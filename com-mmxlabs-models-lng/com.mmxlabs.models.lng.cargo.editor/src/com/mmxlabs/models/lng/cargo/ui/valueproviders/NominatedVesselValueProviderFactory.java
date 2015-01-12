@@ -80,7 +80,10 @@ public class NominatedVesselValueProviderFactory implements IReferenceValueProvi
 					}
 					// create list to populate
 					final ArrayList<Pair<String, EObject>> result = new ArrayList<Pair<String, EObject>>();
-
+					final Pair<String, EObject> none = getEmptyObject();
+					if (none != null) {
+						result.add(0, none);
+					}
 					Vessel currentValue = slot.getNominatedVessel();
 
 					// filter the globally permissible values by the settings for this cargo

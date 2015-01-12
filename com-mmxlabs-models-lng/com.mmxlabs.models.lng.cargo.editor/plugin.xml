@@ -184,7 +184,7 @@
           referenceEClass="com.mmxlabs.models.lng.fleet.Vessel">
     </valueProvider>
     <valueProvider
-          factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.BasicVesselValueProviderFactory"
+          factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.VesselAssignmentTypeValueProviderFactory"
           id="com.mmxlabs.models.lng.cargo.ui.valueproviders.BasicVesselValueProviderFactory"
           ownerEClass="com.mmxlabs.models.lng.cargo.AssignableElement"
           referenceEClass="com.mmxlabs.models.lng.types.VesselAssignmentType">
@@ -200,11 +200,6 @@
           id="com.mmxlabs.models.lng.cargo.ui.valueproviders.VesselPortValueProviderFactory"
           ownerEClass="com.mmxlabs.models.lng.cargo.VesselAvailability"
           referenceEClass="com.mmxlabs.models.lng.types.APortSet">
-    </valueProvider>
-     <valueProvider
-          factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.AVesselSetValueProviderFactory"
-          id="com.mmxlabs.models.lng.cargo.editor.fleetValueProvider"
-          referenceEClass="com.mmxlabs.models.lng.types.AVesselSet">
     </valueProvider>
      <valueProvider
            factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.SlotEntityValueProviderFactory"

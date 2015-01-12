@@ -93,6 +93,11 @@
           id="com.mmxlabs.models.lng.fleet.editor.fleetValueProvider.Vessel"
           referenceEClass="com.mmxlabs.models.lng.fleet.Vessel">
     </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.fleet.ui.valueproviders.VesselValueProviderFactory"
+          id="com.mmxlabs.models.lng.fleet.ui.valueproviders.VesselValueProviderFactory_AVesselSet"
+          referenceEClass="com.mmxlabs.models.lng.types.AVesselSet">
+    </valueProvider>
  </extension>
  <extension
        point="com.mmxlabs.models.util.import.submodels">
