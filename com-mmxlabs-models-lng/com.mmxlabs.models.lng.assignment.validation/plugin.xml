@@ -133,7 +133,7 @@
                   severity="ERROR"
                   statusCode="1">
                <target
-                     class="AssignableElement">
+                     class="Slot">
                </target>
                <message>
                   {0}
