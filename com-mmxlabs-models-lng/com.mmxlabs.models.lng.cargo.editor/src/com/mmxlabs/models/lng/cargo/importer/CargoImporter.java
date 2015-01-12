@@ -23,20 +23,23 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.google.common.collect.Sets;
+import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
-import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.CSVReader;
@@ -91,13 +94,13 @@ public class CargoImporter extends DefaultClassImporter {
 		for (final EAttribute attribute : object.eClass().getEAllAttributes()) {
 
 			if (object instanceof AssignableElement) {
-				final AssignableElement assignableElement = (AssignableElement) object;
+//				final AssignableElement assignableElement = (AssignableElement) object;
 				// yes yes both attribute and reference here, but easier to copy paste....
 				if (attribute == CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX || attribute == CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT
 						|| attribute == CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED) {
-					if (assignableElement.getAssignment() == null) {
+//					if (assignableElement.getAssignment() == null) {
 						continue;
-					}
+//					}
 				}
 			}
 
@@ -109,12 +112,12 @@ public class CargoImporter extends DefaultClassImporter {
 		for (final EReference reference : object.eClass().getEAllReferences()) {
 
 			if (object instanceof AssignableElement) {
-				final AssignableElement assignableElement = (AssignableElement) object;
+//				final AssignableElement assignableElement = (AssignableElement) object;
 				// yes yes both attribute and reference here, but easier to copy paste....
-				if (reference == CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT) {
-					if (assignableElement.getAssignment() == null) {
+				if (reference == CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE) {
+//					if (assignableElement.getAssignment() == null) {
 						continue;
-					}
+//					}
 				}
 			}
 
@@ -506,22 +509,51 @@ public class CargoImporter extends DefaultClassImporter {
 		if (target instanceof AssignableElement) {
 			final AssignableElement assignableElement = (AssignableElement) target;
 
-			final String vesselName = fields.get(CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE.getName().toLowerCase());
 
-			if (vesselName != null && !vesselName.isEmpty()) {
+			final String vesselName = fields.get(CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE.getName().toLowerCase());
+			final String assignment = fields.get("assignment");
+			final String spotindex = fields.get("spotindex");
+
+			if ((vesselName != null && !vesselName.isEmpty()) || (assignment != null && !assignment.isEmpty())) {
 				context.doLater(new IDeferment() {
 
 					@Override
 					public void run(final IImportContext context) {
-						if (assignableElement.isSetSpotIndex()) {
-							final NamedObject v2 = context.getNamedObject(vesselName.trim(), TypesPackage.eINSTANCE.getAVesselSet());
-							if (v2 instanceof VesselClass) {
-								assignableElement.setAssignment((VesselClass) v2);
+
+						// New style
+						if (vesselName != null && !vesselName.isEmpty()) {
+							final CharterInMarket charterInMarket = (CharterInMarket) context.getNamedObject(vesselName.trim(), SpotMarketsPackage.Literals.CHARTER_IN_MARKET);
+							if (charterInMarket != null) {
+								assignableElement.setVesselAssignmentType(charterInMarket);
+							} else {
+								final Vessel v = (Vessel) context.getNamedObject(vesselName.trim(), FleetPackage.Literals.VESSEL);
+								if (v != null) {
+									final VesselAvailability availability = AssignmentEditorHelper.findVesselAvailability(v, assignableElement, ((LNGScenarioModel) context.getRootObject())
+											.getPortfolioModel().getCargoModel().getVesselAvailabilities());
+									assignableElement.setVesselAssignmentType(availability);
+								}
 							}
 						} else {
-							final Vessel v = (Vessel) context.getNamedObject(vesselName.trim(), FleetPackage.eINSTANCE.getVessel());
-							if (v != null) {
-								assignableElement.setAssignment(v);
+							// Old style
+							if (spotindex != null && !spotindex.isEmpty()) {
+
+								final VesselClass vc = (VesselClass) context.getNamedObject(vesselName.trim(), FleetPackage.Literals.VESSEL_CLASS);
+								if (vc != null) {
+									for (CharterInMarket charterInMarket : ((LNGScenarioModel) context.getRootObject()).getSpotMarketsModel().getCharterInMarkets()) {
+										if (vc.equals(charterInMarket.getVesselClass())) {
+											assignableElement.setVesselAssignmentType(charterInMarket);
+											break;
+										}
+									}
+								}
+
+							} else {
+								final Vessel v = (Vessel) context.getNamedObject(vesselName.trim(), FleetPackage.Literals.VESSEL);
+								if (v != null) {
+									final VesselAvailability availability = AssignmentEditorHelper.findVesselAvailability(v, assignableElement, ((LNGScenarioModel) context.getRootObject())
+											.getPortfolioModel().getCargoModel().getVesselAvailabilities());
+									assignableElement.setVesselAssignmentType(availability);
+								}
 							}
 						}
 					}
@@ -531,8 +563,6 @@ public class CargoImporter extends DefaultClassImporter {
 						return IImportContext.STAGE_MODIFY_SUBMODELS;
 					}
 				});
-			} else {
-				assignableElement.unsetSpotIndex();
 			}
 		}
 	}

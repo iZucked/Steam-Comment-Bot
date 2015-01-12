@@ -76,6 +76,9 @@ public class CharterMarketImporter extends DefaultClassImporter {
 									ai.setAttribute(market, SpotMarketsPackage.Literals.CHARTER_OUT_MARKET__MIN_CHARTER_OUT_DURATION, row.get("mincharteroutduration"), context);
 								}
 							}
+
+							market.setName(String.format("%s - %s", vesselClass, charterOutPrice));
+
 							results.add(market);
 						}
 						final String charterInPrice = row.get("charterinprice");
@@ -99,6 +102,9 @@ public class CharterMarketImporter extends DefaultClassImporter {
 									ai.setAttribute(market, SpotMarketsPackage.Literals.CHARTER_IN_MARKET__SPOT_CHARTER_COUNT, row.get("spotchartercount"), context);
 								}
 							}
+
+							market.setName(String.format("%s - %s", vesselClass, charterInPrice));
+
 							results.add(market);
 						}
 					}
@@ -124,7 +130,7 @@ public class CharterMarketImporter extends DefaultClassImporter {
 			}
 		}
 	}
-	
+
 	@Override
 	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final IExportContext context) {
 
