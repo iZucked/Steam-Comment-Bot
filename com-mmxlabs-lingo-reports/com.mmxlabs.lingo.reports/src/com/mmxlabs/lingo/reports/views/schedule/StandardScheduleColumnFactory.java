@@ -277,8 +277,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 						final Slot slot = slotAllocation.getSlot();
 						if (slot instanceof LoadSlot) {
-							final double cv = ((LoadSlot) slot).getSlotOrDelegatedCV();
-							return (int) Math.round(cv * (double) slotAllocation.getVolumeTransferred());
+							return slotAllocation.getEnergyTransferred();
 						}
 					}
 					return null;
@@ -293,19 +292,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				public Integer getIntValue(final Object object) {
 					if (object instanceof SlotAllocation) {
 						final SlotAllocation slotAllocation = (SlotAllocation) object;
-
-						double cv = 0.0;
-						final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
-						if (cargoAllocation != null) {
-							for (final SlotAllocation sa : cargoAllocation.getSlotAllocations()) {
-								final Slot slot = sa.getSlot();
-								if (slot instanceof LoadSlot) {
-									cv = ((LoadSlot) slot).getSlotOrDelegatedCV();
-									break;
-								}
-							}
-						}
-						return (int) Math.round(cv * (double) slotAllocation.getVolumeTransferred());
+						return slotAllocation.getEnergyTransferred();
 					}
 					return null;
 
