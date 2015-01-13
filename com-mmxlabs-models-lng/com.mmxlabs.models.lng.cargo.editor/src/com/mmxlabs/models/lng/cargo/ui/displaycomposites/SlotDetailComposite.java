@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -281,7 +282,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 
 		createSpacer();
 
-		final HashSet<EStructuralFeature> contractFeatures = new HashSet<EStructuralFeature>();
+		final HashSet<EStructuralFeature> contractFeatures = new LinkedHashSet<EStructuralFeature>();
 		for (final EStructuralFeature f : missedFeaturesList) {
 
 			if (f.getEContainingClass().getEAllSuperTypes().contains(SlotContractParams)) {
