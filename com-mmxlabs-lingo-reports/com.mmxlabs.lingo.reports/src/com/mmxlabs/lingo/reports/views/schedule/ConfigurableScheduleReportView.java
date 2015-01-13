@@ -66,7 +66,8 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 		super.initPartControl(parent);
 
 		// Add a filter to only show certain rows.
-		viewer.setFilters(new ViewerFilter[] { new ViewerFilter() {
+		
+		viewer.setFilters(new ViewerFilter[] { super.filterSupport.createViewerFilter(), new ViewerFilter() {
 
 			@Override
 			public boolean select(Viewer viewer, Object parentElement, Object element) {

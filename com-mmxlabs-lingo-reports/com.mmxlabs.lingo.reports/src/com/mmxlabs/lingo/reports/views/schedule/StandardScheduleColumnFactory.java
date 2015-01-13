@@ -21,7 +21,6 @@ import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.utils.CargoAllocationUtils;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.Formatters;
-import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.PriceFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
@@ -58,6 +57,7 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
 public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
@@ -112,7 +112,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.vessel":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Vessel", null, ColumnType.NORMAL, new BaseFormatter() {
 				@Override
-				public String format(final Object object) {
+				public String render(final Object object) {
 
 					if (object instanceof CargoAllocation) {
 						final CargoAllocation cargoAllocation = (CargoAllocation) object;
@@ -202,7 +202,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 					// return sequence.getName();
 					// }
 					// }
-					return format(object);
+					return render(object);
 				}
 
 			}, targetObjectRef));
@@ -414,7 +414,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.type":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Type", null, ColumnType.NORMAL, new BaseFormatter() {
 				@Override
-				public String format(final Object object) {
+				public String render(final Object object) {
 					if (object instanceof OpenSlotAllocation) {
 						final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) object;
 						String type = "Open Slot";
@@ -515,11 +515,11 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 		return null;
 	}
 
-	public IFormatter generateChangeStringColumnFormatter(final EStructuralFeature cargoAllocationRef) {
+	public ICellRenderer generateChangeStringColumnFormatter(final EStructuralFeature cargoAllocationRef) {
 		return new BaseFormatter() {
 
 			@Override
-			public String format(final Object obj) {
+			public String render(final Object obj) {
 
 				if (obj instanceof Row) {
 					final Row row = (Row) obj;
@@ -568,10 +568,10 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 		};
 	}
 
-	public IFormatter generatePermutationColumnFormatter(final EStructuralFeature cargoAllocationRef) {
+	public ICellRenderer generatePermutationColumnFormatter(final EStructuralFeature cargoAllocationRef) {
 		return new BaseFormatter() {
 			@Override
-			public String format(final Object obj) {
+			public String render(final Object obj) {
 
 				if (obj instanceof Row) {
 					final Row row = (Row) obj;
@@ -587,10 +587,10 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 		};
 	}
 
-	public IFormatter generatePermutationGroupColumnFormatter(final EStructuralFeature cargoAllocationRef) {
+	public ICellRenderer generatePermutationGroupColumnFormatter(final EStructuralFeature cargoAllocationRef) {
 		return new BaseFormatter() {
 			@Override
-			public String format(final Object obj) {
+			public String render(final Object obj) {
 
 				if (obj instanceof Row) {
 					final Row row = (Row) obj;
@@ -628,10 +628,10 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 	 * @param cargoAllocationRef
 	 * @return
 	 */
-	public IFormatter generatePreviousVesselAssignmentColumnFormatter(final EStructuralFeature cargoAllocationRef) {
+	public ICellRenderer generatePreviousVesselAssignmentColumnFormatter(final EStructuralFeature cargoAllocationRef) {
 		return new BaseFormatter() {
 			@Override
-			public String format(final Object obj) {
+			public String render(final Object obj) {
 
 				final Row row = (Row) obj;
 				if (row.getCargoAllocation() == null) {
@@ -669,10 +669,10 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 	 * @param cargoAllocationRef
 	 * @return
 	 */
-	public IFormatter generatePreviousWiringColumnFormatter(final EStructuralFeature cargoAllocationRef) {
+	public ICellRenderer generatePreviousWiringColumnFormatter(final EStructuralFeature cargoAllocationRef) {
 		return new BaseFormatter() {
 			@Override
-			public String format(final Object obj) {
+			public String render(final Object obj) {
 
 				if (obj instanceof Row) {
 					final Row row = (Row) obj;

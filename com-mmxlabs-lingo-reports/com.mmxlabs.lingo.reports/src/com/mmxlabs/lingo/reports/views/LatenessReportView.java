@@ -21,7 +21,6 @@ import com.mmxlabs.lingo.reports.components.ColumnHandler;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EMFReportView;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
-import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -31,6 +30,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.ui.tabular.ICellRenderer;
 
 /**
  * @author hinton
@@ -50,7 +50,7 @@ public class LatenessReportView extends EMFReportView {
 		addColumn("type", "Type", ColumnType.NORMAL, objectFormatter, sp.getEvent__Type());
 		addColumn("lateness", "Lateness", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
-			public String format(final Object object) {
+			public String render(final Object object) {
 
 				if (object instanceof PortVisit) {
 					final PortVisit slotVisit = (PortVisit) object;
@@ -100,8 +100,8 @@ public class LatenessReportView extends EMFReportView {
 
 		addColumn("startby", "Start by", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
-			public String format(final Object object) {
-				return calendarFormatterNoTZ.format(getWindowEndDate(object));
+			public String render(final Object object) {
+				return calendarFormatterNoTZ.render(getWindowEndDate(object));
 			}
 		});
 		addColumn("scheduledtime", "Scheduled time", ColumnType.NORMAL, calendarFormatterNoTZ, sp.getEvent__GetLocalStart());
@@ -293,7 +293,7 @@ public class LatenessReportView extends EMFReportView {
 		return true;
 	}
 
-	public ColumnHandler addColumn(final String blockID, final String title, final ColumnType columnType, final IFormatter formatter, final ETypedElement... path) {
+	public ColumnHandler addColumn(final String blockID, final String title, final ColumnType columnType, final ICellRenderer formatter, final ETypedElement... path) {
 		final ColumnBlock block = getBlockManager().createBlock(blockID, title, columnType);
 		return getBlockManager().createColumn(block, title, formatter, path);
 	}

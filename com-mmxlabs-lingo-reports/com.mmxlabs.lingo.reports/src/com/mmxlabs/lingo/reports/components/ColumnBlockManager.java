@@ -11,14 +11,13 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.ETypedElement;
-import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
+import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.ui.IMemento;
 
-import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
-import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerSortingSupport;
+import com.mmxlabs.models.ui.tabular.ICellRenderer;
 
 /**
  * A class which manages custom column blocks for a Nebula Grid widget. The blocks have columns assigned to them, can be made visible or invisible, and can be moved en masse on the grid.
@@ -39,9 +38,7 @@ public class ColumnBlockManager {
 	private final List<ColumnHandler> handlers = new ArrayList<ColumnHandler>();
 	private final List<ColumnHandler> handlersInOrder = new ArrayList<ColumnHandler>();
 
-	private EObjectTableViewer eObjectTableViewer;
-	private GridTableViewer gridTableViewer;
-	private EObjectTableViewerSortingSupport sortingSupport;
+	private IColumnFactory columnFactory;
 
 	protected ColumnBlock findColumnBlock(final GridColumn column) {
 		for (final ColumnBlock block : blocks) {
@@ -292,72 +289,31 @@ public class ColumnBlockManager {
 		this.grid = grid;
 	}
 
-	public ColumnHandler createColumn(final ColumnBlock block, final String title, final IFormatter formatter, final ETypedElement... path) {
-		final ColumnHandler handler = new ColumnHandler(block, formatter, path, title);
+	public ColumnHandler createColumn(final ColumnBlock block, final String title, final ICellRenderer formatter, final ETypedElement... path) {
+		final ColumnHandler handler = new ColumnHandler(block, formatter, path, title, columnFactory);
 
+		return configureHandler(block, handler);
+	}
+
+	public ColumnHandler createColumn(final ColumnBlock block, final String title, final ICellRenderer formatter, final ETypedElement[][] path) {
+		final ColumnHandler handler = new ColumnHandler(block, formatter, path, title, columnFactory);
+
+		return configureHandler(block, handler);
+	}
+
+	private ColumnHandler configureHandler(final ColumnBlock block, final ColumnHandler handler) {
 		handlers.add(handler);
 		handlersInOrder.add(handler);
 
 		block.columnHandlers.add(handler);
-		GridColumn column = null;
-		// TODO: This should be wrapped up behind an interface to avoid directly referencing table types.
-		if (eObjectTableViewer != null) {
-			column = handler.createColumn(eObjectTableViewer).getColumn();
+		GridViewerColumn gvc = handler.createColumn();
+		final GridColumn column = gvc == null ? null : gvc.getColumn();
 
-		} else if (gridTableViewer != null) {
-			column = handler.createColumn(gridTableViewer).getColumn();
-			if (sortingSupport != null) {
-				sortingSupport.addSortableColumn(gridTableViewer, handler.column, column);
-			}
-		}
 		if (column != null) {
 			column.setVisible(block.getVisible());
 			column.pack();
 		}
 		return handler;
-	}
-
-	public ColumnHandler createColumn(final ColumnBlock block, final String title, final IFormatter formatter, final ETypedElement[][] path) {
-		final ColumnHandler handler = new ColumnHandler(block, formatter, path, title);
-
-		handlers.add(handler);
-		handlersInOrder.add(handler);
-
-		block.columnHandlers.add(handler);
-		GridColumn column = null;
-		if (eObjectTableViewer != null) {
-			column = handler.createColumn(eObjectTableViewer).getColumn();
-
-		} else if (gridTableViewer != null) {
-			column = handler.createColumn(gridTableViewer).getColumn();
-			if (sortingSupport != null) {
-				sortingSupport.addSortableColumn(gridTableViewer, handler.column, column);
-			}
-		}
-		if (column != null) {
-			column.setVisible(block.getVisible());
-			column.pack();
-		}
-		return handler;
-	}
-
-	public EObjectTableViewer geteObjectTableViewer() {
-		return eObjectTableViewer;
-	}
-
-	public void setEObjectTableViewer(EObjectTableViewer eObjectTableViewer) {
-		this.eObjectTableViewer = eObjectTableViewer;
-		gridTableViewer = null;
-	}
-
-	public GridTableViewer getGridTableViewer() {
-		return gridTableViewer;
-	}
-
-	public void setGridTableViewer(GridTableViewer gridTableViewer, EObjectTableViewerSortingSupport sortingSupport) {
-		this.gridTableViewer = gridTableViewer;
-		this.sortingSupport = sortingSupport;
-		eObjectTableViewer = null;
 	}
 
 	public List<ColumnHandler> getHandlersInOrder() {
@@ -368,13 +324,7 @@ public class ColumnBlockManager {
 
 		for (final ColumnHandler h : handlers) {
 			if (h.title.equals(title)) {
-				if (eObjectTableViewer != null) {
-					eObjectTableViewer.removeColumn(h.column);
-				} else if (gridTableViewer != null) {
-					sortingSupport.removeSortableColumn(h.column.getColumn());
-
-					h.column.getColumn().dispose();
-				}
+				h.destroy();
 				handlers.remove(h);
 				handlersInOrder.remove(h);
 				h.block.columnHandlers.remove(h);
@@ -384,7 +334,7 @@ public class ColumnBlockManager {
 	}
 
 	public void makeAllBlocksVisible() {
-		for (ColumnHandler handler : handlers) {
+		for (final ColumnHandler handler : handlers) {
 			handler.block.setUserVisible(true);
 		}
 	}
@@ -396,5 +346,12 @@ public class ColumnBlockManager {
 			}
 		}
 		return null;
+	}
+
+	public void setColumnFactory(final IColumnFactory columnFactory) {
+		this.columnFactory = columnFactory;
+		for (ColumnHandler handler : handlers) {
+			handler.setColumnFactory(columnFactory);
+		}
 	}
 }

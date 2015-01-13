@@ -15,7 +15,7 @@ import com.mmxlabs.lingo.reports.components.ColumnBlockManager;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.components.SimpleEmfBlockColumnFactory;
-import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
+import com.mmxlabs.models.ui.tabular.ICellRenderer;
 
 /**
  * A class to manage columns which are shared by reports of the same report type.
@@ -59,7 +59,7 @@ public class EMFReportColumnManager {
 		}
 	}
 
-	public void registerColumn(final String reportType, final String columnID, final String title, String tooltip, final ColumnType columnType, final IFormatter formatter, final ETypedElement... path) {
+	public void registerColumn(final String reportType, final String columnID, final String title, String tooltip, final ColumnType columnType, final ICellRenderer formatter, final ETypedElement... path) {
 		registerColumn(reportType, new SimpleEmfBlockColumnFactory(columnID, title, tooltip, columnType, formatter, path));
 	}
 	

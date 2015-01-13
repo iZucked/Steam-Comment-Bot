@@ -18,7 +18,6 @@ import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.CostFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.Formatters;
-import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.NumberOfDPFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.PriceFormatter;
@@ -36,6 +35,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.ui.tabular.ICellRenderer;
 
 public class StandardPortRotationColumnFactory implements IPortRotationColumnFactory {
 	public static final String PORT_ROTATION_REPORT_TYPE_ID = "PORT_ROTATION_REPORT_TYPE_ID";
@@ -72,9 +72,9 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 		final EStructuralFeature name = MMXCorePackage.eINSTANCE.getNamedObject_Name();
 		switch (columnID) {
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.schedule":
-			final IFormatter containingScheduleFormatter = new BaseFormatter() {
+			final ICellRenderer containingScheduleFormatter = new BaseFormatter() {
 				@Override
-				public String format(final Object object) {
+				public String render(final Object object) {
 					return builder.getReport().getSynchronizerOutput().getScenarioInstance(object).getName();
 				}
 
@@ -95,7 +95,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.contract":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Contract", null, ColumnType.NORMAL, new BaseFormatter() {
 				@Override
-				public String format(final Object object) {
+				public String render(final Object object) {
 					final Event se = (Event) object;
 					if (se instanceof SlotVisit) {
 						final SlotVisit sv = (SlotVisit) se;
@@ -122,7 +122,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.duration":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Duration (DD:HH)", null, ColumnType.NORMAL, new BaseFormatter() {
 				@Override
-				public String format(final Object object) {
+				public String render(final Object object) {
 					final Event se = (Event) object;
 					final int duration = se.getDuration();
 					return String.format("%02d:%02d", duration / 24, duration % 24);

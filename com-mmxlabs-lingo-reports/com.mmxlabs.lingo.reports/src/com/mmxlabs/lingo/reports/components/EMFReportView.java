@@ -57,10 +57,10 @@ import com.mmxlabs.lingo.reports.properties.ScheduledEventPropertySourceProvider
 import com.mmxlabs.lingo.reports.utils.PinDiffModeColumnManager;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.CalendarFormatter;
-import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
+import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.filter.FilterField;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
@@ -93,20 +93,20 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		this.helpContextId = helpContextId;
 	}
 
-	protected final IFormatter containingScheduleFormatter = new BaseFormatter() {
+	protected final ICellRenderer containingScheduleFormatter = new BaseFormatter() {
 		@Override
-		public String format(final Object object) {
+		public String render(final Object object) {
 			return synchronizerOutput.getScenarioInstance(object).getName();
 		}
 
 	};
-	protected final IFormatter objectFormatter = new BaseFormatter();
+	protected final ICellRenderer objectFormatter = new BaseFormatter();
 
-	protected final IFormatter calendarFormatter = new CalendarFormatter(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT), true);
-	protected final IFormatter calendarFormatterNoTZ = new CalendarFormatter(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT), false);
+	protected final ICellRenderer calendarFormatter = new CalendarFormatter(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT), true);
+	protected final ICellRenderer calendarFormatterNoTZ = new CalendarFormatter(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT), false);
 
-	protected final IFormatter datePartFormatter = new CalendarFormatter(DateFormat.getDateInstance(DateFormat.SHORT), false);
-	protected final IFormatter timePartFormatter = new CalendarFormatter(DateFormat.getTimeInstance(DateFormat.SHORT), false);
+	protected final ICellRenderer datePartFormatter = new CalendarFormatter(DateFormat.getDateInstance(DateFormat.SHORT), false);
+	protected final ICellRenderer timePartFormatter = new CalendarFormatter(DateFormat.getTimeInstance(DateFormat.SHORT), false);
 
 	protected final IntegerFormatter integerFormatter = new IntegerFormatter();
 	//
@@ -391,7 +391,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			}
 		};
 
-		getBlockManager().setEObjectTableViewer(viewer);
+		getBlockManager().setColumnFactory(new EObjectTableViewerColumnFactory(viewer));
 		getBlockManager().setGrid(viewer.getGrid());
 
 		filterField.setFilterSupport(viewer.getFilterSupport());
@@ -429,7 +429,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		viewer.getGrid().setLinesVisible(true);
 
 		for (final ColumnHandler handler : getBlockManager().getHandlersInOrder()) {
-			final GridColumn column = handler.createColumn(viewer).getColumn();
+			final GridColumn column = handler.createColumn().getColumn();
 			column.setVisible(handler.block.getVisible());
 			column.pack();
 		}
@@ -652,7 +652,6 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 	}
 
-
 	/**
 	 * 
 	 * Callback to convert the raw data coming out of the table into something usable externally. This is useful when the table data model is custom for the table rather from the real data model.
@@ -661,6 +660,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	protected List<?> adaptSelectionFromWidget(final List<?> selection) {
 		return selection;
 	}
+
 	/**
 	 * Return the current IScenarioViewerSynchronizerOutput instance, or null. This object could change over time.
 	 * 
