@@ -4,7 +4,13 @@
  */
 package com.mmxlabs.lingo.reports.views.formatters;
 
+import java.util.List;
+
+import org.eclipse.emf.common.notify.Notifier;
+
 import com.google.common.base.Preconditions;
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.ui.tabular.ICellRenderer;
 
 /**
  * Formatter to format a floating point number to a given number of decimal places.
@@ -12,7 +18,7 @@ import com.google.common.base.Preconditions;
  * @author Simon Goodall
  * 
  */
-public class NumberOfDPFormatter implements IFormatter {
+public class NumberOfDPFormatter implements ICellRenderer {
 
 	private final int dp;
 
@@ -29,7 +35,7 @@ public class NumberOfDPFormatter implements IFormatter {
 	}
 
 	@Override
-	public String format(final Object object) {
+	public String render(final Object object) {
 		if (object == null) {
 			return "";
 		}
@@ -50,7 +56,12 @@ public class NumberOfDPFormatter implements IFormatter {
 	}
 
 	@Override
-	public Object getFilterable(final Object object) {
+	public Object getFilterValue(final Object object) {
 		return getComparable(object);
+	}
+
+	@Override
+	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(Object object) {
+		return null;
 	}
 }

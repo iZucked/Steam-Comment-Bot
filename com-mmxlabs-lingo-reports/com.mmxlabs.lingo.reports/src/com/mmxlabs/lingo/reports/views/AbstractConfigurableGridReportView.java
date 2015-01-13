@@ -55,6 +55,7 @@ import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.components.ColumnBlockManager;
 import com.mmxlabs.lingo.reports.components.ColumnHandler;
+import com.mmxlabs.lingo.reports.components.GridTableViewerColumnFactory;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.properties.ScheduledEventPropertySourceProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
@@ -63,6 +64,7 @@ import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnUpdater;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
+import com.mmxlabs.models.ui.tabular.EObjectTableViewerFilterSupport;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerSortingSupport;
 import com.mmxlabs.models.ui.tabular.filter.FilterField;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
@@ -79,7 +81,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	protected static final String CONFIGURABLE_ROWS_ORDER = "CONFIGURABLE_ROWS_ORDER";
 	protected static final String CONFIGURABLE_COLUMNS_REPORT_KEY = "CONFIGURABLE_COLUMNS_REPORT_KEY";
 	protected final ObservablesManager observablesManager = new ObservablesManager();
-	ObservablesManager mgr;
+	private ObservablesManager mgr;
 	private IMemento memento;
 
 	private boolean customisableReport = true;
@@ -93,6 +95,9 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	}
 
 	protected final EObjectTableViewerSortingSupport sortingSupport = new EObjectTableViewerSortingSupport();
+
+	private FilterField filterField;
+	protected EObjectTableViewerFilterSupport filterSupport;
 
 	private void setColumnsImmovable() {
 		if (viewer != null) {
@@ -138,9 +143,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 	public void initPartControl(final Composite parent) {
 
-		// Find the column definitions
-		registerReportColumns();
-
 		// Check ext point to see if we can enable the customise action (created within createPartControl)
 		customisableReport = checkCustomisable();
 		{
@@ -149,6 +151,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 			final GridLayout layout = new GridLayout(1, false);
 			layout.marginHeight = layout.marginWidth = 0;
 			container.setLayout(layout);
+			filterField = new FilterField(container);
 
 			viewer = new GridTableViewer(container, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION) {
 
@@ -163,8 +166,12 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 			};
 			viewer.setComparator(sortingSupport.createViewerComparer());
 
+			this.filterSupport = new EObjectTableViewerFilterSupport(viewer, viewer.getGrid());
+			viewer.addFilter(filterSupport.createViewerFilter());
+			filterField.setFilterSupport(filterSupport);
+
 			getBlockManager().setGrid(viewer.getGrid());
-			getBlockManager().setGridTableViewer(viewer, sortingSupport);
+			getBlockManager().setColumnFactory(new GridTableViewerColumnFactory(viewer, sortingSupport, filterSupport));
 			// filterField.setFilterSupport(viewer.getFilterSupport());
 
 			viewer.getGrid().setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -198,14 +205,18 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 			table = ScheduleReportFactory.eINSTANCE.createTable();
 			viewer.setInput(EMFProperties.list(ScheduleReportPackage.Literals.TABLE__ROWS).observe(table));
 
+			// Find the column definitions
+			registerReportColumns();
+
 			for (final ColumnHandler handler : getBlockManager().getHandlersInOrder()) {
-				final GridColumn column = handler.createColumn(viewer).getColumn();
+				final GridColumn column = handler.createColumn().getColumn();
 				if (sortingSupport != null) {
 					sortingSupport.addSortableColumn(viewer, handler.column, column);
 				}
 				column.setVisible(handler.block.getVisible());
 				column.pack();
 			}
+
 			if (helpContextId != null) {
 				PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), helpContextId);
 			}
@@ -219,8 +230,8 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 				getSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(this);
 			}
 
-//			table = ScheduleReportFactory.eINSTANCE.createTable();
-//			viewer.setInput(EMFProperties.list(ScheduleReportPackage.Literals.TABLE__ROWS).observe(table));
+			// table = ScheduleReportFactory.eINSTANCE.createTable();
+			// viewer.setInput(EMFProperties.list(ScheduleReportPackage.Literals.TABLE__ROWS).observe(table));
 			synchronizer = UserManagedScenarioViewerSynchronizer.registerView(viewer, getElementCollector());
 
 		}
@@ -534,7 +545,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 		manager.add(new GroupMarker("importers"));
 		manager.add(new GroupMarker("exporters"));
 
-		// manager.appendToGroup("filter", filterField.getContribution());
+		 manager.appendToGroup("filter", filterField.getContribution());
 		// BE manager.appendToGroup("sortmode", sortModeAction); //BE
 		manager.appendToGroup("pack", packColumnsAction);
 		manager.appendToGroup("copy", copyTableAction);

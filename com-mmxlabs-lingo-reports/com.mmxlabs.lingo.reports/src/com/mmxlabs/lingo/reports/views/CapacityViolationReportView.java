@@ -28,7 +28,6 @@ import com.mmxlabs.lingo.reports.components.ColumnHandler;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EMFReportView;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
-import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -40,6 +39,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.generic.GenericEMFTableDataModel;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -232,7 +232,7 @@ public class CapacityViolationReportView extends EMFReportView {
 		return row;
 	}
 	
-	public ColumnHandler addColumn(final String blockID, final String title, final ColumnType columnType, final IFormatter formatter, final ETypedElement... path) {
+	public ColumnHandler addColumn(final String blockID, final String title, final ColumnType columnType, final ICellRenderer formatter, final ETypedElement... path) {
 		final ColumnBlock block = getBlockManager().createBlock(blockID, title, columnType);
 		return getBlockManager().createColumn(block, title, formatter, path);
 	}

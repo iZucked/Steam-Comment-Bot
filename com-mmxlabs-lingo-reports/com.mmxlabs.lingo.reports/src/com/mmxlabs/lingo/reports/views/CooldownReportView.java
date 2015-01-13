@@ -15,7 +15,6 @@ import com.mmxlabs.lingo.reports.components.ColumnHandler;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EMFReportView;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
-import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -25,6 +24,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.ui.tabular.ICellRenderer;
 
 /**
  * A report which displays the cooldowns in the selected schedules.
@@ -45,7 +45,7 @@ public class CooldownReportView extends EMFReportView {
 		addColumn("vessel", "Vessel", ColumnType.NORMAL, objectFormatter, MMXCorePackage.eINSTANCE.getMMXObject__EContainerOp(), SchedulePackage.eINSTANCE.getSequence__GetName());
 		addColumn("causeid", "Cause ID", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
-			public String format(final Object object) {
+			public String render(final Object object) {
 				if (object instanceof Idle) {
 					final Idle idle = (Idle) object;
 					final Sequence sequence = (Sequence) idle.eContainer();
@@ -67,7 +67,7 @@ public class CooldownReportView extends EMFReportView {
 
 		addColumn("id", "ID", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
-			public String format(final Object object) {
+			public String render(final Object object) {
 				if (object instanceof Idle) {
 					final Idle idle = (Idle) object;
 					final Sequence sequence = (Sequence) idle.eContainer();
@@ -165,7 +165,7 @@ public class CooldownReportView extends EMFReportView {
 		return true;
 	}
 
-	public ColumnHandler addColumn(final String blockID, final String title, final ColumnType columnType, final IFormatter formatter, final ETypedElement... path) {
+	public ColumnHandler addColumn(final String blockID, final String title, final ColumnType columnType, final ICellRenderer formatter, final ETypedElement... path) {
 		final ColumnBlock block = getBlockManager().createBlock(blockID, title, columnType);
 		return getBlockManager().createColumn(block, title, formatter, path);
 	}

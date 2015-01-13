@@ -2,7 +2,7 @@ package com.mmxlabs.lingo.reports.components;
 
 import org.eclipse.emf.ecore.ETypedElement;
 
-import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
+import com.mmxlabs.models.ui.tabular.ICellRenderer;
 
 public class SimpleEmfBlockColumnFactory extends EmfBlockColumnFactory {
 	final String columnName;
@@ -10,10 +10,10 @@ public class SimpleEmfBlockColumnFactory extends EmfBlockColumnFactory {
 	final String blockDisplayName;
 	final String tooltip;
 	final ColumnType columnType;
-	final IFormatter formatter;
+	final ICellRenderer formatter;
 	final ETypedElement[] path;
 
-	public SimpleEmfBlockColumnFactory(final String blockID, final String title, final String tooltip, final ColumnType columnType, final IFormatter formatter, final ETypedElement... path) {
+	public SimpleEmfBlockColumnFactory(final String blockID, final String title, final String tooltip, final ColumnType columnType, final ICellRenderer formatter, final ETypedElement... path) {
 		this.blockID = blockID;
 		this.columnName = title;
 		this.blockDisplayName = title;
@@ -23,7 +23,7 @@ public class SimpleEmfBlockColumnFactory extends EmfBlockColumnFactory {
 		this.path = path;
 	}
 
-	public SimpleEmfBlockColumnFactory(final String blockID, final String title, final String blockName, final String tooltip, final ColumnType columnType, final IFormatter formatter,
+	public SimpleEmfBlockColumnFactory(final String blockID, final String title, final String blockName, final String tooltip, final ColumnType columnType, final ICellRenderer formatter,
 			final ETypedElement... path) {
 		this.blockID = blockID;
 		this.columnName = title;

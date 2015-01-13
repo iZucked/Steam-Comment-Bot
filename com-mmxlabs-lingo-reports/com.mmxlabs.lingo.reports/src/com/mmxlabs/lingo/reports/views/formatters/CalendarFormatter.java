@@ -19,7 +19,7 @@ public class CalendarFormatter extends BaseFormatter {
 	}
 
 	@Override
-	public String format(final Object object) {
+	public String render(final Object object) {
 		if (object == null) {
 			return "";
 		}
@@ -38,7 +38,7 @@ public class CalendarFormatter extends BaseFormatter {
 	}
 
 	@Override
-	public Object getFilterable(final Object object) {
+	public Object getFilterValue(final Object object) {
 		if (object instanceof Calendar) {
 			return object;
 		}
