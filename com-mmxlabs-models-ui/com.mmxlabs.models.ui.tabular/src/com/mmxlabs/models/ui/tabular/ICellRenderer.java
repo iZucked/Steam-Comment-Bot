@@ -7,6 +7,7 @@ package com.mmxlabs.models.ui.tabular;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
 
@@ -24,15 +25,16 @@ public interface ICellRenderer extends IComparableProvider {
 	 * @param object
 	 * @return string rep. of object
 	 */
+	@Nullable
 	String render(Object object);
 
-//	/**
-//	 * Get a comparable representation of the object, for sorting
-//	 * 
-//	 * @param object
-//	 * @return comparable for sorting object by this cell.
-//	 */
-//	Comparable getComparable(Object object);
+	// /**
+	// * Get a comparable representation of the object, for sorting
+	// *
+	// * @param object
+	// * @return comparable for sorting object by this cell.
+	// */
+	// Comparable getComparable(Object object);
 
 	/**
 	 * Get a representation useful for filtering.
@@ -40,6 +42,7 @@ public interface ICellRenderer extends IComparableProvider {
 	 * @param object
 	 * @return
 	 */
+	@Nullable
 	Object getFilterValue(Object object);
 
 	/**
@@ -48,5 +51,6 @@ public interface ICellRenderer extends IComparableProvider {
 	 * 
 	 * @return
 	 */
+	@Nullable
 	Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(Object object);
 }
