@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.models.lng</groupId>
 	<artifactId>com.mmxlabs.models.lng.parent</artifactId>
-	<version>3.6.0-SNAPSHOT</version>
+	<version>3.6.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<parent>
@@ -76,6 +76,13 @@
 		<module>com.mmxlabs.models.lng.analytics.editor</module>
 		<module>com.mmxlabs.models.lng.analytics.validation</module>
 		<module>com.mmxlabs.models.lng.analytics.navigator</module>
+
+
+		<module>com.mmxlabs.models.lng.actuals</module>
+		<module>com.mmxlabs.models.lng.actuals.edit</module>
+		<module>com.mmxlabs.models.lng.actuals.editor</module>
+
+		<module>com.mmxlabs.models.lng.actuals.validation</module>
 
 		<module>com.mmxlabs.models.lng.assignment.validation.tests</module>
 		<module>com.mmxlabs.models.lng.cargo.validation.tests</module>
@@ -181,7 +188,7 @@
 		</repository>
 		<repository>
 			<id>com-mmxlabs-optimiser.hg</id>
-			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/optimiser/com.mmxlabs.optimiser.p2/2.0.0.RELEASE/com.mmxlabs.optimiser.p2-2.0.0.RELEASE.zip-unzip/</url>
+			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/optimiser/com.mmxlabs.optimiser.p2/2.1.0.RELEASE/com.mmxlabs.optimiser.p2-2.1.0.RELEASE.zip-unzip/</url>
 			<layout>p2</layout>
 		</repository>
 		<repository>

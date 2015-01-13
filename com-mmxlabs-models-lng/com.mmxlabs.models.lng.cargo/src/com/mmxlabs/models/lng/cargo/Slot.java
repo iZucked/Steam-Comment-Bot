@@ -47,6 +47,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getHedges <em>Hedges</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getAllowedVessels <em>Allowed Vessels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getCancellationFee <em>Cancellation Fee</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isOverrideRestrictions <em>Override Restrictions</em>}</li>
  * </ul>
  * </p>
  *
@@ -814,34 +815,11 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Restricted Contracts</em>' reference list.
-	 * @see #isSetRestrictedContracts()
-	 * @see #unsetRestrictedContracts()
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_RestrictedContracts()
-	 * @model unsettable="true"
+	 * @model
 	 * @generated
 	 */
 	EList<Contract> getRestrictedContracts();
-
-	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedContracts <em>Restricted Contracts</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isSetRestrictedContracts()
-	 * @see #getRestrictedContracts()
-	 * @generated
-	 */
-	void unsetRestrictedContracts();
-
-	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedContracts <em>Restricted Contracts</em>}' reference list is set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Restricted Contracts</em>' reference list is set.
-	 * @see #unsetRestrictedContracts()
-	 * @see #getRestrictedContracts()
-	 * @generated
-	 */
-	boolean isSetRestrictedContracts();
 
 	/**
 	 * Returns the value of the '<em><b>Restricted Ports</b></em>' reference list.
@@ -853,34 +831,11 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Restricted Ports</em>' reference list.
-	 * @see #isSetRestrictedPorts()
-	 * @see #unsetRestrictedPorts()
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_RestrictedPorts()
-	 * @model unsettable="true"
+	 * @model
 	 * @generated
 	 */
 	EList<Port> getRestrictedPorts();
-
-	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedPorts <em>Restricted Ports</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isSetRestrictedPorts()
-	 * @see #getRestrictedPorts()
-	 * @generated
-	 */
-	void unsetRestrictedPorts();
-
-	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedPorts <em>Restricted Ports</em>}' reference list is set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Restricted Ports</em>' reference list is set.
-	 * @see #unsetRestrictedPorts()
-	 * @see #getRestrictedPorts()
-	 * @generated
-	 */
-	boolean isSetRestrictedPorts();
 
 	/**
 	 * Returns the value of the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
@@ -891,11 +846,9 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Restricted Lists Are Permissive</em>' attribute.
-	 * @see #isSetRestrictedListsArePermissive()
-	 * @see #unsetRestrictedListsArePermissive()
 	 * @see #setRestrictedListsArePermissive(boolean)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_RestrictedListsArePermissive()
-	 * @model unsettable="true"
+	 * @model
 	 * @generated
 	 */
 	boolean isRestrictedListsArePermissive();
@@ -905,35 +858,10 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Restricted Lists Are Permissive</em>' attribute.
-	 * @see #isSetRestrictedListsArePermissive()
-	 * @see #unsetRestrictedListsArePermissive()
 	 * @see #isRestrictedListsArePermissive()
 	 * @generated
 	 */
 	void setRestrictedListsArePermissive(boolean value);
-
-	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isSetRestrictedListsArePermissive()
-	 * @see #isRestrictedListsArePermissive()
-	 * @see #setRestrictedListsArePermissive(boolean)
-	 * @generated
-	 */
-	void unsetRestrictedListsArePermissive();
-
-	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}' attribute is set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Restricted Lists Are Permissive</em>' attribute is set.
-	 * @see #unsetRestrictedListsArePermissive()
-	 * @see #isRestrictedListsArePermissive()
-	 * @see #setRestrictedListsArePermissive(boolean)
-	 * @generated
-	 */
-	boolean isSetRestrictedListsArePermissive();
 
 	/**
 	 * Returns the value of the '<em><b>Hedges</b></em>' attribute.
@@ -1030,6 +958,32 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * @generated
 	 */
 	boolean isSetCancellationFee();
+
+	/**
+	 * Returns the value of the '<em><b>Override Restrictions</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Override Restrictions</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Override Restrictions</em>' attribute.
+	 * @see #setOverrideRestrictions(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_OverrideRestrictions()
+	 * @model
+	 * @generated
+	 */
+	boolean isOverrideRestrictions();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isOverrideRestrictions <em>Override Restrictions</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Override Restrictions</em>' attribute.
+	 * @see #isOverrideRestrictions()
+	 * @generated
+	 */
+	void setOverrideRestrictions(boolean value);
 
 	/**
 	 * <!-- begin-user-doc -->

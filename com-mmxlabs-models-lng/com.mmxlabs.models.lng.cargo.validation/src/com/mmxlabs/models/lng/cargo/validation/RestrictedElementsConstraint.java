@@ -75,7 +75,8 @@ public class RestrictedElementsConstraint extends AbstractModelMultiConstraint {
 		final List<? extends EObject> restrictedPorts;
 		boolean restrictedListsArePermissive = false;
 		final String cause;
-		if (slot1.isSetRestrictedContracts() || slot1.isSetRestrictedListsArePermissive() || slot1.isSetRestrictedPorts()) {
+//		if (slot1.isSetRestrictedContracts() || slot1.isSetRestrictedListsArePermissive() || slot1.isSetRestrictedPorts()) {
+		if (slot1.isOverrideRestrictions()) {
 			restrictedListsArePermissive = slot1.isRestrictedListsArePermissive();
 			restrictedContracts = slot1.getRestrictedContracts();
 			restrictedPorts = slot1.getRestrictedPorts();

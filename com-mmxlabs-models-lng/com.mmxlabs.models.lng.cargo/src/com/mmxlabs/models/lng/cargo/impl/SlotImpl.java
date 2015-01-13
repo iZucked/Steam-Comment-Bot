@@ -22,8 +22,6 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
-import org.eclipse.emf.ecore.util.InternalEList;
-
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -74,6 +72,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getHedges <em>Hedges</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getAllowedVessels <em>Allowed Vessels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getCancellationFee <em>Cancellation Fee</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isOverrideRestrictions <em>Override Restrictions</em>}</li>
  * </ul>
  * </p>
  *
@@ -591,15 +590,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	protected boolean restrictedListsArePermissive = RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT;
 
 	/**
-	 * This is true if the Restricted Lists Are Permissive attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean restrictedListsArePermissiveESet;
-
-	/**
 	 * The default value of the '{@link #getHedges() <em>Hedges</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -657,6 +647,26 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected boolean cancellationFeeESet;
+
+	/**
+	 * The default value of the '{@link #isOverrideRestrictions() <em>Override Restrictions</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isOverrideRestrictions()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean OVERRIDE_RESTRICTIONS_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isOverrideRestrictions() <em>Override Restrictions</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isOverrideRestrictions()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean overrideRestrictions = OVERRIDE_RESTRICTIONS_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -1499,7 +1509,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 */
 	public EList<Contract> getRestrictedContracts() {
 		if (restrictedContracts == null) {
-			restrictedContracts = new EObjectResolvingEList.Unsettable<Contract>(Contract.class, this, CargoPackage.SLOT__RESTRICTED_CONTRACTS);
+			restrictedContracts = new EObjectResolvingEList<Contract>(Contract.class, this, CargoPackage.SLOT__RESTRICTED_CONTRACTS);
 		}
 		return restrictedContracts;
 	}
@@ -1509,47 +1519,11 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void unsetRestrictedContracts() {
-		if (restrictedContracts != null) ((InternalEList.Unsettable<?>)restrictedContracts).unset();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isSetRestrictedContracts() {
-		return restrictedContracts != null && ((InternalEList.Unsettable<?>)restrictedContracts).isSet();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EList<Port> getRestrictedPorts() {
 		if (restrictedPorts == null) {
-			restrictedPorts = new EObjectResolvingEList.Unsettable<Port>(Port.class, this, CargoPackage.SLOT__RESTRICTED_PORTS);
+			restrictedPorts = new EObjectResolvingEList<Port>(Port.class, this, CargoPackage.SLOT__RESTRICTED_PORTS);
 		}
 		return restrictedPorts;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void unsetRestrictedPorts() {
-		if (restrictedPorts != null) ((InternalEList.Unsettable<?>)restrictedPorts).unset();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isSetRestrictedPorts() {
-		return restrictedPorts != null && ((InternalEList.Unsettable<?>)restrictedPorts).isSet();
 	}
 
 	/**
@@ -1569,33 +1543,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	public void setRestrictedListsArePermissive(boolean newRestrictedListsArePermissive) {
 		boolean oldRestrictedListsArePermissive = restrictedListsArePermissive;
 		restrictedListsArePermissive = newRestrictedListsArePermissive;
-		boolean oldRestrictedListsArePermissiveESet = restrictedListsArePermissiveESet;
-		restrictedListsArePermissiveESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE, oldRestrictedListsArePermissive, restrictedListsArePermissive, !oldRestrictedListsArePermissiveESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void unsetRestrictedListsArePermissive() {
-		boolean oldRestrictedListsArePermissive = restrictedListsArePermissive;
-		boolean oldRestrictedListsArePermissiveESet = restrictedListsArePermissiveESet;
-		restrictedListsArePermissive = RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT;
-		restrictedListsArePermissiveESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE, oldRestrictedListsArePermissive, RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT, oldRestrictedListsArePermissiveESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isSetRestrictedListsArePermissive() {
-		return restrictedListsArePermissiveESet;
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE, oldRestrictedListsArePermissive, restrictedListsArePermissive));
 	}
 
 	/**
@@ -1666,6 +1615,27 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	}
 
         /**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isOverrideRestrictions() {
+		return overrideRestrictions;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setOverrideRestrictions(boolean newOverrideRestrictions) {
+		boolean oldOverrideRestrictions = overrideRestrictions;
+		overrideRestrictions = newOverrideRestrictions;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__OVERRIDE_RESTRICTIONS, oldOverrideRestrictions, overrideRestrictions));
+	}
+
+								/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1912,6 +1882,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getAllowedVessels();
 			case CargoPackage.SLOT__CANCELLATION_FEE:
 				return getCancellationFee();
+			case CargoPackage.SLOT__OVERRIDE_RESTRICTIONS:
+				return isOverrideRestrictions();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -2011,6 +1983,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__CANCELLATION_FEE:
 				setCancellationFee((Integer)newValue);
 				return;
+			case CargoPackage.SLOT__OVERRIDE_RESTRICTIONS:
+				setOverrideRestrictions((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -2089,13 +2064,13 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				unsetEntity();
 				return;
 			case CargoPackage.SLOT__RESTRICTED_CONTRACTS:
-				unsetRestrictedContracts();
+				getRestrictedContracts().clear();
 				return;
 			case CargoPackage.SLOT__RESTRICTED_PORTS:
-				unsetRestrictedPorts();
+				getRestrictedPorts().clear();
 				return;
 			case CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE:
-				unsetRestrictedListsArePermissive();
+				setRestrictedListsArePermissive(RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT);
 				return;
 			case CargoPackage.SLOT__HEDGES:
 				setHedges(HEDGES_EDEFAULT);
@@ -2105,6 +2080,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return;
 			case CargoPackage.SLOT__CANCELLATION_FEE:
 				unsetCancellationFee();
+				return;
+			case CargoPackage.SLOT__OVERRIDE_RESTRICTIONS:
+				setOverrideRestrictions(OVERRIDE_RESTRICTIONS_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -2162,17 +2140,19 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__ENTITY:
 				return isSetEntity();
 			case CargoPackage.SLOT__RESTRICTED_CONTRACTS:
-				return isSetRestrictedContracts();
+				return restrictedContracts != null && !restrictedContracts.isEmpty();
 			case CargoPackage.SLOT__RESTRICTED_PORTS:
-				return isSetRestrictedPorts();
+				return restrictedPorts != null && !restrictedPorts.isEmpty();
 			case CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE:
-				return isSetRestrictedListsArePermissive();
+				return restrictedListsArePermissive != RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT;
 			case CargoPackage.SLOT__HEDGES:
 				return hedges != HEDGES_EDEFAULT;
 			case CargoPackage.SLOT__ALLOWED_VESSELS:
 				return allowedVessels != null && !allowedVessels.isEmpty();
 			case CargoPackage.SLOT__CANCELLATION_FEE:
 				return isSetCancellationFee();
+			case CargoPackage.SLOT__OVERRIDE_RESTRICTIONS:
+				return overrideRestrictions != OVERRIDE_RESTRICTIONS_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -2345,11 +2325,13 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		result.append(", shippingDaysRestriction: ");
 		result.append(shippingDaysRestriction);
 		result.append(", restrictedListsArePermissive: ");
-		if (restrictedListsArePermissiveESet) result.append(restrictedListsArePermissive); else result.append("<unset>");
+		result.append(restrictedListsArePermissive);
 		result.append(", hedges: ");
 		result.append(hedges);
 		result.append(", cancellationFee: ");
 		if (cancellationFeeESet) result.append(cancellationFee); else result.append("<unset>");
+		result.append(", overrideRestrictions: ");
+		result.append(overrideRestrictions);
 		result.append(')');
 		return result.toString();
 	}
@@ -2369,12 +2351,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_MaxQuantity(), (Integer) 140000);
 		} else if (CargoPackage.Literals.SLOT__ENTITY == feature) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_Entity(), null);
-		} else if (CargoPackage.Literals.SLOT__RESTRICTED_CONTRACTS == feature) {
-			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_RestrictedContracts(), null);
-		} else if (CargoPackage.Literals.SLOT__RESTRICTED_PORTS == feature) {
-			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_RestrictedPorts(), null);
-		} else if (CargoPackage.Literals.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE == feature) {
-			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_RestrictedListsArePermissive(), (Boolean) false);
 		} else if (CargoPackage.Literals.SLOT__CANCELLATION_FEE == feature) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_CancellationFee(), (Integer)0);
 		}

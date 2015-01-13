@@ -17,7 +17,8 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.editor.utils.AssignmentEditorHelper;
+import com.mmxlabs.models.lng.cargo.edit.utils.AssignableElementCommandHelper;
+import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -58,7 +59,7 @@ public final class AssignmentInlineEditor extends ReferenceInlineEditor {
 									final CargoModel cargoModel = ((LNGScenarioModel) rootObject).getPortfolioModel().getCargoModel();
 									final int maxSpot = AssignmentEditorHelper.getMaxSpot(cargoModel) + 1;
 
-									commandHandler.handleCommand(AssignmentEditorHelper.reassignElement(commandHandler.getEditingDomain(), (AVesselSet<Vessel>) vessel, elementAssignment, maxSpot),
+									commandHandler.handleCommand(AssignableElementCommandHelper.reassignElement(commandHandler.getEditingDomain(), (AVesselSet<Vessel>) vessel, elementAssignment, maxSpot),
 											elementAssignment, CargoPackage.eINSTANCE.getAssignableElement_Assignment());
 									return;
 								}

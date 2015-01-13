@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.scenario.model.provider;
 
+import com.mmxlabs.models.lng.actuals.provider.ActualsEditPlugin;
 import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
 
@@ -53,6 +54,7 @@ public final class LNGScenarioEditPlugin extends EMFPlugin {
 	public LNGScenarioEditPlugin() {
 		super
 		  (new ResourceLocator [] {
+		     ActualsEditPlugin.INSTANCE,
 		     AnalyticsEditPlugin.INSTANCE,
 		     CargoEditPlugin.INSTANCE,
 		     CommercialEditPlugin.INSTANCE,

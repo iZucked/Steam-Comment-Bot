@@ -22,6 +22,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getCargoModel <em>Cargo Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getScheduleModel <em>Schedule Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getParameters <em>Parameters</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getActualsModel <em>Actuals Model</em>}</li>
  * </ul>
  * </p>
  *
@@ -107,5 +108,31 @@ public interface LNGPortfolioModel extends UUIDObject {
 	 * @generated
 	 */
 	void setParameters(OptimiserSettings value);
+
+	/**
+	 * Returns the value of the '<em><b>Actuals Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Actuals Model</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Actuals Model</em>' containment reference.
+	 * @see #setActualsModel(com.mmxlabs.models.lng.actuals.ActualsModel)
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGPortfolioModel_ActualsModel()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	com.mmxlabs.models.lng.actuals.ActualsModel getActualsModel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getActualsModel <em>Actuals Model</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Actuals Model</em>' containment reference.
+	 * @see #getActualsModel()
+	 * @generated
+	 */
+	void setActualsModel(com.mmxlabs.models.lng.actuals.ActualsModel value);
 
 } // LNGPortfolioModel

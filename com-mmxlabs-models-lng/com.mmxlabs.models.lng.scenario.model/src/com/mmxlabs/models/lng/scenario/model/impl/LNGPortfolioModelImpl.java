@@ -29,6 +29,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGPortfolioModelImpl#getCargoModel <em>Cargo Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGPortfolioModelImpl#getScheduleModel <em>Schedule Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGPortfolioModelImpl#getParameters <em>Parameters</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGPortfolioModelImpl#getActualsModel <em>Actuals Model</em>}</li>
  * </ul>
  * </p>
  *
@@ -64,6 +65,16 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 	 * @ordered
 	 */
 	protected OptimiserSettings parameters;
+
+	/**
+	 * The cached value of the '{@link #getActualsModel() <em>Actuals Model</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getActualsModel()
+	 * @generated
+	 * @ordered
+	 */
+	protected com.mmxlabs.models.lng.actuals.ActualsModel actualsModel;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -287,6 +298,72 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public com.mmxlabs.models.lng.actuals.ActualsModel getActualsModel() {
+		if (actualsModel != null && actualsModel.eIsProxy()) {
+			InternalEObject oldActualsModel = (InternalEObject)actualsModel;
+			actualsModel = (com.mmxlabs.models.lng.actuals.ActualsModel)eResolveProxy(oldActualsModel);
+			if (actualsModel != oldActualsModel) {
+				InternalEObject newActualsModel = (InternalEObject)actualsModel;
+				NotificationChain msgs = oldActualsModel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_PORTFOLIO_MODEL__ACTUALS_MODEL, null, null);
+				if (newActualsModel.eInternalContainer() == null) {
+					msgs = newActualsModel.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_PORTFOLIO_MODEL__ACTUALS_MODEL, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LNGScenarioPackage.LNG_PORTFOLIO_MODEL__ACTUALS_MODEL, oldActualsModel, actualsModel));
+			}
+		}
+		return actualsModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public com.mmxlabs.models.lng.actuals.ActualsModel basicGetActualsModel() {
+		return actualsModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetActualsModel(com.mmxlabs.models.lng.actuals.ActualsModel newActualsModel, NotificationChain msgs) {
+		com.mmxlabs.models.lng.actuals.ActualsModel oldActualsModel = actualsModel;
+		actualsModel = newActualsModel;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_PORTFOLIO_MODEL__ACTUALS_MODEL, oldActualsModel, newActualsModel);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setActualsModel(com.mmxlabs.models.lng.actuals.ActualsModel newActualsModel) {
+		if (newActualsModel != actualsModel) {
+			NotificationChain msgs = null;
+			if (actualsModel != null)
+				msgs = ((InternalEObject)actualsModel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_PORTFOLIO_MODEL__ACTUALS_MODEL, null, msgs);
+			if (newActualsModel != null)
+				msgs = ((InternalEObject)newActualsModel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_PORTFOLIO_MODEL__ACTUALS_MODEL, null, msgs);
+			msgs = basicSetActualsModel(newActualsModel, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_PORTFOLIO_MODEL__ACTUALS_MODEL, newActualsModel, newActualsModel));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -296,6 +373,8 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 				return basicSetScheduleModel(null, msgs);
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__PARAMETERS:
 				return basicSetParameters(null, msgs);
+			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__ACTUALS_MODEL:
+				return basicSetActualsModel(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -317,6 +396,9 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__PARAMETERS:
 				if (resolve) return getParameters();
 				return basicGetParameters();
+			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__ACTUALS_MODEL:
+				if (resolve) return getActualsModel();
+				return basicGetActualsModel();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -337,6 +419,9 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 				return;
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__PARAMETERS:
 				setParameters((OptimiserSettings)newValue);
+				return;
+			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__ACTUALS_MODEL:
+				setActualsModel((com.mmxlabs.models.lng.actuals.ActualsModel)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -359,6 +444,9 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__PARAMETERS:
 				setParameters((OptimiserSettings)null);
 				return;
+			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__ACTUALS_MODEL:
+				setActualsModel((com.mmxlabs.models.lng.actuals.ActualsModel)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -377,6 +465,8 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 				return scheduleModel != null;
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__PARAMETERS:
 				return parameters != null;
+			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__ACTUALS_MODEL:
+				return actualsModel != null;
 		}
 		return super.eIsSet(featureID);
 	}
