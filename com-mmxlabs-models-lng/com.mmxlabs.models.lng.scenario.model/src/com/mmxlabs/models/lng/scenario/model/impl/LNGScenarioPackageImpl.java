@@ -94,6 +94,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 		isInited = true;
 
 		// Initialize simple dependencies
+		com.mmxlabs.models.lng.actuals.ActualsPackage.eINSTANCE.eClass();
 		AnalyticsPackage.eINSTANCE.eClass();
 		ParametersPackage.eINSTANCE.eClass();
 		SchedulePackage.eINSTANCE.eClass();
@@ -226,6 +227,15 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getLNGPortfolioModel_ActualsModel() {
+		return (EReference)lngPortfolioModelEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public LNGScenarioFactory getLNGScenarioFactory() {
 		return (LNGScenarioFactory)getEFactoryInstance();
 	}
@@ -262,6 +272,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 		createEReference(lngPortfolioModelEClass, LNG_PORTFOLIO_MODEL__CARGO_MODEL);
 		createEReference(lngPortfolioModelEClass, LNG_PORTFOLIO_MODEL__SCHEDULE_MODEL);
 		createEReference(lngPortfolioModelEClass, LNG_PORTFOLIO_MODEL__PARAMETERS);
+		createEReference(lngPortfolioModelEClass, LNG_PORTFOLIO_MODEL__ACTUALS_MODEL);
 	}
 
 	/**
@@ -298,6 +309,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 		CargoPackage theCargoPackage = (CargoPackage)EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI);
 		SchedulePackage theSchedulePackage = (SchedulePackage)EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI);
 		ParametersPackage theParametersPackage = (ParametersPackage)EPackage.Registry.INSTANCE.getEPackage(ParametersPackage.eNS_URI);
+		com.mmxlabs.models.lng.actuals.ActualsPackage theActualsPackage = (com.mmxlabs.models.lng.actuals.ActualsPackage)EPackage.Registry.INSTANCE.getEPackage(com.mmxlabs.models.lng.actuals.ActualsPackage.eNS_URI);
 
 		// Create type parameters
 
@@ -321,6 +333,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 		initEReference(getLNGPortfolioModel_CargoModel(), theCargoPackage.getCargoModel(), null, "cargoModel", null, 0, 1, LNGPortfolioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getLNGPortfolioModel_ScheduleModel(), theSchedulePackage.getScheduleModel(), null, "scheduleModel", null, 0, 1, LNGPortfolioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getLNGPortfolioModel_Parameters(), theParametersPackage.getOptimiserSettings(), null, "parameters", null, 0, 1, LNGPortfolioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLNGPortfolioModel_ActualsModel(), theActualsPackage.getActualsModel(), null, "actualsModel", null, 0, 1, LNGPortfolioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

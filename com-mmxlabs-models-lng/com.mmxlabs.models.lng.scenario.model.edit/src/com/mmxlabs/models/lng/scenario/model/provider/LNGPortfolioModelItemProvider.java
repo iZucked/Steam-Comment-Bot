@@ -82,6 +82,7 @@ public class LNGPortfolioModelItemProvider
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_CargoModel());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_ScheduleModel());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_Parameters());
+			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_ActualsModel());
 		}
 		return childrenFeatures;
 	}
@@ -139,6 +140,7 @@ public class LNGPortfolioModelItemProvider
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__CARGO_MODEL:
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__SCHEDULE_MODEL:
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__PARAMETERS:
+			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__ACTUALS_MODEL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -170,6 +172,11 @@ public class LNGPortfolioModelItemProvider
 			(createChildParameter
 				(LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_Parameters(),
 				 ParametersFactory.eINSTANCE.createOptimiserSettings()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_ActualsModel(),
+				 com.mmxlabs.models.lng.actuals.ActualsFactory.eINSTANCE.createActualsModel()));
 	}
 
 }

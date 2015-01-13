@@ -43,6 +43,7 @@ import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
@@ -58,7 +59,6 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
@@ -80,16 +80,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 				final LNGPortfolioModel portfolioModel = lngScenarioModel.getPortfolioModel();
 				if (portfolioModel != null) {
 
-					ActualsModel actualsModel = null;
-					final CargoModel cargoModel = portfolioModel.getCargoModel();
-					if (cargoModel != null) {
-						for (final EObject ext : cargoModel.getExtensions()) {
-							if (ext instanceof ActualsModel) {
-								actualsModel = (ActualsModel) ext;
-								break;
-							}
-						}
-					}
+					final ActualsModel actualsModel = portfolioModel.getActualsModel();
 
 					if (actualsModel == null) {
 						actualisePossible = true;
@@ -151,19 +142,10 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 				if (portfolioModel != null) {
 
 					final CompoundCommand cmd = new CompoundCommand();
-					ActualsModel actualsModel = null;
-					final CargoModel cargoModel = portfolioModel.getCargoModel();
-					if (cargoModel != null) {
-						for (final EObject ext : cargoModel.getExtensions()) {
-							if (ext instanceof ActualsModel) {
-								actualsModel = (ActualsModel) ext;
-								break;
-							}
-						}
-						if (actualsModel == null) {
-							actualsModel = ActualsFactory.eINSTANCE.createActualsModel();
-							cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargoModel, MMXCorePackage.Literals.MMX_OBJECT__EXTENSIONS, actualsModel));
-						}
+					ActualsModel actualsModel = portfolioModel.getActualsModel();
+					if (actualsModel == null) {
+						actualsModel = ActualsFactory.eINSTANCE.createActualsModel();
+						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), portfolioModel, LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_ActualsModel(), actualsModel));
 					}
 
 					if (actualsModel == null) {

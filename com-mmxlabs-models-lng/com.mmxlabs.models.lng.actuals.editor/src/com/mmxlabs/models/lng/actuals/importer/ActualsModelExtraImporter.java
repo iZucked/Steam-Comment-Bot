@@ -45,21 +45,18 @@ public class ActualsModelExtraImporter implements IExtraModelImporter {
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 			final LNGPortfolioModel portfolioModel = lngScenarioModel.getPortfolioModel();
 			if (portfolioModel != null) {
-				CargoModel cargoModel = portfolioModel.getCargoModel();
-				if (cargoModel != null) {
 
-					final CSVReader reader = inputs.get(ACTUALS_KEY);
-					if (reader != null) {
-						final Collection<EObject> importObjects = actualsImporter.importObjects(ActualsPackage.Literals.CARGO_ACTUALS, reader, context);
-						final ActualsModel actualsModel = ActualsFactory.eINSTANCE.createActualsModel();
-						for (final EObject e : importObjects) {
-							if (e instanceof CargoActuals) {
-								CargoActuals cargoActuals = (CargoActuals) e;
-								actualsModel.getCargoActuals().add(cargoActuals);
-							}
+				final CSVReader reader = inputs.get(ACTUALS_KEY);
+				if (reader != null) {
+					final Collection<EObject> importObjects = actualsImporter.importObjects(ActualsPackage.Literals.CARGO_ACTUALS, reader, context);
+					final ActualsModel actualsModel = ActualsFactory.eINSTANCE.createActualsModel();
+					for (final EObject e : importObjects) {
+						if (e instanceof CargoActuals) {
+							CargoActuals cargoActuals = (CargoActuals) e;
+							actualsModel.getCargoActuals().add(cargoActuals);
 						}
-						cargoModel.getExtensions().add(actualsModel);
 					}
+					portfolioModel.setActualsModel(actualsModel);
 				}
 			}
 		}
@@ -72,14 +69,9 @@ public class ActualsModelExtraImporter implements IExtraModelImporter {
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 			final LNGPortfolioModel portfolioModel = lngScenarioModel.getPortfolioModel();
 			if (portfolioModel != null) {
-				CargoModel cargoModel = portfolioModel.getCargoModel();
-				if (cargoModel != null) {
-					for (final EObject eObj : cargoModel.getExtensions()) {
-						if (eObj instanceof ActualsModel) {
-							final ActualsModel actualsModel = (ActualsModel) eObj;
-							output.put(ACTUALS_KEY, actualsImporter.exportActuals(actualsModel.getCargoActuals(), context));
-						}
-					}
+				final ActualsModel actualsModel = portfolioModel.getActualsModel();
+				if (actualsModel != null) {
+					output.put(ACTUALS_KEY, actualsImporter.exportActuals(actualsModel.getCargoActuals(), context));
 				}
 			}
 		}

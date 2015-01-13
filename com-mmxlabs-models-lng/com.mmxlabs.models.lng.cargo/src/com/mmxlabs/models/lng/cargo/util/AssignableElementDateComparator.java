@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2014
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.cargo.editor.utils;
+package com.mmxlabs.models.lng.cargo.util;
 
 import java.util.Date;
 
