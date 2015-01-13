@@ -8,9 +8,7 @@ import java.util.EventObject;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
@@ -60,7 +58,6 @@ public class EObjectTableViewer extends GridTreeViewer {
 	public static final String COLUMN_RENDERER = "COLUMN_RENDERER";
 	public static final String COLUMN_COMPARABLE_PROVIDER = "COLUMN_COMPARABLE_PROVIDER";
 	public static final String COLUMN_MANIPULATOR = "COLUMN_MANIPULATOR";
-	public static final String COLUMN_MNEMONICS = "COLUMN_MNEMONICS";
 	public static final String COLUMN_RENDERER_AND_PATH = "COLUMN_RENDERER_AND_PATH";
 
 	/**
@@ -89,10 +86,6 @@ public class EObjectTableViewer extends GridTreeViewer {
 	protected IColorProvider delegateColourProvider;
 
 	protected IToolTipProvider delegateToolTipProvider;
-
-	/**
-	 */
-	protected final Set<String> allMnemonics = new HashSet<String>();
 
 	private final EObjectTableViewerSortingSupport sortingSupport = new EObjectTableViewerSortingSupport();
 
@@ -188,13 +181,13 @@ public class EObjectTableViewer extends GridTreeViewer {
 
 	public EObjectTableViewer(final Composite parent, final int style) {
 		// The default super class constructor creates a data visualizer with
-		// explicit background & foreground; this interferes with the 
+		// explicit background & foreground; this interferes with the
 		// default checking in the AlternatingRowCellRenderer.
 		// Here we make sure that our EObjectTableViewer objects are
 		// initialised with null settings for the cell background colour.
 		super(new Grid(new GridItemDataVisualizer(null, null, null), parent, style));
 		this.validationSupport = createValidationSupport();
-		this.filterSupport = new EObjectTableViewerFilterSupport(this);
+		this.filterSupport = new EObjectTableViewerFilterSupport(this, this.getGrid());
 		ColumnViewerToolTipSupport.enableFor(this);
 	}
 
@@ -213,50 +206,6 @@ public class EObjectTableViewer extends GridTreeViewer {
 	public GridViewerColumn addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final ETypedElement... pathObjects) {
 		// final EMFPath path = new CompiledEMFPath(getClass().getClassLoader(), true, pathObjects);
 		return addColumn(columnName, renderer, manipulator, new EMFPath(true, pathObjects));
-	}
-
-	/**
-	 */
-	public void setColumnMnemonics(final GridColumn column, final List<String> mnemonics) {
-		column.setData(EObjectTableViewer.COLUMN_MNEMONICS, mnemonics);
-		for (final String string : mnemonics) {
-			allMnemonics.add(string);
-		}
-	}
-
-	/**
-	 */
-	protected String uniqueMnemonic(final String mnemonic) {
-		String result = mnemonic;
-		int suffix = 2;
-		while (allMnemonics.contains(result)) {
-			result = mnemonic + suffix++;
-		}
-		return result;
-	}
-
-	/**
-	 */
-	protected List<String> makeMnemonics(final String columnName) {
-		final LinkedList<String> result = new LinkedList<String>();
-
-		result.add(uniqueMnemonic(columnName.toLowerCase().replace(" ", "")));
-		String initials = "";
-		boolean ws = true;
-		for (int i = 0; i < columnName.length(); i++) {
-			final char c = columnName.charAt(i);
-			if (Character.isWhitespace(c)) {
-				ws = true;
-			} else {
-				if (ws) {
-					initials += c;
-				}
-				ws = false;
-			}
-		}
-		result.add(uniqueMnemonic(initials.toLowerCase()));
-
-		return result;
 	}
 
 	public GridViewerColumn addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final EMFPath path) {
@@ -284,7 +233,7 @@ public class EObjectTableViewer extends GridTreeViewer {
 		tColumn.setData(COLUMN_PATH, path);
 		tColumn.setData(COLUMN_MANIPULATOR, manipulator);
 
-		setColumnMnemonics(tColumn, makeMnemonics(columnName));
+		filterSupport.createColumnMnemonics(tColumn, columnName);
 
 		column.setLabelProvider(new EObjectTableViewerColumnProvider(this, renderer, path));
 
@@ -357,7 +306,7 @@ public class EObjectTableViewer extends GridTreeViewer {
 		tColumn.setText(columnName);
 		tColumn.pack();
 
-		setColumnMnemonics(tColumn, makeMnemonics(columnName));
+		filterSupport.createColumnMnemonics(tColumn, columnName);
 
 		if (sortable) {
 			sortingSupport.addSortableColumn(viewer, column, tColumn);
