@@ -171,8 +171,8 @@ public class EObjectTableViewerSortingSupport {
 							rightOwner = path.get((EObject) rightObject);
 						} else if (data instanceof EMFPath[]) {
 
-							leftOwner = leftObject;
-							rightOwner = rightObject;
+							leftOwner = null;//leftObject;
+							rightOwner =null;// rightObject;
 
 							EMFPath[] paths = (EMFPath[]) data;
 							for (final EMFPath p : paths) {
