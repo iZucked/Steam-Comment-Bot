@@ -16,13 +16,10 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
-import com.mmxlabs.models.lng.types.VesselAssignmentType;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.ui.tabular.generic.GenericEMFTableDataModel;
 
 /**
@@ -169,21 +166,25 @@ public class CargoAllocationUtils {
 		if (inputCargo == null) {
 			return "";
 		}
-		final VesselAssignmentType vesselAssignmentType = inputCargo.getVesselAssignmentType();
-
-		if (vesselAssignmentType instanceof VesselAvailability) {
-			final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
-			final Vessel vessel = vesselAvailability.getVessel();
-			if (vessel != null) {
-				return vessel.getName();
-			}
-		} else if (vesselAssignmentType instanceof CharterInMarket) {
-			final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
-			final VesselClass vesselClass = charterInMarket.getVesselClass();
-			if (vesselClass != null) {
-				return vesselClass.getName();
-			}
+		final AVesselSet<? extends Vessel> l = inputCargo.getAssignment();
+		if (l != null) { 
+			return l.getName();
 		}
+//		final VesselAssignmentType vesselAssignmentType = inputCargo.getVesselAssignmentType();
+//
+//		if (vesselAssignmentType instanceof VesselAvailability) {
+//			final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
+//			final Vessel vessel = vesselAvailability.getVessel();
+//			if (vessel != null) {
+//				return vessel.getName();
+//			}
+//		} else if (vesselAssignmentType instanceof CharterInMarket) {
+//			final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
+//			final VesselClass vesselClass = charterInMarket.getVesselClass();
+//			if (vesselClass != null) {
+//				return vesselClass.getName();
+//			}
+//		}
 		return "";
 	}
 }
