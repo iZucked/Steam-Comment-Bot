@@ -6,6 +6,7 @@ version = 22
 
 root = "{0}/com.mmxlabs.models.lng.".format(path_to_ws)
 files = ["port",
+		 "actuals",
 		 "pricing",
 		 "fleet",
 		 "commercial",
