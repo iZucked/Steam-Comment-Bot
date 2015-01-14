@@ -169,10 +169,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 							break;
 						default:
 							break;
-
-						// }
-						// return sequence.getName();
-						// }
+						}
 						return null;
 
 					} else if (object instanceof Event) {
