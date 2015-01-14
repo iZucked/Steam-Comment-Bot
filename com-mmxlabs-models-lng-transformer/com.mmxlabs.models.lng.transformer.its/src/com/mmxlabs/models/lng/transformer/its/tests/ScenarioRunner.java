@@ -79,16 +79,11 @@ public class ScenarioRunner {
 	}
 
 	public void init() throws IncompleteScenarioException {
-		OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
+		final OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
 		assert optimiserSettings != null;
 		IParameterModesRegistry parameterModesRegistry = null;
 
-		Activator activator = Activator.getDefault();
-		if (activator != null) {
-			parameterModesRegistry = activator.getParameterModesRegistry();
-		}
-
-		Activator activator = Activator.getDefault();
+		final Activator activator = Activator.getDefault();
 		if (activator != null) {
 			parameterModesRegistry = activator.getParameterModesRegistry();
 		}
@@ -132,7 +127,7 @@ public class ScenarioRunner {
 		run(100);
 	}
 
-	public void run(int percentage) {
+	public void run(final int percentage) {
 		optimiser.step(percentage);
 		finalSchedule = exportSchedule(optimiser.getBestSolution());
 	}
