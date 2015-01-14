@@ -184,7 +184,6 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	public CharterIndex getCharterInPrice() {
 		if (charterInPrice != null && charterInPrice.eIsProxy()) {
 			InternalEObject oldCharterInPrice = (InternalEObject)charterInPrice;
@@ -223,7 +222,6 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	public CharterIndex getCharterOutPrice() {
 		if (charterOutPrice != null && charterOutPrice.eIsProxy()) {
 			InternalEObject oldCharterOutPrice = (InternalEObject)charterOutPrice;
