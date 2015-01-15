@@ -76,6 +76,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.ScrollBar;
@@ -83,6 +84,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
@@ -1136,9 +1138,28 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 			@Override
 			public void open(final OpenEvent event) {
+
 				if (scenarioViewer.getSelection() instanceof IStructuredSelection) {
 					final IStructuredSelection structuredSelection = (IStructuredSelection) scenarioViewer.getSelection();
 					if (structuredSelection.isEmpty() == false) {
+
+						// Attempt to detect the column we clicked on.
+						final GridColumn column = null;
+						final IWorkbench workbench = PlatformUI.getWorkbench();
+						if (workbench != null) {
+							final Display display = workbench.getDisplay();
+							if (display != null) {
+								final Point cursorLocation = display.getCursorLocation();
+								if (cursorLocation != null) {
+
+									final Grid grid = getScenarioViewer().getGrid();
+
+									final Point mousePoint = grid.toControl(cursorLocation);
+									grid.getColumn(mousePoint);
+
+								}
+							}
+						}
 
 						final List<EObject> editorTargets = new ArrayList<EObject>();
 						final Iterator<?> itr = structuredSelection.iterator();
@@ -1149,9 +1170,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 								final RowData rd = (RowData) obj;
 								if (rd.cargo != null) {
 									target = rd.cargo;
-								} else if (rd.loadSlot != null) {
+								} else if ((column == null || loadColumns.contains(column)) && rd.loadSlot != null) {
 									target = rd.loadSlot;
-								} else if (rd.dischargeSlot != null) {
+								} else if ((column == null || dischargeColumns.contains(column) || !loadColumns.contains(column)) && rd.dischargeSlot != null) {
 									target = rd.dischargeSlot;
 								}
 							}
