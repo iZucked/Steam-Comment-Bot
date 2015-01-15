@@ -76,7 +76,11 @@
 <unit id="org.apache.shiro.guice.source" version="1.2.0"/>
 <unit id="org.apache.shiro.core" version="1.2.0"/>
 <unit id="org.apache.shiro.guice" version="1.2.0"/>
-<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/p2/repository/mmxlabs-external/1.0.6/mmxlabs-external-1.0.6-p2-repo.zip-unzip/" id="mmxlabs-releases"/>
+<unit id="com.springsource.org.apache.poi" version="3.9.0.FINAL"/>
+<unit id="com.springsource.org.apache.poi.source" version="3.9.0.FINAL"/>
+<unit id="com.springsource.org.apache.commons.logging" version="1.1.1"/>
+<unit id="com.springsource.org.apache.commons.codec" version="1.6.0"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/p2/repository/mmxlabs-external/1.0.8/mmxlabs-external-1.0.8-p2-repo.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.swtbot.eclipse.feature.group" version="2.0.5.20111003_1754-3676ac8-dev-e36"/>
