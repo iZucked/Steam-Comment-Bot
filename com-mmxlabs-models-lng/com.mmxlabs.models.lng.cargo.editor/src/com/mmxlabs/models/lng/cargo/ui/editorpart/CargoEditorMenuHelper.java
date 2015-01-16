@@ -940,7 +940,7 @@ public class CargoEditorMenuHelper {
 		final Cargo c = isLoad ? ((LoadSlot) slot).getCargo() : ((DischargeSlot) slot).getCargo();
 		if (c != null) {
 			sb.append(" -- ");
-			sb.append("cargo '" + c.getName() + "'");
+			sb.append("cargo '" + c.getLoadName() + "'");
 		}
 		return sb.toString();
 	}

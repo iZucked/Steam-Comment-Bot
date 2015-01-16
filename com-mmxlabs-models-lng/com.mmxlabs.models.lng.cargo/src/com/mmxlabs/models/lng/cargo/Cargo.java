@@ -8,7 +8,6 @@ import java.util.List;
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.cargo.util.CargoSlotSorter;
-import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
@@ -28,7 +27,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @model
  * @generated
  */
-public interface Cargo extends UUIDObject, NamedObject, AssignableElement {
+public interface Cargo extends UUIDObject, AssignableElement {
 	/**
 	 * Returns the value of the '<em><b>Allow Rewiring</b></em>' attribute.
 	 * The default value is <code>"false"</code>.
@@ -91,6 +90,15 @@ public interface Cargo extends UUIDObject, NamedObject, AssignableElement {
 	 * @generated
 	 */
 	EList<Slot> getSortedSlots();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * Returns the name of the first load slot in the {@link Cargo} as defined by {@link #getSortedSlots()}
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	String getLoadName();
 
 } // end of  Cargo
 

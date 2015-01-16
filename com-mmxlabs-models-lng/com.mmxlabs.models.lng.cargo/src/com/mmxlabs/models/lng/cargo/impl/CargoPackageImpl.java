@@ -295,6 +295,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getCargo__GetLoadName() {
+		return cargoEClass.getEOperations().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getSlot() {
 		return slotEClass;
 	}
@@ -1286,6 +1295,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(cargoEClass, CARGO__SLOTS);
 		createEOperation(cargoEClass, CARGO___GET_CARGO_TYPE);
 		createEOperation(cargoEClass, CARGO___GET_SORTED_SLOTS);
+		createEOperation(cargoEClass, CARGO___GET_LOAD_NAME);
 
 		slotEClass = createEClass(SLOT);
 		createEReference(slotEClass, SLOT__CONTRACT);
@@ -1441,7 +1451,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		// Add supertypes to classes
 		cargoModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		cargoEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
-		cargoEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		cargoEClass.getESuperTypes().add(this.getAssignableElement());
 		slotEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		slotEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
@@ -1485,6 +1494,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEOperation(getCargo__GetCargoType(), this.getCargoType(), "getCargoType", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEOperation(getCargo__GetSortedSlots(), this.getSlot(), "getSortedSlots", 0, -1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getCargo__GetLoadName(), ecorePackage.getEString(), "getLoadName", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(slotEClass, Slot.class, "Slot", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSlot_Contract(), theCommercialPackage.getContract(), null, "contract", null, 1, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

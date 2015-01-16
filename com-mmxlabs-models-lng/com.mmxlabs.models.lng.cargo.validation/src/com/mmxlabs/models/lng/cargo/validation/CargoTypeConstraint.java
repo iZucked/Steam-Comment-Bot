@@ -37,7 +37,7 @@ public class CargoTypeConstraint extends AbstractModelMultiConstraint {
 						final LoadSlot loadSlot = (LoadSlot) s;
 						if (loadSlot.isDESPurchase()) {
 							if (cargo.getCargoType() == CargoType.FOB) {
-								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Cargo|" + cargo.getName()
+								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Cargo|" + cargo.getLoadName()
 										+ " Cannot pair a DES Purchase to a FOB Sale."));
 								failure.addEObjectAndFeature(loadSlot, CargoPackage.Literals.LOAD_SLOT__DES_PURCHASE);
 								failures.add(failure);
@@ -47,7 +47,7 @@ public class CargoTypeConstraint extends AbstractModelMultiConstraint {
 						final DischargeSlot dischargeSlot = (DischargeSlot) s;
 						if (dischargeSlot.isFOBSale()) {
 							if (cargo.getCargoType() == CargoType.DES) {
-								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Cargo|" + cargo.getName()
+								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Cargo|" + cargo.getLoadName()
 										+ " Cannot pair a DES Purchase to a FOB Sale."));
 								failure.addEObjectAndFeature(dischargeSlot, CargoPackage.Literals.DISCHARGE_SLOT__FOB_SALE);
 								failures.add(failure);

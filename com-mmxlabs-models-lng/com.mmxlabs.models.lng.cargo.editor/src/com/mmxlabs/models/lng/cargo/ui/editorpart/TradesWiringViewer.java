@@ -1235,7 +1235,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					if (loadSide.cargo == null) {
 						// New Cargo
 						c = cec.createNewCargo(setCommands, cargoModel);
-						c.setName(loadSide.loadSlot.getName());
 						setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), loadSide.loadSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), c));
 					} else {
 						c = loadSide.cargo;
@@ -1664,7 +1663,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 							}
 						}
 						newCargo.setAllowRewiring(true);
-						newCargo.setName("");
 
 						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), newCargo));
 

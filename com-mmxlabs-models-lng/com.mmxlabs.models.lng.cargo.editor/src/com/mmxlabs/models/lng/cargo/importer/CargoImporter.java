@@ -54,8 +54,8 @@ import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 /**
  */
 public class CargoImporter extends DefaultClassImporter {
+	private static final String KEY_CARGONAME = "name";
 	private static final String KEY_LOADSLOT = "buy";
-
 	private static final String KEY_DISCHARGESLOT = "sell";
 
 	// List of column names to filter out of export. UUID is confusing to the user, othernames is not used by cargo or slots. Fixed Price is deprecated.
@@ -94,13 +94,13 @@ public class CargoImporter extends DefaultClassImporter {
 		for (final EAttribute attribute : object.eClass().getEAllAttributes()) {
 
 			if (object instanceof AssignableElement) {
-//				final AssignableElement assignableElement = (AssignableElement) object;
+				// final AssignableElement assignableElement = (AssignableElement) object;
 				// yes yes both attribute and reference here, but easier to copy paste....
 				if (attribute == CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX || attribute == CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT
 						|| attribute == CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED) {
-//					if (assignableElement.getAssignment() == null) {
-						continue;
-//					}
+					// if (assignableElement.getAssignment() == null) {
+					continue;
+					// }
 				}
 			}
 
@@ -112,12 +112,12 @@ public class CargoImporter extends DefaultClassImporter {
 		for (final EReference reference : object.eClass().getEAllReferences()) {
 
 			if (object instanceof AssignableElement) {
-//				final AssignableElement assignableElement = (AssignableElement) object;
+				// final AssignableElement assignableElement = (AssignableElement) object;
 				// yes yes both attribute and reference here, but easier to copy paste....
 				if (reference == CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE) {
-//					if (assignableElement.getAssignment() == null) {
-						continue;
-//					}
+					// if (assignableElement.getAssignment() == null) {
+					continue;
+					// }
 				}
 			}
 
@@ -183,6 +183,7 @@ public class CargoImporter extends DefaultClassImporter {
 					}
 
 					result.put(KIND_KEY, cargo.eClass().getName());
+					result.put(KEY_CARGONAME, cargo.getLoadName());
 					data.add(result);
 				}
 			}
@@ -343,7 +344,6 @@ public class CargoImporter extends DefaultClassImporter {
 			}
 		});
 
-
 		return newResult;
 	}
 
@@ -375,6 +375,10 @@ public class CargoImporter extends DefaultClassImporter {
 					}
 					final List<EObject> newResults = new ArrayList<EObject>(3);
 
+					// the row data has a "name" field even though cargo objects do not have names
+					// this is used to allow multi-line specifications of e.g. LDD cargoes
+					final String realCargoName = row.get(KEY_CARGONAME);
+
 					boolean keepCargo = true;
 					if (load == null || load.getWindowStart() == null) {
 						load = null;
@@ -392,8 +396,8 @@ public class CargoImporter extends DefaultClassImporter {
 					// Look up the "real cargo" - the first one found with this name/ID. Cargoes with multiple load or multiple discharges will be exported across multiple rows.
 					Cargo realCargo = null;
 					if (tmpCargo != null) {
-						if (cargoMap.containsKey(tmpCargo.getName())) {
-							realCargo = cargoMap.get(tmpCargo.getName());
+						if (cargoMap.containsKey(realCargoName)) {
+							realCargo = cargoMap.get(realCargoName);
 						}
 						// Always clear slots at this information will be updated below
 						tmpCargo.getSlots().clear();
@@ -404,7 +408,7 @@ public class CargoImporter extends DefaultClassImporter {
 					} else if (realCargo == null) {
 						// Keep the cargo and this is the first time we have seen the cargo ID
 						realCargo = tmpCargo;
-						cargoMap.put(tmpCargo.getName(), tmpCargo);
+						cargoMap.put(realCargoName, tmpCargo);
 						newResults.add(realCargo);
 					}
 
@@ -419,8 +423,8 @@ public class CargoImporter extends DefaultClassImporter {
 					}
 
 					// fix missing names
-					if (realCargo != null && realCargo.getName() != null && realCargo.getName().trim().isEmpty() == false) {
-						final String cargoName = realCargo.getName().trim();
+					if (realCargo != null && realCargoName != null && realCargoName.trim().isEmpty() == false) {
+						final String cargoName = realCargoName.trim();
 						if (load != null && (load.getName() == null || load.getName().trim().isEmpty())) {
 							final LoadSlot load2 = load;
 							load2.setName(cargoName);
@@ -509,7 +513,6 @@ public class CargoImporter extends DefaultClassImporter {
 		if (target instanceof AssignableElement) {
 			final AssignableElement assignableElement = (AssignableElement) target;
 
-
 			final String vesselName = fields.get(CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE.getName().toLowerCase());
 			final String assignment = fields.get("assignment");
 			final String spotindex = fields.get("spotindex");
@@ -537,7 +540,7 @@ public class CargoImporter extends DefaultClassImporter {
 							// Old style
 							if (spotindex != null && !spotindex.isEmpty()) {
 
-								final VesselClass vc = (VesselClass) context.getNamedObject(vesselName.trim(), FleetPackage.Literals.VESSEL_CLASS);
+								final VesselClass vc = (VesselClass) context.getNamedObject(assignment.trim(), FleetPackage.Literals.VESSEL_CLASS);
 								if (vc != null) {
 									for (CharterInMarket charterInMarket : ((LNGScenarioModel) context.getRootObject()).getSpotMarketsModel().getCharterInMarkets()) {
 										if (vc.equals(charterInMarket.getVesselClass())) {
@@ -548,7 +551,7 @@ public class CargoImporter extends DefaultClassImporter {
 								}
 
 							} else {
-								final Vessel v = (Vessel) context.getNamedObject(vesselName.trim(), FleetPackage.Literals.VESSEL);
+								final Vessel v = (Vessel) context.getNamedObject(assignment.trim(), FleetPackage.Literals.VESSEL);
 								if (v != null) {
 									final VesselAvailability availability = AssignmentEditorHelper.findVesselAvailability(v, assignableElement, ((LNGScenarioModel) context.getRootObject())
 											.getPortfolioModel().getCargoModel().getVesselAvailabilities());

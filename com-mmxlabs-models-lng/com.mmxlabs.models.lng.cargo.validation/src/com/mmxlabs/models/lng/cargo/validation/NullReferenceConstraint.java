@@ -80,7 +80,7 @@ public class NullReferenceConstraint extends AbstractModelConstraint {
 			String name = "";
 			if(target instanceof Cargo){
 				targetType = "Cargo";
-				name = ((Cargo) target).getName();
+				name = ((Cargo) target).getLoadName();
 			} else if (target instanceof VesselAvailability){
 				targetType = "Vessel";
 				Vessel v = ((VesselAvailability) target).getVessel();

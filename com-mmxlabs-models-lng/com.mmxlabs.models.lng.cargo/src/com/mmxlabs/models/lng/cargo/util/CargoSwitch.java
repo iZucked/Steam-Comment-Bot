@@ -96,7 +96,6 @@ public class CargoSwitch<T1> extends Switch<T1> {
 				Cargo cargo = (Cargo)theEObject;
 				T1 result = caseCargo(cargo);
 				if (result == null) result = caseUUIDObject(cargo);
-				if (result == null) result = caseNamedObject(cargo);
 				if (result == null) result = caseAssignableElement(cargo);
 				if (result == null) result = caseMMXObject(cargo);
 				if (result == null) result = defaultCase(theEObject);

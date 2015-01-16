@@ -63,7 +63,7 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 		for (final ScenarioInstance instance : instances) {
 			// Release reference on block exit
 			try (final ModelReference modelReference = instance.getReference()) {
-			
+
 				final EObject rootObject = modelReference.getInstance();
 
 				if (rootObject instanceof LNGScenarioModel) {
@@ -76,36 +76,38 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 							return false;
 						}
 					}
-	
+
 					// generate export files
 					for (final UUIDObject modelInstance : getSubModels(scenarioModel)) {
 						final ISubmodelImporter importer = Activator.getDefault().getImporterRegistry().getSubmodelImporter(modelInstance.eClass());
 						if (importer != null) {
 							final Map<String, Collection<Map<String, String>>> outputs = new HashMap<String, Collection<Map<String, String>>>();
 							importer.exportModel(modelInstance, outputs, context);
-	
+
 							for (final String key : outputs.keySet()) {
 								final Collection<Map<String, String>> rows = outputs.get(key);
 								final String friendlyName = importer.getRequiredInputs().get(key);
 								final File outputFile = new File(directory, friendlyName + ".csv");
-	
+
 								// export CSV for this file
 								writeCSV(rows, outputFile, delimiter);
 							}
 						}
 					}
-	
+
 					final Collection<IExtraModelImporter> extra = Activator.getDefault().getImporterRegistry().getExtraModelImporters();
 					for (final IExtraModelImporter importer : extra) {
 						final Map<String, Collection<Map<String, String>>> outputs = new HashMap<String, Collection<Map<String, String>>>();
 						importer.exportModel(outputs, context);
 						for (final String key : outputs.keySet()) {
 							final Collection<Map<String, String>> rows = outputs.get(key);
-							final String friendlyName = importer.getRequiredInputs().get(key);
-							final File outputFile = new File(directory, friendlyName + ".csv");
-	
-							// export CSV for this file
-							writeCSV(rows, outputFile, delimiter);
+							if (rows != null) {
+								final String friendlyName = importer.getRequiredInputs().get(key);
+								final File outputFile = new File(directory, friendlyName + ".csv");
+
+								// export CSV for this file
+								writeCSV(rows, outputFile, delimiter);
+							}
 						}
 					}
 				}

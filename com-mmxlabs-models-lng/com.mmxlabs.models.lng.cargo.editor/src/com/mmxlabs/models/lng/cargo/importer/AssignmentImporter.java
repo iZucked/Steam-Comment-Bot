@@ -71,6 +71,11 @@ public class AssignmentImporter {
 								AssignableElement assignableElement = null;
 								if (o instanceof VesselEvent) {
 									assignableElement = (AssignableElement) o;
+								} else if (o instanceof LoadSlot) {
+									final LoadSlot loadSlot = (LoadSlot) o;
+									if (!loadSlot.isDESPurchase()) {
+										assignableElement = loadSlot.getCargo();
+									}
 								}
 
 								if (vesselAssignment != null && !vesselAssignment.isEmpty()) {
@@ -212,7 +217,12 @@ public class AssignmentImporter {
 				} else {
 					sb.append(",");
 				}
-				sb.append(((NamedObject) as).getName());
+				if (as instanceof Cargo) {
+					sb.append(((Cargo) as).getLoadName());
+				} else if (as instanceof NamedObject) {
+					sb.append(((NamedObject) as).getName());
+				}
+
 			}
 			row.put("assignedobjects", sb.toString());
 
@@ -223,6 +233,6 @@ public class AssignmentImporter {
 		for (final DischargeSlot loadSlot : cargoModel.getDischargeSlots()) {
 			// N/A
 		}
-		return null;
+		return result;
 	}
 }

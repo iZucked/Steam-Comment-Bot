@@ -25,8 +25,6 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.util.CargoSlotSorter;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**
@@ -36,7 +34,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getSequenceHint <em>Sequence Hint</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getVesselAssignmentType <em>Vessel Assignment Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getSpotIndex <em>Spot Index</em>}</li>
@@ -49,26 +46,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * @generated
  */
 public class CargoImpl extends UUIDObjectImpl implements Cargo {
-	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String NAME_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected String name = NAME_EDEFAULT;
-
 	/**
 	 * The default value of the '{@link #getSequenceHint() <em>Sequence Hint</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -186,27 +163,6 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	@Override
 	protected EClass eStaticClass() {
 		return CargoPackage.Literals.CARGO;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__NAME, oldName, name));
 	}
 
 	/**
@@ -378,6 +334,20 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public String getLoadName() {
+		for (final Slot slot: getSortedSlots()) {
+			if (slot instanceof LoadSlot) {
+				return slot.getName();
+			}
+		}
+		return "<nameless>";
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
@@ -412,8 +382,6 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case CargoPackage.CARGO__NAME:
-				return getName();
 			case CargoPackage.CARGO__SEQUENCE_HINT:
 				return getSequenceHint();
 			case CargoPackage.CARGO__VESSEL_ASSIGNMENT_TYPE:
@@ -440,9 +408,6 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case CargoPackage.CARGO__NAME:
-				setName((String)newValue);
-				return;
 			case CargoPackage.CARGO__SEQUENCE_HINT:
 				setSequenceHint((Integer)newValue);
 				return;
@@ -474,9 +439,6 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case CargoPackage.CARGO__NAME:
-				setName(NAME_EDEFAULT);
-				return;
 			case CargoPackage.CARGO__SEQUENCE_HINT:
 				setSequenceHint(SEQUENCE_HINT_EDEFAULT);
 				return;
@@ -507,8 +469,6 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case CargoPackage.CARGO__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case CargoPackage.CARGO__SEQUENCE_HINT:
 				return sequenceHint != SEQUENCE_HINT_EDEFAULT;
 			case CargoPackage.CARGO__VESSEL_ASSIGNMENT_TYPE:
@@ -532,12 +492,6 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	 */
 	@Override
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
-		if (baseClass == NamedObject.class) {
-			switch (derivedFeatureID) {
-				case CargoPackage.CARGO__NAME: return MMXCorePackage.NAMED_OBJECT__NAME;
-				default: return -1;
-			}
-		}
 		if (baseClass == AssignableElement.class) {
 			switch (derivedFeatureID) {
 				case CargoPackage.CARGO__SEQUENCE_HINT: return CargoPackage.ASSIGNABLE_ELEMENT__SEQUENCE_HINT;
@@ -557,12 +511,6 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	 */
 	@Override
 	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
-		if (baseClass == NamedObject.class) {
-			switch (baseFeatureID) {
-				case MMXCorePackage.NAMED_OBJECT__NAME: return CargoPackage.CARGO__NAME;
-				default: return -1;
-			}
-		}
 		if (baseClass == AssignableElement.class) {
 			switch (baseFeatureID) {
 				case CargoPackage.ASSIGNABLE_ELEMENT__SEQUENCE_HINT: return CargoPackage.CARGO__SEQUENCE_HINT;
@@ -587,6 +535,8 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 				return getCargoType();
 			case CargoPackage.CARGO___GET_SORTED_SLOTS:
 				return getSortedSlots();
+			case CargoPackage.CARGO___GET_LOAD_NAME:
+				return getLoadName();
 		}
 		return super.eInvoke(operationID, arguments);
 	}
@@ -601,9 +551,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
-		result.append(name);
-		result.append(", sequenceHint: ");
+		result.append(" (sequenceHint: ");
 		result.append(sequenceHint);
 		result.append(", spotIndex: ");
 		result.append(spotIndex);

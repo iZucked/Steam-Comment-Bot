@@ -42,7 +42,7 @@ public class ElementAssignmentConstraint extends AbstractModelMultiConstraint {
 
 				if (cargo.getCargoType() == CargoType.FLEET) {
 					if (assignableElement.getVesselAssignmentType() == null) {
-						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Fleet cargo " + cargo.getName()
+						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Fleet cargo " + cargo.getLoadName()
 								+ " has no vessel assignment. This may cause problems evaluating scenario."), IStatus.WARNING);
 						failure.addEObjectAndFeature(assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
 

@@ -391,10 +391,6 @@
           id="com.mmxlabs.models.lng.cargo.ui.commands.PortUpdatingCommandProvider">
     </ModelCommandProvider>
     <ModelCommandProvider
-          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.SlotNameUpdatingCommandProvider"
-          id="com.mmxlabs.models.lng.cargo.ui.commands.SlotNameUpdatingCommandProvider">
-    </ModelCommandProvider>
-    <ModelCommandProvider
           commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.SlotShipToShipBindingCommandProvider"
           id="com.mmxlabs.models.lng.cargo.ui.commands.SlotShipToShipBindingCommandProvider">
     </ModelCommandProvider>

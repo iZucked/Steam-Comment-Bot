@@ -34,7 +34,7 @@ public class LockedAssignmentWiringConstraint extends AbstractModelMultiConstrai
 					if (cargo.isAllowRewiring()) {
 						if (elementAssignment.isLocked()) {
 
-							final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(cargo.getName()
+							final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(cargo.getLoadName()
 									+ " is locked to a vessel, but permits re-wiring."));
 
 							failure.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargo_AllowRewiring());
@@ -44,7 +44,7 @@ public class LockedAssignmentWiringConstraint extends AbstractModelMultiConstrai
 						}
 					}
 					if (elementAssignment.isLocked() && elementAssignment.getVesselAssignmentType() == null) {
-						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(cargo.getName()
+						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(cargo.getLoadName()
 								+ " is locked to a vessel, but no vessel is assigned."));
 
 						failure.addEObjectAndFeature(elementAssignment, CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED);

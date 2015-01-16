@@ -274,7 +274,6 @@ public class CargoEditingCommands {
 			}
 		} else {
 			cargo = createNewCargo(setCommands, cargoModel);
-			cargo.setName(loadSlot.getName());
 			setCommands.add(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), cargo));
 			setCommands.add(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), cargo));
 		}

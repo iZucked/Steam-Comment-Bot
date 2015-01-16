@@ -35,7 +35,7 @@ public class CargoSpotCharterConstraint extends AbstractModelMultiConstraint {
 			if (vesselAssignmentType instanceof CharterInMarket) {
 				final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
 				if (cargo.getSpotIndex() >= charterInMarket.getSpotCharterCount()) {
-					final String message = String.format("Cargo '%s'| Spot option is higher than the number of options available for charter in market (%s).", cargo.getName(),
+					final String message = String.format("Cargo '%s'| Spot option is higher than the number of options available for charter in market (%s).", cargo.getLoadName(),
 							charterInMarket.getName());
 					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 					dcsd.addEObjectAndFeature(target, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);

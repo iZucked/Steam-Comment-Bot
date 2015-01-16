@@ -18,7 +18,6 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.InternalEList;
 
-import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -494,20 +493,20 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 		final SlotAllocation slotAllocation = getSlotAllocation();
 		final Slot slot = slotAllocation.getSlot();
 		if (slot != null) {
-
-			// Show cargo ID rather than slot ID.
-			// TODO: Perhaps this should be a UI configurable option
-			if (slot instanceof LoadSlot) {
-				final Cargo cargo = ((LoadSlot) slot).getCargo();
-				if (cargo != null) {
-					return cargo.getName();
-				}
-			} else if (slot instanceof DischargeSlot) {
-				final Cargo cargo = ((DischargeSlot) slot).getCargo();
-				if (cargo != null) {
-					return cargo.getName();
-				}
-			}
+//
+//			// Show cargo ID rather than slot ID.
+//			// TODO: Perhaps this should be a UI configurable option
+//			if (slot instanceof LoadSlot) {
+//				final Cargo cargo = ((LoadSlot) slot).getCargo();
+//				if (cargo != null) {
+//					return cargo.getLoadName();
+//				}
+//			} else if (slot instanceof DischargeSlot) {
+//				final Cargo cargo = ((DischargeSlot) slot).getCargo();
+//				if (cargo != null) {
+//					return cargo.getLoadName();
+//				}
+//			}
 
 			return slot.getName();
 		}

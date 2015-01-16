@@ -235,7 +235,7 @@ public class CargoAllocationItemProvider
 		String text = getString("_UI_CargoAllocation_type");
 		Cargo cargo = cargoAllocation.getInputCargo();
 		if (cargo != null) {
-			text += " " + cargo.getName();
+			text += " " + cargo.getLoadName();
 		}
 		return text;
 	}

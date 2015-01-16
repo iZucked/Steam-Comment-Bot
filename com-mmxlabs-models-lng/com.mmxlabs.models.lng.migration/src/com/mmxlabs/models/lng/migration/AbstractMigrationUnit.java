@@ -52,14 +52,25 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 	protected abstract void doMigration(EObject model);
 
 	/**
+	 * Overrideable method to allow sub-classes to choose which meta-model version to load the datamodel under.
+	 * 
+	 * @param extraPackages
+	 * @return
+	 */
+	protected MetamodelLoader getMigrationLoader(@Nullable final Map<URI, PackageData> extraPackages) {
+		return getDestinationMetamodelLoader(extraPackages);
+	}
+
+	/**
 	 */
 	@Override
 	public void migrate(final @NonNull URI baseURI, @Nullable final Map<URI, PackageData> extraPackages) throws Exception {
 
-		final MetamodelLoader destinationLoader = getDestinationMetamodelLoader(extraPackages);
+		final MetamodelLoader destinationLoader = getMigrationLoader(extraPackages);
 
 		// Load all the current model versions
 		final ResourceSet resourceSet = destinationLoader.getResourceSet();
+		assert resourceSet != null;
 
 		// // Standard options
 		// resourceSet.getLoadOptions().put(XMLResource.OPTION_DEFER_ATTACHMENT, true);
@@ -68,7 +79,7 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 		// resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_PARSER_POOL, new XMLParserPoolImpl(true));
 		// resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_XML_NAME_TO_FEATURE_MAP, new HashMap<Object, Object>());
 
-//		final HashMap<String, EObject> intrinsicIDToEObjectMap = new HashMap<String, EObject>();
+		// final HashMap<String, EObject> intrinsicIDToEObjectMap = new HashMap<String, EObject>();
 
 		// Record features which have no meta-model equivalent so we can perform migration
 		// resourceSet.getLoadOptions().put(XMLResource.OPTION_RECORD_UNKNOWN_FEATURE, Boolean.TRUE);

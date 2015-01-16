@@ -72,7 +72,7 @@ public class FOBDESCargoDatesConstraint extends AbstractModelConstraint {
 
 						if (!valid) {
 
-							final String message = String.format("[Cargo|%s] Incompatible slot windows.", cargo.getName());
+							final String message = String.format("[Cargo|%s] Incompatible slot windows.", cargo.getLoadName());
 
 							final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 							status.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_WindowStart());

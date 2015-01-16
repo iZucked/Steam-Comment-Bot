@@ -33,7 +33,7 @@ public class CargoReflexiveTransferSlotConstraint extends AbstractModelMultiCons
 			final LoadSlot transfer = slot.getTransferTo();
 
 			if (cargo != null && transfer != null && cargo.getSlots().contains(transfer)) {
-				final String message = String.format("[Cargo|'%s'] contains slots '%s' and '%s' which represent the same transfer.", cargo.getName(), slot.getName(), transfer.getName());
+				final String message = String.format("[Cargo|'%s'] contains slots '%s' and '%s' which represent the same transfer.", cargo.getLoadName(), slot.getName(), transfer.getName());
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 				dsd.addEObjectAndFeature(cargo, CargoPackage.Literals.CARGO__SLOTS);
 				failures.add(dsd);				

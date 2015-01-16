@@ -81,7 +81,7 @@ public class DischargeCVValueCompatabilityConstraint extends AbstractModelMultiC
 							add(new Pair<EObject, EStructuralFeature>(dischargeSlot, CargoPackage.eINSTANCE.getDischargeSlot_MinCvValue()));
 						}
 					};
-					failures.add(addDetailConstraintStatusDecorator("discharge slot", dischargeSlot.getName(), cargo.getName(), dischargeSlot, loadSlot, true, loadCV, (double) minCvValue,
+					failures.add(addDetailConstraintStatusDecorator("discharge slot", dischargeSlot.getName(), cargo.getLoadName(), dischargeSlot, loadSlot, true, loadCV, (double) minCvValue,
 							detailsDecoratorData, format, ctx));
 				} else { // sales contract
 					addContractError(true, failures, salesContract, dischargeSlot, loadSlot, cargo, loadCV, minCvValue, format, ctx);
@@ -101,7 +101,7 @@ public class DischargeCVValueCompatabilityConstraint extends AbstractModelMultiC
 							add(new Pair<EObject, EStructuralFeature>(dischargeSlot, CargoPackage.eINSTANCE.getDischargeSlot_MaxCvValue()));
 						}
 					};
-					failures.add(addDetailConstraintStatusDecorator("discharge slot", dischargeSlot.getName(), cargo.getName(), dischargeSlot, loadSlot, true, loadCV, (double) maxCvValue,
+					failures.add(addDetailConstraintStatusDecorator("discharge slot", dischargeSlot.getName(), cargo.getLoadName(), dischargeSlot, loadSlot, true, loadCV, (double) maxCvValue,
 							detailsDecoratorData, format, ctx));
 				} else { // sales contract
 					addContractError(false, failures, salesContract, dischargeSlot, loadSlot, cargo, loadCV, maxCvValue, format, ctx);
@@ -118,7 +118,7 @@ public class DischargeCVValueCompatabilityConstraint extends AbstractModelMultiC
 			}
 		};
 		detailsDecoratorData.add(new Pair<EObject, EStructuralFeature>(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Contract()));
-		failures.add(addDetailConstraintStatusDecorator("sales contract", salesContract.getName(), cargo.getName(), dischargeSlot, loadSlot, isMin, loadCV, (double) dischargeCV, detailsDecoratorData,
+		failures.add(addDetailConstraintStatusDecorator("sales contract", salesContract.getName(), cargo.getLoadName(), dischargeSlot, loadSlot, isMin, loadCV, (double) dischargeCV, detailsDecoratorData,
 				format, ctx));
 	}
 
@@ -153,7 +153,7 @@ public class DischargeCVValueCompatabilityConstraint extends AbstractModelMultiC
 				add(new Pair<EObject, EStructuralFeature>(loadSlot, CargoPackage.eINSTANCE.getLoadSlot_CargoCV()));
 			}
 		};
-		failures.add(addDetailConstraintStatusDecorator("port", port.getName(), cargo.getName(), dischargeSlot, loadSlot, isMin, loadCV, dischargeCV, detailsDecoratorData, format, ctx));
+		failures.add(addDetailConstraintStatusDecorator("port", port.getName(), cargo.getLoadName(), dischargeSlot, loadSlot, isMin, loadCV, dischargeCV, detailsDecoratorData, format, ctx));
 	}
 
 	/*

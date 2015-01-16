@@ -65,7 +65,7 @@ public class CargoSlotOrderConstraint extends AbstractModelMultiConstraint {
 				// This should only permit a single load followed by zero or more discharge slots
 
 				if (slotType == Type.Load && prevSlotType != null) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'" + cargo.getName()
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'" + cargo.getLoadName()
 							+ "' - The load slot should be the first slot in the cargo."));
 					dsd.addEObjectAndFeature(prevSlot, CargoPackage.eINSTANCE.getSlot_WindowStart());
 					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
@@ -73,7 +73,7 @@ public class CargoSlotOrderConstraint extends AbstractModelMultiConstraint {
 				}
 
 				if (slotType == Type.Discharge && prevSlotType == null) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'" + cargo.getName()
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'" + cargo.getLoadName()
 							+ "' - A load slot should be the first slot in the cargo."));
 					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
 					failures.add(dsd);
@@ -87,7 +87,7 @@ public class CargoSlotOrderConstraint extends AbstractModelMultiConstraint {
 				// Examine string for valid slot combinations
 				final String cargoType = sb.toString();
 				if (!(cargoType.equals("LD") || cargoType.equals("LDD"))) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'" + cargo.getName()
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'" + cargo.getLoadName()
 							+ "' - Cargo should be LD or LDD."));
 					dsd.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargo_Slots());
 					failures.add(dsd);
@@ -96,7 +96,7 @@ public class CargoSlotOrderConstraint extends AbstractModelMultiConstraint {
 				// Examine string for valid slot combinations
 				final String cargoType = sb.toString();
 				if (!cargoType.equals("LD")) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'" + cargo.getName()
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'" + cargo.getLoadName()
 							+ "' - Cargo should be LD."));
 					dsd.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargo_Slots());
 					failures.add(dsd);

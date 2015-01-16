@@ -44,7 +44,7 @@ public class RestrictedElementsConstraint extends AbstractModelMultiConstraint {
 					}
 					final Slot slotI = cargo.getSlots().get(i);
 					final Slot slotJ = cargo.getSlots().get(j);
-					checkSlotAgainstSlotAndContract(ctx, slotI, slotJ, cargo.getName(), statuses);
+					checkSlotAgainstSlotAndContract(ctx, slotI, slotJ, cargo.getLoadName(), statuses);
 				}
 			}
 		}

@@ -355,7 +355,7 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 */
 	public String getName() {
 		if (isSetInputCargo()) {
-			return getInputCargo().getName();
+			return getInputCargo().getLoadName();
 		} else {
 			for (SlotAllocation slotAllocation : getSlotAllocations()) {
 				// TODO: First load allocation?

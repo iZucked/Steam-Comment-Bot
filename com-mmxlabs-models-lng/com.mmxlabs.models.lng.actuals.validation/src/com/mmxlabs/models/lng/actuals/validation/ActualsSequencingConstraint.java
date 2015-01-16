@@ -301,7 +301,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 	private String getID(final EObject target) {
 		if (target instanceof Cargo) {
 			final Cargo slot = (Cargo) target;
-			return "cargo \"" + slot.getName() + "\"";
+			return "cargo \"" + slot.getLoadName() + "\"";
 		} else if (target instanceof Slot) {
 			final Slot slot = (Slot) target;
 			return "slot \"" + slot.getName() + "\"";

@@ -157,7 +157,7 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 	private String getID(final AssignableElement uuidObject) {
 		if (uuidObject instanceof Cargo) {
 			final Cargo cargo = (Cargo) uuidObject;
-			return "Cargo " + cargo.getName();
+			return "Cargo " + cargo.getLoadName();
 		} else if (uuidObject instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) uuidObject;
 			return "Event " + vesselEvent.getName();
