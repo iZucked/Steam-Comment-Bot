@@ -305,6 +305,38 @@ public class CargoImporter extends DefaultClassImporter {
 		final String buyMarket = row.get("buy.market");
 		final String sellMarket = row.get("sell.market");
 
+		final String buyAssignment = row.get("buy.assignment");
+		final String sellAssignment = row.get("sell.assignment");
+
+		// For older CSV sheets (pre LiNGO 3.7.0), there is an assignment field rather than nominated vessels.
+		if (buyAssignment != null && !buyAssignment.isEmpty()) {
+			context.doLater(new IDeferment() {
+				public void run(IImportContext context) {
+					if (fLoad.isDESPurchase()) {
+						fLoad.setNominatedVessel((Vessel) context.getNamedObject(buyAssignment, FleetPackage.Literals.VESSEL));
+					}
+				}
+
+				@Override
+				public int getStage() {
+					return IImportContext.STAGE_MODIFY_SUBMODELS;
+				}
+			});
+		}
+		if (sellAssignment != null && !sellAssignment.isEmpty()) {
+			context.doLater(new IDeferment() {
+				public void run(IImportContext context) {
+					if (fDischarge.isFOBSale()) {
+						fDischarge.setNominatedVessel((Vessel) context.getNamedObject(sellAssignment, FleetPackage.Literals.VESSEL));
+					}
+				}
+				
+				@Override
+				public int getStage() {
+					return IImportContext.STAGE_MODIFY_SUBMODELS;
+				}
+			});
+		}
 		context.doLater(new IDeferment() {
 
 			@Override
@@ -329,6 +361,7 @@ public class CargoImporter extends DefaultClassImporter {
 					// if (sls.getMarket() == null) {
 					if (sds.isFOBSale()) {
 						market = (SpotMarket) context.getNamedObject(sellMarket, SpotMarketsPackage.Literals.FOB_SALES_MARKET);
+
 					} else {
 						market = (SpotMarket) context.getNamedObject(sellMarket, SpotMarketsPackage.Literals.DES_SALES_MARKET);
 					}
@@ -339,7 +372,6 @@ public class CargoImporter extends DefaultClassImporter {
 
 			@Override
 			public int getStage() {
-				// TODO Auto-generated method stub
 				return IImportContext.STAGE_MODIFY_SUBMODELS;
 			}
 		});
