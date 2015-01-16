@@ -156,6 +156,21 @@ public class PriceExpressionUtils {
 
 	}
 
+	public static ISeries getParsedSeries(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression, final Date date, final List<IStatus> failures) {
+		SeriesParser parser = getCommodityParser(date);
+		try {
+			final IExpression<ISeries> expression = parser.parse(priceExpression);
+			final ISeries parsed = expression.evaluate();
+			return parsed;
+		} catch (Exception e) {
+			final String message = String.format("Price expression is not valid: %s", priceExpression);
+			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+			dsd.addEObjectAndFeature(object, feature);
+			failures.add(dsd);
+			return null;
+		}
+	}
+
 	/**
 	 * Provides a {@link SeriesParser} object based on the default activator (the one returned by {@link Activator.getDefault()}).
 	 * 
