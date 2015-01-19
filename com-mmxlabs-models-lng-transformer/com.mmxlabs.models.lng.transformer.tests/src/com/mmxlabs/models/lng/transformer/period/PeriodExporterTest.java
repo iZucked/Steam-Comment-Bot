@@ -41,7 +41,7 @@ public class PeriodExporterTest {
 		// Populate initial data
 		final LoadSlot load1 = PeriodTestUtils.createLoadSlot(originalScenario, "load");
 		final DischargeSlot discharge1 = PeriodTestUtils.createDischargeSlot(originalScenario, "discharge");
-		final Cargo cargo1 = PeriodTestUtils.createCargo(originalScenario, "cargo", load1, discharge1);
+		final Cargo cargo1 = PeriodTestUtils.createCargo(originalScenario, load1, discharge1);
 
 		// Create period copy
 		{
@@ -93,7 +93,7 @@ public class PeriodExporterTest {
 		// Populate initial data
 		final LoadSlot load1 = PeriodTestUtils.createLoadSlot(originalScenario, "load");
 		final DischargeSlot discharge1 = PeriodTestUtils.createDischargeSlot(originalScenario, "discharge");
-		final Cargo cargo1 = PeriodTestUtils.createCargo(originalScenario, "cargo", load1, discharge1);
+		final Cargo cargo1 = PeriodTestUtils.createCargo(originalScenario, load1, discharge1);
 
 		// Create period copy
 		{
@@ -137,11 +137,11 @@ public class PeriodExporterTest {
 		// Populate initial data
 		final LoadSlot load1 = PeriodTestUtils.createLoadSlot(originalScenario, "load");
 		final DischargeSlot discharge1 = PeriodTestUtils.createDischargeSlot(originalScenario, "discharge");
-		final Cargo cargo1 = PeriodTestUtils.createCargo(originalScenario, "cargo", load1, discharge1);
+		final Cargo cargo1 = PeriodTestUtils.createCargo(originalScenario, load1, discharge1);
 
 		final Vessel vessel1 = PeriodTestUtils.createVessel(originalScenario, "vessel1");
 		final Vessel vessel2 = PeriodTestUtils.createVessel(originalScenario, "vessel2");
-		
+
 		final VesselAvailability vesselAvailability1 = PeriodTestUtils.createVesselAvailability(originalScenario, vessel1);
 		final VesselAvailability vesselAvailability2 = PeriodTestUtils.createVesselAvailability(originalScenario, vessel2);
 
@@ -193,11 +193,11 @@ public class PeriodExporterTest {
 		// Populate initial data
 		final LoadSlot load1 = PeriodTestUtils.createLoadSlot(originalScenario, "load1");
 		final DischargeSlot discharge1 = PeriodTestUtils.createDischargeSlot(originalScenario, "discharge1");
-		final Cargo cargo1 = PeriodTestUtils.createCargo(originalScenario, "cargo1", load1, discharge1);
+		final Cargo cargo1 = PeriodTestUtils.createCargo(originalScenario, load1, discharge1);
 
 		final LoadSlot load2 = PeriodTestUtils.createLoadSlot(originalScenario, "load2");
 		final DischargeSlot discharge2 = PeriodTestUtils.createDischargeSlot(originalScenario, "discharge2");
-		final Cargo cargo2 = PeriodTestUtils.createCargo(originalScenario, "cargo2", load2, discharge2);
+		final Cargo cargo2 = PeriodTestUtils.createCargo(originalScenario, load2, discharge2);
 
 		// Create period copy
 		{
@@ -254,7 +254,7 @@ public class PeriodExporterTest {
 		// Populate initial data
 		final LoadSlot load1 = PeriodTestUtils.createLoadSlot(originalScenario, "load1");
 		final DischargeSlot discharge1 = PeriodTestUtils.createDischargeSlot(originalScenario, "discharge1");
-		final Cargo cargo1 = PeriodTestUtils.createCargo(originalScenario, "cargo1", load1, discharge1);
+		final Cargo cargo1 = PeriodTestUtils.createCargo(originalScenario, load1, discharge1);
 
 		// Create period copy
 		{
@@ -312,7 +312,7 @@ public class PeriodExporterTest {
 		// Populate initial data
 		final LoadSlot load1 = PeriodTestUtils.createLoadSlot(originalScenario, "load1");
 		final SpotDischargeSlot discharge1 = PeriodTestUtils.createSpotDischargeSlot(originalScenario, "spot-discharge1");
-		final Cargo cargo1 = PeriodTestUtils.createCargo(originalScenario, "cargo1", load1, discharge1);
+		final Cargo cargo1 = PeriodTestUtils.createCargo(originalScenario, load1, discharge1);
 
 		// Create period copy
 		{
@@ -389,7 +389,7 @@ public class PeriodExporterTest {
 			final DischargeSlot copyDischarge1 = mapping.getCopyFromOriginal(discharge1);
 
 			// Create our new wiring
-			final Cargo copyCargo = PeriodTestUtils.createCargo(periodScenario, "cargo1", copyLoad1, copyDischarge1);
+			final Cargo copyCargo = PeriodTestUtils.createCargo(periodScenario, copyLoad1, copyDischarge1);
 
 			final VesselAvailability copyVesselAvailability1 = mapping.getCopyFromOriginal(vesselAvailability1);
 			copyCargo.setVesselAssignmentType(copyVesselAvailability1);
@@ -454,7 +454,7 @@ public class PeriodExporterTest {
 			copySpotDischarge1.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JULY, 1));
 
 			// Create our new wiring
-			final Cargo copyCargo = PeriodTestUtils.createCargo(periodScenario, "cargo1", copyLoad1, copySpotDischarge1);
+			final Cargo copyCargo = PeriodTestUtils.createCargo(periodScenario, copyLoad1, copySpotDischarge1);
 
 			final VesselAvailability copyVesselAvailability1 = mapping.getCopyFromOriginal(vesselAvailability1);
 			copyCargo.setVesselAssignmentType(copyVesselAvailability1);
@@ -513,7 +513,7 @@ public class PeriodExporterTest {
 		discharge1.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JULY, 8));
 		discharge1.setPort(port1);
 
-		final Cargo cargo1 = PeriodTestUtils.createCargo(originalScenario, "cargo1", load1, discharge1);
+		final Cargo cargo1 = PeriodTestUtils.createCargo(originalScenario, load1, discharge1);
 
 		final DischargeSlot discharge2 = PeriodTestUtils.createDischargeSlot(originalScenario, "discharge2");
 		discharge2.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JULY, 8));
@@ -574,7 +574,7 @@ public class PeriodExporterTest {
 
 		final Vessel vessel1 = PeriodTestUtils.createVessel(originalScenario, "vessel1");
 		final Vessel vessel2 = PeriodTestUtils.createVessel(originalScenario, "vessel2");
-		
+
 		final VesselAvailability vesselAvailability1 = PeriodTestUtils.createVesselAvailability(originalScenario, vessel1);
 		final VesselAvailability vesselAvailability2 = PeriodTestUtils.createVesselAvailability(originalScenario, vessel2);
 

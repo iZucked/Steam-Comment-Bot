@@ -452,7 +452,6 @@ public class CustomScenarioCreator {
 		dis.setWindowSize(0);
 
 		dis.setPricingEvent(PricingEvent.START_DISCHARGE);
-		cargo.setName(cargoID);
 
 		cargoModel.getLoadSlots().add(load);
 		cargoModel.getDischargeSlots().add(dis);

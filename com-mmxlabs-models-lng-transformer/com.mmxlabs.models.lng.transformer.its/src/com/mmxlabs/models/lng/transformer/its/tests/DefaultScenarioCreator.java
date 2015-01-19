@@ -624,8 +624,6 @@ public class DefaultScenarioCreator {
 			setDefaultSlotWindow(loadSlot, loadTime);
 			setDefaultSlotWindow(dischargeSlot, addHours(loadTime, travelTimeInHours));
 
-			result.setName(name);
-
 			final CargoModel cargoModel = scenario.getPortfolioModel().getCargoModel();
 
 			cargoModel.getLoadSlots().add(loadSlot);
@@ -675,8 +673,6 @@ public class DefaultScenarioCreator {
 			setDefaultSlotWindow(loadSlot, loadTime);
 			setDefaultSlotWindow(dischargeSlot1, addHours(loadTime, travelTimeInHours1));
 			setDefaultSlotWindow(dischargeSlot2, addHours(loadTime, travelTimeInHours1 + defaultWindowSize + travelTimeInHours2));
-
-			result.setName(name);
 
 			final CargoModel cargoModel = scenario.getPortfolioModel().getCargoModel();
 

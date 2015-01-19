@@ -467,8 +467,6 @@ public class ScenarioTools {
 			dryDock.getAllowedVessels().add(vessel);
 		}
 
-		cargo.setName("CARGO");
-
 		cargoModel.getCargoes().add(cargo);
 		cargoModel.getLoadSlots().add(load);
 		cargoModel.getDischargeSlots().add(dis);
@@ -619,7 +617,7 @@ public class ScenarioTools {
 		s.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
 		commercialModel.getEntities().add(s);
 		availability.setEntity(s);
-		
+
 		e.setName("Other");
 		s.setName("Shipping");
 
@@ -722,7 +720,7 @@ public class ScenarioTools {
 		final EditingDomain ed = new AdapterFactoryEditingDomain(adapterFactory, commandStack);
 
 		return LNGSchedulerJobUtils.exportSolution(transformer.getInjector(), scenario, transformer.getOptimiserSettings(), ed, modelEntityMap, startSolution, 0);// Solution(ed, scenario, schedule,
-																																							// scenario.getSubModel(InputModel.class),
+		// scenario.getSubModel(InputModel.class),
 	}
 
 	/**

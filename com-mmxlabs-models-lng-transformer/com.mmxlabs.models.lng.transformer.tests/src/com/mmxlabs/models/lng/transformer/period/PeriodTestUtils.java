@@ -192,9 +192,8 @@ public class PeriodTestUtils {
 		return port;
 	}
 
-	public static Cargo createCargo(final LNGScenarioModel scenarioModel, final String name, final Slot... slots) {
+	public static Cargo createCargo(final LNGScenarioModel scenarioModel,  final Slot... slots) {
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
-		cargo.setName(name);
 		scenarioModel.getPortfolioModel().getCargoModel().getCargoes().add(cargo);
 
 		for (final Slot slot : slots) {
@@ -206,7 +205,6 @@ public class PeriodTestUtils {
 
 	public static Cargo createCargo(final LNGScenarioModel scenarioModel, final String name, final Port loadPort, final Date loadDate, final Port dischargePort, final Date dischargeDate) {
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
-		cargo.setName(name);
 		scenarioModel.getPortfolioModel().getCargoModel().getCargoes().add(cargo);
 
 		final LoadSlot loadSlot = createLoadSlot(scenarioModel, name + "-load");

@@ -275,7 +275,6 @@ public class LNGSchedulerJobUtils {
 							// Slot has no existing cargo, so create a new one
 							final Cargo c = CargoFactory.eINSTANCE.createCargo();
 							c.setAllowRewiring(true);
-							c.setName(slot.getName());
 							cmd.append(AddCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), c));
 							loadCargo = c;
 							slotToCargoMap.put(loadSlot, c);

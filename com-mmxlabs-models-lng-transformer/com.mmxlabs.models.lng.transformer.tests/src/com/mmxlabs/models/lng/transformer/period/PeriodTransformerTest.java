@@ -880,7 +880,7 @@ public class PeriodTransformerTest {
 		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
 		final DischargeSlot copyDischargeSlot = PeriodTestUtils.createDischargeSlot(copyScenarioModel, "discharge");
 		copyDischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.FEBRUARY, 1));
-		final Cargo copyCargo = PeriodTestUtils.createCargo(copyScenarioModel, "cargo", copyLoadSlot, copyDischargeSlot);
+		final Cargo copyCargo = PeriodTestUtils.createCargo(copyScenarioModel, copyLoadSlot, copyDischargeSlot);
 		copyCargo.setAllowRewiring(true);
 
 		final Set<Slot> seenSlots = new HashSet<>();
@@ -924,7 +924,7 @@ public class PeriodTransformerTest {
 		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.MARCH, 1));
 		final DischargeSlot copyDischargeSlot = PeriodTestUtils.createDischargeSlot(copyScenarioModel, "discharge");
 		copyDischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.MAY, 1));
-		final Cargo copyCargo = PeriodTestUtils.createCargo(copyScenarioModel, "cargo", copyLoadSlot, copyDischargeSlot);
+		final Cargo copyCargo = PeriodTestUtils.createCargo(copyScenarioModel, copyLoadSlot, copyDischargeSlot);
 		copyCargo.setAllowRewiring(true);
 
 		final Set<Slot> seenSlots = new HashSet<>();
@@ -983,14 +983,14 @@ public class PeriodTransformerTest {
 		loadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.MAY, 1));
 		final DischargeSlot dischargeSlot = PeriodTestUtils.createDischargeSlot(scenarioModel, "discharge");
 		dischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JULY, 1));
-		final Cargo cargo = PeriodTestUtils.createCargo(scenarioModel, "cargo", loadSlot, dischargeSlot);
+		final Cargo cargo = PeriodTestUtils.createCargo(scenarioModel, loadSlot, dischargeSlot);
 		cargo.setAllowRewiring(true);
 
 		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
 		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.MAY, 1));
 		final DischargeSlot copyDischargeSlot = PeriodTestUtils.createDischargeSlot(copyScenarioModel, "discharge");
 		copyDischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JULY, 1));
-		final Cargo copyCargo = PeriodTestUtils.createCargo(copyScenarioModel, "cargo", copyLoadSlot, copyDischargeSlot);
+		final Cargo copyCargo = PeriodTestUtils.createCargo(copyScenarioModel, copyLoadSlot, copyDischargeSlot);
 		copyCargo.setAllowRewiring(true);
 
 		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
@@ -1064,14 +1064,14 @@ public class PeriodTransformerTest {
 		loadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.AUGUST, 1));
 		final DischargeSlot dischargeSlot = PeriodTestUtils.createDischargeSlot(scenarioModel, "discharge");
 		dischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
-		final Cargo cargo = PeriodTestUtils.createCargo(scenarioModel, "cargo", loadSlot, dischargeSlot);
+		final Cargo cargo = PeriodTestUtils.createCargo(scenarioModel, loadSlot, dischargeSlot);
 		cargo.setAllowRewiring(true);
 
 		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
 		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.AUGUST, 1));
 		final DischargeSlot copyDischargeSlot = PeriodTestUtils.createDischargeSlot(copyScenarioModel, "discharge");
 		copyDischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
-		final Cargo copyCargo = PeriodTestUtils.createCargo(copyScenarioModel, "cargo", copyLoadSlot, copyDischargeSlot);
+		final Cargo copyCargo = PeriodTestUtils.createCargo(copyScenarioModel, copyLoadSlot, copyDischargeSlot);
 		copyCargo.setAllowRewiring(true);
 
 		// final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
@@ -1146,14 +1146,14 @@ public class PeriodTransformerTest {
 		loadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
 		final DischargeSlot dischargeSlot = PeriodTestUtils.createDischargeSlot(scenarioModel, "discharge");
 		dischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.NOVEMBER, 1));
-		final Cargo cargo = PeriodTestUtils.createCargo(scenarioModel, "cargo", loadSlot, dischargeSlot);
+		final Cargo cargo = PeriodTestUtils.createCargo(scenarioModel, loadSlot, dischargeSlot);
 		cargo.setAllowRewiring(true);
 
 		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
 		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
 		final DischargeSlot copyDischargeSlot = PeriodTestUtils.createDischargeSlot(copyScenarioModel, "discharge");
 		copyDischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.NOVEMBER, 1));
-		final Cargo copyCargo = PeriodTestUtils.createCargo(copyScenarioModel, "cargo", copyLoadSlot, copyDischargeSlot);
+		final Cargo copyCargo = PeriodTestUtils.createCargo(copyScenarioModel, copyLoadSlot, copyDischargeSlot);
 		copyCargo.setAllowRewiring(true);
 
 		// final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
@@ -1223,14 +1223,14 @@ public class PeriodTransformerTest {
 		loadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
 		final DischargeSlot dischargeSlot = PeriodTestUtils.createDischargeSlot(scenarioModel, "discharge");
 		dischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
-		final Cargo cargo = PeriodTestUtils.createCargo(scenarioModel, "cargo", loadSlot, dischargeSlot);
+		final Cargo cargo = PeriodTestUtils.createCargo(scenarioModel, loadSlot, dischargeSlot);
 		cargo.setAllowRewiring(true);
 
 		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
 		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
 		final DischargeSlot copyDischargeSlot = PeriodTestUtils.createDischargeSlot(copyScenarioModel, "discharge");
 		copyDischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
-		final Cargo copyCargo = PeriodTestUtils.createCargo(copyScenarioModel, "cargo", copyLoadSlot, copyDischargeSlot);
+		final Cargo copyCargo = PeriodTestUtils.createCargo(copyScenarioModel, copyLoadSlot, copyDischargeSlot);
 		copyCargo.setAllowRewiring(true);
 		//
 		// final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
@@ -1962,7 +1962,7 @@ public class PeriodTransformerTest {
 
 		final LoadSlot load = PeriodTestUtils.createLoadSlot(scenarioModel, "load");
 		final DischargeSlot discharge = PeriodTestUtils.createDischargeSlot(scenarioModel, "discharge");
-		final Cargo cargo = PeriodTestUtils.createCargo(scenarioModel, "cargo", load, discharge);
+		final Cargo cargo = PeriodTestUtils.createCargo(scenarioModel, load, discharge);
 
 		final SlotAllocation loadAllocation = PeriodTestUtils.createSlotAllocation(scenarioModel, load);
 		final SlotAllocation dischargeAllocation = PeriodTestUtils.createSlotAllocation(scenarioModel, discharge);
@@ -2006,7 +2006,7 @@ public class PeriodTransformerTest {
 
 		final LoadSlot load = PeriodTestUtils.createLoadSlot(scenarioModel, "load");
 		final DischargeSlot discharge = PeriodTestUtils.createDischargeSlot(scenarioModel, "discharge");
-		final Cargo cargo = PeriodTestUtils.createCargo(scenarioModel, "cargo", load, discharge);
+		final Cargo cargo = PeriodTestUtils.createCargo(scenarioModel, load, discharge);
 
 		final SlotAllocation loadAllocation = PeriodTestUtils.createSlotAllocation(scenarioModel, load);
 		final SlotAllocation dischargeAllocation = PeriodTestUtils.createSlotAllocation(scenarioModel, discharge);
@@ -2118,19 +2118,19 @@ public class PeriodTransformerTest {
 
 		final LoadSlot loadSlot1 = PeriodTestUtils.createLoadSlot(scenarioModel, "load1");
 		final DischargeSlot dischargeSlot1 = PeriodTestUtils.createDischargeSlot(scenarioModel, "discharge1");
-		final Cargo cargo1 = PeriodTestUtils.createCargo(scenarioModel, "cargo1", loadSlot1, dischargeSlot1);
+		final Cargo cargo1 = PeriodTestUtils.createCargo(scenarioModel, loadSlot1, dischargeSlot1);
 
 		final LoadSlot loadSlot2 = PeriodTestUtils.createLoadSlot(scenarioModel, "load2");
 		final DischargeSlot dischargeSlot2 = PeriodTestUtils.createDischargeSlot(scenarioModel, "discharge2");
-		final Cargo cargo2 = PeriodTestUtils.createCargo(scenarioModel, "cargo2", loadSlot2, dischargeSlot2);
+		final Cargo cargo2 = PeriodTestUtils.createCargo(scenarioModel, loadSlot2, dischargeSlot2);
 
 		final LoadSlot copyLoadSlot1 = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load1");
 		final DischargeSlot copyDischargeSlot1 = PeriodTestUtils.createDischargeSlot(copyScenarioModel, "discharge1");
-		final Cargo copyCargo1 = PeriodTestUtils.createCargo(copyScenarioModel, "cargo1", copyLoadSlot1, copyDischargeSlot1);
+		final Cargo copyCargo1 = PeriodTestUtils.createCargo(copyScenarioModel, copyLoadSlot1, copyDischargeSlot1);
 
 		final LoadSlot copyLoadSlot2 = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load2");
 		final DischargeSlot copyDischargeSlot2 = PeriodTestUtils.createDischargeSlot(copyScenarioModel, "discharge2");
-		final Cargo copyCargo2 = PeriodTestUtils.createCargo(copyScenarioModel, "cargo2", copyLoadSlot2, copyDischargeSlot2);
+		final Cargo copyCargo2 = PeriodTestUtils.createCargo(copyScenarioModel, copyLoadSlot2, copyDischargeSlot2);
 
 		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
 
@@ -2184,7 +2184,7 @@ public class PeriodTransformerTest {
 
 		final LoadSlot loadSlot1 = PeriodTestUtils.createLoadSlot(scenarioModel, "load1");
 		final DischargeSlot dischargeSlot1 = PeriodTestUtils.createDischargeSlot(scenarioModel, "discharge1");
-		final Cargo cargo1 = PeriodTestUtils.createCargo(scenarioModel, "cargo1", loadSlot1, dischargeSlot1);
+		final Cargo cargo1 = PeriodTestUtils.createCargo(scenarioModel, loadSlot1, dischargeSlot1);
 
 		final Port port = PeriodTestUtils.createPort(scenarioModel, "port");
 		port.setTimeZone("Etc/GMT-1");
