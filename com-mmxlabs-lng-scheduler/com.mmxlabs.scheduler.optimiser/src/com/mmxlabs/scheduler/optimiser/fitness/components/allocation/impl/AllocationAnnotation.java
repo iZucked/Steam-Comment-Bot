@@ -18,13 +18,12 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
  * @author hinton
  * 
  */
-public class AllocationAnnotation implements IAllocationAnnotation {
+public final class AllocationAnnotation implements IAllocationAnnotation {
 
 	public class SlotAllocationAnnotation {
 		public long volumeInM3;
 		public long volumeInMMBTu;
 		public int cargoCV;
-		public int pricePerMMBTu;
 		public int startTime;
 		public int duration;
 	}
@@ -106,6 +105,7 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 		throw new IllegalArgumentException("Unknown port slot");
 	}
 
+	@Override
 	public void setSlotTime(final IPortSlot slot, final int time) {
 		getOrCreateSlotAllocation(slot).startTime = time;
 		// Set or update the first port slot and time
@@ -129,21 +129,9 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 		return 0;
 	}
 
+	@Override
 	public void setSlotDuration(final IPortSlot slot, final int duration) {
 		getOrCreateSlotAllocation(slot).duration = duration;
-	}
-
-	@Override
-	public int getSlotPricePerMMBTu(final IPortSlot slot) {
-		final SlotAllocationAnnotation allocation = slotAllocations.get(slot);
-		if (allocation != null) {
-			return allocation.pricePerMMBTu;
-		}
-		throw new IllegalArgumentException("Unknown port slot");
-	}
-
-	public void setSlotPricePerMMBTu(final IPortSlot slot, final int price) {
-		getOrCreateSlotAllocation(slot).pricePerMMBTu = price;
 	}
 
 	@Override

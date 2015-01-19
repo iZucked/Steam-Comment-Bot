@@ -21,6 +21,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.CargoValueAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.FBOVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IdleNBOVoyagePlanChoice;
@@ -237,8 +238,12 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			newAllocation = cargoAllocator.allocate(vesselAvailability, vesselStartTime, newVoyagePlan, portTimesRecord);
 			assert newAllocation != null;
 
-			originalOption = entityValueCalculator.evaluate(vp, currentAllocation, vesselAvailability, vesselStartTime, null);
-			newOption = entityValueCalculator.evaluate(newVoyagePlan, newAllocation, vesselAvailability, vesselStartTime, null);
+			final CargoValueAnnotation currentCargoValueAnnotation = new CargoValueAnnotation(newAllocation);
+			final CargoValueAnnotation newCargoValueAnnotation = new CargoValueAnnotation(newAllocation);
+
+			
+			originalOption = entityValueCalculator.evaluate(vp, currentCargoValueAnnotation, vesselAvailability, vesselStartTime, null);
+			newOption = entityValueCalculator.evaluate(newVoyagePlan, newCargoValueAnnotation, vesselAvailability, vesselStartTime, null);
 
 		} else {
 			originalOption = entityValueCalculator.evaluate(vp, vesselAvailability, portTimesRecord.getFirstSlotTime(), vesselStartTime, null);

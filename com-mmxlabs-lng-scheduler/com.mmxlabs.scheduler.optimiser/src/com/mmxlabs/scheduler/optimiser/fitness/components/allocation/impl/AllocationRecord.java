@@ -18,7 +18,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  * @author Simon McGregor
  */
-public final class AllocationRecord {
+public class AllocationRecord {
 
 	public enum AllocationMode {
 		/**

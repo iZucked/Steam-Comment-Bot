@@ -13,6 +13,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.CargoValueAnnotation;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public interface IEntityValueCalculator {
@@ -21,13 +22,13 @@ public interface IEntityValueCalculator {
 	 * Evaluate a Cargo based {@link VoyagePlan} - returning the post tax P&L value
 	 * 
 	 * @param plan
-	 * @param currentAllocation
+	 * @param cargoValueAllocation - empty {@link CargoValueAnnotation} object to populate. Initialised with an existing {@link IAllocationAnnotation}.
 	 * @param vessel
 	 * @param vesselStartTime
 	 * @param annotatedSolution
 	 * @return
 	 */
-	long evaluate(@NonNull VoyagePlan plan, @NonNull IAllocationAnnotation currentAllocation, @NonNull IVesselAvailability vesselAvailability, int vesselStartTime, @Nullable IAnnotatedSolution annotatedSolution);
+	long evaluate(@NonNull VoyagePlan plan, @NonNull CargoValueAnnotation currentAllocation, @NonNull IVesselAvailability vesselAvailability, int vesselStartTime, @Nullable IAnnotatedSolution annotatedSolution);
 
 	/**
 	 * Evaluate a non-cargo based {@link VoyagePlan} returning the post tax P&L value

@@ -65,6 +65,4 @@ public interface IAllocationAnnotation extends IPortTimesRecord {
 	 * @return
 	 */
 	int getSlotCargoCV(IPortSlot slot);
-
-	int getSlotPricePerMMBTu(IPortSlot slot);
 }

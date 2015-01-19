@@ -49,6 +49,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.CargoValueAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
@@ -434,6 +435,7 @@ public class ScheduleCalculator {
 
 					final IAllocationAnnotation currentAllocation = allocations.get(plan);
 					if (currentAllocation != null) {
+						CargoValueAnnotation cargoValueAnnotation = new CargoValueAnnotation(currentAllocation);
 						if (isDesFobCase) {
 							final PortDetails firstDetails = portDetails.get(1);
 
@@ -444,14 +446,25 @@ public class ScheduleCalculator {
 							final ILoadOption loadSlot = (ILoadOption) currentAllocation.getSlots().get(0);
 							// TODO: Perhaps use the real slot time rather than always load?
 							// TODO: Does it matter really?
-							final long cargoGroupValue = entityValueCalculator.evaluate(plan, currentAllocation, vesselAvailability, currentAllocation.getSlotTime(loadSlot), annotatedSolution);
+							final long cargoGroupValue = entityValueCalculator.evaluate(plan, cargoValueAnnotation, vesselAvailability, currentAllocation.getSlotTime(loadSlot), annotatedSolution);
 							scheduledSequences.setVoyagePlanGroupValue(plan, cargoGroupValue);
 
 						} else {
 							final PortDetails firstDetails = portDetails.get(0);
 							cargo = true;
-							final long cargoGroupValue = entityValueCalculator.evaluate(plan, currentAllocation, vesselAvailability, sequence.getStartTime(), annotatedSolution);
+							final long cargoGroupValue = entityValueCalculator.evaluate(plan, cargoValueAnnotation, vesselAvailability, sequence.getStartTime(), annotatedSolution);
 							scheduledSequences.setVoyagePlanGroupValue(plan, cargoGroupValue);
+						}
+
+						// Store annotations if required
+						if (annotatedSolution != null) {
+							// now add some more data for each load slot
+							final IElementAnnotationsMap elementAnnotations = annotatedSolution.getElementAnnotations();
+							final List<IPortSlot> slots = currentAllocation.getSlots();
+							for (final IPortSlot portSlot : slots) {
+								final ISequenceElement portElement = portSlotProvider.getElement(portSlot);
+								elementAnnotations.setAnnotation(portElement, SchedulerConstants.AI_cargoValueAllocationInfo, cargoValueAnnotation);
+							}
 						}
 					}
 				}
@@ -556,9 +569,10 @@ public class ScheduleCalculator {
 			final IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(vesselAvailability, time, voyagePlan, portTimesRecord);
 			if (allocationAnnotation != null) {
 				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_volumeAllocationInfo, allocationAnnotation);
-
+				CargoValueAnnotation cargoValueAnnotation = new CargoValueAnnotation(allocationAnnotation);
 				// Calculate P&L
-				entityValueCalculator.evaluate(voyagePlan, allocationAnnotation, vesselAvailability, time, annotatedSolution);
+				entityValueCalculator.evaluate(voyagePlan, cargoValueAnnotation, vesselAvailability, time, annotatedSolution);
+				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_cargoValueAllocationInfo, cargoValueAnnotation);
 			}
 		}
 	}
