@@ -37,6 +37,13 @@ public class BasicSlotPNLDetailsProperties extends AbstractDetailPropertyFactory
 
 		boolean hasDetails = false;
 		if (slotPNLDetails.isSetCancellationFees()) {
+			final int additionalPNL = slotPNLDetails.getAdditionalPNL();
+
+			addDetailProperty("Additional P&L", "", "$", "", additionalPNL, new StringFormatLabelProvider("%,d"), details);
+
+			hasDetails = true;
+		}
+		if (slotPNLDetails.isSetCancellationFees()) {
 			final int cancellationFees = slotPNLDetails.getCancellationFees();
 
 			addDetailProperty("Cancellation Fees", "", "$", "", cancellationFees, new StringFormatLabelProvider("%,d"), details);

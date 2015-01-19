@@ -76,6 +76,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="energyTransferred" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cv" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Sequence" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eOperations name="getName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -249,6 +250,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GeneralPNLDetails" abstract="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="BasicSlotPNLDetails" eSuperTypes="#//GeneralPNLDetails">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="additionalPNL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cancellationFees" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="hedgingValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"

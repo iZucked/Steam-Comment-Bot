@@ -70,6 +70,7 @@ public class SlotAllocationItemProvider
 			addVolumeTransferredPropertyDescriptor(object);
 			addEnergyTransferredPropertyDescriptor(object);
 			addCvPropertyDescriptor(object);
+			addVolumeValuePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -273,6 +274,28 @@ public class SlotAllocationItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Volume Value feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVolumeValuePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SlotAllocation_volumeValue_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SlotAllocation_volumeValue_feature", "_UI_SlotAllocation_type"),
+				 SchedulePackage.Literals.SLOT_ALLOCATION__VOLUME_VALUE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -346,6 +369,7 @@ public class SlotAllocationItemProvider
 			case SchedulePackage.SLOT_ALLOCATION__VOLUME_TRANSFERRED:
 			case SchedulePackage.SLOT_ALLOCATION__ENERGY_TRANSFERRED:
 			case SchedulePackage.SLOT_ALLOCATION__CV:
+			case SchedulePackage.SLOT_ALLOCATION__VOLUME_VALUE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

@@ -65,9 +65,19 @@ public class BasicSlotPNLDetailsComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_additionalPNLEditor(detailComposite, topClass);
 		add_cancellationFeesEditor(detailComposite, topClass);
 		add_hedgingValueEditor(detailComposite, topClass);
 	}
+	/**
+	 * Create the editor for the additionalPNL feature on BasicSlotPNLDetails
+	 *
+	 * @generated
+	 */
+	protected void add_additionalPNLEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.BASIC_SLOT_PNL_DETAILS__ADDITIONAL_PNL));
+	}
+
 	/**
 	 * Create the editor for the cancellationFees feature on BasicSlotPNLDetails
 	 *

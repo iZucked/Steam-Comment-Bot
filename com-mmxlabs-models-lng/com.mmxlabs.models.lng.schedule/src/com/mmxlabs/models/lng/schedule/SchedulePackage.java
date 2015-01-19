@@ -1050,13 +1050,22 @@ public interface SchedulePackage extends EPackage {
 	int SLOT_ALLOCATION__CV = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
 
 	/**
+	 * The feature id for the '<em><b>Volume Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ALLOCATION__VOLUME_VALUE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
+
+	/**
 	 * The number of structural features of the '<em>Slot Allocation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
+	int SLOT_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -4044,13 +4053,22 @@ public interface SchedulePackage extends EPackage {
 	int BASIC_SLOT_PNL_DETAILS = 29;
 
 	/**
+	 * The feature id for the '<em><b>Additional PNL</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASIC_SLOT_PNL_DETAILS__ADDITIONAL_PNL = GENERAL_PNL_DETAILS_FEATURE_COUNT + 0;
+
+	/**
 	 * The feature id for the '<em><b>Cancellation Fees</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASIC_SLOT_PNL_DETAILS__CANCELLATION_FEES = GENERAL_PNL_DETAILS_FEATURE_COUNT + 0;
+	int BASIC_SLOT_PNL_DETAILS__CANCELLATION_FEES = GENERAL_PNL_DETAILS_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Hedging Value</b></em>' attribute.
@@ -4059,7 +4077,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE = GENERAL_PNL_DETAILS_FEATURE_COUNT + 1;
+	int BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE = GENERAL_PNL_DETAILS_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Basic Slot PNL Details</em>' class.
@@ -4068,7 +4086,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASIC_SLOT_PNL_DETAILS_FEATURE_COUNT = GENERAL_PNL_DETAILS_FEATURE_COUNT + 2;
+	int BASIC_SLOT_PNL_DETAILS_FEATURE_COUNT = GENERAL_PNL_DETAILS_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of operations of the '<em>Basic Slot PNL Details</em>' class.
@@ -5073,6 +5091,17 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getSlotAllocation_Cv();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getVolumeValue <em>Volume Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Volume Value</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.SlotAllocation#getVolumeValue()
+	 * @see #getSlotAllocation()
+	 * @generated
+	 */
+	EAttribute getSlotAllocation_VolumeValue();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getPort() <em>Get Port</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5516,6 +5545,17 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EClass getBasicSlotPNLDetails();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getAdditionalPNL <em>Additional PNL</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Additional PNL</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getAdditionalPNL()
+	 * @see #getBasicSlotPNLDetails()
+	 * @generated
+	 */
+	EAttribute getBasicSlotPNLDetails_AdditionalPNL();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getCancellationFees <em>Cancellation Fees</em>}'.
@@ -6355,6 +6395,14 @@ public interface SchedulePackage extends EPackage {
 		EAttribute SLOT_ALLOCATION__CV = eINSTANCE.getSlotAllocation_Cv();
 
 		/**
+		 * The meta object literal for the '<em><b>Volume Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT_ALLOCATION__VOLUME_VALUE = eINSTANCE.getSlotAllocation_VolumeValue();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Port</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6717,6 +6765,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EClass BASIC_SLOT_PNL_DETAILS = eINSTANCE.getBasicSlotPNLDetails();
+
+		/**
+		 * The meta object literal for the '<em><b>Additional PNL</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BASIC_SLOT_PNL_DETAILS__ADDITIONAL_PNL = eINSTANCE.getBasicSlotPNLDetails_AdditionalPNL();
 
 		/**
 		 * The meta object literal for the '<em><b>Cancellation Fees</b></em>' attribute feature.

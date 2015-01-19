@@ -61,10 +61,33 @@ public class BasicSlotPNLDetailsItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addAdditionalPNLPropertyDescriptor(object);
 			addCancellationFeesPropertyDescriptor(object);
 			addHedgingValuePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Additional PNL feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addAdditionalPNLPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_BasicSlotPNLDetails_additionalPNL_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_BasicSlotPNLDetails_additionalPNL_feature", "_UI_BasicSlotPNLDetails_type"),
+				 SchedulePackage.Literals.BASIC_SLOT_PNL_DETAILS__ADDITIONAL_PNL,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -131,7 +154,7 @@ public class BasicSlotPNLDetailsItemProvider
 	@Override
 	public String getText(Object object) {
 		BasicSlotPNLDetails basicSlotPNLDetails = (BasicSlotPNLDetails)object;
-		return getString("_UI_BasicSlotPNLDetails_type") + " " + basicSlotPNLDetails.getCancellationFees();
+		return getString("_UI_BasicSlotPNLDetails_type") + " " + basicSlotPNLDetails.getAdditionalPNL();
 	}
 
 	/**
@@ -146,6 +169,7 @@ public class BasicSlotPNLDetailsItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(BasicSlotPNLDetails.class)) {
+			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__ADDITIONAL_PNL:
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__CANCELLATION_FEES:
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

@@ -15,6 +15,7 @@ package com.mmxlabs.models.lng.schedule;
  * <p>
  * The following features are supported:
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getAdditionalPNL <em>Additional PNL</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getCancellationFees <em>Cancellation Fees</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getHedgingValue <em>Hedging Value</em>}</li>
  * </ul>
@@ -25,6 +26,32 @@ package com.mmxlabs.models.lng.schedule;
  * @generated
  */
 public interface BasicSlotPNLDetails extends GeneralPNLDetails {
+	/**
+	 * Returns the value of the '<em><b>Additional PNL</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Additional PNL</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Additional PNL</em>' attribute.
+	 * @see #setAdditionalPNL(int)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getBasicSlotPNLDetails_AdditionalPNL()
+	 * @model
+	 * @generated
+	 */
+	int getAdditionalPNL();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getAdditionalPNL <em>Additional PNL</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Additional PNL</em>' attribute.
+	 * @see #getAdditionalPNL()
+	 * @generated
+	 */
+	void setAdditionalPNL(int value);
+
 	/**
 	 * Returns the value of the '<em><b>Cancellation Fees</b></em>' attribute.
 	 * <!-- begin-user-doc -->

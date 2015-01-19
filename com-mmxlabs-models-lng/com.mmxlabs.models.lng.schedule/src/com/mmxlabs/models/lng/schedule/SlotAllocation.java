@@ -28,6 +28,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getVolumeTransferred <em>Volume Transferred</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getEnergyTransferred <em>Energy Transferred</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getCv <em>Cv</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getVolumeValue <em>Volume Value</em>}</li>
  * </ul>
  * </p>
  *
@@ -356,6 +357,32 @@ public interface SlotAllocation extends MMXObject {
 	 * @generated
 	 */
 	void setCv(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Volume Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Volume Value</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Volume Value</em>' attribute.
+	 * @see #setVolumeValue(int)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSlotAllocation_VolumeValue()
+	 * @model
+	 * @generated
+	 */
+	int getVolumeValue();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getVolumeValue <em>Volume Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Volume Value</em>' attribute.
+	 * @see #getVolumeValue()
+	 * @generated
+	 */
+	void setVolumeValue(int value);
 
 	/**
 	 * <!-- begin-user-doc -->

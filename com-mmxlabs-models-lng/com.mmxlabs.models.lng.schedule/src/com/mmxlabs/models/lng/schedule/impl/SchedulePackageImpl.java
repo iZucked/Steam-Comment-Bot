@@ -1168,6 +1168,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getSlotAllocation_VolumeValue() {
+		return (EAttribute)slotAllocationEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EOperation getSlotAllocation__GetPort() {
 		return slotAllocationEClass.getEOperations().get(0);
 	}
@@ -1546,7 +1555,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getBasicSlotPNLDetails_CancellationFees() {
+	public EAttribute getBasicSlotPNLDetails_AdditionalPNL() {
 		return (EAttribute)basicSlotPNLDetailsEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -1555,8 +1564,17 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getBasicSlotPNLDetails_HedgingValue() {
+	public EAttribute getBasicSlotPNLDetails_CancellationFees() {
 		return (EAttribute)basicSlotPNLDetailsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getBasicSlotPNLDetails_HedgingValue() {
+		return (EAttribute)basicSlotPNLDetailsEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1693,6 +1711,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(slotAllocationEClass, SLOT_ALLOCATION__VOLUME_TRANSFERRED);
 		createEAttribute(slotAllocationEClass, SLOT_ALLOCATION__ENERGY_TRANSFERRED);
 		createEAttribute(slotAllocationEClass, SLOT_ALLOCATION__CV);
+		createEAttribute(slotAllocationEClass, SLOT_ALLOCATION__VOLUME_VALUE);
 		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_PORT);
 		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_LOCAL_START);
 		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_LOCAL_END);
@@ -1807,6 +1826,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		generalPNLDetailsEClass = createEClass(GENERAL_PNL_DETAILS);
 
 		basicSlotPNLDetailsEClass = createEClass(BASIC_SLOT_PNL_DETAILS);
+		createEAttribute(basicSlotPNLDetailsEClass, BASIC_SLOT_PNL_DETAILS__ADDITIONAL_PNL);
 		createEAttribute(basicSlotPNLDetailsEClass, BASIC_SLOT_PNL_DETAILS__CANCELLATION_FEES);
 		createEAttribute(basicSlotPNLDetailsEClass, BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE);
 
@@ -1945,6 +1965,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEAttribute(getSlotAllocation_VolumeTransferred(), ecorePackage.getEInt(), "volumeTransferred", null, 1, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotAllocation_EnergyTransferred(), ecorePackage.getEInt(), "energyTransferred", null, 1, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotAllocation_Cv(), ecorePackage.getEDouble(), "cv", null, 1, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlotAllocation_VolumeValue(), ecorePackage.getEInt(), "volumeValue", null, 0, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getSlotAllocation__GetPort(), thePortPackage.getPort(), "getPort", 1, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -2074,6 +2095,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEClass(generalPNLDetailsEClass, GeneralPNLDetails.class, "GeneralPNLDetails", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(basicSlotPNLDetailsEClass, BasicSlotPNLDetails.class, "BasicSlotPNLDetails", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getBasicSlotPNLDetails_AdditionalPNL(), ecorePackage.getEInt(), "additionalPNL", null, 0, 1, BasicSlotPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getBasicSlotPNLDetails_CancellationFees(), ecorePackage.getEInt(), "cancellationFees", null, 0, 1, BasicSlotPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getBasicSlotPNLDetails_HedgingValue(), ecorePackage.getEInt(), "hedgingValue", null, 0, 1, BasicSlotPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

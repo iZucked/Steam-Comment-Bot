@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl#getAdditionalPNL <em>Additional PNL</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl#getCancellationFees <em>Cancellation Fees</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl#getHedgingValue <em>Hedging Value</em>}</li>
  * </ul>
@@ -30,6 +31,26 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * @generated
  */
 public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements BasicSlotPNLDetails {
+	/**
+	 * The default value of the '{@link #getAdditionalPNL() <em>Additional PNL</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAdditionalPNL()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int ADDITIONAL_PNL_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getAdditionalPNL() <em>Additional PNL</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAdditionalPNL()
+	 * @generated
+	 * @ordered
+	 */
+	protected int additionalPNL = ADDITIONAL_PNL_EDEFAULT;
+
 	/**
 	 * The default value of the '{@link #getCancellationFees() <em>Cancellation Fees</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -105,6 +126,27 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	@Override
 	protected EClass eStaticClass() {
 		return SchedulePackage.Literals.BASIC_SLOT_PNL_DETAILS;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getAdditionalPNL() {
+		return additionalPNL;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setAdditionalPNL(int newAdditionalPNL) {
+		int oldAdditionalPNL = additionalPNL;
+		additionalPNL = newAdditionalPNL;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.BASIC_SLOT_PNL_DETAILS__ADDITIONAL_PNL, oldAdditionalPNL, additionalPNL));
 	}
 
 	/**
@@ -207,6 +249,8 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__ADDITIONAL_PNL:
+				return getAdditionalPNL();
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__CANCELLATION_FEES:
 				return getCancellationFees();
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE:
@@ -223,6 +267,9 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__ADDITIONAL_PNL:
+				setAdditionalPNL((Integer)newValue);
+				return;
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__CANCELLATION_FEES:
 				setCancellationFees((Integer)newValue);
 				return;
@@ -241,6 +288,9 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__ADDITIONAL_PNL:
+				setAdditionalPNL(ADDITIONAL_PNL_EDEFAULT);
+				return;
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__CANCELLATION_FEES:
 				unsetCancellationFees();
 				return;
@@ -259,6 +309,8 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__ADDITIONAL_PNL:
+				return additionalPNL != ADDITIONAL_PNL_EDEFAULT;
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__CANCELLATION_FEES:
 				return isSetCancellationFees();
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE:
@@ -277,7 +329,9 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (cancellationFees: ");
+		result.append(" (additionalPNL: ");
+		result.append(additionalPNL);
+		result.append(", cancellationFees: ");
 		if (cancellationFeesESet) result.append(cancellationFees); else result.append("<unset>");
 		result.append(", hedgingValue: ");
 		if (hedgingValueESet) result.append(hedgingValue); else result.append("<unset>");

@@ -41,6 +41,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getVolumeTransferred <em>Volume Transferred</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getEnergyTransferred <em>Energy Transferred</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getCv <em>Cv</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getVolumeValue <em>Volume Value</em>}</li>
  * </ul>
  * </p>
  *
@@ -203,6 +204,26 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * @ordered
 	 */
 	protected double cv = CV_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getVolumeValue() <em>Volume Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeValue()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int VOLUME_VALUE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getVolumeValue() <em>Volume Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeValue()
+	 * @generated
+	 * @ordered
+	 */
+	protected int volumeValue = VOLUME_VALUE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -668,6 +689,27 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getVolumeValue() {
+		return volumeValue;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVolumeValue(int newVolumeValue) {
+		int oldVolumeValue = volumeValue;
+		volumeValue = newVolumeValue;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SLOT_ALLOCATION__VOLUME_VALUE, oldVolumeValue, volumeValue));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public Port getPort() {
@@ -811,6 +853,8 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 				return getEnergyTransferred();
 			case SchedulePackage.SLOT_ALLOCATION__CV:
 				return getCv();
+			case SchedulePackage.SLOT_ALLOCATION__VOLUME_VALUE:
+				return getVolumeValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -849,6 +893,9 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 				return;
 			case SchedulePackage.SLOT_ALLOCATION__CV:
 				setCv((Double)newValue);
+				return;
+			case SchedulePackage.SLOT_ALLOCATION__VOLUME_VALUE:
+				setVolumeValue((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -889,6 +936,9 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 			case SchedulePackage.SLOT_ALLOCATION__CV:
 				setCv(CV_EDEFAULT);
 				return;
+			case SchedulePackage.SLOT_ALLOCATION__VOLUME_VALUE:
+				setVolumeValue(VOLUME_VALUE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -919,6 +969,8 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 				return energyTransferred != ENERGY_TRANSFERRED_EDEFAULT;
 			case SchedulePackage.SLOT_ALLOCATION__CV:
 				return cv != CV_EDEFAULT;
+			case SchedulePackage.SLOT_ALLOCATION__VOLUME_VALUE:
+				return volumeValue != VOLUME_VALUE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -963,6 +1015,8 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 		result.append(energyTransferred);
 		result.append(", cv: ");
 		result.append(cv);
+		result.append(", volumeValue: ");
+		result.append(volumeValue);
 		result.append(')');
 		return result.toString();
 	}
