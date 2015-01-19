@@ -27,6 +27,7 @@ import com.mmxlabs.scheduler.optimiser.annotations.IHedgingAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ICargoValueAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 
 public class BasicSlotPNLExporterExtension implements IExporterExtension {
@@ -88,11 +89,18 @@ public class BasicSlotPNLExporterExtension implements IExporterExtension {
 
 				if (profitAndLossContainer != null) {
 
+					final ICargoValueAnnotation cargoValueAnnotation = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_cargoValueAllocationInfo,
+							ICargoValueAnnotation.class);
+
 					final IHedgingAnnotation hedgingAnnotation = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_hedgingValue, IHedgingAnnotation.class);
 					final ICancellationAnnotation cancellationAnnotation = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_cancellationFees,
 							ICancellationAnnotation.class);
-					if (hedgingAnnotation != null || cancellationAnnotation != null) {
-						BasicSlotPNLDetails details = ScheduleFactory.eINSTANCE.createBasicSlotPNLDetails();
+					if (hedgingAnnotation != null || cancellationAnnotation != null || cargoValueAnnotation != null) {
+						final BasicSlotPNLDetails details = ScheduleFactory.eINSTANCE.createBasicSlotPNLDetails();
+
+						if (cargoValueAnnotation != null) {
+							details.setAdditionalPNL(OptimiserUnitConvertor.convertToExternalFixedCost(cargoValueAnnotation.getSlotAdditionalPNL(slotProvider.getPortSlot(element))));
+						}
 						if (hedgingAnnotation != null) {
 							details.setHedgingValue(OptimiserUnitConvertor.convertToExternalFixedCost(hedgingAnnotation.getHedgingValue()));
 						}
@@ -101,9 +109,9 @@ public class BasicSlotPNLExporterExtension implements IExporterExtension {
 						}
 
 						SlotPNLDetails slotDetails = null;
-						for (GeneralPNLDetails generalPNLDetails : profitAndLossContainer.getGeneralPNLDetails()) {
+						for (final GeneralPNLDetails generalPNLDetails : profitAndLossContainer.getGeneralPNLDetails()) {
 							if (generalPNLDetails instanceof SlotPNLDetails) {
-								SlotPNLDetails slotPNLDetails = (SlotPNLDetails) generalPNLDetails;
+								final SlotPNLDetails slotPNLDetails = (SlotPNLDetails) generalPNLDetails;
 								if (slotPNLDetails.getSlot() == modelSlot) {
 									slotDetails = slotPNLDetails;
 								}

@@ -27,7 +27,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ICargoValueAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 
@@ -93,7 +93,7 @@ public class MarkToMarketExporter extends BaseAnnotationExporter {
 			slotAllocation.setSlot(optSlot);
 
 			// Output allocation info
-			final IAllocationAnnotation allocation = (IAllocationAnnotation) annotations.get(SchedulerConstants.AI_volumeAllocationInfo);
+			final ICargoValueAnnotation cargoValueAnnotation = (ICargoValueAnnotation) annotations.get(SchedulerConstants.AI_cargoValueAllocationInfo);
 
 			final MarketAllocation eAllocation = scheduleFactory.createMarketAllocation();
 			eAllocation.setSlot(optSlot);
@@ -104,20 +104,21 @@ public class MarkToMarketExporter extends BaseAnnotationExporter {
 			eAllocation.setSlotAllocation(slotAllocation);
 
 			if (slot instanceof ILoadOption) {
-				final int pricePerMMBTu = allocation.getSlotPricePerMMBTu(slot);
+				final int pricePerMMBTu = cargoValueAnnotation.getSlotPricePerMMBTu(slot);
 				slotAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
-				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(slot)));
-
+				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(cargoValueAnnotation.getSlotVolumeInM3(slot)));
+				slotAllocation.setVolumeValue(OptimiserUnitConvertor.convertToExternalFixedCost(cargoValueAnnotation.getSlotValue(slot)));
 			} else {
-				final int pricePerMMBTu = allocation.getSlotPricePerMMBTu(slot);
+				final int pricePerMMBTu = cargoValueAnnotation.getSlotPricePerMMBTu(slot);
 				slotAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
-				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(slot)));
+				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(cargoValueAnnotation.getSlotVolumeInM3(slot)));
+				slotAllocation.setVolumeValue(OptimiserUnitConvertor.convertToExternalFixedCost(cargoValueAnnotation.getSlotValue(slot)));
 			}
 
 			{
 				// /// Get the "fake" mtm slot data
 				// Get all the allocation slots
-				final Set<IPortSlot> slots = new HashSet<IPortSlot>(allocation.getSlots());
+				final Set<IPortSlot> slots = new HashSet<IPortSlot>(cargoValueAnnotation.getSlots());
 				if (slots.size() != 2) {
 					throw new IllegalStateException("Expected 2 slots - got " + slots.size());
 				}
@@ -130,17 +131,17 @@ public class MarkToMarketExporter extends BaseAnnotationExporter {
 				// Look up price and add to MarketAllocation.
 				final IPortSlot mtmSlot = slots.iterator().next();
 				if (mtmSlot instanceof ILoadOption) {
-					final int pricePerMMBTu = allocation.getSlotPricePerMMBTu(mtmSlot);
+					final int pricePerMMBTu = cargoValueAnnotation.getSlotPricePerMMBTu(mtmSlot);
 					eAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
 
 				} else {
-					final int pricePerMMBTu = allocation.getSlotPricePerMMBTu(mtmSlot);
+					final int pricePerMMBTu = cargoValueAnnotation.getSlotPricePerMMBTu(mtmSlot);
 					eAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
 				}
 
 			}
-			sv.setStart(modelEntityMap.getDateFromHours(allocation.getSlotTime(slot), slot.getPort()));
-			sv.setEnd(modelEntityMap.getDateFromHours(allocation.getSlotTime(slot), slot.getPort()));
+			sv.setStart(modelEntityMap.getDateFromHours(cargoValueAnnotation.getSlotTime(slot), slot.getPort()));
+			sv.setEnd(modelEntityMap.getDateFromHours(cargoValueAnnotation.getSlotTime(slot), slot.getPort()));
 
 			sv.setSlotAllocation(slotAllocation);
 

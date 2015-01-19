@@ -36,7 +36,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ICargoValueAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.ICapacityAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.ICapacityEntry;
 import com.mmxlabs.scheduler.optimiser.fitness.components.portcost.IPortCostAnnotation;
@@ -102,7 +102,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			// Output allocation info
 			// TODO: Break up IAllocationAnnotation in separate instances for the load and discharge.
 			// TODO: Break up IAllocationAnnotation to pull out fuel use as a separate chunk.
-			final IAllocationAnnotation allocation = (IAllocationAnnotation) annotations.get(SchedulerConstants.AI_volumeAllocationInfo);
+			final ICargoValueAnnotation allocation = (ICargoValueAnnotation) annotations.get(SchedulerConstants.AI_cargoValueAllocationInfo);
 
 			eAllocation = allocations.get(slot);
 
@@ -119,6 +119,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			final int pricePerMMBTu = allocation.getSlotPricePerMMBTu(slot);
 			slotAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
 			slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(slot)));
+			slotAllocation.setVolumeValue(OptimiserUnitConvertor.convertToExternalFixedCost(allocation.getSlotValue(slot)));
 			slotAllocation.setEnergyTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInMMBTu(slot)));
 			slotAllocation.setCv(OptimiserUnitConvertor.convertToExternalConversionFactor(allocation.getSlotCargoCV(slot)));
 
