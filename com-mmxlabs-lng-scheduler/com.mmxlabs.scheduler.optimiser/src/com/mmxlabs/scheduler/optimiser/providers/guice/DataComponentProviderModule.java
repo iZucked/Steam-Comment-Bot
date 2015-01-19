@@ -91,6 +91,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IShortCargoReturnElementProvide
 import com.mmxlabs.scheduler.optimiser.providers.IShortCargoReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ISlotGroupCountProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ISlotGroupCountProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProvider;
+import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
@@ -122,6 +124,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapShipToShipBindingPr
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapShippingHoursRestrictionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapShortCargoReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapSlotGroupCountProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapSpotMarketSlotsEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapStartEndRequirementEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVirtualVesselSlotProviderEditor;
@@ -258,6 +261,10 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(IOptionalElementsProvider.class).toInstance(optionalElements);
 		bind(IOptionalElementsProviderEditor.class).toInstance(optionalElements);
 
+		final ISpotMarketSlotsProviderEditor spotMarketSlots = new HashMapSpotMarketSlotsEditor();
+		bind(ISpotMarketSlotsProvider.class).toInstance(spotMarketSlots);
+		bind(ISpotMarketSlotsProviderEditor.class).toInstance(spotMarketSlots);
+		
 		final IPortCostProviderEditor portCosts = new HashMapPortCostEditor();
 		bind(IPortCostProvider.class).toInstance(portCosts);
 		bind(IPortCostProviderEditor.class).toInstance(portCosts);
