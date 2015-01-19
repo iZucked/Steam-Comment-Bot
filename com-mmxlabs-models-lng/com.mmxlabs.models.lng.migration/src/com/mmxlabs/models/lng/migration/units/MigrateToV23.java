@@ -127,7 +127,7 @@ public class MigrateToV23 extends AbstractMigrationUnit {
 							charterInMarket.eSet(reference_CharterInMarket_charterInPrice, curve);
 							charterInMarket.eSet(attribute_CharterInMarket_spotCharterCount, charterCostModel.eGet(attribute_CharterCostModel_spotCharterCount));
 
-							final String name = String.format("%s - %s ", vesselClass.eGet(attribute_NamedObject_name), curve.eGet(attribute_NamedObject_name));
+							final String name = String.format("%s - %s", vesselClass.eGet(attribute_NamedObject_name), curve.eGet(attribute_NamedObject_name));
 							charterInMarket.eSet(attribute_NamedObject_name, name);
 
 							charterInMarkets.add(charterInMarket);
