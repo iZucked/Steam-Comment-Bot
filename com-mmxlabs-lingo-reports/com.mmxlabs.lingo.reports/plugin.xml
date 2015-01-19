@@ -213,6 +213,10 @@
       </ScheduleBasedColumn>
       <ScheduleBasedColumn
             handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.pnl_additional">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
             id="com.mmxlabs.lingo.reports.components.columns.schedule.pnl_trading">
       </ScheduleBasedColumn>
             <ScheduleBasedColumn
@@ -358,6 +362,9 @@
          </InitialColumn>
          <InitialColumn
                id="com.mmxlabs.lingo.reports.components.columns.schedule.pnl_total">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.pnl_pnl_additional">
          </InitialColumn>
          <InitialColumn
                id="com.mmxlabs.lingo.reports.components.columns.schedule.buyport">

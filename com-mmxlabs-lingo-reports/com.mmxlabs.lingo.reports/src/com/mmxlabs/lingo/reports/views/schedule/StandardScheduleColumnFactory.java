@@ -40,8 +40,10 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.GeneralPNLDetails;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
@@ -51,6 +53,7 @@ import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
@@ -356,6 +359,48 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 				}
 			}, cargoAllocationRef));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.pnl_additional":
+
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Addn. P&L", null, ColumnType.NORMAL, new IntegerFormatter() {
+				@Override
+				public Integer getIntValue(final Object object) {
+
+					int addnPNL = 0;
+
+					ProfitAndLossContainer container = null;
+
+					if (object instanceof CargoAllocation || object instanceof VesselEventVisit || object instanceof StartEvent || object instanceof GeneratedCharterOut
+							|| object instanceof OpenSlotAllocation) {
+						container = (ProfitAndLossContainer) object;
+					}
+					if (object instanceof SlotVisit) {
+						final SlotVisit slotVisit = (SlotVisit) object;
+						if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
+							container = slotVisit.getSlotAllocation().getCargoAllocation();
+						}
+					}
+
+					if (container != null) {
+
+						final GroupProfitAndLoss dataWithKey = container.getGroupProfitAndLoss();
+						if (dataWithKey != null) {
+							for (final GeneralPNLDetails generalPNLDetails : container.getGeneralPNLDetails()) {
+								if (generalPNLDetails instanceof SlotPNLDetails) {
+									final SlotPNLDetails slotPNLDetails = (SlotPNLDetails) generalPNLDetails;
+									for (GeneralPNLDetails details : slotPNLDetails.getGeneralPNLDetails()) {
+										if (details instanceof BasicSlotPNLDetails) {
+											addnPNL += ((BasicSlotPNLDetails) details).getAdditionalPNL();
+										}
+									}
+								}
+							}
+						}
+					}
+
+					return addnPNL;
+				}
+			}, targetObjectRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.pnl_total":
 
