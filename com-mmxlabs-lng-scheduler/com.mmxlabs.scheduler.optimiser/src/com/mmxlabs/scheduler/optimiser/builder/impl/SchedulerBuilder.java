@@ -423,7 +423,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		optionalElements.setOptional(element, optional);
 		
 		spotMarketSlots.setSpotMarketSlot(element, isSpotMarketSlot);
-
+//		System.out.println(spotMarketSlots.isSpotMarketSlot(element));
 		sequenceElements.add(element);
 
 		// Register the port with the element
