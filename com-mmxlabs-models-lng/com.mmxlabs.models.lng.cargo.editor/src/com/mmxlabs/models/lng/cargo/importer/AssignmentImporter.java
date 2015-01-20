@@ -76,26 +76,29 @@ public class AssignmentImporter {
 									if (!loadSlot.isDESPurchase()) {
 										assignableElement = loadSlot.getCargo();
 									}
+								} else if (o instanceof AssignableElement) {
+									assignableElement = (AssignableElement) o;
 								}
 
 								if (vesselAssignment != null && !vesselAssignment.isEmpty()) {
-									// new style
-									if (spotIndex != null) {
-										final CharterInMarket charterInMarket = (CharterInMarket) context.getNamedObject(vesselAssignment.trim(), SpotMarketsPackage.Literals.CHARTER_IN_MARKET);
-										if (charterInMarket != null) {
-											assignableElement.setVesselAssignmentType(charterInMarket);
-											assignableElement.setSpotIndex(spotIndex.intValue());
+									if (assignableElement != null) {
+										// new style
+										if (spotIndex != null) {
+											final CharterInMarket charterInMarket = (CharterInMarket) context.getNamedObject(vesselAssignment.trim(), SpotMarketsPackage.Literals.CHARTER_IN_MARKET);
+											if (charterInMarket != null) {
+												assignableElement.setVesselAssignmentType(charterInMarket);
+												assignableElement.setSpotIndex(spotIndex.intValue());
+											}
+										} else {
+											final Vessel v = (Vessel) context.getNamedObject(vesselAssignment.trim(), FleetPackage.Literals.VESSEL);
+											if (v != null) {
+												final VesselAvailability availability = AssignmentEditorHelper.findVesselAvailability(v, assignableElement,
+														((LNGScenarioModel) context.getRootObject()).getPortfolioModel().getCargoModel().getVesselAvailabilities());
+												assignableElement.setVesselAssignmentType(availability);
+											}
 										}
-									} else {
-										final Vessel v = (Vessel) context.getNamedObject(vesselAssignment.trim(), FleetPackage.Literals.VESSEL);
-										if (v != null) {
-											final VesselAvailability availability = AssignmentEditorHelper.findVesselAvailability(v, assignableElement, ((LNGScenarioModel) context.getRootObject())
-													.getPortfolioModel().getCargoModel().getVesselAvailabilities());
-											assignableElement.setVesselAssignmentType(availability);
-										}
+										assignableElement.setSequenceHint(seq);
 									}
-									assignableElement.setSequenceHint(seq);
-
 								} else if (vesselName != null && !vesselName.isEmpty()) {
 									// Old style
 									if (assignableElement == null) {

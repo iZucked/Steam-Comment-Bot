@@ -109,6 +109,8 @@ public class MigrateToV24 extends AbstractMigrationUnit {
 
 		final EClass class_AssignableElement = MetamodelUtils.getEClass(package_cargoModel, "AssignableElement");
 		final EReference reference_AssignableElement_assignment = MetamodelUtils.getReference(class_AssignableElement, "assignment");
+		final EAttribute attribute_AssignableElement_spotIndex = MetamodelUtils.getAttribute(class_AssignableElement, "spotIndex");
+		final EAttribute attribute_AssignableElement_sequenceHint = MetamodelUtils.getAttribute(class_AssignableElement, "sequenceHint");
 		final EReference reference_AssignableElement_vesselAssignmentType = MetamodelUtils.getReference(class_AssignableElement, "vesselAssignmentType");
 
 		final EPackage package_ScheduleModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScheduleModel);
@@ -188,6 +190,8 @@ public class MigrateToV24 extends AbstractMigrationUnit {
 							loadSlot.eSet(refernce_Slot_nominatedVessel, vessel);
 							loadSlot.eUnset(reference_AssignableElement_assignment);
 						}
+						loadSlot.eUnset(attribute_AssignableElement_sequenceHint);
+						loadSlot.eUnset(attribute_AssignableElement_spotIndex);
 					}
 				}
 
@@ -200,6 +204,8 @@ public class MigrateToV24 extends AbstractMigrationUnit {
 							dischargeSlot.eSet(refernce_Slot_nominatedVessel, vessel);
 							dischargeSlot.eUnset(reference_AssignableElement_assignment);
 						}
+						dischargeSlot.eUnset(attribute_AssignableElement_sequenceHint);
+						dischargeSlot.eUnset(attribute_AssignableElement_spotIndex);
 					}
 				}
 				final Map<EObject, EObject> vesselToVesselAvailabilityMap = new HashMap<>();
