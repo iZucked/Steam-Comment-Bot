@@ -21,61 +21,63 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
  * </ol>
  * 
  * @author hinton
- * 
+ * FIXME: 2015-01-21; SG -- Disable class as re-evaluating with the VPO return time changes can lead to inconsistent results. Need to ensure arrivalTimes array is properly reset
  */
-public class RelaxingSequenceScheduler extends EnumeratingSequenceScheduler {
+@Deprecated
+/*public*/ class RelaxingSequenceScheduler extends EnumeratingSequenceScheduler {
 	private static final Logger log = LoggerFactory.getLogger(RelaxingSequenceScheduler.class);
 
 	final int steps = 20;
 
 	@Override
 	public ScheduledSequences schedule(final ISequences sequences,  final IAnnotatedSolution solution) {
-		setSequences(sequences);
-		resetBest();
-		prepare2();
-		evaluate();
-
-		for (int seq = 0; seq < arrivalTimes.length; seq++) {
-			for (int pos = 0; pos < sizes[seq]; pos++) {
-				relax(seq, pos);
-			}
-		}
-		log.debug("relaxed; " + count + " evaluations");
-		return reEvaluateAndGetBestResult(solution);
+//		setSequences(sequences);
+//		resetBest();
+//		prepare2();
+//		evaluate();
+//
+//		for (int seq = 0; seq < arrivalTimes.length; seq++) {
+//			for (int pos = 0; pos < sizes[seq]; pos++) {
+//				relax(seq, pos);
+//			}
+//		}
+//		log.debug("relaxed; " + count + " evaluations");
+//		return reEvaluateAndGetBestResult(solution);
+		return null;
 	}
 
 	private void relax(final int seq, final int pos) {
-		final int min = arrivalTimes[seq][pos];
-		final int max = getMaxArrivalTime(seq, pos);
-		// log.debug("relax(" + seq + ", " + pos + "), time between " + min
-		// + ",  " + max);
-		int lastArrivalTime;
-		for (int step = 0; step < steps; step++) {
-			final int i = min + 1 + ((step * ((max - min) + 1)) / steps);
-			lastArrivalTime = arrivalTimes[seq][pos];
-			arrivalTimes[seq][pos] = i;
-			int next;
-			// push later arrival times in this sequence
-			for (next = pos + 1; next < arrivalTimes[seq].length; next++) {
-				final int mat = getMinArrivalTime(seq, next);
-				if (mat == arrivalTimes[seq][next]) {
-					break;
-				}
-				arrivalTimes[seq][next] = mat;
-			}
-			final long prevValue = getLastValue();
-			evaluate();
-			if ((prevValue <= getLastValue()) && (prevValue != Long.MAX_VALUE)) {
-				// roll back change
-				arrivalTimes[seq][pos] = lastArrivalTime;
-				for (int fix = pos; (fix < next) && (fix < arrivalTimes[seq].length); fix++) {
-					arrivalTimes[seq][fix] = getMinArrivalTime(seq, fix);
-				}
-				evaluate();
-				// log.debug("relaxed to " + (i - 1));
-				return;
-			}
-		}
+//		final int min = arrivalTimes[seq][pos];
+//		final int max = getMaxArrivalTime(seq, pos);
+//		// log.debug("relax(" + seq + ", " + pos + "), time between " + min
+//		// + ",  " + max);
+//		int lastArrivalTime;
+//		for (int step = 0; step < steps; step++) {
+//			final int i = min + 1 + ((step * ((max - min) + 1)) / steps);
+//			lastArrivalTime = arrivalTimes[seq][pos];
+//			arrivalTimes[seq][pos] = i;
+//			int next;
+//			// push later arrival times in this sequence
+//			for (next = pos + 1; next < arrivalTimes[seq].length; next++) {
+//				final int mat = getMinArrivalTime(seq, next);
+//				if (mat == arrivalTimes[seq][next]) {
+//					break;
+//				}
+//				arrivalTimes[seq][next] = mat;
+//			}
+//			final long prevValue = getLastValue();
+//			evaluate();
+//			if ((prevValue <= getLastValue()) && (prevValue != Long.MAX_VALUE)) {
+//				// roll back change
+//				arrivalTimes[seq][pos] = lastArrivalTime;
+//				for (int fix = pos; (fix < next) && (fix < arrivalTimes[seq].length); fix++) {
+//					arrivalTimes[seq][fix] = getMinArrivalTime(seq, fix);
+//				}
+//				evaluate();
+//				// log.debug("relaxed to " + (i - 1));
+//				return;
+//			}
+//		}
 	}
 
 	/**

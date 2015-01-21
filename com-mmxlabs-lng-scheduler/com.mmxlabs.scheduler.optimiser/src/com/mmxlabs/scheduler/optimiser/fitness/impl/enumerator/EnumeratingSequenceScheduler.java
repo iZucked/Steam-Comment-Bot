@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -61,16 +62,6 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 	 * How long to let empty time windows be. Since these mostly happen at the end of sequences we make this zero.
 	 */
 	private static final int EMPTY_WINDOW_SIZE = 0;
-
-	/**
-	 * Tracks the number of evaluations done so far
-	 */
-	protected int count = 0;
-
-	/**
-	 * Indicates how many evaluations the best value came after
-	 */
-	protected int bestIndex = 0;
 
 	/**
 	 * The output of the scheduler; these are the arrival times for each element in each sequence.
@@ -188,16 +179,6 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 	 */
 	private ScheduledSequences bestResult;
 
-	/**
-	 * True if the last time we called evaluate() we evaluated the best result in this cycle.
-	 */
-	private boolean lastEvaluationWasBestResult = false;
-
-	/**
-	 * Contains the last valid value calculated by evaluate(). TODO this is ugly.
-	 */
-	private long lastValue;
-
 	private final TimeWindow defaultStartWindow = new TimeWindow(0, Integer.MAX_VALUE);
 
 	public EnumeratingSequenceScheduler() {
@@ -207,41 +188,21 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 	}
 
 	@Override
-	public ScheduledSequences schedule(final ISequences sequences, final IAnnotatedSolution solution) {
+	public ScheduledSequences schedule(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
 		setSequences(sequences);
 		resetBest();
 
 		startLogEntry(1);
 		prepare();
-		enumerate(0, 0);
+		enumerate(0, 0, solution);
 		endLogEntry();
 
-		return reEvaluateAndGetBestResult(solution);
-	}
-
-	protected final ScheduledSequences reEvaluateAndGetBestResult(@Nullable final IAnnotatedSolution solution) {
-
-		// TODO: Trigger only if solution != null?
-
-		final ScheduledSequences scheduledSequences = scheduleCalculator.schedule(sequences, arrivalTimes, solution);
-		if (scheduledSequences == null) {
-			return null;
-		}
-
-		if (evaluator != null) {
-			long evaluateSchedule = evaluator.evaluateSchedule(sequences, scheduledSequences, solution);
-			// Make sure we re-evaluate to the same state!
-			assert evaluateSchedule == bestValue;
-		}
-		return scheduledSequences;
+		return bestResult;
 	}
 
 	protected final void resetBest() {
-		this.lastEvaluationWasBestResult = false;
 		this.bestResult = null;
 		this.bestValue = Long.MAX_VALUE;
-		this.lastValue = Long.MAX_VALUE;
-		count = 0;
 	}
 
 	protected final void setSequences(final ISequences sequences) {
@@ -649,12 +610,12 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 	 * 
 	 * @param index
 	 */
-	protected void enumerate(final int seq, final int index) {
+	protected void enumerate(final int seq, final int index, @Nullable IAnnotatedSolution solution) {
 		if ((seq == arrivalTimes.length) && (index < sizes[seq])) {
-			evaluate();
+			evaluate(solution);
 			return;
 		} else if (seq == arrivalTimes.length) {
-			enumerate(seq + 1, 0);
+			enumerate(seq + 1, 0, solution);
 			return;
 		}
 
@@ -663,7 +624,7 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 
 		for (int time = min; time <= max; time++) {
 			arrivalTimes[seq][index] = time;
-			enumerate(seq, index + 1);
+			enumerate(seq, index + 1, solution);
 		}
 	}
 
@@ -672,33 +633,23 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 
 	}
 
-	protected boolean evaluate() {
+	protected boolean evaluate(@Nullable final IAnnotatedSolution solution) {
 
-		count++;
-
-		final ScheduledSequences scheduledSequences = scheduleCalculator.schedule(sequences, arrivalTimes, null);
+		final ScheduledSequences scheduledSequences = scheduleCalculator.schedule(sequences, arrivalTimes, solution);
 		if (scheduledSequences == null) {
 			return false;
 		}
 
 		if (evaluator != null) {
-			lastValue = evaluator.evaluateSchedule(sequences, scheduledSequences, null);
+			bestValue = evaluator.evaluateSchedule(sequences, scheduledSequences);
 		} else {
-			lastValue = 0;
+			bestValue = 0;
 		}
 
-		logValue(lastValue);
+		logValue(bestValue);
 
-		lastEvaluationWasBestResult = lastValue < bestValue;
-
-		if (lastEvaluationWasBestResult) {
-			bestIndex = count;
-			bestValue = lastValue;
-			bestResult = scheduledSequences;
-			return true;
-		}
-
-		return false;
+		bestResult = scheduledSequences;
+		return true;
 	}
 
 	/**
@@ -797,10 +748,6 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 			}
 		}
 		return accumulator;
-	}
-
-	public long getLastValue() {
-		return lastValue;
 	}
 
 	/**
