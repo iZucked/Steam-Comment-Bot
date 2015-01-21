@@ -105,7 +105,7 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 		}
 //
 //		// Overrides default layout factory so we get a single column rather than multiple columns and one row
-		this.setLayout(new GridLayout(3, true));
+		this.setLayout(new GridLayout(3, false));
 	}
 
 //	 @Override
