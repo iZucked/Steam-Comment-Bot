@@ -143,6 +143,9 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 	public void initPartControl(final Composite parent) {
 
+		// Find the column definitions
+		registerReportColumns();
+
 		// Check ext point to see if we can enable the customise action (created within createPartControl)
 		customisableReport = checkCustomisable();
 		{
@@ -204,9 +207,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 			// table = ScheduleReportFactory.eINSTANCE.createTable();
 			table = ScheduleReportFactory.eINSTANCE.createTable();
 			viewer.setInput(EMFProperties.list(ScheduleReportPackage.Literals.TABLE__ROWS).observe(table));
-
-			// Find the column definitions
-			registerReportColumns();
 
 			for (final ColumnHandler handler : getBlockManager().getHandlersInOrder()) {
 				final GridColumn column = handler.createColumn().getColumn();
@@ -545,7 +545,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 		manager.add(new GroupMarker("importers"));
 		manager.add(new GroupMarker("exporters"));
 
-		 manager.appendToGroup("filter", filterField.getContribution());
+		manager.appendToGroup("filter", filterField.getContribution());
 		// BE manager.appendToGroup("sortmode", sortModeAction); //BE
 		manager.appendToGroup("pack", packColumnsAction);
 		manager.appendToGroup("copy", copyTableAction);
