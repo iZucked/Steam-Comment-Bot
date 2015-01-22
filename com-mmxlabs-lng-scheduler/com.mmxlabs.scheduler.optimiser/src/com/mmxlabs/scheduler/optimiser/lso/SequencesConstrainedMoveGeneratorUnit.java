@@ -120,6 +120,29 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 			return null;
 		}
 
+//		int count = 0;
+//		System.out.println("***********************");
+//		for (ISequenceElement is : owner.sequences.getSequence(0)) {
+//			System.out.println(String.format("seq 1 [%s] (%s) can be followed by:",count, is));
+//			for (ISequenceElement elt: owner.validFollowers.get(is)) {
+//				Pair<Integer, Integer> followingElement = owner.reverseLookup.get(elt);
+//				System.out.println(String.format(" seq [%s] [%s] (%s)",followingElement.getFirst(), followingElement.getSecond(), elt));
+//			}
+//			count ++;
+//		}
+//		System.out.println("***********************");
+//		count = 0;
+//		System.out.println("***********************");
+//		for (ISequenceElement is : owner.sequences.getSequence(1)) {
+//			System.out.println(String.format("seq 2 [%s] (%s) can be followed by:",count, is));
+//			for (ISequenceElement elt: owner.validFollowers.get(is)) {
+//				Pair<Integer, Integer> followingElement = owner.reverseLookup.get(elt);
+//				System.out.println(String.format(" seq [%s] [%s] (%s)",followingElement.getFirst(), followingElement.getSecond(), elt));
+//			}
+//			count ++;
+//		}
+//		System.out.println("***********************");
+
 		// are both these elements currently in the same route
 		if (sequence1 == sequence2) {
 			// we have found a segment which we can legally excise from a route;
@@ -249,15 +272,40 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 									}
 								} else {
 									// 4opt2 check
-									if (valid2opt2 && owner.validFollowers.get(owner.sequences.getSequence(first).get(loc.getSecond() - 1)).contains(seq2.get(i + 1))) {
-										viableSecondBreaks.add(new Pair<Integer, Integer>(i, loc.getSecond()));
-									}
+//									if (valid2opt2 && owner.validFollowers.get(owner.sequences.getSequence(first).get(loc.getSecond() - 1)).contains(seq2.get(i + 1))) {
+//										viableSecondBreaks.add(new Pair<Integer, Integer>(i, loc.getSecond()));
+//									}
 								}
 
 							}
 						}
 					}
 				}
+				
+				// 4-opt-2 specific
+				if (valid2opt2) { // so we can insert...
+					for (int i = (position2); i < (seq2.size() - 1); i++) {
+						final ISequenceElement here = seq2.get(i);
+						for (final ISequenceElement elt : owner.validFollowers.get(here)) {
+							final Pair<Integer, Integer> followingElement = owner.reverseLookup.get(elt);
+							final Integer followingElementSequence = followingElement.getFirst();
+							if (followingElementSequence == null) {
+								// Most likely an optional element no longer in sequences
+								continue;
+							}
+							final int followingElementPosition = followingElement.getSecond();
+							final int elementBeforeFollowingElementPosition = followingElementPosition - 1;
+							if (followingElementSequence.intValue() == sequence1) {
+								if (elementBeforeFollowingElementPosition > position1) {
+									if (owner.validFollowers.get(owner.sequences.getSequence(followingElementSequence).get(elementBeforeFollowingElementPosition)).contains(seq2.get(i+1))) {
+										viableSecondBreaks.add(new Pair<Integer, Integer>(i, followingElementPosition)); // + 1s to cut the segment after elements
+									}
+								}
+							}
+						}
+					}
+				}
+
 				// So, we have collected some possible breaks, pick one
 				// TODO it might be worth caching this as a source of possible
 				// moves to allow
@@ -314,13 +362,14 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 					result.setResource1(resources.get(sequence1));
 					result.setResource2(resources.get(sequence2));
 
-					result.setResource1Start(position1 + 1);
-					result.setResource1End(secondPosition1);
+					result.setResource1Start(position1 + 1);//inclusive
+					result.setResource1End(secondPosition1);//exclusive
 
-					result.setResource2Start(position2);
-					result.setResource2End(secondPosition2 + 1);
+					result.setResource2Start(position2);//inclusive
+					result.setResource2End(secondPosition2 + 1);//exclusive
 
 					return result;
+//					return null;
 				}
 			} else {
 				return null;
