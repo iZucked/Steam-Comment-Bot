@@ -18,6 +18,8 @@ import org.mockito.Mockito;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.validation.LoadSlotCVConstraint;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortFactory;
 
 public class LoadSlotCVConstraintTest {
 
@@ -96,6 +98,11 @@ public class LoadSlotCVConstraintTest {
 		final LoadSlot slot = CargoFactory.eINSTANCE.createLoadSlot();
 		slot.unsetCargoCV();
 
+		// Slot falls back to port
+		final Port port = PortFactory.eINSTANCE.createPort();
+		port.setCvValue(20.0);
+		slot.setPort(port);
+		
 		final IConstraintStatus successStatus = mock(IConstraintStatus.class);
 		when(successStatus.isOK()).thenReturn(Boolean.TRUE);
 
