@@ -188,6 +188,7 @@ public class PeriodTestUtils {
 	public static Port createPort(final LNGScenarioModel scenarioModel, final String name) {
 		final Port port = PortFactory.eINSTANCE.createPort();
 		port.setName(name);
+		port.setTimeZone("Etc/UTC");
 		scenarioModel.getPortModel().getPorts().add(port);
 		return port;
 	}

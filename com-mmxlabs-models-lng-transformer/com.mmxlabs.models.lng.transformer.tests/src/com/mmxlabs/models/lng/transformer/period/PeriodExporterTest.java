@@ -426,8 +426,12 @@ public class PeriodExporterTest {
 		final LNGScenarioModel originalScenario = PeriodTestUtils.createBasicScenario();
 		LNGScenarioModel periodScenario;
 
+		Port originalPort1 = PeriodTestUtils.createPort(originalScenario, "port1");
+		Port originalPort2 = PeriodTestUtils.createPort(originalScenario, "port2");
+
 		// Populate initial data
 		final LoadSlot load1 = PeriodTestUtils.createLoadSlot(originalScenario, "load1");
+		load1.setPort(originalPort1);
 
 		final Vessel vessel1 = PeriodTestUtils.createVessel(originalScenario, "vessel1");
 		// Create period copy
@@ -445,6 +449,7 @@ public class PeriodExporterTest {
 
 			final LoadSlot copyLoad1 = mapping.getCopyFromOriginal(load1);
 			final DischargeSlot copySpotDischarge1 = PeriodTestUtils.createSpotDischargeSlot(periodScenario, "spot-discharge1");
+			copySpotDischarge1.setPort(mapping.getCopyFromOriginal(originalPort2));
 			copySpotDischarge1.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JULY, 1));
 
 			// Create our new wiring
