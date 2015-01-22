@@ -66,7 +66,7 @@ public class ScheduledDataLookupProvider {
 		slotToAllocationAnnotationCache.clear();
 		slotToVesselStartTimeCache.clear();
 		slotToVesselCache.clear();
-
+		slotToVoyagePlanCache.clear();
 		for (final Map.Entry<VoyagePlan, IAllocationAnnotation> e : currentScheduledSequences.getAllocations().entrySet()) {
 			final VoyagePlan vp = e.getKey();
 			final IAllocationAnnotation aa = e.getValue();
@@ -147,7 +147,7 @@ public class ScheduledDataLookupProvider {
 		slotToAllocationAnnotationCache.clear();
 		slotToVesselStartTimeCache.clear();
 		slotToVesselCache.clear();
-
+		slotToVoyagePlanCache.clear();
 	}
 
 }
