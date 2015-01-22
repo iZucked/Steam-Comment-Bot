@@ -211,7 +211,8 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		final String path = d.get("path").toString();
 		serviceName = d.get("serviceName").toString();
 
-		dataPath = new File(path);
+		// Convert to absolute path
+		dataPath = new File(path).getAbsoluteFile();
 
 		if (dataPath.exists()) {
 			lock.writeLock().lock();
