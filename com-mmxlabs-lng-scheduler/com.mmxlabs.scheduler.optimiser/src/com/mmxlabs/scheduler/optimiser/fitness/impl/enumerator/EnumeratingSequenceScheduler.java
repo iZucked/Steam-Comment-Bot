@@ -53,6 +53,8 @@ import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
  */
 public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceScheduler {
 
+	protected static final boolean RE_EVALUATE_SOLUTION = true;
+
 	private static final int DISCHARGE_SEQUENCE_INDEX_OFFSET = 0;
 	private static final int DISCHARGE_WITHIN_SEQUENCE_INDEX_OFFSET = 1;
 	private static final int LOAD_SEQUENCE_INDEX_OFFSET = 2;
@@ -194,10 +196,32 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 
 		startLogEntry(1);
 		prepare();
+		if (RE_EVALUATE_SOLUTION) {
+			enumerate(0, 0, null);
+		} else {
+			enumerate(0, 0, solution);
+		}
+		endLogEntry();
+		if (RE_EVALUATE_SOLUTION) {
+			return reEvaluateAndGetBestResult(sequences, solution);
+		} else {
+			return getBestResult();
+		}
+	}
+
+	protected ScheduledSequences reEvaluateAndGetBestResult(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
+		final long lastValue = getBestValue();
+		setSequences(sequences);
+		resetBest();
+
+		startLogEntry(1);
+		prepare();
 		enumerate(0, 0, solution);
 		endLogEntry();
 
-		return bestResult;
+		assert lastValue == getBestValue();
+
+		return getBestResult();
 	}
 
 	protected final void resetBest() {
@@ -650,6 +674,10 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 
 		bestResult = scheduledSequences;
 		return true;
+	}
+
+	public long getBestValue() {
+		return bestValue;
 	}
 
 	/**
