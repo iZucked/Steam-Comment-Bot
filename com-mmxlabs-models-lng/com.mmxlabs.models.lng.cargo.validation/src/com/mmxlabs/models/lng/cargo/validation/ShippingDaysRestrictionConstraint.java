@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.NonNull;
+import org.ops4j.peaberry.Import;
 import org.ops4j.peaberry.Peaberry;
 import org.osgi.framework.FrameworkUtil;
 
@@ -51,7 +52,7 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstraint {
 
 	public ShippingDaysRestrictionConstraint() {
-		Injector injector = Guice.createInjector(new AbstractModule() {
+		final Injector injector = Guice.createInjector(new AbstractModule() {
 
 			@Override
 			protected void configure() {
@@ -65,7 +66,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 	private static final int MAX_SHIPPING_DAYS = 90;
 
 	@Inject(optional = true)
-	private IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider;
+	private Import<IShippingDaysRestrictionSpeedProvider> shippingDaysSpeedProvider;
 
 	private int getMinRouteTimeInHours(final Slot from, final Slot to, final LNGScenarioModel lngScenarioModel, final Vessel vessel, final double referenceSpeed) {
 
@@ -212,7 +213,14 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 								if (vesselClass == null) {
 									return Activator.PLUGIN_ID;
 								}
-								final double referenceSpeed = shippingDaysSpeedProvider == null ? vesselClass.getMaxSpeed() : shippingDaysSpeedProvider.getSpeed(vesselClass);
+
+								double referenceSpeed = vesselClass.getMaxSpeed();
+								if (shippingDaysSpeedProvider != null && shippingDaysSpeedProvider.available()) {
+									final IShippingDaysRestrictionSpeedProvider provider = shippingDaysSpeedProvider.get();
+									if (provider != null) {
+										referenceSpeed = provider.getSpeed(vesselClass);
+									}
+								}
 
 								final int loadDurationInHours = desPurchase.getSlotOrPortDuration();
 								final int dischargeDurationInHours = dischargeSlot.getSlotOrPortDuration();
