@@ -603,13 +603,13 @@ public class PeriodTransformer {
 
 			vesselAvailability.setEndAfter(portVisit.getStart());
 			vesselAvailability.setEndBy(portVisit.getStart());
+			if (vesselAvailability.getEndHeel() == null) {
+				vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+			}
 
 			// Set must arrive cold with target heel volume
 			final int heel = portVisit.getHeelAtStart();
 			if (heel > 0 || portVisit.getPreviousEvent() instanceof Cooldown) {
-				if (vesselAvailability.getEndHeel() == null) {
-					vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
-				}
 				vesselAvailability.getEndHeel().setTargetEndHeel(heel);
 			} else {
 				vesselAvailability.getEndHeel().unsetTargetEndHeel();
