@@ -28,7 +28,6 @@ import com.mmxlabs.models.lng.actuals.LoadActuals;
 import com.mmxlabs.models.lng.actuals.ReturnActuals;
 import com.mmxlabs.models.lng.actuals.SlotActuals;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -145,7 +144,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 					ActualsModel actualsModel = portfolioModel.getActualsModel();
 					if (actualsModel == null) {
 						actualsModel = ActualsFactory.eINSTANCE.createActualsModel();
-						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), portfolioModel, LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_ActualsModel(), actualsModel));
+						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), portfolioModel, LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_ActualsModel(), actualsModel));
 					}
 
 					if (actualsModel == null) {
