@@ -41,10 +41,11 @@ public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl impl
 
 	/**
 	 */
-	protected abstract boolean respondToNotification(final Notification notification);
-	/**
-	 */
 	protected abstract boolean isEnabled();
+
+	protected boolean respondToNotification(final Notification notification) {
+		return false;
+	}
 
 	private final DisposeListener disposeListener = new DisposeListener() {
 		@Override
@@ -114,8 +115,8 @@ public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl impl
 				eObj.eAdapters().add(this);
 			}
 		}
-		
-		setEditorEnabled(isEnabled());		
+
+		setEditorEnabled(isEnabled());
 	}
 
 	/**
@@ -188,15 +189,15 @@ public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl impl
 	/**
 	 */
 	@Override
-	public void addNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
+	public void addNotificationChangedListener(final IInlineEditorExternalNotificationListener listener) {
 		wrapped.addNotificationChangedListener(listener);
 
-	}	
+	}
 
 	/**
 	 */
 	@Override
-	public void removeNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
+	public void removeNotificationChangedListener(final IInlineEditorExternalNotificationListener listener) {
 		wrapped.removeNotificationChangedListener(listener);
 	}
 
@@ -209,7 +210,7 @@ public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl impl
 		}
 		super.missedNotifications(missed);
 	}
-	
+
 	/**
 	 * Return the wrapped editor instance.
 	 * 
@@ -219,17 +220,20 @@ public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl impl
 		return wrapped;
 	}
 
-	
 	@Override
 	public void reallyNotifyChanged(final Notification notification) {
 		if (respondToNotification(notification)) {
 			setEditorEnabled(isEnabled());
 		}
-	}	
+	}
 
 	@Override
 	public boolean hasLabel() {
 		return wrapped.hasLabel();
 	}
-	
+
+	@Override
+	public Object createLayoutData(final MMXRootObject root, final EObject value, final Control control) {
+		return wrapped.createLayoutData(root, value, control);
+	}
 };
