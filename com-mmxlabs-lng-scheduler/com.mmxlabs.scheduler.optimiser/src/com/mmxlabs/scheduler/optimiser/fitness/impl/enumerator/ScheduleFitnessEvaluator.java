@@ -9,7 +9,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
@@ -31,7 +30,7 @@ public class ScheduleFitnessEvaluator {
 
 	private Collection<ICargoSchedulerFitnessComponent> fitnessComponents;
 
-	public long evaluateSchedule(final ISequences sequences, final ScheduledSequences scheduledSequences, final IAnnotatedSolution solution) {
+	public long evaluateSchedule(final ISequences sequences, final ScheduledSequences scheduledSequences) {
 
 		// Evaluate fitness components
 		final long[] fitnesses = new long[fitnessComponents.size()];

@@ -24,12 +24,6 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler {
 	private final int seed = 0;
 	private Random random;
-	/**
-	 * Do this many times the usual number of samples for an exported solution. Slightly improves the quality of the exported schedule.
-	 * 
-	 * /** Never do more than this many samples
-	 */
-	private int samplingUpperBound = 1;
 
 	@Override
 	public ScheduledSequences schedule(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
@@ -40,17 +34,42 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 
 		prepare();
 
-		final int sampleCount = samplingUpperBound;
-		for (int i = 0; i < sampleCount; i++) {
-			for (int index = 0; index < sequences.size(); ++index) {
-				random.setSeed(seed);
-				randomise(index);
-			}
-			synchroniseShipToShipBindings();
-			evaluate();
+		for (int index = 0; index < sequences.size(); ++index) {
+			random.setSeed(seed);
+			randomise(index);
 		}
+		synchroniseShipToShipBindings();
 
-		return reEvaluateAndGetBestResult(solution);
+		if (RE_EVALUATE_SOLUTION) {
+			evaluate(null);
+			return reEvaluateAndGetBestResult(sequences, solution);
+		} else {
+			evaluate(solution);
+			return getBestResult();
+		}
+	}
+
+	@Override
+	protected final ScheduledSequences reEvaluateAndGetBestResult(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
+
+		final long lastValue = getBestValue();
+		random = new Random(seed);
+
+		setSequences(sequences);
+		resetBest();
+
+		prepare();
+
+		for (int index = 0; index < sequences.size(); ++index) {
+			random.setSeed(seed);
+			randomise(index);
+		}
+		synchroniseShipToShipBindings();
+		evaluate(solution);
+
+		assert lastValue == getBestValue();
+
+		return getBestResult();
 	}
 
 	private void synchroniseShipToShipBindings() {
@@ -87,11 +106,4 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 		}
 	}
 
-	public int getSamplingUpperBound() {
-		return samplingUpperBound;
-	}
-
-	public void setSamplingUpperBound(final int samplingUpperBound) {
-		this.samplingUpperBound = samplingUpperBound;
-	}
 }
