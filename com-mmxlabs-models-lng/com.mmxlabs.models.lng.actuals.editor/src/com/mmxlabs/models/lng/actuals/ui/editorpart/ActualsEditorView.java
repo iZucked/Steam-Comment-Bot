@@ -9,7 +9,7 @@ import java.util.Arrays;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.StructuredSelection;
 
@@ -53,7 +53,7 @@ public class ActualsEditorView extends ScenarioTableViewerView<ActualsTableViewe
 				actualsModel = portfolioModel.getActualsModel();
 				if (actualsModel == null) {
 					actualsModel = ActualsFactory.eINSTANCE.createActualsModel();
-					domain.getCommandStack().execute(AddCommand.create(domain, portfolioModel, LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_ActualsModel(), actualsModel));
+					domain.getCommandStack().execute(SetCommand.create(domain, portfolioModel, LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_ActualsModel(), actualsModel));
 				}
 			}
 			pane.init(Arrays.asList(new EReference[] { ActualsPackage.eINSTANCE.getActualsModel_CargoActuals() }), null, domain.getCommandStack());

@@ -144,7 +144,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 					ActualsModel actualsModel = portfolioModel.getActualsModel();
 					if (actualsModel == null) {
 						actualsModel = ActualsFactory.eINSTANCE.createActualsModel();
-						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), portfolioModel, LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_ActualsModel(), actualsModel));
+						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), portfolioModel, LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_ActualsModel(), actualsModel));
 					}
 
 					if (actualsModel == null) {
