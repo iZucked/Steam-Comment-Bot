@@ -344,6 +344,89 @@ public class MigrationRegistryTests {
 		final List<IMigrationUnit> chain = registry.getMigrationChain(scenarioContext, scenarioVersion, latestScenarioVersion, clientContext, clientVersion, latestClientVersion);
 		Assert.assertEquals(1, chain.size());
 		Assert.assertSame(clientUnit1, chain.get(0));
+	}
 
+	/**
+	 * Test initially added due to recursion error. Timeout to stop eventual out of memory error.s
+	 */
+	@Test(timeout = 5000)
+	public void testComplexChain1() {
+
+		final String scenarioContext = "ScenarioContext";
+		final int latestScenarioVersion = 25;
+
+		final String clientContext = "ClientContext";
+		final int latestClientVersion = 7;
+
+		final MigrationRegistry registry = new MigrationRegistry();
+		registry.registerContext(scenarioContext, latestScenarioVersion);
+		registry.registerClientContext(clientContext, latestClientVersion);
+
+		registry.registerMigrationUnit(createMigrationUnit(scenarioContext, 17, 18));
+		registry.registerMigrationUnit(createMigrationUnit(scenarioContext, 18, 19));
+		registry.registerMigrationUnit(createMigrationUnit(scenarioContext, 19, 20));
+		registry.registerMigrationUnit(createMigrationUnit(scenarioContext, 20, 21));
+		registry.registerMigrationUnit(createMigrationUnit(scenarioContext, 21, 22));
+		registry.registerMigrationUnit(createMigrationUnit(scenarioContext, 22, 23));
+		registry.registerMigrationUnit(createMigrationUnit(scenarioContext, 23, 24));
+		registry.registerMigrationUnit(createMigrationUnit(scenarioContext, 24, 25));
+
+		registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 17, clientContext, 0, 1));
+		registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 17, clientContext, 1, 2));
+		registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 17, clientContext, 2, 3));
+		registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 18, clientContext, 3, 4));
+		registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 19, clientContext, 4, 5));
+		// /
+		registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 22, clientContext, 5, 6));
+		registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 22, clientContext, 6, 7));
+		registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 22, clientContext, 0, 5));
+		registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 22, clientContext, 3, 5));
+		registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 22, clientContext, 0, 6));
+		registry.registerClientMigrationUnit(createClientUnit(scenarioContext, 24, clientContext, 7, 8));
+		{
+			final List<IMigrationUnit> chain = registry.getMigrationChain(scenarioContext, 18, latestScenarioVersion, clientContext, 3, latestClientVersion);
+			Assert.assertFalse(chain.isEmpty());
+		}
+		{
+			final List<IMigrationUnit> chain = registry.getMigrationChain(scenarioContext, 22, latestScenarioVersion, clientContext, 3, latestClientVersion);
+			Assert.assertFalse(chain.isEmpty());
+		}
+		{
+			final List<IMigrationUnit> chain = registry.getMigrationChain(scenarioContext, 19, latestScenarioVersion, clientContext, 3, latestClientVersion);
+			Assert.assertFalse(chain.isEmpty());
+		}
+		{
+			final List<IMigrationUnit> chain = registry.getMigrationChain(scenarioContext, 19, latestScenarioVersion, clientContext, 0, latestClientVersion);
+			Assert.assertFalse(chain.isEmpty());
+		}
+		{
+			final List<IMigrationUnit> chain = registry.getMigrationChain(scenarioContext, 17, latestScenarioVersion, clientContext, 0, latestClientVersion);
+			Assert.assertFalse(chain.isEmpty());
+		}
+		{
+			final List<IMigrationUnit> chain = registry.getMigrationChain(scenarioContext, 17, latestScenarioVersion, clientContext, 0, latestClientVersion);
+			Assert.assertFalse(chain.isEmpty());
+		}
+	}
+
+	@NonNull
+	private IMigrationUnit createMigrationUnit(String scenarioContext, int scenarioFrom, int scenarioTo) {
+		final IMigrationUnit unit1 = Mockito.mock(IMigrationUnit.class);
+		when(unit1.getScenarioContext()).thenReturn(scenarioContext);
+		when(unit1.getScenarioSourceVersion()).thenReturn(scenarioFrom);
+		when(unit1.getScenarioDestinationVersion()).thenReturn(scenarioTo);
+		return unit1;
+	}
+
+	@NonNull
+	private IClientMigrationUnit createClientUnit(String scenarioContext, int scenarioVersion, String clientContext, int clientFrom, int clientTo) {
+		final IClientMigrationUnit clientUnit1 = Mockito.mock(IClientMigrationUnit.class);
+		when(clientUnit1.getScenarioContext()).thenReturn(scenarioContext);
+		when(clientUnit1.getScenarioSourceVersion()).thenReturn(scenarioVersion);
+		when(clientUnit1.getScenarioDestinationVersion()).thenReturn(scenarioVersion);
+		when(clientUnit1.getClientContext()).thenReturn(clientContext);
+		when(clientUnit1.getClientSourceVersion()).thenReturn(clientFrom);
+		when(clientUnit1.getClientDestinationVersion()).thenReturn(clientTo);
+		return clientUnit1;
 	}
 }
