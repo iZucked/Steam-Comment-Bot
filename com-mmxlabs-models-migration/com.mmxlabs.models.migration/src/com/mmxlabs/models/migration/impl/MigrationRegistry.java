@@ -41,13 +41,13 @@ public class MigrationRegistry implements IMigrationRegistry {
 	private static final Logger LOG = LoggerFactory.getLogger(MigrationRegistry.class);
 
 	private final Map<String, Integer> contexts = new HashMap<>();
-	private final Map<String, Map<Integer, IMigrationUnit>> fromVersionMap = new HashMap<>();
+	private final Map<String, Map<Integer, List<IMigrationUnit>>> fromVersionMap = new HashMap<>();
 	private final Map<IMigrationUnit, String> migrationExtPointIDMap = new HashMap<>();
 	private final Map<String, List<IMigrationUnitExtension>> migrationUnitExtensionsMap = new HashMap<>();
 	private String defaultContext;
 
 	private final Map<String, Integer> clientContexts = new HashMap<>();
-	private final Map<String, Map<Integer, IClientMigrationUnit>> clientFromVersionMap = new HashMap<>();
+	private final Map<String, Map<Integer, List<IClientMigrationUnit>>> clientFromVersionMap = new HashMap<>();
 	private final Map<IClientMigrationUnit, String> clientMigrationExtPointIDMap = new HashMap<>();
 	private String defaultClientContext;
 
@@ -167,8 +167,8 @@ public class MigrationRegistry implements IMigrationRegistry {
 
 		// Search through the map finding a set of IMigrationUnits to transform between the desired versions.
 		final List<IMigrationUnit> chain = new ArrayList<IMigrationUnit>(Math.min(1, Math.abs(toScenarioVersion - fromScenarioVersion) + Math.abs(toClientVersion - fromClientVersion)));
-		final Map<Integer, IMigrationUnit> scenarioFroms = fromVersionMap.get(scenarioContext);
-		final Map<Integer, IClientMigrationUnit> clientFroms = clientFromVersionMap.get(clientContext);
+		final Map<Integer, List<IMigrationUnit>> scenarioFroms = fromVersionMap.get(scenarioContext);
+		final Map<Integer, List<IClientMigrationUnit>> clientFroms = clientFromVersionMap.get(clientContext);
 
 		final boolean needClientMigration = clientContext != null && toClientVersion != fromClientVersion;
 		int currentScenarioVersion = fromScenarioVersion;
@@ -180,21 +180,29 @@ public class MigrationRegistry implements IMigrationRegistry {
 			if (needClientMigration) {
 				while (currentClientVersion != toClientVersion) {
 
-					final IClientMigrationUnit nextUnit = clientFroms.get(currentClientVersion);
+					final List<IClientMigrationUnit> nextUnits = clientFroms.get(currentClientVersion);
 					// Is there another unit?
-					if (nextUnit == null) {
+					if (nextUnits == null || nextUnits.isEmpty()) {
 						throw new RuntimeException(String.format("Unable to find migration chain between versions %d and %d for client context %s.", fromClientVersion, toClientVersion, clientContext));
 					}
 
-					if (nextUnit.getScenarioDestinationVersion() != currentScenarioVersion) {
-						// Assume we need to perform a new scenario migration, thus break out of this loop and head on to the scenario migration code path.
+					boolean foundUnit = false;
+					for (final IClientMigrationUnit unit : nextUnits) {
+
+						if (unit.getScenarioDestinationVersion() != currentScenarioVersion) {
+							// Assume we need to perform a new scenario migration, thus break out of this loop and head on to the scenario migration code path.
+							continue;
+						}
+
+						// Add unit to chain
+						chain.add(unit);
+						// Next version to find!
+						currentClientVersion = unit.getClientDestinationVersion();
+						foundUnit = true;
+					}
+					if (!foundUnit) {
 						break;
 					}
-
-					// Add unit to chain
-					chain.add(nextUnit);
-					// Next version to find!
-					currentClientVersion = nextUnit.getClientDestinationVersion();
 				}
 
 			}
@@ -202,28 +210,36 @@ public class MigrationRegistry implements IMigrationRegistry {
 			// Phase two, get scenario migration units
 			if (currentScenarioVersion != toScenarioVersion) {
 
-				IMigrationUnit nextUnit = scenarioFroms.get(currentScenarioVersion);
+				List<IMigrationUnit> nextUnits = scenarioFroms.get(currentScenarioVersion);
 				// Is there another unit?
-				if (nextUnit == null) {
+				if (nextUnits == null || nextUnits.isEmpty()) {
 					throw new RuntimeException(String.format("Unable to find migration chain between verions %d and %d for context %s.", fromScenarioVersion, toScenarioVersion, scenarioContext));
 				}
 
-				// Wrap the migration unit in any extension points found.
-				if (migrationExtPointIDMap.containsKey(nextUnit)) {
-					final String unitID = migrationExtPointIDMap.get(nextUnit);
-					if (migrationUnitExtensionsMap.containsKey(unitID)) {
-						final List<IMigrationUnitExtension> extensions = migrationUnitExtensionsMap.get(unitID);
-						for (final IMigrationUnitExtension ext : extensions) {
-							ext.setMigrationUnit(nextUnit);
-							nextUnit = ext;
+				boolean foundUnit = false;
+				for (IMigrationUnit unit : nextUnits) {
+					// Wrap the migration unit in any extension points found.
+					if (migrationExtPointIDMap.containsKey(unit)) {
+						final String unitID = migrationExtPointIDMap.get(unit);
+						if (migrationUnitExtensionsMap.containsKey(unitID)) {
+							final List<IMigrationUnitExtension> extensions = migrationUnitExtensionsMap.get(unitID);
+							for (final IMigrationUnitExtension ext : extensions) {
+								ext.setMigrationUnit(unit);
+								unit = ext;
+							}
 						}
 					}
+
+					// Add unit to chain
+					chain.add(unit);
+					// Next version to find!
+					currentScenarioVersion = unit.getScenarioDestinationVersion();
+					foundUnit = true;
+				}
+				if (!foundUnit) {
+					break;
 				}
 
-				// Add unit to chain
-				chain.add(nextUnit);
-				// Next version to find!
-				currentScenarioVersion = nextUnit.getScenarioDestinationVersion();
 			} else {
 				break;
 			}
@@ -243,7 +259,7 @@ public class MigrationRegistry implements IMigrationRegistry {
 			throw new IllegalStateException("Context already registered: " + context);
 		}
 		contexts.put(context, latestVersion);
-		fromVersionMap.put(context, new HashMap<Integer, IMigrationUnit>());
+		fromVersionMap.put(context, new HashMap<Integer, List<IMigrationUnit>>());
 	}
 
 	/**
@@ -252,8 +268,17 @@ public class MigrationRegistry implements IMigrationRegistry {
 	 * @param unit
 	 */
 	public void registerMigrationUnit(@NonNull final IMigrationUnit unit) {
-		final Map<Integer, IMigrationUnit> map = fromVersionMap.get(unit.getScenarioContext());
-		map.put(unit.getScenarioSourceVersion(), unit);
+		final Map<Integer, List<IMigrationUnit>> map = fromVersionMap.get(unit.getScenarioContext());
+
+		final int sourceVersion = unit.getScenarioSourceVersion();
+		final List<IMigrationUnit> units;
+		if (map.containsKey(sourceVersion)) {
+			units = map.get(sourceVersion);
+		} else {
+			units = new LinkedList<>();
+			map.put(sourceVersion, units);
+		}
+		units.add(unit);
 	}
 
 	/**
@@ -284,7 +309,7 @@ public class MigrationRegistry implements IMigrationRegistry {
 	@Override
 	public int getLastReleaseVersion(@NonNull final String context) {
 
-		final Map<Integer, IMigrationUnit> map = fromVersionMap.get(context);
+		final Map<Integer, List<IMigrationUnit>> map = fromVersionMap.get(context);
 		int lastNumber = -1;
 		for (final Integer v : map.keySet()) {
 			if (v.intValue() > lastNumber) {
@@ -306,7 +331,7 @@ public class MigrationRegistry implements IMigrationRegistry {
 			throw new IllegalStateException("Client Context already registered: " + context);
 		}
 		clientContexts.put(context, latestVersion);
-		clientFromVersionMap.put(context, new HashMap<Integer, IClientMigrationUnit>());
+		clientFromVersionMap.put(context, new HashMap<Integer, List<IClientMigrationUnit>>());
 	}
 
 	/**
@@ -315,8 +340,16 @@ public class MigrationRegistry implements IMigrationRegistry {
 	 * @param unit
 	 */
 	public void registerClientMigrationUnit(@NonNull final IClientMigrationUnit unit) {
-		final Map<Integer, IClientMigrationUnit> map = clientFromVersionMap.get(unit.getClientContext());
-		map.put(unit.getClientSourceVersion(), unit);
+		final Map<Integer, List<IClientMigrationUnit>> map = clientFromVersionMap.get(unit.getClientContext());
+		final int clientSourceVersion = unit.getClientSourceVersion();
+		final List<IClientMigrationUnit> units;
+		if (map.containsKey(clientSourceVersion)) {
+			units = map.get(clientSourceVersion);
+		} else {
+			units = new LinkedList<>();
+			map.put(clientSourceVersion, units);
+		}
+		units.add(unit);
 	}
 
 	/**
@@ -361,7 +394,7 @@ public class MigrationRegistry implements IMigrationRegistry {
 	@Override
 	public int getLastReleaseClientVersion(@NonNull final String context) {
 
-		final Map<Integer, IClientMigrationUnit> map = clientFromVersionMap.get(context);
+		final Map<Integer, List<IClientMigrationUnit>> map = clientFromVersionMap.get(context);
 		int lastNumber = -1;
 		for (final Integer v : map.keySet()) {
 			if (v.intValue() > lastNumber) {

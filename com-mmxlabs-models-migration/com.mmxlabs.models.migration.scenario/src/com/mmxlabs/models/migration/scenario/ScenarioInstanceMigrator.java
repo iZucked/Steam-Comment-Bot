@@ -108,6 +108,15 @@ public class ScenarioInstanceMigrator {
 					throw new RuntimeException("Error loading migrated scenario. Aborting", e);
 				}
 			}
+			// Make sure the migration has worked!
+			if (migratedVersion[0] != latestScenarioVersion) {
+				throw new ScenarioMigrationException(String.format("Scenario was not migrated to latest version. Expected %d, currently %d.", latestScenarioVersion,
+						scenarioInstance.getScenarioVersion()));
+			}
+			if (migratedVersion[1] != latestClientVersion) {
+				throw new ScenarioMigrationException(String.format("Scenario was not migrated to latest client version. Expected %d, currently %d.", latestClientVersion,
+						scenarioInstance.getClientScenarioVersion()));
+			}
 
 			// Copy back over original data
 			{
@@ -127,6 +136,7 @@ public class ScenarioInstanceMigrator {
 				FileDeleter.delete(f);
 			}
 		}
+
 	}
 
 	/**
