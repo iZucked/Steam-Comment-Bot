@@ -42,6 +42,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
@@ -49,15 +50,18 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
+import com.mmxlabs.models.lng.schedule.GeneralPNLDetails;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
@@ -214,6 +218,7 @@ public class CargoEconsReport extends ViewPart {
 		SHIPPING_CHARTER_COST_TOTAL("> Charter fees", "$", DollarsFormat), 
 		SELL_REVENUE_TOTAL("Sale Revenue", "$", DollarsFormat),
 		SELL_VOLUME_IN_MMBTU("> Volume", "mmBtu", VolumeMMBtuFormat),
+		ADDITIONAL_PNL("Addn. P&L", "$", DollarsFormat),
 		PNL_TOTAL("P&L", "$", DollarsFormat),
 //		PNL_TOTAL_NO_TC("P&L (Ex. TC)", "$", DollarsFormat),
 		PNL_PER_MMBTU("Margin", "$/mmBTu", DollarsPerMMBtuFormat);
@@ -306,6 +311,9 @@ public class CargoEconsReport extends ViewPart {
 					return (double) pnl / dischargeVolumeInMMBTu;
 				}
 				break;
+			}
+			case ADDITIONAL_PNL: {
+				return CargoEconsReport.getAdditionalPNLValue(cargoAllocation);
 			}
 			case PNL_TOTAL: {
 				return CargoEconsReport.getPNLValue(cargoAllocation);
@@ -480,6 +488,10 @@ public class CargoEconsReport extends ViewPart {
 					}
 				}
 				break;
+
+			}
+			case ADDITIONAL_PNL: {
+				return CargoEconsReport.getAdditionalPNLValue(marketAllocation);
 			}
 			case PNL_TOTAL: {
 				return CargoEconsReport.getPNLValue(marketAllocation);
@@ -802,6 +814,30 @@ public class CargoEconsReport extends ViewPart {
 		}
 		// Rounding!
 		return (int) groupProfitAndLoss.getProfitAndLoss();
+	}
+
+	protected static Integer getAdditionalPNLValue(final ProfitAndLossContainer container) {
+
+		int addnPNL = 0;
+
+		if (container != null) {
+
+			final GroupProfitAndLoss dataWithKey = container.getGroupProfitAndLoss();
+			if (dataWithKey != null) {
+				for (final GeneralPNLDetails generalPNLDetails : container.getGeneralPNLDetails()) {
+					if (generalPNLDetails instanceof SlotPNLDetails) {
+						final SlotPNLDetails slotPNLDetails = (SlotPNLDetails) generalPNLDetails;
+						for (GeneralPNLDetails details : slotPNLDetails.getGeneralPNLDetails()) {
+							if (details instanceof BasicSlotPNLDetails) {
+								addnPNL += ((BasicSlotPNLDetails) details).getAdditionalPNL();
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return addnPNL;
 	}
 
 	// /**
