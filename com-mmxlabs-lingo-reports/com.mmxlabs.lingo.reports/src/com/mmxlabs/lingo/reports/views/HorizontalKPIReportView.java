@@ -277,7 +277,7 @@ public class HorizontalKPIReportView extends ViewPart {
 						activeEditorChange(null);
 					} catch (final Exception e) {
 						// Ignore
-					} 
+					}
 				}
 				if (viewerSynchronizer != null) {
 					viewerSynchronizer.refreshViewer();
@@ -292,7 +292,7 @@ public class HorizontalKPIReportView extends ViewPart {
 						activeEditorChange((IEditorPart) part);
 					} catch (final Exception e) {
 						// Ignore
-					} 
+					}
 				}
 				if (viewerSynchronizer != null) {
 					viewerSynchronizer.refreshViewer();
@@ -307,7 +307,7 @@ public class HorizontalKPIReportView extends ViewPart {
 						activeEditorChange((IEditorPart) part);
 					} catch (final Exception e) {
 						// Ignore
-					} 
+					}
 				}
 				if (viewerSynchronizer != null) {
 					viewerSynchronizer.refreshViewer();
@@ -398,13 +398,15 @@ public class HorizontalKPIReportView extends ViewPart {
 				final IScenarioServiceEditorInput ssInput = (IScenarioServiceEditorInput) editorInput;
 				final ScenarioInstance scenarioInstance = ssInput.getScenarioInstance();
 				if (scenarioInstance != null) {
-					this.modelReference = scenarioInstance.getReference();
-					final EObject instance = modelReference.getInstance();
-					if (instance instanceof LNGScenarioModel) {
-						final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) instance;
-						final LNGPortfolioModel portfolioModel = lngScenarioModel.getPortfolioModel();
-						if (portfolioModel != null) {
-							scheduleModel = portfolioModel.getScheduleModel();
+					if (!scenarioInstance.isLoadFailure()) {
+						this.modelReference = scenarioInstance.getReference();
+						final EObject instance = modelReference.getInstance();
+						if (instance instanceof LNGScenarioModel) {
+							final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) instance;
+							final LNGPortfolioModel portfolioModel = lngScenarioModel.getPortfolioModel();
+							if (portfolioModel != null) {
+								scheduleModel = portfolioModel.getScheduleModel();
+							}
 						}
 					}
 				}

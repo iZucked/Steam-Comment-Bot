@@ -175,7 +175,7 @@ public class ScenarioViewerSynchronizer implements IScenarioServiceSelectionChan
 			}
 
 			final ModelReference modelReference = scenarioReferenes.get(job);
-			if (modelReference != null) {
+			if (modelReference != null && !modelReference.getScenarioInstance().isLoadFailure()) {
 				final EObject instance = modelReference.getInstance();
 
 				if (instance instanceof LNGScenarioModel) {
