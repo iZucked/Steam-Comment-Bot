@@ -223,7 +223,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 				final ConstrainedMoveGenerator.Followers<ISequenceElement> followersOfSecondElementsPredecessor = owner.validFollowers.get(seq2.get(position2 - 1));
 
 				final List<Pair<Integer, Integer>> viableSecondBreaks = new ArrayList<Pair<Integer, Integer>>();
-				for (int i = position2 + 1; i < (seq2.size() - 1); i++) { // ignore
+				for (int i = position2; i < (seq2.size() - 1); i++) { // ignore
 																			// last
 																			// element
 					final ISequenceElement here = seq2.get(i);
