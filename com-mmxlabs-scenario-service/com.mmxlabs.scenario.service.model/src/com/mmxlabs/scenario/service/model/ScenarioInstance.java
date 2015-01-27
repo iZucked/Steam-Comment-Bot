@@ -38,6 +38,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isDirty <em>Dirty</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getValidationStatusCode <em>Validation Status Code</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isLoadFailure <em>Load Failure</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getLoadException <em>Load Exception</em>}</li>
  * </ul>
  * </p>
  *
@@ -462,6 +463,32 @@ public interface ScenarioInstance extends Container {
 	 * @generated
 	 */
 	void setLoadFailure(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Load Exception</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Load Exception</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Load Exception</em>' attribute.
+	 * @see #setLoadException(Exception)
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioInstance_LoadException()
+	 * @model dataType="com.mmxlabs.scenario.service.model.Exception" transient="true"
+	 * @generated
+	 */
+	Exception getLoadException();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getLoadException <em>Load Exception</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Load Exception</em>' attribute.
+	 * @see #getLoadException()
+	 * @generated
+	 */
+	void setLoadException(Exception value);
 
 	/**
 	 * <!-- begin-user-doc -->

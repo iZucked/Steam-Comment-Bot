@@ -55,6 +55,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#isDirty <em>Dirty</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getValidationStatusCode <em>Validation Status Code</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#isLoadFailure <em>Load Failure</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getLoadException <em>Load Exception</em>}</li>
  * </ul>
  * </p>
  *
@@ -355,6 +356,26 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * @ordered
 	 */
 	protected boolean loadFailure = LOAD_FAILURE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getLoadException() <em>Load Exception</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLoadException()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final Exception LOAD_EXCEPTION_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getLoadException() <em>Load Exception</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLoadException()
+	 * @generated
+	 * @ordered
+	 */
+	protected Exception loadException = LOAD_EXCEPTION_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -754,6 +775,27 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Exception getLoadException() {
+		return loadException;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setLoadException(Exception newLoadException) {
+		Exception oldLoadException = loadException;
+		loadException = newLoadException;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_INSTANCE__LOAD_EXCEPTION, oldLoadException, loadException));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public int getContainedInstanceCount() {
 		return super.getContainedInstanceCount() + 1;
 	}
@@ -819,9 +861,9 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 			} catch (final Exception e) {
 				// Error on loading, record failure and do not attempt to reload.
 				setLoadFailure(true);
-				
+				setLoadException(e);
 				log.error("Failed to load scenario " + getName() + ". Reload will not be attempted again until the application is relaunched.");
-				
+
 				// Re-throw exception
 				throw e;
 			}
@@ -962,6 +1004,8 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 			return getValidationStatusCode();
 		case ScenarioServicePackage.SCENARIO_INSTANCE__LOAD_FAILURE:
 			return isLoadFailure();
+		case ScenarioServicePackage.SCENARIO_INSTANCE__LOAD_EXCEPTION:
+			return getLoadException();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1029,6 +1073,9 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 		case ScenarioServicePackage.SCENARIO_INSTANCE__LOAD_FAILURE:
 			setLoadFailure((Boolean) newValue);
 			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__LOAD_EXCEPTION:
+			setLoadException((Exception) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1092,6 +1139,9 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 		case ScenarioServicePackage.SCENARIO_INSTANCE__LOAD_FAILURE:
 			setLoadFailure(LOAD_FAILURE_EDEFAULT);
 			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__LOAD_EXCEPTION:
+			setLoadException(LOAD_EXCEPTION_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1138,6 +1188,8 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 			return validationStatusCode != VALIDATION_STATUS_CODE_EDEFAULT;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__LOAD_FAILURE:
 			return loadFailure != LOAD_FAILURE_EDEFAULT;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__LOAD_EXCEPTION:
+			return LOAD_EXCEPTION_EDEFAULT == null ? loadException != null : !LOAD_EXCEPTION_EDEFAULT.equals(loadException);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1177,6 +1229,8 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 		result.append(validationStatusCode);
 		result.append(", loadFailure: ");
 		result.append(loadFailure);
+		result.append(", loadException: ");
+		result.append(loadException);
 		result.append(')');
 		return result.toString();
 	}

@@ -542,6 +542,15 @@ public interface ScenarioServicePackage extends EPackage {
 	int SCENARIO_INSTANCE__LOAD_FAILURE = CONTAINER_FEATURE_COUNT + 16;
 
 	/**
+	 * The feature id for the '<em><b>Load Exception</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_INSTANCE__LOAD_EXCEPTION = CONTAINER_FEATURE_COUNT + 17;
+
+	/**
 	 * The number of structural features of the '<em>Scenario Instance</em>' class.
 	 * <!-- begin-user-doc -->
 	 * @Note: Compatibility filter created
@@ -549,7 +558,7 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_INSTANCE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 17;
+	int SCENARIO_INSTANCE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 18;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.MetadataImpl <em>Metadata</em>}' class.
@@ -801,6 +810,16 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 */
 	int IO_EXCEPTION = 11;
+
+	/**
+	 * The meta object id for the '<em>Exception</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see java.lang.Exception
+	 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getException()
+	 * @generated
+	 */
+	int EXCEPTION = 12;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.model.ScenarioModel <em>Scenario Model</em>}'.
@@ -1172,6 +1191,17 @@ public interface ScenarioServicePackage extends EPackage {
 	EAttribute getScenarioInstance_LoadFailure();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getLoadException <em>Load Exception</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Load Exception</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getLoadException()
+	 * @see #getScenarioInstance()
+	 * @generated
+	 */
+	EAttribute getScenarioInstance_LoadException();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.model.Metadata <em>Metadata</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1408,6 +1438,17 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 */
 	EDataType getIOException();
+
+	/**
+	 * Returns the meta object for data type '{@link java.lang.Exception <em>Exception</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>Exception</em>'.
+	 * @see java.lang.Exception
+	 * @model instanceClass="java.lang.Exception"
+	 * @generated
+	 */
+	EDataType getException();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
