@@ -119,6 +119,13 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	private EDataType ioExceptionEDataType = null;
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EDataType exceptionEDataType = null;
+
+	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
@@ -491,6 +498,15 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getScenarioInstance_LoadException() {
+		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(17);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getMetadata() {
 		return metadataEClass;
 	}
@@ -689,6 +705,15 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EDataType getException() {
+		return exceptionEDataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public ScenarioServiceFactory getScenarioServiceFactory() {
 		return (ScenarioServiceFactory) getEFactoryInstance();
 	}
@@ -751,6 +776,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__DIRTY);
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__VALIDATION_STATUS_CODE);
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__LOAD_FAILURE);
+		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__LOAD_EXCEPTION);
 
 		metadataEClass = createEClass(METADATA);
 		createEAttribute(metadataEClass, METADATA__CREATOR);
@@ -780,6 +806,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		// Create data types
 		iScenarioServiceEDataType = createEDataType(ISCENARIO_SERVICE);
 		ioExceptionEDataType = createEDataType(IO_EXCEPTION);
+		exceptionEDataType = createEDataType(EXCEPTION);
 	}
 
 	/**
@@ -895,6 +922,8 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getScenarioInstance_LoadFailure(), ecorePackage.getEBoolean(), "loadFailure", null, 0, 1, ScenarioInstance.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
 				!IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getScenarioInstance_LoadException(), this.getException(), "loadException", null, 0, 1, ScenarioInstance.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+				!IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		addEOperation(scenarioInstanceEClass, ecorePackage.getEInt(), "getContainedInstanceCount", 1, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -966,6 +995,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		// Initialize data types
 		initEDataType(iScenarioServiceEDataType, IScenarioService.class, "IScenarioService", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 		initEDataType(ioExceptionEDataType, IOException.class, "IOException", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+		initEDataType(exceptionEDataType, Exception.class, "Exception", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
 		createResource(eNS_URI);

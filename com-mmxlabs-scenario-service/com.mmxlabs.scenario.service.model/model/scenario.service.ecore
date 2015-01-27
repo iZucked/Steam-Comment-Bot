@@ -88,6 +88,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="validationStatusCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="loadFailure" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
         transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="loadException" eType="#//Exception"
+        transient="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Metadata">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="creator" lowerBound="1"
@@ -131,4 +133,5 @@
     <eOperations name="close"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="IOException" instanceClassName="java.io.IOException"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Exception" instanceClassName="java.lang.Exception"/>
 </ecore:EPackage>

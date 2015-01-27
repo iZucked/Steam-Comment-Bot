@@ -23,6 +23,8 @@ import javax.crypto.spec.IvParameterSpec;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.AESCipherImpl;
 
+import com.mmxlabs.scenario.service.util.encryption.ScenarioEncryptionException;
+
 /**
  * Based on {@link AESCipherImpl}
  * 
@@ -90,10 +92,10 @@ class EMFCipher implements URIConverter.Cipher {
 				// Do nothing
 			}
 		};
-		CipherOutputStream cos = new CipherOutputStream(outputStream, cipher);
+		final CipherOutputStream cos = new CipherOutputStream(outputStream, cipher);
 
 		if (useZip) {
-			ZipOutputStream zipOutputStream = new ZipOutputStream(cos) {
+			final ZipOutputStream zipOutputStream = new ZipOutputStream(cos) {
 				@Override
 				public void finish() throws IOException {
 					super.finish();
@@ -109,7 +111,7 @@ class EMFCipher implements URIConverter.Cipher {
 				public void close() throws IOException {
 					try {
 						super.flush();
-					} catch (IOException exception) {
+					} catch (final IOException exception) {
 						// Continue and try to close.
 					}
 					super.close();
@@ -128,13 +130,13 @@ class EMFCipher implements URIConverter.Cipher {
 
 	@Override
 	public InputStream decrypt(InputStream in) throws Exception {
-		byte[] uuid = keyFile.getKeyUUID();
+		final byte[] uuid = keyFile.getKeyUUID();
 		final byte[] fileUUID = readBytes(uuid.length, in);
 		if (!Arrays.equals(uuid, fileUUID)) {
-			throw new RuntimeException("Data was not encrypted with decryption key file");
+			throw new ScenarioEncryptionException("Data was not encrypted with decryption key file");
 		}
 		// Flags - currently unused
-		byte[] flags = readBytes(1, in);
+		final byte[] flags = readBytes(1, in);
 		final byte[] encryptionIV = readBytes(16, in);
 
 		// now create the decrypt cipher
@@ -143,9 +145,9 @@ class EMFCipher implements URIConverter.Cipher {
 		in = new CipherInputStream(in, cipher);
 
 		if ((flags[0] & FLAG_ZIPPED) == FLAG_ZIPPED) {
-			ZipInputStream zipInputStream = new ZipInputStream(in);
+			final ZipInputStream zipInputStream = new ZipInputStream(in);
 			while (zipInputStream.available() != 0) {
-				ZipEntry zipEntry = zipInputStream.getNextEntry();
+				final ZipEntry zipEntry = zipInputStream.getNextEntry();
 				// if (isContentZipEntry(zipEntry)) {
 				in = zipInputStream;
 				break;

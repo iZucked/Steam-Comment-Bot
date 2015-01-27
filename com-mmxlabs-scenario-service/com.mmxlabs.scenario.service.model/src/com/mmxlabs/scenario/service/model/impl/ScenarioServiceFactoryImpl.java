@@ -97,6 +97,8 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 		switch (eDataType.getClassifierID()) {
 		case ScenarioServicePackage.IO_EXCEPTION:
 			return createIOExceptionFromString(eDataType, initialValue);
+		case ScenarioServicePackage.EXCEPTION:
+			return createExceptionFromString(eDataType, initialValue);
 		default:
 			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -112,6 +114,8 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 		switch (eDataType.getClassifierID()) {
 		case ScenarioServicePackage.IO_EXCEPTION:
 			return convertIOExceptionToString(eDataType, instanceValue);
+		case ScenarioServicePackage.EXCEPTION:
+			return convertExceptionToString(eDataType, instanceValue);
 		default:
 			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -212,6 +216,24 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 	 * @generated
 	 */
 	public String convertIOExceptionToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(eDataType, instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Exception createExceptionFromString(EDataType eDataType, String initialValue) {
+		return (Exception) super.createFromString(eDataType, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertExceptionToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 

@@ -130,6 +130,8 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 			if (scenarioMigrationService != null) {
 				try {
 					scenarioMigrationService.migrateScenario(this, instance);
+				} catch (final RuntimeException e) {
+					throw e;
 				} catch (final Exception e) {
 					throw new RuntimeException("Error migrating scenario", e);
 				}
@@ -282,6 +284,8 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 				if (scenarioMigrationService != null) {
 					try {
 						scenarioMigrationService.migrateScenario(this, cpy);
+					} catch (final RuntimeException e) {
+						throw e;
 					} catch (final Exception e) {
 						throw new RuntimeException("Error migrating scenario", e);
 					}

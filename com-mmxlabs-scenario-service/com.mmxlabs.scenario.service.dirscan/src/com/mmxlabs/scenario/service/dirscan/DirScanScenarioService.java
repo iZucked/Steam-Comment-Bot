@@ -679,6 +679,9 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		instance.setReadonly(true);
 
 		if (instance.getInstance() == null) {
+			
+			
+			
 			try {
 				final EObject eObj = super.load(instance);
 
@@ -690,8 +693,8 @@ public class DirScanScenarioService extends AbstractScenarioService {
 				}
 
 				return eObj;
-			} catch (final IOException e) {
-				throw new IOException("Error loading scenario. Copy to local scenarios and try again.", e);
+			} catch (final Exception e) {
+				throw new DirScanException(e);
 			}
 		} else {
 			return instance.getInstance();
