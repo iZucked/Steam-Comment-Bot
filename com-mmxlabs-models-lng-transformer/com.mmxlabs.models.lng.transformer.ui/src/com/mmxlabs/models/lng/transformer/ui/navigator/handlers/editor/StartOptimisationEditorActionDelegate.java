@@ -65,6 +65,11 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 				return;
 			}
 
+			if (instance.isLoadFailure()) {
+				action.setEnabled(false);
+				return;
+			}
+			
 			try (final ModelReference modelReference = instance.getReference()) {
 				final Object object = modelReference.getInstance();
 				if (object instanceof MMXRootObject) {
