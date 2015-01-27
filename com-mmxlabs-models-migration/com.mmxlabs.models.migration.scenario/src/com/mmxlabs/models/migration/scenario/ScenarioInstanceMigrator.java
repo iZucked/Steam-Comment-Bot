@@ -129,7 +129,8 @@ public class ScenarioInstanceMigrator {
 
 			scenarioInstance.setScenarioVersion(migratedVersion[0]);
 			scenarioInstance.setClientScenarioVersion(migratedVersion[1]);
-
+		} catch (Exception e) {
+			throw new ScenarioMigrationException(e);
 		} finally {
 			// Done! Clean up
 			for (final File f : tmpFiles) {
