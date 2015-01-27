@@ -5,6 +5,8 @@
 package com.mmxlabs.models.ui.editorpart;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EventObject;
@@ -17,6 +19,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStackListener;
@@ -43,9 +46,14 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
@@ -54,6 +62,13 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.forms.events.ExpansionAdapter;
+import org.eclipse.ui.forms.events.ExpansionEvent;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
+import org.eclipse.ui.forms.widgets.Form;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.ScrolledForm;
+import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.IPropertySource;
@@ -78,6 +93,7 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
 import com.mmxlabs.rcp.common.editors.IPartGotoTarget;
+import com.mmxlabs.rcp.common.editors.IReasonProvider;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
@@ -103,6 +119,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	private static final boolean DEBUG = false;
 
 	private static final Logger log = LoggerFactory.getLogger(JointModelEditorPart.class);
+
+	private Throwable initException = null;
 
 	private final Stack<IExtraValidationContext> validationContextStack = new Stack<IExtraValidationContext>();
 
@@ -330,168 +348,251 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 
 	@Override
 	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
-		super.init(site, input);
-		setPartName(input.getName());
-		final MMXRootObject root;
-		final ScenarioInstance instance;
-		if (input instanceof IScenarioServiceDiffingEditorInput) {
-			final IScenarioServiceDiffingEditorInput ssInput = (IScenarioServiceDiffingEditorInput) input;
 
-			updateTitleImage(ssInput);
+		try {
 
-			instance = ssInput.getCurrentScenarioInstance();
+			super.init(site, input);
+			setPartName(input.getName());
+			final MMXRootObject root;
+			final ScenarioInstance instance;
+			if (input instanceof IScenarioServiceDiffingEditorInput) {
+				final IScenarioServiceDiffingEditorInput ssInput = (IScenarioServiceDiffingEditorInput) input;
 
-			diffEditHandler = ssInput.getDiffEditHandler();
+				updateTitleImage(ssInput);
 
-			referenceInstance = ssInput.getReferenceScenarioInstance();
-			referenceLock = referenceInstance.getLock(ScenarioLock.EDITORS);
+				instance = ssInput.getCurrentScenarioInstance();
 
-			// TODO: Sensible?
-			referenceLock.awaitClaim();
+				diffEditHandler = ssInput.getDiffEditHandler();
 
-			final BundleContext bundleContext = Activator.getDefault().getBundle().getBundleContext();
-			final ServiceReference<IScenarioServiceSelectionProvider> serviceReference = bundleContext.getServiceReference(IScenarioServiceSelectionProvider.class);
-			scenarioSelectionProvider = bundleContext.getService(serviceReference);
-			if (scenarioSelectionProvider != null) {
-				referencePinPartListener = new IPartListener() {
+				referenceInstance = ssInput.getReferenceScenarioInstance();
+				referenceLock = referenceInstance.getLock(ScenarioLock.EDITORS);
 
-					@Override
-					public void partOpened(final IWorkbenchPart part) {
-						if (part == JointModelEditorPart.this) {
-							// Ensure pin is set.
-							setPinMode();
-						}
+				// TODO: Sensible?
+				referenceLock.awaitClaim();
 
-					}
+				final BundleContext bundleContext = Activator.getDefault().getBundle().getBundleContext();
+				final ServiceReference<IScenarioServiceSelectionProvider> serviceReference = bundleContext.getServiceReference(IScenarioServiceSelectionProvider.class);
+				scenarioSelectionProvider = bundleContext.getService(serviceReference);
+				if (scenarioSelectionProvider != null) {
+					referencePinPartListener = new IPartListener() {
 
-					@Override
-					public void partDeactivated(final IWorkbenchPart part) {
-						// TODO Auto-generated method stub
-
-					}
-
-					@Override
-					public void partClosed(final IWorkbenchPart part) {
-						// TODO Auto-generated method stub
-
-					}
-
-					@Override
-					public void partBroughtToTop(final IWorkbenchPart part) {
-						if (part == JointModelEditorPart.this) {
-							// Ensure pin is set.
-							setPinMode();
-						}
-
-					}
-
-					@Override
-					public void partActivated(final IWorkbenchPart part) {
-						if (part == JointModelEditorPart.this) {
-							// Ensure pin is set.
-							setPinMode();
-						}
-
-					}
-				};
-				getSite().getPage().addPartListener(referencePinPartListener);
-
-			}
-		} else if (input instanceof IScenarioServiceEditorInput) {
-
-			final IScenarioServiceEditorInput ssInput = (IScenarioServiceEditorInput) input;
-
-			updateTitleImage(ssInput);
-
-			instance = ssInput.getScenarioInstance();
-		} else {
-			// Error!
-			throw new IllegalArgumentException("Editor input should be instance of IScenarioServiceEditorInput");
-		}
-
-		editorLock = instance.getLock(ScenarioLock.EDITORS);
-
-		modelReference = instance.getReference();
-		final EObject ro = modelReference.getInstance();
-		if (ro == null) {
-			throw new RuntimeException("Instance was not loaded");
-		}
-		scenarioInstance = instance;
-		scenarioInstanceStatusProvider = new ScenarioInstanceStatusProvider(scenarioInstance);
-
-		commandStack = (BasicCommandStack) instance.getAdapters().get(BasicCommandStack.class);
-		editingDomain = (CommandProviderAwareEditingDomain) instance.getAdapters().get(EditingDomain.class);
-
-		adapterFactory = editingDomain.getAdapterFactory();
-
-		lockedAdapter = new AdapterImpl() {
-			@Override
-			public void notifyChanged(final Notification msg) {
-				if (msg.isTouch() == false && msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioLock_Available()) {
-					setLocked(!msg.getNewBooleanValue());
-				}
-			}
-		};
-		editorLock.eAdapters().add(lockedAdapter);
-
-		scenarioAttributeAdapter = new AdapterImpl() {
-			@Override
-			public void notifyChanged(final Notification msg) {
-				if (msg.isTouch() == false && msg.getFeature() == ScenarioServicePackage.eINSTANCE.getContainer_Name()) {
-					setPartName(msg.getNewStringValue());
-				}
-				if (msg.isTouch() == false && msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_Dirty()) {
-					if (!getContainer().isDisposed()) {
-						final Display display = getContainer().getDisplay();
-						display.asyncExec(new Runnable() {
-							@Override
-							public void run() {
-								firePropertyChange(IEditorPart.PROP_DIRTY);
+						@Override
+						public void partOpened(final IWorkbenchPart part) {
+							if (part == JointModelEditorPart.this) {
+								// Ensure pin is set.
+								setPinMode();
 							}
-						});
+
+						}
+
+						@Override
+						public void partDeactivated(final IWorkbenchPart part) {
+							// TODO Auto-generated method stub
+
+						}
+
+						@Override
+						public void partClosed(final IWorkbenchPart part) {
+							// TODO Auto-generated method stub
+
+						}
+
+						@Override
+						public void partBroughtToTop(final IWorkbenchPart part) {
+							if (part == JointModelEditorPart.this) {
+								// Ensure pin is set.
+								setPinMode();
+							}
+
+						}
+
+						@Override
+						public void partActivated(final IWorkbenchPart part) {
+							if (part == JointModelEditorPart.this) {
+								// Ensure pin is set.
+								setPinMode();
+							}
+
+						}
+					};
+					getSite().getPage().addPartListener(referencePinPartListener);
+
+				}
+			} else if (input instanceof IScenarioServiceEditorInput) {
+
+				final IScenarioServiceEditorInput ssInput = (IScenarioServiceEditorInput) input;
+
+				updateTitleImage(ssInput);
+
+				instance = ssInput.getScenarioInstance();
+			} else {
+				// Error!
+				throw new IllegalArgumentException("Editor input should be instance of IScenarioServiceEditorInput");
+			}
+
+			editorLock = instance.getLock(ScenarioLock.EDITORS);
+
+			modelReference = instance.getReference();
+			final EObject ro = modelReference.getInstance();
+			if (ro == null) {
+				throw new RuntimeException("Instance was not loaded");
+			}
+			scenarioInstance = instance;
+			scenarioInstanceStatusProvider = new ScenarioInstanceStatusProvider(scenarioInstance);
+
+			commandStack = (BasicCommandStack) instance.getAdapters().get(BasicCommandStack.class);
+			editingDomain = (CommandProviderAwareEditingDomain) instance.getAdapters().get(EditingDomain.class);
+
+			adapterFactory = editingDomain.getAdapterFactory();
+
+			lockedAdapter = new AdapterImpl() {
+				@Override
+				public void notifyChanged(final Notification msg) {
+					if (msg.isTouch() == false && msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioLock_Available()) {
+						setLocked(!msg.getNewBooleanValue());
 					}
 				}
-			}
-		};
-		instance.eAdapters().add(scenarioAttributeAdapter);
+			};
+			editorLock.eAdapters().add(lockedAdapter);
 
-		if (ro instanceof MMXRootObject) {
-			root = (MMXRootObject) ro;
-		} else {
-			// Wrong type.
-			throw new RuntimeException("Root object is of type " + ro.getClass().getName() + ", not MMXRootObject");
+			scenarioAttributeAdapter = new AdapterImpl() {
+				@Override
+				public void notifyChanged(final Notification msg) {
+					if (msg.isTouch() == false && msg.getFeature() == ScenarioServicePackage.eINSTANCE.getContainer_Name()) {
+						setPartName(msg.getNewStringValue());
+					}
+					if (msg.isTouch() == false && msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_Dirty()) {
+						if (!getContainer().isDisposed()) {
+							final Display display = getContainer().getDisplay();
+							display.asyncExec(new Runnable() {
+								@Override
+								public void run() {
+									firePropertyChange(IEditorPart.PROP_DIRTY);
+								}
+							});
+						}
+					}
+				}
+			};
+			instance.eAdapters().add(scenarioAttributeAdapter);
+
+			if (ro instanceof MMXRootObject) {
+				root = (MMXRootObject) ro;
+			} else {
+				// Wrong type.
+				throw new RuntimeException("Root object is of type " + ro.getClass().getName() + ", not MMXRootObject");
+			}
+			this.rootObject = root;
+
+			{
+				commandStack.addCommandStackListener(new CommandStackListener() {
+					@Override
+					public void commandStackChanged(final EventObject event) {
+						if (!getContainer().isDisposed()) {
+							getContainer().getDisplay().asyncExec(new Runnable() {
+								@Override
+								public void run() {
+									firePropertyChange(IEditorPart.PROP_DIRTY);
+								}
+							});
+						}
+					}
+				});
+
+				// initialize extensions
+
+				contributions = Activator.getDefault().getJointModelEditorContributionRegistry().initEditorContributions(this, rootObject);
+
+				referenceValueProviderCache = new ReferenceValueProviderCache(rootObject);
+			}
+
+			site.setSelectionProvider(this);
+
+			validationContextStack.clear();
+			validationContextStack.push(new DefaultExtraValidationContext(getRootObject(), false));
+
+			setPinMode();
+			setLocked(!editorLock.isAvailable());
+		} catch (final Throwable t) {
+			// Clean up internal data structures etc
+			cleanup();
+
+			// Display some kind of better UI than default error view.
+			for (int i = 0; i < getPageCount(); ++i) {
+				removePage(i);
+			}
+			initException = t;
+
 		}
-		this.rootObject = root;
+	}
+
+	protected void createErrorPage(final Throwable t) {
+		getContainer().setLayout(new FillLayout());
+
+		boolean expandTechnicalDetails = false;
+		IReasonProvider reasonProvider = (IReasonProvider) Platform.getAdapterManager().loadAdapter(t, IReasonProvider.class.getCanonicalName());
+		if (reasonProvider == null) {
+			reasonProvider = new SimpleReasonProvider(t);
+			expandTechnicalDetails = true;
+		}
+		final FormToolkit toolkit = new FormToolkit(getShell().getDisplay());
+		final ScrolledForm scrolledForm = toolkit.createScrolledForm(getContainer());
+		final Form form = scrolledForm.getForm();
+		toolkit.decorateFormHeading(form);
+		form.setText(reasonProvider.getTitle());
+
+		form.getBody().setLayout(new GridLayout(1, true));
 
 		{
-			commandStack.addCommandStackListener(new CommandStackListener() {
-				@Override
-				public void commandStackChanged(final EventObject event) {
-					if (!getContainer().isDisposed()) {
-						getContainer().getDisplay().asyncExec(new Runnable() {
-							@Override
-							public void run() {
-								firePropertyChange(IEditorPart.PROP_DIRTY);
-							}
-						});
-					}
+			final Section sectionDescription = toolkit.createSection(form.getBody(), ExpandableComposite.TITLE_BAR | ExpandableComposite.EXPANDED);
+			sectionDescription.setText("Description");
+			sectionDescription.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL));
+
+			final Text descriptionText = toolkit.createText(sectionDescription, reasonProvider.getDescription(), SWT.READ_ONLY);
+			sectionDescription.setClient(descriptionText);
+		}
+		{
+			final Section sectionResolution = toolkit.createSection(form.getBody(), ExpandableComposite.TITLE_BAR | ExpandableComposite.EXPANDED);
+			sectionResolution.setText("Resolution Steps");
+			sectionResolution.setLayout(new FillLayout());
+			sectionResolution.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL));
+
+			final Text resoutionText = toolkit.createText(sectionResolution, reasonProvider.getResolutionSteps(), SWT.READ_ONLY);
+			resoutionText.setLayoutData(new GridData(SWT.DEFAULT, 40));
+			sectionResolution.setClient(resoutionText);
+		}
+		{
+			final Section technicalDetails = toolkit.createSection(form.getBody(), ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE);
+			technicalDetails.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL));
+			technicalDetails.setText("Technical Detail");
+			technicalDetails.setLayout(new FillLayout());
+			final Throwable throwable = reasonProvider.getThrowable();
+
+			final StringWriter sw = new StringWriter();
+			{
+				final IEditorInput ei = getEditorInput();
+				if (ei instanceof IScenarioServiceEditorInput) {
+					final IScenarioServiceEditorInput ssInput = (IScenarioServiceEditorInput) ei;
+					final ScenarioInstance instance = ssInput.getScenarioInstance();
+
+					sw.append(String.format("Name: %s\n", instance.getName()));
+					sw.append(String.format("UUID: %s\n", instance.getUuid()));
+					sw.append(String.format("Scenario Version: %s - %d\n", instance.getVersionContext(), instance.getScenarioVersion()));
+					sw.append(String.format("Client Version: %s - %d\n", instance.getClientVersionContext(), instance.getClientScenarioVersion()));
+					sw.append("\n");
 				}
-			});
+			}
+			sw.append(String.format("Message %s\n", throwable.getMessage()));
+			sw.append("\nStackTrace:\n");
+			throwable.printStackTrace(new PrintWriter(sw));
+			final Text detailsText = toolkit.createText(technicalDetails, sw.toString(), SWT.MULTI | SWT.READ_ONLY);
+			technicalDetails.setClient(detailsText);
 
-			// initialize extensions
-
-			contributions = Activator.getDefault().getJointModelEditorContributionRegistry().initEditorContributions(this, rootObject);
-
-			referenceValueProviderCache = new ReferenceValueProviderCache(rootObject);
+			technicalDetails.setExpanded(expandTechnicalDetails);
 		}
 
-		site.setSelectionProvider(this);
-
-		validationContextStack.clear();
-		validationContextStack.push(new DefaultExtraValidationContext(getRootObject(), false));
-
-		setPinMode();
-		setLocked(!editorLock.isAvailable());
+		final int pageIndex = addPage(scrolledForm);
+		setPageText(pageIndex, "Error");
 	}
 
 	protected void setPinMode() {
@@ -565,6 +666,12 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 
 	@Override
 	public void dispose() {
+		cleanup();
+
+		super.dispose();
+	}
+
+	protected void cleanup() {
 		if (referenceLock != null) {
 			referenceLock.release();
 			referenceLock = null;
@@ -626,15 +733,15 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 		this.selectionChangedListeners.clear();
 
 		this.rootObject = null;
-		this.modelReference.close();
-		this.modelReference = null;
-
-		super.dispose();
+		if (this.modelReference != null) {
+			this.modelReference.close();
+			this.modelReference = null;
+		}
 	}
 
 	@Override
 	public boolean isDirty() {
-		return commandStack.isSaveNeeded();
+		return commandStack != null && commandStack.isSaveNeeded();
 	}
 
 	@Override
@@ -659,6 +766,12 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 
 	@Override
 	protected void createPages() {
+
+		if (initException != null) {
+			createErrorPage(initException);
+			return;
+		}
+
 		for (final IJointModelEditorContribution contribution : contributions) {
 			contribution.addPages(getContainer());
 			contribution.setLocked(isLocked());
