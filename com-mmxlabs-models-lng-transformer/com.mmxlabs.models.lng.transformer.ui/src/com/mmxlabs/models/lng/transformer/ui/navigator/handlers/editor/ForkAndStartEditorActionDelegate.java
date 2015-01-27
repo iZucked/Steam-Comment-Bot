@@ -107,7 +107,10 @@ public class ForkAndStartEditorActionDelegate extends StartOptimisationEditorAct
 			final IScenarioServiceEditorInput iScenarioServiceEditorInput = (IScenarioServiceEditorInput) targetEditor.getEditorInput();
 
 			final ScenarioInstance instance = iScenarioServiceEditorInput.getScenarioInstance();
-
+			if (instance.isLoadFailure()) {
+				action.setEnabled(false);
+				return;
+			}
 			if (instance.isReadonly()) {
 				action.setEnabled(false);
 				return;

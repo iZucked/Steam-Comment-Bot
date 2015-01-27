@@ -109,6 +109,12 @@ public class StopOptimisationEditorActionDelegate extends AbstractOptimisationEd
 			final IScenarioServiceEditorInput iScenarioServiceEditorInput = (IScenarioServiceEditorInput) targetEditor.getEditorInput();
 
 			final ScenarioInstance instance = iScenarioServiceEditorInput.getScenarioInstance();
+			
+			if (instance.isLoadFailure()) {
+				action.setEnabled(false);
+				return;
+			}
+			
 			try (final ModelReference modelReference = instance.getReference()) {
 				final Object object = modelReference.getInstance();
 				if (object instanceof MMXRootObject) {
