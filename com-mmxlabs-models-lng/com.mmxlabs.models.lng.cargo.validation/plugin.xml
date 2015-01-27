@@ -771,6 +771,22 @@
                <target
                      class="Cargo">
                </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.NonShippedVesselAvailabilityConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.NonShippedVesselAvailabilityConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="NonShippedVesselAvailabilityConstraint"
+                  severity="WARNING"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="Slot">
+               </target>
             </constraint></constraints>
       </constraintProvider>
       <constraintProvider
