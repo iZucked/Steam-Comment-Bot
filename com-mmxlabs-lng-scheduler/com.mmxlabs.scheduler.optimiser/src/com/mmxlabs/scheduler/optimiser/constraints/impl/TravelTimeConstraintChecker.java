@@ -204,7 +204,7 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 
 		final int latestAllowableTime = tw2.getEnd() + maxLateness;
 
-		return earliestArrivalTime < latestAllowableTime;
+		return earliestArrivalTime <= latestAllowableTime;
 	}
 
 	@Override
