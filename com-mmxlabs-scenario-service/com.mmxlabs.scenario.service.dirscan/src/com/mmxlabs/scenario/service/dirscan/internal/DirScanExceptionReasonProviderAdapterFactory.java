@@ -8,7 +8,7 @@ import com.mmxlabs.scenario.service.dirscan.DirScanException;
 public class DirScanExceptionReasonProviderAdapterFactory implements IAdapterFactory {
 
 	@Override
-	public Object getAdapter(Object adaptableObject, Class adapterType) {
+	public Object getAdapter(final Object adaptableObject, @SuppressWarnings("rawtypes") final Class adapterType) {
 		if (adaptableObject instanceof DirScanException) {
 
 			final DirScanException exception = (DirScanException) adaptableObject;
@@ -26,7 +26,7 @@ public class DirScanExceptionReasonProviderAdapterFactory implements IAdapterFac
 
 				@Override
 				public String getResolutionSteps() {
-					return "Please copy the scenario to the local workspace and re-open.";
+					return "Please copy the scenario to \"My Scenarios\" and re-open.";
 				}
 
 				@Override
@@ -40,7 +40,7 @@ public class DirScanExceptionReasonProviderAdapterFactory implements IAdapterFac
 	}
 
 	@Override
-	public Class[] getAdapterList() {
+	public Class<?>[] getAdapterList() {
 		return new Class[] { IReasonProvider.class };
 	}
 
