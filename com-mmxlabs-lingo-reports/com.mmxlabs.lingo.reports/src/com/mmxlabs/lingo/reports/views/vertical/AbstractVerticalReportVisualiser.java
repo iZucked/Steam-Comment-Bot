@@ -172,9 +172,19 @@ public abstract class AbstractVerticalReportVisualiser {
 		} else if (event instanceof GeneratedCharterOut) {
 			return "GCO";
 		} else if (event instanceof StartEvent) {
-			return "Start";
+			final Port port = event.getPort();
+			if (port != null) {
+				return String.format("Start - %s", getShortPortName(port));
+			} else {
+				return "Start";
+			}
 		} else if (event instanceof EndEvent) {
-			return "End";
+			final Port port = event.getPort();
+			if (port != null) {
+				return String.format("End - %s", getShortPortName(port));
+			} else {
+				return "End";
+			}
 		} else if (event instanceof Cooldown) {
 			return "Cooldown";
 		}
