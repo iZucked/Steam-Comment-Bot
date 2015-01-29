@@ -18,7 +18,10 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 import org.joda.time.Days;
+import org.joda.time.Hours;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -57,8 +60,8 @@ public abstract class AbstractVerticalReportVisualiser {
 	public static RGB Orange = new RGB(255, 168, 64);
 	protected final HashMap<RGB, Color> colourMap = new HashMap<>();
 
-	protected final Map<Pair<EObject, EAttribute>, LocalDate> dateCacheA = new HashMap<>();
-	protected final Map<Triple<EObject, Date, EAttribute>, LocalDate> dateCacheB = new HashMap<>();
+	protected final Map<Pair<EObject, EAttribute>, LocalDateTime> dateCacheA = new HashMap<>();
+	protected final Map<Triple<EObject, Date, EAttribute>, LocalDateTime> dateCacheB = new HashMap<>();
 
 	public DateTimeFormatter createDateFormat() {
 		return DateTimeFormat.forPattern("dd/MMM/yy");
@@ -354,23 +357,31 @@ public abstract class AbstractVerticalReportVisualiser {
 	}
 
 	public <T extends ITimezoneProvider & EObject> LocalDate getLocalDateFor(final T object, final EAttribute feature) {
+		return getLocalDateTimeFor(object, feature).toLocalDate();
+	}
+
+	public <T extends ITimezoneProvider & EObject> LocalDateTime getLocalDateTimeFor(final T object, final EAttribute feature) {
 
 		final Pair<EObject, EAttribute> key = new Pair<>((EObject) object, feature);
 		if (dateCacheA.containsKey(key)) {
 			return dateCacheA.get(key);
 		} else {
-			final LocalDate localDate = VerticalReportUtils.getLocalDateFor(object, feature, datesAreUTCEquivalent());
+			final LocalDateTime localDate = VerticalReportUtils.getLocalDateFor(object, feature, datesAreUTCEquivalent());
 			dateCacheA.put(key, localDate);
 			return localDate;
 		}
 	}
 
 	public <T extends ITimezoneProvider & EObject> LocalDate getLocalDateFor(final T object, final Date date, final EAttribute feature) {
+		return getLocalDateTimeFor(object, date, feature).toLocalDate();
+	}
+
+	public <T extends ITimezoneProvider & EObject> LocalDateTime getLocalDateTimeFor(final T object, final Date date, final EAttribute feature) {
 		final Triple<EObject, Date, EAttribute> key = new Triple<>((EObject) object, date, feature);
 		if (dateCacheB.containsKey(key)) {
 			return dateCacheB.get(key);
 		} else {
-			final LocalDate localDate = VerticalReportUtils.getLocalDateFor(object, date, feature, datesAreUTCEquivalent());
+			final LocalDateTime localDate = VerticalReportUtils.getLocalDateFor(object, date, feature, datesAreUTCEquivalent());
 			dateCacheB.put(key, localDate);
 			return localDate;
 		}
