@@ -37,6 +37,15 @@ public class DirScanServicePreferencesPage extends FieldEditorPreferencePage imp
 		addField(new BooleanFieldEditor(PreferenceConstants.P_ENABLED_KEY, "&Enabled:", getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.P_NAME_KEY, "&Name:", getFieldEditorParent()));
 		addField(new DirectoryFieldEditor(PreferenceConstants.P_PATH_KEY, "&Path:", getFieldEditorParent()));
+		
+		
+		addField(new BooleanFieldEditor("option2." + PreferenceConstants.P_ENABLED_KEY, "&Enabled:", getFieldEditorParent()));
+		addField(new StringFieldEditor("option2." + PreferenceConstants.P_NAME_KEY, "&Name:", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor("option2." + PreferenceConstants.P_PATH_KEY, "&Path:", getFieldEditorParent()));
+		
+		addField(new BooleanFieldEditor("option3." + PreferenceConstants.P_ENABLED_KEY, "&Enabled:", getFieldEditorParent()));
+		addField(new StringFieldEditor("option3." + PreferenceConstants.P_NAME_KEY, "&Name:", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor("option3." + PreferenceConstants.P_PATH_KEY, "&Path:", getFieldEditorParent()));
 
 	}
 
