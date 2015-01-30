@@ -27,6 +27,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
@@ -103,10 +104,13 @@ public class AbstractOptimisationResultTester {
 
 	@BeforeClass
 	public static void registerCipherProvider() {
-		final BundleContext bundleContext = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class).getBundleContext();
-		IScenarioCipherProvider provider = new PassthroughCipherProvider();
-		Dictionary<String, Object> properties = new Hashtable<>();
-		cipherServiceRef = bundleContext.registerService(IScenarioCipherProvider.class, provider, properties);
+		final Bundle bundle = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class);
+		if (bundle != null) {
+			final BundleContext bundleContext = bundle.getBundleContext();
+			final IScenarioCipherProvider provider = new PassthroughCipherProvider();
+			final Dictionary<String, Object> properties = new Hashtable<>();
+			cipherServiceRef = bundleContext.registerService(IScenarioCipherProvider.class, provider, properties);
+		}
 	}
 
 	@AfterClass
@@ -119,10 +123,13 @@ public class AbstractOptimisationResultTester {
 
 	@Nullable
 	private IScenarioCipherProvider getScenarioCipherProvider() {
-		final BundleContext bundleContext = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class).getBundleContext();
-		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
-		if (serviceReference != null) {
-			return bundleContext.getService(serviceReference);
+		final Bundle bundle = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class);
+		if (bundle != null) {
+			final BundleContext bundleContext = bundle.getBundleContext();
+			final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
+			if (serviceReference != null) {
+				return bundleContext.getService(serviceReference);
+			}
 		}
 		return null;
 	}
