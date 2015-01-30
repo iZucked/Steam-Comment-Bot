@@ -172,6 +172,7 @@ public class JointModelEditorContributor extends MultiPageEditorActionBarContrib
 	public void update() {
 		if (undoAction.getEditingDomain() != null) {
 			undoAction.update();
+		} else {
 			undoAction.setEnabled(false);
 		}
 		if (redoAction.getEditingDomain() != null) {
