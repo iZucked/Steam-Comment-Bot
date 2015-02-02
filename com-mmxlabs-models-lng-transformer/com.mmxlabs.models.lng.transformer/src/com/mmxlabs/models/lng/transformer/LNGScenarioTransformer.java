@@ -67,6 +67,7 @@ import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -116,6 +117,7 @@ import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
+import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
@@ -142,6 +144,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.CooldownLumpSumCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.CooldownPriceIndexedCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceExpressionContract;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
+import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProviderEditor;
@@ -198,6 +201,9 @@ public class LNGScenarioTransformer {
 	@Inject(optional = true)
 	IShippingDaysRestrictionSpeedProvider shippingDaysRestrictionSpeedProvider;
 
+	@Inject
+	private IBaseFuelCurveProviderEditor baseFuelCurveProvider;
+	
 	/**
 	 * Contains the contract transformers for each known contract type, by the EClass of the contract they transform.
 	 */
@@ -2172,20 +2178,29 @@ public class LNGScenarioTransformer {
 
 		for (final VesselClass eVc : fleetModel.getVesselClasses()) {
 			int baseFuelPriceInInternalUnits = 0;
+			IBaseFuel bf = null;
 			for (final BaseFuelCost baseFuelCost : pricingModel.getFleetCost().getBaseFuelPrices()) {
 				if (baseFuelCost.getFuel() == eVc.getBaseFuel()) {
 					final BaseFuelIndex index = baseFuelCost.getIndex();
 					final ICurve curve = baseFuelIndexAssociation.lookup(index);
+					int point = 0;
 					if (curve != null) {
 						final EList<Date> dates = index.getData().getDates();
-						final int point = dateHelper.convertTime(earliestTime, dates.get(0));
+						point = dateHelper.convertTime(earliestTime, dates.get(0));
 						baseFuelPriceInInternalUnits = curve.getValueAtPoint(point);
+					}
+					BaseFuel eBF = baseFuelCost.getFuel();
+					bf = TransformerHelper.buildBaseFuel(builder, eBF);
+					modelEntityMap.addModelObject(eBF, bf);
+					if (bf != null && curve != null) {
+						baseFuelCurveProvider.setBaseFuelCurve(bf, curve);
+						baseFuelCurveProvider.setBaseFuelCurveFirstValueDate(curve, point);
 					}
 					break;
 				}
 			}
 
-			final IVesselClass vc = TransformerHelper.buildIVesselClass(builder, eVc, baseFuelPriceInInternalUnits);
+			final IVesselClass vc = TransformerHelper.buildIVesselClass(builder, eVc, baseFuelPriceInInternalUnits, bf);
 
 			vesselClassAssociation.add(eVc, vc);
 

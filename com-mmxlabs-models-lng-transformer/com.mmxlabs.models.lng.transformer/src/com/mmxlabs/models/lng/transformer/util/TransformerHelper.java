@@ -6,11 +6,13 @@ package com.mmxlabs.models.lng.transformer.util;
 
 import java.util.TreeMap;
 
+import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
+import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.LookupTableConsumptionRateCalculator;
@@ -22,13 +24,13 @@ public class TransformerHelper {
 
 	/**
 	 */
-	public static IVesselClass buildIVesselClass(final ISchedulerBuilder builder, final VesselClass eVc, final int baseFuelPriceInInternalUnits) {
+	public static IVesselClass buildIVesselClass(final ISchedulerBuilder builder, final VesselClass eVc, final int baseFuelPriceInInternalUnits, final IBaseFuel baseFuel) {
 		final IVesselClass vc = builder.createVesselClass(eVc.getName(), OptimiserUnitConvertor.convertToInternalSpeed(eVc.getMinSpeed()),
 				OptimiserUnitConvertor.convertToInternalSpeed(eVc.getMaxSpeed()), OptimiserUnitConvertor.convertToInternalVolume((int) (eVc.getFillCapacity() * eVc.getCapacity())),
 				OptimiserUnitConvertor.convertToInternalVolume(eVc.getMinHeel()), baseFuelPriceInInternalUnits,
 				OptimiserUnitConvertor.convertToInternalConversionFactor(eVc.getBaseFuel().getEquivalenceFactor()), OptimiserUnitConvertor.convertToInternalDailyRate(eVc.getPilotLightRate()),
 				eVc.getWarmingTime(), OptimiserUnitConvertor.convertToInternalVolume(eVc.getCoolingVolume()), OptimiserUnitConvertor.convertToInternalDailyRate(eVc.getMinBaseFuelConsumption()));
-
+		vc.setBaseFuel(baseFuel);
 		buildVesselStateAttributes(builder, vc, com.mmxlabs.scheduler.optimiser.components.VesselState.Laden, eVc.getLadenAttributes());
 		buildVesselStateAttributes(builder, vc, com.mmxlabs.scheduler.optimiser.components.VesselState.Ballast, eVc.getBallastAttributes());
 
@@ -43,6 +45,14 @@ public class TransformerHelper {
 		return vc;
 	}
 
+	public static IBaseFuel buildBaseFuel(final ISchedulerBuilder builder, final BaseFuel eBF) {
+		if (eBF != null) {
+			IBaseFuel bf = builder.createBaseFuel(eBF.getName(), OptimiserUnitConvertor.convertToInternalDailyRate(eBF.getEquivalenceFactor()));
+			return bf;
+		} else {
+			return null;
+		}
+	}
 	/**
 	 * Tell the builder to set up the given vessel state from the EMF fleet model
 	 * 

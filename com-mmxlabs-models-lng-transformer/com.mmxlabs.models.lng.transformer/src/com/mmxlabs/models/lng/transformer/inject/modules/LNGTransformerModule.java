@@ -29,6 +29,8 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.modules.OptimiserCoreModule;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.CachingVoyagePlanOptimiser;
@@ -95,12 +97,15 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(ILNGVoyageCalculator.class).to(LNGVoyageCalculator.class);
 		bind(LNGVoyageCalculator.class).in(Singleton.class);
 
+		
 		bind(IVolumeAllocator.class).to(UnconstrainedVolumeAllocator.class).in(Singleton.class);
 
 		bind(VoyagePlanOptimiser.class);
 
 		bind(IOptimisationTransformer.class).to(OptimisationTransformer.class).in(Singleton.class);
 
+		bind(IVesselBaseFuelCalculator.class).to(VesselBaseFuelCalculator.class);
+		bind(VesselBaseFuelCalculator.class).in(Singleton.class);
 		if (Platform.isRunning()) {
 			bind(IFitnessFunctionRegistry.class).toProvider(service(IFitnessFunctionRegistry.class).single());
 			bind(IConstraintCheckerRegistry.class).toProvider(service(IConstraintCheckerRegistry.class).single());
