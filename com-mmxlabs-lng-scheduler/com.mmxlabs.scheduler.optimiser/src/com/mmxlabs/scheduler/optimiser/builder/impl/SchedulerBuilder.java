@@ -51,6 +51,7 @@ import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.builder.IXYPortDistanceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.DefaultSpotCharterInMarket;
+import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -73,6 +74,7 @@ import com.mmxlabs.scheduler.optimiser.components.IXYPort;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.impl.BaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.impl.Cargo;
 import com.mmxlabs.scheduler.optimiser.components.impl.CargoShortEnd;
 import com.mmxlabs.scheduler.optimiser.components.impl.DefaultVesselAvailability;
@@ -1209,6 +1211,14 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vesselClasses.add(vesselClass);
 
 		return vesselClass;
+	}
+	
+	@Override
+	@NonNull
+	public IBaseFuel createBaseFuel(final String name, final int equivalenceFactor) {
+		final BaseFuel baseFuel = new BaseFuel(name);
+		baseFuel.setEquivalenceFactor(equivalenceFactor);
+		return baseFuel;
 	}
 
 	/**

@@ -151,4 +151,20 @@ public interface IVesselClass {
 	 * @return
 	 */
 	int getMinBaseFuelConsumptionInMTPerDay();
+	
+	/**
+	 * Get the base fuel used by this vessel class.
+	 * 
+	 * @return
+	 */
+	IBaseFuel getBaseFuel();
+	
+	/**
+	 * Set the base fuel used by this vessel class.
+	 * 
+	 * @return
+	 */
+	void setBaseFuel(IBaseFuel baseFuel);
+	
+	
 }

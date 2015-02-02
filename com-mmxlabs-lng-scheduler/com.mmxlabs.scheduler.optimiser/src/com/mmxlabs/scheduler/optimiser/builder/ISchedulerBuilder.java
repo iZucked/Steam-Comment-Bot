@@ -25,6 +25,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -129,6 +130,14 @@ public interface ISchedulerBuilder {
 	 */
 	void setVesselClassPortTypeParameters(@NonNull IVesselClass vc, PortType portType, int inPortConsumptionRateInMTPerDay);
 
+	/**
+	 * Create a base fuel
+	 * @param name
+	 * @param equivalenceFactor
+	 * @return
+	 */
+	IBaseFuel createBaseFuel(String name, int equivalenceFactor);
+	
 	/**
 	 * Create a charter out event
 	 * 

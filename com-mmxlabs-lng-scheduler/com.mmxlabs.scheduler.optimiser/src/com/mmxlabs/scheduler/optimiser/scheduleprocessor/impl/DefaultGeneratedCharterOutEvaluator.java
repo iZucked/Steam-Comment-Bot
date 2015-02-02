@@ -18,6 +18,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
@@ -62,6 +63,9 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 	@Inject
 	private ICharterRateCalculator charterRateCalculator;
+	
+	@Inject
+	private IVesselBaseFuelCalculator vesselBaseFuelCalculator;
 
 	@Inject
 	private IActualsDataProvider actualsDataProvider;
@@ -81,7 +85,9 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 		// TODO: Extract out further for custom base fuel pricing logic?
 		// Use forecast BF, but check for actuals later
-		int baseFuelUnitPricePerMT = vesselAvailability.getVessel().getVesselClass().getBaseFuelUnitPrice();
+//		int baseFuelUnitPricePerMT = vesselAvailability.getVessel().getVesselClass().getBaseFuelUnitPrice();
+		int baseFuelUnitPricePerMT = vesselBaseFuelCalculator.getBaseFuelPrice(vesselAvailability.getVessel(), portTimesRecord);
+
 		int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselAvailability, /** FIXME: Not UTC */
 		vesselStartTime, timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getFirstSlotTime(), portTimesRecord.getFirstSlot()));
 

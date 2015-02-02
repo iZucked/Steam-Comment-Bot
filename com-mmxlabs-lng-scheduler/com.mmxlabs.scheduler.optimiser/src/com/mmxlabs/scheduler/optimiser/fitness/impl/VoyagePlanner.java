@@ -31,12 +31,14 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord;
@@ -102,6 +104,9 @@ public class VoyagePlanner {
 
 	@Inject
 	private ICharterRateCalculator charterRateCalculator;
+	
+	@Inject
+	private IVesselBaseFuelCalculator vesselBaseFuelCalculator;
 
 	@Inject
 	private IActualsDataProvider actualsDataProvider;
@@ -321,13 +326,22 @@ public class VoyagePlanner {
 			final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
 			final PortType portType = portTypeProvider.getPortType(element);
 
+			final IVessel thisVessel = vesselAvailability.getVessel();
 			// TODO: Extract out further for custom base fuel pricing logic?
 			// Use forecast BF, but check for actuals later
-			voyagePlanOptimiser.setVessel(vesselAvailability.getVessel(), resource, vesselAvailability.getVessel().getVesselClass().getBaseFuelUnitPrice());
+			
+			//Alex: commented out
+//			voyagePlanOptimiser.setVessel(vesselAvailability.getVessel(), resource, vesselAvailability.getVessel().getVesselClass().getBaseFuelUnitPrice());
 			if (thisPortSlot instanceof ILoadOption) {
 				if (actualsDataProvider.hasActuals(thisPortSlot)) {
-					voyagePlanOptimiser.setVessel(vesselAvailability.getVessel(), resource, actualsDataProvider.getBaseFuelPricePerMT(thisPortSlot));
-				}
+					voyagePlanOptimiser.setVessel(thisVessel, resource, actualsDataProvider.getBaseFuelPricePerMT(thisPortSlot));
+				} 
+//					else {
+//					int startOfVoyage = voyageRecord.getFirstSlotTime();
+//					int baseFuelPricePerMT = vesselBaseFuelCalculator.getBaseFuelPrice(thisVessel, 0);
+//
+//					voyagePlanOptimiser.setVessel(thisVessel, resource, actualsDataProvider.getBaseFuelPricePerMT(thisPortSlot));
+//				}
 			}
 
 			// If this is the first port, then this will be null and there will
@@ -384,7 +398,6 @@ public class VoyagePlanner {
 				portTimesRecord.setSlotDuration(thisPortSlot, visitDuration);
 			}
 			if (breakSequence[idx]) {
-
 				// Use prev slot as "thisPortSlot" is the start of a new voyage plan and thus likely a different cargo
 				if (actualsDataProvider.hasActuals(prevPortSlot)) {
 					heelVolumeInM3 = generateActualsVoyagePlan(vesselAvailability, vesselStartTime, voyagePlansMap, voyagePlansList, voyageOrPortOptions, portTimesRecord, heelVolumeInM3);
@@ -392,6 +405,9 @@ public class VoyagePlanner {
 					// Reset VPO ready for next iteration - some data may have been added
 					voyagePlanOptimiser.reset();
 				} else {
+					// set base fuel price in VPO
+					int baseFuelPricePerMT = vesselBaseFuelCalculator.getBaseFuelPrice(thisVessel, portTimesRecord);
+					voyagePlanOptimiser.setVessel(thisVessel, resource, baseFuelPricePerMT);
 
 					final boolean shortCargoEnd = ((PortOptions) voyageOrPortOptions.get(0)).getPortSlot().getPortType() == PortType.Short_Cargo_End;
 
@@ -891,7 +907,9 @@ public class VoyagePlanner {
 
 			// TODO: Extract out further for custom base fuel pricing logic?
 			// Use forecast BF, but check for actuals later
-			voyagePlanOptimiser.setVessel(vesselAvailability.getVessel(), resource, vesselAvailability.getVessel().getVesselClass().getBaseFuelUnitPrice());
+//			voyagePlanOptimiser.setVessel(vesselAvailability.getVessel(), resource, vesselAvailability.getVessel().getVesselClass().getBaseFuelUnitPrice());
+			// Alex: check
+			voyagePlanOptimiser.setVessel(vesselAvailability.getVessel(), resource, 0);
 			if (thisPortSlot instanceof ILoadOption) {
 				if (actualsDataProvider.hasActuals(thisPortSlot)) {
 					voyagePlanOptimiser.setVessel(vesselAvailability.getVessel(), resource, actualsDataProvider.getBaseFuelPricePerMT(thisPortSlot));

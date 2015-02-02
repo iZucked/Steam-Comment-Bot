@@ -30,6 +30,8 @@ import com.mmxlabs.optimiser.core.modules.OptimiserCoreModule;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselStartDateCharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
@@ -79,6 +81,9 @@ public class ScheduleTestModule extends AbstractModule {
 		bind(ICharterRateCalculator.class).to(VesselStartDateCharterRateCalculator.class);
 
 		bind(VoyagePlanOptimiser.class);
+
+		bind(IVesselBaseFuelCalculator.class).to(VesselBaseFuelCalculator.class);
+		bind(VesselBaseFuelCalculator.class).in(Singleton.class);
 
 		// if (Platform.isRunning()) {
 		// bind(IFitnessFunctionRegistry.class).toProvider(service(IFitnessFunctionRegistry.class).single());

@@ -14,6 +14,8 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 
+import javax.inject.Singleton;
+
 import org.hamcrest.Description;
 import org.junit.Test;
 import org.mockito.Matchers;
@@ -45,11 +47,15 @@ import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketDischargeSlot
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketLoadOption;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketLoadSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
@@ -62,6 +68,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvid
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapBaseFuelCurveEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -110,6 +117,13 @@ public class ScheduleCalculatorTest {
 				bind(ICharterRateCalculator.class).toInstance(charterRateCalculator);
 				bind(IActualsDataProvider.class).toInstance(actualsDataProvider);
 				bind(IStartEndRequirementProvider.class).toInstance(startEndRequirementProvider);
+
+				final HashMapBaseFuelCurveEditor baseFuelCurveEditor = new HashMapBaseFuelCurveEditor();
+				bind(IBaseFuelCurveProvider.class).toInstance(baseFuelCurveEditor);
+				bind(IBaseFuelCurveProviderEditor.class).toInstance(baseFuelCurveEditor);
+
+				bind(IVesselBaseFuelCalculator.class).to(VesselBaseFuelCalculator.class);
+				bind(VesselBaseFuelCalculator.class).in(Singleton.class);
 
 				bind(new TypeLiteral<IMultiMatrixProvider<IPort, Integer>>() {
 				}).toInstance(distanceProvider);
