@@ -23,7 +23,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @generated
  */
 public interface BaseFuel extends UUIDObject, NamedObject {
-
+ 
 	/**
 	 * Returns the value of the '<em><b>Equivalence Factor</b></em>' attribute.
 	 * <!-- begin-user-doc -->
