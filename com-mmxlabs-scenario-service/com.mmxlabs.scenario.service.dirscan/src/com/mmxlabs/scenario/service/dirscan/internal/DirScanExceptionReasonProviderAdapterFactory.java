@@ -31,7 +31,8 @@ public class DirScanExceptionReasonProviderAdapterFactory implements IAdapterFac
 
 				@Override
 				public String getDescription() {
-					return "There was an error loading the scenario from the read-only shared workspace. This is often because a scenario needs to be migrated to the latest data model version.";
+					return "There was an error loading the scenario from \"" + exception.getServiceName()
+							+ "\". This is often because a scenario needs to be migrated to the latest data model version.";
 				}
 			};
 		}
