@@ -694,7 +694,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 				return eObj;
 			} catch (final Exception e) {
-				throw new DirScanException(e);
+				throw new DirScanException(getName(), e);
 			}
 		} else {
 			return instance.getInstance();
