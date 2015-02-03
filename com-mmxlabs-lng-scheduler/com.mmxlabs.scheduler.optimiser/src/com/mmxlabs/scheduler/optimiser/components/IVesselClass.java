@@ -116,13 +116,6 @@ public interface IVesselClass {
 	long getNBORate(VesselState vesselState);
 
 	/**
-	 * Returns the unit price of base fuel for this vessel class, where the unit is {@link FuelComponent#getDefaultFuelUnit()}
-	 * 
-	 * @return
-	 */
-	int getBaseFuelUnitPrice();
-
-	/**
 	 * Returns the conversion factor to use to convert 1 {@link FuelUnit#M3} of LNG to {@link FuelUnit#MT} equivalence.
 	 * 
 	 * @return

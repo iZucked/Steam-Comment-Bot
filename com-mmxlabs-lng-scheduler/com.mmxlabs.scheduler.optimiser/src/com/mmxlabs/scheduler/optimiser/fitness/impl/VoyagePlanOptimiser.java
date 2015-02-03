@@ -421,6 +421,11 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		this.baseFuelPricePerMT = baseFuelPricePerMT;
 	}
 
+	@Override
+	public void setBaseFuelPricePerMT(int baseFuelPricePerMT) {
+		this.baseFuelPricePerMT = baseFuelPricePerMT;
+	}
+
 	/**
 	 * Once optimised, returns the best {@link VoyagePlan} cost.
 	 * 

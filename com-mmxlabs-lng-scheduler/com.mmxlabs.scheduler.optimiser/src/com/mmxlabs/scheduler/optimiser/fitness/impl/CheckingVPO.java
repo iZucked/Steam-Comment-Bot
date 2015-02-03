@@ -89,6 +89,12 @@ public class CheckingVPO implements IVoyagePlanOptimiser {
 	}
 
 	@Override
+	public void setBaseFuelPricePerMT(int baseFuelPricePerMT) {
+		delegate.setBaseFuelPricePerMT(baseFuelPricePerMT);
+		reference.setBaseFuelPricePerMT(baseFuelPricePerMT);
+	}
+
+	@Override
 	public long getBestCost() {
 		return delegate.getBestCost();
 	}

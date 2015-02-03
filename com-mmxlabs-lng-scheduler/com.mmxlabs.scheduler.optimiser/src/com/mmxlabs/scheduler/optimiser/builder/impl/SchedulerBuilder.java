@@ -1199,7 +1199,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vesselClass.setCargoCapacity(capacityInM3);
 		vesselClass.setSafetyHeel(safetyHeelInM3);
 
-		vesselClass.setBaseFuelUnitPrice(baseFuelUnitPricePerMT);
 		vesselClass.setBaseFuelConversionFactor(baseFuelEquivalenceInM3TOMT);
 
 		vesselClass.setWarmupTime(warmupTimeHours);

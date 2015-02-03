@@ -36,11 +36,14 @@ public class VesselBaseFuelCalculator implements IVesselBaseFuelCalculator {
 		final ICurve curve = baseFuelProvider.getBaseFuelCurve(bf);
 		if (curve != null) {
 //			return curve.getValueAtPoint(voyagePlanStartTime);
-			int c = curve.getValueAtPoint(baseFuelProvider.getBaseFuelCurveFirstValueDate(curve));
+			int c1 = curve.getValueAtPoint(voyagePlanStartTime);
+			int c2 = curve.getValueAtPoint(baseFuelProvider.getBaseFuelCurveFirstValueDate(curve));
 
-			return curve.getValueAtPoint(baseFuelProvider.getBaseFuelCurveFirstValueDate(curve));
+//			return curve.getValueAtPoint(voyagePlanStartTime);
+//			return c1;
+			return c1;
 		}
-		return 1000;
+		return 0;
 	}
 
 	@Override

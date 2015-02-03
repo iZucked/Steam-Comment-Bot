@@ -27,8 +27,6 @@ public final class VesselClass implements IVesselClass {
 
 	private final EnumMap<VesselState, Integer> serviceSpeed = new EnumMap<VesselState, Integer>(VesselState.class);
 
-	private int baseFuelUnitPrice;
-
 	private int baseFuelConversionFactor;
 
 	private long pilotLightRate;
@@ -168,15 +166,6 @@ public final class VesselClass implements IVesselClass {
 
 	public void setConsumptionRate(final VesselState vesselState, final IConsumptionRateCalculator calc) {
 		consumptionRate.put(vesselState, calc);
-	}
-
-	@Override
-	public int getBaseFuelUnitPrice() {
-		return baseFuelUnitPrice;
-	}
-
-	public void setBaseFuelUnitPrice(final int baseFuelUnitPrice) {
-		this.baseFuelUnitPrice = baseFuelUnitPrice;
 	}
 
 	@Override

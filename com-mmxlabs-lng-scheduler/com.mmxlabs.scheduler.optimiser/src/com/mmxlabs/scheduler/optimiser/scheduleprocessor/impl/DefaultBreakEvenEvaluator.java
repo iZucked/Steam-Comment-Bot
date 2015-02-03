@@ -192,7 +192,6 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 				if (actualsDataProvider.hasActuals(originalLoad)) {
 					baseFuelUnitPricePerMT = actualsDataProvider.getBaseFuelPricePerMT(originalLoad);
 				} else {
-//					baseFuelUnitPricePerMT = vesselAvailability.getVessel().getVesselClass().getBaseFuelUnitPrice();
 					baseFuelUnitPricePerMT = vesselBaseFuelCalculator.getBaseFuelPrice(vesselAvailability.getVessel(), portTimesRecord);
 				}
 

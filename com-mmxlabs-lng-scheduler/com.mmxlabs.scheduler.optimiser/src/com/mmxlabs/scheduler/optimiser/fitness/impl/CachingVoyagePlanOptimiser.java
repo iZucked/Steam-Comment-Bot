@@ -244,6 +244,11 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	}
 
 	@Override
+	public void setBaseFuelPricePerMT(int baseFuelPricePerMT) {
+		this.baseFuelPricePerMT = baseFuelPricePerMT;
+	}
+
+	@Override
 	public long getBestCost() {
 		return bestCost;
 	}
