@@ -17,7 +17,6 @@ import java.util.TimeZone;
 
 import org.eclipse.core.databinding.ObservablesManager;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -29,7 +28,6 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -67,6 +65,7 @@ import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.mmxlabs.common.PairKeyedMap;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -81,7 +80,7 @@ import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
 import com.mmxlabs.models.ui.editors.dialogs.DefaultDialogEditingContext;
 import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
-import com.mmxlabs.models.ui.editors.dialogs.NullDialogController;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogController;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
@@ -143,6 +142,46 @@ public class CreateStripDialog extends FormDialog {
 	private enum IntervalType {
 		days, weeks, months
 	};
+
+	private DefaultDialogEditingContext dialogContext;
+
+	private final IDialogController dialogController = new IDialogController() {
+
+		private final PairKeyedMap<EObject, EStructuralFeature, Boolean> visibilityMap = new PairKeyedMap<>();
+
+		@Override
+		public void validate() {
+
+		}
+
+		@Override
+		public void relayout() {
+
+		}
+
+		@Override
+		public void updateEditorVisibility() {
+			// Trigger the recursive UI update
+			if (templateDetailComposite != null) {
+				templateDetailComposite.checkVisibility(dialogContext);
+			}
+		}
+
+		@Override
+		public void setEditorVisibility(final EObject object, final EStructuralFeature feature, final boolean visible) {
+			visibilityMap.put(object, feature, visible);
+
+		}
+
+		@Override
+		public boolean getEditorVisibility(final EObject object, final EStructuralFeature feature) {
+			if (visibilityMap.contains(object, feature)) {
+				return visibilityMap.get(object, feature).booleanValue();
+			}
+			return true;
+		}
+	};
+	private IDisplayComposite templateDetailComposite;
 
 	public CreateStripDialog(@NonNull final IShellProvider parentShell, @NonNull final IScenarioEditingLocation originalScenarioEditingLocation, @NonNull final StripType stripType,
 			@Nullable final EObject selectedObject) {
@@ -472,11 +511,21 @@ public class CreateStripDialog extends FormDialog {
 			template.setText("Template");
 			toolkit.adapt(template);
 
+			dialogContext = new DefaultDialogEditingContext(dialogController, scenarioEditingLocation, false, true);
+
 			final IDisplayCompositeFactory factory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(sample.eClass());
-			final IDisplayComposite templateDetailComposite = factory.createSublevelComposite(template, sample.eClass(), new DefaultDialogEditingContext(new NullDialogController(),
-					scenarioEditingLocation, false, true), toolkit);
+			templateDetailComposite = factory.createSublevelComposite(template, sample.eClass(), dialogContext, toolkit);
 			templateDetailComposite.setCommandHandler(scenarioEditingLocation.getDefaultCommandHandler());
-			templateDetailComposite.display(new DefaultDialogEditingContext(new NullDialogController(), scenarioEditingLocation, false, true), scenarioEditingLocation.getRootObject(), sample, null, dbc);
+
+			templateDetailComposite.getComposite().setLayoutData(new GridData(GridData.FILL_BOTH));
+
+			final Collection<EObject> range = factory.getExternalEditingRange(scenarioEditingLocation.getRootObject(), sample);
+			range.add(sample);
+
+			templateDetailComposite.display(dialogContext, scenarioEditingLocation.getRootObject(), sample, range, dbc);
+
+			// Trigger update of inline editor visibility and UI state update
+			dialogController.updateEditorVisibility();
 		}
 
 		// Preview Table with generated options
@@ -743,14 +792,14 @@ public class CreateStripDialog extends FormDialog {
 	 */
 	private IScenarioEditingLocation createScenarioEditingLocation(final IScenarioEditingLocation original) {
 
-		final EditingDomain editingDomain = new AdapterFactoryEditingDomain(original.getAdapterFactory(), new BasicCommandStack());
+		// final EditingDomain editingDomain = new AdapterFactoryEditingDomain(original.getAdapterFactory(), new BasicCommandStack());
 
 		final ICommandHandler commandHandler = new ICommandHandler() {
 
 			@Override
 			public void handleCommand(final Command command, final EObject target, final EStructuralFeature feature) {
 				command.execute();
-
+				// Activator.getDefault().getCommandProviderTracker().
 				refreshPreview();
 			}
 
@@ -761,7 +810,7 @@ public class CreateStripDialog extends FormDialog {
 
 			@Override
 			public EditingDomain getEditingDomain() {
-				return editingDomain;
+				return original.getEditingDomain();
 			}
 		};
 
@@ -839,7 +888,7 @@ public class CreateStripDialog extends FormDialog {
 
 			@Override
 			public EditingDomain getEditingDomain() {
-				return editingDomain;
+				return original.getEditingDomain();
 			}
 
 			@Override

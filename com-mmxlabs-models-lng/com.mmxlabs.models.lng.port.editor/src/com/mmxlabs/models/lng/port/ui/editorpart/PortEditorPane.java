@@ -88,7 +88,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 		final DistanceMatrixEditorAction dmaAction = new DistanceMatrixEditorAction();
 		getToolBarManager().appendToGroup(EDIT_GROUP, dmaAction);
 
-		getToolBarManager().appendToGroup(EDIT_GROUP, new Action() {
+		getToolBarManager().appendToGroup(EDIT_GROUP, new Action("Edit Port Groups") {
 			{
 				setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.port.editor", "/icons/group.gif"));
 			}

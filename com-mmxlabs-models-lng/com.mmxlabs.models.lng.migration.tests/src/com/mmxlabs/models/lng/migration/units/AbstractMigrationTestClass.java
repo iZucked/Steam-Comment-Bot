@@ -9,6 +9,7 @@ import java.util.Hashtable;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceRegistration;
@@ -22,10 +23,13 @@ public abstract class AbstractMigrationTestClass {
 
 	@BeforeClass
 	public static void registerCipherProvider() {
-		final BundleContext bundleContext = FrameworkUtil.getBundle(AbstractMigrationTestClass.class).getBundleContext();
-		IScenarioCipherProvider provider = new PassthroughCipherProvider();
-		Dictionary<String, Object> properties = new Hashtable<>();
-		cipherServiceRef = bundleContext.registerService(IScenarioCipherProvider.class, provider, properties);
+		final Bundle bundle = FrameworkUtil.getBundle(AbstractMigrationTestClass.class);
+		if (bundle != null) {
+			final BundleContext bundleContext = bundle.getBundleContext();
+			final IScenarioCipherProvider provider = new PassthroughCipherProvider();
+			final Dictionary<String, Object> properties = new Hashtable<>();
+			cipherServiceRef = bundleContext.registerService(IScenarioCipherProvider.class, provider, properties);
+		}
 	}
 
 	@AfterClass
