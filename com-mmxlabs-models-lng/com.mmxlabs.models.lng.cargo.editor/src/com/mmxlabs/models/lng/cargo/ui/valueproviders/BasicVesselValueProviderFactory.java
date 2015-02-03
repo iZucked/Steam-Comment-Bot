@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -98,16 +99,34 @@ public class BasicVesselValueProviderFactory implements IReferenceValueProviderF
 						}
 					}
 					boolean includeSpotVessels = true;
+
 					if (target instanceof VesselEvent) {
 						includeSpotVessels = false;
+
 					}
 
-					boolean useScenarioVessel = true;
+					boolean isThirdPartyCargo = false;
 					if (target instanceof LoadSlot) {
-						useScenarioVessel = !((LoadSlot) target).isDESPurchase();
+						isThirdPartyCargo = ((LoadSlot) target).isDESPurchase();
 					} else if (target instanceof DischargeSlot) {
-						useScenarioVessel = !((DischargeSlot) target).isFOBSale();
+						isThirdPartyCargo = ((DischargeSlot) target).isFOBSale();
 					}
+
+					boolean showFleetVessels = true;
+					boolean showThirdPartyVessels = false;
+
+					if (isThirdPartyCargo) {
+						// FOB/DES cargoes should only permit third party vessels.
+						showFleetVessels = false;
+						showThirdPartyVessels = true;
+					} else {
+
+						// Shipped cargoes can only use fleet vessels. Note: the allowed list can contain third party vessels for fob/des conversion.
+						showFleetVessels = true;
+						showThirdPartyVessels = field == CargoPackage.Literals.SLOT__ALLOWED_VESSELS;
+					}
+
+					boolean includeVesselClasses = field == CargoPackage.Literals.SLOT__ALLOWED_VESSELS || (field == CargoPackage.Literals.VESSEL_EVENT__ALLOWED_VESSELS && target instanceof CharterOutEvent);
 
 					boolean noVesselsAllowed = false;
 					final List<AVesselSet<Vessel>> allowedVessels = new ArrayList<>();
@@ -145,6 +164,9 @@ public class BasicVesselValueProviderFactory implements IReferenceValueProviderF
 							}
 						}
 					}
+
+					final Set<VesselClass> availableVesselClasses = new HashSet<>(fleetModel.getVesselClasses());
+
 					// create list to populate
 					final ArrayList<Pair<String, EObject>> result = new ArrayList<Pair<String, EObject>>();
 
@@ -157,11 +179,6 @@ public class BasicVesselValueProviderFactory implements IReferenceValueProviderF
 						if (vessel instanceof Vessel) {
 							vc = ((Vessel) vessel).getVesselClass();
 						}
-
-						if (currentValue instanceof Vessel) {
-
-						}
-
 						boolean display = !noVesselsAllowed && (
 						// show the option if the cargo allows this vessel-set
 						// (an empty list of allowed vessels means "all vessels")
@@ -172,9 +189,9 @@ public class BasicVesselValueProviderFactory implements IReferenceValueProviderF
 						// Filter out non-scenario vessels
 						if (display) {
 							if (vessel instanceof Vessel) {
-								display = useScenarioVessel == scenarioVessels.contains(vessel);
+								display = (showFleetVessels && scenarioVessels.contains(vessel)) || (showThirdPartyVessels && !scenarioVessels.contains(vessel));
 							} else if (vessel instanceof VesselClass) {
-								display = useScenarioVessel && availableSpotVesselClasses.contains(vessel);
+								display = (showFleetVessels && availableSpotVesselClasses.contains(vessel)) || (includeVesselClasses && availableVesselClasses.contains(vessel));
 							}
 						}
 
@@ -185,7 +202,7 @@ public class BasicVesselValueProviderFactory implements IReferenceValueProviderF
 						}
 
 						if (display) {
-							result.add(pair);
+							result.add(new Pair<>(getName(target,(EReference) field, pair.getSecond()), pair.getSecond()));
 						}
 					}
 
@@ -199,7 +216,8 @@ public class BasicVesselValueProviderFactory implements IReferenceValueProviderF
 
 				@Override
 				public String getName(final EObject referer, final EReference feature, final EObject referenceValue) {
-					return super.getName(referer, feature, referenceValue) + ((referenceValue instanceof VesselClass) ? " (spot)" : "");
+					String spotStr = (feature == CargoPackage.Literals.SLOT__ALLOWED_VESSELS || feature == CargoPackage.Literals.VESSEL_EVENT__ALLOWED_VESSELS) ? "": " (spot)" ;
+					return super.getName(referer, feature, referenceValue) + ((referenceValue instanceof VesselClass) ? spotStr : "");
 				}
 
 				@Override
@@ -221,20 +239,20 @@ public class BasicVesselValueProviderFactory implements IReferenceValueProviderF
 								}
 							}
 							// Sorting time charters after fleet
-							if (v1 instanceof Vessel && v2 instanceof Vessel){
+							if (v1 instanceof Vessel && v2 instanceof Vessel) {
 								boolean isV1Charter = false;
 								boolean isV2Charter = false;
 								for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
 									Vessel v = va.getVessel();
-									if (v == v1){
+									if (v == v1) {
 										isV1Charter = va.isSetTimeCharterRate();
-									} else if (v == v2){
+									} else if (v == v2) {
 										isV2Charter = va.isSetTimeCharterRate();
 									}
 								}
-								if (!isV1Charter && isV2Charter){
+								if (!isV1Charter && isV2Charter) {
 									return -1;
-								} else if (isV1Charter && !isV2Charter){
+								} else if (isV1Charter && !isV2Charter) {
 									return 1;
 								}
 							}

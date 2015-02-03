@@ -194,7 +194,8 @@ public class AssignmentEditorHelper {
 				}
 			}
 		}
-		// Passed through first loop with out finding a vessel availability covering the assigned element. However if we did find a single availability matching the vessel, return that. If multiple, give up.
+		// Passed through first loop with out finding a vessel availability covering the assigned element. However if we did find a single availability matching the vessel, return that. If multiple,
+		// give up.
 		if (mightMatchCount == 1) {
 			for (final VesselAvailability vesselAvailability : vesselAvailabilities) {
 				if (vesselAvailability.getVessel() == vessel) {
@@ -244,7 +245,6 @@ public class AssignmentEditorHelper {
 		return true;
 	}
 
-
 	public static int getMaxSpot(final CargoModel cargoModel) {
 		int maxSpot = 0;
 		for (final Cargo cargo : cargoModel.getCargoes()) {
@@ -279,10 +279,26 @@ public class AssignmentEditorHelper {
 		return maxSpot;
 	}
 
-	public static boolean compileAllowedVessels(List<AVesselSet<Vessel>> allowedVessels, final EObject target) {
+	public static boolean compileAllowedVessels(List<AVesselSet<Vessel>> allowedVessels, EObject target) {
 		// The slot intersection may mean no vessels are permitted at all!
 		boolean noVesselsAllowed = false;
 		// populate the list of allowed vessels for the target object
+		if (target instanceof Slot) {
+			Slot slot = (Slot) target;
+			Cargo cargo = slot.getCargo();
+			if (cargo != null) {
+				// Change target and fall through.
+				target = cargo;
+			} else {
+				final List<AVesselSet<Vessel>> slotVessels = slot.getAllowedVessels();
+				if (slotVessels == null || slotVessels.isEmpty()) {
+					return true;
+				}
+				allowedVessels.addAll(slotVessels);
+				return false;
+			}
+		}
+
 		if (target instanceof Cargo) {
 			final Cargo cargo = (Cargo) target;
 			final Set<AVesselSet<Vessel>> vessels = new LinkedHashSet<>();

@@ -23,13 +23,20 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.util.SetUtils;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -76,11 +83,19 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 			} else {
 				targets.add(assignableElement);
 			}
+			boolean isThirdPartyCargo = false;
 			for (final EObject target : targets) {
 				EList<AVesselSet<Vessel>> allowedVessels = null;
 				if (target instanceof Slot) {
 					final Slot slot = (Slot) target;
 					allowedVessels = slot.getAllowedVessels();
+
+					if (slot instanceof LoadSlot) {
+						isThirdPartyCargo = ((LoadSlot) slot).isDESPurchase();
+					} else if (slot instanceof DischargeSlot) {
+						isThirdPartyCargo = ((DischargeSlot) slot).isFOBSale();
+					}
+
 				} else if (target instanceof VesselEvent) {
 					final VesselEvent vesselEvent = (VesselEvent) target;
 					allowedVessels = vesselEvent.getAllowedVessels();
@@ -100,6 +115,44 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 					} else {
 						// This is ok as other impl (VesselGroup and VesselTypeGroup) only permit contained Vessels
 						expandedVessels.addAll(SetUtils.getObjects(s));
+					}
+				}
+
+				// Check that third party cargoes have a permitted third party vessel.
+				if (isThirdPartyCargo && !allowedVessels.isEmpty()) {
+					boolean foundThirdPartyVessel = false;
+
+					final Set<Vessel> scenarioVessels = new HashSet<>();
+					final MMXRootObject rootObject = extraContext.getRootObject();
+					if (rootObject instanceof LNGScenarioModel) {
+						final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+						final LNGPortfolioModel portfolioModel = lngScenarioModel.getPortfolioModel();
+						final CargoModel cargoModel = portfolioModel.getCargoModel();
+						for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
+							scenarioVessels.add(va.getVessel());
+						}
+					}
+
+					for (final Vessel vessel : SetUtils.getObjects(allowedVessels)) {
+						if (!scenarioVessels.contains(vessel)) {
+							foundThirdPartyVessel = true;
+							break;
+						}
+					}
+					if (!foundThirdPartyVessel) {
+						final String message;
+						if (target instanceof Slot) {
+							message = String.format("Slot '%s': Allowed vessels list does not permit any third party vessels to be assigned.", ((Slot) target).getName());
+						} else {
+							throw new IllegalStateException("Unexpected code branch.");
+						}
+						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+
+						failure.addEObjectAndFeature(assignableElement, CargoPackage.eINSTANCE.getAssignableElement_Assignment());
+						failure.addEObjectAndFeature(target, CargoPackage.eINSTANCE.getSlot_AllowedVessels());
+
+						failures.add(failure);
+
 					}
 				}
 
