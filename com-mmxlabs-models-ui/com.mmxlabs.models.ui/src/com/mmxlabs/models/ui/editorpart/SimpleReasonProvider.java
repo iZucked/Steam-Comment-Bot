@@ -1,18 +1,20 @@
 package com.mmxlabs.models.ui.editorpart;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.rcp.common.editors.IReasonProvider;
 
 public class SimpleReasonProvider implements IReasonProvider {
 
-	private final Throwable t;
+	private final Throwable throwable;
 
-	public SimpleReasonProvider(final Throwable t) {
-		this.t = t;
+	public SimpleReasonProvider(@NonNull final Throwable throwable) {
+		this.throwable = throwable;
 	}
 
 	@Override
 	public String getTitle() {
-		return t.getMessage();
+		return throwable.getMessage();
 	}
 
 	@Override
@@ -27,7 +29,7 @@ public class SimpleReasonProvider implements IReasonProvider {
 
 	@Override
 	public Throwable getThrowable() {
-		return t;
+		return throwable;
 	}
 
 }
