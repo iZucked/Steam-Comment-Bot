@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.resource.impl.ResourceFactoryRegistryImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.jdt.annotation.NonNull;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
@@ -146,12 +147,15 @@ public class MetamodelLoader {
 
 	@NonNull
 	private static IScenarioCipherProvider getScenarioCipherProvider() {
-		final BundleContext bundleContext = FrameworkUtil.getBundle(MetamodelLoader.class).getBundleContext();
-		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
-		if (serviceReference != null) {
-			final IScenarioCipherProvider service = bundleContext.getService(serviceReference);
-			if (service != null) {
-				return service;
+		final Bundle bundle = FrameworkUtil.getBundle(MetamodelLoader.class);
+		if (bundle != null) {
+			final BundleContext bundleContext = bundle.getBundleContext();
+			final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
+			if (serviceReference != null) {
+				final IScenarioCipherProvider service = bundleContext.getService(serviceReference);
+				if (service != null) {
+					return service;
+				}
 			}
 		}
 
