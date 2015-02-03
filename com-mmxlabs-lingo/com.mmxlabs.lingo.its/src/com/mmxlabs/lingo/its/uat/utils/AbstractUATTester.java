@@ -16,8 +16,7 @@ public abstract class AbstractUATTester {
 	protected boolean write;
 	
 	protected void createContractPropertiesFiles() throws IOException, Exception {
-		if (getWrite()) {
-			UATCase[] g = getCases();
+		if (getWrite() && GlobalUATTestsConfig.WRITE_PROPERTIES) {
 			for (UATCase testCase : getCases()) {
 				getUATFeatureExtractor().createPropertiesForCase(testCase.lingoFilePath, testCase.cargoName);
 			}

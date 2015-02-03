@@ -13,6 +13,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -29,9 +30,16 @@ import org.junit.Assert;
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.FuelAmount;
+import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.transformer.its.tests.ScenarioRunner;
 
 public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
@@ -166,6 +174,38 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		return slotTable;
 	}
 
+	protected IdMapContainer getEventsFeaturesMap(EList<Event> events) {
+		IdMapContainer eventTable = new IdMapContainer("events");
+
+		for (int i = 0; i < events.size(); i++) {
+			Event e = events.get(i);
+			if (e instanceof FuelUsage) {
+				FuelUsage fu = (FuelUsage) e;
+				for (FuelQuantity fq: fu.getFuels()) {
+					for (FuelAmount fa : fq.getAmounts()) {
+						fillFeatureMap(SchedulePackage.Literals.FUEL_AMOUNT, eventTable, fa, String.format("%s-%s-%s",i,e.name(),fq.getFuel().getName()));
+					}
+				}
+			}
+		}
+		return eventTable;
+	}
+	
+	protected void addDefaultDetails(List<IdMapContainer> allDetails, CargoAllocation cargoAllocation) {
+		if (GlobalUATTestsConfig.INCLUDE_GROUP_PROFIT_LOSS_DETAILS) {
+			GroupProfitAndLoss gPL = cargoAllocation.getGroupProfitAndLoss();
+			allDetails.add(getGPLFeaturesMap(gPL));
+		}
+		if (GlobalUATTestsConfig.INCLUDE_SLOT_DETAILS) {
+			EList<SlotAllocation> slotAllocations = cargoAllocation.getSlotAllocations();
+			allDetails.add(getLoadSlotFeaturesMap(slotAllocations));
+			allDetails.add(getDischargeSlotFeaturesMap(slotAllocations));
+		}
+		if (GlobalUATTestsConfig.INCLUDE_SLOT_DETAILS) {
+			allDetails.add(getEventsFeaturesMap(cargoAllocation.getEvents()));
+		}
+	}
+	
 	protected abstract List<IdMapContainer> getIdMapContainers(Schedule schedule, String cargoName);
 
 	public void createPropertiesForCase(String lingoFileName, String cargoName) throws Exception {
