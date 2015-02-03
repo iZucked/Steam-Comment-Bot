@@ -212,6 +212,18 @@
            id="com.mmxlabs.models.lng.cargo.ui.valueproviders.CargoValueProviderFactory_VesselAvailability"
            referenceEClass="com.mmxlabs.models.lng.cargo.VesselAvailability">
      </valueProvider>
+     <valueProvider
+           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.AllowedVesselsValueProviderFactory"
+           id="com.mmxlabs.models.lng.cargo.ui.valueproviders.AllowedVesselsValueProviderFactory_slot"
+           ownerEClass="com.mmxlabs.models.lng.cargo.Slot"
+           referenceEClass="com.mmxlabs.models.lng.types.AVesselSet">
+     </valueProvider>
+     <valueProvider
+           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.AllowedVesselsValueProviderFactory"
+           id="com.mmxlabs.models.lng.cargo.ui.valueproviders.AllowedVesselsValueProviderFactory_vesselEvent"
+           ownerEClass="com.mmxlabs.models.lng.cargo.VesselEvent"
+           referenceEClass="com.mmxlabs.models.lng.types.AVesselSet">
+     </valueProvider>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.displaycompositefactories">

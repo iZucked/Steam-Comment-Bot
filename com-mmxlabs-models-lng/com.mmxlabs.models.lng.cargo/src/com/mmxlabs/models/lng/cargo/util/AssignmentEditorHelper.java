@@ -192,7 +192,8 @@ public class AssignmentEditorHelper {
 				}
 			}
 		}
-		// Passed through first loop with out finding a vessel availability covering the assigned element. However if we did find a single availability matching the vessel, return that. If multiple, give up.
+		// Passed through first loop with out finding a vessel availability covering the assigned element. However if we did find a single availability matching the vessel, return that. If multiple,
+		// give up.
 		if (mightMatchCount == 1) {
 			for (final VesselAvailability vesselAvailability : vesselAvailabilities) {
 				if (vesselAvailability.getVessel() == vessel) {
@@ -260,57 +261,28 @@ public class AssignmentEditorHelper {
 		return maxSpot;
 	}
 
-	public static boolean compileAllowedVessels(List<AVesselSet<Vessel>> allowedVessels, final EObject target) {
+	public static boolean compileAllowedVessels(List<AVesselSet<Vessel>> allowedVessels, EObject target) {
 		// The slot intersection may mean no vessels are permitted at all!
 		boolean noVesselsAllowed = false;
 		// populate the list of allowed vessels for the target object
 
 		if (target instanceof Slot) {
-			final Slot s = (Slot) target;
-			final Set<AVesselSet<Vessel>> vessels = new LinkedHashSet<>();
-			boolean first = true;
-			final List<AVesselSet<Vessel>> slotVessels = s.getAllowedVessels();
-			if (slotVessels == null || slotVessels.isEmpty()) {
-				return noVesselsAllowed;
-			}
-			if (first) {
-				vessels.addAll(slotVessels);
-				first = false;
+			final Slot slot = (Slot) target;
+			final Cargo cargo = slot.getCargo();
+			if (cargo != null) {
+				// Change target and fall through.
+				target = cargo;
 			} else {
-				// TODO: hmm, should we check classes vs vessels here?
-				final Set<AVesselSet<Vessel>> matchedByClass = new LinkedHashSet<>();
-				//
-				for (final AVesselSet<Vessel> v1 : vessels) {
-					if (v1 instanceof Vessel) {
-						for (final AVesselSet<Vessel> v2 : slotVessels) {
-							if (SetUtils.getObjects(v2).contains(v1)) {
-								matchedByClass.add(v1);
-							}
-						}
-					}
+				final List<AVesselSet<Vessel>> slotVessels = slot.getAllowedVessels();
+				if (slotVessels == null || slotVessels.isEmpty()) {
+					return true;
 				}
-				// Reverse map
-				for (final AVesselSet<Vessel> v1 : slotVessels) {
-					if (v1 instanceof Vessel) {
-						for (final AVesselSet<Vessel> v2 : vessels) {
-							if (SetUtils.getObjects(v2).contains(v1)) {
-								matchedByClass.add(v1);
-							}
-						}
-					}
-				}
+				allowedVessels.addAll(slotVessels);
+				return false;
+			}
+		}
 
-				// Exact matches
-				vessels.retainAll(slotVessels);
-				// Add in VesselClass/Group hits
-				vessels.addAll(matchedByClass);
-			}
-			allowedVessels.addAll(vessels);
-			if (vessels.isEmpty() && first == false) {
-				// Uh oh - set intersection resulted in nothing!
-				noVesselsAllowed = true;
-			}
-		} else if (target instanceof Cargo) {
+		if (target instanceof Cargo) {
 			final Cargo cargo = (Cargo) target;
 			final Set<AVesselSet<Vessel>> vessels = new LinkedHashSet<>();
 			boolean first = true;

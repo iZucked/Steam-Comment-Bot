@@ -33,7 +33,7 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
 
 public class NominatedVesselValueProviderFactory implements IReferenceValueProviderFactory {
 
-	private IReferenceValueProviderFactory delegate;
+	private final IReferenceValueProviderFactory delegate;
 
 	public NominatedVesselValueProviderFactory() {
 		this.delegate = Activator.getDefault().getReferenceValueProviderFactoryRegistry().getValueProviderFactory(EcorePackage.eINSTANCE.getEClass(), FleetPackage.eINSTANCE.getVessel());
@@ -50,12 +50,12 @@ public class NominatedVesselValueProviderFactory implements IReferenceValueProvi
 
 		return new IReferenceValueProvider() {
 			@Override
-			public List<Pair<String, EObject>> getAllowedValues(EObject target, final EStructuralFeature field) {
+			public List<Pair<String, EObject>> getAllowedValues(final EObject target, final EStructuralFeature field) {
 				// get a list of globally permissible values
 				final List<Pair<String, EObject>> baseResult = delegateFactory.getAllowedValues(target, field);
 
 				if (target instanceof Slot) {
-					Slot slot = (Slot) target;
+					final Slot slot = (Slot) target;
 					boolean noVesselsAllowed = false;
 					final List<AVesselSet<Vessel>> allowedVessels = new ArrayList<>();
 					// we only want to filter vessels if we are assigning them (i.e. don't do this if we are selecting vessels to add to the restricted list)
@@ -72,7 +72,7 @@ public class NominatedVesselValueProviderFactory implements IReferenceValueProvi
 							if (s instanceof Vessel) {
 								expandedVessels.add(s);
 							} else if (s instanceof VesselClass) {
-								expandedVessels.add(s);
+								expandedVessels.addAll(SetUtils.getObjects(s));
 							} else {
 								expandedVessels.addAll(SetUtils.getObjects(s));
 							}
@@ -84,7 +84,7 @@ public class NominatedVesselValueProviderFactory implements IReferenceValueProvi
 					if (none != null) {
 						result.add(0, none);
 					}
-					Vessel currentValue = slot.getNominatedVessel();
+					final Vessel currentValue = slot.getNominatedVessel();
 
 					// filter the globally permissible values by the settings for this cargo
 					for (final Pair<String, EObject> pair : baseResult) {
@@ -135,7 +135,7 @@ public class NominatedVesselValueProviderFactory implements IReferenceValueProvi
 			}
 
 			@Override
-			public Iterable<Pair<Notifier, List<Object>>> getNotifiers(EObject referer, EReference feature, EObject referenceValue) {
+			public Iterable<Pair<Notifier, List<Object>>> getNotifiers(final EObject referer, final EReference feature, final EObject referenceValue) {
 				// TODO Auto-generated method stub
 				return null;
 			}
