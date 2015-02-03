@@ -12,6 +12,7 @@ import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.internal.Activator;
 
 /**
@@ -38,7 +39,15 @@ public abstract class AbstractModelMultiConstraint extends AbstractModelConstrai
 
 		final List<IStatus> statuses = new LinkedList<IStatus>();
 
-		final String pluginId = validate(ctx, Activator.getDefault().getExtraValidationContext(), statuses);
+		final Activator activator = Activator.getDefault();
+		final IExtraValidationContext extraValidationContext;
+		if (activator == null) {
+			// For unit tests outside of OSGi
+			extraValidationContext = new DefaultExtraValidationContext((MMXRootObject) null, false);
+		} else {
+			extraValidationContext = activator.getExtraValidationContext();
+		}
+		final String pluginId = validate(ctx, extraValidationContext, statuses);
 
 		if (statuses.isEmpty()) {
 			return ctx.createSuccessStatus();
@@ -59,5 +68,4 @@ public abstract class AbstractModelMultiConstraint extends AbstractModelConstrai
 			return multi;
 		}
 	}
-
 }
