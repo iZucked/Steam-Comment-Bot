@@ -105,9 +105,9 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		} else if (modelObject.eGet(feature) instanceof Boolean) {
 			boolean boolValue = (Boolean) modelObject.eGet(feature);
 			if (boolValue) {
-				value = 0;
-			} else {
 				value = 1;
+			} else {
+				value = 0;
 			}
 		} else if (modelObject.eGet(feature) instanceof Long) {
 			value = (double) ((Long) modelObject.eGet(feature));
