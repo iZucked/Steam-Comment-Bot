@@ -53,6 +53,10 @@ public class EObjectTableViewerSortingSupport {
 	 * @param tColumn
 	 */
 	public void addSortableColumn(final ColumnViewer viewer, final GridViewerColumn column, final GridColumn tColumn) {
+		if (columnSortOrder.contains(tColumn)) {
+			return;
+		}
+		
 		columnSortOrder.add(tColumn);
 
 		column.getColumn().addSelectionListener(new SelectionListener() {
