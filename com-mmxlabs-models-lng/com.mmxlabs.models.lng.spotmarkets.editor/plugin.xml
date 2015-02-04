@@ -120,7 +120,7 @@
         <factory
           ID="com.mmxlabs.models.lng.spotmarkets.editor.CharterCostModelFactory"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Charter Price"
+          label="Spot Charter Market"
           targetEClass="com.mmxlabs.models.lng.spotmarkets.CharterCostModel">
     </factory>
  </extension>
