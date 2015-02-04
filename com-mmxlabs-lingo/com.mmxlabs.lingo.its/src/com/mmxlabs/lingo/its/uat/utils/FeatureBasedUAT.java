@@ -181,9 +181,11 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 			Event e = events.get(i);
 			if (e instanceof FuelUsage) {
 				FuelUsage fu = (FuelUsage) e;
-				for (FuelQuantity fq: fu.getFuels()) {
-					for (FuelAmount fa : fq.getAmounts()) {
-						fillFeatureMap(SchedulePackage.Literals.FUEL_AMOUNT, eventTable, fa, String.format("%s-%s-%s",i,e.name(),fq.getFuel().getName()));
+				for (int fqIndex = 0; fqIndex < fu.getFuels().size(); fqIndex++) {
+					FuelQuantity fq = fu.getFuels().get(fqIndex);
+					for (int faIndex = 0; faIndex < fq.getAmounts().size(); faIndex++) {
+						FuelAmount fa = fq.getAmounts().get(faIndex);
+						fillFeatureMap(SchedulePackage.Literals.FUEL_AMOUNT, eventTable, fa, String.format("%s(%s)-fq(%s)-%s-fa(%s)-%s",i,e.eClass().getName(),fqIndex, fq.getFuel().getName(), faIndex, fa.getUnit().getName()));
 					}
 				}
 			}
@@ -307,6 +309,14 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 	}
 
 	private void comparePropertiesToLingo(Properties prop, List<IdMap> table, String prefix) {
+		for (IdMap map : table) {
+			System.out.println(map.getContainer());
+			System.out.println(map.getFeature());
+			System.out.println(map.getId());
+
+		}
+
+
 		for (IdMap map : table) {
 			String key = createPropertyKey(map, prefix);
 			Assert.assertTrue(prop.containsKey(key));
