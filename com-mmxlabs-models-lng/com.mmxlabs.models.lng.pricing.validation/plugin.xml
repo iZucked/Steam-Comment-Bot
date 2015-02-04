@@ -110,6 +110,22 @@
                      class="CommodityIndex">
                </target>
             </constraint>
+             <constraint
+                   class="com.mmxlabs.models.lng.pricing.validation.DerivedIndexValidExpressionConstraint"
+                   id="com.mmxlabs.models.lng.pricing.validation.DerivedIndexValidExpressionConstraint"
+                   isEnabledByDefault="true"
+                   lang="java"
+                   mode="Batch"
+                   name="com.mmxlabs.models.lng.pricing.validation.DerivedIndexValidExpressionConstraint"
+                   severity="ERROR"
+                   statusCode="1">
+                <message>
+                   {0}
+                </message>
+                <target
+                      class="NamedIndexContainer">
+                </target>
+             </constraint>
          </constraints>
       </constraintProvider>
    </extension>
