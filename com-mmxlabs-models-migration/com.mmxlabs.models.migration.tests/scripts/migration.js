@@ -1,8 +1,7 @@
 /*
- * Copyright (C) Minimax Labs Ltd., 2010 - 2014
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
-
 		{
 					println(oldFeatures);
 					println(v2Object);
