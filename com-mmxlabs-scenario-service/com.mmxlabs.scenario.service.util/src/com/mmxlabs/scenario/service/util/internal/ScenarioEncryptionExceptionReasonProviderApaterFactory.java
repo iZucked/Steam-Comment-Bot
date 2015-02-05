@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * All rights reserved.
+ */
 package com.mmxlabs.scenario.service.util.internal;
 
 import org.eclipse.core.runtime.IAdapterFactory;

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2014
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
 package com.mmxlabs.scenario.service.dirscan;
@@ -532,7 +532,9 @@ public class DirScanScenarioService extends AbstractScenarioService {
 			if (original.getInstance() == null) {
 				// Not loaded, copy raw data
 				final ExtensibleURIConverterImpl uc = new ExtensibleURIConverterImpl();
-				final URI sourceURI = originalService.resolveURI(original.getRootObjectURI());
+				final String rootObjectURI = original.getRootObjectURI();
+				assert rootObjectURI != null;
+				final URI sourceURI = originalService.resolveURI(rootObjectURI);
 				copyURIData(uc, sourceURI, destURI);
 			} else {
 				// Already loaded? Just use the same instance.
@@ -679,7 +681,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		instance.setReadonly(true);
 
 		if (instance.getInstance() == null) {
-			
+
 			
 			
 			try {
