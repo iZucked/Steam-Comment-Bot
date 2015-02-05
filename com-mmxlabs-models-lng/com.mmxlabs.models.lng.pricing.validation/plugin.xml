@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2014
+    Copyright (C) Minimax Labs Ltd., 2010 - 2015
     All rights reserved.
 
 -->
@@ -110,6 +110,22 @@
                      class="CommodityIndex">
                </target>
             </constraint>
+             <constraint
+                   class="com.mmxlabs.models.lng.pricing.validation.DerivedIndexValidExpressionConstraint"
+                   id="com.mmxlabs.models.lng.pricing.validation.DerivedIndexValidExpressionConstraint"
+                   isEnabledByDefault="true"
+                   lang="java"
+                   mode="Batch"
+                   name="com.mmxlabs.models.lng.pricing.validation.DerivedIndexValidExpressionConstraint"
+                   severity="ERROR"
+                   statusCode="1">
+                <message>
+                   {0}
+                </message>
+                <target
+                      class="NamedIndexContainer">
+                </target>
+             </constraint>
          </constraints>
       </constraintProvider>
    </extension>

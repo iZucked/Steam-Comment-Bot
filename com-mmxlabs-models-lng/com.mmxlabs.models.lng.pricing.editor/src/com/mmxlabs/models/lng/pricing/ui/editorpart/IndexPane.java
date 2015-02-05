@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2014
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.ui.editorpart;
@@ -165,7 +165,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 		ColumnViewerToolTipSupport.enableFor((ColumnViewer) scenarioViewer, ToolTip.NO_RECREATE);
 
 		scenarioViewer.setToolTipProvider(new DefaultToolTipProvider() {
-						
+
 			@Override
 			public String getToolTipText(Object element) {
 				if (element instanceof NamedIndexContainer<?>) {
@@ -177,7 +177,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 				return null;
 			}
 		});
-		
+
 		final GridViewerColumn nameColumn = addTypicalColumn("Name", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), getEditingDomain()) {
 			@Override
 			public boolean canEdit(final Object object) {
@@ -546,9 +546,9 @@ public class IndexPane extends ScenarioTableViewerPane {
 					refresh();
 				}
 			});
-			
+
 			ColumnViewerToolTipSupport.enableFor((ColumnViewer) viewer, ToolTip.NO_RECREATE);
-			
+
 			col.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), null, null) {
 
 				@Override
@@ -679,9 +679,13 @@ public class IndexPane extends ScenarioTableViewerPane {
 			final SeriesParser seriesParser = seriesParsers.get(dt);
 			if (seriesParser != null) {
 				if (name != null && !name.isEmpty()) {
-					final ISeries series = seriesParser.getSeries(name);
-					if (series != null) {
-						return series.evaluate(PriceIndexUtils.convertTime(dateZero, colDate));
+					try {
+						final ISeries series = seriesParser.getSeries(name);
+						if (series != null) {
+							return series.evaluate(PriceIndexUtils.convertTime(dateZero, colDate));
+						}
+					} catch (Exception e) {
+						// Ignore, anything from seried parser should be picked up via validation
 					}
 				}
 			}
