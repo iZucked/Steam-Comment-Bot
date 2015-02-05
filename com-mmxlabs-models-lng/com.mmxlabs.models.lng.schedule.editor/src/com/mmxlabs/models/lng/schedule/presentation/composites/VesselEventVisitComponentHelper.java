@@ -45,6 +45,7 @@ public class VesselEventVisitComponentHelper extends BaseComponentHelper {
 		superClassesHelpers.addAll(registry.getComponentHelpers(SchedulePackage.Literals.EVENT));
 		superClassesHelpers.addAll(registry.getComponentHelpers(SchedulePackage.Literals.PORT_VISIT));
 		superClassesHelpers.addAll(registry.getComponentHelpers(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER));
+		superClassesHelpers.addAll(registry.getComponentHelpers(SchedulePackage.Literals.EVENT_GROUPING));
 	}
 	
 	/**

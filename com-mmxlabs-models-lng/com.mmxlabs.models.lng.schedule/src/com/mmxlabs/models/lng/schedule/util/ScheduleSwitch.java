@@ -126,6 +126,7 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				CargoAllocation cargoAllocation = (CargoAllocation)theEObject;
 				T result = caseCargoAllocation(cargoAllocation);
 				if (result == null) result = caseProfitAndLossContainer(cargoAllocation);
+				if (result == null) result = caseEventGrouping(cargoAllocation);
 				if (result == null) result = caseMMXObject(cargoAllocation);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -174,6 +175,7 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				if (result == null) result = caseFuelUsage(startEvent);
 				if (result == null) result = casePortVisit(startEvent);
 				if (result == null) result = caseProfitAndLossContainer(startEvent);
+				if (result == null) result = caseEventGrouping(startEvent);
 				if (result == null) result = caseEvent(startEvent);
 				if (result == null) result = caseITimezoneProvider(startEvent);
 				if (result == null) result = caseCapacityViolationsHolder(startEvent);
@@ -241,6 +243,7 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				T result = caseVesselEventVisit(vesselEventVisit);
 				if (result == null) result = casePortVisit(vesselEventVisit);
 				if (result == null) result = caseProfitAndLossContainer(vesselEventVisit);
+				if (result == null) result = caseEventGrouping(vesselEventVisit);
 				if (result == null) result = caseEvent(vesselEventVisit);
 				if (result == null) result = caseITimezoneProvider(vesselEventVisit);
 				if (result == null) result = caseCapacityViolationsHolder(vesselEventVisit);
@@ -342,6 +345,12 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				BasicSlotPNLDetails basicSlotPNLDetails = (BasicSlotPNLDetails)theEObject;
 				T result = caseBasicSlotPNLDetails(basicSlotPNLDetails);
 				if (result == null) result = caseGeneralPNLDetails(basicSlotPNLDetails);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.EVENT_GROUPING: {
+				EventGrouping eventGrouping = (EventGrouping)theEObject;
+				T result = caseEventGrouping(eventGrouping);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -796,6 +805,21 @@ public class ScheduleSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseBasicSlotPNLDetails(BasicSlotPNLDetails object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Event Grouping</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Event Grouping</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseEventGrouping(EventGrouping object) {
 		return null;
 	}
 

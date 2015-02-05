@@ -276,6 +276,15 @@ public interface ScheduleFactory extends EFactory {
 	BasicSlotPNLDetails createBasicSlotPNLDetails();
 
 	/**
+	 * Returns a new object of class '<em>Event Grouping</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Event Grouping</em>'.
+	 * @generated
+	 */
+	EventGrouping createEventGrouping();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

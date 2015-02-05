@@ -220,6 +220,10 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createBasicSlotPNLDetailsAdapter();
 			}
 			@Override
+			public Adapter caseEventGrouping(EventGrouping object) {
+				return createEventGroupingAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -672,6 +676,20 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createBasicSlotPNLDetailsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.EventGrouping <em>Event Grouping</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.EventGrouping
+	 * @generated
+	 */
+	public Adapter createEventGroupingAdapter() {
 		return null;
 	}
 

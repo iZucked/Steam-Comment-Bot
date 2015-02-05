@@ -520,13 +520,22 @@ public interface SchedulePackage extends EPackage {
 	int CARGO_ALLOCATION__GENERAL_PNL_DETAILS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Events</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__EVENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
 	 * The feature id for the '<em><b>Slot Allocations</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__SLOT_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+	int CARGO_ALLOCATION__SLOT_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Input Cargo</b></em>' reference.
@@ -535,16 +544,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__INPUT_CARGO = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Events</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION__EVENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int CARGO_ALLOCATION__INPUT_CARGO = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Sequence</b></em>' reference.
@@ -1608,13 +1608,22 @@ public interface SchedulePackage extends EPackage {
 	int START_EVENT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Events</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START_EVENT__EVENTS = EVENT_FEATURE_COUNT + 5;
+
+	/**
 	 * The feature id for the '<em><b>Slot Allocation</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 5;
+	int START_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of structural features of the '<em>Start Event</em>' class.
@@ -1623,7 +1632,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 6;
+	int START_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -3021,13 +3030,22 @@ public interface SchedulePackage extends EPackage {
 	int VESSEL_EVENT_VISIT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Events</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT__EVENTS = EVENT_FEATURE_COUNT + 4;
+
+	/**
 	 * The feature id for the '<em><b>Vessel Event</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__VESSEL_EVENT = EVENT_FEATURE_COUNT + 4;
+	int VESSEL_EVENT_VISIT__VESSEL_EVENT = EVENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Event Visit</em>' class.
@@ -3036,7 +3054,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 5;
+	int VESSEL_EVENT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -4080,6 +4098,43 @@ public interface SchedulePackage extends EPackage {
 	int BASIC_SLOT_PNL_DETAILS_OPERATION_COUNT = GENERAL_PNL_DETAILS_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.EventGroupingImpl <em>Event Grouping</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.EventGroupingImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getEventGrouping()
+	 * @generated
+	 */
+	int EVENT_GROUPING = 30;
+
+	/**
+	 * The feature id for the '<em><b>Events</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EVENT_GROUPING__EVENTS = 0;
+
+	/**
+	 * The number of structural features of the '<em>Event Grouping</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EVENT_GROUPING_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>Event Grouping</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EVENT_GROUPING_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4087,7 +4142,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelUnit()
 	 * @generated
 	 */
-	int FUEL_UNIT = 32;
+	int FUEL_UNIT = 33;
 
 
 	/**
@@ -4098,7 +4153,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuel()
 	 * @generated
 	 */
-	int FUEL = 31;
+	int FUEL = 32;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SequenceType <em>Sequence Type</em>}' enum.
@@ -4108,7 +4163,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSequenceType()
 	 * @generated
 	 */
-	int SEQUENCE_TYPE = 30;
+	int SEQUENCE_TYPE = 31;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.CapacityViolationType <em>Capacity Violation Type</em>}' enum.
@@ -4118,7 +4173,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityViolationType()
 	 * @generated
 	 */
-	int CAPACITY_VIOLATION_TYPE = 33;
+	int CAPACITY_VIOLATION_TYPE = 34;
 
 	/**
 	 * The meta object id for the '<em>Calendar</em>' data type.
@@ -4128,7 +4183,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCalendar()
 	 * @generated
 	 */
-	int CALENDAR = 34;
+	int CALENDAR = 35;
 
 
 	/**
@@ -4139,7 +4194,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 35;
+	int ITERABLE = 36;
 
 
 	/**
@@ -4150,7 +4205,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getObject()
 	 * @generated
 	 */
-	int OBJECT = 36;
+	int OBJECT = 37;
 
 
 	/**
@@ -4846,17 +4901,6 @@ public interface SchedulePackage extends EPackage {
 	EReference getCargoAllocation_InputCargo();
 
 	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getEvents <em>Events</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Events</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getEvents()
-	 * @see #getCargoAllocation()
-	 * @generated
-	 */
-	EReference getCargoAllocation_Events();
-
-	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getSequence <em>Sequence</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5540,6 +5584,27 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getBasicSlotPNLDetails_HedgingValue();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.EventGrouping <em>Event Grouping</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Event Grouping</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.EventGrouping
+	 * @generated
+	 */
+	EClass getEventGrouping();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.schedule.EventGrouping#getEvents <em>Events</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Events</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.EventGrouping#getEvents()
+	 * @see #getEventGrouping()
+	 * @generated
+	 */
+	EReference getEventGrouping_Events();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6181,14 +6246,6 @@ public interface SchedulePackage extends EPackage {
 		EReference CARGO_ALLOCATION__INPUT_CARGO = eINSTANCE.getCargoAllocation_InputCargo();
 
 		/**
-		 * The meta object literal for the '<em><b>Events</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO_ALLOCATION__EVENTS = eINSTANCE.getCargoAllocation_Events();
-
-		/**
 		 * The meta object literal for the '<em><b>Sequence</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6733,6 +6790,24 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE = eINSTANCE.getBasicSlotPNLDetails_HedgingValue();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.EventGroupingImpl <em>Event Grouping</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.EventGroupingImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getEventGrouping()
+		 * @generated
+		 */
+		EClass EVENT_GROUPING = eINSTANCE.getEventGrouping();
+
+		/**
+		 * The meta object literal for the '<em><b>Events</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference EVENT_GROUPING__EVENTS = eINSTANCE.getEventGrouping_Events();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.

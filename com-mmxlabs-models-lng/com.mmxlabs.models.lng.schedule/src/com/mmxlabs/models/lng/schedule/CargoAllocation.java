@@ -18,7 +18,6 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getSlotAllocations <em>Slot Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getInputCargo <em>Input Cargo</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getEvents <em>Events</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getSequence <em>Sequence</em>}</li>
  * </ul>
  * </p>
@@ -27,7 +26,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  * @model
  * @generated
  */
-public interface CargoAllocation extends MMXObject, ProfitAndLossContainer {
+public interface CargoAllocation extends MMXObject, ProfitAndLossContainer, EventGrouping {
 	/**
 	 * Returns the value of the '<em><b>Slot Allocations</b></em>' reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.schedule.SlotAllocation}.
@@ -98,22 +97,6 @@ public interface CargoAllocation extends MMXObject, ProfitAndLossContainer {
 	 * @generated
 	 */
 	boolean isSetInputCargo();
-
-	/**
-	 * Returns the value of the '<em><b>Events</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.schedule.Event}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Events</em>' reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Events</em>' reference list.
-	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getCargoAllocation_Events()
-	 * @model required="true"
-	 * @generated
-	 */
-	EList<Event> getEvents();
 
 	/**
 	 * Returns the value of the '<em><b>Sequence</b></em>' reference.

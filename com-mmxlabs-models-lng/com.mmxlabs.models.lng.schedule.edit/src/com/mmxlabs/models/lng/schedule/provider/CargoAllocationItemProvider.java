@@ -62,9 +62,9 @@ public class CargoAllocationItemProvider
 			super.getPropertyDescriptors(object);
 
 			addGroupProfitAndLossPropertyDescriptor(object);
+			addEventsPropertyDescriptor(object);
 			addSlotAllocationsPropertyDescriptor(object);
 			addInputCargoPropertyDescriptor(object);
-			addEventsPropertyDescriptor(object);
 			addSequencePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -147,9 +147,9 @@ public class CargoAllocationItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_CargoAllocation_events_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CargoAllocation_events_feature", "_UI_CargoAllocation_type"),
-				 SchedulePackage.Literals.CARGO_ALLOCATION__EVENTS,
+				 getString("_UI_EventGrouping_events_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_EventGrouping_events_feature", "_UI_EventGrouping_type"),
+				 SchedulePackage.Literals.EVENT_GROUPING__EVENTS,
 				 true,
 				 false,
 				 true,
