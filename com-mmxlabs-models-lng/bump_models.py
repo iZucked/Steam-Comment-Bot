@@ -26,12 +26,10 @@ files = [("port", "port"),
 		 ("types","lngtypes"),
 		 ("scenario.model","scenario"),
 		 ]
-for f in files:
-	(d, e) = f
-	arr = [x for x in xrange(from_version, latest_version+1)]
-	arr.sort(reverse=True)
-	for version in arr:
+for (d,e) in files:
+	for version in range(latest_version, from_version -1, -1):
 		source = "{0}{1}/model/{2}-v{3}.ecore".format(root,d,e,version)
 		dest = "{0}{1}/model/{2}-v{3}.ecore".format(root,d,e,version+1)
+		#print "{0} -> {1}".format(source, dest)
 		shutil.copyfile(source,dest)
 
