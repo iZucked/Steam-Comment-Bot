@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2014
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.portrotation;
@@ -183,7 +183,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 					}
 					return null;
 				}
-			});// .setTooltip("In m³");
+			});// .setTooltip("In m??");
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.transfervolume_mmbtu":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Transfer Energy", null, ColumnType.NORMAL, new IntegerFormatter() {
@@ -211,7 +211,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 					}
 					return null;
 				}
-			});// .setTooltip("In m³");
+			});// .setTooltip("In m??");
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.heelend":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Heel End", null, ColumnType.NORMAL, new IntegerFormatter() {
@@ -223,7 +223,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 					}
 					return null;
 				}
-			});// .setTooltip("In m³");
+			});// .setTooltip("In m??");
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.fuels":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, new EmfBlockColumnFactory() {
