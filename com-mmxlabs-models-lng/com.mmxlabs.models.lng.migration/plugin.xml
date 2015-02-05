@@ -191,5 +191,12 @@
              id="com.mmxlabs.models.lng.migration.units.MigrateToV25"
              to="25">
        </MigrationUnit>
+       <MigrationUnit
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV26"
+             context="com.mmxlabs.lingo"
+             from="54"
+             id="com.mmxlabs.models.lng.migration.units.MigrateToV26"
+             to="26">
+       </MigrationUnit>       
    </extension>
 </plugin>

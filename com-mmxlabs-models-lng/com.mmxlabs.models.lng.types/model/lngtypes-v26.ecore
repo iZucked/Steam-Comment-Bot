@@ -69,4 +69,6 @@
       </eAnnotations>
     </eLiterals>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VesselAssignmentType" abstract="true"
+      interface="true"/>
 </ecore:EPackage>

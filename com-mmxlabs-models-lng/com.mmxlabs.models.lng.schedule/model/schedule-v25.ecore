@@ -87,14 +87,17 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselAvailability" lowerBound="1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselAvailability"
         unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="charterInMarket" lowerBound="1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//CharterInMarket"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselClass" lowerBound="1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//VesselClass"
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fitnesses" upperBound="-1"
         eType="#//Fitness" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="spotIndex" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="sequenceType" eType="#//SequenceType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="charterInMarket" lowerBound="1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//CharterInMarket"
+        unsettable="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Event" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ITimezoneProvider">
     <eOperations name="getDuration" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
