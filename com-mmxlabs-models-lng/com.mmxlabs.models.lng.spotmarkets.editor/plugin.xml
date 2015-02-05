@@ -121,13 +121,13 @@
     <factory
           ID="com.mmxlabs.models.lng.spotmarkets.editor.CharterInMarketFactory"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Charter Price"
+          label="Spot Charter In Market"
           targetEClass="com.mmxlabs.models.lng.spotmarkets.CharterInMarket">
     </factory>
 	<factory
           ID="com.mmxlabs.models.lng.spotmarkets.editor.CharterOutMarketFactory"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Charter Price"
+          label="Spot Charter Out Market"
           targetEClass="com.mmxlabs.models.lng.spotmarkets.CharterOutMarket">
     </factory>    
  </extension>
