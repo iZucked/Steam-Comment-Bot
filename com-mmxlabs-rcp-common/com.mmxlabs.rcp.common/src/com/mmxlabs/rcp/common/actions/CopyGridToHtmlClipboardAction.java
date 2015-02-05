@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2014
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
 package com.mmxlabs.rcp.common.actions;
@@ -39,6 +39,7 @@ public class CopyGridToHtmlClipboardAction extends Action {
 	private boolean rowHeadersIncluded = false;
 	// Set border around everything?
 	private final boolean includeBorder = false;
+	private boolean showBackgroundColours = false;
 
 	public CopyGridToHtmlClipboardAction(final Grid table, final boolean includeRowHeaders) {
 
@@ -103,11 +104,13 @@ public class CopyGridToHtmlClipboardAction extends Action {
 		// Create temporary writers to create both header rows concurrently.
 		final StringWriter topRow = new StringWriter();
 		final StringWriter bottomRow = new StringWriter();
+		final StringWriter singleRow = new StringWriter();
 
 		// top left blank cell
 		if (rowHeadersIncluded) {
 			addCell(topRow, "th", "", new String[] { "bgcolor='grey'" });
 			addCell(bottomRow, "th", "", new String[] { "bgcolor='grey'" });
+			addCell(singleRow, "th", "", new String[] { "bgcolor='grey'" });
 		}
 		// Set of column groups already seen. This assumes all columns within a group are next to each other
 		final Set<GridColumnGroup> seenGroups = new HashSet<>();
@@ -116,18 +119,26 @@ public class CopyGridToHtmlClipboardAction extends Action {
 			final GridColumn column = table.getColumn(i);
 			// Get the column group
 			final GridColumnGroup columnGroup = column.getColumnGroup();
+			final String colourString;
+			if (showBackgroundColours) {
+				colourString = "bgcolor='grey'";
+			} else {
+				colourString = "";
+			}
+
 			if (columnGroup == null) {
 				// No group? Then cell bottom row cell should fill both header rows
 				addCell(topRow, "th", column.getText(),
-						combineAttributes(new String[] { "bgcolor='grey'", String.format("rowSpan='%d'", table.getColumnCount() > 0 ? 2 : 1) }, getAdditionalHeaderAttributes(column)));
+						combineAttributes(new String[] { colourString, String.format("rowSpan='%d'", table.getColumnCount() > 0 ? 2 : 1) }, getAdditionalHeaderAttributes(column)));
+				addCell(singleRow, "th", column.getText(), combineAttributes(new String[] { colourString }, getAdditionalHeaderAttributes(column)));
 			} else {
 				// Part of column group. Only add group if we have not previously seen it.
 				if (seenGroups.add(columnGroup)) {
 					addCell(topRow, "th", columnGroup.getText(),
-							combineAttributes(new String[] { "bgcolor='grey'", String.format("colSpan=%d", columnGroup.getColumns().length) }, getAdditionalHeaderAttributes(column)));
+							combineAttributes(new String[] { colourString, String.format("colSpan=%d", columnGroup.getColumns().length) }, getAdditionalHeaderAttributes(column)));
 				}
 				// Add in the bottom row info.
-				addCell(bottomRow, "th", column.getText(), combineAttributes(new String[] { "bgcolor='grey'" }, getAdditionalHeaderAttributes(column)));
+				addCell(bottomRow, "th", column.getText(), combineAttributes(new String[] { colourString }, getAdditionalHeaderAttributes(column)));
 			}
 
 		}
@@ -136,10 +147,15 @@ public class CopyGridToHtmlClipboardAction extends Action {
 			sw.write("<tr>");
 			sw.write(topRow.toString());
 			sw.write("</tr>\n");
+			sw.write("<tr>");
+			sw.write(bottomRow.toString());
+			sw.write("</tr>\n</thead>\n");
+		} else {
+			sw.write("<tr>");
+			sw.write(singleRow.toString());
+			sw.write("</tr>\n</thead>\n");
+
 		}
-		sw.write("<tr>");
-		sw.write(bottomRow.toString());
-		sw.write("</tr>\n</thead>\n");
 	}
 
 	private void processTableRow(final StringWriter sw, final int numColumns, final GridItem item, final int[] rowOffsets) throws IOException {
@@ -155,10 +171,14 @@ public class CopyGridToHtmlClipboardAction extends Action {
 			if (rowOffsets[i] == 0) {
 				final Color c = item.getBackground(i);
 				final String colourString;
-				if (c == null) {
-					colourString = "bgcolor='white'";
+				if (showBackgroundColours) {
+					if (c == null) {
+						colourString = "bgcolor='white'";
+					} else {
+						colourString = String.format("bgcolor='#%02X%02X%02X'", c.getRed(), c.getGreen(), c.getBlue());
+					}
 				} else {
-					colourString = String.format("bgcolor='#%02X%02X%02X'", c.getRed(), c.getGreen(), c.getBlue());
+					colourString = "";
 				}
 				addCell(sw,
 						item.getText(i),
@@ -240,6 +260,14 @@ public class CopyGridToHtmlClipboardAction extends Action {
 
 	public void setRowHeadersIncluded(final boolean b) {
 		this.rowHeadersIncluded = true;
+	}
+
+	public boolean isShowBackgroundColours() {
+		return showBackgroundColours;
+	}
+
+	public void setShowBackgroundColours(boolean showBackgroundColours) {
+		this.showBackgroundColours = showBackgroundColours;
 	}
 
 }
