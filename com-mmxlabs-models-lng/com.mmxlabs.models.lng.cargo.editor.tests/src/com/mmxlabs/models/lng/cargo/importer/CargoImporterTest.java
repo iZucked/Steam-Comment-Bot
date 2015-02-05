@@ -16,20 +16,38 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import junit.framework.Assert;
 
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EcorePackage;
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.ui.dates.DateAttributeImporter;
 import com.mmxlabs.models.util.importer.CSVReader;
+import com.mmxlabs.models.util.importer.IAttributeImporter;
+import com.mmxlabs.models.util.importer.IClassImporter;
+import com.mmxlabs.models.util.importer.IExtraModelImporter;
 import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.IPostModelImporter;
+import com.mmxlabs.models.util.importer.ISubmodelImporter;
+import com.mmxlabs.models.util.importer.impl.DefaultAttributeImporter;
+import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
+import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 
 public class CargoImporterTest {
 
@@ -55,9 +73,9 @@ public class CargoImporterTest {
 			row.put("buy." + CargoPackage.eINSTANCE.getSlot_WindowSize().getName().toLowerCase(), "7");
 			row.put("buy.date", "2013-1-1");
 			row.put("buy.time", "9");
-			row.put("buy.cargoCV" , "23.702");
-		}	
-		final CargoImporter cargoImporter = new CargoImporter();
+			row.put("buy.cargoCV", "23.702");
+		}
+		final CargoImporter cargoImporter = createCargoImporter();
 		final IImportContext context = Mockito.mock(IImportContext.class);
 		// This is needed otherwise there is no decimal separator!
 		Mockito.when(context.getDecimalSeparator()).thenReturn('.');
@@ -123,7 +141,7 @@ public class CargoImporterTest {
 			row.put("sell.time", "9");
 			row.put("sell." + CargoPackage.eINSTANCE.getDischargeSlot_PurchaseDeliveryType().getName().toLowerCase(), "ANY");
 		}
-		final CargoImporter cargoImporter = new CargoImporter();
+		final CargoImporter cargoImporter = createCargoImporter();
 		final IImportContext context = Mockito.mock(IImportContext.class);
 		final Collection<EObject> importedObjects = cargoImporter.importObject(null, CargoPackage.eINSTANCE.getCargo(), row, context).getCreatedObjects();
 
@@ -196,7 +214,7 @@ public class CargoImporterTest {
 			writeCSV(recordData, tmp);
 			final CSVReader reader = new CSVReader(tmp);
 			try {
-				final CargoImporter cargoImporter = new CargoImporter();
+				final CargoImporter cargoImporter = createCargoImporter();
 				final IImportContext context = Mockito.mock(IImportContext.class);
 				final Collection<EObject> importedObjects = cargoImporter.importObjects(CargoPackage.eINSTANCE.getCargo(), reader, context);
 
@@ -282,4 +300,64 @@ public class CargoImporterTest {
 		return sub.contains(",") ? "\"" + sub + "\"" : sub;
 	}
 
+	@NonNull
+	private CargoImporter createCargoImporter() {
+
+		final IImporterRegistry registry = new IImporterRegistry() {
+
+			@Inject
+			private Injector _injector;
+
+			@Override
+			public ISubmodelImporter getSubmodelImporter(final EClass subModelClass) {
+				return null;
+			}
+
+			@Override
+			public Collection<IPostModelImporter> getPostModelImporters() {
+				return null;
+			}
+
+			@Override
+			public Collection<IExtraModelImporter> getExtraModelImporters() {
+				return null;
+			}
+
+			@Override
+			public IClassImporter getClassImporter(final EClass eClass) {
+				if (eClass == CargoPackage.Literals.LOAD_SLOT) {
+					return _injector.getInstance(LoadSlotImporter.class);
+				}
+				if (eClass == CargoPackage.Literals.DISCHARGE_SLOT) {
+					return _injector.getInstance(DischargeSlotImporter.class);
+				}
+				return _injector.getInstance(DefaultClassImporter.class);
+			}
+
+			@Override
+			public IAttributeImporter getAttributeImporter(final EDataType dataType) {
+
+				if (dataType.equals(EcorePackage.eINSTANCE.getEDate())) {
+					return _injector.getInstance(DateAttributeImporter.class);
+				}
+
+				return _injector.getInstance(DefaultAttributeImporter.class);
+			}
+
+			@Override
+			public Collection<ISubmodelImporter> getAllSubModelImporters() {
+				return null;
+			}
+		};
+
+		final Injector injector = Guice.createInjector(new AbstractModule() {
+
+			@Override
+			protected void configure() {
+
+				bind(IImporterRegistry.class).toInstance(registry);
+			}
+		});
+		return injector.getInstance(CargoImporter.class);
+	}
 }

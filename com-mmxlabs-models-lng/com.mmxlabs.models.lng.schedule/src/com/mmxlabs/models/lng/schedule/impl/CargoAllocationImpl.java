@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.GeneralPNLDetails;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
@@ -37,9 +38,9 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getGroupProfitAndLoss <em>Group Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getGeneralPNLDetails <em>General PNL Details</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getEvents <em>Events</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getSlotAllocations <em>Slot Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getInputCargo <em>Input Cargo</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getEvents <em>Events</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getSequence <em>Sequence</em>}</li>
  * </ul>
  * </p>
@@ -65,6 +66,16 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * @ordered
 	 */
 	protected EList<GeneralPNLDetails> generalPNLDetails;
+
+	/**
+	 * The cached value of the '{@link #getEvents() <em>Events</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEvents()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Event> events;
 
 	/**
 	 * The cached value of the '{@link #getSlotAllocations() <em>Slot Allocations</em>}' reference list.
@@ -94,16 +105,6 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * @ordered
 	 */
 	protected boolean inputCargoESet;
-
-	/**
-	 * The cached value of the '{@link #getEvents() <em>Events</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getEvents()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<Event> events;
 
 	/**
 	 * The cached value of the '{@link #getSequence() <em>Sequence</em>}' reference.
@@ -410,13 +411,13 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 				return getGroupProfitAndLoss();
 			case SchedulePackage.CARGO_ALLOCATION__GENERAL_PNL_DETAILS:
 				return getGeneralPNLDetails();
+			case SchedulePackage.CARGO_ALLOCATION__EVENTS:
+				return getEvents();
 			case SchedulePackage.CARGO_ALLOCATION__SLOT_ALLOCATIONS:
 				return getSlotAllocations();
 			case SchedulePackage.CARGO_ALLOCATION__INPUT_CARGO:
 				if (resolve) return getInputCargo();
 				return basicGetInputCargo();
-			case SchedulePackage.CARGO_ALLOCATION__EVENTS:
-				return getEvents();
 			case SchedulePackage.CARGO_ALLOCATION__SEQUENCE:
 				if (resolve) return getSequence();
 				return basicGetSequence();
@@ -440,16 +441,16 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 				getGeneralPNLDetails().clear();
 				getGeneralPNLDetails().addAll((Collection<? extends GeneralPNLDetails>)newValue);
 				return;
+			case SchedulePackage.CARGO_ALLOCATION__EVENTS:
+				getEvents().clear();
+				getEvents().addAll((Collection<? extends Event>)newValue);
+				return;
 			case SchedulePackage.CARGO_ALLOCATION__SLOT_ALLOCATIONS:
 				getSlotAllocations().clear();
 				getSlotAllocations().addAll((Collection<? extends SlotAllocation>)newValue);
 				return;
 			case SchedulePackage.CARGO_ALLOCATION__INPUT_CARGO:
 				setInputCargo((Cargo)newValue);
-				return;
-			case SchedulePackage.CARGO_ALLOCATION__EVENTS:
-				getEvents().clear();
-				getEvents().addAll((Collection<? extends Event>)newValue);
 				return;
 			case SchedulePackage.CARGO_ALLOCATION__SEQUENCE:
 				setSequence((Sequence)newValue);
@@ -472,14 +473,14 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 			case SchedulePackage.CARGO_ALLOCATION__GENERAL_PNL_DETAILS:
 				getGeneralPNLDetails().clear();
 				return;
+			case SchedulePackage.CARGO_ALLOCATION__EVENTS:
+				getEvents().clear();
+				return;
 			case SchedulePackage.CARGO_ALLOCATION__SLOT_ALLOCATIONS:
 				getSlotAllocations().clear();
 				return;
 			case SchedulePackage.CARGO_ALLOCATION__INPUT_CARGO:
 				unsetInputCargo();
-				return;
-			case SchedulePackage.CARGO_ALLOCATION__EVENTS:
-				getEvents().clear();
 				return;
 			case SchedulePackage.CARGO_ALLOCATION__SEQUENCE:
 				unsetSequence();
@@ -500,12 +501,12 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 				return groupProfitAndLoss != null;
 			case SchedulePackage.CARGO_ALLOCATION__GENERAL_PNL_DETAILS:
 				return generalPNLDetails != null && !generalPNLDetails.isEmpty();
+			case SchedulePackage.CARGO_ALLOCATION__EVENTS:
+				return events != null && !events.isEmpty();
 			case SchedulePackage.CARGO_ALLOCATION__SLOT_ALLOCATIONS:
 				return slotAllocations != null && !slotAllocations.isEmpty();
 			case SchedulePackage.CARGO_ALLOCATION__INPUT_CARGO:
 				return isSetInputCargo();
-			case SchedulePackage.CARGO_ALLOCATION__EVENTS:
-				return events != null && !events.isEmpty();
 			case SchedulePackage.CARGO_ALLOCATION__SEQUENCE:
 				return isSetSequence();
 		}
@@ -526,6 +527,12 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 				default: return -1;
 			}
 		}
+		if (baseClass == EventGrouping.class) {
+			switch (derivedFeatureID) {
+				case SchedulePackage.CARGO_ALLOCATION__EVENTS: return SchedulePackage.EVENT_GROUPING__EVENTS;
+				default: return -1;
+			}
+		}
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
@@ -540,6 +547,12 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 			switch (baseFeatureID) {
 				case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS: return SchedulePackage.CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS;
 				case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS: return SchedulePackage.CARGO_ALLOCATION__GENERAL_PNL_DETAILS;
+				default: return -1;
+			}
+		}
+		if (baseClass == EventGrouping.class) {
+			switch (baseFeatureID) {
+				case SchedulePackage.EVENT_GROUPING__EVENTS: return SchedulePackage.CARGO_ALLOCATION__EVENTS;
 				default: return -1;
 			}
 		}

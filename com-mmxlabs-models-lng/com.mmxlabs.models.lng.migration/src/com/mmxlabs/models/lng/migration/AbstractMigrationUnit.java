@@ -16,6 +16,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil.ModelsLNGSet_v1;
 import com.mmxlabs.models.migration.IMigrationUnit;
 import com.mmxlabs.models.migration.PackageData;
+import com.mmxlabs.models.migration.utils.EObjectWrapper;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 import com.mmxlabs.scenario.service.util.ResourceHelper;
 
@@ -49,7 +50,24 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 	 * 
 	 * @param models
 	 */
-	protected abstract void doMigration(EObject model);
+	protected void doMigration(final EObject model) {
+		// Throw some kind of exception if we get here. Sublcasses should override this method or doMigrationWithHelper
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
+
+	protected void doMigrationWithHelper(final MetamodelLoader metamodelLoader, final EObjectWrapper model) {
+		doMigration(model);
+	}
+
+	/**
+	 * Overrideable method to allow sub-classes to choose which meta-model version to load the datamodel under.
+	 * 
+	 * @param extraPackages
+	 * @return
+	 */
+	protected MetamodelLoader getMigrationLoader(@Nullable final Map<URI, PackageData> extraPackages) {
+		return getDestinationMetamodelLoader(extraPackages);
+	}
 
 	/**
 	 * Overrideable method to allow sub-classes to choose which meta-model version to load the datamodel under.
@@ -66,10 +84,10 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 	@Override
 	public void migrate(final @NonNull URI baseURI, @Nullable final Map<URI, PackageData> extraPackages) throws Exception {
 
-		final MetamodelLoader destinationLoader = getMigrationLoader(extraPackages);
+		final MetamodelLoader metamodelLoader = getMigrationLoader(extraPackages);
 
 		// Load all the current model versions
-		final ResourceSet resourceSet = destinationLoader.getResourceSet();
+		final ResourceSet resourceSet = metamodelLoader.getResourceSet();
 		assert resourceSet != null;
 
 		// // Standard options
@@ -86,11 +104,11 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 
 		final Resource modelResource = ResourceHelper.loadResource(resourceSet, baseURI);
 
-		final EObject eObject = modelResource.getContents().get(0);
+		final EObjectWrapper eObject = (EObjectWrapper) modelResource.getContents().get(0);
 		assert eObject != null;
 
 		// Migrate!
-		doMigration(eObject);
+		doMigrationWithHelper(metamodelLoader, eObject);
 
 		// Save the model.
 		ResourceHelper.saveResource(modelResource);

@@ -7,11 +7,17 @@ package com.mmxlabs.models.lng.schedule.util;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 
+/**
+ * TODO: {@link #getSegmentStart(Event)} and {@link #getSegmentEnd(Event)} should be replaceable with the new {@link EventGrouping} interface. 
+ * @author sg
+ *
+ */
 public class ScheduleModelUtils {
 
 	/**

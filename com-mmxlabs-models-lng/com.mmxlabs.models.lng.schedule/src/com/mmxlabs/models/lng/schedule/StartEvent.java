@@ -20,7 +20,7 @@ package com.mmxlabs.models.lng.schedule;
  * @model
  * @generated
  */
-public interface StartEvent extends Event, FuelUsage, PortVisit, ProfitAndLossContainer {
+public interface StartEvent extends Event, FuelUsage, PortVisit, ProfitAndLossContainer, EventGrouping {
 	/**
 	 * Returns the value of the '<em><b>Slot Allocation</b></em>' reference.
 	 * <!-- begin-user-doc -->

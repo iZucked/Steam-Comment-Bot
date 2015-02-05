@@ -15,10 +15,6 @@
         upperBound="-1" eType="#//CharterCostModel" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="charterOutStartDate" eType="#//CharterOutStartDate"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="charterInMarkets" upperBound="-1"
-        eType="#//CharterInMarket" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="charterOutMarkets" upperBound="-1"
-        eType="#//CharterOutMarket" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CharterCostModel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="enabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
@@ -126,22 +122,5 @@
         <details key="showTime" value="false"/>
       </eAnnotations>
     </eStructuralFeatures>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CharterOutMarket" eSuperTypes="#//SpotCharterMarket ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="charterOutPrice" lowerBound="1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.pricing/model/pricing.ecore#//CharterIndex"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minCharterOutDuration"
-        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CharterInMarket" eSuperTypes="#//SpotCharterMarket ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="charterInPrice" lowerBound="1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.pricing/model/pricing.ecore#//CharterIndex"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="spotCharterCount" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SpotCharterMarket" abstract="true">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="enabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        defaultValueLiteral="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselClass" eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//VesselClass"/>
   </eClassifiers>
 </ecore:EPackage>

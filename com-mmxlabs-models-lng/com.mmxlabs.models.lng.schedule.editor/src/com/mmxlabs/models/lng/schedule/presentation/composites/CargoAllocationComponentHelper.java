@@ -45,6 +45,7 @@ public class CargoAllocationComponentHelper extends BaseComponentHelper {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.MMX_OBJECT));
 		superClassesHelpers.addAll(registry.getComponentHelpers(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER));
+		superClassesHelpers.addAll(registry.getComponentHelpers(SchedulePackage.Literals.EVENT_GROUPING));
 	}
 	
 	/**
@@ -67,7 +68,6 @@ public class CargoAllocationComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_slotAllocationsEditor(detailComposite, topClass);
 		add_inputCargoEditor(detailComposite, topClass);
-		add_eventsEditor(detailComposite, topClass);
 		add_sequenceEditor(detailComposite, topClass);
 	}
 	/**
@@ -86,15 +86,6 @@ public class CargoAllocationComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_inputCargoEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CARGO_ALLOCATION__INPUT_CARGO));
-	}
-
-	/**
-	 * Create the editor for the events feature on CargoAllocation
-	 *
-	 * @generated
-	 */
-	protected void add_eventsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.CARGO_ALLOCATION__EVENTS));
 	}
 
 	/**
