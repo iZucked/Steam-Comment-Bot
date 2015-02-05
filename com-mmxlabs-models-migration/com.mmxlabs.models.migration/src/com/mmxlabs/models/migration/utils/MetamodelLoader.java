@@ -5,9 +5,13 @@
 package com.mmxlabs.models.migration.utils;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EcorePackage;
+import org.eclipse.emf.ecore.impl.DynamicEObjectImpl;
+import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.impl.EPackageRegistryImpl;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -69,6 +73,14 @@ public class MetamodelLoader {
 		if (ePackage == null) {
 			throw new RuntimeException("Unable to load package");
 		}
+
+		// Override the default EFactory to return one which creates our DynamicEObjectWrapperImpl instances.
+		ePackage.setEFactoryInstance(new EFactoryImpl() {
+			@Override
+			protected EObject basicCreate(EClass eClass) {
+				return eClass.getInstanceClassName() == "java.util.Map$Entry" ? new DynamicEObjectImpl.BasicEMapEntry<String, String>(eClass) : new DynamicEObjectWrapperImpl(eClass);
+			}
+		});
 
 		// Register the package
 		resourceSet.getPackageRegistry().put(ePackage.getNsURI(), ePackage);
