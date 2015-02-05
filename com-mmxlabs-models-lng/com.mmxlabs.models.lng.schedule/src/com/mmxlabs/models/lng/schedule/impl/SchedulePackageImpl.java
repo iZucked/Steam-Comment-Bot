@@ -1567,11 +1567,23 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		return (EAttribute)basicSlotPNLDetailsEClass.getEStructuralFeatures().get(1);
 	}
 
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getBasicSlotPNLDetails_HedgingValue() {
+		return (EAttribute)basicSlotPNLDetailsEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getEventGrouping() {
+		return eventGroupingEClass;
 	}
 
 	/**

@@ -70,16 +70,6 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 	}
 
 	/**
-	 * Overrideable method to allow sub-classes to choose which meta-model version to load the datamodel under.
-	 * 
-	 * @param extraPackages
-	 * @return
-	 */
-	protected MetamodelLoader getMigrationLoader(@Nullable final Map<URI, PackageData> extraPackages) {
-		return getDestinationMetamodelLoader(extraPackages);
-	}
-
-	/**
 	 */
 	@Override
 	public void migrate(final @NonNull URI baseURI, @Nullable final Map<URI, PackageData> extraPackages) throws Exception {

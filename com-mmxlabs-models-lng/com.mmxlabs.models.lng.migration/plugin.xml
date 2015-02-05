@@ -201,7 +201,7 @@
        <MigrationUnit
              class="com.mmxlabs.models.lng.migration.units.MigrateToV26"
              context="com.mmxlabs.lingo"
-             from="54"
+             from="25"
              id="com.mmxlabs.models.lng.migration.units.MigrateToV26"
              to="26">
        </MigrationUnit>       

@@ -27,15 +27,13 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="fitnessValue" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CargoAllocation" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject #//ProfitAndLossContainer">
+  <eClassifiers xsi:type="ecore:EClass" name="CargoAllocation" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject #//ProfitAndLossContainer #//EventGrouping">
     <eOperations name="getName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="slotAllocations" lowerBound="1"
         upperBound="-1" eType="#//SlotAllocation" eOpposite="#//SlotAllocation/cargoAllocation"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="inputCargo" lowerBound="1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Cargo"
         unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="events" lowerBound="1"
-        upperBound="-1" eType="#//Event"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sequence" lowerBound="1"
         eType="#//Sequence" unsettable="true"/>
   </eClassifiers>
@@ -76,6 +74,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="energyTransferred" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cv" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Sequence" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eOperations name="getName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -115,7 +114,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="heelAtStart" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="heelAtEnd" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="StartEvent" eSuperTypes="#//Event #//FuelUsage #//PortVisit #//ProfitAndLossContainer">
+  <eClassifiers xsi:type="ecore:EClass" name="StartEvent" eSuperTypes="#//Event #//FuelUsage #//PortVisit #//ProfitAndLossContainer #//EventGrouping">
     <eStructuralFeatures xsi:type="ecore:EReference" name="slotAllocation" lowerBound="1"
         eType="#//SlotAllocation"/>
   </eClassifiers>
@@ -144,7 +143,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="slotAllocation" lowerBound="1"
         eType="#//SlotAllocation" eOpposite="#//SlotAllocation/slotVisit"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="VesselEventVisit" eSuperTypes="#//Event #//PortVisit #//ProfitAndLossContainer">
+  <eClassifiers xsi:type="ecore:EClass" name="VesselEventVisit" eSuperTypes="#//Event #//PortVisit #//ProfitAndLossContainer #//EventGrouping">
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselEvent" lowerBound="1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselEvent"/>
   </eClassifiers>
@@ -249,9 +248,14 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GeneralPNLDetails" abstract="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="BasicSlotPNLDetails" eSuperTypes="#//GeneralPNLDetails">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="additionalPNL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cancellationFees" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="hedgingValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
         unsettable="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EventGrouping">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="events" lowerBound="1"
+        upperBound="-1" eType="#//Event"/>
   </eClassifiers>
 </ecore:EPackage>

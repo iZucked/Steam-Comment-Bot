@@ -10,13 +10,14 @@ import org.eclipse.emf.ecore.EObject;
  * <!-- begin-user-doc --> The {@link EventGrouping} is an object containing a list of events in a {@link Sequence} that form a P&L unit. For example this could be a {@link CargoAllocation} containing
  * the first Load up to, but excluding the next cargo load. This would include all {@link Journey} and {@link Idle} events and discharges.
  * <!-- end-user-doc -->
+ *
  * <p>
  * The following features are supported:
  * <ul>
- * <li>{@link com.mmxlabs.models.lng.schedule.EventGrouping#getEvents <em>Events</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.EventGrouping#getEvents <em>Events</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getEventGrouping()
  * @model
  * @generated
