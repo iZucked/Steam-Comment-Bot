@@ -246,7 +246,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 
 			@Override
 			public int getSectionBarDividerHeight() {
-				return 0;
+				return 1;
 			}
 
 			@Override
