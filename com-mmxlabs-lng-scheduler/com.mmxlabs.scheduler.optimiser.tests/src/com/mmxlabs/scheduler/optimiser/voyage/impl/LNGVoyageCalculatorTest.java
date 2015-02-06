@@ -1104,8 +1104,10 @@ public class LNGVoyageCalculatorTest {
 
 		vesselClass.setName("class-1");
 
-		vesselClass.setBaseFuelConversionFactor(OptimiserUnitConvertor.convertToInternalConversionFactor(45.6));
-
+		IBaseFuel baseFuel = new BaseFuel("test");
+		baseFuel.setEquivalenceFactor(OptimiserUnitConvertor.convertToInternalConversionFactor(45.6));
+		vesselClass.setBaseFuel(baseFuel);
+		
 		// 2 days of boil off
 		vesselClass.setSafetyHeel(OptimiserUnitConvertor.convertToInternalVolume(300 * 24));
 

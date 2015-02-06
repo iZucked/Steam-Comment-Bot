@@ -22,13 +22,13 @@ public interface IBaseFuel {
 	String getName();
 
 	/**
-	 * Get the equivalence factor of the base fuel to convert to lng
+	 * returns the conversion factor to use to convert 1 {@link FuelUnit#M3} of LNG to {@link FuelUnit#MT} equivalence.
 	 * @return
 	 */
 	int getEquivalenceFactor();
 
 	/**
-	 * Set the equivalence factor of the base fuel to convert to lng
+	 * Sets returns the conversion factor to use to convert 1 {@link FuelUnit#M3} of LNG to {@link FuelUnit#MT} equivalence.
 	 * @return
 	 */
 	void setEquivalenceFactor(int value);

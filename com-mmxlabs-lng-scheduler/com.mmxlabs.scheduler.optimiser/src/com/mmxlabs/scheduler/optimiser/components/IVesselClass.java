@@ -115,12 +115,12 @@ public interface IVesselClass {
 	 */
 	long getNBORate(VesselState vesselState);
 
-	/**
-	 * Returns the conversion factor to use to convert 1 {@link FuelUnit#M3} of LNG to {@link FuelUnit#MT} equivalence.
-	 * 
-	 * @return
-	 */
-	int getBaseFuelConversionFactor();
+//	/**
+//	 * Returns the conversion factor to use to convert 1 {@link FuelUnit#M3} of LNG to {@link FuelUnit#MT} equivalence.
+//	 * 
+//	 * @return
+//	 */
+//	int getBaseFuelConversionFactor();
 
 	/**
 	 * The time in hours for which these vessels can idle with no heel without the tanks becoming warm and thus requiring a cooldown.

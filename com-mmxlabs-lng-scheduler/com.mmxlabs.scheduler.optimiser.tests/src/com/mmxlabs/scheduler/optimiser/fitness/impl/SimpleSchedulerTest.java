@@ -85,7 +85,8 @@ public class SimpleSchedulerTest {
 		// CV is 22800, divide by the following to get m3 to MT of 0.1 as used by this test.
 		final int baseFuelEquivalence = 228000;
 		final IBaseFuel baseFuel = new BaseFuel("test");
-		final IVesselClass vesselClass1 = builder.createVesselClass("vesselClass-1", 12000, 20000, 150000000, 0, baseFuel, baseFuelEquivalence, 0, Integer.MAX_VALUE, 0, 0);
+		baseFuel.setEquivalenceFactor(baseFuelEquivalence);
+		final IVesselClass vesselClass1 = builder.createVesselClass("vesselClass-1", 12000, 20000, 150000000, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0);
 
 		builder.setVesselClassStateParameters(vesselClass1, VesselState.Laden, OptimiserUnitConvertor.convertToInternalDailyRate(150), OptimiserUnitConvertor.convertToInternalDailyRate(100),
 				OptimiserUnitConvertor.convertToInternalDailyRate(10), consumptionCalculator, 0);

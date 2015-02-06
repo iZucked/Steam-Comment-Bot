@@ -168,14 +168,14 @@ public final class VesselClass implements IVesselClass {
 		consumptionRate.put(vesselState, calc);
 	}
 
-	@Override
-	public int getBaseFuelConversionFactor() {
-		return baseFuelConversionFactor;
-	}
-
-	public void setBaseFuelConversionFactor(final int baseFuelConversionFactor) {
-		this.baseFuelConversionFactor = baseFuelConversionFactor;
-	}
+//	@Override
+//	public int getBaseFuelConversionFactor() {
+//		return baseFuelConversionFactor;
+//	}
+//
+//	public void setBaseFuelConversionFactor(final int baseFuelConversionFactor) {
+//		this.baseFuelConversionFactor = baseFuelConversionFactor;
+//	}
 
 	@Override
 	public final long getPilotLightRate() {

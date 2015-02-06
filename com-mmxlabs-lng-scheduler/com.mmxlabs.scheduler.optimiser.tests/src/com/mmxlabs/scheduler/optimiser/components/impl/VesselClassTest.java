@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
@@ -132,9 +133,12 @@ public class VesselClassTest {
 	public void testGetSetBaseFuelConversionFactor() {
 		final int value = 100;
 		final VesselClass vesselClass = new VesselClass();
-		Assert.assertEquals(0, vesselClass.getBaseFuelConversionFactor());
-		vesselClass.setBaseFuelConversionFactor(value);
-		Assert.assertEquals(value, vesselClass.getBaseFuelConversionFactor());
+		Assert.assertEquals(null, vesselClass.getBaseFuel());
+		IBaseFuel baseFuel = new BaseFuel("test");
+		baseFuel.setEquivalenceFactor(100);
+		vesselClass.setBaseFuel(baseFuel);
+
+		Assert.assertEquals(value, vesselClass.getBaseFuel().getEquivalenceFactor());
 	}
 
 	@Test

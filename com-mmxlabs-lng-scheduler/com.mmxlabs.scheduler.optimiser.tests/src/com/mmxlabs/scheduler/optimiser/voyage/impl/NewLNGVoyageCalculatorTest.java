@@ -11,12 +11,14 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.impl.BaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
@@ -1165,7 +1167,9 @@ public class NewLNGVoyageCalculatorTest {
 
 		vesselClass.setName("class-1");
 
-		vesselClass.setBaseFuelConversionFactor(OptimiserUnitConvertor.convertToInternalConversionFactor(45.6));
+		IBaseFuel baseFuel = new BaseFuel("test");
+		baseFuel.setEquivalenceFactor(OptimiserUnitConvertor.convertToInternalConversionFactor(45.6));
+		vesselClass.setBaseFuel(baseFuel);
 
 		// 2 days of boil off
 		vesselClass.setSafetyHeel(OptimiserUnitConvertor.convertToInternalVolume(150 * HEEL_DURATION));
