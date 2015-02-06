@@ -96,7 +96,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed, long capacity, long safetyHeel, int baseFuelUnitPrice, int baseFuelEquivalenceInM3TOMT, int pilotLightRate,
+	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed, long capacity, long safetyHeel, IBaseFuel baseFuel, int baseFuelEquivalenceInM3TOMT, int pilotLightRate,
 			int warmupTimeInHours, long cooldownVolumeInM3, int minBaseFuelConsumptionPerDay);
 
 	/**

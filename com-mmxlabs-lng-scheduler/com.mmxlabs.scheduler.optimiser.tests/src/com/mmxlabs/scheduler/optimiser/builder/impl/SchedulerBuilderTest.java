@@ -14,10 +14,12 @@ import org.mockito.Mockito;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
+import com.mmxlabs.scheduler.optimiser.components.impl.BaseFuel;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
@@ -165,7 +167,9 @@ public class SchedulerBuilderTest {
 		final long capacity = 3L;
 		final int safetyHeel = 4;
 
-		final IVesselClass vesselClass = builder.createVesselClass("name", minSpeed, maxSpeed, capacity, safetyHeel, 7000, 1000, 0, 35353, 10101, 0);
+		final IBaseFuel baseFuel = new BaseFuel("test");
+
+		final IVesselClass vesselClass = builder.createVesselClass("name", minSpeed, maxSpeed, capacity, safetyHeel, baseFuel, 1000, 0, 35353, 10101, 0);
 		// createVesselClass("name", minSpeed,
 		// maxSpeed, capacity, safetyHeel, 700;
 
@@ -173,7 +177,7 @@ public class SchedulerBuilderTest {
 		Assert.assertEquals(maxSpeed, vesselClass.getMaxSpeed());
 		Assert.assertEquals(capacity, vesselClass.getCargoCapacity());
 		Assert.assertEquals(safetyHeel, vesselClass.getSafetyHeel());
-		Assert.assertEquals(7000, vesselClass.getBaseFuelUnitPrice());
+		Assert.assertEquals(baseFuel, vesselClass.getBaseFuel());
 		Assert.assertEquals(1000, vesselClass.getBaseFuelConversionFactor());
 
 		Assert.assertEquals(35353, vesselClass.getWarmupTime());

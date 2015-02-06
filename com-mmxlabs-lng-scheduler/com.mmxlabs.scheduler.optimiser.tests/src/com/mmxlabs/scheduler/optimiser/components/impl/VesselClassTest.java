@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 
@@ -119,12 +120,12 @@ public class VesselClassTest {
 	}
 
 	@Test
-	public void testGetSetBaseFuelUnitPrice() {
-		final int value = 100;
+	public void testGetSetBaseFuel() {
+		final IBaseFuel b = new BaseFuel("test");
 		final VesselClass vesselClass = new VesselClass();
-		Assert.assertEquals(0, vesselClass.getBaseFuelUnitPrice());
-		vesselClass.setBaseFuelUnitPrice(value);
-		Assert.assertEquals(value, vesselClass.getBaseFuelUnitPrice());
+		Assert.assertEquals(null, vesselClass.getBaseFuel());
+		vesselClass.setBaseFuel(b);
+		Assert.assertEquals(b.getName(), vesselClass.getBaseFuel().getName());
 	}
 
 	@Test

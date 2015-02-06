@@ -855,12 +855,9 @@ public class NewLNGVoyageCalculatorTest {
 
 	@Test
 	public void testCalculateVoyagePlanFuelConsumptions() {
-		final int expectedBasePrice = 99000;
-
 		final IVessel vessel = Mockito.mock(IVessel.class);
 		final IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
-		Mockito.when(vesselClass.getBaseFuelUnitPrice()).thenReturn(expectedBasePrice);
 
 		final PortDetails loadDetails = new PortDetails();
 		loadDetails.setOptions(new PortOptions());
@@ -941,12 +938,9 @@ public class NewLNGVoyageCalculatorTest {
 
 	@Test
 	public void testCalculateCooldownCost_NonLoad() {
-		final int expectedBasePrice = 99000;
-
 		final IVessel vessel = Mockito.mock(IVessel.class);
 		final IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
-		Mockito.when(vesselClass.getBaseFuelUnitPrice()).thenReturn(expectedBasePrice);
 
 		final PortDetails fromPortDetails = new PortDetails();
 		fromPortDetails.setOptions(new PortOptions());
@@ -1011,12 +1005,9 @@ public class NewLNGVoyageCalculatorTest {
 
 	@Test
 	public void testCalculateCooldownCost_Load() {
-		final int expectedBasePrice = 99000;
-
 		final IVessel vessel = Mockito.mock(IVessel.class);
 		final IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
-		Mockito.when(vesselClass.getBaseFuelUnitPrice()).thenReturn(expectedBasePrice);
 
 		final PortDetails fromPortDetails = new PortDetails();
 		fromPortDetails.setOptions(new PortOptions());
@@ -1081,12 +1072,9 @@ public class NewLNGVoyageCalculatorTest {
 
 	@Test
 	public void testCalculateCooldownNotCalled_Load() {
-		final int expectedBasePrice = 99000;
-
 		final IVessel vessel = Mockito.mock(IVessel.class);
 		final IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
-		Mockito.when(vesselClass.getBaseFuelUnitPrice()).thenReturn(expectedBasePrice);
 
 		final PortDetails fromPortDetails = new PortDetails();
 		fromPortDetails.setOptions(new PortOptions());

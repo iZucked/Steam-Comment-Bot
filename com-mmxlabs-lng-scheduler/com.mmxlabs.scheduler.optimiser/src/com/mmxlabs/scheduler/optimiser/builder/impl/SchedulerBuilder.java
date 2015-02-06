@@ -346,7 +346,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		}, "UTC"/* no timezone */, 0, Integer.MAX_VALUE);
 
 		// setup fake vessels for virtual elements.
-		virtualClass = createVesselClass("virtual", 0, 0, Long.MAX_VALUE, 0, 0, 0, 0, 0, 0, 0);
+		virtualClass = createVesselClass("virtual", 0, 0, Long.MAX_VALUE, 0, null, 0, 0, 0, 0, 0);
 	}
 
 	/**
@@ -1187,7 +1187,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	@NonNull
-	public IVesselClass createVesselClass(final String name, final int minSpeed, final int maxSpeed, final long capacityInM3, final long safetyHeelInM3, final int baseFuelUnitPricePerMT,
+	public IVesselClass createVesselClass(final String name, final int minSpeed, final int maxSpeed, final long capacityInM3, final long safetyHeelInM3, final IBaseFuel baseFuel,
 			final int baseFuelEquivalenceInM3TOMT, final int pilotLightRate, final int warmupTimeHours, final long cooldownVolumeM3, final int minBaseFuelConsumptionPerDay) {
 
 		final VesselClass vesselClass = new VesselClass();
@@ -1207,6 +1207,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vesselClass.setPilotLightRate(pilotLightRate);
 		vesselClass.setMinBaseFuelConsumptionInMTPerDay(minBaseFuelConsumptionPerDay);
 
+		vesselClass.setBaseFuel(baseFuel);
 		vesselClasses.add(vesselClass);
 
 		return vesselClass;
