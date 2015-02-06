@@ -8,12 +8,17 @@ package com.mmxlabs.lingo.reports.views.schedule.model.impl;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
@@ -32,6 +37,8 @@ import com.mmxlabs.lingo.reports.views.schedule.model.Table;
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.TableImpl#getRows <em>Rows</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.TableImpl#getCycleGroups <em>Cycle Groups</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.TableImpl#getRowGroups <em>Row Groups</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.TableImpl#getScenarios <em>Scenarios</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.TableImpl#getPinnedScenario <em>Pinned Scenario</em>}</li>
  * </ul>
  * </p>
  *
@@ -69,6 +76,26 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 	protected EList<RowGroup> rowGroups;
 
 	/**
+	 * The cached value of the '{@link #getScenarios() <em>Scenarios</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getScenarios()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<EObject> scenarios;
+
+	/**
+	 * The cached value of the '{@link #getPinnedScenario() <em>Pinned Scenario</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPinnedScenario()
+	 * @generated
+	 * @ordered
+	 */
+	protected EObject pinnedScenario;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -94,7 +121,7 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 	 */
 	public EList<Row> getRows() {
 		if (rows == null) {
-			rows = new EObjectContainmentEList<Row>(Row.class, this, ScheduleReportPackage.TABLE__ROWS);
+			rows = new EObjectContainmentWithInverseEList<Row>(Row.class, this, ScheduleReportPackage.TABLE__ROWS, ScheduleReportPackage.ROW__TABLE);
 		}
 		return rows;
 	}
@@ -121,6 +148,71 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 			rowGroups = new EObjectContainmentEList<RowGroup>(RowGroup.class, this, ScheduleReportPackage.TABLE__ROW_GROUPS);
 		}
 		return rowGroups;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<EObject> getScenarios() {
+		if (scenarios == null) {
+			scenarios = new EObjectResolvingEList<EObject>(EObject.class, this, ScheduleReportPackage.TABLE__SCENARIOS);
+		}
+		return scenarios;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EObject getPinnedScenario() {
+		if (pinnedScenario != null && pinnedScenario.eIsProxy()) {
+			InternalEObject oldPinnedScenario = (InternalEObject)pinnedScenario;
+			pinnedScenario = eResolveProxy(oldPinnedScenario);
+			if (pinnedScenario != oldPinnedScenario) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ScheduleReportPackage.TABLE__PINNED_SCENARIO, oldPinnedScenario, pinnedScenario));
+			}
+		}
+		return pinnedScenario;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EObject basicGetPinnedScenario() {
+		return pinnedScenario;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPinnedScenario(EObject newPinnedScenario) {
+		EObject oldPinnedScenario = pinnedScenario;
+		pinnedScenario = newPinnedScenario;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScheduleReportPackage.TABLE__PINNED_SCENARIO, oldPinnedScenario, pinnedScenario));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case ScheduleReportPackage.TABLE__ROWS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getRows()).basicAdd(otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -155,6 +247,11 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 				return getCycleGroups();
 			case ScheduleReportPackage.TABLE__ROW_GROUPS:
 				return getRowGroups();
+			case ScheduleReportPackage.TABLE__SCENARIOS:
+				return getScenarios();
+			case ScheduleReportPackage.TABLE__PINNED_SCENARIO:
+				if (resolve) return getPinnedScenario();
+				return basicGetPinnedScenario();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -180,6 +277,13 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 				getRowGroups().clear();
 				getRowGroups().addAll((Collection<? extends RowGroup>)newValue);
 				return;
+			case ScheduleReportPackage.TABLE__SCENARIOS:
+				getScenarios().clear();
+				getScenarios().addAll((Collection<? extends EObject>)newValue);
+				return;
+			case ScheduleReportPackage.TABLE__PINNED_SCENARIO:
+				setPinnedScenario((EObject)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -201,6 +305,12 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 			case ScheduleReportPackage.TABLE__ROW_GROUPS:
 				getRowGroups().clear();
 				return;
+			case ScheduleReportPackage.TABLE__SCENARIOS:
+				getScenarios().clear();
+				return;
+			case ScheduleReportPackage.TABLE__PINNED_SCENARIO:
+				setPinnedScenario((EObject)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -219,6 +329,10 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 				return cycleGroups != null && !cycleGroups.isEmpty();
 			case ScheduleReportPackage.TABLE__ROW_GROUPS:
 				return rowGroups != null && !rowGroups.isEmpty();
+			case ScheduleReportPackage.TABLE__SCENARIOS:
+				return scenarios != null && !scenarios.isEmpty();
+			case ScheduleReportPackage.TABLE__PINNED_SCENARIO:
+				return pinnedScenario != null;
 		}
 		return super.eIsSet(featureID);
 	}

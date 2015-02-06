@@ -4,11 +4,14 @@
     nsPrefix="reports.schedule">
   <eClassifiers xsi:type="ecore:EClass" name="Table">
     <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//Row"
-        containment="true"/>
+        containment="true" eOpposite="#//Row/table"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cycleGroups" upperBound="-1"
         eType="#//CycleGroup" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rowGroups" upperBound="-1"
         eType="#//RowGroup" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scenarios" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pinnedScenario" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Row">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="visible" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
@@ -33,6 +36,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="rowGroup" eType="#//RowGroup"
         eOpposite="#//RowGroup/rows"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="scenario" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="table" eType="#//Table"
+        eOpposite="#//Table/rows"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CycleGroup">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
