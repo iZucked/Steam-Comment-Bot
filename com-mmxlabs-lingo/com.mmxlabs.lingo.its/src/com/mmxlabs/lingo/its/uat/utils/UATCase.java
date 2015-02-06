@@ -4,13 +4,12 @@
  */
 package com.mmxlabs.lingo.its.uat.utils;
 
-public class UATCase {
+public class UATCase extends AbstractUATCase{
 
-	public String lingoFilePath;
 	public String cargoName;
 	
 	public UATCase(String lingoFilePath, String cargoName) {
-		this.lingoFilePath = lingoFilePath;
+		super(lingoFilePath);
 		this.cargoName = cargoName;
 	}
 
