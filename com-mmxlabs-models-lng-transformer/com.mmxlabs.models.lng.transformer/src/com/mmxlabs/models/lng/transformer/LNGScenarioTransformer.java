@@ -2200,7 +2200,7 @@ public class LNGScenarioTransformer {
 				}
 			}
 
-			final IVesselClass vc = TransformerHelper.buildIVesselClass(builder, eVc, baseFuelPriceInInternalUnits, bf);
+			final IVesselClass vc = TransformerHelper.buildIVesselClass(builder, eVc, bf);
 
 			vesselClassAssociation.add(eVc, vc);
 

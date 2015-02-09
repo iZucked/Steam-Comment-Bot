@@ -244,7 +244,7 @@ public class DefaultScenarioCreator {
 			return result;
 		}
 
-		public void setBaseFuelPrice(final BaseFuelCost bfc, final double price) {
+		public void setBaseFuelPrice(final BaseFuelCost bfc, final double price, final Date date) {
 			BaseFuelIndex bfi = bfc.getIndex();
 			if (bfi == null) {
 				bfi = PricingFactory.eINSTANCE.createBaseFuelIndex();
@@ -266,7 +266,11 @@ public class DefaultScenarioCreator {
 			}
 
 			points.get(0).setValue(price);
-			points.get(0).setDate(new Date());
+			points.get(0).setDate(date);
+		}
+		
+		public void setBaseFuelPrice(final BaseFuelCost bfc, final double price) {
+			setBaseFuelPrice(bfc, price, createDate(1, 0, 2000));
 		}
 
 		/**
@@ -1111,5 +1115,19 @@ public class DefaultScenarioCreator {
 		}
 		return null;
 	}
+	
+	private Date createDate(int day, int month, int year) {
+		final Calendar newCalendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+		newCalendar.set(Calendar.YEAR, year);
+		newCalendar.set(Calendar.MONTH, month);
+		newCalendar.set(Calendar.DAY_OF_MONTH, day);
+		newCalendar.set(Calendar.HOUR_OF_DAY, 0);
+		newCalendar.set(Calendar.MINUTE, 0);
+		newCalendar.set(Calendar.SECOND, 0);
+		newCalendar.set(Calendar.MILLISECOND, 0);
+
+		return newCalendar.getTime();
+	}
+
 
 }

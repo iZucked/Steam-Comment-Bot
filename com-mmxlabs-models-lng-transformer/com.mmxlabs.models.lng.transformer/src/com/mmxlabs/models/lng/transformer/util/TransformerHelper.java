@@ -24,13 +24,12 @@ public class TransformerHelper {
 
 	/**
 	 */
-	public static IVesselClass buildIVesselClass(final ISchedulerBuilder builder, final VesselClass eVc, final int baseFuelPriceInInternalUnits, final IBaseFuel baseFuel) {
+	public static IVesselClass buildIVesselClass(final ISchedulerBuilder builder, final VesselClass eVc, final IBaseFuel baseFuel) {
 		final IVesselClass vc = builder.createVesselClass(eVc.getName(), OptimiserUnitConvertor.convertToInternalSpeed(eVc.getMinSpeed()),
 				OptimiserUnitConvertor.convertToInternalSpeed(eVc.getMaxSpeed()), OptimiserUnitConvertor.convertToInternalVolume((int) (eVc.getFillCapacity() * eVc.getCapacity())),
-				OptimiserUnitConvertor.convertToInternalVolume(eVc.getMinHeel()), baseFuelPriceInInternalUnits,
-				OptimiserUnitConvertor.convertToInternalConversionFactor(eVc.getBaseFuel().getEquivalenceFactor()), OptimiserUnitConvertor.convertToInternalDailyRate(eVc.getPilotLightRate()),
+				OptimiserUnitConvertor.convertToInternalVolume(eVc.getMinHeel()), baseFuel,
+				OptimiserUnitConvertor.convertToInternalDailyRate(eVc.getPilotLightRate()),
 				eVc.getWarmingTime(), OptimiserUnitConvertor.convertToInternalVolume(eVc.getCoolingVolume()), OptimiserUnitConvertor.convertToInternalDailyRate(eVc.getMinBaseFuelConsumption()));
-		vc.setBaseFuel(baseFuel);
 		buildVesselStateAttributes(builder, vc, com.mmxlabs.scheduler.optimiser.components.VesselState.Laden, eVc.getLadenAttributes());
 		buildVesselStateAttributes(builder, vc, com.mmxlabs.scheduler.optimiser.components.VesselState.Ballast, eVc.getBallastAttributes());
 
@@ -47,7 +46,7 @@ public class TransformerHelper {
 
 	public static IBaseFuel buildBaseFuel(final ISchedulerBuilder builder, final BaseFuel eBF) {
 		if (eBF != null) {
-			IBaseFuel bf = builder.createBaseFuel(eBF.getName(), OptimiserUnitConvertor.convertToInternalDailyRate(eBF.getEquivalenceFactor()));
+			IBaseFuel bf = builder.createBaseFuel(eBF.getName(), OptimiserUnitConvertor.convertToInternalConversionFactor(eBF.getEquivalenceFactor()));
 			return bf;
 		} else {
 			return null;

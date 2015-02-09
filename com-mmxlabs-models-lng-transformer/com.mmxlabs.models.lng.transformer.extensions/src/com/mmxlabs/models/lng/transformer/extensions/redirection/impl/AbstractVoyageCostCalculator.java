@@ -91,7 +91,7 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 
 		final IVesselClass vesselClass = vessel.getVesselClass();
 		// Convert rate to MT equivalent per day
-		final int nboRateInMTPerDay = (int) Calculator.convertM3ToMT(vesselClass.getNBORate(vesselState), cargoCV, vesselClass.getBaseFuelConversionFactor());
+		final int nboRateInMTPerDay = (int) Calculator.convertM3ToMT(vesselClass.getNBORate(vesselState), cargoCV, vesselClass.getBaseFuel().getEquivalenceFactor());
 		final int nboSpeed = vesselClass.getConsumptionRate(vesselState).getSpeed(nboRateInMTPerDay);
 		voyageOptions.setNBOSpeed(nboSpeed);
 		return voyageOptions;
