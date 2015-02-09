@@ -14,11 +14,11 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 public interface IBaseFuelCurveProvider extends IDataComponentProvider {
 
 	@NonNull
-	ICurve getBaseFuelCurve(IBaseFuel baseFuel);
-	
+	ICurve getBaseFuelCurve(@NonNull IBaseFuel baseFuel);
+
 	@NonNull
-	ICurve getVesselBaseFuelCurve(IVessel vessel);
-	
-	int getBaseFuelCurveFirstValueDate(ICurve curve);
+	ICurve getVesselBaseFuelCurve(@NonNull IVessel vessel);
+
+	int getBaseFuelCurveFirstValueDate(@NonNull ICurve curve);
 
 }
