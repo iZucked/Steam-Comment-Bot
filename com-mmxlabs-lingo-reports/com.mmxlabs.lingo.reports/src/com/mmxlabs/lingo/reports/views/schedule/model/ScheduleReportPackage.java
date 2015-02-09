@@ -98,13 +98,31 @@ public interface ScheduleReportPackage extends EPackage {
 	int TABLE__ROW_GROUPS = 2;
 
 	/**
+	 * The feature id for the '<em><b>Scenarios</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TABLE__SCENARIOS = 3;
+
+	/**
+	 * The feature id for the '<em><b>Pinned Scenario</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TABLE__PINNED_SCENARIO = 4;
+
+	/**
 	 * The number of structural features of the '<em>Table</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TABLE_FEATURE_COUNT = 3;
+	int TABLE_FEATURE_COUNT = 5;
 
 	/**
 	 * The number of operations of the '<em>Table</em>' class.
@@ -270,13 +288,22 @@ public interface ScheduleReportPackage extends EPackage {
 	int ROW__SCENARIO = 15;
 
 	/**
+	 * The feature id for the '<em><b>Table</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROW__TABLE = 16;
+
+	/**
 	 * The number of structural features of the '<em>Row</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ROW_FEATURE_COUNT = 16;
+	int ROW_FEATURE_COUNT = 17;
 
 	/**
 	 * The number of operations of the '<em>Row</em>' class.
@@ -422,6 +449,28 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getTable_RowGroups();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getScenarios <em>Scenarios</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Scenarios</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Table#getScenarios()
+	 * @see #getTable()
+	 * @generated
+	 */
+	EReference getTable_Scenarios();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getPinnedScenario <em>Pinned Scenario</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Pinned Scenario</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Table#getPinnedScenario()
+	 * @see #getTable()
+	 * @generated
+	 */
+	EReference getTable_PinnedScenario();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row <em>Row</em>}'.
@@ -610,6 +659,17 @@ public interface ScheduleReportPackage extends EPackage {
 	EReference getRow_Scenario();
 
 	/**
+	 * Returns the meta object for the container reference '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getTable <em>Table</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the container reference '<em>Table</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Row#getTable()
+	 * @see #getRow()
+	 * @generated
+	 */
+	EReference getRow_Table();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup <em>Cycle Group</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -729,6 +789,22 @@ public interface ScheduleReportPackage extends EPackage {
 		 * @generated
 		 */
 		EReference TABLE__ROW_GROUPS = eINSTANCE.getTable_RowGroups();
+
+		/**
+		 * The meta object literal for the '<em><b>Scenarios</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference TABLE__SCENARIOS = eINSTANCE.getTable_Scenarios();
+
+		/**
+		 * The meta object literal for the '<em><b>Pinned Scenario</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference TABLE__PINNED_SCENARIO = eINSTANCE.getTable_PinnedScenario();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl <em>Row</em>}' class.
@@ -867,6 +943,14 @@ public interface ScheduleReportPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ROW__SCENARIO = eINSTANCE.getRow_Scenario();
+
+		/**
+		 * The meta object literal for the '<em><b>Table</b></em>' container reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ROW__TABLE = eINSTANCE.getRow_Table();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.CycleGroupImpl <em>Cycle Group</em>}' class.

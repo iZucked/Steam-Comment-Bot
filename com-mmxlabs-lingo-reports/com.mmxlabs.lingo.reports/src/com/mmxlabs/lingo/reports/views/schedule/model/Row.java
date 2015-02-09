@@ -38,6 +38,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#isReference <em>Reference</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getRowGroup <em>Row Group</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getScenario <em>Scenario</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getTable <em>Table</em>}</li>
  * </ul>
  * </p>
  *
@@ -450,5 +451,33 @@ public interface Row extends EObject {
 	 * @generated
 	 */
 	void setScenario(EObject value);
+
+	/**
+	 * Returns the value of the '<em><b>Table</b></em>' container reference.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getRows <em>Rows</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Table</em>' container reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Table</em>' container reference.
+	 * @see #setTable(Table)
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getRow_Table()
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Table#getRows
+	 * @model opposite="rows" transient="false"
+	 * @generated
+	 */
+	Table getTable();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getTable <em>Table</em>}' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Table</em>' container reference.
+	 * @see #getTable()
+	 * @generated
+	 */
+	void setTable(Table value);
 
 } // Row

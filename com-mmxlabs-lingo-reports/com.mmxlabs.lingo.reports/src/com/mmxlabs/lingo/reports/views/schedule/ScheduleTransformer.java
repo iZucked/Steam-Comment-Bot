@@ -90,14 +90,15 @@ public class ScheduleTransformer {
 				perScenarioElementsByKeyMap.clear();
 				elementToRowMap.clear();
 				rootObjects.clear();
-				// tableDataModel = ScheduleReportFactory.eINSTANCE.createTable();
 
 				table.getRowGroups().clear();
 				table.getRows().clear();
 				table.getCycleGroups().clear();
-				
+				table.getScenarios().clear();
+				table.setPinnedScenario(null);				
+
 				diffProcessors.clear();
-				 diffProcessors.add(new CycleDiffProcessor(customRelatedSlotHandlers));
+				diffProcessors.add(new CycleDiffProcessor(customRelatedSlotHandlers));
 				diffProcessors.add(new StructuralDifferencesProcessor(builder.getScheduleDiffUtils()));
 			}
 
@@ -112,6 +113,11 @@ public class ScheduleTransformer {
 				}
 
 				rootObjects.add(findScenarioModel(schedule));
+
+				if (isPinned) {
+					table.setPinnedScenario(scenarioInstance.getInstance());
+				}
+				table.getScenarios().add(scenarioInstance.getInstance());
 
 				return generateRows(table, scenarioInstance, schedule, isPinned);
 			}

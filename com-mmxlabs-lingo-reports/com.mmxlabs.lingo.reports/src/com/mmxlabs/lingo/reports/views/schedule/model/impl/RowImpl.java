@@ -18,12 +18,14 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.RowGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
+import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -52,6 +54,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#isReference <em>Reference</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getRowGroup <em>Row Group</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getScenario <em>Scenario</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getTable <em>Table</em>}</li>
  * </ul>
  * </p>
  *
@@ -836,6 +839,47 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Table getTable() {
+		if (eContainerFeatureID() != ScheduleReportPackage.ROW__TABLE) return null;
+		return (Table)eInternalContainer();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetTable(Table newTable, NotificationChain msgs) {
+		msgs = eBasicSetContainer((InternalEObject)newTable, ScheduleReportPackage.ROW__TABLE, msgs);
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setTable(Table newTable) {
+		if (newTable != eInternalContainer() || (eContainerFeatureID() != ScheduleReportPackage.ROW__TABLE && newTable != null)) {
+			if (EcoreUtil.isAncestor(this, newTable))
+				throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
+			NotificationChain msgs = null;
+			if (eInternalContainer() != null)
+				msgs = eBasicRemoveFromContainer(msgs);
+			if (newTable != null)
+				msgs = ((InternalEObject)newTable).eInverseAdd(this, ScheduleReportPackage.TABLE__ROWS, Table.class, msgs);
+			msgs = basicSetTable(newTable, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScheduleReportPackage.ROW__TABLE, newTable, newTable));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -854,6 +898,10 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 				if (rowGroup != null)
 					msgs = ((InternalEObject)rowGroup).eInverseRemove(this, ScheduleReportPackage.ROW_GROUP__ROWS, RowGroup.class, msgs);
 				return basicSetRowGroup((RowGroup)otherEnd, msgs);
+			case ScheduleReportPackage.ROW__TABLE:
+				if (eInternalContainer() != null)
+					msgs = eBasicRemoveFromContainer(msgs);
+				return basicSetTable((Table)otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -874,8 +922,24 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 				return ((InternalEList<?>)getReferringRows()).basicRemove(otherEnd, msgs);
 			case ScheduleReportPackage.ROW__ROW_GROUP:
 				return basicSetRowGroup(null, msgs);
+			case ScheduleReportPackage.ROW__TABLE:
+				return basicSetTable(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
+		switch (eContainerFeatureID()) {
+			case ScheduleReportPackage.ROW__TABLE:
+				return eInternalContainer().eInverseRemove(this, ScheduleReportPackage.TABLE__ROWS, Table.class, msgs);
+		}
+		return super.eBasicRemoveFromContainerFeature(msgs);
 	}
 
 	/**
@@ -928,6 +992,8 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 			case ScheduleReportPackage.ROW__SCENARIO:
 				if (resolve) return getScenario();
 				return basicGetScenario();
+			case ScheduleReportPackage.ROW__TABLE:
+				return getTable();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -991,6 +1057,9 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 			case ScheduleReportPackage.ROW__SCENARIO:
 				setScenario((EObject)newValue);
 				return;
+			case ScheduleReportPackage.ROW__TABLE:
+				setTable((Table)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1051,6 +1120,9 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 			case ScheduleReportPackage.ROW__SCENARIO:
 				setScenario((EObject)null);
 				return;
+			case ScheduleReportPackage.ROW__TABLE:
+				setTable((Table)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1095,6 +1167,8 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 				return rowGroup != null;
 			case ScheduleReportPackage.ROW__SCENARIO:
 				return scenario != null;
+			case ScheduleReportPackage.ROW__TABLE:
+				return getTable() != null;
 		}
 		return super.eIsSet(featureID);
 	}

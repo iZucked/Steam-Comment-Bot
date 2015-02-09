@@ -110,9 +110,7 @@ public class CycleDiffProcessor implements IDiffProcessor {
 			}
 			if (different) {
 
-				final CycleGroup cycleGroup = ScheduleReportFactory.eINSTANCE.createCycleGroup();
-				cycleGroup.getRows().add(referenceRow);
-				table.getCycleGroups().add(cycleGroup);
+				final CycleGroup cycleGroup = CycleGroupUtils.createOrReturnCycleGroup(table, referenceRow);
 
 				final CargoAllocation thisCargoAllocation = referenceRowCargoAllocation;
 
@@ -161,9 +159,7 @@ public class CycleDiffProcessor implements IDiffProcessor {
 				final Set<Slot> buysSet = relatedSlotAllocations.getRelatedSetFor(openSlotAllocation, true);
 				final Set<Slot> sellsSet = relatedSlotAllocations.getRelatedSetFor(openSlotAllocation, false);
 
-				final CycleGroup cycleGroup = ScheduleReportFactory.eINSTANCE.createCycleGroup();
-				cycleGroup.getRows().add(referenceRow);
-				table.getCycleGroups().add(cycleGroup);
+				final CycleGroup cycleGroup = CycleGroupUtils.createOrReturnCycleGroup(table, referenceRow);
 
 				for (final Slot s : buysSet) {
 					Object a = relatedSlotAllocations.getSlotAllocation(s);
@@ -205,19 +201,18 @@ public class CycleDiffProcessor implements IDiffProcessor {
 			if (set != null) {
 				for (final EObject equiv : set) {
 					final Row r = elementToRowMap.get(equiv);
-					if (r.getCycleGroup() != null) {
-						assert (cycleGroup == null || r.getCycleGroup() == cycleGroup);
-						cycleGroup = r.getCycleGroup();
+					if (r != null) {
+						if (r.getCycleGroup() != null) {
+							assert (cycleGroup == null || r.getCycleGroup() == cycleGroup);
+							cycleGroup = r.getCycleGroup();
+						}
 					}
 				}
 			}
 			if (cycleGroup != null) {
 				referenceRow.setCycleGroup(cycleGroup);
 			} else {
-				cycleGroup = ScheduleReportFactory.eINSTANCE.createCycleGroup();
-
-				cycleGroup.getRows().add(referenceRow);
-				table.getCycleGroups().add(cycleGroup);
+				cycleGroup = CycleGroupUtils.createOrReturnCycleGroup(table, referenceRow);
 
 				if (target instanceof GeneratedCharterOut) {
 					cycleGroup.setDescription("Charter out (Virt)");
@@ -241,7 +236,9 @@ public class CycleDiffProcessor implements IDiffProcessor {
 			if (set != null) {
 				for (final EObject equiv : set) {
 					final Row r = elementToRowMap.get(equiv);
-					r.setCycleGroup(cycleGroup);
+					if (r != null) {
+						r.setCycleGroup(cycleGroup);
+					}
 				}
 			}
 		}

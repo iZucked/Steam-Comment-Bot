@@ -160,6 +160,24 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getTable_Scenarios() {
+		return (EReference)tableEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getTable_PinnedScenario() {
+		return (EReference)tableEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getRow() {
 		return rowEClass;
 	}
@@ -313,6 +331,15 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getRow_Table() {
+		return (EReference)rowEClass.getEStructuralFeatures().get(16);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getCycleGroup() {
 		return cycleGroupEClass;
 	}
@@ -394,6 +421,8 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 		createEReference(tableEClass, TABLE__ROWS);
 		createEReference(tableEClass, TABLE__CYCLE_GROUPS);
 		createEReference(tableEClass, TABLE__ROW_GROUPS);
+		createEReference(tableEClass, TABLE__SCENARIOS);
+		createEReference(tableEClass, TABLE__PINNED_SCENARIO);
 
 		rowEClass = createEClass(ROW);
 		createEAttribute(rowEClass, ROW__VISIBLE);
@@ -412,6 +441,7 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 		createEAttribute(rowEClass, ROW__REFERENCE);
 		createEReference(rowEClass, ROW__ROW_GROUP);
 		createEReference(rowEClass, ROW__SCENARIO);
+		createEReference(rowEClass, ROW__TABLE);
 
 		cycleGroupEClass = createEClass(CYCLE_GROUP);
 		createEAttribute(cycleGroupEClass, CYCLE_GROUP__DESCRIPTION);
@@ -456,9 +486,11 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(tableEClass, Table.class, "Table", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getTable_Rows(), this.getRow(), null, "rows", null, 0, -1, Table.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getTable_Rows(), this.getRow(), this.getRow_Table(), "rows", null, 0, -1, Table.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getTable_CycleGroups(), this.getCycleGroup(), null, "cycleGroups", null, 0, -1, Table.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getTable_RowGroups(), this.getRowGroup(), null, "rowGroups", null, 0, -1, Table.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getTable_Scenarios(), ecorePackage.getEObject(), null, "scenarios", null, 0, -1, Table.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getTable_PinnedScenario(), ecorePackage.getEObject(), null, "pinnedScenario", null, 0, 1, Table.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(rowEClass, Row.class, "Row", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getRow_Visible(), ecorePackage.getEBoolean(), "visible", "true", 0, 1, Row.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -477,6 +509,7 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 		initEAttribute(getRow_Reference(), ecorePackage.getEBoolean(), "reference", null, 0, 1, Row.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getRow_RowGroup(), this.getRowGroup(), this.getRowGroup_Rows(), "rowGroup", null, 0, 1, Row.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getRow_Scenario(), ecorePackage.getEObject(), null, "scenario", null, 0, 1, Row.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getRow_Table(), this.getTable(), this.getTable_Rows(), "table", null, 0, 1, Row.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(cycleGroupEClass, CycleGroup.class, "CycleGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCycleGroup_Description(), ecorePackage.getEString(), "description", null, 0, 1, CycleGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
