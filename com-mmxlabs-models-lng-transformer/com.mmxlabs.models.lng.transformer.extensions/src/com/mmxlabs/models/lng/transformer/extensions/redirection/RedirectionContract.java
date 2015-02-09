@@ -238,6 +238,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 		final ISequenceElement dischargeElement = portSlotProvider.getElement(dischargeOption);
 		final ITimeWindow baseTimeWindow = shippingHoursRestrictionProvider.getBaseTime(loadElement);
 		final IVessel vessel = nominatedVesselProvider.getNominatedVessel(loadElement);
+		assert vessel != null;
 		if (baseSalesMarketPort.equals(dischargeOption.getPort())) {
 			return marketPurchasePricePerMMBTu;
 		} else {
