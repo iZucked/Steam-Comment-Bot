@@ -1,4 +1,6 @@
-package com.mmxlabs.lingo.its.uat.utils;
+package com.mmxlabs.lingo.its.uat.suite.cases;
+
+import com.mmxlabs.lingo.its.uat.suite.utils.FeatureBasedUAT;
 
 public class UATTypedCase extends AbstractUATCase{
 

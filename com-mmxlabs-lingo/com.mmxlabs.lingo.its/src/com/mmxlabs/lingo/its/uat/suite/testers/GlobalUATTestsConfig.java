@@ -1,4 +1,4 @@
-package com.mmxlabs.lingo.its.uat.utils;
+package com.mmxlabs.lingo.its.uat.suite.testers;
 
 public class GlobalUATTestsConfig {
 	public static boolean WRITE_PROPERTIES = false;

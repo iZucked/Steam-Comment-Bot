@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
-package com.mmxlabs.lingo.its.uat.utils;
+package com.mmxlabs.lingo.its.uat.suite.cases;
 
 public class UATCase extends AbstractUATCase{
 

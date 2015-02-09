@@ -2,12 +2,15 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
-package com.mmxlabs.lingo.its.uat.utils;
+package com.mmxlabs.lingo.its.uat.suite.cases;
 
 import java.io.IOException;
 
 import org.junit.Ignore;
 import org.junit.Test;
+
+import com.mmxlabs.lingo.its.uat.suite.testers.GlobalUATTestsConfig;
+import com.mmxlabs.lingo.its.uat.suite.utils.FeatureBasedUAT;
 
 public abstract class AbstractUATTester {
 	protected UATCase[] cases;

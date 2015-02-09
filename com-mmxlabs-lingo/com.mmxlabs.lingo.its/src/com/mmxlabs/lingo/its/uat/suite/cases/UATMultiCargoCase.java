@@ -1,4 +1,4 @@
-package com.mmxlabs.lingo.its.uat.utils;
+package com.mmxlabs.lingo.its.uat.suite.cases;
 
 public class UATMultiCargoCase extends AbstractUATCase{
 	public UATTypedCase[] cases;

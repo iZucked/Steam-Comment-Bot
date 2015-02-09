@@ -2,9 +2,10 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
-package com.mmxlabs.lingo.its.uat.utils;
+package com.mmxlabs.lingo.its.uat.suite.utils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -28,6 +29,7 @@ import org.eclipse.emf.ecore.EcorePackage;
 import org.junit.Assert;
 
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
+import com.mmxlabs.lingo.its.uat.suite.testers.GlobalUATTestsConfig;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -42,6 +44,12 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.transformer.its.tests.ScenarioRunner;
 
+/**
+ * Abstract class with methods to extract features from given EMF models for use in producing test files and
+ * comparisons for clients. Expected to be subclassed on a per client, per contract basis. 
+ * @author achurchill
+ *
+ */
 public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 
 	protected List<EStructuralFeature> getFeatures(EClass c) {
@@ -225,52 +233,19 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		}
 	}
 	
-	protected abstract List<IdMapContainer> getIdMapContainers(Schedule schedule, String cargoName);
-
 	public void createPropertiesForCase(String lingoFileName, String cargoName) throws Exception {
-		/**
-		 * Extend to save properties in a sorted order for ease of reading
-		 */
-		@SuppressWarnings("serial")
-		final Properties props = new Properties() {
-			@Override
-			public Set<Object> keySet() {
-				return Collections.unmodifiableSet(new TreeSet<Object>(super.keySet()));
-			}
+		final Schedule schedule = getSchedule(lingoFileName);
 
-			@Override
-			public synchronized Enumeration<Object> keys() {
-				return Collections.enumeration(new TreeSet<Object>(super.keySet()));
-			}
-		};
-		// store some meta data:
-		props.setProperty("lingoFileURI", lingoFileName);
+		final Properties props = getNewProperties(lingoFileName);
 		final URL propsURL = getPropertiesURL(lingoFileName, "");
-		final ScenarioRunner runner = getScenarioRunner(lingoFileName);
-		Assert.assertNotNull(runner);
 
-		// Update the scenario with the Schedule links
-		runner.updateScenario();
+		fillProperties(schedule, cargoName, props);
 
-		final Schedule schedule = runner.getIntialSchedule();
-
-		final List<IdMapContainer> idMapContainers = getIdMapContainers(schedule, cargoName);
-		for (IdMapContainer d : idMapContainers) {
-			addToProperties(props, d.getIdMapList(), d.name);
-		}
-
-		// create properties file
-		File file;
-		try {
-			file = new File(propsURL.toURI());
-			props.store(new FileOutputStream(file), "Created by " + this.getClass().getName());
-		} catch (final URISyntaxException e) {
-			e.printStackTrace();
-		}
+		writePropertiesFile(props, propsURL);
 	}
 
 	public void createPropertiesForTypedCase(final Schedule schedule, final String lingoFileName, final String cargoName) throws Exception {
-		Properties props = getProperties(lingoFileName);
+		Properties props = getNewProperties(lingoFileName);
 		final URL propsURL = getPropertiesURL(lingoFileName, cargoName);
 		
 		final List<IdMapContainer> idMapContainers = getIdMapContainers(schedule, cargoName);
@@ -278,17 +253,10 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 			addToProperties(props, d.getIdMapList(), d.name);
 		}
 		
-		// create properties file
-		File file;
-		try {
-			file = new File(propsURL.toURI());
-			props.store(new FileOutputStream(file), "Created by " + this.getClass().getName());
-		} catch (final URISyntaxException e) {
-			e.printStackTrace();
-		}
+		writePropertiesFile(props, propsURL);
 	}
 	
-	public Properties getProperties(String lingoFileName) throws MalformedURLException, IOException {
+	private Properties getNewProperties(String lingoFileName) throws MalformedURLException, IOException {
 		/**
 		 * Extend to save properties in a sorted order for ease of reading
 		 */
@@ -308,62 +276,36 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		props.setProperty("lingoFileURI", lingoFileName);
 		return props;
 	}
-	public void createPropertiesForMultiCargoCase(String lingoFileName, String[] cargoNames) throws Exception {
-		/**
-		 * Extend to save properties in a sorted order for ease of reading
-		 */
-		@SuppressWarnings("serial")
-		final Properties props = new Properties() {
-			@Override
-			public Set<Object> keySet() {
-				return Collections.unmodifiableSet(new TreeSet<Object>(super.keySet()));
-			}
-			
-			@Override
-			public synchronized Enumeration<Object> keys() {
-				return Collections.enumeration(new TreeSet<Object>(super.keySet()));
-			}
-		};
-		final ScenarioRunner runner = getScenarioRunner(lingoFileName);
-		Assert.assertNotNull(runner);
-		
-		// Update the scenario with the Schedule links
-		runner.updateScenario();
-		final Schedule schedule = runner.getIntialSchedule();
-		
-		for (String cargoName: cargoNames) {
-			// store some meta data:
-			props.setProperty("lingoFileURI", lingoFileName);
-			final URL propsURL = getPropertiesURL(lingoFileName, cargoName);
-			
-			final List<IdMapContainer> idMapContainers = getIdMapContainers(schedule, cargoName);
-			for (IdMapContainer d : idMapContainers) {
-				addToProperties(props, d.getIdMapList(), d.name);
-			}
-			
-			// create properties file
-			File file;
-			try {
-				file = new File(propsURL.toURI());
-				props.store(new FileOutputStream(file), "Created by " + this.getClass().getName());
-			} catch (final URISyntaxException e) {
-				e.printStackTrace();
-			}
+	
+	private Properties getExistingProperties(String lingoFileName, String suffix) throws MalformedURLException, IOException {
+		final Properties props = new Properties();
+		final URL propsURL = getPropertiesURL(lingoFileName, suffix);
+		props.load(propsURL.openStream());
+		return props;
+	}
+	
+	private void fillProperties(Schedule schedule, String cargoName, Properties props) {
+		final List<IdMapContainer> idMapContainers = getIdMapContainers(schedule, cargoName);
+		for (IdMapContainer d : idMapContainers) {
+			addToProperties(props, d.getIdMapList(), d.name);
+		}
+	}
+	
+	private void writePropertiesFile(Properties props, URL propsURL) throws FileNotFoundException, IOException {
+		// create properties file
+		File file;
+		try {
+			file = new File(propsURL.toURI());
+			props.store(new FileOutputStream(file), "Created by " + this.getClass().getName());
+		} catch (final URISyntaxException e) {
+			e.printStackTrace();
 		}
 	}
 	
 	public void checkPropertiesForCase(String lingoFileName, String cargoName, boolean additionalChecks) throws Exception {
-		final Properties props = new Properties();
-		final URL propsURL = getPropertiesURL(lingoFileName, "");
-		props.load(propsURL.openStream());
+		final Properties props = getExistingProperties(lingoFileName, "");
 
-		final ScenarioRunner runner = getScenarioRunner(lingoFileName);
-		Assert.assertNotNull(runner);
-
-		// Update the scenario with the Schedule links
-		runner.updateScenario();
-
-		final Schedule schedule = runner.getIntialSchedule();
+		final Schedule schedule = getSchedule(lingoFileName);
 
 		final List<IdMapContainer> idMapContainers = getIdMapContainers(schedule, cargoName);
 		for (IdMapContainer d : idMapContainers) {
@@ -376,9 +318,7 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 	}
 
 	public void checkPropertiesForTypedCase(Schedule schedule, String lingoFileName, String cargoName, boolean additionalChecks) throws Exception {
-		final Properties props = new Properties();
-		final URL propsURL = getPropertiesURL(lingoFileName, cargoName);
-		props.load(propsURL.openStream());
+		final Properties props = getExistingProperties(lingoFileName, cargoName);
 		
 		final List<IdMapContainer> idMapContainers = getIdMapContainers(schedule, cargoName);
 		for (IdMapContainer d : idMapContainers) {
@@ -390,32 +330,11 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		}
 	}
 	
-	public void checkPropertiesForMultiCargoCase(String lingoFileName, String[] cargoNames, boolean additionalChecks) throws Exception {
-		
-		final ScenarioRunner runner = getScenarioRunner(lingoFileName);
-		Assert.assertNotNull(runner);
-		
-		// Update the scenario with the Schedule links
-		runner.updateScenario();
-		
-		final Schedule schedule = runner.getIntialSchedule();
-		
-		for (String cargoName : cargoNames) {
-			final Properties props = new Properties();
-			final URL propsURL = getPropertiesURL(lingoFileName, cargoName);
-			props.load(propsURL.openStream());
-			
-			final List<IdMapContainer> idMapContainers = getIdMapContainers(schedule, cargoName);
-			for (IdMapContainer d : idMapContainers) {
-				comparePropertiesToLingo(props, d.getIdMapList(), d.name, cargoName);
-			}
-			
-			if (additionalChecks) {
-				additionalChecks(schedule, cargoName);
-			}
-		}
-	}
-	
+	/**
+	 * This method is used to add special contract specific checks
+	 * @param schedule
+	 * @param cargoName
+	 */
 	protected void additionalChecks(Schedule schedule, String cargoName) {
 	}
 
@@ -462,5 +381,13 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 	private String createPropertyKey(IdMap map, String prefix) {
 		return String.format("%s-%s", prefix, map.getId());
 	}
+	
+	/**
+	 * This abstract method must be implemented to produce the features used to create testing properties.
+	 * @param schedule
+	 * @param cargoName
+	 * @return
+	 */
+	protected abstract List<IdMapContainer> getIdMapContainers(Schedule schedule, String cargoName);
 
 }

@@ -1,4 +1,4 @@
-package com.mmxlabs.lingo.its.uat.utils;
+package com.mmxlabs.lingo.its.uat.suite.cases;
 
 public abstract class AbstractUATCase {
 
