@@ -14,7 +14,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -41,7 +40,6 @@ import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.transformer.its.tests.ScenarioRunner;
 
 /**
@@ -175,7 +173,7 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 				loadAllocation = slotAllocation;
 			}
 		}
-		if (loadSlot != null) {
+		if (loadSlot != null && loadAllocation != null) {
 			fillFeatureMap(loadSlot.eClass(), slotTable, loadSlot);
 			fillFeatureMap(loadAllocation.eClass(), slotTable, loadAllocation, "allocation");
 		}
@@ -192,7 +190,7 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 				dischargeAllocation = slotAllocation;
 			}
 		}
-		if (dischargeSlot != null) {
+		if (dischargeSlot != null && dischargeAllocation != null) {
 			fillFeatureMap(dischargeSlot.eClass(), slotTable, dischargeSlot);
 			fillFeatureMap(dischargeAllocation.eClass(), slotTable, dischargeAllocation, "allocation");
 		}
