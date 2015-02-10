@@ -36,7 +36,7 @@ public interface EObjectWrapper extends EObject {
 	 * @param name
 	 * @return
 	 */
-	Object getAttrib(String name);
+	<T> T getAttrib(String name);
 
 	/**
 	 * Find the named {@link EAttribute} and return the result at a typed {@link List}.
