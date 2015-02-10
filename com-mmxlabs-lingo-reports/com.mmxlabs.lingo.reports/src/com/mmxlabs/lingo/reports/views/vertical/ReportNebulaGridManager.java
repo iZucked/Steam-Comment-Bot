@@ -154,9 +154,9 @@ public class ReportNebulaGridManager implements IStructuredContentProvider {
 		if (calendarColumns != null) {
 			for (final CalendarColumn column : calendarColumns) {
 				if (column.getColumnGroup() != null) {
-					nebulaColumns.add(verticalReport.createColumn(column.createColumnLabelProvider(this), column.getTitle(), column.getColumnGroup()));
+					nebulaColumns.add(verticalReport.createColumn(column.createColumnLabelProvider(this), column.getProvider(), column.getTitle(), column.getColumnGroup()));
 				} else {
-					nebulaColumns.add(verticalReport.createColumn(column.createColumnLabelProvider(this), column.getTitle()));
+					nebulaColumns.add(verticalReport.createColumn(column.createColumnLabelProvider(this), column.getProvider(), column.getTitle()));
 				}
 			}
 		}

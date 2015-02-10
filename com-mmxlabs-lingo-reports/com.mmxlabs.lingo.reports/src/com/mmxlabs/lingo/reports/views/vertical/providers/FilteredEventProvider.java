@@ -9,6 +9,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.joda.time.LocalDate;
 
 import com.mmxlabs.lingo.reports.views.vertical.filters.EventFilter;
+import com.mmxlabs.lingo.reports.views.vertical.labellers.IBorderProvider;
 import com.mmxlabs.models.lng.schedule.Event;
 
 /**
@@ -17,13 +18,19 @@ import com.mmxlabs.models.lng.schedule.Event;
  * @author Simon Goodall
  * 
  */
-public final class FilteredEventProvider extends EventProvider {
+public final class FilteredEventProvider extends EventProvider implements IBorderProvider {
 
 	private final EventProvider wrapped;
+	private final IBorderProvider borderProvider;
 
 	public FilteredEventProvider(@NonNull final EventProvider wrapped, @Nullable final EventFilter filter) {
 		super(filter);
 		this.wrapped = wrapped;
+		if (wrapped instanceof IBorderProvider) {
+			borderProvider = (IBorderProvider) wrapped;
+		} else {
+			borderProvider = null;
+		}
 	}
 
 	@Override
@@ -31,4 +38,11 @@ public final class FilteredEventProvider extends EventProvider {
 		return wrapped.getEvents(date);
 	}
 
+	@Override
+	public int getBorders(final LocalDate date, final Event event) {
+		if (borderProvider != null) {
+			return borderProvider.getBorders(date, event);
+		}
+		return IBorderProvider.NONE;
+	}
 }
