@@ -15,13 +15,9 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.widgets.Display;
 import org.joda.time.Days;
-import org.joda.time.Hours;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
-import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -29,9 +25,12 @@ import com.google.common.collect.Range;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.lingo.reports.ColourPalette;
+import com.mmxlabs.lingo.reports.ColourPalette.ColourElements;
+import com.mmxlabs.lingo.reports.ColourPalette.ColourPaletteItems;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
@@ -52,16 +51,25 @@ import com.mmxlabs.models.lng.types.ITimezoneProvider;
 
 public abstract class AbstractVerticalReportVisualiser {
 
-	public static RGB Black = new RGB(0, 0, 0);
-	public static RGB Grey = new RGB(168, 168, 168);
-	public static RGB Header_Grey = new RGB(228, 228, 228);
-	public static RGB Light_Grey = new RGB(240, 240, 240);
-	public static RGB Light_Orange = new RGB(255, 197, 168);
-	public static RGB Orange = new RGB(255, 168, 64);
-	protected final HashMap<RGB, Color> colourMap = new HashMap<>();
+	// public static RGB Black = new RGB(0, 0, 0);
+	// public static RGB Grey = new RGB(168, 168, 168);
+	// public static RGB Header_Grey = new RGB(228, 228, 228);
+	// public static RGB Light_Grey = new RGB(240, 240, 240);
+	// public static RGB Light_Orange = new RGB(255, 197, 168);
+	// public static RGB Orange = new RGB(255, 168, 64);
 
 	protected final Map<Pair<EObject, EAttribute>, LocalDateTime> dateCacheA = new HashMap<>();
 	protected final Map<Triple<EObject, Date, EAttribute>, LocalDateTime> dateCacheB = new HashMap<>();
+
+	protected final ColourPalette colourPalette;
+
+	protected AbstractVerticalReportVisualiser() {
+		this(ColourPalette.getInstance());
+	}
+
+	protected AbstractVerticalReportVisualiser(final ColourPalette colourPalette) {
+		this.colourPalette = colourPalette;
+	}
 
 	public DateTimeFormatter createDateFormat() {
 		return DateTimeFormat.forPattern("dd/MMM/yy");
@@ -83,16 +91,6 @@ public abstract class AbstractVerticalReportVisualiser {
 		return /* isWindow ? getColour(Light_Orange) : */getSlotColour(visit);
 	}
 
-	public Color getColour(final RGB rgb) {
-		if (colourMap.containsKey(rgb)) {
-			return colourMap.get(rgb);
-		} else {
-			final Color result = new Color(Display.getCurrent(), rgb);
-			colourMap.put(rgb, result);
-			return result;
-		}
-	}
-
 	public Color getEventBackgroundColor(final LocalDate date, final Event event) {
 
 		if (event instanceof SlotVisit) {
@@ -100,22 +98,29 @@ public abstract class AbstractVerticalReportVisualiser {
 		}
 		if (event instanceof Journey) {
 			if (((Journey) event).isLaden()) {
-				return getColour(ColourPalette.Vessel_Laden_Journey);
-			} else
-				return getColour(ColourPalette.Vessel_Ballast_Journey);
+				return colourPalette.getColourFor(ColourPaletteItems.Voyage_Laden_Journey, ColourElements.Background);
+			} else {
+				return colourPalette.getColourFor(ColourPaletteItems.Voyage_Ballast_Journey, ColourElements.Background);
+			}
 		}
 		if (event instanceof CharterOutEvent) {
-			return getColour(ColourPalette.Vessel_Charter_Out);
+			return colourPalette.getColourFor(ColourPaletteItems.Event_CharterOut, ColourElements.Background);
+		}
+		if (event instanceof DryDockEvent) {
+			return colourPalette.getColourFor(ColourPaletteItems.Event_DryDock, ColourElements.Background);
+		}
+		if (event instanceof MaintenanceEvent) {
+			return colourPalette.getColourFor(ColourPaletteItems.Event_Maintenence, ColourElements.Background);
 		}
 		if (event instanceof GeneratedCharterOut) {
-			return getColour(ColourPalette.Vessel_Generated_Charter_Out);
+			return colourPalette.getColourFor(ColourPaletteItems.Voyage_GeneratedCharterOut, ColourElements.Background);
 		}
 
 		if (event instanceof Idle) {
 			if (((Idle) event).isLaden()) {
-				return getColour(ColourPalette.Vessel_Laden_Idle);
+				return colourPalette.getColourFor(ColourPaletteItems.Voyage_Laden_Idle, ColourElements.Background);
 			} else
-				return getColour(ColourPalette.Vessel_Ballast_Idle);
+				return colourPalette.getColourFor(ColourPaletteItems.Voyage_Ballast_Idle, ColourElements.Background);
 		}
 
 		return null;
@@ -197,7 +202,11 @@ public abstract class AbstractVerticalReportVisualiser {
 	}
 
 	public Color getSlotColour(final SlotVisit visit) {
-		return getColour(Orange);
+		if (visit.getSlotAllocation().getSlot() instanceof LoadSlot) {
+			return colourPalette.getColourFor(ColourPaletteItems.Voyage_Load, ColourElements.Background);
+		} else {
+			return colourPalette.getColourFor(ColourPaletteItems.Voyage_Discharge, ColourElements.Background);
+		}
 	}
 
 	/**
@@ -211,10 +220,6 @@ public abstract class AbstractVerticalReportVisualiser {
 	}
 
 	public void dispose() {
-		for (final Color colour : colourMap.values()) {
-			colour.dispose();
-		}
-		colourMap.clear();
 	}
 
 	/**
