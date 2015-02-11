@@ -10,11 +10,13 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypedElement;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.lingo.reports.components.ColumnType;
+import com.mmxlabs.lingo.reports.components.IRowSpanProvider;
 import com.mmxlabs.lingo.reports.components.MultiObjectEmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.components.SimpleEmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
@@ -26,6 +28,7 @@ import com.mmxlabs.lingo.reports.views.formatters.PriceFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
+import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
@@ -64,6 +67,79 @@ import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
 public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
+
+	private final class PNLDeltaFormatter extends IntegerFormatter implements IRowSpanProvider {
+		@Override
+		public Integer getIntValue(final Object object) {
+
+			if (object instanceof Row) {
+				final Row row = (Row) object;
+
+				// In simplePinDiff mode, we can activate row spanning, thus we always show total P&L delta. Otherwise show p&l delta only on the non-reference rows.
+				final Table tbl = row.getTable();
+				boolean simplePinDiff = tbl.getScenarios().size() == 2 && tbl.getPinnedScenario() != null;
+
+				// Disabled, see comment above.
+				if (!simplePinDiff && row.isReference()) {
+					return null;
+				}
+
+				final CycleGroup group = row.getCycleGroup();
+				if (group != null) {
+					int delta = 0;
+					for (final Row groupRow : group.getRows()) {
+						final Integer pnl = getElementProfitAndLoss(groupRow.getTarget());
+						if (pnl == null) {
+							continue;
+						}
+						if (groupRow.isReference()) {
+							delta -= pnl.intValue();
+						} else {
+							// Exclude rows from other scenarios. (disabled, see comment above)
+							if (!simplePinDiff && groupRow.getSchedule() != row.getSchedule()) {
+								continue;
+							}
+							delta += pnl.intValue();
+						}
+					}
+					return delta;
+				}
+			}
+			return null;
+		}
+
+		@Override
+		public int getRowSpan(final ViewerCell cell, final Object object) {
+			if (object instanceof Row) {
+				final Row row = (Row) object;
+
+				final Table tbl = row.getTable();
+				if (tbl.getScenarios().size() == 2 && tbl.getPinnedScenario() != null) {
+					final CycleGroup group = row.getCycleGroup();
+					if (group != null) {
+						// Navigate upwards to find the number of rows spanned so far for a given cycle group.
+						// Note: This *only* works for displayed cells. Cells which have not been drawn yet (ViewerCell.BELOW) or are not visible (outside of current scroll viewport) will be retuned
+						// as a null neighbour.
+						{
+							int count = 0;
+							ViewerCell neighbour = cell.getNeighbor(ViewerCell.ABOVE, false);
+							while (neighbour != null && neighbour.getElement() instanceof Row) {
+								final Row neighbourRow = (Row) neighbour.getElement();
+								if (neighbourRow.getCycleGroup() == group) {
+									count++;
+									neighbour = neighbour.getNeighbor(ViewerCell.ABOVE, false);
+								} else {
+									break;
+								}
+							}
+							return count;
+						}
+					}
+				}
+			}
+			return 0;
+		}
+	}
 
 	private static final Logger log = LoggerFactory.getLogger(StandardScheduleColumnFactory.class);
 
@@ -408,28 +484,8 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				@Override
 				public Integer getIntValue(final Object object) {
 
-					ProfitAndLossContainer container = null;
+					return getElementProfitAndLoss(object);
 
-					if (object instanceof CargoAllocation || object instanceof VesselEventVisit || object instanceof StartEvent || object instanceof GeneratedCharterOut
-							|| object instanceof OpenSlotAllocation) {
-						container = (ProfitAndLossContainer) object;
-					}
-					if (object instanceof SlotVisit) {
-						final SlotVisit slotVisit = (SlotVisit) object;
-						if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-							container = slotVisit.getSlotAllocation().getCargoAllocation();
-						}
-					}
-
-					if (container != null) {
-
-						final GroupProfitAndLoss dataWithKey = container.getGroupProfitAndLoss();
-						if (dataWithKey != null) {
-							return (int) dataWithKey.getProfitAndLoss();
-						}
-					}
-
-					return null;
 				}
 			}, targetObjectRef));
 			break;
@@ -485,6 +541,9 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation_group":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Permutation Group", null, ColumnType.DIFF, generatePermutationGroupColumnFormatter(cargoAllocationRef));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation_group_pnldelta":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "P&L Delta", null, ColumnType.DIFF, generatePermutationGroupPNLDeltaColumnFormatter(cargoAllocationRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_changestring":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Change", null, ColumnType.DIFF, generateChangeStringColumnFormatter(cargoAllocationRef));
@@ -649,6 +708,10 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 		};
 	}
 
+	public ICellRenderer generatePermutationGroupPNLDeltaColumnFormatter(final EStructuralFeature cargoAllocationRef) {
+		return new PNLDeltaFormatter();
+	}
+
 	/**
 	 * Generate a new formatter for the previous-vessel-assignment column
 	 * 
@@ -768,4 +831,28 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			}
 		};
 	}
+
+	private Integer getElementProfitAndLoss(final Object object) {
+		ProfitAndLossContainer container = null;
+
+		if (object instanceof CargoAllocation || object instanceof VesselEventVisit || object instanceof StartEvent || object instanceof GeneratedCharterOut || object instanceof OpenSlotAllocation) {
+			container = (ProfitAndLossContainer) object;
+		}
+		if (object instanceof SlotVisit) {
+			final SlotVisit slotVisit = (SlotVisit) object;
+			if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
+				container = slotVisit.getSlotAllocation().getCargoAllocation();
+			}
+		}
+
+		if (container != null) {
+
+			final GroupProfitAndLoss dataWithKey = container.getGroupProfitAndLoss();
+			if (dataWithKey != null) {
+				return (int) dataWithKey.getProfitAndLoss();
+			}
+		}
+		return null;
+	}
+
 }

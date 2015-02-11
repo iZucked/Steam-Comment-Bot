@@ -217,6 +217,10 @@
       </ScheduleBasedColumn>
       <ScheduleBasedColumn
             handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation_group_pnldelta">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
             id="com.mmxlabs.lingo.reports.components.columns.schedule.pnl_trading">
       </ScheduleBasedColumn>
             <ScheduleBasedColumn
@@ -396,6 +400,9 @@
          <InitialColumn
                id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation">
          </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation_group_pnldelta">
+         </InitialColumn>         
          <InitialColumn
                id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation_group">
          </InitialColumn>

@@ -26,6 +26,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
+import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -67,7 +68,7 @@ import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerFilterSupport;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerSortingSupport;
 import com.mmxlabs.models.ui.tabular.filter.FilterField;
-import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
+import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 
 /**
@@ -553,7 +554,18 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 	private void makeActions() {
 		packColumnsAction = PackActionFactory.createPackColumnsAction(viewer);
-		copyTableAction = new CopyGridToClipboardAction(viewer.getGrid());
+		copyTableAction = new CopyGridToHtmlClipboardAction(viewer.getGrid(), false) {
+			@Override
+			protected String[] getAdditionalHeaderAttributes(GridColumn column) {
+				// Border around all header cells.
+				return null;//new String[] { "style='border:1 solid #000;'" };
+			}
+			@Override
+			protected String[] getAdditionalAttributes(final GridItem item, final int i) {
+				// Border around all header cells.
+				return null;//new String[] { "style='border:1 solid #000;'" };
+			}
+		};
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
 	}
 
