@@ -25,6 +25,7 @@ import com.mmxlabs.lingo.reports.ScheduleElementCollector;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandler;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.CycleDiffProcessor;
+import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.GCOCycleGroupingProcessor;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.IDiffProcessor;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.StructuralDifferencesProcessor;
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
@@ -109,6 +110,7 @@ public class ScheduleTransformer {
 				diffProcessors.clear();
 				diffProcessors.add(new CycleDiffProcessor(customRelatedSlotHandlers));
 				diffProcessors.add(new StructuralDifferencesProcessor(builder.getScheduleDiffUtils()));
+				diffProcessors.add(new GCOCycleGroupingProcessor());
 			}
 
 			@Override
