@@ -7,6 +7,7 @@ package com.mmxlabs.lingo.reports.views.schedule;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -79,7 +80,7 @@ public class ScheduleTransformer {
 
 			private boolean isPinned = false;
 			private int numberOfSchedules;
-			private List<LNGScenarioModel> rootObjects = new LinkedList<>();
+			private final List<LNGScenarioModel> rootObjects = new LinkedList<>();
 			private final List<IDiffProcessor> diffProcessors = new LinkedList<>();
 
 			@Override
@@ -133,6 +134,7 @@ public class ScheduleTransformer {
 			@Override
 			public void endCollecting() {
 				// In Pin/Diff mode
+
 				final boolean pinDiffMode = numberOfSchedules > 1 && isPinned;
 				for (final ColumnBlock handler : builder.getBlockManager().getBlocksInVisibleOrder()) {
 					if (handler != null) {
@@ -161,7 +163,10 @@ public class ScheduleTransformer {
 
 					// Display unique rows.
 					for (final EObject element : uniqueElements) {
-						elementToRowMap.get(element).setVisible(true);
+						final Row row = elementToRowMap.get(element);
+						if (row != null) {
+							row.setVisible(true);
+						}
 					}
 					// // Run diff processes.
 					for (final IDiffProcessor diffProcessor : diffProcessors) {
@@ -181,11 +186,13 @@ public class ScheduleTransformer {
 	public List<Row> generateRows(final Table dataModelInstance, final ScenarioInstance scenarioInstance, final Schedule schedule, final boolean isPinned) {
 
 		final List<EObject> interestingEvents = new LinkedList<EObject>();
+		final Set<EObject> allEvents = new HashSet<EObject>();
 		for (final Sequence sequence : schedule.getSequences()) {
 			for (final Event event : sequence.getEvents()) {
 				if (builder.showEvent(event)) {
 					interestingEvents.add(event);
 				}
+				allEvents.add(event);
 			}
 		}
 
@@ -193,16 +200,16 @@ public class ScheduleTransformer {
 			if (builder.showOpenSlot(openSlotAllocation)) {
 				interestingEvents.add(openSlotAllocation);
 			}
+			allEvents.add(openSlotAllocation);
 		}
 
-		return generateRows(dataModelInstance, scenarioInstance, schedule, interestingEvents, isPinned);
+		return generateRows(dataModelInstance, scenarioInstance, schedule, interestingEvents, allEvents, isPinned);
 	}
 
 	public List<Row> generateRows(final Table tableModelInstance, final ScenarioInstance scenarioInstance, final Schedule schedule, final List<EObject> interestingElements,
-			final boolean isReferenceSchedule) {
+			final Set<EObject> allElements, final boolean isReferenceSchedule) {
 		final List<Row> rows = new ArrayList<Row>(interestingElements.size());
 
-		final List<EObject> scheduleElements = new LinkedList<>();
 		if (isReferenceSchedule) {
 			this.referenceElements = new LinkedList<>();
 		}
@@ -246,7 +253,7 @@ public class ScheduleTransformer {
 
 							this.referenceElements.add(slot);
 						}
-						scheduleElements.add(slot);
+						allElements.add(slot);
 					}
 					if (i < dischargeSlots.size()) {
 						final SlotAllocation slot = dischargeSlots.get(i);
@@ -258,7 +265,7 @@ public class ScheduleTransformer {
 
 							this.referenceElements.add(slot);
 						}
-						scheduleElements.add(slot);
+						allElements.add(slot);
 					}
 					rows.add(row);
 					addInputEquivalents(row, cargoAllocation);
@@ -271,7 +278,7 @@ public class ScheduleTransformer {
 				row.setTarget(openSlotAllocation);
 				row.setOpenSlotAllocation(openSlotAllocation);
 				elementToRowMap.put(openSlotAllocation, row);
-				scheduleElements.add(openSlotAllocation);
+				allElements.add(openSlotAllocation);
 				if (isReferenceSchedule) {
 					this.referenceElements.add(openSlotAllocation);
 				}
@@ -288,7 +295,6 @@ public class ScheduleTransformer {
 				}
 				addInputEquivalents(row, openSlotAllocation);
 				rows.add(row);
-
 			} else if (element instanceof Event) {
 				final Event event = (Event) element;
 				final Row row = ScheduleReportFactory.eINSTANCE.createRow();
@@ -297,7 +303,7 @@ public class ScheduleTransformer {
 				rows.add(row);
 
 				elementToRowMap.put(event, row);
-				scheduleElements.add(event);
+				allElements.add(event);
 				if (isReferenceSchedule) {
 					this.referenceElements.add(event);
 				}
@@ -317,7 +323,7 @@ public class ScheduleTransformer {
 		}
 
 		// Generate the element by key map
-		final Map<String, List<EObject>> map = equivalanceGroupBuilder.generateElementNameGroups(scheduleElements);
+		final Map<String, List<EObject>> map = equivalanceGroupBuilder.generateElementNameGroups(allElements);
 		if (isReferenceSchedule) {
 			perScenarioElementsByKeyMap.add(0, map);
 		} else {
@@ -356,8 +362,10 @@ public class ScheduleTransformer {
 		} else if (a instanceof VesselEventVisit) {
 			final VesselEventVisit vesselEventVisit = (VesselEventVisit) a;
 			row.getInputEquivalents().addAll(Lists.<EObject> newArrayList(vesselEventVisit, vesselEventVisit.getVesselEvent()));
+			row.getInputEquivalents().addAll(vesselEventVisit.getEvents());
 		} else if (a instanceof StartEvent) {
 			final StartEvent startEvent = (StartEvent) a;
+			row.getInputEquivalents().addAll(startEvent.getEvents());
 			final VesselAvailability vesselAvailability = startEvent.getSequence().getVesselAvailability();
 			if (vesselAvailability != null) {
 				row.getInputEquivalents().addAll(Lists.<EObject> newArrayList(startEvent, vesselAvailability.getVessel()));

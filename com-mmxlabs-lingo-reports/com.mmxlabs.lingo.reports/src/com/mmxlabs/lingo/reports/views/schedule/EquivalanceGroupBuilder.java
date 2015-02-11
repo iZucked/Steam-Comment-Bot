@@ -24,10 +24,12 @@ import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.mmxcore.NamedObject;
 
@@ -36,7 +38,7 @@ public class EquivalanceGroupBuilder {
 	private Set<EObject> checkElementEquivalence(final EObject referenceElement, final List<EObject> elements) {
 
 		final Set<EObject> equivalents = new HashSet<>();
-		String keyB = getElementKey(referenceElement);
+		final String keyB = getElementKey(referenceElement);
 		if (referenceElement instanceof SlotAllocation) {
 			final SlotAllocation slotAllocation = (SlotAllocation) referenceElement;
 			if (slotAllocation.getSlot() instanceof SpotLoadSlot) {
@@ -85,6 +87,58 @@ public class EquivalanceGroupBuilder {
 			}
 		}
 
+		if (referenceElement instanceof SlotVisit) {
+			SlotVisit slotVisit = (SlotVisit) referenceElement;
+			final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();// (SlotAllocation) referenceElement;
+			if (slotAllocation.getSlot() instanceof SpotLoadSlot) {
+				final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
+				for (final SlotAllocation sa : cargoAllocation.getSlotAllocations()) {
+					if (sa == slotAllocation) {
+						continue;
+					}
+
+					for (final EObject eObject : elements) {
+						if (eObject instanceof SlotVisit) {
+							SlotVisit slotVisit2 = (SlotVisit) eObject;
+							final SlotAllocation eObjectslotAllocation = slotVisit2.getSlotAllocation();
+							final CargoAllocation eObjectcargoAllocation = eObjectslotAllocation.getCargoAllocation();
+							for (final SlotAllocation eObjectsa : eObjectcargoAllocation.getSlotAllocations()) {
+								if (getElementKey(sa).equals(getElementKey(eObjectsa))) {
+									equivalents.add(eObject);
+								}
+							}
+						}
+					}
+
+				}
+
+				return equivalents;
+			} else if (slotAllocation.getSlot() instanceof SpotDischargeSlot) {
+				final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
+				for (final SlotAllocation sa : cargoAllocation.getSlotAllocations()) {
+					if (sa == slotAllocation) {
+						continue;
+					}
+					for (final EObject eObject : elements) {
+						if (eObject instanceof SlotVisit) {
+							SlotVisit slotVisit2 = (SlotVisit) eObject;
+							final SlotAllocation eObjectslotAllocation = slotVisit2.getSlotAllocation();
+
+							final CargoAllocation eObjectcargoAllocation = eObjectslotAllocation.getCargoAllocation();
+							for (final SlotAllocation eObjectsa : eObjectcargoAllocation.getSlotAllocations()) {
+								if (getElementKey(sa).equals(getElementKey(eObjectsa))) {
+									equivalents.add(eObject);
+								}
+							}
+						}
+					}
+
+				}
+
+				return equivalents;
+			}
+		}
+
 		{
 			for (final EObject eObject : elements) {
 				if (getElementKey(eObject).equals(keyB)) {
@@ -95,7 +149,7 @@ public class EquivalanceGroupBuilder {
 		return equivalents;
 	}
 
-	public Map<String, List<EObject>> generateElementNameGroups(final List<EObject> elements) {
+	public Map<String, List<EObject>> generateElementNameGroups(final Collection<EObject> elements) {
 		final Map<String, List<EObject>> scheduleMap = new HashMap<>();
 		for (final EObject eObj : elements) {
 			final String key = getElementKey(eObj);
@@ -162,19 +216,50 @@ public class EquivalanceGroupBuilder {
 					final Collection<EObject> equivalences = checkElementEquivalence(referenceElement, elements);
 					if (equivalences != null) {
 						updateHashSetMap(equivalancesMap, referenceElement, equivalences);
+						// TODO: May not need this section as we pass in SlotVisits explicitly.
+						if (referenceElement instanceof SlotAllocation) {
+							final SlotAllocation referenceAllocation = (SlotAllocation) referenceElement;
+							final Set<EObject> equivalentVisits = new HashSet<>();
+							for (final EObject e : equivalences) {
+								if (e instanceof SlotAllocation) {
+									equivalentVisits.add(((SlotAllocation) e).getSlotVisit());
+								}
+							}
+							updateHashSetMap(equivalancesMap, referenceAllocation.getSlotVisit(), equivalentVisits);
+
+						}
 					}
+
+					// TODO: Break out into separate function?
+					// Here we attempt to link rows together based on equivalence.
 					if (equivalences != null && !equivalences.isEmpty()) {
+
+						// Skip SlotVisits as rows are linked by SlotAllocations
+						if (referenceElement instanceof SlotVisit) {
+							continue;
+						}
+						// Skip DischargeSlots references as we link by load slot
+						if (referenceElement instanceof SlotAllocation) {
+							if (((SlotAllocation) referenceElement).getSlot() instanceof DischargeSlot) {
+								continue;
+							}
+						}
+
 						// Row referenceRow = elementToRowMap.get(referenceElement);
 						for (final EObject e : equivalences) {
 							final Row equivalenceRow = elementToRowMap.get(e);
-							if (e instanceof SlotAllocation) {
-								if (((SlotAllocation) e).getSlot() instanceof DischargeSlot) {
-									if (equivalenceRow.getReferenceRow() != null) {
-										continue;
+							if (equivalenceRow != null) {
+								if (e instanceof SlotAllocation) {
+									if (((SlotAllocation) e).getSlot() instanceof DischargeSlot) {
+										if (equivalenceRow.getReferenceRow() != null) {
+											continue;
+										}
 									}
 								}
+								if (referenceRow != null) {
+									equivalenceRow.setReferenceRow(referenceRow);
+								}
 							}
-							equivalenceRow.setReferenceRow(referenceRow);
 						}
 
 					}
@@ -230,16 +315,16 @@ public class EquivalanceGroupBuilder {
 			}
 		}
 		if (element instanceof SlotVisit) {
-			return getElementKey(((SlotVisit) element).getSlotAllocation());
+			return "visit-" + getElementKey(((SlotVisit) element).getSlotAllocation());
 		}
 		if (element instanceof SlotAllocation) {
 			final SlotAllocation slotAllocation = (SlotAllocation) element;
 			String prefix = "";
 			final Slot slot = slotAllocation.getSlot();
 			if (slot instanceof LoadSlot) {
-				prefix = "load";
+				prefix = "allocation-load";
 			} else {
-				prefix = "discharge";
+				prefix = "allocation-discharge";
 			}
 			if (slot instanceof SpotSlot) {
 				final SpotMarket market = ((SpotSlot) slot).getMarket();
@@ -251,9 +336,9 @@ public class EquivalanceGroupBuilder {
 				return prefix + "-" + baseName;
 			}
 		} else if (element instanceof CargoAllocation) {
-			return ((CargoAllocation) element).getName();
+			return "cargo-" + ((CargoAllocation) element).getName();
 		} else if (element instanceof OpenSlotAllocation) {
-			OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) element;
+			final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) element;
 			String prefix = "";
 			final Slot slot = openSlotAllocation.getSlot();
 			if (slot instanceof LoadSlot) {
@@ -270,13 +355,18 @@ public class EquivalanceGroupBuilder {
 				final String baseName = openSlotAllocation.getSlot().getName();
 				return prefix + "-" + baseName;
 			}
+		} else if (element instanceof StartEvent) {
+			final StartEvent startEvent = (StartEvent) element;
+			return "start-" + startEvent.getSequence().getName();
+		} else if (element instanceof EndEvent) {
+			final EndEvent endEvent = (EndEvent) element;
+			return "end-" + endEvent.getSequence().getName();
 		} else if (element instanceof Event) {
-			return ((Event) element).name();
+			return element.eClass().getName() + "-" + ((Event) element).name();
 		}
 		if (element instanceof NamedObject) {
-			return ((NamedObject) element).getName();
+			return element.getClass().getName() + "-" + ((NamedObject) element).getName();
 		}
 		return element.toString();
 	}
-
 }

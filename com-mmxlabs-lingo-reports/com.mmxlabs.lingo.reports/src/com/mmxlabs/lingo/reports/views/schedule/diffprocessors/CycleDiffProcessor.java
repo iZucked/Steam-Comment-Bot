@@ -19,7 +19,6 @@ import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandler;
 import com.mmxlabs.lingo.reports.utils.RelatedSlotAllocations;
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
-import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
@@ -83,6 +82,9 @@ public class CycleDiffProcessor implements IDiffProcessor {
 	private void generateCycleDiffForElement(final Table table, final Map<EObject, Set<EObject>> equivalancesMap, final Map<EObject, Row> elementToRowMap, final EObject referenceElement) {
 
 		final Row referenceRow = elementToRowMap.get(referenceElement);
+		if (referenceRow == null) {
+			return;
+		}
 
 		final CargoAllocation referenceRowCargoAllocation = referenceRow.getCargoAllocation();
 		if (referenceRowCargoAllocation != null) {
