@@ -77,7 +77,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 				// In simplePinDiff mode, we can activate row spanning, thus we always show total P&L delta. Otherwise show p&l delta only on the non-reference rows.
 				final Table tbl = row.getTable();
-				boolean simplePinDiff = tbl.getScenarios().size() == 2 && tbl.getPinnedScenario() != null;
+				final boolean simplePinDiff = tbl.getScenarios().size() == 2 && tbl.getPinnedScenario() != null;
 
 				// Disabled, see comment above.
 				if (!simplePinDiff && row.isReference()) {
@@ -644,9 +644,33 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 							if (row.getOpenSlotAllocation() != null && referenceRow.getOpenSlotAllocation() == null) {
 								return String.format("Cancelled '%s'", row.getOpenSlotAllocation().getSlot().getName());
 							}
+							if (row.getTarget() instanceof GeneratedCharterOut && referenceRow.getTarget() instanceof GeneratedCharterOut) {
+								final GeneratedCharterOut rowTarget = (GeneratedCharterOut) row.getTarget();
+								final GeneratedCharterOut referenceTarget = (GeneratedCharterOut) referenceRow.getTarget();
+								if (rowTarget.getDuration() > referenceTarget.getDuration()) {
+									return String.format("Charter duration increased by %.1f days", ((double) (rowTarget.getDuration() - referenceTarget.getDuration())) / 24.0);
+								} else if (rowTarget.getDuration() < referenceTarget.getDuration()) {
+									return String.format("Charter duration decreased by %.1f days", ((double) (referenceTarget.getDuration() - rowTarget.getDuration())) / 24.0);
+								}
+							} else if (referenceRow.getTarget() instanceof GeneratedCharterOut) {
+								return "Removed charter out";
+							}
 						} else {
+
 							if (row.getOpenSlotAllocation() != null) {
 								return String.format("Cancelled '%s'", row.getOpenSlotAllocation().getSlot().getName());
+							}
+							if (row.getTarget() instanceof GeneratedCharterOut) {
+								return "Added charter out";
+							}
+						}
+					} else {
+						if (row.getReferringRows().isEmpty()) {
+							// This is a reference row, nothing refers to it. 
+							
+							// GCO in reference case, but not comparison case.
+							if (row.getTarget() instanceof GeneratedCharterOut) {
+								return "Removed charter out";
 							}
 						}
 					}
