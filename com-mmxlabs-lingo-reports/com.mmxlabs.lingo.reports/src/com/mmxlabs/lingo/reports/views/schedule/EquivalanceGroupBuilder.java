@@ -15,8 +15,12 @@ import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.CycleGroupUtils;
+import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
+import com.mmxlabs.lingo.reports.views.schedule.model.Table;
+import com.mmxlabs.models.lng.analytics.Journey;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -24,8 +28,10 @@ import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -210,6 +216,10 @@ public class EquivalanceGroupBuilder {
 
 				foundEquivalent = true;
 				for (final EObject referenceElement : referenceElements) {
+					// Skip these elements types - they are supplemental items.
+					if (referenceElement instanceof Journey || referenceElement instanceof Idle || referenceElement instanceof Cooldown) {
+						continue;
+					}
 
 					final Row referenceRow = elementToRowMap.get(referenceElement);
 
@@ -244,7 +254,6 @@ public class EquivalanceGroupBuilder {
 								continue;
 							}
 						}
-
 						// Row referenceRow = elementToRowMap.get(referenceElement);
 						for (final EObject e : equivalences) {
 							final Row equivalenceRow = elementToRowMap.get(e);
@@ -257,11 +266,13 @@ public class EquivalanceGroupBuilder {
 									}
 								}
 								if (referenceRow != null) {
+									final Table table = referenceRow.getTable();
+									final CycleGroup cycleGroup = CycleGroupUtils.createOrReturnCycleGroup(table, referenceRow);
+									CycleGroupUtils.addToOrMergeCycleGroup(table, equivalenceRow, cycleGroup);
 									equivalenceRow.setReferenceRow(referenceRow);
 								}
 							}
 						}
-
 					}
 
 				}
