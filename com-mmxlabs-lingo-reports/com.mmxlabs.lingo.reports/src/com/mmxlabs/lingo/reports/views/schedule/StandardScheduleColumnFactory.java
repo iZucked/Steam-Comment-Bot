@@ -14,7 +14,6 @@ import org.eclipse.jface.viewers.ViewerCell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.common.Equality;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.IRowSpanProvider;
 import com.mmxlabs.lingo.reports.components.MultiObjectEmfBlockColumnFactory;
@@ -46,6 +45,7 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.GeneralPNLDetails;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
@@ -546,7 +546,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "P&L Delta", null, ColumnType.DIFF, generatePermutationGroupPNLDeltaColumnFormatter(cargoAllocationRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_changestring":
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Change", null, ColumnType.DIFF, generateChangeStringColumnFormatter(cargoAllocationRef));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Main Change", null, ColumnType.DIFF, generateChangeStringColumnFormatter(cargoAllocationRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.pnl_group":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, builder.getEmptyPNLColumnBlockFactory());
@@ -613,32 +613,38 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 					final Row row = (Row) obj;
 					if (!row.isReference()) {
 						final Row referenceRow = row.getReferenceRow();
+						CargoAllocation ca = row.getCargoAllocation();
 						if (referenceRow != null) {
 
-							if (row.getCargoAllocation() != null && referenceRow.getCargoAllocation() != null) {
+							CargoAllocation ref = referenceRow.getCargoAllocation();
+							if (ca != null && ref != null) {
 
-								final String elementString = CargoAllocationUtils.getWiringAsString(row.getCargoAllocation());
-								final String referenceString = CargoAllocationUtils.getWiringAsString(referenceRow.getCargoAllocation());
+								final String elementString = CargoAllocationUtils.getWiringAsString(ca);
+								final String referenceString = CargoAllocationUtils.getWiringAsString(ref);
+
 								if (elementString.equals(referenceString)) {
 
-									if (!Equality.isEqual(CargoAllocationUtils.getVesselAssignmentName(row.getCargoAllocation()),
-											CargoAllocationUtils.getVesselAssignmentName(referenceRow.getCargoAllocation()))) {
+									if (!ca.getSequence().getName().equals(ref.getSequence().getName())) {
+										return String.format("Vessel: %s -> %s", ref.getSequence().getName(), ca.getSequence().getName());
+									}
 
-										// Highlight vessel changes.
-										// return String
-										// .format("Allocate '%s' : '%s' to '%s'", row.getLoadAllocation().getSlot().getName(),
-										// CargoAllocationUtils.getVesselAssignmentName(referenceRow.getCargoAllocation()),
-										// CargoAllocationUtils.getVesselAssignmentName(row.getCargoAllocation()));
+									final int rowDuration = getEventGroupingDuration(ca);
+									final int referenceDuration = getEventGroupingDuration(ref);
+
+									if (rowDuration > referenceDuration) {
+										return String.format("Shipping duration increased by %.1f days", ((double) (rowDuration - referenceDuration)) / 24.0);
+									} else if (rowDuration < referenceDuration) {
+										return String.format("Shipping duration decreased by %.1f days", ((double) (referenceDuration - rowDuration)) / 24.0);
 									}
 
 									return "";
 								}
 								if (row.getLoadAllocation().getSlot() instanceof SpotLoadSlot) {
 									final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) row.getLoadAllocation().getSlot();
-									return String.format("Buy spot '%s' to %s", spotLoadSlot.getMarket().getName(), CargoAllocationUtils.getSalesWiringAsString(row.getCargoAllocation()));
+									return String.format("Buy spot '%s' to %s", spotLoadSlot.getMarket().getName(), CargoAllocationUtils.getSalesWiringAsString(ca));
 								} else {
-									return String.format("Redirect '%s' : %s -> %s", row.getLoadAllocation().getSlot().getName(),
-											CargoAllocationUtils.getSalesWiringAsString(referenceRow.getCargoAllocation()), CargoAllocationUtils.getSalesWiringAsString(row.getCargoAllocation()));
+									return String.format("Redirect '%s' : %s -> %s", row.getLoadAllocation().getSlot().getName(), CargoAllocationUtils.getSalesWiringAsString(ref),
+											CargoAllocationUtils.getSalesWiringAsString(ca));
 								}
 							}
 							if (row.getOpenSlotAllocation() != null && referenceRow.getOpenSlotAllocation() == null) {
@@ -655,19 +661,37 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 							} else if (referenceRow.getTarget() instanceof GeneratedCharterOut) {
 								return "Removed charter out";
 							}
+							if (row.getTarget() instanceof EventGrouping && referenceRow.getTarget() instanceof EventGrouping) {
+								final EventGrouping rowTarget = (EventGrouping) row.getTarget();
+								final EventGrouping referenceTarget = (EventGrouping) referenceRow.getTarget();
+								final int rowDuration = getEventGroupingDuration(rowTarget);
+								final int referenceDuration = getEventGroupingDuration(referenceTarget);
+
+								if (rowDuration > referenceDuration) {
+									return String.format("Event duration increased by %.1f days", ((double) (rowDuration - referenceDuration)) / 24.0);
+								} else if (rowDuration < referenceDuration) {
+									return String.format("Event duration decreased by %.1f days", ((double) (referenceDuration - rowDuration)) / 24.0);
+								}
+							}
 						} else {
 
 							if (row.getOpenSlotAllocation() != null) {
 								return String.format("Cancelled '%s'", row.getOpenSlotAllocation().getSlot().getName());
 							}
+
+							if (row.getLoadAllocation() != null && row.getLoadAllocation().getSlot() instanceof SpotLoadSlot) {
+								final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) row.getLoadAllocation().getSlot();
+								return String.format("Buy spot '%s' to %s", spotLoadSlot.getMarket().getName(), CargoAllocationUtils.getSalesWiringAsString(ca));
+							}
+
 							if (row.getTarget() instanceof GeneratedCharterOut) {
 								return "Added charter out";
 							}
 						}
 					} else {
 						if (row.getReferringRows().isEmpty()) {
-							// This is a reference row, nothing refers to it. 
-							
+							// This is a reference row, nothing refers to it.
+
 							// GCO in reference case, but not comparison case.
 							if (row.getTarget() instanceof GeneratedCharterOut) {
 								return "Removed charter out";
@@ -678,6 +702,15 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				return "";
 			}
 		};
+	}
+
+	protected int getEventGroupingDuration(final EventGrouping eventGrouping) {
+		int duration = 0;
+		for (final Event event : eventGrouping.getEvents()) {
+			duration += event.getDuration();
+		}
+
+		return duration;
 	}
 
 	public ICellRenderer generatePermutationColumnFormatter(final EStructuralFeature cargoAllocationRef) {
