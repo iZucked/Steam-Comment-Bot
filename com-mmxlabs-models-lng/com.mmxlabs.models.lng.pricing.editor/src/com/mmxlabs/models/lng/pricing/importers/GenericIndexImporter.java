@@ -8,11 +8,13 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +25,7 @@ import java.util.TreeMap;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jface.viewers.deferred.SetModel;
 
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
@@ -46,9 +49,12 @@ import com.mmxlabs.models.util.importer.impl.NumberAttributeImporter;
 abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImporter {
 	protected static final String EXPRESSION = "expression";
 	protected static final String UNITS = "units";
+
 	final DateFormat exportDateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 	final DateAttributeImporter dateParser = new DateAttributeImporter();
 
+	protected boolean multipleDataTypeInput = false;
+	
 	@SuppressWarnings("unchecked")
 	protected Index<Double> importDoubleIndex(@NonNull final Map<String, String> row, @NonNull final Set<String> columnsToIgnore, @NonNull final IImportContext context) {
 		return (Index<Double>) importIndex(false, row, columnsToIgnore, context);
@@ -233,4 +239,16 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 		}		
 	}
 	*/
+	
+	protected Set<String> getIgnoreSet(String ... ignore) {
+		HashSet<String> ignoredSet = new HashSet<String>();
+		for (String i : ignore) {
+			ignoredSet.add(i);
+		}
+		return ignoredSet;
+	}
+	
+	public void setMultipleDataTypeInput(final boolean isMultiple) {
+		this.multipleDataTypeInput = isMultiple;
+	}
 }
