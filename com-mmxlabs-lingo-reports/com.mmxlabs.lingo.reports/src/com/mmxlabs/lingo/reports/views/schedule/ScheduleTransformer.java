@@ -6,17 +6,20 @@ package com.mmxlabs.lingo.reports.views.schedule;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.collect.Lists;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ScheduleElementCollector;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
@@ -24,6 +27,7 @@ import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandler;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.CycleDiffProcessor;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.IDiffProcessor;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.StructuralDifferencesProcessor;
+import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.RowGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
@@ -35,7 +39,11 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.EventGrouping;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -96,7 +104,7 @@ public class ScheduleTransformer {
 				table.getRows().clear();
 				table.getCycleGroups().clear();
 				table.getScenarios().clear();
-				table.setPinnedScenario(null);				
+				table.setPinnedScenario(null);
 
 				diffProcessors.clear();
 				diffProcessors.add(new CycleDiffProcessor(customRelatedSlotHandlers));
@@ -172,6 +180,7 @@ public class ScheduleTransformer {
 					for (final IDiffProcessor diffProcessor : diffProcessors) {
 						diffProcessor.runDiffProcess(table, referenceElements, uniqueElements, equivalancesMap, elementToRowMap);
 					}
+					renumberCycleGroups(table);
 				}
 				super.endCollecting();
 
@@ -250,10 +259,18 @@ public class ScheduleTransformer {
 						elementToRowMap.put(slot, row);
 						elementToRowMap.put(slot.getSlotVisit(), row);
 						if (isReferenceSchedule) {
-
 							this.referenceElements.add(slot);
 						}
 						allElements.add(slot);
+
+						Event evt = slot.getSlotVisit().getNextEvent();
+						while (evt != null && !(evt instanceof SlotVisit)) {
+							elementToRowMap.put(evt, row);
+							evt = evt.getNextEvent();
+							if (!cargoAllocation.getEvents().contains(evt)) {
+								break;
+							}
+						}
 					}
 					if (i < dischargeSlots.size()) {
 						final SlotAllocation slot = dischargeSlots.get(i);
@@ -266,9 +283,19 @@ public class ScheduleTransformer {
 							this.referenceElements.add(slot);
 						}
 						allElements.add(slot);
+
+						Event evt = slot.getSlotVisit().getNextEvent();
+						while (evt != null && !(evt instanceof SlotVisit)) {
+							elementToRowMap.put(evt, row);
+							evt = evt.getNextEvent();
+							if (!cargoAllocation.getEvents().contains(evt)) {
+								break;
+							}
+						}
 					}
 					rows.add(row);
 					addInputEquivalents(row, cargoAllocation);
+
 				}
 			} else if (element instanceof OpenSlotAllocation) {
 
@@ -308,7 +335,14 @@ public class ScheduleTransformer {
 					this.referenceElements.add(event);
 				}
 				addInputEquivalents(row, event);
+				if (element instanceof EventGrouping) {
+					final EventGrouping eventGrouping = (EventGrouping) element;
+					for (final Event ge : eventGrouping.getEvents()) {
+						elementToRowMap.put(ge, row);
+					}
+				}
 			}
+
 		}
 		// If this is the reference schedule, then mark all rows as reference
 		if (isReferenceSchedule) {
@@ -373,6 +407,146 @@ public class ScheduleTransformer {
 		} else if (a instanceof OpenSlotAllocation) {
 			final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) a;
 			row.getInputEquivalents().addAll(Lists.<EObject> newArrayList(openSlotAllocation, openSlotAllocation.getSlot()));
+		} else {
+			row.getInputEquivalents().addAll(Lists.<EObject> newArrayList(a));
 		}
+	}
+
+	private void renumberCycleGroups(final Table table) {
+
+		// For cargo based cycle groups, construct a particular diff message
+		final Set<Pair<CycleGroup, Integer>> orderedCycleGroup = new TreeSet<>(new Comparator<Pair<CycleGroup, Integer>>() {
+
+			@Override
+			public int compare(final Pair<CycleGroup, Integer> o1, final Pair<CycleGroup, Integer> o2) {
+
+				if (o1.getFirst() == o2.getFirst()) {
+					return 0;
+				}
+				//
+				int c = o2.getSecond() - o1.getSecond();
+				if (c == 0) {
+					final String desc2 = o2.getFirst().getDescription();
+					final String desc1 = o1.getFirst().getDescription();
+					if (desc2 == null) {
+						c = 1;
+					} else if (desc1 == null) {
+						c = -1;
+					} else {
+						c = desc2.compareToIgnoreCase(desc1);
+					}
+				}
+				if (c == 0) {
+					c = o2.hashCode() - o1.hashCode();
+				}
+				return c;
+			}
+		});
+
+		for (final CycleGroup group : table.getCycleGroups()) {
+			// Skip empty groups
+			if (group.getRows().isEmpty()) {
+				continue;
+			}
+
+			final int pnlDelta = getPNLDelta(table, group);
+			if (pnlDelta != 0) {
+				orderedCycleGroup.add(new Pair<>(group, pnlDelta));
+				// non-zero P&L, show group
+				for (final Row row2 : group.getRows()) {
+					row2.setVisible(true);
+				}
+			} else {
+				// Zero P&L, hide group
+				for (final Row row2 : group.getRows()) {
+					row2.setVisible(false);
+				}
+			}
+		}
+		int goupCounter = 1;
+		table.getCycleGroups().clear();
+		for (final Pair<CycleGroup, Integer> p : orderedCycleGroup) {
+			final CycleGroup group = p.getFirst();
+			table.getCycleGroups().add(group);
+			group.setIndex(goupCounter++);
+		}
+	}
+
+	/**
+	 * TODO: Also in {@link StandardScheduleColumnFactory}
+	 * 
+	 * @param object
+	 * @return
+	 */
+
+	private int getPNLDelta(final Table tbl, final CycleGroup group) {
+		// if (object instanceof Row) {
+		// final Row row = (Row) object;
+		//
+		// // In simplePinDiff mode, we can activate row spanning, thus we always show total P&L delta. Otherwise show p&l delta only on the non-reference rows.
+		// final Table tbl = row.getTable();
+		final boolean simplePinDiff = tbl.getScenarios().size() == 2 && tbl.getPinnedScenario() != null;
+		if (!simplePinDiff) {
+			return 0;
+		}
+		//
+		// // Disabled, see comment above.
+		// if (!simplePinDiff && row.isReference()) {
+		// return null;
+		// }
+		//
+		// final CycleGroup group = row.getCycleGroup();
+		if (group != null) {
+			int delta = 0;
+			for (final Row groupRow : group.getRows()) {
+				final Integer pnl = getElementProfitAndLoss(groupRow.getTarget());
+				if (pnl == null) {
+					continue;
+				}
+				if (groupRow.isReference()) {
+					delta -= pnl.intValue();
+				} else {
+					// // Exclude rows from other scenarios. (disabled, see comment above)
+					// if (!simplePinDiff && groupRow.getSchedule() != row.getSchedule()) {
+					// continue;
+					// }
+					delta += pnl.intValue();
+				}
+			}
+			return delta;
+		}
+		// }
+
+		return 0;
+	}
+
+	/**
+	 * TODO: Also in {@link StandardScheduleColumnFactory}
+	 * 
+	 * @param object
+	 * @return
+	 */
+
+	private Integer getElementProfitAndLoss(final Object object) {
+		ProfitAndLossContainer container = null;
+
+		if (object instanceof CargoAllocation || object instanceof VesselEventVisit || object instanceof StartEvent || object instanceof GeneratedCharterOut || object instanceof OpenSlotAllocation) {
+			container = (ProfitAndLossContainer) object;
+		}
+		if (object instanceof SlotVisit) {
+			final SlotVisit slotVisit = (SlotVisit) object;
+			if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
+				container = slotVisit.getSlotAllocation().getCargoAllocation();
+			}
+		}
+
+		if (container != null) {
+
+			final GroupProfitAndLoss dataWithKey = container.getGroupProfitAndLoss();
+			if (dataWithKey != null) {
+				return (int) dataWithKey.getProfitAndLoss();
+			}
+		}
+		return null;
 	}
 }
