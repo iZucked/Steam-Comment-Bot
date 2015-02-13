@@ -33,6 +33,7 @@ import com.mmxlabs.models.mmxcore.OtherNamesObject;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getOtherNames <em>Other Names</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getShortName <em>Short Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getCapabilities <em>Capabilities</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getTimeZone <em>Time Zone</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getLoadDuration <em>Load Duration</em>}</li>
@@ -67,6 +68,26 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	protected EList<String> otherNames;
 
 	/**
+	 * The default value of the '{@link #getShortName() <em>Short Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getShortName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String SHORT_NAME_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getShortName() <em>Short Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getShortName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String shortName = SHORT_NAME_EDEFAULT;
+
+	/**
 	 * The cached value of the '{@link #getCapabilities() <em>Capabilities</em>}' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -85,6 +106,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * @ordered
 	 */
 	protected static final String TIME_ZONE_EDEFAULT = null;
+
 	/**
 	 * The cached value of the '{@link #getTimeZone() <em>Time Zone</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -94,6 +116,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * @ordered
 	 */
 	protected String timeZone = TIME_ZONE_EDEFAULT;
+
 	/**
 	 * The default value of the '{@link #getLoadDuration() <em>Load Duration</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -103,6 +126,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * @ordered
 	 */
 	protected static final int LOAD_DURATION_EDEFAULT = 0;
+
 	/**
 	 * The cached value of the '{@link #getLoadDuration() <em>Load Duration</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -112,6 +136,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * @ordered
 	 */
 	protected int loadDuration = LOAD_DURATION_EDEFAULT;
+
 	/**
 	 * The default value of the '{@link #getDischargeDuration() <em>Discharge Duration</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -121,6 +146,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * @ordered
 	 */
 	protected static final int DISCHARGE_DURATION_EDEFAULT = 0;
+
 	/**
 	 * The cached value of the '{@link #getDischargeDuration() <em>Discharge Duration</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -130,6 +156,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * @ordered
 	 */
 	protected int dischargeDuration = DISCHARGE_DURATION_EDEFAULT;
+
 	/**
 	 * The default value of the '{@link #getBerths() <em>Berths</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -159,6 +186,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * @ordered
 	 */
 	protected static final double CV_VALUE_EDEFAULT = 0.0;
+
 	/**
 	 * The cached value of the '{@link #getCvValue() <em>Cv Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -168,6 +196,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * @ordered
 	 */
 	protected double cvValue = CV_VALUE_EDEFAULT;
+
 	/**
 	 * The default value of the '{@link #getDefaultStartTime() <em>Default Start Time</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -177,6 +206,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * @ordered
 	 */
 	protected static final int DEFAULT_START_TIME_EDEFAULT = 0;
+
 	/**
 	 * The cached value of the '{@link #getDefaultStartTime() <em>Default Start Time</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -186,6 +216,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * @ordered
 	 */
 	protected int defaultStartTime = DEFAULT_START_TIME_EDEFAULT;
+
 	/**
 	 * The default value of the '{@link #isAllowCooldown() <em>Allow Cooldown</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -195,6 +226,7 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * @ordered
 	 */
 	protected static final boolean ALLOW_COOLDOWN_EDEFAULT = false;
+
 	/**
 	 * The cached value of the '{@link #isAllowCooldown() <em>Allow Cooldown</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -849,6 +881,27 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getShortName() {
+		return shortName;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setShortName(String newShortName) {
+		String oldShortName = shortName;
+		shortName = newShortName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__SHORT_NAME, oldShortName, shortName));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -868,6 +921,8 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 		switch (featureID) {
 			case PortPackage.PORT__OTHER_NAMES:
 				return getOtherNames();
+			case PortPackage.PORT__SHORT_NAME:
+				return getShortName();
 			case PortPackage.PORT__CAPABILITIES:
 				return getCapabilities();
 			case PortPackage.PORT__TIME_ZONE:
@@ -918,6 +973,9 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 			case PortPackage.PORT__OTHER_NAMES:
 				getOtherNames().clear();
 				getOtherNames().addAll((Collection<? extends String>)newValue);
+				return;
+			case PortPackage.PORT__SHORT_NAME:
+				setShortName((String)newValue);
 				return;
 			case PortPackage.PORT__CAPABILITIES:
 				getCapabilities().clear();
@@ -986,6 +1044,9 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 			case PortPackage.PORT__OTHER_NAMES:
 				getOtherNames().clear();
 				return;
+			case PortPackage.PORT__SHORT_NAME:
+				setShortName(SHORT_NAME_EDEFAULT);
+				return;
 			case PortPackage.PORT__CAPABILITIES:
 				getCapabilities().clear();
 				return;
@@ -1051,6 +1112,8 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 		switch (featureID) {
 			case PortPackage.PORT__OTHER_NAMES:
 				return otherNames != null && !otherNames.isEmpty();
+			case PortPackage.PORT__SHORT_NAME:
+				return SHORT_NAME_EDEFAULT == null ? shortName != null : !SHORT_NAME_EDEFAULT.equals(shortName);
 			case PortPackage.PORT__CAPABILITIES:
 				return capabilities != null && !capabilities.isEmpty();
 			case PortPackage.PORT__TIME_ZONE:
@@ -1133,6 +1196,8 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (otherNames: ");
 		result.append(otherNames);
+		result.append(", shortName: ");
+		result.append(shortName);
 		result.append(", capabilities: ");
 		result.append(capabilities);
 		result.append(", timeZone: ");

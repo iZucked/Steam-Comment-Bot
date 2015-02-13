@@ -91,6 +91,7 @@ public class PortComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_shortNameEditor(detailComposite, topClass);
 		add_capabilitiesEditor(detailComposite, topClass);
 		add_timeZoneEditor(detailComposite, topClass);
 		add_loadDurationEditor(detailComposite, topClass);
@@ -108,6 +109,15 @@ public class PortComponentHelper extends BaseComponentHelper {
 		add_UNLocodeEditor(detailComposite, topClass);
 		add_minCvValueEditor(detailComposite, topClass);
 		add_maxCvValueEditor(detailComposite, topClass);
+	}
+
+	/**
+	 * Create the editor for the shortName feature on Port
+	 *
+	 * @generated
+	 */
+	protected void add_shortNameEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__SHORT_NAME));
 	}
 
 	/**

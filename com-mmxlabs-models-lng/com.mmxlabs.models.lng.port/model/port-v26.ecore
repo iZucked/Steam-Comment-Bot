@@ -5,6 +5,7 @@
     <eAnnotations source="http://www.mmxlabs.com/models/mmxcore/annotations/namedobject">
       <details key="showOtherNames" value="true"/>
     </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="shortName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="capabilities" upperBound="-1"
         eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//PortCapability"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeZone" lowerBound="1"
