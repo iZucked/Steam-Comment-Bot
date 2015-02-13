@@ -30,13 +30,12 @@ public class ScenarioMigrationService implements IScenarioMigrationService {
 				scenarioInstance.setScenarioVersion(0);
 			}
 		}
+		boolean installClientModel = false;
 		{
-			String context = scenarioInstance.getClientVersionContext();
+			final String context = scenarioInstance.getClientVersionContext();
 
 			if (context == null || context.isEmpty()) {
-				context = migrationRegistry.getDefaultClientMigrationContext();
-				scenarioInstance.setClientVersionContext(context);
-				scenarioInstance.setClientScenarioVersion(0);
+				installClientModel = true;
 			}
 		}
 		final String scenarioContext = scenarioInstance.getVersionContext();
@@ -45,10 +44,10 @@ public class ScenarioMigrationService implements IScenarioMigrationService {
 		if (scenarioContext != null && getMigrationRegistry().getMigrationContexts().contains(scenarioContext)) {
 
 			final int latestScenarioVersion = getMigrationRegistry().getLatestContextVersion(scenarioContext);
-			final int latestClientVersion = getMigrationRegistry().getLatestClientContextVersion(clientContext);
+			final int latestClientVersion = clientContext == null ? 0 : getMigrationRegistry().getLatestClientContextVersion(clientContext);
 
 			final int scenarioVersion = scenarioInstance.getScenarioVersion();
-			final int clientVersion = scenarioInstance.getClientScenarioVersion();
+			final int clientVersion = clientContext == null ? 0 : scenarioInstance.getClientScenarioVersion();
 
 			if (latestScenarioVersion < 0 || scenarioVersion < latestScenarioVersion || latestClientVersion < 0 || clientVersion < latestClientVersion) {
 
@@ -56,6 +55,12 @@ public class ScenarioMigrationService implements IScenarioMigrationService {
 				migrator.performMigration(scenarioService, scenarioInstance);
 			}
 		}
+		if (installClientModel) {
+			final String ctx = migrationRegistry.getDefaultClientMigrationContext();
+			scenarioInstance.setClientVersionContext(ctx);
+			scenarioInstance.setClientScenarioVersion(migrationRegistry.getLastReleaseClientVersion(ctx));
+		}
+
 	}
 
 	public IMigrationRegistry getMigrationRegistry() {
