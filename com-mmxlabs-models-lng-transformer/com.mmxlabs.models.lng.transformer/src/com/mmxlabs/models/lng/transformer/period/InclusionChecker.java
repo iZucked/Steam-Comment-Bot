@@ -60,6 +60,10 @@ public class InclusionChecker {
 	public Pair<InclusionType, Position> getObjectInclusionType(final EObject object, final PeriodRecord periodRecord) {
 
 		if (object instanceof Cargo) {
+			
+			// TODO: Decompose into slots. If slot is in boundary, fix to current vessel (though allowed vessels list), but unlock and allow rewiring.
+			// FOB sales stay fixed. DES purchases, only if divertible
+			
 			final Cargo cargo = (Cargo) object;
 			final EList<Slot> sortedSlots = cargo.getSortedSlots();
 			final Slot firstSlot = sortedSlots.get(0);
