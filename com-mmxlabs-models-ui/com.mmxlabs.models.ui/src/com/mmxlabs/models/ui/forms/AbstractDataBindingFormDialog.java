@@ -249,7 +249,8 @@ public abstract class AbstractDataBindingFormDialog extends FormDialog {
 				shell.setMinimumSize(shell.getSize());
 			}
 
-			shell.setSize(shell.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+			Point computeSize = shell.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+			shell.setSize(Math.min(computeSize.x, shell.getDisplay().getPrimaryMonitor().getBounds().width - 50), Math.min(computeSize.y, shell.getDisplay().getPrimaryMonitor().getBounds().height - 50));
 			final Rectangle shellBounds = getParentShell().getBounds();
 			final Point dialogSize = shell.getSize();
 			shell.setLocation(shellBounds.x + ((shellBounds.width - dialogSize.x) / 2), shellBounds.y + ((shellBounds.height - dialogSize.y) / 2));
