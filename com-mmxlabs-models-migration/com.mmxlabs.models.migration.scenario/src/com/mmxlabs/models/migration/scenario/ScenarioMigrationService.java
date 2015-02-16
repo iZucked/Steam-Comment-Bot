@@ -57,6 +57,7 @@ public class ScenarioMigrationService implements IScenarioMigrationService {
 		}
 		if (installClientModel) {
 			final String ctx = migrationRegistry.getDefaultClientMigrationContext();
+			assert ctx != null;
 			scenarioInstance.setClientVersionContext(ctx);
 			scenarioInstance.setClientScenarioVersion(migrationRegistry.getLastReleaseClientVersion(ctx));
 		}
