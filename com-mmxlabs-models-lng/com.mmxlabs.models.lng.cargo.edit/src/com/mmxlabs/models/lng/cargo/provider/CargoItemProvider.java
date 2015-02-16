@@ -251,7 +251,7 @@ public class CargoItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Cargo)object).getUuid();
+		String label = ((Cargo)object).getLoadName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_Cargo_type") :
 			getString("_UI_Cargo_type") + " " + label;
