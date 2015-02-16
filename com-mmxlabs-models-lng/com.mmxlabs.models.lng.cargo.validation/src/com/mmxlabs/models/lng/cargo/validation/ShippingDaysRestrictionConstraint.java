@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.ops4j.peaberry.Import;
 import org.ops4j.peaberry.Peaberry;
 import org.osgi.framework.FrameworkUtil;
@@ -24,6 +25,8 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.google.inject.Key;
+import com.google.inject.TypeLiteral;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
@@ -50,6 +53,8 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
  * 
  */
 public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstraint {
+	@Inject
+	private IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider;
 
 	public ShippingDaysRestrictionConstraint() {
 		final Injector injector = Guice.createInjector(new AbstractModule() {
@@ -64,9 +69,6 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 	}
 
 	private static final int MAX_SHIPPING_DAYS = 90;
-
-	@Inject(optional = true)
-	private Import<IShippingDaysRestrictionSpeedProvider> shippingDaysSpeedProvider;
 
 	private int getMinRouteTimeInHours(final Slot from, final Slot to, final LNGScenarioModel lngScenarioModel, final Vessel vessel, final double referenceSpeed) {
 
@@ -214,14 +216,15 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 									return Activator.PLUGIN_ID;
 								}
 
-								double referenceSpeed = vesselClass.getMaxSpeed();
-								if (shippingDaysSpeedProvider != null && shippingDaysSpeedProvider.available()) {
-									final IShippingDaysRestrictionSpeedProvider provider = shippingDaysSpeedProvider.get();
-									if (provider != null) {
-										referenceSpeed = provider.getSpeed(vesselClass);
-									}
-								}
+								double referenceSpeed;
 
+								// catch error in case no service registered
+								try {
+									referenceSpeed = shippingDaysSpeedProvider.getSpeed(vesselClass);
+								} catch (org.ops4j.peaberry.ServiceUnavailableException e) {
+									referenceSpeed = vesselClass.getMaxSpeed();
+								}
+								
 								final int loadDurationInHours = desPurchase.getSlotOrPortDuration();
 								final int dischargeDurationInHours = dischargeSlot.getSlotOrPortDuration();
 
