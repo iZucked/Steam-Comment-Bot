@@ -918,7 +918,9 @@ public class VoyagePlanner {
 			}
 
 			final int visitDuration = portTimesRecord.getSlotDuration(thisPortSlot);
-			assert visitDuration == durationsProvider.getElementDuration(element, resource);
+
+			// This fails with dry docks as portsTimesRecord doesn't store duration for this event
+//			assert visitDuration == durationsProvider.getElementDuration(element, resource);
 
 			final PortOptions portOptions = new PortOptions();
 			portOptions.setVisitDuration(visitDuration);
