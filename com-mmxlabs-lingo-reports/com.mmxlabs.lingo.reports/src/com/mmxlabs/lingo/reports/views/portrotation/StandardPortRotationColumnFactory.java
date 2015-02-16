@@ -201,7 +201,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 					}
 					return null;
 				}
-			});// .setTooltip("In m??");
+			});// .setTooltip("In m³");
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.transfervolume_mmbtu":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Transfer Energy", null, ColumnType.NORMAL, new IntegerFormatter() {
@@ -229,7 +229,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 					}
 					return null;
 				}
-			});// .setTooltip("In m??");
+			});// .setTooltip("In m³");
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.heelend":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Heel End", null, ColumnType.NORMAL, new IntegerFormatter() {
@@ -241,7 +241,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 					}
 					return null;
 				}
-			});// .setTooltip("In m??");
+			});// .setTooltip("In m³");
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.fuels":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, new EmfBlockColumnFactory() {
