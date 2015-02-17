@@ -16,11 +16,13 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
+import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
 
 /**
  * <!-- begin-user-doc -->
@@ -32,6 +34,8 @@ import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.CycleGroupImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.CycleGroupImpl#getRows <em>Rows</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.CycleGroupImpl#getIndex <em>Index</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.CycleGroupImpl#getUserGroup <em>User Group</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.CycleGroupImpl#getDelta <em>Delta</em>}</li>
  * </ul>
  * </p>
  *
@@ -98,6 +102,26 @@ public class CycleGroupImpl extends MinimalEObjectImpl.Container implements Cycl
 	protected boolean indexESet;
 
 	/**
+	 * The default value of the '{@link #getDelta() <em>Delta</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDelta()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int DELTA_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getDelta() <em>Delta</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDelta()
+	 * @generated
+	 * @ordered
+	 */
+	protected int delta = DELTA_EDEFAULT;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -121,6 +145,7 @@ public class CycleGroupImpl extends MinimalEObjectImpl.Container implements Cycl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getDescription() {
 		return description;
 	}
@@ -130,6 +155,7 @@ public class CycleGroupImpl extends MinimalEObjectImpl.Container implements Cycl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDescription(String newDescription) {
 		String oldDescription = description;
 		description = newDescription;
@@ -142,6 +168,7 @@ public class CycleGroupImpl extends MinimalEObjectImpl.Container implements Cycl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Row> getRows() {
 		if (rows == null) {
 			rows = new EObjectWithInverseResolvingEList<Row>(Row.class, this, ScheduleReportPackage.CYCLE_GROUP__ROWS, ScheduleReportPackage.ROW__CYCLE_GROUP);
@@ -154,6 +181,7 @@ public class CycleGroupImpl extends MinimalEObjectImpl.Container implements Cycl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getIndex() {
 		return index;
 	}
@@ -163,6 +191,7 @@ public class CycleGroupImpl extends MinimalEObjectImpl.Container implements Cycl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setIndex(int newIndex) {
 		int oldIndex = index;
 		index = newIndex;
@@ -177,6 +206,7 @@ public class CycleGroupImpl extends MinimalEObjectImpl.Container implements Cycl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetIndex() {
 		int oldIndex = index;
 		boolean oldIndexESet = indexESet;
@@ -191,8 +221,76 @@ public class CycleGroupImpl extends MinimalEObjectImpl.Container implements Cycl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetIndex() {
 		return indexESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public UserGroup getUserGroup() {
+		if (eContainerFeatureID() != ScheduleReportPackage.CYCLE_GROUP__USER_GROUP) return null;
+		return (UserGroup)eInternalContainer();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetUserGroup(UserGroup newUserGroup, NotificationChain msgs) {
+		msgs = eBasicSetContainer((InternalEObject)newUserGroup, ScheduleReportPackage.CYCLE_GROUP__USER_GROUP, msgs);
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setUserGroup(UserGroup newUserGroup) {
+		if (newUserGroup != eInternalContainer() || (eContainerFeatureID() != ScheduleReportPackage.CYCLE_GROUP__USER_GROUP && newUserGroup != null)) {
+			if (EcoreUtil.isAncestor(this, newUserGroup))
+				throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
+			NotificationChain msgs = null;
+			if (eInternalContainer() != null)
+				msgs = eBasicRemoveFromContainer(msgs);
+			if (newUserGroup != null)
+				msgs = ((InternalEObject)newUserGroup).eInverseAdd(this, ScheduleReportPackage.USER_GROUP__GROUPS, UserGroup.class, msgs);
+			msgs = basicSetUserGroup(newUserGroup, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScheduleReportPackage.CYCLE_GROUP__USER_GROUP, newUserGroup, newUserGroup));
+	}
+
+	 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int getDelta() {
+		return delta;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setDelta(int newDelta) {
+		int oldDelta = delta;
+		delta = newDelta;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScheduleReportPackage.CYCLE_GROUP__DELTA, oldDelta, delta));
 	}
 
 	/**
@@ -206,6 +304,10 @@ public class CycleGroupImpl extends MinimalEObjectImpl.Container implements Cycl
 		switch (featureID) {
 			case ScheduleReportPackage.CYCLE_GROUP__ROWS:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getRows()).basicAdd(otherEnd, msgs);
+			case ScheduleReportPackage.CYCLE_GROUP__USER_GROUP:
+				if (eInternalContainer() != null)
+					msgs = eBasicRemoveFromContainer(msgs);
+				return basicSetUserGroup((UserGroup)otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -220,8 +322,24 @@ public class CycleGroupImpl extends MinimalEObjectImpl.Container implements Cycl
 		switch (featureID) {
 			case ScheduleReportPackage.CYCLE_GROUP__ROWS:
 				return ((InternalEList<?>)getRows()).basicRemove(otherEnd, msgs);
+			case ScheduleReportPackage.CYCLE_GROUP__USER_GROUP:
+				return basicSetUserGroup(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
+		switch (eContainerFeatureID()) {
+			case ScheduleReportPackage.CYCLE_GROUP__USER_GROUP:
+				return eInternalContainer().eInverseRemove(this, ScheduleReportPackage.USER_GROUP__GROUPS, UserGroup.class, msgs);
+		}
+		return super.eBasicRemoveFromContainerFeature(msgs);
 	}
 
 	/**
@@ -238,6 +356,10 @@ public class CycleGroupImpl extends MinimalEObjectImpl.Container implements Cycl
 				return getRows();
 			case ScheduleReportPackage.CYCLE_GROUP__INDEX:
 				return getIndex();
+			case ScheduleReportPackage.CYCLE_GROUP__USER_GROUP:
+				return getUserGroup();
+			case ScheduleReportPackage.CYCLE_GROUP__DELTA:
+				return getDelta();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -261,6 +383,12 @@ public class CycleGroupImpl extends MinimalEObjectImpl.Container implements Cycl
 			case ScheduleReportPackage.CYCLE_GROUP__INDEX:
 				setIndex((Integer)newValue);
 				return;
+			case ScheduleReportPackage.CYCLE_GROUP__USER_GROUP:
+				setUserGroup((UserGroup)newValue);
+				return;
+			case ScheduleReportPackage.CYCLE_GROUP__DELTA:
+				setDelta((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -282,6 +410,12 @@ public class CycleGroupImpl extends MinimalEObjectImpl.Container implements Cycl
 			case ScheduleReportPackage.CYCLE_GROUP__INDEX:
 				unsetIndex();
 				return;
+			case ScheduleReportPackage.CYCLE_GROUP__USER_GROUP:
+				setUserGroup((UserGroup)null);
+				return;
+			case ScheduleReportPackage.CYCLE_GROUP__DELTA:
+				setDelta(DELTA_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -300,6 +434,10 @@ public class CycleGroupImpl extends MinimalEObjectImpl.Container implements Cycl
 				return rows != null && !rows.isEmpty();
 			case ScheduleReportPackage.CYCLE_GROUP__INDEX:
 				return isSetIndex();
+			case ScheduleReportPackage.CYCLE_GROUP__USER_GROUP:
+				return getUserGroup() != null;
+			case ScheduleReportPackage.CYCLE_GROUP__DELTA:
+				return delta != DELTA_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -318,6 +456,8 @@ public class CycleGroupImpl extends MinimalEObjectImpl.Container implements Cycl
 		result.append(description);
 		result.append(", index: ");
 		if (indexESet) result.append(index); else result.append("<unset>");
+		result.append(", delta: ");
+		result.append(delta);
 		result.append(')');
 		return result.toString();
 	}

@@ -285,6 +285,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isVisible() {
 		return visible;
 	}
@@ -294,6 +295,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVisible(boolean newVisible) {
 		boolean oldVisible = visible;
 		visible = newVisible;
@@ -306,6 +308,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CycleGroup getCycleGroup() {
 		if (cycleGroup != null && cycleGroup.eIsProxy()) {
 			InternalEObject oldCycleGroup = (InternalEObject)cycleGroup;
@@ -347,6 +350,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCycleGroup(CycleGroup newCycleGroup) {
 		if (newCycleGroup != cycleGroup) {
 			NotificationChain msgs = null;
@@ -366,6 +370,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<EObject> getInputEquivalents() {
 		if (inputEquivalents == null) {
 			inputEquivalents = new EObjectResolvingEList<EObject>(EObject.class, this, ScheduleReportPackage.ROW__INPUT_EQUIVALENTS);
@@ -378,6 +383,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -387,6 +393,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -399,6 +406,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName2() {
 		return name2;
 	}
@@ -408,6 +416,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName2(String newName2) {
 		String oldName2 = name2;
 		name2 = newName2;
@@ -420,6 +429,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EObject getTarget() {
 		if (target != null && target.eIsProxy()) {
 			InternalEObject oldTarget = (InternalEObject)target;
@@ -446,6 +456,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTarget(EObject newTarget) {
 		EObject oldTarget = target;
 		target = newTarget;
@@ -458,6 +469,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Schedule getSchedule() {
 		if (schedule != null && schedule.eIsProxy()) {
 			InternalEObject oldSchedule = (InternalEObject)schedule;
@@ -484,6 +496,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSchedule(Schedule newSchedule) {
 		Schedule oldSchedule = schedule;
 		schedule = newSchedule;
@@ -496,6 +509,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CargoAllocation getCargoAllocation() {
 		if (cargoAllocation != null && cargoAllocation.eIsProxy()) {
 			InternalEObject oldCargoAllocation = (InternalEObject)cargoAllocation;
@@ -522,6 +536,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCargoAllocation(CargoAllocation newCargoAllocation) {
 		CargoAllocation oldCargoAllocation = cargoAllocation;
 		cargoAllocation = newCargoAllocation;
@@ -534,6 +549,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SlotAllocation getLoadAllocation() {
 		if (loadAllocation != null && loadAllocation.eIsProxy()) {
 			InternalEObject oldLoadAllocation = (InternalEObject)loadAllocation;
@@ -560,6 +576,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLoadAllocation(SlotAllocation newLoadAllocation) {
 		SlotAllocation oldLoadAllocation = loadAllocation;
 		loadAllocation = newLoadAllocation;
@@ -572,6 +589,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SlotAllocation getDischargeAllocation() {
 		if (dischargeAllocation != null && dischargeAllocation.eIsProxy()) {
 			InternalEObject oldDischargeAllocation = (InternalEObject)dischargeAllocation;
@@ -598,6 +616,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDischargeAllocation(SlotAllocation newDischargeAllocation) {
 		SlotAllocation oldDischargeAllocation = dischargeAllocation;
 		dischargeAllocation = newDischargeAllocation;
@@ -610,6 +629,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public OpenSlotAllocation getOpenSlotAllocation() {
 		if (openSlotAllocation != null && openSlotAllocation.eIsProxy()) {
 			InternalEObject oldOpenSlotAllocation = (InternalEObject)openSlotAllocation;
@@ -636,6 +656,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setOpenSlotAllocation(OpenSlotAllocation newOpenSlotAllocation) {
 		OpenSlotAllocation oldOpenSlotAllocation = openSlotAllocation;
 		openSlotAllocation = newOpenSlotAllocation;
@@ -648,6 +669,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Row getReferenceRow() {
 		if (referenceRow != null && referenceRow.eIsProxy()) {
 			InternalEObject oldReferenceRow = (InternalEObject)referenceRow;
@@ -689,6 +711,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setReferenceRow(Row newReferenceRow) {
 		if (newReferenceRow != referenceRow) {
 			NotificationChain msgs = null;
@@ -708,6 +731,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Row> getReferringRows() {
 		if (referringRows == null) {
 			referringRows = new EObjectWithInverseResolvingEList<Row>(Row.class, this, ScheduleReportPackage.ROW__REFERRING_ROWS, ScheduleReportPackage.ROW__REFERENCE_ROW);
@@ -720,6 +744,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isReference() {
 		return reference;
 	}
@@ -729,6 +754,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setReference(boolean newReference) {
 		boolean oldReference = reference;
 		reference = newReference;
@@ -741,6 +767,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public RowGroup getRowGroup() {
 		if (rowGroup != null && rowGroup.eIsProxy()) {
 			InternalEObject oldRowGroup = (InternalEObject)rowGroup;
@@ -782,6 +809,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRowGroup(RowGroup newRowGroup) {
 		if (newRowGroup != rowGroup) {
 			NotificationChain msgs = null;
@@ -801,6 +829,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EObject getScenario() {
 		if (scenario != null && scenario.eIsProxy()) {
 			InternalEObject oldScenario = (InternalEObject)scenario;
@@ -827,6 +856,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setScenario(EObject newScenario) {
 		EObject oldScenario = scenario;
 		scenario = newScenario;
@@ -839,6 +869,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Table getTable() {
 		if (eContainerFeatureID() != ScheduleReportPackage.ROW__TABLE) return null;
 		return (Table)eInternalContainer();
@@ -859,6 +890,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTable(Table newTable) {
 		if (newTable != eInternalContainer() || (eContainerFeatureID() != ScheduleReportPackage.ROW__TABLE && newTable != null)) {
 			if (EcoreUtil.isAncestor(this, newTable))

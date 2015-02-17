@@ -26,6 +26,7 @@ import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.RowGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
+import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
 
 /**
  * <!-- begin-user-doc -->
@@ -39,6 +40,7 @@ import com.mmxlabs.lingo.reports.views.schedule.model.Table;
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.TableImpl#getRowGroups <em>Row Groups</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.TableImpl#getScenarios <em>Scenarios</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.TableImpl#getPinnedScenario <em>Pinned Scenario</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.TableImpl#getUserGroups <em>User Groups</em>}</li>
  * </ul>
  * </p>
  *
@@ -96,6 +98,16 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 	protected EObject pinnedScenario;
 
 	/**
+	 * The cached value of the '{@link #getUserGroups() <em>User Groups</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getUserGroups()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<UserGroup> userGroups;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -119,6 +131,7 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Row> getRows() {
 		if (rows == null) {
 			rows = new EObjectContainmentWithInverseEList<Row>(Row.class, this, ScheduleReportPackage.TABLE__ROWS, ScheduleReportPackage.ROW__TABLE);
@@ -131,6 +144,7 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<CycleGroup> getCycleGroups() {
 		if (cycleGroups == null) {
 			cycleGroups = new EObjectContainmentEList<CycleGroup>(CycleGroup.class, this, ScheduleReportPackage.TABLE__CYCLE_GROUPS);
@@ -143,6 +157,7 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<RowGroup> getRowGroups() {
 		if (rowGroups == null) {
 			rowGroups = new EObjectContainmentEList<RowGroup>(RowGroup.class, this, ScheduleReportPackage.TABLE__ROW_GROUPS);
@@ -155,6 +170,7 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<EObject> getScenarios() {
 		if (scenarios == null) {
 			scenarios = new EObjectResolvingEList<EObject>(EObject.class, this, ScheduleReportPackage.TABLE__SCENARIOS);
@@ -167,6 +183,7 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EObject getPinnedScenario() {
 		if (pinnedScenario != null && pinnedScenario.eIsProxy()) {
 			InternalEObject oldPinnedScenario = (InternalEObject)pinnedScenario;
@@ -193,11 +210,25 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPinnedScenario(EObject newPinnedScenario) {
 		EObject oldPinnedScenario = pinnedScenario;
 		pinnedScenario = newPinnedScenario;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ScheduleReportPackage.TABLE__PINNED_SCENARIO, oldPinnedScenario, pinnedScenario));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<UserGroup> getUserGroups() {
+		if (userGroups == null) {
+			userGroups = new EObjectContainmentEList<UserGroup>(UserGroup.class, this, ScheduleReportPackage.TABLE__USER_GROUPS);
+		}
+		return userGroups;
 	}
 
 	/**
@@ -229,6 +260,8 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 				return ((InternalEList<?>)getCycleGroups()).basicRemove(otherEnd, msgs);
 			case ScheduleReportPackage.TABLE__ROW_GROUPS:
 				return ((InternalEList<?>)getRowGroups()).basicRemove(otherEnd, msgs);
+			case ScheduleReportPackage.TABLE__USER_GROUPS:
+				return ((InternalEList<?>)getUserGroups()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -252,6 +285,8 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 			case ScheduleReportPackage.TABLE__PINNED_SCENARIO:
 				if (resolve) return getPinnedScenario();
 				return basicGetPinnedScenario();
+			case ScheduleReportPackage.TABLE__USER_GROUPS:
+				return getUserGroups();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -284,6 +319,10 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 			case ScheduleReportPackage.TABLE__PINNED_SCENARIO:
 				setPinnedScenario((EObject)newValue);
 				return;
+			case ScheduleReportPackage.TABLE__USER_GROUPS:
+				getUserGroups().clear();
+				getUserGroups().addAll((Collection<? extends UserGroup>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -311,6 +350,9 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 			case ScheduleReportPackage.TABLE__PINNED_SCENARIO:
 				setPinnedScenario((EObject)null);
 				return;
+			case ScheduleReportPackage.TABLE__USER_GROUPS:
+				getUserGroups().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -333,6 +375,8 @@ public class TableImpl extends MinimalEObjectImpl.Container implements Table {
 				return scenarios != null && !scenarios.isEmpty();
 			case ScheduleReportPackage.TABLE__PINNED_SCENARIO:
 				return pinnedScenario != null;
+			case ScheduleReportPackage.TABLE__USER_GROUPS:
+				return userGroups != null && !userGroups.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

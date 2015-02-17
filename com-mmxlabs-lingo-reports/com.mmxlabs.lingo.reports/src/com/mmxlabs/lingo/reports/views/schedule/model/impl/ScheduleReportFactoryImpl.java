@@ -6,11 +6,17 @@
  */
 package com.mmxlabs.lingo.reports.views.schedule.model.impl;
 
+import com.mmxlabs.lingo.reports.diff.utils.PNLDeltaUtils;
+import com.mmxlabs.lingo.reports.views.schedule.model.*;
+
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+import org.eclipse.emf.ecore.util.EContentAdapter;
+
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.RowGroup;
@@ -66,6 +72,7 @@ public class ScheduleReportFactoryImpl extends EFactoryImpl implements ScheduleR
 			case ScheduleReportPackage.ROW: return createRow();
 			case ScheduleReportPackage.CYCLE_GROUP: return createCycleGroup();
 			case ScheduleReportPackage.ROW_GROUP: return createRowGroup();
+			case ScheduleReportPackage.USER_GROUP: return createUserGroup();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -76,6 +83,7 @@ public class ScheduleReportFactoryImpl extends EFactoryImpl implements ScheduleR
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Table createTable() {
 		TableImpl table = new TableImpl();
 		return table;
@@ -86,6 +94,7 @@ public class ScheduleReportFactoryImpl extends EFactoryImpl implements ScheduleR
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Row createRow() {
 		RowImpl row = new RowImpl();
 		return row;
@@ -94,10 +103,20 @@ public class ScheduleReportFactoryImpl extends EFactoryImpl implements ScheduleR
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
+	@Override
 	public CycleGroup createCycleGroup() {
-		CycleGroupImpl cycleGroup = new CycleGroupImpl();
+		final CycleGroupImpl cycleGroup = new CycleGroupImpl();
+		cycleGroup.eAdapters().add(new EContentAdapter() {
+			@Override
+			public void notifyChanged(Notification notification) {
+				super.notifyChanged(notification);
+				if (notification.getFeature() == ScheduleReportPackage.Literals.CYCLE_GROUP__ROWS) {
+					cycleGroup.setDelta(PNLDeltaUtils.getPNLDelta(cycleGroup));
+				}
+			}
+		});
 		return cycleGroup;
 	}
 
@@ -106,6 +125,7 @@ public class ScheduleReportFactoryImpl extends EFactoryImpl implements ScheduleR
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public RowGroup createRowGroup() {
 		RowGroupImpl rowGroup = new RowGroupImpl();
 		return rowGroup;
@@ -114,8 +134,29 @@ public class ScheduleReportFactoryImpl extends EFactoryImpl implements ScheduleR
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public UserGroup createUserGroup() {
+		final UserGroupImpl userGroup = new UserGroupImpl();
+		userGroup.eAdapters().add(new EContentAdapter() {
+			@Override
+			public void notifyChanged(Notification notification) {
+				super.notifyChanged(notification);
+				if (notification.getFeature() == ScheduleReportPackage.Literals.USER_GROUP__GROUPS) {
+					userGroup.setDelta(PNLDeltaUtils.getPNLDelta(userGroup));
+				}
+			}
+		});
+		return userGroup;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ScheduleReportPackage getScheduleReportPackage() {
 		return (ScheduleReportPackage)getEPackage();
 	}

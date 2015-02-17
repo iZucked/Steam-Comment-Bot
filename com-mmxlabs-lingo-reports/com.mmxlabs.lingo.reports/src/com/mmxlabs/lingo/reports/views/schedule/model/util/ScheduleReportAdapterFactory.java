@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.lingo.reports.views.schedule.model.util;
 
+import com.mmxlabs.lingo.reports.views.schedule.model.*;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
@@ -89,6 +90,10 @@ public class ScheduleReportAdapterFactory extends AdapterFactoryImpl {
 				return createRowGroupAdapter();
 			}
 			@Override
+			public Adapter caseUserGroup(UserGroup object) {
+				return createUserGroupAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -161,6 +166,20 @@ public class ScheduleReportAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createRowGroupAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.lingo.reports.views.schedule.model.UserGroup <em>User Group</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.UserGroup
+	 * @generated
+	 */
+	public Adapter createUserGroupAdapter() {
 		return null;
 	}
 

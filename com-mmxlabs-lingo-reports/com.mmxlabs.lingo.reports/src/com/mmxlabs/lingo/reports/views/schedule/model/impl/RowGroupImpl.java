@@ -68,6 +68,7 @@ public class RowGroupImpl extends MinimalEObjectImpl.Container implements RowGro
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Row> getRows() {
 		if (rows == null) {
 			rows = new EObjectWithInverseResolvingEList<Row>(Row.class, this, ScheduleReportPackage.ROW_GROUP__ROWS, ScheduleReportPackage.ROW__ROW_GROUP);

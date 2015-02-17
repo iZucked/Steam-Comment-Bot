@@ -1,111 +1,201 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
- * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.internal;
 
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
+import com.mmxlabs.models.lng.cargo.provider.CargoEditPlugin;
+import com.mmxlabs.models.lng.commercial.provider.CommercialEditPlugin;
+import com.mmxlabs.models.lng.fleet.provider.FleetEditPlugin;
+import com.mmxlabs.models.lng.port.provider.PortEditPlugin;
+import com.mmxlabs.models.lng.pricing.provider.PricingEditPlugin;
+import com.mmxlabs.models.lng.schedule.provider.ScheduleEditPlugin;
+import com.mmxlabs.models.lng.spotmarkets.provider.SpotMarketsEditPlugin;
+import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
+import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
+import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
+
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.emf.common.EMFPlugin;
+import org.eclipse.emf.common.util.ResourceLocator;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
-
 /**
- * The activator class controls the plug-in life cycle
+ * This is the central singleton for the model edit plugin.
+ * <!-- begin-user-doc -->
+ * <!-- end-user-doc -->
+ * @generated
  */
-public class Activator extends AbstractUIPlugin {
-
+public final class Activator extends EMFPlugin {
 	// The plug-in ID
 	public static final String PLUGIN_ID = "com.mmxlabs.lingo.reports"; //$NON-NLS-1$
-	// The shared instance
-	private static Activator plugin;
+	
 
-	private ServiceTracker<IScenarioServiceSelectionProvider, IScenarioServiceSelectionProvider> scenarioServiceSelectionProviderTracker;
+	
+	/**
+	 * Keep track of the singleton.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static final Activator INSTANCE = new Activator();
 
 	/**
-	 * The constructor
+	 * Keep track of the singleton.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private static Implementation plugin;
+
+	/**
+	 * Create the instance.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
 	 */
 	public Activator() {
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext )
-	 */
-	@Override
-	public void start(final BundleContext context) throws Exception {
-		super.start(context);
-		plugin = this;
-
-		scenarioServiceSelectionProviderTracker = new ServiceTracker<IScenarioServiceSelectionProvider, IScenarioServiceSelectionProvider>(context, IScenarioServiceSelectionProvider.class, null);
-		scenarioServiceSelectionProviderTracker.open();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext )
-	 */
-	@Override
-	public void stop(final BundleContext context) throws Exception {
-
-		// close the service tracker
-		scenarioServiceSelectionProviderTracker.close();
-		scenarioServiceSelectionProviderTracker = null;
-
-		plugin = null;
-		super.stop(context);
+		super
+		  (new ResourceLocator [] {
+		     CargoEditPlugin.INSTANCE,
+		     CommercialEditPlugin.INSTANCE,
+		     FleetEditPlugin.INSTANCE,
+		     LNGTypesEditPlugin.INSTANCE,
+		     MmxcoreEditPlugin.INSTANCE,
+		     PortEditPlugin.INSTANCE,
+		     PricingEditPlugin.INSTANCE,
+		     ScheduleEditPlugin.INSTANCE,
+		     SpotMarketsEditPlugin.INSTANCE,
+		   });
 	}
 
 	/**
-	 * Returns the shared instance
-	 * 
-	 * @return the shared instance
+	 * Returns the singleton instance of the Eclipse plugin.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the singleton instance.
+	 * @generated
 	 */
-	public static Activator getDefault() {
+	@Override
+	public ResourceLocator getPluginResourceLocator() {
 		return plugin;
 	}
 
 	/**
-	 * Returns an image descriptor for the image file at the given plug-in relative path
-	 * 
-	 * @param path
-	 *            the path
-	 * @return the image descriptor
+	 * Returns the singleton instance of the Eclipse plugin.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the singleton instance.
+	 * @generated
 	 */
-	public static ImageDescriptor getImageDescriptor(final String path) {
-		return imageDescriptorFromPlugin(PLUGIN_ID, path);
+	public static Implementation getPlugin() {
+		return plugin;
+	}
+	
+	/**
+	 * Returns the singleton instance of the Eclipse plugin.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the singleton instance.
+	 * @generated NOT
+	 */
+	public static Implementation getDefault() {
+		return plugin;
+	}
+	/**
+	 * The actual implementation of the Eclipse <b>Plugin</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public static class Implementation extends EclipsePlugin {
+		private ServiceTracker<IScenarioServiceSelectionProvider, IScenarioServiceSelectionProvider> scenarioServiceSelectionProviderTracker;
+	    /**
+	     * Storage for preferences.
+	     */
+	    private ScopedPreferenceStore preferenceStore;
+		
+		/**
+		 * Creates an instance.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		public Implementation() {
+			super();
+
+			// Remember the static instance.
+			//
+			plugin = this;
+		}
+		
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext )
+		 */
+		@Override
+		public void stop(final BundleContext context) throws Exception {
+
+			// close the service tracker
+			scenarioServiceSelectionProviderTracker.close();
+			scenarioServiceSelectionProviderTracker = null;
+
+			super.stop(context);
+		}
+
+		
+		@Override
+		public void start(BundleContext context) throws Exception {
+			scenarioServiceSelectionProviderTracker = new ServiceTracker<IScenarioServiceSelectionProvider, IScenarioServiceSelectionProvider>(context, IScenarioServiceSelectionProvider.class, null);
+			scenarioServiceSelectionProviderTracker.open();
+			
+			super.start(context);
+		}
+		/**
+		 * Returns an image descriptor for the image file at the given plug-in relative path
+		 * 
+		 * @param path
+		 *            the path
+		 * @return the image descriptor
+		 */
+		public static ImageDescriptor getImageDescriptor(final String path) {
+			return AbstractUIPlugin.imageDescriptorFromPlugin(PLUGIN_ID, path);
+		}
+
+		public IScenarioServiceSelectionProvider getScenarioServiceSelectionProvider() {
+			return scenarioServiceSelectionProviderTracker.getService();
+		}
+		
+		 /**
+	     * Returns the preference store for this UI plug-in.
+	     * This preference store is used to hold persistent settings for this plug-in in
+	     * the context of a workbench. Some of these settings will be user controlled, 
+	     * whereas others may be internal setting that are never exposed to the user.
+	     * <p>
+	     * If an error occurs reading the preference store, an empty preference store is
+	     * quietly created, initialized with defaults, and returned.
+	     * </p>
+	     * <p>
+	     * <strong>NOTE:</strong> As of Eclipse 3.1 this method is
+	     * no longer referring to the core runtime compatibility layer and so
+	     * plug-ins relying on Plugin#initializeDefaultPreferences
+	     * will have to access the compatibility layer themselves.
+	     * </p>
+	     *
+	     * @return the preference store 
+	     */
+	    public IPreferenceStore getPreferenceStore() {
+	        // Create the preference store lazily.
+	        if (preferenceStore == null) {
+	            preferenceStore = new ScopedPreferenceStore(new InstanceScope(),getBundle().getSymbolicName());
+
+	        }
+	        return preferenceStore;
+	    }
 	}
 
-	public IScenarioServiceSelectionProvider getScenarioServiceSelectionProvider() {
-		return scenarioServiceSelectionProviderTracker.getService();
-	}
-
-	public static void warning(final String message) {
-
-		final Status status = new Status(IStatus.WARNING, PLUGIN_ID, message);
-		getDefault().getLog().log(status);
-	}
-
-	public static void warning(final String message, final Throwable t) {
-
-		final Status status = new Status(IStatus.WARNING, PLUGIN_ID, message, t);
-		getDefault().getLog().log(status);
-	}
-
-	public static void error(final String message) {
-
-		final Status status = new Status(IStatus.ERROR, PLUGIN_ID, message);
-		getDefault().getLog().log(status);
-	}
-
-	public static void error(final String message, final Throwable t) {
-
-		final Status status = new Status(IStatus.ERROR, PLUGIN_ID, message, t);
-		getDefault().getLog().log(status);
-	}
 }

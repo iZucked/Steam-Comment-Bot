@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getRowGroups <em>Row Groups</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getScenarios <em>Scenarios</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getPinnedScenario <em>Pinned Scenario</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getUserGroups <em>User Groups</em>}</li>
  * </ul>
  * </p>
  *
@@ -121,5 +122,21 @@ public interface Table extends EObject {
 	 * @generated
 	 */
 	void setPinnedScenario(EObject value);
+
+	/**
+	 * Returns the value of the '<em><b>User Groups</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.lingo.reports.views.schedule.model.UserGroup}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>User Groups</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>User Groups</em>' containment reference list.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getTable_UserGroups()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<UserGroup> getUserGroups();
 
 } // Table
