@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.emf.databinding.internal.EMFObservableListDecorator;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
@@ -32,6 +33,7 @@ import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportIni
 import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportInitialStateExtension.InitialDiffOption;
 import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportInitialStateExtension.InitialRowType;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
+import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 
 /**
  * A customisable report for schedule based data. Extension points define the available columns for all instances and initial state for each instance of this report. Optionally a dialog is available
@@ -66,11 +68,26 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 	}
 
 	@Override
+	public Object getAdapter(Class adapter) {
+
+		if (Table.class.isAssignableFrom(adapter)) {
+			Object input = viewer.getInput();
+			if (input instanceof EMFObservableListDecorator) {
+				EMFObservableListDecorator emfObservableListDecorator = (EMFObservableListDecorator) input;
+				return emfObservableListDecorator.getObserved();
+			}
+			return input;
+		}
+
+		return super.getAdapter(adapter);
+	}
+
+	@Override
 	public void initPartControl(Composite parent) {
 		super.initPartControl(parent);
 
 		// Add a filter to only show certain rows.
-		
+
 		viewer.setFilters(new ViewerFilter[] { super.filterSupport.createViewerFilter(), new ViewerFilter() {
 
 			@Override

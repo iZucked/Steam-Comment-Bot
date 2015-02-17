@@ -104,6 +104,7 @@ public class ScheduleTransformer {
 				table.getRowGroups().clear();
 				table.getRows().clear();
 				table.getCycleGroups().clear();
+				table.getUserGroups().clear();
 				table.getScenarios().clear();
 				table.setPinnedScenario(null);
 

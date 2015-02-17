@@ -140,11 +140,12 @@ public class ScheduleBasedReportBuilder {
 	}
 
 	public List<?> adaptSelectionFromWidget(final List<?> selection) {
-		final List<Object> adaptedSelection = new ArrayList<Object>(selection.size());
+		final List<Object> adaptedSelection = new ArrayList<Object>(selection.size()  * 2);
 		for (final Object obj : selection) {
 			if (obj instanceof EObject) {
 				adaptedSelection.add(((EObject) obj).eGet(ScheduleReportPackage.Literals.ROW__TARGET));
 			}
+			adaptedSelection.add(obj);
 		}
 
 		return adaptedSelection;
