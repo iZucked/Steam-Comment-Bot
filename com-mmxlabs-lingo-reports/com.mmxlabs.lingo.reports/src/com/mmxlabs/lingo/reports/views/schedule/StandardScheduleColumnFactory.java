@@ -642,6 +642,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 								if (row.getLoadAllocation().getSlot() instanceof SpotLoadSlot) {
 									final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) row.getLoadAllocation().getSlot();
 									return String.format("Buy spot '%s' to %s", spotLoadSlot.getMarket().getName(), CargoAllocationUtils.getSalesWiringAsString(ca));
+									// Sell spot?
 								} else {
 									return String.format("Redirect '%s' : %s -> %s", row.getLoadAllocation().getSlot().getName(), CargoAllocationUtils.getSalesWiringAsString(ref),
 											CargoAllocationUtils.getSalesWiringAsString(ca));
