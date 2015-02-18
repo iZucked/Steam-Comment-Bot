@@ -37,6 +37,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.IElementComparer;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -44,6 +45,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.widgets.ganttchart.AbstractSettings;
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.nebula.widgets.ganttchart.DefaultColorManager;
+import org.eclipse.nebula.widgets.ganttchart.GanttEvent;
 import org.eclipse.nebula.widgets.ganttchart.GanttFlags;
 import org.eclipse.nebula.widgets.ganttchart.IColorManager;
 import org.eclipse.nebula.widgets.ganttchart.ISettings;
@@ -128,8 +130,8 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 
 	@Inject
 	private Iterable<ISchedulerViewColourSchemeExtension> colourSchemeExtensions;
-	
-	private List<IScheduleViewColourScheme> colourSchemes= new ArrayList<>();
+
+	private List<IScheduleViewColourScheme> colourSchemes = new ArrayList<>();
 
 	private HighlightAction highlightAction;
 
@@ -191,7 +193,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 
 		// Inject the extension points
 		Activator.getDefault().getInjector().injectMembers(this);
-		
+
 		// Gantt Chart settings object
 		final ISettings settings = new AbstractSettings() {
 			@Override
@@ -325,12 +327,62 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 				}
 			}
 
+			@Override
+			protected void setSelectionToWidget(@SuppressWarnings("rawtypes") final List l, final boolean reveal) {
+
+				final ArrayList<GanttEvent> selectedEvents;
+				if (l != null) {
+					// Use the internalMap to obtain the list of events we are selecting
+					selectedEvents = new ArrayList<GanttEvent>(l.size());
+					if (!l.isEmpty()) {
+						for (Object ge : ganttChart.getGanttComposite().getEvents()) {
+							((GanttEvent) ge).setStatusAlpha(50);
+						}
+					}
+					for (final Object obj : l) {
+						if (obj != null) {
+							if (internalMap.containsKey(obj)) {
+								selectedEvents.add(internalMap.get(obj));
+								internalMap.get(obj).setStatusAlpha(getLabelProviderAlpha((ILabelProvider) getLabelProvider(), obj));
+
+							} else if (getComparer() != null) {
+								for (final Map.Entry<Object, GanttEvent> e : internalMap.entrySet()) {
+									if (getComparer().equals(e.getKey(), obj)) {
+										selectedEvents.add(internalMap.get(e.getKey()));
+										e.getValue().setStatusAlpha(getLabelProviderAlpha((ILabelProvider) getLabelProvider(), e.getKey()));
+										internalMap.get(e.getKey()).setStatusAlpha(getLabelProviderAlpha((ILabelProvider) getLabelProvider(), e.getKey()));
+									}
+								}
+							}
+						}
+					}
+				} else {
+					// Clear selection
+					selectedEvents = new ArrayList<GanttEvent>(0);
+				}
+
+				ganttChart.getGanttComposite().setSelection(selectedEvents);
+				if (selectedEvents.isEmpty() == false) {
+					final GanttEvent sel = selectedEvents.get(0);
+					if (!ganttChart.getGanttComposite().isEventVisible(sel, ganttChart.getGanttComposite().getBounds())) {
+						ganttChart.getGanttComposite().showEvent(sel, SWT.CENTER);
+					}
+				}
+				// ganttChart. getGanttComposite().heavyRedraw();
+			}
+
+			@Override
+			public void setSelection(ISelection selection) {
+				// TODO Auto-generated method stub
+				super.setSelection(selection);
+			}
+
 		};
-		
+
 		// make sure this viewer is listening to preference changes
 		IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode("com.mmxlabs.lingo.reports");
-		prefs.addPreferenceChangeListener(this);				
-		
+		prefs.addPreferenceChangeListener(this);
+
 		// viewer.setContentProvider(new AnnotatedScheduleContentProvider());
 		// viewer.setLabelProvider(new AnnotatedSequenceLabelProvider());
 
@@ -492,7 +544,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 	public void dispose() {
 		// stop this view from listening to preference changes
 		IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode("com.mmxlabs.lingo.reports");
-		prefs.removePreferenceChangeListener(this);				
+		prefs.removePreferenceChangeListener(this);
 
 		ScenarioViewerSynchronizer.deregisterView(jobManagerListener);
 		// getSite().getPage().removeSelectionListener(
