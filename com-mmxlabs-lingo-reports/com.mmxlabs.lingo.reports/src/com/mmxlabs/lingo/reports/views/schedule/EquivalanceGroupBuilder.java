@@ -266,9 +266,6 @@ public class EquivalanceGroupBuilder {
 									}
 								}
 								if (referenceRow != null) {
-									final Table table = referenceRow.getTable();
-									final CycleGroup cycleGroup = CycleGroupUtils.createOrReturnCycleGroup(table, referenceRow);
-									CycleGroupUtils.addToOrMergeCycleGroup(table, equivalenceRow, cycleGroup);
 									equivalenceRow.setReferenceRow(referenceRow);
 								}
 							}

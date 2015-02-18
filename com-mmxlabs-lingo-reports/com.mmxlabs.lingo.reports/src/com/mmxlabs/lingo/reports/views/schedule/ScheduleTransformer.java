@@ -26,6 +26,7 @@ import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.diff.utils.PNLDeltaUtils;
 import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandler;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.CycleDiffProcessor;
+import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.CycleGroupUtils;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.GCOCycleGroupingProcessor;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.IDiffProcessor;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.LadenVoyageProcessor;
@@ -166,7 +167,7 @@ public class ScheduleTransformer {
 				diffProcessors.add(new CycleDiffProcessor(customRelatedSlotHandlers));
 				diffProcessors.add(new StructuralDifferencesProcessor(builder.getScheduleDiffUtils()));
 				diffProcessors.add(new GCOCycleGroupingProcessor());
-                                diffProcessors.add(new LadenVoyageProcessor());
+				diffProcessors.add(new LadenVoyageProcessor());
 			}
 
 			@Override
@@ -232,6 +233,10 @@ public class ScheduleTransformer {
 						final Row row = elementToRowMap.get(element);
 						if (row != null) {
 							row.setVisible(true);
+							if (row.getCycleGroup() == null) {
+								// Create a default group
+								CycleGroupUtils.createOrReturnCycleGroup(table, row);
+							}
 						}
 					}
 					// // Run diff processes.
@@ -481,18 +486,24 @@ public class ScheduleTransformer {
 				continue;
 			}
 
-			final int pnlDelta = PNLDeltaUtils.getPNLDelta(group);
-			orderedUserGroup.add(new Pair<>(group, pnlDelta));
+			// Filter out single element groups
+			if (group.getGroups().size() == 1) {
+				table.getCycleGroups().addAll(group.getGroups());
+			} else {
+				final int pnlDelta = PNLDeltaUtils.getPNLDelta(group);
+				orderedUserGroup.add(new Pair<>(group, pnlDelta));
+			}
 		}
 		int userGoupCounter = 1;
 		int cycleGoupCounter = 1;
 		table.getUserGroups().clear();
 		for (final Pair<UserGroup, Integer> p : orderedUserGroup) {
 			final UserGroup userGroup = p.getFirst();
-			if (p.getSecond() == 0) {
-				table.getCycleGroups().addAll(userGroup.getGroups());
-				continue;
-			}
+//			 Zero sum user group, remove it.
+//			if (p.getSecond() == 0) {
+//				table.getCycleGroups().addAll(userGroup.getGroups());
+//				continue;
+//			}
 			table.getUserGroups().add(userGroup);
 			userGroup.setComment(String.format("Group %d", userGoupCounter++));
 

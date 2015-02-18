@@ -1,7 +1,5 @@
 package com.mmxlabs.lingo.reports.views.schedule.diffprocessors;
 
-import java.util.ArrayList;
-
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
@@ -23,9 +21,21 @@ public class CycleGroupUtils {
 		if (cycleGroup == null) {
 			cycleGroup = ScheduleReportFactory.eINSTANCE.createCycleGroup();
 			table.getCycleGroups().add(cycleGroup);
-			row.setCycleGroup(cycleGroup);
+			// row.setCycleGroup(cycleGroup);
+			setRowCycleGroup(row, cycleGroup);
 		}
 		return cycleGroup;
+	}
+
+	private static void setRowCycleGroup(Row row, CycleGroup cycleGroup) {
+		row.setCycleGroup(cycleGroup);
+		if (row.getReferenceRow() != null) {
+			row.getReferenceRow().setCycleGroup(cycleGroup);
+		} else {
+			for (Row r : row.getReferringRows()) {
+				r.setCycleGroup(cycleGroup);
+			}
+		}
 	}
 
 	public static void addToOrMergeCycleGroup(final Table table, final Row row, final CycleGroup cycleGroup) {
@@ -34,9 +44,11 @@ public class CycleGroupUtils {
 		}
 		final CycleGroup rowCycleGroup = row.getCycleGroup();
 		if (rowCycleGroup == null) {
-			row.setCycleGroup(cycleGroup);
+			setRowCycleGroup(row, cycleGroup);
+
 		} else if (rowCycleGroup != cycleGroup) {
-			row.setCycleGroup(cycleGroup);
+			setRowCycleGroup(row, cycleGroup);
+
 			// Copy all rows into new cycle group.
 			cycleGroup.getRows().addAll(rowCycleGroup.getRows());
 
@@ -111,11 +123,12 @@ public class CycleGroupUtils {
 		if (cycleGroup.getUserGroup() != userGroup) {
 			final UserGroup oldGroup = cycleGroup.getUserGroup();
 			cycleGroup.setUserGroup(userGroup);
-			if (oldGroup != null ) {
-			userGroup.getGroups().addAll(oldGroup.getGroups());
-			if (oldGroup != null && oldGroup.getGroups().isEmpty()) {
-				table.getUserGroups().remove(oldGroup);
-			}}
+			if (oldGroup != null) {
+				userGroup.getGroups().addAll(oldGroup.getGroups());
+				if (oldGroup.getGroups().isEmpty()) {
+					table.getUserGroups().remove(oldGroup);
+				}
+			}
 		}
 
 	}
