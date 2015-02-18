@@ -48,6 +48,7 @@ import org.eclipse.ui.views.properties.PropertySheet;
 
 import com.google.common.collect.Sets;
 import com.mmxlabs.lingo.reports.diff.actions.DeleteDiffAction;
+import com.mmxlabs.lingo.reports.diff.actions.ExtractCycleGroupAction;
 import com.mmxlabs.lingo.reports.diff.utils.PNLDeltaUtils;
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
@@ -422,10 +423,16 @@ public class DiffGroupView extends ViewPart implements ISelectionListener, IMenu
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
 
+			if (structuredSelection.getFirstElement() instanceof CycleGroup) {
+				ExtractCycleGroupAction action = new ExtractCycleGroupAction();
+				manager.add(action);
+				action.selectionChanged(structuredSelection);
+
+			}
 			if (structuredSelection.size() > 1) {
 				manager.add(new MergeAction(structuredSelection, table));
 			}
-			if (structuredSelection.size() > 0) {
+			if (structuredSelection.getFirstElement() instanceof UserGroup) {
 				final DeleteDiffAction action = new DeleteDiffAction();
 				action.selectionChanged(structuredSelection);
 				manager.add(action);

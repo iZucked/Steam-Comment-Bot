@@ -11,6 +11,7 @@ import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
 public class AbstractDiffAction extends BaseSelectionListenerAction {
 
 	protected EObject target;
+	protected IStructuredSelection selection;
 
 	protected AbstractDiffAction(final String text) {
 		super(text);
@@ -19,6 +20,7 @@ public class AbstractDiffAction extends BaseSelectionListenerAction {
 	@Override
 	protected boolean updateSelection(final IStructuredSelection selection) {
 
+		this.selection = selection;
 		final Object firstElement = selection.getFirstElement();
 		if (firstElement instanceof UserGroup || firstElement instanceof CycleGroup || firstElement instanceof Row) {
 			target = (EObject) firstElement;
