@@ -15,11 +15,8 @@ import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 
-import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.CycleGroupUtils;
-import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
-import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;

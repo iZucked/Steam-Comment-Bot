@@ -7,7 +7,6 @@ package com.mmxlabs.lingo.reports.scheduleview.views.colourschemes;
 import static com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ColourSchemeUtil.isLocked;
 import static com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ColourSchemeUtil.isOutsideTimeWindow;
 
-import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.swt.graphics.Color;
 
 import com.mmxlabs.lingo.reports.ColourPalette;

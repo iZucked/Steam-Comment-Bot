@@ -12,7 +12,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
 
-import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
