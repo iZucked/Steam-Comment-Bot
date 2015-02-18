@@ -36,8 +36,8 @@ public class GCOCycleGroupingProcessor implements IDiffProcessor {
 			if (previousEvent != null) {
 				final Row previousEventRow = elementToRowMap.get(previousEvent);
 				if (previousEventRow != null) {
-					final CycleGroup cycleGroup = CycleGroupUtils.createOrReturnCycleGroup(table, referenceRow);
-					CycleGroupUtils.addToOrMergeCycleGroup(table, previousEventRow, cycleGroup);
+//					final CycleGroup cycleGroup = CycleGroupUtils.createOrReturnCycleGroup(table, referenceRow);
+//					CycleGroupUtils.addToOrMergeCycleGroup(table, previousEventRow, cycleGroup);
 					
 					
 //					if (showRows) {
