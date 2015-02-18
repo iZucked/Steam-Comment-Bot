@@ -9,6 +9,7 @@ import static com.mmxlabs.lingo.reports.views.schedule.ScheduleBasedReportBuilde
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypedElement;
+import org.eclipse.swt.graphics.Image;
 
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.MultiObjectEmfBlockColumnFactory;
@@ -16,6 +17,7 @@ import com.mmxlabs.lingo.reports.components.SimpleEmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.diff.utils.PNLDeltaUtils;
 import com.mmxlabs.lingo.reports.diff.utils.ScheduleCostUtils;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
+import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.PriceFormatter;
@@ -28,6 +30,7 @@ import com.mmxlabs.lingo.reports.views.schedule.formatters.PreviousWiringFormatt
 import com.mmxlabs.lingo.reports.views.schedule.formatters.RowTypeFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
+import com.mmxlabs.lingo.reports.views.schedule.model.provider.PinnedScheduleFormatter;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -67,10 +70,15 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 		final EStructuralFeature loadAllocationRef = ScheduleReportPackage.Literals.ROW__LOAD_ALLOCATION;
 		final EStructuralFeature dischargeAllocationRef = ScheduleReportPackage.Literals.ROW__DISCHARGE_ALLOCATION;
 
+		// TODO: Dispose!
+		Image pinImage = Activator.Implementation.getImageDescriptor("icons/full/obj16/PinnedRow.gif").createImage();
+		
+		
 		switch (columnID) {
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.schedule":
+			PinnedScheduleFormatter formatter= new PinnedScheduleFormatter(pinImage);
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Scenario", "The scenario name. Only shown when multiple scenarios are selected",
-					ColumnType.MULTIPLE, Formatters.objectFormatter, ScheduleReportPackage.Literals.ROW__SCENARIO, ScenarioServicePackage.eINSTANCE.getContainer_Name()));
+					ColumnType.MULTIPLE,formatter, ScheduleReportPackage.Literals.ROW__SCENARIO, ScenarioServicePackage.eINSTANCE.getContainer_Name()));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.id":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "ID", "The main ID for all including discharge slots", ColumnType.NORMAL,

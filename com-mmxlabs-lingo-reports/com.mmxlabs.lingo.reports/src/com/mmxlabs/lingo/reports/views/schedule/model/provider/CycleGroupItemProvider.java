@@ -180,6 +180,8 @@ public class CycleGroupItemProvider
 				 null));
 	}
 
+	
+
 	/**
 	 * This returns CycleGroup.gif.
 	 * <!-- begin-user-doc -->

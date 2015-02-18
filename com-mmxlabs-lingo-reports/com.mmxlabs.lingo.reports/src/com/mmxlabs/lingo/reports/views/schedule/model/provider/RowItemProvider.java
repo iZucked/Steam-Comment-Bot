@@ -437,11 +437,17 @@ public class RowItemProvider
 	 * This returns Row.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Row"));
+		if (object instanceof Row) {
+			final Row row = (Row) object;
+			if (row.isReference()) {
+				return overlayImage(object, getResourceLocator().getImage("full/obj16/PinnedRow"));
+			}
+		}
+		return null;
 	}
 
 	/**

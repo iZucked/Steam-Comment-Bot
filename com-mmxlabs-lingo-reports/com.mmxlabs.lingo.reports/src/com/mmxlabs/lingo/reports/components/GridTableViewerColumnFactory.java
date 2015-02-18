@@ -26,6 +26,7 @@ import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerFilterSupport;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerSortingSupport;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.models.ui.tabular.IImageProvider;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
 public class GridTableViewerColumnFactory implements IColumnFactory {
@@ -89,6 +90,9 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 				setRowSpan(formatter, cell, element);
 
 				cell.setText(formatter.render(element));
+				if (formatter instanceof IImageProvider) {
+					cell.setImage(((IImageProvider) formatter).getImage(element));
+				}
 			}
 		});
 
@@ -147,6 +151,11 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 							setRowSpan(formatter, cell, element);
 
 							cell.setText(formatter.render(element));
+
+							if (formatter instanceof IImageProvider) {
+								cell.setImage(((IImageProvider) formatter).getImage(cell.getElement()));
+							}
+
 						}
 
 					}
