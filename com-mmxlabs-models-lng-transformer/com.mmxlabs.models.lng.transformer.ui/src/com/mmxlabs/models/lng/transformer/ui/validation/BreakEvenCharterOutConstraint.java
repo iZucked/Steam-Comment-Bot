@@ -43,7 +43,7 @@ public class BreakEvenCharterOutConstraint extends AbstractModelMultiConstraint 
 				}
 				boolean charterOutEnabled = false;
 				for (final CharterOutMarket ccm : spotMarketsModel.getCharterOutMarkets()) {
-					if (ccm.getCharterOutPrice() != null) {
+					if (ccm.isEnabled()) {
 						charterOutEnabled = true;
 						break;
 					}
