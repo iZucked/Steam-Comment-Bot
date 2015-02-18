@@ -124,8 +124,12 @@ public class MigrateToV23 extends AbstractMigrationUnit {
 		final EClass class_EndEvent = MetamodelUtils.getEClass(schedulePackage, "EndEvent");
 		final EClass class_SlotVisit = MetamodelUtils.getEClass(schedulePackage, "SlotVisit");
 		final EClass class_LoadSlot = MetamodelUtils.getEClass(cargoPackage, "LoadSlot");
+		final EClass class_GeneratedCharterOut = MetamodelUtils.getEClass(schedulePackage, "GeneratedCharterOut");
 
 		if (class_VesselEventVisit.isInstance(event)) {
+			return true;
+		}
+		if (class_GeneratedCharterOut.isInstance(event)) {
 			return true;
 		}
 		if (class_StartEvent.isInstance(event)) {
