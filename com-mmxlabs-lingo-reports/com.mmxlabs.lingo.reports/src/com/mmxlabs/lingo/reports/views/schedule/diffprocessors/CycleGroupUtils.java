@@ -1,9 +1,14 @@
 package com.mmxlabs.lingo.reports.views.schedule.diffprocessors;
 
+import java.util.ArrayList;
+
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
+import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
 
 /**
  * Utils class to help with creating and merging {@link CycleGroup} objects.
@@ -32,9 +37,87 @@ public class CycleGroupUtils {
 			row.setCycleGroup(cycleGroup);
 		} else if (rowCycleGroup != cycleGroup) {
 			row.setCycleGroup(cycleGroup);
+			// Copy all rows into new cycle group.
 			cycleGroup.getRows().addAll(rowCycleGroup.getRows());
-			table.getCycleGroups().remove(rowCycleGroup);
+
+			UserGroup rowUserGroup = rowCycleGroup.getUserGroup();
+			if (cycleGroup.getUserGroup() != rowUserGroup) {
+				if (rowUserGroup != null && cycleGroup.getUserGroup() == null) {
+					cycleGroup.setUserGroup(rowUserGroup);
+					rowCycleGroup.setUserGroup(null);
+				} else if (rowUserGroup != null && cycleGroup.getUserGroup() != null) {
+					cycleGroup.getUserGroup().getGroups().addAll(rowUserGroup.getGroups());
+				}
+			}
+
+			if (rowUserGroup != null) {
+				if (cycleGroup.getUserGroup() != null) {
+
+				}
+
+			} else {
+				table.getCycleGroups().remove(rowCycleGroup);
+			}
+
 		}
+	}
+
+	public static UserGroup createOrReturnUserGroup(final Table table, final CycleGroup cycleGroup) {
+		UserGroup userGroup = cycleGroup.getUserGroup();
+		if (userGroup == null) {
+			userGroup = ScheduleReportFactory.eINSTANCE.createUserGroup();
+			userGroup.setComment("New Group");
+			table.getUserGroups().add(userGroup);
+
+			cycleGroup.setUserGroup(userGroup);
+		}
+		return userGroup;
+	}
+
+	public static UserGroup createOrReturnUserGroup(final Table table, @NonNull final Row row) {
+		CycleGroup cycleGroup = createOrReturnCycleGroup(table, row);
+
+		UserGroup userGroup = cycleGroup.getUserGroup();
+		if (userGroup == null) {
+			userGroup = ScheduleReportFactory.eINSTANCE.createUserGroup();
+			userGroup.setComment("New Group");
+			table.getUserGroups().add(userGroup);
+
+			cycleGroup.setUserGroup(userGroup);
+		}
+		return userGroup;
+	}
+
+	public static void addToOrMergeUserGroup(final Table table, final CycleGroup cycleGroup, final UserGroup userGroup) {
+		if (cycleGroup == null || userGroup == null) {
+			return;
+		}
+		if (cycleGroup.getUserGroup() != userGroup) {
+			final UserGroup oldGroup = cycleGroup.getUserGroup();
+			cycleGroup.setUserGroup(userGroup);
+			if (oldGroup != null && oldGroup.getGroups().isEmpty()) {
+				table.getUserGroups().remove(oldGroup);
+			}
+		}
+
+	}
+
+	public static void addToOrMergeUserGroup(final Table table, final Row row, final UserGroup userGroup) {
+		CycleGroup cycleGroup = createOrReturnCycleGroup(table, row);
+
+		if (cycleGroup == null || userGroup == null) {
+			return;
+		}
+		if (cycleGroup.getUserGroup() != userGroup) {
+			final UserGroup oldGroup = cycleGroup.getUserGroup();
+			cycleGroup.setUserGroup(userGroup);
+			if (oldGroup != null ) {
+			userGroup.getGroups().addAll(oldGroup.getGroups());
+			if (oldGroup != null && oldGroup.getGroups().isEmpty()) {
+				table.getUserGroups().remove(oldGroup);
+			}}
+		}
+
 	}
 
 }
