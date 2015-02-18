@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.Fitness;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
@@ -407,6 +408,8 @@ public class AnnotatedSolutionExporter {
 					} else {
 						eventGrouping = null;
 					}
+				} else if (event instanceof GeneratedCharterOut) {
+					eventGrouping = null;
 				} else if (event instanceof Journey && eventGrouping != null) {
 					eventGrouping.getEvents().add(event);
 				} else if (event instanceof Idle && eventGrouping != null) {
