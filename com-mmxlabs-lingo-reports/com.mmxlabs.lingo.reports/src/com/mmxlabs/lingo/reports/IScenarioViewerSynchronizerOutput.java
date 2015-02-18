@@ -34,6 +34,8 @@ public interface IScenarioViewerSynchronizerOutput {
 	 */
 	public boolean isPinned(Object object);
 
+	public boolean hasPinnedScenario();
+	
 	/**
 	 * Gets the {@link LNGScenarioModel} object for a particular object from the {@link #getCollectedElements()} list.
 	 * 

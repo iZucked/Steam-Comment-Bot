@@ -271,7 +271,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 
 			@Override
 			public int getEventsTopSpacer() {
-				return 5;
+				return 3;
 			}
 
 			@Override
