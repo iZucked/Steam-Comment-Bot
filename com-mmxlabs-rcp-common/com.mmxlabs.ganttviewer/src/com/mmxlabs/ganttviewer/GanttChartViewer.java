@@ -52,10 +52,10 @@ public class GanttChartViewer extends StructuredViewer {
 
 	private static final Logger log = LoggerFactory.getLogger(GanttChartViewer.class);
 
-	private final GanttChart ganttChart;
+	protected final GanttChart ganttChart;
 
-	private final Map<Object, GanttEvent> internalMap = new HashMap<Object, GanttEvent>();
-	private final Map<GanttEvent, Object> internalReverseMap = new HashMap<GanttEvent, Object>();
+	protected final Map<Object, GanttEvent> internalMap = new HashMap<Object, GanttEvent>();
+	protected final Map<GanttEvent, Object> internalReverseMap = new HashMap<GanttEvent, Object>();
 
 	private final IGanttEventListener ganttEventListener;
 
@@ -389,35 +389,35 @@ public class GanttChartViewer extends StructuredViewer {
 		}
 	}
 
-	private String getGanttGroup(IContentProvider provider, Object c) {
+	protected String getGanttGroup(IContentProvider provider, Object c) {
 		if (provider instanceof IGanttChartContentProvider) {
 			return ((IGanttChartContentProvider) provider).getGroupIdentifier(c);
 		}
 		return null;
 	}
 
-	private Color getLabelProviderColor(final ILabelProvider labelProvider, final Object c) {
+	protected Color getLabelProviderColor(final ILabelProvider labelProvider, final Object c) {
 		if (labelProvider instanceof IColorProvider) {
 			return ((IColorProvider) labelProvider).getBackground(c);
 		}
 		return null;
 	}
 
-	private Color getLabelProviderBorderColor(final ILabelProvider labelProvider, final Object c) {
+	protected Color getLabelProviderBorderColor(final ILabelProvider labelProvider, final Object c) {
 		if (labelProvider instanceof IGanttChartColourProvider) {
 			return ((IGanttChartColourProvider) labelProvider).getBorderColour(c);
 		}
 		return null;
 	}
 
-	private int getLabelProviderBorderWidth(final ILabelProvider labelProvider, final Object c) {
+	protected int getLabelProviderBorderWidth(final ILabelProvider labelProvider, final Object c) {
 		if (labelProvider instanceof IGanttChartColourProvider) {
 			return ((IGanttChartColourProvider) labelProvider).getBorderWidth(c);
 		}
 		return 1;
 	}
 
-	private int getLabelProviderAlpha(final ILabelProvider labelProvider, final Object c) {
+	protected int getLabelProviderAlpha(final ILabelProvider labelProvider, final Object c) {
 		if (labelProvider instanceof IGanttChartColourProvider) {
 			return ((IGanttChartColourProvider) labelProvider).getAlpha(c);
 		}
