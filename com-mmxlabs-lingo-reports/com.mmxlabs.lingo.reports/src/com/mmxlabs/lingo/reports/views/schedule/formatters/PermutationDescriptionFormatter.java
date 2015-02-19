@@ -18,7 +18,7 @@ public class PermutationDescriptionFormatter extends BaseFormatter {
 
 			}
 		}
-		return null;
+		return "";
 	}
 
 	@Override
@@ -28,8 +28,7 @@ public class PermutationDescriptionFormatter extends BaseFormatter {
 
 			final CycleGroup group = row.getCycleGroup();
 			if (group != null) {
-				return group.getDescription();
-
+				return group.getDescription() == null ? "" : group.getDescription();
 			}
 		}
 		return "";

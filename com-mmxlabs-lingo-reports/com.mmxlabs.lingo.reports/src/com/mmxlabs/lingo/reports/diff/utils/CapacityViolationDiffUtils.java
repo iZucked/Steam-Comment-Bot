@@ -3,8 +3,10 @@ package com.mmxlabs.lingo.reports.diff.utils;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -28,14 +30,14 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 public class CapacityViolationDiffUtils {
 
 	public static class CapacityViolationDifferences {
-		public HashSet<CapacityViolationType> additionSet = new HashSet<CapacityViolationType>();
-		public HashSet<CapacityViolationType> intersectSet = new HashSet<CapacityViolationType>();
-		public HashSet<CapacityViolationType> subtractionSet = new HashSet<CapacityViolationType>();
+		public HashMap<CapacityViolationType, Long> additionSet;
+		public HashMap<CapacityViolationType, Long> intersectSet;
+		public HashMap<CapacityViolationType, Long> subtractionSet;
 		
 		public CapacityViolationDifferences () {
-			additionSet = new HashSet<CapacityViolationType>();
-			intersectSet = new HashSet<CapacityViolationType>();
-			subtractionSet = new HashSet<CapacityViolationType>();
+			additionSet = new HashMap<CapacityViolationType, Long>();
+			intersectSet = new HashMap<CapacityViolationType, Long>();
+			subtractionSet = new HashMap<CapacityViolationType, Long>();
 		}
 	}
 	
@@ -46,34 +48,52 @@ public class CapacityViolationDiffUtils {
 			return "";
 		}
 		CapacityViolationDifferences differences = CapacityViolationDiffUtils.getDifferenceInViolations(nonReference, reference);
-		if (differences.additionSet.isEmpty() && differences.subtractionSet.isEmpty()) {
+		if (differences.additionSet.isEmpty() && differences.subtractionSet.isEmpty() && differences.intersectSet.isEmpty()) {
 			return "";
 		}
 
-		String additions = createViolationTextFromSet(differences.additionSet);
-		String subtractions = createViolationTextFromSet(differences.subtractionSet);
+		String additions = createChangedViolationTextFromSet(differences.additionSet);
+		String subtractions = createChangedViolationTextFromSet(differences.subtractionSet);
+		String intersection = createModifiedViolationTextFromSet(differences.intersectSet);
 		String slotType = nonReference.getSlot() instanceof LoadSlot ? "Load" : "Discharge";
 		
-		if (!differences.subtractionSet.isEmpty() && differences.additionSet.isEmpty()) {
-			return String.format("%s removed violations: %s", slotType, subtractions);
-		} else if (!differences.additionSet.isEmpty() && differences.subtractionSet.isEmpty()) {
-			return String.format("%s added violations: %s", slotType, additions);
-		} else {
-			return String.format("%s removed violations: %s; added violations: %s", slotType, subtractions, additions);
-		}
+		String additionSemiColon = ((!differences.additionSet.isEmpty() && (!differences.subtractionSet.isEmpty() || !differences.intersectSet.isEmpty())) ? " ; " : "");
+		String subtractionSemiColon = (!differences.subtractionSet.isEmpty() && !differences.intersectSet.isEmpty()) ? " ; " : "";
+		String returnString = String.format("%s ",slotType) + (!differences.additionSet.isEmpty() ? String.format("added violations: %s", additions) : "") + additionSemiColon + (!differences.subtractionSet.isEmpty() ? String.format("removed violations: %s", subtractions) : "") + subtractionSemiColon + (!differences.intersectSet.isEmpty() ? String.format("modified violations: %s", intersection) : ""); 
+		
+		return returnString;
 	}
 
-	private static String createViolationTextFromSet(Set<CapacityViolationType> set) {
+	private static String createChangedViolationTextFromSet(Map<CapacityViolationType, Long> map) {
 		String text = "";
-		if (!set.isEmpty()) {
-			List<CapacityViolationType> violations = new ArrayList<>(set);
+		if (!map.isEmpty()) {
+			List<CapacityViolationType> violations = new ArrayList<>(map.keySet());
 			for (int index = 0; index < violations.size(); index++) {
-				text += (violations.get(index).getName() + (index < violations.size() - 1 ? " , " : ""));
+				if (violations.get(index) != CapacityViolationType.FORCED_COOLDOWN) {
+					text += String.format("%s (%sm³)%s", violations.get(index).getName(), map.get(violations.get(index)),(index < violations.size() - 1 ? " , " : ""));
+				} else {
+					text += String.format("%s %s", violations.get(index).getName(), (index < violations.size() - 1 ? " , " : ""));
+				}
 			}
 		}
 		return text;
 	}
 
+	private static String createModifiedViolationTextFromSet(Map<CapacityViolationType, Long> map) {
+		String text = "";
+		if (!map.isEmpty()) {
+			List<CapacityViolationType> violations = new ArrayList<>(map.keySet());
+			for (int index = 0; index < violations.size(); index++) {
+				if (violations.get(index) != CapacityViolationType.FORCED_COOLDOWN) {
+					text += String.format("%s (%s%sm³)%s", violations.get(index).getName(), map.get(violations.get(index)),map.get(violations.get(index)) > 0 ? "+" : "-", (index < violations.size() - 1 ? " , " : ""));
+				} else {
+					text += String.format("%s %s", violations.get(index).getName(), (index < violations.size() - 1 ? " , " : ""));
+				}
+			}
+		}
+		return text;
+	}
+	
 	private static EMap<CapacityViolationType, Long> getViolationMap(SlotAllocation slotAllocation) {
 		SlotVisit visit = slotAllocation.getSlotVisit();
 		if (visit instanceof CapacityViolationsHolder) {
@@ -89,22 +109,24 @@ public class CapacityViolationDiffUtils {
 		CapacityViolationDifferences differences = new CapacityViolationDifferences();
 		if (setA != null && setB != null) {
 			for (CapacityViolationType violation : setA.keySet()) {
-				if (setB.containsKey(violation)) {
-					differences.intersectSet.add(violation);
+				if (setB.containsKey(violation) && setA.get(violation) != setB.get(violation)) {
+					differences.intersectSet.put(violation, setB.get(violation) - setA.get(violation));
 				} else {
-					differences.additionSet.add(violation);
+					differences.additionSet.put(violation, setA.get(violation));
 				}
 			}
 			for (CapacityViolationType violation : setB.keySet()) {
 				if (!setA.containsKey(violation)) {
-					differences.subtractionSet.add(violation);
+					differences.subtractionSet.put(violation, setB.get(violation));
 				}
 			}
 		} else {
 			if (setA == null) {
-				differences.subtractionSet.addAll(setB.keySet());
+				for (CapacityViolationType violation : setB.keySet())
+					differences.subtractionSet.put(violation, setB.get(violation));
 			} else if (setB == null) {
-				differences.additionSet.addAll(setA.keySet());
+				for (CapacityViolationType violation : setA.keySet())
+					differences.additionSet.put(violation, setA.get(violation));
 			}
 		}
 		return differences;

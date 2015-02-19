@@ -15,8 +15,8 @@ public class PreviousWiringFormatter extends BaseFormatter {
 	public String render(final Object obj) {
 		if (obj instanceof Row) {
 			final Row row = (Row) obj;
-			return ChangeDescriptionUtil.getPreviousWiring(row);
+			return ChangeDescriptionUtil.getPreviousWiring(row) == null ? "" : ChangeDescriptionUtil.getPreviousWiring(row);
 		}
-		return null;
+		return "";
 	}
 }
