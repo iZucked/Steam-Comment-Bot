@@ -295,6 +295,11 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 			public int getSelectionLineWidth() {
 				return 3;
 			}
+
+			@Override
+			public int getSelectionLineStyle() {
+				return SWT.LINE_SOLID;
+			}
 		};
 
 		final IColorManager colourManager = new DefaultColorManager() {
