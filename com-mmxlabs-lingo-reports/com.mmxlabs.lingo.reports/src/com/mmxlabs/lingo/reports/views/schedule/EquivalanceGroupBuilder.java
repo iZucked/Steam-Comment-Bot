@@ -6,6 +6,7 @@ package com.mmxlabs.lingo.reports.views.schedule;
 
 import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -27,6 +28,7 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
@@ -40,6 +42,10 @@ public class EquivalanceGroupBuilder {
 
 	private Set<EObject> checkElementEquivalence(final EObject referenceElement, final List<EObject> elements) {
 
+		if (referenceElement instanceof GeneratedCharterOut) {
+			return Collections.emptySet();
+		}
+		
 		final Set<EObject> equivalents = new HashSet<>();
 		final String keyB = getElementKey(referenceElement);
 		if (referenceElement instanceof SlotAllocation) {
