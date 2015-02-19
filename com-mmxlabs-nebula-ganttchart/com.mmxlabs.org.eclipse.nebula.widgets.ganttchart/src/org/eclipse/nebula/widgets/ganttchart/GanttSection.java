@@ -57,6 +57,7 @@ public class GanttSection implements IFillBackgroundColors {
     private int                   _textOrientation = SWT.VERTICAL;
 
     private boolean               _inheritBackgroud;
+	private boolean visible = true;
 
     private GanttSection() {
         this._ganttEvents = new ArrayList();
@@ -403,6 +404,15 @@ public class GanttSection implements IFillBackgroundColors {
     public String toString() {
         return "[GanttSection: " + _name + "]";
     }
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+		
+	}
+	
+	public boolean isVisible() {
+		return visible;
+	}
     
     
 }

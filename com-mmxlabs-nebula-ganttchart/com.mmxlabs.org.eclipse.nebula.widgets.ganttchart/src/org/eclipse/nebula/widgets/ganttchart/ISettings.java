@@ -1077,4 +1077,6 @@ public interface ISettings {
     public boolean drawSectionsWithGradients();
 
 	public int getSelectionLineWidth();
+
+	public int getSelectionLineStyle();
 }

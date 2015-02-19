@@ -1086,6 +1086,10 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
             for (int i = 0; i < _ganttSections.size(); i++) {
                 final GanttSection section = (GanttSection) _ganttSections.get(i);
+                if (!section.isVisible()) {
+                	continue;
+                }
+                
                 final Rectangle gsBounds = section.getBounds();
 
                 if (boundsOverride != null) {
@@ -1129,6 +1133,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
             // a connection to a group/event that hasn't been drawn yet, it would draw an arrow into space..
             for (int i = 0; i < _ganttSections.size(); i++) {
                 final GanttSection section = (GanttSection) _ganttSections.get(i);
+                if (!section.isVisible()) {
+                	continue;
+                }
                 _bottomMostY = Math.max(section.getBounds().y + section.getBounds().height, _bottomMostY);
             }
         } else {
@@ -1636,7 +1643,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
         for (int i = 0; i < _ganttSections.size(); i++) {
             final GanttSection gs = (GanttSection) _ganttSections.get(i);
-
+			if (!gs.isVisible()) {
+				continue;
+			}
             Point extent = null;
             if (gs.needsNameUpdate() || gs.getNameExtent() == null) {
                 extent = gc.textExtent(gs.getName(), SWT.DRAW_DELIMITER);
@@ -1858,8 +1867,13 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
         final int horiSpacer = 3;
 
         // calculate max width if any section is horizontal
+        GanttSection bottomSection = null;
         for (int i = 0; i < _ganttSections.size(); i++) {
             final GanttSection gs = (GanttSection) _ganttSections.get(i);
+            if (!gs.isVisible()) {
+            	continue;
+            }
+            bottomSection = gs;
             if (gs.getTextOrientation() == SWT.HORIZONTAL) {
                 Point p = null;
                 if (gs.needsNameUpdate() || gs.getNameExtent() == null) {
@@ -1896,8 +1910,6 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
             neg = -_settings.getSectionBarWidth();
         }
 
-        final GanttSection bottomSection = (GanttSection) _ganttSections.get(_ganttSections.size() - 1);
-
 
         if (drawCornerOnly) {
       		// Keep corner line in same place on scroll
@@ -1919,13 +1931,18 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
         gc.setForeground(_colorManager.getTopHorizontalLinesColor());
         // vertical
-        gc.drawLine(x + xMax + neg, 0, x + xMax + neg, bottomSection.getBounds().y + bottomSection.getBounds().height - 1);
+        if (bottomSection != null) {
+        	gc.drawLine(x + xMax + neg, 0, x + xMax + neg, bottomSection.getBounds().y + bottomSection.getBounds().height - 1);
+        }
 
         if (!drawCornerOnly) {
 
             for (int i = 0; i < _ganttSections.size(); i++) {
                 final GanttSection gs = (GanttSection) _ganttSections.get(i);
-
+                if (!gs.isVisible()) {
+                	continue;
+                }
+                
                 final int gsHeight = gs.getBounds().height;
 
                 gc.setForeground(_colorManager.getActiveSessionBarColorLeft());
@@ -1998,7 +2015,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
                     gc.setForeground(_colorManager.getTopHorizontalLinesColor());
 
                     //System.out.println(bounds + " " + width);
-
+                    // FIXME: GS
                     if (i != _ganttSections.size() - 1 && _settings.getSectionBarDividerHeight() != 0) { 
                         gc.setForeground(_colorManager.getSessionBarDividerColorLeft());
                         gc.setBackground(_colorManager.getSessionBarDividerColorRight());
@@ -5904,7 +5921,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
         for (int i = 0; i < _ganttSections.size(); i++) {
             final GanttSection gs = (GanttSection) _ganttSections.get(i);
-
+            if (!gs.isVisible()) {
+            	continue;
+            }
             // must account for scroll position as the event itself has no clue there's a scrollbar and obviously doesn't account for it
             if (gs.getBounds().contains(event.getX(), event.getY())) { return gs; }
         }
@@ -6000,7 +6019,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
             if (i < sorted.size() - 1) {
                 next = (GanttEvent) sorted.get(i + 1);
             }
-            //System.err.println("Next: " + next + " " + event.getY());
+            //System.err. ("Next: " + next + " " + event.getY());
             /*            if (next != null) {
                             System.err.println(cur + " || - if ("+event.getY()+ " < " + cur.getY()+" && " + next.getY() + " > " + event.getY() + ")");
                         }
@@ -6226,11 +6245,14 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
             if (_freeDragging && _dragging && !_ganttSections.isEmpty() && !_dragEvents.isEmpty()) {
                 final GanttEvent drag = (GanttEvent) _dragEvents.get(0);
                 for (int i = 0; i < _ganttSections.size(); i++) {
+                	
                     final GanttSection gs = (GanttSection) _ganttSections.get(i);
                     if (drag.getGanttSection() == gs) {
                         continue;
                     }
-
+                    if (!gs.isVisible()) {
+                    	continue;
+                    }
                     if (gs.getBounds().intersects(drag.getBounds())) {
                         gs.addDNDGanttEvent(drag);
                     } else {

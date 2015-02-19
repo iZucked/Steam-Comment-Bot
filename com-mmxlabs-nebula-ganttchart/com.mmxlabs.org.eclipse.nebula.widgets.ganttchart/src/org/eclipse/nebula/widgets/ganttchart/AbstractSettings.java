@@ -508,4 +508,8 @@ public abstract class AbstractSettings implements ISettings {
     public int getSelectionLineWidth() {
     	return 1;
     }
+    
+    public int getSelectionLineStyle() {
+    	return SWT.LINE_DOT;
+    }
 }
