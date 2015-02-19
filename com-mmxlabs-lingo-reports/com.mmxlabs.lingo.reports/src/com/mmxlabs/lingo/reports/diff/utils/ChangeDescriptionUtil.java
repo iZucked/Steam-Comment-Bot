@@ -1,9 +1,12 @@
 package com.mmxlabs.lingo.reports.diff.utils;
 
+import org.eclipse.swt.custom.CTabFolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lingo.reports.utils.CargoAllocationUtils;
+import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.CycleGroupUtils;
+import com.mmxlabs.lingo.reports.views.schedule.model.ChangeType;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -35,6 +38,7 @@ public class ChangeDescriptionUtil {
 					if (elementString.equals(referenceString)) {
 
 						if (!ca.getSequence().getName().equals(ref.getSequence().getName())) {
+							CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.VESSEL);
 							return String.format("Vessel: %s -> %s", ref.getSequence().getName(), ca.getSequence().getName());
 						}
 
@@ -42,8 +46,10 @@ public class ChangeDescriptionUtil {
 						final int referenceDuration = getEventGroupingDuration(ref);
 
 						if (rowDuration > referenceDuration) {
+							CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.DURATION);
 							return String.format("Shipping duration increased by %.1f days", ((double) (rowDuration - referenceDuration)) / 24.0);
 						} else if (rowDuration < referenceDuration) {
+							CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.DURATION);
 							return String.format("Shipping duration decreased by %.1f days", ((double) (referenceDuration - rowDuration)) / 24.0);
 						}
 
@@ -51,28 +57,35 @@ public class ChangeDescriptionUtil {
 					}
 					if (row.getLoadAllocation().getSlot() instanceof SpotLoadSlot) {
 						final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) row.getLoadAllocation().getSlot();
+                                                CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.WIRING);
 						return String.format("Buy spot '%s' to %s", spotLoadSlot.getMarket().getName(), CargoAllocationUtils.getSalesWiringAsString(ca));
 					} else if (row.getDischargeAllocation().getSlot() instanceof SpotDischargeSlot) {
 						// Sell spot?
 						final SpotDischargeSlot spotDischargeSlot = (SpotDischargeSlot) row.getDischargeAllocation().getSlot();
+                                                CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.WIRING);
 						return String.format("Sell spot '%s' to %s", row.getLoadAllocation().getSlot().getName(), spotDischargeSlot.getMarket().getName());
 					} else {
+                                                CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.WIRING);
 						return String.format("Redirect '%s' : %s -> %s", row.getLoadAllocation().getSlot().getName(), CargoAllocationUtils.getSalesWiringAsString(ref),
 								CargoAllocationUtils.getSalesWiringAsString(ca));
 					}
 				}
 				if (row.getOpenSlotAllocation() != null && referenceRow.getOpenSlotAllocation() == null) {
+                                        CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.WIRING);
 					return String.format("Cancelled '%s'", row.getOpenSlotAllocation().getSlot().getName());
 				}
 				if (row.getTarget() instanceof GeneratedCharterOut && referenceRow.getTarget() instanceof GeneratedCharterOut) {
 					final GeneratedCharterOut rowTarget = (GeneratedCharterOut) row.getTarget();
 					final GeneratedCharterOut referenceTarget = (GeneratedCharterOut) referenceRow.getTarget();
 					if (rowTarget.getDuration() > referenceTarget.getDuration()) {
+                                                CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.DURATION);
 						return String.format("Charter duration increased by %.1f days", ((double) (rowTarget.getDuration() - referenceTarget.getDuration())) / 24.0);
 					} else if (rowTarget.getDuration() < referenceTarget.getDuration()) {
+                                                CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.DURATION);
 						return String.format("Charter duration decreased by %.1f days", ((double) (referenceTarget.getDuration() - rowTarget.getDuration())) / 24.0);
 					}
 				} else if (referenceRow.getTarget() instanceof GeneratedCharterOut) {
+					CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.CHARTERING);
 					return "Removed charter out";
 				}
 				if (row.getTarget() instanceof EventGrouping && referenceRow.getTarget() instanceof EventGrouping) {
@@ -82,23 +95,31 @@ public class ChangeDescriptionUtil {
 					final int referenceDuration = getEventGroupingDuration(referenceTarget);
 
 					if (rowDuration > referenceDuration) {
+						CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.DURATION);
+
 						return String.format("Event duration increased by %.1f days", ((double) (rowDuration - referenceDuration)) / 24.0);
 					} else if (rowDuration < referenceDuration) {
+						CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.DURATION);
 						return String.format("Event duration decreased by %.1f days", ((double) (referenceDuration - rowDuration)) / 24.0);
 					}
 				}
 			} else {
 
 				if (row.getOpenSlotAllocation() != null) {
+					CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.WIRING);
+
 					return String.format("Cancelled '%s'", row.getOpenSlotAllocation().getSlot().getName());
 				}
 
 				if (row.getLoadAllocation() != null && row.getLoadAllocation().getSlot() instanceof SpotLoadSlot) {
 					final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) row.getLoadAllocation().getSlot();
+					CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.WIRING);
+
 					return String.format("Buy spot '%s' to %s", spotLoadSlot.getMarket().getName(), CargoAllocationUtils.getSalesWiringAsString(ca));
 				}
 
 				if (row.getTarget() instanceof GeneratedCharterOut) {
+					CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.CHARTERING);
 					return "Added charter out";
 				}
 			}
@@ -108,6 +129,7 @@ public class ChangeDescriptionUtil {
 
 				// GCO in reference case, but not comparison case.
 				if (row.getTarget() instanceof GeneratedCharterOut) {
+					CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.CHARTERING);
 					return "Removed charter out";
 				}
 			}
@@ -214,4 +236,5 @@ public class ChangeDescriptionUtil {
 		return null;
 
 	}
+
 }

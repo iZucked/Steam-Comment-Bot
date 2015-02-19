@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getIndex <em>Index</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getUserGroup <em>User Group</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getDelta <em>Delta</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getChangeType <em>Change Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -180,5 +181,35 @@ public interface CycleGroup extends EObject {
 	 * @generated
 	 */
 	void setDelta(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Change Type</b></em>' attribute.
+	 * The default value is <code>"PNL"</code>.
+	 * The literals are from the enumeration {@link com.mmxlabs.lingo.reports.views.schedule.model.ChangeType}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Change Type</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Change Type</em>' attribute.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ChangeType
+	 * @see #setChangeType(ChangeType)
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getCycleGroup_ChangeType()
+	 * @model default="PNL"
+	 * @generated
+	 */
+	ChangeType getChangeType();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getChangeType <em>Change Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Change Type</em>' attribute.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ChangeType
+	 * @see #getChangeType()
+	 * @generated
+	 */
+	void setChangeType(ChangeType value);
 
 } // CycleGroup

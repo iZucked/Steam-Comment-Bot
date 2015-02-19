@@ -17,6 +17,7 @@ import com.google.common.collect.Sets;
 import com.mmxlabs.lingo.reports.utils.CargoAllocationUtils;
 import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandler;
 import com.mmxlabs.lingo.reports.utils.RelatedSlotAllocations;
+import com.mmxlabs.lingo.reports.views.schedule.model.ChangeType;
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
@@ -140,6 +141,8 @@ public class CycleDiffProcessor implements IDiffProcessor {
 					}
 					cycleGroup.getRows().add(r);
 				}
+				
+				cycleGroup.setChangeType(ChangeType.WIRING);
 			}
 		} else if (referenceRow.getOpenSlotAllocation() != null) {
 			final OpenSlotAllocation openSlotAllocation = referenceRow.getOpenSlotAllocation();

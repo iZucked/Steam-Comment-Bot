@@ -8,6 +8,7 @@ package com.mmxlabs.lingo.reports.views.schedule.model;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -397,13 +398,22 @@ public interface ScheduleReportPackage extends EPackage {
 	int CYCLE_GROUP__DELTA = 4;
 
 	/**
+	 * The feature id for the '<em><b>Change Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CYCLE_GROUP__CHANGE_TYPE = 5;
+
+	/**
 	 * The number of structural features of the '<em>Cycle Group</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CYCLE_GROUP_FEATURE_COUNT = 5;
+	int CYCLE_GROUP_FEATURE_COUNT = 6;
 
 	/**
 	 * The number of operations of the '<em>Cycle Group</em>' class.
@@ -544,6 +554,17 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @ordered
 	 */
 	int DIFF_OPTIONS_OPERATION_COUNT = 0;
+
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.ChangeType <em>Change Type</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ChangeType
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.impl.ScheduleReportPackageImpl#getChangeType()
+	 * @generated
+	 */
+	int CHANGE_TYPE = 6;
 
 
 	/**
@@ -908,6 +929,17 @@ public interface ScheduleReportPackage extends EPackage {
 
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getChangeType <em>Change Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Change Type</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getChangeType()
+	 * @see #getCycleGroup()
+	 * @generated
+	 */
+	EAttribute getCycleGroup_ChangeType();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.schedule.model.RowGroup <em>Row Group</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -991,6 +1023,16 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getDiffOptions_FilterSelectedElements();
+
+	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.lingo.reports.views.schedule.model.ChangeType <em>Change Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Change Type</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ChangeType
+	 * @generated
+	 */
+	EEnum getChangeType();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -1287,6 +1329,14 @@ public interface ScheduleReportPackage extends EPackage {
 
 
 		/**
+		 * The meta object literal for the '<em><b>Change Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CYCLE_GROUP__CHANGE_TYPE = eINSTANCE.getCycleGroup_ChangeType();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowGroupImpl <em>Row Group</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1355,6 +1405,16 @@ public interface ScheduleReportPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute DIFF_OPTIONS__FILTER_SELECTED_ELEMENTS = eINSTANCE.getDiffOptions_FilterSelectedElements();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.ChangeType <em>Change Type</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.lingo.reports.views.schedule.model.ChangeType
+		 * @see com.mmxlabs.lingo.reports.views.schedule.model.impl.ScheduleReportPackageImpl#getChangeType()
+		 * @generated
+		 */
+		EEnum CHANGE_TYPE = eINSTANCE.getChangeType();
 
 	}
 

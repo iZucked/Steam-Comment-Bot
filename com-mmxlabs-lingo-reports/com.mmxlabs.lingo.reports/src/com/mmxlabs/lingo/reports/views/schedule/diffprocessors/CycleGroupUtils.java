@@ -2,6 +2,7 @@ package com.mmxlabs.lingo.reports.views.schedule.diffprocessors;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.lingo.reports.views.schedule.model.ChangeType;
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
@@ -47,6 +48,7 @@ public class CycleGroupUtils {
 			setRowCycleGroup(row, cycleGroup);
 
 		} else if (rowCycleGroup != cycleGroup) {
+			setChangeType(cycleGroup, rowCycleGroup.getChangeType());
 			setRowCycleGroup(row, cycleGroup);
 
 			// Copy all rows into new cycle group.
@@ -131,6 +133,14 @@ public class CycleGroupUtils {
 			}
 		}
 
+	}
+
+	public static void setChangeType(final CycleGroup cycleGroup, final ChangeType changeType) {
+		if (cycleGroup != null && changeType != null) {
+			if (changeType.ordinal() > cycleGroup.getChangeType().ordinal()) {
+				cycleGroup.setChangeType(changeType);
+			}
+		}
 	}
 
 }

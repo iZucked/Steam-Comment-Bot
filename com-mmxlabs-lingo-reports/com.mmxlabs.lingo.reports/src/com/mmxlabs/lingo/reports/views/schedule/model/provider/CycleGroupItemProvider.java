@@ -66,6 +66,7 @@ public class CycleGroupItemProvider
 			addIndexPropertyDescriptor(object);
 			addUserGroupPropertyDescriptor(object);
 			addDeltaPropertyDescriptor(object);
+			addChangeTypePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -183,6 +184,28 @@ public class CycleGroupItemProvider
 	
 
 	/**
+	 * This adds a property descriptor for the Change Type feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addChangeTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CycleGroup_changeType_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CycleGroup_changeType_feature", "_UI_CycleGroup_type"),
+				 ScheduleReportPackage.Literals.CYCLE_GROUP__CHANGE_TYPE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns CycleGroup.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -223,6 +246,7 @@ public class CycleGroupItemProvider
 			case ScheduleReportPackage.CYCLE_GROUP__ROWS:
 			case ScheduleReportPackage.CYCLE_GROUP__INDEX:
 			case ScheduleReportPackage.CYCLE_GROUP__DELTA:
+			case ScheduleReportPackage.CYCLE_GROUP__CHANGE_TYPE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

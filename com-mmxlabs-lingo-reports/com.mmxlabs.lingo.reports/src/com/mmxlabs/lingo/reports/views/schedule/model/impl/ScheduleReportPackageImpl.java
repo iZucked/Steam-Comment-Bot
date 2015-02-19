@@ -6,8 +6,10 @@
  */
 package com.mmxlabs.lingo.reports.views.schedule.model.impl;
 
+import com.mmxlabs.lingo.reports.views.schedule.model.ChangeType;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
@@ -70,6 +72,13 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 	 * @generated
 	 */
 	private EClass diffOptionsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum changeTypeEEnum = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -470,6 +479,15 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getCycleGroup_ChangeType() {
+		return (EAttribute)cycleGroupEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public EClass getRowGroup() {
 		return rowGroupEClass;
@@ -550,6 +568,15 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EEnum getChangeType() {
+		return changeTypeEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public ScheduleReportFactory getScheduleReportFactory() {
 		return (ScheduleReportFactory)getEFactoryInstance();
@@ -609,6 +636,7 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 		createEAttribute(cycleGroupEClass, CYCLE_GROUP__INDEX);
 		createEReference(cycleGroupEClass, CYCLE_GROUP__USER_GROUP);
 		createEAttribute(cycleGroupEClass, CYCLE_GROUP__DELTA);
+		createEAttribute(cycleGroupEClass, CYCLE_GROUP__CHANGE_TYPE);
 
 		rowGroupEClass = createEClass(ROW_GROUP);
 		createEReference(rowGroupEClass, ROW_GROUP__ROWS);
@@ -620,6 +648,9 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 
 		diffOptionsEClass = createEClass(DIFF_OPTIONS);
 		createEAttribute(diffOptionsEClass, DIFF_OPTIONS__FILTER_SELECTED_ELEMENTS);
+
+		// Create enums
+		changeTypeEEnum = createEEnum(CHANGE_TYPE);
 	}
 
 	/**
@@ -690,6 +721,7 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 		initEAttribute(getCycleGroup_Index(), ecorePackage.getEInt(), "index", null, 0, 1, CycleGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCycleGroup_UserGroup(), this.getUserGroup(), this.getUserGroup_Groups(), "userGroup", null, 0, 1, CycleGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCycleGroup_Delta(), ecorePackage.getEInt(), "delta", null, 0, 1, CycleGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCycleGroup_ChangeType(), this.getChangeType(), "changeType", "PNL", 0, 1, CycleGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(rowGroupEClass, RowGroup.class, "RowGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getRowGroup_Rows(), this.getRow(), this.getRow_RowGroup(), "rows", null, 0, -1, RowGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -701,6 +733,14 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 
 		initEClass(diffOptionsEClass, DiffOptions.class, "DiffOptions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getDiffOptions_FilterSelectedElements(), ecorePackage.getEBoolean(), "filterSelectedElements", null, 0, 1, DiffOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		// Initialize enums and add enum literals
+		initEEnum(changeTypeEEnum, ChangeType.class, "ChangeType");
+		addEEnumLiteral(changeTypeEEnum, ChangeType.PNL);
+		addEEnumLiteral(changeTypeEEnum, ChangeType.DURATION);
+		addEEnumLiteral(changeTypeEEnum, ChangeType.CHARTERING);
+		addEEnumLiteral(changeTypeEEnum, ChangeType.VESSEL);
+		addEEnumLiteral(changeTypeEEnum, ChangeType.WIRING);
 
 		// Create resource
 		createResource(eNS_URI);

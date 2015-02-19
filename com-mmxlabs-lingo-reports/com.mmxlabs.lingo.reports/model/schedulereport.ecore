@@ -54,6 +54,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="userGroup" eType="#//UserGroup"
         eOpposite="#//UserGroup/groups"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="delta" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="changeType" eType="#//ChangeType"
+        defaultValueLiteral="PNL"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RowGroup">
     <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//Row"
@@ -68,5 +70,12 @@
   <eClassifiers xsi:type="ecore:EClass" name="DiffOptions">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="filterSelectedElements"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ChangeType">
+    <eLiterals name="PNL"/>
+    <eLiterals name="DURATION" value="1"/>
+    <eLiterals name="CHARTERING" value="2"/>
+    <eLiterals name="VESSEL" value="3"/>
+    <eLiterals name="WIRING" value="4"/>
   </eClassifiers>
 </ecore:EPackage>

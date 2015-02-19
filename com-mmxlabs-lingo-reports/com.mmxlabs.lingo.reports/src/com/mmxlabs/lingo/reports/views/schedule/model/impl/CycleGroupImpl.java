@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.lingo.reports.views.schedule.model.impl;
 
+import com.mmxlabs.lingo.reports.views.schedule.model.ChangeType;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -36,6 +37,7 @@ import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.CycleGroupImpl#getIndex <em>Index</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.CycleGroupImpl#getUserGroup <em>User Group</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.CycleGroupImpl#getDelta <em>Delta</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.CycleGroupImpl#getChangeType <em>Change Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -120,6 +122,26 @@ public class CycleGroupImpl extends MinimalEObjectImpl.Container implements Cycl
 	 * @ordered
 	 */
 	protected int delta = DELTA_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getChangeType() <em>Change Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getChangeType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final ChangeType CHANGE_TYPE_EDEFAULT = ChangeType.PNL;
+
+	/**
+	 * The cached value of the '{@link #getChangeType() <em>Change Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getChangeType()
+	 * @generated
+	 * @ordered
+	 */
+	protected ChangeType changeType = CHANGE_TYPE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -298,6 +320,27 @@ public class CycleGroupImpl extends MinimalEObjectImpl.Container implements Cycl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public ChangeType getChangeType() {
+		return changeType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setChangeType(ChangeType newChangeType) {
+		ChangeType oldChangeType = changeType;
+		changeType = newChangeType == null ? CHANGE_TYPE_EDEFAULT : newChangeType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScheduleReportPackage.CYCLE_GROUP__CHANGE_TYPE, oldChangeType, changeType));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -360,6 +403,8 @@ public class CycleGroupImpl extends MinimalEObjectImpl.Container implements Cycl
 				return getUserGroup();
 			case ScheduleReportPackage.CYCLE_GROUP__DELTA:
 				return getDelta();
+			case ScheduleReportPackage.CYCLE_GROUP__CHANGE_TYPE:
+				return getChangeType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -389,6 +434,9 @@ public class CycleGroupImpl extends MinimalEObjectImpl.Container implements Cycl
 			case ScheduleReportPackage.CYCLE_GROUP__DELTA:
 				setDelta((Integer)newValue);
 				return;
+			case ScheduleReportPackage.CYCLE_GROUP__CHANGE_TYPE:
+				setChangeType((ChangeType)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -416,6 +464,9 @@ public class CycleGroupImpl extends MinimalEObjectImpl.Container implements Cycl
 			case ScheduleReportPackage.CYCLE_GROUP__DELTA:
 				setDelta(DELTA_EDEFAULT);
 				return;
+			case ScheduleReportPackage.CYCLE_GROUP__CHANGE_TYPE:
+				setChangeType(CHANGE_TYPE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -438,6 +489,8 @@ public class CycleGroupImpl extends MinimalEObjectImpl.Container implements Cycl
 				return getUserGroup() != null;
 			case ScheduleReportPackage.CYCLE_GROUP__DELTA:
 				return delta != DELTA_EDEFAULT;
+			case ScheduleReportPackage.CYCLE_GROUP__CHANGE_TYPE:
+				return changeType != CHANGE_TYPE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -458,6 +511,8 @@ public class CycleGroupImpl extends MinimalEObjectImpl.Container implements Cycl
 		if (indexESet) result.append(index); else result.append("<unset>");
 		result.append(", delta: ");
 		result.append(delta);
+		result.append(", changeType: ");
+		result.append(changeType);
 		result.append(')');
 		return result.toString();
 	}
