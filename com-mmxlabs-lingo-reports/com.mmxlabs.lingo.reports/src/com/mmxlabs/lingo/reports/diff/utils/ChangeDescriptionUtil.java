@@ -7,6 +7,7 @@ import com.mmxlabs.lingo.reports.utils.CargoAllocationUtils;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -51,7 +52,10 @@ public class ChangeDescriptionUtil {
 					if (row.getLoadAllocation().getSlot() instanceof SpotLoadSlot) {
 						final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) row.getLoadAllocation().getSlot();
 						return String.format("Buy spot '%s' to %s", spotLoadSlot.getMarket().getName(), CargoAllocationUtils.getSalesWiringAsString(ca));
+					} else if (row.getDischargeAllocation().getSlot() instanceof SpotDischargeSlot) {
 						// Sell spot?
+						final SpotDischargeSlot spotDischargeSlot = (SpotDischargeSlot) row.getDischargeAllocation().getSlot();
+						return String.format("Sell spot '%s' to %s", row.getLoadAllocation().getSlot().getName(), spotDischargeSlot.getMarket().getName());
 					} else {
 						return String.format("Redirect '%s' : %s -> %s", row.getLoadAllocation().getSlot().getName(), CargoAllocationUtils.getSalesWiringAsString(ref),
 								CargoAllocationUtils.getSalesWiringAsString(ca));
