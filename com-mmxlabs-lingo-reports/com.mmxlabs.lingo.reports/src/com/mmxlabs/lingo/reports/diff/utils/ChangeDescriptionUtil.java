@@ -57,31 +57,31 @@ public class ChangeDescriptionUtil {
 					}
 					if (row.getLoadAllocation().getSlot() instanceof SpotLoadSlot) {
 						final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) row.getLoadAllocation().getSlot();
-                                                CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.WIRING);
+						CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.WIRING);
 						return String.format("Buy spot '%s' to %s", spotLoadSlot.getMarket().getName(), CargoAllocationUtils.getSalesWiringAsString(ca));
 					} else if (row.getDischargeAllocation().getSlot() instanceof SpotDischargeSlot) {
 						// Sell spot?
 						final SpotDischargeSlot spotDischargeSlot = (SpotDischargeSlot) row.getDischargeAllocation().getSlot();
-                                                CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.WIRING);
+						CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.WIRING);
 						return String.format("Sell spot '%s' to %s", row.getLoadAllocation().getSlot().getName(), spotDischargeSlot.getMarket().getName());
 					} else {
-                                                CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.WIRING);
+						CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.WIRING);
 						return String.format("Redirect '%s' : %s -> %s", row.getLoadAllocation().getSlot().getName(), CargoAllocationUtils.getSalesWiringAsString(ref),
 								CargoAllocationUtils.getSalesWiringAsString(ca));
 					}
 				}
 				if (row.getOpenSlotAllocation() != null && referenceRow.getOpenSlotAllocation() == null) {
-                                        CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.WIRING);
+					CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.WIRING);
 					return String.format("Cancelled '%s'", row.getOpenSlotAllocation().getSlot().getName());
 				}
 				if (row.getTarget() instanceof GeneratedCharterOut && referenceRow.getTarget() instanceof GeneratedCharterOut) {
 					final GeneratedCharterOut rowTarget = (GeneratedCharterOut) row.getTarget();
 					final GeneratedCharterOut referenceTarget = (GeneratedCharterOut) referenceRow.getTarget();
 					if (rowTarget.getDuration() > referenceTarget.getDuration()) {
-                                                CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.DURATION);
+						CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.DURATION);
 						return String.format("Charter duration increased by %.1f days", ((double) (rowTarget.getDuration() - referenceTarget.getDuration())) / 24.0);
 					} else if (rowTarget.getDuration() < referenceTarget.getDuration()) {
-                                                CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.DURATION);
+						CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.DURATION);
 						return String.format("Charter duration decreased by %.1f days", ((double) (referenceTarget.getDuration() - rowTarget.getDuration())) / 24.0);
 					}
 				} else if (referenceRow.getTarget() instanceof GeneratedCharterOut) {
@@ -94,6 +94,14 @@ public class ChangeDescriptionUtil {
 					final int rowDuration = getEventGroupingDuration(rowTarget);
 					final int referenceDuration = getEventGroupingDuration(referenceTarget);
 
+					if (rowTarget instanceof Event && referenceTarget instanceof Event) {
+						final Event rowEvent = (Event) rowTarget;
+						final Event referenceEvent = (Event) referenceTarget;
+						if (!(rowEvent.getSequence().getName().equals(referenceEvent.getSequence().getName()))) {
+							CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.VESSEL);
+							return String.format("Vessel: %s -> %s", referenceEvent.getSequence().getName(), rowEvent.getSequence().getName());
+						}
+					}
 					if (rowDuration > referenceDuration) {
 						CycleGroupUtils.setChangeType(row.getCycleGroup(), ChangeType.DURATION);
 
