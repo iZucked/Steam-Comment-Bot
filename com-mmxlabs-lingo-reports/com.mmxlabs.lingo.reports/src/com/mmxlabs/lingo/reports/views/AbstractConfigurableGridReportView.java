@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.views;
 
+import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -11,7 +12,9 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.eclipse.core.databinding.ObservablesManager;
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.databinding.EMFProperties;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuListener;
@@ -207,6 +210,24 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 			// table = ScheduleReportFactory.eINSTANCE.createTable();
 			table = ScheduleReportFactory.eINSTANCE.createTable();
+			// Create default options
+			table.setOptions(ScheduleReportFactory.eINSTANCE.createDiffOptions());
+
+			table.eAdapters().add(new EContentAdapter() {
+				@Override
+				public void notifyChanged(Notification notification) {
+					super.notifyChanged(notification);
+					if (notification.getFeature() == ScheduleReportPackage.Literals.DIFF_OPTIONS__FILTER_SELECTED_ELEMENTS) {
+						viewer.refresh();
+					}
+					if (notification.getFeature() == ScheduleReportPackage.Literals.TABLE__SELECTED_ELEMENTS) {
+						if (table.getOptions().isFilterSelectedElements()) {
+							viewer.refresh();
+						}
+					}
+				}
+			});
+
 			viewer.setInput(EMFProperties.list(ScheduleReportPackage.Literals.TABLE__ROWS).observe(table));
 
 			for (final ColumnHandler handler : getBlockManager().getHandlersInOrder()) {
@@ -558,12 +579,13 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 			@Override
 			protected String[] getAdditionalHeaderAttributes(GridColumn column) {
 				// Border around all header cells.
-				return null;//new String[] { "style='border:1 solid #000;'" };
+				return null;// new String[] { "style='border:1 solid #000;'" };
 			}
+
 			@Override
 			protected String[] getAdditionalAttributes(final GridItem item, final int i) {
 				// Border around all header cells.
-				return null;//new String[] { "style='border:1 solid #000;'" };
+				return null;// new String[] { "style='border:1 solid #000;'" };
 			}
 		};
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);

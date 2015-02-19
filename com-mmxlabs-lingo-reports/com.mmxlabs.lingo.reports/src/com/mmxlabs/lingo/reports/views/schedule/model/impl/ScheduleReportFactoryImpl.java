@@ -73,6 +73,7 @@ public class ScheduleReportFactoryImpl extends EFactoryImpl implements ScheduleR
 			case ScheduleReportPackage.CYCLE_GROUP: return createCycleGroup();
 			case ScheduleReportPackage.ROW_GROUP: return createRowGroup();
 			case ScheduleReportPackage.USER_GROUP: return createUserGroup();
+			case ScheduleReportPackage.DIFF_OPTIONS: return createDiffOptions();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -149,6 +150,16 @@ public class ScheduleReportFactoryImpl extends EFactoryImpl implements ScheduleR
 			}
 		});
 		return userGroup;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public DiffOptions createDiffOptions() {
+		DiffOptionsImpl diffOptions = new DiffOptionsImpl();
+		return diffOptions;
 	}
 
 	/**

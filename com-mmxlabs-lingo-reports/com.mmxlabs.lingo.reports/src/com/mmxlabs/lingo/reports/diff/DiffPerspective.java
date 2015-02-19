@@ -11,11 +11,11 @@ public class DiffPerspective implements IPerspectiveFactory {
 
 	@Override
 	public void createInitialLayout(final IPageLayout layout) {
-		
+		layout.addActionSet("com.mmxlabs.lingo.reports.diff.actionset");
 		layout.setEditorAreaVisible(false);
 //		layout.setFixed();
 		
-		final IFolderLayout diffArea = layout.createFolder("diffArea", IPageLayout.LEFT, 0.35f, IPageLayout.ID_EDITOR_AREA);
+		final IFolderLayout diffArea = layout.createFolder("diffArea", IPageLayout.LEFT, 0.32f, IPageLayout.ID_EDITOR_AREA);
 		final IFolderLayout ganttArea = layout.createFolder("ganttArea", IPageLayout.BOTTOM, 0.25f, IPageLayout.ID_EDITOR_AREA);
 		final IFolderLayout reportsArea = layout.createFolder("reportsArea", IPageLayout.BOTTOM, 0.65f, IPageLayout.ID_EDITOR_AREA);
 //		final IFolderLayout miscFolder = layout.createFolder("miscFolder", IPageLayout.LEFT, 0.25f, "reportsFolder");

@@ -187,6 +187,29 @@ public class ScheduleReportItemProviderAdapterFactory extends ScheduleReportAdap
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.lingo.reports.views.schedule.model.DiffOptions} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected DiffOptionsItemProvider diffOptionsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.lingo.reports.views.schedule.model.DiffOptions}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createDiffOptionsAdapter() {
+		if (diffOptionsItemProvider == null) {
+			diffOptionsItemProvider = new DiffOptionsItemProvider(this);
+		}
+
+		return diffOptionsItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -296,6 +319,7 @@ public class ScheduleReportItemProviderAdapterFactory extends ScheduleReportAdap
 		if (cycleGroupItemProvider != null) cycleGroupItemProvider.dispose();
 		if (rowGroupItemProvider != null) rowGroupItemProvider.dispose();
 		if (userGroupItemProvider != null) userGroupItemProvider.dispose();
+		if (diffOptionsItemProvider != null) diffOptionsItemProvider.dispose();
 	}
 
 }

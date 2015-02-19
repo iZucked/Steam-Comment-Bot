@@ -71,6 +71,15 @@ public interface ScheduleReportFactory extends EFactory {
 	UserGroup createUserGroup();
 
 	/**
+	 * Returns a new object of class '<em>Diff Options</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Diff Options</em>'.
+	 * @generated
+	 */
+	DiffOptions createDiffOptions();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -3,6 +3,8 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model" nsURI="http://www.mmxlabs.com/models/lingo/reports/schedule/1"
     nsPrefix="reports.schedule">
   <eClassifiers xsi:type="ecore:EClass" name="Table">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="options" eType="#//DiffOptions"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//Row"
         containment="true" eOpposite="#//Row/table"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cycleGroups" upperBound="-1"
@@ -14,6 +16,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="pinnedScenario" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="userGroups" upperBound="-1"
         eType="#//UserGroup" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="selectedElements" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Row">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="visible" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
@@ -60,5 +64,9 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="groups" upperBound="-1"
         eType="#//CycleGroup" containment="true" eOpposite="#//CycleGroup/userGroup"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="delta" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DiffOptions">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="filterSelectedElements"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
 </ecore:EPackage>

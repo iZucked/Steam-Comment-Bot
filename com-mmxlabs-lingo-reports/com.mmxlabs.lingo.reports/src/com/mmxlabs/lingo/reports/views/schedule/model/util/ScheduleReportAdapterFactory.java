@@ -94,6 +94,10 @@ public class ScheduleReportAdapterFactory extends AdapterFactoryImpl {
 				return createUserGroupAdapter();
 			}
 			@Override
+			public Adapter caseDiffOptions(DiffOptions object) {
+				return createDiffOptionsAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -180,6 +184,20 @@ public class ScheduleReportAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createUserGroupAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.lingo.reports.views.schedule.model.DiffOptions <em>Diff Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.DiffOptions
+	 * @generated
+	 */
+	public Adapter createDiffOptionsAdapter() {
 		return null;
 	}
 

@@ -93,6 +93,12 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 			@Override
 			public boolean select(Viewer viewer, Object parentElement, Object element) {
 
+				if (table != null && table.getOptions().isFilterSelectedElements()) {
+					if (!table.getSelectedElements().contains(element)) {
+						return false;
+					}
+				}
+				
 				if (element instanceof Row) {
 					Row row = (Row) element;
 					// Filter out reference scenario if required
@@ -272,6 +278,8 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 	@Override
 	protected void postDialogOpen(final ColumnConfigurationDialog dialog) {
 		builder.refreshDiffOptions();
+		// Update options state
+//		table.getOptions().setShowPinnedScenario(!builder.getDiffFilterInfo().contains(ScheduleBasedReportBuilder.DIFF_FILTER_PINNDED_SCENARIO));
 
 	}
 

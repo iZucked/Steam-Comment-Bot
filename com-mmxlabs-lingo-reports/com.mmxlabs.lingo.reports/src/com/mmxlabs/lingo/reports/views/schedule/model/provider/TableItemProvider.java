@@ -65,6 +65,7 @@ public class TableItemProvider
 
 			addScenariosPropertyDescriptor(object);
 			addPinnedScenarioPropertyDescriptor(object);
+			addSelectedElementsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -114,6 +115,28 @@ public class TableItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Selected Elements feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSelectedElementsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Table_selectedElements_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Table_selectedElements_feature", "_UI_Table_type"),
+				 ScheduleReportPackage.Literals.TABLE__SELECTED_ELEMENTS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -125,6 +148,7 @@ public class TableItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
+			childrenFeatures.add(ScheduleReportPackage.Literals.TABLE__OPTIONS);
 			childrenFeatures.add(ScheduleReportPackage.Literals.TABLE__ROWS);
 			childrenFeatures.add(ScheduleReportPackage.Literals.TABLE__CYCLE_GROUPS);
 			childrenFeatures.add(ScheduleReportPackage.Literals.TABLE__ROW_GROUPS);
@@ -180,6 +204,7 @@ public class TableItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Table.class)) {
+			case ScheduleReportPackage.TABLE__OPTIONS:
 			case ScheduleReportPackage.TABLE__ROWS:
 			case ScheduleReportPackage.TABLE__CYCLE_GROUPS:
 			case ScheduleReportPackage.TABLE__ROW_GROUPS:
@@ -200,6 +225,11 @@ public class TableItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ScheduleReportPackage.Literals.TABLE__OPTIONS,
+				 ScheduleReportFactory.eINSTANCE.createDiffOptions()));
 
 		newChildDescriptors.add
 			(createChildParameter

@@ -71,13 +71,22 @@ public interface ScheduleReportPackage extends EPackage {
 	int TABLE = 0;
 
 	/**
+	 * The feature id for the '<em><b>Options</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TABLE__OPTIONS = 0;
+
+	/**
 	 * The feature id for the '<em><b>Rows</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TABLE__ROWS = 0;
+	int TABLE__ROWS = 1;
 
 	/**
 	 * The feature id for the '<em><b>Cycle Groups</b></em>' containment reference list.
@@ -86,7 +95,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TABLE__CYCLE_GROUPS = 1;
+	int TABLE__CYCLE_GROUPS = 2;
 
 	/**
 	 * The feature id for the '<em><b>Row Groups</b></em>' containment reference list.
@@ -95,7 +104,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TABLE__ROW_GROUPS = 2;
+	int TABLE__ROW_GROUPS = 3;
 
 	/**
 	 * The feature id for the '<em><b>Scenarios</b></em>' reference list.
@@ -104,7 +113,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TABLE__SCENARIOS = 3;
+	int TABLE__SCENARIOS = 4;
 
 	/**
 	 * The feature id for the '<em><b>Pinned Scenario</b></em>' reference.
@@ -113,7 +122,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TABLE__PINNED_SCENARIO = 4;
+	int TABLE__PINNED_SCENARIO = 5;
 
 	/**
 	 * The feature id for the '<em><b>User Groups</b></em>' containment reference list.
@@ -122,7 +131,16 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TABLE__USER_GROUPS = 5;
+	int TABLE__USER_GROUPS = 6;
+
+	/**
+	 * The feature id for the '<em><b>Selected Elements</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TABLE__SELECTED_ELEMENTS = 7;
 
 	/**
 	 * The number of structural features of the '<em>Table</em>' class.
@@ -131,7 +149,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TABLE_FEATURE_COUNT = 6;
+	int TABLE_FEATURE_COUNT = 8;
 
 	/**
 	 * The number of operations of the '<em>Table</em>' class.
@@ -491,6 +509,44 @@ public interface ScheduleReportPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.DiffOptionsImpl <em>Diff Options</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.impl.DiffOptionsImpl
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.impl.ScheduleReportPackageImpl#getDiffOptions()
+	 * @generated
+	 */
+	int DIFF_OPTIONS = 5;
+
+	/**
+	 * The feature id for the '<em><b>Filter Selected Elements</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIFF_OPTIONS__FILTER_SELECTED_ELEMENTS = 0;
+
+	/**
+	 * The number of structural features of the '<em>Diff Options</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIFF_OPTIONS_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>Diff Options</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIFF_OPTIONS_OPERATION_COUNT = 0;
+
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.schedule.model.Table <em>Table</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -499,6 +555,17 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getTable();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getOptions <em>Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Options</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Table#getOptions()
+	 * @see #getTable()
+	 * @generated
+	 */
+	EReference getTable_Options();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getRows <em>Rows</em>}'.
@@ -565,6 +632,17 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getTable_UserGroups();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getSelectedElements <em>Selected Elements</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Selected Elements</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Table#getSelectedElements()
+	 * @see #getTable()
+	 * @generated
+	 */
+	EReference getTable_SelectedElements();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row <em>Row</em>}'.
@@ -894,6 +972,27 @@ public interface ScheduleReportPackage extends EPackage {
 	EAttribute getUserGroup_Delta();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.schedule.model.DiffOptions <em>Diff Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Diff Options</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.DiffOptions
+	 * @generated
+	 */
+	EClass getDiffOptions();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.schedule.model.DiffOptions#isFilterSelectedElements <em>Filter Selected Elements</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Filter Selected Elements</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.DiffOptions#isFilterSelectedElements()
+	 * @see #getDiffOptions()
+	 * @generated
+	 */
+	EAttribute getDiffOptions_FilterSelectedElements();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -925,6 +1024,14 @@ public interface ScheduleReportPackage extends EPackage {
 		 * @generated
 		 */
 		EClass TABLE = eINSTANCE.getTable();
+
+		/**
+		 * The meta object literal for the '<em><b>Options</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference TABLE__OPTIONS = eINSTANCE.getTable_Options();
 
 		/**
 		 * The meta object literal for the '<em><b>Rows</b></em>' containment reference list feature.
@@ -973,6 +1080,14 @@ public interface ScheduleReportPackage extends EPackage {
 		 * @generated
 		 */
 		EReference TABLE__USER_GROUPS = eINSTANCE.getTable_UserGroups();
+
+		/**
+		 * The meta object literal for the '<em><b>Selected Elements</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference TABLE__SELECTED_ELEMENTS = eINSTANCE.getTable_SelectedElements();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl <em>Row</em>}' class.
@@ -1222,6 +1337,24 @@ public interface ScheduleReportPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute USER_GROUP__DELTA = eINSTANCE.getUserGroup_Delta();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.DiffOptionsImpl <em>Diff Options</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.lingo.reports.views.schedule.model.impl.DiffOptionsImpl
+		 * @see com.mmxlabs.lingo.reports.views.schedule.model.impl.ScheduleReportPackageImpl#getDiffOptions()
+		 * @generated
+		 */
+		EClass DIFF_OPTIONS = eINSTANCE.getDiffOptions();
+
+		/**
+		 * The meta object literal for the '<em><b>Filter Selected Elements</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DIFF_OPTIONS__FILTER_SELECTED_ELEMENTS = eINSTANCE.getDiffOptions_FilterSelectedElements();
 
 	}
 

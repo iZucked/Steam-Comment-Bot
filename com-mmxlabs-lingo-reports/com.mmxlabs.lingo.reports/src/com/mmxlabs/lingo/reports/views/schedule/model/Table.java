@@ -17,12 +17,14 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getOptions <em>Options</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getRows <em>Rows</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getCycleGroups <em>Cycle Groups</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getRowGroups <em>Row Groups</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getScenarios <em>Scenarios</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getPinnedScenario <em>Pinned Scenario</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getUserGroups <em>User Groups</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getSelectedElements <em>Selected Elements</em>}</li>
  * </ul>
  * </p>
  *
@@ -31,6 +33,32 @@ import org.eclipse.emf.ecore.EObject;
  * @generated
  */
 public interface Table extends EObject {
+	/**
+	 * Returns the value of the '<em><b>Options</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Options</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Options</em>' containment reference.
+	 * @see #setOptions(DiffOptions)
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getTable_Options()
+	 * @model containment="true"
+	 * @generated
+	 */
+	DiffOptions getOptions();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.schedule.model.Table#getOptions <em>Options</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Options</em>' containment reference.
+	 * @see #getOptions()
+	 * @generated
+	 */
+	void setOptions(DiffOptions value);
+
 	/**
 	 * Returns the value of the '<em><b>Rows</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.lingo.reports.views.schedule.model.Row}.
@@ -138,5 +166,21 @@ public interface Table extends EObject {
 	 * @generated
 	 */
 	EList<UserGroup> getUserGroups();
+
+	/**
+	 * Returns the value of the '<em><b>Selected Elements</b></em>' reference list.
+	 * The list contents are of type {@link org.eclipse.emf.ecore.EObject}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Selected Elements</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Selected Elements</em>' reference list.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getTable_SelectedElements()
+	 * @model
+	 * @generated
+	 */
+	EList<EObject> getSelectedElements();
 
 } // Table

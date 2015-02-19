@@ -411,9 +411,6 @@
                id="com.mmxlabs.lingo.reports.components.columns.schedule.sellvolume_m3">
          </InitialColumn>
          <InitialColumn
-               id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation">
-         </InitialColumn>
-         <InitialColumn
                id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation_group_pnldelta">
          </InitialColumn>         
          <InitialColumn
@@ -639,5 +636,19 @@
                org.eclipse.emf.edit.provider.ITreeItemContentProvider
                org.eclipse.emf.edit.provider.IItemLabelProvider
                org.eclipse.emf.edit.provider.IItemPropertySource"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="com.mmxlabs.lingo.reports.diff.actionset"
+            label="Diff Tools">
+         <action
+               class="com.mmxlabs.lingo.reports.diff.actions.FilterBySelection"
+               id="com.mmxlabs.lingo.reports.action1"
+               label="Filter By Selection"
+               style="toggle"
+               toolbarPath="additions">
+         </action>
+      </actionSet>
    </extension>
 </plugin>
