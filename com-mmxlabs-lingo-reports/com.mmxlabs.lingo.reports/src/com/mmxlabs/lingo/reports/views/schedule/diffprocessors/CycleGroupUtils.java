@@ -27,12 +27,12 @@ public class CycleGroupUtils {
 		return cycleGroup;
 	}
 
-	private static void setRowCycleGroup(Row row, CycleGroup cycleGroup) {
+	private static void setRowCycleGroup(final Row row, final CycleGroup cycleGroup) {
 		row.setCycleGroup(cycleGroup);
 		if (row.getReferenceRow() != null) {
 			row.getReferenceRow().setCycleGroup(cycleGroup);
 		} else {
-			for (Row r : row.getReferringRows()) {
+			for (final Row r : row.getReferringRows()) {
 				r.setCycleGroup(cycleGroup);
 			}
 		}
@@ -52,7 +52,7 @@ public class CycleGroupUtils {
 			// Copy all rows into new cycle group.
 			cycleGroup.getRows().addAll(rowCycleGroup.getRows());
 
-			UserGroup rowUserGroup = rowCycleGroup.getUserGroup();
+			final UserGroup rowUserGroup = rowCycleGroup.getUserGroup();
 			if (cycleGroup.getUserGroup() != rowUserGroup) {
 				if (rowUserGroup != null && cycleGroup.getUserGroup() == null) {
 					cycleGroup.setUserGroup(rowUserGroup);
@@ -87,7 +87,7 @@ public class CycleGroupUtils {
 	}
 
 	public static UserGroup createOrReturnUserGroup(final Table table, @NonNull final Row row) {
-		CycleGroup cycleGroup = createOrReturnCycleGroup(table, row);
+		final CycleGroup cycleGroup = createOrReturnCycleGroup(table, row);
 
 		UserGroup userGroup = cycleGroup.getUserGroup();
 		if (userGroup == null) {
@@ -115,7 +115,7 @@ public class CycleGroupUtils {
 	}
 
 	public static void addToOrMergeUserGroup(final Table table, final Row row, final UserGroup userGroup) {
-		CycleGroup cycleGroup = createOrReturnCycleGroup(table, row);
+		final CycleGroup cycleGroup = createOrReturnCycleGroup(table, row);
 
 		if (cycleGroup == null || userGroup == null) {
 			return;
