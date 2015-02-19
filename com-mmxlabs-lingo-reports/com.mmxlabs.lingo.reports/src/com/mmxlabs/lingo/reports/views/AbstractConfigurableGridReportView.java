@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.reports.views;
 
-import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -60,6 +59,7 @@ import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.components.ColumnBlockManager;
 import com.mmxlabs.lingo.reports.components.ColumnHandler;
 import com.mmxlabs.lingo.reports.components.GridTableViewerColumnFactory;
+import com.mmxlabs.lingo.reports.diff.DiffGroupView;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.properties.ScheduledEventPropertySourceProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
@@ -616,6 +616,9 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 			return;
 		}
 
+		if (part instanceof DiffGroupView) {
+			return;
+		}
 		viewer.setSelection(selection, true);
 	}
 

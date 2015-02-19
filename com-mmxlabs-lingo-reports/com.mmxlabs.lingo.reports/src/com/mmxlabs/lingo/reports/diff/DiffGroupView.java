@@ -1,8 +1,5 @@
 package com.mmxlabs.lingo.reports.diff;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.databinding.DataBindingContext;
@@ -10,7 +7,6 @@ import org.eclipse.core.databinding.ObservablesManager;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.EMFProperties;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
@@ -25,7 +21,6 @@ import org.eclipse.jface.databinding.viewers.ObservableListTreeContentProvider;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
@@ -38,6 +33,7 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
@@ -79,28 +75,13 @@ public class DiffGroupView extends ViewPart implements ISelectionListener, IMenu
 
 				viewer = new GridTreeViewer(parent) {
 
-					@Override
-					public void setSelection(final ISelection selection) {
-						setSelection(selection, true);
-					}
-
-					@Override
-					public void setSelection(ISelection selection, final boolean reveal) {
-						// Transform external inputs
-						if (table != null) {
-							final List<EObject> newSelectedElements = new LinkedList<>();
-							if (selection instanceof IStructuredSelection) {
-								final IStructuredSelection iStructuredSelection = (IStructuredSelection) selection;
-								final Iterator<?> itr = iStructuredSelection.iterator();
-								while (itr.hasNext()) {
-									final Object item = itr.next();
-									DiffSelectionAdapter.expandExternal(item, table, newSelectedElements);
-								}
-							}
-							selection = new StructuredSelection(newSelectedElements);
-						}
-						super.setSelection(selection, reveal);
-					}
+					// @Override
+					// public void setSelection(final ISelection selection) {
+					// setSelection(selection, true);
+					// }
+					//
+					// // super.setSelection(selection, reveal);
+					// // }
 				};
 
 				viewer.getGrid().setHeaderVisible(true);
@@ -162,12 +143,8 @@ public class DiffGroupView extends ViewPart implements ISelectionListener, IMenu
 		final IActionBars actionBars = getViewSite().getActionBars();
 		actionBars.getToolBarManager().add(PackActionFactory.createPackColumnsAction(viewer));
 
-		// newUserGroupAction = new NewUserGroupAction();
-		// actionBars.getToolBarManager().add(newUserGroupAction);
-
 		final DeleteDiffAction deleteAction = new DeleteDiffAction();
 		viewer.addSelectionChangedListener(deleteAction);
-		// actionBars.getToolBarManager().add(deleteAction);
 		actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
 
 		final Action collapseAllAction = new Action("Collapse All") {
@@ -175,10 +152,14 @@ public class DiffGroupView extends ViewPart implements ISelectionListener, IMenu
 			public void run() {
 				viewer.collapseAll();
 			}
-			// }
 		};
 		collapseAllAction.setImageDescriptor(Implementation.getImageDescriptor("icons/collapseall.gif"));
 		actionBars.getToolBarManager().add(collapseAllAction);
+
+		// Filter by change type
+		{
+
+		}
 
 		actionBars.getToolBarManager().update(true);
 
@@ -247,7 +228,6 @@ public class DiffGroupView extends ViewPart implements ISelectionListener, IMenu
 
 			@Override
 			public void partBroughtToTop(final IWorkbenchPart part) {
-				// TODO Auto-generated method stub
 
 			}
 
@@ -263,6 +243,11 @@ public class DiffGroupView extends ViewPart implements ISelectionListener, IMenu
 			}
 		};
 		getViewSite().getPage().addPartListener(listener);
+		for (final IViewReference view : getViewSite().getPage().getViewReferences()) {
+			if (view.getId().equals(SCHEDULE_VIEW_ID)) {
+				listener.partOpened(view.getView(false));
+			}
+		}
 	}
 
 	protected void createColumns(final GridTreeViewer viewer) {
@@ -273,13 +258,11 @@ public class DiffGroupView extends ViewPart implements ISelectionListener, IMenu
 
 			gvc.setEditingSupport(editingSupport);
 			final IObservableMap[] attributeMaps = new IObservableMap[] { EMFProperties.value(ScheduleReportPackage.Literals.USER_GROUP__COMMENT).observeDetail(contentProvider.getKnownElements()),
-			// EMFProperties.value(ScheduleReportPackage.Literals.CYCLE_GROUP__INDEX).observeDetail(contentProvider.getKnownElements()),
-			// = EMFProperties.value(ScheduleReportPackage.Literals.ROW__NAME).observeDetail(contentProvider.getKnownElements()),
-			};
+					EMFProperties.value(ScheduleReportPackage.Literals.CYCLE_GROUP__INDEX).observeDetail(contentProvider.getKnownElements()),
+					EMFProperties.value(ScheduleReportPackage.Literals.CYCLE_GROUP__CHANGE_TYPE).observeDetail(contentProvider.getKnownElements()),
+					EMFProperties.value(ScheduleReportPackage.Literals.ROW__NAME).observeDetail(contentProvider.getKnownElements()), };
 			gvc.setLabelProvider(new DataModelLabelProvider(adapterFactory, attributeMaps));
 
-			// editingSupport.create(viewer, dbc, cellEditor, cellEditorProperty, elementProperty)
-			// gvc.setLabelProvider(new DataModelLabelProvider(adapterFactory));
 			gvc.getColumn().setWidth(150);
 
 		}
@@ -289,7 +272,7 @@ public class DiffGroupView extends ViewPart implements ISelectionListener, IMenu
 
 			final IObservableMap[] attributeMaps = new IObservableMap[] { EMFProperties.value(ScheduleReportPackage.Literals.USER_GROUP__DELTA).observeDetail(contentProvider.getKnownElements()),
 					EMFProperties.value(ScheduleReportPackage.Literals.CYCLE_GROUP__DELTA).observeDetail(contentProvider.getKnownElements()),
-			// attributeMaps[2] = EMFProperties.value(ScheduleReportPackage.Literals.ROW__NAME).observeDetail(contentProvider.getKnownElements())
+			// EMFProperties.value(ScheduleReportPackage.Literals.ROW__NAME).observeDetail(contentProvider.getKnownElements())
 			};
 			gvc.setLabelProvider(new MixedDeltaCellLabelProvider(attributeMaps));
 			gvc.getColumn().setWidth(100);
@@ -307,7 +290,10 @@ public class DiffGroupView extends ViewPart implements ISelectionListener, IMenu
 			return;
 		}
 		if (viewer.getInput() != null) {
-			viewer.setSelection(selection, true);
+			// Transform external inputs
+			if (!selection.isEmpty()) {
+				viewer.setSelection(DiffSelectionAdapter.expandAll(selection, table), false);
+			}
 		}
 	}
 

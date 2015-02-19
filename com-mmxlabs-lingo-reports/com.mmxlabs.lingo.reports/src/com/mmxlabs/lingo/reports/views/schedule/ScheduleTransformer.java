@@ -513,7 +513,9 @@ public class ScheduleTransformer {
 				if (cycleGroup.getRows().isEmpty()) {
 					continue;
 				}
-
+				for (final Row row2 : cycleGroup.getRows()) {
+					row2.setVisible(true);
+				}
 				final int pnlDelta = PNLDeltaUtils.getPNLDelta(cycleGroup);
 				orderedCycleGroup.add(new Pair<>(cycleGroup, pnlDelta));
 			}

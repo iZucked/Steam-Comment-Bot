@@ -1,15 +1,19 @@
 package com.mmxlabs.lingo.reports.diff;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -50,7 +54,7 @@ public class DiffSelectionAdapter implements ISelectionListener, ISelectionChang
 			final Set<EObject> adaptedSelection = new LinkedHashSet<>();
 			final Iterator<?> itr = structuredSelection.iterator();
 			while (itr.hasNext()) {
-				expandUp(itr.next(), adaptedSelection);
+				expandDown(itr.next(), adaptedSelection);
 			}
 			// Remove nulls
 			while (adaptedSelection.remove(null))
@@ -71,6 +75,34 @@ public class DiffSelectionAdapter implements ISelectionListener, ISelectionChang
 		}
 	}
 
+	public static IStructuredSelection expandAll(final ISelection selection, final Table table) {
+
+		final Set<EObject> newSelectedElements = new LinkedHashSet<>();
+		if (selection instanceof IStructuredSelection) {
+			final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
+			final Iterator<?> itr = structuredSelection.iterator();
+			while (itr.hasNext()) {
+				final Object item = itr.next();
+				expandAllExternal(item, table, newSelectedElements);
+			}
+		}
+		return new StructuredSelection(new ArrayList<>(newSelectedElements));
+	}
+
+	public static IStructuredSelection expandDown(final ISelection selection, final Table table) {
+
+		final Set<EObject> newSelectedElements = new LinkedHashSet<>();
+		if (selection instanceof IStructuredSelection) {
+			final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
+			final Iterator<?> itr = structuredSelection.iterator();
+			while (itr.hasNext()) {
+				final Object item = itr.next();
+				expandDownExternal(item, table, newSelectedElements);
+			}
+		}
+		return new StructuredSelection(new ArrayList<>(newSelectedElements));
+	}
+
 	public static void expandUp(final Object object, final Collection<EObject> elements) {
 		if (object instanceof UserGroup) {
 			expandUp((UserGroup) object, elements);
@@ -81,12 +113,23 @@ public class DiffSelectionAdapter implements ISelectionListener, ISelectionChang
 		}
 	}
 
+	public static void expandDown(final Object object, final Collection<EObject> elements) {
+		if (object instanceof UserGroup) {
+			expandDown((UserGroup) object, elements);
+		} else if (object instanceof CycleGroup) {
+			expandDown((CycleGroup) object, elements);
+		} else if (object instanceof Row) {
+			expandDown((Row) object, elements);
+		}
+	}
+
 	public static void expandAll(final UserGroup userGroup, final Collection<EObject> elements) {
 		elements.add(userGroup);
 		for (final CycleGroup cycleGroup : userGroup.getGroups()) {
 			elements.add(cycleGroup);
 			for (final Row row : cycleGroup.getRows()) {
 				elements.add(row);
+				elements.addAll(row.getInputEquivalents());
 			}
 		}
 	}
@@ -98,6 +141,7 @@ public class DiffSelectionAdapter implements ISelectionListener, ISelectionChang
 			elements.add(cycleGroup);
 			for (final Row row : cycleGroup.getRows()) {
 				elements.add(row);
+				elements.addAll(row.getInputEquivalents());
 			}
 		}
 	}
@@ -107,9 +151,40 @@ public class DiffSelectionAdapter implements ISelectionListener, ISelectionChang
 			expandAll(row.getCycleGroup(), elements);
 		} else {
 			elements.add(row);
+			elements.addAll(row.getInputEquivalents());
 			elements.add(row.getReferenceRow());
 			elements.addAll(row.getReferringRows());
 		}
+	}
+
+	public static void expandDown(final UserGroup userGroup, final Collection<EObject> elements) {
+		elements.add(userGroup);
+		for (final CycleGroup cycleGroup : userGroup.getGroups()) {
+			elements.add(cycleGroup);
+			for (final Row row : cycleGroup.getRows()) {
+				elements.add(row);
+				elements.addAll(row.getInputEquivalents());
+			}
+		}
+	}
+
+	public static void expandDown(final CycleGroup cycleGroup, final Collection<EObject> elements) {
+
+		elements.add(cycleGroup);
+		for (final Row row : cycleGroup.getRows()) {
+			elements.add(row);
+			elements.addAll(row.getInputEquivalents());
+
+		}
+	}
+
+	public static void expandDown(final Row row, final Collection<EObject> elements) {
+
+		elements.add(row);
+		elements.addAll(row.getInputEquivalents());
+		elements.add(row.getReferenceRow());
+		elements.addAll(row.getReferringRows());
+
 	}
 
 	public static void expandUp(final UserGroup userGroup, final Collection<EObject> elements) {
@@ -134,13 +209,41 @@ public class DiffSelectionAdapter implements ISelectionListener, ISelectionChang
 		}
 	}
 
-	public static void expandExternal(final Object object, Table table, final Collection<EObject> elements) {
+	public static void expandUpExternal(final Object object, final Table table, final Collection<EObject> elements) {
 		expandUp(object, elements);
 		for (final Row row : table.getRows()) {
 			for (final Object o : row.getInputEquivalents()) {
 				if (o == object) {
 					DiffSelectionAdapter.expandUp(row, elements);
 					break;
+				}
+			}
+		}
+	}
+
+	public static void expandAllExternal(final Object object, @Nullable final Table table, @NonNull final Collection<EObject> elements) {
+		expandAll(object, elements);
+		if (table != null) {
+			for (final Row row : table.getRows()) {
+				for (final Object o : row.getInputEquivalents()) {
+					if (o == object) {
+						DiffSelectionAdapter.expandAll(row, elements);
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	public static void expandDownExternal(final Object object, @Nullable final Table table, @NonNull final Collection<EObject> elements) {
+		expandDown(object, elements);
+		if (table != null) {
+			for (final Row row : table.getRows()) {
+				for (final Object o : row.getInputEquivalents()) {
+					if (o == object) {
+						DiffSelectionAdapter.expandDown(row, elements);
+						break;
+					}
 				}
 			}
 		}

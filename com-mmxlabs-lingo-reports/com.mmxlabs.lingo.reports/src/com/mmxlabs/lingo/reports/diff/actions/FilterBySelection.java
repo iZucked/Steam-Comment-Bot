@@ -2,20 +2,21 @@ package com.mmxlabs.lingo.reports.diff.actions;
 
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
+import com.mmxlabs.lingo.reports.internal.Activator.Implementation;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 
 public class FilterBySelection implements IWorkbenchWindowActionDelegate {
 	private static final String SCHEDULE_VIEW_ID = "com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport";
-//	private GridTreeViewer viewer;
+	// private GridTreeViewer viewer;
 
 	private IViewPart scheduleView;
 	private IPartListener listener;
@@ -23,49 +24,48 @@ public class FilterBySelection implements IWorkbenchWindowActionDelegate {
 	private IWorkbenchWindow window;
 	private IAction action;
 
+	ImageDescriptor img_enabled = Implementation.getImageDescriptor("icons/FilterBySelectionEnabled.gif");
+	ImageDescriptor img_disabled = Implementation.getImageDescriptor("icons/FilterBySelectionDisabled.gif");
+
 	@Override
-	public void run(IAction action) {
-		// TODO Auto-generated method stub
+	public void run(final IAction action) {
 		if (table != null) {
 			table.getOptions().setFilterSelectedElements(action.isChecked());
 		}
 	}
 
 	@Override
-	public void selectionChanged(IAction action, ISelection selection) {
+	public void selectionChanged(final IAction action, final ISelection selection) {
 		this.action = action;
 		// TODO Auto-generated method stub
 		if (table != null && action != null) {
-			action.setChecked(table.getOptions().isFilterSelectedElements());
+			setActionChecked(table.getOptions().isFilterSelectedElements());
 		}
 
 	}
 
-	private EContentAdapter adapter = new EContentAdapter() {
-		public void notifyChanged(org.eclipse.emf.common.notify.Notification notification) {
+	private final EContentAdapter adapter = new EContentAdapter() {
+		@Override
+		public void notifyChanged(final org.eclipse.emf.common.notify.Notification notification) {
 			super.notifyChanged(notification);
 			if (notification.getFeature() == ScheduleReportPackage.Literals.DIFF_OPTIONS__FILTER_SELECTED_ELEMENTS) {
-				if (action != null) {
-					action.setChecked(notification.getNewBooleanValue());
-				}
+				setActionChecked(notification.getNewBooleanValue());
 			}
 		}
 	};
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
 		window.getPartService().removePartListener(listener);
 	}
 
 	@Override
-	public void init(IWorkbenchWindow window) {
+	public void init(final IWorkbenchWindow window) {
 		this.window = window;
-		// TODO Auto-generated method stub
-hookToScheduleView(window);
+		hookToScheduleView(window);
 	}
 
-	protected void hookToScheduleView(IWorkbenchWindow window) {
+	protected void hookToScheduleView(final IWorkbenchWindow window) {
 		listener = new IPartListener() {
 
 			@Override
@@ -80,22 +80,16 @@ hookToScheduleView(window);
 			}
 
 			private void observeInput(final Table table) {
-				// FilterBySelection.this.is
-
 				if (table != null) {
 					table.eAdapters().remove(adapter);
 				}
 
 				if (FilterBySelection.this.table != table) {
-//					viewer.setInput(table);
 					FilterBySelection.this.table = table;
 					if (table != null && action != null) {
-						action.setChecked(table.getOptions().isFilterSelectedElements());
+						setActionChecked(table.getOptions().isFilterSelectedElements());
+
 					}
-					//
-					// if (newUserGroupAction != null) {
-					// newUserGroupAction.setTable(table);
-					// }
 
 					// TODO: Here we want to trigger the schedule report view filters.
 					// TODO: Add selected to the data model.
@@ -125,7 +119,6 @@ hookToScheduleView(window);
 
 			@Override
 			public void partBroughtToTop(final IWorkbenchPart part) {
-				// TODO Auto-generated method stub
 
 			}
 
@@ -141,5 +134,18 @@ hookToScheduleView(window);
 			}
 		};
 		window.getPartService().addPartListener(listener);
+		for (final IViewPart view : window.getWorkbench().getActiveWorkbenchWindow().getActivePage().getViews()) {
+			if (view.getViewSite().getId().equals(SCHEDULE_VIEW_ID)) {
+				listener.partOpened(view);
+			}
+		}
 	}
+
+	public void setActionChecked(boolean checked) {
+		if (action != null) {
+			action.setChecked(checked);
+			action.setImageDescriptor(action.isChecked() ? img_enabled : img_disabled);
+		}
+	}
+
 }
