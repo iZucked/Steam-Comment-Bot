@@ -6019,7 +6019,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
             if (i < sorted.size() - 1) {
                 next = (GanttEvent) sorted.get(i + 1);
             }
-            //System.err.println("Next: " + next + " " + event.getY());
+            //System.err. ("Next: " + next + " " + event.getY());
             /*            if (next != null) {
                             System.err.println(cur + " || - if ("+event.getY()+ " < " + cur.getY()+" && " + next.getY() + " > " + event.getY() + ")");
                         }
