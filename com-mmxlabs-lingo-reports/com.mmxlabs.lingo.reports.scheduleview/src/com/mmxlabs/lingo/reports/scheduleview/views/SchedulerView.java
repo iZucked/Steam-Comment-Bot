@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -27,7 +28,9 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChangeEvent;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
@@ -47,6 +50,8 @@ import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.nebula.widgets.ganttchart.DefaultColorManager;
 import org.eclipse.nebula.widgets.ganttchart.GanttEvent;
 import org.eclipse.nebula.widgets.ganttchart.GanttFlags;
+import org.eclipse.nebula.widgets.ganttchart.GanttGroup;
+import org.eclipse.nebula.widgets.ganttchart.GanttSection;
 import org.eclipse.nebula.widgets.ganttchart.IColorManager;
 import org.eclipse.nebula.widgets.ganttchart.ISettings;
 import org.eclipse.swt.SWT;
@@ -86,6 +91,7 @@ import com.mmxlabs.lingo.reports.properties.ScheduledEventPropertySourceProvider
 import com.mmxlabs.lingo.reports.scheduleview.internal.Activator;
 import com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ISchedulerViewColourSchemeExtension;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
+import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -136,7 +142,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 	@Inject
 	private Iterable<ISchedulerViewColourSchemeExtension> colourSchemeExtensions;
 
-	private List<IScheduleViewColourScheme> colourSchemes = new ArrayList<>();
+	private final List<IScheduleViewColourScheme> colourSchemes = new ArrayList<>();
 
 	private HighlightAction highlightAction;
 
@@ -351,7 +357,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 					// Use the internalMap to obtain the list of events we are selecting
 					selectedEvents = new ArrayList<GanttEvent>(l.size());
 					if (!l.isEmpty()) {
-						for (Object ge : ganttChart.getGanttComposite().getEvents()) {
+						for (final Object ge : ganttChart.getGanttComposite().getEvents()) {
 							((GanttEvent) ge).setStatusAlpha(50);
 						}
 					}
@@ -376,7 +382,36 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 					// Clear selection
 					selectedEvents = new ArrayList<GanttEvent>(0);
 				}
+				if (table != null && table.getOptions().isFilterSelectedSequences()) {
+					final Set<GanttSection> selectedSections = new HashSet<>();
+					for (final GanttEvent event : selectedEvents) {
+						selectedSections.add(event.getGanttSection());
+					}
+					final Iterator<GanttSection> itr = new ArrayList<GanttSection>(ganttChart.getGanttComposite().getGanttSections()).iterator();// .iterator();
+					while (itr.hasNext()) {
+						final GanttSection ganttSection = itr.next();
+						final Set<GanttEvent> events = new HashSet<>(ganttSection.getEvents());
+						for (final Object o : ganttSection.getEvents()) {
+							if (o instanceof GanttGroup) {
+								final GanttGroup ganttGroup = (GanttGroup) o;
+								events.addAll(ganttGroup.getEventMembers());
+							}
+						}
 
+						events.retainAll(selectedEvents);
+						if (events.isEmpty()) {
+							ganttSection.setVisible(false);
+						} else {
+							ganttSection.setVisible(true);
+						}
+					}
+				} else {
+					final Iterator<GanttSection> itr = new ArrayList<GanttSection>(ganttChart.getGanttComposite().getGanttSections()).iterator();// .iterator();
+					while (itr.hasNext()) {
+						final GanttSection ganttSection = itr.next();
+						ganttSection.setVisible(true);
+					}
+				}
 				ganttChart.getGanttComposite().setSelection(selectedEvents);
 				if (selectedEvents.isEmpty() == false) {
 					final GanttEvent sel = selectedEvents.get(0);
@@ -384,19 +419,12 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 						ganttChart.getGanttComposite().showEvent(sel, SWT.CENTER);
 					}
 				}
-				// ganttChart. getGanttComposite().heavyRedraw();
+				ganttChart.getGanttComposite().heavyRedraw();
 			}
-
-			@Override
-			public void setSelection(ISelection selection) {
-				// TODO Auto-generated method stub
-				super.setSelection(selection);
-			}
-
 		};
 
 		// make sure this viewer is listening to preference changes
-		IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode("com.mmxlabs.lingo.reports");
+		final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode("com.mmxlabs.lingo.reports");
 		prefs.addPreferenceChangeListener(this);
 
 		// viewer.setContentProvider(new AnnotatedScheduleContentProvider());
@@ -561,7 +589,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 	@Override
 	public void dispose() {
 		// stop this view from listening to preference changes
-		IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode("com.mmxlabs.lingo.reports");
+		final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode("com.mmxlabs.lingo.reports");
 		prefs.removePreferenceChangeListener(this);
 
 		ScenarioViewerSynchronizer.deregisterView(jobManagerListener);
@@ -785,7 +813,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 						final CargoAllocation allocation = (CargoAllocation) o;
 						objects.add(allocation.getInputCargo());
 						objects.addAll(allocation.getEvents());
-						for (SlotAllocation sa : allocation.getSlotAllocations()) {
+						for (final SlotAllocation sa : allocation.getSlotAllocations()) {
 							objects.add(sa.getSlotVisit());
 						}
 					} else if (o instanceof Cargo) {
@@ -958,23 +986,22 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 	}
 
 	@Override
-	public void preferenceChange(PreferenceChangeEvent event) {
+	public void preferenceChange(final PreferenceChangeEvent event) {
 		viewer.setInput(viewer.getInput());
 	}
 
 	protected void hookToScheduleView() {
 		listener = new IPartListener() {
 
-			// EContentAdapter adapter = new EContentAdapter() {
-			// @Override
-			// public void notifyChanged(Notification notification) {
-			// super.notifyChanged(notification);
-			// if (notification.getFeature() == ScheduleReportPackage.Literals.DIFF_OPTIONS__FILTER_UNCHANGED_SEQUENCES) {
-			// // filterUnselectedScenarios = notification.getNewBooleanValue();
-			// viewer.refresh();
-			// }
-			// }
-			// };
+			EContentAdapter adapter = new EContentAdapter() {
+				@Override
+				public void notifyChanged(Notification notification) {
+					super.notifyChanged(notification);
+					if (notification.getFeature() == ScheduleReportPackage.Literals.DIFF_OPTIONS__FILTER_SELECTED_SEQUENCES) {
+						viewer.setSelection(viewer.getSelection());
+					}
+				}
+			};
 
 			@Override
 			public void partOpened(final IWorkbenchPart part) {
@@ -989,22 +1016,13 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 
 			private void observeInput(final Table table) {
 
-				// if (viewer.getInput() != table) {
-
 				if (SchedulerView.this.table != null) {
-					// SchedulerView.this.table.eAdapters().remove(adapter);
+					SchedulerView.this.table.eAdapters().remove(adapter);
 				}
 				SchedulerView.this.table = table;
-
-				// viewer.setInput(table);
-				//
-				// if (SchedulerView.this.table != null) {
-				// SchedulerView.this.table.eAdapters().add(adapter);
-				// filterUnselectedScenarios = table.getOptions().isFilterUnchangedSequences();
-				// viewer.refresh();
-				// }
-				//
-				// }
+				if (SchedulerView.this.table != null) {
+					SchedulerView.this.table.eAdapters().add(adapter);
+				}
 			}
 
 			@Override
@@ -1026,7 +1044,6 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 
 			@Override
 			public void partBroughtToTop(final IWorkbenchPart part) {
-				// TODO Auto-generated method stub
 
 			}
 

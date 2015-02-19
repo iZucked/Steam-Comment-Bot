@@ -641,11 +641,20 @@
          point="org.eclipse.ui.actionSets">
       <actionSet
             id="com.mmxlabs.lingo.reports.diff.actionset"
-            label="Diff Tools">
+            label="Diff View Tools">
          <action
-               class="com.mmxlabs.lingo.reports.diff.actions.FilterBySelection"
-               id="com.mmxlabs.lingo.reports.action1"
-               label="Filter By Selection"
+               class="com.mmxlabs.lingo.reports.diff.actions.FilterScheduleReportBySelection"
+               icon="icons/FilterBySelection.gif"
+               id="com.mmxlabs.lingo.reports.diff.actions.FilterScheduleReportBySelection"
+               label="Filter Schedule Report"
+               style="toggle"
+               toolbarPath="additions">
+         </action>
+         <action
+               class="com.mmxlabs.lingo.reports.diff.actions.FilterGanttReportBySelection"
+               icon="icons/filterGantt.gif"
+               id="com.mmxlabs.lingo.reports.diff.actions.FilterGanttReportBySelection"
+               label="Filter Schedule"
                style="toggle"
                toolbarPath="additions">
          </action>

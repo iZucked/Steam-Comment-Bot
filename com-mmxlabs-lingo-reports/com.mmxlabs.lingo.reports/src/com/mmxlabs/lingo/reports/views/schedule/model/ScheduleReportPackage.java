@@ -538,13 +538,22 @@ public interface ScheduleReportPackage extends EPackage {
 	int DIFF_OPTIONS__FILTER_SELECTED_ELEMENTS = 0;
 
 	/**
+	 * The feature id for the '<em><b>Filter Selected Sequences</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIFF_OPTIONS__FILTER_SELECTED_SEQUENCES = 1;
+
+	/**
 	 * The number of structural features of the '<em>Diff Options</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DIFF_OPTIONS_FEATURE_COUNT = 1;
+	int DIFF_OPTIONS_FEATURE_COUNT = 2;
 
 	/**
 	 * The number of operations of the '<em>Diff Options</em>' class.
@@ -1025,6 +1034,17 @@ public interface ScheduleReportPackage extends EPackage {
 	EAttribute getDiffOptions_FilterSelectedElements();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.schedule.model.DiffOptions#isFilterSelectedSequences <em>Filter Selected Sequences</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Filter Selected Sequences</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.DiffOptions#isFilterSelectedSequences()
+	 * @see #getDiffOptions()
+	 * @generated
+	 */
+	EAttribute getDiffOptions_FilterSelectedSequences();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.lingo.reports.views.schedule.model.ChangeType <em>Change Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1405,6 +1425,14 @@ public interface ScheduleReportPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute DIFF_OPTIONS__FILTER_SELECTED_ELEMENTS = eINSTANCE.getDiffOptions_FilterSelectedElements();
+
+		/**
+		 * The meta object literal for the '<em><b>Filter Selected Sequences</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DIFF_OPTIONS__FILTER_SELECTED_SEQUENCES = eINSTANCE.getDiffOptions_FilterSelectedSequences();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.ChangeType <em>Change Type</em>}' enum.

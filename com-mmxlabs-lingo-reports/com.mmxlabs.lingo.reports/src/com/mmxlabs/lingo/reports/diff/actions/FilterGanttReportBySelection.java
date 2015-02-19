@@ -14,9 +14,8 @@ import com.mmxlabs.lingo.reports.internal.Activator.Implementation;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 
-public class FilterBySelection implements IWorkbenchWindowActionDelegate {
+public class FilterGanttReportBySelection implements IWorkbenchWindowActionDelegate {
 	private static final String SCHEDULE_VIEW_ID = "com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport";
-	// private GridTreeViewer viewer;
 
 	private IViewPart scheduleView;
 	private IPartListener listener;
@@ -24,31 +23,26 @@ public class FilterBySelection implements IWorkbenchWindowActionDelegate {
 	private IWorkbenchWindow window;
 	private IAction action;
 
-	ImageDescriptor img_enabled = Implementation.getImageDescriptor("icons/FilterBySelectionEnabled.gif");
-	ImageDescriptor img_disabled = Implementation.getImageDescriptor("icons/FilterBySelectionDisabled.gif");
-
 	@Override
 	public void run(final IAction action) {
 		if (table != null) {
-			table.getOptions().setFilterSelectedElements(action.isChecked());
+			table.getOptions().setFilterSelectedSequences(action.isChecked());
 		}
 	}
 
 	@Override
 	public void selectionChanged(final IAction action, final ISelection selection) {
 		this.action = action;
-		// TODO Auto-generated method stub
 		if (table != null && action != null) {
 			setActionChecked(table.getOptions().isFilterSelectedElements());
 		}
-
 	}
 
 	private final EContentAdapter adapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(final org.eclipse.emf.common.notify.Notification notification) {
 			super.notifyChanged(notification);
-			if (notification.getFeature() == ScheduleReportPackage.Literals.DIFF_OPTIONS__FILTER_SELECTED_ELEMENTS) {
+			if (notification.getFeature() == ScheduleReportPackage.Literals.DIFF_OPTIONS__FILTER_SELECTED_SEQUENCES) {
 				setActionChecked(notification.getNewBooleanValue());
 			}
 		}
@@ -84,15 +78,11 @@ public class FilterBySelection implements IWorkbenchWindowActionDelegate {
 					table.eAdapters().remove(adapter);
 				}
 
-				if (FilterBySelection.this.table != table) {
-					FilterBySelection.this.table = table;
+				if (FilterGanttReportBySelection.this.table != table) {
+					FilterGanttReportBySelection.this.table = table;
 					if (table != null && action != null) {
-						setActionChecked(table.getOptions().isFilterSelectedElements());
-
+						setActionChecked(table.getOptions().isFilterSelectedSequences());
 					}
-
-					// TODO: Here we want to trigger the schedule report view filters.
-					// TODO: Add selected to the data model.
 					if (table != null) {
 						table.eAdapters().add(adapter);
 					}
@@ -144,7 +134,6 @@ public class FilterBySelection implements IWorkbenchWindowActionDelegate {
 	public void setActionChecked(boolean checked) {
 		if (action != null) {
 			action.setChecked(checked);
-			action.setImageDescriptor(action.isChecked() ? img_enabled : img_disabled);
 		}
 	}
 

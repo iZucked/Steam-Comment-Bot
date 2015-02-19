@@ -160,11 +160,7 @@ public class DiffSelectionAdapter implements ISelectionListener, ISelectionChang
 	public static void expandDown(final UserGroup userGroup, final Collection<EObject> elements) {
 		elements.add(userGroup);
 		for (final CycleGroup cycleGroup : userGroup.getGroups()) {
-			elements.add(cycleGroup);
-			for (final Row row : cycleGroup.getRows()) {
-				elements.add(row);
-				elements.addAll(row.getInputEquivalents());
-			}
+			expandDown(cycleGroup, elements);
 		}
 	}
 
@@ -172,9 +168,7 @@ public class DiffSelectionAdapter implements ISelectionListener, ISelectionChang
 
 		elements.add(cycleGroup);
 		for (final Row row : cycleGroup.getRows()) {
-			elements.add(row);
-			elements.addAll(row.getInputEquivalents());
-
+			expandDown(row, elements);
 		}
 	}
 
@@ -237,16 +231,16 @@ public class DiffSelectionAdapter implements ISelectionListener, ISelectionChang
 
 	public static void expandDownExternal(final Object object, @Nullable final Table table, @NonNull final Collection<EObject> elements) {
 		expandDown(object, elements);
-		if (table != null) {
-			for (final Row row : table.getRows()) {
-				for (final Object o : row.getInputEquivalents()) {
-					if (o == object) {
-						DiffSelectionAdapter.expandDown(row, elements);
-						break;
-					}
-				}
-			}
-		}
+//		if (table != null) {
+//			for (final Row row : table.getRows()) {
+//				for (final Object o : row.getInputEquivalents()) {
+//					if (o == object) {
+//						DiffSelectionAdapter.expandDown(row, elements);
+//						break;
+//					}
+//				}
+//			}
+//		}
 	}
 
 	public static Set<Object> expandEquivalents(final Object o) {

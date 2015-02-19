@@ -568,6 +568,15 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getDiffOptions_FilterSelectedSequences() {
+		return (EAttribute)diffOptionsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getChangeType() {
 		return changeTypeEEnum;
 	}
@@ -648,6 +657,7 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 
 		diffOptionsEClass = createEClass(DIFF_OPTIONS);
 		createEAttribute(diffOptionsEClass, DIFF_OPTIONS__FILTER_SELECTED_ELEMENTS);
+		createEAttribute(diffOptionsEClass, DIFF_OPTIONS__FILTER_SELECTED_SEQUENCES);
 
 		// Create enums
 		changeTypeEEnum = createEEnum(CHANGE_TYPE);
@@ -733,6 +743,7 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 
 		initEClass(diffOptionsEClass, DiffOptions.class, "DiffOptions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getDiffOptions_FilterSelectedElements(), ecorePackage.getEBoolean(), "filterSelectedElements", null, 0, 1, DiffOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDiffOptions_FilterSelectedSequences(), ecorePackage.getEBoolean(), "filterSelectedSequences", null, 0, 1, DiffOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(changeTypeEEnum, ChangeType.class, "ChangeType");

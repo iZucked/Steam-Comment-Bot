@@ -63,6 +63,7 @@ public class DiffOptionsItemProvider
 			super.getPropertyDescriptors(object);
 
 			addFilterSelectedElementsPropertyDescriptor(object);
+			addFilterSelectedSequencesPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -81,6 +82,28 @@ public class DiffOptionsItemProvider
 				 getString("_UI_DiffOptions_filterSelectedElements_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_DiffOptions_filterSelectedElements_feature", "_UI_DiffOptions_type"),
 				 ScheduleReportPackage.Literals.DIFF_OPTIONS__FILTER_SELECTED_ELEMENTS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Filter Selected Sequences feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addFilterSelectedSequencesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_DiffOptions_filterSelectedSequences_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_DiffOptions_filterSelectedSequences_feature", "_UI_DiffOptions_type"),
+				 ScheduleReportPackage.Literals.DIFF_OPTIONS__FILTER_SELECTED_SEQUENCES,
 				 true,
 				 false,
 				 false,
@@ -125,6 +148,7 @@ public class DiffOptionsItemProvider
 
 		switch (notification.getFeatureID(DiffOptions.class)) {
 			case ScheduleReportPackage.DIFF_OPTIONS__FILTER_SELECTED_ELEMENTS:
+			case ScheduleReportPackage.DIFF_OPTIONS__FILTER_SELECTED_SEQUENCES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
