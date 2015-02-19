@@ -38,7 +38,7 @@ public abstract class AbstractPaintManager implements IPaintManager {
 		}
 
 		if (isSelected && settings.drawSelectionMarkerAroundSelectedEvent()) {
-			gc.setLineStyle(SWT.LINE_DOT);
+			gc.setLineStyle(settings.getSelectionLineStyle());
 			gc.setLineWidth(settings.getSelectionLineWidth());
 
 			// this is _extremely_ slow to draw, so we need to check bounds here, which is probably a good idea anyway
