@@ -30,7 +30,7 @@ public class MergeAction extends Action {
 		// TODO Auto-generated method stub
 		final Set<UserGroup> userGroups = new HashSet<>();
 		final Set<CycleGroup> cycleGroups = new HashSet<>();
-		final Iterator<Object> itr = selection.iterator();
+		final Iterator<?> itr = selection.iterator();
 		UserGroup firstUserGroup = null;
 		while (itr.hasNext()) {
 			final Object o = itr.next();
@@ -42,6 +42,7 @@ public class MergeAction extends Action {
 				}
 			} else if (o instanceof CycleGroup) {
 				final CycleGroup cycleGroup = (CycleGroup) o;
+				cycleGroups.add(cycleGroup);
 				final UserGroup userGroup = cycleGroup.getUserGroup();
 				if (userGroup != null) {
 					userGroups.add(userGroup);
