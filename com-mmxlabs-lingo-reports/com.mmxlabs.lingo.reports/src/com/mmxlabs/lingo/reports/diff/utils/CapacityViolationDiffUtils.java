@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * All rights reserved.
+ */
 package com.mmxlabs.lingo.reports.diff.utils;
 
 import java.util.ArrayList;
@@ -70,7 +74,7 @@ public class CapacityViolationDiffUtils {
 			List<CapacityViolationType> violations = new ArrayList<>(map.keySet());
 			for (int index = 0; index < violations.size(); index++) {
 				if (violations.get(index) != CapacityViolationType.FORCED_COOLDOWN) {
-					text += String.format("%s (%sm³)%s", violations.get(index).getName(), map.get(violations.get(index)),(index < violations.size() - 1 ? " , " : ""));
+					text += String.format("%s (%sm??)%s", violations.get(index).getName(), map.get(violations.get(index)),(index < violations.size() - 1 ? " , " : ""));
 				} else {
 					text += String.format("%s %s", violations.get(index).getName(), (index < violations.size() - 1 ? " , " : ""));
 				}
@@ -85,7 +89,7 @@ public class CapacityViolationDiffUtils {
 			List<CapacityViolationType> violations = new ArrayList<>(map.keySet());
 			for (int index = 0; index < violations.size(); index++) {
 				if (violations.get(index) != CapacityViolationType.FORCED_COOLDOWN) {
-					text += String.format("%s (%s%sm³)%s", violations.get(index).getName(), map.get(violations.get(index)),map.get(violations.get(index)) > 0 ? "+" : "-", (index < violations.size() - 1 ? " , " : ""));
+					text += String.format("%s (%s%sm??)%s", violations.get(index).getName(), map.get(violations.get(index)),map.get(violations.get(index)) > 0 ? "+" : "-", (index < violations.size() - 1 ? " , " : ""));
 				} else {
 					text += String.format("%s %s", violations.get(index).getName(), (index < violations.size() - 1 ? " , " : ""));
 				}
