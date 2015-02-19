@@ -358,7 +358,25 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 					selectedEvents = new ArrayList<GanttEvent>(l.size());
 					if (!l.isEmpty()) {
 						for (final Object ge : ganttChart.getGanttComposite().getEvents()) {
-							((GanttEvent) ge).setStatusAlpha(50);
+							final GanttEvent ganttEvent = (GanttEvent) ge;
+							ganttEvent.setStatusAlpha(130);
+							final Event evt = (Event) ganttEvent.getData();
+							if (table != null) {
+								// Add scenario instance name to field if multiple scenarios are selected
+								final Object input = viewer.getInput();
+								if (input instanceof IScenarioViewerSynchronizerOutput) {
+									final IScenarioViewerSynchronizerOutput output = (IScenarioViewerSynchronizerOutput) input;
+
+									final Collection<Object> collectedElements = output.getCollectedElements();
+									if (collectedElements.size() > 1) {
+										if (output.hasPinnedScenario()) {
+											if (output.isPinned(evt.getSequence().eContainer())) {
+												ganttEvent.setStatusAlpha(50);
+											}
+										}
+									}
+								}
+							}
 						}
 					}
 					for (final Object obj : l) {
@@ -995,7 +1013,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 
 			EContentAdapter adapter = new EContentAdapter() {
 				@Override
-				public void notifyChanged(Notification notification) {
+				public void notifyChanged(final Notification notification) {
 					super.notifyChanged(notification);
 					if (notification.getFeature() == ScheduleReportPackage.Literals.DIFF_OPTIONS__FILTER_SELECTED_SEQUENCES) {
 						viewer.setSelection(viewer.getSelection());

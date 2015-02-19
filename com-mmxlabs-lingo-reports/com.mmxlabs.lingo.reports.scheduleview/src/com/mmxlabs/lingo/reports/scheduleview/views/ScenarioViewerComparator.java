@@ -4,10 +4,13 @@
  */
 package com.mmxlabs.lingo.reports.scheduleview.views;
 
+import java.util.Collection;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 
+import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.models.lng.schedule.Sequence;
 
 /**
@@ -85,6 +88,29 @@ public class ScenarioViewerComparator extends ViewerComparator {
 			if (c != 0) {
 				return c;
 			}
+			{
+				// Add scenario instance name to field if multiple scenarios are selected
+				final Object input = viewer.getInput();
+				if (input instanceof IScenarioViewerSynchronizerOutput) {
+					final IScenarioViewerSynchronizerOutput output = (IScenarioViewerSynchronizerOutput) input;
+
+					final Collection<Object> collectedElements = output.getCollectedElements();
+					if (collectedElements.size() > 1) {
+						if (output.hasPinnedScenario()) {
+							final boolean s1Pinned = output.isPinned(s1.eContainer());
+							final boolean s2Pinned = output.isPinned(s2.eContainer());
+							if (s1Pinned != s2Pinned) {
+								if (s1Pinned) {
+									return -1;
+								} else {
+									return 1;
+								}
+							}
+						}
+					}
+				}
+			}
+
 		} else if (mode == Mode.INTERLEAVE) {
 
 			// Then order by element order
@@ -107,6 +133,29 @@ public class ScenarioViewerComparator extends ViewerComparator {
 				final int c = name1.compareTo(name2);
 				if (c != 0) {
 					return c;
+				}
+
+				{
+					// Add scenario instance name to field if multiple scenarios are selected
+					final Object input = viewer.getInput();
+					if (input instanceof IScenarioViewerSynchronizerOutput) {
+						final IScenarioViewerSynchronizerOutput output = (IScenarioViewerSynchronizerOutput) input;
+
+						final Collection<Object> collectedElements = output.getCollectedElements();
+						if (collectedElements.size() > 1) {
+							if (output.hasPinnedScenario()) {
+								final boolean s1Pinned = output.isPinned(s1.eContainer());
+								final boolean s2Pinned = output.isPinned(s2.eContainer());
+								if (s1Pinned != s2Pinned) {
+									if (s1Pinned) {
+										return -1;
+									} else {
+										return 1;
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 			// Group by scenario
