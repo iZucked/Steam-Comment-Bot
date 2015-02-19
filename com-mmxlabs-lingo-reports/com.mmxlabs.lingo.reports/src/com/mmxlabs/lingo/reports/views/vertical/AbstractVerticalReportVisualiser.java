@@ -216,6 +216,9 @@ public abstract class AbstractVerticalReportVisualiser {
 	 * @return
 	 */
 	public String getShortPortName(final Port port) {
+		if (port.getShortName() != null && !port.getShortName().isEmpty()) {
+			return port.getShortName();
+		}
 		return port.getName();
 	}
 
