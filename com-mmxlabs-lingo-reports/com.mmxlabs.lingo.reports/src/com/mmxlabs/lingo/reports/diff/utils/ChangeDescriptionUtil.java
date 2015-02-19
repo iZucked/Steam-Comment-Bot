@@ -1,11 +1,19 @@
 package com.mmxlabs.lingo.reports.diff.utils;
 
-import org.eclipse.swt.custom.CTabFolder;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+import java.util.TimeZone;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lingo.reports.utils.CargoAllocationUtils;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.CycleGroupUtils;
+import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.ChangeType;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
@@ -17,10 +25,54 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 
 public class ChangeDescriptionUtil {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ChangeDescriptionUtil.class);
+
+	public static String getCapacityViolationDescription(final Row row) {
+		if (!row.isReference()) {
+			final Row referenceRow = row.getReferenceRow();
+			String loadViolationString = "";
+			String dischargeViolationString = "";
+			if (referenceRow != null) {
+				loadViolationString = CapacityViolationDiffUtils.checkSlotAllocationForCapacityViolations(row.getLoadAllocation(), referenceRow.getLoadAllocation());
+			}
+			dischargeViolationString = CapacityViolationDiffUtils.checkSlotAllocationForCapacityViolations(row.getDischargeAllocation(), getMatchedDischargeAllocation(row));
+			return String.format("%s%s%s", loadViolationString, loadViolationString.equals("") || dischargeViolationString.equals("") ? "" : " | ", dischargeViolationString);
+		}
+		return "";
+	}
+		
+	public static String getLatenessDescription(final Row row) {
+		if (!row.isReference()) {
+			final Row referenceRow = row.getReferenceRow();
+			String loadLatenessString = "";
+			String dischargeLatenessString = "";
+			if (referenceRow != null) {
+				loadLatenessString = LatenessDiffUtils.checkSlotAllocationForLateness(row.getLoadAllocation(), referenceRow.getLoadAllocation());
+			}
+			dischargeLatenessString = LatenessDiffUtils.checkSlotAllocationForLateness(row.getDischargeAllocation(), getMatchedDischargeAllocation(row));
+			return String.format("%s%s%s", loadLatenessString, loadLatenessString.equals("") || dischargeLatenessString.equals("") ? "" : " | ", dischargeLatenessString);
+		}
+		return "";
+	}
+	
+	private static SlotAllocation getMatchedDischargeAllocation(Row row) {
+		CycleGroup group = row.getCycleGroup();
+		SlotAllocation matchedDischarge = null;
+		if (group != null) {
+			for (Row r : group.getRows()) {
+				if (r.isReference()) {
+					if (row.getDischargeAllocation() != null && r.getDischargeAllocation() != null && row.getDischargeAllocation().getName().equals(r.getDischargeAllocation().getName())) {
+						matchedDischarge = r.getDischargeAllocation();
+					}
+				}
+			}
+		}
+		return matchedDischarge;
+	}
 
 	public static String getChangeDescription(final Row row) {
 

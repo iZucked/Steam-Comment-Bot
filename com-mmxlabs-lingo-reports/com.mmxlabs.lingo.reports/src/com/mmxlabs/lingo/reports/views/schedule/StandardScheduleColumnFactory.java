@@ -21,6 +21,8 @@ import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.PriceFormatter;
+import com.mmxlabs.lingo.reports.views.schedule.formatters.CapacityViolationDescriptionFormatter;
+import com.mmxlabs.lingo.reports.views.schedule.formatters.LatenessDescriptionFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.MainChangeDescriptionFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.PNLDeltaFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.PermutationDescriptionFormatter;
@@ -335,6 +337,12 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_changestring":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Main Change", null, ColumnType.DIFF, new MainChangeDescriptionFormatter());
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_lateness":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Lateness change", null, ColumnType.DIFF, new LatenessDescriptionFormatter());
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_capacity_violation":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Violation change", null, ColumnType.DIFF, new CapacityViolationDescriptionFormatter());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.pnl_group":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, builder.getEmptyPNLColumnBlockFactory());

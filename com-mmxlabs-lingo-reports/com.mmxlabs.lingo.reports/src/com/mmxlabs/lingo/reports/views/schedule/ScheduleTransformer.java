@@ -166,7 +166,7 @@ public class ScheduleTransformer {
 				diffProcessors.clear();
 				diffProcessors.add(new CycleDiffProcessor(customRelatedSlotHandlers));
 				diffProcessors.add(new StructuralDifferencesProcessor(builder.getScheduleDiffUtils()));
-				diffProcessors.add(new GCOCycleGroupingProcessor());
+//				diffProcessors.add(new GCOCycleGroupingProcessor());
 				diffProcessors.add(new LadenVoyageProcessor());
 			}
 
