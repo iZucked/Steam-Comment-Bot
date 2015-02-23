@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
@@ -18,6 +20,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -41,18 +44,18 @@ public class DiffSelectionAdapter implements ISelectionListener, ISelectionChang
 	@Override
 	public void selectionChanged(final SelectionChangedEvent event) {
 		if (table != null) {
-			adaptSelection(event.getSelection());
+			adaptSelection(table, event.getSelection());
 		}
 	}
 
 	@Override
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		if (table != null && part instanceof DiffGroupView) {
-			adaptSelection(selection);
+			adaptSelection(table, selection);
 		}
 	}
 
-	private void adaptSelection(final ISelection selection) {
+	public static void adaptSelection(Table table, final ISelection selection) {
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
 			final Set<EObject> adaptedSelection = new LinkedHashSet<>();
@@ -102,6 +105,19 @@ public class DiffSelectionAdapter implements ISelectionListener, ISelectionChang
 			while (itr.hasNext()) {
 				final Object item = itr.next();
 				expandDownExternal(item, table, newSelectedElements);
+			}
+		}
+		return new StructuredSelection(new ArrayList<>(newSelectedElements));
+	}
+	public static IStructuredSelection expandToRow(final ISelection selection, final Table table) {
+		
+		final Set<EObject> newSelectedElements = new LinkedHashSet<>();
+		if (selection instanceof IStructuredSelection) {
+			final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
+			final Iterator<?> itr = structuredSelection.iterator();
+			while (itr.hasNext()) {
+				final Object item = itr.next();
+				expandUpToRowExternal(item, table, newSelectedElements);
 			}
 		}
 		return new StructuredSelection(new ArrayList<>(newSelectedElements));
@@ -180,8 +196,8 @@ public class DiffSelectionAdapter implements ISelectionListener, ISelectionChang
 
 		elements.add(row);
 		elements.addAll(row.getInputEquivalents());
-		elements.add(row.getReferenceRow());
-		elements.addAll(row.getReferringRows());
+//		elements.add(row.getReferenceRow());
+//		elements.addAll(row.getReferringRows());
 
 	}
 
@@ -232,19 +248,33 @@ public class DiffSelectionAdapter implements ISelectionListener, ISelectionChang
 			}
 		}
 	}
+	
+	public static void expandUpToRowExternal(final Object object, @Nullable final Table table, @NonNull final Collection<EObject> elements) {
+		expandDown(object, elements);
+		if (table != null) {
+			for (final Row row : table.getRows()) {
+				for (final Object o : row.getInputEquivalents()) {
+					if (o == object) {
+						DiffSelectionAdapter.expandDown(row, elements);
+						break;
+					}
+				}
+			}
+		}
+	}
 
 	public static void expandDownExternal(final Object object, @Nullable final Table table, @NonNull final Collection<EObject> elements) {
 		expandDown(object, elements);
-//		if (table != null) {
-//			for (final Row row : table.getRows()) {
-//				for (final Object o : row.getInputEquivalents()) {
-//					if (o == object) {
-//						DiffSelectionAdapter.expandDown(row, elements);
-//						break;
-//					}
-//				}
-//			}
-//		}
+		if (table != null) {
+			for (final Row row : table.getRows()) {
+				for (final Object o : row.getInputEquivalents()) {
+					if (o == object) {
+						DiffSelectionAdapter.expandDown(row, elements);
+						break;
+					}
+				}
+			}
+		}
 	}
 
 	public static Set<Object> expandEquivalents(final Object o) {
@@ -257,4 +287,26 @@ public class DiffSelectionAdapter implements ISelectionListener, ISelectionChang
 		return s;
 	}
 
+	public static List<Object> convertToTreePaths(@NonNull final Collection<?> selection) {
+		List<Object> treePaths = new ArrayList<>(selection.size());
+		for (Object element : selection) {
+			List<Object> path = new LinkedList<>();
+			path.add(element);
+			if (element instanceof Row) {
+				element = ((Row) element).getCycleGroup();
+				if (element != null) {
+					path.add(0, element);
+				}
+			}
+			if (element instanceof CycleGroup) {
+				element = ((CycleGroup) element).getUserGroup();
+				if (element != null) {
+					path.add(0, element);
+				}
+			}
+			treePaths.add(new TreePath(path.toArray()));
+			
+		}
+		return treePaths;
+	}
 }

@@ -4,6 +4,10 @@
  */
 package com.mmxlabs.lingo.reports.diff;
 
+import java.awt.datatransfer.StringSelection;
+import java.security.interfaces.DSAKey;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.eclipse.core.databinding.DataBindingContext;
@@ -11,6 +15,7 @@ import org.eclipse.core.databinding.ObservablesManager;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.EMFProperties;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
@@ -25,6 +30,7 @@ import org.eclipse.jface.databinding.viewers.ObservableListTreeContentProvider;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
@@ -296,7 +302,19 @@ public class DiffGroupView extends ViewPart implements ISelectionListener, IMenu
 		if (viewer.getInput() != null) {
 			// Transform external inputs
 			if (!selection.isEmpty()) {
-				viewer.setSelection(DiffSelectionAdapter.expandAll(selection, table), false);
+
+				if (selection instanceof IStructuredSelection) {
+					final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
+					final Set<EObject> adaptedSelection = new LinkedHashSet<>();
+					final Iterator<?> itr = structuredSelection.iterator();
+					while (itr.hasNext()) {
+						DiffSelectionAdapter.expandUpToRowExternal(itr.next(), table, adaptedSelection);
+					}
+					// Remove nulls
+					while (adaptedSelection.remove(null))
+						;
+					viewer.setSelection(new StructuredSelection(DiffSelectionAdapter.convertToTreePaths(adaptedSelection)), true);
+				}
 			}
 		}
 	}
