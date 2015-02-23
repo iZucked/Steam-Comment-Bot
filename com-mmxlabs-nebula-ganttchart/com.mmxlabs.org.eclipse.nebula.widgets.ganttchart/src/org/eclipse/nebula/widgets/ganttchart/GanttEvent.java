@@ -1156,7 +1156,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      * 
      * @param ganttSection
      */
-    void setGanttSection(final GanttSection ganttSection) {
+    public void setGanttSection(final GanttSection ganttSection) {
         _ganttSection = ganttSection;
     }
 

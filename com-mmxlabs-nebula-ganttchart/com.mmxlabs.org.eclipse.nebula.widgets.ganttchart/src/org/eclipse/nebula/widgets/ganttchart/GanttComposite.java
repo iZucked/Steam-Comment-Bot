@@ -226,9 +226,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
     private Point                         _mouseDragStartLocation;                      
 
-    private final List                    _ganttGroups;
+    private final List<GanttGroup>        _ganttGroups;
 
-    private final List                    _ganttSections;
+    private final List<GanttSection>      _ganttSections;
 
     // menu used at right click events
     private Menu                          _rightClickMenu;
@@ -843,7 +843,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
      * 
      * @return List of GanttGroups
      */
-    public List getGroups() {
+    public List<GanttGroup> getGroups() {
         return _ganttGroups;
     }
 
@@ -879,7 +879,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
      * 
      * @return List of GanttSections.
      */
-    public List getGanttSections() {
+    public List<GanttSection> getGanttSections() {
         return _ganttSections;
     }
 
@@ -5525,6 +5525,13 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
                 continue;
             }
 
+            if (event.isHidden()) {
+            	continue;
+            }
+			if (event.getGanttSection() != null && !event.getGanttSection().isVisible()) {
+				continue;
+			}
+			
             if (isInside(me.x, me.y, new Rectangle(event.getX(), event.getY(), event.getWidth(), event.getHeight()))) { 
                 GC gc = new GC(this);
 
@@ -5937,11 +5944,18 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
         // ok, we're not oob at the top, so we're probably between two, easy check
         for (int i = 0; i < _ganttSections.size(); i++) {
             final GanttSection gs = (GanttSection) _ganttSections.get(i);
+            if (!gs.isVisible()) {
+            	continue;
+            }
             GanttSection next = null;
             if (i != _ganttSections.size() - 1) {
                 next = (GanttSection) _ganttSections.get(i + 1);
+                while (next != null && !next.isVisible() && i < _ganttSections.size()) {
+                	++i;
+                	next = (GanttSection) _ganttSections.get(i + 1);
+                }
 
-                if (next != null) {
+                if (next != null && !next.isVisible()) {
                     if (event.getY() >= (gs.getBounds().y + gs.getBounds().height) && event.getY() <= next.getBounds().y) {
                         if (accountForVerticalDragDirection) {
                             if (_vDragDir == SWT.UP) {
@@ -6247,6 +6261,10 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
                 for (int i = 0; i < _ganttSections.size(); i++) {
                 	
                     final GanttSection gs = (GanttSection) _ganttSections.get(i);
+                    if (!gs.isVisible()) {
+                    	continue;
+                    }
+                    
                     if (drag.getGanttSection() == gs) {
                         continue;
                     }
@@ -7533,6 +7551,13 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
         for (int i = 0; i < _ganttEvents.size(); i++) {
             GanttEvent event = (GanttEvent) _ganttEvents.get(i);
+
+            if (event.isHidden()) {
+            	continue;
+            }
+            if (event.getGanttSection() != null&& !event.getGanttSection().isVisible()) {
+            	continue;
+            }
             if (isInside(me.x, me.y, new Rectangle(event.getX(), event.getY(), event.getWidth(), event.getHeight()))) {
                 showTooltip(event, me);
                 return;
@@ -7542,7 +7567,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
     private void showTooltip(GanttEvent event, MouseEvent me) {
         if (!_settings.showToolTips()) { return; }
-
+        
         long days = DateHelper.daysBetween(event.getStartDate(), event.getEndDate());
         days++;
         long revisedDays = 0;

@@ -19,7 +19,7 @@ public class GanttGroup extends AbstractGanttEvent implements IGanttChartItem {
 
     public static final int  FIXED_ROW_HEIGHT_AUTOMATIC = -1;
 
-    private final List       _events;
+    private final List<GanttEvent>       _events;
     private int              _fixedRowHeight            = FIXED_ROW_HEIGHT_AUTOMATIC;
     private int              _vAlignment                = SWT.TOP;
     private final GanttChart _chart;
@@ -32,7 +32,7 @@ public class GanttGroup extends AbstractGanttEvent implements IGanttChartItem {
     public GanttGroup(final GanttChart parent) {
         super();
         _chart = parent;
-        _events = new ArrayList();
+        _events = new ArrayList<>();
         parent.addGroup(this);
     }
 
@@ -78,7 +78,7 @@ public class GanttGroup extends AbstractGanttEvent implements IGanttChartItem {
      * 
      * @return List of GanttEvents.
      */
-    public List getEventMembers() {
+    public List<GanttEvent> getEventMembers() {
         return _events;
     }
 
@@ -145,7 +145,7 @@ public class GanttGroup extends AbstractGanttEvent implements IGanttChartItem {
     int getTallestEvent() {
         int max = 0;
         for (int i = 0; i < _events.size(); i++) {
-            final GanttEvent event = ((GanttEvent) _events.get(i));
+            final GanttEvent event = _events.get(i);
             max = Math.max(event.getHeight(), max);
         }
         return max;

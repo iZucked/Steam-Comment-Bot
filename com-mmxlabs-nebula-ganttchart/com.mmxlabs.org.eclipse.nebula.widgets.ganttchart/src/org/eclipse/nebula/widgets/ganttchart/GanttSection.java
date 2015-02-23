@@ -407,6 +407,15 @@ public class GanttSection implements IFillBackgroundColors {
 
 	public void setVisible(boolean visible) {
 		this.visible = visible;
+		for (final Object event : _ganttEvents) {
+			if (event instanceof GanttGroup) {
+				for (final GanttEvent event2 : ((GanttGroup) event).getEventMembers()) {
+					  event2.setHidden(!visible);
+				}
+			} else if (event instanceof GanttEvent) {
+				((GanttEvent) event).setHidden(!visible);
+			}
+		}
 		
 	}
 	
