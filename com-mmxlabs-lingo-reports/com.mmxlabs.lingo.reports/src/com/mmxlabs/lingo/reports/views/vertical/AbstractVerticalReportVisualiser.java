@@ -399,4 +399,8 @@ public abstract class AbstractVerticalReportVisualiser {
 		dateCacheA.clear();
 		dateCacheB.clear();
 	}
+
+	public ColourPalette getColourPalette() {
+		return colourPalette;
+	}
 }
