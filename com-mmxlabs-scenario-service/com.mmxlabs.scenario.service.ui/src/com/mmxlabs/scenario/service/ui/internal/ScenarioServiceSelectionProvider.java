@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scenario.service.ui.internal;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -30,6 +31,18 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 	@Override
 	public void select(final ScenarioInstance instance) {
 		if (!isSelected(instance)) {
+			// Enforce one pin, one other scenario.
+			if (pin != null && selection.size() > 1) {
+				for (final ScenarioInstance scenarioInstance : new ArrayList<>(selection)) {
+					if (scenarioInstance == instance) {
+						continue;
+					}
+					if (scenarioInstance == pin) {
+						continue;
+					}
+					deselect(scenarioInstance);
+				}
+			}
 			selection.add(instance);
 			for (final IScenarioServiceSelectionChangedListener listener : listeners) {
 				listener.selected(this, Collections.singleton(instance));
@@ -107,6 +120,15 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 				select(instance);
 			} else if (oldPin != null && pin == null) {
 				// deselect(instance);
+			}
+			// Enforce one pin, one other scenario.
+			if (pin != null && selection.size() > 2) {
+				for (final ScenarioInstance scenarioInstance : new ArrayList<>(selection)) {
+					if (scenarioInstance == pin) {
+						continue;
+					}
+					deselect(scenarioInstance);
+				}
 			}
 			for (final IScenarioServiceSelectionChangedListener listener : listeners) {
 				listener.pinned(this, oldPin, pin);
