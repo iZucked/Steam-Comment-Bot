@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2014
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.providers.guice;
@@ -44,6 +44,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProvider;
@@ -105,6 +107,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultNextLoadDateProvide
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultVesselCharterCurveProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapActualsDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapAlternativeElementProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapBaseFuelCurveEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapCancellationFeeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapCharterMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapDiscountCurveEditor;
@@ -346,6 +349,10 @@ public class DataComponentProviderModule extends AbstractModule {
 
 		bind(TimeZoneToUtcOffsetProvider.class).in(Singleton.class);
 		bind(ITimeZoneToUtcOffsetProvider.class).to(TimeZoneToUtcOffsetProvider.class);
+		
+		final HashMapBaseFuelCurveEditor baseFuelCurveEditor = new HashMapBaseFuelCurveEditor();
+		bind(IBaseFuelCurveProvider.class).toInstance(baseFuelCurveEditor);
+		bind(IBaseFuelCurveProviderEditor.class).toInstance(baseFuelCurveEditor);
 	}
 
 	/**

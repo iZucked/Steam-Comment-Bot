@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2014
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser;
@@ -7,6 +7,8 @@ package com.mmxlabs.scheduler.optimiser;
 import java.util.Collections;
 import java.util.List;
 import java.util.TreeMap;
+
+import javax.inject.Singleton;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -30,6 +32,7 @@ import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
+import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
@@ -43,9 +46,12 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.impl.BaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselStartDateCharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;
 import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
@@ -58,10 +64,13 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
+import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapBaseFuelCurveEditor;
 import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
 import com.mmxlabs.scheduler.optimiser.schedule.VoyagePlanAnnotator;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
@@ -92,6 +101,7 @@ public class TestCalculations {
 	public void testCalculations1() {
 		final IVolumeAllocator volumeAllocator = Mockito.mock(IVolumeAllocator.class);
 		final Injector injector = createTestInjector(volumeAllocator);
+		IVesselBaseFuelCalculator v = injector.getInstance(IVesselBaseFuelCalculator.class);
 
 		final SchedulerBuilder builder = injector.getInstance(SchedulerBuilder.class);
 
@@ -107,7 +117,9 @@ public class TestCalculations {
 		final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(2.0);
 		final int baseFuelEquivalence = OptimiserUnitConvertor.convertToInternalConversionFactor(4);
 		final int baseFuelUnitPrice = OptimiserUnitConvertor.convertToInternalPrice(400);
-		final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuelUnitPrice, baseFuelEquivalence, 0, Integer.MAX_VALUE, 0, 0);
+		final IBaseFuel baseFuel = new BaseFuel("test");
+		baseFuel.setEquivalenceFactor(baseFuelEquivalence);
+		final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0);
 
 		final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
 		ladenKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.6));
@@ -512,8 +524,10 @@ public class TestCalculations {
 		// 2 / 4 == 0.5 equivalence
 		final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(2.0);
 		final int baseFuelUnitEquivalence = OptimiserUnitConvertor.convertToInternalConversionFactor(4.0);
+		final IBaseFuel baseFuel = new BaseFuel("test");
+		baseFuel.setEquivalenceFactor(baseFuelUnitEquivalence);
 
-		final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuelUnitPrice, baseFuelUnitEquivalence, 0, Integer.MAX_VALUE, 0, 0);
+		final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0);
 
 		final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
 		ladenKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.6));
@@ -909,7 +923,8 @@ public class TestCalculations {
 	public void testCalculations3() {
 
 		final IVolumeAllocator volumeAllocator = Mockito.mock(IVolumeAllocator.class);
-		final Injector injector = createTestInjector(volumeAllocator);
+		final int baseFuelUnitPrice = OptimiserUnitConvertor.convertToInternalPrice(1);
+		final Injector injector = createTestInjector(volumeAllocator, baseFuelUnitPrice);
 		final SchedulerBuilder builder = injector.getInstance(SchedulerBuilder.class);
 
 		final IPort port1 = builder.createPortForTest("port-1", false, null, "UTC");
@@ -925,8 +940,9 @@ public class TestCalculations {
 		final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(2.0);
 		final int baseFuelEquivalence = OptimiserUnitConvertor.convertToInternalConversionFactor(4);
 
-		final int baseFuelUnitPrice = OptimiserUnitConvertor.convertToInternalPrice(1);
-		final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuelUnitPrice, baseFuelEquivalence, 0, Integer.MAX_VALUE, 0, 0);
+		final IBaseFuel baseFuel = new BaseFuel("test");
+		baseFuel.setEquivalenceFactor(baseFuelEquivalence);
+		final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0);
 
 		final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
 		ladenKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.6));
@@ -1327,7 +1343,7 @@ public class TestCalculations {
 		}
 	}
 
-	private Injector createTestInjector(final IVolumeAllocator volumeAllocator) {
+	private Injector createTestInjector(final IVolumeAllocator volumeAllocator, final int baseFuelUnitPrice) {
 
 		final Injector injector = Guice.createInjector(new DataComponentProviderModule(), new AbstractModule() {
 			@Override
@@ -1341,8 +1357,20 @@ public class TestCalculations {
 				bind(SchedulerBuilder.class);
 				bind(ILNGVoyageCalculator.class).to(LNGVoyageCalculator.class);
 				bind(IVoyagePlanOptimiser.class).to(VoyagePlanOptimiser.class);
+				
+				bind(IVesselBaseFuelCalculator.class).to(VesselBaseFuelCalculator.class);
+				final VesselBaseFuelCalculator baseFuelCalculator = Mockito.mock(VesselBaseFuelCalculator.class);
+				Mockito.when(baseFuelCalculator.getBaseFuelPrice(Mockito.any(IVessel.class), Mockito.any(IPortTimesRecord.class))).thenReturn(baseFuelUnitPrice);
+				Mockito.when(baseFuelCalculator.getBaseFuelPrice(Mockito.any(IVessel.class), Mockito.anyInt())).thenReturn(baseFuelUnitPrice);
+
+				bind(VesselBaseFuelCalculator.class).toInstance(baseFuelCalculator);
+
 			}
 		});
 		return injector;
+	}
+	
+	private Injector createTestInjector(final IVolumeAllocator volumeAllocator) {
+		return createTestInjector(volumeAllocator, OptimiserUnitConvertor.convertToInternalPrice(400));
 	}
 }

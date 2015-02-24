@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2014
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.scheduleprocessor.impl;
@@ -19,6 +19,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.contracts.IBreakEvenPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
@@ -65,6 +66,9 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 	@Inject
 	private IActualsDataProvider actualsDataProvider;
 
+	@Inject
+	private IVesselBaseFuelCalculator vesselBaseFuelCalculator;
+	
 	@Override
 	public Pair<VoyagePlan, IAllocationAnnotation> processSchedule(final int vesselStartTime, final IVesselAvailability vesselAvailability, final VoyagePlan vp, final IPortTimesRecord portTimesRecord) {
 		final long startingHeelInM3 = vp.getStartingHeelInM3();
@@ -188,7 +192,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 				if (actualsDataProvider.hasActuals(originalLoad)) {
 					baseFuelUnitPricePerMT = actualsDataProvider.getBaseFuelPricePerMT(originalLoad);
 				} else {
-					baseFuelUnitPricePerMT = vesselAvailability.getVessel().getVesselClass().getBaseFuelUnitPrice();
+					baseFuelUnitPricePerMT = vesselBaseFuelCalculator.getBaseFuelPrice(vesselAvailability.getVessel(), portTimesRecord);
 				}
 
 				voyageCalculator.calculateVoyagePlan(vp, vesselAvailability.getVessel(), startingHeelInM3, baseFuelUnitPricePerMT, portTimesRecord, newSequence);

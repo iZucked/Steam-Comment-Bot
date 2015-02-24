@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2014
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.builder.impl;
@@ -51,6 +51,7 @@ import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.builder.IXYPortDistanceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.DefaultSpotCharterInMarket;
+import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -73,6 +74,7 @@ import com.mmxlabs.scheduler.optimiser.components.IXYPort;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.impl.BaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.impl.Cargo;
 import com.mmxlabs.scheduler.optimiser.components.impl.CargoShortEnd;
 import com.mmxlabs.scheduler.optimiser.components.impl.DefaultVesselAvailability;
@@ -348,7 +350,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		}, "UTC"/* no timezone */, 0, Integer.MAX_VALUE);
 
 		// setup fake vessels for virtual elements.
-		virtualClass = createVesselClass("virtual", 0, 0, Long.MAX_VALUE, 0, 0, 0, 0, 0, 0, 0);
+		virtualClass = createVesselClass("virtual", 0, 0, Long.MAX_VALUE, 0, null, 0, 0, 0, 0);
 	}
 
 	/**
@@ -1194,8 +1196,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	@NonNull
-	public IVesselClass createVesselClass(final String name, final int minSpeed, final int maxSpeed, final long capacityInM3, final long safetyHeelInM3, final int baseFuelUnitPricePerMT,
-			final int baseFuelEquivalenceInM3TOMT, final int pilotLightRate, final int warmupTimeHours, final long cooldownVolumeM3, final int minBaseFuelConsumptionPerDay) {
+	public IVesselClass createVesselClass(final String name, final int minSpeed, final int maxSpeed, final long capacityInM3, final long safetyHeelInM3, final IBaseFuel baseFuel,
+			final int pilotLightRate, final int warmupTimeHours, final long cooldownVolumeM3, final int minBaseFuelConsumptionPerDay) {
 
 		final VesselClass vesselClass = new VesselClass();
 		vesselClass.setName(name);
@@ -1206,18 +1208,24 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vesselClass.setCargoCapacity(capacityInM3);
 		vesselClass.setSafetyHeel(safetyHeelInM3);
 
-		vesselClass.setBaseFuelUnitPrice(baseFuelUnitPricePerMT);
-		vesselClass.setBaseFuelConversionFactor(baseFuelEquivalenceInM3TOMT);
-
 		vesselClass.setWarmupTime(warmupTimeHours);
 		vesselClass.setCooldownVolume(cooldownVolumeM3);
 
 		vesselClass.setPilotLightRate(pilotLightRate);
 		vesselClass.setMinBaseFuelConsumptionInMTPerDay(minBaseFuelConsumptionPerDay);
 
+		vesselClass.setBaseFuel(baseFuel);
 		vesselClasses.add(vesselClass);
 
 		return vesselClass;
+	}
+	
+	@Override
+	@NonNull
+	public IBaseFuel createBaseFuel(final String name, final int equivalenceFactor) {
+		final BaseFuel baseFuel = new BaseFuel(name);
+		baseFuel.setEquivalenceFactor(equivalenceFactor);
+		return baseFuel;
 	}
 
 	/**

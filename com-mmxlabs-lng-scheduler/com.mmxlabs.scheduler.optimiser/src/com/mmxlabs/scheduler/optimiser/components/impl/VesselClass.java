@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2014
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.components.impl;
 import java.util.EnumMap;
 
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
@@ -25,8 +26,6 @@ public final class VesselClass implements IVesselClass {
 	private int maxSpeed;
 
 	private final EnumMap<VesselState, Integer> serviceSpeed = new EnumMap<VesselState, Integer>(VesselState.class);
-
-	private int baseFuelUnitPrice;
 
 	private int baseFuelConversionFactor;
 
@@ -58,6 +57,8 @@ public final class VesselClass implements IVesselClass {
 	 */
 	private int warmupTime;
 
+	private IBaseFuel baseFuel = null;
+	
 	@Override
 	public String getName() {
 		return name;
@@ -167,23 +168,14 @@ public final class VesselClass implements IVesselClass {
 		consumptionRate.put(vesselState, calc);
 	}
 
-	@Override
-	public int getBaseFuelUnitPrice() {
-		return baseFuelUnitPrice;
-	}
-
-	public void setBaseFuelUnitPrice(final int baseFuelUnitPrice) {
-		this.baseFuelUnitPrice = baseFuelUnitPrice;
-	}
-
-	@Override
-	public int getBaseFuelConversionFactor() {
-		return baseFuelConversionFactor;
-	}
-
-	public void setBaseFuelConversionFactor(final int baseFuelConversionFactor) {
-		this.baseFuelConversionFactor = baseFuelConversionFactor;
-	}
+//	@Override
+//	public int getBaseFuelConversionFactor() {
+//		return baseFuelConversionFactor;
+//	}
+//
+//	public void setBaseFuelConversionFactor(final int baseFuelConversionFactor) {
+//		this.baseFuelConversionFactor = baseFuelConversionFactor;
+//	}
 
 	@Override
 	public final long getPilotLightRate() {
@@ -228,5 +220,15 @@ public final class VesselClass implements IVesselClass {
 
 	public void setMinBaseFuelConsumptionInMTPerDay(final int minBaseFuelConsumptionInMTPerDay) {
 		this.minBaseFuelConsumptionInMTPerDay = minBaseFuelConsumptionInMTPerDay;
+	}
+
+	@Override
+	public IBaseFuel getBaseFuel() {
+		return baseFuel;
+	}
+	
+	@Override
+	public void setBaseFuel(IBaseFuel bf) {
+		baseFuel = bf;
 	}
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2014
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
@@ -86,6 +86,12 @@ public class CheckingVPO implements IVoyagePlanOptimiser {
 	public void setVessel(final IVessel vessel, final IResource resource, final int baseFuelPricePerMT) {
 		delegate.setVessel(vessel, resource, baseFuelPricePerMT);
 		reference.setVessel(vessel, resource, baseFuelPricePerMT);
+	}
+
+	@Override
+	public void setBaseFuelPricePerMT(int baseFuelPricePerMT) {
+		delegate.setBaseFuelPricePerMT(baseFuelPricePerMT);
+		reference.setBaseFuelPricePerMT(baseFuelPricePerMT);
 	}
 
 	@Override

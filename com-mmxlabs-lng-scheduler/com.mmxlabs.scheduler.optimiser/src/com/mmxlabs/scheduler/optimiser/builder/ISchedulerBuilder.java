@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2014
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
 /**
@@ -25,6 +25,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -95,7 +96,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed, long capacity, long safetyHeel, int baseFuelUnitPrice, int baseFuelEquivalenceInM3TOMT, int pilotLightRate,
+	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed, long capacity, long safetyHeel, IBaseFuel baseFuel, int pilotLightRate,
 			int warmupTimeInHours, long cooldownVolumeInM3, int minBaseFuelConsumptionPerDay);
 
 	/**
@@ -129,6 +130,14 @@ public interface ISchedulerBuilder {
 	 */
 	void setVesselClassPortTypeParameters(@NonNull IVesselClass vc, PortType portType, int inPortConsumptionRateInMTPerDay);
 
+	/**
+	 * Create a base fuel
+	 * @param name
+	 * @param equivalenceFactor
+	 * @return
+	 */
+	IBaseFuel createBaseFuel(String name, int equivalenceFactor);
+	
 	/**
 	 * Create a charter out event
 	 * 

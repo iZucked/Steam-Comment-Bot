@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2014
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
@@ -82,7 +82,13 @@ public interface IVoyagePlanOptimiser {
 	 */
 	void setVessel(@NonNull IVessel vessel, @Nullable IResource resource, int baseFuelPricePerMT);
 
-
+	/**
+	 * Set the base fuel price for the voyage
+	 * 
+	 * @param baseFuelPricePerMT
+	 */
+	void setBaseFuelPricePerMT(int baseFuelPricePerMT);
+	
 	/**
 	 * Once optimised, returns the best {@link VoyagePlan} cost.
 	 * 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2014
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
@@ -240,6 +240,11 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	public void setVessel(final IVessel vessel, final IResource resource, final int baseFuelPricePerMT) {
 		this.vessel = vessel;
 		this.resource = resource;
+		this.baseFuelPricePerMT = baseFuelPricePerMT;
+	}
+
+	@Override
+	public void setBaseFuelPricePerMT(int baseFuelPricePerMT) {
 		this.baseFuelPricePerMT = baseFuelPricePerMT;
 	}
 

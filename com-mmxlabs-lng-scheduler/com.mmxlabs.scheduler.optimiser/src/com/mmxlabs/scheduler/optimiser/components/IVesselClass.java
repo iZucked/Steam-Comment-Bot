@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2014
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.components;
@@ -116,20 +116,6 @@ public interface IVesselClass {
 	long getNBORate(VesselState vesselState);
 
 	/**
-	 * Returns the unit price of base fuel for this vessel class, where the unit is {@link FuelComponent#getDefaultFuelUnit()}
-	 * 
-	 * @return
-	 */
-	int getBaseFuelUnitPrice();
-
-	/**
-	 * Returns the conversion factor to use to convert 1 {@link FuelUnit#M3} of LNG to {@link FuelUnit#MT} equivalence.
-	 * 
-	 * @return
-	 */
-	int getBaseFuelConversionFactor();
-
-	/**
 	 * The time in hours for which these vessels can idle with no heel without the tanks becoming warm and thus requiring a cooldown.
 	 * 
 	 * @return the time to warm up
@@ -151,4 +137,20 @@ public interface IVesselClass {
 	 * @return
 	 */
 	int getMinBaseFuelConsumptionInMTPerDay();
+	
+	/**
+	 * Get the base fuel used by this vessel class.
+	 * 
+	 * @return
+	 */
+	IBaseFuel getBaseFuel();
+	
+	/**
+	 * Set the base fuel used by this vessel class.
+	 * 
+	 * @return
+	 */
+	void setBaseFuel(IBaseFuel baseFuel);
+	
+	
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2014
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
@@ -131,7 +131,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	protected final void calculateRouteAdditionalFuelRequirements(final VoyageOptions options, final VoyageDetails output, final IVesselClass vesselClass, final VesselState vesselState,
 			final int additionalRouteTimeInHours) {
 
-		final int equivalenceFactorMMBTuToMT = vesselClass.getBaseFuelConversionFactor();
+		final int equivalenceFactorMMBTuToMT = vesselClass.getBaseFuel().getEquivalenceFactor();
 
 		final long routeRequiredConsumptionInMT = Calculator.quantityFromRateTime(routeCostProvider.getRouteFuelUsage(options.getRoute(), vesselClass, vesselState), additionalRouteTimeInHours) / 24L;
 		final int cargoCVValue = options.getCargoCVValue();
@@ -228,7 +228,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 	protected final void calculateIdleFuelRequirements(final VoyageOptions options, final VoyageDetails output, final IVesselClass vesselClass, final VesselState vesselState, final int idleTimeInHours) {
 
-		final int equivalenceFactorM3ToMT = vesselClass.getBaseFuelConversionFactor();
+		final int equivalenceFactorM3ToMT = vesselClass.getBaseFuel().getEquivalenceFactor();
 
 		if (!options.isCharterOutIdleTime()) {
 			final long idleNBORateInM3PerDay = vesselClass.getIdleNBORate(vesselState);
@@ -262,7 +262,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	protected final void calculateTravelFuelRequirements(final VoyageOptions options, final VoyageDetails output, final IVesselClass vesselClass, final VesselState vesselState,
 			final int travelTimeInHours, final int speed) {
 
-		final int equivalenceFactorMMBTuToMT = vesselClass.getBaseFuelConversionFactor();
+		final int equivalenceFactorMMBTuToMT = vesselClass.getBaseFuel().getEquivalenceFactor();
 
 		/**
 		 * The number of MT of base fuel or MT-equivalent of LNG required per hour during this journey

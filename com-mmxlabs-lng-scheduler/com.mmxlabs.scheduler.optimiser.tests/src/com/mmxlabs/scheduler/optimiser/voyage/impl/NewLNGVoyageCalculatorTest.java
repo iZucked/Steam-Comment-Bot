@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2014
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
@@ -11,12 +11,14 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.impl.BaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
@@ -855,12 +857,9 @@ public class NewLNGVoyageCalculatorTest {
 
 	@Test
 	public void testCalculateVoyagePlanFuelConsumptions() {
-		final int expectedBasePrice = 99000;
-
 		final IVessel vessel = Mockito.mock(IVessel.class);
 		final IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
-		Mockito.when(vesselClass.getBaseFuelUnitPrice()).thenReturn(expectedBasePrice);
 
 		final PortDetails loadDetails = new PortDetails();
 		loadDetails.setOptions(new PortOptions());
@@ -941,12 +940,9 @@ public class NewLNGVoyageCalculatorTest {
 
 	@Test
 	public void testCalculateCooldownCost_NonLoad() {
-		final int expectedBasePrice = 99000;
-
 		final IVessel vessel = Mockito.mock(IVessel.class);
 		final IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
-		Mockito.when(vesselClass.getBaseFuelUnitPrice()).thenReturn(expectedBasePrice);
 
 		final PortDetails fromPortDetails = new PortDetails();
 		fromPortDetails.setOptions(new PortOptions());
@@ -1011,12 +1007,9 @@ public class NewLNGVoyageCalculatorTest {
 
 	@Test
 	public void testCalculateCooldownCost_Load() {
-		final int expectedBasePrice = 99000;
-
 		final IVessel vessel = Mockito.mock(IVessel.class);
 		final IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
-		Mockito.when(vesselClass.getBaseFuelUnitPrice()).thenReturn(expectedBasePrice);
 
 		final PortDetails fromPortDetails = new PortDetails();
 		fromPortDetails.setOptions(new PortOptions());
@@ -1081,12 +1074,9 @@ public class NewLNGVoyageCalculatorTest {
 
 	@Test
 	public void testCalculateCooldownNotCalled_Load() {
-		final int expectedBasePrice = 99000;
-
 		final IVessel vessel = Mockito.mock(IVessel.class);
 		final IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
-		Mockito.when(vesselClass.getBaseFuelUnitPrice()).thenReturn(expectedBasePrice);
 
 		final PortDetails fromPortDetails = new PortDetails();
 		fromPortDetails.setOptions(new PortOptions());
@@ -1177,7 +1167,9 @@ public class NewLNGVoyageCalculatorTest {
 
 		vesselClass.setName("class-1");
 
-		vesselClass.setBaseFuelConversionFactor(OptimiserUnitConvertor.convertToInternalConversionFactor(45.6));
+		IBaseFuel baseFuel = new BaseFuel("test");
+		baseFuel.setEquivalenceFactor(OptimiserUnitConvertor.convertToInternalConversionFactor(45.6));
+		vesselClass.setBaseFuel(baseFuel);
 
 		// 2 days of boil off
 		vesselClass.setSafetyHeel(OptimiserUnitConvertor.convertToInternalVolume(150 * HEEL_DURATION));
