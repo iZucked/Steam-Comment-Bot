@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * All rights reserved.
+ */
 package com.mmxlabs.models.migration.utils;
 
 import java.util.List;
@@ -36,7 +40,7 @@ public interface EObjectWrapper extends EObject {
 	 * @param name
 	 * @return
 	 */
-	Object getAttrib(String name);
+	<T> T getAttrib(String name);
 
 	/**
 	 * Find the named {@link EAttribute} and return the result at a typed {@link List}.
