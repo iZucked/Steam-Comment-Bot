@@ -203,7 +203,7 @@ public class LNGScenarioTransformer {
 
 	@Inject
 	private IBaseFuelCurveProviderEditor baseFuelCurveProvider;
-	
+
 	/**
 	 * Contains the contract transformers for each known contract type, by the EClass of the contract they transform.
 	 */
@@ -650,7 +650,10 @@ public class LNGScenarioTransformer {
 				continue;
 			}
 			final boolean freeze = assignableElement.isLocked();
-			if (!freeze) {
+			Pair<Boolean, Set<Slot>> containsLockedSlots = checkAndCollectLockedSlots(assignableElement);
+//			Pair<Boolean, Set<Slot>> containsLockedSlots = new Pair<Boolean, Set<Slot>>(false, new HashSet<Slot>());
+			Set<Slot> lockedSlots = containsLockedSlots.getSecond();
+			if (!freeze && !containsLockedSlots.getFirst()) {
 				continue;
 			}
 
@@ -669,13 +672,17 @@ public class LNGScenarioTransformer {
 				IPortSlot prevSlot = null;
 				for (final Slot slot : cargo.getSortedSlots()) {
 					final IPortSlot portSlot = modelEntityMap.getOptimiserObject(slot, IPortSlot.class);
-					// bind slots to vessel
-					builder.freezeSlotToVesselAvailability(portSlot, vesselAvailability);
-					// bind sequencing as well - this forces
-					// previousSlot to come before currentSlot.
-					if (prevSlot != null) {
+					if (freeze || lockedSlots.contains(slot)) {
+						// bind slots to vessel
+						builder.freezeSlotToVesselAvailability(portSlot, vesselAvailability);
+					}
+
+					if ((prevSlot != null) & (freeze || (lockedSlots.contains(slot) && lockedSlots.contains(prevSlot)))) {
+						// bind sequencing as well - this forces
+						// previousSlot to come before currentSlot.
 						builder.constrainSlotAdjacency(prevSlot, portSlot);
 					}
+
 					prevSlot = portSlot;
 				}
 			} else if (assignableElement instanceof VesselEvent) {
@@ -687,6 +694,44 @@ public class LNGScenarioTransformer {
 		}
 	}
 
+	private boolean checkAndLockSlots(AssignableElement assignableElement) {
+		boolean containsLocked = false;
+		if (assignableElement instanceof Cargo) {
+			final Cargo cargo = (Cargo) assignableElement;
+			for (final Slot slot : cargo.getSortedSlots()) {
+				if (cargo.isLocked() || slot.isLocked()) {
+					slot.setLocked(true);
+					containsLocked = true;
+				}
+			}
+		}
+		return containsLocked;
+	}
+
+	private void unlockSlot(Slot slot) {
+		slot.setLocked(false);
+	}
+
+	private Pair<Boolean, Set<Slot>> checkAndCollectLockedSlots(AssignableElement assignableElement) {
+		Pair<Boolean, Set<Slot>> lockedSlots = new Pair<>();
+		lockedSlots.setBoth(false, new HashSet<Slot>());
+
+		if (assignableElement instanceof Cargo) {
+			final Cargo cargo = (Cargo) assignableElement;
+			for (final Slot slot : cargo.getSortedSlots()) {
+				if (slot.getName().equals("N130")) {
+					int i = 0;
+				}
+				if (slot.isLocked()) {
+					lockedSlots.setFirst(true);
+					lockedSlots.getSecond().add(slot);
+				}
+			}
+		}
+		return lockedSlots;
+	}
+
+	//
 	// /**
 	// * Create and associate discount curves
 	// *

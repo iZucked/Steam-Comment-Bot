@@ -109,6 +109,7 @@ public class ScenarioUtils {
 
 		settings.setAnnealingSettings(annealingSettings);
 
+		settings.setSeed(50000);
 		final OptimisationRange range = parametersFactory.createOptimisationRange();
 		settings.setRange(range);
 		return settings;

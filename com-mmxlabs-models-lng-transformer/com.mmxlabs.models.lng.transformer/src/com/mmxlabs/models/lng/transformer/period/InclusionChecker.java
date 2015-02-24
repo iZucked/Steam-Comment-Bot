@@ -65,9 +65,9 @@ public class InclusionChecker {
 			// FOB sales stay fixed. DES purchases, only if divertible
 			
 			final Cargo cargo = (Cargo) object;
-			final EList<Slot> sortedSlots = cargo.getSortedSlots();
-			final Slot firstSlot = sortedSlots.get(0);
-			final Slot lastSlot = sortedSlots.get(sortedSlots.size() - 1);
+			final Pair<Slot, Slot> slots = getFirstAndLastSlots(cargo);
+			final Slot firstSlot = slots.getFirst();
+			final Slot lastSlot = slots.getSecond();
 
 			if (periodRecord.upperCutoff != null) {
 				if (firstSlot.getWindowStartWithSlotOrPortTime().after(periodRecord.upperCutoff)) {
@@ -163,6 +163,13 @@ public class InclusionChecker {
 		}
 
 		return InclusionType.In;
+	}
+	
+	public Pair<Slot, Slot> getFirstAndLastSlots(Cargo cargo) {
+		final EList<Slot> sortedSlots = cargo.getSortedSlots();
+		final Slot firstSlot = sortedSlots.get(0);
+		final Slot lastSlot = sortedSlots.get(sortedSlots.size() - 1);
+		return new Pair<Slot, Slot>(firstSlot, lastSlot);
 	}
 
 }

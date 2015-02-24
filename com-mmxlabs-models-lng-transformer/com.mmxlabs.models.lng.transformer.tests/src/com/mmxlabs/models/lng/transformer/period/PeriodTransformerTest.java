@@ -906,7 +906,7 @@ public class PeriodTransformerTest {
 	}
 
 	@Test
-	public void filterSlotsAndCargoesTest_Cargo2() {
+	public void filterSlotsAndCargoesTest_Cargo2_PartialLock() {
 		final InclusionChecker inclusionChecker = new InclusionChecker();
 
 		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
@@ -959,8 +959,12 @@ public class PeriodTransformerTest {
 		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
 		//
 		// // Check copy flags changed
-		Assert.assertTrue(copyCargo.isLocked());
-		Assert.assertFalse(copyCargo.isAllowRewiring());
+		
+		// This should pass now
+		Assert.assertTrue(copyLoadSlot.isLocked());
+		Assert.assertFalse(copyDischargeSlot.isLocked());
+		Assert.assertTrue(copyCargo.isAllowRewiring());
+		Assert.assertFalse(copyCargo.isLocked());
 	}
 
 	@Test
@@ -1045,7 +1049,7 @@ public class PeriodTransformerTest {
 	}
 
 	@Test
-	public void filterSlotsAndCargoesTest_Cargo4() {
+	public void filterSlotsAndCargoesTest_Cargo4_PartialLock() {
 		final InclusionChecker inclusionChecker = new InclusionChecker();
 
 		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
@@ -1115,8 +1119,8 @@ public class PeriodTransformerTest {
 		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
 		//
 		// // Check copy flags changed
-		Assert.assertTrue(copyCargo.isLocked());
-		Assert.assertFalse(copyCargo.isAllowRewiring());
+		Assert.assertFalse(copyCargo.isLocked());
+		Assert.assertTrue(copyCargo.isAllowRewiring());
 		//
 		// // but not original
 		// Assert.assertFalse(cargo.isLocked());
