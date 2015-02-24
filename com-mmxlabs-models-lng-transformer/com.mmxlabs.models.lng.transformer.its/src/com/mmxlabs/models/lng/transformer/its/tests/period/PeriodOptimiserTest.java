@@ -36,7 +36,7 @@ public class PeriodOptimiserTest {
 	 * Base case - all discharge slots should swap around for best P&L
 	 */
 	@Test
-//	@Ignore("Disabled in 3.5, fix for 3.6")
+	@Ignore("Disabled in 3.5, requires 4-opt-2 fix")
 	public void testSimpleDischargeSwap() {
 		final PeriodOptimiserScenarioTester tester = new PeriodOptimiserScenarioTester();
 
@@ -62,6 +62,7 @@ public class PeriodOptimiserTest {
 	}
 
 	@Test
+	@Ignore("requires 4-opt-2 fix")
 	public void testSimpleDischargeSwapPeriod() throws IOException {
 		final PeriodOptimiserScenarioTester tester = new PeriodOptimiserScenarioTester();
 		
@@ -87,6 +88,7 @@ public class PeriodOptimiserTest {
 	}
 	
 	@Test
+	@Ignore("requires 4-opt-2 fix")
 	public void testSimpleDischargeSwapPeriodMiddleOnly() throws IOException {
 		final PeriodOptimiserScenarioTester tester = new PeriodOptimiserScenarioTester();
 		
@@ -116,6 +118,7 @@ public class PeriodOptimiserTest {
 	 * @throws IOException 
 	 */
 	@Test
+	@Ignore("requires 4-opt-2 fix")
 	public void testSimpleDischargeSwapPeriodMiddleOnlyLoadsLocked() throws IOException {
 		final PeriodOptimiserScenarioTester tester = new PeriodOptimiserScenarioTester();
 		
@@ -145,6 +148,7 @@ public class PeriodOptimiserTest {
 	 * @throws IOException 
 	 */
 	@Test
+	@Ignore("requires 4-opt-2 fix")
 	public void testSimpleDischargeSwapPeriodMiddleOnlyDischargesLocked() throws IOException {
 		final PeriodOptimiserScenarioTester tester = new PeriodOptimiserScenarioTester();
 		tester.cargoA2.getSortedSlots().get(0).setPriceExpression("20.0");
