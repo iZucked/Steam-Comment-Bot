@@ -16,6 +16,7 @@ import com.google.common.collect.Lists;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mmxlabs.common.curves.ConstantValueCurve;
+import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -60,6 +61,7 @@ public class SimpleSchedulerTest {
 	IOptimisationData createProblem(final Injector injector) {
 
 		final SchedulerBuilder builder = injector.getInstance(SchedulerBuilder.class);
+		final IBaseFuelCurveProviderEditor baseFuelCurveProvider = injector.getInstance(IBaseFuelCurveProviderEditor.class);
 
 		final IBaseFuelCurveProviderEditor baseFuCurveProviderEditor = injector.getInstance(IBaseFuelCurveProviderEditor.class);
 
@@ -89,7 +91,12 @@ public class SimpleSchedulerTest {
 		final IBaseFuel baseFuel = builder.createBaseFuel("test", baseFuelEquivalence);
 		baseFuCurveProviderEditor.setBaseFuelCurve(baseFuel, new ConstantValueCurve(7000));
 		final IVesselClass vesselClass1 = builder.createVesselClass("vesselClass-1", 12000, 20000, 150000000, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0);
-
+		
+		// set up basefuel curve
+		final StepwiseIntegerCurve baseFuelCurve = new StepwiseIntegerCurve();
+		baseFuelCurve.setValueAfter(0, 7000);
+		baseFuelCurveProvider.setBaseFuelCurve(baseFuel, baseFuelCurve);
+		
 		builder.setVesselClassStateParameters(vesselClass1, VesselState.Laden, OptimiserUnitConvertor.convertToInternalDailyRate(150), OptimiserUnitConvertor.convertToInternalDailyRate(100),
 				OptimiserUnitConvertor.convertToInternalDailyRate(10), consumptionCalculator, 0);
 		builder.setVesselClassStateParameters(vesselClass1, VesselState.Ballast, OptimiserUnitConvertor.convertToInternalDailyRate(150), OptimiserUnitConvertor.convertToInternalDailyRate(100),
