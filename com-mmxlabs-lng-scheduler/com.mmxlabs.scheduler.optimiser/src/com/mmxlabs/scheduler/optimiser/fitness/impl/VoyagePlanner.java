@@ -104,7 +104,7 @@ public class VoyagePlanner {
 
 	@Inject
 	private ICharterRateCalculator charterRateCalculator;
-	
+
 	@Inject
 	private IVesselBaseFuelCalculator vesselBaseFuelCalculator;
 
@@ -276,7 +276,7 @@ public class VoyagePlanner {
 	 * @param arrivalTimes
 	 * @return
 	 */
-	final public List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IAllocationAnnotation>> makeVoyagePlans(final IResource resource, final ISequence sequence, final int[] arrivalTimes) {
+	final public List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> makeVoyagePlans(final IResource resource, final ISequence sequence, final int[] arrivalTimes) {
 
 		// TODO: Handle FOB/DES cargoes also
 
@@ -288,7 +288,7 @@ public class VoyagePlanner {
 
 		final boolean isShortsSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
 
-		final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IAllocationAnnotation>> voyagePlansMap = new LinkedList<>();
+		final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlansMap = new LinkedList<>();
 		final List<VoyagePlan> voyagePlansList = new LinkedList<>();
 
 		final List<IOptionsSequenceElement> voyageOrPortOptions = new ArrayList<IOptionsSequenceElement>(5);
@@ -456,6 +456,18 @@ public class VoyagePlanner {
 
 		// Populate final plan details
 		if (voyageOrPortOptions.size() > 1) {
+
+			{
+				final int idx = arrivalTimes.length - 1;
+				if (isShortsSequence && prevPortSlot != null && prevPortSlot.getPortType() == PortType.Short_Cargo_End) {
+					// FIXME
+					// int shortCargoReturnArrivalTime = arrivalTimes[idx - 1] + prevVisitDuration + availableTime;
+					// portTimesRecord.setReturnSlotTime(prevPrevPortSlot, shortCargoReturnArrivalTime);
+				} else {
+					portTimesRecord.setReturnSlotTime(prevPortSlot, arrivalTimes[idx]);
+				}
+			}
+
 			if (actualsDataProvider.hasActuals(prevPrevPortSlot)) {
 				heelVolumeInM3 = generateActualsVoyagePlan(vesselAvailability, vesselStartTime, voyagePlansMap, voyagePlansList, voyageOrPortOptions, portTimesRecord, heelVolumeInM3);
 				assert heelVolumeInM3 >= 0;
@@ -489,7 +501,7 @@ public class VoyagePlanner {
 	}
 
 	private long generateActualsVoyagePlan(final IVesselAvailability vesselAvailability, final int vesselStartTime,
-			final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IAllocationAnnotation>> voyagePlansMap, final List<VoyagePlan> voyagePlansList,
+			final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlansMap, final List<VoyagePlan> voyagePlansList,
 			final List<IOptionsSequenceElement> voyageOrPortOptions, final IPortTimesRecord portTimesRecord, final long startHeelVolumeInM3) {
 		final Map<IPortSlot, IHeelLevelAnnotation> heelLevelAnnotations = new HashMap<IPortSlot, IHeelLevelAnnotation>();
 
@@ -694,14 +706,15 @@ public class VoyagePlanner {
 		// Sanity check
 		assert plan.getRemainingHeelInM3() == allocationAnnotation.getRemainingHeelVolumeInM3();
 
-		voyagePlansMap.add(new Triple<>(plan, heelLevelAnnotations, allocationAnnotation));
+		final IPortTimesRecord rec = allocationAnnotation == null ? portTimesRecord : allocationAnnotation;
+		voyagePlansMap.add(new Triple<>(plan, heelLevelAnnotations, rec));
 
 		return plan.getRemainingHeelInM3();
 	}
 
 	// TODO: Better naming?
 	private long evaluateVoyagePlan(final IVesselAvailability vesselAvailability, final int vesselStartTime,
-			final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IAllocationAnnotation>> voyagePlansMap, final List<VoyagePlan> voyagePlansList, final IPortTimesRecord portTimesRecord,
+			final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlansMap, final List<VoyagePlan> voyagePlansList, final IPortTimesRecord portTimesRecord,
 			final long startHeelVolumeInM3, final VoyagePlan originalPlan) {
 
 		// Take a copy so we can retain isIgnoreEnd flag later on
@@ -840,7 +853,9 @@ public class VoyagePlanner {
 
 		// Ensure this flag is copied across!
 		plan.setIgnoreEnd(originalPlan.isIgnoreEnd());
-		voyagePlansMap.add(new Triple<>(plan, heelLevelAnnotations, allocationAnnotation));
+
+		final IPortTimesRecord rec = allocationAnnotation == null ? portTimesRecord : allocationAnnotation;
+		voyagePlansMap.add(new Triple<>(plan, heelLevelAnnotations, rec));
 
 		return endHeelVolumeInM3;
 
@@ -920,7 +935,7 @@ public class VoyagePlanner {
 			final int visitDuration = portTimesRecord.getSlotDuration(thisPortSlot);
 
 			// This fails with dry docks as portsTimesRecord doesn't store duration for this event
-//			assert visitDuration == durationsProvider.getElementDuration(element, resource);
+			// assert visitDuration == durationsProvider.getElementDuration(element, resource);
 
 			final PortOptions portOptions = new PortOptions();
 			portOptions.setVisitDuration(visitDuration);
@@ -962,7 +977,7 @@ public class VoyagePlanner {
 			}
 		}
 	}
-	
+
 	/**
 	 * Returns a VoyagePlan produced by the optimiser from a cargo itinerary.
 	 * 
@@ -1017,7 +1032,6 @@ public class VoyagePlanner {
 			final VoyageDetails lastVoyage = (VoyageDetails) vpSequence[vpSequence.length - 2];
 			if (lastVoyage.getOptions().getToPortSlot().getPortType() == PortType.End) {
 				// New arrival time = Previous element arrival time + visit duration + travel time + idle time.
-
 				final IPortSlot fromSlot = lastVoyage.getOptions().getFromPortSlot();
 				final int newTime = portTimesRecord.getSlotTime(fromSlot) + portTimesRecord.getSlotDuration(fromSlot) + lastVoyage.getTravelTime() + lastVoyage.getIdleTime();
 				portTimesRecord.setSlotTime(portTimesRecord.getReturnSlot(), newTime);

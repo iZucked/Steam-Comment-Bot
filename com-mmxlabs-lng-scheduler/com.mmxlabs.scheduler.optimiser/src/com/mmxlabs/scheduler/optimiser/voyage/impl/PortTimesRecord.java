@@ -66,6 +66,7 @@ public class PortTimesRecord implements IPortTimesRecord {
 	public PortTimesRecord(final IPortTimesRecord other) {
 		final IPortSlot otherReturnSlot = other.getReturnSlot();
 		for (final IPortSlot slot : other.getSlots()) {
+			assert (slot != null);
 			if (otherReturnSlot == slot) {
 				this.setReturnSlotTime(slot, other.getSlotTime(slot));
 			} else {
@@ -100,6 +101,7 @@ public class PortTimesRecord implements IPortTimesRecord {
 	}
 
 	private SlotVoyageRecord getOrCreateSlotRecord(final IPortSlot slot) {
+		assert slot != null;
 		SlotVoyageRecord allocation = slotRecords.get(slot);
 		if (allocation == null) {
 			allocation = new SlotVoyageRecord();
@@ -120,6 +122,8 @@ public class PortTimesRecord implements IPortTimesRecord {
 
 	public void setReturnSlotTime(final IPortSlot slot, final int time) {
 		setSlotTime(slot, time);
+		// Return slot should not be in list
+		slots.remove(slot);
 		this.returnSlot = slot;
 	}
 
@@ -149,7 +153,9 @@ public class PortTimesRecord implements IPortTimesRecord {
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj instanceof PortTimesRecord) {
+		if (obj == this) {
+			return true;
+		} else if (obj instanceof PortTimesRecord) {
 			final PortTimesRecord other = (PortTimesRecord) obj;
 			return slotRecords.equals(other.slotRecords);
 		}

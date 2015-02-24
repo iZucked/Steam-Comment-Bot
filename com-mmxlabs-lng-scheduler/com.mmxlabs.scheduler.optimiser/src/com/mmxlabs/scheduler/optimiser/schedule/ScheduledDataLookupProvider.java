@@ -7,17 +7,15 @@ package com.mmxlabs.scheduler.optimiser.schedule;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.inject.Inject;
-import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.optimiser.core.ISequence;
-import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.optimiser.core.ISequences;
+import javax.inject.Inject;
+
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
-import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -27,114 +25,87 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  * NOT THREAD SAFE
  * 
- * TODO: This should be rolled into the core API more directly - i.e. not useful until volume allocation has run, evaluators can cause data to be invalid etc...
- * TODO: Build cache into the {@link ScheduledSequences} API
+ * TODO: This should be rolled into the core API more directly - i.e. not useful until volume allocation has run, evaluators can cause data to be invalid etc... TODO: Build cache into the
+ * {@link ScheduledSequences} API
  * 
  * @author Simon Goodall
  * 
  */
 public class ScheduledDataLookupProvider {
-
 	@Inject
 	private IVesselProvider vesselProvider;
 
-	@Inject
-	private IPortSlotProvider portSlotProvider;
-
 	private ScheduledSequences currentScheduledSequences;
-	private ISequences currentSequences;
 
-	private final Map<IPortSlot, VoyagePlan> slotToVoyagePlanCache = new HashMap<>();
-	private final Map<IPortSlot, IVesselAvailability> slotToVesselCache = new HashMap<>();
-	private final Map<IPortSlot, IAllocationAnnotation> slotToAllocationAnnotationCache = new HashMap<>();
-	private final Map<IPortSlot, Integer> slotToVesselStartTimeCache = new HashMap<>();
-	private final Map<IPortSlot, Integer> slotToArrivalTimeCache = new HashMap<>();
+	private final Map<IPortSlot, ScheduledSequence> slotToSequenceCache = new HashMap<>();
 
 	private boolean dirty = false;
 
-	/**
-	 * Analyses the {@link ScheduledSequences} object for volume allocations (note this must be run after the volume allocator has completed) and records the data required for USS calculations. This
-	 * 
-	 * @return
-	 */
 	private void buildCache() {
 
-		assert currentSequences != null;
 		assert currentScheduledSequences != null;
 
-		slotToVesselCache.clear();
-		slotToAllocationAnnotationCache.clear();
-		slotToVesselStartTimeCache.clear();
-		slotToVesselCache.clear();
-		slotToVoyagePlanCache.clear();
-		for (final Map.Entry<VoyagePlan, IAllocationAnnotation> e : currentScheduledSequences.getAllocations().entrySet()) {
-			final VoyagePlan vp = e.getKey();
-			final IAllocationAnnotation aa = e.getValue();
-			for (final IPortSlot slot : aa.getSlots()) {
-				slotToVoyagePlanCache.put(slot, vp);
-				slotToAllocationAnnotationCache.put(slot, aa);
-			}
-		}
+		slotToSequenceCache.clear();
 
 		for (final ScheduledSequence scheduledSequence : currentScheduledSequences) {
-
-			final IResource resource = scheduledSequence.getResource();
-			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-			final ISequence sequence = currentSequences.getSequence(resource);
-
-			int[] arrivalTimes = scheduledSequence.getArrivalTimes();
-			final int vesselStartTime = scheduledSequence.getStartTime();
-			int idx = 0;
-			for (final ISequenceElement element : sequence) {
-				final IPortSlot slot = portSlotProvider.getPortSlot(element);
-				if (slot != null) {
-					slotToVesselCache.put(slot, vesselAvailability);
-					slotToVesselStartTimeCache.put(slot, vesselStartTime);
-					slotToArrivalTimeCache.put(slot, arrivalTimes[idx]);
-				}
-				++idx;
+			for (final IPortSlot portSlot : scheduledSequence.getSequenceSlots()) {
+				slotToSequenceCache.put(portSlot, scheduledSequence);
 			}
 		}
 
 		dirty = false;
 	}
 
-	public void setInputs(final ISequences sequences, final ScheduledSequences scheduledSequences) {
+	public void setInputs(final ScheduledSequences scheduledSequences) {
 
-		this.currentSequences = sequences;
 		this.currentScheduledSequences = scheduledSequences;
 
 		this.dirty = true;
 	}
 
-	public VoyagePlan getVoyagePlan(final IPortSlot portSlot) {
+	@Nullable
+	public ScheduledSequence getScheduledSequence(final IPortSlot portSlot) {
 		if (dirty) {
 			buildCache();
 		}
-		return slotToVoyagePlanCache.get(portSlot);
+		return slotToSequenceCache.get(portSlot);
+	}
+
+	public VoyagePlan getVoyagePlan(final IPortSlot portSlot) {
+
+		final ScheduledSequence scheduledSequence = getScheduledSequence(portSlot);
+		if (scheduledSequence != null) {
+			return scheduledSequence.getVoyagePlan(portSlot);
+		}
+
+		return null;
 	}
 
 	public IVesselAvailability getVesselAvailability(final IPortSlot portSlot) {
 
-		if (dirty) {
-			buildCache();
+		final ScheduledSequence scheduledSequence = getScheduledSequence(portSlot);
+		if (scheduledSequence != null) {
+			return vesselProvider.getVesselAvailability(scheduledSequence.getResource());
 		}
-		return slotToVesselCache.get(portSlot);
+
+		return null;
 	}
 
 	public Integer getVesselStartTime(final IPortSlot portSlot) {
-		if (dirty) {
-			buildCache();
+		final ScheduledSequence scheduledSequence = getScheduledSequence(portSlot);
+		if (scheduledSequence != null) {
+			return scheduledSequence.getStartTime();
 		}
-		return slotToVesselStartTimeCache.get(portSlot);
+		return null;
 	}
 
 	public IAllocationAnnotation getAllocationAnnotation(final IPortSlot portSlot) {
 
-		if (dirty) {
-			buildCache();
+		final ScheduledSequence scheduledSequence = getScheduledSequence(portSlot);
+		if (scheduledSequence != null) {
+			return scheduledSequence.getAllocationAnnotation(portSlot);
 		}
-		return slotToAllocationAnnotationCache.get(portSlot);
+		return null;
 	}
 
 	/**
@@ -143,11 +114,6 @@ public class ScheduledDataLookupProvider {
 	public void reset() {
 		dirty = false;
 
-		slotToVesselCache.clear();
-		slotToAllocationAnnotationCache.clear();
-		slotToVesselStartTimeCache.clear();
-		slotToVesselCache.clear();
-		slotToVoyagePlanCache.clear();
+		slotToSequenceCache.clear();
 	}
-
 }

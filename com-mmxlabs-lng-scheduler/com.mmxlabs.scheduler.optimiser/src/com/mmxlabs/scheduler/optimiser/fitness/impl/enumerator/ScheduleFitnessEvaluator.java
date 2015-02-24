@@ -25,9 +25,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public class ScheduleFitnessEvaluator {
 
-	@Inject
-	private VoyagePlanIterator vpIterator;
-
 	private Collection<ICargoSchedulerFitnessComponent> fitnessComponents;
 
 	public long evaluateSchedule(final ISequences sequences, final ScheduledSequences scheduledSequences) {
@@ -35,7 +32,7 @@ public class ScheduleFitnessEvaluator {
 		// Evaluate fitness components
 		final long[] fitnesses = new long[fitnessComponents.size()];
 
-		if (!iterateSchedulerComponents(vpIterator, fitnessComponents, scheduledSequences, sequences.getUnusedElements(), fitnesses)) {
+		if (!iterateSchedulerComponents(fitnessComponents, scheduledSequences, sequences.getUnusedElements(), fitnesses)) {
 			return Long.MAX_VALUE;
 		}
 
@@ -69,14 +66,14 @@ public class ScheduleFitnessEvaluator {
 	 *            output parameter containing fitnesses, in the order the iterator provides the components
 	 * @return
 	 */
-	private static boolean iterateSchedulerComponents(final VoyagePlanIterator vpItr, final Iterable<ICargoSchedulerFitnessComponent> components, final ScheduledSequences scheduledSequences,
-			List<ISequenceElement> unusedElements, final long[] fitnesses) {
+	private static boolean iterateSchedulerComponents(final Iterable<ICargoSchedulerFitnessComponent> components, final ScheduledSequences scheduledSequences, List<ISequenceElement> unusedElements,
+			final long[] fitnesses) {
 		for (final ICargoSchedulerFitnessComponent component : components) {
 			component.startEvaluation(scheduledSequences);
 		}
 
 		for (final ScheduledSequence sequence : scheduledSequences) {
-			if (!iterateSchedulerComponents(vpItr, components, sequence)) {
+			if (!iterateSchedulerComponents(components, sequence)) {
 				return false;
 			}
 		}
@@ -99,17 +96,16 @@ public class ScheduleFitnessEvaluator {
 	 * Iterate through the given sequence, with the given components. Assumes start/end evaluation process has been done.
 	 * 
 	 * @param components
-	 * @param sequence
+	 * @param scheduledSequence
 	 * @return
 	 */
-	private static boolean iterateSchedulerComponents(final VoyagePlanIterator vpItr, final Iterable<ICargoSchedulerFitnessComponent> components, final ScheduledSequence sequence) {
+	private static boolean iterateSchedulerComponents(final Iterable<ICargoSchedulerFitnessComponent> components, final ScheduledSequence scheduledSequence) {
 
-		
+		final VoyagePlanIterator vpItr = new VoyagePlanIterator(scheduledSequence);
+
 		for (final ICargoSchedulerFitnessComponent component : components) {
-			component.startSequence(sequence.getResource());
+			component.startSequence(scheduledSequence.getResource());
 		}
-
-		vpItr.setVoyagePlans(sequence.getResource(), sequence.getVoyagePlans(), sequence.getArrivalTimes());
 
 		if (vpItr.hasNextObject()) {
 			final Object obj = vpItr.nextObject();
@@ -125,7 +121,7 @@ public class ScheduleFitnessEvaluator {
 				}
 			}
 		}
-		
+
 		while (vpItr.hasNextObject()) {
 			if (vpItr.nextObjectIsStartOfPlan()) {
 				final Object obj = vpItr.nextObject();

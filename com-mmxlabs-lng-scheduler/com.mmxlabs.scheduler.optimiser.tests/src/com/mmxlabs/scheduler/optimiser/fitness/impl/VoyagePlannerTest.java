@@ -13,7 +13,6 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Matchers;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import com.google.inject.AbstractModule;
@@ -54,7 +53,6 @@ import com.mmxlabs.scheduler.optimiser.components.impl.Vessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselStartDateCharterRateCalculator;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -69,6 +67,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortSlotEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortTypeEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -325,7 +324,7 @@ public final class VoyagePlannerTest {
 
 		// Schedule sequence
 		// final LinkedHashMap<VoyagePlan, IAllocationAnnotation> plans =
-		final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IAllocationAnnotation>> plans = planner.makeVoyagePlans(resource, sequence, arrivalTimes);
+		final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> plans = planner.makeVoyagePlans(resource, sequence, arrivalTimes);
 		//
 		// Rely upon objects equals() methods to aid JMock equal(..) case
 		Mockito.verify(voyagePlanOptimiser).setVessel(vessel, resource, 0);
@@ -573,7 +572,7 @@ public final class VoyagePlannerTest {
 		final int[] arrivalTimes = new int[] { 5, 10, 15 };
 
 		// Schedule sequence
-		final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IAllocationAnnotation>> voyagePlans = planner.makeVoyagePlans(resource, sequence, arrivalTimes);
+		final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlans = planner.makeVoyagePlans(resource, sequence, arrivalTimes);
 
 		// Rely upon objects equals() methods to aid JMock equal(..) case
 		Mockito.verify(voyagePlanOptimiser).setVessel(vessel, resource, 0);

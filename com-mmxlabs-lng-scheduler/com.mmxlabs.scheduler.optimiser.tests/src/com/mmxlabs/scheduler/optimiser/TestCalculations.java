@@ -78,6 +78,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -101,7 +102,7 @@ public class TestCalculations {
 	public void testCalculations1() {
 		final IVolumeAllocator volumeAllocator = Mockito.mock(IVolumeAllocator.class);
 		final Injector injector = createTestInjector(volumeAllocator);
-		IVesselBaseFuelCalculator v = injector.getInstance(IVesselBaseFuelCalculator.class);
+		final IVesselBaseFuelCalculator v = injector.getInstance(IVesselBaseFuelCalculator.class);
 
 		final SchedulerBuilder builder = injector.getInstance(SchedulerBuilder.class);
 
@@ -171,17 +172,39 @@ public class TestCalculations {
 		final IResource resource = vesselProvider.getResource(vesselAvailability1);
 
 		final ISequenceElement startElement = startEndProvider.getStartElement(resource);
+		assert startElement != null;
 		final ISequenceElement endElement = startEndProvider.getEndElement(resource);
+		assert endElement != null;
 
 		final ISequenceElement dischargeElement = portSlotProvider.getElement(dischargeSlot);
+		assert dischargeElement != null;
 		final ISequenceElement loadElement = portSlotProvider.getElement(loadSlot);
+		assert loadElement != null;
 		final List<ISequenceElement> sequenceList = CollectionsUtil.makeArrayList(startElement, loadElement, dischargeElement, endElement);
 
 		final ISequence sequence = new ListSequence(sequenceList);
 
 		final IAllocationAnnotation allocationAnnotation = Mockito.mock(IAllocationAnnotation.class);
-		Mockito.when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> any()))
-				.thenReturn(allocationAnnotation);
+		{
+			final PortTimesRecord expectedPTR = new PortTimesRecord();
+			expectedPTR.setSlotTime(loadSlot, 25);
+			expectedPTR.setSlotTime(dischargeSlot, 50);
+			expectedPTR.setSlotDuration(loadSlot, 1);
+			expectedPTR.setSlotDuration(dischargeSlot, 1);
+			expectedPTR.setReturnSlotTime(portSlotProvider.getPortSlot(endElement), 75);
+
+			Mockito.when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> eq(expectedPTR))).thenReturn(
+					allocationAnnotation);
+		}
+
+		Mockito.when(allocationAnnotation.getSlotTime(loadSlot)).thenReturn(25);
+		Mockito.when(allocationAnnotation.getSlotDuration(loadSlot)).thenReturn(1);
+
+		Mockito.when(allocationAnnotation.getSlotTime(dischargeSlot)).thenReturn(50);
+		Mockito.when(allocationAnnotation.getSlotDuration(dischargeSlot)).thenReturn(1);
+
+		Mockito.when(allocationAnnotation.getSlotTime(portSlotProvider.getPortSlot(endElement))).thenReturn(75);
+
 		Mockito.when(allocationAnnotation.getRemainingHeelVolumeInM3()).thenReturn(0L);
 		// Load enough to cover boil-off
 		Mockito.when(allocationAnnotation.getSlotVolumeInM3(loadSlot)).thenReturn(2200L);
@@ -595,8 +618,26 @@ public class TestCalculations {
 		final ISequences sequences = new Sequences(Collections.singletonList(resource), CollectionsUtil.<IResource, ISequence> makeHashMap(resource, sequence));
 
 		final IAllocationAnnotation allocationAnnotation = Mockito.mock(IAllocationAnnotation.class);
-		Mockito.when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> any()))
-				.thenReturn(allocationAnnotation);
+		{
+			final PortTimesRecord expectedPTR = new PortTimesRecord();
+			expectedPTR.setSlotTime(loadSlot, 25);
+			expectedPTR.setSlotTime(dischargeSlot, 50);
+			expectedPTR.setSlotDuration(loadSlot, 1);
+			expectedPTR.setSlotDuration(dischargeSlot, 1);
+			expectedPTR.setReturnSlotTime(portSlotProvider.getPortSlot(endElement), 75);
+
+			Mockito.when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> eq(expectedPTR))).thenReturn(
+					allocationAnnotation);
+		}
+
+		Mockito.when(allocationAnnotation.getSlotTime(loadSlot)).thenReturn(25);
+		Mockito.when(allocationAnnotation.getSlotDuration(loadSlot)).thenReturn(1);
+
+		Mockito.when(allocationAnnotation.getSlotTime(dischargeSlot)).thenReturn(50);
+		Mockito.when(allocationAnnotation.getSlotDuration(dischargeSlot)).thenReturn(1);
+
+		Mockito.when(allocationAnnotation.getSlotTime(portSlotProvider.getPortSlot(endElement))).thenReturn(75);
+
 		Mockito.when(allocationAnnotation.getRemainingHeelVolumeInM3()).thenReturn(0L);
 		// Load enough to cover boil-off
 		Mockito.when(allocationAnnotation.getSlotVolumeInM3(loadSlot)).thenReturn(3300L);
@@ -935,7 +976,7 @@ public class TestCalculations {
 		final int minSpeed = 16000;
 		final int maxSpeed = 20000;
 		final int capacity = 150000000;
-		
+
 		// 2 / 4 == 0.5 equivalence
 		final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(2.0);
 		final int baseFuelEquivalence = OptimiserUnitConvertor.convertToInternalConversionFactor(4);
@@ -1007,8 +1048,26 @@ public class TestCalculations {
 		final ISequence sequence = new ListSequence(sequenceList);
 
 		final IAllocationAnnotation allocationAnnotation = Mockito.mock(IAllocationAnnotation.class);
-		Mockito.when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> any()))
-				.thenReturn(allocationAnnotation);
+		{
+			final PortTimesRecord expectedPTR = new PortTimesRecord();
+			expectedPTR.setSlotTime(loadSlot, 25);
+			expectedPTR.setSlotTime(dischargeSlot, 50);
+			expectedPTR.setSlotDuration(loadSlot, 1);
+			expectedPTR.setSlotDuration(dischargeSlot, 1);
+			expectedPTR.setReturnSlotTime(portSlotProvider.getPortSlot(endElement), 75);
+
+			Mockito.when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> eq(expectedPTR))).thenReturn(
+					allocationAnnotation);
+		}
+
+		Mockito.when(allocationAnnotation.getSlotTime(loadSlot)).thenReturn(25);
+		Mockito.when(allocationAnnotation.getSlotDuration(loadSlot)).thenReturn(1);
+
+		Mockito.when(allocationAnnotation.getSlotTime(dischargeSlot)).thenReturn(50);
+		Mockito.when(allocationAnnotation.getSlotDuration(dischargeSlot)).thenReturn(1);
+
+		Mockito.when(allocationAnnotation.getSlotTime(portSlotProvider.getPortSlot(endElement))).thenReturn(75);
+
 		Mockito.when(allocationAnnotation.getRemainingHeelVolumeInM3()).thenReturn(0L);
 		// Load enough to cover boil-off
 		Mockito.when(allocationAnnotation.getSlotVolumeInM3(loadSlot)).thenReturn(1150L);
@@ -1348,7 +1407,6 @@ public class TestCalculations {
 		final Injector injector = Guice.createInjector(new DataComponentProviderModule(), new AbstractModule() {
 			@Override
 			protected void configure() {
-				bind(VoyagePlanIterator.class);
 				bind(VoyagePlanAnnotator.class);
 				bind(VoyagePlanner.class);
 				bind(ScheduleCalculator.class);
@@ -1357,7 +1415,7 @@ public class TestCalculations {
 				bind(SchedulerBuilder.class);
 				bind(ILNGVoyageCalculator.class).to(LNGVoyageCalculator.class);
 				bind(IVoyagePlanOptimiser.class).to(VoyagePlanOptimiser.class);
-				
+
 				bind(IVesselBaseFuelCalculator.class).to(VesselBaseFuelCalculator.class);
 				final VesselBaseFuelCalculator baseFuelCalculator = Mockito.mock(VesselBaseFuelCalculator.class);
 				Mockito.when(baseFuelCalculator.getBaseFuelPrice(Mockito.any(IVessel.class), Mockito.any(IPortTimesRecord.class))).thenReturn(baseFuelUnitPrice);
@@ -1369,7 +1427,7 @@ public class TestCalculations {
 		});
 		return injector;
 	}
-	
+
 	private Injector createTestInjector(final IVolumeAllocator volumeAllocator) {
 		return createTestInjector(volumeAllocator, OptimiserUnitConvertor.convertToInternalPrice(400));
 	}

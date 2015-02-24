@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.voyage.impl;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,11 +15,14 @@ import org.mockito.Mockito;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -29,6 +33,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;
 import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -37,6 +42,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortSlotEditor;
 import com.mmxlabs.scheduler.optimiser.schedule.VoyagePlanAnnotator;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 public class VoyagePlanAnnotatorTest {
 
@@ -162,20 +168,34 @@ public class VoyagePlanAnnotatorTest {
 
 		final VoyagePlan plan1 = new VoyagePlan();
 		plan1.setSequence(new IDetailsSequenceElement[] { loadDetails1, voyageDetails1, dischargeDetails1, voyageDetails2, loadDetails2 });
+		PortTimesRecord portTimesRecord1 = new PortTimesRecord();
+		portTimesRecord1.setSlotTime(loadSlot1, 0);
+		portTimesRecord1.setSlotTime(dischargeSlot1, 100);
+		portTimesRecord1.setSlotDuration(loadSlot1, loadVisitDuration1);
+		portTimesRecord1.setSlotDuration(dischargeSlot1, dischargeVisitDuration1);
+		portTimesRecord1.setReturnSlotTime(loadSlot2, 200);
+		plan1.setIgnoreEnd(true);
 
 		final VoyagePlan plan2 = new VoyagePlan();
 		plan2.setSequence(new IDetailsSequenceElement[] { loadDetails2, voyageDetails3, dischargeDetails2 });
+		PortTimesRecord portTimesRecord2 = new PortTimesRecord();
+		portTimesRecord2.setSlotTime(loadSlot2, 200);
+		portTimesRecord2.setSlotTime(dischargeSlot2, 300);
+		portTimesRecord2.setSlotDuration(loadSlot2, loadVisitDuration2);
+		portTimesRecord2.setSlotDuration(dischargeSlot2, dischargeVisitDuration2);
+		plan2.setIgnoreEnd(false);
 
-		final List<VoyagePlan> plans = new LinkedList<VoyagePlan>();
-		plans.add(plan1);
-		plans.add(plan2);
+		final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> plans = new LinkedList<>();
+		plans.add(new Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>(plan1, null, portTimesRecord1));
+		plans.add(new Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>(plan2, null, portTimesRecord2));
 
 		final IResource resource = Mockito.mock(IResource.class);
 		Mockito.when(vesselProvider.getVesselAvailability(resource)).thenReturn(vesselAvailability);
 
 		final AnnotatedSolution annotatedSolution = new AnnotatedSolution();
-		final int[] expectedArrivalTimes = new int[] { 0, 100, 200, 310 };
-		annotator.annotateFromVoyagePlan(resource, plans, annotatedSolution, expectedArrivalTimes);
+		ISequence sequence = Mockito.mock(ISequence.class);
+		ScheduledSequence scheduledSequence = new ScheduledSequence(resource, sequence, 0, plans);
+		annotator.annotateFromVoyagePlan(scheduledSequence, annotatedSolution);
 
 		{
 			final IJourneyEvent journey = annotatedSolution.getElementAnnotations().getAnnotation(element1, SchedulerConstants.AI_journeyInfo, IJourneyEvent.class);
@@ -406,7 +426,6 @@ public class VoyagePlanAnnotatorTest {
 				bind(IPortSlotProvider.class).toInstance(portSlotProvider);
 				bind(IPortCostProvider.class).toInstance(portCostProvider);
 				bind(IVesselProvider.class).toInstance(vesselProvider);
-				bind(VoyagePlanIterator.class);
 				bind(VoyagePlanAnnotator.class);
 			}
 		}).getInstance(VoyagePlanAnnotator.class);

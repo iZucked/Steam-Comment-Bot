@@ -55,9 +55,6 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 	@Inject
 	private IVesselProvider vesselProvider;
 
-	@Inject
-	private Provider<VoyagePlanIterator> voyagePlanIteratorProvider;
-
 	private final FuelComponent[] idleFuelComponents = FuelComponent.getIdleFuelComponents();
 	private final FuelComponent[] travelFuelComponents = FuelComponent.getTravelFuelComponents();
 
@@ -69,21 +66,18 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 	}
 
 	public void annotateFromScheduledSequence(final ScheduledSequence scheduledSequence, final IAnnotatedSolution solution) {
-		annotateFromVoyagePlan(scheduledSequence.getResource(), scheduledSequence.getVoyagePlans(), solution, scheduledSequence.getArrivalTimes());
+		annotateFromVoyagePlan(scheduledSequence, solution);
 	}
 
 	/**
 	 */
 	@Override
-	public void annotateFromVoyagePlan(final IResource resource, final List<VoyagePlan> plans, final IAnnotatedSolution solution, final int[] arrivalTimes) {
-		final VoyagePlanIterator vpi = voyagePlanIteratorProvider.get();
-		vpi.setVoyagePlans(resource, plans, arrivalTimes);
-
-		vpi.reset();
+	public void annotateFromVoyagePlan(final ScheduledSequence scheduledSequence, final IAnnotatedSolution solution) {
+		final VoyagePlanIterator vpi = new VoyagePlanIterator(scheduledSequence);
 
 		while (vpi.hasNextObject()) {
 			final Object e = vpi.nextObject();
-
+			//
 			final int currentTime = vpi.getCurrentTime();
 			VoyagePlan currentPlan = vpi.getCurrentPlan();
 			int charterRatePerDay = currentPlan.getCharterInRatePerDay();
