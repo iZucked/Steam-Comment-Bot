@@ -30,12 +30,13 @@ public class ScenarioMigrationService implements IScenarioMigrationService {
 				scenarioInstance.setScenarioVersion(0);
 			}
 		}
-		boolean installClientModel = false;
 		{
-			final String context = scenarioInstance.getClientVersionContext();
+			String context = scenarioInstance.getClientVersionContext();
 
 			if (context == null || context.isEmpty()) {
-				installClientModel = true;
+				context = migrationRegistry.getDefaultClientMigrationContext();
+				scenarioInstance.setClientVersionContext(context);
+				scenarioInstance.setClientScenarioVersion(0);
 			}
 		}
 		final String scenarioContext = scenarioInstance.getVersionContext();
@@ -55,13 +56,6 @@ public class ScenarioMigrationService implements IScenarioMigrationService {
 				migrator.performMigration(scenarioService, scenarioInstance);
 			}
 		}
-		if (installClientModel) {
-			final String ctx = migrationRegistry.getDefaultClientMigrationContext();
-			assert ctx != null;
-			scenarioInstance.setClientVersionContext(ctx);
-			scenarioInstance.setClientScenarioVersion(migrationRegistry.getLastReleaseClientVersion(ctx));
-		}
-
 	}
 
 	public IMigrationRegistry getMigrationRegistry() {
