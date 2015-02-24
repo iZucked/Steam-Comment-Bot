@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2014
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.providers.impl;
@@ -10,18 +10,15 @@ import java.util.Map;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.curves.ICurve;
-import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
 
 /**
  * Implementation of {@link IBaseFuelCurveProviderEditor} using a {@link HashMap} as the backing implementation.
  * 
  * @author achurchill
- *
+ * 
  */
 public final class HashMapBaseFuelCurveEditor implements IBaseFuelCurveProviderEditor {
 
@@ -33,7 +30,7 @@ public final class HashMapBaseFuelCurveEditor implements IBaseFuelCurveProviderE
 		if (map.containsKey(baseFuel)) {
 			return map.get(baseFuel);
 		}
-		return null;
+		throw new IllegalArgumentException("Unknown basefuel");
 	}
 
 	@Override
@@ -41,9 +38,9 @@ public final class HashMapBaseFuelCurveEditor implements IBaseFuelCurveProviderE
 		if (map.containsKey(vessel)) {
 			return map.get(vessel);
 		}
-		return null;
+		throw new IllegalArgumentException("Unknown vessel");
 	}
-	
+
 	@Override
 	public void setBaseFuelCurve(final IBaseFuel baseFuel, final ICurve curve) {
 		map.put(baseFuel, curve);
@@ -55,7 +52,7 @@ public final class HashMapBaseFuelCurveEditor implements IBaseFuelCurveProviderE
 	}
 
 	@Override
-	public void setBaseFuelCurveFirstValueDate(@NonNull ICurve curve, @NonNull int firstValueDate) {
+	public void setBaseFuelCurveFirstValueDate(@NonNull ICurve curve, int firstValueDate) {
 		firstValueMap.put(curve, firstValueDate);
 	}
 }

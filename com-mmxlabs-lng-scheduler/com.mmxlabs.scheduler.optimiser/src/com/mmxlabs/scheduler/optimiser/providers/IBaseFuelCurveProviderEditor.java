@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2014
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.providers;
@@ -12,6 +12,7 @@ import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 public interface IBaseFuelCurveProviderEditor extends IBaseFuelCurveProvider {
 
 	void setBaseFuelCurve(@NonNull IBaseFuel baseFuel, @NonNull ICurve curve);
-	void setBaseFuelCurveFirstValueDate(@NonNull ICurve curve, @NonNull int firstValueDate);
-	
+
+	void setBaseFuelCurveFirstValueDate(@NonNull ICurve curve, int firstValueDate);
+
 }
