@@ -131,6 +131,7 @@ public final class PricingEventHelper {
 		ILoadOption loadOption = null;
 		// Find first load option
 		for (final IPortSlot slot : portTimesRecord.getSlots()) {
+			assert (slot != null);
 			if (slot instanceof ILoadOption) {
 				loadOption = (ILoadOption) slot;
 				break;

@@ -11,10 +11,12 @@ import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -28,28 +30,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public final class ScheduledSequences extends ArrayList<ScheduledSequence> {
 	private static final long serialVersionUID = 1L;
 
-	// TODO: Need better mechanism for this stuff!
-	private Map<VoyagePlan, IAllocationAnnotation> allocations = null;
-	private Map<IPortSlot, IHeelLevelAnnotation> heelLevels = null;
 	private final Map<IPortSlot, Long> unusedSlotGroupValue = new HashMap<>();
 	private final Map<IPortSlot, Long> capacityViolationSum = new HashMap<>();
 	private final Map<VoyagePlan, Long> voyagePlanGroupValue = new HashMap<>();
-
-	public final Map<VoyagePlan, IAllocationAnnotation> getAllocations() {
-		return allocations;
-	}
-
-	public final void setAllocations(final Map<VoyagePlan, IAllocationAnnotation> allocations) {
-		this.allocations = allocations;
-	}
-
-	public final Map<IPortSlot, IHeelLevelAnnotation> getHeelLevels() {
-		return heelLevels;
-	}
-
-	public final void setHeelLevels(final Map<IPortSlot, IHeelLevelAnnotation> heelLevels) {
-		this.heelLevels = heelLevels;
-	}
 
 	/**
 	 * 
@@ -58,8 +41,9 @@ public final class ScheduledSequences extends ArrayList<ScheduledSequence> {
 	 * @param voyagePlans
 	 * @param arrivalTimes
 	 */
-	public void addScheduledSequence(final IResource resource, final int startTime, final List<VoyagePlan> voyagePlans, final int[] arrivalTimes) {
-		add(new ScheduledSequence(resource, startTime, voyagePlans, arrivalTimes));
+	public void addScheduledSequence(final IResource resource, final ISequence sequence, final int startTime,
+			final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlans) {
+		add(new ScheduledSequence(resource, sequence, startTime, voyagePlans));
 	}
 
 	public void setUnusedSlotGroupValue(@NonNull final IPortSlot portSlot, final long groupValue) {

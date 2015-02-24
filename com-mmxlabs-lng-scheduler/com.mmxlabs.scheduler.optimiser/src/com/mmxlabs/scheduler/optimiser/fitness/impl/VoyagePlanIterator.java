@@ -6,8 +6,13 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
-import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.common.Triple;
+import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -20,46 +25,42 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public class VoyagePlanIterator {
 	private static final Object[] EMPTY_SEQUENCE = new Object[] {};
-	private List<VoyagePlan> plans;
-	private Iterator<VoyagePlan> planIterator;
-	private VoyagePlan currentPlan;
+	private List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> plans;
+	private Iterator<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> planIterator;
+	private Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord> currentPlan;
 	private Object[] currentSequence;
 	private int currentPlanIndex;
-	private int currentTimeIndex;
 
 	private int currentTime;
 	private int extraTime;
-	private int arrivalTimes[];
 
 	/**
 	 */
-	public final void setVoyagePlans(final IResource resource, final List<VoyagePlan> plans, int arrivalTimes[]) {
-		this.plans = plans;
-		this.arrivalTimes = arrivalTimes;
+	public VoyagePlanIterator(final ScheduledSequence scheduledSequence) {
+		this.plans = scheduledSequence.getVoyagePlans();
 		reset();
 	}
 
-	public final void reset() {
+	private final void reset() {
 		planIterator = plans.iterator();
 		currentTime = 0;
-		extraTime = arrivalTimes[0];
+		// extraTime = arrivalTimes[0];
 		if (planIterator.hasNext()) {
 			currentPlan = planIterator.next();
-			currentSequence = currentPlan.getSequence();
+			currentSequence = currentPlan.getFirst().getSequence();
 		} else {
 			currentSequence = EMPTY_SEQUENCE;
 		}
 		currentPlanIndex = 0;
-		currentTimeIndex = 0;
 	}
 
 	public final Object nextObject() {
 		currentTime += extraTime;
 
-		if (planIterator.hasNext() && ((currentPlanIndex >= (currentSequence.length - 1) && currentPlan.isIgnoreEnd()) || currentPlanIndex >= currentSequence.length)) {
+		if (planIterator.hasNext() && ((currentPlanIndex >= (currentSequence.length - 1) && currentPlan.getFirst().isIgnoreEnd()) || currentPlanIndex >= currentSequence.length)) {
 			// advance by one voyageplan.
 			currentPlan = planIterator.next();
-			currentSequence = currentPlan.getSequence();
+			currentSequence = currentPlan.getFirst().getSequence();
 			currentPlanIndex = 0; // should I skip the extra port visit on the end
 									// of
 									// each plan?
@@ -70,8 +71,8 @@ public class VoyagePlanIterator {
 		extraTime = 0;
 		if (obj instanceof PortDetails) {
 			final PortDetails details = (PortDetails) obj;
-			if (!currentPlan.isIgnoreEnd() || currentPlanIndex != (currentSequence.length - 1)) {
-				currentTime = arrivalTimes[currentTimeIndex++];
+			if (!currentPlan.getFirst().isIgnoreEnd() || currentPlanIndex != (currentSequence.length - 1)) {
+				currentTime = currentPlan.getThird().getSlotTime(details.getOptions().getPortSlot());
 				extraTime = details.getOptions().getVisitDuration();
 			}
 		} else if (obj instanceof VoyageDetails) {
@@ -88,7 +89,7 @@ public class VoyagePlanIterator {
 	}
 
 	public final boolean nextObjectIsStartOfPlan() {
-		return ((currentPlanIndex >= (currentSequence.length - 1) && currentPlan.isIgnoreEnd()) || currentPlanIndex >= currentSequence.length);
+		return ((currentPlanIndex >= (currentSequence.length - 1) && currentPlan.getFirst().isIgnoreEnd()) || currentPlanIndex >= currentSequence.length);
 	}
 
 	public final int getCurrentTime() {
@@ -96,6 +97,14 @@ public class VoyagePlanIterator {
 	}
 
 	public final VoyagePlan getCurrentPlan() {
-		return currentPlan;
+		return currentPlan.getFirst();
+	}
+
+	public IPortTimesRecord getCurrentPortTimeRecord() {
+		return currentPlan.getThird();
+	}
+
+	public Map<IPortSlot, IHeelLevelAnnotation> getCurrentHeelLevelAnnotations() {
+		return currentPlan.getSecond();
 	}
 }

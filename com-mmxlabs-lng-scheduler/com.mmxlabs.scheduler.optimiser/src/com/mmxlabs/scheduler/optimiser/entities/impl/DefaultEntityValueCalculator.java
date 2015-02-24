@@ -376,7 +376,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		int idx = 0;
 		for (final IPortSlot slot : cargoPNLData.getSlots()) {
-
+			assert slot != null;
 			final IEntity entity = cargoPNLData.getSlotEntity(slot);
 			assert entity != null;
 

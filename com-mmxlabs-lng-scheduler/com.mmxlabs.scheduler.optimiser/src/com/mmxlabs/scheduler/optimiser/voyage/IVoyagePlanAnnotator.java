@@ -4,10 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.voyage;
 
-import java.util.List;
-
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -21,10 +19,9 @@ public interface IVoyagePlanAnnotator {
 	/**
 	 * Annotate the {@link IAnnotatedSequence} from the list of {@link VoyagePlan} objects.
 	 * 
-	 * @param resource
-	 * @param plans
+	 * @param Sequence
 	 * @param annotatedSequence
 	 */
-	void annotateFromVoyagePlan(IResource resource, List<VoyagePlan> plans, IAnnotatedSolution annotatedSolution, int[] arrivalTimes);
+	void annotateFromVoyagePlan(ScheduledSequence scheduledSequence, IAnnotatedSolution annotatedSolution);
 
 }

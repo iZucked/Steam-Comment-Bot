@@ -9,10 +9,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 /**
  * @author hinton
@@ -39,6 +42,23 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 	private int firstSlotTime = Integer.MAX_VALUE;
 	private IPortSlot firstPortSlot = null;
 	private IPortSlot returnPortSlot = null;
+
+	public AllocationAnnotation() {
+
+	}
+
+	public AllocationAnnotation(@NonNull final IPortTimesRecord portTimesRecord) {
+		for (final IPortSlot portSlot : portTimesRecord.getSlots()) {
+			assert portSlot != null;
+			getSlots().add(portSlot);
+			setSlotTime(portSlot, portTimesRecord.getSlotTime(portSlot));
+			setSlotTime(portSlot, portTimesRecord.getSlotDuration(portSlot));
+		}
+		final IPortSlot returnSlot = portTimesRecord.getReturnSlot();
+		if (returnSlot != null) {
+			setReturnSlotTime(returnSlot, portTimesRecord.getSlotDuration(returnSlot));
+		}
+	}
 
 	@Override
 	public long getFuelVolumeInM3() {
@@ -117,6 +137,7 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 
 	public void setReturnSlotTime(final IPortSlot slot, final int time) {
 		setSlotTime(slot, time);
+		slots.remove(returnPortSlot);
 		returnPortSlot = slot;
 	}
 
@@ -184,7 +205,7 @@ public final class AllocationAnnotation implements IAllocationAnnotation {
 		return startHeelVolumeInM3;
 	}
 
-	public void setStartHeelVolumeInM3(long startHeelVolumeInM3) {
+	public void setStartHeelVolumeInM3(final long startHeelVolumeInM3) {
 		this.startHeelVolumeInM3 = startHeelVolumeInM3;
 	}
 

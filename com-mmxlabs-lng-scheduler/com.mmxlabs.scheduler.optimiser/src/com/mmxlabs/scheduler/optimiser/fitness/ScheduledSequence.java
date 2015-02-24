@@ -6,46 +6,51 @@ package com.mmxlabs.scheduler.optimiser.fitness;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.Nullable;
+
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public final class ScheduledSequence {
-	private final int startTime;
-	private final List<VoyagePlan> voyagePlans;
 	private final IResource resource;
-	private final int[] arrivalTimes;
+	private final ISequence sequence;
+	private final int startTime;
+	private final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlans;
 
-	// Lookup data
+	// Cached Lookup data
 	private final Map<IPortSlot, Integer> portSlotToTimeMap = new HashMap<>();
 	private final Map<IPortSlot, VoyagePlan> portSlotToVoyagePlanMap = new HashMap<>();
-	private final Map<VoyagePlan, List<IPortSlot>> voyagePlanToPortSlots = new HashMap<>();
-	private final Map<VoyagePlan, List<Integer>> voyagePlanToArrivalTimes = new HashMap<>();
+	private final Map<IPortSlot, IPortTimesRecord> portSlotToPortTimesRecordMap = new HashMap<>();
+	private final Map<IPortSlot, IHeelLevelAnnotation> portSlotToHeelLevelAnnotationMap = new HashMap<>();
 	private final List<IPortSlot> sequencePortSlots;
-	private VoyagePlan lastPlan;
-	private Map<IPortSlot, IHeelLevelAnnotation> heelLevels = new HashMap<>();
-	private Map<VoyagePlan, IAllocationAnnotation> allocations = new HashMap<>();
 
 	/**
 	 */
-	public ScheduledSequence(final IResource resource, final int startTime, final List<VoyagePlan> voyagePlans, final int[] arrivalTimes) {
+	public ScheduledSequence(final IResource resource, final ISequence sequence, final int startTime, final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlans) {
 		super();
+		this.sequence = sequence;
 		this.startTime = startTime;
 		this.voyagePlans = voyagePlans;
 		this.resource = resource;
-		this.arrivalTimes = arrivalTimes;
-		this.sequencePortSlots = new ArrayList<>(arrivalTimes.length);
+		this.sequencePortSlots = new ArrayList<>(sequence.size());
 
 		// Build the lookup data!
 		buildLookup();
+	}
+
+	protected ISequence getSequence() {
+		return sequence;
 	}
 
 	public IResource getResource() {
@@ -56,19 +61,8 @@ public final class ScheduledSequence {
 		return startTime;
 	}
 
-	public List<VoyagePlan> getVoyagePlans() {
+	public List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> getVoyagePlans() {
 		return voyagePlans;
-	}
-
-	/**
-	 * @return
-	 */
-	public int[] getArrivalTimes() {
-		return arrivalTimes;
-	}
-
-	public boolean isLastVoyagePlan(final VoyagePlan plan) {
-		return lastPlan != null && lastPlan == plan;
 	}
 
 	public int getArrivalTime(final IPortSlot portSlot) {
@@ -83,29 +77,37 @@ public final class ScheduledSequence {
 		return portSlotToVoyagePlanMap.get(portSlot);
 	}
 
-	public List<Integer> getArrivalTimes(final VoyagePlan voyagePlan) {
-		return voyagePlanToArrivalTimes.get(voyagePlan);
+	public List<IPortSlot> getSequenceSlots() {
+		return sequencePortSlots;
 	}
 
-	public List<IPortSlot> getPortSlots(final VoyagePlan voyagePlan) {
-		return voyagePlanToPortSlots.get(voyagePlan);
+	public IPortTimesRecord getPortTimesRecord(final IPortSlot portSlot) {
+		return portSlotToPortTimesRecordMap.get(portSlot);
+
+	}
+
+	@Nullable
+	public IAllocationAnnotation getAllocationAnnotation(final IPortSlot portSlot) {
+		final IPortTimesRecord portTimesRecord = getPortTimesRecord(portSlot);
+		if (portTimesRecord instanceof IAllocationAnnotation) {
+			return (IAllocationAnnotation) portTimesRecord;
+		}
+		return null;
+
+	}
+
+	public IHeelLevelAnnotation getHeelLevelAnnotation(final IPortSlot portSlot) {
+		return portSlotToHeelLevelAnnotationMap.get(portSlot);
 	}
 
 	/**
 	 * Builds the lookup data. TODO: More efficient if this is done as the sequence data is built up!
 	 */
 	private void buildLookup() {
-		final VoyagePlanIterator vpi = new VoyagePlanIterator();
-		vpi.setVoyagePlans(resource, voyagePlans, arrivalTimes);
+		final VoyagePlanIterator vpi = new VoyagePlanIterator(this);
 
 		// Lists to store the voyageplan data
-		final List<Integer> times = new LinkedList<>();
-		final List<IPortSlot> portSlots = new LinkedList<>();
-		VoyagePlan previousPlan = null;
 		while (vpi.hasNextObject()) {
-			previousPlan = vpi.getCurrentPlan();
-			final boolean startOfPlan = vpi.nextObjectIsStartOfPlan();
-
 			final Object e = vpi.nextObject();
 			if (e instanceof PortDetails) {
 				final PortDetails details = (PortDetails) e;
@@ -113,46 +115,16 @@ public final class ScheduledSequence {
 				final int currentTime = vpi.getCurrentTime();
 
 				// Set mapping between slot and time / current plan
+				sequencePortSlots.add(portSlot);
 				portSlotToTimeMap.put(portSlot, currentTime);
 				portSlotToVoyagePlanMap.put(portSlot, vpi.getCurrentPlan());
-
-				// Add time to current times array
-				times.add(currentTime);
-				portSlots.add(portSlot);
-				sequencePortSlots.add(portSlot);
-
-				// Start of vessel plan? then add times and slots to last voyage plans mapping and reset data structures for the current voyage plan
-				if (startOfPlan && previousPlan != null) {
-					// Add to previous data
-					voyagePlanToArrivalTimes.put(previousPlan, new ArrayList<>(times));
-					voyagePlanToPortSlots.put(previousPlan, new ArrayList<>(portSlots));
-
-					// Reset for next pass
-					times.clear();
-					portSlots.clear();
-
-					// Re-add times to array as first elements of the next plan
-					times.add(currentTime);
-					portSlots.add(portSlot);
+				portSlotToPortTimesRecordMap.put(portSlot, vpi.getCurrentPortTimeRecord());
+				final Map<IPortSlot, IHeelLevelAnnotation> currentHeelLevelAnnotations = vpi.getCurrentHeelLevelAnnotations();
+				if (currentHeelLevelAnnotations != null) {
+					portSlotToHeelLevelAnnotationMap.put(portSlot, currentHeelLevelAnnotations.get(portSlot));
 				}
 			}
-			lastPlan = vpi.getCurrentPlan();
-		}
-
-		// End of loop, add in last bits of data
-		final VoyagePlan currentPlan = vpi.getCurrentPlan();
-		if (currentPlan != null) {
-			voyagePlanToArrivalTimes.put(currentPlan, new ArrayList<>(times));
-			voyagePlanToPortSlots.put(currentPlan, new ArrayList<>(portSlots));
-			lastPlan = currentPlan;
 		}
 	}
 
-	public Map<VoyagePlan, IAllocationAnnotation> getAllocations() {
-		return allocations;
-	}
-
-	public Map<IPortSlot, IHeelLevelAnnotation> getHeelLevels() {
-		return heelLevels;
-	}
 }

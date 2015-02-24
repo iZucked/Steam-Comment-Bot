@@ -11,11 +11,12 @@ import java.util.Map;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptions;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionsPortSlot;
@@ -37,6 +38,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.impl.Capacity
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
@@ -75,12 +77,12 @@ public class CapacityViolationChecker {
 	 * @param allocations
 	 * @param annotatedSolution
 	 */
-	public void calculateCapacityViolations(final ISequences sequences, final ScheduledSequences scheduledSequences, final Map<VoyagePlan, IAllocationAnnotation> allocations,
-			@Nullable final IAnnotatedSolution annotatedSolution) {
+	public void calculateCapacityViolations(final ScheduledSequences scheduledSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
 
 		// Loop over all sequences
 		for (final ScheduledSequence scheduledSequence : scheduledSequences) {
 			final IResource resource = scheduledSequence.getResource();
+			assert resource != null;
 			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 			final IVessel nominatedVessel = nominatedVesselProvider.getNominatedVessel(resource);
 
@@ -97,13 +99,16 @@ public class CapacityViolationChecker {
 			long remainingHeelInM3 = 0;
 			PortDetails lastHeelDetails = null;
 			// Loop over all voyage plans in turn. We Use the VoyagePlan directly to obtain allocation annotations
-			for (final VoyagePlan voyagePlan : scheduledSequence.getVoyagePlans()) {
+			for (final Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord> entry : scheduledSequence.getVoyagePlans()) {
+				final VoyagePlan voyagePlan = entry.getFirst();
+				final IPortTimesRecord portTimesRecord = entry.getThird();
 				// Get the allocation annotation if this is a cargo, otherwise this will be null
-				final IAllocationAnnotation allocationAnnotation = scheduledSequences.getAllocations().get(voyagePlan);
+				final IAllocationAnnotation allocationAnnotation = (portTimesRecord instanceof IAllocationAnnotation) ? (IAllocationAnnotation) portTimesRecord : null;
 
 				ILoadOption buy = null;
 				IDischargeOption sell = null;
-				for (int idx = 0; idx < voyagePlan.getSequence().length - 1; ++idx) {
+				int offset = voyagePlan.isIgnoreEnd() ? 1 : 0;
+				for (int idx = 0; idx < voyagePlan.getSequence().length - offset; ++idx) {
 					final IDetailsSequenceElement e = voyagePlan.getSequence()[idx];
 					if (e instanceof PortDetails) {
 						// Cargo based checks
@@ -200,7 +205,7 @@ public class CapacityViolationChecker {
 
 				// TODO: Handle multiple load/discharge case
 				if (buy != null && sell != null) {
-					CargoType cargoType = CargoTypeUtil.getCargoType(buy, sell);
+					final CargoType cargoType = CargoTypeUtil.getCargoType(buy, sell);
 					if (cargoType == CargoType.SHIPPED) {
 						lastHeelDetails = (PortDetails) voyagePlan.getSequence()[voyagePlan.getSequence().length - 1];
 					} else {
@@ -252,7 +257,7 @@ public class CapacityViolationChecker {
 	 * @param volume
 	 */
 	private void addEntryToCapacityViolationAnnotation(@Nullable final IAnnotatedSolution annotatedSolution, final PortDetails portDetails, final CapacityViolationType cvt, final long volume,
-			ScheduledSequences scheduledSequences) {
+			final ScheduledSequences scheduledSequences) {
 		// Set port details entry
 		scheduledSequences.addCapacityViolation(portDetails.getOptions().getPortSlot());
 
