@@ -24,7 +24,9 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.Fitness;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
@@ -35,6 +37,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -96,7 +99,7 @@ public class AnnotatedSolutionExporter {
 		exporters.add(new GeneratedCharterOutEventExporter(visitExporter));
 		exporters.add(visitExporter);
 
-		for (IAnnotationExporter ext : exporters) {
+		for (final IAnnotationExporter ext : exporters) {
 			injector.injectMembers(ext);
 		}
 	}
@@ -367,7 +370,7 @@ public class AnnotatedSolutionExporter {
 				desSequenceFitness.add(sf);
 			}
 		}
-		
+
 		// Fix up start events with no port.
 		fixUpStartEventPorts(output);
 		// patch up idle events with no port
@@ -387,24 +390,32 @@ public class AnnotatedSolutionExporter {
 
 		// now patch up laden/ballast journey references in the cargoes
 		for (final Sequence eSequence : output.getSequences()) {
-			CargoAllocation allocation = null;
+			EventGrouping eventGrouping = null;
 			for (final Event event : eSequence.getEvents()) {
 				if (event instanceof PortVisit) {
 					if (event instanceof SlotVisit) {
 						final SlotVisit visit = (SlotVisit) event;
-						allocation = visit.getSlotAllocation().getCargoAllocation();
+						final CargoAllocation allocation = visit.getSlotAllocation().getCargoAllocation();
 						allocation.setSequence(eSequence);
-						allocation.getEvents().add(event);
-
+						eventGrouping = allocation;
+						eventGrouping.getEvents().add(event);
+					} else if (event instanceof StartEvent) {
+						eventGrouping = (StartEvent) event;
+						eventGrouping.getEvents().add(event);
+					} else if (event instanceof VesselEventVisit) {
+						eventGrouping = (VesselEventVisit) event;
+						eventGrouping.getEvents().add(event);
 					} else {
-						allocation = null;
+						eventGrouping = null;
 					}
-				} else if (event instanceof Journey && allocation != null) {
-					allocation.getEvents().add(event);
-				} else if (event instanceof Idle && allocation != null) {
-					allocation.getEvents().add(event);
-				} else if (event instanceof Cooldown && allocation != null) {
-					allocation.getEvents().add(event);
+				} else if (event instanceof GeneratedCharterOut) {
+					eventGrouping = null;
+				} else if (event instanceof Journey && eventGrouping != null) {
+					eventGrouping.getEvents().add(event);
+				} else if (event instanceof Idle && eventGrouping != null) {
+					eventGrouping.getEvents().add(event);
+				} else if (event instanceof Cooldown && eventGrouping != null) {
+					eventGrouping.getEvents().add(event);
 				}
 			}
 		}
@@ -457,16 +468,16 @@ public class AnnotatedSolutionExporter {
 		return output;
 	}
 
-	private void fixUpStartEventPorts(Schedule schedule) {
-		for (Sequence sequence : schedule.getSequences()) {
+	private void fixUpStartEventPorts(final Schedule schedule) {
+		for (final Sequence sequence : schedule.getSequences()) {
 			if (sequence.getEvents().isEmpty()) {
 				continue;
 			}
-			Event event = sequence.getEvents().get(0);
+			final Event event = sequence.getEvents().get(0);
 			if (event instanceof StartEvent) {
-				StartEvent startEvent = (StartEvent) event;
+				final StartEvent startEvent = (StartEvent) event;
 				if (startEvent.getPort() == null) {
-					Event nextEvent = startEvent.getNextEvent();
+					final Event nextEvent = startEvent.getNextEvent();
 					if (nextEvent.getPort() != null) {
 						startEvent.setPort(nextEvent.getPort());
 					}
