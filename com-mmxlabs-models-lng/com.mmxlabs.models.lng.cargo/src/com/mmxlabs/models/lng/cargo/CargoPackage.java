@@ -635,13 +635,22 @@ public interface CargoPackage extends EPackage {
 	int SLOT__NOMINATED_VESSEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 25;
 
 	/**
+	 * The feature id for the '<em><b>Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__LOCKED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 26;
+
+	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 26;
+	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 27;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1047,6 +1056,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT__NOMINATED_VESSEL = SLOT__NOMINATED_VESSEL;
+
+	/**
+	 * The feature id for the '<em><b>Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__LOCKED = SLOT__LOCKED;
 
 	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
@@ -1524,6 +1542,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT__NOMINATED_VESSEL = SLOT__NOMINATED_VESSEL;
+
+	/**
+	 * The feature id for the '<em><b>Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__LOCKED = SLOT__LOCKED;
 
 	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
@@ -2095,6 +2122,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__NOMINATED_VESSEL = LOAD_SLOT__NOMINATED_VESSEL;
 
 	/**
+	 * The feature id for the '<em><b>Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__LOCKED = LOAD_SLOT__LOCKED;
+
+	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2589,6 +2625,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT__NOMINATED_VESSEL = DISCHARGE_SLOT__NOMINATED_VESSEL;
+
+	/**
+	 * The feature id for the '<em><b>Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__LOCKED = DISCHARGE_SLOT__LOCKED;
 
 	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
@@ -4392,6 +4437,17 @@ public interface CargoPackage extends EPackage {
 	EReference getSlot_NominatedVessel();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isLocked <em>Locked</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Locked</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#isLocked()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_Locked();
+
+	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.Slot#getAllowedVessels <em>Allowed Vessels</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5529,6 +5585,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference SLOT__NOMINATED_VESSEL = eINSTANCE.getSlot_NominatedVessel();
+
+		/**
+		 * The meta object literal for the '<em><b>Locked</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__LOCKED = eINSTANCE.getSlot_Locked();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Port Duration</b></em>' operation.

@@ -186,74 +186,74 @@ public class SlotDateOverlapConstraint extends AbstractModelMultiConstraint {
 		final EObject original = extraContext.getOriginal(object);
 		final EObject replacement = extraContext.getReplacement(object);
 
-		if (object instanceof Slot) {
-
-			final Slot slot = (Slot) object;
-			if (slot instanceof LoadSlot) {
-				final LoadSlot load = (LoadSlot) slot;
-				// if (load.isDESPurchase()) {
-				// return ctx.createSuccessStatus();
-				// }
-			} else if (slot instanceof DischargeSlot) {
-				final DischargeSlot disch = (DischargeSlot) slot;
-				// if (disch.isFOBSale()) {
-				// return ctx.createSuccessStatus();
-				// }
-			}
-			if (slot instanceof SpotSlot) {
-				return Activator.PLUGIN_ID;
-			}
-
-			final Object currentConstraintData = ctx.getCurrentConstraintData();
-			PortSlotCounter psc;
-			if (currentConstraintData == null || !(currentConstraintData instanceof PortSlotCounter)) {
-				psc = buildConstraintData(ctx, extraContext);
-				ctx.putCurrentConstraintData(psc);
-			} else {
-				psc = (PortSlotCounter) currentConstraintData;
-			}
-
-			final Collection<Slot> slotOverlaps = psc.slotOverlaps(slot);
-			// Remove "this" slot to avoid conflicts
-			slotOverlaps.remove(original);
-			slotOverlaps.remove(slot);
-			slotOverlaps.remove(replacement);
-			if (slot instanceof LoadSlot) {
-				final DischargeSlot transferSlot = ((LoadSlot) slot).getTransferFrom();
-				slotOverlaps.remove(extraContext.getReplacement(transferSlot));
-				slotOverlaps.remove(extraContext.getOriginal(transferSlot));
-				slotOverlaps.remove(transferSlot);
-			} else if (slot instanceof DischargeSlot) {
-				final LoadSlot transferSlot = ((DischargeSlot) slot).getTransferTo();
-				slotOverlaps.remove(extraContext.getReplacement(transferSlot));
-				slotOverlaps.remove(extraContext.getOriginal(transferSlot));
-				slotOverlaps.remove(transferSlot);
-			}
-
-			assert slotOverlaps.contains(slot) == false;
-			if (slotOverlaps.isEmpty()) {
-				return Activator.PLUGIN_ID;
-			}
-
-			boolean first = true;
-			final StringBuilder sb = new StringBuilder();
-			for (final Slot s : slotOverlaps) {
-				if (first) {
-					first = false;
-				} else {
-					sb.append(", ");
-				}
-				sb.append(s.getName());
-			}
-			final String slotStr = sb.toString();
-
-			final String message;
-			message = String.format("[Slot|'%s'] Overlaps with slot(s) '%s'", slot.getName() == null ? "(no ID)" : slot.getName(), slotStr);
-
-			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-			dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
-			statuses.add(dsd);
-		}
+//		if (object instanceof Slot) {
+//
+//			final Slot slot = (Slot) object;
+//			if (slot instanceof LoadSlot) {
+//				final LoadSlot load = (LoadSlot) slot;
+//				// if (load.isDESPurchase()) {
+//				// return ctx.createSuccessStatus();
+//				// }
+//			} else if (slot instanceof DischargeSlot) {
+//				final DischargeSlot disch = (DischargeSlot) slot;
+//				// if (disch.isFOBSale()) {
+//				// return ctx.createSuccessStatus();
+//				// }
+//			}
+//			if (slot instanceof SpotSlot) {
+//				return Activator.PLUGIN_ID;
+//			}
+//
+//			final Object currentConstraintData = ctx.getCurrentConstraintData();
+//			PortSlotCounter psc;
+//			if (currentConstraintData == null || !(currentConstraintData instanceof PortSlotCounter)) {
+//				psc = buildConstraintData(ctx, extraContext);
+//				ctx.putCurrentConstraintData(psc);
+//			} else {
+//				psc = (PortSlotCounter) currentConstraintData;
+//			}
+//
+//			final Collection<Slot> slotOverlaps = psc.slotOverlaps(slot);
+//			// Remove "this" slot to avoid conflicts
+//			slotOverlaps.remove(original);
+//			slotOverlaps.remove(slot);
+//			slotOverlaps.remove(replacement);
+//			if (slot instanceof LoadSlot) {
+//				final DischargeSlot transferSlot = ((LoadSlot) slot).getTransferFrom();
+//				slotOverlaps.remove(extraContext.getReplacement(transferSlot));
+//				slotOverlaps.remove(extraContext.getOriginal(transferSlot));
+//				slotOverlaps.remove(transferSlot);
+//			} else if (slot instanceof DischargeSlot) {
+//				final LoadSlot transferSlot = ((DischargeSlot) slot).getTransferTo();
+//				slotOverlaps.remove(extraContext.getReplacement(transferSlot));
+//				slotOverlaps.remove(extraContext.getOriginal(transferSlot));
+//				slotOverlaps.remove(transferSlot);
+//			}
+//
+//			assert slotOverlaps.contains(slot) == false;
+//			if (slotOverlaps.isEmpty()) {
+//				return Activator.PLUGIN_ID;
+//			}
+//
+//			boolean first = true;
+//			final StringBuilder sb = new StringBuilder();
+//			for (final Slot s : slotOverlaps) {
+//				if (first) {
+//					first = false;
+//				} else {
+//					sb.append(", ");
+//				}
+//				sb.append(s.getName());
+//			}
+//			final String slotStr = sb.toString();
+//
+//			final String message;
+//			message = String.format("[Slot|'%s'] Overlaps with slot(s) '%s'", slot.getName() == null ? "(no ID)" : slot.getName(), slotStr);
+//
+//			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+//			dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
+//			statuses.add(dsd);
+//		}
 
 		return Activator.PLUGIN_ID;
 	}
