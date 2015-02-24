@@ -69,6 +69,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getCancellationFee <em>Cancellation Fee</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isOverrideRestrictions <em>Override Restrictions</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getNominatedVessel <em>Nominated Vessel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isLocked <em>Locked</em>}</li>
  * </ul>
  * </p>
  *
@@ -594,6 +595,26 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected Vessel nominatedVessel;
+
+	/**
+	 * The default value of the '{@link #isLocked() <em>Locked</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isLocked()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean LOCKED_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isLocked() <em>Locked</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isLocked()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean locked = LOCKED_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -1478,6 +1499,27 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isLocked() {
+		return locked;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setLocked(boolean newLocked) {
+		boolean oldLocked = locked;
+		locked = newLocked;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__LOCKED, oldLocked, locked));
+	}
+
+								/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EList<AVesselSet<Vessel>> getAllowedVessels() {
 		if (allowedVessels == null) {
 			allowedVessels = new EObjectResolvingEList<AVesselSet<Vessel>>(AVesselSet.class, this, CargoPackage.SLOT__ALLOWED_VESSELS);
@@ -1716,6 +1758,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__NOMINATED_VESSEL:
 				if (resolve) return getNominatedVessel();
 				return basicGetNominatedVessel();
+			case CargoPackage.SLOT__LOCKED:
+				return isLocked();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1809,6 +1853,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__NOMINATED_VESSEL:
 				setNominatedVessel((Vessel)newValue);
 				return;
+			case CargoPackage.SLOT__LOCKED:
+				setLocked((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1898,6 +1945,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__NOMINATED_VESSEL:
 				setNominatedVessel((Vessel)null);
 				return;
+			case CargoPackage.SLOT__LOCKED:
+				setLocked(LOCKED_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1961,6 +2011,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return overrideRestrictions != OVERRIDE_RESTRICTIONS_EDEFAULT;
 			case CargoPackage.SLOT__NOMINATED_VESSEL:
 				return nominatedVessel != null;
+			case CargoPackage.SLOT__LOCKED:
+				return locked != LOCKED_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -2111,6 +2163,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		if (cancellationFeeESet) result.append(cancellationFee); else result.append("<unset>");
 		result.append(", overrideRestrictions: ");
 		result.append(overrideRestrictions);
+		result.append(", locked: ");
+		result.append(locked);
 		result.append(')');
 		return result.toString();
 	}
