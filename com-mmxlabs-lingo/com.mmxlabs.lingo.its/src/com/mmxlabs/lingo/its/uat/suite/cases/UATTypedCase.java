@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * All rights reserved.
+ */
 package com.mmxlabs.lingo.its.uat.suite.cases;
 
 import com.mmxlabs.lingo.its.uat.suite.utils.FeatureBasedUAT;
