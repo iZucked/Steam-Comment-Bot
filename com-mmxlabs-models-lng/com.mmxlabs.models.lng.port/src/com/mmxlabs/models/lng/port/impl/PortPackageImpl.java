@@ -158,15 +158,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	public EAttribute getPort_Capabilities() {
-		return (EAttribute)portEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getPort_TimeZone() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -175,7 +166,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_LoadDuration() {
+	public EAttribute getPort_TimeZone() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -184,7 +175,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_DischargeDuration() {
+	public EAttribute getPort_LoadDuration() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -193,7 +184,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_Berths() {
+	public EAttribute getPort_DischargeDuration() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -202,7 +193,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_CvValue() {
+	public EAttribute getPort_Berths() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(5);
 	}
 
@@ -211,7 +202,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_DefaultStartTime() {
+	public EAttribute getPort_CvValue() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(6);
 	}
 
@@ -220,7 +211,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_AllowCooldown() {
+	public EAttribute getPort_DefaultStartTime() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(7);
 	}
 
@@ -229,7 +220,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_DefaultWindowSize() {
+	public EAttribute getPort_AllowCooldown() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(8);
 	}
 
@@ -238,8 +229,17 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getPort_DefaultWindowSize() {
+		return (EAttribute)portEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EReference getPort_Location() {
-		return (EReference)portEClass.getEStructuralFeatures().get(9);
+		return (EReference)portEClass.getEStructuralFeatures().get(10);
 	}
 
 	/**
@@ -248,15 +248,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	public EAttribute getPort_AtobviacCode() {
-		return (EAttribute)portEClass.getEStructuralFeatures().get(10);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getPort_DataloyCode() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(11);
 	}
 
@@ -265,7 +256,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_VesonCode() {
+	public EAttribute getPort_DataloyCode() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(12);
 	}
 
@@ -274,7 +265,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_ExternalCode() {
+	public EAttribute getPort_VesonCode() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(13);
 	}
 
@@ -283,7 +274,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_UNLocode() {
+	public EAttribute getPort_ExternalCode() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(14);
 	}
 
@@ -292,7 +283,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_MinCvValue() {
+	public EAttribute getPort_UNLocode() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(15);
 	}
 
@@ -301,8 +292,26 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_MaxCvValue() {
+	public EAttribute getPort_MinCvValue() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(16);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPort_MaxCvValue() {
+		return (EAttribute)portEClass.getEStructuralFeatures().get(17);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPort_ShortName() {
+		return (EAttribute)portEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -532,6 +541,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 		// Create classes and their features
 		portEClass = createEClass(PORT);
+		createEAttribute(portEClass, PORT__SHORT_NAME);
 		createEAttribute(portEClass, PORT__CAPABILITIES);
 		createEAttribute(portEClass, PORT__TIME_ZONE);
 		createEAttribute(portEClass, PORT__LOAD_DURATION);
@@ -632,6 +642,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(portEClass, Port.class, "Port", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getPort_ShortName(), ecorePackage.getEString(), "shortName", null, 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_Capabilities(), theTypesPackage.getPortCapability(), "capabilities", null, 0, -1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_TimeZone(), ecorePackage.getEString(), "timeZone", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_LoadDuration(), ecorePackage.getEInt(), "loadDuration", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

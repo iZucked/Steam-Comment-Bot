@@ -86,6 +86,12 @@
         inheritable="true"
         modelClass="com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate">
   </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.spotmarkets.presentation.composites.SpotCharterMarketComponentHelper"
+        id="com.mmxlabs.models.lng.spotmarkets.presentation.composites.SpotCharterMarketComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.spotmarkets.SpotCharterMarket">
+  </componentHelper>
 		
 	</extension>
   <extension

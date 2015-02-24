@@ -18,6 +18,7 @@ import com.mmxlabs.models.mmxcore.OtherNamesObject;
  * <p>
  * The following features are supported:
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.port.Port#getShortName <em>Short Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getCapabilities <em>Capabilities</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getTimeZone <em>Time Zone</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getLoadDuration <em>Load Duration</em>}</li>
@@ -538,4 +539,30 @@ public interface Port extends APortSet<Port>, OtherNamesObject {
 	 * @generated
 	 */
 	boolean isSetMaxCvValue();
+
+	/**
+	 * Returns the value of the '<em><b>Short Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Short Name</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Short Name</em>' attribute.
+	 * @see #setShortName(String)
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_ShortName()
+	 * @model
+	 * @generated
+	 */
+	String getShortName();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Port#getShortName <em>Short Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Short Name</em>' attribute.
+	 * @see #getShortName()
+	 * @generated
+	 */
+	void setShortName(String value);
 } // Port

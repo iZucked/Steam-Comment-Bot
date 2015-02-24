@@ -63,6 +63,7 @@ public class PortItemProvider
 			super.getPropertyDescriptors(object);
 
 			addOtherNamesPropertyDescriptor(object);
+			addShortNamePropertyDescriptor(object);
 			addCapabilitiesPropertyDescriptor(object);
 			addTimeZonePropertyDescriptor(object);
 			addLoadDurationPropertyDescriptor(object);
@@ -425,7 +426,7 @@ public class PortItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Port_minCvValue_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Port_minCvValue_feature", "_UI_Port_type"),
+				 getString("_UI_Port_minCvValue_description"),
 				 PortPackage.Literals.PORT__MIN_CV_VALUE,
 				 true,
 				 false,
@@ -447,12 +448,34 @@ public class PortItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_Port_maxCvValue_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Port_maxCvValue_feature", "_UI_Port_type"),
+				 getString("_UI_Port_maxCvValue_description"),
 				 PortPackage.Literals.PORT__MAX_CV_VALUE,
 				 true,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Short Name feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addShortNamePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_shortName_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_shortName_feature", "_UI_Port_type"),
+				 PortPackage.Literals.PORT__SHORT_NAME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -525,6 +548,7 @@ public class PortItemProvider
 
 		switch (notification.getFeatureID(Port.class)) {
 			case PortPackage.PORT__OTHER_NAMES:
+			case PortPackage.PORT__SHORT_NAME:
 			case PortPackage.PORT__CAPABILITIES:
 			case PortPackage.PORT__TIME_ZONE:
 			case PortPackage.PORT__LOAD_DURATION:
