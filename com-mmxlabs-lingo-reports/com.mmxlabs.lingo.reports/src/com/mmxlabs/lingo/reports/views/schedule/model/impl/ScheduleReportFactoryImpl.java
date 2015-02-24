@@ -6,11 +6,18 @@
  */
 package com.mmxlabs.lingo.reports.views.schedule.model.impl;
 
+import com.mmxlabs.lingo.reports.diff.utils.PNLDeltaUtils;
+import com.mmxlabs.lingo.reports.views.schedule.model.*;
+
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+import org.eclipse.emf.ecore.util.EContentAdapter;
+
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.RowGroup;
@@ -66,6 +73,8 @@ public class ScheduleReportFactoryImpl extends EFactoryImpl implements ScheduleR
 			case ScheduleReportPackage.ROW: return createRow();
 			case ScheduleReportPackage.CYCLE_GROUP: return createCycleGroup();
 			case ScheduleReportPackage.ROW_GROUP: return createRowGroup();
+			case ScheduleReportPackage.USER_GROUP: return createUserGroup();
+			case ScheduleReportPackage.DIFF_OPTIONS: return createDiffOptions();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -76,6 +85,37 @@ public class ScheduleReportFactoryImpl extends EFactoryImpl implements ScheduleR
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public Object createFromString(EDataType eDataType, String initialValue) {
+		switch (eDataType.getClassifierID()) {
+			case ScheduleReportPackage.CHANGE_TYPE:
+				return createChangeTypeFromString(eDataType, initialValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String convertToString(EDataType eDataType, Object instanceValue) {
+		switch (eDataType.getClassifierID()) {
+			case ScheduleReportPackage.CHANGE_TYPE:
+				return convertChangeTypeToString(eDataType, instanceValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Table createTable() {
 		TableImpl table = new TableImpl();
 		return table;
@@ -86,6 +126,7 @@ public class ScheduleReportFactoryImpl extends EFactoryImpl implements ScheduleR
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Row createRow() {
 		RowImpl row = new RowImpl();
 		return row;
@@ -94,10 +135,20 @@ public class ScheduleReportFactoryImpl extends EFactoryImpl implements ScheduleR
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
+	@Override
 	public CycleGroup createCycleGroup() {
-		CycleGroupImpl cycleGroup = new CycleGroupImpl();
+		final CycleGroupImpl cycleGroup = new CycleGroupImpl();
+		cycleGroup.eAdapters().add(new EContentAdapter() {
+			@Override
+			public void notifyChanged(Notification notification) {
+				super.notifyChanged(notification);
+				if (notification.getFeature() == ScheduleReportPackage.Literals.CYCLE_GROUP__ROWS) {
+					cycleGroup.setDelta(PNLDeltaUtils.getPNLDelta(cycleGroup));
+				}
+			}
+		});
 		return cycleGroup;
 	}
 
@@ -106,6 +157,7 @@ public class ScheduleReportFactoryImpl extends EFactoryImpl implements ScheduleR
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public RowGroup createRowGroup() {
 		RowGroupImpl rowGroup = new RowGroupImpl();
 		return rowGroup;
@@ -114,8 +166,59 @@ public class ScheduleReportFactoryImpl extends EFactoryImpl implements ScheduleR
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public UserGroup createUserGroup() {
+		final UserGroupImpl userGroup = new UserGroupImpl();
+		userGroup.eAdapters().add(new EContentAdapter() {
+			@Override
+			public void notifyChanged(Notification notification) {
+				super.notifyChanged(notification);
+				if (notification.getFeature() == ScheduleReportPackage.Literals.USER_GROUP__GROUPS) {
+					userGroup.setDelta(PNLDeltaUtils.getPNLDelta(userGroup));
+				}
+			}
+		});
+		return userGroup;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public DiffOptions createDiffOptions() {
+		DiffOptionsImpl diffOptions = new DiffOptionsImpl();
+		return diffOptions;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ChangeType createChangeTypeFromString(EDataType eDataType, String initialValue) {
+		ChangeType result = ChangeType.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertChangeTypeToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public ScheduleReportPackage getScheduleReportPackage() {
 		return (ScheduleReportPackage)getEPackage();
 	}

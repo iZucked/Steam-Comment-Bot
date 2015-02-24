@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -27,7 +28,9 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChangeEvent;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
@@ -37,6 +40,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.IElementComparer;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -44,7 +48,10 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.widgets.ganttchart.AbstractSettings;
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.nebula.widgets.ganttchart.DefaultColorManager;
+import org.eclipse.nebula.widgets.ganttchart.GanttEvent;
 import org.eclipse.nebula.widgets.ganttchart.GanttFlags;
+import org.eclipse.nebula.widgets.ganttchart.GanttGroup;
+import org.eclipse.nebula.widgets.ganttchart.GanttSection;
 import org.eclipse.nebula.widgets.ganttchart.IColorManager;
 import org.eclipse.nebula.widgets.ganttchart.ISettings;
 import org.eclipse.swt.SWT;
@@ -53,7 +60,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPart;
@@ -76,10 +86,13 @@ import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.lingo.reports.ScenarioViewerSynchronizer;
 import com.mmxlabs.lingo.reports.ScheduleElementCollector;
+import com.mmxlabs.lingo.reports.diff.DiffSelectionAdapter;
 import com.mmxlabs.lingo.reports.properties.ScheduledEventPropertySourceProvider;
 import com.mmxlabs.lingo.reports.scheduleview.internal.Activator;
 import com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ISchedulerViewColourSchemeExtension;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
+import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
+import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -128,8 +141,8 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 
 	@Inject
 	private Iterable<ISchedulerViewColourSchemeExtension> colourSchemeExtensions;
-	
-	private List<IScheduleViewColourScheme> colourSchemes= new ArrayList<>();
+
+	private final List<IScheduleViewColourScheme> colourSchemes = new ArrayList<>();
 
 	private HighlightAction highlightAction;
 
@@ -140,6 +153,12 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 	private final Map<String, List<EObject>> allObjectsByKey = new LinkedHashMap<String, List<EObject>>();
 
 	private final Set<EObject> pinnedObjects = new LinkedHashSet<EObject>();
+
+	// New diff stuff
+	private Table table;
+	private IPartListener listener;
+	private static final String SCHEDULE_VIEW_ID = "com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport";
+	private IViewPart scheduleView;
 
 	/**
 	 * The constructor.
@@ -191,7 +210,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 
 		// Inject the extension points
 		Activator.getDefault().getInjector().injectMembers(this);
-		
+
 		// Gantt Chart settings object
 		final ISettings settings = new AbstractSettings() {
 			@Override
@@ -246,7 +265,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 
 			@Override
 			public int getSectionBarDividerHeight() {
-				return 0;
+				return 1;
 			}
 
 			@Override
@@ -271,7 +290,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 
 			@Override
 			public int getEventsTopSpacer() {
-				return 5;
+				return 3;
 			}
 
 			@Override
@@ -292,6 +311,11 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 			@Override
 			public int getSelectionLineWidth() {
 				return 3;
+			}
+
+			@Override
+			public int getSelectionLineStyle() {
+				return SWT.LINE_SOLID;
 			}
 		};
 
@@ -325,12 +349,102 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 				}
 			}
 
+			@Override
+			protected void setSelectionToWidget(@SuppressWarnings("rawtypes") final List l, final boolean reveal) {
+
+				final ArrayList<GanttEvent> selectedEvents;
+				if (l != null) {
+					// Use the internalMap to obtain the list of events we are selecting
+					selectedEvents = new ArrayList<GanttEvent>(l.size());
+					if (!l.isEmpty()) {
+						for (final Object ge : ganttChart.getGanttComposite().getEvents()) {
+							final GanttEvent ganttEvent = (GanttEvent) ge;
+							ganttEvent.setStatusAlpha(130);
+							final Event evt = (Event) ganttEvent.getData();
+							if (table != null) {
+								// Add scenario instance name to field if multiple scenarios are selected
+								final Object input = viewer.getInput();
+								if (input instanceof IScenarioViewerSynchronizerOutput) {
+									final IScenarioViewerSynchronizerOutput output = (IScenarioViewerSynchronizerOutput) input;
+
+									final Collection<Object> collectedElements = output.getCollectedElements();
+									if (collectedElements.size() > 1) {
+										if (output.hasPinnedScenario()) {
+											if (output.isPinned(evt.getSequence().eContainer())) {
+												ganttEvent.setStatusAlpha(50);
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					for (final Object obj : l) {
+						if (obj != null) {
+							if (internalMap.containsKey(obj)) {
+								selectedEvents.add(internalMap.get(obj));
+								internalMap.get(obj).setStatusAlpha(getLabelProviderAlpha((ILabelProvider) getLabelProvider(), obj));
+
+							} else if (getComparer() != null) {
+								for (final Map.Entry<Object, GanttEvent> e : internalMap.entrySet()) {
+									if (getComparer().equals(e.getKey(), obj)) {
+										selectedEvents.add(internalMap.get(e.getKey()));
+										e.getValue().setStatusAlpha(getLabelProviderAlpha((ILabelProvider) getLabelProvider(), e.getKey()));
+										internalMap.get(e.getKey()).setStatusAlpha(getLabelProviderAlpha((ILabelProvider) getLabelProvider(), e.getKey()));
+									}
+								}
+							}
+						}
+					}
+				} else {
+					// Clear selection
+					selectedEvents = new ArrayList<GanttEvent>(0);
+				}
+				if (table != null && table.getOptions().isFilterSelectedSequences()) {
+					final Set<GanttSection> selectedSections = new HashSet<>();
+					for (final GanttEvent event : selectedEvents) {
+						selectedSections.add(event.getGanttSection());
+					}
+					final Iterator<GanttSection> itr = new ArrayList<GanttSection>(ganttChart.getGanttComposite().getGanttSections()).iterator();// .iterator();
+					while (itr.hasNext()) {
+						final GanttSection ganttSection = itr.next();
+						final Set<GanttEvent> events = new HashSet<>(ganttSection.getEvents());
+						for (final Object o : ganttSection.getEvents()) {
+							if (o instanceof GanttGroup) {
+								final GanttGroup ganttGroup = (GanttGroup) o;
+								events.addAll(ganttGroup.getEventMembers());
+							}
+						}
+
+						events.retainAll(selectedEvents);
+						if (events.isEmpty()) {
+							ganttSection.setVisible(false);
+						} else {
+							ganttSection.setVisible(true);
+						}
+					}
+				} else {
+					final Iterator<GanttSection> itr = new ArrayList<GanttSection>(ganttChart.getGanttComposite().getGanttSections()).iterator();// .iterator();
+					while (itr.hasNext()) {
+						final GanttSection ganttSection = itr.next();
+						ganttSection.setVisible(true);
+					}
+				}
+				ganttChart.getGanttComposite().setSelection(selectedEvents);
+				if (selectedEvents.isEmpty() == false) {
+					final GanttEvent sel = selectedEvents.get(0);
+					if (!ganttChart.getGanttComposite().isEventVisible(sel, ganttChart.getGanttComposite().getBounds())) {
+						ganttChart.getGanttComposite().showEvent(sel, SWT.CENTER);
+					}
+				}
+				ganttChart.getGanttComposite().heavyRedraw();
+			}
 		};
-		
+
 		// make sure this viewer is listening to preference changes
-		IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode("com.mmxlabs.lingo.reports");
-		prefs.addPreferenceChangeListener(this);				
-		
+		final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode("com.mmxlabs.lingo.reports");
+		prefs.addPreferenceChangeListener(this);
+
 		// viewer.setContentProvider(new AnnotatedScheduleContentProvider());
 		// viewer.setLabelProvider(new AnnotatedSequenceLabelProvider());
 
@@ -470,6 +584,8 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 
 		viewer.setInput(getViewSite());
 
+		hookToScheduleView();
+
 		// Create the help context id for the viewer's control. This is in the
 		// format of pluginid.contextId
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.shiplingo.platform.scheduleview.SchedulerViewer");
@@ -491,12 +607,16 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 	@Override
 	public void dispose() {
 		// stop this view from listening to preference changes
-		IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode("com.mmxlabs.lingo.reports");
-		prefs.removePreferenceChangeListener(this);				
+		final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode("com.mmxlabs.lingo.reports");
+		prefs.removePreferenceChangeListener(this);
 
 		ScenarioViewerSynchronizer.deregisterView(jobManagerListener);
 		// getSite().getPage().removeSelectionListener(
 		// "com.mmxlabs.rcp.navigator", selectionListener);
+
+		if (listener != null) {
+			getViewSite().getPage().removePartListener(listener);
+		}
 
 		super.dispose();
 	}
@@ -702,30 +822,33 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 		if (part instanceof PropertySheet) {
 			return;
 		}
-
-		if (selection instanceof IStructuredSelection) {
-			final IStructuredSelection sel = (IStructuredSelection) selection;
-			List<Object> objects = new ArrayList<Object>(sel.toList().size());
-			for (final Object o : sel.toList()) {
-				if (o instanceof CargoAllocation) {
-					final CargoAllocation allocation = (CargoAllocation) o;
-					objects.add(allocation.getInputCargo());
-					objects.addAll(allocation.getEvents());
-					for (SlotAllocation sa : allocation.getSlotAllocations()) {
-						objects.add(sa.getSlotVisit());
+		if (table == null) {
+			if (selection instanceof IStructuredSelection) {
+				final IStructuredSelection sel = (IStructuredSelection) selection;
+				List<Object> objects = new ArrayList<Object>(sel.toList().size());
+				for (final Object o : sel.toList()) {
+					if (o instanceof CargoAllocation) {
+						final CargoAllocation allocation = (CargoAllocation) o;
+						objects.add(allocation.getInputCargo());
+						objects.addAll(allocation.getEvents());
+						for (final SlotAllocation sa : allocation.getSlotAllocations()) {
+							objects.add(sa.getSlotVisit());
+						}
+					} else if (o instanceof Cargo) {
+						final Cargo cargo = (Cargo) o;
+						objects.add(cargo);
+						objects.addAll(cargo.getSlots());
+					} else {
+						objects.add(o);
 					}
-				} else if (o instanceof Cargo) {
-					final Cargo cargo = (Cargo) o;
-					objects.add(cargo);
-					objects.addAll(cargo.getSlots());
-				} else {
-					objects.add(o);
 				}
+				objects = expandSelection(objects);
+				selection = new StructuredSelection(objects);
 			}
-			objects = expandSelection(objects);
-			selection = new StructuredSelection(objects);
+			viewer.setSelection(selection);
+		} else {
+			viewer.setSelection(DiffSelectionAdapter.expandDown(selection, table));
 		}
-		viewer.setSelection(selection);
 	}
 
 	private final HashMap<Object, Object> equivalents = new HashMap<Object, Object>();
@@ -881,7 +1004,83 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 	}
 
 	@Override
-	public void preferenceChange(PreferenceChangeEvent event) {
+	public void preferenceChange(final PreferenceChangeEvent event) {
 		viewer.setInput(viewer.getInput());
+	}
+
+	protected void hookToScheduleView() {
+		listener = new IPartListener() {
+
+			EContentAdapter adapter = new EContentAdapter() {
+				@Override
+				public void notifyChanged(final Notification notification) {
+					super.notifyChanged(notification);
+					if (notification.getFeature() == ScheduleReportPackage.Literals.DIFF_OPTIONS__FILTER_SELECTED_SEQUENCES) {
+						viewer.setSelection(viewer.getSelection());
+					}
+				}
+			};
+
+			@Override
+			public void partOpened(final IWorkbenchPart part) {
+				if (part instanceof IViewPart) {
+					final IViewPart viewPart = (IViewPart) part;
+					if (viewPart.getViewSite().getId().equals(SCHEDULE_VIEW_ID)) {
+						scheduleView = viewPart;
+						observeInput((Table) scheduleView.getAdapter(Table.class));
+					}
+				}
+			}
+
+			private void observeInput(final Table table) {
+
+				if (SchedulerView.this.table != null) {
+					SchedulerView.this.table.eAdapters().remove(adapter);
+				}
+				SchedulerView.this.table = table;
+				if (SchedulerView.this.table != null) {
+					SchedulerView.this.table.eAdapters().add(adapter);
+				}
+			}
+
+			@Override
+			public void partDeactivated(final IWorkbenchPart part) {
+
+			}
+
+			@Override
+			public void partClosed(final IWorkbenchPart part) {
+				if (part instanceof IViewPart) {
+					final IViewPart viewPart = (IViewPart) part;
+					if (viewPart.getViewSite().getId().equals(SCHEDULE_VIEW_ID)) {
+						scheduleView = null;
+						observeInput(null);
+					}
+				}
+
+			}
+
+			@Override
+			public void partBroughtToTop(final IWorkbenchPart part) {
+
+			}
+
+			@Override
+			public void partActivated(final IWorkbenchPart part) {
+				if (part instanceof IViewPart) {
+					final IViewPart viewPart = (IViewPart) part;
+					if (viewPart.getViewSite().getId().equals(SCHEDULE_VIEW_ID)) {
+						scheduleView = viewPart;
+						observeInput((Table) scheduleView.getAdapter(Table.class));
+					}
+				}
+			}
+		};
+		getViewSite().getPage().addPartListener(listener);
+		for (final IViewReference view : getViewSite().getPage().getViewReferences()) {
+			if (view.getId().equals(SCHEDULE_VIEW_ID)) {
+				listener.partOpened(view.getView(false));
+			}
+		}
 	}
 }

@@ -14,9 +14,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.ui.IMemento;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
@@ -140,11 +137,12 @@ public class ScheduleBasedReportBuilder {
 	}
 
 	public List<?> adaptSelectionFromWidget(final List<?> selection) {
-		final List<Object> adaptedSelection = new ArrayList<Object>(selection.size());
+		final List<Object> adaptedSelection = new ArrayList<Object>(selection.size()  * 2);
 		for (final Object obj : selection) {
 			if (obj instanceof EObject) {
 				adaptedSelection.add(((EObject) obj).eGet(ScheduleReportPackage.Literals.ROW__TARGET));
 			}
+			adaptedSelection.add(obj);
 		}
 
 		return adaptedSelection;

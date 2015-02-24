@@ -22,9 +22,9 @@ import org.eclipse.ui.part.ViewPart;
 import com.google.common.collect.Lists;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ScenarioViewerSynchronizer;
+import com.mmxlabs.lingo.reports.views.vertical.providers.EventProvider;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
-import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
+import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -93,8 +93,10 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 	protected void makeActions() {
 		final PackGridTableColumnsAction packColumnsAction = PackActionFactory.createPackColumnsAction(gridViewer);
-		final CopyGridToClipboardAction copyToClipboardAction = CopyToClipboardActionFactory.createCopyToClipboardAction(gridViewer);
+		
+		final CopyGridToHtmlClipboardAction copyToClipboardAction = new CopyGridToHtmlClipboardAction(gridViewer.getGrid(), true);
 		copyToClipboardAction.setRowHeadersIncluded(true);
+		
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyToClipboardAction);
 
 		getViewSite().getActionBars().getToolBarManager().add(packColumnsAction);
@@ -149,22 +151,23 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		super.dispose();
 	}
 
+	//
 	/**
 	 * Should return the text associated with an individual event on a given day.
 	 * 
 	 * @param eventColumnLabelProvider
 	 */
-	protected GridViewerColumn createColumn(final ColumnLabelProvider labeller, final String title) {
-		return createColumn(labeller, title, (GridColumn) null);
+	protected GridViewerColumn createColumn(final ColumnLabelProvider labeller, final EventProvider eventProvider, final String title) {
+		return createColumn(labeller, eventProvider, title, (GridColumn) null);
 	}
 
-	protected GridViewerColumn createColumn(final ColumnLabelProvider labeller, final String name, @Nullable final GridColumnGroup columnGroup) {
+	protected GridViewerColumn createColumn(final ColumnLabelProvider labeller, final EventProvider eventProvider, final String name, @Nullable final GridColumnGroup columnGroup) {
 		final GridColumn column = new GridColumn(columnGroup, SWT.NONE);
-		return createColumn(labeller, name, column);
+		return createColumn(labeller, eventProvider, name, column);
 
 	}
 
-	protected GridViewerColumn createColumn(final ColumnLabelProvider labeller, final String name, @Nullable final GridColumn column) {
+	protected GridViewerColumn createColumn(final ColumnLabelProvider labeller, final EventProvider eventProvider, final String name, @Nullable final GridColumn column) {
 		final GridViewerColumn result;
 		if (column == null) {
 			result = new GridViewerColumn(gridViewer, SWT.NONE);

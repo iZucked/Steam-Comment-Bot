@@ -7,39 +7,36 @@ package com.mmxlabs.lingo.reports.views.schedule;
 import static com.mmxlabs.lingo.reports.views.schedule.ScheduleBasedReportBuilder.CARGO_REPORT_TYPE_ID;
 
 import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypedElement;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.eclipse.swt.graphics.Image;
 
-import com.mmxlabs.common.Equality;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.MultiObjectEmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.components.SimpleEmfBlockColumnFactory;
+import com.mmxlabs.lingo.reports.diff.utils.PNLDeltaUtils;
+import com.mmxlabs.lingo.reports.diff.utils.ScheduleCostUtils;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
-import com.mmxlabs.lingo.reports.utils.CargoAllocationUtils;
-import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
+import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.PriceFormatter;
-import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
-import com.mmxlabs.lingo.reports.views.schedule.model.Row;
+import com.mmxlabs.lingo.reports.views.schedule.formatters.CapacityViolationDescriptionFormatter;
+import com.mmxlabs.lingo.reports.views.schedule.formatters.LatenessDescriptionFormatter;
+import com.mmxlabs.lingo.reports.views.schedule.formatters.MainChangeDescriptionFormatter;
+import com.mmxlabs.lingo.reports.views.schedule.formatters.PNLDeltaFormatter;
+import com.mmxlabs.lingo.reports.views.schedule.formatters.PermutationDescriptionFormatter;
+import com.mmxlabs.lingo.reports.views.schedule.formatters.PermutationGroupFormatter;
+import com.mmxlabs.lingo.reports.views.schedule.formatters.PreviousVesselFormatter;
+import com.mmxlabs.lingo.reports.views.schedule.formatters.PreviousWiringFormatter;
+import com.mmxlabs.lingo.reports.views.schedule.formatters.RowTypeFormatter;
+import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
-import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.lingo.reports.views.schedule.model.provider.PinnedScheduleFormatter;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.CharterOutEvent;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -51,21 +48,15 @@ import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
-import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
-import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
 public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
-
-	private static final Logger log = LoggerFactory.getLogger(StandardScheduleColumnFactory.class);
 
 	@Override
 	public void registerColumn(final String columnID, final EMFReportColumnManager columnManager, final ScheduleBasedReportBuilder builder) {
@@ -81,17 +72,15 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 		final EStructuralFeature loadAllocationRef = ScheduleReportPackage.Literals.ROW__LOAD_ALLOCATION;
 		final EStructuralFeature dischargeAllocationRef = ScheduleReportPackage.Literals.ROW__DISCHARGE_ALLOCATION;
 
+		// TODO: Dispose!
+		Image pinImage = Activator.Implementation.getImageDescriptor("icons/full/obj16/PinnedRow.gif").createImage();
+		
+		
 		switch (columnID) {
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.schedule":
-			// final IFormatter containingScheduleFormatter = new BaseFormatter() {
-			// @Override
-			// public String format(final Object object) {
-			// return builder.getReport().getSynchronizerOutput().getScenarioInstance(object).getName();
-			// }
-			//
-			// };
+			PinnedScheduleFormatter formatter= new PinnedScheduleFormatter(pinImage);
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Scenario", "The scenario name. Only shown when multiple scenarios are selected",
-					ColumnType.MULTIPLE, Formatters.objectFormatter, ScheduleReportPackage.Literals.ROW__SCENARIO, ScenarioServicePackage.eINSTANCE.getContainer_Name()));
+					ColumnType.MULTIPLE,formatter, ScheduleReportPackage.Literals.ROW__SCENARIO, ScenarioServicePackage.eINSTANCE.getContainer_Name()));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.id":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "ID", "The main ID for all including discharge slots", ColumnType.NORMAL,
@@ -113,99 +102,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 							.getCargo__GetCargoType()));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.vessel":
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Vessel", null, ColumnType.NORMAL, new BaseFormatter() {
-				@Override
-				public String render(final Object object) {
-
-					if (object instanceof CargoAllocation) {
-						final CargoAllocation cargoAllocation = (CargoAllocation) object;
-						// final Sequence sequence = cargoAllocation.getSequence();
-						// if (sequence != null) {
-						// if (!sequence.isFleetVessel()) {
-						final Cargo inputCargo = cargoAllocation.getInputCargo();
-						if (inputCargo == null) {
-							return null;
-						}
-						switch (inputCargo.getCargoType()) {
-						case DES:
-							for (final Slot slot : inputCargo.getSortedSlots()) {
-								if (slot instanceof LoadSlot) {
-									final LoadSlot loadSlot = (LoadSlot) slot;
-									if (loadSlot.isDESPurchase()) {
-										final Vessel assignment = slot.getNominatedVessel();
-										if (assignment != null) {
-											return assignment.getName();
-										}
-										break;
-									}
-								}
-							}
-						case FOB:
-							for (final Slot slot : inputCargo.getSortedSlots()) {
-								if (slot instanceof DischargeSlot) {
-									final DischargeSlot dischargeSlot = (DischargeSlot) slot;
-									if (dischargeSlot.isFOBSale()) {
-										final Vessel assignment = slot.getNominatedVessel();
-										if (assignment != null) {
-											return assignment.getName();
-										}
-										break;
-									}
-								}
-							}
-						case FLEET:
-							final VesselAssignmentType vesselAssignmentType = inputCargo.getVesselAssignmentType();
-
-							if (vesselAssignmentType instanceof VesselAvailability) {
-								final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
-								final Vessel vessel = vesselAvailability.getVessel();
-								if (vessel != null) {
-									return vessel.getName();
-								}
-							} else if (vesselAssignmentType instanceof CharterInMarket) {
-								final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
-								final VesselClass vesselClass = charterInMarket.getVesselClass();
-								if (vesselClass != null) {
-									return vesselClass.getName();
-								}
-							}
-							break;
-						default:
-							break;
-						}
-						return null;
-
-					} else if (object instanceof Event) {
-						final Event event = (Event) object;
-						final Sequence sequence = event.getSequence();
-						if (sequence != null) {
-							return sequence.getName();
-						}
-					}
-
-					return null;
-				}
-
-				@Override
-				public Comparable<?> getComparable(final Object object) {
-
-					// if (object instanceof CargoAllocation) {
-					// final CargoAllocation cargoAllocation = (CargoAllocation) object;
-					// final Sequence sequence = cargoAllocation.getSequence();
-					// if (sequence != null) {
-					// return sequence.getName();
-					// }
-					// } else if (object instanceof Event) {
-					// final Event event = (Event) object;
-					// final Sequence sequence = event.getSequence();
-					// if (sequence != null) {
-					// return sequence.getName();
-					// }
-					// }
-					return render(object);
-				}
-
-			}, targetObjectRef));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Vessel", null, ColumnType.NORMAL, new VesselAssignmentFormatter(), targetObjectRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.loaddate": {
 			final ETypedElement[][] paths = new ETypedElement[][] { { loadAllocationRef, s.getSlotAllocation__GetLocalStart() }, { targetObjectRef, s.getEvent__GetLocalStart() } };
@@ -312,7 +209,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				@Override
 				public Integer getIntValue(final Object object) {
 
-					return calculateLegCost(object, cargoAllocationRef, loadAllocationRef);
+					return ScheduleCostUtils.calculateLegCost(object, cargoAllocationRef, loadAllocationRef);
 				}
 
 			}));
@@ -323,7 +220,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				@Override
 				public Integer getIntValue(final Object object) {
 
-					return calculateLegCost(object, cargoAllocationRef, dischargeAllocationRef);
+					return ScheduleCostUtils.calculateLegCost(object, cargoAllocationRef, dischargeAllocationRef);
 				}
 			}));
 			break;
@@ -408,28 +305,8 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				@Override
 				public Integer getIntValue(final Object object) {
 
-					ProfitAndLossContainer container = null;
+					return PNLDeltaUtils.getElementProfitAndLoss(object);
 
-					if (object instanceof CargoAllocation || object instanceof VesselEventVisit || object instanceof StartEvent || object instanceof GeneratedCharterOut
-							|| object instanceof OpenSlotAllocation) {
-						container = (ProfitAndLossContainer) object;
-					}
-					if (object instanceof SlotVisit) {
-						final SlotVisit slotVisit = (SlotVisit) object;
-						if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-							container = slotVisit.getSlotAllocation().getCargoAllocation();
-						}
-					}
-
-					if (container != null) {
-
-						final GroupProfitAndLoss dataWithKey = container.getGroupProfitAndLoss();
-						if (dataWithKey != null) {
-							return (int) dataWithKey.getProfitAndLoss();
-						}
-					}
-
-					return null;
 				}
 			}, targetObjectRef));
 			break;
@@ -441,331 +318,35 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			break;
 
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.type":
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Type", null, ColumnType.NORMAL, new BaseFormatter() {
-				@Override
-				public String render(final Object object) {
-					if (object instanceof OpenSlotAllocation) {
-						final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) object;
-						String type = "Open Slot";
-						final Slot slot = openSlotAllocation.getSlot();
-						if (slot instanceof LoadSlot) {
-							type = "Long";
-						} else if (slot instanceof DischargeSlot) {
-							type = "Short";
-						}
-						return type;
-					} else if (object instanceof SlotVisit || object instanceof CargoAllocation) {
-						return "Cargo";
-					} else if (object instanceof StartEvent) {
-						return "Start";
-					} else if (object instanceof GeneratedCharterOut) {
-						return "Charter Out (virt)";
-					} else if (object instanceof VesselEventVisit) {
-						final VesselEvent vesselEvent = ((VesselEventVisit) object).getVesselEvent();
-						if (vesselEvent instanceof DryDockEvent) {
-							return "Dry Dock";
-						} else if (vesselEvent instanceof MaintenanceEvent) {
-							return "Maintenance";
-						} else if (vesselEvent instanceof CharterOutEvent) {
-							return "Charter Out";
-						}
-					}
-					return "Unknown";
-				}
-			}, targetObjectRef));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Type", null, ColumnType.NORMAL, new RowTypeFormatter(), targetObjectRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_prevvessel":
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Prev. Vessel", null, ColumnType.DIFF, generatePreviousVesselAssignmentColumnFormatter(cargoAllocationRef));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Prev. Vessel", null, ColumnType.DIFF, new PreviousVesselFormatter());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_prevwiring":
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Prev. discharge", null, ColumnType.DIFF, generatePreviousWiringColumnFormatter(cargoAllocationRef));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Prev. discharge", null, ColumnType.DIFF, new PreviousWiringFormatter());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation":
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Permutation", null, ColumnType.DIFF, generatePermutationColumnFormatter(cargoAllocationRef));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Permutation", null, ColumnType.DIFF, new PermutationDescriptionFormatter());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation_group":
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Permutation Group", null, ColumnType.DIFF, generatePermutationGroupColumnFormatter(cargoAllocationRef));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Permutation Group", null, ColumnType.DIFF, new PermutationGroupFormatter());
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation_group_pnldelta":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "P&L Delta", null, ColumnType.DIFF, new PNLDeltaFormatter());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_changestring":
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Change", null, ColumnType.DIFF, generateChangeStringColumnFormatter(cargoAllocationRef));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Main Change", null, ColumnType.DIFF, new MainChangeDescriptionFormatter());
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_lateness":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Lateness change", null, ColumnType.DIFF, new LatenessDescriptionFormatter());
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_capacity_violation":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Violation change", null, ColumnType.DIFF, new CapacityViolationDescriptionFormatter());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.pnl_group":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, builder.getEmptyPNLColumnBlockFactory());
 			break;
 		}
-	}
-
-	private Integer calculateLegCost(final Object object, final EStructuralFeature cargoAllocationRef, final EStructuralFeature allocationRef) {
-		if (object instanceof EObject) {
-			final EObject eObject = (EObject) object;
-			final CargoAllocation cargoAllocation = (CargoAllocation) eObject.eGet(cargoAllocationRef);
-			final SlotAllocation allocation = (SlotAllocation) eObject.eGet(allocationRef);
-			if (allocation != null && cargoAllocation != null) {
-
-				boolean collecting = false;
-				int total = 0;
-				for (final Event event : cargoAllocation.getEvents()) {
-					if (event instanceof SlotVisit) {
-						final SlotVisit slotVisit = (SlotVisit) event;
-						if (allocation.getSlotVisit() == event) {
-							collecting = true;
-						} else {
-							if (collecting) {
-								// Finished!
-								break;
-							}
-						}
-						if (collecting) {
-							total += slotVisit.getFuelCost();
-							total += slotVisit.getCharterCost();
-							total += slotVisit.getPortCost();
-						}
-
-					} else if (event instanceof Journey) {
-						final Journey journey = (Journey) event;
-						if (collecting) {
-							total += journey.getFuelCost();
-							total += journey.getCharterCost();
-							total += journey.getToll();
-						}
-					} else if (event instanceof Idle) {
-						final Idle idle = (Idle) event;
-						if (collecting) {
-							total += idle.getFuelCost();
-							total += idle.getCharterCost();
-						}
-					}
-				}
-
-				return total;
-			}
-
-		}
-		return null;
-	}
-
-	public ICellRenderer generateChangeStringColumnFormatter(final EStructuralFeature cargoAllocationRef) {
-		return new BaseFormatter() {
-
-			@Override
-			public String render(final Object obj) {
-
-				if (obj instanceof Row) {
-					final Row row = (Row) obj;
-					if (!row.isReference()) {
-						final Row referenceRow = row.getReferenceRow();
-						if (referenceRow != null) {
-
-							if (row.getCargoAllocation() != null && referenceRow.getCargoAllocation() != null) {
-
-								final String elementString = CargoAllocationUtils.getWiringAsString(row.getCargoAllocation());
-								final String referenceString = CargoAllocationUtils.getWiringAsString(referenceRow.getCargoAllocation());
-								if (elementString.equals(referenceString)) {
-
-									if (!Equality.isEqual(CargoAllocationUtils.getVesselAssignmentName(row.getCargoAllocation()),
-											CargoAllocationUtils.getVesselAssignmentName(referenceRow.getCargoAllocation()))) {
-
-										// Highlight vessel changes.
-										// return String
-										// .format("Allocate '%s' : '%s' to '%s'", row.getLoadAllocation().getSlot().getName(),
-										// CargoAllocationUtils.getVesselAssignmentName(referenceRow.getCargoAllocation()),
-										// CargoAllocationUtils.getVesselAssignmentName(row.getCargoAllocation()));
-									}
-
-									return "";
-								}
-								if (row.getLoadAllocation().getSlot() instanceof SpotLoadSlot) {
-									final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) row.getLoadAllocation().getSlot();
-									return String.format("Buy spot '%s' to %s", spotLoadSlot.getMarket().getName(), CargoAllocationUtils.getSalesWiringAsString(row.getCargoAllocation()));
-								} else {
-									return String.format("Redirect '%s' : %s -> %s", row.getLoadAllocation().getSlot().getName(),
-											CargoAllocationUtils.getSalesWiringAsString(referenceRow.getCargoAllocation()), CargoAllocationUtils.getSalesWiringAsString(row.getCargoAllocation()));
-								}
-							}
-							if (row.getOpenSlotAllocation() != null && referenceRow.getOpenSlotAllocation() == null) {
-								return String.format("Cancelled '%s'", row.getOpenSlotAllocation().getSlot().getName());
-							}
-						} else {
-							if (row.getOpenSlotAllocation() != null) {
-								return String.format("Cancelled '%s'", row.getOpenSlotAllocation().getSlot().getName());
-							}
-						}
-					}
-				}
-				return "";
-			}
-		};
-	}
-
-	public ICellRenderer generatePermutationColumnFormatter(final EStructuralFeature cargoAllocationRef) {
-		return new BaseFormatter() {
-			@Override
-			public String render(final Object obj) {
-
-				if (obj instanceof Row) {
-					final Row row = (Row) obj;
-
-					final CycleGroup group = row.getCycleGroup();
-					if (group != null) {
-						return group.getDescription();
-
-					}
-				}
-				return "";
-			}
-		};
-	}
-
-	public ICellRenderer generatePermutationGroupColumnFormatter(final EStructuralFeature cargoAllocationRef) {
-		return new BaseFormatter() {
-			@Override
-			public String render(final Object obj) {
-
-				if (obj instanceof Row) {
-					final Row row = (Row) obj;
-
-					final CycleGroup group = row.getCycleGroup();
-					if (group != null && group.isSetIndex()) {
-						return Integer.toString(group.getIndex());
-
-					}
-				}
-				return "";
-			}
-
-			@Override
-			public Comparable getComparable(final Object obj) {
-				if (obj instanceof Row) {
-					final Row row = (Row) obj;
-
-					final CycleGroup group = row.getCycleGroup();
-					if (group != null && group.isSetIndex()) {
-						return group.getIndex();
-
-					}
-				}
-				return Integer.MAX_VALUE;
-			}
-		};
-	}
-
-	/**
-	 * Generate a new formatter for the previous-vessel-assignment column
-	 * 
-	 * Used in pin/diff mode.
-	 * 
-	 * @param cargoAllocationRef
-	 * @return
-	 */
-	public ICellRenderer generatePreviousVesselAssignmentColumnFormatter(final EStructuralFeature cargoAllocationRef) {
-		return new BaseFormatter() {
-			@Override
-			public String render(final Object obj) {
-
-				final Row row = (Row) obj;
-				if (row.getCargoAllocation() == null) {
-					return null;
-				}
-
-				final String currentAssignment = CargoAllocationUtils.getVesselAssignmentName(row.getCargoAllocation());
-
-				String result = "";
-
-				final Row referenceRow = row.getReferenceRow();
-				if (referenceRow != null) {
-					try {
-						final CargoAllocation ca = (CargoAllocation) referenceRow.eGet(cargoAllocationRef);
-						result = CargoAllocationUtils.getVesselAssignmentName(ca);
-					} catch (final Exception e) {
-						log.warn("Error formatting previous assignment", e);
-					}
-				}
-
-				// Only show if different.
-				if (currentAssignment.equals(result)) {
-					return "";
-				}
-				return result;
-			}
-		};
-	}
-
-	/**
-	 * Generate a new formatter for the previous-wiring column
-	 * 
-	 * Used in pin/diff mode.
-	 * 
-	 * @param cargoAllocationRef
-	 * @return
-	 */
-	public ICellRenderer generatePreviousWiringColumnFormatter(final EStructuralFeature cargoAllocationRef) {
-		return new BaseFormatter() {
-			@Override
-			public String render(final Object obj) {
-
-				if (obj instanceof Row) {
-					final Row row = (Row) obj;
-					if (row.getCargoAllocation() == null) {
-						return null;
-					}
-
-					final Row referenceRow = row.getReferenceRow();
-					if (referenceRow != null) {
-						//
-						if (row.getCargoAllocation() != null) {
-							final String currentWiring = CargoAllocationUtils.getSalesWiringAsString(row.getCargoAllocation());
-							//
-							String result = "";
-							// // for objects not coming from the pinned scenario,
-							// // return the pinned counterpart's wiring to display as the previous wiring
-							try {
-								final CargoAllocation pinnedCargoAllocation = referenceRow.getCargoAllocation();
-								if (pinnedCargoAllocation != null) {
-									// convert this cargo's wiring of slot allocations to a string
-									result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
-								} else if (referenceRow.getOpenSlotAllocation() != null) {
-									final OpenSlotAllocation openSlotAllocation = referenceRow.getOpenSlotAllocation();
-									if (openSlotAllocation != null) {
-										if (openSlotAllocation.getSlot() instanceof LoadSlot) {
-											result = "Long";
-										} else {
-											result = "Short";
-										}
-									}
-								}
-							} catch (final Exception e) {
-								log.warn("Error formatting previous wiring", e);
-							}
-
-							// Do not display if same
-							if (currentWiring.equals(result)) {
-								return "";
-							}
-
-							return result;
-						} else if (row.getOpenSlotAllocation() != null) {
-							final OpenSlotAllocation openSlotAllocation = row.getOpenSlotAllocation();
-							if (openSlotAllocation != null) {
-
-								if (referenceRow.getCargoAllocation() != null) {
-									final CargoAllocation pinnedCargoAllocation = referenceRow.getCargoAllocation();
-									if (pinnedCargoAllocation != null) {
-
-										final String result;
-										if (openSlotAllocation.getSlot() instanceof LoadSlot) {
-											result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
-										} else {
-											result = CargoAllocationUtils.getPurchaseWiringAsString(pinnedCargoAllocation);
-										}
-										return result;
-									}
-								}
-							}
-						}
-					}
-				}
-				return "";
-			}
-		};
 	}
 }

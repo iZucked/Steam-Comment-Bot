@@ -12,6 +12,7 @@ import java.util.Set;
 import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
+import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -53,9 +54,17 @@ public class StructuralDifferencesProcessor implements IDiffProcessor {
 				}
 			}
 			if (showRows) {
-				elementToRowMap.get(referenceElement).setVisible(true);
-				for (final EObject element : equivalents) {
-					elementToRowMap.get(element).setVisible(true);
+				final Row referenceRow = elementToRowMap.get(referenceElement);
+				if (referenceRow != null) {
+					referenceRow.setVisible(true);
+					final CycleGroup cycleGroup = CycleGroupUtils.createOrReturnCycleGroup(table, referenceRow);
+					for (final EObject element : equivalents) {
+						final Row elementRow = elementToRowMap.get(element);
+						if (elementRow != null) {
+							elementRow.setVisible(true);
+							CycleGroupUtils.addToOrMergeCycleGroup(table, elementRow, cycleGroup);
+						}
+					}
 				}
 			}
 

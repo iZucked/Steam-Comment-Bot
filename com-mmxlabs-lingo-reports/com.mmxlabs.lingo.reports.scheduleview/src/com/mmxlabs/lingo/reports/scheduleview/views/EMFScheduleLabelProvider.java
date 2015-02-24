@@ -100,8 +100,14 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 				final Collection<Object> collectedElements = output.getCollectedElements();
 				if (collectedElements.size() > 1) {
-					final ScenarioInstance instance = output.getScenarioInstance(sequence.eContainer());
-					seqText += "\n" + instance.getName();
+					if (output.hasPinnedScenario()) {
+						if (output.isPinned(sequence.eContainer())) {
+							seqText += " (pinned)";
+						}
+					} else {
+						final ScenarioInstance instance = output.getScenarioInstance(sequence.eContainer());
+						seqText += "\n" + instance.getName();
+					}
 				}
 			}
 			text = seqText;

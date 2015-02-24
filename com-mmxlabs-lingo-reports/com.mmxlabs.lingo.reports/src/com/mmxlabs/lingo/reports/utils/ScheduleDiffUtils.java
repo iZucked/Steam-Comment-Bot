@@ -40,8 +40,17 @@ public class ScheduleDiffUtils {
 		}
 
 		if (pinnedObject instanceof GeneratedCharterOut || otherObject instanceof GeneratedCharterOut) {
+			GeneratedCharterOut pinnedCharterOut = (GeneratedCharterOut) pinnedObject;
+			GeneratedCharterOut otherCharterOut = (GeneratedCharterOut) otherObject;
+			
+			if (pinnedCharterOut.getDuration() != otherCharterOut.getDuration()) {
+				return true;
+			}
+			if (pinnedCharterOut.getRevenue() != otherCharterOut.getRevenue()) {
+				return true;
+			}
 			// Specific to each scenario/schedule so always mark as different.
-			return true;
+			return false;
 		}
 
 		if (pinnedObject instanceof CargoAllocation && otherObject instanceof CargoAllocation) {

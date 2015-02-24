@@ -6,27 +6,37 @@ package com.mmxlabs.lingo.reports.views.schedule;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.collect.Lists;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ScheduleElementCollector;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
+import com.mmxlabs.lingo.reports.diff.utils.PNLDeltaUtils;
 import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandler;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.CycleDiffProcessor;
+import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.CycleGroupUtils;
+import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.GCOCycleGroupingProcessor;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.IDiffProcessor;
+import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.LadenVoyageProcessor;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.StructuralDifferencesProcessor;
+import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.RowGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
+import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -34,6 +44,7 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -44,6 +55,60 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class ScheduleTransformer {
+
+	private final class UserGroupPNLDeltaComparator implements Comparator<Pair<UserGroup, Integer>> {
+		@Override
+		public int compare(final Pair<UserGroup, Integer> o1, final Pair<UserGroup, Integer> o2) {
+
+			if (o1.getFirst() == o2.getFirst()) {
+				return 0;
+			}
+			//
+			int c = o2.getSecond() - o1.getSecond();
+			if (c == 0) {
+				final String desc2 = o2.getFirst().getComment();
+				final String desc1 = o1.getFirst().getComment();
+				if (desc2 == null) {
+					c = 1;
+				} else if (desc1 == null) {
+					c = -1;
+				} else {
+					c = desc2.compareToIgnoreCase(desc1);
+				}
+			}
+			if (c == 0) {
+				c = o2.hashCode() - o1.hashCode();
+			}
+			return c;
+		}
+	}
+
+	private final class CycleGroupPNLComparator implements Comparator<Pair<CycleGroup, Integer>> {
+		@Override
+		public int compare(final Pair<CycleGroup, Integer> o1, final Pair<CycleGroup, Integer> o2) {
+
+			if (o1.getFirst() == o2.getFirst()) {
+				return 0;
+			}
+			//
+			int c = o2.getSecond() - o1.getSecond();
+			if (c == 0) {
+				final String desc2 = o2.getFirst().getDescription();
+				final String desc1 = o1.getFirst().getDescription();
+				if (desc2 == null) {
+					c = 1;
+				} else if (desc1 == null) {
+					c = -1;
+				} else {
+					c = desc2.compareToIgnoreCase(desc1);
+				}
+			}
+			if (c == 0) {
+				c = o2.hashCode() - o1.hashCode();
+			}
+			return c;
+		}
+	}
 
 	/**
 	 * Map between {@link Schedule} model elements and {@link Row}s
@@ -79,7 +144,7 @@ public class ScheduleTransformer {
 
 			private boolean isPinned = false;
 			private int numberOfSchedules;
-			private List<LNGScenarioModel> rootObjects = new LinkedList<>();
+			private final List<LNGScenarioModel> rootObjects = new LinkedList<>();
 			private final List<IDiffProcessor> diffProcessors = new LinkedList<>();
 
 			@Override
@@ -90,15 +155,19 @@ public class ScheduleTransformer {
 				perScenarioElementsByKeyMap.clear();
 				elementToRowMap.clear();
 				rootObjects.clear();
-				// tableDataModel = ScheduleReportFactory.eINSTANCE.createTable();
 
 				table.getRowGroups().clear();
 				table.getRows().clear();
 				table.getCycleGroups().clear();
-				
+				table.getUserGroups().clear();
+				table.getScenarios().clear();
+				table.setPinnedScenario(null);
+
 				diffProcessors.clear();
-				 diffProcessors.add(new CycleDiffProcessor(customRelatedSlotHandlers));
+				diffProcessors.add(new CycleDiffProcessor(customRelatedSlotHandlers));
 				diffProcessors.add(new StructuralDifferencesProcessor(builder.getScheduleDiffUtils()));
+//				diffProcessors.add(new GCOCycleGroupingProcessor());
+				diffProcessors.add(new LadenVoyageProcessor());
 			}
 
 			@Override
@@ -112,6 +181,11 @@ public class ScheduleTransformer {
 				}
 
 				rootObjects.add(findScenarioModel(schedule));
+
+				if (isPinned) {
+					table.setPinnedScenario(scenarioInstance.getInstance());
+				}
+				table.getScenarios().add(scenarioInstance.getInstance());
 
 				return generateRows(table, scenarioInstance, schedule, isPinned);
 			}
@@ -127,6 +201,7 @@ public class ScheduleTransformer {
 			@Override
 			public void endCollecting() {
 				// In Pin/Diff mode
+
 				final boolean pinDiffMode = numberOfSchedules > 1 && isPinned;
 				for (final ColumnBlock handler : builder.getBlockManager().getBlocksInVisibleOrder()) {
 					if (handler != null) {
@@ -135,7 +210,7 @@ public class ScheduleTransformer {
 				}
 
 				// Also if number of scenarios is 0 or 1
-				if (!isPinned) {
+				if (!isPinned || numberOfSchedules == 1) {
 					// Show all rows
 					for (final Row row : table.getRows()) {
 						row.setVisible(true);
@@ -155,12 +230,20 @@ public class ScheduleTransformer {
 
 					// Display unique rows.
 					for (final EObject element : uniqueElements) {
-						elementToRowMap.get(element).setVisible(true);
+						final Row row = elementToRowMap.get(element);
+						if (row != null) {
+							row.setVisible(true);
+							if (row.getCycleGroup() == null) {
+								// Create a default group
+								CycleGroupUtils.createOrReturnCycleGroup(table, row);
+							}
+						}
 					}
 					// // Run diff processes.
 					for (final IDiffProcessor diffProcessor : diffProcessors) {
 						diffProcessor.runDiffProcess(table, referenceElements, uniqueElements, equivalancesMap, elementToRowMap);
 					}
+					renumberCycleGroups(table);
 				}
 				super.endCollecting();
 
@@ -175,11 +258,13 @@ public class ScheduleTransformer {
 	public List<Row> generateRows(final Table dataModelInstance, final ScenarioInstance scenarioInstance, final Schedule schedule, final boolean isPinned) {
 
 		final List<EObject> interestingEvents = new LinkedList<EObject>();
+		final Set<EObject> allEvents = new HashSet<EObject>();
 		for (final Sequence sequence : schedule.getSequences()) {
 			for (final Event event : sequence.getEvents()) {
 				if (builder.showEvent(event)) {
 					interestingEvents.add(event);
 				}
+				allEvents.add(event);
 			}
 		}
 
@@ -187,16 +272,16 @@ public class ScheduleTransformer {
 			if (builder.showOpenSlot(openSlotAllocation)) {
 				interestingEvents.add(openSlotAllocation);
 			}
+			allEvents.add(openSlotAllocation);
 		}
 
-		return generateRows(dataModelInstance, scenarioInstance, schedule, interestingEvents, isPinned);
+		return generateRows(dataModelInstance, scenarioInstance, schedule, interestingEvents, allEvents, isPinned);
 	}
 
 	public List<Row> generateRows(final Table tableModelInstance, final ScenarioInstance scenarioInstance, final Schedule schedule, final List<EObject> interestingElements,
-			final boolean isReferenceSchedule) {
+			final Set<EObject> allElements, final boolean isReferenceSchedule) {
 		final List<Row> rows = new ArrayList<Row>(interestingElements.size());
 
-		final List<EObject> scheduleElements = new LinkedList<>();
 		if (isReferenceSchedule) {
 			this.referenceElements = new LinkedList<>();
 		}
@@ -237,10 +322,18 @@ public class ScheduleTransformer {
 						elementToRowMap.put(slot, row);
 						elementToRowMap.put(slot.getSlotVisit(), row);
 						if (isReferenceSchedule) {
-
 							this.referenceElements.add(slot);
 						}
-						scheduleElements.add(slot);
+						allElements.add(slot);
+
+						Event evt = slot.getSlotVisit().getNextEvent();
+						while (evt != null && !(evt instanceof SlotVisit)) {
+							elementToRowMap.put(evt, row);
+							evt = evt.getNextEvent();
+							if (!cargoAllocation.getEvents().contains(evt)) {
+								break;
+							}
+						}
 					}
 					if (i < dischargeSlots.size()) {
 						final SlotAllocation slot = dischargeSlots.get(i);
@@ -252,10 +345,20 @@ public class ScheduleTransformer {
 
 							this.referenceElements.add(slot);
 						}
-						scheduleElements.add(slot);
+						allElements.add(slot);
+
+						Event evt = slot.getSlotVisit().getNextEvent();
+						while (evt != null && !(evt instanceof SlotVisit)) {
+							elementToRowMap.put(evt, row);
+							evt = evt.getNextEvent();
+							if (!cargoAllocation.getEvents().contains(evt)) {
+								break;
+							}
+						}
 					}
 					rows.add(row);
 					addInputEquivalents(row, cargoAllocation);
+
 				}
 			} else if (element instanceof OpenSlotAllocation) {
 
@@ -265,7 +368,7 @@ public class ScheduleTransformer {
 				row.setTarget(openSlotAllocation);
 				row.setOpenSlotAllocation(openSlotAllocation);
 				elementToRowMap.put(openSlotAllocation, row);
-				scheduleElements.add(openSlotAllocation);
+				allElements.add(openSlotAllocation);
 				if (isReferenceSchedule) {
 					this.referenceElements.add(openSlotAllocation);
 				}
@@ -282,7 +385,6 @@ public class ScheduleTransformer {
 				}
 				addInputEquivalents(row, openSlotAllocation);
 				rows.add(row);
-
 			} else if (element instanceof Event) {
 				final Event event = (Event) element;
 				final Row row = ScheduleReportFactory.eINSTANCE.createRow();
@@ -291,12 +393,19 @@ public class ScheduleTransformer {
 				rows.add(row);
 
 				elementToRowMap.put(event, row);
-				scheduleElements.add(event);
+				allElements.add(event);
 				if (isReferenceSchedule) {
 					this.referenceElements.add(event);
 				}
 				addInputEquivalents(row, event);
+				if (element instanceof EventGrouping) {
+					final EventGrouping eventGrouping = (EventGrouping) element;
+					for (final Event ge : eventGrouping.getEvents()) {
+						elementToRowMap.put(ge, row);
+					}
+				}
 			}
+
 		}
 		// If this is the reference schedule, then mark all rows as reference
 		if (isReferenceSchedule) {
@@ -311,7 +420,7 @@ public class ScheduleTransformer {
 		}
 
 		// Generate the element by key map
-		final Map<String, List<EObject>> map = equivalanceGroupBuilder.generateElementNameGroups(scheduleElements);
+		final Map<String, List<EObject>> map = equivalanceGroupBuilder.generateElementNameGroups(allElements);
 		if (isReferenceSchedule) {
 			perScenarioElementsByKeyMap.add(0, map);
 		} else {
@@ -350,8 +459,10 @@ public class ScheduleTransformer {
 		} else if (a instanceof VesselEventVisit) {
 			final VesselEventVisit vesselEventVisit = (VesselEventVisit) a;
 			row.getInputEquivalents().addAll(Lists.<EObject> newArrayList(vesselEventVisit, vesselEventVisit.getVesselEvent()));
+			row.getInputEquivalents().addAll(vesselEventVisit.getEvents());
 		} else if (a instanceof StartEvent) {
 			final StartEvent startEvent = (StartEvent) a;
+			row.getInputEquivalents().addAll(startEvent.getEvents());
 			final VesselAvailability vesselAvailability = startEvent.getSequence().getVesselAvailability();
 			if (vesselAvailability != null) {
 				row.getInputEquivalents().addAll(Lists.<EObject> newArrayList(startEvent, vesselAvailability.getVessel()));
@@ -359,6 +470,93 @@ public class ScheduleTransformer {
 		} else if (a instanceof OpenSlotAllocation) {
 			final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) a;
 			row.getInputEquivalents().addAll(Lists.<EObject> newArrayList(openSlotAllocation, openSlotAllocation.getSlot()));
+		} else {
+			row.getInputEquivalents().addAll(Lists.<EObject> newArrayList(a));
 		}
 	}
+
+	private void renumberCycleGroups(final Table table) {
+
+		// For cargo based cycle groups, construct a particular diff message
+		final Set<Pair<UserGroup, Integer>> orderedUserGroup = new TreeSet<>(new UserGroupPNLDeltaComparator());
+
+		for (final UserGroup group : table.getUserGroups()) {
+			// Skip empty groups
+			if (group.getGroups().isEmpty()) {
+				continue;
+			}
+
+			// Filter out single element groups
+			if (group.getGroups().size() == 1) {
+				table.getCycleGroups().addAll(group.getGroups());
+			} else {
+				final int pnlDelta = PNLDeltaUtils.getPNLDelta(group);
+				orderedUserGroup.add(new Pair<>(group, pnlDelta));
+			}
+		}
+		int userGoupCounter = 1;
+		int cycleGoupCounter = 1;
+		table.getUserGroups().clear();
+		for (final Pair<UserGroup, Integer> p : orderedUserGroup) {
+			final UserGroup userGroup = p.getFirst();
+//			 Zero sum user group, remove it.
+//			if (p.getSecond() == 0) {
+//				table.getCycleGroups().addAll(userGroup.getGroups());
+//				continue;
+//			}
+			table.getUserGroups().add(userGroup);
+			userGroup.setComment(String.format("Group %d", userGoupCounter++));
+
+			final Set<Pair<CycleGroup, Integer>> orderedCycleGroup = new TreeSet<>(new CycleGroupPNLComparator());
+			for (final CycleGroup cycleGroup : userGroup.getGroups()) {
+				// Skip empty groups
+				if (cycleGroup.getRows().isEmpty()) {
+					continue;
+				}
+				for (final Row row2 : cycleGroup.getRows()) {
+					row2.setVisible(true);
+				}
+				final int pnlDelta = PNLDeltaUtils.getPNLDelta(cycleGroup);
+				orderedCycleGroup.add(new Pair<>(cycleGroup, pnlDelta));
+			}
+
+			userGroup.getGroups().clear();
+			for (final Pair<CycleGroup, Integer> p2 : orderedCycleGroup) {
+				final CycleGroup group = p2.getFirst();
+				userGroup.getGroups().add(group);
+				group.setIndex(cycleGoupCounter++);
+			}
+		}
+
+		// For cargo based cycle groups, construct a particular diff message
+		final Set<Pair<CycleGroup, Integer>> orderedCycleGroup = new TreeSet<>(new CycleGroupPNLComparator());
+
+		for (final CycleGroup group : table.getCycleGroups()) {
+			// Skip empty groups
+			if (group.getRows().isEmpty()) {
+				continue;
+			}
+
+			final int pnlDelta = PNLDeltaUtils.getPNLDelta(group);
+			if (pnlDelta != 0) {
+				orderedCycleGroup.add(new Pair<>(group, pnlDelta));
+				// non-zero P&L, show group
+				for (final Row row2 : group.getRows()) {
+					row2.setVisible(true);
+				}
+			} else {
+				// Zero P&L, hide group
+				for (final Row row2 : group.getRows()) {
+					row2.setVisible(false);
+				}
+			}
+		}
+		table.getCycleGroups().clear();
+		for (final Pair<CycleGroup, Integer> p : orderedCycleGroup) {
+			final CycleGroup group = p.getFirst();
+			table.getCycleGroups().add(group);
+			group.setIndex(cycleGoupCounter++);
+		}
+	}
+
 }

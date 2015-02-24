@@ -3,12 +3,21 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model" nsURI="http://www.mmxlabs.com/models/lingo/reports/schedule/1"
     nsPrefix="reports.schedule">
   <eClassifiers xsi:type="ecore:EClass" name="Table">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//Row"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="options" eType="#//DiffOptions"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//Row"
+        containment="true" eOpposite="#//Row/table"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cycleGroups" upperBound="-1"
         eType="#//CycleGroup" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rowGroups" upperBound="-1"
         eType="#//RowGroup" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scenarios" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pinnedScenario" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="userGroups" upperBound="-1"
+        eType="#//UserGroup" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="selectedElements" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Row">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="visible" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
@@ -33,6 +42,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="rowGroup" eType="#//RowGroup"
         eOpposite="#//RowGroup/rows"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="scenario" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="table" eType="#//Table"
+        eOpposite="#//Table/rows"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CycleGroup">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -40,9 +51,33 @@
         eOpposite="#//Row/cycleGroup"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="index" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
         unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="userGroup" eType="#//UserGroup"
+        eOpposite="#//UserGroup/groups"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="delta" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="changeType" eType="#//ChangeType"
+        defaultValueLiteral="PNL"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RowGroup">
     <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//Row"
         eOpposite="#//Row/rowGroup"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UserGroup">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="groups" upperBound="-1"
+        eType="#//CycleGroup" containment="true" eOpposite="#//CycleGroup/userGroup"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="delta" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DiffOptions">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="filterSelectedElements"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="filterSelectedSequences"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ChangeType">
+    <eLiterals name="PNL"/>
+    <eLiterals name="DURATION" value="1"/>
+    <eLiterals name="CHARTERING" value="2"/>
+    <eLiterals name="VESSEL" value="3"/>
+    <eLiterals name="WIRING" value="4"/>
   </eClassifiers>
 </ecore:EPackage>

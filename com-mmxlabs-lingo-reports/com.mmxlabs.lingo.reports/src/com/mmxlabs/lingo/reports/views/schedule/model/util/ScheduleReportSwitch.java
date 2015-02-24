@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.lingo.reports.views.schedule.model.util;
 
+import com.mmxlabs.lingo.reports.views.schedule.model.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
@@ -96,6 +97,18 @@ public class ScheduleReportSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case ScheduleReportPackage.USER_GROUP: {
+				UserGroup userGroup = (UserGroup)theEObject;
+				T result = caseUserGroup(userGroup);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ScheduleReportPackage.DIFF_OPTIONS: {
+				DiffOptions diffOptions = (DiffOptions)theEObject;
+				T result = caseDiffOptions(diffOptions);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -157,6 +170,36 @@ public class ScheduleReportSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseRowGroup(RowGroup object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>User Group</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>User Group</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseUserGroup(UserGroup object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Diff Options</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Diff Options</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseDiffOptions(DiffOptions object) {
 		return null;
 	}
 

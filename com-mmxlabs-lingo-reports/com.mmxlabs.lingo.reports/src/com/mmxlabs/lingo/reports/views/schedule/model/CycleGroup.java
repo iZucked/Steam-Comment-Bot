@@ -20,6 +20,9 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getDescription <em>Description</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getRows <em>Rows</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getIndex <em>Index</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getUserGroup <em>User Group</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getDelta <em>Delta</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getChangeType <em>Change Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -124,5 +127,89 @@ public interface CycleGroup extends EObject {
 	 * @generated
 	 */
 	boolean isSetIndex();
+
+	/**
+	 * Returns the value of the '<em><b>User Group</b></em>' container reference.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.lingo.reports.views.schedule.model.UserGroup#getGroups <em>Groups</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>User Group</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>User Group</em>' container reference.
+	 * @see #setUserGroup(UserGroup)
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getCycleGroup_UserGroup()
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.UserGroup#getGroups
+	 * @model opposite="groups" transient="false"
+	 * @generated
+	 */
+	UserGroup getUserGroup();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getUserGroup <em>User Group</em>}' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>User Group</em>' container reference.
+	 * @see #getUserGroup()
+	 * @generated
+	 */
+	void setUserGroup(UserGroup value);
+
+	/**
+	 * Returns the value of the '<em><b>Delta</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Delta</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Delta</em>' attribute.
+	 * @see #setDelta(int)
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getCycleGroup_Delta()
+	 * @model
+	 * @generated
+	 */
+	int getDelta();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getDelta <em>Delta</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Delta</em>' attribute.
+	 * @see #getDelta()
+	 * @generated
+	 */
+	void setDelta(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Change Type</b></em>' attribute.
+	 * The default value is <code>"PNL"</code>.
+	 * The literals are from the enumeration {@link com.mmxlabs.lingo.reports.views.schedule.model.ChangeType}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Change Type</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Change Type</em>' attribute.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ChangeType
+	 * @see #setChangeType(ChangeType)
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getCycleGroup_ChangeType()
+	 * @model default="PNL"
+	 * @generated
+	 */
+	ChangeType getChangeType();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getChangeType <em>Change Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Change Type</em>' attribute.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ChangeType
+	 * @see #getChangeType()
+	 * @generated
+	 */
+	void setChangeType(ChangeType value);
 
 } // CycleGroup

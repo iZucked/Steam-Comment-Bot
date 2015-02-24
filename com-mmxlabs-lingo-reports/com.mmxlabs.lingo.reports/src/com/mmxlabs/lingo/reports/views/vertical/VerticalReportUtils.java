@@ -13,6 +13,7 @@ import java.util.TimeZone;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -86,30 +87,30 @@ public final class VerticalReportUtils {
 		return result;
 	}
 
-	public static LocalDate getLocalDateFor(final Date date, final TimeZone timeZone, final boolean asUTCEquivalent) {
+	public static LocalDateTime getLocalDateFor(final Date date, final TimeZone timeZone, final boolean asUTCEquivalent) {
 		final Calendar cal = Calendar.getInstance(timeZone);
 		cal.setTime(date);
 		return getLocalDateFor(cal, asUTCEquivalent);
 	}
 
-	public static LocalDate getLocalDateFor(final Calendar cal, final boolean asUTCEquivalent) {
+	public static LocalDateTime getLocalDateFor(final Calendar cal, final boolean asUTCEquivalent) {
 		if (asUTCEquivalent) {
-			return new LocalDate(cal.get(Calendar.YEAR), 1 + cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+			return new LocalDateTime(cal.get(Calendar.YEAR), 1 + cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE));
 		} else {
 			final Calendar cal2 = (Calendar) cal.clone();
 			cal2.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
-			return new LocalDate(cal2.get(Calendar.YEAR), 1 + cal2.get(Calendar.MONTH), cal2.get(Calendar.DAY_OF_MONTH));
+			return new LocalDateTime(cal2.get(Calendar.YEAR), 1 + cal2.get(Calendar.MONTH), cal2.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE));
 
 		}
 	}
 
-	public static <T extends ITimezoneProvider & EObject> LocalDate getLocalDateFor(final T object, final EAttribute feature, final boolean asUTCEquivalent) {
+	public static <T extends ITimezoneProvider & EObject> LocalDateTime getLocalDateFor(final T object, final EAttribute feature, final boolean asUTCEquivalent) {
 		final Date date = (Date) object.eGet(feature);
 		return getLocalDateFor(date, TimeZone.getTimeZone(object.getTimeZone(feature)), asUTCEquivalent);
 
 	}
 
-	public static <T extends ITimezoneProvider & EObject> LocalDate getLocalDateFor(final T object, final Date date, final EAttribute feature, final boolean asUTCEquivalent) {
+	public static <T extends ITimezoneProvider & EObject> LocalDateTime getLocalDateFor(final T object, final Date date, final EAttribute feature, final boolean asUTCEquivalent) {
 		return getLocalDateFor(date, TimeZone.getTimeZone(object.getTimeZone(feature)), asUTCEquivalent);
 
 	}

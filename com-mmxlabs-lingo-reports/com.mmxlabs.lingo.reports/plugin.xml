@@ -29,7 +29,14 @@
             class="com.mmxlabs.lingo.reports.preferences.PreferenceInitializer">
       </initializer>
    </extension>
-
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="com.mmxlabs.lingo.reports.diff.DiffPerspective"
+            id="com.mmxlabs.lingo.reports.diff.DiffPerspective"
+            name="Diff">
+      </perspective>
+   </extension>
    <extension
          point="org.eclipse.ui.views">
       <category
@@ -150,6 +157,12 @@
              id="com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport"
              name="PnL Details">
        </view>
+       <view
+             class="com.mmxlabs.lingo.reports.diff.DiffGroupView"
+             id="com.mmxlabs.lingo.reports.diff.DiffGroupView"
+             name="Diff View"
+             restorable="true">
+       </view>       
    </extension>
    <extension
          point="org.eclipse.help.contexts">
@@ -214,6 +227,10 @@
       <ScheduleBasedColumn
             handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
             id="com.mmxlabs.lingo.reports.components.columns.schedule.pnl_additional">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation_group_pnldelta">
       </ScheduleBasedColumn>
       <ScheduleBasedColumn
             handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
@@ -315,6 +332,14 @@
             handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
             id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_changestring">
       </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_lateness">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_capacity_violation">
+      </ScheduleBasedColumn>
    </extension>
    <extension
          point="com.mmxlabs.lingo.reports.ScheduleBasedReportInitialState">
@@ -364,7 +389,7 @@
                id="com.mmxlabs.lingo.reports.components.columns.schedule.pnl_total">
          </InitialColumn>
          <InitialColumn
-               id="com.mmxlabs.lingo.reports.components.columns.schedule.pnl_pnl_additional">
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.pnl_additional">
          </InitialColumn>
          <InitialColumn
                id="com.mmxlabs.lingo.reports.components.columns.schedule.buyport">
@@ -394,13 +419,19 @@
                id="com.mmxlabs.lingo.reports.components.columns.schedule.sellvolume_m3">
          </InitialColumn>
          <InitialColumn
-               id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation">
-         </InitialColumn>
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation_group_pnldelta">
+         </InitialColumn>         
          <InitialColumn
                id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation_group">
          </InitialColumn>
          <InitialColumn
                id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_changestring">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_capacity_violation">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_lateness">
          </InitialColumn>
          <InitialDiffOption
                option="scenario">
@@ -446,6 +477,14 @@
       <PortRotationBasedColumn
             handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
             id="com.mmxlabs.lingo.reports.components.columns.portrotation.enddate">
+      </PortRotationBasedColumn>
+      <PortRotationBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.cv">
+      </PortRotationBasedColumn>
+      <PortRotationBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.price">
       </PortRotationBasedColumn>
       <PortRotationBasedColumn
             handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
@@ -600,4 +639,39 @@
             genModel="model/schedulereport.genmodel"/>
    </extension>
 
+   <extension point="org.eclipse.emf.edit.itemProviderAdapterFactories">
+      <!-- @generated schedulereport -->
+      <factory
+            uri="http://www.mmxlabs.com/models/lingo/reports/schedule/1"
+            class="com.mmxlabs.lingo.reports.views.schedule.model.provider.ScheduleReportItemProviderAdapterFactory"
+            supportedTypes=
+              "org.eclipse.emf.edit.provider.IEditingDomainItemProvider
+               org.eclipse.emf.edit.provider.IStructuredItemContentProvider
+               org.eclipse.emf.edit.provider.ITreeItemContentProvider
+               org.eclipse.emf.edit.provider.IItemLabelProvider
+               org.eclipse.emf.edit.provider.IItemPropertySource"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="com.mmxlabs.lingo.reports.diff.actionset"
+            label="Diff View Tools">
+         <action
+               class="com.mmxlabs.lingo.reports.diff.actions.FilterScheduleReportBySelection"
+               icon="icons/FilterBySelection.gif"
+               id="com.mmxlabs.lingo.reports.diff.actions.FilterScheduleReportBySelection"
+               label="Filter Schedule Report"
+               style="toggle"
+               toolbarPath="additions">
+         </action>
+         <action
+               class="com.mmxlabs.lingo.reports.diff.actions.FilterGanttReportBySelection"
+               icon="icons/filterGantt.gif"
+               id="com.mmxlabs.lingo.reports.diff.actions.FilterGanttReportBySelection"
+               label="Filter Schedule"
+               style="toggle"
+               toolbarPath="additions">
+         </action>
+      </actionSet>
+   </extension>
 </plugin>

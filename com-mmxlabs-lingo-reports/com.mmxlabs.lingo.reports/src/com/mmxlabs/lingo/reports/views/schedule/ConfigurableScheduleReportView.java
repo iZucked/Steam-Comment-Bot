@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.emf.databinding.IEMFObservable;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
@@ -32,6 +33,7 @@ import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportIni
 import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportInitialStateExtension.InitialDiffOption;
 import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportInitialStateExtension.InitialRowType;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
+import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 
 /**
  * A customisable report for schedule based data. Extension points define the available columns for all instances and initial state for each instance of this report. Optionally a dialog is available
@@ -66,18 +68,39 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 	}
 
 	@Override
-	public void initPartControl(Composite parent) {
+	public Object getAdapter(final Class adapter) {
+
+		if (Table.class.isAssignableFrom(adapter)) {
+			final Object input = viewer.getInput();
+			if (input instanceof IEMFObservable) {
+				final IEMFObservable observable = (IEMFObservable) input;
+				return observable.getObserved();
+			}
+			return input;
+		}
+
+		return super.getAdapter(adapter);
+	}
+
+	@Override
+	public void initPartControl(final Composite parent) {
 		super.initPartControl(parent);
 
 		// Add a filter to only show certain rows.
-		
+
 		viewer.setFilters(new ViewerFilter[] { super.filterSupport.createViewerFilter(), new ViewerFilter() {
 
 			@Override
-			public boolean select(Viewer viewer, Object parentElement, Object element) {
+			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
+
+				if (table != null && table.getOptions().isFilterSelectedElements() && !table.getSelectedElements().isEmpty()) {
+					if (!table.getSelectedElements().contains(element)) {
+						return false;
+					}
+				}
 
 				if (element instanceof Row) {
-					Row row = (Row) element;
+					final Row row = (Row) element;
 					// Filter out reference scenario if required
 					if (!builder.getDiffFilterInfo().contains(ScheduleBasedReportBuilder.DIFF_FILTER_PINNDED_SCENARIO.id)) {
 						if (row.isReference()) {
@@ -255,6 +278,8 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 	@Override
 	protected void postDialogOpen(final ColumnConfigurationDialog dialog) {
 		builder.refreshDiffOptions();
+		// Update options state
+		// table.getOptions().setShowPinnedScenario(!builder.getDiffFilterInfo().contains(ScheduleBasedReportBuilder.DIFF_FILTER_PINNDED_SCENARIO));
 
 	}
 

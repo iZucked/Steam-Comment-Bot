@@ -17,26 +17,19 @@ import com.google.common.collect.Sets;
 import com.mmxlabs.lingo.reports.utils.CargoAllocationUtils;
 import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandler;
 import com.mmxlabs.lingo.reports.utils.RelatedSlotAllocations;
+import com.mmxlabs.lingo.reports.views.schedule.model.ChangeType;
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
-import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
-import com.mmxlabs.models.lng.cargo.CharterOutEvent;
-import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
-import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.models.lng.schedule.StartEvent;
-import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 
 public class CycleDiffProcessor implements IDiffProcessor {
 
@@ -83,6 +76,9 @@ public class CycleDiffProcessor implements IDiffProcessor {
 	private void generateCycleDiffForElement(final Table table, final Map<EObject, Set<EObject>> equivalancesMap, final Map<EObject, Row> elementToRowMap, final EObject referenceElement) {
 
 		final Row referenceRow = elementToRowMap.get(referenceElement);
+		if (referenceRow == null) {
+			return;
+		}
 
 		final CargoAllocation referenceRowCargoAllocation = referenceRow.getCargoAllocation();
 		if (referenceRowCargoAllocation != null) {
@@ -110,9 +106,7 @@ public class CycleDiffProcessor implements IDiffProcessor {
 			}
 			if (different) {
 
-				final CycleGroup cycleGroup = ScheduleReportFactory.eINSTANCE.createCycleGroup();
-				cycleGroup.getRows().add(referenceRow);
-				table.getCycleGroups().add(cycleGroup);
+				final CycleGroup cycleGroup = CycleGroupUtils.createOrReturnCycleGroup(table, referenceRow);
 
 				final CargoAllocation thisCargoAllocation = referenceRowCargoAllocation;
 
@@ -147,6 +141,8 @@ public class CycleDiffProcessor implements IDiffProcessor {
 					}
 					cycleGroup.getRows().add(r);
 				}
+				
+				cycleGroup.setChangeType(ChangeType.WIRING);
 			}
 		} else if (referenceRow.getOpenSlotAllocation() != null) {
 			final OpenSlotAllocation openSlotAllocation = referenceRow.getOpenSlotAllocation();
@@ -161,9 +157,7 @@ public class CycleDiffProcessor implements IDiffProcessor {
 				final Set<Slot> buysSet = relatedSlotAllocations.getRelatedSetFor(openSlotAllocation, true);
 				final Set<Slot> sellsSet = relatedSlotAllocations.getRelatedSetFor(openSlotAllocation, false);
 
-				final CycleGroup cycleGroup = ScheduleReportFactory.eINSTANCE.createCycleGroup();
-				cycleGroup.getRows().add(referenceRow);
-				table.getCycleGroups().add(cycleGroup);
+				final CycleGroup cycleGroup = CycleGroupUtils.createOrReturnCycleGroup(table, referenceRow);
 
 				for (final Slot s : buysSet) {
 					Object a = relatedSlotAllocations.getSlotAllocation(s);
@@ -195,55 +189,56 @@ public class CycleDiffProcessor implements IDiffProcessor {
 				}
 			}
 		} else {
-			final Object target = referenceRow.getTarget();
-
-			if (referenceRow.getCycleGroup() != null) {
-				return;
-			}
-			CycleGroup cycleGroup = null;
-			final Set<EObject> set = equivalancesMap.get(referenceElement);
-			if (set != null) {
-				for (final EObject equiv : set) {
-					final Row r = elementToRowMap.get(equiv);
-					if (r.getCycleGroup() != null) {
-						assert (cycleGroup == null || r.getCycleGroup() == cycleGroup);
-						cycleGroup = r.getCycleGroup();
-					}
-				}
-			}
-			if (cycleGroup != null) {
-				referenceRow.setCycleGroup(cycleGroup);
-			} else {
-				cycleGroup = ScheduleReportFactory.eINSTANCE.createCycleGroup();
-
-				cycleGroup.getRows().add(referenceRow);
-				table.getCycleGroups().add(cycleGroup);
-
-				if (target instanceof GeneratedCharterOut) {
-					cycleGroup.setDescription("Charter out (Virt)");
-				} else if (target instanceof StartEvent) {
-					cycleGroup.setDescription("Orphan Ballast");
-				} else if (target instanceof VesselEventVisit) {
-					final VesselEventVisit vesselEventVisit = (VesselEventVisit) target;
-					final VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
-					if (vesselEvent instanceof DryDockEvent) {
-						cycleGroup.setDescription("Drydock - " + vesselEvent.getName());
-					} else if (vesselEvent instanceof MaintenanceEvent) {
-						cycleGroup.setDescription("Maintenance - " + vesselEvent.getName());
-					} else if (vesselEvent instanceof CharterOutEvent) {
-						cycleGroup.setDescription("Charter out - " + vesselEvent.getName());
-					} else {
-						cycleGroup.setDescription("Event - " + vesselEvent.getName());
-					}
-
-				}
-			}
-			if (set != null) {
-				for (final EObject equiv : set) {
-					final Row r = elementToRowMap.get(equiv);
-					r.setCycleGroup(cycleGroup);
-				}
-			}
+//			final Object target = referenceRow.getTarget();
+//
+//			if (referenceRow.getCycleGroup() != null) {
+//				return;
+//			}
+//			CycleGroup cycleGroup = null;
+//			final Set<EObject> set = equivalancesMap.get(referenceElement);
+//			if (set != null) {
+//				for (final EObject equiv : set) {
+//					final Row r = elementToRowMap.get(equiv);
+//					if (r != null) {
+//						if (r.getCycleGroup() != null) {
+//							assert (cycleGroup == null || r.getCycleGroup() == cycleGroup);
+//							cycleGroup = r.getCycleGroup();
+//						}
+//					}
+//				}
+//			}
+//			if (cycleGroup != null) {
+//				referenceRow.setCycleGroup(cycleGroup);
+//			} else {
+//				cycleGroup = CycleGroupUtils.createOrReturnCycleGroup(table, referenceRow);
+//
+//				if (target instanceof GeneratedCharterOut) {
+//					cycleGroup.setDescription("Charter out (Virt)");
+//				} else if (target instanceof StartEvent) {
+//					cycleGroup.setDescription("Orphan Ballast");
+//				} else if (target instanceof VesselEventVisit) {
+//					final VesselEventVisit vesselEventVisit = (VesselEventVisit) target;
+//					final VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
+//					if (vesselEvent instanceof DryDockEvent) {
+//						cycleGroup.setDescription("Drydock - " + vesselEvent.getName());
+//					} else if (vesselEvent instanceof MaintenanceEvent) {
+//						cycleGroup.setDescription("Maintenance - " + vesselEvent.getName());
+//					} else if (vesselEvent instanceof CharterOutEvent) {
+//						cycleGroup.setDescription("Charter out - " + vesselEvent.getName());
+//					} else {
+//						cycleGroup.setDescription("Event - " + vesselEvent.getName());
+//					}
+//
+//				}
+//			}
+//			if (set != null) {
+//				for (final EObject equiv : set) {
+//					final Row r = elementToRowMap.get(equiv);
+//					if (r != null) {
+//						r.setCycleGroup(cycleGroup);
+//					}
+//				}
+//			}
 		}
 	}
 
@@ -259,7 +254,6 @@ public class CycleDiffProcessor implements IDiffProcessor {
 		}
 
 		// For cargo based cycle groups, construct a particular diff message
-		int goupCounter = 1;
 		for (final CycleGroup group : table.getCycleGroups()) {
 			final Set<Slot> buysSet = new HashSet<>();
 			final Set<Slot> sellsSet = new HashSet<>();
@@ -296,7 +290,6 @@ public class CycleDiffProcessor implements IDiffProcessor {
 				r.setVisible(true);
 			}
 
-			group.setIndex(goupCounter++);
 			group.setDescription(String.format("Rewire %d x %d; Buys %s, Sells %s", buysStringsSet.size(), sellsStringsSet.size(), buysStr, sellsStr));
 		}
 	}

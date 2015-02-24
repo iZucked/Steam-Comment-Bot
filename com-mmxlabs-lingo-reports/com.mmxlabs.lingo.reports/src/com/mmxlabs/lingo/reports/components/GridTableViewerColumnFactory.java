@@ -16,7 +16,9 @@ import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.nebula.widgets.grid.DataVisualizer;
 import org.eclipse.nebula.widgets.grid.GridColumn;
+import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
 
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
@@ -24,6 +26,7 @@ import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerFilterSupport;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerSortingSupport;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.models.ui.tabular.IImageProvider;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
 public class GridTableViewerColumnFactory implements IColumnFactory {
@@ -56,6 +59,7 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 
 			@Override
 			public void update(final ViewerCell cell) {
+
 				Object element = cell.getElement();
 				if (element != null) {
 					boolean found = false;
@@ -83,7 +87,12 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 
 				}
 
+				setRowSpan(formatter, cell, element);
+
 				cell.setText(formatter.render(element));
+				if (formatter instanceof IImageProvider) {
+					cell.setImage(((IImageProvider) formatter).getImage(element));
+				}
 			}
 		});
 
@@ -121,6 +130,7 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 
 						@Override
 						public void update(final ViewerCell cell) {
+
 							Object element = cell.getElement();
 							if (element != null) {
 								boolean found = false;
@@ -138,9 +148,16 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 									element = null;
 								}
 							}
+							setRowSpan(formatter, cell, element);
 
 							cell.setText(formatter.render(element));
+
+							if (formatter instanceof IImageProvider) {
+								cell.setImage(((IImageProvider) formatter).getImage(cell.getElement()));
+							}
+
 						}
+
 					}
 
 					);
@@ -179,4 +196,23 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 		}
 		gvc.getColumn().dispose();
 	}
+
+	private void setRowSpan(final ICellRenderer formatter, final ViewerCell cell, Object element) {
+		if (formatter instanceof IRowSpanProvider) {
+			final IRowSpanProvider rowSpanProvider = (IRowSpanProvider) formatter;
+			final DataVisualizer dv = viewer.getGrid().getDataVisualizer();
+			// final GridItem item = (GridItem) cell.getItem();
+			int rowSpan = rowSpanProvider.getRowSpan(cell, element);
+			{
+				ViewerCell c = cell;
+				for (int i = 0; i < rowSpan; i++) {
+					dv.setRowSpan((GridItem) c.getItem(), cell.getColumnIndex(), i);
+					c = c.getNeighbor(ViewerCell.ABOVE, false);
+					// Set row span each time in case the first cell in the range is not visible
+				}
+				dv.setRowSpan((GridItem) c.getItem(), cell.getColumnIndex(), rowSpan);
+			}
+		}
+	}
+
 }

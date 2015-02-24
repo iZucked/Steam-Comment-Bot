@@ -18,12 +18,14 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.RowGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
+import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -52,6 +54,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#isReference <em>Reference</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getRowGroup <em>Row Group</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getScenario <em>Scenario</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getTable <em>Table</em>}</li>
  * </ul>
  * </p>
  *
@@ -282,6 +285,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isVisible() {
 		return visible;
 	}
@@ -291,6 +295,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVisible(boolean newVisible) {
 		boolean oldVisible = visible;
 		visible = newVisible;
@@ -303,6 +308,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CycleGroup getCycleGroup() {
 		if (cycleGroup != null && cycleGroup.eIsProxy()) {
 			InternalEObject oldCycleGroup = (InternalEObject)cycleGroup;
@@ -344,6 +350,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCycleGroup(CycleGroup newCycleGroup) {
 		if (newCycleGroup != cycleGroup) {
 			NotificationChain msgs = null;
@@ -363,6 +370,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<EObject> getInputEquivalents() {
 		if (inputEquivalents == null) {
 			inputEquivalents = new EObjectResolvingEList<EObject>(EObject.class, this, ScheduleReportPackage.ROW__INPUT_EQUIVALENTS);
@@ -375,6 +383,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -384,6 +393,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -396,6 +406,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName2() {
 		return name2;
 	}
@@ -405,6 +416,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName2(String newName2) {
 		String oldName2 = name2;
 		name2 = newName2;
@@ -417,6 +429,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EObject getTarget() {
 		if (target != null && target.eIsProxy()) {
 			InternalEObject oldTarget = (InternalEObject)target;
@@ -443,6 +456,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setTarget(EObject newTarget) {
 		EObject oldTarget = target;
 		target = newTarget;
@@ -455,6 +469,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Schedule getSchedule() {
 		if (schedule != null && schedule.eIsProxy()) {
 			InternalEObject oldSchedule = (InternalEObject)schedule;
@@ -481,6 +496,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSchedule(Schedule newSchedule) {
 		Schedule oldSchedule = schedule;
 		schedule = newSchedule;
@@ -493,6 +509,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CargoAllocation getCargoAllocation() {
 		if (cargoAllocation != null && cargoAllocation.eIsProxy()) {
 			InternalEObject oldCargoAllocation = (InternalEObject)cargoAllocation;
@@ -519,6 +536,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCargoAllocation(CargoAllocation newCargoAllocation) {
 		CargoAllocation oldCargoAllocation = cargoAllocation;
 		cargoAllocation = newCargoAllocation;
@@ -531,6 +549,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SlotAllocation getLoadAllocation() {
 		if (loadAllocation != null && loadAllocation.eIsProxy()) {
 			InternalEObject oldLoadAllocation = (InternalEObject)loadAllocation;
@@ -557,6 +576,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLoadAllocation(SlotAllocation newLoadAllocation) {
 		SlotAllocation oldLoadAllocation = loadAllocation;
 		loadAllocation = newLoadAllocation;
@@ -569,6 +589,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SlotAllocation getDischargeAllocation() {
 		if (dischargeAllocation != null && dischargeAllocation.eIsProxy()) {
 			InternalEObject oldDischargeAllocation = (InternalEObject)dischargeAllocation;
@@ -595,6 +616,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDischargeAllocation(SlotAllocation newDischargeAllocation) {
 		SlotAllocation oldDischargeAllocation = dischargeAllocation;
 		dischargeAllocation = newDischargeAllocation;
@@ -607,6 +629,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public OpenSlotAllocation getOpenSlotAllocation() {
 		if (openSlotAllocation != null && openSlotAllocation.eIsProxy()) {
 			InternalEObject oldOpenSlotAllocation = (InternalEObject)openSlotAllocation;
@@ -633,6 +656,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setOpenSlotAllocation(OpenSlotAllocation newOpenSlotAllocation) {
 		OpenSlotAllocation oldOpenSlotAllocation = openSlotAllocation;
 		openSlotAllocation = newOpenSlotAllocation;
@@ -645,6 +669,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Row getReferenceRow() {
 		if (referenceRow != null && referenceRow.eIsProxy()) {
 			InternalEObject oldReferenceRow = (InternalEObject)referenceRow;
@@ -686,6 +711,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setReferenceRow(Row newReferenceRow) {
 		if (newReferenceRow != referenceRow) {
 			NotificationChain msgs = null;
@@ -705,6 +731,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<Row> getReferringRows() {
 		if (referringRows == null) {
 			referringRows = new EObjectWithInverseResolvingEList<Row>(Row.class, this, ScheduleReportPackage.ROW__REFERRING_ROWS, ScheduleReportPackage.ROW__REFERENCE_ROW);
@@ -717,6 +744,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isReference() {
 		return reference;
 	}
@@ -726,6 +754,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setReference(boolean newReference) {
 		boolean oldReference = reference;
 		reference = newReference;
@@ -738,6 +767,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public RowGroup getRowGroup() {
 		if (rowGroup != null && rowGroup.eIsProxy()) {
 			InternalEObject oldRowGroup = (InternalEObject)rowGroup;
@@ -779,6 +809,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setRowGroup(RowGroup newRowGroup) {
 		if (newRowGroup != rowGroup) {
 			NotificationChain msgs = null;
@@ -798,6 +829,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EObject getScenario() {
 		if (scenario != null && scenario.eIsProxy()) {
 			InternalEObject oldScenario = (InternalEObject)scenario;
@@ -824,11 +856,55 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setScenario(EObject newScenario) {
 		EObject oldScenario = scenario;
 		scenario = newScenario;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ScheduleReportPackage.ROW__SCENARIO, oldScenario, scenario));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Table getTable() {
+		if (eContainerFeatureID() != ScheduleReportPackage.ROW__TABLE) return null;
+		return (Table)eInternalContainer();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetTable(Table newTable, NotificationChain msgs) {
+		msgs = eBasicSetContainer((InternalEObject)newTable, ScheduleReportPackage.ROW__TABLE, msgs);
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setTable(Table newTable) {
+		if (newTable != eInternalContainer() || (eContainerFeatureID() != ScheduleReportPackage.ROW__TABLE && newTable != null)) {
+			if (EcoreUtil.isAncestor(this, newTable))
+				throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
+			NotificationChain msgs = null;
+			if (eInternalContainer() != null)
+				msgs = eBasicRemoveFromContainer(msgs);
+			if (newTable != null)
+				msgs = ((InternalEObject)newTable).eInverseAdd(this, ScheduleReportPackage.TABLE__ROWS, Table.class, msgs);
+			msgs = basicSetTable(newTable, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScheduleReportPackage.ROW__TABLE, newTable, newTable));
 	}
 
 	/**
@@ -854,6 +930,10 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 				if (rowGroup != null)
 					msgs = ((InternalEObject)rowGroup).eInverseRemove(this, ScheduleReportPackage.ROW_GROUP__ROWS, RowGroup.class, msgs);
 				return basicSetRowGroup((RowGroup)otherEnd, msgs);
+			case ScheduleReportPackage.ROW__TABLE:
+				if (eInternalContainer() != null)
+					msgs = eBasicRemoveFromContainer(msgs);
+				return basicSetTable((Table)otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -874,8 +954,24 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 				return ((InternalEList<?>)getReferringRows()).basicRemove(otherEnd, msgs);
 			case ScheduleReportPackage.ROW__ROW_GROUP:
 				return basicSetRowGroup(null, msgs);
+			case ScheduleReportPackage.ROW__TABLE:
+				return basicSetTable(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
+		switch (eContainerFeatureID()) {
+			case ScheduleReportPackage.ROW__TABLE:
+				return eInternalContainer().eInverseRemove(this, ScheduleReportPackage.TABLE__ROWS, Table.class, msgs);
+		}
+		return super.eBasicRemoveFromContainerFeature(msgs);
 	}
 
 	/**
@@ -928,6 +1024,8 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 			case ScheduleReportPackage.ROW__SCENARIO:
 				if (resolve) return getScenario();
 				return basicGetScenario();
+			case ScheduleReportPackage.ROW__TABLE:
+				return getTable();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -991,6 +1089,9 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 			case ScheduleReportPackage.ROW__SCENARIO:
 				setScenario((EObject)newValue);
 				return;
+			case ScheduleReportPackage.ROW__TABLE:
+				setTable((Table)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1051,6 +1152,9 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 			case ScheduleReportPackage.ROW__SCENARIO:
 				setScenario((EObject)null);
 				return;
+			case ScheduleReportPackage.ROW__TABLE:
+				setTable((Table)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1095,6 +1199,8 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 				return rowGroup != null;
 			case ScheduleReportPackage.ROW__SCENARIO:
 				return scenario != null;
+			case ScheduleReportPackage.ROW__TABLE:
+				return getTable() != null;
 		}
 		return super.eIsSet(featureID);
 	}

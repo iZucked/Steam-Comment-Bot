@@ -164,12 +164,20 @@ public class ScenarioViewerSynchronizer implements IScenarioServiceSelectionChan
 		final ArrayList<Object> selectedObjects = new ArrayList<Object>();
 		final List<LNGScenarioModel> scenarioModels = new ArrayList<LNGScenarioModel>();
 		final List<LNGPortfolioModel> portfolioModels = new ArrayList<LNGPortfolioModel>();
-
+		final boolean hasPinnedScenario = selectionProvider.getPinnedInstance() != null;
 		collector.beginCollecting();
 
-		for (final ScenarioInstance job : selectionProvider.getSelection()) {
+		// Sort pinned scenario first.
+		final List<ScenarioInstance> selectedInstances = new ArrayList<>(selectionProvider.getSelection());
+		final ScenarioInstance pinnedInstance = selectionProvider.getPinnedInstance();
+		if (pinnedInstance != null) {
+			selectedInstances.remove(pinnedInstance);
+			selectedInstances.add(0, pinnedInstance);
+		}
+
+		for (final ScenarioInstance job : selectedInstances) {
 			final IScenarioService scenarioService = job.getScenarioService();
-			final boolean isPinned = selectionProvider.getPinnedInstance() == job;
+			final boolean isPinned = pinnedInstance == job;
 			if (scenarioService == null) {
 				continue;
 			}
@@ -228,6 +236,11 @@ public class ScenarioViewerSynchronizer implements IScenarioServiceSelectionChan
 			@Override
 			public boolean isPinned(final Object object) {
 				return ScenarioViewerSynchronizer.this.selectionProvider.getPinnedInstance() == (getScenarioInstance(object));
+			}
+
+			@Override
+			public boolean hasPinnedScenario() {
+				return hasPinnedScenario;
 			}
 		};
 	}
