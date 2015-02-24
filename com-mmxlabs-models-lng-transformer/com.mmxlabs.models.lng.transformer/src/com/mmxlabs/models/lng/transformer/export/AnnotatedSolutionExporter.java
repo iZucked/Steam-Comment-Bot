@@ -176,7 +176,7 @@ public class AnnotatedSolutionExporter {
 				fobSequence.setSequenceType(SequenceType.FOB_SALE);
 				isFOBSequence = true;
 				// Skip and process differently
-				if (sequence.size() < 4) {
+				if (sequence.size() < 2) {
 					continue;
 				}
 
@@ -186,7 +186,7 @@ public class AnnotatedSolutionExporter {
 				desSequence.setSequenceType(SequenceType.DES_PURCHASE);
 				isDESSequence = true;
 				// Skip and process differently
-				if (sequence.size() < 4) {
+				if (sequence.size() < 2) {
 					continue;
 				}
 
