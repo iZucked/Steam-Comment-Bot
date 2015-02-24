@@ -302,7 +302,8 @@ public class GanttChartViewer extends StructuredViewer {
 							}
 							eventMap.put(c, event);
 							event.setVerticalEventAlignment(SWT.CENTER);
-
+							event.setGanttSection(section);
+							
 							if (image != null) {
 								event.setImage(true);
 								event.setPicture(image);
