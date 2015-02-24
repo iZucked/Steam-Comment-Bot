@@ -11,6 +11,8 @@ import com.google.inject.Module;
 import com.google.inject.Singleton;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VoyagePlanStartDateCharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.impl.DefaultEntityValueCalculator;
@@ -39,6 +41,9 @@ public class EvaluationModule extends AbstractModule {
 		
 		bind(VoyagePlanStartDateCharterRateCalculator.class).in(Singleton.class);
 		bind(ICharterRateCalculator.class).to(VoyagePlanStartDateCharterRateCalculator.class);
+
+		bind(IVesselBaseFuelCalculator.class).to(VesselBaseFuelCalculator.class);
+		bind(VesselBaseFuelCalculator.class).in(Singleton.class);
 
 		if (hints != null) {
 			for (final String hint : hints) {

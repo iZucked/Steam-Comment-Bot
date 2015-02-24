@@ -34,6 +34,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.google.inject.Module;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -67,6 +68,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotAvailability;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
@@ -101,11 +103,17 @@ public class PeriodTransformer {
 
 	@Inject(optional = true)
 	private Iterable<IPeriodTransformerExtension> extensions;
+	private Module testingModule;
+	
+	public PeriodTransformer(Module testingModule) {
+		this.testingModule = testingModule;
+		injectExtensions();
+	}
 
 	public PeriodTransformer() {
 		injectExtensions();
 	}
-
+	
 	private void injectExtensions() {
 
 		Injector injector = null;
@@ -255,6 +263,8 @@ public class PeriodTransformer {
 			}
 			if (event instanceof CharterOutEvent) {
 				// TODO: If in boundary, limit available vessels to assigned vessel
+				event.getAllowedVessels().clear();
+				event.getAllowedVessels().add(((VesselAvailability) event.getVesselAssignmentType()).getVessel());
 			}
 		}
 		internalDomain.getCommandStack().execute(DeleteCommand.create(internalDomain, eventsToRemove));
@@ -266,13 +276,34 @@ public class PeriodTransformer {
 
 		for (final Cargo cargo : cargoModel.getCargoes()) {
 
-			final InclusionType inclusionType = inclusionChecker.getObjectInclusionType(cargo, periodRecord).getFirst();
+			final Pair<InclusionType, Position> inclusionResult = inclusionChecker.getObjectInclusionType(cargo, periodRecord);
+			final InclusionType inclusionType = inclusionResult.getFirst();
+			final Position pos = inclusionResult.getSecond();
 
 			if (inclusionType == InclusionType.Out) {
 				cargoesToRemove.add(cargo);
 				slotsToRemove.addAll(cargo.getSlots());
 			} else if (inclusionType == InclusionType.Boundary) {
-				lockDownCargoDates(slotAllocationMap, cargo);
+				if (pos == Position.Both) {
+					// lock whole cargo
+					lockDownCargoDates(slotAllocationMap, cargo);
+				} else {
+					// lock only one slot
+					Pair<Slot, Slot> slots = inclusionChecker.getFirstAndLastSlots(cargo);
+					if (pos == Position.After) {
+						if (inclusionChecker.getObjectInclusionType(slots.getFirst(), periodRecord).getFirst() == InclusionType.In) {
+							lockDownSlotDates(slotAllocationMap, slots.getSecond());
+						} else {
+							lockDownCargoDates(slotAllocationMap, cargo);
+						}
+					} else {
+						if (inclusionChecker.getObjectInclusionType(slots.getSecond(), periodRecord).getFirst() == InclusionType.In) {
+							lockDownSlotDates(slotAllocationMap, slots.getFirst());
+						} else {
+							lockDownCargoDates(slotAllocationMap, cargo);
+						}
+					}
+				}
 			}
 
 			// These slots have been considered
@@ -420,6 +451,43 @@ public class PeriodTransformer {
 		}
 	}
 
+	public void lockDownSlotDates(final Map<Slot, SlotAllocation> slotAllocationMap, final Slot slot) {
+		if (slot.getName().equals("N130")) {
+			int i = 0;
+		}
+		if (slot instanceof LoadSlot) {
+			final LoadSlot loadSlot = (LoadSlot) slot;
+			if (loadSlot.isDESPurchase()) {
+				// Dates defined by other slots
+				return;
+			}
+		} else if (slot instanceof DischargeSlot) {
+			final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+			if (dischargeSlot.isFOBSale()) {
+				// Dates defined by other slots
+				return;
+			}
+		}
+
+		final SlotAllocation cargoSlotAllocation = slotAllocationMap.get(slot);
+		if (cargoSlotAllocation != null) {
+			slot.setWindowSize(0);
+			final Calendar localStart = (Calendar) cargoSlotAllocation.getLocalStart().clone();
+			final int localTime = localStart.get(Calendar.HOUR_OF_DAY);
+			localStart.set(Calendar.HOUR_OF_DAY, 0);
+			slot.setWindowStart(localStart.getTime());
+			slot.setWindowStartTime(localTime);
+			slot.getAllowedVessels().clear();
+			VesselAssignmentType vat = slot.getCargo().getVesselAssignmentType();
+			if (vat instanceof VesselAvailability) {
+				slot.getAllowedVessels().add(((VesselAvailability) vat).getVessel());
+			} else if (vat instanceof CharterInMarket) {
+				slot.getAllowedVessels().add(((CharterInMarket) vat).getVesselClass());
+			}
+		}
+		slot.setLocked(true);
+	}
+
 	protected List<Slot> getExtraDependenciesForSlot(final Slot slot) {
 
 		if (extensions == null) {
@@ -535,7 +603,7 @@ public class PeriodTransformer {
 
 	public EditingDomain evaluateScenario(final OptimiserSettings optimiserSettings, final LNGScenarioModel output) {
 
-		final LNGTransformer transformer = new LNGTransformer(output, optimiserSettings);
+		final LNGTransformer transformer = new LNGTransformer(output, optimiserSettings, testingModule);
 
 		final ModelEntityMap modelEntityMap = transformer.getModelEntityMap();
 		final IAnnotatedSolution startSolution = LNGSchedulerJobUtils.evaluateCurrentState(transformer);
@@ -568,7 +636,11 @@ public class PeriodTransformer {
 		final PortVisit portVisit = startConditionMap.get(assignedObject);
 		if (inclusionChecker.getObjectInVesselAvailabilityRange(portVisit, vesselAvailability) == InclusionType.In) {
 			vesselAvailability.getStartAt().clear();
-			vesselAvailability.getStartAt().add(portVisit.getPort());
+			if (portVisit instanceof VesselEventVisit && ((VesselEventVisit) portVisit).getVesselEvent() instanceof CharterOutEvent) {
+				vesselAvailability.getStartAt().add(((VesselEventVisit) portVisit).getVesselEvent().getPort());
+			} else {
+				vesselAvailability.getStartAt().add(portVisit.getPort());
+			}
 
 			vesselAvailability.setStartAfter(portVisit.getStart());
 			vesselAvailability.setStartBy(portVisit.getStart());

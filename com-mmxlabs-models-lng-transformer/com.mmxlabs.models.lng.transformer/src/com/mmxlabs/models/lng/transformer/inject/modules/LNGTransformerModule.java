@@ -104,8 +104,6 @@ public class LNGTransformerModule extends AbstractModule {
 
 		bind(IOptimisationTransformer.class).to(OptimisationTransformer.class).in(Singleton.class);
 
-		bind(IVesselBaseFuelCalculator.class).to(VesselBaseFuelCalculator.class);
-		bind(VesselBaseFuelCalculator.class).in(Singleton.class);
 		if (Platform.isRunning()) {
 			bind(IFitnessFunctionRegistry.class).toProvider(service(IFitnessFunctionRegistry.class).single());
 			bind(IConstraintCheckerRegistry.class).toProvider(service(IConstraintCheckerRegistry.class).single());

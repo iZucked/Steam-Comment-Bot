@@ -1,0 +1,185 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * All rights reserved.
+ */
+package com.mmxlabs.models.lng.transformer.its.tests;
+
+import java.util.Collection;
+
+import org.eclipse.emf.common.command.BasicCommandStack;
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
+
+import com.google.inject.Injector;
+import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
+import com.mmxlabs.models.lng.transformer.ModelEntityMap;
+import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
+import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
+import com.mmxlabs.models.lng.transformer.inject.modules.ExporterExtensionsModule;
+import com.mmxlabs.models.lng.transformer.its.internal.Activator;
+import com.mmxlabs.models.lng.transformer.period.InclusionChecker;
+import com.mmxlabs.models.lng.transformer.period.PeriodExporter;
+import com.mmxlabs.models.lng.transformer.period.PeriodTransformer;
+import com.mmxlabs.models.lng.transformer.period.ScenarioEntityMapping;
+import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeCustomiser;
+import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeExtender;
+import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModesRegistry;
+import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
+import com.mmxlabs.optimiser.core.IOptimisationContext;
+import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
+import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
+
+/**
+ * Simple wrapper based on {@link LNGSchedulerJobDescriptor} to run an optimisation in the unit tests.
+ * 
+ * @author Alex Churchill
+ * 
+ */
+public class PeriodScenarioRunner {
+
+	private final LNGScenarioModel scenario;
+
+	private IOptimisationContext context;
+	private ModelEntityMap modelEntityMap;
+	private LocalSearchOptimiser optimiser;
+
+	private Schedule intialSchedule;
+
+	private Schedule finalSchedule;
+
+	private Injector injector;
+
+	private LNGTransformer transformer;
+
+	private OptimiserSettings optimiserSettings;
+
+	/**
+	 */
+	public PeriodScenarioRunner(final LNGScenarioModel scenario) {
+		this.scenario = scenario;
+	}
+
+	public final Schedule getFinalSchedule() {
+		return finalSchedule;
+	}
+
+	public final Schedule getIntialSchedule() {
+		return intialSchedule;
+	}
+
+	/**
+	 */
+	public final LNGScenarioModel getScenario() {
+		return scenario;
+	}
+
+	public final IOptimisationContext getContext() {
+		return context;
+	}
+
+	public void init() throws IncompleteScenarioException {
+		final OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
+		assert optimiserSettings != null;
+		IParameterModesRegistry parameterModesRegistry = null;
+
+		final Activator activator = Activator.getDefault();
+		if (activator != null) {
+			parameterModesRegistry = activator.getParameterModesRegistry();
+		}
+
+		if (parameterModesRegistry != null) {
+			final Collection<IParameterModeExtender> extenders = parameterModesRegistry.getExtenders();
+			if (extenders != null) {
+				for (final IParameterModeExtender extender : extenders) {
+					extender.extend(optimiserSettings, null);
+				}
+			}
+		}
+
+		init(optimiserSettings);
+	}
+
+	ScenarioEntityMapping periodMapping;
+	private LNGScenarioModel optimiserScenario;
+
+	public void init(final OptimiserSettings optimiserSettings) throws IncompleteScenarioException {
+		periodMapping = new ScenarioEntityMapping();
+		this.optimiserSettings = optimiserSettings;
+		final PeriodTransformer t = new PeriodTransformer(new TransformerExtensionTestModule());
+		t.setInclusionChecker(new InclusionChecker());
+
+		optimiserScenario = t.transform(scenario, optimiserSettings, periodMapping);
+		transformer = new LNGTransformer(optimiserScenario, optimiserSettings, new TransformerExtensionTestModule(), LNGTransformer.HINT_OPTIMISE_LSO);
+
+		injector = transformer.getInjector();
+
+		modelEntityMap = transformer.getModelEntityMap();
+
+		context = transformer.getOptimisationContext();
+		optimiser = transformer.getOptimiser();
+
+		// because we are driving the optimiser ourself, so we can be paused, we
+		// don't actually get progress callbacks.
+		optimiser.setProgressMonitor(new NullOptimiserProgressMonitor());
+
+		// Limit number of iterations to keep runtime down.
+		optimiser.setNumberOfIterations(10000);
+
+		optimiser.init();
+
+		intialSchedule = exportSchedule(optimiser.start(context));
+	}
+
+	public void run() {
+		run(100);
+	}
+
+	public void run(final int percentage) {
+		optimiser.step(percentage);
+		finalSchedule = exportSchedule(optimiser.getBestSolution());
+	}
+
+	private Schedule exportSchedule(final IAnnotatedSolution solution) {
+		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
+		final Injector childInjector = injector.createChildInjector(new ExporterExtensionsModule());
+		childInjector.injectMembers(exporter);
+
+		final Schedule schedule = exporter.exportAnnotatedSolution(modelEntityMap, solution);
+		return schedule;
+	}
+
+	/**
+	 * Update the Scenario with the best solution. Note: This {@link PeriodScenarioRunner} should not be used again.
+	 */
+	public Schedule updateScenario() {
+
+		// Construct internal command stack to generate correct output schedule
+		final BasicCommandStack commandStack = new BasicCommandStack();
+		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
+		final EditingDomain ed = new AdapterFactoryEditingDomain(adapterFactory, commandStack);
+		LNGSchedulerJobUtils.exportSolution(injector, scenario, transformer.getOptimiserSettings(), ed, modelEntityMap, optimiser.getBestSolution(), 0);
+		final PeriodExporter e = new PeriodExporter();
+		Command c = e.updateOriginal(ed, scenario, optimiserScenario, periodMapping);
+		c.execute();
+		
+		final OptimiserSettings evalSettings = EcoreUtil.copy(optimiserSettings);
+		evalSettings.getRange().unsetOptimiseAfter();
+		evalSettings.getRange().unsetOptimiseBefore();
+		final LNGTransformer transformer = new LNGTransformer(scenario, evalSettings, new TransformerExtensionTestModule());
+
+		final ModelEntityMap modelEntityMap = transformer.getModelEntityMap();
+		final IAnnotatedSolution finalSolution = LNGSchedulerJobUtils.evaluateCurrentState(transformer);
+		return LNGSchedulerJobUtils.exportSolution(transformer.getInjector(), scenario, transformer.getOptimiserSettings(), ed, modelEntityMap, finalSolution, 0);
+
+	}
+}
