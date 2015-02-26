@@ -30,14 +30,6 @@
       </initializer>
    </extension>
    <extension
-         point="org.eclipse.ui.perspectives">
-      <perspective
-            class="com.mmxlabs.lingo.reports.diff.DiffPerspective"
-            id="com.mmxlabs.lingo.reports.diff.DiffPerspective"
-            name="Diff">
-      </perspective>
-   </extension>
-   <extension
          point="org.eclipse.ui.views">
       <category
             name="Reports"
@@ -157,12 +149,6 @@
              id="com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport"
              name="PnL Details">
        </view>
-       <view
-             class="com.mmxlabs.lingo.reports.diff.DiffGroupView"
-             id="com.mmxlabs.lingo.reports.diff.DiffGroupView"
-             name="Diff View"
-             restorable="true">
-       </view>       
    </extension>
    <extension
          point="org.eclipse.help.contexts">
@@ -652,26 +638,10 @@
                org.eclipse.emf.edit.provider.IItemPropertySource"/>
    </extension>
    <extension
-         point="org.eclipse.ui.actionSets">
-      <actionSet
-            id="com.mmxlabs.lingo.reports.diff.actionset"
-            label="Diff View Tools">
-         <action
-               class="com.mmxlabs.lingo.reports.diff.actions.FilterScheduleReportBySelection"
-               icon="icons/FilterBySelection.gif"
-               id="com.mmxlabs.lingo.reports.diff.actions.FilterScheduleReportBySelection"
-               label="Filter Schedule Report"
-               style="toggle"
-               toolbarPath="additions">
-         </action>
-         <action
-               class="com.mmxlabs.lingo.reports.diff.actions.FilterGanttReportBySelection"
-               icon="icons/filterGantt.gif"
-               id="com.mmxlabs.lingo.reports.diff.actions.FilterGanttReportBySelection"
-               label="Filter Schedule"
-               style="toggle"
-               toolbarPath="additions">
-         </action>
-      </actionSet>
-   </extension>
+         point="com.mmxlabs.license.features.PluginXMLEnablement">
+      <PluginXMLEnablement
+            feature="difftools"
+            plugin.xml="difftools.plugin.xml">
+      </PluginXMLEnablement>
+   </extension>>
 </plugin>
