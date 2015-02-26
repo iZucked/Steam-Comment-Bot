@@ -41,7 +41,8 @@ public class LicenseFeatures {
 						if (featureEnablementExtension != null) {
 							final String feature = featureEnablementExtension.getFeature();
 							if (feature != null) {
-								sai.addStringPermission("features:" + clean(feature));
+								final String permissionKey = "features:" + clean(feature);
+								sai.addStringPermission(permissionKey);
 
 							}
 						}
@@ -61,7 +62,7 @@ public class LicenseFeatures {
 		injector.injectMembers(realm);
 
 		// Disable caching for immediate updates
-		 realm.setAuthorizationCachingEnabled(false);
+		realm.setAuthorizationCachingEnabled(false);
 
 		final SecurityManager securityManager = new DefaultSecurityManager(realm);
 		SecurityUtils.setSecurityManager(securityManager);
@@ -73,7 +74,7 @@ public class LicenseFeatures {
 	 * @param feature
 	 * @return
 	 */
-	private static String clean(String feature) {
+	public static String clean(String feature) {
 
 		feature = feature.replaceAll(":", "_");
 		feature = feature.replaceAll("\\*", "_");
