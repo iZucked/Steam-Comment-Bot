@@ -28,6 +28,7 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.license.features.pluginxml.PluginRegistryHook;
 import com.mmxlabs.license.ssl.LicenseChecker;
 import com.mmxlabs.license.ssl.LicenseChecker.LicenseState;
 import com.mmxlabs.rcp.common.application.DelayedOpenFileProcessor;
@@ -145,6 +146,8 @@ public class Application implements IApplication {
 		// Login our default user
 		final Subject subject = SecurityUtils.getSubject();
 		subject.login(new UsernamePasswordToken("user", "password"));
+		
+		PluginRegistryHook.initialisePluginXMLEnablements();
 	}
 
 	/*
