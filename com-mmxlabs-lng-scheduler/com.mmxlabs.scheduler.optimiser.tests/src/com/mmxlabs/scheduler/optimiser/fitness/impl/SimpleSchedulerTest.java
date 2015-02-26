@@ -16,6 +16,7 @@ import com.google.common.collect.Lists;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mmxlabs.common.curves.ConstantValueCurve;
+import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -42,11 +43,11 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
-import com.mmxlabs.scheduler.optimiser.components.impl.BaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
+import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 
 /**
@@ -57,9 +58,12 @@ import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModu
  */
 public class SimpleSchedulerTest {
 
-	IOptimisationData createProblem(Injector injector) {
+	IOptimisationData createProblem(final Injector injector) {
 
 		final SchedulerBuilder builder = injector.getInstance(SchedulerBuilder.class);
+		final IBaseFuelCurveProviderEditor baseFuelCurveProvider = injector.getInstance(IBaseFuelCurveProviderEditor.class);
+
+		final IBaseFuelCurveProviderEditor baseFuCurveProviderEditor = injector.getInstance(IBaseFuelCurveProviderEditor.class);
 
 		// Build XY ports so distance is automatically populated`
 		// TODO: Add API to determine which distance provider to use
@@ -84,19 +88,24 @@ public class SimpleSchedulerTest {
 
 		// CV is 22800, divide by the following to get m3 to MT of 0.1 as used by this test.
 		final int baseFuelEquivalence = 228000;
-		final IBaseFuel baseFuel = new BaseFuel("test");
-		baseFuel.setEquivalenceFactor(baseFuelEquivalence);
+		final IBaseFuel baseFuel = builder.createBaseFuel("test", baseFuelEquivalence);
+		baseFuCurveProviderEditor.setBaseFuelCurve(baseFuel, new ConstantValueCurve(7000));
 		final IVesselClass vesselClass1 = builder.createVesselClass("vesselClass-1", 12000, 20000, 150000000, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0);
-
+		
+		// set up basefuel curve
+		final StepwiseIntegerCurve baseFuelCurve = new StepwiseIntegerCurve();
+		baseFuelCurve.setValueAfter(0, 7000);
+		baseFuelCurveProvider.setBaseFuelCurve(baseFuel, baseFuelCurve);
+		
 		builder.setVesselClassStateParameters(vesselClass1, VesselState.Laden, OptimiserUnitConvertor.convertToInternalDailyRate(150), OptimiserUnitConvertor.convertToInternalDailyRate(100),
 				OptimiserUnitConvertor.convertToInternalDailyRate(10), consumptionCalculator, 0);
 		builder.setVesselClassStateParameters(vesselClass1, VesselState.Ballast, OptimiserUnitConvertor.convertToInternalDailyRate(150), OptimiserUnitConvertor.convertToInternalDailyRate(100),
 				OptimiserUnitConvertor.convertToInternalDailyRate(10), consumptionCalculator, 0);
 
 		// TODO: Setup start/end ports correctly
-		IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, 150000000);
-		IVessel vessel2 = builder.createVessel("vessel-2", vesselClass1, 150000000);
-		IVessel vessel3 = builder.createVessel("vessel-3", vesselClass1, 150000000);
+		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, 150000000);
+		final IVessel vessel2 = builder.createVessel("vessel-2", vesselClass1, 150000000);
+		final IVessel vessel3 = builder.createVessel("vessel-3", vesselClass1, 150000000);
 
 		builder.createVesselAvailability(vessel1, new ConstantValueCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, null, null),
 				builder.createEndRequirement(Collections.singleton(port2), null, false, 0));
@@ -179,8 +188,8 @@ public class SimpleSchedulerTest {
 
 		final IOptimisationData data = createProblem(parentInjector);
 		// Build opt data
-		ScheduleTestModule m = new ScheduleTestModule(data);
-		Injector injector = parentInjector.createChildInjector(m);
+		final ScheduleTestModule m = new ScheduleTestModule(data);
+		final Injector injector = parentInjector.createChildInjector(m);
 
 		// Generate initial state
 		// final IInitialSequenceBuilder sequenceBuilder = injector.getInstance(IInitialSequenceBuilder.class);
@@ -191,7 +200,7 @@ public class SimpleSchedulerTest {
 		// ArrayList<String>(
 		// constraintRegistry.getConstraintCheckerNames()), constraintRegistry, new ArrayList<String>(evaluationProcessRegistry.getEvaluationProcessNames()), evaluationProcessRegistry);
 
-		IOptimisationContext context = injector.getInstance(IOptimisationContext.class);
+		final IOptimisationContext context = injector.getInstance(IOptimisationContext.class);
 
 		final IOptimiserProgressMonitor monitor = new IOptimiserProgressMonitor() {
 
@@ -214,11 +223,11 @@ public class SimpleSchedulerTest {
 
 		final ILocalSearchOptimiser optimiser = GeneralTestUtils.buildOptimiser(context, new Random(seed), 1000, 5, monitor);
 
-		for (IConstraintChecker c : optimiser.getConstraintCheckers()) {
+		for (final IConstraintChecker c : optimiser.getConstraintCheckers()) {
 			injector.injectMembers(c);
 		}
 
-		for (IFitnessComponent c : optimiser.getFitnessEvaluator().getFitnessComponents()) {
+		for (final IFitnessComponent c : optimiser.getFitnessEvaluator().getFitnessComponents()) {
 			injector.injectMembers(c);
 			injector.injectMembers(c.getFitnessCore());
 		}
