@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.lingo.reports.diff;
 
-import java.awt.datatransfer.StringSelection;
-import java.security.interfaces.DSAKey;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -61,6 +59,7 @@ import com.mmxlabs.lingo.reports.views.schedule.model.provider.ScheduleReportIte
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 
 public class DiffGroupView extends ViewPart implements ISelectionListener, IMenuListener {
+	public static final String ID = "com.mmxlabs.lingo.reports.diff.DiffGroupView";
 	private static final String SCHEDULE_VIEW_ID = "com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport";
 	private GridTreeViewer viewer;
 

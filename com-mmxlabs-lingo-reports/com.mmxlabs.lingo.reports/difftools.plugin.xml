@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2015
+    All rights reserved.
+
+-->
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="com.mmxlabs.lingo.reports.diff.DiffPerspective"
+            id="com.mmxlabs.lingo.reports.diff.DiffPerspective"
+            name="Diff Tools">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">      
+       <view
+             class="com.mmxlabs.lingo.reports.diff.DiffGroupView"
+             id="com.mmxlabs.lingo.reports.diff.DiffGroupView"
+             name="Diffs"
+             restorable="true">
+       </view>       
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="com.mmxlabs.lingo.reports.diff.actionset"
+            label="Diff View Tools">
+         <action
+               class="com.mmxlabs.lingo.reports.diff.actions.FilterScheduleReportBySelection"
+               icon="icons/FilterBySelection.gif"
+               id="com.mmxlabs.lingo.reports.diff.actions.FilterScheduleReportBySelection"
+               label="Filter Schedule Report"
+               style="toggle"
+               toolbarPath="additions">
+         </action>
+         <action
+               class="com.mmxlabs.lingo.reports.diff.actions.FilterGanttReportBySelection"
+               icon="icons/filterGantt.gif"
+               id="com.mmxlabs.lingo.reports.diff.actions.FilterGanttReportBySelection"
+               label="Filter Schedule"
+               style="toggle"
+               toolbarPath="additions">
+         </action>
+      </actionSet>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="*">
+         <perspectiveShortcut
+               id="com.mmxlabs.lingo.reports.diff.DiffPerspective">
+         </perspectiveShortcut>
+      </perspectiveExtension>
+   </extension>  
+</plugin>

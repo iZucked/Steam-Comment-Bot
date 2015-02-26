@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.shiro.SecurityUtils;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -164,10 +165,17 @@ public class ScheduleTransformer {
 				table.setPinnedScenario(null);
 
 				diffProcessors.clear();
-				diffProcessors.add(new CycleDiffProcessor(customRelatedSlotHandlers));
+
+				// Also if number of scenarios is 0 or 1
+				final boolean enableDiffTools = SecurityUtils.getSubject().isPermitted("features:difftools");
+				if (enableDiffTools) {
+					diffProcessors.add(new CycleDiffProcessor(customRelatedSlotHandlers));
+				}
 				diffProcessors.add(new StructuralDifferencesProcessor(builder.getScheduleDiffUtils()));
-				diffProcessors.add(new GCOCycleGroupingProcessor());
-				diffProcessors.add(new LadenVoyageProcessor());
+				if (enableDiffTools) {
+					diffProcessors.add(new GCOCycleGroupingProcessor());
+					diffProcessors.add(new LadenVoyageProcessor());
+				}
 			}
 
 			@Override
@@ -209,7 +217,6 @@ public class ScheduleTransformer {
 					}
 				}
 
-				// Also if number of scenarios is 0 or 1
 				if (!isPinned || numberOfSchedules == 1) {
 					// Show all rows
 					for (final Row row : table.getRows()) {
@@ -499,11 +506,11 @@ public class ScheduleTransformer {
 		table.getUserGroups().clear();
 		for (final Pair<UserGroup, Integer> p : orderedUserGroup) {
 			final UserGroup userGroup = p.getFirst();
-//			 Zero sum user group, remove it.
-//			if (p.getSecond() == 0) {
-//				table.getCycleGroups().addAll(userGroup.getGroups());
-//				continue;
-//			}
+			// Zero sum user group, remove it.
+			// if (p.getSecond() == 0) {
+			// table.getCycleGroups().addAll(userGroup.getGroups());
+			// continue;
+			// }
 			table.getUserGroups().add(userGroup);
 			userGroup.setComment(String.format("Group %d", userGoupCounter++));
 
