@@ -32,6 +32,8 @@ import com.mmxlabs.license.features.pluginxml.PluginRegistryHook;
 import com.mmxlabs.license.ssl.LicenseChecker;
 import com.mmxlabs.license.ssl.LicenseChecker.LicenseState;
 import com.mmxlabs.rcp.common.application.DelayedOpenFileProcessor;
+import com.mmxlabs.rcp.common.application.WorkbenchStateManager;
+import com.mmxlabs.rcp.common.viewfactory.ReplaceableViewManager;
 
 /**
  * This class controls all aspects of the application's execution
@@ -46,8 +48,10 @@ public class Application implements IApplication {
 	 */
 	@Override
 	public Object start(final IApplicationContext context) {
-
 		final Display display = PlatformUI.createDisplay();
+
+		WorkbenchStateManager.cleanupWorkbenchState();
+
 		final LicenseState validity = LicenseChecker.checkLicense();
 		if (validity != LicenseState.Valid) {
 
@@ -146,8 +150,10 @@ public class Application implements IApplication {
 		// Login our default user
 		final Subject subject = SecurityUtils.getSubject();
 		subject.login(new UsernamePasswordToken("user", "password"));
-		
+
 		PluginRegistryHook.initialisePluginXMLEnablements();
+
+		ReplaceableViewManager.initialiseReplaceableViews();
 	}
 
 	/*
