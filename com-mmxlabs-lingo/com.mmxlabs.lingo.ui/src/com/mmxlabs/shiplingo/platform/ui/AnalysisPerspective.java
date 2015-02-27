@@ -19,6 +19,8 @@ import com.mmxlabs.lingo.reports.views.TotalsHierarchyView;
 import com.mmxlabs.lingo.reports.views.TotalsReportView;
 import com.mmxlabs.lingo.reports.views.portrotation.PortRotationReportView;
 import com.mmxlabs.lingo.reports.views.schedule.ConfigurableScheduleReportView;
+import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalCalendarReportView;
+import com.mmxlabs.lingo.reports.views.vertical.DefaultVerticalReportView;
 
 public class AnalysisPerspective implements IPerspectiveFactory {
 
@@ -40,6 +42,7 @@ public class AnalysisPerspective implements IPerspectiveFactory {
 
 		// reportsFolder.addView(KPIReportView.ID);
 		reportsFolder.addView(SchedulerView.ID);
+		reportsFolder.addView(AbstractVerticalCalendarReportView.ID);
 		reportsFolder.addPlaceholder(TotalsReportView.ID);
 		reportsFolder.addPlaceholder(ConfigurableScheduleReportView.ID);
 		reportsFolder.addPlaceholder(PortRotationReportView.ID);
@@ -53,6 +56,7 @@ public class AnalysisPerspective implements IPerspectiveFactory {
 		layout.addShowViewShortcut(KPIReportView.ID);
 		layout.addShowViewShortcut(ConfigurableScheduleReportView.ID);
 		layout.addShowViewShortcut(SchedulerView.ID);
+		layout.addShowViewShortcut(AbstractVerticalCalendarReportView.ID);
 		layout.addShowViewShortcut(TotalsReportView.ID);
 		layout.addShowViewShortcut(TotalsHierarchyView.ID);
 		layout.addShowViewShortcut(PortRotationReportView.ID);
