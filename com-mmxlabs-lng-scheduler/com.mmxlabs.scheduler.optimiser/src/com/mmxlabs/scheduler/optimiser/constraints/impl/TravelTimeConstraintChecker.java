@@ -45,7 +45,7 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 	/**
 	 * The maximum amount of lateness which will even be considered (20 days)
 	 */
-	private int maxLateness = 1000 * 24;
+	private int maxLateness = 1000 * 24; //note, this particular value is never used, as calls to setMaxLateness() are made
 	private final String name;
 
 	@Inject
@@ -204,7 +204,7 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 
 		final int latestAllowableTime = tw2.getEnd() + maxLateness;
 
-		return earliestArrivalTime < latestAllowableTime;
+		return earliestArrivalTime <= latestAllowableTime;
 	}
 
 	@Override

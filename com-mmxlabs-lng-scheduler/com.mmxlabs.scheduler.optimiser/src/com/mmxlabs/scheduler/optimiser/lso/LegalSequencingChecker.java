@@ -123,10 +123,26 @@ public class LegalSequencingChecker {
 
 	// TODO quick hack to try something
 	public void disallowLateness() {
+		setMaxLateness(0);
+	}
+	
+	public int getMaxLateness() {
+		int time = 0;
 		for (final IPairwiseConstraintChecker checker : pairwiseCheckers) {
 			if (checker instanceof TravelTimeConstraintChecker) {
 				final TravelTimeConstraintChecker tt = (TravelTimeConstraintChecker) checker;
-				tt.setMaxLateness(0);
+				time = tt.getMaxLateness();
+				return time;
+			}
+		}
+		return time;
+	}
+	
+	public void setMaxLateness(int time) {
+		for (final IPairwiseConstraintChecker checker : pairwiseCheckers) {
+			if (checker instanceof TravelTimeConstraintChecker) {
+				final TravelTimeConstraintChecker tt = (TravelTimeConstraintChecker) checker;
+				tt.setMaxLateness(time);
 			}
 		}
 	}

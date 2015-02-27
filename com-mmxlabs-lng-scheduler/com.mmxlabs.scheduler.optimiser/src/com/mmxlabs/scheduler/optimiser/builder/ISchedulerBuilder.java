@@ -383,13 +383,13 @@ public interface ISchedulerBuilder {
 	 */
 	@NonNull
 	ILoadSlot createLoadSlot(String id, @NonNull IPort port, ITimeWindow window, long minVolume, long maxVolume, ILoadPriceCalculator priceCalculator, int cargoCVValue, int durationHours,
-			boolean cooldownSet, boolean cooldownForbidden, int pricingDate, PricingEventType pricingEvent, boolean slotIsOptional);
+			boolean cooldownSet, boolean cooldownForbidden, int pricingDate, PricingEventType pricingEvent, boolean slotIsOptional, boolean isSpotMarketSlot);
 
 	/**
 	 */
 	@NonNull
 	ILoadOption createDESPurchaseLoadSlot(String id, @Nullable IPort port, ITimeWindow window, long minVolume, long maxVolume, ILoadPriceCalculator priceCalculator, int cargoCVValue,
-			int durationInHours, int pricingDate, PricingEventType pricingEvent, boolean slotIsOptional);
+			int durationInHours, int pricingDate, PricingEventType pricingEvent, boolean slotIsOptional, boolean isSpotMarketSlot);
 
 	/**
 	 * Create a new {@link IDischargeSlot} instance. This is currently expected to be assigned to a cargo.
@@ -407,7 +407,7 @@ public interface ISchedulerBuilder {
 	 */
 	@NonNull
 	IDischargeSlot createDischargeSlot(String id, @NonNull IPort port, ITimeWindow window, long minVolumeInM3, long maxVolumeInM3, long minCvValue, long maxCvValue,
-			ISalesPriceCalculator pricePerMMBTu, int durationHours, int pricingDate, PricingEventType pricingEvent, boolean optional);
+			ISalesPriceCalculator pricePerMMBTu, int durationHours, int pricingDate, PricingEventType pricingEvent, boolean optional, boolean isSpotMarketSlot);
 
 	/**
 	 * 
@@ -422,7 +422,7 @@ public interface ISchedulerBuilder {
 	 */
 	@NonNull
 	IDischargeOption createFOBSaleDischargeSlot(String id, @Nullable IPort port, ITimeWindow window, long minVolume, long maxVolume, long minCvValue, long maxCvValue,
-			ISalesPriceCalculator priceCalculator, int durationInHours, int pricingDate, PricingEventType pricingEvent, boolean slotIsOptional);
+			ISalesPriceCalculator priceCalculator, int durationInHours, int pricingDate, PricingEventType pricingEvent, boolean slotIsOptional, boolean isSpotMarketSlot);
 
 	/**
 	 * Clean up builder resources. TODO: We assume the opt-data object owns the data providers. However, the builder will own them until then. Dispose should selectively clean these
