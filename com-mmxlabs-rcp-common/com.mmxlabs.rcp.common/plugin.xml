@@ -7,6 +7,8 @@
 -->
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="ReplaceableViewFactory" name="ReplaceableViewFactory" schema="schema/ReplaceableViewFactory.exsd"/>
+   <extension-point id="ReplaceableView" name="ReplaceableView" schema="schema/ReplaceableView.exsd"/>
    <extension
          point="org.eclipse.ui.viewActions">
       <viewContribution
