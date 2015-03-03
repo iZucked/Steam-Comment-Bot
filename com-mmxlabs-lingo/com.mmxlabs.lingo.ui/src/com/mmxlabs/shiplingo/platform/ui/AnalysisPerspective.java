@@ -9,16 +9,16 @@ import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 
 import com.mmxlabs.lingo.reports.scheduleview.views.SchedulerView;
-import com.mmxlabs.lingo.reports.views.CapacityViolationReportView;
-import com.mmxlabs.lingo.reports.views.CooldownReportView;
-import com.mmxlabs.lingo.reports.views.FitnessReportView;
-import com.mmxlabs.lingo.reports.views.HorizontalKPIReportView;
-import com.mmxlabs.lingo.reports.views.KPIReportView;
-import com.mmxlabs.lingo.reports.views.LatenessReportView;
-import com.mmxlabs.lingo.reports.views.TotalsHierarchyView;
-import com.mmxlabs.lingo.reports.views.TotalsReportView;
 import com.mmxlabs.lingo.reports.views.portrotation.PortRotationReportView;
 import com.mmxlabs.lingo.reports.views.schedule.ConfigurableScheduleReportView;
+import com.mmxlabs.lingo.reports.views.standard.CapacityViolationReportView;
+import com.mmxlabs.lingo.reports.views.standard.CooldownReportView;
+import com.mmxlabs.lingo.reports.views.standard.FitnessReportView;
+import com.mmxlabs.lingo.reports.views.standard.HorizontalKPIReportView;
+import com.mmxlabs.lingo.reports.views.standard.KPIReportView;
+import com.mmxlabs.lingo.reports.views.standard.LatenessReportView;
+import com.mmxlabs.lingo.reports.views.standard.TotalsHierarchyView;
+import com.mmxlabs.lingo.reports.views.standard.TotalsReportView;
 import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalCalendarReportView;
 import com.mmxlabs.lingo.reports.views.vertical.DefaultVerticalReportView;
 
