@@ -235,13 +235,22 @@ public interface ScheduleReportPackage extends EPackage {
 	int ROW__SCHEDULE = 6;
 
 	/**
+	 * The feature id for the '<em><b>Sequence</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROW__SEQUENCE = 7;
+
+	/**
 	 * The feature id for the '<em><b>Cargo Allocation</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__CARGO_ALLOCATION = 7;
+	int ROW__CARGO_ALLOCATION = 8;
 
 	/**
 	 * The feature id for the '<em><b>Load Allocation</b></em>' reference.
@@ -250,7 +259,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__LOAD_ALLOCATION = 8;
+	int ROW__LOAD_ALLOCATION = 9;
 
 	/**
 	 * The feature id for the '<em><b>Discharge Allocation</b></em>' reference.
@@ -259,7 +268,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__DISCHARGE_ALLOCATION = 9;
+	int ROW__DISCHARGE_ALLOCATION = 10;
 
 	/**
 	 * The feature id for the '<em><b>Open Slot Allocation</b></em>' reference.
@@ -268,7 +277,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__OPEN_SLOT_ALLOCATION = 10;
+	int ROW__OPEN_SLOT_ALLOCATION = 11;
 
 	/**
 	 * The feature id for the '<em><b>Reference Row</b></em>' reference.
@@ -277,7 +286,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__REFERENCE_ROW = 11;
+	int ROW__REFERENCE_ROW = 12;
 
 	/**
 	 * The feature id for the '<em><b>Referring Rows</b></em>' reference list.
@@ -286,7 +295,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__REFERRING_ROWS = 12;
+	int ROW__REFERRING_ROWS = 13;
 
 	/**
 	 * The feature id for the '<em><b>Reference</b></em>' attribute.
@@ -295,7 +304,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__REFERENCE = 13;
+	int ROW__REFERENCE = 14;
 
 	/**
 	 * The feature id for the '<em><b>Row Group</b></em>' reference.
@@ -304,7 +313,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__ROW_GROUP = 14;
+	int ROW__ROW_GROUP = 15;
 
 	/**
 	 * The feature id for the '<em><b>Scenario</b></em>' reference.
@@ -313,7 +322,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__SCENARIO = 15;
+	int ROW__SCENARIO = 16;
 
 	/**
 	 * The feature id for the '<em><b>Table</b></em>' container reference.
@@ -322,7 +331,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW__TABLE = 16;
+	int ROW__TABLE = 17;
 
 	/**
 	 * The number of structural features of the '<em>Row</em>' class.
@@ -331,7 +340,7 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROW_FEATURE_COUNT = 17;
+	int ROW_FEATURE_COUNT = 18;
 
 	/**
 	 * The number of operations of the '<em>Row</em>' class.
@@ -760,6 +769,17 @@ public interface ScheduleReportPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getRow_Schedule();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getSequence <em>Sequence</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Sequence</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.Row#getSequence()
+	 * @see #getRow()
+	 * @generated
+	 */
+	EReference getRow_Sequence();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getCargoAllocation <em>Cargo Allocation</em>}'.
@@ -1216,6 +1236,14 @@ public interface ScheduleReportPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ROW__SCHEDULE = eINSTANCE.getRow_Schedule();
+
+		/**
+		 * The meta object literal for the '<em><b>Sequence</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ROW__SEQUENCE = eINSTANCE.getRow_Sequence();
 
 		/**
 		 * The meta object literal for the '<em><b>Cargo Allocation</b></em>' reference feature.

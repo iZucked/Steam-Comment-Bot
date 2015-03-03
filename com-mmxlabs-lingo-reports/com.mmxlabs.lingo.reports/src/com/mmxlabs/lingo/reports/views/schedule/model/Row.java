@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EObject;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 
 /**
@@ -29,6 +30,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getName2 <em>Name2</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getTarget <em>Target</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getSchedule <em>Schedule</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getSequence <em>Sequence</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getCargoAllocation <em>Cargo Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getLoadAllocation <em>Load Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getDischargeAllocation <em>Discharge Allocation</em>}</li>
@@ -221,6 +223,32 @@ public interface Row extends EObject {
 	 * @generated
 	 */
 	void setSchedule(Schedule value);
+
+	/**
+	 * Returns the value of the '<em><b>Sequence</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Sequence</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Sequence</em>' reference.
+	 * @see #setSequence(Sequence)
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getRow_Sequence()
+	 * @model
+	 * @generated
+	 */
+	Sequence getSequence();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.schedule.model.Row#getSequence <em>Sequence</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Sequence</em>' reference.
+	 * @see #getSequence()
+	 * @generated
+	 */
+	void setSequence(Sequence value);
 
 	/**
 	 * Returns the value of the '<em><b>Cargo Allocation</b></em>' reference.

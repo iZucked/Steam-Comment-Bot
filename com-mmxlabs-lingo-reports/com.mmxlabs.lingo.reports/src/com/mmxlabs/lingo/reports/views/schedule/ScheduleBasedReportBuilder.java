@@ -5,15 +5,13 @@
 package com.mmxlabs.lingo.reports.views.schedule;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.ui.IMemento;
+
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
@@ -25,6 +23,7 @@ import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.OptionInfo;
 import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandler;
 import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandlerExtension;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
+import com.mmxlabs.lingo.reports.views.AbstractReportBuilder;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -52,7 +51,7 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
  * @author Simon Goodall
  * 
  */
-public class ScheduleBasedReportBuilder {
+public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 	public static final String CARGO_REPORT_TYPE_ID = "CARGO_REPORT_TYPE_ID";
 
 	public static final String COLUMN_BLOCK_PNL = "com.mmxlabs.lingo.reports.components.columns.schedule.pnl_group";
@@ -64,118 +63,22 @@ public class ScheduleBasedReportBuilder {
 	public static final OptionInfo ROW_FILTER_CHARTER_OUT_ROW = new OptionInfo("ROW_FILTER_CHARTER_OUT_ROW", "Charter Outs (Virtual)");
 	public static final OptionInfo ROW_FILTER_CARGO_ROW = new OptionInfo("ROW_FILTER_CARGO_ROW", "Cargoes");
 
-	/** All filters (note this order is also used in the {@link ConfigurableScheduleReportView} dialog */
-	public static final OptionInfo[] ROW_FILTER_ALL = new OptionInfo[] { ROW_FILTER_CARGO_ROW, ROW_FILTER_LONG_CARGOES, ROW_FILTER_SHORT_CARGOES, ROW_FILTER_VESSEL_EVENT_ROW,
-			ROW_FILTER_CHARTER_OUT_ROW, ROW_FILTER_VESSEL_START_ROW };
-
-	public static final OptionInfo DIFF_FILTER_PINNDED_SCENARIO = new OptionInfo("DIFF_FILTER_PINNDED_SCENARIO", "Show Pinned Scenario");
 	public static final OptionInfo DIFF_FILTER_VESSEL_CHANGES = new OptionInfo("DIFF_FILTER_VESSEL_CHANGES", "Show Vessel Changes");
 
-	/** All filters (note this order is also used in the {@link ConfigurableScheduleReportView} dialog */
-	public static final OptionInfo[] DIFF_FILTER_ALL = new OptionInfo[] { DIFF_FILTER_PINNDED_SCENARIO, DIFF_FILTER_VESSEL_CHANGES };
-
-	private static final String ROW_FILTER_MEMENTO = "ROW_FILTER";
-	private static final String DIFF_FILTER_MEMENTO = "DIFF_FILTER";
-
 	private final ScheduleDiffUtils scheduleDiffUtils = new ScheduleDiffUtils();
-	private ScheduleTransformer transformer;
-
-	private ColumnBlockManager blockManager;
-
-	private final Set<String> rowFilterInfo = new HashSet<>();
-	private final Set<String> diffFilterInfo = new HashSet<>();
 
 	@Inject(optional = true)
 	private Iterable<ICustomRelatedSlotHandlerExtension> customRelatedSlotHandlers;
 
-	/**
-	 * Replace the existing row filters with the following set.
-	 * 
-	 * @param filters
-	 */
-	public void setRowFilter(final String... filters) {
-		rowFilterInfo.clear();
-		for (final String filter : filters) {
-			rowFilterInfo.add(filter);
-		}
+	public ScheduleBasedReportBuilder() {
+		/** All filters (note this order is also used in the {@link ConfigurableScheduleReportView} dialog */
+		DIFF_FILTER_ALL = new OptionInfo[] { DIFF_FILTER_PINNDED_SCENARIO, DIFF_FILTER_VESSEL_CHANGES };
+
+		/** All filters (note this order is also used in the {@link ConfigurableScheduleReportView} dialog */
+		ROW_FILTER_ALL = new OptionInfo[] { ROW_FILTER_CARGO_ROW, ROW_FILTER_LONG_CARGOES, ROW_FILTER_SHORT_CARGOES, ROW_FILTER_VESSEL_EVENT_ROW, ROW_FILTER_CHARTER_OUT_ROW,
+				ROW_FILTER_VESSEL_START_ROW };
+
 	}
-
-	public void addRowFilters(final String... filters) {
-		for (final String filter : filters) {
-			rowFilterInfo.add(filter);
-		}
-	}
-
-	public void removeRowFilters(final String... filters) {
-		for (final String filter : filters) {
-			rowFilterInfo.remove(filter);
-		}
-	}
-
-	/**
-	 * Replace the existing row filters with the following set.
-	 * 
-	 * @param filters
-	 */
-	public void setDiffFilter(final String... filters) {
-		diffFilterInfo.clear();
-		for (final String filter : filters) {
-			diffFilterInfo.add(filter);
-		}
-	}
-
-	public void addDiffFilters(final String... filters) {
-		for (final String filter : filters) {
-			diffFilterInfo.add(filter);
-		}
-	}
-
-	public void removeDiffFilters(final String... filters) {
-		for (final String filter : filters) {
-			diffFilterInfo.remove(filter);
-		}
-	}
-
-	public List<?> adaptSelectionFromWidget(final List<?> selection) {
-		final List<Object> adaptedSelection = new ArrayList<Object>(selection.size()  * 2);
-		for (final Object obj : selection) {
-			if (obj instanceof EObject) {
-				adaptedSelection.add(((EObject) obj).eGet(ScheduleReportPackage.Literals.ROW__TARGET));
-			}
-			adaptedSelection.add(obj);
-		}
-
-		return adaptedSelection;
-	}
-
-	// /**
-	// * Returns a key of some kind for the element
-	// *
-	// * @param element
-	// * @return
-	// */
-	// public String getElementKey(EObject element) {
-	//
-	// if (element.eIsSet(ScheduleReportPackage.Literals.ROW__CARGO_ALLOCATION)) {
-	// element = (EObject) element.eGet(ScheduleReportPackage.Literals.ROW__CARGO_ALLOCATION);
-	// } else if (element.eIsSet(ScheduleReportPackage.Literals.ROW__OPEN_SLOT_ALLOCATION)) {
-	// element = (EObject) element.eGet(ScheduleReportPackage.Literals.ROW__OPEN_SLOT_ALLOCATION);
-	// } else if (element.eIsSet(ScheduleReportPackage.Literals.ROW__TARGET)) {
-	// element = (EObject) element.eGet(ScheduleReportPackage.Literals.ROW__TARGET);
-	// }
-	//
-	// if (element instanceof CargoAllocation) {
-	// return ((CargoAllocation) element).getName();
-	// } else if (element instanceof OpenSlotAllocation) {
-	// return ((OpenSlotAllocation) element).getSlot().getName();
-	// } else if (element instanceof Event) {
-	// return ((Event) element).name();
-	// }
-	// if (element instanceof NamedObject) {
-	// return ((NamedObject) element).getName();
-	// }
-	// return element.toString();
-	// }
 
 	public boolean showOpenSlot(final OpenSlotAllocation openSlotAllocation) {
 
@@ -213,125 +116,11 @@ public class ScheduleBasedReportBuilder {
 		return l;
 	}
 
-	//
-	// public List<EObject> generateNodes(final EObject dataModelInstance, final Schedule schedule, final List<EObject> interestingElements) {
-	// final List<EObject> nodes = new ArrayList<EObject>(interestingElements.size());
-	//
-	// for (final Object element : interestingElements) {
-	//
-	// if (element instanceof SlotVisit) {
-	// final SlotVisit slotVisit = (SlotVisit) element;
-	// final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
-	//
-	// // Build up list of slots assigned to cargo, sorting into loads and discharges
-	// final List<SlotAllocation> loadSlots = new ArrayList<SlotAllocation>();
-	// final List<SlotAllocation> dischargeSlots = new ArrayList<SlotAllocation>();
-	// for (final SlotAllocation slot : cargoAllocation.getSlotAllocations()) {
-	// if (slot.getSlot() instanceof LoadSlot) {
-	// loadSlots.add(slot);
-	// } else if (slot.getSlot() instanceof DischargeSlot) {
-	// dischargeSlots.add(slot);
-	// } else {
-	// // Assume some kind of discharge?
-	// // dischargeSlots.add((Slot) slot);
-	// }
-	//
-	// }
-	//
-	// final EObject group = GenericEMFTableDataModel.createGroup(tableDataModel, dataModelInstance);
-	// // Create a row for each pair of load and discharge slots in the cargo. This may lead to a row with only one slot
-	// for (int i = 0; i < Math.max(loadSlots.size(), dischargeSlots.size()); ++i) {
-	//
-	// final EObject node = GenericEMFTableDataModel.createRow(tableDataModel, dataModelInstance, group);
-	// GenericEMFTableDataModel.setRowValue(tableDataModel, node, cargoAllocationRef, cargoAllocation);
-	// if (i < loadSlots.size()) {
-	// final SlotAllocation slot = loadSlots.get(i);
-	// GenericEMFTableDataModel.setRowValue(tableDataModel, node, loadAllocationRef, slot);
-	// GenericEMFTableDataModel.setRowValue(tableDataModel, node, nameObjectRef, slot.getName());
-	// }
-	// if (i < dischargeSlots.size()) {
-	// final SlotAllocation slot = dischargeSlots.get(i);
-	// GenericEMFTableDataModel.setRowValue(tableDataModel, node, dischargeAllocationRef, slot);
-	// GenericEMFTableDataModel.setRowValue(tableDataModel, node, name2ObjectRef, slot.getName());
-	// }
-	// GenericEMFTableDataModel.setRowValue(tableDataModel, node, targetObjectRef, cargoAllocation);
-	// nodes.add(node);
-	// }
-	// } else if (element instanceof OpenSlotAllocation) {
-	//
-	// final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) element;
-	//
-	// final EObject group = GenericEMFTableDataModel.createGroup(tableDataModel, dataModelInstance);
-	// final EObject node = GenericEMFTableDataModel.createRow(tableDataModel, dataModelInstance, group);
-	// GenericEMFTableDataModel.setRowValue(tableDataModel, node, targetObjectRef, openSlotAllocation);
-	// GenericEMFTableDataModel.setRowValue(tableDataModel, node, openSlotAllocationRef, openSlotAllocation);
-	// final Slot slot = openSlotAllocation.getSlot();
-	// if (slot == null) {
-	// GenericEMFTableDataModel.setRowValue(tableDataModel, node, nameObjectRef, "??");
-	// } else {
-	// if (slot instanceof DischargeSlot) {
-	// GenericEMFTableDataModel.setRowValue(tableDataModel, node, name2ObjectRef, slot.getName());
-	// } else {
-	// GenericEMFTableDataModel.setRowValue(tableDataModel, node, nameObjectRef, slot.getName());
-	// }
-	// }
-	// nodes.add(node);
-	//
-	// } else if (element instanceof Event) {
-	// final Event event = (Event) element;
-	// final EObject group = GenericEMFTableDataModel.createGroup(tableDataModel, dataModelInstance);
-	//
-	// final EObject node = GenericEMFTableDataModel.createRow(tableDataModel, dataModelInstance, group);
-	// GenericEMFTableDataModel.setRowValue(tableDataModel, node, targetObjectRef, event);
-	// GenericEMFTableDataModel.setRowValue(tableDataModel, node, nameObjectRef, event.name());
-	// nodes.add(node);
-	// }
-	// }
-	// return nodes;
-	// }
-
-	public Set<String> getRowFilterInfo() {
-		return rowFilterInfo;
-	}
-
-	public Set<String> getDiffFilterInfo() {
-		return diffFilterInfo;
-	}
-
-	public void saveToMemento(final String uniqueConfigKey, final IMemento memento) {
-		final IMemento rowsInfo = memento.createChild(uniqueConfigKey);
-		for (final String option : rowFilterInfo) {
-			final IMemento optionInfo = rowsInfo.createChild(ROW_FILTER_MEMENTO);
-			optionInfo.putTextData(option);
-		}
-		for (final String option : diffFilterInfo) {
-			final IMemento optionInfo = rowsInfo.createChild(DIFF_FILTER_MEMENTO);
-			optionInfo.putTextData(option);
-		}
-	}
-
-	public void initFromMemento(final String uniqueConfigKey, final IMemento memento) {
-		final IMemento rowsInfo = memento.getChild(uniqueConfigKey);
-		if (rowsInfo != null) {
-			rowFilterInfo.clear();
-			for (final IMemento optionInfo : rowsInfo.getChildren(ROW_FILTER_MEMENTO)) {
-				rowFilterInfo.add(optionInfo.getTextData());
-			}
-			diffFilterInfo.clear();
-			for (final IMemento optionInfo : rowsInfo.getChildren(DIFF_FILTER_MEMENTO)) {
-				diffFilterInfo.add(optionInfo.getTextData());
-			}
-		} else {
-			rowFilterInfo.addAll(OptionInfo.getIds(ScheduleBasedReportBuilder.ROW_FILTER_ALL));
-			diffFilterInfo.addAll(OptionInfo.getIds(ScheduleBasedReportBuilder.DIFF_FILTER_ALL));
-		}
-		refreshDiffOptions();
-	}
-
 	// / Normal Columns
 
 	// ////// Pin / Diff Columns
 
+	@Override
 	public void refreshDiffOptions() {
 		scheduleDiffUtils.setCheckAssignmentDifferences(diffFilterInfo.contains(DIFF_FILTER_VESSEL_CHANGES.id));
 		// pinDiffModeHelper.setShowPinnedData(diffFilterInfo.contains(DIFF_FILTER_PINNDED_SCENARIO.id));
@@ -498,13 +287,5 @@ public class ScheduleBasedReportBuilder {
 
 	public ScheduleDiffUtils getScheduleDiffUtils() {
 		return scheduleDiffUtils;
-	}
-
-	public ColumnBlockManager getBlockManager() {
-		return blockManager;
-	}
-
-	public void setBlockManager(ColumnBlockManager blockManager) {
-		this.blockManager = blockManager;
 	}
 }

@@ -56,5 +56,12 @@
                id="com.mmxlabs.lingo.reports.diff.DiffPerspective">
          </perspectiveShortcut>
       </perspectiveExtension>
+   </extension>
+      <extension
+         point="com.mmxlabs.lingo.reports.FleetBasedColumn">
+      <FleetBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.fleet.StandardFleetColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.fleet.diff_selection_gco">
+      </FleetBasedColumn>
    </extension>  
 </plugin>
