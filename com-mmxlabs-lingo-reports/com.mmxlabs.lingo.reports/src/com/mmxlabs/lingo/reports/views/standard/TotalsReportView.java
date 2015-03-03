@@ -2,11 +2,12 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
-package com.mmxlabs.lingo.reports.views;
+package com.mmxlabs.lingo.reports.views.standard;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.jface.action.Action;
@@ -23,7 +24,7 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerComparator;
-import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
+import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
@@ -33,8 +34,10 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -45,22 +48,22 @@ import org.eclipse.ui.part.ViewPart;
 import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.lingo.reports.ScenarioViewerSynchronizer;
 import com.mmxlabs.lingo.reports.ScheduleElementCollector;
-import com.mmxlabs.lingo.reports.components.SimpleContentAndColumnProvider;
-import com.mmxlabs.lingo.reports.components.SimpleContentAndColumnProvider.ColumnManager;
+import com.mmxlabs.lingo.reports.views.standard.TotalsContentProvider.RowData;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
-import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
+import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
-/**
- */
-public abstract class SimpleTabularReportView<T> extends ViewPart {
-	private final ArrayList<ColumnManager<T>> sortColumns = new ArrayList<ColumnManager<T>>();
-	private final ArrayList<ColumnManager<T>> columnManagers = new ArrayList<ColumnManager<T>>();
+public class TotalsReportView extends ViewPart {
+	private final ArrayList<Integer> sortColumns = new ArrayList<Integer>(4);
 
 	private boolean inverseSort = false;
+	/**
+	 * The ID of the view as specified by the extension.
+	 */
+	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.TotalsReportView";
 
-	private GridTreeViewer viewer;
+	private GridTableViewer viewer;
 
 	private Action packColumnsAction;
 
@@ -68,35 +71,78 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 
 	private ScenarioViewerSynchronizer viewerSynchronizer;
 
-	// private SimpleContentAndColumnProvider<T> contentProvider;
+	private TotalsContentProvider contentProvider;
 
-	public class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, IFontProvider, ITableColorProvider {
+	private GridViewerColumn delta;
+
+	private GridViewerColumn scheduleColumnViewer;
+
+	class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, IFontProvider, ITableColorProvider {
+
+		private final Font boldFont;
 
 		public ViewLabelProvider() {
+			final Font systemFont = Display.getDefault().getSystemFont();
+			// Clone the font data
+			final FontData fd = new FontData(systemFont.getFontData()[0].toString());
+			// Set the bold bit.
+			fd.setStyle(fd.getStyle() | SWT.BOLD);
+			boldFont = new Font(Display.getDefault(), fd);
 		}
 
 		@Override
 		public void dispose() {
-			for (ColumnManager<T> manager : columnManagers) {
-				manager.dispose();
-			}
-
+			boldFont.dispose();
 			super.dispose();
 		}
 
-		@SuppressWarnings("unchecked")
-		@Override
-		public String getColumnText(final Object obj, final int index) {
-			if (index >= columnManagers.size()) {
-				return "";
+		protected Long getDelta(final RowData d) {
+			final List<RowData> pinned = TotalsReportView.this.contentProvider.getPinnedScenarioData();
+			for (final RowData ref : pinned) {
+				if (d.component.equals(ref.component)) {
+					final long delta = d.fitness - ref.fitness;
+					return delta;
+				}
 			}
-			return columnManagers.get(index).getColumnText((T) obj);
+			return null;
 		}
 
-		@SuppressWarnings("unchecked")
+		@Override
+		public String getColumnText(final Object obj, final int index) {
+			if (obj instanceof RowData) {
+				final RowData d = (RowData) obj;
+				switch (index) {
+				case 0:
+					return d.scheduleName;
+				case 1:
+					return d.component;
+				case 2:
+					return d.type;
+				case 3:
+					if (TotalsContentProvider.TYPE_TIME.equals(d.type)) {
+						final long days = d.fitness / 24;
+						final long hours = d.fitness % 24;
+						return "" + days + "d, " + hours + "h";
+					} else {
+						return String.format("%,d", d.fitness);
+					}
+				case 4:
+					final Long l = getDelta(d);
+					if (l != null) {
+						if (TotalsContentProvider.TYPE_TIME.equals(d.type)) {
+							return String.format("%dd, %dh", l / 24, l % 24);
+						} else {
+							return String.format("%,d", l);
+						}
+					}
+				}
+			}
+			return "";
+		}
+
 		@Override
 		public Image getColumnImage(final Object obj, final int index) {
-			return columnManagers.get(index).getColumnImage((T) obj);
+			return null;
 		}
 
 		@Override
@@ -106,30 +152,45 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 
 		@Override
 		public Font getFont(final Object element) {
+			if (element instanceof RowData) {
+				final RowData d = (RowData) element;
+				if ("Total Cost".equals(d.component)) {
+					return boldFont;
+				}
+			}
+
 			return null;
 		}
 
-		@SuppressWarnings("unchecked")
 		@Override
-		public Color getBackground(final Object obj, final int index) {
-			return columnManagers.get(index).getBackground((T) obj);
+		public Color getForeground(final Object element, final int columnIndex) {
+			if (columnIndex == 4 && element instanceof RowData) {
+				final RowData rowData = (RowData) element;
+				final Long l = getDelta(rowData);
+				if (l == null || l.longValue() == 0l) {
+					return null;
+				} else if ((l < 0 && !rowData.minimise) || (l > 0 && rowData.minimise)) {
+					return Display.getCurrent().getSystemColor(SWT.COLOR_RED);
+				} else {
+					return Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GREEN);
+				}
+			}
+			return null;
 		}
 
-		@SuppressWarnings("unchecked")
 		@Override
-		public Color getForeground(Object obj, int index) {
-			// TODO Auto-generated method stub
-			return columnManagers.get(index).getForeground((T) obj);
+		public Color getBackground(final Object element, final int columnIndex) {
+			return null;
 		}
 	}
 
 	/**
 	 * The constructor.
 	 */
-	public SimpleTabularReportView() {
+	public TotalsReportView() {
 	}
 
-	private void addSortSelectionListener(final GridColumn column, final ColumnManager<T> value) {
+	private void addSortSelectionListener(final GridColumn column, final int value) {
 		column.addSelectionListener(new SelectionAdapter() {
 			{
 				final SelectionAdapter self = this;
@@ -146,12 +207,9 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 				setSortColumn(column, value);
 			}
 		});
-		if (!sortColumns.contains(value)) {
-			sortColumns.add(value);
-		}
 	}
 
-	protected void setSortColumn(final GridColumn column, final ColumnManager<T> value) {
+	protected void setSortColumn(final GridColumn column, final int value) {
 		if (sortColumns.get(0) == value) {
 			inverseSort = !inverseSort;
 		} else {
@@ -159,6 +217,9 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 			sortColumns.remove((Object) value);
 			sortColumns.add(0, value);
 		}
+
+		// viewer.getTable().setSortColumn(column);
+		// viewer.getTable().setSortDirection(inverseSort ? SWT.DOWN : SWT.UP);
 
 		viewer.refresh();
 	}
@@ -168,12 +229,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 	 */
 	@Override
 	public void createPartControl(final Composite parent) {
-		final SimpleContentAndColumnProvider<T> contentProvider = createContentProvider();
-		// this.contentProvider = contentProvider;
-
-		viewer = new GridTreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION) {
-			final List<GridViewerColumn> viewerColumns = new ArrayList<GridViewerColumn>();
-
+		viewer = new GridTableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION) {
 			@Override
 			protected void inputChanged(final Object input, final Object oldInput) {
 				super.inputChanged(input, oldInput);
@@ -182,72 +238,78 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 				final boolean oldInputEmpty = (oldInput == null)
 						|| ((oldInput instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) oldInput).getCollectedElements().isEmpty());
 
-				columnManagers.clear();
-				columnManagers.addAll(contentProvider.getColumnManagers());
-				clearColumns();
-				addColumns();
-				viewer.getLabelProvider().dispose();
-				setLabelProvider(new ViewLabelProvider());
-
 				if (inputEmpty != oldInputEmpty) {
 					if (packColumnsAction != null) {
 						packColumnsAction.run();
 					}
 				}
 			};
-
-			protected void addColumns() {
-				for (ColumnManager<T> cv : columnManagers) {
-					String name = cv.getName();
-					GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
-					viewerColumns.add(gvc);
-					GridColumn gc = gvc.getColumn();
-					gc.setText(name);
-					gc.pack();
-					addSortSelectionListener(gc, cv);
-					if (cv.isTree()) {
-						// Enable the tree controls on this column
-						gvc.getColumn().setTree(true);
-					}
-				}
-			}
-
-			protected void clearColumns() {
-				for (GridViewerColumn gvc : viewerColumns) {
-					gvc.getColumn().dispose();
-				}
-				viewerColumns.clear();
-			}
 		};
+		this.contentProvider = new TotalsContentProvider();
 		viewer.setContentProvider(contentProvider);
 		viewer.setInput(getViewSite());
 
-		// get a list of column managers from the content / column provider
-		// List<ColumnManager<T>> columnManagers = contentProvider.getColumnManagers();
+		scheduleColumnViewer = new GridViewerColumn(viewer, SWT.NONE);
+		scheduleColumnViewer.getColumn().setText("Schedule");
+		scheduleColumnViewer.getColumn().pack();
+		addSortSelectionListener(scheduleColumnViewer.getColumn(), 0);
 
-		/*
-		 * // add corresponding columns to the report for (ColumnManager<T> cv: columnManagers) { String name = cv.getName(); GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE); GridColumn
-		 * gc = gvc.getColumn(); gc.setText(name); gc.pack(); addSortSelectionListener(gc, cv); }
-		 */
+		final GridViewerColumn tvc1 = new GridViewerColumn(viewer, SWT.NONE);
+		tvc1.getColumn().setText("Component");
+		tvc1.getColumn().pack();
+		addSortSelectionListener(tvc1.getColumn(), 1);
+
+		final GridViewerColumn tvc3 = new GridViewerColumn(viewer, SWT.NONE);
+		tvc3.getColumn().setText("Type");
+		tvc3.getColumn().pack();
+		addSortSelectionListener(tvc3.getColumn(), 2);
+
+		final GridViewerColumn tvc2 = new GridViewerColumn(viewer, SWT.NONE);
+		tvc2.getColumn().setText("Total");
+		tvc2.getColumn().pack();
+		addSortSelectionListener(tvc2.getColumn(), 3);
 
 		viewer.setLabelProvider(new ViewLabelProvider());
 
 		viewer.getGrid().setLinesVisible(true);
 		viewer.getGrid().setHeaderVisible(true);
 
+		sortColumns.add(0);
+		sortColumns.add(2);
+		sortColumns.add(3);
+		sortColumns.add(1);
+
+		// viewer.getGrid().setSortColumn(tvc0.getColumn());
+		// viewer.getGrid().setSortDirection(SWT.UP);
+
 		viewer.setComparator(new ViewerComparator() {
-			@SuppressWarnings("unchecked")
 			@Override
 			public int compare(final Viewer viewer, final Object e1, final Object e2) {
+				final RowData r1 = (RowData) e1;
+				final RowData r2 = (RowData) e2;
+
 				final int d = inverseSort ? -1 : 1;
-				for (ColumnManager<T> cm : sortColumns) {
-					int sort = cm.compare((T) e1, (T) e2);
-					if (sort != 0) {
-						return d * sort;
+				int sort = 0;
+				final Iterator<Integer> iterator = sortColumns.iterator();
+				while (iterator.hasNext() && (sort == 0)) {
+					switch (iterator.next()) {
+					case 0:
+						sort = r1.scheduleName.compareTo(r2.scheduleName);
+						break;
+					case 1:
+						sort = r1.component.compareTo(r2.component);
+						break;
+					case 2:
+						sort = r1.type.compareTo(r2.type);
+						break;
+					case 3:
+						sort = ((Long) r1.fitness).compareTo(r2.fitness);
+						break;
 					}
 				}
 
-				return 0;
+				return d * sort;
+				// return super.compare(viewer, e1, e2);
 			}
 		});
 
@@ -281,21 +343,13 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 		});
 	}
 
-	/**
-	 * Must be implemented by descendant classes to produce a SimpleContentAndColumnProvider object, which will provide column manager information (a list of columns with: names, sort comparators, and
-	 * methods to get display text from a row object)
-	 * 
-	 * @return
-	 */
-	abstract protected SimpleContentAndColumnProvider<T> createContentProvider();
-
 	private void hookContextMenu() {
 		final MenuManager menuMgr = new MenuManager("#PopupMenu");
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
 			@Override
 			public void menuAboutToShow(final IMenuManager manager) {
-				fillContextMenu(manager);
+				TotalsReportView.this.fillContextMenu(manager);
 			}
 		});
 		final Menu menu = menuMgr.createContextMenu(viewer.getControl());
@@ -331,7 +385,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 	}
 
 	private void makeActions() {
-		packColumnsAction = new PackGridTreeColumnsAction(viewer);
+		packColumnsAction = new PackGridTableColumnsAction(viewer);
 		copyTableAction = new CopyGridToClipboardAction(viewer.getGrid());
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
 	}
@@ -370,13 +424,27 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 
 	@Override
 	public void dispose() {
-		if (viewerSynchronizer != null) {
-			ScenarioViewerSynchronizer.deregisterView(viewerSynchronizer);
-		}
+
+		ScenarioViewerSynchronizer.deregisterView(viewerSynchronizer);
 		super.dispose();
 	}
 
 	private void setShowColumns(final boolean showDeltaColumn, int numberOfSchedules) {
+		if (showDeltaColumn) {
+			if (delta == null) {
+				delta = new GridViewerColumn(viewer, SWT.NONE);
+				delta.getColumn().setText("Change");
+				delta.getColumn().pack();
+				addSortSelectionListener(delta.getColumn(), 4);
+				viewer.setLabelProvider(viewer.getLabelProvider());
+			}
+		} else {
+			if (delta != null) {
+				delta.getColumn().dispose();
+				delta = null;
+			}
+		}
 
+		scheduleColumnViewer.getColumn().setVisible(numberOfSchedules > 1);
 	}
 }

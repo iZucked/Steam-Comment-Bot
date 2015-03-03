@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
-package com.mmxlabs.lingo.reports.views;
+package com.mmxlabs.lingo.reports.views.standard;
 
 import java.util.ArrayList;
 import java.util.Date;

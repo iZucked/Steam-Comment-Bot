@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
-package com.mmxlabs.lingo.reports.views;
+package com.mmxlabs.lingo.reports.views.standard;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -31,7 +31,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.mmxlabs.lingo.reports.ScenarioViewerSynchronizer;
 import com.mmxlabs.lingo.reports.ScheduleElementCollector;
-import com.mmxlabs.lingo.reports.views.HorizontalKPIContentProvider.RowData;
+import com.mmxlabs.lingo.reports.views.standard.HorizontalKPIContentProvider.RowData;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;

@@ -8,8 +8,8 @@ import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 
-import com.mmxlabs.lingo.reports.views.HorizontalKPIReportView;
 import com.mmxlabs.lingo.reports.views.schedule.ConfigurableScheduleReportView;
+import com.mmxlabs.lingo.reports.views.standard.HorizontalKPIReportView;
 
 public class DiffPerspective implements IPerspectiveFactory {
 

@@ -40,7 +40,7 @@
             name="Index Exposures"
             icon="icons/cview16/exec_statistic_view.gif"
             category="com.mmxlabs.shiplingo.platform.reports"
-            class="com.mmxlabs.lingo.reports.views.ExposureReportView"
+            class="com.mmxlabs.lingo.reports.views.standard.ExposureReportView"
             id="com.mmxlabs.shiplingo.platform.reports.views.ExposureReportView">
       </view>
       
@@ -48,7 +48,7 @@
             name="Volume Tracking"
             icon="icons/cview16/exec_statistic_view.gif"
             category="com.mmxlabs.shiplingo.platform.reports"
-            class="com.mmxlabs.lingo.reports.views.VolumeTrackingReportView"
+            class="com.mmxlabs.lingo.reports.views.standard.VolumeTrackingReportView"
             id="com.mmxlabs.shiplingo.platform.reports.views.VolumeTrackingReportView">
       </view>
 
@@ -63,21 +63,21 @@
       
       <view
             category="com.mmxlabs.shiplingo.platform.reports"
-            class="com.mmxlabs.lingo.reports.views.FitnessReportView"
+            class="com.mmxlabs.lingo.reports.views.standard.FitnessReportView"
             icon="icons/cview16/exec_flow_view.gif"
             id="com.mmxlabs.shiplingo.platform.reports.views.FitnessReportView"
             name="Fitness">
       </view>
       <view
             category="com.mmxlabs.shiplingo.platform.reports"
-            class="com.mmxlabs.lingo.reports.views.TotalsHierarchyView"
+            class="com.mmxlabs.lingo.reports.views.standard.TotalsHierarchyView"
             icon="icons/cview16/exec_flow_view.gif"
             id="com.mmxlabs.shiplingo.platform.reports.views.TotalsHierarchyView"
             name="Costs Breakdown">
       </view>
       <view
             category="com.mmxlabs.shiplingo.platform.reports"
-            class="com.mmxlabs.lingo.reports.views.TotalsReportView"
+            class="com.mmxlabs.lingo.reports.views.standard.TotalsReportView"
             icon="icons/cview16/exec_flow_view.gif"
             id="com.mmxlabs.shiplingo.platform.reports.views.TotalsReportView"
             name="Totals">
@@ -93,7 +93,7 @@
       
       <view
             category="com.mmxlabs.shiplingo.platform.reports"
-            class="com.mmxlabs.lingo.reports.views.LatenessReportView"
+            class="com.mmxlabs.lingo.reports.views.standard.LatenessReportView"
             icon="icons/cview16/exec_flow_view.gif"
             id="com.mmxlabs.shiplingo.platform.reports.views.LatenessReportView"
             name="Lateness">
@@ -101,14 +101,14 @@
       
        <view
              category="com.mmxlabs.shiplingo.platform.reports"
-             class="com.mmxlabs.lingo.reports.views.CooldownReportView"
+             class="com.mmxlabs.lingo.reports.views.standard.CooldownReportView"
              icon="icons/cview16/exec_flow_view.gif"
              id="com.mmxlabs.shiplingo.platform.reports.views.CooldownReportView"
              name="Cooldown">
        </view>
        <view
              category="com.mmxlabs.shiplingo.platform.reports"
-             class="com.mmxlabs.lingo.reports.views.PerVesselReportView"
+             class="com.mmxlabs.lingo.reports.views.standard.PerVesselReportView"
              icon="icons/cview16/exec_flow_view.gif"
              id="com.mmxlabs.shiplingo.platform.reports.views.PerVesselReportView"
              name="Vessel Summary"
@@ -116,28 +116,28 @@
        </view>
        <view
              category="com.mmxlabs.shiplingo.platform.reports"
-             class="com.mmxlabs.lingo.reports.views.KPIReportView"
+             class="com.mmxlabs.lingo.reports.views.standard.KPIReportView"
              icon="icons/cview16/exec_flow_view.gif"
              id="com.mmxlabs.shiplingo.platform.reports.views.KPIReportView"
              name="KPI">
        </view>
        <view
              category="com.mmxlabs.shiplingo.platform.reports"
-             class="com.mmxlabs.lingo.reports.views.HorizontalKPIReportView"
+             class="com.mmxlabs.lingo.reports.views.standard.HorizontalKPIReportView"
              icon="icons/cview16/exec_flow_view.gif"
              id="com.mmxlabs.shiplingo.platform.reports.views.HorizontalKPIReportView"
              name="Horizontal KPI">
        </view>
        <view
              category="com.mmxlabs.shiplingo.platform.reports"
-             class="com.mmxlabs.lingo.reports.views.CapacityViolationReportView"
+             class="com.mmxlabs.lingo.reports.views.standard.CapacityViolationReportView"
              icon="icons/cview16/exec_flow_view.gif"
              id="com.mmxlabs.shiplingo.platform.reports.views.CapacityViolationReportView"
              name="Capacity Violations">
        </view>
          <view
              category="com.mmxlabs.shiplingo.platform.reports"
-             class="com.mmxlabs.lingo.reports.views.PNLDetailsReport"
+             class="com.mmxlabs.lingo.reports.views.standard.PNLDetailsReport"
              icon="icons/cview16/exec_flow_view.gif"
              id="com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport"
              name="PnL Details">
@@ -648,7 +648,7 @@
       </ReplaceableView>
       <ReplaceableView
             category="com.mmxlabs.shiplingo.platform.reports"
-            class="com.mmxlabs.lingo.reports.views.CargoEconsReport"
+            class="com.mmxlabs.lingo.reports.views.standard.CargoEconsReport"
             icon="icons/cview16/exec_statistic_view.gif"
             name="Cargo Econs"
             viewId="com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport">
