@@ -678,8 +678,11 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				@Override
 				public void onStatusChanged(final IStatusProvider provider, final IStatus status) {
 					final CargoModelRowTransformer transformer = new CargoModelRowTransformer();
-					transformer.updateWiringValidity(rootData, getScenarioViewer().getValidationSupport().getValidationErrors());
-					wiringDiagram.redraw();
+					ScenarioTableViewer scenarioViewer2 = getScenarioViewer();
+					if (scenarioViewer2 != null) {
+						transformer.updateWiringValidity(rootData, scenarioViewer2.getValidationSupport().getValidationErrors());
+						wiringDiagram.redraw();
+					}
 				}
 			};
 			statusProvider.addStatusChangedListener(statusChangedListener);
