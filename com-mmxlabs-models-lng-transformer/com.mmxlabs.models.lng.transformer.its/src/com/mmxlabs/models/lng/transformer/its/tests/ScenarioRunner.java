@@ -23,7 +23,6 @@ import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.inject.modules.ExporterExtensionsModule;
 import com.mmxlabs.models.lng.transformer.its.internal.Activator;
-import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeCustomiser;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeExtender;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModesRegistry;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
