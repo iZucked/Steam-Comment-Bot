@@ -7,8 +7,6 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 import java.util.Collection;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;

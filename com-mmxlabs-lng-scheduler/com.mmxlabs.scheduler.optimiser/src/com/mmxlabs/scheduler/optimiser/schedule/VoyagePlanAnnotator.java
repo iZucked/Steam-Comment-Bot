@@ -4,20 +4,14 @@
  */
 package com.mmxlabs.scheduler.optimiser.schedule;
 
-import java.util.List;
-
 import javax.inject.Inject;
-import javax.inject.Provider;
-
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.events.impl.DischargeEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.GeneratedCharterOutEventImpl;

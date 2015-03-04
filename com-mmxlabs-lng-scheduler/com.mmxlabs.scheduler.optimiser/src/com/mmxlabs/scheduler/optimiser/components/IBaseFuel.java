@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.components;
 
-import com.mmxlabs.common.indexedobjects.IIndexedObject;
-
 /**
  * This interface defines a BaseFuel
  * 
