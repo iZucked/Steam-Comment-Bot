@@ -1506,7 +1506,7 @@ public class LNGScenarioTransformer {
 						}
 
 						final Collection<Slot> existing = getSpotSlots(market, getKeyForDate(cal.getTimeZone(), startTime));
-						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
+						final int count = getAvailabilityForDate(market.getAvailability(), startTime, cal.getTimeZone());
 
 						final List<IPortSlot> marketSlots = new ArrayList<IPortSlot>(count);
 						for (final Slot slot : existing) {
@@ -1585,7 +1585,7 @@ public class LNGScenarioTransformer {
 
 				// Take group availability curve and add into a constraint.
 				if (groupAvailability != null) {
-					final int count = getAvailabilityForDate(groupAvailability, startTime);
+					final int count = getAvailabilityForDate(groupAvailability, startTime, cal.getTimeZone());
 					if (marketGroupSlots.size() > count) {
 						// Disabled until UI available
 						// builder.createSlotGroupCount(marketGroupSlots, count);
@@ -1638,7 +1638,7 @@ public class LNGScenarioTransformer {
 						}
 
 						final Collection<Slot> existing = getSpotSlots(market, getKeyForDate(cal.getTimeZone(), startTime));
-						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
+						final int count = getAvailabilityForDate(market.getAvailability(), startTime, cal.getTimeZone());
 
 						final List<IPortSlot> marketSlots = new ArrayList<IPortSlot>(count);
 						for (final Slot slot : existing) {
@@ -1717,7 +1717,7 @@ public class LNGScenarioTransformer {
 
 				// Take group availability curve and add into a constraint.
 				if (groupAvailability != null) {
-					final int count = getAvailabilityForDate(groupAvailability, startTime);
+					final int count = getAvailabilityForDate(groupAvailability, startTime, cal.getTimeZone());
 					if (marketGroupSlots.size() > count) {
 						// builder.createSlotGroupCount(marketGroupSlots, count);
 					}
@@ -1777,7 +1777,7 @@ public class LNGScenarioTransformer {
 						final Date endTime = cal.getTime();
 
 						final Collection<Slot> existing = getSpotSlots(market, getKeyForDate(cal.getTimeZone(), startTime));
-						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
+						final int count = getAvailabilityForDate(market.getAvailability(), startTime, cal.getTimeZone());
 
 						final List<IPortSlot> marketSlots = new ArrayList<IPortSlot>(count);
 						for (final Slot slot : existing) {
@@ -1839,7 +1839,7 @@ public class LNGScenarioTransformer {
 
 						// Take group availability curve and add into a constraint.
 						if (groupAvailability != null) {
-							final int groupCount = getAvailabilityForDate(groupAvailability, startTime);
+							final int groupCount = getAvailabilityForDate(groupAvailability, startTime, cal.getTimeZone());
 							if (marketGroupSlots.size() > groupCount) {
 								// builder.createSlotGroupCount(marketGroupSlots, count);
 							}
@@ -1888,7 +1888,7 @@ public class LNGScenarioTransformer {
 						final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(fobPurchaseMarket.getCv());
 
 						final Collection<Slot> existing = getSpotSlots(market, getKeyForDate(cal.getTimeZone(), startTime));
-						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
+						final int count = getAvailabilityForDate(market.getAvailability(), startTime, cal.getTimeZone());
 
 						final List<IPortSlot> marketSlots = new ArrayList<IPortSlot>(count);
 						for (final Slot slot : existing) {
@@ -1949,7 +1949,7 @@ public class LNGScenarioTransformer {
 
 						// Take group availability curve and add into a constraint.
 						if (groupAvailability != null) {
-							final int groupCount = getAvailabilityForDate(groupAvailability, startTime);
+							final int groupCount = getAvailabilityForDate(groupAvailability, startTime, cal.getTimeZone());
 							if (marketGroupSlots.size() > groupCount) {
 								// builder.createSlotGroupCount(marketGroupSlots, count);
 							}
@@ -1963,14 +1963,14 @@ public class LNGScenarioTransformer {
 		}
 	}
 
-	private int getAvailabilityForDate(final SpotAvailability availability, final Date startTime) {
+	private int getAvailabilityForDate(final SpotAvailability availability, final Date startTime, final TimeZone timeZoneOfSpot) {
 		boolean valueSet = false;
 		int count = 0;
 		if (availability != null) {
 			if (availability.isSetCurve()) {
 				final Index<Integer> curve = availability.getCurve();
 
-				final Integer value = curve.getValueForMonth(startTime);
+				final Integer value = curve.getValueForMonth(convertDateToUTC(startTime, timeZoneOfSpot));
 				if (value != null) {
 					count = value;
 					valueSet = true;
@@ -1984,6 +1984,12 @@ public class LNGScenarioTransformer {
 			}
 		}
 		return count;
+	}
+	
+	private Date convertDateToUTC(Date startTimeLocalTime, TimeZone tz) {
+		// shift localTime to UTC
+		Calendar shiftedToUTC = TimeZoneHelper.createTimeZoneShiftedCalendar(startTimeLocalTime, tz.getID(), "UTC");
+		return shiftedToUTC.getTime();
 	}
 
 	private void buildMarkToMarkets(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Collection<IContractTransformer> contractTransformers,

@@ -77,6 +77,7 @@ import com.mmxlabs.models.lng.transformer.period.InclusionChecker.InclusionType;
 import com.mmxlabs.models.lng.transformer.period.InclusionChecker.PeriodRecord;
 import com.mmxlabs.models.lng.transformer.period.InclusionChecker.Position;
 import com.mmxlabs.models.lng.transformer.period.extensions.IPeriodTransformerExtension;
+import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -228,7 +229,7 @@ public class PeriodTransformer {
 
 		output.getPortfolioModel().getCargoModel().getVesselAvailabilities().addAll(newVesselAvailabilities);
 
-		trimSpotMarketCurves(internalDomain, periodRecord, output.getSpotMarketsModel(), mapping);
+		trimSpotMarketCurves(internalDomain, periodRecord, output.getSpotMarketsModel());
 
 		// Remove schedule model
 		output.getPortfolioModel().getScheduleModel().setSchedule(null);
@@ -760,16 +761,17 @@ public class PeriodTransformer {
 		}
 	}
 
-	public void trimSpotMarketCurves(final EditingDomain internalDomain, final PeriodRecord periodRecord, final SpotMarketsModel spotMarketsModel, final IScenarioEntityMapping mapping) {
+	public void trimSpotMarketCurves(final EditingDomain internalDomain, final PeriodRecord periodRecord, final SpotMarketsModel spotMarketsModel) {
 
 		// Not quite ready yet...
-		// trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getDesPurchaseSpotMarket(), mapping);
-		// trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getDesSalesSpotMarket(), mapping);
-		// trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getFobPurchasesSpotMarket(), mapping);
-		// trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getFobSalesSpotMarket(), mapping);
+		 trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getDesPurchaseSpotMarket());
+		 trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getDesSalesSpotMarket());
+		 trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getFobPurchasesSpotMarket());
+		 trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getFobSalesSpotMarket());
 	}
 
-	public void trimSpotMarketCurves(final EditingDomain internalDomain, final PeriodRecord periodRecord, final SpotMarketGroup spotMarketGroup, final IScenarioEntityMapping mapping) {
+	//TODO: create first month in UTC time!
+	public void trimSpotMarketCurves(final EditingDomain internalDomain, final PeriodRecord periodRecord, final SpotMarketGroup spotMarketGroup) {
 		for (final SpotMarket spotMarket : spotMarketGroup.getMarkets()) {
 			final SpotAvailability availability = spotMarket.getAvailability();
 
@@ -785,27 +787,32 @@ public class PeriodTransformer {
 			final DataIndex<Integer> curve = availability.getCurve();
 			final List<IndexPoint<Integer>> pointsToRemove = new LinkedList<>();
 			for (final IndexPoint<Integer> value : curve.getPoints()) {
+				if (value.getDate().before(getDateFromStartOfMonth(periodRecord.lowerBoundary))) {
+					// remove
+					pointsToRemove.add(value);
+					continue;
+				}
+				if (value.getDate().after(periodRecord.upperBoundary) || value.getDate().equals(periodRecord.upperBoundary)) {
+					// remove
+					pointsToRemove.add(value);
+					continue;
+				}
 				seenDates.add(value.getDate());
-				if (value.getDate().before(periodRecord.lowerBoundary)) {
-					// remove
-					pointsToRemove.add(value);
-				}
-				if (value.getDate().after(periodRecord.upperBoundary)) {
-					// remove
-					pointsToRemove.add(value);
-				}
 			}
 			curve.getPoints().removeAll(pointsToRemove);
 
-			// TODO: If bounds are missing, then we need to do something different.
 			// Set the constant, and add curve data across known period instead
 
 			// Fill in curve gaps with the original constant value.
 			if (constantValue != 0) {
 				final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-				cal.setTime(periodRecord.lowerBoundary);
+				cal.setTime(getDateFromStartOfMonth(periodRecord.lowerBoundary));
 				cal.set(Calendar.DAY_OF_MONTH, 1);
 				cal.set(Calendar.HOUR_OF_DAY, 0);
+				final Calendar boundary = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+				boundary.setTime(periodRecord.upperBoundary);
+				System.out.println(periodRecord.lowerBoundary);
+				System.out.println(boundary.getTime());
 				while (cal.getTime().before(periodRecord.upperBoundary)) {
 					if (!seenDates.contains(cal.getTime())) {
 						final IndexPoint<Integer> newValue = PricingFactory.eINSTANCE.createIndexPoint();
@@ -814,11 +821,20 @@ public class PeriodTransformer {
 						// Add
 						curve.getPoints().add(newValue);
 					}
-
+					// Increment calendar
+					cal.add(Calendar.MONTH, 1);
 				}
-
 			}
-
+			// replace availability with new curve
+			availability.setCurve(curve);
 		}
 	}
+	
+	private Date getDateFromStartOfMonth(Date date) {
+		final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+		cal.setTime(date);
+		return DateAndCurveHelper.createDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), 1, 0, "UTC");
+	}
+	
+	
 }

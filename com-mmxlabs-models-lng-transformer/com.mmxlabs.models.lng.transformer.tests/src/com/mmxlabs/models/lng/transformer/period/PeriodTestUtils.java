@@ -37,6 +37,10 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.pricing.DataIndex;
+import com.mmxlabs.models.lng.pricing.IndexPoint;
+import com.mmxlabs.models.lng.pricing.PricingFactory;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -55,6 +59,16 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
+import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
+import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
+import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotAvailability;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
+import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 
 public class PeriodTestUtils {
 
@@ -270,6 +284,48 @@ public class PeriodTestUtils {
 		return slot;
 	}
 
+	public static SpotMarketsModel createSpotMarkets(final LNGScenarioModel scenarioModel, final String name, final String timeZone) {
+		SpotMarketsModel marketsModel = SpotMarketsFactory.eINSTANCE.createSpotMarketsModel();
+		DESSalesMarket desSalesMarket = SpotMarketsFactory.eINSTANCE.createDESSalesMarket();
+		DESPurchaseMarket desPurchasesMarket = SpotMarketsFactory.eINSTANCE.createDESPurchaseMarket();
+		FOBSalesMarket fobSalesMarket = SpotMarketsFactory.eINSTANCE.createFOBSalesMarket();
+		FOBPurchasesMarket fobPurchaseMarket = SpotMarketsFactory.eINSTANCE.createFOBPurchasesMarket();
+		
+		for (SpotMarket market: new SpotMarket[] {desSalesMarket, desPurchasesMarket, fobPurchaseMarket, fobSalesMarket}) {
+			setUpSpotMarket(market, timeZone);
+		}
+		SpotMarketGroup dp = SpotMarketsFactory.eINSTANCE.createSpotMarketGroup();
+		dp.getMarkets().add(desPurchasesMarket);
+		SpotMarketGroup ds = SpotMarketsFactory.eINSTANCE.createSpotMarketGroup();
+		ds.getMarkets().add(desSalesMarket);
+		SpotMarketGroup fp = SpotMarketsFactory.eINSTANCE.createSpotMarketGroup();
+		fp.getMarkets().add(fobPurchaseMarket);
+		SpotMarketGroup fs = SpotMarketsFactory.eINSTANCE.createSpotMarketGroup();
+		fs.getMarkets().add(fobSalesMarket);
+		
+		marketsModel.setDesPurchaseSpotMarket(dp);
+		marketsModel.setDesSalesSpotMarket(ds);
+		marketsModel.setFobPurchasesSpotMarket(fp);
+		marketsModel.setFobSalesSpotMarket(fs);
+		return marketsModel;
+	}
+	
+	private static void setUpSpotMarket(SpotMarket market, String timeZone) {
+		market.setEnabled(true);
+		SpotAvailability availability = SpotMarketsFactory.eINSTANCE.createSpotAvailability();
+		availability.setConstant(2);
+		DataIndex<Integer> curve = PricingFactory.eINSTANCE.createDataIndex();
+		for (int i = 4; i < 6; i++) {
+			Date date = DateAndCurveHelper.createDate(2015, i, 1, 0, timeZone);
+			IndexPoint<Integer> point = PricingFactory.eINSTANCE.createIndexPoint();
+			point.setDate(date);
+			point.setValue(5);
+			curve.getPoints().add(point);
+		}
+		availability.setCurve(curve);
+		market.setAvailability(availability);
+	}
+	
 	public static PortVisit createPortVisit(final Port port, final Date date) {
 
 		final PortVisit portVisit = ScheduleFactory.eINSTANCE.createPortVisit();

@@ -11,6 +11,7 @@ import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.conversion.Converter;
@@ -243,7 +244,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		toolkit.createLabel(area, option.label);
 
 		final DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT);
-
+		format.setTimeZone(TimeZone.getTimeZone("UTC"));
 		final IValidator validator = new IValidator() {
 			@Override
 			public IStatus validate(final Object value) {
