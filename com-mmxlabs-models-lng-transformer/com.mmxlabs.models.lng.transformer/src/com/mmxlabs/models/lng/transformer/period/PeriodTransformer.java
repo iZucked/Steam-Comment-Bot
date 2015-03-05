@@ -259,9 +259,12 @@ public class PeriodTransformer {
 				mapping.registerRemovedOriginal(mapping.getOriginalFromCopy(event));
 			}
 			if (event instanceof CharterOutEvent) {
-				// TODO: If in boundary, limit available vessels to assigned vessel
+				// If in boundary, limit available vessels to assigned vessel
 				event.getAllowedVessels().clear();
-				event.getAllowedVessels().add(((VesselAvailability) event.getVesselAssignmentType()).getVessel());
+				VesselAvailability vesselAvailability = ((VesselAvailability) event.getVesselAssignmentType());
+				if (vesselAvailability != null) {
+					event.getAllowedVessels().add(vesselAvailability.getVessel());
+				}
 			}
 		}
 		internalDomain.getCommandStack().execute(DeleteCommand.create(internalDomain, eventsToRemove));
