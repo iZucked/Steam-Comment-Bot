@@ -86,6 +86,7 @@ public class SlotItemProvider
 			addCancellationFeePropertyDescriptor(object);
 			addOverrideRestrictionsPropertyDescriptor(object);
 			addNominatedVesselPropertyDescriptor(object);
+			addLockedPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -663,6 +664,28 @@ public class SlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Locked feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addLockedPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_locked_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_locked_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__LOCKED,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Slot.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -717,6 +740,7 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__HEDGES:
 			case CargoPackage.SLOT__CANCELLATION_FEE:
 			case CargoPackage.SLOT__OVERRIDE_RESTRICTIONS:
+			case CargoPackage.SLOT__LOCKED:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
