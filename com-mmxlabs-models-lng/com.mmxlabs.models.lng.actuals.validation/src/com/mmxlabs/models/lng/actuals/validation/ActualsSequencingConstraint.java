@@ -185,7 +185,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 							if (loadActuals.getStartingHeelM3() > 0) {
 								if (!startHeel.isSetVolumeAvailable() || Math.abs(loadActuals.getStartingHeelM3() - startHeel.getVolumeAvailable()) > 0.001) {
 									final String msg = String.format("Actualised Cargo %s and vessel %s starting heel quantities do not match (%,.3f - %,.3f)", getID(assignment),
-											getVesselName(va.getVessel()), loadActuals.getStartingHeelM3(), startHeel.getVolumeAvailable());
+											getVesselName(va.getVessel()), (double) loadActuals.getStartingHeelM3(), (double) startHeel.getVolumeAvailable());
 
 									final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
 									failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_HEEL);
@@ -211,7 +211,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 								if (startHeel.isSetVolumeAvailable() || loadActuals.getStartingHeelM3() > 0) {
 									// Error
 									final String msg = String.format("Actualised Cargo %s and vessel %s starting heel quantities do not match (%,.3f - %,.3f)", getID(assignment),
-											getVesselName(va.getVessel()), loadActuals.getStartingHeelM3(), startHeel.getVolumeAvailable());
+											getVesselName(va.getVessel()), (double) loadActuals.getStartingHeelM3(), (double) startHeel.getVolumeAvailable());
 
 									final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
 									failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_HEEL);
