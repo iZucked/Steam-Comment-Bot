@@ -49,6 +49,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getCancellationFee <em>Cancellation Fee</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isOverrideRestrictions <em>Override Restrictions</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getNominatedVessel <em>Nominated Vessel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isLocked <em>Locked</em>}</li>
  * </ul>
  * </p>
  *
@@ -1011,6 +1012,32 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @generated
 	 */
 	void setNominatedVessel(Vessel value);
+
+	/**
+	 * Returns the value of the '<em><b>Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Locked</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Locked</em>' attribute.
+	 * @see #setLocked(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_Locked()
+	 * @model
+	 * @generated
+	 */
+	boolean isLocked();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isLocked <em>Locked</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Locked</em>' attribute.
+	 * @see #isLocked()
+	 * @generated
+	 */
+	void setLocked(boolean value);
 
 	/**
 	 * <!-- begin-user-doc -->
