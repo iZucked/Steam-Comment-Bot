@@ -6,8 +6,6 @@ package com.mmxlabs.lingo.reports.views.fleet;
 
 import static com.mmxlabs.lingo.reports.views.fleet.FleetBasedReportBuilder.FLEET_REPORT_TYPE_ID;
 
-import java.util.List;
-
 import org.eclipse.swt.graphics.Image;
 
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
@@ -25,16 +23,8 @@ import com.mmxlabs.lingo.reports.views.fleet.formatters.GeneratedCharterRevenueF
 import com.mmxlabs.lingo.reports.views.fleet.formatters.LNGCostFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.PortCostFormatter;
 import com.mmxlabs.lingo.reports.views.fleet.formatters.VesselFormatter;
-import com.mmxlabs.lingo.reports.views.formatters.CostFormatter;
-import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
-import com.mmxlabs.lingo.reports.views.formatters.PriceFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.lingo.reports.views.schedule.model.provider.PinnedScheduleFormatter;
-import com.mmxlabs.models.lng.schedule.Fuel;
-import com.mmxlabs.models.lng.schedule.FuelAmount;
-import com.mmxlabs.models.lng.schedule.FuelQuantity;
-import com.mmxlabs.models.lng.schedule.FuelUnit;
-import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
 public class StandardFleetColumnFactory implements IFleetColumnFactory {
@@ -45,13 +35,11 @@ public class StandardFleetColumnFactory implements IFleetColumnFactory {
 	@Override
 	public void registerColumn(final String columnID, final EMFReportColumnManager columnManager, final FleetBasedReportBuilder builder) {
 
-		// TODO: Dispose!
-		// TODO: Shared image
-		Image pinImage = Activator.Implementation.getImageDescriptor("icons/full/obj16/PinnedRow.gif").createImage();
+		final Image pinImage = Activator.getDefault().getImageRegistry().get(Activator.Implementation.IMAGE_PINNED_ROW);
 
 		switch (columnID) {
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.schedule":
-			PinnedScheduleFormatter formatter = new PinnedScheduleFormatter(pinImage);
+			final PinnedScheduleFormatter formatter = new PinnedScheduleFormatter(pinImage);
 			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Scenario", "The scenario name. Only shown when multiple scenarios are selected",
 					ColumnType.MULTIPLE, formatter, ScheduleReportPackage.Literals.ROW__SCENARIO, ScenarioServicePackage.eINSTANCE.getContainer_Name()));
 			break;

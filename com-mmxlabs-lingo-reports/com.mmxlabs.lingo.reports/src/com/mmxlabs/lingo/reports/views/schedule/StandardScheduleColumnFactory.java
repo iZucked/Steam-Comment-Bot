@@ -72,15 +72,13 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 		final EStructuralFeature loadAllocationRef = ScheduleReportPackage.Literals.ROW__LOAD_ALLOCATION;
 		final EStructuralFeature dischargeAllocationRef = ScheduleReportPackage.Literals.ROW__DISCHARGE_ALLOCATION;
 
-		// TODO: Dispose!
-		Image pinImage = Activator.Implementation.getImageDescriptor("icons/full/obj16/PinnedRow.gif").createImage();
-		
-		
+		final Image pinImage = Activator.getDefault().getImageRegistry().get(Activator.Implementation.IMAGE_PINNED_ROW);
+
 		switch (columnID) {
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.schedule":
-			PinnedScheduleFormatter formatter= new PinnedScheduleFormatter(pinImage);
+			final PinnedScheduleFormatter formatter = new PinnedScheduleFormatter(pinImage);
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Scenario", "The scenario name. Only shown when multiple scenarios are selected",
-					ColumnType.MULTIPLE,formatter, ScheduleReportPackage.Literals.ROW__SCENARIO, ScenarioServicePackage.eINSTANCE.getContainer_Name()));
+					ColumnType.MULTIPLE, formatter, ScheduleReportPackage.Literals.ROW__SCENARIO, ScenarioServicePackage.eINSTANCE.getContainer_Name()));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.id":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "ID", "The main ID for all including discharge slots", ColumnType.NORMAL,
@@ -285,7 +283,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 							for (final GeneralPNLDetails generalPNLDetails : container.getGeneralPNLDetails()) {
 								if (generalPNLDetails instanceof SlotPNLDetails) {
 									final SlotPNLDetails slotPNLDetails = (SlotPNLDetails) generalPNLDetails;
-									for (GeneralPNLDetails details : slotPNLDetails.getGeneralPNLDetails()) {
+									for (final GeneralPNLDetails details : slotPNLDetails.getGeneralPNLDetails()) {
 										if (details instanceof BasicSlotPNLDetails) {
 											addnPNL += ((BasicSlotPNLDetails) details).getAdditionalPNL();
 										}
