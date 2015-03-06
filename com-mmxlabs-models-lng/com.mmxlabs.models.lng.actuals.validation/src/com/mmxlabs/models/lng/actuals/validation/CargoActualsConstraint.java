@@ -76,7 +76,7 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 						final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
 						final Vessel vessel = vesselAvailability.getVessel();
 
-						if (vessel != null && vessel.equals(cargoActuals.getVessel())) {
+						if (vessel != null && !vessel.equals(cargoActuals.getVessel())) {
 							final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Assigned and Actual vessel differ"));
 							status.addEObjectAndFeature(cargoActuals, ActualsPackage.Literals.CARGO_ACTUALS__VESSEL);
 							status.addEObjectAndFeature(cargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
