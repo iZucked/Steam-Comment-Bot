@@ -183,8 +183,13 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 	private String escape(final String key, final char delimiter) {
 		if (key == null)
 			return "";
-		final String sub = key.trim().replace("\"", "\\\"");
-		return sub.contains("" + delimiter) ? "\"" + sub + "\"" : sub;
+		String sub = key.trim().replace("\"", "\\\"");
+		sub = sub.contains("" + delimiter) ? "\"" + sub + "\"" : sub;
+		// Ensure string is quoted if there is a new line present.
+		if (sub.contains("\n")) {
+			sub = "\"" + sub + "\"";
+		}
+		return sub;
 	}
 
 	@Override
