@@ -271,9 +271,9 @@ public final class OptimisationHelper {
 			if (!forEvaluation) {
 				dialog.addOption(DataSection.Advanced, editingDomian, "Number of Iterations", copy, defaultSettings, DataType.PositiveInt,
 						ParametersPackage.eINSTANCE.getOptimiserSettings_AnnealingSettings(), ParametersPackage.eINSTANCE.getAnnealingSettings_Iterations());
-				dialog.addOption(DataSection.Main, editingDomian, "Start Date", copy, defaultSettings, DataType.Date,
+				dialog.addOption(DataSection.Main, editingDomian, "Start Date (mm/yyyy)", copy, defaultSettings, DataType.MonthYear,
 						ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
-				dialog.addOption(DataSection.Main, editingDomian, "End Date", copy, defaultSettings, DataType.Date,
+				dialog.addOption(DataSection.Main, editingDomian, "End Date (mm/yyyy)", copy, defaultSettings, DataType.MonthYear,
 						ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseBefore());
 			}
 

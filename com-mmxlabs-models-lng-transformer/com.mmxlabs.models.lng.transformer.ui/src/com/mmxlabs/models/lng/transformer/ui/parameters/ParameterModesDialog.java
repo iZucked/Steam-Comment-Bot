@@ -6,6 +6,8 @@ package com.mmxlabs.models.lng.transformer.ui.parameters;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.EnumMap;
 import java.util.LinkedList;
@@ -53,7 +55,7 @@ import com.mmxlabs.models.ui.forms.AbstractDataBindingFormDialog;
 public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 
 	public enum DataType {
-		Boolean, PositiveInt, Date
+		Boolean, PositiveInt, Date, MonthYear
 	}
 
 	public enum DataSection {
@@ -176,6 +178,9 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		case Date:
 			createDateEditor(parent, option);
 			break;
+		case MonthYear:
+			createMonthYearEditor(parent, option);
+			break;
 		default:
 			break;
 		}
@@ -244,6 +249,8 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		toolkit.createLabel(area, option.label);
 
 		final DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT);
+		// Strict parse mode
+		format.setLenient(false);
 		format.setTimeZone(TimeZone.getTimeZone("UTC"));
 		final IValidator validator = new IValidator() {
 			@Override
@@ -275,6 +282,88 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 						final String value = fromObject == null ? null : fromObject.toString();
 						try {
 							return format.parse(value);
+						} catch (final Exception e) {
+							return null;
+						}
+					}
+				};
+			}
+		};
+
+		final EMFUpdateValueStrategy dateToStringStrategy = new EMFUpdateValueStrategy() {
+			@Override
+			protected IConverter createConverter(final Object fromType, final Object toType) {
+				return new Converter(fromType, toType) {
+					@Override
+					public Object convert(final Object fromObject) {
+						if (fromObject instanceof Date) {
+							return format.format(fromObject);
+						}
+						return null;
+					}
+				};
+			}
+		};
+
+		stringToDateStrategy.setAfterGetValidator(validator);
+
+		final Binding bindValue = dbc.bindValue(WidgetProperties.text(SWT.Modify).observeDelayed(500, text), prop.observe(option.data), stringToDateStrategy, dateToStringStrategy);
+		ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT);
+
+		return area;
+
+	}
+
+	private Composite createMonthYearEditor(final Composite parent, final Option option) {
+		final Composite area = toolkit.createComposite(parent, SWT.NONE);
+		area.setLayout(new GridLayout(2, false));
+		area.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
+		toolkit.createLabel(area, option.label);
+
+		final SimpleDateFormat format = new SimpleDateFormat("MM/yy");
+		// Strict parse mode
+		format.setLenient(false);
+		format.setTimeZone(TimeZone.getTimeZone("UTC"));
+		// Permit 2 digit year dates.
+		{
+			final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+			cal.clear();
+			cal.set(Calendar.YEAR, 2000);
+			cal.set(Calendar.MONTH, Calendar.JANUARY);
+			cal.set(Calendar.DAY_OF_MONTH, 1);
+			format.set2DigitYearStart(cal.getTime());
+		}
+		final IValidator validator = new IValidator() {
+			@Override
+			public IStatus validate(final Object value) {
+				if (value instanceof String) {
+					if (value.equals("") == false) {
+						try {
+							format.parse((String) value);
+						} catch (final ParseException e) {
+							return ValidationStatus.error(String.format("'%s' is not a valid date.", value));
+						}
+					}
+				}
+				return ValidationStatus.ok();
+			}
+		};
+
+		final Text text = toolkit.createText(area, null, SWT.NONE);
+		text.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
+
+		final IEMFEditValueProperty prop = EMFEditProperties.value(option.editingDomain, FeaturePath.fromList(option.features));
+
+		final EMFUpdateValueStrategy stringToDateStrategy = new EMFUpdateValueStrategy() {
+			@Override
+			protected IConverter createConverter(final Object fromType, final Object toType) {
+				return new Converter(fromType, toType) {
+					@Override
+					public Object convert(final Object fromObject) {
+						final String value = fromObject == null ? null : fromObject.toString();
+						try {
+							final Date date = format.parse(value);
+							return date;
 						} catch (final Exception e) {
 							return null;
 						}
