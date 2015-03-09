@@ -4,20 +4,14 @@
  */
 package com.mmxlabs.models.lng.pricing.importers;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.models.lng.pricing.CharterIndex;
-import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
-import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IImportContext;
-import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
 
 /**
  * Custom import logic for loading a {@link CharterIndex}.

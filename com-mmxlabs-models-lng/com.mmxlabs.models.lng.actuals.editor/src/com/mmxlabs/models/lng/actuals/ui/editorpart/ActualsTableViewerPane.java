@@ -75,6 +75,7 @@ import com.mmxlabs.models.lng.actuals.ui.editorpart.ActualsModelRowTransformer.R
 import com.mmxlabs.models.lng.actuals.ui.editorpart.ActualsModelRowTransformer.RowData;
 import com.mmxlabs.models.lng.actuals.ui.editorpart.ActualsModelRowTransformer.RowDataEMFPath;
 import com.mmxlabs.models.lng.actuals.ui.editorpart.ActualsModelRowTransformer.Type;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
@@ -87,6 +88,7 @@ import com.mmxlabs.models.ui.tabular.EObjectTableViewerValidationSupport;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.BasicOperationRenderer;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
@@ -547,8 +549,8 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 		// final IReferenceValueProviderProvider provider = scenarioEditingLocation.getReferenceValueProviderCache();
 		final EditingDomain editingDomain = scenarioEditingLocation.getEditingDomain();
 
-		addActualsColumn(cargoColumns, "C-ID", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(MMXCorePackage.Literals.NAMED_OBJECT__NAME, editingDomain)),
-				new RowDataEMFPath(false, Type.CARGO, pkg.getCargoActuals_Cargo()));
+//		addActualsColumn(cargoColumns, "C-ID", new BasicOperationRenderer(CargoPackage.Literals.CARGO___GET_LOAD_NAME, editingDomain),
+//				new RowDataEMFPath(false, Type.CARGO, pkg.getCargoActuals_Cargo()));
 
 		addActualsColumn(loadColumns, "L-ID", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(MMXCorePackage.Literals.NAMED_OBJECT__NAME, editingDomain)),
 				new RowDataEMFPath(false, Type.LOAD, pkg.getSlotActuals_Slot()));

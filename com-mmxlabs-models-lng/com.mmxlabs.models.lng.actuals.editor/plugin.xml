@@ -104,6 +104,12 @@
             ownerEClass="com.mmxlabs.models.lng.actuals.DischargeActuals"
             referenceEClass="com.mmxlabs.models.lng.cargo.Slot">
       </valueProvider>
+      <valueProvider
+            factory="com.mmxlabs.models.lng.actuals.presentation.valueproviders.ActualsCargoValueProviderFactory"
+            id="com.mmxlabs.models.lng.actuals.presentation.valueproviders.ActualsCargoValueProviderFactory"
+            ownerEClass="com.mmxlabs.models.lng.actuals.CargoActuals"
+            referenceEClass="com.mmxlabs.models.lng.cargo.Cargo">
+      </valueProvider>
    </extension>
    <extension
          point="com.mmxlabs.models.ui.editorfactories">
