@@ -270,6 +270,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 			@Override
 			protected IConverter createConverter(final Object fromType, final Object toType) {
 				return new Converter(fromType, toType) {
+					@Override
 					public Object convert(final Object fromObject) {
 						final String value = fromObject == null ? null : fromObject.toString();
 						try {
@@ -286,6 +287,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 			@Override
 			protected IConverter createConverter(final Object fromType, final Object toType) {
 				return new Converter(fromType, toType) {
+					@Override
 					public Object convert(final Object fromObject) {
 						if (fromObject instanceof Date) {
 							return format.format(fromObject);
