@@ -97,7 +97,7 @@ public class CopyGridToHtmlClipboardAction extends Action {
 	}
 
 	private void addHeader(final StringWriter sw) {
-		final int numColumns = table.getColumnCount();
+		// final int numColumns = table.getColumnCount();
 		// write the head
 		sw.write("<thead>\n");
 
@@ -114,9 +114,11 @@ public class CopyGridToHtmlClipboardAction extends Action {
 		}
 		// Set of column groups already seen. This assumes all columns within a group are next to each other
 		final Set<GridColumnGroup> seenGroups = new HashSet<>();
-		for (int i = 0; i < numColumns; ++i) {
-
+		for (int i : table.getColumnOrder()) {
 			final GridColumn column = table.getColumn(i);
+			if (!column.isVisible()) {
+				continue;
+			}
 			// Get the column group
 			final GridColumnGroup columnGroup = column.getColumnGroup();
 			final String colourString;
@@ -167,6 +169,14 @@ public class CopyGridToHtmlClipboardAction extends Action {
 		}
 
 		for (int i = 0; i < numColumns; ++i) {
+			{
+				int j = table.getColumnOrder()[i];
+				final GridColumn column = table.getColumn(j);
+				if (!column.isVisible()) {
+					continue;
+				}
+			}
+
 			// If offset is greater than zero, skip this row
 			if (rowOffsets[i] == 0) {
 				final Color c = item.getBackground(i);
