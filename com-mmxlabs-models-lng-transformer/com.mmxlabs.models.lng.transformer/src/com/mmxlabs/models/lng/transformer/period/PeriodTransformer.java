@@ -102,7 +102,7 @@ public class PeriodTransformer {
 	@Inject(optional = true)
 	private Iterable<IPeriodTransformerExtension> extensions;
 	private Module testingModule;
-	
+
 	public PeriodTransformer(Module testingModule) {
 		this.testingModule = testingModule;
 		injectExtensions();
@@ -111,7 +111,7 @@ public class PeriodTransformer {
 	public PeriodTransformer() {
 		injectExtensions();
 	}
-	
+
 	private void injectExtensions() {
 
 		Injector injector = null;
@@ -762,79 +762,75 @@ public class PeriodTransformer {
 	}
 
 	public void trimSpotMarketCurves(final EditingDomain internalDomain, final PeriodRecord periodRecord, final SpotMarketsModel spotMarketsModel) {
-
-		// Not quite ready yet...
-		 trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getDesPurchaseSpotMarket());
-		 trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getDesSalesSpotMarket());
-		 trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getFobPurchasesSpotMarket());
-		 trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getFobSalesSpotMarket());
+		trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getDesPurchaseSpotMarket());
+		trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getDesSalesSpotMarket());
+		trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getFobPurchasesSpotMarket());
+		trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getFobSalesSpotMarket());
 	}
 
-	//TODO: create first month in UTC time!
 	public void trimSpotMarketCurves(final EditingDomain internalDomain, final PeriodRecord periodRecord, final SpotMarketGroup spotMarketGroup) {
-		for (final SpotMarket spotMarket : spotMarketGroup.getMarkets()) {
-			final SpotAvailability availability = spotMarket.getAvailability();
+		if (spotMarketGroup != null) {
+			for (final SpotMarket spotMarket : spotMarketGroup.getMarkets()) {
+				final SpotAvailability availability = spotMarket.getAvailability();
 
-			// If the constant is set, get the value and replace with zero. Later create new curve points with the original constant value.
-			int constantValue = 0;
-			if (availability.isSetConstant() && availability.getConstant() > 0) {
-				constantValue = availability.getConstant();
-				availability.unsetConstant();
-			}
-
-			// Create lookup of curve dates and remove those outside optimisation range.
-			final Set<Date> seenDates = new HashSet<>();
-			final DataIndex<Integer> curve = availability.getCurve();
-			final List<IndexPoint<Integer>> pointsToRemove = new LinkedList<>();
-			for (final IndexPoint<Integer> value : curve.getPoints()) {
-				if (value.getDate().before(getDateFromStartOfMonth(periodRecord.lowerBoundary))) {
-					// remove
-					pointsToRemove.add(value);
-					continue;
+				// If the constant is set, get the value and replace with zero. Later create new curve points with the original constant value.
+				int constantValue = 0;
+				if (availability.isSetConstant() && availability.getConstant() > 0) {
+					constantValue = availability.getConstant();
+					availability.unsetConstant();
 				}
-				if (value.getDate().after(periodRecord.upperBoundary) || value.getDate().equals(periodRecord.upperBoundary)) {
-					// remove
-					pointsToRemove.add(value);
-					continue;
-				}
-				seenDates.add(value.getDate());
-			}
-			curve.getPoints().removeAll(pointsToRemove);
 
-			// Set the constant, and add curve data across known period instead
-
-			// Fill in curve gaps with the original constant value.
-			if (constantValue != 0) {
-				final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-				cal.setTime(getDateFromStartOfMonth(periodRecord.lowerBoundary));
-				cal.set(Calendar.DAY_OF_MONTH, 1);
-				cal.set(Calendar.HOUR_OF_DAY, 0);
-				final Calendar boundary = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-				boundary.setTime(periodRecord.upperBoundary);
-				System.out.println(periodRecord.lowerBoundary);
-				System.out.println(boundary.getTime());
-				while (cal.getTime().before(periodRecord.upperBoundary)) {
-					if (!seenDates.contains(cal.getTime())) {
-						final IndexPoint<Integer> newValue = PricingFactory.eINSTANCE.createIndexPoint();
-						newValue.setDate(cal.getTime());
-						newValue.setValue(constantValue);
-						// Add
-						curve.getPoints().add(newValue);
+				// Create lookup of curve dates and remove those outside optimisation range.
+				final Set<Date> seenDates = new HashSet<>();
+				final DataIndex<Integer> curve = availability.getCurve();
+				final List<IndexPoint<Integer>> pointsToRemove = new LinkedList<>();
+				for (final IndexPoint<Integer> value : curve.getPoints()) {
+					if (value.getDate().before(getDateFromStartOfMonth(periodRecord.lowerBoundary))) {
+						// remove
+						pointsToRemove.add(value);
+						continue;
 					}
-					// Increment calendar
-					cal.add(Calendar.MONTH, 1);
+					if (value.getDate().after(periodRecord.upperBoundary) || value.getDate().equals(periodRecord.upperBoundary)) {
+						// remove
+						pointsToRemove.add(value);
+						continue;
+					}
+					seenDates.add(value.getDate());
 				}
+				curve.getPoints().removeAll(pointsToRemove);
+
+				// Set the constant, and add curve data across known period instead
+
+				// Fill in curve gaps with the original constant value.
+				if (constantValue != 0) {
+					final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+					cal.setTime(getDateFromStartOfMonth(periodRecord.lowerBoundary));
+					cal.set(Calendar.DAY_OF_MONTH, 1);
+					cal.set(Calendar.HOUR_OF_DAY, 0);
+					final Calendar boundary = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+					boundary.setTime(periodRecord.upperBoundary);
+					while (cal.getTime().before(periodRecord.upperBoundary)) {
+						if (!seenDates.contains(cal.getTime())) {
+							final IndexPoint<Integer> newValue = PricingFactory.eINSTANCE.createIndexPoint();
+							newValue.setDate(cal.getTime());
+							newValue.setValue(constantValue);
+							// Add
+							curve.getPoints().add(newValue);
+						}
+						// Increment calendar
+						cal.add(Calendar.MONTH, 1);
+					}
+				}
+				// replace availability with new curve
+				availability.setCurve(curve);
 			}
-			// replace availability with new curve
-			availability.setCurve(curve);
 		}
 	}
-	
+
 	private Date getDateFromStartOfMonth(Date date) {
 		final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		cal.setTime(date);
 		return DateAndCurveHelper.createDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), 1, 0, "UTC");
 	}
-	
-	
+
 }
