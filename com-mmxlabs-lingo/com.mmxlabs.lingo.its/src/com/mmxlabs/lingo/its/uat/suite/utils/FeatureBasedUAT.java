@@ -26,6 +26,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.junit.Assert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
 import com.mmxlabs.lingo.its.uat.suite.testers.GlobalUATTestsConfig;
@@ -43,17 +45,19 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.transformer.its.tests.ScenarioRunner;
 
 /**
- * Abstract class with methods to extract features from given EMF models for use in producing test files and
- * comparisons for clients. Expected to be subclassed on a per client, per contract basis. 
+ * Abstract class with methods to extract features from given EMF models for use in producing test files and comparisons for clients. Expected to be subclassed on a per client, per contract basis.
+ * 
  * @author achurchill
- *
+ * 
  */
 public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 
-	protected List<EStructuralFeature> getFeatures(EClass c) {
-		List<EStructuralFeature> list = new ArrayList<EStructuralFeature>();
-		List<EStructuralFeature> features = c.getEAllStructuralFeatures();
-		for (EStructuralFeature f : features) {
+	private static final Logger LOG = LoggerFactory.getLogger(FeatureBasedUAT.class);
+
+	protected List<EStructuralFeature> getFeatures(final EClass c) {
+		final List<EStructuralFeature> list = new ArrayList<EStructuralFeature>();
+		final List<EStructuralFeature> features = c.getEAllStructuralFeatures();
+		for (final EStructuralFeature f : features) {
 			if (f.getEType() == EcorePackage.Literals.EINT || f.getEType() == EcorePackage.Literals.EINTEGER_OBJECT || f.getEType() == EcorePackage.Literals.EDOUBLE
 					|| f.getEType() == EcorePackage.Literals.EDOUBLE_OBJECT || f.getEType() == EcorePackage.Literals.EBOOLEAN || f.getEType() == EcorePackage.Literals.EBOOLEAN_OBJECT
 					|| f.getEType() == EcorePackage.Literals.ELONG || f.getEType() == EcorePackage.Literals.ELONG_OBJECT) {
@@ -67,7 +71,7 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 
 	}
 
-	protected ScenarioRunner getScenarioRunner(String filePath, boolean isLingoFile) throws Exception {
+	protected ScenarioRunner getScenarioRunner(final String filePath, final boolean isLingoFile) throws Exception {
 		final URL url = getClass().getResource(filePath);
 		final ScenarioRunner runner;
 		if (isLingoFile) {
@@ -78,25 +82,25 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		return runner;
 	}
 
-	protected ScenarioRunner getScenarioRunner(String filePath) throws Exception {
+	protected ScenarioRunner getScenarioRunner(final String filePath) throws Exception {
 
 		return getScenarioRunner(filePath, isLingoFile(filePath));
 	}
-	
-	public Schedule getSchedule(String lingoFileName) throws Exception {
+
+	public Schedule getSchedule(final String lingoFileName) throws Exception {
 		final ScenarioRunner runner = getScenarioRunner(lingoFileName);
 		Assert.assertNotNull(runner);
-		
+
 		// Update the scenario with the Schedule links
 		runner.updateScenario();
-		
+
 		final Schedule schedule = runner.getIntialSchedule();
 		return schedule;
 	}
-	
-	protected boolean isLingoFile(String filePath) {
+
+	protected boolean isLingoFile(final String filePath) {
 		String extension = "";
-		int i = filePath.lastIndexOf('.');
+		final int i = filePath.lastIndexOf('.');
 		if (i > 0) {
 			extension = filePath.substring(i + 1);
 		}
@@ -127,12 +131,12 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		fillFeatureMap(eClass, baseTable, containedObj, "");
 	}
 
-	private double getLingoOutput(EObject modelObject, EStructuralFeature feature) {
+	private double getLingoOutput(final EObject modelObject, final EStructuralFeature feature) {
 		double value;
 		if (modelObject.eGet(feature) instanceof Integer) {
 			value = (double) ((Integer) modelObject.eGet(feature));
 		} else if (modelObject.eGet(feature) instanceof Boolean) {
-			boolean boolValue = (Boolean) modelObject.eGet(feature);
+			final boolean boolValue = (Boolean) modelObject.eGet(feature);
 			if (boolValue) {
 				value = 1;
 			} else {
@@ -143,28 +147,28 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		} else {
 			value = (double) modelObject.eGet(feature);
 		}
-		int multiplier = getMultiplier(feature);
+		final int multiplier = getMultiplier(feature);
 		return value * (Math.pow(10, multiplier));
 	}
 
-	private int getMultiplier(EStructuralFeature e) {
-		Integer multiplier = FeatureIdTools.getMultiplier(e);
+	private int getMultiplier(final EStructuralFeature e) {
+		final Integer multiplier = FeatureIdTools.getMultiplier(e);
 		if (multiplier != null) {
 			return FeatureIdTools.getMultiplier(e);
 		}
 		return 0;
 	}
 
-	protected IdMapContainer getGPLFeaturesMap(GroupProfitAndLoss gPL) {
-		IdMapContainer gPLTable = new IdMapContainer("groupProfitAndLoss");
+	protected IdMapContainer getGPLFeaturesMap(final GroupProfitAndLoss gPL) {
+		final IdMapContainer gPLTable = new IdMapContainer("groupProfitAndLoss");
 		if (gPL != null) {
 			fillFeatureMap(gPL.eClass(), gPLTable, gPL);
 		}
 		return gPLTable;
 	}
 
-	protected IdMapContainer getLoadSlotFeaturesMap(EList<SlotAllocation> slotAllocations) {
-		IdMapContainer slotTable = new IdMapContainer("loadSlot");
+	protected IdMapContainer getLoadSlotFeaturesMap(final EList<SlotAllocation> slotAllocations) {
+		final IdMapContainer slotTable = new IdMapContainer("loadSlot");
 		LoadSlot loadSlot = null;
 		SlotAllocation loadAllocation = null;
 		for (final SlotAllocation slotAllocation : slotAllocations) {
@@ -180,8 +184,8 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		return slotTable;
 	}
 
-	protected IdMapContainer getDischargeSlotFeaturesMap(EList<SlotAllocation> slotAllocations) {
-		IdMapContainer slotTable = new IdMapContainer("dischargeSlot");
+	protected IdMapContainer getDischargeSlotFeaturesMap(final EList<SlotAllocation> slotAllocations) {
+		final IdMapContainer slotTable = new IdMapContainer("dischargeSlot");
 		DischargeSlot dischargeSlot = null;
 		SlotAllocation dischargeAllocation = null;
 		for (final SlotAllocation slotAllocation : slotAllocations) {
@@ -197,32 +201,33 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		return slotTable;
 	}
 
-	protected IdMapContainer getEventsFeaturesMap(EList<Event> events) {
-		IdMapContainer eventTable = new IdMapContainer("events");
+	protected IdMapContainer getEventsFeaturesMap(final EList<Event> events) {
+		final IdMapContainer eventTable = new IdMapContainer("events");
 
 		for (int i = 0; i < events.size(); i++) {
-			Event e = events.get(i);
+			final Event e = events.get(i);
 			if (e instanceof FuelUsage) {
-				FuelUsage fu = (FuelUsage) e;
+				final FuelUsage fu = (FuelUsage) e;
 				for (int fqIndex = 0; fqIndex < fu.getFuels().size(); fqIndex++) {
-					FuelQuantity fq = fu.getFuels().get(fqIndex);
+					final FuelQuantity fq = fu.getFuels().get(fqIndex);
 					for (int faIndex = 0; faIndex < fq.getAmounts().size(); faIndex++) {
-						FuelAmount fa = fq.getAmounts().get(faIndex);
-						fillFeatureMap(SchedulePackage.Literals.FUEL_AMOUNT, eventTable, fa, String.format("%s(%s)-%s-fa(%s)-%s",i,e.eClass().getName(), fq.getFuel().getName(), faIndex, fa.getUnit().getName()));
+						final FuelAmount fa = fq.getAmounts().get(faIndex);
+						fillFeatureMap(SchedulePackage.Literals.FUEL_AMOUNT, eventTable, fa,
+								String.format("%s(%s)-%s-fa(%s)-%s", i, e.eClass().getName(), fq.getFuel().getName(), faIndex, fa.getUnit().getName()));
 					}
 				}
 			}
 		}
 		return eventTable;
 	}
-	
-	protected void addDefaultDetails(List<IdMapContainer> allDetails, CargoAllocation cargoAllocation) {
+
+	protected void addDefaultDetails(final List<IdMapContainer> allDetails, final CargoAllocation cargoAllocation) {
 		if (GlobalUATTestsConfig.INCLUDE_GROUP_PROFIT_LOSS_DETAILS) {
-			GroupProfitAndLoss gPL = cargoAllocation.getGroupProfitAndLoss();
+			final GroupProfitAndLoss gPL = cargoAllocation.getGroupProfitAndLoss();
 			allDetails.add(getGPLFeaturesMap(gPL));
 		}
 		if (GlobalUATTestsConfig.INCLUDE_SLOT_DETAILS) {
-			EList<SlotAllocation> slotAllocations = cargoAllocation.getSlotAllocations();
+			final EList<SlotAllocation> slotAllocations = cargoAllocation.getSlotAllocations();
 			allDetails.add(getLoadSlotFeaturesMap(slotAllocations));
 			allDetails.add(getDischargeSlotFeaturesMap(slotAllocations));
 		}
@@ -230,8 +235,8 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 			allDetails.add(getEventsFeaturesMap(cargoAllocation.getEvents()));
 		}
 	}
-	
-	public void createPropertiesForCase(String lingoFileName, String cargoName) throws Exception {
+
+	public void createPropertiesForCase(final String lingoFileName, final String cargoName) throws Exception {
 		final Schedule schedule = getSchedule(lingoFileName);
 
 		final Properties props = getNewProperties(lingoFileName);
@@ -243,18 +248,18 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 	}
 
 	public void createPropertiesForTypedCase(final Schedule schedule, final String lingoFileName, final String cargoName) throws Exception {
-		Properties props = getNewProperties(lingoFileName);
+		final Properties props = getNewProperties(lingoFileName);
 		final URL propsURL = getPropertiesURL(lingoFileName, cargoName);
-		
+
 		final List<IdMapContainer> idMapContainers = getIdMapContainers(schedule, cargoName);
-		for (IdMapContainer d : idMapContainers) {
+		for (final IdMapContainer d : idMapContainers) {
 			addToProperties(props, d.getIdMapList(), d.name);
 		}
-		
+
 		writePropertiesFile(props, propsURL);
 	}
-	
-	private Properties getNewProperties(String lingoFileName) throws MalformedURLException, IOException {
+
+	private Properties getNewProperties(final String lingoFileName) throws MalformedURLException, IOException {
 		/**
 		 * Extend to save properties in a sorted order for ease of reading
 		 */
@@ -264,7 +269,7 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 			public Set<Object> keySet() {
 				return Collections.unmodifiableSet(new TreeSet<Object>(super.keySet()));
 			}
-			
+
 			@Override
 			public synchronized Enumeration<Object> keys() {
 				return Collections.enumeration(new TreeSet<Object>(super.keySet()));
@@ -274,22 +279,22 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		props.setProperty("lingoFileURI", lingoFileName);
 		return props;
 	}
-	
-	private Properties getExistingProperties(String lingoFileName, String suffix) throws MalformedURLException, IOException {
+
+	private Properties getExistingProperties(final String lingoFileName, final String suffix) throws MalformedURLException, IOException {
 		final Properties props = new Properties();
 		final URL propsURL = getPropertiesURL(lingoFileName, suffix);
 		props.load(propsURL.openStream());
 		return props;
 	}
-	
-	private void fillProperties(Schedule schedule, String cargoName, Properties props) {
+
+	private void fillProperties(final Schedule schedule, final String cargoName, final Properties props) {
 		final List<IdMapContainer> idMapContainers = getIdMapContainers(schedule, cargoName);
-		for (IdMapContainer d : idMapContainers) {
+		for (final IdMapContainer d : idMapContainers) {
 			addToProperties(props, d.getIdMapList(), d.name);
 		}
 	}
-	
-	private void writePropertiesFile(Properties props, URL propsURL) throws FileNotFoundException, IOException {
+
+	private void writePropertiesFile(final Properties props, final URL propsURL) throws FileNotFoundException, IOException {
 		// create properties file
 		File file;
 		try {
@@ -299,14 +304,14 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 			e.printStackTrace();
 		}
 	}
-	
-	public void checkPropertiesForCase(String lingoFileName, String cargoName, boolean additionalChecks) throws Exception {
+
+	public void checkPropertiesForCase(final String lingoFileName, final String cargoName, final boolean additionalChecks) throws Exception {
 		final Properties props = getExistingProperties(lingoFileName, "");
 
 		final Schedule schedule = getSchedule(lingoFileName);
 
 		final List<IdMapContainer> idMapContainers = getIdMapContainers(schedule, cargoName);
-		for (IdMapContainer d : idMapContainers) {
+		for (final IdMapContainer d : idMapContainers) {
 			comparePropertiesToLingo(props, d.getIdMapList(), d.name, cargoName);
 		}
 
@@ -315,31 +320,32 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		}
 	}
 
-	public void checkPropertiesForTypedCase(Schedule schedule, String lingoFileName, String cargoName, boolean additionalChecks) throws Exception {
+	public void checkPropertiesForTypedCase(final Schedule schedule, final String lingoFileName, final String cargoName, final boolean additionalChecks) throws Exception {
 		final Properties props = getExistingProperties(lingoFileName, cargoName);
-		
+
 		final List<IdMapContainer> idMapContainers = getIdMapContainers(schedule, cargoName);
-		for (IdMapContainer d : idMapContainers) {
+		for (final IdMapContainer d : idMapContainers) {
 			comparePropertiesToLingo(props, d.getIdMapList(), d.name, cargoName);
 		}
-		
+
 		if (additionalChecks) {
 			additionalChecks(schedule, cargoName);
 		}
 	}
-	
+
 	/**
 	 * This method is used to add special contract specific checks
+	 * 
 	 * @param schedule
 	 * @param cargoName
 	 */
-	protected void additionalChecks(Schedule schedule, String cargoName) {
+	protected void additionalChecks(final Schedule schedule, final String cargoName) {
 	}
 
-	protected URL getPropertiesURL(String lingoFileName, String suffix) throws MalformedURLException, IOException {
+	protected URL getPropertiesURL(final String lingoFileName, final String suffix) throws MalformedURLException, IOException {
 		final URL propsURL;
 		final URL url = getClass().getResource(lingoFileName);
-		String urlString = FileLocator.toFileURL(new URL(url.toString())).toString();
+		final String urlString = FileLocator.toFileURL(new URL(url.toString())).toString();
 		String propsPath;
 		if (isLingoFile(urlString)) {
 			propsPath = urlString.replaceAll("\\.lingo$", "");
@@ -354,34 +360,38 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 					break;
 				}
 			}
-			propsPath = (propsPath.substring(0, end + 1) + propsPath.substring(end).replaceAll("/", "") + (suffix.equals("") ? "" : "-" + suffix) +".properties").replaceAll(" ", "%20");
+			propsPath = (propsPath.substring(0, end + 1) + propsPath.substring(end).replaceAll("/", "") + (suffix.equals("") ? "" : "-" + suffix) + ".properties").replaceAll(" ", "%20");
 		}
 		propsURL = new URL(propsPath);
 		return propsURL;
 	}
 
-	private void addToProperties(Properties prop, List<IdMap> table, String prefix) {
-		for (IdMap map : table) {
+	private void addToProperties(final Properties prop, final List<IdMap> table, final String prefix) {
+		for (final IdMap map : table) {
 			prop.setProperty(createPropertyKey(map, prefix), String.format("%.7f", (double) getLingoOutput(map.getContainer(), map.getFeature())));
 		}
 	}
 
-	private void comparePropertiesToLingo(Properties prop, List<IdMap> table, String prefix, String cargoName) {
-		for (IdMap map : table) {
-			String key = createPropertyKey(map, prefix);
-			Assert.assertTrue(key+" not in map",prop.containsKey(key));
-			double propertiesValue = Double.valueOf(prop.getProperty(key));
-			double lingoValue = getLingoOutput(map.getContainer(), map.getFeature());
-			Assert.assertEquals(String.format("testing cargo (%s) \"%s:\"", cargoName, key), propertiesValue, lingoValue, 0.000001);
+	private void comparePropertiesToLingo(final Properties prop, final List<IdMap> table, final String prefix, final String cargoName) {
+		for (final IdMap map : table) {
+			final String key = createPropertyKey(map, prefix);
+			if (prop.containsKey(key)) {
+				final double propertiesValue = Double.valueOf(prop.getProperty(key));
+				final double lingoValue = getLingoOutput(map.getContainer(), map.getFeature());
+				Assert.assertEquals(String.format("testing cargo (%s) \"%s:\"", cargoName, key), propertiesValue, lingoValue, 0.000001);
+			} else {
+				LOG.warn(key + " not in map");
+			}
 		}
 	}
 
-	private String createPropertyKey(IdMap map, String prefix) {
+	private String createPropertyKey(final IdMap map, final String prefix) {
 		return String.format("%s-%s", prefix, map.getId());
 	}
-	
+
 	/**
 	 * This abstract method must be implemented to produce the features used to create testing properties.
+	 * 
 	 * @param schedule
 	 * @param cargoName
 	 * @return
