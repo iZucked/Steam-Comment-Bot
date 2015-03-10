@@ -265,7 +265,7 @@ public final class OptimisationHelper {
 
 			final OptimiserSettings copy = EcoreUtil.copy(previousSettings);
 
-			dialog.addOption(DataSection.Advanced, editingDomian, "Shipping Only Optimisation", copy, defaultSettings, DataType.Boolean, ParametersPackage.eINSTANCE.getOptimiserSettings_ShippingOnly());
+			dialog.addOption(DataSection.Main, editingDomian, "Shipping Only Optimisation", copy, defaultSettings, DataType.Boolean, ParametersPackage.eINSTANCE.getOptimiserSettings_ShippingOnly());
 			dialog.addOption(DataSection.Main, editingDomian, "Generate Charter Outs", copy, defaultSettings, DataType.Boolean, ParametersPackage.eINSTANCE.getOptimiserSettings_GenerateCharterOuts());
 
 			if (!forEvaluation) {
