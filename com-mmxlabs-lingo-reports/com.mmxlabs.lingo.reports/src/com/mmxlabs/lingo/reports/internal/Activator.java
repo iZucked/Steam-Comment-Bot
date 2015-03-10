@@ -6,6 +6,21 @@
  */
 package com.mmxlabs.lingo.reports.internal;
 
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.emf.common.EMFPlugin;
+import org.eclipse.emf.common.util.ResourceLocator;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTError;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
+import org.osgi.framework.BundleContext;
+import org.osgi.util.tracker.ServiceTracker;
+
 import com.mmxlabs.models.lng.cargo.provider.CargoEditPlugin;
 import com.mmxlabs.models.lng.commercial.provider.CommercialEditPlugin;
 import com.mmxlabs.models.lng.fleet.provider.FleetEditPlugin;
@@ -17,69 +32,42 @@ import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
 import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 
-import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.emf.common.EMFPlugin;
-import org.eclipse.emf.common.util.ResourceLocator;
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.eclipse.ui.preferences.ScopedPreferenceStore;
-import org.osgi.framework.BundleContext;
-import org.osgi.util.tracker.ServiceTracker;
-
 /**
- * This is the central singleton for the model edit plugin.
- * <!-- begin-user-doc -->
- * <!-- end-user-doc -->
+ * This is the central singleton for the model edit plugin. <!-- begin-user-doc --> <!-- end-user-doc -->
+ * 
  * @generated
  */
 public final class Activator extends EMFPlugin {
 	// The plug-in ID
 	public static final String PLUGIN_ID = "com.mmxlabs.lingo.reports"; //$NON-NLS-1$
-	
 
-	
 	/**
-	 * Keep track of the singleton.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Keep track of the singleton. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public static final Activator INSTANCE = new Activator();
 
 	/**
-	 * Keep track of the singleton.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Keep track of the singleton. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	private static Implementation plugin;
 
 	/**
-	 * Create the instance.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Create the instance. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public Activator() {
-		super
-		  (new ResourceLocator [] {
-		     CargoEditPlugin.INSTANCE,
-		     CommercialEditPlugin.INSTANCE,
-		     FleetEditPlugin.INSTANCE,
-		     LNGTypesEditPlugin.INSTANCE,
-		     MmxcoreEditPlugin.INSTANCE,
-		     PortEditPlugin.INSTANCE,
-		     PricingEditPlugin.INSTANCE,
-		     ScheduleEditPlugin.INSTANCE,
-		     SpotMarketsEditPlugin.INSTANCE,
-		   });
+		super(new ResourceLocator[] { CargoEditPlugin.INSTANCE, CommercialEditPlugin.INSTANCE, FleetEditPlugin.INSTANCE, LNGTypesEditPlugin.INSTANCE, MmxcoreEditPlugin.INSTANCE,
+				PortEditPlugin.INSTANCE, PricingEditPlugin.INSTANCE, ScheduleEditPlugin.INSTANCE, SpotMarketsEditPlugin.INSTANCE, });
 	}
 
 	/**
-	 * Returns the singleton instance of the Eclipse plugin.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns the singleton instance of the Eclipse plugin. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @return the singleton instance.
 	 * @generated
 	 */
@@ -89,43 +77,44 @@ public final class Activator extends EMFPlugin {
 	}
 
 	/**
-	 * Returns the singleton instance of the Eclipse plugin.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns the singleton instance of the Eclipse plugin. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @return the singleton instance.
 	 * @generated
 	 */
 	public static Implementation getPlugin() {
 		return plugin;
 	}
-	
+
 	/**
-	 * Returns the singleton instance of the Eclipse plugin.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns the singleton instance of the Eclipse plugin. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @return the singleton instance.
 	 * @generated NOT
 	 */
 	public static Implementation getDefault() {
 		return plugin;
 	}
+
 	/**
-	 * The actual implementation of the Eclipse <b>Plugin</b>.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The actual implementation of the Eclipse <b>Plugin</b>. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public static class Implementation extends EclipsePlugin {
+
+		public static final String IMAGE_PINNED_ROW = "pinned.row";
+
 		private ServiceTracker<IScenarioServiceSelectionProvider, IScenarioServiceSelectionProvider> scenarioServiceSelectionProviderTracker;
-	    /**
-	     * Storage for preferences.
-	     */
-	    private ScopedPreferenceStore preferenceStore;
-		
 		/**
-		 * Creates an instance.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
+		 * Storage for preferences.
+		 */
+		private ScopedPreferenceStore preferenceStore;
+		private ImageRegistry imageRegistry = null;
+
+		/**
+		 * Creates an instance. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * 
 		 * @generated
 		 */
 		public Implementation() {
@@ -135,7 +124,38 @@ public final class Activator extends EMFPlugin {
 			//
 			plugin = this;
 		}
-		
+
+		public ImageRegistry getImageRegistry() {
+			if (imageRegistry == null) {
+				imageRegistry = createImageRegistry();
+				initializeImageRegistry(imageRegistry);
+			}
+			return imageRegistry;
+		}
+
+		protected ImageRegistry createImageRegistry() {
+
+			// If we are in the UI Thread use that
+			if (Display.getCurrent() != null) {
+				return new ImageRegistry(Display.getCurrent());
+			}
+
+			if (PlatformUI.isWorkbenchRunning()) {
+				return new ImageRegistry(PlatformUI.getWorkbench().getDisplay());
+			}
+
+			// Invalid thread access if it is not the UI Thread
+			// and the workbench is not created.
+			throw new SWTError(SWT.ERROR_THREAD_INVALID_ACCESS);
+		}
+
+		protected void initializeImageRegistry(final ImageRegistry reg) {
+
+			final ImageDescriptor importImageDescriptor = getImageDescriptor("icons/full/obj16/PinnedRow.gif");
+			getImageRegistry().put(IMAGE_PINNED_ROW, importImageDescriptor);
+
+		}
+
 		/*
 		 * (non-Javadoc)
 		 * 
@@ -148,17 +168,22 @@ public final class Activator extends EMFPlugin {
 			scenarioServiceSelectionProviderTracker.close();
 			scenarioServiceSelectionProviderTracker = null;
 
+			if (imageRegistry != null) {
+				imageRegistry.dispose();
+			}
+			imageRegistry = null;
+
 			super.stop(context);
 		}
 
-		
 		@Override
-		public void start(BundleContext context) throws Exception {
+		public void start(final BundleContext context) throws Exception {
 			scenarioServiceSelectionProviderTracker = new ServiceTracker<IScenarioServiceSelectionProvider, IScenarioServiceSelectionProvider>(context, IScenarioServiceSelectionProvider.class, null);
 			scenarioServiceSelectionProviderTracker.open();
-			
+
 			super.start(context);
 		}
+
 		/**
 		 * Returns an image descriptor for the image file at the given plug-in relative path
 		 * 
@@ -173,33 +198,28 @@ public final class Activator extends EMFPlugin {
 		public IScenarioServiceSelectionProvider getScenarioServiceSelectionProvider() {
 			return scenarioServiceSelectionProviderTracker.getService();
 		}
-		
-		 /**
-	     * Returns the preference store for this UI plug-in.
-	     * This preference store is used to hold persistent settings for this plug-in in
-	     * the context of a workbench. Some of these settings will be user controlled, 
-	     * whereas others may be internal setting that are never exposed to the user.
-	     * <p>
-	     * If an error occurs reading the preference store, an empty preference store is
-	     * quietly created, initialized with defaults, and returned.
-	     * </p>
-	     * <p>
-	     * <strong>NOTE:</strong> As of Eclipse 3.1 this method is
-	     * no longer referring to the core runtime compatibility layer and so
-	     * plug-ins relying on Plugin#initializeDefaultPreferences
-	     * will have to access the compatibility layer themselves.
-	     * </p>
-	     *
-	     * @return the preference store 
-	     */
-	    public IPreferenceStore getPreferenceStore() {
-	        // Create the preference store lazily.
-	        if (preferenceStore == null) {
-	            preferenceStore = new ScopedPreferenceStore(new InstanceScope(),getBundle().getSymbolicName());
 
-	        }
-	        return preferenceStore;
-	    }
+		/**
+		 * Returns the preference store for this UI plug-in. This preference store is used to hold persistent settings for this plug-in in the context of a workbench. Some of these settings will be
+		 * user controlled, whereas others may be internal setting that are never exposed to the user.
+		 * <p>
+		 * If an error occurs reading the preference store, an empty preference store is quietly created, initialized with defaults, and returned.
+		 * </p>
+		 * <p>
+		 * <strong>NOTE:</strong> As of Eclipse 3.1 this method is no longer referring to the core runtime compatibility layer and so plug-ins relying on Plugin#initializeDefaultPreferences will have
+		 * to access the compatibility layer themselves.
+		 * </p>
+		 * 
+		 * @return the preference store
+		 */
+		public IPreferenceStore getPreferenceStore() {
+			// Create the preference store lazily.
+			if (preferenceStore == null) {
+				preferenceStore = new ScopedPreferenceStore(new InstanceScope(), getBundle().getSymbolicName());
+
+			}
+			return preferenceStore;
+		}
 	}
 
 }

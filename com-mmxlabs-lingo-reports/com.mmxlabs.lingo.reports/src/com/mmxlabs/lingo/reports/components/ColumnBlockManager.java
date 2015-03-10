@@ -186,7 +186,7 @@ public class ColumnBlockManager {
 				continue;
 			}
 			// adding the columns in each block to the grid in the correct order
-			for (final ColumnHandler handler : block.columnHandlers) {
+			for (final ColumnHandler handler : block.getColumnHandlers()) {
 				final GridColumn column = handler.column.getColumn();
 				// sanity check to make sure nothing is bad
 				if (column != null && column.isDisposed() == false) {
@@ -229,7 +229,7 @@ public class ColumnBlockManager {
 
 	public boolean getBlockReallyVisible(final ColumnBlock block) {
 		Boolean result = null;
-		for (final ColumnHandler handler : block.columnHandlers) {
+		for (final ColumnHandler handler : block.getColumnHandlers()) {
 			final GridColumn column = handler.column.getColumn();
 			if (result != null && !column.isDisposed() && column.getVisible() != result) {
 				System.err.println(String.format("Column block has inconsistent visibility: %s.", column.toString()));
@@ -304,14 +304,14 @@ public class ColumnBlockManager {
 		handlers.add(handler);
 		handlersInOrder.add(handler);
 
-		block.columnHandlers.add(handler);
-		GridViewerColumn gvc = handler.createColumn();
+		block.addColumn(handler);
+		final GridViewerColumn gvc = handler.createColumn();
 		final GridColumn column = gvc == null ? null : gvc.getColumn();
 
 		if (column != null) {
 			column.setVisible(block.getVisible());
 			column.pack();
-		}
+		} 
 		return handler;
 	}
 
@@ -326,7 +326,7 @@ public class ColumnBlockManager {
 				h.destroy();
 				handlers.remove(h);
 				handlersInOrder.remove(h);
-				h.block.columnHandlers.remove(h);
+				h.block.getColumnHandlers().remove(h);
 				break;
 			}
 		}
@@ -349,7 +349,7 @@ public class ColumnBlockManager {
 
 	public void setColumnFactory(final IColumnFactory columnFactory) {
 		this.columnFactory = columnFactory;
-		for (ColumnHandler handler : handlers) {
+		for (final ColumnHandler handler : handlers) {
 			handler.setColumnFactory(columnFactory);
 		}
 	}

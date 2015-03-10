@@ -317,8 +317,7 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public EReference getRow_CargoAllocation() {
+	public EReference getRow_Sequence() {
 		return (EReference)rowEClass.getEStructuralFeatures().get(7);
 	}
 
@@ -328,7 +327,7 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 	 * @generated
 	 */
 	@Override
-	public EReference getRow_LoadAllocation() {
+	public EReference getRow_CargoAllocation() {
 		return (EReference)rowEClass.getEStructuralFeatures().get(8);
 	}
 
@@ -338,7 +337,7 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 	 * @generated
 	 */
 	@Override
-	public EReference getRow_DischargeAllocation() {
+	public EReference getRow_LoadAllocation() {
 		return (EReference)rowEClass.getEStructuralFeatures().get(9);
 	}
 
@@ -348,7 +347,7 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 	 * @generated
 	 */
 	@Override
-	public EReference getRow_OpenSlotAllocation() {
+	public EReference getRow_DischargeAllocation() {
 		return (EReference)rowEClass.getEStructuralFeatures().get(10);
 	}
 
@@ -358,7 +357,7 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 	 * @generated
 	 */
 	@Override
-	public EReference getRow_ReferenceRow() {
+	public EReference getRow_OpenSlotAllocation() {
 		return (EReference)rowEClass.getEStructuralFeatures().get(11);
 	}
 
@@ -368,7 +367,7 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 	 * @generated
 	 */
 	@Override
-	public EReference getRow_ReferringRows() {
+	public EReference getRow_ReferenceRow() {
 		return (EReference)rowEClass.getEStructuralFeatures().get(12);
 	}
 
@@ -378,8 +377,18 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 	 * @generated
 	 */
 	@Override
+	public EReference getRow_ReferringRows() {
+		return (EReference)rowEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EAttribute getRow_Reference() {
-		return (EAttribute)rowEClass.getEStructuralFeatures().get(13);
+		return (EAttribute)rowEClass.getEStructuralFeatures().get(14);
 	}
 
 	/**
@@ -389,16 +398,6 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 	 */
 	@Override
 	public EReference getRow_RowGroup() {
-		return (EReference)rowEClass.getEStructuralFeatures().get(14);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getRow_Scenario() {
 		return (EReference)rowEClass.getEStructuralFeatures().get(15);
 	}
 
@@ -408,8 +407,18 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 	 * @generated
 	 */
 	@Override
-	public EReference getRow_Table() {
+	public EReference getRow_Scenario() {
 		return (EReference)rowEClass.getEStructuralFeatures().get(16);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getRow_Table() {
+		return (EReference)rowEClass.getEStructuralFeatures().get(17);
 	}
 
 	/**
@@ -628,6 +637,7 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 		createEAttribute(rowEClass, ROW__NAME2);
 		createEReference(rowEClass, ROW__TARGET);
 		createEReference(rowEClass, ROW__SCHEDULE);
+		createEReference(rowEClass, ROW__SEQUENCE);
 		createEReference(rowEClass, ROW__CARGO_ALLOCATION);
 		createEReference(rowEClass, ROW__LOAD_ALLOCATION);
 		createEReference(rowEClass, ROW__DISCHARGE_ALLOCATION);
@@ -714,6 +724,7 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 		initEAttribute(getRow_Name2(), ecorePackage.getEString(), "name2", null, 0, 1, Row.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getRow_Target(), ecorePackage.getEObject(), null, "target", null, 0, 1, Row.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getRow_Schedule(), theSchedulePackage.getSchedule(), null, "schedule", null, 0, 1, Row.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getRow_Sequence(), theSchedulePackage.getSequence(), null, "sequence", null, 0, 1, Row.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getRow_CargoAllocation(), theSchedulePackage.getCargoAllocation(), null, "cargoAllocation", null, 0, 1, Row.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getRow_LoadAllocation(), theSchedulePackage.getSlotAllocation(), null, "loadAllocation", null, 0, 1, Row.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getRow_DischargeAllocation(), theSchedulePackage.getSlotAllocation(), null, "dischargeAllocation", null, 0, 1, Row.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

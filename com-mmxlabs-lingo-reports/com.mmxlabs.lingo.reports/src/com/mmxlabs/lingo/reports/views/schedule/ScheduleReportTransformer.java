@@ -55,7 +55,7 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
-public class ScheduleTransformer {
+public class ScheduleReportTransformer {
 
 	private final class UserGroupPNLDeltaComparator implements Comparator<Pair<UserGroup, Integer>> {
 		@Override
@@ -134,7 +134,7 @@ public class ScheduleTransformer {
 
 	private final Table table;
 
-	public ScheduleTransformer(final Table table, final ScheduleBasedReportBuilder builder, final List<ICustomRelatedSlotHandler> customRelatedSlotHandlers) {
+	public ScheduleReportTransformer(final Table table, final ScheduleBasedReportBuilder builder, final List<ICustomRelatedSlotHandler> customRelatedSlotHandlers) {
 		this.table = table;
 		this.builder = builder;
 		this.customRelatedSlotHandlers = customRelatedSlotHandlers;
@@ -319,6 +319,7 @@ public class ScheduleTransformer {
 				for (int i = 0; i < Math.max(loadSlots.size(), dischargeSlots.size()); ++i) {
 
 					final Row row = ScheduleReportFactory.eINSTANCE.createRow();
+					row.setSequence(cargoAllocation.getSequence());
 					row.setTarget(cargoAllocation);
 					row.setCargoAllocation(cargoAllocation);
 					row.setRowGroup(group);
@@ -395,6 +396,7 @@ public class ScheduleTransformer {
 			} else if (element instanceof Event) {
 				final Event event = (Event) element;
 				final Row row = ScheduleReportFactory.eINSTANCE.createRow();
+				row.setSequence(event.getSequence());
 				row.setTarget(event);
 				row.setName(event.name());
 				rows.add(row);
@@ -479,6 +481,9 @@ public class ScheduleTransformer {
 			row.getInputEquivalents().addAll(Lists.<EObject> newArrayList(openSlotAllocation, openSlotAllocation.getSlot()));
 		} else {
 			row.getInputEquivalents().addAll(Lists.<EObject> newArrayList(a));
+		}
+		if (row.getSequence() != null) {
+			row.getInputEquivalents().add(row.getSequence());
 		}
 	}
 

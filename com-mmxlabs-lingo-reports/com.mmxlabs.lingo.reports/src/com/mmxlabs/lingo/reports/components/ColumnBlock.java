@@ -7,7 +7,10 @@ package com.mmxlabs.lingo.reports.components;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
+import org.eclipse.nebula.widgets.grid.GridColumnGroup;
+import org.eclipse.swt.SWT;
 
 /**
  * A named group which report columns can be attached to. The configuration dialog allows the user to edit the placement and visibility of these groups, which affects all columns in the group. Saved
@@ -17,10 +20,9 @@ import org.eclipse.nebula.widgets.grid.GridColumn;
  * 
  */
 public class ColumnBlock {
-	public List<ColumnHandler> columnHandlers = new ArrayList<>();
+	private List<ColumnHandler> columnHandlers = new ArrayList<>();
 	private boolean userVisible = false;
-	
-	
+
 	private boolean modeVisible = false;
 	public String blockID;
 	public String blockName;
@@ -30,6 +32,7 @@ public class ColumnBlock {
 	 */
 	private boolean placeholder;
 	public String tooltip;
+	private GridColumnGroup gridColumnGroup;
 
 	public ColumnBlock(final String blockID, final String blockName, final ColumnType columnType) {
 		this.blockID = blockID;
@@ -62,7 +65,7 @@ public class ColumnBlock {
 			}
 		}
 	}
-	
+
 	public boolean isModeVisible() {
 		return modeVisible;
 	}
@@ -105,17 +108,31 @@ public class ColumnBlock {
 		return placeholder;
 	}
 
-	public void setPlaceholder(boolean placeholder) {
+	public void setPlaceholder(final boolean placeholder) {
 		this.placeholder = placeholder;
 	}
 
 	public boolean getVisible() {
 		return userVisible;
 	}
-	
+
 	@Override
 	public String toString() {
 		return String.format("Column block '%s'", blockName);
+	}
+
+	public GridColumnGroup getOrCreateColumnGroup(final Grid grid) {
+		if (gridColumnGroup == null) {
+			if (columnHandlers.size() > 1) {
+				gridColumnGroup = new GridColumnGroup(grid, SWT.NONE);
+				gridColumnGroup.setText(blockName);
+			}
+		}
+		return gridColumnGroup;
+	}
+
+	public List<ColumnHandler> getColumnHandlers() {
+		return columnHandlers;
 	}
 
 }

@@ -5,6 +5,7 @@
 package com.mmxlabs.lingo.reports.components;
 
 import com.google.inject.AbstractModule;
+import com.mmxlabs.lingo.reports.views.fleet.extpoint.FleetBasedReportModule;
 import com.mmxlabs.lingo.reports.views.portrotation.extpoint.PortRotationBasedReportModule;
 import com.mmxlabs.lingo.reports.views.schedule.extpoint.ScheduleBasedReportModule;
 
@@ -14,6 +15,7 @@ public class ReportComponentModule extends AbstractModule {
 	protected void configure() {
 
 		install(new ScheduleBasedReportModule());
+		install(new FleetBasedReportModule());
 		install(new PortRotationBasedReportModule());
 	}
 }

@@ -72,6 +72,7 @@ public class RowItemProvider
 			addName2PropertyDescriptor(object);
 			addTargetPropertyDescriptor(object);
 			addSchedulePropertyDescriptor(object);
+			addSequencePropertyDescriptor(object);
 			addCargoAllocationPropertyDescriptor(object);
 			addLoadAllocationPropertyDescriptor(object);
 			addDischargeAllocationPropertyDescriptor(object);
@@ -231,6 +232,28 @@ public class RowItemProvider
 				 getString("_UI_Row_schedule_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_Row_schedule_feature", "_UI_Row_type"),
 				 ScheduleReportPackage.Literals.ROW__SCHEDULE,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Sequence feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSequencePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Row_sequence_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Row_sequence_feature", "_UI_Row_type"),
+				 ScheduleReportPackage.Literals.ROW__SEQUENCE,
 				 true,
 				 false,
 				 true,

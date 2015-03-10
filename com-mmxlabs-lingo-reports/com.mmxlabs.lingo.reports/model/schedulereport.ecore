@@ -30,6 +30,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name2" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="schedule" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//Schedule"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sequence" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//Sequence"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cargoAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//CargoAllocation"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="loadAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>

@@ -18,6 +18,7 @@ import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.DataVisualizer;
 import org.eclipse.nebula.widgets.grid.GridColumn;
+import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
 
@@ -43,6 +44,7 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 
 	@Override
 	public GridViewerColumn createColumn(final ColumnHandler handler) {
+		GridColumnGroup group = handler.block.getOrCreateColumnGroup(viewer.getGrid());
 
 		final String title = handler.title;
 		final ICellRenderer formatter = handler.getFormatter();
@@ -50,7 +52,13 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 		final ETypedElement[][] features = handler.getFeatures();
 		final String tooltip = handler.getTooltip();
 
-		final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
+		final GridColumn col;
+		if (group != null) {
+			col = new GridColumn(group, SWT.NONE);
+		} else {
+			col = new GridColumn(viewer.getGrid(), SWT.NONE);
+		}
+		final GridViewerColumn column = new GridViewerColumn(viewer, col);
 		column.getColumn().setText(title);
 		column.getColumn().setData(EObjectTableViewer.COLUMN_RENDERER, formatter);
 

@@ -5,7 +5,7 @@
 /**
  * All rights reserved.
  */
-package com.mmxlabs.lingo.reports.views.schedule;
+package com.mmxlabs.lingo.reports.views.fleet;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,11 +13,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.databinding.IEMFObservable;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IViewReference;
+import org.eclipse.ui.IWorkbenchPart;
 
 import com.google.inject.Inject;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
@@ -27,40 +33,47 @@ import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.views.AbstractConfigurableGridReportView;
 import com.mmxlabs.lingo.reports.views.AbstractReportBuilder;
-import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedColumnExtension;
-import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedColumnFactoryExtension;
-import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportInitialStateExtension;
-import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportInitialStateExtension.InitialColumn;
-import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportInitialStateExtension.InitialDiffOption;
-import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportInitialStateExtension.InitialRowType;
+import com.mmxlabs.lingo.reports.views.fleet.extpoint.IFleetBasedColumnExtension;
+import com.mmxlabs.lingo.reports.views.fleet.extpoint.IFleetBasedColumnFactoryExtension;
+import com.mmxlabs.lingo.reports.views.fleet.extpoint.IFleetBasedReportInitialStateExtension;
+import com.mmxlabs.lingo.reports.views.fleet.extpoint.IFleetBasedReportInitialStateExtension.InitialColumn;
+import com.mmxlabs.lingo.reports.views.fleet.extpoint.IFleetBasedReportInitialStateExtension.InitialDiffOption;
+import com.mmxlabs.lingo.reports.views.fleet.extpoint.IFleetBasedReportInitialStateExtension.InitialRowType;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
+import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 
 /**
- * A customisable report for schedule based data. Extension points define the available columns for all instances and initial state for each instance of this report. Optionally a dialog is available
- * for the user to change the default settings.
+ * A customisable report for fleet based data. Extension points define the available columns for all instances and initial state for each instance of this report. Optionally a dialog is available for
+ * the user to change the default settings.
  */
-public class ConfigurableScheduleReportView extends AbstractConfigurableGridReportView {
+public class ConfigurableFleetReportView extends AbstractConfigurableGridReportView {
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
-	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport";
+	public static final String ID = "com.mmxlabs.lingo.reports.views.fleet.ConfigurableFleetReportView";
 
-	private final ScheduleBasedReportBuilder builder;
-
-	@Inject(optional = true)
-	private Iterable<IScheduleBasedColumnFactoryExtension> columnFactoryExtensions;
+	private final FleetBasedReportBuilder builder;
 
 	@Inject(optional = true)
-	private Iterable<IScheduleBasedColumnExtension> columnExtensions;
+	private Iterable<IFleetBasedColumnFactoryExtension> columnFactoryExtensions;
 
 	@Inject(optional = true)
-	private Iterable<IScheduleBasedReportInitialStateExtension> initialStates;
+	private Iterable<IFleetBasedColumnExtension> columnExtensions;
 
-	private ScheduleReportTransformer transformer;
+	@Inject(optional = true)
+	private Iterable<IFleetBasedReportInitialStateExtension> initialStates;
+
+	private FleetReportTransformer transformer;
+
+	// New diff stuff
+	private IPartListener listener;
+	private static final String SCHEDULE_VIEW_ID = "com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport";
+	private IViewPart scheduleView;
+	private Table scheduleReportTable;
 
 	@Inject
-	public ConfigurableScheduleReportView(final ScheduleBasedReportBuilder builder) {
+	public ConfigurableFleetReportView(final FleetBasedReportBuilder builder) {
 		super(ID);
 
 		// Setup the builder hooks.
@@ -70,7 +83,6 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") final Class adapter) {
-
 		if (Table.class.isAssignableFrom(adapter)) {
 			final Object input = viewer.getInput();
 			if (input instanceof IEMFObservable) {
@@ -94,9 +106,12 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 			@Override
 			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
 
-				if (table != null && table.getOptions().isFilterSelectedElements() && !table.getSelectedElements().isEmpty()) {
-					if (!table.getSelectedElements().contains(element)) {
-						return false;
+				if (scheduleReportTable != null && scheduleReportTable.getOptions().isFilterSelectedSequences() && !scheduleReportTable.getSelectedElements().isEmpty()) {
+					if (element instanceof Row) {
+						Row row = (Row) element;
+						if (!scheduleReportTable.getSelectedElements().contains(row.getSequence())) {
+							return false;
+						}
 					}
 				}
 
@@ -105,16 +120,28 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 					// Filter out reference scenario if required
 					if (!builder.getDiffFilterInfo().contains(AbstractReportBuilder.DIFF_FILTER_PINNDED_SCENARIO.id)) {
 						if (row.isReference()) {
-//							return false;
+							return false;
 						}
 					}
 					// Only show visible rows
-//					return row.isVisible();
+					return row.isVisible();
 				}
 				return true;
 			}
 		} });
 
+		hookToScheduleView();
+
+	}
+
+	@Override
+	public void dispose() {
+
+		if (listener != null) {
+			getViewSite().getPage().removePartListener(listener);
+		}
+
+		super.dispose();
 	}
 
 	@Override
@@ -141,7 +168,7 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 
 		if (initialStates != null) {
 
-			for (final IScheduleBasedReportInitialStateExtension ext : initialStates) {
+			for (final IFleetBasedReportInitialStateExtension ext : initialStates) {
 
 				final String viewId = ext.getViewID();
 
@@ -164,7 +191,7 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 
 		if (initialStates != null) {
 
-			for (final IScheduleBasedReportInitialStateExtension ext : initialStates) {
+			for (final IFleetBasedReportInitialStateExtension ext : initialStates) {
 
 				final String viewId = ext.getViewID();
 
@@ -196,23 +223,14 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 							for (final InitialRowType row : initialRows) {
 
 								switch (row.getRowType()) {
-								case "cargo":
-									rowFilter.add(ScheduleBasedReportBuilder.ROW_FILTER_CARGO_ROW.id);
+								case "timecharters":
+									rowFilter.add(FleetBasedReportBuilder.ROW_FILTER_TIME_CHARTERS.id);
 									break;
-								case "long":
-									rowFilter.add(ScheduleBasedReportBuilder.ROW_FILTER_LONG_CARGOES.id);
+								case "spotcharters":
+									rowFilter.add(FleetBasedReportBuilder.ROW_FILTER_SPOT_CHARTER_INS.id);
 									break;
-								case "short":
-									rowFilter.add(ScheduleBasedReportBuilder.ROW_FILTER_SHORT_CARGOES.id);
-									break;
-								case "virtualcharters":
-									rowFilter.add(ScheduleBasedReportBuilder.ROW_FILTER_CHARTER_OUT_ROW.id);
-									break;
-								case "event":
-									rowFilter.add(ScheduleBasedReportBuilder.ROW_FILTER_VESSEL_EVENT_ROW.id);
-									break;
-								case "orphanlegs":
-									rowFilter.add(ScheduleBasedReportBuilder.ROW_FILTER_VESSEL_START_ROW.id);
+								case "owned":
+									rowFilter.add(FleetBasedReportBuilder.ROW_FILTER_OWNED.id);
 									break;
 								}
 							}
@@ -228,11 +246,8 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 
 								switch (diffOption.getOption()) {
 
-								case "vessel":
-									diffOptions.add(ScheduleBasedReportBuilder.DIFF_FILTER_VESSEL_CHANGES.id);
-									break;
 								case "scenario":
-									diffOptions.add(ScheduleBasedReportBuilder.DIFF_FILTER_PINNDED_SCENARIO.id);
+									diffOptions.add(AbstractReportBuilder.DIFF_FILTER_PINNDED_SCENARIO.id);
 									break;
 								}
 							}
@@ -254,7 +269,7 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 	@Override
 	protected IScenarioInstanceElementCollector getElementCollector() {
 
-		transformer = new ScheduleReportTransformer(table, builder, builder.getCustomRelatedSlotHandlers());
+		transformer = new FleetReportTransformer(table, builder);
 		return transformer.getElementCollector(this);
 	}
 
@@ -280,7 +295,7 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 	protected void postDialogOpen(final ColumnConfigurationDialog dialog) {
 		builder.refreshDiffOptions();
 		// Update options state
-//		 table.getOptions().setShowPinnedScenario(!builder.getDiffFilterInfo().contains(AbstractReportBuilder.DIFF_FILTER_PINNDED_SCENARIO));
+		// table.getOptions().setShowPinnedScenario(!builder.getDiffFilterInfo().contains(ScheduleBasedReportBuilder.DIFF_FILTER_PINNDED_SCENARIO));
 
 	}
 
@@ -293,9 +308,9 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 		final EMFReportColumnManager manager = new EMFReportColumnManager();
 
 		// Find any shared column factories and install.
-		final Map<String, IScheduleColumnFactory> handlerMap = new HashMap<>();
+		final Map<String, IFleetColumnFactory> handlerMap = new HashMap<>();
 		if (columnFactoryExtensions != null) {
-			for (final IScheduleBasedColumnFactoryExtension ext : columnFactoryExtensions) {
+			for (final IFleetBasedColumnFactoryExtension ext : columnFactoryExtensions) {
 				final String handlerID = ext.getHandlerID();
 				handlerMap.put(handlerID, ext.getFactory());
 			}
@@ -304,12 +319,12 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 		// Now find the column definitions themselves.
 		if (columnExtensions != null) {
 
-			for (final IScheduleBasedColumnExtension ext : columnExtensions) {
-				IScheduleColumnFactory factory;
+			for (final IFleetBasedColumnExtension ext : columnExtensions) {
+				IFleetColumnFactory factory;
 				if (ext.getHandlerID() != null) {
 					factory = handlerMap.get(ext.getHandlerID());
 				} else {
-					factory = ext.getFactory();
+					factory = ext.createFactory();
 				}
 				if (factory != null) {
 					factory.registerColumn(ext.getColumnID(), manager, builder);
@@ -318,7 +333,91 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 		}
 
 		// Create the actual columns instances.
-		manager.addColumns(ScheduleBasedReportBuilder.CARGO_REPORT_TYPE_ID, getBlockManager());
+		manager.addColumns(FleetBasedReportBuilder.FLEET_REPORT_TYPE_ID, getBlockManager());
 	}
 
+	protected void hookToScheduleView() {
+		listener = new IPartListener() {
+
+			EContentAdapter adapter = new EContentAdapter() {
+				@Override
+				public void notifyChanged(final Notification notification) {
+					super.notifyChanged(notification);
+					if (notification.getFeature() == ScheduleReportPackage.Literals.DIFF_OPTIONS__FILTER_SELECTED_SEQUENCES) {
+						// viewer.setSelection(viewer.getSelection());
+						viewer.refresh();
+					}
+					if (notification.getFeature() == ScheduleReportPackage.Literals.TABLE__SELECTED_ELEMENTS) {
+
+						// Copy across data
+						table.getSelectedElements().clear();
+						table.getSelectedElements().addAll(scheduleReportTable.getSelectedElements());
+						// viewer.setSelection(viewer.getSelection());
+						viewer.refresh();
+					}
+				}
+			};
+
+			@Override
+			public void partOpened(final IWorkbenchPart part) {
+				if (part instanceof IViewPart) {
+					final IViewPart viewPart = (IViewPart) part;
+					if (viewPart.getViewSite().getId().equals(SCHEDULE_VIEW_ID)) {
+						scheduleView = viewPart;
+						observeInput((Table) scheduleView.getAdapter(Table.class));
+					}
+				}
+			}
+
+			private void observeInput(final Table table) {
+
+				if (ConfigurableFleetReportView.this.scheduleReportTable != null) {
+					ConfigurableFleetReportView.this.scheduleReportTable.eAdapters().remove(adapter);
+				}
+				ConfigurableFleetReportView.this.scheduleReportTable = table;
+				if (ConfigurableFleetReportView.this.scheduleReportTable != null) {
+					ConfigurableFleetReportView.this.scheduleReportTable.eAdapters().add(adapter);
+				}
+			}
+
+			@Override
+			public void partDeactivated(final IWorkbenchPart part) {
+
+			}
+
+			@Override
+			public void partClosed(final IWorkbenchPart part) {
+				if (part instanceof IViewPart) {
+					final IViewPart viewPart = (IViewPart) part;
+					if (viewPart.getViewSite().getId().equals(SCHEDULE_VIEW_ID)) {
+						scheduleView = null;
+						observeInput(null);
+					}
+				}
+
+			}
+
+			@Override
+			public void partBroughtToTop(final IWorkbenchPart part) {
+
+			}
+
+			@Override
+			public void partActivated(final IWorkbenchPart part) {
+				if (part instanceof IViewPart) {
+					final IViewPart viewPart = (IViewPart) part;
+					if (viewPart.getViewSite().getId().equals(SCHEDULE_VIEW_ID)) {
+						scheduleView = viewPart;
+						observeInput((Table) scheduleView.getAdapter(Table.class));
+					}
+				}
+			}
+		};
+		getViewSite().getPage().addPartListener(listener);
+		for (final IViewReference view : getViewSite().getPage().getViewReferences()) {
+			if (view.getId().equals(SCHEDULE_VIEW_ID)) {
+				listener.partOpened(view.getView(false));
+			}
+		}
+	}
 }

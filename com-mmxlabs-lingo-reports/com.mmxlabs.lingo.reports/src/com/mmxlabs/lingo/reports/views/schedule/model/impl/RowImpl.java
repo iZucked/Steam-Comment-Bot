@@ -29,6 +29,7 @@ import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 
 /**
@@ -45,6 +46,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getName2 <em>Name2</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getTarget <em>Target</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getSchedule <em>Schedule</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getSequence <em>Sequence</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getCargoAllocation <em>Cargo Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getLoadAllocation <em>Load Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowImpl#getDischargeAllocation <em>Discharge Allocation</em>}</li>
@@ -160,6 +162,16 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * @ordered
 	 */
 	protected Schedule schedule;
+
+	/**
+	 * The cached value of the '{@link #getSequence() <em>Sequence</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSequence()
+	 * @generated
+	 * @ordered
+	 */
+	protected Sequence sequence;
 
 	/**
 	 * The cached value of the '{@link #getCargoAllocation() <em>Cargo Allocation</em>}' reference.
@@ -502,6 +514,44 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 		schedule = newSchedule;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ScheduleReportPackage.ROW__SCHEDULE, oldSchedule, schedule));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Sequence getSequence() {
+		if (sequence != null && sequence.eIsProxy()) {
+			InternalEObject oldSequence = (InternalEObject)sequence;
+			sequence = (Sequence)eResolveProxy(oldSequence);
+			if (sequence != oldSequence) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ScheduleReportPackage.ROW__SEQUENCE, oldSequence, sequence));
+			}
+		}
+		return sequence;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Sequence basicGetSequence() {
+		return sequence;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSequence(Sequence newSequence) {
+		Sequence oldSequence = sequence;
+		sequence = newSequence;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScheduleReportPackage.ROW__SEQUENCE, oldSequence, sequence));
 	}
 
 	/**
@@ -999,6 +1049,9 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 			case ScheduleReportPackage.ROW__SCHEDULE:
 				if (resolve) return getSchedule();
 				return basicGetSchedule();
+			case ScheduleReportPackage.ROW__SEQUENCE:
+				if (resolve) return getSequence();
+				return basicGetSequence();
 			case ScheduleReportPackage.ROW__CARGO_ALLOCATION:
 				if (resolve) return getCargoAllocation();
 				return basicGetCargoAllocation();
@@ -1060,6 +1113,9 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 				return;
 			case ScheduleReportPackage.ROW__SCHEDULE:
 				setSchedule((Schedule)newValue);
+				return;
+			case ScheduleReportPackage.ROW__SEQUENCE:
+				setSequence((Sequence)newValue);
 				return;
 			case ScheduleReportPackage.ROW__CARGO_ALLOCATION:
 				setCargoAllocation((CargoAllocation)newValue);
@@ -1125,6 +1181,9 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 			case ScheduleReportPackage.ROW__SCHEDULE:
 				setSchedule((Schedule)null);
 				return;
+			case ScheduleReportPackage.ROW__SEQUENCE:
+				setSequence((Sequence)null);
+				return;
 			case ScheduleReportPackage.ROW__CARGO_ALLOCATION:
 				setCargoAllocation((CargoAllocation)null);
 				return;
@@ -1181,6 +1240,8 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 				return target != null;
 			case ScheduleReportPackage.ROW__SCHEDULE:
 				return schedule != null;
+			case ScheduleReportPackage.ROW__SEQUENCE:
+				return sequence != null;
 			case ScheduleReportPackage.ROW__CARGO_ALLOCATION:
 				return cargoAllocation != null;
 			case ScheduleReportPackage.ROW__LOAD_ALLOCATION:
