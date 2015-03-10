@@ -7,7 +7,6 @@ package com.mmxlabs.scheduler.optimiser.contracts.impl;
 import javax.inject.Inject;
 
 import com.mmxlabs.common.curves.ICurve;
-import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;

@@ -702,10 +702,10 @@ public class VoyagePlanner {
 		final AllocationRecord allocationRecord = volumeAllocator.createAllocationRecord(vesselAvailability, vesselStartTime, plan, portTimesRecord);
 		allocationRecord.allocationMode = AllocationMode.Actuals;
 		final IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(allocationRecord);
-
-		// Sanity check
-		assert plan.getRemainingHeelInM3() == allocationAnnotation.getRemainingHeelVolumeInM3();
-
+		if (allocationAnnotation != null) {
+			// Sanity check
+			assert plan.getRemainingHeelInM3() == allocationAnnotation.getRemainingHeelVolumeInM3();
+		}
 		final IPortTimesRecord rec = allocationAnnotation == null ? portTimesRecord : allocationAnnotation;
 		voyagePlansMap.add(new Triple<>(plan, heelLevelAnnotations, rec));
 

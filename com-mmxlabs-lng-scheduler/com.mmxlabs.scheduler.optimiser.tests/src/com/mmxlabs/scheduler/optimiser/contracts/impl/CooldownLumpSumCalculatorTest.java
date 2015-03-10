@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
-import static org.junit.Assert.*;
 import junit.framework.Assert;
 
 import org.junit.Test;

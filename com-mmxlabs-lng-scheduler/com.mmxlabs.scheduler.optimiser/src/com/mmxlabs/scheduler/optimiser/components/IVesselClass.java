@@ -6,8 +6,6 @@ package com.mmxlabs.scheduler.optimiser.components;
 
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 
 /**
  * Interface generic vessel parameters shared between multiple {@link IVessel} of the same underlying type.
