@@ -772,6 +772,9 @@ public class PeriodTransformer {
 
 	//TODO: create first month in UTC time!
 	public void trimSpotMarketCurves(final EditingDomain internalDomain, final PeriodRecord periodRecord, final SpotMarketGroup spotMarketGroup) {
+		if (spotMarketGroup == null) {
+			return; 
+		}
 		for (final SpotMarket spotMarket : spotMarketGroup.getMarkets()) {
 			final SpotAvailability availability = spotMarket.getAvailability();
 
