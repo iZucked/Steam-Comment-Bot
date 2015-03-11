@@ -29,6 +29,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -115,6 +116,8 @@ public class PNLDetailsReport extends DetailPropertiesView {
 					findSelectionElement((Slot) a, adaptedObjects);
 				} else if (a instanceof VesselEvent) {
 					findSelectionElement((VesselEvent) a, adaptedObjects);
+				} else if (a instanceof GeneratedCharterOut) {
+					adaptedObjects.add(a);
 				}
 			}
 			return adaptedObjects;
