@@ -86,12 +86,12 @@ public class StandardFleetColumnFactory implements IFleetColumnFactory {
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
 					ColumnBlock block = blockManager.getBlockByID(COLUMN_BLOCK_GCO_DELTA_VESSEL);
 					if (block == null) {
-						block = blockManager.createBlock(COLUMN_BLOCK_GCO_DELTA_VESSEL, "GCO delta by vessel", ColumnType.DIFF);
+						block = blockManager.createBlock(COLUMN_BLOCK_GCO_DELTA_VESSEL, "GCO delta", ColumnType.DIFF);
 					}
 					block.setPlaceholder(true);
 
-					blockManager.createColumn(block, "Delta GCO Days", new GeneratedCharterDaysFormatter(true, false));
-					blockManager.createColumn(block, "Delta GCO Revenue", new GeneratedCharterRevenueFormatter(true, true, false));
+					blockManager.createColumn(block, "Days", new GeneratedCharterDaysFormatter(true, false));
+					blockManager.createColumn(block, "Revenue", new GeneratedCharterRevenueFormatter(true, true, false));
 
 					return null;
 				}
@@ -105,12 +105,12 @@ public class StandardFleetColumnFactory implements IFleetColumnFactory {
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
 					ColumnBlock block = blockManager.getBlockByID(COLUMN_BLOCK_GCO_DELTA_SELECTION);
 					if (block == null) {
-						block = blockManager.createBlock(COLUMN_BLOCK_GCO_DELTA_SELECTION, "GCO delta by change set", ColumnType.DIFF);
+						block = blockManager.createBlock(COLUMN_BLOCK_GCO_DELTA_SELECTION, "GCO delta (change set)", ColumnType.DIFF);
 					}
 					block.setPlaceholder(true);
 
-					blockManager.createColumn(block, "Delta GCO Days", new GeneratedCharterDaysFormatter(true, true));
-					blockManager.createColumn(block, "Delta GCO Revenue", new GeneratedCharterRevenueFormatter(true, true, true));
+					blockManager.createColumn(block, "Days", new GeneratedCharterDaysFormatter(true, true));
+					blockManager.createColumn(block, "Revenue", new GeneratedCharterRevenueFormatter(true, true, true));
 
 					return null;
 				}
