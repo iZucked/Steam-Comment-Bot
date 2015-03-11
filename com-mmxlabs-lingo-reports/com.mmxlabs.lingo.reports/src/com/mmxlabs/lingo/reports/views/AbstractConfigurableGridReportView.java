@@ -228,7 +228,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 				}
 			});
 
-			viewer.setInput(EMFProperties.list(ScheduleReportPackage.Literals.TABLE__ROWS).observe(table));
 
 			for (final ColumnHandler handler : getBlockManager().getHandlersInOrder()) {
 				final GridColumn column = handler.createColumn().getColumn();
@@ -255,7 +254,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 			// table = ScheduleReportFactory.eINSTANCE.createTable();
 			// viewer.setInput(EMFProperties.list(ScheduleReportPackage.Literals.TABLE__ROWS).observe(table));
 			synchronizer = UserManagedScenarioViewerSynchronizer.registerView(viewer, getElementCollector());
-
+			setInput();
 		}
 
 		// Look at the extension points for the initial visibilities, rows and diff options
@@ -274,6 +273,10 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 			}
 		}
 
+	}
+
+	protected void setInput() {
+		viewer.setInput(EMFProperties.list(ScheduleReportPackage.Literals.TABLE__ROWS).observe(table));
 	}
 
 	protected abstract void registerReportColumns();
