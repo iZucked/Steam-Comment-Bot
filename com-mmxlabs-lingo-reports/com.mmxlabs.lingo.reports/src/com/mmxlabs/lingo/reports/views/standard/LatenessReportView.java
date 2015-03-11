@@ -4,11 +4,15 @@
  */
 package com.mmxlabs.lingo.reports.views.standard;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -25,12 +29,14 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
  * @author hinton
@@ -180,7 +186,7 @@ public class LatenessReportView extends EMFReportView {
 		return new ITreeContentProvider() {
 
 			@Override
-			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 				superProvider.inputChanged(viewer, oldInput, newInput);
 			}
 
@@ -190,17 +196,17 @@ public class LatenessReportView extends EMFReportView {
 			}
 
 			@Override
-			public boolean hasChildren(Object element) {
+			public boolean hasChildren(final Object element) {
 				return superProvider.hasChildren(element);
 			}
 
 			@Override
-			public Object getParent(Object element) {
+			public Object getParent(final Object element) {
 				return superProvider.getParent(element);
 			}
 
 			@Override
-			public Object[] getElements(Object inputElement) {
+			public Object[] getElements(final Object inputElement) {
 				clearInputEquivalents();
 				final Object[] result = superProvider.getElements(inputElement);
 				for (final Object e : result) {
@@ -223,7 +229,7 @@ public class LatenessReportView extends EMFReportView {
 			}
 
 			@Override
-			public Object[] getChildren(Object parentElement) {
+			public Object[] getChildren(final Object parentElement) {
 				return superProvider.getChildren(parentElement);
 			}
 		};
@@ -232,6 +238,27 @@ public class LatenessReportView extends EMFReportView {
 	@Override
 	protected IScenarioInstanceElementCollector getElementCollector() {
 		return new ScheduledEventCollector() {
+
+			@Override
+			public void beginCollecting() {
+				clearPinModeData();
+				super.beginCollecting();
+			}
+
+			@Override
+			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final Schedule schedule, final boolean pinned) {
+
+				final Collection<? extends Object> collectedElements = super.collectElements(scenarioInstance, schedule, pinned);
+				List<EObject> elements = new ArrayList<>(collectedElements.size());
+				for (Object o : collectedElements) {
+					if (o instanceof EObject) {
+						elements.add((EObject) o);
+					}
+				}
+				collectPinModeElements(elements, pinned);
+				return collectedElements;
+			}
+
 			@Override
 			protected boolean filter(final Event e) {
 				if (e instanceof SlotVisit) {

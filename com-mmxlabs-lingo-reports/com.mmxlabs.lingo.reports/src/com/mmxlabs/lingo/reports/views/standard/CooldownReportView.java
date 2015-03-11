@@ -4,6 +4,11 @@
  */
 package com.mmxlabs.lingo.reports.views.standard;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -19,12 +24,14 @@ import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Idle;
+import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
  * A report which displays the cooldowns in the selected schedules.
@@ -148,6 +155,27 @@ public class CooldownReportView extends EMFReportView {
 	@Override
 	protected IScenarioInstanceElementCollector getElementCollector() {
 		return new ScheduledEventCollector() {
+
+			@Override
+			public void beginCollecting() {
+				clearPinModeData();
+				super.beginCollecting();
+			}
+
+			@Override
+			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final Schedule schedule, final boolean pinned) {
+
+				final Collection<? extends Object> collectedElements = super.collectElements(scenarioInstance, schedule, pinned);
+				List<EObject> elements = new ArrayList<>(collectedElements.size());
+				for (Object o : collectedElements) {
+					if (o instanceof EObject) {
+						elements.add((EObject) o);
+					}
+				}
+				collectPinModeElements(elements, pinned);
+				return collectedElements;
+			}
+
 			@Override
 			protected boolean filter(final Event event) {
 				return event instanceof Cooldown;
