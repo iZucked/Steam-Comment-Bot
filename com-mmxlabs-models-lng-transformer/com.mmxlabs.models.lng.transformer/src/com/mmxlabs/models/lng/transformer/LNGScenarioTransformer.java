@@ -106,6 +106,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
+import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
 import com.mmxlabs.models.lng.transformer.util.TransformerHelper;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
@@ -315,7 +316,7 @@ public class LNGScenarioTransformer {
 		/*
 		 * Set reference for hour 0
 		 */
-		findEarliestAndLatestTimes();
+		setEarliestAndLatestTimes();
 
 		dateHelper.setEarliestTime(earliestTime);
 		dateHelper.setEarliestTime(earliestTime);
@@ -779,50 +780,12 @@ public class LNGScenarioTransformer {
 	// return realCurve;
 	// }
 
-	/**
-	 * Find the earliest and latest times set by events in the model. This takes into account:
-	 * 
-	 * <ul>
-	 * <li>Slot window dates</li>
-	 * <li>Vessel event dates</li>
-	 * <li>Vessel availability dates</li>
-	 * </ul>
-	 */
-	private void findEarliestAndLatestTimes() {
+	private void setEarliestAndLatestTimes() {
 		earliestTime = null;
 		latestTime = null;
-		final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
-
-		final HashSet<Date> allDates = new HashSet<Date>();
-
-		for (final VesselEvent event : cargoModel.getVesselEvents()) {
-			allDates.add(event.getStartBy());
-			allDates.add(event.getStartAfter());
-		}
-		for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
-			if (vesselAvailability.isSetStartBy())
-				allDates.add(vesselAvailability.getStartBy());
-			if (vesselAvailability.isSetStartAfter())
-				allDates.add(vesselAvailability.getStartAfter());
-
-			if (vesselAvailability.isSetEndBy())
-				allDates.add(vesselAvailability.getEndBy());
-			if (vesselAvailability.isSetEndAfter())
-				allDates.add(vesselAvailability.getEndAfter());
-		}
-		for (final Slot s : cargoModel.getLoadSlots()) {
-			allDates.add(s.getWindowStartWithSlotOrPortTime());
-			allDates.add(s.getWindowEndWithSlotOrPortTime());
-		}
-		for (final Slot s : cargoModel.getDischargeSlots()) {
-			allDates.add(s.getWindowStartWithSlotOrPortTime());
-			allDates.add(s.getWindowEndWithSlotOrPortTime());
-		}
-
-		earliestTime = allDates.isEmpty() ? new Date(0) : Collections.min(allDates);
-		// round down earliest time
-		earliestTime = DateAndCurveHelper.roundTimeDown(earliestTime);
-		latestTime = allDates.isEmpty() ? new Date(0) : Collections.max(allDates);
+		Pair<Date, Date> earliestAndLatestTimes = LNGScenarioUtils.findEarliestAndLatestTimes(rootObject);
+		earliestTime = earliestAndLatestTimes.getFirst();
+		latestTime = earliestAndLatestTimes.getSecond();
 	}
 
 	private void buildVesselEvents(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Association<VesselClass, IVesselClass> classes,
