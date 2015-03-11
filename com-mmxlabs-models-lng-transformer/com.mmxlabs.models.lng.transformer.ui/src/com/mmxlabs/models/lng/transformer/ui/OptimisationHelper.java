@@ -269,8 +269,8 @@ public final class OptimisationHelper {
 			dialog.addOption(DataSection.Main, editingDomian, "Generate Charter Outs", copy, defaultSettings, DataType.Boolean, ParametersPackage.eINSTANCE.getOptimiserSettings_GenerateCharterOuts());
 
 			if (!forEvaluation) {
-				dialog.addOption(DataSection.Advanced, editingDomian, "Number of Iterations", copy, defaultSettings, DataType.PositiveInt,
-						ParametersPackage.eINSTANCE.getOptimiserSettings_AnnealingSettings(), ParametersPackage.eINSTANCE.getAnnealingSettings_Iterations());
+//				dialog.addOption(DataSection.Advanced, editingDomian, "Number of Iterations", copy, defaultSettings, DataType.PositiveInt,
+//						ParametersPackage.eINSTANCE.getOptimiserSettings_AnnealingSettings(), ParametersPackage.eINSTANCE.getAnnealingSettings_Iterations());
 				dialog.addOption(DataSection.Main, editingDomian, "Start Date (mm/yyyy)", copy, defaultSettings, DataType.MonthYear,
 						ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
 				dialog.addOption(DataSection.Main, editingDomian, "End Date (mm/yyyy)", copy, defaultSettings, DataType.MonthYear,
