@@ -86,7 +86,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			break;
 
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.l-id":
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "ID", "The main ID for all except discharge slots", ColumnType.NORMAL,
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "L-ID", "The main ID for all except discharge slots", ColumnType.NORMAL,
 					Formatters.objectFormatter, nameObjectRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.d-id":
