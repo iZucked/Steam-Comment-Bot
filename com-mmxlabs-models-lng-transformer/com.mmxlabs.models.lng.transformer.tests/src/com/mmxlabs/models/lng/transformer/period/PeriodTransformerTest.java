@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.emf.common.util.EList;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -36,6 +37,7 @@ import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
@@ -47,7 +49,13 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotAvailability;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
+import com.mmxlabs.models.lng.spotmarkets.provider.SpotMarketGroupItemProvider;
 import com.mmxlabs.models.lng.transformer.period.InclusionChecker.PeriodRecord;
+import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 
 public class PeriodTransformerTest {
 
@@ -1952,6 +1960,47 @@ public class PeriodTransformerTest {
 		Mockito.verifyNoMoreInteractions(mapping);
 	}
 
+	@Test
+	public void trimSpotMarketCurves() {
+		final InclusionChecker inclusionChecker = new InclusionChecker();
+		
+		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+		
+		final PeriodRecord periodRecord = new PeriodRecord();
+		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2015, Calendar.MARCH, 15);
+		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2015, Calendar.APRIL, 15);
+		periodRecord.upperBoundary = PeriodTestUtils.createDate(2015, Calendar.AUGUST, 15);
+		periodRecord.upperCutoff = PeriodTestUtils.createDate(2015, Calendar.SEPTEMBER, 15);
+		
+		// // Create a sample scenario
+		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
+		scenarioModel.setSpotMarketsModel(PeriodTestUtils.createSpotMarkets(scenarioModel, "testSpots", "UTC"));
+		
+		transformer.trimSpotMarketCurves(PeriodTestUtils.createEditingDomain(scenarioModel), periodRecord, scenarioModel);
+		
+		for (SpotMarketGroup group : new SpotMarketGroup[] {
+				scenarioModel.getSpotMarketsModel().getDesPurchaseSpotMarket(),
+				scenarioModel.getSpotMarketsModel().getDesSalesSpotMarket(),
+				scenarioModel.getSpotMarketsModel().getFobPurchasesSpotMarket(),
+				scenarioModel.getSpotMarketsModel().getFobSalesSpotMarket(),
+				})
+		{
+			EList<SpotMarket> markets = group.getMarkets();
+			SpotMarket market = markets.get(0);
+			SpotAvailability availability = market.getAvailability();
+			Assert.assertTrue(availability.isSetConstant() == false);
+			Assert.assertTrue(availability.getCurve().getPoints().size() > 0);
+			for (IndexPoint<Integer> point : availability.getCurve().getPoints()) {
+				Assert.assertTrue(point.getDate().after(periodRecord.lowerCutoff));
+				Assert.assertTrue(point.getDate().before(periodRecord.upperBoundary));
+			}
+			Assert.assertTrue(availability.getCurve().getValueForMonth(DateAndCurveHelper.createDate(2015, 4, 1, 0, "UTC")) == 5);
+			Assert.assertTrue(availability.getCurve().getValueForMonth(DateAndCurveHelper.createDate(2015, 5, 1, 0, "UTC")) == 5);
+			Assert.assertTrue(availability.getCurve().getValueForMonth(DateAndCurveHelper.createDate(2015, 6, 1, 0, "UTC")) == 2);
+			Assert.assertTrue(availability.getCurve().getValueForMonth(DateAndCurveHelper.createDate(2015, 6, 1, 0, "UTC")) == 2);
+		}
+	}
+	
 	@Test
 	public void generateStartAndEndConditionsMapTest_Cargo() {
 

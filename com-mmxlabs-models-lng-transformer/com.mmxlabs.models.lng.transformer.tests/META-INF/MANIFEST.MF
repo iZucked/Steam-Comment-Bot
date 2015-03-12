@@ -8,3 +8,5 @@ Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: org.junit;bundle-version="4.8.2",
  org.mockito.mockito-all;bundle-version="1.9.5"
+Import-Package: com.mmxlabs.models.lng.pricing,
+ com.mmxlabs.models.lng.spotmarkets

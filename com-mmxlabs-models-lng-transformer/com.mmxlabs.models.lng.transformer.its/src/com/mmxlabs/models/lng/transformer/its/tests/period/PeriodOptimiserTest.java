@@ -361,18 +361,19 @@ public class PeriodOptimiserTest {
 				try {
 					runner.init(settings);
 				} catch (IncompleteScenarioException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
+					Assert.fail("Scenario runner failed to initialise scenario: " + e.getMessage());
 				}
 				
-				save(runner.getScenario(), "c:/temp/scenario1.lingo");
+//				save(runner.getScenario(), "c:/temp/scenario1.lingo");
 				runner.run();
 				runner.updateScenario();
 				
-				save(runner.getScenario(), "c:/temp/scenario2.lingo");
+//				save(runner.getScenario(), "c:/temp/scenario2.lingo");
 			} catch (final Exception er) {
+				er.printStackTrace();
 				// this exception should not occur
-				Assert.fail("Scenario runner failed to initialise scenario");
+				Assert.fail("Scenario runner failed to initialise scenario: " + er.getMessage());
 			}
 		}
 	}

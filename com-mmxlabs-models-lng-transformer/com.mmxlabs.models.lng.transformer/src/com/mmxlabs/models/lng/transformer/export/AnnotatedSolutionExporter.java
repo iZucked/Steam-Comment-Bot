@@ -130,7 +130,7 @@ public class AnnotatedSolutionExporter {
 			exporter.init();
 		}
 
-		// TODO: Generate an unused element exporter inteface etc.
+		// TODO: Generate an unused element exporter interface etc.
 		final OpenSlotExporter openSlotExporter = new OpenSlotExporter();
 		{
 			injector.injectMembers(openSlotExporter);
