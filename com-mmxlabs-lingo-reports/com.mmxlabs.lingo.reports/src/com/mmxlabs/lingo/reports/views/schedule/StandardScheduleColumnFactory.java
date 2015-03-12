@@ -18,6 +18,7 @@ import com.mmxlabs.lingo.reports.diff.utils.PNLDeltaUtils;
 import com.mmxlabs.lingo.reports.diff.utils.ScheduleCostUtils;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.internal.Activator;
+import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.PriceFormatter;
@@ -31,6 +32,7 @@ import com.mmxlabs.lingo.reports.views.schedule.formatters.PreviousVesselFormatt
 import com.mmxlabs.lingo.reports.views.schedule.formatters.PreviousWiringFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.RowTypeFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
+import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.lingo.reports.views.schedule.model.provider.PinnedScheduleFormatter;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -82,12 +84,29 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.id":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "ID", "The main ID for all including discharge slots", ColumnType.NORMAL,
-					Formatters.objectFormatter, cargoAllocationRef, s.getCargoAllocation__GetName()));
+					Formatters.objectFormatter, nameObjectRef));
 			break;
 
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.l-id":
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "L-ID", "The main ID for all except discharge slots", ColumnType.NORMAL,
-					Formatters.objectFormatter, nameObjectRef));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "L-ID", "The main ID for all except discharge slots", ColumnType.NORMAL, new BaseFormatter() {
+				@Override
+				public String render(final Object object) {
+
+					if (object instanceof Row) {
+						final Row row = (Row) object;
+						final OpenSlotAllocation openSlotAllocation = row.getOpenSlotAllocation();
+						if (openSlotAllocation != null) {
+							final Slot slot = openSlotAllocation.getSlot();
+							if (slot instanceof LoadSlot) {
+								return slot.getName();
+							}
+						} else {
+							return row.getName();
+						}
+					}
+					return "";
+				}
+			}));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.d-id":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "D-ID", "The discharge ID for discharge slots", ColumnType.NORMAL, Formatters.objectFormatter,
