@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.swt.graphics.Image;
 
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.components.ColumnBlockManager;
@@ -15,12 +16,14 @@ import com.mmxlabs.lingo.reports.components.ColumnHandler;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
+import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.CostFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.NumberOfDPFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.PriceFormatter;
+import com.mmxlabs.lingo.reports.views.schedule.model.provider.PinnedScheduleFormatter;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -35,7 +38,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class StandardPortRotationColumnFactory implements IPortRotationColumnFactory {
 	public static final String PORT_ROTATION_REPORT_TYPE_ID = "PORT_ROTATION_REPORT_TYPE_ID";
@@ -65,17 +68,21 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 
 	@Override
 	public void registerColumn(final String columnID, final EMFReportColumnManager manager, final PortRotationBasedReportBuilder builder) {
-		// TODO Auto-generated method stub
 
 		final SchedulePackage sp = SchedulePackage.eINSTANCE;
+		final Image pinImage = Activator.getDefault().getImageRegistry().get(Activator.Implementation.IMAGE_PINNED_ROW);
 
 		final EStructuralFeature name = MMXCorePackage.eINSTANCE.getNamedObject_Name();
 		switch (columnID) {
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.schedule":
-			final ICellRenderer containingScheduleFormatter = new BaseFormatter() {
+			final PinnedScheduleFormatter containingScheduleFormatter = new PinnedScheduleFormatter(pinImage) {
 				@Override
 				public String render(final Object object) {
-					return builder.getReport().getSynchronizerOutput().getScenarioInstance(object).getName();
+					ScenarioInstance scenarioInstance = builder.getReport().getScenarioInstance(object);
+					if (scenarioInstance != null) {
+						return scenarioInstance.getName();
+					}
+					return null;
 				}
 
 			};
@@ -137,7 +144,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.cv":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "CV", null, ColumnType.NORMAL, new NumberOfDPFormatter(2) {
-				
+
 				@Override
 				public Double getDoubleValue(final Object object) {
 					if (object instanceof SlotVisit) {

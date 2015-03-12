@@ -11,27 +11,28 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.core.databinding.observable.list.IObservableList;
+import org.eclipse.core.databinding.observable.list.WritableList;
 
 import com.google.inject.Inject;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
-import com.mmxlabs.lingo.reports.ScheduledEventCollector;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
-import com.mmxlabs.lingo.reports.views.AbstractConfigurableReportView;
+import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
+import com.mmxlabs.lingo.reports.views.AbstractConfigurableGridReportView;
 import com.mmxlabs.lingo.reports.views.portrotation.extpoint.IPortRotationBasedColumnExtension;
 import com.mmxlabs.lingo.reports.views.portrotation.extpoint.IPortRotationBasedColumnFactoryExtension;
 import com.mmxlabs.lingo.reports.views.portrotation.extpoint.IPortRotationBasedReportInitialStateExtension;
 import com.mmxlabs.lingo.reports.views.portrotation.extpoint.IPortRotationBasedReportInitialStateExtension.InitialColumn;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
  * 
  */
-public class PortRotationReportView extends AbstractConfigurableReportView {
+public class PortRotationReportView extends AbstractConfigurableGridReportView {
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
@@ -48,11 +49,18 @@ public class PortRotationReportView extends AbstractConfigurableReportView {
 	@Inject(optional = true)
 	private Iterable<IPortRotationBasedReportInitialStateExtension> initialStates;
 
+	private PortRotationsReportTransformer transformer;
+
+	private Map<Object, ScenarioInstance> elementMap;
+
+	private IObservableList elements;
+
 	@Inject
 	public PortRotationReportView(final PortRotationBasedReportBuilder builder) {
 
 		super("com.mmxlabs.shiplingo.platform.reports.PortRotationReportView");
 		this.builder = builder;
+		builder.setBlockManager(getBlockManager());
 		builder.setReport(this);
 
 	}
@@ -96,7 +104,7 @@ public class PortRotationReportView extends AbstractConfigurableReportView {
 
 				// Is this a matching view definition?
 				if (viewId != null && viewId.equals(getViewSite().getId())) {
-					// Get visibile columns and order
+					// Get visible columns and order
 					{
 						final InitialColumn[] initialColumns = ext.getInitialColumns();
 						if (initialColumns != null) {
@@ -115,11 +123,120 @@ public class PortRotationReportView extends AbstractConfigurableReportView {
 						}
 					}
 
+					// // Get row types
+					// {
+					// final List<String> rowFilter = new ArrayList<>(builder.ROW_FILTER_ALL.length);
+					// final InitialRowType[] initialRows = ext.getInitialRows();
+					// if (initialRows != null) {
+					// for (final InitialRowType row : initialRows) {
+					//
+					// switch (row.getRowType()) {
+					// case "spotcharters":
+					// rowFilter.add(PortRotationBasedReportBuilder.ROW_FILTER_XXXX.id);
+					// break;
+					// }
+					// }
+					// }
+					// builder.setRowFilter(rowFilter.toArray(new String[0]));
+					// }
+					// // Get diff options
+					// {
+					// final List<String> diffOptions = new ArrayList<>(builder.DIFF_FILTER_ALL.length);
+					// final InitialDiffOption[] initialDiffOptions = ext.getInitialDiffOptions();
+					// if (initialDiffOptions != null) {
+					// for (final InitialDiffOption diffOption : initialDiffOptions) {
+					//
+					// switch (diffOption.getOption()) {
+					//
+					// case "scenario":
+					// diffOptions.add(AbstractReportBuilder.DIFF_FILTER_PINNDED_SCENARIO.id);
+					// break;
+					// }
+					// }
+					// }
+					// builder.setDiffFilter(diffOptions.toArray(new String[0]));
+					// }
 					break;
 				}
 			}
 		}
 	}
+
+	public void processInputs(final List<?> result) {
+
+		for (final Object event : result) {
+			if (event instanceof SlotVisit) {
+				setInputEquivalents(event, Arrays.asList(new Object[] { ((SlotVisit) event).getSlotAllocation().getCargoAllocation() }));
+			} else if (event instanceof VesselEventVisit) {
+				setInputEquivalents(event, Arrays.asList(new Object[] { ((VesselEventVisit) event).getVesselEvent() }));
+			} else {
+				setInputEquivalents(event, Collections.emptyList());
+			}
+		}
+	}
+
+	@Override
+	protected void setInput() {
+		viewer.setInput(elements);
+	}
+
+	@Override
+	protected IScenarioInstanceElementCollector getElementCollector() {
+		elements = new WritableList();
+
+		transformer = new PortRotationsReportTransformer(builder);
+		return transformer.getElementCollector(elements, this);
+	}
+
+	// @Override
+	// protected ITreeContentProvider getContentProvider() {
+	// final ITreeContentProvider superProvider = super.getContentProvider();
+	// return new ITreeContentProvider() {
+	//
+	// @Override
+	// public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+	// superProvider.inputChanged(viewer, oldInput, newInput);
+	// }
+	//
+	// @Override
+	// public void dispose() {
+	// superProvider.dispose();
+	// }
+	//
+	// @Override
+	// public boolean hasChildren(final Object element) {
+	// return superProvider.hasChildren(element);
+	// }
+	//
+	// @Override
+	// public Object getParent(final Object element) {
+	// return superProvider.getParent(element);
+	// }
+	//
+	// @Override
+	// public Object[] getElements(final Object inputElement) {
+	// clearInputEquivalents();
+	// final Object[] result = superProvider.getElements(inputElement);
+	//
+	// for (final Object event : result) {
+	// if (event instanceof SlotVisit) {
+	// setInputEquivalents(event, Arrays.asList(new Object[] { ((SlotVisit) event).getSlotAllocation().getCargoAllocation() }));
+	// } else if (event instanceof VesselEventVisit) {
+	// setInputEquivalents(event, Arrays.asList(new Object[] { ((VesselEventVisit) event).getVesselEvent() }));
+	// } else {
+	// setInputEquivalents(event, Collections.emptyList());
+	// }
+	// }
+	//
+	// return result;
+	// }
+	//
+	// @Override
+	// public Object[] getChildren(final Object parentElement) {
+	// return superProvider.getChildren(parentElement);
+	// }
+	// };
+	// }
 
 	@Override
 	protected boolean handleSelections() {
@@ -127,58 +244,17 @@ public class PortRotationReportView extends AbstractConfigurableReportView {
 	}
 
 	@Override
-	protected ITreeContentProvider getContentProvider() {
-		final ITreeContentProvider superProvider = super.getContentProvider();
-		return new ITreeContentProvider() {
-
-			@Override
-			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-				superProvider.inputChanged(viewer, oldInput, newInput);
-			}
-
-			@Override
-			public void dispose() {
-				superProvider.dispose();
-			}
-
-			@Override
-			public boolean hasChildren(Object element) {
-				return superProvider.hasChildren(element);
-			}
-
-			@Override
-			public Object getParent(Object element) {
-				return superProvider.getParent(element);
-			}
-
-			@Override
-			public Object[] getElements(Object inputElement) {
-				clearInputEquivalents();
-				final Object[] result = superProvider.getElements(inputElement);
-
-				for (final Object event : result) {
-					if (event instanceof SlotVisit) {
-						setInputEquivalents(event, Arrays.asList(new Object[] { ((SlotVisit) event).getSlotAllocation().getCargoAllocation() }));
-					} else if (event instanceof VesselEventVisit) {
-						setInputEquivalents(event, Arrays.asList(new Object[] { ((VesselEventVisit) event).getVesselEvent() }));
-					} else {
-						setInputEquivalents(event, Collections.emptyList());
-					}
-				}
-
-				return result;
-			}
-
-			@Override
-			public Object[] getChildren(Object parentElement) {
-				return superProvider.getChildren(parentElement);
-			}
-		};
+	protected void addDialogCheckBoxes(final ColumnConfigurationDialog dialog) {
+		// dialog.addCheckBoxInfo("Show rows for", builder.ROW_FILTER_ALL, builder.getRowFilterInfo());
+		// dialog.addCheckBoxInfo("In diff mode", builder.DIFF_FILTER_ALL, builder.getDiffFilterInfo());
 	}
 
 	@Override
-	protected IScenarioInstanceElementCollector getElementCollector() {
-		return new ScheduledEventCollector();
+	protected void postDialogOpen(final ColumnConfigurationDialog dialog) {
+		builder.refreshDiffOptions();
+		// Update options state
+		// table.getOptions().setShowPinnedScenario(!builder.getDiffFilterInfo().contains(ScheduleBasedReportBuilder.DIFF_FILTER_PINNDED_SCENARIO));
+
 	}
 
 	/**
@@ -209,7 +285,7 @@ public class PortRotationReportView extends AbstractConfigurableReportView {
 					factory = ext.getFactory();
 				}
 				if (factory != null) {
-					String columnID = ext.getColumnID();
+					final String columnID = ext.getColumnID();
 					factory.registerColumn(columnID, manager, builder);
 				}
 			}
@@ -217,5 +293,16 @@ public class PortRotationReportView extends AbstractConfigurableReportView {
 
 		// Create the actual columns instances.
 		manager.addColumns(PortRotationBasedReportBuilder.PORT_ROTATION_REPORT_TYPE_ID, getBlockManager());
+	}
+
+	public void mapInputs(final Map<Object, ScenarioInstance> elementMap) {
+		this.elementMap = elementMap;
+	}
+
+	public ScenarioInstance getScenarioInstance(final Object key) {
+		if (elementMap != null) {
+			return elementMap.get(key);
+		}
+		return null;
 	}
 }

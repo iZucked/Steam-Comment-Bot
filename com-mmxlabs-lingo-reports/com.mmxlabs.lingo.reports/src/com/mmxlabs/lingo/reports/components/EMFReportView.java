@@ -589,7 +589,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	 * @param objects
 	 * @param isPinned
 	 */
-	public void collectPinModeElements(final List<? extends EObject> objects, final boolean isPinned) {
+	public void collectPinModeElements(final Collection<? extends EObject> objects, final boolean isPinned) {
 		currentlyPinned |= isPinned;
 		++numberOfSchedules;
 

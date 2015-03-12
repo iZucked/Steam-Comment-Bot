@@ -95,6 +95,31 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 		return super.getAdapter(adapter);
 	}
 
+	/**
+	 * Check the view extension point to see if we can enable the customise dialog
+	 * 
+	 * @return
+	 */
+	@Override
+	protected boolean checkCustomisable() {
+
+		if (initialStates != null) {
+
+			for (final IFleetBasedReportInitialStateExtension ext : initialStates) {
+
+				final String viewId = ext.getViewID();
+
+				if (viewId != null && viewId.equals(getViewSite().getId())) {
+					final String customisableString = ext.getCustomisable();
+					if (customisableString != null) {
+						return customisableString.equals("true");
+					}
+				}
+			}
+		}
+		return true;
+	}
+
 	@Override
 	public void initPartControl(final Composite parent) {
 		super.initPartControl(parent);
@@ -137,6 +162,10 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 	@Override
 	public void dispose() {
 
+		if (scheduleReportTable != null) {
+			scheduleReportTable.eAdapters().remove(adapter);
+		}
+		
 		if (listener != null) {
 			getViewSite().getPage().removePartListener(listener);
 		}
@@ -156,31 +185,6 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 		if (configMemento != null) {
 			builder.initFromMemento(CONFIGURABLE_ROWS_ORDER, configMemento);
 		}
-	}
-
-	/**
-	 * Check the view extension point to see if we can enable the customise dialog
-	 * 
-	 * @return
-	 */
-	@Override
-	protected boolean checkCustomisable() {
-
-		if (initialStates != null) {
-
-			for (final IFleetBasedReportInitialStateExtension ext : initialStates) {
-
-				final String viewId = ext.getViewID();
-
-				if (viewId != null && viewId.equals(getViewSite().getId())) {
-					final String customisableString = ext.getCustomisable();
-					if (customisableString != null) {
-						return customisableString.equals("true");
-					}
-				}
-			}
-		}
-		return true;
 	}
 
 	/**
@@ -336,27 +340,28 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 		manager.addColumns(FleetBasedReportBuilder.FLEET_REPORT_TYPE_ID, getBlockManager());
 	}
 
+	// not always disposed
+	private final EContentAdapter adapter = new EContentAdapter() {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
+			if (notification.getFeature() == ScheduleReportPackage.Literals.DIFF_OPTIONS__FILTER_SELECTED_SEQUENCES) {
+				// viewer.setSelection(viewer.getSelection());
+				viewer.refresh();
+			}
+			if (notification.getFeature() == ScheduleReportPackage.Literals.TABLE__SELECTED_ELEMENTS) {
+
+				// Copy across data
+				table.getSelectedElements().clear();
+				table.getSelectedElements().addAll(scheduleReportTable.getSelectedElements());
+				// viewer.setSelection(viewer.getSelection());
+				viewer.refresh();
+			}
+		}
+	};
+
 	protected void hookToScheduleView() {
 		listener = new IPartListener() {
-
-			EContentAdapter adapter = new EContentAdapter() {
-				@Override
-				public void notifyChanged(final Notification notification) {
-					super.notifyChanged(notification);
-					if (notification.getFeature() == ScheduleReportPackage.Literals.DIFF_OPTIONS__FILTER_SELECTED_SEQUENCES) {
-						// viewer.setSelection(viewer.getSelection());
-						viewer.refresh();
-					}
-					if (notification.getFeature() == ScheduleReportPackage.Literals.TABLE__SELECTED_ELEMENTS) {
-
-						// Copy across data
-						table.getSelectedElements().clear();
-						table.getSelectedElements().addAll(scheduleReportTable.getSelectedElements());
-						// viewer.setSelection(viewer.getSelection());
-						viewer.refresh();
-					}
-				}
-			};
 
 			@Override
 			public void partOpened(final IWorkbenchPart part) {
