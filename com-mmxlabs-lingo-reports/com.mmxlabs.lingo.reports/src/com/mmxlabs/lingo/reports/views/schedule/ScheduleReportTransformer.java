@@ -386,7 +386,8 @@ public class ScheduleReportTransformer {
 				} else {
 					if (slot instanceof DischargeSlot) {
 						row.setName2(slot.getName());
-					} else {
+					}// else 
+					{
 						row.setName(slot.getName());
 
 					}
