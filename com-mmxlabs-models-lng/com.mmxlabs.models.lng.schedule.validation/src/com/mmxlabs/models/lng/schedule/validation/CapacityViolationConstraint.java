@@ -86,14 +86,12 @@ public class CapacityViolationConstraint extends AbstractModelMultiConstraint {
 		final EObject target = ctx.getTarget();
 
 		if (target instanceof CapacityViolationsHolder) {
-			EMap<CapacityViolationType, Long> violations = ((CapacityViolationsHolder) target).getViolations();
+			final EMap<CapacityViolationType, Long> violations = ((CapacityViolationsHolder) target).getViolations();
 
 			if (violations.isEmpty() == false) {
 
-				for (Entry<CapacityViolationType, Long> entry : violations) {
-					if (entry.getValue() != 0) {
-						statuses.add(createCapacityViolationStatus(ctx, entry.getKey(), entry.getValue()));
-					}
+				for (final Entry<CapacityViolationType, Long> entry : violations) {
+					statuses.add(createCapacityViolationStatus(ctx, entry.getKey(), entry.getValue()));
 				}
 
 			}
