@@ -4,21 +4,13 @@
  */
 package com.mmxlabs.lingo.reports.diff.utils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.TimeZone;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lingo.reports.utils.CargoAllocationUtils;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.CycleGroupUtils;
-import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.ChangeType;
+import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
