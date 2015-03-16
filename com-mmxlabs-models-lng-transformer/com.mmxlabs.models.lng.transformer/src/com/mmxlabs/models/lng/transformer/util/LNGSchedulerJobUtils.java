@@ -63,11 +63,15 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
+import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.OptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scenario.service.util.MMXAdaptersAwareCommandStack;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.DirectRandomSequenceScheduler;
@@ -415,7 +419,7 @@ public class LNGSchedulerJobUtils {
 		// Create all the new vessel assignment objects.
 		for (final Sequence sequence : schedule.getSequences()) {
 
-//			final AVesselSet<Vessel> assignment = sequence.isSpotVessel() ? sequence.getVesselClass() : (sequence.isSetVesselAvailability() ? sequence.getVesselAvailability().getVessel() : null);
+			// final AVesselSet<Vessel> assignment = sequence.isSpotVessel() ? sequence.getVesselClass() : (sequence.isSetVesselAvailability() ? sequence.getVesselAvailability().getVessel() : null);
 			int index = 0;
 			for (final Event event : sequence.getEvents()) {
 				AssignableElement object = null;
@@ -436,8 +440,8 @@ public class LNGSchedulerJobUtils {
 
 				if (object != null) {
 					cmd.append(SetCommand.create(domain, object, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, index++));
-					if (sequence.isSetVesselAvailability()){
-						
+					if (sequence.isSetVesselAvailability()) {
+
 						cmd.append(SetCommand.create(domain, object, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, sequence.getVesselAvailability()));
 						cmd.append(SetCommand.create(domain, object, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
 					} else {
@@ -478,19 +482,23 @@ public class LNGSchedulerJobUtils {
 		// run a scheduler on the sequences - there is no SchedulerFitnessEvaluator to guide it!
 		final ISequenceScheduler scheduler = injector.getInstance(DirectRandomSequenceScheduler.class);
 
+		final EvaluationState state = new EvaluationState();
 		// The output data structured, a solution with all the output data as annotations
 		final AnnotatedSolution solution = new AnnotatedSolution();
-		solution.setSequences(sequences);
-		final ScheduledSequences scheduledSequences = scheduler.schedule(sequences, solution);
-
-		// Make sure a schedule was created.
-		if (scheduledSequences == null) {
-			// Error scheduling
-			throw new RuntimeException("Unable to evaluate Scenario. Check schedule level inputs (e.g. distances, vessel capacities, restrictions)");
-		}
-
 		// Create a fake context
 		solution.setContext(new OptimisationContext(data, null, null, null, null, null, null, null));
+		solution.setSequences(sequences);
+		solution.setEvaluationState(state);
+		final IEvaluationProcess process = injector.getInstance(SchedulerEvaluationProcess.class);
+		process.annotate(sequences, state, solution);
+////		final ScheduledSequences scheduledSequences = scheduler.schedule(sequences, solution);
+////		solution.setGeneralAnnotation(SchedulerConstants.G_AI_scheduledSequence, scheduledSequences);
+//		// Make sure a schedule was created.
+//		if (scheduledSequences == null) {
+//			// Error scheduling
+//			throw new RuntimeException("Unable to evaluate Scenario. Check schedule level inputs (e.g. distances, vessel capacities, restrictions)");
+//		}
+
 		return solution;
 	}
 

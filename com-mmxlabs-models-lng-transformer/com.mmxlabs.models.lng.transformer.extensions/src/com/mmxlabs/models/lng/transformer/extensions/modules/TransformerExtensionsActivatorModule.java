@@ -6,6 +6,8 @@ package com.mmxlabs.models.lng.transformer.extensions.modules;
 
 import org.ops4j.peaberry.activation.util.PeaberryActivationModule;
 
+import com.mmxlabs.models.lng.transformer.extensions.charterout.GeneratedCharterOutTransformer;
+import com.mmxlabs.models.lng.transformer.extensions.charterout.GeneratedCharterOutTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.entities.EntityTransformerExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsModule;
 import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRequirementModule;
@@ -28,6 +30,7 @@ public class TransformerExtensionsActivatorModule extends PeaberryActivationModu
 		install(new ShippingTypeRequirementModule());
 
 		bindService(SimpleContractTransformerFactory.class).export();
+		bindService(GeneratedCharterOutTransformerFactory.class).export();
 		
 		bindService(EntityTransformerExtensionFactory.class).export();
 		bindService(TradingExporterExtensionFactory.class).export();

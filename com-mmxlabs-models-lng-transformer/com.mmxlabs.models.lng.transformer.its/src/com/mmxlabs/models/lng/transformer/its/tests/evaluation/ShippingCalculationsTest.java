@@ -1096,7 +1096,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
 
-		msc.pricingCreator.createDefaultCharterCostModel(msc.vc, 1, 96);
+		msc.pricingCreator.createDefaultCharterCostModel(msc.vc, 1, 96, scenario.getPortModel().getPorts());
 
 		// change from default scenario: set a "return after" date
 		// somewhat later than the end of the discharge window
@@ -1109,29 +1109,29 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		av.unsetEndBy();
 		System.err.println("Vessel to return after: " + returnDate);
 
-		final Class<?>[] expectedClasses = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, GeneratedCharterOut.class,
-				EndEvent.class };
+		final Class<?>[] expectedClasses = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Idle.class, GeneratedCharterOut.class,
+				Journey.class, Idle.class, EndEvent.class };
 		final SequenceTester checker = getDefaultTester(expectedClasses);
 
 		// change from default: one fewer idle
 
 		// expected durations of idles
-		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer[] { 0, 2 });
+		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer[] { 0, 2, 0, 0 });
 
 		// expected base idle consumptions
 		// 0 = no idle (start)
 		// 0 = no idle (idle on NBO)
 		// 0 = no idle (end)
-		checker.setExpectedValues(Expectations.BF_USAGE, Idle.class, new Integer[] { 0, 0 });
+		checker.setExpectedValues(Expectations.BF_USAGE, Idle.class, new Integer[] { 0, 0, 0, 0 });
 
 		// expected NBO idle consumptions
 		// 10 = 2 { idle duration } * 5 { idle NBO rate }
-		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer[] { 0, 10 });
+		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer[] { 0, 10, 0, 0 });
 
 		// expected fuel costs
 		// 0 = no idle
 		// 30 = 21 { LNG cost } * 10 { LNG consumption }
-		checker.setExpectedValues(Expectations.FUEL_COSTS, Idle.class, new Integer[] { 0, 210 });
+		checker.setExpectedValues(Expectations.FUEL_COSTS, Idle.class, new Integer[] { 0, 210, 0, 0 });
 
 		// change from default: generated charter out
 		checker.setExpectedValues(Expectations.DURATIONS, GeneratedCharterOut.class, new Integer[] { 36 });
@@ -1155,7 +1155,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
 
-		msc.pricingCreator.createDefaultCharterCostModel(msc.vc, 1, 96);
+		msc.pricingCreator.createDefaultCharterCostModel(msc.vc, 1, 96, scenario.getPortModel().getPorts());
 
 		// change from default scenario: set a "return after" date
 		// somewhat later than the end of the discharge window
@@ -1172,30 +1172,30 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		av.unsetEndBy();
 		System.err.println("Vessel to return after: " + returnDate);
 
-		final Class<?>[] expectedClasses = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, GeneratedCharterOut.class,
-				EndEvent.class };
+		final Class<?>[] expectedClasses = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Idle.class, GeneratedCharterOut.class,
+				Journey.class, Idle.class, EndEvent.class };
 		final SequenceTester checker = getDefaultTester(expectedClasses);
 
 		checker.hireCostPerHour = charterRatePerDay / 24;
 		// change from default: one fewer idle
 
 		// expected durations of idles
-		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer[] { 0, 2 });
+		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer[] { 0, 2, 0, 0 });
 
 		// expected base idle consumptions
 		// 0 = no idle (start)
 		// 0 = no idle (idle on NBO)
 		// 0 = no idle (end)
-		checker.setExpectedValues(Expectations.BF_USAGE, Idle.class, new Integer[] { 0, 0 });
+		checker.setExpectedValues(Expectations.BF_USAGE, Idle.class, new Integer[] { 0, 0, 0, 0 });
 
 		// expected NBO idle consumptions
 		// 10 = 2 { idle duration } * 5 { idle NBO rate }
-		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer[] { 0, 10 });
+		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer[] { 0, 10, 0, 0 });
 
 		// expected fuel costs
 		// 0 = no idle
 		// 30 = 21 { LNG cost } * 10 { LNG consumption }
-		checker.setExpectedValues(Expectations.FUEL_COSTS, Idle.class, new Integer[] { 0, 210 });
+		checker.setExpectedValues(Expectations.FUEL_COSTS, Idle.class, new Integer[] { 0, 210, 0, 0 });
 
 		// change from default: generated charter out
 		checker.setExpectedValues(Expectations.DURATIONS, GeneratedCharterOut.class, new Integer[] { 36 });
@@ -1219,7 +1219,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
 
-		msc.pricingCreator.createDefaultCharterCostModel(msc.vc, 1, 96);
+		msc.pricingCreator.createDefaultCharterCostModel(msc.vc, 1, 96, scenario.getPortModel().getPorts());
 
 		SequenceTester checker = getDefaultTester();
 
