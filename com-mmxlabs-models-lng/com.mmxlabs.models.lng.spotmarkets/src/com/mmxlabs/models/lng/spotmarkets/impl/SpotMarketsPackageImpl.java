@@ -607,6 +607,15 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getSpotCharterMarket_AvailablePorts() {
+		return (EReference)spotCharterMarketEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getSpotType() {
 		return spotTypeEEnum;
 	}
@@ -695,6 +704,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		spotCharterMarketEClass = createEClass(SPOT_CHARTER_MARKET);
 		createEAttribute(spotCharterMarketEClass, SPOT_CHARTER_MARKET__ENABLED);
 		createEReference(spotCharterMarketEClass, SPOT_CHARTER_MARKET__VESSEL_CLASS);
+		createEReference(spotCharterMarketEClass, SPOT_CHARTER_MARKET__AVAILABLE_PORTS);
 
 		// Create enums
 		spotTypeEEnum = createEEnum(SPOT_TYPE);
@@ -819,6 +829,10 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		initEClass(spotCharterMarketEClass, SpotCharterMarket.class, "SpotCharterMarket", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSpotCharterMarket_Enabled(), ecorePackage.getEBoolean(), "enabled", "true", 0, 1, SpotCharterMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSpotCharterMarket_VesselClass(), theFleetPackage.getVesselClass(), null, "vesselClass", null, 0, 1, SpotCharterMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		g1 = createEGenericType(theTypesPackage.getAPortSet());
+		g2 = createEGenericType(thePortPackage.getPort());
+		g1.getETypeArguments().add(g2);
+		initEReference(getSpotCharterMarket_AvailablePorts(), g1, null, "availablePorts", null, 0, -1, SpotCharterMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(spotTypeEEnum, SpotType.class, "SpotType");

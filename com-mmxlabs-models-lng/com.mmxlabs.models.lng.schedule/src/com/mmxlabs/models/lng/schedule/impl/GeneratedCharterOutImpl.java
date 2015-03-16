@@ -13,9 +13,11 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
@@ -35,13 +37,14 @@ import java.util.Collection;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.GeneratedCharterOutImpl#getGroupProfitAndLoss <em>Group Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.GeneratedCharterOutImpl#getGeneralPNLDetails <em>General PNL Details</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.GeneratedCharterOutImpl#getEvents <em>Events</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.GeneratedCharterOutImpl#getRevenue <em>Revenue</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class GeneratedCharterOutImpl extends EventImpl implements GeneratedCharterOut {
+public class GeneratedCharterOutImpl extends PortVisitImpl implements GeneratedCharterOut {
 	/**
 	 * The cached value of the '{@link #getGroupProfitAndLoss() <em>Group Profit And Loss</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -61,6 +64,16 @@ public class GeneratedCharterOutImpl extends EventImpl implements GeneratedChart
 	 * @ordered
 	 */
 	protected EList<GeneralPNLDetails> generalPNLDetails;
+
+	/**
+	 * The cached value of the '{@link #getEvents() <em>Events</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEvents()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Event> events;
 
 	/**
 	 * The default value of the '{@link #getRevenue() <em>Revenue</em>}' attribute.
@@ -161,6 +174,18 @@ public class GeneratedCharterOutImpl extends EventImpl implements GeneratedChart
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<Event> getEvents() {
+		if (events == null) {
+			events = new EObjectResolvingEList<Event>(Event.class, this, SchedulePackage.GENERATED_CHARTER_OUT__EVENTS);
+		}
+		return events;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public int getRevenue() {
 		return revenue;
 	}
@@ -205,6 +230,8 @@ public class GeneratedCharterOutImpl extends EventImpl implements GeneratedChart
 				return getGroupProfitAndLoss();
 			case SchedulePackage.GENERATED_CHARTER_OUT__GENERAL_PNL_DETAILS:
 				return getGeneralPNLDetails();
+			case SchedulePackage.GENERATED_CHARTER_OUT__EVENTS:
+				return getEvents();
 			case SchedulePackage.GENERATED_CHARTER_OUT__REVENUE:
 				return getRevenue();
 		}
@@ -227,6 +254,10 @@ public class GeneratedCharterOutImpl extends EventImpl implements GeneratedChart
 				getGeneralPNLDetails().clear();
 				getGeneralPNLDetails().addAll((Collection<? extends GeneralPNLDetails>)newValue);
 				return;
+			case SchedulePackage.GENERATED_CHARTER_OUT__EVENTS:
+				getEvents().clear();
+				getEvents().addAll((Collection<? extends Event>)newValue);
+				return;
 			case SchedulePackage.GENERATED_CHARTER_OUT__REVENUE:
 				setRevenue((Integer)newValue);
 				return;
@@ -248,6 +279,9 @@ public class GeneratedCharterOutImpl extends EventImpl implements GeneratedChart
 			case SchedulePackage.GENERATED_CHARTER_OUT__GENERAL_PNL_DETAILS:
 				getGeneralPNLDetails().clear();
 				return;
+			case SchedulePackage.GENERATED_CHARTER_OUT__EVENTS:
+				getEvents().clear();
+				return;
 			case SchedulePackage.GENERATED_CHARTER_OUT__REVENUE:
 				setRevenue(REVENUE_EDEFAULT);
 				return;
@@ -267,6 +301,8 @@ public class GeneratedCharterOutImpl extends EventImpl implements GeneratedChart
 				return groupProfitAndLoss != null;
 			case SchedulePackage.GENERATED_CHARTER_OUT__GENERAL_PNL_DETAILS:
 				return generalPNLDetails != null && !generalPNLDetails.isEmpty();
+			case SchedulePackage.GENERATED_CHARTER_OUT__EVENTS:
+				return events != null && !events.isEmpty();
 			case SchedulePackage.GENERATED_CHARTER_OUT__REVENUE:
 				return revenue != REVENUE_EDEFAULT;
 		}
@@ -287,6 +323,12 @@ public class GeneratedCharterOutImpl extends EventImpl implements GeneratedChart
 				default: return -1;
 			}
 		}
+		if (baseClass == EventGrouping.class) {
+			switch (derivedFeatureID) {
+				case SchedulePackage.GENERATED_CHARTER_OUT__EVENTS: return SchedulePackage.EVENT_GROUPING__EVENTS;
+				default: return -1;
+			}
+		}
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
@@ -301,6 +343,12 @@ public class GeneratedCharterOutImpl extends EventImpl implements GeneratedChart
 			switch (baseFeatureID) {
 				case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS: return SchedulePackage.GENERATED_CHARTER_OUT__GROUP_PROFIT_AND_LOSS;
 				case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS: return SchedulePackage.GENERATED_CHARTER_OUT__GENERAL_PNL_DETAILS;
+				default: return -1;
+			}
+		}
+		if (baseClass == EventGrouping.class) {
+			switch (baseFeatureID) {
+				case SchedulePackage.EVENT_GROUPING__EVENTS: return SchedulePackage.GENERATED_CHARTER_OUT__EVENTS;
 				default: return -1;
 			}
 		}

@@ -21,7 +21,7 @@ package com.mmxlabs.models.lng.schedule;
  * @model
  * @generated
  */
-public interface GeneratedCharterOut extends Event, ProfitAndLossContainer {
+public interface GeneratedCharterOut extends PortVisit, ProfitAndLossContainer, EventGrouping {
 	/**
 	 * Returns the value of the '<em><b>Revenue</b></em>' attribute.
 	 * <!-- begin-user-doc -->
