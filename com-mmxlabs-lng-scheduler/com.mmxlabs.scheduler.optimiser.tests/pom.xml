@@ -56,67 +56,6 @@
 				</configuration>
 			</plugin>
 
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-surefire-plugin</artifactId>
-				<configuration>
-<!-- 					Include non-standard test suffix -->
-<!-- 					<includes> -->
-<!-- 						<include>**/*Tests.*</include> -->
-<!-- 						<include>**/Test*.*</include> -->
-<!-- 						<include>**/*Test.*</include> -->
-<!-- 					</includes> -->
-
-					<product>org.eclipse.sdk.ide</product>
-					<application>org.eclipse.ui.ide.workbench</application>
-
-					<dependencies>
-						<dependency>
-							<type>eclipse-plugin</type>
-							<artifactId>org.eclipse.equinox.ds</artifactId>
-							<version>0.0.0</version>
-						</dependency>
-						<dependency>
-							<type>eclipse-plugin</type>
-							<artifactId>org.eclipse.equinox.event</artifactId>
-							<version>0.0.0</version>
-						</dependency>
-						<dependency>
-							<type>eclipse-plugin</type>
-							<artifactId>org.eclipse.equinox.console</artifactId>
-							<version>0.0.0</version>
-						</dependency>
-						<dependency>
-							<type>eclipse-plugin</type>
-							<artifactId> org.apache.felix.gogo.shell</artifactId>
-							<version>0.0.0</version>
-						</dependency>
-						<!-- Logging plug-ins -->
-						<dependency>
-							<type>eclipse-plugin</type>
-							<artifactId>ch.qos.logback.core</artifactId>
-							<version>0.0.0</version>
-						</dependency>
-						<dependency>
-							<type>eclipse-plugin</type>
-							<artifactId>ch.qos.logback.classic</artifactId>
-							<version>0.0.0</version>
-						</dependency>
-						<dependency>
-							<type>eclipse-plugin</type>
-							<artifactId>ch.qos.logback.slf4j</artifactId>
-							<version>0.0.0</version>
-						</dependency>
-						<dependency>
-							<type>eclipse-plugin</type>
-							<artifactId>com.mmxlabs.scheduler.optimiser</artifactId>
-							<version>0.0.0</version>
-						</dependency>
-
-					</dependencies>
-
-				</configuration>
-			</plugin>
 		</plugins>
 
 	</build>
