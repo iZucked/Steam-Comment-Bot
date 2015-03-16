@@ -173,6 +173,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 			}
 
 			solution.setGeneralAnnotation(SchedulerConstants.G_AI_fitnessPerRoute, fitnessPerRoute);
+//			solution.setGeneralAnnotation(SchedulerConstants.G_AI_scheduledSequence, evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class));
 		}
 	}
 }

@@ -718,146 +718,89 @@ public class VoyagePlanner {
 			final long startHeelVolumeInM3, final VoyagePlan originalPlan) {
 
 		// Take a copy so we can retain isIgnoreEnd flag later on
-		VoyagePlan plan = originalPlan;
-		assert startHeelVolumeInM3 >= 0;
-		// TODO: Handle LNG at end of charter out
-		long endHeelVolumeInM3 = 0;
-		boolean planSet = false;
-		IAllocationAnnotation allocationAnnotation = null;
-		if (generatedCharterOutEvaluator != null) {
-			final Pair<VoyagePlan, IAllocationAnnotation> p = generatedCharterOutEvaluator.processSchedule(vesselStartTime, vesselAvailability, plan, portTimesRecord);
-			if (p != null) {
-				plan = p.getFirst();
-				voyagePlansList.add(p.getFirst());
-				allocationAnnotation = p.getSecond();
+		VoyagePlan plan = originalPlan; // TODO: remove
+		List<PlanEvaluationData> plans = new ArrayList<PlanEvaluationData>();
 
-				if (allocationAnnotation != null) {
-					endHeelVolumeInM3 = allocationAnnotation.getRemainingHeelVolumeInM3();
-				} else {
-					endHeelVolumeInM3 = plan.getRemainingHeelInM3();
+		assert startHeelVolumeInM3 >= 0;
+		boolean planSet = false;
+		if (generatedCharterOutEvaluator != null) {
+			final List<Pair<VoyagePlan, IPortTimesRecord>> lp = generatedCharterOutEvaluator.processSchedule(vesselStartTime, startHeelVolumeInM3, vesselAvailability, plan, portTimesRecord);
+			if (lp != null) {
+				for (Pair<VoyagePlan, IPortTimesRecord> p : lp) {
+					PlanEvaluationData evalData = new PlanEvaluationData();
+					evalData.plan = p.getFirst();
+					voyagePlansList.add(evalData.plan);
+					if (p.getSecond() instanceof IAllocationAnnotation) {
+						evalData.allocation = (IAllocationAnnotation) p.getSecond();
+					}
+					evalData.portTimesRecord = p.getSecond();
+
+					if (evalData.allocation != null) {
+						evalData.endHeelVolumeInM3 = evalData.allocation.getRemainingHeelVolumeInM3();
+					} else {
+						evalData.endHeelVolumeInM3 = evalData.plan.getRemainingHeelInM3();
+					}
+					evalData.setStartHeelVolumeInM3(evalData.plan.getStartingHeelInM3());
+					plans.add(evalData);
+					evalData.setIgnoreEndSet(true);
 				}
 				planSet = true;
 			}
 		}
-
-		// FIXME: This should be more customisable
 
 		// Execute custom logic to manipulate the schedule and choices
 		if (breakEvenEvaluator != null) {
 			final Pair<VoyagePlan, IAllocationAnnotation> p = breakEvenEvaluator.processSchedule(vesselStartTime, vesselAvailability, plan, portTimesRecord);
 			if (p != null) {
-				plan = p.getFirst();
-				voyagePlansList.add(p.getFirst());
-				allocationAnnotation = p.getSecond();
+				PlanEvaluationData evalData = new PlanEvaluationData();
 
-				if (allocationAnnotation != null) {
-					endHeelVolumeInM3 = allocationAnnotation.getRemainingHeelVolumeInM3();
+				evalData.plan = p.getFirst();
+				voyagePlansList.add(evalData.plan);
+				if (p.getSecond() instanceof IAllocationAnnotation) {
+					evalData.allocation = (IAllocationAnnotation) p.getSecond();
+					evalData.portTimesRecord = p.getSecond();
 				} else {
-					endHeelVolumeInM3 = plan.getRemainingHeelInM3();
+					evalData.portTimesRecord = portTimesRecord;
 				}
+
+				if (evalData.allocation != null) {
+					evalData.endHeelVolumeInM3 = evalData.allocation.getRemainingHeelVolumeInM3();
+				} else {
+					evalData.endHeelVolumeInM3 = evalData.plan.getRemainingHeelInM3();
+				}
+				evalData.setStartHeelVolumeInM3(startHeelVolumeInM3);
+				plans.add(evalData);
 				planSet = true;
 			}
 		}
 
 		if (!planSet) {
-			voyagePlansList.add(plan);
-			// TODO: Non-cargo cases?
-			allocationAnnotation = volumeAllocator.allocate(vesselAvailability, vesselStartTime, plan, portTimesRecord);
-			if (allocationAnnotation == null) {
-				// not a cargo plan?
-				endHeelVolumeInM3 = plan.getRemainingHeelInM3();
+			PlanEvaluationData evalData = new PlanEvaluationData();
+
+			evalData.plan = plan;
+			voyagePlansList.add(evalData.plan);
+			evalData.allocation = volumeAllocator.allocate(vesselAvailability, vesselStartTime, plan, portTimesRecord);
+			if (evalData.allocation != null) {
+				evalData.portTimesRecord = evalData.allocation;
 			} else {
-				endHeelVolumeInM3 = allocationAnnotation.getRemainingHeelVolumeInM3();
+				evalData.portTimesRecord = portTimesRecord;
 			}
+
+			if (evalData.allocation != null) {
+				evalData.endHeelVolumeInM3 = evalData.allocation.getRemainingHeelVolumeInM3();
+			} else {
+				evalData.endHeelVolumeInM3 = evalData.plan.getRemainingHeelInM3();
+			}
+			evalData.setStartHeelVolumeInM3(startHeelVolumeInM3);
+			plans.add(evalData);
 		}
 
-		assert endHeelVolumeInM3 >= 0;
-
-		// Generate heel level annotations
-		final Map<IPortSlot, IHeelLevelAnnotation> heelLevelAnnotations = new HashMap<IPortSlot, IHeelLevelAnnotation>();
-		{
-			final IDetailsSequenceElement[] sequence = plan.getSequence();
-			long currentHeelInM3 = startHeelVolumeInM3;
-			long totalVoyageBOG = 0;
-			int voyageTime = 0;
-			IPortSlot optionalHeelUsePortSlot = null;
-			final int adjust = plan.isIgnoreEnd() ? 1 : 0;
-			for (int i = 0; i < sequence.length - adjust; ++i) {
-				final IDetailsSequenceElement e = sequence[i];
-				if (e instanceof PortDetails) {
-					final PortDetails portDetails = (PortDetails) e;
-					final IPortSlot portSlot = portDetails.getOptions().getPortSlot();
-					final long start = currentHeelInM3;
-					if (portSlot.getPortType() != PortType.End) {
-						optionalHeelUsePortSlot = null;
-						if (allocationAnnotation != null) {
-							if (portSlot.getPortType() == PortType.Load) {
-								currentHeelInM3 += allocationAnnotation.getSlotVolumeInM3(portSlot);
-							} else if (portSlot.getPortType() == PortType.Discharge) {
-								currentHeelInM3 -= allocationAnnotation.getSlotVolumeInM3(portSlot);
-							}
-						} else {
-							if (portSlot instanceof IHeelOptionsPortSlot) {
-								optionalHeelUsePortSlot = portSlot;
-								// FIXME: This volume is optional use
-								final IHeelOptionsPortSlot heelOptionsPortSlot = (IHeelOptionsPortSlot) portSlot;
-								currentHeelInM3 = heelOptionsPortSlot.getHeelOptions().getHeelLimit();
-							} else {
-								currentHeelInM3 = 0;
-							}
-
-						}
-						assert currentHeelInM3 >= 0;
-
-					} else {
-						if (portSlot instanceof EndPortSlot) {
-							final EndPortSlot endPortSlot = (EndPortSlot) portSlot;
-							// Assert disabled as it is not always possible to arrive with target heel (thus capacity violation should be triggered)
-							// assert currentHeelInM3 >= endPortSlot.getTargetEndHeelInM3();
-						}
-					}
-					final long end = currentHeelInM3;
-
-					final HeelLevelAnnotation heelLevelAnnotation = new HeelLevelAnnotation(start, end);
-					heelLevelAnnotations.put(portSlot, heelLevelAnnotation);
-				} else if (e instanceof VoyageDetails) {
-					final VoyageDetails voyageDetails = (VoyageDetails) e;
-					long voyageBOGInM3 = 0;
-					for (final FuelComponent fuel : FuelComponent.getLNGFuelComponents()) {
-						voyageBOGInM3 += voyageDetails.getFuelConsumption(fuel, FuelUnit.M3);
-						voyageBOGInM3 += voyageDetails.getRouteAdditionalConsumption(fuel, FuelUnit.M3);
-					}
-					totalVoyageBOG += voyageBOGInM3;
-					currentHeelInM3 -= voyageBOGInM3;
-					assert currentHeelInM3 >= 0;
-					voyageTime += voyageDetails.getTravelTime();
-					voyageTime += voyageDetails.getIdleTime();
-
-				}
-			}
-			// The optional heel use port slot has heel on board which may or may not have been used.
-			// The default code path assumes it has been used. However, if there is no NBO at all, we assume it did not exist,
-			// thus we need to update the data to accommodate.
-			if (optionalHeelUsePortSlot != null && voyageTime > 0 && totalVoyageBOG == 0) {
-				// Replace heel level annotation
-				heelLevelAnnotations.put(optionalHeelUsePortSlot, new HeelLevelAnnotation(0, 0));
-				// Update current heel - this will still be the start heel value as there was no boil-off
-				currentHeelInM3 = 0;
-			}
-			assert currentHeelInM3 >= 0;
-
-			// Sanity check these calculations match expected values
-			assert totalVoyageBOG == plan.getLNGFuelVolume();
-			assert endHeelVolumeInM3 == currentHeelInM3;
+		for (PlanEvaluationData planData : plans) {
+			evaluateBrokenUpVoyagePlan(planData, vesselAvailability, vesselStartTime, voyagePlansMap, voyagePlansList, originalPlan);
 		}
 
-		// Ensure this flag is copied across!
-		plan.setIgnoreEnd(originalPlan.isIgnoreEnd());
-
-		final IPortTimesRecord rec = allocationAnnotation == null ? portTimesRecord : allocationAnnotation;
-		voyagePlansMap.add(new Triple<>(plan, heelLevelAnnotations, rec));
-
-		return endHeelVolumeInM3;
+		// return the end heel of the last plan (for the generated charter out case there will be more than one plan)
+		return plans.get(plans.size() - 1).getEndHeelVolumeInM3();
 
 	}
 
@@ -1169,6 +1112,92 @@ public class VoyagePlanner {
 		}
 
 		return result;
+	}
+
+	/**
+	 * Here, a single a voyage plan is evaluated, which may be part of what used to be a single voyage plan, e.g. if a charter out event was generated.
+	 * 
+	 * @return
+	 */
+	private void evaluateBrokenUpVoyagePlan(final PlanEvaluationData planData, final IVesselAvailability vesselAvailability, final int vesselStartTime,
+			final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlansMap, final List<VoyagePlan> voyagePlansList,
+			final VoyagePlan originalPlan) {
+
+		assert planData.getEndHeelVolumeInM3() >= 0;
+		// Generate heel level annotations
+		final Map<IPortSlot, IHeelLevelAnnotation> heelLevelAnnotations = new HashMap<IPortSlot, IHeelLevelAnnotation>();
+		{
+			final IDetailsSequenceElement[] sequence = planData.getPlan().getSequence();
+			long currentHeelInM3 = planData.getPlan().getStartingHeelInM3();
+			long totalVoyageBOG = 0;
+			int voyageTime = 0;
+			IPortSlot optionalHeelUsePortSlot = null;
+			final int adjust = planData.getPlan().isIgnoreEnd() ? 1 : 0;
+			for (int i = 0; i < sequence.length - adjust; ++i) {
+				final IDetailsSequenceElement e = sequence[i];
+				if (e instanceof PortDetails) {
+					final PortDetails portDetails = (PortDetails) e;
+					final IPortSlot portSlot = portDetails.getOptions().getPortSlot();
+					final long start = currentHeelInM3;
+					if (portSlot.getPortType() != PortType.End) {
+						optionalHeelUsePortSlot = null;
+						if (planData.getAllocation() != null) {
+							if (portSlot.getPortType() == PortType.Load) {
+								currentHeelInM3 += planData.getAllocation().getSlotVolumeInM3(portSlot);
+							} else if (portSlot.getPortType() == PortType.Discharge) {
+								currentHeelInM3 -= planData.getAllocation().getSlotVolumeInM3(portSlot);
+							}
+						}
+						assert currentHeelInM3 >= 0;
+					} else {
+						if (portSlot instanceof EndPortSlot) {
+							final EndPortSlot endPortSlot = (EndPortSlot) portSlot;
+							// Assert disabled as it is not always possible to arrive with target heel (thus capacity violation should be triggered)
+							// assert currentHeelInM3 >= endPortSlot.getTargetEndHeelInM3();
+						}
+					}
+					final long end = currentHeelInM3;
+
+					final HeelLevelAnnotation heelLevelAnnotation = new HeelLevelAnnotation(start, end);
+					heelLevelAnnotations.put(portSlot, heelLevelAnnotation);
+				} else if (e instanceof VoyageDetails) {
+					final VoyageDetails voyageDetails = (VoyageDetails) e;
+					long voyageBOGInM3 = 0;
+					for (final FuelComponent fuel : FuelComponent.getLNGFuelComponents()) {
+						voyageBOGInM3 += voyageDetails.getFuelConsumption(fuel, FuelUnit.M3);
+						voyageBOGInM3 += voyageDetails.getRouteAdditionalConsumption(fuel, FuelUnit.M3);
+					}
+					totalVoyageBOG += voyageBOGInM3;
+					currentHeelInM3 -= voyageBOGInM3;
+					assert currentHeelInM3 >= 0;
+					voyageTime += voyageDetails.getTravelTime();
+					voyageTime += voyageDetails.getIdleTime();
+
+				}
+			}
+			// The optional heel use port slot has heel on board which may or may not have been used.
+			// The default code path assumes it has been used. However, if there is no NBO at all, we assume it did not exist,
+			// thus we need to update the data to accommodate.
+			if (optionalHeelUsePortSlot != null && voyageTime > 0 && totalVoyageBOG == 0) {
+				// Replace heel level annotation
+				heelLevelAnnotations.put(optionalHeelUsePortSlot, new HeelLevelAnnotation(0, 0));
+				// Update current heel - this will still be the start heel value as there was no boil-off
+				currentHeelInM3 = 0;
+			}
+			assert currentHeelInM3 >= 0;
+
+			// Sanity check these calculations match expected values
+			assert totalVoyageBOG == planData.getPlan().getLNGFuelVolume();
+			assert planData.getEndHeelVolumeInM3() == currentHeelInM3;
+		}
+
+		// Ensure this flag is copied across!
+		if (!planData.isIgnoreEndSet()) {
+			planData.getPlan().setIgnoreEnd(originalPlan.isIgnoreEnd());
+		}
+
+		voyagePlansMap.add(new Triple<>(planData.getPlan(), heelLevelAnnotations, planData.getPortTimesRecord()));
+
 	}
 
 }

@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.schedule;
 
 import javax.inject.Inject;
+
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -62,7 +63,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 	public void annotateFromScheduledSequence(final ScheduledSequence scheduledSequence, final IAnnotatedSolution solution) {
 		annotateFromVoyagePlan(scheduledSequence, solution);
 	}
-
+		
 	/**
 	 */
 	@Override
@@ -251,4 +252,5 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 	public void setVesselProvider(final IVesselProvider vesselProvider) {
 		this.vesselProvider = vesselProvider;
 	}
+	
 }

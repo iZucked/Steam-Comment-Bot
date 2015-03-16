@@ -57,6 +57,7 @@ import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptions;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
@@ -82,6 +83,8 @@ import com.mmxlabs.scheduler.optimiser.components.impl.DischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.impl.GeneratedCharterOutVesselEvent;
+import com.mmxlabs.scheduler.optimiser.components.impl.GeneratedCharterOutVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.HeelOptions;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadOption;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
@@ -1063,9 +1066,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			window.setEnd(latestTime);
 		}
 
-		// Create charter out elements
-		buildVesselEvents();
-
 		// Generate DES Purchase and FOB Sale slot bindings before applying vessel restriction constraints
 		doBindDischargeSlotsToDESPurchase();
 		doBindLoadSlotsToFOBSale();
@@ -1211,7 +1211,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		return vesselClass;
 	}
-	
+
 	@Override
 	@NonNull
 	public IBaseFuel createBaseFuel(final String name, final int equivalenceFactor) {
@@ -1268,8 +1268,16 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	public IVesselEventPortSlot createCharterOutEvent(final String id, final ITimeWindow arrival, final IPort fromPort, final IPort toPort, final int durationHours, final long maxHeelOut,
-			final int heelCVValue, final int heelUnitPrice, final long hireCost, final long repositioning) {
-		return createVesselEvent(id, PortType.CharterOut, arrival, fromPort, toPort, durationHours, maxHeelOut, heelCVValue, heelUnitPrice, hireCost, repositioning);
+			final int heelCVValue, final int heelUnitPrice, final long totalHireRevenue, final long repositioning) {
+		return createVesselEvent(id, PortType.CharterOut, arrival, fromPort, toPort, durationHours, maxHeelOut, heelCVValue, heelUnitPrice, totalHireRevenue, repositioning);
+	}
+
+	/**
+	 */
+	@Override
+	public IGeneratedCharterOutVesselEventPortSlot createGeneratedCharterOutEvent(final String id, final ITimeWindow arrival, final IPort fromPort, final IPort toPort, final int durationHours,
+			final long maxHeelOut, final int heelCVValue, final int heelUnitPrice, final long hireCost, final long repositioning) {
+		return createGeneratedCharterOutVesselEvent(id, arrival, fromPort, toPort, durationHours, maxHeelOut, heelCVValue, heelUnitPrice, hireCost, repositioning);
 	}
 
 	@Override
@@ -1288,7 +1296,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@NonNull
 	public IVesselEventPortSlot createVesselEvent(final String id, final PortType portType, final ITimeWindow arrival, final IPort fromPort, final IPort toPort, final int durationHours,
-			final long maxHeelOut, final int heelCVValue, final int heelUnitPrice, final long hireCost, final long repositioning) {
+			final long maxHeelOut, final int heelCVValue, final int heelUnitPrice, final long totalHireRevenue, final long repositioning) {
 		final VesselEvent event = new VesselEvent();
 
 		// TODO should start port and end port be set on this single sequence
@@ -1304,15 +1312,44 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		event.setMaxHeelOut(maxHeelOut);
 		event.setHeelCVValue(heelCVValue);
 		event.setHeelUnitPrice(heelUnitPrice);
-		event.setHireCost(hireCost);
+		event.setHireOutRevenue(totalHireRevenue);
 		event.setRepositioning(repositioning);
 
 		final VesselEventPortSlot slot = new VesselEventPortSlot(id, event.getEndPort(), event.getTimeWindow(), event);
-
-		vesselEvents.add(slot);
 		slot.setPortType(portType);
+		vesselEvents.add(slot);
 		slotVesselAvailabilityRestrictions.put(slot, new HashSet<IVesselAvailability>());
 		slotVesselClassRestrictions.put(slot, new HashSet<IVesselClass>());
+
+		buildVesselEvent(slot);
+		return slot;
+	}
+
+	/**
+	 */
+	@NonNull
+	private IGeneratedCharterOutVesselEventPortSlot createGeneratedCharterOutVesselEvent(final String id, final ITimeWindow arrival, final IPort fromPort, final IPort toPort, final int durationHours,
+			final long maxHeelOut, final int heelCVValue, final int heelUnitPrice, final long hireCost, final long repositioning) {
+		final GeneratedCharterOutVesselEvent event = new GeneratedCharterOutVesselEvent();
+
+		// TODO should start port and end port be set on this single sequence
+		// element,
+		// or should there be a second invisible sequence element for
+		// repositioning, and something
+		// which rigs the distance to be zero between repositioning elements?
+
+		event.setTimeWindow(arrival); // TODO: this may fail...
+		event.setDurationHours(durationHours);
+		event.setStartPort(fromPort);
+		event.setEndPort(toPort);
+		event.setMaxHeelOut(maxHeelOut);
+		event.setHeelCVValue(heelCVValue);
+		event.setHeelUnitPrice(heelUnitPrice);
+		event.setHireOutRevenue(hireCost);
+		event.setRepositioning(repositioning);
+
+		final GeneratedCharterOutVesselEventPortSlot slot = new GeneratedCharterOutVesselEventPortSlot(id, event.getEndPort(), event.getTimeWindow(), event);
+		slot.setPortType(PortType.GeneratedCharterOut);
 		return slot;
 	}
 
@@ -1342,80 +1379,75 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		slotVesselClassRestrictions.get(charterOut).add(vesselClass);
 	}
 
-	protected void buildVesselEvents() {
-		// int i = 0;
+	protected void buildVesselEvent(IVesselEventPortSlot slot) {
+		final IVesselEvent vesselEvent = slot.getVesselEvent();
 
-		for (final IVesselEventPortSlot slot : vesselEvents) {
-			final IVesselEvent vesselEvent = slot.getVesselEvent();
+		final SequenceElement endElement = new SequenceElement(indexingContext, slot.getId());
 
-			final SequenceElement endElement = new SequenceElement(indexingContext, slot.getId());
+		if (vesselEvent.getStartPort() != vesselEvent.getEndPort()) {
+			// We insert two extra elements and slots, so that we go
+			// startPort -> ANYWHERE -> endPort
+			// this means we also have to fix any sequencing constraints
+			// which have already been set up, and replicate the vessel
+			// allocation constraints.
+			final VesselEventPortSlot startSlot = new VesselEventPortSlot("start-" + slot.getId(), vesselEvent.getStartPort(), slot.getTimeWindow(), vesselEvent);
+			final VesselEventPortSlot redirectSlot = new VesselEventPortSlot("redirect-" + slot.getId(), ANYWHERE, slot.getTimeWindow(), vesselEvent);
 
-			if (vesselEvent.getStartPort() != vesselEvent.getEndPort()) {
-				// We insert two extra elements and slots, so that we go
-				// startPort -> ANYWHERE -> endPort
-				// this means we also have to fix any sequencing constraints
-				// which have already been set up, and replicate the vessel
-				// allocation constraints.
-				final VesselEventPortSlot startSlot = new VesselEventPortSlot("start-" + slot.getId(), vesselEvent.getStartPort(), slot.getTimeWindow(), vesselEvent);
-				final VesselEventPortSlot redirectSlot = new VesselEventPortSlot("redirect-" + slot.getId(), ANYWHERE, slot.getTimeWindow(), vesselEvent);
+			startSlot.setPortType(PortType.Other);
+			redirectSlot.setPortType(PortType.Virtual);
 
-				startSlot.setPortType(PortType.Other);
-				redirectSlot.setPortType(PortType.Virtual);
+			final SequenceElement startElement = new SequenceElement(indexingContext, startSlot.getId());
+			final SequenceElement redirectElement = new SequenceElement(indexingContext, redirectSlot.getId());
 
-				final SequenceElement startElement = new SequenceElement(indexingContext, startSlot.getId());
-				final SequenceElement redirectElement = new SequenceElement(indexingContext, redirectSlot.getId());
+			orderedSequenceElementsEditor.setElementOrder(startElement, redirectElement);
+			orderedSequenceElementsEditor.setElementOrder(redirectElement, endElement);
 
-				orderedSequenceElementsEditor.setElementOrder(startElement, redirectElement);
-				orderedSequenceElementsEditor.setElementOrder(redirectElement, endElement);
+			timeWindowProvider.setTimeWindows(startElement, Collections.singletonList(vesselEvent.getTimeWindow()));
+			elementDurationsProvider.setElementDuration(startElement, 0);
+			elementDurationsProvider.setElementDuration(redirectElement, 0);
 
-				timeWindowProvider.setTimeWindows(startElement, Collections.singletonList(vesselEvent.getTimeWindow()));
-				elementDurationsProvider.setElementDuration(startElement, 0);
-				elementDurationsProvider.setElementDuration(redirectElement, 0);
+			portSlotsProvider.setPortSlot(startElement, startSlot);
+			portSlotsProvider.setPortSlot(redirectElement, redirectSlot);
 
-				portSlotsProvider.setPortSlot(startElement, startSlot);
-				portSlotsProvider.setPortSlot(redirectElement, redirectSlot);
+			portTypeProvider.setPortType(startElement, startSlot.getPortType());
+			portTypeProvider.setPortType(redirectElement, redirectSlot.getPortType());
 
-				portTypeProvider.setPortType(startElement, startSlot.getPortType());
-				portTypeProvider.setPortType(redirectElement, redirectSlot.getPortType());
+			portProvider.setPortForElement(startSlot.getPort(), startElement);
+			portProvider.setPortForElement(redirectSlot.getPort(), redirectElement);
 
-				portProvider.setPortForElement(startSlot.getPort(), startElement);
-				portProvider.setPortForElement(redirectSlot.getPort(), redirectElement);
+			sequenceElements.add(startElement);
+			sequenceElements.add(redirectElement);
 
-				sequenceElements.add(startElement);
-				sequenceElements.add(redirectElement);
+			// replicate vessel constraints
+			constrainSlotToVesselClasses(startSlot, slotVesselClassRestrictions.get(slot));
+			constrainSlotToVesselAvailabilities(startSlot, slotVesselAvailabilityRestrictions.get(slot));
 
-				// replicate vessel constraints
-				constrainSlotToVesselClasses(startSlot, slotVesselClassRestrictions.get(slot));
-				constrainSlotToVesselAvailabilities(startSlot, slotVesselAvailabilityRestrictions.get(slot));
+			constrainSlotToVesselClasses(redirectSlot, slotVesselClassRestrictions.get(slot));
+			constrainSlotToVesselAvailabilities(redirectSlot, slotVesselAvailabilityRestrictions.get(slot));
 
-				constrainSlotToVesselClasses(redirectSlot, slotVesselClassRestrictions.get(slot));
-				constrainSlotToVesselAvailabilities(redirectSlot, slotVesselAvailabilityRestrictions.get(slot));
-
-				// patch up sequencing constraints
-				if (reverseAdjacencyConstraints.containsKey(slot)) {
-					// whatever was meant to be before slot should now be before
-					// startSlot, and so on
-					constrainSlotAdjacency(reverseAdjacencyConstraints.get(slot), startSlot);
-					constrainSlotAdjacency(startSlot, redirectSlot);
-					constrainSlotAdjacency(redirectSlot, slot);
-				}
+			// patch up sequencing constraints
+			if (reverseAdjacencyConstraints.containsKey(slot)) {
+				// whatever was meant to be before slot should now be before
+				// startSlot, and so on
+				constrainSlotAdjacency(reverseAdjacencyConstraints.get(slot), startSlot);
+				constrainSlotAdjacency(startSlot, redirectSlot);
+				constrainSlotAdjacency(redirectSlot, slot);
 			}
-
-			sequenceElements.add(endElement);
-
-			timeWindowProvider.setTimeWindows(endElement, Collections.singletonList(vesselEvent.getTimeWindow()));
-			portTypeProvider.setPortType(endElement, slot.getPortType());
-
-			elementDurationsProvider.setElementDuration(endElement, vesselEvent.getDurationHours());
-
-			// element needs a port slot
-
-			portSlotsProvider.setPortSlot(endElement, slot);
-
-			portProvider.setPortForElement(slot.getPort(), endElement);
-
-			// i++;
 		}
+
+		sequenceElements.add(endElement);
+
+		timeWindowProvider.setTimeWindows(endElement, Collections.singletonList(vesselEvent.getTimeWindow()));
+		portTypeProvider.setPortType(endElement, slot.getPortType());
+
+		elementDurationsProvider.setElementDuration(endElement, vesselEvent.getDurationHours());
+
+		// element needs a port slot
+
+		portSlotsProvider.setPortSlot(endElement, slot);
+
+		portProvider.setPortForElement(slot.getPort(), endElement);
+
 	}
 
 	@Override
@@ -1800,8 +1832,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	/**
 	 */
 	@Override
-	public void createCharterOutCurve(@NonNull final IVesselClass vesselClass, final ICurve charterOutCurve, final int minDuration) {
-		charterMarketProviderEditor.addCharterOutOption(vesselClass, charterOutCurve, minDuration);
+	public void createCharterOutCurve(@NonNull final IVesselClass vesselClass, final ICurve charterOutCurve, final int minDuration, final Set<IPort> ports) {
+		charterMarketProviderEditor.addCharterOutOption(vesselClass, charterOutCurve, minDuration, ports);
 	}
 
 	@Override
@@ -1964,5 +1996,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public ISpotCharterInMarket createSpotCharterInMarket(final String name, final IVesselClass vesselClass, final ICurve dailyCharterInRateCurve, final int availabilityCount) {
 		return new DefaultSpotCharterInMarket(name, vesselClass, dailyCharterInRateCurve, availabilityCount);
+	}
+
+	@Override
+	public SequenceElement createSequenceElement(String name) {
+		return new SequenceElement(indexingContext, name);
 	}
 }

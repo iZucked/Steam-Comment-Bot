@@ -11,7 +11,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 
 public class VesselEventPortSlot extends PortSlot implements IVesselEventPortSlot {
-	private final IVesselEvent charterOut;
+	protected IVesselEvent charterOut;
 
 	public VesselEventPortSlot(final String id, final IPort port, final ITimeWindow timeWindow, final IVesselEvent charterOut) {
 		super(id, port, timeWindow);

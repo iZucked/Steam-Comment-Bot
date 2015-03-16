@@ -31,6 +31,7 @@ import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptions;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
@@ -47,6 +48,7 @@ import com.mmxlabs.scheduler.optimiser.components.IXYPort;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.impl.SequenceElement;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
@@ -159,8 +161,31 @@ public interface ISchedulerBuilder {
 	 */
 	@NonNull
 	IVesselEventPortSlot createCharterOutEvent(String id, ITimeWindow arrivalTimeWindow, IPort startPort, IPort endPort, int durationHours, long maxHeelOut, int heelCVValue, int heelUnitPrice,
-			final long hireCost, final long repositioning);
+			final long hireRevenue, final long repositioning);
 
+	/**
+	 * Create a generated charter out event
+	 * 
+	 * @param id
+	 *            the ID of the charter out
+	 * @param arrivalTimeWindow
+	 *            a time window in which the vessel must arrive at the port
+	 * @param startPort
+	 *            the port where the client is collecting the vessel
+	 * @param endPort
+	 *            the port where the vessel is being returned to
+	 * @param durationHours
+	 *            how long the charter out is for, in hours
+	 * @param maxHeelOut
+	 *            the maximum amount of heel available for travel
+	 * @param heelCVValue
+	 *            the CV value of heel available for travel
+	 * @return
+	 */
+	@NonNull
+	IGeneratedCharterOutVesselEventPortSlot createGeneratedCharterOutEvent(String id, ITimeWindow arrivalTimeWindow, IPort startPort, IPort endPort, int durationHours, long maxHeelOut, int heelCVValue, int heelUnitPrice,
+			final long hireCost, final long repositioning);
+	
 	/**
 	 * Create a dry dock event
 	 * 
@@ -596,7 +621,7 @@ public interface ISchedulerBuilder {
 	 * @param minDuration
 	 *            The minimum duration in hours a charter out can be.
 	 */
-	void createCharterOutCurve(@NonNull IVesselClass vesselClass, ICurve charterOutCurve, int minDuration);
+	void createCharterOutCurve(@NonNull IVesselClass vesselClass, ICurve charterOutCurve, int minDuration, Set<IPort> allowedPorts);
 
 	/**
 	 * Set a flag to indicate that the given {@link IPortSlot} is to be treated as "soft required". That is generally optional, but not entirely. For example a fitness component may penalise such
@@ -699,5 +724,13 @@ public interface ISchedulerBuilder {
 
 	@NonNull
 	ISpotCharterInMarket createSpotCharterInMarket(@NonNull String name, @NonNull IVesselClass oVesselClass, @NonNull ICurve charterInCurve, int charterCount);
+
+	/***
+	 * Create a sequence element
+	 * @param name
+	 * @return
+	 */
+	@NonNull
+	SequenceElement createSequenceElement(String name);
 
 }
