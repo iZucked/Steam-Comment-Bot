@@ -41,7 +41,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * @param
  */
 public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
-
+	public static final boolean START_ELEMENT_OPTIMISATION_FIX = false; // if set to true it fixes a bug that prevents start elements from being valid preceders
 	/**
 	 * The maximum amount of lateness which will even be considered (20 days)
 	 */
@@ -204,7 +204,11 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 
 		final int latestAllowableTime = tw2.getEnd() + maxLateness;
 
-		return earliestArrivalTime <= latestAllowableTime;
+		if (START_ELEMENT_OPTIMISATION_FIX) {
+			return earliestArrivalTime <= latestAllowableTime;
+		} else {
+			return earliestArrivalTime < latestAllowableTime;
+		}
 	}
 
 	@Override
