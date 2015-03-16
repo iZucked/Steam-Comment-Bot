@@ -76,6 +76,11 @@
 							<artifactId>org.eclipse.equinox.console</artifactId>
 							<version>0.0.0</version>
 						</dependency>
+						<dependency>
+							<type>eclipse-plugin</type>
+							<artifactId> org.apache.felix.gogo.shell</artifactId>
+							<version>0.0.0</version>
+						</dependency>
 						<!-- Logging plug-ins -->
 						<dependency>
 							<type>eclipse-plugin</type>
