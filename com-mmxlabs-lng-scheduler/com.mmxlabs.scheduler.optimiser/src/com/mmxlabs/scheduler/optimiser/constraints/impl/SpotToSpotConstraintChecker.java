@@ -7,17 +7,13 @@ package com.mmxlabs.scheduler.optimiser.constraints.impl;
 import com.google.inject.Inject;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortCVRangeProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProvider;
-import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
  * {@link IPairwiseConstraintChecker} to prevent the optimiser from wiring spot loads to spot discharges.
@@ -27,19 +23,10 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 public class SpotToSpotConstraintChecker extends AbstractPairwiseConstraintChecker {
 
 	@Inject
-	private IPortTypeProvider portTypeProvider;
-
-	@Inject
 	private IPortSlotProvider portSlotProvider;
 
 	@Inject
-	private IPortProvider portProvider;
-
-	@Inject
 	private IActualsDataProvider actualsDataProvider;
-
-	@Inject
-	private IPortCVRangeProvider portCVRangeProvider;
 
 	@Inject
 	private ISpotMarketSlotsProvider spotMarketSlots;
