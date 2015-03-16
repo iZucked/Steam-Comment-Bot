@@ -24,6 +24,7 @@ import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
@@ -138,6 +139,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 						final ILoadOption loadOption = (ILoadOption) optimiserSlot;
 
 						final boolean slotIsOptional = modelSlot.isOptional();
+						final boolean isSpotSlot = (modelSlot instanceof SpotSlot);
 						final ILoadPriceCalculator priceCalculator = loadOption.getLoadPriceCalculator();
 						final int cargoCVValue = loadOption.getCargoCVValue();
 						final long minVolume = loadOption.getMinLoadVolume();
@@ -151,7 +153,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 
 							// Convert to FOB Purchase slot
 							alternativeSlot = builder.createLoadSlot(id, loadOption.getPort(), baseTimeWindow, minVolume, maxVolume, priceCalculator, cargoCVValue, loadSlot.getSlotOrPortDuration(),
-									false, true, IPortSlot.NO_PRICING_DATE, loadOption.getPricingEvent(), slotIsOptional);
+									false, true, IPortSlot.NO_PRICING_DATE, loadOption.getPricingEvent(), slotIsOptional, isSpotSlot);
 							generatedOptions.add(alternativeSlot);
 
 							// Create a fake model object to add in here;
@@ -189,7 +191,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 
 							final ITimeWindow window = builder.createTimeWindow(currentWindow.getStart(), currentWindow.getEnd() + shippingHours);
 							alternativeSlot = builder.createDESPurchaseLoadSlot(id, loadOption.getPort(), window, minVolume, maxVolume, priceCalculator, cargoCVValue,
-									loadSlot.getSlotOrPortDuration(), IPortSlot.NO_PRICING_DATE, loadOption.getPricingEvent(), slotIsOptional);
+									loadSlot.getSlotOrPortDuration(), IPortSlot.NO_PRICING_DATE, loadOption.getPricingEvent(), slotIsOptional, isSpotSlot);
 
 							generatedOptions.add(alternativeSlot);
 

@@ -119,7 +119,6 @@ public class AnnotatedSolutionExporter {
 		final IElementAnnotationsMap elementAnnotations = annotatedSolution.getElementAnnotations();
 		final Schedule output = factory.createSchedule();
 		// get domain level sequences
-//		final ScheduledSequences scheduledSequences = annotatedSolution.getGeneralAnnotation(SchedulerConstants.G_AI_scheduledSequence, ScheduledSequences.class);
 		final ScheduledSequences scheduledSequences = annotatedSolution.getEvaluationState().getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class);
 
 		// go through the annotated solution and build stuff for the EMF;

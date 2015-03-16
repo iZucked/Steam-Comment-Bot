@@ -491,13 +491,6 @@ public class LNGSchedulerJobUtils {
 		solution.setEvaluationState(state);
 		final IEvaluationProcess process = injector.getInstance(SchedulerEvaluationProcess.class);
 		process.annotate(sequences, state, solution);
-////		final ScheduledSequences scheduledSequences = scheduler.schedule(sequences, solution);
-////		solution.setGeneralAnnotation(SchedulerConstants.G_AI_scheduledSequence, scheduledSequences);
-//		// Make sure a schedule was created.
-//		if (scheduledSequences == null) {
-//			// Error scheduling
-//			throw new RuntimeException("Unable to evaluate Scenario. Check schedule level inputs (e.g. distances, vessel capacities, restrictions)");
-//		}
 
 		return solution;
 	}
