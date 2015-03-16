@@ -71,7 +71,11 @@
 					<application>org.eclipse.ui.ide.workbench</application>
 
 					<dependencies>
-
+						<dependency>
+							<type>eclipse-plugin</type>
+							<artifactId>org.eclipse.equinox.console</artifactId>
+							<version>0.0.0</version>
+						</dependency>
 						<!-- Logging plug-ins -->
 						<dependency>
 							<type>eclipse-plugin</type>
