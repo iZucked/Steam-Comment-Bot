@@ -230,6 +230,7 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 	public String toString() {
 		// @formatter:off
 		return Objects.toStringHelper(VoyageOptions.class)
+				.add("availableTime", availableTime)
 				.add("charterOutIdleTime", charterOutIdleTime)
 				.add("charterOutDailyRate", charterOutDailyRate)
 				.add("distance", distance)
