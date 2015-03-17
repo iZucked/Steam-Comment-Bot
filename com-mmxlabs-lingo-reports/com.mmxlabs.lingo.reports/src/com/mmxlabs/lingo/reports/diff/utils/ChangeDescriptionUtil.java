@@ -40,7 +40,7 @@ public class ChangeDescriptionUtil {
 		}
 		return "";
 	}
-		
+
 	public static String getLatenessDescription(final Row row) {
 		if (!row.isReference()) {
 			final Row referenceRow = row.getReferenceRow();
@@ -54,7 +54,7 @@ public class ChangeDescriptionUtil {
 		}
 		return "";
 	}
-	
+
 	private static SlotAllocation getMatchedDischargeAllocation(Row row) {
 		CycleGroup group = row.getCycleGroup();
 		SlotAllocation matchedDischarge = null;

@@ -28,6 +28,7 @@ import com.mmxlabs.lingo.reports.components.ColumnHandler;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EMFReportView;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
+import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -73,15 +74,45 @@ public class CapacityViolationReportView extends EMFReportView {
 
 		addColumn("type", "Type", ColumnType.NORMAL, objectFormatter, ref_Row_Owner, sp.getEvent__Type());
 
-		addColumn("violation", "Violation", ColumnType.NORMAL, objectFormatter, attrib_Row_Type);
+		addColumn("violation", "Violation", ColumnType.NORMAL, new BaseFormatter() {
+			@Override
+			public String render(final Object object) {
+
+				if (object instanceof CapacityViolationType) {
+					final CapacityViolationType capacityViolationType = (CapacityViolationType) object;
+					switch (capacityViolationType) {
+					case FORCED_COOLDOWN:
+						return "Forced Cooldown";
+					case LOST_HEEL:
+						return "Lost Heel";
+					case MAX_DISCHARGE:
+						return "Max Discharge";
+					case MAX_HEEL:
+						return "Max Heel";
+					case MAX_LOAD:
+						return "Max Load";
+					case MIN_DISCHARGE:
+						return "Min Discharge";
+					case MIN_LOAD:
+						return "Min Load";
+					case VESSEL_CAPACITY:
+						return "Vessel Capacity";
+					default:
+						break;
+					}
+				}
+
+				return super.render(object);
+			}
+		}, attrib_Row_Type);
 		addColumn("qty", "Quantity (m³)", ColumnType.NORMAL, objectFormatter, attrib_Row_Quantity);
-		
+
 		getBlockManager().makeAllBlocksVisible();
 
 	}
 
 	@Override
-	public void createPartControl(Composite parent) {
+	public void createPartControl(final Composite parent) {
 		super.createPartControl(parent);
 
 		viewer.setComparator(GenericEMFTableDataModel.createGroupComparator(viewer.getComparator(), tableDataModel));
@@ -231,7 +262,7 @@ public class CapacityViolationReportView extends EMFReportView {
 
 		return row;
 	}
-	
+
 	public ColumnHandler addColumn(final String blockID, final String title, final ColumnType columnType, final ICellRenderer formatter, final ETypedElement... path) {
 		final ColumnBlock block = getBlockManager().createBlock(blockID, title, columnType);
 		return getBlockManager().createColumn(block, title, formatter, path);

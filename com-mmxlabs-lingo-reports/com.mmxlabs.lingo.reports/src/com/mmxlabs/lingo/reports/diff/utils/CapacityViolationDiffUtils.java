@@ -49,9 +49,9 @@ public class CapacityViolationDiffUtils {
 
 		final String additionSemiColon = ((!differences.additionSet.isEmpty() && (!differences.subtractionSet.isEmpty() || !differences.intersectSet.isEmpty())) ? " ; " : "");
 		final String subtractionSemiColon = (!differences.subtractionSet.isEmpty() && !differences.intersectSet.isEmpty()) ? " ; " : "";
-		final String returnString = String.format("%s ", slotType) + (!differences.additionSet.isEmpty() ? String.format("added violations: %s", additions) : "") + additionSemiColon
-				+ (!differences.subtractionSet.isEmpty() ? String.format("removed violations: %s", subtractions) : "") + subtractionSemiColon
-				+ (!differences.intersectSet.isEmpty() ? String.format("modified violations: %s", intersection) : "");
+		final String returnString = (!differences.additionSet.isEmpty() ? String.format("Added %s", additions) : "") + additionSemiColon
+				+ (!differences.subtractionSet.isEmpty() ? String.format("Removed %s", subtractions) : "") + subtractionSemiColon
+				+ (!differences.intersectSet.isEmpty() ? String.format("Modified %s", intersection) : "") + String.format("on %s ", slotType);
 
 		return returnString;
 	}
@@ -62,9 +62,9 @@ public class CapacityViolationDiffUtils {
 			final List<CapacityViolationType> violations = new ArrayList<>(map.keySet());
 			for (int index = 0; index < violations.size(); index++) {
 				if (violations.get(index) != CapacityViolationType.FORCED_COOLDOWN) {
-					text += String.format("%s (%sm³)%s", violations.get(index).getName(), map.get(violations.get(index)), (index < violations.size() - 1 ? " , " : ""));
+					text += String.format("%s (%sm³)%s", getUserString(violations.get(index)), map.get(violations.get(index)), (index < violations.size() - 1 ? " , " : ""));
 				} else {
-					text += String.format("%s %s", violations.get(index).getName(), (index < violations.size() - 1 ? " , " : ""));
+					text += String.format("%s %s", getUserString(violations.get(index)), (index < violations.size() - 1 ? " , " : ""));
 				}
 			}
 		}
@@ -77,10 +77,10 @@ public class CapacityViolationDiffUtils {
 			final List<CapacityViolationType> violations = new ArrayList<>(map.keySet());
 			for (int index = 0; index < violations.size(); index++) {
 				if (violations.get(index) != CapacityViolationType.FORCED_COOLDOWN) {
-					text += String.format("%s (%s%sm³)%s", violations.get(index).getName(), map.get(violations.get(index)), map.get(violations.get(index)) > 0 ? "+" : "-",
+					text += String.format("%s (%s%sm³)%s", getUserString(violations.get(index)), map.get(violations.get(index)), map.get(violations.get(index)) > 0 ? "+" : "-",
 							(index < violations.size() - 1 ? " , " : ""));
 				} else {
-					text += String.format("%s %s", violations.get(index).getName(), (index < violations.size() - 1 ? " , " : ""));
+					text += String.format("%s %s", getUserString(violations.get(index)), (index < violations.size() - 1 ? " , " : ""));
 				}
 			}
 		}
@@ -129,5 +129,30 @@ public class CapacityViolationDiffUtils {
 
 	public static CapacityViolationDifferences getDifferenceInViolations(final SlotAllocation slotA, final SlotAllocation slotB) {
 		return getDifferenceInViolations(getViolationMap(slotA), getViolationMap(slotB));
+	}
+
+	public static String getUserString(final CapacityViolationType capacityViolationType) {
+		switch (capacityViolationType) {
+		case FORCED_COOLDOWN:
+			return "Forced Cooldown";
+		case LOST_HEEL:
+			return "Lost Heel";
+		case MAX_DISCHARGE:
+			return "Max Discharge";
+		case MAX_HEEL:
+			return "Max Heel";
+		case MAX_LOAD:
+			return "Max Load";
+		case MIN_DISCHARGE:
+			return "Min Discharge";
+		case MIN_LOAD:
+			return "Min Load";
+		case VESSEL_CAPACITY:
+			return "Vessel Capacity";
+		default:
+			break;
+		}
+		return capacityViolationType.toString();
+
 	}
 }
