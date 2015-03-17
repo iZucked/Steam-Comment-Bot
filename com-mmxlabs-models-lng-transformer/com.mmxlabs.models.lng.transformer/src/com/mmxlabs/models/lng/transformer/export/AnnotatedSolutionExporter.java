@@ -7,12 +7,10 @@ package com.mmxlabs.models.lng.transformer.export;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -406,14 +404,12 @@ public class AnnotatedSolutionExporter {
 					} else if (event instanceof VesselEventVisit) {
 						eventGrouping = (VesselEventVisit) event;
 						eventGrouping.getEvents().add(event);
-					}
-				else if (event instanceof GeneratedCharterOut) {
-					eventGrouping = (EventGrouping) event;
-				} else {
+					} else if (event instanceof GeneratedCharterOut) {
+						eventGrouping = (EventGrouping) event;
+					} else {
 						eventGrouping = null;
 					}
-				}
-				else if (event instanceof Journey && eventGrouping != null) {
+				} else if (event instanceof Journey && eventGrouping != null) {
 					eventGrouping.getEvents().add(event);
 				} else if (event instanceof Idle && eventGrouping != null) {
 					eventGrouping.getEvents().add(event);
@@ -488,7 +484,5 @@ public class AnnotatedSolutionExporter {
 			}
 		}
 	}
-	
 
-	
 }
