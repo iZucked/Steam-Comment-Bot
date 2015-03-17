@@ -4,11 +4,11 @@
 <locations>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="jre.feature.feature.group" version="0.0.0"/>
-<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/jre/jre.p2/7.25.2.2014f/jre.p2-7.25.2.2014f.zip-unzip/" id="mmxlabs-releases"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/jre/jre.p2/7.25.2.2015a/jre.p2-7.25.2.2015a.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="jre-jce.feature.feature.group" version="0.0.0"/>
-<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/jre/jre-jce.p2/7.25.2.2014f/jre-jce.p2-7.25.2.2014f.zip-unzip/" id="mmxlabs-releases"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/jre/jre-jce.p2/7.25.2.2015a/jre-jce.p2-7.25.2.2015a.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 </locations>
 </target>
