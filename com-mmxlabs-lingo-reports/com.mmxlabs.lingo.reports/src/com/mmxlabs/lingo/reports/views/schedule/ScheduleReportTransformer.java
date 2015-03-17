@@ -26,6 +26,7 @@ import com.mmxlabs.lingo.reports.ScheduleElementCollector;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.diff.utils.PNLDeltaUtils;
 import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandler;
+import com.mmxlabs.lingo.reports.views.fleet.formatters.GeneratedCharterDaysFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.CycleDiffProcessor;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.CycleGroupUtils;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.GCOCycleGroupingProcessor;
@@ -46,6 +47,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -470,6 +472,10 @@ public class ScheduleReportTransformer {
 			final VesselEventVisit vesselEventVisit = (VesselEventVisit) a;
 			row.getInputEquivalents().addAll(Lists.<EObject> newArrayList(vesselEventVisit, vesselEventVisit.getVesselEvent()));
 			row.getInputEquivalents().addAll(vesselEventVisit.getEvents());
+		} else if (a instanceof GeneratedCharterOut) {
+			final GeneratedCharterOut generatedCharterOut = (GeneratedCharterOut) a;
+			row.getInputEquivalents().add(generatedCharterOut);
+			row.getInputEquivalents().addAll(generatedCharterOut.getEvents());
 		} else if (a instanceof StartEvent) {
 			final StartEvent startEvent = (StartEvent) a;
 			row.getInputEquivalents().addAll(startEvent.getEvents());
