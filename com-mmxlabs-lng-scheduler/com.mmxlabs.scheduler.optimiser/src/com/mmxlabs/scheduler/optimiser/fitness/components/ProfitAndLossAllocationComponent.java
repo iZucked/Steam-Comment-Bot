@@ -52,7 +52,7 @@ public class ProfitAndLossAllocationComponent extends AbstractSchedulerFitnessCo
 
 	@Override
 	public boolean nextVoyagePlan(@NonNull final VoyagePlan voyagePlan, final int time) {
-
+		long fitness = scheduledSequences.getVoyagePlanGroupValue(voyagePlan);
 		accumulator -= scheduledSequences.getVoyagePlanGroupValue(voyagePlan);
 		return true;
 	}

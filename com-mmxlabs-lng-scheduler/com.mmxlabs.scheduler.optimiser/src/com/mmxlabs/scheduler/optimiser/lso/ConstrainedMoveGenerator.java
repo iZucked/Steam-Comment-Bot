@@ -180,6 +180,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 		}
 		// this.checker = injector.getInstance(LegalSequencingChecker.class);
 		// LegalSequencingChecker checker2 = new LegalSequencingChecker(context);
+		int initialMaxLateness = checker.getMaxLateness();
 		checker.disallowLateness();
 		final IOptimisationData data = context.getOptimisationData();
 
@@ -283,7 +284,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 				break;
 			}
 		}
-
+		checker.setMaxLateness(initialMaxLateness);
 	}
 
 	@Override

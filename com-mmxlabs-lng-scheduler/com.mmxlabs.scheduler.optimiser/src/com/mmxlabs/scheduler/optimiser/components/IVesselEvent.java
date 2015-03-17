@@ -64,7 +64,7 @@ public interface IVesselEvent extends IHeelOptions {
 	 * 
 	 * @return
 	 */
-	long getHireCost();
+	long getHireOutRevenue();
 
 	/**
 	 * Sets the repositioning fee for charter out events.
@@ -76,5 +76,5 @@ public interface IVesselEvent extends IHeelOptions {
 	 * Set the total hire cost for charter out events.
 	 * 
 	 */
-	void setHireCost(long hireCost);
+	void setHireOutRevenue(long hireCost);
 }

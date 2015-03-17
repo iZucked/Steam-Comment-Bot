@@ -5,8 +5,10 @@
 package com.mmxlabs.scheduler.optimiser.providers;
 
 import java.util.Collection;
+import java.util.Set;
 
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 
 /**
@@ -27,6 +29,10 @@ public interface ICharterMarketProvider extends IDataComponentProvider {
 		int getMinDuration();
 
 		int getCharterPrice();
+		
+		int getCharterPrice(int date);
+		
+		Set<IPort> getAllowedPorts();
 	};
 
 	Collection<CharterMarketOptions> getCharterInOptions(IVesselClass vesselClass, int time);

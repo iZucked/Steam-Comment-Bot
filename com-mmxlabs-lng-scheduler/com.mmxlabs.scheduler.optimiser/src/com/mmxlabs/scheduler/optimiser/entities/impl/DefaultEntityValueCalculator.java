@@ -39,6 +39,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarketOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
@@ -346,19 +347,19 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		}
 
 		// Finally handle any charter out generation stuff.
-		{
-			final long generatedCharterOutRevenue = shippingCostHelper.getGeneratedCharterOutRevenue(plan, vesselAvailability);
-			final long generatedCharterOutCosts = shippingCostHelper.getGeneratedCharterOutCosts(plan);
-
-			result += shippingEntity.getShippingBook().getTaxedProfit(generatedCharterOutRevenue - generatedCharterOutCosts, utcEquivTaxTime);
-
-			if (annotatedSolution != null && exportElement != null) {
-				if (shippingCostHelper.hasGeneratedCharterOut(plan)) {
-					// Calculate P&L
-					generateCharterOutAnnotations(plan, vesselAvailability, vesselStartTime, annotatedSolution, shippingEntity, utcEquivTaxTime, generatedCharterOutRevenue, firstSlot);
-				}
-			}
-		}
+//		{
+//			final long generatedCharterOutRevenue = shippingCostHelper.getGeneratedCharterOutRevenue(plan, vesselAvailability);
+//			final long generatedCharterOutCosts = shippingCostHelper.getGeneratedCharterOutCosts(plan);
+//
+//			result += shippingEntity.getShippingBook().getTaxedProfit(generatedCharterOutRevenue - generatedCharterOutCosts, utcEquivTaxTime);
+//
+//			if (annotatedSolution != null && exportElement != null) {
+//				if (shippingCostHelper.hasGeneratedCharterOut(plan)) {
+//					// Calculate P&L
+//					generateCharterOutAnnotations(plan, vesselAvailability, vesselStartTime, annotatedSolution, shippingEntity, utcEquivTaxTime, generatedCharterOutRevenue, firstSlot);
+//				}
+//			}
+//		}
 
 		return result;
 	}
@@ -420,25 +421,23 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		final long value;
 		final long revenue;
-		final long generatedCharterOutRevenue;
-		final long generatedCharterOutCost;
+		final boolean isGeneratedCharterOutPlan;
 		{
-			final long shippingCost = shippingCostHelper.getShippingCosts(plan, vesselAvailability, true, includeTimeCharterInFitness);
 			final PortDetails portDetails = (PortDetails) plan.getSequence()[0];
-			if (portDetails.getOptions().getPortSlot().getPortType() == PortType.CharterOut) {
-				final VesselEventPortSlot vesselEventPortSlot = (VesselEventPortSlot) portDetails.getOptions().getPortSlot();
-				revenue = vesselEventPortSlot.getVesselEvent().getHireCost() + vesselEventPortSlot.getVesselEvent().getRepositioning();
+			final IPortSlot portSlot = portDetails.getOptions().getPortSlot();
+			isGeneratedCharterOutPlan = portSlot.getPortType() == PortType.GeneratedCharterOut;
+			final long shippingCost = shippingCostHelper.getShippingCosts(plan, vesselAvailability, true, includeTimeCharterInFitness);
+			if (portSlot.getPortType() == PortType.CharterOut || isGeneratedCharterOutPlan) {
+				final IVesselEventPortSlot vesselEventPortSlot = (IVesselEventPortSlot) portSlot;
+				revenue = vesselEventPortSlot.getVesselEvent().getHireOutRevenue() + vesselEventPortSlot.getVesselEvent().getRepositioning();
 			} else {
 				revenue = 0;
 			}
 
-			generatedCharterOutRevenue = shippingCostHelper.getGeneratedCharterOutRevenue(plan, vesselAvailability);
-			generatedCharterOutCost = shippingCostHelper.getGeneratedCharterOutCosts(plan);
-
 			// Calculate the value for the fitness function
 			final IEntityBook shippingBook = shippingEntity.getShippingBook();
 			final int utcEquivTaxTime = utcOffsetProvider.UTC(planStartTime, portDetails.getOptions().getPortSlot().getPort());
-			value = shippingBook.getTaxedProfit(revenue + generatedCharterOutRevenue - generatedCharterOutCost - shippingCost, utcEquivTaxTime);
+			value = shippingBook.getTaxedProfit(revenue - shippingCost, utcEquivTaxTime);
 		}
 		// Solution Export branch - should called infrequently
 		if (annotatedSolution != null) {
@@ -450,9 +449,6 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			// Cost is zero as shipping cost is recalculated to obtain annotation
 
 			generateShippingAnnotations(plan, vesselAvailability, vesselStartTime, annotatedSolution, shippingEntity, revenue, 0, planStartTime, exportElement, true);
-			if (shippingCostHelper.hasGeneratedCharterOut(plan)) {
-				generateCharterOutAnnotations(plan, vesselAvailability, vesselStartTime, annotatedSolution, shippingEntity, planStartTime, generatedCharterOutRevenue, firstSlot);
-			}
 
 		}
 
@@ -472,23 +468,6 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(Collections.singleton(entry));
 			annotatedSolution.getElementAnnotations().setAnnotation(exportElement, SchedulerConstants.AI_profitAndLoss, annotation);
 		}
-	}
-
-	private void generateCharterOutAnnotations(final VoyagePlan plan, final IVesselAvailability vesselAvailability, final int vesselStartTime, final IAnnotatedSolution annotatedSolution,
-			final IEntity shippingEntity, final int utcEquivTaxTime, final long generatedCharterOutRevenue, final IPortSlot firstSlot) {
-
-		final long charterOutCosts = shippingCostHelper.getGeneratedCharterOutCosts(plan);
-		final long charterOutPretaxProfit = generatedCharterOutRevenue - charterOutCosts;
-		final long charterOutProfit = shippingEntity.getShippingBook().getTaxedProfit(charterOutPretaxProfit, utcEquivTaxTime);
-
-		final DetailTree details = new DetailTree();
-
-		details.addChild(new DetailTree("Charter Out", new TotalCostDetailElement(generatedCharterOutRevenue)));
-
-		final IProfitAndLossEntry entry = new ProfitAndLossEntry(shippingEntity.getShippingBook(), charterOutProfit, charterOutPretaxProfit, details);
-		final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(Collections.singleton(entry));
-		final ISequenceElement element = slotProvider.getElement(firstSlot);
-		annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_charterOutProfitAndLoss, annotation);
 	}
 
 	protected void addEntityBookProfit(@NonNull final Map<IEntityBook, Long> entityBookProfit, @NonNull final IEntityBook entityBook, final long profit) {

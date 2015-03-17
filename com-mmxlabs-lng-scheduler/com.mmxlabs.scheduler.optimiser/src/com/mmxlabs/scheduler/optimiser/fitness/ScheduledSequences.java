@@ -33,6 +33,7 @@ public final class ScheduledSequences extends ArrayList<ScheduledSequence> {
 	private final Map<IPortSlot, Long> unusedSlotGroupValue = new HashMap<>();
 	private final Map<IPortSlot, Long> capacityViolationSum = new HashMap<>();
 	private final Map<VoyagePlan, Long> voyagePlanGroupValue = new HashMap<>();
+	private final Map<IResource, ScheduledSequence> resourceToScheduledSequenceMap = new HashMap<>();
 
 	/**
 	 * 
@@ -43,9 +44,17 @@ public final class ScheduledSequences extends ArrayList<ScheduledSequence> {
 	 */
 	public void addScheduledSequence(final IResource resource, final ISequence sequence, final int startTime,
 			final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlans) {
-		add(new ScheduledSequence(resource, sequence, startTime, voyagePlans));
+		final ScheduledSequence scheduledSequence = new ScheduledSequence(resource, sequence, startTime, voyagePlans);
+		resourceToScheduledSequenceMap.put(resource, scheduledSequence);
+		add(scheduledSequence);
 	}
 
+	@Override
+	public boolean add(ScheduledSequence scheduledSequence) {
+		resourceToScheduledSequenceMap.put(scheduledSequence.getResource(), scheduledSequence);
+		return super.add(scheduledSequence);
+	}
+	
 	public void setUnusedSlotGroupValue(@NonNull final IPortSlot portSlot, final long groupValue) {
 		unusedSlotGroupValue.put(portSlot, groupValue);
 	}
@@ -82,5 +91,9 @@ public final class ScheduledSequences extends ArrayList<ScheduledSequence> {
 			return capacityViolationSum.get(portSlot);
 		}
 		return 0L;
+	}
+	
+	public ScheduledSequence getScheduledSequenceForResource(final IResource resource) {
+		return resourceToScheduledSequenceMap.get(resource);
 	}
 }

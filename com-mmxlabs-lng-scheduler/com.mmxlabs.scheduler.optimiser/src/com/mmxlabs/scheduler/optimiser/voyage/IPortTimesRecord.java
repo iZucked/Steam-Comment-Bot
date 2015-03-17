@@ -21,6 +21,11 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  */
 public interface IPortTimesRecord extends IElementAnnotation {
+	
+	/**
+	 * Returns all slots excluding the return slot
+	 * @return
+	 */
 	List<IPortSlot> getSlots();
 
 	int getSlotTime(IPortSlot slot);
@@ -37,6 +42,10 @@ public interface IPortTimesRecord extends IElementAnnotation {
 
 	IPortSlot getFirstSlot();
 	
+	/**
+	 * Returns the final slot in the slots list
+	 * @return
+	 */
 	IPortSlot getReturnSlot();
 	
 }

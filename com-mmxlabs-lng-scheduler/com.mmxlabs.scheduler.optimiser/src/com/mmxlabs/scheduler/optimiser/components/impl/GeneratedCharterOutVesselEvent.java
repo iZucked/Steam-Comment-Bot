@@ -5,20 +5,22 @@
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEvent;
+import com.mmxlabs.scheduler.optimiser.components.IHeelOptions;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEvent;
 
-public class VesselEvent implements IVesselEvent {
+public class GeneratedCharterOutVesselEvent implements IGeneratedCharterOutVesselEvent {
 	private ITimeWindow timeWindow;
 	private int durationHours;
 	private IPort startPort, endPort;
 	private long maxHeelOut;
 	private int heelCVValue;
 	private int heelUnitPrice;
-	private long hireOutRevenue;
+	private long hireCost;
 	private long repositioning;
 
-	public VesselEvent() {
+	public GeneratedCharterOutVesselEvent() {
 		super();
 	}
 
@@ -109,7 +111,7 @@ public class VesselEvent implements IVesselEvent {
 	 */
 	@Override
 	public long getHireOutRevenue() {
-		return hireOutRevenue;
+		return hireCost;
 	}
 
 	/**
@@ -123,7 +125,7 @@ public class VesselEvent implements IVesselEvent {
 	 */
 	@Override
 	public void setHireOutRevenue(final long hireCost) {
-		this.hireOutRevenue = hireCost;
+		this.hireCost = hireCost;
 	}
 
 	/**
@@ -132,4 +134,12 @@ public class VesselEvent implements IVesselEvent {
 	public void setRepositioning(final long repositioning) {
 		this.repositioning = repositioning;
 	}
+	
+	@Override
+	public void setHeelOptions(int pricePerMBTU, int cv, long volumeInM3) {
+		setHeelUnitPrice(pricePerMBTU);
+		setHeelCVValue(cv);
+		setMaxHeelOut(volumeInM3);
+	}
+
 }

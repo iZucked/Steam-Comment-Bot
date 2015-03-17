@@ -19,6 +19,7 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintC
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ShippingHoursRestrictionCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.SlotGroupCountConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.SpotToSpotConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TimeSortConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.VirtualVesselConstraintCheckerFactory;
@@ -30,7 +31,6 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.VirtualVesselConstraintC
  * 
  */
 public class ConstraintCheckerServiceModule extends AbstractModule {
-
 	@Override
 	protected void configure() {
 
@@ -63,6 +63,9 @@ public class ConstraintCheckerServiceModule extends AbstractModule {
 
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(PortCvCompatibilityConstraintCheckerFactory.class.getCanonicalName())).toProvider(
 				Peaberry.service(new PortCvCompatibilityConstraintCheckerFactory()).export());
+
+		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(SpotToSpotConstraintCheckerFactory.class.getCanonicalName())).toProvider(
+				Peaberry.service(new SpotToSpotConstraintCheckerFactory()).export());
 
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(DifferentSTSVesselsConstraintCheckerFactory.class.getCanonicalName())).toProvider(
 				Peaberry.service(new DifferentSTSVesselsConstraintCheckerFactory()).export());

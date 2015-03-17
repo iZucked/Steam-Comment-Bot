@@ -45,6 +45,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 		// Hashcode / Equals fields
 		private final IPortSlot[] slots;
+		private final int[] durations;
 		private final int[] voyageTimes;
 		private final int dischargePrice;
 		private final int vesselCharterInRatePerDay;
@@ -68,6 +69,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			final int sz = sequence.size();
 			this.voyageTimes = new int[sz / 2];
 			this.slots = new IPortSlot[(sz / 2) + 1];
+			this.durations = new int[(sz / 2) + 1];
 			int slotix = 0;
 			int timeix = 0;
 
@@ -75,6 +77,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			for (final Object o : sequence) {
 				if (o instanceof PortOptions) {
 					slots[slotix] = ((PortOptions) o).getPortSlot();
+					durations[slotix] = ((PortOptions) o).getVisitDuration();
 					if ((loadix == -1) && (slots[slotix] instanceof ILoadSlot)) {
 						loadix = slotix;
 					} else if ((dischargeix == -1) && (slots[slotix] instanceof IDischargeSlot)) {
@@ -108,6 +111,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			int result = 1;
 			// result = prime * result + getOuterType().hashCode();
 			result = (prime * result) + Arrays.hashCode(slots);
+			result = (prime * result) + Arrays.hashCode(durations);
 			result = (prime * result) + Arrays.hashCode(voyageTimes);
 
 			// result = prime * result + loadPrice;
@@ -136,7 +140,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 				// return false;
 
 				return Equality.shallowEquals(slots, other.slots) && (vessel == other.vessel) && Arrays.equals(voyageTimes, other.voyageTimes) && (// loadPrice == other.loadPrice &&
-						dischargePrice == other.dischargePrice && startHeel == other.startHeel);
+						dischargePrice == other.dischargePrice && startHeel == other.startHeel && Arrays.equals(durations, other.durations));
 			}
 			return false;
 		}

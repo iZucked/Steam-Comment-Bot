@@ -57,6 +57,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IGeneratedCharterOutSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IGeneratedCharterOutSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
@@ -93,6 +95,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IShortCargoReturnElementProvide
 import com.mmxlabs.scheduler.optimiser.providers.IShortCargoReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ISlotGroupCountProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ISlotGroupCountProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProvider;
+import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
@@ -110,6 +114,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapCancellationFeeProv
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapCharterMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapDiscountCurveEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapGeneratedCharterOutPortSlotEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapMarkToMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapNominatedVesselProviderEditor;
@@ -125,6 +130,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapShipToShipBindingPr
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapShippingHoursRestrictionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapShortCargoReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapSlotGroupCountProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapSpotMarketSlotsEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapStartEndRequirementEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVirtualVesselSlotProviderEditor;
@@ -261,6 +267,10 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(IOptionalElementsProvider.class).toInstance(optionalElements);
 		bind(IOptionalElementsProviderEditor.class).toInstance(optionalElements);
 
+		final ISpotMarketSlotsProviderEditor spotMarketSlots = new HashMapSpotMarketSlotsEditor();
+		bind(ISpotMarketSlotsProvider.class).toInstance(spotMarketSlots);
+		bind(ISpotMarketSlotsProviderEditor.class).toInstance(spotMarketSlots);
+		
 		final IPortCostProviderEditor portCosts = new HashMapPortCostEditor();
 		bind(IPortCostProvider.class).toInstance(portCosts);
 		bind(IPortCostProviderEditor.class).toInstance(portCosts);
@@ -346,6 +356,10 @@ public class DataComponentProviderModule extends AbstractModule {
 		final HashMapBaseFuelCurveEditor baseFuelCurveEditor = new HashMapBaseFuelCurveEditor();
 		bind(IBaseFuelCurveProvider.class).toInstance(baseFuelCurveEditor);
 		bind(IBaseFuelCurveProviderEditor.class).toInstance(baseFuelCurveEditor);
+		
+		final HashMapGeneratedCharterOutPortSlotEditor generatedCharterOutPortSlotEditor = new HashMapGeneratedCharterOutPortSlotEditor();
+		bind(IGeneratedCharterOutSlotProvider.class).toInstance(generatedCharterOutPortSlotEditor);
+		bind(IGeneratedCharterOutSlotProviderEditor.class).toInstance(generatedCharterOutPortSlotEditor);
 	}
 
 	/**
