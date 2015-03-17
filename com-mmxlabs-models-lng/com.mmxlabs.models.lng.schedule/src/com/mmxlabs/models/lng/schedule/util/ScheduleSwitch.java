@@ -254,8 +254,11 @@ public class ScheduleSwitch<T> extends Switch<T> {
 			case SchedulePackage.GENERATED_CHARTER_OUT: {
 				GeneratedCharterOut generatedCharterOut = (GeneratedCharterOut)theEObject;
 				T result = caseGeneratedCharterOut(generatedCharterOut);
-				if (result == null) result = caseEvent(generatedCharterOut);
+				if (result == null) result = casePortVisit(generatedCharterOut);
 				if (result == null) result = caseProfitAndLossContainer(generatedCharterOut);
+				if (result == null) result = caseEventGrouping(generatedCharterOut);
+				if (result == null) result = caseEvent(generatedCharterOut);
+				if (result == null) result = caseCapacityViolationsHolder(generatedCharterOut);
 				if (result == null) result = caseMMXObject(generatedCharterOut);
 				if (result == null) result = caseITimezoneProvider(generatedCharterOut);
 				if (result == null) result = defaultCase(theEObject);

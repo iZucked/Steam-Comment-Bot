@@ -3162,7 +3162,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT__EXTENSIONS = EVENT__EXTENSIONS;
+	int GENERATED_CHARTER_OUT__EXTENSIONS = PORT_VISIT__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Start</b></em>' attribute.
@@ -3171,7 +3171,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT__START = EVENT__START;
+	int GENERATED_CHARTER_OUT__START = PORT_VISIT__START;
 
 	/**
 	 * The feature id for the '<em><b>End</b></em>' attribute.
@@ -3180,7 +3180,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT__END = EVENT__END;
+	int GENERATED_CHARTER_OUT__END = PORT_VISIT__END;
 
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
@@ -3189,7 +3189,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT__PORT = EVENT__PORT;
+	int GENERATED_CHARTER_OUT__PORT = PORT_VISIT__PORT;
 
 	/**
 	 * The feature id for the '<em><b>Previous Event</b></em>' reference.
@@ -3198,7 +3198,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT__PREVIOUS_EVENT = EVENT__PREVIOUS_EVENT;
+	int GENERATED_CHARTER_OUT__PREVIOUS_EVENT = PORT_VISIT__PREVIOUS_EVENT;
 
 	/**
 	 * The feature id for the '<em><b>Next Event</b></em>' reference.
@@ -3207,7 +3207,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT__NEXT_EVENT = EVENT__NEXT_EVENT;
+	int GENERATED_CHARTER_OUT__NEXT_EVENT = PORT_VISIT__NEXT_EVENT;
 
 	/**
 	 * The feature id for the '<em><b>Sequence</b></em>' container reference.
@@ -3216,7 +3216,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT__SEQUENCE = EVENT__SEQUENCE;
+	int GENERATED_CHARTER_OUT__SEQUENCE = PORT_VISIT__SEQUENCE;
 
 	/**
 	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
@@ -3225,7 +3225,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT__CHARTER_COST = EVENT__CHARTER_COST;
+	int GENERATED_CHARTER_OUT__CHARTER_COST = PORT_VISIT__CHARTER_COST;
 
 	/**
 	 * The feature id for the '<em><b>Heel At Start</b></em>' attribute.
@@ -3234,7 +3234,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT__HEEL_AT_START = EVENT__HEEL_AT_START;
+	int GENERATED_CHARTER_OUT__HEEL_AT_START = PORT_VISIT__HEEL_AT_START;
 
 	/**
 	 * The feature id for the '<em><b>Heel At End</b></em>' attribute.
@@ -3243,7 +3243,25 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT__HEEL_AT_END = EVENT__HEEL_AT_END;
+	int GENERATED_CHARTER_OUT__HEEL_AT_END = PORT_VISIT__HEEL_AT_END;
+
+	/**
+	 * The feature id for the '<em><b>Violations</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__VIOLATIONS = PORT_VISIT__VIOLATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Port Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__PORT_COST = PORT_VISIT__PORT_COST;
 
 	/**
 	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
@@ -3252,7 +3270,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT__GROUP_PROFIT_AND_LOSS = EVENT_FEATURE_COUNT + 0;
+	int GENERATED_CHARTER_OUT__GROUP_PROFIT_AND_LOSS = PORT_VISIT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
@@ -3261,7 +3279,16 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 1;
+	int GENERATED_CHARTER_OUT__GENERAL_PNL_DETAILS = PORT_VISIT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Events</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__EVENTS = PORT_VISIT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Revenue</b></em>' attribute.
@@ -3270,7 +3297,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT__REVENUE = EVENT_FEATURE_COUNT + 2;
+	int GENERATED_CHARTER_OUT__REVENUE = PORT_VISIT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Generated Charter Out</em>' class.
@@ -3279,7 +3306,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 3;
+	int GENERATED_CHARTER_OUT_FEATURE_COUNT = PORT_VISIT_FEATURE_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -3288,7 +3315,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+	int GENERATED_CHARTER_OUT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = PORT_VISIT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
@@ -3297,7 +3324,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+	int GENERATED_CHARTER_OUT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = PORT_VISIT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
@@ -3306,7 +3333,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT___ECONTAINER_OP = EVENT___ECONTAINER_OP;
+	int GENERATED_CHARTER_OUT___ECONTAINER_OP = PORT_VISIT___ECONTAINER_OP;
 
 	/**
 	 * The operation id for the '<em>Get Time Zone</em>' operation.
@@ -3315,7 +3342,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT___GET_TIME_ZONE__EATTRIBUTE = EVENT___GET_TIME_ZONE__EATTRIBUTE;
+	int GENERATED_CHARTER_OUT___GET_TIME_ZONE__EATTRIBUTE = PORT_VISIT___GET_TIME_ZONE__EATTRIBUTE;
 
 	/**
 	 * The operation id for the '<em>Get Duration</em>' operation.
@@ -3324,7 +3351,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT___GET_DURATION = EVENT___GET_DURATION;
+	int GENERATED_CHARTER_OUT___GET_DURATION = PORT_VISIT___GET_DURATION;
 
 	/**
 	 * The operation id for the '<em>Get Local Start</em>' operation.
@@ -3333,7 +3360,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT___GET_LOCAL_START = EVENT___GET_LOCAL_START;
+	int GENERATED_CHARTER_OUT___GET_LOCAL_START = PORT_VISIT___GET_LOCAL_START;
 
 	/**
 	 * The operation id for the '<em>Get Local End</em>' operation.
@@ -3342,7 +3369,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT___GET_LOCAL_END = EVENT___GET_LOCAL_END;
+	int GENERATED_CHARTER_OUT___GET_LOCAL_END = PORT_VISIT___GET_LOCAL_END;
 
 	/**
 	 * The operation id for the '<em>Type</em>' operation.
@@ -3351,7 +3378,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT___TYPE = EVENT___TYPE;
+	int GENERATED_CHARTER_OUT___TYPE = PORT_VISIT___TYPE;
 
 	/**
 	 * The operation id for the '<em>Name</em>' operation.
@@ -3360,7 +3387,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT___NAME = EVENT___NAME;
+	int GENERATED_CHARTER_OUT___NAME = PORT_VISIT___NAME;
 
 	/**
 	 * The number of operations of the '<em>Generated Charter Out</em>' class.
@@ -3369,7 +3396,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 0;
+	int GENERATED_CHARTER_OUT_OPERATION_COUNT = PORT_VISIT_OPERATION_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
