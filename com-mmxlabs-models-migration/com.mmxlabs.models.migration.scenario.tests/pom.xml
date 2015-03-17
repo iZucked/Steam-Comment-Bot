@@ -48,7 +48,6 @@
 					<product>org.eclipse.sdk.ide</product>
 					<application>org.eclipse.ui.ide.workbench</application>
 
-
 				</configuration>
 			</plugin>
 		</plugins>
