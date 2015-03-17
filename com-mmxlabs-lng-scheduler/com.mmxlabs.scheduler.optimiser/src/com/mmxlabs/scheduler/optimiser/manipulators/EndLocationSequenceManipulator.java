@@ -4,8 +4,10 @@
  */
 package com.mmxlabs.scheduler.optimiser.manipulators;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -18,13 +20,20 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IGeneratedCharterOutSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IGeneratedCharterOutEvaluator;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.impl.NullGeneratedCharterOutEvaluator;
 
 /**
  * The {@link EndLocationSequenceManipulator} replaces the end location with another location in two possible ways; either the vessel's end location is adjust to be the same as its first load port, or
@@ -58,8 +67,13 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 		 * Return to the last load port visited.
 		 */
 		RETURN_TO_LAST_LOAD, RETURN_TO_CLOSEST_IN_SET,
-		
-		
+
+		/**
+		 * Return to the closest charter out port
+		 */
+
+		RETURN_TO_CLOSEST_CHARTER_OUT_PORT,
+
 		/**
 		 */
 		REMOVE,
@@ -84,6 +98,12 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 
 	@Inject
 	private IVesselProvider vesselProvider;
+
+	@Inject
+	private IGeneratedCharterOutEvaluator charterOutEvaluator;
+
+	@Inject
+	private ICharterMarketProvider charterMarketProvider;
 
 	public EndLocationSequenceManipulator() {
 
@@ -111,13 +131,50 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 
 				final IStartEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
 				if (!endRequirement.hasPortRequirement()) {
-					setEndLocationRule(resource, EndLocationRule.RETURN_TO_LAST_LOAD);
+					// choose between returning to last load port or a charter out port
+					setNoRequirementEndLocationRule(resource);
 				} else if (endRequirement.hasPortRequirement() && endRequirement.getLocation() == null) {
 					setEndLocationRule(resource, EndLocationRule.RETURN_TO_CLOSEST_IN_SET);
 				}
 			}
 		}
 
+	}
+
+	private void setNoRequirementEndLocationRule(IResource resource) {
+		// TODO: Remove NullGeneratedCharterOutEvaluator at some point
+		boolean returnToLastPort = true;
+		if (charterOutEvaluator != null && !(charterOutEvaluator instanceof NullGeneratedCharterOutEvaluator)) {
+			Set<IPort> charteringPorts = getCharterMarketPortsForResource(resource);
+			if (charteringPorts != null && charteringPorts.size() > 0) {
+				returnToLastPort = false;
+			}
+		}
+		if (returnToLastPort) {
+			setEndLocationRule(resource, EndLocationRule.RETURN_TO_LAST_LOAD);
+		} else {
+			setEndLocationRule(resource, EndLocationRule.RETURN_TO_CLOSEST_CHARTER_OUT_PORT);
+		}
+	}
+
+	private Set<IPort> getCharterMarketPortsForResource(IResource resource) {
+		Set<IPort> charteringPorts = null;
+		IVesselClass resourceVesselClass = getVesselClass(resource);
+		if (resourceVesselClass != null) {
+			charteringPorts = charterMarketProvider.getCharteringPortsForVesselClass(resourceVesselClass);
+		}
+		return charteringPorts;
+	}
+
+	private IVesselClass getVesselClass(IResource resource) {
+		IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+		if (vesselAvailability != null) {
+			IVessel vessel = vesselAvailability.getVessel();
+			if (vessel != null) {
+				return vessel.getVesselClass();
+			}
+		}
+		return null;
 	}
 
 	@Override
@@ -145,6 +202,9 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 			break;
 		case RETURN_TO_CLOSEST_IN_SET:
 			returnToClosestInSet(resource, sequence);
+			break;
+		case RETURN_TO_CLOSEST_CHARTER_OUT_PORT:
+			returnToClosestCharterOutPort(resource, sequence);
 			break;
 		case REMOVE:
 			sequence.remove(sequence.size() - 1);
@@ -176,22 +236,38 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 	}
 
 	/**
-	 * Swap the dummy element in for the given sequence, and set its location to the given port.
-	 * 
+	 * Return to the closest port to the last in the user defined set of ports
 	 * @param resource
-	 * 
 	 * @param sequence
-	 * @param location
 	 */
 	private final void returnToClosestInSet(final IResource resource, final IModifiableSequence sequence) {
 		final IStartEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
-
+		returnToClosestInSet(resource, sequence, endRequirement.getLocations());
+	}
+	
+	/**
+	 * Return to the closest charter out port to the last in the port in the sequence
+	 * @param resource
+	 * @param sequence
+	 */
+	private final void returnToClosestCharterOutPort(final IResource resource, final IModifiableSequence sequence) {
+		returnToClosestInSet(resource, sequence, getCharterMarketPortsForResource(resource));
+	}
+	
+	/**
+	 * Swap the dummy element in for the given sequence, and set its location to the given port.
+	 * 
+	 * @param resource
+	 * @param sequence
+	 * @param ports
+	 */
+	private final void returnToClosestInSet(final IResource resource, final IModifiableSequence sequence, Collection<IPort> ports) {
 		final ISequenceElement lastVisit = sequence.get(sequence.size() - 2);
 		final IPort fromPort = portProvider.getPortForElement(lastVisit);
 
 		IPort closestPort = null;
 		int closestPortDistance = Integer.MAX_VALUE;
-		for (final IPort toPort : endRequirement.getLocations()) {
+		for (final IPort toPort : ports) {
 			if (fromPort == toPort) {
 				closestPort = toPort;
 				break;

@@ -14,10 +14,12 @@ import javax.inject.Inject;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionsPortSlot;
@@ -29,6 +31,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
@@ -40,6 +43,8 @@ import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider.CharterMarketOptions;
 import com.mmxlabs.scheduler.optimiser.providers.IGeneratedCharterOutSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IGeneratedCharterOutEvaluator;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
@@ -81,6 +86,12 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	@Inject
 	private IGeneratedCharterOutSlotProviderEditor generatedCharterOutSlotProviderEditor;
 
+	@Inject
+	private IVesselProvider vesselProvider;
+	
+	@Inject
+	private IStartEndRequirementProvider startEndRequirementProvider;
+
 	private static final double canalChoiceThreshold = 0.1; //percentage improvement required to choose a canal route
 	
 	@Override
@@ -120,8 +131,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		final VoyageDetails ballastDetails = (VoyageDetails) currentSequence[ballastIdx];
 		final int availableTime = ballastDetails.getOptions().getAvailableTime();
 		
-		final GeneratedCharterOutOption gcoMarket = getCharterOutOption(ballastStartTime, availableTime, ballastDetails.getOptions().getFromPortSlot().getPort(), ballastDetails.getOptions().getToPortSlot()
-				.getPort(), vesselAvailability);
+		final GeneratedCharterOutOption gcoMarket = getCharterOutOption(ballastStartTime, availableTime, ballastDetails.getOptions().getFromPortSlot(), ballastDetails.getOptions().getToPortSlot(), vesselAvailability);
 
 		// Have we found a market?
 		if (gcoMarket.getOption() == null) {
@@ -179,9 +189,19 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		return charterPlans;
 	}
 
-	private GeneratedCharterOutOption getCharterOutOption(final int ballastStartTime, final int availableTime, final IPort discharge, final IPort nextLoad, final IVesselAvailability vesselAvailability) {
+	private GeneratedCharterOutOption getCharterOutOption(final int ballastStartTime, final int availableTime, final IPortSlot dischargeSlot, final IPortSlot nextLoadSlot, final IVesselAvailability vesselAvailability) {
 		final GeneratedCharterOutOption gcoo = new GeneratedCharterOutOption();
+		final IPort discharge = dischargeSlot.getPort();
+		final IPort nextLoad = nextLoadSlot.getPort();
 		gcoo.setMaxCharteringRevenue(-1);
+		
+		// set end ports
+		boolean goingToEnd = false;
+		final Set<IPort> endPorts = new HashSet<IPort>();
+		if (nextLoadSlot instanceof EndPortSlot) {
+			goingToEnd = true;
+			endPorts.add(nextLoad);
+		}
 		// Scan all the markets for a match
 		for (final CharterMarketOptions option : charterMarketProvider.getCharterOutOptions(vesselAvailability.getVessel().getVesselClass(), ballastStartTime)) {
 			Set<IPort> ports = option.getAllowedPorts();
@@ -189,6 +209,17 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 				// If no ports, charter out at next load port (this is primarily for ITS cases)
 				ports = new HashSet<IPort>();
 				ports.add(nextLoad);
+			} else {
+				// end slot exceptions
+				if (goingToEnd) {
+					if (ports.contains(nextLoad)) {
+						// only going to charter at the end port
+						ports = endPorts;
+					} else {
+						// end port not in this option so move on to the next
+						continue;
+					}
+				}
 			}
 			for (final IPort charterOutPort : ports) {
 				final Triple<Integer, String, Integer> toCharterPort = calculateShortestTimeToPort(discharge, charterOutPort, vesselAvailability.getVessel().getVesselClass());
