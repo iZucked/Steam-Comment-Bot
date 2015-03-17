@@ -31,7 +31,7 @@ import com.mmxlabs.optimiser.lso.impl.Move4over2;
  * 
  */
 public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGeneratorUnit {
-	public final static int FOUROPT2MOVES = 1; // 0 = 4 opt 2, 1 = no 4 opt 2
+	public final static int FOUR_OPT2_MOVES = 1; // 0 = 4 opt 2, 1 = no 4 opt 2
 	
 	final ConstrainedMoveGenerator owner;
 
@@ -225,7 +225,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 				final ConstrainedMoveGenerator.Followers<ISequenceElement> followersOfSecondElementsPredecessor = owner.validFollowers.get(seq2.get(position2 - 1));
 
 				final List<Pair<Integer, Integer>> viableSecondBreaks = new ArrayList<Pair<Integer, Integer>>();
-				for (int i = position2 + SequencesConstrainedMoveGeneratorUnit.FOUROPT2MOVES; i < (seq2.size() - 1); i++) { // ignore last element
+				for (int i = position2 + SequencesConstrainedMoveGeneratorUnit.FOUR_OPT2_MOVES; i < (seq2.size() - 1); i++) { // ignore last element
 					final ISequenceElement here = seq2.get(i);
 					for (final ISequenceElement elt : owner.validFollowers.get(here)) {
 						final Pair<Integer, Integer> loc = owner.reverseLookup.get(elt);
