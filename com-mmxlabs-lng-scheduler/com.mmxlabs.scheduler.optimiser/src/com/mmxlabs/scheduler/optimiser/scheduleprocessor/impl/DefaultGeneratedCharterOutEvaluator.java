@@ -235,7 +235,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			}
 		}
 		// heuristic to only use canal if a big improvement
-		if (!route.equals("Direct")) {
+		if (!route.equals("Direct") && directEntry != null) {
 			final double improvement = ((double) directTime - (double) shortestTime)/ (double) directTime;
 			if (directTime == 0 || improvement < canalChoiceThreshold) {
 				distance = directEntry.getValue();
