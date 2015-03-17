@@ -31,8 +31,6 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.VirtualVesselConstraintC
  * 
  */
 public class ConstraintCheckerServiceModule extends AbstractModule {
-	public static final boolean USE_SPOT_TO_SPOT_CONSTRAINT = false;
-
 	@Override
 	protected void configure() {
 
@@ -66,10 +64,8 @@ public class ConstraintCheckerServiceModule extends AbstractModule {
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(PortCvCompatibilityConstraintCheckerFactory.class.getCanonicalName())).toProvider(
 				Peaberry.service(new PortCvCompatibilityConstraintCheckerFactory()).export());
 
-		if (USE_SPOT_TO_SPOT_CONSTRAINT) {
-			bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(SpotToSpotConstraintCheckerFactory.class.getCanonicalName())).toProvider(
-					Peaberry.service(new SpotToSpotConstraintCheckerFactory()).export());
-		}
+		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(SpotToSpotConstraintCheckerFactory.class.getCanonicalName())).toProvider(
+				Peaberry.service(new SpotToSpotConstraintCheckerFactory()).export());
 
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(DifferentSTSVesselsConstraintCheckerFactory.class.getCanonicalName())).toProvider(
 				Peaberry.service(new DifferentSTSVesselsConstraintCheckerFactory()).export());
