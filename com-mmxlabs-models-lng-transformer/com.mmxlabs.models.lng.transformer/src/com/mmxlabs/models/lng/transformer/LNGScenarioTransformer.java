@@ -61,6 +61,7 @@ import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.util.IShippingDaysRestrictionSpeedProvider;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
@@ -104,6 +105,9 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
+import com.mmxlabs.models.lng.transformer.contracts.IVesselAvailabilityTransformer;
+import com.mmxlabs.models.lng.transformer.contracts.IVesselEventTransformer;
+import com.mmxlabs.models.lng.transformer.extensions.charterout.GeneratedCharterOutTransformer;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
@@ -146,9 +150,13 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceExpressionContract;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IGeneratedCharterOutSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
@@ -213,7 +221,17 @@ public class LNGScenarioTransformer {
 	 * A set of all contract transformers being used; these should be mapped to in {@link #contractTransformersByEClass}
 	 */
 	final Set<IContractTransformer> contractTransformers = new LinkedHashSet<IContractTransformer>();
+	
+	/**
+	 * A set of all vessel event transformers being used; 
+	 */
+	final Set<IVesselEventTransformer> vesselEventTransformers = new LinkedHashSet<IVesselEventTransformer>();
 
+	/**
+	 * A set of all vessel availability transformers being used; 
+	 */
+	final Set<IVesselAvailabilityTransformer> vesselAvailabilityTransformers = new LinkedHashSet<IVesselAvailabilityTransformer>();
+	
 	/**
 	 * A set of all transformer extensions being used (should contain {@link #contractTransformers})
 	 */
@@ -258,6 +276,7 @@ public class LNGScenarioTransformer {
 	public LNGScenarioTransformer(final LNGScenarioModel rootObject, final OptimiserSettings optimiserParameters) {
 
 		init(rootObject, optimiserParameters);
+		
 	}
 
 	/**
@@ -286,6 +305,14 @@ public class LNGScenarioTransformer {
 				final IContractTransformer contractTransformer = (IContractTransformer) transformer;
 				addContractTransformer(contractTransformer);
 			}
+			if (transformer instanceof IVesselAvailabilityTransformer) {
+				final IVesselAvailabilityTransformer vesselAvailabilityTransformer = (IVesselAvailabilityTransformer) transformer;
+				addVesselAvailabilityTransformer(vesselAvailabilityTransformer);
+			}
+			if (transformer instanceof IVesselEventTransformer) {
+				final IVesselEventTransformer vesselEventTransformer = (IVesselEventTransformer) transformer;
+				addVesselEventTransformer(vesselEventTransformer);
+			}
 		}
 
 		return true;
@@ -306,6 +333,14 @@ public class LNGScenarioTransformer {
 		}
 	}
 
+	public void addVesselAvailabilityTransformer(final IVesselAvailabilityTransformer transformer) {
+		vesselAvailabilityTransformers.add(transformer);
+	}
+	
+	public void addVesselEventTransformer(final IVesselEventTransformer transformer) {
+		vesselEventTransformers.add(transformer);
+	}
+	
 	/**
 	 * Instantiates and returns an {@link IOptimisationData} isomorphic to the contained scenario.
 	 * 
@@ -490,7 +525,12 @@ public class LNGScenarioTransformer {
 
 		final Pair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>> vesselAssociations = buildFleet(builder, portAssociation, baseFuelIndexAssociation, charterIndexAssociation,
 				modelEntityMap);
-
+		for (IVesselAvailability vesselAvailability : allVesselAvailabilities) {
+			for (IVesselAvailabilityTransformer vesselAvailabilityTransformer: vesselAvailabilityTransformers) {
+				vesselAvailabilityTransformer.vesselAvailabilityTransformed(modelEntityMap.getModelObject(vesselAvailability, VesselAvailability.class), vesselAvailability);
+			}
+		}
+		
 		final CommercialModel commercialModel = rootObject.getCommercialModel();
 
 		// Any NPE's in the following code are likely due to missing associations between a IContractTransformer and the EMF AContract object. IContractTransformer instances are typically OSGi
@@ -810,11 +850,11 @@ public class LNGScenarioTransformer {
 				final IPort endPort = portAssociation.lookup(charterOut.isSetRelocateTo() ? charterOut.getRelocateTo() : charterOut.getPort());
 				final HeelOptions heelOptions = charterOut.getHeelOptions();
 				final long maxHeel = heelOptions.isSetVolumeAvailable() ? OptimiserUnitConvertor.convertToInternalVolume(heelOptions.getVolumeAvailable()) : 0l;
-				final long totalHireCost = OptimiserUnitConvertor.convertToInternalDailyCost(charterOut.getHireRate()) * (long) charterOut.getDurationInDays();
+				final long totalHireRevenue = OptimiserUnitConvertor.convertToInternalDailyCost(charterOut.getHireRate()) * (long) charterOut.getDurationInDays();
 				final long repositioning = OptimiserUnitConvertor.convertToInternalFixedCost(charterOut.getRepositioningFee());
 				builderSlot = builder.createCharterOutEvent(event.getName(), window, port, endPort, durationHours, maxHeel,
 						OptimiserUnitConvertor.convertToInternalConversionFactor(heelOptions.getCvValue()), OptimiserUnitConvertor.convertToInternalPrice(heelOptions.getPricePerMMBTU()),
-						totalHireCost, repositioning);
+						totalHireRevenue, repositioning);
 			} else if (event instanceof DryDockEvent) {
 				builderSlot = builder.createDrydockEvent(event.getName(), window, port, durationHours);
 			} else if (event instanceof MaintenanceEvent) {
@@ -833,6 +873,9 @@ public class LNGScenarioTransformer {
 			}
 
 			modelEntityMap.addModelObject(event, builderSlot);
+			for (IVesselEventTransformer vesselEventTransformer : vesselEventTransformers) {
+				vesselEventTransformer.vesselEventTransformed(event, builderSlot);
+			}
 		}
 	}
 
@@ -1117,6 +1160,7 @@ public class LNGScenarioTransformer {
 
 		final ISalesPriceCalculator dischargePriceCalculator;
 
+		boolean isSpot = (dischargeSlot instanceof SpotSlot);
 		if (dischargeSlot.isSetPriceExpression()) {
 
 			final String priceExpression = dischargeSlot.getPriceExpression();
@@ -1224,14 +1268,14 @@ public class LNGScenarioTransformer {
 				}
 
 				discharge = builder.createFOBSaleDischargeSlot(name, port, localTimeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator, dischargeSlot.getSlotOrPortDuration(),
-						pricingDate, transformPricingEvent(dischargeSlot.getSlotOrDelegatedPricingEvent()), dischargeSlot.isOptional());
+						pricingDate, transformPricingEvent(dischargeSlot.getSlotOrDelegatedPricingEvent()), dischargeSlot.isOptional(), isSpot);
 
 				if (dischargeSlot.isDivertible()) {
 					// builder.setShippingHoursRestriction(discharge, dischargeWindow, dischargeSlot.getShippingDaysRestriction() * 24);
 				}
 			} else {
 				discharge = builder.createDischargeSlot(name, portAssociation.lookup(dischargeSlot.getPort()), dischargeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator,
-						dischargeSlot.getSlotOrPortDuration(), pricingDate, transformPricingEvent(dischargeSlot.getSlotOrDelegatedPricingEvent()), dischargeSlot.isOptional());
+						dischargeSlot.getSlotOrPortDuration(), pricingDate, transformPricingEvent(dischargeSlot.getSlotOrDelegatedPricingEvent()), dischargeSlot.isOptional(), isSpot);
 			}
 		}
 
@@ -1278,6 +1322,7 @@ public class LNGScenarioTransformer {
 				convertTime(earliestTime, loadSlot.getWindowEndWithSlotOrPortTime()));
 
 		final ILoadPriceCalculator loadPriceCalculator;
+		boolean isSpot = (loadSlot instanceof SpotSlot);
 
 		if (loadSlot.isSetPriceExpression()) {
 
@@ -1366,7 +1411,7 @@ public class LNGScenarioTransformer {
 			}
 			load = builder.createDESPurchaseLoadSlot(loadSlot.getName(), port, localTimeWindow, minVolume, maxVolume, loadPriceCalculator,
 					OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrDelegatedCV()), loadSlot.getSlotOrPortDuration(), slotPricingDate,
-					transformPricingEvent(loadSlot.getSlotOrDelegatedPricingEvent()), loadSlot.isOptional());
+					transformPricingEvent(loadSlot.getSlotOrDelegatedPricingEvent()), loadSlot.isOptional(), isSpot);
 
 			if (loadSlot.isDivertible()) {
 				builder.setShippingHoursRestriction(load, loadWindow, loadSlot.getShippingDaysRestriction() * 24);
@@ -1374,7 +1419,7 @@ public class LNGScenarioTransformer {
 		} else {
 			load = builder.createLoadSlot(loadSlot.getName(), portAssociation.lookup(loadSlot.getPort()), loadWindow, minVolume, maxVolume, loadPriceCalculator,
 					OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrDelegatedCV()), loadSlot.getSlotOrPortDuration(), loadSlot.isSetArriveCold(), loadSlot.isArriveCold(),
-					slotPricingDate, transformPricingEvent(loadSlot.getSlotOrDelegatedPricingEvent()), loadSlot.isOptional());
+					slotPricingDate, transformPricingEvent(loadSlot.getSlotOrDelegatedPricingEvent()), loadSlot.isOptional(), isSpot);
 		}
 		// Store market slots for lookup when building spot markets.
 		modelEntityMap.addModelObject(loadSlot, load);
@@ -1508,7 +1553,7 @@ public class LNGScenarioTransformer {
 
 								final ILoadOption desPurchaseSlot = builder.createDESPurchaseLoadSlot(id, null, twUTCPlus, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
 										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), priceCalculator, cargoCVValue, 0, IPortSlot.NO_PRICING_DATE,
-										transformPricingEvent(market.getPricingEvent()), true);
+										transformPricingEvent(market.getPricingEvent()), true, true);
 
 								// Create a fake model object to add in here;
 								final SpotLoadSlot desSlot = CargoFactory.eINSTANCE.createSpotLoadSlot();
@@ -1639,7 +1684,7 @@ public class LNGScenarioTransformer {
 
 								final IDischargeOption fobSaleSlot = builder.createFOBSaleDischargeSlot(id, null, twUTCPlus, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
 										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), minCv, maxCv, priceCalculator, 0, IPortSlot.NO_PRICING_DATE,
-										transformPricingEvent(market.getPricingEvent()), true);
+										transformPricingEvent(market.getPricingEvent()), true, true);
 
 								// Create a fake model object to add in here;
 								final SpotDischargeSlot fobSlot = CargoFactory.eINSTANCE.createSpotDischargeSlot();
@@ -1784,7 +1829,7 @@ public class LNGScenarioTransformer {
 								final long maxVolume = OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity());
 
 								final IDischargeOption desSalesSlot = builder.createDischargeSlot(id, notionalIPort, tw, minVolume, maxVolume, 0, Long.MAX_VALUE, priceCalculator,
-										desSlot.getSlotOrPortDuration(), pricingDate, transformPricingEvent(market.getPricingEvent()), true);
+										desSlot.getSlotOrPortDuration(), pricingDate, transformPricingEvent(market.getPricingEvent()), true, true);
 
 								// Key piece of information
 								desSlot.setMarket(desSalesMarket);
@@ -1894,7 +1939,7 @@ public class LNGScenarioTransformer {
 
 								final ILoadOption fobPurchaseSlot = builder.createLoadSlot(id, notionalIPort, tw, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
 										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), priceCalculator, cargoCVValue, fobSlot.getSlotOrPortDuration(), true, true,
-										IPortSlot.NO_PRICING_DATE, transformPricingEvent(market.getPricingEvent()), true);
+										IPortSlot.NO_PRICING_DATE, transformPricingEvent(market.getPricingEvent()), true, true);
 
 								// Key piece of information
 								fobSlot.setMarket(fobPurchaseMarket);
@@ -2371,7 +2416,17 @@ public class LNGScenarioTransformer {
 				if (charterCost.getCharterOutPrice() != null) {
 					final ICurve charterOutCurve = charterIndexAssociation.lookup(charterCost.getCharterOutPrice());
 					final int minDuration = 24 * charterCost.getMinCharterOutDuration();
-					builder.createCharterOutCurve(vesselClassAssociation.lookup(eVesselClass), charterOutCurve, minDuration);
+					
+					final Set<Port> portSet = SetUtils.getObjects(charterCost.getAvailablePorts());
+					final Set<IPort> marketPorts = new HashSet<IPort>();
+					for (final Port ap : portSet) {
+						final IPort ip = portAssociation.lookup((Port) ap);
+						if (ip != null) {
+							marketPorts.add(ip);
+						}
+					}
+
+					builder.createCharterOutCurve(vesselClassAssociation.lookup(eVesselClass), charterOutCurve, minDuration, marketPorts);
 				}
 			}
 		}

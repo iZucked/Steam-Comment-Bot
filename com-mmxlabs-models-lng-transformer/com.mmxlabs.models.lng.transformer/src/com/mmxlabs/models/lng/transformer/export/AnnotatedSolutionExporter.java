@@ -7,10 +7,12 @@ package com.mmxlabs.models.lng.transformer.export;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -51,6 +53,9 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
@@ -113,6 +118,8 @@ public class AnnotatedSolutionExporter {
 	public Schedule exportAnnotatedSolution(final ModelEntityMap modelEntityMap, final IAnnotatedSolution annotatedSolution) {
 		final IElementAnnotationsMap elementAnnotations = annotatedSolution.getElementAnnotations();
 		final Schedule output = factory.createSchedule();
+		// get domain level sequences
+		final ScheduledSequences scheduledSequences = annotatedSolution.getEvaluationState().getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class);
 
 		// go through the annotated solution and build stuff for the EMF;
 
@@ -160,11 +167,11 @@ public class AnnotatedSolutionExporter {
 
 			final Sequence eSequence = factory.createSequence();
 
-			boolean skipStartEndElements = false;
 			boolean isFOBSequence = false;
 			boolean isDESSequence = false;
 
 			final ISequence sequence = annotatedSolution.getSequences().getSequence(resource);
+			final ScheduledSequence scheduledSequence = scheduledSequences.getScheduledSequenceForResource(resource);
 			switch (vesselAvailability.getVesselInstanceType()) {
 			case TIME_CHARTER:
 			case FLEET:
@@ -179,8 +186,6 @@ public class AnnotatedSolutionExporter {
 				if (sequence.size() < 2) {
 					continue;
 				}
-
-				skipStartEndElements = true;
 				break;
 			case DES_PURCHASE:
 				desSequence.setSequenceType(SequenceType.DES_PURCHASE);
@@ -189,8 +194,6 @@ public class AnnotatedSolutionExporter {
 				if (sequence.size() < 2) {
 					continue;
 				}
-
-				skipStartEndElements = true;
 				break;
 			case SPOT_CHARTER:
 				eSequence.setSequenceType(SequenceType.SPOT_VESSEL);
@@ -309,12 +312,10 @@ public class AnnotatedSolutionExporter {
 			};
 
 			final List<Event> eventsForElement = new ArrayList<Event>();
-			for (int i = 0; i < sequence.size(); ++i) {
-
-				final ISequenceElement element = sequence.get(i);
-				if (skipStartEndElements && (i == 0 || i == sequence.size() - 1)) {
-					continue;
-				}
+			final List<IPortSlot> sequencePortSlots = scheduledSequence.getSequenceSlots();
+			for (int i = 0; i < sequencePortSlots.size(); ++i) {
+				final IPortSlot scheduledSlot = sequencePortSlots.get(i);
+				final ISequenceElement element = portSlotProvider.getElement(scheduledSlot);
 				// get annotations for this element
 				final Map<String, IElementAnnotation> annotations = elementAnnotations.getAnnotations(element);
 
@@ -405,12 +406,14 @@ public class AnnotatedSolutionExporter {
 					} else if (event instanceof VesselEventVisit) {
 						eventGrouping = (VesselEventVisit) event;
 						eventGrouping.getEvents().add(event);
-					} else {
+					}
+				else if (event instanceof GeneratedCharterOut) {
+					eventGrouping = (EventGrouping) event;
+				} else {
 						eventGrouping = null;
 					}
-				} else if (event instanceof GeneratedCharterOut) {
-					eventGrouping = null;
-				} else if (event instanceof Journey && eventGrouping != null) {
+				}
+				else if (event instanceof Journey && eventGrouping != null) {
 					eventGrouping.getEvents().add(event);
 				} else if (event instanceof Idle && eventGrouping != null) {
 					eventGrouping.getEvents().add(event);
@@ -485,4 +488,7 @@ public class AnnotatedSolutionExporter {
 			}
 		}
 	}
+	
+
+	
 }

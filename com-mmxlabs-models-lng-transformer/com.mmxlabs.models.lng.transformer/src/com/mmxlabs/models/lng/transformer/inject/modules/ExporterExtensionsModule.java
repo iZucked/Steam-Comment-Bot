@@ -12,6 +12,8 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.mmxlabs.models.lng.transformer.export.IExporterExtension;
+import com.mmxlabs.models.lng.transformer.export.IPortSlotEventProvider;
+import com.mmxlabs.models.lng.transformer.export.PortSlotEventProvider;
 import com.mmxlabs.models.lng.transformer.inject.IExporterExtensionFactory;
 
 /**
@@ -24,7 +26,8 @@ public class ExporterExtensionsModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-
+		IPortSlotEventProvider portSlotEventProvider = new PortSlotEventProvider();
+		bind(IPortSlotEventProvider.class).toInstance(portSlotEventProvider);
 	}
 
 	@Provides
