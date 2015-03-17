@@ -5,6 +5,9 @@
 package com.mmxlabs.lingo.reports.views.standard;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -12,14 +15,18 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
@@ -30,6 +37,8 @@ import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -42,7 +51,8 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 class HorizontalKPIContentProvider implements IStructuredContentProvider {
 
 	public static class RowData {
-		public RowData(final String scheduleName, final Long totalPNL, final Long tradingPNL, final Long shippingPNL, final Long mtmPnl, final Long shippingCost, final Long idleTime) {
+		public RowData(final String scheduleName, final Long totalPNL, final Long tradingPNL, final Long shippingPNL, final Long mtmPnl, final Long shippingCost, final Long idleTime,
+				final Long gcoTime, final Long capacityViolationCount, final Long lateness) {
 			super();
 			this.scheduleName = scheduleName;
 			this.totalPNL = totalPNL;
@@ -51,6 +61,9 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 			this.mtmPnl = mtmPnl;
 			this.shippingCost = shippingCost;
 			this.idleTime = idleTime;
+			this.gcoTime = gcoTime;
+			this.capacityViolationCount = capacityViolationCount;
+			this.lateness = lateness;
 		}
 
 		public final String scheduleName;
@@ -60,6 +73,9 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 		public final Long mtmPnl;
 		public final Long shippingCost;
 		public final Long idleTime;
+		public final Long gcoTime;
+		public final Long capacityViolationCount;
+		public final Long lateness;
 	}
 
 	private RowData[] rowData = new RowData[0];
@@ -76,6 +92,9 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 		long totalShippingPNL = 0l;
 		long totalMtMPNL = 0l;
 		long totalIdleHours = 0l;
+		long totalGCOHours = 0l;
+		long totalCapacityViolationCount = 0l;
+		long totalLatenessHours = 0l;
 
 		for (final Sequence seq : schedule.getSequences()) {
 
@@ -98,6 +117,23 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 				if (evt instanceof PortVisit) {
 					final int cost = ((PortVisit) evt).getPortCost();
 					totalCost += cost;
+
+					if (LatenessUtils.isLate(evt)) {
+						final PortVisit slotVisit = (PortVisit) evt;
+						final Calendar localStart = slotVisit.getLocalStart();
+						final Calendar windowEndDate = getWindowEndDate(slotVisit);
+
+						long diff = localStart.getTimeInMillis() - windowEndDate.getTimeInMillis();
+
+						// Strip milliseconds
+						diff /= 1000;
+						// Strip seconds;
+						diff /= 60;
+						// Strip minutes
+						diff /= 60;
+						// Ensure positive
+						totalLatenessHours += Math.abs(diff);
+					}
 				}
 
 				if (evt instanceof SlotVisit) {
@@ -112,6 +148,15 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 				} else if (evt instanceof ProfitAndLossContainer) {
 					totalTradingPNL += getElementTradingPNL((ProfitAndLossContainer) evt);
 					totalShippingPNL += getElementShippingPNL((ProfitAndLossContainer) evt);
+				}
+
+				if (evt instanceof GeneratedCharterOut) {
+					totalGCOHours += evt.getDuration();
+				}
+
+				if (evt instanceof CapacityViolationsHolder) {
+					final CapacityViolationsHolder capacityViolationsHolder = (CapacityViolationsHolder) evt;
+					totalCapacityViolationCount += capacityViolationsHolder.getViolations().size();
 				}
 			}
 
@@ -130,7 +175,8 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 			object = object.eContainer();
 		}
 
-		return new RowData(scenarioInstance.getName(), totalTradingPNL + totalShippingPNL, totalTradingPNL, totalShippingPNL, totalMtMPNL, totalCost, totalIdleHours);
+		return new RowData(scenarioInstance.getName(), totalTradingPNL + totalShippingPNL, totalTradingPNL, totalShippingPNL, totalMtMPNL, totalCost, totalIdleHours, totalGCOHours,
+				totalCapacityViolationCount, totalLatenessHours);
 	}
 
 	private long getElementShippingPNL(final ProfitAndLossContainer container) {
@@ -194,12 +240,12 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 		}
 
 		if (rowData.length == 0) {
-			rowData = new RowData[] { new RowData("", null, null, null, null, null, null) };
+			rowData = new RowData[] { new RowData("", null, null, null, null, null, null, null, null, null) };
 		}
 
 	}
 
-	private RowData pinnedData = new RowData("", null, null, null, null, null, null);
+	private RowData pinnedData = new RowData("", null, null, null, null, null, null, null, null, null);
 
 	public RowData getPinnedData() {
 		return pinnedData;
@@ -209,4 +255,49 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 	public void dispose() {
 
 	}
+
+	private Calendar getWindowEndDate(final Object object) {
+		final Date date;
+		if (object instanceof SlotVisit) {
+			date = ((SlotVisit) object).getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime();
+			String timeZone = ((SlotVisit) object).getSlotAllocation().getSlot().getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart());
+			if (timeZone == null)
+				timeZone = "UTC";
+			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
+			c.setTime(date);
+			return c;
+		} else if (object instanceof VesselEventVisit) {
+			date = ((VesselEventVisit) object).getVesselEvent().getStartBy();
+			String timeZone = ((VesselEventVisit) object).getVesselEvent().getTimeZone(CargoPackage.eINSTANCE.getVesselEvent_StartBy());
+			if (timeZone == null)
+				timeZone = "UTC";
+			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
+			c.setTime(date);
+			return c;
+		} else if (object instanceof PortVisit) {
+			final PortVisit visit = (PortVisit) object;
+			final Sequence seq = visit.getSequence();
+			final VesselAvailability vesselAvailability = seq.getVesselAvailability();
+			if (vesselAvailability == null) {
+				return null;
+			}
+			if (seq.getEvents().indexOf(visit) == 0) {
+				final Date startBy = vesselAvailability.getStartBy();
+				if (startBy != null) {
+					final Calendar c = Calendar.getInstance();
+					c.setTime(startBy);
+					return c;
+				}
+			} else if (seq.getEvents().indexOf(visit) == seq.getEvents().size() - 1) {
+				final Date endBy = vesselAvailability.getEndBy();
+				if (endBy != null) {
+					final Calendar c = Calendar.getInstance();
+					c.setTime(endBy);
+					return c;
+				}
+			}
+		}
+		return null;
+	}
+
 }

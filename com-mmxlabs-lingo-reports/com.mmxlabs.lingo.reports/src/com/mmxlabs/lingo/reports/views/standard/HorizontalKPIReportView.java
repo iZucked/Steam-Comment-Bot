@@ -113,9 +113,19 @@ public class HorizontalKPIReportView extends ViewPart {
 					// rtn = (d.shippingCost != null ? d.shippingCost - (pinD != null ? pinD.shippingCost : 0) : null);
 					// return format(rtn, KPIContentProvider.TYPE_COST);
 				case 6:
-					return "Idle Time";
+					return "Charter Out (virt)";
 				case 7:
-					rtn = (d.idleTime != null ? d.idleTime - (pinD != null ? pinD.idleTime : 0) : null);
+					rtn = (d.gcoTime != null ? d.gcoTime - (pinD != null ? pinD.gcoTime : 0) : null);
+					return format(rtn, KPIContentProvider.TYPE_TIME);
+				case 8:
+					return "Violations";
+				case 9:
+					rtn = (d.capacityViolationCount != null ? d.capacityViolationCount - (pinD != null ? pinD.capacityViolationCount : 0) : null);
+					return format(rtn, "");
+				case 10:
+					return "Lateness";
+				case 11:
+					rtn = (d.lateness != null ? d.lateness - (pinD != null ? pinD.lateness : 0) : null);
 					return format(rtn, KPIContentProvider.TYPE_TIME);
 				}
 			}
@@ -181,6 +191,9 @@ public class HorizontalKPIReportView extends ViewPart {
 					}
 					break;
 				case 4:
+				case 6:
+				case 8:
+				case 10:
 					color = SWT.COLOR_BLACK;
 					break;
 				case 5:
@@ -189,6 +202,30 @@ public class HorizontalKPIReportView extends ViewPart {
 					} else {
 						final RowData d = (RowData) element;
 						color = (d.shippingPNL - pinD.shippingPNL) >= 0 ? SWT.COLOR_DARK_GREEN : SWT.COLOR_RED;
+					}
+					break;
+				case 7:
+					if (pinD == null) {
+						color = SWT.COLOR_BLACK;
+					} else {
+						final RowData d = (RowData) element;
+						color = (d.gcoTime - pinD.gcoTime) >= 0 ? SWT.COLOR_DARK_GREEN : SWT.COLOR_RED;
+					}
+					break;
+				case 9:
+					if (pinD == null) {
+						color = SWT.COLOR_BLACK;
+					} else {
+						final RowData d = (RowData) element;
+						color = (d.capacityViolationCount - pinD.capacityViolationCount) >= 0 ? SWT.COLOR_RED : SWT.COLOR_DARK_GREEN;
+					}
+					break;
+				case 11:
+					if (pinD == null) {
+						color = SWT.COLOR_BLACK;
+					} else {
+						final RowData d = (RowData) element;
+						color = (d.lateness - pinD.lateness) >= 0 ? SWT.COLOR_RED : SWT.COLOR_DARK_GREEN;
 					}
 					break;
 				}
@@ -225,7 +262,7 @@ public class HorizontalKPIReportView extends ViewPart {
 		// SG: 2013-04-17
 		viewer.setAutoPreferredHeight(true);
 		// KPI columns - two per KPI - name, value
-		for (int i = 0; i < 2 * 5; ++i) {
+		for (int i = 0; i < 2 * 7; ++i) {
 			final GridViewerColumn tvc = new GridViewerColumn(viewer, SWT.NONE);
 			int width = 100;
 			switch (i) {
@@ -244,8 +281,14 @@ public class HorizontalKPIReportView extends ViewPart {
 			// case 8:
 			// width = 85; // "Shipping Cost"
 			// break;
-			case 6:
-				width = 60; // "Idle time"
+			case 6: // Idle / GCO
+				width = 90; 
+				break;
+			case 8: // Capacity
+				width = 70; 
+				break;
+			case 10: // Lateness
+				width = 70; 
 				break;
 			}
 			tvc.getColumn().setWidth(width);
