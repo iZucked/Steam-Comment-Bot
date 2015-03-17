@@ -455,9 +455,6 @@ public class PeriodTransformer {
 	}
 
 	public void lockDownSlotDates(final Map<Slot, SlotAllocation> slotAllocationMap, final Slot slot) {
-		if (slot.getName().equals("N130")) {
-			int i = 0;
-		}
 		if (slot instanceof LoadSlot) {
 			final LoadSlot loadSlot = (LoadSlot) slot;
 			if (loadSlot.isDESPurchase()) {

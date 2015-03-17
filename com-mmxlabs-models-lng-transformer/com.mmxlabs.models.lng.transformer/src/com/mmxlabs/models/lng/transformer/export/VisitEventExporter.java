@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -32,6 +33,8 @@ import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEvent;
+import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
@@ -56,6 +59,9 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 	private IPortSlotProvider portSlotProvider;
 	@Inject
 	private IPortTypeProvider portTypeProvider;
+	@Inject
+	private IPortSlotEventProvider portSlotEventProvider;
+	
 	private final HashMap<IPortSlot, CargoAllocation> allocations = new HashMap<IPortSlot, CargoAllocation>();
 	private Port lastPortVisited = null;
 
@@ -133,27 +139,38 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			}
 
 		} else if (slot instanceof IVesselEventPortSlot) {
-			// final ICharterOutPortSlot cslot = (ICharterOutPortSlot) slot;
-			final VesselEvent event = modelEntityMap.getModelObject(slot, VesselEvent.class);
-			if (event == null)
-				return null;
-			final VesselEventVisit vev;
-			if (event instanceof CharterOutEvent) {
-				final CharterOutEvent charterOut = (CharterOutEvent) event;
-				// filter out the charter out slots at the start port (these
-				// will have duration zero anyway)
-				if (ePort != charterOut.getEndPort()) {
-					return null;
-				}
-				// final CharterOutVisit cov = factory.createCharterOutVisit();
-				// vev = cov;
-				// cov.setCharterOut(charterOut);
-				vev = factory.createVesselEventVisit();
+			if (slot instanceof IGeneratedCharterOutVesselEventPortSlot) {
+				//GCO logic
+				GeneratedCharterOut generatedCharterOutEvent = factory.createGeneratedCharterOut();
+				IGeneratedCharterOutVesselEvent event = ((IGeneratedCharterOutVesselEventPortSlot) slot).getVesselEvent();
+				generatedCharterOutEvent.setRevenue(OptimiserUnitConvertor.convertToExternalFixedCost(event.getHireOutRevenue()));
+
+				portVisit = generatedCharterOutEvent;
+				portSlotEventProvider.addEventToPortSlot(slot, GeneratedCharterOut.class, generatedCharterOutEvent);
+
 			} else {
-				vev = factory.createVesselEventVisit();
+				// final ICharterOutPortSlot cslot = (ICharterOutPortSlot) slot;
+				final VesselEvent event = modelEntityMap.getModelObject(slot, VesselEvent.class);
+				if (event == null)
+					return null;
+				final VesselEventVisit vev;
+				if (event instanceof CharterOutEvent) {
+					final CharterOutEvent charterOut = (CharterOutEvent) event;
+					// filter out the charter out slots at the start port (these
+					// will have duration zero anyway)
+					if (ePort != charterOut.getEndPort()) {
+						return null;
+					}
+					// final CharterOutVisit cov = factory.createCharterOutVisit();
+					// vev = cov;
+					// cov.setCharterOut(charterOut);
+					vev = factory.createVesselEventVisit();
+				} else {
+					vev = factory.createVesselEventVisit();
+				}
+				vev.setVesselEvent(event);
+				portVisit = vev;
 			}
-			vev.setVesselEvent(event);
-			portVisit = vev;
 		} else {
 
 			final PortType portType = portTypeProvider.getPortType(element);

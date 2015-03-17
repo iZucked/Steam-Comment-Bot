@@ -75,6 +75,7 @@ import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
+import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -721,7 +722,7 @@ public class DefaultScenarioCreator {
 			return result;
 		}
 
-		public CharterOutMarket createDefaultCharterCostModel(final VesselClass vc, final Integer minDuration, final Integer price) {
+		public CharterOutMarket createDefaultCharterCostModel(final VesselClass vc, final Integer minDuration, final Integer price, final EList<Port> ports) {
 			final CharterOutMarket result = SpotMarketsFactory.eINSTANCE.createCharterOutMarket();
 			result.setVesselClass(vc);
 			result.setMinCharterOutDuration(minDuration);
@@ -732,6 +733,12 @@ public class DefaultScenarioCreator {
 			charterIndex.setData(createIndex(price));
 			result.setCharterOutPrice(charterIndex);
 
+			EList<APortSet<Port>> cPorts = result.getAvailablePorts();
+			for (Port p : ports) {
+				if (p.getName().equals("Port 2"))
+					cPorts.add(p);
+			}
+			
 			final SpotMarketsModel marketModel = scenario.getSpotMarketsModel();
 			marketModel.getCharterOutMarkets().add(result);
 

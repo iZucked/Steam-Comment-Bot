@@ -31,11 +31,13 @@ import com.mmxlabs.optimiser.core.modules.OptimiserCoreModule;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
+import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.CachingVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.DirectRandomSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorModule;
 import com.mmxlabs.scheduler.optimiser.peaberry.SchedulerModule;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
@@ -97,12 +99,14 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(ILNGVoyageCalculator.class).to(LNGVoyageCalculator.class);
 		bind(LNGVoyageCalculator.class).in(Singleton.class);
 
-		
 		bind(IVolumeAllocator.class).to(UnconstrainedVolumeAllocator.class).in(Singleton.class);
 
 		bind(VoyagePlanOptimiser.class);
 
 		bind(IOptimisationTransformer.class).to(OptimisationTransformer.class).in(Singleton.class);
+
+		bind(DirectRandomSequenceScheduler.class).in(Singleton.class);
+		bind(ISequenceScheduler.class).to(DirectRandomSequenceScheduler.class);
 
 		if (Platform.isRunning()) {
 			bind(IFitnessFunctionRegistry.class).toProvider(service(IFitnessFunctionRegistry.class).single());

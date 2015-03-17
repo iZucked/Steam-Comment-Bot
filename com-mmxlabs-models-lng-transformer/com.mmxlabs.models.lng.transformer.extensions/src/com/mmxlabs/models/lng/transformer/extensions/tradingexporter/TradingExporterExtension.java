@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.transformer.extensions.tradingexporter;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -27,11 +28,11 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.IExporterExtension;
+import com.mmxlabs.models.lng.transformer.export.IPortSlotEventProvider;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -41,6 +42,7 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossEntry;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -48,6 +50,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
+import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
@@ -68,6 +71,9 @@ public class TradingExporterExtension implements IExporterExtension {
 	@Inject
 	private IVesselProvider vesselProvider;
 
+	@Inject
+	private IPortSlotEventProvider portSlotEventProvider;
+
 	@Override
 	public void startExporting(final Schedule outputSchedule, final ModelEntityMap modelEntityMap, final IAnnotatedSolution annotatedSolution) {
 		this.modelEntityMap = modelEntityMap;
@@ -77,29 +83,56 @@ public class TradingExporterExtension implements IExporterExtension {
 
 	@Override
 	public void finishExporting() {
-		for (final ISequenceElement element : annotatedSolution.getContext().getOptimisationData().getSequenceElements()) {
-			{
-				final IProfitAndLossAnnotation profitAndLossWithTimeCharter = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_profitAndLoss,
-						IProfitAndLossAnnotation.class);
+		final Set<ISequenceElement> allElements = annotatedSolution.getEvaluationState().getData(SchedulerEvaluationProcess.ALL_ELEMENTS, Set.class);
+		if (allElements != null) {
+			for (final ISequenceElement element : allElements) {
+				{
+					final IProfitAndLossAnnotation profitAndLossWithTimeCharter = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_profitAndLoss,
+							IProfitAndLossAnnotation.class);
 
-				if (profitAndLossWithTimeCharter != null) {
-					// emit p&l entry - depends on the type of slot associated with the element.
-					final IPortSlot slot = slotProvider.getPortSlot(element);
+					if (profitAndLossWithTimeCharter != null) {
+						// emit p&l entry - depends on the type of slot associated with the element.
+						final IPortSlot slot = slotProvider.getPortSlot(element);
 
-					if (slot instanceof ILoadOption) {
-						final Slot modelSlot = modelEntityMap.getModelObject(slot, Slot.class);
-						CargoAllocation cargoAllocation = null;
-						for (final CargoAllocation allocation : outputSchedule.getCargoAllocations()) {
-							for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
-								if (slotAllocation.getSlot() == modelSlot) {
-									cargoAllocation = allocation;
-									break;
+						if (slot instanceof ILoadOption) {
+							final Slot modelSlot = modelEntityMap.getModelObject(slot, Slot.class);
+							CargoAllocation cargoAllocation = null;
+							for (final CargoAllocation allocation : outputSchedule.getCargoAllocations()) {
+								for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
+									if (slotAllocation.getSlot() == modelSlot) {
+										cargoAllocation = allocation;
+										break;
+									}
 								}
 							}
-						}
-						if (cargoAllocation != null) {
-							setPandLentries(profitAndLossWithTimeCharter, cargoAllocation);
-						} else {
+							if (cargoAllocation != null) {
+								setPandLentries(profitAndLossWithTimeCharter, cargoAllocation);
+							} else {
+
+								OpenSlotAllocation openSlotAllocation = null;
+								for (final OpenSlotAllocation allocation : outputSchedule.getOpenSlotAllocations()) {
+									if (allocation.getSlot() == modelSlot) {
+										openSlotAllocation = allocation;
+										break;
+									}
+								}
+								if (openSlotAllocation != null) {
+									setPandLentries(profitAndLossWithTimeCharter, openSlotAllocation);
+								} else {
+									MarketAllocation marketAllocation = null;
+									for (final MarketAllocation allocation : outputSchedule.getMarketAllocations()) {
+										if (allocation.getSlot() == modelSlot) {
+											marketAllocation = allocation;
+											break;
+										}
+									}
+									if (marketAllocation != null) {
+										setPandLentries(profitAndLossWithTimeCharter, marketAllocation);
+									}
+								}
+							}
+						} else if (slot instanceof IDischargeOption) {
+							final Slot modelSlot = modelEntityMap.getModelObject(slot, Slot.class);
 
 							OpenSlotAllocation openSlotAllocation = null;
 							for (final OpenSlotAllocation allocation : outputSchedule.getOpenSlotAllocations()) {
@@ -122,134 +155,43 @@ public class TradingExporterExtension implements IExporterExtension {
 									setPandLentries(profitAndLossWithTimeCharter, marketAllocation);
 								}
 							}
-						}
-					} else if (slot instanceof IDischargeOption) {
-						final Slot modelSlot = modelEntityMap.getModelObject(slot, Slot.class);
-
-						OpenSlotAllocation openSlotAllocation = null;
-						for (final OpenSlotAllocation allocation : outputSchedule.getOpenSlotAllocations()) {
-							if (allocation.getSlot() == modelSlot) {
-								openSlotAllocation = allocation;
-								break;
-							}
-						}
-						if (openSlotAllocation != null) {
-							setPandLentries(profitAndLossWithTimeCharter, openSlotAllocation);
-						} else {
-							MarketAllocation marketAllocation = null;
-							for (final MarketAllocation allocation : outputSchedule.getMarketAllocations()) {
-								if (allocation.getSlot() == modelSlot) {
-									marketAllocation = allocation;
-									break;
+						} else if (slot instanceof IVesselEventPortSlot) {
+							if (slot instanceof IGeneratedCharterOutVesselEventPortSlot) {
+								final GeneratedCharterOut gco = portSlotEventProvider.getEventFromPortSlot(slot, GeneratedCharterOut.class);
+								if (gco != null) {
+									setPandLentries(profitAndLossWithTimeCharter, gco);
 								}
-							}
-							if (marketAllocation != null) {
-								setPandLentries(profitAndLossWithTimeCharter, marketAllocation);
-							}
-						}
-					} else if (slot instanceof IVesselEventPortSlot) {
-						final com.mmxlabs.models.lng.cargo.VesselEvent modelEvent = modelEntityMap.getModelObject(slot, com.mmxlabs.models.lng.cargo.VesselEvent.class);
-						VesselEventVisit visit = null;
-						//
-						for (final Sequence sequence : outputSchedule.getSequences()) {
-							for (final Event event : sequence.getEvents()) {
-								if (event instanceof VesselEventVisit) {
-									if (((VesselEventVisit) event).getVesselEvent() == modelEvent) {
-										visit = (VesselEventVisit) event;
+							} else {
+								final com.mmxlabs.models.lng.cargo.VesselEvent modelEvent = modelEntityMap.getModelObject(slot, com.mmxlabs.models.lng.cargo.VesselEvent.class);
+								VesselEventVisit visit = null;
+								//
+								for (final Sequence sequence : outputSchedule.getSequences()) {
+									for (final Event event : sequence.getEvents()) {
+										if (event instanceof VesselEventVisit) {
+											if (((VesselEventVisit) event).getVesselEvent() == modelEvent) {
+												visit = (VesselEventVisit) event;
+											}
+										}
 									}
 								}
-							}
-						}
-						if (visit != null) {
-							setPandLentries(profitAndLossWithTimeCharter, visit);
-						}
-						// }
-					} else if (slot instanceof StartPortSlot) {
-						final StartEvent startEvent = findStartEvent(vesselProvider, element);
-
-						if (startEvent != null) {
-							setPandLentries(profitAndLossWithTimeCharter, startEvent);
-						}
-					} else if (slot instanceof EndPortSlot) {
-						final EndEvent endEvent = findEndEvent(element);
-
-						if (endEvent != null) {
-							setPandLentries(profitAndLossWithTimeCharter, endEvent);
-						}
-					}
-				}
-			}
-			final IProfitAndLossAnnotation generatedCharterOutProfitAndLoss = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_charterOutProfitAndLoss,
-					IProfitAndLossAnnotation.class);
-			if (generatedCharterOutProfitAndLoss != null) {
-				// emit p&l entry - depends on the type of slot associated with the element.
-				final IPortSlot slot = slotProvider.getPortSlot(element);
-
-				if (slot instanceof ILoadOption) {
-					final Slot modelSlot = modelEntityMap.getModelObject(slot, Slot.class);
-					// CargoAllocation cargoAllocation = null;
-					SlotVisit slotVisit = null;
-					for (final CargoAllocation allocation : outputSchedule.getCargoAllocations()) {
-						for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
-							if (slotAllocation.getSlot() == modelSlot) {
-								slotVisit = slotAllocation.getSlotVisit();
-								break;
-
-							}
-						}
-					}
-					if (slotVisit != null) {
-
-						// TODO: Quick hack to find the charter event. Should do better search in case it is not here!
-						Event nextEvent = slotVisit.getNextEvent();
-						while (nextEvent != null && !(nextEvent instanceof GeneratedCharterOut)) {
-							nextEvent = nextEvent.getNextEvent();
-						}
-						if (nextEvent instanceof GeneratedCharterOut) {
-							setPandLentries(generatedCharterOutProfitAndLoss, (GeneratedCharterOut) nextEvent);
-						}
-					}
-
-				} else {
-					if (slot instanceof StartPortSlot) {
-						final StartEvent startEvent = findStartEvent(vesselProvider, element);
-						if (startEvent != null) {
-							// Look forward in sequence for a charter event
-							Event nextEvent = startEvent.getNextEvent();
-							while (nextEvent != null && !(nextEvent instanceof GeneratedCharterOut)) {
-								nextEvent = nextEvent.getNextEvent();
-							}
-							if (nextEvent instanceof GeneratedCharterOut) {
-								setPandLentries(generatedCharterOutProfitAndLoss, (GeneratedCharterOut) nextEvent);
-							}
-						}
-					} else if (slot instanceof EndPortSlot) {
-						// ? Unexpected state!
-					} else if (slot instanceof IVesselEventPortSlot) {
-						final com.mmxlabs.models.lng.cargo.VesselEvent modelEvent = modelEntityMap.getModelObject(slot, com.mmxlabs.models.lng.cargo.VesselEvent.class);
-						VesselEventVisit visit = null;
-						//
-						for (final Sequence sequence : outputSchedule.getSequences()) {
-							for (final Event event : sequence.getEvents()) {
-								if (event instanceof VesselEventVisit) {
-									if (((VesselEventVisit) event).getVesselEvent() == modelEvent) {
-										visit = (VesselEventVisit) event;
-									}
+								if (visit != null) {
+									setPandLentries(profitAndLossWithTimeCharter, visit);
 								}
 							}
-						}
-						if (visit != null) {
-							// Look forward in sequence for a charter event
-							Event nextEvent = visit.getNextEvent();
-							while (nextEvent != null && !(nextEvent instanceof GeneratedCharterOut)) {
-								nextEvent = nextEvent.getNextEvent();
+						} else if (slot instanceof StartPortSlot) {
+							final StartEvent startEvent = findStartEvent(vesselProvider, element);
+
+							if (startEvent != null) {
+								setPandLentries(profitAndLossWithTimeCharter, startEvent);
 							}
-							if (nextEvent instanceof GeneratedCharterOut) {
-								setPandLentries(generatedCharterOutProfitAndLoss, (GeneratedCharterOut) nextEvent);
+						} else if (slot instanceof EndPortSlot) {
+							final EndEvent endEvent = findEndEvent(element);
+
+							if (endEvent != null) {
+								setPandLentries(profitAndLossWithTimeCharter, endEvent);
 							}
 						}
 					}
-
 				}
 			}
 		}
