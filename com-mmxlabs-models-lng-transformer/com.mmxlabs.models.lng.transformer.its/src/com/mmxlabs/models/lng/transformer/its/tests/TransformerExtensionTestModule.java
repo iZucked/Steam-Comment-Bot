@@ -14,6 +14,7 @@ import org.ops4j.peaberry.util.TypeLiterals;
 
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
+import com.mmxlabs.models.lng.transformer.extensions.charterout.GeneratedCharterOutTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.entities.EntityTransformerExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsModule;
@@ -78,6 +79,7 @@ public class TransformerExtensionTestModule extends AbstractModule {
 			// transformerExtensionFactories.add(new StandardContractTransformerExtensionFactory());
 			transformerExtensionFactories.add(new RestrictedElementsTransformerFactory());
 			transformerExtensionFactories.add(new ShippingTypeRequirementTransformerFactory());
+			transformerExtensionFactories.add(new GeneratedCharterOutTransformerFactory());
 			bind(TypeLiterals.iterable(ITransformerExtensionFactory.class)).toInstance(transformerExtensionFactories);
 
 			final List<IExporterExtensionFactory> exporterExtensionFactories = new ArrayList<IExporterExtensionFactory>();
