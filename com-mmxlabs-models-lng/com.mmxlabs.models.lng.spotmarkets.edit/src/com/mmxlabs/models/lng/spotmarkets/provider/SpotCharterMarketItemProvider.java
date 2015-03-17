@@ -66,7 +66,6 @@ public class SpotCharterMarketItemProvider
 
 			addEnabledPropertyDescriptor(object);
 			addVesselClassPropertyDescriptor(object);
-			addAvailablePortsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -107,28 +106,6 @@ public class SpotCharterMarketItemProvider
 				 getString("_UI_SpotCharterMarket_vesselClass_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_SpotCharterMarket_vesselClass_feature", "_UI_SpotCharterMarket_type"),
 				 SpotMarketsPackage.Literals.SPOT_CHARTER_MARKET__VESSEL_CLASS,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Available Ports feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addAvailablePortsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SpotCharterMarket_availablePorts_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SpotCharterMarket_availablePorts_feature", "_UI_SpotCharterMarket_type"),
-				 SpotMarketsPackage.Literals.SPOT_CHARTER_MARKET__AVAILABLE_PORTS,
 				 true,
 				 false,
 				 true,

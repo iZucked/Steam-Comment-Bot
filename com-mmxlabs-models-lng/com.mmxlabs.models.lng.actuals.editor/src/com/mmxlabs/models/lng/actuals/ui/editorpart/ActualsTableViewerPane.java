@@ -75,7 +75,6 @@ import com.mmxlabs.models.lng.actuals.ui.editorpart.ActualsModelRowTransformer.R
 import com.mmxlabs.models.lng.actuals.ui.editorpart.ActualsModelRowTransformer.RowData;
 import com.mmxlabs.models.lng.actuals.ui.editorpart.ActualsModelRowTransformer.RowDataEMFPath;
 import com.mmxlabs.models.lng.actuals.ui.editorpart.ActualsModelRowTransformer.Type;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
@@ -88,7 +87,6 @@ import com.mmxlabs.models.ui.tabular.EObjectTableViewerValidationSupport;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
-import com.mmxlabs.models.ui.tabular.manipulators.BasicOperationRenderer;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
 import com.mmxlabs.models.ui.validation.IStatusProvider;

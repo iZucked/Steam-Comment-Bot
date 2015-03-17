@@ -14,16 +14,9 @@ import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
@@ -76,6 +69,7 @@ public class CharterOutMarketComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_charterOutPriceEditor(detailComposite, topClass);
 		add_minCharterOutDurationEditor(detailComposite, topClass);
+		add_availablePortsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the charterOutPrice feature on CharterOutMarket
@@ -92,5 +86,14 @@ public class CharterOutMarketComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_minCharterOutDurationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.CHARTER_OUT_MARKET__MIN_CHARTER_OUT_DURATION));
+	}
+
+	/**
+	 * Create the editor for the availablePorts feature on CharterOutMarket
+	 *
+	 * @generated
+	 */
+	protected void add_availablePortsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.CHARTER_OUT_MARKET__AVAILABLE_PORTS));
 	}
 }

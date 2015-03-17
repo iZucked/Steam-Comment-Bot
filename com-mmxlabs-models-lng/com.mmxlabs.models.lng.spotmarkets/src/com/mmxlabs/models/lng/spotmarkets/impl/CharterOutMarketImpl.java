@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.spotmarkets.impl;
 
+import com.mmxlabs.models.lng.port.Port;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -17,11 +18,13 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
+import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -37,6 +40,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterOutMarketImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterOutMarketImpl#getCharterOutPrice <em>Charter Out Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterOutMarketImpl#getMinCharterOutDuration <em>Min Charter Out Duration</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterOutMarketImpl#getAvailablePorts <em>Available Ports</em>}</li>
  * </ul>
  * </p>
  *
@@ -102,6 +106,16 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 	 * @ordered
 	 */
 	protected int minCharterOutDuration = MIN_CHARTER_OUT_DURATION_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getAvailablePorts() <em>Available Ports</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAvailablePorts()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<APortSet<Port>> availablePorts;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -217,6 +231,18 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<APortSet<Port>> getAvailablePorts() {
+		if (availablePorts == null) {
+			availablePorts = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, SpotMarketsPackage.CHARTER_OUT_MARKET__AVAILABLE_PORTS);
+		}
+		return availablePorts;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public Object getUnsetValue(EStructuralFeature feature) {
@@ -283,6 +309,8 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 				return basicGetCharterOutPrice();
 			case SpotMarketsPackage.CHARTER_OUT_MARKET__MIN_CHARTER_OUT_DURATION:
 				return getMinCharterOutDuration();
+			case SpotMarketsPackage.CHARTER_OUT_MARKET__AVAILABLE_PORTS:
+				return getAvailablePorts();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -309,6 +337,10 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 			case SpotMarketsPackage.CHARTER_OUT_MARKET__MIN_CHARTER_OUT_DURATION:
 				setMinCharterOutDuration((Integer)newValue);
 				return;
+			case SpotMarketsPackage.CHARTER_OUT_MARKET__AVAILABLE_PORTS:
+				getAvailablePorts().clear();
+				getAvailablePorts().addAll((Collection<? extends APortSet<Port>>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -333,6 +365,9 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 			case SpotMarketsPackage.CHARTER_OUT_MARKET__MIN_CHARTER_OUT_DURATION:
 				setMinCharterOutDuration(MIN_CHARTER_OUT_DURATION_EDEFAULT);
 				return;
+			case SpotMarketsPackage.CHARTER_OUT_MARKET__AVAILABLE_PORTS:
+				getAvailablePorts().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -353,6 +388,8 @@ public class CharterOutMarketImpl extends SpotCharterMarketImpl implements Chart
 				return charterOutPrice != null;
 			case SpotMarketsPackage.CHARTER_OUT_MARKET__MIN_CHARTER_OUT_DURATION:
 				return minCharterOutDuration != MIN_CHARTER_OUT_DURATION_EDEFAULT;
+			case SpotMarketsPackage.CHARTER_OUT_MARKET__AVAILABLE_PORTS:
+				return availablePorts != null && !availablePorts.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

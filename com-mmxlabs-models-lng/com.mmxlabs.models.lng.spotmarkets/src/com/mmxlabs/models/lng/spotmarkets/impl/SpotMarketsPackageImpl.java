@@ -553,6 +553,15 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getCharterOutMarket_AvailablePorts() {
+		return (EReference)charterOutMarketEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getCharterInMarket() {
 		return charterInMarketEClass;
 	}
@@ -600,15 +609,6 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 */
 	public EReference getSpotCharterMarket_VesselClass() {
 		return (EReference)spotCharterMarketEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getSpotCharterMarket_AvailablePorts() {
-		return (EReference)spotCharterMarketEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -696,6 +696,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		charterOutMarketEClass = createEClass(CHARTER_OUT_MARKET);
 		createEReference(charterOutMarketEClass, CHARTER_OUT_MARKET__CHARTER_OUT_PRICE);
 		createEAttribute(charterOutMarketEClass, CHARTER_OUT_MARKET__MIN_CHARTER_OUT_DURATION);
+		createEReference(charterOutMarketEClass, CHARTER_OUT_MARKET__AVAILABLE_PORTS);
 
 		charterInMarketEClass = createEClass(CHARTER_IN_MARKET);
 		createEReference(charterInMarketEClass, CHARTER_IN_MARKET__CHARTER_IN_PRICE);
@@ -704,7 +705,6 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		spotCharterMarketEClass = createEClass(SPOT_CHARTER_MARKET);
 		createEAttribute(spotCharterMarketEClass, SPOT_CHARTER_MARKET__ENABLED);
 		createEReference(spotCharterMarketEClass, SPOT_CHARTER_MARKET__VESSEL_CLASS);
-		createEReference(spotCharterMarketEClass, SPOT_CHARTER_MARKET__AVAILABLE_PORTS);
 
 		// Create enums
 		spotTypeEEnum = createEEnum(SPOT_TYPE);
@@ -821,6 +821,10 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		initEClass(charterOutMarketEClass, CharterOutMarket.class, "CharterOutMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCharterOutMarket_CharterOutPrice(), thePricingPackage.getCharterIndex(), null, "charterOutPrice", null, 1, 1, CharterOutMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCharterOutMarket_MinCharterOutDuration(), ecorePackage.getEInt(), "minCharterOutDuration", null, 1, 1, CharterOutMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		g1 = createEGenericType(theTypesPackage.getAPortSet());
+		g2 = createEGenericType(thePortPackage.getPort());
+		g1.getETypeArguments().add(g2);
+		initEReference(getCharterOutMarket_AvailablePorts(), g1, null, "availablePorts", null, 0, -1, CharterOutMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(charterInMarketEClass, CharterInMarket.class, "CharterInMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCharterInMarket_CharterInPrice(), thePricingPackage.getCharterIndex(), null, "charterInPrice", null, 1, 1, CharterInMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -829,10 +833,6 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		initEClass(spotCharterMarketEClass, SpotCharterMarket.class, "SpotCharterMarket", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSpotCharterMarket_Enabled(), ecorePackage.getEBoolean(), "enabled", "true", 0, 1, SpotCharterMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSpotCharterMarket_VesselClass(), theFleetPackage.getVesselClass(), null, "vesselClass", null, 0, 1, SpotCharterMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		g1 = createEGenericType(theTypesPackage.getAPortSet());
-		g2 = createEGenericType(thePortPackage.getPort());
-		g1.getETypeArguments().add(g2);
-		initEReference(getSpotCharterMarket_AvailablePorts(), g1, null, "availablePorts", null, 0, -1, SpotCharterMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(spotTypeEEnum, SpotType.class, "SpotType");

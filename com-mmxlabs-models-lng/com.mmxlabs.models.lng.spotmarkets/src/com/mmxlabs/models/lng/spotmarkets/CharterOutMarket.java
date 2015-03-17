@@ -6,8 +6,11 @@
  */
 package com.mmxlabs.models.lng.spotmarkets;
 
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.CharterIndex;
+import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -19,6 +22,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getCharterOutPrice <em>Charter Out Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getMinCharterOutDuration <em>Min Charter Out Duration</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket#getAvailablePorts <em>Available Ports</em>}</li>
  * </ul>
  * </p>
  *
@@ -78,5 +82,21 @@ public interface CharterOutMarket extends SpotCharterMarket, NamedObject {
 	 * @generated
 	 */
 	void setMinCharterOutDuration(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Available Ports</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}&lt;com.mmxlabs.models.lng.port.Port>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Available Ports</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Available Ports</em>' reference list.
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterOutMarket_AvailablePorts()
+	 * @model
+	 * @generated
+	 */
+	EList<APortSet<Port>> getAvailablePorts();
 
 } // CharterOutMarket

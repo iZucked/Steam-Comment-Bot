@@ -13,16 +13,9 @@ import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
@@ -73,7 +66,6 @@ public class SpotCharterMarketComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_enabledEditor(detailComposite, topClass);
 		add_vesselClassEditor(detailComposite, topClass);
-		add_availablePortsEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -92,14 +84,5 @@ public class SpotCharterMarketComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_vesselClassEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_CHARTER_MARKET__VESSEL_CLASS));
-	}
-
-	/**
-	 * Create the editor for the availablePorts feature on SpotCharterMarket
-	 *
-	 * @generated
-	 */
-	protected void add_availablePortsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_CHARTER_MARKET__AVAILABLE_PORTS));
 	}
 }

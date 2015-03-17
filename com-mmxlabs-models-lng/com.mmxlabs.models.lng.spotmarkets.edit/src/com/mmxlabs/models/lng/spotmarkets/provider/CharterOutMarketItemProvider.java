@@ -67,6 +67,7 @@ public class CharterOutMarketItemProvider
 			addNamePropertyDescriptor(object);
 			addCharterOutPricePropertyDescriptor(object);
 			addMinCharterOutDurationPropertyDescriptor(object);
+			addAvailablePortsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -155,6 +156,28 @@ public class CharterOutMarketItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Available Ports feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addAvailablePortsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterOutMarket_availablePorts_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterOutMarket_availablePorts_feature", "_UI_CharterOutMarket_type"),
+				 SpotMarketsPackage.Literals.CHARTER_OUT_MARKET__AVAILABLE_PORTS,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

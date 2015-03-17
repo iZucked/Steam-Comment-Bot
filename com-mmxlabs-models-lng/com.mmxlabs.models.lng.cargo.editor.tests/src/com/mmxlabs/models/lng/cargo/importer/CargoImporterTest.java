@@ -18,13 +18,12 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import junit.framework.Assert;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.jdt.annotation.NonNull;
+import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
