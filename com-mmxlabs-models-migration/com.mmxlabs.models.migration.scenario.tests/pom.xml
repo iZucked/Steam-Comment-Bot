@@ -19,8 +19,6 @@
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
 				<configuration>
-
-							
 					<dependency-resolution>
 						<extraRequirements>
 							<requirement>
@@ -28,26 +26,9 @@
 								<id>org.hamcrest</id>
 								<versionRange>0.0.0</versionRange>
 							</requirement>
-							<requirement>
-								<type>eclipse-plugin</type>
-								<id>com.mmxlabs.scheduler.optimiser</id>
-								<versionRange>0.0.0</versionRange>
-							</requirement>
 						</extraRequirements>
 					</dependency-resolution>
 					
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-surefire-plugin</artifactId>
-				<configuration>
-					<useUIHarness>false</useUIHarness>
-					<useUIThread>false</useUIThread>
-
-					<product>org.eclipse.sdk.ide</product>
-					<application>org.eclipse.ui.ide.workbench</application>
-
 				</configuration>
 			</plugin>
 		</plugins>
