@@ -217,7 +217,7 @@ public class CapacityViolationReportView extends EMFReportView {
 		tableDataModel = GenericEMFTableDataModel.createEPackage(NODE_OWNER);
 
 		final EClass rowClass = GenericEMFTableDataModel.getRowClass(tableDataModel);
-		attrib_Row_Type = GenericEMFTableDataModel.createRowAttribute(rowClass, EcorePackage.eINSTANCE.getEEnum(), ATTRIBUTE_TYPE);
+		attrib_Row_Type = GenericEMFTableDataModel.createRowAttribute(rowClass, SchedulePackage.Literals.CAPACITY_VIOLATION_TYPE, ATTRIBUTE_TYPE);
 		attrib_Row_Quantity = GenericEMFTableDataModel.createRowAttribute(rowClass, EcorePackage.eINSTANCE.getELong(), ATTRIBUTE_QUANTITY);
 
 		ref_Row_Owner = (EReference) GenericEMFTableDataModel.getRowFeature(tableDataModel, NODE_OWNER);
