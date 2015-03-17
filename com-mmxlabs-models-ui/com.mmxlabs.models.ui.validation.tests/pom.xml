@@ -52,6 +52,23 @@
 							<arch>x86_64</arch>
 						</environment>
 					</environments>
+					
+					<dependency-resolution>
+						<extraRequirements>
+							<requirement>
+								<type>eclipse-plugin</type>
+								<id>org.hamcrest</id>
+								<versionRange>0.0.0</versionRange>
+							</requirement>
+							<requirement>
+								<type>eclipse-plugin</type>
+								<id>com.mmxlabs.scheduler.optimiser</id>
+								<versionRange>0.0.0</versionRange>
+							</requirement>
+						</extraRequirements>
+					</dependency-resolution>
+					
+					
 				</configuration>
 			</plugin>
 
