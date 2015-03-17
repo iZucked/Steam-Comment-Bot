@@ -38,6 +38,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
  */
 public class ScenarioUtils {
 
+	private static final boolean SPOT_TO_SPOT_CONSTRAINT = false;
 	private static Constraint createConstraint(ParametersFactory parametersFactory, String name, boolean enabled) {
 		Constraint c = parametersFactory.createConstraint();
 		c.setName(name);
@@ -77,7 +78,9 @@ public class ScenarioUtils {
 			constraints.add(createConstraint(parametersFactory, RestrictedElementsConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(parametersFactory, ContractCvConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(parametersFactory, PortCvCompatibilityConstraintCheckerFactory.NAME, true));
-			constraints.add(createConstraint(parametersFactory, SpotToSpotConstraintCheckerFactory.NAME, true));
+			if (SPOT_TO_SPOT_CONSTRAINT) {
+				constraints.add(createConstraint(parametersFactory, SpotToSpotConstraintCheckerFactory.NAME, true));
+			}
 			constraints.add(createConstraint(parametersFactory, DifferentSTSVesselsConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(parametersFactory, ShippingTypeRequirementConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(parametersFactory, ShippingHoursRestrictionCheckerFactory.NAME, true));
