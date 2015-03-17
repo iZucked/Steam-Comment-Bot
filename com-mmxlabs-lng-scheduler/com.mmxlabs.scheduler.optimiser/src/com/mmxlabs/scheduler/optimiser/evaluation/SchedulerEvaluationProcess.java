@@ -38,11 +38,11 @@ public class SchedulerEvaluationProcess implements IEvaluationProcess {
 	}
 
 	@Override
-	public void annotate(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @NonNull IAnnotatedSolution solution) {
+	public void annotate(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @NonNull final IAnnotatedSolution solution) {
 		evaluate(sequences, evaluationState, solution);
 	}
 
-	private boolean evaluate(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @Nullable IAnnotatedSolution solution) {
+	private boolean evaluate(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @Nullable final IAnnotatedSolution solution) {
 
 		final ScheduledSequences scheduledSequences = scheduler.schedule(sequences, solution);
 		if (scheduledSequences == null) {
@@ -57,38 +57,38 @@ public class SchedulerEvaluationProcess implements IEvaluationProcess {
 		}
 		return true;
 	}
-	
-	public void setEvaluationElements(@NonNull final IEvaluationState evaluationState, @Nullable IAnnotatedSolution solution) {
-		Set<ISequenceElement> allElements = getAllScheduledSequenceElements(evaluationState, solution);
+
+	public void setEvaluationElements(@NonNull final IEvaluationState evaluationState, @NonNull final IAnnotatedSolution solution) {
+		final Set<ISequenceElement> allElements = getAllScheduledSequenceElements(evaluationState, solution);
 		evaluationState.setData(ALL_ELEMENTS, allElements);
-		Set<ISequenceElement> optimisationElements = getOptimisationSequenceElements(solution);
+		final Set<ISequenceElement> optimisationElements = getOptimisationSequenceElements(solution);
 		evaluationState.setData(OPTIMISATION_ELEMENTS, optimisationElements);
-		Set<ISequenceElement> additionalElements = getAdditionalSequenceElements(allElements, optimisationElements);
+		final Set<ISequenceElement> additionalElements = getAdditionalSequenceElements(allElements, optimisationElements);
 		evaluationState.setData(ADDITIONAL_ELEMENTS, additionalElements);
 	}
 
 	private Set<ISequenceElement> getAllScheduledSequenceElements(@NonNull final IEvaluationState evaluationState, @NonNull final IAnnotatedSolution annotatedSolution) {
-		Set<ISequenceElement> allElements = new HashSet<ISequenceElement>();
-		ScheduledSequences scheduledSequences = evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class);
-		for (ScheduledSequence scheduledSequence : scheduledSequences) {
-			for (IPortSlot portSlot : scheduledSequence.getSequenceSlots()) {
+		final Set<ISequenceElement> allElements = new HashSet<ISequenceElement>();
+		final ScheduledSequences scheduledSequences = evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class);
+		assert scheduledSequences != null;
+		for (final ScheduledSequence scheduledSequence : scheduledSequences) {
+			for (final IPortSlot portSlot : scheduledSequence.getSequenceSlots()) {
 				allElements.add(portSlotProvider.getElement(portSlot));
 			}
 		}
 		allElements.addAll(annotatedSolution.getContext().getOptimisationData().getSequenceElements());
 		return allElements;
 	}
-	
-	private Set<ISequenceElement> getOptimisationSequenceElements(IAnnotatedSolution solution) {
-		Set<ISequenceElement> optimisationElements = new HashSet<ISequenceElement>(solution.getContext().getOptimisationData().getSequenceElements());
+
+	private Set<ISequenceElement> getOptimisationSequenceElements(final IAnnotatedSolution solution) {
+		final Set<ISequenceElement> optimisationElements = new HashSet<ISequenceElement>(solution.getContext().getOptimisationData().getSequenceElements());
 		return optimisationElements;
 	}
 
-	private Set<ISequenceElement> getAdditionalSequenceElements(Set<ISequenceElement> allElements, Set<ISequenceElement> optimisationElements) {
-		Set<ISequenceElement> additionalElements = new HashSet<ISequenceElement>(allElements);
+	private Set<ISequenceElement> getAdditionalSequenceElements(final Set<ISequenceElement> allElements, final Set<ISequenceElement> optimisationElements) {
+		final Set<ISequenceElement> additionalElements = new HashSet<ISequenceElement>(allElements);
 		additionalElements.removeAll(optimisationElements);
 		return additionalElements;
 	}
-
 
 }
