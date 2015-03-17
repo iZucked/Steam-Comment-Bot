@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Shiplingo Transformer Tests
+Bundle-Name: Lingo Transformer Tests
 Bundle-SymbolicName: com.mmxlabs.models.lng.transformer.its
 Bundle-Version: 3.8.0.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
