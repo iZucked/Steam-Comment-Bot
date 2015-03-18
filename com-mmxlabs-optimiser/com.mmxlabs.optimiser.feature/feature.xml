@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2014
+    Copyright (C) Minimax Labs Ltd., 2010 - 2015
     All rights reserved.
 
 -->
 <feature
       id="com.mmxlabs.optimiser.feature"
       label="Optimiser Feature"
-      version="2.1.1.qualifier"
+      version="3.0.1.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <description>

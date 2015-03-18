@@ -4,11 +4,35 @@
 	<parent>
 		<groupId>com.mmxlabs.optimiser</groupId>
 		<artifactId>optimiser-parent</artifactId>
-		<version>2.1.1-SNAPSHOT</version>
+		<version>3.0.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.optimiser.optimiser-ga.tests</artifactId>
-	<version>2.1.1-SNAPSHOT</version>
+	<version>3.0.1-SNAPSHOT</version>
 	<packaging>eclipse-test-plugin</packaging>
+	
+	<build>
 
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<configuration>
+
+							
+					<dependency-resolution>
+						<extraRequirements>
+							<requirement>
+								<type>eclipse-plugin</type>
+								<id>com.mmxlabs.optimiser.optimiser-ga</id>
+								<versionRange>0.0.0</versionRange>
+							</requirement>
+						</extraRequirements>
+					</dependency-resolution>
+					
+				</configuration>
+			</plugin>
+		</plugins>
+
+	</build>
 </project>
