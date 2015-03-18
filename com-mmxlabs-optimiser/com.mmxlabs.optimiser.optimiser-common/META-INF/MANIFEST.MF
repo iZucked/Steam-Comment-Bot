@@ -9,7 +9,7 @@ Bundle-Name: Optimiser - Common
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-SymbolicName: com.mmxlabs.optimiser.optimiser-common
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-Version: 3.0.0.RELEASE
+Bundle-Version: 3.0.1.qualifier
 Created-By: Apache Maven Bundle Plugin
 Export-Package: com.mmxlabs.optimiser.common.dcproviders.impl.indexed;us
  es:="com.mmxlabs.optimiser.core,com.mmxlabs.common.indexedobjects.impl,
