@@ -5,7 +5,19 @@
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.jdt.annotation" version="0.0.0"/>
 <unit id="org.eclipse.jdt.annotation.source" version="0.0.0"/>
+<unit id="org.eclipse.platform.sdk" version="0.0.0"/>
+<unit id="org.eclipse.sdk.ide" version="0.0.0"/>
+<unit id="org.eclipse.equinox.compendium.sdk.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.equinox.core.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.equinox.core.sdk.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.equinox.sdk.feature.group" version="0.0.0"/>
 <repository location="http://download.eclipse.org/eclipse/updates/4.4/R-4.4.2-201502041700/"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.rcp.source.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.jdt.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.pde.feature.group" version="0.0.0"/>
+<repository location="http://download.eclipse.org/releases/luna/201502271000"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.aopalliance" version="0.0.0"/>
@@ -26,15 +38,6 @@
 <unit id="ch.qos.logback.slf4j" version="0.0.0"/>
 <unit id="ch.qos.logback.slf4j.source" version="0.0.0"/>
 <repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/orbit/orbit-buildrepo/R20150124073747/orbit-buildrepo-R20150124073747.zip-unzip/" id="mmxlabs-releases"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.platform.sdk" version="0.0.0"/>
-<unit id="org.eclipse.sdk.ide" version="0.0.0"/>
-<unit id="org.eclipse.equinox.compendium.sdk.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.equinox.core.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.equinox.core.sdk.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.equinox.sdk.feature.group" version="0.0.0"/>
-<repository location="http://download.eclipse.org/eclipse/updates/4.4/R-4.4.2-201502041700/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.googlecode.json-simple.source" version="0.0.0"/>
