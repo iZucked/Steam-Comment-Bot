@@ -10,7 +10,7 @@ Bundle-Name: common-recorder
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-SymbolicName: com.mmxlabs.common.common-recorder
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-Version: 2.6.3.qualifier
+Bundle-Version: 3.0.0.qualifier
 Created-By: Apache Maven Bundle Plugin
 Export-Package: com.mmxlabs.common.recorder;uses:="javax.xml.stream,com.
  mmxlabs.common.recorder.conversion,com.mmxlabs.common.recorder.conversi
@@ -21,4 +21,4 @@ Export-Package: com.mmxlabs.common.recorder;uses:="javax.xml.stream,com.
 Import-Package: javax.xml.namespace,javax.xml.stream,javax.xml.stream.ev
  ents
 Tool: Bnd-1.50.0
-Require-Bundle: com.mmxlabs.common.common-util;bundle-version="2.6.0"
+Require-Bundle: com.mmxlabs.common.common-util;bundle-version="3.0.0"
