@@ -111,13 +111,12 @@
 	<repositories>
 		<repository>
 			<id>com-mmxlabs-common-util.hg</id>
-			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/common/com.mmxlabs.common.util.p2/2.6.2.RELEASE/com.mmxlabs.common.util.p2-2.6.2.RELEASE.zip-unzip/</url>
+			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/common/com.mmxlabs.common.util.p2/3.0.0.RELEASE/com.mmxlabs.common.util.p2-3.0.0.RELEASE.zip-unzip/</url>
 			<layout>p2</layout>
 		</repository>
 		<repository>
 			<id>com-mmxlabs-optimiser.hg</id>
-			<!--<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/optimiser/com.mmxlabs.optimiser.p2/2.1.0.RELEASE/com.mmxlabs.optimiser.p2-2.1.0.RELEASE.zip-unzip/</url>-->
-			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/optimiser/com.mmxlabs.optimiser.p2/2.1.1-SNAPSHOT/com.mmxlabs.optimiser.p2-2.1.1-SNAPSHOT.zip-unzip/</url>
+			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/optimiser/com.mmxlabs.optimiser.p2/3.0.0.RELEASE/com.mmxlabs.optimiser.p2-3.0.0.RELEASE.zip-unzip/</url>
 			<layout>p2</layout>
 		</repository>
 		<repository>
