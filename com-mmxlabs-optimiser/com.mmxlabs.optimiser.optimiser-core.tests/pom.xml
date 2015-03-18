@@ -28,6 +28,12 @@
 								<id>com.mmxlabs.optimiser.optimiser-core</id>
 								<versionRange>0.0.0</versionRange>
 							</requirement>
+							<requirement>
+								<type>eclipse-plugin</type>
+								<id>org.hamcrest</id>
+								<versionRange>0.0.0</versionRange>
+							</requirement>
+							
 						</extraRequirements>
 					</dependency-resolution>
 					
