@@ -88,7 +88,9 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 	private static final double canalChoiceThreshold = 0.1; // percentage improvement required to choose a canal route
 
-	private static final boolean DO_CACHING = true;
+	private static final boolean DO_CACHING = false;
+
+	private int hits = 0;
 
 	@Override
 	public List<Pair<VoyagePlan, IPortTimesRecord>> processSchedule(final int vesselStartTime, final long startHeelVolumeInM3, final IVesselAvailability vesselAvailability, final VoyagePlan vp,
@@ -136,7 +138,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		List<Pair<VoyagePlan, IPortTimesRecord>> cachedSolution = null;
 
 		if (DO_CACHING) {
-			isSolutionCached(firstStartTime, startHeelInM3, ballastStartTime, availableTime, firstSlot, slotBeforeCharter, slotAfterCharter, vesselAvailability);
+			solutionSeen = isSolutionCached(firstStartTime, startHeelInM3, ballastStartTime, availableTime, firstSlot, slotBeforeCharter, slotAfterCharter, vesselAvailability);
 			if (solutionSeen) {
 				// try to retrieve solution from cache first
 				cachedSolution = getCachedSolution(firstStartTime, startHeelInM3, ballastStartTime, availableTime, firstSlot, slotBeforeCharter, slotAfterCharter, vesselAvailability);
@@ -151,7 +153,9 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 			// Have we found a market?
 			if (gcoMarket.getOption() == null) {
-				addCachedSolution(firstStartTime, startHeelInM3, ballastStartTime, availableTime, firstSlot, slotBeforeCharter, slotAfterCharter, vesselAvailability, null, null);
+				if (DO_CACHING) {
+					addCachedSolution(firstStartTime, startHeelInM3, ballastStartTime, availableTime, firstSlot, slotBeforeCharter, slotAfterCharter, vesselAvailability, null, null);
+				}
 				return null;
 			}
 
@@ -202,17 +206,13 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			final List<Pair<VoyagePlan, IPortTimesRecord>> charterPlans = new LinkedList<Pair<VoyagePlan, IPortTimesRecord>>();
 			charterPlans.add(new Pair<VoyagePlan, IPortTimesRecord>(upToCharterPlan, preCharterAllocation != null ? preCharterAllocation : preCharteringTimes));
 			charterPlans.add(new Pair<VoyagePlan, IPortTimesRecord>(charterToEndPlan, postCharteringTimes));
-			if (cachedSolution == null) {
-				if (DO_CACHING) {
-					setAdditionalDataForCaching(gcoMarket);
-					if (cachedSolution == null) {
-						addCachedSolution(firstStartTime, startHeelInM3, ballastStartTime, availableTime, firstSlot, slotBeforeCharter, slotAfterCharter, vesselAvailability, charterPlans, gcoMarket);
-					}
+			if (DO_CACHING) {
+				setAdditionalDataForCaching(gcoMarket);
+				if (cachedSolution == null) {
+					addCachedSolution(firstStartTime, startHeelInM3, ballastStartTime, availableTime, firstSlot, slotBeforeCharter, slotAfterCharter, vesselAvailability, charterPlans, gcoMarket);
 				}
-				return charterPlans;
-			} else {
-				return cachedSolution;
 			}
+			return charterPlans;
 		}
 	}
 
@@ -639,8 +639,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		if (solution != null) {
 			solutionToCache = new Pair<List<Pair<VoyagePlan, IPortTimesRecord>>, GeneratedCharterOutOption>(solution, charterOutOption);
 		}
-		generatedCharterOutOptionCache.addSplitVoyagePlans(firstLoadTime, startHeel, ballastStartTime, availableTime, firstLoad, discharge, nextLoad, vesselAvailability,
-				solutionToCache);
+		generatedCharterOutOptionCache.addSplitVoyagePlans(firstLoadTime, startHeel, ballastStartTime, availableTime, firstLoad, discharge, nextLoad, vesselAvailability, solutionToCache);
 	}
 
 	private void setAdditionalDataForCaching(GeneratedCharterOutOption gcoo) {
