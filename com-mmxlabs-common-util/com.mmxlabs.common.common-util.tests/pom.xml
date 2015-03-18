@@ -5,7 +5,7 @@
 	<artifactId>com.mmxlabs.common.common-util.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
 	<version>3.0.1-SNAPSHOT</version>
-	<name>common-util</name>
+	<name>common-util: Tests</name>
 
 	<parent>
 		<groupId>com.mmxlabs.common</groupId>
@@ -19,13 +19,17 @@
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
 				<configuration>
-
 							
 					<dependency-resolution>
 						<extraRequirements>
 							<requirement>
 								<type>eclipse-plugin</type>
 								<id>com.mmxlabs.common.common-util</id>
+								<versionRange>0.0.0</versionRange>
+							</requirement>
+							<requirement>
+								<type>eclipse-plugin</type>
+								<id>org.hamcrest</id>
 								<versionRange>0.0.0</versionRange>
 							</requirement>
 						</extraRequirements>
