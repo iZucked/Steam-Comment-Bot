@@ -10,8 +10,8 @@ import java.util.Map;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
-import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IGeneratedCharterOutEvaluator;
-import com.mmxlabs.scheduler.optimiser.scheduleprocessor.impl.DefaultGeneratedCharterOutEvaluator;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterOutEvaluator;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl.DefaultGeneratedCharterOutEvaluator;
 
 public class TransformerITSOptimiserInjectorService implements IOptimiserInjectorService {
 

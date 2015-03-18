@@ -159,7 +159,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
-import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
 
 /**
  * Wrapper for an EMF LNG Scheduling {@link MMXRootObject}, providing utility methods to convert it into an optimisation job. Typical usage is to construct an LNGScenarioTransformer with a given
@@ -2411,15 +2411,21 @@ public class LNGScenarioTransformer {
 				}
 
 				final VesselClass eVesselClass = charterCost.getVesselClass();
-				final ICurve charterInCurve;
 
 				if (charterCost.getCharterOutPrice() != null) {
 					final ICurve charterOutCurve = charterIndexAssociation.lookup(charterCost.getCharterOutPrice());
 					final int minDuration = 24 * charterCost.getMinCharterOutDuration();
 					
 					final Set<Port> portSet = SetUtils.getObjects(charterCost.getAvailablePorts());
-					final Set<IPort> marketPorts = new HashSet<IPort>();
-					for (final Port ap : portSet) {
+					final ArrayList<Port> sortedPortSet = new ArrayList<Port>(portSet);
+					Collections.sort(sortedPortSet, new Comparator<Port>() {
+				        @Override public int compare(Port p1, Port p2) {
+				            return p1.getName().compareTo(p2.getName());
+				        }
+
+				    });
+					final Set<IPort> marketPorts = new LinkedHashSet<IPort>();
+					for (final Port ap : sortedPortSet) {
 						final IPort ip = portAssociation.lookup((Port) ap);
 						if (ip != null) {
 							marketPorts.add(ip);

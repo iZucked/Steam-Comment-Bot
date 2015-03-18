@@ -18,7 +18,7 @@ import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
-import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
 
 public class SingleMissingPriceConstraint extends AbstractModelMultiConstraint {
 
