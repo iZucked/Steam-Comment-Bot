@@ -1,4 +1,4 @@
-package com.mmxlabs.scheduler.optimiser.scheduleprocessor.impl;
+package com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl;
 
 import java.util.List;
 
