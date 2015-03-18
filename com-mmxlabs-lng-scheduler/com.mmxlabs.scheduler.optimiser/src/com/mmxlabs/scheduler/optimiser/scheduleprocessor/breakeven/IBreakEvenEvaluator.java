@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
-package com.mmxlabs.scheduler.optimiser.scheduleprocessor;
+package com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;

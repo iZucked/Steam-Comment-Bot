@@ -171,48 +171,6 @@ public class ShippingCostHelper {
 		return false;
 	}
 	
-//	/**
-//	 * Calculate costs for the idle time method of generating charter outs
-//	 * 
-//	 * @param plan
-//	 * @return
-//	 */
-//	public long getGeneratedCharterOutCosts(final VoyagePlan plan) {
-//		long costs = 0;
-//		Object obj = plan.getSequence()[0];
-//		if (obj instanceof PortDetails) {
-//			final PortDetails portDetails = (PortDetails) obj;
-//			if (portDetails.getOptions().getPortSlot().getPortType() == PortType.GeneratedCharterOut) {
-//				final int hireRatePerDay = plan.getCharterInRatePerDay();
-//				return hireRatePerDay * portDetails.getOptions().getVisitDuration();
-//			}
-//		}
-//		return costs;
-//
-//	}
-//
-//	/**
-//	 * Calculate revenue for the voyage plan method of generating charter outs
-//	 * 
-//	 * @param plan
-//	 * @param vesselAvailability
-//	 * @return
-//	 */
-//	public long getGeneratedCharterOutRevenue(final VoyagePlan plan, final IVesselAvailability vesselAvailability) {
-//		long charterRevenue = 0;
-//		Object obj = plan.getSequence()[0];
-//		if (obj instanceof PortDetails) {
-//			final PortDetails portDetails = (PortDetails) obj;
-//			if (portDetails.getOptions().getPortSlot().getPortType() == PortType.GeneratedCharterOut) {
-//					IGenerated portDetails.getOptions().getPortSlot()
-//					final long hourlyCharterOutPrice = voyageDetails.getOptions().getCharterOutDailyRate();
-//					charterRevenue += Calculator.quantityFromRateTime(hourlyCharterOutPrice, voyageDetails.getIdleTime()) / 24L;
-//				}
-//			}
-//		}
-//		return charterRevenue;
-//	}
-
 	public long getShippingCosts(final VoyagePlan plan, final IVesselAvailability vesselAvailability, final boolean includeLNG, final boolean includeCharterInCosts) {
 
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {

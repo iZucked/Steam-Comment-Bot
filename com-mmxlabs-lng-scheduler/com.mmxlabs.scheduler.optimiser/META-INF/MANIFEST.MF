@@ -9,7 +9,8 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-SymbolicName: com.mmxlabs.scheduler.optimiser
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-Version: 3.8.0.qualifier
-Import-Package: javax.inject;version="[1.0,2)",
+Import-Package: com.mmxlabs.scheduler.optimiser.voyage.impl,
+ javax.inject;version="[1.0,2)",
  org.slf4j;version="[1.5,2)"
 Require-Bundle: com.google.inject;bundle-version="3.0.0",
  org.ops4j.peaberry;bundle-version="1.3.0",
@@ -58,7 +59,9 @@ Export-Package: com.mmxlabs.scheduler.optimiser,
  com.mmxlabs.scheduler.optimiser.providers.impl,
  com.mmxlabs.scheduler.optimiser.providers.impl.indexed,
  com.mmxlabs.scheduler.optimiser.schedule,
- com.mmxlabs.scheduler.optimiser.scheduleprocessor,
- com.mmxlabs.scheduler.optimiser.scheduleprocessor.impl,
+ com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven,
+ com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.impl,
+ com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout,
+ com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl,
  com.mmxlabs.scheduler.optimiser.voyage,
  com.mmxlabs.scheduler.optimiser.voyage.impl

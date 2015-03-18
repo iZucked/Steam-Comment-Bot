@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
-package com.mmxlabs.scheduler.optimiser.scheduleprocessor.impl;
+package com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.impl;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -30,7 +30,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.schedule.ShippingCostHelper;
-import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;

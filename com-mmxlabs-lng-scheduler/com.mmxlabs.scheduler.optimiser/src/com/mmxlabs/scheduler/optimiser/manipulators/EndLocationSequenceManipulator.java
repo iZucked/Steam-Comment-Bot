@@ -24,15 +24,14 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IGeneratedCharterOutSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
-import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IGeneratedCharterOutEvaluator;
-import com.mmxlabs.scheduler.optimiser.scheduleprocessor.impl.NullGeneratedCharterOutEvaluator;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterOutEvaluator;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl.NullGeneratedCharterOutEvaluator;
 
 /**
  * The {@link EndLocationSequenceManipulator} replaces the end location with another location in two possible ways; either the vessel's end location is adjust to be the same as its first load port, or
