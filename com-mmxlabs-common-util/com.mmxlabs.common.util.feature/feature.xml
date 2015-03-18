@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (C) Minimax Labs Ltd., 2010 - 2014
+    Copyright (C) Minimax Labs Ltd., 2010 - 2015
     All rights reserved.
 
 -->
 <feature
       id="com.mmxlabs.common.util.feature"
       label="Common Util Feature"
-      version="2.6.3.qualifier"
+      version="3.0.1.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <description>

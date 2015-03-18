@@ -4,13 +4,36 @@
 
 	<artifactId>com.mmxlabs.common.common-util.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
-	<version>2.6.3-SNAPSHOT</version>
+	<version>3.0.1-SNAPSHOT</version>
 	<name>common-util</name>
 
 	<parent>
 		<groupId>com.mmxlabs.common</groupId>
 		<artifactId>common-util-parent</artifactId>
-		<version>2.6.3-SNAPSHOT</version>
+		<version>3.0.1-SNAPSHOT</version>
 	</parent>
+	<build>
 
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<configuration>
+
+							
+					<dependency-resolution>
+						<extraRequirements>
+							<requirement>
+								<type>eclipse-plugin</type>
+								<id>com.mmxlabs.common.common-util</id>
+								<versionRange>0.0.0</versionRange>
+							</requirement>
+						</extraRequirements>
+					</dependency-resolution>
+					
+				</configuration>
+			</plugin>
+		</plugins>
+
+	</build>
 </project>
