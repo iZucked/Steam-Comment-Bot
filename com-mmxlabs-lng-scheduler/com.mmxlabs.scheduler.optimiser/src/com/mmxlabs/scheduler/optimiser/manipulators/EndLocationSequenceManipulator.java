@@ -9,8 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import javax.inject.Inject;
-
+import com.google.inject.Inject;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
@@ -99,7 +98,7 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 	@Inject
 	private IVesselProvider vesselProvider;
 
-	@Inject
+	@Inject(optional=true)
 	private IGeneratedCharterOutEvaluator charterOutEvaluator;
 
 	@Inject
