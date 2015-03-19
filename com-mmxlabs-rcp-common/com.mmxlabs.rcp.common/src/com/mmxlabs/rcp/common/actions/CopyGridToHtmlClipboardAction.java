@@ -114,7 +114,7 @@ public class CopyGridToHtmlClipboardAction extends Action {
 		}
 		// Set of column groups already seen. This assumes all columns within a group are next to each other
 		final Set<GridColumnGroup> seenGroups = new HashSet<>();
-		for (int i : table.getColumnOrder()) {
+		for (final int i : table.getColumnOrder()) {
 			final GridColumn column = table.getColumn(i);
 			if (!column.isVisible()) {
 				continue;
@@ -168,18 +168,16 @@ public class CopyGridToHtmlClipboardAction extends Action {
 			addCell(sw, item.getHeaderText(), new String[] { "bgcolor='gray'" });
 		}
 
-		for (int i = 0; i < numColumns; ++i) {
-			{
-				int j = table.getColumnOrder()[i];
-				final GridColumn column = table.getColumn(j);
-				if (!column.isVisible()) {
-					continue;
-				}
+		final int[] columnOrder = table.getColumnOrder();
+		for (int i = 0; i < columnOrder.length; ++i) {
+			final int colIdx = columnOrder[i];
+			final GridColumn column = table.getColumn(colIdx);
+			if (!column.isVisible()) {
+				continue;
 			}
-
 			// If offset is greater than zero, skip this row
-			if (rowOffsets[i] == 0) {
-				final Color c = item.getBackground(i);
+			if (rowOffsets[colIdx] == 0) {
+				final Color c = item.getBackground(colIdx);
 				final String colourString;
 				if (showBackgroundColours) {
 					if (c == null) {
@@ -191,14 +189,15 @@ public class CopyGridToHtmlClipboardAction extends Action {
 					colourString = "";
 				}
 				addCell(sw,
-						item.getText(i),
-						combineAttributes(new String[] { colourString, String.format("rowSpan='%d'", 1 + item.getRowSpan(i)), String.format("colSpan='%d'", 1 + item.getColumnSpan(i)) },
-								getAdditionalAttributes(item, i)));
+						item.getText(colIdx),
+						combineAttributes(new String[] { colourString, String.format("rowSpan='%d'", 1 + item.getRowSpan(colIdx)), String.format("colSpan='%d'", 1 + item.getColumnSpan(colIdx)) },
+								getAdditionalAttributes(item, colIdx)));
 				// Increment col idx.
-				i += item.getColumnSpan(i);
-				rowOffsets[i] = item.getRowSpan(i);
+				// FIXME: Does this work correctly for sortable columns? No existing reports to test against.
+				i += item.getColumnSpan(colIdx);
+				rowOffsets[colIdx] = item.getRowSpan(colIdx);
 			} else {
-				rowOffsets[i] = rowOffsets[i] - 1;
+				rowOffsets[colIdx] = rowOffsets[colIdx] - 1;
 			}
 			// end row
 			if ((i + 1) >= numColumns) {
@@ -276,7 +275,7 @@ public class CopyGridToHtmlClipboardAction extends Action {
 		return showBackgroundColours;
 	}
 
-	public void setShowBackgroundColours(boolean showBackgroundColours) {
+	public void setShowBackgroundColours(final boolean showBackgroundColours) {
 		this.showBackgroundColours = showBackgroundColours;
 	}
 
