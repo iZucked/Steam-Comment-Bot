@@ -217,7 +217,7 @@ public class HorizontalKPIReportView extends ViewPart {
 						color = SWT.COLOR_BLACK;
 					} else {
 						final RowData d = (RowData) element;
-						color = (d.capacityViolationCount - pinD.capacityViolationCount) >= 0 ? SWT.COLOR_RED : SWT.COLOR_DARK_GREEN;
+						color = (d.capacityViolationCount - pinD.capacityViolationCount) > 0 ? SWT.COLOR_RED : SWT.COLOR_DARK_GREEN;
 					}
 					break;
 				case 11:
@@ -225,7 +225,7 @@ public class HorizontalKPIReportView extends ViewPart {
 						color = SWT.COLOR_BLACK;
 					} else {
 						final RowData d = (RowData) element;
-						color = (d.lateness - pinD.lateness) >= 0 ? SWT.COLOR_RED : SWT.COLOR_DARK_GREEN;
+						color = (d.lateness - pinD.lateness) > 0 ? SWT.COLOR_RED : SWT.COLOR_DARK_GREEN;
 					}
 					break;
 				}
