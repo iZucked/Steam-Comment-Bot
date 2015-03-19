@@ -20,11 +20,9 @@ import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.CalendarFormatter;
-import com.mmxlabs.lingo.reports.views.formatters.CostFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.NumberOfDPFormatter;
-import com.mmxlabs.lingo.reports.views.formatters.PriceFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.provider.PinnedScheduleFormatter;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.schedule.Cooldown;
@@ -201,7 +199,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 			});
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.price":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Price", null, ColumnType.NORMAL, new PriceFormatter(false, 2) {
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Price", null, ColumnType.NORMAL, new NumberOfDPFormatter(2) {
 
 				@Override
 				public Double getDoubleValue(final Object object) {
@@ -328,7 +326,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 								}
 							}).setTooltip("In " + fuelQuanityUnits.get(fuelName));
 
-							blockManager.createColumn(block, fuelName + " Unit Price", new PriceFormatter(true, 2) {
+							blockManager.createColumn(block, fuelName + " Unit Price", new NumberOfDPFormatter(2) {
 								@Override
 								public Double getDoubleValue(final Object object) {
 									if (object instanceof FuelUsage) {
@@ -347,7 +345,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 									return null;
 								}
 							}).setTooltip("Price per " + fuelUnitPriceUnits.get(fuelName));
-							blockManager.createColumn(block, fuelName + " Cost", new CostFormatter(true) {
+							blockManager.createColumn(block, fuelName + " Cost", new IntegerFormatter() {
 								@Override
 								public Integer getIntValue(final Object object) {
 									if (object instanceof FuelUsage) {
@@ -372,7 +370,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 			});
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.fuelcost":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Fuel Cost", null, ColumnType.NORMAL, new CostFormatter(true) {
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Fuel Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
 					if (object instanceof FuelUsage) {
@@ -384,7 +382,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 			});
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.chartercost":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Charter Cost", null, ColumnType.NORMAL, new CostFormatter(true) {
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Charter Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
 					return (int) ((Event) object).getCharterCost();
@@ -392,10 +390,10 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 			});
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.routecost":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Canal Cost", null, ColumnType.NORMAL, new CostFormatter(true), sp.getJourney_Toll());
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Canal Cost", null, ColumnType.NORMAL, new IntegerFormatter(), sp.getJourney_Toll());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.portcosts":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Port Costs", null, ColumnType.NORMAL, new CostFormatter(true) {
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Port Costs", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
 					if (object instanceof PortVisit) {
@@ -407,7 +405,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 			});
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.totalcosts":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Total Cost", null, ColumnType.NORMAL, new CostFormatter(true) {
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Total Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
 					long total = 0;
