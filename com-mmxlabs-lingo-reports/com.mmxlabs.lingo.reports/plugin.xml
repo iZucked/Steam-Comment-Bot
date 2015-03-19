@@ -697,11 +697,7 @@
       </FleetBasedColumn>
       <FleetBasedColumn
             handlerID="com.mmxlabs.lingo.reports.views.fleet.StandardFleetColumnFactory"
-            id="com.mmxlabs.lingo.reports.components.columns.fleet.gco_days">
-      </FleetBasedColumn>
-      <FleetBasedColumn
-            handlerID="com.mmxlabs.lingo.reports.views.fleet.StandardFleetColumnFactory"
-            id="com.mmxlabs.lingo.reports.components.columns.fleet.gco_revenue">
+            id="com.mmxlabs.lingo.reports.components.columns.fleet.gco">
       </FleetBasedColumn>
       <FleetBasedColumn
             handlerID="com.mmxlabs.lingo.reports.views.fleet.StandardFleetColumnFactory"
@@ -744,10 +740,7 @@
                id="com.mmxlabs.lingo.reports.components.columns.fleet.chartercosts">
          </InitialColumn>
          <InitialColumn
-               id="com.mmxlabs.lingo.reports.components.columns.fleet.gco_days">
-         </InitialColumn>
-         <InitialColumn
-               id="com.mmxlabs.lingo.reports.components.columns.fleet.gco_revenue">
+               id="com.mmxlabs.lingo.reports.components.columns.fleet.gco">
          </InitialColumn>
          <InitialColumn
                id="com.mmxlabs.lingo.reports.components.columns.fleet.diff_gco">

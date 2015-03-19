@@ -29,6 +29,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
 public class StandardFleetColumnFactory implements IFleetColumnFactory {
 
+	private static final String COLUMN_BLOCK_GCO_VESSEL = "com.mmxlabs.lingo.reports.components.columns.fleet.gco";
 	private static final String COLUMN_BLOCK_GCO_DELTA_VESSEL = "com.mmxlabs.lingo.reports.components.columns.fleet.diff_gco";
 	private static final String COLUMN_BLOCK_GCO_DELTA_SELECTION = "com.mmxlabs.lingo.reports.components.columns.fleet.diff_selection_gco";
 
@@ -70,15 +71,27 @@ public class StandardFleetColumnFactory implements IFleetColumnFactory {
 			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Charter Costs", "Total chartering costs", ColumnType.NORMAL, new PortCostFormatter(true),
 					ScheduleReportPackage.Literals.ROW__SEQUENCE));
 			break;
-		case "com.mmxlabs.lingo.reports.components.columns.fleet.gco_days":
-			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "GCO Days", "Total generated charter out days", ColumnType.NORMAL,
-					new GeneratedCharterDaysFormatter(false, false)));
+		case COLUMN_BLOCK_GCO_VESSEL: {
+
+			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new EmfBlockColumnFactory() {
+
+				@Override
+				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
+					ColumnBlock block = blockManager.getBlockByID(COLUMN_BLOCK_GCO_VESSEL);
+					if (block == null) {
+						block = blockManager.createBlock(COLUMN_BLOCK_GCO_VESSEL, "Charter Out (virtual)", ColumnType.NORMAL);
+					}
+					block.setPlaceholder(true);
+
+					blockManager.createColumn(block, "Days", new GeneratedCharterDaysFormatter(false, false));
+					blockManager.createColumn(block, "Revenue", new GeneratedCharterRevenueFormatter(false, true, false));
+
+					return null;
+				}
+			});
+		}
 			break;
-		case "com.mmxlabs.lingo.reports.components.columns.fleet.gco_revenue":
-			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "GCO Revenue", "Total generated charter out revenue", ColumnType.NORMAL,
-					new GeneratedCharterRevenueFormatter(true, false, false)));
-			break;
-		case "com.mmxlabs.lingo.reports.components.columns.fleet.diff_gco": {
+		case COLUMN_BLOCK_GCO_DELTA_VESSEL: {
 
 			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new EmfBlockColumnFactory() {
 
@@ -86,7 +99,7 @@ public class StandardFleetColumnFactory implements IFleetColumnFactory {
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
 					ColumnBlock block = blockManager.getBlockByID(COLUMN_BLOCK_GCO_DELTA_VESSEL);
 					if (block == null) {
-						block = blockManager.createBlock(COLUMN_BLOCK_GCO_DELTA_VESSEL, "GCO delta", ColumnType.DIFF);
+						block = blockManager.createBlock(COLUMN_BLOCK_GCO_DELTA_VESSEL, "Charter Out (virtual) delta", ColumnType.DIFF);
 					}
 					block.setPlaceholder(true);
 
@@ -98,14 +111,14 @@ public class StandardFleetColumnFactory implements IFleetColumnFactory {
 			});
 		}
 			break;
-		case "com.mmxlabs.lingo.reports.components.columns.fleet.diff_selection_gco":
+		case COLUMN_BLOCK_GCO_DELTA_SELECTION:
 			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new EmfBlockColumnFactory() {
 
 				@Override
 				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
 					ColumnBlock block = blockManager.getBlockByID(COLUMN_BLOCK_GCO_DELTA_SELECTION);
 					if (block == null) {
-						block = blockManager.createBlock(COLUMN_BLOCK_GCO_DELTA_SELECTION, "GCO delta (change set)", ColumnType.DIFF);
+						block = blockManager.createBlock(COLUMN_BLOCK_GCO_DELTA_SELECTION, "Charter Out (virtual) delta (change set)", ColumnType.DIFF);
 					}
 					block.setPlaceholder(true);
 

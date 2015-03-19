@@ -165,7 +165,7 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 		if (scheduleReportTable != null) {
 			scheduleReportTable.eAdapters().remove(adapter);
 		}
-		
+
 		if (listener != null) {
 			getViewSite().getPage().removePartListener(listener);
 		}
@@ -227,10 +227,10 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 							for (final InitialRowType row : initialRows) {
 
 								switch (row.getRowType()) {
-								case "timecharters":
+								case "timecharter":
 									rowFilter.add(FleetBasedReportBuilder.ROW_FILTER_TIME_CHARTERS.id);
 									break;
-								case "spotcharters":
+								case "spotcharter":
 									rowFilter.add(FleetBasedReportBuilder.ROW_FILTER_SPOT_CHARTER_INS.id);
 									break;
 								case "owned":
