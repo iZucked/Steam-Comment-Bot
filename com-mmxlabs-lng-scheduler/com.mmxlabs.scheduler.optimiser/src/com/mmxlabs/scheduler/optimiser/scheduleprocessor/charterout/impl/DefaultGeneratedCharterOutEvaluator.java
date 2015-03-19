@@ -121,7 +121,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		}
 
 		assert ((ballastIdx < 0) == (ballastStartTime < 0));
-		if (ballastIdx == -1 || ballastStartTime == -1) {
+		if (firstDetails == null || ballastIdx == -1 || ballastStartTime == -1) {
 
 			// no ballast leg?
 			return null;
