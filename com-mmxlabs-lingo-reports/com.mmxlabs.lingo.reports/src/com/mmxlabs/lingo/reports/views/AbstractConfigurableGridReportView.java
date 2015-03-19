@@ -134,7 +134,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	}
 
 	@Override
-	public final void createPartControl(final Composite parent) {
+	public void createPartControl(final Composite parent) {
 		mgr = new ObservablesManager();
 		mgr.runAndCollect(new Runnable() {
 

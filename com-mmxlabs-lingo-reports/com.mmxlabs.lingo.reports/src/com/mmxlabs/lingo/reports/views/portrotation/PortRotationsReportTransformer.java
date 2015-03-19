@@ -4,8 +4,10 @@
  */
 package com.mmxlabs.lingo.reports.views.portrotation;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.databinding.observable.list.IObservableList;
@@ -29,7 +31,7 @@ public class PortRotationsReportTransformer {
 			private int numberOfSchedules;
 			private boolean isPinned;
 			private final Map<Object, ScenarioInstance> elementMap = new HashMap<>();
-
+			private final List<Object> elementList =  new ArrayList<>();
 			@Override
 			public void beginCollecting() {
 				super.beginCollecting();
@@ -39,6 +41,7 @@ public class PortRotationsReportTransformer {
 				isPinned = false;
 
 				elementMap.clear();
+				elementList.clear();
 			}
 
 			@Override
@@ -46,7 +49,7 @@ public class PortRotationsReportTransformer {
 				numberOfSchedules++;
 				isPinned |= pinned;
 				final Collection<? extends Object> collectElements = super.collectElements(scenarioInstance, schedule, pinned);
-				elements.addAll(collectElements);
+				elementList.addAll(collectElements);
 				elementMap.put(schedule, scenarioInstance);
 				for (final Object element : collectElements) {
 					elementMap.put(element, scenarioInstance);
@@ -69,7 +72,7 @@ public class PortRotationsReportTransformer {
 
 				viewer.processInputs(elements);
 				viewer.mapInputs(elementMap);
-
+				elements.addAll(elementList);
 				// viewer.setInput(elements);
 			}
 		};
