@@ -41,8 +41,6 @@ import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider.CharterMarketOptions;
 import com.mmxlabs.scheduler.optimiser.providers.IGeneratedCharterOutSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterOutEvaluator;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
