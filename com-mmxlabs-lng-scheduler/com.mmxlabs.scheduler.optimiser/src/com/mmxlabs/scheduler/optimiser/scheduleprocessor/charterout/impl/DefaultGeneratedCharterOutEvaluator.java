@@ -234,7 +234,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		// set end ports
 		boolean goingToEnd = false;
 		final Set<IPort> endPorts = new HashSet<IPort>();
-		if (nextLoadSlot instanceof EndPortSlot) {
+		if (nextLoadSlot instanceof EndPortSlot &&
+				charterMarketProvider.getCharteringPortsForVesselClass(vesselAvailability.getVessel().getVesselClass()).contains(nextLoad)) {
 			goingToEnd = true;
 			endPorts.add(nextLoad);
 		}
