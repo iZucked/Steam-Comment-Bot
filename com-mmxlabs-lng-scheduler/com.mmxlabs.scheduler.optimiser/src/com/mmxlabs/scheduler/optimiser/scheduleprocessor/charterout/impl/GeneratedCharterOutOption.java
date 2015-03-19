@@ -1,11 +1,10 @@
-/**
 package com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl;
+/**
  * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
 
 import com.mmxlabs.common.Triple;
-import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider.CharterMarketOptions;
