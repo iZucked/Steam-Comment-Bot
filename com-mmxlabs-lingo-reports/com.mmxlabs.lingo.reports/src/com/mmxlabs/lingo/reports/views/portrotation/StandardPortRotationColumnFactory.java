@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.views.portrotation;
 
+import java.text.DateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +19,7 @@ import com.mmxlabs.lingo.reports.components.EmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
+import com.mmxlabs.lingo.reports.views.formatters.CalendarFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.NumberOfDPFormatter;
@@ -39,6 +41,34 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class StandardPortRotationColumnFactory implements IPortRotationColumnFactory {
+
+	private static class EventStartDateComparator implements Comparable<EventStartDateComparator> {
+		Event event;
+
+		public EventStartDateComparator(Event event) {
+			this.event = event;
+		}
+
+		@Override
+		public int compareTo(EventStartDateComparator o) {
+			if (o != null) {
+				Event other = o.event;
+				if (other != null) {
+					if (event.getStart().equals(other.getStart())) {
+						if (event.getPreviousEvent() != null && event.getPreviousEvent().equals(other)) {
+							return 1;
+						} else if (event.getNextEvent() != null && event.getNextEvent().equals(other)) {
+							return -1;
+						}
+					} else {
+						return event.getStart().compareTo(other.getStart());
+					}
+				}
+			}
+			return 0;
+		}
+	}
+
 	public static final String PORT_ROTATION_REPORT_TYPE_ID = "PORT_ROTATION_REPORT_TYPE_ID";
 
 	/**
@@ -119,7 +149,18 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 			});
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.startdate":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Start Date", null, ColumnType.NORMAL, Formatters.calendarFormatter, sp.getEvent__GetLocalStart());
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Start Date", null, ColumnType.NORMAL,
+					new CalendarFormatter(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT), true) {
+						@Override
+						public String render(Object o) {
+							return super.render(((Event) o).getLocalStart());
+						}
+
+						@Override
+						public Comparable getComparable(final Object object) {
+							return new EventStartDateComparator((Event) object);
+						}
+					});
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.enddate":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "End Date", null, ColumnType.NORMAL, Formatters.calendarFormatter, sp.getEvent__GetLocalEnd());
