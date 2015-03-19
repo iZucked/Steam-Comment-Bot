@@ -22,7 +22,7 @@ public class DiffPerspective implements IPerspectiveFactory {
 
 		final IFolderLayout diffArea = layout.createFolder("diffArea", IPageLayout.LEFT, 0.2f, IPageLayout.ID_EDITOR_AREA);
 		final IFolderLayout ganttArea = layout.createFolder("ganttArea", IPageLayout.BOTTOM, 0.25f, IPageLayout.ID_EDITOR_AREA);
-		final IFolderLayout reportsArea = layout.createFolder("reportsArea", IPageLayout.BOTTOM, 0.65f, IPageLayout.ID_EDITOR_AREA);
+		final IFolderLayout reportsArea = layout.createFolder("reportsArea", IPageLayout.TOP, 0.65f, IPageLayout.ID_EDITOR_AREA);
 		final IFolderLayout fleetReportArea = layout.createFolder("fleetReportsArea", IPageLayout.BOTTOM, 0.65f, "diffArea");
 
 		diffArea.addView("com.mmxlabs.lingo.reports.diff.DiffGroupView");
