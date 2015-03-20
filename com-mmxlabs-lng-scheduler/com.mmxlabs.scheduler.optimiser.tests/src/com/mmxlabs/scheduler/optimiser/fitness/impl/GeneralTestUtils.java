@@ -60,7 +60,8 @@ public final class GeneralTestUtils {
 		return moveGenerator;
 	}
 
-	public static LinearSimulatedAnnealingFitnessEvaluator createLinearSAFitnessEvaluator(final int stepSize, final int numIterations, final List<IFitnessComponent> fitnessComponents) {
+	public static LinearSimulatedAnnealingFitnessEvaluator createLinearSAFitnessEvaluator(final int stepSize, final int numIterations, final List<IFitnessComponent> fitnessComponents,
+			final List<IEvaluationProcess> evaluationProcesses) {
 		final Map<String, Double> weightsMap = new HashMap<String, Double>();
 		for (final IFitnessComponent component : fitnessComponents) {
 			weightsMap.put(component.getName(), 1.0);
@@ -80,6 +81,7 @@ public final class GeneralTestUtils {
 		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = createFitnessEvaluatorInstance(combiner, thresholder, fitnessHelper);
 
 		fitnessEvaluator.setFitnessComponents(fitnessComponents);
+		fitnessEvaluator.setEvaluationProcesses(evaluationProcesses);
 
 		fitnessEvaluator.init();
 
@@ -99,7 +101,7 @@ public final class GeneralTestUtils {
 		final FitnessComponentInstantiator fitnessComponentInstantiator = new FitnessComponentInstantiator();
 		final List<IFitnessComponent> fitnessComponents = fitnessComponentInstantiator.instantiateFitnesses(context.getFitnessFunctionRegistry(), context.getFitnessComponents());
 
-		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = GeneralTestUtils.createLinearSAFitnessEvaluator(stepSize, numberOfIterations, fitnessComponents);
+		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = GeneralTestUtils.createLinearSAFitnessEvaluator(stepSize, numberOfIterations, fitnessComponents, evaluationProcesses);
 		final IMoveGenerator moveGenerator = GeneralTestUtils.createRandomMoveGenerator(random);
 
 		final DefaultLocalSearchOptimiser lso = new DefaultLocalSearchOptimiser();

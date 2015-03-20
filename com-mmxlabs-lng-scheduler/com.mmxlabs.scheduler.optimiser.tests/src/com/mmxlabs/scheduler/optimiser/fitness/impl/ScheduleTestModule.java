@@ -100,12 +100,12 @@ public class ScheduleTestModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	ISchedulerFactory provideSchedulerFactory(final Injector injector) {
-		final ISchedulerFactory factory = new ISchedulerFactory() {
-
-			@Override
-			public ISequenceScheduler createScheduler(final IOptimisationData data, final Collection<ICargoSchedulerFitnessComponent> schedulerComponents) {
+	ISequenceScheduler provideSchedulerFactory(final Injector injector) {
+//		final ISchedulerFactory factory = new ISchedulerFactory() {
 //
+//			@Override
+//			public ISequenceScheduler createScheduler(final IOptimisationData data, final Collection<ICargoSchedulerFitnessComponent> schedulerComponents) {
+////
 //				final ScheduleFitnessEvaluator scheduleEvaluator = new ScheduleFitnessEvaluator();
 //				// TODO: If we can change this API, then we can avoid the need for the ISchedulerFactory and this provider
 //				scheduleEvaluator.setFitnessComponents(schedulerComponents);
@@ -115,9 +115,9 @@ public class ScheduleTestModule extends AbstractModule {
 //				scheduler.setScheduleEvaluator(scheduleEvaluator);
 				injector.injectMembers(scheduler);
 				return scheduler;
-			}
-		};
-		return factory;
+		// }
+		// };
+		// return factory;
 	}
 
 	@Provides
