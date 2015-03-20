@@ -5,7 +5,6 @@ package com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl;
  */
 
 import com.mmxlabs.common.Triple;
-import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider.CharterMarketOptions;
