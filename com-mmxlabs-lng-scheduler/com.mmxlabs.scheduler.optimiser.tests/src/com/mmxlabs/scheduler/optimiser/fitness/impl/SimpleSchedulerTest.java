@@ -27,6 +27,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
@@ -94,12 +95,12 @@ public class SimpleSchedulerTest {
 		final IBaseFuel baseFuel = builder.createBaseFuel("test", baseFuelEquivalence);
 		baseFuCurveProviderEditor.setBaseFuelCurve(baseFuel, new ConstantValueCurve(7000));
 		final IVesselClass vesselClass1 = builder.createVesselClass("vesselClass-1", 12000, 20000, 150000000, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0);
-		
+
 		// set up basefuel curve
 		final StepwiseIntegerCurve baseFuelCurve = new StepwiseIntegerCurve();
 		baseFuelCurve.setValueAfter(0, 7000);
 		baseFuelCurveProvider.setBaseFuelCurve(baseFuel, baseFuelCurve);
-		
+
 		builder.setVesselClassStateParameters(vesselClass1, VesselState.Laden, OptimiserUnitConvertor.convertToInternalDailyRate(150), OptimiserUnitConvertor.convertToInternalDailyRate(100),
 				OptimiserUnitConvertor.convertToInternalDailyRate(10), consumptionCalculator, 0);
 		builder.setVesselClassStateParameters(vesselClass1, VesselState.Ballast, OptimiserUnitConvertor.convertToInternalDailyRate(150), OptimiserUnitConvertor.convertToInternalDailyRate(100),
@@ -235,12 +236,20 @@ public class SimpleSchedulerTest {
 			injector.injectMembers(c.getFitnessCore());
 		}
 
+		for (final IEvaluationProcess c : optimiser.getFitnessEvaluator().getEvaluationProcesses()) {
+			injector.injectMembers(c);
+		}
+
 		final IFitnessEvaluator fitnessEvaluator = optimiser.getFitnessEvaluator();
 
 		final LinearSimulatedAnnealingFitnessEvaluator linearFitnessEvaluator = (LinearSimulatedAnnealingFitnessEvaluator) fitnessEvaluator;
 
 		IEvaluationState evaluationState = new EvaluationState();
-		
+
+		for (final IEvaluationProcess c : optimiser.getFitnessEvaluator().getEvaluationProcesses()) {
+			c.evaluate(context.getInitialSequences(), evaluationState);
+		}
+
 		linearFitnessEvaluator.setOptimisationData(context.getOptimisationData());
 		linearFitnessEvaluator.setInitialSequences(context.getInitialSequences(), evaluationState);
 
