@@ -88,8 +88,6 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	private static final Logger log = LoggerFactory.getLogger(DetailCompositeDialog.class);
 	private static final ComposedAdapterFactory FACTORY = createAdapterFactory();
 
-	// private IScenarioEditingLocation scenarioEditingLocation;
-
 	private IDisplayComposite displayComposite;
 	/**
 	 * The top composite in which we store our detail views
@@ -111,6 +109,8 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	 * This is the list of all input objects passed in for editing
 	 */
 	private final List<EObject> inputs = new ArrayList<EObject>();
+
+	private EObject duplicate = null;
 
 	/**
 	 * A map from duplicated input objects to original input objects
@@ -207,7 +207,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	 * @param displayComposite
 	 * @return a duplicated object suitable for editing.
 	 */
-	private EObject getDuplicate(final EObject input, final IDisplayComposite displayComposite) {
+	private EObject getDuplicate(final EObject input) {
 		final EObject original = input;
 		if (!originalToDuplicate.containsKey(original)) {
 			// Use a set to avoid duplicates in the list
@@ -349,6 +349,26 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	@Override
 	public void create() {
 		super.create();
+
+		// Create the display composite factory and perform duplicate here rather than in doCreateFormContent as previously to that when we change objects in the sidebar, we do not loose changes when
+		// we press OK. Calls to dialogECopier.record() reset the change state.
+		{
+			if (inputs != null) {
+
+				for (final EObject object : inputs) {
+					if (displayCompositeFactory == null) {
+						// Note, now that we do this here rather than in doCreateFormContent we may show the wrong factory for an object *should* the input be of mixed type. (This is not a currently
+						// expected behaviour - 2015-03-23)
+						displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(object.eClass());
+					}
+
+					getDuplicate(object);
+				}
+				dialogEcoreCopier.record();
+			}
+
+		}
+
 		// commence editing
 		enableButtons();
 		updateEditor();
@@ -419,7 +439,6 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 			displayComposite = null;
 		}
 
-		displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(selection.eClass());
 		dialogContext = new DefaultDialogEditingContext(dialogController, location, false, true);
 		displayComposite = displayCompositeFactory.createToplevelComposite(dialogArea, selection.eClass(), dialogContext, toolkit);
 
@@ -429,15 +448,16 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		// Hook via editor wrappers
 		displayComposite.setEditorWrapper(copyDialogToClipboardEditorWrapper);
 
-		final EObject duplicate = getDuplicate(selection, displayComposite);
-		dialogEcoreCopier.record();
-
 		currentEditorTargets.clear();
+		duplicate = getDuplicate(selection);
+
 		final Collection<EObject> range = displayCompositeFactory.getExternalEditingRange(rootObject, selection);
 		range.add(selection);
 		for (final EObject o : range) {
 			currentEditorTargets.add(originalToDuplicate.get(o));
 		}
+		assert currentEditorTargets.contains(null) == false;
+
 		dialogValidationSupport.setValidationTargets(currentEditorTargets);
 
 		displayComposite.setCommandHandler(commandHandler);
@@ -459,6 +479,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 		// Trigger update of inline editor visibility and UI state update
 		dialogController.updateEditorVisibility();
+
 	}
 
 	/**
@@ -550,6 +571,8 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 						if (index >= 0) {
 							if (index != selectedObjectIndex) {
 								selectedObjectIndex = index;
+								// FIXME: This resets the observable state. Probably not what we want to do.
+								// See also BugzId: 1320
 								updateEditor();
 							}
 						}
@@ -856,6 +879,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		this.inputs.addAll(objects);
 		this.originalToDuplicate.clear();
 		this.duplicateToOriginal.clear();
+
 		try {
 			final int value = open();
 			if (value == OK) {
