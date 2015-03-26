@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
@@ -83,5 +84,36 @@ public class MarkToMarketLoadOption implements ILoadOption, IMarkToMarketOption 
 	@Override
 	public PricingEventType getPricingEvent() {
 		return dischargeOption.getPricingEvent();
+	}
+
+	@Override
+	public void setMinLoadVolume(long volume) {
+	}
+
+	@Override
+	public void setMaxLoadVolume(long volume) {
+	}
+
+	@Override
+	public long getMinLoadVolumeMMBTU() {
+		return dischargeOption.getMinDischargeVolumeMMBTU();
+	}
+
+	@Override
+	public void setMinLoadVolumeMMBTU(long volume) {
+	}
+
+	@Override
+	public long getMaxLoadVolumeMMBTU() {
+		return dischargeOption.getMaxDischargeVolumeMMBTU();
+	}
+
+	@Override
+	public void setMaxLoadVolumeMMBTU(long volume) {
+	}
+
+	@Override
+	public boolean isVolumeSetInM3() {
+		return dischargeOption.isVolumeSetInM3();
 	}
 }

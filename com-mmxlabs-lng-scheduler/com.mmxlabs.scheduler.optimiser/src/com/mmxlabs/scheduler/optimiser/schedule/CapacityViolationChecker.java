@@ -15,6 +15,7 @@ import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -117,21 +118,41 @@ public class CapacityViolationChecker {
 						final IPortSlot portSlot = portDetails.getOptions().getPortSlot();
 						// If this is a cargo, get the load or discharge volume
 						final long volumeInM3 = allocationAnnotation == null ? 0 : allocationAnnotation.getSlotVolumeInM3(portSlot);
+						final long volumeInMMBTu = allocationAnnotation == null ? 0 : allocationAnnotation.getSlotVolumeInMMBTu(portSlot);
 
 						if (portSlot instanceof ILoadOption) {
 							final ILoadOption loadOption = (ILoadOption) portSlot;
 
 							buy = loadOption;
 
-							if (volumeInM3 > loadOption.getMaxLoadVolume()) {
-								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MAX_LOAD, volumeInM3 - loadOption.getMaxLoadVolume(), scheduledSequences);
-							} else if (volumeInM3 < loadOption.getMinLoadVolume()) {
-								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MIN_LOAD, loadOption.getMinLoadVolume() - volumeInM3, scheduledSequences);
-							}
-
-							if (remainingHeelInM3 + volumeInM3 > vesselCapacityInM3) {
-								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.VESSEL_CAPACITY, remainingHeelInM3 + volumeInM3 - vesselCapacityInM3,
-										scheduledSequences);
+							if (loadOption.isVolumeSetInM3()) {
+								if (volumeInM3 > loadOption.getMaxLoadVolume()) {
+									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MAX_LOAD, volumeInM3 - loadOption.getMaxLoadVolume(), scheduledSequences);
+								} else if (volumeInM3 < loadOption.getMinLoadVolume()) {
+									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MIN_LOAD, loadOption.getMinLoadVolume() - volumeInM3, scheduledSequences);
+								}
+	
+								if (remainingHeelInM3 + volumeInM3 > vesselCapacityInM3) {
+									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.VESSEL_CAPACITY, remainingHeelInM3 + volumeInM3 - vesselCapacityInM3,
+											scheduledSequences);
+								}
+							} else {
+								// input is set in MMBTu
+								int cargoCV = allocationAnnotation.getSlotCargoCV(portSlot);
+								if (volumeInMMBTu > loadOption.getMaxLoadVolumeMMBTU()) {
+									long violationInMMBTu = volumeInMMBTu - loadOption.getMaxLoadVolumeMMBTU();
+									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MAX_LOAD, getViolationInM3(violationInMMBTu, cargoCV),
+											scheduledSequences);
+								} else if (volumeInMMBTu < loadOption.getMinLoadVolumeMMBTU()) {
+									long violationInMMBTu = loadOption.getMinLoadVolumeMMBTU() - volumeInMMBTu;
+									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MIN_LOAD, getViolationInM3(violationInMMBTu, cargoCV),
+											scheduledSequences);
+								}
+								if (cargoCV > 0) {
+									if (volumeInM3 > vesselCapacityInM3) {
+										addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.VESSEL_CAPACITY, volumeInM3 - vesselCapacityInM3, scheduledSequences);
+									}
+								}
 							}
 							// Reset heel as we have now taken it into account
 							remainingHeelInM3 = 0;
@@ -140,16 +161,37 @@ public class CapacityViolationChecker {
 
 							sell = dischargeOption;
 
-							if (volumeInM3 > dischargeOption.getMaxDischargeVolume()) {
-								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MAX_DISCHARGE, volumeInM3 - dischargeOption.getMaxDischargeVolume(),
-										scheduledSequences);
-							} else if (volumeInM3 < dischargeOption.getMinDischargeVolume()) {
-								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MIN_DISCHARGE, dischargeOption.getMinDischargeVolume() - volumeInM3,
-										scheduledSequences);
-							}
+							if (dischargeOption.isVolumeSetInM3()) {
+								if (volumeInM3 > dischargeOption.getMaxDischargeVolume()) {
+									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MAX_DISCHARGE, volumeInM3 - dischargeOption.getMaxDischargeVolume(),
+											scheduledSequences);
+								} else if (volumeInM3 < dischargeOption.getMinDischargeVolume()) {
+									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MIN_DISCHARGE, dischargeOption.getMinDischargeVolume() - volumeInM3,
+											scheduledSequences);
+								}
+	
+								if (volumeInM3 > vesselCapacityInM3) {
+									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.VESSEL_CAPACITY, volumeInM3 - vesselCapacityInM3, scheduledSequences);
+								}
+							} else {
+								// volumes set in MMBTu
+								int cargoCV = allocationAnnotation.getSlotCargoCV(portSlot);
+								if (volumeInMMBTu > dischargeOption.getMaxDischargeVolumeMMBTU()) {
+									long violationInMMBTu = volumeInMMBTu - dischargeOption.getMaxDischargeVolumeMMBTU();
+									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MAX_DISCHARGE, getViolationInM3(violationInMMBTu, cargoCV),
+											scheduledSequences);
+								} else if (volumeInMMBTu < dischargeOption.getMinDischargeVolumeMMBTU()) {
+									long violationInMMBTu = dischargeOption.getMinDischargeVolumeMMBTU() - volumeInMMBTu;
+									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MIN_DISCHARGE, getViolationInM3(violationInMMBTu, cargoCV),
+											scheduledSequences);
+								}
+	
+								if (cargoCV > 0) {
+									if (volumeInM3 > vesselCapacityInM3) {
+										addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.VESSEL_CAPACITY, volumeInM3 - vesselCapacityInM3, scheduledSequences);
+									}
+								}
 
-							if (volumeInM3 > vesselCapacityInM3) {
-								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.VESSEL_CAPACITY, volumeInM3 - vesselCapacityInM3, scheduledSequences);
 							}
 
 						} else {
@@ -281,4 +323,8 @@ public class CapacityViolationChecker {
 		}
 	}
 
+	private long getViolationInM3(long violationInMMBTu, int cargoCV) {
+		return cargoCV > 0 ? Calculator.convertMMBTuToM3(violationInMMBTu, cargoCV) : violationInMMBTu;
+ 
+	}
 }

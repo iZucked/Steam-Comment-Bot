@@ -25,7 +25,9 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.impl.HeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionsPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
@@ -319,6 +321,8 @@ public class VoyagePlanner {
 			assert heelVolumeInM3 >= 0;
 		}
 
+		boolean sequenceContainsMMBTUVolumeOption = false;
+
 		for (int idx = 0; itr.hasNext(); ++idx) {
 			final ISequenceElement element = itr.next();
 
@@ -326,6 +330,9 @@ public class VoyagePlanner {
 			final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
 			final PortType portType = portTypeProvider.getPortType(element);
 
+			if (isSlotAnMMBTUVolume(thisPortSlot)) {
+				sequenceContainsMMBTUVolumeOption = true;
+			}
 			// If this is the first port, then this will be null and there will
 			// be no voyage to plan.
 			int shortCargoReturnArrivalTime = 0;
@@ -399,7 +406,8 @@ public class VoyagePlanner {
 						final int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselAvailability, /** FIXME: not utc */
 						vesselStartTime, timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getFirstSlotTime(), portTimesRecord.getFirstSlot()));
 
-						final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, portTimesRecord, voyagePlanOptimiser, heelVolumeInM3, vesselCharterInRatePerDay);
+						final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, portTimesRecord, voyagePlanOptimiser, heelVolumeInM3, vesselCharterInRatePerDay,
+								vesselAvailability.getVesselInstanceType(), sequenceContainsMMBTUVolumeOption);
 						if (plan == null) {
 							return null;
 						}
@@ -433,6 +441,7 @@ public class VoyagePlanner {
 				portTimesRecord = new PortTimesRecord();
 				portTimesRecord.setSlotTime(thisPortSlot, arrivalTimes[idx]);
 				portTimesRecord.setSlotDuration(thisPortSlot, visitDuration);
+				sequenceContainsMMBTUVolumeOption = false;
 			}
 
 			// If we are a heel options slots (i.e. Start or other vessel event slot, overwrite previous heel (assume lost) and replace with a new heel value
@@ -478,7 +487,8 @@ public class VoyagePlanner {
 				vesselStartTime, timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getFirstSlotTime(), portTimesRecord.getFirstSlot()));
 				// set vessel and fuel price here
 				setVesselAndBaseFuelPrice(voyagePlanOptimiser, portTimesRecord, vesselAvailability.getVessel(), resource);
-				final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, portTimesRecord, voyagePlanOptimiser, heelVolumeInM3, vesselCharterInRatePerDay);
+				final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, portTimesRecord, voyagePlanOptimiser, heelVolumeInM3, vesselCharterInRatePerDay,
+						vesselAvailability.getVesselInstanceType(), true);
 				if (plan == null) {
 					return null;
 				}
@@ -832,6 +842,7 @@ public class VoyagePlanner {
 		int prevVisitDuration = 0;
 		int prevSlotTime = 0;
 		IPortSlot prevPortSlot = null;
+		boolean sequenceContainsMMBTUVolumeOption = false;
 		for (int idx = 0; idx < sequenceElements.size(); ++idx) {
 			final ISequenceElement element = sequenceElements.get(idx);
 
@@ -843,6 +854,10 @@ public class VoyagePlanner {
 			// If we are a heel options slots (i.e. Start or other vessel event slot, overwrite previous heel (assume lost) and replace with a new heel value
 			if (thisPortSlot instanceof IHeelOptionsPortSlot) {
 				heelVolumeInM3 = ((IHeelOptionsPortSlot) thisPortSlot).getHeelOptions().getHeelLimit();
+			}
+
+			if (isSlotAnMMBTUVolume(thisPortSlot)) {
+				sequenceContainsMMBTUVolumeOption = true;
 			}
 
 			// If this is the first port, then this will be null and there will
@@ -907,7 +922,8 @@ public class VoyagePlanner {
 		// Populate final plan details
 		if (voyageOrPortOptions.size() > 1) {
 			setVesselAndBaseFuelPrice(voyagePlanOptimiser, portTimesRecord, vesselAvailability.getVessel(), resource);
-			return getOptimisedVoyagePlan(voyageOrPortOptions, portTimesRecord, voyagePlanOptimiser, heelVolumeInM3, vesselCharterInRatePerDay);
+			return getOptimisedVoyagePlan(voyageOrPortOptions, portTimesRecord, voyagePlanOptimiser, heelVolumeInM3, vesselCharterInRatePerDay, vesselAvailability.getVesselInstanceType(),
+					sequenceContainsMMBTUVolumeOption);
 		}
 		return null;
 	}
@@ -932,7 +948,11 @@ public class VoyagePlanner {
 	 * @return An optimised VoyagePlan
 	 */
 	final public VoyagePlan getOptimisedVoyagePlan(final List<IOptionsSequenceElement> voyageOrPortOptionsSubsequence, final IPortTimesRecord portTimesRecord, final IVoyagePlanOptimiser optimiser,
-			final long startHeelVolumeInM3, final int vesselCharterInRatePerDay) {
+			final long startHeelVolumeInM3, final int vesselCharterInRatePerDay, final VesselInstanceType vesselInstanceType, final boolean setM3Volumes) {
+		// set MBTUVolume in M3 for a FOB to DES cargo
+		if (vesselInstanceType != VesselInstanceType.DES_PURCHASE && setM3Volumes) {
+			setDesPurchaseOrFobPurchaseM3Volume(voyageOrPortOptionsSubsequence);
+		}
 		// Run sequencer evaluation
 		optimiser.setVesselCharterInRatePerDay(vesselCharterInRatePerDay);
 		optimiser.setBasicSequence(voyageOrPortOptionsSubsequence);
@@ -1120,8 +1140,7 @@ public class VoyagePlanner {
 	 * @return
 	 */
 	private void evaluateBrokenUpVoyagePlan(final PlanEvaluationData planData, final IVesselAvailability vesselAvailability, final int vesselStartTime,
-			final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlansMap, final List<VoyagePlan> voyagePlansList,
-			final VoyagePlan originalPlan) {
+			final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> voyagePlansMap, final List<VoyagePlan> voyagePlansList, final VoyagePlan originalPlan) {
 
 		assert planData.getEndHeelVolumeInM3() >= 0;
 		// Generate heel level annotations
@@ -1200,4 +1219,106 @@ public class VoyagePlanner {
 
 	}
 
+	/**
+	 * Sets M3 volume CV on the discharge slot using the heel from the the element at the start of the sequence
+	 * 
+	 * @param voyageOrPortOptionsSubsequence
+	 * @return
+	 */
+	public final void setDesPurchaseOrFobPurchaseM3VolumeDetails(final List<IDetailsSequenceElement> voyageOrPortOptionsSubsequence) {
+		List<IDischargeOption> discharges = new ArrayList<>();
+		for (int i = voyageOrPortOptionsSubsequence.size() - 1; i > 0; i--) {
+			IDetailsSequenceElement d = voyageOrPortOptionsSubsequence.get(i);
+			if (d instanceof PortDetails) {
+				PortOptions option = ((PortDetails) d).getOptions();
+				addMMBTuVolumeInputDischargeToList(discharges, option);
+			}
+		}
+		int loadCV = getCVOfDesPurchaseOrFobSaleDetailsSequence(voyageOrPortOptionsSubsequence);
+		setM3VolumeForMMBTuInputDischarge(discharges, loadCV);
+	}
+
+	private void addMMBTuVolumeInputDischargeToList(List<IDischargeOption> discharges, PortOptions option) {
+		if (option.getPortSlot() instanceof IDischargeOption) {
+			IDischargeOption dischargeOption = (IDischargeOption) option.getPortSlot();
+			if (!dischargeOption.isVolumeSetInM3()) {
+				discharges.add((IDischargeOption) option.getPortSlot());
+			}
+		}
+	}
+
+	/**
+	 * Sets M3 volume CV on the discharge slot using the heel from the the element at the start of the sequence
+	 * 
+	 * @param voyageOrPortOptionsSubsequence
+	 * @return
+	 */
+	private final void setDesPurchaseOrFobPurchaseM3Volume(final List<IOptionsSequenceElement> voyageOrPortOptionsSubsequence) {
+		List<IDischargeOption> discharges = new ArrayList<>();
+		for (int i = voyageOrPortOptionsSubsequence.size() - 1; i > 0; i--) {
+			IOptionsSequenceElement e = voyageOrPortOptionsSubsequence.get(i);
+			if (e instanceof PortOptions) {
+				addMMBTuVolumeInputDischargeToList(discharges, (PortOptions) e);
+			}
+		}
+
+		int loadCV = getCVOfDesPurchaseOrFobSaleOptionsSequence(voyageOrPortOptionsSubsequence);
+		setM3VolumeForMMBTuInputDischarge(discharges, loadCV);
+	}
+
+	private void setM3VolumeForMMBTuInputDischarge(List<IDischargeOption> discharges, int loadCV) {
+		for (IDischargeOption discharge : discharges) {
+			discharge.setMinDischargeVolume(Calculator.convertMMBTuToM3(discharge.getMinDischargeVolumeMMBTU(), loadCV));
+			discharge.setMaxDischargeVolume(Calculator.convertMMBTuToM3(discharge.getMaxDischargeVolumeMMBTU(), loadCV));
+		}
+	}
+
+	/**
+	 * Get the heel CV from the load or Loop through a voyage plan and find an element to extract heel options information
+	 * 
+	 * @param sequence
+	 * @return
+	 */
+	private int getCVOfDesPurchaseOrFobSaleOptionsSequence(final List<IOptionsSequenceElement> sequence) {
+		int cv = 0;
+		final IOptionsSequenceElement startOfSequence = sequence.get(0);
+		if (startOfSequence instanceof PortOptions) {
+			cv = getCVFromPortSlot(cv, (PortOptions) startOfSequence);
+		}
+		return cv;
+	}
+
+	/**
+	 * Get the heel CV from the load or Loop through a voyage plan and find an element to extract heel options information
+	 * 
+	 * @param sequence
+	 * @return
+	 */
+	private int getCVOfDesPurchaseOrFobSaleDetailsSequence(final List<IDetailsSequenceElement> sequence) {
+		int cv = 0;
+		final IDetailsSequenceElement startOfSequence = sequence.get(0);
+		if (startOfSequence instanceof PortDetails) {
+			cv = getCVFromPortSlot(cv, (PortOptions) ((PortDetails) startOfSequence).getOptions());
+		}
+		return cv;
+	}
+	
+	private int getCVFromPortSlot(int cv, final PortOptions startOfSequence) {
+		final IPortSlot portSlot = startOfSequence.getPortSlot();
+		if (portSlot instanceof IHeelOptionsPortSlot) {
+			cv = ((IHeelOptionsPortSlot) portSlot).getHeelOptions().getHeelCVValue();
+		} else if (portSlot instanceof ILoadOption) {
+			cv = ((ILoadOption) portSlot).getCargoCVValue();
+		}
+		return cv;
+	}
+
+	private boolean isSlotAnMMBTUVolume(IPortSlot portSlot) {
+		if (portSlot instanceof ILoadOption) {
+			return !((ILoadOption) portSlot).isVolumeSetInM3();
+		} else if (portSlot instanceof IDischargeOption) {
+			return !((IDischargeOption) portSlot).isVolumeSetInM3();
+		}
+		return false;
+	}
 }

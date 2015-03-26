@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
@@ -88,5 +89,30 @@ public class MarkToMarketDischargeSlot implements IDischargeSlot, IMarkToMarketO
 	@Override
 	public PricingEventType getPricingEvent() {
 		return loadOption.getPricingEvent();
+	}
+
+	@Override
+	public void setMinDischargeVolume(long volume) {
+	}
+
+	@Override
+	public void setMaxDischargeVolume(long volume) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public long getMinDischargeVolumeMMBTU() {
+		return Calculator.convertM3ToMMBTu(loadOption.getMinLoadVolume(), loadOption.getCargoCVValue());
+	}
+
+	@Override
+	public long getMaxDischargeVolumeMMBTU() {
+		return Calculator.convertM3ToMMBTu(loadOption.getMaxLoadVolume(), loadOption.getCargoCVValue());
+	}
+
+	@Override
+	public boolean isVolumeSetInM3() {
+		return loadOption.isVolumeSetInM3();
 	}
 }

@@ -88,6 +88,7 @@ public class TestCalculations {
 	 * load/discharge volumes + cost/revenue calcs
 	 */
 
+	public static final boolean DEFAULT_VOLUME_LIMIT_IS_M3 = true;
 	/**
 	 * This tests the fuel costs + consumptions when travelling at slowest speed with no idle time.
 	 */
@@ -143,11 +144,11 @@ public class TestCalculations {
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), cargoCVValue, 1, false,
-				false, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false);
+				false, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
 
 		final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
 		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, 0, Long.MAX_VALUE,
-				new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), 1, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false);
+				new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), 1, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
 
 		final ICargo cargo1 = builder.createCargo(Lists.newArrayList(loadSlot, dischargeSlot), false);
 
@@ -578,11 +579,11 @@ public class TestCalculations {
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), cargoCVValue, 1, false,
-				false, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false);
+				false, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
 
 		final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
 		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, 0, Long.MAX_VALUE,
-				new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), 1, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false);
+				new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), 1, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
 
 		final ICargo cargo1 = builder.createCargo(Lists.newArrayList(loadSlot, dischargeSlot), false);
 
@@ -1010,11 +1011,11 @@ public class TestCalculations {
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), cargoCVValue, 1, false,
-				false, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false);
+				false, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
 
 		final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
 		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, 0, Long.MAX_VALUE,
-				new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(200)), 1, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false);
+				new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(200)), 1, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
 
 		final ICargo cargo1 = builder.createCargo(Lists.newArrayList(loadSlot, dischargeSlot), false);
 

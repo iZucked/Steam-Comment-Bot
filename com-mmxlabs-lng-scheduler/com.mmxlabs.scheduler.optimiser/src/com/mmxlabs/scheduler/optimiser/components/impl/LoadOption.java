@@ -31,6 +31,13 @@ public class LoadOption extends PortSlot implements ILoadOption {
 	/**
 	 * A price calculator which can compute the unit price for this option.
 	 */
+
+	private long minLoadVolumeMMBTU;
+	
+	private long maxLoadVolumeMMBTU;
+	
+	private boolean volumeSetInM3;
+
 	private ILoadPriceCalculator loadPriceCalculator;
 	/**
 	 * The CV value of gas at this option.
@@ -44,6 +51,7 @@ public class LoadOption extends PortSlot implements ILoadOption {
 
 	private PricingEventType pricingEvent;
 	
+
 	public LoadOption() {
 		setPortType(PortType.Load);
 	}
@@ -162,5 +170,34 @@ public class LoadOption extends PortSlot implements ILoadOption {
 	public void setPricingEvent(PricingEventType pricingEvent) {
 		this.pricingEvent = pricingEvent;
 	}
+	
+	@Override
+	public long getMinLoadVolumeMMBTU() {
+		return minLoadVolumeMMBTU;
+	}
+
+	public void setMinLoadVolumeMMBTU(long volume) {
+		minLoadVolumeMMBTU = volume;
+	}
+
+	@Override
+	public long getMaxLoadVolumeMMBTU() {
+		return maxLoadVolumeMMBTU;
+	}
+
+	public void setMaxLoadVolumeMMBTU(long volume) {
+		maxLoadVolumeMMBTU = volume;
+	}
+
+	public void setVolumeSetInM3(boolean m3){
+		volumeSetInM3 = m3;
+	}
+	
+	@Override
+	public boolean isVolumeSetInM3() {
+		return volumeSetInM3;
+	}
+
+
 
 }
