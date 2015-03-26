@@ -57,8 +57,6 @@ public class CopyGridToHtmlClipboardAction extends Action {
 		}
 	}
 
-			}
-
 	public void setRowHeadersIncluded(final boolean b) {
 		util.setRowHeadersIncluded(b);
 	}
