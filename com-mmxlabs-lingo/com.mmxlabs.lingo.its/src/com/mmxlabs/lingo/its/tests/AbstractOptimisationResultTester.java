@@ -408,7 +408,7 @@ public class AbstractOptimisationResultTester {
 		scenarioInstance.setMetadata(ScenarioServiceFactory.eINSTANCE.createMetadata());
 		scenarioInstance.setName(scenarioURL.toString());
 		scenarioInstance.setInstance(model);
-		testReports(scenarioInstance, scenarioURL, reportID, extension);
+		testReports(scenarioInstance, new URL( scenarioURL.toString() + "reports"), reportID, extension);
 	}
 
 	public void testReports(final ScenarioInstance instance, final URL scenarioURL, final String reportID, final String extension) throws Exception {
