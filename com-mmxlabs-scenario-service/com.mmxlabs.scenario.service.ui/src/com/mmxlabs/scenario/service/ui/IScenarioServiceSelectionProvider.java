@@ -28,7 +28,15 @@ public interface IScenarioServiceSelectionProvider {
 	 */
 	ScenarioInstance getPinnedInstance();
 
+	/**
+	 * Set pinned scenario. Do not block.
+	 */
 	void setPinnedInstance(ScenarioInstance referenceInstance);
+
+	/**
+	 * Set pinned scenario. If block is true, do not return until UI is fully refreshed.
+	 */
+	void setPinnedInstance(ScenarioInstance referenceInstance, boolean block);
 
 	void addSelectionChangedListener(IScenarioServiceSelectionChangedListener listener);
 
@@ -36,10 +44,34 @@ public interface IScenarioServiceSelectionProvider {
 
 	boolean isSelected(ScenarioInstance instance);
 
+	/**
+	 * Deselect all scenarios. Do not block.
+	 */
 	void deselectAll();
 
+	/**
+	 * Deselect all scenarios. If block is true, do not return until UI is fully refreshed.
+	 */
+	void deselectAll(boolean block);
+
+	/**
+	 * Select a scenario. Do not block.
+	 */
 	void select(ScenarioInstance scenarioInstance);
 
+	/**
+	 * Select a scenario. If block is true, do not return until UI is fully refreshed.
+	 */
+	void select(ScenarioInstance scenarioInstance, boolean block);
+
+	/**
+	 * Deselect a scenario. Do not block.
+	 */
 	void deselect(ScenarioInstance scenarioInstance);
+
+	/**
+	 * Deselect a scenario. If block is true, do not return until UI is fully refreshed.
+	 */
+	void deselect(ScenarioInstance scenarioInstance, boolean block);
 
 }

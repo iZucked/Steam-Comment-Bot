@@ -153,7 +153,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 	private final IScenarioServiceSelectionChangedListener selectionChangedListener = new IScenarioServiceSelectionChangedListener() {
 		@Override
-		public void selected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> deselected) {
+		public void selected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> deselected, boolean block) {
 			if (viewer != null) {
 				for (final ScenarioInstance instance : deselected)
 					viewer.refresh(instance, true);
@@ -161,7 +161,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		}
 
 		@Override
-		public void deselected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> deselected) {
+		public void deselected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> deselected, boolean block) {
 			if (viewer != null) {
 				for (final ScenarioInstance instance : deselected)
 					viewer.refresh(instance, true);
@@ -169,7 +169,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		}
 
 		@Override
-		public void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioInstance oldPin, final ScenarioInstance newPin) {
+		public void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioInstance oldPin, final ScenarioInstance newPin, boolean block) {
 			if (oldPin != null)
 				viewer.refresh(oldPin, true);
 			if (newPin != null)
@@ -350,7 +350,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 								if (data instanceof ScenarioInstance) {
 									final ScenarioInstance instance = (ScenarioInstance) data;
 									// if (!selectionModeTrackEditor || instance != lastAutoSelection) {
-									Activator.getDefault().getScenarioServiceSelectionProvider().toggleSelection(instance);
+									Activator.getDefault().getScenarioServiceSelectionProvider().toggleSelection(instance, false);
 									// }
 								}
 							}
@@ -392,7 +392,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 						if (data instanceof ScenarioInstance) {
 							final ScenarioInstance instance = (ScenarioInstance) data;
 							if (/* !selectionModeTrackEditor || */instance != lastAutoSelection) {
-								Activator.getDefault().getScenarioServiceSelectionProvider().toggleSelection(instance);
+								Activator.getDefault().getScenarioServiceSelectionProvider().toggleSelection(instance, false);
 							}
 						}
 					}
