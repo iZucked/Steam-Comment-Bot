@@ -233,7 +233,7 @@ public abstract class AbstractConfigurableReportView extends EMFReportView {
 					nonVisibleIcon.dispose();
 					visibleIcon.dispose();
 
-					synchronizer.refreshViewer();
+					synchronizer.refreshViewer(false);
 
 				}
 

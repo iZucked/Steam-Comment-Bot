@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
 
 import com.google.inject.Inject;
+import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.components.ColumnType;
@@ -35,6 +36,7 @@ import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportIni
 import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportInitialStateExtension.InitialRowType;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
+import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 
 /**
  * A customisable report for schedule based data. Extension points define the available columns for all instances and initial state for each instance of this report. Optionally a dialog is available
@@ -80,6 +82,19 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 			return input;
 		}
 
+		if (IReportContents.class.isAssignableFrom(adapter)) {
+
+			final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
+			final String contents = util.convert();
+			return new IReportContents() {
+
+				@Override
+				public String getStringContents() {
+					return contents;
+				}
+			};
+
+		}
 		return super.getAdapter(adapter);
 	}
 
@@ -105,11 +120,11 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 					// Filter out reference scenario if required
 					if (!builder.getDiffFilterInfo().contains(AbstractReportBuilder.DIFF_FILTER_PINNDED_SCENARIO.id)) {
 						if (row.isReference()) {
-//							return false;
+							// return false;
 						}
 					}
 					// Only show visible rows
-//					return row.isVisible();
+					// return row.isVisible();
 				}
 				return true;
 			}
@@ -280,7 +295,7 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 	protected void postDialogOpen(final ColumnConfigurationDialog dialog) {
 		builder.refreshDiffOptions();
 		// Update options state
-//		 table.getOptions().setShowPinnedScenario(!builder.getDiffFilterInfo().contains(AbstractReportBuilder.DIFF_FILTER_PINNDED_SCENARIO));
+		// table.getOptions().setShowPinnedScenario(!builder.getDiffFilterInfo().contains(AbstractReportBuilder.DIFF_FILTER_PINNDED_SCENARIO));
 
 	}
 

@@ -15,6 +15,7 @@ import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.list.WritableList;
 
 import com.google.inject.Inject;
+import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.components.ColumnType;
@@ -27,6 +28,7 @@ import com.mmxlabs.lingo.reports.views.portrotation.extpoint.IPortRotationBasedR
 import com.mmxlabs.lingo.reports.views.portrotation.extpoint.IPortRotationBasedReportInitialStateExtension.InitialColumn;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
@@ -304,5 +306,43 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 			return elementMap.get(key);
 		}
 		return null;
+	}
+
+	@Override
+	public final void createPartControl(final Composite parent) {
+		super.createPartControl(parent);
+		final ColumnBlock[] initialReverseSortOrder = { getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.portrotation.startdate"),
+				getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.portrotation.vessel"),
+				getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.portrotation.schedule") };
+		// go through in reverse order as latest is set to primary sort
+		for (final ColumnBlock block : initialReverseSortOrder) {
+			if (block != null) {
+				final List<ColumnHandler> handlers = block.getColumnHandlers();
+				for (final ColumnHandler handler : handlers) {
+					if (handler.column != null) {
+						sortingSupport.sortColumnsBy(handler.column.getColumn());
+					}
+				}
+			}
+		}
+	}
+
+	@Override
+	public Object getAdapter(final Class adapter) {
+
+		if (IReportContents.class.isAssignableFrom(adapter)) {
+
+			final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
+			final String contents = util.convert();
+			return new IReportContents() {
+
+				@Override
+				public String getStringContents() {
+					return contents;
+				}
+			};
+
+		}
+		return super.getAdapter(adapter);
 	}
 }
