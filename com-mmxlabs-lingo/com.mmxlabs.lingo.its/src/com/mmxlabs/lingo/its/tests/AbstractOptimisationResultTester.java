@@ -408,7 +408,7 @@ public class AbstractOptimisationResultTester {
 		scenarioInstance.setMetadata(ScenarioServiceFactory.eINSTANCE.createMetadata());
 		scenarioInstance.setName(scenarioURL.getPath());
 		scenarioInstance.setInstance(model);
-		testReports(scenarioInstance, new URL(scenarioURL.toString() + "reports"), reportID, extension);
+		testReports(scenarioInstance, new URL(scenarioURL.toString()), reportID, extension);
 	}
 
 	public void testReports(final ScenarioInstance instance, final URL scenarioURL, final String reportID, final String extension) throws Exception {
@@ -428,12 +428,13 @@ public class AbstractOptimisationResultTester {
 			final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString())).toString().replaceAll(" ", "%20"));
 
 			final File f1 = new File(expectedReportOutput.toURI());
-			final File file2 = new File(f1.getAbsoluteFile() + "." + reportID + "." + extension);
+			String slash = f1.isDirectory() ? "/" : "";
+			final File file2 = new File(f1.getAbsoluteFile() + slash + "reports" + "." + reportID + "." + extension);
 			try (PrintWriter pw = new PrintWriter(file2)) {
 				pw.print(actualContents);
 			}
 		} else {
-			final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString() + "." + reportID + "." + extension)).toString().replaceAll(" ", "%20"));
+			final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString() + "reports" + "." + reportID + "." + extension)).toString().replaceAll(" ", "%20"));
 			final StringBuilder expectedOutputBuilder = new StringBuilder();
 			{
 				try (InputStream is = expectedReportOutput.openStream(); BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
