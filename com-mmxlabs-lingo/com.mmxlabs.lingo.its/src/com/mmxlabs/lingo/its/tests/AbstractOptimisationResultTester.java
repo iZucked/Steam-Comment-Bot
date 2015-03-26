@@ -4,9 +4,13 @@
  */
 package com.mmxlabs.lingo.its.tests;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collections;
@@ -18,14 +22,13 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
 
-import junit.framework.Assert;
-
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -35,6 +38,7 @@ import org.osgi.framework.ServiceRegistration;
 
 import com.mmxlabs.lingo.its.internal.Activator;
 import com.mmxlabs.lingo.its.utils.MigrationHelper;
+import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -75,6 +79,7 @@ public class AbstractOptimisationResultTester {
 	 * Toggle between storing fitness names and values in a properties file and testing the current fitnesses against the stored values. Should be run as part of a plugin test.
 	 */
 	private static final boolean storeFitnessMap = false;
+	private static final boolean storeReports = false;
 
 	static {
 		// Trigger EMF initialisation outside of eclipse environment.
@@ -380,4 +385,58 @@ public class AbstractOptimisationResultTester {
 		return EcoreUtil.copy(original);
 	}
 
+	public void testReports(final URL scenarioURL, final String reportID, final String extension) throws Exception {
+
+		final URI uri = URI.createURI(FileLocator.toFileURL(scenarioURL).toString().replaceAll(" ", "%20"));
+		final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, getScenarioCipherProvider());
+
+		File f = null;
+		try {
+			f = MigrationHelper.migrateAndLoad(instance);
+			final LNGScenarioModel originalScenario = (LNGScenarioModel) instance.getInstance();
+			final ScenarioRunner runner = evaluateScenario(originalScenario, scenarioURL);
+			runner.updateScenario();
+
+			final ReportTester reportTester = new ReportTester();
+			final IReportContents reportContents = reportTester.getReportContents(instance, reportID);
+
+			Assert.assertNotNull(reportContents);
+			final String actualContents = reportContents.getStringContents();
+			Assert.assertNotNull(actualContents);
+			if (storeReports) {
+
+				final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString())).toString().replaceAll(" ", "%20"));
+
+				final File f1 = new File(expectedReportOutput.toURI());
+				final File file2 = new File(f1.getAbsoluteFile() + "." + reportID + "." + extension);
+				try (PrintWriter pw = new PrintWriter(file2)) {
+					pw.print(actualContents);
+				}
+			} else {
+				final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString() + "." + reportID + "." + extension)).toString().replaceAll(" ", "%20"));
+				final StringBuilder expectedOutputBuilder = new StringBuilder();
+				{
+					try (InputStream is = expectedReportOutput.openStream(); BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
+						String line = reader.readLine();
+						if (line != null) {
+							expectedOutputBuilder.append(line);
+						}
+						while (line != null) {
+							line = reader.readLine();
+							if (line != null) {
+								expectedOutputBuilder.append("\n");
+								expectedOutputBuilder.append(line);
+							}
+						}
+					}
+				}
+				Assert.assertEquals(expectedOutputBuilder.toString(), actualContents);
+			}
+		} finally {
+			if (f != null && f.exists()) {
+				f.delete();
+			}
+		}
+
+	}
 }
