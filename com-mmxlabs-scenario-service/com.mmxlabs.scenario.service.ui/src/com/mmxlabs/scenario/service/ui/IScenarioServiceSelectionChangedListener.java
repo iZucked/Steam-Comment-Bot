@@ -15,7 +15,18 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  * 
  */
 public interface IScenarioServiceSelectionChangedListener {
-	void deselected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> deselected);
-	void selected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> selected);
-	void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioInstance oldPin, final ScenarioInstance newPin);
+	/**
+	 * Notify listener of deselected set of scenarios. If block is true, do not return until UI is fully refreshed.  
+	 */
+	void deselected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> deselected, boolean block);
+
+	/**
+	 * Notify listener of selected set of scenarios. If block is true, do not return until UI is fully refreshed.  
+	 */
+	void selected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> selected, boolean block);
+
+	/**
+	 * Notify listener of pinned scenario. If block is true, do not return until UI is fully refreshed.  
+	 */
+	void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioInstance oldPin, final ScenarioInstance newPin, boolean block);
 }

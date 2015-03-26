@@ -30,6 +30,11 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 
 	@Override
 	public void select(final ScenarioInstance instance) {
+		select(instance, false);
+	}
+
+	@Override
+	public void select(final ScenarioInstance instance, final boolean block) {
 		if (!isSelected(instance)) {
 			// Enforce one pin, one other scenario.
 			if (pin != null && selection.size() > 1) {
@@ -40,25 +45,30 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 					if (scenarioInstance == pin) {
 						continue;
 					}
-					deselect(scenarioInstance);
+					deselect(scenarioInstance, block);
 				}
 			}
 			selection.add(instance);
 			for (final IScenarioServiceSelectionChangedListener listener : listeners) {
-				listener.selected(this, Collections.singleton(instance));
+				listener.selected(this, Collections.singleton(instance), block);
 			}
 		}
 	}
 
 	@Override
 	public void deselect(final ScenarioInstance instance) {
+		deselect(instance, false);
+	}
+
+	@Override
+	public void deselect(final ScenarioInstance instance, final boolean block) {
 		if (isSelected(instance)) {
 			if (instance == pin) {
-				setPinnedInstance(null);
+				setPinnedInstance(null, block);
 			} else {
 				selection.remove(instance);
 				for (final IScenarioServiceSelectionChangedListener listener : listeners) {
-					listener.deselected(this, Collections.singleton(instance));
+					listener.deselected(this, Collections.singleton(instance), block);
 				}
 			}
 		}
@@ -66,12 +76,17 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 
 	@Override
 	public void deselectAll() {
+		deselectAll(false);
+	}
+
+	@Override
+	public void deselectAll(final boolean block) {
 		if (selection.isEmpty() == false) {
 			final HashSet<ScenarioInstance> copy = new HashSet<ScenarioInstance>(selection);
 			selection.clear();
 			setPinnedInstance(null);
 			for (final IScenarioServiceSelectionChangedListener listener : listeners) {
-				listener.deselected(this, copy);
+				listener.deselected(this, copy, block);
 			}
 		}
 	}
@@ -99,11 +114,11 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 	/**
 	 * @param instance
 	 */
-	public void toggleSelection(final ScenarioInstance instance) {
+	public void toggleSelection(final ScenarioInstance instance, final boolean block) {
 		if (isSelected(instance))
-			deselect(instance);
+			deselect(instance, block);
 		else
-			select(instance);
+			select(instance, block);
 	}
 
 	@Override
@@ -113,11 +128,16 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 
 	@Override
 	public void setPinnedInstance(final ScenarioInstance instance) {
+		setPinnedInstance(instance, false);
+	}
+
+	@Override
+	public void setPinnedInstance(final ScenarioInstance instance, final boolean block) {
 		if (pin != instance) {
 			final ScenarioInstance oldPin = pin;
 			pin = instance;
 			if (instance != null && !isSelected(instance)) {
-				select(instance);
+				select(instance, block);
 			} else if (oldPin != null && pin == null) {
 				// deselect(instance);
 			}
@@ -127,11 +147,11 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 					if (scenarioInstance == pin) {
 						continue;
 					}
-					deselect(scenarioInstance);
+					deselect(scenarioInstance, block);
 				}
 			}
 			for (final IScenarioServiceSelectionChangedListener listener : listeners) {
-				listener.pinned(this, oldPin, pin);
+				listener.pinned(this, oldPin, pin, block);
 			}
 		}
 	}

@@ -71,17 +71,17 @@ public class PinStateEditorActionDelegate implements IEditorActionDelegate, IAct
 		selectionChangedListener = new IScenarioServiceSelectionChangedListener() {
 
 			@Override
-			public void selected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> selected) {
+			public void selected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> selected, boolean block) {
 
 			}
 
 			@Override
-			public void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioInstance oldPin, final ScenarioInstance newPin) {
+			public void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioInstance oldPin, final ScenarioInstance newPin, boolean block) {
 				updateActionState();
 			}
 
 			@Override
-			public void deselected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> deselected) {
+			public void deselected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> deselected, boolean block) {
 
 			}
 		};
