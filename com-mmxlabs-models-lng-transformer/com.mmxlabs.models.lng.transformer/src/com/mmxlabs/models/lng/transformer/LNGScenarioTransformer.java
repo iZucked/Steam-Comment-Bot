@@ -1209,6 +1209,8 @@ public class LNGScenarioTransformer {
 			throw new IllegalStateException("Discharge Slot has no contract or other pricing data");
 		}
 
+		final boolean isVolumeLimitInM3 = dischargeSlot.getSlotOrContractVolumeLimitsUnit() == com.mmxlabs.models.lng.types.VolumeUnits.M3 ? true : false;
+
 		// local scope for slot creation convenience variables
 		{
 			// convenience variables
@@ -1268,14 +1270,14 @@ public class LNGScenarioTransformer {
 				}
 
 				discharge = builder.createFOBSaleDischargeSlot(name, port, localTimeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator, dischargeSlot.getSlotOrPortDuration(),
-						pricingDate, transformPricingEvent(dischargeSlot.getSlotOrDelegatedPricingEvent()), dischargeSlot.isOptional(), isSpot);
+						pricingDate, transformPricingEvent(dischargeSlot.getSlotOrDelegatedPricingEvent()), dischargeSlot.isOptional(), isSpot, isVolumeLimitInM3);
 
 				if (dischargeSlot.isDivertible()) {
 					// builder.setShippingHoursRestriction(discharge, dischargeWindow, dischargeSlot.getShippingDaysRestriction() * 24);
 				}
 			} else {
 				discharge = builder.createDischargeSlot(name, portAssociation.lookup(dischargeSlot.getPort()), dischargeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator,
-						dischargeSlot.getSlotOrPortDuration(), pricingDate, transformPricingEvent(dischargeSlot.getSlotOrDelegatedPricingEvent()), dischargeSlot.isOptional(), isSpot);
+						dischargeSlot.getSlotOrPortDuration(), pricingDate, transformPricingEvent(dischargeSlot.getSlotOrDelegatedPricingEvent()), dischargeSlot.isOptional(), isSpot, isVolumeLimitInM3);
 			}
 		}
 
@@ -1389,6 +1391,8 @@ public class LNGScenarioTransformer {
 			minVolume = OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMinQuantity());
 			maxVolume = OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMaxQuantity());
 		}
+		
+		final boolean isVolumeLimitInM3 = loadSlot.getSlotOrContractVolumeLimitsUnit() == com.mmxlabs.models.lng.types.VolumeUnits.M3 ? true : false;
 
 		if (loadSlot.isDESPurchase()) {
 			final ITimeWindow localTimeWindow;
@@ -1411,7 +1415,7 @@ public class LNGScenarioTransformer {
 			}
 			load = builder.createDESPurchaseLoadSlot(loadSlot.getName(), port, localTimeWindow, minVolume, maxVolume, loadPriceCalculator,
 					OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrDelegatedCV()), loadSlot.getSlotOrPortDuration(), slotPricingDate,
-					transformPricingEvent(loadSlot.getSlotOrDelegatedPricingEvent()), loadSlot.isOptional(), isSpot);
+					transformPricingEvent(loadSlot.getSlotOrDelegatedPricingEvent()), loadSlot.isOptional(), isSpot, isVolumeLimitInM3);
 
 			if (loadSlot.isDivertible()) {
 				builder.setShippingHoursRestriction(load, loadWindow, loadSlot.getShippingDaysRestriction() * 24);
@@ -1419,7 +1423,7 @@ public class LNGScenarioTransformer {
 		} else {
 			load = builder.createLoadSlot(loadSlot.getName(), portAssociation.lookup(loadSlot.getPort()), loadWindow, minVolume, maxVolume, loadPriceCalculator,
 					OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrDelegatedCV()), loadSlot.getSlotOrPortDuration(), loadSlot.isSetArriveCold(), loadSlot.isArriveCold(),
-					slotPricingDate, transformPricingEvent(loadSlot.getSlotOrDelegatedPricingEvent()), loadSlot.isOptional(), isSpot);
+					slotPricingDate, transformPricingEvent(loadSlot.getSlotOrDelegatedPricingEvent()), loadSlot.isOptional(), isSpot, isVolumeLimitInM3);
 		}
 		// Store market slots for lookup when building spot markets.
 		modelEntityMap.addModelObject(loadSlot, load);
@@ -1551,9 +1555,11 @@ public class LNGScenarioTransformer {
 								}
 								usedIDStrings.add(id);
 
+								final boolean isVolumeLimitInM3 = desPurchaseMarket.getVolumeLimitsUnit() == com.mmxlabs.models.lng.types.VolumeUnits.M3 ? true : false;
+
 								final ILoadOption desPurchaseSlot = builder.createDESPurchaseLoadSlot(id, null, twUTCPlus, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
 										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), priceCalculator, cargoCVValue, 0, IPortSlot.NO_PRICING_DATE,
-										transformPricingEvent(market.getPricingEvent()), true, true);
+										transformPricingEvent(market.getPricingEvent()), true, true, isVolumeLimitInM3);
 
 								// Create a fake model object to add in here;
 								final SpotLoadSlot desSlot = CargoFactory.eINSTANCE.createSpotLoadSlot();
@@ -1682,9 +1688,11 @@ public class LNGScenarioTransformer {
 								final long minCv = 0;
 								final long maxCv = Long.MAX_VALUE;
 
+								final boolean isVolumeLimitInM3 = fobSaleMarket.getVolumeLimitsUnit() == com.mmxlabs.models.lng.types.VolumeUnits.M3 ? true : false;
+
 								final IDischargeOption fobSaleSlot = builder.createFOBSaleDischargeSlot(id, null, twUTCPlus, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
 										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), minCv, maxCv, priceCalculator, 0, IPortSlot.NO_PRICING_DATE,
-										transformPricingEvent(market.getPricingEvent()), true, true);
+										transformPricingEvent(market.getPricingEvent()), true, true, isVolumeLimitInM3);
 
 								// Create a fake model object to add in here;
 								final SpotDischargeSlot fobSlot = CargoFactory.eINSTANCE.createSpotDischargeSlot();
@@ -1828,8 +1836,10 @@ public class LNGScenarioTransformer {
 								final long minVolume = OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity());
 								final long maxVolume = OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity());
 
+								final boolean isVolumeLimitInM3 = desSalesMarket.getVolumeLimitsUnit() == com.mmxlabs.models.lng.types.VolumeUnits.M3 ? true : false;
+								
 								final IDischargeOption desSalesSlot = builder.createDischargeSlot(id, notionalIPort, tw, minVolume, maxVolume, 0, Long.MAX_VALUE, priceCalculator,
-										desSlot.getSlotOrPortDuration(), pricingDate, transformPricingEvent(market.getPricingEvent()), true, true);
+										desSlot.getSlotOrPortDuration(), pricingDate, transformPricingEvent(market.getPricingEvent()), true, true, isVolumeLimitInM3);
 
 								// Key piece of information
 								desSlot.setMarket(desSalesMarket);
@@ -1939,7 +1949,7 @@ public class LNGScenarioTransformer {
 
 								final ILoadOption fobPurchaseSlot = builder.createLoadSlot(id, notionalIPort, tw, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
 										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), priceCalculator, cargoCVValue, fobSlot.getSlotOrPortDuration(), true, true,
-										IPortSlot.NO_PRICING_DATE, transformPricingEvent(market.getPricingEvent()), true, true);
+										IPortSlot.NO_PRICING_DATE, transformPricingEvent(market.getPricingEvent()), true, true, false);
 
 								// Key piece of information
 								fobSlot.setMarket(fobPurchaseMarket);
