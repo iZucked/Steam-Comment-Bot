@@ -18,3 +18,5 @@ syntax: regexp
 ^plugin_customization\.ini$
 syntax: regexp
 ^com\.mmxlabs\.lingo\.doc/index$
+syntax: regexp
+^com\.mmxlabs\.lingo\.product-definition/plugin_customization\.ini$
