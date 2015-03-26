@@ -14,6 +14,7 @@ import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.spotmarkets.SpotAvailability;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
+import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
@@ -30,6 +31,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getAvailability <em>Availability</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getMinQuantity <em>Min Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getMaxQuantity <em>Max Quantity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getVolumeLimitsUnit <em>Volume Limits Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getPriceInfo <em>Price Info</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getPricingEvent <em>Pricing Event</em>}</li>
@@ -128,6 +130,26 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * @ordered
 	 */
 	protected int maxQuantity = MAX_QUANTITY_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getVolumeLimitsUnit() <em>Volume Limits Unit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeLimitsUnit()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final VolumeUnits VOLUME_LIMITS_UNIT_EDEFAULT = VolumeUnits.M3;
+
+	/**
+	 * The cached value of the '{@link #getVolumeLimitsUnit() <em>Volume Limits Unit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeLimitsUnit()
+	 * @generated
+	 * @ordered
+	 */
+	protected VolumeUnits volumeLimitsUnit = VOLUME_LIMITS_UNIT_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getPriceInfo() <em>Price Info</em>}' containment reference.
@@ -299,6 +321,27 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public VolumeUnits getVolumeLimitsUnit() {
+		return volumeLimitsUnit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVolumeLimitsUnit(VolumeUnits newVolumeLimitsUnit) {
+		VolumeUnits oldVolumeLimitsUnit = volumeLimitsUnit;
+		volumeLimitsUnit = newVolumeLimitsUnit == null ? VOLUME_LIMITS_UNIT_EDEFAULT : newVolumeLimitsUnit;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.SPOT_MARKET__VOLUME_LIMITS_UNIT, oldVolumeLimitsUnit, volumeLimitsUnit));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public LNGPriceCalculatorParameters getPriceInfo() {
 		return priceInfo;
 	}
@@ -451,6 +494,8 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 				return getMinQuantity();
 			case SpotMarketsPackage.SPOT_MARKET__MAX_QUANTITY:
 				return getMaxQuantity();
+			case SpotMarketsPackage.SPOT_MARKET__VOLUME_LIMITS_UNIT:
+				return getVolumeLimitsUnit();
 			case SpotMarketsPackage.SPOT_MARKET__PRICE_INFO:
 				return getPriceInfo();
 			case SpotMarketsPackage.SPOT_MARKET__ENTITY:
@@ -484,6 +529,9 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 				return;
 			case SpotMarketsPackage.SPOT_MARKET__MAX_QUANTITY:
 				setMaxQuantity((Integer)newValue);
+				return;
+			case SpotMarketsPackage.SPOT_MARKET__VOLUME_LIMITS_UNIT:
+				setVolumeLimitsUnit((VolumeUnits)newValue);
 				return;
 			case SpotMarketsPackage.SPOT_MARKET__PRICE_INFO:
 				setPriceInfo((LNGPriceCalculatorParameters)newValue);
@@ -521,6 +569,9 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 			case SpotMarketsPackage.SPOT_MARKET__MAX_QUANTITY:
 				setMaxQuantity(MAX_QUANTITY_EDEFAULT);
 				return;
+			case SpotMarketsPackage.SPOT_MARKET__VOLUME_LIMITS_UNIT:
+				setVolumeLimitsUnit(VOLUME_LIMITS_UNIT_EDEFAULT);
+				return;
 			case SpotMarketsPackage.SPOT_MARKET__PRICE_INFO:
 				setPriceInfo((LNGPriceCalculatorParameters)null);
 				return;
@@ -552,6 +603,8 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 				return minQuantity != MIN_QUANTITY_EDEFAULT;
 			case SpotMarketsPackage.SPOT_MARKET__MAX_QUANTITY:
 				return maxQuantity != MAX_QUANTITY_EDEFAULT;
+			case SpotMarketsPackage.SPOT_MARKET__VOLUME_LIMITS_UNIT:
+				return volumeLimitsUnit != VOLUME_LIMITS_UNIT_EDEFAULT;
 			case SpotMarketsPackage.SPOT_MARKET__PRICE_INFO:
 				return priceInfo != null;
 			case SpotMarketsPackage.SPOT_MARKET__ENTITY:
@@ -612,6 +665,8 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 		result.append(minQuantity);
 		result.append(", maxQuantity: ");
 		result.append(maxQuantity);
+		result.append(", volumeLimitsUnit: ");
+		result.append(volumeLimitsUnit);
 		result.append(", pricingEvent: ");
 		result.append(pricingEvent);
 		result.append(')');

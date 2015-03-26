@@ -16,6 +16,8 @@ import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
+import com.mmxlabs.models.lng.types.VolumeUnits;
+import com.mmxlabs.models.mmxcore.MMXObject.DelegateInformation;
 
 /**
  * <!-- begin-user-doc -->
@@ -233,6 +235,24 @@ public class SpotDischargeSlotImpl extends DischargeSlotImpl implements SpotDisc
 					}
 					return result;
 					
+				}
+			};
+		} else if (feature == CargoPackage.Literals.SLOT__VOLUME_LIMITS_UNIT) {
+			return new DelegateInformation(null, null, null) {
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == CargoPackage.Literals.SPOT_SLOT__MARKET);
+				}
+
+				public Object getValue(final EObject object) {
+					Object result = null;
+					SpotMarket spotMarket = getMarket();
+					if (result == null && spotMarket != null) {
+						result = spotMarket.eGetWithDefault(SpotMarketsPackage.Literals.SPOT_MARKET__VOLUME_LIMITS_UNIT);
+					}
+					if (result == null) {
+						result = VolumeUnits.M3;
+					}
+					return result;
 				}
 			};
 		} else if (feature == CargoPackage.Literals.SLOT__PRICING_EVENT) {

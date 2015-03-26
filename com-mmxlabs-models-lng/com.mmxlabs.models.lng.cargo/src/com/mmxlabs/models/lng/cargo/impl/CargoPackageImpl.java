@@ -367,7 +367,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSlot_MinQuantity() {
+	public EAttribute getSlot_VolumeLimitsUnit() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(6);
 	}
 
@@ -376,7 +376,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSlot_MaxQuantity() {
+	public EAttribute getSlot_MinQuantity() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(7);
 	}
 
@@ -385,7 +385,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSlot_Optional() {
+	public EAttribute getSlot_MaxQuantity() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(8);
 	}
 
@@ -394,7 +394,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSlot_PriceExpression() {
+	public EAttribute getSlot_Optional() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(9);
 	}
 
@@ -403,8 +403,17 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getSlot_PriceExpression() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EReference getSlot_Cargo() {
-		return (EReference)slotEClass.getEStructuralFeatures().get(10);
+		return (EReference)slotEClass.getEStructuralFeatures().get(11);
 	}
 
 	/**
@@ -413,15 +422,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EAttribute getSlot_PricingEvent() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(11);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getSlot_PricingDate() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(12);
 	}
 
@@ -430,7 +430,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSlot_Notes() {
+	public EAttribute getSlot_PricingDate() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(13);
 	}
 
@@ -439,7 +439,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSlot_Divertible() {
+	public EAttribute getSlot_Notes() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(14);
 	}
 
@@ -448,7 +448,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSlot_ShippingDaysRestriction() {
+	public EAttribute getSlot_Divertible() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(15);
 	}
 
@@ -457,8 +457,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSlot_Entity() {
-		return (EReference)slotEClass.getEStructuralFeatures().get(16);
+	public EAttribute getSlot_ShippingDaysRestriction() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(16);
 	}
 
 	/**
@@ -466,7 +466,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSlot_RestrictedContracts() {
+	public EReference getSlot_Entity() {
 		return (EReference)slotEClass.getEStructuralFeatures().get(17);
 	}
 
@@ -475,7 +475,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSlot_RestrictedPorts() {
+	public EReference getSlot_RestrictedContracts() {
 		return (EReference)slotEClass.getEStructuralFeatures().get(18);
 	}
 
@@ -484,8 +484,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSlot_RestrictedListsArePermissive() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(19);
+	public EReference getSlot_RestrictedPorts() {
+		return (EReference)slotEClass.getEStructuralFeatures().get(19);
 	}
 
 	/**
@@ -493,7 +493,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSlot_Hedges() {
+	public EAttribute getSlot_RestrictedListsArePermissive() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(20);
 	}
 
@@ -502,8 +502,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSlot_CancellationFee() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(22);
+	public EAttribute getSlot_Hedges() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(21);
 	}
 
 	/**
@@ -511,7 +511,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSlot_OverrideRestrictions() {
+	public EAttribute getSlot_CancellationFee() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(23);
 	}
 
@@ -520,8 +520,17 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getSlot_OverrideRestrictions() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(24);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EReference getSlot_NominatedVessel() {
-		return (EReference)slotEClass.getEStructuralFeatures().get(24);
+		return (EReference)slotEClass.getEStructuralFeatures().get(25);
 	}
 
 	/**
@@ -530,7 +539,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EAttribute getSlot_Locked() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(25);
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(26);
 	}
 
 	/**
@@ -539,7 +548,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EReference getSlot_AllowedVessels() {
-		return (EReference)slotEClass.getEStructuralFeatures().get(21);
+		return (EReference)slotEClass.getEStructuralFeatures().get(22);
 	}	
 	
 	/**
@@ -574,7 +583,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EOperation getSlot__GetWindowEndWithSlotOrPortTime() {
+	public EOperation getSlot__GetSlotOrContractVolumeLimitsUnit() {
 		return slotEClass.getEOperations().get(3);
 	}
 
@@ -583,7 +592,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EOperation getSlot__GetWindowStartWithSlotOrPortTime() {
+	public EOperation getSlot__GetWindowEndWithSlotOrPortTime() {
 		return slotEClass.getEOperations().get(4);
 	}
 
@@ -592,7 +601,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EOperation getSlot__GetSlotOrPortWindowSize() {
+	public EOperation getSlot__GetWindowStartWithSlotOrPortTime() {
 		return slotEClass.getEOperations().get(5);
 	}
 
@@ -601,7 +610,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EOperation getSlot__GetSlotOrDelegatedEntity() {
+	public EOperation getSlot__GetSlotOrPortWindowSize() {
 		return slotEClass.getEOperations().get(6);
 	}
 
@@ -610,7 +619,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EOperation getSlot__GetSlotOrContractRestrictedContracts() {
+	public EOperation getSlot__GetSlotOrDelegatedEntity() {
 		return slotEClass.getEOperations().get(7);
 	}
 
@@ -619,7 +628,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EOperation getSlot__GetSlotOrContractRestrictedPorts() {
+	public EOperation getSlot__GetSlotOrContractRestrictedContracts() {
 		return slotEClass.getEOperations().get(8);
 	}
 
@@ -628,7 +637,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EOperation getSlot__GetSlotOrContractRestrictedListsArePermissive() {
+	public EOperation getSlot__GetSlotOrContractRestrictedPorts() {
 		return slotEClass.getEOperations().get(9);
 	}
 
@@ -637,7 +646,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EOperation getSlot__GetSlotOrContractCancellationFee() {
+	public EOperation getSlot__GetSlotOrContractRestrictedListsArePermissive() {
 		return slotEClass.getEOperations().get(10);
 	}
 
@@ -646,8 +655,17 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EOperation getSlot__GetSlotOrDelegatedPricingEvent() {
+	public EOperation getSlot__GetSlotOrContractCancellationFee() {
 		return slotEClass.getEOperations().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getSlot__GetSlotOrDelegatedPricingEvent() {
+		return slotEClass.getEOperations().get(12);
 	}
 
 	/**
@@ -1313,6 +1331,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(slotEClass, SLOT__WINDOW_START_TIME);
 		createEAttribute(slotEClass, SLOT__WINDOW_SIZE);
 		createEAttribute(slotEClass, SLOT__DURATION);
+		createEAttribute(slotEClass, SLOT__VOLUME_LIMITS_UNIT);
 		createEAttribute(slotEClass, SLOT__MIN_QUANTITY);
 		createEAttribute(slotEClass, SLOT__MAX_QUANTITY);
 		createEAttribute(slotEClass, SLOT__OPTIONAL);
@@ -1336,6 +1355,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_PORT_DURATION);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_MIN_QUANTITY);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_MAX_QUANTITY);
+		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_VOLUME_LIMITS_UNIT);
 		createEOperation(slotEClass, SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME);
 		createEOperation(slotEClass, SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE);
@@ -1514,6 +1534,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getSlot_WindowStartTime(), ecorePackage.getEInt(), "windowStartTime", null, 1, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_WindowSize(), ecorePackage.getEInt(), "windowSize", null, 1, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_Duration(), ecorePackage.getEInt(), "duration", null, 1, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_VolumeLimitsUnit(), theTypesPackage.getVolumeUnits(), "volumeLimitsUnit", null, 1, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_MinQuantity(), ecorePackage.getEInt(), "minQuantity", null, 1, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_MaxQuantity(), ecorePackage.getEInt(), "maxQuantity", "140000", 1, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_Optional(), ecorePackage.getEBoolean(), "optional", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1543,6 +1564,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEOperation(getSlot__GetSlotOrContractMinQuantity(), ecorePackage.getEInt(), "getSlotOrContractMinQuantity", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEOperation(getSlot__GetSlotOrContractMaxQuantity(), ecorePackage.getEInt(), "getSlotOrContractMaxQuantity", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getSlot__GetSlotOrContractVolumeLimitsUnit(), theTypesPackage.getVolumeUnits(), "getSlotOrContractVolumeLimitsUnit", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEOperation(getSlot__GetWindowEndWithSlotOrPortTime(), ecorePackage.getEDate(), "getWindowEndWithSlotOrPortTime", 0, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -1709,15 +1732,13 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		  (getSlot_MinQuantity(), 
 		   source, 
 		   new String[] {
-			 "unit", "m\u00b3",
-			 "formatString", "###,##0"
+			 "formatString", "#,###,##0"
 		   });		
 		addAnnotation
 		  (getSlot_MaxQuantity(), 
 		   source, 
 		   new String[] {
-			 "unit", "m\u00b3",
-			 "formatString", "###,##0"
+			 "formatString", "#,###,##0"
 		   });		
 		addAnnotation
 		  (getSlot_ShippingDaysRestriction(), 

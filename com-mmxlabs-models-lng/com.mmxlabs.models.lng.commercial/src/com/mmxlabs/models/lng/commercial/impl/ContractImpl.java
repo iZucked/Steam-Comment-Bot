@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
@@ -38,6 +39,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getPreferredPort <em>Preferred Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getMinQuantity <em>Min Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getMaxQuantity <em>Max Quantity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getVolumeLimitsUnit <em>Volume Limits Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getRestrictedContracts <em>Restricted Contracts</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getRestrictedPorts <em>Restricted Ports</em>}</li>
@@ -140,6 +142,26 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * @ordered
 	 */
 	protected int maxQuantity = MAX_QUANTITY_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getVolumeLimitsUnit() <em>Volume Limits Unit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeLimitsUnit()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final VolumeUnits VOLUME_LIMITS_UNIT_EDEFAULT = VolumeUnits.M3;
+
+	/**
+	 * The cached value of the '{@link #getVolumeLimitsUnit() <em>Volume Limits Unit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeLimitsUnit()
+	 * @generated
+	 * @ordered
+	 */
+	protected VolumeUnits volumeLimitsUnit = VOLUME_LIMITS_UNIT_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #isRestrictedListsArePermissive() <em>Restricted Lists Are Permissive</em>}' attribute.
@@ -446,6 +468,27 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public VolumeUnits getVolumeLimitsUnit() {
+		return volumeLimitsUnit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVolumeLimitsUnit(VolumeUnits newVolumeLimitsUnit) {
+		VolumeUnits oldVolumeLimitsUnit = volumeLimitsUnit;
+		volumeLimitsUnit = newVolumeLimitsUnit == null ? VOLUME_LIMITS_UNIT_EDEFAULT : newVolumeLimitsUnit;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__VOLUME_LIMITS_UNIT, oldVolumeLimitsUnit, volumeLimitsUnit));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public boolean isRestrictedListsArePermissive() {
 		return restrictedListsArePermissive;
 	}
@@ -649,6 +692,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return getMinQuantity();
 			case CommercialPackage.CONTRACT__MAX_QUANTITY:
 				return getMaxQuantity();
+			case CommercialPackage.CONTRACT__VOLUME_LIMITS_UNIT:
+				return getVolumeLimitsUnit();
 			case CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 				return isRestrictedListsArePermissive();
 			case CommercialPackage.CONTRACT__RESTRICTED_CONTRACTS:
@@ -696,6 +741,9 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return;
 			case CommercialPackage.CONTRACT__MAX_QUANTITY:
 				setMaxQuantity((Integer)newValue);
+				return;
+			case CommercialPackage.CONTRACT__VOLUME_LIMITS_UNIT:
+				setVolumeLimitsUnit((VolumeUnits)newValue);
 				return;
 			case CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 				setRestrictedListsArePermissive((Boolean)newValue);
@@ -753,6 +801,9 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__MAX_QUANTITY:
 				setMaxQuantity(MAX_QUANTITY_EDEFAULT);
 				return;
+			case CommercialPackage.CONTRACT__VOLUME_LIMITS_UNIT:
+				setVolumeLimitsUnit(VOLUME_LIMITS_UNIT_EDEFAULT);
+				return;
 			case CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 				setRestrictedListsArePermissive(RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT);
 				return;
@@ -801,6 +852,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return minQuantity != MIN_QUANTITY_EDEFAULT;
 			case CommercialPackage.CONTRACT__MAX_QUANTITY:
 				return maxQuantity != MAX_QUANTITY_EDEFAULT;
+			case CommercialPackage.CONTRACT__VOLUME_LIMITS_UNIT:
+				return volumeLimitsUnit != VOLUME_LIMITS_UNIT_EDEFAULT;
 			case CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 				return restrictedListsArePermissive != RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT;
 			case CommercialPackage.CONTRACT__RESTRICTED_CONTRACTS:
@@ -869,6 +922,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 		result.append(minQuantity);
 		result.append(", maxQuantity: ");
 		result.append(maxQuantity);
+		result.append(", volumeLimitsUnit: ");
+		result.append(volumeLimitsUnit);
 		result.append(", restrictedListsArePermissive: ");
 		result.append(restrictedListsArePermissive);
 		result.append(", notes: ");

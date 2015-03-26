@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.types.impl;
 
+import com.mmxlabs.models.lng.types.*;
 import java.lang.Iterable;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
@@ -77,6 +78,8 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 			return createPortCapabilityFromString(eDataType, initialValue);
 		case TypesPackage.CARGO_DELIVERY_TYPE:
 			return createCargoDeliveryTypeFromString(eDataType, initialValue);
+		case TypesPackage.VOLUME_UNITS:
+			return createVolumeUnitsFromString(eDataType, initialValue);
 		case TypesPackage.ITERABLE:
 			return createIterableFromString(eDataType, initialValue);
 		default:
@@ -96,6 +99,8 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 			return convertPortCapabilityToString(eDataType, instanceValue);
 		case TypesPackage.CARGO_DELIVERY_TYPE:
 			return convertCargoDeliveryTypeToString(eDataType, instanceValue);
+		case TypesPackage.VOLUME_UNITS:
+			return convertVolumeUnitsToString(eDataType, instanceValue);
 		case TypesPackage.ITERABLE:
 			return convertIterableToString(eDataType, instanceValue);
 		default:
@@ -142,6 +147,27 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 * @generated
 	 */
 	public String convertCargoDeliveryTypeToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VolumeUnits createVolumeUnitsFromString(EDataType eDataType, String initialValue) {
+		VolumeUnits result = VolumeUnits.get(initialValue);
+		if (result == null)
+			throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertVolumeUnitsToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

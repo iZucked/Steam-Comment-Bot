@@ -289,13 +289,22 @@ public interface SpotMarketsPackage extends EPackage {
 	int SPOT_MARKET__MAX_QUANTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Volume Limits Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_MARKET__VOLUME_LIMITS_UNIT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+
+	/**
 	 * The feature id for the '<em><b>Price Info</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_MARKET__PRICE_INFO = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int SPOT_MARKET__PRICE_INFO = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
@@ -304,7 +313,7 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_MARKET__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int SPOT_MARKET__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Pricing Event</b></em>' attribute.
@@ -313,7 +322,7 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_MARKET__PRICING_EVENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+	int SPOT_MARKET__PRICING_EVENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The number of structural features of the '<em>Spot Market</em>' class.
@@ -322,7 +331,7 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_MARKET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+	int SPOT_MARKET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.DESPurchaseMarketImpl <em>DES Purchase Market</em>}' class.
@@ -396,6 +405,15 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @ordered
 	 */
 	int DES_PURCHASE_MARKET__MAX_QUANTITY = SPOT_MARKET__MAX_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Volume Limits Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_PURCHASE_MARKET__VOLUME_LIMITS_UNIT = SPOT_MARKET__VOLUME_LIMITS_UNIT;
 
 	/**
 	 * The feature id for the '<em><b>Price Info</b></em>' containment reference.
@@ -525,6 +543,15 @@ public interface SpotMarketsPackage extends EPackage {
 	int DES_SALES_MARKET__MAX_QUANTITY = SPOT_MARKET__MAX_QUANTITY;
 
 	/**
+	 * The feature id for the '<em><b>Volume Limits Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_SALES_MARKET__VOLUME_LIMITS_UNIT = SPOT_MARKET__VOLUME_LIMITS_UNIT;
+
+	/**
 	 * The feature id for the '<em><b>Price Info</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -641,6 +668,15 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @ordered
 	 */
 	int FOB_PURCHASES_MARKET__MAX_QUANTITY = SPOT_MARKET__MAX_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Volume Limits Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_PURCHASES_MARKET__VOLUME_LIMITS_UNIT = SPOT_MARKET__VOLUME_LIMITS_UNIT;
 
 	/**
 	 * The feature id for the '<em><b>Price Info</b></em>' containment reference.
@@ -777,6 +813,15 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @ordered
 	 */
 	int FOB_SALES_MARKET__MAX_QUANTITY = SPOT_MARKET__MAX_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Volume Limits Unit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_SALES_MARKET__VOLUME_LIMITS_UNIT = SPOT_MARKET__VOLUME_LIMITS_UNIT;
 
 	/**
 	 * The feature id for the '<em><b>Price Info</b></em>' containment reference.
@@ -1276,6 +1321,17 @@ public interface SpotMarketsPackage extends EPackage {
 	EAttribute getSpotMarket_MaxQuantity();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getVolumeLimitsUnit <em>Volume Limits Unit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Volume Limits Unit</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarket#getVolumeLimitsUnit()
+	 * @see #getSpotMarket()
+	 * @generated
+	 */
+	EAttribute getSpotMarket_VolumeLimitsUnit();
+
+	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getPriceInfo <em>Price Info</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1742,6 +1798,14 @@ public interface SpotMarketsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SPOT_MARKET__MAX_QUANTITY = eINSTANCE.getSpotMarket_MaxQuantity();
+
+		/**
+		 * The meta object literal for the '<em><b>Volume Limits Unit</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SPOT_MARKET__VOLUME_LIMITS_UNIT = eINSTANCE.getSpotMarket_VolumeLimitsUnit();
 
 		/**
 		 * The meta object literal for the '<em><b>Price Info</b></em>' containment reference feature.

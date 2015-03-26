@@ -1026,6 +1026,16 @@ public class CargoEditorMenuHelper {
 							cal.add(Calendar.HOUR_OF_DAY, travelTime);
 							cal.add(Calendar.HOUR_OF_DAY, loadSlot.getSlotOrPortDuration());
 						}
+
+						// Get existing names
+						final Set<String> usedIDStrings = new HashSet<>();
+						for (final DischargeSlot slot : cargoModel.getDischargeSlots()) {
+							usedIDStrings.add(slot.getName());
+						}
+						
+						if (dischargeSlot.isFOBSale()) {
+							dischargeSlot.setPort(source.getPort());
+						}
 						cal.set(Calendar.DAY_OF_MONTH, 1);
 						cal.set(Calendar.HOUR_OF_DAY, 0);
 						cal.set(Calendar.MINUTE, 0);
@@ -1040,13 +1050,7 @@ public class CargoEditorMenuHelper {
 						dishargeCal.add(Calendar.MONTH, 1);
 						final Date endDate = dishargeCal.getTime();
 						dischargeSlot.setWindowSize((int) ((endDate.getTime() - startDate.getTime()) / 1000L / 60L / 60L));
-
-						// Get existing names
-						final Set<String> usedIDStrings = new HashSet<>();
-						for (final DischargeSlot slot : cargoModel.getDischargeSlots()) {
-							usedIDStrings.add(slot.getName());
-						}
-
+						
 						final String idPrefix = market.getName() + "-" + yearMonthString + "-";
 						int i = 0;
 						String id = idPrefix + (i++);
@@ -1054,12 +1058,9 @@ public class CargoEditorMenuHelper {
 							id = idPrefix + (i++);
 						}
 						dischargeSlot.setName(id);
-
+						
 					}
 
-					if (dischargeSlot.isFOBSale()) {
-						dischargeSlot.setPort(source.getPort());
-					}
 				} else {
 					dischargeSlot = (DischargeSlot) source;
 					if (market == null) {

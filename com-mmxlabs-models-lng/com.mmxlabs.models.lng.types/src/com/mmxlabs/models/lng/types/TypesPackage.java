@@ -420,6 +420,16 @@ public interface TypesPackage extends EPackage {
 	int CARGO_DELIVERY_TYPE = 6;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.VolumeUnits <em>Volume Units</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.types.VolumeUnits
+	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getVolumeUnits()
+	 * @generated
+	 */
+	int VOLUME_UNITS = 7;
+
+	/**
 	 * The meta object id for the '<em>Iterable</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -427,7 +437,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 7;
+	int ITERABLE = 8;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.APortSet <em>APort Set</em>}'.
@@ -518,6 +528,16 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 */
 	EEnum getCargoDeliveryType();
+
+	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.types.VolumeUnits <em>Volume Units</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Volume Units</em>'.
+	 * @see com.mmxlabs.models.lng.types.VolumeUnits
+	 * @generated
+	 */
+	EEnum getVolumeUnits();
 
 	/**
 	 * Returns the meta object for data type '{@link java.lang.Iterable <em>Iterable</em>}'.
@@ -638,6 +658,16 @@ public interface TypesPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum CARGO_DELIVERY_TYPE = eINSTANCE.getCargoDeliveryType();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.VolumeUnits <em>Volume Units</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.types.VolumeUnits
+		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getVolumeUnits()
+		 * @generated
+		 */
+		EEnum VOLUME_UNITS = eINSTANCE.getVolumeUnits();
 
 		/**
 		 * The meta object literal for the '<em>Iterable</em>' data type.

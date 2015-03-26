@@ -9,10 +9,24 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -69,6 +83,7 @@ public class SpotMarketComponentHelper extends BaseComponentHelper {
 		add_availabilityEditor(detailComposite, topClass);
 		add_minQuantityEditor(detailComposite, topClass);
 		add_maxQuantityEditor(detailComposite, topClass);
+		add_volumeLimitsUnitEditor(detailComposite, topClass);
 		add_priceInfoEditor(detailComposite, topClass);
 		add_entityEditor(detailComposite, topClass);
 		add_pricingEventEditor(detailComposite, topClass);
@@ -105,6 +120,15 @@ public class SpotMarketComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_maxQuantityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_MARKET__MAX_QUANTITY));
+	}
+
+	/**
+	 * Create the editor for the volumeLimitsUnit feature on SpotMarket
+	 *
+	 * @generated
+	 */
+	protected void add_volumeLimitsUnitEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_MARKET__VOLUME_LIMITS_UNIT));
 	}
 
 	/**

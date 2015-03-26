@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TypesFactory;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
+import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import java.lang.Iterable;
 
@@ -80,6 +81,13 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * @generated
 	 */
 	private EEnum cargoDeliveryTypeEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum volumeUnitsEEnum = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -238,6 +246,15 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EEnum getVolumeUnits() {
+		return volumeUnitsEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EDataType getIterable() {
 		return iterableEDataType;
 	}
@@ -286,6 +303,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		// Create enums
 		portCapabilityEEnum = createEEnum(PORT_CAPABILITY);
 		cargoDeliveryTypeEEnum = createEEnum(CARGO_DELIVERY_TYPE);
+		volumeUnitsEEnum = createEEnum(VOLUME_UNITS);
 
 		// Create data types
 		iterableEDataType = createEDataType(ITERABLE);
@@ -385,6 +403,10 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		addEEnumLiteral(cargoDeliveryTypeEEnum, CargoDeliveryType.ANY);
 		addEEnumLiteral(cargoDeliveryTypeEEnum, CargoDeliveryType.SHIPPED);
 		addEEnumLiteral(cargoDeliveryTypeEEnum, CargoDeliveryType.NOT_SHIPPED);
+
+		initEEnum(volumeUnitsEEnum, VolumeUnits.class, "VolumeUnits");
+		addEEnumLiteral(volumeUnitsEEnum, VolumeUnits.M3);
+		addEEnumLiteral(volumeUnitsEEnum, VolumeUnits.MMBTU);
 
 		// Initialize data types
 		initEDataType(iterableEDataType, Iterable.class, "Iterable", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

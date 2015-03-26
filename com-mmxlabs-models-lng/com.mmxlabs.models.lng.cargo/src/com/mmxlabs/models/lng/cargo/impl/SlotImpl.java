@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -34,6 +35,7 @@ import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
@@ -50,6 +52,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowStartTime <em>Window Start Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowSize <em>Window Size</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getDuration <em>Duration</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getVolumeLimitsUnit <em>Volume Limits Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getMinQuantity <em>Min Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getMaxQuantity <em>Max Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isOptional <em>Optional</em>}</li>
@@ -218,6 +221,35 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected boolean durationESet;
+
+	/**
+	 * The default value of the '{@link #getVolumeLimitsUnit() <em>Volume Limits Unit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeLimitsUnit()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final VolumeUnits VOLUME_LIMITS_UNIT_EDEFAULT = VolumeUnits.M3;
+
+	/**
+	 * The cached value of the '{@link #getVolumeLimitsUnit() <em>Volume Limits Unit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeLimitsUnit()
+	 * @generated
+	 * @ordered
+	 */
+	protected VolumeUnits volumeLimitsUnit = VOLUME_LIMITS_UNIT_EDEFAULT;
+
+	/**
+	 * This is true if the Volume Limits Unit attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean volumeLimitsUnitESet;
 
 	/**
 	 * The default value of the '{@link #getMinQuantity() <em>Min Quantity</em>}' attribute.
@@ -895,6 +927,52 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VolumeUnits getVolumeLimitsUnit() {
+		return volumeLimitsUnit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVolumeLimitsUnit(VolumeUnits newVolumeLimitsUnit) {
+		VolumeUnits oldVolumeLimitsUnit = volumeLimitsUnit;
+		volumeLimitsUnit = newVolumeLimitsUnit == null ? VOLUME_LIMITS_UNIT_EDEFAULT : newVolumeLimitsUnit;
+		boolean oldVolumeLimitsUnitESet = volumeLimitsUnitESet;
+		volumeLimitsUnitESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__VOLUME_LIMITS_UNIT, oldVolumeLimitsUnit, volumeLimitsUnit, !oldVolumeLimitsUnitESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetVolumeLimitsUnit() {
+		VolumeUnits oldVolumeLimitsUnit = volumeLimitsUnit;
+		boolean oldVolumeLimitsUnitESet = volumeLimitsUnitESet;
+		volumeLimitsUnit = VOLUME_LIMITS_UNIT_EDEFAULT;
+		volumeLimitsUnitESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__VOLUME_LIMITS_UNIT, oldVolumeLimitsUnit, VOLUME_LIMITS_UNIT_EDEFAULT, oldVolumeLimitsUnitESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetVolumeLimitsUnit() {
+		return volumeLimitsUnitESet;
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1557,6 +1635,15 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public VolumeUnits getSlotOrContractVolumeLimitsUnit() {
+		return (VolumeUnits) eGetWithDefault(CargoPackage.Literals.SLOT__VOLUME_LIMITS_UNIT);
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated NOT
 	 */
@@ -1717,6 +1804,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getWindowSize();
 			case CargoPackage.SLOT__DURATION:
 				return getDuration();
+			case CargoPackage.SLOT__VOLUME_LIMITS_UNIT:
+				return getVolumeLimitsUnit();
 			case CargoPackage.SLOT__MIN_QUANTITY:
 				return getMinQuantity();
 			case CargoPackage.SLOT__MAX_QUANTITY:
@@ -1792,6 +1881,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return;
 			case CargoPackage.SLOT__DURATION:
 				setDuration((Integer)newValue);
+				return;
+			case CargoPackage.SLOT__VOLUME_LIMITS_UNIT:
+				setVolumeLimitsUnit((VolumeUnits)newValue);
 				return;
 			case CargoPackage.SLOT__MIN_QUANTITY:
 				setMinQuantity((Integer)newValue);
@@ -1888,6 +1980,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__DURATION:
 				unsetDuration();
 				return;
+			case CargoPackage.SLOT__VOLUME_LIMITS_UNIT:
+				unsetVolumeLimitsUnit();
+				return;
 			case CargoPackage.SLOT__MIN_QUANTITY:
 				unsetMinQuantity();
 				return;
@@ -1973,6 +2068,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return isSetWindowSize();
 			case CargoPackage.SLOT__DURATION:
 				return isSetDuration();
+			case CargoPackage.SLOT__VOLUME_LIMITS_UNIT:
+				return isSetVolumeLimitsUnit();
 			case CargoPackage.SLOT__MIN_QUANTITY:
 				return isSetMinQuantity();
 			case CargoPackage.SLOT__MAX_QUANTITY:
@@ -2094,6 +2191,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getSlotOrContractMinQuantity();
 			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_MAX_QUANTITY:
 				return getSlotOrContractMaxQuantity();
+			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_VOLUME_LIMITS_UNIT:
+				return getSlotOrContractVolumeLimitsUnit();
 			case CargoPackage.SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME:
 				return getWindowEndWithSlotOrPortTime();
 			case CargoPackage.SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME:
@@ -2137,6 +2236,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		if (windowSizeESet) result.append(windowSize); else result.append("<unset>");
 		result.append(", duration: ");
 		if (durationESet) result.append(duration); else result.append("<unset>");
+		result.append(", volumeLimitsUnit: ");
+		if (volumeLimitsUnitESet) result.append(volumeLimitsUnit); else result.append("<unset>");
 		result.append(", minQuantity: ");
 		if (minQuantityESet) result.append(minQuantity); else result.append("<unset>");
 		result.append(", maxQuantity: ");
@@ -2186,6 +2287,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_Entity(), null);
 		} else if (CargoPackage.Literals.SLOT__CANCELLATION_FEE == feature) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_CancellationFee(), (Integer)0);
+		} else if (CargoPackage.Literals.SLOT__VOLUME_LIMITS_UNIT == feature) {
+			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_VolumeLimitsUnit(), VolumeUnits.M3);
 		}
 		
 		return super.getUnsetValueOrDelegate(feature);

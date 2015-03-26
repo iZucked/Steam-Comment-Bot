@@ -67,6 +67,7 @@ public class SpotMarketItemProvider
 			addEnabledPropertyDescriptor(object);
 			addMinQuantityPropertyDescriptor(object);
 			addMaxQuantityPropertyDescriptor(object);
+			addVolumeLimitsUnitPropertyDescriptor(object);
 			addEntityPropertyDescriptor(object);
 			addPricingEventPropertyDescriptor(object);
 		}
@@ -157,6 +158,28 @@ public class SpotMarketItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Volume Limits Unit feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVolumeLimitsUnitPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SpotMarket_volumeLimitsUnit_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SpotMarket_volumeLimitsUnit_feature", "_UI_SpotMarket_type"),
+				 SpotMarketsPackage.Literals.SPOT_MARKET__VOLUME_LIMITS_UNIT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -266,6 +289,7 @@ public class SpotMarketItemProvider
 			case SpotMarketsPackage.SPOT_MARKET__ENABLED:
 			case SpotMarketsPackage.SPOT_MARKET__MIN_QUANTITY:
 			case SpotMarketsPackage.SPOT_MARKET__MAX_QUANTITY:
+			case SpotMarketsPackage.SPOT_MARKET__VOLUME_LIMITS_UNIT:
 			case SpotMarketsPackage.SPOT_MARKET__PRICING_EVENT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

@@ -391,6 +391,7 @@
           </EClassExtends>
        </OwnerAnyOf>
     </editorFactory>
+    
  </extension>
  <extension
        point="com.mmxlabs.models.common.modelcommandprovider">

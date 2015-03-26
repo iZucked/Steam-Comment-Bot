@@ -348,7 +348,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getContract_RestrictedListsArePermissive() {
+	public EAttribute getContract_VolumeLimitsUnit() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(5);
 	}
 
@@ -357,8 +357,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getContract_RestrictedContracts() {
-		return (EReference)contractEClass.getEStructuralFeatures().get(6);
+	public EAttribute getContract_RestrictedListsArePermissive() {
+		return (EAttribute)contractEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -366,7 +366,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getContract_RestrictedPorts() {
+	public EReference getContract_RestrictedContracts() {
 		return (EReference)contractEClass.getEStructuralFeatures().get(7);
 	}
 
@@ -375,7 +375,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getContract_PriceInfo() {
+	public EReference getContract_RestrictedPorts() {
 		return (EReference)contractEClass.getEStructuralFeatures().get(8);
 	}
 
@@ -384,8 +384,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getContract_Notes() {
-		return (EAttribute)contractEClass.getEStructuralFeatures().get(9);
+	public EReference getContract_PriceInfo() {
+		return (EReference)contractEClass.getEStructuralFeatures().get(9);
 	}
 
 	/**
@@ -393,7 +393,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getContract_ContractType() {
+	public EAttribute getContract_Notes() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(10);
 	}
 
@@ -402,7 +402,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getContract_PricingEvent() {
+	public EAttribute getContract_ContractType() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(11);
 	}
 
@@ -411,8 +411,17 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getContract_CancellationFee() {
+	public EAttribute getContract_PricingEvent() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(12);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getContract_CancellationFee() {
+		return (EAttribute)contractEClass.getEStructuralFeatures().get(13);
 	}
 
 	/**
@@ -667,6 +676,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEReference(contractEClass, CONTRACT__PREFERRED_PORT);
 		createEAttribute(contractEClass, CONTRACT__MIN_QUANTITY);
 		createEAttribute(contractEClass, CONTRACT__MAX_QUANTITY);
+		createEAttribute(contractEClass, CONTRACT__VOLUME_LIMITS_UNIT);
 		createEAttribute(contractEClass, CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE);
 		createEReference(contractEClass, CONTRACT__RESTRICTED_CONTRACTS);
 		createEReference(contractEClass, CONTRACT__RESTRICTED_PORTS);
@@ -780,6 +790,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEReference(getContract_PreferredPort(), thePortPackage.getPort(), null, "preferredPort", null, 1, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_MinQuantity(), ecorePackage.getEInt(), "minQuantity", null, 1, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_MaxQuantity(), ecorePackage.getEInt(), "maxQuantity", "140000", 1, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getContract_VolumeLimitsUnit(), theTypesPackage.getVolumeUnits(), "volumeLimitsUnit", null, 1, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_RestrictedListsArePermissive(), ecorePackage.getEBoolean(), "restrictedListsArePermissive", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getContract_RestrictedContracts(), this.getContract(), null, "restrictedContracts", null, 0, -1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		g1 = createEGenericType(theTypesPackage.getAPortSet());
@@ -855,15 +866,13 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		  (getContract_MinQuantity(), 
 		   source, 
 		   new String[] {
-			 "unit", "m\u00b3",
-			 "formatString", "###,##0"
+			 "formatString", "#,###,##0"
 		   });		
 		addAnnotation
 		  (getContract_MaxQuantity(), 
 		   source, 
 		   new String[] {
-			 "unit", "m\u00b3",
-			 "formatString", "###,##0"
+			 "formatString", "#,###,##0"
 		   });		
 		addAnnotation
 		  (getContract_CancellationFee(), 

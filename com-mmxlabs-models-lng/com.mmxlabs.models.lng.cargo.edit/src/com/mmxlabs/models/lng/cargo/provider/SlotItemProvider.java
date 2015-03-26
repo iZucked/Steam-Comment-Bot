@@ -67,6 +67,7 @@ public class SlotItemProvider
 			addWindowStartTimePropertyDescriptor(object);
 			addWindowSizePropertyDescriptor(object);
 			addDurationPropertyDescriptor(object);
+			addVolumeLimitsUnitPropertyDescriptor(object);
 			addMinQuantityPropertyDescriptor(object);
 			addMaxQuantityPropertyDescriptor(object);
 			addOptionalPropertyDescriptor(object);
@@ -241,6 +242,28 @@ public class SlotItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Volume Limits Unit feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVolumeLimitsUnitPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_volumeLimitsUnit_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_volumeLimitsUnit_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__VOLUME_LIMITS_UNIT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -727,6 +750,7 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__WINDOW_START_TIME:
 			case CargoPackage.SLOT__WINDOW_SIZE:
 			case CargoPackage.SLOT__DURATION:
+			case CargoPackage.SLOT__VOLUME_LIMITS_UNIT:
 			case CargoPackage.SLOT__MIN_QUANTITY:
 			case CargoPackage.SLOT__MAX_QUANTITY:
 			case CargoPackage.SLOT__OPTIONAL:

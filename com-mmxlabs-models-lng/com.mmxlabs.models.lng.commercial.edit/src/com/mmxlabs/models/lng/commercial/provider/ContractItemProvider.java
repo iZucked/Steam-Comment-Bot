@@ -68,6 +68,7 @@ public class ContractItemProvider
 			addPreferredPortPropertyDescriptor(object);
 			addMinQuantityPropertyDescriptor(object);
 			addMaxQuantityPropertyDescriptor(object);
+			addVolumeLimitsUnitPropertyDescriptor(object);
 			addRestrictedListsArePermissivePropertyDescriptor(object);
 			addRestrictedContractsPropertyDescriptor(object);
 			addRestrictedPortsPropertyDescriptor(object);
@@ -207,6 +208,28 @@ public class ContractItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Volume Limits Unit feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVolumeLimitsUnitPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_volumeLimitsUnit_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Contract_volumeLimitsUnit_feature", "_UI_Contract_type"),
+				 CommercialPackage.Literals.CONTRACT__VOLUME_LIMITS_UNIT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -435,6 +458,7 @@ public class ContractItemProvider
 			case CommercialPackage.CONTRACT__NAME:
 			case CommercialPackage.CONTRACT__MIN_QUANTITY:
 			case CommercialPackage.CONTRACT__MAX_QUANTITY:
+			case CommercialPackage.CONTRACT__VOLUME_LIMITS_UNIT:
 			case CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 			case CommercialPackage.CONTRACT__NOTES:
 			case CommercialPackage.CONTRACT__CONTRACT_TYPE:

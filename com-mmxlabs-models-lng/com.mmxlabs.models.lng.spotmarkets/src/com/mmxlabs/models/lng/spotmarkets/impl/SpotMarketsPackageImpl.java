@@ -355,8 +355,8 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSpotMarket_PriceInfo() {
-		return (EReference)spotMarketEClass.getEStructuralFeatures().get(4);
+	public EAttribute getSpotMarket_VolumeLimitsUnit() {
+		return (EAttribute)spotMarketEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -364,7 +364,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSpotMarket_Entity() {
+	public EReference getSpotMarket_PriceInfo() {
 		return (EReference)spotMarketEClass.getEStructuralFeatures().get(5);
 	}
 
@@ -373,8 +373,17 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getSpotMarket_Entity() {
+		return (EReference)spotMarketEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EAttribute getSpotMarket_PricingEvent() {
-		return (EAttribute)spotMarketEClass.getEStructuralFeatures().get(6);
+		return (EAttribute)spotMarketEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -667,6 +676,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		createEReference(spotMarketEClass, SPOT_MARKET__AVAILABILITY);
 		createEAttribute(spotMarketEClass, SPOT_MARKET__MIN_QUANTITY);
 		createEAttribute(spotMarketEClass, SPOT_MARKET__MAX_QUANTITY);
+		createEAttribute(spotMarketEClass, SPOT_MARKET__VOLUME_LIMITS_UNIT);
 		createEReference(spotMarketEClass, SPOT_MARKET__PRICE_INFO);
 		createEReference(spotMarketEClass, SPOT_MARKET__ENTITY);
 		createEAttribute(spotMarketEClass, SPOT_MARKET__PRICING_EVENT);
@@ -735,8 +745,8 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 
 		// Obtain other dependent packages
 		MMXCorePackage theMMXCorePackage = (MMXCorePackage)EPackage.Registry.INSTANCE.getEPackage(MMXCorePackage.eNS_URI);
-		CommercialPackage theCommercialPackage = (CommercialPackage)EPackage.Registry.INSTANCE.getEPackage(CommercialPackage.eNS_URI);
 		TypesPackage theTypesPackage = (TypesPackage)EPackage.Registry.INSTANCE.getEPackage(TypesPackage.eNS_URI);
+		CommercialPackage theCommercialPackage = (CommercialPackage)EPackage.Registry.INSTANCE.getEPackage(CommercialPackage.eNS_URI);
 		PortPackage thePortPackage = (PortPackage)EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI);
 		PricingPackage thePricingPackage = (PricingPackage)EPackage.Registry.INSTANCE.getEPackage(PricingPackage.eNS_URI);
 		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
@@ -780,6 +790,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		initEReference(getSpotMarket_Availability(), this.getSpotAvailability(), null, "availability", null, 1, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSpotMarket_MinQuantity(), ecorePackage.getEInt(), "minQuantity", null, 1, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSpotMarket_MaxQuantity(), ecorePackage.getEInt(), "maxQuantity", null, 1, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSpotMarket_VolumeLimitsUnit(), theTypesPackage.getVolumeUnits(), "volumeLimitsUnit", null, 1, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSpotMarket_PriceInfo(), theCommercialPackage.getLNGPriceCalculatorParameters(), null, "priceInfo", null, 0, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSpotMarket_Entity(), theCommercialPackage.getBaseLegalEntity(), null, "entity", null, 0, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSpotMarket_PricingEvent(), theCommercialPackage.getPricingEvent(), "pricingEvent", null, 0, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -863,15 +874,13 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		  (getSpotMarket_MinQuantity(), 
 		   source, 
 		   new String[] {
-			 "unit", "m\u00b3",
-			 "formatString", "###,##0"
+			 "formatString", "#,###,##0"
 		   });		
 		addAnnotation
 		  (getSpotMarket_MaxQuantity(), 
 		   source, 
 		   new String[] {
-			 "unit", "m\u00b3",
-			 "formatString", "###,##0"
+			 "formatString", "#,###,##0"
 		   });		
 		addAnnotation
 		  (getDESPurchaseMarket_Cv(), 

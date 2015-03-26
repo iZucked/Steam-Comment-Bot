@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
+import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
@@ -30,6 +31,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getWindowStartTime <em>Window Start Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getWindowSize <em>Window Size</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getDuration <em>Duration</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getVolumeLimitsUnit <em>Volume Limits Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getMinQuantity <em>Min Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getMaxQuantity <em>Max Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isOptional <em>Optional</em>}</li>
@@ -352,6 +354,62 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	boolean isSetDuration();
 
 	/**
+	 * Returns the value of the '<em><b>Volume Limits Unit</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.types.VolumeUnits}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Volume Limits Unit</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Volume Limits Unit</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.VolumeUnits
+	 * @see #isSetVolumeLimitsUnit()
+	 * @see #unsetVolumeLimitsUnit()
+	 * @see #setVolumeLimitsUnit(VolumeUnits)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_VolumeLimitsUnit()
+	 * @model unsettable="true" required="true"
+	 * @generated
+	 */
+	VolumeUnits getVolumeLimitsUnit();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getVolumeLimitsUnit <em>Volume Limits Unit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Volume Limits Unit</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.VolumeUnits
+	 * @see #isSetVolumeLimitsUnit()
+	 * @see #unsetVolumeLimitsUnit()
+	 * @see #getVolumeLimitsUnit()
+	 * @generated
+	 */
+	void setVolumeLimitsUnit(VolumeUnits value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getVolumeLimitsUnit <em>Volume Limits Unit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetVolumeLimitsUnit()
+	 * @see #getVolumeLimitsUnit()
+	 * @see #setVolumeLimitsUnit(VolumeUnits)
+	 * @generated
+	 */
+	void unsetVolumeLimitsUnit();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getVolumeLimitsUnit <em>Volume Limits Unit</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Volume Limits Unit</em>' attribute is set.
+	 * @see #unsetVolumeLimitsUnit()
+	 * @see #getVolumeLimitsUnit()
+	 * @see #setVolumeLimitsUnit(VolumeUnits)
+	 * @generated
+	 */
+	boolean isSetVolumeLimitsUnit();
+
+	/**
 	 * Returns the value of the '<em><b>Min Quantity</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -365,7 +423,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @see #setMinQuantity(int)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_MinQuantity()
 	 * @model unsettable="true" required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263' formatString='###,##0'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='#,###,##0'"
 	 * @generated
 	 */
 	int getMinQuantity();
@@ -420,7 +478,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @see #setMaxQuantity(int)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_MaxQuantity()
 	 * @model default="140000" unsettable="true" required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263' formatString='###,##0'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='#,###,##0'"
 	 * @generated
 	 */
 	int getMaxQuantity();
@@ -1062,6 +1120,14 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @generated
 	 */
 	int getSlotOrContractMaxQuantity();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	VolumeUnits getSlotOrContractVolumeLimitsUnit();
 
 	/**
 	 * <!-- begin-user-doc -->

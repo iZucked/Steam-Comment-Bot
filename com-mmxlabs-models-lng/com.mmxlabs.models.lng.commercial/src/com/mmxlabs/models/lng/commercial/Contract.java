@@ -7,6 +7,7 @@ import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
@@ -23,6 +24,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getPreferredPort <em>Preferred Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getMinQuantity <em>Min Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getMaxQuantity <em>Max Quantity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getVolumeLimitsUnit <em>Volume Limits Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getRestrictedContracts <em>Restricted Contracts</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getRestrictedPorts <em>Restricted Ports</em>}</li>
@@ -119,7 +121,7 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @see #setMinQuantity(int)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_MinQuantity()
 	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263' formatString='###,##0'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='#,###,##0'"
 	 * @generated
 	 */
 	int getMinQuantity();
@@ -147,7 +149,7 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @see #setMaxQuantity(int)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_MaxQuantity()
 	 * @model default="140000" required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263' formatString='###,##0'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='#,###,##0'"
 	 * @generated
 	 */
 	int getMaxQuantity();
@@ -161,6 +163,35 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setMaxQuantity(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Volume Limits Unit</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.types.VolumeUnits}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Volume Limits Unit</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Volume Limits Unit</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.VolumeUnits
+	 * @see #setVolumeLimitsUnit(VolumeUnits)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_VolumeLimitsUnit()
+	 * @model required="true"
+	 * @generated
+	 */
+	VolumeUnits getVolumeLimitsUnit();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getVolumeLimitsUnit <em>Volume Limits Unit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Volume Limits Unit</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.VolumeUnits
+	 * @see #getVolumeLimitsUnit()
+	 * @generated
+	 */
+	void setVolumeLimitsUnit(VolumeUnits value);
 
 	/**
 	 * Returns the value of the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
