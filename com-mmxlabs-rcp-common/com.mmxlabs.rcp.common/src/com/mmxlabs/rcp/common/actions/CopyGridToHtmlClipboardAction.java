@@ -4,25 +4,13 @@
  */
 package com.mmxlabs.rcp.common.actions;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.eclipse.jface.action.Action;
 import org.eclipse.nebula.widgets.grid.Grid;
-import org.eclipse.nebula.widgets.grid.GridColumn;
-import org.eclipse.nebula.widgets.grid.GridColumnGroup;
-import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.google.common.html.HtmlEscapers;
 import com.mmxlabs.rcp.common.internal.Activator;
 
 /**
@@ -33,20 +21,13 @@ import com.mmxlabs.rcp.common.internal.Activator;
  */
 public class CopyGridToHtmlClipboardAction extends Action {
 
-	private static final Logger LOG = LoggerFactory.getLogger(CopyGridToHtmlClipboardAction.class);
-	private final Grid table;
-
-	private boolean rowHeadersIncluded = false;
-	// Set border around everything?
-	private final boolean includeBorder = false;
-	private boolean showBackgroundColours = false;
+	private CopyGridToHtmlStringUtil util;
 
 	public CopyGridToHtmlClipboardAction(final Grid table, final boolean includeRowHeaders) {
 
 		super("Copy");
 
-		this.table = table;
-		this.rowHeadersIncluded = includeRowHeaders;
+		util = new CopyGridToHtmlStringUtil(table, includeRowHeaders, false);
 
 		setText("Copy");
 		setDescription("Copies grid data into the clipboard");
@@ -54,34 +35,14 @@ public class CopyGridToHtmlClipboardAction extends Action {
 		setImageDescriptor(Activator.getImageDescriptor("/icons/copy.gif"));
 	}
 
+	public void setAdditionalAttributeProvider(IAdditionalAttributeProvider provider) {
+		util.setAdditionalAttributeProvider(provider);
+	}
+
 	@Override
 	public void run() {
 
-		final StringWriter sw = new StringWriter();
-
-		// Note this may be zero if no columns have been defined. However an
-		// implicit column will be created in such cases
-		final int numColumns = table.getColumnCount();
-		if (includeBorder) {
-			sw.write("<table border='0'>\n");
-		} else {
-			sw.write("<table >\n");
-
-		}
-		try {
-			addHeader(sw);
-			// Ensure at least 1 column to grab data
-			final int numberOfColumns = Math.max(5, numColumns);
-			final int[] rowOffsets = new int[numberOfColumns];
-
-			for (final GridItem item : table.getItems()) {
-				processTableRow(sw, numberOfColumns, item, rowOffsets);
-			}
-		} catch (final IOException e) {
-			// should not occur, since we use a StringWriter
-			LOG.error(e.getMessage(), e);
-		}
-		sw.write("</table>");
+		String contents = util.convert();
 
 		// Create a new clipboard instance
 		final Display display = Display.getDefault();
@@ -89,195 +50,25 @@ public class CopyGridToHtmlClipboardAction extends Action {
 		try {
 			// Create the text transfer and set the contents
 			final TextTransfer textTransfer = TextTransfer.getInstance();
-			cb.setContents(new Object[] { sw.toString() }, new Transfer[] { textTransfer });
+			cb.setContents(new Object[] { contents }, new Transfer[] { textTransfer });
 		} finally {
 			// Clean up our local resources - system clipboard now has the data
 			cb.dispose();
 		}
 	}
 
-	private void addHeader(final StringWriter sw) {
-		// final int numColumns = table.getColumnCount();
-		// write the head
-		sw.write("<thead>\n");
-
-		// Create temporary writers to create both header rows concurrently.
-		final StringWriter topRow = new StringWriter();
-		final StringWriter bottomRow = new StringWriter();
-		final StringWriter singleRow = new StringWriter();
-
-		// top left blank cell
-		if (rowHeadersIncluded) {
-			addCell(topRow, "th", "", new String[] { "bgcolor='grey'" });
-			addCell(bottomRow, "th", "", new String[] { "bgcolor='grey'" });
-			addCell(singleRow, "th", "", new String[] { "bgcolor='grey'" });
-		}
-		// Set of column groups already seen. This assumes all columns within a group are next to each other
-		final Set<GridColumnGroup> seenGroups = new HashSet<>();
-		for (int i : table.getColumnOrder()) {
-			final GridColumn column = table.getColumn(i);
-			if (!column.isVisible()) {
-				continue;
 			}
-			// Get the column group
-			final GridColumnGroup columnGroup = column.getColumnGroup();
-			final String colourString;
-			if (showBackgroundColours) {
-				colourString = "bgcolor='grey'";
-			} else {
-				colourString = "";
-			}
-
-			if (columnGroup == null) {
-				// No group? Then cell bottom row cell should fill both header rows
-				addCell(topRow, "th", column.getText(),
-						combineAttributes(new String[] { colourString, String.format("rowSpan='%d'", table.getColumnCount() > 0 ? 2 : 1) }, getAdditionalHeaderAttributes(column)));
-				addCell(singleRow, "th", column.getText(), combineAttributes(new String[] { colourString }, getAdditionalHeaderAttributes(column)));
-			} else {
-				// Part of column group. Only add group if we have not previously seen it.
-				if (seenGroups.add(columnGroup)) {
-					addCell(topRow, "th", columnGroup.getText(),
-							combineAttributes(new String[] { colourString, String.format("colSpan=%d", columnGroup.getColumns().length) }, getAdditionalHeaderAttributes(column)));
-				}
-				// Add in the bottom row info.
-				addCell(bottomRow, "th", column.getText(), combineAttributes(new String[] { colourString }, getAdditionalHeaderAttributes(column)));
-			}
-
-		}
-		// If we have column groups, then write the top header row, otherwise skip it.
-		if (!seenGroups.isEmpty()) {
-			sw.write("<tr>");
-			sw.write(topRow.toString());
-			sw.write("</tr>\n");
-			sw.write("<tr>");
-			sw.write(bottomRow.toString());
-			sw.write("</tr>\n</thead>\n");
-		} else {
-			sw.write("<tr>");
-			sw.write(singleRow.toString());
-			sw.write("</tr>\n</thead>\n");
-
-		}
-	}
-
-	private void processTableRow(final StringWriter sw, final int numColumns, final GridItem item, final int[] rowOffsets) throws IOException {
-		// start a row
-		sw.write("<tr>");
-
-		if (rowHeadersIncluded) {
-			addCell(sw, item.getHeaderText(), new String[] { "bgcolor='gray'" });
-		}
-
-		for (int i = 0; i < numColumns; ++i) {
-			{
-				int j = table.getColumnOrder()[i];
-				final GridColumn column = table.getColumn(j);
-				if (!column.isVisible()) {
-					continue;
-				}
-			}
-
-			// If offset is greater than zero, skip this row
-			if (rowOffsets[i] == 0) {
-				final Color c = item.getBackground(i);
-				final String colourString;
-				if (showBackgroundColours) {
-					if (c == null) {
-						colourString = "bgcolor='white'";
-					} else {
-						colourString = String.format("bgcolor='#%02X%02X%02X'", c.getRed(), c.getGreen(), c.getBlue());
-					}
-				} else {
-					colourString = "";
-				}
-				addCell(sw,
-						item.getText(i),
-						combineAttributes(new String[] { colourString, String.format("rowSpan='%d'", 1 + item.getRowSpan(i)), String.format("colSpan='%d'", 1 + item.getColumnSpan(i)) },
-								getAdditionalAttributes(item, i)));
-				// Increment col idx.
-				i += item.getColumnSpan(i);
-				rowOffsets[i] = item.getRowSpan(i);
-			} else {
-				rowOffsets[i] = rowOffsets[i] - 1;
-			}
-			// end row
-			if ((i + 1) >= numColumns) {
-				sw.write("</tr>\n");
-			}
-		}
-	}
-
-	private String[] combineAttributes(final String[] strings, final String[] additionalAttributes) {
-		if (strings == null && additionalAttributes == null) {
-			return new String[0];
-		} else if (strings == null) {
-			return additionalAttributes;
-		} else if (additionalAttributes == null) {
-			return strings;
-		}
-
-		final String[] combined = new String[strings.length + additionalAttributes.length];
-		System.arraycopy(strings, 0, combined, 0, strings.length);
-		System.arraycopy(additionalAttributes, 0, combined, strings.length, additionalAttributes.length);
-
-		return combined;
-	}
-
-	protected String[] getAdditionalHeaderAttributes(final GridColumn column) {
-		return null;
-	}
-
-	protected String[] getAdditionalAttributes(final GridItem item, final int i) {
-		return null;
-	}
-
-	public void addCell(final StringWriter sw, final String text, final String[] attributes) {
-		addCell(sw, "td", text, attributes);
-	}
-
-	public void addCell(final StringWriter sw, final String tag, String text, final String[] attributes) {
-		if (attributes == null) {
-			sw.write("<" + tag + ">" + text + "</" + tag + ">");
-		} else {
-			sw.write("<" + tag);
-			for (final String attribute : attributes) {
-				sw.write(" " + attribute);
-			}
-			sw.write(">");
-		}
-		text = htmlEscape(text);
-
-		if (text == null || text.equals("")) {
-			text = "&nbsp;";
-		}
-
-		sw.write(text); // TODO: escape this for HTML
-		sw.write("</" + tag + ">");
-	}
-
-	/**
-	 * Does rough HTML escaping on a piece of text.
-	 * 
-	 * @param text
-	 * @return
-	 */
-	public String htmlEscape(final String text) {
-		if (text == null) {
-			return null;
-		}
-		return HtmlEscapers.htmlEscaper().escape(text);
-	}
 
 	public void setRowHeadersIncluded(final boolean b) {
-		this.rowHeadersIncluded = true;
+		util.setRowHeadersIncluded(b);
 	}
 
 	public boolean isShowBackgroundColours() {
-		return showBackgroundColours;
+		return util.isShowBackgroundColours();
 	}
 
 	public void setShowBackgroundColours(boolean showBackgroundColours) {
-		this.showBackgroundColours = showBackgroundColours;
+		util.setShowBackgroundColours(showBackgroundColours);
 	}
 
 }
