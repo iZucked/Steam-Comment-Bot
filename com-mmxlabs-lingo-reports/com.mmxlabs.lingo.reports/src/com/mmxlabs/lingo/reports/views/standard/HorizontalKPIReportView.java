@@ -282,13 +282,13 @@ public class HorizontalKPIReportView extends ViewPart {
 			// width = 85; // "Shipping Cost"
 			// break;
 			case 6: // Idle / GCO
-				width = 90; 
+				width = 90;
 				break;
 			case 8: // Capacity
-				width = 70; 
+				width = 70;
 				break;
 			case 10: // Lateness
-				width = 70; 
+				width = 70;
 				break;
 			}
 			tvc.getColumn().setWidth(width);
@@ -323,7 +323,7 @@ public class HorizontalKPIReportView extends ViewPart {
 					}
 				}
 				if (viewerSynchronizer != null) {
-					viewerSynchronizer.refreshViewer();
+					viewerSynchronizer.refreshViewer(false);
 				}
 			}
 
@@ -338,7 +338,7 @@ public class HorizontalKPIReportView extends ViewPart {
 					}
 				}
 				if (viewerSynchronizer != null) {
-					viewerSynchronizer.refreshViewer();
+					viewerSynchronizer.refreshViewer(false);
 				}
 			}
 
@@ -353,7 +353,7 @@ public class HorizontalKPIReportView extends ViewPart {
 					}
 				}
 				if (viewerSynchronizer != null) {
-					viewerSynchronizer.refreshViewer();
+					viewerSynchronizer.refreshViewer(false);
 				}
 			}
 

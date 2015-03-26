@@ -11,13 +11,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.databinding.ObservablesManager;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.ide.undo.CreateProjectOperation;
 
 import com.google.inject.Inject;
+import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.components.ColumnHandler;
@@ -31,6 +30,7 @@ import com.mmxlabs.lingo.reports.views.portrotation.extpoint.IPortRotationBasedR
 import com.mmxlabs.lingo.reports.views.portrotation.extpoint.IPortRotationBasedReportInitialStateExtension.InitialColumn;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
@@ -309,25 +309,42 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public final void createPartControl(final Composite parent) {
 		super.createPartControl(parent);
-		ColumnBlock[] initialReverseSortOrder = {
-			getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.portrotation.startdate"),
-			getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.portrotation.vessel"),		
-			getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.portrotation.schedule")		
-		};
+		final ColumnBlock[] initialReverseSortOrder = { getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.portrotation.startdate"),
+				getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.portrotation.vessel"),
+				getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.portrotation.schedule") };
 		// go through in reverse order as latest is set to primary sort
-		for (ColumnBlock block : initialReverseSortOrder) {
+		for (final ColumnBlock block : initialReverseSortOrder) {
 			if (block != null) {
-				List<ColumnHandler> handlers = block.getColumnHandlers();
-				for (ColumnHandler handler : handlers) {
+				final List<ColumnHandler> handlers = block.getColumnHandlers();
+				for (final ColumnHandler handler : handlers) {
 					if (handler.column != null) {
 						sortingSupport.sortColumnsBy(handler.column.getColumn());
 					}
 				}
 			}
 		}
+	}
+
+	@Override
+	public Object getAdapter(final Class adapter) {
+
+		if (IReportContents.class.isAssignableFrom(adapter)) {
+
+			final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
+			final String contents = util.convert();
+			return new IReportContents() {
+
+				@Override
+				public String getStringContents() {
+					return contents;
+				}
+			};
+
+		}
+		return super.getAdapter(adapter);
 	}
 }

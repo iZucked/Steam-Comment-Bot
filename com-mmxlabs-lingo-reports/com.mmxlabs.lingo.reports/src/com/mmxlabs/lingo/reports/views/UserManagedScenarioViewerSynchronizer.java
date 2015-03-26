@@ -61,7 +61,7 @@ public class UserManagedScenarioViewerSynchronizer implements IScenarioServiceSe
 			log.warn("Viewer synchronizer for " + viewer.getClass() + " didn't find a selection provider");
 		}
 
-		refreshViewer();
+		refreshViewer(false);
 	}
 
 	public void dispose() {
@@ -76,7 +76,7 @@ public class UserManagedScenarioViewerSynchronizer implements IScenarioServiceSe
 	}
 
 	@Override
-	public void deselected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> deselected) {
+	public void deselected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> deselected, boolean block) {
 		for (final ScenarioInstance instance : deselected) {
 			final CommandStack commandStack = getCommandStack(instance);
 			if (commandStack != null) {
@@ -88,7 +88,7 @@ public class UserManagedScenarioViewerSynchronizer implements IScenarioServiceSe
 				ref.close();
 			}
 		}
-		refreshViewer();
+		refreshViewer(block);
 	}
 
 	private CommandStack getCommandStack(final ScenarioInstance instance) {
@@ -109,11 +109,11 @@ public class UserManagedScenarioViewerSynchronizer implements IScenarioServiceSe
 	}
 
 	@Override
-	public void selected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> selected) {
+	public void selected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> selected, boolean block) {
 		for (final ScenarioInstance instance : selected) {
 			adaptInstance(instance);
 		}
-		refreshViewer();
+		refreshViewer(block);
 	}
 
 	private void adaptInstance(final ScenarioInstance instance) {
@@ -152,10 +152,14 @@ public class UserManagedScenarioViewerSynchronizer implements IScenarioServiceSe
 
 	/**
 	 */
-	public void refreshViewer() {
+	public void refreshViewer(boolean block) {
 		synchronized (this) {
 			needsRefresh = true;
-			Display.getDefault().asyncExec(refresh);
+			if (block) {
+				Display.getDefault().syncExec(refresh);
+			} else {
+				Display.getDefault().asyncExec(refresh);
+			}
 		}
 	}
 
@@ -174,7 +178,7 @@ public class UserManagedScenarioViewerSynchronizer implements IScenarioServiceSe
 			final IScenarioService scenarioService = job.getScenarioService();
 			final boolean isPinned = selectionProvider.getPinnedInstance() == job;
 			if (scenarioService == null) {
-				continue;
+				// continue;
 			}
 
 			final ModelReference modelReference = scenarioReferenes.get(job);
@@ -254,8 +258,8 @@ public class UserManagedScenarioViewerSynchronizer implements IScenarioServiceSe
 	}
 
 	@Override
-	public void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioInstance oldPin, final ScenarioInstance newPin) {
-		refreshViewer();
+	public void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioInstance oldPin, final ScenarioInstance newPin, boolean block) {
+		refreshViewer(block);
 	}
 
 	/**
@@ -272,7 +276,7 @@ public class UserManagedScenarioViewerSynchronizer implements IScenarioServiceSe
 			final Collection<?> result = mostRecentCommand.getResult();
 			for (final Object o : result) {
 				if (o instanceof ScheduleModel || o instanceof Schedule) {
-					refreshViewer();
+					refreshViewer(false);
 					return;
 				}
 			}

@@ -7,6 +7,7 @@ package com.mmxlabs.lingo.reports.views.vertical;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalCalendarReportView;
 import com.mmxlabs.lingo.reports.views.vertical.CalendarColumn;
 import com.mmxlabs.lingo.reports.views.vertical.ReportNebulaGridManager;
@@ -14,6 +15,7 @@ import com.mmxlabs.lingo.reports.views.vertical.ScheduleSequenceData;
 import com.mmxlabs.lingo.reports.views.vertical.labellers.EventLabelProvider;
 import com.mmxlabs.lingo.reports.views.vertical.providers.SequenceEventProvider;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 
 public class DefaultVerticalReportView extends AbstractVerticalCalendarReportView {
 
@@ -46,5 +48,26 @@ public class DefaultVerticalReportView extends AbstractVerticalCalendarReportVie
 			}
 		}
 		return result;
+	}
+
+	@Override
+	public Object getAdapter(final Class adapter) {
+
+		if (IReportContents.class.isAssignableFrom(adapter)) {
+
+			final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(gridViewer.getGrid(), false, true);
+			util.setRowHeadersIncluded(true);
+			util.setShowBackgroundColours(true);
+			final String contents = util.convert();
+			return new IReportContents() {
+
+				@Override
+				public String getStringContents() {
+					return contents;
+				}
+			};
+
+		}
+		return super.getAdapter(adapter);
 	}
 }
