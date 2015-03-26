@@ -49,13 +49,13 @@ public class Activator extends ValidationPlugin {
 	private final IScenarioServiceSelectionChangedListener scenarioServiceSelectionChangedListener = new IScenarioServiceSelectionChangedListener() {
 
 		@Override
-		public void selected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> selected) {
+		public void selected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> selected, boolean block) {
 
 			setJobProperty(selected, true);
 		}
 
 		@Override
-		public void deselected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> deselected) {
+		public void deselected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> deselected, boolean block) {
 			setJobProperty(deselected, false);
 		}
 
@@ -84,7 +84,7 @@ public class Activator extends ValidationPlugin {
 		}
 
 		@Override
-		public void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioInstance oldPin, final ScenarioInstance newPin) {
+		public void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioInstance oldPin, final ScenarioInstance newPin, boolean block) {
 		}
 	};
 
