@@ -127,11 +127,11 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 						maxVolumesInMMBtu.add(actualsDataProvider.getVolumeInMMBtu(slot));
 					} else {
 						cargoCV = loadOption.getCargoCVValue();
-
+						// the mmbtu and m3 values have been set in the transformer, so no conversion needed here
+						minVolumesInMMBtu.add(loadOption.getMinLoadVolumeMMBTU());
+						maxVolumesInMMBtu.add(loadOption.getMaxLoadVolumeMMBTU());
 						minVolumesInM3.add(loadOption.getMinLoadVolume());
 						maxVolumesInM3.add(loadOption.getMaxLoadVolume());
-						minVolumesInMMBtu.add(Calculator.convertMMBTuToM3(loadOption.getMinLoadVolume(), cargoCV));
-						maxVolumesInMMBtu.add(Calculator.convertMMBTuToM3(loadOption.getMaxLoadVolume(), cargoCV));
 					}
 
 					foundALoad = true;
@@ -153,8 +153,13 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 					} else {
 						minVolumesInM3.add(dischargeOption.getMinDischargeVolume());
 						maxVolumesInM3.add(dischargeOption.getMaxDischargeVolume());
-						minVolumesInMMBtu.add(Calculator.convertMMBTuToM3(dischargeOption.getMinDischargeVolume(), cargoCV));
-						maxVolumesInMMBtu.add(Calculator.convertMMBTuToM3(dischargeOption.getMaxDischargeVolume(), cargoCV));
+						if (dischargeOption.isVolumeSetInM3()) {
+							minVolumesInMMBtu.add(Calculator.convertM3ToMMBTuWithOverflowProtection(dischargeOption.getMinDischargeVolume(), cargoCV));
+							maxVolumesInMMBtu.add(Calculator.convertM3ToMMBTuWithOverflowProtection(dischargeOption.getMaxDischargeVolume(), cargoCV));
+						} else {
+							minVolumesInMMBtu.add(dischargeOption.getMinDischargeVolumeMMBTU());
+							maxVolumesInMMBtu.add(dischargeOption.getMaxDischargeVolumeMMBTU());
+						}
 					}
 					if (!(dischargeOption instanceof IDischargeSlot)) {
 						nominatedVessel = nominatedVesselProvider.getNominatedVessel(portSlotProvider.getElement(dischargeOption));
@@ -167,13 +172,9 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 					minVolumesInM3.add(heelOptions.getHeelLimit());
 					maxVolumesInM3.add(heelOptions.getHeelLimit());
-					if (cargoCV != 0) {
-						minVolumesInMMBtu.add(Calculator.convertMMBTuToM3(heelOptions.getHeelLimit(), cargoCV));
-						maxVolumesInMMBtu.add(Calculator.convertMMBTuToM3(heelOptions.getHeelLimit(), cargoCV));
-					} else {
-						minVolumesInMMBtu.add(0L);
-						maxVolumesInMMBtu.add(0L);
-					}
+
+					minVolumesInMMBtu.add(Calculator.convertM3ToMMBTuWithOverflowProtection(heelOptions.getHeelLimit(), cargoCV));
+					maxVolumesInMMBtu.add(Calculator.convertM3ToMMBTuWithOverflowProtection(heelOptions.getHeelLimit(), cargoCV));
 				} else {
 					minVolumesInM3.add(0l);
 					maxVolumesInM3.add(0l);
@@ -190,8 +191,8 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		}
 
 		// TODO: Assert start/end heel match actuals records.
-		final AllocationRecord allocationRecord = new AllocationRecord(vesselAvailability, plan, vesselStartTime, plan.getStartingHeelInM3(), plan.getLNGFuelVolume(), minEndVolumeInM3, slots, portTimesRecord,
-				returnSlot, minVolumesInM3, maxVolumesInM3, minVolumesInMMBtu, maxVolumesInMMBtu, slotCV);
+		final AllocationRecord allocationRecord = new AllocationRecord(vesselAvailability, plan, vesselStartTime, plan.getStartingHeelInM3(), plan.getLNGFuelVolume(), minEndVolumeInM3, slots,
+				portTimesRecord, returnSlot, minVolumesInM3, maxVolumesInM3, minVolumesInMMBtu, maxVolumesInMMBtu, slotCV);
 
 		if (hasActuals) {
 			allocationRecord.allocationMode = AllocationMode.Actuals;
@@ -200,5 +201,4 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 		return allocationRecord;
 	}
-
 }

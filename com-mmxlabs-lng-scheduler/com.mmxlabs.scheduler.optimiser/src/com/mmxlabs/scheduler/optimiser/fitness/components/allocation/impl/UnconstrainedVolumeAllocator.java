@@ -163,23 +163,36 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		// Assuming a single cargo CV!
 		final int defaultCargoCVValue = loadSlot.getCargoCVValue();
 
-		if (allocationRecord.allocationMode == AllocationMode.Transfer) {
-			// Transfer, just find the common max and replicate
-			final long availableCargoSpace = vessel.getCargoCapacity() - allocationRecord.startVolumeInM3;
-			long transferVolume = availableCargoSpace;
-			for (int i = 0; i < slots.size(); ++i) {
-				transferVolume = capValueWithZeroDefault(allocationRecord.maxVolumesInM3.get(i), transferVolume);
-
-			}
-			for (int i = 0; i < slots.size(); ++i) {
-				final IPortSlot slot = slots.get(i);
-				annotation.setSlotVolumeInM3(slot, transferVolume);
-				if (actualsDataProvider.hasActuals(slot)) {
-					annotation.setSlotCargoCV(slot, actualsDataProvider.getCVValue(slot));
+		if (allocationRecord.allocationMode == AllocationMode.Transfer) { // Transfer, just find the common max and replicate.
+			// Note: Calculations in MMBTU
+			final long startVolumeInMMBTu;
+			final long vesselCapacityInMMBTu;
+			
+			// Convert startVolume and vesselCapacity into MMBTu
+			if (defaultCargoCVValue > 0) {
+				if (allocationRecord.startVolumeInM3 != Long.MAX_VALUE) {
+					startVolumeInMMBTu = Calculator.convertM3ToMMBTu(allocationRecord.startVolumeInM3, defaultCargoCVValue);
 				} else {
-					annotation.setSlotCargoCV(slot, defaultCargoCVValue);
+					startVolumeInMMBTu = Long.MAX_VALUE;
 				}
+				if (vessel.getCargoCapacity() != Long.MAX_VALUE) {
+					vesselCapacityInMMBTu = Calculator.convertM3ToMMBTu(vessel.getCargoCapacity(), defaultCargoCVValue);
+				} else {
+					vesselCapacityInMMBTu = Long.MAX_VALUE;
+				}
+			} else {
+				startVolumeInMMBTu = 0;
+				vesselCapacityInMMBTu = Long.MAX_VALUE;
 			}
+			final long availableCargoSpaceMMBTu = vesselCapacityInMMBTu - startVolumeInMMBTu;
+			long transferVolumeMMBTu = availableCargoSpaceMMBTu;
+			long transferVolumeM3 = -1;
+			for (int i = 0; i < slots.size(); ++i) {
+				long newMinTransferVolumeMMBTU = capValueWithZeroDefault(allocationRecord.maxVolumesInMMBtu.get(i), transferVolumeMMBTu);
+				transferVolumeM3 = getUnroundedM3TransferVolume(allocationRecord, slots, transferVolumeMMBTu, transferVolumeM3, i, newMinTransferVolumeMMBTU);
+				transferVolumeMMBTu = newMinTransferVolumeMMBTU;
+			}
+			setTransferVolume(allocationRecord, slots, annotation, transferVolumeMMBTu, transferVolumeM3);
 		} else {
 			assert allocationRecord.allocationMode == AllocationMode.Shipped;
 			// how much room is there in the tanks?
@@ -187,7 +200,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 
 			// how much fuel will be required over and above what we start with in the tanks?
 			// note: this is the fuel consumption plus any heel quantity required at discharge
-			final long fuelDeficit = allocationRecord.requiredFuelVolumeInM3 - allocationRecord.startVolumeInM3;
+			final long fuelDeficit = allocationRecord.requiredFuelVolumeInM3 - allocationRecord.startVolumeInM3 + allocationRecord.minEndVolumeInM3;
 
 			// greedy assumption: always load as much as possible
 			long loadVolume = capValueWithZeroDefault(allocationRecord.maxVolumesInM3.get(0), availableCargoSpace);
@@ -306,7 +319,10 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 				annotation.setSlotCargoCV(slot, defaultCargoCVValue);
 			}
 
-			annotation.setSlotVolumeInMMBTu(slot, Calculator.convertM3ToMMBTu(annotation.getSlotVolumeInM3(slot), annotation.getSlotCargoCV(slot)));
+			if (allocationRecord.allocationMode != AllocationMode.Transfer) {
+				// AllocationMode.Transfer volumes are already set in MMBTU
+				annotation.setSlotVolumeInMMBTu(slot, Calculator.convertM3ToMMBTu(annotation.getSlotVolumeInM3(slot), annotation.getSlotCargoCV(slot)));
+			}
 		}
 		// Copy over the return slot time if present
 		{
@@ -316,5 +332,64 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			}
 		}
 		return annotation;
+	}
+
+	/**
+	 * Checks if the maximum transfer volume in MMBTU has changed, and if so, returns the original M3 volume, if the volume came from
+	 * a slot with input originally set in M3. If not a value of -1 is returned. 
+	 * @param allocationRecord
+	 * @param slots
+	 * @param transferVolumeMMBTU
+	 * @param transferVolumeM3
+	 * @param slotIdx
+	 * @param newMinTransferVolumeMMBTU
+	 * @return
+	 */
+	private long getUnroundedM3TransferVolume(final AllocationRecord allocationRecord, final List<IPortSlot> slots, long transferVolumeMMBTU, long transferVolumeM3, int slotIdx,
+			long newMinTransferVolumeMMBTU) {
+		if (transferVolumeMMBTU != newMinTransferVolumeMMBTU) {
+			// updating the min transfer volume, avoid rounding errors for M3 volumes
+			if (slots.get(slotIdx) instanceof IDischargeOption) {
+				if (((IDischargeOption) slots.get(slotIdx)).isVolumeSetInM3()) {
+					transferVolumeM3 = allocationRecord.maxVolumesInM3.get(slotIdx);
+				} else {
+					transferVolumeM3 = -1; // resetting
+				}
+			} else if (slots.get(slotIdx) instanceof ILoadOption) {
+				if (((ILoadOption) slots.get(slotIdx)).isVolumeSetInM3()) {
+					transferVolumeM3 = allocationRecord.maxVolumesInM3.get(slotIdx);
+				} else {
+					transferVolumeM3 = -1;
+				}
+			} else {
+				transferVolumeM3 = -1;
+			}
+		}
+		return transferVolumeM3;
+	}
+
+	/**
+	 * Sets the volume transferred in a non shipped cargo in both M3 and MMBTu
+	 * @param allocationRecord
+	 * @param slots
+	 * @param annotation
+	 * @param transferVolumeMMBTU
+	 * @param transferVolumeM3
+	 */
+	private void setTransferVolume(final AllocationRecord allocationRecord, final List<IPortSlot> slots, final AllocationAnnotation annotation, long transferVolumeMMBTU, long transferVolumeM3) {
+		for (int i = 0; i < slots.size(); ++i) {
+			final IPortSlot slot = slots.get(i);
+			annotation.setSlotVolumeInMMBTu(slot, transferVolumeMMBTU);
+			if (transferVolumeM3 != -1) {
+				annotation.setSlotVolumeInM3(slot, transferVolumeM3);
+			} else {
+				final int slotCV = allocationRecord.slotCV.get(i);
+				if (slotCV > 0) {
+					annotation.setSlotVolumeInM3(slot, Calculator.convertMMBTuToM3(transferVolumeMMBTU, slotCV));
+				} else {
+					annotation.setSlotVolumeInM3(slot, 0);
+				}
+			}
+		}
 	}
 }

@@ -174,6 +174,7 @@ public class ScheduleCalculator {
 		final List<IDetailsSequenceElement> currentSequence = new ArrayList<IDetailsSequenceElement>(5);
 		final VoyagePlan currentPlan = new VoyagePlan();
 		currentPlan.setIgnoreEnd(false);
+		boolean dischargeOptionInMMBTU = false;
 		final IVessel nominatedVessel = nominatedVesselProvider.getNominatedVessel(resource);
 		if (nominatedVessel != null) {
 			// Set a start and end heel for BOG estimations
@@ -210,6 +211,9 @@ public class ScheduleCalculator {
 					final int windowStart = thisPortSlot.getTimeWindow().getStart();
 					startTime = Math.max(windowStart, startTime);
 					// }
+					if (dischargeOptionInMMBTU == false && !(((IDischargeOption) thisPortSlot).isVolumeSetInM3())) {
+						dischargeOptionInMMBTU = true;
+					}
 				}
 
 				// Actuals Data...
@@ -268,6 +272,10 @@ public class ScheduleCalculator {
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		final int vesselStartTime = startTime;
 
+		if (dischargeOptionInMMBTU) {
+			// now we have the load and discharge pair, if an mmbtu discharge, convert to m3
+			voyagePlanner.setDesPurchaseOrFobPurchaseM3VolumeDetails(currentSequence);
+		}
 		// TODO: This is not the place!
 		final IAllocationAnnotation annotation = volumeAllocator.allocate(vesselAvailability, vesselStartTime, currentPlan, portTimesRecord);
 

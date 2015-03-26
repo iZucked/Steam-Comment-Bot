@@ -20,15 +20,21 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 	private long minDischargeVolume;
 
 	private long maxDischargeVolume;
+
+	private long minDischargeVolumeMMBTU;
+
+	private long maxDischargeVolumeMMBTU;
+
+	private boolean volumeSetInM3;
 	
 	private long minCvValue;
-	
+
 	private long maxCvValue;
 
 	private ISalesPriceCalculator priceCalculator;
 
 	private int pricingDate;
-	
+
 	private PricingEventType pricingEvent;
 
 	public DischargeOption() {
@@ -37,7 +43,8 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 
 	/**
 	 */
-	public DischargeOption(final String id, final IPort port, final ITimeWindow timeWindow, final long minDischargeVolume, final long maxDischargeVolume, final long minCvValue, final long maxCvValue, final ISalesPriceCalculator priceCalculator, final int pricingDate) {
+	public DischargeOption(final String id, final IPort port, final ITimeWindow timeWindow, final long minDischargeVolume, final long maxDischargeVolume, final long minCvValue, final long maxCvValue,
+			final ISalesPriceCalculator priceCalculator, final int pricingDate) {
 		super(id, port, timeWindow);
 		this.minDischargeVolume = minDischargeVolume;
 		this.maxDischargeVolume = maxDischargeVolume;
@@ -109,7 +116,7 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 	public void setMinCvValue(final long value) {
 		minCvValue = value;
 	}
-	
+
 	/**
 	 */
 	@Override
@@ -129,7 +136,7 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 	public int getPricingDate() {
 		return pricingDate;
 	}
-	
+
 	/**
 	 */
 	public void setPricingDate(final int value) {
@@ -144,5 +151,32 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 	public void setPricingEvent(PricingEventType pricingEvent) {
 		this.pricingEvent = pricingEvent;
 	}
+
+	@Override
+	public long getMinDischargeVolumeMMBTU() {
+		return minDischargeVolumeMMBTU;
+	}
+
+	public void setMinDischargeVolumeMMBTU(long volume) {
+		minDischargeVolumeMMBTU = volume;
+	}
+
+	@Override
+	public long getMaxDischargeVolumeMMBTU() {
+		return maxDischargeVolumeMMBTU;
+	}
+
+	public void setMaxDischargeVolumeMMBTU(long volume) {
+		maxDischargeVolumeMMBTU = volume;
+	}
+
+	public void setVolumeSetInM3(boolean m3){
+		volumeSetInM3 = m3;
+	}
 	
+	@Override
+	public boolean isVolumeSetInM3() {
+		return volumeSetInM3;
+	}
+
 }
