@@ -22,8 +22,6 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.security.sasl.SaslServerFactory;
-
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
@@ -206,8 +204,6 @@ public class AbstractOptimisationResultTester {
 	 */
 	public ScenarioRunner runScenario(final LNGScenarioModel originalScenario, final URL origURL) throws IOException, IncompleteScenarioException {
 
-		final URL propsURL = new URL(FileLocator.toFileURL(new URL(origURL.toString() + ".properties")).toString().replaceAll(" ", "%20"));
-
 		// TODO: Does EcoreUtil.copy work -- do we need to do it here?
 		final LNGScenarioModel copy = duplicate(originalScenario);
 		if (false) {
@@ -229,6 +225,7 @@ public class AbstractOptimisationResultTester {
 		final EList<Fitness> currentOriginalFitnesses = originalScenarioRunner.getIntialSchedule().getFitnesses();
 
 		if (!storeFitnessMap) {
+			final URL propsURL = new URL(FileLocator.toFileURL(new URL(origURL.toString() + ".properties")).toString().replaceAll(" ", "%20"));
 
 			final Properties props = new Properties();
 			props.load(propsURL.openStream());
@@ -266,16 +263,19 @@ public class AbstractOptimisationResultTester {
 			storeFitnesses(props, originalFitnessesMapName, currentOriginalFitnesses);
 			storeFitnesses(props, endFitnessesMapName, currentEndFitnesses);
 
-			File f;
+			// {
+
 			try {
-				f = new File(propsURL.toURI());
-				props.store(new FileOutputStream(f), "Created by " + AbstractOptimisationResultTester.class.getName());
+				final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(origURL.toString())).toString().replaceAll(" ", "%20"));
+				final File f1 = new File(expectedReportOutput.toURI());
+				final File file2 = new File(f1.getAbsoluteFile() + ".properties");
+				props.store(new FileOutputStream(file2), "Created by " + AbstractOptimisationResultTester.class.getName());
 			} catch (final URISyntaxException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
 		} else {
+			final URL propsURL = new URL(FileLocator.toFileURL(new URL(origURL.toString() + ".properties")).toString().replaceAll(" ", "%20"));
 
 			final Properties props = new Properties();
 			props.load(propsURL.openStream());
