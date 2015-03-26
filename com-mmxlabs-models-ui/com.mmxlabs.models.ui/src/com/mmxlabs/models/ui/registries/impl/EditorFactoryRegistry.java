@@ -90,7 +90,7 @@ public class EditorFactoryRegistry extends AbstractRegistry<Pair<EClass, EStruct
 				final EClass owner, final EStructuralFeature feature) {
 			this.extension = extension;
 			final String featureNameEquals = extension.getFeatureName();
-			if (featureNameEquals != null) {
+			if (featureNameEquals != null && !featureNameEquals.isEmpty()) {
 				matchesFeatureName = true;
 				badMatch = badMatch
 						|| !featureNameEquals.equals(feature.getName());
