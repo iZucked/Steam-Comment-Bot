@@ -406,9 +406,9 @@ public class AbstractOptimisationResultTester {
 	public void testReports(final LNGScenarioModel model, final URL scenarioURL, final String reportID, final String extension) throws Exception {
 		final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
 		scenarioInstance.setMetadata(ScenarioServiceFactory.eINSTANCE.createMetadata());
-		scenarioInstance.setName(scenarioURL.toString());
+		scenarioInstance.setName(scenarioURL.getPath());
 		scenarioInstance.setInstance(model);
-		testReports(scenarioInstance, new URL( scenarioURL.toString() + "reports"), reportID, extension);
+		testReports(scenarioInstance, new URL(scenarioURL.toString() + "reports"), reportID, extension);
 	}
 
 	public void testReports(final ScenarioInstance instance, final URL scenarioURL, final String reportID, final String extension) throws Exception {
