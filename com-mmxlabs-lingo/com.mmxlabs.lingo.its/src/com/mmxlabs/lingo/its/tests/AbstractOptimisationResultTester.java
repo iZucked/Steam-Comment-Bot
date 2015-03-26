@@ -22,6 +22,8 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.security.sasl.SaslServerFactory;
+
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
@@ -58,6 +60,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.scenario.service.manifest.ManifestPackage;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
 import com.mmxlabs.scenario.service.util.encryption.impl.PassthroughCipherProvider;
 
@@ -389,53 +392,65 @@ public class AbstractOptimisationResultTester {
 
 		final URI uri = URI.createURI(FileLocator.toFileURL(scenarioURL).toString().replaceAll(" ", "%20"));
 		final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, getScenarioCipherProvider());
-
 		File f = null;
 		try {
 			f = MigrationHelper.migrateAndLoad(instance);
-			final LNGScenarioModel originalScenario = (LNGScenarioModel) instance.getInstance();
-			final ScenarioRunner runner = evaluateScenario(originalScenario, scenarioURL);
-			runner.updateScenario();
-
-			final ReportTester reportTester = new ReportTester();
-			final IReportContents reportContents = reportTester.getReportContents(instance, reportID);
-
-			Assert.assertNotNull(reportContents);
-			final String actualContents = reportContents.getStringContents();
-			Assert.assertNotNull(actualContents);
-			if (storeReports) {
-
-				final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString())).toString().replaceAll(" ", "%20"));
-
-				final File f1 = new File(expectedReportOutput.toURI());
-				final File file2 = new File(f1.getAbsoluteFile() + "." + reportID + "." + extension);
-				try (PrintWriter pw = new PrintWriter(file2)) {
-					pw.print(actualContents);
-				}
-			} else {
-				final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString() + "." + reportID + "." + extension)).toString().replaceAll(" ", "%20"));
-				final StringBuilder expectedOutputBuilder = new StringBuilder();
-				{
-					try (InputStream is = expectedReportOutput.openStream(); BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
-						String line = reader.readLine();
-						if (line != null) {
-							expectedOutputBuilder.append(line);
-						}
-						while (line != null) {
-							line = reader.readLine();
-							if (line != null) {
-								expectedOutputBuilder.append("\n");
-								expectedOutputBuilder.append(line);
-							}
-						}
-					}
-				}
-				Assert.assertEquals(expectedOutputBuilder.toString(), actualContents);
-			}
+			testReports(instance, scenarioURL, reportID, extension);
 		} finally {
 			if (f != null && f.exists()) {
 				f.delete();
 			}
+		}
+	}
+
+	public void testReports(final LNGScenarioModel model, final URL scenarioURL, final String reportID, final String extension) throws Exception {
+		final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
+		scenarioInstance.setMetadata(ScenarioServiceFactory.eINSTANCE.createMetadata());
+		scenarioInstance.setName(scenarioURL.toString());
+		scenarioInstance.setInstance(model);
+		testReports(scenarioInstance, scenarioURL, reportID, extension);
+	}
+
+	public void testReports(final ScenarioInstance instance, final URL scenarioURL, final String reportID, final String extension) throws Exception {
+
+		final LNGScenarioModel originalScenario = (LNGScenarioModel) instance.getInstance();
+		final ScenarioRunner runner = evaluateScenario(originalScenario, scenarioURL);
+		runner.updateScenario();
+
+		final ReportTester reportTester = new ReportTester();
+		final IReportContents reportContents = reportTester.getReportContents(instance, reportID);
+
+		Assert.assertNotNull(reportContents);
+		final String actualContents = reportContents.getStringContents();
+		Assert.assertNotNull(actualContents);
+		if (storeReports) {
+
+			final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString())).toString().replaceAll(" ", "%20"));
+
+			final File f1 = new File(expectedReportOutput.toURI());
+			final File file2 = new File(f1.getAbsoluteFile() + "." + reportID + "." + extension);
+			try (PrintWriter pw = new PrintWriter(file2)) {
+				pw.print(actualContents);
+			}
+		} else {
+			final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString() + "." + reportID + "." + extension)).toString().replaceAll(" ", "%20"));
+			final StringBuilder expectedOutputBuilder = new StringBuilder();
+			{
+				try (InputStream is = expectedReportOutput.openStream(); BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
+					String line = reader.readLine();
+					if (line != null) {
+						expectedOutputBuilder.append(line);
+					}
+					while (line != null) {
+						line = reader.readLine();
+						if (line != null) {
+							expectedOutputBuilder.append("\n");
+							expectedOutputBuilder.append(line);
+						}
+					}
+				}
+			}
+			Assert.assertEquals(expectedOutputBuilder.toString(), actualContents);
 		}
 
 	}
