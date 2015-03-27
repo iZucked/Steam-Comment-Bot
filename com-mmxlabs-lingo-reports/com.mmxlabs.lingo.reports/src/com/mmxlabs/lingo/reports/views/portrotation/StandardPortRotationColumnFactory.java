@@ -56,9 +56,9 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 				if (other != null) {
 					if (event.getStart().equals(other.getStart())) {
 						if (event.getPreviousEvent() != null && event.getPreviousEvent().equals(other)) {
-							return -1;
-						} else if (event.getNextEvent() != null && event.getNextEvent().equals(other)) {
 							return 1;
+						} else if (event.getNextEvent() != null && event.getNextEvent().equals(other)) {
+							return -1;
 						}
 					} else {
 						return event.getStart().compareTo(other.getStart());
