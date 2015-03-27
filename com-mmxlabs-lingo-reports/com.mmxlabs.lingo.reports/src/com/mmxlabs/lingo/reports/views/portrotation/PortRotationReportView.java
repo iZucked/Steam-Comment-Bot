@@ -13,11 +13,13 @@ import java.util.Map;
 
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.list.WritableList;
+import org.eclipse.swt.widgets.Composite;
 
 import com.google.inject.Inject;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
+import com.mmxlabs.lingo.reports.components.ColumnHandler;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
@@ -309,8 +311,8 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 	}
 
 	@Override
-	public final void createPartControl(final Composite parent) {
-		super.createPartControl(parent);
+	public void initPartControl(final Composite parent) {
+		super.initPartControl(parent);
 		final ColumnBlock[] initialReverseSortOrder = { getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.portrotation.startdate"),
 				getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.portrotation.vessel"),
 				getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.portrotation.schedule") };
