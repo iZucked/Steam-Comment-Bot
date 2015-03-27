@@ -42,7 +42,7 @@ public class EObjectTableViewerSortingSupport {
 	private boolean sortDescending = false;
 
 	public void removeSortableColumn(final GridColumn tColumn) {
-		columnSortOrder.remove(tColumn);
+		getColumnSortOrder().remove(tColumn);
 	}
 
 	/**
@@ -53,11 +53,11 @@ public class EObjectTableViewerSortingSupport {
 	 * @param tColumn
 	 */
 	public void addSortableColumn(final ColumnViewer viewer, final GridViewerColumn column, final GridColumn tColumn) {
-		if (columnSortOrder.contains(tColumn)) {
+		if (getColumnSortOrder().contains(tColumn)) {
 			return;
 		}
 		
-		columnSortOrder.add(tColumn);
+		getColumnSortOrder().add(tColumn);
 
 		column.getColumn().addSelectionListener(new SelectionListener() {
 			@Override
@@ -67,23 +67,28 @@ public class EObjectTableViewerSortingSupport {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 
-				// Sort order changed - clear fixed ordering
-				fixedSortOrder = null;
-
-				if (columnSortOrder.get(0) == tColumn) {
-					sortDescending = !sortDescending;
-				} else {
-					sortDescending = false;
-					columnSortOrder.get(0).setSort(SWT.NONE);
-					columnSortOrder.remove(tColumn);
-					columnSortOrder.add(0, tColumn);
-				}
-				tColumn.setSort(sortDescending ? SWT.UP : SWT.DOWN);
+				sortColumnsBy(tColumn);
 				viewer.refresh(false);
 			}
+
 		});
 	}
 
+	public void sortColumnsBy(final GridColumn tColumn) {
+		// Sort order changed - clear fixed ordering
+		fixedSortOrder = null;
+		
+		if (getColumnSortOrder().get(0) == tColumn) {
+			setSortDescending(!isSortDescending());
+		} else {
+			setSortDescending(false);
+			getColumnSortOrder().get(0).setSort(SWT.NONE);
+			getColumnSortOrder().remove(tColumn);
+			getColumnSortOrder().add(0, tColumn);
+		}
+		tColumn.setSort(isSortDescending() ? SWT.UP : SWT.DOWN);
+	}
+	
 	/**
 	 * Set a predefined sort order to override current column sort order. This will be overridden if the column sort order changes.
 	 * 
@@ -99,7 +104,7 @@ public class EObjectTableViewerSortingSupport {
 	}
 
 	public void clearColumnSortOrder() {
-		columnSortOrder.clear();
+		getColumnSortOrder().clear();
 	}
 
 	// BE category (ie bin) support for sorting
@@ -152,7 +157,7 @@ public class EObjectTableViewerSortingSupport {
 					return idx1 - idx2;
 				}
 
-				final Iterator<GridColumn> iterator = columnSortOrder.iterator();
+				final Iterator<GridColumn> iterator = getColumnSortOrder().iterator();
 				int comparison = 0;
 				while (iterator.hasNext() && (comparison == 0)) {
 					final GridColumn column = iterator.next();
@@ -205,7 +210,7 @@ public class EObjectTableViewerSortingSupport {
 					final Comparable right = renderer.getComparable(rightOwner);
 
 					if (left == right) {
-						return 0;
+						continue;
 					}
 
 					if (left == null) {
@@ -216,12 +221,20 @@ public class EObjectTableViewerSortingSupport {
 						comparison = left.compareTo(right);
 					}
 				}
-				return sortDescending ? -comparison : comparison;
+				return isSortDescending() ? -comparison : comparison;
 			}
 		};
 	}
 
 	public boolean isSortDescending() {
 		return sortDescending;
+	}
+
+	public ArrayList<GridColumn> getColumnSortOrder() {
+		return columnSortOrder;
+	}
+
+	public void setSortDescending(boolean sortDescending) {
+		this.sortDescending = sortDescending;
 	}
 }
