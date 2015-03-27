@@ -15,6 +15,8 @@ import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -48,6 +50,7 @@ import com.mmxlabs.models.lng.transformer.its.tests.MinimalScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.StsScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.types.PortCapability;
+import com.mmxlabs.models.lng.types.VolumeUnits;
 
 public class ShippingCalculationsTest extends AbstractShippingCalculationsTestClass {
 
@@ -383,13 +386,47 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 	}
 
 	@Test
-	public void testMaxDischargeVolume() {
+	public void testMaxLoadVolumeMMBTU() {
+		System.err.println("\n\nMaximum Load Volume Limits Load & Discharge");
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
+		
+		// change from default scenario: add a maximum load volume
+		LoadSlot loadSlot = (LoadSlot) msc.cargo.getSlots().get(0);
+		loadSlot.setMaxQuantity(10500);
+		loadSlot.setCargoCV(21);
+		loadSlot.setVolumeLimitsUnit(VolumeUnits.MMBTU);
+		// no minimum heel
+		msc.vc.setMinHeel(0);
+		
+		final SequenceTester checker = getDefaultTester();
+		
+		// expected load / discharge volumes:
+		// 500 (load) = { new maximum load value }
+		// 470 (discharge) = 500 { load } - 30 { consumption }
+		final Integer[] expectedloadDischargeVolumes = { 500, -470 };
+		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, expectedloadDischargeVolumes);
+		
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+		
+		final Sequence sequence = schedule.getSequences().get(0);
+		
+		checker.check(sequence);
+		
+	}
+	
+	@Test
+	public void testMaxDischargeVolumeMMBTu() {
 		System.err.println("\n\nMaximum Discharge Volume Limits Load & Discharge");
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario: add a maximum load volume
-		msc.cargo.getSlots().get(1).setMaxQuantity(500);
+		DischargeSlot dischargeSlot = (DischargeSlot) msc.cargo.getSlots().get(1);
+		dischargeSlot.setMaxQuantity(10500);
+		dischargeSlot.setVolumeLimitsUnit(VolumeUnits.MMBTU);
+		
 
 		final SequenceTester checker = getDefaultTester();
 
@@ -407,9 +444,35 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		checker.check(sequence);
 
 	}
+	
+	@Test
+	public void testMaxDischargeVolume() {
+		System.err.println("\n\nMaximum Discharge Volume Limits Load & Discharge");
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
+		
+		// change from default scenario: add a maximum load volume
+		msc.cargo.getSlots().get(1).setMaxQuantity(500);
+		
+		final SequenceTester checker = getDefaultTester();
+		
+		// expected load / discharge volumes
+		// 530 (load) = 500 { discharge } + 30 { consumption }
+		// 500 (discharge) =
+		final Integer[] expectedloadDischargeVolumes = { 530, -500 };
+		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, expectedloadDischargeVolumes);
+		
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+		
+		final Sequence sequence = schedule.getSequences().get(0);
+		
+		checker.check(sequence);
+		
+	}
 
 	@Test
-	public void testMinDischargeVolume() {
+	public void testMinDischargeVolumeMMBTu() {
 		System.err.println("\n\nMinimum Discharge Volume Prevents FBO");
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
@@ -422,7 +485,9 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
 
 		// but minimum discharge volume means that it causes a capacity violation
-		msc.cargo.getSlots().get(1).setMinQuantity(9965);
+		DischargeSlot dischargeSlot = (DischargeSlot) msc.cargo.getSlots().get(1);
+		msc.cargo.getSlots().get(1).setMinQuantity(209265);
+		dischargeSlot.setVolumeLimitsUnit(VolumeUnits.MMBTU);
 
 		// for the moment, set min heel to zero since it causes problems in the volume calculations
 		msc.vc.setMinHeel(0);
@@ -445,6 +510,43 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		checker.check(sequence);
 	}
 
+	@Test
+	public void testMinDischargeVolume() {
+		System.err.println("\n\nMinimum Discharge Volume Prevents FBO");
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
+		
+		// change from default scenario: base fuel price more expensive, so FBO is economical
+		final PricingModel pricingModel = scenario.getPricingModel();
+		final FleetCostModel fleetCostModel = pricingModel.getFleetCost();
+		final BaseFuelCost fuelPrice = fleetCostModel.getBaseFuelPrices().get(0);
+		// base fuel is now 10x more expensive, so FBO is economical
+		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
+		
+		// but minimum discharge volume means that it causes a capacity violation
+		msc.cargo.getSlots().get(1).setMinQuantity(9965);
+		
+		// for the moment, set min heel to zero since it causes problems in the volume calculations
+		msc.vc.setMinHeel(0);
+		
+		final SequenceTester checker = getDefaultTester();
+		checker.baseFuelPricePerMT = 100;
+		
+		final Integer[] expectedloadDischargeVolumes = { 10000, -9970 };
+		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, expectedloadDischargeVolumes);
+		
+		// first & last journeys cost 10x as much
+		final Integer[] expectedJourneyCosts = { 1500, 1420, 1500 };
+		checker.setExpectedValues(Expectations.FUEL_COSTS, Journey.class, expectedJourneyCosts);
+		
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+		
+		final Sequence sequence = schedule.getSequences().get(0);
+		
+		checker.check(sequence);
+	}
+	
 	@Test
 	public void testIdleAfterVesselReturn() {
 		System.err.println("\n\nSpecified date for vessel return causes idling.");
