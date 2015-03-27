@@ -138,6 +138,7 @@ public class CapacityViolationChecker {
 								}
 							} else {
 								// input is set in MMBTu
+								assert allocationAnnotation != null;
 								int cargoCV = allocationAnnotation.getSlotCargoCV(portSlot);
 								if (volumeInMMBTu > loadOption.getMaxLoadVolumeMMBTU()) {
 									long violationInMMBTu = volumeInMMBTu - loadOption.getMaxLoadVolumeMMBTU();
@@ -175,6 +176,7 @@ public class CapacityViolationChecker {
 								}
 							} else {
 								// volumes set in MMBTu
+								assert allocationAnnotation != null;
 								int cargoCV = allocationAnnotation.getSlotCargoCV(portSlot);
 								if (volumeInMMBTu > dischargeOption.getMaxDischargeVolumeMMBTU()) {
 									long violationInMMBTu = volumeInMMBTu - dischargeOption.getMaxDischargeVolumeMMBTU();
