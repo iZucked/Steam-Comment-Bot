@@ -73,7 +73,7 @@ public class DeleteScenarioCommandHandler extends AbstractHandler {
 							return;
 						}
 					}
-					final Set<ScenarioInstance> scenarios = new LinkedHashSet<>();
+					final List<ScenarioInstance> scenarios = new LinkedList<>();
 
 					// Find scenarios to save/close editor
 					final List<EObject> search = new LinkedList<>(filtered);
@@ -81,11 +81,12 @@ public class DeleteScenarioCommandHandler extends AbstractHandler {
 						final Container container = (Container) search.remove(0);
 						if (container instanceof ScenarioInstance) {
 							final ScenarioInstance scenarioInstance = (ScenarioInstance) container;
-							scenarios.add(scenarioInstance);
+							// Insert at start of list so that children get deleted before parents.
+							scenarios.add(0, scenarioInstance);
 						} else {
-							// Only search non-scenario instances as delete scenario will also delete children 
-							search.addAll(container.getElements());
+							// Only search non-scenario instances as delete scenario will also delete children
 						}
+						search.addAll(container.getElements());
 					}
 					for (final ScenarioInstance scenarioInstance : scenarios) {
 						if (scenarioInstance.getInstance() != null) {
