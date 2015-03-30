@@ -22,11 +22,26 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  */
 public interface IModelCommandProvider {
 	/**
+	 * Given the input command, return an extra command which should happen before the input has executed.
+	 * @param input
+	 * @return
+	 */
+	public Command provideAdditionalBeforeCommand(
+			final EditingDomain editingDomain, 
+			final MMXRootObject rootObject,
+			final Map<EObject, EObject> overrides,
+			final Set<EObject> editSet,
+			final Class<? extends Command> commandClass, 
+			final CommandParameter parameter, 
+			final Command input);
+	
+	
+	/**
 	 * Given the input command, return an extra command which should happen after the input has executed.
 	 * @param input
 	 * @return
 	 */
-	public Command provideAdditionalCommand(
+	public Command provideAdditionalAfterCommand(
 			final EditingDomain editingDomain, 
 			final MMXRootObject rootObject,
 			final Map<EObject, EObject> overrides,
@@ -36,5 +51,6 @@ public interface IModelCommandProvider {
 			final Command input);
 	
 	public void startCommandProvision();
+	
 	public void endCommandProvision();
 }

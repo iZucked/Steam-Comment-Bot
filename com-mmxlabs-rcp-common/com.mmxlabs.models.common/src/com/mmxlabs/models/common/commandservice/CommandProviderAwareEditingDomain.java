@@ -130,13 +130,32 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 
 		if (!isCommandProvidersDisabled()) {
 			final CompoundCommand wrapper = new CompoundCommand();
+
+			final List<IModelCommandProvider> providers = Activator.getPlugin().getModelCommandProviders();
+			
+			// TODO: Maybe separate API here?
+			startBatchCommand();
+
+			for (final IModelCommandProvider provider : providers) {
+				final Command addition = provider.provideAdditionalBeforeCommand(this, rootObject, overrides, editSet, commandClass, commandParameter, normal);
+				if (addition != null) {
+					log.debug(provider.getClass().getName() + " provided " + addition + " to " + normal);
+					if (addition.canExecute() == false) {
+						log.error("Provided command was not executable, ignoring it", new RuntimeException());
+					} else {
+						wrapper.append(addition);
+					}
+				}
+			}
+
+			endBatchCommand();
+
 			wrapper.append(normal);
 
 			startBatchCommand();
 
-			final List<IModelCommandProvider> providers = Activator.getPlugin().getModelCommandProviders();
 			for (final IModelCommandProvider provider : providers) {
-				final Command addition = provider.provideAdditionalCommand(this, rootObject, overrides, editSet, commandClass, commandParameter, normal);
+				final Command addition = provider.provideAdditionalAfterCommand(this, rootObject, overrides, editSet, commandClass, commandParameter, normal);
 				if (addition != null) {
 					log.debug(provider.getClass().getName() + " provided " + addition + " to " + normal);
 					if (addition.canExecute() == false) {
