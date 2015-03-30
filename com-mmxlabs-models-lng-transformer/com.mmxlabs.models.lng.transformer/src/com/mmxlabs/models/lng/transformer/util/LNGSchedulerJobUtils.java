@@ -70,10 +70,8 @@ import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.OptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scenario.service.util.MMXAdaptersAwareCommandStack;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.DirectRandomSequenceScheduler;
 
 /**
@@ -140,16 +138,16 @@ public class LNGSchedulerJobUtils {
 			command.append(derive(editingDomain, scenario, schedule, cargoModel, postExportProcessors));
 			// command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Dirty(), false));
 			command.append(SetCommand.create(editingDomain, portfolioModel, LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_Parameters(), optimiserSettings));
+
+			// Mark schedule as clean
+			command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY, Boolean.FALSE));
 		} finally {
 			if (editingDomain instanceof CommandProviderAwareEditingDomain) {
 				((CommandProviderAwareEditingDomain) editingDomain).setCommandProvidersDisabled(false);
 			}
 		}
 		editingDomain.getCommandStack().execute(command);
-
-		// Hmm, should this be done here or as part of a command - it is a persisted item.
-		// However the dirty adapter sets dirty to true outside of a command...
-		scheduleModel.setDirty(false);
+		//
 		return schedule;
 	}
 
