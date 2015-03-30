@@ -127,7 +127,7 @@ public class DischargeCVValueCompatabilityConstraint extends AbstractModelMultiC
 	 */
 	private void checkPortBoundsMin(final Port port, final List<IStatus> failures, final DischargeSlot dischargeSlot, final LoadSlot loadSlot, final Cargo cargo, final double loadCV,
 			final String format, final IValidationContext ctx) {
-		if (port.isSetMinCvValue()) {
+		if (port != null && port.isSetMinCvValue()) {
 			final Double minCvValue = port.getMinCvValue();
 			if (minCvValue != null && loadCV < minCvValue) {
 				addPortBoundsError(true, port, failures, dischargeSlot, loadSlot, cargo, loadCV, minCvValue, format, ctx);
@@ -137,7 +137,7 @@ public class DischargeCVValueCompatabilityConstraint extends AbstractModelMultiC
 
 	private void checkPortBoundsMax(final Port port, final List<IStatus> failures, final DischargeSlot dischargeSlot, final LoadSlot loadSlot, final Cargo cargo, final double loadCV,
 			final String format, final IValidationContext ctx) {
-		if (port.isSetMaxCvValue()) {
+		if (port != null && port.isSetMaxCvValue()) {
 			final Double maxCvValue = port.getMaxCvValue();
 			if (maxCvValue != null && loadCV > maxCvValue) {
 				addPortBoundsError(true, port, failures, dischargeSlot, loadSlot, cargo, loadCV, maxCvValue, format, ctx);
