@@ -83,6 +83,7 @@ public class VesselAssignmentTypeValueProviderFactory implements IReferenceValue
 				public List<Pair<String, EObject>> getAllowedValues(final EObject target, final EStructuralFeature field) {
 					// get a list of globally permissible values
 					final List<Pair<String, EObject>> vesselAvailabilityResult = vesselAvailabilityProvider.getAllowedValues(target, field);
+					int id = System.identityHashCode(vesselAvailabilityProvider);
 					final List<Pair<String, EObject>> charterInMarketResult = charterInMarketProvider.getAllowedValues(target, field);
 
 					// determine the current value for the target object
@@ -277,10 +278,25 @@ public class VesselAssignmentTypeValueProviderFactory implements IReferenceValue
 
 					return vesselAvailabilityProvider.updateOnChangeToFeature(changedFeature) || charterInMarketProvider.updateOnChangeToFeature(changedFeature);
 				}
+				
+				public IReferenceValueProvider getVesselAvailabilityProvider() {
+					return vesselAvailabilityProvider;
+				}
 
+				public IReferenceValueProvider getCharterIn() {
+					return charterInMarketProvider;
+				}
+				
 			};
 		}
 
 		return null;
 	}
+	public final IReferenceValueProviderFactory getVesselAvailabilityProviderFactory () {
+		return vesselAvailabilityProviderFactory;
+	}
+	public final IReferenceValueProviderFactory getCharterInMarketProviderFactory () {
+		return charterInMarketProviderFactory;
+	}
+
 }
