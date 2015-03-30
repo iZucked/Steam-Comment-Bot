@@ -27,7 +27,13 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 public class AssignableElementCommandProvider extends AbstractModelCommandProvider<Object> {
 
 	@Override
-	public Command provideAdditionalCommand(EditingDomain editingDomain, MMXRootObject rootObject, Map<EObject, EObject> overrides, Set<EObject> editSet, Class<? extends Command> commandClass,
+	public Command provideAdditionalBeforeCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet,
+			final Class<? extends Command> commandClass, final CommandParameter parameter, final Command input) {
+		return null;
+	}
+
+	@Override
+	public Command provideAdditionalAfterCommand(EditingDomain editingDomain, MMXRootObject rootObject, Map<EObject, EObject> overrides, Set<EObject> editSet, Class<? extends Command> commandClass,
 			CommandParameter parameter, Command input) {
 
 		if (parameter.getFeature() == CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE) {

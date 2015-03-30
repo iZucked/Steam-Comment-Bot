@@ -29,14 +29,19 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  * 
  */
 public class SlotDateUpdatingCommandProvider implements IModelCommandProvider {
+	@Override
+	public Command provideAdditionalBeforeCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet,
+			final Class<? extends Command> commandClass, final CommandParameter parameter, final Command input) {
+		return null;
+	}
 
 	@Override
-	public Command provideAdditionalCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet,
+	public Command provideAdditionalAfterCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet,
 			final Class<? extends Command> commandClass, final CommandParameter parameter, final Command input) {
-		
+
 		// only modify commands which SET the port on a slot
 		if (commandClass == SetCommand.class) {
-			// only modify commands which set the port on a SLOT 
+			// only modify commands which set the port on a SLOT
 			if (parameter.getEOwner() instanceof Slot) {
 				final Slot slot = (Slot) parameter.getEOwner();
 				// no modification if the window start is unset
@@ -71,7 +76,7 @@ public class SlotDateUpdatingCommandProvider implements IModelCommandProvider {
 						}
 					}
 				}
-			} 
+			}
 		}
 		return null;
 	}
