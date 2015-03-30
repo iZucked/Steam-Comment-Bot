@@ -92,5 +92,37 @@
 <unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.feature.source.feature.group" version="0.0.0"/>
 <repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/nebula/widgets/com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.p2/1.0.5.RELEASE/com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.p2-1.0.5.RELEASE.zip-unzip/" id="mmxlabs-releases"/>
 </location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.net4j.db.mysql.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.emf.cdo.server.mongodb.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.net4j.defs.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.emf.cdo.server.db4o.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.net4j.db.postgresql.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.emf.cdo.server.hibernate.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.emf.cdo.compare.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.net4j.sdk.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.net4j.db.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.emf.cdo.server.lissome.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.emf.cdo.doc.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.emf.cdo.server.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.net4j.util.ui.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.emf.cdo.defs.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.emf.cdo.server.product.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.net4j.db.oracle.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.emf.cdo.explorer.product.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.net4j.db.derby.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.emf.cdo.sdk.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.emf.cdo.migrator.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.emf.cdo.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.net4j.ui.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.net4j.db.h2.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.emf.cdo.server.objectivity.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.net4j.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.net4j.util.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.net4j.db.hsqldb.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.net4j.doc.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.emf.cdo.server.db.feature.group" version="0.0.0"/>
+<repository location="http://download.eclipse.org/modeling/emf/cdo/drops/R20140610-0212"/>
+</location>
 </locations>
 </target>
