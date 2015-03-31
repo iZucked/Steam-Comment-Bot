@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.views.fleet.formatters;
 
-import com.mmxlabs.lingo.reports.views.formatters.CostFormatter;
+import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
@@ -12,11 +12,7 @@ import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 
-public class BaseFuelCostFormatter extends CostFormatter {
-
-	public BaseFuelCostFormatter(boolean includeUnits) {
-		super(includeUnits);
-	}
+public class BaseFuelCostFormatter extends IntegerFormatter {
 
 	@Override
 	public Integer getIntValue(Object object) {

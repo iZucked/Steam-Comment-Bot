@@ -4,17 +4,13 @@
  */
 package com.mmxlabs.lingo.reports.views.fleet.formatters;
 
-import com.mmxlabs.lingo.reports.views.formatters.CostFormatter;
+import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Sequence;
 
-public class PortCostFormatter extends CostFormatter {
-
-	public PortCostFormatter(boolean includeUnits) {
-		super(includeUnits);
-	}
+public class PortCostFormatter extends IntegerFormatter {
 
 	@Override
 	public Integer getIntValue(Object object) {
