@@ -35,6 +35,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lingo.its.internal.Activator;
 import com.mmxlabs.lingo.its.utils.MigrationHelper;
@@ -75,6 +77,8 @@ import com.mmxlabs.scenario.service.util.encryption.impl.PassthroughCipherProvid
  * 
  */
 public class AbstractOptimisationResultTester {
+
+	private static final Logger LOG = LoggerFactory.getLogger(AbstractOptimisationResultTester.class);
 
 	/**
 	 * Toggle between storing fitness names and values in a properties file and testing the current fitnesses against the stored values. Should be run as part of a plugin test.
@@ -450,6 +454,10 @@ public class AbstractOptimisationResultTester {
 						}
 					}
 				}
+			}
+			if (!expectedOutputBuilder.toString().equals(actualContents)) {
+				LOG.warn("Expected " + expectedOutputBuilder.toString());
+				LOG.warn("Actual " + actualContents);
 			}
 			Assert.assertEquals(expectedOutputBuilder.toString(), actualContents);
 		}
