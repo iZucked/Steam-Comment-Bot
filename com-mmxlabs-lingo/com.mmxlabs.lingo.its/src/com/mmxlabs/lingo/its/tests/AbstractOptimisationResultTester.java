@@ -104,7 +104,7 @@ public class AbstractOptimisationResultTester {
 		instance = SpotMarketsPackage.eINSTANCE;
 		// Add other packages?
 		
-		// Enfore UK Locale
+		// Enforce UK Locale Needed for running tests on build server. Keeps date format consistent.
 		Locale.setDefault(Locale.UK);
 	}
 
