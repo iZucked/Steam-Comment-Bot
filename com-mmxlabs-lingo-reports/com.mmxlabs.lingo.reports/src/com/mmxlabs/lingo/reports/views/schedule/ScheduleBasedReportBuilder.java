@@ -11,6 +11,7 @@ import java.util.List;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.nebula.widgets.grid.GridColumn;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
@@ -165,16 +166,23 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 
 		entityColumnNames.clear();
 
+		List<ColumnHandler> handlers = new LinkedList<>();
 		for (final LNGScenarioModel rootObject : rootObjects) {
 
 			final CommercialModel commercialModel = rootObject.getCommercialModel();
 			if (commercialModel != null) {
 				for (final BaseLegalEntity e : commercialModel.getEntities()) {
-					addPNLColumn(COLUMN_BLOCK_PNL, e.getName(), e.getName(), CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK);
-					addPNLColumn(COLUMN_BLOCK_PNL, e.getName(), e.getName(), CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK);
+					handlers.add(addPNLColumn(COLUMN_BLOCK_PNL, e.getName(), e.getName(), CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK));
+					handlers.add(addPNLColumn(COLUMN_BLOCK_PNL, e.getName(), e.getName(), CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK));
 				}
 			}
 		}
+		for (final ColumnHandler handler : handlers) {
+			final GridColumn column = handler.createColumn().getColumn();
+			column.setVisible(handler.block.getVisible());
+			column.pack();
+		}
+
 	}
 
 	public EmfBlockColumnFactory getTotalPNLColumnFactory(final String columnId, @Nullable final EStructuralFeature bookContainmentFeature) {
@@ -222,7 +230,7 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 			entityColumnNames.add(title);
 		}
 
-		return blockManager.createColumn(blockManager.getBlockByID(COLUMN_BLOCK_PNL), title, new IntegerFormatter() {
+		return blockManager.createColumn(blockManager.getBlockByID(blockId), title, new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
 				ProfitAndLossContainer container = null;
@@ -240,7 +248,7 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 
 				return getEntityPNLEntry(container, entityKey, bookContainmentFeature);
 			}
-		}, ScheduleReportPackage.Literals.ROW__TARGET);
+		}, false, ScheduleReportPackage.Literals.ROW__TARGET);
 	}
 
 	/**
