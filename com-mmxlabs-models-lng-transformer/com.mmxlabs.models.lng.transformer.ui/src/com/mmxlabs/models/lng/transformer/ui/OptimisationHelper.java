@@ -46,6 +46,7 @@ import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModesRegis
 import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog;
 import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog.DataSection;
 import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog.DataType;
+import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog.OptionGroup;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IValidationService;
@@ -70,7 +71,7 @@ public final class OptimisationHelper {
 			return null;
 		}
 
-		// While we only keep the reference for the duration of this method call, the two current concrete implementations of IJobControl will obtain a ModelReference 
+		// While we only keep the reference for the duration of this method call, the two current concrete implementations of IJobControl will obtain a ModelReference
 		try (final ModelReference modelRefence = instance.getReference()) {
 			final EObject object = modelRefence.getInstance();
 
@@ -265,16 +266,19 @@ public final class OptimisationHelper {
 
 			final OptimiserSettings copy = EcoreUtil.copy(previousSettings);
 
-			dialog.addOption(DataSection.Main, editingDomian, "Shipping Only Optimisation", copy, defaultSettings, DataType.Boolean, ParametersPackage.eINSTANCE.getOptimiserSettings_ShippingOnly());
-			dialog.addOption(DataSection.Main, editingDomian, "Generate Charter Outs", copy, defaultSettings, DataType.Boolean, ParametersPackage.eINSTANCE.getOptimiserSettings_GenerateCharterOuts());
+			dialog.addOption(DataSection.Main, null, editingDomian, "Shipping Only Optimisation", copy, defaultSettings, DataType.Boolean,
+					ParametersPackage.eINSTANCE.getOptimiserSettings_ShippingOnly());
+			dialog.addOption(DataSection.Main, null, editingDomian, "Generate Charter Outs", copy, defaultSettings, DataType.Boolean,
+					ParametersPackage.eINSTANCE.getOptimiserSettings_GenerateCharterOuts());
 
 			if (!forEvaluation) {
-//				dialog.addOption(DataSection.Advanced, editingDomian, "Number of Iterations", copy, defaultSettings, DataType.PositiveInt,
-//						ParametersPackage.eINSTANCE.getOptimiserSettings_AnnealingSettings(), ParametersPackage.eINSTANCE.getAnnealingSettings_Iterations());
-				dialog.addOption(DataSection.Main, editingDomian, "Start Date (mm/yyyy)", copy, defaultSettings, DataType.MonthYear,
-						ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
-				dialog.addOption(DataSection.Main, editingDomian, "End Date (mm/yyyy)", copy, defaultSettings, DataType.MonthYear,
-						ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseBefore());
+				// dialog.addOption(DataSection.Advanced, editingDomian, "Number of Iterations", copy, defaultSettings, DataType.PositiveInt,
+				// ParametersPackage.eINSTANCE.getOptimiserSettings_AnnealingSettings(), ParametersPackage.eINSTANCE.getAnnealingSettings_Iterations());
+				final OptionGroup group = dialog.createGroup(DataSection.Main, "Optimise between");
+				dialog.addOption(DataSection.Main, group, editingDomian, "Start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear, ParametersPackage.eINSTANCE.getOptimiserSettings_Range(),
+						ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
+				dialog.addOption(DataSection.Main, group, editingDomian, "Up to start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear, ParametersPackage.eINSTANCE.getOptimiserSettings_Range(),
+						ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseBefore());
 			}
 
 			final int[] ret = new int[1];
@@ -307,23 +311,21 @@ public final class OptimisationHelper {
 	}
 
 	private static void mergeFields(final OptimiserSettings from, final OptimiserSettings to) {
-		// TODO: replace all this ugly code by a list of EStructuralFeatures and loop through 
+		// TODO: replace all this ugly code by a list of EStructuralFeatures and loop through
 		// them doing the right thing
-		
+
 		if (from.getRange().isSetOptimiseAfter() == false) {
 			to.getRange().unsetOptimiseAfter();
-		}
-		else {
+		} else {
 			to.getRange().setOptimiseAfter(from.getRange().getOptimiseAfter());
 		}
 
 		if (from.getRange().isSetOptimiseBefore() == false) {
 			to.getRange().unsetOptimiseBefore();
-		}
-		else {
+		} else {
 			to.getRange().setOptimiseBefore(from.getRange().getOptimiseBefore());
 		}
-		
+
 		to.getAnnealingSettings().setIterations(from.getAnnealingSettings().getIterations());
 		to.setShippingOnly(from.isShippingOnly());
 		to.setGenerateCharterOuts(from.isGenerateCharterOuts());
