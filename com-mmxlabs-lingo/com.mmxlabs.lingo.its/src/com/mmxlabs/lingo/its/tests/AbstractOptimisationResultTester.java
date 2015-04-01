@@ -18,6 +18,7 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
@@ -102,6 +103,9 @@ public class AbstractOptimisationResultTester {
 		instance = SchedulePackage.eINSTANCE;
 		instance = SpotMarketsPackage.eINSTANCE;
 		// Add other packages?
+		
+		// Enfore UK Locale
+		Locale.setDefault(Locale.UK);
 	}
 
 	// Key prefixes used in the properties file.
