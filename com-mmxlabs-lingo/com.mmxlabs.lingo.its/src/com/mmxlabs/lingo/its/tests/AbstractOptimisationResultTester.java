@@ -103,7 +103,7 @@ public class AbstractOptimisationResultTester {
 		instance = SchedulePackage.eINSTANCE;
 		instance = SpotMarketsPackage.eINSTANCE;
 		// Add other packages?
-		
+
 		// Enforce UK Locale Needed for running tests on build server. Keeps date format consistent.
 		Locale.setDefault(Locale.UK);
 	}
@@ -274,9 +274,11 @@ public class AbstractOptimisationResultTester {
 			// {
 
 			try {
-				final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(origURL.toString())).toString().replaceAll(" ", "%20"));
-				final File f1 = new File(expectedReportOutput.toURI());
-				final File file2 = new File(f1.getAbsoluteFile() + ".properties");
+				final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(origURL.toString() + ".properties")).toString().replaceAll(" ", "%20"));
+			
+				//final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(origURL.toString())).toString().replaceAll(" ", "%20"));
+				final File file2 = new File(expectedReportOutput.toURI());
+				// final File file2 = new File(f1.getAbsoluteFile() + ".properties");
 				props.store(new FileOutputStream(file2), "Created by " + AbstractOptimisationResultTester.class.getName());
 			} catch (final URISyntaxException e) {
 				e.printStackTrace();
@@ -396,14 +398,14 @@ public class AbstractOptimisationResultTester {
 		return EcoreUtil.copy(original);
 	}
 
-	public void testReports(final URL scenarioURL, final String reportID, final String extension) throws Exception {
+	public void testReports(final URL scenarioURL, final String reportID, final String shortName, final String extension) throws Exception {
 
 		final URI uri = URI.createURI(FileLocator.toFileURL(scenarioURL).toString().replaceAll(" ", "%20"));
 		final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, getScenarioCipherProvider());
 		File f = null;
 		try {
 			f = MigrationHelper.migrateAndLoad(instance);
-			testReports(instance, scenarioURL, reportID, extension);
+			testReports(instance, scenarioURL, reportID, shortName, extension);
 		} finally {
 			if (f != null && f.exists()) {
 				f.delete();
@@ -411,15 +413,15 @@ public class AbstractOptimisationResultTester {
 		}
 	}
 
-	public void testReports(final LNGScenarioModel model, final URL scenarioURL, final String reportID, final String extension) throws Exception {
+	public void testReports(final LNGScenarioModel model, final URL scenarioURL, final String reportID, final String shortName, final String extension) throws Exception {
 		final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
 		scenarioInstance.setMetadata(ScenarioServiceFactory.eINSTANCE.createMetadata());
 		scenarioInstance.setName(scenarioURL.getPath());
 		scenarioInstance.setInstance(model);
-		testReports(scenarioInstance, new URL(scenarioURL.toString()), reportID, extension);
+		testReports(scenarioInstance, new URL(scenarioURL.toString()), reportID, shortName, extension);
 	}
 
-	public void testReports(final ScenarioInstance instance, final URL scenarioURL, final String reportID, final String extension) throws Exception {
+	public void testReports(final ScenarioInstance instance, final URL scenarioURL, final String reportID, final String shortName, final String extension) throws Exception {
 
 		final LNGScenarioModel originalScenario = (LNGScenarioModel) instance.getInstance();
 		final ScenarioRunner runner = evaluateScenario(originalScenario, scenarioURL);
@@ -437,12 +439,12 @@ public class AbstractOptimisationResultTester {
 
 			final File f1 = new File(expectedReportOutput.toURI());
 			String slash = f1.isDirectory() ? "/" : "";
-			final File file2 = new File(f1.getAbsoluteFile() + slash + "reports" + "." + reportID + "." + extension);
+			final File file2 = new File(f1.getAbsoluteFile() + slash + "reports" + "." + shortName + "." + extension);
 			try (PrintWriter pw = new PrintWriter(file2)) {
 				pw.print(actualContents);
 			}
 		} else {
-			final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString() + "reports" + "." + reportID + "." + extension)).toString().replaceAll(" ", "%20"));
+			final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString() + "reports" + "." + shortName + "." + extension)).toString().replaceAll(" ", "%20"));
 			final StringBuilder expectedOutputBuilder = new StringBuilder();
 			{
 				try (InputStream is = expectedReportOutput.openStream(); BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
