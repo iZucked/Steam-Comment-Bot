@@ -7,6 +7,7 @@ package com.mmxlabs.lingo.app.intro;
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
+import org.eclipse.ui.IViewLayout;
 
 public class EditingPerspective implements IPerspectiveFactory {
 
@@ -21,7 +22,14 @@ public class EditingPerspective implements IPerspectiveFactory {
 		layout.addView(CostsRoot + "PortCostsView", IPageLayout.BOTTOM, 0.60f, CostsRoot + "CanalCostsView");
 		layout.addView(CostsRoot + "CooldownCostsView", IPageLayout.BOTTOM, 0.5f, CostsRoot + "PortCostsView");
 
-		// com.mmxlabs.scenario.service.ui.navigator
+		// Scenario Navigator
+		{
+			final IFolderLayout scenarioArea = layout.createFolder("scenarioArea", IPageLayout.LEFT, 0.25f, IPageLayout.ID_EDITOR_AREA);
+
+			scenarioArea.addView("com.mmxlabs.scenario.service.ui.navigator");
+			final IViewLayout viewLayout = layout.getViewLayout("com.mmxlabs.scenario.service.ui.navigator");
+			viewLayout.setCloseable(false);
+		}
 
 		final IFolderLayout physicalFolder = layout.createFolder("physicalFolder", IPageLayout.TOP, 0.75f, IPageLayout.ID_EDITOR_AREA);
 		physicalFolder.addView("com.mmxlabs.models.lng.port.editor.views.PortView");
@@ -38,10 +46,9 @@ public class EditingPerspective implements IPerspectiveFactory {
 		layout.addShowViewShortcut("com.mmxlabs.models.ui.validation.views.ValidationProblemsView");
 		layout.addShowViewShortcut("org.eclipse.pde.runtime.LogView");
 
-		layout.addShowViewShortcut("com.mmxlabs.models.lng.spotmarkets.editor.views.DESPurchaseSpotMarketView");
-		layout.addShowViewShortcut("com.mmxlabs.models.lng.spotmarkets.editor.views.FOBSalesSpotMarketView");
+//		layout.addShowViewShortcut("com.mmxlabs.models.lng.spotmarkets.editor.views.DESPurchaseSpotMarketView");
+//		layout.addShowViewShortcut("com.mmxlabs.models.lng.spotmarkets.editor.views.FOBSalesSpotMarketView");
 
-		
 		layout.addPerspectiveShortcut("com.mmxlabs.shiplingo.platform.app.perspective.optimisation");
 		layout.addPerspectiveShortcut("com.mmxlabs.lingo.app.perspective.analysis");
 	}
