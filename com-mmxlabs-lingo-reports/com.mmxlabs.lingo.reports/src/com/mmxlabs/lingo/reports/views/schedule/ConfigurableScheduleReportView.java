@@ -111,7 +111,7 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 
 				if (table != null && table.getOptions().isFilterSelectedElements() && !table.getSelectedElements().isEmpty()) {
 					if (!table.getSelectedElements().contains(element)) {
-						return false;
+						return false;	
 					}
 				}
 
@@ -120,11 +120,11 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 					// Filter out reference scenario if required
 					if (!builder.getDiffFilterInfo().contains(AbstractReportBuilder.DIFF_FILTER_PINNDED_SCENARIO.id)) {
 						if (row.isReference()) {
-							// return false;
+							return false;
 						}
 					}
 					// Only show visible rows
-					// return row.isVisible();
+					return row.isVisible();
 				}
 				return true;
 			}
