@@ -19,8 +19,13 @@ public class DiffPerspective implements IPerspectiveFactory {
 	public void createInitialLayout(final IPageLayout layout) {
 		layout.addActionSet("com.mmxlabs.lingo.reports.diff.actionset");
 		layout.setEditorAreaVisible(false);
-
 		final IFolderLayout diffArea = layout.createFolder("diffArea", IPageLayout.LEFT, 0.2f, IPageLayout.ID_EDITOR_AREA);
+		// Horizontal KPI
+		layout.addStandaloneView(HorizontalKPIReportView.ID, false, IPageLayout.TOP, 0.02f, IPageLayout.ID_EDITOR_AREA);
+		final IViewLayout viewLayout = layout.getViewLayout(HorizontalKPIReportView.ID);
+		viewLayout.setCloseable(false);
+		viewLayout.setMoveable(false);
+
 		final IFolderLayout ganttArea = layout.createFolder("ganttArea", IPageLayout.BOTTOM, 0.25f, IPageLayout.ID_EDITOR_AREA);
 		final IFolderLayout reportsArea = layout.createFolder("reportsArea", IPageLayout.TOP, 0.65f, IPageLayout.ID_EDITOR_AREA);
 		final IFolderLayout fleetReportArea = layout.createFolder("fleetReportsArea", IPageLayout.BOTTOM, 0.65f, "diffArea");
@@ -29,14 +34,9 @@ public class DiffPerspective implements IPerspectiveFactory {
 		diffArea.addView("com.mmxlabs.scenario.service.ui.navigator");
 		reportsArea.addView(ConfigurableScheduleReportView.ID);
 		fleetReportArea.addView(ConfigurableFleetReportView.ID);
-		
+
 		ganttArea.addView("com.mmxlabs.scheduleview.views.SchedulerView");
 
-		// Horizontal KPI
-		layout.addStandaloneView(HorizontalKPIReportView.ID, false, IPageLayout.TOP, 0.08f, "reportsArea");
-		final IViewLayout viewLayout = layout.getViewLayout(HorizontalKPIReportView.ID);
-		viewLayout.setCloseable(false);
-		viewLayout.setMoveable(false);
 
 		layout.addShowViewShortcut(HorizontalKPIReportView.ID);
 		layout.addShowViewShortcut(ConfigurableScheduleReportView.ID);
