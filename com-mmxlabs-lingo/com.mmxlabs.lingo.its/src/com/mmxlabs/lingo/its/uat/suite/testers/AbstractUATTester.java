@@ -42,7 +42,7 @@ public abstract class AbstractUATTester {
 		singleUATTestCase(c, additionalChecks);
 	}
 	
-	private void singleUATTestCase(UATCase testCase, boolean additionalChecks) throws Exception {
+	protected void singleUATTestCase(UATCase testCase, boolean additionalChecks) throws Exception {
 		getUATFeatureExtractor().checkPropertiesForCase(testCase.lingoFilePath, testCase.cargoName, additionalChecks);
 	}
 	

@@ -35,7 +35,7 @@ public class TestOptimisationResult2 extends AbstractOptimisationResultTester {
 		final URL url = getClass().getResource("/scenarios/des-cargo/");
 		final LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
 
-		testReports(scenario, url, ReportTester.VERTICAL_REPORT_ID, "html");
+		testReports(scenario, url, ReportTester.VERTICAL_REPORT_ID, ReportTester.VERTICAL_REPORT_SHORTNAME, "html");
 	}
 
 	@Test
@@ -43,7 +43,7 @@ public class TestOptimisationResult2 extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/des-cargo/");
 		final LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
-		testReports(scenario, url, ReportTester.SCHEDULE_SUMMARY_ID, "html");
+		testReports(scenario, url, ReportTester.SCHEDULE_SUMMARY_ID, ReportTester.SCHEDULE_SUMMARY_SHORTNAME, "html");
 	}
 
 	@Test
@@ -51,6 +51,6 @@ public class TestOptimisationResult2 extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/des-cargo/");
 		final LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
-		testReports(scenario, url, ReportTester.PORT_ROTATIONS_ID, "html");
+		testReports(scenario, url, ReportTester.PORT_ROTATIONS_ID, ReportTester.PORT_ROTATIONS_SHORTNAME, "html");
 	}
 }

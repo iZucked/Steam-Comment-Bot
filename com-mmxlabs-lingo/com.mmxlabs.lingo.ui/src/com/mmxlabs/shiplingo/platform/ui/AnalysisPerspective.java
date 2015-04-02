@@ -7,6 +7,7 @@ package com.mmxlabs.shiplingo.platform.ui;
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
+import org.eclipse.ui.IViewLayout;
 
 import com.mmxlabs.lingo.reports.scheduleview.views.SchedulerView;
 import com.mmxlabs.lingo.reports.views.portrotation.PortRotationReportView;
@@ -51,7 +52,11 @@ public class AnalysisPerspective implements IPerspectiveFactory {
 		reportsFolder.addPlaceholder(FitnessReportView.ID);
 		reportsFolder.addPlaceholder(CapacityViolationReportView.ID);
 
-		// layout.addView(CargoEconsReport.ID, IPageLayout.RIGHT, 0.85f, IPageLayout.ID_EDITOR_AREA);
+		// Horizontal KPI
+		layout.addStandaloneView(HorizontalKPIReportView.ID, false, IPageLayout.TOP, 0.03f,  IPageLayout.ID_EDITOR_AREA);
+		final IViewLayout viewLayout = layout.getViewLayout(HorizontalKPIReportView.ID);
+		viewLayout.setCloseable(false);
+		viewLayout.setMoveable(false);
 
 		layout.addShowViewShortcut(KPIReportView.ID);
 		layout.addShowViewShortcut(ConfigurableScheduleReportView.ID);

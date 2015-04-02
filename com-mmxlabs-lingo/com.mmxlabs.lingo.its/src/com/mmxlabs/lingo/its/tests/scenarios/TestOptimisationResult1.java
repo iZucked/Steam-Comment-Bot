@@ -26,21 +26,21 @@ public class TestOptimisationResult1 extends AbstractOptimisationResultTester {
 	public void testOptimisationResult_VerticalReport() throws Exception {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/sample-data.lingo");
-		testReports(url, ReportTester.VERTICAL_REPORT_ID, "html");
+		testReports(url, ReportTester.VERTICAL_REPORT_ID, ReportTester.VERTICAL_REPORT_SHORTNAME, "html");
 	}
 
 	@Test
 	public void testOptimisationResult_ScheduleSummary() throws Exception {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/sample-data.lingo");
-		testReports(url, ReportTester.SCHEDULE_SUMMARY_ID, "html");
+		testReports(url, ReportTester.SCHEDULE_SUMMARY_ID, ReportTester.SCHEDULE_SUMMARY_SHORTNAME, "html");
 	}
 
 	@Test
 	public void testOptimisationResult_PortRotations() throws Exception {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/sample-data.lingo");
-		testReports(url, ReportTester.PORT_ROTATIONS_ID, "html");
+		testReports(url, ReportTester.PORT_ROTATIONS_ID, ReportTester.PORT_ROTATIONS_SHORTNAME, "html");
 	}
 
 }

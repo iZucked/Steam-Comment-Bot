@@ -24,8 +24,13 @@ import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 public class ReportTester {
 
 	public static final String SCHEDULE_SUMMARY_ID = "com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport";
+	public static final String SCHEDULE_SUMMARY_SHORTNAME = "ScheduleSummary";
+	
 	public static final String PORT_ROTATIONS_ID = "com.mmxlabs.shiplingo.platform.reports.views.PortRotationReportView";
+	public static final String PORT_ROTATIONS_SHORTNAME = "PortRotations";
+	
 	public static final String VERTICAL_REPORT_ID = "com.mmxlabs.lingo.reports.verticalreport";
+	public static final String VERTICAL_REPORT_SHORTNAME = "VerticalReport";
 
 	@Nullable
 	public IReportContents getReportContents(final ScenarioInstance scenario, final String reportID) throws InterruptedException {
