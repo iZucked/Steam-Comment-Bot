@@ -33,7 +33,7 @@ public class DiffPerspective implements IPerspectiveFactory {
 		ganttArea.addView("com.mmxlabs.scheduleview.views.SchedulerView");
 
 		// Horizontal KPI
-		layout.addStandaloneView(HorizontalKPIReportView.ID, false, IPageLayout.TOP, 0.1f, "reportsArea");
+		layout.addStandaloneView(HorizontalKPIReportView.ID, false, IPageLayout.TOP, 0.08f, "reportsArea");
 		final IViewLayout viewLayout = layout.getViewLayout(HorizontalKPIReportView.ID);
 		viewLayout.setCloseable(false);
 		viewLayout.setMoveable(false);

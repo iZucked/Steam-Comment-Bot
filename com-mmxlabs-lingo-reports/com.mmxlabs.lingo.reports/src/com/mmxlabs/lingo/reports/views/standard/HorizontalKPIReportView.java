@@ -5,7 +5,6 @@
 package com.mmxlabs.lingo.reports.views.standard;
 
 import java.util.Collection;
-import java.util.Collections;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.CellLabelProvider;
@@ -19,7 +18,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
@@ -29,6 +30,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
+import com.google.common.collect.Lists;
 import com.mmxlabs.lingo.reports.ScenarioViewerSynchronizer;
 import com.mmxlabs.lingo.reports.ScheduleElementCollector;
 import com.mmxlabs.lingo.reports.views.standard.HorizontalKPIContentProvider.RowData;
@@ -41,6 +43,8 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
 /**
+ * The "Headline" Report.
+ * 
  */
 public class HorizontalKPIReportView extends ViewPart {
 
@@ -50,7 +54,6 @@ public class HorizontalKPIReportView extends ViewPart {
 
 	private HorizontalKPIContentProvider contentProvider;
 
-	// private IEditorPart activeEditor = null;
 	private ScheduleModel scheduleModel;
 
 	private IPartListener partListener;
@@ -60,90 +63,113 @@ public class HorizontalKPIReportView extends ViewPart {
 	private IEditorPart currentActiveEditor;
 
 	private ModelReference modelReference;
+	private Font boldFont;
+
+	/**
+	 * The type of column, a Textual "Label" or numerical "Value"
+	 * 
+	 */
+	public enum ColumnType {
+		Label, Value
+	}
+
+	/**
+	 * The ordered list of columns. These are either labels, or values. Label types take a String value and no formatter. Value types take a default Long value representing the largest expected value
+	 * which is used to calculate the required colum width.
+	 */
+	public enum ColumnDefinition {
+		LABEL_PNL(ColumnType.Label, "P&L", null), VALUE_PNL(ColumnType.Value, 1000000000l, KPIContentProvider.TYPE_COST), //
+		LABEL_TRADING(ColumnType.Label, "Trading", null), VALUE_TRADING(ColumnType.Value, 1000000000l, KPIContentProvider.TYPE_COST), //
+		LABEL_SHIPPING(ColumnType.Label, "Shipping", null), VALUE_SHIPPING(ColumnType.Value, 1000000000l, KPIContentProvider.TYPE_COST), //
+		LABEL_GCO(ColumnType.Label, "Charter Out (virt)", null), VALUE_GCO_DAYS(ColumnType.Value, 2400l, KPIContentProvider.TYPE_TIME), VALUE_GCO_REVENUE(ColumnType.Value, 1000000000l,
+				KPIContentProvider.TYPE_COST), //
+		LABEL_VIOLATIONS(ColumnType.Label, "Violations", null), VALUE_VIOLATIONS(ColumnType.Value, 100l, ""), //
+		LABEL_LATENESS(ColumnType.Label, "Late", null), VALUE_LATENESS(ColumnType.Value, 2400l, KPIContentProvider.TYPE_TIME); //
+
+		private final ColumnType columnType;
+		private final Object labelOrDefaultLong;
+		private final String formatType;
+
+		protected ColumnType getColumnType() {
+			return columnType;
+		}
+
+		protected String getLabel() {
+			return (String) labelOrDefaultLong;
+		}
+
+		protected long getDefaultLong() {
+			return ((Number) labelOrDefaultLong).longValue();
+		}
+
+		protected String getFormatType() {
+			return formatType;
+		}
+
+		private ColumnDefinition(final ColumnType columnType, final Object labelOrDefaultLong, final String formatType) {
+			this.columnType = columnType;
+			this.labelOrDefaultLong = labelOrDefaultLong;
+			assert labelOrDefaultLong instanceof String || labelOrDefaultLong instanceof Number;
+			this.formatType = formatType;
+
+		}
+	}
 
 	class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, IFontProvider, ITableColorProvider {
 
-		private final Font boldFont;
+		/**
+		 * Get Mapping between a {@link ColumnDefinition} value type and a {@link RowData} field.
+		 * 
+		 * @param d
+		 * @param columnDefinition
+		 * @return
+		 */
+		Long getValue(final RowData d, final ColumnDefinition columnDefinition) {
+			if (d == null) {
+				return null;
+			}
+			switch (columnDefinition) {
+			case VALUE_GCO_DAYS:
+				return d.gcoTime;
+			case VALUE_GCO_REVENUE:
+				return d.gcoRevenue;
+			case VALUE_LATENESS:
+				return d.lateness;
+			case VALUE_PNL:
+				return d.totalPNL;
+			case VALUE_SHIPPING:
+				return d.shippingPNL;
+			case VALUE_TRADING:
+				return d.tradingPNL;
+			case VALUE_VIOLATIONS:
+				return d.capacityViolationCount;
+			default:
+				break;
 
-		public ViewLabelProvider() {
-			final Font systemFont = Display.getDefault().getSystemFont();
-			// Clone the font data
-			final FontData fd = new FontData(systemFont.getFontData()[0].toString());
-			// Set the bold bit.
-			fd.setStyle(fd.getStyle() | SWT.BOLD);
-			boldFont = new Font(Display.getDefault(), fd);
-		}
-
-		@Override
-		public void dispose() {
-			boldFont.dispose();
-			super.dispose();
+			}
+			return null;
 		}
 
 		@Override
 		public String getColumnText(final Object obj, final int index) {
 			if (obj instanceof RowData) {
 				final RowData d = (RowData) obj;
+				if (d.dummy) {
+					return "";
+				}
 				final RowData pinD = contentProvider.getPinnedData();
-				Long rtn = null;
-				switch (index) {
-				case 0:
-					return "P&L";
-				case 1:
-					rtn = (d.totalPNL != null ? d.totalPNL - (pinD != null ? pinD.totalPNL : 0) : null);
-					return format(rtn, KPIContentProvider.TYPE_COST);
-				case 2:
-					return "Trading";
-				case 3:
-					rtn = (d.tradingPNL != null ? d.tradingPNL - (pinD != null ? pinD.tradingPNL : 0) : null);
-					return format(rtn, KPIContentProvider.TYPE_COST);
-				case 4:
-					return "Shipping";
-				case 5:
-					rtn = (d.shippingPNL != null ? d.shippingPNL - (pinD != null ? pinD.shippingPNL : 0) : null);
-					return format(rtn, KPIContentProvider.TYPE_COST);
-					// case 6:
-					// return "MtM";
-					// case 7:
-					// rtn = (d.mtmPnl != null ? d.mtmPnl - (pinD != null ? pinD.mtmPnl : 0) : null);
-					// return format(rtn, KPIContentProvider.TYPE_COST);
-					// case 8:
-					// return "Shipping Cost";
-					// case 9:
-					// rtn = (d.shippingCost != null ? d.shippingCost - (pinD != null ? pinD.shippingCost : 0) : null);
-					// return format(rtn, KPIContentProvider.TYPE_COST);
-				case 6:
-					return "Charter Out (virt)";
-				case 7:
-					rtn = (d.gcoTime != null ? d.gcoTime - (pinD != null ? pinD.gcoTime : 0) : null);
-					return format(rtn, KPIContentProvider.TYPE_TIME);
-				case 8:
-					return "Violations";
-				case 9:
-					rtn = (d.capacityViolationCount != null ? d.capacityViolationCount - (pinD != null ? pinD.capacityViolationCount : 0) : null);
-					return format(rtn, "");
-				case 10:
-					return "Lateness";
-				case 11:
-					rtn = (d.lateness != null ? d.lateness - (pinD != null ? pinD.lateness : 0) : null);
-					return format(rtn, KPIContentProvider.TYPE_TIME);
+
+				final ColumnDefinition columnDefinition = ColumnDefinition.values()[index];
+				if (columnDefinition.columnType == ColumnType.Label) {
+					return columnDefinition.getLabel();
+				} else if (columnDefinition.getColumnType() == ColumnType.Value) {
+					final Long dValue = getValue(d, columnDefinition);
+					final Long pinValue = getValue(pinD, columnDefinition);
+					final Long rtn = (dValue != null ? dValue - (pinD != null ? pinValue : 0) : null);
+					return format(rtn, columnDefinition.getFormatType());
 				}
 			}
 			return "";
-		}
-
-		private String format(final Long value, final String type) {
-			if (value == null)
-				return "";
-			if (KPIContentProvider.TYPE_TIME.equals(type)) {
-				final long days = value / 24;
-				final long hours = value % 24;
-				return "" + days + "d, " + hours + "h";
-			} else if (KPIContentProvider.TYPE_COST.equals(type)) {
-				return String.format("$%,d", value);
-			} else {
-				return String.format("%,d", value);
-			}
 		}
 
 		@Override
@@ -165,68 +191,61 @@ public class HorizontalKPIReportView extends ViewPart {
 		public Color getForeground(final Object element, final int columnIndex) {
 
 			if (element instanceof RowData) {
+				final RowData d = (RowData) element;
+				if (d.dummy) {
+					return null;
+				}
 				final RowData pinD = contentProvider.getPinnedData();
 				int color = SWT.COLOR_DARK_GRAY;
-				switch (columnIndex) {
-				case 0:
-					color = SWT.COLOR_BLACK;
-					break;
-				case 1:
+				final ColumnDefinition columnDefinition = ColumnDefinition.values()[columnIndex];
+				if (columnDefinition.getColumnType() == ColumnType.Label) {
+					return Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
+				}
+				switch (columnDefinition) {
+				case VALUE_PNL:
 					if (pinD == null) {
 						color = SWT.COLOR_BLACK;
 					} else {
-						final RowData d = (RowData) element;
 						color = (d.totalPNL - pinD.totalPNL) >= 0 ? SWT.COLOR_DARK_GREEN : SWT.COLOR_RED;
 					}
 					break;
-				case 2:
-					color = SWT.COLOR_BLACK;
-					break;
-				case 3:
+				case VALUE_TRADING:
 					if (pinD == null) {
 						color = SWT.COLOR_BLACK;
 					} else {
-						final RowData d = (RowData) element;
 						color = (d.tradingPNL - pinD.tradingPNL) >= 0 ? SWT.COLOR_DARK_GREEN : SWT.COLOR_RED;
 					}
 					break;
-				case 4:
-				case 6:
-				case 8:
-				case 10:
-					color = SWT.COLOR_BLACK;
-					break;
-				case 5:
+				case VALUE_SHIPPING:
 					if (pinD == null) {
 						color = SWT.COLOR_BLACK;
 					} else {
-						final RowData d = (RowData) element;
 						color = (d.shippingPNL - pinD.shippingPNL) >= 0 ? SWT.COLOR_DARK_GREEN : SWT.COLOR_RED;
 					}
 					break;
-				case 7:
+				case VALUE_GCO_DAYS:
+				case VALUE_GCO_REVENUE:
 					if (pinD == null) {
 						color = SWT.COLOR_BLACK;
 					} else {
-						final RowData d = (RowData) element;
 						color = (d.gcoTime - pinD.gcoTime) >= 0 ? SWT.COLOR_DARK_GREEN : SWT.COLOR_RED;
 					}
 					break;
-				case 9:
+				case VALUE_VIOLATIONS:
 					if (pinD == null) {
 						color = SWT.COLOR_BLACK;
 					} else {
-						final RowData d = (RowData) element;
 						color = (d.capacityViolationCount - pinD.capacityViolationCount) > 0 ? SWT.COLOR_RED : SWT.COLOR_DARK_GREEN;
 					}
 					break;
-				case 11:
+				case VALUE_LATENESS:
 					if (pinD == null) {
 						color = SWT.COLOR_BLACK;
 					} else {
-						final RowData d = (RowData) element;
 						color = (d.lateness - pinD.lateness) > 0 ? SWT.COLOR_RED : SWT.COLOR_DARK_GREEN;
 					}
+					break;
+				default:
 					break;
 				}
 				return Display.getCurrent().getSystemColor(color);
@@ -236,7 +255,6 @@ public class HorizontalKPIReportView extends ViewPart {
 
 		@Override
 		public Color getBackground(final Object element, final int columnIndex) {
-			// TODO Auto-generated method stub
 			return null;
 		}
 	}
@@ -252,7 +270,18 @@ public class HorizontalKPIReportView extends ViewPart {
 	 */
 	@Override
 	public void createPartControl(final Composite parent) {
-		viewer = new GridTableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+
+		{
+			final Font systemFont = Display.getDefault().getSystemFont();
+			// Clone the font data
+			final FontData fd = new FontData(systemFont.getFontData()[0].toString());
+			// Set the bold bit.
+			fd.setStyle(fd.getStyle() | SWT.BOLD);
+			boldFont = new Font(Display.getDefault(), fd);
+		}
+
+		viewer = new GridTableViewer(parent, SWT.FULL_SELECTION | SWT.H_SCROLL);
+		viewer.getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL));
 		this.contentProvider = new HorizontalKPIContentProvider();
 		viewer.setContentProvider(contentProvider);
 		viewer.setInput(getViewSite());
@@ -261,40 +290,23 @@ public class HorizontalKPIReportView extends ViewPart {
 		// This appears to fix it, but no idea why the problem occurs in first place.
 		// SG: 2013-04-17
 		viewer.setAutoPreferredHeight(true);
-		// KPI columns - two per KPI - name, value
-		for (int i = 0; i < 2 * 7; ++i) {
+
+		final ViewLabelProvider labelProvider = new ViewLabelProvider();
+
+		for (int i = 0; i < ColumnDefinition.values().length; ++i) {
+			final ColumnDefinition def = ColumnDefinition.values()[i];
 			final GridViewerColumn tvc = new GridViewerColumn(viewer, SWT.NONE);
-			int width = 100;
-			switch (i) {
-			case 0:
-				width = 32; // "Total"
-				break;
-			case 2:
-				width = 54; // "P&L Trading"
-				break;
-			case 4:
-				width = 63; // "P&L Shipping"
-				break;
-			// case 6:
-			// width = 35; // "P&L (MtM)"
-			// break;
-			// case 8:
-			// width = 85; // "Shipping Cost"
-			// break;
-			case 6: // Idle / GCO
-				width = 90;
-				break;
-			case 8: // Capacity
-				width = 70;
-				break;
-			case 10: // Lateness
-				width = 70;
-				break;
+			int width;
+			String string;
+			if (def.columnType == ColumnType.Label) {
+				string = def.getLabel();
+			} else {
+				string = format(def.getDefaultLong(), def.getFormatType());
 			}
+			width = getTextWidth(20, string);
 			tvc.getColumn().setWidth(width);
 		}
-
-		viewer.setLabelProvider(new ViewLabelProvider());
+		viewer.setLabelProvider(labelProvider);
 
 		viewer.getGrid().setLinesVisible(true);
 		viewer.getGrid().setHeaderVisible(false);
@@ -304,7 +316,7 @@ public class HorizontalKPIReportView extends ViewPart {
 
 		partListener = new IPartListener() {
 			@Override
-			public void partOpened(IWorkbenchPart part) {
+			public void partOpened(final IWorkbenchPart part) {
 
 			}
 
@@ -384,12 +396,34 @@ public class HorizontalKPIReportView extends ViewPart {
 
 				if (pinned || (scheduleModel != null && schedule == scheduleModel.getSchedule())) {
 					// ++numberOfSchedules;
-					return Collections.singleton(schedule);
+					return Lists.newArrayList(schedule, new Object());
 				} else {
-					return Collections.emptySet();
+					return Lists.newArrayList(new Object());
 				}
 			}
 		});
+	}
+
+	int getTextWidth(final int minWidth, final String string) {
+		final GC gc = new GC(viewer.getControl());
+		try {
+			gc.setFont(boldFont);
+			// 8 taken from sum margins in org.eclipse.nebula.widgets.grid.internal.DefaultCellRenderer
+			return Math.max(minWidth, 8 + gc.textExtent(string).x);
+		} finally {
+			gc.dispose();
+		}
+	}
+
+	int getTextHeight(final int minHeight, final String string) {
+		final GC gc = new GC(viewer.getControl());
+		try {
+			gc.setFont(boldFont);
+			// 3 taken from sum margins in org.eclipse.nebula.widgets.grid.internal.DefaultCellRenderer
+			return Math.max(minHeight, 3 + gc.textExtent(string).y);
+		} finally {
+			gc.dispose();
+		}
 	}
 
 	/**
@@ -414,6 +448,11 @@ public class HorizontalKPIReportView extends ViewPart {
 
 	@Override
 	public void dispose() {
+		if (boldFont != null) {
+			boldFont.dispose();
+			boldFont = null;
+		}
+
 		if (viewerSynchronizer != null) {
 			ScenarioViewerSynchronizer.deregisterView(viewerSynchronizer);
 			viewerSynchronizer = null;
@@ -459,8 +498,21 @@ public class HorizontalKPIReportView extends ViewPart {
 		this.scheduleModel = scheduleModel;
 	}
 
-	public void setInput(Object input) {
+	public void setInput(final Object input) {
 		viewer.setInput(input);
 	}
 
+	private String format(final Long value, final String type) {
+		if (value == null)
+			return "";
+		if (KPIContentProvider.TYPE_TIME.equals(type)) {
+			final long days = value / 24;
+			final long hours = value % 24;
+			return "" + days + "d, " + hours + "h";
+		} else if (KPIContentProvider.TYPE_COST.equals(type)) {
+			return String.format("$%,d", value);
+		} else {
+			return String.format("%,d", value);
+		}
+	}
 }
