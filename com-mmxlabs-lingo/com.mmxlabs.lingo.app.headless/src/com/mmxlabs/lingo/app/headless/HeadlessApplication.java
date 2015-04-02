@@ -28,6 +28,10 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
 
 import com.google.common.io.ByteStreams;
 import com.mmxlabs.lingo.app.headless.exporter.FitnessTraceExporter;
@@ -80,7 +84,7 @@ public class HeadlessApplication implements IApplication {
 			return IApplication.EXIT_OK;
 		}
 
-		final IScenarioCipherProvider scenarioCipherProvider = null;
+		final IScenarioCipherProvider scenarioCipherProvider = getScenarioCipherProvider();
 		final LNGScenarioModel rootObject = loadScenario(scenarioFile, scenarioCipherProvider);
 		if (rootObject == null) {
 			System.err.println("Unable to load scenario");
@@ -436,4 +440,17 @@ public class HeadlessApplication implements IApplication {
 			}
 		}
 	}
+
+	private IScenarioCipherProvider getScenarioCipherProvider() {
+		final Bundle bundle = FrameworkUtil.getBundle(HeadlessApplication.class);
+		if (bundle != null) {
+			final BundleContext bundleContext = bundle.getBundleContext();
+			final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
+			if (serviceReference != null) {
+				return bundleContext.getService(serviceReference);
+			}
+		}
+		return null;
+	}
+
 }
