@@ -8,16 +8,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.google.common.collect.Lists;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ScheduledEventCollector;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
@@ -25,16 +22,13 @@ import com.mmxlabs.lingo.reports.components.ColumnHandler;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EMFReportView;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
-import com.mmxlabs.models.lng.schedule.Sequence;
-import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -61,21 +55,11 @@ public class LatenessReportView extends EMFReportView {
 				if (object instanceof PortVisit) {
 					final PortVisit slotVisit = (PortVisit) object;
 					final Calendar localStart = slotVisit.getLocalStart();
-					final Calendar windowEndDate = getWindowEndDate(object);
+					final Calendar windowEndDate = LatenessUtils.getWindowEndDate(object);
 
 					long diff = localStart.getTimeInMillis() - windowEndDate.getTimeInMillis();
 
-					// Strip milliseconds
-					diff /= 1000;
-					// Strip seconds;
-					diff /= 60;
-					// Strip
-					diff /= 60;
-					if (diff / 24 == 0) {
-						return String.format("%2dh", diff % 24);
-					} else {
-						return String.format("%2dd, %2dh", diff / 24, diff % 24);
-					}
+					return LatenessUtils.formatLateness(diff);
 				}
 
 				return "";
@@ -85,19 +69,8 @@ public class LatenessReportView extends EMFReportView {
 			public Comparable<?> getComparable(final Object object) {
 
 				if (object instanceof PortVisit) {
-					final PortVisit slotVisit = (PortVisit) object;
-					final Calendar localStart = slotVisit.getLocalStart();
-					final Calendar windowEndDate = getWindowEndDate(object);
-
-					long diff = localStart.getTimeInMillis() - windowEndDate.getTimeInMillis();
-
-					// Strip milliseconds
-					diff /= 1000;
-					// Strip seconds;
-					diff /= 60;
-					// Strip
-					diff /= 60;
-					return Long.valueOf(diff);
+					final long latenessInHours = LatenessUtils.getLatenessInHours((PortVisit) object);
+					return Long.valueOf(latenessInHours);
 				}
 
 				return super.getComparable(object);
@@ -107,77 +80,12 @@ public class LatenessReportView extends EMFReportView {
 		addColumn("startby", "Start by", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
 			public String render(final Object object) {
-				return calendarFormatterNoTZ.render(getWindowEndDate(object));
+				return calendarFormatterNoTZ.render(LatenessUtils.getWindowEndDate(object));
 			}
 		});
 		addColumn("scheduledtime", "Scheduled time", ColumnType.NORMAL, calendarFormatterNoTZ, sp.getEvent__GetLocalStart());
 
 		getBlockManager().makeAllBlocksVisible();
-	}
-
-	private Calendar getWindowStartDate(final Object object) {
-		if (object instanceof SlotVisit) {
-			final Date date = ((SlotVisit) object).getSlotAllocation().getSlot().getWindowStartWithSlotOrPortTime();
-			String timeZone = ((SlotVisit) object).getSlotAllocation().getSlot().getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart());
-			if (timeZone == null)
-				timeZone = "UTC";
-			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
-			c.setTime(date);
-			return c;
-		} else if (object instanceof VesselEventVisit) {
-			final Date date = ((VesselEventVisit) object).getVesselEvent().getStartAfter();
-			String timeZone = ((VesselEventVisit) object).getVesselEvent().getTimeZone(CargoPackage.eINSTANCE.getVesselEvent_StartBy());
-			if (timeZone == null)
-				timeZone = "UTC";
-			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
-			c.setTime(date);
-			return c;
-		}
-		return null;
-	}
-
-	private Calendar getWindowEndDate(final Object object) {
-		final Date date;
-		if (object instanceof SlotVisit) {
-			date = ((SlotVisit) object).getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime();
-			String timeZone = ((SlotVisit) object).getSlotAllocation().getSlot().getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart());
-			if (timeZone == null)
-				timeZone = "UTC";
-			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
-			c.setTime(date);
-			return c;
-		} else if (object instanceof VesselEventVisit) {
-			date = ((VesselEventVisit) object).getVesselEvent().getStartBy();
-			String timeZone = ((VesselEventVisit) object).getVesselEvent().getTimeZone(CargoPackage.eINSTANCE.getVesselEvent_StartBy());
-			if (timeZone == null)
-				timeZone = "UTC";
-			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
-			c.setTime(date);
-			return c;
-		} else if (object instanceof PortVisit) {
-			final PortVisit visit = (PortVisit) object;
-			final Sequence seq = visit.getSequence();
-			final VesselAvailability vesselAvailability = seq.getVesselAvailability();
-			if (vesselAvailability == null) {
-				return null;
-			}
-			if (seq.getEvents().indexOf(visit) == 0) {
-				final Date startBy = vesselAvailability.getStartBy();
-				if (startBy != null) {
-					final Calendar c = Calendar.getInstance();
-					c.setTime(startBy);
-					return c;
-				}
-			} else if (seq.getEvents().indexOf(visit) == seq.getEvents().size() - 1) {
-				final Date endBy = vesselAvailability.getEndBy();
-				if (endBy != null) {
-					final Calendar c = Calendar.getInstance();
-					c.setTime(endBy);
-					return c;
-				}
-			}
-		}
-		return null;
 	}
 
 	@Override
@@ -261,50 +169,7 @@ public class LatenessReportView extends EMFReportView {
 
 			@Override
 			protected boolean filter(final Event e) {
-				if (e instanceof SlotVisit) {
-					final SlotVisit visit = (SlotVisit) e;
-					// Exclude DES Purchase and fob sales
-					final Sequence seq = visit.getSequence();
-					if (seq.getSequenceType() == SequenceType.DES_PURCHASE || seq.getSequenceType() == SequenceType.FOB_SALE) {
-						return false;
-					}
-					if (visit.getStart().after(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime())) {
-						return true;
-					}
-
-					setInputEquivalents(
-							visit,
-							Lists.<Object> newArrayList(visit.getSlotAllocation().getCargoAllocation(), visit.getSlotAllocation().getSlot(), visit.getSlotAllocation().getCargoAllocation()
-									.getInputCargo()));
-				} else if (e instanceof VesselEventVisit) {
-					final VesselEventVisit vev = (VesselEventVisit) e;
-					if (vev.getStart().after(vev.getVesselEvent().getStartBy())) {
-						return true;
-					}
-				} else if (e instanceof PortVisit) {
-					final PortVisit visit = (PortVisit) e;
-					final Sequence seq = visit.getSequence();
-
-					final VesselAvailability availability = seq.getVesselAvailability();
-					if (availability == null) {
-						return false;
-					}
-					if (seq.getEvents().indexOf(visit) == 0) {
-
-						final Date startBy = availability.getStartBy();
-						if (startBy != null && visit.getStart().after(startBy)) {
-							return true;
-						}
-
-					} else if (seq.getEvents().indexOf(visit) == seq.getEvents().size() - 1) {
-						final Date endBy = availability.getEndBy();
-						if (endBy != null && visit.getStart().after(endBy)) {
-							return true;
-						}
-					}
-					// setInputEquivalents(visit, Collections.singleton((Object) visit.getSlotAllocation().getCargoAllocation()));
-				}
-				return false;
+				return LatenessUtils.isLate(e);
 			}
 
 			@Override

@@ -4,19 +4,13 @@
  */
 package com.mmxlabs.lingo.reports.views.standard;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
-
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
@@ -36,7 +30,6 @@ import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -139,20 +132,9 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 					totalCost += cost;
 
 					if (LatenessUtils.isLate(evt)) {
-						final PortVisit slotVisit = (PortVisit) evt;
-						final Calendar localStart = slotVisit.getLocalStart();
-						final Calendar windowEndDate = getWindowEndDate(slotVisit);
-
-						long diff = localStart.getTimeInMillis() - windowEndDate.getTimeInMillis();
-
-						// Strip milliseconds
-						diff /= 1000;
-						// Strip seconds;
-						diff /= 60;
-						// Strip minutes
-						diff /= 60;
+						final long latenessInHours = LatenessUtils.getLatenessInHours((PortVisit) evt);
 						// Ensure positive
-						totalLatenessHours += Math.abs(diff);
+						totalLatenessHours += Math.abs(latenessInHours);
 					}
 				}
 
@@ -277,50 +259,6 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 	@Override
 	public void dispose() {
 
-	}
-
-	private Calendar getWindowEndDate(final Object object) {
-		final Date date;
-		if (object instanceof SlotVisit) {
-			date = ((SlotVisit) object).getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime();
-			String timeZone = ((SlotVisit) object).getSlotAllocation().getSlot().getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart());
-			if (timeZone == null)
-				timeZone = "UTC";
-			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
-			c.setTime(date);
-			return c;
-		} else if (object instanceof VesselEventVisit) {
-			date = ((VesselEventVisit) object).getVesselEvent().getStartBy();
-			String timeZone = ((VesselEventVisit) object).getVesselEvent().getTimeZone(CargoPackage.eINSTANCE.getVesselEvent_StartBy());
-			if (timeZone == null)
-				timeZone = "UTC";
-			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
-			c.setTime(date);
-			return c;
-		} else if (object instanceof PortVisit) {
-			final PortVisit visit = (PortVisit) object;
-			final Sequence seq = visit.getSequence();
-			final VesselAvailability vesselAvailability = seq.getVesselAvailability();
-			if (vesselAvailability == null) {
-				return null;
-			}
-			if (seq.getEvents().indexOf(visit) == 0) {
-				final Date startBy = vesselAvailability.getStartBy();
-				if (startBy != null) {
-					final Calendar c = Calendar.getInstance();
-					c.setTime(startBy);
-					return c;
-				}
-			} else if (seq.getEvents().indexOf(visit) == seq.getEvents().size() - 1) {
-				final Date endBy = vesselAvailability.getEndBy();
-				if (endBy != null) {
-					final Calendar c = Calendar.getInstance();
-					c.setTime(endBy);
-					return c;
-				}
-			}
-		}
-		return null;
 	}
 
 }
