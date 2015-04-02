@@ -49,26 +49,26 @@ public class StandardFleetColumnFactory implements IFleetColumnFactory {
 					ScheduleReportPackage.Literals.ROW__SEQUENCE));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.canalcosts":
-			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Route Costs", "Total route costs", ColumnType.NORMAL, new CanalCostFormatter(true),
+			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Route ($)", "Total route costs", ColumnType.NORMAL, new CanalCostFormatter(),
 					ScheduleReportPackage.Literals.ROW__SEQUENCE));
 			break;
 
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.lngcosts":
-			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "LNG Costs", "Total LNG BOG costs", ColumnType.NORMAL, new LNGCostFormatter(true),
+			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "LNG ($)", "Total LNG BOG costs", ColumnType.NORMAL, new LNGCostFormatter(),
 					ScheduleReportPackage.Literals.ROW__SEQUENCE));
 			break;
 
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.basefuelcosts":
-			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Base Fuel Costs", "Total base fuel costs", ColumnType.NORMAL,
-					new BaseFuelCostFormatter(true), ScheduleReportPackage.Literals.ROW__SEQUENCE));
+			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Base Fuel ($)", "Total base fuel costs", ColumnType.NORMAL, new BaseFuelCostFormatter(),
+					ScheduleReportPackage.Literals.ROW__SEQUENCE));
 			break;
 
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.portcosts":
-			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Port Costs", "Total port costs", ColumnType.NORMAL, new PortCostFormatter(true),
+			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Port ($)", "Total port costs", ColumnType.NORMAL, new PortCostFormatter(),
 					ScheduleReportPackage.Literals.ROW__SEQUENCE));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.fleet.chartercosts":
-			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Charter Costs", "Total chartering costs", ColumnType.NORMAL, new PortCostFormatter(true),
+			columnManager.registerColumn(FLEET_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Charter ($)", "Total chartering costs", ColumnType.NORMAL, new PortCostFormatter(),
 					ScheduleReportPackage.Literals.ROW__SEQUENCE));
 			break;
 		case COLUMN_BLOCK_GCO_VESSEL: {
@@ -84,7 +84,7 @@ public class StandardFleetColumnFactory implements IFleetColumnFactory {
 					block.setPlaceholder(true);
 
 					blockManager.createColumn(block, "Days", new GeneratedCharterDaysFormatter(false, false));
-					blockManager.createColumn(block, "Revenue", new GeneratedCharterRevenueFormatter(false, true, false));
+					blockManager.createColumn(block, "Revenue", new GeneratedCharterRevenueFormatter(true, false));
 
 					return null;
 				}
@@ -104,7 +104,7 @@ public class StandardFleetColumnFactory implements IFleetColumnFactory {
 					block.setPlaceholder(true);
 
 					blockManager.createColumn(block, "Days", new GeneratedCharterDaysFormatter(true, false));
-					blockManager.createColumn(block, "Revenue", new GeneratedCharterRevenueFormatter(true, true, false));
+					blockManager.createColumn(block, "Revenue", new GeneratedCharterRevenueFormatter(true, false));
 
 					return null;
 				}
@@ -123,7 +123,7 @@ public class StandardFleetColumnFactory implements IFleetColumnFactory {
 					block.setPlaceholder(true);
 
 					blockManager.createColumn(block, "Days", new GeneratedCharterDaysFormatter(true, true));
-					blockManager.createColumn(block, "Revenue", new GeneratedCharterRevenueFormatter(true, true, true));
+					blockManager.createColumn(block, "Revenue", new GeneratedCharterRevenueFormatter(true, true));
 
 					return null;
 				}

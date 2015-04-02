@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.views.fleet.formatters;
 
-import com.mmxlabs.lingo.reports.views.formatters.CostFormatter;
+import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
@@ -12,11 +12,7 @@ import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 
-public class LNGCostFormatter extends CostFormatter {
-
-	public LNGCostFormatter(boolean includeUnits) {
-		super(includeUnits);
-	}
+public class LNGCostFormatter extends IntegerFormatter {
 
 	@Override
 	public Integer getIntValue(Object object) {
@@ -26,10 +22,10 @@ public class LNGCostFormatter extends CostFormatter {
 		}
 		int cost = 0;
 		if (object instanceof Sequence) {
-			Sequence sequence = (Sequence) object;
-			for (Event evt : sequence.getEvents()) {
+			final Sequence sequence = (Sequence) object;
+			for (final Event evt : sequence.getEvents()) {
 				if (evt instanceof FuelUsage) {
-					FuelUsage fuelUsage = (FuelUsage) evt;
+					final FuelUsage fuelUsage = (FuelUsage) evt;
 					cost += getFuelCost(Fuel.NBO, fuelUsage);
 					cost += getFuelCost(Fuel.FBO, fuelUsage);
 				}
@@ -39,9 +35,9 @@ public class LNGCostFormatter extends CostFormatter {
 		return cost;
 	}
 
-	private int getFuelCost(Fuel fuel, FuelUsage fuelUsage) {
+	private int getFuelCost(final Fuel fuel, final FuelUsage fuelUsage) {
 		int cost = 0;
-		for (FuelQuantity fuelQuantity : fuelUsage.getFuels()) {
+		for (final FuelQuantity fuelQuantity : fuelUsage.getFuels()) {
 			if (fuelQuantity.getFuel() == fuel) {
 				cost += fuelQuantity.getCost();
 			}

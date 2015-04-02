@@ -291,27 +291,41 @@ public class ColumnBlockManager {
 	public ColumnHandler createColumn(final ColumnBlock block, final String title, final ICellRenderer formatter, final ETypedElement... path) {
 		final ColumnHandler handler = new ColumnHandler(block, formatter, path, title, columnFactory);
 
-		return configureHandler(block, handler);
+		return configureHandler(block, handler, true);
+	}
+
+	public ColumnHandler createColumn(final ColumnBlock block, final String title, final ICellRenderer formatter, final boolean create, final ETypedElement... path) {
+		final ColumnHandler handler = new ColumnHandler(block, formatter, path, title, columnFactory);
+
+		return configureHandler(block, handler, create);
+	}
+
+	public ColumnHandler createColumn(final ColumnBlock block, final String title, final ICellRenderer formatter, final boolean create, final ETypedElement[][] path) {
+		final ColumnHandler handler = new ColumnHandler(block, formatter, path, title, columnFactory);
+
+		return configureHandler(block, handler, true);
 	}
 
 	public ColumnHandler createColumn(final ColumnBlock block, final String title, final ICellRenderer formatter, final ETypedElement[][] path) {
 		final ColumnHandler handler = new ColumnHandler(block, formatter, path, title, columnFactory);
 
-		return configureHandler(block, handler);
+		return configureHandler(block, handler, true);
 	}
 
-	private ColumnHandler configureHandler(final ColumnBlock block, final ColumnHandler handler) {
+	private ColumnHandler configureHandler(final ColumnBlock block, final ColumnHandler handler, final boolean createNow) {
 		handlers.add(handler);
 		handlersInOrder.add(handler);
 
 		block.addColumn(handler);
-		final GridViewerColumn gvc = handler.createColumn();
-		final GridColumn column = gvc == null ? null : gvc.getColumn();
+		if (createNow) {
+			final GridViewerColumn gvc = handler.createColumn();
+			final GridColumn column = gvc == null ? null : gvc.getColumn();
 
-		if (column != null) {
-			column.setVisible(block.getVisible());
-			column.pack();
-		} 
+			if (column != null) {
+				column.setVisible(block.getVisible());
+				column.pack();
+			}
+		}
 		return handler;
 	}
 
