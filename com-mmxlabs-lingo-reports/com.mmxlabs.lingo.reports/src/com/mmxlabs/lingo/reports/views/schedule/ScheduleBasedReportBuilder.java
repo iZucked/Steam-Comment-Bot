@@ -178,9 +178,11 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 			}
 		}
 		for (final ColumnHandler handler : handlers) {
-			final GridColumn column = handler.createColumn().getColumn();
-			column.setVisible(handler.block.getVisible());
-			column.pack();
+			if (handler != null) {
+				final GridColumn column = handler.createColumn().getColumn();
+				column.setVisible(handler.block.getVisible());
+				column.pack();
+			}
 		}
 
 	}
