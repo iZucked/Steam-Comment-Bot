@@ -30,7 +30,7 @@ public class DataModelLabelProvider extends ObservableMapCellLabelProvider {
 		final Object element = cell.getElement();
 		if (element instanceof CycleGroup) {
 			final CycleGroup cycleGroup = (CycleGroup) element;
-			cell.setText(String.format("%d - %s change", cycleGroup.getIndex(), getChangeTypeString(cycleGroup.getChangeType())));
+			cell.setText(String.format("%d - %s", cycleGroup.getIndex(), getChangeTypeString(cycleGroup.getChangeType())));
 		} else {
 			Object o = null;
 			for (final IObservableMap m : attributeMaps) {
