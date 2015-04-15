@@ -21,7 +21,6 @@ import com.mmxlabs.lingo.reports.views.standard.LatenessReportView;
 import com.mmxlabs.lingo.reports.views.standard.TotalsHierarchyView;
 import com.mmxlabs.lingo.reports.views.standard.TotalsReportView;
 import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalCalendarReportView;
-import com.mmxlabs.lingo.reports.views.vertical.DefaultVerticalReportView;
 
 public class AnalysisPerspective implements IPerspectiveFactory {
 
@@ -30,18 +29,44 @@ public class AnalysisPerspective implements IPerspectiveFactory {
 
 		final IFolderLayout reportsFolder = layout.createFolder("reportsFolder", IPageLayout.BOTTOM, 0.65f, IPageLayout.ID_EDITOR_AREA);
 		final IFolderLayout miscFolder = layout.createFolder("miscFolder", IPageLayout.LEFT, 0.25f, "reportsFolder");
-		// final IFolderLayout KPIBannerFolder = layout.createFolder("KPIBannerFolder", IPageLayout.TOP, 0.05f, "IPageLayout.ID_EDITOR_AREA");
-		// final IFolderLayout cargoEconsFolder = layout.createFolder("cargoEconsFolder", IPageLayout.LEFT, 0.25f, "IPageLayout.ID_EDITOR_AREA");
 
 		miscFolder.addView("com.mmxlabs.models.ui.validation.views.ValidationProblemsView");
 		miscFolder.addView("org.eclipse.pde.runtime.LogView");
 		miscFolder.addPlaceholder(TotalsHierarchyView.ID);
 
-		layout.addPlaceholder(HorizontalKPIReportView.ID, IPageLayout.TOP, 0.05f, IPageLayout.ID_EDITOR_AREA);
+		// Scenario Navigator
+		{
+			final IFolderLayout scenarioArea = layout.createFolder("scenarioArea", IPageLayout.LEFT, 0.25f, IPageLayout.ID_EDITOR_AREA);
 
-		// KPIBannerFolder.addPlaceholder(HorizontalKPIReportView.ID);
+			scenarioArea.addView("com.mmxlabs.scenario.service.ui.navigator");
+			final IViewLayout viewLayout = layout.getViewLayout("com.mmxlabs.scenario.service.ui.navigator");
+			viewLayout.setCloseable(false);
+		}
+		// Horizontal KPI
+		{
+			layout.addStandaloneView(HorizontalKPIReportView.ID, false, IPageLayout.TOP, 0.03f, IPageLayout.ID_EDITOR_AREA);
+			final IViewLayout viewLayout = layout.getViewLayout(HorizontalKPIReportView.ID);
+			viewLayout.setCloseable(false);
+			viewLayout.setMoveable(false);
+		}
 
-		// reportsFolder.addView(KPIReportView.ID);
+		// Cargo Econs
+		final IFolderLayout econsArea = layout.createFolder("econsArea", IPageLayout.RIGHT, 0.85f, IPageLayout.ID_EDITOR_AREA);
+		econsArea.addView("com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport");
+		{
+			final IViewLayout viewLayout = layout.getViewLayout("com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport");
+			viewLayout.setCloseable(false);
+			viewLayout.setMoveable(false);
+		}
+		// PNL Details
+
+		econsArea.addView("com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport");
+		{
+			final IViewLayout viewLayout = layout.getViewLayout("com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport");
+			viewLayout.setCloseable(false);
+			viewLayout.setMoveable(false);
+		}
+
 		reportsFolder.addView(SchedulerView.ID);
 		reportsFolder.addView(AbstractVerticalCalendarReportView.ID);
 		reportsFolder.addPlaceholder(TotalsReportView.ID);
@@ -52,12 +77,9 @@ public class AnalysisPerspective implements IPerspectiveFactory {
 		reportsFolder.addPlaceholder(FitnessReportView.ID);
 		reportsFolder.addPlaceholder(CapacityViolationReportView.ID);
 
-		// Horizontal KPI
-		layout.addStandaloneView(HorizontalKPIReportView.ID, false, IPageLayout.TOP, 0.03f,  IPageLayout.ID_EDITOR_AREA);
-		final IViewLayout viewLayout = layout.getViewLayout(HorizontalKPIReportView.ID);
-		viewLayout.setCloseable(false);
-		viewLayout.setMoveable(false);
-
+		layout.addShowViewShortcut("com.mmxlabs.scenario.service.ui.navigator");
+		layout.addShowViewShortcut("com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport");
+		layout.addShowViewShortcut("com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport");
 		layout.addShowViewShortcut(KPIReportView.ID);
 		layout.addShowViewShortcut(ConfigurableScheduleReportView.ID);
 		layout.addShowViewShortcut(SchedulerView.ID);
