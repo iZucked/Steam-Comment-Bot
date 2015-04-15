@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
@@ -62,8 +64,14 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		Main, Advanced
 	}
 
+	public static class OptionGroup {
+		String name;
+		DataSection dataSection;
+	}
+
 	private class Option {
 		final DataSection dataSection;
+		final OptionGroup group;
 		final EObject data;
 		final EObject defaultData;
 		final DataType dataType;
@@ -71,9 +79,10 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		final String label;
 		final EditingDomain editingDomain;
 
-		public Option(final DataSection dataSection, final EditingDomain editingDomain, final String label, final EObject data, final EObject defaultData, final DataType dataType,
-				final EStructuralFeature... features) {
+		public Option(final DataSection dataSection, final OptionGroup group, final EditingDomain editingDomain, final String label, final EObject data, final EObject defaultData,
+				final DataType dataType, final EStructuralFeature... features) {
 			this.dataSection = dataSection;
+			this.group = group;
 			this.data = data;
 			this.defaultData = defaultData;
 			this.dataType = dataType;
@@ -130,10 +139,25 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		form.getBody().setLayout(layout);
 
 		// Add in standard options
+		final Map<OptionGroup, Composite> groupMap = new HashMap<>();
 		if (optionsMap.containsKey(DataSection.Main)) {
 			final List<Option> options = optionsMap.get(DataSection.Main);
 			for (final Option option : options) {
-				createOption(form.getBody(), option);
+				Composite parent = form.getBody();
+				if (option.group != null) {
+					if (groupMap.containsKey(option.group)) {
+						parent = groupMap.get(option.group);
+					} else {
+						final Group g = new Group(form.getBody(), SWT.NONE);
+						g.setText(option.group.name);
+						g.setLayout(new GridLayout(1, true));
+						toolkit.adapt(g);
+						groupMap.put(option.group, g);
+						parent = g;
+					}
+				}
+
+				createOption(parent, option);
 			}
 		}
 
@@ -396,6 +420,13 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 
 	}
 
+	public OptionGroup createGroup(final DataSection dataSection, final String name) {
+		final OptionGroup group = new OptionGroup();
+		group.name = name;
+		group.dataSection = dataSection;
+		return group;
+	}
+
 	/**
 	 * Adds new elements to the dialog.
 	 * 
@@ -407,9 +438,16 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 	 * @param dataType
 	 * @param features
 	 */
-	public void addOption(final DataSection dataSection, final EditingDomain editingDomian, final String label, final EObject data, final EObject defaultData, final DataType dataType,
-			final EStructuralFeature... features) {
-		final Option option = new Option(dataSection, editingDomian, label, data, defaultData, dataType, features);
+	public void addOption(final DataSection dataSection, final OptionGroup group, final EditingDomain editingDomian, final String label, final EObject data, final EObject defaultData,
+			final DataType dataType, final EStructuralFeature... features) {
+
+		if (group != null) {
+			if (dataSection != group.dataSection) {
+				throw new IllegalArgumentException("Group and option should belong to the same datasection");
+			}
+		}
+
+		final Option option = new Option(dataSection, group, editingDomian, label, data, defaultData, dataType, features);
 		final List<Option> options;
 		if (optionsMap.containsKey(dataSection)) {
 			options = optionsMap.get(dataSection);

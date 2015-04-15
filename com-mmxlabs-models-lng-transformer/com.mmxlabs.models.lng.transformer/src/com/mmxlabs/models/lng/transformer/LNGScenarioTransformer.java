@@ -221,17 +221,17 @@ public class LNGScenarioTransformer {
 	 * A set of all contract transformers being used; these should be mapped to in {@link #contractTransformersByEClass}
 	 */
 	final Set<IContractTransformer> contractTransformers = new LinkedHashSet<IContractTransformer>();
-	
+
 	/**
-	 * A set of all vessel event transformers being used; 
+	 * A set of all vessel event transformers being used;
 	 */
 	final Set<IVesselEventTransformer> vesselEventTransformers = new LinkedHashSet<IVesselEventTransformer>();
 
 	/**
-	 * A set of all vessel availability transformers being used; 
+	 * A set of all vessel availability transformers being used;
 	 */
 	final Set<IVesselAvailabilityTransformer> vesselAvailabilityTransformers = new LinkedHashSet<IVesselAvailabilityTransformer>();
-	
+
 	/**
 	 * A set of all transformer extensions being used (should contain {@link #contractTransformers})
 	 */
@@ -276,7 +276,7 @@ public class LNGScenarioTransformer {
 	public LNGScenarioTransformer(final LNGScenarioModel rootObject, final OptimiserSettings optimiserParameters) {
 
 		init(rootObject, optimiserParameters);
-		
+
 	}
 
 	/**
@@ -336,11 +336,11 @@ public class LNGScenarioTransformer {
 	public void addVesselAvailabilityTransformer(final IVesselAvailabilityTransformer transformer) {
 		vesselAvailabilityTransformers.add(transformer);
 	}
-	
+
 	public void addVesselEventTransformer(final IVesselEventTransformer transformer) {
 		vesselEventTransformers.add(transformer);
 	}
-	
+
 	/**
 	 * Instantiates and returns an {@link IOptimisationData} isomorphic to the contained scenario.
 	 * 
@@ -526,11 +526,11 @@ public class LNGScenarioTransformer {
 		final Pair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>> vesselAssociations = buildFleet(builder, portAssociation, baseFuelIndexAssociation, charterIndexAssociation,
 				modelEntityMap);
 		for (IVesselAvailability vesselAvailability : allVesselAvailabilities) {
-			for (IVesselAvailabilityTransformer vesselAvailabilityTransformer: vesselAvailabilityTransformers) {
+			for (IVesselAvailabilityTransformer vesselAvailabilityTransformer : vesselAvailabilityTransformers) {
 				vesselAvailabilityTransformer.vesselAvailabilityTransformed(modelEntityMap.getModelObject(vesselAvailability, VesselAvailability.class), vesselAvailability);
 			}
 		}
-		
+
 		final CommercialModel commercialModel = rootObject.getCommercialModel();
 
 		// Any NPE's in the following code are likely due to missing associations between a IContractTransformer and the EMF AContract object. IContractTransformer instances are typically OSGi
@@ -691,7 +691,7 @@ public class LNGScenarioTransformer {
 			}
 			final boolean freeze = assignableElement.isLocked();
 			Pair<Boolean, Set<Slot>> containsLockedSlots = checkAndCollectLockedSlots(assignableElement);
-//			Pair<Boolean, Set<Slot>> containsLockedSlots = new Pair<Boolean, Set<Slot>>(false, new HashSet<Slot>());
+			// Pair<Boolean, Set<Slot>> containsLockedSlots = new Pair<Boolean, Set<Slot>>(false, new HashSet<Slot>());
 			Set<Slot> lockedSlots = containsLockedSlots.getSecond();
 			if (!freeze && !containsLockedSlots.getFirst()) {
 				continue;
@@ -2003,7 +2003,7 @@ public class LNGScenarioTransformer {
 		}
 		return count;
 	}
-	
+
 	private Date convertDateToUTC(Date startTimeLocalTime, TimeZone tz) {
 		// shift localTime to UTC
 		Calendar shiftedToUTC = TimeZoneHelper.createTimeZoneShiftedCalendar(startTimeLocalTime, tz.getID(), "UTC");
@@ -2350,6 +2350,9 @@ public class LNGScenarioTransformer {
 			if (endHeel != null) {
 				endCold = endHeel.isSetTargetEndHeel();
 				targetEndHeelInM3 = endCold ? OptimiserUnitConvertor.convertToInternalVolume(endHeel.getTargetEndHeel()) : 0;
+				if (targetEndHeelInM3 == 0) {
+					endCold = false;
+				}
 			}
 
 			final IEndRequirement endRequirement = createEndRequirement(builder, portAssociation, eVesselAvailability.isSetEndAfter() ? eVesselAvailability.getEndAfter() : null,
@@ -2425,15 +2428,16 @@ public class LNGScenarioTransformer {
 				if (charterCost.getCharterOutPrice() != null) {
 					final ICurve charterOutCurve = charterIndexAssociation.lookup(charterCost.getCharterOutPrice());
 					final int minDuration = 24 * charterCost.getMinCharterOutDuration();
-					
+
 					final Set<Port> portSet = SetUtils.getObjects(charterCost.getAvailablePorts());
 					final ArrayList<Port> sortedPortSet = new ArrayList<Port>(portSet);
 					Collections.sort(sortedPortSet, new Comparator<Port>() {
-				        @Override public int compare(Port p1, Port p2) {
-				            return p1.getName().compareTo(p2.getName());
-				        }
+						@Override
+						public int compare(Port p1, Port p2) {
+							return p1.getName().compareTo(p2.getName());
+						}
 
-				    });
+					});
 					final Set<IPort> marketPorts = new LinkedHashSet<IPort>();
 					for (final Port ap : sortedPortSet) {
 						final IPort ip = portAssociation.lookup((Port) ap);
