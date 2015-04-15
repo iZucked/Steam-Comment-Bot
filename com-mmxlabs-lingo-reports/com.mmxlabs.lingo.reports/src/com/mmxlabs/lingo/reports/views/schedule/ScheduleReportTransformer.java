@@ -26,7 +26,6 @@ import com.mmxlabs.lingo.reports.ScheduleElementCollector;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.diff.utils.PNLDeltaUtils;
 import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandler;
-import com.mmxlabs.lingo.reports.views.fleet.formatters.GeneratedCharterDaysFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.CycleDiffProcessor;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.CycleGroupUtils;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.GCOCycleGroupingProcessor;
@@ -248,6 +247,23 @@ public class ScheduleReportTransformer {
 							}
 						}
 					}
+
+					// Create basic groups based on reference/referencing relationship.
+					for (final EObject referenceElement : referenceElements) {
+						final Row referenceRow = elementToRowMap.get(referenceElement);
+
+						if (referenceRow != null) {
+							referenceRow.setVisible(true);
+
+							final CycleGroup cycleGroup = CycleGroupUtils.createOrReturnCycleGroup(table, referenceRow);
+
+							for (final Row row : referenceRow.getReferringRows()) {
+								row.setVisible(true);
+								CycleGroupUtils.addToOrMergeCycleGroup(table, row, cycleGroup);
+							}
+						}
+					}
+
 					// // Run diff processes.
 					for (final IDiffProcessor diffProcessor : diffProcessors) {
 						diffProcessor.runDiffProcess(table, referenceElements, uniqueElements, equivalancesMap, elementToRowMap);
@@ -388,7 +404,7 @@ public class ScheduleReportTransformer {
 				} else {
 					if (slot instanceof DischargeSlot) {
 						row.setName2(slot.getName());
-					}// else 
+					}// else
 					{
 						row.setName(slot.getName());
 
@@ -489,8 +505,9 @@ public class ScheduleReportTransformer {
 		} else {
 			row.getInputEquivalents().addAll(Lists.<EObject> newArrayList(a));
 		}
+		// FIXME: Added to vessel report, but this causing any event on a sequence to be "equivalent" to any other
 		if (row.getSequence() != null) {
-			row.getInputEquivalents().add(row.getSequence());
+			// row.getInputEquivalents().add(row.getSequence());
 		}
 	}
 
@@ -570,6 +587,7 @@ public class ScheduleReportTransformer {
 				}
 			}
 		}
+
 		table.getCycleGroups().clear();
 		for (final Pair<CycleGroup, Integer> p : orderedCycleGroup) {
 			final CycleGroup group = p.getFirst();
