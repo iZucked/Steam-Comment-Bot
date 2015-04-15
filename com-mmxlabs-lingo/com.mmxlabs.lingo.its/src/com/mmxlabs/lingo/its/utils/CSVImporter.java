@@ -22,6 +22,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mmxlabs.lingo.its.internal.Activator;
+import com.mmxlabs.models.lng.actuals.importer.ActualsModelExtraImporter;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -184,6 +185,7 @@ public class CSVImporter {
 					subModelImporters.put(PortPackage.eINSTANCE.getPortModel(), new PortModelImporter());
 					subModelImporters.put(PricingPackage.eINSTANCE.getPricingModel(), new PricingModelImporter());
 					subModelImporters.put(SchedulePackage.eINSTANCE.getScheduleModel(), new ScheduleModelImporter());
+//					subModelImporters.put(ActualsPackage.eINSTANCE.getActualsModel(), new ActualsModelImporter());
 
 					final Map<EClass, IClassImporter> classImporters = new HashMap<EClass, IClassImporter>();
 					classImporters.put(FleetPackage.eINSTANCE.getBaseFuel(), new BaseFuelImporter());
@@ -197,6 +199,7 @@ public class CSVImporter {
 
 					final List<IPostModelImporter> portModelImporters = new ArrayList<>();
 					final List<IExtraModelImporter> extraModelImporters = new ArrayList<>();
+					extraModelImporters.add(new ActualsModelExtraImporter());
 
 					final DateAttributeImporter dateAttributeImporter = new DateAttributeImporter();
 					final DefaultClassImporter defaultClassImporter = new DefaultClassImporter();
