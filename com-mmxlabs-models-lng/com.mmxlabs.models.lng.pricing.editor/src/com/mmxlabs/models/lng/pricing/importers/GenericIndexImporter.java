@@ -24,6 +24,7 @@ import java.util.TreeMap;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
@@ -37,8 +38,7 @@ import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
 import com.mmxlabs.models.util.importer.impl.NumberAttributeImporter;
 
 /**
- * Generic import logic for loading index data. Currently implemented by BaseFuelIndexImporter,
- * CharterIndexImporter and CommodityIndexImporter.
+ * Generic import logic for loading index data. Currently implemented by BaseFuelIndexImporter, CharterIndexImporter and CommodityIndexImporter.
  * 
  * @author Simon McGregor
  * 
@@ -51,7 +51,7 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 	final DateAttributeImporter dateParser = new DateAttributeImporter();
 
 	protected boolean multipleDataTypeInput = false;
-	
+
 	@SuppressWarnings("unchecked")
 	protected Index<Double> importDoubleIndex(@NonNull final Map<String, String> row, @NonNull final Set<String> columnsToIgnore, @NonNull final IImportContext context) {
 		return (Index<Double>) importIndex(false, row, columnsToIgnore, context);
@@ -61,14 +61,17 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 	protected Index<Integer> importIntIndex(@NonNull final Map<String, String> row, @NonNull final Set<String> columnsToIgnore, @NonNull final IImportContext context) {
 		return (Index<Integer>) importIndex(true, row, columnsToIgnore, context);
 	}
-	
+
 	/**
 	 * Imports an Index object from a CSV row (represented as a String->String map of fields).
 	 * 
-	 * @param parseAsInt Whether to parse the value fields as integers (false => parse as double).
+	 * @param parseAsInt
+	 *            Whether to parse the value fields as integers (false => parse as double).
 	 * @param row
-	 * @param columnsToIgnore Any columns to explicitly ignore.
-	 * @param context The import context.
+	 * @param columnsToIgnore
+	 *            Any columns to explicitly ignore.
+	 * @param context
+	 *            The import context.
 	 * @return The imported Index object.
 	 */
 	protected Index<? extends Number> importIndex(final boolean parseAsInt, @NonNull final Map<String, String> row, @NonNull final Set<String> columnsToIgnore, @NonNull final IImportContext context) {
@@ -96,13 +99,24 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 
 		if (result instanceof DataIndex) {
 			final DataIndex<Number> data = (DataIndex<Number>) result;
+			Set<Date> seenDates = new HashSet<>();
+
 			for (final String s : row.keySet()) {
 				if (columnsToIgnore.contains(s)) {
 					continue;
 				}
 				try {
 					final Date date = startOfMonth(dateParser.parseDate(s));
-					
+					final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+					c.setTime(date);
+					// Set back to start of month
+					c.set(Calendar.DAY_OF_MONTH, 1);
+					// Clear any other values
+					c.set(Calendar.HOUR_OF_DAY, 0);
+					c.set(Calendar.MINUTE, 0);
+					c.set(Calendar.SECOND, 0);
+					c.set(Calendar.MILLISECOND, 0);
+
 					final String valueStr = row.get(s);
 					if (valueStr.isEmpty())
 						continue;
@@ -119,8 +133,13 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 							n = value;
 						}
 
+						if (!seenDates.add(c.getTime())) {
+							context.addProblem(context.createProblem("The month " + s + " is defined multiple times", true, true, true));
+							continue;
+						}
+
 						final IndexPoint<Number> point = PricingFactory.eINSTANCE.createIndexPoint();
-						point.setDate(date);
+						point.setDate(c.getTime());
 						point.setValue(n);
 						data.getPoints().add(point);
 					} catch (final NumberFormatException nfe) {
@@ -139,6 +158,7 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 
 	/**
 	 * Returns the date corresponding to the exact start of a calendar month.
+	 * 
 	 * @param date
 	 * @return
 	 */
@@ -154,7 +174,7 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 		c.set(Calendar.MILLISECOND, 0);
 		return c.getTime();
 	}
-	
+
 	@Override
 	abstract public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context);
 
@@ -169,6 +189,7 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 
 	/**
 	 * Return the index contained in a particular target EObject.
+	 * 
 	 * @param target
 	 * @return
 	 */
@@ -222,29 +243,20 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 		}
 		return result;
 	}
-	
+
 	/*
-	protected Class<?> getIndexDataType(EClass clazz) {
-		EList<EGenericType> gens = clazz.getEGenericSuperTypes();
-		for (EGenericType gen: gens) {
-			EList<EGenericType> args = gen.getETypeArguments();
-			for (EGenericType arg: args) {
-				EClassifier t = arg.getERawType();
-				Class<?> c = t.getInstanceClass();
-				c.getName();
-			}
-		}		
-	}
-	*/
-	
-	protected Set<String> getIgnoreSet(String ... ignore) {
+	 * protected Class<?> getIndexDataType(EClass clazz) { EList<EGenericType> gens = clazz.getEGenericSuperTypes(); for (EGenericType gen: gens) { EList<EGenericType> args = gen.getETypeArguments();
+	 * for (EGenericType arg: args) { EClassifier t = arg.getERawType(); Class<?> c = t.getInstanceClass(); c.getName(); } } }
+	 */
+
+	protected Set<String> getIgnoreSet(String... ignore) {
 		HashSet<String> ignoredSet = new HashSet<String>();
 		for (String i : ignore) {
 			ignoredSet.add(i);
 		}
 		return ignoredSet;
 	}
-	
+
 	public void setMultipleDataTypeInput(final boolean isMultiple) {
 		this.multipleDataTypeInput = isMultiple;
 	}
