@@ -84,7 +84,7 @@ public class HorizontalKPIReportView extends ViewPart {
 		LABEL_GCO(ColumnType.Label, "Charter Out (virt)", null), VALUE_GCO_DAYS(ColumnType.Value, 2400l, KPIContentProvider.TYPE_TIME), VALUE_GCO_REVENUE(ColumnType.Value, 1000000000l,
 				KPIContentProvider.TYPE_COST), //
 		LABEL_VIOLATIONS(ColumnType.Label, "Violations", null), VALUE_VIOLATIONS(ColumnType.Value, 100l, ""), //
-		LABEL_LATENESS(ColumnType.Label, "Late", null), VALUE_LATENESS(ColumnType.Value, 2400l, KPIContentProvider.TYPE_TIME); //
+		LABEL_LATENESS(ColumnType.Label, "Late", null), VALUE_LATENESS(ColumnType.Value, 5200l, KPIContentProvider.TYPE_TIME); //
 
 		private final ColumnType columnType;
 		private final Object labelOrDefaultLong;
