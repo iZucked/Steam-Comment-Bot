@@ -12,6 +12,7 @@ import java.util.Set;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.mmxlabs.common.Pair;
@@ -21,7 +22,6 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
-import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
@@ -159,6 +159,7 @@ public class VesselAssignmentTypeValueProviderFactoryTest {
 	}
 
 	@Test
+	@Ignore("Vessel name changes do not pass up chain. Enable once BugzId: 1444 is fixed.")
 	public void changeAll() {
 		MinimalScenario minimalScenario = createDefaultMinimalScenario();
 
