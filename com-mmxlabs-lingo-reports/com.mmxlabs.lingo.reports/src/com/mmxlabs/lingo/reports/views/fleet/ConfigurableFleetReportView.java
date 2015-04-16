@@ -26,6 +26,7 @@ import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.google.inject.Inject;
+import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.components.ColumnType;
@@ -42,6 +43,7 @@ import com.mmxlabs.lingo.reports.views.fleet.extpoint.IFleetBasedReportInitialSt
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
+import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 
 /**
  * A customisable report for fleet based data. Extension points define the available columns for all instances and initial state for each instance of this report. Optionally a dialog is available for
@@ -90,6 +92,19 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 				return observable.getObserved();
 			}
 			return input;
+		}
+
+		if (IReportContents.class.isAssignableFrom(adapter)) {
+
+			final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
+			final String contents = util.convert();
+			return new IReportContents() {
+
+				@Override
+				public String getStringContents() {
+					return contents;
+				}
+			};
 		}
 
 		return super.getAdapter(adapter);
@@ -425,4 +440,6 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 			}
 		}
 	}
+
+
 }
