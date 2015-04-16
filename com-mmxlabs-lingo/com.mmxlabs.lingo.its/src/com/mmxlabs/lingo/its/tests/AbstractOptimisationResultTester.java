@@ -13,6 +13,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -275,8 +277,8 @@ public class AbstractOptimisationResultTester {
 
 			try {
 				final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(origURL.toString() + ".properties")).toString().replaceAll(" ", "%20"));
-			
-				//final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(origURL.toString())).toString().replaceAll(" ", "%20"));
+
+				// final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(origURL.toString())).toString().replaceAll(" ", "%20"));
 				final File file2 = new File(expectedReportOutput.toURI());
 				// final File file2 = new File(f1.getAbsoluteFile() + ".properties");
 				props.store(new FileOutputStream(file2), "Created by " + AbstractOptimisationResultTester.class.getName());
@@ -438,16 +440,16 @@ public class AbstractOptimisationResultTester {
 			final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString())).toString().replaceAll(" ", "%20"));
 
 			final File f1 = new File(expectedReportOutput.toURI());
-			String slash = f1.isDirectory() ? "/" : "";
+			final String slash = f1.isDirectory() ? "/" : "";
 			final File file2 = new File(f1.getAbsoluteFile() + slash + "reports" + "." + shortName + "." + extension);
-			try (PrintWriter pw = new PrintWriter(file2)) {
+			try (PrintWriter pw = new PrintWriter(file2, StandardCharsets.UTF_8.name())) {
 				pw.print(actualContents);
 			}
 		} else {
 			final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString() + "reports" + "." + shortName + "." + extension)).toString().replaceAll(" ", "%20"));
 			final StringBuilder expectedOutputBuilder = new StringBuilder();
 			{
-				try (InputStream is = expectedReportOutput.openStream(); BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
+				try (InputStream is = expectedReportOutput.openStream(); BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
 					String line = reader.readLine();
 					if (line != null) {
 						expectedOutputBuilder.append(line);
