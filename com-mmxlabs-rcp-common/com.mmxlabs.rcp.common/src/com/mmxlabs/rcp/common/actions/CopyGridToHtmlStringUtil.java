@@ -112,7 +112,7 @@ public class CopyGridToHtmlStringUtil {
 			if (columnGroup == null) {
 				// No group? Then cell bottom row cell should fill both header rows
 				addCell(topRow, "th", column.getText(),
-						combineAttributes(new String[] { colourString, String.format("rowSpan='%d'", table.getColumnCount() > 0 ? 2 : 1) }, getAdditionalHeaderAttributes(column)));
+						combineAttributes(new String[] { colourString, String.format("rowSpan='%d'", table.getColumnGroupCount() > 0 ? 2 : 1) }, getAdditionalHeaderAttributes(column)));
 				addCell(singleRow, "th", column.getText(), combineAttributes(new String[] { colourString }, getAdditionalHeaderAttributes(column)));
 			} else {
 				// Part of column group. Only add group if we have not previously seen it.
