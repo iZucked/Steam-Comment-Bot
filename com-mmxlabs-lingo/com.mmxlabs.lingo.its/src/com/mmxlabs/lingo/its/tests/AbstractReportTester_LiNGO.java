@@ -39,20 +39,44 @@ public abstract class AbstractReportTester_LiNGO extends AbstractOptimisationRes
 	}
 
 	@Test
-	public void reportTest_VerticalReport() throws Exception {
+	public void testVerticalReport() throws Exception {
 		final URL url = getClass().getResource(scenario);
 		testReports(url, ReportTester.VERTICAL_REPORT_ID, ReportTester.VERTICAL_REPORT_SHORTNAME, "html");
 	}
 
 	@Test
-	public void reportTest_ScheduleSummary() throws Exception {
+	public void testScheduleSummary() throws Exception {
 		final URL url = getClass().getResource(scenario);
 		testReports(url, ReportTester.SCHEDULE_SUMMARY_ID, ReportTester.SCHEDULE_SUMMARY_SHORTNAME, "html");
 	}
 
 	@Test
-	public void reportTest_PortRotations() throws Exception {
+	public void testPortRotations() throws Exception {
 		final URL url = getClass().getResource(scenario);
 		testReports(url, ReportTester.PORT_ROTATIONS_ID, ReportTester.PORT_ROTATIONS_SHORTNAME, "html");
+	}
+
+	@Test
+	public void testLatenessReport() throws Exception {
+		final URL url = getClass().getResource(scenario);
+		testReports(url, ReportTester.LATENESS_REPORT_ID, ReportTester.LATENESS_REPORT_SHORTNAME, "html");
+	}
+
+	@Test
+	public void testCapacityReport() throws Exception {
+		final URL url = getClass().getResource(scenario);
+		testReports(url, ReportTester.CAPACITY_REPORT_ID, ReportTester.CAPACITY_REPORT_SHORTNAME, "html");
+	}
+
+	@Test
+	public void testVesselReport() throws Exception {
+		final URL url = getClass().getResource(scenario);
+		testReports(url, ReportTester.VESSEL_REPORT_ID, ReportTester.VESSEL_REPORT_SHORTNAME, "html");
+	}
+
+	@Test
+	public void testCooldownReport() throws Exception {
+		final URL url = getClass().getResource(scenario);
+		testReports(url, ReportTester.COOLDOWN_REPORT_ID, ReportTester.COOLDOWN_REPORT_SHORTNAME, "html");
 	}
 }

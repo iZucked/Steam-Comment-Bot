@@ -67,4 +67,32 @@ public abstract class AbstractReportTester_CSV extends AbstractOptimisationResul
 		final LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
 		testReports(scenario, url, ReportTester.PORT_ROTATIONS_ID, ReportTester.PORT_ROTATIONS_SHORTNAME, "html");
 	}
+
+	@Test
+	public void testLatenessReport() throws Exception {
+		final URL url = getClass().getResource(scenario);
+		final LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
+		testReports(scenario, url, ReportTester.LATENESS_REPORT_ID, ReportTester.LATENESS_REPORT_SHORTNAME, "html");
+	}
+
+	@Test
+	public void testCapacityReport() throws Exception {
+		final URL url = getClass().getResource(scenario);
+		final LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
+		testReports(scenario, url, ReportTester.CAPACITY_REPORT_ID, ReportTester.CAPACITY_REPORT_SHORTNAME, "html");
+	}
+
+	@Test
+	public void testVesselReport() throws Exception {
+		final URL url = getClass().getResource(scenario);
+		final LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
+		testReports(scenario, url, ReportTester.VESSEL_REPORT_ID, ReportTester.VESSEL_REPORT_SHORTNAME, "html");
+	}
+
+	@Test
+	public void testCooldownReport() throws Exception {
+		final URL url = getClass().getResource(scenario);
+		final LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
+		testReports(scenario, url, ReportTester.COOLDOWN_REPORT_ID, ReportTester.COOLDOWN_REPORT_SHORTNAME, "html");
+	}
 }
