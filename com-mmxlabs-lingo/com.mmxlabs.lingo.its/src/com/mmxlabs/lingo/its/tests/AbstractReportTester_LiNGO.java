@@ -64,7 +64,7 @@ public abstract class AbstractReportTester_LiNGO extends AbstractOptimisationRes
 
 	@Test
 	@Category(QuickTest.class)
-	void testLatenessReport() throws Exception {
+	public void testLatenessReport() throws Exception {
 		final URL url = getClass().getResource(scenario);
 		testReports(url, ReportTester.LATENESS_REPORT_ID, ReportTester.LATENESS_REPORT_SHORTNAME, "html");
 	}
