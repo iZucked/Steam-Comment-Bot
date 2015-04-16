@@ -529,7 +529,6 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 	 * @generated
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
 			case SchedulePackage.END_EVENT___GET_FUEL_COST:
@@ -552,6 +551,15 @@ public class EndEventImpl extends EventImpl implements EndEvent {
 		result.append(portCost);
 		result.append(')');
 		return result.toString();
+	}
+	
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public String name() {
+		return "End " + getSequence().getName();
 	}
 
 } // end of EndEventImpl
