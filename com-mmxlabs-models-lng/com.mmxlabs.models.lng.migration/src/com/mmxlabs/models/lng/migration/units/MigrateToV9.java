@@ -24,9 +24,6 @@ import com.mmxlabs.models.migration.utils.MetamodelUtils;
  */
 public class MigrateToV9 extends AbstractMigrationUnit {
 
-	private MetamodelLoader destiniationLoader;
-	private MetamodelLoader sourceLoader;
-
 	@Override
 	public String getScenarioContext() {
 		return ModelsLNGMigrationConstants.Context;
@@ -52,10 +49,10 @@ public class MigrateToV9 extends AbstractMigrationUnit {
 
 	@Override
 	protected MetamodelLoader getDestinationMetamodelLoader(final Map<URI, PackageData> extraPackages) {
-		if (destiniationLoader == null) {
-			destiniationLoader = MetamodelVersionsUtil.createV9Loader(extraPackages);
+		if (destinationLoader == null) {
+			destinationLoader = MetamodelVersionsUtil.createV9Loader(extraPackages);
 		}
-		return destiniationLoader;
+		return destinationLoader;
 	}
 
 	@Override
@@ -68,7 +65,7 @@ public class MigrateToV9 extends AbstractMigrationUnit {
 
 	protected void migrateScenarioFleetModel(MetamodelLoader loader, EObject model) {
 
-		final EPackage mmxCorePackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_MMXCore);
+		// final EPackage mmxCorePackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_MMXCore);
 
 		final EPackage package_ScenarioModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel);
 		final EClass class_LNGScenarioModel = MetamodelUtils.getEClass(package_ScenarioModel, "LNGScenarioModel");

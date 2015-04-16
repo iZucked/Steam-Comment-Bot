@@ -32,9 +32,6 @@ import com.mmxlabs.models.migration.utils.MetamodelUtils;
  */
 public class MigrateToV3 extends AbstractMigrationUnit {
 
-	private MetamodelLoader destiniationLoader;
-	private MetamodelLoader sourceLoader;
-
 	@Override
 	public String getScenarioContext() {
 		return ModelsLNGMigrationConstants.Context;
@@ -60,10 +57,10 @@ public class MigrateToV3 extends AbstractMigrationUnit {
 
 	@Override
 	protected MetamodelLoader getDestinationMetamodelLoader(final Map<URI, PackageData> extraPackages) {
-		if (destiniationLoader == null) {
-			destiniationLoader = MetamodelVersionsUtil.createV2_V3Loader(extraPackages);
+		if (destinationLoader == null) {
+			destinationLoader = MetamodelVersionsUtil.createV2_V3Loader(extraPackages);
 		}
-		return destiniationLoader;
+		return destinationLoader;
 	}
 
 	@Override

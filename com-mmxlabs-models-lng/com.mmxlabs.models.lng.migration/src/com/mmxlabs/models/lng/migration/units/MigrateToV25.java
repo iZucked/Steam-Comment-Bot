@@ -26,9 +26,6 @@ import com.mmxlabs.models.migration.utils.MetamodelUtils;
 
 public class MigrateToV25 extends AbstractMigrationUnit {
 
-	private MetamodelLoader destiniationLoader;
-	private MetamodelLoader sourceLoader;
-
 	@Override
 	public String getScenarioContext() {
 		return ModelsLNGMigrationConstants.Context;
@@ -54,10 +51,10 @@ public class MigrateToV25 extends AbstractMigrationUnit {
 
 	@Override
 	protected MetamodelLoader getDestinationMetamodelLoader(final Map<URI, PackageData> extraPackages) {
-		if (destiniationLoader == null) {
-			destiniationLoader = MetamodelVersionsUtil.createV25Loader(extraPackages);
+		if (destinationLoader == null) {
+			destinationLoader = MetamodelVersionsUtil.createV25Loader(extraPackages);
 		}
-		return destiniationLoader;
+		return destinationLoader;
 	}
 
 	@Override
@@ -80,7 +77,7 @@ public class MigrateToV25 extends AbstractMigrationUnit {
 		final EReference reference_SpotMarketsModel_charterInMarkets = MetamodelUtils.getReference(class_SpotMarketsModel, "charterInMarkets");
 
 		final EClass class_CharterInMarket = MetamodelUtils.getEClass(package_SpotMarketsModel, "CharterInMarket");
-		final EAttribute attribute_CharterInMarket_enabled = MetamodelUtils.getAttribute(class_CharterInMarket, "enabled");
+		// final EAttribute attribute_CharterInMarket_enabled = MetamodelUtils.getAttribute(class_CharterInMarket, "enabled");
 		final EReference reference_CharterInMarket_vesselClass = MetamodelUtils.getReference(class_CharterInMarket, "vesselClass");
 		final EAttribute attribute_CharterInMarket_spotCharterCount = MetamodelUtils.getAttribute(class_CharterInMarket, "spotCharterCount");
 
@@ -99,13 +96,13 @@ public class MigrateToV25 extends AbstractMigrationUnit {
 
 		final EClass class_VesselAvailability = MetamodelUtils.getEClass(package_cargoModel, "VesselAvailability");
 		final EReference reference_VesselAvailability_vessel = MetamodelUtils.getReference(class_VesselAvailability, "vessel");
-		final EClass class_Cargo = MetamodelUtils.getEClass(package_cargoModel, "Cargo");
+		// final EClass class_Cargo = MetamodelUtils.getEClass(package_cargoModel, "Cargo");
 		final EClass class_Slot = MetamodelUtils.getEClass(package_cargoModel, "Slot");
 		final EReference refernce_Slot_nominatedVessel = MetamodelUtils.getReference(class_Slot, "nominatedVessel");
 
-		final EClass class_LoadSlot = MetamodelUtils.getEClass(package_cargoModel, "LoadSlot");
-		final EClass class_DischargeSlot = MetamodelUtils.getEClass(package_cargoModel, "DischargeSlot");
-		final EClass class_VesselEvent = MetamodelUtils.getEClass(package_cargoModel, "VesselEvent");
+		// final EClass class_LoadSlot = MetamodelUtils.getEClass(package_cargoModel, "LoadSlot");
+		// final EClass class_DischargeSlot = MetamodelUtils.getEClass(package_cargoModel, "DischargeSlot");
+		// final EClass class_VesselEvent = MetamodelUtils.getEClass(package_cargoModel, "VesselEvent");
 
 		final EClass class_AssignableElement = MetamodelUtils.getEClass(package_cargoModel, "AssignableElement");
 		final EReference reference_AssignableElement_assignment = MetamodelUtils.getReference(class_AssignableElement, "assignment");

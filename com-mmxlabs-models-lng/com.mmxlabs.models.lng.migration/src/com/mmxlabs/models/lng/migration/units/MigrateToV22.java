@@ -16,9 +16,6 @@ import com.mmxlabs.models.migration.utils.MetamodelLoader;
 
 public class MigrateToV22 extends AbstractMigrationUnit {
 
-	private MetamodelLoader destiniationLoader;
-	private MetamodelLoader sourceLoader;
-
 	@Override
 	public String getScenarioContext() {
 		return ModelsLNGMigrationConstants.Context;
@@ -44,10 +41,10 @@ public class MigrateToV22 extends AbstractMigrationUnit {
 
 	@Override
 	protected MetamodelLoader getDestinationMetamodelLoader(final Map<URI, PackageData> extraPackages) {
-		if (destiniationLoader == null) {
-			destiniationLoader = MetamodelVersionsUtil.createV22Loader(extraPackages);
+		if (destinationLoader == null) {
+			destinationLoader = MetamodelVersionsUtil.createV22Loader(extraPackages);
 		}
-		return destiniationLoader;
+		return destinationLoader;
 	}
 
 	@Override

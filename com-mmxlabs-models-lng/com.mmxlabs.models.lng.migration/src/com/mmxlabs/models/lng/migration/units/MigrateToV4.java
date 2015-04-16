@@ -25,8 +25,6 @@ import com.mmxlabs.models.migration.utils.MetamodelUtils;
  */
 public class MigrateToV4 extends AbstractMigrationUnit {
 
-	private MetamodelLoader destiniationLoader;
-	private MetamodelLoader sourceLoader;
 
 	@Override
 	public String getScenarioContext() {
@@ -53,10 +51,10 @@ public class MigrateToV4 extends AbstractMigrationUnit {
 
 	@Override
 	protected MetamodelLoader getDestinationMetamodelLoader(final Map<URI, PackageData> extraPackages) {
-		if (destiniationLoader == null) {
-			destiniationLoader = MetamodelVersionsUtil.createV4Loader(extraPackages);
+		if (destinationLoader == null) {
+			destinationLoader = MetamodelVersionsUtil.createV4Loader(extraPackages);
 		}
-		return destiniationLoader;
+		return destinationLoader;
 	}
 
 	@Override

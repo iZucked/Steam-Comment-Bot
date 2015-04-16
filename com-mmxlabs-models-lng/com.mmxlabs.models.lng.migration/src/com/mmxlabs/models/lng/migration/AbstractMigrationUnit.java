@@ -28,13 +28,24 @@ import com.mmxlabs.scenario.service.util.ResourceHelper;
  * 
  */
 public abstract class AbstractMigrationUnit implements IMigrationUnit {
+	protected MetamodelLoader sourceLoader;
+	protected MetamodelLoader destinationLoader;
+	protected Map<URI, PackageData> extraPackages;
 
 	/**
 	 * Returns a {@link MetamodelLoader} for the {@link IMigrationUnit#getSourceVersion()}.
 	 * 
 	 * @return
 	 */
-	protected abstract MetamodelLoader getSourceMetamodelLoader(Map<URI, PackageData> extraPackages);
+	protected MetamodelLoader getSourceMetamodelLoader(@Nullable final Map<URI, PackageData> extraPackages) {
+		if (extraPackages != null) {
+			this.extraPackages = extraPackages;
+		}
+		if (sourceLoader == null) {
+			sourceLoader = MetamodelVersionsUtil.createVNLoader(getScenarioSourceVersion(), this.extraPackages);
+		}
+		return sourceLoader;
+	}
 
 	/**
 	 * Returns a {@link MetamodelLoader} for the {@link IMigrationUnit#getDestinationVersion()}
@@ -43,19 +54,27 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 	 * 
 	 * @return
 	 */
-	protected abstract MetamodelLoader getDestinationMetamodelLoader(Map<URI, PackageData> extraPackages);
+	protected MetamodelLoader getDestinationMetamodelLoader(@Nullable final Map<URI, PackageData> extraPackages) {
+		if (extraPackages != null) {
+			this.extraPackages = extraPackages;
+		}
+		if (destinationLoader == null) {
+			destinationLoader = MetamodelVersionsUtil.createVNLoader(getScenarioDestinationVersion(), this.extraPackages);
+		}
+		return destinationLoader;
+	}
 
 	/**
 	 * Perform the migration. Root object instance references are not expected to be changed.
 	 * 
 	 * @param models
 	 */
-	protected void doMigration(final EObject model) {
+	protected void doMigration(@NonNull final EObject model) {
 		// Throw some kind of exception if we get here. Sublcasses should override this method or doMigrationWithHelper
 		throw new UnsupportedOperationException("Not yet implemented");
 	}
 
-	protected void doMigrationWithHelper(final MetamodelLoader metamodelLoader, final EObjectWrapper model) {
+	protected void doMigrationWithHelper(@NonNull final MetamodelLoader metamodelLoader, @NonNull final EObjectWrapper model) {
 		doMigration(model);
 	}
 

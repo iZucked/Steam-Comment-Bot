@@ -16,9 +16,6 @@ import com.mmxlabs.models.migration.utils.MetamodelLoader;
 
 public class MigrateToV11 extends AbstractMigrationUnit {
 
-	private MetamodelLoader destiniationLoader;
-	private MetamodelLoader sourceLoader;
-
 	@Override
 	public String getScenarioContext() {
 		return ModelsLNGMigrationConstants.Context;
@@ -35,7 +32,7 @@ public class MigrateToV11 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected MetamodelLoader getSourceMetamodelLoader(final Map<URI, PackageData> extraPackages) {
+	public MetamodelLoader getSourceMetamodelLoader(final Map<URI, PackageData> extraPackages) {
 		if (sourceLoader == null) {
 			sourceLoader = MetamodelVersionsUtil.createV10Loader(extraPackages);
 		}
@@ -43,11 +40,11 @@ public class MigrateToV11 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected MetamodelLoader getDestinationMetamodelLoader(final Map<URI, PackageData> extraPackages) {
-		if (destiniationLoader == null) {
-			destiniationLoader = MetamodelVersionsUtil.createV11Loader(extraPackages);
+	public MetamodelLoader getDestinationMetamodelLoader(final Map<URI, PackageData> extraPackages) {
+		if (destinationLoader == null) {
+			destinationLoader = MetamodelVersionsUtil.createV11Loader(extraPackages);
 		}
-		return destiniationLoader;
+		return destinationLoader;
 	}
 
 	@Override

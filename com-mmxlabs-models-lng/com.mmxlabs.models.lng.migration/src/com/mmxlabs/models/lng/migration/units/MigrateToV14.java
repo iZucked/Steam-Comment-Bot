@@ -23,9 +23,6 @@ import com.mmxlabs.models.migration.utils.MetamodelUtils;
 
 public class MigrateToV14 extends AbstractMigrationUnit {
 
-	private MetamodelLoader destinationLoader;
-	private MetamodelLoader sourceLoader;
-
 	@Override
 	public String getScenarioContext() {
 		return ModelsLNGMigrationConstants.Context;
