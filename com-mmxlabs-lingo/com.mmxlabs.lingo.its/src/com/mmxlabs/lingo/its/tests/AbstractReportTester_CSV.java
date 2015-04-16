@@ -7,9 +7,11 @@ package com.mmxlabs.lingo.its.tests;
 import java.net.URL;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import com.mmxlabs.lingo.its.tests.category.QuickTest;
 import com.mmxlabs.lingo.its.utils.CSVImporter;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 
@@ -42,6 +44,7 @@ public abstract class AbstractReportTester_CSV extends AbstractOptimisationResul
 	}
 
 	@Test
+	@Category(QuickTest.class)
 	public void reportTest_VerticalReport() throws Exception {
 
 		// Load the scenario to test
@@ -51,6 +54,7 @@ public abstract class AbstractReportTester_CSV extends AbstractOptimisationResul
 	}
 
 	@Test
+	@Category(QuickTest.class)
 	public void reportTest_ScheduleSummary() throws Exception {
 
 		// Load the scenario to test
@@ -60,6 +64,7 @@ public abstract class AbstractReportTester_CSV extends AbstractOptimisationResul
 	}
 
 	@Test
+	@Category(QuickTest.class)
 	public void reportTest_PortRotations() throws Exception {
 
 		// Load the scenario to test
@@ -69,6 +74,7 @@ public abstract class AbstractReportTester_CSV extends AbstractOptimisationResul
 	}
 
 	@Test
+	@Category(QuickTest.class)
 	public void testLatenessReport() throws Exception {
 		final URL url = getClass().getResource(scenario);
 		final LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
@@ -76,6 +82,7 @@ public abstract class AbstractReportTester_CSV extends AbstractOptimisationResul
 	}
 
 	@Test
+	@Category(QuickTest.class)
 	public void testCapacityReport() throws Exception {
 		final URL url = getClass().getResource(scenario);
 		final LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
@@ -83,6 +90,7 @@ public abstract class AbstractReportTester_CSV extends AbstractOptimisationResul
 	}
 
 	@Test
+	@Category(QuickTest.class)
 	public void testVesselReport() throws Exception {
 		final URL url = getClass().getResource(scenario);
 		final LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
@@ -90,6 +98,7 @@ public abstract class AbstractReportTester_CSV extends AbstractOptimisationResul
 	}
 
 	@Test
+	@Category(QuickTest.class)
 	public void testCooldownReport() throws Exception {
 		final URL url = getClass().getResource(scenario);
 		final LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());

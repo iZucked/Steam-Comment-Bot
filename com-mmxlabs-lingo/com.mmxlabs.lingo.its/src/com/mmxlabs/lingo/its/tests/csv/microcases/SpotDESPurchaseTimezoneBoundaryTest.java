@@ -12,8 +12,10 @@ import java.util.TimeZone;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
+import com.mmxlabs.lingo.its.tests.category.QuickTest;
 import com.mmxlabs.lingo.its.utils.CSVImporter;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.port.Port;
@@ -36,6 +38,7 @@ public class SpotDESPurchaseTimezoneBoundaryTest extends AbstractOptimisationRes
 	 * @throws URISyntaxException
 	 */
 	@Test
+	@Category(QuickTest.class)
 	public void spotDESPurchaseTimezoneBoundaryTest() throws IOException, InterruptedException, IncompleteScenarioException, URISyntaxException {
 
 		// Load the scenario to test

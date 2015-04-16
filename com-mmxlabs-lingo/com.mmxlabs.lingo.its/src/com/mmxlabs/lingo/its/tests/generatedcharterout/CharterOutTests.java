@@ -10,8 +10,10 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
+import com.mmxlabs.lingo.its.tests.category.QuickTest;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Journey;
@@ -22,6 +24,7 @@ import com.mmxlabs.models.lng.transformer.its.tests.ScenarioRunner;
 public class CharterOutTests extends AbstractOptimisationResultTester {
 
 	@Test
+	@Category(QuickTest.class)
 	public void UAT_CharterOut_1() throws Exception {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/charter-out/gco-barca-bonny-point fortin-min days 60.lingo");
@@ -40,6 +43,7 @@ public class CharterOutTests extends AbstractOptimisationResultTester {
 	}
 
 	@Test
+	@Category(QuickTest.class)
 	public void UAT_CharterOut_2() throws Exception {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/charter-out/gco-barca-bonny-point fortin.lingo");
@@ -55,7 +59,7 @@ public class CharterOutTests extends AbstractOptimisationResultTester {
 
 		List<GeneratedCharterOut> charterOuts = findGCOEvents(schedule.getSequences().get(0));
 		Assert.assertEquals(charterOuts.size(), 1);
-		
+
 		GeneratedCharterOut gco = charterOuts.get(0);
 		Assert.assertEquals(gco.getPort().getName(), "Bonny Is");
 		Assert.assertEquals(gco.getDuration(), 1307);
@@ -63,8 +67,9 @@ public class CharterOutTests extends AbstractOptimisationResultTester {
 		Assert.assertEquals(ballastBeforeOrAfter(gco, true), true); // ballast before
 		Assert.assertEquals(ballastBeforeOrAfter(gco, false), false); // no ballast after
 	}
-	
+
 	@Test
+	@Category(QuickTest.class)
 	public void UAT_CharterOut_3() throws Exception {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/charter-out/gco-barca-point fortin.lingo");
@@ -80,7 +85,7 @@ public class CharterOutTests extends AbstractOptimisationResultTester {
 
 		List<GeneratedCharterOut> charterOuts = findGCOEvents(schedule.getSequences().get(0));
 		Assert.assertEquals(charterOuts.size(), 1);
-		
+
 		GeneratedCharterOut gco = charterOuts.get(0);
 		Assert.assertEquals(gco.getPort().getName(), "Barcelona");
 		Assert.assertEquals(gco.getDuration(), 1293);
@@ -88,7 +93,7 @@ public class CharterOutTests extends AbstractOptimisationResultTester {
 		Assert.assertEquals(ballastBeforeOrAfter(gco, true), true); // ballast before
 		Assert.assertEquals(ballastBeforeOrAfter(gco, false), true); // ballast after
 	}
-	
+
 	private List<GeneratedCharterOut> findGCOEvents(Sequence sequence) {
 		List<GeneratedCharterOut> charterOuts = new ArrayList<GeneratedCharterOut>();
 		for (Event e : sequence.getEvents()) {
@@ -98,7 +103,7 @@ public class CharterOutTests extends AbstractOptimisationResultTester {
 		}
 		return charterOuts;
 	}
-	
+
 	private boolean ballastBeforeOrAfter(GeneratedCharterOut charterOut, boolean before) {
 		Event event;
 		if (before) {
@@ -114,5 +119,5 @@ public class CharterOutTests extends AbstractOptimisationResultTester {
 		}
 		return false;
 	}
-	
+
 }
