@@ -65,6 +65,7 @@ Build: {1}
       <plugin id="com.mmxlabs.optimiser.optimiser-common" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.optimiser.optimiser-core" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.scenario.service.dirscan" autoStart="true" startLevel="0" />
+      <plugin id="com.mmxlabs.scenario.service.util" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.scheduler.optimiser" autoStart="true" startLevel="0" />
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
       <plugin id="org.eclipse.equinox.common" autoStart="false" startLevel="2" />

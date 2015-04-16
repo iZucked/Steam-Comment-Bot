@@ -16,6 +16,12 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
 import com.mmxlabs.lingo.reports.IReportContents;
+import com.mmxlabs.lingo.reports.views.fleet.ConfigurableFleetReportView;
+import com.mmxlabs.lingo.reports.views.portrotation.PortRotationReportView;
+import com.mmxlabs.lingo.reports.views.schedule.ConfigurableScheduleReportView;
+import com.mmxlabs.lingo.reports.views.standard.CapacityViolationReportView;
+import com.mmxlabs.lingo.reports.views.standard.CooldownReportView;
+import com.mmxlabs.lingo.reports.views.standard.LatenessReportView;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 
@@ -27,14 +33,26 @@ import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
  */
 public class ReportTester {
 
-	public static final String SCHEDULE_SUMMARY_ID = "com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport";
+	public static final String SCHEDULE_SUMMARY_ID = ConfigurableScheduleReportView.ID;
 	public static final String SCHEDULE_SUMMARY_SHORTNAME = "ScheduleSummary";
-	
-	public static final String PORT_ROTATIONS_ID = "com.mmxlabs.shiplingo.platform.reports.views.PortRotationReportView";
+
+	public static final String PORT_ROTATIONS_ID = PortRotationReportView.ID;
 	public static final String PORT_ROTATIONS_SHORTNAME = "PortRotations";
-	
+
+	public static final String VESSEL_REPORT_ID = ConfigurableFleetReportView.ID;
+	public static final String VESSEL_REPORT_SHORTNAME = "VesselReport";
+
 	public static final String VERTICAL_REPORT_ID = "com.mmxlabs.lingo.reports.verticalreport";
 	public static final String VERTICAL_REPORT_SHORTNAME = "VerticalReport";
+
+	public static final String LATENESS_REPORT_ID = LatenessReportView.ID;
+	public static final String LATENESS_REPORT_SHORTNAME = "LatenessReport";
+
+	public static final String CAPACITY_REPORT_ID = CapacityViolationReportView.ID;
+	public static final String CAPACITY_REPORT_SHORTNAME = "CapacityReport";
+
+	public static final String COOLDOWN_REPORT_ID = CooldownReportView.ID;
+	public static final String COOLDOWN_REPORT_SHORTNAME = "CooldownReport";
 
 	@Nullable
 	public IReportContents getReportContents(final ScenarioInstance scenario, final String reportID) throws InterruptedException {
