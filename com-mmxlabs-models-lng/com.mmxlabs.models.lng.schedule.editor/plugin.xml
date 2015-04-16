@@ -140,19 +140,14 @@
     </submodelImporter>
  </extension>
  <extension
-       point="com.mmxlabs.models.ui.jointmodeleditors">
-    <jointModelEditor
-          id="com.mmxlabs.models.lng.schedule.editor.scheduleEditorContribution"
-          implementation="com.mmxlabs.models.lng.schedule.ui.editorpart.ScheduleModelEditorContribution"
-          priority="0"
-          subModelClass="com.mmxlabs.models.lng.schedule.ScheduleModel">
-    </jointModelEditor>
- </extension>
- <extension
        point="com.mmxlabs.models.common.modelcommandprovider">
     <ModelCommandProvider
-          commandProvider="com.mmxlabs.models.lng.schedule.ui.commands.ScheduleModelCommandProvider"
-          id="com.mmxlabs.models.lng.schedule.ui.commands.ScheduleModelCommandProvider">
+          commandProvider="com.mmxlabs.models.lng.schedule.ui.commands.ScheduleModelInvalidateCommandProvider"
+          id="com.mmxlabs.models.lng.schedule.ui.commands.ScheduleModelInvalidateCommandProvider">
+    </ModelCommandProvider>
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.schedule.ui.commands.ScheduleModelDirtyCommandProvider"
+          id="com.mmxlabs.models.lng.schedule.ui.commands.ScheduleModelDirtyCommandProvider">
     </ModelCommandProvider>
  </extension>
  <extension

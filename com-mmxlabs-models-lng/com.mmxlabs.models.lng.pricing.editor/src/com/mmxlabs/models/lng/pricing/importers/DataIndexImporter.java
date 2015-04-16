@@ -12,9 +12,11 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeMap;
 
@@ -78,6 +80,7 @@ public class DataIndexImporter extends AbstractClassImporter {
 
 		if (result instanceof DataIndex) {
 			final DataIndex<Number> data = (DataIndex<Number>) result;
+			Set<Date> seenDates = new HashSet<>();
 			for (final String s : row.keySet()) {
 				try {
 					final Date date = dateParser.parseDate(s);
@@ -90,8 +93,11 @@ public class DataIndexImporter extends AbstractClassImporter {
 					c.set(Calendar.MINUTE, 0);
 					c.set(Calendar.SECOND, 0);
 					c.set(Calendar.MILLISECOND, 0);
-					if (row.get(s).isEmpty())
+
+					if (row.get(s).isEmpty()) {
 						continue;
+					}
+
 					try {
 						final Number n;
 						// This used to be a ? : statement, but for some reason the int (or even Integer) was always stored as a Double
@@ -104,9 +110,12 @@ public class DataIndexImporter extends AbstractClassImporter {
 							final double value = Double.parseDouble(row.get(s));
 							n = value;
 						}
-
+						if (!seenDates.add(c.getTime())) {
+							context.addProblem(context.createProblem("The month " + s + " is defined multiple times", true, true, true));
+							continue;
+						}
 						final IndexPoint<Number> point = PricingFactory.eINSTANCE.createIndexPoint();
-						point.setDate(date);
+						point.setDate(c.getTime());
 						point.setValue(n);
 						data.getPoints().add(point);
 					} catch (final NumberFormatException nfe) {

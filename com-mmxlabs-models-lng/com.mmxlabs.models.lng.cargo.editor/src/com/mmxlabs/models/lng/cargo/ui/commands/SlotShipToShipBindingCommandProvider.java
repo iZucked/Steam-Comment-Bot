@@ -16,13 +16,11 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
- * A command provider which supplements commands executed on ship-to-ship slots
- * to force synchronisation of load and discharge slots bound together in a ship-to-ship 
- * transfer. Because these slots represent a single physical event, they need to be matched
- * on volume, date, duration and (notional) port.
+ * A command provider which supplements commands executed on ship-to-ship slots to force synchronisation of load and discharge slots bound together in a ship-to-ship transfer. Because these slots
+ * represent a single physical event, they need to be matched on volume, date, duration and (notional) port.
  * 
  * @author Simon McGregor
- *
+ * 
  */
 public class SlotShipToShipBindingCommandProvider extends SynchronisedFeatureCommandProvider {
 	@Override
@@ -46,13 +44,13 @@ public class SlotShipToShipBindingCommandProvider extends SynchronisedFeatureCom
 		if (owner instanceof LoadSlot) {
 			return ((LoadSlot) owner).getTransferFrom();
 		}
-		
+
 		if (owner instanceof DischargeSlot) {
 			return ((DischargeSlot) owner).getTransferTo();
 		}
-		
+
 		// no paired object exists
 		return null;
 	}
-	
+
 }

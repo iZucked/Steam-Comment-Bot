@@ -12,7 +12,6 @@ import java.util.Set;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.notify.AdapterFactory;
-import org.eclipse.emf.common.ui.ViewerPane;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.ETypedElement;
@@ -68,6 +67,7 @@ import com.mmxlabs.models.lng.ui.actions.DuplicateAction;
 import com.mmxlabs.models.lng.ui.actions.ScenarioModifyingAction;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.EMFViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
@@ -84,7 +84,7 @@ import com.mmxlabs.rcp.common.actions.LockableAction;
 import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 
-public class ScenarioTableViewerPane extends ViewerPane {
+public class ScenarioTableViewerPane extends EMFViewerPane {
 
 	private static final Logger log = LoggerFactory.getLogger(ScenarioTableViewerPane.class);
 
