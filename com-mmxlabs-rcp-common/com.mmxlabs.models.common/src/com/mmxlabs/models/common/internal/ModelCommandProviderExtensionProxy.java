@@ -31,13 +31,23 @@ class ModelCommandProviderExtensionProxy implements IModelCommandProvider {
 	}
 
 	@Override
-	public Command provideAdditionalCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet,
+	public Command provideAdditionalBeforeCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet,
 			final Class<? extends Command> commandClass, final CommandParameter parameter, final Command input) {
 		if (provider == null) {
 			createCommandProvider();
 		}
 
-		return provider.provideAdditionalCommand(editingDomain, rootObject, overrides, editSet, commandClass, parameter, input);
+		return provider.provideAdditionalBeforeCommand(editingDomain, rootObject, overrides, editSet, commandClass, parameter, input);
+	}
+
+	@Override
+	public Command provideAdditionalAfterCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet,
+			final Class<? extends Command> commandClass, final CommandParameter parameter, final Command input) {
+		if (provider == null) {
+			createCommandProvider();
+		}
+
+		return provider.provideAdditionalAfterCommand(editingDomain, rootObject, overrides, editSet, commandClass, parameter, input);
 	}
 
 	@Override
