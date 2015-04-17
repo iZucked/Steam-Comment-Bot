@@ -20,6 +20,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
+import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
@@ -482,7 +483,12 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						cooldownPort = port;
 					}
 
-					cooldownCost = port.getCooldownCalculator().calculateCooldownCost(vesselClass, cooldownPort, cooldownCV, cooldownTime);
+					final ICooldownCalculator cooldownCalculator = port.getCooldownCalculator();
+					if (cooldownCalculator != null) {
+						cooldownCost = cooldownCalculator.calculateCooldownCost(vesselClass, cooldownPort, cooldownCV, cooldownTime);
+					} else {
+						// Trying to cooldown somewhere we are not allowed to cooldown (e.g. discharge port at sequence end?)
+					}
 				}
 			} else {
 				assert sequence[i] instanceof PortDetails;
