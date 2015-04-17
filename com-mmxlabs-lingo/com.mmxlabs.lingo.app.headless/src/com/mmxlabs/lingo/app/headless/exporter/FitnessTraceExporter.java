@@ -14,9 +14,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.name.Names;
-import com.mmxlabs.lingo.app.headless.ScenarioRunner;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimiser;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
@@ -41,15 +42,12 @@ public class FitnessTraceExporter implements IRunExporter {
 	}
 
 	@Override
-	public void setScenarioRunner(final ScenarioRunner runner) {
+	public void setScenarioRunner(final LNGScenarioRunner runner) {
 
-		lsafe = (LinearSimulatedAnnealingFitnessEvaluator) runner.getInjector()
-				.getInstance(IFitnessEvaluator.class);
-		numberOfIterations = runner
-				.getInjector()
-				.getInstance(
-						Key.get(Integer.class,
-								Names.named(LocalSearchOptimiserModule.LSO_NUMBER_OF_ITERATIONS)));
+		Injector injector = runner.getInjector();
+		assert injector != null;
+		lsafe = (LinearSimulatedAnnealingFitnessEvaluator) injector.getInstance(IFitnessEvaluator.class);
+		numberOfIterations = injector.getInstance(Key.get(Integer.class, Names.named(LocalSearchOptimiserModule.LSO_NUMBER_OF_ITERATIONS)));
 	}
 
 	public void exportData(final OutputStream os) {
@@ -57,43 +55,36 @@ public class FitnessTraceExporter implements IRunExporter {
 	}
 
 	@Override
-	public void begin(final IOptimiser optimiser, final long initialFitness,
-			final IAnnotatedSolution annotatedSolution) {
+	public void begin(final IOptimiser optimiser, final long initialFitness, final IAnnotatedSolution annotatedSolution) {
 		final Map<String, Long> componentValues = lsafe.getBestFitnesses();
 
 		componentNames.addAll(componentValues.keySet());
 
-		fitnessComponentTrace.put(0, new LinkedHashMap<String, Long>(
-				componentValues));
+		fitnessComponentTrace.put(0, new LinkedHashMap<String, Long>(componentValues));
 		fitnessTrace.put(0, initialFitness);
 	}
 
 	@Override
-	public void report(final IOptimiser optimiser, final int iteration,
-			final long currentFitness, final long bestFitness,
-			final IAnnotatedSolution currentSolution,
+	public void report(final IOptimiser optimiser, final int iteration, final long currentFitness, final long bestFitness, final IAnnotatedSolution currentSolution,
 			final IAnnotatedSolution bestSolution) {
 
 		final Map<String, Long> componentValues = lsafe.getBestFitnesses();
 
 		componentNames.addAll(componentValues.keySet());
 
-		fitnessComponentTrace.put(iteration, new LinkedHashMap<String, Long>(
-				componentValues));
+		fitnessComponentTrace.put(iteration, new LinkedHashMap<String, Long>(componentValues));
 
 		fitnessTrace.put(iteration, bestFitness);
 	}
 
 	@Override
-	public void done(final IOptimiser optimiser, final long bestFitness,
-			final IAnnotatedSolution annotatedSolution) {
+	public void done(final IOptimiser optimiser, final long bestFitness, final IAnnotatedSolution annotatedSolution) {
 
 		final Map<String, Long> componentValues = lsafe.getBestFitnesses();
 
 		componentNames.addAll(componentValues.keySet());
 
-		fitnessComponentTrace.put(numberOfIterations,
-				new LinkedHashMap<String, Long>(componentValues));
+		fitnessComponentTrace.put(numberOfIterations, new LinkedHashMap<String, Long>(componentValues));
 
 		fitnessTrace.put(numberOfIterations, bestFitness);
 	}
@@ -125,8 +116,7 @@ public class FitnessTraceExporter implements IRunExporter {
 
 			// Print Data rows.
 			for (final Integer key : fitnessTrace.keySet()) {
-				final Map<String, Long> components = fitnessComponentTrace
-						.get(key);
+				final Map<String, Long> components = fitnessComponentTrace.get(key);
 				final Long fitness = fitnessTrace.get(key);
 
 				writer.print(key);

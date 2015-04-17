@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -27,6 +28,7 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -40,7 +42,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lingo.its.internal.Activator;
-import com.mmxlabs.lingo.its.utils.MigrationHelper;
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -51,12 +52,16 @@ import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Fitness;
+import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
-import com.mmxlabs.models.lng.transformer.its.tests.ScenarioRunner;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
+import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.migration.IMigrationRegistry;
+import com.mmxlabs.models.migration.scenario.MigrationHelper;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.scenario.service.manifest.ManifestPackage;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
@@ -136,7 +141,8 @@ public class AbstractOptimisationResultTester {
 	}
 
 	@Nullable
-	private IScenarioCipherProvider getScenarioCipherProvider() {
+	protected IScenarioCipherProvider getScenarioCipherProvider() {
+
 		final Bundle bundle = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class);
 		if (bundle != null) {
 			final BundleContext bundleContext = bundle.getBundleContext();
@@ -161,7 +167,7 @@ public class AbstractOptimisationResultTester {
 	 * @throws MigrationException
 	 * @throws InterruptedException
 	 */
-	public void runScenario(final URL url) throws Exception {
+	public void runScenario(@NonNull final URL url) throws Exception {
 
 		final URI uri = URI.createURI(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20"));
 
@@ -181,7 +187,7 @@ public class AbstractOptimisationResultTester {
 		}
 	}
 
-	public ScenarioRunner evaluateScenario(final URL url) throws Exception {
+	public LNGScenarioRunner evaluateScenario(@NonNull final URL url) throws Exception {
 
 		final URI uri = URI.createURI(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20"));
 
@@ -210,28 +216,20 @@ public class AbstractOptimisationResultTester {
 	 * @throws MigrationException
 	 * @throws InterruptedException
 	 */
-	public ScenarioRunner runScenario(final LNGScenarioModel originalScenario, final URL origURL) throws IOException, IncompleteScenarioException {
+	public LNGScenarioRunner runScenario(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL) throws IOException, IncompleteScenarioException {
 
-		// TODO: Does EcoreUtil.copy work -- do we need to do it here?
-		final LNGScenarioModel copy = duplicate(originalScenario);
 		if (false) {
-			final IMigrationRegistry migrationRegistry = Activator.getDefault().getMigrationRegistry();
-			final String context = migrationRegistry.getDefaultMigrationContext();
-			if (context == null) {
-				throw new NullPointerException("Context cannot be null");
-			}
-			int version = migrationRegistry.getLatestContextVersion(context);
-			if (version < 0) {
-				version = migrationRegistry.getLastReleaseVersion(context);
-			}
-			ScenarioTools.storeToFile(copy, new File("C:/temp/scen.lingo"), context, version);
+			saveScenarioModel(originalScenario);
 		}
-		// Create two scenario runners.
-		// TODO are two necessary?
-		final ScenarioRunner originalScenarioRunner = new ScenarioRunner(originalScenario);
-		originalScenarioRunner.init();
-		final EList<Fitness> currentOriginalFitnesses = originalScenarioRunner.getIntialSchedule().getFitnesses();
 
+		final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(originalScenario, LNGScenarioRunner.createDefaultSettings(), LNGTransformer.HINT_OPTIMISE_LSO);
+		// Limit number of iterations to keep runtime down.
+		scenarioRunner.initAndEval(new TransformerExtensionTestModule(), 10000);
+
+		Schedule intialSchedule = scenarioRunner.getIntialSchedule();
+		Assert.assertNotNull(intialSchedule);
+
+		final EList<Fitness> currentOriginalFitnesses = intialSchedule.getFitnesses();
 		if (!storeFitnessMap) {
 			final URL propsURL = new URL(FileLocator.toFileURL(new URL(origURL.toString() + ".properties")).toString().replaceAll(" ", "%20"));
 
@@ -242,13 +240,13 @@ public class AbstractOptimisationResultTester {
 			testOriginalAndCurrentFitnesses(props, originalFitnessesMapName, currentOriginalFitnesses);
 		}
 
-		// originalScenarioRunner.run();
-		final ScenarioRunner endScenarioRunner = new ScenarioRunner(copy);
-		endScenarioRunner.init();
-		endScenarioRunner.run();
+		scenarioRunner.run();
 
 		// get the fitnesses.
-		final EList<Fitness> currentEndFitnesses = endScenarioRunner.getFinalSchedule().getFitnesses();
+		Schedule finalSchedule = scenarioRunner.getFinalSchedule();
+		Assert.assertNotNull(finalSchedule);
+
+		final EList<Fitness> currentEndFitnesses = finalSchedule.getFitnesses();
 
 		if (storeFitnessMap) {
 
@@ -275,11 +273,13 @@ public class AbstractOptimisationResultTester {
 
 			try {
 				final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(origURL.toString() + ".properties")).toString().replaceAll(" ", "%20"));
-			
-				//final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(origURL.toString())).toString().replaceAll(" ", "%20"));
+
+				// final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(origURL.toString())).toString().replaceAll(" ", "%20"));
 				final File file2 = new File(expectedReportOutput.toURI());
 				// final File file2 = new File(f1.getAbsoluteFile() + ".properties");
-				props.store(new FileOutputStream(file2), "Created by " + AbstractOptimisationResultTester.class.getName());
+				try (FileOutputStream out = new FileOutputStream(file2)) {
+					props.store(out, "Created by " + AbstractOptimisationResultTester.class.getName());
+				}
 			} catch (final URISyntaxException e) {
 				e.printStackTrace();
 			}
@@ -294,31 +294,39 @@ public class AbstractOptimisationResultTester {
 			// testOriginalAndCurrentFitnesses(props, originalFitnessesMapName, currentOriginalFitnesses);
 			testOriginalAndCurrentFitnesses(props, endFitnessesMapName, currentEndFitnesses);
 		}
-		return endScenarioRunner;
+		return scenarioRunner;
 	}
 
-	public ScenarioRunner evaluateScenario(final LNGScenarioModel originalScenario, final URL origURL) throws IOException, IncompleteScenarioException {
+	public LNGScenarioRunner evaluateScenario(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL) throws IOException, IncompleteScenarioException {
 
 		// TODO: Does EcoreUtil.copy work -- do we need to do it here?
 		if (false) {
-			final LNGScenarioModel copy = duplicate(originalScenario);
-			final IMigrationRegistry migrationRegistry = Activator.getDefault().getMigrationRegistry();
-			final String context = migrationRegistry.getDefaultMigrationContext();
-			if (context == null) {
-				throw new NullPointerException("Context cannot be null");
-			}
-			int version = migrationRegistry.getLatestContextVersion(context);
-			if (version < 0) {
-				version = migrationRegistry.getLastReleaseVersion(context);
-			}
-			ScenarioTools.storeToFile(copy, new File("C:/temp/scen.lingo"), context, version);
+			saveScenarioModel(originalScenario);
 		}
-		// Create two scenario runners.
-		// TODO are two necessary?
-		final ScenarioRunner originalScenarioRunner = new ScenarioRunner(originalScenario);
-		originalScenarioRunner.init();
+		// Create scenario runner with optimisation params incase we want to run optimisation outside of the opt run method.
+		final LNGScenarioRunner originalScenarioRunner = new LNGScenarioRunner(originalScenario, LNGScenarioRunner.createDefaultSettings(), LNGTransformer.HINT_OPTIMISE_LSO);
+		originalScenarioRunner.initAndEval(new TransformerExtensionTestModule(), 10000);
 
 		return originalScenarioRunner;
+	}
+
+	private void saveScenarioModel(@NonNull final LNGScenarioModel scenario) throws IOException {
+		saveScenarioModel(scenario, new File("C:/temp/scen.lingo"));
+	}
+
+	private void saveScenarioModel(@NonNull final LNGScenarioModel scenario, @NonNull File destinationFile) throws IOException {
+
+		final LNGScenarioModel copy = duplicate(scenario);
+		final IMigrationRegistry migrationRegistry = Activator.getDefault().getMigrationRegistry();
+		final String context = migrationRegistry.getDefaultMigrationContext();
+		if (context == null) {
+			throw new NullPointerException("Context cannot be null");
+		}
+		int version = migrationRegistry.getLatestContextVersion(context);
+		if (version < 0) {
+			version = migrationRegistry.getLastReleaseVersion(context);
+		}
+		ScenarioTools.storeToFile(copy, destinationFile, context, version);
 	}
 
 	/**
@@ -424,8 +432,7 @@ public class AbstractOptimisationResultTester {
 	public void testReports(final ScenarioInstance instance, final URL scenarioURL, final String reportID, final String shortName, final String extension) throws Exception {
 
 		final LNGScenarioModel originalScenario = (LNGScenarioModel) instance.getInstance();
-		final ScenarioRunner runner = evaluateScenario(originalScenario, scenarioURL);
-		runner.updateScenario();
+		final LNGScenarioRunner runner = evaluateScenario(originalScenario, scenarioURL);
 
 		final ReportTester reportTester = new ReportTester();
 		final IReportContents reportContents = reportTester.getReportContents(instance, reportID);
@@ -438,16 +445,16 @@ public class AbstractOptimisationResultTester {
 			final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString())).toString().replaceAll(" ", "%20"));
 
 			final File f1 = new File(expectedReportOutput.toURI());
-			String slash = f1.isDirectory() ? "/" : "";
+			final String slash = f1.isDirectory() ? "/" : "";
 			final File file2 = new File(f1.getAbsoluteFile() + slash + "reports" + "." + shortName + "." + extension);
-			try (PrintWriter pw = new PrintWriter(file2)) {
+			try (PrintWriter pw = new PrintWriter(file2, StandardCharsets.UTF_8.name())) {
 				pw.print(actualContents);
 			}
 		} else {
 			final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString() + "reports" + "." + shortName + "." + extension)).toString().replaceAll(" ", "%20"));
 			final StringBuilder expectedOutputBuilder = new StringBuilder();
 			{
-				try (InputStream is = expectedReportOutput.openStream(); BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
+				try (InputStream is = expectedReportOutput.openStream(); BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
 					String line = reader.readLine();
 					if (line != null) {
 						expectedOutputBuilder.append(line);

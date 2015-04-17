@@ -38,13 +38,16 @@ Require-Bundle: org.junit;bundle-version="4.8.1",
  com.mmxlabs.lingo.extensions;bundle-version="3.9.0",
  org.eclipse.jdt.annotation;bundle-version="[1.1.0,2.0.0)";resolution:=optional,
  com.mmxlabs.lingo.reports,
- com.mmxlabs.models.lng.actuals.editor;bundle-version="[3.9.0,3.10.0)"
+ com.mmxlabs.models.lng.actuals.editor;bundle-version="[3.9.0,3.10.0)",
+ com.mmxlabs.common.common-util,
+ com.mmxlabs.models.lng.transformer.ui
 Bundle-ClassPath: data/,
  .
 Import-Package: org.slf4j;version="1.6.4"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.mmxlabs.lingo.its.internal.Activator
 Export-Package: com.mmxlabs.lingo.its.tests,
+ com.mmxlabs.lingo.its.tests.category,
  com.mmxlabs.lingo.its.uat.suite.cases,
  com.mmxlabs.lingo.its.uat.suite.testers,
  com.mmxlabs.lingo.its.uat.suite.utils,

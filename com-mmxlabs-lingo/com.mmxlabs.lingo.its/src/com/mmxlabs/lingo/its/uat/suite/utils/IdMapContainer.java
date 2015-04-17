@@ -7,24 +7,24 @@ package com.mmxlabs.lingo.its.uat.suite.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 public class IdMapContainer {
 	String name;
 	List<IdMap> idMapList;
 
-	public IdMapContainer(String name) {
+	public IdMapContainer(final String name) {
 		this.name = name;
-		setIdMapList(new ArrayList<IdMap>());
+		this.idMapList = new ArrayList<IdMap>();
 	}
-	
-	public void addToList(IdMap m) {
+
+	public void addToList(final IdMap m) {
 		getIdMapList().add(m);
 	}
 
+	@NonNull
 	public List<IdMap> getIdMapList() {
 		return idMapList;
 	}
 
-	public void setIdMapList(List<IdMap> idMapList) {
-		this.idMapList = idMapList;
-	}
 }

@@ -25,6 +25,8 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +44,7 @@ import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.models.lng.transformer.its.tests.ScenarioRunner;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 
 /**
  * Abstract class with methods to extract features from given EMF models for use in producing test files and comparisons for clients. Expected to be subclassed on a per client, per contract basis.
@@ -54,7 +56,7 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 
 	private static final Logger LOG = LoggerFactory.getLogger(FeatureBasedUAT.class);
 
-	protected List<EStructuralFeature> getFeatures(final EClass c) {
+	protected List<EStructuralFeature> getFeatures(@NonNull final EClass c) {
 		final List<EStructuralFeature> list = new ArrayList<EStructuralFeature>();
 		final List<EStructuralFeature> features = c.getEAllStructuralFeatures();
 		for (final EStructuralFeature f : features) {
@@ -71,9 +73,10 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 
 	}
 
-	protected ScenarioRunner getScenarioRunner(final String filePath, final boolean isLingoFile) throws Exception {
+	protected LNGScenarioRunner getScenarioRunner(@NonNull final String filePath, final boolean isLingoFile) throws Exception {
 		final URL url = getClass().getResource(filePath);
-		final ScenarioRunner runner;
+		Assert.assertNotNull(url);
+		final LNGScenarioRunner runner;
 		if (isLingoFile) {
 			runner = evaluateScenario(url);
 		} else {
@@ -82,18 +85,14 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		return runner;
 	}
 
-	protected ScenarioRunner getScenarioRunner(final String filePath) throws Exception {
+	protected LNGScenarioRunner getScenarioRunner(@NonNull final String filePath) throws Exception {
 
 		return getScenarioRunner(filePath, isLingoFile(filePath));
 	}
 
-	public Schedule getSchedule(final String lingoFileName) throws Exception {
-		final ScenarioRunner runner = getScenarioRunner(lingoFileName);
+	public Schedule getSchedule(@NonNull final String lingoFileName) throws Exception {
+		final LNGScenarioRunner runner = getScenarioRunner(lingoFileName);
 		Assert.assertNotNull(runner);
-
-		// Update the scenario with the Schedule links
-		runner.updateScenario();
-
 		final Schedule schedule = runner.getIntialSchedule();
 		return schedule;
 	}
@@ -113,25 +112,19 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		return isLingo;
 	}
 
-	protected void fillFeatureMap(final EClass eClass, final IdMapContainer baseTable, final EObject containedObj, final String prefix) {
+	protected void fillFeatureMap(@NonNull final EClass eClass, @NonNull final IdMapContainer baseTable, @NonNull final EObject containedObj, @NonNull final String prefix) {
 		if (eClass != null) {
 			for (final EStructuralFeature e : getFeatures(eClass)) {
-				baseTable.getIdMapList().add(new IdMap() {
-					{
-						this.setId(prefix.equals("") ? e.getName() : prefix + "-" + e.getName());
-						setFeature(e);
-						setContainer(containedObj);
-					}
-				});
+				baseTable.getIdMapList().add(new IdMap(prefix.equals("") ? e.getName() : (prefix + "-" + e.getName()), e, containedObj));
 			}
 		}
 	}
 
-	protected void fillFeatureMap(final EClass eClass, final IdMapContainer baseTable, final EObject containedObj) {
+	protected void fillFeatureMap(@NonNull final EClass eClass, @NonNull final IdMapContainer baseTable, @NonNull final EObject containedObj) {
 		fillFeatureMap(eClass, baseTable, containedObj, "");
 	}
 
-	private double getLingoOutput(final EObject modelObject, final EStructuralFeature feature) {
+	private double getLingoOutput(@NonNull final EObject modelObject, @NonNull final EStructuralFeature feature) {
 		double value;
 		if (modelObject.eGet(feature) instanceof Integer) {
 			value = (double) ((Integer) modelObject.eGet(feature));
@@ -151,7 +144,7 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		return value * (Math.pow(10, multiplier));
 	}
 
-	private int getMultiplier(final EStructuralFeature e) {
+	private int getMultiplier(@NonNull final EStructuralFeature e) {
 		final Integer multiplier = FeatureIdTools.getMultiplier(e);
 		if (multiplier != null) {
 			return FeatureIdTools.getMultiplier(e);
@@ -159,7 +152,7 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		return 0;
 	}
 
-	protected IdMapContainer getGPLFeaturesMap(final GroupProfitAndLoss gPL) {
+	protected IdMapContainer getGPLFeaturesMap(@Nullable final GroupProfitAndLoss gPL) {
 		final IdMapContainer gPLTable = new IdMapContainer("groupProfitAndLoss");
 		if (gPL != null) {
 			fillFeatureMap(gPL.eClass(), gPLTable, gPL);
@@ -167,7 +160,7 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		return gPLTable;
 	}
 
-	protected IdMapContainer getLoadSlotFeaturesMap(final EList<SlotAllocation> slotAllocations) {
+	protected IdMapContainer getLoadSlotFeaturesMap(@NonNull final EList<SlotAllocation> slotAllocations) {
 		final IdMapContainer slotTable = new IdMapContainer("loadSlot");
 		LoadSlot loadSlot = null;
 		SlotAllocation loadAllocation = null;
@@ -184,7 +177,7 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		return slotTable;
 	}
 
-	protected IdMapContainer getDischargeSlotFeaturesMap(final EList<SlotAllocation> slotAllocations) {
+	protected IdMapContainer getDischargeSlotFeaturesMap(@NonNull final EList<SlotAllocation> slotAllocations) {
 		final IdMapContainer slotTable = new IdMapContainer("dischargeSlot");
 		DischargeSlot dischargeSlot = null;
 		SlotAllocation dischargeAllocation = null;
@@ -201,7 +194,7 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		return slotTable;
 	}
 
-	protected IdMapContainer getEventsFeaturesMap(final EList<Event> events) {
+	protected IdMapContainer getEventsFeaturesMap(@NonNull final EList<Event> events) {
 		final IdMapContainer eventTable = new IdMapContainer("events");
 
 		for (int i = 0; i < events.size(); i++) {
@@ -221,7 +214,7 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		return eventTable;
 	}
 
-	protected void addDefaultDetails(final List<IdMapContainer> allDetails, final CargoAllocation cargoAllocation) {
+	protected void addDefaultDetails(@NonNull final List<IdMapContainer> allDetails, @NonNull final CargoAllocation cargoAllocation) {
 		if (GlobalUATTestsConfig.INCLUDE_GROUP_PROFIT_LOSS_DETAILS) {
 			final GroupProfitAndLoss gPL = cargoAllocation.getGroupProfitAndLoss();
 			allDetails.add(getGPLFeaturesMap(gPL));
@@ -236,7 +229,7 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		}
 	}
 
-	public void createPropertiesForCase(final String lingoFileName, final String cargoName) throws Exception {
+	public void createPropertiesForCase(@NonNull final String lingoFileName, @NonNull final String cargoName) throws Exception {
 		final Schedule schedule = getSchedule(lingoFileName);
 
 		final Properties props = getNewProperties(lingoFileName);
@@ -247,7 +240,7 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		writePropertiesFile(props, propsURL);
 	}
 
-	public void createPropertiesForTypedCase(final Schedule schedule, final String lingoFileName, final String cargoName) throws Exception {
+	public void createPropertiesForTypedCase(@NonNull final Schedule schedule, @NonNull final String lingoFileName, @NonNull final String cargoName) throws Exception {
 		final Properties props = getNewProperties(lingoFileName);
 		final URL propsURL = getPropertiesURL(lingoFileName, cargoName);
 
@@ -259,7 +252,7 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		writePropertiesFile(props, propsURL);
 	}
 
-	private Properties getNewProperties(final String lingoFileName) throws MalformedURLException, IOException {
+	private Properties getNewProperties(@NonNull final String lingoFileName) throws MalformedURLException, IOException {
 		/**
 		 * Extend to save properties in a sorted order for ease of reading
 		 */
@@ -280,21 +273,21 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		return props;
 	}
 
-	private Properties getExistingProperties(final String lingoFileName, final String suffix) throws MalformedURLException, IOException {
+	private Properties getExistingProperties(@NonNull final String lingoFileName, @NonNull final String suffix) throws MalformedURLException, IOException {
 		final Properties props = new Properties();
 		final URL propsURL = getPropertiesURL(lingoFileName, suffix);
 		props.load(propsURL.openStream());
 		return props;
 	}
 
-	private void fillProperties(final Schedule schedule, final String cargoName, final Properties props) {
+	private void fillProperties(@NonNull final Schedule schedule, @NonNull final String cargoName, @NonNull final Properties props) {
 		final List<IdMapContainer> idMapContainers = getIdMapContainers(schedule, cargoName);
 		for (final IdMapContainer d : idMapContainers) {
 			addToProperties(props, d.getIdMapList(), d.name);
 		}
 	}
 
-	private void writePropertiesFile(final Properties props, final URL propsURL) throws FileNotFoundException, IOException {
+	private void writePropertiesFile(@NonNull final Properties props, @NonNull final URL propsURL) throws FileNotFoundException, IOException {
 		// create properties file
 		File file;
 		try {
@@ -305,7 +298,7 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		}
 	}
 
-	public void checkPropertiesForCase(final String lingoFileName, final String cargoName, final boolean additionalChecks) throws Exception {
+	public void checkPropertiesForCase(@NonNull final String lingoFileName, @NonNull final String cargoName, final boolean additionalChecks) throws Exception {
 		final Properties props = getExistingProperties(lingoFileName, "");
 
 		final Schedule schedule = getSchedule(lingoFileName);
@@ -320,7 +313,7 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		}
 	}
 
-	public void checkPropertiesForTypedCase(final Schedule schedule, final String lingoFileName, final String cargoName, final boolean additionalChecks) throws Exception {
+	public void checkPropertiesForTypedCase(@NonNull final Schedule schedule, @NonNull final String lingoFileName, @NonNull final String cargoName, final boolean additionalChecks) throws Exception {
 		final Properties props = getExistingProperties(lingoFileName, cargoName);
 
 		final List<IdMapContainer> idMapContainers = getIdMapContainers(schedule, cargoName);
@@ -339,10 +332,11 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 	 * @param schedule
 	 * @param cargoName
 	 */
-	protected void additionalChecks(final Schedule schedule, final String cargoName) {
+	protected void additionalChecks(@NonNull final Schedule schedule, @NonNull final String cargoName) {
 	}
 
-	protected URL getPropertiesURL(final String lingoFileName, final String suffix) throws MalformedURLException, IOException {
+	@NonNull
+	protected URL getPropertiesURL(@NonNull final String lingoFileName, @NonNull final String suffix) throws MalformedURLException, IOException {
 		final URL propsURL;
 		final URL url = getClass().getResource(lingoFileName);
 		final String urlString = FileLocator.toFileURL(new URL(url.toString())).toString();
@@ -366,13 +360,13 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		return propsURL;
 	}
 
-	private void addToProperties(final Properties prop, final List<IdMap> table, final String prefix) {
+	private void addToProperties(@NonNull final Properties prop, @NonNull final List<IdMap> table, @NonNull final String prefix) {
 		for (final IdMap map : table) {
 			prop.setProperty(createPropertyKey(map, prefix), String.format("%.7f", (double) getLingoOutput(map.getContainer(), map.getFeature())));
 		}
 	}
 
-	private void comparePropertiesToLingo(final Properties prop, final List<IdMap> table, final String prefix, final String cargoName) {
+	private void comparePropertiesToLingo(@NonNull final Properties prop, @NonNull final List<IdMap> table, @NonNull final String prefix, @NonNull final String cargoName) {
 		for (final IdMap map : table) {
 			final String key = createPropertyKey(map, prefix);
 			if (prop.containsKey(key)) {
@@ -385,7 +379,7 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		}
 	}
 
-	private String createPropertyKey(final IdMap map, final String prefix) {
+	private String createPropertyKey(@NonNull final IdMap map, @NonNull final String prefix) {
 		return String.format("%s-%s", prefix, map.getId());
 	}
 
@@ -396,6 +390,6 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 	 * @param cargoName
 	 * @return
 	 */
-	protected abstract List<IdMapContainer> getIdMapContainers(Schedule schedule, String cargoName);
+	protected abstract List<IdMapContainer> getIdMapContainers(@NonNull Schedule schedule, @NonNull String cargoName);
 
 }

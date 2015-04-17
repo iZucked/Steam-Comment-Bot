@@ -5,11 +5,16 @@
 package com.mmxlabs.lingo.its.tests;
 
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.lingo.its.tests.category.QuickTest;
 import com.mmxlabs.lingo.its.utils.CSVImporter;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 
@@ -31,68 +36,67 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 @RunWith(value = Parameterized.class)
 public abstract class AbstractReportTester_CSV extends AbstractOptimisationResultTester {
 
-	// Used by annotation before getting to constructor
-	@SuppressWarnings("unused")
-	private final String name;
-	private final String scenario;
+	private static Map<Pair<String, String>, Pair<URL, LNGScenarioModel>> cache = new HashMap<>();
 
-	public AbstractReportTester_CSV(final String name, final String scenario) {
-		this.name = name;
-		this.scenario = scenario;
+	private final Pair<String, String> key;
+
+	public AbstractReportTester_CSV(final String name, final String scenarioPath) {
+
+		key = new Pair<>(name, scenarioPath);
+		if (!cache.containsKey(key)) {
+			final URL url = getClass().getResource(scenarioPath);
+			final LNGScenarioModel scenarioModel = CSVImporter.importCSVScenario(url.toString());
+			cache.put(key, new Pair<>(url, scenarioModel));
+		}
+	}
+
+	protected void testReports(final String reportID, final String shortName, final String extension) throws Exception {
+		final Pair<URL, LNGScenarioModel> pair = cache.get(key);
+		final URL url = pair.getFirst();
+		final LNGScenarioModel scenarioModel = pair.getSecond();
+		testReports(scenarioModel, url, reportID, shortName, extension);
 	}
 
 	@Test
+	@Category(QuickTest.class)
 	public void reportTest_VerticalReport() throws Exception {
-
-		// Load the scenario to test
-		final URL url = getClass().getResource(scenario);
-		final LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
-		testReports(scenario, url, ReportTester.VERTICAL_REPORT_ID, ReportTester.VERTICAL_REPORT_SHORTNAME, "html");
+		testReports(ReportTester.VERTICAL_REPORT_ID, ReportTester.VERTICAL_REPORT_SHORTNAME, "html");
 	}
 
 	@Test
+	@Category(QuickTest.class)
 	public void reportTest_ScheduleSummary() throws Exception {
-
-		// Load the scenario to test
-		final URL url = getClass().getResource(scenario);
-		final LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
-		testReports(scenario, url, ReportTester.SCHEDULE_SUMMARY_ID, ReportTester.SCHEDULE_SUMMARY_SHORTNAME, "html");
+		testReports(ReportTester.SCHEDULE_SUMMARY_ID, ReportTester.SCHEDULE_SUMMARY_SHORTNAME, "html");
 	}
 
 	@Test
+	@Category(QuickTest.class)
 	public void reportTest_PortRotations() throws Exception {
-
-		// Load the scenario to test
-		final URL url = getClass().getResource(scenario);
-		final LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
-		testReports(scenario, url, ReportTester.PORT_ROTATIONS_ID, ReportTester.PORT_ROTATIONS_SHORTNAME, "html");
+		testReports(ReportTester.PORT_ROTATIONS_ID, ReportTester.PORT_ROTATIONS_SHORTNAME, "html");
 	}
 
 	@Test
+	@Category(QuickTest.class)
 	public void testLatenessReport() throws Exception {
-		final URL url = getClass().getResource(scenario);
-		final LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
-		testReports(scenario, url, ReportTester.LATENESS_REPORT_ID, ReportTester.LATENESS_REPORT_SHORTNAME, "html");
+		testReports(ReportTester.LATENESS_REPORT_ID, ReportTester.LATENESS_REPORT_SHORTNAME, "html");
+
 	}
 
 	@Test
+	@Category(QuickTest.class)
 	public void testCapacityReport() throws Exception {
-		final URL url = getClass().getResource(scenario);
-		final LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
-		testReports(scenario, url, ReportTester.CAPACITY_REPORT_ID, ReportTester.CAPACITY_REPORT_SHORTNAME, "html");
+		testReports(ReportTester.CAPACITY_REPORT_ID, ReportTester.CAPACITY_REPORT_SHORTNAME, "html");
 	}
 
 	@Test
+	@Category(QuickTest.class)
 	public void testVesselReport() throws Exception {
-		final URL url = getClass().getResource(scenario);
-		final LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
-		testReports(scenario, url, ReportTester.VESSEL_REPORT_ID, ReportTester.VESSEL_REPORT_SHORTNAME, "html");
+		testReports(ReportTester.VESSEL_REPORT_ID, ReportTester.VESSEL_REPORT_SHORTNAME, "html");
 	}
 
 	@Test
+	@Category(QuickTest.class)
 	public void testCooldownReport() throws Exception {
-		final URL url = getClass().getResource(scenario);
-		final LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
-		testReports(scenario, url, ReportTester.COOLDOWN_REPORT_ID, ReportTester.COOLDOWN_REPORT_SHORTNAME, "html");
+		testReports(ReportTester.COOLDOWN_REPORT_ID, ReportTester.COOLDOWN_REPORT_SHORTNAME, "html");
 	}
 }

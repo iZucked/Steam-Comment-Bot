@@ -6,9 +6,10 @@ package com.mmxlabs.lingo.its.uat.suite.utils;
 
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.jdt.annotation.NonNull;
 
 public class FeatureIdTools {
-	public static String getId(final EStructuralFeature feature) {
+	public static String getId(@NonNull final EStructuralFeature feature) {
 		final EAnnotation annotation = feature.getEAnnotation("http://www.mmxlabs.com/models/comparison/sheetId");
 		String id = null;
 		if (annotation != null) {
@@ -16,12 +17,12 @@ public class FeatureIdTools {
 		}
 		return id;
 	}
-	
-	public static Integer getMultiplier(final EStructuralFeature feature) {
+
+	public static Integer getMultiplier(@NonNull final EStructuralFeature feature) {
 		final EAnnotation annotation = feature.getEAnnotation("http://www.mmxlabs.com/models/comparison/sheetId");
 		Integer multiplier = null;
 		if (annotation != null) {
-			String multiplier_s = (String) annotation.getDetails().get("multiplier");
+			final String multiplier_s = (String) annotation.getDetails().get("multiplier");
 			if (multiplier_s == null) {
 				return null;
 			}
