@@ -6,28 +6,32 @@ package com.mmxlabs.lingo.its.uat.suite.utils;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.jdt.annotation.NonNull;
 
 public class IdMap {
-	private String id;
-	private EStructuralFeature feature;
-	private EObject container;
-	
+	private final String id;
+	private final EStructuralFeature feature;
+	private final EObject container;
+
+	public IdMap(@NonNull final String id, @NonNull final EStructuralFeature feature, @NonNull final EObject container) {
+		this.id = id;
+		this.feature = feature;
+		this.container = container;
+	}
+
+	@NonNull
 	public String getId() {
 		return id;
 	}
-	public void setId(String id) {
-		this.id = id;
-	}
+
+	@NonNull
 	public EObject getContainer() {
 		return container;
 	}
-	public void setContainer(EObject container) {
-		this.container = container;
-	}
+
+	@NonNull
 	public EStructuralFeature getFeature() {
 		return feature;
 	}
-	public void setFeature(EStructuralFeature feature) {
-		this.feature = feature;
-	}
+
 }

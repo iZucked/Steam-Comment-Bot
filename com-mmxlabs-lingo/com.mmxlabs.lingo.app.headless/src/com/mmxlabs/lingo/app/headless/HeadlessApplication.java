@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Collections;
+import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,12 +35,18 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
+import com.google.common.collect.Maps;
 import com.google.common.io.ByteStreams;
+import com.google.inject.Module;
 import com.mmxlabs.lingo.app.headless.exporter.FitnessTraceExporter;
 import com.mmxlabs.lingo.app.headless.exporter.IRunExporter;
 import com.mmxlabs.lingo.app.headless.internal.Activator;
+import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.migration.scenario.ScenarioMigrationService;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -52,6 +60,8 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.util.AbstractScenarioService;
 import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
+import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
+import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService.ModuleType;
 
 /**
  * Note duplication with various bits of ITS including ScenarioRunner and MigrationHelper
@@ -92,14 +102,12 @@ public class HeadlessApplication implements IApplication {
 		}
 
 		final String outputFile = settings.getOutput();
+		{
 
-		final ScenarioRunner runner = new ScenarioRunner(rootObject, settings);
-
-		runner.initStage1();
-
-		for (final IRunExporter exporter : exporters) {
-			exporter.setScenarioRunner(runner);
 		}
+		OptimiserSettings optimiserSettings = rootObject.getPortfolioModel().getParameters() == null ? ScenarioUtils.createDefaultSettings() : rootObject.getPortfolioModel().getParameters();
+		assert optimiserSettings != null;
+		final LNGScenarioRunner runner = new LNGScenarioRunner(rootObject, LNGScenarioRunner.createExtendedSettings(optimiserSettings), LNGTransformer.HINT_OPTIMISE_LSO);
 
 		final IOptimiserProgressMonitor monitor = new IOptimiserProgressMonitor() {
 			@Override
@@ -126,10 +134,17 @@ public class HeadlessApplication implements IApplication {
 					exporter.done(optimiser, bestFitness, annotatedSolution);
 				}
 			}
-
 		};
 
-		runner.initStage2(monitor);
+		final EnumMap<ModuleType, List<Module>> localOverrides = Maps.newEnumMap(IOptimiserInjectorService.ModuleType.class);
+		localOverrides.put(IOptimiserInjectorService.ModuleType.Module_ParametersModule, Collections.<Module> singletonList(new SettingsOverrideModule(settings)));
+
+		runner.init(monitor, null, localOverrides);
+
+		for (final IRunExporter exporter : exporters) {
+			exporter.setScenarioRunner(runner);
+		}
+		runner.evaluateInitialState();
 
 		System.out.println("LNGResult(");
 		System.out.println("\tscenario='" + scenarioFile + "',");
@@ -156,8 +171,7 @@ public class HeadlessApplication implements IApplication {
 		System.err.println("Optimised!");
 
 		if (outputFile != null) {
-			runner.updateScenario();
-			saveScenario(outputFile, runner.getScenario());
+			saveScenario(outputFile, rootObject);
 		}
 
 		for (final IRunExporter exporter : exporters) {

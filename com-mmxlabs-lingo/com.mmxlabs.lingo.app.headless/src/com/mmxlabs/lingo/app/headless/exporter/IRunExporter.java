@@ -6,7 +6,7 @@ package com.mmxlabs.lingo.app.headless.exporter;
 
 import java.io.File;
 
-import com.mmxlabs.lingo.app.headless.ScenarioRunner;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
 
 public interface IRunExporter extends IOptimiserProgressMonitor {
@@ -15,5 +15,5 @@ public interface IRunExporter extends IOptimiserProgressMonitor {
 
 	void exportData();
 
-	void setScenarioRunner(ScenarioRunner scenarioRunner);
+	void setScenarioRunner(LNGScenarioRunner scenarioRunner);
 }

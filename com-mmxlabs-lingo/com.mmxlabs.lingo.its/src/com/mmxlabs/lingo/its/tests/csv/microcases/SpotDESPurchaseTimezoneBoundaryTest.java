@@ -24,8 +24,8 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
-import com.mmxlabs.models.lng.transformer.its.tests.ScenarioRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScheduleTools;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 
 public class SpotDESPurchaseTimezoneBoundaryTest extends AbstractOptimisationResultTester {
 
@@ -46,9 +46,10 @@ public class SpotDESPurchaseTimezoneBoundaryTest extends AbstractOptimisationRes
 
 		final LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
 
-		final ScenarioRunner runner = runScenario(scenario, new URL(url.toString() + "fitness"));
-		runner.updateScenario();
+		final LNGScenarioRunner runner = runScenario(scenario, new URL(url.toString() + "fitness"));
+		// runner.updateScenario();
 		final Schedule schedule = runner.getFinalSchedule();
+		Assert.assertNotNull(schedule);
 
 		// Expect only two spot cargoes in Jan
 		Assert.assertNotNull(ScheduleTools.findCargoAllocation("DESPurchaseMarket-2014-01-0", schedule));

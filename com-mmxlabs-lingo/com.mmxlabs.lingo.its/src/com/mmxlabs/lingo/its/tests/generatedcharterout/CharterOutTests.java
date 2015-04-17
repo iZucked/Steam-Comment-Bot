@@ -19,7 +19,7 @@ import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
-import com.mmxlabs.models.lng.transformer.its.tests.ScenarioRunner;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 
 public class CharterOutTests extends AbstractOptimisationResultTester {
 
@@ -29,14 +29,12 @@ public class CharterOutTests extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/charter-out/gco-barca-bonny-point fortin-min days 60.lingo");
 
-		final ScenarioRunner runner = evaluateScenario(url);
+		final LNGScenarioRunner runner = evaluateScenario(url);
 		Assert.assertNotNull(runner);
-
-		// Update the scenario with the Schedule links
-		runner.updateScenario();
 
 		// Should be the same as the updateScenario as we have only called ScenarioRunner#init()
 		final Schedule schedule = runner.getIntialSchedule();
+		Assert.assertNotNull(schedule);
 
 		List<GeneratedCharterOut> charterOuts = findGCOEvents(schedule.getSequences().get(0));
 		Assert.assertEquals(charterOuts.size(), 0);
@@ -48,14 +46,12 @@ public class CharterOutTests extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/charter-out/gco-barca-bonny-point fortin.lingo");
 
-		final ScenarioRunner runner = evaluateScenario(url);
+		final LNGScenarioRunner runner = evaluateScenario(url);
 		Assert.assertNotNull(runner);
-
-		// Update the scenario with the Schedule links
-		runner.updateScenario();
 
 		// Should be the same as the updateScenario as we have only called ScenarioRunner#init()
 		final Schedule schedule = runner.getIntialSchedule();
+		Assert.assertNotNull(schedule);
 
 		List<GeneratedCharterOut> charterOuts = findGCOEvents(schedule.getSequences().get(0));
 		Assert.assertEquals(charterOuts.size(), 1);
@@ -74,14 +70,12 @@ public class CharterOutTests extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/charter-out/gco-barca-point fortin.lingo");
 
-		final ScenarioRunner runner = evaluateScenario(url);
+		final LNGScenarioRunner runner = evaluateScenario(url);
 		Assert.assertNotNull(runner);
-
-		// Update the scenario with the Schedule links
-		runner.updateScenario();
 
 		// Should be the same as the updateScenario as we have only called ScenarioRunner#init()
 		final Schedule schedule = runner.getIntialSchedule();
+		Assert.assertNotNull(schedule);
 
 		List<GeneratedCharterOut> charterOuts = findGCOEvents(schedule.getSequences().get(0));
 		Assert.assertEquals(charterOuts.size(), 1);
