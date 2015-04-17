@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.ops4j.peaberry.Peaberry;
 import org.ops4j.peaberry.util.TypeLiterals;
 
@@ -73,8 +75,8 @@ public class LNGTransformer {
 
 	/**
 	 */
-	public LNGTransformer(final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings, final Map<IOptimiserInjectorService.ModuleType, List<Module>> localOverrides,
-			final String... hints) {
+	public LNGTransformer(@NonNull final LNGScenarioModel scenario, @NonNull final OptimiserSettings optimiserSettings,
+			@Nullable final Map<IOptimiserInjectorService.ModuleType, List<Module>> localOverrides, final String... hints) {
 		this(scenario, optimiserSettings, null, localOverrides, hints);
 	}
 
@@ -84,14 +86,14 @@ public class LNGTransformer {
 	 * @param module
 	 * @param hints
 	 */
-	public LNGTransformer(final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings, final Module module, final String... hints) {
+	public LNGTransformer(@NonNull final LNGScenarioModel scenario, @NonNull final OptimiserSettings optimiserSettings, @Nullable final Module module, final String... hints) {
 		this(scenario, optimiserSettings, module, null, hints);
 	}
 
 	/**
 	 */
-	public LNGTransformer(final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings, final Module module,
-			final Map<IOptimiserInjectorService.ModuleType, List<Module>> localOverrides, final String... initialHints) {
+	public LNGTransformer(@NonNull final LNGScenarioModel scenario, @NonNull final OptimiserSettings optimiserSettings, @Nullable final Module module,
+			@Nullable final Map<IOptimiserInjectorService.ModuleType, List<Module>> localOverrides, final String... initialHints) {
 		this.scenario = scenario;
 		this.optimiserSettings = optimiserSettings;
 
@@ -107,10 +109,8 @@ public class LNGTransformer {
 				}
 			}
 		}
-		if (optimiserSettings != null) {
-			if (optimiserSettings.isGenerateCharterOuts()) {
-				hints.add(HINT_GENERATE_CHARTER_OUTS);
-			}
+		if (optimiserSettings.isGenerateCharterOuts()) {
+			hints.add(HINT_GENERATE_CHARTER_OUTS);
 		}
 
 		{

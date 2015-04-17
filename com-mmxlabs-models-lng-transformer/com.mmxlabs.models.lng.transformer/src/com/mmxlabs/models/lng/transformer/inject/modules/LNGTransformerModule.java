@@ -9,6 +9,7 @@ import static org.ops4j.peaberry.Peaberry.service;
 import javax.inject.Singleton;
 
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -67,9 +68,11 @@ public class LNGTransformerModule extends AbstractModule {
 
 	/**
 	 */
-	public LNGTransformerModule(final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings) {
+	public LNGTransformerModule(@NonNull final LNGScenarioModel scenario, @NonNull final OptimiserSettings optimiserSettings) {
 		this.scenario = scenario;
 		this.optimiserSettings = optimiserSettings;
+		assert scenario != null;
+		assert optimiserSettings != null;
 	}
 
 	@Override

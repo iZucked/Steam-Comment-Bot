@@ -18,8 +18,9 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
-import com.mmxlabs.models.lng.transformer.its.tests.ScenarioRunner;
+import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 
 /**
  * Creates a simple scenario for testing changes in price indexes and price dating
@@ -132,13 +133,11 @@ public class PricingTimesScenario {
 	 * Main testing methods to run the created scenario and compare the actual and expected price
 	 */
 	public void testSalesPrice(double... prices) {
-		ScenarioRunner runner = new ScenarioRunner((LNGScenarioModel) this.scenario);
-		try {
-			runner.init();
-		} catch (IncompleteScenarioException e) {
-			Assert.assertTrue("Scenario runner failed to initialise simple scenario.", false);
-		}
-		final Schedule schedule = runner.updateScenario();
+		LNGScenarioRunner runner = new LNGScenarioRunner((LNGScenarioModel) this.scenario, LNGScenarioRunner.createDefaultSettings());
+		runner.initAndEval(new TransformerExtensionTestModule());
+		final Schedule schedule = runner.getIntialSchedule();
+		Assert.assertNotNull(schedule);
+
 		// Workaround, would prefer to use ca.getInputCargo().getName() but hookup runner.updateScenario() not working
 		String errorMsg = "Cargo %s has incorrect pricing %2f != %2f";
 		for (int i = 0; i < schedule.getCargoAllocations().size(); i++) {
