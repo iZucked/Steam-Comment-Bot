@@ -9,7 +9,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -22,6 +21,7 @@ import javax.inject.Provider;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.joda.time.DateTime;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Pair;
@@ -1856,8 +1856,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	/**
 	 */
 	@Override
-	public void setEarliestDate(@NonNull final Date earliestTime) {
-		dateKeyProviderEditor.setTimeZero(earliestTime.getTime());
+	public void setEarliestDate(@NonNull final DateTime earliestTime) {
+		dateKeyProviderEditor.setTimeZero(earliestTime.getMillis());
 	}
 
 	/**

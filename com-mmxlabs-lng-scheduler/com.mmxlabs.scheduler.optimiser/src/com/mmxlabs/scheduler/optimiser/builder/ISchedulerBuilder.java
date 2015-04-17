@@ -17,6 +17,7 @@ import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.joda.time.DateTime;
 
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -611,7 +612,7 @@ public interface ISchedulerBuilder {
 	 * Set the earliest {@link Date} that will represent time zero.
 	 * 
 	 */
-	void setEarliestDate(@NonNull Date earliestTime);
+	void setEarliestDate(@NonNull DateTime earliestTime);
 
 	/**
 	 * @param vesselClass
