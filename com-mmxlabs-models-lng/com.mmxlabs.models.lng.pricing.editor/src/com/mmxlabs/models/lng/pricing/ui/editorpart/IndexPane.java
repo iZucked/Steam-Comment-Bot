@@ -394,6 +394,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 			};
 
 			col.getColumn().setData(EObjectTableViewer.COLUMN_RENDERER, renderer);
+			col.getColumn().setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, renderer);
 			final ICellManipulator manipulator = new ICellManipulator() {
 
 				@SuppressWarnings("unchecked")
