@@ -14,30 +14,28 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
-import com.mmxlabs.models.lng.transformer.its.tests.PeriodScenarioRunner;
-import com.mmxlabs.models.lng.transformer.its.tests.ScenarioRunner;
+import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.types.PortCapability;
 
+@Ignore("Disabled in 3.5, requires 4-opt-2 fix")
 public class PeriodOptimiserTest {
 
 	/**
 	 * Base case - all discharge slots should swap around for best P&L
 	 */
 	@Test
-	@Ignore("Disabled in 3.5, requires 4-opt-2 fix")
-	public void testSimpleDischargeSwap() {
+	public void testSimpleDischargeSwap() throws Exception {
 		final PeriodOptimiserScenarioTester tester = new PeriodOptimiserScenarioTester();
 
 		// Check the prices are correct rather than specific slot instances.
@@ -50,7 +48,7 @@ public class PeriodOptimiserTest {
 		Assert.assertEquals("20.0", tester.cargoB3.getSlots().get(1).getPriceExpression());
 
 		// Pass in null to disable opt range
-		tester.optimise(null, null);
+		tester.optimise();
 
 		Assert.assertEquals("20.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("20.0", tester.cargoA2.getSlots().get(1).getPriceExpression());
@@ -62,22 +60,21 @@ public class PeriodOptimiserTest {
 	}
 
 	@Test
-	@Ignore("requires 4-opt-2 fix")
-	public void testSimpleDischargeSwapPeriod() throws IOException {
+	public void testSimpleDischargeSwapPeriod() throws Exception {
 		final PeriodOptimiserScenarioTester tester = new PeriodOptimiserScenarioTester();
-		
+
 		// Check the prices are correct rather than specific slot instances.
 		Assert.assertEquals("5.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("5.0", tester.cargoA2.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("5.0", tester.cargoA3.getSlots().get(1).getPriceExpression());
-		
+
 		Assert.assertEquals("20.0", tester.cargoB1.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("20.0", tester.cargoB2.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("20.0", tester.cargoB3.getSlots().get(1).getPriceExpression());
-		
+
 		// Pass in null to disable opt range
 		tester.periodOptimise(DateAndCurveHelper.createDate(2013, 6, 15, 0, "UTC"), DateAndCurveHelper.createDate(2015, 10, 15, 0, "UTC"));
-		
+
 		Assert.assertEquals("20.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("20.0", tester.cargoA2.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("20.0", tester.cargoA3.getSlots().get(1).getPriceExpression());
@@ -86,70 +83,69 @@ public class PeriodOptimiserTest {
 		Assert.assertEquals("5.0", tester.cargoB2.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("5.0", tester.cargoB3.getSlots().get(1).getPriceExpression());
 	}
-	
+
 	@Test
-	@Ignore("requires 4-opt-2 fix")
-	public void testSimpleDischargeSwapPeriodMiddleOnly() throws IOException {
+	public void testSimpleDischargeSwapPeriodMiddleOnly() throws Exception {
 		final PeriodOptimiserScenarioTester tester = new PeriodOptimiserScenarioTester();
-		
+
 		// Check the prices are correct rather than specific slot instances.
 		Assert.assertEquals("5.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("5.0", tester.cargoA2.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("5.0", tester.cargoA3.getSlots().get(1).getPriceExpression());
-		
+
 		Assert.assertEquals("20.0", tester.cargoB1.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("20.0", tester.cargoB2.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("20.0", tester.cargoB3.getSlots().get(1).getPriceExpression());
-		
+
 		// Pass in null to disable opt range
 		tester.periodOptimise(DateAndCurveHelper.createDate(2014, 7, 15, 0, "UTC"), DateAndCurveHelper.createDate(2014, 8, 15, 0, "UTC"));
-		
+
 		Assert.assertEquals("5.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("20.0", tester.cargoA2.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("5.0", tester.cargoA3.getSlots().get(1).getPriceExpression());
-		
+
 		Assert.assertEquals("20.0", tester.cargoB1.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("5.0", tester.cargoB2.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("20.0", tester.cargoB3.getSlots().get(1).getPriceExpression());
 	}
-	
+
 	/**
 	 * The discharges of the middle cargos should be free to swap
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	@Test
-	@Ignore("requires 4-opt-2 fix")
-	public void testSimpleDischargeSwapPeriodMiddleOnlyLoadsLocked() throws IOException {
+	public void testSimpleDischargeSwapPeriodMiddleOnlyLoadsLocked() throws Exception {
 		final PeriodOptimiserScenarioTester tester = new PeriodOptimiserScenarioTester();
-		
+
 		// Check the prices are correct rather than specific slot instances.
 		Assert.assertEquals("5.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("5.0", tester.cargoA2.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("5.0", tester.cargoA3.getSlots().get(1).getPriceExpression());
-		
+
 		Assert.assertEquals("20.0", tester.cargoB1.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("20.0", tester.cargoB2.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("20.0", tester.cargoB3.getSlots().get(1).getPriceExpression());
-		
+
 		// Pass in null to disable opt range
 		tester.periodOptimise(DateAndCurveHelper.createDate(2014, 8, 2, 0, "UTC"), DateAndCurveHelper.createDate(2014, 8, 15, 0, "UTC"));
-		
+
 		Assert.assertEquals("5.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("20.0", tester.cargoA2.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("5.0", tester.cargoA3.getSlots().get(1).getPriceExpression());
-		
+
 		Assert.assertEquals("20.0", tester.cargoB1.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("5.0", tester.cargoB2.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("20.0", tester.cargoB3.getSlots().get(1).getPriceExpression());
 	}
-	
+
 	/**
 	 * The loads of the middle cargos should be free to swap. Note this will only work if the start valid followers fix has been implemented
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	@Test
-	@Ignore("requires 4-opt-2 fix")
-	public void testSimpleDischargeSwapPeriodMiddleOnlyDischargesLocked() throws IOException {
+	public void testSimpleDischargeSwapPeriodMiddleOnlyDischargesLocked() throws Exception {
 		final PeriodOptimiserScenarioTester tester = new PeriodOptimiserScenarioTester();
 		tester.cargoA2.getSortedSlots().get(0).setPriceExpression("20.0");
 		tester.cargoA2.getSortedSlots().get(1).setPriceExpression("20.0");
@@ -159,7 +155,7 @@ public class PeriodOptimiserTest {
 		tester.cargoB2.getSortedSlots().get(0).setMaxQuantity(100000);
 		tester.cargoB2.getSortedSlots().get(1).setPriceExpression("5.0");
 		tester.cargoB3.getSortedSlots().get(0).setPriceExpression("20.0");
-		
+
 		// Fix loads to vessel
 		tester.cargoA1.getSlots().get(0).getAllowedVessels().add(tester.vessels[1]);
 		tester.cargoA2.getSlots().get(0).getAllowedVessels().add(tester.vessels[1]);
@@ -169,27 +165,26 @@ public class PeriodOptimiserTest {
 		tester.cargoB2.getSlots().get(0).getAllowedVessels().add(tester.vessels[0]);
 		tester.cargoB3.getSlots().get(0).getAllowedVessels().add(tester.vessels[0]);
 
-
 		// Check the prices are correct rather than specific slot instances.
 		Assert.assertEquals("5.0", tester.cargoA1.getSlots().get(0).getPriceExpression());
 		Assert.assertEquals("20.0", tester.cargoA2.getSlots().get(0).getPriceExpression());
 		Assert.assertEquals("5.0", tester.cargoA3.getSlots().get(0).getPriceExpression());
-		
+
 		Assert.assertEquals("20.0", tester.cargoB1.getSlots().get(0).getPriceExpression());
 		Assert.assertEquals("5.0", tester.cargoB2.getSlots().get(0).getPriceExpression());
 		Assert.assertEquals("20.0", tester.cargoB3.getSlots().get(0).getPriceExpression());
-		
+
 		// Pass in null to disable opt range
 		tester.periodOptimise(DateAndCurveHelper.createDate(2014, 7, 30, 0, "UTC"), DateAndCurveHelper.createDate(2014, 8, 2, 0, "UTC"));
 		Assert.assertEquals("5.0", tester.cargoA1.getSlots().get(0).getPriceExpression());
 		Assert.assertEquals("20.0", tester.cargoA2.getSlots().get(0).getPriceExpression());
 		Assert.assertEquals("5.0", tester.cargoA3.getSlots().get(0).getPriceExpression());
-		
+
 		Assert.assertEquals("20.0", tester.cargoB1.getSlots().get(0).getPriceExpression());
 		Assert.assertEquals("5.0", tester.cargoB2.getSlots().get(0).getPriceExpression());
 		Assert.assertEquals("20.0", tester.cargoB3.getSlots().get(0).getPriceExpression());
 	}
-	
+
 	/**
 	 * Small scenario creator. Create 6 cargoes, 3 pairs of equivalent slots with volume/pricing adjusted to ensure swapping discharge is best result.
 	 * 
@@ -218,13 +213,13 @@ public class PeriodOptimiserTest {
 
 			loadPort2 = ScenarioTools.createPort("load-port2");
 			loadPort2.getCapabilities().add(PortCapability.LOAD);
-			
+
 			dischargePort = ScenarioTools.createPort("discharge-port");
 			dischargePort.getCapabilities().add(PortCapability.DISCHARGE);
 
 			dischargePort2 = ScenarioTools.createPort("discharge-port2");
 			dischargePort2.getCapabilities().add(PortCapability.DISCHARGE);
-			
+
 			loadPort.setDefaultWindowSize(1);
 			loadPort2.setDefaultWindowSize(1);
 			dischargePort.setDefaultWindowSize(1);
@@ -246,7 +241,7 @@ public class PeriodOptimiserTest {
 			// create a few vessels and add them to the list of vessels created.
 			// createVessels creates and adds the vessels to the scenario.
 			vessels = csc.addVesselSimple("classOne", 2, fuelPrice, 25, 1000000, 10, 10, 0, 500, false);
-			
+
 			final VesselAvailability[] vesselAvailabilities = new VesselAvailability[vessels.length];
 			for (int i = 0; i < vessels.length; ++i) {
 				for (VesselAvailability vesselAvailability : csc.getPortfolioModel().getCargoModel().getVesselAvailabilities()) {
@@ -327,57 +322,49 @@ public class PeriodOptimiserTest {
 			}
 		}
 
-		public void optimise(final Date start, final Date end) {
-			final ScenarioRunner runner = new ScenarioRunner((LNGScenarioModel) scenario);
+		public void optimise() throws Exception {
 			try {
 
 				final OptimiserSettings settings = ScenarioUtils.createDefaultSettings();
 
-				settings.getRange().setOptimiseAfter(start);
-				settings.getRange().setOptimiseBefore(end);
+				final LNGScenarioRunner runner = new LNGScenarioRunner((LNGScenarioModel) scenario, settings, LNGTransformer.HINT_OPTIMISE_LSO);
 
-				runner.init(settings);
-
-				save(runner.getScenario(), "c:/temp/scenario1.lingo");
+				runner.initAndEval(new TransformerExtensionTestModule());
+				// save(runner.getScenario(), "c:/temp/scenario1.lingo");
 				runner.run();
-				runner.updateScenario();
-
-				save(runner.getScenario(), "c:/temp/scenario2.lingo");
+				// save(runner.getScenario(), "c:/temp/scenario2.lingo");
 			} catch (final Exception er) {
 				// this exception should not occur
-				Assert.fail("Scenario runner failed to initialise scenario");
+				// Assert.fail("Scenario runner failed to initialise scenario");
+				throw er;
 			}
 		}
-		
-		public void periodOptimise(final Date start, final Date end) throws IOException {
-			final PeriodScenarioRunner runner = new PeriodScenarioRunner((LNGScenarioModel) scenario);
+
+		public void periodOptimise(final Date start, final Date end) throws Exception {
 			try {
-				
+
 				final OptimiserSettings settings = ScenarioUtils.createDefaultSettings();
-				
+
 				settings.getRange().setOptimiseAfter(start);
 				settings.getRange().setOptimiseBefore(end);
-				
-				try {
-					runner.init(settings);
-				} catch (IncompleteScenarioException e) {
-					e.printStackTrace();
-					Assert.fail("Scenario runner failed to initialise scenario: " + e.getMessage());
-				}
-				
-//				save(runner.getScenario(), "c:/temp/scenario1.lingo");
+
+				final LNGScenarioRunner runner = new LNGScenarioRunner((LNGScenarioModel) scenario, settings, LNGTransformer.HINT_OPTIMISE_LSO);
+				runner.initAndEval(new TransformerExtensionTestModule());
+
+				// save(runner.getScenario(), "c:/temp/scenario1.lingo");
 				runner.run();
-				runner.updateScenario();
-				
-//				save(runner.getScenario(), "c:/temp/scenario2.lingo");
+
+				// save(runner.getScenario(), "c:/temp/scenario2.lingo");
 			} catch (final Exception er) {
 				er.printStackTrace();
 				// this exception should not occur
-				Assert.fail("Scenario runner failed to initialise scenario: " + er.getMessage());
+				// Assert.fail("Scenario runner failed to initialise scenario: " + er.getMessage());
+				throw er;
 			}
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private void save(final LNGScenarioModel scenario, final String path) throws IOException {
 		final String context = "com.mmxlabs.lingo";
 		final int version = 26;

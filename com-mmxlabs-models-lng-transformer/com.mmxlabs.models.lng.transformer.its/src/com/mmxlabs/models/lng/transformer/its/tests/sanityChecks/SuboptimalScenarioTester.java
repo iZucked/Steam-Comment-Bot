@@ -16,13 +16,12 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
-import com.mmxlabs.models.lng.transformer.its.tests.ScenarioRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
@@ -32,9 +31,9 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.AbstractPairwiseConstrai
 /**
  * Creates a scenario object which has a strongly suboptimal wiring in PnL terms, ready to be rewired by the optimiser if constraints permit.
  * 
- * The scenario involves two load slots with large and small maximum cargo quantities respectively, and two discharge slots with matching large and small maximum cargo quantities. The optimum
- * wiring (constraints permitting) is to wire the large load slot (at "bigLoadPort") to the large discharge slot (at "bigDischargePort") and the small load slot (at "smallLoadPort") to the small
- * discharge slot (at "smallDischargePort"), to allow the maximum amount of cargo to be shipped in total. The returned scenario actually wires "bigLoadPort"->"smallDischargePort" and
+ * The scenario involves two load slots with large and small maximum cargo quantities respectively, and two discharge slots with matching large and small maximum cargo quantities. The optimum wiring
+ * (constraints permitting) is to wire the large load slot (at "bigLoadPort") to the large discharge slot (at "bigDischargePort") and the small load slot (at "smallLoadPort") to the small discharge
+ * slot (at "smallDischargePort"), to allow the maximum amount of cargo to be shipped in total. The returned scenario actually wires "bigLoadPort"->"smallDischargePort" and
  * "smallLoadPort"->"bigDischargePort".
  * 
  * @author Simon McGregor
@@ -112,22 +111,18 @@ public class SuboptimalScenarioTester {
 	 * @param dischargePorts
 	 *            A list of discharge ports for the expected wiring, in the same order as the load ports they should be wired to.
 	 */
-	public void testExpectedWiringProduced(Port[] loadPorts, Port[] dischargePorts) {
+	public void testExpectedWiringProduced(final Port[] loadPorts, final Port[] dischargePorts) {
 		Assert.assertEquals("Load port and discharge port lists should have same length", loadPorts.length, dischargePorts.length);
 
 		final int n = loadPorts.length;
 
 		// optimise the scenario
-		ScenarioRunner runner = new ScenarioRunner((LNGScenarioModel) scenario);
-		try {
-			runner.init();
-			runner.run();
-		} catch (IncompleteScenarioException e) {
-			// this exception should not occur
-			Assert.assertTrue("Scenario runner failed to initialise artificial suboptimal scenario.", false);
-		}
+		final LNGScenarioRunner runner = new LNGScenarioRunner((LNGScenarioModel) scenario, LNGScenarioRunner.createDefaultSettings(), LNGTransformer.HINT_OPTIMISE_LSO);
+		runner.initAndEval(new TransformerExtensionTestModule(), 10000);
+		runner.run();
 
 		final Schedule schedule = runner.getFinalSchedule();
+		Assert.assertNotNull(schedule);
 
 		// set up an array storing whether load ports are assigned at all
 		final boolean[] found = new boolean[n];
@@ -137,16 +132,16 @@ public class SuboptimalScenarioTester {
 
 		// check that the cargo allocations wire load ports up with the expected discharge ports
 		for (final CargoAllocation ca : schedule.getCargoAllocations()) {
-			Port loadPort = ca.getSlotAllocations().get(0).getPort();
-			Port dischargePort = ca.getSlotAllocations().get(1).getPort();
+			final Port loadPort = ca.getSlotAllocations().get(0).getPort();
+			final Port dischargePort = ca.getSlotAllocations().get(1).getPort();
 
-			int index = Arrays.asList(loadPorts).indexOf(loadPort);
+			final int index = Arrays.asList(loadPorts).indexOf(loadPort);
 			Assert.assertTrue(String.format("Load port '%s' was assigned a wiring but the expected wiring does not contain it.", loadPort.getName()), index >= 0);
 
 			if (index >= 0) {
 				found[index] = true;
-				Assert.assertTrue(
-						String.format("Expected solution wires '%s' to '%s' but the allocation wires it to '%s'. (load cv = %f; discharge min cv = %f; discharge max cv = %f", loadPort.getName(), dischargePorts[index].getName(), dischargePort.getName(), loadPort.getCvValue(), dischargePort.getMinCvValue(), dischargePort.getMaxCvValue()),
+				Assert.assertTrue(String.format("Expected solution wires '%s' to '%s' but the allocation wires it to '%s'. (load cv = %f; discharge min cv = %f; discharge max cv = %f",
+						loadPort.getName(), dischargePorts[index].getName(), dischargePort.getName(), loadPort.getCvValue(), dischargePort.getMinCvValue(), dischargePort.getMaxCvValue()),
 						dischargePorts[index].equals(dischargePort));
 			}
 		}
@@ -162,8 +157,8 @@ public class SuboptimalScenarioTester {
 	 * Runs the optimiser and tests that the post-optimiser wiring is the most profitable one. This should be the case unless the PnL-optimal wiring is prohibited by a constraint.
 	 */
 	public void testOptimalWiringProduced() {
-		Port[] loadPorts = { smallLoadPort, bigLoadPort };
-		Port[] dischargePorts = { smallDischargePort, bigDischargePort };
+		final Port[] loadPorts = { smallLoadPort, bigLoadPort };
+		final Port[] dischargePorts = { smallDischargePort, bigDischargePort };
 
 		testExpectedWiringProduced(loadPorts, dischargePorts);
 	}
@@ -172,8 +167,8 @@ public class SuboptimalScenarioTester {
 	 * Runs the optimiser and tests that the post-optimiser wiring is the less profitable one. This should be the case if the PnL-optimal wiring is prohibited by a constraint.
 	 */
 	public void testSuboptimalWiringProduced() {
-		Port[] loadPorts = { smallLoadPort, bigLoadPort };
-		Port[] dischargePorts = { bigDischargePort, smallDischargePort };
+		final Port[] loadPorts = { smallLoadPort, bigLoadPort };
+		final Port[] dischargePorts = { bigDischargePort, smallDischargePort };
 
 		testExpectedWiringProduced(loadPorts, dischargePorts);
 	}
@@ -191,8 +186,8 @@ public class SuboptimalScenarioTester {
 	 * 
 	 * final boolean result = checker.checkSequence(sequence, null, errors);
 	 * 
-	 * final String format = "Constraint checker %s should %s on this scenario."; String failureMessage = String.format(format, checker.getName(), (expectedResult ? "pass" : "fail")); if (!result)
-	 * { failureMessage = failureMessage + String.format(" Failed with %d error(s) (beginning '%s').", errors.size(), errors.get(0)); } Assert.assertEquals(failureMessage, expectedResult, result);
+	 * final String format = "Constraint checker %s should %s on this scenario."; String failureMessage = String.format(format, checker.getName(), (expectedResult ? "pass" : "fail")); if (!result) {
+	 * failureMessage = failureMessage + String.format(" Failed with %d error(s) (beginning '%s').", errors.size(), errors.get(0)); } Assert.assertEquals(failureMessage, expectedResult, result);
 	 * 
 	 * }
 	 */
@@ -205,7 +200,7 @@ public class SuboptimalScenarioTester {
 	 *            A new instance of the constraint checker (must be new since this method injects it with dependencies).
 	 */
 	// TODO: rewrite to take a constraint checker factory instead of a constraint checker, so that the expected parameter does not have weird not-initialised semantics
-	public void testConstraintChecker(boolean expectedResult, AbstractPairwiseConstraintChecker checker) {
+	public void testConstraintChecker(final boolean expectedResult, final AbstractPairwiseConstraintChecker checker) {
 		final LNGTransformer transformer = new LNGTransformer(scenario, ScenarioUtils.createDefaultSettings(), new TransformerExtensionTestModule());
 		final IOptimisationData data = transformer.getOptimisationData();
 
@@ -231,7 +226,7 @@ public class SuboptimalScenarioTester {
 	 * 
 	 * @param checker
 	 */
-	public void testConstraintCheckerPasses(AbstractPairwiseConstraintChecker checker) {
+	public void testConstraintCheckerPasses(final AbstractPairwiseConstraintChecker checker) {
 		testConstraintChecker(true, checker);
 	}
 
@@ -240,7 +235,7 @@ public class SuboptimalScenarioTester {
 	 * 
 	 * @param checker
 	 */
-	public void testConstraintCheckerFails(AbstractPairwiseConstraintChecker checker) {
+	public void testConstraintCheckerFails(final AbstractPairwiseConstraintChecker checker) {
 		testConstraintChecker(false, checker);
 	}
 

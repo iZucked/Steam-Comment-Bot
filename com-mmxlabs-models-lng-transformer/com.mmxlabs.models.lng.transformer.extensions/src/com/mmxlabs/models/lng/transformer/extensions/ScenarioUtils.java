@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.transformer.extensions;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.parameters.AnnealingSettings;
 import com.mmxlabs.models.lng.parameters.Constraint;
@@ -39,6 +40,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 public class ScenarioUtils {
 
 	private static final boolean SPOT_TO_SPOT_CONSTRAINT = false;
+
 	private static Constraint createConstraint(ParametersFactory parametersFactory, String name, boolean enabled) {
 		Constraint c = parametersFactory.createConstraint();
 		c.setName(name);
@@ -57,6 +59,7 @@ public class ScenarioUtils {
 	/**
 	 * @return
 	 */
+	@NonNull
 	public static OptimiserSettings createDefaultSettings() {
 		final ParametersFactory parametersFactory = ParametersFactory.eINSTANCE;
 

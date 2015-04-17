@@ -26,6 +26,7 @@ import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
+import org.eclipse.jdt.annotation.Nullable;
 import org.ops4j.peaberry.Peaberry;
 import org.ops4j.peaberry.util.TypeLiterals;
 import org.osgi.framework.FrameworkUtil;
@@ -104,7 +105,7 @@ public class PeriodTransformer {
 	private Iterable<IPeriodTransformerExtension> extensions;
 	private Module testingModule;
 
-	public PeriodTransformer(Module testingModule) {
+	public PeriodTransformer(@Nullable final Module testingModule) {
 		this.testingModule = testingModule;
 		injectExtensions();
 	}
@@ -112,7 +113,7 @@ public class PeriodTransformer {
 	public PeriodTransformer() {
 		injectExtensions();
 	}
-	
+
 	private void injectExtensions() {
 
 		Injector injector = null;
@@ -263,7 +264,7 @@ public class PeriodTransformer {
 			if (event instanceof CharterOutEvent) {
 				// If in boundary, limit available vessels to assigned vessel
 				event.getAllowedVessels().clear();
-				VesselAvailability vesselAvailability = ((VesselAvailability) event.getVesselAssignmentType());
+				final VesselAvailability vesselAvailability = ((VesselAvailability) event.getVesselAssignmentType());
 				if (vesselAvailability != null) {
 					event.getAllowedVessels().add(vesselAvailability.getVessel());
 				}
@@ -291,7 +292,7 @@ public class PeriodTransformer {
 					lockDownCargoDates(slotAllocationMap, cargo);
 				} else {
 					// lock only one slot
-					Pair<Slot, Slot> slots = inclusionChecker.getFirstAndLastSlots(cargo);
+					final Pair<Slot, Slot> slots = inclusionChecker.getFirstAndLastSlots(cargo);
 					if (pos == Position.After) {
 						if (inclusionChecker.getObjectInclusionType(slots.getFirst(), periodRecord).getFirst() == InclusionType.In) {
 							lockDownSlotDates(slotAllocationMap, slots.getSecond());
@@ -307,7 +308,6 @@ public class PeriodTransformer {
 					}
 				}
 			}
-
 
 			// These slots have been considered
 			seenSlots.addAll(cargo.getSlots());
@@ -369,7 +369,7 @@ public class PeriodTransformer {
 						if (depCargo.getCargoType() == CargoType.FLEET) {
 							final VesselAssignmentType vesselAssignmentType = depCargo.getVesselAssignmentType();
 							if (vesselAssignmentType instanceof VesselAvailability) {
-								VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
+								final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
 								final VesselAvailability newVesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
 								newVesselAvailability.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
 								newVesselAvailability.setVessel(vesselAvailability.getVessel());
@@ -478,7 +478,7 @@ public class PeriodTransformer {
 			slot.setWindowStart(localStart.getTime());
 			slot.setWindowStartTime(localTime);
 			slot.getAllowedVessels().clear();
-			VesselAssignmentType vat = slot.getCargo().getVesselAssignmentType();
+			final VesselAssignmentType vat = slot.getCargo().getVesselAssignmentType();
 			if (vat instanceof VesselAvailability) {
 				slot.getAllowedVessels().add(((VesselAvailability) vat).getVessel());
 			} else if (vat instanceof CharterInMarket) {
@@ -760,15 +760,15 @@ public class PeriodTransformer {
 		}
 	}
 
-	public void trimSpotMarketCurves(final EditingDomain internalDomain, final PeriodRecord periodRecord, LNGScenarioModel scenario) {
+	public void trimSpotMarketCurves(final EditingDomain internalDomain, final PeriodRecord periodRecord, final LNGScenarioModel scenario) {
 		final SpotMarketsModel spotMarketsModel = scenario.getSpotMarketsModel();
 		Date earliestDate = periodRecord.lowerBoundary;
 		Date latestDate = periodRecord.upperBoundary;
 		if (periodRecord.lowerBoundary == null || periodRecord.upperBoundary == null) {
-			Pair<Date, Date> earliestAndLatestTimes = LNGScenarioUtils.findEarliestAndLatestTimes(scenario);
+			final Pair<Date, Date> earliestAndLatestTimes = LNGScenarioUtils.findEarliestAndLatestTimes(scenario);
 			if (periodRecord.lowerBoundary == null) {
 				earliestDate = earliestAndLatestTimes.getFirst();
-			} 
+			}
 			if (periodRecord.upperBoundary == null) {
 				latestDate = earliestAndLatestTimes.getSecond();
 			}
@@ -779,11 +779,11 @@ public class PeriodTransformer {
 		trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getFobSalesSpotMarket(), earliestDate, latestDate);
 	}
 
-	public void trimSpotMarketCurves(final EditingDomain internalDomain, final PeriodRecord periodRecord, final SpotMarketGroup spotMarketGroup, Date earliestDate, Date latestDate) {
+	public void trimSpotMarketCurves(final EditingDomain internalDomain, final PeriodRecord periodRecord, final SpotMarketGroup spotMarketGroup, final Date earliestDate, final Date latestDate) {
 		if (spotMarketGroup != null) {
-		if (spotMarketGroup == null) {
-			return; 
-		}
+			if (spotMarketGroup == null) {
+				return;
+			}
 			for (final SpotMarket spotMarket : spotMarketGroup.getMarkets()) {
 				final SpotAvailability availability = spotMarket.getAvailability();
 
@@ -841,7 +841,7 @@ public class PeriodTransformer {
 		}
 	}
 
-	private Date getDateFromStartOfMonth(Date date) {
+	private Date getDateFromStartOfMonth(final Date date) {
 		final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		cal.setTime(date);
 		return DateAndCurveHelper.createDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), 1, 0, "UTC");
