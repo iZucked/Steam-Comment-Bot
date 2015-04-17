@@ -86,7 +86,17 @@ public class ScenarioStorageUtil {
 	}
 
 	public static void storeToFile(final ScenarioInstance instance, final File file) throws IOException {
-		final ResourceSet resourceSet = ResourceHelper.createResourceSet(getScenarioCipherProvider());
+		final BundleContext bundleContext = FrameworkUtil.getBundle(ScenarioStorageUtil.class).getBundleContext();
+		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
+		try {
+			storeToFile(instance, file, bundleContext.getService(serviceReference));
+		} finally {
+			bundleContext.ungetService(serviceReference);
+		}
+	}
+
+	public static void storeToFile(final ScenarioInstance instance, final File file, final IScenarioCipherProvider scenarioCipherProvider) throws IOException {
+		final ResourceSet resourceSet = ResourceHelper.createResourceSet(scenarioCipherProvider);
 
 		final IScenarioService scenarioService = instance.getScenarioService();
 
@@ -156,8 +166,18 @@ public class ScenarioStorageUtil {
 	 * @param filePath
 	 * @return
 	 */
-	public static ScenarioInstance loadInstanceFromFile(final String filePath, IScenarioCipherProvider scenarioCipherProvider) {
+	public static ScenarioInstance loadInstanceFromFile(final String filePath, final IScenarioCipherProvider scenarioCipherProvider) {
 		return loadInstanceFromURI(URI.createFileURI(filePath), scenarioCipherProvider);
+	}
+
+	public static ScenarioInstance loadInstanceFromFile(final String filePath) {
+		final BundleContext bundleContext = FrameworkUtil.getBundle(ScenarioStorageUtil.class).getBundleContext();
+		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
+		try {
+			return loadInstanceFromFile(filePath, bundleContext.getService(serviceReference));
+		} finally {
+			bundleContext.ungetService(serviceReference);
+		}
 	}
 
 	/**
@@ -166,13 +186,23 @@ public class ScenarioStorageUtil {
 	 *            If true, load the resources and hook up submodels. If false, just hook up the URIs. Use false if this will be used in the {@link IScenarioService} / ModelService context
 	 * @return
 	 */
-	public static ScenarioInstance loadInstanceFromURI(final URI scenarioURI, IScenarioCipherProvider scenarioCipherProvider) {
+	public static ScenarioInstance loadInstanceFromURI(final URI scenarioURI) {
+		final BundleContext bundleContext = FrameworkUtil.getBundle(ScenarioStorageUtil.class).getBundleContext();
+		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
+		try {
+			return loadInstanceFromURI(scenarioURI, bundleContext.getService(serviceReference));
+		} finally {
+			bundleContext.ungetService(serviceReference);
+		}
+	}
+
+	public static ScenarioInstance loadInstanceFromURI(final URI scenarioURI, final IScenarioCipherProvider scenarioCipherProvider) {
 		final URI manifestURI = URI.createURI("archive:" + scenarioURI.toString() + "!/MANIFEST.xmi");
 		final ResourceSet resourceSet = ResourceHelper.createResourceSet(scenarioCipherProvider);
 
 		try {
 
-			Resource resource = ResourceHelper.loadResource(resourceSet, manifestURI);
+			final Resource resource = ResourceHelper.loadResource(resourceSet, manifestURI);
 			if (resource.getContents().size() == 1) {
 				final EObject top = resource.getContents().get(0);
 				if (top instanceof Manifest) {
@@ -207,16 +237,6 @@ public class ScenarioStorageUtil {
 			}
 		} catch (final Exception e) {
 			log.error(e.getMessage(), e);
-		}
-		return null;
-	}
-
-	@Nullable
-	private static IScenarioCipherProvider getScenarioCipherProvider() {
-		final BundleContext bundleContext = FrameworkUtil.getBundle(ScenarioStorageUtil.class).getBundleContext();
-		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
-		if (serviceReference != null) {
-			return bundleContext.getService(serviceReference);
 		}
 		return null;
 	}
