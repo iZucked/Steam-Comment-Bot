@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.models.ui.editors.util;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
