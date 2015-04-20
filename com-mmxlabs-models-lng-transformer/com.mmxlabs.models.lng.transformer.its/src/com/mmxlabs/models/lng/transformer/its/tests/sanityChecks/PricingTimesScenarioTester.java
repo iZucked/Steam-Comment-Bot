@@ -117,7 +117,7 @@ public class PricingTimesScenarioTester {
 	@Test
 	public void TestPriceSaleChangedByEarlierPricingDateB() {
 		testingIndexingAndPriceDating("TestPriceSaleChangedByEarlierPricingDateB", PricingTimesScenario.createLocalDate(2014, Calendar.FEBRUARY, 1),
-				PricingTimesScenario.createLocalDateTime(2014, Calendar.MAY, 1, 0), PricingTimesScenario.createLocalDate(2014, Calendar.FEBRUARY, 1), 7.5, 8.6, 5.0);
+				PricingTimesScenario.createLocalDateTime(2014, Calendar.MAY, 1, 0), PricingTimesScenario.createLocalDate(2014, Calendar.FEBRUARY, 1), 7.5, 8.5, 5.0);
 	}
 
 }

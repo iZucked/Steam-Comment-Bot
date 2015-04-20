@@ -1814,6 +1814,7 @@ public class PeriodTransformerTest {
 
 		Mockito.when(mapping.getCopyFromOriginal(vesselAvailability)).thenReturn(copyVesselAvailability);
 		Mockito.when(mapping.getOriginalFromCopy(copyVesselAvailability)).thenReturn(vesselAvailability);
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getVesselAvailabilities().contains(copyVesselAvailability));
 
 		transformer.filterVesselAvailabilities(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
 

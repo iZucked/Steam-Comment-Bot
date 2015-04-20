@@ -74,18 +74,15 @@ import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 public class PeriodTestUtils {
 
 	public static YearMonth createYearMonth(final int year, final int month) {
-
 		return new YearMonth(year, 1 + month);
 	}
 
 	public static DateTime createDate(final int year, final int month, final int day, final int hour) {
-
 		return new DateTime(year, 1 + month, day, hour, 0, DateTimeZone.UTC);
 	}
 
 	public static DateTime createDate(final String timezoneCode, final int year, final int month, final int day, final int hour) {
 		return new DateTime(year, 1 + month, day, hour, 0, DateTimeZone.forID(timezoneCode));
-
 	}
 
 	static DateTime createDate(final int year, final int month, final int day) {

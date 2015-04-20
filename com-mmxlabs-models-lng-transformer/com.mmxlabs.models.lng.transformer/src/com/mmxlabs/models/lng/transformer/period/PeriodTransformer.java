@@ -239,6 +239,7 @@ public class PeriodTransformer {
 
 		for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
 			if (inclusionChecker.getObjectInclusionType(vesselAvailability, periodRecord).getFirst() == InclusionType.Out) {
+				inclusionChecker.getObjectInclusionType(vesselAvailability, periodRecord);
 				vesselsToRemove.add(vesselAvailability);
 				mapping.registerRemovedOriginal(mapping.getOriginalFromCopy(vesselAvailability));
 

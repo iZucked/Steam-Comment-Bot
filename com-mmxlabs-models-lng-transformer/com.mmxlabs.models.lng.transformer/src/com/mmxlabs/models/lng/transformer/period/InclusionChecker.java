@@ -136,7 +136,7 @@ public class InclusionChecker {
 				}
 			}
 			if (periodRecord.upperCutoff != null) {
-				if (vesselAvailability.isSetStartAfter() && vesselAvailability.getStartAfterAsDateTime().isBefore(periodRecord.upperCutoff)) {
+				if (vesselAvailability.isSetStartAfter() && vesselAvailability.getStartAfterAsDateTime().isAfter(periodRecord.upperCutoff)) {
 					return new Pair<>(InclusionType.Out, Position.After);
 				}
 			}
