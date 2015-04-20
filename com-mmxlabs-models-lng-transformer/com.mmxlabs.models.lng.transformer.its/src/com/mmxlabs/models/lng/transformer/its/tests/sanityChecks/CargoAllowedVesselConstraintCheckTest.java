@@ -7,7 +7,7 @@ package com.mmxlabs.models.lng.transformer.its.tests.sanityChecks;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.Test;
 

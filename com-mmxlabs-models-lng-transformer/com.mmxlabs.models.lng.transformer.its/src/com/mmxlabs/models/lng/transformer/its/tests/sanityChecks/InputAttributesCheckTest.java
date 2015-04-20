@@ -6,7 +6,7 @@ package com.mmxlabs.models.lng.transformer.its.tests.sanityChecks;
 
 import java.io.IOException;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.eclipse.emf.ecore.change.ChangeDescription;
 import org.eclipse.emf.ecore.change.util.ChangeRecorder;
