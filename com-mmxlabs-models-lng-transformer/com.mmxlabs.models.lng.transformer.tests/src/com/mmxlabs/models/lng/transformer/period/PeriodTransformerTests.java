@@ -58,7 +58,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.transformer.period.InclusionChecker.PeriodRecord;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 
-public class PeriodTransformerTest {
+public class PeriodTransformerTests {
 
 	@Test
 	public void createPeriodRecordTest_EmptySettings() {

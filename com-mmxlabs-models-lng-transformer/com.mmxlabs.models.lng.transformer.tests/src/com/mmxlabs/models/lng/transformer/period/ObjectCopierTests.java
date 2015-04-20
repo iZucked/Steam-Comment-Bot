@@ -32,7 +32,7 @@ import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
-public class ObjectCopierTest {
+public class ObjectCopierTests {
 
 	@Test
 	public void copySlotAttributesTest() {

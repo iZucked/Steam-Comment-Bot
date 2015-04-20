@@ -24,7 +24,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 
-public class PeriodExporterTest {
+public class PeriodExporterTests {
 
 	/**
 	 * Cargo out of scope of period - expect no change

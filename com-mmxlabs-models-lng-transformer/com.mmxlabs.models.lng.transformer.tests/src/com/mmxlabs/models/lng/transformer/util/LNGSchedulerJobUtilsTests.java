@@ -28,7 +28,7 @@ import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 
-public class LNGSchedulerJobUtilsTest {
+public class LNGSchedulerJobUtilsTests {
 
 	@Test
 	public void testAssignmentChange() {
