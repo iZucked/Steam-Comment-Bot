@@ -27,16 +27,16 @@ public class GeometricThreholderTest {
 		final GeometricThresholder t = new GeometricThresholder(mockRandom, 2, initialTemperature, alpha);
 		t.init();
 
-		Assert.assertEquals(initialTemperature, t.getTemperature());
+		Assert.assertEquals(initialTemperature, t.getTemperature(), 0.0);
 
 		Assert.assertFalse(t.accept((long) (mlnHalf * initialTemperature) + 1));
 		t.step();
 		Assert.assertTrue(t.accept((long) (mlnHalf * initialTemperature) - 1));
 		t.step();
-		Assert.assertEquals(initialTemperature * alpha, t.getTemperature());
+		Assert.assertEquals(initialTemperature * alpha, t.getTemperature(), 0.0);
 		t.step();
 		t.step();
-		Assert.assertEquals(initialTemperature * alpha * alpha, t.getTemperature());
+		Assert.assertEquals(initialTemperature * alpha * alpha, t.getTemperature(), 0.0);
 		Assert.assertTrue(t.accept((long) (mlnHalf * initialTemperature * alpha * alpha) - 1));
 		Assert.assertFalse(t.accept((long) (mlnHalf * initialTemperature * alpha * alpha) + 1));
 	}
