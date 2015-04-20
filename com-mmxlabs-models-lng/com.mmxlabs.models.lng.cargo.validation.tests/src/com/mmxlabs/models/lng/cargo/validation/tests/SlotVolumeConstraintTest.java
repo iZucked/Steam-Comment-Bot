@@ -112,6 +112,7 @@ public class SlotVolumeConstraintTest {
 		when(slot.eContainingFeature()).thenReturn(null);
 		when(slot.getSlotOrContractMinQuantity()).thenReturn(min);
 		when(slot.getSlotOrContractMaxQuantity()).thenReturn(max);
+		when(slot.isSetVolumeLimitsUnit()).thenReturn(false);
 		when(validationContext.getTarget()).thenReturn(slot);
 		when(validationContext.getEventType()).thenReturn(EMFEventType.NULL);
 
@@ -128,6 +129,7 @@ public class SlotVolumeConstraintTest {
 		verify(slot, atLeast(0)).getName();
 		verify(slot, atLeast(0)).getSlotOrContractMinQuantity();
 		verify(slot, atLeast(0)).getSlotOrContractMaxQuantity();
+		verify(slot, atLeast(0)).isSetVolumeLimitsUnit();
 		verify(validationContext).getTarget();
 		verify(validationContext).getEventType();
 		verify(validationContext, atLeast(0)).createSuccessStatus();
