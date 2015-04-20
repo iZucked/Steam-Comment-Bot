@@ -18,7 +18,7 @@ import org.junit.Test;
 
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 
-public class JavascriptTest {
+public class JavascriptTests {
 	@Test
 	public void simplePackageTest() throws FileNotFoundException, ScriptException {
 
