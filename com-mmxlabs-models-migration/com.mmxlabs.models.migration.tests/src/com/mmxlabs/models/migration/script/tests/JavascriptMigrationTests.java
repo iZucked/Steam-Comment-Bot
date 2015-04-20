@@ -32,7 +32,7 @@ import com.mmxlabs.models.migration.PackageData;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 import com.mmxlabs.models.migration.utils.MetamodelUtils;
 
-public class JavascriptMigrationTest {
+public class JavascriptMigrationTests {
 
 	@Test
 	public void migrationTest() throws IOException, ScriptException {
