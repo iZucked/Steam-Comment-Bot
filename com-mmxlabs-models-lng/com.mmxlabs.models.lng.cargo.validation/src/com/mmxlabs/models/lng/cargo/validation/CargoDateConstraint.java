@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.cargo.validation;
 
+import static org.ops4j.peaberry.Peaberry.osgiModule;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,15 +19,25 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.ops4j.peaberry.Peaberry;
+import org.osgi.framework.FrameworkUtil;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.util.IShippingDaysRestrictionSpeedProvider;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
+import com.mmxlabs.models.lng.cargo.validation.utils.TravelTimeUtils;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
@@ -50,15 +62,31 @@ import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
  */
 public class CargoDateConstraint extends AbstractModelMultiConstraint {
 
+	@Inject
+	private IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider;
+
 	private static final String DATE_ORDER_ID = "com.mmxlabs.models.lng.cargo.validation.CargoDateConstraint.cargo_order";
 	private static final String TRAVEL_TIME_ID = "com.mmxlabs.models.lng.cargo.validation.CargoDateConstraint.cargo_travel_time";
 	private static final String AVAILABLE_TIME_ID = "com.mmxlabs.models.lng.cargo.validation.CargoDateConstraint.cargo_available_time";
+	private static final String NON_SHIPPED_TRAVEL_TIME_ID = "com.mmxlabs.models.lng.cargo.validation.CargoDateConstraint.cargo_non_shipped_travel_time";
 
 	/**
 	 * This is the maximum sensible amount of travel time in a cargo, in days
 	 */
 	private static final int SENSIBLE_TRAVEL_TIME = 160;
 
+	public CargoDateConstraint() {
+		final Injector injector = Guice.createInjector(new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				install(osgiModule(FrameworkUtil.getBundle(ShippingDaysRestrictionConstraint.class).getBundleContext()));
+				bind(IShippingDaysRestrictionSpeedProvider.class).toProvider(Peaberry.service(IShippingDaysRestrictionSpeedProvider.class).single());
+			}
+		});
+		injector.injectMembers(this);
+	}
+	
 	/**
 	 * Validate that the available time is not negative.
 	 * 
@@ -257,9 +285,54 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 					}
 					prevSlot = slot;
 				}
+			} else if (constraintID.equals(NON_SHIPPED_TRAVEL_TIME_ID)){
+				// Divertable DES and FOB Sale
+				if (cargo.getSortedSlots().size() == 2) {
+					LoadSlot loadSlot = (LoadSlot) cargo.getSortedSlots().get(0);
+					DischargeSlot dischargeSlot = (DischargeSlot) cargo.getSortedSlots().get(1);
+					if (loadSlot.isDivertible()) {
+						validateNonShippedSlotTravelTime(ctx, extraContext, cargo, loadSlot, dischargeSlot, failures);
+					}
+				}
 			}
 		}
 
 		return Activator.PLUGIN_ID;
 	}
+	
+	private void validateNonShippedSlotTravelTime(final IValidationContext ctx, final IExtraValidationContext extraContext, final Cargo cargo, final LoadSlot from, final DischargeSlot to,
+			final List<IStatus> failures) {
+		if (from.getName().equals("TFS01")) {
+			int i = 0;
+		}
+		Vessel vessel = from.getNominatedVessel();
+		if (vessel == null) {
+			return;
+		}
+		int windowLength = getLadenMaxWindow(from, to);
+		int travelTime = TravelTimeUtils.getMinRouteTimeInHours(from, to, shippingDaysSpeedProvider, TravelTimeUtils.getScenarioModel(extraContext), vessel, TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, vessel.getVesselClass(), true));
+		double ref = TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, vessel.getVesselClass(), true);
+		if (travelTime + from.getSlotOrPortDuration() > windowLength) {
+			final String message = String.format(
+					"Purchase|%s is paired with a sale at %s. However the laden travel time (%s) is greater than the shortest possible journey (%s).", from.getName(),
+					to.getPort().getName(), TravelTimeUtils.formatHours(travelTime + from.getSlotOrPortDuration()), TravelTimeUtils.formatHours((travelTime + from.getSlotOrPortDuration()) - windowLength));
+			final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
+			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
+			dsd.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargoModel_Cargoes());
+			failures.add(dsd);
+		}
+		
+	}
+	
+	private Integer getLadenMaxWindow(Slot startSlot, Slot endSlot) {
+		final Date dateStart = startSlot.getWindowStartWithSlotOrPortTime();
+		final Date dateEnd = endSlot.getWindowEndWithSlotOrPortTime();
+
+		if (dateStart != null && dateEnd != null) {
+			return (int) ((dateEnd.getTime() - dateStart.getTime()) / Timer.ONE_HOUR);
+		} else {
+			return null;
+		}
+	}
+
 }
