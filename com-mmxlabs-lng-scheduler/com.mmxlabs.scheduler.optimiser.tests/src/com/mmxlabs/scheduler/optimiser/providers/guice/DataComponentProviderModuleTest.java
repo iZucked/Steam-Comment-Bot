@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers.guice;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.Test;
 
