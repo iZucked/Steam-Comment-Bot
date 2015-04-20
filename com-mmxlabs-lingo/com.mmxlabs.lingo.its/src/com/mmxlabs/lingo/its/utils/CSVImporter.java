@@ -13,7 +13,6 @@ import java.util.Map;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
-import org.eclipse.emf.ecore.EcorePackage;
 import org.junit.Assert;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -61,7 +60,6 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.spotmarkets.editor.importers.SpotMarketImporter;
 import com.mmxlabs.models.lng.spotmarkets.editor.importers.SpotMarketsModelImporter;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-import com.mmxlabs.models.ui.dates.DateAttributeImporter;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IAttributeImporter;
 import com.mmxlabs.models.util.importer.IClassImporter;
@@ -143,7 +141,7 @@ public class CSVImporter {
 		scenarioModel.setPortfolioModel(portfolioModel);
 
 		portfolioModel.setCargoModel((CargoModel) importSubModel(importerRegistry, context, baseFileName, dataMap, CargoPackage.eINSTANCE.getCargoModel()));
-//		portfolioModel.setAssignmentModel((AssignmentModel) importSubModel(importerRegistry, context, baseFileName, dataMap, AssignmentPackage.eINSTANCE.getAssignmentModel()));
+		// portfolioModel.setAssignmentModel((AssignmentModel) importSubModel(importerRegistry, context, baseFileName, dataMap, AssignmentPackage.eINSTANCE.getAssignmentModel()));
 		portfolioModel.setScheduleModel((ScheduleModel) importSubModel(importerRegistry, context, baseFileName, dataMap, SchedulePackage.eINSTANCE.getScheduleModel()));
 
 		importExtraModels(scenarioModel, importerRegistry, context, baseFileName, dataMap);
@@ -180,7 +178,7 @@ public class CSVImporter {
 					subModelImporters.put(CargoPackage.eINSTANCE.getCargoModel(), new CargoModelImporter());
 					subModelImporters.put(CommercialPackage.eINSTANCE.getCommercialModel(), new CommercialModelImporter());
 					subModelImporters.put(FleetPackage.eINSTANCE.getFleetModel(), new FleetModelImporter());
-//					subModelImporters.put(AssignmentPackage.eINSTANCE.getAssignmentModel(), new AssignmentModelImporter());
+					// subModelImporters.put(AssignmentPackage.eINSTANCE.getAssignmentModel(), new AssignmentModelImporter());
 					subModelImporters.put(ParametersPackage.eINSTANCE.getParametersModel(), new ParametersModelImporter());
 					subModelImporters.put(PortPackage.eINSTANCE.getPortModel(), new PortModelImporter());
 					subModelImporters.put(PricingPackage.eINSTANCE.getPricingModel(), new PricingModelImporter());
@@ -201,7 +199,6 @@ public class CSVImporter {
 					final List<IExtraModelImporter> extraModelImporters = new ArrayList<>();
 					extraModelImporters.add(new ActualsModelExtraImporter());
 
-					final DateAttributeImporter dateAttributeImporter = new DateAttributeImporter();
 					final DefaultClassImporter defaultClassImporter = new DefaultClassImporter();
 					final DefaultAttributeImporter defaultAttributeImporter = new DefaultAttributeImporter();
 
@@ -224,10 +221,6 @@ public class CSVImporter {
 
 						@Override
 						public IAttributeImporter getAttributeImporter(final EDataType dataType) {
-
-							if (dataType.equals(EcorePackage.eINSTANCE.getEDate())) {
-								return dateAttributeImporter;
-							}
 
 							return defaultAttributeImporter;
 						}
@@ -264,7 +257,6 @@ public class CSVImporter {
 						injector.injectMembers(importer);
 					}
 					injector.injectMembers(defaultAttributeImporter);
-					injector.injectMembers(dateAttributeImporter);
 					injector.injectMembers(defaultClassImporter);
 				}
 			}

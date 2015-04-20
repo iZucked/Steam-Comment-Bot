@@ -6,9 +6,6 @@ package com.mmxlabs.lingo.its.uat.suite.cases;
 
 import java.io.IOException;
 
-import org.junit.Ignore;
-import org.junit.Test;
-
 import com.mmxlabs.lingo.its.uat.suite.testers.GlobalUATTestsConfig;
 import com.mmxlabs.lingo.its.uat.suite.utils.FeatureBasedUAT;
 

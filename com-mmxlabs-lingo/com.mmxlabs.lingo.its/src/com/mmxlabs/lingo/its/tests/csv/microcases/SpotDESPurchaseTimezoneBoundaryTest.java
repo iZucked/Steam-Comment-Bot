@@ -7,9 +7,9 @@ package com.mmxlabs.lingo.its.tests.csv.microcases;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Calendar;
-import java.util.TimeZone;
 
+import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -18,7 +18,6 @@ import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
 import com.mmxlabs.lingo.its.tests.category.QuickTest;
 import com.mmxlabs.lingo.its.utils.CSVImporter;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -72,16 +71,14 @@ public class SpotDESPurchaseTimezoneBoundaryTest extends AbstractOptimisationRes
 		for (final SlotAllocation slotAllcocation : cargoAllocation.getSlotAllocations()) {
 			if (slotAllcocation.getSlot() instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) slotAllcocation.getSlot();
-				final Calendar cal = Calendar.getInstance();
-				cal.setTime(loadSlot.getWindowStartWithSlotOrPortTime());
-				final Port port = loadSlot.getPort();
-				cal.setTimeZone(TimeZone.getTimeZone(port.getTimeZone()));
-				Assert.assertEquals(Calendar.JANUARY, cal.get(Calendar.MONTH));
-				Assert.assertEquals(1, cal.get(Calendar.DAY_OF_MONTH));
-				Assert.assertEquals(0, cal.get(Calendar.HOUR_OF_DAY));
-				Assert.assertEquals(0, cal.get(Calendar.MINUTE));
-				Assert.assertEquals(0, cal.get(Calendar.SECOND));
-				Assert.assertEquals(0, cal.get(Calendar.MILLISECOND));
+				final DateTime cal = loadSlot.getWindowStartWithSlotOrPortTime();
+				final LocalDateTime localDateTime = cal.toLocalDateTime();
+				Assert.assertEquals(1, localDateTime.getMonthOfYear());
+				Assert.assertEquals(1, localDateTime.getDayOfMonth());
+				Assert.assertEquals(0, localDateTime.getHourOfDay());
+				Assert.assertEquals(0, localDateTime.getMinuteOfHour());
+				Assert.assertEquals(0, localDateTime.getSecondOfMinute());
+				Assert.assertEquals(0, localDateTime.getMillisOfSecond());
 				return;
 			}
 		}
