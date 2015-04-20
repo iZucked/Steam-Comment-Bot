@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.common.curves;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.Test;
 

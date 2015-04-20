@@ -6,7 +6,7 @@ package com.mmxlabs.common.impl;
 
 import java.util.Map;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.Test;
 
