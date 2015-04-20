@@ -1992,10 +1992,17 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public void setShippingDaysRestrictionReferenceSpeed(@NonNull final IVessel vessel, final int referenceSpeed) {
-		shippingHoursRestrictionProviderEditor.setReferenceSpeed(vessel, referenceSpeed);
+	public void setShippingDaysRestrictionReferenceSpeed(@NonNull final IVessel vessel, final VesselState vesselState, final int referenceSpeed) {
+		shippingHoursRestrictionProviderEditor.setReferenceSpeed(vessel, vesselState, referenceSpeed);
 	}
 
+	@Override
+	public void setDivertableDESAllowedRoute(@NonNull IVesselClass vc, @NonNull List<String> allowedRoutes) {
+		for (String route : allowedRoutes) {
+			shippingHoursRestrictionProviderEditor.setDivertableDESAllowedRoute(vc, route);
+		}
+	}
+	
 	@Override
 	public void freezeSlotToVesselAvailability(@NonNull final IPortSlot portSlot, @NonNull final IVesselAvailability vesselAvailability) {
 		constrainSlotToVesselAvailabilities(portSlot, Collections.singleton(vesselAvailability));
@@ -2011,4 +2018,5 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	public SequenceElement createSequenceElement(String name) {
 		return new SequenceElement(indexingContext, name);
 	}
+
 }

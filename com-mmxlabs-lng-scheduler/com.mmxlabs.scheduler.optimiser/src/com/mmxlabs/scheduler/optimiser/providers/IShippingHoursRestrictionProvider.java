@@ -4,12 +4,16 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers;
 
+import java.util.Collection;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.VesselState;
 
 /**
  */
@@ -44,5 +48,7 @@ public interface IShippingHoursRestrictionProvider extends IDataComponentProvide
 	 * @param vessel
 	 * @return
 	 */
-	int getReferenceSpeed(@NonNull IVessel vessel);
+	int getReferenceSpeed(@NonNull IVessel vessel, @NonNull VesselState vesselState);
+	
+	Collection<String> getDivertableDESAllowedRoutes(@NonNull IVesselClass vesselClass);
 }
