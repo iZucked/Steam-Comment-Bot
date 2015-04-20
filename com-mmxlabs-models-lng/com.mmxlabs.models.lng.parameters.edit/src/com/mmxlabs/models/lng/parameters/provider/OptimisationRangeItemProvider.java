@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.parameters.provider;
 
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -24,6 +23,7 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import org.joda.time.YearMonth;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 
@@ -131,7 +131,7 @@ public class OptimisationRangeItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		Date labelValue = ((OptimisationRange)object).getOptimiseAfter();
+		YearMonth labelValue = ((OptimisationRange)object).getOptimiseAfter();
 		String label = labelValue == null ? null : labelValue.toString();
 		return label == null || label.length() == 0 ?
 			getString("_UI_OptimisationRange_type") :

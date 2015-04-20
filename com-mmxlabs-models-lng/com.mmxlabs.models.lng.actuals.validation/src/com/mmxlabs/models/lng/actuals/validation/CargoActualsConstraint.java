@@ -4,13 +4,13 @@
  */
 package com.mmxlabs.models.lng.actuals.validation;
 
-import java.util.Date;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.joda.time.DateTime;
 
 import com.mmxlabs.models.lng.actuals.ActualsPackage;
 import com.mmxlabs.models.lng.actuals.CargoActuals;
@@ -165,7 +165,7 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 					}
 
 					if (slotActuals.getOperationsStart() != null && slotActuals.getOperationsEnd() != null) {
-						if (slotActuals.getOperationsStart().after(slotActuals.getOperationsEnd())) {
+						if (slotActuals.getOperationsStart().isAfter(slotActuals.getOperationsEnd())) {
 							final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
 									(IConstraintStatus) ctx.createFailureStatus("Operations start date if adter operations end"));
 							status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START);
@@ -214,9 +214,9 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 
 					final ReturnActuals returnActuals = cargoActuals.getReturnActuals();
 					if (returnActuals != null) {
-						final Date returnOperationsStart = returnActuals.getOperationsStart();
-						if (returnOperationsStart != null && slotActuals.getOperationsStart() != null) {
-							if (returnOperationsStart.before(slotActuals.getOperationsStart())) {
+						final DateTime returnOperationsStart = returnActuals.getOperationsStartAsDateTime();
+						if (returnOperationsStart != null && slotActuals.getOperationsStartAsDateTime() != null) {
+							if (returnOperationsStart.isBefore(slotActuals.getOperationsStartAsDateTime())) {
 								final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
 										(IConstraintStatus) ctx.createFailureStatus("Return actuals date is before slot actuals date"));
 								status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START);

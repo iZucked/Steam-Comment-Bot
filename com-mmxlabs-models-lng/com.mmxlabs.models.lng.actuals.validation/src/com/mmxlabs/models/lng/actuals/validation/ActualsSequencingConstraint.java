@@ -4,9 +4,6 @@
  */
 package com.mmxlabs.models.lng.actuals.validation;
 
-import java.text.DateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +13,10 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import com.mmxlabs.models.lng.actuals.ActualsModel;
 import com.mmxlabs.models.lng.actuals.ActualsPackage;
@@ -132,7 +133,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 					if (va != null && currentElementHasActuals && loadActuals != null) {
 
 						final Port actualPort = loadActuals.getTitleTransferPoint();
-						final Calendar actualOperationsStart = loadActuals.getLocalStart();
+						final DateTime actualOperationsStart = loadActuals.getOperationsStartAsDateTime();
 						if (actualOperationsStart != null) {
 							final Set<Port> startPorts = SetUtils.getObjects(va.getStartAt());
 							if (startPorts.isEmpty()) {
@@ -158,9 +159,9 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 							if (va.isSetStartAfter() || va.isSetStartBy()) {
 								// check dates match. Note start by/after is UTC, cargo/event local time.
 
-								if (va.getStartAfter() != null && !va.getStartAfter().equals(actualOperationsStart.getTime())) {
+								if (va.getStartAfterAsDateTime() != null && !va.getStartAfterAsDateTime().equals(actualOperationsStart)) {
 									final String msg = String.format("Actualised Cargo %s and vessel %s operations start date do not match (%s - %s)", getID(assignment),
-											getVesselName(va.getVessel()), getDateString(actualOperationsStart), getDateString(va.getStartAfter()));
+											getVesselName(va.getVessel()), getDateString(actualOperationsStart.toLocalDateTime()), getDateString(va.getStartAfter()));
 
 									final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
 									failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_AFTER);
@@ -169,9 +170,9 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 									statuses.add(failure);
 
 								}
-								if (va.getStartBy() != null && !va.getStartBy().equals(actualOperationsStart.getTime())) {
+								if (va.getStartBy() != null && !va.getStartBy().equals(actualOperationsStart)) {
 									final String msg = String.format("Actualised Cargo %s and vessel %s operations start date do not match (%s - %s)", getID(assignment),
-											getVesselName(va.getVessel()), getDateString(actualOperationsStart), getDateString(va.getStartBy()));
+											getVesselName(va.getVessel()), getDateString(actualOperationsStart.toLocalDateTime()), getDateString(va.getStartBy()));
 
 									final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
 									failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_BY);
@@ -286,16 +287,8 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 		return Activator.PLUGIN_ID;
 	}
 
-	private String getDateString(final Date date) {
-
-		final DateFormat df = DateFormat.getDateTimeInstance();
-		return df.format(date);
-	}
-
-	private String getDateString(final Calendar cal) {
-
-		final DateFormat df = DateFormat.getDateTimeInstance();
-		return df.format(cal.getTime());
+	private String getDateString(final LocalDateTime date) {
+		return DateTimeFormat.shortDate().print(date);
 	}
 
 	private String getID(final EObject target) {

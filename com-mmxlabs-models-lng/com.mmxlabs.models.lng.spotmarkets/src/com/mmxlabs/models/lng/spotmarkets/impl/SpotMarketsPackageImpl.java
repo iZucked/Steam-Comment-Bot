@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.spotmarkets.impl;
 
+import com.mmxlabs.models.datetime.DateTimePackage;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
@@ -749,6 +750,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		CommercialPackage theCommercialPackage = (CommercialPackage)EPackage.Registry.INSTANCE.getEPackage(CommercialPackage.eNS_URI);
 		PortPackage thePortPackage = (PortPackage)EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI);
 		PricingPackage thePricingPackage = (PricingPackage)EPackage.Registry.INSTANCE.getEPackage(PricingPackage.eNS_URI);
+		DateTimePackage theDateTimePackage = (DateTimePackage)EPackage.Registry.INSTANCE.getEPackage(DateTimePackage.eNS_URI);
 		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
 
 		// Create type parameters
@@ -827,7 +829,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		initEReference(getSpotAvailability_Curve(), g1, null, "curve", null, 1, 1, SpotAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(charterOutStartDateEClass, CharterOutStartDate.class, "CharterOutStartDate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getCharterOutStartDate_CharterOutStartDate(), ecorePackage.getEDate(), "charterOutStartDate", null, 0, 1, CharterOutStartDate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCharterOutStartDate_CharterOutStartDate(), theDateTimePackage.getLocalDate(), "charterOutStartDate", null, 0, 1, CharterOutStartDate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(charterOutMarketEClass, CharterOutMarket.class, "CharterOutMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCharterOutMarket_CharterOutPrice(), thePricingPackage.getCharterIndex(), null, "charterOutPrice", null, 1, 1, CharterOutMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -858,8 +860,6 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		// Create annotations
 		// http://www.mmxlabs.com/models/ui/numberFormat
 		createNumberFormatAnnotations();
-		// http://www.mmxlabs.com/models/lng/ui/datetime
-		createDatetimeAnnotations();
 	}
 
 	/**
@@ -895,22 +895,6 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		   new String[] {
 			 "unit", "mmBtu/m\u00b3",
 			 "formatString", "#0.###"
-		   });	
-	}
-
-	/**
-	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/lng/ui/datetime</b>.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void createDatetimeAnnotations() {
-		String source = "http://www.mmxlabs.com/models/lng/ui/datetime";						
-		addAnnotation
-		  (getCharterOutStartDate_CharterOutStartDate(), 
-		   source, 
-		   new String[] {
-			 "showTime", "false"
 		   });
 	}
 

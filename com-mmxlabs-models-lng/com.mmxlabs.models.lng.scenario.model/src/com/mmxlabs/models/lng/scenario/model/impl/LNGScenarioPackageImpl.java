@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.scenario.model.impl;
 
+import com.mmxlabs.models.lng.actuals.ActualsPackage;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -94,7 +95,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 		isInited = true;
 
 		// Initialize simple dependencies
-		com.mmxlabs.models.lng.actuals.ActualsPackage.eINSTANCE.eClass();
+		ActualsPackage.eINSTANCE.eClass();
 		AnalyticsPackage.eINSTANCE.eClass();
 		ParametersPackage.eINSTANCE.eClass();
 		SchedulePackage.eINSTANCE.eClass();
@@ -309,7 +310,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 		CargoPackage theCargoPackage = (CargoPackage)EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI);
 		SchedulePackage theSchedulePackage = (SchedulePackage)EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI);
 		ParametersPackage theParametersPackage = (ParametersPackage)EPackage.Registry.INSTANCE.getEPackage(ParametersPackage.eNS_URI);
-		com.mmxlabs.models.lng.actuals.ActualsPackage theActualsPackage = (com.mmxlabs.models.lng.actuals.ActualsPackage)EPackage.Registry.INSTANCE.getEPackage(com.mmxlabs.models.lng.actuals.ActualsPackage.eNS_URI);
+		ActualsPackage theActualsPackage = (ActualsPackage)EPackage.Registry.INSTANCE.getEPackage(ActualsPackage.eNS_URI);
 
 		// Create type parameters
 

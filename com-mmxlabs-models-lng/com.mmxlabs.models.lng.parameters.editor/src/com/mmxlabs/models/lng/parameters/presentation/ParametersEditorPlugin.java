@@ -10,7 +10,6 @@ import org.eclipse.emf.common.util.ResourceLocator;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
-import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
 import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
@@ -47,7 +46,6 @@ public final class ParametersEditorPlugin extends EMFPlugin {
 	public ParametersEditorPlugin() {
 		super
 			(new ResourceLocator [] {
-				LNGTypesEditPlugin.INSTANCE,
 				MmxcoreEditPlugin.INSTANCE,
 			});
 	}

@@ -4,13 +4,12 @@
  */
 package com.mmxlabs.models.lng.cargo.validation;
 
-import java.util.Date;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.joda.time.DateTime;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -62,7 +61,7 @@ public class FOBDESCargoDatesConstraint extends AbstractModelConstraint {
 					// Check this is the correct type of DES Purchase and FOB Sale
 					if (SlotClassifier.classify(loadSlot) == SlotType.DES_Buy || SlotClassifier.classify(dischargeSlot) == SlotType.FOB_Sale) {
 						final boolean valid;
-						if (loadSlot.getWindowStartWithSlotOrPortTime().before(dischargeSlot.getWindowStartWithSlotOrPortTime())) {
+						if (loadSlot.getWindowStartWithSlotOrPortTime().isBefore(dischargeSlot.getWindowStartWithSlotOrPortTime())) {
 							valid = checkDates(loadSlot.getWindowStartWithSlotOrPortTime(), loadSlot.getWindowEndWithSlotOrPortTime(), dischargeSlot.getWindowEndWithSlotOrPortTime())
 									|| checkDates(loadSlot.getWindowStartWithSlotOrPortTime(), loadSlot.getWindowEndWithSlotOrPortTime(), dischargeSlot.getWindowStartWithSlotOrPortTime());
 						} else {
@@ -87,12 +86,12 @@ public class FOBDESCargoDatesConstraint extends AbstractModelConstraint {
 		return ctx.createSuccessStatus();
 	}
 
-	private boolean checkDates(final Date windowStart, final Date windowEnd, final Date target) {
+	private boolean checkDates(final DateTime windowStart, final DateTime windowEnd, final DateTime target) {
 
-		if (target.before(windowStart)) {
+		if (target.isBefore(windowStart)) {
 			return false;
 		}
-		if (target.after(windowEnd)) {
+		if (target.isAfter(windowEnd)) {
 			return false;
 		}
 		return true;

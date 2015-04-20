@@ -9,7 +9,6 @@ package com.mmxlabs.models.lng.parameters.provider;
 import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
 
-import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
 import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
 
 /**
@@ -44,7 +43,6 @@ public final class ParametersEditPlugin extends EMFPlugin {
 	public ParametersEditPlugin() {
 		super
 		  (new ResourceLocator [] {
-		     LNGTypesEditPlugin.INSTANCE,
 		     MmxcoreEditPlugin.INSTANCE,
 		   });
 	}

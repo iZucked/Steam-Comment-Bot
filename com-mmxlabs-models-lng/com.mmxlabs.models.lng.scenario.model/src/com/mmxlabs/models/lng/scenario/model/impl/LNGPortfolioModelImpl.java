@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.scenario.model.impl;
 
+import com.mmxlabs.models.lng.actuals.ActualsModel;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
@@ -74,7 +75,7 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 	 * @generated
 	 * @ordered
 	 */
-	protected com.mmxlabs.models.lng.actuals.ActualsModel actualsModel;
+	protected ActualsModel actualsModel;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -298,10 +299,10 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public com.mmxlabs.models.lng.actuals.ActualsModel getActualsModel() {
+	public ActualsModel getActualsModel() {
 		if (actualsModel != null && actualsModel.eIsProxy()) {
 			InternalEObject oldActualsModel = (InternalEObject)actualsModel;
-			actualsModel = (com.mmxlabs.models.lng.actuals.ActualsModel)eResolveProxy(oldActualsModel);
+			actualsModel = (ActualsModel)eResolveProxy(oldActualsModel);
 			if (actualsModel != oldActualsModel) {
 				InternalEObject newActualsModel = (InternalEObject)actualsModel;
 				NotificationChain msgs = oldActualsModel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_PORTFOLIO_MODEL__ACTUALS_MODEL, null, null);
@@ -321,7 +322,7 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public com.mmxlabs.models.lng.actuals.ActualsModel basicGetActualsModel() {
+	public ActualsModel basicGetActualsModel() {
 		return actualsModel;
 	}
 
@@ -330,8 +331,8 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetActualsModel(com.mmxlabs.models.lng.actuals.ActualsModel newActualsModel, NotificationChain msgs) {
-		com.mmxlabs.models.lng.actuals.ActualsModel oldActualsModel = actualsModel;
+	public NotificationChain basicSetActualsModel(ActualsModel newActualsModel, NotificationChain msgs) {
+		ActualsModel oldActualsModel = actualsModel;
 		actualsModel = newActualsModel;
 		if (eNotificationRequired()) {
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_PORTFOLIO_MODEL__ACTUALS_MODEL, oldActualsModel, newActualsModel);
@@ -345,7 +346,7 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setActualsModel(com.mmxlabs.models.lng.actuals.ActualsModel newActualsModel) {
+	public void setActualsModel(ActualsModel newActualsModel) {
 		if (newActualsModel != actualsModel) {
 			NotificationChain msgs = null;
 			if (actualsModel != null)
@@ -421,7 +422,7 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 				setParameters((OptimiserSettings)newValue);
 				return;
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__ACTUALS_MODEL:
-				setActualsModel((com.mmxlabs.models.lng.actuals.ActualsModel)newValue);
+				setActualsModel((ActualsModel)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -445,7 +446,7 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 				setParameters((OptimiserSettings)null);
 				return;
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__ACTUALS_MODEL:
-				setActualsModel((com.mmxlabs.models.lng.actuals.ActualsModel)null);
+				setActualsModel((ActualsModel)null);
 				return;
 		}
 		super.eUnset(featureID);

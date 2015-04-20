@@ -4,39 +4,37 @@
  */
 package com.mmxlabs.models.lng.pricing.validation;
 
-import java.util.Date;
-import java.util.GregorianCalendar;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.joda.time.YearMonth;
 
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 
-public class SensibleIndexDateConstraint  extends AbstractModelConstraint {
-	private Date earliestDate = new GregorianCalendar(2000,0,1).getTime();
+public class SensibleIndexDateConstraint extends AbstractModelConstraint {
+	private final YearMonth earliestDate = new YearMonth(2000, 1);
 
 	@Override
-	public IStatus validate(IValidationContext ctx) {
+	public IStatus validate(final IValidationContext ctx) {
 		final EObject target = ctx.getTarget();
 
 		if (target instanceof CommodityIndex) {
 			final CommodityIndex index = (CommodityIndex) target;
 			final Index<Double> data = index.getData();
 			if (data instanceof DataIndex) {
-				for (Date date: data.getDates()) {
-					if (date.before(earliestDate)) {
+				for (final YearMonth date : data.getDates()) {
+					if (date.isBefore(earliestDate)) {
 						return (IConstraintStatus) ctx.createFailureStatus(index.getName(), earliestDate);
 					}
 				}
-				
+
 			}
 		}
-		
+
 		return ctx.createSuccessStatus();
 	}
 

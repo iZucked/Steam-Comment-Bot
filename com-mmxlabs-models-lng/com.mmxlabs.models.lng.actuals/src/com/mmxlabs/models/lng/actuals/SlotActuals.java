@@ -10,8 +10,8 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
-import java.util.Calendar;
-import java.util.Date;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 
 /**
  * <!-- begin-user-doc -->
@@ -125,6 +125,22 @@ public interface SlotActuals extends ITimezoneProvider {
 	 * @generated
 	 */
 	void setCapacityCharges(int value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime" required="true"
+	 * @generated
+	 */
+	DateTime getOperationsStartAsDateTime();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime" required="true"
+	 * @generated
+	 */
+	DateTime getOperationsEndAsDateTime();
 
 	/**
 	 * Returns the value of the '<em><b>Base Fuel Consumption</b></em>' attribute.
@@ -283,22 +299,6 @@ public interface SlotActuals extends ITimezoneProvider {
 	void setCrewBonus(int value);
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="com.mmxlabs.models.lng.actuals.Calendar" required="true"
-	 * @generated
-	 */
-	Calendar getLocalStart();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="com.mmxlabs.models.lng.actuals.Calendar" required="true"
-	 * @generated
-	 */
-	Calendar getLocalEnd();
-
-	/**
 	 * Returns the value of the '<em><b>Slot</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -359,12 +359,12 @@ public interface SlotActuals extends ITimezoneProvider {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Operations Start</em>' attribute.
-	 * @see #setOperationsStart(Date)
+	 * @see #setOperationsStart(LocalDateTime)
 	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_OperationsStart()
-	 * @model
+	 * @model dataType="com.mmxlabs.models.datetime.LocalDateTime"
 	 * @generated
 	 */
-	Date getOperationsStart();
+	LocalDateTime getOperationsStart();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getOperationsStart <em>Operations Start</em>}' attribute.
@@ -374,7 +374,7 @@ public interface SlotActuals extends ITimezoneProvider {
 	 * @see #getOperationsStart()
 	 * @generated
 	 */
-	void setOperationsStart(Date value);
+	void setOperationsStart(LocalDateTime value);
 
 	/**
 	 * Returns the value of the '<em><b>Operations End</b></em>' attribute.
@@ -385,12 +385,12 @@ public interface SlotActuals extends ITimezoneProvider {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Operations End</em>' attribute.
-	 * @see #setOperationsEnd(Date)
+	 * @see #setOperationsEnd(LocalDateTime)
 	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_OperationsEnd()
-	 * @model
+	 * @model dataType="com.mmxlabs.models.datetime.LocalDateTime"
 	 * @generated
 	 */
-	Date getOperationsEnd();
+	LocalDateTime getOperationsEnd();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getOperationsEnd <em>Operations End</em>}' attribute.
@@ -400,7 +400,7 @@ public interface SlotActuals extends ITimezoneProvider {
 	 * @see #getOperationsEnd()
 	 * @generated
 	 */
-	void setOperationsEnd(Date value);
+	void setOperationsEnd(LocalDateTime value);
 
 	/**
 	 * Returns the value of the '<em><b>Title Transfer Point</b></em>' reference.

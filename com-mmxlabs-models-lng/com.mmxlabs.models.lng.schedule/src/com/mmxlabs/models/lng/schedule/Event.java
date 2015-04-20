@@ -3,9 +3,7 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule;
-import java.util.Calendar;
-import java.util.Date;
-
+import org.joda.time.DateTime;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.mmxcore.MMXObject;
@@ -44,12 +42,12 @@ public interface Event extends MMXObject, ITimezoneProvider {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Start</em>' attribute.
-	 * @see #setStart(Date)
+	 * @see #setStart(DateTime)
 	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getEvent_Start()
-	 * @model required="true"
+	 * @model dataType="com.mmxlabs.models.datetime.DateTime" required="true"
 	 * @generated
 	 */
-	Date getStart();
+	DateTime getStart();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Event#getStart <em>Start</em>}' attribute.
@@ -59,7 +57,7 @@ public interface Event extends MMXObject, ITimezoneProvider {
 	 * @see #getStart()
 	 * @generated
 	 */
-	void setStart(Date value);
+	void setStart(DateTime value);
 
 	/**
 	 * Returns the value of the '<em><b>End</b></em>' attribute.
@@ -70,12 +68,12 @@ public interface Event extends MMXObject, ITimezoneProvider {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>End</em>' attribute.
-	 * @see #setEnd(Date)
+	 * @see #setEnd(DateTime)
 	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getEvent_End()
-	 * @model required="true"
+	 * @model dataType="com.mmxlabs.models.datetime.DateTime" required="true"
 	 * @generated
 	 */
-	Date getEnd();
+	DateTime getEnd();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Event#getEnd <em>End</em>}' attribute.
@@ -85,7 +83,7 @@ public interface Event extends MMXObject, ITimezoneProvider {
 	 * @see #getEnd()
 	 * @generated
 	 */
-	void setEnd(Date value);
+	void setEnd(DateTime value);
 
 	/**
 	 * Returns the value of the '<em><b>Port</b></em>' reference.
@@ -282,22 +280,6 @@ public interface Event extends MMXObject, ITimezoneProvider {
 	 * @generated
 	 */
 	int getDuration();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="com.mmxlabs.models.lng.schedule.Calendar" required="true"
-	 * @generated
-	 */
-	Calendar getLocalStart();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="com.mmxlabs.models.lng.schedule.Calendar" required="true"
-	 * @generated
-	 */
-	Calendar getLocalEnd();
 
 	/**
 	 * <!-- begin-user-doc -->

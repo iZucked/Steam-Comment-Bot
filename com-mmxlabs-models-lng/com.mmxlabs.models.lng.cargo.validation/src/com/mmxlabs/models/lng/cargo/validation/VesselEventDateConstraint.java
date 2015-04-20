@@ -4,13 +4,12 @@
  */
 package com.mmxlabs.models.lng.cargo.validation;
 
-import java.util.Date;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.joda.time.LocalDateTime;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
@@ -29,8 +28,8 @@ public class VesselEventDateConstraint extends AbstractModelConstraint {
 		if (target instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) target;
 
-			final Date start = vesselEvent.getStartAfter();
-			final Date end = vesselEvent.getStartBy();
+			final LocalDateTime start = vesselEvent.getStartAfter();
+			final LocalDateTime end = vesselEvent.getStartBy();
 
 			if (start == null || end == null) {
 				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(vesselEvent.getName()));
@@ -42,7 +41,7 @@ public class VesselEventDateConstraint extends AbstractModelConstraint {
 				}
 				return dcsd;
 			} else {
-				if (start.after(end)) {
+				if (start.isAfter(end)) {
 					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(vesselEvent.getName()));
 					dcsd.addEObjectAndFeature(vesselEvent, CargoPackage.eINSTANCE.getVesselEvent_StartAfter());
 					dcsd.addEObjectAndFeature(vesselEvent, CargoPackage.eINSTANCE.getVesselEvent_StartBy());

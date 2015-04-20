@@ -4,14 +4,12 @@
  */
 package com.mmxlabs.models.lng.pricing.util;
 
-import java.util.Calendar;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.SortedSet;
-import java.util.TimeZone;
 import java.util.TreeSet;
 
-import javax.management.timer.Timer;
+import org.joda.time.Hours;
+import org.joda.time.YearMonth;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.series.SeriesParser;
@@ -37,7 +35,7 @@ public class PriceIndexUtils {
 	 * @return A {@link SeriesParser} object for use in validating price expressions.
 	 */
 	@SuppressWarnings("rawtypes")
-	public static SeriesParser getParserForCommodityIndices(final PricingModel pricingModel, final Date dateZero) {
+	public static SeriesParser getParserForCommodityIndices(final PricingModel pricingModel, final YearMonth dateZero) {
 
 		final SeriesParser indices = new SeriesParser();
 
@@ -64,7 +62,7 @@ public class PriceIndexUtils {
 	 * @param index
 	 *            The index data to use.
 	 */
-	public static void addSeriesDataFromDataIndex(final SeriesParser parser, final String name, final Date dateZero, final DataIndex<? extends Number> index) {
+	public static void addSeriesDataFromDataIndex(final SeriesParser parser, final String name, final YearMonth dateZero, final DataIndex<? extends Number> index) {
 		final int[] times;
 		final Number[] values;
 
@@ -76,19 +74,19 @@ public class PriceIndexUtils {
 		}
 		// otherwise, we use the data from the DataIndex
 		else {
-			final SortedSet<Pair<Date, Number>> vals = new TreeSet<Pair<Date, Number>>(new Comparator<Pair<Date, ?>>() {
+			final SortedSet<Pair<YearMonth, Number>> vals = new TreeSet<Pair<YearMonth, Number>>(new Comparator<Pair<YearMonth, ?>>() {
 				@Override
-				public int compare(final Pair<Date, ?> o1, final Pair<Date, ?> o2) {
+				public int compare(final Pair<YearMonth, ?> o1, final Pair<YearMonth, ?> o2) {
 					return o1.getFirst().compareTo(o2.getFirst());
 				}
 			});
 			for (final IndexPoint<? extends Number> pt : index.getPoints()) {
-				vals.add(new Pair<Date, Number>(pt.getDate(), pt.getValue()));
+				vals.add(new Pair<YearMonth, Number>(pt.getDate(), pt.getValue()));
 			}
 			times = new int[vals.size()];
 			values = new Number[vals.size()];
 			int k = 0;
-			for (final Pair<Date, Number> e : vals) {
+			for (final Pair<YearMonth, Number> e : vals) {
 				times[k] = convertTime(dateZero, e.getFirst());
 				values[k++] = e.getSecond();
 			}
@@ -104,29 +102,7 @@ public class PriceIndexUtils {
 	 * @param windowStart
 	 * @return
 	 */
-	public static int convertTime(final Date earliest, final Date windowStart) {
-		final TimeZone timezone = TimeZone.getTimeZone("UTC");
-		// I am using two calendars, because the java date objects are all
-		// deprecated; however, timezones should not be a problem because
-		// every Date in the EMF representation is in UTC.
-		final Calendar a = Calendar.getInstance(timezone);
-		a.setTime(earliest);
-		final Calendar b = Calendar.getInstance(timezone);
-		b.setTime(windowStart);
-		final long difference = b.getTimeInMillis() - a.getTimeInMillis();
-		return (int) (difference / Timer.ONE_HOUR);
+	public static int convertTime(final YearMonth earliest, final YearMonth windowStart) {
+		return Hours.hoursBetween(earliest, windowStart).getHours();
 	}
-
-	public static Date createDate(int year, int month, int dayOfMonth, int hourOfDay, String newTimeZone) {
-		final Calendar newCalendar = Calendar.getInstance(TimeZone.getTimeZone(newTimeZone));
-		newCalendar.set(Calendar.YEAR, year);
-		newCalendar.set(Calendar.MONTH, month);
-		newCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-		newCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-		newCalendar.set(Calendar.MINUTE, 0);
-		newCalendar.set(Calendar.SECOND, 0);
-		newCalendar.set(Calendar.MILLISECOND, 0);
-		return newCalendar.getTime();
-	}
-
 }

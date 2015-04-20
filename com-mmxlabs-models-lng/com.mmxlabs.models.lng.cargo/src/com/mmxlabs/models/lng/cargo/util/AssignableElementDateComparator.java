@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.util;
 
-import java.util.Date;
+import org.joda.time.DateTime;
 
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 
@@ -14,10 +14,10 @@ import com.mmxlabs.models.lng.cargo.AssignableElement;
 public class AssignableElementDateComparator implements IAssignableElementComparator {
 	@Override
 	public int compare(final AssignableElement arg0, final AssignableElement arg1) {
-		final Date start0 = getStartDate(arg0);
-		final Date start1 = getStartDate(arg1);
-		final Date end0 = getEndDate(arg0);
-		final Date end1 = getEndDate(arg1);
+		final DateTime start0 = getStartDate(arg0);
+		final DateTime start1 = getStartDate(arg1);
+		final DateTime end0 = getEndDate(arg0);
+		final DateTime end1 = getEndDate(arg1);
 
 		final boolean null0 = start0 == null || end0 == null;
 		final boolean null1 = start1 == null || end1 == null;
@@ -40,15 +40,15 @@ public class AssignableElementDateComparator implements IAssignableElementCompar
 		}
 	}
 
-	protected boolean overlaps(final Date start0, final Date end0, final Date start1, final Date end1) {
-		return !(end0.before(start1) || end1.before(start0));
+	protected boolean overlaps(final DateTime start0, final DateTime end0, final DateTime start1, final DateTime end1) {
+		return !(end0.isBefore(start1) || end1.isBefore(start0));
 	}
 
-	protected Date getStartDate(final AssignableElement element) {
+	protected DateTime getStartDate(final AssignableElement element) {
 		return AssignmentEditorHelper.getStartDate(element);
 	}
 
-	protected Date getEndDate(final AssignableElement element) {
+	protected DateTime getEndDate(final AssignableElement element) {
 		return AssignmentEditorHelper.getEndDate(element);
 
 	}

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.pricing.impl;
 
+import com.mmxlabs.models.datetime.DateTimePackage;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EGenericType;
@@ -226,6 +227,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		isInited = true;
 
 		// Initialize simple dependencies
+		DateTimePackage.eINSTANCE.eClass();
 		FleetPackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
@@ -866,6 +868,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 		// Obtain other dependent packages
 		MMXCorePackage theMMXCorePackage = (MMXCorePackage)EPackage.Registry.INSTANCE.getEPackage(MMXCorePackage.eNS_URI);
+		DateTimePackage theDateTimePackage = (DateTimePackage)EPackage.Registry.INSTANCE.getEPackage(DateTimePackage.eNS_URI);
 		PortPackage thePortPackage = (PortPackage)EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI);
 		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
 		TypesPackage theTypesPackage = (TypesPackage)EPackage.Registry.INSTANCE.getEPackage(TypesPackage.eNS_URI);
@@ -933,26 +936,26 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEAttribute(getDerivedIndex_Expression(), ecorePackage.getEString(), "expression", null, 1, 1, DerivedIndex.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(indexPointEClass, IndexPoint.class, "IndexPoint", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getIndexPoint_Date(), ecorePackage.getEDate(), "date", null, 1, 1, IndexPoint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getIndexPoint_Date(), theDateTimePackage.getYearMonth(), "date", null, 0, 1, IndexPoint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		g1 = createEGenericType(indexPointEClass_Value);
 		initEAttribute(getIndexPoint_Value(), g1, "value", null, 1, 1, IndexPoint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(indexEClass, Index.class, "Index", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		EOperation op = addEOperation(indexEClass, null, "getValueForMonth", 1, 1, IS_UNIQUE, IS_ORDERED);
-		addEParameter(op, ecorePackage.getEDate(), "date", 1, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, theDateTimePackage.getYearMonth(), "date", 1, 1, IS_UNIQUE, IS_ORDERED);
 		g1 = createEGenericType(indexEClass_Value);
 		initEOperation(op, g1);
 
-		addEOperation(indexEClass, ecorePackage.getEDate(), "getDates", 0, -1, IS_UNIQUE, IS_ORDERED);
+		addEOperation(indexEClass, theDateTimePackage.getYearMonth(), "getDates", 0, -1, IS_UNIQUE, IS_ORDERED);
 
 		op = addEOperation(indexEClass, null, "getForwardValueForMonth", 1, 1, IS_UNIQUE, IS_ORDERED);
-		addEParameter(op, ecorePackage.getEDate(), "date", 1, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, theDateTimePackage.getYearMonth(), "date", 1, 1, IS_UNIQUE, IS_ORDERED);
 		g1 = createEGenericType(indexEClass_Value);
 		initEOperation(op, g1);
 
 		op = addEOperation(indexEClass, null, "getBackwardsValueForMonth", 1, 1, IS_UNIQUE, IS_ORDERED);
-		addEParameter(op, ecorePackage.getEDate(), "date", 1, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, theDateTimePackage.getYearMonth(), "date", 1, 1, IS_UNIQUE, IS_ORDERED);
 		g1 = createEGenericType(indexEClass_Value);
 		initEOperation(op, g1);
 

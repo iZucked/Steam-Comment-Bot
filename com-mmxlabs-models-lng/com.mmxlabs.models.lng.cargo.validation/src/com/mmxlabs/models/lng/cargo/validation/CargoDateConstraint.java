@@ -4,19 +4,18 @@
  */
 package com.mmxlabs.models.lng.cargo.validation;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.management.timer.Timer;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.joda.time.DateTime;
+import org.joda.time.Hours;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -173,8 +172,8 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 					failures.add(dsd);
 				} else {
 					if (minTime > availableTime) {
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'" + cargo.getLoadName() + "'", formatHours(minTime
-								- availableTime)), (cargo.isAllowRewiring()) ? IStatus.WARNING : severity);
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'" + cargo.getLoadName() + "'",
+								formatHours(minTime - availableTime)), (cargo.isAllowRewiring()) ? IStatus.WARNING : severity);
 						dsd.addEObjectAndFeature(from, CargoPackage.eINSTANCE.getSlot_WindowStart());
 						dsd.addEObjectAndFeature(to, CargoPackage.eINSTANCE.getSlot_WindowStart());
 						failures.add(dsd);
@@ -238,12 +237,11 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 						final Port dischargePort = slot.getPort();
 						if ((loadPort != null) && (dischargePort != null)) {
 
-							final Date windowEndWithSlotOrPortTime = slot.getWindowEndWithSlotOrPortTime();
-							final Date windowStartWithSlotOrPortTime = prevSlot.getWindowStartWithSlotOrPortTime();
+							final DateTime windowEndWithSlotOrPortTime = slot.getWindowEndWithSlotOrPortTime();
+							final DateTime windowStartWithSlotOrPortTime = prevSlot.getWindowStartWithSlotOrPortTime();
 
 							if (windowEndWithSlotOrPortTime != null && windowStartWithSlotOrPortTime != null) {
-								final int availableTime = (int) ((windowEndWithSlotOrPortTime.getTime() - windowStartWithSlotOrPortTime.getTime()) / Timer.ONE_HOUR)
-										- (prevSlot.getSlotOrPortDuration());
+								final int availableTime = Hours.hoursBetween(windowStartWithSlotOrPortTime, windowEndWithSlotOrPortTime).getHours() - prevSlot.getSlotOrPortDuration();
 
 								if (constraintID.equals(DATE_ORDER_ID)) {
 									validateSlotOrder(ctx, cargo, prevSlot, availableTime, failures);

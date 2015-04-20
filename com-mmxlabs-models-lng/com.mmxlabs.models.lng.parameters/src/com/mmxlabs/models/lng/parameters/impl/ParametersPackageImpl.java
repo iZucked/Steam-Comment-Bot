@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.parameters.impl;
 
+import com.mmxlabs.models.datetime.DateTimePackage;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
@@ -21,7 +22,6 @@ import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.ParametersModel;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
-import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 /**
@@ -127,7 +127,8 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		isInited = true;
 
 		// Initialize simple dependencies
-		TypesPackage.eINSTANCE.eClass();
+		DateTimePackage.eINSTANCE.eClass();
+		MMXCorePackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
 		theParametersPackage.createPackageContents();
@@ -514,6 +515,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 
 		// Obtain other dependent packages
 		MMXCorePackage theMMXCorePackage = (MMXCorePackage)EPackage.Registry.INSTANCE.getEPackage(MMXCorePackage.eNS_URI);
+		DateTimePackage theDateTimePackage = (DateTimePackage)EPackage.Registry.INSTANCE.getEPackage(DateTimePackage.eNS_URI);
 
 		// Create type parameters
 
@@ -549,8 +551,8 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		initEAttribute(getConstraint_Enabled(), ecorePackage.getEBoolean(), "enabled", null, 1, 1, Constraint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(optimisationRangeEClass, OptimisationRange.class, "OptimisationRange", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getOptimisationRange_OptimiseAfter(), ecorePackage.getEDate(), "optimiseAfter", null, 1, 1, OptimisationRange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getOptimisationRange_OptimiseBefore(), ecorePackage.getEDate(), "optimiseBefore", null, 1, 1, OptimisationRange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getOptimisationRange_OptimiseAfter(), theDateTimePackage.getYearMonth(), "optimiseAfter", null, 0, 1, OptimisationRange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getOptimisationRange_OptimiseBefore(), theDateTimePackage.getYearMonth(), "optimiseBefore", null, 0, 1, OptimisationRange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(annealingSettingsEClass, AnnealingSettings.class, "AnnealingSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getAnnealingSettings_Iterations(), ecorePackage.getEInt(), "iterations", null, 1, 1, AnnealingSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

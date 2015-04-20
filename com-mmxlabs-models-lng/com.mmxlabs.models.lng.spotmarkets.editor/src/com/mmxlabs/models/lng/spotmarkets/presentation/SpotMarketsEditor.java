@@ -233,6 +233,7 @@ public class SpotMarketsEditor
 	 */
 	protected IPartListener partListener =
 		new IPartListener() {
+			@Override
 			public void partActivated(IWorkbenchPart p) {
 				if (p instanceof ContentOutline) {
 					if (((ContentOutline)p).getCurrentPage() == contentOutlinePage) {
@@ -251,15 +252,19 @@ public class SpotMarketsEditor
 					handleActivate();
 				}
 			}
+			@Override
 			public void partBroughtToTop(IWorkbenchPart p) {
 				// Ignore.
 			}
+			@Override
 			public void partClosed(IWorkbenchPart p) {
 				// Ignore.
 			}
+			@Override
 			public void partDeactivated(IWorkbenchPart p) {
 				// Ignore.
 			}
+			@Override
 			public void partOpened(IWorkbenchPart p) {
 				// Ignore.
 			}
@@ -332,7 +337,8 @@ public class SpotMarketsEditor
 							if (updateProblemIndication) {
 								getSite().getShell().getDisplay().asyncExec
 									(new Runnable() {
-										 public void run() {
+										 @Override
+										public void run() {
 											 updateProblemIndication();
 										 }
 									 });
@@ -358,7 +364,8 @@ public class SpotMarketsEditor
 				if (updateProblemIndication) {
 					getSite().getShell().getDisplay().asyncExec
 						(new Runnable() {
-							 public void run() {
+							 @Override
+							public void run() {
 								 updateProblemIndication();
 							 }
 						 });
@@ -374,6 +381,7 @@ public class SpotMarketsEditor
 	 */
 	protected IResourceChangeListener resourceChangeListener =
 		new IResourceChangeListener() {
+			@Override
 			public void resourceChanged(IResourceChangeEvent event) {
 				IResourceDelta delta = event.getDelta();
 				try {
@@ -382,6 +390,7 @@ public class SpotMarketsEditor
 						protected Collection<Resource> changedResources = new ArrayList<Resource>();
 						protected Collection<Resource> removedResources = new ArrayList<Resource>();
 
+						@Override
 						public boolean visit(IResourceDelta delta) {
 							if (delta.getResource().getType() == IResource.FILE) {
 								if (delta.getKind() == IResourceDelta.REMOVED ||
@@ -417,7 +426,8 @@ public class SpotMarketsEditor
 					if (!visitor.getRemovedResources().isEmpty()) {
 						getSite().getShell().getDisplay().asyncExec
 							(new Runnable() {
-								 public void run() {
+								 @Override
+								public void run() {
 									 removedResources.addAll(visitor.getRemovedResources());
 									 if (!isDirty()) {
 										 getSite().getPage().closeEditor(SpotMarketsEditor.this, false);
@@ -429,7 +439,8 @@ public class SpotMarketsEditor
 					if (!visitor.getChangedResources().isEmpty()) {
 						getSite().getShell().getDisplay().asyncExec
 							(new Runnable() {
-								 public void run() {
+								 @Override
+								public void run() {
 									 changedResources.addAll(visitor.getChangedResources());
 									 if (getSite().getPage().getActiveEditor() == SpotMarketsEditor.this) {
 										 handleActivate();
@@ -627,10 +638,12 @@ public class SpotMarketsEditor
 		//
 		commandStack.addCommandStackListener
 			(new CommandStackListener() {
-				 public void commandStackChanged(final EventObject event) {
+				 @Override
+				public void commandStackChanged(final EventObject event) {
 					 getContainer().getDisplay().asyncExec
 						 (new Runnable() {
-							  public void run() {
+							  @Override
+							public void run() {
 								  firePropertyChange(IEditorPart.PROP_DIRTY);
 
 								  // Try to select the affected objects.
@@ -682,6 +695,7 @@ public class SpotMarketsEditor
 		if (theSelection != null && !theSelection.isEmpty()) {
 			Runnable runnable =
 				new Runnable() {
+					@Override
 					public void run() {
 						// Try to select the items in the current content viewer of the editor.
 						//
@@ -784,6 +798,7 @@ public class SpotMarketsEditor
 					new ISelectionChangedListener() {
 						// This just notifies those things that are affected by the section.
 						//
+						@Override
 						public void selectionChanged(SelectionChangedEvent selectionChangedEvent) {
 							setSelection(selectionChangedEvent.getSelection());
 						}
@@ -938,7 +953,8 @@ public class SpotMarketsEditor
 
 			getSite().getShell().getDisplay().asyncExec
 				(new Runnable() {
-					 public void run() {
+					 @Override
+					public void run() {
 						 setActivePage(0);
 					 }
 				 });
@@ -962,7 +978,8 @@ public class SpotMarketsEditor
 
 		getSite().getShell().getDisplay().asyncExec
 			(new Runnable() {
-				 public void run() {
+				 @Override
+				public void run() {
 					 updateProblemIndication();
 				 }
 			 });
@@ -1097,7 +1114,8 @@ public class SpotMarketsEditor
 				(new ISelectionChangedListener() {
 					 // This ensures that we handle selections correctly.
 					 //
-					 public void selectionChanged(SelectionChangedEvent event) {
+					 @Override
+					public void selectionChanged(SelectionChangedEvent event) {
 						 handleContentOutlineSelection(event.getSelection());
 					 }
 				 });

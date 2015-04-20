@@ -3,11 +3,10 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics;
-import java.util.Date;
-
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.mmxcore.MMXObject;
+import org.joda.time.LocalDate;
 
 /**
  * <!-- begin-user-doc -->
@@ -90,12 +89,12 @@ public interface BuyOpportunity extends MMXObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Date</em>' attribute.
-	 * @see #setDate(Date)
+	 * @see #setDate(LocalDate)
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getBuyOpportunity_Date()
-	 * @model
+	 * @model dataType="com.mmxlabs.models.datetime.LocalDate"
 	 * @generated
 	 */
-	Date getDate();
+	LocalDate getDate();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getDate <em>Date</em>}' attribute.
@@ -105,7 +104,7 @@ public interface BuyOpportunity extends MMXObject {
 	 * @see #getDate()
 	 * @generated
 	 */
-	void setDate(Date value);
+	void setDate(LocalDate value);
 
 	/**
 	 * Returns the value of the '<em><b>Price Expression</b></em>' attribute.

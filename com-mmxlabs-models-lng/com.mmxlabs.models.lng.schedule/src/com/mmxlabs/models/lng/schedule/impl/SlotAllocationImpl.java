@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Calendar;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -731,31 +730,6 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public Calendar getLocalStart() {
-		if (isSetSlotVisit()) {
-			return getSlotVisit().getLocalStart();
-		} else {
-			throw new UnsupportedOperationException();
-		}
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public Calendar getLocalEnd() {
-		if (isSetSlotVisit()) {
-			return getSlotVisit().getLocalEnd();
-		}
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
 	public Contract getContract() {
 		if (isSetSlot()) {
 			return slot.getContract();
@@ -985,10 +959,6 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 		switch (operationID) {
 			case SchedulePackage.SLOT_ALLOCATION___GET_PORT:
 				return getPort();
-			case SchedulePackage.SLOT_ALLOCATION___GET_LOCAL_START:
-				return getLocalStart();
-			case SchedulePackage.SLOT_ALLOCATION___GET_LOCAL_END:
-				return getLocalEnd();
 			case SchedulePackage.SLOT_ALLOCATION___GET_CONTRACT:
 				return getContract();
 			case SchedulePackage.SLOT_ALLOCATION___GET_NAME:

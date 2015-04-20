@@ -901,6 +901,7 @@ public class MetamodelVersionsUtil {
 
 		final MetamodelLoader loader = new MetamodelLoader();
 
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.datetime/model/datetime-v1.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_DateTime);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.mmxcore/model/mmxcore-v2.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_MMXCore);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.types/model/lngtypes.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_LNGTypes);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.port/model/port.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_PortModel);
@@ -989,6 +990,7 @@ public class MetamodelVersionsUtil {
 
 		final MetamodelLoader loader = new MetamodelLoader();
 
+		loader.loadEPackage(URI.createPlatformPluginURI(String.format("/com.mmxlabs.models.datetime/model/datetime-v1.ecore", n), true), ModelsLNGMigrationConstants.PKG_DATA_DateTime);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.mmxcore/model/mmxcore-v2.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_MMXCore);
 
 		loader.loadEPackage(URI.createPlatformPluginURI(String.format("/com.mmxlabs.models.lng.types/model/lngtypes-v%d.ecore", n), true), ModelsLNGMigrationConstants.PKG_DATA_LNGTypes);

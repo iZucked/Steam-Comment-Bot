@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.commercial.validation;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,6 +17,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
@@ -28,7 +28,7 @@ import com.mmxlabs.models.lng.commercial.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 public class EntityBookTaxRateRangeConstraint extends AbstractModelConstraint  {
-	final DateFormat shortDate = new SimpleDateFormat("yyyy-MM-dd");
+	final DateTimeFormatter shortDate = DateTimeFormat.forPattern("yyyy-MM-dd");
 
 	@Override
 	public IStatus validate(IValidationContext ctx) {
@@ -52,7 +52,7 @@ public class EntityBookTaxRateRangeConstraint extends AbstractModelConstraint  {
 			// for the same date into one validation error)
 			final Map<String, Integer> dateCount = new LinkedHashMap<String, Integer>();
 			for (final TaxRate rate: rates) {
-				final String date = shortDate.format(rate.getDate());
+				final String date = shortDate.print(rate.getDate());
 				Integer count = dateCount.get(date);
 				dateCount.put(date, count == null ? 1 : count + 1);
 			}

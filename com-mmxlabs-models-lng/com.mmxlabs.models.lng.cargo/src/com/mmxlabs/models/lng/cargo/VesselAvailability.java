@@ -18,9 +18,9 @@ import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
-import java.util.Date;
-
 import org.eclipse.emf.common.util.EList;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 
 /**
  * <!-- begin-user-doc -->
@@ -156,12 +156,12 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @return the value of the '<em>Start After</em>' attribute.
 	 * @see #isSetStartAfter()
 	 * @see #unsetStartAfter()
-	 * @see #setStartAfter(Date)
+	 * @see #setStartAfter(LocalDateTime)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_StartAfter()
-	 * @model unsettable="true" required="true"
+	 * @model unsettable="true" dataType="com.mmxlabs.models.datetime.LocalDateTime"
 	 * @generated
 	 */
-	Date getStartAfter();
+	LocalDateTime getStartAfter();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getStartAfter <em>Start After</em>}' attribute.
@@ -173,7 +173,7 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @see #getStartAfter()
 	 * @generated
 	 */
-	void setStartAfter(Date value);
+	void setStartAfter(LocalDateTime value);
 
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getStartAfter <em>Start After</em>}' attribute.
@@ -181,7 +181,7 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * <!-- end-user-doc -->
 	 * @see #isSetStartAfter()
 	 * @see #getStartAfter()
-	 * @see #setStartAfter(Date)
+	 * @see #setStartAfter(LocalDateTime)
 	 * @generated
 	 */
 	void unsetStartAfter();
@@ -193,7 +193,7 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @return whether the value of the '<em>Start After</em>' attribute is set.
 	 * @see #unsetStartAfter()
 	 * @see #getStartAfter()
-	 * @see #setStartAfter(Date)
+	 * @see #setStartAfter(LocalDateTime)
 	 * @generated
 	 */
 	boolean isSetStartAfter();
@@ -209,12 +209,12 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @return the value of the '<em>Start By</em>' attribute.
 	 * @see #isSetStartBy()
 	 * @see #unsetStartBy()
-	 * @see #setStartBy(Date)
+	 * @see #setStartBy(LocalDateTime)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_StartBy()
-	 * @model unsettable="true" required="true"
+	 * @model unsettable="true" dataType="com.mmxlabs.models.datetime.LocalDateTime"
 	 * @generated
 	 */
-	Date getStartBy();
+	LocalDateTime getStartBy();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getStartBy <em>Start By</em>}' attribute.
@@ -226,7 +226,7 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @see #getStartBy()
 	 * @generated
 	 */
-	void setStartBy(Date value);
+	void setStartBy(LocalDateTime value);
 
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getStartBy <em>Start By</em>}' attribute.
@@ -234,7 +234,7 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * <!-- end-user-doc -->
 	 * @see #isSetStartBy()
 	 * @see #getStartBy()
-	 * @see #setStartBy(Date)
+	 * @see #setStartBy(LocalDateTime)
 	 * @generated
 	 */
 	void unsetStartBy();
@@ -246,7 +246,7 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @return whether the value of the '<em>Start By</em>' attribute is set.
 	 * @see #unsetStartBy()
 	 * @see #getStartBy()
-	 * @see #setStartBy(Date)
+	 * @see #setStartBy(LocalDateTime)
 	 * @generated
 	 */
 	boolean isSetStartBy();
@@ -278,12 +278,12 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @return the value of the '<em>End After</em>' attribute.
 	 * @see #isSetEndAfter()
 	 * @see #unsetEndAfter()
-	 * @see #setEndAfter(Date)
+	 * @see #setEndAfter(LocalDateTime)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_EndAfter()
-	 * @model unsettable="true" required="true"
+	 * @model unsettable="true" dataType="com.mmxlabs.models.datetime.LocalDateTime"
 	 * @generated
 	 */
-	Date getEndAfter();
+	LocalDateTime getEndAfter();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEndAfter <em>End After</em>}' attribute.
@@ -295,7 +295,7 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @see #getEndAfter()
 	 * @generated
 	 */
-	void setEndAfter(Date value);
+	void setEndAfter(LocalDateTime value);
 
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEndAfter <em>End After</em>}' attribute.
@@ -303,7 +303,7 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * <!-- end-user-doc -->
 	 * @see #isSetEndAfter()
 	 * @see #getEndAfter()
-	 * @see #setEndAfter(Date)
+	 * @see #setEndAfter(LocalDateTime)
 	 * @generated
 	 */
 	void unsetEndAfter();
@@ -315,7 +315,7 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @return whether the value of the '<em>End After</em>' attribute is set.
 	 * @see #unsetEndAfter()
 	 * @see #getEndAfter()
-	 * @see #setEndAfter(Date)
+	 * @see #setEndAfter(LocalDateTime)
 	 * @generated
 	 */
 	boolean isSetEndAfter();
@@ -331,12 +331,12 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @return the value of the '<em>End By</em>' attribute.
 	 * @see #isSetEndBy()
 	 * @see #unsetEndBy()
-	 * @see #setEndBy(Date)
+	 * @see #setEndBy(LocalDateTime)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_EndBy()
-	 * @model unsettable="true" required="true"
+	 * @model unsettable="true" dataType="com.mmxlabs.models.datetime.LocalDateTime"
 	 * @generated
 	 */
-	Date getEndBy();
+	LocalDateTime getEndBy();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEndBy <em>End By</em>}' attribute.
@@ -348,7 +348,7 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @see #getEndBy()
 	 * @generated
 	 */
-	void setEndBy(Date value);
+	void setEndBy(LocalDateTime value);
 
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEndBy <em>End By</em>}' attribute.
@@ -356,7 +356,7 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * <!-- end-user-doc -->
 	 * @see #isSetEndBy()
 	 * @see #getEndBy()
-	 * @see #setEndBy(Date)
+	 * @see #setEndBy(LocalDateTime)
 	 * @generated
 	 */
 	void unsetEndBy();
@@ -368,7 +368,7 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @return whether the value of the '<em>End By</em>' attribute is set.
 	 * @see #unsetEndBy()
 	 * @see #getEndBy()
-	 * @see #setEndBy(Date)
+	 * @see #setEndBy(LocalDateTime)
 	 * @generated
 	 */
 	boolean isSetEndBy();
@@ -424,6 +424,38 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @generated
 	 */
 	void setEndHeel(EndHeelOptions value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
+	 * @generated
+	 */
+	DateTime getStartByAsDateTime();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
+	 * @generated
+	 */
+	DateTime getStartAfterAsDateTime();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
+	 * @generated
+	 */
+	DateTime getEndByAsDateTime();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
+	 * @generated
+	 */
+	DateTime getEndAfterAsDateTime();
 
 	/**
 	 * Returns the value of the '<em><b>Entity</b></em>' reference.

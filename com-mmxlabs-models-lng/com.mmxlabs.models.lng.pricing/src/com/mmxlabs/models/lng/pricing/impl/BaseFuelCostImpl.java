@@ -3,7 +3,6 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.impl;
-import java.util.Date;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
@@ -13,7 +12,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
-import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 
@@ -147,35 +145,35 @@ public class BaseFuelCostImpl extends MMXObjectImpl implements BaseFuelCost {
 			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.BASE_FUEL_COST__INDEX, oldIndex, index));
 	}
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public double _getPrice() {
-		if (getIndex() == null) {
-			return 0;
-		}
-		Index<Double> data = getIndex().getData();
-		if (data == null) {
-			return 0;
-		}
-		Date date = data.getDates().get(0);
-		return data.getValueForMonth(date);
-		//return getIndex().getData().getValueForMonth(date)
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
-		//throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public void _setPrice(double price) {
-		// debug measure: dummy up a price field while moving over to base price indices
-	}
+//	/**
+//	 * <!-- begin-user-doc -->
+//	 * <!-- end-user-doc -->
+//	 * @generated NOT
+//	 */
+//	public double _getPrice() {
+//		if (getIndex() == null) {
+//			return 0;
+//		}
+//		Index<Double> data = getIndex().getData();
+//		if (data == null) {
+//			return 0;
+//		}
+//		Date date = data.getDates().get(0);
+//		return data.getValueForMonth(date);
+//		//return getIndex().getData().getValueForMonth(date)
+//		// TODO: implement this method
+//		// Ensure that you remove @generated or mark it @generated NOT
+//		//throw new UnsupportedOperationException();
+//	}
+//
+//	/**
+//	 * <!-- begin-user-doc -->
+//	 * <!-- end-user-doc -->
+//	 * @generated NOT
+//	 */
+//	public void _setPrice(double price) {
+//		// debug measure: dummy up a price field while moving over to base price indices
+//	}
 
 	/**
 	 * <!-- begin-user-doc -->

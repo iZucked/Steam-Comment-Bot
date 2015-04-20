@@ -10,8 +10,8 @@ import com.mmxlabs.models.lng.port.Port;
 
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 
-import java.util.Calendar;
-import java.util.Date;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 
 /**
  * <!-- begin-user-doc -->
@@ -67,12 +67,12 @@ public interface ReturnActuals extends ITimezoneProvider {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Operations Start</em>' attribute.
-	 * @see #setOperationsStart(Date)
+	 * @see #setOperationsStart(LocalDateTime)
 	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getReturnActuals_OperationsStart()
-	 * @model
+	 * @model dataType="com.mmxlabs.models.datetime.LocalDateTime"
 	 * @generated
 	 */
-	Date getOperationsStart();
+	LocalDateTime getOperationsStart();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.ReturnActuals#getOperationsStart <em>Operations Start</em>}' attribute.
@@ -82,7 +82,7 @@ public interface ReturnActuals extends ITimezoneProvider {
 	 * @see #getOperationsStart()
 	 * @generated
 	 */
-	void setOperationsStart(Date value);
+	void setOperationsStart(LocalDateTime value);
 
 	/**
 	 * Returns the value of the '<em><b>End Heel M3</b></em>' attribute.
@@ -113,9 +113,9 @@ public interface ReturnActuals extends ITimezoneProvider {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="com.mmxlabs.models.lng.actuals.Calendar" required="true"
+	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime" required="true"
 	 * @generated
 	 */
-	Calendar getLocalStart();
+	DateTime getOperationsStartAsDateTime();
 
 } // ReturnActuals

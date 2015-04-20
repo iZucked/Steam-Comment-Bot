@@ -4,10 +4,8 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -31,6 +29,7 @@ import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.SharedScrolledComposite;
+import org.joda.time.LocalDate;
 
 import com.google.common.collect.Sets;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -42,7 +41,6 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.dates.LocalDateUtil;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
@@ -60,8 +58,6 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	private static final EStructuralFeature Contract = CargoFeatures.getSlot_Contract();
 	private static final EStructuralFeature PriceExpression = CargoFeatures.getSlot_PriceExpression();
 	private static final EClass SlotContractParams = CommercialPackage.eINSTANCE.getSlotContractParams();
-
-	private static final String WindowDateFormatString = "dd MMM YYYY";
 
 	Composite contentComposite;
 	private final Map<EStructuralFeature, IInlineEditor> feature2Editor;
@@ -126,7 +122,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		dischargeTermsFeatures = new ArrayList<EStructuralFeature[]>();
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getDischargeSlot_PurchaseDeliveryType() });
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getDischargeSlot_MinCvValue(), CargoFeatures.getDischargeSlot_MaxCvValue() });
-		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_OverrideRestrictions()});
+		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_OverrideRestrictions() });
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedListsArePermissive() });
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedPorts() });
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedContracts() });
@@ -172,15 +168,12 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 			@Override
 			protected void updateTextClient(final EObject eo) {
 
-				final SimpleDateFormat windowDateFormat = new SimpleDateFormat(WindowDateFormatString);
-				windowDateFormat.setTimeZone(LocalDateUtil.getTimeZone(eo, null));
-
 				final MMXObject mmxEo = (MMXObject) eo;
-				final Date d = (Date) mmxEo.eGet(WindowStart);
+				final LocalDate d = (LocalDate) mmxEo.eGet(WindowStart);
 				if (d != null) {
 					final int time = (Integer) mmxEo.eGetWithDefault(WindowStartTime);
 					final int wsize = (Integer) mmxEo.eGetWithDefault(WindowSize);
-					final String text = windowDateFormat.format(d) + ", " + String.format("%02d:00", time) + " - " + wsize + " hours";
+					final String text = formatDate(d, time) + " - " + wsize + " hours";
 					textClient.setText(text);
 					// ec.setText(baseTitle + ":   " + text);
 				}
@@ -373,5 +366,10 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 			}
 		}
 		return fs;
+	}
+
+	private String formatDate(LocalDate localDate, int hourOfDay) {
+
+		return String.format("%02d %s %04d %02d:00", localDate.getDayOfMonth(), localDate.monthOfYear().getAsShortText(), localDate.getYear(), hourOfDay);
 	}
 }

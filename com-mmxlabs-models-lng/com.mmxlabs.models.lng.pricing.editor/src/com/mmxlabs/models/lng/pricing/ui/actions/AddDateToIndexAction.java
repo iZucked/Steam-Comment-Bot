@@ -4,18 +4,15 @@
  */
 package com.mmxlabs.models.lng.pricing.ui.actions;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
+import org.joda.time.YearMonth;
 
+import com.mmxlabs.models.datetime.importers.YearMonthAttributeImporter;
 import com.mmxlabs.models.lng.pricing.ui.editorpart.IndexPane;
 
 /**
@@ -29,8 +26,6 @@ public class AddDateToIndexAction extends Action {
 	private final IndexPane pane;
 	private static int earliestYear = 1990;
 	private static int latestYear = 2050;
-	
-	
 
 	public AddDateToIndexAction(final IndexPane pane) {
 		super("Extend dates");
@@ -38,49 +33,43 @@ public class AddDateToIndexAction extends Action {
 		setText("Extend dates");
 		setDescription("Adds new date columns");
 		setToolTipText("Adds new date columns");
-
-		//setImageDescriptor(Activator.getImageDescriptor("/icons/add.gif"));
-		
 	}
 
 	@Override
 	public void run() {
-		final DateFormat format = new SimpleDateFormat("yyyy-MM");
-		
-		IInputValidator validator = new IInputValidator() {
+		final YearMonthAttributeImporter format = new YearMonthAttributeImporter();
+
+		final IInputValidator validator = new IInputValidator() {
 			@Override
-			public String isValid(String newText) {
+			public String isValid(final String newText) {
 				try {
-					Date date = format.parse(newText);
+					final YearMonth date = format.parseYearMonth(newText);
 					if (date != null) {
-						Calendar cal = new GregorianCalendar();
-						cal.setTime(date);
-						
-						int year = cal.get(Calendar.YEAR);
-						
+
+						final int year = date.getYear();
+
 						if (year < earliestYear || year > latestYear) {
 							return String.format("Year should be in range %d to %d", earliestYear, latestYear);
 						}
 						return null;
 					}
-				} catch (ParseException e) {
+				} catch (final ParseException e) {
 				}
-				
-				return "Please use the form yyyy-MM";
+
+				return "Please use the form MM-yyyy";
 			}
-			
+
 		};
-		
-		InputDialog dialog = new InputDialog(null, "Extend date range", "Enter a new start or end date.", "yyyy-MM", validator);
-		
+
+		final InputDialog dialog = new InputDialog(null, "Extend date range", "Enter a new start or end date.", "yyyy-MM", validator);
+
 		if (dialog.open() == Window.OK) {
 			try {
-				Date date = format.parse(dialog.getValue());
-				pane.selectDateColumn(date);			
-			} catch (ParseException e) {
+				final YearMonth date = format.parseYearMonth(dialog.getValue());
+				pane.selectDateColumn(date);
+			} catch (final ParseException e) {
 			}
 		}
 
 	}
-
 }

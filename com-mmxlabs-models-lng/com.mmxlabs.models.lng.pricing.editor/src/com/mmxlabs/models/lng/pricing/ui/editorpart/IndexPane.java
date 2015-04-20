@@ -4,13 +4,10 @@
  */
 package com.mmxlabs.models.lng.pricing.ui.editorpart;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
@@ -49,6 +46,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
+import org.joda.time.YearMonth;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.series.ISeries;
@@ -95,10 +93,10 @@ import com.mmxlabs.scenario.service.model.ScenarioLock;
  */
 public class IndexPane extends ScenarioTableViewerPane {
 
-	private static final Date dateZero = new Date(0);
+	private static final YearMonth dateZero = new YearMonth();
 
-	private Date minDisplayDate = null;
-	private Date maxDisplayDate = null;
+	private YearMonth minDisplayDate = null;
+	private YearMonth maxDisplayDate = null;
 
 	private final IndexTreeTransformer transformer = new IndexTreeTransformer();
 	private final Map<DataType, SeriesParser> seriesParsers = new EnumMap<>(DataType.class);
@@ -114,16 +112,16 @@ public class IndexPane extends ScenarioTableViewerPane {
 	 * 
 	 * @param date
 	 */
-	public void selectDateColumn(final Date date) {
+	public void selectDateColumn(final YearMonth date) {
 		if (date == null) {
 			return;
 		}
 
-		if (minDisplayDate == null || minDisplayDate.after(date)) {
+		if (minDisplayDate == null || minDisplayDate.isAfter(date)) {
 			minDisplayDate = date;
 		}
 
-		if (maxDisplayDate == null || maxDisplayDate.before(date)) {
+		if (maxDisplayDate == null || maxDisplayDate.isBefore(date)) {
 			maxDisplayDate = date;
 		}
 
@@ -167,9 +165,9 @@ public class IndexPane extends ScenarioTableViewerPane {
 		scenarioViewer.setToolTipProvider(new DefaultToolTipProvider() {
 
 			@Override
-			public String getToolTipText(Object element) {
+			public String getToolTipText(final Object element) {
 				if (element instanceof NamedIndexContainer<?>) {
-					Index<?> index = ((NamedIndexContainer<?>) element).getData();
+					final Index<?> index = ((NamedIndexContainer<?>) element).getData();
 					if (index instanceof DerivedIndex<?>) {
 						return ((DerivedIndex<?>) index).getExpression();
 					}
@@ -273,11 +271,11 @@ public class IndexPane extends ScenarioTableViewerPane {
 					continue;
 				}
 
-				for (final Date d : idx.getDates()) {
-					if (minDisplayDate == null || minDisplayDate.after(d)) {
+				for (final YearMonth d : idx.getDates()) {
+					if (minDisplayDate == null || minDisplayDate.isAfter(d)) {
 						minDisplayDate = d;
 					}
-					if (maxDisplayDate == null || maxDisplayDate.before(d)) {
+					if (maxDisplayDate == null || maxDisplayDate.isBefore(d)) {
 						maxDisplayDate = d;
 					}
 				}
@@ -303,7 +301,8 @@ public class IndexPane extends ScenarioTableViewerPane {
 			super.internalRefresh(element, updateLabels);
 		}
 
-		protected void redisplayDateRange(final Date selected) {
+		protected void redisplayDateRange(final YearMonth selected) {
+
 			if (minDisplayDate != null && maxDisplayDate != null) {
 				Grid grid = null;
 				if (IndexPane.this.viewer instanceof GridTreeViewer) {
@@ -319,17 +318,10 @@ public class IndexPane extends ScenarioTableViewerPane {
 						getSortingSupport().removeSortableColumn(column);
 						column.dispose();
 					}
-					final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-					c.setTime(minDisplayDate);
-					c.set(Calendar.MILLISECOND, 0);
-					c.set(Calendar.SECOND, 0);
-					c.set(Calendar.MINUTE, 0);
-					c.set(Calendar.HOUR, 0);
-					c.set(Calendar.DAY_OF_MONTH, 1);
-
-					while (!c.getTime().after(maxDisplayDate)) {
-						addColumn(c, true);
-						c.add(Calendar.MONTH, 1);
+					YearMonth localDate = minDisplayDate;
+					while (!localDate.isAfter(maxDisplayDate)) {
+						addColumn(new YearMonth(localDate), true);
+						localDate = localDate.plusMonths(1);
 					}
 				}
 			}
@@ -352,11 +344,11 @@ public class IndexPane extends ScenarioTableViewerPane {
 			super.doCommandStackChanged();
 		}
 
-		private void addColumn(final Calendar cal, final boolean sortable) {
+		private void addColumn(final YearMonth cal, final boolean sortable) {
 
-			final String date = String.format("%4d-%02d", cal.get(Calendar.YEAR), (cal.get(Calendar.MONTH) + 1));
+			final String date = String.format("%4d-%02d", cal.getYear(), (cal.getMonthOfYear()));
 			final GridViewerColumn col = addSimpleColumn(date, sortable);
-			col.getColumn().setData("date", cal.getTime());
+			col.getColumn().setData("date", cal);
 
 			final ICellRenderer renderer = new ICellRenderer() {
 
@@ -378,7 +370,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 				@Override
 				public Comparable<?> getComparable(final Object element) {
 
-					final Date colDate = (Date) col.getColumn().getData("date");
+					final YearMonth colDate = (YearMonth) col.getColumn().getData("date");
 					final Number number = getNumberForElement(element, colDate);
 					if (number != null) {
 						final DataType dt = getDataTypeForElement(element);
@@ -411,7 +403,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 							}
 						}
 						if (element instanceof DataIndex) {
-							final Date colDate = (Date) col.getColumn().getData("date");
+							final YearMonth colDate = (YearMonth) col.getColumn().getData("date");
 
 							if (dt.useIntegers()) {
 								setIndexPoint((Integer) value, (DataIndex<Integer>) element, colDate);
@@ -422,11 +414,10 @@ public class IndexPane extends ScenarioTableViewerPane {
 					}
 				}
 
-				@SuppressWarnings({ "deprecation" })
-				private <T> void setIndexPoint(final T value, final DataIndex<T> di, final Date colDate) {
+				private <T> void setIndexPoint(final T value, final DataIndex<T> di, final YearMonth colDate) {
 
 					for (final IndexPoint<T> p : di.getPoints()) {
-						if (p.getDate().getYear() == colDate.getYear() && p.getDate().getMonth() == colDate.getMonth()) {
+						if (p.getDate().getYear() == colDate.getYear() && p.getDate().getMonthOfYear() == colDate.getMonthOfYear()) {
 
 							final Command cmd;
 							if (value == null) {
@@ -457,7 +448,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 				@Override
 				public Object getValue(final Object element) {
 
-					final Date colDate = (Date) col.getColumn().getData("date");
+					final YearMonth colDate = (YearMonth) col.getColumn().getData("date");
 					final Number number = getNumberForElement(element, colDate);
 					if (number != null) {
 						final DataType dt = getDataTypeForElement(element);
@@ -574,7 +565,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 				@Override
 				public String getText(final Object element) {
 
-					final Date colDate = (Date) col.getColumn().getData("date");
+					final YearMonth colDate = (YearMonth) col.getColumn().getData("date");
 					final Number number = getNumberForElement(element, colDate);
 					if (number != null) {
 						final DataType dt = getDataTypeForElement(element);
@@ -657,7 +648,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 	}
 
 	private @Nullable
-	Number getNumberForElement(Object element, final Date colDate) {
+	Number getNumberForElement(Object element, final YearMonth colDate) {
 
 		if (transformer.getNodeClass().isInstance(element)) {
 			return null;
@@ -685,7 +676,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 						if (series != null) {
 							return series.evaluate(PriceIndexUtils.convertTime(dateZero, colDate));
 						}
-					} catch (Exception e) {
+					} catch (final Exception e) {
 						// Ignore, anything from seried parser should be picked up via validation
 					}
 				}

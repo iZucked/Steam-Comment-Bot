@@ -4,9 +4,9 @@
  */
 package com.mmxlabs.models.lng.cargo;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import java.util.Date;
-
 import org.eclipse.emf.common.util.EList;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -122,13 +122,12 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Window Start</em>' attribute.
-	 * @see #setWindowStart(Date)
+	 * @see #setWindowStart(LocalDate)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_WindowStart()
-	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/lng/ui/datetime showTime='false'"
+	 * @model dataType="com.mmxlabs.models.datetime.LocalDate"
 	 * @generated
 	 */
-	Date getWindowStart();
+	LocalDate getWindowStart();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getWindowStart <em>Window Start</em>}' attribute.
@@ -138,7 +137,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @see #getWindowStart()
 	 * @generated
 	 */
-	void setWindowStart(Date value);
+	void setWindowStart(LocalDate value);
 
 	/**
 	 * Returns the value of the '<em><b>Window Start Time</b></em>' attribute.
@@ -692,24 +691,24 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @return the value of the '<em>Pricing Date</em>' attribute.
 	 * @see #isSetPricingDate()
 	 * @see #unsetPricingDate()
-	 * @see #setPricingDate(Date)
+	 * @see #setPricingDate(LocalDate)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_PricingDate()
-	 * @model unsettable="true" required="true"
+	 * @model unsettable="true" dataType="com.mmxlabs.models.datetime.LocalDate"
 	 * @generated
 	 */
-	Date getPricingDate();
+	LocalDate getPricingDate();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getPricingDate <em>Pricing Date</em>}' attribute.
 	 * <!-- begin-user-doc -->
- 	 * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Pricing Date</em>' attribute.
 	 * @see #isSetPricingDate()
 	 * @see #unsetPricingDate()
 	 * @see #getPricingDate()
 	 * @generated
 	 */
-	void setPricingDate(Date value);
+	void setPricingDate(LocalDate value);
 
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getPricingDate <em>Pricing Date</em>}' attribute.
@@ -717,7 +716,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * <!-- end-user-doc -->
 	 * @see #isSetPricingDate()
 	 * @see #getPricingDate()
-	 * @see #setPricingDate(Date)
+	 * @see #setPricingDate(LocalDate)
 	 * @generated
 	 */
 	void unsetPricingDate();
@@ -729,7 +728,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @return whether the value of the '<em>Pricing Date</em>' attribute is set.
 	 * @see #unsetPricingDate()
 	 * @see #getPricingDate()
-	 * @see #setPricingDate(Date)
+	 * @see #setPricingDate(LocalDate)
 	 * @generated
 	 */
 	boolean isSetPricingDate();
@@ -1132,18 +1131,18 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model kind="operation"
+	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
 	 * @generated
 	 */
-	Date getWindowEndWithSlotOrPortTime();
+	DateTime getWindowEndWithSlotOrPortTime();
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model kind="operation"
+	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
 	 * @generated
 	 */
-	Date getWindowStartWithSlotOrPortTime();
+	DateTime getWindowStartWithSlotOrPortTime();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1200,6 +1199,14 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @generated
 	 */
 	PricingEvent getSlotOrDelegatedPricingEvent();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
+	 * @generated
+	 */
+	DateTime getPricingDateAsDateTime();
 
 } // end of  Slot
 

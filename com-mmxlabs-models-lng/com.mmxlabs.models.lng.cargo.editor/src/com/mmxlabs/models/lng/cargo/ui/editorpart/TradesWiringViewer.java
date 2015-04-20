@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -91,6 +90,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.menus.IMenuService;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.joda.time.LocalDate;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Equality;
@@ -141,7 +141,6 @@ import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.models.ui.dates.DateAttributeManipulator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.editors.dialogs.MultiDetailDialog;
@@ -152,6 +151,7 @@ import com.mmxlabs.models.ui.tabular.EObjectTableViewerValidationSupport;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.LocalDateAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
@@ -836,7 +836,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				return super.renderSetValue(container, setValue);
 			}
 		}), new RowDataEMFPath(false, Type.LOAD_ALLOCATION));
-		final GridViewerColumn loadDateColumn = addTradesColumn(loadColumns, "Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
+		final GridViewerColumn loadDateColumn = addTradesColumn(loadColumns, "Date", new LocalDateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
 			@Override
 			public Comparable<?> getComparable(final Object object) {
 
@@ -854,7 +854,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 		final GridViewerColumn wiringColumn = addWiringColumn();
 
-		final GridViewerColumn dischargeDateColumn = addTradesColumn(dischargeColumns, "Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
+		final GridViewerColumn dischargeDateColumn = addTradesColumn(dischargeColumns, "Date", new LocalDateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
 			@Override
 			public Comparable<?> getComparable(final Object object) {
 				if (object instanceof RowData) {
@@ -1784,14 +1784,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				final DischargeSlot discharge1 = CargoFactory.eINSTANCE.createDischargeSlot();
 				final DischargeSlot discharge2 = CargoFactory.eINSTANCE.createDischargeSlot();
 
-				final Calendar cal = Calendar.getInstance();
-				cal.set(Calendar.MILLISECOND, 0);
-				cal.set(Calendar.SECOND, 0);
-				cal.set(Calendar.MINUTE, 0);
-				cal.set(Calendar.HOUR_OF_DAY, 0);
-				load.setWindowStart(cal.getTime());
-				discharge1.setWindowStart(cal.getTime());
-				discharge2.setWindowStart(cal.getTime());
+				discharge1.setWindowStart(new LocalDate());
+				discharge2.setWindowStart(new LocalDate());
 
 				cargo.getSlots().addAll(Lists.newArrayList(load, discharge1, discharge2));
 				final int ret = editor.open(cargo);

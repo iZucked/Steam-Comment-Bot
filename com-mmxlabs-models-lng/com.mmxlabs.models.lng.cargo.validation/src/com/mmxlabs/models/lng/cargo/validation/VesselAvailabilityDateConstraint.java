@@ -32,7 +32,7 @@ public class VesselAvailabilityDateConstraint extends AbstractModelConstraint {
 		if (target instanceof VesselAvailability) {
 			final VesselAvailability va = (VesselAvailability) target;
 			if (va.isSetStartAfter() && va.isSetStartBy()) {
-				if (va.getStartAfter().after(va.getStartBy())) {
+				if (va.getStartAfter().isAfter(va.getStartBy())) {
 					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(va.getVessel().getName(), "start"));
 					dcsd.addEObjectAndFeature(va, CargoPackage.eINSTANCE.getVesselAvailability_StartAfter());
 					dcsd.addEObjectAndFeature(va, CargoPackage.eINSTANCE.getVesselAvailability_StartBy());
@@ -41,7 +41,7 @@ public class VesselAvailabilityDateConstraint extends AbstractModelConstraint {
 			}
 
 			if (va.isSetEndAfter() && va.isSetEndBy()) {
-				if (va.getEndAfter().after(va.getEndBy())) {
+				if (va.getEndAfter().isAfter(va.getEndBy())) {
 					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(va.getVessel().getName(), "end"));
 					dcsd.addEObjectAndFeature(va, CargoPackage.eINSTANCE.getVesselAvailability_EndAfter());
 					dcsd.addEObjectAndFeature(va, CargoPackage.eINSTANCE.getVesselAvailability_EndBy());

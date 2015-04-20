@@ -6,9 +6,8 @@
  */
 package com.mmxlabs.models.lng.spotmarkets;
 
-import java.util.Date;
-
 import org.eclipse.emf.ecore.EObject;
+import org.joda.time.LocalDate;
 
 /**
  * <!-- begin-user-doc -->
@@ -36,12 +35,12 @@ public interface CharterOutStartDate extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Charter Out Start Date</em>' attribute.
-	 * @see #setCharterOutStartDate(Date)
+	 * @see #setCharterOutStartDate(LocalDate)
 	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterOutStartDate_CharterOutStartDate()
-	 * @model annotation="http://www.mmxlabs.com/models/lng/ui/datetime showTime='false'"
+	 * @model dataType="com.mmxlabs.models.datetime.LocalDate"
 	 * @generated
 	 */
-	Date getCharterOutStartDate();
+	LocalDate getCharterOutStartDate();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate#getCharterOutStartDate <em>Charter Out Start Date</em>}' attribute.
@@ -51,6 +50,6 @@ public interface CharterOutStartDate extends EObject {
 	 * @see #getCharterOutStartDate()
 	 * @generated
 	 */
-	void setCharterOutStartDate(Date value);
+	void setCharterOutStartDate(LocalDate value);
 
 } // CharterOutStartDate

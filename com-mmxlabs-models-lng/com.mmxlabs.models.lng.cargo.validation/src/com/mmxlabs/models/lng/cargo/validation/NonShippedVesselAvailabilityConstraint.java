@@ -79,7 +79,7 @@ public class NonShippedVesselAvailabilityConstraint extends AbstractModelMultiCo
 				{
 					DateTime start;
 					if (va.isSetStartAfter()) {
-						start = new DateTime(va.getStartAfter());
+						start = va.getStartAfterAsDateTime();
 					} else {
 						start = new DateTime(0);
 					}

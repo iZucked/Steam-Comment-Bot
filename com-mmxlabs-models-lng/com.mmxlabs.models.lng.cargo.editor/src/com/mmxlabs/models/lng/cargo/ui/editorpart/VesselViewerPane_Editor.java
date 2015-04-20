@@ -27,9 +27,9 @@ import com.mmxlabs.models.lng.port.ui.editorpart.MultiplePortReferenceManipulato
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.ui.dates.DateAttributeManipulator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.LocalDateTimeAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 
@@ -62,17 +62,17 @@ public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 				new MultiplePortReferenceManipulator(CargoPackage.eINSTANCE.getVesselAvailability_StartAt(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain(),
 						MMXCorePackage.eINSTANCE.getNamedObject_Name()));
 
-		addTypicalColumn("Start After", new DateAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_StartAfter(), jointModelEditor.getEditingDomain()));
+		addTypicalColumn("Start After", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_StartAfter(), jointModelEditor.getEditingDomain()));
 
-		addTypicalColumn("Start By", new DateAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_StartBy(), jointModelEditor.getEditingDomain()));
+		addTypicalColumn("Start By", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_StartBy(), jointModelEditor.getEditingDomain()));
 
 		addTypicalColumn("End Port",
 				new MultiplePortReferenceManipulator(CargoPackage.eINSTANCE.getVesselAvailability_EndAt(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain(),
 						MMXCorePackage.eINSTANCE.getNamedObject_Name()));
 
-		addTypicalColumn("End After", new DateAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_EndAfter(), jointModelEditor.getEditingDomain()));
+		addTypicalColumn("End After", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_EndAfter(), jointModelEditor.getEditingDomain()));
 
-		addTypicalColumn("End By", new DateAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_EndBy(), jointModelEditor.getEditingDomain()));
+		addTypicalColumn("End By", new LocalDateTimeAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_EndBy(), jointModelEditor.getEditingDomain()));
 
 		setTitle("Vessels", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}

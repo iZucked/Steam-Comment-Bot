@@ -4,11 +4,8 @@
  */
 package com.mmxlabs.models.lng.commercial.importer;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Collection;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -20,13 +17,14 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.joda.time.LocalDate;
 
+import com.mmxlabs.models.datetime.importers.LocalDateAttributeImporter;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.TaxRate;
-import com.mmxlabs.models.ui.dates.DateAttributeImporter;
 import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
@@ -41,8 +39,7 @@ public class LegalEntityBookImporter extends DefaultClassImporter {
 	static final String TYPE_KEY = "type";
 	static final String TYPE_SHIPPING = "shipping";
 	static final String TYPE_TRADES = "trading";
-	final DateFormat shortDate = new SimpleDateFormat("yyyy-MM-dd");
-	final DateAttributeImporter dateParser = new DateAttributeImporter();
+	final LocalDateAttributeImporter dateParser = new LocalDateAttributeImporter();
 
 	@Override
 	public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context) {
@@ -60,7 +57,7 @@ public class LegalEntityBookImporter extends DefaultClassImporter {
 				continue;
 			}
 			try {
-				final Date date = dateParser.parseDate(key);
+				final LocalDate date = dateParser.parseLocalDate(key);
 				final TaxRate taxRate = CommercialFactory.eINSTANCE.createTaxRate();
 				taxRate.setDate(date);
 				taxRate.setValue(Float.parseFloat(row.get(key)));
@@ -119,7 +116,7 @@ public class LegalEntityBookImporter extends DefaultClassImporter {
 
 		final EList<TaxRate> taxRates = entityBook.getTaxRates();
 		for (final TaxRate rate : taxRates) {
-			result.put(shortDate.format(rate.getDate()), String.format("%.4f", rate.getValue()));
+			result.put(dateParser.formatLocalDate(rate.getDate()), String.format("%.4f", rate.getValue()));
 		}
 
 		return result;
@@ -147,7 +144,7 @@ public class LegalEntityBookImporter extends DefaultClassImporter {
 				final BaseEntityBook shippingBook = baseLegalEntity.getShippingBook();
 				if (shippingBook != null) {
 					for (final TaxRate taxRate : shippingBook.getTaxRates()) {
-						dates.add(shortDate.format(taxRate.getDate()));
+						dates.add(dateParser.formatLocalDate(taxRate.getDate()));
 					}
 					objectList.add(shippingBook);
 				}
@@ -155,7 +152,7 @@ public class LegalEntityBookImporter extends DefaultClassImporter {
 				final BaseEntityBook tradingBook = baseLegalEntity.getTradingBook();
 				if (tradingBook != null) {
 					for (final TaxRate taxRate : tradingBook.getTaxRates()) {
-						dates.add(shortDate.format(taxRate.getDate()));
+						dates.add(dateParser.formatLocalDate(taxRate.getDate()));
 					}
 					objectList.add(tradingBook);
 				}

@@ -4,19 +4,15 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -36,9 +32,12 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.Hours;
+import org.joda.time.LocalDate;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.timezone.TimeZoneHelper;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -75,7 +74,6 @@ import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.Activator;
-import com.mmxlabs.models.ui.dates.LocalDateUtil;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
@@ -594,10 +592,10 @@ public class CargoEditorMenuHelper {
 	}
 
 	private boolean areSlotWindowsCompatible(final LoadSlot load, final DischargeSlot discharge) {
-		final Date loadStart = load.getWindowStartWithSlotOrPortTime();
-		final Date loadEnd = load.getWindowEndWithSlotOrPortTime();
-		final Date dischargeStart = discharge.getWindowStartWithSlotOrPortTime();
-		final Date dischargeEnd = discharge.getWindowEndWithSlotOrPortTime();
+		final DateTime loadStart = load.getWindowStartWithSlotOrPortTime();
+		final DateTime loadEnd = load.getWindowEndWithSlotOrPortTime();
+		final DateTime dischargeStart = discharge.getWindowStartWithSlotOrPortTime();
+		final DateTime dischargeEnd = discharge.getWindowEndWithSlotOrPortTime();
 
 		// slots with unknown time windows are incompatible
 		if (loadStart == null || dischargeStart == null || loadEnd == null || dischargeEnd == null) {
@@ -605,14 +603,14 @@ public class CargoEditorMenuHelper {
 		}
 
 		// can never load before discharging
-		if (loadStart.after(dischargeEnd)) {
+		if (loadStart.isAfter(dischargeEnd)) {
 			return false;
 		}
 
-		final boolean overlap = (dischargeStart.before(loadEnd));
+		final boolean overlap = (dischargeStart.isBefore(loadEnd));
 
-		final long diff = dischargeEnd.getTime() - loadStart.getTime();
-		final int daysDifference = (int) (diff / 1000L / 60L / 60L / 24L);
+		// TODO: Check the change in rounding - does this round down as the previous code did?
+		final int daysDifference = Days.daysBetween(loadStart, dischargeEnd).getDays();
 
 		// DES load
 		if (load.isDESPurchase()) {
@@ -750,8 +748,8 @@ public class CargoEditorMenuHelper {
 				if (sourceCargo != null && sourceCargo == targetCargo) {
 					continue;
 				}
-				final long diff = dischargeSlot.getWindowStart().getTime() - loadSlot.getWindowStart().getTime();
-				daysDifference = (int) (diff / 1000L / 60L / 60L / 24L);
+				// TODO: Check the change in rounding - does this round down as the previous code did?
+				daysDifference = Days.daysBetween(loadSlot.getWindowStartWithSlotOrPortTime(), dischargeSlot.getWindowStartWithSlotOrPortTime()).getDays();
 			}
 
 			if (targetCargo == null) {
@@ -922,15 +920,7 @@ public class CargoEditorMenuHelper {
 	private String getActionName(final Slot slot, final boolean isLoad, final boolean includeContract, final boolean includePort) {
 		final StringBuilder sb = new StringBuilder();
 
-		{
-			final SimpleDateFormat df = (SimpleDateFormat) SimpleDateFormat.getDateInstance();
-			df.applyPattern("dd MMM yy");
-			if (slot.getPort() != null) {
-				final TimeZone zone = LocalDateUtil.getTimeZone(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
-				df.setTimeZone(zone);
-			}
-			sb.append(df.format(slot.getWindowStart()));
-		}
+		sb.append(formatDate(slot.getWindowStart()));
 		if (includePort && slot.getPort() != null) {
 			sb.append(", " + slot.getPort().getName());
 		}
@@ -964,10 +954,8 @@ public class CargoEditorMenuHelper {
 		private final boolean isDesPurchaseOrFobSale;
 		private final Port shipToShipPort;
 
-		private String getKeyForDate(final TimeZone zone, final Date date) {
-			final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM");
-			df.setTimeZone(zone);
-			final String key = df.format(date);
+		private String getKeyForDate(final LocalDate date) {
+			final String key = String.format("%04d-%02d", date.getYear(), date.getMonthOfYear());
 			return key;
 		}
 
@@ -1003,14 +991,12 @@ public class CargoEditorMenuHelper {
 					} else {
 						dischargeSlot = cec.createNewSpotDischarge(setCommands, cargoModel, isDesPurchaseOrFobSale, market);
 						// Get start of month and create full sized window
-						final Calendar cal = Calendar.getInstance();
-						cal.setTimeZone(TimeZone.getTimeZone(source.getPort().getTimeZone()));
-						cal.setTime(source.getWindowStartWithSlotOrPortTime());
+						DateTime cal = source.getWindowStartWithSlotOrPortTime();
 						// Take into account travel time
 						if (loadSlot.isDESPurchase() && loadSlot.isDivertible()) {
 							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), loadSlot.getNominatedVessel());
-							cal.add(Calendar.HOUR_OF_DAY, travelTime);
-							cal.add(Calendar.HOUR_OF_DAY, loadSlot.getSlotOrPortDuration());
+							cal = cal.plusHours(travelTime);
+							cal = cal.plusHours(loadSlot.getSlotOrPortDuration());
 						} else if (!loadSlot.isDESPurchase()) {
 
 							AVesselSet<? extends Vessel> assignedVessel = null;
@@ -1023,8 +1009,8 @@ public class CargoEditorMenuHelper {
 								}
 							}
 							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel);
-							cal.add(Calendar.HOUR_OF_DAY, travelTime);
-							cal.add(Calendar.HOUR_OF_DAY, loadSlot.getSlotOrPortDuration());
+							cal = cal.plusHours(travelTime);
+							cal = cal.plusHours(loadSlot.getSlotOrPortDuration());
 						}
 
 						// Get existing names
@@ -1032,25 +1018,19 @@ public class CargoEditorMenuHelper {
 						for (final DischargeSlot slot : cargoModel.getDischargeSlots()) {
 							usedIDStrings.add(slot.getName());
 						}
-						
+
 						if (dischargeSlot.isFOBSale()) {
 							dischargeSlot.setPort(source.getPort());
 						}
-						cal.set(Calendar.DAY_OF_MONTH, 1);
-						cal.set(Calendar.HOUR_OF_DAY, 0);
-						cal.set(Calendar.MINUTE, 0);
-						cal.set(Calendar.SECOND, 0);
-						cal.set(Calendar.MILLISECOND, 0);
-						// create new calendar in Discharge Port's timezone
-						final Calendar dishargeCal = TimeZoneHelper.createTimeZoneShiftedCalendar(cal, cal.getTimeZone().getID(), dischargeSlot.getPort().getTimeZone());
-						final Date startDate = dishargeCal.getTime();
-						final String yearMonthString = getKeyForDate(dishargeCal.getTimeZone(), dishargeCal.getTime());
-						dischargeSlot.setWindowStart(startDate);
+						// Set back to start of month
+						cal = cal.withDayOfMonth(1).withHourOfDay(0);
+						LocalDate dishargeCal = cal.toLocalDate();
+						final String yearMonthString = getKeyForDate(dishargeCal);
+						dischargeSlot.setWindowStart(dishargeCal);
 						dischargeSlot.setWindowStartTime(0);
-						dishargeCal.add(Calendar.MONTH, 1);
-						final Date endDate = dishargeCal.getTime();
-						dischargeSlot.setWindowSize((int) ((endDate.getTime() - startDate.getTime()) / 1000L / 60L / 60L));
-						
+
+						dischargeSlot.setWindowSize(Hours.hoursBetween(dishargeCal, dishargeCal.plusMonths(1)).getHours());
+
 						final String idPrefix = market.getName() + "-" + yearMonthString + "-";
 						int i = 0;
 						String id = idPrefix + (i++);
@@ -1058,7 +1038,7 @@ public class CargoEditorMenuHelper {
 							id = idPrefix + (i++);
 						}
 						dischargeSlot.setName(id);
-						
+
 					}
 
 				} else {
@@ -1069,24 +1049,12 @@ public class CargoEditorMenuHelper {
 					} else {
 						loadSlot = cec.createNewSpotLoad(setCommands, cargoModel, isDesPurchaseOrFobSale, market);
 						// Get start of month and create full sized window
-						final Calendar cal = Calendar.getInstance();
-						cal.setTimeZone(TimeZone.getTimeZone(source.getPort().getTimeZone()));
-						cal.setTime(source.getWindowStartWithSlotOrPortTime());
-						cal.set(Calendar.DAY_OF_MONTH, 1);
-						cal.set(Calendar.DAY_OF_MONTH, 1);
-						cal.set(Calendar.HOUR_OF_DAY, 0);
-						cal.set(Calendar.MINUTE, 0);
-						cal.set(Calendar.SECOND, 0);
-						cal.set(Calendar.MILLISECOND, 0);
-						final Date startDate = cal.getTime();
+						final LocalDate cal = source.getWindowStartWithSlotOrPortTime().toLocalDate().withDayOfMonth(1);
+						final String yearMonthString = getKeyForDate(cal);
 
-						final String yearMonthString = getKeyForDate(cal.getTimeZone(), cal.getTime());
-
-						loadSlot.setWindowStart(startDate);
+						loadSlot.setWindowStart(cal);
 						loadSlot.setWindowStartTime(0);
-						cal.add(Calendar.MONTH, 1);
-						final Date endDate = cal.getTime();
-						loadSlot.setWindowSize((int) ((endDate.getTime() - startDate.getTime()) / 1000L / 60L / 60L));
+						loadSlot.setWindowSize(Hours.hoursBetween(cal, cal.plusMonths(1)).getHours());
 
 						// Get existing names
 						final Set<String> usedIDStrings = new HashSet<>();
@@ -1197,8 +1165,8 @@ public class CargoEditorMenuHelper {
 							continue;
 						}
 
-						final Date slotDate = slot.getWindowStartWithSlotOrPortTime();
-						if (slotDate == null || target.getWindowEndWithSlotOrPortTime().before(slotDate)) {
+						final DateTime slotDate = slot.getWindowStartWithSlotOrPortTime();
+						if (slotDate == null || target.getWindowEndWithSlotOrPortTime().isBefore(slotDate)) {
 							currentWiringCommand.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), c, MMXCorePackage.eINSTANCE.getNamedObject_Name(), target.getName()));
 						} else {
 							break;
@@ -1367,4 +1335,8 @@ public class CargoEditorMenuHelper {
 		return travelTime;
 	}
 
+	private String formatDate(LocalDate localDate) {
+
+		return String.format("%02d %s %04d", localDate.getDayOfMonth(), localDate.monthOfYear().getAsShortText(), localDate.getYear());
+	}
 }

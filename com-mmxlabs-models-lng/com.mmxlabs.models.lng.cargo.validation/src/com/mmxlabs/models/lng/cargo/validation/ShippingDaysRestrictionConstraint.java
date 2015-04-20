@@ -6,16 +6,15 @@ package com.mmxlabs.models.lng.cargo.validation;
 
 import static org.ops4j.peaberry.Peaberry.osgiModule;
 
-import java.util.Date;
 import java.util.List;
-
-import javax.management.timer.Timer;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.NonNull;
+import org.joda.time.DateTime;
+import org.joda.time.Hours;
 import org.ops4j.peaberry.Peaberry;
 import org.osgi.framework.FrameworkUtil;
 
@@ -220,7 +219,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 								} catch (org.ops4j.peaberry.ServiceUnavailableException e) {
 									referenceSpeed = vesselClass.getMaxSpeed();
 								}
-								
+
 								final int loadDurationInHours = desPurchase.getSlotOrPortDuration();
 								final int dischargeDurationInHours = dischargeSlot.getSlotOrPortDuration();
 
@@ -232,20 +231,21 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 								final int ladenMinWindowInHours;
 								{
 									// TODO: check overlaps
-									final Date loadDateStart = desPurchase.getWindowStartWithSlotOrPortTime();
-									final Date loadDateEnd = desPurchase.getWindowEndWithSlotOrPortTime();
-									final Date dischargeDateStart = dischargeSlot.getWindowStartWithSlotOrPortTime();
-									final Date dischargeDateEnd = dischargeSlot.getWindowEndWithSlotOrPortTime();
+									final DateTime loadDateStart = desPurchase.getWindowStartWithSlotOrPortTime();
+									final DateTime loadDateEnd = desPurchase.getWindowEndWithSlotOrPortTime();
+									final DateTime dischargeDateStart = dischargeSlot.getWindowStartWithSlotOrPortTime();
+									final DateTime dischargeDateEnd = dischargeSlot.getWindowEndWithSlotOrPortTime();
 
 									if (loadDateStart != null && dischargeDateEnd != null) {
-										ladenMaxWindowInHours = (int) ((dischargeDateEnd.getTime() - loadDateStart.getTime()) / Timer.ONE_HOUR) - (loadDurationInHours);
+										ladenMaxWindowInHours = Math.max(0, Hours.hoursBetween(loadDateStart, dischargeDateEnd).getHours() - (loadDurationInHours));
+
 									} else {
 										return Activator.PLUGIN_ID;
 									}
 
 									if (loadDateEnd != null && dischargeDateStart != null) {
 										// There could be an overlap
-										ladenMinWindowInHours = Math.max(0, (int) ((dischargeDateStart.getTime() - loadDateEnd.getTime()) / Timer.ONE_HOUR) - (loadDurationInHours));
+										ladenMinWindowInHours = Math.max(0, Hours.hoursBetween(loadDateEnd, dischargeDateStart).getHours() - (loadDurationInHours));
 									} else {
 										return Activator.PLUGIN_ID;
 									}

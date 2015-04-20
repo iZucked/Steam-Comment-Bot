@@ -8,7 +8,6 @@ package com.mmxlabs.models.lng.actuals.impl;
 
 import com.mmxlabs.models.lng.actuals.*;
 
-import java.util.Calendar;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -82,8 +81,6 @@ public class ActualsFactoryImpl extends EFactoryImpl implements ActualsFactory {
 		switch (eDataType.getClassifierID()) {
 			case ActualsPackage.PENALTY_TYPE:
 				return createPenaltyTypeFromString(eDataType, initialValue);
-			case ActualsPackage.CALENDAR:
-				return createCalendarFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -99,8 +96,6 @@ public class ActualsFactoryImpl extends EFactoryImpl implements ActualsFactory {
 		switch (eDataType.getClassifierID()) {
 			case ActualsPackage.PENALTY_TYPE:
 				return convertPenaltyTypeToString(eDataType, instanceValue);
-			case ActualsPackage.CALENDAR:
-				return convertCalendarToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -179,24 +174,6 @@ public class ActualsFactoryImpl extends EFactoryImpl implements ActualsFactory {
 	 */
 	public String convertPenaltyTypeToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Calendar createCalendarFromString(EDataType eDataType, String initialValue) {
-		return (Calendar)super.createFromString(eDataType, initialValue);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String convertCalendarToString(EDataType eDataType, Object instanceValue) {
-		return super.convertToString(eDataType, instanceValue);
 	}
 
 	/**

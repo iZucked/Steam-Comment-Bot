@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.actuals.impl;
 
+import com.mmxlabs.models.datetime.DateTimePackage;
 import com.mmxlabs.models.lng.actuals.ActualsFactory;
 import com.mmxlabs.models.lng.actuals.ActualsModel;
 import com.mmxlabs.models.lng.actuals.ActualsPackage;
@@ -15,20 +16,17 @@ import com.mmxlabs.models.lng.actuals.LoadActuals;
 import com.mmxlabs.models.lng.actuals.PenaltyType;
 import com.mmxlabs.models.lng.actuals.ReturnActuals;
 import com.mmxlabs.models.lng.actuals.SlotActuals;
-
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
-import java.util.Calendar;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
-
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
@@ -86,13 +84,6 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * @generated
 	 */
 	private EEnum penaltyTypeEEnum = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EDataType calendarEDataType = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -224,6 +215,26 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * @generated
 	 */
 	@Override
+	public EOperation getSlotActuals__GetOperationsStartAsDateTime() {
+		return slotActualsEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getSlotActuals__GetOperationsEndAsDateTime() {
+		return slotActualsEClass.getEOperations().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EAttribute getSlotActuals_BaseFuelConsumption() {
 		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(11);
 	}
@@ -276,26 +287,6 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	@Override
 	public EAttribute getSlotActuals_CrewBonus() {
 		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(16);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EOperation getSlotActuals__GetLocalStart() {
-		return slotActualsEClass.getEOperations().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EOperation getSlotActuals__GetLocalEnd() {
-		return slotActualsEClass.getEOperations().get(1);
 	}
 
 	/**
@@ -664,7 +655,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * @generated
 	 */
 	@Override
-	public EOperation getReturnActuals__GetLocalStart() {
+	public EOperation getReturnActuals__GetOperationsStartAsDateTime() {
 		return returnActualsEClass.getEOperations().get(0);
 	}
 
@@ -676,16 +667,6 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	@Override
 	public EEnum getPenaltyType() {
 		return penaltyTypeEEnum;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EDataType getCalendar() {
-		return calendarEDataType;
 	}
 
 	/**
@@ -740,8 +721,8 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		createEAttribute(slotActualsEClass, SLOT_ACTUALS__CREW_BONUS);
 		createEAttribute(slotActualsEClass, SLOT_ACTUALS__PORT_CHARGES);
 		createEAttribute(slotActualsEClass, SLOT_ACTUALS__CAPACITY_CHARGES);
-		createEOperation(slotActualsEClass, SLOT_ACTUALS___GET_LOCAL_START);
-		createEOperation(slotActualsEClass, SLOT_ACTUALS___GET_LOCAL_END);
+		createEOperation(slotActualsEClass, SLOT_ACTUALS___GET_OPERATIONS_START_AS_DATE_TIME);
+		createEOperation(slotActualsEClass, SLOT_ACTUALS___GET_OPERATIONS_END_AS_DATE_TIME);
 
 		cargoActualsEClass = createEClass(CARGO_ACTUALS);
 		createEReference(cargoActualsEClass, CARGO_ACTUALS__ACTUALS);
@@ -772,13 +753,10 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		createEReference(returnActualsEClass, RETURN_ACTUALS__TITLE_TRANSFER_POINT);
 		createEAttribute(returnActualsEClass, RETURN_ACTUALS__OPERATIONS_START);
 		createEAttribute(returnActualsEClass, RETURN_ACTUALS__END_HEEL_M3);
-		createEOperation(returnActualsEClass, RETURN_ACTUALS___GET_LOCAL_START);
+		createEOperation(returnActualsEClass, RETURN_ACTUALS___GET_OPERATIONS_START_AS_DATE_TIME);
 
 		// Create enums
 		penaltyTypeEEnum = createEEnum(PENALTY_TYPE);
-
-		// Create data types
-		calendarEDataType = createEDataType(CALENDAR);
 	}
 
 	/**
@@ -807,6 +785,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		// Obtain other dependent packages
 		TypesPackage theTypesPackage = (TypesPackage)EPackage.Registry.INSTANCE.getEPackage(TypesPackage.eNS_URI);
 		CargoPackage theCargoPackage = (CargoPackage)EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI);
+		DateTimePackage theDateTimePackage = (DateTimePackage)EPackage.Registry.INSTANCE.getEPackage(DateTimePackage.eNS_URI);
 		PortPackage thePortPackage = (PortPackage)EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI);
 		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
 
@@ -827,8 +806,8 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		initEClass(slotActualsEClass, SlotActuals.class, "SlotActuals", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSlotActuals_Slot(), theCargoPackage.getSlot(), null, "slot", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotActuals_Counterparty(), ecorePackage.getEString(), "counterparty", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSlotActuals_OperationsStart(), ecorePackage.getEDate(), "operationsStart", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSlotActuals_OperationsEnd(), ecorePackage.getEDate(), "operationsEnd", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlotActuals_OperationsStart(), theDateTimePackage.getLocalDateTime(), "operationsStart", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlotActuals_OperationsEnd(), theDateTimePackage.getLocalDateTime(), "operationsEnd", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSlotActuals_TitleTransferPoint(), thePortPackage.getPort(), null, "titleTransferPoint", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotActuals_VolumeInM3(), ecorePackage.getEDouble(), "volumeInM3", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotActuals_VolumeInMMBtu(), ecorePackage.getEDouble(), "volumeInMMBtu", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -845,9 +824,9 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		initEAttribute(getSlotActuals_PortCharges(), ecorePackage.getEInt(), "portCharges", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotActuals_CapacityCharges(), ecorePackage.getEInt(), "capacityCharges", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEOperation(getSlotActuals__GetLocalStart(), this.getCalendar(), "getLocalStart", 1, 1, IS_UNIQUE, IS_ORDERED);
+		initEOperation(getSlotActuals__GetOperationsStartAsDateTime(), theDateTimePackage.getDateTime(), "getOperationsStartAsDateTime", 1, 1, IS_UNIQUE, IS_ORDERED);
 
-		initEOperation(getSlotActuals__GetLocalEnd(), this.getCalendar(), "getLocalEnd", 1, 1, IS_UNIQUE, IS_ORDERED);
+		initEOperation(getSlotActuals__GetOperationsEndAsDateTime(), theDateTimePackage.getDateTime(), "getOperationsEndAsDateTime", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(cargoActualsEClass, CargoActuals.class, "CargoActuals", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCargoActuals_Actuals(), this.getSlotActuals(), null, "actuals", null, 0, -1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -876,18 +855,15 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 
 		initEClass(returnActualsEClass, ReturnActuals.class, "ReturnActuals", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getReturnActuals_TitleTransferPoint(), thePortPackage.getPort(), null, "titleTransferPoint", null, 0, 1, ReturnActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getReturnActuals_OperationsStart(), ecorePackage.getEDate(), "operationsStart", null, 0, 1, ReturnActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getReturnActuals_OperationsStart(), theDateTimePackage.getLocalDateTime(), "operationsStart", null, 0, 1, ReturnActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getReturnActuals_EndHeelM3(), ecorePackage.getEDouble(), "endHeelM3", null, 0, 1, ReturnActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEOperation(getReturnActuals__GetLocalStart(), this.getCalendar(), "getLocalStart", 1, 1, IS_UNIQUE, IS_ORDERED);
+		initEOperation(getReturnActuals__GetOperationsStartAsDateTime(), theDateTimePackage.getDateTime(), "getOperationsStartAsDateTime", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(penaltyTypeEEnum, PenaltyType.class, "PenaltyType");
 		addEEnumLiteral(penaltyTypeEEnum, PenaltyType.TOP);
 		addEEnumLiteral(penaltyTypeEEnum, PenaltyType.NOT_TOP);
-
-		// Initialize data types
-		initEDataType(calendarEDataType, Calendar.class, "Calendar", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
 		createResource(eNS_URI);

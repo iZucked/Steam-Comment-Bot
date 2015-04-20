@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.pricing.validation.utils;
 
-import java.util.Date;
 import java.util.EmptyStackException;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -16,6 +15,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.joda.time.YearMonth;
 
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
@@ -117,7 +117,7 @@ public class PriceExpressionUtils {
 	/**
 	 */
 	public static void constrainPriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression, final Double minValue,
-			final Double maxValue, final Date date, final List<IStatus> failures) {
+			final Double maxValue, final YearMonth date, final List<IStatus> failures) {
 
 		if (priceExpression == null || priceExpression.isEmpty()) {
 			return;
@@ -157,7 +157,7 @@ public class PriceExpressionUtils {
 
 	}
 
-	public static ISeries getParsedSeries(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression, final Date date,
+	public static ISeries getParsedSeries(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression, final YearMonth date,
 			final List<IStatus> failures) {
 		final SeriesParser parser = getCommodityParser(date);
 		try {
@@ -178,35 +178,8 @@ public class PriceExpressionUtils {
 	 * 
 	 * @return A {@link SeriesParser} object for use in validating price expressions.
 	 */
-	@SuppressWarnings("rawtypes")
-	public static SeriesParser getCommodityParser(final Date dateZero) {
+	public static SeriesParser getCommodityParser(final YearMonth dateZero) {
 		return getIndexParser(dateZero, PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES);
-
-//		final Activator activator = Activator.getDefault();
-//		if (activator == null) {
-//			return null;
-//		}
-//		final IExtraValidationContext extraValidationContext = activator.getExtraValidationContext();
-//		if (extraValidationContext != null) {
-//			final MMXRootObject rootObject = extraValidationContext.getRootObject();
-//
-//			if (rootObject instanceof LNGScenarioModel) {
-//				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
-//				final SeriesParser indices = new SeriesParser();
-//
-//				final PricingModel pricingModel = lngScenarioModel.getPricingModel();
-//				for (final CommodityIndex commodityIndex : pricingModel.getCommodityIndices()) {
-//					final Index<Double> index = commodityIndex.getData();
-//					if (index instanceof DataIndex) {
-//						PriceIndexUtils.addSeriesDataFromDataIndex(indices, commodityIndex.getName(), dateZero, (DataIndex<? extends Number>) index);
-//					} else if (index instanceof DerivedIndex) {
-//						indices.addSeriesExpression(commodityIndex.getName(), ((DerivedIndex) index).getExpression());
-//					}
-//				}
-//				return indices;
-//			}
-//		}
-//		return null;
 	}
 
 	/**
@@ -214,35 +187,8 @@ public class PriceExpressionUtils {
 	 * 
 	 * @return A {@link SeriesParser} object for use in validating price expressions.
 	 */
-	@SuppressWarnings("rawtypes")
-	public static SeriesParser getCharterParser(final Date dateZero) {
+	public static SeriesParser getCharterParser(final YearMonth dateZero) {
 		return getIndexParser(dateZero, PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES);
-
-//		final Activator activator = Activator.getDefault();
-//		if (activator == null) {
-//			return null;
-//		}
-//		final IExtraValidationContext extraValidationContext = activator.getExtraValidationContext();
-//		if (extraValidationContext != null) {
-//			final MMXRootObject rootObject = extraValidationContext.getRootObject();
-//
-//			if (rootObject instanceof LNGScenarioModel) {
-//				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
-//				final SeriesParser indices = new SeriesParser();
-//
-//				final PricingModel pricingModel = lngScenarioModel.getPricingModel();
-//				for (final CharterIndex charterIndex : pricingModel.getCharterIndices()) {
-//					final Index<Integer> index = charterIndex.getData();
-//					if (index instanceof DataIndex) {
-//						PriceIndexUtils.addSeriesDataFromDataIndex(indices, charterIndex.getName(), dateZero, (DataIndex<? extends Number>) index);
-//					} else if (index instanceof DerivedIndex) {
-//						indices.addSeriesExpression(charterIndex.getName(), ((DerivedIndex) index).getExpression());
-//					}
-//				}
-//				return indices;
-//			}
-//		}
-//		return null;
 	}
 
 	/**
@@ -250,12 +196,11 @@ public class PriceExpressionUtils {
 	 * 
 	 * @return A {@link SeriesParser} object for use in validating price expressions.
 	 */
-	@SuppressWarnings("rawtypes")
-	public static SeriesParser getBaseFuelIndexParser(final Date dateZero) {
+	public static SeriesParser getBaseFuelIndexParser(final YearMonth dateZero) {
 		return getIndexParser(dateZero, PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES);
 	}
 
-	public static SeriesParser getIndexParser(final Date dateZero, final EReference reference) {
+	public static SeriesParser getIndexParser(final YearMonth dateZero, final EReference reference) {
 		final Activator activator = Activator.getDefault();
 		if (activator == null) {
 			return null;

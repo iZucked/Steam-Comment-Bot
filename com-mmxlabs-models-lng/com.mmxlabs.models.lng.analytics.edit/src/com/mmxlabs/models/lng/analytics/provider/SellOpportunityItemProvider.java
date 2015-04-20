@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.analytics.provider;
 
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -21,6 +20,7 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import org.joda.time.LocalDate;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
@@ -175,7 +175,7 @@ public class SellOpportunityItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		Date labelValue = ((SellOpportunity)object).getDate();
+		LocalDate labelValue = ((SellOpportunity)object).getDate();
 		String label = labelValue == null ? null : labelValue.toString();
 		return label == null || label.length() == 0 ?
 			getString("_UI_SellOpportunity_type") :

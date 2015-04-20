@@ -4,33 +4,30 @@
  */
 package com.mmxlabs.models.lng.pricing.importers;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TimeZone;
 import java.util.TreeMap;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
+import org.joda.time.YearMonth;
 
+import com.mmxlabs.models.datetime.importers.LocalDateAttributeImporter;
+import com.mmxlabs.models.datetime.importers.YearMonthAttributeImporter;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
-import com.mmxlabs.models.ui.dates.DateAttributeImporter;
 import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.impl.AbstractClassImporter;
@@ -47,8 +44,8 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 	protected static final String EXPRESSION = "expression";
 	protected static final String UNITS = "units";
 
-	final DateFormat exportDateFormatter = new SimpleDateFormat("yyyy-MM-dd");
-	final DateAttributeImporter dateParser = new DateAttributeImporter();
+        final YearMonthAttributeImporter dateParser = new YearMonthAttributeImporter();
+	final LocalDateAttributeImporter dateParser2 = new LocalDateAttributeImporter();
 
 	protected boolean multipleDataTypeInput = false;
 
@@ -81,7 +78,7 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 			di.setExpression(row.get(EXPRESSION));
 			for (final String s : row.keySet()) {
 				try {
-					dateParser.parseDate(s);
+					dateParser.parseYearMonth(s);
 					if (row.get(s).isEmpty() == false) {
 						context.addProblem(context.createProblem("Indices with an expression should not have any values set", true, true, true));
 					}
@@ -99,23 +96,14 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 
 		if (result instanceof DataIndex) {
 			final DataIndex<Number> data = (DataIndex<Number>) result;
-			Set<Date> seenDates = new HashSet<>();
+			Set<YearMonth> seenDates = new HashSet<>();
 
 			for (final String s : row.keySet()) {
 				if (columnsToIgnore.contains(s)) {
 					continue;
 				}
 				try {
-					final Date date = startOfMonth(dateParser.parseDate(s));
-					final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-					c.setTime(date);
-					// Set back to start of month
-					c.set(Calendar.DAY_OF_MONTH, 1);
-					// Clear any other values
-					c.set(Calendar.HOUR_OF_DAY, 0);
-					c.set(Calendar.MINUTE, 0);
-					c.set(Calendar.SECOND, 0);
-					c.set(Calendar.MILLISECOND, 0);
+					final YearMonth date = parseDateString(s);
 
 					final String valueStr = row.get(s);
 					if (valueStr.isEmpty())
@@ -133,13 +121,13 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 							n = value;
 						}
 
-						if (!seenDates.add(c.getTime())) {
+						if (!seenDates.add(date)) {
 							context.addProblem(context.createProblem("The month " + s + " is defined multiple times", true, true, true));
 							continue;
 						}
 
 						final IndexPoint<Number> point = PricingFactory.eINSTANCE.createIndexPoint();
-						point.setDate(c.getTime());
+						point.setDate(date);
 						point.setValue(n);
 						data.getPoints().add(point);
 					} catch (final NumberFormatException nfe) {
@@ -154,25 +142,6 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 		}
 
 		return result;
-	}
-
-	/**
-	 * Returns the date corresponding to the exact start of a calendar month.
-	 * 
-	 * @param date
-	 * @return
-	 */
-	private Date startOfMonth(final Date date) {
-		final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-		c.setTime(date);
-		// Set back to start of month
-		c.set(Calendar.DAY_OF_MONTH, 1);
-		// Clear any other values
-		c.set(Calendar.HOUR_OF_DAY, 0);
-		c.set(Calendar.MINUTE, 0);
-		c.set(Calendar.SECOND, 0);
-		c.set(Calendar.MILLISECOND, 0);
-		return c.getTime();
 	}
 
 	@Override
@@ -216,11 +185,19 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 				} else {
 					value = nai.doubleToString(pt.getValue().doubleValue());
 				}
-				map.put(exportDateFormatter.format(pt.getDate()), value);
+				map.put(dateParser.formatYearMonth(pt.getDate()), value);
 			}
 		}
 
 		return map;
+	}
+
+	protected YearMonth parseDateString(final String s) throws ParseException {
+		try {
+			return dateParser.parseYearMonth(s);
+		} catch (final Exception e) {
+			return new YearMonth(dateParser2.parseLocalDate(s));
+		}
 	}
 
 	protected Collection<Map<String, String>> exportIndices(final Collection<? extends EObject> objects, final IExportContext context, final boolean exportAsInt) {

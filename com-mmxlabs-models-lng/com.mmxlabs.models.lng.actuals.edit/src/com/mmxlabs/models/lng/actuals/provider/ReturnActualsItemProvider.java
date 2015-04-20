@@ -11,7 +11,6 @@ import com.mmxlabs.models.lng.actuals.ActualsPackage;
 import com.mmxlabs.models.lng.actuals.ReturnActuals;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -29,6 +28,7 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+import org.joda.time.LocalDateTime;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.actuals.ReturnActuals} object.
@@ -157,7 +157,7 @@ public class ReturnActualsItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		Date labelValue = ((ReturnActuals)object).getOperationsStart();
+		LocalDateTime labelValue = ((ReturnActuals)object).getOperationsStart();
 		String label = labelValue == null ? null : labelValue.toString();
 		return label == null || label.length() == 0 ?
 			getString("_UI_ReturnActuals_type") :

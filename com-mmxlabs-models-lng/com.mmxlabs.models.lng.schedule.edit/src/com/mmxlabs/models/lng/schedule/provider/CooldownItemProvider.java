@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.schedule.provider;
 
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -22,6 +21,7 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import org.joda.time.DateTime;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -160,7 +160,7 @@ public class CooldownItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		Date labelValue = ((Cooldown)object).getStart();
+		DateTime labelValue = ((Cooldown)object).getStart();
 		String label = labelValue == null ? null : labelValue.toString();
 		return label == null || label.length() == 0 ?
 			getString("_UI_Cooldown_type") :

@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.schedule.provider;
 
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -22,6 +21,7 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import org.joda.time.DateTime;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
@@ -209,7 +209,7 @@ public class VesselEventVisitItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		Date labelValue = ((VesselEventVisit)object).getStart();
+		DateTime labelValue = ((VesselEventVisit)object).getStart();
 		String label = labelValue == null ? null : labelValue.toString();
 		return label == null || label.length() == 0 ?
 			getString("_UI_VesselEventVisit_type") :

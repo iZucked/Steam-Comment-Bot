@@ -6,14 +6,7 @@
  */
 package com.mmxlabs.models.lng.actuals.impl;
 
-import com.mmxlabs.models.lng.actuals.ActualsPackage;
-import com.mmxlabs.models.lng.actuals.ReturnActuals;
-import com.mmxlabs.models.lng.port.Port;
-
 import java.lang.reflect.InvocationTargetException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
@@ -22,6 +15,13 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+
+import org.joda.time.LocalDateTime;
+import com.mmxlabs.models.lng.actuals.ActualsPackage;
+import com.mmxlabs.models.lng.actuals.ReturnActuals;
+import com.mmxlabs.models.lng.port.Port;
 
 /**
  * <!-- begin-user-doc -->
@@ -57,7 +57,7 @@ public class ReturnActualsImpl extends EObjectImpl implements ReturnActuals {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final Date OPERATIONS_START_EDEFAULT = null;
+	protected static final LocalDateTime OPERATIONS_START_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getOperationsStart() <em>Operations Start</em>}' attribute.
@@ -67,7 +67,7 @@ public class ReturnActualsImpl extends EObjectImpl implements ReturnActuals {
 	 * @generated
 	 * @ordered
 	 */
-	protected Date operationsStart = OPERATIONS_START_EDEFAULT;
+	protected LocalDateTime operationsStart = OPERATIONS_START_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getEndHeelM3() <em>End Heel M3</em>}' attribute.
@@ -154,7 +154,7 @@ public class ReturnActualsImpl extends EObjectImpl implements ReturnActuals {
 	 * @generated
 	 */
 	@Override
-	public Date getOperationsStart() {
+	public LocalDateTime getOperationsStart() {
 		return operationsStart;
 	}
 
@@ -164,8 +164,8 @@ public class ReturnActualsImpl extends EObjectImpl implements ReturnActuals {
 	 * @generated
 	 */
 	@Override
-	public void setOperationsStart(Date newOperationsStart) {
-		Date oldOperationsStart = operationsStart;
+	public void setOperationsStart(LocalDateTime newOperationsStart) {
+		LocalDateTime oldOperationsStart = operationsStart;
 		operationsStart = newOperationsStart;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.RETURN_ACTUALS__OPERATIONS_START, oldOperationsStart, operationsStart));
@@ -200,13 +200,10 @@ public class ReturnActualsImpl extends EObjectImpl implements ReturnActuals {
 	 * @generated NOT
 	 */
 	@Override
-	public Calendar getLocalStart() {
-		final Date os = getOperationsStart();
+	public DateTime getOperationsStartAsDateTime() {
+		final LocalDateTime os = getOperationsStart();
 		if (os != null) {
-			final Calendar calendar = Calendar.getInstance();
-			calendar.setTime(os);
-			calendar.setTimeZone(TimeZone.getTimeZone(getTimeZone(ActualsPackage.Literals.RETURN_ACTUALS__OPERATIONS_START)));
-			return calendar;
+			return os.toDateTime(DateTimeZone.forID(getTimeZone(ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START)));
 		}
 		return null;
 	}
@@ -220,6 +217,7 @@ public class ReturnActualsImpl extends EObjectImpl implements ReturnActuals {
 	public String getTimeZone(EAttribute attribute) {
 		if (getTitleTransferPoint() == null) return "UTC";
 		if (getTitleTransferPoint().getTimeZone() == null) return "UTC";
+		if (getTitleTransferPoint().getTimeZone().isEmpty()) return "UTC";
 		return getTitleTransferPoint().getTimeZone();
 	}
 
@@ -254,7 +252,7 @@ public class ReturnActualsImpl extends EObjectImpl implements ReturnActuals {
 				setTitleTransferPoint((Port)newValue);
 				return;
 			case ActualsPackage.RETURN_ACTUALS__OPERATIONS_START:
-				setOperationsStart((Date)newValue);
+				setOperationsStart((LocalDateTime)newValue);
 				return;
 			case ActualsPackage.RETURN_ACTUALS__END_HEEL_M3:
 				setEndHeelM3((Double)newValue);
@@ -310,8 +308,8 @@ public class ReturnActualsImpl extends EObjectImpl implements ReturnActuals {
 	@Override
 	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-			case ActualsPackage.RETURN_ACTUALS___GET_LOCAL_START:
-				return getLocalStart();
+			case ActualsPackage.RETURN_ACTUALS___GET_OPERATIONS_START_AS_DATE_TIME:
+				return getOperationsStartAsDateTime();
 			case ActualsPackage.RETURN_ACTUALS___GET_TIME_ZONE__EATTRIBUTE:
 				return getTimeZone((EAttribute)arguments.get(0));
 		}

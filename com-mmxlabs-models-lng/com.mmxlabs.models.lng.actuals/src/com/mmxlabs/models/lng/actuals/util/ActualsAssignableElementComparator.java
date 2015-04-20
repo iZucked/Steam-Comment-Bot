@@ -4,10 +4,11 @@
  */
 package com.mmxlabs.models.lng.actuals.util;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.joda.time.DateTime;
 
 import com.mmxlabs.models.lng.actuals.ActualsModel;
 import com.mmxlabs.models.lng.actuals.CargoActuals;
@@ -56,19 +57,19 @@ public class ActualsAssignableElementComparator extends AssignableElementDateCom
 	// }
 
 	@Override
-	protected Date getStartDate(final AssignableElement element) {
+	protected DateTime getStartDate(final AssignableElement element) {
 		if (startDateMap.containsKey(element)) {
 			final SlotActuals slotActuals = startDateMap.get(element);
-			return slotActuals.getOperationsStart();
+			return slotActuals.getOperationsStartAsDateTime();
 		}
 		return super.getStartDate(element);
 	}
 
 	@Override
-	protected Date getEndDate(final AssignableElement element) {
+	protected DateTime getEndDate(final AssignableElement element) {
 		if (endDateMap.containsKey(element)) {
 			final SlotActuals slotActuals = endDateMap.get(element);
-			return slotActuals.getOperationsEnd();
+			return slotActuals.getOperationsEndAsDateTime();
 		}
 		return super.getEndDate(element);
 	}

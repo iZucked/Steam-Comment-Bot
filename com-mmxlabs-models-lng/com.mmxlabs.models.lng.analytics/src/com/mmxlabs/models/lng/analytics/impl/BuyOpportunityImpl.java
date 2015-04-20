@@ -3,13 +3,12 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.impl;
-import java.util.Date;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.joda.time.LocalDate;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -61,7 +60,7 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 	 * @generated
 	 * @ordered
 	 */
-	protected static final Date DATE_EDEFAULT = null;
+	protected static final LocalDate DATE_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getDate() <em>Date</em>}' attribute.
@@ -71,7 +70,7 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 	 * @generated
 	 * @ordered
 	 */
-	protected Date date = DATE_EDEFAULT;
+	protected LocalDate date = DATE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getPriceExpression() <em>Price Expression</em>}' attribute.
@@ -198,7 +197,7 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 	 * @generated
 	 */
 	@Override
-	public Date getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 
@@ -208,8 +207,8 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 	 * @generated
 	 */
 	@Override
-	public void setDate(Date newDate) {
-		Date oldDate = date;
+	public void setDate(LocalDate newDate) {
+		LocalDate oldDate = date;
 		date = newDate;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.BUY_OPPORTUNITY__DATE, oldDate, date));
@@ -275,7 +274,7 @@ public class BuyOpportunityImpl extends MMXObjectImpl implements BuyOpportunity 
 				setContract((PurchaseContract)newValue);
 				return;
 			case AnalyticsPackage.BUY_OPPORTUNITY__DATE:
-				setDate((Date)newValue);
+				setDate((LocalDate)newValue);
 				return;
 			case AnalyticsPackage.BUY_OPPORTUNITY__PRICE_EXPRESSION:
 				setPriceExpression((String)newValue);

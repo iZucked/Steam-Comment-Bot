@@ -4,12 +4,6 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
-
-import javax.management.timer.Timer;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
@@ -18,6 +12,8 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.joda.time.DateTime;
+import org.joda.time.Hours;
 
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -57,7 +53,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final Date START_EDEFAULT = null;
+	protected static final DateTime START_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getStart() <em>Start</em>}' attribute.
@@ -67,7 +63,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * @generated
 	 * @ordered
 	 */
-	protected Date start = START_EDEFAULT;
+	protected DateTime start = START_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getEnd() <em>End</em>}' attribute.
@@ -77,7 +73,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final Date END_EDEFAULT = null;
+	protected static final DateTime END_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getEnd() <em>End</em>}' attribute.
@@ -87,7 +83,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * @generated
 	 * @ordered
 	 */
-	protected Date end = END_EDEFAULT;
+	protected DateTime end = END_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
@@ -203,7 +199,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Date getStart() {
+	public DateTime getStart() {
 		return start;
 	}
 
@@ -212,8 +208,8 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setStart(Date newStart) {
-		Date oldStart = start;
+	public void setStart(DateTime newStart) {
+		DateTime oldStart = start;
 		start = newStart;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.EVENT__START, oldStart, start));
@@ -224,7 +220,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Date getEnd() {
+	public DateTime getEnd() {
 		return end;
 	}
 
@@ -233,8 +229,8 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setEnd(Date newEnd) {
-		Date oldEnd = end;
+	public void setEnd(DateTime newEnd) {
+		DateTime oldEnd = end;
 		end = newEnd;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.EVENT__END, oldEnd, end));
@@ -508,31 +504,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * @generated NOT
 	 */
 	public int getDuration() {
-		return (int)( (getEnd().getTime() - getStart().getTime()) / Timer.ONE_HOUR );
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public Calendar getLocalStart() {
-		final Calendar calendar = Calendar.getInstance();
-		calendar.setTime(getStart());
-		calendar.setTimeZone(TimeZone.getTimeZone(getTimeZone(SchedulePackage.Literals.EVENT__START)));
-		return calendar;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public Calendar getLocalEnd() {
-		final Calendar calendar = Calendar.getInstance();
-		calendar.setTime(getEnd());
-		calendar.setTimeZone(TimeZone.getTimeZone(getTimeZone(SchedulePackage.Literals.EVENT__END)));
-		return calendar;
+		return Hours.hoursBetween(getStart(),  getEnd()).getHours();
 	}
 
 	/**
@@ -558,10 +530,12 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public String getTimeZone(EAttribute attribute) {
-		if (getPort() == null) return "UTC";
-		if (getPort().getTimeZone() == null) return "UTC";
-		return getPort().getTimeZone();
+	public String getTimeZone(final EAttribute attribute) {
+		Port p = getPort();
+		if (p == null) return "UTC";
+		if (p.getTimeZone() == null) return "UTC";
+		if (p.getTimeZone().isEmpty()) return "UTC";
+		return p.getTimeZone();
 	}
 
 	/**
@@ -662,10 +636,10 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case SchedulePackage.EVENT__START:
-				setStart((Date)newValue);
+				setStart((DateTime)newValue);
 				return;
 			case SchedulePackage.EVENT__END:
-				setEnd((Date)newValue);
+				setEnd((DateTime)newValue);
 				return;
 			case SchedulePackage.EVENT__PORT:
 				setPort((Port)newValue);
@@ -787,10 +761,6 @@ public class EventImpl extends MMXObjectImpl implements Event {
 		switch (operationID) {
 			case SchedulePackage.EVENT___GET_DURATION:
 				return getDuration();
-			case SchedulePackage.EVENT___GET_LOCAL_START:
-				return getLocalStart();
-			case SchedulePackage.EVENT___GET_LOCAL_END:
-				return getLocalEnd();
 			case SchedulePackage.EVENT___TYPE:
 				return type();
 			case SchedulePackage.EVENT___NAME:

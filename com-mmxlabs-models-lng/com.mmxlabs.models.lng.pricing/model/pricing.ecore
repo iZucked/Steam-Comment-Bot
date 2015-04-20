@@ -40,7 +40,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IndexPoint">
     <eTypeParameters name="Value"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1">
       <eGenericType eTypeParameter="#//IndexPoint/Value"/>
     </eStructuralFeatures>
@@ -49,16 +49,16 @@
     <eTypeParameters name="Value"/>
     <eOperations name="getValueForMonth" lowerBound="1">
       <eGenericType eTypeParameter="#//Index/Value"/>
-      <eParameters name="date" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      <eParameters name="date" lowerBound="1" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth"/>
     </eOperations>
-    <eOperations name="getDates" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eOperations name="getDates" upperBound="-1" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth"/>
     <eOperations name="getForwardValueForMonth" lowerBound="1">
       <eGenericType eTypeParameter="#//Index/Value"/>
-      <eParameters name="date" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      <eParameters name="date" lowerBound="1" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth"/>
     </eOperations>
     <eOperations name="getBackwardsValueForMonth" lowerBound="1">
       <eGenericType eTypeParameter="#//Index/Value"/>
-      <eParameters name="date" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      <eParameters name="date" lowerBound="1" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FleetCostModel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">

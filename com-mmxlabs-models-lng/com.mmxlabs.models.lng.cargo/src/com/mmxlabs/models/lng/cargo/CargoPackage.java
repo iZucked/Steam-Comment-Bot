@@ -815,13 +815,22 @@ public interface CargoPackage extends EPackage {
 	int SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 13;
 
 	/**
+	 * The operation id for the '<em>Get Pricing Date As Date Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_PRICING_DATE_AS_DATE_TIME = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 14;
+
+	/**
 	 * The number of operations of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 14;
+	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 15;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1299,6 +1308,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT = SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT;
+
+	/**
+	 * The operation id for the '<em>Get Pricing Date As Date Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_PRICING_DATE_AS_DATE_TIME = SLOT___GET_PRICING_DATE_AS_DATE_TIME;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegated CV</em>' operation.
@@ -1803,6 +1821,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT = SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT;
+
+	/**
+	 * The operation id for the '<em>Get Pricing Date As Date Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_PRICING_DATE_AS_DATE_TIME = SLOT___GET_PRICING_DATE_AS_DATE_TIME;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Min Cv</em>' operation.
@@ -2410,6 +2437,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT = LOAD_SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT;
 
 	/**
+	 * The operation id for the '<em>Get Pricing Date As Date Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_PRICING_DATE_AS_DATE_TIME = LOAD_SLOT___GET_PRICING_DATE_AS_DATE_TIME;
+
+	/**
 	 * The operation id for the '<em>Get Slot Or Delegated CV</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2934,6 +2970,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT;
 
 	/**
+	 * The operation id for the '<em>Get Pricing Date As Date Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_PRICING_DATE_AS_DATE_TIME = DISCHARGE_SLOT___GET_PRICING_DATE_AS_DATE_TIME;
+
+	/**
 	 * The operation id for the '<em>Get Slot Or Contract Min Cv</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3215,13 +3260,49 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_AVAILABILITY___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
 
 	/**
+	 * The operation id for the '<em>Get Start By As Date Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY___GET_START_BY_AS_DATE_TIME = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Start After As Date Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY___GET_START_AFTER_AS_DATE_TIME = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get End By As Date Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY___GET_END_BY_AS_DATE_TIME = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Get End After As Date Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY___GET_END_AFTER_AS_DATE_TIME = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 3;
+
+	/**
 	 * The number of operations of the '<em>Vessel Availability</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_AVAILABILITY_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
+	int VESSEL_AVAILABILITY_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.VesselEventImpl <em>Vessel Event</em>}' class.
@@ -3387,13 +3468,31 @@ public interface CargoPackage extends EPackage {
 	int VESSEL_EVENT___GET_TIME_ZONE__EATTRIBUTE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
 
 	/**
+	 * The operation id for the '<em>Get Start By As Date Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT___GET_START_BY_AS_DATE_TIME = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Start After As Date Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT___GET_START_AFTER_AS_DATE_TIME = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 2;
+
+	/**
 	 * The number of operations of the '<em>Vessel Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 1;
+	int VESSEL_EVENT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.MaintenanceEventImpl <em>Maintenance Event</em>}' class.
@@ -3557,6 +3656,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int MAINTENANCE_EVENT___GET_TIME_ZONE__EATTRIBUTE = VESSEL_EVENT___GET_TIME_ZONE__EATTRIBUTE;
+
+	/**
+	 * The operation id for the '<em>Get Start By As Date Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT___GET_START_BY_AS_DATE_TIME = VESSEL_EVENT___GET_START_BY_AS_DATE_TIME;
+
+	/**
+	 * The operation id for the '<em>Get Start After As Date Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT___GET_START_AFTER_AS_DATE_TIME = VESSEL_EVENT___GET_START_AFTER_AS_DATE_TIME;
 
 	/**
 	 * The number of operations of the '<em>Maintenance Event</em>' class.
@@ -3729,6 +3846,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DRY_DOCK_EVENT___GET_TIME_ZONE__EATTRIBUTE = VESSEL_EVENT___GET_TIME_ZONE__EATTRIBUTE;
+
+	/**
+	 * The operation id for the '<em>Get Start By As Date Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT___GET_START_BY_AS_DATE_TIME = VESSEL_EVENT___GET_START_BY_AS_DATE_TIME;
+
+	/**
+	 * The operation id for the '<em>Get Start After As Date Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT___GET_START_AFTER_AS_DATE_TIME = VESSEL_EVENT___GET_START_AFTER_AS_DATE_TIME;
 
 	/**
 	 * The number of operations of the '<em>Dry Dock Event</em>' class.
@@ -3937,6 +4072,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int CHARTER_OUT_EVENT___GET_TIME_ZONE__EATTRIBUTE = VESSEL_EVENT___GET_TIME_ZONE__EATTRIBUTE;
+
+	/**
+	 * The operation id for the '<em>Get Start By As Date Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT___GET_START_BY_AS_DATE_TIME = VESSEL_EVENT___GET_START_BY_AS_DATE_TIME;
+
+	/**
+	 * The operation id for the '<em>Get Start After As Date Time</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT___GET_START_AFTER_AS_DATE_TIME = VESSEL_EVENT___GET_START_AFTER_AS_DATE_TIME;
 
 	/**
 	 * The operation id for the '<em>Get End Port</em>' operation.
@@ -4691,6 +4844,16 @@ public interface CargoPackage extends EPackage {
 	EOperation getSlot__GetSlotOrDelegatedPricingEvent();
 
 	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getPricingDateAsDateTime() <em>Get Pricing Date As Date Time</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Pricing Date As Date Time</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getPricingDateAsDateTime()
+	 * @generated
+	 */
+	EOperation getSlot__GetPricingDateAsDateTime();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.LoadSlot <em>Load Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5140,6 +5303,46 @@ public interface CargoPackage extends EPackage {
 	EReference getVesselAvailability_EndHeel();
 
 	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getStartByAsDateTime() <em>Get Start By As Date Time</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Start By As Date Time</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getStartByAsDateTime()
+	 * @generated
+	 */
+	EOperation getVesselAvailability__GetStartByAsDateTime();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getStartAfterAsDateTime() <em>Get Start After As Date Time</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Start After As Date Time</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getStartAfterAsDateTime()
+	 * @generated
+	 */
+	EOperation getVesselAvailability__GetStartAfterAsDateTime();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEndByAsDateTime() <em>Get End By As Date Time</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get End By As Date Time</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getEndByAsDateTime()
+	 * @generated
+	 */
+	EOperation getVesselAvailability__GetEndByAsDateTime();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEndAfterAsDateTime() <em>Get End After As Date Time</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get End After As Date Time</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getEndAfterAsDateTime()
+	 * @generated
+	 */
+	EOperation getVesselAvailability__GetEndAfterAsDateTime();
+
+	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEntity <em>Entity</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5214,6 +5417,26 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getVesselEvent_StartBy();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselEvent#getStartByAsDateTime() <em>Get Start By As Date Time</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Start By As Date Time</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.VesselEvent#getStartByAsDateTime()
+	 * @generated
+	 */
+	EOperation getVesselEvent__GetStartByAsDateTime();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.VesselEvent#getStartAfterAsDateTime() <em>Get Start After As Date Time</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Start After As Date Time</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.VesselEvent#getStartAfterAsDateTime()
+	 * @generated
+	 */
+	EOperation getVesselEvent__GetStartAfterAsDateTime();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.MaintenanceEvent <em>Maintenance Event</em>}'.
@@ -5818,6 +6041,14 @@ public interface CargoPackage extends EPackage {
 		EOperation SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT = eINSTANCE.getSlot__GetSlotOrDelegatedPricingEvent();
 
 		/**
+		 * The meta object literal for the '<em><b>Get Pricing Date As Date Time</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_PRICING_DATE_AS_DATE_TIME = eINSTANCE.getSlot__GetPricingDateAsDateTime();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6170,6 +6401,38 @@ public interface CargoPackage extends EPackage {
 		EReference VESSEL_AVAILABILITY__END_HEEL = eINSTANCE.getVesselAvailability_EndHeel();
 
 		/**
+		 * The meta object literal for the '<em><b>Get Start By As Date Time</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation VESSEL_AVAILABILITY___GET_START_BY_AS_DATE_TIME = eINSTANCE.getVesselAvailability__GetStartByAsDateTime();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Start After As Date Time</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation VESSEL_AVAILABILITY___GET_START_AFTER_AS_DATE_TIME = eINSTANCE.getVesselAvailability__GetStartAfterAsDateTime();
+
+		/**
+		 * The meta object literal for the '<em><b>Get End By As Date Time</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation VESSEL_AVAILABILITY___GET_END_BY_AS_DATE_TIME = eINSTANCE.getVesselAvailability__GetEndByAsDateTime();
+
+		/**
+		 * The meta object literal for the '<em><b>Get End After As Date Time</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation VESSEL_AVAILABILITY___GET_END_AFTER_AS_DATE_TIME = eINSTANCE.getVesselAvailability__GetEndAfterAsDateTime();
+
+		/**
 		 * The meta object literal for the '<em><b>Entity</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6226,6 +6489,22 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VESSEL_EVENT__START_BY = eINSTANCE.getVesselEvent_StartBy();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Start By As Date Time</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation VESSEL_EVENT___GET_START_BY_AS_DATE_TIME = eINSTANCE.getVesselEvent__GetStartByAsDateTime();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Start After As Date Time</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation VESSEL_EVENT___GET_START_AFTER_AS_DATE_TIME = eINSTANCE.getVesselEvent__GetStartAfterAsDateTime();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.MaintenanceEventImpl <em>Maintenance Event</em>}' class.

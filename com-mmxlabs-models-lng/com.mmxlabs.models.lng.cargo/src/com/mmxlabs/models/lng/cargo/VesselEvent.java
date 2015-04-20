@@ -16,9 +16,9 @@ import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
-import java.util.Date;
-
 import org.eclipse.emf.common.util.EList;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 
 /**
  * <!-- begin-user-doc -->
@@ -119,12 +119,12 @@ public interface VesselEvent extends UUIDObject, NamedObject, ITimezoneProvider,
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Start After</em>' attribute.
-	 * @see #setStartAfter(Date)
+	 * @see #setStartAfter(LocalDateTime)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselEvent_StartAfter()
-	 * @model required="true"
+	 * @model dataType="com.mmxlabs.models.datetime.LocalDateTime"
 	 * @generated
 	 */
-	Date getStartAfter();
+	LocalDateTime getStartAfter();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselEvent#getStartAfter <em>Start After</em>}' attribute.
@@ -134,7 +134,7 @@ public interface VesselEvent extends UUIDObject, NamedObject, ITimezoneProvider,
 	 * @see #getStartAfter()
 	 * @generated
 	 */
-	void setStartAfter(Date value);
+	void setStartAfter(LocalDateTime value);
 
 	/**
 	 * Returns the value of the '<em><b>Start By</b></em>' attribute.
@@ -145,12 +145,12 @@ public interface VesselEvent extends UUIDObject, NamedObject, ITimezoneProvider,
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Start By</em>' attribute.
-	 * @see #setStartBy(Date)
+	 * @see #setStartBy(LocalDateTime)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselEvent_StartBy()
-	 * @model required="true"
+	 * @model dataType="com.mmxlabs.models.datetime.LocalDateTime"
 	 * @generated
 	 */
-	Date getStartBy();
+	LocalDateTime getStartBy();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselEvent#getStartBy <em>Start By</em>}' attribute.
@@ -160,6 +160,22 @@ public interface VesselEvent extends UUIDObject, NamedObject, ITimezoneProvider,
 	 * @see #getStartBy()
 	 * @generated
 	 */
-	void setStartBy(Date value);
+	void setStartBy(LocalDateTime value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
+	 * @generated
+	 */
+	DateTime getStartByAsDateTime();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
+	 * @generated
+	 */
+	DateTime getStartAfterAsDateTime();
 
 } // VesselEvent

@@ -34,6 +34,18 @@ public abstract class AbstractClientMigrationUnit implements IClientMigrationUni
 	protected MetamodelLoader destinationLoader;
 	protected Map<URI, PackageData> extraPackages;
 
+	public abstract int getScenarioVersion();
+
+	@Override
+	public final int getScenarioSourceVersion() {
+		return getScenarioVersion();
+	}
+
+	@Override
+	public final int getScenarioDestinationVersion() {
+		return getScenarioVersion();
+	}
+
 	/**
 	 * Returns a {@link MetamodelLoader} for the {@link IMigrationUnit#getSourceVersion()}.
 	 * 

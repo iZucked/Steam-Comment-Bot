@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.commercial.provider;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -23,6 +22,7 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import org.joda.time.LocalDate;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.TaxRate;
 
@@ -124,7 +124,7 @@ public class TaxRateItemProvider extends ItemProviderAdapter implements
 	 */
 	@Override
 	public String getText(Object object) {
-		Date labelValue = ((TaxRate)object).getDate();
+		LocalDate labelValue = ((TaxRate)object).getDate();
 		String label = labelValue == null ? null : labelValue.toString();
 		return label == null || label.length() == 0 ?
 			getString("_UI_TaxRate_type") :

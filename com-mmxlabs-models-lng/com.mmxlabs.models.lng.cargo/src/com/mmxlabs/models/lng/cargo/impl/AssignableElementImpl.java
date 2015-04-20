@@ -251,7 +251,6 @@ public abstract class AssignableElementImpl extends EObjectImpl implements Assig
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {

@@ -9,56 +9,20 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.nebula.widgets.formattedtext.DateTimeFormatter;
 
+import com.mmxlabs.models.datetime.ui.formatters.LocalDateTextFormatter;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.editor.SlotContractRestrictionsWrapper;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.NominatedVesselEditorWrapper;
-import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.dates.DateInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.impl.LocalDateInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.MultiTextInlineEditor;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
@@ -154,7 +118,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		final IInlineEditor editor;
 		if (topClass.getEAllSuperTypes().contains(CargoPackage.eINSTANCE.getSpotSlot())) {
 			// For spot slots, only allow month portion to be edited
-			editor = new DateInlineEditor(CargoPackage.eINSTANCE.getSlot_WindowStart(), new DateTimeFormatter("MM/yyyy"));
+			editor = new LocalDateInlineEditor(CargoPackage.eINSTANCE.getSlot_WindowStart(), new LocalDateTextFormatter("MM/yyyy"));
 		} else {
 			editor = ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_START);
 		}
@@ -164,18 +128,15 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the pricingDate feature on Slot
 	 * 
-	 * @generated NOT
+	 * @generated
 	 */
 	protected void add_pricingDateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-
-		final IInlineEditor editor;
-		editor = new DateInlineEditor(CargoPackage.Literals.SLOT__PRICING_DATE, new DateTimeFormatter("dd/MM/yyyy"));
-		detailComposite.addInlineEditor(editor);
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PRICING_DATE));
 	}
 
 	/**
 	 * Create the editor for the notes feature on Slot
-	 *
+	 * 
 	 * @generated NO
 	 */
 	protected void add_notesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
@@ -184,7 +145,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 
 	/**
 	 * Create the editor for the divertable feature on Slot
-	 *
+	 * 
 	 * @generated NOT
 	 */
 	protected void add_divertibleEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
@@ -195,7 +156,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 
 	/**
 	 * Create the editor for the entity feature on Slot
-	 *
+	 * 
 	 * @generated
 	 */
 	protected void add_entityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
@@ -204,7 +165,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 
 	/**
 	 * Create the editor for the restrictedContracts feature on Slot
-	 *
+	 * 
 	 * @generated NOT
 	 */
 	protected void add_restrictedContractsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
@@ -213,7 +174,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 
 	/**
 	 * Create the editor for the restrictedPorts feature on Slot
-	 *
+	 * 
 	 * @generated NOT
 	 */
 	protected void add_restrictedPortsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
@@ -222,7 +183,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 
 	/**
 	 * Create the editor for the restrictedListsArePermissive feature on Slot
-	 *
+	 * 
 	 * @generated NOT
 	 */
 	protected void add_restrictedListsArePermissiveEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
@@ -231,7 +192,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 
 	/**
 	 * Create the editor for the hedges feature on Slot
-	 *
+	 * 
 	 * @generated
 	 */
 	protected void add_hedgesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
@@ -240,7 +201,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 
 	/**
 	 * Create the editor for the cancellationFee feature on Slot
-	 *
+	 * 
 	 * @generated
 	 */
 	protected void add_cancellationFeeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
@@ -249,7 +210,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 
 	/**
 	 * Create the editor for the overrideRestrictions feature on Slot
-	 *
+	 * 
 	 * @generated
 	 */
 	protected void add_overrideRestrictionsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
@@ -258,7 +219,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 
 	/**
 	 * Create the editor for the nominatedVessel feature on Slot
-	 *
+	 * 
 	 * @generated NOT
 	 */
 	protected void add_nominatedVesselEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
@@ -267,29 +228,29 @@ public class SlotComponentHelper extends BaseComponentHelper {
 
 	/**
 	 * Create the editor for the locked feature on Slot
-	 *
+	 * 
 	 * @generated NOT
 	 */
 	protected void add_lockedEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__LOCKED));
+		// detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__LOCKED));
 	}
 
 	/**
 	 * Create the editor for the allowedVessels feature on Slot
-	 *
+	 * 
 	 * @generated
 	 */
 	protected void add_allowedVesselsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__ALLOWED_VESSELS));
 	}
-	
+
 	/**
 	 * Create the editor for the shippingDaysRestriction feature on Slot
-	 *
+	 * 
 	 * @generated NOT
 	 */
 	protected void add_shippingDaysRestrictionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		
+
 		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__SHIPPING_DAYS_RESTRICTION);
 		editor.addNotificationChangedListener(new ShippingDaysRestrictionInlineEditorChangedListener());
 		detailComposite.addInlineEditor(editor);
@@ -307,7 +268,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the windowSize feature on Slot
 	 * 
-	 * @generated 
+	 * @generated
 	 */
 	protected void add_windowSizeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_SIZE));
@@ -316,7 +277,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the port feature on Slot
 	 * 
-	 * @generated 
+	 * @generated
 	 */
 	protected void add_portEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PORT));
@@ -387,21 +348,21 @@ public class SlotComponentHelper extends BaseComponentHelper {
 
 	/**
 	 * Create the editor for the cargo feature on Slot
-	 *
+	 * 
 	 * @generated NOT
 	 */
 	protected void add_cargoEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__CARGO));
+		// detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__CARGO));
 	}
 
 	/**
 	 * Create the editor for the pricingEvent feature on Slot
-	 *
+	 * 
 	 * @generated NOT
 	 */
 	protected void add_pricingEventEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PRICING_EVENT);
 		editor.addNotificationChangedListener(new PricingEventInlineEditorChangedListener());
-		detailComposite.addInlineEditor(editor);		
+		detailComposite.addInlineEditor(editor);
 	}
 }

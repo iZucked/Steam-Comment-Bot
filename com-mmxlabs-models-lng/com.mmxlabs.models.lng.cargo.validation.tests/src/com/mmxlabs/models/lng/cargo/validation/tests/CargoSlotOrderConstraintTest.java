@@ -7,11 +7,10 @@ package com.mmxlabs.models.lng.cargo.validation.tests;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.Calendar;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.joda.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Matchers;
@@ -241,13 +240,6 @@ public class CargoSlotOrderConstraintTest {
 	}
 
 	private void setDate(final Slot slot, final int year, final int month, final int day) {
-		final Calendar cal = Calendar.getInstance();
-		cal.clear();
-		cal.set(Calendar.YEAR, year);
-		cal.set(Calendar.MONTH, month);
-		cal.set(Calendar.DATE, day);
-
-		slot.setWindowStart(cal.getTime());
+		slot.setWindowStart(new LocalDate(year, month, day));
 	}
-
 }

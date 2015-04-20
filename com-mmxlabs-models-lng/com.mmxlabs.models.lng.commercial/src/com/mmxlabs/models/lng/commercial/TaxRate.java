@@ -3,9 +3,8 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial;
-import java.util.Date;
-
 import org.eclipse.emf.ecore.EObject;
+import org.joda.time.LocalDate;
 
 /**
  * <!-- begin-user-doc -->
@@ -34,12 +33,12 @@ public interface TaxRate extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Date</em>' attribute.
-	 * @see #setDate(Date)
+	 * @see #setDate(LocalDate)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getTaxRate_Date()
-	 * @model
+	 * @model dataType="com.mmxlabs.models.datetime.LocalDate"
 	 * @generated
 	 */
-	Date getDate();
+	LocalDate getDate();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.TaxRate#getDate <em>Date</em>}' attribute.
@@ -49,7 +48,7 @@ public interface TaxRate extends EObject {
 	 * @see #getDate()
 	 * @generated
 	 */
-	void setDate(Date value);
+	void setDate(LocalDate value);
 
 	/**
 	 * Returns the value of the '<em><b>Value</b></em>' attribute.

@@ -64,13 +64,13 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoEditorMenuHelper;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.ContractManipulator;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.ui.dates.DateAttributeManipulator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DefaultDialogEditingContext;
 import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.dialogs.NullDialogController;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.LocalDateAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
@@ -217,7 +217,7 @@ public class ComplexCargoEditor extends Dialog {
 				column.getColumn().setWidth(100);
 				// column.setLabelProvider(new GenericMapCellLabelProvider("{0}", attributeMap));
 
-				final DateAttributeManipulator manipulator = new DateAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowStart(), sel.getEditingDomain());
+				final LocalDateAttributeManipulator manipulator = new LocalDateAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowStart(), sel.getEditingDomain());
 				column.setLabelProvider(new CellRendererColumnLabelProvider(viewer, manipulator, validationErrors, new EMFPath(false)));
 
 				final CellManipulatorEditingSupport es = new CellManipulatorEditingSupport(column.getViewer(), viewer, manipulator, new EMFPath(false));

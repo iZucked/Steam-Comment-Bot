@@ -8,12 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.management.timer.Timer;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.joda.time.Hours;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
@@ -154,7 +153,7 @@ public class ProvisionalCargoConstraint extends AbstractModelMultiConstraint {
 				// } else if(lastRow.getDestinationType() == DestinationType.OTHER) {
 				// visitDuration = 24;
 				// }
-				final int availableTime = (int) ((row.getDate().getTime() - lastRow.getDate().getTime()) / Timer.ONE_HOUR) - visitDuration;
+				final int availableTime = Hours.hoursBetween(lastRow.getDate(), row.getDate()).getHours() - visitDuration;
 
 				if (availableTime < 0) {
 					final String msg = String.format("Date is before the previous date.");

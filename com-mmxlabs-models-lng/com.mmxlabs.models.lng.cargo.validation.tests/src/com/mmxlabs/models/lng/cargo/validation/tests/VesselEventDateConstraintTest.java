@@ -10,11 +10,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-import java.util.Date;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.joda.time.LocalDateTime;
 import org.junit.Test;
 
 import com.mmxlabs.models.lng.cargo.VesselEvent;
@@ -27,8 +26,8 @@ public class VesselEventDateConstraintTest {
 
 	// Create some dates to test.
 	private static final long time = System.currentTimeMillis();
-	private static final Date now = new Date(time);
-	private static final Date nowPlusOne = new Date(time + 1);
+	private static final LocalDateTime now = new LocalDateTime(time);
+	private static final LocalDateTime nowPlusOne = new LocalDateTime(time + 1);
 
 	/**
 	 * Test the constraint succeeds with the correct input.
@@ -91,7 +90,7 @@ public class VesselEventDateConstraintTest {
 	 * @param end
 	 *            The end date of the VesselEvent.
 	 */
-	private void testVesselEventDateConstraint(final boolean expectSuccess, final Date start, final Date end) {
+	private void testVesselEventDateConstraint(final boolean expectSuccess, final LocalDateTime start, final LocalDateTime end) {
 		// This is the constraint we will be testing
 		final VesselEventDateConstraint constraint = new VesselEventDateConstraint();
 		final String vesselEventID = "vesselEventID";

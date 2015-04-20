@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.cargo.validation;
 
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
@@ -13,6 +11,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.joda.time.LocalDateTime;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
@@ -21,28 +20,26 @@ import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
-public class SensibleEventDateConstraint  extends AbstractModelMultiConstraint {
+public class SensibleEventDateConstraint extends AbstractModelMultiConstraint {
 
-	private Date earliestDate = new GregorianCalendar(2000,0,1).getTime();
-	private EStructuralFeature [] eventDateFields = { 
-			CargoPackage.Literals.VESSEL_EVENT__START_AFTER,
-			CargoPackage.Literals.VESSEL_EVENT__START_BY,
-	};
-	
+	private final LocalDateTime earliestDate = new LocalDateTime(2000, 1, 1, 0, 0);
+	private final EStructuralFeature[] eventDateFields = { CargoPackage.Literals.VESSEL_EVENT__START_AFTER, CargoPackage.Literals.VESSEL_EVENT__START_BY, };
+
 	/**
 	 * Impose sensible date cutoffs for vessel availabilities and events
 	 */
 	@Override
-	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, List<IStatus> failures) {
+	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 		if (object instanceof VesselEvent) {
 			final VesselEvent event = (VesselEvent) object;
-			for (EStructuralFeature feature: eventDateFields) {
-				final Date date = (Date) object.eGet(feature);
-				if (date.before(earliestDate)) {
-					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(event.getName(), feature.getName(), earliestDate.toString()));
+			for (final EStructuralFeature feature : eventDateFields) {
+				final LocalDateTime date = (LocalDateTime) object.eGet(feature);
+				if (date != null && date.isBefore(earliestDate)) {
+					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(event.getName(), feature.getName(),
+							earliestDate.toString()));
 					status.addEObjectAndFeature(object, feature);
-					failures.add(status);				
+					failures.add(status);
 				}
 			}
 
@@ -50,5 +47,4 @@ public class SensibleEventDateConstraint  extends AbstractModelMultiConstraint {
 
 		return Activator.PLUGIN_ID;
 	}
-
 }

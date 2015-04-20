@@ -621,12 +621,12 @@ public class JourneyImpl extends EventImpl implements Journey {
 	 * @generated NOT
 	 */
 	public String getTimeZone(EAttribute attribute) {
-		if (attribute == SchedulePackage.Literals.EVENT__END){
-			if (getDestination() == null)
+		if (attribute == SchedulePackage.Literals.EVENT__END) {
+			final Port p = getDestination();
+			if (p == null || p.getTimeZone() == null || p.getTimeZone().isEmpty()) {
 				return "UTC";
-			if (getDestination().getTimeZone() == null)
-				return "UTC";
-			return getDestination().getTimeZone();
+			}
+			return p.getTimeZone();
 		} else {
 			return super.getTimeZone(attribute);
 		}

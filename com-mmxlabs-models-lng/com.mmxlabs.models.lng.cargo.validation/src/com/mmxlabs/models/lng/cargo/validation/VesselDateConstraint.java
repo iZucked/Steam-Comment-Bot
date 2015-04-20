@@ -8,13 +8,12 @@
  */
 package com.mmxlabs.models.lng.cargo.validation;
 
-import java.util.Date;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.joda.time.LocalDateTime;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -45,17 +44,17 @@ public class VesselDateConstraint extends AbstractModelConstraint {
 //			if (availability != null) {
 				// Gather dates
 				VesselAvailability availability = (VesselAvailability) object;
-				final Date startStart = availability.getStartAfter();
-				final Date startEnd = availability.getStartBy();
+				final LocalDateTime startStart = availability.getStartAfter();
+				final LocalDateTime startEnd = availability.getStartBy();
 
-				final Date endStart = availability.getEndAfter();
-				final Date endEnd = availability.getEndBy();
+				final LocalDateTime endStart = availability.getEndAfter();
+				final LocalDateTime endEnd = availability.getEndBy();
 
-				final Date s = startStart == null ? startEnd : startStart;
-				final Date e = endEnd == null ? endStart : endEnd;
+				final LocalDateTime s = startStart == null ? startEnd : startStart;
+				final LocalDateTime e = endEnd == null ? endStart : endEnd;
 
 				if ((s != null) && (e != null)) {
-					if (e.before(s)) {
+					if (e.isBefore(s)) {
 						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(availability.getVessel().getName()));
 						if (startStart != null) {
 							status.addEObjectAndFeature(availability, CargoPackage.eINSTANCE.getVesselAvailability_StartAfter());

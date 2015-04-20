@@ -3,9 +3,8 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.parameters;
-import java.util.Date;
-
 import org.eclipse.emf.ecore.EObject;
+import org.joda.time.YearMonth;
 
 /**
  * <!-- begin-user-doc -->
@@ -36,12 +35,12 @@ public interface OptimisationRange extends EObject {
 	 * @return the value of the '<em>Optimise After</em>' attribute.
 	 * @see #isSetOptimiseAfter()
 	 * @see #unsetOptimiseAfter()
-	 * @see #setOptimiseAfter(Date)
+	 * @see #setOptimiseAfter(YearMonth)
 	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getOptimisationRange_OptimiseAfter()
-	 * @model unsettable="true" required="true"
+	 * @model unsettable="true" dataType="com.mmxlabs.models.datetime.YearMonth"
 	 * @generated
 	 */
-	Date getOptimiseAfter();
+	YearMonth getOptimiseAfter();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.OptimisationRange#getOptimiseAfter <em>Optimise After</em>}' attribute.
@@ -53,7 +52,7 @@ public interface OptimisationRange extends EObject {
 	 * @see #getOptimiseAfter()
 	 * @generated
 	 */
-	void setOptimiseAfter(Date value);
+	void setOptimiseAfter(YearMonth value);
 
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.parameters.OptimisationRange#getOptimiseAfter <em>Optimise After</em>}' attribute.
@@ -61,7 +60,7 @@ public interface OptimisationRange extends EObject {
 	 * <!-- end-user-doc -->
 	 * @see #isSetOptimiseAfter()
 	 * @see #getOptimiseAfter()
-	 * @see #setOptimiseAfter(Date)
+	 * @see #setOptimiseAfter(YearMonth)
 	 * @generated
 	 */
 	void unsetOptimiseAfter();
@@ -73,7 +72,7 @@ public interface OptimisationRange extends EObject {
 	 * @return whether the value of the '<em>Optimise After</em>' attribute is set.
 	 * @see #unsetOptimiseAfter()
 	 * @see #getOptimiseAfter()
-	 * @see #setOptimiseAfter(Date)
+	 * @see #setOptimiseAfter(YearMonth)
 	 * @generated
 	 */
 	boolean isSetOptimiseAfter();
@@ -89,12 +88,12 @@ public interface OptimisationRange extends EObject {
 	 * @return the value of the '<em>Optimise Before</em>' attribute.
 	 * @see #isSetOptimiseBefore()
 	 * @see #unsetOptimiseBefore()
-	 * @see #setOptimiseBefore(Date)
+	 * @see #setOptimiseBefore(YearMonth)
 	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getOptimisationRange_OptimiseBefore()
-	 * @model unsettable="true" required="true"
+	 * @model unsettable="true" dataType="com.mmxlabs.models.datetime.YearMonth"
 	 * @generated
 	 */
-	Date getOptimiseBefore();
+	YearMonth getOptimiseBefore();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.OptimisationRange#getOptimiseBefore <em>Optimise Before</em>}' attribute.
@@ -106,7 +105,7 @@ public interface OptimisationRange extends EObject {
 	 * @see #getOptimiseBefore()
 	 * @generated
 	 */
-	void setOptimiseBefore(Date value);
+	void setOptimiseBefore(YearMonth value);
 
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.parameters.OptimisationRange#getOptimiseBefore <em>Optimise Before</em>}' attribute.
@@ -114,7 +113,7 @@ public interface OptimisationRange extends EObject {
 	 * <!-- end-user-doc -->
 	 * @see #isSetOptimiseBefore()
 	 * @see #getOptimiseBefore()
-	 * @see #setOptimiseBefore(Date)
+	 * @see #setOptimiseBefore(YearMonth)
 	 * @generated
 	 */
 	void unsetOptimiseBefore();
@@ -126,7 +125,7 @@ public interface OptimisationRange extends EObject {
 	 * @return whether the value of the '<em>Optimise Before</em>' attribute is set.
 	 * @see #unsetOptimiseBefore()
 	 * @see #getOptimiseBefore()
-	 * @see #setOptimiseBefore(Date)
+	 * @see #setOptimiseBefore(YearMonth)
 	 * @generated
 	 */
 	boolean isSetOptimiseBefore();

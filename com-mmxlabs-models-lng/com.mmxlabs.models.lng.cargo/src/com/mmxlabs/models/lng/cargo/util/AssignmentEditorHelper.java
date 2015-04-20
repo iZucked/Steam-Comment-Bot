@@ -5,19 +5,16 @@
 package com.mmxlabs.models.lng.cargo.util;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import javax.management.timer.Timer;
-
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.joda.time.DateTime;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
@@ -37,7 +34,7 @@ import com.mmxlabs.models.lng.types.util.SetUtils;
 /**
  */
 public class AssignmentEditorHelper {
-	public static Date getStartDate(final AssignableElement task) {
+	public static DateTime getStartDate(final AssignableElement task) {
 
 		if (task instanceof Cargo) {
 			final Cargo cargo = (Cargo) task;
@@ -48,7 +45,7 @@ public class AssignmentEditorHelper {
 			final Slot firstSlot = slots.get(0);
 			return firstSlot.getWindowStartWithSlotOrPortTime();
 		} else if (task instanceof VesselEvent) {
-			return ((VesselEvent) task).getStartBy();
+			return ((VesselEvent) task).getStartByAsDateTime();
 		} else if (task instanceof Slot) {
 			return ((Slot) task).getWindowStartWithSlotOrPortTime();
 		} else {
@@ -56,7 +53,7 @@ public class AssignmentEditorHelper {
 		}
 	}
 
-	public static Date getEndDate(final AssignableElement task) {
+	public static DateTime getEndDate(final AssignableElement task) {
 		if (task instanceof Cargo) {
 			final Cargo cargo = (Cargo) task;
 			final EList<Slot> slots = cargo.getSortedSlots();
@@ -66,7 +63,7 @@ public class AssignmentEditorHelper {
 			final Slot lastSlot = slots.get(slots.size() - 1);
 			return lastSlot.getWindowEndWithSlotOrPortTime();
 		} else if (task instanceof VesselEvent) {
-			return new Date(((VesselEvent) task).getStartBy().getTime() + Timer.ONE_DAY * ((VesselEvent) task).getDurationInDays());
+			return ((VesselEvent) task).getStartByAsDateTime().plusDays(((VesselEvent) task).getDurationInDays());
 		} else if (task instanceof Slot) {
 			return ((Slot) task).getWindowEndWithSlotOrPortTime();
 		} else {
@@ -207,34 +204,36 @@ public class AssignmentEditorHelper {
 
 	private static boolean isElementInVesselAvailability(final AssignableElement element, final VesselAvailability vesselAvailability) {
 
+		final DateTime vesselAvailabilityEndBy = vesselAvailability.getEndByAsDateTime();
+		final DateTime vesselAvailabilityStartAfter = vesselAvailability.getStartAfterAsDateTime();
 		if (element instanceof Cargo) {
 			final Cargo cargo = (Cargo) element;
 			final List<Slot> sortedSlots = cargo.getSortedSlots();
 			final Slot firstSlot = sortedSlots.get(0);
 			final Slot lastSlot = sortedSlots.get(sortedSlots.size() - 1);
 
-			if (vesselAvailability.getEndBy() != null) {
-				if (firstSlot.getWindowStartWithSlotOrPortTime().after(vesselAvailability.getEndBy())) {
+			if (vesselAvailabilityEndBy != null) {
+				if (firstSlot.getWindowStartWithSlotOrPortTime().isAfter(vesselAvailabilityEndBy)) {
 					return false;
 				}
 			}
 			if (vesselAvailability.getStartAfter() != null) {
-				if (lastSlot.getWindowEndWithSlotOrPortTime().before(vesselAvailability.getStartAfter())) {
+				if (lastSlot.getWindowEndWithSlotOrPortTime().isAfter(vesselAvailabilityStartAfter)) {
 					return false;
 				}
 			}
 		} else if (element instanceof VesselEvent) {
 			final VesselEvent event = (VesselEvent) element;
-			if (vesselAvailability.getEndBy() != null) {
-				if (event.getStartAfter().after(vesselAvailability.getEndBy())) {
+			if (vesselAvailabilityEndBy != null) {
+				final DateTime eventStartAfter = event.getStartAfterAsDateTime();
+				if (eventStartAfter.isAfter(vesselAvailabilityEndBy)) {
 					return false;
 				}
 			}
-			if (vesselAvailability.getStartAfter() != null) {
-				final Calendar cal = Calendar.getInstance();
-				cal.setTime(event.getStartBy());
-				cal.add(Calendar.DATE, event.getDurationInDays());
-				if (cal.getTime().before(vesselAvailability.getStartAfter())) {
+			if (vesselAvailabilityStartAfter != null) {
+				DateTime eventStartBy = event.getStartByAsDateTime();
+				eventStartBy = eventStartBy.plusDays(event.getDurationInDays());
+				if (eventStartBy.isBefore(vesselAvailabilityStartAfter)) {
 					return false;
 				}
 			}

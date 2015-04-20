@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.pricing.impl;
 import java.util.Collections;
-import java.util.Date;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
@@ -13,6 +11,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.joda.time.YearMonth;
 
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -169,7 +168,7 @@ public class DerivedIndexImpl<Value> extends IndexImpl<Value> implements Derived
 	 * @see com.mmxlabs.models.lng.pricing.impl.IndexImpl#getValueAfter(java.util.Date)
 	 */
 	@Override
-	public Value getValueForMonth(final Date date) {
+	public Value getValueForMonth(final YearMonth date) {
 		// THIS DOES NOT WORK - CLASSIFIER COMES THROUGH AS SERIALIZABLE
 		EClassifier classifier = eContainingFeature().getEGenericType().getETypeArguments().get(0).getERawType();
 		if (classifier instanceof EDataType) {
@@ -182,17 +181,17 @@ public class DerivedIndexImpl<Value> extends IndexImpl<Value> implements Derived
 	}
 
 	@Override
-	public EList<Date> getDates() {
-		return new BasicEList<Date>(Collections.singleton(new Date(0)));
+	public EList<YearMonth> getDates() {
+		return new BasicEList<YearMonth>(Collections.singleton(new YearMonth()));
 	}
 	
 	@Override
-	public Value getBackwardsValueForMonth(Date date) {
+	public Value getBackwardsValueForMonth(YearMonth date) {
 		return getValueForMonth(date);
 	}
 	
 	@Override
-	public Value getForwardValueForMonth(Date date) {
+	public Value getForwardValueForMonth(YearMonth date) {
 		return getValueForMonth(date);
 	}
 	

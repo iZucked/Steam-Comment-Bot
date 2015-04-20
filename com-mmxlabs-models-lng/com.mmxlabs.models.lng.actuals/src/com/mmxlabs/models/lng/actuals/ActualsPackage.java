@@ -9,7 +9,6 @@ package com.mmxlabs.models.lng.actuals;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
@@ -301,22 +300,22 @@ public interface ActualsPackage extends EPackage {
 	int SLOT_ACTUALS___GET_TIME_ZONE__EATTRIBUTE = TypesPackage.ITIMEZONE_PROVIDER___GET_TIME_ZONE__EATTRIBUTE;
 
 	/**
-	 * The operation id for the '<em>Get Local Start</em>' operation.
+	 * The operation id for the '<em>Get Operations Start As Date Time</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS___GET_LOCAL_START = TypesPackage.ITIMEZONE_PROVIDER_OPERATION_COUNT + 0;
+	int SLOT_ACTUALS___GET_OPERATIONS_START_AS_DATE_TIME = TypesPackage.ITIMEZONE_PROVIDER_OPERATION_COUNT + 0;
 
 	/**
-	 * The operation id for the '<em>Get Local End</em>' operation.
+	 * The operation id for the '<em>Get Operations End As Date Time</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS___GET_LOCAL_END = TypesPackage.ITIMEZONE_PROVIDER_OPERATION_COUNT + 1;
+	int SLOT_ACTUALS___GET_OPERATIONS_END_AS_DATE_TIME = TypesPackage.ITIMEZONE_PROVIDER_OPERATION_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Slot Actuals</em>' class.
@@ -699,22 +698,22 @@ public interface ActualsPackage extends EPackage {
 	int LOAD_ACTUALS___GET_TIME_ZONE__EATTRIBUTE = SLOT_ACTUALS___GET_TIME_ZONE__EATTRIBUTE;
 
 	/**
-	 * The operation id for the '<em>Get Local Start</em>' operation.
+	 * The operation id for the '<em>Get Operations Start As Date Time</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_ACTUALS___GET_LOCAL_START = SLOT_ACTUALS___GET_LOCAL_START;
+	int LOAD_ACTUALS___GET_OPERATIONS_START_AS_DATE_TIME = SLOT_ACTUALS___GET_OPERATIONS_START_AS_DATE_TIME;
 
 	/**
-	 * The operation id for the '<em>Get Local End</em>' operation.
+	 * The operation id for the '<em>Get Operations End As Date Time</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_ACTUALS___GET_LOCAL_END = SLOT_ACTUALS___GET_LOCAL_END;
+	int LOAD_ACTUALS___GET_OPERATIONS_END_AS_DATE_TIME = SLOT_ACTUALS___GET_OPERATIONS_END_AS_DATE_TIME;
 
 	/**
 	 * The number of operations of the '<em>Load Actuals</em>' class.
@@ -952,22 +951,22 @@ public interface ActualsPackage extends EPackage {
 	int DISCHARGE_ACTUALS___GET_TIME_ZONE__EATTRIBUTE = SLOT_ACTUALS___GET_TIME_ZONE__EATTRIBUTE;
 
 	/**
-	 * The operation id for the '<em>Get Local Start</em>' operation.
+	 * The operation id for the '<em>Get Operations Start As Date Time</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_ACTUALS___GET_LOCAL_START = SLOT_ACTUALS___GET_LOCAL_START;
+	int DISCHARGE_ACTUALS___GET_OPERATIONS_START_AS_DATE_TIME = SLOT_ACTUALS___GET_OPERATIONS_START_AS_DATE_TIME;
 
 	/**
-	 * The operation id for the '<em>Get Local End</em>' operation.
+	 * The operation id for the '<em>Get Operations End As Date Time</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_ACTUALS___GET_LOCAL_END = SLOT_ACTUALS___GET_LOCAL_END;
+	int DISCHARGE_ACTUALS___GET_OPERATIONS_END_AS_DATE_TIME = SLOT_ACTUALS___GET_OPERATIONS_END_AS_DATE_TIME;
 
 	/**
 	 * The number of operations of the '<em>Discharge Actuals</em>' class.
@@ -1035,13 +1034,13 @@ public interface ActualsPackage extends EPackage {
 	int RETURN_ACTUALS___GET_TIME_ZONE__EATTRIBUTE = TypesPackage.ITIMEZONE_PROVIDER___GET_TIME_ZONE__EATTRIBUTE;
 
 	/**
-	 * The operation id for the '<em>Get Local Start</em>' operation.
+	 * The operation id for the '<em>Get Operations Start As Date Time</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int RETURN_ACTUALS___GET_LOCAL_START = TypesPackage.ITIMEZONE_PROVIDER_OPERATION_COUNT + 0;
+	int RETURN_ACTUALS___GET_OPERATIONS_START_AS_DATE_TIME = TypesPackage.ITIMEZONE_PROVIDER_OPERATION_COUNT + 0;
 
 	/**
 	 * The number of operations of the '<em>Return Actuals</em>' class.
@@ -1061,17 +1060,6 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 */
 	int PENALTY_TYPE = 6;
-
-	/**
-	 * The meta object id for the '<em>Calendar</em>' data type.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see java.util.Calendar
-	 * @see com.mmxlabs.models.lng.actuals.impl.ActualsPackageImpl#getCalendar()
-	 * @generated
-	 */
-	int CALENDAR = 7;
-
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.actuals.ActualsModel <em>Model</em>}'.
@@ -1138,6 +1126,26 @@ public interface ActualsPackage extends EPackage {
 	EAttribute getSlotActuals_CapacityCharges();
 
 	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getOperationsStartAsDateTime() <em>Get Operations Start As Date Time</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Operations Start As Date Time</em>' operation.
+	 * @see com.mmxlabs.models.lng.actuals.SlotActuals#getOperationsStartAsDateTime()
+	 * @generated
+	 */
+	EOperation getSlotActuals__GetOperationsStartAsDateTime();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getOperationsEndAsDateTime() <em>Get Operations End As Date Time</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Operations End As Date Time</em>' operation.
+	 * @see com.mmxlabs.models.lng.actuals.SlotActuals#getOperationsEndAsDateTime()
+	 * @generated
+	 */
+	EOperation getSlotActuals__GetOperationsEndAsDateTime();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getBaseFuelConsumption <em>Base Fuel Consumption</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1202,26 +1210,6 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getSlotActuals_CrewBonus();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getLocalStart() <em>Get Local Start</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Local Start</em>' operation.
-	 * @see com.mmxlabs.models.lng.actuals.SlotActuals#getLocalStart()
-	 * @generated
-	 */
-	EOperation getSlotActuals__GetLocalStart();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getLocalEnd() <em>Get Local End</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Local End</em>' operation.
-	 * @see com.mmxlabs.models.lng.actuals.SlotActuals#getLocalEnd()
-	 * @generated
-	 */
-	EOperation getSlotActuals__GetLocalEnd();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getSlot <em>Slot</em>}'.
@@ -1616,14 +1604,14 @@ public interface ActualsPackage extends EPackage {
 	EAttribute getReturnActuals_EndHeelM3();
 
 	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.actuals.ReturnActuals#getLocalStart() <em>Get Local Start</em>}' operation.
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.actuals.ReturnActuals#getOperationsStartAsDateTime() <em>Get Operations Start As Date Time</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Local Start</em>' operation.
-	 * @see com.mmxlabs.models.lng.actuals.ReturnActuals#getLocalStart()
+	 * @return the meta object for the '<em>Get Operations Start As Date Time</em>' operation.
+	 * @see com.mmxlabs.models.lng.actuals.ReturnActuals#getOperationsStartAsDateTime()
 	 * @generated
 	 */
-	EOperation getReturnActuals__GetLocalStart();
+	EOperation getReturnActuals__GetOperationsStartAsDateTime();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.actuals.PenaltyType <em>Penalty Type</em>}'.
@@ -1634,17 +1622,6 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 */
 	EEnum getPenaltyType();
-
-	/**
-	 * Returns the meta object for data type '{@link java.util.Calendar <em>Calendar</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for data type '<em>Calendar</em>'.
-	 * @see java.util.Calendar
-	 * @model instanceClass="java.util.Calendar"
-	 * @generated
-	 */
-	EDataType getCalendar();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -1722,6 +1699,22 @@ public interface ActualsPackage extends EPackage {
 		EAttribute SLOT_ACTUALS__CAPACITY_CHARGES = eINSTANCE.getSlotActuals_CapacityCharges();
 
 		/**
+		 * The meta object literal for the '<em><b>Get Operations Start As Date Time</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT_ACTUALS___GET_OPERATIONS_START_AS_DATE_TIME = eINSTANCE.getSlotActuals__GetOperationsStartAsDateTime();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Operations End As Date Time</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT_ACTUALS___GET_OPERATIONS_END_AS_DATE_TIME = eINSTANCE.getSlotActuals__GetOperationsEndAsDateTime();
+
+		/**
 		 * The meta object literal for the '<em><b>Base Fuel Consumption</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1768,22 +1761,6 @@ public interface ActualsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SLOT_ACTUALS__CREW_BONUS = eINSTANCE.getSlotActuals_CrewBonus();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Local Start</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation SLOT_ACTUALS___GET_LOCAL_START = eINSTANCE.getSlotActuals__GetLocalStart();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Local End</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation SLOT_ACTUALS___GET_LOCAL_END = eINSTANCE.getSlotActuals__GetLocalEnd();
 
 		/**
 		 * The meta object literal for the '<em><b>Slot</b></em>' reference feature.
@@ -2082,12 +2059,12 @@ public interface ActualsPackage extends EPackage {
 		EAttribute RETURN_ACTUALS__END_HEEL_M3 = eINSTANCE.getReturnActuals_EndHeelM3();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Local Start</b></em>' operation.
+		 * The meta object literal for the '<em><b>Get Operations Start As Date Time</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation RETURN_ACTUALS___GET_LOCAL_START = eINSTANCE.getReturnActuals__GetLocalStart();
+		EOperation RETURN_ACTUALS___GET_OPERATIONS_START_AS_DATE_TIME = eINSTANCE.getReturnActuals__GetOperationsStartAsDateTime();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.actuals.PenaltyType <em>Penalty Type</em>}' enum.
@@ -2098,16 +2075,6 @@ public interface ActualsPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum PENALTY_TYPE = eINSTANCE.getPenaltyType();
-
-		/**
-		 * The meta object literal for the '<em>Calendar</em>' data type.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see java.util.Calendar
-		 * @see com.mmxlabs.models.lng.actuals.impl.ActualsPackageImpl#getCalendar()
-		 * @generated
-		 */
-		EDataType CALENDAR = eINSTANCE.getCalendar();
 
 	}
 

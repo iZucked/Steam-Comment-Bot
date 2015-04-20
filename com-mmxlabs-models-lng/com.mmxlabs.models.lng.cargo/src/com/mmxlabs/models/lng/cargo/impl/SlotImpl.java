@@ -5,12 +5,7 @@
 package com.mmxlabs.models.lng.cargo.impl;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
-import java.util.TimeZone;
-
-import javax.management.timer.Timer;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -21,6 +16,9 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDate;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -128,12 +126,13 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * The default value of the '{@link #getWindowStart() <em>Window Start</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getWindowStart()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final Date WINDOW_START_EDEFAULT = null;
+	protected static final LocalDate WINDOW_START_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getWindowStart() <em>Window Start</em>}' attribute.
@@ -142,7 +141,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @generated
 	 * @ordered
 	 */
-	protected Date windowStart = WINDOW_START_EDEFAULT;
+	protected LocalDate windowStart = WINDOW_START_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getWindowStartTime() <em>Window Start Time</em>}' attribute.
@@ -399,7 +398,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final Date PRICING_DATE_EDEFAULT = null;
+	protected static final LocalDate PRICING_DATE_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getPricingDate() <em>Pricing Date</em>}' attribute.
@@ -409,7 +408,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @generated
 	 * @ordered
 	 */
-	protected Date pricingDate = PRICING_DATE_EDEFAULT;
+	protected LocalDate pricingDate = PRICING_DATE_EDEFAULT;
 
 	/**
 	 * This is true if the Pricing Date attribute has been set.
@@ -690,16 +689,17 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Date getWindowStart() {
+	public LocalDate getWindowStart() {
 		return windowStart;
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setWindowStart(Date newWindowStart) {
-		Date oldWindowStart = windowStart;
+	public void setWindowStart(LocalDate newWindowStart) {
+		LocalDate oldWindowStart = windowStart;
 		windowStart = newWindowStart;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__WINDOW_START, oldWindowStart, windowStart));
@@ -1234,7 +1234,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Date getPricingDate() {
+	public LocalDate getPricingDate() {
 		return pricingDate;
 	}
 
@@ -1243,8 +1243,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setPricingDate(Date newPricingDate) {
-		Date oldPricingDate = pricingDate;
+	public void setPricingDate(LocalDate newPricingDate) {
+		LocalDate oldPricingDate = pricingDate;
 		pricingDate = newPricingDate;
 		boolean oldPricingDateESet = pricingDateESet;
 		pricingDateESet = true;
@@ -1258,7 +1258,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @generated
 	 */
 	public void unsetPricingDate() {
-		Date oldPricingDate = pricingDate;
+		LocalDate oldPricingDate = pricingDate;
 		boolean oldPricingDateESet = pricingDateESet;
 		pricingDate = PRICING_DATE_EDEFAULT;
 		pricingDateESet = false;
@@ -1647,31 +1647,29 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public Date getWindowEndWithSlotOrPortTime() {
-		final Date startTime = getWindowStartWithSlotOrPortTime();
+	public DateTime getWindowEndWithSlotOrPortTime() {
+		final DateTime startTime = getWindowStartWithSlotOrPortTime();
 		if (startTime == null) {
 			return null;
 		}
-		return new Date(startTime.getTime()
-				+ Timer.ONE_HOUR * getSlotOrPortWindowSize());
+		return startTime.plusHours( getSlotOrPortWindowSize());
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
 	 */
-	public Date getWindowStartWithSlotOrPortTime() {
-		Date wStart = getWindowStart();
+	public DateTime getWindowStartWithSlotOrPortTime() {
+		final LocalDate wStart = getWindowStart();
 		if (wStart == null) {
 			return null;
 		}
-		final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart())));
+		DateTime dateTime = wStart.toDateTimeAtStartOfDay(DateTimeZone.forID(getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart())));
 		final int startTime = (Integer) eGetWithDefault(CargoPackage.eINSTANCE.getSlot_WindowStartTime());
-		calendar.setTime(wStart);
-//		if (calendar.get(Calendar.HOUR_OF_DAY) != 0) System.err.println("This should never happen : " + calendar.get(Calendar.HOUR_OF_DAY));
-		calendar.set(Calendar.HOUR_OF_DAY, startTime);
-		return calendar.getTime();
+		dateTime = dateTime.withHourOfDay(startTime);
+		return dateTime;
 	}
 
 	/**
@@ -1740,14 +1738,28 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public DateTime getPricingDateAsDateTime() {
+		if (isSetPricingDate()) {
+			final LocalDate ld = getPricingDate();
+			return ld.toDateTimeAtStartOfDay(DateTimeZone.forID(getTimeZone(CargoPackage.Literals.SLOT__PRICING_DATE)));
+		}
+		return null;
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
 	 */
 	public String getTimeZone(EAttribute attribute) {
 		final Port p = getPort();
-		if (p == null || p.getTimeZone() == null)
+		if (p == null || p.getTimeZone() == null || p.getTimeZone().isEmpty()) {
 			return "UTC";
+		}
 		return p.getTimeZone();
 	}
 
@@ -1871,7 +1883,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				setPort((Port)newValue);
 				return;
 			case CargoPackage.SLOT__WINDOW_START:
-				setWindowStart((Date)newValue);
+				setWindowStart((LocalDate)newValue);
 				return;
 			case CargoPackage.SLOT__WINDOW_START_TIME:
 				setWindowStartTime((Integer)newValue);
@@ -1904,7 +1916,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				setPricingEvent((PricingEvent)newValue);
 				return;
 			case CargoPackage.SLOT__PRICING_DATE:
-				setPricingDate((Date)newValue);
+				setPricingDate((LocalDate)newValue);
 				return;
 			case CargoPackage.SLOT__NOTES:
 				setNotes((String)newValue);
@@ -2211,6 +2223,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getSlotOrContractCancellationFee();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT:
 				return getSlotOrDelegatedPricingEvent();
+			case CargoPackage.SLOT___GET_PRICING_DATE_AS_DATE_TIME:
+				return getPricingDateAsDateTime();
 			case CargoPackage.SLOT___GET_TIME_ZONE__EATTRIBUTE:
 				return getTimeZone((EAttribute)arguments.get(0));
 		}

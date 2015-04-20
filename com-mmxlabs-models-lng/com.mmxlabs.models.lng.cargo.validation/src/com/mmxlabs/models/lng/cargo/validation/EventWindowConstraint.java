@@ -9,6 +9,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.joda.time.Days;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
@@ -23,23 +24,24 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
  */
 public class EventWindowConstraint extends AbstractModelConstraint {
 	private int maxWindowSizeInDays = 6 * 30;
-	
+
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject target = ctx.getTarget();
 
 		if (target instanceof VesselEvent) {
 			final VesselEvent event = (VesselEvent) target;
-			
-			final long windowSizeInMs = event.getStartBy().getTime() - event.getStartAfter().getTime();
-			final long windowSizeInDays = windowSizeInMs / (1000 * 24 * 3600);
-					
-			if (windowSizeInDays > maxWindowSizeInDays) {
-				String message = String.format("Event duration %d days (> %d days maximum)", windowSizeInDays, maxWindowSizeInDays);
-				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-				dcsd.addEObjectAndFeature(event, CargoPackage.eINSTANCE.getVesselEvent_StartAfter());
-				dcsd.addEObjectAndFeature(event, CargoPackage.eINSTANCE.getVesselEvent_StartBy());
-				return dcsd;
+
+			if (event.getStartAfter() != null && event.getStartBy() != null) {
+				final int windowSizeInDays = Days.daysBetween(event.getStartAfter(), event.getStartBy()).getDays();
+
+				if (windowSizeInDays > maxWindowSizeInDays) {
+					String message = String.format("Event duration %d days (> %d days maximum)", windowSizeInDays, maxWindowSizeInDays);
+					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+					dcsd.addEObjectAndFeature(event, CargoPackage.eINSTANCE.getVesselEvent_StartAfter());
+					dcsd.addEObjectAndFeature(event, CargoPackage.eINSTANCE.getVesselEvent_StartBy());
+					return dcsd;
+				}
 			}
 
 		}

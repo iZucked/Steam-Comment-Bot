@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 
+import com.mmxlabs.models.datetime.DateTimePackage;
 import java.util.Calendar;
 import java.util.Map;
 
@@ -58,6 +59,7 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+
 import java.lang.Iterable;
 
 /**
@@ -699,7 +701,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EOperation getEvent__GetLocalStart() {
+	public EOperation getEvent__Type() {
 		return eventEClass.getEOperations().get(1);
 	}
 
@@ -708,26 +710,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EOperation getEvent__GetLocalEnd() {
-		return eventEClass.getEOperations().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EOperation getEvent__Type() {
-		return eventEClass.getEOperations().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EOperation getEvent__Name() {
-		return eventEClass.getEOperations().get(4);
+		return eventEClass.getEOperations().get(2);
 	}
 
 	/**
@@ -1185,7 +1169,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EOperation getSlotAllocation__GetLocalStart() {
+	public EOperation getSlotAllocation__GetContract() {
 		return slotAllocationEClass.getEOperations().get(1);
 	}
 
@@ -1194,26 +1178,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EOperation getSlotAllocation__GetLocalEnd() {
-		return slotAllocationEClass.getEOperations().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EOperation getSlotAllocation__GetContract() {
-		return slotAllocationEClass.getEOperations().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EOperation getSlotAllocation__GetName() {
-		return slotAllocationEClass.getEOperations().get(4);
+		return slotAllocationEClass.getEOperations().get(2);
 	}
 
 	/**
@@ -1730,8 +1696,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(slotAllocationEClass, SLOT_ALLOCATION__CV);
 		createEAttribute(slotAllocationEClass, SLOT_ALLOCATION__VOLUME_VALUE);
 		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_PORT);
-		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_LOCAL_START);
-		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_LOCAL_END);
 		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_CONTRACT);
 		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_NAME);
 
@@ -1758,8 +1722,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(eventEClass, EVENT__HEEL_AT_START);
 		createEAttribute(eventEClass, EVENT__HEEL_AT_END);
 		createEOperation(eventEClass, EVENT___GET_DURATION);
-		createEOperation(eventEClass, EVENT___GET_LOCAL_START);
-		createEOperation(eventEClass, EVENT___GET_LOCAL_END);
 		createEOperation(eventEClass, EVENT___TYPE);
 		createEOperation(eventEClass, EVENT___NAME);
 
@@ -1892,6 +1854,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		PortPackage thePortPackage = (PortPackage)EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI);
 		CommercialPackage theCommercialPackage = (CommercialPackage)EPackage.Registry.INSTANCE.getEPackage(CommercialPackage.eNS_URI);
 		TypesPackage theTypesPackage = (TypesPackage)EPackage.Registry.INSTANCE.getEPackage(TypesPackage.eNS_URI);
+		DateTimePackage theDateTimePackage = (DateTimePackage)EPackage.Registry.INSTANCE.getEPackage(DateTimePackage.eNS_URI);
 
 		// Create type parameters
 		addETypeParameter(iterableEDataType, "T");
@@ -1992,10 +1955,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		initEOperation(getSlotAllocation__GetPort(), thePortPackage.getPort(), "getPort", 1, 1, IS_UNIQUE, IS_ORDERED);
 
-		initEOperation(getSlotAllocation__GetLocalStart(), this.getCalendar(), "getLocalStart", 1, 1, IS_UNIQUE, IS_ORDERED);
-
-		initEOperation(getSlotAllocation__GetLocalEnd(), this.getCalendar(), "getLocalEnd", 1, 1, IS_UNIQUE, IS_ORDERED);
-
 		initEOperation(getSlotAllocation__GetContract(), theCommercialPackage.getContract(), "getContract", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEOperation(getSlotAllocation__GetName(), ecorePackage.getEString(), "getName", 1, 1, IS_UNIQUE, IS_ORDERED);
@@ -2017,8 +1976,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEOperation(getSequence__IsTimeCharterVessel(), ecorePackage.getEBoolean(), "isTimeCharterVessel", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(eventEClass, Event.class, "Event", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getEvent_Start(), ecorePackage.getEDate(), "start", null, 1, 1, Event.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getEvent_End(), ecorePackage.getEDate(), "end", null, 1, 1, Event.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getEvent_Start(), theDateTimePackage.getDateTime(), "start", null, 1, 1, Event.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getEvent_End(), theDateTimePackage.getDateTime(), "end", null, 1, 1, Event.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getEvent_Port(), thePortPackage.getPort(), null, "port", null, 1, 1, Event.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getEvent_PreviousEvent(), this.getEvent(), this.getEvent_NextEvent(), "previousEvent", null, 0, 1, Event.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getEvent_NextEvent(), this.getEvent(), this.getEvent_PreviousEvent(), "nextEvent", null, 0, 1, Event.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2028,10 +1987,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEAttribute(getEvent_HeelAtEnd(), ecorePackage.getEInt(), "heelAtEnd", null, 0, 1, Event.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getEvent__GetDuration(), ecorePackage.getEInt(), "getDuration", 1, 1, IS_UNIQUE, IS_ORDERED);
-
-		initEOperation(getEvent__GetLocalStart(), this.getCalendar(), "getLocalStart", 1, 1, IS_UNIQUE, IS_ORDERED);
-
-		initEOperation(getEvent__GetLocalEnd(), this.getCalendar(), "getLocalEnd", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEOperation(getEvent__Type(), ecorePackage.getEString(), "type", 1, 1, IS_UNIQUE, IS_ORDERED);
 

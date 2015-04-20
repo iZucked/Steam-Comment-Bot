@@ -3,11 +3,10 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing;
-import java.util.Date;
-
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
+import org.joda.time.YearMonth;
 
 /**
  * <!-- begin-user-doc -->
@@ -23,38 +22,35 @@ public interface Index<Value> extends EObject {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * Returns the value of the curve for this month, or null if there is no explicit value.
 	 * <!-- end-user-doc -->
-	 * @model required="true" dateRequired="true"
+	 * @model required="true" dateDataType="com.mmxlabs.models.datetime.YearMonth" dateRequired="true"
 	 * @generated
 	 */
-	Value getValueForMonth(Date date);
+	Value getValueForMonth(YearMonth date);
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model kind="operation"
+	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.YearMonth"
 	 * @generated
 	 */
-	EList<Date> getDates();
+	EList<YearMonth> getDates();
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * Returns the value of the curve for this month, or look forward in the curve to find a value (or null if there is no more data)
 	 * <!-- end-user-doc -->
-	 * @model required="true" dateRequired="true"
+	 * @model required="true" dateDataType="com.mmxlabs.models.datetime.YearMonth" dateRequired="true"
 	 * @generated
 	 */
-	Value getForwardValueForMonth(Date date);
+	Value getForwardValueForMonth(YearMonth date);
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * Returns the value of the curve for this month, or look backward in the curve to find a value (or null if there is no more data)
 	 * <!-- end-user-doc -->
-	 * @model required="true" dateRequired="true"
+	 * @model required="true" dateDataType="com.mmxlabs.models.datetime.YearMonth" dateRequired="true"
 	 * @generated
 	 */
-	Value getBackwardsValueForMonth(Date date);
+	Value getBackwardsValueForMonth(YearMonth date);
 } // end of  Index
 
 // finish type fixing

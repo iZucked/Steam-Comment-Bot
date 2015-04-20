@@ -4,7 +4,9 @@
  */
 package com.mmxlabs.models.lng.cargo.impl;
 
+import com.mmxlabs.models.datetime.DateTimePackage;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
@@ -673,6 +675,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getSlot__GetPricingDateAsDateTime() {
+		return slotEClass.getEOperations().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getLoadSlot() {
 		return loadSlotEClass;
 	}
@@ -1051,6 +1062,42 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getVesselAvailability__GetStartByAsDateTime() {
+		return vesselAvailabilityEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getVesselAvailability__GetStartAfterAsDateTime() {
+		return vesselAvailabilityEClass.getEOperations().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getVesselAvailability__GetEndByAsDateTime() {
+		return vesselAvailabilityEClass.getEOperations().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getVesselAvailability__GetEndAfterAsDateTime() {
+		return vesselAvailabilityEClass.getEOperations().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EReference getVesselAvailability_Entity() {
 		return (EReference)vesselAvailabilityEClass.getEStructuralFeatures().get(1);
 	}
@@ -1107,6 +1154,24 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	public EAttribute getVesselEvent_StartBy() {
 		return (EAttribute)vesselEventEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getVesselEvent__GetStartByAsDateTime() {
+		return vesselEventEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getVesselEvent__GetStartAfterAsDateTime() {
+		return vesselEventEClass.getEOperations().get(1);
 	}
 
 	/**
@@ -1365,6 +1430,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT);
+		createEOperation(slotEClass, SLOT___GET_PRICING_DATE_AS_DATE_TIME);
 
 		loadSlotEClass = createEClass(LOAD_SLOT);
 		createEAttribute(loadSlotEClass, LOAD_SLOT__CARGO_CV);
@@ -1407,6 +1473,10 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(vesselAvailabilityEClass, VESSEL_AVAILABILITY__END_BY);
 		createEReference(vesselAvailabilityEClass, VESSEL_AVAILABILITY__START_HEEL);
 		createEReference(vesselAvailabilityEClass, VESSEL_AVAILABILITY__END_HEEL);
+		createEOperation(vesselAvailabilityEClass, VESSEL_AVAILABILITY___GET_START_BY_AS_DATE_TIME);
+		createEOperation(vesselAvailabilityEClass, VESSEL_AVAILABILITY___GET_START_AFTER_AS_DATE_TIME);
+		createEOperation(vesselAvailabilityEClass, VESSEL_AVAILABILITY___GET_END_BY_AS_DATE_TIME);
+		createEOperation(vesselAvailabilityEClass, VESSEL_AVAILABILITY___GET_END_AFTER_AS_DATE_TIME);
 
 		vesselEventEClass = createEClass(VESSEL_EVENT);
 		createEAttribute(vesselEventEClass, VESSEL_EVENT__DURATION_IN_DAYS);
@@ -1414,6 +1484,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(vesselEventEClass, VESSEL_EVENT__PORT);
 		createEAttribute(vesselEventEClass, VESSEL_EVENT__START_AFTER);
 		createEAttribute(vesselEventEClass, VESSEL_EVENT__START_BY);
+		createEOperation(vesselEventEClass, VESSEL_EVENT___GET_START_BY_AS_DATE_TIME);
+		createEOperation(vesselEventEClass, VESSEL_EVENT___GET_START_AFTER_AS_DATE_TIME);
 
 		maintenanceEventEClass = createEClass(MAINTENANCE_EVENT);
 
@@ -1471,6 +1543,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		TypesPackage theTypesPackage = (TypesPackage)EPackage.Registry.INSTANCE.getEPackage(TypesPackage.eNS_URI);
 		CommercialPackage theCommercialPackage = (CommercialPackage)EPackage.Registry.INSTANCE.getEPackage(CommercialPackage.eNS_URI);
 		PortPackage thePortPackage = (PortPackage)EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI);
+		DateTimePackage theDateTimePackage = (DateTimePackage)EPackage.Registry.INSTANCE.getEPackage(DateTimePackage.eNS_URI);
 		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
 		SpotMarketsPackage theSpotMarketsPackage = (SpotMarketsPackage)EPackage.Registry.INSTANCE.getEPackage(SpotMarketsPackage.eNS_URI);
 
@@ -1530,7 +1603,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEClass(slotEClass, Slot.class, "Slot", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSlot_Contract(), theCommercialPackage.getContract(), null, "contract", null, 1, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSlot_Port(), thePortPackage.getPort(), null, "port", null, 1, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSlot_WindowStart(), ecorePackage.getEDate(), "windowStart", null, 1, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_WindowStart(), theDateTimePackage.getLocalDate(), "windowStart", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_WindowStartTime(), ecorePackage.getEInt(), "windowStartTime", null, 1, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_WindowSize(), ecorePackage.getEInt(), "windowSize", null, 1, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_Duration(), ecorePackage.getEInt(), "duration", null, 1, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1541,7 +1614,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getSlot_PriceExpression(), ecorePackage.getEString(), "priceExpression", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSlot_Cargo(), this.getCargo(), this.getCargo_Slots(), "cargo", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_PricingEvent(), theCommercialPackage.getPricingEvent(), "pricingEvent", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSlot_PricingDate(), ecorePackage.getEDate(), "pricingDate", null, 1, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_PricingDate(), theDateTimePackage.getLocalDate(), "pricingDate", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_Notes(), ecorePackage.getEString(), "notes", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_Divertible(), ecorePackage.getEBoolean(), "divertible", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_ShippingDaysRestriction(), ecorePackage.getEInt(), "shippingDaysRestriction", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1567,9 +1640,9 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		initEOperation(getSlot__GetSlotOrContractVolumeLimitsUnit(), theTypesPackage.getVolumeUnits(), "getSlotOrContractVolumeLimitsUnit", 0, 1, IS_UNIQUE, IS_ORDERED);
 
-		initEOperation(getSlot__GetWindowEndWithSlotOrPortTime(), ecorePackage.getEDate(), "getWindowEndWithSlotOrPortTime", 0, 1, IS_UNIQUE, IS_ORDERED);
+		initEOperation(getSlot__GetWindowEndWithSlotOrPortTime(), theDateTimePackage.getDateTime(), "getWindowEndWithSlotOrPortTime", 0, 1, IS_UNIQUE, IS_ORDERED);
 
-		initEOperation(getSlot__GetWindowStartWithSlotOrPortTime(), ecorePackage.getEDate(), "getWindowStartWithSlotOrPortTime", 0, 1, IS_UNIQUE, IS_ORDERED);
+		initEOperation(getSlot__GetWindowStartWithSlotOrPortTime(), theDateTimePackage.getDateTime(), "getWindowStartWithSlotOrPortTime", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEOperation(getSlot__GetSlotOrPortWindowSize(), ecorePackage.getEInt(), "getSlotOrPortWindowSize", 1, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -1584,6 +1657,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEOperation(getSlot__GetSlotOrContractCancellationFee(), ecorePackage.getEInt(), "getSlotOrContractCancellationFee", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEOperation(getSlot__GetSlotOrDelegatedPricingEvent(), theCommercialPackage.getPricingEvent(), "getSlotOrDelegatedPricingEvent", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getSlot__GetPricingDateAsDateTime(), theDateTimePackage.getDateTime(), "getPricingDateAsDateTime", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(loadSlotEClass, LoadSlot.class, "LoadSlot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getLoadSlot_CargoCV(), ecorePackage.getEDouble(), "cargoCV", null, 1, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1627,16 +1702,24 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		g2 = createEGenericType(thePortPackage.getPort());
 		g1.getETypeArguments().add(g2);
 		initEReference(getVesselAvailability_StartAt(), g1, null, "startAt", null, 0, -1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVesselAvailability_StartAfter(), ecorePackage.getEDate(), "startAfter", null, 1, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVesselAvailability_StartBy(), ecorePackage.getEDate(), "startBy", null, 1, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselAvailability_StartAfter(), theDateTimePackage.getLocalDateTime(), "startAfter", null, 0, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselAvailability_StartBy(), theDateTimePackage.getLocalDateTime(), "startBy", null, 0, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		g1 = createEGenericType(theTypesPackage.getAPortSet());
 		g2 = createEGenericType(thePortPackage.getPort());
 		g1.getETypeArguments().add(g2);
 		initEReference(getVesselAvailability_EndAt(), g1, null, "endAt", null, 0, -1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVesselAvailability_EndAfter(), ecorePackage.getEDate(), "endAfter", null, 1, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVesselAvailability_EndBy(), ecorePackage.getEDate(), "endBy", null, 1, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselAvailability_EndAfter(), theDateTimePackage.getLocalDateTime(), "endAfter", null, 0, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselAvailability_EndBy(), theDateTimePackage.getLocalDateTime(), "endBy", null, 0, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVesselAvailability_StartHeel(), theFleetPackage.getHeelOptions(), null, "startHeel", null, 1, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVesselAvailability_EndHeel(), this.getEndHeelOptions(), null, "endHeel", null, 0, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEOperation(getVesselAvailability__GetStartByAsDateTime(), theDateTimePackage.getDateTime(), "getStartByAsDateTime", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getVesselAvailability__GetStartAfterAsDateTime(), theDateTimePackage.getDateTime(), "getStartAfterAsDateTime", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getVesselAvailability__GetEndByAsDateTime(), theDateTimePackage.getDateTime(), "getEndByAsDateTime", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getVesselAvailability__GetEndAfterAsDateTime(), theDateTimePackage.getDateTime(), "getEndAfterAsDateTime", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(vesselEventEClass, VesselEvent.class, "VesselEvent", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getVesselEvent_DurationInDays(), ecorePackage.getEInt(), "durationInDays", null, 1, 1, VesselEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1645,8 +1728,12 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		g1.getETypeArguments().add(g2);
 		initEReference(getVesselEvent_AllowedVessels(), g1, null, "allowedVessels", null, 0, -1, VesselEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVesselEvent_Port(), thePortPackage.getPort(), null, "port", null, 1, 1, VesselEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVesselEvent_StartAfter(), ecorePackage.getEDate(), "startAfter", null, 1, 1, VesselEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVesselEvent_StartBy(), ecorePackage.getEDate(), "startBy", null, 1, 1, VesselEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselEvent_StartAfter(), theDateTimePackage.getLocalDateTime(), "startAfter", null, 0, 1, VesselEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselEvent_StartBy(), theDateTimePackage.getLocalDateTime(), "startBy", null, 0, 1, VesselEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEOperation(getVesselEvent__GetStartByAsDateTime(), theDateTimePackage.getDateTime(), "getStartByAsDateTime", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getVesselEvent__GetStartAfterAsDateTime(), theDateTimePackage.getDateTime(), "getStartAfterAsDateTime", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(maintenanceEventEClass, MaintenanceEvent.class, "MaintenanceEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -1686,26 +1773,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createResource(eNS_URI);
 
 		// Create annotations
-		// http://www.mmxlabs.com/models/lng/ui/datetime
-		createDatetimeAnnotations();
 		// http://www.mmxlabs.com/models/ui/numberFormat
 		createNumberFormatAnnotations();
-	}
-
-	/**
-	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/lng/ui/datetime</b>.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void createDatetimeAnnotations() {
-		String source = "http://www.mmxlabs.com/models/lng/ui/datetime";		
-		addAnnotation
-		  (getSlot_WindowStart(), 
-		   source, 
-		   new String[] {
-			 "showTime", "false"
-		   });														
 	}
 
 	/**
@@ -1715,7 +1784,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	protected void createNumberFormatAnnotations() {
-		String source = "http://www.mmxlabs.com/models/ui/numberFormat";			
+		String source = "http://www.mmxlabs.com/models/ui/numberFormat";		
 		addAnnotation
 		  (getSlot_WindowSize(), 
 		   source, 

@@ -9,7 +9,6 @@ package com.mmxlabs.models.lng.pricing.impl;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
-import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 
 /**
@@ -39,16 +38,6 @@ public class BaseFuelIndexImpl extends NamedIndexContainerImpl<Double> implement
 	@Override
 	protected EClass eStaticClass() {
 		return PricingPackage.Literals.BASE_FUEL_INDEX;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public double getPrice() {
-		final Index<Double> data = getData();
-		return data.getValueForMonth(data.getDates().get(0));
 	}
 
 } //BaseFuelIndexImpl

@@ -5,15 +5,12 @@
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import org.eclipse.core.databinding.ObservablesManager;
 import org.eclipse.core.runtime.IStatus;
@@ -64,6 +61,9 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.joda.time.Days;
+import org.joda.time.DurationFieldType;
+import org.joda.time.LocalDate;
 
 import com.mmxlabs.common.PairKeyedMap;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -222,13 +222,8 @@ public class CreateStripDialog extends FormDialog {
 			break;
 		}
 
-		// Set a default window start
-		final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-		cal.set(Calendar.MILLISECOND, 0);
-		cal.set(Calendar.SECOND, 0);
-		cal.set(Calendar.MINUTE, 0);
-		cal.set(Calendar.HOUR_OF_DAY, 0);
-		sample.eSet(CargoPackage.eINSTANCE.getSlot_WindowStart(), cal.getTime());
+		// // Set a default window start
+		sample.eSet(CargoPackage.eINSTANCE.getSlot_WindowStart(), new LocalDate());
 
 		// Copy valid features across
 		if (selectedObject != null) {
@@ -463,9 +458,9 @@ public class CreateStripDialog extends FormDialog {
 					@Override
 					public void widgetSelected(final SelectionEvent e) {
 
-						final Calendar cal = getCalendarFromDateTime(pattern_periodStart);
+						final LocalDate date = getLocalDateFromDateTimeWidget(pattern_periodStart);
 
-						sample.eSet(CargoPackage.Literals.SLOT__WINDOW_START, cal.getTime());
+						sample.eSet(CargoPackage.Literals.SLOT__WINDOW_START, date);
 
 						refreshPreview();
 					}
@@ -558,18 +553,15 @@ public class CreateStripDialog extends FormDialog {
 		repeatType.setSelection(new StructuredSelection(RepeatType.Periodic));
 		intervalType.setSelection(new StructuredSelection(IntervalType.days));
 
-		final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+		LocalDate localDate = new LocalDate();
 		// Only valid for slots
 		if (sample.eIsSet(CargoPackage.eINSTANCE.getSlot_WindowStart())) {
-			cal.setTime((Date) sample.eGet(CargoPackage.eINSTANCE.getSlot_WindowStart()));
+			localDate = (LocalDate) sample.eGet(CargoPackage.eINSTANCE.getSlot_WindowStart());
 		} else {
-			cal.set(Calendar.MILLISECOND, 0);
-			cal.set(Calendar.SECOND, 0);
-			cal.set(Calendar.MINUTE, 0);
-			cal.set(Calendar.HOUR_OF_DAY, 0);
+			localDate = new LocalDate();
 		}
-		pattern_periodStart.setDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
-		pattern_periodEnd.setDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+		pattern_periodStart.setDate(localDate.getYear(), 1 + localDate.getMonthOfYear(), localDate.getDayOfMonth());
+		pattern_periodEnd.setDate(localDate.getYear(), 1 + localDate.getMonthOfYear(), localDate.getDayOfMonth());
 
 		// Hook up refresh handlers
 		final EContentAdapter changedAdapter = new EContentAdapter() {
@@ -604,17 +596,16 @@ public class CreateStripDialog extends FormDialog {
 	private List<EObject> updateGeneratedObjects() {
 		// Sync dates
 		{
-			final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 			// Only valid for slots
 			if (sample.eIsSet(CargoPackage.eINSTANCE.getSlot_WindowStart())) {
-				cal.setTime((Date) sample.eGet(CargoPackage.eINSTANCE.getSlot_WindowStart()));
-				pattern_periodStart.setDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+				final LocalDate date = (LocalDate) sample.eGet(CargoPackage.eINSTANCE.getSlot_WindowStart());
+				pattern_periodStart.setDate(date.getYear(), date.getMonthOfYear() - 1, date.getDayOfMonth());
 			}
 		}
-		final List<Date> dates = new LinkedList<Date>();
 		// Generate the dates
+		final List<LocalDate> dates = new LinkedList<>();
 
-		int calUnit = Calendar.MONTH;
+		DurationFieldType calUnit = DurationFieldType.months();
 		int calSpacing = 1;
 		try {
 			calSpacing = Integer.parseInt(pattern_n.getText());
@@ -624,12 +615,11 @@ public class CreateStripDialog extends FormDialog {
 		// Min of 1 element
 		calSpacing = Math.max(1, calSpacing);
 
-		final Calendar toDate = getCalendarFromDateTime(pattern_periodEnd);
-		final Calendar fromDate = getCalendarFromDateTime(pattern_periodStart);
+		final LocalDate toDate = getLocalDateFromDateTimeWidget(pattern_periodEnd);
+		final LocalDate fromDate = getLocalDateFromDateTimeWidget(pattern_periodStart);
 
 		// ABS as sanity check...
-		final long diffInMilliseconds = Math.abs(toDate.getTimeInMillis() - fromDate.getTimeInMillis());
-		final int diffInDays = (int) (diffInMilliseconds / 1000l / 60l / 60l / 24l);
+		final int diffInDays = Days.daysBetween(fromDate, toDate).getDays();
 
 		{
 
@@ -640,13 +630,13 @@ public class CreateStripDialog extends FormDialog {
 			final RepeatType rt = RepeatType.values()[rtIdx];
 			switch (rt) {
 			case Distributed: {
-				calUnit = Calendar.DAY_OF_YEAR;
+				calUnit = DurationFieldType.days();
 				calSpacing = diffInDays / calSpacing;
 				calSpacing = Math.max(1, calSpacing);
 			}
 				break;
 			case Periodic: {
-				calUnit = Calendar.DAY_OF_YEAR;
+				calUnit = DurationFieldType.days();
 				final int itIdx = intervalType.getCombo().getSelectionIndex();
 				if (itIdx < 0) {
 					return Collections.emptyList();
@@ -654,13 +644,13 @@ public class CreateStripDialog extends FormDialog {
 				final IntervalType it = IntervalType.values()[itIdx];
 				switch (it) {
 				case days:
-					calUnit = Calendar.DAY_OF_YEAR;
+					calUnit = DurationFieldType.days();
 					break;
 				case months:
-					calUnit = Calendar.MONTH;
+					calUnit = DurationFieldType.months();
 					break;
 				case weeks:
-					calUnit = Calendar.WEEK_OF_YEAR;
+					calUnit = DurationFieldType.weeks();
 					break;
 				default:
 					break;
@@ -673,28 +663,24 @@ public class CreateStripDialog extends FormDialog {
 			}
 		}
 
-		final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+		LocalDate sampleDate;
 		// Only valid for slots
 		if (sample.eIsSet(CargoPackage.eINSTANCE.getSlot_WindowStart())) {
-			cal.setTime((Date) sample.eGet(CargoPackage.eINSTANCE.getSlot_WindowStart()));
+			sampleDate = (LocalDate) sample.eGet(CargoPackage.eINSTANCE.getSlot_WindowStart());
 		} else {
-			cal.set(Calendar.MILLISECOND, 0);
-			cal.set(Calendar.SECOND, 0);
-			cal.set(Calendar.MINUTE, 0);
-			cal.set(Calendar.HOUR_OF_DAY, 0);
+			sampleDate = new LocalDate();
 		}
-		final Date sampleDate = cal.getTime();
-		while (toDate.getTime().after(cal.getTime())) {
-			dates.add(cal.getTime());
-			cal.add(calUnit, calSpacing);
+		while (toDate.isAfter(sampleDate)) {
+			dates.add(new LocalDate(sampleDate));
+			sampleDate = sampleDate.withFieldAdded(calUnit, calSpacing);
 		}
 
 		// Pricing date special case - keep the difference in months constant
 		int pricingMonthDiff = 0;
-		final Date pricingDate = (Date) sample.eGet(CargoPackage.eINSTANCE.getSlot_PricingDate());
+		final LocalDate pricingDate = (LocalDate) sample.eGet(CargoPackage.eINSTANCE.getSlot_PricingDate());
 		if (sample.eIsSet(CargoPackage.eINSTANCE.getSlot_PricingDate())) {
-			final int sampleKey = sampleDate.getYear() * 100 + sampleDate.getMonth();
-			final int pricingKey = pricingDate.getYear() * 100 + pricingDate.getMonth();
+			final int sampleKey = sampleDate.getYear() * 100 + sampleDate.getMonthOfYear();
+			final int pricingKey = pricingDate.getYear() * 100 + pricingDate.getMonthOfYear();
 			pricingMonthDiff = pricingKey - sampleKey;
 		}
 
@@ -702,7 +688,7 @@ public class CreateStripDialog extends FormDialog {
 		final List<EObject> objects = new ArrayList<EObject>(dates.size());
 		final CargoFactory factory = CargoFactory.eINSTANCE;
 		int counter = 1;
-		for (final Date date : dates) {
+		for (final LocalDate date : dates) {
 			final EObject eObj = factory.create(referenceClass);
 			objects.add(eObj);
 
@@ -723,17 +709,9 @@ public class CreateStripDialog extends FormDialog {
 					eObj.eSet(feature, date);
 				} else if (feature == CargoPackage.eINSTANCE.getSlot_PricingDate()) {
 					if (sample.eIsSet(feature)) {
-						final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-						c.setTime(date);
-						// Reset to start of month
-						c.set(Calendar.DAY_OF_MONTH, 1);
-						c.set(Calendar.HOUR_OF_DAY, 0);
-						c.set(Calendar.MINUTE, 0);
-						c.set(Calendar.SECOND, 0);
-						c.set(Calendar.MILLISECOND, 0);
 						// Shift by predetermined month difference
-						c.add(Calendar.MONTH, pricingMonthDiff);
-						eObj.eSet(feature, c.getTime());
+						final LocalDate d2 = date.plusMonths(pricingMonthDiff);
+						eObj.eSet(feature, d2);
 					}
 				} else {
 					// Copy from template
@@ -973,12 +951,7 @@ public class CreateStripDialog extends FormDialog {
 		}
 	}
 
-	private Calendar getCalendarFromDateTime(final DateTime dateTime) {
-		final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-		cal.clear();
-		cal.set(Calendar.YEAR, dateTime.getYear());
-		cal.set(Calendar.MONTH, dateTime.getMonth());
-		cal.set(Calendar.DAY_OF_MONTH, dateTime.getDay());
-		return cal;
+	private LocalDate getLocalDateFromDateTimeWidget(final DateTime dateTime) {
+		return new LocalDate(dateTime.getYear(), 1 + dateTime.getMonth(), dateTime.getDay());
 	}
 }

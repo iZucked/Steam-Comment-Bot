@@ -300,6 +300,11 @@ public class ProvisionalCargoItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
+				 CommercialFactory.eINSTANCE.createSimpleEntityBook()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
 				 FleetFactory.eINSTANCE.createFleetModel()));
 
 		newChildDescriptors.add

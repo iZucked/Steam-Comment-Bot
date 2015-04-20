@@ -12,6 +12,7 @@ import java.util.TimeZone;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
+import org.joda.time.DateTime;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -40,8 +41,8 @@ public class CargoSlotSorter {
 				return c;
 			}
 
-			final Date d1 = o1.getWindowStartWithSlotOrPortTime();
-			final Date d2 = o2.getWindowStartWithSlotOrPortTime();
+			final DateTime d1 = o1.getWindowStartWithSlotOrPortTime();
+			final DateTime d2 = o2.getWindowStartWithSlotOrPortTime();
 			if (d1 == null) {
 				return -1;
 			} else if (d2 == null) {

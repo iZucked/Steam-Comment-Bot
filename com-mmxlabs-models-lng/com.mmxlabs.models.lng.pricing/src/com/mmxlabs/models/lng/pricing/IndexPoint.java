@@ -3,9 +3,8 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing;
-import java.util.Date;
-
 import org.eclipse.emf.ecore.EObject;
+import org.joda.time.YearMonth;
 
 /**
  * <!-- begin-user-doc -->
@@ -34,12 +33,12 @@ public interface IndexPoint<Value> extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Date</em>' attribute.
-	 * @see #setDate(Date)
+	 * @see #setDate(YearMonth)
 	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getIndexPoint_Date()
-	 * @model required="true"
+	 * @model dataType="com.mmxlabs.models.datetime.YearMonth"
 	 * @generated
 	 */
-	Date getDate();
+	YearMonth getDate();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.IndexPoint#getDate <em>Date</em>}' attribute.
@@ -49,7 +48,7 @@ public interface IndexPoint<Value> extends EObject {
 	 * @see #getDate()
 	 * @generated
 	 */
-	void setDate(Date value);
+	void setDate(YearMonth value);
 
 	/**
 	 * Returns the value of the '<em><b>Value</b></em>' attribute.

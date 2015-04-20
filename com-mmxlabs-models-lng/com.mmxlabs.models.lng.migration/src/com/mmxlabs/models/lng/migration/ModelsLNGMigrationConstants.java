@@ -15,6 +15,11 @@ public final class ModelsLNGMigrationConstants {
 	public static final String Context = "com.mmxlabs.lingo";
 
 	// The namespace URI's
+	public static final String NSURI_DateTime = "http://www.mmxlabs.com/models/datetime/1";
+
+	public static final PackageData PKG_DATA_DateTime = new PackageData(NSURI_DateTime, "platform:/plugin/com.mmxlabs.models.datetime/model/datetime.ecore",
+			"../../com.mmxlabs.models.datetime/model/datetime.ecore", "../../../com.mmxlabs.models.datetime/model/datetime.ecore");
+
 	public static final String NSURI_MMXCore = "http://www.mmxlabs.com/models/mmxcore/1/";
 	/**
 	 */

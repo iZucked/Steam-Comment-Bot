@@ -4,12 +4,9 @@
  */
 package com.mmxlabs.models.lng.commercial.ui.displaycomposites;
 
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.Date;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.notify.Adapter;
@@ -35,7 +32,6 @@ import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.nebula.widgets.formattedtext.DateFormatter;
 import org.eclipse.nebula.widgets.formattedtext.FormattedTextCellEditor;
 import org.eclipse.nebula.widgets.formattedtext.PercentFormatter;
 import org.eclipse.swt.SWT;
@@ -50,7 +46,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-
+import org.joda.time.LocalDate;
+import com.mmxlabs.models.datetime.ui.formatters.LocalDateTextFormatter;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -73,7 +70,6 @@ public class LegalEntityBookDetailComposite extends Composite implements IDispla
 	private DefaultDetailComposite delegate;
 	private ICommandHandler commandHandler;
 	private TableViewer tableViewer;
-	private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 	private static EStructuralFeature editedAttribute = CommercialPackage.Literals.BASE_ENTITY_BOOK__TAX_RATES;
 	private static EAttribute[] columnFeatures = { CommercialPackage.Literals.TAX_RATE__DATE, CommercialPackage.Literals.TAX_RATE__VALUE };
@@ -157,7 +153,7 @@ public class LegalEntityBookDetailComposite extends Composite implements IDispla
 			@Override
 			protected CellEditor getCellEditor(final Object element) {
 				final FormattedTextCellEditor ed = new FormattedTextCellEditor(table);
-				ed.setFormatter(new DateFormatter());
+				ed.setFormatter(new LocalDateTextFormatter());
 				return ed;
 			}
 
@@ -171,9 +167,12 @@ public class LegalEntityBookDetailComposite extends Composite implements IDispla
 			@Override
 			public String getText(final Object element) {
 				if (element != null) {
-					final Date date = ((TaxRate) element).getDate();
-					if (date != null)
-						return sdf.format(date);
+					final LocalDate date = ((TaxRate) element).getDate();
+					if (date != null) {
+						final LocalDateTextFormatter formatter = new LocalDateTextFormatter();
+						formatter.setValue(date);
+						return formatter.getDisplayString();
+					}
 				}
 				return "";
 			}
@@ -237,10 +236,10 @@ public class LegalEntityBookDetailComposite extends Composite implements IDispla
 
 					@Override
 					public int compare(final TaxRate arg0, final TaxRate arg1) {
-						final Date date0 = ((TaxRate) arg0).getDate();
+						final LocalDate date0 = ((TaxRate) arg0).getDate();
 						if (date0 == null)
 							return -1;
-						final Date date1 = ((TaxRate) arg1).getDate();
+						final LocalDate date1 = ((TaxRate) arg1).getDate();
 						if (date1 == null)
 							return 1;
 						return date0.compareTo(date1);
@@ -302,9 +301,7 @@ public class LegalEntityBookDetailComposite extends Composite implements IDispla
 				}
 				final TaxRate newTaxRate = CommercialFactory.eINSTANCE.createTaxRate();
 				newTaxRate.setValue(0);
-				final Calendar cal = Calendar.getInstance();
-				cal.clear();
-				newTaxRate.setDate(cal.getTime());
+				newTaxRate.setDate(new LocalDate());
 				commandHandler.handleCommand(AddCommand.create(commandHandler.getEditingDomain(), oldValue, editedAttribute, newTaxRate), oldValue, editedAttribute);
 				tableViewer.setSelection(new StructuredSelection(newTaxRate));
 			}
@@ -379,7 +376,7 @@ public class LegalEntityBookDetailComposite extends Composite implements IDispla
 	}
 
 	@Override
-	public boolean checkVisibility(IDialogEditingContext context) {
+	public boolean checkVisibility(final IDialogEditingContext context) {
 		return delegate.checkVisibility(context);
 	}
 

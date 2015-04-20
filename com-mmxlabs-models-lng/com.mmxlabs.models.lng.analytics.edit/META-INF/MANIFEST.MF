@@ -24,5 +24,6 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.lng.port;visibility:=reexport,
  com.mmxlabs.models.lng.pricing.edit;visibility:=reexport;bundle-version="[3.9.0,4.0.0)",
  com.mmxlabs.models.lng.port.edit;visibility:=reexport;bundle-version="[3.9.0,4.0.0)",
+ com.mmxlabs.models.datetime;visibility:=reexport,
  com.mmxlabs.models.lng.schedule.edit;visibility:=reexport;bundle-version="[3.9.0,4.0.0)"
 Bundle-ActivationPolicy: lazy

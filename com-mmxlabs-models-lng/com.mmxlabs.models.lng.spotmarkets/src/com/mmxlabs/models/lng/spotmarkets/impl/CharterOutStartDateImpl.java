@@ -9,14 +9,13 @@ package com.mmxlabs.models.lng.spotmarkets.impl;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 
-import java.util.Date;
-
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.joda.time.LocalDate;
 
 /**
  * <!-- begin-user-doc -->
@@ -40,8 +39,7 @@ public class CharterOutStartDateImpl extends EObjectImpl implements CharterOutSt
 	 * @generated
 	 * @ordered
 	 */
-	protected static final Date CHARTER_OUT_START_DATE_EDEFAULT = null;
-
+	protected static final LocalDate CHARTER_OUT_START_DATE_EDEFAULT = null;
 	/**
 	 * The cached value of the '{@link #getCharterOutStartDate() <em>Charter Out Start Date</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -50,7 +48,7 @@ public class CharterOutStartDateImpl extends EObjectImpl implements CharterOutSt
 	 * @generated
 	 * @ordered
 	 */
-	protected Date charterOutStartDate = CHARTER_OUT_START_DATE_EDEFAULT;
+	protected LocalDate charterOutStartDate = CHARTER_OUT_START_DATE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -76,7 +74,7 @@ public class CharterOutStartDateImpl extends EObjectImpl implements CharterOutSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Date getCharterOutStartDate() {
+	public LocalDate getCharterOutStartDate() {
 		return charterOutStartDate;
 	}
 
@@ -85,8 +83,8 @@ public class CharterOutStartDateImpl extends EObjectImpl implements CharterOutSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setCharterOutStartDate(Date newCharterOutStartDate) {
-		Date oldCharterOutStartDate = charterOutStartDate;
+	public void setCharterOutStartDate(LocalDate newCharterOutStartDate) {
+		LocalDate oldCharterOutStartDate = charterOutStartDate;
 		charterOutStartDate = newCharterOutStartDate;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.CHARTER_OUT_START_DATE__CHARTER_OUT_START_DATE, oldCharterOutStartDate, charterOutStartDate));
@@ -115,7 +113,7 @@ public class CharterOutStartDateImpl extends EObjectImpl implements CharterOutSt
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case SpotMarketsPackage.CHARTER_OUT_START_DATE__CHARTER_OUT_START_DATE:
-				setCharterOutStartDate((Date)newValue);
+				setCharterOutStartDate((LocalDate)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);

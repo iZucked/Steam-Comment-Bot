@@ -20,7 +20,7 @@
       <package
             uri="http://www.mmxlabs.com/models/lng/parameters/1/"
             class="com.mmxlabs.models.lng.parameters.ParametersPackage"
-            genModel="model/optimiser.genmodel"/>
+            genModel="model/parameters.genmodel"/>
    </extension>
 
 </plugin>

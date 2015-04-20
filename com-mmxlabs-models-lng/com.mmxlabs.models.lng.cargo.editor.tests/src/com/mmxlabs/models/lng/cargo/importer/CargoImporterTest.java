@@ -21,7 +21,6 @@ import javax.inject.Inject;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
@@ -36,7 +35,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.ui.dates.DateAttributeImporter;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IAttributeImporter;
 import com.mmxlabs.models.util.importer.IClassImporter;
@@ -335,10 +333,6 @@ public class CargoImporterTest {
 
 			@Override
 			public IAttributeImporter getAttributeImporter(final EDataType dataType) {
-
-				if (dataType.equals(EcorePackage.eINSTANCE.getEDate())) {
-					return _injector.getInstance(DateAttributeImporter.class);
-				}
 
 				return _injector.getInstance(DefaultAttributeImporter.class);
 			}

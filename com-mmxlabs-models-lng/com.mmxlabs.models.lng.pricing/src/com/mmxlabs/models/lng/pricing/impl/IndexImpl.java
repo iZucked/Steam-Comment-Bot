@@ -3,11 +3,10 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.impl;
-import java.util.Date;
-
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.joda.time.YearMonth;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 
@@ -45,7 +44,7 @@ public abstract class IndexImpl<Value> extends EObjectImpl implements Index<Valu
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Value getValueForMonth(Date date) {
+	public Value getValueForMonth(YearMonth date) {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
 		throw new UnsupportedOperationException();
@@ -56,7 +55,7 @@ public abstract class IndexImpl<Value> extends EObjectImpl implements Index<Valu
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<Date> getDates() {
+	public EList<YearMonth> getDates() {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
 		throw new UnsupportedOperationException();
@@ -67,7 +66,7 @@ public abstract class IndexImpl<Value> extends EObjectImpl implements Index<Valu
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Value getForwardValueForMonth(Date date) {
+	public Value getForwardValueForMonth(YearMonth date) {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
 		throw new UnsupportedOperationException();
@@ -78,7 +77,7 @@ public abstract class IndexImpl<Value> extends EObjectImpl implements Index<Valu
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Value getBackwardsValueForMonth(Date date) {
+	public Value getBackwardsValueForMonth(YearMonth date) {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
 		throw new UnsupportedOperationException();

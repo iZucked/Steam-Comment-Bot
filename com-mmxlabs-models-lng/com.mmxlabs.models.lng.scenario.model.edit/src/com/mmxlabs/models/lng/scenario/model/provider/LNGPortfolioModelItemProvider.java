@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.scenario.model.provider;
 
 
+import com.mmxlabs.models.lng.actuals.ActualsFactory;
 import java.util.Collection;
 import java.util.List;
 
@@ -176,7 +177,7 @@ public class LNGPortfolioModelItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_ActualsModel(),
-				 com.mmxlabs.models.lng.actuals.ActualsFactory.eINSTANCE.createActualsModel()));
+				 ActualsFactory.eINSTANCE.createActualsModel()));
 	}
 
 }

@@ -4,17 +4,15 @@
  */
 package com.mmxlabs.models.lng.assignment.validation;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.TimeZone;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.joda.time.DateTime;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
@@ -58,11 +56,11 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 			for (final CollectedAssignment collectedAssignment : collectAssignments) {
 				AssignableElement prevAssignment = null;
 				for (final AssignableElement assignment : collectedAssignment.getAssignedObjects()) {
-					final Date left = getEndDate(prevAssignment);
-					final Date right = getStartDate(assignment);
+					final DateTime left = getEndDate(prevAssignment);
+					final DateTime right = getStartDate(assignment);
 
 					if (left != null && right != null) {
-						if (left.after(right)) {
+						if (left.isAfter(right)) {
 							// Uh oh, likely to be an error
 							problems.add(new Pair<AssignableElement, AssignableElement>(prevAssignment, assignment));
 						}
@@ -109,7 +107,7 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 		}
 	}
 
-	private Date getStartDate(final AssignableElement uuidObject) {
+	private DateTime getStartDate(final AssignableElement uuidObject) {
 		if (uuidObject instanceof Cargo) {
 			final Cargo cargo = (Cargo) uuidObject;
 			final EList<Slot> sortedSlots = cargo.getSortedSlots();
@@ -120,14 +118,12 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 			return slot.getWindowStartWithSlotOrPortTime();
 		} else if (uuidObject instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) uuidObject;
-			final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(vesselEvent.getTimeZone(CargoPackage.eINSTANCE.getVesselEvent_StartBy())));
-			calendar.setTime(vesselEvent.getStartBy());
-			return calendar.getTime();
+			return vesselEvent.getStartByAsDateTime();
 		}
 		return null;
 	}
 
-	private Date getEndDate(final AssignableElement uuidObject) {
+	private DateTime getEndDate(final AssignableElement uuidObject) {
 		if (uuidObject instanceof Cargo) {
 			final Cargo cargo = (Cargo) uuidObject;
 			final EList<Slot> sortedSlots = cargo.getSortedSlots();
@@ -135,21 +131,13 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 			if (slot instanceof SpotSlot) {
 				return null;
 			}
-			final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(slot.getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart())));
-			final Date windowStartWithSlotOrPortTime = slot.getWindowStartWithSlotOrPortTime();
+			final DateTime windowStartWithSlotOrPortTime = slot.getWindowStartWithSlotOrPortTime();
 			if (windowStartWithSlotOrPortTime != null) {
-				cal.setTime(windowStartWithSlotOrPortTime);
-				cal.add(Calendar.HOUR_OF_DAY, slot.getSlotOrPortDuration());
-				return cal.getTime();
+				return windowStartWithSlotOrPortTime.plusHours(slot.getSlotOrPortDuration());
 			}
 		} else if (uuidObject instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) uuidObject;
-			final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(vesselEvent.getTimeZone(CargoPackage.eINSTANCE.getVesselEvent_StartAfter())));
-			final Date startAfter = vesselEvent.getStartAfter();
-			if (startAfter != null) {
-				calendar.setTime(startAfter);
-				return calendar.getTime();
-			}
+			return vesselEvent.getStartAfterAsDateTime();
 		}
 		return null;
 	}

@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.schedule.provider;
 
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -21,6 +20,7 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import org.joda.time.DateTime;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
@@ -267,7 +267,7 @@ public class EventItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		Date labelValue = ((Event)object).getStart();
+		DateTime labelValue = ((Event)object).getStart();
 		String label = labelValue == null ? null : labelValue.toString();
 		return label == null || label.length() == 0 ?
 			getString("_UI_Event_type") :

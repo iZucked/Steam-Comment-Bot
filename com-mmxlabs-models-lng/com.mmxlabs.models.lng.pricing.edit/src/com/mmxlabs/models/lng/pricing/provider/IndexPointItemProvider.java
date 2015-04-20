@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.pricing.provider;
 
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -24,6 +23,7 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import org.joda.time.YearMonth;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 
@@ -131,7 +131,7 @@ public class IndexPointItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		Date labelValue = ((IndexPoint<?>)object).getDate();
+		YearMonth labelValue = ((IndexPoint<?>)object).getDate();
 		String label = labelValue == null ? null : labelValue.toString();
 		return label == null || label.length() == 0 ?
 			getString("_UI_IndexPoint_type") :

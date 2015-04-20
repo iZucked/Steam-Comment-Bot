@@ -3,8 +3,6 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule;
-import java.util.Calendar;
-
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
@@ -392,22 +390,6 @@ public interface SlotAllocation extends MMXObject {
 	 * @generated
 	 */
 	Port getPort();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="com.mmxlabs.models.lng.schedule.Calendar" required="true"
-	 * @generated
-	 */
-	Calendar getLocalStart();
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="com.mmxlabs.models.lng.schedule.Calendar" required="true"
-	 * @generated
-	 */
-	Calendar getLocalEnd();
 
 	/**
 	 * <!-- begin-user-doc -->

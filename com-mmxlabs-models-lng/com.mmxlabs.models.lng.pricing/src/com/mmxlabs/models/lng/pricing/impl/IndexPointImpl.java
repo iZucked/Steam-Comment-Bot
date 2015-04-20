@@ -3,13 +3,12 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.impl;
-import java.util.Date;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
+import org.joda.time.YearMonth;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 
@@ -36,7 +35,7 @@ public class IndexPointImpl<Value> extends EObjectImpl implements IndexPoint<Val
 	 * @generated
 	 * @ordered
 	 */
-	protected static final Date DATE_EDEFAULT = null;
+	protected static final YearMonth DATE_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getDate() <em>Date</em>}' attribute.
@@ -46,7 +45,7 @@ public class IndexPointImpl<Value> extends EObjectImpl implements IndexPoint<Val
 	 * @generated
 	 * @ordered
 	 */
-	protected Date date = DATE_EDEFAULT;
+	protected YearMonth date = DATE_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
@@ -82,7 +81,7 @@ public class IndexPointImpl<Value> extends EObjectImpl implements IndexPoint<Val
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Date getDate() {
+	public YearMonth getDate() {
 		return date;
 	}
 
@@ -91,8 +90,8 @@ public class IndexPointImpl<Value> extends EObjectImpl implements IndexPoint<Val
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setDate(Date newDate) {
-		Date oldDate = date;
+	public void setDate(YearMonth newDate) {
+		YearMonth oldDate = date;
 		date = newDate;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.INDEX_POINT__DATE, oldDate, date));
@@ -145,7 +144,7 @@ public class IndexPointImpl<Value> extends EObjectImpl implements IndexPoint<Val
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case PricingPackage.INDEX_POINT__DATE:
-				setDate((Date)newValue);
+				setDate((YearMonth)newValue);
 				return;
 			case PricingPackage.INDEX_POINT__VALUE:
 				setValue((Value)newValue);

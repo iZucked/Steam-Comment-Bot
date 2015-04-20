@@ -4,11 +4,9 @@
  */
 package com.mmxlabs.models.lng.actuals.ui.editorpart;
 
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TimeZone;
 
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.util.EList;
@@ -18,6 +16,7 @@ import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
+import org.joda.time.LocalDateTime;
 
 import com.mmxlabs.models.lng.actuals.ActualsFactory;
 import com.mmxlabs.models.lng.actuals.ActualsModel;
@@ -303,8 +302,8 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 
 									for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
 										final SlotActuals slotActuals = slotActualMap.get(slotAllocation.getSlot());
-										slotActuals.setOperationsStart(slotAllocation.getLocalStart().getTime());
-										slotActuals.setOperationsEnd(slotAllocation.getLocalEnd().getTime());
+										slotActuals.setOperationsStart(slotAllocation.getSlotVisit().getStart().toLocalDateTime());
+										slotActuals.setOperationsEnd(slotAllocation.getSlotVisit().getEnd().toLocalDateTime());
 										slotActuals.setTitleTransferPoint(slotAllocation.getPort());
 										slotActuals.setVolumeInM3(slotAllocation.getVolumeTransferred());
 										slotActuals.setCV(slotAllocation.getCv());
@@ -366,13 +365,10 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 									if (nextEvent != null && (sequence.getSequenceType() == SequenceType.VESSEL || sequence.getSequenceType() == SequenceType.SPOT_VESSEL)) {
 										returnActuals.setEndHeelM3(nextEvent.getHeelAtStart());
 										returnActuals.setTitleTransferPoint(nextEvent.getPort());
-										returnActuals.setOperationsStart(nextEvent.getLocalStart().getTime());
+										returnActuals.setOperationsStart(nextEvent.getStart().toLocalDateTime());
 									} else {
-										final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-										cal.clear();
 										// In the past to trigger validation error.
-										cal.set(Calendar.YEAR, 2010);
-										returnActuals.setOperationsStart(cal.getTime());
+										returnActuals.setOperationsStart(new LocalDateTime().withYear(2010));
 
 										if (isDivertableDESPurchase && loadPort != null) {
 											returnActuals.setTitleTransferPoint(loadPort);

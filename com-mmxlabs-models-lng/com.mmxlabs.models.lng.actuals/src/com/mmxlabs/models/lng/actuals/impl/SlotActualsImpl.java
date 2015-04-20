@@ -6,17 +6,7 @@
  */
 package com.mmxlabs.models.lng.actuals.impl;
 
-import com.mmxlabs.models.lng.actuals.ActualsPackage;
-import com.mmxlabs.models.lng.actuals.PenaltyType;
-import com.mmxlabs.models.lng.actuals.SlotActuals;
-import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.port.Port;
-
-import com.mmxlabs.models.lng.port.Route;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
@@ -25,6 +15,16 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+
+import org.joda.time.LocalDateTime;
+import com.mmxlabs.models.lng.actuals.ActualsPackage;
+import com.mmxlabs.models.lng.actuals.PenaltyType;
+import com.mmxlabs.models.lng.actuals.SlotActuals;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.Route;
 
 /**
  * <!-- begin-user-doc -->
@@ -96,7 +96,7 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * @generated
 	 * @ordered
 	 */
-	protected static final Date OPERATIONS_START_EDEFAULT = null;
+	protected static final LocalDateTime OPERATIONS_START_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getOperationsStart() <em>Operations Start</em>}' attribute.
@@ -106,7 +106,7 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * @generated
 	 * @ordered
 	 */
-	protected Date operationsStart = OPERATIONS_START_EDEFAULT;
+	protected LocalDateTime operationsStart = OPERATIONS_START_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getOperationsEnd() <em>Operations End</em>}' attribute.
@@ -116,7 +116,7 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * @generated
 	 * @ordered
 	 */
-	protected static final Date OPERATIONS_END_EDEFAULT = null;
+	protected static final LocalDateTime OPERATIONS_END_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getOperationsEnd() <em>Operations End</em>}' attribute.
@@ -126,7 +126,7 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * @generated
 	 * @ordered
 	 */
-	protected Date operationsEnd = OPERATIONS_END_EDEFAULT;
+	protected LocalDateTime operationsEnd = OPERATIONS_END_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getTitleTransferPoint() <em>Title Transfer Point</em>}' reference.
@@ -499,6 +499,35 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public DateTime getOperationsStartAsDateTime() {
+		final LocalDateTime os = getOperationsStart();
+		if (os != null) {
+			return os.toDateTime(DateTimeZone.forID(getTimeZone(ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START)));
+		}
+		return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public DateTime getOperationsEndAsDateTime() {
+		final LocalDateTime os = getOperationsEnd();
+		if (os != null) {
+			return os.toDateTime(DateTimeZone.forID(getTimeZone(ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_END)));
+		}
+		return null;
+	}
+
+	 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -657,43 +686,10 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * @generated NOT
 	 */
 	@Override
-	public Calendar getLocalStart() {
-		final Date os = getOperationsStart();
-		if (os != null) {
-			final Calendar calendar = Calendar.getInstance();
-			calendar.setTime(os);
-			calendar.setTimeZone(TimeZone.getTimeZone(getTimeZone(ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START)));
-			return calendar;
-		}
-		return null;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	@Override
-	public Calendar getLocalEnd() {
-		final Date oe = getOperationsEnd();
-		if (oe != null) {
-			final Calendar calendar = Calendar.getInstance();
-			calendar.setTime(oe);
-			calendar.setTimeZone(TimeZone.getTimeZone(getTimeZone(ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_END)));
-			return calendar;
-		}
-		return null;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	@Override
 	public String getTimeZone(EAttribute attribute) {
 		if (getTitleTransferPoint() == null) return "UTC";
 		if (getTitleTransferPoint().getTimeZone() == null) return "UTC";
+		if (getTitleTransferPoint().getTimeZone().isEmpty()) return "UTC";
 		return getTitleTransferPoint().getTimeZone();
 	}
 
@@ -766,7 +762,7 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * @generated
 	 */
 	@Override
-	public Date getOperationsStart() {
+	public LocalDateTime getOperationsStart() {
 		return operationsStart;
 	}
 
@@ -776,8 +772,8 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * @generated
 	 */
 	@Override
-	public void setOperationsStart(Date newOperationsStart) {
-		Date oldOperationsStart = operationsStart;
+	public void setOperationsStart(LocalDateTime newOperationsStart) {
+		LocalDateTime oldOperationsStart = operationsStart;
 		operationsStart = newOperationsStart;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__OPERATIONS_START, oldOperationsStart, operationsStart));
@@ -789,7 +785,7 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * @generated
 	 */
 	@Override
-	public Date getOperationsEnd() {
+	public LocalDateTime getOperationsEnd() {
 		return operationsEnd;
 	}
 
@@ -799,8 +795,8 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * @generated
 	 */
 	@Override
-	public void setOperationsEnd(Date newOperationsEnd) {
-		Date oldOperationsEnd = operationsEnd;
+	public void setOperationsEnd(LocalDateTime newOperationsEnd) {
+		LocalDateTime oldOperationsEnd = operationsEnd;
 		operationsEnd = newOperationsEnd;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__OPERATIONS_END, oldOperationsEnd, operationsEnd));
@@ -1029,10 +1025,10 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 				setCounterparty((String)newValue);
 				return;
 			case ActualsPackage.SLOT_ACTUALS__OPERATIONS_START:
-				setOperationsStart((Date)newValue);
+				setOperationsStart((LocalDateTime)newValue);
 				return;
 			case ActualsPackage.SLOT_ACTUALS__OPERATIONS_END:
-				setOperationsEnd((Date)newValue);
+				setOperationsEnd((LocalDateTime)newValue);
 				return;
 			case ActualsPackage.SLOT_ACTUALS__TITLE_TRANSFER_POINT:
 				setTitleTransferPoint((Port)newValue);
@@ -1210,10 +1206,10 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	@Override
 	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
-			case ActualsPackage.SLOT_ACTUALS___GET_LOCAL_START:
-				return getLocalStart();
-			case ActualsPackage.SLOT_ACTUALS___GET_LOCAL_END:
-				return getLocalEnd();
+			case ActualsPackage.SLOT_ACTUALS___GET_OPERATIONS_START_AS_DATE_TIME:
+				return getOperationsStartAsDateTime();
+			case ActualsPackage.SLOT_ACTUALS___GET_OPERATIONS_END_AS_DATE_TIME:
+				return getOperationsEndAsDateTime();
 			case ActualsPackage.SLOT_ACTUALS___GET_TIME_ZONE__EATTRIBUTE:
 				return getTimeZone((EAttribute)arguments.get(0));
 		}

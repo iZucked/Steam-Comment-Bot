@@ -10,17 +10,16 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.models.datetime.importers.LocalDateAttributeImporter;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
-import com.mmxlabs.models.ui.dates.DateAttributeImporter;
 import com.mmxlabs.models.util.importer.FieldMap;
 import com.mmxlabs.models.util.importer.IAttributeImporter;
 import com.mmxlabs.models.util.importer.IExportContext;
@@ -32,7 +31,7 @@ import com.mmxlabs.models.util.importer.impl.SetReference;
 public class CharterMarketImporter extends DefaultClassImporter {
 
 	private static final String START_DATE_KEY = "charteroutstartdate";
-	private final DateAttributeImporter dateAttributeImporter = new DateAttributeImporter();
+	private final LocalDateAttributeImporter dateAttributeImporter = new LocalDateAttributeImporter();
 
 	@Override
 	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IImportContext context) {
@@ -40,7 +39,7 @@ public class CharterMarketImporter extends DefaultClassImporter {
 		if (row.get(START_DATE_KEY) != null && !row.get(START_DATE_KEY).trim().isEmpty()) {
 			final CharterOutStartDate charterOutStartDate = SpotMarketsFactory.eINSTANCE.createCharterOutStartDate();
 			try {
-				charterOutStartDate.setCharterOutStartDate(dateAttributeImporter.parseDate(row.get(START_DATE_KEY)));
+				charterOutStartDate.setCharterOutStartDate(dateAttributeImporter.parseLocalDate(row.get(START_DATE_KEY)));
 			} catch (final ParseException e) {
 				context.addProblem(context.createProblem("Unable to parse date " + row.get(START_DATE_KEY), true, true, true));
 				return new ImportResults(null);
@@ -142,7 +141,7 @@ public class CharterMarketImporter extends DefaultClassImporter {
 				final CharterOutStartDate charterOutStartDate = (CharterOutStartDate) obj;
 				final Map<String, String> dateRow = new HashMap<String, String>();
 
-				dateRow.put(START_DATE_KEY, dateAttributeImporter.formatDate(charterOutStartDate.getCharterOutStartDate(), TimeZone.getTimeZone("UTC"), false));
+				dateRow.put(START_DATE_KEY, dateAttributeImporter.formatLocalDate(charterOutStartDate.getCharterOutStartDate()));
 				exportedObjects.add(dateRow);
 			} else {
 				generalExportObject.add(obj);

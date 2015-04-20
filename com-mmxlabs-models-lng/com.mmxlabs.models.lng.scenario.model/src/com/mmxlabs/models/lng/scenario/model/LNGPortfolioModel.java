@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.scenario.model;
 
+import com.mmxlabs.models.lng.actuals.ActualsModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
@@ -118,12 +119,12 @@ public interface LNGPortfolioModel extends UUIDObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Actuals Model</em>' containment reference.
-	 * @see #setActualsModel(com.mmxlabs.models.lng.actuals.ActualsModel)
+	 * @see #setActualsModel(ActualsModel)
 	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGPortfolioModel_ActualsModel()
 	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
-	com.mmxlabs.models.lng.actuals.ActualsModel getActualsModel();
+	ActualsModel getActualsModel();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getActualsModel <em>Actuals Model</em>}' containment reference.
@@ -133,6 +134,6 @@ public interface LNGPortfolioModel extends UUIDObject {
 	 * @see #getActualsModel()
 	 * @generated
 	 */
-	void setActualsModel(com.mmxlabs.models.lng.actuals.ActualsModel value);
+	void setActualsModel(ActualsModel value);
 
 } // LNGPortfolioModel

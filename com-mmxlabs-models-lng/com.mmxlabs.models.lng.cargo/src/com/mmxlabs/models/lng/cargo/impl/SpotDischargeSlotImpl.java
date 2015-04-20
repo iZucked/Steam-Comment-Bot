@@ -17,7 +17,6 @@ import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.VolumeUnits;
-import com.mmxlabs.models.mmxcore.MMXObject.DelegateInformation;
 
 /**
  * <!-- begin-user-doc -->

@@ -4,11 +4,12 @@
  */
 package com.mmxlabs.models.lng.commercial.parseutils;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.joda.time.DateTime;
+import org.joda.time.YearMonth;
 
 import com.mmxlabs.common.parser.ExpressionParser;
 import com.mmxlabs.common.parser.IExpression;
@@ -56,82 +57,7 @@ public class Exposures {
 		}
 	}
 
-	/**
-	 * Simple class to represent a month and year.
-	 * 
-	 * @author Simon McGregor
-	 * 
-	 */
-	// TODO: move this out of here into a top-level class of its own somewhere useful.
-	public static class MonthYear implements Comparable<MonthYear> {
-		private final int month;
-		private final int year;
-
-		public MonthYear(final Date date) {
-			final Calendar calendar = Calendar.getInstance();
-			calendar.setTime(date);
-			this.month = calendar.get(Calendar.MONTH) + 1;
-			this.year = calendar.get(Calendar.YEAR);
-		}
-
-		public MonthYear(final int month, final int year) {
-			this.month = month;
-			this.year = year;
-
-		}
-
-		/**
-		 * Returns a new MonthYear which is a given number of months later than this one.
-		 * 
-		 * @param months
-		 *            The total number of months to add to this MonthYear
-		 * @return A new MonthYear which is the specified number of months later.
-		 */
-		public MonthYear addMonths(final int months) {
-			final int convenienceMonth = month - 1 + months;
-			final int newYear = year + convenienceMonth / 12;
-			final int newMonth = 1 + convenienceMonth % 12;
-			return new MonthYear(newMonth, newYear);
-		}
-
-		public int getMonth() {
-			return month;
-		}
-
-		public int getYear() {
-			return year;
-		}
-
-		public boolean after(final MonthYear my) {
-			return compareTo(my) > 0;
-		}
-
-		public boolean before(final MonthYear my) {
-			return compareTo(my) < 0;
-		}
-
-		@Override
-		// need to override equals and hashCode to provide sensible hashing behaviour
-		public boolean equals(final Object object) {
-			if (object instanceof MonthYear) {
-				final MonthYear my = (MonthYear) object;
-				return (month == my.getMonth()) && (year == my.getYear());
-			}
-			return false;
-		}
-
-		@Override
-		// need to override equals and hashCode to provide sensible hashing behaviour
-		public int hashCode() {
-			final int result = year * 100 + month;
-			return result;
-		}
-
-		@Override
-		public int compareTo(final MonthYear my) {
-			return (month + year * 100) - (my.getMonth() + my.getYear() * 100);
-		}
-	}
+	
 
 	/**
 	 * Simple tree class because Java utils inexplicably doesn't provide one
@@ -247,7 +173,6 @@ public class Exposures {
 
 	}
 
-	@SuppressWarnings("rawtypes")
 	private static double getExposureCoefficient(final Node node, final CommodityIndex index) {
 		final String indexToken = index.getName();
 		final String token = node.token;
@@ -344,8 +269,8 @@ public class Exposures {
 	 * @param index
 	 * @return
 	 */
-	public static Map<MonthYear, Double> getExposuresByMonth(final Schedule schedule, final CommodityIndex index) {
-		final CumulativeMap<MonthYear> result = new CumulativeMap<MonthYear>();
+	public static Map<YearMonth, Double> getExposuresByMonth(final Schedule schedule, final CommodityIndex index) {
+		final CumulativeMap<YearMonth> result = new CumulativeMap<YearMonth>();
 
 		for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
 			for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
@@ -363,8 +288,8 @@ public class Exposures {
 					// Unknown slot type!
 					throw new IllegalStateException("Unsupported slot type");
 				}
-				final Date date = slotAllocation.getSlotVisit().getStart();
-				result.plusEquals(new MonthYear(date), exposure);
+				final DateTime date = slotAllocation.getSlotVisit().getStart();
+				result.plusEquals(new YearMonth(date), exposure);
 			}
 		}
 

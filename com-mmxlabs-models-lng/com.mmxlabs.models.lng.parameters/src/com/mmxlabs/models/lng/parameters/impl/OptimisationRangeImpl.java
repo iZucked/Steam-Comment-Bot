@@ -3,13 +3,12 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.parameters.impl;
-import java.util.Date;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
+import org.joda.time.YearMonth;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 
@@ -36,7 +35,7 @@ public class OptimisationRangeImpl extends EObjectImpl implements OptimisationRa
 	 * @generated
 	 * @ordered
 	 */
-	protected static final Date OPTIMISE_AFTER_EDEFAULT = null;
+	protected static final YearMonth OPTIMISE_AFTER_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getOptimiseAfter() <em>Optimise After</em>}' attribute.
@@ -46,7 +45,7 @@ public class OptimisationRangeImpl extends EObjectImpl implements OptimisationRa
 	 * @generated
 	 * @ordered
 	 */
-	protected Date optimiseAfter = OPTIMISE_AFTER_EDEFAULT;
+	protected YearMonth optimiseAfter = OPTIMISE_AFTER_EDEFAULT;
 
 	/**
 	 * This is true if the Optimise After attribute has been set.
@@ -65,7 +64,7 @@ public class OptimisationRangeImpl extends EObjectImpl implements OptimisationRa
 	 * @generated
 	 * @ordered
 	 */
-	protected static final Date OPTIMISE_BEFORE_EDEFAULT = null;
+	protected static final YearMonth OPTIMISE_BEFORE_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getOptimiseBefore() <em>Optimise Before</em>}' attribute.
@@ -75,7 +74,7 @@ public class OptimisationRangeImpl extends EObjectImpl implements OptimisationRa
 	 * @generated
 	 * @ordered
 	 */
-	protected Date optimiseBefore = OPTIMISE_BEFORE_EDEFAULT;
+	protected YearMonth optimiseBefore = OPTIMISE_BEFORE_EDEFAULT;
 
 	/**
 	 * This is true if the Optimise Before attribute has been set.
@@ -111,7 +110,7 @@ public class OptimisationRangeImpl extends EObjectImpl implements OptimisationRa
 	 * @generated
 	 */
 	@Override
-	public Date getOptimiseAfter() {
+	public YearMonth getOptimiseAfter() {
 		return optimiseAfter;
 	}
 
@@ -121,8 +120,8 @@ public class OptimisationRangeImpl extends EObjectImpl implements OptimisationRa
 	 * @generated
 	 */
 	@Override
-	public void setOptimiseAfter(Date newOptimiseAfter) {
-		Date oldOptimiseAfter = optimiseAfter;
+	public void setOptimiseAfter(YearMonth newOptimiseAfter) {
+		YearMonth oldOptimiseAfter = optimiseAfter;
 		optimiseAfter = newOptimiseAfter;
 		boolean oldOptimiseAfterESet = optimiseAfterESet;
 		optimiseAfterESet = true;
@@ -137,7 +136,7 @@ public class OptimisationRangeImpl extends EObjectImpl implements OptimisationRa
 	 */
 	@Override
 	public void unsetOptimiseAfter() {
-		Date oldOptimiseAfter = optimiseAfter;
+		YearMonth oldOptimiseAfter = optimiseAfter;
 		boolean oldOptimiseAfterESet = optimiseAfterESet;
 		optimiseAfter = OPTIMISE_AFTER_EDEFAULT;
 		optimiseAfterESet = false;
@@ -161,7 +160,7 @@ public class OptimisationRangeImpl extends EObjectImpl implements OptimisationRa
 	 * @generated
 	 */
 	@Override
-	public Date getOptimiseBefore() {
+	public YearMonth getOptimiseBefore() {
 		return optimiseBefore;
 	}
 
@@ -171,8 +170,8 @@ public class OptimisationRangeImpl extends EObjectImpl implements OptimisationRa
 	 * @generated
 	 */
 	@Override
-	public void setOptimiseBefore(Date newOptimiseBefore) {
-		Date oldOptimiseBefore = optimiseBefore;
+	public void setOptimiseBefore(YearMonth newOptimiseBefore) {
+		YearMonth oldOptimiseBefore = optimiseBefore;
 		optimiseBefore = newOptimiseBefore;
 		boolean oldOptimiseBeforeESet = optimiseBeforeESet;
 		optimiseBeforeESet = true;
@@ -187,7 +186,7 @@ public class OptimisationRangeImpl extends EObjectImpl implements OptimisationRa
 	 */
 	@Override
 	public void unsetOptimiseBefore() {
-		Date oldOptimiseBefore = optimiseBefore;
+		YearMonth oldOptimiseBefore = optimiseBefore;
 		boolean oldOptimiseBeforeESet = optimiseBeforeESet;
 		optimiseBefore = OPTIMISE_BEFORE_EDEFAULT;
 		optimiseBeforeESet = false;
@@ -230,10 +229,10 @@ public class OptimisationRangeImpl extends EObjectImpl implements OptimisationRa
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case ParametersPackage.OPTIMISATION_RANGE__OPTIMISE_AFTER:
-				setOptimiseAfter((Date)newValue);
+				setOptimiseAfter((YearMonth)newValue);
 				return;
 			case ParametersPackage.OPTIMISATION_RANGE__OPTIMISE_BEFORE:
-				setOptimiseBefore((Date)newValue);
+				setOptimiseBefore((YearMonth)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);

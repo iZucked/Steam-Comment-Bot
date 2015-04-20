@@ -1104,31 +1104,13 @@ public interface SchedulePackage extends EPackage {
 	int SLOT_ALLOCATION___GET_PORT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
 
 	/**
-	 * The operation id for the '<em>Get Local Start</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_ALLOCATION___GET_LOCAL_START = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 1;
-
-	/**
-	 * The operation id for the '<em>Get Local End</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_ALLOCATION___GET_LOCAL_END = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 2;
-
-	/**
 	 * The operation id for the '<em>Get Contract</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ALLOCATION___GET_CONTRACT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 3;
+	int SLOT_ALLOCATION___GET_CONTRACT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 1;
 
 	/**
 	 * The operation id for the '<em>Get Name</em>' operation.
@@ -1137,7 +1119,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ALLOCATION___GET_NAME = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 4;
+	int SLOT_ALLOCATION___GET_NAME = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Slot Allocation</em>' class.
@@ -1146,7 +1128,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ALLOCATION_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 5;
+	int SLOT_ALLOCATION_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1437,31 +1419,13 @@ public interface SchedulePackage extends EPackage {
 	int EVENT___GET_DURATION = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 1;
 
 	/**
-	 * The operation id for the '<em>Get Local Start</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EVENT___GET_LOCAL_START = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Get Local End</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EVENT___GET_LOCAL_END = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 3;
-
-	/**
 	 * The operation id for the '<em>Type</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EVENT___TYPE = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 4;
+	int EVENT___TYPE = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Name</em>' operation.
@@ -1470,7 +1434,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int EVENT___NAME = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 5;
+	int EVENT___NAME = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 3;
 
 	/**
 	 * The number of operations of the '<em>Event</em>' class.
@@ -1479,7 +1443,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int EVENT_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 6;
+	int EVENT_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1687,24 +1651,6 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int START_EVENT___GET_DURATION = EVENT___GET_DURATION;
-
-	/**
-	 * The operation id for the '<em>Get Local Start</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_EVENT___GET_LOCAL_START = EVENT___GET_LOCAL_START;
-
-	/**
-	 * The operation id for the '<em>Get Local End</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_EVENT___GET_LOCAL_END = EVENT___GET_LOCAL_END;
 
 	/**
 	 * The operation id for the '<em>Type</em>' operation.
@@ -1939,24 +1885,6 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int END_EVENT___GET_DURATION = EVENT___GET_DURATION;
-
-	/**
-	 * The operation id for the '<em>Get Local Start</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END_EVENT___GET_LOCAL_START = EVENT___GET_LOCAL_START;
-
-	/**
-	 * The operation id for the '<em>Get Local End</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END_EVENT___GET_LOCAL_END = EVENT___GET_LOCAL_END;
 
 	/**
 	 * The operation id for the '<em>Type</em>' operation.
@@ -2202,24 +2130,6 @@ public interface SchedulePackage extends EPackage {
 	int JOURNEY___GET_DURATION = EVENT___GET_DURATION;
 
 	/**
-	 * The operation id for the '<em>Get Local Start</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY___GET_LOCAL_START = EVENT___GET_LOCAL_START;
-
-	/**
-	 * The operation id for the '<em>Get Local End</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOURNEY___GET_LOCAL_END = EVENT___GET_LOCAL_END;
-
-	/**
 	 * The operation id for the '<em>Type</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2418,24 +2328,6 @@ public interface SchedulePackage extends EPackage {
 	int IDLE___GET_DURATION = EVENT___GET_DURATION;
 
 	/**
-	 * The operation id for the '<em>Get Local Start</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int IDLE___GET_LOCAL_START = EVENT___GET_LOCAL_START;
-
-	/**
-	 * The operation id for the '<em>Get Local End</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int IDLE___GET_LOCAL_END = EVENT___GET_LOCAL_END;
-
-	/**
 	 * The operation id for the '<em>Type</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2632,24 +2524,6 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int PORT_VISIT___GET_DURATION = EVENT___GET_DURATION;
-
-	/**
-	 * The operation id for the '<em>Get Local Start</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT_VISIT___GET_LOCAL_START = EVENT___GET_LOCAL_START;
-
-	/**
-	 * The operation id for the '<em>Get Local End</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT_VISIT___GET_LOCAL_END = EVENT___GET_LOCAL_END;
 
 	/**
 	 * The operation id for the '<em>Type</em>' operation.
@@ -2857,24 +2731,6 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int SLOT_VISIT___GET_DURATION = EVENT___GET_DURATION;
-
-	/**
-	 * The operation id for the '<em>Get Local Start</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_VISIT___GET_LOCAL_START = EVENT___GET_LOCAL_START;
-
-	/**
-	 * The operation id for the '<em>Get Local End</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_VISIT___GET_LOCAL_END = EVENT___GET_LOCAL_END;
 
 	/**
 	 * The operation id for the '<em>Type</em>' operation.
@@ -3111,24 +2967,6 @@ public interface SchedulePackage extends EPackage {
 	int VESSEL_EVENT_VISIT___GET_DURATION = EVENT___GET_DURATION;
 
 	/**
-	 * The operation id for the '<em>Get Local Start</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_EVENT_VISIT___GET_LOCAL_START = EVENT___GET_LOCAL_START;
-
-	/**
-	 * The operation id for the '<em>Get Local End</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_EVENT_VISIT___GET_LOCAL_END = EVENT___GET_LOCAL_END;
-
-	/**
 	 * The operation id for the '<em>Type</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3354,24 +3192,6 @@ public interface SchedulePackage extends EPackage {
 	int GENERATED_CHARTER_OUT___GET_DURATION = PORT_VISIT___GET_DURATION;
 
 	/**
-	 * The operation id for the '<em>Get Local Start</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT___GET_LOCAL_START = PORT_VISIT___GET_LOCAL_START;
-
-	/**
-	 * The operation id for the '<em>Get Local End</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT___GET_LOCAL_END = PORT_VISIT___GET_LOCAL_END;
-
-	/**
 	 * The operation id for the '<em>Type</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3568,24 +3388,6 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int COOLDOWN___GET_DURATION = EVENT___GET_DURATION;
-
-	/**
-	 * The operation id for the '<em>Get Local Start</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN___GET_LOCAL_START = EVENT___GET_LOCAL_START;
-
-	/**
-	 * The operation id for the '<em>Get Local End</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN___GET_LOCAL_END = EVENT___GET_LOCAL_END;
 
 	/**
 	 * The operation id for the '<em>Type</em>' operation.
@@ -4608,26 +4410,6 @@ public interface SchedulePackage extends EPackage {
 	EOperation getEvent__GetDuration();
 
 	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.Event#getLocalStart() <em>Get Local Start</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Local Start</em>' operation.
-	 * @see com.mmxlabs.models.lng.schedule.Event#getLocalStart()
-	 * @generated
-	 */
-	EOperation getEvent__GetLocalStart();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.Event#getLocalEnd() <em>Get Local End</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Local End</em>' operation.
-	 * @see com.mmxlabs.models.lng.schedule.Event#getLocalEnd()
-	 * @generated
-	 */
-	EOperation getEvent__GetLocalEnd();
-
-	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.Event#type() <em>Type</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5181,26 +4963,6 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getSlotAllocation__GetPort();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getLocalStart() <em>Get Local Start</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Local Start</em>' operation.
-	 * @see com.mmxlabs.models.lng.schedule.SlotAllocation#getLocalStart()
-	 * @generated
-	 */
-	EOperation getSlotAllocation__GetLocalStart();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getLocalEnd() <em>Get Local End</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Local End</em>' operation.
-	 * @see com.mmxlabs.models.lng.schedule.SlotAllocation#getLocalEnd()
-	 * @generated
-	 */
-	EOperation getSlotAllocation__GetLocalEnd();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getContract() <em>Get Contract</em>}' operation.
@@ -6039,22 +5801,6 @@ public interface SchedulePackage extends EPackage {
 		EOperation EVENT___GET_DURATION = eINSTANCE.getEvent__GetDuration();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Local Start</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation EVENT___GET_LOCAL_START = eINSTANCE.getEvent__GetLocalStart();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Local End</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation EVENT___GET_LOCAL_END = eINSTANCE.getEvent__GetLocalEnd();
-
-		/**
 		 * The meta object literal for the '<em><b>Type</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6493,22 +6239,6 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EOperation SLOT_ALLOCATION___GET_PORT = eINSTANCE.getSlotAllocation__GetPort();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Local Start</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation SLOT_ALLOCATION___GET_LOCAL_START = eINSTANCE.getSlotAllocation__GetLocalStart();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Local End</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation SLOT_ALLOCATION___GET_LOCAL_END = eINSTANCE.getSlotAllocation__GetLocalEnd();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Contract</b></em>' operation.

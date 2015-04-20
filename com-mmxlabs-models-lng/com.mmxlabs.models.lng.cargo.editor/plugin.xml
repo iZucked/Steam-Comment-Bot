@@ -396,20 +396,12 @@
  <extension
        point="com.mmxlabs.models.common.modelcommandprovider">
     <ModelCommandProvider
-          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.SlotDateUpdatingCommandProvider"
-          id="com.mmxlabs.models.lng.cargo.ui.commands.SlotDateUpdatingCommandProvider">
-    </ModelCommandProvider>
-    <ModelCommandProvider
           commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.PortUpdatingCommandProvider"
           id="com.mmxlabs.models.lng.cargo.ui.commands.PortUpdatingCommandProvider">
     </ModelCommandProvider>
     <ModelCommandProvider
           commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.SlotShipToShipBindingCommandProvider"
           id="com.mmxlabs.models.lng.cargo.ui.commands.SlotShipToShipBindingCommandProvider">
-    </ModelCommandProvider>
-    <ModelCommandProvider
-          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.EventDateUpdatingCommandProvider"
-          id="com.mmxlabs.models.lng.cargo.ui.commands.EventDateUpdatingCommandProvider">
     </ModelCommandProvider>
     <ModelCommandProvider
           commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.VesselAvailabilityCommandProvider"

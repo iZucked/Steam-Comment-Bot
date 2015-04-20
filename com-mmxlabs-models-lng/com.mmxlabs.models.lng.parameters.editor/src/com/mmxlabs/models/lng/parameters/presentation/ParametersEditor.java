@@ -112,7 +112,6 @@ import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
 import com.mmxlabs.models.lng.parameters.provider.ParametersItemProviderAdapterFactory;
-import com.mmxlabs.models.lng.types.provider.TypesItemProviderAdapterFactory;
 import com.mmxlabs.models.mmxcore.provider.MMXCoreItemProviderAdapterFactory;
 
 
@@ -620,7 +619,6 @@ public class ParametersEditor
 
 		adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new ParametersItemProviderAdapterFactory());
-		adapterFactory.addAdapterFactory(new TypesItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new MMXCoreItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 
