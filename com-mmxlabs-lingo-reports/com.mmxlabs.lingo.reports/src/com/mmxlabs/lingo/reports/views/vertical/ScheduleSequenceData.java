@@ -17,7 +17,6 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 
@@ -64,8 +63,8 @@ public class ScheduleSequenceData {
 		for (final Sequence seq : schedule.getSequences()) {
 			for (final Event event : seq.getEvents()) {
 
-				final LocalDate sDate = verticalReportVisualiser.getLocalDateFor(event, SchedulePackage.Literals.EVENT__START);
-				final LocalDate eDate = verticalReportVisualiser.getLocalDateFor(event, SchedulePackage.Literals.EVENT__END);
+				final LocalDate sDate = verticalReportVisualiser.getLocalDateFor(event.getStart());
+				final LocalDate eDate = verticalReportVisualiser.getLocalDateFor(event.getEnd());
 
 				// final Date sDate = event.getStart();
 				// final Date eDate = event.getEnd();

@@ -10,24 +10,22 @@ import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstant
 
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IMemento;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 
 import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.ganttviewer.IGanttChartColourProvider;
 import com.mmxlabs.ganttviewer.IGanttChartToolTipProvider;
 import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -47,6 +45,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
@@ -69,8 +68,6 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 	private final IMemento memento;
 
-	final DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
-	final DateFormat tf = DateFormat.getTimeInstance(DateFormat.SHORT);
 
 	private boolean showCanals = false;
 
@@ -200,8 +197,8 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		return currentHighlighters.contains(hi);
 	}
 
-	private String dateToString(final Date date) {
-		return df.format(date) + " " + tf.format(date);
+	private String dateToString(final DateTime date) {
+		return DateTimeFormat.shortDateTime().print(date);
 	}
 
 	@Override
@@ -267,21 +264,20 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 					}
 				}
 
-				if (checkLateness && slotVisit.getStart().after(slot.getWindowEndWithSlotOrPortTime())) {
-					// lateness
-					final Calendar localStart = slotVisit.getLocalStart();
-					final Calendar windowEndDate = getWindowEndDate(element);
-					eventText.append("LATE by " + getLatenessString(localStart, windowEndDate) + "\n");
+				// lateness
+				if (checkLateness) {
+					int lateHours = LatenessUtils.getLatenessInHours(slotVisit);
+					if (lateHours != 0) {
+						eventText.append("LATE by " + LatenessUtils.formatLateness(lateHours) + "\n");
+					}
 				}
 			} else if (element instanceof VesselEventVisit) {
 				eventText.append("Duration: " + durationTime + "\n");
 				final VesselEventVisit vev = (VesselEventVisit) element;
-				if (vev.getStart().after(vev.getVesselEvent().getStartBy())) {
-					// lateness;
-					final Calendar localStart = vev.getLocalStart();
-					final Calendar windowEndDate = getWindowEndDate(element);
+				int lateHours = LatenessUtils.getLatenessInHours(vev);
+				if (lateHours != 0) {
 					eventText.append(" \n");
-					eventText.append("LATE by  " + getLatenessString(localStart, windowEndDate) + "\n");
+					eventText.append("LATE by " + LatenessUtils.formatLateness(lateHours) + "\n");
 				}
 			} else if (element instanceof Idle) {
 				eventText.append("Idle time: " + durationTime);
@@ -387,45 +383,6 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		colourSchemes.add(colourScheme);
 		if ((currentScheme == null) && (colourSchemes.size() == 1)) {
 			currentScheme = colourScheme;
-		}
-	}
-
-	private Calendar getWindowEndDate(final Object object) {
-		final Date date;
-		if (object instanceof SlotVisit) {
-			date = ((SlotVisit) object).getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime();
-			String timeZone = ((SlotVisit) object).getSlotAllocation().getSlot().getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart());
-			if (timeZone == null)
-				timeZone = "UTC";
-			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
-			c.setTime(date);
-			return c;
-		} else if (object instanceof VesselEventVisit) {
-			date = ((VesselEventVisit) object).getVesselEvent().getStartBy();
-			String timeZone = ((VesselEventVisit) object).getVesselEvent().getTimeZone(CargoPackage.eINSTANCE.getVesselEvent_StartBy());
-			if (timeZone == null)
-				timeZone = "UTC";
-			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
-			c.setTime(date);
-			return c;
-		} else {
-			return null;
-		}
-	}
-
-	public String getLatenessString(final Calendar localStart, final Calendar windowEndDate) {
-		long diff = localStart.getTimeInMillis() - windowEndDate.getTimeInMillis();
-
-		// Strip milliseconds
-		diff /= 1000;
-		// Strip seconds;
-		diff /= 60;
-		// Strip
-		diff /= 60;
-		if (diff / 24 == 0) {
-			return String.format("%2dh", diff % 24);
-		} else {
-			return String.format("%2dd, %2dh", diff / 24, diff % 24);
 		}
 	}
 

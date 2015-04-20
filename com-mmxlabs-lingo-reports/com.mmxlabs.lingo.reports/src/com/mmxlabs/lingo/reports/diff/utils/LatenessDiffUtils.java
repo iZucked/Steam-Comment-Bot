@@ -4,24 +4,12 @@
  */
 package com.mmxlabs.lingo.reports.diff.utils;
 
-import java.util.Calendar;
-
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 
 public class LatenessDiffUtils {
-
-
-	public static long getLateness(SlotVisit visit) {
-		final Calendar localStart = visit.getLocalStart();
-		final Calendar windowEndDate = LatenessUtils.getWindowEndDate(visit);
-
-		long diff = localStart.getTimeInMillis() - windowEndDate.getTimeInMillis();
-		return diff < 0 ? 0 : diff;
-	}
 
 	protected static boolean filter(final Event e) {
 		return LatenessUtils.isLate(e);
@@ -35,9 +23,9 @@ public class LatenessDiffUtils {
 		} else if ((!LatenessDiffUtils.filter(nonReference.getSlotVisit()) && !LatenessDiffUtils.filter(reference.getSlotVisit()))) {
 			return "";
 		}
-		long nonReferenceLateness = LatenessDiffUtils.getLateness(nonReference.getSlotVisit());
-		long referenceLateness = LatenessDiffUtils.getLateness(reference.getSlotVisit());
-		long diff = nonReferenceLateness - referenceLateness;
+		int nonReferenceLateness = LatenessUtils.getLatenessInHours(nonReference.getSlotVisit());
+		int referenceLateness = LatenessUtils.getLatenessInHours(reference.getSlotVisit());
+		int diff = nonReferenceLateness - referenceLateness;
 		if (diff == 0) {
 			return "";
 		} else {

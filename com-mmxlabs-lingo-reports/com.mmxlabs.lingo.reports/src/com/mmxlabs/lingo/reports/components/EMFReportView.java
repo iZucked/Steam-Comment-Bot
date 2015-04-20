@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.reports.components;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -56,8 +55,6 @@ import com.mmxlabs.lingo.reports.ScenarioViewerSynchronizer;
 import com.mmxlabs.lingo.reports.properties.ScheduledEventPropertySourceProvider;
 import com.mmxlabs.lingo.reports.utils.PinDiffModeColumnManager;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
-import com.mmxlabs.lingo.reports.views.formatters.CalendarFormatter;
-import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
@@ -100,25 +97,6 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		}
 
 	};
-	protected final ICellRenderer objectFormatter = new BaseFormatter();
-
-	protected final ICellRenderer calendarFormatter = new CalendarFormatter(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT), true);
-	protected final ICellRenderer calendarFormatterNoTZ = new CalendarFormatter(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT), false);
-
-	protected final ICellRenderer datePartFormatter = new CalendarFormatter(DateFormat.getDateInstance(DateFormat.SHORT), false);
-	protected final ICellRenderer timePartFormatter = new CalendarFormatter(DateFormat.getTimeInstance(DateFormat.SHORT), false);
-
-	protected final IntegerFormatter integerFormatter = new IntegerFormatter();
-	//
-	// protected final IFormatter costFormatter = new IntegerFormatter() {
-	// @Override
-	// public Integer getIntValue(final Object object) {
-	// if (object == null) {
-	// return null;
-	// }
-	// return -super.getIntValue(object);
-	// }
-	// };
 
 	/**
 	 */
@@ -127,7 +105,6 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	private Action packColumnsAction;
 	private Action copyTableAction;
 	// BE private Action sortModeAction; //BE
-
 	private final String helpContextId;
 	protected ScenarioViewerSynchronizer synchronizer;
 

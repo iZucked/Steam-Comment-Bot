@@ -19,7 +19,7 @@ import com.mmxlabs.lingo.reports.views.vertical.ReportNebulaGridManager;
 import com.mmxlabs.lingo.reports.views.vertical.providers.EventProvider;
 import com.mmxlabs.models.lng.schedule.Event;
 
-public class CalendarColumnLabelProvider extends GridColumnLabelProvider {
+public class LocalDateColumnLabelProvider extends GridColumnLabelProvider {
 	protected EventProvider provider;
 	protected EventLabelProvider labeller;
 	protected ReportNebulaGridManager manager;
@@ -27,7 +27,7 @@ public class CalendarColumnLabelProvider extends GridColumnLabelProvider {
 
 	protected HashMap<LocalDate, Event[]> cache = new HashMap<>();
 
-	public CalendarColumnLabelProvider(@NonNull final DateTimeFormatter df, @NonNull final EventProvider provider, @NonNull final EventLabelProvider labeller,
+	public LocalDateColumnLabelProvider(@NonNull final DateTimeFormatter df, @NonNull final EventProvider provider, @NonNull final EventLabelProvider labeller,
 			@NonNull final ReportNebulaGridManager manager) {
 		this.df = df;
 		this.provider = provider;

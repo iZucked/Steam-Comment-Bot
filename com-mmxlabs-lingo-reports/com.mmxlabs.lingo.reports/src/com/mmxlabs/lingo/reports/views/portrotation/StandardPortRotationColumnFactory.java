@@ -4,12 +4,12 @@
  */
 package com.mmxlabs.lingo.reports.views.portrotation;
 
-import java.text.DateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.graphics.Image;
+import org.joda.time.format.DateTimeFormat;
 
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.components.ColumnBlockManager;
@@ -18,8 +18,8 @@ import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.internal.Activator;
+import com.mmxlabs.lingo.reports.views.formatters.AsDateTimeFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
-import com.mmxlabs.lingo.reports.views.formatters.CalendarFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.NumberOfDPFormatter;
@@ -150,10 +150,10 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.startdate":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Start Date", null, ColumnType.NORMAL,
-					new CalendarFormatter(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT), true) {
+					new AsDateTimeFormatter(DateTimeFormat.shortDateTime(), true) {
 						@Override
 						public String render(Object o) {
-							return super.render(((Event) o).getLocalStart());
+							return super.render(((Event) o).getStart());
 						}
 
 						@Override
@@ -163,7 +163,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 					});
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.enddate":
-			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "End Date", null, ColumnType.NORMAL, Formatters.calendarFormatter, sp.getEvent__GetLocalEnd());
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "End Date", null, ColumnType.NORMAL, Formatters.asDateTimeFormatterWithTZ, sp.getEvent_End());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.duration":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Duration (DD:HH)", null, ColumnType.NORMAL, new BaseFormatter() {

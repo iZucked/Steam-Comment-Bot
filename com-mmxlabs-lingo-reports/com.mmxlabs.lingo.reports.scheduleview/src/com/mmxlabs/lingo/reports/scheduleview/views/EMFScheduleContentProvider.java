@@ -6,7 +6,6 @@ package com.mmxlabs.lingo.reports.scheduleview.views;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.WeakHashMap;
 
@@ -102,13 +101,7 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 	public Calendar getElementStartTime(final Object element) {
 		if (element instanceof Event) {
 			final Event event = (Event) element;
-			final Calendar c = Calendar.getInstance();
-
-			final Date startTime = event.getStart();
-			if (startTime != null) {
-				c.setTime(startTime);
-				return c;
-			}
+			return event.getStart().toGregorianCalendar();
 		}
 		return null;
 	}
@@ -117,13 +110,8 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 	public Calendar getElementEndTime(final Object element) {
 		if (element instanceof Event) {
 			final Event event = (Event) element;
-			final Calendar c = Calendar.getInstance();
 
-			final Date endTime = event.getEnd();
-			if (endTime != null) {
-				c.setTime(endTime);
-				return c;
-			}
+			return event.getEnd().toGregorianCalendar();
 		}
 		return null;
 	}
@@ -132,14 +120,9 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 	public Calendar getElementPlannedStartTime(final Object element) {
 		if (element instanceof SlotVisit) {
 			final SlotVisit visit = (SlotVisit) element;
-			final Calendar c = Calendar.getInstance();
 			final Slot slot = visit.getSlotAllocation().getSlot();
 			if (slot != null) {
-				final Date windowStart = slot.getWindowStartWithSlotOrPortTime();
-				if (windowStart != null) {
-					c.setTime(windowStart);
-					return c;
-				}
+				return slot.getWindowStartWithSlotOrPortTime().toGregorianCalendar();
 			}
 		}
 
@@ -150,15 +133,9 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 	public Calendar getElementPlannedEndTime(final Object element) {
 		if (element instanceof SlotVisit) {
 			final SlotVisit visit = (SlotVisit) element;
-			final Calendar c = Calendar.getInstance();
 			final Slot slot = visit.getSlotAllocation().getSlot();
 			if (slot != null) {
-				final Date windowStart = slot.getWindowStartWithSlotOrPortTime();
-				if (windowStart != null) {
-					c.setTime(windowStart);
-					c.add(Calendar.HOUR, slot.getSlotOrPortDuration());
-					return c;
-				}
+				return slot.getWindowStartWithSlotOrPortTime().toGregorianCalendar();
 			}
 		}
 
@@ -198,8 +175,8 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 				final Slot slot = slotAllocation.getSlot();
 				Slot transferSlot = null;
 				if (slot instanceof LoadSlot) {
-					final LoadSlot loadSlot = (LoadSlot) slot;
-//					transferSlot = loadSlot.getTransferFrom();
+//					final LoadSlot loadSlot = (LoadSlot) slot;
+					// transferSlot = loadSlot.getTransferFrom();
 				} else if (slot instanceof DischargeSlot) {
 					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 					transferSlot = dischargeSlot.getTransferTo();

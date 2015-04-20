@@ -6,15 +6,15 @@ package com.mmxlabs.lingo.reports.views.standard;
 
 import java.util.Map;
 
-import com.mmxlabs.models.lng.commercial.parseutils.Exposures.MonthYear;
+import org.joda.time.YearMonth;
 
 /**
  */
 public class IndexExposureData {
 	public final String indexName;
-	public final Map<MonthYear, Double> exposures; 
+	public final Map<YearMonth, Double> exposures; 
 
-	public IndexExposureData(String name, Map<MonthYear, Double> exposuresByMonth) {
+	public IndexExposureData(String name, Map<YearMonth, Double> exposuresByMonth) {
 		super();
 		this.indexName = name;
 		this.exposures = exposuresByMonth;

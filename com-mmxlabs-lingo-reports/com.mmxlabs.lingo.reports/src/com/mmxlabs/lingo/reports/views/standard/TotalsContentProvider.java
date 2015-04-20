@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
@@ -130,14 +131,8 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 
 				if (evt instanceof SlotVisit) {
 					final SlotVisit visit = (SlotVisit) evt;
-
+					lateness += LatenessUtils.getLatenessInHours(visit);
 					final SlotAllocation slotAllocation = visit.getSlotAllocation();
-					if (visit.getStart().after(slotAllocation.getSlot().getWindowEndWithSlotOrPortTime())) {
-
-						final long late = visit.getStart().getTime() - slotAllocation.getSlot().getWindowEndWithSlotOrPortTime().getTime();
-						lateness += (late / 1000 / 60 / 60);
-					}
-
 					if (slotAllocation.getSlot() != null) {
 						final Slot slot = slotAllocation.getSlot();
 						final int minQuantity = slot.getMinQuantity();
@@ -153,10 +148,7 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 
 				} else if (evt instanceof VesselEventVisit) {
 					final VesselEventVisit vev = (VesselEventVisit) evt;
-					if (vev.getStart().after(vev.getVesselEvent().getStartBy())) {
-						final long late = evt.getStart().getTime() - vev.getVesselEvent().getStartBy().getTime();
-						lateness += (late / 1000 / 60 / 60);
-					}
+					lateness += LatenessUtils.getLatenessInHours(vev);
 				}
 			}
 		}

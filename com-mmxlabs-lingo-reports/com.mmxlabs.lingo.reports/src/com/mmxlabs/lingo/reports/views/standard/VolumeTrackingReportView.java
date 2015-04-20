@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+
 import com.mmxlabs.lingo.reports.components.SimpleContentAndColumnProvider;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -26,8 +29,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 
 /**
- * Class to display a report describing the total volume of gas transactions for each contract (purchase & sales) 
- * for each gas year (with additional rows for "other purchase" and "other sales"). 
+ * Class to display a report describing the total volume of gas transactions for each contract (purchase & sales) for each gas year (with additional rows for "other purchase" and "other sales").
  * 
  * @author Simon McGregor
  */
@@ -39,19 +41,28 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 			return new CumulativeMap<Integer>();
 		}
 	};
-	
-	private static PurchaseContract otherPurchase = new PurchaseContractImpl() { { name = "Other Purchase"; } };
-	private static SalesContract otherSales = new SalesContractImpl() { { name = "Other Sales"; } };
-	
+
+	private static PurchaseContract otherPurchase = new PurchaseContractImpl() {
+		{
+			name = "Other Purchase";
+		}
+	};
+	private static SalesContract otherSales = new SalesContractImpl() {
+		{
+			name = "Other Sales";
+		}
+	};
+
 	public static class VolumeData {
 		public final Contract contract;
 		public final Map<Integer, Long> volumes;
+
 		public VolumeData(Contract contract, Map<Integer, Long> volumes) {
 			this.contract = contract;
 			this.volumes = volumes;
-		}		
+		}
 	}
-	
+
 	@SuppressWarnings("serial")
 	private static abstract class AutoInitialisingMap<K, V> extends HashMap<K, V> {
 		@Override
@@ -62,79 +73,72 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 			return super.get(key);
 		}
 
-		abstract protected V autoValue();		
+		abstract protected V autoValue();
 	}
-	
+
 	@SuppressWarnings("serial")
 	private static class CumulativeMap<K> extends AutoInitialisingMap<K, Long> {
 		@Override
 		protected Long autoValue() {
 			return 0l;
 		}
-		
+
 		public void plusEquals(K key, Long value) {
 			put(key, get(key) + value);
 		}
-		
+
 	}
-	
-	
+
 	/**
-	 * Returns the gas year for a particular calendar date. The gas year starts in October
-	 * and is based on UTC.
+	 * Returns the gas year for a particular calendar date. The gas year starts in October and is based on UTC.
 	 * 
 	 * @param calendar
 	 * @return
 	 */
-	private int getGasYear(Calendar calendar) {
-		final Calendar utc = (Calendar) calendar.clone();
-		// convert the date into UTC
-		final int utcOffset = calendar.getTimeZone().getOffset(calendar.getTime().getTime());
-		utc.add(Calendar.MILLISECOND, -utcOffset);				
-		
+	private int getGasYear(DateTime calendar) {
+		final LocalDate utc = calendar.toLocalDate();
+
 		// subtract one year from the reported year for dates prior to october
-		int yearOffset = (utc.get(Calendar.MONTH) < Calendar.OCTOBER) ? -1 : 0;
-		
-		return utc.get(Calendar.YEAR) + yearOffset;
+		int yearOffset = (utc.getMonthOfYear() < Calendar.OCTOBER) ? -1 : 0;
+
+		return utc.getYear() + yearOffset;
 	}
-	
 
 	@Override
 	protected SimpleContentAndColumnProvider<VolumeData> createContentProvider() {
 
 		return new SimpleContentAndColumnProvider<VolumeData>() {
-			
+
 			@Override
 			protected List<VolumeData> createData(Schedule schedule, LNGScenarioModel rootObject, LNGPortfolioModel portfolioModel) {
 				final List<VolumeData> output = new ArrayList<VolumeData>();
 
 				overallVolumes.clear();
-				
-				for (CargoAllocation ca: schedule.getCargoAllocations()) {
-					for (SlotAllocation sa: ca.getSlotAllocations()) {
+
+				for (CargoAllocation ca : schedule.getCargoAllocations()) {
+					for (SlotAllocation sa : ca.getSlotAllocations()) {
 						final long volume = sa.getVolumeTransferred();
 						Contract contract = sa.getContract();
 						if (contract == null) {
 							Slot slot = sa.getSlot();
 							if (slot instanceof LoadSlot) {
 								contract = otherPurchase;
-							}
-							else if (slot instanceof DischargeSlot) {
+							} else if (slot instanceof DischargeSlot) {
 								contract = otherSales;
 							}
 						}
-						final int year = getGasYear(sa.getLocalStart());
-						overallVolumes.get(contract).plusEquals(year, volume);						
+						final int year = getGasYear(sa.getSlotVisit().getStart());
+						overallVolumes.get(contract).plusEquals(year, volume);
 					}
 				}
-				
-				for (Contract contract: overallVolumes.keySet()) {
+
+				for (Contract contract : overallVolumes.keySet()) {
 					output.add(new VolumeData(contract, overallVolumes.get(contract)));
 				}
 
 				return output;
 			}
-			
+
 			/**
 			 * Returns the list of year / month labels for the entire known exposure data range. This may conceivably include months in which no transactions occur.
 			 * 
@@ -202,8 +206,6 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 
 				return result;
 			}
-
-
 
 		};
 	}

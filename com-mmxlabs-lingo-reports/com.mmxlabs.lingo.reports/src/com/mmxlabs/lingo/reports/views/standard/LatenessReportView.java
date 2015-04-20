@@ -5,7 +5,6 @@
 package com.mmxlabs.lingo.reports.views.standard;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -23,6 +22,7 @@ import com.mmxlabs.lingo.reports.components.ColumnHandler;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EMFReportView;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
+import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -47,21 +47,16 @@ public class LatenessReportView extends EMFReportView {
 
 		final SchedulePackage sp = SchedulePackage.eINSTANCE;
 
-		addColumn("id", "ID", ColumnType.NORMAL, objectFormatter, sp.getEvent__Name());
+		addColumn("id", "ID", ColumnType.NORMAL, Formatters.objectFormatter, sp.getEvent__Name());
 
-		addColumn("type", "Type", ColumnType.NORMAL, objectFormatter, sp.getEvent__Type());
+		addColumn("type", "Type", ColumnType.NORMAL, Formatters.objectFormatter, sp.getEvent__Type());
 		addColumn("lateness", "Lateness", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
 			public String render(final Object object) {
 
 				if (object instanceof PortVisit) {
 					final PortVisit slotVisit = (PortVisit) object;
-					final Calendar localStart = slotVisit.getLocalStart();
-					final Calendar windowEndDate = LatenessUtils.getWindowEndDate(object);
-
-					long diff = localStart.getTimeInMillis() - windowEndDate.getTimeInMillis();
-
-					return LatenessUtils.formatLateness(diff);
+					return LatenessUtils.formatLateness(LatenessUtils.getLatenessInHours(slotVisit));
 				}
 
 				return "";
@@ -82,10 +77,10 @@ public class LatenessReportView extends EMFReportView {
 		addColumn("startby", "Start by", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
 			public String render(final Object object) {
-				return calendarFormatterNoTZ.render(LatenessUtils.getWindowEndDate(object));
+				return Formatters.asDateTimeFormatterNoTz.render(LatenessUtils.getWindowEndDate(object));
 			}
 		});
-		addColumn("scheduledtime", "Scheduled time", ColumnType.NORMAL, calendarFormatterNoTZ, sp.getEvent__GetLocalStart());
+		addColumn("scheduledtime", "Scheduled time", ColumnType.NORMAL, Formatters.asDateTimeFormatterNoTz, sp.getEvent_Start());
 
 		getBlockManager().makeAllBlocksVisible();
 	}
@@ -122,16 +117,12 @@ public class LatenessReportView extends EMFReportView {
 				for (final Object e : result) {
 					if (e instanceof SlotVisit) {
 						final SlotVisit visit = (SlotVisit) e;
-
 						setInputEquivalents(visit, Collections.singleton((Object) visit.getSlotAllocation().getCargoAllocation()));
 					} else if (e instanceof VesselEventVisit) {
 						final VesselEventVisit visit = (VesselEventVisit) e;
-
 						setInputEquivalents(visit, Collections.singleton((Object) visit.getVesselEvent()));
 					} else if (e instanceof PortVisit) {
 						final PortVisit visit = (PortVisit) e;
-
-						//
 					}
 				}
 
@@ -191,7 +182,7 @@ public class LatenessReportView extends EMFReportView {
 		final ColumnBlock block = getBlockManager().createBlock(blockID, title, columnType);
 		return getBlockManager().createColumn(block, title, formatter, path);
 	}
-	
+
 	@Override
 	public Object getAdapter(final Class adapter) {
 

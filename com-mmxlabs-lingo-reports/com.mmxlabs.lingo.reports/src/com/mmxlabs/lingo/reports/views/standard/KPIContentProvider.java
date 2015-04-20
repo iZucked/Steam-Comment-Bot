@@ -5,12 +5,13 @@
 package com.mmxlabs.lingo.reports.views.standard;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+import org.joda.time.DateTime;
+import org.joda.time.Hours;
 
 import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -115,18 +116,15 @@ public class KPIContentProvider implements IStructuredContentProvider {
 
 				if (evt instanceof SlotVisit) {
 					final SlotVisit visit = (SlotVisit) evt;
-
-					if (visit.getStart().after(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime())) {
-
-						final long late = visit.getStart().getTime() - visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime().getTime();
-						lateness += (late / 1000 / 60 / 60);
+					if (visit.getStart().isAfter(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime())) {
+						lateness += Hours.hoursBetween(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime(), visit.getStart()).getHours();
 					}
 
 				} else if (evt instanceof VesselEventVisit) {
 					final VesselEventVisit vev = (VesselEventVisit) evt;
-					if (vev.getStart().after(vev.getVesselEvent().getStartBy())) {
-						final long late = evt.getStart().getTime() - vev.getVesselEvent().getStartBy().getTime();
-						lateness += (late / 1000 / 60 / 60);
+					if (vev.getStart().isAfter(vev.getVesselEvent().getStartByAsDateTime())) {
+						lateness += Hours.hoursBetween(vev.getVesselEvent().getStartByAsDateTime(), evt.getStart()).getHours();
+
 					}
 				} else if (evt instanceof PortVisit) {
 					final PortVisit visit = (PortVisit) evt;
@@ -136,16 +134,14 @@ public class KPIContentProvider implements IStructuredContentProvider {
 					}
 					if (seq.getEvents().indexOf(visit) == 0) {
 
-						final Date startBy = availability.getStartBy();
-						if (startBy != null && visit.getStart().after(startBy)) {
-							final long late = visit.getStart().getTime() - startBy.getTime();
-							lateness += (late / 1000 / 60 / 60);
+						final DateTime startBy = availability.getStartByAsDateTime();
+						if (startBy != null && visit.getStart().isAfter(startBy)) {
+							lateness += Hours.hoursBetween(startBy, visit.getStart()).getHours();
 						}
 					} else if (seq.getEvents().indexOf(visit) == seq.getEvents().size() - 1) {
-						final Date endBy = availability.getEndBy();
-						if (endBy != null && visit.getStart().after(endBy)) {
-							final long late = visit.getStart().getTime() - endBy.getTime();
-							lateness += (late / 1000 / 60 / 60);
+						final DateTime endBy = availability.getEndAfterAsDateTime();
+						if (endBy != null && visit.getStart().isAfter(endBy)) {
+							lateness += Hours.hoursBetween(endBy, visit.getStart()).getHours();
 						}
 					}
 				}

@@ -4,12 +4,13 @@
  */
 package com.mmxlabs.lingo.reports.utils;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -111,8 +112,8 @@ public class CargoAllocationUtils {
 				} else {
 					first = false;
 				}
-				final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM");
-				sb.append(String.format("'%s-%s'", slot.getMarket().getName(), df.format(slot.getWindowStart())));
+				final DateTimeFormatter df = DateTimeFormat.forPattern("yyyy-MM");
+				sb.append(String.format("'%s-%s'", slot.getMarket().getName(), df.print(slot.getWindowStart())));
 			} else if (sa.getSlot() instanceof DischargeSlot) {
 				if (!first) {
 					sb.append(" -- ");
@@ -146,8 +147,8 @@ public class CargoAllocationUtils {
 				} else {
 					first = false;
 				}
-				final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM");
-				sb.append(String.format("'%s-%s'", slot.getMarket().getName(), df.format(slot.getWindowStart())));
+				final DateTimeFormatter df = DateTimeFormat.forPattern("yyyy-MM");
+				sb.append(String.format("'%s-%s'", slot.getMarket().getName(), df.print(slot.getWindowStart())));
 			} else if (sa.getSlot() instanceof LoadSlot) {
 				if (!first) {
 					sb.append(" -- ");

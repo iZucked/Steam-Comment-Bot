@@ -21,6 +21,7 @@ import com.mmxlabs.lingo.reports.components.ColumnHandler;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EMFReportView;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
+import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -51,7 +52,7 @@ public class CooldownReportView extends EMFReportView {
 		super("com.mmxlabs.shiplingo.platform.reports.CooldownReportView");
 
 		addColumn("schedule", "Schedule", ColumnType.MULTIPLE, containingScheduleFormatter);
-		addColumn("vessel", "Vessel", ColumnType.NORMAL, objectFormatter, MMXCorePackage.eINSTANCE.getMMXObject__EContainerOp(), SchedulePackage.eINSTANCE.getSequence__GetName());
+		addColumn("vessel", "Vessel", ColumnType.NORMAL, Formatters.objectFormatter, MMXCorePackage.eINSTANCE.getMMXObject__EContainerOp(), SchedulePackage.eINSTANCE.getSequence__GetName());
 		addColumn("causeid", "Cause ID", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
 			public String render(final Object object) {
@@ -89,9 +90,9 @@ public class CooldownReportView extends EMFReportView {
 			}
 		});
 
-		addColumn("date", "Date", ColumnType.NORMAL, datePartFormatter, SchedulePackage.eINSTANCE.getEvent__GetLocalStart());
-		addColumn("time", "Time", ColumnType.NORMAL, timePartFormatter, SchedulePackage.eINSTANCE.getEvent__GetLocalStart());
-		addColumn("port", "Port", ColumnType.NORMAL, objectFormatter, SchedulePackage.eINSTANCE.getEvent_Port(), MMXCorePackage.eINSTANCE.getNamedObject_Name());
+		addColumn("date", "Date", ColumnType.NORMAL, Formatters.asLocalDateFormatter, SchedulePackage.eINSTANCE.getEvent_Start());
+		addColumn("time", "Time", ColumnType.NORMAL, Formatters.asLocalTimeFormatter, SchedulePackage.eINSTANCE.getEvent_Start());
+		addColumn("port", "Port", ColumnType.NORMAL, Formatters.objectFormatter, SchedulePackage.eINSTANCE.getEvent_Port(), MMXCorePackage.eINSTANCE.getNamedObject_Name());
 		addColumn("cost", "Cost", ColumnType.NORMAL, new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {

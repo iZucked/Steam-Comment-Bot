@@ -4,14 +4,16 @@
  */
 package com.mmxlabs.lingo.reports.properties;
 
-import java.text.DateFormat;
-import java.util.Calendar;
 import java.util.TimeZone;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
+import org.joda.time.DateTime;
+import org.joda.time.ReadablePartial;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -33,11 +35,14 @@ public class ScheduledEventPropertySourceProvider implements IPropertySourceProv
 				return String.format("%.1f", element);
 			} else if (element instanceof Port) {
 				return ((Port) element).getName();
-			} else if (element instanceof Calendar) {
-				final Calendar cal = (Calendar) element;
-				final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
-				df.setCalendar(cal);
-				return df.format(cal.getTime()) + " (" + cal.getTimeZone().getDisplayName(false, TimeZone.SHORT) + ")";
+			} else if (element instanceof ReadablePartial) {
+				final ReadablePartial readablePartial = (ReadablePartial) element;
+				final DateTimeFormatter df = DateTimeFormat.shortDateTime();
+				return df.print(readablePartial);
+			} else if (element instanceof DateTime) {
+				final DateTime dateTime = (DateTime) element;
+				final DateTimeFormatter df = DateTimeFormat.shortDateTime();
+				return df.print(dateTime) + " (" + dateTime.getZone().toTimeZone().getDisplayName(false, TimeZone.SHORT) + ")";
 			}
 			return super.getText(element);
 		}

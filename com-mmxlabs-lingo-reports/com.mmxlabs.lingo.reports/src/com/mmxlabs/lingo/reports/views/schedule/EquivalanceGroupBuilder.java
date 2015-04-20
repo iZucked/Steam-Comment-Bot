@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.reports.views.schedule;
 
-import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -15,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
+import org.joda.time.LocalDate;
 
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
@@ -45,7 +45,7 @@ public class EquivalanceGroupBuilder {
 		if (referenceElement instanceof GeneratedCharterOut) {
 			return Collections.emptySet();
 		}
-		
+
 		final Set<EObject> equivalents = new HashSet<>();
 		final String keyB = getElementKey(referenceElement);
 		if (referenceElement instanceof SlotAllocation) {
@@ -339,8 +339,7 @@ public class EquivalanceGroupBuilder {
 			}
 			if (slot instanceof SpotSlot) {
 				final SpotMarket market = ((SpotSlot) slot).getMarket();
-				final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM");
-				return String.format("%s-%s-%s-%s", prefix, market.eClass().getName(), market.getName(), df.format(slot.getWindowStart()));
+				return String.format("%s-%s-%s-%s", prefix, market.eClass().getName(), market.getName(), format(slot.getWindowStart()));
 
 			} else {
 				final String baseName = slotAllocation.getName();
@@ -359,8 +358,7 @@ public class EquivalanceGroupBuilder {
 			}
 			if (slot instanceof SpotSlot) {
 				final SpotMarket market = ((SpotSlot) slot).getMarket();
-				final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM");
-				return String.format("%s-%s-%s-%s", prefix, market.eClass().getName(), market.getName(), df.format(slot.getWindowStart()));
+				return String.format("%s-%s-%s-%s", prefix, market.eClass().getName(), market.getName(), format(slot.getWindowStart()));
 
 			} else {
 				final String baseName = openSlotAllocation.getSlot().getName();
@@ -379,5 +377,10 @@ public class EquivalanceGroupBuilder {
 			return element.getClass().getName() + "-" + ((NamedObject) element).getName();
 		}
 		return element.toString();
+	}
+
+	private String format(LocalDate date) {
+		return String.format("%04d-%02d", date.getYear(), date.getMonthOfYear());
+
 	}
 }

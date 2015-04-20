@@ -30,6 +30,7 @@ import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EMFReportView;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
+import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -72,9 +73,9 @@ public class CapacityViolationReportView extends EMFReportView {
 
 		final SchedulePackage sp = SchedulePackage.eINSTANCE;
 
-		addColumn("id", "ID", ColumnType.NORMAL, objectFormatter, ref_Row_Owner, sp.getEvent__Name());
+		addColumn("id", "ID", ColumnType.NORMAL, Formatters.objectFormatter, ref_Row_Owner, sp.getEvent__Name());
 
-		addColumn("type", "Type", ColumnType.NORMAL, objectFormatter, ref_Row_Owner, sp.getEvent__Type());
+		addColumn("type", "Type", ColumnType.NORMAL, Formatters.objectFormatter, ref_Row_Owner, sp.getEvent__Type());
 
 		addColumn("violation", "Violation", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
@@ -107,7 +108,7 @@ public class CapacityViolationReportView extends EMFReportView {
 				return super.render(object);
 			}
 		}, attrib_Row_Type);
-		addColumn("qty", "Quantity (m³)", ColumnType.NORMAL, objectFormatter, attrib_Row_Quantity);
+		addColumn("qty", "Quantity (m³)", ColumnType.NORMAL, Formatters.objectFormatter, attrib_Row_Quantity);
 
 		getBlockManager().makeAllBlocksVisible();
 

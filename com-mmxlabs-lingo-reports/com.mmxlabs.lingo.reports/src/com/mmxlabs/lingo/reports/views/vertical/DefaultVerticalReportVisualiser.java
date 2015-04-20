@@ -20,6 +20,6 @@ public class DefaultVerticalReportVisualiser extends AbstractVerticalReportVisua
 	@Override
 	public boolean datesAreUTCEquivalent() {
 		// Always render as local time.
-		return true;
+		return false;
 	}
 }

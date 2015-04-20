@@ -6,7 +6,6 @@ package com.mmxlabs.lingo.reports.diff.actions;
 
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IViewPart;
@@ -14,7 +13,6 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
-import com.mmxlabs.lingo.reports.internal.Activator.Implementation;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 

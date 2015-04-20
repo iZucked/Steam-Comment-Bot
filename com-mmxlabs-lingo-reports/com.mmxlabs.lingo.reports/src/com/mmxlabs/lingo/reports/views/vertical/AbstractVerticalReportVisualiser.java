@@ -15,6 +15,8 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
@@ -27,7 +29,6 @@ import com.mmxlabs.common.Triple;
 import com.mmxlabs.lingo.reports.ColourPalette;
 import com.mmxlabs.lingo.reports.ColourPalette.ColourElements;
 import com.mmxlabs.lingo.reports.ColourPalette.ColourPaletteItems;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -41,13 +42,11 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.types.ITimezoneProvider;
 
 public abstract class AbstractVerticalReportVisualiser {
 
@@ -72,7 +71,7 @@ public abstract class AbstractVerticalReportVisualiser {
 	}
 
 	public DateTimeFormatter createDateFormat() {
-		return DateTimeFormat.forPattern("dd/MMM/yy");
+		return DateTimeFormat.shortDate();
 	}
 
 	public Color getColorFor(final LocalDate date, final SlotVisit visit) {
@@ -140,7 +139,7 @@ public abstract class AbstractVerticalReportVisualiser {
 
 		// Journey events just show the day number
 		if (event instanceof Journey) {
-			final LocalDate eventStart = getLocalDateFor(event, SchedulePackage.Literals.EVENT__START);
+			final LocalDate eventStart = getLocalDateFor(event.getStart());
 
 			// how many days since the start of the event?
 			int days = Days.daysBetween(eventStart, date).getDays();
@@ -235,8 +234,8 @@ public abstract class AbstractVerticalReportVisualiser {
 	public boolean isDayOutsideActualVisit(final LocalDate day, final SlotVisit visit) {
 		final LocalDate nextDay = day.plusDays(1);
 
-		final LocalDate eventStart = getLocalDateFor(visit, SchedulePackage.Literals.EVENT__START);
-		final LocalDate eventEnd = getLocalDateFor(visit, SchedulePackage.Literals.EVENT__END);
+		final LocalDate eventStart = getLocalDateFor(visit.getStart());
+		final LocalDate eventEnd = getLocalDateFor(visit.getEnd());
 
 		return (nextDay.isBefore(eventStart) || (eventEnd.isAfter(day) == false));
 	}
@@ -250,8 +249,8 @@ public abstract class AbstractVerticalReportVisualiser {
 	 */
 	public boolean isDayInsideWindow(final LocalDate day, final SlotVisit visit) {
 		final Slot slot = visit.getSlotAllocation().getSlot();
-		final LocalDate eventStart = getLocalDateFor(slot, slot.getWindowStartWithSlotOrPortTime(), CargoPackage.Literals.SLOT__WINDOW_START);
-		final LocalDate eventEnd = getLocalDateFor(slot, slot.getWindowEndWithSlotOrPortTime(), CargoPackage.Literals.SLOT__WINDOW_START);
+		final LocalDate eventStart = getLocalDateFor(slot.getWindowStartWithSlotOrPortTime());
+		final LocalDate eventEnd = getLocalDateFor(slot.getWindowEndWithSlotOrPortTime());
 
 		final Range<LocalDate> range = Range.closedOpen(eventStart, eventEnd);
 		return range.contains(day);
@@ -287,11 +286,11 @@ public abstract class AbstractVerticalReportVisualiser {
 				} else if (event instanceof VesselEventVisit) {
 					final VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
 					final VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
-					eventStart = getLocalDateFor(vesselEvent, CargoPackage.Literals.VESSEL_EVENT__START_AFTER);
-					eventEnd = getLocalDateFor(vesselEvent, CargoPackage.Literals.VESSEL_EVENT__START_BY);
+					eventStart = getLocalDateFor(vesselEvent.getStartAfterAsDateTime());
+					eventEnd = getLocalDateFor(vesselEvent.getStartByAsDateTime());
 				} else {
-					eventStart = getLocalDateFor(event, SchedulePackage.Literals.EVENT__START);
-					eventEnd = getLocalDateFor(event, SchedulePackage.Literals.EVENT__END);
+					eventStart = getLocalDateFor(event.getStart());
+					eventEnd = getLocalDateFor(event.getEnd());
 				}
 				// when we get to an event after the search window, break the loop
 				// NO: events are not guaranteed to be sorted by date :(
@@ -310,8 +309,8 @@ public abstract class AbstractVerticalReportVisualiser {
 
 	public Pair<LocalDate, LocalDate> getWindowDatesForSlotVisit(final SlotVisit slotVisit) {
 		final Slot slot = slotVisit.getSlotAllocation().getSlot();
-		final LocalDate eventStart = getLocalDateFor(slot, slot.getWindowStartWithSlotOrPortTime(), CargoPackage.Literals.SLOT__WINDOW_START);
-		final LocalDate eventEnd = getLocalDateFor(slot, slot.getWindowEndWithSlotOrPortTime(), CargoPackage.Literals.SLOT__WINDOW_START);
+		final LocalDate eventStart = getLocalDateFor(slot.getWindowStartWithSlotOrPortTime());
+		final LocalDate eventEnd = getLocalDateFor(slot.getWindowEndWithSlotOrPortTime());
 		return new Pair<>(eventStart, eventEnd);
 	}
 
@@ -335,8 +334,8 @@ public abstract class AbstractVerticalReportVisualiser {
 		if (seq != null && start != null && end != null) {
 			for (final Event event : seq.getEvents()) {
 
-				final LocalDate eventStart = getLocalDateFor(event, SchedulePackage.Literals.EVENT__START);
-				final LocalDate eventEnd = getLocalDateFor(event, SchedulePackage.Literals.EVENT__END);
+				final LocalDate eventStart = getLocalDateFor(event.getStart());
+				final LocalDate eventEnd = getLocalDateFor(event.getEnd());
 
 				// when we get to an event after the search window, break the loop
 				// NO: events are not guaranteed to be sorted by date :(
@@ -364,35 +363,55 @@ public abstract class AbstractVerticalReportVisualiser {
 		return false;
 	}
 
-	public <T extends ITimezoneProvider & EObject> LocalDate getLocalDateFor(final T object, final EAttribute feature) {
-		return getLocalDateTimeFor(object, feature).toLocalDate();
-	}
+	// public <T extends ITimezoneProvider & EObject> LocalDate getLocalDateFor(final T object, final EAttribute feature) {
+	// return getLocalDateTimeFor(object, feature).toLocalDate();
+	// }
+	//
+	// public <T extends ITimezoneProvider & EObject> LocalDateTime getLocalDateTimeFor(final T object, final EAttribute feature) {
+	//
+	// final Pair<EObject, EAttribute> key = new Pair<>((EObject) object, feature);
+	// if (dateCacheA.containsKey(key)) {
+	// return dateCacheA.get(key);
+	// } else {
+	// final LocalDateTime localDate = VerticalReportUtils.getLocalDateFor(object, feature, datesAreUTCEquivalent());
+	// dateCacheA.put(key, localDate);
+	// return localDate;
+	// }
+	// }
+	//
+	// public <T extends ITimezoneProvider & EObject> LocalDate getLocalDateFor(final T object, final Date date, final EAttribute feature) {
+	// return getLocalDateTimeFor(object, date, feature).toLocalDate();
+	// }
+	//
+	// public <T extends ITimezoneProvider & EObject> LocalDateTime getLocalDateTimeFor(final T object, final Date date, final EAttribute feature) {
+	// final Triple<EObject, Date, EAttribute> key = new Triple<>((EObject) object, date, feature);
+	// if (dateCacheB.containsKey(key)) {
+	// return dateCacheB.get(key);
+	// } else {
+	// final LocalDateTime localDate = VerticalReportUtils.getLocalDateFor(object, date, feature, datesAreUTCEquivalent());
+	// dateCacheB.put(key, localDate);
+	// return localDate;
+	// }
+	// }
 
-	public <T extends ITimezoneProvider & EObject> LocalDateTime getLocalDateTimeFor(final T object, final EAttribute feature) {
-
-		final Pair<EObject, EAttribute> key = new Pair<>((EObject) object, feature);
-		if (dateCacheA.containsKey(key)) {
-			return dateCacheA.get(key);
-		} else {
-			final LocalDateTime localDate = VerticalReportUtils.getLocalDateFor(object, feature, datesAreUTCEquivalent());
-			dateCacheA.put(key, localDate);
-			return localDate;
+	public LocalDate getLocalDateFor(final DateTime dateTime) {
+		if (dateTime == null) {
+			return null;
 		}
-	}
-
-	public <T extends ITimezoneProvider & EObject> LocalDate getLocalDateFor(final T object, final Date date, final EAttribute feature) {
-		return getLocalDateTimeFor(object, date, feature).toLocalDate();
-	}
-
-	public <T extends ITimezoneProvider & EObject> LocalDateTime getLocalDateTimeFor(final T object, final Date date, final EAttribute feature) {
-		final Triple<EObject, Date, EAttribute> key = new Triple<>((EObject) object, date, feature);
-		if (dateCacheB.containsKey(key)) {
-			return dateCacheB.get(key);
-		} else {
-			final LocalDateTime localDate = VerticalReportUtils.getLocalDateFor(object, date, feature, datesAreUTCEquivalent());
-			dateCacheB.put(key, localDate);
-			return localDate;
+		if (datesAreUTCEquivalent()) {
+			return dateTime.withZone(DateTimeZone.UTC).toLocalDate();
 		}
+		return dateTime.toLocalDate();
+	}
+
+	public LocalDateTime getLocalDateTimeFor(final DateTime dateTime) {
+		if (dateTime == null) {
+			return null;
+		}
+		if (datesAreUTCEquivalent()) {
+			return dateTime.withZone(DateTimeZone.UTC).toLocalDateTime();
+		}
+		return dateTime.toLocalDateTime();
 	}
 
 	public void inputChanged() {

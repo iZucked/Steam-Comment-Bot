@@ -188,7 +188,7 @@ public class EventPropertySource implements IPropertySource {
 			// list.add(descriptor);
 			// }
 
-			descriptor = new PropertyDescriptor(new EMFPath(true, SchedulePackage.eINSTANCE.getEvent__GetLocalStart()),
+			descriptor = new PropertyDescriptor(new EMFPath(true, SchedulePackage.eINSTANCE.getEvent_Start()),
 
 			"From Date");
 			descriptor.setCategory("Time");
@@ -199,7 +199,7 @@ public class EventPropertySource implements IPropertySource {
 			// addPropertyDescriptor(list, "From Time", SchedulePackage.eINSTANCE.getEvent__GetLocalStart(), Collections.<Object> emptyList());
 			// addPropertyDescriptor(list, "To Time", SchedulePackage.eINSTANCE.getEvent__GetLocalEnd(), Collections.<Object> emptyList());
 
-			descriptor = new PropertyDescriptor(new EMFPath(true, SchedulePackage.eINSTANCE.getEvent__GetLocalEnd()),
+			descriptor = new PropertyDescriptor(new EMFPath(true, SchedulePackage.eINSTANCE.getEvent_End()),
 
 			"To Date");
 			descriptor.setCategory("Time");
