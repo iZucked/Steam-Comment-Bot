@@ -53,6 +53,18 @@
                attributeTypeName="EChar"
                attributeTypeURI="http://www.eclipse.org/emf/2002/Ecore">
          </dataType>
+         <dataType
+               attributeTypeName="LocalDateTime"
+               attributeTypeURI="http://www.mmxlabs.com/models/datetime/1">
+         </dataType>
+         <dataType
+               attributeTypeName="LocalDate"
+               attributeTypeURI="http://www.mmxlabs.com/models/datetime/1">
+         </dataType>
+         <dataType
+               attributeTypeName="YearMonth"
+               attributeTypeURI="http://www.mmxlabs.com/models/datetime/1">
+         </dataType>
       </attributeImporter>
    </extension>
    <extension

@@ -11,15 +11,19 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
 
+import com.mmxlabs.models.datetime.DateTimePackage;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorFactory;
 import com.mmxlabs.models.ui.editors.impl.BooleanInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.EENumInlineEditor;
+import com.mmxlabs.models.ui.editors.impl.LocalDateInlineEditor;
+import com.mmxlabs.models.ui.editors.impl.LocalDateTimeInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.MultiEnumInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.MultiReferenceInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.NumberInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.ReferenceInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.TextInlineEditor;
+import com.mmxlabs.models.ui.editors.impl.YearMonthInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.YesNoInlineEditor;
 
 /**
@@ -85,6 +89,14 @@ public class DefaultInlineEditorFactory implements IInlineEditorFactory {
 				}
 			} else if (attributeType == ecore.getEString()) {
 				return new TextInlineEditor(feature);
+			} else if (attributeType == DateTimePackage.Literals.YEAR_MONTH) {
+				return new YearMonthInlineEditor(feature);
+			} else if (attributeType == DateTimePackage.Literals.DATE_TIME) {
+//				return new DateTimeInlineEditor(feature);
+			} else if (attributeType == DateTimePackage.Literals.LOCAL_DATE) {
+				return new LocalDateInlineEditor(feature);
+			} else if (attributeType == DateTimePackage.Literals.LOCAL_DATE_TIME) {
+				return new LocalDateTimeInlineEditor(feature);
 			}
 		}
 		return null;

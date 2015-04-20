@@ -22,11 +22,13 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  com.mmxlabs.models.mmxcore;bundle-version="[5.0.0,6.0.0)",
  com.mmxlabs.scenario.service.model;bundle-version="[3.9.0,4.0.0)",
  com.mmxlabs.models.ui.validation;bundle-version="[3.9.0,4.0.0)",
- org.eclipse.jdt.annotation;bundle-version="[1.1.0,2.0.0)";resolution:=optional
+ org.eclipse.jdt.annotation;bundle-version="[1.1.0,2.0.0)";resolution:=optional,
+ com.mmxlabs.models.datetime.ui;bundle-version="[1.0.0,2.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.models.ui.tabular,
  com.mmxlabs.models.ui.tabular.filter,
  com.mmxlabs.models.ui.tabular.generic,
  com.mmxlabs.models.ui.tabular.manipulators
-Import-Package: com.google.common.base
+Import-Package: com.google.common.base,
+ org.joda.time;version="2.7.0"

@@ -11,7 +11,14 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EcorePackage;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+import org.joda.time.YearMonth;
 
+import com.mmxlabs.models.datetime.DateTimePackage;
+import com.mmxlabs.models.datetime.importers.LocalDateAttributeImporter;
+import com.mmxlabs.models.datetime.importers.LocalDateTimeAttributeImporter;
+import com.mmxlabs.models.datetime.importers.YearMonthAttributeImporter;
 import com.mmxlabs.models.util.importer.IAttributeImporter;
 import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IImportContext;
@@ -80,6 +87,9 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 
 			if (isNumberDataType(dt)) {
 				return importNumberDataType(dt, value, context);
+			} else if (isDateDataType(dt)) {
+				return importDateDataType(dt, value, context);
+
 			} else {
 				return dt.getEPackage().getEFactoryInstance().createFromString(dt, value);
 			}
@@ -98,6 +108,8 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 
 		if (isNumberDataType(dt)) {
 			return exportNumberDataType(dt, value, context);
+		} else if (isDateDataType(dt)) {
+			return exportDateDataType(dt, value, context);
 		} else {
 			return attribute.getEAttributeType().getEPackage().getEFactoryInstance().convertToString(attribute.getEAttributeType(), value);
 		}
@@ -110,6 +122,14 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 
 		if (dt == EcorePackage.Literals.EDOUBLE || dt == EcorePackage.Literals.EDOUBLE_OBJECT || dt == EcorePackage.Literals.EINT || dt == EcorePackage.Literals.EINTEGER_OBJECT
 				|| dt == EcorePackage.Literals.EFLOAT || dt == EcorePackage.Literals.EFLOAT_OBJECT) {
+			return true;
+		}
+		return false;
+	}
+
+	protected boolean isDateDataType(final EDataType dt) {
+
+		if (dt == DateTimePackage.Literals.DATE_TIME || dt == DateTimePackage.Literals.LOCAL_DATE || dt == DateTimePackage.Literals.LOCAL_DATE_TIME || dt == DateTimePackage.Literals.YEAR_MONTH) {
 			return true;
 		}
 		return false;
@@ -140,6 +160,42 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 			return nai.doubleToString((Double) value);
 		}
 
+		return null;
+	}
+
+	protected String exportDateDataType(final EDataType dt, final Object value, final IExportContext context) {
+		if (value == null) {
+			return null;
+		}
+		if (dt == DateTimePackage.Literals.YEAR_MONTH) {
+			return new YearMonthAttributeImporter().formatYearMonth((YearMonth) value);
+		}
+		if (dt == DateTimePackage.Literals.LOCAL_DATE) {
+			return new LocalDateAttributeImporter().formatLocalDate((LocalDate) value);
+		}
+		if (dt == DateTimePackage.Literals.LOCAL_DATE_TIME) {
+			return new LocalDateTimeAttributeImporter().formatLocalDateTime((LocalDateTime) value);
+		}
+		if (dt == DateTimePackage.Literals.DATE_TIME) {
+			// return new DateTimeAttributeImporter().formatDateTime((DateTime) value);
+		}
+		return null;
+	}
+
+	protected Object importDateDataType(final EDataType dt, final String value, final IImportContext context) throws ParseException {
+
+		if (dt == DateTimePackage.Literals.YEAR_MONTH) {
+			return new YearMonthAttributeImporter().parseYearMonth(value);
+		}
+		if (dt == DateTimePackage.Literals.LOCAL_DATE) {
+			return new LocalDateAttributeImporter().parseLocalDate(value);
+		}
+		if (dt == DateTimePackage.Literals.LOCAL_DATE_TIME) {
+			return new LocalDateTimeAttributeImporter().parseLocalDateTime(value);
+		}
+		if (dt == DateTimePackage.Literals.DATE_TIME) {
+			// return new DateTimeAttributeImporter().parseDateTime(value);
+		}
 		return null;
 	}
 }

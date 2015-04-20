@@ -18,7 +18,8 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.eclipse.emf.edit.ui;bundle-version="2.8.0",
  org.eclipse.jface,
  com.mmxlabs.rcp.common;bundle-version="[3.9.0,4.0.0)",
- org.eclipse.jdt.annotation;bundle-version="[1.1.0,2.0.0)";resolution:=optional
+ org.eclipse.jdt.annotation;bundle-version="[1.1.0,2.0.0)";resolution:=optional,
+ com.mmxlabs.models.datetime.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: com.mmxlabs.models.ui.properties,
  com.mmxlabs.models.ui.properties.extensions,

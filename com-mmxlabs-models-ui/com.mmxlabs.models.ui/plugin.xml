@@ -59,6 +59,22 @@
                   EDataTypeName="EString"
                   EDataTypeURI="http://www.eclipse.org/emf/2002/Ecore">
             </EDataTypeIs>
+            <EDataTypeIs
+                  EDataTypeName="YearMonth"
+                  EDataTypeURI="http://www.mmxlabs.com/models/datetime/1">
+            </EDataTypeIs>
+            <EDataTypeIs
+                  EDataTypeName="LocalDate"
+                  EDataTypeURI="http://www.mmxlabs.com/models/datetime/1">
+            </EDataTypeIs>
+            <EDataTypeIs
+                  EDataTypeName="LocalDateTime"
+                  EDataTypeURI="http://www.mmxlabs.com/models/datetime/1">
+            </EDataTypeIs>
+            <EDataTypeIs
+                  EDataTypeName="DateTime"
+                  EDataTypeURI="http://www.mmxlabs.com/models/datetime/1">
+            </EDataTypeIs>
          </FeatureAnyOf>
       </editorFactory>
    </extension>

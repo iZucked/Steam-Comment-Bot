@@ -8,6 +8,11 @@ import java.text.DateFormatSymbols;
 import java.util.Calendar;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+
 import com.mmxlabs.common.Pair;
 
 /**
@@ -93,6 +98,24 @@ class Match implements IFilter {
 				}
 				return likeLowercaseString(renderedValue);
 			}
+			if (value instanceof DateTime) {
+				if (likeDateTime((DateTime) value)) {
+					return true;
+				}
+				return likeLowercaseString(renderedValue);
+			}
+			if (value instanceof LocalDateTime) {
+				if (likeLocalDateTime((LocalDateTime) value)) {
+					return true;
+				}
+				return likeLowercaseString(renderedValue);
+			}
+			if (value instanceof LocalDate) {
+				if (likeLocalDate((LocalDate) value)) {
+					return true;
+				}
+				return likeLowercaseString(renderedValue);
+			}
 			return likeLowercaseString(value);
 		case EQUAL:
 			if (value instanceof Number) {
@@ -141,18 +164,56 @@ class Match implements IFilter {
 
 	private final static DateFormatSymbols dateFormatSymbols = new DateFormatSymbols();
 
-	// private final static
 	/**
 	 * @param value2
 	 * @return
 	 */
-	private boolean likeCalendar(final Calendar calendar) {
+	private boolean likeCalendar(@NonNull final Calendar calendar) {
 		if (integerValue != null) {
 			final int i = integerValue;
 			return (calendar.get(Calendar.YEAR) == integerValue) || (calendar.get(Calendar.DAY_OF_MONTH) == i) || ((calendar.get(Calendar.MONTH) + 1) == i);
 		}
 
 		if (likeLowercaseString(dateFormatSymbols.getMonths()[calendar.get(Calendar.MONTH)])) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private boolean likeDateTime(@NonNull final DateTime calendar) {
+		if (integerValue != null) {
+			final int i = integerValue;
+			return (calendar.getYear() == integerValue) || (calendar.getDayOfMonth() == i) || (calendar.getMonthOfYear() == i);
+		}
+
+		if (likeLowercaseString(dateFormatSymbols.getMonths()[calendar.getMonthOfYear() - 1])) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private boolean likeLocalDateTime(@NonNull final LocalDateTime calendar) {
+		if (integerValue != null) {
+			final int i = integerValue;
+			return (calendar.getYear() == integerValue) || (calendar.getDayOfMonth() == i) || (calendar.getMonthOfYear() == i);
+		}
+
+		if (likeLowercaseString(dateFormatSymbols.getMonths()[calendar.getMonthOfYear() - 1])) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private boolean likeLocalDate(@NonNull final LocalDate calendar) {
+		if (integerValue != null) {
+			final int i = integerValue;
+			return (calendar.getYear() == integerValue) || (calendar.getDayOfMonth() == i) || (calendar.getMonthOfYear() == i);
+		}
+
+		if (likeLowercaseString(dateFormatSymbols.getMonths()[calendar.getMonthOfYear() - 1])) {
 			return true;
 		}
 
