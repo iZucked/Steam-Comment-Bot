@@ -60,7 +60,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 
 	private boolean inverseSort = false;
 
-	private GridTreeViewer viewer;
+	protected GridTreeViewer viewer;
 
 	private Action packColumnsAction;
 
