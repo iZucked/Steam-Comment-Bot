@@ -6,7 +6,7 @@ package com.mmxlabs.optimiser.lso.impl.thresholders;
 
 import java.util.Random;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.Test;
 
