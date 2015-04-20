@@ -5,15 +5,15 @@
 package com.mmxlabs.models.lng.transformer;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import javax.management.timer.Timer;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.Nullable;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
@@ -30,8 +30,8 @@ public class ModelEntityMap {
 	private final Map<Object, Object> modelToOptimiser = new HashMap<Object, Object>();
 	private final Map<Object, Object> optimiserToModel = new HashMap<Object, Object>();
 
-	private Date earliestDate;
-	private Date latestDate;
+	private DateTime earliestDate;
+	private DateTime latestDate;
 
 	public <U> U getModelObject(final Object internalObject, final Class<? extends U> clz) {
 		return clz.cast(optimiserToModel.get(internalObject));
@@ -69,11 +69,11 @@ public class ModelEntityMap {
 	/**
 	 * @return the earliestDate
 	 */
-	public Date getEarliestDate() {
+	public DateTime getEarliestDate() {
 		return earliestDate;
 	}
 
-	public Date getLatestDate() {
+	public DateTime getLatestDate() {
 		return latestDate;
 	}
 
@@ -81,18 +81,18 @@ public class ModelEntityMap {
 	 * @param earliestDate
 	 *            the earliestDate to set. The date is rounded down to the nearest hour (relative to UTC).
 	 */
-	public void setEarliestDate(Date earliestDate) {
+	public void setEarliestDate(DateTime earliestDate) {
 		this.earliestDate = DateAndCurveHelper.roundTimeDown(earliestDate);
 	}
 
-	public void setLatestDate(Date latestTime) {
+	public void setLatestDate(DateTime latestTime) {
 		this.latestDate = latestTime;
 	}
 
-	public Date getDateFromHours(final long hours, final String tz) {
+	public DateTime getDateFromHours(final int hours, final String tz) {
 		String timeZone = (tz == null) ? "UTC" : tz;
 		int offsetMinutes = DateAndCurveHelper.getOffsetInMinutesFromTimeZone(timeZone);
-		return new Date(earliestDate.getTime() + hours * Timer.ONE_HOUR + offsetMinutes * Timer.ONE_MINUTE);
+		return new DateTime(earliestDate).withZone(DateTimeZone.forID(timeZone)).plusHours(hours).plusMinutes(offsetMinutes);
 	}
 
 	/**
@@ -102,7 +102,7 @@ public class ModelEntityMap {
 	 * @param port
 	 * @return
 	 */
-	public Date getDateFromHours(final long hours, @Nullable IPort port) {
+	public DateTime getDateFromHours(final int hours, @Nullable IPort port) {
 		if (port == null) {
 			return getDateFromHours(hours, "UTC");
 		}
@@ -116,7 +116,7 @@ public class ModelEntityMap {
 	 * @param port
 	 * @return
 	 */
-	public Date getDateFromHours(final long hours, @Nullable Port port) {
+	public DateTime getDateFromHours(final int hours, @Nullable Port port) {
 		if (port == null) {
 			return getDateFromHours(hours, "UTC");
 		}

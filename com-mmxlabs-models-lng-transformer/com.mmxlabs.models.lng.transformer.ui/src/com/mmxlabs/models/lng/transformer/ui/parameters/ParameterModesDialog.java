@@ -4,17 +4,11 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.parameters;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.conversion.Converter;
@@ -45,6 +39,10 @@ import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
+import org.joda.time.LocalDate;
+import org.joda.time.YearMonth;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import com.mmxlabs.models.ui.forms.AbstractDataBindingFormDialog;
 
@@ -272,18 +270,16 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		area.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
 		toolkit.createLabel(area, option.label);
 
-		final DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT);
+		final DateTimeFormatter format = DateTimeFormat.shortDate();
 		// Strict parse mode
-		format.setLenient(false);
-		format.setTimeZone(TimeZone.getTimeZone("UTC"));
 		final IValidator validator = new IValidator() {
 			@Override
 			public IStatus validate(final Object value) {
 				if (value instanceof String) {
 					if (value.equals("") == false) {
 						try {
-							format.parse((String) value);
-						} catch (final ParseException e) {
+							format.parseLocalDate((String) value);
+						} catch (final IllegalArgumentException e) {
 							return ValidationStatus.error(String.format("'%s' is not a valid date.", value));
 						}
 					}
@@ -305,7 +301,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 					public Object convert(final Object fromObject) {
 						final String value = fromObject == null ? null : fromObject.toString();
 						try {
-							return format.parse(value);
+							return format.parseLocalDate(value);
 						} catch (final Exception e) {
 							return null;
 						}
@@ -320,8 +316,9 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 				return new Converter(fromType, toType) {
 					@Override
 					public Object convert(final Object fromObject) {
-						if (fromObject instanceof Date) {
-							return format.format(fromObject);
+						if (fromObject instanceof LocalDate) {
+							LocalDate localDate = (LocalDate) fromObject;
+							return format.print(localDate);
 						}
 						return null;
 					}
@@ -344,27 +341,16 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		area.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
 		toolkit.createLabel(area, option.label);
 
-		final SimpleDateFormat format = new SimpleDateFormat("MM/yy");
-		// Strict parse mode
-		format.setLenient(false);
-		format.setTimeZone(TimeZone.getTimeZone("UTC"));
-		// Permit 2 digit year dates.
-		{
-			final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-			cal.clear();
-			cal.set(Calendar.YEAR, 2000);
-			cal.set(Calendar.MONTH, Calendar.JANUARY);
-			cal.set(Calendar.DAY_OF_MONTH, 1);
-			format.set2DigitYearStart(cal.getTime());
-		}
+		final DateTimeFormatter format = DateTimeFormat.forPattern("MM/yy");
+
 		final IValidator validator = new IValidator() {
 			@Override
 			public IStatus validate(final Object value) {
 				if (value instanceof String) {
 					if (value.equals("") == false) {
 						try {
-							format.parse((String) value);
-						} catch (final ParseException e) {
+							format.parseLocalDate((String) value);
+						} catch (final IllegalArgumentException e) {
 							return ValidationStatus.error(String.format("'%s' is not a valid date.", value));
 						}
 					}
@@ -386,8 +372,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 					public Object convert(final Object fromObject) {
 						final String value = fromObject == null ? null : fromObject.toString();
 						try {
-							final Date date = format.parse(value);
-							return date;
+							return new YearMonth(format.parseLocalDate(value));
 						} catch (final Exception e) {
 							return null;
 						}
@@ -402,8 +387,8 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 				return new Converter(fromType, toType) {
 					@Override
 					public Object convert(final Object fromObject) {
-						if (fromObject instanceof Date) {
-							return format.format(fromObject);
+						if (fromObject instanceof YearMonth) {
+							return format.print((YearMonth) fromObject);
 						}
 						return null;
 					}

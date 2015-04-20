@@ -7,15 +7,17 @@ package com.mmxlabs.models.lng.transformer.its.tests;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
-
-import javax.management.timer.Timer;
 
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+import org.joda.time.YearMonth;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -100,7 +102,7 @@ public class CustomScenarioCreator {
 
 	private String timeZone = TimeZone.getDefault().getID();
 
-	public CustomScenarioCreator(final float dischargePrice, String timeZone) {
+	public CustomScenarioCreator(final float dischargePrice, final String timeZone) {
 		this.timeZone = timeZone;
 
 		scenario = ManifestJointModel.createEmptyInstance(null);
@@ -120,8 +122,8 @@ public class CustomScenarioCreator {
 		shippingEntity = CommercialFactory.eINSTANCE.createLegalEntity();
 		shippingEntity.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
 		shippingEntity.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
-		TaxRate taxRate = CommercialFactory.eINSTANCE.createTaxRate();
-		taxRate.setDate(createDate(2000, Calendar.JANUARY, 1));
+		final TaxRate taxRate = CommercialFactory.eINSTANCE.createTaxRate();
+		taxRate.setDate(createLocalDate(2000, Calendar.JANUARY, 1));
 		shippingEntity.getShippingBook().getTaxRates().add(EcoreUtil.copy(taxRate));
 		shippingEntity.getTradingBook().getTaxRates().add(EcoreUtil.copy(taxRate));
 		contractEntity.getShippingBook().getTaxRates().add(EcoreUtil.copy(taxRate));
@@ -144,7 +146,7 @@ public class CustomScenarioCreator {
 	}
 
 	public CustomScenarioCreator(final float dischargePrice) {
-		this(dischargePrice, TimeZone.getDefault().getID());
+		this(dischargePrice, "UTC");
 	}
 
 	/**
@@ -385,8 +387,8 @@ public class CustomScenarioCreator {
 	 * Add a cargo to the scenario. <br>
 	 * Both the load and discharge ports must be added using {@link #addPorts(Port, Port, int[], int[])} to correctly set up distances.
 	 */
-	public Cargo addCargo(final String cargoID, final Port loadPort, final Port dischargePort, final String loadPrice, final String dischargePrice, final float cvValue, final Date loadWindowStart,
-			final int travelTime) {
+	public Cargo addCargo(final String cargoID, final Port loadPort, final Port dischargePort, final String loadPrice, final String dischargePrice, final float cvValue,
+			final LocalDateTime loadWindowStart, final int travelTime) {
 
 		if (!portModel.getPorts().contains(loadPort)) {
 			log.warn("Scenario does not contain load port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway.", new RuntimeException());
@@ -425,30 +427,14 @@ public class CustomScenarioCreator {
 
 		load.setWindowSize(0);
 
-		final TimeZone loadZone = TimeZone.getTimeZone(loadPort.getTimeZone() == null || loadPort.getTimeZone().isEmpty() ? "UTC" : loadPort.getTimeZone());
+		final DateTimeZone dischargeZone = DateTimeZone.forID(dischargePort.getTimeZone() == null || dischargePort.getTimeZone().isEmpty() ? "UTC" : dischargePort.getTimeZone());
 
-		final TimeZone dischargeZone = TimeZone.getTimeZone(dischargePort.getTimeZone() == null || dischargePort.getTimeZone().isEmpty() ? "UTC" : dischargePort.getTimeZone());
+		load.setWindowStart(loadWindowStart.toLocalDate());
+		load.setWindowStartTime(loadWindowStart.getHourOfDay());
 
-		final Calendar loadCalendar = Calendar.getInstance(loadZone);
-		loadCalendar.setTime(loadWindowStart);
-		load.setWindowStartTime(loadCalendar.get(Calendar.HOUR_OF_DAY));
-		loadCalendar.set(Calendar.HOUR_OF_DAY, 0);
-		loadCalendar.set(Calendar.MINUTE, 0);
-		loadCalendar.set(Calendar.SECOND, 0);
-		loadCalendar.set(Calendar.MILLISECOND, 0);
-		load.setWindowStart(loadCalendar.getTime());
-
-		final Date dischargeDate = new Date(loadWindowStart.getTime() + (Timer.ONE_HOUR * travelTime));
-		final Calendar dischargeCalendar = Calendar.getInstance(dischargeZone);
-		dischargeCalendar.setTime(dischargeDate);
-		dis.setWindowStartTime(dischargeCalendar.get(Calendar.HOUR_OF_DAY));
-
-		dischargeCalendar.set(Calendar.HOUR_OF_DAY, 0);
-		dischargeCalendar.set(Calendar.MINUTE, 0);
-		dischargeCalendar.set(Calendar.SECOND, 0);
-		dischargeCalendar.set(Calendar.MILLISECOND, 0);
-
-		dis.setWindowStart(dischargeCalendar.getTime());
+		final DateTime dischargeDate = load.getWindowStartWithSlotOrPortTime().withZone(dischargeZone).plusHours(travelTime);
+		dis.setWindowStartTime(dischargeDate.getHourOfDay());
+		dis.setWindowStart(dischargeDate.toLocalDate());
 		dis.setWindowSize(0);
 
 		dis.setPricingEvent(PricingEvent.START_DISCHARGE);
@@ -460,12 +446,12 @@ public class CustomScenarioCreator {
 		return cargo;
 	}
 
-	public Cargo addCargo(final String cargoID, final Port loadPort, final Port dischargePort, final int loadPrice, final float dischargePrice, final float cvValue, final Date loadWindowStart,
-			final int travelTime) {
+	public Cargo addCargo(final String cargoID, final Port loadPort, final Port dischargePort, final int loadPrice, final float dischargePrice, final float cvValue,
+			final LocalDateTime loadWindowStart, final int travelTime) {
 		return addCargo(cargoID, loadPort, dischargePort, Float.toString(loadPrice), Float.toString(dischargePrice), cvValue, loadWindowStart, travelTime);
 	}
 
-	public DryDockEvent addDryDock(final Port startPort, final Date start, final int durationDays) {
+	public DryDockEvent addDryDock(final Port startPort, final LocalDateTime start, final int durationDays) {
 
 		if (!portModel.getPorts().contains(startPort)) {
 			log.warn("Scenario does not contain start port. Ports should be added using addPorts to correctly set distances. Adding port to scenario anyway.", new RuntimeException());
@@ -487,7 +473,7 @@ public class CustomScenarioCreator {
 		return dryDock;
 	}
 
-	public CharterOutEvent addCharterOut(final String id, final Port startPort, final Port endPort, final Date startCharterOut, final int heelLimit, final int charterOutDurationDays,
+	public CharterOutEvent addCharterOut(final String id, final Port startPort, final Port endPort, final LocalDateTime startCharterOut, final int heelLimit, final int charterOutDurationDays,
 			final float cvValue, final float dischargePrice, final int dailyCharterOutPrice, final int repositioningFee) {
 
 		final CharterOutEvent charterOut = CargoFactory.eINSTANCE.createCharterOutEvent();
@@ -673,7 +659,7 @@ public class CustomScenarioCreator {
 
 			for (final Cargo c : cargoModel.getCargoes()) {
 				if (c.equals(cargo)) {
-					for (Slot s : c.getSlots()) {
+					for (final Slot s : c.getSlots()) {
 						s.getAllowedVessels().addAll(allowedVessels);
 					}
 					return true;
@@ -734,15 +720,15 @@ public class CustomScenarioCreator {
 		final CommodityIndex ci = PricingFactory.eINSTANCE.createCommodityIndex();
 		ci.setName(name);
 		pricingModel.getCommodityIndices().add(ci);
-		DataIndex<Double> di = PricingFactory.eINSTANCE.createDataIndex();
+		final DataIndex<Double> di = PricingFactory.eINSTANCE.createDataIndex();
 		ci.setData(di);
 		return ci;
 	}
 
-	public void addDataToCommodity(CommodityIndex ci, Date date, double value) {
-		DataIndex<Double> di = (DataIndex<Double>) ci.getData();
-		List<IndexPoint<Double>> points = di.getPoints();
-		IndexPoint<Double> ip = PricingFactory.eINSTANCE.createIndexPoint();
+	public void addDataToCommodity(final CommodityIndex ci, final YearMonth date, final double value) {
+		final DataIndex<Double> di = (DataIndex<Double>) ci.getData();
+		final List<IndexPoint<Double>> points = di.getPoints();
+		final IndexPoint<Double> ip = PricingFactory.eINSTANCE.createIndexPoint();
 		ip.setDate(date);
 		ip.setValue(value);
 		points.add(ip);
@@ -774,15 +760,18 @@ public class CustomScenarioCreator {
 		pricingModel.getCooldownPrices().add(price);
 	}
 
-	public Date createDate(int year, int month, int day) {
-		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-		cal.clear();
-		cal.set(Calendar.YEAR, year);
-		cal.set(Calendar.MONTH, month);
-		cal.set(Calendar.DAY_OF_MONTH, day);
-		return cal.getTime();
+	public LocalDate createLocalDate(final int year, final int month, final int day) {
+		return new LocalDate(year, 1 + month, day);
 	}
-	
+
+	public LocalDateTime createLocalDateTime(final int year, final int month, final int day, final int hourOfDay) {
+		return new LocalDateTime(year, 1 + month, day, hourOfDay, 0);
+	}
+
+	public YearMonth createYearMonth(final int year, final int month) {
+		return new YearMonth(year, 1 + month);
+	}
+
 	public LNGPortfolioModel getPortfolioModel() {
 		return portfolioModel;
 	}

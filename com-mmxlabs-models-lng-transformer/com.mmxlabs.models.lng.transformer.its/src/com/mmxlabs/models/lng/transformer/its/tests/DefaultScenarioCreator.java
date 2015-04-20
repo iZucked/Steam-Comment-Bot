@@ -6,17 +6,17 @@ package com.mmxlabs.models.lng.transformer.its.tests;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
-
-import javax.management.timer.Timer;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+import org.joda.time.YearMonth;
 import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,15 +118,11 @@ public class DefaultScenarioCreator {
 	/** A list of canal costs that will be added to every class of vessel when the scenario is retrieved for use. */
 	// private final ArrayList<VesselClassCost> canalCostsForAllVesselClasses = new ArrayList<VesselClassCost>();
 
-	private static final String timeZone = TimeZone.getDefault().getID();
+	private static final String timeZone = DateTimeZone.UTC.getID();
 
 	public DefaultScenarioCreator() {
 		scenario = ManifestJointModel.createEmptyInstance(null);
 		// minimalScenarioSetup = new MinimalScenarioSetup();
-	}
-
-	public Date addHours(final Date date, final int hours) {
-		return new Date(date.getTime() + Timer.ONE_HOUR * hours);
 	}
 
 	/**
@@ -239,13 +235,14 @@ public class DefaultScenarioCreator {
 			result.setVolumeAvailable(startHeelVolume);
 			return result;
 		}
+
 		public EndHeelOptions createDefaultEndHeelOptions() {
 			final EndHeelOptions result = CargoFactory.eINSTANCE.createEndHeelOptions();
 			result.unsetTargetEndHeel();
 			return result;
 		}
 
-		public void setBaseFuelPrice(final BaseFuelCost bfc, final double price, final Date date) {
+		public void setBaseFuelPrice(final BaseFuelCost bfc, final double price, final YearMonth date) {
 			BaseFuelIndex bfi = bfc.getIndex();
 			if (bfi == null) {
 				bfi = PricingFactory.eINSTANCE.createBaseFuelIndex();
@@ -269,9 +266,9 @@ public class DefaultScenarioCreator {
 			points.get(0).setValue(price);
 			points.get(0).setDate(date);
 		}
-		
+
 		public void setBaseFuelPrice(final BaseFuelCost bfc, final double price) {
-			setBaseFuelPrice(bfc, price, createDate(1, 0, 2000));
+			setBaseFuelPrice(bfc, price, new YearMonth(2000, 1));
 		}
 
 		/**
@@ -379,7 +376,7 @@ public class DefaultScenarioCreator {
 		public Vessel[] createMultipleDefaultVessels(final VesselClass vc, final int num, final BaseLegalEntity shippingEntity) {
 			final Vessel[] result = new Vessel[num];
 			for (int i = 0; i < num; i++) {
-				result[i] = createDefaultVessel(i + "(class " + vc.getName() + ")", vc,shippingEntity);
+				result[i] = createDefaultVessel(i + "(class " + vc.getName() + ")", vc, shippingEntity);
 			}
 			return result;
 		}
@@ -393,7 +390,7 @@ public class DefaultScenarioCreator {
 		 * @param endPort
 		 * @param endDate
 		 */
-		public VesselAvailability setAvailability(final CargoModel cargoModel, final Vessel vessel, final Port startPort, final Date startDate, final Port endPort, final Date endDate) {
+		public VesselAvailability setAvailability(final CargoModel cargoModel, final Vessel vessel, final Port startPort, final LocalDateTime startDate, final Port endPort, final LocalDateTime endDate) {
 			for (final VesselAvailability availability : cargoModel.getVesselAvailabilities()) {
 				if (availability.getVessel() == vessel) {
 					availability.getStartAt().add(startPort);
@@ -580,30 +577,20 @@ public class DefaultScenarioCreator {
 	public class DefaultCargoCreator {
 		int defaultWindowSize = 0;
 
-		public void setDefaultSlotWindow(final Slot slot, final Date time) {
+		public void setDefaultSlotWindow(final Slot slot, final LocalDateTime time) {
 			slot.setWindowSize(defaultWindowSize);
-			final Port port = slot.getPort();
-			final TimeZone zone = TimeZone.getTimeZone(port.getTimeZone() == null || port.getTimeZone().isEmpty() ? "UTC" : port.getTimeZone());
-
-			final Calendar loadCalendar = Calendar.getInstance(zone);
-
-			loadCalendar.setTime(time);
-			slot.setWindowStartTime(loadCalendar.get(Calendar.HOUR_OF_DAY));
-			loadCalendar.set(Calendar.HOUR_OF_DAY, 0);
-			loadCalendar.set(Calendar.MINUTE, 0);
-			loadCalendar.set(Calendar.SECOND, 0);
-			loadCalendar.set(Calendar.MILLISECOND, 0);
-			slot.setWindowStart(loadCalendar.getTime());
+			slot.setWindowStartTime(time.getHourOfDay());
+			slot.setWindowStart(time.toLocalDate());
 		}
 
-		public Cargo createDefaultCargo(String name, final Port loadPort, final Port dischargePort, Date loadTime, final int travelTimeInHours) {
+		public Cargo createDefaultCargo(String name, final Port loadPort, final Port dischargePort, LocalDateTime loadTime, final int travelTimeInHours) {
 			final Cargo result = CargoFactory.eINSTANCE.createCargo();
 			final LoadSlot loadSlot = CargoFactory.eINSTANCE.createLoadSlot();
 			final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
 
 			// if load time is not specified, set it to the current datetime
 			if (loadTime == null) {
-				loadTime = new Date(System.currentTimeMillis());
+				loadTime = new LocalDateTime(2015, 5, 1, 0, 0);
 			}
 
 			// if name is not specified, set it to a sensible default
@@ -627,7 +614,7 @@ public class DefaultScenarioCreator {
 			dischargeSlot.setName("discharge");
 
 			setDefaultSlotWindow(loadSlot, loadTime);
-			setDefaultSlotWindow(dischargeSlot, addHours(loadTime, travelTimeInHours));
+			setDefaultSlotWindow(dischargeSlot, loadTime.plusHours(travelTimeInHours));
 
 			final CargoModel cargoModel = scenario.getPortfolioModel().getCargoModel();
 
@@ -638,7 +625,7 @@ public class DefaultScenarioCreator {
 			return result;
 		}
 
-		public Cargo createDefaultLddCargo(String name, final Port loadPort, final Port dischargePort1, final Port dischargePort2, Date loadTime, final int travelTimeInHours1,
+		public Cargo createDefaultLddCargo(String name, final Port loadPort, final Port dischargePort1, final Port dischargePort2, LocalDateTime loadTime, final int travelTimeInHours1,
 				final int travelTimeInHours2) {
 			final Cargo result = CargoFactory.eINSTANCE.createCargo();
 			final LoadSlot loadSlot = CargoFactory.eINSTANCE.createLoadSlot();
@@ -647,7 +634,7 @@ public class DefaultScenarioCreator {
 
 			// if load time is not specified, set it to the current datetime
 			if (loadTime == null) {
-				loadTime = new Date(System.currentTimeMillis());
+				loadTime = new LocalDateTime();
 			}
 
 			// if name is not specified, set it to a sensible default
@@ -676,8 +663,8 @@ public class DefaultScenarioCreator {
 			dischargeSlot2.setName("discharge2");
 
 			setDefaultSlotWindow(loadSlot, loadTime);
-			setDefaultSlotWindow(dischargeSlot1, addHours(loadTime, travelTimeInHours1));
-			setDefaultSlotWindow(dischargeSlot2, addHours(loadTime, travelTimeInHours1 + defaultWindowSize + travelTimeInHours2));
+			setDefaultSlotWindow(dischargeSlot1, loadTime.plusHours(travelTimeInHours1));
+			setDefaultSlotWindow(dischargeSlot2, loadTime.plusHours(travelTimeInHours1 + defaultWindowSize + travelTimeInHours2));
 
 			final CargoModel cargoModel = scenario.getPortfolioModel().getCargoModel();
 
@@ -708,10 +695,10 @@ public class DefaultScenarioCreator {
 			final IndexPoint<T> startPoint = PricingFactory.eINSTANCE.createIndexPoint();
 			final IndexPoint<T> endPoint = PricingFactory.eINSTANCE.createIndexPoint();
 
-			startPoint.setDate(new Date(0));
+			startPoint.setDate(new YearMonth(1000, 1));
 			startPoint.setValue(value);
 
-			endPoint.setDate(new Date(Long.MAX_VALUE));
+			endPoint.setDate(new YearMonth(3000, 1));
 			endPoint.setValue(value);
 
 			final DataIndex<T> result = PricingFactory.eINSTANCE.createDataIndex();
@@ -738,7 +725,7 @@ public class DefaultScenarioCreator {
 				if (p.getName().equals("Port 2"))
 					cPorts.add(p);
 			}
-			
+
 			final SpotMarketsModel marketModel = scenario.getSpotMarketsModel();
 			marketModel.getCharterOutMarkets().add(result);
 
@@ -773,7 +760,7 @@ public class DefaultScenarioCreator {
 	public class DefaultVesselEventCreator {
 		int defaultDurationInDays = 1;
 
-		public void addEventToModel(final VesselEvent event, final String name, final Port port, final Date startByDate, final Date startAfterDate) {
+		public void addEventToModel(final VesselEvent event, final String name, final Port port, final LocalDateTime startByDate, final LocalDateTime startAfterDate) {
 			event.setName(name);
 			event.setPort(port);
 			event.setDurationInDays(defaultDurationInDays);
@@ -783,19 +770,20 @@ public class DefaultScenarioCreator {
 			cargoModel.getVesselEvents().add(event);
 		}
 
-		public DryDockEvent createDryDockEvent(final String name, final Port port, final Date startByDate, final Date startAfterDate) {
+		public DryDockEvent createDryDockEvent(final String name, final Port port, final LocalDateTime startByDate, final LocalDateTime startAfterDate) {
 			final DryDockEvent event = CargoFactory.eINSTANCE.createDryDockEvent();
 			addEventToModel(event, name, port, startAfterDate, startAfterDate);
 			return event;
 		}
 
-		public MaintenanceEvent createMaintenanceEvent(final String name, final Port port, final Date startByDate, final Date startAfterDate) {
+		public MaintenanceEvent createMaintenanceEvent(final String name, final Port port, final LocalDateTime startByDate, final LocalDateTime startAfterDate) {
 			final MaintenanceEvent event = CargoFactory.eINSTANCE.createMaintenanceEvent();
 			addEventToModel(event, name, port, startAfterDate, startAfterDate);
 			return event;
 		}
 
-		public CharterOutEvent createCharterOutEvent(final String name, final Port startPort, final Port endPort, final Date startByDate, final Date startAfterDate, final int hireRate) {
+		public CharterOutEvent createCharterOutEvent(final String name, final Port startPort, final Port endPort, final LocalDateTime startByDate, final LocalDateTime startAfterDate,
+				final int hireRate) {
 			final CharterOutEvent event = CargoFactory.eINSTANCE.createCharterOutEvent();
 			addEventToModel(event, name, startPort, startAfterDate, startAfterDate);
 			event.setHireRate(hireRate);
@@ -825,7 +813,7 @@ public class DefaultScenarioCreator {
 		return null;
 	}
 
-	public DryDockEvent addDryDock(final Port startPort, final Date start, final int durationDays) {
+	public DryDockEvent addDryDock(final Port startPort, final LocalDateTime start, final int durationDays) {
 
 		final PortModel portModel = scenario.getPortModel();
 		if (!portModel.getPorts().contains(startPort)) {
@@ -914,7 +902,7 @@ public class DefaultScenarioCreator {
 		}
 	}
 
-	public CharterOutEvent addCharterOut(final String id, final Port startPort, final Port endPort, final Date startCharterOut, final int heelLimit, final int charterOutDurationDays,
+	public CharterOutEvent addCharterOut(final String id, final Port startPort, final Port endPort, final LocalDateTime startCharterOut, final int heelLimit, final int charterOutDurationDays,
 			final float cvValue, final float dischargePrice, final int dailyCharterOutPrice, final int repositioningFee) {
 
 		final CharterOutEvent charterOut = CargoFactory.eINSTANCE.createCharterOutEvent();
@@ -1122,19 +1110,4 @@ public class DefaultScenarioCreator {
 		}
 		return null;
 	}
-	
-	private Date createDate(int day, int month, int year) {
-		final Calendar newCalendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-		newCalendar.set(Calendar.YEAR, year);
-		newCalendar.set(Calendar.MONTH, month);
-		newCalendar.set(Calendar.DAY_OF_MONTH, day);
-		newCalendar.set(Calendar.HOUR_OF_DAY, 0);
-		newCalendar.set(Calendar.MINUTE, 0);
-		newCalendar.set(Calendar.SECOND, 0);
-		newCalendar.set(Calendar.MILLISECOND, 0);
-
-		return newCalendar.getTime();
-	}
-
-
 }

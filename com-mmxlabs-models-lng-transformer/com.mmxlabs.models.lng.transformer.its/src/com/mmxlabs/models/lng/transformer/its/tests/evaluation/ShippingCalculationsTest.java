@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
+import org.joda.time.LocalDateTime;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -556,10 +557,10 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		// change from default scenario: set a "return after" date
 		// somewhat later than the end of the discharge window
 		final VesselAvailability av = msc.vesselAvailability;
-		final Date endDischarge = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
+		final LocalDateTime endDischarge = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime().toLocalDateTime();
 
 		// return 3 hrs after discharge window ends
-		final Date returnDate = new Date(endDischarge.getTime() + 3 * 3600 * 1000);
+		final LocalDateTime returnDate = endDischarge.plusHours(3);
 		av.setEndAfter(returnDate);
 		av.unsetEndBy();
 		System.err.println("Vessel to return after: " + returnDate);
@@ -591,12 +592,12 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		// change from default scenario: set a "return after" date
 		// somewhat later than the end of the discharge window
 		final VesselAvailability av = msc.vesselAvailability;
-		final Date startLoad = msc.cargo.getSlots().get(0).getWindowStartWithSlotOrPortTime();
+		final LocalDateTime startLoad = msc.cargo.getSlots().get(0).getWindowStartWithSlotOrPortTime().toLocalDateTime();
 
 		// start 3 hrs before load window begins
-		final Date startDate = msc.addHours(startLoad, -3);
+		final LocalDateTime startDate = startLoad.minusHours(3);
 		av.setStartBy(startDate);
-		av.setStartAfter(msc.addHours(startDate, -5));
+		av.setStartAfter(startDate.minusHours(5));
 		System.err.println("Vessel to start before: " + startDate);
 
 		final SequenceTester checker = getDefaultTester();
@@ -626,16 +627,16 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		// change from default scenario: set a "return after" date
 		// somewhat later than the end of the discharge window
 		final VesselAvailability av = msc.vesselAvailability;
-		final Date startLoad = msc.cargo.getSlots().get(0).getWindowStartWithSlotOrPortTime();
-		final Date endDischarge = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
+		final LocalDateTime startLoad = msc.cargo.getSlots().get(0).getWindowStartWithSlotOrPortTime().toLocalDateTime();
+		final LocalDateTime endDischarge = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime().toLocalDateTime();
 
 		// start within 5 hrs before load window starts
-		final Date startDate = new Date(startLoad.getTime() - 5 * 3600 * 1000);
+		final LocalDateTime startDate = startLoad.minusHours(5);
 		av.setStartAfter(startDate);
 		System.err.println("Vessel to start after: " + startDate);
 
 		// return within 5 hrs after discharge window ends
-		final Date returnDate = new Date(endDischarge.getTime() + 5 * 3600 * 1000);
+		final LocalDateTime returnDate = endDischarge.plusHours(5);
 		av.setEndBy(returnDate);
 		System.err.println("Vessel to return by: " + returnDate);
 
@@ -1012,9 +1013,9 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change to default: add a dry dock event 2-3 hrs after discharge window ends
-		final Date endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
-		final Date dryDockStartByDate = new Date(endLoad.getTime() + 3 * 3600 * 1000);
-		final Date dryDockStartAfterDate = new Date(endLoad.getTime() + 2 * 3600 * 1000);
+		final LocalDateTime endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime().toLocalDateTime();
+		final LocalDateTime dryDockStartByDate = endLoad.plusHours(3);
+		final LocalDateTime dryDockStartAfterDate = endLoad.plusHours(2);
 		msc.vesselEventCreator.createDryDockEvent("DryDock", msc.loadPort, dryDockStartByDate, dryDockStartAfterDate);
 
 		// set up a drydock pricing of 6
@@ -1044,9 +1045,9 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change to default: add a dry dock event 2-3 hrs after discharge window ends
-		final Date endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
-		final Date maintenanceDockStartByDate = new Date(endLoad.getTime() + 3 * 3600 * 1000);
-		final Date maintenanceDockStartAfterDate = new Date(endLoad.getTime() + 2 * 3600 * 1000);
+		final LocalDateTime endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime().toLocalDateTime();
+		final LocalDateTime maintenanceDockStartByDate = endLoad.plusHours(3);
+		final LocalDateTime maintenanceDockStartAfterDate = endLoad.plusHours(2);
 		msc.vesselEventCreator.createMaintenanceEvent("Maintenance", msc.loadPort, maintenanceDockStartByDate, maintenanceDockStartAfterDate);
 
 		// set up a drydock pricing of 6
@@ -1142,12 +1143,13 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final LNGScenarioModel scenario = msc.buildScenario();
 
 		final Slot loadSlot = msc.cargo.getSlots().get(0);
-		final Date loadDate = loadSlot.getWindowStartWithSlotOrPortTime();
+		final LocalDateTime loadDate = loadSlot.getWindowStartWithSlotOrPortTime().toLocalDateTime();
 
 		final double maxSpeed = msc.vc.getMaxSpeed();
 		final int firstIdle = 1;
-		final Date startAfterDate = msc.addHours(loadDate, -5 * msc.getTravelTime(msc.originPort, msc.loadPort, null, (int) maxSpeed));
-		final Date startByDate = msc.addHours(loadDate, -msc.getTravelTime(msc.originPort, msc.loadPort, null, (int) maxSpeed) - firstIdle);
+		Integer travelTime = msc.getTravelTime(msc.originPort, msc.loadPort, null, (int) maxSpeed);
+		final LocalDateTime startAfterDate = loadDate.minusHours(5 * travelTime);
+		final LocalDateTime startByDate = loadDate.minusHours(travelTime + firstIdle);
 
 		msc.vesselAvailability.setStartAfter(startAfterDate);
 		msc.vesselAvailability.setStartBy(startByDate);
@@ -1203,10 +1205,10 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		// change from default scenario: set a "return after" date
 		// somewhat later than the end of the discharge window
 		final VesselAvailability av = msc.vesselAvailability;
-		final Date endDischarge = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
+		final LocalDateTime endDischarge = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime().toLocalDateTime();
 
 		// return 37 hrs after discharge window ends
-		final Date returnDate = new Date(endDischarge.getTime() + 37l * 3600l * 1000l);
+		final LocalDateTime returnDate = endDischarge.plusHours(37);
 		av.setEndAfter(returnDate);
 		av.unsetEndBy();
 		System.err.println("Vessel to return after: " + returnDate);
@@ -1262,14 +1264,14 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		// change from default scenario: set a "return after" date
 		// somewhat later than the end of the discharge window
 		final VesselAvailability av = msc.vesselAvailability;
-		final Date endDischarge = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
+		final LocalDateTime endDischarge = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime().toLocalDateTime();
 
 		final int charterRatePerDay = 240000;
 		// change from default scenario: vessel has time charter rate 240 per day (10 per hour)
 		msc.vesselAvailability.setTimeCharterRate("" + charterRatePerDay);
 
 		// return 37 hrs after discharge window ends
-		final Date returnDate = new Date(endDischarge.getTime() + 37l * 3600l * 1000l);
+		final LocalDateTime returnDate = endDischarge.plusHours(37);
 		av.setEndAfter(returnDate);
 		av.unsetEndBy();
 		System.err.println("Vessel to return after: " + returnDate);

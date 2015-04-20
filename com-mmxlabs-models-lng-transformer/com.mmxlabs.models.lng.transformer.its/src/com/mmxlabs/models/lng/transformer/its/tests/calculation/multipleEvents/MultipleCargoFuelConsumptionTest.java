@@ -4,12 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests.calculation.multipleEvents;
 
-import java.util.Date;
-
-import javax.management.timer.Timer;
-
-import junit.framework.Assert;
-
+import org.joda.time.LocalDateTime;
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.common.TimeUnitConvert;
@@ -46,7 +42,7 @@ public class MultipleCargoFuelConsumptionTest {
 		final CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
 
 		// We want a leg between ports A and B to take 10 hours (9 hours travel, 1 hour idle).
-		final long legDuration = 10 * Timer.ONE_HOUR;
+		final int legDuration = 10;
 
 		final Port portA = PortFactory.eINSTANCE.createPort();
 		final Port portB = PortFactory.eINSTANCE.createPort();
@@ -65,10 +61,10 @@ public class MultipleCargoFuelConsumptionTest {
 		csc.addVesselSimple(vesselClassName, numOfVesselsToCreate, baseFuelUnitPrice, speed, capacity, consumption, NBORate, pilotLightRate, minHeelVolume, false);
 
 		// Set up start dates and durations.
-		final Date cargoAStart = new Date(System.currentTimeMillis());
+		final LocalDateTime cargoAStart = new LocalDateTime();
 		final int cargoADuration = 10;
 		// cargo B starts one hour after the vessel makes it back to port A (the vessel takes 10 hours to get to portB, then 10 hours to travel back to portA).
-		final Date cargoBStart = new Date(cargoAStart.getTime() + (2 * legDuration));
+		final LocalDateTime cargoBStart = cargoAStart.plusHours(2 * legDuration);
 		final int cargoBDuration = 10;
 
 		final int dryDockDurationDays = 0;
@@ -77,7 +73,7 @@ public class MultipleCargoFuelConsumptionTest {
 		csc.addCargo("beta", portA, portB, loadPrice, dischargePrice, 10, cargoBStart, cargoBDuration);
 
 		// add a dry dock so ballast idle doesn't take ages, but leave enough time for a 1 hour idle.
-		final Date dryDockStart = new Date(cargoBStart.getTime() + (2 * legDuration));
+		final LocalDateTime dryDockStart = cargoBStart.plusHours(2 * legDuration);
 		csc.addDryDock(portA, dryDockStart, dryDockDurationDays);
 
 		final LNGScenarioModel scenario = csc.buildScenario();
@@ -205,7 +201,7 @@ public class MultipleCargoFuelConsumptionTest {
 		final CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
 
 		// We want a leg between ports A and B to take 10 hours (9 hours travel, 1 hour idle).
-		final long legDuration = 10 * Timer.ONE_HOUR;
+		final int legDuration = 10;
 
 		final Port portA = PortFactory.eINSTANCE.createPort();
 		final Port portB = PortFactory.eINSTANCE.createPort();
@@ -229,10 +225,10 @@ public class MultipleCargoFuelConsumptionTest {
 		csc.addVesselSimple(vesselClassName, numOfVesselsToCreate, baseFuelUnitPrice, speed, capacity, consumption, NBORate, pilotLightRate, minHeelVolume, false);
 
 		// Set up start dates and durations.
-		final Date cargoAStart = new Date(System.currentTimeMillis());
+		final LocalDateTime cargoAStart = new LocalDateTime();
 		final int cargoADuration = 10;
 		// cargo B starts one hour after the vessel makes it back to port A (the vessel takes 10 hours to get to portB, then 10 hours to travel back to portA).
-		final Date cargoBStart = new Date(cargoAStart.getTime() + (2 * legDuration));
+		final LocalDateTime cargoBStart = cargoAStart.plusHours(2 * legDuration);
 		final int cargoBDuration = 10;
 
 		final int dryDockDurationDays = 0;
@@ -241,7 +237,7 @@ public class MultipleCargoFuelConsumptionTest {
 		csc.addCargo("beta", portA, portB, loadPrice, dischargePrice, 10, cargoBStart, cargoBDuration);
 
 		// add a dry dock so ballast idle doesn't take ages, but leave enough time for a 1 hour idle.
-		final Date dryDockStart = new Date(cargoBStart.getTime() + (2 * legDuration));
+		final LocalDateTime dryDockStart = cargoBStart.plusHours(2 * legDuration);
 		csc.addDryDock(portA, dryDockStart, dryDockDurationDays);
 
 		final LNGScenarioModel scenario = csc.buildScenario();

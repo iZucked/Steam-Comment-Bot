@@ -4,14 +4,15 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests;
 
-import java.util.Date;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
@@ -35,16 +36,9 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 	private final VesselAvailability vesselAvailability;
 
 	/**
-	 * Initialises a minimal complete scenario, creating:
-	 * - contract and shipping legal entities
-	 * - one vessel class and one vessel
-	 * - one (default) route
-	 * - one fixed-price sales contract and one fixed-price purchase contract
-	 * - three ports (one origin port, one load port and one discharge port)
-	 * - one cargo
-	 * The vessel starts at the origin port, must travel to the load port, pick up the cargo,
-	 * travel to the discharge port and discharge it. There is enough time at every stage
-	 * to create some idling at the discharge port. 
+	 * Initialises a minimal complete scenario, creating: - contract and shipping legal entities - one vessel class and one vessel - one (default) route - one fixed-price sales contract and one
+	 * fixed-price purchase contract - three ports (one origin port, one load port and one discharge port) - one cargo The vessel starts at the origin port, must travel to the load port, pick up the
+	 * cargo, travel to the discharge port and discharge it. There is enough time at every stage to create some idling at the discharge port.
 	 */
 	public LddScenarioCreator() {
 		scenario = ManifestJointModel.createEmptyInstance(null);
@@ -101,13 +95,14 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 			slot.setMaxQuantity(1000);
 		}
 
-		final Date loadDate = cargo.getSlots().get(0).getWindowStart();
-		final Date lastDischargeDate = cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
+		final DateTime loadDate = cargo.getSlots().get(0).getWindowStartWithSlotOrPortTime();
+		final DateTime lastDischargeDate = cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
 
-		final Date startDate = addHours(loadDate, -2 * getTravelTime(originPort, loadPort, null, (int) maxSpeed));
-		final Date endDate = addHours(lastDischargeDate, 2 * getTravelTime(dischargePort2, originPort, null, (int) maxSpeed));
+		final DateTime startDate = loadDate.minusHours(2 * getTravelTime(originPort, loadPort, null, (int) maxSpeed));
+		final DateTime endDate = lastDischargeDate.plusHours(2 * getTravelTime(dischargePort2, originPort, null, (int) maxSpeed));
 
-		this.vesselAvailability = fleetCreator.setAvailability(portfolioModel.getCargoModel(), vessel, originPort, startDate, originPort, endDate);
+		this.vesselAvailability = fleetCreator.setAvailability(portfolioModel.getCargoModel(), vessel, originPort, startDate.withZone(DateTimeZone.UTC).toLocalDateTime(), originPort, endDate
+				.withZone(DateTimeZone.UTC).toLocalDateTime());
 
 		cargo.setVesselAssignmentType(vesselAvailability);
 	}

@@ -41,42 +41,42 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
  * 
  */
 public class ManifestJointModel {
-	private static final String PORT_MODEL_KEY = "port-model";
-	private static final String FLEET_MODEL_KEY = "fleet-model";
-	private static final String SCENARIO_FLEET_MODEL_KEY = "scenario-fleet-model";
-	private static final String CARGO_MODEL_KEY = "cargo-model";
-	private static final String PRICING_MODEL_KEY = "pricing-model";
-	private static final String ASSIGNMENT_MODEL_KEY = "assignment-model";
-	private static final String SCHEDULE_MODEL_KEY = "schedule-model";
-	private static final String COMMERCIAL_MODEL_KEY = "commercial-model";
-	private static final String ROOT_MODEL_KEY = "root-model";
-//	private static final String PARAMETERS_MODEL_KEY = "parameters-model";
-//	private static final String ANALYTICS_MODEL_KEY = "analytics-model";
-	private static final String SPOT_MARKETS_MODEL_KEY = "spot-markets-model";
-
-	/**
-	 * This map lets us know what kind of model class has what key.
-	 */
-	private static final Map<EClass, String> modelClassKeys = new LinkedHashMap<EClass, String>();
-
-	static {
-		modelClassKeys.put(PortPackage.eINSTANCE.getPortModel(), PORT_MODEL_KEY);
-		modelClassKeys.put(FleetPackage.eINSTANCE.getFleetModel(), FLEET_MODEL_KEY);
-		modelClassKeys.put(CargoPackage.eINSTANCE.getCargoModel(), CARGO_MODEL_KEY);
-		modelClassKeys.put(CommercialPackage.eINSTANCE.getCommercialModel(), COMMERCIAL_MODEL_KEY);
-		modelClassKeys.put(PricingPackage.eINSTANCE.getPricingModel(), PRICING_MODEL_KEY);
-//		modelClassKeys.put(AssignmentPackage.eINSTANCE.getAssignmentModel(), ASSIGNMENT_MODEL_KEY);
-		modelClassKeys.put(SchedulePackage.eINSTANCE.getScheduleModel(), SCHEDULE_MODEL_KEY);
-//		modelClassKeys.put(ParametersPackage.eINSTANCE.getParametersModel(), PARAMETERS_MODEL_KEY);
-		// modelClassKeys.put(AnalyticsPackage.eINSTANCE.getAnalyticsModel(), ANALYTICS_MODEL_KEY);
-		modelClassKeys.put(SpotMarketsPackage.eINSTANCE.getSpotMarketsModel(), SPOT_MARKETS_MODEL_KEY);
-
-		/*
-		 * There is no migration history for MMXCore, but this is not a problem; the joint model will ignore submodels which have no release history and leave them out of the upgrade process.
-		 */
-		modelClassKeys.put(MMXCorePackage.eINSTANCE.getMMXRootObject(), ROOT_MODEL_KEY);
-	}
-
+//	private static final String PORT_MODEL_KEY = "port-model";
+//	private static final String FLEET_MODEL_KEY = "fleet-model";
+//	private static final String SCENARIO_FLEET_MODEL_KEY = "scenario-fleet-model";
+//	private static final String CARGO_MODEL_KEY = "cargo-model";
+//	private static final String PRICING_MODEL_KEY = "pricing-model";
+//	private static final String ASSIGNMENT_MODEL_KEY = "assignment-model";
+//	private static final String SCHEDULE_MODEL_KEY = "schedule-model";
+//	private static final String COMMERCIAL_MODEL_KEY = "commercial-model";
+//	private static final String ROOT_MODEL_KEY = "root-model";
+////	private static final String PARAMETERS_MODEL_KEY = "parameters-model";
+////	private static final String ANALYTICS_MODEL_KEY = "analytics-model";
+//	private static final String SPOT_MARKETS_MODEL_KEY = "spot-markets-model";
+//
+//	/**
+//	 * This map lets us know what kind of model class has what key.
+//	 */
+//	private static final Map<EClass, String> modelClassKeys = new LinkedHashMap<EClass, String>();
+//
+//	static {
+//		modelClassKeys.put(PortPackage.eINSTANCE.getPortModel(), PORT_MODEL_KEY);
+//		modelClassKeys.put(FleetPackage.eINSTANCE.getFleetModel(), FLEET_MODEL_KEY);
+//		modelClassKeys.put(CargoPackage.eINSTANCE.getCargoModel(), CARGO_MODEL_KEY);
+//		modelClassKeys.put(CommercialPackage.eINSTANCE.getCommercialModel(), COMMERCIAL_MODEL_KEY);
+//		modelClassKeys.put(PricingPackage.eINSTANCE.getPricingModel(), PRICING_MODEL_KEY);
+////		modelClassKeys.put(AssignmentPackage.eINSTANCE.getAssignmentModel(), ASSIGNMENT_MODEL_KEY);
+//		modelClassKeys.put(SchedulePackage.eINSTANCE.getScheduleModel(), SCHEDULE_MODEL_KEY);
+////		modelClassKeys.put(ParametersPackage.eINSTANCE.getParametersModel(), PARAMETERS_MODEL_KEY);
+//		// modelClassKeys.put(AnalyticsPackage.eINSTANCE.getAnalyticsModel(), ANALYTICS_MODEL_KEY);
+//		modelClassKeys.put(SpotMarketsPackage.eINSTANCE.getSpotMarketsModel(), SPOT_MARKETS_MODEL_KEY);
+//
+//		/*
+//		 * There is no migration history for MMXCore, but this is not a problem; the joint model will ignore submodels which have no release history and leave them out of the upgrade process.
+//		 */
+//		modelClassKeys.put(MMXCorePackage.eINSTANCE.getMMXRootObject(), ROOT_MODEL_KEY);
+//	}
+//
 	/**
 	 */
 	public static LNGScenarioModel createEmptyInstance(final List<EObject> models) {

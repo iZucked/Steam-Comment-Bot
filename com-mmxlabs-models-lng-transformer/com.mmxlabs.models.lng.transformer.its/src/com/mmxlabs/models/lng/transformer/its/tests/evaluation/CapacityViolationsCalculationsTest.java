@@ -4,8 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests.evaluation;
 
-import java.util.Date;
-
+import org.joda.time.LocalDateTime;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -705,7 +704,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 
 		// End heel in m3 - Unable to meet end heel level
 		// Current check means if anything is left, then no violation.
-//		checker.setExpectedValue(1000, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
+		// checker.setExpectedValue(1000, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
@@ -726,9 +725,9 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		msc.vesselAvailability.getEndHeel().setTargetEndHeel(2000);
 
 		// change to default: add a dry dock event 2-3 hrs after discharge window ends
-		final Date endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
-		final Date dryDockStartByDate = new Date(endLoad.getTime() + 3 * 3600 * 1000);
-		final Date dryDockStartAfterDate = new Date(endLoad.getTime() + 2 * 3600 * 1000);
+		final LocalDateTime endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime().toLocalDateTime();
+		final LocalDateTime dryDockStartByDate = endLoad.plusHours(3);
+		final LocalDateTime dryDockStartAfterDate = endLoad.plusHours(2);
 		msc.vesselEventCreator.createDryDockEvent("DryDock", msc.loadPort, dryDockStartByDate, dryDockStartAfterDate);
 
 		// set up a drydock pricing of 6

@@ -456,7 +456,7 @@ public class PeriodExporterTest {
 			final LoadSlot copyLoad1 = mapping.getCopyFromOriginal(load1);
 			final DischargeSlot copySpotDischarge1 = PeriodTestUtils.createSpotDischargeSlot(periodScenario, "spot-discharge1");
 			copySpotDischarge1.setPort(mapping.getCopyFromOriginal(originalPort2));
-			copySpotDischarge1.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JULY, 1));
+			copySpotDischarge1.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.JULY, 1));
 
 			// Create our new wiring
 			final Cargo copyCargo = PeriodTestUtils.createCargo(periodScenario, copyLoad1, copySpotDischarge1);
@@ -511,17 +511,17 @@ public class PeriodExporterTest {
 		// Populate initial data
 		final SpotLoadSlot load1 = PeriodTestUtils.createSpotLoadSlot(originalScenario, "load1");
 		load1.setDESPurchase(true);
-		load1.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JULY, 8));
+		load1.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.JULY, 8));
 		load1.setPort(port1);
 
 		final DischargeSlot discharge1 = PeriodTestUtils.createDischargeSlot(originalScenario, "discharge1");
-		discharge1.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JULY, 8));
+		discharge1.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.JULY, 8));
 		discharge1.setPort(port1);
 
 		final Cargo cargo1 = PeriodTestUtils.createCargo(originalScenario, load1, discharge1);
 
 		final DischargeSlot discharge2 = PeriodTestUtils.createDischargeSlot(originalScenario, "discharge2");
-		discharge2.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JULY, 8));
+		discharge2.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.JULY, 8));
 		discharge2.setPort(port2);
 
 		// Create period copy

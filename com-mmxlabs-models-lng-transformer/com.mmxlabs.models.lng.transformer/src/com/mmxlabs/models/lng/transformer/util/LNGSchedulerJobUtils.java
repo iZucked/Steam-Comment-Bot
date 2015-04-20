@@ -325,14 +325,10 @@ public class LNGSchedulerJobUtils {
 				if (allocation.getSlotAllocations().size() == 2) {
 					if (desPurchaseSlot instanceof SpotSlot) {
 						cmd.append(SetCommand.create(domain, desPurchaseSlot, CargoPackage.eINSTANCE.getSlot_Port(), allocation.getSlotAllocations().get(1).getPort()));
-						// Adjust port times to be local to new port
-						updateSpotSlotDate(domain, cmd, desPurchaseSlot, allocation.getSlotAllocations().get(1).getPort());
 					}
 
 					if (fobSaleSlot instanceof SpotSlot) {
 						cmd.append(SetCommand.create(domain, fobSaleSlot, CargoPackage.eINSTANCE.getSlot_Port(), allocation.getSlotAllocations().get(0).getPort()));
-						// Adjust port times to be local to new port
-						updateSpotSlotDate(domain, cmd, fobSaleSlot, allocation.getSlotAllocations().get(0).getPort());
 					}
 				}
 			}
@@ -492,43 +488,4 @@ public class LNGSchedulerJobUtils {
 
 		return solution;
 	}
-
-	private static void updateSpotSlotDate(final EditingDomain domain, final CompoundCommand cmd, final Slot slot, final Port port) {
-
-		if (slot.getPort() != port) {
-			final String oldZone;
-			if (slot.getPort() == null) {
-				// Assume current date is UTC
-				oldZone = "UTC";
-			} else {
-				oldZone = slot.getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart());
-			}
-			final String newZone = ((Port) port).getTimeZone();
-			// remap from old zone to new zone
-			if ((newZone == null && !(oldZone == null)) || (newZone != null && !newZone.equals(oldZone))) {
-				final Calendar oldCalendar = Calendar.getInstance(getZone(oldZone));
-				final Calendar newCalendar = Calendar.getInstance(getZone(newZone));
-				// Prime with current date in old tz
-				oldCalendar.setTime(slot.getWindowStart());
-				// Clear all components (specifically time)
-				newCalendar.clear();
-				// Replicate the date components in new TZ
-				newCalendar.set(Calendar.YEAR, oldCalendar.get(Calendar.YEAR));
-				newCalendar.set(Calendar.MONTH, oldCalendar.get(Calendar.MONTH));
-				newCalendar.set(Calendar.DAY_OF_MONTH, oldCalendar.get(Calendar.DAY_OF_MONTH));
-
-				final Date newDate = newCalendar.getTime();
-				cmd.append(SetCommand.create(domain, slot, CargoPackage.eINSTANCE.getSlot_WindowStart(), newDate));
-			}
-		}
-
-	}
-
-	private static TimeZone getZone(final String zone) {
-		if (zone == null || zone.isEmpty())
-			return TimeZone.getTimeZone("UTC");
-		else
-			return TimeZone.getTimeZone(zone);
-	}
-
 }

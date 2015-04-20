@@ -14,6 +14,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.YearMonth;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -49,11 +52,9 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotAvailability;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
-import com.mmxlabs.models.lng.spotmarkets.provider.SpotMarketGroupItemProvider;
 import com.mmxlabs.models.lng.transformer.period.InclusionChecker.PeriodRecord;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 
@@ -89,7 +90,7 @@ public class PeriodTransformerTest {
 		final OptimisationRange range = ParametersFactory.eINSTANCE.createOptimisationRange();
 
 		optimiserSettings.setRange(range);
-		range.setOptimiseAfter(PeriodTestUtils.createDate(2014, Calendar.FEBRUARY, 1));
+		range.setOptimiseAfter(PeriodTestUtils.createYearMonth(2014, Calendar.FEBRUARY));
 
 		final PeriodRecord periodRecord = transformer.createPeriodRecord(optimiserSettings);
 
@@ -111,7 +112,7 @@ public class PeriodTransformerTest {
 		final OptimisationRange range = ParametersFactory.eINSTANCE.createOptimisationRange();
 
 		optimiserSettings.setRange(range);
-		range.setOptimiseBefore(PeriodTestUtils.createDate(2014, Calendar.FEBRUARY, 1));
+		range.setOptimiseBefore(PeriodTestUtils.createYearMonth(2014, Calendar.FEBRUARY));
 
 		final PeriodRecord periodRecord = transformer.createPeriodRecord(optimiserSettings);
 
@@ -133,8 +134,8 @@ public class PeriodTransformerTest {
 		final OptimisationRange range = ParametersFactory.eINSTANCE.createOptimisationRange();
 
 		optimiserSettings.setRange(range);
-		range.setOptimiseAfter(PeriodTestUtils.createDate(2014, Calendar.FEBRUARY, 1));
-		range.setOptimiseBefore(PeriodTestUtils.createDate(2014, Calendar.JULY, 1));
+		range.setOptimiseAfter(PeriodTestUtils.createYearMonth(2014, Calendar.FEBRUARY));
+		range.setOptimiseBefore(PeriodTestUtils.createYearMonth(2014, Calendar.JULY));
 
 		final PeriodRecord periodRecord = transformer.createPeriodRecord(optimiserSettings);
 
@@ -172,10 +173,10 @@ public class PeriodTransformerTest {
 		// Vessel before period
 		final Vessel vessel1 = PeriodTestUtils.createVessel(scenarioModel, "Vessel1");
 		final VesselAvailability vesselAvailability1 = PeriodTestUtils.createVesselAvailability(scenarioModel, vessel1);
-		vesselAvailability1.setEndBy(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
+		vesselAvailability1.setEndBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.JANUARY, 1, 0));
 		{
-			final Cargo c1 = PeriodTestUtils.createCargo(scenarioModel, "v1-cargo1", port1, PeriodTestUtils.createDate(2013, Calendar.NOVEMBER, 1), port2,
-					PeriodTestUtils.createDate(2013, Calendar.DECEMBER, 1));
+			final Cargo c1 = PeriodTestUtils.createCargo(scenarioModel, "v1-cargo1", port1, PeriodTestUtils.createLocalDate(2013, Calendar.NOVEMBER, 1), port2,
+					PeriodTestUtils.createLocalDate(2013, Calendar.DECEMBER, 1));
 			c1.setVesselAssignmentType(vesselAvailability1);
 
 			startConditionMap.put(c1, PeriodTestUtils.createPortVisit(port1, PeriodTestUtils.createDate(2014, Calendar.MAY, 1)));
@@ -192,7 +193,7 @@ public class PeriodTransformerTest {
 		Assert.assertNull(vesselAvailability1.getStartAfter());
 		Assert.assertNull(vesselAvailability1.getStartBy());
 		Assert.assertNull(vesselAvailability1.getEndAfter());
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1), vesselAvailability1.getEndBy());
+		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JANUARY, 1, 0), vesselAvailability1.getEndBy());
 	}
 
 	@Test
@@ -223,15 +224,15 @@ public class PeriodTransformerTest {
 		final Vessel vessel2 = PeriodTestUtils.createVessel(scenarioModel, "Vessel2");
 		final VesselAvailability vesselAvailability2 = PeriodTestUtils.createVesselAvailability(scenarioModel, vessel2);
 		vesselAvailability2.getStartAt().add(port1);
-		vesselAvailability2.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
-		vesselAvailability2.setStartBy(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
-		vesselAvailability2.setEndAfter(PeriodTestUtils.createDate(2014, Calendar.APRIL, 1));
-		vesselAvailability2.setEndBy(PeriodTestUtils.createDate(2014, Calendar.APRIL, 1));
+		vesselAvailability2.setStartAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.JANUARY, 1, 0));
+		vesselAvailability2.setStartBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.JANUARY, 1, 0));
+		vesselAvailability2.setEndAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.APRIL, 1, 0));
+		vesselAvailability2.setEndBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.APRIL, 1, 0));
 		{
-			final Cargo c1 = PeriodTestUtils.createCargo(scenarioModel, "v2-cargo1", port1, PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1), port2,
-					PeriodTestUtils.createDate(2014, Calendar.FEBRUARY, 1));
-			final Cargo c2 = PeriodTestUtils.createCargo(scenarioModel, "v2-cargo2", port3, PeriodTestUtils.createDate(2014, Calendar.MARCH, 1), port4,
-					PeriodTestUtils.createDate(2014, Calendar.APRIL, 1));
+			final Cargo c1 = PeriodTestUtils.createCargo(scenarioModel, "v2-cargo1", port1, PeriodTestUtils.createLocalDate(2014, Calendar.JANUARY, 1), port2,
+					PeriodTestUtils.createLocalDate(2014, Calendar.FEBRUARY, 1));
+			final Cargo c2 = PeriodTestUtils.createCargo(scenarioModel, "v2-cargo2", port3, PeriodTestUtils.createLocalDate(2014, Calendar.MARCH, 1), port4,
+					PeriodTestUtils.createLocalDate(2014, Calendar.APRIL, 1));
 
 			c1.setVesselAssignmentType(vesselAvailability2);
 			c2.setVesselAssignmentType(vesselAvailability2);
@@ -249,12 +250,12 @@ public class PeriodTransformerTest {
 
 		// Changed
 		Assert.assertEquals(Collections.singletonList(port3), vesselAvailability2.getStartAt());
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.MARCH, 1), vesselAvailability2.getStartAfter());
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.MARCH, 1), vesselAvailability2.getStartBy());
+		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0), vesselAvailability2.getStartAfter());
+		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0), vesselAvailability2.getStartBy());
 		// Unchanged
 		Assert.assertTrue(vesselAvailability2.getEndAt().isEmpty());
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.APRIL, 1), vesselAvailability2.getEndAfter());
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.APRIL, 1), vesselAvailability2.getEndBy());
+		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.APRIL, 1, 0), vesselAvailability2.getEndAfter());
+		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.APRIL, 1, 0), vesselAvailability2.getEndBy());
 	}
 
 	@Test
@@ -284,15 +285,15 @@ public class PeriodTransformerTest {
 		// vessel completely in
 		final Vessel vessel3 = PeriodTestUtils.createVessel(scenarioModel, "Vessel3");
 		final VesselAvailability vesselAvailability3 = PeriodTestUtils.createVesselAvailability(scenarioModel, vessel3);
-		vesselAvailability3.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.MAY, 1));
-		vesselAvailability3.setStartBy(PeriodTestUtils.createDate(2014, Calendar.MAY, 1));
-		vesselAvailability3.setEndAfter(PeriodTestUtils.createDate(2014, Calendar.AUGUST, 1));
-		vesselAvailability3.setEndBy(PeriodTestUtils.createDate(2014, Calendar.AUGUST, 1));
+		vesselAvailability3.setStartAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.MAY, 1, 0));
+		vesselAvailability3.setStartBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.MAY, 1, 0));
+		vesselAvailability3.setEndAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.AUGUST, 1, 0));
+		vesselAvailability3.setEndBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.AUGUST, 1, 0));
 		{
-			final Cargo c1 = PeriodTestUtils.createCargo(scenarioModel, "v3-cargo1", port1, PeriodTestUtils.createDate(2014, Calendar.MAY, 1), port2,
-					PeriodTestUtils.createDate(2014, Calendar.JUNE, 1));
-			final Cargo c2 = PeriodTestUtils.createCargo(scenarioModel, "v3-cargo2", port3, PeriodTestUtils.createDate(2014, Calendar.JULY, 1), port4,
-					PeriodTestUtils.createDate(2014, Calendar.AUGUST, 1));
+			final Cargo c1 = PeriodTestUtils.createCargo(scenarioModel, "v3-cargo1", port1, PeriodTestUtils.createLocalDate(2014, Calendar.MAY, 1), port2,
+					PeriodTestUtils.createLocalDate(2014, Calendar.JUNE, 1));
+			final Cargo c2 = PeriodTestUtils.createCargo(scenarioModel, "v3-cargo2", port3, PeriodTestUtils.createLocalDate(2014, Calendar.JULY, 1), port4,
+					PeriodTestUtils.createLocalDate(2014, Calendar.AUGUST, 1));
 			c1.setVesselAssignmentType(vesselAvailability3);
 			c2.setVesselAssignmentType(vesselAvailability3);
 
@@ -309,10 +310,10 @@ public class PeriodTransformerTest {
 		// No change expected
 		Assert.assertTrue(vesselAvailability3.getStartAt().isEmpty());
 		Assert.assertTrue(vesselAvailability3.getEndAt().isEmpty());
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.MAY, 1), vesselAvailability3.getStartAfter());
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.MAY, 1), vesselAvailability3.getStartBy());
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.AUGUST, 1), vesselAvailability3.getEndAfter());
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.AUGUST, 1), vesselAvailability3.getEndBy());
+		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MAY, 1, 0), vesselAvailability3.getStartAfter());
+		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MAY, 1, 0), vesselAvailability3.getStartBy());
+		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.AUGUST, 1, 0), vesselAvailability3.getEndAfter());
+		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.AUGUST, 1, 0), vesselAvailability3.getEndBy());
 	}
 
 	@Test
@@ -342,23 +343,23 @@ public class PeriodTransformerTest {
 		// vessel across both bounds
 		final Vessel vessel4 = PeriodTestUtils.createVessel(scenarioModel, "Vessel4");
 		final VesselAvailability vesselAvailability4 = PeriodTestUtils.createVesselAvailability(scenarioModel, vessel4);
-		vesselAvailability4.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
-		vesselAvailability4.setStartBy(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
-		vesselAvailability4.setEndAfter(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
-		vesselAvailability4.setEndBy(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+		vesselAvailability4.setStartAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.JANUARY, 1, 0));
+		vesselAvailability4.setStartBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.JANUARY, 1, 0));
+		vesselAvailability4.setEndAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.DECEMBER, 1, 0));
+		vesselAvailability4.setEndBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.DECEMBER, 1, 0));
 		{
-			final Cargo c1 = PeriodTestUtils.createCargo(scenarioModel, "v4-cargo1", port1, PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1), port2,
-					PeriodTestUtils.createDate(2014, Calendar.FEBRUARY, 1));
-			final Cargo c2 = PeriodTestUtils.createCargo(scenarioModel, "v4-cargo2", port3, PeriodTestUtils.createDate(2014, Calendar.MARCH, 1), port4,
-					PeriodTestUtils.createDate(2014, Calendar.APRIL, 1));
-			final Cargo c3 = PeriodTestUtils.createCargo(scenarioModel, "v4-cargo3", port3, PeriodTestUtils.createDate(2014, Calendar.MAY, 1), port4,
-					PeriodTestUtils.createDate(2014, Calendar.JUNE, 1));
-			final Cargo c4 = PeriodTestUtils.createCargo(scenarioModel, "v4-cargo4", port3, PeriodTestUtils.createDate(2014, Calendar.JULY, 1), port4,
-					PeriodTestUtils.createDate(2014, Calendar.AUGUST, 1));
-			final Cargo c5 = PeriodTestUtils.createCargo(scenarioModel, "v4-cargo5", port3, PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 1), port4,
-					PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
-			final Cargo c6 = PeriodTestUtils.createCargo(scenarioModel, "v4-cargo6", port3, PeriodTestUtils.createDate(2014, Calendar.NOVEMBER, 1), port4,
-					PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+			final Cargo c1 = PeriodTestUtils.createCargo(scenarioModel, "v4-cargo1", port1, PeriodTestUtils.createLocalDate(2014, Calendar.JANUARY, 1), port2,
+					PeriodTestUtils.createLocalDate(2014, Calendar.FEBRUARY, 1));
+			final Cargo c2 = PeriodTestUtils.createCargo(scenarioModel, "v4-cargo2", port3, PeriodTestUtils.createLocalDate(2014, Calendar.MARCH, 1), port4,
+					PeriodTestUtils.createLocalDate(2014, Calendar.APRIL, 1));
+			final Cargo c3 = PeriodTestUtils.createCargo(scenarioModel, "v4-cargo3", port3, PeriodTestUtils.createLocalDate(2014, Calendar.MAY, 1), port4,
+					PeriodTestUtils.createLocalDate(2014, Calendar.JUNE, 1));
+			final Cargo c4 = PeriodTestUtils.createCargo(scenarioModel, "v4-cargo4", port3, PeriodTestUtils.createLocalDate(2014, Calendar.JULY, 1), port4,
+					PeriodTestUtils.createLocalDate(2014, Calendar.AUGUST, 1));
+			final Cargo c5 = PeriodTestUtils.createCargo(scenarioModel, "v4-cargo5", port3, PeriodTestUtils.createLocalDate(2014, Calendar.SEPTEMBER, 1), port4,
+					PeriodTestUtils.createLocalDate(2014, Calendar.OCTOBER, 1));
+			final Cargo c6 = PeriodTestUtils.createCargo(scenarioModel, "v4-cargo6", port3, PeriodTestUtils.createLocalDate(2014, Calendar.NOVEMBER, 1), port4,
+					PeriodTestUtils.createLocalDate(2014, Calendar.DECEMBER, 1));
 
 			c1.setVesselAssignmentType(vesselAvailability4);
 			c2.setVesselAssignmentType(vesselAvailability4);
@@ -390,11 +391,11 @@ public class PeriodTransformerTest {
 		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap);
 
 		Assert.assertEquals(Collections.singletonList(port3), vesselAvailability4.getStartAt());
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.MARCH, 1), vesselAvailability4.getStartAfter());
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.MARCH, 1), vesselAvailability4.getStartBy());
+		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0), vesselAvailability4.getStartAfter());
+		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0), vesselAvailability4.getStartBy());
 		Assert.assertEquals(Collections.singletonList(port3), vesselAvailability4.getEndAt());
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.NOVEMBER, 1), vesselAvailability4.getEndAfter());
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.NOVEMBER, 1), vesselAvailability4.getEndBy());
+		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.NOVEMBER, 1, 0), vesselAvailability4.getEndAfter());
+		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.NOVEMBER, 1, 0), vesselAvailability4.getEndBy());
 	}
 
 	@Test
@@ -425,18 +426,18 @@ public class PeriodTransformerTest {
 		final Vessel vessel5 = PeriodTestUtils.createVessel(scenarioModel, "Vessel5");
 		final VesselAvailability vesselAvailability5 = PeriodTestUtils.createVesselAvailability(scenarioModel, vessel5);
 		{
-			final Cargo c1 = PeriodTestUtils.createCargo(scenarioModel, "v5-cargo1", port1, PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1), port2,
-					PeriodTestUtils.createDate(2014, Calendar.FEBRUARY, 1));
-			final Cargo c2 = PeriodTestUtils.createCargo(scenarioModel, "v5-cargo2", port3, PeriodTestUtils.createDate(2014, Calendar.MARCH, 1), port4,
-					PeriodTestUtils.createDate(2014, Calendar.APRIL, 1));
-			final Cargo c3 = PeriodTestUtils.createCargo(scenarioModel, "v5-cargo3", port3, PeriodTestUtils.createDate(2014, Calendar.MAY, 1), port4,
-					PeriodTestUtils.createDate(2014, Calendar.JUNE, 1));
-			final Cargo c4 = PeriodTestUtils.createCargo(scenarioModel, "v5-cargo4", port3, PeriodTestUtils.createDate(2014, Calendar.JULY, 1), port4,
-					PeriodTestUtils.createDate(2014, Calendar.AUGUST, 1));
-			final Cargo c5 = PeriodTestUtils.createCargo(scenarioModel, "v5-cargo5", port3, PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 1), port4,
-					PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
-			final Cargo c6 = PeriodTestUtils.createCargo(scenarioModel, "v5-cargo6", port3, PeriodTestUtils.createDate(2014, Calendar.NOVEMBER, 1), port4,
-					PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+			final Cargo c1 = PeriodTestUtils.createCargo(scenarioModel, "v5-cargo1", port1, PeriodTestUtils.createLocalDate(2014, Calendar.JANUARY, 1), port2,
+					PeriodTestUtils.createLocalDate(2014, Calendar.FEBRUARY, 1));
+			final Cargo c2 = PeriodTestUtils.createCargo(scenarioModel, "v5-cargo2", port3, PeriodTestUtils.createLocalDate(2014, Calendar.MARCH, 1), port4,
+					PeriodTestUtils.createLocalDate(2014, Calendar.APRIL, 1));
+			final Cargo c3 = PeriodTestUtils.createCargo(scenarioModel, "v5-cargo3", port3, PeriodTestUtils.createLocalDate(2014, Calendar.MAY, 1), port4,
+					PeriodTestUtils.createLocalDate(2014, Calendar.JUNE, 1));
+			final Cargo c4 = PeriodTestUtils.createCargo(scenarioModel, "v5-cargo4", port3, PeriodTestUtils.createLocalDate(2014, Calendar.JULY, 1), port4,
+					PeriodTestUtils.createLocalDate(2014, Calendar.AUGUST, 1));
+			final Cargo c5 = PeriodTestUtils.createCargo(scenarioModel, "v5-cargo5", port3, PeriodTestUtils.createLocalDate(2014, Calendar.SEPTEMBER, 1), port4,
+					PeriodTestUtils.createLocalDate(2014, Calendar.OCTOBER, 1));
+			final Cargo c6 = PeriodTestUtils.createCargo(scenarioModel, "v5-cargo6", port3, PeriodTestUtils.createLocalDate(2014, Calendar.NOVEMBER, 1), port4,
+					PeriodTestUtils.createLocalDate(2014, Calendar.DECEMBER, 1));
 
 			c1.setVesselAssignmentType(vesselAvailability5);
 			c2.setVesselAssignmentType(vesselAvailability5);
@@ -468,11 +469,11 @@ public class PeriodTransformerTest {
 		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap);
 
 		Assert.assertEquals(Collections.singletonList(port3), vesselAvailability5.getStartAt());
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.MARCH, 1), vesselAvailability5.getStartAfter());
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.MARCH, 1), vesselAvailability5.getStartBy());
+		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0), vesselAvailability5.getStartAfter());
+		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0), vesselAvailability5.getStartBy());
 		Assert.assertEquals(Collections.singletonList(port3), vesselAvailability5.getEndAt());
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.NOVEMBER, 1), vesselAvailability5.getEndAfter());
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.NOVEMBER, 1), vesselAvailability5.getEndBy());
+		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.NOVEMBER, 1, 0), vesselAvailability5.getEndAfter());
+		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.NOVEMBER, 1, 0), vesselAvailability5.getEndBy());
 	}
 
 	@Test
@@ -502,15 +503,15 @@ public class PeriodTransformerTest {
 		// vessel across upper bound
 		final Vessel vessel6 = PeriodTestUtils.createVessel(scenarioModel, "Vessel3");
 		final VesselAvailability vesselAvailability6 = PeriodTestUtils.createVesselAvailability(scenarioModel, vessel6);
-		vesselAvailability6.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 1));
-		vesselAvailability6.setStartBy(PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 1));
-		vesselAvailability6.setEndAfter(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
-		vesselAvailability6.setEndBy(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+		vesselAvailability6.setStartAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.SEPTEMBER, 1, 0));
+		vesselAvailability6.setStartBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.SEPTEMBER, 1, 0));
+		vesselAvailability6.setEndAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.DECEMBER, 1, 0));
+		vesselAvailability6.setEndBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.DECEMBER, 1, 0));
 		{
-			final Cargo c1 = PeriodTestUtils.createCargo(scenarioModel, "v6-cargo1", port1, PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 1), port2,
-					PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
-			final Cargo c2 = PeriodTestUtils.createCargo(scenarioModel, "v6-cargo2", port3, PeriodTestUtils.createDate(2014, Calendar.NOVEMBER, 1), port4,
-					PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+			final Cargo c1 = PeriodTestUtils.createCargo(scenarioModel, "v6-cargo1", port1, PeriodTestUtils.createLocalDate(2014, Calendar.SEPTEMBER, 1), port2,
+					PeriodTestUtils.createLocalDate(2014, Calendar.OCTOBER, 1));
+			final Cargo c2 = PeriodTestUtils.createCargo(scenarioModel, "v6-cargo2", port3, PeriodTestUtils.createLocalDate(2014, Calendar.NOVEMBER, 1), port4,
+					PeriodTestUtils.createLocalDate(2014, Calendar.DECEMBER, 1));
 			c1.setVesselAssignmentType(vesselAvailability6);
 			c2.setVesselAssignmentType(vesselAvailability6);
 
@@ -526,12 +527,12 @@ public class PeriodTransformerTest {
 
 		// No change expected
 		Assert.assertTrue(vesselAvailability6.getStartAt().isEmpty());
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 1), vesselAvailability6.getStartAfter());
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 1), vesselAvailability6.getStartBy());
+		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.SEPTEMBER, 1, 0), vesselAvailability6.getStartAfter());
+		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.SEPTEMBER, 1, 0), vesselAvailability6.getStartBy());
 
 		Assert.assertEquals(Collections.singletonList(port3), vesselAvailability6.getEndAt());
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.NOVEMBER, 1), vesselAvailability6.getEndAfter());
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.NOVEMBER, 1), vesselAvailability6.getEndBy());
+		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.NOVEMBER, 1, 0), vesselAvailability6.getEndAfter());
+		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.NOVEMBER, 1, 0), vesselAvailability6.getEndBy());
 	}
 
 	@Test
@@ -561,7 +562,7 @@ public class PeriodTransformerTest {
 		// vessel after period
 		final Vessel vessel7 = PeriodTestUtils.createVessel(scenarioModel, "Vessel7");
 		final VesselAvailability vesselAvailability7 = PeriodTestUtils.createVesselAvailability(scenarioModel, vessel7);
-		vesselAvailability7.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+		vesselAvailability7.setStartAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.DECEMBER, 1, 0));
 
 		// Cargoes with 1 month intervals
 		// Initial Vessel availability 0.5 month intervals
@@ -574,7 +575,7 @@ public class PeriodTransformerTest {
 		// No change expected - vesselAvailability7
 		Assert.assertTrue(vesselAvailability7.getStartAt().isEmpty());
 		Assert.assertTrue(vesselAvailability7.getEndAt().isEmpty());
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1), vesselAvailability7.getStartAfter());
+		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.DECEMBER, 1, 0), vesselAvailability7.getStartAfter());
 		Assert.assertNull(vesselAvailability7.getStartBy());
 		Assert.assertNull(vesselAvailability7.getEndAfter());
 		Assert.assertNull(vesselAvailability7.getEndBy());
@@ -609,8 +610,8 @@ public class PeriodTransformerTest {
 		final VesselAvailability vesselAvailability = PeriodTestUtils.createVesselAvailability(scenarioModel, vessel);
 
 		{
-			final VesselEvent event1 = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event1", port1, PeriodTestUtils.createDate(2014, Calendar.APRIL, 1), 30);
-			final VesselEvent event2 = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event2", port2, PeriodTestUtils.createDate(2014, Calendar.JUNE, 1), 30);
+			final VesselEvent event1 = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event1", port1, PeriodTestUtils.createLocalDateTime(2014, Calendar.APRIL, 1, 0), 30);
+			final VesselEvent event2 = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event2", port2, PeriodTestUtils.createLocalDateTime(2014, Calendar.JUNE, 1, 0), 30);
 			event1.setVesselAssignmentType(vesselAvailability);
 			event2.setVesselAssignmentType(vesselAvailability);
 
@@ -662,8 +663,8 @@ public class PeriodTransformerTest {
 		final VesselAvailability vesselAvailability = PeriodTestUtils.createVesselAvailability(scenarioModel, vessel);
 
 		{
-			final VesselEvent event1 = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event1", port1, PeriodTestUtils.createDate(2014, Calendar.APRIL, 1), 30);
-			final VesselEvent event2 = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event2", port2, PeriodTestUtils.createDate(2014, Calendar.JUNE, 1), 30);
+			final VesselEvent event1 = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event1", port1, PeriodTestUtils.createLocalDateTime(2014, Calendar.APRIL, 1, 0), 30);
+			final VesselEvent event2 = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event2", port2, PeriodTestUtils.createLocalDateTime(2014, Calendar.JUNE, 1, 0), 30);
 			event1.setVesselAssignmentType(vesselAvailability);
 			event2.setVesselAssignmentType(vesselAvailability);
 
@@ -679,8 +680,8 @@ public class PeriodTransformerTest {
 		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap);
 
 		Assert.assertEquals(Collections.singletonList(port2), vesselAvailability.getStartAt());
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.JUNE, 1), vesselAvailability.getStartAfter());
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.JUNE, 1), vesselAvailability.getStartBy());
+		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JUNE, 1, 0), vesselAvailability.getStartAfter());
+		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JUNE, 1, 0), vesselAvailability.getStartBy());
 
 		Assert.assertTrue(vesselAvailability.getEndAt().isEmpty());
 		Assert.assertNull(vesselAvailability.getEndAfter());
@@ -716,8 +717,8 @@ public class PeriodTransformerTest {
 		final VesselAvailability vesselAvailability = PeriodTestUtils.createVesselAvailability(scenarioModel, vessel);
 
 		{
-			final VesselEvent event1 = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event1", port1, PeriodTestUtils.createDate(2014, Calendar.APRIL, 1), 30);
-			final VesselEvent event2 = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event2", port2, PeriodTestUtils.createDate(2014, Calendar.JUNE, 1), 30);
+			final VesselEvent event1 = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event1", port1, PeriodTestUtils.createLocalDateTime(2014, Calendar.APRIL, 1, 0), 30);
+			final VesselEvent event2 = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event2", port2, PeriodTestUtils.createLocalDateTime(2014, Calendar.JUNE, 1, 0), 30);
 			event1.setVesselAssignmentType(vesselAvailability);
 			event2.setVesselAssignmentType(vesselAvailability);
 
@@ -737,8 +738,8 @@ public class PeriodTransformerTest {
 		Assert.assertNull(vesselAvailability.getStartBy());
 
 		Assert.assertEquals(Collections.singletonList(port2), vesselAvailability.getEndAt());
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.APRIL, 1), vesselAvailability.getEndAfter());
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.APRIL, 1), vesselAvailability.getEndBy());
+		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.APRIL, 1, 0), vesselAvailability.getEndAfter());
+		Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.APRIL, 1, 0), vesselAvailability.getEndBy());
 	}
 
 	@Test
@@ -787,8 +788,8 @@ public class PeriodTransformerTest {
 
 			Assert.assertEquals(Collections.singletonList(port3), vesselAvailability1.getStartAt());
 			Assert.assertEquals(30000, vesselAvailability1.getStartHeel().getVolumeAvailable());
-			Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.JULY, 28), vesselAvailability1.getStartBy());
-			Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.JULY, 28), vesselAvailability1.getStartAfter());
+			Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 28, 0), vesselAvailability1.getStartBy());
+			Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 28, 0), vesselAvailability1.getStartAfter());
 		}
 		// Same again, but reverse order. Should yield same result as before.
 		{
@@ -801,8 +802,8 @@ public class PeriodTransformerTest {
 
 			Assert.assertEquals(Collections.singletonList(port3), vesselAvailability2.getStartAt());
 			Assert.assertEquals(30000, vesselAvailability2.getStartHeel().getVolumeAvailable());
-			Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.JULY, 28), vesselAvailability2.getStartBy());
-			Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.JULY, 28), vesselAvailability2.getStartAfter());
+			Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 28, 0), vesselAvailability2.getStartBy());
+			Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 28, 0), vesselAvailability2.getStartAfter());
 		}
 	}
 
@@ -851,8 +852,8 @@ public class PeriodTransformerTest {
 			transformer.updateEndConditions(vesselAvailability1, assignedObject3, endConditionMap);
 
 			Assert.assertEquals(Collections.singletonList(port1), vesselAvailability1.getEndAt());
-			Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.JULY, 8), vesselAvailability1.getEndBy());
-			Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.JULY, 8), vesselAvailability1.getEndAfter());
+			Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 8, 0), vesselAvailability1.getEndBy());
+			Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 8, 0), vesselAvailability1.getEndAfter());
 		}
 		// Same again, but reverse order. Should yield same result as before.
 		{
@@ -864,8 +865,8 @@ public class PeriodTransformerTest {
 			transformer.updateEndConditions(vesselAvailability2, assignedObject1, endConditionMap);
 
 			Assert.assertEquals(Collections.singletonList(port1), vesselAvailability2.getEndAt());
-			Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.JULY, 8), vesselAvailability2.getEndBy());
-			Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.JULY, 8), vesselAvailability2.getEndAfter());
+			Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 8, 0), vesselAvailability2.getEndBy());
+			Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 8, 0), vesselAvailability2.getEndAfter());
 		}
 	}
 
@@ -885,9 +886,9 @@ public class PeriodTransformerTest {
 		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
 
 		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
-		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
+		copyLoadSlot.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.JANUARY, 1));
 		final DischargeSlot copyDischargeSlot = PeriodTestUtils.createDischargeSlot(copyScenarioModel, "discharge");
-		copyDischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.FEBRUARY, 1));
+		copyDischargeSlot.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.FEBRUARY, 1));
 		final Cargo copyCargo = PeriodTestUtils.createCargo(copyScenarioModel, copyLoadSlot, copyDischargeSlot);
 		copyCargo.setAllowRewiring(true);
 
@@ -929,9 +930,9 @@ public class PeriodTransformerTest {
 		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
 
 		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
-		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.MARCH, 1));
+		copyLoadSlot.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.MARCH, 1));
 		final DischargeSlot copyDischargeSlot = PeriodTestUtils.createDischargeSlot(copyScenarioModel, "discharge");
-		copyDischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.MAY, 1));
+		copyDischargeSlot.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.MAY, 1));
 		final Cargo copyCargo = PeriodTestUtils.createCargo(copyScenarioModel, copyLoadSlot, copyDischargeSlot);
 		copyCargo.setAllowRewiring(true);
 
@@ -967,7 +968,7 @@ public class PeriodTransformerTest {
 		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
 		//
 		// // Check copy flags changed
-		
+
 		// This should pass now
 		Assert.assertTrue(copyLoadSlot.isLocked());
 		Assert.assertFalse(copyDischargeSlot.isLocked());
@@ -992,16 +993,16 @@ public class PeriodTransformerTest {
 		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
 
 		final LoadSlot loadSlot = PeriodTestUtils.createLoadSlot(scenarioModel, "load");
-		loadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.MAY, 1));
+		loadSlot.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.MAY, 1));
 		final DischargeSlot dischargeSlot = PeriodTestUtils.createDischargeSlot(scenarioModel, "discharge");
-		dischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JULY, 1));
+		dischargeSlot.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.JULY, 1));
 		final Cargo cargo = PeriodTestUtils.createCargo(scenarioModel, loadSlot, dischargeSlot);
 		cargo.setAllowRewiring(true);
 
 		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
-		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.MAY, 1));
+		copyLoadSlot.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.MAY, 1));
 		final DischargeSlot copyDischargeSlot = PeriodTestUtils.createDischargeSlot(copyScenarioModel, "discharge");
-		copyDischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JULY, 1));
+		copyDischargeSlot.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.JULY, 1));
 		final Cargo copyCargo = PeriodTestUtils.createCargo(copyScenarioModel, copyLoadSlot, copyDischargeSlot);
 		copyCargo.setAllowRewiring(true);
 
@@ -1073,16 +1074,16 @@ public class PeriodTransformerTest {
 		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
 
 		final LoadSlot loadSlot = PeriodTestUtils.createLoadSlot(scenarioModel, "load");
-		loadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.AUGUST, 1));
+		loadSlot.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.AUGUST, 1));
 		final DischargeSlot dischargeSlot = PeriodTestUtils.createDischargeSlot(scenarioModel, "discharge");
-		dischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
+		dischargeSlot.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.OCTOBER, 1));
 		final Cargo cargo = PeriodTestUtils.createCargo(scenarioModel, loadSlot, dischargeSlot);
 		cargo.setAllowRewiring(true);
 
 		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
-		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.AUGUST, 1));
+		copyLoadSlot.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.AUGUST, 1));
 		final DischargeSlot copyDischargeSlot = PeriodTestUtils.createDischargeSlot(copyScenarioModel, "discharge");
-		copyDischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
+		copyDischargeSlot.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.OCTOBER, 1));
 		final Cargo copyCargo = PeriodTestUtils.createCargo(copyScenarioModel, copyLoadSlot, copyDischargeSlot);
 		copyCargo.setAllowRewiring(true);
 
@@ -1155,16 +1156,16 @@ public class PeriodTransformerTest {
 		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
 
 		final LoadSlot loadSlot = PeriodTestUtils.createLoadSlot(scenarioModel, "load");
-		loadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
+		loadSlot.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.OCTOBER, 1));
 		final DischargeSlot dischargeSlot = PeriodTestUtils.createDischargeSlot(scenarioModel, "discharge");
-		dischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.NOVEMBER, 1));
+		dischargeSlot.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.NOVEMBER, 1));
 		final Cargo cargo = PeriodTestUtils.createCargo(scenarioModel, loadSlot, dischargeSlot);
 		cargo.setAllowRewiring(true);
 
 		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
-		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
+		copyLoadSlot.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.OCTOBER, 1));
 		final DischargeSlot copyDischargeSlot = PeriodTestUtils.createDischargeSlot(copyScenarioModel, "discharge");
-		copyDischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.NOVEMBER, 1));
+		copyDischargeSlot.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.NOVEMBER, 1));
 		final Cargo copyCargo = PeriodTestUtils.createCargo(copyScenarioModel, copyLoadSlot, copyDischargeSlot);
 		copyCargo.setAllowRewiring(true);
 
@@ -1232,16 +1233,16 @@ public class PeriodTransformerTest {
 		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
 
 		final LoadSlot loadSlot = PeriodTestUtils.createLoadSlot(scenarioModel, "load");
-		loadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
+		loadSlot.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.JANUARY, 1));
 		final DischargeSlot dischargeSlot = PeriodTestUtils.createDischargeSlot(scenarioModel, "discharge");
-		dischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+		dischargeSlot.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.DECEMBER, 1));
 		final Cargo cargo = PeriodTestUtils.createCargo(scenarioModel, loadSlot, dischargeSlot);
 		cargo.setAllowRewiring(true);
 
 		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
-		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
+		copyLoadSlot.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.JANUARY, 1));
 		final DischargeSlot copyDischargeSlot = PeriodTestUtils.createDischargeSlot(copyScenarioModel, "discharge");
-		copyDischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+		copyDischargeSlot.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.DECEMBER, 1));
 		final Cargo copyCargo = PeriodTestUtils.createCargo(copyScenarioModel, copyLoadSlot, copyDischargeSlot);
 		copyCargo.setAllowRewiring(true);
 		//
@@ -1310,7 +1311,7 @@ public class PeriodTransformerTest {
 		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
 
 		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
-		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
+		copyLoadSlot.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.JANUARY, 1));
 
 		final Set<Slot> seenSlots = new HashSet<>();
 		final Set<Slot> removedSlots = new HashSet<>();
@@ -1352,10 +1353,10 @@ public class PeriodTransformerTest {
 		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
 
 		final LoadSlot loadSlot = PeriodTestUtils.createLoadSlot(scenarioModel, "load");
-		loadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.APRIL, 1));
+		loadSlot.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.APRIL, 1));
 
 		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
-		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.APRIL, 1));
+		copyLoadSlot.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.APRIL, 1));
 
 		// final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
 		//
@@ -1411,7 +1412,7 @@ public class PeriodTransformerTest {
 		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
 
 		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
-		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.MAY, 1));
+		copyLoadSlot.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.MAY, 1));
 
 		final Set<Slot> seenSlots = new HashSet<>();
 		final Set<Slot> removedSlots = new HashSet<>();
@@ -1467,7 +1468,7 @@ public class PeriodTransformerTest {
 		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
 
 		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
-		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 1));
+		copyLoadSlot.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.SEPTEMBER, 1));
 
 		final Set<Slot> seenSlots = new HashSet<>();
 		final Set<Slot> removedSlots = new HashSet<>();
@@ -1526,10 +1527,10 @@ public class PeriodTransformerTest {
 		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
 
 		final LoadSlot loadSlot = PeriodTestUtils.createLoadSlot(scenarioModel, "load");
-		loadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+		loadSlot.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.DECEMBER, 1));
 
 		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
-		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+		copyLoadSlot.setWindowStart(PeriodTestUtils.createLocalDate(2014, Calendar.DECEMBER, 1));
 
 		final Set<Slot> seenSlots = new HashSet<>();
 		final Set<Slot> removedSlots = new HashSet<>();
@@ -1584,13 +1585,13 @@ public class PeriodTransformerTest {
 		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
 
 		final VesselEvent event = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event");
-		event.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
-		event.setStartBy(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
+		event.setStartAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.JANUARY, 1, 0));
+		event.setStartBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.JANUARY, 1, 0));
 		event.setDurationInDays(10);
 
 		final VesselEvent copyEvent = PeriodTestUtils.createCharterOutEvent(copyScenarioModel, "event");
-		copyEvent.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
-		copyEvent.setStartBy(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
+		copyEvent.setStartAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.JANUARY, 1, 0));
+		copyEvent.setStartBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.JANUARY, 1, 0));
 		copyEvent.setDurationInDays(10);
 
 		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
@@ -1626,13 +1627,13 @@ public class PeriodTransformerTest {
 		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
 
 		final VesselEvent event = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event");
-		event.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.MARCH, 1));
-		event.setStartBy(PeriodTestUtils.createDate(2014, Calendar.MARCH, 1));
+		event.setStartAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0));
+		event.setStartBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0));
 		event.setDurationInDays(20);
 
 		final VesselEvent copyEvent = PeriodTestUtils.createCharterOutEvent(copyScenarioModel, "event");
-		copyEvent.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.MARCH, 1));
-		copyEvent.setStartBy(PeriodTestUtils.createDate(2014, Calendar.MARCH, 1));
+		copyEvent.setStartAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0));
+		copyEvent.setStartBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.MARCH, 1, 0));
 		copyEvent.setDurationInDays(20);
 
 		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
@@ -1667,13 +1668,13 @@ public class PeriodTransformerTest {
 		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
 
 		final VesselEvent event = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event");
-		event.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 1));
-		event.setStartBy(PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 1));
+		event.setStartAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.SEPTEMBER, 1, 0));
+		event.setStartBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.SEPTEMBER, 1, 0));
 		event.setDurationInDays(20);
 
 		final VesselEvent copyEvent = PeriodTestUtils.createCharterOutEvent(copyScenarioModel, "event");
-		copyEvent.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 1));
-		copyEvent.setStartBy(PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 1));
+		copyEvent.setStartAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.SEPTEMBER, 1, 0));
+		copyEvent.setStartBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.SEPTEMBER, 1, 0));
 		copyEvent.setDurationInDays(20);
 
 		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
@@ -1708,13 +1709,13 @@ public class PeriodTransformerTest {
 		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
 
 		final VesselEvent event = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event");
-		event.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
-		event.setStartBy(PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
+		event.setStartAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.OCTOBER, 1, 0));
+		event.setStartBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.OCTOBER, 1, 0));
 		event.setDurationInDays(10);
 
 		final VesselEvent copyEvent = PeriodTestUtils.createCharterOutEvent(copyScenarioModel, "event");
-		copyEvent.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
-		copyEvent.setStartBy(PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
+		copyEvent.setStartAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.OCTOBER, 1, 0));
+		copyEvent.setStartBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.OCTOBER, 1, 0));
 		copyEvent.setDurationInDays(10);
 
 		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
@@ -1751,17 +1752,17 @@ public class PeriodTransformerTest {
 
 		final Vessel vessel = PeriodTestUtils.createVessel(scenarioModel, "vessel");
 		final VesselAvailability vesselAvailability = PeriodTestUtils.createVesselAvailability(scenarioModel, vessel);
-		vesselAvailability.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
-		vesselAvailability.setStartBy(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
-		vesselAvailability.setEndAfter(PeriodTestUtils.createDate(2014, Calendar.FEBRUARY, 1));
-		vesselAvailability.setEndBy(PeriodTestUtils.createDate(2014, Calendar.FEBRUARY, 1));
+		vesselAvailability.setStartAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.JANUARY, 1, 0));
+		vesselAvailability.setStartBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.JANUARY, 1, 0));
+		vesselAvailability.setEndAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.FEBRUARY, 1, 0));
+		vesselAvailability.setEndBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.FEBRUARY, 1, 0));
 
 		final Vessel copyVessel = PeriodTestUtils.createVessel(copyScenarioModel, "vessel");
 		final VesselAvailability copyVesselAvailability = PeriodTestUtils.createVesselAvailability(copyScenarioModel, copyVessel);
-		copyVesselAvailability.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
-		copyVesselAvailability.setStartBy(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
-		copyVesselAvailability.setEndAfter(PeriodTestUtils.createDate(2014, Calendar.FEBRUARY, 1));
-		copyVesselAvailability.setEndBy(PeriodTestUtils.createDate(2014, Calendar.FEBRUARY, 1));
+		copyVesselAvailability.setStartAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.JANUARY, 1, 0));
+		copyVesselAvailability.setStartBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.JANUARY, 1, 0));
+		copyVesselAvailability.setEndAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.FEBRUARY, 1, 0));
+		copyVesselAvailability.setEndBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.FEBRUARY, 1, 0));
 
 		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
 
@@ -1797,17 +1798,17 @@ public class PeriodTransformerTest {
 
 		final Vessel vessel = PeriodTestUtils.createVessel(scenarioModel, "vessel");
 		final VesselAvailability vesselAvailability = PeriodTestUtils.createVesselAvailability(scenarioModel, vessel);
-		vesselAvailability.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
-		vesselAvailability.setStartBy(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
-		vesselAvailability.setEndAfter(PeriodTestUtils.createDate(2014, Calendar.APRIL, 1));
-		vesselAvailability.setEndBy(PeriodTestUtils.createDate(2014, Calendar.APRIL, 1));
+		vesselAvailability.setStartAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.JANUARY, 1, 0));
+		vesselAvailability.setStartBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.JANUARY, 1, 0));
+		vesselAvailability.setEndAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.APRIL, 1, 0));
+		vesselAvailability.setEndBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.APRIL, 1, 0));
 
 		final Vessel copyVessel = PeriodTestUtils.createVessel(copyScenarioModel, "vessel");
 		final VesselAvailability copyVesselAvailability = PeriodTestUtils.createVesselAvailability(copyScenarioModel, copyVessel);
-		copyVesselAvailability.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
-		copyVesselAvailability.setStartBy(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
-		copyVesselAvailability.setEndAfter(PeriodTestUtils.createDate(2014, Calendar.APRIL, 1));
-		copyVesselAvailability.setEndBy(PeriodTestUtils.createDate(2014, Calendar.APRIL, 1));
+		copyVesselAvailability.setStartAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.JANUARY, 1, 0));
+		copyVesselAvailability.setStartBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.JANUARY, 1, 0));
+		copyVesselAvailability.setEndAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.APRIL, 1, 0));
+		copyVesselAvailability.setEndBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.APRIL, 1, 0));
 
 		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
 
@@ -1842,17 +1843,17 @@ public class PeriodTransformerTest {
 
 		final Vessel vessel = PeriodTestUtils.createVessel(scenarioModel, "vessel");
 		final VesselAvailability vesselAvailability = PeriodTestUtils.createVesselAvailability(scenarioModel, vessel);
-		vesselAvailability.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 1));
-		vesselAvailability.setStartBy(PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 1));
-		vesselAvailability.setEndAfter(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
-		vesselAvailability.setEndBy(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+		vesselAvailability.setStartAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.SEPTEMBER, 1, 0));
+		vesselAvailability.setStartBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.SEPTEMBER, 1, 0));
+		vesselAvailability.setEndAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.DECEMBER, 1, 0));
+		vesselAvailability.setEndBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.DECEMBER, 1, 0));
 
 		final Vessel copyVessel = PeriodTestUtils.createVessel(copyScenarioModel, "vessel");
 		final VesselAvailability copyVesselAvailability = PeriodTestUtils.createVesselAvailability(copyScenarioModel, copyVessel);
-		copyVesselAvailability.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 1));
-		copyVesselAvailability.setStartBy(PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 1));
-		copyVesselAvailability.setEndAfter(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
-		copyVesselAvailability.setEndBy(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+		copyVesselAvailability.setStartAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.SEPTEMBER, 1, 0));
+		copyVesselAvailability.setStartBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.SEPTEMBER, 1, 0));
+		copyVesselAvailability.setEndAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.DECEMBER, 1, 0));
+		copyVesselAvailability.setEndBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.DECEMBER, 1, 0));
 
 		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
 
@@ -1887,17 +1888,17 @@ public class PeriodTransformerTest {
 
 		final Vessel vessel = PeriodTestUtils.createVessel(scenarioModel, "vessel");
 		final VesselAvailability vesselAvailability = PeriodTestUtils.createVesselAvailability(scenarioModel, vessel);
-		vesselAvailability.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
-		vesselAvailability.setStartBy(PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
-		vesselAvailability.setEndAfter(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
-		vesselAvailability.setEndBy(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+		vesselAvailability.setStartAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.OCTOBER, 1, 0));
+		vesselAvailability.setStartBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.OCTOBER, 1, 0));
+		vesselAvailability.setEndAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.DECEMBER, 1, 0));
+		vesselAvailability.setEndBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.DECEMBER, 1, 0));
 
 		final Vessel copyVessel = PeriodTestUtils.createVessel(copyScenarioModel, "vessel");
 		final VesselAvailability copyVesselAvailability = PeriodTestUtils.createVesselAvailability(copyScenarioModel, copyVessel);
-		copyVesselAvailability.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
-		copyVesselAvailability.setStartBy(PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
-		copyVesselAvailability.setEndAfter(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
-		copyVesselAvailability.setEndBy(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+		copyVesselAvailability.setStartAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.OCTOBER, 1, 0));
+		copyVesselAvailability.setStartBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.OCTOBER, 1, 0));
+		copyVesselAvailability.setEndAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.DECEMBER, 1, 0));
+		copyVesselAvailability.setEndBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.DECEMBER, 1, 0));
 
 		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
 
@@ -1933,17 +1934,17 @@ public class PeriodTransformerTest {
 
 		final Vessel vessel = PeriodTestUtils.createVessel(scenarioModel, "vessel");
 		final VesselAvailability vesselAvailability = PeriodTestUtils.createVesselAvailability(scenarioModel, vessel);
-		vesselAvailability.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
-		vesselAvailability.setStartBy(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
-		vesselAvailability.setEndAfter(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
-		vesselAvailability.setEndBy(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+		vesselAvailability.setStartAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.JANUARY, 1, 0));
+		vesselAvailability.setStartBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.JANUARY, 1, 0));
+		vesselAvailability.setEndAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.DECEMBER, 1, 0));
+		vesselAvailability.setEndBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.DECEMBER, 1, 0));
 
 		final Vessel copyVessel = PeriodTestUtils.createVessel(copyScenarioModel, "vessel");
 		final VesselAvailability copyVesselAvailability = PeriodTestUtils.createVesselAvailability(copyScenarioModel, copyVessel);
-		copyVesselAvailability.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
-		copyVesselAvailability.setStartBy(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
-		copyVesselAvailability.setEndAfter(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
-		copyVesselAvailability.setEndBy(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+		copyVesselAvailability.setStartAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.JANUARY, 1, 0));
+		copyVesselAvailability.setStartBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.JANUARY, 1, 0));
+		copyVesselAvailability.setEndAfter(PeriodTestUtils.createLocalDateTime(2014, Calendar.DECEMBER, 1, 0));
+		copyVesselAvailability.setEndBy(PeriodTestUtils.createLocalDateTime(2014, Calendar.DECEMBER, 1, 0));
 
 		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
 
@@ -1963,44 +1964,41 @@ public class PeriodTransformerTest {
 	@Test
 	public void trimSpotMarketCurves() {
 		final InclusionChecker inclusionChecker = new InclusionChecker();
-		
+
 		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
-		
+
 		final PeriodRecord periodRecord = new PeriodRecord();
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2015, Calendar.MARCH, 15);
 		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2015, Calendar.APRIL, 15);
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2015, Calendar.AUGUST, 15);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2015, Calendar.SEPTEMBER, 15);
-		
+
 		// // Create a sample scenario
 		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
-		scenarioModel.setSpotMarketsModel(PeriodTestUtils.createSpotMarkets(scenarioModel, "testSpots", "UTC"));
-		
+		scenarioModel.setSpotMarketsModel(PeriodTestUtils.createSpotMarkets(scenarioModel, "testSpots"));
+
 		transformer.trimSpotMarketCurves(PeriodTestUtils.createEditingDomain(scenarioModel), periodRecord, scenarioModel);
-		
-		for (SpotMarketGroup group : new SpotMarketGroup[] {
-				scenarioModel.getSpotMarketsModel().getDesPurchaseSpotMarket(),
-				scenarioModel.getSpotMarketsModel().getDesSalesSpotMarket(),
-				scenarioModel.getSpotMarketsModel().getFobPurchasesSpotMarket(),
-				scenarioModel.getSpotMarketsModel().getFobSalesSpotMarket(),
-				})
-		{
+
+		for (SpotMarketGroup group : new SpotMarketGroup[] { scenarioModel.getSpotMarketsModel().getDesPurchaseSpotMarket(), scenarioModel.getSpotMarketsModel().getDesSalesSpotMarket(),
+				scenarioModel.getSpotMarketsModel().getFobPurchasesSpotMarket(), scenarioModel.getSpotMarketsModel().getFobSalesSpotMarket(), }) {
 			EList<SpotMarket> markets = group.getMarkets();
 			SpotMarket market = markets.get(0);
 			SpotAvailability availability = market.getAvailability();
 			Assert.assertTrue(availability.isSetConstant() == false);
 			Assert.assertTrue(availability.getCurve().getPoints().size() > 0);
 			for (IndexPoint<Integer> point : availability.getCurve().getPoints()) {
-				Assert.assertTrue(point.getDate().after(periodRecord.lowerCutoff));
-				Assert.assertTrue(point.getDate().before(periodRecord.upperBoundary));
+				YearMonth date = point.getDate();
+				DateTime dateAsDateTime = date.toLocalDate(1).toDateTimeAtStartOfDay(DateTimeZone.UTC);
+				Assert.assertTrue(dateAsDateTime.isAfter(periodRecord.lowerCutoff));
+				Assert.assertTrue(dateAsDateTime.isBefore(periodRecord.upperBoundary));
 			}
-			Assert.assertTrue(availability.getCurve().getValueForMonth(DateAndCurveHelper.createDate(2015, 4, 1, 0, "UTC")) == 5);
-			Assert.assertTrue(availability.getCurve().getValueForMonth(DateAndCurveHelper.createDate(2015, 5, 1, 0, "UTC")) == 5);
-			Assert.assertTrue(availability.getCurve().getValueForMonth(DateAndCurveHelper.createDate(2015, 6, 1, 0, "UTC")) == 2);
-			Assert.assertTrue(availability.getCurve().getValueForMonth(DateAndCurveHelper.createDate(2015, 6, 1, 0, "UTC")) == 2);
+			Assert.assertTrue(availability.getCurve().getValueForMonth(DateAndCurveHelper.createYearMonth(2015, 4)) == 5);
+			Assert.assertTrue(availability.getCurve().getValueForMonth(DateAndCurveHelper.createYearMonth(2015, 5)) == 5);
+			Assert.assertTrue(availability.getCurve().getValueForMonth(DateAndCurveHelper.createYearMonth(2015, 6)) == 2);
+			Assert.assertTrue(availability.getCurve().getValueForMonth(DateAndCurveHelper.createYearMonth(2015, 6)) == 2);
 		}
 	}
-	
+
 	@Test
 	public void generateStartAndEndConditionsMapTest_Cargo() {
 
@@ -2246,8 +2244,8 @@ public class PeriodTransformerTest {
 		dischargeSlot1.setPort(port);
 
 		// set window start dsate, time and duration.
-		loadSlot1.setWindowStart(PeriodTestUtils.createDate("Etc/GMT-1", 2014, 10, 1));
-		dischargeSlot1.setWindowStart(PeriodTestUtils.createDate("Etc/GMT-1", 2014, 11, 1));
+		loadSlot1.setWindowStart(PeriodTestUtils.createLocalDate(2014, 10, 1));
+		dischargeSlot1.setWindowStart(PeriodTestUtils.createLocalDate(2014, 11, 1));
 
 		loadSlot1.setWindowStartTime(5);
 		dischargeSlot1.setWindowStartTime(10);
@@ -2286,15 +2284,14 @@ public class PeriodTransformerTest {
 		Assert.assertFalse(cargo1.isAllowRewiring());
 		Assert.assertTrue(cargo1.isLocked());
 
-		Assert.assertEquals(PeriodTestUtils.createDate("Etc/GMT-1", 2014, 10, 5), loadSlot1.getWindowStart());
-		Assert.assertEquals(PeriodTestUtils.createDate("Etc/GMT-1", 2014, 11, 10), dischargeSlot1.getWindowStart());
+		Assert.assertEquals(PeriodTestUtils.createLocalDate(2014, 10, 5), loadSlot1.getWindowStart());
+		Assert.assertEquals(PeriodTestUtils.createLocalDate(2014, 11, 10), dischargeSlot1.getWindowStart());
 
 		Assert.assertEquals(0, loadSlot1.getWindowSize());
 		Assert.assertEquals(0, dischargeSlot1.getWindowSize());
 
-		// +1 for difference between UTC and Etc/GMT-1
-		Assert.assertEquals(1 + 1, loadSlot1.getWindowStartTime());
-		Assert.assertEquals(2 + 1, dischargeSlot1.getWindowStartTime());
+		Assert.assertEquals(1, loadSlot1.getWindowStartTime());
+		Assert.assertEquals(2, dischargeSlot1.getWindowStartTime());
 	}
 
 	private PeriodTransformer createPeriodTransformer(final InclusionChecker inclusionChecker) {

@@ -6,6 +6,8 @@ package com.mmxlabs.models.lng.transformer.its.tests;
 
 import java.util.Date;
 
+import org.joda.time.DateTime;
+
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -24,7 +26,7 @@ public class StsScenarioCreator extends DefaultScenarioCreator {
 	 * 
 	 */
 	public final VesselClass vc;
-	public final Vessel [] vessels;
+	public final Vessel[] vessels;
 
 	public final Port originPort;
 	public final Port loadPort;
@@ -32,19 +34,13 @@ public class StsScenarioCreator extends DefaultScenarioCreator {
 	public final Port dischargePort;
 
 	public final Cargo loadCargo;
-	//public final Cargo dischargeCargo;
+
+	// public final Cargo dischargeCargo;
 
 	/**
-	 * Initialises a minimal complete scenario, creating:
-	 * - contract and shipping legal entities
-	 * - one vessel class and one vessel
-	 * - one (default) route
-	 * - one fixed-price sales contract and one fixed-price purchase contract
-	 * - three ports (one origin port, one load port and one discharge port)
-	 * - one cargo
-	 * The vessel starts at the origin port, must travel to the load port, pick up the cargo,
-	 * travel to the discharge port and discharge it. There is enough time at every stage
-	 * to create some idling at the discharge port. 
+	 * Initialises a minimal complete scenario, creating: - contract and shipping legal entities - one vessel class and one vessel - one (default) route - one fixed-price sales contract and one
+	 * fixed-price purchase contract - three ports (one origin port, one load port and one discharge port) - one cargo The vessel starts at the origin port, must travel to the load port, pick up the
+	 * cargo, travel to the discharge port and discharge it. There is enough time at every stage to create some idling at the discharge port.
 	 */
 	public StsScenarioCreator() {
 		scenario = ManifestJointModel.createEmptyInstance(null);
@@ -104,42 +100,39 @@ public class StsScenarioCreator extends DefaultScenarioCreator {
 
 		DischargeSlot loadTransferSlot = (DischargeSlot) loadCargo.getSortedSlots().get(1);
 
-		//dischargeCargo = cargoCreator.createDefaultCargo(null, transferPort, dischargePort, loadTransferSlot.getWindowStartWithSlotOrPortTime(), transferDischargeDuration);
-		
-		//LoadSlot dischargeTransferSlot = (LoadSlot) loadCargo.getSortedSlots().get(0);
+		// dischargeCargo = cargoCreator.createDefaultCargo(null, transferPort, dischargePort, loadTransferSlot.getWindowStartWithSlotOrPortTime(), transferDischargeDuration);
+
+		// LoadSlot dischargeTransferSlot = (LoadSlot) loadCargo.getSortedSlots().get(0);
 
 		// set fixed discharge quantities on the transfer slot
 		loadTransferSlot.setMinQuantity(10000);
 		loadTransferSlot.setMaxQuantity(10000);
-		//dischargeTransferSlot.setMinQuantity(1000);
-		//dischargeTransferSlot.setMaxQuantity(1000);
-		
+		// dischargeTransferSlot.setMinQuantity(1000);
+		// dischargeTransferSlot.setMaxQuantity(1000);
+
 		// setup transfer slots as sts
-		//loadTransferSlot.setTransferTo(dischargeTransferSlot);
+		// loadTransferSlot.setTransferTo(dischargeTransferSlot);
 
-		final Date loadDate = loadCargo.getSlots().get(0).getWindowStartWithSlotOrPortTime();
-		final Date transferDate = loadCargo.getSlots().get(1).getWindowStartWithSlotOrPortTime();
-		//final Date dischargeDate = dischargeCargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
+		final DateTime loadDate = loadCargo.getSlots().get(0).getWindowStartWithSlotOrPortTime();
+		final DateTime transferDate = loadCargo.getSlots().get(1).getWindowStartWithSlotOrPortTime();
+		// final Date dischargeDate = dischargeCargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
 
-		
 		// vessel one will start before the load date and end before the discharge date
-		final Date preLoadDate = addHours(loadDate, -2 * getTravelTime(originPort, loadPort, null, (int) maxSpeed));
-		//final Date preDischargeDate = addHours(dischargeDate, -2);
-		//fleetCreator.setAvailability(portfolioModel.getScenarioFleetModel(), vessels[0], originPort, preLoadDate, transferPort, preDischargeDate);		
-		
+		final DateTime preLoadDate = loadDate.minusHours(2 * getTravelTime(originPort, loadPort, null, (int) maxSpeed));
+		// final Date preDischargeDate = addHours(dischargeDate, -2);
+		// fleetCreator.setAvailability(portfolioModel.getScenarioFleetModel(), vessels[0], originPort, preLoadDate, transferPort, preDischargeDate);
+
 		// vessel two will start after the load date and end after the discharge date
-		final Date postLoadDate = addHours(loadDate, 2);
-		//final Date postDischargeDate = addHours(dischargeDate, 2 * getTravelTime(dischargePort, originPort, null, (int) maxSpeed));
-		//fleetCreator.setAvailability(portfolioModel.getScenarioFleetModel(), vessels[1], transferPort, postLoadDate, originPort, postDischargeDate);		
-		
+		final DateTime postLoadDate = loadDate.plusHours(2);
+		// final Date postDischargeDate = addHours(dischargeDate, 2 * getTravelTime(dischargePort, originPort, null, (int) maxSpeed));
+		// fleetCreator.setAvailability(portfolioModel.getScenarioFleetModel(), vessels[1], transferPort, postLoadDate, originPort, postDischargeDate);
+
 		loadCargo.setVesselAssignmentType(vesselAvailabilities[0]);
 
 		/*
-		assignment = AssignmentFactory.eINSTANCE.createElementAssignment();
-		assignment.setAssignedObject(dischargeCargo);
-		assignment.setAssignment(vessels[1]);
-		assignmentModel.getElementAssignments().add(assignment);
-		*/
+		 * assignment = AssignmentFactory.eINSTANCE.createElementAssignment(); assignment.setAssignedObject(dischargeCargo); assignment.setAssignment(vessels[1]);
+		 * assignmentModel.getElementAssignments().add(assignment);
+		 */
 
 	}
 

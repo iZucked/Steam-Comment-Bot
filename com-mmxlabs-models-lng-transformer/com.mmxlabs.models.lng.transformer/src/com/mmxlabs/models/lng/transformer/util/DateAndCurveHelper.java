@@ -4,11 +4,13 @@
  */
 package com.mmxlabs.models.lng.transformer.util;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.TimeZone;
 
-import javax.management.timer.Timer;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.Hours;
+import org.joda.time.LocalDate;
+import org.joda.time.YearMonth;
 
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
@@ -27,13 +29,7 @@ import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
  */
 public class DateAndCurveHelper {
 
-	private TimeZone timezone;
-	private Date earliestTime;
-
-	public DateAndCurveHelper() {
-		this.timezone = TimeZone.getTimeZone("UTC");
-
-	}
+	private DateTime earliestTime;
 
 	/**
 	 * Convert a date into relative hours; returns the number of hours between windowStart and earliest.
@@ -42,16 +38,12 @@ public class DateAndCurveHelper {
 	 * @param windowStart
 	 * @return number of hours between earliest and windowStart
 	 */
-	public int convertTime(final Date earliest, final Date windowStart) {
-		// I am using two calendars, because the java date objects are all
-		// deprecated; however, timezones should not be a problem because
-		// every Date in the EMF representation is in UTC. (No - everything should be in correct localtime, but date doesn't care so we just need it to be consistent.
-		final Calendar a = Calendar.getInstance(timezone);
-		a.setTime(earliest);
-		final Calendar b = Calendar.getInstance(timezone);
-		b.setTime(windowStart);
-		final long difference = b.getTimeInMillis() - a.getTimeInMillis();
-		return (int) (difference / Timer.ONE_HOUR);
+	public int convertTime(final DateTime earliest, final DateTime windowStart) {
+		return Hours.hoursBetween(earliest, windowStart).getHours();
+	}
+
+	public int convertTime(final DateTime earliest, final YearMonth windowStart) {
+		return convertTime(earliest, windowStart.toLocalDate(1).toDateTimeAtStartOfDay(DateTimeZone.UTC));
 	}
 
 	public StepwiseIntegerCurve createCurveForDoubleIndex(final Index<Double> index, final double scale) {
@@ -60,7 +52,7 @@ public class DateAndCurveHelper {
 		curve.setDefaultValue(0);
 
 		boolean gotOneEarlyDate = false;
-		for (final Date date : index.getDates()) {
+		for (final YearMonth date : index.getDates()) {
 			final double value = index.getValueForMonth(date);
 			final int hours = convertTime(date);
 			if (hours < 0) {
@@ -74,13 +66,13 @@ public class DateAndCurveHelper {
 		return curve;
 	}
 
-	public StepwiseIntegerCurve createCurveForIntegerIndex(final Index<Integer> index, final double scale, boolean smallNumber) {
+	public StepwiseIntegerCurve createCurveForIntegerIndex(final Index<Integer> index, final double scale, final boolean smallNumber) {
 		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
 
 		curve.setDefaultValue(0);
 
 		boolean gotOneEarlyDate = false;
-		for (final Date date : index.getDates()) {
+		for (final YearMonth date : index.getDates()) {
 			final int value = index.getValueForMonth(date);
 			final int hours = convertTime(date);
 			if (hours < 0) {
@@ -90,7 +82,7 @@ public class DateAndCurveHelper {
 				}
 				gotOneEarlyDate = true;
 			}
-			double scaledValue = (double) value * scale;
+			final double scaledValue = (double) value * scale;
 			int internalValue;//
 			if (smallNumber) {
 				internalValue = OptimiserUnitConvertor.convertToInternalPrice(scaledValue);
@@ -103,7 +95,7 @@ public class DateAndCurveHelper {
 		return curve;
 	}
 
-	public StepwiseIntegerCurve generateExpressionCurve(final String priceExpression, SeriesParser indices) {
+	public StepwiseIntegerCurve generateExpressionCurve(final String priceExpression, final SeriesParser indices) {
 
 		if (priceExpression == null || priceExpression.isEmpty()) {
 			return null;
@@ -125,7 +117,7 @@ public class DateAndCurveHelper {
 		return curve;
 	}
 
-	public StepwiseIntegerCurve generateFixedCostExpressionCurve(final String priceExpression, SeriesParser indices) {
+	public StepwiseIntegerCurve generateFixedCostExpressionCurve(final String priceExpression, final SeriesParser indices) {
 
 		if (priceExpression == null || priceExpression.isEmpty()) {
 			return null;
@@ -147,16 +139,24 @@ public class DateAndCurveHelper {
 		return curve;
 	}
 
-	public int convertTime(final Date startTime) {
+	public int convertTime(final YearMonth time) {
+		return convertTime(time.toLocalDate(1).toDateTimeAtStartOfDay(DateTimeZone.UTC));
+	}
+
+	public int convertTime(final LocalDate time) {
+		return convertTime(time.toDateTimeAtStartOfDay(DateTimeZone.UTC));
+	}
+
+	public int convertTime(final DateTime startTime) {
 		assert earliestTime != null;
 		return convertTime(earliestTime, startTime);
 	}
 
-	public Date getEarliestTime() {
+	public DateTime getEarliestTime() {
 		return earliestTime;
 	}
 
-	public void setEarliestTime(Date earliestTime) {
+	public void setEarliestTime(final DateTime earliestTime) {
 		this.earliestTime = roundTimeDown(earliestTime);
 	}
 
@@ -166,18 +166,18 @@ public class DateAndCurveHelper {
 	 * @param timeZone
 	 * @return
 	 */
-	public static int getOffsetInMinutesFromTimeZone(String timeZone) {
+	public static int getOffsetInMinutesFromTimeZone(final String timeZone) {
 		return getOffsetMinutes(getOffsetInMsFromTimeZone(timeZone));
 	}
 
-	public static int getOffsetInMsFromTimeZone(String timeZone) {
-		int offset = TimeZone.getTimeZone(timeZone).getRawOffset();
+	public static int getOffsetInMsFromTimeZone(final String timeZone) {
+		final int offset = TimeZone.getTimeZone(timeZone).getRawOffset();
 		return offset;
 	}
 
-	public static int getOffsetMinutes(int offsetMs) {
+	public static int getOffsetMinutes(final int offsetMs) {
 		int correctedOffset = 0;
-		int offsetInMinutes = (Math.abs(offsetMs) / 1000 / 60) % 60;
+		final int offsetInMinutes = (Math.abs(offsetMs) / 1000 / 60) % 60;
 		if (offsetInMinutes != 0) {
 			if (offsetMs > 0) {
 				correctedOffset = 60 - offsetInMinutes;
@@ -193,8 +193,8 @@ public class DateAndCurveHelper {
 	 * 
 	 * @return
 	 */
-	public static Date roundTimeDown(Date date) {
-		return new Date(date.getTime() - getHourRoundingRemainder(date));
+	public static DateTime roundTimeDown(final DateTime date) {
+		return date.minusMinutes(getHourRoundingRemainder(date));
 	}
 
 	/**
@@ -203,19 +203,15 @@ public class DateAndCurveHelper {
 	 * @param date
 	 * @return
 	 */
-	public static int getHourRoundingRemainder(Date date) {
-		return (int) (date.getTime() % Timer.ONE_HOUR);
+	public static int getHourRoundingRemainder(final DateTime date) {
+		return date.withZone(DateTimeZone.UTC).getMinuteOfHour();
 	}
-	
-	public static Date createDate(int year, int month, int dayOfMonth, int hourOfDay, String newTimeZone) {
-		final Calendar newCalendar = Calendar.getInstance(TimeZone.getTimeZone(newTimeZone));
-		newCalendar.set(Calendar.YEAR, year);
-		newCalendar.set(Calendar.MONTH, month);
-		newCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-		newCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-		newCalendar.set(Calendar.MINUTE, 0);
-		newCalendar.set(Calendar.SECOND, 0);
-		newCalendar.set(Calendar.MILLISECOND, 0);
-		return newCalendar.getTime();
+
+	public static DateTime createDate(final int year, final int month, final int dayOfMonth, final int hourOfDay, final String newTimeZone) {
+		return new DateTime(year, month, dayOfMonth, hourOfDay, 0, DateTimeZone.forID(newTimeZone));
+	}
+
+	public static YearMonth createYearMonth(final int year, final int month) {
+		return new YearMonth(year, month);
 	}
 }

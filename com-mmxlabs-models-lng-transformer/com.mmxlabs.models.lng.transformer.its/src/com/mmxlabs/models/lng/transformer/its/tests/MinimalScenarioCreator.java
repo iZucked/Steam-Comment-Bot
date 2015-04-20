@@ -9,6 +9,9 @@ import java.util.Date;
 import javax.management.timer.Timer;
 
 import org.eclipse.emf.common.util.EList;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDateTime;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -101,15 +104,15 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 	 * @return
 	 */
 	public Cargo createDefaultCargo(final Port loadPort, final Port dischargePort) {
-		final Pair<Port, Date> appointment = getLastAppointment();
-		final Date loadTime;
+		final Pair<Port, DateTime> appointment = getLastAppointment();
+		final LocalDateTime loadTime;
 
 		if (appointment == null) {
 			loadTime = null;
 		} else {
-			final Date date = appointment.getSecond();
+			final DateTime date = appointment.getSecond();
 			final Port port = appointment.getFirst();
-			loadTime = addHours(date, getMarginHours(port, loadPort));
+			loadTime = date.plusHours(getMarginHours(port, loadPort)).withZone(DateTimeZone.forID(loadPort.getTimeZone())).toLocalDateTime();
 		}
 
 		return cargoCreator.createDefaultCargo(null, loadPort, dischargePort, loadTime, getMarginHours(loadPort, dischargePort));
@@ -121,23 +124,24 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 
 	public void setDefaultAvailability(final Port startPort, final Port endPort) {
 
-		final Pair<Port, Date> firstAppointment = getFirstAppointment();
-		final Pair<Port, Date> lastAppointment = getLastAppointment();
+		final Pair<Port, DateTime> firstAppointment = getFirstAppointment();
+		final Pair<Port, DateTime> lastAppointment = getLastAppointment();
 
-		final Date firstLoadDate = firstAppointment.getSecond();
-		final Date lastDischargeDate = lastAppointment.getSecond();
+		final DateTime firstLoadDate = firstAppointment.getSecond();
+		final DateTime lastDischargeDate = lastAppointment.getSecond();
 
-		final Date startDate = addHours(firstLoadDate, -getMarginHours(startPort, firstAppointment.getFirst()));
-		final Date endDate = addHours(lastDischargeDate, getMarginHours(lastAppointment.getFirst(), endPort));
+		final DateTime startDate = firstLoadDate.minusHours(getMarginHours(startPort, firstAppointment.getFirst()));
+		final DateTime endDate = lastDischargeDate.plusHours(getMarginHours(lastAppointment.getFirst(), endPort));
 
 		final CargoModel cargoModel = scenario.getPortfolioModel().getCargoModel();
-		this.vesselAvailability = fleetCreator.setAvailability(cargoModel, vessel, originPort, startDate, originPort, endDate);
+		this.vesselAvailability = fleetCreator.setAvailability(cargoModel, vessel, originPort, startDate.withZone(DateTimeZone.UTC).toLocalDateTime(), originPort, endDate.withZone(DateTimeZone.UTC)
+				.toLocalDateTime());
 	}
 
-	public VesselEvent createDefaultMaintenanceEvent(final String name, final Port port, Date startDate) {
+	public VesselEvent createDefaultMaintenanceEvent(final String name, final Port port, LocalDateTime startDate) {
 		if (startDate == null) {
-			final Pair<Port, Date> last = getLastAppointment();
-			startDate = addHours(last.getSecond(), getMarginHours(last.getFirst(), port));
+			final Pair<Port, DateTime> last = getLastAppointment();
+			startDate = last.getSecond().plusHours(getMarginHours(last.getFirst(), port)).withZone(DateTimeZone.forID(port.getTimeZone())).toLocalDateTime();
 		}
 
 		final VesselEvent result = CargoFactory.eINSTANCE.createMaintenanceEvent();
@@ -163,17 +167,17 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 	 * cargoes.get(cargoes.size() - 1).getSortedSlots(); return slots.get(slots.size()-1); }
 	 */
 
-	public Pair<Port, Date> getLastAppointment() {
-		Date date = null;
+	public Pair<Port, DateTime> getLastAppointment() {
+		DateTime date = null;
 		Port port = null;
 
 		final EList<Cargo> cargoes = scenario.getPortfolioModel().getCargoModel().getCargoes();
 		for (final Cargo cargo : cargoes) {
 			final EList<Slot> slots = cargo.getSortedSlots();
 			final Slot slot = slots.get(slots.size() - 1);
-			final Date slotDate = slot.getWindowEndWithSlotOrPortTime();
+			final DateTime slotDate = slot.getWindowEndWithSlotOrPortTime();
 
-			if (date == null || date.before(slotDate)) {
+			if (date == null || date.isBefore(slotDate)) {
 				date = slotDate;
 				port = slot.getPort();
 			}
@@ -181,14 +185,14 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 
 		final EList<VesselEvent> events = scenario.getPortfolioModel().getCargoModel().getVesselEvents();
 		for (final VesselEvent event : events) {
-			Date eventDate = event.getStartBy();
+			DateTime eventDate = event.getStartByAsDateTime();
 			if (eventDate == null) {
-				eventDate = event.getStartAfter();
+				eventDate = event.getStartAfterAsDateTime();
 			}
 			if (eventDate != null) {
-				eventDate = new Date(eventDate.getTime() + Timer.ONE_DAY * event.getDurationInDays());
+				eventDate = eventDate.plusDays(event.getDurationInDays());
 
-				if (date == null || date.before(eventDate)) {
+				if (date == null || date.isBefore(eventDate)) {
 					date = eventDate;
 					port = event.getPort();
 				}
@@ -199,20 +203,20 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 			return null;
 		}
 
-		return new Pair<Port, Date>(port, date);
+		return new Pair<Port, DateTime>(port, date);
 	}
 
-	public Pair<Port, Date> getFirstAppointment() {
-		Date date = null;
+	public Pair<Port, DateTime> getFirstAppointment() {
+		DateTime date = null;
 		Port port = null;
 
 		final EList<Cargo> cargoes = scenario.getPortfolioModel().getCargoModel().getCargoes();
 		for (final Cargo cargo : cargoes) {
 			final EList<Slot> slots = cargo.getSortedSlots();
 			final Slot slot = slots.get(0);
-			final Date slotDate = slot.getWindowStartWithSlotOrPortTime();
+			final DateTime slotDate = slot.getWindowStartWithSlotOrPortTime();
 
-			if (date == null || date.after(slotDate)) {
+			if (date == null || date.isAfter(slotDate)) {
 				date = slotDate;
 				port = slot.getPort();
 			}
@@ -220,12 +224,12 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 
 		final EList<VesselEvent> events = scenario.getPortfolioModel().getCargoModel().getVesselEvents();
 		for (final VesselEvent event : events) {
-			Date eventDate = event.getStartAfter();
+			DateTime eventDate = event.getStartAfterAsDateTime();
 			if (eventDate == null) {
-				eventDate = event.getStartBy();
+				eventDate = event.getStartByAsDateTime();
 			}
 			if (eventDate != null) {
-				if (date == null || date.after(eventDate)) {
+				if (date == null || date.isAfter(eventDate)) {
 					date = eventDate;
 					port = event.getPort();
 				}
@@ -236,7 +240,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 			return null;
 		}
 
-		return new Pair<Port, Date>(port, date);
+		return new Pair<Port, DateTime>(port, date);
 	}
 
 	/**
@@ -276,9 +280,9 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 
 	public CharterOutEvent makeCharterOut(MinimalScenarioCreator msc, MMXRootObject scenario, Port startPort, Port endPort) {
 		// change to default: add a charter out event 2-3 hrs after discharge window ends
-		final Date endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
-		final Date charterStartByDate = new Date(endLoad.getTime() + 3 * 3600 * 1000);
-		final Date charterStartAfterDate = new Date(endLoad.getTime() + 2 * 3600 * 1000);
+		final DateTime endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
+		final LocalDateTime charterStartByDate = endLoad.plusHours(3).withZone(DateTimeZone.forID(startPort.getTimeZone())).toLocalDateTime();
+		final LocalDateTime charterStartAfterDate = endLoad.plusHours(2).withZone(DateTimeZone.forID(startPort.getTimeZone())).toLocalDateTime();
 		int charterOutRate = 24;
 		CharterOutEvent event = msc.vesselEventCreator.createCharterOutEvent("CharterOut", startPort, endPort, charterStartByDate, charterStartAfterDate, charterOutRate);
 		event.getHeelOptions().setVolumeAvailable(0);

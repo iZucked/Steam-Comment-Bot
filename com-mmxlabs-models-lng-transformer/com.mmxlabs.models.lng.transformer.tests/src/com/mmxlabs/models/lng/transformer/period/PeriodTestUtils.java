@@ -5,9 +5,6 @@
 package com.mmxlabs.models.lng.transformer.period;
 
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -16,6 +13,11 @@ import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+import org.joda.time.YearMonth;
 
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -40,7 +42,6 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
-import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -72,35 +73,35 @@ import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 
 public class PeriodTestUtils {
 
-	public static Date createDate(final int year, final int month, final int day, final int hour) {
-		final Calendar cal = Calendar.getInstance();
-		cal.setTimeZone(TimeZone.getTimeZone("UTC"));
-		cal.clear();
+	public static YearMonth createYearMonth(final int year, final int month) {
 
-		cal.set(Calendar.YEAR, year);
-		cal.set(Calendar.MONTH, month);
-		cal.set(Calendar.DAY_OF_MONTH, day);
-		cal.set(Calendar.HOUR_OF_DAY, hour);
-		return cal.getTime();
+		return new YearMonth(year, 1 + month);
 	}
 
-	public static Date createDate(final String timezoneCode, final int year, final int month, final int day, final int hour) {
-		final Calendar cal = Calendar.getInstance();
-		cal.setTimeZone(TimeZone.getTimeZone(timezoneCode));
-		cal.clear();
+	public static DateTime createDate(final int year, final int month, final int day, final int hour) {
 
-		cal.set(Calendar.YEAR, year);
-		cal.set(Calendar.MONTH, month);
-		cal.set(Calendar.DAY_OF_MONTH, day);
-		cal.set(Calendar.HOUR_OF_DAY, hour);
-		return cal.getTime();
+		return new DateTime(year, 1 + month, day, hour, 0, DateTimeZone.UTC);
 	}
 
-	static Date createDate(final int year, final int month, final int day) {
-		return PeriodTestUtils.createDate(year, month, day, 0);
+	public static DateTime createDate(final String timezoneCode, final int year, final int month, final int day, final int hour) {
+		return new DateTime(year, 1 + month, day, hour, 0, DateTimeZone.forID(timezoneCode));
+
 	}
-	static Date createDate(final String timezoneCode, final int year, final int month, final int day) {
-		return PeriodTestUtils.createDate(timezoneCode, year, month, day, 0);
+
+	static DateTime createDate(final int year, final int month, final int day) {
+		return new DateTime(year, 1 + month, day, 0, 0, DateTimeZone.UTC);
+	}
+
+	static LocalDate createLocalDate(final int year, final int month, final int day) {
+		return new LocalDate(year, 1 + month, day);
+	}
+
+	static LocalDateTime createLocalDateTime(final int year, final int month, final int day, int hourOfDay) {
+		return new LocalDateTime(year, 1 + month, day, hourOfDay, 0);
+	}
+
+	static DateTime createDate(final String timezoneCode, final int year, final int month, final int day) {
+		return new DateTime(year, 1 + month, day, 0, 0, DateTimeZone.forID(timezoneCode));
 	}
 
 	public static LNGScenarioModel createBasicScenario() {
@@ -158,9 +159,8 @@ public class PeriodTestUtils {
 		final Slot slot = slotAllocation.getSlot();
 
 		slotVisit.setSlotAllocation(slotAllocation);
-		slotVisit.setStart(slot.getWindowStart());
-		slotVisit.setEnd(slot.getWindowStart());
-		slotVisit.setEnd(slot.getWindowStart());
+		slotVisit.setStart(slot.getWindowStartWithSlotOrPortTime());
+		slotVisit.setEnd(slot.getWindowStartWithSlotOrPortTime());
 
 		return slotVisit;
 	}
@@ -170,13 +170,11 @@ public class PeriodTestUtils {
 
 		vesselEventVisit.setVesselEvent(vesselEvent);
 
-		vesselEventVisit.setStart(vesselEvent.getStartAfter());
+		vesselEventVisit.setStart(vesselEvent.getStartAfterAsDateTime());
 
 		if (vesselEventVisit.getStart() != null) {
-			final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-			cal.setTime(vesselEventVisit.getStart());
-			cal.add(Calendar.DATE, vesselEvent.getDurationInDays());
-			vesselEventVisit.setEnd(cal.getTime());
+			final DateTime date = vesselEventVisit.getStart().plusDays(vesselEvent.getDurationInDays());
+			vesselEventVisit.setEnd(date);
 		}
 		return vesselEventVisit;
 	}
@@ -207,7 +205,7 @@ public class PeriodTestUtils {
 		return port;
 	}
 
-	public static Cargo createCargo(final LNGScenarioModel scenarioModel,  final Slot... slots) {
+	public static Cargo createCargo(final LNGScenarioModel scenarioModel, final Slot... slots) {
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
 		scenarioModel.getPortfolioModel().getCargoModel().getCargoes().add(cargo);
 
@@ -218,7 +216,7 @@ public class PeriodTestUtils {
 		return cargo;
 	}
 
-	public static Cargo createCargo(final LNGScenarioModel scenarioModel, final String name, final Port loadPort, final Date loadDate, final Port dischargePort, final Date dischargeDate) {
+	public static Cargo createCargo(final LNGScenarioModel scenarioModel, final String name, final Port loadPort, final LocalDate loadDate, final Port dischargePort, final LocalDate dischargeDate) {
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
 		scenarioModel.getPortfolioModel().getCargoModel().getCargoes().add(cargo);
 
@@ -243,7 +241,7 @@ public class PeriodTestUtils {
 		return event;
 	}
 
-	public static VesselEvent createCharterOutEvent(final LNGScenarioModel scenarioModel, final String name, final Port port, final Date date, final int duration) {
+	public static VesselEvent createCharterOutEvent(final LNGScenarioModel scenarioModel, final String name, final Port port, final LocalDateTime date, final int duration) {
 		final CharterOutEvent event = CargoFactory.eINSTANCE.createCharterOutEvent();
 		event.setName(name);
 		scenarioModel.getPortfolioModel().getCargoModel().getVesselEvents().add(event);
@@ -284,40 +282,40 @@ public class PeriodTestUtils {
 		return slot;
 	}
 
-	public static SpotMarketsModel createSpotMarkets(final LNGScenarioModel scenarioModel, final String name, final String timeZone) {
-		SpotMarketsModel marketsModel = SpotMarketsFactory.eINSTANCE.createSpotMarketsModel();
-		DESSalesMarket desSalesMarket = SpotMarketsFactory.eINSTANCE.createDESSalesMarket();
-		DESPurchaseMarket desPurchasesMarket = SpotMarketsFactory.eINSTANCE.createDESPurchaseMarket();
-		FOBSalesMarket fobSalesMarket = SpotMarketsFactory.eINSTANCE.createFOBSalesMarket();
-		FOBPurchasesMarket fobPurchaseMarket = SpotMarketsFactory.eINSTANCE.createFOBPurchasesMarket();
-		
-		for (SpotMarket market: new SpotMarket[] {desSalesMarket, desPurchasesMarket, fobPurchaseMarket, fobSalesMarket}) {
-			setUpSpotMarket(market, timeZone);
+	public static SpotMarketsModel createSpotMarkets(final LNGScenarioModel scenarioModel, final String name) {
+		final SpotMarketsModel marketsModel = SpotMarketsFactory.eINSTANCE.createSpotMarketsModel();
+		final DESSalesMarket desSalesMarket = SpotMarketsFactory.eINSTANCE.createDESSalesMarket();
+		final DESPurchaseMarket desPurchasesMarket = SpotMarketsFactory.eINSTANCE.createDESPurchaseMarket();
+		final FOBSalesMarket fobSalesMarket = SpotMarketsFactory.eINSTANCE.createFOBSalesMarket();
+		final FOBPurchasesMarket fobPurchaseMarket = SpotMarketsFactory.eINSTANCE.createFOBPurchasesMarket();
+
+		for (final SpotMarket market : new SpotMarket[] { desSalesMarket, desPurchasesMarket, fobPurchaseMarket, fobSalesMarket }) {
+			setUpSpotMarket(market);
 		}
-		SpotMarketGroup dp = SpotMarketsFactory.eINSTANCE.createSpotMarketGroup();
+		final SpotMarketGroup dp = SpotMarketsFactory.eINSTANCE.createSpotMarketGroup();
 		dp.getMarkets().add(desPurchasesMarket);
-		SpotMarketGroup ds = SpotMarketsFactory.eINSTANCE.createSpotMarketGroup();
+		final SpotMarketGroup ds = SpotMarketsFactory.eINSTANCE.createSpotMarketGroup();
 		ds.getMarkets().add(desSalesMarket);
-		SpotMarketGroup fp = SpotMarketsFactory.eINSTANCE.createSpotMarketGroup();
+		final SpotMarketGroup fp = SpotMarketsFactory.eINSTANCE.createSpotMarketGroup();
 		fp.getMarkets().add(fobPurchaseMarket);
-		SpotMarketGroup fs = SpotMarketsFactory.eINSTANCE.createSpotMarketGroup();
+		final SpotMarketGroup fs = SpotMarketsFactory.eINSTANCE.createSpotMarketGroup();
 		fs.getMarkets().add(fobSalesMarket);
-		
+
 		marketsModel.setDesPurchaseSpotMarket(dp);
 		marketsModel.setDesSalesSpotMarket(ds);
 		marketsModel.setFobPurchasesSpotMarket(fp);
 		marketsModel.setFobSalesSpotMarket(fs);
 		return marketsModel;
 	}
-	
-	private static void setUpSpotMarket(SpotMarket market, String timeZone) {
+
+	private static void setUpSpotMarket(final SpotMarket market) {
 		market.setEnabled(true);
-		SpotAvailability availability = SpotMarketsFactory.eINSTANCE.createSpotAvailability();
+		final SpotAvailability availability = SpotMarketsFactory.eINSTANCE.createSpotAvailability();
 		availability.setConstant(2);
-		DataIndex<Integer> curve = PricingFactory.eINSTANCE.createDataIndex();
+		final DataIndex<Integer> curve = PricingFactory.eINSTANCE.createDataIndex();
 		for (int i = 4; i < 6; i++) {
-			Date date = DateAndCurveHelper.createDate(2015, i, 1, 0, timeZone);
-			IndexPoint<Integer> point = PricingFactory.eINSTANCE.createIndexPoint();
+			final YearMonth date = DateAndCurveHelper.createYearMonth(2015, i);
+			final IndexPoint<Integer> point = PricingFactory.eINSTANCE.createIndexPoint();
 			point.setDate(date);
 			point.setValue(5);
 			curve.getPoints().add(point);
@@ -325,8 +323,8 @@ public class PeriodTestUtils {
 		availability.setCurve(curve);
 		market.setAvailability(availability);
 	}
-	
-	public static PortVisit createPortVisit(final Port port, final Date date) {
+
+	public static PortVisit createPortVisit(final Port port, final DateTime date) {
 
 		final PortVisit portVisit = ScheduleFactory.eINSTANCE.createPortVisit();
 		portVisit.setPort(port);

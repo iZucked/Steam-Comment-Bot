@@ -4,9 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests.calculation.multipleEvents;
 
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
+import org.joda.time.LocalDateTime;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -48,7 +46,7 @@ public class CharterOutTest {
 		final CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
 
 		// a leg between ports A and B will take 100 hours.
-		final long legDurationHours = 100;
+		final int legDurationHours = 100;
 
 		final Port portA = PortFactory.eINSTANCE.createPort();
 		final Port portB = PortFactory.eINSTANCE.createPort();
@@ -79,12 +77,12 @@ public class CharterOutTest {
 		final int dryDockDurationDays = 0;
 		final float cvValue = 1;
 
-		final Date startFirstCharterOut = new Date();
-		final Date endFirstCharterOut = new Date(startFirstCharterOut.getTime() + TimeUnit.DAYS.toMillis(charterOutDurationDays));
-		final Date startFirstDryDock = new Date(endFirstCharterOut.getTime() + TimeUnit.HOURS.toMillis(legDurationHours));
-		final Date startSecondCharterOut = new Date(startFirstDryDock.getTime());
-		final Date endSecondCharterOut = new Date(startSecondCharterOut.getTime() + TimeUnit.DAYS.toMillis(charterOutDurationDays));
-		final Date startSecondDryDock = new Date(endSecondCharterOut.getTime() + TimeUnit.HOURS.toMillis(legDurationHours));
+		final LocalDateTime startFirstCharterOut = new LocalDateTime();
+		final LocalDateTime endFirstCharterOut = startFirstCharterOut.plusDays(charterOutDurationDays);
+		final LocalDateTime startFirstDryDock = endFirstCharterOut.plusHours(legDurationHours);
+		final LocalDateTime startSecondCharterOut = new LocalDateTime(startFirstDryDock);
+		final LocalDateTime endSecondCharterOut = startSecondCharterOut.plusDays(charterOutDurationDays);
+		final LocalDateTime startSecondDryDock = endSecondCharterOut.plusHours(legDurationHours);
 
 		csc.addCharterOut(firstCharterOutID, portA, portA, startFirstCharterOut, firstCOHeelLimit, charterOutDurationDays, cvValue, dischargePrice, 0, 0);
 		csc.addDryDock(portB, startFirstDryDock, dryDockDurationDays);

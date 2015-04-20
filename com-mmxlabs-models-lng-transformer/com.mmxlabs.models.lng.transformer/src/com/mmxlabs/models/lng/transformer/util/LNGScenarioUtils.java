@@ -5,8 +5,10 @@
 package com.mmxlabs.models.lng.transformer.util;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashSet;
+
+import org.eclipse.jdt.annotation.NonNull;
+import org.joda.time.DateTime;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -26,27 +28,27 @@ public class LNGScenarioUtils {
 	 * <li>Vessel availability dates</li>
 	 * </ul>
 	 */
-	public static Pair<Date, Date> findEarliestAndLatestTimes(LNGScenarioModel rootObject) {
-		Date earliestTime = null;
-		Date latestTime = null;
+	public static Pair<DateTime, DateTime> findEarliestAndLatestTimes(@NonNull final LNGScenarioModel rootObject) {
+		DateTime earliestTime = null;
+		DateTime latestTime = null;
 		final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
 
-		final HashSet<Date> allDates = new HashSet<Date>();
+		final HashSet<DateTime> allDates = new HashSet<>();
 
 		for (final VesselEvent event : cargoModel.getVesselEvents()) {
-			allDates.add(event.getStartBy());
-			allDates.add(event.getStartAfter());
+			allDates.add(event.getStartByAsDateTime());
+			allDates.add(event.getStartAfterAsDateTime());
 		}
 		for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
 			if (vesselAvailability.isSetStartBy())
-				allDates.add(vesselAvailability.getStartBy());
+				allDates.add(vesselAvailability.getStartByAsDateTime());
 			if (vesselAvailability.isSetStartAfter())
-				allDates.add(vesselAvailability.getStartAfter());
+				allDates.add(vesselAvailability.getStartAfterAsDateTime());
 
 			if (vesselAvailability.isSetEndBy())
-				allDates.add(vesselAvailability.getEndBy());
+				allDates.add(vesselAvailability.getEndByAsDateTime());
 			if (vesselAvailability.isSetEndAfter())
-				allDates.add(vesselAvailability.getEndAfter());
+				allDates.add(vesselAvailability.getEndAfterAsDateTime());
 		}
 		for (final Slot s : cargoModel.getLoadSlots()) {
 			allDates.add(s.getWindowStartWithSlotOrPortTime());
@@ -57,11 +59,11 @@ public class LNGScenarioUtils {
 			allDates.add(s.getWindowEndWithSlotOrPortTime());
 		}
 
-		earliestTime = allDates.isEmpty() ? new Date(0) : Collections.min(allDates);
+		earliestTime = allDates.isEmpty() ? new DateTime(0) : Collections.min(allDates);
 		// round down earliest time
 		earliestTime = DateAndCurveHelper.roundTimeDown(earliestTime);
-		latestTime = allDates.isEmpty() ? new Date(0) : Collections.max(allDates);
-		return new Pair<Date, Date>(earliestTime, latestTime);
+		latestTime = allDates.isEmpty() ? new DateTime(0) : Collections.max(allDates);
+		return new Pair<DateTime, DateTime>(earliestTime, latestTime);
 	}
 
 }

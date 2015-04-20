@@ -4,13 +4,10 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests.sanityChecks;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
-
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.junit.Assert;
 import org.junit.Test;
-
-import junit.framework.Assert;
 
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
@@ -27,7 +24,7 @@ public class TimeZoneTests {
 
 	public void testTimeZone(int year, int month, int day, String timeZone, boolean isJanEarliestTime, boolean dahejEarliestTime) {
 		String earliestTimeString = isJanEarliestTime ? "Jan 2014" : "Jul 2013";
-		System.out.println(String.format("Testing: %s/%s/%s (%s) with earliest time %s", year,month+1,day,timeZone,earliestTimeString));
+		System.out.println(String.format("Testing: %s/%s/%s (%s) with earliest time %s", year, month + 1, day, timeZone, earliestTimeString));
 		if (isJanEarliestTime) {
 			if (dahejEarliestTime)
 				setJanuaryEarliestTimeDahej();
@@ -40,7 +37,7 @@ public class TimeZoneTests {
 				setJulyEarliestTime();
 		}
 		for (int i = 0; i < 24; i++) {
-			Date dateToTest = createDate(year, month, day, i, timeZone);
+			DateTime dateToTest = createDate(year, month, day, i, timeZone);
 			testDate(dateToTest, timeZone);
 		}
 	}
@@ -48,26 +45,20 @@ public class TimeZoneTests {
 	public void testTimeZone(int year, int month, int day, String timeZone, boolean isJanEarliestTime) {
 		testTimeZone(year, month, day, timeZone, isJanEarliestTime, false);
 	}
-	
-	public static Date createDate(int year, int month, int day, int hour, String timeZone) {
-		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
-		cal.clear();
-		cal.set(Calendar.YEAR, year);
-		cal.set(Calendar.MONTH, month);
-		cal.set(Calendar.DAY_OF_MONTH, day);
-		cal.set(Calendar.HOUR_OF_DAY, hour);
-		return cal.getTime();
+
+	public static DateTime createDate(int year, int month, int day, int hour, String timeZone) {
+		return new DateTime(year, 1 + month, day, hour, 0, DateTimeZone.forID(timeZone));
 	}
 
-	public void testDate(Date dateToTest, String timeZone) {
+	public void testDate(DateTime dateToTest, String timeZone) {
 		int dhToInt = dateHelper.convertTime(dateToTest);
-		Date intToDate = modelEntityMap.getDateFromHours(dhToInt, timeZone);
-		System.out.println(String.format("In: %s Out: %s",dateToTest, intToDate));
+		DateTime intToDate = modelEntityMap.getDateFromHours(dhToInt, timeZone);
+		System.out.println(String.format("In: %s Out: %s", dateToTest, intToDate));
 		Assert.assertEquals(dateToTest, intToDate);
 	}
 
 	private void setJanuaryEarliestTime(String timeZone) {
-		Date jan = createDate(2014, 0, 10, 0, timeZone);
+		DateTime jan = createDate(2014, 0, 10, 0, timeZone);
 		setEarliestTime(jan);
 	}
 
@@ -76,10 +67,10 @@ public class TimeZoneTests {
 	}
 
 	private void setJulyEarliestTime(String timeZone) {
-		Date jul = createDate(2013, 6, 10, 0, timeZone);
+		DateTime jul = createDate(2013, 6, 10, 0, timeZone);
 		setEarliestTime(jul);
 	}
-	
+
 	private void setJulyEarliestTime() {
 		setJulyEarliestTime("UTC");
 	}
@@ -87,13 +78,12 @@ public class TimeZoneTests {
 	private void setJanuaryEarliestTimeDahej() {
 		setJanuaryEarliestTime("Asia/Calcutta");
 	}
-	
+
 	private void setJulyEarliestTimeDahej() {
 		setJulyEarliestTime("Asia/Calcutta");
 	}
 
-	
-	private void setEarliestTime(Date earliestTime) {
+	private void setEarliestTime(DateTime earliestTime) {
 		modelEntityMap.setEarliestDate(earliestTime);
 		dateHelper.setEarliestTime(earliestTime);
 	}
@@ -133,7 +123,7 @@ public class TimeZoneTests {
 		testTimeZone(2015, 6, 1, "Europe/London", true);
 		testTimeZone(2015, 6, 1, "Europe/London", false);
 	}
-	
+
 	@Test
 	public void testNairobi() {
 		testTimeZone(2015, 0, 1, "Africa/Nairobi", true);
@@ -161,7 +151,7 @@ public class TimeZoneTests {
 		testTimeZone(2015, 6, 1, "Asia/Calcutta", false);
 		testTimeZone(2015, 6, 1, "Asia/Calcutta", false, true);
 	}
-	
+
 	@Test
 	public void testChathamIslands() {
 		testTimeZone(2015, 0, 1, "Pacific/Chatham", true);
@@ -197,7 +187,7 @@ public class TimeZoneTests {
 		testTimeZone(2015, 6, 1, "Australia/Adelaide", true);
 		testTimeZone(2015, 6, 1, "Australia/Adelaide", false);
 	}
-	
+
 	@Test
 	public void testNewfoundland() {
 		testTimeZone(2015, 0, 1, "Canada/Newfoundland", true);
@@ -209,6 +199,5 @@ public class TimeZoneTests {
 		testTimeZone(2015, 6, 1, "Canada/Newfoundland", false);
 		testTimeZone(2015, 6, 1, "Canada/Newfoundland", false, true);
 	}
-
 
 }

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Date;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.joda.time.YearMonth;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -73,7 +74,7 @@ public class PeriodOptimiserTest {
 		Assert.assertEquals("20.0", tester.cargoB3.getSlots().get(1).getPriceExpression());
 
 		// Pass in null to disable opt range
-		tester.periodOptimise(DateAndCurveHelper.createDate(2013, 6, 15, 0, "UTC"), DateAndCurveHelper.createDate(2015, 10, 15, 0, "UTC"));
+		tester.periodOptimise(DateAndCurveHelper.createYearMonth(2013, 6), DateAndCurveHelper.createYearMonth(2015, 10));
 
 		Assert.assertEquals("20.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("20.0", tester.cargoA2.getSlots().get(1).getPriceExpression());
@@ -98,7 +99,7 @@ public class PeriodOptimiserTest {
 		Assert.assertEquals("20.0", tester.cargoB3.getSlots().get(1).getPriceExpression());
 
 		// Pass in null to disable opt range
-		tester.periodOptimise(DateAndCurveHelper.createDate(2014, 7, 15, 0, "UTC"), DateAndCurveHelper.createDate(2014, 8, 15, 0, "UTC"));
+		tester.periodOptimise(DateAndCurveHelper.createYearMonth(2014, 7), DateAndCurveHelper.createYearMonth(2014, 8));
 
 		Assert.assertEquals("5.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("20.0", tester.cargoA2.getSlots().get(1).getPriceExpression());
@@ -112,7 +113,7 @@ public class PeriodOptimiserTest {
 	/**
 	 * The discharges of the middle cargos should be free to swap
 	 * 
-	 * @throws IOException
+	 * @throws Exception
 	 */
 	@Test
 	public void testSimpleDischargeSwapPeriodMiddleOnlyLoadsLocked() throws Exception {
@@ -128,7 +129,7 @@ public class PeriodOptimiserTest {
 		Assert.assertEquals("20.0", tester.cargoB3.getSlots().get(1).getPriceExpression());
 
 		// Pass in null to disable opt range
-		tester.periodOptimise(DateAndCurveHelper.createDate(2014, 8, 2, 0, "UTC"), DateAndCurveHelper.createDate(2014, 8, 15, 0, "UTC"));
+		tester.periodOptimise(DateAndCurveHelper.createYearMonth(2014, 8), DateAndCurveHelper.createYearMonth(2014, 8));
 
 		Assert.assertEquals("5.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("20.0", tester.cargoA2.getSlots().get(1).getPriceExpression());
@@ -142,7 +143,7 @@ public class PeriodOptimiserTest {
 	/**
 	 * The loads of the middle cargos should be free to swap. Note this will only work if the start valid followers fix has been implemented
 	 * 
-	 * @throws IOException
+	 * @throws Exception
 	 */
 	@Test
 	public void testSimpleDischargeSwapPeriodMiddleOnlyDischargesLocked() throws Exception {
@@ -175,7 +176,7 @@ public class PeriodOptimiserTest {
 		Assert.assertEquals("20.0", tester.cargoB3.getSlots().get(0).getPriceExpression());
 
 		// Pass in null to disable opt range
-		tester.periodOptimise(DateAndCurveHelper.createDate(2014, 7, 30, 0, "UTC"), DateAndCurveHelper.createDate(2014, 8, 2, 0, "UTC"));
+		tester.periodOptimise(DateAndCurveHelper.createYearMonth(2014, 7), DateAndCurveHelper.createYearMonth(2014, 8));
 		Assert.assertEquals("5.0", tester.cargoA1.getSlots().get(0).getPriceExpression());
 		Assert.assertEquals("20.0", tester.cargoA2.getSlots().get(0).getPriceExpression());
 		Assert.assertEquals("5.0", tester.cargoA3.getSlots().get(0).getPriceExpression());
@@ -252,13 +253,13 @@ public class PeriodOptimiserTest {
 			}
 
 			// create two different cargoes
-			cargoA1 = csc.addCargo("Cargo-A1", loadPort, dischargePort, 5, 5.0f, 20.f, csc.createDate(2014, 7, 1), 50);
-			cargoA2 = csc.addCargo("Cargo-A2", loadPort, dischargePort, 5, 5.0f, 20.f, csc.createDate(2014, 8, 1), 50);
-			cargoA3 = csc.addCargo("Cargo-A3", loadPort, dischargePort, 5, 5.0f, 20.f, csc.createDate(2014, 9, 1), 50);
+			cargoA1 = csc.addCargo("Cargo-A1", loadPort, dischargePort, 5, 5.0f, 20.f, csc.createLocalDateTime(2014, 7, 1, 0), 50);
+			cargoA2 = csc.addCargo("Cargo-A2", loadPort, dischargePort, 5, 5.0f, 20.f, csc.createLocalDateTime(2014, 8, 1, 0), 50);
+			cargoA3 = csc.addCargo("Cargo-A3", loadPort, dischargePort, 5, 5.0f, 20.f, csc.createLocalDateTime(2014, 9, 1, 0), 50);
 
-			cargoB1 = csc.addCargo("Cargo-B1", loadPort2, dischargePort2, 5, 20.0f, 20.f, csc.createDate(2014, 7, 1), 50);
-			cargoB2 = csc.addCargo("Cargo-B2", loadPort2, dischargePort2, 5, 20.0f, 20.f, csc.createDate(2014, 8, 1), 50);
-			cargoB3 = csc.addCargo("Cargo-B3", loadPort2, dischargePort2, 5, 20.0f, 20.f, csc.createDate(2014, 9, 1), 50);
+			cargoB1 = csc.addCargo("Cargo-B1", loadPort2, dischargePort2, 5, 20.0f, 20.f, csc.createLocalDateTime(2014, 7, 1, 0), 50);
+			cargoB2 = csc.addCargo("Cargo-B2", loadPort2, dischargePort2, 5, 20.0f, 20.f, csc.createLocalDateTime(2014, 8, 1, 0), 50);
+			cargoB3 = csc.addCargo("Cargo-B3", loadPort2, dischargePort2, 5, 20.0f, 20.f, csc.createLocalDateTime(2014, 9, 1, 0), 50);
 
 			// // make sure they can be rewired
 			cargoA1.setAllowRewiring(true);
@@ -340,7 +341,7 @@ public class PeriodOptimiserTest {
 			}
 		}
 
-		public void periodOptimise(final Date start, final Date end) throws Exception {
+		public void periodOptimise(final YearMonth start, final YearMonth end) throws Exception {
 			try {
 
 				final OptimiserSettings settings = ScenarioUtils.createDefaultSettings();

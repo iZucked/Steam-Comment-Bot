@@ -32,8 +32,8 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 public final class ScheduleTools {
 
 	public static @Nullable
-	CargoAllocation findCargoAllocation(@NonNull String cargoID, @NonNull Schedule schedule) {
-		for (CargoAllocation ca : schedule.getCargoAllocations()) {
+	CargoAllocation findCargoAllocation(@NonNull final String cargoID, @NonNull final Schedule schedule) {
+		for (final CargoAllocation ca : schedule.getCargoAllocations()) {
 			if (cargoID.equals(ca.getName())) {
 				return ca;
 			}
@@ -42,10 +42,10 @@ public final class ScheduleTools {
 		return null;
 	}
 
-	public static int getFuelQuantity(@NonNull Fuel fuel, @NonNull FuelUnit unit, @NonNull FuelUsage fuelUsage) {
-		for (FuelQuantity fq : fuelUsage.getFuels()) {
+	public static int getFuelQuantity(@NonNull final Fuel fuel, @NonNull final FuelUnit unit, @NonNull final FuelUsage fuelUsage) {
+		for (final FuelQuantity fq : fuelUsage.getFuels()) {
 			if (fq.getFuel().equals(fuel)) {
-				for (FuelAmount fa : fq.getAmounts()) {
+				for (final FuelAmount fa : fq.getAmounts()) {
 					if (fa.getUnit().equals(unit)) {
 						return fa.getQuantity();
 					}
@@ -56,14 +56,14 @@ public final class ScheduleTools {
 		return 0;
 	}
 
-	public static double getFuelConsumption(@NonNull List<FuelConsumption> consumptions, double speed) {
+	public static double getFuelConsumption(@NonNull final List<FuelConsumption> consumptions, final double speed) {
 
 		double lowerBound = 0.0;
 		double upperBound = Double.MAX_VALUE;
 		FuelConsumption lowerConsumption = null;
 		FuelConsumption upperConsumption = null;
 
-		for (FuelConsumption fc : consumptions) {
+		for (final FuelConsumption fc : consumptions) {
 			// Exact match
 			if (Double.compare(fc.getSpeed(), speed) == 0) {
 				return fc.getConsumption();
@@ -80,10 +80,10 @@ public final class ScheduleTools {
 		}
 
 		if (lowerConsumption != null && upperConsumption != null) {
-			double diff = upperBound - lowerBound;
-			double relative = (speed - lowerBound) / diff;
+			final double diff = upperBound - lowerBound;
+			final double relative = (speed - lowerBound) / diff;
 
-			double consumption = (upperConsumption.getConsumption() - lowerConsumption.getConsumption()) * relative + lowerConsumption.getConsumption();
+			final double consumption = (upperConsumption.getConsumption() - lowerConsumption.getConsumption()) * relative + lowerConsumption.getConsumption();
 			return Math.round(consumption);
 		}
 

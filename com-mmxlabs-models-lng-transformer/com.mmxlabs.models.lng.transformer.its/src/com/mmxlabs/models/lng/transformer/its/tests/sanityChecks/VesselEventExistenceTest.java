@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import org.joda.time.LocalDateTime;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -62,17 +63,17 @@ public class VesselEventExistenceTest {
 		csc.addVesselSimple("classThree", numOfClassThree, 11, 12, 500000, 13, 15, 15, 0, true);
 
 		// add some VesselEvents, i.e. CharterOuts and DryDocks in a random-ish manner.
-		Date start = new Date(System.currentTimeMillis());
+		LocalDateTime start = new LocalDateTime();
 		for (final Port portA : ports) {
 			for (final Port portB : ports) {
 				if (!portA.equals(portB)) {
 					inputVesselEvents.add(csc.addDryDock(portB, start, 1));
-					start.setTime(start.getTime() + TimeUnit.HOURS.toMillis(2));
+					start = start.plusHours(2);
 				}
 			}
 		}
 
-		start = new Date(System.currentTimeMillis());
+		start = new LocalDateTime();
 		int charterOutDurationDays = 1;
 		for (final Port portA : ports) {
 			for (final Port portB : ports) {

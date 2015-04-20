@@ -28,6 +28,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
+import org.joda.time.DateTime;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -128,35 +129,35 @@ public class TransformerUtils {
 
 	}
 
-	private static void updateMinMax(Pair<Date, Date> pair, Date date) {
+	private static void updateMinMax(Pair<DateTime, DateTime> pair, DateTime date) {
 		if (date == null)
 			return;
-		if (pair.getFirst() == null || date.before(pair.getFirst()))
+		if (pair.getFirst() == null || date.isBefore(pair.getFirst()))
 			pair.setFirst(date);
-		if (pair.getSecond() == null || date.after(pair.getSecond()))
+		if (pair.getSecond() == null || date.isAfter(pair.getSecond()))
 			pair.setSecond(date);
 
 	}
 
-	public static Pair<Date, Date> findEarliestAndLatestEvents(final MMXRootObject rootObject) {
-		final Pair<Date, Date> result = new Pair<Date, Date>(null, null);
+	public static Pair<DateTime, DateTime> findEarliestAndLatestEvents(final MMXRootObject rootObject) {
+		final Pair<DateTime, DateTime> result = new Pair<>(null, null);
 
 		final TreeIterator<EObject> iterator = rootObject.eAllContents();
 		while (iterator.hasNext()) {
 			final EObject o = iterator.next();
 			if (o instanceof VesselAvailability) {
 				final VesselAvailability pat = (VesselAvailability) o;
-				updateMinMax(result, pat.getStartAfter());
-				updateMinMax(result, pat.getStartBy());
-				updateMinMax(result, pat.getEndAfter());
-				updateMinMax(result, pat.getEndBy());
+				updateMinMax(result, pat.getStartAfterAsDateTime());
+				updateMinMax(result, pat.getStartByAsDateTime());
+				updateMinMax(result, pat.getEndAfterAsDateTime());
+				updateMinMax(result, pat.getEndByAsDateTime());
 			} else if (o instanceof Slot) {
 				final Slot slot = (Slot) o;
 				updateMinMax(result, slot.getWindowStartWithSlotOrPortTime());
 				updateMinMax(result, slot.getWindowEndWithSlotOrPortTime());
 			} else if (o instanceof VesselEvent) {
-				updateMinMax(result, ((VesselEvent) o).getStartAfter());
-				updateMinMax(result, ((VesselEvent) o).getStartBy());
+				updateMinMax(result, ((VesselEvent) o).getStartAfterAsDateTime());
+				updateMinMax(result, ((VesselEvent) o).getStartByAsDateTime());
 			}
 		}
 		return result;

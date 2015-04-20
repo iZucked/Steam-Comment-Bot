@@ -5,9 +5,9 @@
 package com.mmxlabs.models.lng.transformer.its.tests.sanityChecks;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+
+import org.joda.time.LocalDateTime;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
@@ -72,7 +72,7 @@ public class SanityCheckTools {
 		final Cargo[] inputCargoes = new Cargo[numOfCargoes];
 		int i = 0;
 
-		final Date cargoStart = new Date(System.currentTimeMillis());
+		LocalDateTime cargoStart = new LocalDateTime();
 		int duration = 50;
 
 		for (final Port portX : ports) {
@@ -84,7 +84,7 @@ public class SanityCheckTools {
 					inputCargoes[i++] = c;
 
 					duration += 25;
-					cargoStart.setTime(cargoStart.getTime() + TimeUnit.DAYS.toMillis(10));
+					cargoStart = cargoStart.plusDays(10);
 
 				} else {
 
@@ -138,7 +138,7 @@ public class SanityCheckTools {
 	 */
 	public static void addDrydocks(final CustomScenarioCreator csc, final Port[] ports, final Vessel allowedDrydockVessel, final VesselClass allowedDrydockVesselClass) {
 
-		final Date start = new Date(System.currentTimeMillis());
+		LocalDateTime start = new LocalDateTime();
 		for (final Port portA : ports) {
 			for (final Port portB : ports) {
 				if (!portA.equals(portB)) {
@@ -152,7 +152,7 @@ public class SanityCheckTools {
 						dry.getAllowedVessels().add(allowedDrydockVesselClass);
 					}
 
-					start.setTime(start.getTime() + TimeUnit.HOURS.toMillis(2));
+					start = start.plusHours(2);
 				}
 			}
 		}
@@ -171,7 +171,7 @@ public class SanityCheckTools {
 	public static void addCharterOuts(final CustomScenarioCreator csc, final Port[] ports, final Vessel allowedCharterOutVessel, final VesselClass allowedCharterOutVesselClass, final float cvValue,
 			final float dischargePrice) {
 
-		final Date start = new Date(System.currentTimeMillis());
+		final LocalDateTime start = new LocalDateTime();
 		int charterOutDurationDays = 1;
 		for (final Port portA : ports) {
 			for (final Port portB : ports) {

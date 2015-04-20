@@ -6,9 +6,9 @@ package com.mmxlabs.models.lng.transformer.its.tests.sanityChecks;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
+import org.joda.time.LocalDateTime;
 import org.junit.Assert;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -76,7 +76,7 @@ public class SuboptimalScenarioTester {
 		// createVessels creates and adds the vessels to the scenario.
 		csc.addVesselSimple("classOne", numOfClassOne, fuelPrice, 25, 1000000, 10, 10, 0, 500, false);
 
-		final Date cargoStart = new Date(System.currentTimeMillis());
+		final LocalDateTime cargoStart = new LocalDateTime();
 
 		// create two different cargoes
 		smallToLargeCargo = csc.addCargo("S-L-Cargo", smallLoadPort, bigDischargePort, loadPrice, dischargePrice, 22, cargoStart, 50);

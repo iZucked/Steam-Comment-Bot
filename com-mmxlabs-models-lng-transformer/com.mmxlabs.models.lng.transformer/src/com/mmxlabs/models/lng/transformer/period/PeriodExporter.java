@@ -21,8 +21,8 @@ import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.joda.time.LocalDate;
 
-import com.mmxlabs.common.timezone.TimeZoneHelper;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -146,8 +146,7 @@ public class PeriodExporter {
 						} else if (newSlot instanceof DischargeSlot && ((DischargeSlot) newSlot).isFOBSale()) {
 							cmd.append(SetCommand.create(editingDomain, oldSlot, CargoPackage.Literals.SLOT__PORT, mapping.getOriginalFromCopy(newSlot.getPort())));
 						}
-						cmd.append(SetCommand.create(editingDomain, oldSlot, CargoPackage.Literals.SLOT__WINDOW_START,
-								TimeZoneHelper.createTimeZoneShiftedDate(oldSlot.getWindowStart(), oldSlot.getPort().getTimeZone(), newSlot.getPort().getTimeZone())));
+						cmd.append(SetCommand.create(editingDomain, oldSlot, CargoPackage.Literals.SLOT__WINDOW_START, new LocalDate(oldSlot.getWindowStart())));
 						cmd.append(SetCommand.create(editingDomain, oldSlot, CargoPackage.Literals.SLOT__WINDOW_START_TIME, 0));
 					}
 					newCargoSlots.add(oldSlot);

@@ -4,9 +4,9 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests.calculation.multipleEvents;
 
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import org.joda.time.LocalDateTime;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -46,7 +46,7 @@ public class DryDockTest {
 		final float dischargePrice = 1f;
 		final CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
 
-		final long legDurationHours = 10;
+		final int legDurationHours = 10;
 
 		final Port portA = PortFactory.eINSTANCE.createPort();
 		final Port portB = PortFactory.eINSTANCE.createPort();
@@ -72,11 +72,11 @@ public class DryDockTest {
 		final int dryDockDurationDays = 10;
 		// final float cvValue = 1;
 
-		final Date startFirstDryDock = new Date();
-		final Date endFirstDryDock = new Date(startFirstDryDock.getTime() + TimeUnit.DAYS.toMillis(dryDockDurationDays));
-		final Date startSecondDryDock = new Date(endFirstDryDock.getTime() + TimeUnit.HOURS.toMillis(legDurationHours));
-		final Date endSecondDryDock = new Date(startSecondDryDock.getTime() + TimeUnit.DAYS.toMillis(dryDockDurationDays));
-		final Date startThirdDryDock = new Date(endSecondDryDock.getTime() + TimeUnit.HOURS.toMillis(legDurationHours));
+		final LocalDateTime startFirstDryDock = new LocalDateTime();
+		final LocalDateTime endFirstDryDock = startFirstDryDock.plusDays(dryDockDurationDays);
+		final LocalDateTime startSecondDryDock = endFirstDryDock.plusHours(legDurationHours);
+		final LocalDateTime endSecondDryDock = startSecondDryDock.plusDays(dryDockDurationDays);
+		final LocalDateTime startThirdDryDock = endSecondDryDock.plusHours(legDurationHours);
 		// final Date endThirdDryDock = new Date(startThirdDryDock.getTime() + TimeUnit.DAYS.toMillis(dryDockDurationDays));
 
 		csc.addDryDock(portA, startFirstDryDock, dryDockDurationDays);
