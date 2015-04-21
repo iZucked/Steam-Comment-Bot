@@ -2017,12 +2017,6 @@ public class LNGScenarioTransformer {
 		return count;
 	}
 
-	private Date convertDateToUTC(final Date startTimeLocalTime, final TimeZone tz) {
-		// shift localTime to UTC
-		final Calendar shiftedToUTC = TimeZoneHelper.createTimeZoneShiftedCalendar(startTimeLocalTime, tz.getID(), "UTC");
-		return shiftedToUTC.getTime();
-	}
-
 	private void buildMarkToMarkets(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Collection<IContractTransformer> contractTransformers,
 			final ModelEntityMap modelEntityMap) {
 
