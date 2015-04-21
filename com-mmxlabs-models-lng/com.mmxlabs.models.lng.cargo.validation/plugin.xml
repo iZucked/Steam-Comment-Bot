@@ -85,6 +85,24 @@
             </constraint>
             <constraint
                   class="com.mmxlabs.models.lng.cargo.validation.CargoDateConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.CargoDateConstraint.cargo_non_shipped_travel_time"
+                  lang="Java"
+                  mode="Batch"
+                  name="Non shipped travel time"
+                  severity="WARNING"
+                  statusCode="1">
+               <message>
+                  [Cargo|{0}] Load is after discharge (note timezone).
+               </message>
+               <description>
+               </description>
+               <target
+                     class="Cargo">
+               </target>
+            </constraint>
+            
+            <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.CargoDateConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.CargoDateConstraint.cargo_available_time"
                   lang="Java"
                   mode="Batch"
@@ -92,7 +110,7 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  [Cargo|{0}] Travel time is excessive ({1} days); {2} is a sensible maximum.
+                  {0}
                </message>
                <description>
                   If a cargo has a very large amount of slack in its travel time, lots of fuel will be wasted idling at the destination

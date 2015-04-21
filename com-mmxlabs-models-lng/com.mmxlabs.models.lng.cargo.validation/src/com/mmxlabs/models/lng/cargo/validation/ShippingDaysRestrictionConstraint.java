@@ -32,6 +32,7 @@ import com.mmxlabs.models.lng.cargo.util.IShippingDaysRestrictionSpeedProvider;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier.SlotType;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
+import com.mmxlabs.models.lng.cargo.validation.utils.TravelTimeUtils;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
@@ -48,6 +49,7 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
  * 
  */
 public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstraint {
+
 	@Inject
 	private IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider;
 
@@ -64,42 +66,6 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 	}
 
 	private static final int MAX_SHIPPING_DAYS = 90;
-
-	private int getMinRouteTimeInHours(final Slot from, final Slot to, final LNGScenarioModel lngScenarioModel, final Vessel vessel, final double referenceSpeed) {
-
-		int minDuration = Integer.MAX_VALUE;
-		for (final Route route : lngScenarioModel.getPortModel().getRoutes()) {
-			assert route != null;
-			final Port fromPort = from.getPort();
-			final Port toPort = to.getPort();
-			if (fromPort != null && toPort != null) {
-
-				final int distance = getDistance(route, fromPort, toPort);
-
-				int extraTime = 0;
-				for (final VesselClassRouteParameters vcrp : vessel.getVesselClass().getRouteParameters()) {
-					if (vcrp.getRoute().equals(route)) {
-						extraTime = vcrp.getExtraTransitTime();
-					}
-				}
-				final double travelTime = distance / referenceSpeed;
-				final int totalTime = (int) (Math.floor(travelTime) + extraTime);
-				if (totalTime < minDuration) {
-					minDuration = totalTime;
-				}
-			}
-		}
-		return minDuration;
-	}
-
-	public int getDistance(@NonNull final Route route, @NonNull final Port from, @NonNull final Port to) {
-		for (final RouteLine dl : route.getLines()) {
-			if (dl.getFrom().equals(from) && dl.getTo().equals(to)) {
-				return dl.getDistance();
-			}
-		}
-		return Integer.MAX_VALUE;
-	}
 
 	@Override
 	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
@@ -211,20 +177,12 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 									return Activator.PLUGIN_ID;
 								}
 
-								double referenceSpeed;
-
-								// catch error in case no service registered
-								try {
-									referenceSpeed = shippingDaysSpeedProvider.getSpeed(vesselClass);
-								} catch (org.ops4j.peaberry.ServiceUnavailableException e) {
-									referenceSpeed = vesselClass.getMaxSpeed();
-								}
 
 								final int loadDurationInHours = desPurchase.getSlotOrPortDuration();
 								final int dischargeDurationInHours = dischargeSlot.getSlotOrPortDuration();
 
-								final int ladenTravelTimeInHours = getMinRouteTimeInHours(desPurchase, dischargeSlot, lngScenarioModel, vessel, referenceSpeed);
-								final int ballastTravelTimeInHours = getMinRouteTimeInHours(dischargeSlot, desPurchase, lngScenarioModel, vessel, referenceSpeed);
+								final int ladenTravelTimeInHours = TravelTimeUtils.getMinRouteTimeInHours(desPurchase, dischargeSlot, shippingDaysSpeedProvider, lngScenarioModel, vessel, TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, vesselClass, true));
+								final int ballastTravelTimeInHours = TravelTimeUtils.getMinRouteTimeInHours(dischargeSlot, desPurchase, shippingDaysSpeedProvider, lngScenarioModel, vessel, TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, vesselClass, false));
 
 								// Calculate minimum time due to slot windows
 								final int ladenMaxWindowInHours;
@@ -261,16 +219,6 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 									return Activator.PLUGIN_ID;
 								}
 
-								if (ladenTravelTimeInHours > ladenMaxWindowInHours) {
-									final String message = String.format("DES Purchase|%s available laden travel time (%s) is greater than available time from windows (%s)!", desPurchase.getName(),
-											formatHours(ladenTravelTimeInHours), formatHours(ladenMaxWindowInHours));
-									final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
-									final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
-									dsd.addEObjectAndFeature(desPurchase, CargoPackage.eINSTANCE.getSlot_WindowStart());
-									dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_WindowStart());
-									failures.add(dsd);
-								}
-
 								// Smallest amount of time permitted between slots
 								final int ladenTimeInHours = Math.max(ladenTravelTimeInHours, ladenMinWindowInHours);
 
@@ -279,8 +227,8 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 
 								if (totalRoundTripTimeInHours > desPurchase.getShippingDaysRestriction() * 24) {
 									final String message = String.format(
-											"DES Purchase|%s is paired with a sale at %s. However the round trip time (%s) is greater than the permitted restriction (%s).", desPurchase.getName(),
-											dischargeSlot.getPort().getName(), formatHours(totalRoundTripTimeInHours), formatHours(desPurchase.getShippingDaysRestriction() * 24));
+											"DES Purchase|%s is paired with a sale at %s. However the round trip time (%s) is greater than the permitted restriction (%s) by (%s).", desPurchase.getName(),
+											dischargeSlot.getPort().getName(), TravelTimeUtils.formatHours(totalRoundTripTimeInHours), TravelTimeUtils.formatHours(desPurchase.getShippingDaysRestriction() * 24), TravelTimeUtils.formatHours(totalRoundTripTimeInHours - desPurchase.getShippingDaysRestriction() * 24));
 									final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
 									final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
 									dsd.addEObjectAndFeature(desPurchase, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
@@ -300,19 +248,5 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 		}
 
 		return Activator.PLUGIN_ID;
-	}
-
-	private String formatHours(final int hours) {
-		if (hours < 24) {
-			if (hours == 1) {
-				return hours + " hour";
-			} else {
-				return hours + " hours";
-			}
-		} else {
-			final int remainderHours = hours % 24;
-			final int days = hours / 24;
-			return days + " day" + (days > 1 ? "s" : "") + (remainderHours > 0 ? (", " + remainderHours + " hour" + (remainderHours > 1 ? "s" : "")) : "");
-		}
-	}
+	}	
 }

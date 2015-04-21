@@ -20,7 +20,6 @@ public class LatenessUtils {
 	public static boolean isLate(final Event e) {
 		if (e instanceof SlotVisit) {
 			final SlotVisit visit = (SlotVisit) e;
-			// Exclude DES Purchase and fob sales
 			final Sequence seq = visit.getSequence();
 			if (seq.getSequenceType() == SequenceType.DES_PURCHASE || seq.getSequenceType() == SequenceType.FOB_SALE) {
 				// ignore load slots as we don't care when the load was performed
