@@ -10,6 +10,8 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.Singleton;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
+import com.mmxlabs.scheduler.optimiser.calculators.IDivertableDESShippingTimesCalculator;
+import com.mmxlabs.scheduler.optimiser.calculators.impl.DefaultDivertableDESShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
@@ -44,6 +46,9 @@ public class EvaluationModule extends AbstractModule {
 
 		bind(IVesselBaseFuelCalculator.class).to(VesselBaseFuelCalculator.class);
 		bind(VesselBaseFuelCalculator.class).in(Singleton.class);
+
+		bind(IDivertableDESShippingTimesCalculator.class).to(DefaultDivertableDESShippingTimesCalculator.class);
+		bind(DefaultDivertableDESShippingTimesCalculator.class).in(Singleton.class);
 
 		if (hints != null) {
 			for (final String hint : hints) {

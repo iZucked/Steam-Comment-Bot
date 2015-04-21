@@ -2247,6 +2247,7 @@ public class LNGScenarioTransformer {
 		// precision
 
 		final FleetModel fleetModel = rootObject.getFleetModel();
+		final PortModel portModel = rootObject.getPortModel();
 		final PricingModel pricingModel = rootObject.getPricingModel();
 
 		// look up prices
@@ -2279,6 +2280,13 @@ public class LNGScenarioTransformer {
 
 			vesselClassAssociation.add(eVc, vc);
 
+			List<String> allowedRoutes = new LinkedList<>();
+			if (shippingDaysRestrictionSpeedProvider != null) {
+				for (Route route: shippingDaysRestrictionSpeedProvider.getValidRoutes(portModel, eVc)) {
+					allowedRoutes.add(route.getName());
+				}
+			}
+			builder.setDivertableDESAllowedRoute(vc, allowedRoutes);
 			/*
 			 * set up inaccessible ports by applying resource allocation constraints
 			 */
@@ -2318,12 +2326,15 @@ public class LNGScenarioTransformer {
 					OptimiserUnitConvertor.convertToInternalVolume((int) (eVessel.getVesselOrVesselClassCapacity() * eVessel.getVesselOrVesselClassFillCapacity())));
 			vesselAssociation.add(eVessel, vessel);
 
+			final int ballastReferenceSpeed, ladenReferenceSpeed;
 			if (shippingDaysRestrictionSpeedProvider == null) {
-				builder.setShippingDaysRestrictionReferenceSpeed(vessel, vessel.getVesselClass().getMaxSpeed());
+				ballastReferenceSpeed = ladenReferenceSpeed = vessel.getVesselClass().getMaxSpeed();
 			} else {
-				final int referenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(eVessel.getVesselClass()));
-				builder.setShippingDaysRestrictionReferenceSpeed(vessel, referenceSpeed);
+				ballastReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(eVessel.getVesselClass(), false /*ballast*/));
+				ladenReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(eVessel.getVesselClass(), true /*laden*/));
 			}
+			builder.setShippingDaysRestrictionReferenceSpeed(vessel, VesselState.Ballast, ballastReferenceSpeed);
+			builder.setShippingDaysRestrictionReferenceSpeed(vessel, VesselState.Laden, ladenReferenceSpeed);
 			modelEntityMap.addModelObject(eVessel, vessel);
 			allVessels.put(eVessel, vessel);
 
