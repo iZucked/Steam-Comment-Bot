@@ -9,13 +9,15 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.VesselState;
 
 /**
  */
 public interface IShippingHoursRestrictionProviderEditor extends IShippingHoursRestrictionProvider {
 
 	/**
-	 * Set shipping days restrictions. Implies {@link IShippingHoursRestrictionProvider#isDivertable(ISequenceElement)} will be true for this element
+	 * Set shipping hours restrictions. Implies {@link IShippingHoursRestrictionProvider#isDivertable(ISequenceElement)} will be true for this element
 	 * 
 	 * @param element
 	 * @param baseTimeWindow
@@ -29,6 +31,11 @@ public interface IShippingHoursRestrictionProviderEditor extends IShippingHoursR
 	 * @param vessel
 	 * @param referenceSpeed
 	 */
-	void setReferenceSpeed(@NonNull IVessel vessel, int referenceSpeed);
+	void setReferenceSpeed(@NonNull IVessel vessel, VesselState vesselState, int referenceSpeed);
 
+	/**
+	 * Set an allowed route that a DES cargo can follow
+	 * @param route
+	 */
+	void setDivertableDESAllowedRoute(@NonNull IVesselClass vc, @NonNull String route);
 }

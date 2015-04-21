@@ -705,7 +705,7 @@ public interface ISchedulerBuilder {
 	 */
 	void setShippingHoursRestriction(@NonNull IPortSlot slot, @NonNull ITimeWindow baseTime, int hours);
 
-	void setShippingDaysRestrictionReferenceSpeed(@NonNull IVessel vessel, int referenceSpeed);
+	void setShippingDaysRestrictionReferenceSpeed(@NonNull IVessel vessel, VesselState vesselState, int referenceSpeed);
 
 	/**
 	 * Freeze a {@link IPortSlot} to a single {@link IVesselAvailability}. Unlike {@link #constrainSlotToVesselAvailabilities(IPortSlot, Set)} which still permits allocations to special vessels, this
@@ -733,5 +733,7 @@ public interface ISchedulerBuilder {
 	 */
 	@NonNull
 	SequenceElement createSequenceElement(String name);
+
+	void setDivertableDESAllowedRoute(@NonNull IVesselClass vc, @NonNull List<String> allowedRoutes);
 
 }
