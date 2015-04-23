@@ -26,9 +26,11 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class TravelTimeUtils {
 	public static int getMinRouteTimeInHours(final Slot from, final Slot to, final IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider, final LNGScenarioModel lngScenarioModel, final Vessel vessel, final double referenceSpeed) {
 		Collection<Route> allowedRoutes = null;
-		if (shippingDaysSpeedProvider != null) {
+		try {
 			allowedRoutes = shippingDaysSpeedProvider.getValidRoutes(lngScenarioModel.getPortModel(), vessel.getVesselClass());
+		} catch (org.ops4j.peaberry.ServiceUnavailableException e) {
 		}
+
 		if (allowedRoutes == null || allowedRoutes.isEmpty()) {
 			allowedRoutes = lngScenarioModel.getPortModel().getRoutes();
 		}
