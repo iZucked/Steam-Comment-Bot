@@ -35,4 +35,3 @@ Require-Bundle: com.mmxlabs.optimiser.optimiser-core;bundle-version="[3.0.0,4.0.
  com.mmxlabs.common.common-util;bundle-version="[3.0.0,4.0.0)",
  com.google.inject;bundle-version="3.0.0",
  com.google.guava;bundle-version="13.0.1"
-Bundle-ActivationPolicy: lazy

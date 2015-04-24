@@ -50,4 +50,3 @@ Tool: Bnd-1.50.0
 Require-Bundle: com.mmxlabs.common.common-util;bundle-version="[3.0.0,4.0.0)",
  com.google.guava;bundle-version="13.0.1",
  com.google.inject;bundle-version="3.0.0"
-Bundle-ActivationPolicy: lazy

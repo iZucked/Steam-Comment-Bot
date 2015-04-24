@@ -16,4 +16,3 @@ Export-Package: com.mmxlabs.optimiser.ga.bytearray;uses:="com.mmxlabs.op
 Require-Bundle: com.mmxlabs.optimiser.optimiser-common;bundle-version="[3.0.0,4.0.0)",
  com.mmxlabs.optimiser.optimiser-core;bundle-version="[3.0.0,4.0.0)",
  com.mmxlabs.common.common-util;bundle-version="[3.0.0,4.0.0)"
-Bundle-ActivationPolicy: lazy
