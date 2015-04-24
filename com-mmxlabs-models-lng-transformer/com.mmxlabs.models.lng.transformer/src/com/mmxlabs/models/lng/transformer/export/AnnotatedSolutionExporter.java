@@ -21,8 +21,10 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Injector;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.Fitness;
@@ -373,19 +375,9 @@ public class AnnotatedSolutionExporter {
 		// Fix up start events with no port.
 		fixUpStartEventPorts(output);
 		// patch up idle events with no port
-		for (final Sequence eSequence : output.getSequences()) {
-			Idle firstIdle = null;
-			for (final Event event : eSequence.getEvents()) {
-				if (firstIdle != null && firstIdle.getPort() != null)
-					break;
-				if (event instanceof Idle) {
-					firstIdle = (Idle) event;
-				}
-				if (firstIdle != null && firstIdle.getPort() == null && event.getPort() != null) {
-					firstIdle.setPort(event.getPort());
-				}
-			}
-		}
+		fixUpFirstIdleEventPorts(output);
+		// Fix up end events with no port.
+		fixUpEndEventPorts(output);
 
 		// now patch up laden/ballast journey references in the cargoes
 		for (final Sequence eSequence : output.getSequences()) {
@@ -485,4 +477,51 @@ public class AnnotatedSolutionExporter {
 		}
 	}
 
+	/**
+	 * Fix up first idle events missing a port - typically a result of missing start event ports.
+	 * 
+	 * @param output
+	 */
+	private void fixUpFirstIdleEventPorts(final Schedule output) {
+		for (final Sequence eSequence : output.getSequences()) {
+			Idle firstIdle = null;
+			for (final Event event : eSequence.getEvents()) {
+				if (firstIdle != null && firstIdle.getPort() != null) {
+					break;
+				}
+				if (event instanceof Idle) {
+					firstIdle = (Idle) event;
+				}
+				final Port port = event.getPort();
+				if (firstIdle != null && firstIdle.getPort() == null && port != null) {
+					firstIdle.setPort(port);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Fix up {@link EndEvent}s with no start port.
+	 * 
+	 * @param schedule
+	 */
+	private void fixUpEndEventPorts(final Schedule schedule) {
+		for (final Sequence sequence : schedule.getSequences()) {
+			if (sequence.getEvents().isEmpty()) {
+				continue;
+			}
+			final Event event = sequence.getEvents().get(sequence.getEvents().size() - 1);
+			if (event instanceof EndEvent) {
+				final EndEvent endEvent = (EndEvent) event;
+				if (endEvent.getPort() == null) {
+					final Event prevEvent = endEvent.getPreviousEvent();
+					final Port port = prevEvent.getPort();
+					if (port != null) {
+						endEvent.setPort(port);
+					}
+				}
+			}
+
+		}
+	}
 }
