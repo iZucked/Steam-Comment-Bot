@@ -13,7 +13,6 @@
 	<build>
 		<plugins>
 
-
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
@@ -85,24 +84,7 @@
 					<useUIHarness>true</useUIHarness>
 					<useUIThread>true</useUIThread>
 
-					<dependencies>
-						<dependency>
-							<type>eclipse-feature</type>
-							<artifactId>com.mmxlabs.lingo.feature</artifactId>
-							<version>0.0.0</version>
-						</dependency>
-						<dependency>
-							<type>eclipse-feature</type>
-							<artifactId>com.mmxlabs.lingo.platform.feature</artifactId>
-							<version>0.0.0</version>
-						</dependency>
-						<dependency>
-							<type>eclipse-feature</type>
-							<artifactId>com.mmxlabs.models.lng.transformer.its.feature</artifactId>
-							<version>0.0.0</version>
-						</dependency>
-
-					</dependencies>
+					<argLine>-Dlingo.suppress.dialogs=true -Dlingo.enc.keyfile=${lingo.enc.keyfile}</argLine>
 
 					<!-- Automatically start these bundles at specified run level. These contain the services required for test execution -->
 					<bundleStartLevel>
