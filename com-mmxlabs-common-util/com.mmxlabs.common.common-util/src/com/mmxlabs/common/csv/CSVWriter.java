@@ -18,7 +18,7 @@ import java.io.Writer;
  * 
  * 
  * @author Simon McGregor
- *
+ * 
  */
 public class CSVWriter {
 	private final char separator; // this is the character which appears between fields
@@ -28,12 +28,12 @@ public class CSVWriter {
 
 	private final String separatorString; // String version of the separator for convenience
 	private final String delimiterString; // String version of the delimiter for convenience
-	
-	private final Writer writer; // the stream to which output is written 
-	
+
+	private final Writer writer; // the stream to which output is written
+
 	private boolean rowStarted = false; // track whether a row has been started yet
-	
-	public CSVWriter(Writer w, char sep, char delim, String escaped) {
+
+	public CSVWriter(final Writer w, final char sep, final char delim, final String escaped) {
 		separator = sep;
 		separatorString = "" + sep;
 		delimiter = delim;
@@ -42,37 +42,36 @@ public class CSVWriter {
 		writer = w;
 	}
 
-	public CSVWriter(Writer w, char sep, char delim) {
+	public CSVWriter(final Writer w, final char sep, final char delim) {
 		this(w, sep, delim, "\\" + delim);
 	}
-	
-	public CSVWriter(Writer w, char sep) {
+
+	public CSVWriter(final Writer w, final char sep) {
 		this(w, sep, '"');
 	}
-	
-	public CSVWriter(Writer w) {
+
+	public CSVWriter(final Writer w) {
 		this(w, '\t');
 	}
-	
-	public void addValue(String value) throws IOException {
+
+	public void addValue(final String value) throws IOException {
 		if (rowStarted) {
 			writer.write(separator);
 		}
 		writer.write(escape(value));
 		rowStarted = true;
 	}
-	
+
 	public void endRow() throws IOException {
 		writer.write(newLine);
 		rowStarted = false;
 	}
 
-	private String escape(String value) {
+	private String escape(final String value) {
 		if (value.contains(delimiterString) || value.contains(separatorString) || value.contains(newLine)) {
-			return delimiterString + value.replace("" + delimiter, escapedDelimiter) + delimiterString; 
+			return delimiterString + value.replace("" + delimiter, escapedDelimiter) + delimiterString;
 		}
-		return value;		
+		return value;
 	}
 
 }
-
