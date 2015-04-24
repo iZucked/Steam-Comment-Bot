@@ -67,3 +67,4 @@ Export-Package: com.mmxlabs.scheduler.optimiser,
  com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl,
  com.mmxlabs.scheduler.optimiser.voyage,
  com.mmxlabs.scheduler.optimiser.voyage.impl
+Bundle-ActivationPolicy: lazy
