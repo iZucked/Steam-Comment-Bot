@@ -18,16 +18,16 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.csv.CSVReader;
+import com.mmxlabs.common.csv.FieldMap;
+import com.mmxlabs.common.csv.IFieldMap;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.util.Activator;
-import com.mmxlabs.models.util.importer.CSVReader;
-import com.mmxlabs.models.util.importer.FieldMap;
 import com.mmxlabs.models.util.importer.IClassImporter;
-import com.mmxlabs.models.util.importer.IExportContext;
-import com.mmxlabs.models.util.importer.IFieldMap;
-import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.IMMXExportContext;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 
 /**
  * Class to permit the generic import of multi-line data from a CSV file.
@@ -76,7 +76,7 @@ public class MultiLineImporter extends DefaultClassImporter {
 	 * (Unfinished code)
 	 */
 
-	protected Collection<Map<String, String>> multiExportObject(final EObject object, final IExportContext context) {
+	protected Collection<Map<String, String>> multiExportObject(final EObject object, final IMMXExportContext context) {
 
 		final Collection<Map<String, String>> result = new LinkedList<Map<String, String>>();
 		final Map<String, String> row = new LinkedHashMap<String, String>();
@@ -115,7 +115,7 @@ public class MultiLineImporter extends DefaultClassImporter {
 	/*
 	 * (Unfinished code)
 	 */
-	protected Collection<Map<String, String>> multiExportReference(final EObject object, final EReference reference, final Map<String, String> row, final IExportContext context) {
+	protected Collection<Map<String, String>> multiExportReference(final EObject object, final EReference reference, final Map<String, String> row, final IMMXExportContext context) {
 		Collection<Map<String, String>> result = null;
 
 		if (shouldFlattenReference(reference)) {
@@ -172,7 +172,7 @@ public class MultiLineImporter extends DefaultClassImporter {
 	}
 
 	@Override
-	public Collection<EObject> importObjects(final EClass importClass, final CSVReader reader, final IImportContext context) {
+	public Collection<EObject> importObjects(final EClass importClass, final CSVReader reader, final IMMXImportContext context) {
 		objectMap.clear();
 		return super.importObjects(importClass, reader, context);
 	}
@@ -188,7 +188,7 @@ public class MultiLineImporter extends DefaultClassImporter {
 	 * @param results
 	 */
 	@SuppressWarnings("unchecked")
-	private void importReference(final EReference reference, final EObject instance, final IFieldMap map, final IImportContext context) {
+	private void importReference(final EReference reference, final EObject instance, final IFieldMap map, final IMMXImportContext context) {
 		// get the appropriate sub-importer from the importer registry and invoke it
 		final IClassImporter classImporter = importerRegistry.getClassImporter(reference.getEReferenceType());
 
@@ -213,7 +213,7 @@ public class MultiLineImporter extends DefaultClassImporter {
 	}
 
 	@Override
-	protected void importReferences(final IFieldMap row, final IImportContext context, final EClass rowClass, final EObject instance) {
+	protected void importReferences(final IFieldMap row, final IMMXImportContext context, final EClass rowClass, final EObject instance) {
 		for (final EReference reference : rowClass.getEAllReferences()) {
 			if (!shouldImportReference(reference)) {
 				continue;
@@ -317,7 +317,7 @@ public class MultiLineImporter extends DefaultClassImporter {
 	}
 
 	@Override
-	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IImportContext context) {
+	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IMMXImportContext context) {
 		final EClass rowClass = getTrueOutputClass(eClass, row.get(KIND_KEY));
 		try {
 			boolean objectCreated = false;

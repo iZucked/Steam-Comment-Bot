@@ -9,7 +9,10 @@ import java.util.Map;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
 
 /**
@@ -27,7 +30,8 @@ public interface IClassImporter {
 	 * @param context
 	 * @return
 	 */
-	public Collection<EObject> importObjects(final EClass targetClass, final CSVReader reader, final IImportContext context);
+	@NonNull
+	Collection<EObject> importObjects(@NonNull EClass targetClass, @NonNull CSVReader reader, @NonNull IMMXImportContext context);
 
 	/**
 	 * Import objects from the given row; the first object should correspond to the row. Any other objects are those which are not contained in the imported object but were imported anyway; users of
@@ -38,7 +42,8 @@ public interface IClassImporter {
 	 * @param context
 	 * @return
 	 */
-	public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context);
+	@NonNull
+	ImportResults importObject(@Nullable EObject parent, @NonNull EClass targetClass, @NonNull Map<String, String> row, @NonNull IMMXImportContext context);
 
 	/**
 	 * Turn the given collection of objects into a bunch of key-value maps, for export to something like a CSV writer.
@@ -46,5 +51,6 @@ public interface IClassImporter {
 	 * @param objects
 	 * @return
 	 */
-	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final IExportContext context);
+	@NonNull
+	Collection<Map<String, String>> exportObjects(@NonNull Collection<? extends EObject> objects, @NonNull IMMXExportContext context);
 }

@@ -6,28 +6,33 @@ package com.mmxlabs.models.util.importer;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
 
 /**
  * Instances of this are used to convert strings into EAttribute values, and vice-versa
+ * 
  * @author hinton
- *
+ * 
  */
 public interface IAttributeImporter {
 	/**
 	 * This method will set the given attribute on the given EObject, using whatever data is in the value string.
+	 * 
 	 * @param container
 	 * @param attribute
 	 * @param value
 	 * @param context
 	 */
-	public void setAttribute(final EObject container, EAttribute attribute, final String value, final IImportContext context);
+	void setAttribute(@NonNull EObject container, @NonNull EAttribute attribute, @NonNull String value, @NonNull IMMXImportContext context);
+
 	/**
-	 * This method should turn the given attribute on given container <em>already gotten as the given value</em> into a string,
-	 * hopefully inverse to {@link #setAttribute(EObject, EAttribute, String, IImportContext)}
+	 * This method should turn the given attribute on given container <em>already gotten as the given value</em> into a string, hopefully inverse to
+	 * {@link #setAttribute(EObject, EAttribute, String, IMMXImportContext)}
+	 * 
 	 * @param container
 	 * @param attribute
 	 * @param value
 	 * @return
 	 */
-	public String writeAttribute(final EObject container, final EAttribute attribute, final Object value, final IExportContext context);
+	String writeAttribute(@NonNull EObject container, @NonNull EAttribute attribute, @NonNull Object value, @NonNull IMMXExportContext context);
 }

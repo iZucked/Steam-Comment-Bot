@@ -11,6 +11,8 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EcorePackage;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.YearMonth;
@@ -20,8 +22,8 @@ import com.mmxlabs.models.datetime.importers.LocalDateAttributeImporter;
 import com.mmxlabs.models.datetime.importers.LocalDateTimeAttributeImporter;
 import com.mmxlabs.models.datetime.importers.YearMonthAttributeImporter;
 import com.mmxlabs.models.util.importer.IAttributeImporter;
-import com.mmxlabs.models.util.importer.IExportContext;
-import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.IMMXExportContext;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 
 public class DefaultAttributeImporter implements IAttributeImporter {
 
@@ -29,10 +31,11 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 	private static final String HTML_COMMA = "&#44;";
 
 	@Override
-	public void setAttribute(final EObject container, final EAttribute attribute, final String value, final IImportContext context) {
+	public void setAttribute(@NonNull final EObject container, @NonNull final EAttribute attribute, @NonNull final String value, @NonNull final IMMXImportContext context) {
 		if (attribute.isMany()) {
 			final String[] values = value.split(",");
-			final EList eValues = (EList) container.eGet(attribute);
+			@SuppressWarnings({ "unchecked", "rawtypes" })
+			final EList<Object> eValues = (EList) container.eGet(attribute);
 			for (final String v : values) {
 				if (v.trim().isEmpty()) {
 					continue;
@@ -40,6 +43,7 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 
 				// Simple (de)encoding - should expand into something more robust
 				final String decodedValue = v.trim().replaceAll(HTML_COMMA, ",").replaceAll(HTML_AMPERSAND, "&");
+				assert decodedValue != null;
 
 				eValues.add(attributeFromString(container, attribute, decodedValue, context));
 			}
@@ -55,7 +59,7 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 	}
 
 	@Override
-	public String writeAttribute(final EObject container, final EAttribute attribute, final Object value, final IExportContext context) {
+	public String writeAttribute(@NonNull final EObject container, @NonNull final EAttribute attribute, @NonNull final Object value, @NonNull final IMMXExportContext context) {
 		if (attribute.isMany()) {
 			final EList<?> eValues = (EList<?>) container.eGet(attribute);
 			final StringBuffer result = new StringBuffer();
@@ -81,10 +85,11 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 		}
 	}
 
-	protected Object attributeFromString(final EObject container, final EAttribute attribute, final String value, final IImportContext context) {
+	@Nullable
+	protected Object attributeFromString(@NonNull final EObject container, @NonNull final EAttribute attribute, @NonNull final String value, @NonNull final IMMXImportContext context) {
 		final EDataType dt = attribute.getEAttributeType();
+		assert dt != null;
 		try {
-
 			if (isNumberDataType(dt)) {
 				return importNumberDataType(dt, value, context);
 			} else if (isDateDataType(dt)) {
@@ -99,8 +104,9 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 		return null;
 	}
 
-	protected String stringFromAttribute(final EObject container, final EAttribute attribute, final Object value, final IExportContext context) {
+	protected String stringFromAttribute(@NonNull final EObject container, @NonNull final EAttribute attribute, @NonNull final Object value, @NonNull final IMMXExportContext context) {
 		final EDataType dt = attribute.getEAttributeType();
+		assert dt != null;
 
 		if (attribute.isUnsettable() && container.eIsSet(attribute) == false) {
 			return "";
@@ -115,7 +121,7 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 		}
 	}
 
-	protected boolean isNumberDataType(final EDataType dt) {
+	protected boolean isNumberDataType(@NonNull final EDataType dt) {
 		if (dt == EcorePackage.Literals.EBIG_DECIMAL || dt == EcorePackage.Literals.EBIG_INTEGER || dt == EcorePackage.Literals.ESHORT || dt == EcorePackage.Literals.ESHORT_OBJECT) {
 			throw new UnsupportedOperationException("Unable to handle this numerical data type: " + dt.getName());
 		}
@@ -127,7 +133,7 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 		return false;
 	}
 
-	protected boolean isDateDataType(final EDataType dt) {
+	protected boolean isDateDataType(@NonNull final EDataType dt) {
 
 		if (dt == DateTimePackage.Literals.DATE_TIME || dt == DateTimePackage.Literals.LOCAL_DATE || dt == DateTimePackage.Literals.LOCAL_DATE_TIME || dt == DateTimePackage.Literals.YEAR_MONTH) {
 			return true;
@@ -135,7 +141,7 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 		return false;
 	}
 
-	protected Object importNumberDataType(final EDataType dt, final String value, final IImportContext context) throws ParseException {
+	protected Object importNumberDataType(@NonNull final EDataType dt, @NonNull final String value, @NonNull final IMMXImportContext context) throws ParseException {
 
 		final NumberAttributeImporter nai = new NumberAttributeImporter(context.getDecimalSeparator());
 		if (dt == EcorePackage.Literals.EINT || dt == EcorePackage.Literals.EINTEGER_OBJECT) {
@@ -149,7 +155,7 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 		return null;
 	}
 
-	protected String exportNumberDataType(final EDataType dt, final Object value, final IExportContext context) {
+	protected String exportNumberDataType(@NonNull final EDataType dt, @NonNull final Object value, @NonNull final IMMXExportContext context) {
 
 		final NumberAttributeImporter nai = new NumberAttributeImporter(context.getDecimalSeparator());
 		if (dt == EcorePackage.Literals.EINT || dt == EcorePackage.Literals.EINTEGER_OBJECT) {
@@ -163,7 +169,7 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 		return null;
 	}
 
-	protected String exportDateDataType(final EDataType dt, final Object value, final IExportContext context) {
+	protected String exportDateDataType(@NonNull final EDataType dt, @Nullable final Object value, @NonNull final IMMXExportContext context) {
 		if (value == null) {
 			return null;
 		}
@@ -182,7 +188,7 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 		return null;
 	}
 
-	protected Object importDateDataType(final EDataType dt, final String value, final IImportContext context) throws ParseException {
+	protected Object importDateDataType(@NonNull final EDataType dt, @NonNull final String value, @NonNull final IMMXImportContext context) throws ParseException {
 
 		if (dt == DateTimePackage.Literals.YEAR_MONTH) {
 			return new YearMonthAttributeImporter().parseYearMonth(value);

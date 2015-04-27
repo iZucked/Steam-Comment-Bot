@@ -7,6 +7,9 @@ package com.mmxlabs.models.util.importer;
 import java.util.Collection;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
+
+import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
@@ -21,6 +24,7 @@ public interface IExtraModelImporter {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	Map<String, String> getRequiredInputs();
 
 	/**
@@ -29,7 +33,7 @@ public interface IExtraModelImporter {
 	 * @param context
 	 * @return
 	 */
-	void importModel(MMXRootObject rootObject, Map<String, CSVReader> inputs, IImportContext context);
+	void importModel(@NonNull MMXRootObject rootObject, @NonNull Map<String, CSVReader> inputs, @NonNull IMMXImportContext context);
 
 	/**
 	 * Turn the given model instance into a bunch of output values, keyed like the inputs.
@@ -37,5 +41,5 @@ public interface IExtraModelImporter {
 	 * @param output
 	 * @param context
 	 */
-	void exportModel(Map<String, Collection<Map<String, String>>> output, IExportContext context);
+	void exportModel(@NonNull Map<String, Collection<Map<String, String>>> output, @NonNull IMMXExportContext context);
 }

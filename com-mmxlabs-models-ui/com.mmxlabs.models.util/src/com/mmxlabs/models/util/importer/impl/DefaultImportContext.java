@@ -21,14 +21,17 @@ import org.eclipse.emf.ecore.EObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.common.csv.CSVReader;
+import com.mmxlabs.common.csv.FileCSVReader;
+import com.mmxlabs.common.csv.IDeferment;
+import com.mmxlabs.common.csv.IImportProblem;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.OtherNamesObject;
 import com.mmxlabs.models.util.emfpath.EMFUtils;
-import com.mmxlabs.models.util.importer.CSVReader;
-import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 
-public class DefaultImportContext implements IImportContext {
+public class DefaultImportContext implements IMMXImportContext {
 	private static final Logger log = LoggerFactory.getLogger(DefaultImportContext.class);
 
 	private final LinkedList<IDeferment> deferments = new LinkedList<>();
@@ -162,8 +165,8 @@ public class DefaultImportContext implements IImportContext {
 	}
 
 	@Override
-	public void popReader() {
-		readerStack.pop();
+	public CSVReader popReader() {
+		return readerStack.pop();
 	}
 
 	@Override
@@ -288,7 +291,12 @@ public class DefaultImportContext implements IImportContext {
 			final String lowerField = reader.getLastField().toLowerCase();
 			final String upperField = reader.getCasedColumnName(lowerField);
 			final String field = trackField ? (upperField == null ? lowerField : upperField) : null;
-			final String file = trackFile ? readerStack.peek().getFileName() : null;
+			final String file;
+			if (reader instanceof FileCSVReader) {
+				file = trackFile ? ((FileCSVReader)readerStack.peek()).getFileName() : null;
+			} else {
+				file = null;
+			}
 			return new DefaultImportProblem(file, line, field, string);
 		}
 	}

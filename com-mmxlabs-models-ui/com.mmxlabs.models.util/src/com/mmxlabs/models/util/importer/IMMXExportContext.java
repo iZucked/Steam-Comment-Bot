@@ -4,11 +4,10 @@
  */
 package com.mmxlabs.models.util.importer;
 
+import com.mmxlabs.common.csv.IExportContext;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
-public interface IExportContext {
+public interface IMMXExportContext extends IExportContext {
 
-	public MMXRootObject getRootObject();
-
-	public char getDecimalSeparator();
+	MMXRootObject getRootObject();
 }

@@ -5,9 +5,9 @@
 package com.mmxlabs.models.util.importer.impl;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.util.importer.IExportContext;
+import com.mmxlabs.models.util.importer.IMMXExportContext;
 
-public class DefaultExportContext implements IExportContext {
+public class DefaultExportContext implements IMMXExportContext {
 
 	private final MMXRootObject rootObject;
 

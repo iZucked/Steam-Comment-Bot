@@ -26,20 +26,22 @@ import org.eclipse.emf.ecore.EPackage.Registry;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Equality;
+import com.mmxlabs.common.csv.CSVReader;
+import com.mmxlabs.common.csv.FieldMap;
+import com.mmxlabs.common.csv.IFieldMap;
+import com.mmxlabs.common.csv.IImportProblem;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.util.Activator;
-import com.mmxlabs.models.util.importer.CSVReader;
-import com.mmxlabs.models.util.importer.FieldMap;
 import com.mmxlabs.models.util.importer.IAttributeImporter;
 import com.mmxlabs.models.util.importer.IClassImporter;
-import com.mmxlabs.models.util.importer.IExportContext;
-import com.mmxlabs.models.util.importer.IFieldMap;
-import com.mmxlabs.models.util.importer.IImportContext;
-import com.mmxlabs.models.util.importer.IImportContext.IImportProblem;
+import com.mmxlabs.models.util.importer.IMMXExportContext;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 
 public class DefaultClassImporter extends AbstractClassImporter {
@@ -95,7 +97,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 	}
 
 	@Override
-	public Collection<EObject> importObjects(final EClass importClass, final CSVReader reader, final IImportContext context) {
+	public Collection<EObject> importObjects(@NonNull final EClass importClass, @NonNull final CSVReader reader, @NonNull final IMMXImportContext context) {
 		final List<EObject> results = new ArrayList<EObject>();
 		try {
 			try {
@@ -119,7 +121,8 @@ public class DefaultClassImporter extends AbstractClassImporter {
 		return results;
 	}
 
-	protected EClass getTrueOutputClass(final EClass outputEClass, final String kind) {
+	@NonNull
+	protected EClass getTrueOutputClass(@NonNull final EClass outputEClass, @Nullable final String kind) {
 		if (kind == null) {
 			return outputEClass;
 		}
@@ -159,8 +162,9 @@ public class DefaultClassImporter extends AbstractClassImporter {
 
 	/**
 	 */
+	@NonNull
 	@Override
-	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IImportContext context) {
+	public ImportResults importObject(@Nullable final EObject parent, @NonNull final EClass eClass, @NonNull final Map<String, String> row, @NonNull final IMMXImportContext context) {
 		final EClass rowClass = getTrueOutputClass(eClass, row.get(KIND_KEY));
 		try {
 			final EObject instance = rowClass.getEPackage().getEFactoryInstance().create(rowClass);
@@ -190,7 +194,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 
 	/**
 	 */
-	protected void importReferences(final IFieldMap row, final IImportContext context, final EClass rowClass, final EObject instance) {
+	protected void importReferences(final IFieldMap row, final IMMXImportContext context, final EClass rowClass, final EObject instance) {
 		for (final EReference reference : rowClass.getEAllReferences()) {
 			if (!shouldImportReference(reference)) {
 				continue;
@@ -289,7 +293,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 
 	/**
 	 */
-	protected void notifyMissingFields(final EObject blank, final IImportProblem delegate, final IImportContext context) {
+	protected void notifyMissingFields(final EObject blank, final IImportProblem delegate, final IMMXImportContext context) {
 		if (blank == null) {
 			return;
 		}
@@ -374,7 +378,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 		target.eSet(reference, content);
 	}
 
-	protected void importAttributes(final Map<String, String> row, final IImportContext context, final EClass rowClass, final EObject instance) {
+	protected void importAttributes(final Map<String, String> row, final IMMXImportContext context, final EClass rowClass, final EObject instance) {
 		for (final EAttribute attribute : rowClass.getEAllAttributes()) {
 			final String lowerCase = attribute.getName().toLowerCase();
 			if (row.containsKey(lowerCase)) {
@@ -409,7 +413,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 	}
 
 	@Override
-	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final IExportContext context) {
+	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final IMMXExportContext context) {
 		final LinkedList<Map<String, String>> result = new LinkedList<Map<String, String>>();
 
 		if (objects.isEmpty()) {
@@ -424,7 +428,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 		return result;
 	}
 
-	protected Map<String, String> exportObject(final EObject object, final IExportContext context) {
+	protected Map<String, String> exportObject(@NonNull final EObject object, @NonNull final IMMXExportContext context) {
 		final Map<String, String> result = new LinkedHashMap<String, String>();
 
 		for (final EAttribute attribute : object.eClass().getEAllAttributes()) {
@@ -442,7 +446,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 		return result;
 	}
 
-	protected void exportAttribute(final EObject object, final EAttribute attribute, final Map<String, String> result, final IExportContext context) {
+	protected void exportAttribute(final EObject object, final EAttribute attribute, final Map<String, String> result, @NonNull final IMMXExportContext context) {
 		final IAttributeImporter ai = Activator.getDefault().getImporterRegistry().getAttributeImporter(attribute.getEAttributeType());
 		if (ai != null) {
 
@@ -466,7 +470,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 		}
 	}
 
-	protected void exportReference(final EObject object, final EReference reference, final Map<String, String> result, final IExportContext context) {
+	protected void exportReference(final EObject object, final EReference reference, final Map<String, String> result, final IMMXExportContext context) {
 		if (shouldFlattenReference(reference)) {
 			final EObject value = (EObject) object.eGet(reference);
 			if (value != null) {

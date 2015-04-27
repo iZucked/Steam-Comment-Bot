@@ -8,7 +8,10 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
@@ -24,6 +27,7 @@ public interface ISubmodelImporter {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	EClass getEClass();
 
 	/**
@@ -31,6 +35,7 @@ public interface ISubmodelImporter {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	Map<String, String> getRequiredInputs();
 
 	/**
@@ -40,7 +45,7 @@ public interface ISubmodelImporter {
 	 * @param context
 	 * @return
 	 */
-	UUIDObject importModel(Map<String, CSVReader> inputs, IImportContext context);
+	EObject importModel(@NonNull Map<String, CSVReader> inputs, @NonNull IMMXImportContext context);
 
 	/**
 	 * Turn the given model instance into a bunch of output values, keyed like the inputs.
@@ -49,5 +54,5 @@ public interface ISubmodelImporter {
 	 * @param model
 	 * @param output
 	 */
-	void exportModel(UUIDObject model, Map<String, Collection<Map<String, String>>> output, IExportContext context);
+	void exportModel(@NonNull EObject model, @NonNull Map<String, Collection<Map<String, String>>> output, @NonNull IMMXExportContext context);
 }

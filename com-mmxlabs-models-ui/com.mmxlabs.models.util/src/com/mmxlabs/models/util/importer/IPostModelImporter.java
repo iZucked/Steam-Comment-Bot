@@ -17,5 +17,5 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  */
 public interface IPostModelImporter {
 
-	void onPostModelImport(@NonNull IImportContext context, @NonNull MMXRootObject rootObject);
+	void onPostModelImport(@NonNull IMMXImportContext context, @NonNull MMXRootObject rootObject);
 }
