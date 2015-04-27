@@ -31,6 +31,7 @@ import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 
+@SuppressWarnings("null")
 public class AbstractSequencesOptimiserTest {
 
 	@Test
@@ -181,8 +182,8 @@ public class AbstractSequencesOptimiserTest {
 	@Test
 	public void testUpdateSequences() {
 		final IIndexingContext index = new SimpleIndexingContext();
-		final IResource r1 = new Resource(index);
-		final IResource r2 = new Resource(index);
+		final IResource r1 = new Resource(index, "r1");
+		final IResource r2 = new Resource(index, "r2");
 
 		final IModifiableSequence seq1 = OptimiserTestUtil.makeSequence(1, 2, 3, 4, 5);
 		final IModifiableSequence seq2 = OptimiserTestUtil.makeSequence(6, 7, 8, 9, 10);
@@ -220,8 +221,8 @@ public class AbstractSequencesOptimiserTest {
 	@Test
 	public void testUpdateSequences2() {
 		final IIndexingContext index = new SimpleIndexingContext();
-		final IResource r1 = new Resource(index);
-		final IResource r2 = new Resource(index);
+		final IResource r1 = new Resource(index, "r1");
+		final IResource r2 = new Resource(index, "r2");
 
 		final ISequence seq1 = Mockito.mock(ISequence.class, "seq1");
 		final ISequence seq2 = Mockito.mock(ISequence.class, "seq2");

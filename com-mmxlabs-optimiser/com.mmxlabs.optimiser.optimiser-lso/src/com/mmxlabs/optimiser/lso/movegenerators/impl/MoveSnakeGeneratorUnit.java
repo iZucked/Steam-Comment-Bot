@@ -9,6 +9,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -18,7 +21,8 @@ import com.mmxlabs.optimiser.lso.impl.MoveSnake;
 public final class MoveSnakeGeneratorUnit implements IRandomMoveGeneratorUnit {
 
 	@Override
-	public IMove generateRandomMove(final RandomMoveGenerator moveGenerator, final ISequences sequences) {
+	@Nullable
+	public IMove generateRandomMove(@NonNull final RandomMoveGenerator moveGenerator, @NonNull final ISequences sequences) {
 
 		final Random random = moveGenerator.getRandom();
 
@@ -63,7 +67,9 @@ public final class MoveSnakeGeneratorUnit implements IRandomMoveGeneratorUnit {
 		// Generate outgoing segment
 		final int[] breakPoints = new int[3];
 		for (int i = 0; i < numChangedResources; ++i) {
-			final ISequence sequence = sequences.getSequence(froms.get(i));
+			IResource resource = froms.get(i);
+			assert resource != null;
+			final ISequence sequence = sequences.getSequence(resource);
 			moveGenerator.generateSortedBreakPoints(sequence, breakPoints);
 
 			// Randomly pick the insertion point as first or last break point

@@ -11,25 +11,20 @@ import org.mockito.Mockito;
 import com.mmxlabs.optimiser.core.IElementAnnotationsMap;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 
+@SuppressWarnings("null")
 public class AnnotatedSolutionTest {
 
 	@Test
 	public void testGetSetSequences() {
 		final ISequences sequences = Mockito.mock(ISequences.class);
-		final AnnotatedSolution solution = new AnnotatedSolution();
-		Assert.assertNull(solution.getSequences());
-		solution.setSequences(sequences);
-		Assert.assertSame(sequences, solution.getSequences());
-	}
-
-	@Test
-	public void testGetSetContext() {
 		final IOptimisationContext optContext = Mockito.mock(IOptimisationContext.class);
-		final AnnotatedSolution solution = new AnnotatedSolution();
-		Assert.assertNull(solution.getContext());
-		solution.setContext(optContext);
+		final IEvaluationState state = Mockito.mock(IEvaluationState.class);
+		final AnnotatedSolution solution = new AnnotatedSolution(sequences, optContext, state);
+		Assert.assertSame(sequences, solution.getSequences());
 		Assert.assertSame(optContext, solution.getContext());
+		Assert.assertSame(state, solution.getEvaluationState());
 	}
 
 	@Test
@@ -37,7 +32,10 @@ public class AnnotatedSolutionTest {
 		final Object annotation = new Object();
 		final String key = "key";
 
-		final AnnotatedSolution solution = new AnnotatedSolution();
+		final ISequences sequences = Mockito.mock(ISequences.class);
+		final IOptimisationContext optContext = Mockito.mock(IOptimisationContext.class);
+		final IEvaluationState state = Mockito.mock(IEvaluationState.class);
+		final AnnotatedSolution solution = new AnnotatedSolution(sequences, optContext, state);
 
 		solution.setGeneralAnnotation(key, annotation);
 
@@ -46,41 +44,13 @@ public class AnnotatedSolutionTest {
 
 	@Test
 	public void getElementAnnotations() {
-		final AnnotatedSolution solution = new AnnotatedSolution();
 
+		final ISequences sequences = Mockito.mock(ISequences.class);
+		final IOptimisationContext optContext = Mockito.mock(IOptimisationContext.class);
+		final IEvaluationState state = Mockito.mock(IEvaluationState.class);
+		final AnnotatedSolution solution = new AnnotatedSolution(sequences, optContext, state);
 		final IElementAnnotationsMap elementAnnotations = solution.getElementAnnotations();
 
 		Assert.assertNotNull(elementAnnotations);
 	}
-
-	@Test
-	public void testDispose() {
-		final ISequences sequences = Mockito.mock(ISequences.class);
-		final IOptimisationContext optContext = Mockito.mock(IOptimisationContext.class);
-
-		final Object annotation = new Object();
-		final String key = "key";
-
-		final AnnotatedSolution solution = new AnnotatedSolution();
-
-		Assert.assertNull(solution.getSequences());
-		Assert.assertNull(solution.getContext());
-
-		solution.setContext(optContext);
-		solution.setSequences(sequences);
-
-		Assert.assertSame(optContext, solution.getContext());
-		Assert.assertSame(sequences, solution.getSequences());
-
-		solution.setGeneralAnnotation(key, annotation);
-
-		solution.dispose();
-
-		Assert.assertNull(solution.getSequences());
-		Assert.assertNull(solution.getContext());
-
-		Assert.assertNull(solution.getGeneralAnnotation(key, Object.class));
-		Assert.assertNull(solution.getElementAnnotations());
-	}
-
 }

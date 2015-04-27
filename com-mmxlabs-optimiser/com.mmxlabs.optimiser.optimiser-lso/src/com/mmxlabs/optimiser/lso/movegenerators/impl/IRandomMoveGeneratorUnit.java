@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.optimiser.lso.movegenerators.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
 
@@ -16,6 +19,7 @@ import com.mmxlabs.optimiser.lso.IMove;
  */
 public interface IRandomMoveGeneratorUnit {
 
-	IMove generateRandomMove(RandomMoveGenerator moveGenerator, ISequences sequences);
+	@Nullable
+	IMove generateRandomMove(@NonNull RandomMoveGenerator moveGenerator, @NonNull ISequences sequences);
 
 }

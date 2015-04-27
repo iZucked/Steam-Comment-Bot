@@ -19,6 +19,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 public class OptimisationContextTest {
 
+	@SuppressWarnings("null")
 	@Test
 	public void testOptimisationContext() {
 
@@ -32,7 +33,8 @@ public class OptimisationContextTest {
 		final List<String> evaluationProcesses = Collections.emptyList();
 		final IEvaluationProcessRegistry evaluationProcessRegistry = Mockito.mock(IEvaluationProcessRegistry.class);
 
-		final OptimisationContext optContext = new OptimisationContext(optimisationData, initialSequences, fitnessComponents, fitnessFunctionRegistry, constraintCheckers, constraintCheckerRegistry, evaluationProcesses, evaluationProcessRegistry);
+		final OptimisationContext optContext = new OptimisationContext(optimisationData, initialSequences, fitnessComponents, fitnessFunctionRegistry, constraintCheckers, constraintCheckerRegistry,
+				evaluationProcesses, evaluationProcessRegistry);
 
 		Assert.assertSame(optimisationData, optContext.getOptimisationData());
 		Assert.assertSame(initialSequences, optContext.getInitialSequences());

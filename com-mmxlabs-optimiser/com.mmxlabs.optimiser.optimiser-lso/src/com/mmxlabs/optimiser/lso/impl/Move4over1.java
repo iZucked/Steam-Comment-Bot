@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
@@ -31,7 +33,7 @@ public final class Move4over1 implements IMove {
 	private int segment2Start = -1, segment2End = -1;
 
 	@Override
-	public final void apply(final IModifiableSequences sequences) {
+	public final void apply(@NonNull final IModifiableSequences sequences) {
 
 		// Get sequences
 		final IModifiableSequence sequence = sequences.getModifiableSequence(resource);
@@ -62,12 +64,13 @@ public final class Move4over1 implements IMove {
 	}
 
 	@Override
+	@NonNull
 	public final Collection<IResource> getAffectedResources() {
 		return Collections.singletonList(resource);
 	}
 
 	@Override
-	public final boolean validate(final ISequences sequences) {
+	public final boolean validate(@NonNull final ISequences sequences) {
 
 		// Validate basic parameters
 		if (resource == null) {

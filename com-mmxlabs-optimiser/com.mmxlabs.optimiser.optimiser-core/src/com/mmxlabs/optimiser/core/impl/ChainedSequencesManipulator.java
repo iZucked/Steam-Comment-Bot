@@ -7,6 +7,8 @@ package com.mmxlabs.optimiser.core.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -18,6 +20,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
  * 
  */
 public class ChainedSequencesManipulator implements ISequencesManipulator {
+	@NonNull
 	private final List<ISequencesManipulator> delegates = new ArrayList<ISequencesManipulator>();
 
 	public void addDelegate(final ISequencesManipulator delegate) {
@@ -25,7 +28,7 @@ public class ChainedSequencesManipulator implements ISequencesManipulator {
 	}
 
 	@Override
-	public void manipulate(final IModifiableSequences sequences) {
+	public void manipulate(@NonNull final IModifiableSequences sequences) {
 		for (final ISequencesManipulator manipulator : delegates) {
 			manipulator.manipulate(sequences);
 		}
@@ -43,7 +46,7 @@ public class ChainedSequencesManipulator implements ISequencesManipulator {
 	 * Init method. This will call {@link ISequencesManipulator#init(IOptimisationData)} on all delegates.
 	 */
 	@Override
-	public void init(final IOptimisationData data) {
+	public void init(@NonNull final IOptimisationData data) {
 		for (final ISequencesManipulator manipulator : delegates) {
 			manipulator.init(data);
 		}

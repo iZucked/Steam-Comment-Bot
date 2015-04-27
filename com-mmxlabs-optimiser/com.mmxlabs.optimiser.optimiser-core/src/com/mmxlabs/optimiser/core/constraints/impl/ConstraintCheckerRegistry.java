@@ -23,11 +23,8 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
  */
 public final class ConstraintCheckerRegistry implements IConstraintCheckerRegistry {
 
-	private final Map<String, IConstraintCheckerFactory> constraintFactoriesByName;
-
-	public ConstraintCheckerRegistry() {
-		this.constraintFactoriesByName = new HashMap<String, IConstraintCheckerFactory>();
-	}
+	@NonNull
+	private final Map<String, IConstraintCheckerFactory> constraintFactoriesByName = new HashMap<>();
 
 	@Override
 	public void registerConstraintCheckerFactory(@NonNull final IConstraintCheckerFactory factory) {
@@ -45,12 +42,14 @@ public final class ConstraintCheckerRegistry implements IConstraintCheckerRegist
 		constraintFactoriesByName.remove(factory.getName());
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	@NonNull
 	public Collection<String> getConstraintCheckerNames() {
 		return constraintFactoriesByName.keySet();
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	@NonNull
 	public Collection<IConstraintCheckerFactory> getConstraintCheckerFactories() {

@@ -16,6 +16,7 @@ import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 
+@SuppressWarnings("null")
 public class SequencesTest {
 
 	@Test
@@ -78,6 +79,7 @@ public class SequencesTest {
 		Assert.assertSame(sequence2, sequences.getSequence(resource2));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testSequencesISequencesOfT() {
 		// Create two resources and test Sequences object is correctly

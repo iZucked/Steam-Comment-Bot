@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.common.fitness;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 
@@ -14,11 +16,13 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
  * 
  */
 public final class MatrixProviderFitnessComponent implements IFitnessComponent {
-
+	@NonNull
 	private final String name;
+
+	@NonNull
 	private final MatrixProviderFitnessCore core;
 
-	public MatrixProviderFitnessComponent(final String name, final MatrixProviderFitnessCore core) {
+	public MatrixProviderFitnessComponent(@NonNull final String name, @NonNull final MatrixProviderFitnessCore core) {
 		this.name = name;
 		this.core = core;
 	}
@@ -29,11 +33,13 @@ public final class MatrixProviderFitnessComponent implements IFitnessComponent {
 	}
 
 	@Override
+	@NonNull
 	public IFitnessCore getFitnessCore() {
 		return core;
 	}
 
 	@Override
+	@NonNull
 	public String getName() {
 		return name;
 	}

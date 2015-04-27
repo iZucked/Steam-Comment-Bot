@@ -17,6 +17,7 @@ import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 
+@SuppressWarnings("null")
 public class ModifiableSequencesTest {
 
 	@Test
@@ -79,6 +80,7 @@ public class ModifiableSequencesTest {
 		Assert.assertSame(sequence2, sequences.getSequence(resource2));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testModifiableSequencesISequencesOfT() {
 		// Create two resources and test Sequences object is correctly

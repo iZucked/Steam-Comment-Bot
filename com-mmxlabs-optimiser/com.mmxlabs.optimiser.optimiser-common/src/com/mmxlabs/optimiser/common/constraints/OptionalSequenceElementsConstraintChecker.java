@@ -8,6 +8,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -26,27 +29,30 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 public class OptionalSequenceElementsConstraintChecker implements IConstraintChecker {
 
 	@Inject
+	@NonNull
 	private IOptionalElementsProvider optionalElementsProvider;
 
+	@NonNull
 	private final String name;
 
-	public OptionalSequenceElementsConstraintChecker(final String name) {
+	public OptionalSequenceElementsConstraintChecker(@NonNull final String name) {
 		super();
 		this.name = name;
 	}
 
 	@Override
+	@NonNull
 	public String getName() {
 		return name;
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences sequences) {
+	public boolean checkConstraints(@NonNull final ISequences sequences) {
 		return checkConstraints(sequences, null);
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences sequences, final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final List<String> messages) {
 		for (final ISequenceElement element : sequences.getUnusedElements()) {
 			if (optionalElementsProvider.isElementRequired(element)) {
 				if (messages != null) {
@@ -58,6 +64,7 @@ public class OptionalSequenceElementsConstraintChecker implements IConstraintChe
 
 		int elementCount = sequences.getUnusedElements().size();
 		for (final IResource resource : sequences.getResources()) {
+			assert resource != null;
 			elementCount += sequences.getSequence(resource).size();
 		}
 
@@ -73,7 +80,7 @@ public class OptionalSequenceElementsConstraintChecker implements IConstraintChe
 	}
 
 	@Override
-	public void setOptimisationData(final IOptimisationData optimisationData) {
+	public void setOptimisationData(@NonNull final IOptimisationData optimisationData) {
 	}
 
 }

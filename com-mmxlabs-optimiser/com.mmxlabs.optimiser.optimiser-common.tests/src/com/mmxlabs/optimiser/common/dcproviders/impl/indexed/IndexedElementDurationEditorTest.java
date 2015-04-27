@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.optimiser.common.dcproviders.impl.indexed;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -13,14 +14,15 @@ import com.mmxlabs.optimiser.core.impl.Resource;
 
 public class IndexedElementDurationEditorTest {
 
-	IIndexingContext index = new SimpleIndexingContext();
+	@NonNull
+	private IIndexingContext index = new SimpleIndexingContext();
 
 	@Test
 	public void testGetSetElementDuration() {
 		final IndexedElementDurationEditor provider = new IndexedElementDurationEditor();
 
-		final Resource r1 = new Resource(index);
-		final Resource r2 = new Resource(index);
+		final Resource r1 = new Resource(index, "r1");
+		final Resource r2 = new Resource(index, "r2");
 		final MockSequenceElement obj = new MockSequenceElement(1);
 
 		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj, r1));
@@ -36,8 +38,8 @@ public class IndexedElementDurationEditorTest {
 	public void testGetSetElementDuration2() {
 		final IndexedElementDurationEditor provider = new IndexedElementDurationEditor();
 
-		final Resource r1 = new Resource(index);
-		final Resource r2 = new Resource(index);
+		final Resource r1 = new Resource(index, "r1");
+		final Resource r2 = new Resource(index, "r2");
 		final MockSequenceElement obj1 = new MockSequenceElement(1);
 		final MockSequenceElement obj2 = new MockSequenceElement(2);
 
@@ -60,7 +62,7 @@ public class IndexedElementDurationEditorTest {
 	public void testGetSetElementDuration3() {
 		final IndexedElementDurationEditor provider = new IndexedElementDurationEditor();
 
-		final Resource r1 = new Resource(index);
+		final Resource r1 = new Resource(index, "r1");
 		final MockSequenceElement obj1 = new MockSequenceElement(1);
 		final MockSequenceElement obj2 = new MockSequenceElement(2);
 

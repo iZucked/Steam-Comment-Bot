@@ -28,7 +28,6 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
-import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.IFitnessCombiner;
@@ -245,7 +244,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 	}
 
 	@Override
-	public IAnnotatedSolution getBestAnnotatedSolution(final IOptimisationContext context) {
+	public IAnnotatedSolution getBestAnnotatedSolution(@NonNull final IOptimisationContext context) {
 		Pair<ISequences, IEvaluationState> p = getBestSequences();
 		if (p == null) {
 			return null;
@@ -262,7 +261,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 	}
 
 	@Override
-	public IAnnotatedSolution getCurrentAnnotatedSolution(final IOptimisationContext context) {
+	public IAnnotatedSolution getCurrentAnnotatedSolution(@NonNull final IOptimisationContext context) {
 		Pair<ISequences, IEvaluationState> p = getCurrentSequences();
 		if (p == null) {
 			return null;
@@ -272,8 +271,6 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 		assert sequences != null;
 		assert evaluationState != null;
 
-		IAnnotatedSolution annotatedSolution = new AnnotatedSolution();
-
 		final IAnnotatedSolution result = fitnessHelper.buildAnnotatedSolution(context, sequences, evaluationState, getFitnessComponents(), getEvaluationProcesses());
 
 		result.setGeneralAnnotation(OptimiserConstants.G_AI_fitnessComponents, new HashMap<String, Long>(currentFitnesses));
@@ -281,7 +278,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 		return result;
 	}
 
-	public void setEvaluationProcesses(List<IEvaluationProcess> evaluationProcesses) {
+	public void setEvaluationProcesses(@NonNull List<IEvaluationProcess> evaluationProcesses) {
 		this.evaluationProcesses = evaluationProcesses;
 
 	}

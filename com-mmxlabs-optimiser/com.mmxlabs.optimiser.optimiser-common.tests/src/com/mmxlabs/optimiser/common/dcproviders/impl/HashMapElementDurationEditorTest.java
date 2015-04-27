@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.optimiser.common.dcproviders.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -15,15 +16,15 @@ import com.mmxlabs.optimiser.core.impl.Resource;
 
 public class HashMapElementDurationEditorTest {
 
-
-	IIndexingContext index = new SimpleIndexingContext();
+	@NonNull
+	private IIndexingContext index = new SimpleIndexingContext();
 
 	@Test
 	public void testGetSetElementDuration() {
 		final HashMapElementDurationEditor provider = new HashMapElementDurationEditor();
 
-		final Resource r1 = new Resource(index);
-		final Resource r2 = new Resource(index);
+		final Resource r1 = new Resource(index, "r1");
+		final Resource r2 = new Resource(index, "r2");
 		final ISequenceElement obj = Mockito.mock(ISequenceElement.class, "1");
 
 		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj, r1));
@@ -39,8 +40,8 @@ public class HashMapElementDurationEditorTest {
 	public void testGetSetElementDuration2() {
 		final HashMapElementDurationEditor provider = new HashMapElementDurationEditor();
 
-		final Resource r1 = new Resource(index);
-		final Resource r2 = new Resource(index);
+		final Resource r1 = new Resource(index, "r1");
+		final Resource r2 = new Resource(index, "r2");
 		final ISequenceElement obj1 = Mockito.mock(ISequenceElement.class, "1");
 		final ISequenceElement obj2 = Mockito.mock(ISequenceElement.class, "2");
 
@@ -63,7 +64,7 @@ public class HashMapElementDurationEditorTest {
 	public void testGetSetElementDuration3() {
 		final HashMapElementDurationEditor provider = new HashMapElementDurationEditor();
 
-		final Resource r1 = new Resource(index);
+		final Resource r1 = new Resource(index, "r1");
 		final ISequenceElement obj1 = Mockito.mock(ISequenceElement.class, "1");
 		final ISequenceElement obj2 = Mockito.mock(ISequenceElement.class, "2");
 		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj1, r1));

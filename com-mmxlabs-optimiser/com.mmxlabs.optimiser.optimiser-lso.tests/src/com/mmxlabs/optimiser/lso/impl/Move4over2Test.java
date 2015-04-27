@@ -21,6 +21,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.Sequences;
 
+@SuppressWarnings("null")
 public class Move4over2Test {
 
 	@Test
@@ -39,22 +40,13 @@ public class Move4over2Test {
 
 		final ModifiableSequences sequences = new ModifiableSequences(resources, map);
 
-		final Move4over2 move = new Move4over2();
-
 		final int resource1Start = 0;
 		final int resource1End = 2;
 
 		final int resource2Start = 1;
 		final int resource2End = 3;
 
-		move.setResource1(resource1);
-		move.setResource2(resource2);
-
-		move.setResource1Start(resource1Start);
-		move.setResource1End(resource1End);
-
-		move.setResource2Start(resource2Start);
-		move.setResource2End(resource2End);
+		final Move4over2 move = new Move4over2(resource1, resource1Start, resource1End, resource2, resource2Start, resource2End);
 
 		move.apply(sequences);
 
@@ -76,22 +68,13 @@ public class Move4over2Test {
 
 		final IModifiableSequences sequences = new ModifiableSequences(resources, sequenceMap);
 
-		final Move4over2 move = new Move4over2();
-
 		final int resource1Start = 0;
 		final int resource1End = 2;
 
 		final int resource2Start = 1;
 		final int resource2End = 3;
 
-		move.setResource1(resource1);
-		move.setResource2(resource2);
-
-		move.setResource1Start(resource1Start);
-		move.setResource1End(resource1End);
-
-		move.setResource2Start(resource2Start);
-		move.setResource2End(resource2End);
+		final Move4over2 move = new Move4over2(resource1, resource1Start, resource1End, resource2, resource2Start, resource2End);
 
 		move.apply(sequences);
 
@@ -124,32 +107,12 @@ public class Move4over2Test {
 
 		final IModifiableSequences sequences = new ModifiableSequences(resources, sequenceMap);
 
-		final Move4over2 move = new Move4over2();
-
 		final int resource1Start = 0;
 		final int resource1End = 2;
 
 		final int resource2Start = 1;
 		final int resource2End = 3;
-
-		Assert.assertFalse(move.validate(sequences));
-
-		move.setResource1(resource1);
-		Assert.assertFalse(move.validate(sequences));
-
-		move.setResource2(resource2);
-		Assert.assertFalse(move.validate(sequences));
-
-		move.setResource1Start(resource1Start);
-		Assert.assertFalse(move.validate(sequences));
-
-		move.setResource1End(resource1End);
-		Assert.assertFalse(move.validate(sequences));
-
-		move.setResource2Start(resource2Start);
-		Assert.assertFalse(move.validate(sequences));
-
-		move.setResource2End(resource2End);
+		Move4over2 move = new Move4over2(resource1, resource1Start, resource1End, resource2, resource2Start, resource2End);
 
 		Assert.assertTrue(move.validate(sequences));
 
@@ -159,113 +122,54 @@ public class Move4over2Test {
 		Assert.assertFalse(move.validate(new Sequences(Collections.singletonList(resource2), sequenceMap_r2)));
 		Assert.assertFalse(move.validate(new Sequences(Collections.singletonList(resource1), sequenceMap_r1)));
 
-		move.setResource1End(100);
+		move = new Move4over2(resource1, resource1Start, 100, resource2, resource2Start, resource2End);
 		Assert.assertFalse(move.validate(sequences));
-		move.setResource1End(resource1End);
 
-		move.setResource1Start(100);
+		move = new Move4over2(resource1, 100, resource1End, resource2, resource2Start, resource2End);
 		Assert.assertFalse(move.validate(sequences));
-		move.setResource1Start(resource1Start);
 
-		move.setResource2End(100);
+		move = new Move4over2(resource1, resource1Start, resource1End, resource2, resource2Start, 100);
 		Assert.assertFalse(move.validate(sequences));
-		move.setResource2End(resource2End);
 
-		move.setResource2Start(100);
+		move = new Move4over2(resource1, resource1Start, resource1End, resource2, 100, resource2End);
 		Assert.assertFalse(move.validate(sequences));
-		move.setResource2Start(resource2Start);
 
-		move.setResource1End(-1);
+		move = new Move4over2(resource1, resource1Start, -1, resource2, resource2Start, resource2End);
 		Assert.assertFalse(move.validate(sequences));
-		move.setResource1End(resource1End);
 
-		move.setResource1Start(-1);
+		move = new Move4over2(resource1, -1, resource1End, resource2, resource2Start, resource2End);
 		Assert.assertFalse(move.validate(sequences));
-		move.setResource1Start(resource1Start);
 
-		move.setResource2End(-1);
+		move = new Move4over2(resource1, resource1Start, resource1End, resource2, resource2Start, -1);
 		Assert.assertFalse(move.validate(sequences));
-		move.setResource2End(resource1End);
 
-		move.setResource2Start(-1);
+		move = new Move4over2(resource1, resource1Start, resource1End, resource2, -1, resource2End);
 		Assert.assertFalse(move.validate(sequences));
-		move.setResource2Start(resource2Start);
 
-		move.setResource1(resource3);
+		move = new Move4over2(resource3, resource1Start, resource1End, resource2, resource2Start, resource2End);
 		Assert.assertFalse(move.validate(sequences));
-		move.setResource1(resource1);
 
-		move.setResource2(resource3);
+		move = new Move4over2(resource1, resource1Start, resource1End, resource3, resource2Start, resource2End);
 		Assert.assertFalse(move.validate(sequences));
-		move.setResource2(resource2);
 	}
 
 	@Test
-	public void testGetSetResource1() {
-
-		final Move4over2 move = new Move4over2();
+	public void testGet() {
 
 		final IResource resource1 = Mockito.mock(IResource.class, "resource1");
-
-		Assert.assertNull(move.getResource1());
-		move.setResource1(resource1);
-		Assert.assertSame(resource1, move.getResource1());
-	}
-
-	@Test
-	public void testGetSetResource2() {
-
-		final Move4over2 move = new Move4over2();
-
 		final IResource resource2 = Mockito.mock(IResource.class, "resource2");
+		final int resource1Start = 1;
+		final int resource1End = 2;
 
-		Assert.assertNull(move.getResource2());
-		move.setResource2(resource2);
+		final int resource2Start = 3;
+		final int resource2End = 4;
+		final Move4over2 move = new Move4over2(resource1, resource1Start, resource1End, resource2, resource2Start, resource2End);
+
+		Assert.assertSame(resource1, move.getResource1());
 		Assert.assertSame(resource2, move.getResource2());
+		Assert.assertEquals(1, move.getResource1Start());
+		Assert.assertEquals(2, move.getResource1End());
+		Assert.assertEquals(3, move.getResource2Start());
+		Assert.assertEquals(4, move.getResource2End());
 	}
-
-	@Test
-	public void testGetSetResource1Start() {
-
-		final Move4over2 move = new Move4over2();
-
-		Assert.assertEquals(-1, move.getResource1Start());
-		final int pos = 10;
-		move.setResource1Start(pos);
-		Assert.assertEquals(pos, move.getResource1Start());
-	}
-
-	@Test
-	public void testGetSetResource1End() {
-
-		final Move4over2 move = new Move4over2();
-
-		Assert.assertEquals(-1, move.getResource1End());
-		final int pos = 10;
-		move.setResource1End(pos);
-		Assert.assertEquals(pos, move.getResource1End());
-	}
-
-	@Test
-	public void testGetSetResource2Start() {
-
-		final Move4over2 move = new Move4over2();
-
-		Assert.assertEquals(-1, move.getResource2Start());
-		final int pos = 10;
-		move.setResource2Start(pos);
-		Assert.assertEquals(pos, move.getResource2Start());
-	}
-
-	@Test
-	public void testGetSetResource2End() {
-
-		final Move4over2 move = new Move4over2();
-
-		Assert.assertEquals(-1, move.getResource2End());
-		final int pos = 10;
-		move.setResource2End(pos);
-		Assert.assertEquals(pos, move.getResource2End());
-	}
-
 }

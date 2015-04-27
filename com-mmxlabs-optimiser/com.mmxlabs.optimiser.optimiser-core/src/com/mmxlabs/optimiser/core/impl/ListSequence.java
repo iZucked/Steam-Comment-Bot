@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.ISegment;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -61,11 +63,17 @@ public final class ListSequence implements ISequence {
 	}
 
 	@Override
+	@NonNull
 	public ISequenceElement get(final int index) {
-		return list.get(index);
+		ISequenceElement element = list.get(index);
+		if (element == null) {
+			throw new IllegalArgumentException("Unknown element index");
+		}
+		return element;
 	}
 
 	@Override
+	@NonNull
 	public ISegment getSegment(final int start, final int end) {
 
 		// Copy of the sublist to make segment independent from sequence.

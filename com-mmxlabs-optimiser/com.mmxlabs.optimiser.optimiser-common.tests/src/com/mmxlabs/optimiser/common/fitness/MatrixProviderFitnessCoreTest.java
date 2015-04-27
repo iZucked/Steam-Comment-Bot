@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -33,7 +34,8 @@ import com.mmxlabs.optimiser.core.scenario.impl.OptimisationData;
 
 public class MatrixProviderFitnessCoreTest {
 
-	final IIndexingContext index = new SimpleIndexingContext();
+	@NonNull
+	private final IIndexingContext index = new SimpleIndexingContext();
 
 	@Test
 	public void testMatrixProviderFitnessCore() {
@@ -67,8 +69,8 @@ public class MatrixProviderFitnessCoreTest {
 		final ISequenceElement obj3 = Mockito.mock(ISequenceElement.class, "3");
 		final ISequenceElement obj4 = Mockito.mock(ISequenceElement.class, "4");
 
-		final IResource r1 = new Resource(index);
-		final IResource r2 = new Resource(index);
+		final IResource r1 = new Resource(index, "r1");
+		final IResource r2 = new Resource(index, "r2");
 		final Sequences sequences;
 		{
 			final ListSequence seq1 = new ListSequence(CollectionsUtil.makeArrayList(obj1, obj2));
@@ -139,8 +141,8 @@ public class MatrixProviderFitnessCoreTest {
 		final ISequenceElement obj3 = Mockito.mock(ISequenceElement.class, "3");
 		final ISequenceElement obj4 = Mockito.mock(ISequenceElement.class, "4");
 
-		final IResource r1 = new Resource(index);
-		final IResource r2 = new Resource(index);
+		final IResource r1 = new Resource(index, "r1");
+		final IResource r2 = new Resource(index, "r2");
 
 		final ListSequence seq1 = new ListSequence(CollectionsUtil.makeArrayList(obj1, obj2));
 
@@ -183,8 +185,8 @@ public class MatrixProviderFitnessCoreTest {
 		final ISequenceElement obj3 = Mockito.mock(ISequenceElement.class, "3");
 		final ISequenceElement obj4 = Mockito.mock(ISequenceElement.class, "4");
 
-		final IResource r1 = new Resource(index);
-		final IResource r2 = new Resource(index);
+		final IResource r1 = new Resource(index, "r1");
+		final IResource r2 = new Resource(index, "r2");
 		final Sequences sequences;
 		{
 			final ListSequence seq1 = new ListSequence(CollectionsUtil.makeArrayList(obj1, obj2));

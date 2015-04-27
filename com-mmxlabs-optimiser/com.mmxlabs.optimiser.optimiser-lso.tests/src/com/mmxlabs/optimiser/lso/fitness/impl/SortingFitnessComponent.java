@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.lso.fitness.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 
@@ -14,11 +16,13 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
  */
 public final class SortingFitnessComponent implements IFitnessComponent {
 
+	@NonNull
 	public static final String COMPONENT_NAME = "Sorting Fitness";
 
+	@NonNull
 	private final SortingFitnessCore core;
 
-	public SortingFitnessComponent(final SortingFitnessCore core) {
+	public SortingFitnessComponent(@NonNull final SortingFitnessCore core) {
 		this.core = core;
 	}
 
@@ -29,12 +33,14 @@ public final class SortingFitnessComponent implements IFitnessComponent {
 	}
 
 	@Override
+	@NonNull
 	public IFitnessCore getFitnessCore() {
 
 		return core;
 	}
 
 	@Override
+	@NonNull
 	public String getName() {
 
 		return COMPONENT_NAME;

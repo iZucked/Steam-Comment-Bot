@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.IElementAnnotation;
 import com.mmxlabs.optimiser.core.IElementAnnotationsMap;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -23,7 +25,7 @@ public class HashMapAnnotations implements IElementAnnotationsMap {
 	private final Map<ISequenceElement, Map<String, IElementAnnotation>> contents = new HashMap<ISequenceElement, Map<String, IElementAnnotation>>();
 
 	@Override
-	public void setAnnotation(final ISequenceElement element, final String key, final IElementAnnotation value) {
+	public void setAnnotation(@NonNull final ISequenceElement element, @NonNull final String key, @NonNull final IElementAnnotation value) {
 		Map<String, IElementAnnotation> inner = contents.get(element);
 		if (inner == null) {
 			inner = new HashMap<String, IElementAnnotation>();
@@ -33,18 +35,19 @@ public class HashMapAnnotations implements IElementAnnotationsMap {
 	}
 
 	@Override
-	public <U extends IElementAnnotation> U getAnnotation(final ISequenceElement element, final String key, final Class<U> clz) {
+	public <U extends IElementAnnotation> U getAnnotation(@NonNull final ISequenceElement element, @NonNull final String key, @NonNull final Class<U> clz) {
 		final Map<String, IElementAnnotation> inner = contents.get(element);
 		return clz.cast(inner == null ? null : inner.get(key));
 	}
 
 	@Override
-	public boolean hasAnnotation(final ISequenceElement element, final String key) {
+	public boolean hasAnnotation(@NonNull final ISequenceElement element, @NonNull final String key) {
 		return contents.containsKey(element) && contents.get(element).containsKey(key);
 	}
 
 	@Override
-	public Iterable<String> getAnnotationNames(final ISequenceElement element) {
+	@NonNull
+	public Iterable<String> getAnnotationNames(@NonNull final ISequenceElement element) {
 		final Map<String, IElementAnnotation> inner = contents.get(element);
 		final LinkedList<String> results = new LinkedList<String>();
 
@@ -60,8 +63,10 @@ public class HashMapAnnotations implements IElementAnnotationsMap {
 	 * 
 	 * @see com.mmxlabs.optimiser.core.IAnnotations#getAnnotations(java.lang.Object)
 	 */
+	@SuppressWarnings("null")
 	@Override
-	public Map<String, IElementAnnotation> getAnnotations(final ISequenceElement element) {
+	@NonNull
+	public Map<String, IElementAnnotation> getAnnotations(@NonNull final ISequenceElement element) {
 		final Map<String, IElementAnnotation> inner = contents.get(element);
 		if (inner != null) {
 			return Collections.unmodifiableMap(inner);

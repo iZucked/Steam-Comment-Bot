@@ -10,11 +10,8 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
-import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
-import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 /**
  * Interface defining an optimisation context. This ties together static optimisation data, initial state, parameters and fitness components that will compose an optimisation run.
@@ -22,23 +19,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
  * @author Simon Goodall
  * 
  */
-public interface IOptimisationContext {
-
-	/**
-	 * Return static input data to the optimisation.
-	 * 
-	 * @return
-	 */
-	@NonNull
-	IOptimisationData getOptimisationData();
-
-	/**
-	 * Returns the initial sequences state - i.e. the starting point of the optimisation process.
-	 * 
-	 * @return
-	 */
-	@NonNull
-	ISequences getInitialSequences();
+public interface IOptimisationContext extends IEvaluationContext {
 
 	/**
 	 * Returns the {@link IFitnessFunctionRegistry} instance to be used to obtain {@link IFitnessComponent}s. @see {@link #getFitnessComponents()}.
@@ -71,20 +52,4 @@ public interface IOptimisationContext {
 	 */
 	@NonNull
 	List<String> getConstraintCheckers();
-
-	/**
-	 * Returns the {@link IEvaluationProcessRegistry} instance to be used to obtain {@link IEvaluationProcess} instances. @see {@link #getEvaluationProcesses()}.
-	 * 
-	 * @return
-	 */
-	@NonNull
-	IEvaluationProcessRegistry getEvaluationProcessRegistry();
-
-	/**
-	 * Returns a list of {@link IEvaluationProcess} names to be used in this optimisation.
-	 * 
-	 * @return
-	 */
-	@NonNull
-	List<String> getEvaluationProcesses();
 }

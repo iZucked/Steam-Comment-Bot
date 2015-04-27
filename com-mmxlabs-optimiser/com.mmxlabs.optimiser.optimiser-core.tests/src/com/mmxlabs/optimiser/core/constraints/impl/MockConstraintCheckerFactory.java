@@ -6,6 +6,8 @@ package com.mmxlabs.optimiser.core.constraints.impl;
 
 import java.util.Collection;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCoreFactory;
@@ -18,18 +20,21 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessCoreFactory;
  */
 public class MockConstraintCheckerFactory implements IConstraintCheckerFactory {
 
+	@NonNull
 	private final String checkerName;
 
-	public MockConstraintCheckerFactory(final String checkerName) {
+	public MockConstraintCheckerFactory(@NonNull final String checkerName) {
 		this.checkerName = checkerName;
 	}
 
 	@Override
+	@NonNull
 	public IConstraintChecker instantiate() {
 		return new MockConstraintChecker(checkerName);
 	}
 
 	@Override
+	@NonNull
 	public String getName() {
 		return checkerName;
 	}

@@ -22,10 +22,12 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.impl.IntegerElement;
 
 public final class SortingFitnessCore implements IFitnessCore {
+	@NonNull
 	public static final String CORE_NAME = "Sorting Fitness Core";
 
 	private long fitness;
 
+	@NonNull
 	private final SortingFitnessComponent component;
 
 	public SortingFitnessCore() {
@@ -39,7 +41,7 @@ public final class SortingFitnessCore implements IFitnessCore {
 	}
 
 	@Override
-	public boolean evaluate(final ISequences sequences, @NonNull final IEvaluationState evaluationState) {
+	public boolean evaluate(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState) {
 
 		fitness = evaluateSequences(sequences, evaluationState);
 		return true;
@@ -61,7 +63,7 @@ public final class SortingFitnessCore implements IFitnessCore {
 	}
 
 	@Override
-	public void init(final IOptimisationData data) {
+	public void init(@NonNull final IOptimisationData data) {
 		fitness = Long.MAX_VALUE;
 	}
 

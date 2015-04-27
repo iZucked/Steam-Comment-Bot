@@ -17,6 +17,7 @@ import com.mmxlabs.optimiser.lso.movegenerators.impl.RandomMoveGenerator;
 
 public class RandomMoveGeneratorTest {
 
+	@SuppressWarnings("null")
 	@Test
 	public void testGenerateMove() {
 
@@ -25,13 +26,14 @@ public class RandomMoveGeneratorTest {
 		final RandomMoveGenerator moveGenerator = new RandomMoveGenerator();
 
 		final IRandomMoveGeneratorUnit unit = Mockito.mock(IRandomMoveGeneratorUnit.class);
+		final ISequences sequences = Mockito.mock(ISequences.class);
 
 		moveGenerator.setRandom(random);
 		moveGenerator.addMoveGeneratorUnit(unit);
-
+		moveGenerator.setSequences(sequences);
 		moveGenerator.generateMove();
 
-		Mockito.verify(unit).generateRandomMove(moveGenerator, null);
+		Mockito.verify(unit).generateRandomMove(moveGenerator, sequences);
 		Mockito.verifyNoMoreInteractions(unit);
 	}
 

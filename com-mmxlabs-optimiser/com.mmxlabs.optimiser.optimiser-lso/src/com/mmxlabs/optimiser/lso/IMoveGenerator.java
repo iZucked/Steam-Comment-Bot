@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.optimiser.lso;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.core.ISequences;
 
 /**
@@ -21,6 +24,7 @@ public interface IMoveGenerator {
 	 * 
 	 * @return
 	 */
+	@Nullable
 	IMove generateMove();
 
 	/**
@@ -28,6 +32,7 @@ public interface IMoveGenerator {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	ISequences getSequences();
 
 	/**
@@ -35,5 +40,5 @@ public interface IMoveGenerator {
 	 * 
 	 * @param sequences
 	 */
-	void setSequences(ISequences sequences);
+	void setSequences(@NonNull ISequences sequences);
 }

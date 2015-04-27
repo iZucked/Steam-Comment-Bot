@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.lso.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.ISequenceElement;
 
 public class IntegerElement implements ISequenceElement, Comparable<IntegerElement> {
@@ -20,6 +22,7 @@ public class IntegerElement implements ISequenceElement, Comparable<IntegerEleme
 	}
 
 	@Override
+	@NonNull
 	public String getName() {
 		return "" + idx;
 	}

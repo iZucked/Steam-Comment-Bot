@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.common.constraints;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 
 /**
@@ -14,14 +16,17 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
  */
 public final class ResourceAllocationConstraintCheckerFactory implements IConstraintCheckerFactory {
 
+	@NonNull
 	public static final String NAME = "ResourceAllocationConstraintChecker";
 
 	@Override
+	@NonNull
 	public String getName() {
 		return NAME;
 	}
 
 	@Override
+	@NonNull
 	public ResourceAllocationConstraintChecker instantiate() {
 		return new ResourceAllocationConstraintChecker(NAME);
 	}

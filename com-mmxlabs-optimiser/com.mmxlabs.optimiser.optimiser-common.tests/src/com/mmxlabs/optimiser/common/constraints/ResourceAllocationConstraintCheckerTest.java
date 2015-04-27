@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -30,6 +31,7 @@ import com.mmxlabs.optimiser.core.impl.Sequences;
 
 public class ResourceAllocationConstraintCheckerTest {
 
+	@NonNull
 	private IIndexingContext index = new SimpleIndexingContext();
 
 	@Test
@@ -50,8 +52,8 @@ public class ResourceAllocationConstraintCheckerTest {
 		final ISequenceElement obj3 = Mockito.mock(ISequenceElement.class, "3");
 		final ISequenceElement obj4 = Mockito.mock(ISequenceElement.class, "4");
 
-		final IResource r1 = new Resource(index);
-		final IResource r2 = new Resource(index);
+		final IResource r1 = new Resource(index, "r1");
+		final IResource r2 = new Resource(index, "r2");
 
 		provider.setAllowedResources(obj1, CollectionsUtil.makeArrayList(r1));
 		provider.setAllowedResources(obj2, CollectionsUtil.makeArrayList(r1, r2));
@@ -79,8 +81,8 @@ public class ResourceAllocationConstraintCheckerTest {
 		final ISequenceElement obj3 = Mockito.mock(ISequenceElement.class, "3");
 		final ISequenceElement obj4 = Mockito.mock(ISequenceElement.class, "4");
 
-		final IResource r1 = new Resource(index);
-		final IResource r2 = new Resource(index);
+		final IResource r1 = new Resource(index, "r1");
+		final IResource r2 = new Resource(index, "r2");
 
 		provider.setAllowedResources(obj1, CollectionsUtil.makeArrayList(r1));
 		provider.setAllowedResources(obj2, CollectionsUtil.makeArrayList(r1, r2));
@@ -108,8 +110,8 @@ public class ResourceAllocationConstraintCheckerTest {
 		final ISequenceElement obj3 = Mockito.mock(ISequenceElement.class, "3");
 		final ISequenceElement obj4 = Mockito.mock(ISequenceElement.class, "4");
 
-		final IResource r1 = new Resource(index);
-		final IResource r2 = new Resource(index);
+		final IResource r1 = new Resource(index, "r1");
+		final IResource r2 = new Resource(index, "r2");
 
 		provider.setAllowedResources(obj1, CollectionsUtil.makeArrayList(r1));
 		provider.setAllowedResources(obj2, CollectionsUtil.makeArrayList(r1, r2));
@@ -141,8 +143,8 @@ public class ResourceAllocationConstraintCheckerTest {
 		final ISequenceElement obj3 = Mockito.mock(ISequenceElement.class, "3");
 		final ISequenceElement obj4 = Mockito.mock(ISequenceElement.class, "4");
 
-		final IResource r1 = new Resource(index);
-		final IResource r2 = new Resource(index);
+		final IResource r1 = new Resource(index, "r1");
+		final IResource r2 = new Resource(index, "r2");
 
 		provider.setAllowedResources(obj1, CollectionsUtil.makeArrayList(r1));
 		provider.setAllowedResources(obj2, CollectionsUtil.makeArrayList(r1, r2));

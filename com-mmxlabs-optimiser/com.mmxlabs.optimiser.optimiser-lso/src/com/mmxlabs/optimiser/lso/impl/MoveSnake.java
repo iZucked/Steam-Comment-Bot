@@ -10,6 +10,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
@@ -38,7 +40,7 @@ public final class MoveSnake implements IMove {
 	private List<Integer> insertionPositions;
 
 	@Override
-	public void apply(final IModifiableSequences sequences) {
+	public void apply(@NonNull final IModifiableSequences sequences) {
 
 		final int numChanges = fromResources.size();
 
@@ -47,6 +49,7 @@ public final class MoveSnake implements IMove {
 		// Generate all the segments
 		for (int i = 0; i < numChanges; ++i) {
 			final IResource from = fromResources.get(i);
+			assert from != null;
 			final IModifiableSequence fromSequence = sequences.getModifiableSequence(from);
 			final ISegment segment = fromSequence.getSegment(segmentStarts.get(i), segmentEnds.get(i));
 			segments.add(i, segment);
@@ -56,20 +59,27 @@ public final class MoveSnake implements IMove {
 		// Generate all the segments
 		for (int i = 0; i < numChanges; ++i) {
 			final IResource to = toResources.get(i);
+			assert to != null;
 			final IModifiableSequence toSequence = sequences.getModifiableSequence(to);
-			toSequence.insert(insertionPositions.get(i), segments.get(i));
+			final ISegment segment = segments.get(i);
+			assert segment != null;
+			toSequence.insert(insertionPositions.get(i), segment);
 		}
 
 		// Remove segments from old sequences
 		for (int i = 0; i < numChanges; ++i) {
 			final IResource from = fromResources.get(i);
+			assert from != null;
 			final IModifiableSequence fromSequence = sequences.getModifiableSequence(from);
 
-			fromSequence.remove(segments.get(i));
+			final ISegment segment = segments.get(i);
+			assert segment != null;
+			fromSequence.remove(segment);
 		}
 	}
 
 	@Override
+	@NonNull
 	public Collection<IResource> getAffectedResources() {
 
 		final Set<IResource> affectedResources = new HashSet<IResource>();
@@ -79,7 +89,7 @@ public final class MoveSnake implements IMove {
 	}
 
 	@Override
-	public boolean validate(final ISequences sequences) {
+	public boolean validate(@NonNull final ISequences sequences) {
 
 		if (fromResources == null) {
 			return false;

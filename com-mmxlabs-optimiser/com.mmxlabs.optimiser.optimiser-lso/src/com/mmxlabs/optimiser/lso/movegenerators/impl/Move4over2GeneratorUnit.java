@@ -7,6 +7,9 @@ package com.mmxlabs.optimiser.lso.movegenerators.impl;
 import java.util.List;
 import java.util.Random;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -16,7 +19,8 @@ import com.mmxlabs.optimiser.lso.impl.Move4over2;
 public final class Move4over2GeneratorUnit implements IRandomMoveGeneratorUnit {
 
 	@Override
-	public IMove generateRandomMove(final RandomMoveGenerator moveGenerator, final ISequences sequences) {
+	@Nullable
+	public IMove generateRandomMove(@NonNull final RandomMoveGenerator moveGenerator, @NonNull final ISequences sequences) {
 
 		final Random random = moveGenerator.getRandom();
 
@@ -29,16 +33,16 @@ public final class Move4over2GeneratorUnit implements IRandomMoveGeneratorUnit {
 			return null;
 		}
 
-		final int resource1 = random.nextInt(numResources);
-		int resource2 = random.nextInt(numResources);
+		final int resource1Idx = random.nextInt(numResources);
+		int resource2Idx = random.nextInt(numResources);
 
 		// Ensure different resources
-		while (resource2 == resource1) {
-			resource2 = random.nextInt(numResources);
+		while (resource2Idx == resource1Idx) {
+			resource2Idx = random.nextInt(numResources);
 		}
 
-		final ISequence sequence1 = sequences.getSequence(resource1);
-		final ISequence sequence2 = sequences.getSequence(resource2);
+		final ISequence sequence1 = sequences.getSequence(resource1Idx);
+		final ISequence sequence2 = sequences.getSequence(resource2Idx);
 
 		final int[] resource1StartEnd = new int[2];
 		moveGenerator.generateSortedBreakPoints(sequence1, resource1StartEnd);
@@ -47,20 +51,12 @@ public final class Move4over2GeneratorUnit implements IRandomMoveGeneratorUnit {
 		moveGenerator.generateSortedBreakPoints(sequence2, resource2StartEnd);
 
 		// Create new move
-		final Move4over2 move = new Move4over2();
-
-		// Set resources
-		move.setResource1(resources.get(resource1));
-		move.setResource2(resources.get(resource2));
-
-		// Set break points
-		move.setResource1Start(resource1StartEnd[0]);
-		move.setResource1End(resource1StartEnd[1]);
-
-		move.setResource2Start(resource2StartEnd[0]);
-		move.setResource2End(resource2StartEnd[1]);
+		IResource resource1 = resources.get(resource1Idx);
+		assert resource1 != null;
+		IResource resource2 = resources.get(resource2Idx);
+		assert resource2 != null;
+		final Move4over2 move = new Move4over2(resource1, resource1StartEnd[0], resource1StartEnd[1], resource2, resource2StartEnd[0], resource2StartEnd[1]);
 
 		return move;
 	}
-
 }

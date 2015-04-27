@@ -16,6 +16,7 @@ import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 
+@SuppressWarnings("null")
 public class UnmodifiableSequencesWrapperTest {
 
 	@Test

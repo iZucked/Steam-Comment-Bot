@@ -7,6 +7,8 @@ package com.mmxlabs.optimiser.lso.impl;
 import java.util.Collection;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -35,7 +37,7 @@ public class Move3over2 implements IMove {
 	private int resource2Position = -1;
 
 	@Override
-	public final void apply(final IModifiableSequences sequences) {
+	public final void apply(@NonNull final IModifiableSequences sequences) {
 
 		// Get sequences
 		final IModifiableSequence sequence1 = sequences.getModifiableSequence(resource1);
@@ -52,12 +54,13 @@ public class Move3over2 implements IMove {
 	}
 
 	@Override
+	@NonNull
 	public final Collection<IResource> getAffectedResources() {
 		return CollectionsUtil.makeArrayList(resource1, resource2);
 	}
 
 	@Override
-	public final boolean validate(final ISequences sequences) {
+	public final boolean validate(@NonNull final ISequences sequences) {
 
 		// Validate basic parameters
 		if (resource1 == null) {

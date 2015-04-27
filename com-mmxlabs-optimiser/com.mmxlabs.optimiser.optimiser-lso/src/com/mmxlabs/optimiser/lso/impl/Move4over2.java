@@ -7,6 +7,8 @@ package com.mmxlabs.optimiser.lso.impl;
 import java.util.Collection;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -23,17 +25,29 @@ import com.mmxlabs.optimiser.lso.IMove;
  * 
  */
 public final class Move4over2 implements IMove {
+	@NonNull
+	private final IResource resource1;
 
-	private IResource resource1;
+	@NonNull
+	private final IResource resource2;
 
-	private IResource resource2;
+	private final int resource1Start;
+	private final int resource1End;
 
-	private int resource1Start = -1, resource1End = -1;
+	private final int resource2Start;
+	private final int resource2End;
 
-	private int resource2Start = -1, resource2End = -1;
+	public Move4over2(@NonNull final IResource resource1, final int resource1Start, final int resource1End, @NonNull final IResource resource2, final int resoure2Start, final int resource2End) {
+		this.resource1 = resource1;
+		this.resource1Start = resource1Start;
+		this.resource1End = resource1End;
+		this.resource2 = resource2;
+		resource2Start = resoure2Start;
+		this.resource2End = resource2End;
+	}
 
 	@Override
-	public final void apply(final IModifiableSequences sequences) {
+	public final void apply(@NonNull final IModifiableSequences sequences) {
 
 		// Get sequences
 		final IModifiableSequence sequence1 = sequences.getModifiableSequence(resource1);
@@ -53,22 +67,15 @@ public final class Move4over2 implements IMove {
 	}
 
 	@Override
+	@NonNull
 	public final Collection<IResource> getAffectedResources() {
 		return CollectionsUtil.makeArrayList(resource1, resource2);
 	}
 
 	@Override
-	public final boolean validate(final ISequences sequences) {
+	public final boolean validate(@NonNull final ISequences sequences) {
 
 		// Validate basic parameters
-		if (resource1 == null) {
-			return false;
-		}
-
-		if (resource2 == null) {
-			return false;
-		}
-
 		if (resource1Start < 0) {
 			return false;
 		}
@@ -113,48 +120,24 @@ public final class Move4over2 implements IMove {
 		return resource1;
 	}
 
-	public final void setResource1(final IResource resource1) {
-		this.resource1 = resource1;
-	}
-
 	public final IResource getResource2() {
 		return resource2;
-	}
-
-	public final void setResource2(final IResource resource2) {
-		this.resource2 = resource2;
 	}
 
 	public final int getResource1Start() {
 		return resource1Start;
 	}
 
-	public final void setResource1Start(final int resource1Start) {
-		this.resource1Start = resource1Start;
-	}
-
 	public final int getResource1End() {
 		return resource1End;
-	}
-
-	public final void setResource1End(final int resource1End) {
-		this.resource1End = resource1End;
 	}
 
 	public final int getResource2Start() {
 		return resource2Start;
 	}
 
-	public final void setResource2Start(final int resource2Start) {
-		this.resource2Start = resource2Start;
-	}
-
 	public final int getResource2End() {
 		return resource2End;
-	}
-
-	public final void setResource2End(final int resource2End) {
-		this.resource2End = resource2End;
 	}
 
 	@Override

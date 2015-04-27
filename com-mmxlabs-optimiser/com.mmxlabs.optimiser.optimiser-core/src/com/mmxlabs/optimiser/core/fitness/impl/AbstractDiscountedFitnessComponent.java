@@ -31,6 +31,7 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
  */
 public abstract class AbstractDiscountedFitnessComponent implements IFitnessComponent {
 
+	@NonNull
 	private ICurve discountCurve = UnitCurve.getInstance();
 
 	private long accumulator;

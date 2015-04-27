@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.common.constraints;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 
 /**
@@ -14,14 +16,17 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
  */
 public final class OrderedSequenceElementsConstraintCheckerFactory implements IConstraintCheckerFactory {
 
+	@NonNull
 	public static final String NAME = "OrderedSequenceElementsConstraintChecker";
 
 	@Override
+	@NonNull
 	public String getName() {
 		return NAME;
 	}
 
 	@Override
+	@NonNull
 	public OrderedSequenceElementsConstraintChecker instantiate() {
 		return new OrderedSequenceElementsConstraintChecker(NAME);
 	}

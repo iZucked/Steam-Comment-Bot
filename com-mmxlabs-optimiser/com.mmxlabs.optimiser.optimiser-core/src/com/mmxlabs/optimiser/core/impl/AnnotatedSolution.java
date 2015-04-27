@@ -7,9 +7,11 @@ package com.mmxlabs.optimiser.core.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IElementAnnotationsMap;
-import com.mmxlabs.optimiser.core.IOptimisationContext;
+import com.mmxlabs.optimiser.core.IEvaluationContext;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 
@@ -21,69 +23,58 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
  */
 public final class AnnotatedSolution implements IAnnotatedSolution {
 
-	private ISequences sequences;
+	@NonNull
+	private final ISequences sequences;
 
-	private IOptimisationContext context;
+	@NonNull
+	private final IEvaluationContext context;
 
-	private IEvaluationState evaluationState;
+	@NonNull
+	private final IEvaluationState evaluationState;
 
-	private IElementAnnotationsMap elementAnnotations = new HashMapAnnotations();
+	@NonNull
+	private final IElementAnnotationsMap elementAnnotations = new HashMapAnnotations();
 
-	private Map<String, Object> generalAnnotations = new HashMap<String, Object>();
+	@NonNull
+	private final Map<String, Object> generalAnnotations = new HashMap<String, Object>();
+
+	public AnnotatedSolution(@NonNull final ISequences sequences, @NonNull final IEvaluationContext context, @NonNull final IEvaluationState evaluationState) {
+		this.sequences = sequences;
+		this.context = context;
+		this.evaluationState = evaluationState;
+	}
 
 	@Override
+	@NonNull
 	public ISequences getSequences() {
 		return sequences;
 	}
 
-	public void setSequences(final ISequences sequences) {
-		this.sequences = sequences;
-	}
-
 	@Override
-	public IOptimisationContext getContext() {
+	@NonNull
+	public IEvaluationContext getContext() {
 		return context;
 	}
 
-	public void setContext(final IOptimisationContext context) {
-		this.context = context;
+	@Override
+	@NonNull
+	public IEvaluationState getEvaluationState() {
+		return evaluationState;
 	}
 
 	@Override
-	public void dispose() {
-		context = null;
-		sequences = null;
-		elementAnnotations = null;
-		generalAnnotations = null;
-	}
-
-	@Override
+	@NonNull
 	public IElementAnnotationsMap getElementAnnotations() {
 		return elementAnnotations;
 	}
 
 	@Override
-	public void setGeneralAnnotation(final String key, final Object value) {
-		if (generalAnnotations == null) {
-			throw new RuntimeException("Attempted to set an annotation after dispose()");
-		}
+	public void setGeneralAnnotation(@NonNull final String key, @NonNull final Object value) {
 		generalAnnotations.put(key, value);
 	}
 
 	@Override
 	public <U> U getGeneralAnnotation(final String key, final Class<U> clz) {
-		if (generalAnnotations == null) {
-			return null;
-		}
 		return clz.cast(generalAnnotations.get(key));
-	}
-
-	@Override
-	public IEvaluationState getEvaluationState() {
-		return evaluationState;
-	}
-
-	public void setEvaluationState(final IEvaluationState evaluationState) {
-		this.evaluationState = evaluationState;
 	}
 }

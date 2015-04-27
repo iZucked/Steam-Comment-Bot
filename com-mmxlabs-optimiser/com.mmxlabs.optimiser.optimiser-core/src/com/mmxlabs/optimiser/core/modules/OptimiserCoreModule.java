@@ -115,9 +115,10 @@ public class OptimiserCoreModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	private IOptimisationContext createOptimisationContext(final IOptimisationData data, @Named("Initial") final ISequences sequences, final IFitnessFunctionRegistry fitnessFunctionRegistry,
-			final IConstraintCheckerRegistry constraintCheckerRegistry, final IEvaluationProcessRegistry evaluationProcessRegistry,
-			@Named(ENABLED_CONSTRAINT_NAMES) final List<String> enabledConstraintNames, @Named(ENABLED_FITNESS_NAMES) final List<String> enabledFitnessNames) {
+	private IOptimisationContext createOptimisationContext(@NonNull final IOptimisationData data, @NonNull @Named("Initial") final ISequences sequences,
+			@NonNull final IFitnessFunctionRegistry fitnessFunctionRegistry, @NonNull final IConstraintCheckerRegistry constraintCheckerRegistry,
+			@NonNull final IEvaluationProcessRegistry evaluationProcessRegistry, @NonNull @Named(ENABLED_CONSTRAINT_NAMES) final List<String> enabledConstraintNames,
+			@NonNull @Named(ENABLED_FITNESS_NAMES) final List<String> enabledFitnessNames) {
 
 		final List<String> components = new ArrayList<String>(enabledFitnessNames);
 		components.retainAll(fitnessFunctionRegistry.getFitnessComponentNames());

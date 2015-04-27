@@ -28,6 +28,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
  * @author Simon Goodall
  * 
  */
+@SuppressWarnings("null")
 public class ListModifiableSequenceTest {
 
 	private ListModifiableSequence sequence;

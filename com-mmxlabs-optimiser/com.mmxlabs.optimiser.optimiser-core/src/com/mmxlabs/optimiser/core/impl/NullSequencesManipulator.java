@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.core.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -17,7 +19,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 public final class NullSequencesManipulator implements ISequencesManipulator {
 
 	@Override
-	public void manipulate(final IModifiableSequences sequence) {
+	public void manipulate(@NonNull final IModifiableSequences sequence) {
 		// Do nothing
 	}
 
@@ -27,7 +29,7 @@ public final class NullSequencesManipulator implements ISequencesManipulator {
 	}
 
 	@Override
-	public void init(IOptimisationData data) {
+	public void init(@NonNull final IOptimisationData data) {
 		// Do nothing
 	}
 }

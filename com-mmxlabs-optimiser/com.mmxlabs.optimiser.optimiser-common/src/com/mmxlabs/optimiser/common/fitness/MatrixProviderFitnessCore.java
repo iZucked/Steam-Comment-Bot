@@ -5,7 +5,6 @@
 package com.mmxlabs.optimiser.common.fitness;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,7 +66,7 @@ public final class MatrixProviderFitnessCore implements IFitnessCore {
 
 	private final IFitnessComponent component;
 
-	public MatrixProviderFitnessCore(final String componentName) {
+	public MatrixProviderFitnessCore(@NonNull final String componentName) {
 		component = new MatrixProviderFitnessComponent(componentName, this);
 	}
 
@@ -93,6 +92,7 @@ public final class MatrixProviderFitnessCore implements IFitnessCore {
 		oldFitness = 0;
 
 		for (final IResource resource : sequences.getResources()) {
+			assert resource != null;
 			final ISequence sequence = sequences.getSequence(resource);
 			assert sequence != null;
 			final long value = evaluateSequence(sequence);
@@ -113,6 +113,8 @@ public final class MatrixProviderFitnessCore implements IFitnessCore {
 
 		final Collection<IResource> loopResources = affectedResources != null ? affectedResources : sequences.getResources();
 		for (final IResource resource : loopResources) {
+			assert resource != null;
+
 			// Subtract old resource fitness from total
 			final long oldValue = oldFitnessByResource.get(resource);
 			newFitness -= oldValue;
@@ -131,6 +133,7 @@ public final class MatrixProviderFitnessCore implements IFitnessCore {
 	}
 
 	@Override
+	@NonNull
 	public Collection<IFitnessComponent> getFitnessComponents() {
 		return CollectionsUtil.<IFitnessComponent> makeArrayList(component);
 	}

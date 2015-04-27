@@ -31,10 +31,13 @@ import com.mmxlabs.optimiser.core.ISequences;
  */
 public final class ModifiableSequences implements IModifiableSequences {
 
+	@NonNull
 	private final List<IResource> resources;
 
+	@NonNull
 	private final Map<IResource, IModifiableSequence> sequenceMap;
 
+	@NonNull
 	private final List<ISequenceElement> unusedElements = new ArrayList<ISequenceElement>();
 
 	/**
@@ -75,6 +78,8 @@ public final class ModifiableSequences implements IModifiableSequences {
 
 		this.sequenceMap = new HashMap<IResource, IModifiableSequence>();
 		for (final IResource r : resources) {
+			assert r != null;
+
 			// Get original sequence
 			final ISequence seq = sequences.getSequence(r);
 
@@ -92,17 +97,26 @@ public final class ModifiableSequences implements IModifiableSequences {
 
 	@Override
 	@NonNull
-	public IModifiableSequence getModifiableSequence(final IResource resource) {
+	public IModifiableSequence getModifiableSequence(@NonNull final IResource resource) {
 
-		return sequenceMap.get(resource);
+		final IModifiableSequence seq = sequenceMap.get(resource);
+		if (seq == null) {
+			throw new IllegalArgumentException("Unknown resource");
+		}
+		return seq;
 	}
 
 	@Override
 	@NonNull
 	public IModifiableSequence getModifiableSequence(final int index) {
-		return sequenceMap.get(resources.get(index));
+		final IModifiableSequence seq = sequenceMap.get(resources.get(index));
+		if (seq == null) {
+			throw new IllegalArgumentException("Unknown resource or index");
+		}
+		return seq;
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	@NonNull
 	public List<IResource> getResources() {
@@ -111,14 +125,22 @@ public final class ModifiableSequences implements IModifiableSequences {
 
 	@Override
 	@NonNull
-	public ISequence getSequence(final IResource resource) {
-		return sequenceMap.get(resource);
+	public ISequence getSequence(@NonNull final IResource resource) {
+		final IModifiableSequence seq = sequenceMap.get(resource);
+		if (seq == null) {
+			throw new IllegalArgumentException("Unknown resource");
+		}
+		return seq;
 	}
 
 	@Override
 	@NonNull
 	public ISequence getSequence(final int index) {
-		return sequenceMap.get(resources.get(index));
+		final IModifiableSequence seq = sequenceMap.get(resources.get(index));
+		if (seq == null) {
+			throw new IllegalArgumentException("Unknown resource or index");
+		}
+		return seq;
 	}
 
 	@Override
@@ -186,6 +208,7 @@ public final class ModifiableSequences implements IModifiableSequences {
 		return Objects.hashCode(this.resources, this.sequenceMap, this.unusedElements);
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	@NonNull
 	public List<ISequenceElement> getUnusedElements() {

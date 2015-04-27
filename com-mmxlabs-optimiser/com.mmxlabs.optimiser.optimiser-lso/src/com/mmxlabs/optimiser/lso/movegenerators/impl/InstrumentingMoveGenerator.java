@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,19 +41,21 @@ public class InstrumentingMoveGenerator implements IMoveGenerator {
 	Map<Class<? extends IMove>, Stats> stats = new HashMap<Class<? extends IMove>, Stats>();
 
 	private final class AllMoves implements IMove {
+		@SuppressWarnings("null")
 		@Override
+		@NonNull
 		public Collection<IResource> getAffectedResources() {
 			// TODO: SG - 2014-12-11 Changed from null to empty list for null analysis stuff. Is this correct? I am not sure how this move interacts with the rest of the application.
 			return Collections.emptySet();
 		}
 
 		@Override
-		public void apply(final IModifiableSequences sequences) {
+		public void apply(@NonNull final IModifiableSequences sequences) {
 
 		}
 
 		@Override
-		public boolean validate(final ISequences sequences) {
+		public boolean validate(@NonNull final ISequences sequences) {
 			return false;
 		}
 	}
@@ -187,12 +190,13 @@ public class InstrumentingMoveGenerator implements IMoveGenerator {
 	}
 
 	@Override
+	@NonNull
 	public ISequences getSequences() {
 		return delegate.getSequences();
 	}
 
 	@Override
-	public void setSequences(final ISequences sequences) {
+	public void setSequences(@NonNull final ISequences sequences) {
 		delegate.setSequences(sequences);
 	}
 

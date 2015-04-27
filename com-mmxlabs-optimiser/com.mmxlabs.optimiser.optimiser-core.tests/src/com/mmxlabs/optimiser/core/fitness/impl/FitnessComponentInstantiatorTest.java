@@ -18,6 +18,7 @@ import org.junit.Test;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 
+@SuppressWarnings("null")
 public class FitnessComponentInstantiatorTest {
 
 	@Test

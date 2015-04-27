@@ -5,7 +5,6 @@
 package com.mmxlabs.optimiser.common.fitness;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,6 +13,7 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
@@ -32,6 +32,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
  */
 public class NonOptionalSlotFitnessCore implements IFitnessCore, IFitnessComponent {
 
+	@NonNull
 	private final String name;
 
 	@Inject
@@ -41,7 +42,7 @@ public class NonOptionalSlotFitnessCore implements IFitnessCore, IFitnessCompone
 
 	private int lastFitness = 0;
 
-	public NonOptionalSlotFitnessCore(final String name) {
+	public NonOptionalSlotFitnessCore(@NonNull final String name) {
 		this.name = name;
 	}
 
@@ -56,8 +57,9 @@ public class NonOptionalSlotFitnessCore implements IFitnessCore, IFitnessCompone
 	}
 
 	@Override
+	@NonNull
 	public Collection<IFitnessComponent> getFitnessComponents() {
-		return Collections.<IFitnessComponent> singleton(this);
+		return CollectionsUtil.<IFitnessComponent> makeArrayList(this);
 	}
 
 	@Override
@@ -93,6 +95,7 @@ public class NonOptionalSlotFitnessCore implements IFitnessCore, IFitnessCompone
 	}
 
 	@Override
+	@NonNull
 	public String getName() {
 		return name;
 	}
@@ -103,6 +106,7 @@ public class NonOptionalSlotFitnessCore implements IFitnessCore, IFitnessCompone
 	}
 
 	@Override
+	@NonNull
 	public IFitnessCore getFitnessCore() {
 		return this;
 	}

@@ -10,6 +10,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
@@ -41,11 +43,14 @@ public final class RandomMoveGenerator implements IMoveGenerator {
 
 	@Override
 	public IMove generateMove() {
+		// Pin for null analysis
+		final ISequences pSequences = sequences;
+		assert pSequences != null;
 		double newMove = random.nextDouble() * totalWeight;
 		for (int i = 0; i < units.size(); i++) {
 			final double weight = weights.get(i);
 			if (newMove <= weight) {
-				return units.get(i).generateRandomMove(this, sequences);
+				return units.get(i).generateRandomMove(this, pSequences);
 			}
 			newMove -= weight;
 		}
@@ -64,7 +69,7 @@ public final class RandomMoveGenerator implements IMoveGenerator {
 		}
 	}
 
-	public void setRandom(final Random random) {
+	public void setRandom(@NonNull final Random random) {
 		this.random = random;
 	}
 
@@ -73,11 +78,12 @@ public final class RandomMoveGenerator implements IMoveGenerator {
 	}
 
 	@Override
-	public void setSequences(final ISequences sequences) {
+	public void setSequences(@NonNull final ISequences sequences) {
 		this.sequences = sequences;
 	}
 
 	@Override
+	@NonNull
 	public ISequences getSequences() {
 		return sequences;
 	}
@@ -88,15 +94,15 @@ public final class RandomMoveGenerator implements IMoveGenerator {
 	 * @param sequence
 	 * @return
 	 */
-	public int generateBreakPoint(final ISequence sequence) {
+	public int generateBreakPoint(@NonNull final ISequence sequence) {
 		final int breakPoint;
 
-		if (true) {
-			// Skip start/end as breakpoint options
-			breakPoint = random.nextInt(sequence.size() - 1) + 1;
-		} else {
-			breakPoint = random.nextInt(1 + sequence.size());
-		}
+		// if (true) {
+		// Skip start/end as breakpoint options
+		breakPoint = random.nextInt(sequence.size() - 1) + 1;
+		// } else {
+		// breakPoint = random.nextInt(1 + sequence.size());
+		// }
 
 		// Validate break point -- should it include start/end elements?
 
@@ -134,7 +140,7 @@ public final class RandomMoveGenerator implements IMoveGenerator {
 		units.add(unit);
 	}
 
-	public void addMoveGeneratorUnit(final IRandomMoveGeneratorUnit unit) {
+	public void addMoveGeneratorUnit(@NonNull final IRandomMoveGeneratorUnit unit) {
 		this.addMoveGeneratorUnit(unit, 1);
 	}
 
@@ -143,7 +149,7 @@ public final class RandomMoveGenerator implements IMoveGenerator {
 	 * 
 	 * @param unit
 	 */
-	public void removeMoveGeneratorUnit(final IRandomMoveGeneratorUnit unit) {
+	public void removeMoveGeneratorUnit(@NonNull final IRandomMoveGeneratorUnit unit) {
 		final int i = units.indexOf(unit);
 		if (i != -1) {
 			totalWeight -= weights.get(i);

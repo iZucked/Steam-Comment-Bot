@@ -8,6 +8,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.common.dcproviders.IOrderedSequenceElementsDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -26,33 +29,37 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
  */
 public final class OrderedSequenceElementsConstraintChecker implements IPairwiseConstraintChecker {
 	@Inject
+	@NonNull
 	private IOrderedSequenceElementsDataComponentProvider provider;
 
+	@NonNull
 	private final String name;
 
-	public OrderedSequenceElementsConstraintChecker(final String name) {
+	public OrderedSequenceElementsConstraintChecker(@NonNull final String name) {
 		this.name = name;
 	}
 
 	@Override
+	@NonNull
 	public String getName() {
 		return name;
 	}
 
 	@Override
-	public void setOptimisationData(final IOptimisationData optimisationData) {
+	public void setOptimisationData(@NonNull final IOptimisationData optimisationData) {
 
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences sequences) {
+	public boolean checkConstraints(@NonNull final ISequences sequences) {
 		return checkConstraints(sequences, null);
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences sequences, final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final List<String> messages) {
 
 		for (final IResource resource : sequences.getResources()) {
+			assert resource != null;
 			final ISequence sequence = sequences.getSequence(resource);
 			if (!checkSequence(sequence, messages)) {
 				return false;
@@ -106,7 +113,7 @@ public final class OrderedSequenceElementsConstraintChecker implements IPairwise
 	}
 
 	@Override
-	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
+	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 		final ISequenceElement afterFirst = provider.getNextElement(first);
 		if (afterFirst == null) {
 			final ISequenceElement beforeSecond = provider.getPreviousElement(second);
@@ -122,8 +129,7 @@ public final class OrderedSequenceElementsConstraintChecker implements IPairwise
 	}
 
 	@Override
-	public String explain(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
-		// TODO Auto-generated method stub
+	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 		return null;
 	}
 }

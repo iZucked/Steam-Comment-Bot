@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.ISegment;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -33,17 +35,17 @@ public final class ListModifiableSequence implements IModifiableSequence {
 	}
 
 	@Override
-	public void add(final ISequenceElement element) {
+	public void add(@NonNull final ISequenceElement element) {
 		list.add(element);
 	}
 
 	@Override
-	public void insert(final int index, final ISequenceElement element) {
+	public void insert(final int index, @NonNull final ISequenceElement element) {
 		list.add(index, element);
 	}
 
 	@Override
-	public void insert(final int index, final ISegment segment) {
+	public void insert(final int index, @NonNull final ISegment segment) {
 		int idx = index;
 		for (final ISequenceElement e : segment) {
 			list.add(idx++, e);
@@ -56,12 +58,12 @@ public final class ListModifiableSequence implements IModifiableSequence {
 	}
 
 	@Override
-	public boolean remove(final ISequenceElement element) {
+	public boolean remove(@NonNull final ISequenceElement element) {
 		return list.remove(element);
 	}
 
 	@Override
-	public void remove(final ISegment segment) {
+	public void remove(@NonNull final ISegment segment) {
 		for (final ISequenceElement e : segment) {
 			list.remove(e);
 		}
@@ -73,17 +75,23 @@ public final class ListModifiableSequence implements IModifiableSequence {
 	}
 
 	@Override
-	public void set(final int index, final ISequenceElement element) {
+	public void set(final int index, @NonNull final ISequenceElement element) {
 		list.set(index, element);
 
 	}
 
 	@Override
+	@NonNull
 	public ISequenceElement get(final int index) {
-		return list.get(index);
+		final ISequenceElement element = list.get(index);
+		if (element == null) {
+			throw new IllegalArgumentException("Unknown element index");
+		}
+		return element;
 	}
 
 	@Override
+	@NonNull
 	public ISegment getSegment(final int start, final int end) {
 
 		// Copy of the sublist to make segment independent from sequence.
@@ -96,7 +104,7 @@ public final class ListModifiableSequence implements IModifiableSequence {
 	}
 
 	@Override
-	public void replaceAll(final ISequence sequence) {
+	public void replaceAll(@NonNull final ISequence sequence) {
 		list.clear();
 
 		for (final ISequenceElement t : sequence) {

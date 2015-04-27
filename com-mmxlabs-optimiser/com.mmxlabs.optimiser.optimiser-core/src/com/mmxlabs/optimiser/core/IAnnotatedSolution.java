@@ -16,38 +16,30 @@ public interface IAnnotatedSolution {
 	 * 
 	 * @return
 	 */
-	@NonNull 
+	@NonNull
 	ISequences getSequences();
 
+	@NonNull
 	IEvaluationState getEvaluationState();
-	
+
 	/**
 	 * Returns the {@link IElementAnnotationsMap} associated with the sequence elements in this solution
 	 * 
 	 * @return
 	 */
-	@NonNull 
+	@NonNull
 	IElementAnnotationsMap getElementAnnotations();
 
-	// annotations for other components?
-	// IAnnotations<IResource> getResourceAnnotations();
-	// IAnnotations<ISequence> getSequenceAnnotations();
-
 	/**
-	 * Returns the {@link IOptimisationContext} used to create this solution.
+	 * Returns the {@link IEvaluationContext} used to create this solution.
 	 * 
 	 * @return
 	 */
-	@NonNull 
-	IOptimisationContext getContext();
-
-	/**
-	 * Release any internal resources.
-	 */
-	void dispose();
+	@NonNull
+	IEvaluationContext getContext();
 
 	@Nullable
-	<U> U getGeneralAnnotation(@NonNull String key,@NonNull  Class<U> clz);
+	<U> U getGeneralAnnotation(@NonNull String key, @NonNull Class<U> clz);
 
 	/**
 	 * Set a general annotation.
@@ -55,5 +47,5 @@ public interface IAnnotatedSolution {
 	 * @param key
 	 * @param value
 	 */
-	void setGeneralAnnotation(@NonNull String key,@NonNull  Object value);
+	void setGeneralAnnotation(@NonNull String key, @NonNull Object value);
 }

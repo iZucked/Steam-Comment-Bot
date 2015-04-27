@@ -130,6 +130,7 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 	protected final void updateSequences(@NonNull final ISequences source, @NonNull final IModifiableSequences destination, @NonNull final Collection<IResource> affectedResources) {
 
 		for (final IResource resource : affectedResources) {
+			assert resource != null;
 			// Get source sequence
 			final ISequence sourceSequence = source.getSequence(resource);
 			assert sourceSequence != null;

@@ -27,6 +27,7 @@ public interface IConstraintChecker {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	String getName();
 
 	/**

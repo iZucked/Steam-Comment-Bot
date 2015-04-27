@@ -7,6 +7,7 @@ package com.mmxlabs.optimiser.lso.impl.thresholders;
 import java.util.BitSet;
 import java.util.Random;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +17,9 @@ public class MovingAverageThresholder implements IThresholder {
 
 	private static final Logger log = LoggerFactory.getLogger(MovingAverageThresholder.class);
 
+	@NonNull
+	private final Random random;
+
 	private final BitSet accepts;
 	private final long[] window;
 	private double sum = 0;
@@ -24,13 +28,12 @@ public class MovingAverageThresholder implements IThresholder {
 	private double logAlpha;
 	final double alpha0;
 	final double cooling;
-	final private Random random;
 	int tick = 0;
 	int epoch = 0;
 	private final int epochLength;
 	private double lastT;
 
-	public MovingAverageThresholder(final Random random, final double initialAcceptance, final double cooling, final int epochLength, final int window) {
+	public MovingAverageThresholder(@NonNull final Random random, final double initialAcceptance, final double cooling, final int epochLength, final int window) {
 		this.random = random;
 		this.window = new long[window];
 		accepts = new BitSet(window);

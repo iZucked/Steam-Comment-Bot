@@ -22,14 +22,11 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
  * 
  */
 public final class FitnessFunctionRegistry implements IFitnessFunctionRegistry {
+	@NonNull
+	private final Map<String, IFitnessCoreFactory> coreFactoriesByCoreName = new HashMap<>();
 
-	private final Map<String, IFitnessCoreFactory> coreFactoriesByCoreName;
-	private final Map<String, IFitnessCoreFactory> coreFactoriesByComponentName;
-
-	public FitnessFunctionRegistry() {
-		this.coreFactoriesByCoreName = new HashMap<String, IFitnessCoreFactory>();
-		this.coreFactoriesByComponentName = new HashMap<String, IFitnessCoreFactory>();
-	}
+	@NonNull
+	private final Map<String, IFitnessCoreFactory> coreFactoriesByComponentName = new HashMap<>();
 
 	@Override
 	public void registerFitnessCoreFactory(@NonNull final IFitnessCoreFactory factory) {
@@ -58,18 +55,21 @@ public final class FitnessFunctionRegistry implements IFitnessFunctionRegistry {
 		}
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	@NonNull
 	public Collection<String> getFitnessCoreFactoryNames() {
 		return coreFactoriesByCoreName.keySet();
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	@NonNull
 	public Collection<String> getFitnessComponentNames() {
 		return coreFactoriesByComponentName.keySet();
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	@NonNull
 	public Collection<IFitnessCoreFactory> getFitnessCoreFactories() {

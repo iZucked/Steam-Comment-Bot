@@ -7,6 +7,9 @@ package com.mmxlabs.optimiser.lso.movegenerators.impl;
 import java.util.List;
 import java.util.Random;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -16,7 +19,8 @@ import com.mmxlabs.optimiser.lso.impl.Move3over2;
 public final class Move3over2GeneratorUnit implements IRandomMoveGeneratorUnit {
 
 	@Override
-	public IMove generateRandomMove(final RandomMoveGenerator moveGenerator, final ISequences sequences) {
+	@Nullable
+	public IMove generateRandomMove(@NonNull final RandomMoveGenerator moveGenerator, @NonNull final ISequences sequences) {
 
 		final Random random = moveGenerator.getRandom();
 

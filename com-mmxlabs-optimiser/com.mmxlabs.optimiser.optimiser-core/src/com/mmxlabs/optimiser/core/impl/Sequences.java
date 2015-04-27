@@ -11,6 +11,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -69,6 +71,7 @@ public final class Sequences implements ISequences {
 
 		this.sequenceMap = new HashMap<IResource, ISequence>();
 		for (final IResource r : resources) {
+			assert r != null;
 			// Get original sequence
 			final ISequence seq = sequences.getSequence(r);
 
@@ -81,28 +84,41 @@ public final class Sequences implements ISequences {
 		this.unusedElements.addAll(sequences.getUnusedElements());
 	}
 
+	@SuppressWarnings("null")
 	@Override
+	@NonNull
 	public List<IResource> getResources() {
 		return Collections.unmodifiableList(resources);
 	}
 
 	@Override
-	public ISequence getSequence(final IResource resource) {
-		return sequenceMap.get(resource);
+	@NonNull
+	public ISequence getSequence(@NonNull final IResource resource) {
+		final ISequence sequence = sequenceMap.get(resource);
+		if (sequence == null) {
+			throw new IllegalArgumentException("Unknown resource");
+		}
+		return sequence;
 	}
 
 	@Override
+	@NonNull
 	public ISequence getSequence(final int index) {
-		return sequenceMap.get(resources.get(index));
+		final ISequence seq = sequenceMap.get(resources.get(index));
+		if (seq == null) {
+			throw new IllegalArgumentException("Unknown resource or index");
+		}
+		return seq;
 	}
 
+	@SuppressWarnings("null")
 	@Override
+	@NonNull
 	public Map<IResource, ISequence> getSequences() {
 
 		// Create a copy so external modification does not affect internal
 		// state.
-		final Map<IResource, ISequence> map = Collections.unmodifiableMap(sequenceMap);
-		return map;
+		return Collections.unmodifiableMap(sequenceMap);
 	}
 
 	@Override
@@ -137,7 +153,9 @@ public final class Sequences implements ISequences {
 		return sequenceMap.hashCode();
 	}
 
+	@SuppressWarnings("null")
 	@Override
+	@NonNull
 	public List<ISequenceElement> getUnusedElements() {
 		return Collections.unmodifiableList(unusedElements);
 	}

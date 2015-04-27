@@ -22,10 +22,12 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
+@SuppressWarnings("null")
 public class FitnessHelperTest {
 
 	static class CoreWrapper implements IFitnessComponent {
 
+		@NonNull
 		private final IFitnessCore core;
 
 		public CoreWrapper(@NonNull final IFitnessCore core) {
@@ -39,11 +41,13 @@ public class FitnessHelperTest {
 		}
 
 		@Override
+		@NonNull
 		public IFitnessCore getFitnessCore() {
 			return core;
 		}
 
 		@Override
+		@NonNull
 		public String getName() {
 			fail("Unexpected method invocation");
 			return "";

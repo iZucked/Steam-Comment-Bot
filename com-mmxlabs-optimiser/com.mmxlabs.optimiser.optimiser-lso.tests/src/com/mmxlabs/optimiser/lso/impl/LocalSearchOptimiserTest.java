@@ -9,6 +9,8 @@ import static org.junit.Assert.fail;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -21,6 +23,7 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 
+@SuppressWarnings("null")
 public class LocalSearchOptimiserTest {
 
 	@Test
@@ -84,7 +87,8 @@ public class LocalSearchOptimiserTest {
 	private static class TestLocalSearchOptimiser extends LocalSearchOptimiser {
 
 		@Override
-		public IAnnotatedSolution start(final IOptimisationContext context) {
+		@Nullable
+		public IAnnotatedSolution start(@NonNull final IOptimisationContext context) {
 			fail("This is not part of the test.");
 			return null;
 		}

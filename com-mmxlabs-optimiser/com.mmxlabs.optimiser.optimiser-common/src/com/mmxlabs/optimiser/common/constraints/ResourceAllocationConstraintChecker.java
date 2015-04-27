@@ -9,6 +9,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -26,27 +29,30 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
  * 
  */
 public final class ResourceAllocationConstraintChecker implements IPairwiseConstraintChecker {
-
+	@NonNull
 	private final String name;
 
 	@Inject
+	@NonNull
 	private IResourceAllocationConstraintDataComponentProvider resourceAllocationConstraintDataComponentProvider;
 
-	public ResourceAllocationConstraintChecker(final String name) {
+	public ResourceAllocationConstraintChecker(@NonNull final String name) {
 		this.name = name;
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences sequences) {
+	public boolean checkConstraints(@NonNull final ISequences sequences) {
 		return checkConstraints(sequences, null);
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences sequences, final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final List<String> messages) {
 
 		final List<IResource> resources = sequences.getResources();
 		for (final IResource resource : resources) {
+			assert resource != null;
 			final ISequence sequence = sequences.getSequence(resource);
+
 			final boolean ok = checkSequence(resource, sequence, messages);
 			if (!ok) {
 				return false;
@@ -64,9 +70,10 @@ public final class ResourceAllocationConstraintChecker implements IPairwiseConst
 	 * @param messages
 	 * @return
 	 */
-	private boolean checkSequence(final IResource resource, final ISequence sequence, final List<String> messages) {
+	private boolean checkSequence(@NonNull final IResource resource, @NonNull final ISequence sequence, @Nullable final List<String> messages) {
 
 		for (final ISequenceElement t : sequence) {
+			assert t != null;
 			if (!checkElement(t, resource)) {
 				if (messages != null) {
 					final String msg = String.format("Element (%s) is not permitted to be allocated to resource (%s)", t, resource);
@@ -80,28 +87,29 @@ public final class ResourceAllocationConstraintChecker implements IPairwiseConst
 	}
 
 	@Override
-	public void setOptimisationData(final IOptimisationData optimisationData) {
+	public void setOptimisationData(@NonNull final IOptimisationData optimisationData) {
 	}
 
 	@Override
+	@NonNull
 	public String getName() {
 		return name;
 	}
 
 	@Override
-	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
+	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 
 		return checkElement(first, resource) && checkElement(second, resource);
 	}
 
-	private final boolean checkElement(final ISequenceElement element, final IResource resource) {
+	private final boolean checkElement(@NonNull final ISequenceElement element, @NonNull final IResource resource) {
 
 		final Collection<IResource> resources = resourceAllocationConstraintDataComponentProvider.getAllowedResources(element);
 		return ((resources == null) || resources.contains(resource));
 	}
 
 	@Override
-	public String explain(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
+	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 		final Collection<IResource> resources = resourceAllocationConstraintDataComponentProvider.getAllowedResources(first);
 		return "Resource: " + resource.getName() + ", first in " + resources + ", second in " + resourceAllocationConstraintDataComponentProvider.getAllowedResources(second);
 	}

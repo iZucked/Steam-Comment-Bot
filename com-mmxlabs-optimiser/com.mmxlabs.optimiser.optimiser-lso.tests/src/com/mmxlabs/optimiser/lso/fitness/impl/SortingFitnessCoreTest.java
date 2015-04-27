@@ -49,7 +49,7 @@ public class SortingFitnessCoreTest {
 
 		final IEvaluationState evaluationState = Mockito.mock(IEvaluationState.class);
 		assert evaluationState != null;
-		final ISequences sequences = OptimiserTestUtil.makeSequences(OptimiserTestUtil.makeResource(), 1, 2, 3, 4);
+		final ISequences sequences = OptimiserTestUtil.makeSequences(OptimiserTestUtil.makeResource("r1"), 1, 2, 3, 4);
 
 		core.evaluate(sequences, evaluationState);
 
@@ -60,7 +60,7 @@ public class SortingFitnessCoreTest {
 	public void testSortingFitnessCore2() {
 		final IEvaluationState evaluationState = Mockito.mock(IEvaluationState.class);
 		assert evaluationState != null;
-		final ISequences sequences = OptimiserTestUtil.makeSequences(OptimiserTestUtil.makeResource(), 1, 2, 4, 3);
+		final ISequences sequences = OptimiserTestUtil.makeSequences(OptimiserTestUtil.makeResource("r1"), 1, 2, 4, 3);
 
 		core.evaluate(sequences, evaluationState);
 
@@ -70,7 +70,7 @@ public class SortingFitnessCoreTest {
 	@Test
 	public void testSortingFitnessCore3() {
 
-		final ISequences sequences = OptimiserTestUtil.makeSequences(OptimiserTestUtil.makeResource(), 4, 3, 2, 1);
+		final ISequences sequences = OptimiserTestUtil.makeSequences(OptimiserTestUtil.makeResource("r1"), 4, 3, 2, 1);
 		final IEvaluationState evaluationState = Mockito.mock(IEvaluationState.class);
 		assert evaluationState != null;
 		core.evaluate(sequences, evaluationState);
@@ -82,7 +82,7 @@ public class SortingFitnessCoreTest {
 	public void testSortingFitnessCore4() {
 		final IEvaluationState evaluationState = Mockito.mock(IEvaluationState.class);
 		assert evaluationState != null;
-		final ISequences sequences = OptimiserTestUtil.makeSequences(OptimiserTestUtil.makeResource(), new int[0]);
+		final ISequences sequences = OptimiserTestUtil.makeSequences(OptimiserTestUtil.makeResource("r1"), new int[0]);
 
 		core.evaluate(sequences, evaluationState);
 
@@ -95,8 +95,8 @@ public class SortingFitnessCoreTest {
 		final IEvaluationState evaluationState = Mockito.mock(IEvaluationState.class);
 		assert evaluationState != null;
 
-		final IResource r1 = OptimiserTestUtil.makeResource();
-		final IResource r2 = OptimiserTestUtil.makeResource();
+		final IResource r1 = OptimiserTestUtil.makeResource("r1");
+		final IResource r2 = OptimiserTestUtil.makeResource("r2");
 
 		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(r1, OptimiserTestUtil.makeSequence(1, 3, 2, 4), r2, OptimiserTestUtil.makeSequence(5, 8, 7, 6));
 

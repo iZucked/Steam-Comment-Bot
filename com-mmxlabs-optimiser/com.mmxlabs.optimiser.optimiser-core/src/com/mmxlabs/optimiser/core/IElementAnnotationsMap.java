@@ -52,7 +52,8 @@ public interface IElementAnnotationsMap {
 	 * @return
 	 */
 	@NonNull
-	Iterable<String> getAnnotationNames(ISequenceElement element);
+	Iterable<String> getAnnotationNames(@NonNull ISequenceElement element);
 
+	@NonNull
 	Map<String, IElementAnnotation> getAnnotations(@NonNull ISequenceElement element);
 }

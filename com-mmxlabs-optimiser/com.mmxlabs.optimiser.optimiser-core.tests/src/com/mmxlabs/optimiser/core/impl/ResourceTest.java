@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.optimiser.core.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -11,13 +12,8 @@ import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 
 public class ResourceTest {
+	@NonNull
 	IIndexingContext index = new SimpleIndexingContext();
-
-	@Test
-	public void testResource() {
-		final Resource resource = new Resource(index);
-		Assert.assertNull(resource.getName());
-	}
 
 	@Test
 	public void testResourceString() {
@@ -25,14 +21,4 @@ public class ResourceTest {
 		final Resource resource = new Resource(index, name);
 		Assert.assertSame(name, resource.getName());
 	}
-
-	@Test
-	public void testGetSetName() {
-		final Resource resource = new Resource(index);
-		Assert.assertNull(resource.getName());
-		final String name = "name";
-		resource.setName(name);
-		Assert.assertSame(name, resource.getName());
-	}
-
 }

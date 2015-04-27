@@ -7,7 +7,6 @@ package com.mmxlabs.optimiser.lso.impl.thresholders;
 import java.util.Random;
 
 import org.junit.Assert;
-
 import org.junit.Test;
 
 public class GeometricThreholderTest {
@@ -15,6 +14,7 @@ public class GeometricThreholderTest {
 	public void testAcceptanceCases() {
 		// can't mock classes, sadly. Perhaps we should use a random interface instead.
 		final double p = 0.76;
+		@SuppressWarnings("serial")
 		final Random mockRandom = new Random() {
 			@Override
 			public double nextDouble() {

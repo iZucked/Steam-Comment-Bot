@@ -5,8 +5,10 @@
 package com.mmxlabs.optimiser.common.fitness;
 
 import java.util.Collection;
-import java.util.Collections;
 
+import org.eclipse.jdt.annotation.NonNull;
+
+import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCoreFactory;
 
@@ -17,19 +19,23 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessCoreFactory;
  */
 public class NonOptionalSlotFitnessCoreFactory implements IFitnessCoreFactory {
 
+	@NonNull
 	public static final String NAME = "NonOptionalSlotFitness";
 
 	@Override
+	@NonNull
 	public String getFitnessCoreName() {
 		return NAME;
 	}
 
 	@Override
+	@NonNull
 	public Collection<String> getFitnessComponentNames() {
-		return Collections.singleton(NAME);
+		return CollectionsUtil.makeArrayList(NAME);
 	}
 
 	@Override
+	@NonNull
 	public IFitnessCore instantiate() {
 		return new NonOptionalSlotFitnessCore(NAME);
 	}

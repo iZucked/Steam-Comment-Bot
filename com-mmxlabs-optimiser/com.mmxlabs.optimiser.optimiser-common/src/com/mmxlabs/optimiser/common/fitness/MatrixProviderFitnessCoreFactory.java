@@ -5,8 +5,10 @@
 package com.mmxlabs.optimiser.common.fitness;
 
 import java.util.Collection;
-import java.util.Collections;
 
+import org.eclipse.jdt.annotation.NonNull;
+
+import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCoreFactory;
 import com.mmxlabs.optimiser.core.scenario.common.IMatrixProvider;
@@ -19,26 +21,31 @@ import com.mmxlabs.optimiser.core.scenario.common.IMatrixProvider;
  */
 public final class MatrixProviderFitnessCoreFactory implements IFitnessCoreFactory {
 
+	@NonNull
 	private final String fitnessCoreName;
 
+	@NonNull
 	private final String fitnessComponentName;
 
-	public MatrixProviderFitnessCoreFactory(final String fitnessCoreName, final String fitnessComponentName) {
+	public MatrixProviderFitnessCoreFactory(@NonNull final String fitnessCoreName, @NonNull final String fitnessComponentName) {
 		this.fitnessCoreName = fitnessCoreName;
 		this.fitnessComponentName = fitnessComponentName;
 	}
 
 	@Override
+	@NonNull
 	public Collection<String> getFitnessComponentNames() {
-		return Collections.singleton(fitnessComponentName);
+		return CollectionsUtil.makeArrayList(fitnessComponentName);
 	}
 
 	@Override
+	@NonNull
 	public String getFitnessCoreName() {
 		return fitnessCoreName;
 	}
 
 	@Override
+	@NonNull
 	public IFitnessCore instantiate() {
 		return new MatrixProviderFitnessCore(fitnessComponentName);
 	}

@@ -6,6 +6,8 @@ package com.mmxlabs.optimiser.core.impl;
 
 import java.util.Iterator;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.ISegment;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -54,11 +56,13 @@ public final class UnmodifiableSequenceWrapper implements ISequence {
 	}
 
 	@Override
+	@NonNull
 	public final ISequenceElement get(final int index) {
 		return wrapped.get(index);
 	}
 
 	@Override
+	@NonNull
 	public final ISegment getSegment(final int start, final int end) {
 		return wrapped.getSegment(start, end);
 	}

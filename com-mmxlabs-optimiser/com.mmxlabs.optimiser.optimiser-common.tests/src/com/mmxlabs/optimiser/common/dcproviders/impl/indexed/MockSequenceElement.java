@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.common.dcproviders.impl.indexed;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.ISequenceElement;
 
 /**
@@ -26,6 +28,7 @@ class MockSequenceElement implements ISequenceElement {
 	}
 
 	@Override
+	@NonNull
 	public String getName() {
 		return "" + index;
 	}

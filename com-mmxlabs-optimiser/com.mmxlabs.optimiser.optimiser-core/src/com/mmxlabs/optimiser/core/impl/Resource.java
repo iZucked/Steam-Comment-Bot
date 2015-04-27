@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.core.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.IndexedObject;
 import com.mmxlabs.optimiser.core.IResource;
@@ -16,24 +18,18 @@ import com.mmxlabs.optimiser.core.IResource;
  */
 public final class Resource extends IndexedObject implements IResource {
 
+	@NonNull
 	private String name;
 
-	public Resource(final IIndexingContext context) {
-		super(context);
-	}
-
-	public Resource(final IIndexingContext context, final String name) {
+	public Resource(@NonNull final IIndexingContext context, @NonNull final String name) {
 		super(context);
 		this.name = name;
 	}
 
 	@Override
+	@NonNull
 	public String getName() {
 		return name;
-	}
-
-	public void setName(final String name) {
-		this.name = name;
 	}
 
 	@Override

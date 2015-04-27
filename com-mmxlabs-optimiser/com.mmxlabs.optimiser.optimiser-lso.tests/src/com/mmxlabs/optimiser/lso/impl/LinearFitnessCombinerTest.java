@@ -7,6 +7,7 @@ package com.mmxlabs.optimiser.lso.impl;
 import java.util.Collections;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -48,17 +49,18 @@ public class LinearFitnessCombinerTest {
 	}
 
 	private static class MockFitnessComponent implements IFitnessComponent {
-
+		@NonNull
 		private final String name;
 
 		private final long fitness;
 
-		public MockFitnessComponent(final String name, final long fitness) {
+		public MockFitnessComponent(@NonNull final String name, final long fitness) {
 			this.name = name;
 			this.fitness = fitness;
 		}
 
 		@Override
+		@NonNull
 		public String getName() {
 			return name;
 		}
@@ -69,6 +71,7 @@ public class LinearFitnessCombinerTest {
 		}
 
 		@Override
+		@NonNull
 		public IFitnessCore getFitnessCore() {
 			throw new UnsupportedOperationException("Unexpected invocation");
 		}

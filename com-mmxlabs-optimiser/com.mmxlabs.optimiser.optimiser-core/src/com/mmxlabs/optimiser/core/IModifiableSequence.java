@@ -22,7 +22,7 @@ public interface IModifiableSequence extends ISequence {
 	 * @param index
 	 * @param element
 	 */
-	void set(int index,@NonNull  ISequenceElement element);
+	void set(int index, @NonNull ISequenceElement element);
 
 	/**
 	 * Remove the element at the specified index
@@ -45,7 +45,7 @@ public interface IModifiableSequence extends ISequence {
 	 * @param index
 	 * @param element
 	 */
-	void insert(int index,@NonNull  ISequenceElement element);
+	void insert(int index, @NonNull ISequenceElement element);
 
 	/**
 	 * Add the given element to the end of the sequence.
@@ -78,7 +78,7 @@ public interface IModifiableSequence extends ISequence {
 	 * @param index
 	 * @param segment
 	 */
-	void insert(int index,@NonNull  ISegment segment);
+	void insert(int index, @NonNull ISegment segment);
 
 	/**
 	 * Replaces all entries in the current sequence with those in the specified sequence.

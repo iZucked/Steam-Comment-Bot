@@ -6,6 +6,8 @@ package com.mmxlabs.optimiser.core.fitness.impl;
 
 import java.util.Collection;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCoreFactory;
 
@@ -17,25 +19,32 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessCoreFactory;
  */
 public final class MockFitnessCoreFactory implements IFitnessCoreFactory {
 
+	@NonNull
 	private final String coreName;
+
+	@NonNull
 	private final Collection<String> componentNames;
 
-	public MockFitnessCoreFactory(final String coreName, final Collection<String> componentNames) {
+	public MockFitnessCoreFactory(@NonNull final String coreName, @NonNull final Collection<String> componentNames) {
 		this.coreName = coreName;
 		this.componentNames = componentNames;
 	}
 
 	@Override
+	@NonNull
 	public Collection<String> getFitnessComponentNames() {
 		return componentNames;
 	}
 
 	@Override
+	@NonNull
 	public String getFitnessCoreName() {
 		return coreName;
 	}
 
+	@SuppressWarnings("null")
 	@Override
+	@NonNull
 	public IFitnessCore instantiate() {
 		return new MockFitnessCore(componentNames.iterator().next());
 	}

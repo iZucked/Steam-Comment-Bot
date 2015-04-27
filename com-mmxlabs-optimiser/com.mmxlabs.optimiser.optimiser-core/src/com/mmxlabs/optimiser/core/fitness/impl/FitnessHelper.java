@@ -110,10 +110,7 @@ public final class FitnessHelper implements IFitnessHelper {
 	public IAnnotatedSolution buildAnnotatedSolution(@NonNull final IOptimisationContext context, @NonNull final ISequences state, @NonNull final IEvaluationState evaluationState,
 			@NonNull final Collection<IFitnessComponent> fitnessComponents, @NonNull final Collection<IEvaluationProcess> evaluationProcesses) {
 
-		final AnnotatedSolution result = new AnnotatedSolution();
-		result.setSequences(state);
-		result.setContext(context);
-		result.setEvaluationState(evaluationState);
+		final AnnotatedSolution result = new AnnotatedSolution(state, context, evaluationState);
 
 		for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
 			evaluationProcess.annotate(state, evaluationState, result);

@@ -8,6 +8,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
@@ -45,19 +47,20 @@ public class CompoundMoveGenerator implements IMoveGenerator {
 	}
 
 	@Override
+	@NonNull
 	public ISequences getSequences() {
 		return sequences;
 	}
 
 	@Override
-	public void setSequences(final ISequences sequences) {
+	public void setSequences(@NonNull final ISequences sequences) {
 		for (final IMoveGenerator generator : generators) {
 			generator.setSequences(sequences);
 		}
 		this.sequences = sequences;
 	}
 
-	public void setRandom(final Random random) {
+	public void setRandom(@NonNull final Random random) {
 		this.random = random;
 	}
 }

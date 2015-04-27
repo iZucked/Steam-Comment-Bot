@@ -9,6 +9,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
@@ -18,6 +20,8 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 
 public class OptimiserTestUtil {
+
+	@NonNull
 	public static IIndexingContext index = new SimpleIndexingContext();
 
 	/**
@@ -26,11 +30,13 @@ public class OptimiserTestUtil {
 	 * @param elements
 	 * @return
 	 */
+	@NonNull
 	public static IModifiableSequence makeSequence(final int... integers) {
 		final List<ISequenceElement> elementsList = makeList(integers);
 		return new ListModifiableSequence(elementsList);
 	}
 
+	@NonNull
 	public static List<ISequenceElement> makeList(final int... integers) {
 		final List<ISequenceElement> elementsList = new ArrayList<ISequenceElement>();
 		for (final int i : integers) {
@@ -50,8 +56,9 @@ public class OptimiserTestUtil {
 		return new ListModifiableSequence(elementsList);
 	}
 
-	public static IResource makeResource() {
-		return new Resource(index);
+	@NonNull
+	public static IResource makeResource(@NonNull String name) {
+		return new Resource(index, name);
 	}
 
 	/**
@@ -62,19 +69,23 @@ public class OptimiserTestUtil {
 	 * @param elements
 	 * @return
 	 */
-	public static IModifiableSequences makeSequences(final IResource res, final ISequenceElement... elements) {
+	@NonNull
+	public static IModifiableSequences makeSequences(@NonNull final IResource res, final ISequenceElement... elements) {
 
 		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(res, makeSequence(elements));
 
+		@SuppressWarnings("null")
 		final IModifiableSequences sequences = new ModifiableSequences(Collections.singletonList(res), map);
 
 		return sequences;
 	}
 
-	public static IModifiableSequences makeSequences(final IResource res, final int... elements) {
+	@NonNull
+	public static IModifiableSequences makeSequences(@NonNull final IResource res, final int... elements) {
 
 		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(res, makeSequence(elements));
 
+		@SuppressWarnings("null")
 		final IModifiableSequences sequences = new ModifiableSequences(Collections.singletonList(res), map);
 
 		return sequences;

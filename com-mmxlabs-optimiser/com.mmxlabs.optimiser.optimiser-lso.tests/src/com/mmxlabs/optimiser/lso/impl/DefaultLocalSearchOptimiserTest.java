@@ -74,8 +74,8 @@ public class DefaultLocalSearchOptimiserTest {
 
 		// Create an initial set of sequences.
 
-		final IResource r1 = OptimiserTestUtil.makeResource();
-		final IResource r2 = OptimiserTestUtil.makeResource();
+		final IResource r1 = OptimiserTestUtil.makeResource("r1");
+		final IResource r2 = OptimiserTestUtil.makeResource("r2");
 
 		final Map<IResource, IModifiableSequence> map = CollectionsUtil.makeHashMap(r1, OptimiserTestUtil.makeSequence(1, 3, 2, 4), r2, OptimiserTestUtil.makeSequence(5, 8, 7, 6));
 

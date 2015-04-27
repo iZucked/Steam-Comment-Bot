@@ -15,6 +15,7 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
+@SuppressWarnings("null")
 public class ConstraintCheckerInstantiatorTest {
 
 	@Test

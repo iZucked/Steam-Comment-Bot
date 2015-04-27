@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -30,6 +31,7 @@ import com.mmxlabs.optimiser.core.impl.Sequences;
 
 public class OrderedSequenceElementsConstraintCheckerTest {
 
+	@NonNull
 	private IIndexingContext index = new SimpleIndexingContext();
 
 	@Test
@@ -59,7 +61,7 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 		final OrderedSequenceElementsConstraintChecker checker = createChecker(provider);
 
 		final ListSequence seq1 = new ListSequence(CollectionsUtil.makeArrayList(obj1, obj2, obj3, obj4, obj5, obj6));
-		final IResource r = new Resource(index);
+		final IResource r = new Resource(index, "r");
 
 		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r, seq1);
 		final Sequences sequences = new Sequences(Collections.singletonList(r), map);
@@ -85,7 +87,7 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 
 		final OrderedSequenceElementsConstraintChecker checker = createChecker(provider);
 		final ListSequence seq1 = new ListSequence(CollectionsUtil.makeArrayList(obj1, obj6, obj2, obj3, obj4, obj5));
-		final IResource r = new Resource(index);
+		final IResource r = new Resource(index, "r");
 
 		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r, seq1);
 		final Sequences sequences = new Sequences(Collections.singletonList(r), map);
@@ -111,7 +113,7 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 
 		final OrderedSequenceElementsConstraintChecker checker = createChecker(provider);
 		final ListSequence seq1 = new ListSequence(CollectionsUtil.makeArrayList(obj1, obj2, obj3, obj4, obj6, obj5));
-		final IResource r = new Resource(index);
+		final IResource r = new Resource(index, "r");
 
 		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r, seq1);
 		final Sequences sequences = new Sequences(Collections.singletonList(r), map);
@@ -137,7 +139,7 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 
 		final OrderedSequenceElementsConstraintChecker checker = createChecker(provider);
 		final ListSequence seq1 = new ListSequence(CollectionsUtil.makeArrayList(obj1, obj2, obj3, obj4, obj5, obj6));
-		final IResource r = new Resource(index);
+		final IResource r = new Resource(index, "r");
 
 		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r, seq1);
 		final Sequences sequences = new Sequences(Collections.singletonList(r), map);
@@ -167,7 +169,7 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 
 		final OrderedSequenceElementsConstraintChecker checker = createChecker(provider);
 		final ListSequence seq1 = new ListSequence(CollectionsUtil.makeArrayList(obj1, obj2, obj3, obj4, obj6, obj5));
-		final IResource r = new Resource(index);
+		final IResource r = new Resource(index, "r");
 
 		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r, seq1);
 		final Sequences sequences = new Sequences(Collections.singletonList(r), map);
@@ -195,7 +197,7 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 
 		final OrderedSequenceElementsConstraintChecker checker = createChecker(provider);
 		final ListSequence seq1 = new ListSequence(CollectionsUtil.makeArrayList(obj1));
-		final IResource r = new Resource(index);
+		final IResource r = new Resource(index, "r");
 
 		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r, seq1);
 		final Sequences sequences = new Sequences(Collections.singletonList(r), map);
@@ -223,7 +225,7 @@ public class OrderedSequenceElementsConstraintCheckerTest {
 
 		final OrderedSequenceElementsConstraintChecker checker = createChecker(provider);
 		final ListSequence seq1 = new ListSequence(CollectionsUtil.makeArrayList(obj2));
-		final IResource r = new Resource(index);
+		final IResource r = new Resource(index, "r");
 
 		final Map<IResource, ISequence> map = CollectionsUtil.makeHashMap(r, seq1);
 		final Sequences sequences = new Sequences(Collections.singletonList(r), map);
