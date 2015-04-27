@@ -11,6 +11,7 @@ import java.util.List;
 import org.joda.time.LocalDateTime;
 import org.junit.Assert;
 
+import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -22,9 +23,12 @@ import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
+import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
+import com.mmxlabs.optimiser.core.impl.Resource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.AbstractPairwiseConstraintChecker;
 
@@ -210,7 +214,8 @@ public class SuboptimalScenarioTester {
 
 		final List<String> errors = new ArrayList<String>();
 
-		final boolean result = checker.checkSequence(sequence, null, errors);
+		final Resource fakeResource = new Resource(new SimpleIndexingContext(), "SG Testing Resource for null analysis - find a better way to obatin this.");
+		final boolean result = checker.checkSequence(sequence, fakeResource, errors);
 
 		final String format = "Constraint checker %s should %s on this scenario.";
 		String failureMessage = String.format(format, checker.getName(), (expectedResult ? "pass" : "fail"));

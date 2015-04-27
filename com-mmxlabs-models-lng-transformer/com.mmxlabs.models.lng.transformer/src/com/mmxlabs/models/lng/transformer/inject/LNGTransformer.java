@@ -35,6 +35,7 @@ import com.mmxlabs.models.lng.transformer.inject.modules.OptimiserSettingsModule
 import com.mmxlabs.models.lng.transformer.internal.Activator;
 import com.mmxlabs.models.lng.transformer.util.OptimisationTransformer;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.optimiser.core.IEvaluationContext;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
@@ -243,12 +244,18 @@ public class LNGTransformer {
 		return injector.getInstance(LNGScenarioTransformer.class);
 	}
 
+	@NonNull
 	public IOptimisationData getOptimisationData() {
 		return injector.getInstance(IOptimisationData.class);
 	}
 
 	/**
 	 */
+	@NonNull
+	public IEvaluationContext getEvaluationContext() {
+		return injector.getInstance(IEvaluationContext.class);
+	}
+	@NonNull
 	public IOptimisationContext getOptimisationContext() {
 		return injector.getInstance(IOptimisationContext.class);
 	}

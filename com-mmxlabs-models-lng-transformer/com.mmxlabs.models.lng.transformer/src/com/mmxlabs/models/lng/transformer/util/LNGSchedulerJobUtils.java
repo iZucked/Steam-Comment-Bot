@@ -5,15 +5,13 @@
 package com.mmxlabs.models.lng.transformer.util;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TimeZone;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
@@ -40,7 +38,6 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
-import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
@@ -61,13 +58,15 @@ import com.mmxlabs.models.lng.transformer.inject.modules.ExporterExtensionsModul
 import com.mmxlabs.models.lng.transformer.inject.modules.PostExportProcessorModule;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
+import com.mmxlabs.optimiser.core.IEvaluationContext;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
+import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
+import com.mmxlabs.optimiser.core.impl.EvaluationContext;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
-import com.mmxlabs.optimiser.core.impl.OptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scenario.service.util.MMXAdaptersAwareCommandStack;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
@@ -478,12 +477,14 @@ public class LNGSchedulerJobUtils {
 
 		final EvaluationState state = new EvaluationState();
 		// The output data structured, a solution with all the output data as annotations
-		final AnnotatedSolution solution = new AnnotatedSolution();
 		// Create a fake context
-		solution.setContext(new OptimisationContext(data, null, null, null, null, null, null, null));
-		solution.setSequences(sequences);
-		solution.setEvaluationState(state);
+		EvaluationProcessRegistry evaluationProcessRegistry = new EvaluationProcessRegistry();
+		final IEvaluationContext context = new EvaluationContext(data, sequences, Collections.<String> emptyList(), evaluationProcessRegistry);
+
+		final AnnotatedSolution solution = new AnnotatedSolution(sequences, context, state);
+
 		final IEvaluationProcess process = injector.getInstance(SchedulerEvaluationProcess.class);
+
 		process.annotate(sequences, state, solution);
 
 		return solution;

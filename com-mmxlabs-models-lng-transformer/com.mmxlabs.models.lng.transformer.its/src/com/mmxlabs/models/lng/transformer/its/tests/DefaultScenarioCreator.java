@@ -691,7 +691,7 @@ public class DefaultScenarioCreator {
 			return index;
 		}
 
-		private <T> DataIndex<T> createIndex(final T value) {
+		private <T extends Number> DataIndex<T> createIndex(final T value) {
 			final IndexPoint<T> startPoint = PricingFactory.eINSTANCE.createIndexPoint();
 			final IndexPoint<T> endPoint = PricingFactory.eINSTANCE.createIndexPoint();
 
