@@ -71,7 +71,7 @@ public abstract class AbstractVerticalReportVisualiser {
 	}
 
 	public DateTimeFormatter createDateFormat() {
-		return DateTimeFormat.shortDate();
+		return DateTimeFormat.forPattern("dd/MMM/yy");
 	}
 
 	public Color getColorFor(final LocalDate date, final SlotVisit visit) {
@@ -150,7 +150,7 @@ public abstract class AbstractVerticalReportVisualiser {
 		else if (event instanceof SlotVisit) {
 			final SlotVisit visit = (SlotVisit) event;
 			// True or false or both?
-			if (date != null && isDayOutsideActualVisit(date, visit)) {
+			if (isDayOutsideActualVisit(date, visit)) {
 				return "";
 			}
 			String result = getShortPortName(visit.getPort());
