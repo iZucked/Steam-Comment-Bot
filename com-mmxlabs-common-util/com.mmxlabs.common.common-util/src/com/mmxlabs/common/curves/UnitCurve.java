@@ -4,11 +4,14 @@
  */
 package com.mmxlabs.common.curves;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 public final class UnitCurve implements ICurve {
 	protected UnitCurve() {
 
 	}
 
+	@NonNull
 	private static final UnitCurve INSTANCE = new UnitCurve();
 
 	@Override
@@ -16,6 +19,7 @@ public final class UnitCurve implements ICurve {
 		return 1;
 	}
 
+	@NonNull
 	public static UnitCurve getInstance() {
 		return INSTANCE;
 	}

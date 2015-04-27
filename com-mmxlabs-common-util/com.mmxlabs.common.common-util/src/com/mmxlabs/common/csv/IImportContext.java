@@ -48,6 +48,7 @@ public interface IImportContext {
 	 * @param trackField
 	 *            if true record the last field read when this happened
 	 */
+	@NonNull
 	public IImportProblem createProblem(final String string, final boolean trackFile, final boolean trackLine, final boolean trackField);
 
 	public void addProblem(@NonNull IImportProblem problem);
