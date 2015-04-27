@@ -10,6 +10,9 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IResource;
@@ -45,45 +48,64 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 	/**
 	 * The maximum amount of lateness which will even be considered (20 days)
 	 */
-	private int maxLateness = 1000 * 24; //note, this particular value is never used, as calls to setMaxLateness() are made
+	private int maxLateness = 1000 * 24; // note, this particular value is never used, as calls to setMaxLateness() are made
+
+	@NonNull
 	private final String name;
 
 	@Inject
+	@NonNull
 	private IPortSlotProvider portSlotProvider;
+
 	@Inject
+	@NonNull
 	private IPortTypeProvider portTypeProvider;
+
 	@Inject
+	@NonNull
 	private IVesselProvider vesselProvider;
+
 	@Inject
+	@NonNull
 	private IElementDurationProvider elementDurationProvider;
+
 	@Inject
+	@NonNull
 	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
+
 	@Inject
+	@NonNull
 	private IShippingHoursRestrictionProvider shippingHoursRestrictionProvider;
 
 	@Inject
+	@NonNull
 	private IActualsDataProvider actualsDataProvider;
 
-	public TravelTimeConstraintChecker(final String name) {
+	public TravelTimeConstraintChecker(@NonNull final String name) {
 		this.name = name;
 	}
 
 	@Override
+	@NonNull
 	public String getName() {
 		return name;
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences sequences) {
+	public boolean checkConstraints(@NonNull final ISequences sequences) {
 		for (final Map.Entry<IResource, ISequence> entry : sequences.getSequences().entrySet()) {
-			if (!checkSequence(entry.getValue(), entry.getKey())) {
+			final IResource resource = entry.getKey();
+			assert resource != null;
+			final ISequence sequence = entry.getValue();
+			assert sequence != null;
+			if (!checkSequence(sequence, resource)) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	private boolean checkSequence(final ISequence sequence, final IResource resource) {
+	private boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource) {
 		final Iterator<ISequenceElement> iter = sequence.iterator();
 		ISequenceElement prev, cur;
 		prev = cur = null;
@@ -94,7 +116,7 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 		while (iter.hasNext()) {
 			prev = cur;
 			cur = iter.next();
-			if (prev != null) {
+			if (prev != null && cur != null) {
 				if (!checkPairwiseConstraint(prev, cur, resource, maxSpeed)) {
 					return false;
 				}
@@ -104,12 +126,12 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences sequences, final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final List<String> messages) {
 		return checkConstraints(sequences);
 	}
 
 	@Override
-	public void setOptimisationData(final IOptimisationData optimisationData) {
+	public void setOptimisationData(@NonNull final IOptimisationData optimisationData) {
 
 	}
 
@@ -123,13 +145,13 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 	 * @param resource the vessel in question
 	 * @return
 	 */
-	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
+	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
 		return checkPairwiseConstraint(first, second, resource, vesselAvailability.getVessel().getVesselClass().getMaxSpeed());
 	}
 
-	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource, final int resourceMaxSpeed) {
+	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource, final int resourceMaxSpeed) {
 
 		final IPortSlot slot1 = portSlotProvider.getPortSlot(first);
 		final IPortSlot slot2 = portSlotProvider.getPortSlot(second);
@@ -212,7 +234,7 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 	}
 
 	@Override
-	public String explain(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
+	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 		final IPortSlot slot1 = portSlotProvider.getPortSlot(first);
 		final IPortSlot slot2 = portSlotProvider.getPortSlot(second);
 		final int distance = distanceProvider.get(IMultiMatrixProvider.Default_Key).get(slot1.getPort(), slot2.getPort());

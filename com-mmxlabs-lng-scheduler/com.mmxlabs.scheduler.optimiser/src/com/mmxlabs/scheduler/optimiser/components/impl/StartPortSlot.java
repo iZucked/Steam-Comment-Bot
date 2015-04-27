@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptions;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionsPortSlot;
@@ -11,17 +14,19 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public final class StartPortSlot extends PortSlot implements IHeelOptionsPortSlot {
+
+	@NonNull
 	private final IHeelOptions heelOptions;
 
-	public StartPortSlot(final String id, final IPort port, final ITimeWindow timeWindow, final IHeelOptions heelOptions) {
+	public StartPortSlot(@NonNull final String id, @NonNull final IPort port, @NonNull final ITimeWindow timeWindow, @Nullable final IHeelOptions heelOptions) {
 		super(id, port, timeWindow);
 		setPortType(PortType.Start);
-		this.heelOptions = heelOptions == null? new HeelOptions() : heelOptions;
+		this.heelOptions = heelOptions == null ? new HeelOptions() : heelOptions;
 	}
 
 	public StartPortSlot(final IHeelOptions heelOptions) {
 		setPortType(PortType.Start);
-		this.heelOptions = heelOptions == null? new HeelOptions() : heelOptions;
+		this.heelOptions = heelOptions == null ? new HeelOptions() : heelOptions;
 	}
 
 	/*
@@ -30,6 +35,7 @@ public final class StartPortSlot extends PortSlot implements IHeelOptionsPortSlo
 	 * @see com.mmxlabs.scheduler.optimiser.components.IHeelOptionsPortSlot#getHeelOptions()
 	 */
 	@Override
+	@NonNull
 	public IHeelOptions getHeelOptions() {
 		return heelOptions;
 	}

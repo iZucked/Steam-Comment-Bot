@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.components;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
@@ -18,6 +20,7 @@ public interface IPortSlot {
 	 */
 	public static final int NO_PRICING_DATE = -1000;
 
+	@NonNull
 	String getId();
 
 	IPort getPort();

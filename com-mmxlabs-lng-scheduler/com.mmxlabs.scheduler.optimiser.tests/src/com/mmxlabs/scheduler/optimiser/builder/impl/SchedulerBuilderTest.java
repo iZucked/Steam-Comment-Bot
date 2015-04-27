@@ -5,8 +5,8 @@
 package com.mmxlabs.scheduler.optimiser.builder.impl;
 
 import static org.junit.Assert.fail;
-import org.junit.Assert;
 
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -24,6 +24,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 
+@SuppressWarnings("null")
 public class SchedulerBuilderTest {
 
 	public static final boolean DEFAULT_VOLUME_LIMIT_IS_M3 = true;
@@ -192,15 +193,6 @@ public class SchedulerBuilderTest {
 	@Test
 	public void testSetVesselClassStateParamaters() {
 		fail("Not yet implemented");
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testSetVesselClassStateParamaters2() {
-		final IVesselClass vc = Mockito.mock(IVesselClass.class);
-
-		final SchedulerBuilder builder = createScheduleBuilder();
-
-		builder.setVesselClassStateParameters(vc, null, 0, 0, 0, null, 0);
 	}
 
 	private SchedulerBuilder createScheduleBuilder() {

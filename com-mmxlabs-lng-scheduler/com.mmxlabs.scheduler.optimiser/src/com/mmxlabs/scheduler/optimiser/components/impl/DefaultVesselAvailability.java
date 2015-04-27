@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.curves.ICurve;
@@ -23,6 +24,7 @@ public final class DefaultVesselAvailability implements IVesselAvailability {
 
 	private IVessel vessel;
 
+	@NonNull
 	private VesselInstanceType vesselInstanceType = VesselInstanceType.UNKNOWN;
 
 	private ICurve dailyCharterInRate;
@@ -44,11 +46,12 @@ public final class DefaultVesselAvailability implements IVesselAvailability {
 	}
 
 	@Override
+	@NonNull
 	public VesselInstanceType getVesselInstanceType() {
 		return vesselInstanceType;
 	}
 
-	public void setVesselInstanceType(final VesselInstanceType vesselInstanceType) {
+	public void setVesselInstanceType(@NonNull final VesselInstanceType vesselInstanceType) {
 		this.vesselInstanceType = vesselInstanceType;
 	}
 

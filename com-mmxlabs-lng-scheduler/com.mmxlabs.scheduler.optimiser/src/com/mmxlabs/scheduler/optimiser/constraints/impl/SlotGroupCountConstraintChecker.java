@@ -11,6 +11,9 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -35,33 +38,38 @@ import com.mmxlabs.scheduler.optimiser.providers.SlotGroup;
  * 
  */
 public class SlotGroupCountConstraintChecker implements IReducingContraintChecker {
+	@NonNull
 	private final String name;
 
 	@Inject
+	@NonNull
 	private IVesselProvider vesselProvider;
 
 	@Inject
+	@NonNull
 	private ISlotGroupCountProvider slotGroupProvider;
 
 	/**
 	 * Small class to track slot group element count.
 	 * 
 	 */
-	private class SlotGroupTracker {
+	private static class SlotGroupTracker {
 
 		int currentCount;
 		int constraintedCount;
 		int permittedCount;
 	}
 
+	@NonNull
 	private final Map<SlotGroup, SlotGroupTracker> trackers = new HashMap<SlotGroup, SlotGroupTracker>();
 
-	public SlotGroupCountConstraintChecker(final String name) {
+	public SlotGroupCountConstraintChecker(@NonNull final String name) {
 		super();
 		this.name = name;
 	}
 
 	@Override
+	@NonNull
 	public String getName() {
 		return name;
 	}
@@ -80,7 +88,7 @@ public class SlotGroupCountConstraintChecker implements IReducingContraintChecke
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences sequences, final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final List<String> messages) {
 
 		// Reset counters;
 		for (final SlotGroupTracker tracker : trackers.values()) {
@@ -88,7 +96,7 @@ public class SlotGroupCountConstraintChecker implements IReducingContraintChecke
 		}
 
 		for (final IResource resource : sequences.getResources()) {
-
+			assert resource != null;
 			final ISequence sequence = sequences.getSequence(resource);
 			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
@@ -114,7 +122,7 @@ public class SlotGroupCountConstraintChecker implements IReducingContraintChecke
 	}
 
 	@Override
-	public void sequencesAccepted(final ISequences sequences) {
+	public void sequencesAccepted(@NonNull final ISequences sequences) {
 
 		// Reset current counts to zero;
 		for (final SlotGroupTracker tracker : trackers.values()) {
@@ -123,13 +131,12 @@ public class SlotGroupCountConstraintChecker implements IReducingContraintChecke
 
 		// Loop through and update the current count;
 		for (final IResource resource : sequences.getResources()) {
-
+			assert resource != null;
 			final ISequence sequence = sequences.getSequence(resource);
 			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
 			// Virtual vessels need special treatment. If there is only one element on the route, then it is considered not to be used.
-			final boolean isVirtualVessel = vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE
-					|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE;
+			final boolean isVirtualVessel = vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE;
 			final boolean checkSequence = (!isVirtualVessel) || (isVirtualVessel && sequence.size() > 1);
 			if (checkSequence) {
 				for (final ISequenceElement element : sequence) {
@@ -149,12 +156,12 @@ public class SlotGroupCountConstraintChecker implements IReducingContraintChecke
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences sequences) {
+	public boolean checkConstraints(@NonNull final ISequences sequences) {
 		return checkConstraints(sequences, null);
 	}
 
 	@Override
-	public void setOptimisationData(IOptimisationData optimisationData) {
+	public void setOptimisationData(@NonNull IOptimisationData optimisationData) {
 
 	}
 }

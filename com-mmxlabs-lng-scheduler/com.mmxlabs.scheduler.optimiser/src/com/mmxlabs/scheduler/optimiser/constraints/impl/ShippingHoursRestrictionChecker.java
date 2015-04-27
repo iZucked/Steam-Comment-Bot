@@ -6,6 +6,9 @@ package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -15,71 +18,69 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
-import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.calculators.IDivertableDESShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
-import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
  */
 public class ShippingHoursRestrictionChecker implements IPairwiseConstraintChecker {
 
 	@Inject
+	@NonNull
 	private IPortSlotProvider portSlotProvider;
 
 	@Inject
-	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
-
-	@Inject
+	@NonNull
 	private INominatedVesselProvider nominatedVesselProvider;
 
 	@Inject
+	@NonNull
 	private IShippingHoursRestrictionProvider shippingHoursRestrictionProvider;
 
 	@Inject
-	private IPortVisitDurationProvider portVisitDurationProvider;
-
-	@Inject
+	@NonNull
 	private IVesselProvider vesselProvider;
 
 	@Inject
+	@NonNull
 	private IActualsDataProvider actualsDataProvider;
 
-	@Inject IDivertableDESShippingTimesCalculator dischargeTimeCalculator;
-	
+	@Inject
+	@NonNull
+	private IDivertableDESShippingTimesCalculator dischargeTimeCalculator;
+
 	@Override
+	@NonNull
 	public String getName() {
 		return "ShippingHoursRestrictionChecker";
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences sequences) {
+	public boolean checkConstraints(@NonNull final ISequences sequences) {
 		return checkConstraints(sequences, null);
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences sequences, final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final List<String> messages) {
 
 		for (final IResource resource : sequences.getResources()) {
+			assert resource != null;
 			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 
 				final ISequence sequence = sequences.getSequence(resource);
 				ISequenceElement prevElement = null;
 				for (final ISequenceElement element : sequence) {
+					assert element != null;
 					if (prevElement != null) {
 						if (!checkPairwiseConstraint(prevElement, element, resource)) {
 							return false;
@@ -94,12 +95,12 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 	}
 
 	@Override
-	public void setOptimisationData(final IOptimisationData optimisationData) {
+	public void setOptimisationData(@NonNull final IOptimisationData optimisationData) {
 
 	}
 
 	@Override
-	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
+	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
@@ -117,9 +118,6 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 			// Check distances using injected provider, or actual/max speed.
 
 			if (firstSlot instanceof ILoadOption && secondSlot instanceof IDischargeSlot) {
-				if (firstSlot.getId().equals("S2")) {
-					int i = 0;
-				}
 				// DES Purchase
 				final ILoadOption desPurchase = (ILoadOption) firstSlot;
 				final IDischargeSlot desSale = (IDischargeSlot) secondSlot;
@@ -137,8 +135,8 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 					}
 
 					final Pair<Integer, Integer> desTimes = dischargeTimeCalculator.getDivertableDESTimes(desPurchase, desSale, nominatedVesselProvider.getNominatedVessel(first), resource);
-					int dischargeTime = desTimes.getFirst();
-					int returnTime = desTimes.getSecond();
+					final int dischargeTime = desTimes.getFirst();
+					final int returnTime = desTimes.getSecond();
 					if (returnTime - dischargeTime > shippingHours) {
 						return false;
 					}
@@ -151,7 +149,7 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 	}
 
 	@Override
-	public String explain(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
+	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 		return null;
 	}
 

@@ -4,12 +4,15 @@
  */
 package com.mmxlabs.scheduler.optimiser;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 /**
  * Various constants, such as keys, used within the scheduler.
  * 
  * @author Simon Goodall
  * 
  */
+@NonNullByDefault
 public final class SchedulerConstants {
 
 	// Additional Info keys
@@ -32,7 +35,7 @@ public final class SchedulerConstants {
 	 * A key for a per-route fitness map, which should be of type {@code Map<IResource, Map<String, Long>}. Each element in the map should map fitness function names to fitness values.
 	 */
 	public static final String G_AI_fitnessPerRoute = "general-info-fitness-per-route";
-	
+
 	/**
 	 * A key for a per-route fitness map, which should be of type {@code Map<IResource, Map<String, Long>}. Each element in the map should map fitness function names to fitness values.
 	 */

@@ -16,9 +16,12 @@ import org.mockito.Mockito;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.mmxlabs.common.Triple;
+import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
@@ -43,6 +46,7 @@ import com.mmxlabs.scheduler.optimiser.schedule.VoyagePlanAnnotator;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
+@SuppressWarnings("null")
 public class VoyagePlanAnnotatorTest {
 
 	@Test
@@ -191,7 +195,11 @@ public class VoyagePlanAnnotatorTest {
 		final IResource resource = Mockito.mock(IResource.class);
 		Mockito.when(vesselProvider.getVesselAvailability(resource)).thenReturn(vesselAvailability);
 
-		final AnnotatedSolution annotatedSolution = new AnnotatedSolution();
+		ISequences sequences = Mockito.mock(ISequences.class);
+		IEvaluationState evaluationState = Mockito.mock(IEvaluationState.class);
+		IOptimisationContext context = Mockito.mock(IOptimisationContext.class);
+
+		final AnnotatedSolution annotatedSolution = new AnnotatedSolution(sequences, context, evaluationState);
 		ISequence sequence = Mockito.mock(ISequence.class);
 		ScheduledSequence scheduledSequence = new ScheduledSequence(resource, sequence, 0, plans);
 		annotator.annotateFromVoyagePlan(scheduledSequence, annotatedSolution);

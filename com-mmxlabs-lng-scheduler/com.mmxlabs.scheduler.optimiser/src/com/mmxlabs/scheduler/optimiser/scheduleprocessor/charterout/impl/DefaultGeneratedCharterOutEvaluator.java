@@ -12,6 +12,8 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
@@ -224,6 +226,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	 * @param vesselAvailability
 	 * @return
 	 */
+	@NonNull
 	private GeneratedCharterOutOption getCharterOutOption(final int ballastStartTime, final int availableTime, final IPortSlot dischargeSlot, final IPortSlot nextLoadSlot,
 			final IVesselAvailability vesselAvailability) {
 		final GeneratedCharterOutOption gcoo = new GeneratedCharterOutOption();
@@ -234,8 +237,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		// set end ports
 		boolean goingToEnd = false;
 		final Set<IPort> endPorts = new HashSet<IPort>();
-		if (nextLoadSlot instanceof EndPortSlot &&
-				charterMarketProvider.getCharteringPortsForVesselClass(vesselAvailability.getVessel().getVesselClass()).contains(nextLoad)) {
+		if (nextLoadSlot instanceof EndPortSlot && charterMarketProvider.getCharteringPortsForVesselClass(vesselAvailability.getVessel().getVesselClass()).contains(nextLoad)) {
 			goingToEnd = true;
 			endPorts.add(nextLoad);
 		}
@@ -311,7 +313,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 				shortestTime = directTime;
 			}
 		}
-		return new Triple(distance, route, shortestTime);
+		return new Triple<>(distance, route, shortestTime);
 	}
 
 	/**
@@ -430,7 +432,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	 * @param slotsToAdd
 	 * @return
 	 */
-	private IPortTimesRecord createPortTimesRecordForExtendedPlan(final IPortTimesRecord existing, final Triple<IPortSlot, Integer, Integer>... slotsToAdd) {
+	@NonNull
+	private IPortTimesRecord createPortTimesRecordForExtendedPlan(@NonNull final IPortTimesRecord existing, final Triple<IPortSlot, Integer, Integer>... slotsToAdd) {
 		final PortTimesRecord newPortsTimeRecord = new PortTimesRecord();
 		// existing
 		for (int i = 0; i < existing.getSlots().size(); i++) {
@@ -479,7 +482,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	 * @param bigSequence
 	 * @return
 	 */
-	private VoyagePlan runVPOOnBigSequence(final IVessel vessel, final VoyagePlan originalVoyagePlan, final long startHeelInM3, final ExtendedCharterOutSequence bigSequence) {
+	private VoyagePlan runVPOOnBigSequence(@NonNull final IVessel vessel, final VoyagePlan originalVoyagePlan, final long startHeelInM3, final ExtendedCharterOutSequence bigSequence) {
 		// We will use the VPO to optimise fuel and route choices
 		vpo.reset();
 

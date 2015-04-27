@@ -25,15 +25,24 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 
 public class SchedulerEvaluationProcess implements IEvaluationProcess {
 
+	@NonNull
 	public static final String SCHEDULED_SEQUENCES = "com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess-scheduled-sequences";
+
+	@NonNull
 	public static final String ALL_ELEMENTS = "com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess-all-elements";
+
+	@NonNull
 	public static final String OPTIMISATION_ELEMENTS = "com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess-optimisation-elements";
+
+	@NonNull
 	public static final String ADDITIONAL_ELEMENTS = "com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess-additional-elements";
 
 	@Inject
+	@NonNull
 	private ISequenceScheduler scheduler;
 
 	@Inject
+	@NonNull
 	private IPortSlotProvider portSlotProvider;
 
 	@Override
@@ -54,7 +63,6 @@ public class SchedulerEvaluationProcess implements IEvaluationProcess {
 		}
 
 		// Store evaluated state
-		assert SCHEDULED_SEQUENCES != null;
 		evaluationState.setData(SCHEDULED_SEQUENCES, scheduledSequences);
 		if (solution != null) {
 			setEvaluationElements(evaluationState, solution);
@@ -71,6 +79,7 @@ public class SchedulerEvaluationProcess implements IEvaluationProcess {
 		evaluationState.setData(ADDITIONAL_ELEMENTS, additionalElements);
 	}
 
+	@NonNull
 	private Set<ISequenceElement> getAllScheduledSequenceElements(@NonNull final IEvaluationState evaluationState, @NonNull final IAnnotatedSolution annotatedSolution) {
 		final Set<ISequenceElement> allElements = new HashSet<ISequenceElement>();
 		final ScheduledSequences scheduledSequences = evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class);
@@ -84,11 +93,13 @@ public class SchedulerEvaluationProcess implements IEvaluationProcess {
 		return allElements;
 	}
 
+	@NonNull
 	private Set<ISequenceElement> getOptimisationSequenceElements(final IAnnotatedSolution solution) {
 		final Set<ISequenceElement> optimisationElements = new HashSet<ISequenceElement>(solution.getContext().getOptimisationData().getSequenceElements());
 		return optimisationElements;
 	}
 
+	@NonNull
 	private Set<ISequenceElement> getAdditionalSequenceElements(final Set<ISequenceElement> allElements, final Set<ISequenceElement> optimisationElements) {
 		final Set<ISequenceElement> additionalElements = new HashSet<ISequenceElement>(allElements);
 		additionalElements.removeAll(optimisationElements);

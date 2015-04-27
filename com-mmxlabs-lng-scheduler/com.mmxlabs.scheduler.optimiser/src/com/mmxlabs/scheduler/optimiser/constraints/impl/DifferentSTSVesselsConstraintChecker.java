@@ -10,6 +10,9 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -26,37 +29,40 @@ import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProvider;
  * @author Simon Goodall
  */
 public class DifferentSTSVesselsConstraintChecker implements IConstraintChecker {
-
+	@NonNull
 	private final String name;
 
 	@Inject
+	@NonNull
 	private IPortSlotProvider portSlotProvider;
 
 	@Inject
+	@NonNull
 	private IShipToShipBindingProvider shipBindingProvider;
 
-	public DifferentSTSVesselsConstraintChecker(String name) {
+	public DifferentSTSVesselsConstraintChecker(@NonNull final String name) {
 		this.name = name;
 	}
 
 	@Override
+	@NonNull
 	public String getName() {
 		return name;
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences sequences) {
+	public boolean checkConstraints(@NonNull final ISequences sequences) {
 		return checkConstraints(sequences, null);
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences sequences, final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final List<String> messages) {
 
 		for (final IResource resource : sequences.getResources()) {
 			final ISequence sequence = sequences.getSequence(resource);
 
 			// TODO: Skip special routes
-			
+
 			final Set<IPortSlot> sequenceElements = new HashSet<IPortSlot>();
 
 			// Loop over all sequence elements
@@ -84,7 +90,7 @@ public class DifferentSTSVesselsConstraintChecker implements IConstraintChecker 
 	}
 
 	@Override
-	public void setOptimisationData(final IOptimisationData optimisationData) {
+	public void setOptimisationData(@NonNull final IOptimisationData optimisationData) {
 
 	}
 

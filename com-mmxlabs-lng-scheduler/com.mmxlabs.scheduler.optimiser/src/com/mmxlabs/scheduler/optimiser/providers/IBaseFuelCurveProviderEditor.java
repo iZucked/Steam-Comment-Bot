@@ -13,6 +13,4 @@ public interface IBaseFuelCurveProviderEditor extends IBaseFuelCurveProvider {
 
 	void setBaseFuelCurve(@NonNull IBaseFuel baseFuel, @NonNull ICurve curve);
 
-	void setBaseFuelCurveFirstValueDate(@NonNull ICurve curve, int firstValueDate);
-
 }

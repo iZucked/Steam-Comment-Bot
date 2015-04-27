@@ -19,6 +19,4 @@ public interface IBaseFuelCurveProvider extends IDataComponentProvider {
 	@NonNull
 	ICurve getVesselBaseFuelCurve(@NonNull IVessel vessel);
 
-	int getBaseFuelCurveFirstValueDate(@NonNull ICurve curve);
-
 }

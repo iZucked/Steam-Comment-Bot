@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -24,18 +26,19 @@ public abstract class PortSlot implements IPortSlot {
 
 	}
 
-	public PortSlot(final String id, final IPort port, final ITimeWindow timeWindow) {
+	public PortSlot(@NonNull final String id, @NonNull final IPort port, @NonNull final ITimeWindow timeWindow) {
 		this.id = id;
 		this.port = port;
 		this.timeWindow = timeWindow;
 	}
 
 	@Override
+	@NonNull
 	public String getId() {
 		return id;
 	}
 
-	public void setId(final String id) {
+	public void setId(@NonNull final String id) {
 		this.id = id;
 	}
 
@@ -44,7 +47,7 @@ public abstract class PortSlot implements IPortSlot {
 		return port;
 	}
 
-	public void setPort(final IPort port) {
+	public void setPort(@NonNull final IPort port) {
 		this.port = port;
 	}
 
@@ -53,7 +56,7 @@ public abstract class PortSlot implements IPortSlot {
 		return timeWindow;
 	}
 
-	public void setTimeWindow(final ITimeWindow timeWindow) {
+	public void setTimeWindow(@NonNull final ITimeWindow timeWindow) {
 		this.timeWindow = timeWindow;
 	}
 
@@ -87,7 +90,7 @@ public abstract class PortSlot implements IPortSlot {
 		return portType;
 	}
 
-	public void setPortType(final PortType portType) {
+	public void setPortType(@NonNull final PortType portType) {
 		this.portType = portType;
 	}
 

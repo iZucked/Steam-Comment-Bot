@@ -9,6 +9,9 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -33,43 +36,50 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  */
 public final class TimeSortConstraintChecker implements IPairwiseConstraintChecker {
 
+	@NonNull
 	private final String name;
 
 	@Inject
+	@NonNull
 	private IPortTypeProvider portTypeProvider;
 
 	@Inject
+	@NonNull
 	private IPortSlotProvider portSlotProvider;
 
 	@Inject
+	@NonNull
 	private IVesselProvider vesselProvider;
 
 	/**
 	 */
-	public TimeSortConstraintChecker(final String name) {
+	public TimeSortConstraintChecker(@NonNull final String name) {
 		this.name = name;
 	}
 
 	@Override
+	@NonNull
 	public String getName() {
 		return name;
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences sequences) {
+	public boolean checkConstraints(@NonNull final ISequences sequences) {
 
 		return checkConstraints(sequences, null);
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences sequences, final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final List<String> messages) {
 
 		for (final Map.Entry<IResource, ISequence> entry : sequences.getSequences().entrySet()) {
 			final VesselInstanceType vesselInstanceType = vesselProvider.getVesselAvailability(entry.getKey()).getVesselInstanceType();
 			if (vesselInstanceType == VesselInstanceType.UNKNOWN || vesselInstanceType == VesselInstanceType.DES_PURCHASE || vesselInstanceType == VesselInstanceType.FOB_SALE) {
 				continue;
 			}
-			if (!checkSequence(entry.getValue(), messages, vesselInstanceType)) {
+			final ISequence sequence = entry.getValue();
+			assert sequence != null;
+			if (!checkSequence(sequence, messages, vesselInstanceType)) {
 				return false;
 			}
 		}
@@ -78,7 +88,7 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 	}
 
 	@Override
-	public void setOptimisationData(final IOptimisationData optimisationData) {
+	public void setOptimisationData(@NonNull final IOptimisationData optimisationData) {
 
 	}
 
@@ -89,7 +99,7 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 	 * @param messages
 	 * @return
 	 */
-	public final boolean checkSequence(final ISequence sequence, final List<String> messages, final VesselInstanceType instanceType) {
+	public final boolean checkSequence(@NonNull final ISequence sequence, @Nullable final List<String> messages, @NonNull final VesselInstanceType instanceType) {
 
 		ITimeWindow lastTimeWindow = null;
 		PortType lastType = null;
@@ -119,7 +129,7 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 	}
 
 	@Override
-	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
+	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 		final VesselInstanceType instanceType = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();
 		if (instanceType == VesselInstanceType.CARGO_SHORTS) {
 			// Cargo pairs are independent of each other, so only check real load->discharge state and ignore rest
@@ -144,7 +154,7 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 	}
 
 	@Override
-	public String explain(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
+	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 		final IPortSlot firstSlot = portSlotProvider.getPortSlot(first);
 		final IPortSlot secondSlot = portSlotProvider.getPortSlot(second);
 		final ITimeWindow firstTimeWindow = firstSlot.getTimeWindow();

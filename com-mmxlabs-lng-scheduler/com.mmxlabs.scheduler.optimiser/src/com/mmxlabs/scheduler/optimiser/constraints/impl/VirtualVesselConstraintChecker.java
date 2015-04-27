@@ -8,6 +8,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -32,40 +35,47 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * 
  */
 public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecker {
+	@NonNull
 	private final String name;
 
 	@Inject
+	@NonNull
 	private IPortTypeProvider portTypeProvider;
 
 	@Inject
+	@NonNull
 	private IVesselProvider vesselProvider;
 
 	@Inject
+	@NonNull
 	private IStartEndRequirementProvider startEndProvider;
 
 	@Inject
+	@NonNull
 	private IVirtualVesselSlotProvider virtualVesselSlotProvider;
 
 	/**
 	 */
-	public VirtualVesselConstraintChecker(final String name) {
+	public VirtualVesselConstraintChecker(@NonNull final String name) {
 		super();
 		this.name = name;
 	}
 
 	@Override
+	@NonNull
 	public String getName() {
 		return name;
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences sequences) {
+	public boolean checkConstraints(@NonNull final ISequences sequences) {
 		return checkConstraints(sequences, null);
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences sequences, final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final List<String> messages) {
 		for (final IResource resource : sequences.getResources()) {
+			assert resource != null;
 			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
 				if (isInvalid(resource, sequences.getSequence(resource))) {
@@ -85,7 +95,7 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 	 *            - a sequence which should be on a virtual vessel (vessel instance type is VIRTUAL)
 	 * @return true if there is a problem with this sequence, false if the sequence is OK.
 	 */
-	private boolean isInvalid(final IResource resource, final ISequence sequence) {
+	private boolean isInvalid(@NonNull final IResource resource, @NonNull final ISequence sequence) {
 		if (sequence.size() == 2) {
 			return false;
 		}
@@ -95,6 +105,7 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 
 		ISequenceElement prevElement = null;
 		for (final ISequenceElement element : sequence) {
+			assert element != null;
 			if (prevElement != null) {
 				if (!checkPairwiseConstraint(prevElement, element, resource)) {
 					return true;
@@ -107,11 +118,11 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 	}
 
 	@Override
-	public void setOptimisationData(final IOptimisationData optimisationData) {
+	public void setOptimisationData(@NonNull final IOptimisationData optimisationData) {
 	}
 
 	@Override
-	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
+	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		if (vesselAvailability.getVesselInstanceType() != VesselInstanceType.FOB_SALE && vesselAvailability.getVesselInstanceType() != VesselInstanceType.DES_PURCHASE) {
@@ -193,8 +204,7 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 	}
 
 	@Override
-	public String explain(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
-		// TODO Auto-generated method stub
+	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 		return null;
 	}
 }

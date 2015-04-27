@@ -20,10 +20,12 @@ import com.google.inject.Injector;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.core.IEvaluationContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.optimiser.core.impl.Sequences;
@@ -79,6 +81,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * Set of unit tests to check that the expected costs are calculated from an input set of data.
  * 
  */
+@SuppressWarnings({ "unused", "null" })
 public class TestCalculations {
 
 	/**
@@ -89,10 +92,10 @@ public class TestCalculations {
 	 */
 
 	public static final boolean DEFAULT_VOLUME_LIMIT_IS_M3 = true;
+
 	/**
 	 * This tests the fuel costs + consumptions when travelling at slowest speed with no idle time.
 	 */
-	@SuppressWarnings({ "unused" })
 	@Test
 	public void testCalculations1() {
 		final IVolumeAllocator volumeAllocator = Mockito.mock(IVolumeAllocator.class);
@@ -207,11 +210,15 @@ public class TestCalculations {
 
 		// Schedule sequence
 		final int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
-		final AnnotatedSolution annotatedSolution = new AnnotatedSolution();
 		final ISequences sequences = new Sequences(Collections.singletonList(resource), CollectionsUtil.<IResource, ISequence> makeHashMap(resource, sequence));
+
+		final IEvaluationContext context = Mockito.mock(IEvaluationContext.class);
+		final IEvaluationState state = Mockito.mock(IEvaluationState.class);
+
+		final AnnotatedSolution annotatedSolution = new AnnotatedSolution(sequences, context, state);
+
 		final ScheduledSequences scheduledSequence = scheduler.schedule(sequences, new int[][] { expectedArrivalTimes }, annotatedSolution);
 		Assert.assertNotNull(scheduledSequence);
-
 		// TODO: Start checking results
 		{
 			Assert.assertNull(annotatedSolution.getElementAnnotations().getAnnotation(startElement, SchedulerConstants.AI_journeyInfo, IJourneyEvent.class));
@@ -641,7 +648,11 @@ public class TestCalculations {
 
 		// Schedule sequence
 		final int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
-		final AnnotatedSolution annotatedSolution = new AnnotatedSolution();
+		final IEvaluationContext context = Mockito.mock(IEvaluationContext.class);
+		final IEvaluationState state = Mockito.mock(IEvaluationState.class);
+
+		final AnnotatedSolution annotatedSolution = new AnnotatedSolution(sequences, context, state);
+
 		final ScheduledSequences scheduledSequence = scheduler.schedule(sequences, new int[][] { expectedArrivalTimes }, annotatedSolution);
 		Assert.assertNotNull(scheduledSequence);
 
@@ -1014,8 +1025,9 @@ public class TestCalculations {
 				false, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
 
 		final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
-		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, 0, Long.MAX_VALUE,
-				new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(200)), 1, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
+		final IDischargeSlot dischargeSlot = builder
+				.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, 0, Long.MAX_VALUE, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(200)), 1,
+						IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
 
 		final ICargo cargo1 = builder.createCargo(Lists.newArrayList(loadSlot, dischargeSlot), false);
 
@@ -1070,8 +1082,13 @@ public class TestCalculations {
 
 		// Schedule sequence
 		final int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
-		final AnnotatedSolution annotatedSolution = new AnnotatedSolution();
 		final ISequences sequences = new Sequences(Collections.singletonList(resource), CollectionsUtil.<IResource, ISequence> makeHashMap(resource, sequence));
+
+		final IEvaluationContext context = Mockito.mock(IEvaluationContext.class);
+		final IEvaluationState state = Mockito.mock(IEvaluationState.class);
+
+		final AnnotatedSolution annotatedSolution = new AnnotatedSolution(sequences, context, state);
+
 		final ScheduledSequences scheduledSequence = scheduler.schedule(sequences, new int[][] { expectedArrivalTimes }, annotatedSolution);
 		Assert.assertNotNull(scheduledSequence);
 		// TODO: Start checking results
@@ -1413,8 +1430,8 @@ public class TestCalculations {
 
 				bind(IVesselBaseFuelCalculator.class).to(VesselBaseFuelCalculator.class);
 				final VesselBaseFuelCalculator baseFuelCalculator = Mockito.mock(VesselBaseFuelCalculator.class);
-				Mockito.when(baseFuelCalculator.getBaseFuelPrice(Mockito.any(IVessel.class), Mockito.any(IPortTimesRecord.class))).thenReturn(baseFuelUnitPrice);
-				Mockito.when(baseFuelCalculator.getBaseFuelPrice(Mockito.any(IVessel.class), Mockito.anyInt())).thenReturn(baseFuelUnitPrice);
+				Mockito.when(baseFuelCalculator.getBaseFuelPrice(Matchers.any(IVessel.class), Matchers.any(IPortTimesRecord.class))).thenReturn(baseFuelUnitPrice);
+				Mockito.when(baseFuelCalculator.getBaseFuelPrice(Matchers.any(IVessel.class), Matchers.anyInt())).thenReturn(baseFuelUnitPrice);
 
 				bind(VesselBaseFuelCalculator.class).toInstance(baseFuelCalculator);
 

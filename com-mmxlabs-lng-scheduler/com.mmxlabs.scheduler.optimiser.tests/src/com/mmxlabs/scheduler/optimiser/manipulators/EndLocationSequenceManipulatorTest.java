@@ -35,9 +35,9 @@ public class EndLocationSequenceManipulatorTest {
 		final IIndexingContext index = new SimpleIndexingContext();
 		final EndLocationSequenceManipulator manipulator = new EndLocationSequenceManipulator();
 
-		final IResource resource1 = new Resource(index);
-		final IResource resource2 = new Resource(index);
-		final IResource resource3 = new Resource(index);
+		final IResource resource1 = new Resource(index, "r1");
+		final IResource resource2 = new Resource(index, "r2");
+		final IResource resource3 = new Resource(index, "r3");
 
 		Assert.assertSame(EndLocationRule.NONE, manipulator.getEndLocationRule(resource1));
 		Assert.assertSame(EndLocationRule.NONE, manipulator.getEndLocationRule(resource2));

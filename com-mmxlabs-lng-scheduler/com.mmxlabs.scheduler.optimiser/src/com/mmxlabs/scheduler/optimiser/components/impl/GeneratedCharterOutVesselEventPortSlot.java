@@ -9,8 +9,6 @@ import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEven
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptions;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IVesselEvent;
-import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 
 public class GeneratedCharterOutVesselEventPortSlot extends VesselEventPortSlot implements IGeneratedCharterOutVesselEventPortSlot {
 

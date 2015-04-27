@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.caches.AbstractCache;
@@ -229,7 +232,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	}
 
 	@Override
-	public void setBasicSequence(final List<IOptionsSequenceElement> basicSequence) {
+	public void setBasicSequence(@NonNull final List<IOptionsSequenceElement> basicSequence) {
 		this.basicSequence = basicSequence;
 	}
 
@@ -241,7 +244,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	/**
 	 */
 	@Override
-	public void setVessel(final IVessel vessel, final IResource resource, final int baseFuelPricePerMT) {
+	public void setVessel(@NonNull final IVessel vessel, @Nullable final IResource resource, final int baseFuelPricePerMT) {
 		this.vessel = vessel;
 		this.resource = resource;
 		this.baseFuelPricePerMT = baseFuelPricePerMT;

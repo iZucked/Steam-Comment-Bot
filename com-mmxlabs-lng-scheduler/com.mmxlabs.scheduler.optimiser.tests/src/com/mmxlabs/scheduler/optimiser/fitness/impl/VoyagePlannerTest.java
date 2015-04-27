@@ -85,6 +85,7 @@ public final class VoyagePlannerTest {
 	 * @throws CloneNotSupportedException
 	 * 
 	 */
+	@SuppressWarnings("null")
 	@Ignore("Does not work after JMock - Mockito Change. Verify happens after execution where as jmock expectations happen during execution")
 	@Test
 	public void testSchedule_1() throws CloneNotSupportedException {
@@ -169,18 +170,15 @@ public final class VoyagePlannerTest {
 		portTypeProvider.setPortType(element3, PortType.Load);
 		portTypeProvider.setPortType(element4, PortType.Discharge);
 
-		final IResource resource = new Resource(index);
-		final Vessel vessel = new Vessel();
-		vessel.setName("Schedule1Vessel");
 		final VesselClass vesselClass = new VesselClass();
 		vesselClass.setCargoCapacity(1000000);
+		final Vessel vessel = new Vessel("Schedule1Vessel", vesselClass, 1000000);
 
-		vessel.setVesselClass(vesselClass);
-		
-		
+		final IResource resource = new Resource(index, vessel.getName());
+
 		final IConsumptionRateCalculator consumptionRateCalculator = Mockito.mock(IConsumptionRateCalculator.class);
 		Mockito.when(consumptionRateCalculator.getSpeed(Matchers.anyInt())).thenReturn(15000);
-		
+
 		vesselClass.setConsumptionRate(VesselState.Laden, consumptionRateCalculator);
 		vesselClass.setConsumptionRate(VesselState.Ballast, consumptionRateCalculator);
 
@@ -375,7 +373,7 @@ public final class VoyagePlannerTest {
 	 * @throws CloneNotSupportedException
 	 */
 	@Ignore("Does not work after JMock - Mockito Change. Verify happens after execution where as jmock expectations happen during execution")
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked", "rawtypes", "null" })
 	@Test
 	public void testSchedule_2() throws CloneNotSupportedException {
 		final IIndexingContext index = new SimpleIndexingContext();
@@ -444,20 +442,15 @@ public final class VoyagePlannerTest {
 		portTypeProvider.setPortType(element2, PortType.Discharge);
 		portTypeProvider.setPortType(element3, PortType.Load);
 
-		final IResource resource = new Resource(index);
-		final Vessel vessel = new Vessel();
-		vessel.setName("Schedule2Vessel");
 		final VesselClass vesselClass = new VesselClass();
-		vesselClass.setCargoCapacity(100000);
-		vessel.setVesselClass(vesselClass);
-		
-		
+		final Vessel vessel = new Vessel("Schedule2Vessel", vesselClass, vesselClass.getCargoCapacity());
+		final IResource resource = new Resource(index, vessel.getName());
+
 		final IConsumptionRateCalculator consumptionRateCalculator = Mockito.mock(IConsumptionRateCalculator.class);
 		Mockito.when(consumptionRateCalculator.getSpeed(Matchers.anyInt())).thenReturn(15000);
-		
+
 		vesselClass.setConsumptionRate(VesselState.Laden, consumptionRateCalculator);
 		vesselClass.setConsumptionRate(VesselState.Ballast, consumptionRateCalculator);
-
 
 		final DefaultVesselAvailability vesselAvailability = new DefaultVesselAvailability();
 		vesselAvailability.setVessel(vessel);

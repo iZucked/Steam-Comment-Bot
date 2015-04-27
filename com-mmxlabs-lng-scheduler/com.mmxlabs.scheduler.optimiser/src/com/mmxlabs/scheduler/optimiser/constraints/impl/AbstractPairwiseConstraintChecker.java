@@ -6,6 +6,9 @@ package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -18,23 +21,24 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
  * 
  */
 public abstract class AbstractPairwiseConstraintChecker implements IPairwiseConstraintChecker {
-
+	@NonNull
 	protected final String name;
 
-	public AbstractPairwiseConstraintChecker(final String name) {
+	public AbstractPairwiseConstraintChecker(@NonNull final String name) {
 		this.name = name;
 	}
 
 	@Override
+	@NonNull
 	public String getName() {
 		return name;
 	}
 
-	public boolean checkSequence(final ISequence sequence, final IResource resource) {
+	public boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource) {
 		return checkSequence(sequence, resource, null);
 	}
 
-	public boolean checkSequence(final ISequence sequence, final IResource resource, final List<String> messages) {
+	public boolean checkSequence(@NonNull final ISequence sequence, @NonNull final IResource resource, @Nullable final List<String> messages) {
 		boolean valid = true;
 		ISequenceElement prev = null;
 		for (final ISequenceElement current : sequence) {
@@ -52,17 +56,18 @@ public abstract class AbstractPairwiseConstraintChecker implements IPairwiseCons
 		}
 		return valid;
 	}
-	
+
 	@Override
-	public boolean checkConstraints(final ISequences sequences) {
+	public boolean checkConstraints(@NonNull final ISequences sequences) {
 		return checkConstraints(sequences, null);
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences sequences, final List<String> messages) {
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final List<String> messages) {
 		boolean valid = true;
 
 		for (final IResource resource : sequences.getResources()) {
+			assert resource != null;
 			final ISequence sequence = sequences.getSequence(resource);
 			if (!checkSequence(sequence, resource, messages)) {
 				if (messages == null) {
@@ -75,9 +80,9 @@ public abstract class AbstractPairwiseConstraintChecker implements IPairwiseCons
 
 		return valid;
 	}
-	
+
 	@Override
-	public void setOptimisationData(final IOptimisationData optimisationData) {
+	public void setOptimisationData(@NonNull final IOptimisationData optimisationData) {
 
 	}
 

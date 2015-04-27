@@ -79,7 +79,7 @@ public class DefaultDivertableDESShippingTimesCalculator implements IDivertableD
 		Collection<String> allowedRoutes = shippingHoursRestrictionProvider.getDivertableDESAllowedRoutes(vesselClass);
 		final List<MatrixEntry<IPort, Integer>> distances = new ArrayList<MatrixEntry<IPort, Integer>>(distanceProvider.getValues(to, from));
 		for (final MatrixEntry<IPort, Integer> d : distances) {
-			if (allowedRoutes.isEmpty() || allowedRoutes.contains(d.getKey())) {
+			if (allowedRoutes == null || allowedRoutes.isEmpty() || allowedRoutes.contains(d.getKey())) {
 				final int travelTime = Calculator.getTimeFromSpeedDistance(referenceSpeed, d.getValue()) + routeCostProvider.getRouteTransitTime(d.getKey(), vesselClass);
 				if (travelTime < shortestTime) {
 					distance = d.getValue();

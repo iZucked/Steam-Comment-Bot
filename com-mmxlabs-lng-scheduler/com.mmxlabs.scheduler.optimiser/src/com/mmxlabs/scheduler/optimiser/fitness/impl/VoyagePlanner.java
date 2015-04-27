@@ -13,6 +13,8 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
@@ -728,16 +730,16 @@ public class VoyagePlanner {
 			final long startHeelVolumeInM3, final VoyagePlan originalPlan) {
 
 		// Take a copy so we can retain isIgnoreEnd flag later on
-		VoyagePlan plan = originalPlan; // TODO: remove
-		List<PlanEvaluationData> plans = new ArrayList<PlanEvaluationData>();
+		final VoyagePlan plan = originalPlan; // TODO: remove
+		final List<PlanEvaluationData> plans = new ArrayList<PlanEvaluationData>();
 
 		assert startHeelVolumeInM3 >= 0;
 		boolean planSet = false;
 		if (generatedCharterOutEvaluator != null) {
 			final List<Pair<VoyagePlan, IPortTimesRecord>> lp = generatedCharterOutEvaluator.processSchedule(vesselStartTime, startHeelVolumeInM3, vesselAvailability, plan, portTimesRecord);
 			if (lp != null) {
-				for (Pair<VoyagePlan, IPortTimesRecord> p : lp) {
-					PlanEvaluationData evalData = new PlanEvaluationData();
+				for (final Pair<VoyagePlan, IPortTimesRecord> p : lp) {
+					final PlanEvaluationData evalData = new PlanEvaluationData();
 					evalData.plan = p.getFirst();
 					voyagePlansList.add(evalData.plan);
 					if (p.getSecond() instanceof IAllocationAnnotation) {
@@ -762,7 +764,7 @@ public class VoyagePlanner {
 		if (breakEvenEvaluator != null) {
 			final Pair<VoyagePlan, IAllocationAnnotation> p = breakEvenEvaluator.processSchedule(vesselStartTime, vesselAvailability, plan, portTimesRecord);
 			if (p != null) {
-				PlanEvaluationData evalData = new PlanEvaluationData();
+				final PlanEvaluationData evalData = new PlanEvaluationData();
 
 				evalData.plan = p.getFirst();
 				voyagePlansList.add(evalData.plan);
@@ -785,7 +787,7 @@ public class VoyagePlanner {
 		}
 
 		if (!planSet) {
-			PlanEvaluationData evalData = new PlanEvaluationData();
+			final PlanEvaluationData evalData = new PlanEvaluationData();
 
 			evalData.plan = plan;
 			voyagePlansList.add(evalData.plan);
@@ -805,7 +807,7 @@ public class VoyagePlanner {
 			plans.add(evalData);
 		}
 
-		for (PlanEvaluationData planData : plans) {
+		for (final PlanEvaluationData planData : plans) {
 			evaluateBrokenUpVoyagePlan(planData, vesselAvailability, vesselStartTime, voyagePlansMap, voyagePlansList, originalPlan);
 		}
 
@@ -822,8 +824,8 @@ public class VoyagePlanner {
 	 * @param arrivalTimes
 	 * @return
 	 */
-	final public VoyagePlan makeVoyage(final IResource resource, final List<ISequenceElement> sequenceElements, final int vesselCharterInRatePerDay, final IPortTimesRecord portTimesRecord,
-			long heelVolumeInM3) {
+	final public VoyagePlan makeVoyage(@NonNull final IResource resource, @NonNull final List<ISequenceElement> sequenceElements, final int vesselCharterInRatePerDay,
+			@NonNull final IPortTimesRecord portTimesRecord, long heelVolumeInM3) {
 
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		final boolean isShortsSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
@@ -845,6 +847,7 @@ public class VoyagePlanner {
 		boolean sequenceContainsMMBTUVolumeOption = false;
 		for (int idx = 0; idx < sequenceElements.size(); ++idx) {
 			final ISequenceElement element = sequenceElements.get(idx);
+			assert element != null;
 
 			final IPort thisPort = portProvider.getPortForElement(element);
 			final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
@@ -928,7 +931,8 @@ public class VoyagePlanner {
 		return null;
 	}
 
-	final private void setVesselAndBaseFuelPrice(IVoyagePlanOptimiser voyagePlanOptimiser, IPortTimesRecord portTimesRecord, IVessel vessel, IResource resource) {
+	final private void setVesselAndBaseFuelPrice(@NonNull final IVoyagePlanOptimiser voyagePlanOptimiser, @NonNull final IPortTimesRecord portTimesRecord, @NonNull final IVessel vessel,
+			@NonNull final IResource resource) {
 		voyagePlanOptimiser.setVessel(vessel, resource, vesselBaseFuelCalculator.getBaseFuelPrice(vessel, portTimesRecord));
 		if (portTimesRecord.getFirstSlot() instanceof ILoadOption) {
 			if (actualsDataProvider.hasActuals(portTimesRecord.getFirstSlot())) {
@@ -1226,21 +1230,21 @@ public class VoyagePlanner {
 	 * @return
 	 */
 	public final void setDesPurchaseOrFobPurchaseM3VolumeDetails(final List<IDetailsSequenceElement> voyageOrPortOptionsSubsequence) {
-		List<IDischargeOption> discharges = new ArrayList<>();
+		final List<IDischargeOption> discharges = new ArrayList<>();
 		for (int i = voyageOrPortOptionsSubsequence.size() - 1; i > 0; i--) {
-			IDetailsSequenceElement d = voyageOrPortOptionsSubsequence.get(i);
+			final IDetailsSequenceElement d = voyageOrPortOptionsSubsequence.get(i);
 			if (d instanceof PortDetails) {
-				PortOptions option = ((PortDetails) d).getOptions();
+				final PortOptions option = ((PortDetails) d).getOptions();
 				addMMBTuVolumeInputDischargeToList(discharges, option);
 			}
 		}
-		int loadCV = getCVOfDesPurchaseOrFobSaleDetailsSequence(voyageOrPortOptionsSubsequence);
+		final int loadCV = getCVOfDesPurchaseOrFobSaleDetailsSequence(voyageOrPortOptionsSubsequence);
 		setM3VolumeForMMBTuInputDischarge(discharges, loadCV);
 	}
 
-	private void addMMBTuVolumeInputDischargeToList(List<IDischargeOption> discharges, PortOptions option) {
+	private void addMMBTuVolumeInputDischargeToList(final List<IDischargeOption> discharges, final PortOptions option) {
 		if (option.getPortSlot() instanceof IDischargeOption) {
-			IDischargeOption dischargeOption = (IDischargeOption) option.getPortSlot();
+			final IDischargeOption dischargeOption = (IDischargeOption) option.getPortSlot();
 			if (!dischargeOption.isVolumeSetInM3()) {
 				discharges.add((IDischargeOption) option.getPortSlot());
 			}
@@ -1254,20 +1258,20 @@ public class VoyagePlanner {
 	 * @return
 	 */
 	private final void setDesPurchaseOrFobPurchaseM3Volume(final List<IOptionsSequenceElement> voyageOrPortOptionsSubsequence) {
-		List<IDischargeOption> discharges = new ArrayList<>();
+		final List<IDischargeOption> discharges = new ArrayList<>();
 		for (int i = voyageOrPortOptionsSubsequence.size() - 1; i > 0; i--) {
-			IOptionsSequenceElement e = voyageOrPortOptionsSubsequence.get(i);
+			final IOptionsSequenceElement e = voyageOrPortOptionsSubsequence.get(i);
 			if (e instanceof PortOptions) {
 				addMMBTuVolumeInputDischargeToList(discharges, (PortOptions) e);
 			}
 		}
 
-		int loadCV = getCVOfDesPurchaseOrFobSaleOptionsSequence(voyageOrPortOptionsSubsequence);
+		final int loadCV = getCVOfDesPurchaseOrFobSaleOptionsSequence(voyageOrPortOptionsSubsequence);
 		setM3VolumeForMMBTuInputDischarge(discharges, loadCV);
 	}
 
-	private void setM3VolumeForMMBTuInputDischarge(List<IDischargeOption> discharges, int loadCV) {
-		for (IDischargeOption discharge : discharges) {
+	private void setM3VolumeForMMBTuInputDischarge(final List<IDischargeOption> discharges, final int loadCV) {
+		for (final IDischargeOption discharge : discharges) {
 			discharge.setMinDischargeVolume(Calculator.convertMMBTuToM3(discharge.getMinDischargeVolumeMMBTU(), loadCV));
 			discharge.setMaxDischargeVolume(Calculator.convertMMBTuToM3(discharge.getMaxDischargeVolumeMMBTU(), loadCV));
 		}
@@ -1302,7 +1306,7 @@ public class VoyagePlanner {
 		}
 		return cv;
 	}
-	
+
 	private int getCVFromPortSlot(int cv, final PortOptions startOfSequence) {
 		final IPortSlot portSlot = startOfSequence.getPortSlot();
 		if (portSlot instanceof IHeelOptionsPortSlot) {
@@ -1313,7 +1317,7 @@ public class VoyagePlanner {
 		return cv;
 	}
 
-	private boolean isSlotAnMMBTUVolume(IPortSlot portSlot) {
+	private boolean isSlotAnMMBTUVolume(final IPortSlot portSlot) {
 		if (portSlot instanceof ILoadOption) {
 			return !((ILoadOption) portSlot).isVolumeSetInM3();
 		} else if (portSlot instanceof IDischargeOption) {

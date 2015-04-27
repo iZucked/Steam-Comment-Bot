@@ -12,29 +12,14 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 
 public class VesselTest {
 
+	@SuppressWarnings("null")
 	@Test
-	public void testGetSetName() {
-		final Vessel vessel = new Vessel();
-		Assert.assertNull(vessel.getName());
+	public void testVessel() {
 		final String name = "name";
-		vessel.setName(name);
-		Assert.assertSame(name, vessel.getName());
-	}
-
-	@Test
-	public void testGetSetVesselClass() {
-		final Vessel vessel = new Vessel();
-		Assert.assertNull(vessel.getVesselClass());
 		final IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
-		vessel.setVesselClass(vesselClass);
+		final Vessel vessel = new Vessel(name, vesselClass, 123456);
+		Assert.assertSame(name, vessel.getName());
 		Assert.assertSame(vesselClass, vessel.getVesselClass());
-	}
-
-	@Test
-	public void testGetSetVesselInstanceType() {
-		final Vessel vessel = new Vessel();
-		Assert.assertEquals(0, vessel.getCargoCapacity());
-		vessel.setCargoCapacity(123456);
 		Assert.assertEquals(123456, vessel.getCargoCapacity());
 	}
 }

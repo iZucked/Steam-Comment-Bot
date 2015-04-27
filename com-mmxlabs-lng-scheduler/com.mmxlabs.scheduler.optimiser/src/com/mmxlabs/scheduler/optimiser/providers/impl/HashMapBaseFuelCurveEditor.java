@@ -22,11 +22,12 @@ import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
  */
 public final class HashMapBaseFuelCurveEditor implements IBaseFuelCurveProviderEditor {
 
+	@NonNull
 	private final Map<IBaseFuel, ICurve> map = new HashMap<IBaseFuel, ICurve>();
-	private final Map<ICurve, Integer> firstValueMap = new HashMap<ICurve, Integer>();
 
 	@Override
-	public ICurve getBaseFuelCurve(final IBaseFuel baseFuel) {
+	@NonNull
+	public ICurve getBaseFuelCurve(@NonNull final IBaseFuel baseFuel) {
 		if (map.containsKey(baseFuel)) {
 			return map.get(baseFuel);
 		}
@@ -34,7 +35,8 @@ public final class HashMapBaseFuelCurveEditor implements IBaseFuelCurveProviderE
 	}
 
 	@Override
-	public ICurve getVesselBaseFuelCurve(final IVessel vessel) {
+	@NonNull
+	public ICurve getVesselBaseFuelCurve(@NonNull final IVessel vessel) {
 		if (map.containsKey(vessel)) {
 			return map.get(vessel);
 		}
@@ -42,17 +44,8 @@ public final class HashMapBaseFuelCurveEditor implements IBaseFuelCurveProviderE
 	}
 
 	@Override
-	public void setBaseFuelCurve(final IBaseFuel baseFuel, final ICurve curve) {
+	public void setBaseFuelCurve(@NonNull final IBaseFuel baseFuel, @NonNull final ICurve curve) {
 		map.put(baseFuel, curve);
 	}
 
-	@Override
-	public int getBaseFuelCurveFirstValueDate(@NonNull ICurve curve) {
-		return firstValueMap.get(curve);
-	}
-
-	@Override
-	public void setBaseFuelCurveFirstValueDate(@NonNull ICurve curve, int firstValueDate) {
-		firstValueMap.put(curve, firstValueDate);
-	}
 }

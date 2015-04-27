@@ -4,13 +4,17 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 
 public interface IVesselProvider extends IDataComponentProvider {
 
-	IVesselAvailability getVesselAvailability(IResource resource);
+	@NonNull
+	IVesselAvailability getVesselAvailability(@NonNull IResource resource);
 
-	IResource getResource(IVesselAvailability vessel);
+	@NonNull
+	IResource getResource(@NonNull IVesselAvailability vessel);
 }

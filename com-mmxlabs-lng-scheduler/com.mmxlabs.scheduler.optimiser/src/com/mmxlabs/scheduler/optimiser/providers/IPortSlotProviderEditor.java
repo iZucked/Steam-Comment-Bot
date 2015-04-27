@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 
@@ -21,5 +23,5 @@ public interface IPortSlotProviderEditor extends IPortSlotProvider {
 	 * @param element
 	 * @param portSlot
 	 */
-	void setPortSlot(ISequenceElement element, IPortSlot portSlot);
+	void setPortSlot(@NonNull ISequenceElement element, @NonNull IPortSlot portSlot);
 }

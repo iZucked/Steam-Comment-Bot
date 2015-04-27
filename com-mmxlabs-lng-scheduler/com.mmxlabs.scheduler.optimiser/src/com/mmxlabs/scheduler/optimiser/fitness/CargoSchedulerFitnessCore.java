@@ -13,6 +13,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Injector;
 import com.mmxlabs.common.CollectionsUtil;
@@ -124,7 +125,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 	}
 
 	@Override
-	public boolean evaluate(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, final Collection<IResource> affectedResources) {
+	public boolean evaluate(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @Nullable final Collection<IResource> affectedResources) {
 		final ScheduledSequences scheduledSequences = evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class);
 		if (scheduledSequences != null) {
 			return evaluator.evaluateSchedule(sequences, scheduledSequences) != Long.MAX_VALUE;

@@ -9,6 +9,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -32,7 +34,7 @@ import com.mmxlabs.optimiser.lso.impl.Move4over2;
  */
 public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGeneratorUnit {
 	public final static int FOUR_OPT2_MOVES = 1; // 0 = 4 opt 2, 1 = no 4 opt 2
-	
+
 	final ConstrainedMoveGenerator owner;
 
 	class Move2over2A extends Move2over2 {
@@ -49,6 +51,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 
 	class NullMove implements IMove {
 
+		@SuppressWarnings("null")
 		@Override
 		public Collection<IResource> getAffectedResources() {
 
@@ -56,12 +59,12 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 		}
 
 		@Override
-		public void apply(final IModifiableSequences sequences) {
+		public void apply(@NonNull final IModifiableSequences sequences) {
 
 		}
 
 		@Override
-		public boolean validate(final ISequences sequences) {
+		public boolean validate(@NonNull final ISequences sequences) {
 			return true;
 		}
 
@@ -117,7 +120,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 		final int sequence2 = pos2.getFirst();
 		final int position1 = pos1.getSecond();
 		int position2 = pos2.getSecond();
-		
+
 		if (position1 == -1 || position2 == -1) {
 			return null;
 		}
@@ -142,7 +145,8 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 			final ConstrainedMoveGenerator.Followers<ISequenceElement> followers = owner.validFollowers.get(lastElementInSegment);
 
 			// Pick one of these followers and find where it is at the moment
-			if (followers.size() == 0) return null;
+			if (followers.size() == 0)
+				return null;
 			final ISequenceElement precursor = followers.get(owner.random.nextInt(followers.size()));
 			final Pair<Integer, Integer> posPrecursor = owner.reverseLookup.get(precursor);
 
@@ -309,16 +313,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 					return result;
 				} else {
 					// 4opt2
-					final Move4over2 result = new Move4over2();
-
-					result.setResource1(resources.get(sequence1));
-					result.setResource2(resources.get(sequence2));
-
-					result.setResource1Start(position1 + 1);
-					result.setResource1End(secondPosition1);
-
-					result.setResource2Start(position2);
-					result.setResource2End(secondPosition2 + 1);
+					final Move4over2 result = new Move4over2(resources.get(sequence1), position1 + 1, secondPosition1, resources.get(sequence2), position2, secondPosition2 + 1);
 
 					return result;
 				}

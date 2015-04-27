@@ -9,6 +9,9 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.common.dcproviders.IOrderedSequenceElementsDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -40,42 +43,39 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * 
  */
 public final class PortTypeConstraintChecker implements IPairwiseConstraintChecker {
-
+	@NonNull
 	private final String name;
 
 	@Inject
+	@NonNull
 	private IPortTypeProvider portTypeProvider;
 
 	@Inject
+	@NonNull
 	private IVesselProvider vesselProvider;
 
 	@Inject
+	@NonNull
 	private IOrderedSequenceElementsDataComponentProvider orderedSequenceProvider;
 
-	/**
-	 */
-	public PortTypeConstraintChecker(final String name) {
+	public PortTypeConstraintChecker(@NonNull final String name) {
 		this.name = name;
 	}
 
 	@Override
+	@NonNull
 	public String getName() {
 		return name;
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences sequences) {
+	public boolean checkConstraints(@NonNull final ISequences sequences) {
 
 		return checkConstraints(sequences, null);
 	}
 
 	@Override
-	public boolean checkConstraints(final ISequences sequences, final List<String> messages) {
-
-		if (portTypeProvider == null) {
-			// Cannot check port if there is no port type provider
-			return true;
-		}
+	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final List<String> messages) {
 
 		for (final Map.Entry<IResource, ISequence> entry : sequences.getSequences().entrySet()) {
 			if (!checkSequence(entry.getValue(), messages, vesselProvider.getVesselAvailability(entry.getKey()).getVesselInstanceType())) {
@@ -87,7 +87,7 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 	}
 
 	@Override
-	public void setOptimisationData(final IOptimisationData optimisationData) {
+	public void setOptimisationData(@NonNull final IOptimisationData optimisationData) {
 	}
 
 	/**
@@ -97,7 +97,7 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 	 * @param messages
 	 * @return
 	 */
-	public final boolean checkSequence(final ISequence sequence, final List<String> messages, final VesselInstanceType instanceType) {
+	public final boolean checkSequence(@NonNull final ISequence sequence, @Nullable final List<String> messages, @NonNull final VesselInstanceType instanceType) {
 
 		if (instanceType == VesselInstanceType.FOB_SALE || instanceType == VesselInstanceType.DES_PURCHASE) {
 			int size = sequence.size();
@@ -241,24 +241,8 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 		return true;
 	}
 
-	public IPortTypeProvider getPortTypeProvider() {
-		return portTypeProvider;
-	}
-
-	public void setPortTypeProvider(final IPortTypeProvider portTypeProvider) {
-		this.portTypeProvider = portTypeProvider;
-	}
-
-	public IVesselProvider getVesselProvider() {
-		return vesselProvider;
-	}
-
-	public void setVesselProvider(final IVesselProvider vesselProvider) {
-		this.vesselProvider = vesselProvider;
-	}
-
 	@Override
-	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
+	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 		final PortType firstType = portTypeProvider.getPortType(first);
 		final PortType secondType = portTypeProvider.getPortType(second);
 
@@ -308,7 +292,7 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 	}
 
 	@Override
-	public String explain(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
+	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 		final PortType firstType = portTypeProvider.getPortType(first);
 		final PortType secondType = portTypeProvider.getPortType(second);
 

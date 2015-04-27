@@ -62,10 +62,10 @@ public interface IVoyagePlanOptimiser {
 	 * 
 	 * @param basicSequence
 	 */
-	void setBasicSequence(final List<IOptionsSequenceElement> basicSequence);
+	void setBasicSequence(@NonNull final List<IOptionsSequenceElement> basicSequence);
 
-	void setPortTimesRecord(final IPortTimesRecord portTimesRecord);
-	
+	void setPortTimesRecord(@NonNull final IPortTimesRecord portTimesRecord);
+
 	void setVesselCharterInRatePerDay(int charterInRatePerDay);
 
 	/**
@@ -88,7 +88,7 @@ public interface IVoyagePlanOptimiser {
 	 * @param baseFuelPricePerMT
 	 */
 	void setBaseFuelPricePerMT(int baseFuelPricePerMT);
-	
+
 	/**
 	 * Once optimised, returns the best {@link VoyagePlan} cost.
 	 * 
@@ -119,10 +119,11 @@ public interface IVoyagePlanOptimiser {
 
 	/**
 	 * The start heel for this particular voyage.
+	 * 
 	 * @param heelVolumeInM3
 	 */
 	void setStartHeel(long heelVolumeInM3);
-	
+
 	long getStartHeel();
 
 }

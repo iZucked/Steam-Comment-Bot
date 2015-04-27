@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -19,19 +22,28 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 /**
  */
 public class MarkToMarketVesselAvailability implements IVesselAvailability {
+
+	@NonNull
 	private final IMarkToMarket markToMarket;
+
+	@SuppressWarnings("unused")
+	@NonNull
 	private final IPortSlot portSlot;
+
+	@NonNull
 	private final VesselInstanceType vesselInstanceType;
+
+	@NonNull
 	private ICurve curve;
 
-	public MarkToMarketVesselAvailability(final IMarkToMarket markToMarket, final IDischargeOption dischargeOption) {
+	public MarkToMarketVesselAvailability(@NonNull final IMarkToMarket markToMarket, @NonNull final IDischargeOption dischargeOption) {
 		this.markToMarket = markToMarket;
 		this.portSlot = dischargeOption;
 		this.curve = new ConstantValueCurve(0);
 		this.vesselInstanceType = VesselInstanceType.DES_PURCHASE;
 	}
 
-	public MarkToMarketVesselAvailability(final IMarkToMarket markToMarket, final ILoadOption loadOption) {
+	public MarkToMarketVesselAvailability(@NonNull final IMarkToMarket markToMarket, @NonNull final ILoadOption loadOption) {
 		this.markToMarket = markToMarket;
 		this.portSlot = loadOption;
 		this.curve = new ConstantValueCurve(0);
@@ -39,35 +51,42 @@ public class MarkToMarketVesselAvailability implements IVesselAvailability {
 	}
 
 	@Override
+	@Nullable
 	public IVessel getVessel() {
 		return null;
 	}
 
 	@Override
+	@NonNull
 	public VesselInstanceType getVesselInstanceType() {
 		return vesselInstanceType;
 	}
 
 	@Override
+	@NonNull
 	public ICurve getDailyCharterInRate() {
 		return curve;
 	}
 
+	@NonNull
 	public IMarkToMarket getMarkToMarket() {
 		return markToMarket;
 	}
 
 	@Override
+	@Nullable
 	public IStartEndRequirement getStartRequirement() {
 		return null;
 	}
 
 	@Override
+	@Nullable
 	public IStartEndRequirement getEndRequirement() {
 		return null;
 	}
 
 	@Override
+	@Nullable
 	public ISpotCharterInMarket getSpotCharterInMarket() {
 		return null;
 	}

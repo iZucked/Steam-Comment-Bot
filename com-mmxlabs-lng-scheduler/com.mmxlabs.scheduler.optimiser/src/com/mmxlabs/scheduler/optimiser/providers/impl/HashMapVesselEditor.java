@@ -7,6 +7,8 @@ package com.mmxlabs.scheduler.optimiser.providers.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
@@ -23,27 +25,26 @@ public final class HashMapVesselEditor implements IVesselProviderEditor {
 	private final Map<IVesselAvailability, IResource> vesselAvailabilityResourceMap = new HashMap<>();
 
 	@Override
-	public IVesselAvailability getVesselAvailability(final IResource resource) {
+	@NonNull
+	public IVesselAvailability getVesselAvailability(@NonNull final IResource resource) {
 		if (resourceVesselAvailabilityMap.containsKey(resource)) {
 			return resourceVesselAvailabilityMap.get(resource);
 		}
 
-		// TODO: Error?
-		return null;
+		throw new IllegalArgumentException("Unknown resource");
 	}
 
 	@Override
-	public IResource getResource(final IVesselAvailability vesselAvailability) {
+	@NonNull
+	public IResource getResource(@NonNull final IVesselAvailability vesselAvailability) {
 		if (vesselAvailabilityResourceMap.containsKey(vesselAvailability)) {
 			return vesselAvailabilityResourceMap.get(vesselAvailability);
 		}
-
-		// TODO: Error?
-		return null;
+		throw new IllegalArgumentException("Unknown vesselAvailability");
 	}
 
 	@Override
-	public void setVesselAvailabilityResource(final IResource resource, final IVesselAvailability vesselAvailability) {
+	public void setVesselAvailabilityResource(@NonNull final IResource resource, @NonNull final IVesselAvailability vesselAvailability) {
 		vesselAvailabilityResourceMap.put(vesselAvailability, resource);
 		resourceVesselAvailabilityMap.put(resource, vesselAvailability);
 	}

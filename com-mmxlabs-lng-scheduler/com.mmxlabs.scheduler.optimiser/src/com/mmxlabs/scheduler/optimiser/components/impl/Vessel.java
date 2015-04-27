@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 
@@ -14,42 +16,40 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
  * 
  */
 public final class Vessel implements IVessel {
+	@NonNull
+	private final String name;
 
-	private String name;
+	@NonNull
+	private final IVesselClass vesselClass;
 
-	private IVesselClass vesselClass;
+	private final long cargoCapacity;
 
-	private long cargoCapacity;
+	public Vessel(@NonNull final String name, final @NonNull IVesselClass vesselClass, final long cargoCapacity) {
+		this.name = name;
+		this.vesselClass = vesselClass;
+		this.cargoCapacity = cargoCapacity;
+	}
 
 	@Override
+	@NonNull
 	public String toString() {
 		return getName();
 	}
 
 	@Override
+	@NonNull
 	public String getName() {
 		return name;
 	}
 
-	public void setName(final String name) {
-		this.name = name;
-	}
-
 	@Override
+	@NonNull
 	public IVesselClass getVesselClass() {
 		return vesselClass;
-	}
-
-	public void setVesselClass(final IVesselClass vesselClass) {
-		this.vesselClass = vesselClass;
 	}
 
 	@Override
 	public long getCargoCapacity() {
 		return cargoCapacity;
-	}
-
-	public void setCargoCapacity(final long value) {
-		cargoCapacity = value;
 	}
 }

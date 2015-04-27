@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -21,7 +23,8 @@ public interface IPortSlotProvider extends IDataComponentProvider {
 	 * @param element
 	 * @return
 	 */
-	IPortSlot getPortSlot(ISequenceElement element);
+	@NonNull
+	IPortSlot getPortSlot(@NonNull ISequenceElement element);
 
 	/**
 	 * Returns the sequence element for the given {@link IPortSlot}.
@@ -29,5 +32,6 @@ public interface IPortSlotProvider extends IDataComponentProvider {
 	 * @param portSlot
 	 * @return
 	 */
-	ISequenceElement getElement(IPortSlot portSlot);
+	@NonNull
+	ISequenceElement getElement(@NonNull IPortSlot portSlot);
 }

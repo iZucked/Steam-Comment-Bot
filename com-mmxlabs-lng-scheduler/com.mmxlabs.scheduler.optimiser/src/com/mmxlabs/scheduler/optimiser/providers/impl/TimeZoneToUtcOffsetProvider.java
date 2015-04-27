@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.joda.time.DateTimeZone;
 
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -102,7 +104,7 @@ public class TimeZoneToUtcOffsetProvider implements ITimeZoneToUtcOffsetProvider
 	}
 
 	@Override
-	public int UTC(final int localTime, final IPort port) {
+	public int UTC(final int localTime, @Nullable final IPort port) {
 
 		String timeZoneId = port == null ? "UTC" : port.getTimeZoneId();
 		if (timeZoneId == null || timeZoneId.isEmpty()) {
@@ -112,7 +114,7 @@ public class TimeZoneToUtcOffsetProvider implements ITimeZoneToUtcOffsetProvider
 	}
 
 	@Override
-	public int UTC(final int localTime, final IPortSlot portSlot) {
+	public int UTC(final int localTime, @Nullable final IPortSlot portSlot) {
 		final IPort port = portSlot == null ? null : portSlot.getPort();
 		final String timeZoneId = port == null ? "UTC" : port.getTimeZoneId();
 
@@ -120,7 +122,7 @@ public class TimeZoneToUtcOffsetProvider implements ITimeZoneToUtcOffsetProvider
 	}
 
 	@Override
-	public int localTime(final int utcTime, final String timezoneId) {
+	public int localTime(final int utcTime, @Nullable final String timezoneId) {
 		final DateTimeZone tz = DateTimeZone.forID(timezoneId);
 
 		// for now, re-throw any exceptions
@@ -142,7 +144,7 @@ public class TimeZoneToUtcOffsetProvider implements ITimeZoneToUtcOffsetProvider
 	}
 
 	@Override
-	public int localTime(final int utcTime, final IPort port) {
+	public int localTime(final int utcTime, @Nullable final IPort port) {
 
 		String timeZoneId = port == null ? "UTC" : port.getTimeZoneId();
 		if (timeZoneId == null || timeZoneId.isEmpty()) {
@@ -152,7 +154,7 @@ public class TimeZoneToUtcOffsetProvider implements ITimeZoneToUtcOffsetProvider
 	}
 
 	@Override
-	public int localTime(final int utcTime, final IPortSlot portSlot) {
+	public int localTime(final int utcTime, @Nullable final IPortSlot portSlot) {
 		final IPort port = portSlot == null ? null : portSlot.getPort();
 		final String timeZoneId = port == null ? "UTC" : port.getTimeZoneId();
 
@@ -186,7 +188,7 @@ public class TimeZoneToUtcOffsetProvider implements ITimeZoneToUtcOffsetProvider
 	 *            local time instant at the specified port
 	 * @return the millisecond offset to subtract from local time at port to get UTC time
 	 */
-	private int getUtcOffset(final IPort port, final int localTimeInMillis) {
+	private int getUtcOffset(@NonNull final IPort port, final int localTimeInMillis) {
 		return getUtcOffset(port.getTimeZoneId(), localTimeInMillis);
 	}
 
@@ -197,7 +199,7 @@ public class TimeZoneToUtcOffsetProvider implements ITimeZoneToUtcOffsetProvider
 	 *            local time instant at the specified port
 	 * @return the millisecond offset to subtract from local time at port to get UTC time
 	 */
-	private int getUtcOffset(final IPortSlot portSlot, final int localTimeInMillis) {
+	private int getUtcOffset(@NonNull final IPortSlot portSlot, final int localTimeInMillis) {
 		return getUtcOffset(portSlot.getPort().getTimeZoneId(), localTimeInMillis);
 	}
 

@@ -9,6 +9,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
@@ -415,7 +418,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	 * @param vessel
 	 */
 	@Override
-	public void setVessel(final IVessel vessel, final IResource resource, final int baseFuelPricePerMT) {
+	public void setVessel(@NonNull final IVessel vessel, @Nullable final IResource resource, final int baseFuelPricePerMT) {
 		this.vessel = vessel;
 		this.resource = resource;
 		this.baseFuelPricePerMT = baseFuelPricePerMT;
