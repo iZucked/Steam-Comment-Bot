@@ -312,9 +312,9 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 				TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, vessel.getVesselClass(), true));
 		double ref = TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, vessel.getVesselClass(), true);
 		if (travelTime + from.getSlotOrPortDuration() > windowLength) {
-			final String message = String.format("Purchase|%s is paired with a sale at %s. However the laden travel time (%s) is greater than the shortest possible journey (%s).", from.getName(), to
-					.getPort().getName(), TravelTimeUtils.formatHours(travelTime + from.getSlotOrPortDuration()), TravelTimeUtils.formatHours((travelTime + from.getSlotOrPortDuration())
-					- windowLength));
+			final String message = String.format(
+					"Purchase|%s is paired with a sale at %s. However the laden travel time (%s) is greater than the shortest possible journey by %s", from.getName(),
+					to.getPort().getName(), TravelTimeUtils.formatHours(travelTime + from.getSlotOrPortDuration()), TravelTimeUtils.formatHours((travelTime + from.getSlotOrPortDuration()) - windowLength));
 			final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
 			dsd.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargoModel_Cargoes());
