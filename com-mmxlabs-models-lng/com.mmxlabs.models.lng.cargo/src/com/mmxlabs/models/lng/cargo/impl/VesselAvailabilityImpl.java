@@ -6,16 +6,6 @@
  */
 package com.mmxlabs.models.lng.cargo.impl;
 
-import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.EndHeelOptions;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.fleet.HeelOptions;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
@@ -29,6 +19,16 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
+
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.EndHeelOptions;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.fleet.HeelOptions;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**
  * <!-- begin-user-doc -->

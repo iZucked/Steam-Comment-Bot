@@ -3,14 +3,16 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.spotmarkets.impl;
+import java.util.Collection;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.APortSet;
-import java.util.Collection;
 
 /**
  * <!-- begin-user-doc -->

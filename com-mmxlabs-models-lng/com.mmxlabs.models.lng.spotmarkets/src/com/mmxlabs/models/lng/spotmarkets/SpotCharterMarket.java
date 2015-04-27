@@ -6,8 +6,9 @@
  */
 package com.mmxlabs.models.lng.spotmarkets;
 
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import org.eclipse.emf.ecore.EObject;
+
+import com.mmxlabs.models.lng.fleet.VesselClass;
 
 /**
  * <!-- begin-user-doc -->

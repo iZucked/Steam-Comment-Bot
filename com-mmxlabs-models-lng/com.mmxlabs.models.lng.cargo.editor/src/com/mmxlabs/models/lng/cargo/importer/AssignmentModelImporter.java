@@ -8,15 +8,15 @@ import java.util.Collection;
 import java.util.Map;
 
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.util.importer.CSVReader;
-import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IExtraModelImporter;
-import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.IMMXExportContext;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 
 /**
  */
@@ -32,14 +32,14 @@ public class AssignmentModelImporter implements IExtraModelImporter {
 	}
 
 	@Override
-	public void importModel(final MMXRootObject rootObject, final Map<String, CSVReader> inputs, final IImportContext context) {
+	public void importModel(final MMXRootObject rootObject, final Map<String, CSVReader> inputs, final IMMXImportContext context) {
 		if (inputs.containsKey(ASSIGNMENTS)) {
 			importer.importAssignments(inputs.get(ASSIGNMENTS), context);
 		}
 	}
 
 	@Override
-	public void exportModel(final Map<String, Collection<Map<String, String>>> output, final IExportContext context) {
+	public void exportModel(final Map<String, Collection<Map<String, String>>> output, final IMMXExportContext context) {
 		final MMXRootObject rootObject = context.getRootObject();
 		if (rootObject instanceof LNGScenarioModel) {
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;

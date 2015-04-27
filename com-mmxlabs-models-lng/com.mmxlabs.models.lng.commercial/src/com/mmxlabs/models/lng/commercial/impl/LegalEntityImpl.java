@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.commercial.impl;
 import org.eclipse.emf.ecore.EClass;
+
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 

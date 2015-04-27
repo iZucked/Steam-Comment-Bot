@@ -26,8 +26,8 @@ import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
-import com.mmxlabs.models.util.importer.IExportContext;
-import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.IMMXExportContext;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.impl.AbstractClassImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
 
@@ -61,7 +61,7 @@ public class DataIndexImporter extends AbstractClassImporter {
 	/**
 	 */
 	@Override
-	public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context) {
+	public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IMMXImportContext context) {
 		final Index<Number> result;
 		if (row.containsKey(EXPRESSION)) {
 			if (row.get(EXPRESSION).isEmpty() == false) {
@@ -140,7 +140,7 @@ public class DataIndexImporter extends AbstractClassImporter {
 	}
 
 	@Override
-	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final IExportContext context) {
+	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final IMMXExportContext context) {
 		final List<Map<String, String>> result = new ArrayList<Map<String, String>>();
 		for (final EObject o : objects) {
 			if (o instanceof DataIndex) {

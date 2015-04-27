@@ -3,6 +3,8 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
+import java.util.Collection;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
@@ -30,7 +32,6 @@ import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import java.util.Collection;
 
 /**
  * <!-- begin-user-doc -->

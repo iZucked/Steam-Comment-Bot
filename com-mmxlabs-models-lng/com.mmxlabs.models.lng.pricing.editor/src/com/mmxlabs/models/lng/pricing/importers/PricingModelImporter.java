@@ -11,7 +11,11 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.common.csv.CSVReader;
+import com.mmxlabs.common.csv.IDeferment;
+import com.mmxlabs.common.csv.IImportContext;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
@@ -32,11 +36,9 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
-import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IClassImporter;
-import com.mmxlabs.models.util.importer.IExportContext;
-import com.mmxlabs.models.util.importer.IImportContext;
-import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
+import com.mmxlabs.models.util.importer.IMMXExportContext;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 
@@ -99,7 +101,7 @@ public class PricingModelImporter implements ISubmodelImporter {
 	}
 
 	@Override
-	public UUIDObject importModel(final Map<String, CSVReader> inputs, final IImportContext context) {
+	public UUIDObject importModel(final Map<String, CSVReader> inputs, final IMMXImportContext context) {
 		final PricingModel pricing = PricingFactory.eINSTANCE.createPricingModel();
 		if (inputs.containsKey(PRICE_CURVE_KEY)) {
 			importCommodityCurves(pricing, inputs.get(PRICE_CURVE_KEY), context);
@@ -121,10 +123,11 @@ public class PricingModelImporter implements ISubmodelImporter {
 			pricing.getCooldownPrices().addAll(
 					(Collection<? extends CooldownPrice>) cooldownPriceImporter.importObjects(PricingPackage.eINSTANCE.getCooldownPrice(), inputs.get(COOLDOWN_PRICING_KEY), context));
 		}
-		
+
 		context.doLater(new IDeferment() {
 			@Override
-			public void run(final IImportContext context) {
+			public void run(final IImportContext importContext) {
+				final IMMXImportContext context = (IMMXImportContext) importContext;
 				final MMXRootObject root = context.getRootObject();
 				if (root instanceof LNGScenarioModel) {
 					LNGScenarioModel scenarioModel = (LNGScenarioModel) root;
@@ -173,27 +176,27 @@ public class PricingModelImporter implements ISubmodelImporter {
 
 			@Override
 			public int getStage() {
-				return IImportContext.STAGE_MODIFY_SUBMODELS;
+				return IMMXImportContext.STAGE_MODIFY_SUBMODELS;
 			}
 		});
 
 		return pricing;
 	}
-	
-	private void importCommodityCurves(final PricingModel pricing, final CSVReader csvReader, final IImportContext context) {
+
+	private void importCommodityCurves(final PricingModel pricing, final CSVReader csvReader, final IMMXImportContext context) {
 		pricing.getCommodityIndices().addAll((Collection<? extends CommodityIndex>) commodityIndexImporter.importObjects(PricingPackage.eINSTANCE.getCommodityIndex(), csvReader, context));
 	}
 
-	private void importCharterCurves(final PricingModel pricing, final CSVReader csvReader, final IImportContext context) {
+	private void importCharterCurves(final PricingModel pricing, final CSVReader csvReader, final IMMXImportContext context) {
 		pricing.getCharterIndices().addAll((Collection<? extends CharterIndex>) charterIndexImporter.importObjects(PricingPackage.eINSTANCE.getCharterIndex(), csvReader, context));
 	}
 
-	private void importBaseFuelCurves(final PricingModel pricing, final CSVReader csvReader, final IImportContext context) {
+	private void importBaseFuelCurves(final PricingModel pricing, final CSVReader csvReader, final IMMXImportContext context) {
 		pricing.getBaseFuelPrices().addAll((Collection<? extends BaseFuelIndex>) baseFuelIndexImporter.importObjects(PricingPackage.eINSTANCE.getBaseFuelIndex(), csvReader, context));
 	}
 
 	@Override
-	public void exportModel( final UUIDObject model, final Map<String, Collection<Map<String, String>>> output, final IExportContext context) {
+	public void exportModel(final EObject model, final Map<String, Collection<Map<String, String>>> output, final IMMXExportContext context) {
 		final PricingModel pricing = (PricingModel) model;
 		output.put(PRICE_CURVE_KEY, commodityIndexImporter.exportObjects(pricing.getCommodityIndices(), context));
 		output.put(CHARTER_CURVE_KEY, charterIndexImporter.exportObjects(pricing.getCharterIndices(), context));

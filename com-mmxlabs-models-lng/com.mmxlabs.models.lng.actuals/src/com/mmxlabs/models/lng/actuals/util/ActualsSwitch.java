@@ -6,13 +6,18 @@
  */
 package com.mmxlabs.models.lng.actuals.util;
 
-import com.mmxlabs.models.lng.actuals.*;
-
-import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.util.Switch;
+
+import com.mmxlabs.models.lng.actuals.ActualsModel;
+import com.mmxlabs.models.lng.actuals.ActualsPackage;
+import com.mmxlabs.models.lng.actuals.CargoActuals;
+import com.mmxlabs.models.lng.actuals.DischargeActuals;
+import com.mmxlabs.models.lng.actuals.LoadActuals;
+import com.mmxlabs.models.lng.actuals.ReturnActuals;
+import com.mmxlabs.models.lng.actuals.SlotActuals;
+import com.mmxlabs.models.lng.types.ITimezoneProvider;
 
 /**
  * <!-- begin-user-doc -->

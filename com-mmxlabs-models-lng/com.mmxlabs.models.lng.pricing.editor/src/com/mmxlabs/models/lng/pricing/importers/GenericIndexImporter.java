@@ -21,6 +21,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.joda.time.YearMonth;
 
+import com.mmxlabs.common.csv.IExportContext;
+import com.mmxlabs.common.csv.IImportContext;
 import com.mmxlabs.models.datetime.importers.LocalDateAttributeImporter;
 import com.mmxlabs.models.datetime.importers.YearMonthAttributeImporter;
 import com.mmxlabs.models.lng.pricing.DataIndex;
@@ -28,8 +30,7 @@ import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
-import com.mmxlabs.models.util.importer.IExportContext;
-import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.impl.AbstractClassImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
 import com.mmxlabs.models.util.importer.impl.NumberAttributeImporter;
@@ -145,7 +146,7 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 	}
 
 	@Override
-	abstract public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context);
+	abstract public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IMMXImportContext context);
 
 	protected Comparator<String> getFieldNameOrderComparator() {
 		return new Comparator<String>() {

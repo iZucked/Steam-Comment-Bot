@@ -18,15 +18,16 @@ import java.util.TreeMap;
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.csv.CSVReader;
+import com.mmxlabs.common.csv.IDeferment;
+import com.mmxlabs.common.csv.IExportContext;
+import com.mmxlabs.common.csv.IImportContext;
+import com.mmxlabs.common.csv.IImportProblem;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.VesselClass;
-import com.mmxlabs.models.util.importer.CSVReader;
-import com.mmxlabs.models.util.importer.IExportContext;
-import com.mmxlabs.models.util.importer.IImportContext;
-import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
-import com.mmxlabs.models.util.importer.IImportContext.IImportProblem;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.impl.NumberAttributeImporter;
 
 /**
@@ -89,7 +90,7 @@ public class FuelCurveImporter {
 		return result;
 	}
 
-	public void importFuelConsumptions(final CSVReader reader, final IImportContext context) {
+	public void importFuelConsumptions(final CSVReader reader, final IMMXImportContext context) {
 		try {
 			final Map<String, Pair<IImportProblem, Pair<List<FuelConsumption>, List<FuelConsumption>>>> consumptions = readConsumptions(reader, context);
 
@@ -97,7 +98,8 @@ public class FuelCurveImporter {
 				final Pair<IImportProblem, Pair<List<FuelConsumption>, List<FuelConsumption>>> c = consumptions.get(s);
 				context.doLater(new IDeferment() {
 					@Override
-					public void run(final IImportContext context) {
+					public void run(final IImportContext importContext) {
+						final IMMXImportContext context = (IMMXImportContext) importContext;
 						final VesselClass vesselClass = (VesselClass) context.getNamedObject(s, FleetPackage.eINSTANCE.getVesselClass());
 						if (vesselClass != null) {
 							vesselClass.getLadenAttributes().getFuelConsumption().addAll(c.getSecond().getFirst());
@@ -109,7 +111,7 @@ public class FuelCurveImporter {
 
 					@Override
 					public int getStage() {
-						return IImportContext.STAGE_REFERENCES_RESOLVED;
+						return IMMXImportContext.STAGE_REFERENCES_RESOLVED;
 					}
 				});
 			}

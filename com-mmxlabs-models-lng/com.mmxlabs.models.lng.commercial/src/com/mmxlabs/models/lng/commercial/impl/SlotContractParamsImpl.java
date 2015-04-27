@@ -6,11 +6,11 @@
  */
 package com.mmxlabs.models.lng.commercial.impl;
 
+import org.eclipse.emf.ecore.EClass;
+
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
-
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
-import org.eclipse.emf.ecore.EClass;
 
 /**
  * <!-- begin-user-doc -->

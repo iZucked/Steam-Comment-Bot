@@ -38,7 +38,7 @@ import com.mmxlabs.models.lng.cargo.util.IShippingDaysRestrictionSpeedProvider;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.validation.utils.TravelTimeUtils;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;IValueCurveRepository
+import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
@@ -85,7 +85,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 		});
 		injector.injectMembers(this);
 	}
-	
+
 	/**
 	 * Validate that the available time is not negative.
 	 * 
@@ -283,7 +283,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 					}
 					prevSlot = slot;
 				}
-			} else if (constraintID.equals(NON_SHIPPED_TRAVEL_TIME_ID)){
+			} else if (constraintID.equals(NON_SHIPPED_TRAVEL_TIME_ID)) {
 				// Divertable DES and FOB Sale
 				if (cargo.getSortedSlots().size() == 2) {
 					LoadSlot loadSlot = (LoadSlot) cargo.getSortedSlots().get(0);
@@ -297,7 +297,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 
 		return Activator.PLUGIN_ID;
 	}
-	
+
 	private void validateNonShippedSlotTravelTime(final IValidationContext ctx, final IExtraValidationContext extraContext, final Cargo cargo, final LoadSlot from, final DischargeSlot to,
 			final List<IStatus> failures) {
 		if (from.getName().equals("TFS01")) {
@@ -308,26 +308,27 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 			return;
 		}
 		int windowLength = getLadenMaxWindow(from, to);
-		int travelTime = TravelTimeUtils.getMinRouteTimeInHours(from, to, shippingDaysSpeedProvider, TravelTimeUtils.getScenarioModel(extraContext), vessel, TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, vessel.getVesselClass(), true));
+		int travelTime = TravelTimeUtils.getMinRouteTimeInHours(from, to, shippingDaysSpeedProvider, TravelTimeUtils.getScenarioModel(extraContext), vessel,
+				TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, vessel.getVesselClass(), true));
 		double ref = TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, vessel.getVesselClass(), true);
 		if (travelTime + from.getSlotOrPortDuration() > windowLength) {
-			final String message = String.format(
-					"Purchase|%s is paired with a sale at %s. However the laden travel time (%s) is greater than the shortest possible journey (%s).", from.getName(),
-					to.getPort().getName(), TravelTimeUtils.formatHours(travelTime + from.getSlotOrPortDuration()), TravelTimeUtils.formatHours((travelTime + from.getSlotOrPortDuration()) - windowLength));
+			final String message = String.format("Purchase|%s is paired with a sale at %s. However the laden travel time (%s) is greater than the shortest possible journey (%s).", from.getName(), to
+					.getPort().getName(), TravelTimeUtils.formatHours(travelTime + from.getSlotOrPortDuration()), TravelTimeUtils.formatHours((travelTime + from.getSlotOrPortDuration())
+					- windowLength));
 			final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
 			dsd.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargoModel_Cargoes());
 			failures.add(dsd);
 		}
-		
+
 	}
-	
+
 	private Integer getLadenMaxWindow(Slot startSlot, Slot endSlot) {
-		final Date dateStart = startSlot.getWindowStartWithSlotOrPortTime();
-		final Date dateEnd = endSlot.getWindowEndWithSlotOrPortTime();
+		final DateTime dateStart = startSlot.getWindowStartWithSlotOrPortTime();
+		final DateTime dateEnd = endSlot.getWindowEndWithSlotOrPortTime();
 
 		if (dateStart != null && dateEnd != null) {
-			return (int) ((dateEnd.getTime() - dateStart.getTime()) / Timer.ONE_HOUR);
+			return Hours.hoursBetween(dateStart, dateEnd).getHours();
 		} else {
 			return null;
 		}

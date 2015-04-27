@@ -6,9 +6,10 @@
  */
 package com.mmxlabs.models.lng.schedule;
 
+import org.eclipse.emf.ecore.EObject;
+
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->

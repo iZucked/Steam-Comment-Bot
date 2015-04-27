@@ -373,7 +373,7 @@ public class ScenarioSelectionPage extends WizardPage {
 		container.setLayoutData(ld);
 
 		// create a radiobutton group for specifying how scenarios are selected
-		final String currentScenarioOption = String.format("Current ('%s')", currentScenario.getName());
+		final String currentScenarioOption = currentScenario == null ? "" : String.format("Current ('%s')", currentScenario.getName());
 		scenarioSelectionGroup = new RadioSelectionGroup(container, "Scenarios", SWT.NONE, new String[] { "All", currentScenarioOption, "Selected" }, new int[] { CHOICE_ALL_SCENARIOS,
 				CHOICE_CURRENT_SCENARIO, CHOICE_SELECTED_SCENARIOS });
 		// scenarioSelectionGroup.setSelectedIndex(0);

@@ -20,8 +20,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableColumn;
 
-import com.mmxlabs.models.util.importer.IImportContext;
-import com.mmxlabs.models.util.importer.IImportContext.IImportProblem;
+import com.mmxlabs.common.csv.IImportContext;
+import com.mmxlabs.common.csv.IImportProblem;
 
 /**
  * A quick dialog for showing a list of import problems

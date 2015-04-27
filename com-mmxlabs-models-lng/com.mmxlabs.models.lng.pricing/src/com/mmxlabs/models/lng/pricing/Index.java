@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.pricing;
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EObject;
 import org.joda.time.YearMonth;
 

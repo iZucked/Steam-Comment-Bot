@@ -15,10 +15,11 @@ import org.eclipse.emf.ecore.EReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.common.csv.CSVReader;
+import com.mmxlabs.common.csv.FileCSVReader;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.util.Activator;
-import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 
@@ -102,7 +103,7 @@ public class SimpleImportAction extends ImportAction {
 
 		CSVReader reader = null;
 		try {
-			reader = new CSVReader(new File(path), importHooksProvider.getCsvSeparator());
+			reader = new FileCSVReader(new File(path), importHooksProvider.getCsvSeparator());
 			final Collection<EObject> importedObjects = importer.importObjects(containment.getEReferenceType(), reader, context);
 			context.run();
 			final Command cmd = mergeImports(container, containment, importedObjects);

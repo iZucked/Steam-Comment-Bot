@@ -12,7 +12,9 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.models.lng.port.CapabilityGroup;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
@@ -23,10 +25,9 @@ import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
-import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IClassImporter;
-import com.mmxlabs.models.util.importer.IExportContext;
-import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.IMMXExportContext;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 
@@ -85,7 +86,7 @@ public class PortModelImporter implements ISubmodelImporter {
 	}
 
 	@Override
-	public UUIDObject importModel(final Map<String, CSVReader> inputs, final IImportContext context) {
+	public UUIDObject importModel(final Map<String, CSVReader> inputs, final IMMXImportContext context) {
 		final PortModel result = PortFactory.eINSTANCE.createPortModel();
 
 		final PortModel portModel = result;
@@ -137,7 +138,7 @@ public class PortModelImporter implements ISubmodelImporter {
 	}
 
 	@Override
-	public void exportModel(final UUIDObject model, final Map<String, Collection<Map<String, String>>> output, final IExportContext context) {
+	public void exportModel(final EObject model, final Map<String, Collection<Map<String, String>>> output, final IMMXExportContext context) {
 		for (final Route r : ((PortModel) model).getRoutes()) {
 			final Collection<Map<String, String>> result = routeImporter.exportRoute(r, context);
 			if (r.getName().equals(DIRECT_NAME)) {

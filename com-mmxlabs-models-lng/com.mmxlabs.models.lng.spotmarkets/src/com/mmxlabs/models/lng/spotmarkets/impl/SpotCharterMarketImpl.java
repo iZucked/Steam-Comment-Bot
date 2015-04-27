@@ -6,16 +6,15 @@
  */
 package com.mmxlabs.models.lng.spotmarkets.impl;
 
-import com.mmxlabs.models.lng.fleet.VesselClass;
-import com.mmxlabs.models.lng.spotmarkets.SpotCharterMarket;
-import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
+import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.spotmarkets.SpotCharterMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 
 /**
  * <!-- begin-user-doc -->

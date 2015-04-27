@@ -3,11 +3,12 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.impl;
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
-import org.eclipse.emf.common.notify.Notification;
 
 /**
  * <!-- begin-user-doc -->

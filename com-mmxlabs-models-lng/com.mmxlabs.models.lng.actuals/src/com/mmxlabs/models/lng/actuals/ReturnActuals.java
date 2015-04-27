@@ -6,12 +6,11 @@
  */
 package com.mmxlabs.models.lng.actuals;
 
-import com.mmxlabs.models.lng.port.Port;
-
-import com.mmxlabs.models.lng.types.ITimezoneProvider;
-
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
+
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.types.ITimezoneProvider;
 
 /**
  * <!-- begin-user-doc -->

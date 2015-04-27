@@ -7,7 +7,6 @@
 package com.mmxlabs.models.lng.cargo;
 
 import com.mmxlabs.models.lng.fleet.HeelOptions;
-
 import com.mmxlabs.models.lng.port.Port;
 
 /**

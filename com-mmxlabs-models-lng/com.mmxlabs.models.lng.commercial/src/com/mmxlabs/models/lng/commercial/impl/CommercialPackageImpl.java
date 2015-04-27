@@ -4,10 +4,6 @@
  */
 package com.mmxlabs.models.lng.commercial.impl;
 
-import com.mmxlabs.models.datetime.DateTimePackage;
-import com.mmxlabs.models.lng.commercial.BaseEntityBook;
-import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
@@ -16,6 +12,9 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
+import com.mmxlabs.models.datetime.DateTimePackage;
+import com.mmxlabs.models.lng.commercial.BaseEntityBook;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;

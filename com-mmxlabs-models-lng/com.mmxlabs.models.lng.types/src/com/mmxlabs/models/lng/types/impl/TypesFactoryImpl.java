@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.types.impl;
 
-import com.mmxlabs.models.lng.types.*;
-import java.lang.Iterable;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -17,6 +15,7 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TypesFactory;
 import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.lng.types.VolumeUnits;
 
 /**
  * <!-- begin-user-doc -->

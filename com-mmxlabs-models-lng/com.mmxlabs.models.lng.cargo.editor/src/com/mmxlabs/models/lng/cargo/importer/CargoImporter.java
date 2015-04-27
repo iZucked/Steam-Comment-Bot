@@ -23,6 +23,11 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.google.common.collect.Sets;
+import com.mmxlabs.common.csv.CSVReader;
+import com.mmxlabs.common.csv.FieldMap;
+import com.mmxlabs.common.csv.IDeferment;
+import com.mmxlabs.common.csv.IFieldMap;
+import com.mmxlabs.common.csv.IImportContext;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -42,13 +47,9 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.util.Activator;
-import com.mmxlabs.models.util.importer.CSVReader;
-import com.mmxlabs.models.util.importer.FieldMap;
 import com.mmxlabs.models.util.importer.IClassImporter;
-import com.mmxlabs.models.util.importer.IExportContext;
-import com.mmxlabs.models.util.importer.IFieldMap;
-import com.mmxlabs.models.util.importer.IImportContext;
-import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
+import com.mmxlabs.models.util.importer.IMMXExportContext;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 
 /**
@@ -88,7 +89,7 @@ public class CargoImporter extends DefaultClassImporter {
 	}
 
 	@Override
-	protected Map<String, String> exportObject(final EObject object, final IExportContext context) {
+	protected Map<String, String> exportObject(final EObject object, final IMMXExportContext context) {
 		final Map<String, String> result = new LinkedHashMap<String, String>();
 
 		for (final EAttribute attribute : object.eClass().getEAllAttributes()) {
@@ -150,7 +151,7 @@ public class CargoImporter extends DefaultClassImporter {
 	}
 
 	public Collection<Map<String, String>> exportObjects(final Collection<Cargo> cargoes, final Collection<LoadSlot> loadSlots, final Collection<DischargeSlot> dischargeSlots,
-			final IExportContext context) {
+			final IMMXExportContext context) {
 
 		final List<Map<String, String>> data = new LinkedList<Map<String, String>>();
 
@@ -223,7 +224,7 @@ public class CargoImporter extends DefaultClassImporter {
 
 	/**
 	 */
-	protected void exportSlot(final IExportContext context, final Map<String, String> result, final Slot slot, final String referenceName) {
+	protected void exportSlot(final IMMXExportContext context, final Map<String, String> result, final Slot slot, final String referenceName) {
 		final IClassImporter importer = Activator.getDefault().getImporterRegistry().getClassImporter(slot.eClass());
 		if (importer != null) {
 			final Map<String, String> subMap = importer.exportObjects(Collections.singleton(slot), context).iterator().next();
@@ -258,7 +259,7 @@ public class CargoImporter extends DefaultClassImporter {
 	}
 
 	@Override
-	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IImportContext context) {
+	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IMMXImportContext context) {
 		final Collection<EObject> result = importRawObject(parent, eClass, row, context);
 		LoadSlot load = null;
 		DischargeSlot discharge = null;
@@ -311,7 +312,8 @@ public class CargoImporter extends DefaultClassImporter {
 		// For older CSV sheets (pre LiNGO 3.7.0), there is an assignment field rather than nominated vessels.
 		if (buyAssignment != null && !buyAssignment.isEmpty()) {
 			context.doLater(new IDeferment() {
-				public void run(IImportContext context) {
+				public void run(IImportContext importContext) {
+					final IMMXImportContext context = (IMMXImportContext) importContext;
 					if (fLoad.isDESPurchase()) {
 						fLoad.setNominatedVessel((Vessel) context.getNamedObject(buyAssignment, FleetPackage.Literals.VESSEL));
 					}
@@ -319,28 +321,30 @@ public class CargoImporter extends DefaultClassImporter {
 
 				@Override
 				public int getStage() {
-					return IImportContext.STAGE_MODIFY_SUBMODELS;
+					return IMMXImportContext.STAGE_MODIFY_SUBMODELS;
 				}
 			});
 		}
 		if (sellAssignment != null && !sellAssignment.isEmpty()) {
 			context.doLater(new IDeferment() {
-				public void run(IImportContext context) {
+				public void run(IImportContext importContext) {
+					final IMMXImportContext context = (IMMXImportContext) importContext;
 					if (fDischarge.isFOBSale()) {
 						fDischarge.setNominatedVessel((Vessel) context.getNamedObject(sellAssignment, FleetPackage.Literals.VESSEL));
 					}
 				}
-				
+
 				@Override
 				public int getStage() {
-					return IImportContext.STAGE_MODIFY_SUBMODELS;
+					return IMMXImportContext.STAGE_MODIFY_SUBMODELS;
 				}
 			});
 		}
 		context.doLater(new IDeferment() {
 
 			@Override
-			public void run(final IImportContext context) {
+			public void run(final IImportContext importContext) {
+				final IMMXImportContext context = (IMMXImportContext) importContext;
 				if (fLoad instanceof SpotLoadSlot) {
 
 					final SpotLoadSlot sls = (SpotLoadSlot) fLoad;
@@ -372,7 +376,7 @@ public class CargoImporter extends DefaultClassImporter {
 
 			@Override
 			public int getStage() {
-				return IImportContext.STAGE_MODIFY_SUBMODELS;
+				return IMMXImportContext.STAGE_MODIFY_SUBMODELS;
 			}
 		});
 
@@ -380,7 +384,7 @@ public class CargoImporter extends DefaultClassImporter {
 	}
 
 	@Override
-	public Collection<EObject> importObjects(final EClass importClass, final CSVReader reader, final IImportContext context) {
+	public Collection<EObject> importObjects(final EClass importClass, final CSVReader reader, final IMMXImportContext context) {
 		final LinkedList<EObject> results = new LinkedList<EObject>();
 		try {
 			try {
@@ -504,7 +508,7 @@ public class CargoImporter extends DefaultClassImporter {
 
 	/**
 	 */
-	public Collection<EObject> importRawObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IImportContext context) {
+	public Collection<EObject> importRawObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IMMXImportContext context) {
 		final List<EObject> objects = new LinkedList<EObject>();
 		objects.addAll(super.importObject(parent, eClass, row, context).getCreatedObjects());
 		for (final EObject target : objects) {
@@ -541,7 +545,7 @@ public class CargoImporter extends DefaultClassImporter {
 		return objects;
 	}
 
-	private void addAssignmentTask(final EObject target, final IFieldMap fields, final IImportContext context) {
+	private void addAssignmentTask(final EObject target, final IFieldMap fields, final IMMXImportContext context) {
 		if (target instanceof AssignableElement) {
 			final AssignableElement assignableElement = (AssignableElement) target;
 
@@ -553,8 +557,8 @@ public class CargoImporter extends DefaultClassImporter {
 				context.doLater(new IDeferment() {
 
 					@Override
-					public void run(final IImportContext context) {
-
+					public void run(final IImportContext importContext) {
+						final IMMXImportContext context = (IMMXImportContext) importContext;
 						// New style
 						if (vesselName != null && !vesselName.isEmpty()) {
 							final CharterInMarket charterInMarket = (CharterInMarket) context.getNamedObject(vesselName.trim(), SpotMarketsPackage.Literals.CHARTER_IN_MARKET);
@@ -595,7 +599,7 @@ public class CargoImporter extends DefaultClassImporter {
 
 					@Override
 					public int getStage() {
-						return IImportContext.STAGE_MODIFY_SUBMODELS;
+						return IMMXImportContext.STAGE_MODIFY_SUBMODELS;
 					}
 				});
 			}

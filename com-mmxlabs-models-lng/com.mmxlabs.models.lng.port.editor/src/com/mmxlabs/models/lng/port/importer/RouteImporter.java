@@ -17,14 +17,15 @@ import java.util.TreeMap;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
+import com.mmxlabs.common.csv.CSVReader;
+import com.mmxlabs.common.csv.IDeferment;
+import com.mmxlabs.common.csv.IExportContext;
+import com.mmxlabs.common.csv.IImportContext;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
-import com.mmxlabs.models.util.importer.CSVReader;
-import com.mmxlabs.models.util.importer.IExportContext;
-import com.mmxlabs.models.util.importer.IImportContext;
-import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.impl.NumberAttributeImporter;
 import com.mmxlabs.models.util.importer.impl.SetReference;
 
@@ -41,7 +42,7 @@ public class RouteImporter {
 
 	}
 
-	public Route importRoute(final CSVReader reader, final IImportContext context) {
+	public Route importRoute(final CSVReader reader, final IMMXImportContext context) {
 		final Route result = PortFactory.eINSTANCE.createRoute();
 
 		final NumberAttributeImporter nai = new NumberAttributeImporter(context.getDecimalSeparator());
@@ -97,7 +98,7 @@ public class RouteImporter {
 
 							@Override
 							public int getStage() {
-								return IImportContext.STAGE_MODIFY_SUBMODELS;
+								return IMMXImportContext.STAGE_MODIFY_SUBMODELS;
 							}
 						});
 						result.getLines().add(line);

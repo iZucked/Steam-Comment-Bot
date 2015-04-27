@@ -12,7 +12,7 @@ import org.eclipse.emf.ecore.EObject;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
-import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 
 /**
@@ -23,7 +23,7 @@ import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
  */
 public class ContractClassImporter extends DefaultClassImporter {
 	@Override
-	protected void importAttributes(final Map<String, String> row, final IImportContext context, final EClass rowClass, final EObject instance) {
+	protected void importAttributes(final Map<String, String> row, final IMMXImportContext context, final EClass rowClass, final EObject instance) {
 
 		// Set pricing event defaults
 		if (instance instanceof PurchaseContract) {

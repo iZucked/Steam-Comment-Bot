@@ -7,7 +7,6 @@
 package com.mmxlabs.models.lng.scenario.model.provider;
 
 
-import com.mmxlabs.models.lng.actuals.ActualsFactory;
 import java.util.Collection;
 import java.util.List;
 
@@ -22,6 +21,7 @@ import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import com.mmxlabs.models.lng.actuals.ActualsFactory;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;

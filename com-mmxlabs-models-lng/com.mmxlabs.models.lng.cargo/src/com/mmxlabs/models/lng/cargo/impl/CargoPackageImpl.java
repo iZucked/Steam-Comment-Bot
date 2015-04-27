@@ -4,9 +4,6 @@
  */
 package com.mmxlabs.models.lng.cargo.impl;
 
-import com.mmxlabs.models.datetime.DateTimePackage;
-import com.mmxlabs.models.lng.cargo.AssignableElement;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
@@ -16,6 +13,8 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
+import com.mmxlabs.models.datetime.DateTimePackage;
+import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoGroup;

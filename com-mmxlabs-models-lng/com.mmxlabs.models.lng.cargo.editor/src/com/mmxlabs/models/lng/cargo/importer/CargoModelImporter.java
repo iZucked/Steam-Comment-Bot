@@ -13,6 +13,9 @@ import javax.inject.Inject;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.common.csv.CSVReader;
+import com.mmxlabs.common.csv.IDeferment;
+import com.mmxlabs.common.csv.IImportContext;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoGroup;
@@ -28,11 +31,9 @@ import com.mmxlabs.models.lng.cargo.VesselTypeGroup;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
-import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IClassImporter;
-import com.mmxlabs.models.util.importer.IExportContext;
-import com.mmxlabs.models.util.importer.IImportContext;
-import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
+import com.mmxlabs.models.util.importer.IMMXExportContext;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 
@@ -88,7 +89,7 @@ public class CargoModelImporter implements ISubmodelImporter {
 	}
 
 	@Override
-	public UUIDObject importModel(final Map<String, CSVReader> inputs, final IImportContext context) {
+	public UUIDObject importModel(final Map<String, CSVReader> inputs, final IMMXImportContext context) {
 		final CargoModel cargoModel = CargoFactory.eINSTANCE.createCargoModel();
 
 		// Create Special groups
@@ -156,7 +157,7 @@ public class CargoModelImporter implements ISubmodelImporter {
 
 						@Override
 						public int getStage() {
-							return IImportContext.STAGE_REFERENCES_RESOLVED;
+							return IMMXImportContext.STAGE_REFERENCES_RESOLVED;
 						}
 					});
 				}
@@ -180,7 +181,7 @@ public class CargoModelImporter implements ISubmodelImporter {
 	}
 
 	@Override
-	public void exportModel(final UUIDObject model, final Map<String, Collection<Map<String, String>>> output, final IExportContext context) {
+	public void exportModel(final EObject model, final Map<String, Collection<Map<String, String>>> output, final IMMXExportContext context) {
 		final CargoModel cargoModel = (CargoModel) model;
 		output.put(CARGO_KEY, cargoImporter.exportObjects(cargoModel.getCargoes(), cargoModel.getLoadSlots(), cargoModel.getDischargeSlots(), context));
 		output.put(CARGO_GROUP_KEY, cargoGroupImporter.exportObjects(cargoModel.getCargoGroups(), context));

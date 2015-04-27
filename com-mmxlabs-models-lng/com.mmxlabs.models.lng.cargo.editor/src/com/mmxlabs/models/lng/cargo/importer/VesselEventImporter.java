@@ -12,6 +12,10 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 
+import com.mmxlabs.common.csv.FieldMap;
+import com.mmxlabs.common.csv.IDeferment;
+import com.mmxlabs.common.csv.IFieldMap;
+import com.mmxlabs.common.csv.IImportContext;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -22,11 +26,8 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
-import com.mmxlabs.models.util.importer.FieldMap;
-import com.mmxlabs.models.util.importer.IExportContext;
-import com.mmxlabs.models.util.importer.IFieldMap;
-import com.mmxlabs.models.util.importer.IImportContext;
-import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
+import com.mmxlabs.models.util.importer.IMMXExportContext;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 
 /**
@@ -37,7 +38,7 @@ public class VesselEventImporter extends DefaultClassImporter {
 		return reference != CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE;
 	}
 
-	protected Map<String, String> exportObject(final EObject object, final IExportContext context) {
+	protected Map<String, String> exportObject(final EObject object, final IMMXExportContext context) {
 		final Map<String, String> result = new LinkedHashMap<String, String>();
 
 		for (final EAttribute attribute : object.eClass().getEAllAttributes()) {
@@ -79,13 +80,13 @@ public class VesselEventImporter extends DefaultClassImporter {
 	}
 
 	@Override
-	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IImportContext context) {
+	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IMMXImportContext context) {
 		final ImportResults results = super.importObject(parent, eClass, row, context);
 		addAssignmentTask(results.importedObject, new FieldMap(row), context);
 		return results;
 	}
 
-	private void addAssignmentTask(final EObject target, final IFieldMap fields, final IImportContext context) {
+	private void addAssignmentTask(final EObject target, final IFieldMap fields, final IMMXImportContext context) {
 		if (target instanceof AssignableElement) {
 			final AssignableElement assignableElement = (AssignableElement) target;
 
@@ -97,7 +98,9 @@ public class VesselEventImporter extends DefaultClassImporter {
 				context.doLater(new IDeferment() {
 
 					@Override
-					public void run(final IImportContext context) {
+					public void run(final IImportContext importContext) {
+
+						final IMMXImportContext context = (IMMXImportContext) importContext;
 
 						// New style
 						if (vesselName != null && !vesselName.isEmpty()) {
@@ -139,7 +142,7 @@ public class VesselEventImporter extends DefaultClassImporter {
 
 					@Override
 					public int getStage() {
-						return IImportContext.STAGE_MODIFY_SUBMODELS;
+						return IMMXImportContext.STAGE_MODIFY_SUBMODELS;
 					}
 				});
 			}

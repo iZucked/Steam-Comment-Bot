@@ -6,13 +6,13 @@
  */
 package com.mmxlabs.models.lng.parameters.impl;
 
-import com.mmxlabs.models.datetime.DateTimePackage;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
+import com.mmxlabs.models.datetime.DateTimePackage;
 import com.mmxlabs.models.lng.parameters.AnnealingSettings;
 import com.mmxlabs.models.lng.parameters.Argument;
 import com.mmxlabs.models.lng.parameters.Constraint;

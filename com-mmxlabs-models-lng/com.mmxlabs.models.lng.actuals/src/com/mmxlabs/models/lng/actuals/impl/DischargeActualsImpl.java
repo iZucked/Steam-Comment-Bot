@@ -6,12 +6,12 @@
  */
 package com.mmxlabs.models.lng.actuals.impl;
 
-import com.mmxlabs.models.lng.actuals.ActualsPackage;
-import com.mmxlabs.models.lng.actuals.DischargeActuals;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
+import com.mmxlabs.models.lng.actuals.ActualsPackage;
+import com.mmxlabs.models.lng.actuals.DischargeActuals;
 
 /**
  * <!-- begin-user-doc -->

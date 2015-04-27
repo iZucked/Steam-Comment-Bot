@@ -6,19 +6,16 @@
  */
 package com.mmxlabs.models.lng.cargo;
 
-import com.mmxlabs.models.lng.fleet.Vessel;
-
-import com.mmxlabs.models.lng.port.Port;
-
-import com.mmxlabs.models.lng.types.AVesselSet;
-import com.mmxlabs.models.lng.types.ITimezoneProvider;
-
-import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
-
 import org.eclipse.emf.common.util.EList;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
+
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.types.ITimezoneProvider;
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->

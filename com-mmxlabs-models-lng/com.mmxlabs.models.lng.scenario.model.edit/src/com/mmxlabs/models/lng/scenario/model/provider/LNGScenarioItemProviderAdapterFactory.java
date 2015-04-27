@@ -6,9 +6,6 @@
  */
 package com.mmxlabs.models.lng.scenario.model.provider;
 
-import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.analytics.ProvisionalCargo;
-import com.mmxlabs.models.lng.analytics.util.AnalyticsSwitch;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -34,6 +31,9 @@ import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.ProvisionalCargo;
+import com.mmxlabs.models.lng.analytics.util.AnalyticsSwitch;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.scenario.model.util.LNGScenarioAdapterFactory;

@@ -9,14 +9,15 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-import com.mmxlabs.models.util.importer.CSVReader;
-import com.mmxlabs.models.util.importer.IExportContext;
-import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.IMMXExportContext;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 
 /**
@@ -29,13 +30,13 @@ public class ScheduleModelImporter implements ISubmodelImporter {
 	}
 
 	@Override
-	public UUIDObject importModel(final Map<String, CSVReader> inputs, final IImportContext context) {
+	public UUIDObject importModel(final Map<String, CSVReader> inputs, final IMMXImportContext context) {
 		final ScheduleModel commercial = ScheduleFactory.eINSTANCE.createScheduleModel();
 		return commercial;
 	}
 
 	@Override
-	public void exportModel(final UUIDObject model, final Map<String, Collection<Map<String, String>>> output, final IExportContext context) {
+	public void exportModel(final EObject model, final Map<String, Collection<Map<String, String>>> output, final IMMXExportContext context) {
 
 	}
 

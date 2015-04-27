@@ -14,8 +14,8 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-import com.mmxlabs.models.util.importer.IImportContext;
-import com.mmxlabs.models.util.importer.IImportContext.IImportProblem;
+import com.mmxlabs.common.csv.IImportContext;
+import com.mmxlabs.common.csv.IImportProblem;
 
 /**
  * Page for displaying the warnings from an import job

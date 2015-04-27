@@ -3,10 +3,11 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo;
-import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import org.eclipse.emf.common.util.EList;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;

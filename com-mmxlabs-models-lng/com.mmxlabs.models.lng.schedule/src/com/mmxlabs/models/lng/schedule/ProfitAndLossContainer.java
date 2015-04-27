@@ -6,8 +6,9 @@
  */
 package com.mmxlabs.models.lng.schedule;
 
-import com.mmxlabs.models.mmxcore.MMXObject;
 import org.eclipse.emf.common.util.EList;
+
+import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**
  * <!-- begin-user-doc -->

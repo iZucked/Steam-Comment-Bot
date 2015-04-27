@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.commercial.provider;
 
 
-import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import java.util.Collection;
 import java.util.List;
 
@@ -18,9 +17,10 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 
 /**

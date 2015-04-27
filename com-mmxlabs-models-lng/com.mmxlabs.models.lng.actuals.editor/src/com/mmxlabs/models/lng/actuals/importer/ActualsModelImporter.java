@@ -17,6 +17,9 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
+import com.mmxlabs.common.csv.CSVReader;
+import com.mmxlabs.common.csv.FieldMap;
+import com.mmxlabs.common.csv.IFieldMap;
 import com.mmxlabs.models.lng.actuals.ActualsPackage;
 import com.mmxlabs.models.lng.actuals.CargoActuals;
 import com.mmxlabs.models.lng.actuals.DischargeActuals;
@@ -24,12 +27,9 @@ import com.mmxlabs.models.lng.actuals.LoadActuals;
 import com.mmxlabs.models.lng.actuals.SlotActuals;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.util.Activator;
-import com.mmxlabs.models.util.importer.CSVReader;
-import com.mmxlabs.models.util.importer.FieldMap;
 import com.mmxlabs.models.util.importer.IClassImporter;
-import com.mmxlabs.models.util.importer.IExportContext;
-import com.mmxlabs.models.util.importer.IFieldMap;
-import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.IMMXExportContext;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 
 /**
@@ -48,7 +48,7 @@ public class ActualsModelImporter extends DefaultClassImporter {
 		return super.shouldExportFeature(feature);
 	}
 
-	public Collection<Map<String, String>> exportActuals(final Collection<CargoActuals> cargoes, final IExportContext context) {
+	public Collection<Map<String, String>> exportActuals(final Collection<CargoActuals> cargoes, final IMMXExportContext context) {
 
 		final List<Map<String, String>> data = new LinkedList<Map<String, String>>();
 
@@ -91,7 +91,7 @@ public class ActualsModelImporter extends DefaultClassImporter {
 
 	/**
 	 */
-	protected void exportSlot(final IExportContext context, final Map<String, String> result, final SlotActuals slot, final String referenceName) {
+	protected void exportSlot(final IMMXExportContext context, final Map<String, String> result, final SlotActuals slot, final String referenceName) {
 		final IClassImporter importer = Activator.getDefault().getImporterRegistry().getClassImporter(slot.eClass());
 		if (importer != null) {
 			final Map<String, String> subMap = importer.exportObjects(Collections.singleton(slot), context).iterator().next();
@@ -102,7 +102,7 @@ public class ActualsModelImporter extends DefaultClassImporter {
 	}
 
 	@Override
-	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IImportContext context) {
+	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IMMXImportContext context) {
 
 		ImportResults importResult = super.importObject(parent, eClass, row, context);
 		CargoActuals importedObject = (CargoActuals) importResult.importedObject;
@@ -132,7 +132,7 @@ public class ActualsModelImporter extends DefaultClassImporter {
 	}
 
 	@Override
-	public Collection<EObject> importObjects(final EClass importClass, final CSVReader reader, final IImportContext context) {
+	public Collection<EObject> importObjects(final EClass importClass, final CSVReader reader, final IMMXImportContext context) {
 		final LinkedList<EObject> results = new LinkedList<EObject>();
 		try {
 			try {

@@ -6,8 +6,9 @@
  */
 package com.mmxlabs.models.lng.schedule;
 
-import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import org.eclipse.emf.common.util.EList;
+
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 
 /**
  * <!-- begin-user-doc -->

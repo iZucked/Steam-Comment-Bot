@@ -11,7 +11,11 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.common.csv.CSVReader;
+import com.mmxlabs.common.csv.IDeferment;
+import com.mmxlabs.common.csv.IImportContext;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -26,11 +30,9 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
-import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IClassImporter;
-import com.mmxlabs.models.util.importer.IExportContext;
-import com.mmxlabs.models.util.importer.IImportContext;
-import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
+import com.mmxlabs.models.util.importer.IMMXExportContext;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 
@@ -89,7 +91,7 @@ public class FleetModelImporter implements ISubmodelImporter {
 	}
 
 	@Override
-	public UUIDObject importModel(final Map<String, CSVReader> inputs, final IImportContext context) {
+	public UUIDObject importModel(final Map<String, CSVReader> inputs, final IMMXImportContext context) {
 		final FleetModel fleetModel = FleetFactory.eINSTANCE.createFleetModel();
 
 		if (inputs.containsKey(VESSELS_KEY))
@@ -110,8 +112,8 @@ public class FleetModelImporter implements ISubmodelImporter {
 
 		context.doLater(new IDeferment() {
 			@Override
-			public void run(final IImportContext context) {
-
+			public void run(final IImportContext importContext) {
+				final IMMXImportContext context = (IMMXImportContext) importContext;
 				final MMXRootObject rootObject = context.getRootObject();
 				if (rootObject instanceof LNGScenarioModel) {
 					final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
@@ -138,7 +140,7 @@ public class FleetModelImporter implements ISubmodelImporter {
 
 			@Override
 			public int getStage() {
-				return IImportContext.STAGE_MODIFY_SUBMODELS;
+				return IMMXImportContext.STAGE_MODIFY_SUBMODELS;
 			}
 		});
 
@@ -146,7 +148,7 @@ public class FleetModelImporter implements ISubmodelImporter {
 	}
 
 	@Override
-	public void exportModel(final UUIDObject model, final Map<String, Collection<Map<String, String>>> output, final IExportContext context) {
+	public void exportModel(final EObject model, final Map<String, Collection<Map<String, String>>> output, final IMMXExportContext context) {
 		final FleetModel fleetModel = (FleetModel) model;
 		output.put(VESSELS_KEY, vesselImporter.exportObjects(fleetModel.getVessels(), context));
 		output.put(VESSEL_CLASSES_KEY, vesselClassImporter.exportObjects(fleetModel.getVesselClasses(), context));

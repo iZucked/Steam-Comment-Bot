@@ -6,11 +6,12 @@
  */
 package com.mmxlabs.models.lng.spotmarkets;
 
+import org.eclipse.emf.common.util.EList;
+
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.mmxcore.NamedObject;
-import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->

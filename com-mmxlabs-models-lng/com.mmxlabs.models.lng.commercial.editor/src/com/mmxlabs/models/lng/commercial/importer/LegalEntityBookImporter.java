@@ -19,15 +19,17 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.joda.time.LocalDate;
 
+import com.mmxlabs.common.csv.IDeferment;
+import com.mmxlabs.common.csv.IExportContext;
+import com.mmxlabs.common.csv.IImportContext;
 import com.mmxlabs.models.datetime.importers.LocalDateAttributeImporter;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.TaxRate;
-import com.mmxlabs.models.util.importer.IExportContext;
-import com.mmxlabs.models.util.importer.IImportContext;
-import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
+import com.mmxlabs.models.util.importer.IMMXExportContext;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 
 /**
@@ -42,7 +44,7 @@ public class LegalEntityBookImporter extends DefaultClassImporter {
 	final LocalDateAttributeImporter dateParser = new LocalDateAttributeImporter();
 
 	@Override
-	public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context) {
+	public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IMMXImportContext context) {
 
 		// use the default importer to import the object's usual attributes
 		final ImportResults result = super.importObject(parent, targetClass, row, context);
@@ -76,7 +78,8 @@ public class LegalEntityBookImporter extends DefaultClassImporter {
 		final String bookType = row.get(TYPE_KEY);
 		context.doLater(new IDeferment() {
 			@Override
-			public void run(final IImportContext context) {
+			public void run(final IImportContext importContext) {
+				final IMMXImportContext context = (IMMXImportContext) importContext;
 				final BaseLegalEntity legalEntity = (BaseLegalEntity) context.getNamedObject(entityName, CommercialPackage.Literals.BASE_LEGAL_ENTITY);
 				if (legalEntity != null) {
 					if (TYPE_SHIPPING.equalsIgnoreCase(bookType)) {
@@ -91,7 +94,7 @@ public class LegalEntityBookImporter extends DefaultClassImporter {
 
 			@Override
 			public int getStage() {
-				return IImportContext.STAGE_REFERENCES_RESOLVED;
+				return IMMXImportContext.STAGE_REFERENCES_RESOLVED;
 			}
 		});
 
@@ -123,7 +126,7 @@ public class LegalEntityBookImporter extends DefaultClassImporter {
 	}
 
 	@Override
-	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final IExportContext context) {
+	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final IMMXExportContext context) {
 		final LinkedList<Map<String, String>> result = new LinkedList<Map<String, String>>();
 
 		final SortedSet<String> dates = new TreeSet<String>();

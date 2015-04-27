@@ -414,7 +414,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 					}
 				}
 
-				private <T> void setIndexPoint(final T value, final DataIndex<T> di, final YearMonth colDate) {
+				private <T extends Number> void setIndexPoint(final T value, final DataIndex<T> di, final YearMonth colDate) {
 
 					for (final IndexPoint<T> p : di.getPoints()) {
 						if (p.getDate().getYear() == colDate.getYear() && p.getDate().getMonthOfYear() == colDate.getMonthOfYear()) {

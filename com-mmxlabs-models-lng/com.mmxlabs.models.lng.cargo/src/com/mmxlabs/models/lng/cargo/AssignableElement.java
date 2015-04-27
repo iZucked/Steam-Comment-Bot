@@ -6,8 +6,9 @@
  */
 package com.mmxlabs.models.lng.cargo;
 
-import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import org.eclipse.emf.ecore.EObject;
+
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 
 /**
  * <!-- begin-user-doc -->

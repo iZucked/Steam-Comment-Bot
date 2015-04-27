@@ -6,23 +6,19 @@
  */
 package com.mmxlabs.models.lng.actuals.impl;
 
-import com.mmxlabs.models.lng.actuals.ActualsModel;
-import com.mmxlabs.models.lng.actuals.ActualsPackage;
-import com.mmxlabs.models.lng.actuals.CargoActuals;
-
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
+
+import com.mmxlabs.models.lng.actuals.ActualsModel;
+import com.mmxlabs.models.lng.actuals.ActualsPackage;
+import com.mmxlabs.models.lng.actuals.CargoActuals;
 
 /**
  * <!-- begin-user-doc -->

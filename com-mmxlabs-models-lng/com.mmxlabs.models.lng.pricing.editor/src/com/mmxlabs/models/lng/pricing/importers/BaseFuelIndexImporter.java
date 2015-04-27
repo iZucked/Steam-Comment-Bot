@@ -11,7 +11,7 @@ import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
-import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 
 /**
  * Custom import logic for loading a base fuel index.
@@ -28,7 +28,7 @@ public class BaseFuelIndexImporter extends AbstractMultipleDataIndexImporter<Bas
 	}
 	
 	@Override
-	protected BaseFuelIndex getResult(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context, boolean isUnified) {
+	protected BaseFuelIndex getResult(final EObject parent, final EClass targetClass, final Map<String, String> row, final IMMXImportContext context, boolean isUnified) {
 		BaseFuelIndex result = PricingFactory.eINSTANCE.createBaseFuelIndex();
 		setIndexFromRow(result, row, context, isUnified);
 		return result;

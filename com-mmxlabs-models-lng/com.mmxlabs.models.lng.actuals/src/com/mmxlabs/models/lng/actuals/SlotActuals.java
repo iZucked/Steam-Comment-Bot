@@ -6,12 +6,13 @@
  */
 package com.mmxlabs.models.lng.actuals;
 
+import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
+
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDateTime;
 
 /**
  * <!-- begin-user-doc -->

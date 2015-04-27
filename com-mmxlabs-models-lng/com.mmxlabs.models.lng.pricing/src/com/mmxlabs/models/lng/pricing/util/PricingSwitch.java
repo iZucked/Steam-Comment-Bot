@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.pricing.util;
 
-import com.mmxlabs.models.lng.pricing.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
@@ -22,6 +21,10 @@ import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
+import com.mmxlabs.models.lng.pricing.PortsExpressionMap;
+import com.mmxlabs.models.lng.pricing.PortsPriceMap;
+import com.mmxlabs.models.lng.pricing.PortsSplitExpressionMap;
+import com.mmxlabs.models.lng.pricing.PortsSplitPriceMap;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;

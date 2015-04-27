@@ -13,6 +13,10 @@ import javax.inject.Inject;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.common.csv.FieldMap;
+import com.mmxlabs.common.csv.IDeferment;
+import com.mmxlabs.common.csv.IFieldMap;
+import com.mmxlabs.common.csv.IImportContext;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
@@ -22,12 +26,9 @@ import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.util.Activator;
-import com.mmxlabs.models.util.importer.FieldMap;
 import com.mmxlabs.models.util.importer.IClassImporter;
-import com.mmxlabs.models.util.importer.IExportContext;
-import com.mmxlabs.models.util.importer.IFieldMap;
-import com.mmxlabs.models.util.importer.IImportContext;
-import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
+import com.mmxlabs.models.util.importer.IMMXExportContext;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 
@@ -65,7 +66,7 @@ public class VesselClassImporter extends DefaultClassImporter {
 	}
 
 	@Override
-	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IImportContext context) {
+	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IMMXImportContext context) {
 		final ImportResults result = super.importObject(parent, eClass, row, context);
 		final VesselClass vc = (VesselClass) result.importedObject;
 		final HashSet<String> pricedCanals = new HashSet<String>();
@@ -96,7 +97,8 @@ public class VesselClassImporter extends DefaultClassImporter {
 
 						context.doLater(new IDeferment() {
 							@Override
-							public void run(final IImportContext context) {
+							public void run(final IImportContext importContext) {
+								final IMMXImportContext context = (IMMXImportContext) importContext;
 								if (cost.getRoute() != null && cost.getVesselClass() != null) {
 									final MMXRootObject rootObject = context.getRootObject();
 									if (rootObject instanceof LNGScenarioModel) {
@@ -107,7 +109,7 @@ public class VesselClassImporter extends DefaultClassImporter {
 
 							@Override
 							public int getStage() {
-								return IImportContext.STAGE_REFERENCES_RESOLVED;
+								return IMMXImportContext.STAGE_REFERENCES_RESOLVED;
 							}
 						});
 					}
@@ -144,7 +146,7 @@ public class VesselClassImporter extends DefaultClassImporter {
 
 							@Override
 							public int getStage() {
-								return IImportContext.STAGE_REFERENCES_RESOLVED;
+								return IMMXImportContext.STAGE_REFERENCES_RESOLVED;
 							}
 						});
 					}
@@ -156,7 +158,7 @@ public class VesselClassImporter extends DefaultClassImporter {
 	}
 
 	@Override
-	protected Map<String, String> exportObject(final EObject object, final IExportContext context) {
+	protected Map<String, String> exportObject(final EObject object, final IMMXExportContext context) {
 		final VesselClass vc = (VesselClass) object;
 		final Map<String, String> result = super.exportObject(object, context);
 

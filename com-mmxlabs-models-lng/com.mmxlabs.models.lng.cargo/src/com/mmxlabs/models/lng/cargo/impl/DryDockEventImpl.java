@@ -6,10 +6,10 @@
  */
 package com.mmxlabs.models.lng.cargo.impl;
 
+import org.eclipse.emf.ecore.EClass;
+
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
-
-import org.eclipse.emf.ecore.EClass;
 
 /**
  * <!-- begin-user-doc -->

@@ -11,7 +11,7 @@ import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
-import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 
 /**
  * Custom import logic for loading a commodity index.
@@ -26,7 +26,7 @@ public class CommodityIndexImporter extends AbstractMultipleDataIndexImporter<Co
 	}
 	
 	@Override
-	protected CommodityIndex getResult(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context, boolean isUnified) {
+	protected CommodityIndex getResult(final EObject parent, final EClass targetClass, final Map<String, String> row, final IMMXImportContext context, boolean isUnified) {
 		final CommodityIndex result = PricingFactory.eINSTANCE.createCommodityIndex();
 		setIndexFromRow(result, row, context, isUnified);
 		return result;

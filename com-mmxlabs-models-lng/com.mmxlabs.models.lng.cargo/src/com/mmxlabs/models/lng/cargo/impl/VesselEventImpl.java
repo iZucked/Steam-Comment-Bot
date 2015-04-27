@@ -6,19 +6,6 @@
  */
 package com.mmxlabs.models.lng.cargo.impl;
 
-import com.mmxlabs.models.lng.cargo.AssignableElement;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.VesselEvent;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.types.AVesselSet;
-import com.mmxlabs.models.lng.types.ITimezoneProvider;
-import com.mmxlabs.models.lng.types.TypesPackage;
-import com.mmxlabs.models.lng.types.VesselAssignmentType;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
@@ -32,6 +19,19 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
+
+import com.mmxlabs.models.lng.cargo.AssignableElement;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.types.ITimezoneProvider;
+import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**
  * <!-- begin-user-doc -->

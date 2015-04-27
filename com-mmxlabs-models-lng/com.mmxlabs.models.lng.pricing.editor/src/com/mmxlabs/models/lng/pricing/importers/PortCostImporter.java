@@ -13,15 +13,15 @@ import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.types.PortCapability;
-import com.mmxlabs.models.util.importer.IExportContext;
-import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.IMMXExportContext;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 
 /**
  */
 public class PortCostImporter extends DefaultClassImporter {
 	@Override
-	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IImportContext context) {
+	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IMMXImportContext context) {
 		final PortCost cost = (PortCost) super.importObject(parent, eClass, row, context).importedObject;
 
 		for (final PortCapability pc : PortCapability.values()) {
@@ -43,7 +43,7 @@ public class PortCostImporter extends DefaultClassImporter {
 	}
 
 	@Override
-	protected Map<String, String> exportObject(final EObject object, final IExportContext context) {
+	protected Map<String, String> exportObject(final EObject object, final IMMXExportContext context) {
 		final Map<String, String> result = super.exportObject(object, context);
 
 		for (final PortCostEntry pce : ((PortCost) object).getEntries()) {

@@ -9,7 +9,10 @@ import java.util.Map;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.common.csv.IDeferment;
+import com.mmxlabs.common.csv.IImportContext;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
@@ -18,9 +21,8 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.util.importer.IExportContext;
-import com.mmxlabs.models.util.importer.IImportContext;
-import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
+import com.mmxlabs.models.util.importer.IMMXExportContext;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 
 /**
@@ -33,7 +35,7 @@ public class BaseFuelImporter extends DefaultClassImporter {
 	private static String indexKey = "index";
 
 	@Override
-	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IImportContext context) {
+	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IMMXImportContext context) {
 		final ImportResults result = super.importObject(parent, eClass, row, context);
 		final BaseFuel fuel = (BaseFuel) result.importedObject;
 
@@ -45,7 +47,8 @@ public class BaseFuelImporter extends DefaultClassImporter {
 			context.doLater(new IDeferment() {
 
 				@Override
-				public void run(final IImportContext context) {
+				public void run(@NonNull final IImportContext importContext) {
+					final IMMXImportContext context = (IMMXImportContext) importContext;
 					final MMXRootObject rootObject = context.getRootObject();
 					if (rootObject instanceof LNGScenarioModel) {
 						final PricingModel pricingModel = ((LNGScenarioModel) rootObject).getPricingModel();
@@ -70,7 +73,7 @@ public class BaseFuelImporter extends DefaultClassImporter {
 
 				@Override
 				public int getStage() {
-					return IImportContext.STAGE_MODIFY_SUBMODELS;
+					return IMMXImportContext.STAGE_MODIFY_SUBMODELS;
 				}
 			});
 		} else {
@@ -81,7 +84,7 @@ public class BaseFuelImporter extends DefaultClassImporter {
 	}
 
 	@Override
-	protected Map<String, String> exportObject(final EObject object, final IExportContext context) {
+	protected Map<String, String> exportObject(@NonNull final EObject object, @NonNull final IMMXExportContext context) {
 		final BaseFuel bf = (BaseFuel) object;
 		final Map<String, String> result = super.exportObject(object, context);
 		final MMXRootObject rootObject = context.getRootObject();

@@ -14,7 +14,9 @@ import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
@@ -31,10 +33,9 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotType;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
-import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IClassImporter;
-import com.mmxlabs.models.util.importer.IExportContext;
-import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.IMMXExportContext;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 
@@ -88,11 +89,11 @@ public class SpotMarketsModelImporter implements ISubmodelImporter {
 	}
 
 	@Override
-	public UUIDObject importModel(final Map<String, CSVReader> inputs, final IImportContext context) {
+	public UUIDObject importModel(final Map<String, CSVReader> inputs, final IMMXImportContext context) {
 		final SpotMarketsModel spotMarketsModel = SpotMarketsFactory.eINSTANCE.createSpotMarketsModel();
 
 		if (inputs.containsKey(CHARTER_PRICING_KEY)) {
-			// Pass in an example class for importer code to obtain the package from. 
+			// Pass in an example class for importer code to obtain the package from.
 			for (final Object obj : charterPriceImporter.importObjects(SpotMarketsPackage.Literals.SPOT_CHARTER_MARKET, inputs.get(CHARTER_PRICING_KEY), context)) {
 				if (obj instanceof CharterInMarket) {
 					spotMarketsModel.getCharterInMarkets().add((CharterInMarket) obj);
@@ -195,7 +196,7 @@ public class SpotMarketsModelImporter implements ISubmodelImporter {
 	}
 
 	@Override
-	public void exportModel(final UUIDObject model, final Map<String, Collection<Map<String, String>>> output, final IExportContext context) {
+	public void exportModel(@NonNull final EObject model, @NonNull final Map<String, Collection<Map<String, String>>> output, @NonNull final IMMXExportContext context) {
 		final SpotMarketsModel spotMarketsModel = (SpotMarketsModel) model;
 		{
 			final List<EObject> charterObjects = new LinkedList<EObject>(spotMarketsModel.getCharterInMarkets());

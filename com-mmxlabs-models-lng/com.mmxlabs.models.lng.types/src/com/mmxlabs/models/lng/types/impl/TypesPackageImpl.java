@@ -24,7 +24,6 @@ import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import java.lang.Iterable;
 
 /**
  * <!-- begin-user-doc -->

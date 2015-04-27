@@ -14,17 +14,17 @@ import java.util.Map;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.common.csv.FieldMap;
+import com.mmxlabs.common.csv.IFieldMap;
 import com.mmxlabs.models.datetime.importers.LocalDateAttributeImporter;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
-import com.mmxlabs.models.util.importer.FieldMap;
 import com.mmxlabs.models.util.importer.IAttributeImporter;
-import com.mmxlabs.models.util.importer.IExportContext;
-import com.mmxlabs.models.util.importer.IFieldMap;
-import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.IMMXExportContext;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 import com.mmxlabs.models.util.importer.impl.SetReference;
 
@@ -34,7 +34,7 @@ public class CharterMarketImporter extends DefaultClassImporter {
 	private final LocalDateAttributeImporter dateAttributeImporter = new LocalDateAttributeImporter();
 
 	@Override
-	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IImportContext context) {
+	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IMMXImportContext context) {
 
 		if (row.get(START_DATE_KEY) != null && !row.get(START_DATE_KEY).trim().isEmpty()) {
 			final CharterOutStartDate charterOutStartDate = SpotMarketsFactory.eINSTANCE.createCharterOutStartDate();
@@ -109,7 +109,7 @@ public class CharterMarketImporter extends DefaultClassImporter {
 					}
 					return results;
 				}
-				return null;
+				return new ImportResults(null);
 			} else {
 				final EClass rowClass = getTrueOutputClass(eClass, kind);
 				try {
@@ -131,7 +131,7 @@ public class CharterMarketImporter extends DefaultClassImporter {
 	}
 
 	@Override
-	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final IExportContext context) {
+	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final IMMXExportContext context) {
 
 		final Collection<Map<String, String>> exportedObjects = new LinkedList<>();
 

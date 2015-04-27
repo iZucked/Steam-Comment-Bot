@@ -10,7 +10,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -30,17 +29,19 @@ import org.mockito.Mockito;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.mmxlabs.common.csv.CSVReader;
+import com.mmxlabs.common.csv.FileCSVReader;
+import com.mmxlabs.common.csv.IImportContext;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IAttributeImporter;
 import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IExtraModelImporter;
-import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.IPostModelImporter;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultAttributeImporter;
@@ -74,7 +75,7 @@ public class CargoImporterTest {
 			row.put("buy.cargoCV", "23.702");
 		}
 		final CargoImporter cargoImporter = createCargoImporter();
-		final IImportContext context = Mockito.mock(IImportContext.class);
+		final IMMXImportContext context = Mockito.mock(IMMXImportContext.class);
 		// This is needed otherwise there is no decimal separator!
 		Mockito.when(context.getDecimalSeparator()).thenReturn('.');
 		final Collection<EObject> importedObjects = cargoImporter.importObject(null, CargoPackage.eINSTANCE.getCargo(), row, context).getCreatedObjects();
@@ -140,7 +141,7 @@ public class CargoImporterTest {
 			row.put("sell." + CargoPackage.eINSTANCE.getDischargeSlot_PurchaseDeliveryType().getName().toLowerCase(), "ANY");
 		}
 		final CargoImporter cargoImporter = createCargoImporter();
-		final IImportContext context = Mockito.mock(IImportContext.class);
+		final IMMXImportContext context = Mockito.mock(IMMXImportContext.class);
 		final Collection<EObject> importedObjects = cargoImporter.importObject(null, CargoPackage.eINSTANCE.getCargo(), row, context).getCreatedObjects();
 
 		Assert.assertEquals(2, importedObjects.size());
@@ -210,10 +211,10 @@ public class CargoImporterTest {
 		final File tmp = File.createTempFile("CargoImporterTest", ".csv");
 		try {
 			writeCSV(recordData, tmp);
-			final CSVReader reader = new CSVReader(tmp);
+			final CSVReader reader = new FileCSVReader(tmp);
 			try {
 				final CargoImporter cargoImporter = createCargoImporter();
-				final IImportContext context = Mockito.mock(IImportContext.class);
+				final IMMXImportContext context = Mockito.mock(IMMXImportContext.class);
 				final Collection<EObject> importedObjects = cargoImporter.importObjects(CargoPackage.eINSTANCE.getCargo(), reader, context);
 
 				Assert.assertEquals(1, importedObjects.size());

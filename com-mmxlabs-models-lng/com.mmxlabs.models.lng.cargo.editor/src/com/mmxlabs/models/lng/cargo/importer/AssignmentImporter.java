@@ -11,6 +11,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.mmxlabs.common.csv.CSVReader;
+import com.mmxlabs.common.csv.IDeferment;
+import com.mmxlabs.common.csv.IExportContext;
+import com.mmxlabs.common.csv.IFieldMap;
+import com.mmxlabs.common.csv.IImportContext;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -30,11 +35,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.models.util.importer.CSVReader;
-import com.mmxlabs.models.util.importer.IExportContext;
-import com.mmxlabs.models.util.importer.IFieldMap;
-import com.mmxlabs.models.util.importer.IImportContext;
-import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 
 /**
  */
@@ -64,7 +65,9 @@ public class AssignmentImporter {
 					final int seq = index++;
 					context.doLater(new IDeferment() {
 						@Override
-						public void run(final IImportContext context) {
+						public void run(final IImportContext importContext) {
+
+							final IMMXImportContext context = (IMMXImportContext) importContext;
 							// Loop over all named objects and find the first object which can be used.
 							for (final NamedObject o : context.getNamedObjects(aon.trim())) {
 
@@ -187,7 +190,7 @@ public class AssignmentImporter {
 
 						@Override
 						public int getStage() {
-							return IImportContext.STAGE_MODIFY_SUBMODELS;
+							return IMMXImportContext.STAGE_MODIFY_SUBMODELS;
 						}
 					});
 				}

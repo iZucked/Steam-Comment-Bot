@@ -6,21 +6,17 @@
  */
 package com.mmxlabs.models.lng.cargo;
 
-import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-
-import com.mmxlabs.models.lng.fleet.HeelOptions;
-import com.mmxlabs.models.lng.fleet.Vessel;
-
-import com.mmxlabs.models.lng.port.Port;
-
-import com.mmxlabs.models.lng.types.APortSet;
-
-import com.mmxlabs.models.lng.types.VesselAssignmentType;
-import com.mmxlabs.models.mmxcore.UUIDObject;
-
 import org.eclipse.emf.common.util.EList;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
+
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.fleet.HeelOptions;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->

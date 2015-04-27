@@ -6,16 +6,21 @@
  */
 package com.mmxlabs.models.lng.actuals.impl;
 
-import com.mmxlabs.models.lng.actuals.*;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+
+import com.mmxlabs.models.lng.actuals.ActualsFactory;
+import com.mmxlabs.models.lng.actuals.ActualsModel;
+import com.mmxlabs.models.lng.actuals.ActualsPackage;
+import com.mmxlabs.models.lng.actuals.CargoActuals;
+import com.mmxlabs.models.lng.actuals.DischargeActuals;
+import com.mmxlabs.models.lng.actuals.LoadActuals;
+import com.mmxlabs.models.lng.actuals.PenaltyType;
+import com.mmxlabs.models.lng.actuals.ReturnActuals;
 
 /**
  * <!-- begin-user-doc -->

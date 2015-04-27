@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.command.IdentityCommand;
@@ -38,6 +39,8 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.common.csv.CSVReader;
+import com.mmxlabs.common.csv.FileCSVReader;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
@@ -56,7 +59,6 @@ import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
-import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
 import com.mmxlabs.rcp.common.actions.LockableAction;
@@ -188,7 +190,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 
 								CSVReader reader = null;
 								try {
-									reader = new CSVReader(new File(path), importHooksProvider.getCsvSeparator());
+									reader = new FileCSVReader(new File(path), importHooksProvider.getCsvSeparator());
 									final Route importRoute = routeImporter.importRoute(reader, context);
 									context.run();
 									final CompoundCommand cc = new CompoundCommand();
@@ -249,7 +251,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 
 								CSVReader reader = null;
 								try {
-									reader = new CSVReader(new File(path));
+									reader = new FileCSVReader(new File(path));
 
 									final Route importRoute = routeImporter.importRoute(reader, context);
 
@@ -304,7 +306,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 
 								CSVReader reader = null;
 								try {
-									reader = new CSVReader(new File(path), importHooksProvider.getCsvSeparator());
+									reader = new FileCSVReader(new File(path), importHooksProvider.getCsvSeparator());
 
 									final Route importRoute = routeImporter.importRoute(reader, context);
 

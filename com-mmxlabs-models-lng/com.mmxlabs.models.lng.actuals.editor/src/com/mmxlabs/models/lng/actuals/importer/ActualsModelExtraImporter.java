@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.models.lng.actuals.ActualsFactory;
 import com.mmxlabs.models.lng.actuals.ActualsModel;
 import com.mmxlabs.models.lng.actuals.ActualsPackage;
@@ -17,10 +18,9 @@ import com.mmxlabs.models.lng.actuals.CargoActuals;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.util.importer.CSVReader;
-import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IExtraModelImporter;
-import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.IMMXExportContext;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 
 public class ActualsModelExtraImporter implements IExtraModelImporter {
 
@@ -39,7 +39,7 @@ public class ActualsModelExtraImporter implements IExtraModelImporter {
 	}
 
 	@Override
-	public void importModel(final MMXRootObject rootObject, final Map<String, CSVReader> inputs, final IImportContext context) {
+	public void importModel(final MMXRootObject rootObject, final Map<String, CSVReader> inputs, final IMMXImportContext context) {
 		if (rootObject instanceof LNGScenarioModel) {
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 			final LNGPortfolioModel portfolioModel = lngScenarioModel.getPortfolioModel();
@@ -62,7 +62,7 @@ public class ActualsModelExtraImporter implements IExtraModelImporter {
 	}
 
 	@Override
-	public void exportModel(final Map<String, Collection<Map<String, String>>> output, IExportContext context) {
+	public void exportModel(final Map<String, Collection<Map<String, String>>> output, IMMXExportContext context) {
 		MMXRootObject rootObject = context.getRootObject();
 		if (rootObject instanceof LNGScenarioModel) {
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;

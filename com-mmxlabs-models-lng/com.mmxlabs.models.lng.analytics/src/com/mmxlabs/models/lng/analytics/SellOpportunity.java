@@ -3,10 +3,11 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics;
+import org.joda.time.LocalDate;
+
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.mmxcore.MMXObject;
-import org.joda.time.LocalDate;
 
 /**
  * <!-- begin-user-doc -->

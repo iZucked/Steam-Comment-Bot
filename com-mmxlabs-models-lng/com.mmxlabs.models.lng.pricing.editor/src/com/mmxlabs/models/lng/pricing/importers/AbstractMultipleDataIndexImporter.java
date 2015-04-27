@@ -14,8 +14,8 @@ import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
-import com.mmxlabs.models.util.importer.IExportContext;
-import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.IMMXExportContext;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
 
 /**
@@ -31,7 +31,7 @@ public abstract class AbstractMultipleDataIndexImporter<TargetClass extends Name
 	protected static final String UNITS = "units";
 
 	@Override
-	public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context) {
+	public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IMMXImportContext context) {
 		final boolean unified = isUnified(row);
 		boolean created = false;
 		EObject result = null;
@@ -88,13 +88,13 @@ public abstract class AbstractMultipleDataIndexImporter<TargetClass extends Name
 	}
 	
 	@Override
-	public Collection<Map<String, String>> exportObjects(Collection<? extends EObject> objects, IExportContext context) {
+	public Collection<Map<String, String>> exportObjects(Collection<? extends EObject> objects, IMMXExportContext context) {
 		return exportIndices(objects, context, false);
 	}
 
-	protected abstract TargetClass getResult(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context, final boolean isUnified);
+	protected abstract TargetClass getResult(final EObject parent, final EClass targetClass, final Map<String, String> row, final IMMXImportContext context, final boolean isUnified);
 	
-	protected void setIndexFromRow(TargetClass result, final Map<String, String> row, final IImportContext context, final boolean isUnified) {
+	protected void setIndexFromRow(TargetClass result, final Map<String, String> row, final IMMXImportContext context, final boolean isUnified) {
 		if (row.containsKey(NAME)) {
 			result.setName(row.get(NAME));
 		} else {

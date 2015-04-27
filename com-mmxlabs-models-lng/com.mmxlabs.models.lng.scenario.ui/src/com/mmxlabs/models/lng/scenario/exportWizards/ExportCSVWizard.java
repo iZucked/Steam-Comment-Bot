@@ -27,8 +27,8 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
-import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IExtraModelImporter;
+import com.mmxlabs.models.util.importer.IMMXExportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultExportContext;
 import com.mmxlabs.scenario.service.model.ModelReference;
@@ -68,7 +68,7 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 
 				if (rootObject instanceof LNGScenarioModel) {
 					final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
-					final IExportContext context = new DefaultExportContext(scenarioModel, decimalSeparator);
+					final IMMXExportContext context = new DefaultExportContext(scenarioModel, decimalSeparator);
 					final File directory = createExportDirectories ? new File(outputDirectory, instance.getName()) : outputDirectory;
 					if (!directory.exists()) {
 						if (!directory.mkdirs()) {

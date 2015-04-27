@@ -7,7 +7,6 @@
 package com.mmxlabs.models.lng.cargo.provider;
 
 
-import com.mmxlabs.models.lng.cargo.CargoFactory;
 import java.util.Collection;
 import java.util.List;
 
@@ -24,6 +23,7 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.FleetFactory;

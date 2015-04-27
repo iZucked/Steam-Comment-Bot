@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.pricing.impl;
 
 import org.eclipse.emf.ecore.EClass;
+
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 

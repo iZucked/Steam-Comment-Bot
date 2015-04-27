@@ -23,6 +23,7 @@ import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.common.csv.IImportProblem;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoImportAction;
@@ -32,7 +33,6 @@ import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage;
 import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage.FieldChoice;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.util.importer.IImportContext.IImportProblem;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;

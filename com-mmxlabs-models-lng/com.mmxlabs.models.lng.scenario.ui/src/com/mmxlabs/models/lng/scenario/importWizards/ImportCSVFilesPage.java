@@ -15,6 +15,7 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.FileFieldEditor;
@@ -37,6 +38,9 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.common.csv.CSVReader;
+import com.mmxlabs.common.csv.FileCSVReader;
+import com.mmxlabs.common.csv.IImportContext;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
@@ -52,11 +56,8 @@ import com.mmxlabs.models.lng.scenario.wizards.ScenarioServiceNewScenarioPage;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.migration.IMigrationRegistry;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
-import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IExtraModelImporter;
-import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.IPostModelImporter;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
@@ -356,14 +357,14 @@ public class ImportCSVFilesPage extends WizardPage {
 				for (final String key : c.keys.keySet()) {
 					try {
 						@SuppressWarnings("resource")
-						final CSVReader r = new CSVReader(new File(c.keys.get(key)), delimiter);
+						final CSVReader r = new FileCSVReader(new File(c.keys.get(key)), delimiter);
 						readers.put(key, r);
 					} catch (final IOException e) {
 						log.error(e.getMessage(), e);
 					}
 				}
 				try {
-					final UUIDObject subModel = c.importer.importModel(readers, context);
+					final EObject subModel = c.importer.importModel(readers, context);
 					setSubModel(scenarioModel, subModel);
 				} catch (final Throwable th) {
 					log.error(th.getMessage(), th);
@@ -385,7 +386,7 @@ public class ImportCSVFilesPage extends WizardPage {
 				for (final String key : c.keys.keySet()) {
 					try {
 						@SuppressWarnings("resource")
-						final CSVReader r = new CSVReader(new File(c.keys.get(key)));
+						final CSVReader r = new FileCSVReader(new File(c.keys.get(key)));
 						readers.put(key, r);
 					} catch (final IOException e) {
 						log.error(e.getMessage(), e);
@@ -419,7 +420,7 @@ public class ImportCSVFilesPage extends WizardPage {
 		return scenarioModel;
 	}
 
-	private void setSubModel(final LNGScenarioModel scenarioModel, final UUIDObject subModel) {
+	private void setSubModel(final LNGScenarioModel scenarioModel, final EObject subModel) {
 		final LNGPortfolioModel portfolioModel = scenarioModel.getPortfolioModel();
 		if (subModel instanceof PortModel) {
 			scenarioModel.setPortModel((PortModel) subModel);
