@@ -13,6 +13,7 @@ import java.util.Map;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EObject;
 import org.junit.Assert;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -20,6 +21,8 @@ import org.osgi.framework.FrameworkUtil;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.mmxlabs.common.csv.CSVReader;
+import com.mmxlabs.common.csv.FileCSVReader;
 import com.mmxlabs.lingo.its.internal.Activator;
 import com.mmxlabs.models.lng.actuals.importer.ActualsModelExtraImporter;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
@@ -59,12 +62,10 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.spotmarkets.editor.importers.SpotMarketImporter;
 import com.mmxlabs.models.lng.spotmarkets.editor.importers.SpotMarketsModelImporter;
-import com.mmxlabs.models.mmxcore.UUIDObject;
-import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IAttributeImporter;
 import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IExtraModelImporter;
-import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.IPostModelImporter;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultAttributeImporter;
@@ -265,7 +266,7 @@ public class CSVImporter {
 		return importerRegistry;
 	}
 
-	private static UUIDObject importSubModel(final IImporterRegistry importerRegistry, final IImportContext context, final String baseFileName, final Map<String, String> dataMap,
+	private static EObject importSubModel(final IImporterRegistry importerRegistry, final IMMXImportContext context, final String baseFileName, final Map<String, String> dataMap,
 			final EClass subModelClass) {
 		final ISubmodelImporter importer = importerRegistry.getSubmodelImporter(subModelClass);
 		if (importer == null) {
@@ -277,7 +278,7 @@ public class CSVImporter {
 			for (final String key : parts.keySet()) {
 				try {
 					@SuppressWarnings("resource")
-					final CSVReader r = new CSVReader(baseFileName, dataMap.get(key));
+					final CSVReader r = new FileCSVReader(baseFileName, dataMap.get(key));
 					readers.put(key, r);
 				} catch (final IOException e) {
 					// Assert.fail(e.getMessage());
@@ -300,7 +301,7 @@ public class CSVImporter {
 		return null;
 	}
 
-	private static void importExtraModels(final LNGScenarioModel scenarioModel, final IImporterRegistry importerRegistry, final IImportContext context, final String baseFileName,
+	private static void importExtraModels(final LNGScenarioModel scenarioModel, final IImporterRegistry importerRegistry, final IMMXImportContext context, final String baseFileName,
 			final Map<String, String> dataMap) {
 		for (final IExtraModelImporter importer : importerRegistry.getExtraModelImporters()) {
 			if (importer == null) {
@@ -312,7 +313,7 @@ public class CSVImporter {
 				for (final String key : parts.keySet()) {
 					try {
 						@SuppressWarnings("resource")
-						final CSVReader r = new CSVReader(baseFileName, dataMap.get(key));
+						final CSVReader r = new FileCSVReader(baseFileName, dataMap.get(key));
 						readers.put(key, r);
 					} catch (final IOException e) {
 						// Assert.fail(e.getMessage());
