@@ -4,8 +4,12 @@
  */
 package com.mmxlabs.models.ui.dates;
 
+import java.awt.datatransfer.DataFlavor;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -29,11 +33,28 @@ public class DateInlineEditor extends UnsettableInlineEditor {
 	}
 
 	public DateInlineEditor(final EStructuralFeature feature) {
-		this(feature, new DateTimeFormatter("dd/MM/yyyy HH:00"));
+		this(feature, createDefaultDateFormatter());
+	}
+
+	private static DateTimeFormatter createDefaultDateFormatter() {
+		final DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
+		if (!(df instanceof SimpleDateFormat)) {
+			throw new IllegalArgumentException("No default pattern for locale " + Locale.getDefault().getDisplayName());
+		}
+
+		final SimpleDateFormat simpleDateFormat = (SimpleDateFormat) df;
+		String datePattern = simpleDateFormat.toPattern();
+		// Expand year to 4 digits
+		if (!datePattern.contains("yyyy") && datePattern.contains("yy")) {
+			datePattern = datePattern.replaceAll("yy", "yyyy");
+		}
+		// Append time component
+		return new DateTimeFormatter(String.format("%s HH:00", datePattern));
 	}
 
 	@Override
 	protected void updateValueDisplay(final Object value) {
+
 		if (formattedText.getControl() == null || formattedText.getControl().isDisposed()) {
 			return;
 		}
@@ -80,13 +101,14 @@ public class DateInlineEditor extends UnsettableInlineEditor {
 
 		super.setControlsEnabled(controlsEnabled);
 	}
+
 	@Override
 	protected void setControlsVisible(final boolean visible) {
 		if (formattedText.getControl().isDisposed()) {
 			return;
 		}
 		formattedText.getControl().setVisible(visible);
-		
+
 		super.setControlsVisible(visible);
 	}
 
