@@ -82,4 +82,8 @@ public interface EObjectWrapper extends EObject {
 	 */
 	boolean getAttribAsBoolean(String name);
 
+	void unsetFeature(String name);
+
+	boolean isSetFeature(String name);
+
 }
