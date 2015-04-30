@@ -9,6 +9,7 @@ import java.util.List;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.impl.DynamicEObjectImpl;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
@@ -95,4 +96,14 @@ public class DynamicEObjectWrapperImpl extends DynamicEObjectImpl implements EOb
 		eSet(feature, value);
 	}
 
+	@Override
+	public void unsetFeature(final String name) {
+		final EStructuralFeature feature = eClass().getEStructuralFeature(name);
+		eUnset(feature);
+	}
+	@Override
+	public boolean isSetFeature(final String name) {
+		final EStructuralFeature feature = eClass().getEStructuralFeature(name);
+		return eIsSet(feature);
+	}
 }
