@@ -11,6 +11,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.internal.Activator;
@@ -32,7 +33,7 @@ public abstract class AbstractModelMultiConstraint extends AbstractModelConstrai
 	 *            Output: Overriding methods should store any created validation status objects in this list.
 	 * @return The calling Plugin/Bundle ID
 	 */
-	protected abstract String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses);
+	protected abstract String validate(@NonNull final IValidationContext ctx, @NonNull final IExtraValidationContext extraContext, @NonNull final List<IStatus> statuses);
 
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
