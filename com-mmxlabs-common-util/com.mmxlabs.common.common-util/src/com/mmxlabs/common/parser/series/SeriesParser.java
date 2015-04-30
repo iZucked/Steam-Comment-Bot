@@ -6,8 +6,13 @@ package com.mmxlabs.common.parser.series;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.parser.ExpressionParser;
 import com.mmxlabs.common.parser.IExpression;
@@ -28,10 +33,11 @@ import com.mmxlabs.common.parser.series.functions.ShiftedSeries;
 public class SeriesParser extends ExpressionParser<ISeries> {
 	private final Map<String, ISeries> evaluatedSeries = new HashMap<String, ISeries>();
 	private final Map<String, String> unevaluatedSeries = new HashMap<String, String>();
+	private final Set<String> expressionCurves = new HashSet<>();
 
 	private class FunctionConstructor implements IExpression<ISeries> {
-		private Class<? extends ISeries> clazz;
-		private List<IExpression<ISeries>> arguments;
+		private final Class<? extends ISeries> clazz;
+		private final List<IExpression<ISeries>> arguments;
 
 		public FunctionConstructor(final Class<? extends ISeries> clazz, final List<IExpression<ISeries>> arguments) {
 			this.clazz = clazz;
@@ -63,7 +69,7 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 	public SeriesParser() {
 		setInfixOperatorFactory(new IInfixOperatorFactory<ISeries>() {
 			@Override
-			public boolean isOperatorHigherPriority(char a, char b) {
+			public boolean isOperatorHigherPriority(final char a, final char b) {
 				if (a == b)
 					return false;
 				switch (a) {
@@ -82,12 +88,12 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 			}
 
 			@Override
-			public boolean isInfixOperator(char operator) {
+			public boolean isInfixOperator(final char operator) {
 				return operator == '*' || operator == '/' || operator == '+' || operator == '-' || operator == '%';
 			}
 
 			@Override
-			public IExpression<ISeries> createInfixOperator(char operator, IExpression<ISeries> lhs, IExpression<ISeries> rhs) {
+			public IExpression<ISeries> createInfixOperator(final char operator, final IExpression<ISeries> lhs, final IExpression<ISeries> rhs) {
 				return new SeriesOperatorExpression(operator, lhs, rhs);
 			}
 		});
@@ -96,13 +102,13 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 			@Override
 			public IExpression<ISeries> createTerm(final String term) {
 				try {
-					int i = Integer.parseInt(term);
+					final int i = Integer.parseInt(term);
 					return new ConstantSeriesExpression(i);
-				} catch (NumberFormatException nfe) {
+				} catch (final NumberFormatException nfe) {
 					try {
-						double d = Double.parseDouble(term);
+						final double d = Double.parseDouble(term);
 						return new ConstantSeriesExpression(d);
-					} catch (NumberFormatException nfe2) {
+					} catch (final NumberFormatException nfe2) {
 						return new NamedSeriesExpression(getSeries(term));
 					}
 				}
@@ -111,7 +117,7 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 
 		setFunctionFactory(new IFunctionFactory<ISeries>() {
 			@Override
-			public IExpression<ISeries> createFunction(String name, final List<IExpression<ISeries>> arguments) {
+			public IExpression<ISeries> createFunction(final String name, final List<IExpression<ISeries>> arguments) {
 				if (name.equals("MAX")) {
 					return new FunctionConstructor(Max.class, arguments);
 				} else if (name.equals("MIN")) {
@@ -143,12 +149,12 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 
 		setPrefixOperatorFactory(new IPrefixOperatorFactory<ISeries>() {
 			@Override
-			public boolean isPrefixOperator(char operator) {
+			public boolean isPrefixOperator(final char operator) {
 				return false;
 			}
 
 			@Override
-			public IExpression<ISeries> createPrefixOperator(char operator, IExpression<ISeries> argument) {
+			public IExpression<ISeries> createPrefixOperator(final char operator, final IExpression<ISeries> argument) {
 				throw new RuntimeException("Unknown prefix op " + operator);
 			}
 		});
@@ -166,11 +172,33 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 		}
 	}
 
-	public void addConstant(final String name, final Number value) {
+	public void addConstant(@NonNull final String name, @NonNull final Number value) {
 		evaluatedSeries.put(name, new ConstantSeriesExpression(value).evaluate());
 	}
 
-	public void addSeriesData(final String name, final int[] points, final Number[] values) {
+	public void addSeriesData(@NonNull final String name, @NonNull ISeries series) {
+		evaluatedSeries.put(name, series);
+		// Invalidate any pre-evaluated expression curves as we may have changed the underlying data
+		for (final String expr : expressionCurves) {
+			evaluatedSeries.remove(expr);
+		}
+	}
+
+	public void removeSeriesData(@Nullable final String name) {
+		if (name == null) {
+			return;
+		}
+		// Remove any references to the curve
+		evaluatedSeries.remove(name);
+		unevaluatedSeries.remove(name);
+		expressionCurves.remove(name);
+		// Invalidate any pre-evaluated expression curves as we may have changed the underlying data
+		for (final String expr : expressionCurves) {
+			evaluatedSeries.remove(expr);
+		}
+	}
+
+	public void addSeriesData(@NonNull final String name, @NonNull final int[] points, @NonNull final Number[] values) {
 		evaluatedSeries.put(name, new ISeries() {
 			@Override
 			public int[] getChangePoints() {
@@ -178,17 +206,28 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 			}
 
 			@Override
-			public Number evaluate(int point) {
-				return values.length == 0 ? 0 :  values[SeriesUtil.floor(points, point)];
+			public Number evaluate(final int point) {
+				return values.length == 0 ? 0 : values[SeriesUtil.floor(points, point)];
 			}
 		});
+		// Invalidate any pre-evaluated expression curves as we may have changed the underlying data
+		for (final String expr : expressionCurves) {
+			evaluatedSeries.remove(expr);
+		}
 	}
 
 	public void addSeriesExpression(final String name, final String expression) {
+		// Register as an expression curve.
+		if (!expressionCurves.add(name)) {
+			// Invalidate any pre-evaluated expression curves as we may have changed the underlying data
+			for (final String expr : expressionCurves) {
+				evaluatedSeries.remove(expr);
+			}
+		}
 		unevaluatedSeries.put(name, expression);
 	}
 
-	public static void main(String args[]) {
+	public static void main(final String args[]) {
 		final SeriesParser parser = new SeriesParser();
 		parser.addConstant("X", 1);
 		parser.addConstant("Y", 10);
