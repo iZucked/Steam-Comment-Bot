@@ -47,7 +47,7 @@ public class EntityTransformerExtension implements ITransformerExtension {
 	private HashMapEntityProviderEditor entityProvider;
 
 	@Inject
-	private DateAndCurveHelper dateAndCurveHelper;
+	private DateAndCurveHelper dateHelper;
 
 	@Inject
 	private Injector injector;
@@ -77,7 +77,7 @@ public class EntityTransformerExtension implements ITransformerExtension {
 			IEntity entity = modelEntityMap.getOptimiserObject(e, IEntity.class);
 			if (e.getShippingBook() instanceof SimpleEntityBook) {
 				final SimpleEntityBook simpleBook = (SimpleEntityBook) e.getShippingBook();
-				final StepwiseIntegerCurve taxCurve = EntityTransformerUtils.createTaxCurve(simpleBook.getTaxRates(), dateAndCurveHelper, modelEntityMap.getEarliestDate());
+				final StepwiseIntegerCurve taxCurve = EntityTransformerUtils.createTaxCurve(simpleBook.getTaxRates(), dateHelper, dateHelper.getEarliestTime());
 				final IEntityBook book = new DefaultEntityBook(entity, EntityBookType.Shipping, taxCurve);
 				injector.injectMembers(book);
 				modelEntityMap.addModelObject(simpleBook, book);
@@ -85,7 +85,7 @@ public class EntityTransformerExtension implements ITransformerExtension {
 			}
 			if (e.getTradingBook() instanceof SimpleEntityBook) {
 				final SimpleEntityBook simpleBook = (SimpleEntityBook) e.getTradingBook();
-				final StepwiseIntegerCurve taxCurve = EntityTransformerUtils.createTaxCurve(simpleBook.getTaxRates(), dateAndCurveHelper, modelEntityMap.getEarliestDate());
+				final StepwiseIntegerCurve taxCurve = EntityTransformerUtils.createTaxCurve(simpleBook.getTaxRates(), dateHelper, dateHelper.getEarliestTime());
 				final IEntityBook book = new DefaultEntityBook(entity, EntityBookType.Shipping, taxCurve);
 				injector.injectMembers(book);
 				modelEntityMap.addModelObject(simpleBook, book);
@@ -104,6 +104,7 @@ public class EntityTransformerExtension implements ITransformerExtension {
 		// set up contract association or slot association or whatever
 		final Collection<Slot> slots = modelEntityMap.getAllModelObjects(Slot.class);
 		for (final Slot slot : slots) {
+			assert slot != null;
 			final IPortSlot portSlot = modelEntityMap.getOptimiserObject(slot, IPortSlot.class);
 			if (portSlot != null) {
 				final BaseLegalEntity slotEntity = slot.getSlotOrDelegatedEntity();

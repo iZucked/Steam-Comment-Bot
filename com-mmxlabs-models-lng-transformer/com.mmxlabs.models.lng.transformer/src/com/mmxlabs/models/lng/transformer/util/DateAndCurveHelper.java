@@ -6,12 +6,17 @@ package com.mmxlabs.models.lng.transformer.util;
 
 import java.util.TimeZone;
 
+import javax.inject.Inject;
+
+import org.eclipse.jdt.annotation.NonNull;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.Hours;
 import org.joda.time.LocalDate;
 import org.joda.time.YearMonth;
 
+import com.google.inject.name.Named;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.common.parser.IExpression;
@@ -19,6 +24,7 @@ import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
+import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
 
@@ -29,7 +35,25 @@ import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
  */
 public class DateAndCurveHelper {
 
-	private DateTime earliestTime;
+	@NonNull
+	private final DateTime earliestTime;
+
+	@NonNull
+	private final DateTime latestTime;
+
+	@SuppressWarnings("null")
+	@Inject
+	public DateAndCurveHelper(@Named(LNGTransformerModule.EARLIEST_AND_LATEST_TIMES) @NonNull final Pair<DateTime, DateTime> earliestAndLatestTime) {
+		this(earliestAndLatestTime.getFirst(), earliestAndLatestTime.getSecond());
+	}
+
+	@SuppressWarnings("null")
+	public DateAndCurveHelper(@NonNull final DateTime earliest, @NonNull final DateTime latest) {
+
+		this.earliestTime = earliest.withZone(DateTimeZone.UTC);
+		assert !earliestTime.isAfter(earliest);
+		this.latestTime = latest;
+	}
 
 	/**
 	 * Convert a date into relative hours; returns the number of hours between windowStart and earliest.
@@ -38,12 +62,18 @@ public class DateAndCurveHelper {
 	 * @param windowStart
 	 * @return number of hours between earliest and windowStart
 	 */
-	public int convertTime(final DateTime earliest, final DateTime windowStart) {
+	public int convertTime(@NonNull final DateTime earliest, @NonNull final DateTime windowStart) {
 		return Hours.hoursBetween(earliest, windowStart).getHours();
 	}
 
-	public int convertTime(final DateTime earliest, final YearMonth windowStart) {
-		return convertTime(earliest, windowStart.toLocalDate(1).toDateTimeAtStartOfDay(DateTimeZone.UTC));
+	public int convertTime(@NonNull final DateTime earliest, @NonNull final YearMonth windowStart) {
+		return convertTime(earliest, yearMonthToDateTime(windowStart));
+	}
+
+	@SuppressWarnings("null")
+	@NonNull
+	protected DateTime yearMonthToDateTime(@NonNull final YearMonth windowStart) {
+		return windowStart.toLocalDate(1).toDateTimeAtStartOfDay(DateTimeZone.UTC);
 	}
 
 	public StepwiseIntegerCurve createCurveForDoubleIndex(final Index<Double> index, final double scale) {
@@ -53,6 +83,7 @@ public class DateAndCurveHelper {
 
 		boolean gotOneEarlyDate = false;
 		for (final YearMonth date : index.getDates()) {
+			assert date != null;
 			final double value = index.getValueForMonth(date);
 			final int hours = convertTime(date);
 			if (hours < 0) {
@@ -73,8 +104,10 @@ public class DateAndCurveHelper {
 
 		boolean gotOneEarlyDate = false;
 		for (final YearMonth date : index.getDates()) {
+			assert date != null;
 			final int value = index.getValueForMonth(date);
 			final int hours = convertTime(date);
+
 			if (hours < 0) {
 				if (gotOneEarlyDate) {
 					// TODO: While we should skip all the early stuff, we need to keep the latest, this currently however takes the earliest value!
@@ -117,13 +150,13 @@ public class DateAndCurveHelper {
 		return curve;
 	}
 
-	public StepwiseIntegerCurve generateFixedCostExpressionCurve(final String priceExpression, final SeriesParser indices) {
+	public StepwiseIntegerCurve generateFixedCostExpressionCurve(final String priceExpression, final SeriesParser seriesParser) {
 
 		if (priceExpression == null || priceExpression.isEmpty()) {
 			return null;
 		}
 
-		final IExpression<ISeries> expression = indices.parse(priceExpression);
+		final IExpression<ISeries> expression = seriesParser.parse(priceExpression);
 		final ISeries parsed = expression.evaluate();
 
 		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
@@ -139,25 +172,28 @@ public class DateAndCurveHelper {
 		return curve;
 	}
 
-	public int convertTime(final YearMonth time) {
-		return convertTime(time.toLocalDate(1).toDateTimeAtStartOfDay(DateTimeZone.UTC));
+	public int convertTime(@NonNull final YearMonth time) {
+		return convertTime(yearMonthToDateTime(time));
 	}
 
-	public int convertTime(final LocalDate time) {
+	@SuppressWarnings("null")
+	public int convertTime(@NonNull final LocalDate time) {
 		return convertTime(time.toDateTimeAtStartOfDay(DateTimeZone.UTC));
 	}
 
-	public int convertTime(final DateTime startTime) {
+	public int convertTime(@NonNull final DateTime startTime) {
 		assert earliestTime != null;
 		return convertTime(earliestTime, startTime);
 	}
 
+	@NonNull
 	public DateTime getEarliestTime() {
 		return earliestTime;
 	}
 
-	public void setEarliestTime(final DateTime earliestTime) {
-		this.earliestTime = roundTimeDown(earliestTime);
+	@NonNull
+	public DateTime getLatestTime() {
+		return latestTime;
 	}
 
 	/**
@@ -189,21 +225,12 @@ public class DateAndCurveHelper {
 	}
 
 	/**
-	 * Rounds time down by losing the hour information
-	 * 
-	 * @return
-	 */
-	public static DateTime roundTimeDown(final DateTime date) {
-		return date.minusMinutes(getHourRoundingRemainder(date));
-	}
-
-	/**
 	 * Returns the number of milliseconds lost by rounding down to the nearest hour
 	 * 
 	 * @param date
 	 * @return
 	 */
-	public static int getHourRoundingRemainder(final DateTime date) {
+	public static int getHourRoundingRemainder(@NonNull final DateTime date) {
 		return date.withZone(DateTimeZone.UTC).getMinuteOfHour();
 	}
 

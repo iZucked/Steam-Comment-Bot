@@ -60,8 +60,8 @@ public class LNGScenarioUtils {
 		}
 
 		earliestTime = allDates.isEmpty() ? new DateTime(0) : Collections.min(allDates);
-		// round down earliest time
-		earliestTime = DateAndCurveHelper.roundTimeDown(earliestTime);
+//		 round down earliest time
+//		earliestTime = DateAndCurveHelper.roundTimeDown(earliestTime);
 		latestTime = allDates.isEmpty() ? new DateTime(0) : Collections.max(allDates);
 		return new Pair<DateTime, DateTime>(earliestTime, latestTime);
 	}

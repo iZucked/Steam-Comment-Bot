@@ -19,8 +19,8 @@ import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
  * 
  */
 public class TimeZoneTests {
-	ModelEntityMap modelEntityMap = new ModelEntityMap();
-	DateAndCurveHelper dateHelper = new DateAndCurveHelper();
+	private ModelEntityMap modelEntityMap;
+	private DateAndCurveHelper dateHelper;
 
 	public void testTimeZone(int year, int month, int day, String timeZone, boolean isJanEarliestTime, boolean dahejEarliestTime) {
 		String earliestTimeString = isJanEarliestTime ? "Jan 2014" : "Jul 2013";
@@ -83,9 +83,9 @@ public class TimeZoneTests {
 		setJulyEarliestTime("Asia/Calcutta");
 	}
 
-	private void setEarliestTime(DateTime earliestTime) {
-		modelEntityMap.setEarliestDate(earliestTime);
-		dateHelper.setEarliestTime(earliestTime);
+	private void setEarliestTime(final DateTime earliestTime) {
+		dateHelper = new DateAndCurveHelper(earliestTime, earliestTime.plusYears(2));
+		modelEntityMap = new ModelEntityMap(dateHelper);
 	}
 
 	@Test

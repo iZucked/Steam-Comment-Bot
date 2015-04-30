@@ -10,7 +10,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -27,11 +30,17 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
  * 
  */
 public class ModelEntityMap {
+
+	@NonNull
+	private final DateAndCurveHelper dateHelper;
+
 	private final Map<Object, Object> modelToOptimiser = new HashMap<Object, Object>();
 	private final Map<Object, Object> optimiserToModel = new HashMap<Object, Object>();
 
-	private DateTime earliestDate;
-	private DateTime latestDate;
+	@Inject
+	public ModelEntityMap(@NonNull final DateAndCurveHelper dateHelper) {
+		this.dateHelper = dateHelper;
+	}
 
 	public <U> U getModelObject(final Object internalObject, final Class<? extends U> clz) {
 		return clz.cast(optimiserToModel.get(internalObject));
@@ -47,8 +56,6 @@ public class ModelEntityMap {
 	}
 
 	public void dispose() {
-		this.earliestDate = null;
-		this.latestDate = null;
 		modelToOptimiser.clear();
 		optimiserToModel.clear();
 	}
@@ -66,33 +73,10 @@ public class ModelEntityMap {
 		return objects;
 	}
 
-	/**
-	 * @return the earliestDate
-	 */
-	public DateTime getEarliestDate() {
-		return earliestDate;
-	}
-
-	public DateTime getLatestDate() {
-		return latestDate;
-	}
-
-	/**
-	 * @param earliestDate
-	 *            the earliestDate to set. The date is rounded down to the nearest hour (relative to UTC).
-	 */
-	public void setEarliestDate(DateTime earliestDate) {
-		this.earliestDate = DateAndCurveHelper.roundTimeDown(earliestDate);
-	}
-
-	public void setLatestDate(DateTime latestTime) {
-		this.latestDate = latestTime;
-	}
-
 	public DateTime getDateFromHours(final int hours, final String tz) {
 		String timeZone = (tz == null) ? "UTC" : tz;
 		int offsetMinutes = DateAndCurveHelper.getOffsetInMinutesFromTimeZone(timeZone);
-		return new DateTime(earliestDate).withZone(DateTimeZone.forID(timeZone)).plusHours(hours).plusMinutes(offsetMinutes);
+		return new DateTime(dateHelper.getEarliestTime()).withZone(DateTimeZone.forID(timeZone)).plusHours(hours).plusMinutes(offsetMinutes);
 	}
 
 	/**

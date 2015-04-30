@@ -5,11 +5,9 @@
 package com.mmxlabs.models.lng.transformer;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -20,7 +18,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -48,7 +45,6 @@ import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
-import com.mmxlabs.common.timezone.TimeZoneHelper;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -113,7 +109,6 @@ import com.mmxlabs.models.lng.transformer.contracts.IVesselAvailabilityTransform
 import com.mmxlabs.models.lng.transformer.contracts.IVesselEventTransformer;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
-import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
 import com.mmxlabs.models.lng.transformer.util.TransformerHelper;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
@@ -172,10 +167,8 @@ public class LNGScenarioTransformer {
 
 	private LNGScenarioModel rootObject;
 
-	private DateTime earliestTime;
-	private DateTime latestTime;
-
 	@Inject
+	@NonNull
 	private DateAndCurveHelper dateHelper;
 
 	@Inject
@@ -346,19 +339,14 @@ public class LNGScenarioTransformer {
 	 * @return
 	 * @throws IncompleteScenarioException
 	 */
-	public IOptimisationData createOptimisationData(final ModelEntityMap modelEntityMap) throws IncompleteScenarioException {
-		/*
-		 * Set reference for hour 0
-		 */
-		setEarliestAndLatestTimes();
+	@NonNull
+	public IOptimisationData createOptimisationData(@NonNull final ModelEntityMap modelEntityMap) throws IncompleteScenarioException {
 
-		dateHelper.setEarliestTime(earliestTime);
-		dateHelper.setEarliestTime(earliestTime);
 		// set earliest and latest times into modelEntityMap
-		modelEntityMap.setEarliestDate(earliestTime);
-		modelEntityMap.setLatestDate(latestTime);
+		// modelEntityMap.setEarliestDate(dateHelper.getEarliestTime());
+		// modelEntityMap.setLatestDate(dateHelper.getLatestTime());
 
-		timeZoneToUtcOffsetProvider.setTimeZeroInMillis(earliestTime.getMillis());
+		timeZoneToUtcOffsetProvider.setTimeZeroInMillis(dateHelper.getEarliestTime().getMillis());
 
 		/**
 		 * First, create all the market curves (should these come through the builder?)
@@ -618,7 +606,7 @@ public class LNGScenarioTransformer {
 			extension.finishTransforming();
 		}
 
-		builder.setEarliestDate(earliestTime);
+		builder.setEarliestDate(dateHelper.getEarliestTime());
 
 		final IOptimisationData optimisationData = builder.getOptimisationData();
 
@@ -642,7 +630,7 @@ public class LNGScenarioTransformer {
 			final Number[] nums = new Number[vals.size()];
 			int k = 0;
 			for (final Pair<YearMonth, Number> e : vals) {
-				times[k] = convertTime(e.getFirst());
+				times[k] = dateHelper.convertTime(e.getFirst());
 				nums[k++] = e.getSecond();
 			}
 			indices.addSeriesData(name, times, nums);
@@ -770,67 +758,10 @@ public class LNGScenarioTransformer {
 		return lockedSlots;
 	}
 
-	//
-	// /**
-	// * Create and associate discount curves
-	// *
-	// * This ought to be in {@link OptimisationTransformer} but that doesn't have access to set up DCPs.
-	// *
-	// * @param builder
-	// */
-	// private void buildDiscountCurves(final ISchedulerBuilder builder) {
-	// // set up DCP
-	//
-	// final DiscountCurve defaultCurve = scenario.getOptimisation().getCurrentSettings().isSetDefaultDiscountCurve() ? scenario.getOptimisation().getCurrentSettings().getDefaultDiscountCurve()
-	// : null;
-	//
-	// final ICurve realDefaultCurve;
-	// if (defaultCurve == null) {
-	// realDefaultCurve = new ConstantValueCurve(1);
-	// } else {
-	// realDefaultCurve = buildDiscountCurve(defaultCurve);
-	// }
-	//
-	// for (final Objective objective : scenario.getOptimisation().getCurrentSettings().getObjectives()) {
-	// if (objective.isSetDiscountCurve()) {
-	// builder.setFitnessComponentDiscountCurve(objective.getName(), buildDiscountCurve(objective.getDiscountCurve()));
-	// } else {
-	// builder.setFitnessComponentDiscountCurve(objective.getName(), realDefaultCurve);
-	// }
-	// }
-	// }
-
-	// /**
-	// * @param defaultCurve
-	// * @return
-	// */
-	// private ICurve buildDiscountCurve(final DiscountCurve curve) {
-	// final InterpolatingDiscountCurve realCurve = new InterpolatingDiscountCurve();
-	//
-	// final int baseTime = curve.isSetStartDate() ? convertTime(curve.getStartDate()) : 0;
-	// if (baseTime > 0) {
-	// realCurve.setValueAtPoint(0, 1);
-	// realCurve.setValueAtPoint(baseTime - 1, 1);
-	// }
-	//
-	// for (final Discount d : curve.getDiscounts()) {
-	// realCurve.setValueAtPoint(baseTime + d.getTime(), d.getDiscountFactor());
-	// }
-	// return realCurve;
-	// }
-
-	private void setEarliestAndLatestTimes() {
-		earliestTime = null;
-		latestTime = null;
-		final Pair<DateTime, DateTime> earliestAndLatestTimes = LNGScenarioUtils.findEarliestAndLatestTimes(rootObject);
-		earliestTime = earliestAndLatestTimes.getFirst();
-		latestTime = earliestAndLatestTimes.getSecond();
-	}
-
 	private void buildVesselEvents(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Association<VesselClass, IVesselClass> classes,
 			final ModelEntityMap modelEntityMap) {
 
-		final DateTime latestDate = latestTime;
+		final DateTime latestDate = dateHelper.getLatestTime();
 
 		final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
 
@@ -840,7 +771,7 @@ public class LNGScenarioTransformer {
 				continue;
 			}
 
-			final ITimeWindow window = builder.createTimeWindow(convertTime(event.getStartAfterAsDateTime()), convertTime(event.getStartByAsDateTime()));
+			final ITimeWindow window = builder.createTimeWindow(dateHelper.convertTime(event.getStartAfterAsDateTime()), dateHelper.convertTime(event.getStartByAsDateTime()));
 			final IPort port = portAssociation.lookup(event.getPort());
 			final int durationHours = event.getDurationInDays() * 24;
 			final IVesselEventPortSlot builderSlot;
@@ -906,7 +837,7 @@ public class LNGScenarioTransformer {
 			}
 		}
 
-		final DateTime latestDate = latestTime;
+		final DateTime latestDate = dateHelper.getLatestTime();
 
 		final Set<LoadSlot> usedLoadSlots = new HashSet<LoadSlot>();
 		final Set<DischargeSlot> usedDischargeSlots = new HashSet<DischargeSlot>();
@@ -1048,8 +979,8 @@ public class LNGScenarioTransformer {
 			final DateTime startTime = modelSlot.getWindowStartWithSlotOrPortTime();
 			final DateTime endTime = modelSlot.getWindowEndWithSlotOrPortTime();
 			// Convert port local external date/time into UTC based internal time units
-			final int twStart = timeZoneToUtcOffsetProvider.UTC(convertTime(earliestTime, startTime), port);
-			final int twEnd = timeZoneToUtcOffsetProvider.UTC(convertTime(earliestTime, endTime), port);
+			final int twStart = timeZoneToUtcOffsetProvider.UTC(dateHelper.convertTime(startTime), port);
+			final int twEnd = timeZoneToUtcOffsetProvider.UTC(dateHelper.convertTime(endTime), port);
 			// This should probably be fixed in ScheduleBuilder#matchingWindows and elsewhere if needed, but subtract one to avoid e.g. 1st Feb 00:00 being permitted in the Jan
 			// month block
 			final ITimeWindow twUTC = builder.createTimeWindow(twStart, Math.max(twStart, twEnd - 1));
@@ -1154,8 +1085,8 @@ public class LNGScenarioTransformer {
 		final IDischargeOption discharge;
 		usedIDStrings.add(dischargeSlot.getName());
 
-		final ITimeWindow dischargeWindow = builder.createTimeWindow(convertTime(earliestTime, dischargeSlot.getWindowStartWithSlotOrPortTime()),
-				convertTime(earliestTime, dischargeSlot.getWindowEndWithSlotOrPortTime()));
+		final ITimeWindow dischargeWindow = builder.createTimeWindow(dateHelper.convertTime(dischargeSlot.getWindowStartWithSlotOrPortTime()),
+				dateHelper.convertTime(dischargeSlot.getWindowEndWithSlotOrPortTime()));
 
 		final ISalesPriceCalculator dischargePriceCalculator;
 
@@ -1320,8 +1251,7 @@ public class LNGScenarioTransformer {
 		final ILoadOption load;
 		usedIDStrings.add(loadSlot.getName());
 
-		final ITimeWindow loadWindow = builder.createTimeWindow(convertTime(earliestTime, loadSlot.getWindowStartWithSlotOrPortTime()),
-				convertTime(earliestTime, loadSlot.getWindowEndWithSlotOrPortTime()));
+		final ITimeWindow loadWindow = builder.createTimeWindow(dateHelper.convertTime(loadSlot.getWindowStartWithSlotOrPortTime()), dateHelper.convertTime(loadSlot.getWindowEndWithSlotOrPortTime()));
 
 		final ILoadPriceCalculator loadPriceCalculator;
 		final boolean isSpot = (loadSlot instanceof SpotSlot);
@@ -1466,8 +1396,8 @@ public class LNGScenarioTransformer {
 		if (spotMarketsModel == null) {
 			return;
 		}
-		final DateTime earliestDate = earliestTime;
-		final DateTime latestDate = latestTime;
+		final DateTime earliestDate = dateHelper.getEarliestTime();
+		final DateTime latestDate = dateHelper.getLatestTime();
 
 		buildDESPurchaseSpotMarket(builder, portAssociation, contractTransformers, modelEntityMap, earliestDate, latestDate, spotMarketsModel.getDesPurchaseSpotMarket());
 		buildDESSalesSpotMarket(builder, portAssociation, contractTransformers, modelEntityMap, earliestDate, latestDate, spotMarketsModel.getDesSalesSpotMarket());
@@ -1542,8 +1472,8 @@ public class LNGScenarioTransformer {
 
 								// This should probably be fixed in ScheduleBuilder#matchingWindows and elsewhere if needed, but subtract one to avoid e.g. 1st Feb 00:00 being permitted in the Jan
 								// month block
-								final ITimeWindow twUTC = builder.createTimeWindow(convertTime(earliestTime, tzStartTime), convertTime(earliestTime, tzEndTime) - 1);
-								final ITimeWindow twUTCPlus = createUTCPlusTimeWindow(convertTime(earliestTime, tzStartTime), convertTime(earliestTime, tzEndTime));
+								final ITimeWindow twUTC = builder.createTimeWindow(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime) - 1);
+								final ITimeWindow twUTCPlus = createUTCPlusTimeWindow(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime));
 
 								final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(desPurchaseMarket.getCv());
 
@@ -1677,8 +1607,8 @@ public class LNGScenarioTransformer {
 
 								// This should probably be fixed in ScheduleBuilder#matchingWindows and elsewhere if needed, but subtract one to avoid e.g. 1st Feb 00:00 being permitted in the Jan
 								// month block
-								final ITimeWindow twUTC = builder.createTimeWindow(convertTime(earliestTime, tzStartTime), convertTime(earliestTime, tzEndTime) - 1);
-								final ITimeWindow twUTCPlus = createUTCPlusTimeWindow(convertTime(earliestTime, tzStartTime), convertTime(earliestTime, tzEndTime));
+								final ITimeWindow twUTC = builder.createTimeWindow(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime) - 1);
+								final ITimeWindow twUTCPlus = createUTCPlusTimeWindow(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime));
 
 								final String idPrefix = market.getName() + "-" + yearMonthString + "-";
 
@@ -1816,7 +1746,7 @@ public class LNGScenarioTransformer {
 							int offset = 0;
 							for (int i = 0; i < remaining; ++i) {
 
-								final ITimeWindow tw = builder.createTimeWindow(convertTime(earliestTime, tzStartTime), convertTime(earliestTime, tzEndTime));
+								final ITimeWindow tw = builder.createTimeWindow(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime));
 
 								final String idPrefix = market.getName() + "-" + yearMonthString + "-";
 
@@ -1936,7 +1866,7 @@ public class LNGScenarioTransformer {
 							int offset = 0;
 							for (int i = 0; i < remaining; ++i) {
 
-								final ITimeWindow tw = builder.createTimeWindow(convertTime(earliestTime, tzStartTime), convertTime(earliestTime, tzEndTime));
+								final ITimeWindow tw = builder.createTimeWindow(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime));
 
 								final String idPrefix = market.getName() + "-" + yearMonthString + "-";
 
@@ -2262,7 +2192,7 @@ public class LNGScenarioTransformer {
 					int point = 0;
 					if (curve != null) {
 						final EList<YearMonth> dates = index.getData().getDates();
-						point = dateHelper.convertTime(earliestTime, dates.get(0));
+						point = dateHelper.convertTime(dates.get(0));
 						baseFuelPriceInInternalUnits = curve.getValueAtPoint(point);
 					}
 					final BaseFuel eBF = baseFuelCost.getFuel();
@@ -2270,7 +2200,6 @@ public class LNGScenarioTransformer {
 					modelEntityMap.addModelObject(eBF, bf);
 					if (bf != null && curve != null) {
 						baseFuelCurveProvider.setBaseFuelCurve(bf, curve);
-						baseFuelCurveProvider.setBaseFuelCurveFirstValueDate(curve, point);
 					}
 					break;
 				}
@@ -2282,7 +2211,7 @@ public class LNGScenarioTransformer {
 
 			List<String> allowedRoutes = new LinkedList<>();
 			if (shippingDaysRestrictionSpeedProvider != null) {
-				for (Route route: shippingDaysRestrictionSpeedProvider.getValidRoutes(portModel, eVc)) {
+				for (Route route : shippingDaysRestrictionSpeedProvider.getValidRoutes(portModel, eVc)) {
 					allowedRoutes.add(route.getName());
 				}
 			}
@@ -2330,8 +2259,8 @@ public class LNGScenarioTransformer {
 			if (shippingDaysRestrictionSpeedProvider == null) {
 				ballastReferenceSpeed = ladenReferenceSpeed = vessel.getVesselClass().getMaxSpeed();
 			} else {
-				ballastReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(eVessel.getVesselClass(), false /*ballast*/));
-				ladenReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(eVessel.getVesselClass(), true /*laden*/));
+				ballastReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(eVessel.getVesselClass(), false /* ballast */));
+				ladenReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(eVessel.getVesselClass(), true /* laden */));
 			}
 			builder.setShippingDaysRestrictionReferenceSpeed(vessel, VesselState.Ballast, ballastReferenceSpeed);
 			builder.setShippingDaysRestrictionReferenceSpeed(vessel, VesselState.Laden, ladenReferenceSpeed);
@@ -2485,11 +2414,11 @@ public class LNGScenarioTransformer {
 		ITimeWindow window = null;
 
 		if (from == null && to != null) {
-			window = builder.createTimeWindow(convertTime(earliestTime), convertTime(to));
+			window = builder.createTimeWindow(dateHelper.convertTime(dateHelper.getEarliestTime()), dateHelper.convertTime(to));
 		} else if (from != null && to == null) {
-			window = builder.createTimeWindow(convertTime(from), convertTime(latestTime));
+			window = builder.createTimeWindow(dateHelper.convertTime(from), dateHelper.convertTime(dateHelper.getLatestTime()));
 		} else if (from != null && to != null) {
-			window = builder.createTimeWindow(convertTime(from), convertTime(to));
+			window = builder.createTimeWindow(dateHelper.convertTime(from), dateHelper.convertTime(to));
 		}
 
 		IHeelOptions heelOptions;
@@ -2519,11 +2448,11 @@ public class LNGScenarioTransformer {
 		ITimeWindow window = null;
 
 		if (from == null && to != null) {
-			window = builder.createTimeWindow(convertTime(earliestTime), convertTime(to));
+			window = builder.createTimeWindow(dateHelper.convertTime(dateHelper.getEarliestTime()), dateHelper.convertTime(to));
 		} else if (from != null && to == null) {
-			window = builder.createTimeWindow(convertTime(from), Integer.MIN_VALUE);
+			window = builder.createTimeWindow(dateHelper.convertTime(from), Integer.MIN_VALUE);
 		} else if (from != null && to != null) {
-			window = builder.createTimeWindow(convertTime(from), convertTime(to));
+			window = builder.createTimeWindow(dateHelper.convertTime(from), dateHelper.convertTime(to));
 		}
 
 		final Set<IPort> portSet = new HashSet<IPort>();
@@ -2585,37 +2514,12 @@ public class LNGScenarioTransformer {
 		return Collections.emptyList();
 	}
 
-	// private String getKeyForDate(final TimeZone zone, final DateTime date) {
-	// return String.format("%04d-%02d", date.toLocalDate().getYear(), date.toLocalDate().getMonthOfYear());
-	// }
 	private String getKeyForDate(final LocalDate date) {
 		return String.format("%04d-%02d", date.getYear(), date.getMonthOfYear());
 	}
 
-	/**
-	 * Convert a date into relative hours; returns the number of hours between windowStart and earliest.
-	 * 
-	 * @param earliest
-	 * @param windowStart
-	 * @return number of hours between earliest and windowStart
-	 */
-	private int convertTime(final DateTime earliest, final DateTime windowStart) {
-		return dateHelper.convertTime(earliest, windowStart);
-	}
-
-	private int convertLocalTime(final DateTime earliest, final LocalDate windowStart) {
-		return dateHelper.convertTime(earliest, windowStart.toDateTimeAtStartOfDay(DateTimeZone.UTC));
-	}
-
-	private int convertTime(final DateTime startTime) {
-		return dateHelper.convertTime(earliestTime, startTime);
-	}
-
-	private int convertTime(final YearMonth startTime) {
-		return dateHelper.convertTime(earliestTime, startTime.toLocalDate(1).toDateTimeAtStartOfDay(DateTimeZone.UTC));
-	}
-
-	private PricingEventType transformPricingEvent(final PricingEvent event) {
+	@NonNull
+	private PricingEventType transformPricingEvent(@NonNull final PricingEvent event) {
 		switch (event) {
 		case END_DISCHARGE:
 			return PricingEventType.END_OF_DISCHARGE;
@@ -2633,7 +2537,7 @@ public class LNGScenarioTransformer {
 	private int getSlotPricingDate(final Slot slot) {
 		int pricingDate;
 		if (slot.isSetPricingDate()) {
-			pricingDate = convertTime(earliestTime, slot.getPricingDateAsDateTime());
+			pricingDate = dateHelper.convertTime(slot.getPricingDateAsDateTime());
 		} else {
 			pricingDate = IPortSlot.NO_PRICING_DATE;
 		}

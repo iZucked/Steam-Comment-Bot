@@ -10,11 +10,13 @@ import javax.inject.Singleton;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.annotation.NonNull;
+import org.joda.time.DateTime;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -23,6 +25,7 @@ import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
+import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
 import com.mmxlabs.models.lng.transformer.util.OptimisationTransformer;
 import com.mmxlabs.optimiser.core.IEvaluationContext;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -49,6 +52,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
  * 
  */
 public class LNGTransformerModule extends AbstractModule {
+
+	public static final String EARLIEST_AND_LATEST_TIMES = "earliest-and-latest-times";
 
 	/**
 	 */
@@ -172,5 +177,12 @@ public class LNGTransformerModule extends AbstractModule {
 		final ISequences sequences = optimisationTransformer.createInitialSequences(data, modelEntityMap);
 
 		return sequences;
+	}
+
+	@Singleton
+	@Provides
+	@Named(EARLIEST_AND_LATEST_TIMES)
+	private Pair<DateTime, DateTime> provideEarliestAndLatestTime(@NonNull final LNGScenarioModel scenario) {
+		return LNGScenarioUtils.findEarliestAndLatestTimes(scenario);
 	}
 }
