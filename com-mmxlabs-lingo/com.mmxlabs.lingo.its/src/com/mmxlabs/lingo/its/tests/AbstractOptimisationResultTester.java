@@ -167,7 +167,7 @@ public class AbstractOptimisationResultTester {
 	 * @throws MigrationException
 	 * @throws InterruptedException
 	 */
-	public void runScenario(@NonNull final URL url) throws Exception {
+	public LNGScenarioRunner runScenario(@NonNull final URL url) throws Exception {
 
 		final URI uri = URI.createURI(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20"));
 
@@ -179,7 +179,7 @@ public class AbstractOptimisationResultTester {
 
 			final LNGScenarioModel originalScenario = (LNGScenarioModel) instance.getInstance();
 
-			runScenario(originalScenario, url);
+			return runScenario(originalScenario, url);
 		} finally {
 			if (f != null && f.exists()) {
 				f.delete();
