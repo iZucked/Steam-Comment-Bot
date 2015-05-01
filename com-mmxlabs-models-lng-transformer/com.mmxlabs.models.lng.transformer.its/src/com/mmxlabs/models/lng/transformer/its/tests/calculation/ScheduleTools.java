@@ -9,6 +9,8 @@ import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Fuel;
@@ -17,6 +19,7 @@ import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 
 /**
  * Start of a utils class to navigate a data model to fins particular elements
@@ -36,6 +39,39 @@ public final class ScheduleTools {
 		for (final CargoAllocation ca : schedule.getCargoAllocations()) {
 			if (cargoID.equals(ca.getName())) {
 				return ca;
+			}
+		}
+
+		return null;
+	}
+	
+	public static @Nullable
+	CargoAllocation findCargoAllocationByDischargeID(@NonNull final String dischargeID, @NonNull final Schedule schedule) {
+		for (final CargoAllocation ca : schedule.getCargoAllocations()) {
+			for (final SlotAllocation sa : ca.getSlotAllocations()) {
+				final Slot s = sa.getSlot();
+				if (s instanceof DischargeSlot) {
+					if (dischargeID.equals(s.getName())) {
+						return ca;
+					}
+				}
+			}
+		}
+
+		return null;
+	}
+
+
+	public static int getFuelQuantity(@NonNull final Fuel fuel, @NonNull final FuelUnit unit, @NonNull final FuelUsage fuelUsage) {
+		for (final FuelQuantity fq : fuelUsage.getFuels()) {
+		for (final CargoAllocation ca : schedule.getCargoAllocations()) {
+			for (final SlotAllocation sa : ca.getSlotAllocations()) {
+				final Slot s = sa.getSlot();
+				if (s instanceof DischargeSlot) {
+					if (dischargeID.equals(s.getName())) {
+						return ca;
+					}
+				}
 			}
 		}
 
