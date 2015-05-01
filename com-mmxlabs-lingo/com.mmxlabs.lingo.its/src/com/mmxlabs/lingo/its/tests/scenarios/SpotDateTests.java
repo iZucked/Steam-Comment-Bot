@@ -5,9 +5,8 @@
 package com.mmxlabs.lingo.its.tests.scenarios;
 
 import java.net.URL;
-import java.util.Calendar;
-import java.util.TimeZone;
 
+import org.joda.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -43,13 +42,7 @@ public class SpotDateTests extends AbstractOptimisationResultTester {
 				final Slot s = sa.getSlot();
 				if (s instanceof SpotLoadSlot) {
 					final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) s;
-					final Calendar cal = Calendar.getInstance();
-					cal.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));
-					cal.clear();
-					cal.set(Calendar.YEAR, 2014);
-					cal.set(Calendar.MONTH, Calendar.MAY);
-					cal.set(Calendar.DAY_OF_MONTH, 1);
-					Assert.assertEquals(cal.getTime(), spotLoadSlot.getWindowStartWithSlotOrPortTime());
+					Assert.assertEquals(new LocalDate(2014, 5, 1), spotLoadSlot.getWindowStart());
 				}
 			}
 		}
@@ -61,13 +54,7 @@ public class SpotDateTests extends AbstractOptimisationResultTester {
 				final Slot s = sa.getSlot();
 				if (s instanceof SpotLoadSlot) {
 					final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) s;
-					final Calendar cal = Calendar.getInstance();
-					cal.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));
-					cal.clear();
-					cal.set(Calendar.YEAR, 2014);
-					cal.set(Calendar.MONTH, Calendar.JUNE);
-					cal.set(Calendar.DAY_OF_MONTH, 1);
-					Assert.assertEquals(cal.getTime(), spotLoadSlot.getWindowStartWithSlotOrPortTime());
+					Assert.assertEquals(new LocalDate(2014, 6, 1), spotLoadSlot.getWindowStart());
 				}
 			}
 		}
