@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.cargo;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
@@ -1135,6 +1137,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
 	 * @generated
 	 */
+	@NonNull
 	DateTime getWindowEndWithSlotOrPortTime();
 
 	/**
@@ -1143,6 +1146,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
 	 * @generated
 	 */
+	@NonNull
 	DateTime getWindowStartWithSlotOrPortTime();
 
 	/**
@@ -1199,6 +1203,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @model kind="operation"
 	 * @generated
 	 */
+	@NonNull
 	PricingEvent getSlotOrDelegatedPricingEvent();
 
 	/**
@@ -1207,6 +1212,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
 	 * @generated
 	 */
+	@NonNull
 	DateTime getPricingDateAsDateTime();
 
 } // end of  Slot

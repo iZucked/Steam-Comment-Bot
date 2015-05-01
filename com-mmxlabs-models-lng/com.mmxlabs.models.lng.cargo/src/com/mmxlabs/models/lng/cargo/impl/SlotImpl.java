@@ -1664,7 +1664,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	public DateTime getWindowStartWithSlotOrPortTime() {
 		final LocalDate wStart = getWindowStart();
 		if (wStart == null) {
-			return null;
+			throw new IllegalStateException("No window start");
 		}
 		DateTime dateTime = wStart.toDateTimeAtStartOfDay(DateTimeZone.forID(getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart())));
 		final int startTime = (Integer) eGetWithDefault(CargoPackage.eINSTANCE.getSlot_WindowStartTime());
@@ -1747,7 +1747,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			final LocalDate ld = getPricingDate();
 			return ld.toDateTimeAtStartOfDay(DateTimeZone.forID(getTimeZone(CargoPackage.Literals.SLOT__PRICING_DATE)));
 		}
-		return null;
+		throw new IllegalStateException("No pricing date");
 	}
 
 	/**
