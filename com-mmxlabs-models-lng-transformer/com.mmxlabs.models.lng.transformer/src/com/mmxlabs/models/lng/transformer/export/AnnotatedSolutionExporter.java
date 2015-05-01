@@ -378,7 +378,7 @@ public class AnnotatedSolutionExporter {
 		// patch up idle events with no port
 		fixUpFirstIdleEventPorts(output);
 		// Fix up end events with no port.
-		// fixUpEndEventPorts(output);
+		fixUpEndEventPorts(output);
 		// Correct the timezone of event dates
 		fixUpEventTimezones(output);
 
