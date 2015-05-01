@@ -15,6 +15,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.jdt.annotation.NonNull;
 import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,17 +71,24 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
  */
 public class AnnotatedSolutionExporter {
 	private static final Logger log = LoggerFactory.getLogger(AnnotatedSolutionExporter.class);
+
+	@NonNull
 	private final List<IAnnotationExporter> exporters = new LinkedList<IAnnotationExporter>();
+
 	private final ScheduleFactory factory = SchedulePackage.eINSTANCE.getScheduleFactory();
+
 	@Inject
 	private IVesselProvider vesselProvider;
 	@Inject
+	@NonNull
 	private IPortSlotProvider portSlotProvider;
 
 	@Inject
+	@NonNull
 	private List<IExporterExtension> extensions;
 
 	@Inject
+	@NonNull
 	private Injector injector;
 
 	private boolean exportRuntimeAndFitness = false;
@@ -164,6 +172,7 @@ public class AnnotatedSolutionExporter {
 		final Map<String, Long> fobFitnessMap = new LinkedHashMap<String, Long>();
 
 		for (final IResource resource : resources) {
+			assert resource != null;
 			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
 			final Sequence eSequence = factory.createSequence();
@@ -177,7 +186,7 @@ public class AnnotatedSolutionExporter {
 			case TIME_CHARTER:
 			case FLEET:
 				eSequence.setSequenceType(SequenceType.VESSEL);
-				eSequence.setVesselAvailability(modelEntityMap.getModelObject(vesselAvailability, VesselAvailability.class));
+				eSequence.setVesselAvailability(modelEntityMap.getModelObjectNullChecked(vesselAvailability, VesselAvailability.class));
 				eSequence.unsetCharterInMarket();
 				break;
 			case FOB_SALE:
@@ -201,7 +210,7 @@ public class AnnotatedSolutionExporter {
 				if (sequence.size() < 2)
 					continue;
 
-				eSequence.setCharterInMarket(modelEntityMap.getModelObject(vesselAvailability.getSpotCharterInMarket(), CharterInMarket.class));
+				eSequence.setCharterInMarket(modelEntityMap.getModelObjectNullChecked(vesselAvailability.getSpotCharterInMarket(), CharterInMarket.class));
 				eSequence.unsetVesselAvailability();
 				eSequence.setSpotIndex(vesselAvailability.getSpotIndex());
 				break;
@@ -316,6 +325,7 @@ public class AnnotatedSolutionExporter {
 			final List<IPortSlot> sequencePortSlots = scheduledSequence.getSequenceSlots();
 			for (int i = 0; i < sequencePortSlots.size(); ++i) {
 				final IPortSlot scheduledSlot = sequencePortSlots.get(i);
+				assert scheduledSlot != null;
 				final ISequenceElement element = portSlotProvider.getElement(scheduledSlot);
 				// get annotations for this element
 				final Map<String, IElementAnnotation> annotations = elementAnnotations.getAnnotations(element);
@@ -415,6 +425,7 @@ public class AnnotatedSolutionExporter {
 		}
 
 		for (final ISequenceElement element : annotatedSolution.getSequences().getUnusedElements()) {
+			assert element != null;
 			final IPortSlot slot = portSlotProvider.getPortSlot(element);
 			final Slot modelSlot = modelEntityMap.getModelObject(slot, Slot.class);
 			if (slot != null) {

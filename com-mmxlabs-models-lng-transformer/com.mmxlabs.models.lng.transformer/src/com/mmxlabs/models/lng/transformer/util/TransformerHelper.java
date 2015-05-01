@@ -6,6 +6,10 @@ package com.mmxlabs.models.lng.transformer.util;
 
 import java.util.TreeMap;
 
+import org.eclipse.jdt.annotation.NonNull;
+
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.VesselClass;
@@ -24,12 +28,12 @@ public class TransformerHelper {
 
 	/**
 	 */
-	public static IVesselClass buildIVesselClass(final ISchedulerBuilder builder, final VesselClass eVc, final IBaseFuel baseFuel) {
+	@NonNull
+	public static IVesselClass buildIVesselClass(@NonNull final ISchedulerBuilder builder, @NonNull final VesselClass eVc, @NonNull final IBaseFuel baseFuel) {
 		final IVesselClass vc = builder.createVesselClass(eVc.getName(), OptimiserUnitConvertor.convertToInternalSpeed(eVc.getMinSpeed()),
 				OptimiserUnitConvertor.convertToInternalSpeed(eVc.getMaxSpeed()), OptimiserUnitConvertor.convertToInternalVolume((int) (eVc.getFillCapacity() * eVc.getCapacity())),
-				OptimiserUnitConvertor.convertToInternalVolume(eVc.getMinHeel()), baseFuel,
-				OptimiserUnitConvertor.convertToInternalDailyRate(eVc.getPilotLightRate()),
-				eVc.getWarmingTime(), OptimiserUnitConvertor.convertToInternalVolume(eVc.getCoolingVolume()), OptimiserUnitConvertor.convertToInternalDailyRate(eVc.getMinBaseFuelConsumption()));
+				OptimiserUnitConvertor.convertToInternalVolume(eVc.getMinHeel()), baseFuel, OptimiserUnitConvertor.convertToInternalDailyRate(eVc.getPilotLightRate()), eVc.getWarmingTime(),
+				OptimiserUnitConvertor.convertToInternalVolume(eVc.getCoolingVolume()), OptimiserUnitConvertor.convertToInternalDailyRate(eVc.getMinBaseFuelConsumption()));
 		buildVesselStateAttributes(builder, vc, com.mmxlabs.scheduler.optimiser.components.VesselState.Laden, eVc.getLadenAttributes());
 		buildVesselStateAttributes(builder, vc, com.mmxlabs.scheduler.optimiser.components.VesselState.Ballast, eVc.getBallastAttributes());
 
@@ -44,14 +48,12 @@ public class TransformerHelper {
 		return vc;
 	}
 
-	public static IBaseFuel buildBaseFuel(final ISchedulerBuilder builder, final BaseFuel eBF) {
-		if (eBF != null) {
-			IBaseFuel bf = builder.createBaseFuel(eBF.getName(), OptimiserUnitConvertor.convertToInternalConversionFactor(eBF.getEquivalenceFactor()));
-			return bf;
-		} else {
-			return null;
-		}
+	@NonNull
+	public static IBaseFuel buildBaseFuel(@NonNull final ISchedulerBuilder builder, @NonNull final BaseFuel eBF) {
+		IBaseFuel bf = builder.createBaseFuel(eBF.getName(), OptimiserUnitConvertor.convertToInternalConversionFactor(eBF.getEquivalenceFactor()));
+		return bf;
 	}
+
 	/**
 	 * Tell the builder to set up the given vessel state from the EMF fleet model
 	 * 
@@ -64,9 +66,9 @@ public class TransformerHelper {
 	 * @param ladenAttributes
 	 *            the {@link VesselStateAttributes} from the EMF model
 	 */
-	public static void buildVesselStateAttributes(final ISchedulerBuilder builder, final IVesselClass vc, final com.mmxlabs.scheduler.optimiser.components.VesselState state,
-			final VesselStateAttributes attrs) {
-		final TreeMap<Integer, Long> keypoints = new TreeMap<Integer, Long>();
+	public static void buildVesselStateAttributes(@NonNull final ISchedulerBuilder builder, @NonNull final IVesselClass vc,
+			@NonNull final com.mmxlabs.scheduler.optimiser.components.VesselState state, final VesselStateAttributes attrs) {
+		final TreeMap<Integer, Long> keypoints = new TreeMap<>();
 
 		int minSpeed = Integer.MAX_VALUE;
 		int maxSpeed = Integer.MIN_VALUE;

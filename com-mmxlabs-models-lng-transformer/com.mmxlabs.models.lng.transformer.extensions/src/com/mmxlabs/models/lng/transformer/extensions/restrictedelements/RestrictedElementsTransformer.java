@@ -17,7 +17,6 @@ import javax.inject.Inject;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -97,7 +96,7 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 
 			for (final EObject element : elements) {
 				// get the list of ISequenceElements associated with each restricted element
-				Collection<ISequenceElement> destinationElements = findAssociatedISequenceElements(element);
+				final Collection<ISequenceElement> destinationElements = findAssociatedISequenceElements(element);
 				if (destinationElements != null) {
 					restrictedElements.addAll(destinationElements);
 				}
@@ -174,7 +173,7 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 				final List<Contract> restrictedContracts;
 				final List<? extends EObject> restrictedPorts;
 				boolean isPermissive = false;
-//				if (slot.isSetRestrictedContracts() || slot.isSetRestrictedListsArePermissive() || slot.isSetRestrictedPorts()) {
+				// if (slot.isSetRestrictedContracts() || slot.isSetRestrictedListsArePermissive() || slot.isSetRestrictedPorts()) {
 				if (slot.isOverrideRestrictions()) {
 					isPermissive = slot.isRestrictedListsArePermissive();
 					restrictedContracts = slot.getRestrictedContracts();
@@ -202,20 +201,6 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 		portMap.clear();
 		slotMap.clear();
 		allElements.clear();
-	}
-
-	/**
-	 */
-	@Override
-	public ISalesPriceCalculator transformSalesPriceParameters(@Nullable final SalesContract salesContract, @NonNull final LNGPriceCalculatorParameters priceParameters) {
-		return null;
-	}
-
-	/**
-	 */
-	@Override
-	public ILoadPriceCalculator transformPurchasePriceParameters(@Nullable final PurchaseContract purchaseContract, @NonNull final LNGPriceCalculatorParameters priceParameters) {
-		return null;
 	}
 
 	@Override
@@ -261,4 +246,13 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 		return Collections.emptySet();
 	}
 
+	@Override
+	public ISalesPriceCalculator transformSalesPriceParameters(final SalesContract salesContract, final LNGPriceCalculatorParameters priceParameters) {
+		return null;
+	}
+
+	@Override
+	public ILoadPriceCalculator transformPurchasePriceParameters(final PurchaseContract purchaseContract, final LNGPriceCalculatorParameters priceParameters) {
+		return null;
+	}
 }

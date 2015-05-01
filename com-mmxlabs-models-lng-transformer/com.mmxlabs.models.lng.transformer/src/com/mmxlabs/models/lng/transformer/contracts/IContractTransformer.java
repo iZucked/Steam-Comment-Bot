@@ -32,7 +32,7 @@ public interface IContractTransformer extends ISlotTransformer {
 	 * @param sc
 	 * @return
 	 */
-	public ISalesPriceCalculator transformSalesPriceParameters(@Nullable SalesContract salesContract, @NonNull LNGPriceCalculatorParameters priceParameters);
+	ISalesPriceCalculator transformSalesPriceParameters(@Nullable SalesContract salesContract, @NonNull LNGPriceCalculatorParameters priceParameters);
 
 	/**
 	 * Create an {@link ILoadPriceCalculator} from a {@link PurchaseContract}
@@ -40,7 +40,7 @@ public interface IContractTransformer extends ISlotTransformer {
 	 * @param pc
 	 * @return
 	 */
-	public ILoadPriceCalculator transformPurchasePriceParameters(@Nullable PurchaseContract purchaseContract, @NonNull LNGPriceCalculatorParameters priceParameters);
+	ILoadPriceCalculator transformPurchasePriceParameters(@Nullable PurchaseContract purchaseContract, @NonNull LNGPriceCalculatorParameters priceParameters);
 
 	/**
 	 */

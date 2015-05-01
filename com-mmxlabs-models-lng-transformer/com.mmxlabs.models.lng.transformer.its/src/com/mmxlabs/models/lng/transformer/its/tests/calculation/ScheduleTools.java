@@ -34,8 +34,8 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  */
 public final class ScheduleTools {
 
-	public static @Nullable
-	CargoAllocation findCargoAllocation(@NonNull final String cargoID, @NonNull final Schedule schedule) {
+	@Nullable
+	public static CargoAllocation findCargoAllocation(@NonNull final String cargoID, @NonNull final Schedule schedule) {
 		for (final CargoAllocation ca : schedule.getCargoAllocations()) {
 			if (cargoID.equals(ca.getName())) {
 				return ca;
@@ -44,26 +44,9 @@ public final class ScheduleTools {
 
 		return null;
 	}
-	
-	public static @Nullable
-	CargoAllocation findCargoAllocationByDischargeID(@NonNull final String dischargeID, @NonNull final Schedule schedule) {
-		for (final CargoAllocation ca : schedule.getCargoAllocations()) {
-			for (final SlotAllocation sa : ca.getSlotAllocations()) {
-				final Slot s = sa.getSlot();
-				if (s instanceof DischargeSlot) {
-					if (dischargeID.equals(s.getName())) {
-						return ca;
-					}
-				}
-			}
-		}
 
-		return null;
-	}
-
-
-	public static int getFuelQuantity(@NonNull final Fuel fuel, @NonNull final FuelUnit unit, @NonNull final FuelUsage fuelUsage) {
-		for (final FuelQuantity fq : fuelUsage.getFuels()) {
+	@Nullable
+	public static CargoAllocation findCargoAllocationByDischargeID(@NonNull final String dischargeID, @NonNull final Schedule schedule) {
 		for (final CargoAllocation ca : schedule.getCargoAllocations()) {
 			for (final SlotAllocation sa : ca.getSlotAllocations()) {
 				final Slot s = sa.getSlot();

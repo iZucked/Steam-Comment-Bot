@@ -34,7 +34,10 @@ public class ModelEntityMap {
 	@NonNull
 	private final DateAndCurveHelper dateHelper;
 
+	@NonNull
 	private final Map<Object, Object> modelToOptimiser = new HashMap<Object, Object>();
+
+	@NonNull
 	private final Map<Object, Object> optimiserToModel = new HashMap<Object, Object>();
 
 	@Inject
@@ -42,16 +45,44 @@ public class ModelEntityMap {
 		this.dateHelper = dateHelper;
 	}
 
-	public <U> U getModelObject(final Object internalObject, final Class<? extends U> clz) {
+	@Nullable
+	public <U> U getModelObject(@NonNull final Object internalObject, @NonNull final Class<? extends U> clz) {
 		return clz.cast(optimiserToModel.get(internalObject));
 	}
 
-	public void addModelObject(final EObject modelObject, final Object internalObject) {
+	@SuppressWarnings("null")
+	@NonNull
+	public <U> U getModelObjectNullChecked(@Nullable final Object internalObject, @NonNull final Class<? extends U> clz) {
+		if (internalObject == null) {
+			throw new IllegalArgumentException("Optimiser object is null");
+		}
+		final Object o = optimiserToModel.get(internalObject);
+		if (o == null) {
+			throw new IllegalArgumentException("No model object found");
+		}
+		return clz.cast(o);
+	}
+
+	public void addModelObject(@NonNull final EObject modelObject, @NonNull final Object internalObject) {
 		modelToOptimiser.put(modelObject, internalObject);
 		optimiserToModel.put(internalObject, modelObject);
 	}
 
-	public <T> T getOptimiserObject(final EObject modelObject, final Class<? extends T> clz) {
+	@SuppressWarnings("null")
+	@NonNull
+	public <T> T getOptimiserObjectNullChecked(@Nullable final EObject modelObject, final Class<? extends T> clz) {
+		if (modelObject == null) {
+			throw new IllegalArgumentException("Model object is null");
+		}
+		final Object o = modelToOptimiser.get(modelObject);
+		if (o == null) {
+			throw new IllegalArgumentException("No optimiser object found");
+		}
+		return clz.cast(o);
+	}
+
+	@Nullable
+	public <T> T getOptimiserObject(@NonNull final EObject modelObject, @NonNull final Class<? extends T> clz) {
 		return clz.cast(modelToOptimiser.get(modelObject));
 	}
 
@@ -62,7 +93,7 @@ public class ModelEntityMap {
 
 	/**
 	 */
-	public <T extends EObject> Collection<T> getAllModelObjects(final Class<? extends T> clz) {
+	public <T extends EObject> Collection<T> getAllModelObjects(@NonNull final Class<? extends T> clz) {
 
 		final List<T> objects = new LinkedList<T>();
 		for (final Object obj : modelToOptimiser.keySet()) {
@@ -73,9 +104,11 @@ public class ModelEntityMap {
 		return objects;
 	}
 
+	@SuppressWarnings("null")
+	@NonNull
 	public DateTime getDateFromHours(final int hours, final String tz) {
-		String timeZone = (tz == null) ? "UTC" : tz;
-		int offsetMinutes = DateAndCurveHelper.getOffsetInMinutesFromTimeZone(timeZone);
+		final String timeZone = (tz == null) ? "UTC" : tz;
+		final int offsetMinutes = DateAndCurveHelper.getOffsetInMinutesFromTimeZone(timeZone);
 		return new DateTime(dateHelper.getEarliestTime()).withZone(DateTimeZone.forID(timeZone)).plusHours(hours).plusMinutes(offsetMinutes);
 	}
 
@@ -86,7 +119,8 @@ public class ModelEntityMap {
 	 * @param port
 	 * @return
 	 */
-	public DateTime getDateFromHours(final int hours, @Nullable IPort port) {
+	@NonNull
+	public DateTime getDateFromHours(final int hours, @Nullable final IPort port) {
 		if (port == null) {
 			return getDateFromHours(hours, "UTC");
 		}
@@ -100,7 +134,8 @@ public class ModelEntityMap {
 	 * @param port
 	 * @return
 	 */
-	public DateTime getDateFromHours(final int hours, @Nullable Port port) {
+	@NonNull
+	public DateTime getDateFromHours(final int hours, @Nullable final Port port) {
 		if (port == null) {
 			return getDateFromHours(hours, "UTC");
 		}
