@@ -11,8 +11,8 @@ import org.mockito.Mockito;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 
+@SuppressWarnings("null")
 public class HashMapVesselEditorTest {
-
 
 	@Test
 	public void testHashMapVesselEditor() {
@@ -21,12 +21,27 @@ public class HashMapVesselEditorTest {
 		final IResource resource1 = Mockito.mock(IResource.class, "resource-1");
 		final IVesselAvailability vesselAvailability1 = Mockito.mock(IVesselAvailability.class, "vessel-1");
 
-		Assert.assertNull(editor.getResource(vesselAvailability1));
-		Assert.assertNull(editor.getVesselAvailability(resource1));
-
 		editor.setVesselAvailabilityResource(resource1, vesselAvailability1);
 
 		Assert.assertSame(vesselAvailability1, editor.getVesselAvailability(resource1));
 		Assert.assertSame(resource1, editor.getResource(vesselAvailability1));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testGetUnknownVesselAvailability() {
+		final HashMapVesselEditor editor = new HashMapVesselEditor();
+
+		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class, "vessel-1");
+		editor.getResource(vesselAvailability);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testGetUnknownResource() {
+		final HashMapVesselEditor editor = new HashMapVesselEditor();
+
+		final IResource resource1 = Mockito.mock(IResource.class, "resource-1");
+
+		editor.getVesselAvailability(resource1);
+
 	}
 }
