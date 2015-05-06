@@ -15,23 +15,17 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
-import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.calculators.IDivertableDESShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
-import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
  */
@@ -41,16 +35,10 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 	private IPortSlotProvider portSlotProvider;
 
 	@Inject
-	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
-
-	@Inject
 	private INominatedVesselProvider nominatedVesselProvider;
 
 	@Inject
 	private IShippingHoursRestrictionProvider shippingHoursRestrictionProvider;
-
-	@Inject
-	private IPortVisitDurationProvider portVisitDurationProvider;
 
 	@Inject
 	private IVesselProvider vesselProvider;
@@ -117,9 +105,6 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 			// Check distances using injected provider, or actual/max speed.
 
 			if (firstSlot instanceof ILoadOption && secondSlot instanceof IDischargeSlot) {
-				if (firstSlot.getId().equals("S2")) {
-					int i = 0;
-				}
 				// DES Purchase
 				final ILoadOption desPurchase = (ILoadOption) firstSlot;
 				final IDischargeSlot desSale = (IDischargeSlot) secondSlot;
@@ -137,9 +122,8 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 					}
 
 					final Pair<Integer, Integer> desTimes = dischargeTimeCalculator.getDivertableDESTimes(desPurchase, desSale, nominatedVesselProvider.getNominatedVessel(first), resource);
-					int dischargeTime = desTimes.getFirst();
 					int returnTime = desTimes.getSecond();
-					if (returnTime - dischargeTime > shippingHours) {
+					if (returnTime - fobLoadDate.getStart() > shippingHours) {
 						return false;
 					}
 					return true;

@@ -60,7 +60,8 @@ public class DefaultDivertableDESShippingTimesCalculator implements IDivertableD
 	@Override
 	public Pair<Integer, Integer> getDivertableDESTimes(ILoadOption buyOption, IDischargeOption sellOption, IVessel nominatedVessel, IResource resource) {
 		Pair<Integer, String> dischargeJourney = getDischargeTimeAndRoute(buyOption, sellOption, nominatedVessel, resource);
-		final int ballastDistance = distanceProvider.get(dischargeJourney.getSecond()).get(sellOption.getPort(), buyOption.getPort());
+		String route = dischargeJourney.getSecond();
+		final int ballastDistance = distanceProvider.get(dischargeJourney.getSecond()).get(sellOption.getPort(), buyOption.getPort()) + routeCostProvider.getRouteTransitTime(route, nominatedVessel.getVesselClass());
 		// Get notional speed
 		final int referenceSpeed = shippingHoursRestrictionProvider.getReferenceSpeed(nominatedVessel, VesselState.Ballast);
 
