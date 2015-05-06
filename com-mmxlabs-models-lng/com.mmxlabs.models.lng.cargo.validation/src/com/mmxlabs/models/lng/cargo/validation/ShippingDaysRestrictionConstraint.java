@@ -202,7 +202,8 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 
 									if (loadDateEnd != null && dischargeDateStart != null) {
 										// There could be an overlap
-										ladenMinWindowInHours = Math.max(0, (int) ((dischargeDateStart.getTime() - loadDateEnd.getTime()) / Timer.ONE_HOUR) - (loadDurationInHours));
+										// Note: loadDateStart is the value used in the ShippingHoursRestrictionChecker
+										ladenMinWindowInHours = Math.max(0, (int) ((dischargeDateStart.getTime() - loadDateStart.getTime()) / Timer.ONE_HOUR) - (loadDurationInHours));
 									} else {
 										return Activator.PLUGIN_ID;
 									}
