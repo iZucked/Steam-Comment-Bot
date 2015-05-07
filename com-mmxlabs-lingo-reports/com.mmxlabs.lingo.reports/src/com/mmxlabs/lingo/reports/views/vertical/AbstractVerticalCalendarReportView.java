@@ -60,7 +60,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 	public static final String ID = "com.mmxlabs.lingo.reports.verticalreport";
-	
+
 	protected GridTableViewer gridViewer;
 	private ScenarioViewerSynchronizer jobManagerListener;
 
@@ -95,10 +95,11 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 	protected void makeActions() {
 		final PackGridTableColumnsAction packColumnsAction = PackActionFactory.createPackColumnsAction(gridViewer);
-		
+
 		final CopyGridToHtmlClipboardAction copyToClipboardAction = new CopyGridToHtmlClipboardAction(gridViewer.getGrid(), true);
 		copyToClipboardAction.setRowHeadersIncluded(true);
-		
+		copyToClipboardAction.setShowBackgroundColours(true);
+
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyToClipboardAction);
 
 		getViewSite().getActionBars().getToolBarManager().add(packColumnsAction);
