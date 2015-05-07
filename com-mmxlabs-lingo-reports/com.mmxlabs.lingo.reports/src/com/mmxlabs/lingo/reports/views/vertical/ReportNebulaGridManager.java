@@ -48,7 +48,7 @@ public class ReportNebulaGridManager implements IStructuredContentProvider {
 
 	private boolean collapseEvents = false;
 
-	public ReportNebulaGridManager(AbstractVerticalCalendarReportView verticalReport, AbstractVerticalReportVisualiser verticalReportVisualiser) {
+	public ReportNebulaGridManager(final AbstractVerticalCalendarReportView verticalReport, final AbstractVerticalReportVisualiser verticalReportVisualiser) {
 		this.verticalReport = verticalReport;
 		this.verticalReportVisualiser = verticalReportVisualiser;
 	}
@@ -154,9 +154,13 @@ public class ReportNebulaGridManager implements IStructuredContentProvider {
 		if (calendarColumns != null) {
 			for (final CalendarColumn column : calendarColumns) {
 				if (column.getColumnGroup() != null) {
-					nebulaColumns.add(verticalReport.createColumn(column.createColumnLabelProvider(this), column.getProvider(), column.getTitle(), column.getColumnGroup()));
+					final GridViewerColumn col = verticalReport.createColumn(column.createColumnLabelProvider(this), column.getProvider(), column.getTitle(), column.getColumnGroup());
+					nebulaColumns.add(col);
+					col.getColumn().setMoveable(true);
 				} else {
-					nebulaColumns.add(verticalReport.createColumn(column.createColumnLabelProvider(this), column.getProvider(), column.getTitle()));
+					final GridViewerColumn col = verticalReport.createColumn(column.createColumnLabelProvider(this), column.getProvider(), column.getTitle());
+					nebulaColumns.add(col);
+					col.getColumn().setMoveable(true);
 				}
 			}
 		}
@@ -208,7 +212,7 @@ public class ReportNebulaGridManager implements IStructuredContentProvider {
 	 * 
 	 * @param collapseEvents
 	 */
-	public void setCollapseEvents(boolean collapseEvents) {
+	public void setCollapseEvents(final boolean collapseEvents) {
 		this.collapseEvents = collapseEvents;
 	}
 
