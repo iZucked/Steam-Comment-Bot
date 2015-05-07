@@ -7,6 +7,7 @@ package com.mmxlabs.lingo.reports.views.vertical;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
@@ -66,9 +67,10 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 	protected ReportNebulaGridManager manager;
 
+	@NonNull
 	protected final AbstractVerticalReportVisualiser verticalReportVisualiser;
 
-	protected AbstractVerticalCalendarReportView(final AbstractVerticalReportVisualiser verticalReportVisualiser) {
+	protected AbstractVerticalCalendarReportView(@NonNull final AbstractVerticalReportVisualiser verticalReportVisualiser) {
 		super();
 		this.verticalReportVisualiser = verticalReportVisualiser;
 	}
