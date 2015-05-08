@@ -11,11 +11,12 @@ import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeCustom
 
 class ParameterModeCustomiserProxy implements IParameterModeCustomiser {
 
+	@NonNull
 	private final ParameterModeExtension parameterModeExtension;
 
 	private IParameterModeCustomiser customiser;
 
-	public ParameterModeCustomiserProxy(final ParameterModeExtension parameterModeExtension) {
+	public ParameterModeCustomiserProxy(@NonNull final ParameterModeExtension parameterModeExtension) {
 		this.parameterModeExtension = parameterModeExtension;
 	}
 

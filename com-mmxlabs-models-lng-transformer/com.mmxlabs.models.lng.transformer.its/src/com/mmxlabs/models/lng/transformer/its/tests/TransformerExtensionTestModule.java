@@ -4,12 +4,10 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests;
 
-import java.sql.Ref;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.ui.internal.ErrorViewPart;
 import org.ops4j.peaberry.util.TypeLiterals;
 
 import com.google.common.collect.Lists;
