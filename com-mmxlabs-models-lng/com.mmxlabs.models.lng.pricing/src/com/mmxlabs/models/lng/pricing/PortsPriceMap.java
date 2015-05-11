@@ -43,7 +43,7 @@ public interface PortsPriceMap extends MMXObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Ports</em>' reference list.
 	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPortsPriceMap_Ports()
-	 * @model
+	 * @model required="true"
 	 * @generated
 	 */
 	EList<APortSet<Port>> getPorts();

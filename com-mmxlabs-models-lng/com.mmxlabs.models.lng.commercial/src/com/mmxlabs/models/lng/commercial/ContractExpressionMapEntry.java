@@ -37,7 +37,7 @@ public interface ContractExpressionMapEntry extends EObject {
 	 * @return the value of the '<em>Contract</em>' reference.
 	 * @see #setContract(Contract)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContractExpressionMapEntry_Contract()
-	 * @model
+	 * @model required="true"
 	 * @generated
 	 */
 	Contract getContract();
@@ -63,7 +63,7 @@ public interface ContractExpressionMapEntry extends EObject {
 	 * @return the value of the '<em>Expression</em>' attribute.
 	 * @see #setExpression(String)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContractExpressionMapEntry_Expression()
-	 * @model
+	 * @model required="true"
 	 * @generated
 	 */
 	String getExpression();

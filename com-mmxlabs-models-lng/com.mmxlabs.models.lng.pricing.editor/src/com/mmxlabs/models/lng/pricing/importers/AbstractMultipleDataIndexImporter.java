@@ -46,7 +46,7 @@ public abstract class AbstractMultipleDataIndexImporter<TargetClass extends Name
 
 		return new ImportResults(result, created);
 	}
-	
+
 	protected boolean isUnified(final Map<String, String> row) {
 		if (multipleDataTypeInput && (row.containsKey(TYPE_KEY) && row.get(TYPE_KEY).equals(TYPE_VALUE))) {
 			return true;
@@ -54,11 +54,11 @@ public abstract class AbstractMultipleDataIndexImporter<TargetClass extends Name
 			return false;
 		}
 	}
-	
+
 	protected Comparator<String> getFieldNameOrderComparator() {
 		return new Comparator<String>() {
 			@Override
-			public int compare(String o1, String o2) {
+			public int compare(final String o1, final String o2) {
 				// Always sort name column first
 				if (NAME.equals(o1) && NAME.equals(o2)) {
 					return 0;
@@ -70,45 +70,45 @@ public abstract class AbstractMultipleDataIndexImporter<TargetClass extends Name
 				}
 
 				return o1.compareTo(o2);
-			}			
+			}
 		};
 	}
-	
+
 	@Override
-	protected Map<String, String>  getNonDateFields(TargetClass target, Index<? extends Number> index) {
-		Map<String, String> result = super.getNonDateFields(target, index);
+	protected Map<String, String> getNonDateFields(final TargetClass target, final Index<? extends Number> index) {
+		final Map<String, String> result = super.getNonDateFields(target, index);
 		result.put(NAME, target.getName());
 		result.put(UNITS, target.getUnits());
 		return result;
 	}
 
 	@Override
-	protected Index<? extends Number> getIndexFromObject(TargetClass target) {
+	protected Index<? extends Number> getIndexFromObject(final TargetClass target) {
 		return target.getData();
 	}
-	
+
 	@Override
-	public Collection<Map<String, String>> exportObjects(Collection<? extends EObject> objects, IExportContext context) {
+	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final IExportContext context) {
 		return exportIndices(objects, context, false);
 	}
 
 	protected abstract TargetClass getResult(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context, final boolean isUnified);
-	
-	protected void setIndexFromRow(TargetClass result, final Map<String, String> row, final IImportContext context, final boolean isUnified) {
+
+	protected void setIndexFromRow(final TargetClass result, final Map<String, String> row, final IImportContext context, final boolean isUnified) {
 		if (row.containsKey(NAME)) {
 			result.setName(row.get(NAME));
 		} else {
-			context.addProblem(context.createProblem("CommodityIndex name is missing", true, true, true));
+			context.addProblem(context.createProblem(String.format("Index %s name is missing", TYPE_VALUE), true, true, true));
 		}
 
 		if (row.containsKey(UNITS)) {
 			result.setUnits(row.get(UNITS));
 		} else {
-			context.addProblem(context.createProblem("CommodityIndex units is missing", true, true, true));
+			// context.addProblem(context.createProblem("CommodityIndex units is missing", true, true, true));
 		}
 		final Index<Double> indexData = importDoubleIndex(row, isUnified ? getIgnoreSet(NAME, TYPE_KEY) : Collections.singleton(NAME), context);
 		result.setData(indexData);
-		
+
 		context.registerNamedObject(result);
 	}
 }

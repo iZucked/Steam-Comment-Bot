@@ -44,7 +44,7 @@ public interface PortsSplitExpressionMap extends MMXObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Ports</em>' reference list.
 	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPortsSplitExpressionMap_Ports()
-	 * @model
+	 * @model required="true"
 	 * @generated
 	 */
 	EList<APortSet<Port>> getPorts();
@@ -60,7 +60,7 @@ public interface PortsSplitExpressionMap extends MMXObject {
 	 * @return the value of the '<em>Expression1</em>' attribute.
 	 * @see #setExpression1(String)
 	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPortsSplitExpressionMap_Expression1()
-	 * @model
+	 * @model required="true"
 	 * @generated
 	 */
 	String getExpression1();
@@ -86,7 +86,7 @@ public interface PortsSplitExpressionMap extends MMXObject {
 	 * @return the value of the '<em>Expression2</em>' attribute.
 	 * @see #setExpression2(String)
 	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPortsSplitExpressionMap_Expression2()
-	 * @model
+	 * @model required="true"
 	 * @generated
 	 */
 	String getExpression2();

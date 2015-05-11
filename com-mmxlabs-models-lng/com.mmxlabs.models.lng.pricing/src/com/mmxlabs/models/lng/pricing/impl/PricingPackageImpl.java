@@ -998,28 +998,28 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		g1 = createEGenericType(this.getIndex());
 		g2 = createEGenericType(namedIndexContainerEClass_Value);
 		g1.getETypeArguments().add(g2);
-		initEReference(getNamedIndexContainer_Data(), g1, null, "data", null, 0, 1, NamedIndexContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getNamedIndexContainer_Units(), ecorePackage.getEString(), "units", null, 0, 1, NamedIndexContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getNamedIndexContainer_Data(), g1, null, "data", null, 1, 1, NamedIndexContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getNamedIndexContainer_Units(), ecorePackage.getEString(), "units", null, 1, 1, NamedIndexContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(portsPriceMapEClass, PortsPriceMap.class, "PortsPriceMap", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		g1 = createEGenericType(theTypesPackage.getAPortSet());
 		g2 = createEGenericType(thePortPackage.getPort());
 		g1.getETypeArguments().add(g2);
-		initEReference(getPortsPriceMap_Ports(), g1, null, "ports", null, 0, -1, PortsPriceMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPortsPriceMap_Ports(), g1, null, "ports", null, 1, -1, PortsPriceMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPortsPriceMap_Index(), this.getCommodityIndex(), null, "index", null, 1, 1, PortsPriceMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(portsExpressionMapEClass, PortsExpressionMap.class, "PortsExpressionMap", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		g1 = createEGenericType(theTypesPackage.getAPortSet());
 		g2 = createEGenericType(thePortPackage.getPort());
 		g1.getETypeArguments().add(g2);
-		initEReference(getPortsExpressionMap_Ports(), g1, null, "ports", null, 0, -1, PortsExpressionMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPortsExpressionMap_Expression(), ecorePackage.getEString(), "expression", null, 0, 1, PortsExpressionMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPortsExpressionMap_Ports(), g1, null, "ports", null, 1, -1, PortsExpressionMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPortsExpressionMap_Expression(), ecorePackage.getEString(), "expression", null, 1, 1, PortsExpressionMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(portsSplitPriceMapEClass, PortsSplitPriceMap.class, "PortsSplitPriceMap", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		g1 = createEGenericType(theTypesPackage.getAPortSet());
 		g2 = createEGenericType(thePortPackage.getPort());
 		g1.getETypeArguments().add(g2);
-		initEReference(getPortsSplitPriceMap_Ports(), g1, null, "ports", null, 0, -1, PortsSplitPriceMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPortsSplitPriceMap_Ports(), g1, null, "ports", null, 1, -1, PortsSplitPriceMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPortsSplitPriceMap_IndexH1(), this.getCommodityIndex(), null, "indexH1", null, 1, 1, PortsSplitPriceMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPortsSplitPriceMap_IndexH2(), this.getCommodityIndex(), null, "indexH2", null, 1, 1, PortsSplitPriceMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -1027,9 +1027,9 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		g1 = createEGenericType(theTypesPackage.getAPortSet());
 		g2 = createEGenericType(thePortPackage.getPort());
 		g1.getETypeArguments().add(g2);
-		initEReference(getPortsSplitExpressionMap_Ports(), g1, null, "ports", null, 0, -1, PortsSplitExpressionMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPortsSplitExpressionMap_Expression1(), ecorePackage.getEString(), "expression1", null, 0, 1, PortsSplitExpressionMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPortsSplitExpressionMap_Expression2(), ecorePackage.getEString(), "expression2", null, 0, 1, PortsSplitExpressionMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPortsSplitExpressionMap_Ports(), g1, null, "ports", null, 1, -1, PortsSplitExpressionMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPortsSplitExpressionMap_Expression1(), ecorePackage.getEString(), "expression1", null, 1, 1, PortsSplitExpressionMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPortsSplitExpressionMap_Expression2(), ecorePackage.getEString(), "expression2", null, 1, 1, PortsSplitExpressionMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

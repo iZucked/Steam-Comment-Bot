@@ -148,7 +148,7 @@ public interface SalesContract extends Contract {
 	 * @see com.mmxlabs.models.lng.types.CargoDeliveryType
 	 * @see #setPurchaseDeliveryType(CargoDeliveryType)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getSalesContract_PurchaseDeliveryType()
-	 * @model default="Any"
+	 * @model default="Any" required="true"
 	 * @generated
 	 */
 	CargoDeliveryType getPurchaseDeliveryType();
