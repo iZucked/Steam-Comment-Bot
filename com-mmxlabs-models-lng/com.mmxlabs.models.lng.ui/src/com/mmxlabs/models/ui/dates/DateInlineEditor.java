@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.ui.dates;
 
-import java.awt.datatransfer.DataFlavor;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
