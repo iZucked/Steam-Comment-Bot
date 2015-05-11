@@ -61,7 +61,6 @@ import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
-import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.util.IShippingDaysRestrictionSpeedProvider;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
@@ -107,7 +106,6 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
 import com.mmxlabs.models.lng.transformer.contracts.IVesselAvailabilityTransformer;
 import com.mmxlabs.models.lng.transformer.contracts.IVesselEventTransformer;
-import com.mmxlabs.models.lng.transformer.extensions.charterout.GeneratedCharterOutTransformer;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
@@ -150,13 +148,9 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceExpressionContract;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IGeneratedCharterOutSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
@@ -525,8 +519,8 @@ public class LNGScenarioTransformer {
 
 		final Pair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>> vesselAssociations = buildFleet(builder, portAssociation, baseFuelIndexAssociation, charterIndexAssociation,
 				modelEntityMap);
-		for (IVesselAvailability vesselAvailability : allVesselAvailabilities) {
-			for (IVesselAvailabilityTransformer vesselAvailabilityTransformer : vesselAvailabilityTransformers) {
+		for (final IVesselAvailability vesselAvailability : allVesselAvailabilities) {
+			for (final IVesselAvailabilityTransformer vesselAvailabilityTransformer : vesselAvailabilityTransformers) {
 				vesselAvailabilityTransformer.vesselAvailabilityTransformed(modelEntityMap.getModelObject(vesselAvailability, VesselAvailability.class), vesselAvailability);
 			}
 		}
@@ -690,9 +684,9 @@ public class LNGScenarioTransformer {
 				continue;
 			}
 			final boolean freeze = assignableElement.isLocked();
-			Pair<Boolean, Set<Slot>> containsLockedSlots = checkAndCollectLockedSlots(assignableElement);
+			final Pair<Boolean, Set<Slot>> containsLockedSlots = checkAndCollectLockedSlots(assignableElement);
 			// Pair<Boolean, Set<Slot>> containsLockedSlots = new Pair<Boolean, Set<Slot>>(false, new HashSet<Slot>());
-			Set<Slot> lockedSlots = containsLockedSlots.getSecond();
+			final Set<Slot> lockedSlots = containsLockedSlots.getSecond();
 			if (!freeze && !containsLockedSlots.getFirst()) {
 				continue;
 			}
@@ -734,7 +728,7 @@ public class LNGScenarioTransformer {
 		}
 	}
 
-	private boolean checkAndLockSlots(AssignableElement assignableElement) {
+	private boolean checkAndLockSlots(final AssignableElement assignableElement) {
 		boolean containsLocked = false;
 		if (assignableElement instanceof Cargo) {
 			final Cargo cargo = (Cargo) assignableElement;
@@ -748,19 +742,19 @@ public class LNGScenarioTransformer {
 		return containsLocked;
 	}
 
-	private void unlockSlot(Slot slot) {
+	private void unlockSlot(final Slot slot) {
 		slot.setLocked(false);
 	}
 
-	private Pair<Boolean, Set<Slot>> checkAndCollectLockedSlots(AssignableElement assignableElement) {
-		Pair<Boolean, Set<Slot>> lockedSlots = new Pair<>();
+	private Pair<Boolean, Set<Slot>> checkAndCollectLockedSlots(final AssignableElement assignableElement) {
+		final Pair<Boolean, Set<Slot>> lockedSlots = new Pair<>();
 		lockedSlots.setBoth(false, new HashSet<Slot>());
 
 		if (assignableElement instanceof Cargo) {
 			final Cargo cargo = (Cargo) assignableElement;
 			for (final Slot slot : cargo.getSortedSlots()) {
 				if (slot.getName().equals("N130")) {
-					int i = 0;
+					final int i = 0;
 				}
 				if (slot.isLocked()) {
 					lockedSlots.setFirst(true);
@@ -823,7 +817,7 @@ public class LNGScenarioTransformer {
 	private void setEarliestAndLatestTimes() {
 		earliestTime = null;
 		latestTime = null;
-		Pair<Date, Date> earliestAndLatestTimes = LNGScenarioUtils.findEarliestAndLatestTimes(rootObject);
+		final Pair<Date, Date> earliestAndLatestTimes = LNGScenarioUtils.findEarliestAndLatestTimes(rootObject);
 		earliestTime = earliestAndLatestTimes.getFirst();
 		latestTime = earliestAndLatestTimes.getSecond();
 	}
@@ -873,7 +867,7 @@ public class LNGScenarioTransformer {
 			}
 
 			modelEntityMap.addModelObject(event, builderSlot);
-			for (IVesselEventTransformer vesselEventTransformer : vesselEventTransformers) {
+			for (final IVesselEventTransformer vesselEventTransformer : vesselEventTransformers) {
 				vesselEventTransformer.vesselEventTransformed(event, builderSlot);
 			}
 		}
@@ -1045,9 +1039,9 @@ public class LNGScenarioTransformer {
 	private ITimeWindow getTimeWindowForSlotBinding(final Slot modelSlot, final IPortSlot optimiserSlot, final IPort port) {
 
 		if (modelSlot instanceof SpotSlot) {
-
-			final Date startTime = modelSlot.getWindowStartWithSlotOrPortTime();
-			final Date endTime = modelSlot.getWindowEndWithSlotOrPortTime();
+// TODO: IS this with flex or not??
+			final Date startTime = modelSlot.getWindowStartWithSlotOrPortTimeWithFlex();
+			final Date endTime = modelSlot.getWindowEndWithSlotOrPortTimeWithFlex();
 			// Convert port local external date/time into UTC based internal time units
 			final int twStart = timeZoneToUtcOffsetProvider.UTC(convertTime(earliestTime, startTime), port);
 			final int twEnd = timeZoneToUtcOffsetProvider.UTC(convertTime(earliestTime, endTime), port);
@@ -1155,12 +1149,12 @@ public class LNGScenarioTransformer {
 		final IDischargeOption discharge;
 		usedIDStrings.add(dischargeSlot.getName());
 
-		final ITimeWindow dischargeWindow = builder.createTimeWindow(convertTime(earliestTime, dischargeSlot.getWindowStartWithSlotOrPortTime()),
-				convertTime(earliestTime, dischargeSlot.getWindowEndWithSlotOrPortTime()));
+		final ITimeWindow dischargeWindow = builder.createTimeWindow(convertTime(earliestTime, dischargeSlot.getWindowStartWithSlotOrPortTimeWithFlex()),
+				convertTime(earliestTime, dischargeSlot.getWindowEndWithSlotOrPortTimeWithFlex()));
 
 		final ISalesPriceCalculator dischargePriceCalculator;
 
-		boolean isSpot = (dischargeSlot instanceof SpotSlot);
+		final boolean isSpot = (dischargeSlot instanceof SpotSlot);
 		if (dischargeSlot.isSetPriceExpression()) {
 
 			final String priceExpression = dischargeSlot.getPriceExpression();
@@ -1318,11 +1312,11 @@ public class LNGScenarioTransformer {
 		final ILoadOption load;
 		usedIDStrings.add(loadSlot.getName());
 
-		final ITimeWindow loadWindow = builder.createTimeWindow(convertTime(earliestTime, loadSlot.getWindowStartWithSlotOrPortTime()),
-				convertTime(earliestTime, loadSlot.getWindowEndWithSlotOrPortTime()));
+		final ITimeWindow loadWindow = builder.createTimeWindow(convertTime(earliestTime, loadSlot.getWindowStartWithSlotOrPortTimeWithFlex()),
+				convertTime(earliestTime, loadSlot.getWindowEndWithSlotOrPortTimeWithFlex()));
 
 		final ILoadPriceCalculator loadPriceCalculator;
-		boolean isSpot = (loadSlot instanceof SpotSlot);
+		final boolean isSpot = (loadSlot instanceof SpotSlot);
 
 		if (loadSlot.isSetPriceExpression()) {
 
@@ -1994,9 +1988,9 @@ public class LNGScenarioTransformer {
 		return count;
 	}
 
-	private Date convertDateToUTC(Date startTimeLocalTime, TimeZone tz) {
+	private Date convertDateToUTC(final Date startTimeLocalTime, final TimeZone tz) {
 		// shift localTime to UTC
-		Calendar shiftedToUTC = TimeZoneHelper.createTimeZoneShiftedCalendar(startTimeLocalTime, tz.getID(), "UTC");
+		final Calendar shiftedToUTC = TimeZoneHelper.createTimeZoneShiftedCalendar(startTimeLocalTime, tz.getID(), "UTC");
 		return shiftedToUTC.getTime();
 	}
 
@@ -2248,7 +2242,7 @@ public class LNGScenarioTransformer {
 						point = dateHelper.convertTime(earliestTime, dates.get(0));
 						baseFuelPriceInInternalUnits = curve.getValueAtPoint(point);
 					}
-					BaseFuel eBF = baseFuelCost.getFuel();
+					final BaseFuel eBF = baseFuelCost.getFuel();
 					bf = TransformerHelper.buildBaseFuel(builder, eBF);
 					modelEntityMap.addModelObject(eBF, bf);
 					if (bf != null && curve != null) {
@@ -2263,9 +2257,9 @@ public class LNGScenarioTransformer {
 
 			vesselClassAssociation.add(eVc, vc);
 
-			List<String> allowedRoutes = new LinkedList<>();
+			final List<String> allowedRoutes = new LinkedList<>();
 			if (shippingDaysRestrictionSpeedProvider != null) {
-				for (Route route: shippingDaysRestrictionSpeedProvider.getValidRoutes(portModel, eVc)) {
+				for (final Route route : shippingDaysRestrictionSpeedProvider.getValidRoutes(portModel, eVc)) {
 					allowedRoutes.add(route.getName());
 				}
 			}
@@ -2313,8 +2307,8 @@ public class LNGScenarioTransformer {
 			if (shippingDaysRestrictionSpeedProvider == null) {
 				ballastReferenceSpeed = ladenReferenceSpeed = vessel.getVesselClass().getMaxSpeed();
 			} else {
-				ballastReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(eVessel.getVesselClass(), false /*ballast*/));
-				ladenReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(eVessel.getVesselClass(), true /*laden*/));
+				ballastReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(eVessel.getVesselClass(), false /* ballast */));
+				ladenReferenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(eVessel.getVesselClass(), true /* laden */));
 			}
 			builder.setShippingDaysRestrictionReferenceSpeed(vessel, VesselState.Ballast, ballastReferenceSpeed);
 			builder.setShippingDaysRestrictionReferenceSpeed(vessel, VesselState.Laden, ladenReferenceSpeed);
@@ -2434,7 +2428,7 @@ public class LNGScenarioTransformer {
 					final ArrayList<Port> sortedPortSet = new ArrayList<Port>(portSet);
 					Collections.sort(sortedPortSet, new Comparator<Port>() {
 						@Override
-						public int compare(Port p1, Port p2) {
+						public int compare(final Port p1, final Port p2) {
 							return p1.getName().compareTo(p2.getName());
 						}
 

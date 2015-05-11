@@ -441,6 +441,7 @@ public class PeriodTransformer {
 			final SlotAllocation cargoSlotAllocation = slotAllocationMap.get(slot);
 			if (cargoSlotAllocation != null) {
 				slot.setWindowSize(0);
+				slot.setWindowFlex(0);
 				final Calendar localStart = (Calendar) cargoSlotAllocation.getLocalStart().clone();
 				final int localTime = localStart.get(Calendar.HOUR_OF_DAY);
 				localStart.set(Calendar.HOUR_OF_DAY, 0);
@@ -472,6 +473,7 @@ public class PeriodTransformer {
 		final SlotAllocation cargoSlotAllocation = slotAllocationMap.get(slot);
 		if (cargoSlotAllocation != null) {
 			slot.setWindowSize(0);
+			slot.setWindowFlex(0);
 			final Calendar localStart = (Calendar) cargoSlotAllocation.getLocalStart().clone();
 			final int localTime = localStart.get(Calendar.HOUR_OF_DAY);
 			localStart.set(Calendar.HOUR_OF_DAY, 0);
