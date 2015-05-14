@@ -49,6 +49,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowStart <em>Window Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowStartTime <em>Window Start Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowSize <em>Window Size</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowFlex <em>Window Flex</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getDuration <em>Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getMinQuantity <em>Min Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getMaxQuantity <em>Max Quantity</em>}</li>
@@ -192,6 +193,26 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected boolean windowSizeESet;
+
+	/**
+	 * The default value of the '{@link #getWindowFlex() <em>Window Flex</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWindowFlex()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int WINDOW_FLEX_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getWindowFlex() <em>Window Flex</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWindowFlex()
+	 * @generated
+	 * @ordered
+	 */
+	protected int windowFlex = WINDOW_FLEX_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getDuration() <em>Duration</em>}' attribute.
@@ -755,6 +776,27 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 */
 	public boolean isSetWindowSize() {
 		return windowSizeESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getWindowFlex() {
+		return windowFlex;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setWindowFlex(int newWindowFlex) {
+		int oldWindowFlex = windowFlex;
+		windowFlex = newWindowFlex;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__WINDOW_FLEX, oldWindowFlex, windowFlex));
 	}
 
 	/**
@@ -1568,6 +1610,23 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		return new Date(startTime.getTime()
 				+ Timer.ONE_HOUR * getSlotOrPortWindowSize());
 	}
+	
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public Date getWindowEndWithSlotOrPortTimeWithFlex() {
+		final Date endTime = getWindowEndWithSlotOrPortTime();
+		if (endTime == null) {
+			return null;
+		}
+		final int slotFlex = getWindowFlex();
+		if (slotFlex > 0) {
+			return new Date(endTime.getTime() + Timer.ONE_HOUR * slotFlex);
+		}
+		return endTime;
+		
+	}
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -1585,6 +1644,23 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 //		if (calendar.get(Calendar.HOUR_OF_DAY) != 0) System.err.println("This should never happen : " + calendar.get(Calendar.HOUR_OF_DAY));
 		calendar.set(Calendar.HOUR_OF_DAY, startTime);
 		return calendar.getTime();
+	}
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated NOT
+	 */
+	public Date getWindowStartWithSlotOrPortTimeWithFlex() {
+		final Date startTime = getWindowStartWithSlotOrPortTime();
+		if (startTime == null) {
+			return null;
+		}
+	 
+		final int slotFlex = getWindowFlex();
+		if (slotFlex < 0) {
+			return new Date(startTime.getTime() + Timer.ONE_HOUR * slotFlex);
+		}
+		return startTime;
 	}
 
 	/**
@@ -1715,6 +1791,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getWindowStartTime();
 			case CargoPackage.SLOT__WINDOW_SIZE:
 				return getWindowSize();
+			case CargoPackage.SLOT__WINDOW_FLEX:
+				return getWindowFlex();
 			case CargoPackage.SLOT__DURATION:
 				return getDuration();
 			case CargoPackage.SLOT__MIN_QUANTITY:
@@ -1789,6 +1867,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return;
 			case CargoPackage.SLOT__WINDOW_SIZE:
 				setWindowSize((Integer)newValue);
+				return;
+			case CargoPackage.SLOT__WINDOW_FLEX:
+				setWindowFlex((Integer)newValue);
 				return;
 			case CargoPackage.SLOT__DURATION:
 				setDuration((Integer)newValue);
@@ -1885,6 +1966,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__WINDOW_SIZE:
 				unsetWindowSize();
 				return;
+			case CargoPackage.SLOT__WINDOW_FLEX:
+				setWindowFlex(WINDOW_FLEX_EDEFAULT);
+				return;
 			case CargoPackage.SLOT__DURATION:
 				unsetDuration();
 				return;
@@ -1971,6 +2055,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return isSetWindowStartTime();
 			case CargoPackage.SLOT__WINDOW_SIZE:
 				return isSetWindowSize();
+			case CargoPackage.SLOT__WINDOW_FLEX:
+				return windowFlex != WINDOW_FLEX_EDEFAULT;
 			case CargoPackage.SLOT__DURATION:
 				return isSetDuration();
 			case CargoPackage.SLOT__MIN_QUANTITY:
@@ -2098,6 +2184,10 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getWindowEndWithSlotOrPortTime();
 			case CargoPackage.SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME:
 				return getWindowStartWithSlotOrPortTime();
+			case CargoPackage.SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME_WITH_FLEX:
+				return getWindowEndWithSlotOrPortTimeWithFlex();
+			case CargoPackage.SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME_WITH_FLEX:
+				return getWindowStartWithSlotOrPortTimeWithFlex();
 			case CargoPackage.SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE:
 				return getSlotOrPortWindowSize();
 			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATED_ENTITY:
@@ -2135,6 +2225,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		if (windowStartTimeESet) result.append(windowStartTime); else result.append("<unset>");
 		result.append(", windowSize: ");
 		if (windowSizeESet) result.append(windowSize); else result.append("<unset>");
+		result.append(", windowFlex: ");
+		result.append(windowFlex);
 		result.append(", duration: ");
 		if (durationESet) result.append(duration); else result.append("<unset>");
 		result.append(", minQuantity: ");

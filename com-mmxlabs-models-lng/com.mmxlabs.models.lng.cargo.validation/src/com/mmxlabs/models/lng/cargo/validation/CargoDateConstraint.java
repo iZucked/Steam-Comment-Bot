@@ -86,7 +86,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 		});
 		injector.injectMembers(this);
 	}
-	
+
 	/**
 	 * Validate that the available time is not negative.
 	 * 
@@ -190,7 +190,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 
 				final Integer minTime = minTimes.get(key);
 
-				final int severity = IStatus.ERROR;
+				int severity = IStatus.ERROR;
 				if (minTime == null) {
 					// distance line is missing
 					// TODO customise message for this case.
@@ -201,8 +201,15 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 					failures.add(dsd);
 				} else {
 					if (minTime > availableTime) {
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'" + cargo.getLoadName() + "'", formatHours(minTime
-								- availableTime)), (cargo.isAllowRewiring()) ? IStatus.WARNING : severity);
+						// If difference is within the slot flex, then downgrade to warning.
+						final int diff = minTime - availableTime;
+						// We want to sum the negative flex on the from to the positive flex on the to - this gives the sum additional flex on top of the windows.
+						final int totalFlex = -from.getWindowFlex() + to.getWindowFlex();
+						if (diff < totalFlex) {
+							severity = IStatus.WARNING;
+						}
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'" + cargo.getLoadName() + "'",
+								formatHours(minTime - availableTime)), (cargo.isAllowRewiring()) ? IStatus.WARNING : severity);
 						dsd.addEObjectAndFeature(from, CargoPackage.eINSTANCE.getSlot_WindowStart());
 						dsd.addEObjectAndFeature(to, CargoPackage.eINSTANCE.getSlot_WindowStart());
 						failures.add(dsd);
@@ -285,11 +292,11 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 					}
 					prevSlot = slot;
 				}
-			} else if (constraintID.equals(NON_SHIPPED_TRAVEL_TIME_ID)){
+			} else if (constraintID.equals(NON_SHIPPED_TRAVEL_TIME_ID)) {
 				// Divertable DES and FOB Sale
 				if (cargo.getSortedSlots().size() == 2) {
-					LoadSlot loadSlot = (LoadSlot) cargo.getSortedSlots().get(0);
-					DischargeSlot dischargeSlot = (DischargeSlot) cargo.getSortedSlots().get(1);
+					final LoadSlot loadSlot = (LoadSlot) cargo.getSortedSlots().get(0);
+					final DischargeSlot dischargeSlot = (DischargeSlot) cargo.getSortedSlots().get(1);
 					if (loadSlot.isDivertible()) {
 						validateNonShippedSlotTravelTime(ctx, extraContext, cargo, loadSlot, dischargeSlot, failures);
 					}
