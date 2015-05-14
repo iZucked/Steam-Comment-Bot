@@ -302,16 +302,12 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	
 	private void validateNonShippedSlotTravelTime(final IValidationContext ctx, final IExtraValidationContext extraContext, final Cargo cargo, final LoadSlot from, final DischargeSlot to,
 			final List<IStatus> failures) {
-		if (from.getName().equals("TFS01")) {
-			int i = 0;
-		}
 		Vessel vessel = from.getNominatedVessel();
 		if (vessel == null) {
 			return;
 		}
 		int windowLength = getLadenMaxWindow(from, to);
-		int travelTime = TravelTimeUtils.getMinRouteTimeInHours(from, to, shippingDaysSpeedProvider, TravelTimeUtils.getScenarioModel(extraContext), vessel, TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, vessel.getVesselClass(), true));
-		double ref = TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, vessel.getVesselClass(), true);
+		int travelTime = TravelTimeUtils.getMinRouteTimeInHours(from, to, shippingDaysSpeedProvider, TravelTimeUtils.getScenarioModel(extraContext), vessel, TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, from, vessel.getVesselClass(), true));
 		if (travelTime + from.getSlotOrPortDuration() > windowLength) {
 			final String message = String.format(
 					"Purchase|%s is paired with a sale at %s. However the laden travel time (%s) is greater than the shortest possible journey by %s", from.getName(),

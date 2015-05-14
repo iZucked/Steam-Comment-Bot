@@ -122,4 +122,16 @@ public class TravelTimeUtils {
 		return referenceSpeed;
 	}
 
+	public static double getReferenceSpeed(IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider, final LoadSlot loadSlot, final VesselClass vesselClass, final boolean isLaden) {
+		double referenceSpeed;
+
+		// catch error in case no service registered
+		try {
+			referenceSpeed = shippingDaysSpeedProvider.getSpeed(loadSlot, vesselClass, isLaden);
+		} catch (org.ops4j.peaberry.ServiceUnavailableException e) {
+			referenceSpeed = vesselClass.getMaxSpeed();
+		}
+		return referenceSpeed;
+	}
+
 }
