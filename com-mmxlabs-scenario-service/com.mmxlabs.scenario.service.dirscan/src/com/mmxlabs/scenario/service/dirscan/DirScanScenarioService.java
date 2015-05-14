@@ -549,6 +549,12 @@ public class DirScanScenarioService extends AbstractScenarioService {
 			manifest.setUUID(original.getUuid());
 			manifest.setScenarioVersion(original.getScenarioVersion());
 			manifest.setVersionContext(original.getVersionContext());
+			
+			manifest.setClientScenarioVersion(original.getClientScenarioVersion());
+			manifest.setClientVersionContext(original.getClientVersionContext());
+			// client version!
+			
+			
 			final URI manifestURI = URI.createURI("archive:" + scenarioURI.toString() + "!/MANIFEST.xmi");
 			final Resource manifestResource = instanceResourceSet.createResource(manifestURI);
 
