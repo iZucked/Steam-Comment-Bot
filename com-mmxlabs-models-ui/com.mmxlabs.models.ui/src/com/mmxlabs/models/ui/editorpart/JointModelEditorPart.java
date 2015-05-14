@@ -112,6 +112,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 
 	/**
 	 * Flag to enable the default EMF tree view editor
+	 * 
+	 * NEVER COMMIT AS TRUE
 	 */
 	private static final boolean DEBUG = false;
 
