@@ -228,7 +228,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 				}
 			});
 
-
 			for (final ColumnHandler handler : getBlockManager().getHandlersInOrder()) {
 				final GridColumn column = handler.createColumn().getColumn();
 				if (sortingSupport != null) {
@@ -578,19 +577,9 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 	private void makeActions() {
 		packColumnsAction = PackActionFactory.createPackColumnsAction(viewer);
-		copyTableAction = new CopyGridToHtmlClipboardAction(viewer.getGrid(), false) {
-			@Override
-			protected String[] getAdditionalHeaderAttributes(GridColumn column) {
-				// Border around all header cells.
-				return null;// new String[] { "style='border:1 solid #000;'" };
-			}
 
-			@Override
-			protected String[] getAdditionalAttributes(final GridItem item, final int i) {
-				// Border around all header cells.
-				return null;// new String[] { "style='border:1 solid #000;'" };
-			}
-		};
+		copyTableAction = new CopyGridToHtmlClipboardAction(viewer.getGrid(), false);
+
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
 	}
 
