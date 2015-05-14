@@ -6,7 +6,10 @@ package com.mmxlabs.scheduler.optimiser.schedule;
 
 import javax.inject.Inject;
 
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -65,13 +68,18 @@ public class ShippingCostHelper {
 	}
 
 	public long getHireCosts(final VoyagePlan plan) {
-
 		final long planDuration = getPlanDurationInHours(plan);
 
 		final int hireRatePerDay = plan.getCharterInRatePerDay();
-		long hireCosts = (long) hireRatePerDay * (long) planDuration / 24L;
+		long hireCosts = (long) hireRatePerDay * planDuration / 24L;
 		return hireCosts;
 	}
+	
+	private long getDurationInDays(final VoyagePlan plan) {
+		final long planDuration = getPlanDurationInHours(plan);
+		return Calculator.ScaleFactor * planDuration / 24L;
+	}
+
 	
 	public int getPlanDurationInHours(final VoyagePlan plan) {
 		int planDuration = 0;
@@ -183,4 +191,24 @@ public class ShippingCostHelper {
 
 		return shippingCosts + portCosts + hireCosts;
 	}
+	
+	public long[] getSeperatedShippingCosts(final VoyagePlan plan, final IVesselAvailability vesselAvailability, final boolean includeLNG, final boolean includeCharterInCosts) {
+		long[] costs = new long[4];
+		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+			return costs;
+		}
+
+		final long shippingCosts = getRouteExtraCosts(plan) + getFuelCosts(plan, includeLNG);
+		final long portCosts = getPortCosts(vesselAvailability.getVessel(), plan);
+		final long hireCosts = includeCharterInCosts ? getHireCosts(plan) : 0L;
+		final long shippingDays = includeCharterInCosts ? getDurationInDays(plan): 0L;
+		
+		costs[0] = shippingCosts;
+		costs[1] = portCosts;
+		costs[2] = hireCosts;
+		costs[3] = shippingDays;
+		
+		return costs;
+	}
+
 }
