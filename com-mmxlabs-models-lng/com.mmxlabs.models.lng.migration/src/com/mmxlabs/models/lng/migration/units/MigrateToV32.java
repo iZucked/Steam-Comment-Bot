@@ -23,12 +23,12 @@ public class MigrateToV32 extends AbstractMigrationUnit {
 
 	@Override
 	public int getScenarioSourceVersion() {
-		return 30;
+		return 31;
 	}
 
 	@Override
 	public int getScenarioDestinationVersion() {
-		return 31;
+		return 32;
 	}
 
 	@Override
