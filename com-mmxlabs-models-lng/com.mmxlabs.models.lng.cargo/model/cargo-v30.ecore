@@ -30,6 +30,7 @@
     <eOperations name="getSlotOrPortDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eOperations name="getSlotOrContractMinQuantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eOperations name="getSlotOrContractMaxQuantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eOperations name="getSlotOrContractVolumeLimitsUnit" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VolumeUnits"/>
     <eOperations name="getWindowEndWithSlotOrPortTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     <eOperations name="getWindowStartWithSlotOrPortTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     <eOperations name="getSlotOrPortWindowSize" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
@@ -43,7 +44,6 @@
         eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//Contract"
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="port" lowerBound="1" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowStartTmp" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowStart" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate">
       <eAnnotations source="http://www.mmxlabs.com/models/lng/ui/datetime">
@@ -89,7 +89,6 @@
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="pricingDate" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate" unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pricingDateTmp" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="notes" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="divertible" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="shippingDaysRestriction"
@@ -203,22 +202,15 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate" unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="startBy" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate" unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startAfterTmp" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDateTime"
-        unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startByTmp" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDateTime"
-        unsettable="true"/>    <eStructuralFeatures xsi:type="ecore:EReference" name="endAt" upperBound="-1">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="endAt" upperBound="-1">
       <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet">
         <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
       </eGenericType>
     </eStructuralFeatures>
-        <eStructuralFeatures xsi:type="ecore:EAttribute" name="endAfter" lowerBound="1"
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="endAfter" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate" unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="endBy" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"
         unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="endAfterTmp" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDateTime"
-        unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="endByTmp" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDateTime"
-        unsettable="true"/> 
     <eStructuralFeatures xsi:type="ecore:EReference" name="startHeel" lowerBound="1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//HeelOptions"
         containment="true"/>
@@ -243,8 +235,6 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="startBy" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startAfterTmp" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDateTime"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startByTmp" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDateTime"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MaintenanceEvent" eSuperTypes="#//VesselEvent"/>
   <eClassifiers xsi:type="ecore:EClass" name="DryDockEvent" eSuperTypes="#//VesselEvent"/>

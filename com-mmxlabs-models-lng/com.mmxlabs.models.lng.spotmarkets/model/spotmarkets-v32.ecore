@@ -105,11 +105,8 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CharterOutStartDate">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="charterOutStartDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate">
-      <eAnnotations source="http://www.mmxlabs.com/models/lng/ui/datetime">
-        <details key="showTime" value="false"/>
-      </eAnnotations>
-    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="charterOutStartDate" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="charterOutStartDateTmp" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CharterOutMarket" eSuperTypes="#//SpotCharterMarket ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="charterOutPrice" lowerBound="1"

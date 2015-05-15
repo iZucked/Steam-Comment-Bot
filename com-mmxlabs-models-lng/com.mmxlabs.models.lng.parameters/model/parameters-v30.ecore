@@ -38,8 +38,6 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate" unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="optimiseBefore" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate" unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="optimiseAfterTmp" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth" unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="optimiseBeforeTmp" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth" unsettable="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AnnealingSettings">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="iterations" lowerBound="1"

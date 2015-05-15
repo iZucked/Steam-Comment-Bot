@@ -40,11 +40,11 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IndexPoint">
     <eTypeParameters name="Value"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dateTmp" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth"/>    
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1">
       <eGenericType eTypeParameter="#//IndexPoint/Value"/>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dateTmp" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth"/>    
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Index" abstract="true">
     <eTypeParameters name="Value"/>

@@ -39,17 +39,17 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="minQuantity" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
-        <details key="formatString" value="#,###,##0"/>
+        <details key="unit" value="m³"/>
+        <details key="formatString" value="###,##0"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxQuantity" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
-        <details key="formatString" value="#,###,##0"/>
+        <details key="unit" value="m³"/>
+        <details key="formatString" value="###,##0"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeLimitsUnit" lowerBound="1"
-        eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VolumeUnits"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="priceInfo" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//LNGPriceCalculatorParameters"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="entity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BaseLegalEntity"/>
