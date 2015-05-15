@@ -43,7 +43,7 @@ public class ExtendedLogLogger extends MarkerIgnoringBase {
 	}
 
 	@Override
-	public void trace(final String format, final Object[] argArray) {
+	public void trace(final String format, final Object... argArray) {
 
 	}
 
@@ -79,7 +79,7 @@ public class ExtendedLogLogger extends MarkerIgnoringBase {
 	}
 
 	@Override
-	public void debug(final String format, final Object[] argArray) {
+	public void debug(final String format, final Object... argArray) {
 
 		if (isDebugEnabled()) {
 			doLog(IStatus.INFO, String.format(format, argArray), null);
@@ -122,7 +122,7 @@ public class ExtendedLogLogger extends MarkerIgnoringBase {
 	}
 
 	@Override
-	public void info(final String format, final Object[] argArray) {
+	public void info(final String format, final Object... argArray) {
 		if (isInfoEnabled()) {
 			doLog(IStatus.INFO, String.format(format, argArray), null);
 		}
@@ -153,7 +153,7 @@ public class ExtendedLogLogger extends MarkerIgnoringBase {
 	}
 
 	@Override
-	public void warn(final String format, final Object[] argArray) {
+	public void warn(final String format, final Object... argArray) {
 		doLog(IStatus.WARNING, String.format(format, argArray), null);
 
 	}
@@ -189,7 +189,7 @@ public class ExtendedLogLogger extends MarkerIgnoringBase {
 	}
 
 	@Override
-	public void error(final String format, final Object[] argArray) {
+	public void error(final String format, final Object... argArray) {
 		doLog(IStatus.ERROR, String.format(format, argArray), null);
 	}
 
