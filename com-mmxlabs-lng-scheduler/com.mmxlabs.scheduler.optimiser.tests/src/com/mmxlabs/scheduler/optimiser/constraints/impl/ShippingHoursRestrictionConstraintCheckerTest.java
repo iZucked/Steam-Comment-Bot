@@ -53,19 +53,21 @@ public class ShippingHoursRestrictionConstraintCheckerTest {
 
 	@Test
 	public void testConstraintPasses() {
-		Pair<ISequenceElement[], ShippingHoursRestrictionChecker> testData = createTester(1230, new Pair<>(661,1227));
-		ShippingHoursRestrictionChecker shippingHoursRestrictionChecker = testData.getSecond();
-		Assert.assertTrue(shippingHoursRestrictionChecker.checkPairwiseConstraint(testData.getFirst()[0], testData.getFirst()[1], null));
+		final Pair<ISequenceElement[], ShippingHoursRestrictionChecker> testData = createTester(1230, new Pair<>(661, 1227));
+		final ShippingHoursRestrictionChecker shippingHoursRestrictionChecker = testData.getSecond();
+		// Mock resource here is ok as #createTester works with any resource
+		Assert.assertTrue(shippingHoursRestrictionChecker.checkPairwiseConstraint(testData.getFirst()[0], testData.getFirst()[1], Mockito.mock(IResource.class)));
 	}
 
 	@Test
 	public void testConstraintFails() {
-		Pair<ISequenceElement[], ShippingHoursRestrictionChecker> testData = createTester(1220, new Pair<>(661,1227));
-		ShippingHoursRestrictionChecker shippingHoursRestrictionChecker = testData.getSecond();
-		Assert.assertFalse(shippingHoursRestrictionChecker.checkPairwiseConstraint(testData.getFirst()[0], testData.getFirst()[1], null));
+		final Pair<ISequenceElement[], ShippingHoursRestrictionChecker> testData = createTester(1220, new Pair<>(661, 1227));
+		final ShippingHoursRestrictionChecker shippingHoursRestrictionChecker = testData.getSecond();
+		// Mock resource here is ok as #createTester works with any resource
+		Assert.assertFalse(shippingHoursRestrictionChecker.checkPairwiseConstraint(testData.getFirst()[0], testData.getFirst()[1], Mockito.mock(IResource.class)));
 	}
 
-	private Pair<ISequenceElement[], ShippingHoursRestrictionChecker> createTester(int shippingHoursRestriction, Pair<Integer, Integer> desTimes) {
+	private Pair<ISequenceElement[], ShippingHoursRestrictionChecker> createTester(final int shippingHoursRestriction, final Pair<Integer, Integer> desTimes) {
 		final IPortSlotProviderEditor portSlotProvider = new HashMapPortSlotEditor();
 		final IActualsDataProvider actualsDataProvider = Mockito.mock(IActualsDataProvider.class);
 		final IShippingHoursRestrictionProvider shippingHoursRestrictionProvider = Mockito.mock(IShippingHoursRestrictionProvider.class);
@@ -95,24 +97,27 @@ public class ShippingHoursRestrictionConstraintCheckerTest {
 		Mockito.when(actualsDataProvider.hasActuals(Mockito.any(IPortSlot.class))).thenReturn(false);
 		Mockito.when(shippingHoursRestrictionProvider.getShippingHoursRestriction(o1)).thenReturn(shippingHoursRestriction);
 		Mockito.when(shippingHoursRestrictionProvider.isDivertable(Mockito.any(ISequenceElement.class))).thenReturn(true);
-		ITimeWindow timeWindow = Mockito.mock(ITimeWindow.class);
+		final ITimeWindow timeWindow = Mockito.mock(ITimeWindow.class);
 		Mockito.when(timeWindow.getStart()).thenReturn(0);
 		Mockito.when(shippingHoursRestrictionProvider.getBaseTime(o1)).thenReturn(timeWindow);
-		
-		Mockito.when(divertableDESShippingTimesCalculator.getDivertableDESTimes(Mockito.any(ILoadOption.class), Mockito.any(IDischargeOption.class), Mockito.any(IVessel.class), Mockito.any(IResource.class))).thenReturn(desTimes);
-		
-		IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class);
+
+		Mockito.when(
+				divertableDESShippingTimesCalculator.getDivertableDESTimes(Mockito.any(ILoadOption.class), Mockito.any(IDischargeOption.class), Mockito.any(IVessel.class),
+						Mockito.any(IResource.class))).thenReturn(desTimes);
+
+		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class);
 		Mockito.when(vesselAvailability.getVesselInstanceType()).thenReturn(VesselInstanceType.DES_PURCHASE);
 		Mockito.when(vp.getVesselAvailability(Mockito.any(IResource.class))).thenReturn(vesselAvailability);
 		Mockito.when(nvp.getNominatedVessel(Mockito.any(IResource.class))).thenReturn(null);
-		
-		ShippingHoursRestrictionChecker shippingHoursRestrictionChecker = createChecker(portSlotProvider, actualsDataProvider, shippingHoursRestrictionProvider, vp, nvp, divertableDESShippingTimesCalculator);
-		return new Pair<> (new ISequenceElement[] {o1, o2}, shippingHoursRestrictionChecker);
+
+		final ShippingHoursRestrictionChecker shippingHoursRestrictionChecker = createChecker(portSlotProvider, actualsDataProvider, shippingHoursRestrictionProvider, vp, nvp,
+				divertableDESShippingTimesCalculator);
+		return new Pair<>(new ISequenceElement[] { o1, o2 }, shippingHoursRestrictionChecker);
 	}
-	
-	private ShippingHoursRestrictionChecker createChecker(final IPortSlotProviderEditor portSlotProvider,
-			final IActualsDataProvider actualsDataProvider, final IShippingHoursRestrictionProvider shippingHoursRestrictionProvider,
-			final IVesselProvider vp, final INominatedVesselProvider nvp, final IDivertableDESShippingTimesCalculator divertableDESShippingTimesCalculator) {
+
+	private ShippingHoursRestrictionChecker createChecker(final IPortSlotProviderEditor portSlotProvider, final IActualsDataProvider actualsDataProvider,
+			final IShippingHoursRestrictionProvider shippingHoursRestrictionProvider, final IVesselProvider vp, final INominatedVesselProvider nvp,
+			final IDivertableDESShippingTimesCalculator divertableDESShippingTimesCalculator) {
 		final Injector injector = Guice.createInjector(new AbstractModule() {
 
 			@Override
