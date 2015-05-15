@@ -6,19 +6,17 @@ package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
-import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.scheduler.optimiser.calculators.IDivertableDESShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
@@ -28,18 +26,13 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
-import com.mmxlabs.scheduler.optimiser.components.impl.LoadOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
-import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortSlotEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortTypeEditor;
 
 public class ShippingHoursRestrictionConstraintCheckerTest {
 
@@ -51,6 +44,7 @@ public class ShippingHoursRestrictionConstraintCheckerTest {
 		Assert.assertSame(name, checker.getName());
 	}
 
+	@SuppressWarnings("null")
 	@Test
 	public void testConstraintPasses() {
 		final Pair<ISequenceElement[], ShippingHoursRestrictionChecker> testData = createTester(1230, new Pair<>(661, 1227));
@@ -59,6 +53,7 @@ public class ShippingHoursRestrictionConstraintCheckerTest {
 		Assert.assertTrue(shippingHoursRestrictionChecker.checkPairwiseConstraint(testData.getFirst()[0], testData.getFirst()[1], Mockito.mock(IResource.class)));
 	}
 
+	@SuppressWarnings("null")
 	@Test
 	public void testConstraintFails() {
 		final Pair<ISequenceElement[], ShippingHoursRestrictionChecker> testData = createTester(1220, new Pair<>(661, 1227));
@@ -67,6 +62,7 @@ public class ShippingHoursRestrictionConstraintCheckerTest {
 		Assert.assertFalse(shippingHoursRestrictionChecker.checkPairwiseConstraint(testData.getFirst()[0], testData.getFirst()[1], Mockito.mock(IResource.class)));
 	}
 
+	@SuppressWarnings("null")
 	private Pair<ISequenceElement[], ShippingHoursRestrictionChecker> createTester(final int shippingHoursRestriction, final Pair<Integer, Integer> desTimes) {
 		final IPortSlotProviderEditor portSlotProvider = new HashMapPortSlotEditor();
 		final IActualsDataProvider actualsDataProvider = Mockito.mock(IActualsDataProvider.class);
@@ -94,21 +90,21 @@ public class ShippingHoursRestrictionConstraintCheckerTest {
 		portSlotProvider.setPortSlot(o3, s3);
 		portSlotProvider.setPortSlot(o4, s4);
 
-		Mockito.when(actualsDataProvider.hasActuals(Mockito.any(IPortSlot.class))).thenReturn(false);
+		Mockito.when(actualsDataProvider.hasActuals(Matchers.any(IPortSlot.class))).thenReturn(false);
 		Mockito.when(shippingHoursRestrictionProvider.getShippingHoursRestriction(o1)).thenReturn(shippingHoursRestriction);
-		Mockito.when(shippingHoursRestrictionProvider.isDivertable(Mockito.any(ISequenceElement.class))).thenReturn(true);
+		Mockito.when(shippingHoursRestrictionProvider.isDivertable(Matchers.any(ISequenceElement.class))).thenReturn(true);
 		final ITimeWindow timeWindow = Mockito.mock(ITimeWindow.class);
 		Mockito.when(timeWindow.getStart()).thenReturn(0);
 		Mockito.when(shippingHoursRestrictionProvider.getBaseTime(o1)).thenReturn(timeWindow);
 
 		Mockito.when(
-				divertableDESShippingTimesCalculator.getDivertableDESTimes(Mockito.any(ILoadOption.class), Mockito.any(IDischargeOption.class), Mockito.any(IVessel.class),
-						Mockito.any(IResource.class))).thenReturn(desTimes);
+				divertableDESShippingTimesCalculator.getDivertableDESTimes(Matchers.any(ILoadOption.class), Matchers.any(IDischargeOption.class), Matchers.any(IVessel.class),
+						Matchers.any(IResource.class))).thenReturn(desTimes);
 
 		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class);
 		Mockito.when(vesselAvailability.getVesselInstanceType()).thenReturn(VesselInstanceType.DES_PURCHASE);
-		Mockito.when(vp.getVesselAvailability(Mockito.any(IResource.class))).thenReturn(vesselAvailability);
-		Mockito.when(nvp.getNominatedVessel(Mockito.any(IResource.class))).thenReturn(null);
+		Mockito.when(vp.getVesselAvailability(Matchers.any(IResource.class))).thenReturn(vesselAvailability);
+		Mockito.when(nvp.getNominatedVessel(Matchers.any(IResource.class))).thenReturn(null);
 
 		final ShippingHoursRestrictionChecker shippingHoursRestrictionChecker = createChecker(portSlotProvider, actualsDataProvider, shippingHoursRestrictionProvider, vp, nvp,
 				divertableDESShippingTimesCalculator);
