@@ -855,7 +855,7 @@ public class MetamodelVersionsUtil {
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.analytics/model/analytics-v27.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_AnalyticsModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.parameters/model/parameters-v27.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ParametersModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.scenario.model/model/scenario-v27.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ScenarioModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.actuals/model/actuals-v27.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ScenarioModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.actuals/model/actuals-v27.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ActualsModel);
 
 		if (extraPackages != null) {
 			for (final Map.Entry<URI, PackageData> e : extraPackages.entrySet()) {
@@ -883,7 +883,7 @@ public class MetamodelVersionsUtil {
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.analytics/model/analytics-v28.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_AnalyticsModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.parameters/model/parameters-v28.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ParametersModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.scenario.model/model/scenario-v28.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ScenarioModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.actuals/model/actuals-v28.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ScenarioModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.actuals/model/actuals-v28.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ActualsModel);
 
 		if (extraPackages != null) {
 			for (final Map.Entry<URI, PackageData> e : extraPackages.entrySet()) {
@@ -911,7 +911,7 @@ public class MetamodelVersionsUtil {
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.analytics/model/analytics-v29.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_AnalyticsModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.parameters/model/parameters-v29.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ParametersModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.scenario.model/model/scenario-v29.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ScenarioModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.actuals/model/actuals-v29.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ScenarioModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.actuals/model/actuals-v29.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ActualsModel);
 
 		if (extraPackages != null) {
 			for (final Map.Entry<URI, PackageData> e : extraPackages.entrySet()) {
