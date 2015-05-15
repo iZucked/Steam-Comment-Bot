@@ -6,7 +6,6 @@ package com.mmxlabs.scheduler.optimiser.providers;
 
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 
 /**
  * Provider for determining whether or not an element is a spot market slot.

@@ -6,10 +6,7 @@ package com.mmxlabs.scheduler.optimiser.schedule;
 
 import javax.inject.Inject;
 
-import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.Triple;
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;

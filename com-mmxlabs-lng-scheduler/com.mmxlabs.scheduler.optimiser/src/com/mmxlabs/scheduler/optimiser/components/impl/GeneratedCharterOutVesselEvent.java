@@ -6,9 +6,7 @@ package com.mmxlabs.scheduler.optimiser.components.impl;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IGeneratedCharterOutVesselEvent;
-import com.mmxlabs.scheduler.optimiser.components.IHeelOptions;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IVesselEvent;
 
 public class GeneratedCharterOutVesselEvent implements IGeneratedCharterOutVesselEvent {
 	private ITimeWindow timeWindow;

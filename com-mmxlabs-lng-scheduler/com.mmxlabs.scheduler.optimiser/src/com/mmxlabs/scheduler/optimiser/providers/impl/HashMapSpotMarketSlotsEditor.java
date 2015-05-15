@@ -8,9 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public final class HashMapSpotMarketSlotsEditor implements ISpotMarketSlotsProviderEditor {
 

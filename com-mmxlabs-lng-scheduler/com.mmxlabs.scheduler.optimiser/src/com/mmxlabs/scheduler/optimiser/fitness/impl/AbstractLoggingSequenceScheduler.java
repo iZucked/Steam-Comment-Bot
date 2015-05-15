@@ -4,14 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 
 /**
