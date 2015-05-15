@@ -89,9 +89,9 @@ public class MethodChainGenerator implements Opcodes {
 
 			final String methodReturnCode = getTypeCode(m.getReturnType());
 			if (dc.isInterface()) {
-				mw.visitMethodInsn(INVOKEINTERFACE, containerTypeName, m.getName(), "()" + methodReturnCode);
+				mw.visitMethodInsn(INVOKEINTERFACE, containerTypeName, m.getName(), "()" + methodReturnCode, true);
 			} else {
-				mw.visitMethodInsn(INVOKEVIRTUAL, containerTypeName, m.getName(), "()" + methodReturnCode);
+				mw.visitMethodInsn(INVOKEVIRTUAL, containerTypeName, m.getName(), "()" + methodReturnCode, false);
 			}
 			// result should now be at stack top
 			final Class<?> typeOnRegister = m.getReturnType();
@@ -119,7 +119,7 @@ public class MethodChainGenerator implements Opcodes {
 				if (boxedType != null) {
 					boxedType = "java/lang/" + boxedType;
 					final String boxingSignature = "(" + methodReturnCode + ")L" + boxedType + ";";
-					mw.visitMethodInsn(INVOKESTATIC, boxedType, "valueOf", boxingSignature);
+					mw.visitMethodInsn(INVOKESTATIC, boxedType, "valueOf", boxingSignature, false);
 				}
 			}
 
@@ -176,7 +176,7 @@ public class MethodChainGenerator implements Opcodes {
 		final MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
 		mv.visitCode();
 		mv.visitVarInsn(ALOAD, 0);
-		mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V");
+		mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false);
 		mv.visitInsn(RETURN);
 		mv.visitMaxs(1, 1);
 		mv.visitEnd();
