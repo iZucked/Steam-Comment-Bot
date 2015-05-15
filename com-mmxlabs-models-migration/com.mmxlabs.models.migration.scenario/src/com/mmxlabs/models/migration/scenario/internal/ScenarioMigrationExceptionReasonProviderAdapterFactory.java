@@ -4,12 +4,10 @@
  */
 package com.mmxlabs.models.migration.scenario.internal;
 
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdapterFactory;
 
 import com.mmxlabs.models.migration.scenario.FinalClientMigratedVersionMismatchException;
 import com.mmxlabs.models.migration.scenario.ScenarioMigrationException;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.rcp.common.editors.IReasonProvider;
 
 public class ScenarioMigrationExceptionReasonProviderAdapterFactory implements IAdapterFactory {

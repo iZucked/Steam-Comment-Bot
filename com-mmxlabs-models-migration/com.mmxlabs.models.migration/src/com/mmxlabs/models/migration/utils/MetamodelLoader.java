@@ -25,7 +25,6 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.YearMonth;
 import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.PeriodFormatter;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
