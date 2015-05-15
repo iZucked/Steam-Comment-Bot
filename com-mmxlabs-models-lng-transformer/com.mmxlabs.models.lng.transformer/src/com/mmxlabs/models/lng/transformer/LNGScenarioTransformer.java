@@ -150,6 +150,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
@@ -205,6 +206,10 @@ public class LNGScenarioTransformer {
 
 	@Inject
 	private IBaseFuelCurveProviderEditor baseFuelCurveProvider;
+
+	@Inject
+	@NonNull
+	private IPromptPeriodProviderEditor promptPeriodProviderEditor;
 
 	/**
 	 * Contains the contract transformers for each known contract type, by the EClass of the contract they transform.
@@ -354,6 +359,13 @@ public class LNGScenarioTransformer {
 		modelEntityMap.setLatestDate(latestTime);
 
 		timeZoneToUtcOffsetProvider.setTimeZeroInMillis(earliestTime.getTime());
+
+		if (rootObject.getPortfolioModel().isSetPromptPeriodStart()) {
+			promptPeriodProviderEditor.setStartOfPromptPeriod(dateHelper.convertTime(rootObject.getPortfolioModel().getPromptPeriodStart()));
+		}
+		if (rootObject.getPortfolioModel().isSetPromptPeriodEnd()) {
+			promptPeriodProviderEditor.setEndOfPromptPeriod(dateHelper.convertTime(rootObject.getPortfolioModel().getPromptPeriodEnd()));
+		}
 
 		/**
 		 * First, create all the market curves (should these come through the builder?)
@@ -1039,7 +1051,7 @@ public class LNGScenarioTransformer {
 	private ITimeWindow getTimeWindowForSlotBinding(final Slot modelSlot, final IPortSlot optimiserSlot, final IPort port) {
 
 		if (modelSlot instanceof SpotSlot) {
-// TODO: IS this with flex or not??
+			// TODO: IS this with flex or not??
 			final Date startTime = modelSlot.getWindowStartWithSlotOrPortTimeWithFlex();
 			final Date endTime = modelSlot.getWindowEndWithSlotOrPortTimeWithFlex();
 			// Convert port local external date/time into UTC based internal time units
