@@ -22,18 +22,22 @@ public class GeneratedCharterOutVesselEvent implements IGeneratedCharterOutVesse
 		super();
 	}
 
+	@Override
 	public void setTimeWindow(final ITimeWindow timeWindow) {
 		this.timeWindow = timeWindow;
 	}
 
+	@Override
 	public void setDurationHours(final int durationHours) {
 		this.durationHours = durationHours;
 	}
 
+	@Override
 	public void setStartPort(final IPort startPort) {
 		this.startPort = startPort;
 	}
 
+	@Override
 	public void setEndPort(final IPort endPort) {
 		this.endPort = endPort;
 	}

@@ -92,6 +92,7 @@ public abstract class AbstractFuelUsingEventImpl extends AbstractScheduledEventI
 		fuelUnitPrice.put(fuel, pricePerUnit);
 	}
 
+	@Override
 	public boolean isCooldownPerformed() {
 		return cooldownPerformed;
 	}

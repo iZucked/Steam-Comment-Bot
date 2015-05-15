@@ -46,6 +46,7 @@ public interface IGeneratedCharterOutVesselEvent extends IVesselEvent {
 	 * Set the total hire cost for charter out events.
 	 * 
 	 */
+	@Override
 	void setHireOutRevenue(long hireCost);
 	
 	void setHeelOptions(int pricePerMBTU, int cv, long volumeInM3);

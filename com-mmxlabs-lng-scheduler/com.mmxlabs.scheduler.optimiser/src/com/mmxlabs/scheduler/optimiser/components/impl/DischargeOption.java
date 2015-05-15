@@ -59,6 +59,7 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 		return minDischargeVolume;
 	}
 
+	@Override
 	public void setMinDischargeVolume(final long minDischargeVolume) {
 		this.minDischargeVolume = minDischargeVolume;
 	}
@@ -68,6 +69,7 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 		return maxDischargeVolume;
 	}
 
+	@Override
 	public void setMaxDischargeVolume(final long maxDischargeVolume) {
 		this.maxDischargeVolume = maxDischargeVolume;
 	}

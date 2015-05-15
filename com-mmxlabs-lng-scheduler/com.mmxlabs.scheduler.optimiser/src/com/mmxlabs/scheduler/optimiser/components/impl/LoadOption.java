@@ -88,6 +88,7 @@ public class LoadOption extends PortSlot implements ILoadOption {
 		return minLoadVolume;
 	}
 
+	@Override
 	public void setMinLoadVolume(final long minLoadVolume) {
 		this.minLoadVolume = minLoadVolume;
 	}
@@ -97,6 +98,7 @@ public class LoadOption extends PortSlot implements ILoadOption {
 		return maxLoadVolume;
 	}
 
+	@Override
 	public void setMaxLoadVolume(final long maxLoadVolume) {
 		this.maxLoadVolume = maxLoadVolume;
 	}
@@ -176,6 +178,7 @@ public class LoadOption extends PortSlot implements ILoadOption {
 		return minLoadVolumeMMBTU;
 	}
 
+	@Override
 	public void setMinLoadVolumeMMBTU(long volume) {
 		minLoadVolumeMMBTU = volume;
 	}
@@ -185,6 +188,7 @@ public class LoadOption extends PortSlot implements ILoadOption {
 		return maxLoadVolumeMMBTU;
 	}
 
+	@Override
 	public void setMaxLoadVolumeMMBTU(long volume) {
 		maxLoadVolumeMMBTU = volume;
 	}
