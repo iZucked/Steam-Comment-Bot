@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import org.eclipse.emf.ecore.EAttribute;
 
 /**
  * <!-- begin-user-doc -->
@@ -262,13 +263,31 @@ public interface LNGScenarioPackage extends EPackage {
 	int LNG_PORTFOLIO_MODEL__ACTUALS_MODEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Prompt Period Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LNG_PORTFOLIO_MODEL__PROMPT_PERIOD_START = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Prompt Period End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LNG_PORTFOLIO_MODEL__PROMPT_PERIOD_END = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>LNG Portfolio Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_PORTFOLIO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int LNG_PORTFOLIO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -447,6 +466,28 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getLNGPortfolioModel_ActualsModel();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getPromptPeriodStart <em>Prompt Period Start</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Prompt Period Start</em>'.
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getPromptPeriodStart()
+	 * @see #getLNGPortfolioModel()
+	 * @generated
+	 */
+	EAttribute getLNGPortfolioModel_PromptPeriodStart();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getPromptPeriodEnd <em>Prompt Period End</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Prompt Period End</em>'.
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getPromptPeriodEnd()
+	 * @see #getLNGPortfolioModel()
+	 * @generated
+	 */
+	EAttribute getLNGPortfolioModel_PromptPeriodEnd();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
