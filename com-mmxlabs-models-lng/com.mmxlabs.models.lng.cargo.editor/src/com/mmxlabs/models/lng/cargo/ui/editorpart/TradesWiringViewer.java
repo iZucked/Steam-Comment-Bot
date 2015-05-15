@@ -2066,6 +2066,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	 * @return
 	 */
 	protected Action createDuplicateAction() {
-		return new CreateStripMenuAction("Duplicate");
+		return new CreateStripMenuAction("Create Strip");
 	}
 }
