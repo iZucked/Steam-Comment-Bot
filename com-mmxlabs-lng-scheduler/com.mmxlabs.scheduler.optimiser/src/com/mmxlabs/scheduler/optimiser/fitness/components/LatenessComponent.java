@@ -6,6 +6,8 @@ package com.mmxlabs.scheduler.optimiser.fitness.components;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
@@ -15,6 +17,8 @@ import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
+import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
+import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 
@@ -28,10 +32,20 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 public final class LatenessComponent extends AbstractPerRouteSchedulerFitnessComponent implements IFitnessComponent {
 
 	private long accumulator = 0;
+
 	@Inject
+	@NonNull
 	private IStartEndRequirementProvider startEndRequirementProvider;
 
-	public LatenessComponent(final String name, final CargoSchedulerFitnessCore core) {
+	@Inject
+	@NonNull
+	private IPromptPeriodProvider promptPeriodProvider;
+
+	@Inject
+	@NonNull
+	private ILatenessComponentParameters latenessParameters;
+
+	public LatenessComponent(@NonNull final String name, @NonNull final CargoSchedulerFitnessCore core) {
 		super(name, core);
 	}
 
@@ -69,8 +83,24 @@ public final class LatenessComponent extends AbstractPerRouteSchedulerFitnessCom
 			}
 
 			if ((tw != null) && (time > tw.getEnd())) {
+				int latenessInHours = time - tw.getEnd();
+				// We are late!
+				ILatenessComponentParameters.Interval interval = Interval.BEYOND;
+				if (tw.getStart() < promptPeriodProvider.getEndOfPromptPeriod()) {
+					interval = Interval.PROMPT;
+				} else if (tw.getStart() < (promptPeriodProvider.getEndOfPromptPeriod() + 90 * 24)) {
+					interval = Interval.MID_TERM;
+				}
+
+				if (latenessInHours < latenessParameters.getThreshold(interval)) {
+					// Hit low penalty value
+					accumulator += latenessParameters.getLowWeight(interval) * latenessInHours;
+				} else {
+					accumulator += latenessParameters.getHighWeight(interval) * latenessInHours;
+				}
+
 				// addDiscountedValue(time, 1000000*(time - tw.getEnd()));
-				accumulator += getDiscountedValue(time, (time - tw.getEnd()));
+				// accumulator += getDiscountedValue(time, (time - tw.getEnd()));
 			}
 		}
 		return true;
