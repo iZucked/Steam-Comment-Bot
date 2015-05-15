@@ -94,7 +94,7 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @return the value of the '<em>Preferred Port</em>' reference.
 	 * @see #setPreferredPort(Port)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_PreferredPort()
-	 * @model required="true"
+	 * @model
 	 * @generated
 	 */
 	Port getPreferredPort();
@@ -262,7 +262,7 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @return the value of the '<em>Price Info</em>' containment reference.
 	 * @see #setPriceInfo(LNGPriceCalculatorParameters)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_PriceInfo()
-	 * @model containment="true"
+	 * @model containment="true" required="true"
 	 * @generated
 	 */
 	LNGPriceCalculatorParameters getPriceInfo();
@@ -345,7 +345,7 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @see com.mmxlabs.models.lng.commercial.PricingEvent
 	 * @see #setPricingEvent(PricingEvent)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_PricingEvent()
-	 * @model
+	 * @model required="true"
 	 * @generated
 	 */
 	PricingEvent getPricingEvent();

@@ -55,6 +55,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	private static final EStructuralFeature WindowStart = CargoFeatures.getSlot_WindowStart();
 	private static final EStructuralFeature WindowStartTime = CargoFeatures.getSlot_WindowStartTime();
 	private static final EStructuralFeature WindowSize = CargoFeatures.getSlot_WindowSize();
+	private static final EStructuralFeature WindowFlex= CargoFeatures.getSlot_WindowFlex();
 	private static final EStructuralFeature Contract = CargoFeatures.getSlot_Contract();
 	private static final EStructuralFeature PriceExpression = CargoFeatures.getSlot_PriceExpression();
 	private static final EClass SlotContractParams = CommercialPackage.eINSTANCE.getSlotContractParams();
@@ -101,7 +102,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 
 		windowFeatures = new ArrayList<EStructuralFeature[]>();
 		windowFeatures.add(new EStructuralFeature[] { WindowStart, WindowStartTime });
-		windowFeatures.add(new EStructuralFeature[] { WindowSize, CargoFeatures.getSlot_Duration() });
+		windowFeatures.add(new EStructuralFeature[] { WindowSize, CargoFeatures.getSlot_Duration(), WindowFlex });
 		windowFeatures.add(new EStructuralFeature[] {});
 		windowTitleFeatures = Sets.newHashSet(WindowStart, WindowStartTime, WindowSize);
 		allFeatures.addAll(getAllFeatures(windowFeatures));

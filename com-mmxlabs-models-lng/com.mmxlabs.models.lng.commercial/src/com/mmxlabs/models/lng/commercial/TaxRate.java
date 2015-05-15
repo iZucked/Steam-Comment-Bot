@@ -61,7 +61,7 @@ public interface TaxRate extends EObject {
 	 * @return the value of the '<em>Value</em>' attribute.
 	 * @see #setValue(float)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getTaxRate_Value()
-	 * @model
+	 * @model required="true"
 	 * @generated
 	 */
 	float getValue();

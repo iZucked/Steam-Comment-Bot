@@ -41,7 +41,7 @@ public interface PortsExpressionMap extends MMXObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Ports</em>' reference list.
 	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPortsExpressionMap_Ports()
-	 * @model
+	 * @model required="true"
 	 * @generated
 	 */
 	EList<APortSet<Port>> getPorts();
@@ -57,7 +57,7 @@ public interface PortsExpressionMap extends MMXObject {
 	 * @return the value of the '<em>Expression</em>' attribute.
 	 * @see #setExpression(String)
 	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPortsExpressionMap_Expression()
-	 * @model
+	 * @model required="true"
 	 * @generated
 	 */
 	String getExpression();

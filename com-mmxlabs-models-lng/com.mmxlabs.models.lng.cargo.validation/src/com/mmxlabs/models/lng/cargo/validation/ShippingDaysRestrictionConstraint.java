@@ -176,8 +176,8 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 								final int loadDurationInHours = desPurchase.getSlotOrPortDuration();
 								final int dischargeDurationInHours = dischargeSlot.getSlotOrPortDuration();
 
-								final int ladenTravelTimeInHours = TravelTimeUtils.getMinRouteTimeInHours(desPurchase, dischargeSlot, shippingDaysSpeedProvider, lngScenarioModel, vessel, TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, vesselClass, true));
-								final int ballastTravelTimeInHours = TravelTimeUtils.getMinRouteTimeInHours(dischargeSlot, desPurchase, shippingDaysSpeedProvider, lngScenarioModel, vessel, TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, vesselClass, false));
+								final int ladenTravelTimeInHours = TravelTimeUtils.getMinRouteTimeInHours(desPurchase, dischargeSlot, shippingDaysSpeedProvider, lngScenarioModel, vessel, TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, desPurchase, vesselClass, true));
+								final int ballastTravelTimeInHours = TravelTimeUtils.getMinRouteTimeInHours(dischargeSlot, desPurchase, shippingDaysSpeedProvider, lngScenarioModel, vessel, TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, desPurchase, vesselClass, false));
 
 								// Calculate minimum time due to slot windows
 								final int ladenMaxWindowInHours;
@@ -198,7 +198,8 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 
 									if (loadDateEnd != null && dischargeDateStart != null) {
 										// There could be an overlap
-										ladenMinWindowInHours = Math.max(0, Hours.hoursBetween(loadDateEnd, dischargeDateStart).getHours() - (loadDurationInHours));
+										// Note: loadDateStart is the value used in the ShippingHoursRestrictionChecker
+										ladenMinWindowInHours = Math.max(0, Hours.hoursBetween(loadDateStart, dischargeDateStart).getHours() - (loadDurationInHours));
 									} else {
 										return Activator.PLUGIN_ID;
 									}

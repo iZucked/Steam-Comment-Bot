@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import java.util.Date;
 
 /**
  * <!-- begin-user-doc -->
@@ -33,6 +34,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getWindowStart <em>Window Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getWindowStartTime <em>Window Start Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getWindowSize <em>Window Size</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getWindowFlex <em>Window Flex</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getDuration <em>Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getVolumeLimitsUnit <em>Volume Limits Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getMinQuantity <em>Min Quantity</em>}</li>
@@ -248,6 +250,32 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @generated
 	 */
 	boolean isSetWindowSize();
+
+	/**
+	 * Returns the value of the '<em><b>Window Flex</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Window Flex</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Window Flex</em>' attribute.
+	 * @see #setWindowFlex(int)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_WindowFlex()
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='-##0'"
+	 * @generated
+	 */
+	int getWindowFlex();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getWindowFlex <em>Window Flex</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Window Flex</em>' attribute.
+	 * @see #getWindowFlex()
+	 * @generated
+	 */
+	void setWindowFlex(int value);
 
 	/**
 	 * Returns the value of the '<em><b>Port</b></em>' reference.
@@ -1148,6 +1176,22 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 */
 	@NonNull
 	DateTime getWindowStartWithSlotOrPortTime();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
+	 * @generated
+	 */
+	DateTime getWindowEndWithSlotOrPortTimeWithFlex();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
+	 * @generated
+	 */
+	DateTime getWindowStartWithSlotOrPortTimeWithFlex();
 
 	/**
 	 * <!-- begin-user-doc -->

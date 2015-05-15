@@ -189,7 +189,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 
 				final Integer minTime = minTimes.get(key);
 
-				final int severity = IStatus.ERROR;
+				int severity = IStatus.ERROR;
 				if (minTime == null) {
 					// distance line is missing
 					// TODO customise message for this case.
@@ -200,6 +200,13 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 					failures.add(dsd);
 				} else {
 					if (minTime > availableTime) {
+						// If difference is within the slot flex, then downgrade to warning.
+						final int diff = minTime - availableTime;
+						// We want to sum the negative flex on the from to the positive flex on the to - this gives the sum additional flex on top of the windows.
+						final int totalFlex = -from.getWindowFlex() + to.getWindowFlex();
+						if (diff < totalFlex) {
+							severity = IStatus.WARNING;
+						}
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'" + cargo.getLoadName() + "'",
 								formatHours(minTime - availableTime)), (cargo.isAllowRewiring()) ? IStatus.WARNING : severity);
 						dsd.addEObjectAndFeature(from, CargoPackage.eINSTANCE.getSlot_WindowStart());
@@ -286,8 +293,8 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 			} else if (constraintID.equals(NON_SHIPPED_TRAVEL_TIME_ID)) {
 				// Divertable DES and FOB Sale
 				if (cargo.getSortedSlots().size() == 2) {
-					LoadSlot loadSlot = (LoadSlot) cargo.getSortedSlots().get(0);
-					DischargeSlot dischargeSlot = (DischargeSlot) cargo.getSortedSlots().get(1);
+					final LoadSlot loadSlot = (LoadSlot) cargo.getSortedSlots().get(0);
+					final DischargeSlot dischargeSlot = (DischargeSlot) cargo.getSortedSlots().get(1);
 					if (loadSlot.isDivertible()) {
 						validateNonShippedSlotTravelTime(ctx, extraContext, cargo, loadSlot, dischargeSlot, failures);
 					}
@@ -300,17 +307,12 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 
 	private void validateNonShippedSlotTravelTime(final IValidationContext ctx, final IExtraValidationContext extraContext, final Cargo cargo, final LoadSlot from, final DischargeSlot to,
 			final List<IStatus> failures) {
-		if (from.getName().equals("TFS01")) {
-			int i = 0;
-		}
 		Vessel vessel = from.getNominatedVessel();
 		if (vessel == null) {
 			return;
 		}
 		int windowLength = getLadenMaxWindow(from, to);
-		int travelTime = TravelTimeUtils.getMinRouteTimeInHours(from, to, shippingDaysSpeedProvider, TravelTimeUtils.getScenarioModel(extraContext), vessel,
-				TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, vessel.getVesselClass(), true));
-		double ref = TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, vessel.getVesselClass(), true);
+		int travelTime = TravelTimeUtils.getMinRouteTimeInHours(from, to, shippingDaysSpeedProvider, TravelTimeUtils.getScenarioModel(extraContext), vessel, TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, from, vessel.getVesselClass(), true));
 		if (travelTime + from.getSlotOrPortDuration() > windowLength) {
 			final String message = String.format(
 					"Purchase|%s is paired with a sale at %s. However the laden travel time (%s) is greater than the shortest possible journey by %s", from.getName(),

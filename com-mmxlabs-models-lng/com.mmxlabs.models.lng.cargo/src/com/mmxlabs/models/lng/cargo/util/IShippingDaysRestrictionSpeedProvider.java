@@ -5,9 +5,9 @@
 package com.mmxlabs.models.lng.cargo.util;
 
 import java.util.Collection;
-
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
@@ -27,6 +27,8 @@ public interface IShippingDaysRestrictionSpeedProvider {
 	 * @return
 	 */
 	double getSpeed(@NonNull VesselClass vesselClass, boolean isLaden);
+	
+	double getSpeed(@NonNull LoadSlot loadSlot, @NonNull VesselClass vesselClass, boolean isLaden);
 	
 	Collection<Route> getValidRoutes(@NonNull PortModel portModel, VesselClass vesselClass);
 }

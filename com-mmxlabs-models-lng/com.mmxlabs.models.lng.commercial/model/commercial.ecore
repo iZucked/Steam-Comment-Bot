@@ -25,8 +25,7 @@
         <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
       </eGenericType>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="preferredPort" lowerBound="1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="preferredPort" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="minQuantity" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
@@ -50,11 +49,12 @@
         <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
       </eGenericType>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="priceInfo" eType="#//LNGPriceCalculatorParameters"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="priceInfo" lowerBound="1"
+        eType="#//LNGPriceCalculatorParameters" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="notes" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="contractType" eType="#//ContractType"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pricingEvent" eType="#//PricingEvent"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pricingEvent" lowerBound="1"
+        eType="#//PricingEvent"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cancellationFee" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
         defaultValueLiteral="0">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
@@ -78,7 +78,8 @@
         <details key="formatString" value="#0.###"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="PurchaseDeliveryType" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//CargoDeliveryType"
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="PurchaseDeliveryType" lowerBound="1"
+        eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//CargoDeliveryType"
         defaultValueLiteral="Any"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PurchaseContract" eSuperTypes="#//Contract">
@@ -89,12 +90,13 @@
         <details key="formatString" value="#0.###"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="salesDeliveryType" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//CargoDeliveryType"
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="salesDeliveryType" lowerBound="1"
+        eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//CargoDeliveryType"
         defaultValueLiteral="Any"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TaxRate">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" lowerBound="1" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LNGPriceCalculatorParameters" abstract="true"
       eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject"/>
@@ -110,8 +112,10 @@
   <eClassifiers xsi:type="ecore:EClass" name="SlotContractParams" abstract="true"
       eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject"/>
   <eClassifiers xsi:type="ecore:EClass" name="ContractExpressionMapEntry">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="contract" eType="#//Contract"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contract" lowerBound="1"
+        eType="#//Contract"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="VolumeParams" abstract="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="BaseEntityBook" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">

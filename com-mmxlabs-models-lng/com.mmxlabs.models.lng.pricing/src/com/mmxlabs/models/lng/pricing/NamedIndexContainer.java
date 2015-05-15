@@ -38,7 +38,7 @@ public interface NamedIndexContainer<Value> extends UUIDObject, NamedObject {
 	 * @return the value of the '<em>Data</em>' containment reference.
 	 * @see #setData(Index)
 	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getNamedIndexContainer_Data()
-	 * @model containment="true"
+	 * @model containment="true" required="true"
 	 * @generated
 	 */
 	Index<Value> getData();
@@ -64,7 +64,7 @@ public interface NamedIndexContainer<Value> extends UUIDObject, NamedObject {
 	 * @return the value of the '<em>Units</em>' attribute.
 	 * @see #setUnits(String)
 	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getNamedIndexContainer_Units()
-	 * @model
+	 * @model required="true"
 	 * @generated
 	 */
 	String getUnits();

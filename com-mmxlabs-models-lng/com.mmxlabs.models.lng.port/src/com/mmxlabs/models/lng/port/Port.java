@@ -100,8 +100,7 @@ public interface Port extends APortSet<Port>, OtherNamesObject {
 	 * @return the value of the '<em>Load Duration</em>' attribute.
 	 * @see #setLoadDuration(int)
 	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_LoadDuration()
-	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='hours' formatString='##,##0'"
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='hours' formatString='##,##0'"
 	 * @generated
 	 */
 	int getLoadDuration();
@@ -127,8 +126,7 @@ public interface Port extends APortSet<Port>, OtherNamesObject {
 	 * @return the value of the '<em>Discharge Duration</em>' attribute.
 	 * @see #setDischargeDuration(int)
 	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_DischargeDuration()
-	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='hours' formatString='##,##0'"
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='hours' formatString='##,##0'"
 	 * @generated
 	 */
 	int getDischargeDuration();
@@ -181,8 +179,7 @@ public interface Port extends APortSet<Port>, OtherNamesObject {
 	 * @return the value of the '<em>Cv Value</em>' attribute.
 	 * @see #setCvValue(double)
 	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_CvValue()
-	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='mmBtu/m\263' formatString='#0.###'"
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='mmBtu/m\263' formatString='#0.###'"
 	 * @generated
 	 */
 	double getCvValue();
@@ -234,7 +231,7 @@ public interface Port extends APortSet<Port>, OtherNamesObject {
 	 * @return the value of the '<em>Allow Cooldown</em>' attribute.
 	 * @see #setAllowCooldown(boolean)
 	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_AllowCooldown()
-	 * @model required="true"
+	 * @model
 	 * @generated
 	 */
 	boolean isAllowCooldown();
@@ -287,7 +284,7 @@ public interface Port extends APortSet<Port>, OtherNamesObject {
 	 * @return the value of the '<em>Location</em>' containment reference.
 	 * @see #setLocation(Location)
 	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_Location()
-	 * @model containment="true"
+	 * @model containment="true" required="true"
 	 * @generated
 	 */
 	Location getLocation();

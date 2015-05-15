@@ -592,10 +592,10 @@ public class CargoEditorMenuHelper {
 	}
 
 	private boolean areSlotWindowsCompatible(final LoadSlot load, final DischargeSlot discharge) {
-		final DateTime loadStart = load.getWindowStartWithSlotOrPortTime();
-		final DateTime loadEnd = load.getWindowEndWithSlotOrPortTime();
-		final DateTime dischargeStart = discharge.getWindowStartWithSlotOrPortTime();
-		final DateTime dischargeEnd = discharge.getWindowEndWithSlotOrPortTime();
+		final DateTime loadStart = load.getWindowStartWithSlotOrPortTimeWithFlex();
+		final DateTime loadEnd = load.getWindowEndWithSlotOrPortTimeWithFlex();
+		final DateTime dischargeStart = discharge.getWindowStartWithSlotOrPortTimeWithFlex();
+		final DateTime dischargeEnd = discharge.getWindowEndWithSlotOrPortTimeWithFlex();
 
 		// slots with unknown time windows are incompatible
 		if (loadStart == null || dischargeStart == null || loadEnd == null || dischargeEnd == null) {

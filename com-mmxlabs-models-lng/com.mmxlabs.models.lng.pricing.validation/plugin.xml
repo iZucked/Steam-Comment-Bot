@@ -126,6 +126,23 @@
                       class="NamedIndexContainer">
                 </target>
              </constraint>
+             <constraint
+                  class="com.mmxlabs.models.lng.pricing.validation.PortCostsConstraint"
+                  id="com.mmxlabs.models.lng.pricing.validation.PortCostsConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Port Costs Constraint"
+                  severity="WARNING"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="PortCost">
+               </target>
+            </constraint>
+             
          </constraints>
       </constraintProvider>
    </extension>

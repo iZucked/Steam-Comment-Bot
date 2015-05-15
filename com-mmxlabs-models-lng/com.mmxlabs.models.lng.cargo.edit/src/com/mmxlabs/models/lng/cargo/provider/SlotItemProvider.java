@@ -66,6 +66,7 @@ public class SlotItemProvider
 			addWindowStartPropertyDescriptor(object);
 			addWindowStartTimePropertyDescriptor(object);
 			addWindowSizePropertyDescriptor(object);
+			addWindowFlexPropertyDescriptor(object);
 			addDurationPropertyDescriptor(object);
 			addVolumeLimitsUnitPropertyDescriptor(object);
 			addMinQuantityPropertyDescriptor(object);
@@ -172,6 +173,28 @@ public class SlotItemProvider
 				 getString("_UI_Slot_windowSize_feature"),
 				 getString("_UI_Slot_windowSize_description"),
 				 CargoPackage.Literals.SLOT__WINDOW_SIZE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Window Flex feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addWindowFlexPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_windowFlex_feature"),
+				 getString("_UI_Slot_windowFlex_description"),
+				 CargoPackage.Literals.SLOT__WINDOW_FLEX,
 				 true,
 				 false,
 				 false,
@@ -749,6 +772,7 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__WINDOW_START:
 			case CargoPackage.SLOT__WINDOW_START_TIME:
 			case CargoPackage.SLOT__WINDOW_SIZE:
+			case CargoPackage.SLOT__WINDOW_FLEX:
 			case CargoPackage.SLOT__DURATION:
 			case CargoPackage.SLOT__VOLUME_LIMITS_UNIT:
 			case CargoPackage.SLOT__MIN_QUANTITY:
