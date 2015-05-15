@@ -7,6 +7,8 @@ package com.mmxlabs.optimiser.core.scenario.common;
 import java.util.Collection;
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 
 /**
@@ -24,6 +26,7 @@ public interface IMultiMatrixProvider<T, U extends Comparable<U>> extends IDataC
 	/**
 	 * Key for the default matrix.
 	 */
+	@NonNull
 	public static final String Default_Key = "default";
 
 	/**

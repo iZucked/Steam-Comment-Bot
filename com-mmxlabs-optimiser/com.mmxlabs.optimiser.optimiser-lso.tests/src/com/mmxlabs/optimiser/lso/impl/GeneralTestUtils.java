@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -48,7 +50,7 @@ import com.mmxlabs.optimiser.lso.movegenerators.impl.RandomMoveGenerator;
  */
 public final class GeneralTestUtils {
 
-	public static IMoveGenerator createRandomMoveGenerator(final Random random) {
+	public static IMoveGenerator createRandomMoveGenerator(@NonNull final Random random) {
 		final RandomMoveGenerator moveGenerator = new RandomMoveGenerator();
 		moveGenerator.setRandom(random);
 
@@ -77,7 +79,7 @@ public final class GeneralTestUtils {
 
 		return registry;
 	}
-	
+
 	public static IEvaluationProcessRegistry createEvaluationProcessRegistry() {
 
 		final EvaluationProcessRegistry registry = new EvaluationProcessRegistry();
@@ -90,17 +92,17 @@ public final class GeneralTestUtils {
 		for (final IFitnessComponent component : fitnessComponents) {
 			weightsMap.put(component.getName(), 1.0);
 		}
-		
+
 		final LinearFitnessCombiner combiner = new LinearFitnessCombiner();
 		combiner.setFitnessComponentWeights(weightsMap);
 
 		// Thresholder params
 		final int initialThreshold = stepSize * numIterations;
-		
+
 		final StepThresholder thresholder = new StepThresholder();
 		thresholder.setStepSize(stepSize);
 		thresholder.setInitialThreshold(initialThreshold);
-		
+
 		final FitnessHelper fitnessHelper = new FitnessHelper();
 		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = createFitnessEvaluatorInstance(combiner, thresholder, fitnessHelper);
 
@@ -111,7 +113,8 @@ public final class GeneralTestUtils {
 		return fitnessEvaluator;
 	}
 
-	public static LocalSearchOptimiser buildOptimiser(final IOptimisationContext context, final Random random, final int numberOfIterations, final int stepSize, final IOptimiserProgressMonitor monitor) {
+	public static LocalSearchOptimiser buildOptimiser(@NonNull final IOptimisationContext context, @NonNull final Random random, final int numberOfIterations, final int stepSize,
+			final IOptimiserProgressMonitor monitor) {
 
 		final EvaluationProcessInstantiator evaluationProcessInstantiator = new EvaluationProcessInstantiator();
 		final List<IEvaluationProcess> evaluationProcesses = evaluationProcessInstantiator.instantiateEvaluationProcesses(context.getEvaluationProcessRegistry(), context.getEvaluationProcesses(),
@@ -144,7 +147,7 @@ public final class GeneralTestUtils {
 
 		return lso;
 	}
-	
+
 	private static LinearSimulatedAnnealingFitnessEvaluator createFitnessEvaluatorInstance(final IFitnessCombiner fitnessCombiner, final IThresholder thresholder, final IFitnessHelper fitnessHelper) {
 		return Guice.createInjector(new AbstractModule() {
 
