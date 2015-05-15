@@ -211,8 +211,11 @@ public class DefaultClassImporter extends AbstractClassImporter {
 				}
 
 				if (!row.containsKey(lcrn)) {
-					notifyMissingFields((EObject) instance.eGet(reference), context.createProblem("Field not present", true, false, true), context);
+					if (reference.getLowerBound() > 0) {
+						notifyMissingFields((EObject) instance.eGet(reference), context.createProblem("Field not present", true, false, true), context);
+					}
 					continue;
+
 				}
 
 				// The reference itself is present, so do a lookup later
@@ -266,12 +269,13 @@ public class DefaultClassImporter extends AbstractClassImporter {
 						if (reference.isContainment()) {
 
 							populateWithBlank(instance, reference);
-
-							notifyMissingFields((EObject) instance.eGet(reference), context.createProblem("Field not present", true, false, true), context);
-
+							if (reference.getLowerBound() > 0) {
+								notifyMissingFields((EObject) instance.eGet(reference), context.createProblem("Field not present", true, false, true), context);
+							}
 						}
-
-						context.addProblem(context.createProblem(reference.getName() + " is missing from " + instance.eClass().getName(), true, false, true));
+						if (reference.getLowerBound() > 0) {
+							context.addProblem(context.createProblem(reference.getName() + " is missing from " + instance.eClass().getName(), true, false, true));
+						}
 					} else {
 						final IClassImporter classImporter = importerRegistry.getClassImporter(reference.getEReferenceType());
 						final Collection<EObject> values = classImporter.importObject(instance, reference.getEReferenceType(), subKeys, context).createdExtraObjects;
@@ -406,7 +410,9 @@ public class DefaultClassImporter extends AbstractClassImporter {
 				}
 
 				if (shouldWarn) {
-					context.addProblem(context.createProblem("Field not present", true, false, true));
+					if (attribute.getLowerBound() > 0) {
+						context.addProblem(context.createProblem("Field not present", true, false, true));
+					}
 				}
 			}
 		}
