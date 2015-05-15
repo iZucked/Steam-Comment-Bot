@@ -135,9 +135,8 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 					}
 
 					final Pair<Integer, Integer> desTimes = dischargeTimeCalculator.getDivertableDESTimes(desPurchase, desSale, nominatedVesselProvider.getNominatedVessel(first), resource);
-					final int dischargeTime = desTimes.getFirst();
 					final int returnTime = desTimes.getSecond();
-					if (returnTime - dischargeTime > shippingHours) {
+					if (returnTime - fobLoadDate.getStart() > shippingHours) {
 						return false;
 					}
 					return true;
