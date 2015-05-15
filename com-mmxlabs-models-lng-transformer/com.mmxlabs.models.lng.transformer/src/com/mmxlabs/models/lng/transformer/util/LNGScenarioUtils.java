@@ -51,12 +51,12 @@ public class LNGScenarioUtils {
 				allDates.add(vesselAvailability.getEndAfterAsDateTime());
 		}
 		for (final Slot s : cargoModel.getLoadSlots()) {
-			allDates.add(s.getWindowStartWithSlotOrPortTime());
-			allDates.add(s.getWindowEndWithSlotOrPortTime());
+			allDates.add(s.getWindowStartWithSlotOrPortTimeWithFlex());
+			allDates.add(s.getWindowEndWithSlotOrPortTimeWithFlex());
 		}
 		for (final Slot s : cargoModel.getDischargeSlots()) {
-			allDates.add(s.getWindowStartWithSlotOrPortTime());
-			allDates.add(s.getWindowEndWithSlotOrPortTime());
+			allDates.add(s.getWindowStartWithSlotOrPortTimeWithFlex());
+			allDates.add(s.getWindowEndWithSlotOrPortTimeWithFlex());
 		}
 
 		earliestTime = allDates.isEmpty() ? new DateTime(0) : Collections.min(allDates);

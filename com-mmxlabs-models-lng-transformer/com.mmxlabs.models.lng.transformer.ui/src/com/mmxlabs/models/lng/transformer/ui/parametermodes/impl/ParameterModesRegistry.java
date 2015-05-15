@@ -31,14 +31,14 @@ public class ParameterModesRegistry implements IParameterModesRegistry {
 
 	private static final Logger log = LoggerFactory.getLogger(ParameterModesRegistry.class);
 
+	@NonNull
 	private final Map<String, IParameterModeCustomiser> parameterModes = new HashMap<String, IParameterModeCustomiser>();
+
+	@NonNull
 	private final List<IParameterModeExtender> extenders = new LinkedList<IParameterModeExtender>();
 
 	@Inject
-	Iterable<ParameterModeExtension> parameterModeExtensions;
-
-	@Inject
-	public void init(final Iterable<ParameterModeExtension> parameterModeExtensions, final Iterable<ParameterModeExtenderExtension> parameterModeExtenderExtensions) {
+	public void init(@NonNull final Iterable<ParameterModeExtension> parameterModeExtensions, @NonNull final Iterable<ParameterModeExtenderExtension> parameterModeExtenderExtensions) {
 
 		for (final ParameterModeExtension ext : parameterModeExtensions) {
 			if (ext != null) {
@@ -95,6 +95,7 @@ public class ParameterModesRegistry implements IParameterModesRegistry {
 	}
 
 	@Override
+	@NonNull
 	public Collection<IParameterModeExtender> getExtenders() {
 		return extenders;
 	}

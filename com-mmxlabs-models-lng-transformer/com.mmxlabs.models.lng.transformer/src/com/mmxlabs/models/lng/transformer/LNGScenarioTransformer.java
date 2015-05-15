@@ -1027,7 +1027,7 @@ public class LNGScenarioTransformer {
 	private ITimeWindow getTimeWindowForSlotBinding(final Slot modelSlot, final IPortSlot optimiserSlot, final IPort port) {
 
 		if (modelSlot instanceof SpotSlot) {
-
+// TODO: IS this with flex or not??
 			final DateTime startTime = modelSlot.getWindowStartWithSlotOrPortTime();
 			final DateTime endTime = modelSlot.getWindowEndWithSlotOrPortTime();
 			// Convert port local external date/time into UTC based internal time units
@@ -1137,8 +1137,8 @@ public class LNGScenarioTransformer {
 		final IDischargeOption discharge;
 		usedIDStrings.add(dischargeSlot.getName());
 
-		final ITimeWindow dischargeWindow = builder.createTimeWindow(dateHelper.convertTime(dischargeSlot.getWindowStartWithSlotOrPortTime()),
-				dateHelper.convertTime(dischargeSlot.getWindowEndWithSlotOrPortTime()));
+		final ITimeWindow dischargeWindow = builder.createTimeWindow(dateHelper.convertTime(dischargeSlot.getWindowStartWithSlotOrPortTimeWithFlex()),
+				dateHelper.convertTime(dischargeSlot.getWindowEndWithSlotOrPortTimeWithFlex()));
 
 		final ISalesPriceCalculator dischargePriceCalculator;
 
@@ -1305,7 +1305,7 @@ public class LNGScenarioTransformer {
 		final ILoadOption load;
 		usedIDStrings.add(loadSlot.getName());
 
-		final ITimeWindow loadWindow = builder.createTimeWindow(dateHelper.convertTime(loadSlot.getWindowStartWithSlotOrPortTime()), dateHelper.convertTime(loadSlot.getWindowEndWithSlotOrPortTime()));
+		final ITimeWindow loadWindow = builder.createTimeWindow(dateHelper.convertTime(loadSlot.getWindowStartWithSlotOrPortTimeWithFlex()), dateHelper.convertTime(loadSlot.getWindowEndWithSlotOrPortTimeWithFlex()));
 
 		final ILoadPriceCalculator loadPriceCalculator;
 		final boolean isSpot = (loadSlot instanceof SpotSlot);
