@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.schedule.Event;
  */
 public class EventLabelProvider {
 
+	@NonNull
 	protected final AbstractVerticalReportVisualiser verticalReportVisualiser;
 
 	public EventLabelProvider(@NonNull final AbstractVerticalReportVisualiser verticalReportVisualiser) {

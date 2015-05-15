@@ -100,6 +100,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 		final CopyGridToHtmlClipboardAction copyToClipboardAction = new CopyGridToHtmlClipboardAction(gridViewer.getGrid(), true);
 		copyToClipboardAction.setRowHeadersIncluded(true);
+		copyToClipboardAction.setShowBackgroundColours(true);
 
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyToClipboardAction);
 

@@ -25,11 +25,11 @@ import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
-import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
@@ -56,15 +56,15 @@ public class CooldownReportView extends EMFReportView {
 		addColumn("causeid", "Cause ID", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
 			public String render(final Object object) {
-				if (object instanceof Idle) {
-					final Idle idle = (Idle) object;
+				if (object instanceof Cooldown) {
+					final Cooldown idle = (Cooldown) object;
 					final Sequence sequence = (Sequence) idle.eContainer();
 					int index = sequence.getEvents().indexOf(idle) - 1;
 
 					while (index >= 0) {
 						final Event before = sequence.getEvents().get(index);
 
-						if ((before instanceof SlotVisit) || (before instanceof VesselEventVisit)) {
+						if ((before instanceof SlotVisit) || (before instanceof VesselEventVisit) || (before instanceof StartEvent)) {
 							return before.name();
 						}
 
@@ -78,8 +78,8 @@ public class CooldownReportView extends EMFReportView {
 		addColumn("id", "ID", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
 			public String render(final Object object) {
-				if (object instanceof Idle) {
-					final Idle idle = (Idle) object;
+				if (object instanceof Cooldown) {
+					final Cooldown idle = (Cooldown) object;
 					final Sequence sequence = (Sequence) idle.eContainer();
 					final int index = sequence.getEvents().indexOf(idle) + 1;
 					final Event after = sequence.getEvents().get(index);
