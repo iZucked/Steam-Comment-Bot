@@ -6,6 +6,8 @@ package com.mmxlabs.scheduler.optimiser.fitness.components;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
@@ -21,9 +23,10 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 public class CharterCostFitnessComponent extends AbstractPerRouteSchedulerFitnessComponent implements IFitnessComponent {
 
 	@Inject
+	@NonNull
 	private IVesselProvider vesselProvider;
 
-	public CharterCostFitnessComponent(final String name, final CargoSchedulerFitnessCore core) {
+	public CharterCostFitnessComponent(@NonNull final String name, @NonNull final CargoSchedulerFitnessCore core) {
 		super(name, core);
 	}
 

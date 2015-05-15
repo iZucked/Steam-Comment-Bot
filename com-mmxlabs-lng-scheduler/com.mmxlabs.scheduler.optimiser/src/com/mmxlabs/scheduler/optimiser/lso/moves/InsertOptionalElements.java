@@ -9,6 +9,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
@@ -23,24 +25,29 @@ import com.mmxlabs.optimiser.lso.IMove;
  * 
  */
 public class InsertOptionalElements implements IMove {
-	final IResource resource;
-	final int beforeInsertionPoint;
-	final int[] insertedElements;
+	@NonNull
+	private final IResource resource;
 
-	public InsertOptionalElements(final IResource resource, final int beforeInsertionPoint, final int[] insertedElements) {
+	private final int beforeInsertionPoint;
+
+	@NonNull
+	private final int[] insertedElements;
+
+	public InsertOptionalElements(@NonNull final IResource resource, final int beforeInsertionPoint, @NonNull final int[] insertedElements) {
 		super();
 		this.resource = resource;
 		this.beforeInsertionPoint = beforeInsertionPoint;
 		this.insertedElements = insertedElements;
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	public Collection<IResource> getAffectedResources() {
 		return Collections.singleton(resource);
 	}
 
 	@Override
-	public void apply(final IModifiableSequences sequences) {
+	public void apply(@NonNull final IModifiableSequences sequences) {
 		final IModifiableSequence sequence = sequences.getModifiableSequence(resource);
 		final List<ISequenceElement> unused = sequences.getModifiableUnusedElements();
 		int k = 1;
@@ -58,7 +65,7 @@ public class InsertOptionalElements implements IMove {
 	}
 
 	@Override
-	public boolean validate(final ISequences sequences) {
+	public boolean validate(@NonNull final ISequences sequences) {
 		return true;
 	}
 }

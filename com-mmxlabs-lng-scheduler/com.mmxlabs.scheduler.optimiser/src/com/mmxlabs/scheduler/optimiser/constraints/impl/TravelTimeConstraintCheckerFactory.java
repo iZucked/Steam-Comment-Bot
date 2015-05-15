@@ -4,10 +4,14 @@
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 
 public class TravelTimeConstraintCheckerFactory implements IConstraintCheckerFactory {
+
+	@NonNull
 	public static final String NAME = "TravelTimeChecker";
 
 	@Override

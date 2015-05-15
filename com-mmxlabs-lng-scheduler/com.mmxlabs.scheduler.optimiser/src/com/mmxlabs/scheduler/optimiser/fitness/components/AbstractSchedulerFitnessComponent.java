@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.curves.ConstantValueCurve;
@@ -22,14 +23,20 @@ import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProvider;
  * 
  */
 public abstract class AbstractSchedulerFitnessComponent implements ICargoSchedulerFitnessComponent {
+	@NonNull
 	private final IFitnessCore core;
+
+	@NonNull
 	private final String name;
+
+	@NonNull
 	private ICurve discountCurve = new ConstantValueCurve(1);
 
 	@Inject(optional = true)
+	@Nullable
 	private IDiscountCurveProvider discountCurveProvider;
 
-	protected AbstractSchedulerFitnessComponent(final String name, final IFitnessCore core) {
+	protected AbstractSchedulerFitnessComponent(@NonNull final String name, @NonNull final IFitnessCore core) {
 		super();
 		this.core = core;
 		this.name = name;
@@ -44,11 +51,13 @@ public abstract class AbstractSchedulerFitnessComponent implements ICargoSchedul
 	}
 
 	@Override
+	@NonNull
 	public final String getName() {
 		return name;
 	}
 
 	@Override
+	@NonNull
 	public final IFitnessCore getFitnessCore() {
 		return core;
 	}
@@ -88,8 +97,12 @@ public abstract class AbstractSchedulerFitnessComponent implements ICargoSchedul
 
 	@Override
 	public void init(@NonNull final IOptimisationData data) {
-		if (discountCurveProvider != null) {
-			discountCurve = discountCurveProvider.getDiscountCurve(getName());
+		IDiscountCurveProvider pDiscountCurveProvider = discountCurveProvider;
+		if (pDiscountCurveProvider != null) {
+			ICurve curve = pDiscountCurveProvider.getDiscountCurve(getName());
+			if (curve != null) {
+				discountCurve = curve;
+			}
 		}
 	}
 }

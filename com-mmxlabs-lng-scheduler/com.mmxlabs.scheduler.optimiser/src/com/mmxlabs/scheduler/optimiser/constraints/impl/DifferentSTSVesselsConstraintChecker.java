@@ -29,6 +29,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProvider;
  * @author Simon Goodall
  */
 public class DifferentSTSVesselsConstraintChecker implements IConstraintChecker {
+
 	@NonNull
 	private final String name;
 

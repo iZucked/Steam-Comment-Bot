@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 
@@ -14,6 +16,7 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
  */
 public final class SpotToSpotConstraintCheckerFactory implements IConstraintCheckerFactory {
 
+	@NonNull
 	public static final String NAME = "SpotToSpotConstraintChecker";
 
 	@Override

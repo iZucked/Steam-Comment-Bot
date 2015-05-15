@@ -43,6 +43,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * 
  */
 public final class PortTypeConstraintChecker implements IPairwiseConstraintChecker {
+
 	@NonNull
 	private final String name;
 

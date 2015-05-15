@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.google.inject.Inject;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -19,15 +21,18 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 public class ContractCvConstraintChecker extends AbstractPairwiseConstraintChecker {
 
 	@Inject
+	@NonNull
 	private IPortTypeProvider portTypeProvider;
 
 	@Inject
+	@NonNull
 	private IPortSlotProvider portSlotProvider;
 
 	@Inject
+	@NonNull
 	private IActualsDataProvider actualsDataProvider;
 
-	public ContractCvConstraintChecker(String name) {
+	public ContractCvConstraintChecker(@NonNull String name) {
 		super(name);
 	}
 

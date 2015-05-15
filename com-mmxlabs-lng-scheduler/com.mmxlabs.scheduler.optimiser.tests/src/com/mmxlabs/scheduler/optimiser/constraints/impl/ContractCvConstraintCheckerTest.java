@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -38,6 +39,7 @@ public class ContractCvConstraintCheckerTest {
 		Assert.assertSame(name, checker.getName());
 	}
 
+	@SuppressWarnings("null")
 	@Test
 	public void testConstraint() {
 		//
@@ -81,12 +83,11 @@ public class ContractCvConstraintCheckerTest {
 		Mockito.when(s4.getMinCvValue()).thenReturn(0L);
 		Mockito.when(s4.getMaxCvValue()).thenReturn(50L);
 
-		
 		Mockito.when(actualsDataProvider.hasActuals(s1)).thenReturn(false);
 		Mockito.when(actualsDataProvider.hasActuals(s2)).thenReturn(false);
 		Mockito.when(actualsDataProvider.hasActuals(s3)).thenReturn(false);
 		Mockito.when(actualsDataProvider.hasActuals(s4)).thenReturn(false);
-		
+
 		// OK pairing
 		Assert.assertTrue(checker.checkPairwiseConstraint(o1, o2, resource));
 		final ISequence okSequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2));
@@ -105,7 +106,7 @@ public class ContractCvConstraintCheckerTest {
 		// combined sequence of all cases should fail
 		final ISequence combinedSequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o1, o3, o1, o4));
 		Assert.assertFalse(checker.checkSequence(combinedSequence, resource));
-		
+
 		// Actuals test case - should now pass as actualised CV are ignored
 		// CV too high
 		Mockito.when(actualsDataProvider.hasActuals(s1)).thenReturn(true);
@@ -114,8 +115,8 @@ public class ContractCvConstraintCheckerTest {
 		Assert.assertTrue(checker.checkSequence(tooHighSequence, resource));
 	}
 
-	private ContractCvConstraintChecker createChecker(final String name, final IPortTypeProviderEditor portTypeProvider, final IPortSlotProviderEditor portSlotProvider,
-			final IActualsDataProvider actualsDataProvider) {
+	private ContractCvConstraintChecker createChecker(@NonNull final String name, @NonNull final IPortTypeProviderEditor portTypeProvider, @NonNull final IPortSlotProviderEditor portSlotProvider,
+			@NonNull final IActualsDataProvider actualsDataProvider) {
 		final Injector injector = Guice.createInjector(new AbstractModule() {
 
 			@Override

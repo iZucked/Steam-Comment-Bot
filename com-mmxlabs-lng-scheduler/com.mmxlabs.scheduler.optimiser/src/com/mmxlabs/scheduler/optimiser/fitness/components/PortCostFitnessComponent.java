@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -19,12 +21,12 @@ public class PortCostFitnessComponent extends AbstractPerRouteSchedulerFitnessCo
 
 	private long sequenceAccumulator = 0;
 
-	public PortCostFitnessComponent(final String name, final IFitnessCore core) {
+	public PortCostFitnessComponent(@NonNull final String name, @NonNull final IFitnessCore core) {
 		super(name, core);
 	}
 
 	@Override
-	protected boolean reallyStartSequence(final IResource resource) {
+	protected boolean reallyStartSequence(@NonNull final IResource resource) {
 		sequenceAccumulator = 0;
 		return true;
 	}

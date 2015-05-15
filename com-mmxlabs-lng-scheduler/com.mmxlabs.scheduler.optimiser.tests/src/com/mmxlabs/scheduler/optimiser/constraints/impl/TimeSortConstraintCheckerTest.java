@@ -24,7 +24,9 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
+@SuppressWarnings("null")
 public class TimeSortConstraintCheckerTest {
+
 	@Test
 	public void test1() {
 

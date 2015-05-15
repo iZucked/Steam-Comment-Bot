@@ -7,6 +7,8 @@ package com.mmxlabs.scheduler.optimiser.fitness;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.google.inject.Inject;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCoreFactory;
@@ -19,24 +21,34 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessCoreFactory;
  */
 public final class CargoSchedulerFitnessCoreFactory implements IFitnessCoreFactory {
 
+	@NonNull
 	public static final String FITNESS_CORE_NAME = "CargoSchedulerCore";
 
+	@NonNull
 	public static final String LATENESS_COMPONENT_NAME = "cargo-scheduler-lateness";
 
+	@NonNull
 	public static final String CAPACITY_COMPONENT_NAME = "cargo-scheduler-capacity";
 
+	@NonNull
 	public static final String COST_BASE_COMPONENT_NAME = "cargo-scheduler-cost-base";
 
+	@NonNull
 	public static final String COST_LNG_COMPONENT_NAME = "cargo-scheduler-cost-lng";
 
+	@NonNull
 	public static final String CHARTER_COST_COMPONENT_NAME = "cargo-scheduler-charter-cost";
 
+	@NonNull
 	public static final String ROUTE_PRICE_COMPONENT_NAME = "cargo-scheduler-canal-cost";
 
+	@NonNull
 	public static final String COST_COOLDOWN_COMPONENT_NAME = "cargo-scheduler-cost-cooldown";
 
+	@NonNull
 	public static final String PORT_COST_COMPONENT_NAME = "cargo-scheduler-port-cost";
 
+	@NonNull
 	public static final String PROFIT_COMPONENT_NAME = "cargo-scheduler-group-profit";
 
 	@Inject(optional = true)

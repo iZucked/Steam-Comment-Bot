@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -77,6 +78,7 @@ public class TestPriceExpressionContract {
 		Assert.assertEquals(p2, price2);
 	}
 
+	@SuppressWarnings("null")
 	@Test
 	public void testCalculateLoadUnitPrice() {
 		// create a PriceExpressionContract with a mocked ICurve object

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -44,6 +45,7 @@ public class PortExclusionConstraintCheckerTest {
 		Assert.assertSame(name, checker.getName());
 	}
 
+	@SuppressWarnings("null")
 	@Test
 	public void testConstraint() {
 		//
@@ -99,6 +101,7 @@ public class PortExclusionConstraintCheckerTest {
 
 	}
 
+	@SuppressWarnings("null")
 	@Test
 	public void testConstraintNominatedVessel() {
 		//
@@ -158,8 +161,10 @@ public class PortExclusionConstraintCheckerTest {
 
 	}
 
-	private PortExclusionConstraintChecker createChecker(final String name, final IVesselProvider vesselProvider, final INominatedVesselProvider nominatedVesselProvider,
-			final IPortProvider portProvider, final IPortExclusionProvider portExclusionProvider) {
+	@SuppressWarnings("null")
+	@NonNull
+	private PortExclusionConstraintChecker createChecker(@NonNull final String name, @NonNull final IVesselProvider vesselProvider, @NonNull final INominatedVesselProvider nominatedVesselProvider,
+			@NonNull final IPortProvider portProvider, final IPortExclusionProvider portExclusionProvider) {
 		final Injector injector = Guice.createInjector(new AbstractModule() {
 
 			@Override

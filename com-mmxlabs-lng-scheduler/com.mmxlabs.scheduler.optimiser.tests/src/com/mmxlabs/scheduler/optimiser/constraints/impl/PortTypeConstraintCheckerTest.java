@@ -34,6 +34,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortTypeEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
 
+@SuppressWarnings("null")
 public class PortTypeConstraintCheckerTest {
 
 	@Test

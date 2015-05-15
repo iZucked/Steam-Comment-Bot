@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.google.inject.Inject;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -23,15 +25,18 @@ import com.mmxlabs.scheduler.optimiser.providers.ISpotMarketSlotsProvider;
 public class SpotToSpotConstraintChecker extends AbstractPairwiseConstraintChecker {
 
 	@Inject
+	@NonNull
 	private IPortSlotProvider portSlotProvider;
 
 	@Inject
+	@NonNull
 	private IActualsDataProvider actualsDataProvider;
 
 	@Inject
+	@NonNull
 	private ISpotMarketSlotsProvider spotMarketSlots;
 
-	public SpotToSpotConstraintChecker(final String name) {
+	public SpotToSpotConstraintChecker(@NonNull final String name) {
 		super(name);
 	}
 
@@ -42,7 +47,7 @@ public class SpotToSpotConstraintChecker extends AbstractPairwiseConstraintCheck
 
 		if (firstSlot instanceof ILoadOption && secondSlot instanceof IDischargeOption) {
 			// If data is actualised (i.e. the event has occurred), we do not care
-			if (actualsDataProvider.hasActuals(firstSlot)&& actualsDataProvider.hasActuals(secondSlot)) {
+			if (actualsDataProvider.hasActuals(firstSlot) && actualsDataProvider.hasActuals(secondSlot)) {
 				return true;
 			}
 			if (spotMarketSlots.isSpotMarketSlot(first) && spotMarketSlots.isSpotMarketSlot(second)) {
@@ -61,7 +66,7 @@ public class SpotToSpotConstraintChecker extends AbstractPairwiseConstraintCheck
 
 		if (firstSlot instanceof ILoadOption && secondSlot instanceof IDischargeOption) {
 			// If data is actualised (i.e. the event has occurred), we do not care
-			if (actualsDataProvider.hasActuals(firstSlot)&& actualsDataProvider.hasActuals(secondSlot)) {
+			if (actualsDataProvider.hasActuals(firstSlot) && actualsDataProvider.hasActuals(secondSlot)) {
 				return String.format("load slot %s and discharge slot %s are actualised.", firstSlot.getId(), secondSlot.getId());
 			}
 			if (spotMarketSlots.isSpotMarketSlot(first) && spotMarketSlots.isSpotMarketSlot(second)) {

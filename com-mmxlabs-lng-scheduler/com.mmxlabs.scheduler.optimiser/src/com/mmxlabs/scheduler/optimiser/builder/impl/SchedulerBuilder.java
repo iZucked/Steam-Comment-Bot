@@ -473,7 +473,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@NonNull
-	private ISequenceElement configureLoadOption(@NonNull final LoadOption slot, final String id, final IPort port, final ITimeWindow window, final long minVolume, final long maxVolume,
+	private ISequenceElement configureLoadOption(@NonNull final LoadOption slot, @NonNull final String id, final IPort port, final ITimeWindow window, final long minVolume, final long maxVolume,
 			final ILoadPriceCalculator priceCalculator, final int cargoCVValue, final int pricingDate, final PricingEventType pricingEvent, final boolean optional, final boolean isSpotMarketSlot,
 			final boolean isVolumeLimitInM3) {
 		slot.setId(id);
