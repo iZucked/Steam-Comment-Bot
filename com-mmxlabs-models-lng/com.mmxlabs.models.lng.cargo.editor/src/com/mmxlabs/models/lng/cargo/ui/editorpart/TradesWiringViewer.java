@@ -209,6 +209,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 	private Action resetSortOrder;
 
+	private PromptToolbarEditor promptToolbarEditor;
+
 	public TradesWiringViewer(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation scenarioEditingLocation, final IActionBars actionBars) {
 		super(page, part, scenarioEditingLocation, actionBars);
 
@@ -224,6 +226,11 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 		this.rootData = null;
 		this.referenceRootData = null;
+
+		if (promptToolbarEditor != null) {
+			promptToolbarEditor.dispose();
+			promptToolbarEditor = null;
+		}
 
 		super.dispose();
 	}
@@ -695,6 +702,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 		// set up toolbars
 		final ToolBarManager toolbar = getToolBarManager();
+
+		promptToolbarEditor = new PromptToolbarEditor("prompt", scenarioEditingLocation.getEditingDomain(), (LNGScenarioModel) scenarioEditingLocation.getRootObject());
+		toolbar.add(promptToolbarEditor);
+
 		toolbar.add(new GroupMarker(EDIT_GROUP));
 		toolbar.add(new GroupMarker(ADD_REMOVE_GROUP));
 		toolbar.add(new GroupMarker(VIEW_GROUP));
