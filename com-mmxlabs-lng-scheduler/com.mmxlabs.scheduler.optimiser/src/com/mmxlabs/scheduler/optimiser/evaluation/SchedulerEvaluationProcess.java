@@ -25,15 +25,21 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 
 public class SchedulerEvaluationProcess implements IEvaluationProcess {
 
+	@NonNull
 	public static final String SCHEDULED_SEQUENCES = "com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess-scheduled-sequences";
+	@NonNull
 	public static final String ALL_ELEMENTS = "com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess-all-elements";
+	@NonNull
 	public static final String OPTIMISATION_ELEMENTS = "com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess-optimisation-elements";
+	@NonNull
 	public static final String ADDITIONAL_ELEMENTS = "com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess-additional-elements";
 
 	@Inject
+	@NonNull
 	private ISequenceScheduler scheduler;
 
 	@Inject
+	@NonNull
 	private IPortSlotProvider portSlotProvider;
 
 	@Override
@@ -54,7 +60,6 @@ public class SchedulerEvaluationProcess implements IEvaluationProcess {
 		}
 
 		// Store evaluated state
-		assert SCHEDULED_SEQUENCES != null;
 		evaluationState.setData(SCHEDULED_SEQUENCES, scheduledSequences);
 		if (solution != null) {
 			setEvaluationElements(evaluationState, solution);

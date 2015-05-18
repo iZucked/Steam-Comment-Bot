@@ -26,6 +26,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
+import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -63,17 +64,19 @@ public class LatenessComponentTest {
 
 		final String name = "name";
 		final String dcp = "dcp";
-		final CargoSchedulerFitnessCore core = Mockito.mock(CargoSchedulerFitnessCore.class);
+		final CargoSchedulerFitnessCore core = new CargoSchedulerFitnessCore(null);
 
 		final IOptimisationData data = Mockito.mock(IOptimisationData.class);
 
 		final IStartEndRequirementProvider startEndRequirementProvider = Mockito.mock(IStartEndRequirementProvider.class);
+		final IPromptPeriodProvider promptProvider = Mockito.mock(IPromptPeriodProvider.class);
 
 		Injector injector = Guice.createInjector(new AbstractModule() {
 
 			@Override
 			protected void configure() {
 				bind(IStartEndRequirementProvider.class).toInstance(startEndRequirementProvider);
+				bind(IPromptPeriodProvider.class).toInstance(promptProvider);
 			}
 
 			@Provides
