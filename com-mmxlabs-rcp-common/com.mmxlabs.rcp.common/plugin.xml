@@ -26,5 +26,13 @@
          </action>
       </viewContribution>
    </extension>
+   <extension
+         id="id3"
+         point="org.eclipse.e4.workbench.model">
+      <fragment
+            apply="always"
+            uri="fragment.e4xmi">
+      </fragment>
+   </extension>
 
 </plugin>

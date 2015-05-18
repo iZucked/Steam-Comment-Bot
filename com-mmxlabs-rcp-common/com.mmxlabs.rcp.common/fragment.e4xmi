@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmi:id="_HMyjAOnQEeSW8aVjYmCarQ">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Hlq9EOnQEeSW8aVjYmCarQ" featurename="commands" parentElementId="org.eclipse.e4.legacy.ide.application">
+    <elements xsi:type="commands:Command" xmi:id="_KLizIOnQEeSW8aVjYmCarQ" elementId="com.mmxlabs.rcp.common.command.pack" commandName="Pack"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_MpyXMOnQEeSW8aVjYmCarQ" featurename="handlers" parentElementId="org.eclipse.e4.legacy.ide.application">
+    <elements xsi:type="commands:Handler" xmi:id="_OrjaoOnQEeSW8aVjYmCarQ" elementId="com.mmxlabs.rcp.common.handler.pack.default" contributionURI="bundleclass://com.mmxlabs.rcp.common/com.mmxlabs.rcp.common.handlers.PackGridHandler" command="_KLizIOnQEeSW8aVjYmCarQ"/>
+  </fragments>
+</fragment:ModelFragments>
