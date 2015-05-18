@@ -15,7 +15,6 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.jdt.annotation.Nullable;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
@@ -65,6 +64,7 @@ public class ScenarioStorageUtil {
 		final String name = instance.getName();
 		final String uuid = instance.getUuid();
 
+		// We create a temporary folder so that the real scenario filename can be used, otherwise Windows paste handler will take the random filename.
 		final File uuidDir = new File(storageDirectory, escape(uuid) + ".d");
 		if (uuidDir.exists() == false) {
 			uuidDir.mkdirs();
