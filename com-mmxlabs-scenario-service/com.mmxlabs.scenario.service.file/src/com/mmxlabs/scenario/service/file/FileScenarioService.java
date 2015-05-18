@@ -480,13 +480,31 @@ public class FileScenarioService extends AbstractScenarioService {
 		// Unlock as we do not really need it
 		backupLock.release();
 
+		boolean attemptBackup = true;
 		resource = resourceSet.createResource(storeURI);
 		boolean resourceExisted = false;
 		try {
 			resource.load(options);
 			resourceExisted = true;
 		} catch (final IOException ex) {
+			// // Load failure, try to restore backup
 
+			// Do not create a new backup in case we need to manually restore
+			attemptBackup = false;
+			// "Unload" the resource -- this clears the loaded flag
+			resource.unload();
+			// Change to the bnack URI
+			resource.setURI(URI.createURI(storeURI.toString() + ".backup"));
+			try {
+				resource.load(options);
+				resourceExisted = true;
+			} catch (final IOException ex2) {
+				log.error("Error reading both main and backup scenario service models.", ex2);
+			} finally {
+				// Restore original URI for saves later on
+				resource.setURI(storeURI);
+			}
+			log.warn("Scenario service model restored from backup.");
 		}
 
 		if (resource.getContents().isEmpty()) {
@@ -494,7 +512,7 @@ public class FileScenarioService extends AbstractScenarioService {
 			if (resourceExisted) {
 				// consider loading backup?
 			}
-		} else {
+		} else if (attemptBackup) {
 			// back-up resource
 			try {
 				log.debug("Backing up " + storeURI);
@@ -560,7 +578,7 @@ public class FileScenarioService extends AbstractScenarioService {
 						log.warn("Recovering instance " + instanceUUID);
 						// recover the instance in f, if possible
 						try {
-							final Resource resource = ResourceHelper.loadResource(resourceSet, URI.createFileURI(instanceFile.getAbsolutePath())); 
+							final Resource resource = ResourceHelper.loadResource(resourceSet, URI.createFileURI(instanceFile.getAbsolutePath()));
 							final EObject o = resource.getContents().get(0);
 							if (o instanceof ScenarioInstance) {
 								final ScenarioInstance theInstance = (ScenarioInstance) o;
