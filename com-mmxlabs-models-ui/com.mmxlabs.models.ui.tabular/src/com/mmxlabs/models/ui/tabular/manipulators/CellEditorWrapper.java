@@ -19,8 +19,8 @@ import org.eclipse.swt.widgets.Display;
 
 /**
  */
-public class CellEditorWrapper<T extends Control> extends CellEditor {
-		private CheckedControl<T> inner;
+public class CellEditorWrapper extends CellEditor {
+		private CheckedControl<Control> inner;
 		private CellEditor delegate;
 
 		public CellEditorWrapper(final Composite composite) {
@@ -28,7 +28,7 @@ public class CellEditorWrapper<T extends Control> extends CellEditor {
 		}
 		@Override
 		protected Control createControl(Composite parent) {
-			inner = new CheckedControl<T>(parent, SWT.NONE);
+			inner = new CheckedControl<Control>(parent, SWT.NONE);
 			inner.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 			inner.addFocusListener(new FocusAdapter() {
 				@Override
@@ -47,13 +47,13 @@ public class CellEditorWrapper<T extends Control> extends CellEditor {
 			return inner;
 		}
 
-		public CheckedControl<T> getInnerComposite() {
+		public CheckedControl<Control> getInnerComposite() {
 			return inner;
 		}
 		
 		public void setDelegate(final CellEditor delegate) {
 			this.delegate = delegate;
-			inner.setValueControl((T) delegate.getControl());
+			inner.setValueControl( delegate.getControl());
 			if (isActivated()) {
 				delegate.activate();
 			} else if (delegate.isActivated()) {
