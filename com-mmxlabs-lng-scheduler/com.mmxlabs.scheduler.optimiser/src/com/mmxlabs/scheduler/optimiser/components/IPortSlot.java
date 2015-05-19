@@ -15,6 +15,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  */
 public interface IPortSlot {
 	/**
+	 * FIXME! Bad constant, *could* clash with real time unit.
 	 */
 	public static final int NO_PRICING_DATE = -1000;
 
