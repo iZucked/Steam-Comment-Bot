@@ -146,6 +146,7 @@ public final class CollectionsUtil {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
+	@NonNull
 	public static <K, V> Map<K, V> makeHashMap(final Object... elements) {
 
 		final Map<K, V> map = new HashMap<K, V>();
