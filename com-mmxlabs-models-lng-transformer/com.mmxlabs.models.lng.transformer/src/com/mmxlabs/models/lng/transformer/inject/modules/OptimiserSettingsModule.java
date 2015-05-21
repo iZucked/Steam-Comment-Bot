@@ -141,17 +141,17 @@ public class OptimiserSettingsModule extends AbstractModule {
 	private ILatenessComponentParameters provideLatenessComponentParamters() {
 		final LatenessComponentParameters lcp = new LatenessComponentParameters();
 
-		lcp.setThreshold(Interval.PROMPT, 24);
-		lcp.setLowWeight(Interval.PROMPT, 1);
-		lcp.setHighWeight(Interval.PROMPT, 1);
+		lcp.setThreshold(Interval.PROMPT, 48);
+		lcp.setLowWeight(Interval.PROMPT, 250000);
+		lcp.setHighWeight(Interval.PROMPT, 1000000);
 
-		lcp.setThreshold(Interval.MID_TERM, 24);
-		lcp.setLowWeight(Interval.MID_TERM, 1);
-		lcp.setHighWeight(Interval.MID_TERM, 1);
+		lcp.setThreshold(Interval.MID_TERM, 72);
+		lcp.setLowWeight(Interval.MID_TERM, 250000);
+		lcp.setHighWeight(Interval.MID_TERM, 1000000);
 
-		lcp.setThreshold(Interval.BEYOND, 24);
-		lcp.setLowWeight(Interval.BEYOND, 1);
-		lcp.setHighWeight(Interval.BEYOND, 1);
+		lcp.setThreshold(Interval.BEYOND, 72);
+		lcp.setLowWeight(Interval.BEYOND, 250000);
+		lcp.setHighWeight(Interval.BEYOND, 1000000);
 
 		return lcp;
 	}

@@ -22,6 +22,8 @@ import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.schedule.PortVisitLateness;
+import com.mmxlabs.models.lng.schedule.PortVisitLatenessType;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -39,6 +41,8 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
+import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessAnnotation;
+import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ICargoValueAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.ICapacityAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.ICapacityEntry;
@@ -61,7 +65,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 	private IPortTypeProvider portTypeProvider;
 	@Inject
 	private IPortSlotEventProvider portSlotEventProvider;
-	
+
 	private final HashMap<IPortSlot, CargoAllocation> allocations = new HashMap<IPortSlot, CargoAllocation>();
 	private Port lastPortVisited = null;
 
@@ -242,6 +246,26 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 				final long volume = OptimiserUnitConvertor.convertToExternalVolume(violation.getVolume());
 				portVisit.getViolations().put(type, volume);
 			}
+		}
+		final ILatenessAnnotation latenessAnnotation = (ILatenessAnnotation) annotations.get(SchedulerConstants.AI_latenessInfo);
+		if (latenessAnnotation != null) {
+			PortVisitLateness portVisitLateness = ScheduleFactory.eINSTANCE.createPortVisitLateness();
+			PortVisitLatenessType type = null;
+			Interval interval = latenessAnnotation.getIntervalWithoutFlex();
+			switch(interval) {
+			case PROMPT :
+				type = PortVisitLatenessType.PROMPT;
+				break;
+			case MID_TERM :
+				type = PortVisitLatenessType.MID_TERM;
+				break;
+			case BEYOND :
+				type = PortVisitLatenessType.BEYOND;
+				break;
+			}
+			portVisitLateness.setType(type);
+			portVisitLateness.setLatenessInHours(latenessAnnotation.getlatenessWithoutFlex());
+			portVisit.setLateness(portVisitLateness);
 		}
 
 		final IPortCostAnnotation cost = (IPortCostAnnotation) annotations.get(SchedulerConstants.AI_portCostInfo);
