@@ -6,7 +6,7 @@
 	<artifactId>optimiser-parent</artifactId>
 	<packaging>pom</packaging>
 	<name>Optimiser - Parent</name>
-	<version>3.0.1-SNAPSHOT</version>
+	<version>3.8.4-SNAPSHOT</version>
 	<description>Parent maven project for core optimisation projects</description>
 
 	<parent>
@@ -28,7 +28,6 @@
 	</ciManagement>
 
 	<modules>
-		<module>com.mmxlabs.optimiser.target-definition</module>
 		<module>com.mmxlabs.optimiser.optimiser-core</module>
 		<module>com.mmxlabs.optimiser.optimiser-lso</module>
 		<module>com.mmxlabs.optimiser.optimiser-common</module>
@@ -65,8 +64,8 @@
 
 					<target>
 						<artifact>
-							<groupId>com.mmxlabs.optimiser</groupId>
-							<artifactId>com.mmxlabs.optimiser.target-definition</artifactId>
+							<groupId>com.mmxlabs.lingo.common.target</groupId>
+							<artifactId>com.mmxlabs.lingo.common.target-definition</artifactId>
 							<version>${project.version}</version>
 						</artifact>
 					</target>
@@ -115,5 +114,13 @@
 
 		</plugins>
 	</build>
+
+	<repositories>
+		<repository>
+			<id>com-mmxlabs-common-util.hg</id>
+			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/common/com.mmxlabs.common.util.p2/3.0.0-SNAPSHOT/com.mmxlabs.common.util.p2-3.0.0-SNAPSHOT.zip-unzip/</url>
+			<layout>p2</layout>
+		</repository>
+	</repositories>
 
 </project>
