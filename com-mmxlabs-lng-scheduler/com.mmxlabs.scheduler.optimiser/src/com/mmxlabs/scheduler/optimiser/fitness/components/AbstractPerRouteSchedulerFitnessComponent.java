@@ -26,7 +26,7 @@ public abstract class AbstractPerRouteSchedulerFitnessComponent extends Abstract
 	private final Map<IResource, Long> acceptedFitnesses = new HashMap<IResource, Long>();
 
 	protected IResource currentResource;
-	private long accumulator = 0;
+	private long evaluationAccumulator = 0;
 
 	protected ScheduledSequences scheduledSequences;
 
@@ -94,7 +94,7 @@ public abstract class AbstractPerRouteSchedulerFitnessComponent extends Abstract
 	@Override
 	public void startEvaluation(@NonNull final ScheduledSequences scheduledSequences) {
 		this.scheduledSequences = scheduledSequences;
-		accumulator = 0;
+		evaluationAccumulator = 0;
 	}
 
 	/*
@@ -109,7 +109,7 @@ public abstract class AbstractPerRouteSchedulerFitnessComponent extends Abstract
 			if (sequenceValue == Long.MAX_VALUE) {
 				return false;
 			} else {
-				accumulator += sequenceValue;
+				evaluationAccumulator += sequenceValue;
 				evaluatedFitnesses.put(currentResource, sequenceValue);
 				return true;
 			}
@@ -133,7 +133,7 @@ public abstract class AbstractPerRouteSchedulerFitnessComponent extends Abstract
 	@Override
 	public long endEvaluationAndGetCost() {
 		scheduledSequences = null;
-		return setLastEvaluatedFitness(accumulator);
+		return setLastEvaluatedFitness(evaluationAccumulator);
 	}
 
 	@Override

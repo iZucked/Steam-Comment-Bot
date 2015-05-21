@@ -11,11 +11,13 @@ import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -32,6 +34,8 @@ public final class ScheduledSequences extends ArrayList<ScheduledSequence> {
 
 	private final Map<IPortSlot, Long> unusedSlotGroupValue = new HashMap<>();
 	private final Map<IPortSlot, Long> capacityViolationSum = new HashMap<>();
+	private final Map<IPortSlot, Pair<Interval, Long>> latenessSum = new HashMap<>();
+	private final Map<IPortSlot, Long> weightedLatenessSum = new HashMap<>();
 	private final Map<VoyagePlan, Long> voyagePlanGroupValue = new HashMap<>();
 	private final Map<IResource, ScheduledSequence> resourceToScheduledSequenceMap = new HashMap<>();
 
@@ -95,5 +99,37 @@ public final class ScheduledSequences extends ArrayList<ScheduledSequence> {
 	
 	public ScheduledSequence getScheduledSequenceForResource(final IResource resource) {
 		return resourceToScheduledSequenceMap.get(resource);
+	}
+	
+	public void addLatenessCost(IPortSlot portSlot, Pair<Interval, Long> lateness) {
+		latenessSum.put(portSlot, lateness);
+	}
+
+	public void addWeightedLatenessCost(IPortSlot portSlot, long weightedLateness) {
+		weightedLatenessSum.put(portSlot, (long) weightedLateness);
+	}
+	
+	public Pair<Interval, Long> getLatenessCost(IPortSlot portSlot) {
+		if (latenessSum.containsKey(portSlot)) {
+			return latenessSum.get(portSlot);
+		} else {
+			return null;
+		}
+	}
+	
+	public long getWeightedLatenessCost(IPortSlot portSlot) {
+		if (weightedLatenessSum.containsKey(portSlot)) {
+			return weightedLatenessSum.get(portSlot);
+		} else {
+			return 0L;
+		}
+	}
+	
+	public long getTotalWeightedLateness() {
+		long sum = 0L;
+		for (long lateness : weightedLatenessSum.values()) {
+			sum += lateness;
+		}
+		return sum;
 	}
 }
