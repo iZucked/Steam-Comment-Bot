@@ -28,6 +28,7 @@ import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GeneralPNLDetails;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.schedule.PortVisitLateness;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -43,6 +44,7 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getFuels <em>Fuels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getViolations <em>Violations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getPortCost <em>Port Cost</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getLateness <em>Lateness</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getGroupProfitAndLoss <em>Group Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getGeneralPNLDetails <em>General PNL Details</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getEvents <em>Events</em>}</li>
@@ -92,6 +94,16 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 	 * @ordered
 	 */
 	protected int portCost = PORT_COST_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getLateness() <em>Lateness</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLateness()
+	 * @generated
+	 * @ordered
+	 */
+	protected PortVisitLateness lateness;
 
 	/**
 	 * The cached value of the '{@link #getGroupProfitAndLoss() <em>Group Profit And Loss</em>}' containment reference.
@@ -195,6 +207,49 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 		portCost = newPortCost;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.START_EVENT__PORT_COST, oldPortCost, portCost));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PortVisitLateness getLateness() {
+		return lateness;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetLateness(PortVisitLateness newLateness, NotificationChain msgs) {
+		PortVisitLateness oldLateness = lateness;
+		lateness = newLateness;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SchedulePackage.START_EVENT__LATENESS, oldLateness, newLateness);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setLateness(PortVisitLateness newLateness) {
+		if (newLateness != lateness) {
+			NotificationChain msgs = null;
+			if (lateness != null)
+				msgs = ((InternalEObject)lateness).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.START_EVENT__LATENESS, null, msgs);
+			if (newLateness != null)
+				msgs = ((InternalEObject)newLateness).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.START_EVENT__LATENESS, null, msgs);
+			msgs = basicSetLateness(newLateness, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.START_EVENT__LATENESS, newLateness, newLateness));
 	}
 
 	/**
@@ -327,6 +382,8 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 				return ((InternalEList<?>)getFuels()).basicRemove(otherEnd, msgs);
 			case SchedulePackage.START_EVENT__VIOLATIONS:
 				return ((InternalEList<?>)getViolations()).basicRemove(otherEnd, msgs);
+			case SchedulePackage.START_EVENT__LATENESS:
+				return basicSetLateness(null, msgs);
 			case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS:
 				return basicSetGroupProfitAndLoss(null, msgs);
 			case SchedulePackage.START_EVENT__GENERAL_PNL_DETAILS:
@@ -350,6 +407,8 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 				else return getViolations().map();
 			case SchedulePackage.START_EVENT__PORT_COST:
 				return getPortCost();
+			case SchedulePackage.START_EVENT__LATENESS:
+				return getLateness();
 			case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS:
 				return getGroupProfitAndLoss();
 			case SchedulePackage.START_EVENT__GENERAL_PNL_DETAILS:
@@ -381,6 +440,9 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 				return;
 			case SchedulePackage.START_EVENT__PORT_COST:
 				setPortCost((Integer)newValue);
+				return;
+			case SchedulePackage.START_EVENT__LATENESS:
+				setLateness((PortVisitLateness)newValue);
 				return;
 			case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS:
 				setGroupProfitAndLoss((GroupProfitAndLoss)newValue);
@@ -417,6 +479,9 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 			case SchedulePackage.START_EVENT__PORT_COST:
 				setPortCost(PORT_COST_EDEFAULT);
 				return;
+			case SchedulePackage.START_EVENT__LATENESS:
+				setLateness((PortVisitLateness)null);
+				return;
 			case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS:
 				setGroupProfitAndLoss((GroupProfitAndLoss)null);
 				return;
@@ -447,6 +512,8 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 				return violations != null && !violations.isEmpty();
 			case SchedulePackage.START_EVENT__PORT_COST:
 				return portCost != PORT_COST_EDEFAULT;
+			case SchedulePackage.START_EVENT__LATENESS:
+				return lateness != null;
 			case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS:
 				return groupProfitAndLoss != null;
 			case SchedulePackage.START_EVENT__GENERAL_PNL_DETAILS:
@@ -481,6 +548,7 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 		if (baseClass == PortVisit.class) {
 			switch (derivedFeatureID) {
 				case SchedulePackage.START_EVENT__PORT_COST: return SchedulePackage.PORT_VISIT__PORT_COST;
+				case SchedulePackage.START_EVENT__LATENESS: return SchedulePackage.PORT_VISIT__LATENESS;
 				default: return -1;
 			}
 		}
@@ -522,6 +590,7 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 		if (baseClass == PortVisit.class) {
 			switch (baseFeatureID) {
 				case SchedulePackage.PORT_VISIT__PORT_COST: return SchedulePackage.START_EVENT__PORT_COST;
+				case SchedulePackage.PORT_VISIT__LATENESS: return SchedulePackage.START_EVENT__LATENESS;
 				default: return -1;
 			}
 		}

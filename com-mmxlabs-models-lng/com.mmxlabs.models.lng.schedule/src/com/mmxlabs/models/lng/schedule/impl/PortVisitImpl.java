@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.schedule.PortVisitLateness;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 
 /**
@@ -27,6 +28,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.PortVisitImpl#getViolations <em>Violations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.PortVisitImpl#getPortCost <em>Port Cost</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.PortVisitImpl#getLateness <em>Lateness</em>}</li>
  * </ul>
  * </p>
  *
@@ -62,6 +64,16 @@ public class PortVisitImpl extends EventImpl implements PortVisit {
 	 * @ordered
 	 */
 	protected int portCost = PORT_COST_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getLateness() <em>Lateness</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLateness()
+	 * @generated
+	 * @ordered
+	 */
+	protected PortVisitLateness lateness;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -120,11 +132,56 @@ public class PortVisitImpl extends EventImpl implements PortVisit {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public PortVisitLateness getLateness() {
+		return lateness;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetLateness(PortVisitLateness newLateness, NotificationChain msgs) {
+		PortVisitLateness oldLateness = lateness;
+		lateness = newLateness;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SchedulePackage.PORT_VISIT__LATENESS, oldLateness, newLateness);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setLateness(PortVisitLateness newLateness) {
+		if (newLateness != lateness) {
+			NotificationChain msgs = null;
+			if (lateness != null)
+				msgs = ((InternalEObject)lateness).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.PORT_VISIT__LATENESS, null, msgs);
+			if (newLateness != null)
+				msgs = ((InternalEObject)newLateness).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.PORT_VISIT__LATENESS, null, msgs);
+			msgs = basicSetLateness(newLateness, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.PORT_VISIT__LATENESS, newLateness, newLateness));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case SchedulePackage.PORT_VISIT__VIOLATIONS:
 				return ((InternalEList<?>)getViolations()).basicRemove(otherEnd, msgs);
+			case SchedulePackage.PORT_VISIT__LATENESS:
+				return basicSetLateness(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -142,6 +199,8 @@ public class PortVisitImpl extends EventImpl implements PortVisit {
 				else return getViolations().map();
 			case SchedulePackage.PORT_VISIT__PORT_COST:
 				return getPortCost();
+			case SchedulePackage.PORT_VISIT__LATENESS:
+				return getLateness();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -159,6 +218,9 @@ public class PortVisitImpl extends EventImpl implements PortVisit {
 				return;
 			case SchedulePackage.PORT_VISIT__PORT_COST:
 				setPortCost((Integer)newValue);
+				return;
+			case SchedulePackage.PORT_VISIT__LATENESS:
+				setLateness((PortVisitLateness)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -178,6 +240,9 @@ public class PortVisitImpl extends EventImpl implements PortVisit {
 			case SchedulePackage.PORT_VISIT__PORT_COST:
 				setPortCost(PORT_COST_EDEFAULT);
 				return;
+			case SchedulePackage.PORT_VISIT__LATENESS:
+				setLateness((PortVisitLateness)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -194,6 +259,8 @@ public class PortVisitImpl extends EventImpl implements PortVisit {
 				return violations != null && !violations.isEmpty();
 			case SchedulePackage.PORT_VISIT__PORT_COST:
 				return portCost != PORT_COST_EDEFAULT;
+			case SchedulePackage.PORT_VISIT__LATENESS:
+				return lateness != null;
 		}
 		return super.eIsSet(featureID);
 	}

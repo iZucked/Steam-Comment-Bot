@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.schedule.PortVisitLateness;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -40,6 +41,7 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl#getFuels <em>Fuels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl#getViolations <em>Violations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl#getPortCost <em>Port Cost</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl#getLateness <em>Lateness</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl#getSlotAllocation <em>Slot Allocation</em>}</li>
  * </ul>
  * </p>
@@ -83,6 +85,15 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 	 * @ordered
 	 */
 	protected int portCost = PORT_COST_EDEFAULT;
+	/**
+	 * The cached value of the '{@link #getLateness() <em>Lateness</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLateness()
+	 * @generated
+	 * @ordered
+	 */
+	protected PortVisitLateness lateness;
 	/**
 	 * The cached value of the '{@link #getSlotAllocation() <em>Slot Allocation</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -154,6 +165,49 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 		portCost = newPortCost;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SLOT_VISIT__PORT_COST, oldPortCost, portCost));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PortVisitLateness getLateness() {
+		return lateness;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetLateness(PortVisitLateness newLateness, NotificationChain msgs) {
+		PortVisitLateness oldLateness = lateness;
+		lateness = newLateness;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SchedulePackage.SLOT_VISIT__LATENESS, oldLateness, newLateness);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setLateness(PortVisitLateness newLateness) {
+		if (newLateness != lateness) {
+			NotificationChain msgs = null;
+			if (lateness != null)
+				msgs = ((InternalEObject)lateness).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.SLOT_VISIT__LATENESS, null, msgs);
+			if (newLateness != null)
+				msgs = ((InternalEObject)newLateness).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.SLOT_VISIT__LATENESS, null, msgs);
+			msgs = basicSetLateness(newLateness, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SLOT_VISIT__LATENESS, newLateness, newLateness));
 	}
 
 	/**
@@ -257,6 +311,8 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 				return ((InternalEList<?>)getFuels()).basicRemove(otherEnd, msgs);
 			case SchedulePackage.SLOT_VISIT__VIOLATIONS:
 				return ((InternalEList<?>)getViolations()).basicRemove(otherEnd, msgs);
+			case SchedulePackage.SLOT_VISIT__LATENESS:
+				return basicSetLateness(null, msgs);
 			case SchedulePackage.SLOT_VISIT__SLOT_ALLOCATION:
 				return basicSetSlotAllocation(null, msgs);
 		}
@@ -278,6 +334,8 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 				else return getViolations().map();
 			case SchedulePackage.SLOT_VISIT__PORT_COST:
 				return getPortCost();
+			case SchedulePackage.SLOT_VISIT__LATENESS:
+				return getLateness();
 			case SchedulePackage.SLOT_VISIT__SLOT_ALLOCATION:
 				if (resolve) return getSlotAllocation();
 				return basicGetSlotAllocation();
@@ -304,6 +362,9 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 			case SchedulePackage.SLOT_VISIT__PORT_COST:
 				setPortCost((Integer)newValue);
 				return;
+			case SchedulePackage.SLOT_VISIT__LATENESS:
+				setLateness((PortVisitLateness)newValue);
+				return;
 			case SchedulePackage.SLOT_VISIT__SLOT_ALLOCATION:
 				setSlotAllocation((SlotAllocation)newValue);
 				return;
@@ -328,6 +389,9 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 			case SchedulePackage.SLOT_VISIT__PORT_COST:
 				setPortCost(PORT_COST_EDEFAULT);
 				return;
+			case SchedulePackage.SLOT_VISIT__LATENESS:
+				setLateness((PortVisitLateness)null);
+				return;
 			case SchedulePackage.SLOT_VISIT__SLOT_ALLOCATION:
 				setSlotAllocation((SlotAllocation)null);
 				return;
@@ -349,6 +413,8 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 				return violations != null && !violations.isEmpty();
 			case SchedulePackage.SLOT_VISIT__PORT_COST:
 				return portCost != PORT_COST_EDEFAULT;
+			case SchedulePackage.SLOT_VISIT__LATENESS:
+				return lateness != null;
 			case SchedulePackage.SLOT_VISIT__SLOT_ALLOCATION:
 				return slotAllocation != null;
 		}
@@ -377,6 +443,7 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 		if (baseClass == PortVisit.class) {
 			switch (derivedFeatureID) {
 				case SchedulePackage.SLOT_VISIT__PORT_COST: return SchedulePackage.PORT_VISIT__PORT_COST;
+				case SchedulePackage.SLOT_VISIT__LATENESS: return SchedulePackage.PORT_VISIT__LATENESS;
 				default: return -1;
 			}
 		}
@@ -405,6 +472,7 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 		if (baseClass == PortVisit.class) {
 			switch (baseFeatureID) {
 				case SchedulePackage.PORT_VISIT__PORT_COST: return SchedulePackage.SLOT_VISIT__PORT_COST;
+				case SchedulePackage.PORT_VISIT__LATENESS: return SchedulePackage.SLOT_VISIT__LATENESS;
 				default: return -1;
 			}
 		}
