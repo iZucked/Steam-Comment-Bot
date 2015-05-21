@@ -56,11 +56,7 @@ public class LatenessReportView extends EMFReportView {
 
 				if (object instanceof PortVisit) {
 					final PortVisit slotVisit = (PortVisit) object;
-					final Calendar localStart = slotVisit.getLocalStart();
-					final Calendar windowEndDate = LatenessUtils.getWindowEndDate(object);
-
-					long diff = localStart.getTimeInMillis() - windowEndDate.getTimeInMillis();
-
+					long diff = slotVisit.getLateness().getLatenessInHours() * 60 * 60 * 1000;
 					return LatenessUtils.formatLateness(diff);
 				}
 
