@@ -332,6 +332,21 @@ public interface ISchedulerBuilder {
 	ITimeWindow createTimeWindow(int start, int end);
 
 	/**
+	 * Create a time window with the specified start and end time. If the end time is {@link Integer#MIN_VALUE}, then assume the end time is unbounded and it will be replaced with the latest time in
+	 * the scenario.
+	 * 
+	 * @param start
+	 *            Time window start
+	 * @param end
+	 *            Time window end
+	 * @param endFlex
+	 *            Time window endFlex
+	 * @return
+	 */
+	@NonNull
+	ITimeWindow createTimeWindow(int start, int end, int endFlex);
+
+	/**
 	 * Specify a one-way distance between two ports
 	 * 
 	 * @param from

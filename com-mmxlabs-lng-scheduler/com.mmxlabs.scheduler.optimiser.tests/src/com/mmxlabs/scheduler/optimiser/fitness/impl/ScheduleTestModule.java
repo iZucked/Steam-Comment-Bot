@@ -35,6 +35,9 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselStartDateCharterRate
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcessFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
+import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponentParameters;
+import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.DirectRandomSequenceScheduler;
@@ -97,20 +100,20 @@ public class ScheduleTestModule extends AbstractModule {
 	@Provides
 	@Singleton
 	ISequenceScheduler provideSchedulerFactory(final Injector injector) {
-//		final ISchedulerFactory factory = new ISchedulerFactory() {
-//
-//			@Override
-//			public ISequenceScheduler createScheduler(final IOptimisationData data, final Collection<ICargoSchedulerFitnessComponent> schedulerComponents) {
-////
-//				final ScheduleFitnessEvaluator scheduleEvaluator = new ScheduleFitnessEvaluator();
-//				// TODO: If we can change this API, then we can avoid the need for the ISchedulerFactory and this provider
-//				scheduleEvaluator.setFitnessComponents(schedulerComponents);
-//				injector.injectMembers(scheduleEvaluator);
+		// final ISchedulerFactory factory = new ISchedulerFactory() {
+		//
+		// @Override
+		// public ISequenceScheduler createScheduler(final IOptimisationData data, final Collection<ICargoSchedulerFitnessComponent> schedulerComponents) {
+		// //
+		// final ScheduleFitnessEvaluator scheduleEvaluator = new ScheduleFitnessEvaluator();
+		// // TODO: If we can change this API, then we can avoid the need for the ISchedulerFactory and this provider
+		// scheduleEvaluator.setFitnessComponents(schedulerComponents);
+		// injector.injectMembers(scheduleEvaluator);
 
-				final DirectRandomSequenceScheduler scheduler = new DirectRandomSequenceScheduler();
-//				scheduler.setScheduleEvaluator(scheduleEvaluator);
-				injector.injectMembers(scheduler);
-				return scheduler;
+		final DirectRandomSequenceScheduler scheduler = new DirectRandomSequenceScheduler();
+		// scheduler.setScheduleEvaluator(scheduleEvaluator);
+		injector.injectMembers(scheduler);
+		return scheduler;
 		// }
 		// };
 		// return factory;
@@ -225,4 +228,22 @@ public class ScheduleTestModule extends AbstractModule {
 		return sequences;
 	}
 
+	@Provides
+	@Singleton
+	private ILatenessComponentParameters provideLatenessParameters() {
+		final LatenessComponentParameters lcp = new LatenessComponentParameters();
+
+		lcp.setThreshold(Interval.PROMPT, 24);
+		lcp.setLowWeight(Interval.PROMPT, 1);
+		lcp.setHighWeight(Interval.PROMPT, 1);
+
+		lcp.setThreshold(Interval.MID_TERM, 24);
+		lcp.setLowWeight(Interval.MID_TERM, 1);
+		lcp.setHighWeight(Interval.MID_TERM, 1);
+
+		lcp.setThreshold(Interval.BEYOND, 24);
+		lcp.setLowWeight(Interval.BEYOND, 1);
+		lcp.setHighWeight(Interval.BEYOND, 1);
+		return lcp;
+	}
 }

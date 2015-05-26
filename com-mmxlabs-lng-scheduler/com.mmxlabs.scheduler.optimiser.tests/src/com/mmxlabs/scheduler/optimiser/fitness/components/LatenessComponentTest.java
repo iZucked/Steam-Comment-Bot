@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
+import javax.inject.Singleton;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -11,6 +13,7 @@ import org.mockito.Mockito;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Provides;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -22,6 +25,8 @@ import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
+import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -59,17 +64,38 @@ public class LatenessComponentTest {
 
 		final String name = "name";
 		final String dcp = "dcp";
-		final CargoSchedulerFitnessCore core = null;
+		final CargoSchedulerFitnessCore core = new CargoSchedulerFitnessCore(null);
 
 		final IOptimisationData data = Mockito.mock(IOptimisationData.class);
 
 		final IStartEndRequirementProvider startEndRequirementProvider = Mockito.mock(IStartEndRequirementProvider.class);
+		final IPromptPeriodProvider promptProvider = Mockito.mock(IPromptPeriodProvider.class);
 
 		Injector injector = Guice.createInjector(new AbstractModule() {
 
 			@Override
 			protected void configure() {
 				bind(IStartEndRequirementProvider.class).toInstance(startEndRequirementProvider);
+				bind(IPromptPeriodProvider.class).toInstance(promptProvider);
+			}
+
+			@Provides
+			@Singleton
+			private ILatenessComponentParameters provideLatenessParameters() {
+				final LatenessComponentParameters lcp = new LatenessComponentParameters();
+
+				lcp.setThreshold(Interval.PROMPT, 24);
+				lcp.setLowWeight(Interval.PROMPT, 1);
+				lcp.setHighWeight(Interval.PROMPT, 1);
+
+				lcp.setThreshold(Interval.MID_TERM, 24);
+				lcp.setLowWeight(Interval.MID_TERM, 1);
+				lcp.setHighWeight(Interval.MID_TERM, 1);
+
+				lcp.setThreshold(Interval.BEYOND, 24);
+				lcp.setLowWeight(Interval.BEYOND, 1);
+				lcp.setHighWeight(Interval.BEYOND, 1);
+				return lcp;
 			}
 		});
 		final LatenessComponent c = new LatenessComponent(name, core);

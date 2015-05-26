@@ -4,34 +4,45 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
-import javax.inject.Inject;
+import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
 
-import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import org.eclipse.jdt.annotation.NonNull;
+
+import com.google.common.util.concurrent.SettableFuture;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
-import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
-import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 
 /**
  * 
- * {@link ICargoSchedulerFitnessComponent} implementation to calculate a fitness based on lateness.
+ * {@link ICargoSchedulerFitnessComponent} implementation to calculate a fitness based on weighted lateness.
  * 
- * @author Simon Goodall
+ * @author Alex Churchill
  * 
  */
 public final class LatenessComponent extends AbstractPerRouteSchedulerFitnessComponent implements IFitnessComponent {
 
-	private long accumulator = 0;
-	@Inject
-	private IStartEndRequirementProvider startEndRequirementProvider;
+	private long sequenceAccumulator = 0;
 
-	public LatenessComponent(final String name, final CargoSchedulerFitnessCore core) {
+	private long promptLateness = 0;
+	private long totalLateness = 0;
+	private long initialPromptLateness = 0;
+	private long initialTotalLateness = 0;
+	private boolean hasBeenInitialised = false;
+
+	@Override
+	public void startEvaluation(@NonNull ScheduledSequences scheduledSequences) {
+		promptLateness = 0;
+		totalLateness = 0;
+		super.startEvaluation(scheduledSequences);
+	}
+	
+	public LatenessComponent(@NonNull final String name, @NonNull final CargoSchedulerFitnessCore core) {
 		super(name, core);
 	}
 
@@ -41,8 +52,8 @@ public final class LatenessComponent extends AbstractPerRouteSchedulerFitnessCom
 	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.AbstractPerRouteSchedulerFitnessComponent#reallyStartSequence(com.mmxlabs.optimiser.core.IResource)
 	 */
 	@Override
-	protected boolean reallyStartSequence(final IResource resource) {
-		accumulator = 0;
+	protected boolean reallyStartSequence(@NonNull final IResource resource) {
+		sequenceAccumulator = 0;
 		return true;
 	}
 
@@ -52,25 +63,17 @@ public final class LatenessComponent extends AbstractPerRouteSchedulerFitnessCom
 	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.AbstractPerRouteSchedulerFitnessComponent#reallyEvaluateObject(java.lang.Object, int)
 	 */
 	@Override
-	protected boolean reallyEvaluateObject(final Object object, final int time) {
+	protected boolean reallyEvaluateObject(@NonNull final Object object, final int time) {
 		if (object instanceof PortDetails) {
 			final PortDetails detail = (PortDetails) object;
-			final IPortSlot portSlot = detail.getOptions().getPortSlot();
-			final ITimeWindow tw;
-
-			if (portSlot instanceof StartPortSlot) {
-				final IStartEndRequirement req = startEndRequirementProvider.getStartRequirement(currentResource);
-				tw = req.getTimeWindow();
-			} else if (portSlot instanceof EndPortSlot) {
-				final IStartEndRequirement req = startEndRequirementProvider.getEndRequirement(currentResource);
-				tw = req.getTimeWindow();
-			} else {
-				tw = portSlot.getTimeWindow();
-			}
-
-			if ((tw != null) && (time > tw.getEnd())) {
-				// addDiscountedValue(time, 1000000*(time - tw.getEnd()));
-				accumulator += getDiscountedValue(time, (time - tw.getEnd()));
+			sequenceAccumulator += scheduledSequences.getWeightedLatenessCost(detail.getOptions().getPortSlot());
+			Pair<Interval, Long> latenessDetails = scheduledSequences.getLatenessCost(detail.getOptions().getPortSlot());
+			if (latenessDetails != null) {
+				long lateness = latenessDetails.getSecond();
+				if (latenessDetails.getFirst() == Interval.PROMPT) {
+					promptLateness += lateness;
+				}
+				totalLateness += lateness;
 			}
 		}
 		return true;
@@ -83,6 +86,44 @@ public final class LatenessComponent extends AbstractPerRouteSchedulerFitnessCom
 	 */
 	@Override
 	protected long endSequenceAndGetCost() {
-		return accumulator;
+		if (initialised() && (promptLateness > getInitialPromptLateness() || totalLateness > getInitialTotalLateness())) {
+			return Long.MAX_VALUE;
+		}
+
+		return sequenceAccumulator;
+	}
+
+	@Override
+	public long endEvaluationAndGetCost() {
+		if (!initialised()) {
+			setInitialPromptLateness(promptLateness);
+			setInitialTotalLateness(totalLateness);
+			setInitialised(true);
+		}
+		return super.endEvaluationAndGetCost();
+	}
+
+	private void setInitialPromptLateness(long lateness) {
+		initialPromptLateness = lateness;
+	}
+
+	private void setInitialTotalLateness(long lateness) {
+		initialTotalLateness = lateness;
+	}
+
+	private long getInitialPromptLateness() {
+		return initialPromptLateness;
+	}
+
+	private long getInitialTotalLateness() {
+		return initialTotalLateness;
+	}
+
+	private boolean initialised() {
+		return hasBeenInitialised;
+	}
+
+	private void setInitialised(boolean initialised) {
+		hasBeenInitialised = initialised;
 	}
 }

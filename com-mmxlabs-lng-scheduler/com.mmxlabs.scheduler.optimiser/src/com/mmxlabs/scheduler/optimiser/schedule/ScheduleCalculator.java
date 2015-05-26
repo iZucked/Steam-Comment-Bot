@@ -82,6 +82,9 @@ public class ScheduleCalculator {
 	private CapacityViolationChecker capacityViolationChecker;
 
 	@Inject
+	private LatenessChecker latenessChecker;
+
+	@Inject
 	private IVolumeAllocator volumeAllocator;
 
 	@Inject
@@ -375,6 +378,8 @@ public class ScheduleCalculator {
 
 		// Perform capacity violations analysis
 		capacityViolationChecker.calculateCapacityViolations(scheduledSequences, annotatedSolution);
+		// Perform capacity violations analysis
+		latenessChecker.calculateLateness(scheduledSequences, annotatedSolution);
 	}
 
 	// TODO: Push into entity value calculator?

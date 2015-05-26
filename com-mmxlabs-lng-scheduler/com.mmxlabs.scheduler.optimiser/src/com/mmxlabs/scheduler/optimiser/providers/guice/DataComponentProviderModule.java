@@ -83,6 +83,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
@@ -106,6 +108,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultNextLoadDateProvider;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultPromptPeriodProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultVesselCharterCurveProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapActualsDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapAlternativeElementProviderEditor;
@@ -270,7 +273,7 @@ public class DataComponentProviderModule extends AbstractModule {
 		final ISpotMarketSlotsProviderEditor spotMarketSlots = new HashMapSpotMarketSlotsEditor();
 		bind(ISpotMarketSlotsProvider.class).toInstance(spotMarketSlots);
 		bind(ISpotMarketSlotsProviderEditor.class).toInstance(spotMarketSlots);
-		
+
 		final IPortCostProviderEditor portCosts = new HashMapPortCostEditor();
 		bind(IPortCostProvider.class).toInstance(portCosts);
 		bind(IPortCostProviderEditor.class).toInstance(portCosts);
@@ -352,14 +355,18 @@ public class DataComponentProviderModule extends AbstractModule {
 
 		bind(TimeZoneToUtcOffsetProvider.class).in(Singleton.class);
 		bind(ITimeZoneToUtcOffsetProvider.class).to(TimeZoneToUtcOffsetProvider.class);
-		
+
 		final HashMapBaseFuelCurveEditor baseFuelCurveEditor = new HashMapBaseFuelCurveEditor();
 		bind(IBaseFuelCurveProvider.class).toInstance(baseFuelCurveEditor);
 		bind(IBaseFuelCurveProviderEditor.class).toInstance(baseFuelCurveEditor);
-		
+
 		final HashMapGeneratedCharterOutPortSlotEditor generatedCharterOutPortSlotEditor = new HashMapGeneratedCharterOutPortSlotEditor();
 		bind(IGeneratedCharterOutSlotProvider.class).toInstance(generatedCharterOutPortSlotEditor);
 		bind(IGeneratedCharterOutSlotProviderEditor.class).toInstance(generatedCharterOutPortSlotEditor);
+
+		bind(DefaultPromptPeriodProviderEditor.class).in(Singleton.class);
+		bind(IPromptPeriodProvider.class).to(DefaultPromptPeriodProviderEditor.class);
+		bind(IPromptPeriodProviderEditor.class).to(DefaultPromptPeriodProviderEditor.class);
 	}
 
 	/**
