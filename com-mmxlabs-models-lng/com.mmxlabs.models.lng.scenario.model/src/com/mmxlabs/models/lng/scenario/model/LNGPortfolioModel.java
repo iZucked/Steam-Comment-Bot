@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import java.util.Date;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,6 +25,8 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getScheduleModel <em>Schedule Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getParameters <em>Parameters</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getActualsModel <em>Actuals Model</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getPromptPeriodStart <em>Prompt Period Start</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getPromptPeriodEnd <em>Prompt Period End</em>}</li>
  * </ul>
  * </p>
  *
@@ -135,5 +138,111 @@ public interface LNGPortfolioModel extends UUIDObject {
 	 * @generated
 	 */
 	void setActualsModel(ActualsModel value);
+
+	/**
+	 * Returns the value of the '<em><b>Prompt Period Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Prompt Period Start</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Prompt Period Start</em>' attribute.
+	 * @see #isSetPromptPeriodStart()
+	 * @see #unsetPromptPeriodStart()
+	 * @see #setPromptPeriodStart(Date)
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGPortfolioModel_PromptPeriodStart()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	Date getPromptPeriodStart();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getPromptPeriodStart <em>Prompt Period Start</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Prompt Period Start</em>' attribute.
+	 * @see #isSetPromptPeriodStart()
+	 * @see #unsetPromptPeriodStart()
+	 * @see #getPromptPeriodStart()
+	 * @generated
+	 */
+	void setPromptPeriodStart(Date value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getPromptPeriodStart <em>Prompt Period Start</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetPromptPeriodStart()
+	 * @see #getPromptPeriodStart()
+	 * @see #setPromptPeriodStart(Date)
+	 * @generated
+	 */
+	void unsetPromptPeriodStart();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getPromptPeriodStart <em>Prompt Period Start</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Prompt Period Start</em>' attribute is set.
+	 * @see #unsetPromptPeriodStart()
+	 * @see #getPromptPeriodStart()
+	 * @see #setPromptPeriodStart(Date)
+	 * @generated
+	 */
+	boolean isSetPromptPeriodStart();
+
+	/**
+	 * Returns the value of the '<em><b>Prompt Period End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Prompt Period End</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Prompt Period End</em>' attribute.
+	 * @see #isSetPromptPeriodEnd()
+	 * @see #unsetPromptPeriodEnd()
+	 * @see #setPromptPeriodEnd(Date)
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGPortfolioModel_PromptPeriodEnd()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	Date getPromptPeriodEnd();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getPromptPeriodEnd <em>Prompt Period End</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Prompt Period End</em>' attribute.
+	 * @see #isSetPromptPeriodEnd()
+	 * @see #unsetPromptPeriodEnd()
+	 * @see #getPromptPeriodEnd()
+	 * @generated
+	 */
+	void setPromptPeriodEnd(Date value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getPromptPeriodEnd <em>Prompt Period End</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetPromptPeriodEnd()
+	 * @see #getPromptPeriodEnd()
+	 * @see #setPromptPeriodEnd(Date)
+	 * @generated
+	 */
+	void unsetPromptPeriodEnd();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getPromptPeriodEnd <em>Prompt Period End</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Prompt Period End</em>' attribute is set.
+	 * @see #unsetPromptPeriodEnd()
+	 * @see #getPromptPeriodEnd()
+	 * @see #setPromptPeriodEnd(Date)
+	 * @generated
+	 */
+	boolean isSetPromptPeriodEnd();
 
 } // LNGPortfolioModel

@@ -7,18 +7,21 @@
 package com.mmxlabs.models.lng.scenario.model.provider;
 
 
+import com.mmxlabs.models.lng.actuals.ActualsFactory;
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import com.mmxlabs.models.lng.actuals.ActualsFactory;
@@ -64,8 +67,54 @@ public class LNGPortfolioModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addPromptPeriodStartPropertyDescriptor(object);
+			addPromptPeriodEndPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Prompt Period Start feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPromptPeriodStartPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_LNGPortfolioModel_promptPeriodStart_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_LNGPortfolioModel_promptPeriodStart_feature", "_UI_LNGPortfolioModel_type"),
+				 LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodStart(),
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Prompt Period End feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPromptPeriodEndPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_LNGPortfolioModel_promptPeriodEnd_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_LNGPortfolioModel_promptPeriodEnd_feature", "_UI_LNGPortfolioModel_type"),
+				 LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodEnd(),
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -138,6 +187,10 @@ public class LNGPortfolioModelItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(LNGPortfolioModel.class)) {
+			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__PROMPT_PERIOD_START:
+			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__PROMPT_PERIOD_END:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__CARGO_MODEL:
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__SCHEDULE_MODEL:
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__PARAMETERS:

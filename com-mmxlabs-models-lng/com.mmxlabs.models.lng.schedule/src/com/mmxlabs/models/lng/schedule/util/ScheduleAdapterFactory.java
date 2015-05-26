@@ -229,6 +229,10 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createEventGroupingAdapter();
 			}
 			@Override
+			public Adapter casePortVisitLateness(PortVisitLateness object) {
+				return createPortVisitLatenessAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -695,6 +699,20 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createEventGroupingAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.PortVisitLateness <em>Port Visit Lateness</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.PortVisitLateness
+	 * @generated
+	 */
+	public Adapter createPortVisitLatenessAdapter() {
 		return null;
 	}
 

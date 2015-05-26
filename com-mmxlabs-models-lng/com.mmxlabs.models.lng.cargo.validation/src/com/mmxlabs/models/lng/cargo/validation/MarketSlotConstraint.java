@@ -115,6 +115,12 @@ public class MarketSlotConstraint extends AbstractModelConstraint {
 					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_PricingEvent());
 					failures.add(dsd);
 				}
+				if (slot.getWindowFlex() != 0) {
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type
+							+ " should not have window flex."));
+					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowFlex());
+					failures.add(dsd);
+				}
 			}
 
 			if (spotSlot instanceof SpotLoadSlot) {
@@ -127,7 +133,6 @@ public class MarketSlotConstraint extends AbstractModelConstraint {
 					failures.add(dsd);
 				}
 
-				
 				if (market instanceof DESPurchaseMarket) {
 					final DESPurchaseMarket desPurchaseMarket = (DESPurchaseMarket) market;
 

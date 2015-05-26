@@ -133,6 +133,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.SLOT_PNL_DETAILS: return createSlotPNLDetails();
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS: return createBasicSlotPNLDetails();
 			case SchedulePackage.EVENT_GROUPING: return createEventGrouping();
+			case SchedulePackage.PORT_VISIT_LATENESS: return createPortVisitLateness();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -154,6 +155,8 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 				return createFuelUnitFromString(eDataType, initialValue);
 			case SchedulePackage.CAPACITY_VIOLATION_TYPE:
 				return createCapacityViolationTypeFromString(eDataType, initialValue);
+			case SchedulePackage.PORT_VISIT_LATENESS_TYPE:
+				return createPortVisitLatenessTypeFromString(eDataType, initialValue);
 			case SchedulePackage.CALENDAR:
 				return createCalendarFromString(eDataType, initialValue);
 			case SchedulePackage.ITERABLE:
@@ -181,6 +184,8 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 				return convertFuelUnitToString(eDataType, instanceValue);
 			case SchedulePackage.CAPACITY_VIOLATION_TYPE:
 				return convertCapacityViolationTypeToString(eDataType, instanceValue);
+			case SchedulePackage.PORT_VISIT_LATENESS_TYPE:
+				return convertPortVisitLatenessTypeToString(eDataType, instanceValue);
 			case SchedulePackage.CALENDAR:
 				return convertCalendarToString(eDataType, instanceValue);
 			case SchedulePackage.ITERABLE:
@@ -497,6 +502,16 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public PortVisitLateness createPortVisitLateness() {
+		PortVisitLatenessImpl portVisitLateness = new PortVisitLatenessImpl();
+		return portVisitLateness;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public FuelUnit createFuelUnitFromString(EDataType eDataType, String initialValue) {
 		FuelUnit result = FuelUnit.get(initialValue);
 		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
@@ -569,6 +584,26 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * @generated
 	 */
 	public String convertCapacityViolationTypeToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PortVisitLatenessType createPortVisitLatenessTypeFromString(EDataType eDataType, String initialValue) {
+		PortVisitLatenessType result = PortVisitLatenessType.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertPortVisitLatenessTypeToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

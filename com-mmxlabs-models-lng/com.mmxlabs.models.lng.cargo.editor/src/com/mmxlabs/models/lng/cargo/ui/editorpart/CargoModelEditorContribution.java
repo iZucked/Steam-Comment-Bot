@@ -41,10 +41,10 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 	// private VesselClassViewerPane vesselClassViewerPane;
 	private VesselEventViewerPane eventViewerPane;
 	private int eventPage;
-	
 
 	@Override
 	public void addPages(final Composite parent) {
+
 		this.tradesViewer = new TradesWiringViewer(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		tradesViewer.createControl(parent);
 		tradesViewer.init(Collections.<EReference> emptyList(), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
@@ -83,24 +83,21 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 	@Override
 	public boolean canHandle(final IStatus status) {
 
-		Class<?> [] handledClasses = { Vessel.class, VesselAvailability.class, 
-				VesselEvent.class, HeelOptions.class, Cargo.class, LoadSlot.class, 
-				DischargeSlot.class, SlotContractParams.class, SlotVisit.class,
-				EndEvent.class };
+		final Class<?>[] handledClasses = { Vessel.class, VesselAvailability.class, VesselEvent.class, HeelOptions.class, Cargo.class, LoadSlot.class, DischargeSlot.class, SlotContractParams.class,
+				SlotVisit.class, EndEvent.class };
 
 		if (status instanceof DetailConstraintStatusDecorator) {
 			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
-			
-			EObject target = dcsd.getTarget();
-			
-			for (Class<?> clazz: handledClasses) {
+
+			final EObject target = dcsd.getTarget();
+
+			for (final Class<?> clazz : handledClasses) {
 				if (clazz.isInstance(target)) {
 					return true;
 				}
 			}
-			
+
 		}
-		
 
 		return false;
 	}
@@ -125,12 +122,12 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 				target = ((VesselEventVisit) target).getVesselEvent();
 			}
 			if (target instanceof EndEvent) {
-				VesselAvailability availability = ((EndEvent) target).getSequence().getVesselAvailability();
+				final VesselAvailability availability = ((EndEvent) target).getSequence().getVesselAvailability();
 				if (availability != null) {
 					target = availability;
 				}
 			}
-			
+
 			if (target instanceof Cargo) {
 				cargo = (Cargo) target;
 			} else if (target instanceof LoadSlot) {
@@ -159,12 +156,12 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 					return;
 				}
 			}
-			
+
 			editorPart.setActivePage(eventPage);
 
 			// extract viewable target from a faulty HeelOptions object
 			if (target instanceof HeelOptions) {
-				EObject container = target.eContainer();
+				final EObject container = target.eContainer();
 				if (container instanceof VesselAvailability) {
 					target = (VesselAvailability) container;
 				} else if (container instanceof CharterOutEvent) {

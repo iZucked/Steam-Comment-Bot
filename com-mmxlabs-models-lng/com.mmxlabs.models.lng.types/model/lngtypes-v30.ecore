@@ -71,8 +71,4 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="VesselAssignmentType" abstract="true"
       interface="true"/>
-  <eClassifiers xsi:type="ecore:EEnum" name="VolumeUnits">
-    <eLiterals name="M3"/>
-    <eLiterals name="MMBTU" value="1" literal="MMBTU"/>
-  </eClassifiers>
 </ecore:EPackage>

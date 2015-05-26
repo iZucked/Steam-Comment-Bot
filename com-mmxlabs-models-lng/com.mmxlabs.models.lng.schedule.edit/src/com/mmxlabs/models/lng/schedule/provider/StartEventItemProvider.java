@@ -62,6 +62,7 @@ public class StartEventItemProvider
 			super.getPropertyDescriptors(object);
 
 			addPortCostPropertyDescriptor(object);
+			addLatenessPropertyDescriptor(object);
 			addGroupProfitAndLossPropertyDescriptor(object);
 			addEventsPropertyDescriptor(object);
 			addSlotAllocationPropertyDescriptor(object);
@@ -87,6 +88,28 @@ public class StartEventItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Lateness feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addLatenessPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PortVisit_lateness_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PortVisit_lateness_feature", "_UI_PortVisit_type"),
+				 SchedulePackage.Literals.PORT_VISIT__LATENESS,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

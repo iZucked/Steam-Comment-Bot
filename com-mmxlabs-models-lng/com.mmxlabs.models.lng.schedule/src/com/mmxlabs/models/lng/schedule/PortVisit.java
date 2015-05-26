@@ -13,6 +13,7 @@ package com.mmxlabs.models.lng.schedule;
  * The following features are supported:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.PortVisit#getPortCost <em>Port Cost</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.PortVisit#getLateness <em>Lateness</em>}</li>
  * </ul>
  * </p>
  *
@@ -46,6 +47,32 @@ public interface PortVisit extends Event, CapacityViolationsHolder {
 	 * @generated
 	 */
 	void setPortCost(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Lateness</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Lateness</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Lateness</em>' containment reference.
+	 * @see #setLateness(PortVisitLateness)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getPortVisit_Lateness()
+	 * @model containment="true"
+	 * @generated
+	 */
+	PortVisitLateness getLateness();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.PortVisit#getLateness <em>Lateness</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Lateness</em>' containment reference.
+	 * @see #getLateness()
+	 * @generated
+	 */
+	void setLateness(PortVisitLateness value);
 
 } // end of  PortVisit
 

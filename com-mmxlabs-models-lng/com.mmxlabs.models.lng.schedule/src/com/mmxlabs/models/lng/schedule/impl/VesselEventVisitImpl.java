@@ -29,6 +29,7 @@ import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.GeneralPNLDetails;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.schedule.PortVisitLateness;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
@@ -42,6 +43,7 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getViolations <em>Violations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getPortCost <em>Port Cost</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getLateness <em>Lateness</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getGroupProfitAndLoss <em>Group Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getGeneralPNLDetails <em>General PNL Details</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getEvents <em>Events</em>}</li>
@@ -79,6 +81,15 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 * @ordered
 	 */
 	protected int portCost = PORT_COST_EDEFAULT;
+	/**
+	 * The cached value of the '{@link #getLateness() <em>Lateness</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLateness()
+	 * @generated
+	 * @ordered
+	 */
+	protected PortVisitLateness lateness;
 	/**
 	 * The cached value of the '{@link #getGroupProfitAndLoss() <em>Group Profit And Loss</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -166,6 +177,49 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 		portCost = newPortCost;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.VESSEL_EVENT_VISIT__PORT_COST, oldPortCost, portCost));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PortVisitLateness getLateness() {
+		return lateness;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetLateness(PortVisitLateness newLateness, NotificationChain msgs) {
+		PortVisitLateness oldLateness = lateness;
+		lateness = newLateness;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SchedulePackage.VESSEL_EVENT_VISIT__LATENESS, oldLateness, newLateness);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setLateness(PortVisitLateness newLateness) {
+		if (newLateness != lateness) {
+			NotificationChain msgs = null;
+			if (lateness != null)
+				msgs = ((InternalEObject)lateness).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.VESSEL_EVENT_VISIT__LATENESS, null, msgs);
+			if (newLateness != null)
+				msgs = ((InternalEObject)newLateness).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.VESSEL_EVENT_VISIT__LATENESS, null, msgs);
+			msgs = basicSetLateness(newLateness, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.VESSEL_EVENT_VISIT__LATENESS, newLateness, newLateness));
 	}
 
 	/**
@@ -283,6 +337,8 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 		switch (featureID) {
 			case SchedulePackage.VESSEL_EVENT_VISIT__VIOLATIONS:
 				return ((InternalEList<?>)getViolations()).basicRemove(otherEnd, msgs);
+			case SchedulePackage.VESSEL_EVENT_VISIT__LATENESS:
+				return basicSetLateness(null, msgs);
 			case SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS:
 				return basicSetGroupProfitAndLoss(null, msgs);
 			case SchedulePackage.VESSEL_EVENT_VISIT__GENERAL_PNL_DETAILS:
@@ -304,6 +360,8 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 				else return getViolations().map();
 			case SchedulePackage.VESSEL_EVENT_VISIT__PORT_COST:
 				return getPortCost();
+			case SchedulePackage.VESSEL_EVENT_VISIT__LATENESS:
+				return getLateness();
 			case SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS:
 				return getGroupProfitAndLoss();
 			case SchedulePackage.VESSEL_EVENT_VISIT__GENERAL_PNL_DETAILS:
@@ -331,6 +389,9 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 				return;
 			case SchedulePackage.VESSEL_EVENT_VISIT__PORT_COST:
 				setPortCost((Integer)newValue);
+				return;
+			case SchedulePackage.VESSEL_EVENT_VISIT__LATENESS:
+				setLateness((PortVisitLateness)newValue);
 				return;
 			case SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS:
 				setGroupProfitAndLoss((GroupProfitAndLoss)newValue);
@@ -364,6 +425,9 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 			case SchedulePackage.VESSEL_EVENT_VISIT__PORT_COST:
 				setPortCost(PORT_COST_EDEFAULT);
 				return;
+			case SchedulePackage.VESSEL_EVENT_VISIT__LATENESS:
+				setLateness((PortVisitLateness)null);
+				return;
 			case SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS:
 				setGroupProfitAndLoss((GroupProfitAndLoss)null);
 				return;
@@ -392,6 +456,8 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 				return violations != null && !violations.isEmpty();
 			case SchedulePackage.VESSEL_EVENT_VISIT__PORT_COST:
 				return portCost != PORT_COST_EDEFAULT;
+			case SchedulePackage.VESSEL_EVENT_VISIT__LATENESS:
+				return lateness != null;
 			case SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS:
 				return groupProfitAndLoss != null;
 			case SchedulePackage.VESSEL_EVENT_VISIT__GENERAL_PNL_DETAILS:
@@ -420,6 +486,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 		if (baseClass == PortVisit.class) {
 			switch (derivedFeatureID) {
 				case SchedulePackage.VESSEL_EVENT_VISIT__PORT_COST: return SchedulePackage.PORT_VISIT__PORT_COST;
+				case SchedulePackage.VESSEL_EVENT_VISIT__LATENESS: return SchedulePackage.PORT_VISIT__LATENESS;
 				default: return -1;
 			}
 		}
@@ -455,6 +522,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 		if (baseClass == PortVisit.class) {
 			switch (baseFeatureID) {
 				case SchedulePackage.PORT_VISIT__PORT_COST: return SchedulePackage.VESSEL_EVENT_VISIT__PORT_COST;
+				case SchedulePackage.PORT_VISIT__LATENESS: return SchedulePackage.VESSEL_EVENT_VISIT__LATENESS;
 				default: return -1;
 			}
 		}

@@ -1563,13 +1563,22 @@ public interface SchedulePackage extends EPackage {
 	int START_EVENT__PORT_COST = EVENT_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Lateness</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START_EVENT__LATENESS = EVENT_FEATURE_COUNT + 3;
+
+	/**
 	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__GROUP_PROFIT_AND_LOSS = EVENT_FEATURE_COUNT + 3;
+	int START_EVENT__GROUP_PROFIT_AND_LOSS = EVENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
@@ -1578,7 +1587,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 4;
+	int START_EVENT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Events</b></em>' reference list.
@@ -1587,7 +1596,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__EVENTS = EVENT_FEATURE_COUNT + 5;
+	int START_EVENT__EVENTS = EVENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Slot Allocation</b></em>' reference.
@@ -1596,7 +1605,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 6;
+	int START_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 7;
 
 	/**
 	 * The number of structural features of the '<em>Start Event</em>' class.
@@ -1605,7 +1614,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 7;
+	int START_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 8;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1806,13 +1815,22 @@ public interface SchedulePackage extends EPackage {
 	int END_EVENT__PORT_COST = EVENT_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Lateness</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END_EVENT__LATENESS = EVENT_FEATURE_COUNT + 3;
+
+	/**
 	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT__GROUP_PROFIT_AND_LOSS = EVENT_FEATURE_COUNT + 3;
+	int END_EVENT__GROUP_PROFIT_AND_LOSS = EVENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
@@ -1821,7 +1839,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 4;
+	int END_EVENT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Slot Allocation</b></em>' reference.
@@ -1830,7 +1848,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 5;
+	int END_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of structural features of the '<em>End Event</em>' class.
@@ -1839,7 +1857,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 6;
+	int END_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -2472,13 +2490,22 @@ public interface SchedulePackage extends EPackage {
 	int PORT_VISIT__PORT_COST = EVENT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Lateness</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT__LATENESS = EVENT_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Port Visit</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 2;
+	int PORT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -2670,13 +2697,22 @@ public interface SchedulePackage extends EPackage {
 	int SLOT_VISIT__PORT_COST = EVENT_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Lateness</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_VISIT__LATENESS = EVENT_FEATURE_COUNT + 3;
+
+	/**
 	 * The feature id for the '<em><b>Slot Allocation</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 3;
+	int SLOT_VISIT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Slot Visit</em>' class.
@@ -2685,7 +2721,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 4;
+	int SLOT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -2877,13 +2913,22 @@ public interface SchedulePackage extends EPackage {
 	int VESSEL_EVENT_VISIT__PORT_COST = EVENT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Lateness</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT__LATENESS = EVENT_FEATURE_COUNT + 2;
+
+	/**
 	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS = EVENT_FEATURE_COUNT + 2;
+	int VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS = EVENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
@@ -2892,7 +2937,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 3;
+	int VESSEL_EVENT_VISIT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Events</b></em>' reference list.
@@ -2901,7 +2946,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__EVENTS = EVENT_FEATURE_COUNT + 4;
+	int VESSEL_EVENT_VISIT__EVENTS = EVENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Event</b></em>' reference.
@@ -2910,7 +2955,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__VESSEL_EVENT = EVENT_FEATURE_COUNT + 5;
+	int VESSEL_EVENT_VISIT__VESSEL_EVENT = EVENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Event Visit</em>' class.
@@ -2919,7 +2964,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 6;
+	int VESSEL_EVENT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -3100,6 +3145,15 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int GENERATED_CHARTER_OUT__PORT_COST = PORT_VISIT__PORT_COST;
+
+	/**
+	 * The feature id for the '<em><b>Lateness</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__LATENESS = PORT_VISIT__LATENESS;
 
 	/**
 	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
@@ -3982,6 +4036,52 @@ public interface SchedulePackage extends EPackage {
 	int EVENT_GROUPING_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.PortVisitLatenessImpl <em>Port Visit Lateness</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.PortVisitLatenessImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPortVisitLateness()
+	 * @generated
+	 */
+	int PORT_VISIT_LATENESS = 31;
+
+	/**
+	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT_LATENESS__TYPE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Lateness In Hours</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT_LATENESS__LATENESS_IN_HOURS = 1;
+
+	/**
+	 * The number of structural features of the '<em>Port Visit Lateness</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT_LATENESS_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Port Visit Lateness</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT_LATENESS_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3989,7 +4089,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelUnit()
 	 * @generated
 	 */
-	int FUEL_UNIT = 33;
+	int FUEL_UNIT = 34;
 
 
 	/**
@@ -4000,7 +4100,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuel()
 	 * @generated
 	 */
-	int FUEL = 32;
+	int FUEL = 33;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SequenceType <em>Sequence Type</em>}' enum.
@@ -4010,7 +4110,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSequenceType()
 	 * @generated
 	 */
-	int SEQUENCE_TYPE = 31;
+	int SEQUENCE_TYPE = 32;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.CapacityViolationType <em>Capacity Violation Type</em>}' enum.
@@ -4020,7 +4120,17 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityViolationType()
 	 * @generated
 	 */
-	int CAPACITY_VIOLATION_TYPE = 34;
+	int CAPACITY_VIOLATION_TYPE = 35;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.PortVisitLatenessType <em>Port Visit Lateness Type</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.PortVisitLatenessType
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPortVisitLatenessType()
+	 * @generated
+	 */
+	int PORT_VISIT_LATENESS_TYPE = 36;
 
 	/**
 	 * The meta object id for the '<em>Calendar</em>' data type.
@@ -4030,7 +4140,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCalendar()
 	 * @generated
 	 */
-	int CALENDAR = 35;
+	int CALENDAR = 37;
 
 
 	/**
@@ -4041,7 +4151,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 36;
+	int ITERABLE = 38;
 
 
 	/**
@@ -4052,7 +4162,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getObject()
 	 * @generated
 	 */
-	int OBJECT = 37;
+	int OBJECT = 39;
 
 
 	/**
@@ -5070,6 +5180,17 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getPortVisit_PortCost();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.schedule.PortVisit#getLateness <em>Lateness</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Lateness</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.PortVisit#getLateness()
+	 * @see #getPortVisit()
+	 * @generated
+	 */
+	EReference getPortVisit_Lateness();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.StartEvent <em>Start Event</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5434,6 +5555,38 @@ public interface SchedulePackage extends EPackage {
 	EReference getEventGrouping_Events();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.PortVisitLateness <em>Port Visit Lateness</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Port Visit Lateness</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.PortVisitLateness
+	 * @generated
+	 */
+	EClass getPortVisitLateness();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.PortVisitLateness#getType <em>Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Type</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.PortVisitLateness#getType()
+	 * @see #getPortVisitLateness()
+	 * @generated
+	 */
+	EAttribute getPortVisitLateness_Type();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.PortVisitLateness#getLatenessInHours <em>Lateness In Hours</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Lateness In Hours</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.PortVisitLateness#getLatenessInHours()
+	 * @see #getPortVisitLateness()
+	 * @generated
+	 */
+	EAttribute getPortVisitLateness_LatenessInHours();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5472,6 +5625,16 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EEnum getCapacityViolationType();
+
+	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.PortVisitLatenessType <em>Port Visit Lateness Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Port Visit Lateness Type</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.PortVisitLatenessType
+	 * @generated
+	 */
+	EEnum getPortVisitLatenessType();
 
 	/**
 	 * Returns the meta object for data type '{@link java.util.Calendar <em>Calendar</em>}'.
@@ -6327,6 +6490,14 @@ public interface SchedulePackage extends EPackage {
 		EAttribute PORT_VISIT__PORT_COST = eINSTANCE.getPortVisit_PortCost();
 
 		/**
+		 * The meta object literal for the '<em><b>Lateness</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PORT_VISIT__LATENESS = eINSTANCE.getPortVisit_Lateness();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl <em>Start Event</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6623,6 +6794,32 @@ public interface SchedulePackage extends EPackage {
 		EReference EVENT_GROUPING__EVENTS = eINSTANCE.getEventGrouping_Events();
 
 		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.PortVisitLatenessImpl <em>Port Visit Lateness</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.PortVisitLatenessImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPortVisitLateness()
+		 * @generated
+		 */
+		EClass PORT_VISIT_LATENESS = eINSTANCE.getPortVisitLateness();
+
+		/**
+		 * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT_VISIT_LATENESS__TYPE = eINSTANCE.getPortVisitLateness_Type();
+
+		/**
+		 * The meta object literal for the '<em><b>Lateness In Hours</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT_VISIT_LATENESS__LATENESS_IN_HOURS = eINSTANCE.getPortVisitLateness_LatenessInHours();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6661,6 +6858,16 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EEnum CAPACITY_VIOLATION_TYPE = eINSTANCE.getCapacityViolationType();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.PortVisitLatenessType <em>Port Visit Lateness Type</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.PortVisitLatenessType
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPortVisitLatenessType()
+		 * @generated
+		 */
+		EEnum PORT_VISIT_LATENESS_TYPE = eINSTANCE.getPortVisitLatenessType();
 
 		/**
 		 * The meta object literal for the '<em>Calendar</em>' data type.

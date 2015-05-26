@@ -285,6 +285,15 @@ public interface ScheduleFactory extends EFactory {
 	EventGrouping createEventGrouping();
 
 	/**
+	 * Returns a new object of class '<em>Port Visit Lateness</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Port Visit Lateness</em>'.
+	 * @generated
+	 */
+	PortVisitLateness createPortVisitLateness();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

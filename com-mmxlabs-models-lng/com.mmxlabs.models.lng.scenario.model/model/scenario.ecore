@@ -27,5 +27,9 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="actualsModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.actuals/model/actuals.ecore#//ActualsModel"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="promptPeriodStart" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="promptPeriodEnd" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"
+        unsettable="true"/>
   </eClassifiers>
 </ecore:EPackage>

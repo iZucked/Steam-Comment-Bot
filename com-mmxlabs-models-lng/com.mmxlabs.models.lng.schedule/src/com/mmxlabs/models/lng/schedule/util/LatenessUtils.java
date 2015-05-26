@@ -11,56 +11,24 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.schedule.PortVisitLateness;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 
 public class LatenessUtils {
+
 	public static boolean isLate(final Event e) {
-		if (e instanceof SlotVisit) {
-			final SlotVisit visit = (SlotVisit) e;
-			final Sequence seq = visit.getSequence();
-			if (seq.getSequenceType() == SequenceType.DES_PURCHASE || seq.getSequenceType() == SequenceType.FOB_SALE) {
-				// ignore load slots as we don't care when the load was performed
-				if (visit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-					return false;
-				}
-			}
-			if (visit.getStart().isAfter(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime())) {
+		if (e instanceof PortVisit) {
+			PortVisitLateness portVisitLateness = ((PortVisit) e).getLateness();
+			if (portVisitLateness != null) {
 				return true;
-			}
-
-		} else if (e instanceof VesselEventVisit) {
-			final VesselEventVisit vev = (VesselEventVisit) e;
-			if (vev.getStart().isAfter(vev.getVesselEvent().getStartByAsDateTime())) {
-				return true;
-			}
-		} else if (e instanceof PortVisit) {
-			final PortVisit visit = (PortVisit) e;
-			final Sequence seq = visit.getSequence();
-
-			final VesselAvailability availability = seq.getVesselAvailability();
-			if (availability == null) {
-				return false;
-			}
-			if (seq.getEvents().indexOf(visit) == 0) {
-
-				final DateTime startBy = availability.getStartByAsDateTime();
-				if (startBy != null && visit.getStart().isAfter(startBy)) {
-					return true;
-				}
-
-			} else if (seq.getEvents().indexOf(visit) == seq.getEvents().size() - 1) {
-				final DateTime endBy = availability.getEndByAsDateTime();
-				if (endBy != null && visit.getStart().isAfter(endBy)) {
-					return true;
-				}
 			}
 		}
 		return false;
-
 	}
+
 
 	public static DateTime getWindowStartDate(final Object object) {
 		if (object instanceof SlotVisit) {

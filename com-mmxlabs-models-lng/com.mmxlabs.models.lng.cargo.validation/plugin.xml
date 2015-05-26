@@ -92,7 +92,7 @@
                   severity="WARNING"
                   statusCode="1">
                <message>
-                  [Cargo|{0}] Load is after discharge (note timezone).
+                  [Cargo|{0}].
                </message>
                <description>
                </description>

@@ -6,21 +6,8 @@
  */
 package com.mmxlabs.models.lng.schedule.presentation.composites;
 
-import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
+
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -38,29 +25,22 @@ import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
-
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
+
 /**
- * A component helper for EventGrouping instances
+ * A component helper for PortVisitLateness instances
  *
  * @generated
  */
-public class EventGroupingComponentHelper extends BaseComponentHelper {
+public class PortVisitLatenessComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -68,7 +48,7 @@ public class EventGroupingComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public EventGroupingComponentHelper() {
+	public PortVisitLatenessComponentHelper() {
 		this(Platform.getAdapterManager());
 	}
 
@@ -77,18 +57,18 @@ public class EventGroupingComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public EventGroupingComponentHelper(IAdapterManager adapterManager) {
+	public PortVisitLatenessComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 	}
 	
 	/**
-	 * add editors to a composite, using EventGrouping as the supertype
+	 * add editors to a composite, using PortVisitLateness as the supertype
 	 *
 	 * @generated
 	 */
 	 @Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, SchedulePackage.Literals.EVENT_GROUPING);	
+		addEditorsToComposite(detailComposite, SchedulePackage.Literals.PORT_VISIT_LATENESS);	
 	}
 	
 	/**
@@ -99,14 +79,23 @@ public class EventGroupingComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_eventsEditor(detailComposite, topClass);
+		add_typeEditor(detailComposite, topClass);
+		add_latenessInHoursEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the events feature on EventGrouping
+	 * Create the editor for the type feature on PortVisitLateness
 	 *
 	 * @generated
 	 */
-	protected void add_eventsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.EVENT_GROUPING__EVENTS));
+	protected void add_typeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.PORT_VISIT_LATENESS__TYPE));
+	}
+	/**
+	 * Create the editor for the latenessInHours feature on PortVisitLateness
+	 *
+	 * @generated
+	 */
+	protected void add_latenessInHoursEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.PORT_VISIT_LATENESS__LATENESS_IN_HOURS));
 	}
 }

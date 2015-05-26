@@ -777,6 +777,29 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.PortVisitLateness} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PortVisitLatenessItemProvider portVisitLatenessItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.PortVisitLateness}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPortVisitLatenessAdapter() {
+		if (portVisitLatenessItemProvider == null) {
+			portVisitLatenessItemProvider = new PortVisitLatenessItemProvider(this);
+		}
+
+		return portVisitLatenessItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -932,6 +955,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (slotPNLDetailsItemProvider != null) slotPNLDetailsItemProvider.dispose();
 		if (basicSlotPNLDetailsItemProvider != null) basicSlotPNLDetailsItemProvider.dispose();
 		if (eventGroupingItemProvider != null) eventGroupingItemProvider.dispose();
+		if (portVisitLatenessItemProvider != null) portVisitLatenessItemProvider.dispose();
 	}
 
 }
