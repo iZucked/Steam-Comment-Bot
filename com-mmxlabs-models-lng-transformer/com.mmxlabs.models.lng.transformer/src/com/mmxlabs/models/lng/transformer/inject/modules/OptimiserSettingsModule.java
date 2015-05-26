@@ -26,6 +26,10 @@ import com.mmxlabs.optimiser.lso.IThresholder;
 import com.mmxlabs.optimiser.lso.impl.thresholders.GeometricThresholder;
 import com.mmxlabs.optimiser.lso.modules.LinearFitnessEvaluatorModule;
 import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
+import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
+import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponentParameters;
+import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
+import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
 
 /**
  * The {@link OptimiserSettingsModule} provides user-definable parameters derived from the {@link OptimiserSettings} object such as the random seed and number of iterations
@@ -130,5 +134,25 @@ public class OptimiserSettingsModule extends AbstractModule {
 			}
 		}
 		return weightsMap;
+	}
+
+	@Provides
+	@Singleton
+	private ILatenessComponentParameters provideLatenessComponentParamters() {
+		final LatenessComponentParameters lcp = new LatenessComponentParameters();
+
+		lcp.setThreshold(Interval.PROMPT, 48);
+		lcp.setLowWeight(Interval.PROMPT, 250000);
+		lcp.setHighWeight(Interval.PROMPT, 1000000);
+
+		lcp.setThreshold(Interval.MID_TERM, 72);
+		lcp.setLowWeight(Interval.MID_TERM, 250000);
+		lcp.setHighWeight(Interval.MID_TERM, 1000000);
+
+		lcp.setThreshold(Interval.BEYOND, 72);
+		lcp.setLowWeight(Interval.BEYOND, 250000);
+		lcp.setHighWeight(Interval.BEYOND, 1000000);
+
+		return lcp;
 	}
 }
