@@ -62,7 +62,6 @@ public class EndEventItemProvider
 			super.getPropertyDescriptors(object);
 
 			addPortCostPropertyDescriptor(object);
-			addLatenessPropertyDescriptor(object);
 			addGroupProfitAndLossPropertyDescriptor(object);
 			addSlotAllocationPropertyDescriptor(object);
 		}
@@ -87,28 +86,6 @@ public class EndEventItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Lateness feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addLatenessPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_PortVisit_lateness_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PortVisit_lateness_feature", "_UI_PortVisit_type"),
-				 SchedulePackage.Literals.PORT_VISIT__LATENESS,
-				 true,
-				 false,
-				 true,
-				 null,
 				 null,
 				 null));
 	}
@@ -171,6 +148,7 @@ public class EndEventItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(SchedulePackage.Literals.FUEL_USAGE__FUELS);
 			childrenFeatures.add(SchedulePackage.Literals.CAPACITY_VIOLATIONS_HOLDER__VIOLATIONS);
+			childrenFeatures.add(SchedulePackage.Literals.PORT_VISIT__LATENESS);
 			childrenFeatures.add(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS);
 			childrenFeatures.add(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS);
 		}
@@ -233,6 +211,7 @@ public class EndEventItemProvider
 				return;
 			case SchedulePackage.END_EVENT__FUELS:
 			case SchedulePackage.END_EVENT__VIOLATIONS:
+			case SchedulePackage.END_EVENT__LATENESS:
 			case SchedulePackage.END_EVENT__GROUP_PROFIT_AND_LOSS:
 			case SchedulePackage.END_EVENT__GENERAL_PNL_DETAILS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
@@ -261,6 +240,11 @@ public class EndEventItemProvider
 			(createChildParameter
 				(SchedulePackage.Literals.CAPACITY_VIOLATIONS_HOLDER__VIOLATIONS,
 				 ScheduleFactory.eINSTANCE.create(SchedulePackage.Literals.CAPACITY_MAP_ENTRY)));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.PORT_VISIT__LATENESS,
+				 ScheduleFactory.eINSTANCE.createPortVisitLateness()));
 
 		newChildDescriptors.add
 			(createChildParameter

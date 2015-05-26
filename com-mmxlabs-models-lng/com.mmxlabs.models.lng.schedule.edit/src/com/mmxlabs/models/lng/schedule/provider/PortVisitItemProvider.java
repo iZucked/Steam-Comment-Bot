@@ -62,7 +62,6 @@ public class PortVisitItemProvider
 			super.getPropertyDescriptors(object);
 
 			addPortCostPropertyDescriptor(object);
-			addLatenessPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -90,28 +89,6 @@ public class PortVisitItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Lateness feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addLatenessPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_PortVisit_lateness_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PortVisit_lateness_feature", "_UI_PortVisit_type"),
-				 SchedulePackage.Literals.PORT_VISIT__LATENESS,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -124,6 +101,7 @@ public class PortVisitItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(SchedulePackage.Literals.CAPACITY_VIOLATIONS_HOLDER__VIOLATIONS);
+			childrenFeatures.add(SchedulePackage.Literals.PORT_VISIT__LATENESS);
 		}
 		return childrenFeatures;
 	}
@@ -183,6 +161,7 @@ public class PortVisitItemProvider
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case SchedulePackage.PORT_VISIT__VIOLATIONS:
+			case SchedulePackage.PORT_VISIT__LATENESS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -204,6 +183,11 @@ public class PortVisitItemProvider
 			(createChildParameter
 				(SchedulePackage.Literals.CAPACITY_VIOLATIONS_HOLDER__VIOLATIONS,
 				 ScheduleFactory.eINSTANCE.create(SchedulePackage.Literals.CAPACITY_MAP_ENTRY)));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.PORT_VISIT__LATENESS,
+				 ScheduleFactory.eINSTANCE.createPortVisitLateness()));
 	}
 
 }

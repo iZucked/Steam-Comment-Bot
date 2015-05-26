@@ -62,7 +62,6 @@ public class SlotVisitItemProvider
 			super.getPropertyDescriptors(object);
 
 			addPortCostPropertyDescriptor(object);
-			addLatenessPropertyDescriptor(object);
 			addSlotAllocationPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -86,28 +85,6 @@ public class SlotVisitItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Lateness feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addLatenessPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_PortVisit_lateness_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PortVisit_lateness_feature", "_UI_PortVisit_type"),
-				 SchedulePackage.Literals.PORT_VISIT__LATENESS,
-				 true,
-				 false,
-				 true,
-				 null,
 				 null,
 				 null));
 	}
@@ -148,6 +125,7 @@ public class SlotVisitItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(SchedulePackage.Literals.FUEL_USAGE__FUELS);
 			childrenFeatures.add(SchedulePackage.Literals.CAPACITY_VIOLATIONS_HOLDER__VIOLATIONS);
+			childrenFeatures.add(SchedulePackage.Literals.PORT_VISIT__LATENESS);
 			childrenFeatures.add(SchedulePackage.Literals.SLOT_VISIT__SLOT_ALLOCATION);
 		}
 		return childrenFeatures;
@@ -198,6 +176,7 @@ public class SlotVisitItemProvider
 				return;
 			case SchedulePackage.SLOT_VISIT__FUELS:
 			case SchedulePackage.SLOT_VISIT__VIOLATIONS:
+			case SchedulePackage.SLOT_VISIT__LATENESS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -224,6 +203,11 @@ public class SlotVisitItemProvider
 			(createChildParameter
 				(SchedulePackage.Literals.CAPACITY_VIOLATIONS_HOLDER__VIOLATIONS,
 				 ScheduleFactory.eINSTANCE.create(SchedulePackage.Literals.CAPACITY_MAP_ENTRY)));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.PORT_VISIT__LATENESS,
+				 ScheduleFactory.eINSTANCE.createPortVisitLateness()));
 	}
 
 }
