@@ -16,7 +16,8 @@ public final class MutableTimeWindow implements ITimeWindow {
 
 	private int start;
 	private int end;
-
+	private int endFlex;
+	
 	public MutableTimeWindow() {
 
 	}
@@ -43,4 +44,20 @@ public final class MutableTimeWindow implements ITimeWindow {
 	public void setEnd(final int end) {
 		this.end = end;
 	}
+
+	@Override
+	public int getEndFlex() {
+		return endFlex;
+	}
+	
+	public void setEndFlex(int endFlex) {
+		this.endFlex = endFlex;
+	}
+
+	@Override
+	public int getEndWithoutFlex() {
+		return end - endFlex;
+	}
+	
+	
 }

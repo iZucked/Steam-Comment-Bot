@@ -18,9 +18,18 @@ public final class TimeWindow implements ITimeWindow {
 
 	private final int end;
 
+	private final int endFlex;
+	
 	public TimeWindow(final int start, final int end) {
 		this.start = start;
 		this.end = end;
+		this.endFlex = 0;
+	}
+
+	public TimeWindow(final int start, final int end, final int endFlex) {
+		this.start = start;
+		this.end = end;
+		this.endFlex = endFlex;
 	}
 
 	@Override
@@ -32,6 +41,17 @@ public final class TimeWindow implements ITimeWindow {
 	public final int getStart() {
 		return start;
 	}
+	
+	@Override
+	public int getEndFlex() {
+		return endFlex;
+	}
+	
+	@Override
+	public int getEndWithoutFlex() {
+		return end - endFlex;
+	}
+
 
 	@Override
 	public final boolean equals(final Object obj) {
