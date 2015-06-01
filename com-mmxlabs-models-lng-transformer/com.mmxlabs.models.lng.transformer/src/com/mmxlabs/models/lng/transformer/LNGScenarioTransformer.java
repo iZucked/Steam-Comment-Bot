@@ -149,6 +149,7 @@ import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.ILoadPriceCalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProviderEditor;
@@ -191,7 +192,10 @@ public class LNGScenarioTransformer {
 
 	@Inject
 	private ISchedulerBuilder builder;
-
+	
+	@Inject
+	private ILoadPriceCalculatorProviderEditor loadPriceCalculatorProvider;
+	
 	@Inject
 	private IShipToShipBindingProviderEditor shipToShipBindingProvider;
 
@@ -560,6 +564,7 @@ public class LNGScenarioTransformer {
 			}
 			final ILoadPriceCalculator calculator = transformer.transformPurchasePriceParameters(c, c.getPriceInfo());
 			modelEntityMap.addModelObject(c, calculator);
+			loadPriceCalculatorProvider.setPortfolioCalculator(calculator);
 		}
 
 		// process port costs
