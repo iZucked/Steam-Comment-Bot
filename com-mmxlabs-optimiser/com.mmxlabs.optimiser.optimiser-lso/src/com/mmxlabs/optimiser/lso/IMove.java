@@ -18,7 +18,7 @@ import com.mmxlabs.optimiser.core.ISequences;
  * @author Simon Goodall
  * 
  */
-public interface IMove {
+public interface IMove extends IMoveType{
 
 	/**
 	 * Returns the collection of {@link IResource}s this move affects.

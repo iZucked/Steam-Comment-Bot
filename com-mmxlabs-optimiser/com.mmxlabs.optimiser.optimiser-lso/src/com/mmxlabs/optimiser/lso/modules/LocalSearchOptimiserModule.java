@@ -50,9 +50,8 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 			@NonNull final List<IEvaluationProcess> evaluationProcesses) {
 
 		final DefaultLocalSearchOptimiser lso = new DefaultLocalSearchOptimiser();
-
+		injector.injectMembers(lso);
 		lso.setNumberOfIterations(numberOfIterations);
-
 		// .. Should not be performed here, but needs to be somewhere.
 		// Need to co-ordinate with AnalyticsTransformer over the init method. Analytics Transformer creates the opt data manually.
 		// final ChainedSequencesManipulator sequencesManipulator = injector.getInstance(ChainedSequencesManipulator.class);

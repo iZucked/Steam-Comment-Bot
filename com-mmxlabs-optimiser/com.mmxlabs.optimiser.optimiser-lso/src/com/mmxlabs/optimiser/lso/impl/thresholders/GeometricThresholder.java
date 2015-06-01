@@ -79,6 +79,8 @@ public class GeometricThresholder implements IThresholder {
 			ticks = 0;
 			temperature *= fractionPerEpoch;
 			log.debug("Next epoch, temperature = " + temperature);
+			System.out.println("Next epoch, temperature = " + temperature);
+
 		}
 	}
 

@@ -4,8 +4,13 @@
  */
 package com.mmxlabs.optimiser.lso.impl;
 
+import java.util.Date;
+
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import com.mmxlabs.optimiser.common.logging.ILoggingDataStore;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -19,6 +24,9 @@ import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.IMove;
+import com.mmxlabs.optimiser.lso.INullMove;
+import com.mmxlabs.optimiser.lso.LSOLoggingConstants;
+import com.mmxlabs.optimiser.lso.logging.LSOLogger;
 
 /**
  * A sub-class of {@link LocalSearchOptimiser} implementing a default main loop.
@@ -33,9 +41,19 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 	private int numberOfMovesAccepted;
 
+	private int numberOfRejectedMoves;
+
+	private int numberOfFailedEvaluations;
+
+	private int numberOfFailedToValidate;
+
 	private ModifiableSequences currentRawSequences;
 
 	private ModifiableSequences potentialRawSequences;
+
+	@Inject(optional = true)
+	@Named(LSOLoggingConstants.LSO_LOGGER)
+	private LSOLogger loggingDataStore;
 
 	@Override
 	public IAnnotatedSolution start(@NonNull final IOptimisationContext optimiserContext) {
@@ -88,6 +106,9 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		this.currentRawSequences = currentRawSequences;
 		this.potentialRawSequences = potentialRawSequences;
 
+		if (loggingDataStore != null) {
+			loggingDataStore.intialiseProgressLog(getFitnessEvaluator().getBestFitness(), getFitnessEvaluator().getCurrentFitness());
+		}
 		return annotatedBestSolution;
 	}
 
@@ -101,22 +122,38 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		final int iterationsThisStep = Math.min(Math.max(1, (getNumberOfIterations() * percentage) / 100), getNumberOfIterations() - getNumberOfIterationsCompleted());
 		MAIN_LOOP: for (int i = 0; i < iterationsThisStep; i++) {
 			++numberOfMovesTried;
+			if (loggingDataStore != null && (numberOfMovesTried % loggingDataStore.getReportingInterval()) == 0) {
+				loggingDataStore.logProgress(numberOfMovesTried, numberOfMovesAccepted, numberOfRejectedMoves, numberOfFailedEvaluations, numberOfFailedToValidate, getFitnessEvaluator()
+						.getBestFitness(), getFitnessEvaluator().getCurrentFitness(), new Date().getTime());
+			}
 
 			// Generate a new move
 			final IMove move = getMoveGenerator().generateMove();
 
 			// Make sure the generator was able to generate a move
-			if (move == null) {
+			if (move == null || move instanceof INullMove) {
+				if (loggingDataStore != null) {
+					loggingDataStore.logNullMove(move);
+				}
 				continue;
 			}
 
 			// Test move is valid against data.
 			if (!move.validate(pinnedPotentialRawSequences)) {
+				++numberOfFailedToValidate;
+				if (loggingDataStore != null) {
+					loggingDataStore.logFailedToValidateMove(move);
+				}
 				continue;
 			}
 
 			// Update potential sequences
 			move.apply(pinnedPotentialRawSequences);
+			String moveName = move.getClass().getName();
+
+			if (loggingDataStore != null) {
+				loggingDataStore.logAppliedMove(moveName);
+			}
 
 			// Apply sequence manipulators
 			final IModifiableSequences potentialFullSequences = new ModifiableSequences(pinnedPotentialRawSequences);
@@ -125,6 +162,10 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 			// Apply hard constraint checkers
 			for (final IConstraintChecker checker : getConstraintCheckers()) {
 				if (checker.checkConstraints(potentialFullSequences) == false) {
+					if (loggingDataStore != null) {
+						loggingDataStore.logFailedConstraints(checker, move);
+					}
+
 					// Reject Move
 					updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
 					// Break out
@@ -136,6 +177,8 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 			for (final IEvaluationProcess evaluationProcess : getEvaluationProcesses()) {
 				if (!evaluationProcess.evaluate(potentialFullSequences, evaluationState)) {
 					// Problem evaluating, reject move
+					++numberOfFailedEvaluations;
+
 					updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
 					continue MAIN_LOOP;
 				}
@@ -154,10 +197,14 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 				// Update move sequences.
 				getMoveGenerator().setSequences(pinnedPotentialRawSequences);
+				if (loggingDataStore != null) {
+					loggingDataStore.logSuccessfulMove(move);
+				}
 
 				++numberOfMovesAccepted;
 			} else {
 				// Failed, reset state for old sequences
+				++numberOfRejectedMoves;
 				updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
 			}
 		}
