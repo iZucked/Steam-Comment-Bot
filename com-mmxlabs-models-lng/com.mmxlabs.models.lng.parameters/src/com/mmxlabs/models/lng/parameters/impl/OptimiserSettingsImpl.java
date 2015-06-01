@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.parameters.Objective;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
+import com.mmxlabs.models.lng.parameters.SimilaritySettings;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
@@ -41,6 +42,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#getArguments <em>Arguments</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#isGenerateCharterOuts <em>Generate Charter Outs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#isShippingOnly <em>Shipping Only</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#getSimilaritySettings <em>Similarity Settings</em>}</li>
  * </ul>
  * </p>
  *
@@ -176,6 +178,16 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * @ordered
 	 */
 	protected boolean shippingOnly = SHIPPING_ONLY_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getSimilaritySettings() <em>Similarity Settings</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSimilaritySettings()
+	 * @generated
+	 * @ordered
+	 */
+	protected SimilaritySettings similaritySettings;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -422,6 +434,49 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public SimilaritySettings getSimilaritySettings() {
+		return similaritySettings;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetSimilaritySettings(SimilaritySettings newSimilaritySettings, NotificationChain msgs) {
+		SimilaritySettings oldSimilaritySettings = similaritySettings;
+		similaritySettings = newSimilaritySettings;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ParametersPackage.OPTIMISER_SETTINGS__SIMILARITY_SETTINGS, oldSimilaritySettings, newSimilaritySettings);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSimilaritySettings(SimilaritySettings newSimilaritySettings) {
+		if (newSimilaritySettings != similaritySettings) {
+			NotificationChain msgs = null;
+			if (similaritySettings != null)
+				msgs = ((InternalEObject)similaritySettings).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ParametersPackage.OPTIMISER_SETTINGS__SIMILARITY_SETTINGS, null, msgs);
+			if (newSimilaritySettings != null)
+				msgs = ((InternalEObject)newSimilaritySettings).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ParametersPackage.OPTIMISER_SETTINGS__SIMILARITY_SETTINGS, null, msgs);
+			msgs = basicSetSimilaritySettings(newSimilaritySettings, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.OPTIMISER_SETTINGS__SIMILARITY_SETTINGS, newSimilaritySettings, newSimilaritySettings));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -435,6 +490,8 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 				return basicSetAnnealingSettings(null, msgs);
 			case ParametersPackage.OPTIMISER_SETTINGS__ARGUMENTS:
 				return ((InternalEList<?>)getArguments()).basicRemove(otherEnd, msgs);
+			case ParametersPackage.OPTIMISER_SETTINGS__SIMILARITY_SETTINGS:
+				return basicSetSimilaritySettings(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -465,6 +522,8 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 				return isGenerateCharterOuts();
 			case ParametersPackage.OPTIMISER_SETTINGS__SHIPPING_ONLY:
 				return isShippingOnly();
+			case ParametersPackage.OPTIMISER_SETTINGS__SIMILARITY_SETTINGS:
+				return getSimilaritySettings();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -508,6 +567,9 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 			case ParametersPackage.OPTIMISER_SETTINGS__SHIPPING_ONLY:
 				setShippingOnly((Boolean)newValue);
 				return;
+			case ParametersPackage.OPTIMISER_SETTINGS__SIMILARITY_SETTINGS:
+				setSimilaritySettings((SimilaritySettings)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -547,6 +609,9 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 			case ParametersPackage.OPTIMISER_SETTINGS__SHIPPING_ONLY:
 				setShippingOnly(SHIPPING_ONLY_EDEFAULT);
 				return;
+			case ParametersPackage.OPTIMISER_SETTINGS__SIMILARITY_SETTINGS:
+				setSimilaritySettings((SimilaritySettings)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -577,6 +642,8 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 				return generateCharterOuts != GENERATE_CHARTER_OUTS_EDEFAULT;
 			case ParametersPackage.OPTIMISER_SETTINGS__SHIPPING_ONLY:
 				return shippingOnly != SHIPPING_ONLY_EDEFAULT;
+			case ParametersPackage.OPTIMISER_SETTINGS__SIMILARITY_SETTINGS:
+				return similaritySettings != null;
 		}
 		return super.eIsSet(featureID);
 	}

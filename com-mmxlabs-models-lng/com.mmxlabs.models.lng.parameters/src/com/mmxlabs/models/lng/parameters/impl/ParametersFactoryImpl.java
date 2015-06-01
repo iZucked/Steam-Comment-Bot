@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.parameters.impl;
 
+import com.mmxlabs.models.lng.parameters.*;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -73,6 +74,7 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 			case ParametersPackage.OPTIMISATION_RANGE: return createOptimisationRange();
 			case ParametersPackage.ANNEALING_SETTINGS: return createAnnealingSettings();
 			case ParametersPackage.ARGUMENT: return createArgument();
+			case ParametersPackage.SIMILARITY_SETTINGS: return createSimilaritySettings();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -153,6 +155,16 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	public Argument createArgument() {
 		ArgumentImpl argument = new ArgumentImpl();
 		return argument;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SimilaritySettings createSimilaritySettings() {
+		SimilaritySettingsImpl similaritySettings = new SimilaritySettingsImpl();
+		return similaritySettings;
 	}
 
 	/**

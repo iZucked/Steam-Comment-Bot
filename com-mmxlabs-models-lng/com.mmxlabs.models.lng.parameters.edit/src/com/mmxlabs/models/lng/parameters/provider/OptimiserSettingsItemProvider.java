@@ -175,6 +175,7 @@ public class OptimiserSettingsItemProvider
 			childrenFeatures.add(ParametersPackage.Literals.OPTIMISER_SETTINGS__RANGE);
 			childrenFeatures.add(ParametersPackage.Literals.OPTIMISER_SETTINGS__ANNEALING_SETTINGS);
 			childrenFeatures.add(ParametersPackage.Literals.OPTIMISER_SETTINGS__ARGUMENTS);
+			childrenFeatures.add(ParametersPackage.Literals.OPTIMISER_SETTINGS__SIMILARITY_SETTINGS);
 		}
 		return childrenFeatures;
 	}
@@ -240,6 +241,7 @@ public class OptimiserSettingsItemProvider
 			case ParametersPackage.OPTIMISER_SETTINGS__RANGE:
 			case ParametersPackage.OPTIMISER_SETTINGS__ANNEALING_SETTINGS:
 			case ParametersPackage.OPTIMISER_SETTINGS__ARGUMENTS:
+			case ParametersPackage.OPTIMISER_SETTINGS__SIMILARITY_SETTINGS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -281,6 +283,11 @@ public class OptimiserSettingsItemProvider
 			(createChildParameter
 				(ParametersPackage.Literals.OPTIMISER_SETTINGS__ARGUMENTS,
 				 ParametersFactory.eINSTANCE.createArgument()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ParametersPackage.Literals.OPTIMISER_SETTINGS__SIMILARITY_SETTINGS,
+				 ParametersFactory.eINSTANCE.createSimilaritySettings()));
 	}
 
 }
