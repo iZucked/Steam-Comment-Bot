@@ -47,6 +47,10 @@ public class LNGHeadlessParameters extends HeadlessParameters {
 		
 		setParameter("lcp-set-beyond-period", 72, Integer.class, false);
 		setParameter("lcp-set-beyond-lowWeight", 1, Integer.class, false);
-		setParameter("lcp-set-beyond-highWeight", 1, Integer.class, false);		
+		setParameter("lcp-set-beyond-highWeight", 1, Integer.class, false);
+		
+		// Similarity settings
+		setParameter("similarity-thresholdNumChanges", -1, Integer.class, false);
+		
 	}
 }

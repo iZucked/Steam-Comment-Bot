@@ -44,6 +44,7 @@ import com.mmxlabs.models.lng.parameters.AnnealingSettings;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
+import com.mmxlabs.models.lng.parameters.SimilaritySettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
@@ -193,8 +194,8 @@ public class HeadlessApplication implements IApplication {
 	}
 
 	private void addLatenessExporter(final List<IRunExporter> exporters, String path, String outputFolderName) {
-		final LatenessExporter exporter = new LatenessExporter();
-		addExporter(exporters, path, outputFolderName, "latenessReport.txt", exporter);
+		final GeneralAnnotationsExporter exporter = new GeneralAnnotationsExporter();
+		addExporter(exporters, path, outputFolderName, "generalAnnotationsReport.txt", exporter);
 	}
 
 	private Module createLoggingModule() {
@@ -342,6 +343,16 @@ public class HeadlessApplication implements IApplication {
 		createDateRanges(settings, headlessParameters);
 		setLatenessParameters(settingsOverride, headlessParameters);
 		createPromptDates(rootObject, headlessParameters);
+		createSimilaritySettings(settings, headlessParameters);
+	}
+
+	private void createSimilaritySettings(OptimiserSettings settings, HeadlessParameters headlessParameters) {
+		int similarityThreshold = headlessParameters.getParameterValue("similarity-thresholdNumChanges", Integer.class);
+		if (similarityThreshold > -1) {
+			SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
+			similaritySettings.setThreshold(similarityThreshold);
+			settings.setSimilaritySettings(similaritySettings);
+		}
 	}
 
 	private void createPromptDates(LNGScenarioModel rootObject, HeadlessParameters parameters) {
