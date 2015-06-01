@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.lingo.app.headless;
 
+import java.util.Map;
+
 import org.apache.commons.cli.Options;
 
 /**
@@ -14,11 +16,46 @@ import org.apache.commons.cli.Options;
  */
 
 public final class SettingsOverride {
+	public static String[] latenessComponentParameters = new String[] {
+		"lcp-set-prompt-period",
+		"lcp-set-prompt-lowWeight",
+		"lcp-set-prompt-highWeight",
+		"lcp-set-midTerm-period",
+		"lcp-set-midTerm-lowWeight",
+		"lcp-set-midTerm-highWeight",
+		"lcp-set-beyond-period",
+		"lcp-set-beyond-lowWeight",
+		"lcp-set-beyond-highWeight",
+	};
+	
 	private int iterations = 30000;
 	private int seed = 1;
 
 	private String scenario;
 	private String output;
+	private String outputPath;
+	
+
+	private String json;
+	private String outputName;
+
+	Map<String, Integer> latenessParameterMap;
+	
+	public String getOutputName() {
+		return outputName;
+	}
+
+	public void setOutputName(String outputName) {
+		this.outputName = outputName;
+	}
+
+	public String getOutputPath() {
+		return outputPath;
+	}
+	
+	public void setOutputPath(String outputPath) {
+		this.outputPath = outputPath;
+	}
 
 	public final String getScenario() {
 		return scenario;
@@ -40,6 +77,10 @@ public final class SettingsOverride {
 		return seed;
 	}
 
+	public final String getJSON() {
+		return json;
+	}
+	
 	public final void setSeed(final int seed) {
 		this.seed = seed;
 	}
@@ -51,5 +92,17 @@ public final class SettingsOverride {
 	protected void setOutput(String output) {
 		this.output = output;
 	}
+	
+	protected void setJSON(String json) {
+		this.json = json;
+	}
+	
+	public void setlatenessParameterMap(Map<String, Integer> latenessParameterMap) {
+		this.latenessParameterMap = latenessParameterMap;
+	}
 
+	public Map<String, Integer> getlatenessParameterMap() {
+		return latenessParameterMap;
+	}
+	
 }

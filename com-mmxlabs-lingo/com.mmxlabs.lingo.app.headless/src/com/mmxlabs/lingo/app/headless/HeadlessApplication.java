@@ -6,10 +6,15 @@ package com.mmxlabs.lingo.app.headless;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Collections;
+import java.util.Date;
 import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -23,10 +28,22 @@ import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 
 import com.google.common.collect.Maps;
+import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.app.headless.exporter.FitnessTraceExporter;
 import com.mmxlabs.lingo.app.headless.exporter.IRunExporter;
+import com.mmxlabs.lingo.app.headless.utils.DoubleMap;
+import com.mmxlabs.lingo.app.headless.utils.HeadlessJSONParser;
+import com.mmxlabs.lingo.app.headless.utils.HeadlessParameters;
+import com.mmxlabs.lingo.app.headless.utils.IntegerParameter;
+import com.mmxlabs.lingo.app.headless.utils.JSONParseResult;
+import com.mmxlabs.lingo.app.headless.utils.LNGHeadlessParameters;
+import com.mmxlabs.lingo.app.headless.utils.StringParameter;
+import com.mmxlabs.models.lng.parameters.AnnealingSettings;
+import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
@@ -34,6 +51,8 @@ import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.migration.scenario.MigrationHelper;
 import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
+import com.mmxlabs.optimiser.lso.logging.LSOLogger;
+import com.mmxlabs.optimiser.lso.logging.LSOLoggingExporter;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -49,22 +68,37 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService.Module
 public class HeadlessApplication implements IApplication {
 
 	private static final String FITNESS_TRACE = "exportFitnessTrace";
-	private static final String SCENARIO = "scenario";
 	private static final String OUTPUT = "output";
-	private static final String ITERATIONS = "iterations";
-	private static final String SEED = "seed";
+	private static final String OUTPUT_PATH = "outputPath";
+	private static final String OUTPUT_NAME = "outputFolderName";
+	private static final String JSON = "json";
 
 	@Override
 	public Object start(final IApplicationContext context) throws Exception {
 
 		final List<IRunExporter> exporters = new LinkedList<IRunExporter>();
 		final String[] commandLineArgs = Platform.getCommandLineArgs();
-		final SettingsOverride settings = new SettingsOverride();
-		if (!parseOptions(commandLineArgs, settings, exporters)) {
+		final SettingsOverride overrideSettings = new SettingsOverride();
+		if (!parseOptions(commandLineArgs, overrideSettings, exporters)) {
 			return IApplication.EXIT_OK;
 		}
 
-		final String scenarioFile = settings.getScenario();
+		String jsonFilePath = overrideSettings.getJSON();
+		Pair<JSONParseResult, LNGHeadlessParameters> jsonParse = setParametersFromJSON(overrideSettings, jsonFilePath);
+		if (!jsonParse.getFirst().allRequirementsPassed()) {
+			// json parse failed
+			for (String error : jsonParse.getFirst().getRequiredMissingText()) {
+				System.err.println(error);
+			}
+			return IApplication.EXIT_OK;
+		}
+		LNGHeadlessParameters headlessParameters = jsonParse.getSecond();
+		// set output file
+		String path = overrideSettings.getOutputPath();
+		// set scenario file
+		overrideSettings.setScenario(headlessParameters.getParameter("scenario", StringParameter.class).getValue());
+
+		final String scenarioFile = overrideSettings.getScenario();
 		if (scenarioFile == null || scenarioFile.isEmpty()) {
 			System.err.println("No scenario specified");
 			return IApplication.EXIT_OK;
@@ -84,13 +118,17 @@ public class HeadlessApplication implements IApplication {
 			return IApplication.EXIT_OK;
 		}
 
-		final String outputFile = settings.getOutput();
-		{
-
-		}
+		final String outputFile = overrideSettings.getOutput();
 
 		final OptimiserSettings optimiserSettings = rootObject.getPortfolioModel().getParameters() == null ? ScenarioUtils.createDefaultSettings() : rootObject.getPortfolioModel().getParameters();
 		assert optimiserSettings != null;
+
+		updateOptimiserSettings(rootObject, optimiserSettings, overrideSettings, headlessParameters);
+
+		String outputFolderName = overrideSettings.getOutputName() == null ? getFolderNameFromSettings(optimiserSettings) : getFolderNameFromSettings(overrideSettings);
+
+		addFitnessTraceExporter(exporters, path, outputFolderName);
+		addLatenessExporter(exporters, path, outputFolderName);
 
 		final LNGScenarioRunner runner = new LNGScenarioRunner(rootObject, LNGScenarioRunner.createExtendedSettings(optimiserSettings), LNGTransformer.HINT_OPTIMISE_LSO);
 
@@ -98,26 +136,29 @@ public class HeadlessApplication implements IApplication {
 
 		// FIXME: Replace with an IParameterMode thing
 		final EnumMap<ModuleType, List<Module>> localOverrides = Maps.newEnumMap(IOptimiserInjectorService.ModuleType.class);
-		localOverrides.put(IOptimiserInjectorService.ModuleType.Module_ParametersModule, Collections.<Module> singletonList(new SettingsOverrideModule(settings)));
+		localOverrides.put(IOptimiserInjectorService.ModuleType.Module_ParametersModule, Collections.<Module> singletonList(new SettingsOverrideModule(overrideSettings)));
 
-		runner.init(monitor, null, localOverrides);
+		// Create logging module
+		Module loggingModule = createLoggingModule();
+		runner.init(monitor, loggingModule, localOverrides);
 
-		for (final IRunExporter exporter : exporters) {
-			exporter.setScenarioRunner(runner);
+		for (final IRunExporter ex : exporters) {
+			ex.setScenarioRunner(runner);
 		}
+		final long startTime = System.currentTimeMillis();
 		runner.evaluateInitialState();
-
 		System.out.println("LNGResult(");
 		System.out.println("\tscenario='" + scenarioFile + "',");
 		if (outputFile != null) {
 			System.out.println("\toutput='" + outputFile + "',");
 		}
-		System.out.println("\titerations=" + settings.getIterations() + ",");
-		System.out.println("\tseed=" + settings.getSeed() + ",");
+		System.out.println("\titerations=" + optimiserSettings.getAnnealingSettings().getIterations() + ",");
+		System.out.println("\tseed=" + optimiserSettings.getSeed() + ",");
+		System.out.println("\tcooling=" + optimiserSettings.getAnnealingSettings().getCooling() + ",");
+		System.out.println("\tepochLength=" + optimiserSettings.getAnnealingSettings().getEpochLength() + ",");
+		System.out.println("\ttemp=" + optimiserSettings.getAnnealingSettings().getInitialTemperature() + ",");
 
 		System.err.println("Starting run...");
-
-		final long startTime = System.currentTimeMillis();
 
 		runner.run();
 
@@ -127,20 +168,48 @@ public class HeadlessApplication implements IApplication {
 			System.err.println("Error optimising scenario");
 		}
 
-		System.out.println("\truntime=" + runTime / 1000 + ",");
+		System.out.println("\truntime=" + runTime + ",");
 
 		System.err.println("Optimised!");
 
 		if (outputFile != null) {
-			saveScenario(outputFile, instance);
+			saveScenario(Paths.get(path, outputFolderName, outputFile).toString(), instance);
 		}
 
-		for (final IRunExporter exporter : exporters) {
-			exporter.exportData();
-		}
+		exportData(runner.getInjector(), path, outputFolderName, exporters, jsonFilePath);
 
 		return IApplication.EXIT_OK;
 
+	}
+
+	private void addFitnessTraceExporter(final List<IRunExporter> exporters, String path, String outputFolderName) {
+		final FitnessTraceExporter exporter = new FitnessTraceExporter();
+		addExporter(exporters, path, outputFolderName, "fitnessTrace.txt", exporter);
+	}
+
+	private void addExporter(final List<IRunExporter> exporters, String path, String outputFolderName, String filename, final IRunExporter exporter) {
+		exporter.setOutputFile(Paths.get(path, outputFolderName, filename).toFile());
+		exporters.add(exporter);
+	}
+
+	private void addLatenessExporter(final List<IRunExporter> exporters, String path, String outputFolderName) {
+		final LatenessExporter exporter = new LatenessExporter();
+		addExporter(exporters, path, outputFolderName, "latenessReport.txt", exporter);
+	}
+
+	private Module createLoggingModule() {
+		LSOLogger lsoLogger = new LSOLogger(1000);
+		LoggingModule loggingModule = new LoggingModule(lsoLogger);
+		return loggingModule;
+	}
+
+	private Pair<JSONParseResult, LNGHeadlessParameters> setParametersFromJSON(final SettingsOverride settings, String json) {
+		LNGHeadlessParameters headlessParameters = new LNGHeadlessParameters();
+		HeadlessJSONParser headlessJSONParser = new HeadlessJSONParser();
+		Map<String, Pair<Object, Class<?>>> parsed = headlessJSONParser.parseJSON(json);
+		JSONParseResult result = headlessParameters.setParametersFromJSON(parsed);
+
+		return new Pair<>(result, headlessParameters);
 	}
 
 	private ScenarioInstance loadScenario(final String scenarioFile) throws IOException {
@@ -173,9 +242,9 @@ public class HeadlessApplication implements IApplication {
 		final Options options = new Options();
 
 		options.addOption(OptionBuilder.withLongOpt(OUTPUT).withDescription("Output scenario file").hasArg().create());
-		options.addOption(OptionBuilder.withLongOpt(SCENARIO).withDescription("Input scenario file").hasArg().isRequired().create());
-		options.addOption(ITERATIONS, true, "Number of iterations");
-		options.addOption(SEED, true, "Random seed");
+		options.addOption(OptionBuilder.withLongOpt(OUTPUT_PATH).withDescription("Path to directory for output files").hasArg().isRequired().create());
+		options.addOption(OptionBuilder.withLongOpt(OUTPUT_NAME).withDescription("Output folder name (e.g. job number, datetime, uuid)").hasArg().create());
+		options.addOption(JSON, true, "json");
 
 		// Options for OSGi/Eclipse compat - not used, but needs to be specified
 		options.addOption("application", true, "(OSGi) Application ID");
@@ -234,23 +303,19 @@ public class HeadlessApplication implements IApplication {
 		final CommandLineParser parser = new PosixParser();
 		try {
 			final CommandLine line = parser.parse(options, commandLineArgs);
-			if (line.hasOption(SCENARIO)) {
-				settings.setScenario(line.getOptionValue(SCENARIO));
-			}
 			if (line.hasOption(OUTPUT)) {
 				settings.setOutput(line.getOptionValue(OUTPUT));
 			}
-			if (line.hasOption(ITERATIONS)) {
-				settings.setIterations(Integer.parseInt(line.getOptionValue(ITERATIONS)));
+			if (line.hasOption(OUTPUT_PATH)) {
+				settings.setOutputPath(line.getOptionValue(OUTPUT_PATH));
 			}
-			if (line.hasOption(SEED)) {
-				settings.setIterations(Integer.parseInt(line.getOptionValue(SEED)));
+			if (line.hasOption(JSON)) {
+				settings.setJSON(line.getOptionValue(JSON));
 			}
-			if (line.hasOption(FITNESS_TRACE)) {
-				final FitnessTraceExporter exporter = new FitnessTraceExporter();
-				exporter.setOutputFile(new File(line.getOptionValue(FITNESS_TRACE)));
-				exporters.add(exporter);
+			if (line.hasOption(OUTPUT_NAME)) {
+				settings.setOutputName(line.getOptionValue(OUTPUT_NAME));
 			}
+
 		} catch (final ParseException ex) {
 			System.err.println("Bad option : " + ex.getMessage());
 			final HelpFormatter formatter = new HelpFormatter();
@@ -259,5 +324,104 @@ public class HeadlessApplication implements IApplication {
 		}
 
 		return true;
+	}
+
+	private void updateOptimiserSettings(LNGScenarioModel rootObject, OptimiserSettings settings, SettingsOverride settingsOverride, HeadlessParameters headlessParameters) {
+		// standard settings
+		settings.setSeed(headlessParameters.getParameter("seed", IntegerParameter.class).getValue());
+		// LSO settings
+		AnnealingSettings annealingSettings = settings.getAnnealingSettings();
+		annealingSettings.setInitialTemperature(headlessParameters.getParameterValue("sa-temperature", Integer.class));
+		annealingSettings.setEpochLength(headlessParameters.getParameterValue("sa-epoch-length", Integer.class));
+		annealingSettings.setIterations(headlessParameters.getParameterValue("iterations", Integer.class));
+		annealingSettings.setCooling(headlessParameters.getParameterValue("sa-cooling", Double.class));
+		// Scenario settings
+		settings.setShippingOnly(headlessParameters.getParameterValue("shippingonly-optimisation", Boolean.class));
+		settings.setGenerateCharterOuts(headlessParameters.getParameterValue("generatedcharterouts-optimisation", Boolean.class));
+		createObjectives(settings, headlessParameters.getParameterValue("objectives", DoubleMap.class));
+		createDateRanges(settings, headlessParameters);
+		setLatenessParameters(settingsOverride, headlessParameters);
+		createPromptDates(rootObject, headlessParameters);
+	}
+
+	private void createPromptDates(LNGScenarioModel rootObject, HeadlessParameters parameters) {
+		Date promptStart = parameters.getParameterValue("promptStart", Date.class);
+		Date promptEnd = parameters.getParameterValue("promptEnd", Date.class);
+		if (promptStart != null) {
+			rootObject.getPortfolioModel().setPromptPeriodStart(promptStart);
+		} else {
+			rootObject.getPortfolioModel().unsetPromptPeriodStart();
+		}
+		if (promptEnd != null) {
+			rootObject.getPortfolioModel().setPromptPeriodEnd(promptEnd);
+		} else {
+			rootObject.getPortfolioModel().unsetPromptPeriodEnd();
+		}
+	}
+
+	private void setLatenessParameters(SettingsOverride overrideSettings, HeadlessParameters headlessParameters) {
+		Map<String, Integer> latenessParameterMap = new HashMap<String, Integer>();
+		for (String latenessKey : SettingsOverride.latenessComponentParameters) {
+			latenessParameterMap.put(latenessKey, headlessParameters.getParameterValue(latenessKey, Integer.class));
+		}
+		overrideSettings.setlatenessParameterMap(latenessParameterMap);
+	}
+
+	private void createDateRanges(OptimiserSettings settings, HeadlessParameters headlessParameters) {
+		Date dateBefore = headlessParameters.getParameterValue("periodOptimisationDateBefore", Date.class);
+		Date dateAfter = headlessParameters.getParameterValue("periodOptimisationDateAfter", Date.class);
+		final OptimisationRange range = ParametersFactory.eINSTANCE.createOptimisationRange();
+		if (dateBefore != null) {
+			range.setOptimiseBefore(dateBefore);
+		}
+		if (dateAfter != null) {
+			range.setOptimiseAfter(dateAfter);
+		}
+		settings.setRange(range);
+	}
+
+	private void createObjectives(OptimiserSettings settings, DoubleMap doubleMap) {
+		ParametersFactory parametersFactory = ParametersFactory.eINSTANCE;
+		settings.getObjectives().clear();
+		for (String objectiveName : doubleMap.getDoubleMap().keySet()) {
+			settings.getObjectives().add(ScenarioUtils.createObjective(parametersFactory, objectiveName, doubleMap.getDoubleMap().get(objectiveName)));
+		}
+	}
+
+	private String getFolderNameFromSettings(OptimiserSettings settings) {
+		Map<String, Object> nameMap = getSettingsFileNameMap(settings);
+		String name = "";
+		int count = 0;
+		for (String key : nameMap.keySet()) {
+			name += String.format("%s-%s%s", key, nameMap.get(key), ++count < nameMap.size() ? "-" : "");
+		}
+		return name;
+	}
+
+	private String getFolderNameFromSettings(SettingsOverride settings) {
+		return settings.getOutputName();
+	}
+
+	private Map<String, Object> getSettingsFileNameMap(OptimiserSettings settings) {
+		Map<String, Object> nameMap = new LinkedHashMap<>();
+		nameMap.put("seed", settings.getSeed());
+		nameMap.put("iterations", settings.getAnnealingSettings().getIterations());
+		nameMap.put("temperature", settings.getAnnealingSettings().getInitialTemperature());
+		nameMap.put("epochLength", settings.getAnnealingSettings().getEpochLength());
+		nameMap.put("cooling", settings.getAnnealingSettings().getCooling());
+		nameMap.put("shippingOnly", settings.isShippingOnly());
+		nameMap.put("gco", settings.isGenerateCharterOuts());
+		return nameMap;
+	}
+
+	private void exportData(Injector injector, String path, String foldername, List<IRunExporter> exporters, String jsonFilePath) {
+		// first export logging data
+		LSOLoggingExporter lsoLoggingExporter = new LSOLoggingExporter(path, foldername);
+		injector.injectMembers(lsoLoggingExporter);
+		lsoLoggingExporter.exportData("best-fitness", "current-fitness");
+		for (final IRunExporter exporter : exporters) {
+			exporter.exportData();
+		}
+		HeadlessJSONParser.copyJSONFile(jsonFilePath, Paths.get(path, foldername, "parameters.json").toString());
 	}
 }
