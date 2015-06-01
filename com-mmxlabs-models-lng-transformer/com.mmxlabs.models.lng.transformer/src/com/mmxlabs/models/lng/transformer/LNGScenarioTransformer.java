@@ -364,16 +364,12 @@ public class LNGScenarioTransformer {
 
 		timeZoneToUtcOffsetProvider.setTimeZeroInMillis(earliestTime.getTime());
 
-		Date startP = DateAndCurveHelper.createDate(2015, 2, 01, 0, "UTC");
-		Date endP = DateAndCurveHelper.createDate(2015, 5, 01, 0, "UTC");
-//		if (rootObject.getPortfolioModel().isSetPromptPeriodStart()) {
-//			promptPeriodProviderEditor.setStartOfPromptPeriod(dateHelper.convertTime(rootObject.getPortfolioModel().getPromptPeriodStart()));
-//		}
-//		if (rootObject.getPortfolioModel().isSetPromptPeriodEnd()) {
-//			promptPeriodProviderEditor.setEndOfPromptPeriod(dateHelper.convertTime(rootObject.getPortfolioModel().getPromptPeriodEnd()));
-//		}
-		promptPeriodProviderEditor.setStartOfPromptPeriod(dateHelper.convertTime(startP));
-		promptPeriodProviderEditor.setEndOfPromptPeriod(dateHelper.convertTime(endP));
+		if (rootObject.getPortfolioModel().isSetPromptPeriodStart()) {
+			promptPeriodProviderEditor.setStartOfPromptPeriod(dateHelper.convertTime(rootObject.getPortfolioModel().getPromptPeriodStart()));
+		}
+		if (rootObject.getPortfolioModel().isSetPromptPeriodEnd()) {
+			promptPeriodProviderEditor.setEndOfPromptPeriod(dateHelper.convertTime(rootObject.getPortfolioModel().getPromptPeriodEnd()));
+		}
 		
 		/**
 		 * First, create all the market curves (should these come through the builder?)

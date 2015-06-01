@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.parameters.Objective;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
+import com.mmxlabs.models.lng.parameters.SimilaritySettings;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRequirementConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
@@ -30,6 +31,7 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.TimeSortConstraintChecke
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.VirtualVesselConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
+import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCoreFactory;
 
 /**
  * Utility class for handling scenarios.
@@ -92,15 +94,6 @@ public class ScenarioUtils {
 		// create objectives
 		{
 			final EList<Objective> objectives = settings.getObjectives();
-			// objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.CHARTER_COST_COMPONENT_NAME, 1));
-			// objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.COST_BASE_COMPONENT_NAME, 1));
-			//
-			// objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.COST_COOLDOWN_COMPONENT_NAME, 1));
-			// objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.COST_LNG_COMPONENT_NAME, 1));
-			// objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.ROUTE_PRICE_COMPONENT_NAME, 1));
-			//
-			// objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.CHARTER_REVENUE_COMPONENT_NAME, 1));
-
 			objectives.add(createObjective(parametersFactory, "cargo-scheduler-group-profit", 1));
 
 			objectives.add(createObjective(parametersFactory, CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME, 1));
@@ -109,7 +102,6 @@ public class ScenarioUtils {
 		}
 
 		final AnnealingSettings annealingSettings = parametersFactory.createAnnealingSettings();
-		// annealingSettings.setIterations(200000);
 		annealingSettings.setIterations(80000);
 		annealingSettings.setCooling(0.85);
 		annealingSettings.setEpochLength(10000);
@@ -120,6 +112,10 @@ public class ScenarioUtils {
 		final OptimisationRange range = parametersFactory.createOptimisationRange();
 		settings.setRange(range);
 		settings.setSeed(0);
+		
+		// similarity
+		SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
+		settings.setSimilaritySettings(similaritySettings);
 		return settings;
 	}
 }

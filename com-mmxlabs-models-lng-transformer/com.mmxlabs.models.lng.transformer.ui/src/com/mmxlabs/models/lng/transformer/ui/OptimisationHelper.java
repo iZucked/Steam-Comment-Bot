@@ -329,5 +329,8 @@ public final class OptimisationHelper {
 		to.getAnnealingSettings().setIterations(from.getAnnealingSettings().getIterations());
 		to.setShippingOnly(from.isShippingOnly());
 		to.setGenerateCharterOuts(from.isGenerateCharterOuts());
+		if (from.getSimilaritySettings()!=null) {
+			to.setSimilaritySettings(from.getSimilaritySettings());
+		}
 	}
 }
