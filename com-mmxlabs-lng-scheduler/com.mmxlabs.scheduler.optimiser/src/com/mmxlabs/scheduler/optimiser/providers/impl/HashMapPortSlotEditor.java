@@ -10,6 +10,7 @@ import java.util.Map;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public final class HashMapPortSlotEditor implements IPortSlotProviderEditor {
 
@@ -35,6 +36,15 @@ public final class HashMapPortSlotEditor implements IPortSlotProviderEditor {
 	public ISequenceElement getElement(final IPortSlot portSlot) {
 		if (elementMap.containsKey(portSlot)) {
 			return elementMap.get(portSlot);
+		}
+		return null;
+	}
+
+	@Override
+	public PortType getPortTypeFromElement(ISequenceElement element) {
+		IPortSlot slot = getPortSlot(element);
+		if (slot != null) {
+			return slot.getPortType();
 		}
 		return null;
 	}

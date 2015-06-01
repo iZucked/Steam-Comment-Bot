@@ -31,6 +31,7 @@ public final class SchedulerConstants {
 	public static final String AI_profitAndLoss = "element-profit-and-loss";
 	public static final String AI_profitAndLossSlotDetails = "element-profit-and-loss-slot-details";
 	public static final String AI_latenessInfo = "info-lateness";
+	public static final String AI_similarityDifferences = "info-similarity-changes";
 
 	/**
 	 * A key for a per-route fitness map, which should be of type {@code Map<IResource, Map<String, Long>}. Each element in the map should map fitness function names to fitness values.

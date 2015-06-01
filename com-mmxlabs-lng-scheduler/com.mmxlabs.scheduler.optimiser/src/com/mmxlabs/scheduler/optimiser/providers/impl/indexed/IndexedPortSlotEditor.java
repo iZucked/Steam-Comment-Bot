@@ -11,6 +11,7 @@ import com.mmxlabs.common.indexedobjects.impl.ArrayIndexMap;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public final class IndexedPortSlotEditor implements IPortSlotProviderEditor {
 	private final IIndexMap<ISequenceElement, IPortSlot> slots = new ArrayIndexMap<ISequenceElement, IPortSlot>();
@@ -33,4 +34,14 @@ public final class IndexedPortSlotEditor implements IPortSlotProviderEditor {
 		slots.set(element, portSlot);
 		elements.put(portSlot, element);
 	}
+	
+	@Override
+	public PortType getPortTypeFromElement(ISequenceElement element) {
+		IPortSlot slot = getPortSlot(element);
+		if (slot != null) {
+			return slot.getPortType();
+		}
+		return null;
+	}
+
 }
