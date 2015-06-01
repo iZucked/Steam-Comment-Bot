@@ -26,6 +26,9 @@ import com.mmxlabs.optimiser.lso.IThresholder;
 import com.mmxlabs.optimiser.lso.impl.thresholders.GeometricThresholder;
 import com.mmxlabs.optimiser.lso.modules.LinearFitnessEvaluatorModule;
 import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.EnumeratingSequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.lso.SequencesConstrainedMoveGeneratorUnit;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
@@ -109,6 +112,24 @@ public class OptimiserSettingsModule extends AbstractModule {
 		return settings.getSeed();
 	}
 
+	@Provides
+	@Named(EnumeratingSequenceScheduler.OPTIMISER_REEVALUATE)
+	private boolean isOptimiserReevaluating() {
+		return false;
+	}
+	
+	@Provides
+	@Named(SequencesConstrainedMoveGeneratorUnit.OPTIMISER_ENABLE_FOUR_OPT_2)
+	private boolean enableFourOpt2() {
+		return false;
+	}
+	
+	@Provides
+	@Named(TravelTimeConstraintChecker.OPTIMISER_START_ELEMENT_FIX)
+	private boolean enableStartOfSequenceFix() {
+		return false;
+	}
+	
 	@Provides
 	@Named(LocalSearchOptimiserModule.LSO_NUMBER_OF_ITERATIONS)
 	private int getNumberOfIterations(final OptimiserSettings settings) {

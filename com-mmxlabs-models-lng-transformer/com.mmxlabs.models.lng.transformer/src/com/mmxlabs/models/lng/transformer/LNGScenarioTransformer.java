@@ -364,13 +364,17 @@ public class LNGScenarioTransformer {
 
 		timeZoneToUtcOffsetProvider.setTimeZeroInMillis(earliestTime.getTime());
 
-		if (rootObject.getPortfolioModel().isSetPromptPeriodStart()) {
-			promptPeriodProviderEditor.setStartOfPromptPeriod(dateHelper.convertTime(rootObject.getPortfolioModel().getPromptPeriodStart()));
-		}
-		if (rootObject.getPortfolioModel().isSetPromptPeriodEnd()) {
-			promptPeriodProviderEditor.setEndOfPromptPeriod(dateHelper.convertTime(rootObject.getPortfolioModel().getPromptPeriodEnd()));
-		}
-
+		Date startP = DateAndCurveHelper.createDate(2015, 2, 01, 0, "UTC");
+		Date endP = DateAndCurveHelper.createDate(2015, 5, 01, 0, "UTC");
+//		if (rootObject.getPortfolioModel().isSetPromptPeriodStart()) {
+//			promptPeriodProviderEditor.setStartOfPromptPeriod(dateHelper.convertTime(rootObject.getPortfolioModel().getPromptPeriodStart()));
+//		}
+//		if (rootObject.getPortfolioModel().isSetPromptPeriodEnd()) {
+//			promptPeriodProviderEditor.setEndOfPromptPeriod(dateHelper.convertTime(rootObject.getPortfolioModel().getPromptPeriodEnd()));
+//		}
+		promptPeriodProviderEditor.setStartOfPromptPeriod(dateHelper.convertTime(startP));
+		promptPeriodProviderEditor.setEndOfPromptPeriod(dateHelper.convertTime(endP));
+		
 		/**
 		 * First, create all the market curves (should these come through the builder?)
 		 */
@@ -1167,7 +1171,7 @@ public class LNGScenarioTransformer {
 		usedIDStrings.add(dischargeSlot.getName());
 
 		final ITimeWindow dischargeWindow = builder.createTimeWindow(convertTime(earliestTime, dischargeSlot.getWindowStartWithSlotOrPortTimeWithFlex()),
-				convertTime(earliestTime, dischargeSlot.getWindowEndWithSlotOrPortTimeWithFlex()));
+				convertTime(earliestTime, dischargeSlot.getWindowEndWithSlotOrPortTimeWithFlex()), dischargeSlot.getWindowFlex());
 
 		final ISalesPriceCalculator dischargePriceCalculator;
 
@@ -1330,7 +1334,7 @@ public class LNGScenarioTransformer {
 		usedIDStrings.add(loadSlot.getName());
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(convertTime(earliestTime, loadSlot.getWindowStartWithSlotOrPortTimeWithFlex()),
-				convertTime(earliestTime, loadSlot.getWindowEndWithSlotOrPortTimeWithFlex()));
+				convertTime(earliestTime, loadSlot.getWindowEndWithSlotOrPortTimeWithFlex()), loadSlot.getWindowFlex());
 
 		final ILoadPriceCalculator loadPriceCalculator;
 		final boolean isSpot = (loadSlot instanceof SpotSlot);

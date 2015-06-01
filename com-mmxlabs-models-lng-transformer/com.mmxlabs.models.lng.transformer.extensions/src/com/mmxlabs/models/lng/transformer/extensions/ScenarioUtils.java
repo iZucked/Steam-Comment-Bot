@@ -41,14 +41,14 @@ public class ScenarioUtils {
 
 	private static final boolean SPOT_TO_SPOT_CONSTRAINT = false;
 
-	private static Constraint createConstraint(ParametersFactory parametersFactory, String name, boolean enabled) {
+	public static Constraint createConstraint(ParametersFactory parametersFactory, String name, boolean enabled) {
 		Constraint c = parametersFactory.createConstraint();
 		c.setName(name);
 		c.setEnabled(enabled);
 		return c;
 	}
 
-	private static Objective createObjective(ParametersFactory of, String name, double weight) {
+	public static Objective createObjective(ParametersFactory of, String name, double weight) {
 		Objective o = of.createObjective();
 		o.setName(name);
 		o.setWeight(weight);
@@ -119,6 +119,7 @@ public class ScenarioUtils {
 
 		final OptimisationRange range = parametersFactory.createOptimisationRange();
 		settings.setRange(range);
+		settings.setSeed(0);
 		return settings;
 	}
 }
