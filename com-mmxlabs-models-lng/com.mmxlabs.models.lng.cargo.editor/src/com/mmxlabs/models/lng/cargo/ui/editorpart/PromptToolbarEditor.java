@@ -4,10 +4,6 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
-
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.Notification;
@@ -28,6 +24,7 @@ import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
+import org.joda.time.LocalDate;
 
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -77,12 +74,12 @@ public class PromptToolbarEditor extends ControlContribution {
 		public void notifyChanged(final Notification notification) {
 			final Object newValue = notification.getNewValue();
 			if (notification.getFeature() == LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodStart()) {
-				final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 				if (newValue != null) {
-					cal.setTime((Date) newValue);
-					periodStartEditor.setYear(cal.get(Calendar.YEAR));
-					periodStartEditor.setMonth(cal.get(Calendar.MONTH));
-					periodStartEditor.setDay(cal.get(Calendar.DAY_OF_MONTH));
+
+					final LocalDate date = (LocalDate) newValue;
+					periodStartEditor.setYear(date.getYear());
+					periodStartEditor.setMonth(date.getMonthOfYear() - 1);
+					periodStartEditor.setDay(date.getDayOfMonth());
 					periodStartEditor.setEnabled(true);
 					periodStartEnabled.setSelection(true);
 
@@ -91,12 +88,11 @@ public class PromptToolbarEditor extends ControlContribution {
 					periodStartEnabled.setSelection(false);
 				}
 			} else if (notification.getFeature() == LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodEnd()) {
-				final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 				if (newValue != null) {
-					cal.setTime((Date) newValue);
-					periodEndEditor.setYear(cal.get(Calendar.YEAR));
-					periodEndEditor.setMonth(cal.get(Calendar.MONTH));
-					periodEndEditor.setDay(cal.get(Calendar.DAY_OF_MONTH));
+					final LocalDate date = (LocalDate) newValue;
+					periodEndEditor.setYear(date.getYear());
+					periodEndEditor.setMonth(date.getMonthOfYear() - 1);
+					periodEndEditor.setDay(date.getDayOfMonth());
 					periodEndEditor.setEnabled(true);
 					periodEndEnabled.setSelection(true);
 				} else {
@@ -132,11 +128,8 @@ public class PromptToolbarEditor extends ControlContribution {
 			public void widgetSelected(final SelectionEvent e) {
 
 				if (periodStartEnabled.getSelection()) {
-					final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-					cal.set(Calendar.MILLISECOND, 0);
-					cal.set(Calendar.SECOND, 0);
-					cal.set(Calendar.MINUTE, 0);
-					final Command cmd = SetCommand.create(editingDomain, rootObject.getPortfolioModel(), LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodStart(), cal.getTime());
+					final LocalDate date = new LocalDate();
+					final Command cmd = SetCommand.create(editingDomain, rootObject.getPortfolioModel(), LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodStart(), date);
 					editingDomain.getCommandStack().execute(cmd);
 					periodStartEditor.setEnabled(true);
 				} else {
@@ -159,11 +152,10 @@ public class PromptToolbarEditor extends ControlContribution {
 		{
 			final LNGPortfolioModel portfolioModel = rootObject.getPortfolioModel();
 			if (portfolioModel.isSetPromptPeriodStart()) {
-				final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-				cal.setTime(portfolioModel.getPromptPeriodStart());
-				periodStartEditor.setYear(cal.get(Calendar.YEAR));
-				periodStartEditor.setMonth(cal.get(Calendar.MONTH));
-				periodStartEditor.setDay(cal.get(Calendar.DAY_OF_MONTH));
+				final LocalDate date = portfolioModel.getPromptPeriodStart();
+				periodStartEditor.setYear(date.getYear());
+				periodStartEditor.setMonth(date.getMonthOfYear() - 1);
+				periodStartEditor.setDay(date.getDayOfMonth());
 				periodStartEnabled.setSelection(true);
 			} else {
 				periodStartEditor.setEnabled(false);
@@ -175,12 +167,8 @@ public class PromptToolbarEditor extends ControlContribution {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 
-				final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-				cal.clear();
-				cal.set(Calendar.YEAR, periodStartEditor.getYear());
-				cal.set(Calendar.MONTH, periodStartEditor.getMonth());
-				cal.set(Calendar.DAY_OF_MONTH, periodStartEditor.getDay());
-				final Command cmd = SetCommand.create(editingDomain, rootObject.getPortfolioModel(), LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodStart(), cal.getTime());
+				final LocalDate date = new LocalDate(periodStartEditor.getYear(), periodStartEditor.getMonth() + 1, periodStartEditor.getDay());
+				final Command cmd = SetCommand.create(editingDomain, rootObject.getPortfolioModel(), LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodStart(), date);
 				editingDomain.getCommandStack().execute(cmd);
 			}
 
@@ -198,11 +186,8 @@ public class PromptToolbarEditor extends ControlContribution {
 			public void widgetSelected(final SelectionEvent e) {
 
 				if (periodEndEnabled.getSelection()) {
-					final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-					cal.set(Calendar.MILLISECOND, 0);
-					cal.set(Calendar.SECOND, 0);
-					cal.set(Calendar.MINUTE, 0);
-					final Command cmd = SetCommand.create(editingDomain, rootObject.getPortfolioModel(), LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodEnd(), cal.getTime());
+					final LocalDate date = new LocalDate();
+					final Command cmd = SetCommand.create(editingDomain, rootObject.getPortfolioModel(), LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodEnd(), date);
 					editingDomain.getCommandStack().execute(cmd);
 					periodEndEditor.setEnabled(true);
 				} else {
@@ -225,11 +210,10 @@ public class PromptToolbarEditor extends ControlContribution {
 		{
 			final LNGPortfolioModel portfolioModel = rootObject.getPortfolioModel();
 			if (portfolioModel.isSetPromptPeriodEnd()) {
-				final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-				cal.setTime(portfolioModel.getPromptPeriodEnd());
-				periodEndEditor.setYear(cal.get(Calendar.YEAR));
-				periodEndEditor.setMonth(cal.get(Calendar.MONTH));
-				periodEndEditor.setDay(cal.get(Calendar.DAY_OF_MONTH));
+				final LocalDate date = portfolioModel.getPromptPeriodEnd();
+				periodEndEditor.setYear(date.getYear());
+				periodEndEditor.setMonth(date.getMonthOfYear() - 1);
+				periodEndEditor.setDay(date.getDayOfMonth());
 				periodEndEnabled.setSelection(true);
 			} else {
 				periodEndEditor.setEnabled(false);
@@ -240,12 +224,8 @@ public class PromptToolbarEditor extends ControlContribution {
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-				cal.clear();
-				cal.set(Calendar.YEAR, periodEndEditor.getYear());
-				cal.set(Calendar.MONTH, periodEndEditor.getMonth());
-				cal.set(Calendar.DAY_OF_MONTH, periodEndEditor.getDay());
-				final Command cmd = SetCommand.create(editingDomain, rootObject.getPortfolioModel(), LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodEnd(), cal.getTime());
+				final LocalDate date = new LocalDate(periodEndEditor.getYear(), periodEndEditor.getMonth() + 1, periodEndEditor.getDay());
+				final Command cmd = SetCommand.create(editingDomain, rootObject.getPortfolioModel(), LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodEnd(), date);
 				editingDomain.getCommandStack().execute(cmd);
 			}
 
@@ -263,16 +243,11 @@ public class PromptToolbarEditor extends ControlContribution {
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-				cal.set(Calendar.MILLISECOND, 0);
-				cal.set(Calendar.SECOND, 0);
-				cal.set(Calendar.MINUTE, 0);
+				final LocalDate date = new LocalDate();
 				final CompoundCommand cc = new CompoundCommand("Set prompt");
-				cc.append(SetCommand.create(editingDomain, rootObject.getPortfolioModel(), LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodStart(), cal.getTime()));
-				cal.add(Calendar.DAY_OF_MONTH, 90);
-				cc.append(SetCommand.create(editingDomain, rootObject.getPortfolioModel(), LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodEnd(), cal.getTime()));
+				cc.append(SetCommand.create(editingDomain, rootObject.getPortfolioModel(), LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodStart(), date));
+				cc.append(SetCommand.create(editingDomain, rootObject.getPortfolioModel(), LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodEnd(), date.plusDays(90)));
 				editingDomain.getCommandStack().execute(cc);
-
 			}
 
 			@Override

@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.joda.time.LocalDate;
 import com.mmxlabs.models.lng.actuals.ActualsModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
@@ -89,7 +90,7 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 	 * @generated
 	 * @ordered
 	 */
-	protected static final Date PROMPT_PERIOD_START_EDEFAULT = null;
+	protected static final LocalDate PROMPT_PERIOD_START_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getPromptPeriodStart() <em>Prompt Period Start</em>}' attribute.
@@ -99,7 +100,7 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 	 * @generated
 	 * @ordered
 	 */
-	protected Date promptPeriodStart = PROMPT_PERIOD_START_EDEFAULT;
+	protected LocalDate promptPeriodStart = PROMPT_PERIOD_START_EDEFAULT;
 
 	/**
 	 * This is true if the Prompt Period Start attribute has been set.
@@ -118,7 +119,7 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 	 * @generated
 	 * @ordered
 	 */
-	protected static final Date PROMPT_PERIOD_END_EDEFAULT = null;
+	protected static final LocalDate PROMPT_PERIOD_END_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getPromptPeriodEnd() <em>Prompt Period End</em>}' attribute.
@@ -128,7 +129,7 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 	 * @generated
 	 * @ordered
 	 */
-	protected Date promptPeriodEnd = PROMPT_PERIOD_END_EDEFAULT;
+	protected LocalDate promptPeriodEnd = PROMPT_PERIOD_END_EDEFAULT;
 
 	/**
 	 * This is true if the Prompt Period End attribute has been set.
@@ -427,7 +428,7 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Date getPromptPeriodStart() {
+	public LocalDate getPromptPeriodStart() {
 		return promptPeriodStart;
 	}
 
@@ -436,8 +437,8 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setPromptPeriodStart(Date newPromptPeriodStart) {
-		Date oldPromptPeriodStart = promptPeriodStart;
+	public void setPromptPeriodStart(LocalDate newPromptPeriodStart) {
+		LocalDate oldPromptPeriodStart = promptPeriodStart;
 		promptPeriodStart = newPromptPeriodStart;
 		boolean oldPromptPeriodStartESet = promptPeriodStartESet;
 		promptPeriodStartESet = true;
@@ -451,7 +452,7 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 	 * @generated
 	 */
 	public void unsetPromptPeriodStart() {
-		Date oldPromptPeriodStart = promptPeriodStart;
+		LocalDate oldPromptPeriodStart = promptPeriodStart;
 		boolean oldPromptPeriodStartESet = promptPeriodStartESet;
 		promptPeriodStart = PROMPT_PERIOD_START_EDEFAULT;
 		promptPeriodStartESet = false;
@@ -473,7 +474,7 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Date getPromptPeriodEnd() {
+	public LocalDate getPromptPeriodEnd() {
 		return promptPeriodEnd;
 	}
 
@@ -482,8 +483,8 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setPromptPeriodEnd(Date newPromptPeriodEnd) {
-		Date oldPromptPeriodEnd = promptPeriodEnd;
+	public void setPromptPeriodEnd(LocalDate newPromptPeriodEnd) {
+		LocalDate oldPromptPeriodEnd = promptPeriodEnd;
 		promptPeriodEnd = newPromptPeriodEnd;
 		boolean oldPromptPeriodEndESet = promptPeriodEndESet;
 		promptPeriodEndESet = true;
@@ -497,7 +498,7 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 	 * @generated
 	 */
 	public void unsetPromptPeriodEnd() {
-		Date oldPromptPeriodEnd = promptPeriodEnd;
+		LocalDate oldPromptPeriodEnd = promptPeriodEnd;
 		boolean oldPromptPeriodEndESet = promptPeriodEndESet;
 		promptPeriodEnd = PROMPT_PERIOD_END_EDEFAULT;
 		promptPeriodEndESet = false;
@@ -583,10 +584,10 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 				setActualsModel((ActualsModel)newValue);
 				return;
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__PROMPT_PERIOD_START:
-				setPromptPeriodStart((Date)newValue);
+				setPromptPeriodStart((LocalDate)newValue);
 				return;
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__PROMPT_PERIOD_END:
-				setPromptPeriodEnd((Date)newValue);
+				setPromptPeriodEnd((LocalDate)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);

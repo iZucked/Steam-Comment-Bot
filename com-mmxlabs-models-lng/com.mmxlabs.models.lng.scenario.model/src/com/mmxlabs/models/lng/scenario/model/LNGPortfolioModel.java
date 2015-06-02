@@ -12,6 +12,7 @@ import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import java.util.Date;
+import org.joda.time.LocalDate;
 
 /**
  * <!-- begin-user-doc -->
@@ -150,12 +151,12 @@ public interface LNGPortfolioModel extends UUIDObject {
 	 * @return the value of the '<em>Prompt Period Start</em>' attribute.
 	 * @see #isSetPromptPeriodStart()
 	 * @see #unsetPromptPeriodStart()
-	 * @see #setPromptPeriodStart(Date)
+	 * @see #setPromptPeriodStart(LocalDate)
 	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGPortfolioModel_PromptPeriodStart()
-	 * @model unsettable="true"
+	 * @model unsettable="true" dataType="com.mmxlabs.models.datetime.LocalDate"
 	 * @generated
 	 */
-	Date getPromptPeriodStart();
+	LocalDate getPromptPeriodStart();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getPromptPeriodStart <em>Prompt Period Start</em>}' attribute.
@@ -167,7 +168,7 @@ public interface LNGPortfolioModel extends UUIDObject {
 	 * @see #getPromptPeriodStart()
 	 * @generated
 	 */
-	void setPromptPeriodStart(Date value);
+	void setPromptPeriodStart(LocalDate value);
 
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getPromptPeriodStart <em>Prompt Period Start</em>}' attribute.
@@ -175,7 +176,7 @@ public interface LNGPortfolioModel extends UUIDObject {
 	 * <!-- end-user-doc -->
 	 * @see #isSetPromptPeriodStart()
 	 * @see #getPromptPeriodStart()
-	 * @see #setPromptPeriodStart(Date)
+	 * @see #setPromptPeriodStart(LocalDate)
 	 * @generated
 	 */
 	void unsetPromptPeriodStart();
@@ -187,7 +188,7 @@ public interface LNGPortfolioModel extends UUIDObject {
 	 * @return whether the value of the '<em>Prompt Period Start</em>' attribute is set.
 	 * @see #unsetPromptPeriodStart()
 	 * @see #getPromptPeriodStart()
-	 * @see #setPromptPeriodStart(Date)
+	 * @see #setPromptPeriodStart(LocalDate)
 	 * @generated
 	 */
 	boolean isSetPromptPeriodStart();
@@ -203,12 +204,12 @@ public interface LNGPortfolioModel extends UUIDObject {
 	 * @return the value of the '<em>Prompt Period End</em>' attribute.
 	 * @see #isSetPromptPeriodEnd()
 	 * @see #unsetPromptPeriodEnd()
-	 * @see #setPromptPeriodEnd(Date)
+	 * @see #setPromptPeriodEnd(LocalDate)
 	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGPortfolioModel_PromptPeriodEnd()
-	 * @model unsettable="true"
+	 * @model unsettable="true" dataType="com.mmxlabs.models.datetime.LocalDate"
 	 * @generated
 	 */
-	Date getPromptPeriodEnd();
+	LocalDate getPromptPeriodEnd();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getPromptPeriodEnd <em>Prompt Period End</em>}' attribute.
@@ -220,7 +221,7 @@ public interface LNGPortfolioModel extends UUIDObject {
 	 * @see #getPromptPeriodEnd()
 	 * @generated
 	 */
-	void setPromptPeriodEnd(Date value);
+	void setPromptPeriodEnd(LocalDate value);
 
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getPromptPeriodEnd <em>Prompt Period End</em>}' attribute.
@@ -228,7 +229,7 @@ public interface LNGPortfolioModel extends UUIDObject {
 	 * <!-- end-user-doc -->
 	 * @see #isSetPromptPeriodEnd()
 	 * @see #getPromptPeriodEnd()
-	 * @see #setPromptPeriodEnd(Date)
+	 * @see #setPromptPeriodEnd(LocalDate)
 	 * @generated
 	 */
 	void unsetPromptPeriodEnd();
@@ -240,7 +241,7 @@ public interface LNGPortfolioModel extends UUIDObject {
 	 * @return whether the value of the '<em>Prompt Period End</em>' attribute is set.
 	 * @see #unsetPromptPeriodEnd()
 	 * @see #getPromptPeriodEnd()
-	 * @see #setPromptPeriodEnd(Date)
+	 * @see #setPromptPeriodEnd(LocalDate)
 	 * @generated
 	 */
 	boolean isSetPromptPeriodEnd();
