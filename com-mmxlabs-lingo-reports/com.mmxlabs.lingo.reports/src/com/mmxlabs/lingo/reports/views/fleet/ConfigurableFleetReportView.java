@@ -76,7 +76,7 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 
 	@Inject
 	public ConfigurableFleetReportView(final FleetBasedReportBuilder builder) {
-		super(ID);
+		super("com.mmxlabs.lingo.doc.Report_VesselSummary");
 
 		// Setup the builder hooks.
 		this.builder = builder;

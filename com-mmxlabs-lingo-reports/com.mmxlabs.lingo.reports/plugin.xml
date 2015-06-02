@@ -148,19 +148,6 @@
        </view>
    </extension>
    <extension
-         point="org.eclipse.help.contexts">
-      <contexts
-            file="contexts.xml">
-      </contexts>
-   </extension>
-   <extension
-         point="org.eclipse.help.toc">
-      <toc
-            file="toc.xml"
-            primary="false">
-      </toc>
-   </extension>
-   <extension
          point="org.ops4j.peaberry.eclipse.modules">
       <module
             class="com.mmxlabs.lingo.reports.components.ReportComponentModule">

@@ -62,7 +62,7 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 	@Inject
 	public PortRotationReportView(final PortRotationBasedReportBuilder builder) {
 
-		super("com.mmxlabs.shiplingo.platform.reports.PortRotationReportView");
+		super("com.mmxlabs.lingo.doc.Reports_PortRotationReportView");
 		this.builder = builder;
 		builder.setBlockManager(getBlockManager());
 		builder.setReport(this);

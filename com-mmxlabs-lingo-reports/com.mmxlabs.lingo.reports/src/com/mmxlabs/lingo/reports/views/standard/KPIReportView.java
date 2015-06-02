@@ -309,7 +309,7 @@ public class KPIReportView extends ViewPart {
 //		});
 
 		// Create the help context id for the viewer's control
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.demo.reports.KPIReportView");
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Reports_KPI");
 		makeActions();
 		hookContextMenu();
 		contributeToActionBars();

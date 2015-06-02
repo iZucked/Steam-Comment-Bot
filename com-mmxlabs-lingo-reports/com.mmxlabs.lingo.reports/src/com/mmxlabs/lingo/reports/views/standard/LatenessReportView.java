@@ -42,7 +42,7 @@ public class LatenessReportView extends EMFReportView {
 	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.LatenessReportView";
 
 	public LatenessReportView() {
-		super();
+		super("com.mmxlabs.lingo.doc.Reports_Lateness");
 		addColumn("schedule", "Schedule", ColumnType.MULTIPLE, containingScheduleFormatter);
 
 		final SchedulePackage sp = SchedulePackage.eINSTANCE;

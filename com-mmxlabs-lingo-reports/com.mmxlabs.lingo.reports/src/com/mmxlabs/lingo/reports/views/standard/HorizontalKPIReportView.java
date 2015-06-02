@@ -263,6 +263,7 @@ public class HorizontalKPIReportView extends ViewPart {
 	 * The constructor.
 	 */
 	public HorizontalKPIReportView() {
+
 	}
 
 	/**
@@ -312,7 +313,7 @@ public class HorizontalKPIReportView extends ViewPart {
 		viewer.getGrid().setHeaderVisible(false);
 
 		// Create the help context id for the viewer's control
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), ID);
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Reports_Headline");
 
 		partListener = new IPartListener() {
 			@Override

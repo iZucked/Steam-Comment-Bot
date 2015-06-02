@@ -67,6 +67,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 	private Action copyTableAction;
 
 	private ScenarioViewerSynchronizer viewerSynchronizer;
+	private String helpContextId;
 
 	// private SimpleContentAndColumnProvider<T> contentProvider;
 
@@ -125,8 +126,11 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 
 	/**
 	 * The constructor.
+	 * 
+	 * @param helpContextId
 	 */
-	public SimpleTabularReportView() {
+	public SimpleTabularReportView(String helpContextId) {
+		this.helpContextId = helpContextId;
 	}
 
 	private void addSortSelectionListener(final GridColumn column, final ColumnManager<T> value) {
@@ -252,7 +256,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 		});
 
 		// Create the help context id for the viewer's control
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.demo.reports.TotalsReportView");
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), helpContextId);
 		makeActions();
 		hookContextMenu();
 		contributeToActionBars();

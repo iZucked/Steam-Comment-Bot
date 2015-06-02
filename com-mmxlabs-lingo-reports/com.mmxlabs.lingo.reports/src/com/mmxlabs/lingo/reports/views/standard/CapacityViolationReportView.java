@@ -65,7 +65,7 @@ public class CapacityViolationReportView extends EMFReportView {
 	private EReference ref_Row_Owner;
 
 	public CapacityViolationReportView() {
-		super();
+		super("com.mmxlabs.lingo.doc.Reports_CapacityViolations");
 
 		createDataModel();
 

@@ -82,10 +82,6 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 	private final ColumnBlockManager blockManager = new ColumnBlockManager();
 
-	protected EMFReportView() {
-		this(null);
-	}
-
 	protected EMFReportView(final String helpContextId) {
 		this.helpContextId = helpContextId;
 	}

@@ -49,7 +49,7 @@ public class CooldownReportView extends EMFReportView {
 	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.CooldownReportView";
 
 	public CooldownReportView() {
-		super("com.mmxlabs.shiplingo.platform.reports.CooldownReportView");
+		super("com.mmxlabs.lingo.doc.Reports_Cooldown");
 
 		addColumn("schedule", "Schedule", ColumnType.MULTIPLE, containingScheduleFormatter);
 		addColumn("vessel", "Vessel", ColumnType.NORMAL, Formatters.objectFormatter, MMXCorePackage.eINSTANCE.getMMXObject__EContainerOp(), SchedulePackage.eINSTANCE.getSequence__GetName());

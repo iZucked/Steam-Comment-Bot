@@ -18,6 +18,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.lingo.reports.internal.Activator;
@@ -79,6 +80,8 @@ public class PNLDetailsReport extends DetailPropertiesView {
 		getViewSite().getActionBars().updateActionBars();
 
 		updateFromSelection();
+
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Reports_PNLDetails");
 	}
 
 	@Override

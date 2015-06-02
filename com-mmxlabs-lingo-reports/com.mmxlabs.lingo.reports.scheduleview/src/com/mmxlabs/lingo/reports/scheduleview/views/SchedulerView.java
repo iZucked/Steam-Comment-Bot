@@ -588,7 +588,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 
 		// Create the help context id for the viewer's control. This is in the
 		// format of pluginid.contextId
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.shiplingo.platform.scheduleview.SchedulerViewer");
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Reports_ScheduleChart");
 
 		makeActions();
 		hookContextMenu();

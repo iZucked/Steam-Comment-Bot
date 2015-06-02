@@ -34,6 +34,11 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  * @author Simon McGregor
  */
 public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrackingReportView.VolumeData> {
+
+	public VolumeTrackingReportView() {
+		super("com.mmxlabs.lingo.doc.Reports_VolumeTracking");
+	}
+
 	@SuppressWarnings("serial")
 	public final Map<Contract, CumulativeMap<Integer>> overallVolumes = new AutoInitialisingMap<Contract, CumulativeMap<Integer>>() {
 		@Override

@@ -355,13 +355,14 @@ public class TotalsHierarchyView extends ViewPart {
 		if (portCosts.getChildCount() > 0) {
 			top.addChild(portCosts);
 		}
-		
+
 		// Finally do charter cost
 		final TreeData charterCosts = new TreeData("Charter In");
 		top.addChild(charterCosts);
 
 		for (final Sequence seq : schedule.getSequences()) {
-			if (seq.isFleetVessel()) continue;
+			if (seq.isFleetVessel())
+				continue;
 			long acc = 0;
 			for (final Event e : seq.getEvents()) {
 				acc += e.getCharterCost();
@@ -492,7 +493,7 @@ public class TotalsHierarchyView extends ViewPart {
 		viewer.setInput(null);
 
 		// Create the help context id for the viewer's control
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.demo.reports.TotalsHierarchyView");
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Reports_CostBreakdown");
 		makeActions();
 		hookContextMenu();
 		contributeToActionBars();

@@ -314,7 +314,7 @@ public class TotalsReportView extends ViewPart {
 		});
 
 		// Create the help context id for the viewer's control
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.demo.reports.TotalsReportView");
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Reports_Totals");
 		makeActions();
 		hookContextMenu();
 		contributeToActionBars();

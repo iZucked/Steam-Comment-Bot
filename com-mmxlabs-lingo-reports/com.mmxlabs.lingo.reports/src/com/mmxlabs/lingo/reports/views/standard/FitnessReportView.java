@@ -295,7 +295,7 @@ public class FitnessReportView extends ViewPart {
 		});
 
 		// Create the help context id for the viewer's control
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.demo.reports.FitnessReportView");
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Reports_Fitness");
 		makeActions();
 		hookContextMenu();
 		contributeToActionBars();

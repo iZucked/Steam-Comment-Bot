@@ -24,7 +24,11 @@ import com.mmxlabs.models.lng.schedule.Schedule;
  */
 public class ExposureReportView extends SimpleTabularReportView<IndexExposureData> {
 	public final Map<String, Map<YearMonth, Double>> overallExposures = new HashMap<String, Map<YearMonth, Double>>();
-
+	
+	public ExposureReportView() {
+		super("com.mmxlabs.lingo.doc.Reports_IndexExposures");
+	}
+	
 	@Override
 	protected SimpleContentAndColumnProvider<IndexExposureData> createContentProvider() {
 		// TODO Auto-generated method stub
