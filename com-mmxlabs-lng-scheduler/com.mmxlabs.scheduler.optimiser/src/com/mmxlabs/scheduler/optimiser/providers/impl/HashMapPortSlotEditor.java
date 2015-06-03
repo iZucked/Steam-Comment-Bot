@@ -43,7 +43,7 @@ public final class HashMapPortSlotEditor implements IPortSlotProviderEditor {
 		if (elementMap.containsKey(portSlot)) {
 			return elementMap.get(portSlot);
 		}
-		return null;
+		throw new IllegalArgumentException("Unknown port slot");
 	}
 
 	@Override

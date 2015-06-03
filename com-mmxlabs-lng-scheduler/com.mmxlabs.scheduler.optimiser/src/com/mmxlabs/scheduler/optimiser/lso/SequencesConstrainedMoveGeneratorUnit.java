@@ -55,7 +55,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 		} else {
 			FOUR_OPT2_MOVES = 1;
 		}
-		System.out.println("FOUR_OPT2_MOVES:"+FOUR_OPT2_MOVES);
+//		System.out.println("FOUR_OPT2_MOVES:"+FOUR_OPT2_MOVES);
 	}
 		
 	final ConstrainedMoveGenerator owner;
