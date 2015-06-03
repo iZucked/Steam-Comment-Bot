@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.shiro.SecurityUtils;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -111,7 +112,9 @@ public class LNGTransformer {
 			}
 		}
 		if (optimiserSettings.isGenerateCharterOuts()) {
-			hints.add(HINT_GENERATE_CHARTER_OUTS);
+			if (SecurityUtils.getSubject().isPermitted("features:optimisation-charter-out-generation")) {
+				hints.add(HINT_GENERATE_CHARTER_OUTS);
+			}
 		}
 
 		{

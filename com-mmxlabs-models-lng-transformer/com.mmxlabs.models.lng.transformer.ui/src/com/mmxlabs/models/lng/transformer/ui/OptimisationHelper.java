@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.transformer.ui;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.apache.shiro.SecurityUtils;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.ecore.EObject;
@@ -268,17 +269,24 @@ public final class OptimisationHelper {
 
 			dialog.addOption(DataSection.Main, null, editingDomian, "Shipping Only Optimisation", copy, defaultSettings, DataType.Boolean,
 					ParametersPackage.eINSTANCE.getOptimiserSettings_ShippingOnly());
-			dialog.addOption(DataSection.Main, null, editingDomian, "Generate Charter Outs", copy, defaultSettings, DataType.Boolean,
-					ParametersPackage.eINSTANCE.getOptimiserSettings_GenerateCharterOuts());
+
+			if (SecurityUtils.getSubject().isPermitted("features:optimisation-charter-out-generation")) {
+				dialog.addOption(DataSection.Main, null, editingDomian, "Generate Charter Outs", copy, defaultSettings, DataType.Boolean,
+						ParametersPackage.eINSTANCE.getOptimiserSettings_GenerateCharterOuts());
+			}
 
 			if (!forEvaluation) {
 				// dialog.addOption(DataSection.Advanced, editingDomian, "Number of Iterations", copy, defaultSettings, DataType.PositiveInt,
 				// ParametersPackage.eINSTANCE.getOptimiserSettings_AnnealingSettings(), ParametersPackage.eINSTANCE.getAnnealingSettings_Iterations());
-				final OptionGroup group = dialog.createGroup(DataSection.Main, "Optimise between");
-				dialog.addOption(DataSection.Main, group, editingDomian, "Start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear, ParametersPackage.eINSTANCE.getOptimiserSettings_Range(),
-						ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
-				dialog.addOption(DataSection.Main, group, editingDomian, "Up to start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear, ParametersPackage.eINSTANCE.getOptimiserSettings_Range(),
-						ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseBefore());
+
+				// Check period optimisation is permitted
+				if (SecurityUtils.getSubject().isPermitted("features:optimisation-period")) {
+					final OptionGroup group = dialog.createGroup(DataSection.Main, "Optimise between");
+					dialog.addOption(DataSection.Main, group, editingDomian, "Start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear, ParametersPackage.eINSTANCE.getOptimiserSettings_Range(),
+							ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
+					dialog.addOption(DataSection.Main, group, editingDomian, "Up to start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear,
+							ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseBefore());
+				}
 			}
 
 			final int[] ret = new int[1];
@@ -327,7 +335,11 @@ public final class OptimisationHelper {
 		}
 
 		to.getAnnealingSettings().setIterations(from.getAnnealingSettings().getIterations());
+
 		to.setShippingOnly(from.isShippingOnly());
 		to.setGenerateCharterOuts(from.isGenerateCharterOuts());
+		if (from.getSimilaritySettings()!=null) {
+			to.setSimilaritySettings(from.getSimilaritySettings());
+		}
 	}
 }
