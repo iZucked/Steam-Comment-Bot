@@ -108,7 +108,7 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected void updateControl() {
-		if (combo.isDisposed()) {
+		if (combo == null || combo.isDisposed()) {
 			return;
 		}
 		final List<Pair<String, EObject>> values = valueProvider != null ? valueProvider.getAllowedValues(input, feature) : Collections.<Pair<String, EObject>> emptyList();
@@ -134,7 +134,7 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected void updateValueDisplay(final Object value) {
-		if (combo.isDisposed()) {
+		if (combo == null || combo.isDisposed()) {
 			return;
 		}
 		final int curIndex = valueList.indexOf(value);

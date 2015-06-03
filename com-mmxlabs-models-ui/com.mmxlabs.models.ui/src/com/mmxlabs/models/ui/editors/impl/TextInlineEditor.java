@@ -75,7 +75,7 @@ public class TextInlineEditor extends UnsettableInlineEditor {
 	protected void setControlsEnabled(final boolean enabled) {
 		final boolean controlsEnabled = !isFeatureReadonly() && enabled;
 
-		if (!text.isDisposed()) {
+		if (text != null && !text.isDisposed()) {
 			text.setEnabled(controlsEnabled);
 		}
 
