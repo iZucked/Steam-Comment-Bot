@@ -499,6 +499,7 @@ public class FileScenarioService extends AbstractScenarioService {
 				resource.load(options);
 				resourceExisted = true;
 			} catch (final IOException ex2) {
+				// FIXME: We can also get here on a clean workspace start up where the models have not yet been created.
 				log.error("Error reading both main and backup scenario service models.", ex2);
 			} finally {
 				// Restore original URI for saves later on
