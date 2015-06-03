@@ -10,7 +10,7 @@
    <extension
          point="com.mmxlabs.models.migration.MigrationContext">
       <MigrationContext
-            latestVersion="33"
+            latestVersion="34"
             name="com.mmxlabs.lingo">
       </MigrationContext>
    </extension>
@@ -255,25 +255,32 @@
              to="30">
        </MigrationUnit>
        <MigrationUnit
-             class="com.mmxlabs.models.lng.migration.units.MigrateToV32"
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV31"
              context="com.mmxlabs.lingo"
              from="30"
              id="com.mmxlabs.models.lng.migration.units.MigrateToV31"
              to="31">
        </MigrationUnit>              
        <MigrationUnit
-             class="com.mmxlabs.models.lng.migration.units.MigrateToV33"
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV32"
              context="com.mmxlabs.lingo"
              from="31"
              id="com.mmxlabs.models.lng.migration.units.MigrateToV32"
              to="32">
        </MigrationUnit>              
        <MigrationUnit
-             class="com.mmxlabs.models.lng.migration.units.MigrateToV34"
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV33"
              context="com.mmxlabs.lingo"
              from="32"
              id="com.mmxlabs.models.lng.migration.units.MigrateToV33"
              to="33">
+       </MigrationUnit>              
+       <MigrationUnit
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV34"
+             context="com.mmxlabs.lingo"
+             from="33"
+             id="com.mmxlabs.models.lng.migration.units.MigrateToV34"
+             to="34">
        </MigrationUnit>              
    </extension>
 </plugin>
