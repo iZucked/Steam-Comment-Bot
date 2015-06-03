@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.core;
 
+import java.util.List;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -41,6 +43,12 @@ public interface IAnnotatedSolution {
 	@Nullable
 	<U> U getGeneralAnnotation(@NonNull String key, @NonNull Class<U> clz);
 
+	/**
+	 * Get all general annotation keys
+	 * @return
+	 */
+	List<String> getGeneralAnnotationKeys();
+	
 	/**
 	 * Set a general annotation.
 	 * 
