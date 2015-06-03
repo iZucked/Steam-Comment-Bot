@@ -35,6 +35,7 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -157,6 +158,8 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 		// getMenuManager().update(true);
 
 		defaultSetTitle("Ports");
+
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Editor_Ports");
 	}
 
 	protected Action createImportAction() {

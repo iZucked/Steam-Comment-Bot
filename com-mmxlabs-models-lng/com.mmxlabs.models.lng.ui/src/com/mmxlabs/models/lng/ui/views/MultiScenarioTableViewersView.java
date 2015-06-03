@@ -107,7 +107,7 @@ public abstract class MultiScenarioTableViewersView extends ScenarioInstanceView
 
 	abstract protected EReference[][] getPaneRootPaths();
 
-	private void initViewerPanes(final List<ScenarioTableViewerPane> panes) {
+	protected void initViewerPanes(final List<ScenarioTableViewerPane> panes) {
 
 		final EditingDomain domain = getEditingDomain();
 		final EReference[][] references = getPaneRootPaths();

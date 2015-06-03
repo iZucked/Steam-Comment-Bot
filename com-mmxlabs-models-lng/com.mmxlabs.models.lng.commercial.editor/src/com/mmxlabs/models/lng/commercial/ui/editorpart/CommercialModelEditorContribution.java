@@ -12,6 +12,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
@@ -57,6 +58,11 @@ public class CommercialModelEditorContribution extends BaseJointModelEditorContr
 
 		pageNumber = editorPart.addPage(sash);
 		editorPart.setPageText(pageNumber, "Commercial");
+
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(purchaseContractEditorPane.getControl(), "com.mmxlabs.lingo.doc.Editor_Commercial");
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(salesContractEditorPane.getControl(), "com.mmxlabs.lingo.doc.Editor_Commercial");
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(entityEditorPane.getControl(), "com.mmxlabs.lingo.doc.Editor_Commercial");
+
 	}
 
 	@Override

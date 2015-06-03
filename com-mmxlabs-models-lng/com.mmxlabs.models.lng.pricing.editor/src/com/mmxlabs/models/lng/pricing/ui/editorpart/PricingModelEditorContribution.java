@@ -10,6 +10,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 import com.mmxlabs.models.lng.pricing.CharterIndex;
@@ -35,6 +36,8 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 
 		indexPage = editorPart.addPage(indexPane.getControl());
 		editorPart.setPageText(indexPage, "Markets");
+
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(indexPane.getControl(), "com.mmxlabs.lingo.doc.Editor_Markets");
 	}
 
 	@Override

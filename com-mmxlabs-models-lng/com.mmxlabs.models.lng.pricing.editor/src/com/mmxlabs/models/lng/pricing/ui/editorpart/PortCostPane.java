@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.pricing.PortCost;
@@ -40,7 +41,7 @@ import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
  * Pricing model pane.
  * 
  * @author hinton
- *
+ * 
  */
 public class PortCostPane extends ScenarioTableViewerPane {
 	public PortCostPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location, final IActionBars actionBars) {
@@ -50,46 +51,44 @@ public class PortCostPane extends ScenarioTableViewerPane {
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
 		super.init(path, adapterFactory, commandStack);
-		
-		addTypicalColumn("Ports", new MultipleReferenceManipulator(
-				PricingPackage.eINSTANCE.getPortCost_Ports(),
-				getReferenceValueProviderCache(),
-				getEditingDomain(),
-				MMXCorePackage.eINSTANCE.getNamedObject_Name()));
-		
+
+		addTypicalColumn("Ports",
+				new MultipleReferenceManipulator(PricingPackage.eINSTANCE.getPortCost_Ports(), getReferenceValueProviderCache(), getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()));
+
 		addTypicalColumn("Reference Capacity", new NumericAttributeManipulator(PricingPackage.eINSTANCE.getPortCost_ReferenceCapacity(), getEditingDomain()));
 
 		addTypicalColumn("Loading Fee", new PortCostManipulator(PortCapability.LOAD));
-		addTypicalColumn("Discharging Fee",  new PortCostManipulator(PortCapability.DISCHARGE));
-		
+		addTypicalColumn("Discharging Fee", new PortCostManipulator(PortCapability.DISCHARGE));
+
 		defaultSetTitle("Port Costs");
+
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Editor_PortCosts");
 	}
-	
+
 	private class PortCostManipulator implements ICellRenderer, ICellManipulator {
 		private PortCapability activity;
 
 		public PortCostManipulator(final PortCapability activity) {
 			this.activity = activity;
 		}
-		
+
 		@Override
 		public void setValue(Object object, Object value) {
 			final PortCost def = (PortCost) object;
-			
+
 			for (final PortCostEntry entry : def.getEntries()) {
 				if (entry.getActivity() == activity) {
 					getEditingDomain().getCommandStack().execute(SetCommand.create(getEditingDomain(), entry, PricingPackage.eINSTANCE.getPortCostEntry_Cost(), value));
 					return;
 				}
 			}
-			
+
 			final PortCostEntry addedEntry = PricingFactory.eINSTANCE.createPortCostEntry();
-			
+
 			addedEntry.setActivity(activity);
 			addedEntry.setCost((Integer) value);
-			
-			getEditingDomain().getCommandStack().execute(
-					AddCommand.create(getEditingDomain(), def, PricingPackage.eINSTANCE.getPortCost_Entries(), addedEntry));
+
+			getEditingDomain().getCommandStack().execute(AddCommand.create(getEditingDomain(), def, PricingPackage.eINSTANCE.getPortCost_Entries(), addedEntry));
 		}
 
 		@Override
@@ -106,11 +105,12 @@ public class PortCostPane extends ScenarioTableViewerPane {
 		@Override
 		public Object getValue(Object object) {
 			final PortCost def = (PortCost) object;
-			
+
 			for (final PortCostEntry entry : def.getEntries()) {
-				if (entry.getActivity() == activity) return entry.getCost();
+				if (entry.getActivity() == activity)
+					return entry.getCost();
 			}
-			
+
 			return 0;
 		}
 
@@ -138,6 +138,6 @@ public class PortCostPane extends ScenarioTableViewerPane {
 		public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(Object object) {
 			return Collections.emptyList();
 		}
-		
+
 	}
 }

@@ -10,6 +10,7 @@ import java.util.List;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
@@ -31,7 +32,7 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
  */
 public class VesselAndClassView extends MultiScenarioTableViewersView {
 
-	private EReference[][] rootPaths = new EReference[][] { new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_FleetModel(), FleetPackage.eINSTANCE.getFleetModel_Vessels() },
+	private final EReference[][] rootPaths = new EReference[][] { new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_FleetModel(), FleetPackage.eINSTANCE.getFleetModel_Vessels() },
 			new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_FleetModel(), FleetPackage.eINSTANCE.getFleetModel_VesselClasses() } };
 
 	private VesselClassViewerPane vesselClassViewerPane;
@@ -41,10 +42,20 @@ public class VesselAndClassView extends MultiScenarioTableViewersView {
 		vesselViewerPane = new VesselViewerPane_View(getSite().getPage(), this, this, getViewSite().getActionBars());
 		vesselClassViewerPane = new VesselClassViewerPane(getSite().getPage(), this, this, getViewSite().getActionBars());
 
-		List<ScenarioTableViewerPane> result = new LinkedList<ScenarioTableViewerPane>();
+		final List<ScenarioTableViewerPane> result = new LinkedList<ScenarioTableViewerPane>();
 		result.add(vesselViewerPane);
 		result.add(vesselClassViewerPane);
+
 		return result;
+	}
+
+	@Override
+	protected void initViewerPanes(final List<ScenarioTableViewerPane> panes) {
+		super.initViewerPanes(panes);
+		// Currently no separate help.
+		for (final ScenarioTableViewerPane p : panes) {
+			PlatformUI.getWorkbench().getHelpSystem().setHelp(p.getControl(), "com.mmxlabs.lingo.doc.Editor_Vessels");
+		}
 	}
 
 	@Override

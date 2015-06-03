@@ -9,7 +9,9 @@ package com.mmxlabs.models.lng.commercial.ui.displaycomposites;
  * All rights reserved.
  */
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -28,6 +30,12 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 		super(parent, style, toolkit);
 
 		this.topOfPane = top;
+
+	}
+
+	@Override
+	protected void setDefaultHelpContext(EObject object) {
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(this, "com.mmxlabs.lingo.doc.DataModel_lng_commercial_Contract");
 	}
 
 	@Override

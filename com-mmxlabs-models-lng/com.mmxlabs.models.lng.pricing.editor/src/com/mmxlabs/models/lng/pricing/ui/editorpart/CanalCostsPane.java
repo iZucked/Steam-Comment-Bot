@@ -14,6 +14,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Route;
@@ -75,6 +76,9 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 		addTypicalColumn("Ballast Toll", new NumericAttributeManipulator(PricingPackage.Literals.ROUTE_COST__BALLAST_COST, ed));
 
 		defaultSetTitle("Canal Costs");
+
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Editor_CanalCosts");
+
 	}
 
 	@Override

@@ -13,6 +13,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.PlatformUI;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -67,6 +68,11 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 
 		eventPage = editorPart.addPage(sash);
 		editorPart.setPageText(eventPage, "Fleet");
+		
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(tradesViewer.getControl(), "com.mmxlabs.lingo.doc.Editor_Trades");
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(vesselViewerPane.getControl(), "com.mmxlabs.lingo.doc.Editor_Fleet");
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(eventViewerPane.getControl(), "com.mmxlabs.lingo.doc.Editor_Fleet");
+		
 	}
 
 	@Override

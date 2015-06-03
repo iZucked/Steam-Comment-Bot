@@ -25,6 +25,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Layout;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -55,7 +56,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	private static final EStructuralFeature WindowStart = CargoFeatures.getSlot_WindowStart();
 	private static final EStructuralFeature WindowStartTime = CargoFeatures.getSlot_WindowStartTime();
 	private static final EStructuralFeature WindowSize = CargoFeatures.getSlot_WindowSize();
-	private static final EStructuralFeature WindowFlex= CargoFeatures.getSlot_WindowFlex();
+	private static final EStructuralFeature WindowFlex = CargoFeatures.getSlot_WindowFlex();
 	private static final EStructuralFeature Contract = CargoFeatures.getSlot_Contract();
 	private static final EStructuralFeature PriceExpression = CargoFeatures.getSlot_PriceExpression();
 	private static final EClass SlotContractParams = CommercialPackage.eINSTANCE.getSlotContractParams();
@@ -259,6 +260,8 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		}
 
 		contentComposite = toolkit.createComposite(this);
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(contentComposite, "com.mmxlabs.lingo.doc.DataModel_lng_cargo_Slot");
+
 		final Layout l = layoutProvider.createDetailLayout(root, object);
 		// contentComposite.setLayout(new GridLayout(2, false));
 
@@ -290,12 +293,15 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		}
 
 		makeExpandable(dialogContext, root, object, dbc, esPricing, pricingFeatures, pricingTitleFeatures, false);
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(esPricing.ec, "com.mmxlabs.lingo.doc.DataModel_lng_cargo_Slot_Pricing");
 
 		createSpacer();
 		makeExpandable(dialogContext, root, object, dbc, esWindow, windowFeatures, windowTitleFeatures, false);
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(esWindow.ec, "com.mmxlabs.lingo.doc.DataModel_lng_cargo_Slot_Window");
 
 		createSpacer();
 		makeExpandable(dialogContext, root, object, dbc, esTerms, isLoad ? loadTermsFeatures : dischargeTermsFeatures, null, false);
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(esTerms.ec, "com.mmxlabs.lingo.doc.DataModel_lng_cargo_Slot_Terms");
 
 		if (!missedFeaturesList.isEmpty()) {
 

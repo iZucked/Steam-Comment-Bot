@@ -12,6 +12,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -59,6 +60,10 @@ public class SpotMarketsModelEditorContribution extends BaseJointModelEditorCont
 				.getEditingDomain().getCommandStack());
 		charterOutMarketPane.getViewer().setInput(modelObject);
 
+
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(charterInMarketPane.getControl(), "com.mmxlabs.lingo.doc.Editor_SpotCharters");
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(charterOutMarketPane.getControl(), "com.mmxlabs.lingo.doc.Editor_SpotCharters");
+		
 		indexPage = editorPart.addPage(sash);
 		editorPart.setPageText(indexPage, "Charters");
 	}
@@ -97,6 +102,12 @@ public class SpotMarketsModelEditorContribution extends BaseJointModelEditorCont
 
 		spotCargoMarketsPage = editorPart.addPage(sash);
 		editorPart.setPageText(spotCargoMarketsPage, "Spot Cargoes");
+		
+
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(fobPurchasesPane.getControl(), "com.mmxlabs.lingo.doc.Editor_SpotCargoes");
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(desPurchasePane.getControl(), "com.mmxlabs.lingo.doc.Editor_SpotCargoes");
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(desSalesPane.getControl(), "com.mmxlabs.lingo.doc.Editor_SpotCargoes");
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(fobSalesPane.getControl(), "com.mmxlabs.lingo.doc.Editor_SpotCargoes");
 	}
 
 	@Override

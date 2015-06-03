@@ -81,9 +81,10 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 		// addTypicalColumn("Ballast Fuel Usage", new VSAManipulator(FleetPackage.eINSTANCE.getVesselClass_BallastAttributes(), editingDomain));
 
 		setTitle("Vessel Classes", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
+
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Editor_VesselClasses");
 	}
 
-					
 	class BaseFuelEditorAction extends AbstractMenuAction {
 		public BaseFuelEditorAction() {
 			super("Base Fuels");
@@ -97,7 +98,7 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 		protected void populate(final Menu menu) {
 			final MMXRootObject rootObject = jointModelEditor.getRootObject();
 			if (rootObject instanceof LNGScenarioModel) {
-				final FleetModel fleetModel = ((LNGScenarioModel)rootObject).getFleetModel();
+				final FleetModel fleetModel = ((LNGScenarioModel) rootObject).getFleetModel();
 				boolean b = false;
 				for (final BaseFuel baseFuel : fleetModel.getBaseFuels()) {
 					b = true;

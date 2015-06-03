@@ -30,6 +30,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.PlatformUI;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.port.PortGroup;
@@ -57,7 +58,6 @@ public class PortGroupView extends ScenarioInstanceView {
 	public void createPartControl(final Composite parent) {
 		sash = new SashForm(parent, SWT.HORIZONTAL);
 		listenToScenarioSelection();
-
 	}
 
 	@Override
