@@ -39,24 +39,31 @@ public class ParameterModesRegistry implements IParameterModesRegistry {
 
 	@Inject
 	public void init(@NonNull final Iterable<ParameterModeExtension> parameterModeExtensions, @NonNull final Iterable<ParameterModeExtenderExtension> parameterModeExtenderExtensions) {
+		// Something needs to bind the parameters types to trigger the watchers in ParameterModesExtensionModule, and as we are the class that needs the watchers, we trigger the bind.
+		// The watcher will trigger all the items in the list now and any future items also, so we do not need to process the iterables here.
+	}
 
-		for (final ParameterModeExtension ext : parameterModeExtensions) {
-			if (ext != null) {
-				final ParameterModeCustomiserProxy proxy = new ParameterModeCustomiserProxy(ext);
-				final String name = ext.getName();
-				if (name != null) {
-					registerParameterMode(name, proxy);
-				}
-
-			}
+	/**
+	 * Register an {@link ParameterModeExtension} with this registry
+	 * 
+	 * @param unit
+	 */
+	public void registerParameterMode(@NonNull final ParameterModeExtension ext) {
+		final ParameterModeCustomiserProxy proxy = new ParameterModeCustomiserProxy(ext);
+		final String name = ext.getName();
+		if (name != null) {
+			registerParameterMode(name, proxy);
 		}
+	}
 
-		for (final ParameterModeExtenderExtension ext : parameterModeExtenderExtensions) {
-			if (ext != null) {
-				final ParameterModeExtenderProxy proxy = new ParameterModeExtenderProxy(ext);
-				registerExtender(proxy);
-			}
-		}
+	/**
+	 * Register an {@link ParameterModeExtenderExtension} with this registry
+	 * 
+	 * @param unit
+	 */
+	public void registerExtender(@NonNull final ParameterModeExtenderExtension ext) {
+		final ParameterModeExtenderProxy proxy = new ParameterModeExtenderProxy(ext);
+		registerExtender(proxy);
 	}
 
 	/**
@@ -99,5 +106,4 @@ public class ParameterModesRegistry implements IParameterModesRegistry {
 	public Collection<IParameterModeExtender> getExtenders() {
 		return extenders;
 	}
-
 }

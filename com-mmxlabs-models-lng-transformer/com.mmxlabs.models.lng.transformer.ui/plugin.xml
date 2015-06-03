@@ -443,10 +443,12 @@
                id="com.mmxlabs.models.lng.transformer.ui.parametermodes.preset.ShippingOnlyMode"
                name="Shipping Only">
          </ParameterMode>
-         <ParameterMode
-               class="com.mmxlabs.models.lng.transformer.ui.parametermodes.preset.GenerateCharterOutsMode"
-               id="com.mmxlabs.models.lng.transformer.ui.parametermodes.preset.GenerateCharterOutsMode"
-               name="Charter Out Generation">
-         </ParameterMode>
+      </extension>
+      <extension
+            point="com.mmxlabs.license.features.PluginXMLEnablement">
+         <PluginXMLEnablement
+               feature="optimisation-charter-out-generation"
+               plugin.xml="gco.plugin.xml">
+         </PluginXMLEnablement>
       </extension>
 </plugin>

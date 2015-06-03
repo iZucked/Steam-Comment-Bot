@@ -6,6 +6,8 @@ package com.mmxlabs.models.lng.transformer.inject.modules;
 
 import java.util.Collection;
 
+import org.apache.shiro.SecurityUtils;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.Singleton;
@@ -40,7 +42,7 @@ public class EvaluationModule extends AbstractModule {
 
 		// Register default implementations
 		bind(IEntityValueCalculator.class).to(DefaultEntityValueCalculator.class);
-		
+
 		bind(VoyagePlanStartDateCharterRateCalculator.class).in(Singleton.class);
 		bind(ICharterRateCalculator.class).to(VoyagePlanStartDateCharterRateCalculator.class);
 
@@ -51,13 +53,18 @@ public class EvaluationModule extends AbstractModule {
 		bind(DefaultDivertableDESShippingTimesCalculator.class).in(Singleton.class);
 
 		if (hints != null) {
-			for (final String hint : hints) {
-				if (LNGTransformer.HINT_GENERATE_CHARTER_OUTS.equals(hint)) {
-					bind(IGeneratedCharterOutEvaluator.class).to(DefaultGeneratedCharterOutEvaluator.class);
+			if (SecurityUtils.getSubject().isPermitted("features:optimisation-charter-out-generation")) {
+
+				for (final String hint : hints) {
+					if (LNGTransformer.HINT_GENERATE_CHARTER_OUTS.equals(hint)) {
+						bind(IGeneratedCharterOutEvaluator.class).to(DefaultGeneratedCharterOutEvaluator.class);
+					}
+					break;
 				}
-				break;
 			}
 		}
-		bind(IBreakEvenEvaluator.class).to(DefaultBreakEvenEvaluator.class);
+		if (SecurityUtils.getSubject().isPermitted("features:break-evens")) {
+			bind(IBreakEvenEvaluator.class).to(DefaultBreakEvenEvaluator.class);
+		}
 	}
 }

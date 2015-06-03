@@ -300,7 +300,7 @@ public class LNGScenarioRunner {
 	@Nullable
 	private Schedule exportPeriodScenario(final int currentProgress) {
 		if (periodMapping != null) {
-			LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, 100);
+			LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, currentProgress);
 
 			final PeriodExporter e = new PeriodExporter();
 			final CompoundCommand cmd = LNGSchedulerJobUtils.createBlankCommand(currentProgress);
