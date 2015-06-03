@@ -5,8 +5,6 @@
 package com.mmxlabs.scheduler.optimiser.lso;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import com.google.inject.Inject;
@@ -15,8 +13,6 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.RandomHelper;
-import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
-import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -29,7 +25,6 @@ import com.mmxlabs.optimiser.lso.impl.NullMove;
 import com.mmxlabs.optimiser.lso.impl.NullMove2Over2;
 import com.mmxlabs.optimiser.lso.impl.NullMove3Over2;
 import com.mmxlabs.optimiser.lso.impl.NullMove4Over2;
-import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 
 /**
  * Refactoring of the sequences-related CMG logic into a helper class.
@@ -55,9 +50,9 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 		} else {
 			FOUR_OPT2_MOVES = 1;
 		}
-//		System.out.println("FOUR_OPT2_MOVES:"+FOUR_OPT2_MOVES);
+		// System.out.println("FOUR_OPT2_MOVES:"+FOUR_OPT2_MOVES);
 	}
-		
+
 	final ConstrainedMoveGenerator owner;
 
 	class Move2over2A extends Move2over2 {
@@ -207,7 +202,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 				position2--;
 				valid2opt2 = owner.validFollowers.get(seq2.get(position2 - 1)).contains(seq1.get(position1 + 1));
 			}
-			
+
 			// if it would be, maybe do it
 			if (valid2opt2 && (owner.random.nextDouble() < 0.05)) {
 				// make 2opt2
