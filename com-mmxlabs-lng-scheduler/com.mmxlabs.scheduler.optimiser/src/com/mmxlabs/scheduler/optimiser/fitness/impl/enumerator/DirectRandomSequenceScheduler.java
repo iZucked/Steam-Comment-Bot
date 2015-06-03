@@ -73,6 +73,8 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 	}
 
 	private void synchroniseShipToShipBindings() {
+		// TODO: why do we not fix up later voyages? Why do we not loop multiple times here?
+		// TODO: If the above is implemented, STS slots should probably arrive as early as possible.
 		for (int i = 0; i < bindings.size(); i += 4) {
 			final int discharge_seq = bindings.get(i);
 			final int discharge_index = bindings.get(i + 1);
