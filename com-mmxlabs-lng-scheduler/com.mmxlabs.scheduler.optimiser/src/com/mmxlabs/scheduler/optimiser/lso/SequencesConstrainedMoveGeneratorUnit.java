@@ -53,9 +53,9 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 		} else {
 			FOUR_OPT2_MOVES = 1;
 		}
-		System.out.println("FOUR_OPT2_MOVES:"+FOUR_OPT2_MOVES);
+		// System.out.println("FOUR_OPT2_MOVES:"+FOUR_OPT2_MOVES);
 	}
-		
+
 	final ConstrainedMoveGenerator owner;
 
 	class Move2over2A extends Move2over2 {
@@ -205,7 +205,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 				position2--;
 				valid2opt2 = owner.validFollowers.get(seq2.get(position2 - 1)).contains(seq1.get(position1 + 1));
 			}
-			
+
 			// if it would be, maybe do it
 			if (valid2opt2 && (owner.random.nextDouble() < 0.05)) {
 				// make 2opt2
