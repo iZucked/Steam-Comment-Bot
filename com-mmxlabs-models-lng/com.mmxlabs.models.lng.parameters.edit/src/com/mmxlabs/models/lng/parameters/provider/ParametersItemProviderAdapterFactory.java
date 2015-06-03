@@ -250,6 +250,29 @@ public class ParametersItemProviderAdapterFactory extends ParametersAdapterFacto
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.SimilaritySettings} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SimilaritySettingsItemProvider similaritySettingsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.SimilaritySettings}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSimilaritySettingsAdapter() {
+		if (similaritySettingsItemProvider == null) {
+			similaritySettingsItemProvider = new SimilaritySettingsItemProvider(this);
+		}
+
+		return similaritySettingsItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -390,6 +413,7 @@ public class ParametersItemProviderAdapterFactory extends ParametersAdapterFacto
 		if (optimisationRangeItemProvider != null) optimisationRangeItemProvider.dispose();
 		if (annealingSettingsItemProvider != null) annealingSettingsItemProvider.dispose();
 		if (argumentItemProvider != null) argumentItemProvider.dispose();
+		if (similaritySettingsItemProvider != null) similaritySettingsItemProvider.dispose();
 	}
 
 }

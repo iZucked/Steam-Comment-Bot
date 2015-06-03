@@ -224,13 +224,22 @@ public interface ParametersPackage extends EPackage {
 	int OPTIMISER_SETTINGS__SHIPPING_ONLY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
+	 * The feature id for the '<em><b>Similarity Settings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISER_SETTINGS__SIMILARITY_SETTINGS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+
+	/**
 	 * The number of structural features of the '<em>Optimiser Settings</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISER_SETTINGS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+	int OPTIMISER_SETTINGS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ObjectiveImpl <em>Objective</em>}' class.
@@ -464,6 +473,35 @@ public interface ParametersPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.SimilaritySettingsImpl <em>Similarity Settings</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.parameters.impl.SimilaritySettingsImpl
+	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getSimilaritySettings()
+	 * @generated
+	 */
+	int SIMILARITY_SETTINGS = 7;
+
+	/**
+	 * The feature id for the '<em><b>Threshold</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMILARITY_SETTINGS__THRESHOLD = 0;
+
+	/**
+	 * The number of structural features of the '<em>Similarity Settings</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMILARITY_SETTINGS_FEATURE_COUNT = 1;
+
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.ParametersModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -592,6 +630,17 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getOptimiserSettings_ShippingOnly();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getSimilaritySettings <em>Similarity Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Similarity Settings</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.OptimiserSettings#getSimilaritySettings()
+	 * @see #getOptimiserSettings()
+	 * @generated
+	 */
+	EReference getOptimiserSettings_SimilaritySettings();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.Objective <em>Objective</em>}'.
@@ -765,6 +814,27 @@ public interface ParametersPackage extends EPackage {
 	EAttribute getArgument_Value();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.SimilaritySettings <em>Similarity Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Similarity Settings</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.SimilaritySettings
+	 * @generated
+	 */
+	EClass getSimilaritySettings();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.SimilaritySettings#getThreshold <em>Threshold</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Threshold</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.SimilaritySettings#getThreshold()
+	 * @see #getSimilaritySettings()
+	 * @generated
+	 */
+	EAttribute getSimilaritySettings_Threshold();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -885,6 +955,14 @@ public interface ParametersPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute OPTIMISER_SETTINGS__SHIPPING_ONLY = eINSTANCE.getOptimiserSettings_ShippingOnly();
+
+		/**
+		 * The meta object literal for the '<em><b>Similarity Settings</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference OPTIMISER_SETTINGS__SIMILARITY_SETTINGS = eINSTANCE.getOptimiserSettings_SimilaritySettings();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.ObjectiveImpl <em>Objective</em>}' class.
@@ -1023,6 +1101,24 @@ public interface ParametersPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ARGUMENT__VALUE = eINSTANCE.getArgument_Value();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.SimilaritySettingsImpl <em>Similarity Settings</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.parameters.impl.SimilaritySettingsImpl
+		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getSimilaritySettings()
+		 * @generated
+		 */
+		EClass SIMILARITY_SETTINGS = eINSTANCE.getSimilaritySettings();
+
+		/**
+		 * The meta object literal for the '<em><b>Threshold</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SIMILARITY_SETTINGS__THRESHOLD = eINSTANCE.getSimilaritySettings_Threshold();
 
 	}
 

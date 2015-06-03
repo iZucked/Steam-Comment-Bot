@@ -24,6 +24,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getArguments <em>Arguments</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#isGenerateCharterOuts <em>Generate Charter Outs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#isShippingOnly <em>Shipping Only</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getSimilaritySettings <em>Similarity Settings</em>}</li>
  * </ul>
  * </p>
  *
@@ -209,6 +210,32 @@ public interface OptimiserSettings extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setShippingOnly(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Similarity Settings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Similarity Settings</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Similarity Settings</em>' containment reference.
+	 * @see #setSimilaritySettings(SimilaritySettings)
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getOptimiserSettings_SimilaritySettings()
+	 * @model containment="true" required="true"
+	 * @generated
+	 */
+	SimilaritySettings getSimilaritySettings();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getSimilaritySettings <em>Similarity Settings</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Similarity Settings</em>' containment reference.
+	 * @see #getSimilaritySettings()
+	 * @generated
+	 */
+	void setSimilaritySettings(SimilaritySettings value);
 
 } // end of  OptimiserSettings
 

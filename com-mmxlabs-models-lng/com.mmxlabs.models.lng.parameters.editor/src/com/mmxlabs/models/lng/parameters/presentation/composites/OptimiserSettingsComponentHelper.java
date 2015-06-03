@@ -9,10 +9,17 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -73,6 +80,7 @@ public class OptimiserSettingsComponentHelper extends BaseComponentHelper {
 		add_argumentsEditor(detailComposite, topClass);
 		add_generateCharterOutsEditor(detailComposite, topClass);
 		add_shippingOnlyEditor(detailComposite, topClass);
+		add_similaritySettingsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the objectives feature on OptimiserSettings
@@ -139,5 +147,14 @@ public class OptimiserSettingsComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_shippingOnlyEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ParametersPackage.Literals.OPTIMISER_SETTINGS__SHIPPING_ONLY));
+	}
+
+	/**
+	 * Create the editor for the similaritySettings feature on OptimiserSettings
+	 *
+	 * @generated
+	 */
+	protected void add_similaritySettingsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ParametersPackage.Literals.OPTIMISER_SETTINGS__SIMILARITY_SETTINGS));
 	}
 }
