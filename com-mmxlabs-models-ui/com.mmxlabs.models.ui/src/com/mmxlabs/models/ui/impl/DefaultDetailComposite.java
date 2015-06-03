@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -54,6 +55,7 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 		super(parent, style);
 		this.toolkit = toolkit;
 		toolkit.adapt(this);
+
 	}
 
 	protected IDisplayCompositeLayoutProvider createLayoutProvider() {
@@ -84,6 +86,7 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 
 		this.object = object;
 		toolkit.adapt(this);
+		setDefaultHelpContext(object);
 
 		for (final IInlineEditor editor : editors) {
 
@@ -102,6 +105,12 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 				dialogContext.registerEditorControl(object, editor.getFeature(), label);
 			}
 		}
+	}
+
+	protected void setDefaultHelpContext(final EObject object) {
+		final EClass eClass = object.eClass();
+		final String helpContextId = String.format("com.mmxlabs.lingo.doc.DataModel_%s_%s", eClass.getEPackage().getNsPrefix().replaceAll("\\.", "_"), eClass.getName());
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(this, helpContextId);
 	}
 
 	/**

@@ -61,6 +61,7 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -806,6 +807,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 			final int pageIndex = addPage(viewerPane.getControl());
 			setPageText(pageIndex, "DEBUG");
 		}
+		// TODO: Be more context sensitive?
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(getContainer(), "com.mmxlabs.lingo.doc.Chapter_Editor");
 	}
 
 	@Override

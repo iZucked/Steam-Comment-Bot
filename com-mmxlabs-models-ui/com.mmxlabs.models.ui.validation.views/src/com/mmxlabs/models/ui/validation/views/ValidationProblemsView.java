@@ -214,15 +214,15 @@ public class ValidationProblemsView extends ViewPart {
 				}
 			}
 		});
-		
+
 		CopyTreeToClipboardAction copyAction = new CopyTreeToClipboardAction(viewer.getTree());
 		getViewSite().getActionBars().getToolBarManager().add(copyAction);
 		getViewSite().getActionBars().getToolBarManager().update(true);
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyAction);
+
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.View_Validation");
 	}
 
-	
-	
 	@Override
 	public void dispose() {
 		getSite().getPage().removePartListener(partListener);
@@ -353,8 +353,8 @@ public class ValidationProblemsView extends ViewPart {
 
 	private void refreshViewer() {
 		if (!viewer.getControl().isDisposed()) {
-//			viewer.refresh();
-//			viewer.expandAll();
+			// viewer.refresh();
+			// viewer.expandAll();
 			viewer.setInput(null);
 			viewer.setInput(statusMap);
 		}
