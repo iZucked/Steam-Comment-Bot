@@ -31,9 +31,5 @@
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="promptPeriodEnd" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"
         unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="promptPeriodStartTmp" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"
-        unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="promptPeriodEndTmp" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"
-        unsettable="true"/>        
   </eClassifiers>
 </ecore:EPackage>

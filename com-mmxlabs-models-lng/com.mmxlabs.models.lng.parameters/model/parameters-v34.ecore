@@ -34,10 +34,8 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OptimisationRange">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="optimiseAfter" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate" unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="optimiseBefore" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="optimiseAfter" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="optimiseBefore" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth" unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="optimiseAfterTmp" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth" unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="optimiseBeforeTmp" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//YearMonth" unsettable="true"/>
   </eClassifiers>

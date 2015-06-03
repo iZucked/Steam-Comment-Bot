@@ -248,21 +248,21 @@
              to="30">
        </MigrationUnit>
        <MigrationUnit
-             class="com.mmxlabs.models.lng.migration.units.MigrateToV31"
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV32"
              context="com.mmxlabs.lingo"
              from="30"
              id="com.mmxlabs.models.lng.migration.units.MigrateToV31"
              to="31">
        </MigrationUnit>              
        <MigrationUnit
-             class="com.mmxlabs.models.lng.migration.units.MigrateToV32"
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV33"
              context="com.mmxlabs.lingo"
              from="31"
              id="com.mmxlabs.models.lng.migration.units.MigrateToV32"
              to="32">
        </MigrationUnit>              
        <MigrationUnit
-             class="com.mmxlabs.models.lng.migration.units.MigrateToV33"
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV34"
              context="com.mmxlabs.lingo"
              from="32"
              id="com.mmxlabs.models.lng.migration.units.MigrateToV33"
