@@ -89,4 +89,29 @@
 			</InitialColumn>
 		</ScheduleBasedReportInitialState>
 	</extension>
+	 <extension
+         point="com.mmxlabs.lingo.reports.FleetBasedColumn">
+      <FleetBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.fleet.StandardFleetColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.fleet.gco">
+      </FleetBasedColumn>
+      <FleetBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.fleet.StandardFleetColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.fleet.diff_gco">
+      </FleetBasedColumn>
+   </extension>
+	
+	<extension
+         point="com.mmxlabs.lingo.reports.FleetBasedReportInitialState">
+      <FleetBasedReportInitialState
+            customisable="true"
+            id="com.mmxlabs.lingo.reports.views.fleet.ConfigurableFleetReportView">       
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.fleet.gco">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.fleet.diff_gco">
+         </InitialColumn>
+      </FleetBasedReportInitialState>
+   </extension>
 </plugin>

@@ -213,10 +213,6 @@
       </ScheduleBasedColumn>
       <ScheduleBasedColumn
             handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
-            id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation_group_pnldelta">
-      </ScheduleBasedColumn>
-      <ScheduleBasedColumn
-            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
             id="com.mmxlabs.lingo.reports.components.columns.schedule.pnl_trading">
       </ScheduleBasedColumn>
             <ScheduleBasedColumn
@@ -303,26 +299,6 @@
             handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
             id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_prevwiring">
       </ScheduleBasedColumn>
-      <ScheduleBasedColumn
-            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
-            id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation">
-      </ScheduleBasedColumn>
-      <ScheduleBasedColumn
-            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
-            id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation_group">
-      </ScheduleBasedColumn>
-      <ScheduleBasedColumn
-            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
-            id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_changestring">
-      </ScheduleBasedColumn>
-      <ScheduleBasedColumn
-            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
-            id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_lateness">
-      </ScheduleBasedColumn>
-      <ScheduleBasedColumn
-            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
-            id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_capacity_violation">
-      </ScheduleBasedColumn>
    </extension>
    <extension
          point="com.mmxlabs.lingo.reports.ScheduleBasedReportInitialState">
@@ -400,21 +376,6 @@
          </InitialColumn>
          <InitialColumn
                id="com.mmxlabs.lingo.reports.components.columns.schedule.sellvolume_m3">
-         </InitialColumn>
-         <InitialColumn
-               id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation_group_pnldelta">
-         </InitialColumn>         
-         <InitialColumn
-               id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation_group">
-         </InitialColumn>
-         <InitialColumn
-               id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_changestring">
-         </InitialColumn>
-         <InitialColumn
-               id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_capacity_violation">
-         </InitialColumn>
-         <InitialColumn
-               id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_lateness">
          </InitialColumn>
          <InitialDiffOption
                option="scenario">
@@ -640,6 +601,10 @@
             feature="difftools"
             plugin.xml="difftools.plugin.xml">
       </PluginXMLEnablement>
+      <PluginXMLEnablement
+            feature="optimisation-charter-out-generation"
+            plugin.xml="gco.plugin.xml">
+      </PluginXMLEnablement>
    </extension>
    <extension
          point="com.mmxlabs.rcp.common.ReplaceableView">
@@ -695,14 +660,6 @@
             handlerID="com.mmxlabs.lingo.reports.views.fleet.StandardFleetColumnFactory"
             id="com.mmxlabs.lingo.reports.components.columns.fleet.chartercosts">
       </FleetBasedColumn>
-      <FleetBasedColumn
-            handlerID="com.mmxlabs.lingo.reports.views.fleet.StandardFleetColumnFactory"
-            id="com.mmxlabs.lingo.reports.components.columns.fleet.gco">
-      </FleetBasedColumn>
-      <FleetBasedColumn
-            handlerID="com.mmxlabs.lingo.reports.views.fleet.StandardFleetColumnFactory"
-            id="com.mmxlabs.lingo.reports.components.columns.fleet.diff_gco">
-      </FleetBasedColumn>
    </extension>
    <extension
          point="com.mmxlabs.lingo.reports.FleetBasedReportInitialState">
@@ -739,12 +696,6 @@
          <InitialColumn
                id="com.mmxlabs.lingo.reports.components.columns.fleet.chartercosts">
          </InitialColumn>
-         <InitialColumn
-               id="com.mmxlabs.lingo.reports.components.columns.fleet.gco">
-         </InitialColumn>
-         <InitialColumn
-               id="com.mmxlabs.lingo.reports.components.columns.fleet.diff_gco">
-         </InitialColumn>
       </FleetBasedReportInitialState>
-   </extension>>
+   </extension>
 </plugin>
