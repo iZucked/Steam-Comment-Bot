@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Collections;
-import java.util.Date;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -26,6 +25,8 @@ import org.apache.commons.cli.PosixParser;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
+import org.joda.time.LocalDate;
+import org.joda.time.YearMonth;
 
 import com.google.common.collect.Maps;
 import com.google.inject.Injector;
@@ -356,8 +357,8 @@ public class HeadlessApplication implements IApplication {
 	}
 
 	private void createPromptDates(LNGScenarioModel rootObject, HeadlessParameters parameters) {
-		Date promptStart = parameters.getParameterValue("promptStart", Date.class);
-		Date promptEnd = parameters.getParameterValue("promptEnd", Date.class);
+		LocalDate promptStart = parameters.getParameterValue("promptStart", LocalDate.class);
+		LocalDate promptEnd = parameters.getParameterValue("promptEnd", LocalDate.class);
 		if (promptStart != null) {
 			rootObject.getPortfolioModel().setPromptPeriodStart(promptStart);
 		} else {
@@ -379,8 +380,8 @@ public class HeadlessApplication implements IApplication {
 	}
 
 	private void createDateRanges(OptimiserSettings settings, HeadlessParameters headlessParameters) {
-		Date dateBefore = headlessParameters.getParameterValue("periodOptimisationDateBefore", Date.class);
-		Date dateAfter = headlessParameters.getParameterValue("periodOptimisationDateAfter", Date.class);
+		YearMonth dateBefore = headlessParameters.getParameterValue("periodOptimisationDateBefore", YearMonth.class);
+		YearMonth dateAfter = headlessParameters.getParameterValue("periodOptimisationDateAfter", YearMonth.class);
 		final OptimisationRange range = ParametersFactory.eINSTANCE.createOptimisationRange();
 		if (dateBefore != null) {
 			range.setOptimiseBefore(dateBefore);
