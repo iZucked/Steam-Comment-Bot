@@ -227,7 +227,7 @@ public class SimilarityFitnessCoreTest {
 	public List<IResource> createResources(final int numberOfResources) {
 		final List<IResource> resources = new LinkedList<IResource>();
 		for (int i = 0; i < numberOfResources; i++) {
-			resources.add(new Resource(context));
+			resources.add(new Resource(context, String.format("Resource-%d", i)));
 		}
 		return resources;
 	}
