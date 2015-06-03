@@ -9,10 +9,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.RandomHelper;
+import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -22,6 +25,11 @@ import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.optimiser.lso.impl.Move2over2;
 import com.mmxlabs.optimiser.lso.impl.Move3over2;
 import com.mmxlabs.optimiser.lso.impl.Move4over2;
+import com.mmxlabs.optimiser.lso.impl.NullMove;
+import com.mmxlabs.optimiser.lso.impl.NullMove2Over2;
+import com.mmxlabs.optimiser.lso.impl.NullMove3Over2;
+import com.mmxlabs.optimiser.lso.impl.NullMove4Over2;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 
 /**
  * Refactoring of the sequences-related CMG logic into a helper class.
@@ -33,8 +41,23 @@ import com.mmxlabs.optimiser.lso.impl.Move4over2;
  * 
  */
 public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGeneratorUnit {
-	public final static int FOUR_OPT2_MOVES = 1; // 0 = 4 opt 2, 1 = no 4 opt 2
+	/**
+	 * This setting is an injectable from the OptimiserSettingsModule, to speed up non-client optimisation
+	 */
+	public final static String OPTIMISER_ENABLE_FOUR_OPT_2 = "enableOptimiser4Opt2";
 
+	private int FOUR_OPT2_MOVES;
+
+	@Inject
+	public void setFourOpt2Fix(@Named(SequencesConstrainedMoveGeneratorUnit.OPTIMISER_ENABLE_FOUR_OPT_2) boolean ENABLE_4_OPT_2_FIX) {
+		if (ENABLE_4_OPT_2_FIX) {
+			FOUR_OPT2_MOVES = 0; // 0 = 4 opt 2, 1 = no 4 opt 2
+		} else {
+			FOUR_OPT2_MOVES = 1;
+		}
+		System.out.println("FOUR_OPT2_MOVES:"+FOUR_OPT2_MOVES);
+	}
+		
 	final ConstrainedMoveGenerator owner;
 
 	class Move2over2A extends Move2over2 {
@@ -46,27 +69,6 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 	}
 
 	class Move2over2C extends Move2over2 {
-
-	}
-
-	class NullMove implements IMove {
-
-		@SuppressWarnings("null")
-		@Override
-		public Collection<IResource> getAffectedResources() {
-
-			return Collections.emptyList();
-		}
-
-		@Override
-		public void apply(@NonNull final IModifiableSequences sequences) {
-
-		}
-
-		@Override
-		public boolean validate(@NonNull final ISequences sequences) {
-			return true;
-		}
 
 	}
 
@@ -111,7 +113,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 		// in this case, we typically need something clever to happen anyway
 		// so this MG will just bail out and give up.
 		if ((pos1.getFirst() == null) || (pos2.getFirst() == null)) {
-			return null;
+			return new NullMove();
 		}
 
 		final List<IResource> resources = owner.sequences.getResources();
@@ -122,7 +124,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 		int position2 = pos2.getSecond();
 
 		if (position1 == -1 || position2 == -1) {
-			return null;
+			return new NullMove();
 		}
 
 		// are both these elements currently in the same route
@@ -154,7 +156,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 			// the first element in the segment
 			final Integer first = posPrecursor.getFirst();
 			if (first == null) {
-				return null;
+				return new NullMove3Over2();
 			}
 			final ISequenceElement beforeInsert = owner.sequences.getSequence(first).get(posPrecursor.getSecond() - 1);
 			if (owner.validFollowers.get(beforeInsert).contains(firstElementInSegment)) {
@@ -165,7 +167,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 					// check for stupidity
 					final int position3 = posPrecursor.getSecond();
 					if ((position3 >= beforeFirstCut) && (position3 <= beforeSecondCut)) {
-						return null; // stupidity has happened.
+						return new NullMove3Over2(); // stupidity has happened.
 					}
 				}
 
@@ -183,7 +185,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 				// bailing out
 				// maybe search for a 4opt1 in here? but will a 4opt1 work if a
 				// 3opt1 won't? probably not!
-				return null;
+				return new NullMove3Over2();
 			}
 		} else {
 			// we have found a potentially valid situation for an opt2 move of
@@ -205,7 +207,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 				position2--;
 				valid2opt2 = owner.validFollowers.get(seq2.get(position2 - 1)).contains(seq1.get(position1 + 1));
 			}
-
+			
 			// if it would be, maybe do it
 			if (valid2opt2 && (owner.random.nextDouble() < 0.05)) {
 				// make 2opt2
@@ -229,7 +231,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 				final ConstrainedMoveGenerator.Followers<ISequenceElement> followersOfSecondElementsPredecessor = owner.validFollowers.get(seq2.get(position2 - 1));
 
 				final List<Pair<Integer, Integer>> viableSecondBreaks = new ArrayList<Pair<Integer, Integer>>();
-				for (int i = position2 + SequencesConstrainedMoveGeneratorUnit.FOUR_OPT2_MOVES; i < (seq2.size() - 1); i++) { // ignore last element
+				for (int i = position2 + FOUR_OPT2_MOVES; i < (seq2.size() - 1); i++) { // ignore last element
 					final ISequenceElement here = seq2.get(i);
 					for (final ISequenceElement elt : owner.validFollowers.get(here)) {
 						final Pair<Integer, Integer> loc = owner.reverseLookup.get(elt);
@@ -286,7 +288,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 						// seq2.get(position2-1), seq1.get(position1+1),
 						// resources.get(sequence2)));
 						//
-						return null;
+						return new NullMove2Over2();
 					}
 				}
 
@@ -318,7 +320,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 					return result;
 				}
 			} else {
-				return null;
+				return new NullMove4Over2();
 			}
 		}
 	}

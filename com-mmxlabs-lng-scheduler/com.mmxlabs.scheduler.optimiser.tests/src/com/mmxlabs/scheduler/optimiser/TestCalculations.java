@@ -8,6 +8,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.TreeMap;
 
+import javax.inject.Singleton;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Matchers;
@@ -17,6 +19,7 @@ import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Provides;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -58,6 +61,9 @@ import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
 import com.mmxlabs.scheduler.optimiser.events.ILoadEvent;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
+import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponentParameters;
+import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
@@ -1417,6 +1423,27 @@ public class TestCalculations {
 	private Injector createTestInjector(final IVolumeAllocator volumeAllocator, final int baseFuelUnitPrice) {
 
 		final Injector injector = Guice.createInjector(new DataComponentProviderModule(), new AbstractModule() {
+			
+			@Provides
+			@Singleton
+			private ILatenessComponentParameters provideLatenessComponentParameters() {
+				final LatenessComponentParameters lcp = new LatenessComponentParameters();
+
+				lcp.setThreshold(Interval.PROMPT, 48);
+				lcp.setLowWeight(Interval.PROMPT, 250000);
+				lcp.setHighWeight(Interval.PROMPT, 1000000);
+
+				lcp.setThreshold(Interval.MID_TERM, 72);
+				lcp.setLowWeight(Interval.MID_TERM, 250000);
+				lcp.setHighWeight(Interval.MID_TERM, 1000000);
+
+				lcp.setThreshold(Interval.BEYOND, 72);
+				lcp.setLowWeight(Interval.BEYOND, 250000);
+				lcp.setHighWeight(Interval.BEYOND, 1000000);
+
+				return lcp;
+			}
+
 			@Override
 			protected void configure() {
 				bind(VoyagePlanAnnotator.class);

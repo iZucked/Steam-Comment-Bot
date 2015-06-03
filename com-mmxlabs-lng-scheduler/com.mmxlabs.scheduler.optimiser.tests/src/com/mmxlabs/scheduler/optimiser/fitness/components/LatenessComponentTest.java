@@ -4,6 +4,10 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Map;
+
 import javax.inject.Singleton;
 
 import org.junit.Assert;
@@ -14,20 +18,28 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
+import com.mmxlabs.scheduler.optimiser.schedule.LatenessChecker;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
@@ -69,6 +81,7 @@ public class LatenessComponentTest {
 		final IOptimisationData data = Mockito.mock(IOptimisationData.class);
 
 		final IStartEndRequirementProvider startEndRequirementProvider = Mockito.mock(IStartEndRequirementProvider.class);
+		final IPortSlotProvider portSlotProvider = Mockito.mock(IPortSlotProvider.class);
 		final IPromptPeriodProvider promptProvider = Mockito.mock(IPromptPeriodProvider.class);
 
 		Injector injector = Guice.createInjector(new AbstractModule() {
@@ -77,6 +90,7 @@ public class LatenessComponentTest {
 			protected void configure() {
 				bind(IStartEndRequirementProvider.class).toInstance(startEndRequirementProvider);
 				bind(IPromptPeriodProvider.class).toInstance(promptProvider);
+				bind(IPortSlotProvider.class).toInstance(portSlotProvider);
 			}
 
 			@Provides
@@ -99,9 +113,9 @@ public class LatenessComponentTest {
 			}
 		});
 		final LatenessComponent c = new LatenessComponent(name, core);
-
+		final LatenessChecker checker = new LatenessChecker();
 		injector.injectMembers(c);
-
+		
 		final IResource resource = Mockito.mock(IResource.class);
 
 		final IStartRequirement startRequirement = Mockito.mock(IStartRequirement.class, "Start");
@@ -112,6 +126,7 @@ public class LatenessComponentTest {
 
 		c.init(data);
 
+		injector.injectMembers(checker);
 		// set up time windows from load/discharge end/start times above
 		final TimeWindow window1 = new TimeWindow(loadStartTime, loadEndTime);
 		final TimeWindow window2 = new TimeWindow(dischargeStartTime, dischargeEndTime);
@@ -142,8 +157,19 @@ public class LatenessComponentTest {
 		final IDetailsSequenceElement[] routeSequence = new IDetailsSequenceElement[] { startDetails, loadDetails, null, dischargeDetails, endDetails };
 		final VoyagePlan voyagePlan = new VoyagePlan();
 		voyagePlan.setSequence(routeSequence);
+		ISequence mockedSequence = Mockito.mock(ISequence.class);
+		Mockito.when(mockedSequence.size()).thenReturn(4);
+		IPortTimesRecord portTimesRecord = Mockito.mock(IPortTimesRecord.class);
+		Mockito.when(portTimesRecord.getSlotTime(startSlot)).thenReturn(0);
+		Mockito.when(portTimesRecord.getSlotTime(endSlot)).thenReturn(0);
+		Mockito.when(portTimesRecord.getSlotTime(loadSlot)).thenReturn(loadEndTime+1);
+		Mockito.when(portTimesRecord.getSlotTime(dischargeSlot)).thenReturn(dischargeEndTime+1);
+		ScheduledSequence scheduledSequence = new ScheduledSequence(resource, mockedSequence, voyageStartTime, new LinkedList<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>>(
+				Arrays.asList(new Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>(voyagePlan, null, portTimesRecord))
+				));
 		final ScheduledSequences scheduledSequences = new ScheduledSequences();
-
+		scheduledSequences.add(scheduledSequence);
+		checker.calculateLateness(scheduledSequences, null);
 		c.startEvaluation(scheduledSequences);
 		c.startSequence(resource);
 		c.nextVoyagePlan(voyagePlan, voyageStartTime);
@@ -159,4 +185,5 @@ public class LatenessComponentTest {
 		final long expectedCost = (dischargeLateTime + loadLateTime) * penalty;
 		Assert.assertEquals("Expected cost equals calculated cost.", expectedCost, cost);
 	}
+		
 }

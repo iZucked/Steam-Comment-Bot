@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import com.google.inject.name.Named;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -44,7 +45,12 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * @param
  */
 public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
-	public static final boolean START_ELEMENT_OPTIMISATION_FIX = false; // if set to true it fixes a bug that prevents start elements from being valid preceders
+	public final static String OPTIMISER_START_ELEMENT_FIX = "enableStartElementOptimisation";
+
+	@Inject
+	@Named(TravelTimeConstraintChecker.OPTIMISER_START_ELEMENT_FIX)
+	private boolean START_ELEMENT_OPTIMISATION_FIX; // if set to true it fixes a bug that prevents start elements from being valid preceders
+
 	/**
 	 * The maximum amount of lateness which will even be considered (20 days)
 	 */

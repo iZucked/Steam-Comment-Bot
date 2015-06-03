@@ -4,11 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
-import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
-
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.google.common.util.concurrent.SettableFuture;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;

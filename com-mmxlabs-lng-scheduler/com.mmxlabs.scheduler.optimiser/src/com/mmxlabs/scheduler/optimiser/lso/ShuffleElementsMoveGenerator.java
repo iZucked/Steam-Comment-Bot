@@ -85,7 +85,7 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 
 		// TODO: Disable move generator completely in such cases
 		if (targetElements.isEmpty()) {
-			return null;
+			return new NullShuffleElementsMove();
 		}
 
 		final ShuffleElementsBuilder builder = new ShuffleElementsBuilder();
@@ -96,14 +96,14 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 		final Pair<Integer, Integer> elementPosition = owner.reverseLookup.get(rawElement);
 		final IResource elementResource = elementPosition.getFirst() == null ? null : owner.getSequences().getResources().get(elementPosition.getFirst());
 		if (elementResource == null) {
-			return null;
+			return new NullShuffleElementsMove();
 		}
 		final ISequence elementSequence = owner.getSequences().getSequence(elementResource);
 
 		touchedElements.add(rawElement);
 
 		if (elementPosition.getSecond() == -1) {
-			return null;
+			return new NullShuffleElementsMove();
 		}
 
 		// If there is an alternative, randomly choose to use it.
@@ -123,7 +123,7 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 		if (findFollower) {
 			final Followers<ISequenceElement> followers = owner.validFollowers.get(element);
 			if (followers.size() == 0) {
-				return null;
+				return new NullShuffleElementsMove();
 			}
 			for (final ISequenceElement follower : shuffleFollowers(followers)) {
 				final Pair<Integer, Integer> followerPosition = owner.reverseLookup.get(follower);
@@ -196,7 +196,7 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 		} else {
 			final Followers<ISequenceElement> preceders = owner.validPreceeders.get(element);
 			if (preceders.size() == 0) {
-				return null;
+				return new NullShuffleElementsMove();
 			}
 			for (final ISequenceElement preceder : shuffleFollowers(preceders)) {
 				final Pair<Integer, Integer> precederPosition = owner.reverseLookup.get(preceder);
@@ -265,7 +265,7 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 			}
 		}
 		if (!foundMove) {
-			return null;
+			return new NullShuffleElementsMove();
 		}
 
 		// Fix up source part
@@ -327,7 +327,7 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 			}
 		}
 
-		return null;
+		return new NullShuffleElementsMove();
 
 	}
 
