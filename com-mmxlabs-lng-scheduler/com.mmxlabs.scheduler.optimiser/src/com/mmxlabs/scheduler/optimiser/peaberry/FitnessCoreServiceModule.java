@@ -13,6 +13,7 @@ import com.google.inject.name.Names;
 import com.mmxlabs.optimiser.common.fitness.NonOptionalSlotFitnessCoreFactory;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
+import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCoreFactory;
 
 /**
  * {@link Guice} module using {@link Peaberry} to register {@link IFitnessCoreFactory} instances as services.
@@ -29,5 +30,8 @@ public class FitnessCoreServiceModule extends AbstractModule {
 
 		bind(TypeLiterals.export(IFitnessCoreFactory.class)).annotatedWith(Names.named(NonOptionalSlotFitnessCoreFactory.class.getCanonicalName())).toProvider(
 				Peaberry.service(NonOptionalSlotFitnessCoreFactory.class).export());
+
+		bind(TypeLiterals.export(IFitnessCoreFactory.class)).annotatedWith(Names.named(SimilarityFitnessCoreFactory.class.getCanonicalName())).toProvider(
+				Peaberry.service(SimilarityFitnessCoreFactory.class).export());
 	}
 }

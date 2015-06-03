@@ -238,7 +238,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 					spotResource = spotElementMap.get(e2);
 				}
 
-				final boolean allowForwardSequence = spotResource == null ? checker.allowSequence(e1, e2) : checker.allowSequence(e1, e2, spotResource);
+				final boolean allowForwardSequence = spotResource == null ? checker.allowSequence(e1, e2, false) : checker.allowSequence(e1, e2, spotResource, false);
 				if (allowForwardSequence) {
 
 					if (followers.size() == 1) {
@@ -250,7 +250,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 					}
 				}
 
-				final boolean allowReverseSequence = spotResource == null ? checker.allowSequence(e2, e1) : checker.allowSequence(e2, e1, spotResource);
+				final boolean allowReverseSequence = spotResource == null ? checker.allowSequence(e2, e1, false) : checker.allowSequence(e2, e1, spotResource, false);
 				if (allowReverseSequence) {
 					preceeders.add(e2);
 				}

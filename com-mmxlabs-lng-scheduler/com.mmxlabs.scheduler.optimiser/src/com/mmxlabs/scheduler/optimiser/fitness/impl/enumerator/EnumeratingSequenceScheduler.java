@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.inject.name.Named;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
@@ -52,8 +53,11 @@ import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
  * 
  */
 public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceScheduler {
+	public final static String OPTIMISER_REEVALUATE = "enableReEvaluationInOptimiser";
 
-	protected static final boolean RE_EVALUATE_SOLUTION = true;
+	@Inject
+	@Named(EnumeratingSequenceScheduler.OPTIMISER_REEVALUATE)
+	protected boolean RE_EVALUATE_SOLUTION;
 
 	private static final int DISCHARGE_SEQUENCE_INDEX_OFFSET = 0;
 	private static final int DISCHARGE_WITHIN_SEQUENCE_INDEX_OFFSET = 1;

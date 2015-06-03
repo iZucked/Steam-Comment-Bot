@@ -9,6 +9,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintChecker;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
@@ -17,6 +20,7 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChecker;
 
 /**
@@ -27,6 +31,7 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChec
  * 
  */
 public class LegalSequencingChecker {
+	private static final Logger log = LoggerFactory.getLogger(LinearSimulatedAnnealingFitnessEvaluator.class);
 
 	private final List<IPairwiseConstraintChecker> pairwiseCheckers;
 	private final List<IResource> resources;
@@ -79,20 +84,26 @@ public class LegalSequencingChecker {
 	 * @param e2
 	 * @return
 	 */
-	public boolean allowSequence(final ISequenceElement e1, final ISequenceElement e2, final IResource resource) {
+	public boolean allowSequence(final ISequenceElement e1, final ISequenceElement e2, final IResource resource, boolean print) {
 		// Check with hard constraints like resource allocation and ordered elements
 
 		if (!resourceAllocationChecker.checkPairwiseConstraint(e1, e2, resource)) {
 			// if (log.isInfoEnabled()) {
 			// log.info("Rejected: " + pairwiseChecker.getName() + ": " + pairwiseChecker.explain(e1, e2, resource));
 			// }
+			if (print)
+			 System.out.println("RAC: Rejected: " + resourceAllocationChecker.getName() + ": " + resourceAllocationChecker.explain(e1, e2, resource));
 			return false;
+		} else {
+//			System.out.println("True");
 		}
 		for (final IPairwiseConstraintChecker pairwiseChecker : pairwiseCheckers) {
 			if (!pairwiseChecker.checkPairwiseConstraint(e1, e2, resource)) {
-				// if (log.isInfoEnabled()) {
-				// log.info("Rejected: " + pairwiseChecker.getName() + ": " + pairwiseChecker.explain(e1, e2, resource));
-				// }
+//				 if (log.isInfoEnabled()) {
+//				 log.info("Rejected: " + pairwiseChecker.getName() + ": " + pairwiseChecker.explain(e1, e2, resource));
+//				 }
+				if (print)
+				 System.out.println("PW: Rejected: " + pairwiseChecker.getName() + ": " + pairwiseChecker.explain(e1, e2, resource));
 				return false;
 			}
 		}
@@ -112,9 +123,9 @@ public class LegalSequencingChecker {
 		return result;
 	}
 
-	public boolean allowSequence(final ISequenceElement e1, final ISequenceElement e2) {
+	public boolean allowSequence(final ISequenceElement e1, final ISequenceElement e2, boolean print) {
 		for (final IResource r : resources) {
-			if (allowSequence(e1, e2, r)) {
+			if (allowSequence(e1, e2, r, print)) {
 				return true;
 			}
 		}

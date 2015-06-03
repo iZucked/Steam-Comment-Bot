@@ -30,4 +30,9 @@ public interface IPortSlotProvider extends IDataComponentProvider {
 	 * @return
 	 */
 	ISequenceElement getElement(IPortSlot portSlot);
+	
+	/**
+	 * Returns the port type for an {@link ISequenceElement}
+	 */
+	PortType getPortTypeFromElement(ISequenceElement element);
 }
