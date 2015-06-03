@@ -5,16 +5,12 @@
 package com.mmxlabs.scheduler.optimiser.lso;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.RandomHelper;
-import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
-import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -27,7 +23,6 @@ import com.mmxlabs.optimiser.lso.impl.NullMove;
 import com.mmxlabs.optimiser.lso.impl.NullMove2Over2;
 import com.mmxlabs.optimiser.lso.impl.NullMove3Over2;
 import com.mmxlabs.optimiser.lso.impl.NullMove4Over2;
-import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 
 /**
  * Refactoring of the sequences-related CMG logic into a helper class.
