@@ -1,33 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-    Copyright (C) Minimax Labs Ltd., 2010 - 2015
-    All rights reserved.
-
--->
-<?eclipse version="3.4"?>
-<plugin>
-
-   <extension
-         point="org.eclipse.help.toc">
-      <index path="index">
-      </index>
-      <toc
-            file="toc.xml"
-            primary="true">
-      </toc>
-      <toc
-            file="tochowtos.xml">
-      </toc>
-      <toc
-            file="tocgettingstarted.xml">
-      </toc>
-      <toc
-            file="tochowtos.xml">
-      </toc>
-      <toc
-            file="tocreports.xml">
-      </toc>
-   </extension>
-
-</plugin>
+<plugin><extension point="org.eclipse.help.toc"><toc primary="true" file="toc.xml"></toc></extension><extension point="org.eclipse.help.index"><index file="index.xml"></index></extension>
+                                                                                                     <extension
+                                                                                                           point="org.eclipse.help.contexts">
+                                                                                                        <contexts
+                                                                                                              file="contexts.xml">
+                                                                                                        </contexts>
+                                                                                                     </extension></plugin>

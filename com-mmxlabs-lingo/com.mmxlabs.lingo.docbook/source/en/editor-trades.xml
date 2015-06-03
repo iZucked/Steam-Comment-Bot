@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xml:lang="en" xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xl="http://www.w3.org/1999/xlink"
+	id="Editor_Trades">
+	<title>Trades Tab</title>
+	<informalfigure>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="resources/editor/trades/editor-trades.png" width="16.511cm" depth="4.056cm" />
+			</imageobject>
+		</mediaobject>
+	</informalfigure>
+	<para>The Trades Tab shows every buy and sell position in the scenario and allows you to modify how loads (purchase opportunities) are linked to discharges
+		(sales opportunities). It has an additional icon:
+	</para>
+	<informaltable frame="all">
+		<tgroup cols="3">
+			<colspec colnum="1" colname="col1" colwidth="1*" />
+			<colspec colnum="2" colname="col2" colwidth="2*" />
+			<colspec colnum="3" colname="col3" colwidth="7*" />
+			<tbody>
+				<row>
+					<entry>
+						<para>
+							<inlinegraphic fileref="resources/editor/trades/reset-wiring.png" width="0.662cm" depth="0.636cm" />
+						</para>
+					</entry>
+					<entry>
+						<para>Reset Wiring</para>
+					</entry>
+					<entry>
+						<para>This button will rearrange the grid to provide a neat
+							visual layout, with slots paired in the same cargo shown in
+							the same row.
+						</para>
+					</entry>
+				</row>
+			</tbody>
+		</tgroup>
+	</informaltable>
+	<para>
+		The central wiring column gives a visualisation of the slots, their
+		types and how they are linked to form cargoes. Each slot is
+		represented by a circle, with
+		purchase slots on the left, and sale
+		slots on the right. Filled circles
+		<inlinegraphic fileref="resources/editor/trades/fob-green.png" depth="0.371cm" />
+		<inlinegraphic fileref="resources/editor/trades/fob-red.png" depth="0.371cm" />
+		indicate FOB slots, and empty circles
+		<inlinegraphic fileref="resources/editor/trades/des-green.png" depth="0.371cm" />
+		<inlinegraphic fileref="resources/editor/trades/des-red.png" depth="0.371cm" />
+		indicate DES slots. A dot in the centre of a circle
+		<inlinegraphic fileref="resources/editor/trades/optional.png" depth="0.371cm" />
+		indicates that the slot is optional; if there is no dot, the slot
+		must be fulfilled.
+		<inlinegraphic fileref="resources/editor/trades/wiring-diagram.png" width="10.48cm" depth="6.496cm" />
+	</para>
+	<para>
+		A grey line
+		<inlinegraphic fileref="resources/editor/trades/grey-line.png" width="2.435cm" depth="0.53cm" />
+		between circles means that the cargo cannot be rewired by the
+		optimiser; these slots will remain paired together after
+		optimisation.
+	</para>
+	<para>
+		If circles are joined by a black line
+		<inlinegraphic fileref="resources/editor/trades/black-line.png" width="2.488cm" depth="0.61cm" />
+		between circles, the optimiser will consider linking the slots with other buy or sell opportunities instead.
+	</para>
+	<para>The columns immediately on either side of the wiring column provide information on the slots.
+	</para>
+	<para>
+		<inlinegraphic fileref="resources/editor/trades/mini-trades.png" width="16.511cm" depth="3.282cm" />
+	</para>
+	<para />
+	<informaltable frame="all">
+		<tgroup cols="2">
+			<colspec colnum="1" colname="col1" colwidth="1*" />
+			<colspec colnum="2" colname="col2" colwidth="4*" />
+			<tbody>
+				<row>
+					<entry>
+						<para>L-ID / D-ID</para>
+					</entry>
+					<entry>
+						<para>The name (ID) of the slot</para>
+					</entry>
+				</row>
+				<row>
+					<entry>
+						<para>Port</para>
+					</entry>
+					<entry>
+						<para>The port associated with the slot</para>
+					</entry>
+				</row>
+				<row>
+					<entry>
+						<para>Buy At / Sell At</para>
+					</entry>
+					<entry>
+						<para>The expression (or contract) used to calculate the
+							transaction price per mmBtu
+						</para>
+					</entry>
+				</row>
+				<row>
+					<entry>
+						<para>Price</para>
+					</entry>
+					<entry>
+						<para>The calculated price per mmBtu of this transaction
+						</para>
+					</entry>
+				</row>
+			</tbody>
+		</tgroup>
+	</informaltable>
+	<para />
+	<para>
+		The remaining columns in the table relate to the cargo:
+		<inlinegraphic fileref="resources/editor/trades/trades-rhs.png" width="6.478cm" depth="3.626cm" />
+	</para>
+	<informaltable frame="all">
+		<tgroup cols="2">
+			<colspec colnum="1" colname="col1" colwidth="1*" />
+			<colspec colnum="2" colname="col2" colwidth="4*" />
+			<tbody>
+				<row>
+					<entry>
+						<para>Assignment</para>
+					</entry>
+					<entry>
+						<para>The vessel assigned to this cargo.</para>
+					</entry>
+				</row>
+				<row>
+					<entry>
+						<para>P&amp;L (Trading)</para>
+					</entry>
+					<entry>
+						<para>The profit &amp; loss calculated for this cargo (in
+							million dollars).
+						</para>
+					</entry>
+				</row>
+				<row>
+					<entry>
+						<para>P&amp;L (Shipping)</para>
+					</entry>
+					<entry>
+						<para>The profit &amp; loss calculated for this cargo (in
+							million dollars).
+						</para>
+					</entry>
+				</row>
+			</tbody>
+		</tgroup>
+	</informaltable>
+	<para />
+	<para />
+	<para>
+		By right-clicking a row in the trades table on the left side or
+		right side of the visual summary column, you can bring up a
+		context
+		menu with actions relevant to
+		the load or discharge slot. (If there
+		is only one slot in the row, the appropriate context menu will come
+		up for that slot, wherever you right-click the row.)
+		<inlinegraphic fileref="resources/editor/trades/trades-context.png" width="3.557cm" depth="4.869cm" />
+	</para>
+	<para />
+	<para>The “New”, “Shorts” (for load slots) / “Longs” (for discharge
+		slots) and “All” menu items allow the slot to be directly linked
+		to
+		a
+		complementary slot, which
+		can be chosen from a sub-menu.
+	</para>
+	<para />
+	<informaltable frame="all">
+		<tgroup cols="2">
+			<colspec colnum="1" colname="col1" colwidth="1*" />
+			<colspec colnum="2" colname="col2" colwidth="4*" />
+			<tbody>
+				<row>
+					<entry>
+						<para>New</para>
+					</entry>
+					<entry>
+						<para>Creates a new paired slot of an appropriate type; if you
+							right-clicked on a FOB purchase or DES sale you may create a
+							shipped or non-shipped cargo.
+						</para>
+					</entry>
+				</row>
+				<row>
+					<entry>
+						<para>Shorts / Longs</para>
+					</entry>
+					<entry>
+						<para>Brings up a list of available open positions which are
+							compatible with the selected slot (“Shorts” or “Longs”).
+						</para>
+					</entry>
+				</row>
+				<row>
+					<entry>
+						<para>All</para>
+					</entry>
+					<entry>
+						<para>Brings up a list of all postions which are compatible
+							with
+							the selected slot, including those slots which are
+							already
+							paired. Available slots can be
+							browsed by port or
+							contract. Only
+							appears if there are compatible positions.
+						</para>
+					</entry>
+				</row>
+				<row>
+					<entry>
+						<para>Edit Slot</para>
+					</entry>
+					<entry>
+						<para>Brings up an editor dialog where you can full modify the
+							selected slot. See the section on the Cargo Editor for
+							complete
+							information on the slot editor
+							layout.
+						</para>
+					</entry>
+				</row>
+				<row>
+					<entry>
+						<para>Delete</para>
+					</entry>
+					<entry>
+						<para>Deletes the selected slot.</para>
+					</entry>
+				</row>
+				<row>
+					<entry>
+						<para>Assign to...</para>
+					</entry>
+					<entry>
+						<para>Sets the vessel assigned to the slot (or cargo). Only
+							appears for DES purchase, FOB sale or paired slots.
+						</para>
+					</entry>
+				</row>
+				<row>
+					<entry>
+						<para>Lock/Unlock</para>
+					</entry>
+					<entry>
+						<para>Freeze/unfreeze the vessel assignment. The optimisation
+							will not move (or rewire) these.
+						</para>
+					</entry>
+				</row>
+				<row>
+					<entry>
+						<para>Unassign</para>
+					</entry>
+					<entry>
+						<para>Unassign the vessel from the cargo (or slot), leaving
+							the optimisation to decide.
+						</para>
+					</entry>
+				</row>
+			</tbody>
+		</tgroup>
+	</informaltable>
+	<para />
+	<para />
+	<para>
+		Rewiring Cargoes
+	</para>
+
+	<informalfigure>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="resources/editor/trades/trades-rewiring-mini.png" width="2.647cm" depth="4.578cm" />
+			</imageobject>
+		</mediaobject>
+	</informalfigure>
+
+
+	<para />
+	<para>The central wiring column in the Trades Tab allows purchases
+		and sales to be conveniently paired by the user. The lines joining
+		circles in this column
+		indicate slots which are paired to form a
+		complete trade; by (left-)clicking on a circle and dragging the
+		mouse, you can “stretch” the line to join it to a
+		different slot -
+		or unpair a slot entirely.
+	</para>
+	<para>The auto-validation will turn the wire red if pairings
+		violate
+		constraints and similarly will highlight any trades which are
+		invalid (red for errors, yellow
+		for warnings).
+	</para>
+	<para>The central wiring column in the Trades Tab allows purchases
+		and sales to be conveniently paired by the user. The lines joining
+		circles in this column
+		indicate slots which are paired to form a
+		complete trade; by (left-)clicking on a circle and dragging the
+		mouse, you can “stretch” the line to join it to a
+		different slot -
+		or unpair a slot entirely.
+	</para>
+	<para>The auto-validation will highlight any trades which are invalid (red for errors, yellow for warnings).</para>
+	<informalfigure>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="resources/editor/trades/trades-wiring-large.png" width="16.511cm" depth="4.164cm" />
+			</imageobject>
+			<caption>
+				<para>Tip: Hover over for a description of the validation problem.</para>
+			</caption>
+		</mediaobject>
+	</informalfigure>
+
+</section>

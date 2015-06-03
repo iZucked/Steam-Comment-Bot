@@ -1,0 +1,172 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>The Terms Section</title><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="LiNGO User Manual"><link rel="up" href="ch04.html" title="Chapter&nbsp;4.&nbsp;Data Model Reference"><link rel="prev" href="ch04s04.html" title="The Window Section"><link rel="next" href="ch04s06.html" title="Vessel Class Fields"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="DataModel_lng_cargo_Slot_Terms"></a>
+			The Terms Section
+		</h2></div></div></div><p>
+			<img src="resources/datamodel/slot-terms-dialog.png" height="189">
+		</p><p>The Terms section determines important conditions regarding
+			the
+			cargo. The exact inputs in this section depend on whether the
+			slot is
+			a load or discharge
+			slot, and whether it is FOB or DES.
+		</p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1973"></a>
+				Inputs for load slots only:
+			</h3></div></div></div><p>
+				<img src="resources/datamodel/slot-arrive-cold-dialog.png" height="34">
+			</p><div class="informaltable"><table border="1" width="100%"><colgroup><col width="20%" class="col1"><col width="80%" class="col2"></colgroup><tbody><tr><td>
+								<p>Arrive cold</p>
+							</td><td>
+								<p>If the &#8220;Arrive cold&#8221; input is set to &#8220;No&#8221;, then the
+									vessel
+									can be scheduled to arrive for its load with &#8220;warm&#8221;
+									empty tanks.
+									Overrides port.
+								</p>
+							</td></tr><tr><td>
+								<p>Cargo CV</p>
+							</td><td>
+								<p>The &#8220;Cargo CV&#8221; input specifies the calorific value (CV)
+									of
+									the LNG loaded at this slot in mmBtu per m3.
+								</p>
+							</td></tr></tbody></table></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2007"></a>
+				Terms Inputs for discharge slots only:
+			</h3></div></div></div><p>
+				<img src="resources/datamodel/discharge-slot-terms-dialog.png" height="64">
+			</p><div class="informaltable"><table border="1" width="100%"><colgroup><col width="20%" class="col1"><col width="80%" class="col2"></colgroup><tbody><tr><td>
+								<p>Cargo Type</p>
+							</td><td>
+								<p>The &#8220;Cargo Type&#8221; input may be set to &#8220;Shipped&#8221; to
+									require
+									that the LNG for this transaction must have been
+									actually
+									shipped from another port, or set
+									to &#8220;Not Shipped&#8221;
+									to require
+									that the LNG must be bought and sold at the same
+									port (e.g. in
+									a FOB-FOB or DES-DES deal). The default
+									setting
+									is &#8220;Any&#8221;, which
+									allows the sale to be paired with any
+									purchase.
+								</p>
+							</td></tr><tr><td>
+								<p>Min CV Value / Max CV Value</p>
+							</td><td>
+								<p>The &#8220;Min CV Value&#8221; and &#8220;Max CV Value&#8221; inputs allow
+									minimum
+									and maximum permissible calorific values (CV) in
+									mmBtu
+									per m3 to
+									be associated with a
+									discharge slot.
+								</p>
+							</td></tr></tbody></table></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2041"></a>
+				Terms Inputs for all slots:
+			</h3></div></div></div><p>
+				<img src="resources/datamodel/slot-terms-dialog.png" height="130">
+			</p><p>A particular LNG load may have legal or practical
+				restrictions
+				on which port the LNG may be shipped to, which
+				contracts it can be
+				sold under, and which
+				vessels can carry it.
+				The same considerations
+				may hold vice versa for discharges. These
+				inputs determine those
+				restrictions:
+			</p><p></p><div class="informaltable"><table border="1" width="100%"><colgroup><col width="20%" class="col1"><col width="80%" class="col2"></colgroup><tbody><tr><td>
+								<p>Restricted Ports</p>
+							</td><td>
+								<p>The &#8220;Restricted Ports&#8221; input specifies a list of ports
+									which the reciprocal transaction may not occur at (or, if
+									&#8220;Restricted Lists Are Permissive&#8221;
+									is set to &#8220;Yes&#8221;, it must
+									occur at one of them).
+								</p>
+							</td></tr><tr><td>
+								<p>Restricted Contracts</p>
+							</td><td>
+								<p>The &#8220;Restricted Contracts&#8221; input specifies a list of
+									contracts which the reciprocal transaction may not occur
+									under
+									(or, if &#8220;Restricted Lists Are
+									Permissive&#8221; is set to
+									&#8220;Yes&#8221;, it
+									must occur under one of them).
+								</p>
+							</td></tr><tr><td>
+								<p>Allowed Vessels</p>
+							</td><td>
+								<p>If the &#8220;Allowed Vessels&#8221; input is set, it specifies a
+									list
+									of the vessels which can load (or discharge) at this
+									slot. If it
+									is left blank, any vessel
+									is permitted.
+								</p>
+							</td></tr></tbody></table></div><p>Note: These override the contract defaults. If one value is
+				overridden, then all three are deemed to override the contract.
+			</p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2091"></a>
+				Terms Inputs for DES purchases and FOB sales only:
+			</h3></div></div></div><p>
+				<img src="resources/datamodel/slot-notional-dialog.png" height="58">
+			</p><div class="informaltable"><table border="1" width="100%"><colgroup><col width="20%" class="col1"><col width="80%" class="col2"></colgroup><tbody><tr><td>
+								<p>Assignment</p>
+							</td><td>
+								<p>These transactions are not part of shipped cargoes, so
+									the
+									cargo itself is not assigned a vessel. The &#8220;Assignment&#8221;
+									input
+									determines which vessel is
+									nominated for the
+									transaction.
+								</p>
+							</td></tr><tr><td>
+								<p>Divertible</p>
+							</td><td>
+								<p>A non divertible slot is defined based upon it&#8217;s
+									transfer
+									point. For a DES purchase, this is the port and date
+									where
+									ownership is taken. If it is
+									divertible then the some
+									modelling
+									of the third party shipping is involved (using the
+									nominated
+									vessel assignment). For a divertible DES purchase,
+									the load
+									port
+									and estimated load date is specified.
+									Divertible
+									DES purchases
+									also have a shipping days limit
+									defining the
+									maximum permitted
+									round trip time for slot
+									pairings.
+								</p>
+							</td></tr></tbody></table></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2125"></a>
+				Terms Inputs for DES purchases only:
+			</h3></div></div></div><p>
+				<img src="resources/datamodel/load-slot-delivery-type-dialog.png" height="35">
+			</p><div class="informaltable"><table border="1" width="100%"><colgroup><col width="20%" class="col1"><col width="80%" class="col2"></colgroup><tbody><tr><td>
+								<p>Sales Delivery Type</p>
+							</td><td>
+								<p>The &#8220;Sales Delivery Type&#8221; input may be set to &#8220;Shipped&#8221;
+									to
+									require that the LNG for this transaction must have been
+									actually shipped from another
+									port, or set to &#8220;Not Shipped&#8221;
+									to
+									require that the LNG must be bought and sold at the same
+									port
+									(e.g. in a FOB-FOB or DES-DES deal). The default
+									setting
+									is
+									&#8220;Any&#8221;, which allows the sale to be paired with any
+									purchase.
+								</p>
+							</td></tr></tbody></table></div><p></p></div></div></body></html>

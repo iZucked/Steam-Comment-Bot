@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xml:lang="en" xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xl="http://www.w3.org/1999/xlink"
+	id="Editor_SpotCargoes">
+	<title>
+		Spot Cargoes
+	</title>
+	<para>The Spot Cargoes tab defines spot cargo markets for the four
+		types of buy and sell - FOB Purchase, DES Purchase, FOB Sale, and
+		DES
+		Sale. These are
+		automatically generated buy and sell
+		opportunities and
+		can be created in the trades tables wiring menus
+		or
+		by the optimiser.
+		Each market is defined with a number
+		of
+		options
+		available per month
+		(and each option has a month long
+		window). Spot
+		market slots inherit
+		most of their attributes from
+		the spot market
+		itself.
+	</para>
+	<orderedlist>
+		<listitem>
+			<para>Note FOB Sale problems with certain custom contract logic
+			</para>
+		</listitem>
+	</orderedlist>
+
+	<section>
+		<title>
+			Spot Market Editor
+		</title>
+		<informaltable frame="all">
+			<tgroup cols="2">
+				<colspec colnum="1" colname="col1" colwidth="1*" />
+				<colspec colnum="2" colname="col2" colwidth="4*" />
+				<tbody>
+					<row>
+						<entry>
+							<para>Name</para>
+						</entry>
+						<entry>
+							<para>A unique name to identify this spot market.</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Min Quantity / Max Quantity</para>
+						</entry>
+						<entry>
+							<para>Minimum and maximum volumes (in m3) of LNG for a
+								transaction in this market.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Entity</para>
+						</entry>
+						<entry>
+							<para>The legal trading entity which trades in this spot
+								market.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Notional Port</para>
+						</entry>
+						<entry>
+							<para>The port at which this market is deemed to operate.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>CV</para>
+						</entry>
+						<entry>
+							<para>The CV of the gas</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Market Ports</para>
+						</entry>
+						<entry>
+							<para>A list of ports which this market can be accessed at.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Constant</para>
+						</entry>
+						<entry>
+							<para>Number of cargoes per month</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Price Expression</para>
+						</entry>
+						<entry>
+							<para>A price expression specifying the expected price at
+								which
+								LNG is sold in this market (see price expressions).
+							</para>
+						</entry>
+					</row>
+				</tbody>
+			</tgroup>
+		</informaltable>
+	</section>
+</section>

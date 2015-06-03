@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xml:lang="en" xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xl="http://www.w3.org/1999/xlink">
+
+	<title>
+		Data Perspective: Editing Views
+	</title>
+	<section id="Editor_CooldownCosts">
+		<title>
+			Cooldown Costs
+		</title>
+		<orderedlist>
+			<listitem>
+				<para>Links Load ports to a price curve to use when pricing
+					cooldowns at that load port.
+				</para>
+			</listitem>
+			<listitem>
+				<para>Multiple load ports can be grouped together, but a load
+					port
+					may only have a single price curve.
+				</para>
+			</listitem>
+		</orderedlist>
+	</section>
+	<section id="Editor_Ports">
+		<title>
+			Ports
+		</title>
+		<orderedlist>
+			<listitem>
+				<para>Lists all the available ports in the scenario</para>
+			</listitem>
+			<listitem>
+				<para>Manage distances and routes via toolbar buttons</para>
+			</listitem>
+		</orderedlist>
+	</section>
+	<section id="Editor_Vessels">
+		<title>
+			Vessels
+		</title>
+		<orderedlist>
+			<listitem>
+				<para>Lists all the known vessel and classes in the scenario
+				</para>
+			</listitem>
+			<listitem>
+				<para>Manage base fuels via toolbar button</para>
+			</listitem>
+			<listitem>
+				<para>Note: Use editor fleet tab to register a vessel as a fleet
+					vessel.
+				</para>
+			</listitem>
+		</orderedlist>
+	</section>
+	<section id="Editor_CanalCosts">
+		<title>
+			Canal costs
+		</title>
+		<orderedlist>
+			<listitem>
+				<para>One row per vessel class and non direct route.</para>
+			</listitem>
+			<listitem>
+				<para>Automatically created/removed</para>
+			</listitem>
+			<listitem>
+				<para>Specifies the fixed costs for using a canal.</para>
+			</listitem>
+			<listitem>
+				<para>Note: Consumptions are edited from the vessel class editor.
+				</para>
+			</listitem>
+		</orderedlist>
+	</section>
+	<section id="Editor_PortCosts">
+		<title>
+			Port Costs
+		</title>
+		<orderedlist>
+			<listitem>
+				<para>Links operations costs for a given port.</para>
+			</listitem>
+			<listitem>
+				<para>Multiple ports can be grouped together, but a port may only
+					have a single single set of costs.
+				</para>
+			</listitem>
+			<listitem>
+				<para>Costs are fixed unless a reference capacity is provided. If
+					a
+					reference capacity is provided then port costs are scaled
+					linearly
+					in proportion to the
+					actual vessel capacity.
+				</para>
+			</listitem>
+		</orderedlist>
+		<para />
+	</section>
+</section>
+

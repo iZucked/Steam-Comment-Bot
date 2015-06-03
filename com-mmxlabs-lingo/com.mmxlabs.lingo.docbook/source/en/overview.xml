@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter xml:lang="en" xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xl="http://www.w3.org/1999/xlink">
+	<title>Application Overview</title>
+
+	<para>LiNGO is an LNG portfolio optimisation and management software product. Featuring a rich, highly functional user interface (UI) and it enables business
+		users to:
+	</para>
+	<orderedlist>
+		<listitem>
+			<para>Model vessels, ports, cargoes, contracts,  etc. data and constraints in detail</para>
+		</listitem>
+		<listitem>
+			<para>Evaluate complex contract and corporate P&amp;L logic</para>
+		</listitem>
+		<listitem>
+			<para>Optimise ship scheduling and portfolio configuration (specifically, buy-sell pairs) to maximise post-tax group P&amp;L.</para>
+		</listitem>
+		<listitem>
+			<para>Discover and exploit opportunities in both cargo and shipping markets.</para>
+		</listitem>
+		<listitem>
+			<para>Manage operations and analyse risk.</para>
+		</listitem>
+	</orderedlist>
+	<para>It is often highly customised, particularly around contract and entity P&amp;L logic, reporting and systems integration.</para>
+	<para>LiNGO is based around Scenarios, a collection of data which completely defines a snapshot of the portfolio (cargoes, shipping, contracts, entities, as
+		well as reference data for ports, vessels, port and canal costs, etc.). Scenarios are the self-contained data files and can largely be thought of as
+		traditional files.
+	</para>
+	<para>Users edit scenarios to reflect current business and operational conditions evaluate possible trading and shipping decisions. Built-in auto-validation
+		checks all physical and commercial constraints and highlight violation to the user for correction.
+	</para>
+	<para>We give here an overview of the application just as a user sees it. Other sections of this guide will focus on data model, common use
+		cases and
+		questions.
+	</para>
+	<para>Firstly a note on the structure of the application, then descriptions of each part of the main Analysis screen (perspective), then followed by Reports
+		and the Data perspective.
+	</para>
+	<section>
+		<title>
+			Screens (aka Perspectives) and windows (aka Views)
+		</title>
+		<para>
+			A view is a window which generally displays some data or diagram (such as the editing view. LiNGO has a number or carefully configured screens or
+			Perspectives, which group together Views within a common context. For example, Analysis (illustrated) covers portfolio modelling and optimisation while Data
+			contains and handles editing of all the reference data.
+			<inlinegraphic fileref="resources/overview/overview.png" width="100%" />
+		</para>
+	</section>
+	<section>
+		<title>Icons</title>
+		<para>Many Views have small icons in the top right corner providing commonly-used commands:</para>
+		<informaltable frame="all">
+			<tgroup cols="3">
+				<colspec colnum="1" colname="col1" colwidth="1*" />
+				<colspec colnum="2" colname="col2" colwidth="2*" />
+				<colspec colnum="3" colname="col3" colwidth="7*" />
+				<tbody>
+					<row>
+						<entry>
+							<inlinegraphic fileref="resources/overview/icons-add.png" width="1.236cm" depth="0.601cm" />
+						</entry>
+						<entry>
+							Add
+						</entry>
+						<entry>Add an existing vessel to the fleet or create a new “Charter Out”, “Maintenance” or “Dry Dock” vessel event.
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<inlinegraphic fileref="resources/overview/icons-delete.png" width="0.601cm" depth="0.601cm" />
+						</entry>
+						<entry>
+							Delete
+						</entry>
+						<entry>
+							Delete the selected rows.
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<inlinegraphic fileref="resources/overview/icons-pack-columns.png" width="0.742cm" depth="0.601cm" />
+						</entry>
+						<entry>
+							Pack Columns
+						</entry>
+						<entry>
+							Resize table columns to fit data
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<inlinegraphic fileref="resources/overview/icons-filter.png" width="1.095cm" depth="0.636cm" />
+						</entry>
+						<entry>
+							Filter
+						</entry>
+						<entry>
+							Filter data based on specified names or other fields.
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<inlinegraphic fileref="resources/overview/icons-copy-to-clipboard.png" width="0.671cm" depth="0.636cm" />
+						</entry>
+						<entry>
+							Copy to Clipboard
+						</entry>
+						<entry>
+							Copy data in Excel compatible format to the clipboard.
+						</entry>
+					</row>
+				</tbody>
+			</tgroup>
+		</informaltable>
+	</section>
+	<section id="View_Navigator">
+	<?dbeclipse ctx_title="About the Scenario Navigator" ?>
+		<title>Scenario Navigator</title>
+		<para>The Scenarios Navigator is common to all perspectives and drives most use of the application. Here, the user manages the scenarios in the workspace and
+			selects them for viewing, editing and optimising.
+		</para>
+		<para>
+			The scenarios are organised into a tree of repositories
+			<inlinegraphic fileref="resources/scenario-navigator/ScenarioService.gif" width="0.424cm" depth="0.424cm" />
+			, folders
+			<inlinegraphic fileref="resources/scenario-navigator/Folder.gif" width="0.424cm" depth="0.424cm" />
+			and scenarios
+			<inlinegraphic fileref="resources/scenario-navigator/ScenarioInstance.gif" width="0.424cm" depth="0.424cm" />
+			. A folder is just like a directory on the filesystem, containing other folders and scenarios. Folders are stored on the local machine and optionally on a
+			network share. The repositories, “My Scenarios” and “Base cases (shared)”, are hidden if the share is not enabled.
+		</para>
+		<para>
+			The Pin
+			<inlinemediaobject>
+				<imageobject>
+					<imagedata fileref="resources/scenario-navigator/nav-pin.png" depth="0.4cm" />
+				</imageobject>
+			</inlinemediaobject>
+			and Display
+			<inlinegraphic fileref="resources/scenario-navigator/nav-display.png" />
+			icons control how scenarios appear in comparative reports. Pinning a scenario selects it as the base case to compare other scenarios
+			against in comparative
+			reports. Only one scenario may be pinned at one time. The pinned scenario is always featured in a comparative
+			report. The Display icon determines whether a
+			scenario is shown in a
+			comparative report: if it is selected
+			<inlinegraphic fileref="resources/scenario-navigator/nav-display.png" width="0.477cm" depth="0.451cm" />
+			, the scenario will be displayed, while if it is unselected
+			<inlinegraphic fileref="resources/scenario-navigator/nav-display-grey.png" width="0.371cm" depth="0.398cm" />
+			then the scenario will not appear on comparative reports. Clicking on a Display icon will toggle it between selected and unselected.
+			Double-clicking on a
+			Display icon will pin the scenario.
+		</para>
+
+		<informalfigure>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="resources/scenario-navigator/views-scenario-navigator.png" width="6cm" />
+				</imageobject>
+			</mediaobject>
+		</informalfigure>
+
+		<para>
+			The
+			<inlinegraphic fileref="resources/scenario-navigator/bg-eval.png" width="0.53cm" depth="0.504cm" />
+			column in the Scenarios View shows when work (evaluation or
+			optimisation) is being done by the application on a scenario, so
+			that
+			the scenario is not available
+			for editing. A red circle
+			<inlinegraphic fileref="resources/scenario-navigator/nav-progress.png" width="0.477cm" depth="0.53cm" />
+			will appear when work is being done on a scenario, turning
+			gradually
+			green to indicate progress.
+		</para>
+
+		<para>
+			Finally, any scenario
+			<inlinegraphic fileref="resources/scenario-navigator/ScenarioInstance.gif" width="0.424cm" depth="0.424cm" />
+			may also be overlaid with icons showing it has validation warnings
+			<inlinegraphic fileref="resources/scenario-navigator/nav-warning.gif" width="0.424cm" depth="0.424cm" />
+			and errors
+			<inlinegraphic fileref="resources/scenario-navigator/nav-error.gif" width="0.424cm" depth="0.424cm" />
+			, is locked for editing
+			<inlinegraphic fileref="resources/scenario-navigator/nav-lock.png" width="0.424cm" depth="0.424cm" />
+			or is being optimised
+			<inlinegraphic fileref="resources/scenario-navigator/nav-opt.png" width="0.186cm" depth="0.213cm" />
+			.
+		</para>
+		<para>Scenarios and folders can be moved around by drag and drop
+			(hold
+			down control to copy rather than move). The usual copy
+			(CTRL+C) and
+			paste (CTRL+V) actions
+			can be used both within the
+			Navigator and to
+			transfer scenarios to and from the Windows
+			filesystem or Desktop
+			(where they have the “.lingo” file
+			extension).
+		</para>
+		<para>
+			Double-clicking on a scenario will open it in the scenario editor.
+			Single click on a scenario to snap the editor and display to that
+			scenario (if open).
+		</para>
+		<para>Scenarios can be “forked”. Forking simply creates a copy of
+			the scenario, displayed under the contained under the parent scenario.
+			Note: a scenario can
+			only be placed under another scenario as a result of a fork.
+		</para>
+
+		<informalfigure>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="resources/scenario-navigator/context-menu.png" width="7.259cm" depth="7.21cm" />
+				</imageobject>
+				<caption>
+					<para>Tip: Use forking to make chain of scenarios to track an
+						evolving analysis case.
+					</para>
+				</caption>
+			</mediaobject>
+		</informalfigure>
+
+
+		<para>Right-clicking on a scenario or folder will open the context
+			menu:
+		</para>
+		<informaltable frame="all">
+			<tgroup cols="2">
+				<colspec colnum="1" colname="col1" colwidth="1*" />
+				<colspec colnum="2" colname="col2" colwidth="4*" />
+				<tbody>
+					<row>
+						<entry>Go Into</entry>
+						<entry>
+							Change the focus of the scenarios view to the selected folder.
+							This can be adjusted by clicking the back
+							<inlinegraphic fileref="resources/scenario-navigator/nav-back.png" width="0.424cm" depth="0.424cm" />
+							, forward
+							<inlinegraphic fileref="resources/scenario-navigator/nav-forward.png" width="0.424cm" depth="0.424cm" />
+							or up
+							<inlinegraphic fileref="resources/scenario-navigator/nav-up.png" width="0.424cm" depth="0.424cm" />
+							icons.
+						</entry>
+					</row>
+					<row>
+						<entry>New Folder</entry>
+						<entry>If a folder is selected, create a new folder inside it.</entry>
+					</row>
+					<row>
+						<entry>Rename</entry>
+						<entry>Rename a scenario or folder.</entry>
+					</row>
+					<row>
+						<entry>Copy</entry>
+						<entry>Copy a scenario or folder, to paste into Scenario Navigator or a Windows folder.</entry>
+					</row>
+					<row>
+						<entry>Paste</entry>
+						<entry>Paste a scenario from LiNGO or a Windows folder.</entry>
+					</row>
+					<row>
+						<entry>Delete</entry>
+						<entry>Delete a scenario. This action cannot be undone.</entry>
+					</row>
+					<row>
+						<entry>Revert</entry>
+						<entry>If you have made any unsaved changes to a scenario, abandon those changes and go back to the last saved version.</entry>
+					</row>
+					<row>
+						<entry>Fork</entry>
+						<entry>Make a new version of a scenario for quick editing and comparison.</entry>
+					</row>
+					<row>
+						<entry>Optimise</entry>
+						<entry>Attempt to automatically optimise the scenario, producing a commercially improved schedule by changing the allocation of trades and vessels, as
+							well as some other factors.
+						</entry>
+					</row>
+					<row>
+						<entry>Fork and Optimise</entry>
+						<entry>Fork a scenario and then optimise the fork.</entry>
+					</row>
+					<row>
+						<entry>Pin / Unpin</entry>
+						<entry>“Pin” or “unpin” the scenario. A pinned scenario is used as the base for comparison in comparative reports.</entry>
+					</row>
+					<row>
+						<entry>Export Scenario as CSV</entry>
+						<entry>Save the scenario in CSV format, allowing the scenario data to be edited in Excel or another spreadsheet.</entry>
+					</row>
+				</tbody>
+			</tgroup>
+		</informaltable>
+	</section>
+	<section id="View_Validation">
+		<title>Validation</title>
+		<para>The Validation view displays a list of warning and error
+			messages for the scenario currently being edited.
+		</para>
+		<para>
+			Note: not to be confused with application errors recorded in the
+			Error Log view.
+		</para>
+		<informalfigure>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="resources/overview/validation view.png" />
+				</imageobject>
+				<caption>
+					<para>Tip: Double-click on a validation message to switch to and
+						highlight the relevant data item in the relevant editor tab (note for
+						ports and vessels,
+						etc.
+						switch to the Data perspective).
+					</para>
+				</caption>
+			</mediaobject>
+		</informalfigure>
+
+		<para>Warning messages are generally data issues which the optimiser
+			can work around but may lead to suboptimal results. Error messages
+			are generally for gaps
+			or inconsistencies in the input data, or
+			conflicting requirements that the optimiser is unable to fix (by
+			moving slots around), or even evaluate properly.
+		</para>
+	</section>
+	<section id="View_ErrorLog">
+		<title>Error Log</title>
+		<para>
+			The Error Log view records internal application errors (not to be
+			confused with scenario data errors, shown in the Validation view).
+			This view provides
+			invaluable information for debugging problems so
+			any bug report should provide a copy of the Error Log together with
+			related scenarios and steps to reproduce.
+			Export the Error Log
+			using
+			the "Export Log”
+			<inlinegraphic fileref="resources/overview/export error log.png" width="0.53cm" depth="0.504cm" />
+			button.
+		</para>
+		<informalfigure>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="resources/overview/error log.png" width="11.749cm" depth="4.949cm" />
+				</imageobject>
+			</mediaobject>
+		</informalfigure>
+	</section>
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="menubar.xml" />
+</chapter>

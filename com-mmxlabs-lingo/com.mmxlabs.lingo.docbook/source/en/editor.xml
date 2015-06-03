@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter xml:lang="en" xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xl="http://www.w3.org/1999/xlink" id="Chapter_Editor">
+	<title>Editing</title>
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="editor-trades.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="editor-fleet.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="editor-commercial.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="editor-markets.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="editor-spot-charters.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="editor-spot-cargoes.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="editor-views.xml" />
+</chapter>

@@ -1,0 +1,89 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Scenario Navigator</title><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="LiNGO User Manual"><link rel="up" href="ch01.html" title="Chapter&nbsp;1.&nbsp;Application Overview"><link rel="prev" href="ch01s02.html" title="Icons"><link rel="next" href="ch01s04.html" title="Validation"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="View_Navigator"></a>Scenario Navigator</h2></div></div></div><p>The Scenarios Navigator is common to all perspectives and drives most use of the application. Here, the user manages the scenarios in the workspace and
+			selects them for viewing, editing and optimising.
+		</p><p>
+			The scenarios are organised into a tree of repositories
+			<img src="resources/scenario-navigator/ScenarioService.gif" width="15">
+			, folders
+			<img src="resources/scenario-navigator/Folder.gif" width="15">
+			and scenarios
+			<img src="resources/scenario-navigator/ScenarioInstance.gif" width="15">
+			. A folder is just like a directory on the filesystem, containing other folders and scenarios. Folders are stored on the local machine and optionally on a
+			network share. The repositories, &#8220;My Scenarios&#8221; and &#8220;Base cases (shared)&#8221;,&nbsp;are hidden if the share is not enabled.
+		</p><p>
+			The Pin
+			<span class="inlinemediaobject"><img src="resources/scenario-navigator/nav-pin.png" height="14"></span>
+			and Display
+			<img src="resources/scenario-navigator/nav-display.png">
+			icons control how scenarios appear in comparative reports. Pinning a scenario selects it as the base case to compare other scenarios
+			against in comparative
+			reports. Only one scenario may be pinned at one time. The pinned scenario is always featured in a comparative
+			report. The Display icon determines whether a
+			scenario is shown in a
+			comparative report: if it is selected
+			<img src="resources/scenario-navigator/nav-display.png" width="17">
+			, the scenario will be displayed, while if it is unselected
+			<img src="resources/scenario-navigator/nav-display-grey.png" width="13">
+			then the scenario will not appear on comparative reports. Clicking on a Display icon will toggle it between selected and unselected.
+			Double-clicking on a
+			Display icon will pin the scenario.
+		</p><div class="informalfigure"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="213"><tr><td><img src="resources/scenario-navigator/views-scenario-navigator.png" width="213"></td></tr></table></div></div><p>
+			The
+			<img src="resources/scenario-navigator/bg-eval.png" width="19">
+			column in the Scenarios View shows when work (evaluation or
+			optimisation) is being done by the application on a scenario, so
+			that
+			the scenario is not available
+			for editing. A red circle
+			<img src="resources/scenario-navigator/nav-progress.png" width="17">
+			will appear when work is being done on a scenario, turning
+			gradually
+			green to indicate progress.
+		</p><p>
+			Finally, any scenario
+			<img src="resources/scenario-navigator/ScenarioInstance.gif" width="15">
+			may also be overlaid with icons showing it has validation warnings
+			<img src="resources/scenario-navigator/nav-warning.gif" width="15">
+			and errors
+			<img src="resources/scenario-navigator/nav-error.gif" width="15">
+			, is locked for editing
+			<img src="resources/scenario-navigator/nav-lock.png" width="15">
+			or is being optimised
+			<img src="resources/scenario-navigator/nav-opt.png" width="7">
+			.
+		</p><p>Scenarios and folders can be moved around by drag and drop
+			(hold
+			down control to copy rather than move). The usual copy
+			(CTRL+C) and
+			paste (CTRL+V) actions
+			can be used both within the
+			Navigator and to
+			transfer scenarios to and from the Windows
+			filesystem or Desktop
+			(where they have the &#8220;.lingo&#8221; file
+			extension).
+		</p><p>
+			Double-clicking on a scenario will open it in the scenario editor.
+			Single click on a scenario to snap the editor and display to that
+			scenario (if open).
+		</p><p>Scenarios can be &#8220;forked&#8221;. Forking simply creates a copy of
+			the scenario, displayed under the contained under the parent scenario.
+			Note: a scenario can
+			only be placed under another scenario as a result of a fork.
+		</p><div class="informalfigure"><div class="mediaobject"><table border="0" summary="manufactured viewport for HTML img" style="cellpadding: 0; cellspacing: 0;" width="257"><tr style="height: 255px"><td><img src="resources/scenario-navigator/context-menu.png" width="257"></td></tr></table><div class="caption"><p>Tip: Use forking to make chain of scenarios to track an
+						evolving analysis case.
+					</p></div></div></div><p>Right-clicking on a scenario or folder will open the context
+			menu:
+		</p><div class="informaltable"><table border="1" width="100%"><colgroup><col width="20%" class="col1"><col width="80%" class="col2"></colgroup><tbody><tr><td>Go Into</td><td>
+							Change the focus of the scenarios view to the selected folder.
+							This can be adjusted by clicking the back
+							<img src="resources/scenario-navigator/nav-back.png" width="15">
+							, forward
+							<img src="resources/scenario-navigator/nav-forward.png" width="15">
+							or up
+							<img src="resources/scenario-navigator/nav-up.png" width="15">
+							icons.
+						</td></tr><tr><td>New Folder</td><td>If a folder is selected, create a new folder inside it.</td></tr><tr><td>Rename</td><td>Rename a scenario or folder.</td></tr><tr><td>Copy</td><td>Copy a scenario or folder, to paste into Scenario Navigator or a Windows folder.</td></tr><tr><td>Paste</td><td>Paste a scenario from LiNGO or a Windows folder.</td></tr><tr><td>Delete</td><td>Delete a scenario. This action cannot be undone.</td></tr><tr><td>Revert</td><td>If you have made any unsaved changes to a scenario, abandon those changes and go back to the last saved version.</td></tr><tr><td>Fork</td><td>Make a new version of a scenario for quick editing and comparison.</td></tr><tr><td>Optimise</td><td>Attempt to automatically optimise the scenario, producing a commercially improved schedule by changing the allocation of trades and vessels, as
+							well as some other factors.
+						</td></tr><tr><td>Fork and Optimise</td><td>Fork a scenario and then optimise the fork.</td></tr><tr><td>Pin / Unpin</td><td>&#8220;Pin&#8221; or &#8220;unpin&#8221; the scenario. A pinned scenario is used as the base for comparison in comparative reports.</td></tr><tr><td>Export Scenario as CSV</td><td>Save the scenario in CSV format, allowing the scenario data to be edited in Excel or another spreadsheet.</td></tr></tbody></table></div></div></body></html>

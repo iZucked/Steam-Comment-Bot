@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter xml:lang="en" xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xl="http://www.w3.org/1999/xlink">
+	<title>Reports</title>
+	<section id="Reports_ScheduleChart">
+		<indexterm>
+			<primary>Reports</primary>
+			<secondary>Schedule Chart</secondary>
+		</indexterm>
+	<?dbeclipse ctx_description="The schedule chart provides a visual representation of the schedule. Each row represents a vessel showing the sequence of cargoes, drydocks, charter outs and other events in time." ?>
+		<title>Schedule Chart</title>
+		<para>The schedule chart provides a visual representation of the schedule. Each row represents a vessel showing the sequence of cargoes, drydocks, charter
+			outs and other events in time.
+		</para>
+		<para>Selecting an element in the view will cause the other reports and editor to &quot;snap&quot; to that element if possible. For example selecting a load
+			or discharge event will cause the relevant cargo to be highlighted in the cargo report. Additionally, the properties view will show additional details about
+			the event. A summary will be shown in the tooltip which is displayed when hovering over an event.
+		</para>
+		<itemizedlist>
+			<listitem>
+				<para>Also known as the Gantt view</para>
+			</listitem>
+			<listitem>
+				<para>Vessel names also include scenario name when multiple
+					scenarios are selected.
+				</para>
+			</listitem>
+			<listitem>
+				<para>FOB / DES cargoes in single row.</para>
+			</listitem>
+			<listitem>
+				<para>Colour Scheme (show examples in screenshots)</para>
+			</listitem>
+			<listitem>
+				<para>Sort Modes (multiple scenarios)</para>
+			</listitem>
+			<listitem>
+				<para>Multiple Scenarios: stack</para>
+			</listitem>
+			<listitem>
+				<para>Pin/Diff: No change over multiple scenarios</para>
+			</listitem>
+		</itemizedlist>
+	</section>
+	<section id="Reports_PortRotationReportView">
+	<?dbeclipse ctx_description="The port rotations report is a configurable report showing a detailed shipping based breakdown of voyages." ?>
+		<title>Port Rotations</title>
+		<itemizedlist>
+			<listitem>
+				<para>Detailed event by event breakdown of costs and consumptions
+					for each vessel.
+				</para>
+			</listitem>
+			<listitem>
+				<para>One row per port visit, travel time, idle time and other
+					events.
+				</para>
+			</listitem>
+			<listitem>
+				<para>Best view to see what the vessel is doing operationally.
+				</para>
+			</listitem>
+		</itemizedlist>
+		<itemizedlist>
+			<listitem>
+				<para>Multiple Scenarios: stack</para>
+			</listitem>
+			<listitem>
+				<para>Pin/Diff: No change over multiple scenarios</para>
+			</listitem>
+		</itemizedlist>
+	</section>
+	<section id="Reports_ScheduleSummary">
+	<?dbeclipse ctx_description="The schedule summary report is a configurable shows a P&amp;L based breakdown of cargoes and other events" ?>
+		<title>Schedule Summary</title>
+		<itemizedlist>
+			<listitem>
+				<para>Report
+					shows all P&amp;L contributions
+					<itemizedlist>
+						<listitem>
+							<para>All cargoes</para>
+						</listitem>
+						<listitem>
+							<para>Vessel events</para>
+						</listitem>
+						<listitem>
+							<para>Orphan ballast legs</para>
+						</listitem>
+						<listitem>
+							<para>Unpaired slots with PnL contributions (e.g. cancellation fees)</para>
+						</listitem>
+					</itemizedlist>
+				</para>
+			</listitem>
+			<listitem>
+				<para>Multiple Scenarios: stack</para>
+			</listitem>
+			<listitem>
+				<para>Pin/Diff: Hide structurally similar rows</para>
+			</listitem>
+		</itemizedlist>
+	</section>
+	<section id="Reports_VerticalSchedule">
+	<?dbeclipse ctx_description="The vertical schedule shows shipping and trading events on a day-by-day basis." ?>
+		<title>Verticle Report</title>
+
+		<itemizedlist>
+			<listitem>
+				<para>Report shows day by day events for vessels and trading positions.
+				</para>
+			</listitem>
+			<listitem>
+				<para>Multiple Scenarios: First selected</para>
+			</listitem>
+			<listitem>
+				<para>Pin/Diff: NBo change over multiple scenarios</para>
+			</listitem>
+		</itemizedlist>
+	</section>
+	<section id="Reports_Lateness">
+		<?dbeclipse ctx_description="The lateness report shows the late arrivals in the scenario." ?>
+		<title>
+			Lateness Report
+		</title>
+		<itemizedlist>
+			<listitem>
+				<para>Reports all late arrivals in scenario</para>
+			</listitem>
+			<listitem>
+				<para>Multiple Scenarios: stack</para>
+			</listitem>
+			<listitem>
+				<para>Pin/Diff: No change over multiple scenarios</para>
+			</listitem>
+		</itemizedlist>
+	</section>
+	<section id="Reports_Cooldown">
+		<?dbeclipse ctx_description="The cooldown report lists all of the cooldowns in the scenario - both permitted and forced." ?>
+		<title>
+			Cooldown Report
+		</title>
+		<itemizedlist>
+			<listitem>
+				<para>Reports all the cooldowns in the scenarios</para>
+			</listitem>
+			<listitem>
+				<para>Multiple Scenarios: stack</para>
+			</listitem>
+			<listitem>
+				<para>Pin/Diff: No change over multiple scenarios</para>
+			</listitem>
+		</itemizedlist>
+	</section>
+	<section id="Reports_CapacityViolations">
+		<?dbeclipse ctx_description="The capacity violation report shows all of the capacity related violations in the scenario. These include load and discharge volume bound breaches and forced cooldowns." ?>
+		<title>
+			Capacity Violations
+		</title>
+		<itemizedlist>
+			<listitem>
+				<para>Reports all the capacity violations</para>
+			</listitem>
+			<listitem>
+				<para>Min/Max volume breaches</para>
+			</listitem>
+			<listitem>
+				<para>Heel issues</para>
+			</listitem>
+			<listitem>
+				<para>Max vessel capacity issues</para>
+			</listitem>
+			<listitem>
+				<para>Multiple Scenarios: stack</para>
+			</listitem>
+			<listitem>
+				<para>Pin/Diff: No change over multiple scenarios</para>
+			</listitem>
+		</itemizedlist>
+	</section>
+	<section id="Reports_IndexExposures">
+		<title>
+			Index Exposures
+		</title>
+		<itemizedlist>
+			<listitem>
+				<para>Simple tracking of exposures by volume for price expression
+					contracts.
+				</para>
+			</listitem>
+			<listitem>
+				<para>Multiple Scenarios: Shows one scenario</para>
+			</listitem>
+			<listitem>
+				<para>Pin/Diff: Not implemented</para>
+			</listitem>
+		</itemizedlist>
+	</section>
+	<section id="Reports_KPI">
+		<title>
+			KPI
+		</title>
+		<itemizedlist>
+			<listitem>
+				<para>Some headline totals</para>
+			</listitem>
+			<listitem>
+				<para>Multiple Scenarios: stack</para>
+			</listitem>
+			<listitem>
+				<para>Pin/Diff: Extra diff column</para>
+			</listitem>
+		</itemizedlist>
+	</section>
+	<section id="Reports_Headline">
+		<?dbeclipse ctx_description="The headline report shows a few KPI's for the current scenario - or the difference in pin/diff mode." ?>
+		<title>
+			Headline Report
+		</title>
+		<itemizedlist>
+			<listitem>
+				<para>Some headline totals, horizontally tracking current
+					scenario
+				</para>
+			</listitem>
+			<listitem>
+				<para>Multiple Scenarios: Only current editor scenario</para>
+			</listitem>
+			<listitem>
+				<para>Pin/Diff: Diff on values (shows one of the selected
+					scenarios)
+				</para>
+			</listitem>
+		</itemizedlist>
+	</section>
+	<section id="Reports_CargoEcons">
+		<title>
+			Cargo Econs
+		</title>
+		<itemizedlist>
+			<listitem>
+				<para>High level breakdown of cargo PNL due to purchase cost,
+					sales
+					revenue and shipping cost.
+				</para>
+			</listitem>
+			<listitem>
+				<para>Based on selected cargoes.</para>
+			</listitem>
+			<listitem>
+				<para>Multiple Scenarios: N/A</para>
+			</listitem>
+			<listitem>
+				<para>Pin/Diff: N/A</para>
+			</listitem>
+		</itemizedlist>
+	</section>
+	<section id="Reports_PNLDetails">
+		<title>
+			PnL Details
+		</title>
+		<itemizedlist>
+			<listitem>
+				<para>Detailed cargo PNL breakdown </para>
+			</listitem>
+			<listitem>
+				<para>Based on selected cargo</para>
+			</listitem>
+			<listitem>
+				<para>Multiple Scenarios: N/A</para>
+			</listitem>
+			<listitem>
+				<para>Pin/Diff: N/A</para>
+			</listitem>
+		</itemizedlist>
+	</section>
+	<section id="Reports_CostsBreakdown">
+		<title>
+			Costs Breakdown
+		</title>
+		<itemizedlist>
+			<listitem>
+				<para>A drill down report on shipping costs.</para>
+			</listitem>
+		</itemizedlist>
+		<itemizedlist>
+			<listitem>
+				<para>Multiple Scenarios: Stack</para>
+			</listitem>
+			<listitem>
+				<para>Pin/Diff: No difference to multiple scenarios</para>
+			</listitem>
+		</itemizedlist>
+	</section>
+	<!-- <section> <title> Fitness </title> <itemizedlist> <listitem> <para>Shows internal fitness component values when optimising </para> </listitem> </itemizedlist> 
+		<itemizedlist> <listitem> <para>Multiple Scenarios: stack</para> </listitem> <listitem> <para>Pin/Diff: Extra Diff column</para> </listitem> </itemizedlist> </section> -->
+	<section id="Reports_VesselSummary">
+		<title>
+			Vessel Summary
+		</title>
+		<itemizedlist>
+			<listitem>
+				<para>Shows schedule totals on a per vessel basis.</para>
+			</listitem>
+			<listitem>
+				<para>Utilisation based on</para>
+			</listitem>
+		</itemizedlist>
+		<itemizedlist>
+			<listitem>
+				<para>Multiple Scenarios: Stack</para>
+			</listitem>
+			<listitem>
+				<para>Pin/Diff: No difference to multiple scenarios</para>
+			</listitem>
+		</itemizedlist>
+	</section>
+	<section id="Reports_VolumeTracking">
+		<title>
+			Volume Tracking
+		</title>
+		<itemizedlist>
+			<listitem>
+				<para>Tracks volume bought and sold by contract and gas year.(1st
+					Oct -&gt; 30th Sept)</para>
+			</listitem>
+		</itemizedlist>
+		<itemizedlist>
+			<listitem>
+				<para>Multiple Scenarios: Shows one scenario</para>
+			</listitem>
+			<listitem>
+				<para>Pin/Diff: Not available.</para>
+			</listitem>
+		</itemizedlist>
+	</section>
+	<section id="Reports_Totals">
+		<title>
+			Totals
+		</title>
+		<itemizedlist>
+			<listitem>
+				<para>Shows shipping cost related schedule totals</para>
+			</listitem>
+		</itemizedlist>
+		<itemizedlist>
+			<listitem>
+				<para>Multiple Scenarios: Stack</para>
+			</listitem>
+			<listitem>
+				<para>Pin/Diff: Extra diff column</para>
+			</listitem>
+		</itemizedlist>
+	</section>
+</chapter>

@@ -1,0 +1,56 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Chapter&nbsp;4.&nbsp;Data Model Reference</title><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="LiNGO User Manual"><link rel="up" href="index.html" title="LiNGO User Manual"><link rel="prev" href="ch03s16.html" title="Totals"><link rel="next" href="ch04s02.html" title="Slot Editors"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div lang="en" class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="d0e1666"></a>Chapter&nbsp;4.&nbsp;Data Model Reference</h1></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl class="toc"><dt><span class="section"><a href="ch04.html#DataModel_lng_cargo_Cargo">
+			The Cargo Editor
+		</a></span></dt><dt><span class="section"><a href="ch04s02.html">
+			Slot Editors
+		</a></span></dt><dt><span class="section"><a href="ch04s03.html">
+			The Pricing Section
+		</a></span></dt><dt><span class="section"><a href="ch04s04.html">
+			The Window Section
+		</a></span></dt><dt><span class="section"><a href="ch04s05.html">
+			The Terms Section
+		</a></span></dt><dt><span class="section"><a href="ch04s06.html">
+			Vessel Class Fields
+		</a></span></dt><dt><span class="section"><a href="ch04s07.html">
+			Contract Fields
+		</a></span></dt></dl></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="DataModel_lng_cargo_Cargo"></a>
+			The Cargo Editor
+		</h2></div></div></div><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p></p></li></ol></div><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>Data Restrictions - unique name, no overlaps</p></li><li class="listitem"><p>Assigned vessel vs. allowed vessel</p></li><li class="listitem"><p>Step by step example(s)!</p></li></ol></div><p>
+			<img src="resources/datamodel/cargo-full-dialog.png" width="513">
+		</p><p>
+			The Cargo Editor dialog allows various aspects of a cargo to be
+			modified. The top part of the dialog
+			<img src="resources/datamodel/cargo-dialog.png" height="92">
+			contains information about the entire cargo, with inputs as
+			follows:
+		</p><div class="informaltable"><table border="1" width="100%"><colgroup><col width="20%" class="col1"><col width="80%" class="col2"></colgroup><tbody><tr><td>
+							<p>Name </p>
+						</td><td>
+							<p>The cargo&#8217;s unique name.</p>
+						</td></tr><tr><td>
+							<p>Assignment</p>
+						</td><td>
+							<p>The vessel the cargo is assigned to.</p>
+						</td></tr><tr><td>
+							<p>Locked (to a vessel)</p>
+						</td><td>
+							<p>If this checkbox is unchecked, the optimiser is free to
+								reallocate the cargo to a different vessel. If the checkbox is
+								checked, the optimiser will
+								ensure that the cargo is assigned
+								to
+								the specified vessel.
+							</p>
+						</td></tr><tr><td>
+							<p>Allow rewiring</p>
+						</td><td>
+							<p>If this checkbox is checked, the optimiser is free to
+								pair
+								the specified load and discharge slots of this cargo with
+								different loads and discharges,
+								if it finds more commercially
+								viable pairings. If the checkbox is unchecked, the optimiser
+								will not consider reallocating the specified pairing.
+							</p>
+						</td></tr></tbody></table></div></div></div></body></html>

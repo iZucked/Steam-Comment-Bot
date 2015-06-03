@@ -1,23 +1,89 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-    Copyright (C) Minimax Labs Ltd., 2010 - 2015
-    All rights reserved.
-
--->
-<?NLS TYPE="org.eclipse.help.toc"?>
-
-<toc label="LiNGO Documentation" topic="html/toc.html">
-   <topic label="Getting Started">
-      <anchor id="gettingstarted"/>
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<toc label="LiNGO User Manual" topic="index.html">
+   <topic label="Application Overview" href="ch01.html">
+      <topic label="Screens (aka Perspectives) and windows (aka Views)" href="ch01.html#d0e58"/>
+      <topic label="Icons" href="ch01s02.html"/>
+      <topic label="Scenario Navigator" href="ch01s03.html"/>
+      <topic label="Validation" href="ch01s04.html"/>
+      <topic label="Error Log" href="ch01s05.html"/>
+      <topic label="The Menu Bar" href="ch01s06.html"/>
    </topic>
-   <topic label="How Tos">
-      <anchor id="howtos"/>
+   <topic label="Editing" href="ch02.html">
+      <topic label="Trades Tab" href="ch02.html#Editor_Trades"/>
+      <topic label="Fleet Tab" href="ch02s02.html">
+         <topic label="Fleet Availability Editor" href="ch02s02.html#d0e604"/>
+         <topic label="Charter Out Editor" href="ch02s02.html#d0e752"/>
+         <topic label="Dry Dock / Maintenance Editor" href="ch02s02.html#d0e886"/>
+      </topic>
+      <topic label="Commercial Tab" href="ch02s03.html">
+         <topic label="Contract Tab" href="ch02s03.html#d0e983"/>
+         <topic label="Pricing Tab" href="ch02s03.html#d0e1103"/>
+         <topic label="Restrictions Tab" href="ch02s03.html#d0e1109"/>
+         <topic label="Entity Editor" href="ch02s03.html#d0e1180"/>
+      </topic>
+      <topic label="Markets Tab" href="ch02s04.html"/>
+      <topic label="Charters Tab" href="ch02s05.html"/>
+      <topic label="Spot Cargoes" href="ch02s06.html">
+         <topic label="Spot Market Editor" href="ch02s06.html#d0e1220"/>
+      </topic>
+      <topic label="Data Perspective: Editing Views" href="ch02s07.html">
+         <topic label="Cooldown Costs" href="ch02s07.html#Editor_CooldownCosts"/>
+         <topic label="Ports" href="ch02s07.html#Editor_Ports"/>
+         <topic label="Vessels" href="ch02s07.html#Editor_Vessels"/>
+         <topic label="Canal costs" href="ch02s07.html#Editor_CanalCosts"/>
+         <topic label="Port Costs" href="ch02s07.html#Editor_PortCosts"/>
+      </topic>
    </topic>
-   <topic label="Reports">
-      <anchor id="reports"/>
+   <topic label="Reports" href="ch03.html">
+      <topic label="Schedule Chart" href="ch03.html#Reports_ScheduleChart"/>
+      <topic label="Port Rotations" href="ch03s02.html"/>
+      <topic label="Schedule Summary" href="ch03s03.html"/>
+      <topic label="Verticle Report" href="ch03s04.html"/>
+      <topic label="Lateness Report" href="ch03s05.html"/>
+      <topic label="Cooldown Report" href="ch03s06.html"/>
+      <topic label="Capacity Violations" href="ch03s07.html"/>
+      <topic label="Index Exposures" href="ch03s08.html"/>
+      <topic label="KPI" href="ch03s09.html"/>
+      <topic label="Headline Report" href="ch03s10.html"/>
+      <topic label="Cargo Econs" href="ch03s11.html"/>
+      <topic label="PnL Details" href="ch03s12.html"/>
+      <topic label="Costs Breakdown" href="ch03s13.html"/>
+      <topic label="Vessel Summary" href="ch03s14.html"/>
+      <topic label="Volume Tracking" href="ch03s15.html"/>
+      <topic label="Totals" href="ch03s16.html"/>
    </topic>
-   <topic label="Editing">
-      <anchor id="editing"/>
+   <topic label="Data Model Reference" href="ch04.html">
+      <topic label="The Cargo Editor" href="ch04.html#DataModel_lng_cargo_Cargo"/>
+      <topic label="Slot Editors" href="ch04s02.html"/>
+      <topic label="The Pricing Section" href="ch04s03.html"/>
+      <topic label="The Window Section" href="ch04s04.html"/>
+      <topic label="The Terms Section" href="ch04s05.html">
+         <topic label="Inputs for load slots only:" href="ch04s05.html#d0e1973"/>
+         <topic label="Terms Inputs for discharge slots only:" href="ch04s05.html#d0e2007"/>
+         <topic label="Terms Inputs for all slots:" href="ch04s05.html#d0e2041"/>
+         <topic label="Terms Inputs for DES purchases and FOB sales only:" href="ch04s05.html#d0e2091"/>
+         <topic label="Terms Inputs for DES purchases only:" href="ch04s05.html#d0e2125"/>
+      </topic>
+      <topic label="Vessel Class Fields" href="ch04s06.html">
+         <topic label="Laden / Ballast Attributes" href="ch04s06.html#d0e2289"/>
+      </topic>
+      <topic label="Contract Fields" href="ch04s07.html">
+         <topic label="The Restrictions Tab" href="ch04s07.html#d0e2463"/>
+      </topic>
+   </topic>
+   <topic label="How Tos" href="ch05.html">
+      <topic label="Enable/Disable auto evaluate" href="ch05.html#d0e2543"/>
+      <topic label="Undo Changes" href="ch05s02.html"/>
+      <topic label="Add a new Cargo" href="ch05s03.html"/>
+      <topic label="What Is A Vessel Class?" href="ch05s04.html"/>
+      <topic label="Add a new Vessel Class" href="ch05s05.html"/>
+      <topic label="Add a Vessel" href="ch05s06.html"/>
+      <topic label="Add a Scenario Vessel" href="ch05s07.html"/>
+      <topic label="Add a Contract" href="ch05s08.html"/>
+      <topic label="Update Price Curves" href="ch05s09.html"/>
+      <topic label="Add a Port" href="ch05s10.html"/>
+      <topic label="Compare Scenarios" href="ch05s11.html"/>
+      <topic label="Check for Updates" href="ch05s12.html"/>
+      <topic label="Moving an installation of LiNGO" href="ch05s13.html"/>
    </topic>
 </toc>

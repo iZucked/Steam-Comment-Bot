@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xml:lang="en" xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xl="http://www.w3.org/1999/xlink"
+	id="Editor_Commercial">
+
+	<title>Commercial Tab</title>
+	<informalfigure>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="resources/editor/editor-commercial.png" width="16.511cm" depth="4.975cm" />
+			</imageobject>
+		</mediaobject>
+	</informalfigure>
+	<para>The commercial tab shows the portfolio’s purchase and sales
+		contracts and corporate entities which own contracts or vessels.
+	</para>
+	<para>
+		<inlinegraphic fileref="resources/editor/editor-commercial-purchases.png" width="5.755cm" depth="4.783cm" />
+	</para>
+	<para>The
+		Purchase Contracts and Sales Contracts grids allow you to manage
+		your
+		purchase contracts and sales contracts respectively. Each
+		entry
+		edited
+		in more detail
+		by
+		double clicking or hitting
+		&lt;Return&gt; to
+		bring up
+		the Contract Editor.
+	</para>
+	<para>
+		The Contract Editor dialog allows the editing of a number of
+		fields
+		relating to a purchase or sales contract. These fields are
+		organised
+		in three tabs:
+		“Contract”, “Pricing” and “Restrictions”.
+		<inlinegraphic fileref="resources/editor/editor-commercial-purchase-dialog-1.png" width="8.612cm" depth="8.956cm" />
+	</para>
+	<section>
+		<title>Contract Tab</title>
+		<para>The “Contract” tab contains various fields to edit the basic
+			attributes of the contract.
+		</para>
+		<informaltable frame="all">
+			<tgroup cols="2">
+				<colspec colnum="1" colname="col1" colwidth="1*" />
+				<colspec colnum="2" colname="col2" colwidth="4*" />
+				<tbody>
+					<row>
+						<entry>
+							<para>Name</para>
+						</entry>
+						<entry>
+							<para>A unique name to denote the contract.</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Entity</para>
+						</entry>
+						<entry>
+							<para>The legal entity owning the contract.</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Ports</para>
+						</entry>
+						<entry>
+							<para>A list of allowed purchase/sale ports.</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Preferred Port</para>
+						</entry>
+						<entry>
+							<para>A default port for the contract (editing convenience
+								only,
+								not optimisation).
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Min Quantity</para>
+						</entry>
+						<entry>
+							<para>The minimum volume for a transaction under this
+								contract,
+								in
+								m3.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Max Quantity</para>
+						</entry>
+						<entry>
+							<para>The minimum volume for a transaction under this
+								contract,
+								in
+								m3.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Notes</para>
+						</entry>
+						<entry>
+							<para>Any notes regarding the contract.</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Contract Type</para>
+						</entry>
+						<entry>
+							<para>The types of trade (FOB or DES) permitted under this
+								contract.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Cancellation Fee</para>
+						</entry>
+						<entry>
+							<para>An amount in dollars payable if a slot using the
+								contract
+								is
+								not used.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Cargo CV</para>
+						</entry>
+						<entry>
+							<para>(For purchase contracts only) the calorific value of the
+								LNG purchased.
+							</para>
+						</entry>
+					</row>
+				</tbody>
+			</tgroup>
+		</informaltable>
+	</section>
+	<section>
+		<title>Pricing Tab</title>
+		<inlinegraphic fileref="resources/editor/editor-commercial-purchase-dialog-2.png" width="7.157cm" depth="7.448cm" />
+		<para>The “Pricing” tab allows editing of parameters which
+			determine
+			pricing. Complex contracts will have custom parameters
+			which can be
+			edited. For the simple
+			contracts, this is just a
+			price expression (a
+			formula using standard price indices (see
+			“Price Expressions”).
+		</para>
+	</section>
+	<section>
+		<title>Restrictions Tab</title>
+		<para>
+			The “Restrictions” tab specifies of any restrictions applying
+			to a transaction conducted under this contract.
+			<inlinegraphic fileref="resources/editor/editor-commercial-purchase-dialog-3.png" width="7.896cm" depth="7.767cm" />
+		</para>
+		<informaltable frame="all">
+			<tgroup cols="2">
+				<colspec colnum="1" colname="col1" colwidth="1*" />
+				<colspec colnum="2" colname="col2" colwidth="4*" />
+				<tbody>
+					<row>
+						<entry>
+							<para>Restrictions Are Permissive</para>
+						</entry>
+						<entry>
+							<para>If this checkbox is unchecked, the “Contracts” and
+								“Ports”
+								inputs specify lists of contracts and ports which
+								the
+								complementary transaction may not be
+								associated with. If the
+								checkbox is ticked, the complementary transaction must be
+								associated with a contract / port in the specified list. In
+								either case,
+								a
+								blank list is treated as no restriction.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Contracts</para>
+						</entry>
+						<entry>
+							<para>A list of contracts which the complementary transaction
+								(i.e. a sale, for a purchase contract, or a purchase, for a
+								sales contract) must (or must
+								not)
+								be conducted under.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Ports</para>
+						</entry>
+						<entry>
+							<para>A list of ports which the complementary transaction
+								(i.e.
+								a
+								sale, for a purchase contract, or a purchase, for a
+								sales
+								contract) must (or must not) be
+								conducted at.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Min / Max CV Value</para>
+						</entry>
+						<entry>
+							<para>(Sales contracts only) These fields allow you to
+								specify
+								restrictions on the calorific value of the LNG sold under the
+								contract.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Sales Delivery Type / Cargo Type</para>
+						</entry>
+						<entry>
+							<para>“Shipped” if the trade must involve shipping, “Not
+								Shipped” if the trade must be a FOB or DES only transaction,
+								“Any” if no restrictions are
+								involved.
+							</para>
+						</entry>
+					</row>
+				</tbody>
+			</tgroup>
+		</informaltable>
+		<para>
+			<inlinegraphic fileref="resources/editor/editor-commercial-entity-dialog.png" width="8.274cm" depth="7.395cm" />
+		</para>
+	</section>
+	<section>
+		<title>Entity Editor</title>
+		<para>The Entity Editor allows you to modify a variety of fields
+			associated with a legal trading entity. The Shipping Book and
+			Trading Book panels allow tax
+			rates to be set, by commencement
+			dates.
+		</para>
+	</section>
+</section>

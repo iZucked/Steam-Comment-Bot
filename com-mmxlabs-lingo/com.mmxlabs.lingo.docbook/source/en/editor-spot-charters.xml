@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xml:lang="en" xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xl="http://www.w3.org/1999/xlink"
+	id="Editor_SpotCharters">
+
+	<title>
+		Charters Tab
+	</title>
+	<para>Each charter opportunity defines a charter-in and/or a
+		charter-out market for vessels of the selected vessel classes.
+	</para>
+	<para>A charter-in market requires a charter in price curve and the
+		number of options per selected class to create. Each option is
+		modelled as a vessel available
+		for the duration of the scenario
+		(but
+		only used to cover the cargoes assigned to it).
+	</para>
+	<para>A charter-out market defines a charter out price curve and a
+		minimum duration. Charter outs are created in ballast idle times.
+		If
+		a
+		vessel was travelling at
+		full speed on the ballast leg and
+		the
+		remaining idle time is greater than the minimum charter duration,
+		then this time can be considered for chartering out.
+	</para>
+	<para>Charter outs can be restricted from occurring before a
+		particular date using the extra drop-down menu from the toolbar.
+	</para>
+</section>

@@ -1,0 +1,1023 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter xml:lang="en" xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xl="http://www.w3.org/1999/xlink">
+
+	<title>Data Model Reference</title>
+	<section id="DataModel_lng_cargo_Cargo">
+		<title>
+			The Cargo Editor
+		</title>
+		<orderedlist>
+			<listitem>
+				<para />
+			</listitem>
+		</orderedlist>
+		<orderedlist>
+			<listitem>
+				<para>Data Restrictions - unique name, no overlaps</para>
+			</listitem>
+			<listitem>
+				<para>Assigned vessel vs. allowed vessel</para>
+			</listitem>
+			<listitem>
+				<para>Step by step example(s)!</para>
+			</listitem>
+		</orderedlist>
+		<para>
+			<inlinegraphic fileref="resources/datamodel/cargo-full-dialog.png" width="14.468cm" depth="11.306cm" />
+		</para>
+		<para>
+			The Cargo Editor dialog allows various aspects of a cargo to be
+			modified. The top part of the dialog
+			<inlinegraphic fileref="resources/datamodel/cargo-dialog.png" width="20.72cm" depth="2.59cm" />
+			contains information about the entire cargo, with inputs as
+			follows:
+		</para>
+		<informaltable frame="all">
+			<tgroup cols="2">
+				<colspec colnum="1" colname="col1" colwidth="1*" />
+				<colspec colnum="2" colname="col2" colwidth="4*" />
+				<tbody>
+					<row>
+						<entry>
+							<para>Name </para>
+						</entry>
+						<entry>
+							<para>The cargo’s unique name.</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Assignment</para>
+						</entry>
+						<entry>
+							<para>The vessel the cargo is assigned to.</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Locked (to a vessel)</para>
+						</entry>
+						<entry>
+							<para>If this checkbox is unchecked, the optimiser is free to
+								reallocate the cargo to a different vessel. If the checkbox is
+								checked, the optimiser will
+								ensure that the cargo is assigned
+								to
+								the specified vessel.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Allow rewiring</para>
+						</entry>
+						<entry>
+							<para>If this checkbox is checked, the optimiser is free to
+								pair
+								the specified load and discharge slots of this cargo with
+								different loads and discharges,
+								if it finds more commercially
+								viable pairings. If the checkbox is unchecked, the optimiser
+								will not consider reallocating the specified pairing.
+							</para>
+						</entry>
+					</row>
+				</tbody>
+			</tgroup>
+		</informaltable>
+	</section>
+	<section id="DataModel_lng_cargo_Slot">
+		<title>
+			Slot Editors
+		</title>
+		<para>The bottom part of the Cargo dialog</para>
+		<para>
+			<inlinegraphic fileref="resources/datamodel/load-slot-dialog.png" width="10.21cm" depth="10.112cm" />
+		</para>
+		<para>contains editor panels for each slot (transaction) in the
+			cargo,
+			with the main inputs being:
+		</para>
+		<para />
+		<informaltable frame="all">
+			<tgroup cols="2">
+				<colspec colnum="1" colname="col1" colwidth="1*" />
+				<colspec colnum="2" colname="col2" colwidth="4*" />
+				<tbody>
+					<row>
+						<entry>
+							<para>Name</para>
+						</entry>
+						<entry>
+							<para>The slot’s unique name (typically a load name and cargo
+								name should be the same).
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Optional </para>
+						</entry>
+						<entry>
+							<para>If this checkbox is checked, the optimiser can construct
+								a
+								schedule which does not contain the specified load or discharge
+								slot (if this is
+								commercially viable). If the checkbox is
+								checked, the optimiser will try to ensure that the specified
+								transaction occurs in the generated schedule.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Port</para>
+						</entry>
+						<entry>
+							<para>The port where the LNG is loaded or discharged.</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Entity </para>
+						</entry>
+						<entry>
+							<para>The organisational entity which legally conducts the
+								transaction. Overrides contract default.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Min volume / Max volume </para>
+						</entry>
+						<entry>
+							<para>If the checkboxes next to these inputs are checked, you
+								can
+								specify a minimum or maximum volume of LNG for the
+								transaction.
+								Overrides contract
+								defaults.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Notes </para>
+						</entry>
+						<entry>
+							<para>This input allows you to make notes or comments regarding
+								the slot.
+							</para>
+							<para />
+						</entry>
+					</row>
+				</tbody>
+			</tgroup>
+		</informaltable>
+		<para />
+		<para>The slot editor has various collapsible sections </para>
+		<para>
+			<inlinegraphic fileref="resources/datamodel/slot-groups-dialog.png" width="9.861cm" depth="3.188cm" />
+		</para>
+		<para>which can be clicked to expand the section and edit the
+			relevant
+			slot details.
+		</para>
+		<para />
+	</section>
+	<section id="DataModel_lng_cargo_Slot_Pricing">
+		<title>
+			The Pricing Section
+		</title>
+		<para>
+			<inlinegraphic fileref="resources/datamodel/slot-pricing-dialog.png" width="9.563cm" depth="4.234cm" />
+		</para>
+		<para>This section allows the pricing structure of the transaction
+			to
+			be specified, with inputs being:
+		</para>
+		<informaltable frame="all">
+			<tgroup cols="2">
+				<tbody>
+					<row>
+						<entry>
+							<para>Contract</para>
+						</entry>
+						<entry>
+							<para>If the “Contract” checkbox is checked, you can determine
+								the transaction price by choosing a particular contract,
+								which
+								will calculate price based on
+								various factors.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Expression</para>
+						</entry>
+						<entry>
+							<para>If the “Expression” checkbox is checked, you can
+								determine
+								the price for this transaction directly, either as
+								a
+								given number
+								of USD per mmBtu, or as a
+								mathematical expression
+								involving one
+								or more industry indices. You must specify
+								either a contract or
+								a
+								price expression.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Pricing Date</para>
+						</entry>
+						<entry>
+							<para>If this checkbox is checked, you can specify a date on
+								which the price for the transaction is based, which is
+								different
+								from the date the transaction
+								actually occurs on.
+								If
+								the checkbox
+								is unchecked, the date for calculating the price
+								will be the
+								actual date of the transaction.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Hedges</para>
+						</entry>
+						<entry>
+							<para>This field allows you to specify a profit &amp; loss
+								term
+								which is linked to the selected slot (whether it is used or
+								not); the value may be either
+								positive (profit) or negative
+								(loss). This term will not affect the decisions made by the
+								optimiser, but will be reflected in profit &amp; loss
+								reports.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Cancellation Fee</para>
+						</entry>
+						<entry>
+							<para>This field allows you to specify a cost which must be
+								paid
+								if the slot is not used.
+							</para>
+						</entry>
+					</row>
+				</tbody>
+			</tgroup>
+		</informaltable>
+		<para />
+		<para>NOTE: This section will also include any contract-specific
+			options for the slot.
+		</para>
+		<para />
+	</section>
+	<section id="DataModel_lng_cargo_Slot_Window">
+		<title>
+			The Window Section
+		</title>
+		<para>
+			<inlinegraphic fileref="resources/datamodel/slot-window-dialog.png" width="9.711cm" depth="2.64cm" />
+		</para>
+		<para>The Window section specifies the time window during which the
+			given transaction is permitted to occur, with inputs being:
+		</para>
+		<informaltable frame="all">
+			<tgroup cols="2">
+				<tbody>
+					<row>
+						<entry>
+							<para>Date</para>
+						</entry>
+						<entry>
+							<para>This gives the intended date for the transaction.</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Time</para>
+						</entry>
+						<entry>
+							<para>This input allows you to specify a time of day
+								(according
+								to
+								the local timezone at the port) for the transaction. The
+								default
+								setting is 07:00.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Window</para>
+						</entry>
+						<entry>
+							<para>This input allows you to specify the length of the
+								available time window for the transaction (in hours). The
+								default setting is 24hrs.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Duration</para>
+						</entry>
+						<entry>
+							<para>This input allows you to specify the maximum expected
+								amount of time required to conduct the transaction (in
+								hours).
+								The default setting is 24hrs.
+							</para>
+						</entry>
+					</row>
+				</tbody>
+			</tgroup>
+		</informaltable>
+	</section>
+	<section id="DataModel_lng_cargo_Slot_Terms">
+		<title>
+			The Terms Section
+		</title>
+		<para>
+			<inlinegraphic fileref="resources/datamodel/slot-terms-dialog.png" width="9.413cm" depth="5.33cm" />
+		</para>
+		<para>The Terms section determines important conditions regarding
+			the
+			cargo. The exact inputs in this section depend on whether the
+			slot is
+			a load or discharge
+			slot, and whether it is FOB or DES.
+		</para>
+		<section>
+			<title>
+				Inputs for load slots only:
+			</title>
+			<para>
+				<inlinegraphic fileref="resources/datamodel/slot-arrive-cold-dialog.png" width="9.413cm" depth="0.946cm" />
+			</para>
+			<informaltable frame="all">
+				<tgroup cols="2">
+					<colspec colnum="1" colname="col1" colwidth="1*" />
+					<colspec colnum="2" colname="col2" colwidth="4*" />
+					<tbody>
+						<row>
+							<entry>
+								<para>Arrive cold</para>
+							</entry>
+							<entry>
+								<para>If the “Arrive cold” input is set to “No”, then the
+									vessel
+									can be scheduled to arrive for its load with “warm”
+									empty tanks.
+									Overrides port.
+								</para>
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<para>Cargo CV</para>
+							</entry>
+							<entry>
+								<para>The “Cargo CV” input specifies the calorific value (CV)
+									of
+									the LNG loaded at this slot in mmBtu per m3.
+								</para>
+							</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</informaltable>
+		</section>
+		<section>
+			<title>
+				Terms Inputs for discharge slots only:
+			</title>
+			<para>
+				<inlinegraphic fileref="resources/datamodel/discharge-slot-terms-dialog.png" width="9.216cm" depth="1.793cm" />
+			</para>
+			<informaltable frame="all">
+				<tgroup cols="2">
+					<colspec colnum="1" colname="col1" colwidth="1*" />
+					<colspec colnum="2" colname="col2" colwidth="4*" />
+					<tbody>
+						<row>
+							<entry>
+								<para>Cargo Type</para>
+							</entry>
+							<entry>
+								<para>The “Cargo Type” input may be set to “Shipped” to
+									require
+									that the LNG for this transaction must have been
+									actually
+									shipped from another port, or set
+									to “Not Shipped”
+									to require
+									that the LNG must be bought and sold at the same
+									port (e.g. in
+									a FOB-FOB or DES-DES deal). The default
+									setting
+									is “Any”, which
+									allows the sale to be paired with any
+									purchase.
+								</para>
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<para>Min CV Value / Max CV Value</para>
+							</entry>
+							<entry>
+								<para>The “Min CV Value” and “Max CV Value” inputs allow
+									minimum
+									and maximum permissible calorific values (CV) in
+									mmBtu
+									per m3 to
+									be associated with a
+									discharge slot.
+								</para>
+							</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</informaltable>
+		</section>
+		<section>
+			<title>
+				Terms Inputs for all slots:
+			</title>
+			<para>
+				<inlinegraphic fileref="resources/datamodel/slot-terms-dialog.png" width="8.916cm" depth="3.663cm" />
+			</para>
+			<para>A particular LNG load may have legal or practical
+				restrictions
+				on which port the LNG may be shipped to, which
+				contracts it can be
+				sold under, and which
+				vessels can carry it.
+				The same considerations
+				may hold vice versa for discharges. These
+				inputs determine those
+				restrictions:
+			</para>
+			<para />
+			<informaltable frame="all">
+				<tgroup cols="2">
+					<colspec colnum="1" colname="col1" colwidth="1*" />
+					<colspec colnum="2" colname="col2" colwidth="4*" />
+					<tbody>
+						<row>
+							<entry>
+								<para>Restricted Ports</para>
+							</entry>
+							<entry>
+								<para>The “Restricted Ports” input specifies a list of ports
+									which the reciprocal transaction may not occur at (or, if
+									“Restricted Lists Are Permissive”
+									is set to “Yes”, it must
+									occur at one of them).
+								</para>
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<para>Restricted Contracts</para>
+							</entry>
+							<entry>
+								<para>The “Restricted Contracts” input specifies a list of
+									contracts which the reciprocal transaction may not occur
+									under
+									(or, if “Restricted Lists Are
+									Permissive” is set to
+									“Yes”, it
+									must occur under one of them).
+								</para>
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<para>Allowed Vessels</para>
+							</entry>
+							<entry>
+								<para>If the “Allowed Vessels” input is set, it specifies a
+									list
+									of the vessels which can load (or discharge) at this
+									slot. If it
+									is left blank, any vessel
+									is permitted.
+								</para>
+							</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</informaltable>
+			<para>Note: These override the contract defaults. If one value is
+				overridden, then all three are deemed to override the contract.
+			</para>
+		</section>
+		<section>
+			<title>
+				Terms Inputs for DES purchases and FOB sales only:
+			</title>
+			<para>
+				<inlinegraphic fileref="resources/datamodel/slot-notional-dialog.png" width="9.263cm" depth="1.624cm" />
+			</para>
+			<informaltable frame="all">
+				<tgroup cols="2">
+					<colspec colnum="1" colname="col1" colwidth="1*" />
+					<colspec colnum="2" colname="col2" colwidth="4*" />
+					<tbody>
+						<row>
+							<entry>
+								<para>Assignment</para>
+							</entry>
+							<entry>
+								<para>These transactions are not part of shipped cargoes, so
+									the
+									cargo itself is not assigned a vessel. The “Assignment”
+									input
+									determines which vessel is
+									nominated for the
+									transaction.
+								</para>
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<para>Divertible</para>
+							</entry>
+							<entry>
+								<para>A non divertible slot is defined based upon it’s
+									transfer
+									point. For a DES purchase, this is the port and date
+									where
+									ownership is taken. If it is
+									divertible then the some
+									modelling
+									of the third party shipping is involved (using the
+									nominated
+									vessel assignment). For a divertible DES purchase,
+									the load
+									port
+									and estimated load date is specified.
+									Divertible
+									DES purchases
+									also have a shipping days limit
+									defining the
+									maximum permitted
+									round trip time for slot
+									pairings.
+								</para>
+							</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</informaltable>
+		</section>
+		<section>
+			<title>
+				Terms Inputs for DES purchases only:
+			</title>
+			<para>
+				<inlinegraphic fileref="resources/datamodel/load-slot-delivery-type-dialog.png" width="9.762cm" depth="0.998cm" />
+			</para>
+			<informaltable frame="all">
+				<tgroup cols="2">
+					<colspec colnum="1" colname="col1" colwidth="1*" />
+					<colspec colnum="2" colname="col2" colwidth="4*" />
+					<tbody>
+						<row>
+							<entry>
+								<para>Sales Delivery Type</para>
+							</entry>
+							<entry>
+								<para>The “Sales Delivery Type” input may be set to “Shipped”
+									to
+									require that the LNG for this transaction must have been
+									actually shipped from another
+									port, or set to “Not Shipped”
+									to
+									require that the LNG must be bought and sold at the same
+									port
+									(e.g. in a FOB-FOB or DES-DES deal). The default
+									setting
+									is
+									“Any”, which allows the sale to be paired with any
+									purchase.
+								</para>
+							</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</informaltable>
+			<para />
+		</section>
+	</section>
+	<section id="DataModel_lng_fleet_VesselClass">
+		<title>
+			Vessel Class Fields
+		</title>
+		<para />
+		<informaltable frame="all">
+			<tgroup cols="2">
+				<colspec colnum="1" colname="col1" colwidth="1*" />
+				<colspec colnum="2" colname="col2" colwidth="4*" />
+				<tbody>
+					<row>
+						<entry>
+							<para>Name</para>
+						</entry>
+						<entry>
+							<para>The name of the vessel class.</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Inaccessible Ports</para>
+						</entry>
+						<entry>
+							<para>A list of ports which vessels of this class cannot use.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Base Fuel</para>
+						</entry>
+						<entry>
+							<para>The type of base fuel used by vessels of this class.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Capacity</para>
+						</entry>
+						<entry>
+							<para>The LNG tank volume in m3 for vessels of this class.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Fill Capacity</para>
+						</entry>
+						<entry>
+							<para>The percentage of the LNG tank volume which can actually
+								be
+								filled with LNG.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Min / Max Speed</para>
+						</entry>
+						<entry>
+							<para>The minimum and maximum travel speed of the vessel in
+								knots.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Min Heel</para>
+						</entry>
+						<entry>
+							<para>The minimum remaining quantity of LNG required to keep
+								the
+								vessel operational at the end of a voyage if LNG is on
+								board.  
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Warming Time</para>
+						</entry>
+						<entry>
+							<para>The amount of time in hours that the vessel can operate
+								with empty LNG tanks before requiring a cooldown.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Cooling Volume</para>
+						</entry>
+						<entry>
+							<para>The amount of excess LNG required to cool the tanks when
+								they are warm.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Route Parameters</para>
+						</entry>
+						<entry>
+							<para>Information on time and fuel consumption used to travel
+								canals or other unusual routes.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Pilot Light Rate</para>
+						</entry>
+						<entry>
+							<para>The amount of base fuel used to keep a vessel
+								operational
+								on
+								a pure LNG boiloff trip.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Min Base Fuel Consumption</para>
+						</entry>
+						<entry>
+							<para />
+						</entry>
+					</row>
+				</tbody>
+			</tgroup>
+		</informaltable>
+		<section>
+			<title>
+				Laden / Ballast Attributes
+			</title>
+			<para>These panels allow you to edit the details for the vessel
+				class’s fuel consumption when the vessel is on a laden (carrying
+				LNG cargo in its tanks) or
+				ballast (travelling without cargo)
+				voyage.
+			</para>
+			<para />
+			<informaltable frame="all">
+				<tgroup cols="2">
+					<colspec colnum="1" colname="col1" colwidth="1*" />
+					<colspec colnum="2" colname="col2" colwidth="4*" />
+					<tbody>
+						<row>
+							<entry>
+								<para>NBO Rate</para>
+							</entry>
+							<entry>
+								<para>The amount of LNG boiled off during a laden / ballast
+									voyage
+								</para>
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<para>Idle NBO Rate</para>
+							</entry>
+							<entry>
+								<para>The amount of LNG boiled off while idling laden /
+									unladen
+									(ballast).
+								</para>
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<para>Idle Base Fuel Rate</para>
+							</entry>
+							<entry>
+								<para>The amount of base fuel consumed while idling laden /
+									unladen (ballast).
+								</para>
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<para>In Port Base Rate</para>
+							</entry>
+							<entry>
+								<para>The amount of base fuel consumed while being actively
+									processed at a port under laden / ballast conditions.
+								</para>
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<para>Service Speed</para>
+							</entry>
+							<entry>
+								<para>The typical voyage speed for a vessel when laden /
+									unladen
+									(ballast).
+								</para>
+							</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</informaltable>
+			<para />
+		</section>
+	</section>
+	<section id="DataModel_lng_commercial_Contract">
+		<title>
+			Contract Fields
+		</title>
+		<informaltable frame="all">
+			<tgroup cols="2">
+				<colspec colnum="1" colname="col1" colwidth="1*" />
+				<colspec colnum="2" colname="col2" colwidth="4*" />
+				<tbody>
+					<row>
+						<entry>
+							<para>Name</para>
+						</entry>
+						<entry>
+							<para>Unique name of the contract</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Entity</para>
+						</entry>
+						<entry>
+							<para>Owning corporate entity</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Ports</para>
+						</entry>
+						<entry>
+							<para>The ports linked to the contract (i.e. load port for
+								purchase contracts, discharge ports for sales contracts). Can
+								be
+								left blank
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Preferred Port</para>
+						</entry>
+						<entry>
+							<para>A preferred, or default, port for the contract (used
+								when
+								creating new slots).
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Min/Max Quantity</para>
+						</entry>
+						<entry>
+							<para>Default slot minimum and maximum transfer volume in m3.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Notes</para>
+						</entry>
+						<entry>
+							<para>Free text field to user notes on the contract.</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Contract Type</para>
+						</entry>
+						<entry>
+							<para>Whether this contract is just for FOB or DES
+								transactions
+								or
+								both. For purchase contracts this means FOB Purchase or DES
+								Purchase. For sales contracts
+								this means DES Sales or FOB
+								Sales.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Cancellation Fee</para>
+						</entry>
+						<entry>
+							<para>Fixed fee for not using a slot linked to this contract.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Cargo CV</para>
+						</entry>
+						<entry>
+							<para>(Purchase Only) Contract purchase CV if different to CV
+								defined on the load port.
+							</para>
+						</entry>
+					</row>
+				</tbody>
+			</tgroup>
+		</informaltable>
+		<section>
+			<title>
+				The Restrictions Tab
+			</title>
+			<para />
+			<informaltable frame="all">
+				<tgroup cols="2">
+					<colspec colnum="1" colname="col1" colwidth="1*" />
+					<colspec colnum="2" colname="col2" colwidth="4*" />
+					<tbody>
+						<row>
+							<entry>
+								<para>Restrictions Are Permissive</para>
+							</entry>
+							<entry>
+								<para>Flips restrictions from blacklisted contracts and ports
+									to
+									whitelisted contracts and ports.
+								</para>
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<para>Contracts</para>
+							</entry>
+							<entry>
+								<para>List of contracts which cannot be linked to this
+									contract
+									(or if restrictions are permissive then this is the
+									list of
+									contracts which can only be
+									linked to this one).
+								</para>
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<para>Ports</para>
+							</entry>
+							<entry>
+								<para>List of ports which cannot be linked to this contract
+									(or
+									if restrictions are permissive then this is the list of
+									ports
+									which can only be linked to
+									this one).
+								</para>
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<para>Min/Max CV Value</para>
+							</entry>
+							<entry>
+								<para>(Sales Only) Only link to purchases with a CV value
+									within
+									this range.
+								</para>
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<para>Cargo Type</para>
+							</entry>
+							<entry>
+								<para>(Sales Only) Shipped means only link to FOB Purchases, Non
+									Shipped means only link to DES Purchases.
+								</para>
+								<para />
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<para>Sales Delivery Type</para>
+							</entry>
+							<entry>
+								<para>(Purchase Only) Shipped means only link to DES Sales, Non
+									Shipped means only link to FOB Sales.
+								</para>
+							</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</informaltable>
+		</section>
+	</section>
+</chapter>

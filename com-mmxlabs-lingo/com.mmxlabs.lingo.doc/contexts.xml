@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<contexts xmlns:d="http://docbook.org/ns/docbook" xmlns:ng="http://docbook.org/docbook-ng" xmlns:db="http://docbook.org/ns/docbook" xmlns:exsl="http://exslt.org/common">
+   <context id="View_Navigator" title="About the Scenario Navigator">
+      <description>Scenario Navigator</description>
+      <topic label="Scenario Navigator" href="ch01s03.html"/>
+   </context>
+   <context id="View_Validation">
+      <description>Validation</description>
+      <topic label="Validation" href="ch01s04.html"/>
+   </context>
+   <context id="View_ErrorLog">
+      <description>Error Log</description>
+      <topic label="Error Log" href="ch01s05.html"/>
+   </context>
+   <context id="Chapter_Editor">
+      <description>Editing</description>
+      <topic label="Editing" href="ch02.html"/>
+   </context>
+   <context id="Editor_Trades">
+      <description>Trades Tab</description>
+      <topic label="Trades Tab" href="ch02.html#Editor_Trades"/>
+   </context>
+   <context id="Editor_Fleet">
+      <description>Fleet Tab</description>
+      <topic label="Fleet Tab" href="ch02s02.html"/>
+   </context>
+   <context id="Editor_Commercial">
+      <description>Commercial Tab</description>
+      <topic label="Commercial Tab" href="ch02s03.html"/>
+   </context>
+   <context id="Editor_Markets">
+      <description>
+		Markets Tab
+	</description>
+      <topic label="&#xA;&#x9;&#x9;Markets Tab&#xA;&#x9;" href="ch02s04.html"/>
+   </context>
+   <context id="Editor_SpotCharters">
+      <description>
+		Charters Tab
+	</description>
+      <topic label="&#xA;&#x9;&#x9;Charters Tab&#xA;&#x9;" href="ch02s05.html"/>
+   </context>
+   <context id="Editor_SpotCargoes">
+      <description>
+		Spot Cargoes
+	</description>
+      <topic label="&#xA;&#x9;&#x9;Spot Cargoes&#xA;&#x9;" href="ch02s06.html"/>
+   </context>
+   <context id="Editor_CooldownCosts">
+      <description>
+			Cooldown Costs
+		</description>
+      <topic label="&#xA;&#x9;&#x9;&#x9;Cooldown Costs&#xA;&#x9;&#x9;" href="ch02s07.html#Editor_CooldownCosts"/>
+   </context>
+   <context id="Editor_Ports">
+      <description>
+			Ports
+		</description>
+      <topic label="&#xA;&#x9;&#x9;&#x9;Ports&#xA;&#x9;&#x9;" href="ch02s07.html#Editor_Ports"/>
+   </context>
+   <context id="Editor_Vessels">
+      <description>
+			Vessels
+		</description>
+      <topic label="&#xA;&#x9;&#x9;&#x9;Vessels&#xA;&#x9;&#x9;" href="ch02s07.html#Editor_Vessels"/>
+   </context>
+   <context id="Editor_CanalCosts">
+      <description>
+			Canal costs
+		</description>
+      <topic label="&#xA;&#x9;&#x9;&#x9;Canal costs&#xA;&#x9;&#x9;" href="ch02s07.html#Editor_CanalCosts"/>
+   </context>
+   <context id="Editor_PortCosts">
+      <description>
+			Port Costs
+		</description>
+      <topic label="&#xA;&#x9;&#x9;&#x9;Port Costs&#xA;&#x9;&#x9;" href="ch02s07.html#Editor_PortCosts"/>
+   </context>
+   <context id="Reports_ScheduleChart">
+      <description>The schedule chart provides a visual representation of the schedule. Each row represents a vessel showing the sequence of cargoes, drydocks, charter outs and other events in time.</description>
+      <topic label="Schedule Chart" href="ch03.html#Reports_ScheduleChart"/>
+   </context>
+   <context id="Reports_PortRotationReportView">
+      <description>The port rotations report is a configurable report showing a detailed shipping based breakdown of voyages.</description>
+      <topic label="Port Rotations" href="ch03s02.html"/>
+   </context>
+   <context id="Reports_ScheduleSummary">
+      <description>The schedule summary report is a configurable shows a P&amp;amp;L based breakdown of cargoes and other events</description>
+      <topic label="Schedule Summary" href="ch03s03.html"/>
+   </context>
+   <context id="Reports_VerticalSchedule">
+      <description>The vertical schedule shows shipping and trading events on a day-by-day basis.</description>
+      <topic label="Verticle Report" href="ch03s04.html"/>
+   </context>
+   <context id="Reports_Lateness">
+      <description>The lateness report shows the late arrivals in the scenario.</description>
+      <topic label="&#xA;&#x9;&#x9;&#x9;Lateness Report&#xA;&#x9;&#x9;" href="ch03s05.html"/>
+   </context>
+   <context id="Reports_Cooldown">
+      <description>The cooldown report lists all of the cooldowns in the scenario - both permitted and forced.</description>
+      <topic label="&#xA;&#x9;&#x9;&#x9;Cooldown Report&#xA;&#x9;&#x9;" href="ch03s06.html"/>
+   </context>
+   <context id="Reports_CapacityViolations">
+      <description>The capacity violation report shows all of the capacity related violations in the scenario. These include load and discharge volume bound breaches and forced cooldowns.</description>
+      <topic label="&#xA;&#x9;&#x9;&#x9;Capacity Violations&#xA;&#x9;&#x9;" href="ch03s07.html"/>
+   </context>
+   <context id="Reports_IndexExposures">
+      <description>
+			Index Exposures
+		</description>
+      <topic label="&#xA;&#x9;&#x9;&#x9;Index Exposures&#xA;&#x9;&#x9;" href="ch03s08.html"/>
+   </context>
+   <context id="Reports_KPI">
+      <description>
+			KPI
+		</description>
+      <topic label="&#xA;&#x9;&#x9;&#x9;KPI&#xA;&#x9;&#x9;" href="ch03s09.html"/>
+   </context>
+   <context id="Reports_Headline">
+      <description>The headline report shows a few KPI's for the current scenario - or the difference in pin/diff mode.</description>
+      <topic label="&#xA;&#x9;&#x9;&#x9;Headline Report&#xA;&#x9;&#x9;" href="ch03s10.html"/>
+   </context>
+   <context id="Reports_CargoEcons">
+      <description>
+			Cargo Econs
+		</description>
+      <topic label="&#xA;&#x9;&#x9;&#x9;Cargo Econs&#xA;&#x9;&#x9;" href="ch03s11.html"/>
+   </context>
+   <context id="Reports_PNLDetails">
+      <description>
+			PnL Details
+		</description>
+      <topic label="&#xA;&#x9;&#x9;&#x9;PnL Details&#xA;&#x9;&#x9;" href="ch03s12.html"/>
+   </context>
+   <context id="Reports_CostsBreakdown">
+      <description>
+			Costs Breakdown
+		</description>
+      <topic label="&#xA;&#x9;&#x9;&#x9;Costs Breakdown&#xA;&#x9;&#x9;" href="ch03s13.html"/>
+   </context>
+   <context id="Reports_VesselSummary">
+      <description>
+			Vessel Summary
+		</description>
+      <topic label="&#xA;&#x9;&#x9;&#x9;Vessel Summary&#xA;&#x9;&#x9;" href="ch03s14.html"/>
+   </context>
+   <context id="Reports_VolumeTracking">
+      <description>
+			Volume Tracking
+		</description>
+      <topic label="&#xA;&#x9;&#x9;&#x9;Volume Tracking&#xA;&#x9;&#x9;" href="ch03s15.html"/>
+   </context>
+   <context id="Reports_Totals">
+      <description>
+			Totals
+		</description>
+      <topic label="&#xA;&#x9;&#x9;&#x9;Totals&#xA;&#x9;&#x9;" href="ch03s16.html"/>
+   </context>
+   <context id="DataModel_lng_cargo_Cargo">
+      <description>
+			The Cargo Editor
+		</description>
+      <topic label="&#xA;&#x9;&#x9;&#x9;The Cargo Editor&#xA;&#x9;&#x9;" href="ch04.html#DataModel_lng_cargo_Cargo"/>
+   </context>
+   <context id="DataModel_lng_cargo_Slot">
+      <description>
+			Slot Editors
+		</description>
+      <topic label="&#xA;&#x9;&#x9;&#x9;Slot Editors&#xA;&#x9;&#x9;" href="ch04s02.html"/>
+   </context>
+   <context id="DataModel_lng_cargo_Slot_Pricing">
+      <description>
+			The Pricing Section
+		</description>
+      <topic label="&#xA;&#x9;&#x9;&#x9;The Pricing Section&#xA;&#x9;&#x9;" href="ch04s03.html"/>
+   </context>
+   <context id="DataModel_lng_cargo_Slot_Window">
+      <description>
+			The Window Section
+		</description>
+      <topic label="&#xA;&#x9;&#x9;&#x9;The Window Section&#xA;&#x9;&#x9;" href="ch04s04.html"/>
+   </context>
+   <context id="DataModel_lng_cargo_Slot_Terms">
+      <description>
+			The Terms Section
+		</description>
+      <topic label="&#xA;&#x9;&#x9;&#x9;The Terms Section&#xA;&#x9;&#x9;" href="ch04s05.html"/>
+   </context>
+   <context id="DataModel_lng_fleet_VesselClass">
+      <description>
+			Vessel Class Fields
+		</description>
+      <topic label="&#xA;&#x9;&#x9;&#x9;Vessel Class Fields&#xA;&#x9;&#x9;" href="ch04s06.html"/>
+   </context>
+   <context id="DataModel_lng_commercial_Contract">
+      <description>
+			Contract Fields
+		</description>
+      <topic label="&#xA;&#x9;&#x9;&#x9;Contract Fields&#xA;&#x9;&#x9;" href="ch04s07.html"/>
+   </context>
+   <context id="howtos.what_is_a_vessel_class">
+      <description>
+			What Is A Vessel Class?
+		</description>
+      <topic label="&#xA;&#x9;&#x9;&#x9;What Is A Vessel Class?&#xA;&#x9;&#x9;" href="ch05s04.html"/>
+   </context>
+</contexts>

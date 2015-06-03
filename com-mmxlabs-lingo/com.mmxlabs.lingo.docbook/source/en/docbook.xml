@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<book xml:lang="en" xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xl="http://www.w3.org/1999/xlink">
+	<info>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="resources/minimaxlabs-logo.png" align="left" depth="30cm" height="30cm" />
+			</imageobject>
+		</mediaobject>
+		<title>LiNGO User Manual</title>
+
+		<copyright>
+			<year>2015</year>
+			<holder>Minimax Labs Ltd.</holder>
+		</copyright>
+
+		<!-- <abstract> -->
+		<!-- <para>If your book has an abstract then it should go here.</para> -->
+		<!-- </abstract> -->
+		<mediaobject role="online">
+			<imageobject>
+				<imagedata fileref="resources/minimaxlabs-logo.png" align="left" />
+			</imageobject>
+		</mediaobject>
+
+	</info>
+	<!-- <preface> -->
+	<!-- <title>Preface</title> -->
+	<!-- <para>Your book may have a preface, in which case it should be placed -->
+	<!-- here. -->
+	<!-- </para> -->
+	<!-- <para>LiNGO User Manual</para> -->
+	<!-- <para>Version 3.3.0 and above, 2014</para> -->
+	<!-- </preface> -->
+
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="overview.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="editor.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="reports.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="data-model-reference.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="howtos.xml" />
+</book>

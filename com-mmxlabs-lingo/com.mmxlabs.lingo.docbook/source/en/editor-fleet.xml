@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xml:lang="en" xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xl="http://www.w3.org/1999/xlink"
+	id="Editor_Fleet">
+	<title>Fleet Tab</title>
+	<para>The fleet tab shows which vessels are in the fleet and when they are available. This tab also displays the non-cargo vessel events such as dry-docks and
+		charter outs.
+	</para>
+	<para>
+		<inlinegraphic fileref="resources/editor/editor-fleet.png" width="16.511cm" depth="8.113cm" />
+	</para>
+	<section>
+		<title>
+			Fleet Availability Editor
+		</title>
+		<para>
+			<inlinegraphic fileref="resources/editor/editor-fleet-availability.png" width="15.029cm" depth="13.089cm" />
+		</para>
+		<para>This dialog allows you to edit various fields associated with
+			a
+			vessel’s availability to the fleet. Note that the vessel’s
+			details
+			must already have been
+			created in the LiNGO application [
+			see
+			“Vessels” ] in order to add it to the fleet.
+		</para>
+		<para />
+		<informaltable frame="all">
+			<tgroup cols="2">
+				<colspec colnum="1" colname="col1" colwidth="1*" />
+				<colspec colnum="2" colname="col2" colwidth="4*" />
+				<tbody>
+					<row>
+						<entry>
+							<para />
+						</entry>
+						<entry>
+							<para>Availability Details</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Vessel</para>
+						</entry>
+						<entry>
+							<para>The vessel being allocated to the fleet for LNG trading.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Time Charter Rate</para>
+						</entry>
+						<entry>
+							<para>Optional cost per day for the vessel. This can be a fixed number or an expression on the charter curves.</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Start At</para>
+						</entry>
+						<entry>
+							<para>The port the vessel starts at when it is allocated to
+								the
+								fleet. If left blank, the vessel is assumed to be available to
+								start trading at any port.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Start After /</para>
+							<para>Start By</para>
+						</entry>
+						<entry>
+							<para>These fields constrain the date and time after which the
+								vessel is available for LNG trading as part of the fleet. If
+								blank, the vessel is assumed to
+								be available whenever
+								required.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>End At</para>
+						</entry>
+						<entry>
+							<para>The port the vessel must finish at when its itinerary
+								ends.
+								If left blank, it is assumed that the vessel can finish
+								anywhere.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>End After / End By</para>
+						</entry>
+						<entry>
+							<para>These fields specify the date and time after which the
+								vessel is available for LNG trading as part of the fleet. If
+								blank, the vessel is assumed to
+								be available whenever
+								required.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Entity</para>
+						</entry>
+						<entry>
+							<para>These fields constrain the date and time after which the
+								vessel is no longer available for LNG trading as part of the
+								fleet. If blank, the vessel is
+								assumed to be available as
+								long
+								as
+								it is required.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Start Heel Details</para>
+						</entry>
+						<entry>
+							<para />
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Volume Available</para>
+						</entry>
+						<entry>
+							<para>The estimated maximum quantity of LNG the vessel begins its
+								itinerary
+								with.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>CV Value</para>
+						</entry>
+						<entry>
+							<para>If the vessel begins its itinerary with LNG on board,
+								the
+								calorific value of its initial LNG heel.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Price Per mmBtu</para>
+						</entry>
+						<entry>
+							<para>The unit price of the heel</para>
+						</entry>
+					</row>
+				</tbody>
+			</tgroup>
+		</informaltable>
+	</section>
+	<section>
+		<title>
+			Charter Out Editor
+		</title>
+		<para>A charter out opportunity is a period of time where a vessel
+			is
+			chartered out to a third party for a predetermined amount of
+			time. During such time there
+			are no costs for the vessel except
+			hire cost.
+			A charter out gains revenue at a fixed rate per day
+			with
+			an optional
+			fixed fee. A charter out begins at a
+			predetermined port
+			and may be
+			returned back to that port or a completely different
+			port.
+		</para>
+		<para>
+			<inlinegraphic fileref="resources/editor/editor-fleet-new-event.png" width="5.54cm" depth="4.129cm" />
+		</para>
+		<para>A new charter out can be created from the “Fleet” tab in the
+			scenario editor and it is included as part of the “Events” table.
+			Pressing the down arrow on
+			the green plus button displays a menu
+			of
+			the different types of vessel event. Select “Charter Out” to create
+			a charter out event.
+		</para>
+		<para />
+		<para />
+		<para>
+			<inlinegraphic fileref="resources/editor/editor-fleet-charter-out.png" width="14.156cm" depth="9.685cm" />
+		</para>
+		<para />
+		<informaltable frame="all">
+			<tgroup cols="2">
+				<colspec colnum="1" colname="col1" colwidth="1*" />
+				<colspec colnum="2" colname="col2" colwidth="4*" />
+				<tbody>
+					<row>
+						<entry>
+							<para>Name</para>
+						</entry>
+						<entry>
+							<para>A unique name for this event</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Assignment</para>
+						</entry>
+						<entry>
+							<para>The vessel currently assigned to the charter out. One
+								must
+								be specified.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Duration in Days</para>
+						</entry>
+						<entry>
+							<para>The duration of the charter out.</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Allowed Vessels</para>
+						</entry>
+						<entry>
+							<para>The list of vessels which could perform the charter out.
+								Assigned vessel should be in this list.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Port</para>
+						</entry>
+						<entry>
+							<para>The port where the charter out is picked up</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Start After/By</para>
+						</entry>
+						<entry>
+							<para>The window in which this charter out can star</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Relocate To</para>
+						</entry>
+						<entry>
+							<para>Optional port for the vessel to be returned to. If not
+								specified, the pickup port is used.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Repositioning Fee</para>
+						</entry>
+						<entry>
+							<para>Fixed fee paid by charter for this charter out</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Hire Rate</para>
+						</entry>
+						<entry>
+							<para>Cost per day paid by charter for this charter out</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>End heel [Optional]</para>
+						</entry>
+						<entry>
+							<para>This is the amount of heel left on the vessel at the end
+								of the charter. This is intended to be enough fuel to cover
+								the
+								ballast journey from the
+								return port to the next
+								destination.
+								Boil-off is priced at the specified heel price
+							</para>
+						</entry>
+					</row>
+				</tbody>
+			</tgroup>
+		</informaltable>
+		<para />
+	</section>
+	<section>
+		<title>
+			Dry Dock / Maintenance Editor
+		</title>
+		<inlinegraphic fileref="resources/editor/editor-fleet-drydock.png" width="12.117cm" depth="10.77cm" />
+		<para>This dialog allows you to schedule dry dock or maintenance
+			stops
+			for a particular vessel.
+		</para>
+		<para />
+		<informaltable frame="all">
+			<tgroup cols="2">
+				<colspec colnum="1" colname="col1" colwidth="1*" />
+				<colspec colnum="2" colname="col2" colwidth="4*" />
+				<tbody>
+					<row>
+						<entry>
+							<para>Name</para>
+						</entry>
+						<entry>
+							<para>A unique name for this event</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Assignment</para>
+						</entry>
+						<entry>
+							<para>The vessel currently assigned to the dry dock or
+								maintenance stop. One must be specified.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Duration in Days</para>
+						</entry>
+						<entry>
+							<para>The duration of the dry dock or maintenance stop.</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Allowed Vessels</para>
+						</entry>
+						<entry>
+							<para>For dry dock and maintenance this should match the assignment field.</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Port</para>
+						</entry>
+						<entry>
+							<para>The port where the dry dock or maintenance stop occurs.
+							</para>
+						</entry>
+					</row>
+					<row>
+						<entry>
+							<para>Start After/By</para>
+						</entry>
+						<entry>
+							<para>The time window in which this stop can begin.</para>
+						</entry>
+					</row>
+				</tbody>
+			</tgroup>
+		</informaltable>
+	</section>
+</section>

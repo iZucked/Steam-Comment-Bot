@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter xml:lang="en" xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xl="http://www.w3.org/1999/xlink">
+
+	<title>How Tos</title>
+	<section>
+		<title>Enable/Disable auto evaluate</title>
+		<para>
+			The auto-evaluation button
+			<inlinegraphic fileref="resources/howtos/auto-eval-off.gif" width="0.449cm" depth="0.449cm" />
+			on the main toolbar switches auto-evaluate mode on and off. When the button is in the depressed state
+			<inlinegraphic fileref="resources/howtos/auto-eval-on.png" width="0.798cm" depth="0.747cm" />
+			, auto-evaluate is on, and the application will automatically pause to re-evaluate your scenario a few seconds after you make any changes to it. If
+			auto-evaluate is turned off, the application will only evaluate your scenario when you press the evaluate button.
+		</para>
+	</section>
+	<section>
+		<title>Undo Changes</title>
+		<orderedlist>
+			<listitem>
+				<para>In navigator, right-click scenario and select revert.</para>
+			</listitem>
+		</orderedlist>
+		<para>
+			All changes made in LiNGO, including optimisation, can be undone. The “undo” command can be accessed by pressing CTRL-Z, selecting “Undo” from the Edit menu,
+			or pressing the
+			<inlinegraphic fileref="resources/howtos/undo.gif" width="0.449cm" depth="0.449cm" />
+			icon on an editor menu. If the application is in auto-evaluate mode, this change will usually trigger a delayed evaluation. Before the evaluation (or if
+			auto-evaluate is turned off), the undone change may be re-applied by choosing the “redo” command (CTRL-Y / “Redo” /
+			<inlinegraphic fileref="resources/howtos/redo.gif" width="0.449cm" depth="0.449cm" />
+			).
+		</para>
+	</section>
+	<section>
+		<title>Add a new Cargo</title>
+		<para>The concept of a cargo is central to the LiNGO user interface.
+			A
+			cargo consists of a quantity of LNG which is purchased and then
+			sold,
+			with each transaction
+			occurring at a particular time and in a
+			particular place.
+		</para>
+		<para>The most common type of cargo modelled in LiNGO is bought FOB
+			(link-&gt;Free On Board), loaded onto a particular vessel, shipped
+			to
+			its destination, and
+			discharged in a DES (link-&gt;Delivery Ex
+			Ship)
+			sale. LiNGO also allows for other types of transaction to be
+			modelled, including a divertible DES purchase at
+			the load port, a
+			DES
+			purchase at the discharge port, and a FOB sale.
+		</para>
+		<orderedlist>
+			<listitem>
+				<para>Types of cargo - fleet, des, fob</para>
+			</listitem>
+			<listitem>
+				<para>Ways to create a cargo (images useful)</para>
+			</listitem>
+		</orderedlist>
+		<para>
+			You can create a cargo by selecting “Cargo” from the “Add” menu
+			<inlinegraphic fileref="resources/howtos/icons-add.png" width="1.396cm" depth="0.698cm" />
+			in the Trades tab of the scenario editor. This menu also allows the
+			creation of individual LNG purchase or sales slots.
+		</para>
+		<para>
+			<inlinegraphic fileref="resources/howtos/new-cargo-menu.png" width="7.422cm" depth="5.63cm" />
+		</para>
+		<para>A newly-created cargo will have no information associated with
+			it. You can edit its information by double-clicking on the
+			highlighted row to bring up the
+			Cargo Editor.
+		</para>
+		<para>
+			<inlinegraphic fileref="resources/howtos/new-cargo-table.png" width="24.754cm" depth="6.873cm" />
+		</para>
+		<para />
+	</section>
+	<section id="howtos.what_is_a_vessel_class">
+		<title>
+			What Is A Vessel Class?
+		</title>
+		<para>A vessel class describes a particular physical type of vessel,
+			with details of capacity, fuel consumption and other operating
+			parameters. More than one
+			vessel can belong to the same vessel
+			class.
+			Even if a vessel is the only one of its class, you will need
+			to create
+			a vessel class for that vessel to specify its
+			physical
+			operating
+			parameters.
+		</para>
+		<para />
+	</section>
+	<section>
+		<title>
+			Add a new Vessel Class
+		</title>
+		<orderedlist>
+			<listitem>
+				<para>
+					See
+					<xref linkend="howtos.what_is_a_vessel_class" />
+				</para>
+			</listitem>
+			<listitem>
+				<para>“Data Perspective” -&gt; Vessels </para>
+			</listitem>
+			<listitem>
+				<para>Laden vs Ballast (laden also means “Load” for port values”</para>
+			</listitem>
+			<listitem>
+				<para>Suez parameters (linked to routes)</para>
+			</listitem>
+			<listitem>
+				<para>Explain other parameters</para>
+			</listitem>
+			<listitem>
+				<para>Min/max speed and relation to service speed and fuel curves</para>
+			</listitem>
+		</orderedlist>
+		<para />
+	</section>
+	<section>
+		<title>
+			Add a Vessel
+		</title>
+		<orderedlist>
+			<listitem>
+				<para>“Reference” Vessel vs Scenario Vessel (fleet vs available to
+					be nominated, TC)
+				</para>
+			</listitem>
+			<listitem>
+				<para>Relationship to vessel class</para>
+			</listitem>
+			<listitem>
+				<para>“Data Perspective” -&gt; Vessels</para>
+			</listitem>
+		</orderedlist>
+		<para />
+	</section>
+	<section>
+		<title>
+			Add a Scenario Vessel
+		</title>
+		<orderedlist>
+			<listitem>
+				<para>“Reference” Vessel vs Scenario Vessel (fleet vs available to
+					be nominated, TC)
+				</para>
+			</listitem>
+			<listitem>
+				<para>Editor -&gt; Fleet tab</para>
+			</listitem>
+			<listitem>
+				<para>Time charter rate as expression.</para>
+			</listitem>
+			<listitem>
+				<para>Entity (link to client specific transfer rules for cargo
+					voyages, vessel events always shipping entity)
+				</para>
+			</listitem>
+			<listitem>
+				<para>Start details (note single port, although UI can select
+					multiple, but hit by validation)
+				</para>
+			</listitem>
+			<listitem>
+				<para>End details (multiple ports)</para>
+			</listitem>
+			<listitem>
+				<para>Starting Heel</para>
+			</listitem>
+			<listitem>
+				<para>Note start/end can be blank, mismatched, what happens? (BOG
+					used if  heel is big enough, otherwise assume no heel available)
+				</para>
+			</listitem>
+		</orderedlist>
+	</section>
+	<section>
+		<title>
+			Add a Contract
+		</title>
+		<para>Purchases and Sales contracts can be managed in the
+			“Commercial”
+			tab of the editor. New simple contracts can be added
+			using the green
+			plus icon. Custom
+			contracts cannot be added this way
+			and need to be
+			pre-loaded into a scenario.
+		</para>
+		<para>Purchase and Sales contracts are generally similar, although
+			they do have a couple of unique attributes.
+		</para>
+		<para>
+			<inlinegraphic fileref="resources/howtos/new-purchase-contract.png" width="14.643cm" depth="12.9cm" />
+		</para>
+		<para>The next contract editor is split into three tabs: Contract,
+			Pricing and Restrictions.
+		</para>
+		<para />
+		<para>The pricing tab is specific to the type of contract. By default
+			LiNGO ships with a price expression contract. This type of contract
+			has a text field where
+			simple expressions based around market curves
+			can be defined. E.g. 99% HH+0.5 means take 99% of HH curve price
+			and
+			add 50 cents (assuming the HH curve is in
+			dollars). More complex
+			contracts can have many other fields specific to that
+			implementation.
+		</para>
+		<para />
+		<para>The Contract tab contains various general information about the
+			contract, while the Restrictions tabs allows for restrictions on
+			transactions at the
+			“other end” of the trade by port, contract or
+			other characteristics.
+		</para>
+		<para />
+	</section>
+	<section>
+		<title>
+			Update Price Curves
+		</title>
+		<para>Commodity price curves can be updated via a CSV upload. This
+			can
+			be performed on an individual scenario or group basis. This can
+			be
+			accessed from the
+			“Import Price Curves” item in the “Data”
+			application menu.
+		</para>
+		<para>
+			<inlinegraphic fileref="resources/howtos/update-price-curves.png" width="9.812cm" depth="4.284cm" />
+		</para>
+		<para>A dialog will open up with a number of options. </para>
+		<para>Select the CSV data file containing the source data.</para>
+		<para>For format and decimal separators depend on how the file has
+			been created. Microsoft Excel will create a CSV file using the
+			system
+			Locale settings. For a
+			UK locale this means the format
+			separator is a
+			comma and the decimal separator is a period. In
+			Europe the format
+			separator is typically a semicolon and the
+			decimal
+			separator is a
+			comma.
+		</para>
+		<para>Finally choose whether to update all scenarios, the scenario
+			currently being edited or a user defined selection from the tree.
+		</para>
+		<para>Press the “Finish” button to import the data into all chosen
+			scenarios.
+		</para>
+		<orderedlist>
+			<listitem>
+				<para>Other curves (base + charter), export as CSV, overwrite,
+					re-import
+				</para>
+			</listitem>
+		</orderedlist>
+		<para />
+	</section>
+	<section>
+		<title>
+			Add a Port
+		</title>
+		<orderedlist>
+			<listitem>
+				<para>Data Perspective -&gt; Port View</para>
+			</listitem>
+			<listitem>
+				<para>Create port.</para>
+			</listitem>
+			<listitem>
+				<para>Need to update distance matrix with new row/column per route
+					for all other ports.
+				</para>
+			</listitem>
+			<listitem>
+				<para>Best to do outside of application as </para>
+			</listitem>
+		</orderedlist>
+		<para />
+	</section>
+	<section>
+		<title>
+			Compare Scenarios
+		</title>
+		<orderedlist>
+			<listitem>
+				<para>“Stacking” - Select display icon in navigator for each
+					scenario.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					Pin/Diff - Right click navigator display icon and “pin”, double
+					click , or editor action
+					<inlinegraphic fileref="resources/howtos/icons-pin.gif" width="0.449cm" depth="0.449cm" />
+				</para>
+			</listitem>
+		</orderedlist>
+		<para />
+	</section>
+	<section>
+		<title>
+			Check for Updates
+		</title>
+		<orderedlist>
+			<listitem>
+				<para>Open Help menu, select check for updates</para>
+			</listitem>
+			<listitem>
+				<para>
+					<inlinegraphic fileref="resources/howtos/Check for updates.png" width="13.25cm" depth="5.48cm" />
+				</para>
+			</listitem>
+			<listitem>
+				<para>If update is present, Press “Next &gt;”,</para>
+			</listitem>
+			<listitem>
+				<para>Press “Next &gt;” again</para>
+			</listitem>
+			<listitem>
+				<para>Accept license terms, and press Finish</para>
+			</listitem>
+			<listitem>
+				<para>Once downloaded, restart app.</para>
+			</listitem>
+		</orderedlist>
+		<para />
+	</section>
+	<section>
+		<title>
+			Moving an installation of LiNGO
+		</title>
+		<orderedlist>
+			<listitem>
+				<para>ZIP up the LiNGO application folder and copy to the new
+					location on the new computer.
+				</para>
+			</listitem>
+			<listitem>
+				<para>Re-create any shortcuts.</para>
+			</listitem>
+			<listitem>
+				<para>Launch LiNGO and check everything works!</para>
+			</listitem>
+			<listitem>
+				<para>Note, the workspace (which holds the scenario data) will be in
+					a folder called "LiNGO" in your user home directory. We assume that
+					is copied over
+					automatically, but if not then you'll need to also
+					copy that folder from the home directory on the old computer to
+					that on the new computer.
+				</para>
+			</listitem>
+			<listitem>
+				<para>&lt;Check Lingo/mmxlabs directories in user home - e.g.
+					lingo.data&gt;</para>
+			</listitem>
+		</orderedlist>
+		<para>You can of course just copy across a base case and start afresh,
+			if you're absolutely certain you don't need any of the old data.
+		</para>
+	</section>
+</chapter>

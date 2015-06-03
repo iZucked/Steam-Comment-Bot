@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xml:lang="en" xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xl="http://www.w3.org/1999/xlink"
+	id="Editor_Markets">
+	<title>
+		Markets Tab
+	</title>
+	<para>The Markets tab shows the three types of curve data used in
+		LiNGO. These are Base Fuel curves, Chartering curves and Commodity
+		Curves.
+	</para>
+	<para>Curves are represented by a price for each calendar month.
+		They
+		can be defined as such or, for commodity curves, be derived
+		from a
+		simple expression such as
+		“99%HH”. Missing values are
+		assumed to be
+		the same as the previous month (or the month before
+		if that is also
+		missing, and so on). Thus the last value in a
+		curve
+		is used for all
+		dates in the future. Values can be edited or added
+		directly in the
+		table or imported in bulk. The add button (the
+		green plus icon) in
+		the
+		table
+		toolbar has an option to add
+		additional dates to the table.
+	</para>
+	<para>Base Fuel curves are typically $/MT of base fuel, such as HFO
+		or
+		MGO. Note, LiNGO currently prices base fuel at the first value
+		in
+		the
+		curve regardless of
+		date.
+	</para>
+	<para>Chartering curves are typically $/day rates for chartering in
+		or
+		out a vessel.
+	</para>
+	<para>Commodity curves are the various market indices and derived
+		curves. Slot and contract price expressions can reference these
+		curves. Typically priced as
+		$/mmBtu.
+	</para>
+	<para>Note: the units column is a free text field for information
+		purposes. Changing it does not affect LiNGO in any way.
+	</para>
+</section>

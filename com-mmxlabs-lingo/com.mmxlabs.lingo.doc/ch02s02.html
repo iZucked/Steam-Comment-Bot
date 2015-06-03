@@ -1,0 +1,213 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Fleet Tab</title><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="LiNGO User Manual"><link rel="up" href="ch02.html" title="Chapter&nbsp;2.&nbsp;Editing"><link rel="prev" href="ch02.html" title="Chapter&nbsp;2.&nbsp;Editing"><link rel="next" href="ch02s03.html" title="Commercial Tab"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div lang="en" class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Editor_Fleet"></a>Fleet Tab</h2></div></div></div><p>The fleet tab shows which vessels are in the fleet and when they are available. This tab also displays the non-cargo vessel events such as dry-docks and
+		charter outs.
+	</p><p>
+		<img src="resources/editor/editor-fleet.png" height="287">
+	</p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="d0e604"></a>
+			Fleet Availability Editor
+		</h3></div></div></div><p>
+			<img src="resources/editor/editor-fleet-availability.png" width="533">
+		</p><p>This dialog allows you to edit various fields associated with
+			a
+			vessel&#8217;s availability to the fleet. Note that the vessel&#8217;s
+			details
+			must already have been
+			created in the LiNGO application [
+			see
+			&#8220;Vessels&#8221; ] in order to add it to the fleet.
+		</p><p></p><div class="informaltable"><table border="1" width="100%"><colgroup><col width="20%" class="col1"><col width="80%" class="col2"></colgroup><tbody><tr><td>
+							<p></p>
+						</td><td>
+							<p>Availability Details</p>
+						</td></tr><tr><td>
+							<p>Vessel</p>
+						</td><td>
+							<p>The vessel being allocated to the fleet for LNG trading.
+							</p>
+						</td></tr><tr><td>
+							<p>Time Charter Rate</p>
+						</td><td>
+							<p>Optional cost per day for the vessel. This can be a fixed number or an expression on the charter curves.</p>
+						</td></tr><tr><td>
+							<p>Start At</p>
+						</td><td>
+							<p>The port the vessel starts at when it is allocated to
+								the
+								fleet. If left blank, the vessel is assumed to be available to
+								start trading at any port.
+							</p>
+						</td></tr><tr><td>
+							<p>Start After /</p>
+							<p>Start By</p>
+						</td><td>
+							<p>These fields constrain the date and time after which the
+								vessel is available for LNG trading as part of the fleet. If
+								blank, the vessel is assumed to
+								be available whenever
+								required.
+							</p>
+						</td></tr><tr><td>
+							<p>End At</p>
+						</td><td>
+							<p>The port the vessel must finish at when its itinerary
+								ends.
+								If left blank, it is assumed that the vessel can finish
+								anywhere.
+							</p>
+						</td></tr><tr><td>
+							<p>End After / End By</p>
+						</td><td>
+							<p>These fields specify the date and time after which the
+								vessel is available for LNG trading as part of the fleet. If
+								blank, the vessel is assumed to
+								be available whenever
+								required.
+							</p>
+						</td></tr><tr><td>
+							<p>Entity</p>
+						</td><td>
+							<p>These fields constrain the date and time after which the
+								vessel is no longer available for LNG trading as part of the
+								fleet. If blank, the vessel is
+								assumed to be available as
+								long
+								as
+								it is required.
+							</p>
+						</td></tr><tr><td>
+							<p>Start Heel Details</p>
+						</td><td>
+							<p></p>
+						</td></tr><tr><td>
+							<p>Volume Available</p>
+						</td><td>
+							<p>The estimated maximum quantity of LNG the vessel begins its
+								itinerary
+								with.
+							</p>
+						</td></tr><tr><td>
+							<p>CV Value</p>
+						</td><td>
+							<p>If the vessel begins its itinerary with LNG on board,
+								the
+								calorific value of its initial LNG heel.
+							</p>
+						</td></tr><tr><td>
+							<p>Price Per mmBtu</p>
+						</td><td>
+							<p>The unit price of the heel</p>
+						</td></tr></tbody></table></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="d0e752"></a>
+			Charter Out Editor
+		</h3></div></div></div><p>A charter out opportunity is a period of time where a vessel
+			is
+			chartered out to a third party for a predetermined amount of
+			time.&nbsp;During such time there
+			are no costs for the vessel except
+			hire cost.
+			A charter out gains revenue at a fixed rate per day
+			with
+			an optional
+			fixed fee. A charter out begins at a
+			predetermined port
+			and may be
+			returned back to that port or a completely different
+			port.
+		</p><p>
+			<img src="resources/editor/editor-fleet-new-event.png" width="196">
+		</p><p>A new charter out can be created from the &#8220;Fleet&#8221; tab in the
+			scenario editor and it is included as part of the &#8220;Events&#8221; table.
+			Pressing the down arrow on
+			the green plus button displays a menu
+			of
+			the different types of vessel event. Select &#8220;Charter Out&#8221; to create
+			a charter out event.
+		</p><p></p><p></p><p>
+			<img src="resources/editor/editor-fleet-charter-out.png" width="502">
+		</p><p></p><div class="informaltable"><table border="1" width="100%"><colgroup><col width="20%" class="col1"><col width="80%" class="col2"></colgroup><tbody><tr><td>
+							<p>Name</p>
+						</td><td>
+							<p>A unique name for this event</p>
+						</td></tr><tr><td>
+							<p>Assignment</p>
+						</td><td>
+							<p>The vessel currently assigned to the charter out. One
+								must
+								be specified.
+							</p>
+						</td></tr><tr><td>
+							<p>Duration in Days</p>
+						</td><td>
+							<p>The duration of the charter out.</p>
+						</td></tr><tr><td>
+							<p>Allowed Vessels</p>
+						</td><td>
+							<p>The list of vessels which could perform the charter out.
+								Assigned vessel should be in this list.
+							</p>
+						</td></tr><tr><td>
+							<p>Port</p>
+						</td><td>
+							<p>The port where the charter out is picked up</p>
+						</td></tr><tr><td>
+							<p>Start After/By</p>
+						</td><td>
+							<p>The window in which this charter out can star</p>
+						</td></tr><tr><td>
+							<p>Relocate To</p>
+						</td><td>
+							<p>Optional port for the vessel to be returned to. If not
+								specified, the pickup port is used.
+							</p>
+						</td></tr><tr><td>
+							<p>Repositioning Fee</p>
+						</td><td>
+							<p>Fixed fee paid by charter for this charter out</p>
+						</td></tr><tr><td>
+							<p>Hire Rate</p>
+						</td><td>
+							<p>Cost per day paid by charter for this charter out</p>
+						</td></tr><tr><td>
+							<p>End heel [Optional]</p>
+						</td><td>
+							<p>This is the amount of heel left on the vessel at the end
+								of the charter. This is intended to be enough fuel to cover
+								the
+								ballast journey from the
+								return port to the next
+								destination.
+								Boil-off is priced at the specified heel price
+							</p>
+						</td></tr></tbody></table></div><p></p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="d0e886"></a>
+			Dry Dock / Maintenance Editor
+		</h3></div></div></div><img src="resources/editor/editor-fleet-drydock.png" width="429"><p>This dialog allows you to schedule dry dock or maintenance
+			stops
+			for a particular vessel.
+		</p><p></p><div class="informaltable"><table border="1" width="100%"><colgroup><col width="20%" class="col1"><col width="80%" class="col2"></colgroup><tbody><tr><td>
+							<p>Name</p>
+						</td><td>
+							<p>A unique name for this event</p>
+						</td></tr><tr><td>
+							<p>Assignment</p>
+						</td><td>
+							<p>The vessel currently assigned to the dry dock or
+								maintenance stop. One must be specified.
+							</p>
+						</td></tr><tr><td>
+							<p>Duration in Days</p>
+						</td><td>
+							<p>The duration of the dry dock or maintenance stop.</p>
+						</td></tr><tr><td>
+							<p>Allowed Vessels</p>
+						</td><td>
+							<p>For dry dock and maintenance this should match the assignment field.</p>
+						</td></tr><tr><td>
+							<p>Port</p>
+						</td><td>
+							<p>The port where the dry dock or maintenance stop occurs.
+							</p>
+						</td></tr><tr><td>
+							<p>Start After/By</p>
+						</td><td>
+							<p>The time window in which this stop can begin.</p>
+						</td></tr></tbody></table></div></div></div></body></html>

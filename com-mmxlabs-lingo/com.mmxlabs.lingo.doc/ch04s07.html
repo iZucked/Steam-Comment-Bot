@@ -1,0 +1,108 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>Contract Fields</title><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="LiNGO User Manual"><link rel="up" href="ch04.html" title="Chapter&nbsp;4.&nbsp;Data Model Reference"><link rel="prev" href="ch04s06.html" title="Vessel Class Fields"><link rel="next" href="ch05.html" title="Chapter&nbsp;5.&nbsp;How Tos"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="DataModel_lng_commercial_Contract"></a>
+			Contract Fields
+		</h2></div></div></div><div class="informaltable"><table border="1" width="100%"><colgroup><col width="20%" class="col1"><col width="80%" class="col2"></colgroup><tbody><tr><td>
+							<p>Name</p>
+						</td><td>
+							<p>Unique name of the contract</p>
+						</td></tr><tr><td>
+							<p>Entity</p>
+						</td><td>
+							<p>Owning corporate entity</p>
+						</td></tr><tr><td>
+							<p>Ports</p>
+						</td><td>
+							<p>The ports linked to the contract (i.e. load port for
+								purchase contracts, discharge ports for sales contracts). Can
+								be
+								left blank
+							</p>
+						</td></tr><tr><td>
+							<p>Preferred Port</p>
+						</td><td>
+							<p>A preferred, or default, port for the contract (used
+								when
+								creating new slots).
+							</p>
+						</td></tr><tr><td>
+							<p>Min/Max Quantity</p>
+						</td><td>
+							<p>Default slot minimum and maximum transfer volume in m3.
+							</p>
+						</td></tr><tr><td>
+							<p>Notes</p>
+						</td><td>
+							<p>Free text field to user notes on the contract.</p>
+						</td></tr><tr><td>
+							<p>Contract Type</p>
+						</td><td>
+							<p>Whether this contract is just for FOB or DES
+								transactions
+								or
+								both. For purchase contracts this means FOB Purchase or DES
+								Purchase. For sales contracts
+								this means DES Sales or FOB
+								Sales.
+							</p>
+						</td></tr><tr><td>
+							<p>Cancellation Fee</p>
+						</td><td>
+							<p>Fixed fee for not using a slot linked to this contract.
+							</p>
+						</td></tr><tr><td>
+							<p>Cargo CV</p>
+						</td><td>
+							<p>(Purchase Only) Contract purchase CV if different to CV
+								defined on the load port.
+							</p>
+						</td></tr></tbody></table></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2463"></a>
+				The Restrictions Tab
+			</h3></div></div></div><p></p><div class="informaltable"><table border="1" width="100%"><colgroup><col width="20%" class="col1"><col width="80%" class="col2"></colgroup><tbody><tr><td>
+								<p>Restrictions Are Permissive</p>
+							</td><td>
+								<p>Flips restrictions from blacklisted contracts and ports
+									to
+									whitelisted contracts and ports.
+								</p>
+							</td></tr><tr><td>
+								<p>Contracts</p>
+							</td><td>
+								<p>List of contracts which cannot be linked to this
+									contract
+									(or if restrictions are permissive then this is the
+									list of
+									contracts which can only be
+									linked to this one).
+								</p>
+							</td></tr><tr><td>
+								<p>Ports</p>
+							</td><td>
+								<p>List of ports which cannot be linked to this contract
+									(or
+									if restrictions are permissive then this is the list of
+									ports
+									which can only be linked to
+									this one).
+								</p>
+							</td></tr><tr><td>
+								<p>Min/Max CV Value</p>
+							</td><td>
+								<p>(Sales Only) Only link to purchases with a CV value
+									within
+									this range.
+								</p>
+							</td></tr><tr><td>
+								<p>Cargo Type</p>
+							</td><td>
+								<p>(Sales Only) Shipped means only link to FOB Purchases, Non
+									Shipped means only link to DES Purchases.
+								</p>
+								<p></p>
+							</td></tr><tr><td>
+								<p>Sales Delivery Type</p>
+							</td><td>
+								<p>(Purchase Only) Shipped means only link to DES Sales, Non
+									Shipped means only link to FOB Sales.
+								</p>
+							</td></tr></tbody></table></div></div></div></body></html>
