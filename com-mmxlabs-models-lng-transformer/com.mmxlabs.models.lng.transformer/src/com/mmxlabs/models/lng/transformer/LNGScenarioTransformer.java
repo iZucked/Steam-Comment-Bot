@@ -196,11 +196,11 @@ public class LNGScenarioTransformer {
 	@Inject
 	@NonNull
 	private ISchedulerBuilder builder;
-	
+
 	@Inject
 	@NonNull
 	private ILoadPriceCalculatorProviderEditor loadPriceCalculatorProvider;
-	
+
 	@Inject
 	@NonNull
 	private IShipToShipBindingProviderEditor shipToShipBindingProvider;
@@ -386,7 +386,7 @@ public class LNGScenarioTransformer {
 		if (rootObject.getPortfolioModel().isSetPromptPeriodEnd()) {
 			promptPeriodProviderEditor.setEndOfPromptPeriod(dateHelper.convertTime(rootObject.getPortfolioModel().getPromptPeriodEnd()));
 		}
-		
+
 		/**
 		 * First, create all the market curves (should these come through the builder?)
 		 */
@@ -1016,7 +1016,8 @@ public class LNGScenarioTransformer {
 				}
 			}
 
-			configureLoadSlotRestrictions(builder, portAssociation, allDischargePorts, loadSlot, load, getTimeWindowForSlotBinding(loadSlot, load, portAssociation.lookupNullChecked(loadSlot.getPort())));
+			configureLoadSlotRestrictions(builder, portAssociation, allDischargePorts, loadSlot, load,
+					getTimeWindowForSlotBinding(loadSlot, load, portAssociation.lookupNullChecked(loadSlot.getPort())));
 		}
 
 		for (final DischargeSlot dischargeSlot : cargoModel.getDischargeSlots()) {
@@ -1323,8 +1324,8 @@ public class LNGScenarioTransformer {
 		final ILoadOption load;
 		usedIDStrings.add(loadSlot.getName());
 
-		final ITimeWindow loadWindow = builder.createTimeWindow(dateHelper.convertTime(loadSlot.getWindowStartWithSlotOrPortTimeWithFlex()), dateHelper.convertTime(loadSlot.getWindowEndWithSlotOrPortTimeWithFlex())
-				loadSlot.getWindowFlex());
+		final ITimeWindow loadWindow = builder.createTimeWindow(dateHelper.convertTime(loadSlot.getWindowStartWithSlotOrPortTimeWithFlex()),
+				dateHelper.convertTime(loadSlot.getWindowEndWithSlotOrPortTimeWithFlex()), loadSlot.getWindowFlex());
 
 		final ILoadPriceCalculator loadPriceCalculator;
 		final boolean isSpot = (loadSlot instanceof SpotSlot);
