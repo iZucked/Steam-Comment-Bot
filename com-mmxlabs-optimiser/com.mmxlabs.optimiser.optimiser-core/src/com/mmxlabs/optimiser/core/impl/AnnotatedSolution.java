@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.optimiser.core.impl;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -81,11 +80,11 @@ public final class AnnotatedSolution implements IAnnotatedSolution {
 	public <U> U getGeneralAnnotation(final String key, final Class<U> clz) {
 		return clz.cast(generalAnnotations.get(key));
 	}
-	}
 
 	@Override
 	public List<String> getGeneralAnnotationKeys() {
-		List<String> keys = new LinkedList<String>(generalAnnotations.keySet());
+		final List<String> keys = new LinkedList<String>(generalAnnotations.keySet());
 		Collections.sort(keys);
 		return keys;
+	}
 }
