@@ -2,116 +2,33 @@
 <!-- Copyright (C) Minimax Labs Ltd., 2010 - 2015 All rights reserved. -->
 <?eclipse version="3.4"?>
 <plugin>
-	<extension point="org.eclipse.ui.perspectives">
-		<perspective class="com.mmxlabs.lingo.reports.diff.DiffPerspective"
-			id="com.mmxlabs.lingo.reports.diff.DiffPerspective" name="Diff Tools">
-		</perspective>
-	</extension>
-	<extension point="org.eclipse.ui.views">
-		<view class="com.mmxlabs.lingo.reports.diff.DiffGroupView" id="com.mmxlabs.lingo.reports.diff.DiffGroupView"
-			name="Diffs" restorable="true">
-		</view>
-	</extension>
-
-	<extension point="org.eclipse.ui.actionSets">
-		<actionSet id="com.mmxlabs.lingo.reports.diff.actionset"
-			label="Diff View Tools">
-			<action
-				class="com.mmxlabs.lingo.reports.diff.actions.FilterScheduleReportBySelection"
-				icon="icons/FilterBySelection.gif"
-				id="com.mmxlabs.lingo.reports.diff.actions.FilterScheduleReportBySelection"
-				label="Filter Schedule Report" style="toggle" toolbarPath="additions">
-			</action>
-			<action
-				class="com.mmxlabs.lingo.reports.diff.actions.FilterGanttReportBySelection"
-				icon="icons/filterGantt.gif"
-				id="com.mmxlabs.lingo.reports.diff.actions.FilterGanttReportBySelection"
-				label="Filter Schedule" style="toggle" toolbarPath="additions">
-			</action>
-		</actionSet>
-	</extension>
-	<extension point="org.eclipse.ui.perspectiveExtensions">
-		<perspectiveExtension targetID="*">
-			<perspectiveShortcut id="com.mmxlabs.lingo.reports.diff.DiffPerspective">
-			</perspectiveShortcut>
-		</perspectiveExtension>
-	</extension>
 	<extension point="com.mmxlabs.lingo.reports.FleetBasedColumn">
 		<FleetBasedColumn
 			handlerID="com.mmxlabs.lingo.reports.views.fleet.StandardFleetColumnFactory"
 			id="com.mmxlabs.lingo.reports.components.columns.fleet.diff_selection_gco">
 		</FleetBasedColumn>
 	</extension>
-	<extension point="com.mmxlabs.lingo.reports.ScheduleBasedColumn">
-		<ScheduleBasedColumn
-			handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
-			id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation_group_pnldelta">
-		</ScheduleBasedColumn>
-		<ScheduleBasedColumn
-			handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
-			id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation">
-		</ScheduleBasedColumn>
-		<ScheduleBasedColumn
-			handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
-			id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation_group">
-		</ScheduleBasedColumn>
-		<ScheduleBasedColumn
-			handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
-			id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_changestring">
-		</ScheduleBasedColumn>
-		<ScheduleBasedColumn
-			handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
-			id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_lateness">
-		</ScheduleBasedColumn>
-		<ScheduleBasedColumn
-			handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
-			id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_capacity_violation">
-		</ScheduleBasedColumn>
+	<extension point="com.mmxlabs.lingo.reports.FleetBasedColumn">
+		<FleetBasedColumn
+			handlerID="com.mmxlabs.lingo.reports.views.fleet.StandardFleetColumnFactory"
+			id="com.mmxlabs.lingo.reports.components.columns.fleet.gco">
+		</FleetBasedColumn>
+		<FleetBasedColumn
+			handlerID="com.mmxlabs.lingo.reports.views.fleet.StandardFleetColumnFactory"
+			id="com.mmxlabs.lingo.reports.components.columns.fleet.diff_gco">
+		</FleetBasedColumn>
 	</extension>
-	<extension point="com.mmxlabs.lingo.reports.ScheduleBasedReportInitialState">
-		<ScheduleBasedReportInitialState
+
+	<extension point="com.mmxlabs.lingo.reports.FleetBasedReportInitialState">
+		<FleetBasedReportInitialState
 			customisable="true"
-			id="com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport">
+			id="com.mmxlabs.lingo.reports.views.fleet.ConfigurableFleetReportView">
 			<InitialColumn
-				id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation_group_pnldelta">
+				id="com.mmxlabs.lingo.reports.components.columns.fleet.gco">
 			</InitialColumn>
 			<InitialColumn
-				id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation_group">
+				id="com.mmxlabs.lingo.reports.components.columns.fleet.diff_gco">
 			</InitialColumn>
-			<InitialColumn
-				id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_changestring">
-			</InitialColumn>
-			<InitialColumn
-				id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_capacity_violation">
-			</InitialColumn>
-			<InitialColumn
-				id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_lateness">
-			</InitialColumn>
-		</ScheduleBasedReportInitialState>
+		</FleetBasedReportInitialState>
 	</extension>
-	 <extension
-         point="com.mmxlabs.lingo.reports.FleetBasedColumn">
-      <FleetBasedColumn
-            handlerID="com.mmxlabs.lingo.reports.views.fleet.StandardFleetColumnFactory"
-            id="com.mmxlabs.lingo.reports.components.columns.fleet.gco">
-      </FleetBasedColumn>
-      <FleetBasedColumn
-            handlerID="com.mmxlabs.lingo.reports.views.fleet.StandardFleetColumnFactory"
-            id="com.mmxlabs.lingo.reports.components.columns.fleet.diff_gco">
-      </FleetBasedColumn>
-   </extension>
-	
-	<extension
-         point="com.mmxlabs.lingo.reports.FleetBasedReportInitialState">
-      <FleetBasedReportInitialState
-            customisable="true"
-            id="com.mmxlabs.lingo.reports.views.fleet.ConfigurableFleetReportView">       
-         <InitialColumn
-               id="com.mmxlabs.lingo.reports.components.columns.fleet.gco">
-         </InitialColumn>
-         <InitialColumn
-               id="com.mmxlabs.lingo.reports.components.columns.fleet.diff_gco">
-         </InitialColumn>
-      </FleetBasedReportInitialState>
-   </extension>
 </plugin>
