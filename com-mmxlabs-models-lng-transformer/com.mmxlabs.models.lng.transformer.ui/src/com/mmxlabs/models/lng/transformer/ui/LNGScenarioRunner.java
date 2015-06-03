@@ -203,6 +203,13 @@ public class LNGScenarioRunner {
 		if (periodSchedule != null) {
 			initialSchedule = periodSchedule;
 		}
+		try {
+			optimiser.getProgressMonitor().begin(optimiser, optimiser.getFitnessEvaluator().getCurrentFitness(), startSolution);
+		} catch (Exception e) {
+
+		} finally {
+
+		}
 		return initialSchedule;
 	}
 
@@ -277,7 +284,13 @@ public class LNGScenarioRunner {
 	 */
 	public boolean step(final int percent) {
 		assert createOptimiser;
+		IOptimiserProgressMonitor monitor = optimiser.getProgressMonitor();
 		optimiser.step(percent);
+		if (monitor != null) {
+			monitor.report(optimiser, optimiser.getNumberOfIterationsCompleted(), optimiser.getFitnessEvaluator().getCurrentFitness(), optimiser.getFitnessEvaluator().getBestFitness(),
+					optimiser.getCurrentSolution(), optimiser.getBestSolution());
+		}
+
 		if (optimiser.isFinished()) {
 			// export final state
 			LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
@@ -288,7 +301,9 @@ public class LNGScenarioRunner {
 			if (periodSchedule != null) {
 				finalSchedule = periodSchedule;
 			}
-
+			if (monitor != null) {
+				monitor.done(optimiser, optimiser.getFitnessEvaluator().getBestFitness(), optimiser.getBestSolution());
+			}
 			optimiser = null;
 			log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
 			return false;

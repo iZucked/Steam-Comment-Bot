@@ -149,6 +149,7 @@ import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.ILoadPriceCalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProviderEditor;
@@ -191,7 +192,10 @@ public class LNGScenarioTransformer {
 
 	@Inject
 	private ISchedulerBuilder builder;
-
+	
+	@Inject
+	private ILoadPriceCalculatorProviderEditor loadPriceCalculatorProvider;
+	
 	@Inject
 	private IShipToShipBindingProviderEditor shipToShipBindingProvider;
 
@@ -366,7 +370,7 @@ public class LNGScenarioTransformer {
 		if (rootObject.getPortfolioModel().isSetPromptPeriodEnd()) {
 			promptPeriodProviderEditor.setEndOfPromptPeriod(dateHelper.convertTime(rootObject.getPortfolioModel().getPromptPeriodEnd()));
 		}
-
+		
 		/**
 		 * First, create all the market curves (should these come through the builder?)
 		 */
@@ -560,6 +564,7 @@ public class LNGScenarioTransformer {
 			}
 			final ILoadPriceCalculator calculator = transformer.transformPurchasePriceParameters(c, c.getPriceInfo());
 			modelEntityMap.addModelObject(c, calculator);
+			loadPriceCalculatorProvider.setPortfolioCalculator(calculator);
 		}
 
 		// process port costs
@@ -1162,7 +1167,7 @@ public class LNGScenarioTransformer {
 		usedIDStrings.add(dischargeSlot.getName());
 
 		final ITimeWindow dischargeWindow = builder.createTimeWindow(convertTime(earliestTime, dischargeSlot.getWindowStartWithSlotOrPortTimeWithFlex()),
-				convertTime(earliestTime, dischargeSlot.getWindowEndWithSlotOrPortTimeWithFlex()));
+				convertTime(earliestTime, dischargeSlot.getWindowEndWithSlotOrPortTimeWithFlex()), dischargeSlot.getWindowFlex());
 
 		final ISalesPriceCalculator dischargePriceCalculator;
 
@@ -1325,7 +1330,7 @@ public class LNGScenarioTransformer {
 		usedIDStrings.add(loadSlot.getName());
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(convertTime(earliestTime, loadSlot.getWindowStartWithSlotOrPortTimeWithFlex()),
-				convertTime(earliestTime, loadSlot.getWindowEndWithSlotOrPortTimeWithFlex()));
+				convertTime(earliestTime, loadSlot.getWindowEndWithSlotOrPortTimeWithFlex()), loadSlot.getWindowFlex());
 
 		final ILoadPriceCalculator loadPriceCalculator;
 		final boolean isSpot = (loadSlot instanceof SpotSlot);

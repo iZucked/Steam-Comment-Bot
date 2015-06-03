@@ -26,6 +26,10 @@ import com.mmxlabs.optimiser.lso.IThresholder;
 import com.mmxlabs.optimiser.lso.impl.thresholders.GeometricThresholder;
 import com.mmxlabs.optimiser.lso.modules.LinearFitnessEvaluatorModule;
 import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCore;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.EnumeratingSequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.lso.SequencesConstrainedMoveGeneratorUnit;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
@@ -110,11 +114,49 @@ public class OptimiserSettingsModule extends AbstractModule {
 	}
 
 	@Provides
+	@Named(EnumeratingSequenceScheduler.OPTIMISER_REEVALUATE)
+	private boolean isOptimiserReevaluating() {
+		return true;
+	}
+	
+	@Provides
+	@Named(SequencesConstrainedMoveGeneratorUnit.OPTIMISER_ENABLE_FOUR_OPT_2)
+	private boolean enableFourOpt2() {
+		return false;
+	}
+	
+	@Provides
+	@Named(TravelTimeConstraintChecker.OPTIMISER_START_ELEMENT_FIX)
+	private boolean enableStartOfSequenceFix() {
+		return false;
+	}
+	
+	@Provides
 	@Named(LocalSearchOptimiserModule.LSO_NUMBER_OF_ITERATIONS)
 	private int getNumberOfIterations(final OptimiserSettings settings) {
 		return settings.getAnnealingSettings().getIterations();
 	}
 
+	@Provides
+	@Named(SimilarityFitnessCore.SIMILARITY_THRESHOLD_NUM_CHANGES)
+	private int getSimilarityFitnessThresholdNumChanges(final OptimiserSettings settings) {
+		if (settings.getSimilaritySettings() != null && settings.getSimilaritySettings().isSetThreshold()) {
+			return settings.getSimilaritySettings().getThreshold();
+		} else {
+			return -1;
+		}
+	}
+	
+	@Provides
+	@Named(SimilarityFitnessCore.SIMILARITY_THRESHOLD)
+	private boolean getSimilarityFitnessThreshold(final OptimiserSettings settings) {
+		if (settings.getSimilaritySettings() != null) {
+			return settings.getSimilaritySettings().isSetThreshold();
+		} else {
+			return false;
+		}
+	}
+	
 	@Provides
 	@Named(LinearFitnessEvaluatorModule.LINEAR_FITNESS_WEIGHTS_MAP)
 	Map<String, Double> provideLSOFitnessWeights(final OptimiserSettings settings, final List<IFitnessComponent> fitnessComponents) {
@@ -138,7 +180,7 @@ public class OptimiserSettingsModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	private ILatenessComponentParameters provideLatenessComponentParamters() {
+	private ILatenessComponentParameters provideLatenessComponentParameters() {
 		final LatenessComponentParameters lcp = new LatenessComponentParameters();
 
 		lcp.setThreshold(Interval.PROMPT, 48);

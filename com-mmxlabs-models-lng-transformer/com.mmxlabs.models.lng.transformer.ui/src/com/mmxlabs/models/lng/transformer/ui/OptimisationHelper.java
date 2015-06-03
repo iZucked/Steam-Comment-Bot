@@ -338,5 +338,8 @@ public final class OptimisationHelper {
 
 		to.setShippingOnly(from.isShippingOnly());
 		to.setGenerateCharterOuts(from.isGenerateCharterOuts());
+		if (from.getSimilaritySettings()!=null) {
+			to.setSimilaritySettings(from.getSimilaritySettings());
+		}
 	}
 }
