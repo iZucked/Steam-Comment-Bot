@@ -63,7 +63,7 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 
 	@Inject
 	public ConfigurableScheduleReportView(final ScheduleBasedReportBuilder builder) {
-		super(ID);
+		super("com.mmxlabs.lingo.doc.Reports_ScheduleSummary");
 
 		// Setup the builder hooks.
 		this.builder = builder;

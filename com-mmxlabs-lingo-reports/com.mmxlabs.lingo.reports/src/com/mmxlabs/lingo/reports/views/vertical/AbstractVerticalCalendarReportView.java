@@ -17,6 +17,7 @@ import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
@@ -93,6 +94,8 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		jobManagerListener = ScenarioViewerSynchronizer.registerView(gridViewer, createElementCollector());
 
 		makeActions();
+
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(gridViewer.getControl(), "com.mmxlabs.lingo.doc.Reports_VerticalSchedule");
 	}
 
 	protected void makeActions() {
