@@ -199,9 +199,7 @@
       <topic label="&#xA;&#x9;&#x9;&#x9;Contract Fields&#xA;&#x9;&#x9;" href="ch04s07.html"/>
    </context>
    <context id="howtos.what_is_a_vessel_class">
-      <description>
-			What Is A Vessel Class?
-		</description>
-      <topic label="&#xA;&#x9;&#x9;&#x9;What Is A Vessel Class?&#xA;&#x9;&#x9;" href="ch05s04.html"/>
+      <description>What Is A Vessel Class?</description>
+      <topic label="What Is A Vessel Class?" href="ch05s04.html"/>
    </context>
 </contexts>

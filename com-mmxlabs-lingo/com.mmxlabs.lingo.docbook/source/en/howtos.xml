@@ -80,9 +80,7 @@
 		<para />
 	</section>
 	<section id="howtos.what_is_a_vessel_class">
-		<title>
-			What Is A Vessel Class?
-		</title>
+		<title>What Is A Vessel Class?</title>
 		<para>A vessel class describes a particular physical type of vessel,
 			with details of capacity, fuel consumption and other operating
 			parameters. More than one
@@ -98,9 +96,7 @@
 		<para />
 	</section>
 	<section>
-		<title>
-			Add a new Vessel Class
-		</title>
+		<title>Add a new Vessel Class</title>
 		<orderedlist>
 			<listitem>
 				<para>
@@ -127,9 +123,7 @@
 		<para />
 	</section>
 	<section>
-		<title>
-			Add a Vessel
-		</title>
+		<title>Add a Vessel</title>
 		<orderedlist>
 			<listitem>
 				<para>“Reference” Vessel vs Scenario Vessel (fleet vs available to
@@ -146,9 +140,7 @@
 		<para />
 	</section>
 	<section>
-		<title>
-			Add a Scenario Vessel
-		</title>
+		<title>Add a Scenario Vessel</title>
 		<orderedlist>
 			<listitem>
 				<para>“Reference” Vessel vs Scenario Vessel (fleet vs available to
@@ -185,9 +177,7 @@
 		</orderedlist>
 	</section>
 	<section>
-		<title>
-			Add a Contract
-		</title>
+		<title>Add a Contract</title>
 		<para>Purchases and Sales contracts can be managed in the
 			“Commercial”
 			tab of the editor. New simple contracts can be added
@@ -228,9 +218,7 @@
 		<para />
 	</section>
 	<section>
-		<title>
-			Update Price Curves
-		</title>
+		<title>Update Price Curves</title>
 		<para>Commodity price curves can be updated via a CSV upload. This
 			can
 			be performed on an individual scenario or group basis. This can
@@ -295,9 +283,7 @@
 		<para />
 	</section>
 	<section>
-		<title>
-			Compare Scenarios
-		</title>
+		<title>Compare Scenarios</title>
 		<orderedlist>
 			<listitem>
 				<para>“Stacking” - Select display icon in navigator for each
@@ -343,9 +329,7 @@
 		<para />
 	</section>
 	<section>
-		<title>
-			Moving an installation of LiNGO
-		</title>
+		<title>Moving an installation of LiNGO</title>
 		<orderedlist>
 			<listitem>
 				<para>ZIP up the LiNGO application folder and copy to the new
@@ -374,6 +358,17 @@
 		</orderedlist>
 		<para>You can of course just copy across a base case and start afresh,
 			if you're absolutely certain you don't need any of the old data.
+		</para>
+	</section>
+	<section>
+		<title>Automatic Scenario Data Backup</title>
+		<para>
+			Your scenario data can be automatically backed up on application startup and shutdown. This creates a zip file of all your scenario data and stores it
+			in a destination folder of your choice, overwriting any previous backup. This can be a local folder, or a mapped remote folder.
+		</para>
+		<para>To enable the backup, locate the "Scenario Data Backup" preference page (under the Window Menu, Preferences option). Here you can specify the name of
+			the archive and the destination folder (this must exist). Tick the enabled check box to enable the backup. Restart the application to trigger the backup
+			process.
 		</para>
 	</section>
 </chapter>
