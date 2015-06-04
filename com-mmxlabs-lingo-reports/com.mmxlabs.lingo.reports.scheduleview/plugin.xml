@@ -24,19 +24,6 @@
       </view>
    </extension>
    <extension
-         point="org.eclipse.help.contexts">
-      <contexts
-            file="contexts.xml">
-      </contexts>
-   </extension>
-   <extension
-         point="org.eclipse.help.toc">
-      <toc
-            file="toc.xml"
-            primary="false">
-      </toc>
-   </extension>
-   <extension
          point="com.mmxlabs.lingo.reports.scheduleview.schedulerViewColourScheme">
       <ColourScheme
             class="com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.VesselStateColourScheme"
