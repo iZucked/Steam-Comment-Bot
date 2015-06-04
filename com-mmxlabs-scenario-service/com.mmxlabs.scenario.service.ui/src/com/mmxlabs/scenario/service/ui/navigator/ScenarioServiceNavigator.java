@@ -34,6 +34,7 @@ import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.IHandlerService;
@@ -418,6 +419,9 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		 * getViewSite().getActionBars().getToolBarManager().add(a);
 		 */
 		getViewSite().getActionBars().getToolBarManager().update(true);
+
+		// We cannot set this programatically for a common navigator. Instead look in the plugin.xml!
+		// PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.View_Navigator");
 
 		return viewer;
 	}

@@ -22,6 +22,7 @@
          </includes>
       </viewerContentBinding>
       <viewer
+            helpContext="com.mmxlabs.lingo.doc.View_Navigator"
             viewerId="com.mmxlabs.scenario.service.ui.navigator">
          <options>
             <property
