@@ -44,6 +44,7 @@ import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModesRegis
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
+import com.mmxlabs.optimiser.core.IOptimiser;
 import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
@@ -203,17 +204,19 @@ public class LNGScenarioRunner {
 		if (periodSchedule != null) {
 			initialSchedule = periodSchedule;
 		}
-		try {
-			optimiser.getProgressMonitor().begin(optimiser, optimiser.getFitnessEvaluator().getCurrentFitness(), startSolution);
-		} catch (Exception e) {
+		final LocalSearchOptimiser pOptimiser = this.optimiser;
+		if (pOptimiser != null) {
+			try {
+				pOptimiser.getProgressMonitor().begin(pOptimiser, pOptimiser.getFitnessEvaluator().getCurrentFitness(), startSolution);
+			} catch (final Exception e) {
 
-		} finally {
-
+			} finally {
+			}
 		}
 		return initialSchedule;
 	}
 
-	private void initPeriodOptimisationData(final OptimiserSettings optimiserSettings, @Nullable Module extraModule) {
+	private void initPeriodOptimisationData(final OptimiserSettings optimiserSettings, @Nullable final Module extraModule) {
 		{
 			final OptimisationRange range = optimiserSettings.getRange();
 			if (range != null) {
@@ -284,7 +287,7 @@ public class LNGScenarioRunner {
 	 */
 	public boolean step(final int percent) {
 		assert createOptimiser;
-		IOptimiserProgressMonitor monitor = optimiser.getProgressMonitor();
+		final IOptimiserProgressMonitor monitor = optimiser.getProgressMonitor();
 		optimiser.step(percent);
 		if (monitor != null) {
 			monitor.report(optimiser, optimiser.getNumberOfIterationsCompleted(), optimiser.getFitnessEvaluator().getCurrentFitness(), optimiser.getFitnessEvaluator().getBestFitness(),
