@@ -236,7 +236,7 @@ public class PromptToolbarEditor extends ControlContribution {
 		});
 
 		final Button btn = new Button(pparent, SWT.PUSH);
-		btn.setText("+90d");
+		btn.setText("90d");
 		btn.setToolTipText("Set prompt period to 90 days from today");
 
 		btn.addSelectionListener(new SelectionListener() {
