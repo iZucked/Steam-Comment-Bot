@@ -6,7 +6,6 @@
  */
 package com.mmxlabs.models.lng.cargo.presentation.composites;
 
-import com.mmxlabs.models.ui.ComponentHelperUtils;
 import java.util.ArrayList;
 import java.util.List;
 
