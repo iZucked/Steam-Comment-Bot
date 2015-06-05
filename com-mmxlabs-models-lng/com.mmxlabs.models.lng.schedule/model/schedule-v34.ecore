@@ -140,6 +140,8 @@
   <eClassifiers xsi:type="ecore:EClass" name="PortVisit" eSuperTypes="#//Event #//CapacityViolationsHolder">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="portCost" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lateness" eType="#//PortVisitLateness"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SlotVisit" eSuperTypes="#//Event #//FuelUsage #//PortVisit">
     <eStructuralFeatures xsi:type="ecore:EReference" name="slotAllocation" lowerBound="1"
@@ -259,5 +261,14 @@
   <eClassifiers xsi:type="ecore:EClass" name="EventGrouping">
     <eStructuralFeatures xsi:type="ecore:EReference" name="events" lowerBound="1"
         upperBound="-1" eType="#//Event"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="PortVisitLatenessType">
+    <eLiterals name="PROMPT"/>
+    <eLiterals name="MID_TERM" value="1"/>
+    <eLiterals name="BEYOND" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PortVisitLateness">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//PortVisitLatenessType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="latenessInHours" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
 </ecore:EPackage>
