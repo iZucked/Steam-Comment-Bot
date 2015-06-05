@@ -4,12 +4,12 @@
 <plugin>
 	<extension point="org.eclipse.ui.perspectives">
 		<perspective class="com.mmxlabs.lingo.reports.diff.DiffPerspective"
-			id="com.mmxlabs.lingo.reports.diff.DiffPerspective" name="Diff Tools">
+			id="com.mmxlabs.lingo.reports.diff.DiffPerspective" name="Compare">
 		</perspective>
 	</extension>
 	<extension point="org.eclipse.ui.views">
 		<view class="com.mmxlabs.lingo.reports.diff.DiffGroupView" id="com.mmxlabs.lingo.reports.diff.DiffGroupView"
-			name="Diffs" restorable="true">
+			name="Changes" restorable="true">
 		</view>
 	</extension>
 
