@@ -10,6 +10,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 
 /**
@@ -21,10 +22,19 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
  */
 public final class CapacityComponent extends AbstractPerRouteSchedulerFitnessComponent implements IFitnessComponent {
 
-	private long accumulator = 0;
+	private long sequenceAccumulator = 0;
+	private long initialSum = 0;
+	private long totalViolations = 0;
+	private boolean hasBeenInitialised = false;
 
 	public CapacityComponent(@NonNull final String name, @NonNull final CargoSchedulerFitnessCore core) {
 		super(name, core);
+	}
+
+	@Override
+	public void startEvaluation(@NonNull ScheduledSequences scheduledSequences) {
+		totalViolations = 0;
+		super.startEvaluation(scheduledSequences);
 	}
 
 	/*
@@ -34,7 +44,7 @@ public final class CapacityComponent extends AbstractPerRouteSchedulerFitnessCom
 	 */
 	@Override
 	protected boolean reallyStartSequence(@NonNull final IResource resource) {
-		accumulator = 0;
+		sequenceAccumulator = 0;
 		return true;
 	}
 
@@ -48,7 +58,8 @@ public final class CapacityComponent extends AbstractPerRouteSchedulerFitnessCom
 		if (object instanceof PortDetails) {
 			final PortDetails detail = (PortDetails) object;
 
-			accumulator += scheduledSequences.getCapacityViolationCount(detail.getOptions().getPortSlot());
+			sequenceAccumulator += scheduledSequences.getCapacityViolationCount(detail.getOptions().getPortSlot());
+			totalViolations += scheduledSequences.getCapacityViolationCount(detail.getOptions().getPortSlot());
 		}
 		return true;
 	}
@@ -60,7 +71,28 @@ public final class CapacityComponent extends AbstractPerRouteSchedulerFitnessCom
 	 */
 	@Override
 	protected long endSequenceAndGetCost() {
+		if (initialised() && (totalViolations > initialSum)) {
+			return Long.MAX_VALUE;
+		}
 
-		return accumulator;
+		return sequenceAccumulator;
 	}
+	
+	@Override
+	public long endEvaluationAndGetCost() {
+		if (!initialised()) {
+			initialSum = totalViolations;
+			setInitialised(true);
+		}
+		return super.endEvaluationAndGetCost();
+	}
+
+	private boolean initialised() {
+		return hasBeenInitialised;
+	}
+
+	private void setInitialised(boolean initialised) {
+		hasBeenInitialised = initialised;
+	}
+
 }
