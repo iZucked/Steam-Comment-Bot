@@ -203,12 +203,14 @@ public class LNGScenarioRunner {
 		if (periodSchedule != null) {
 			initialSchedule = periodSchedule;
 		}
-		try {
-			optimiser.getProgressMonitor().begin(optimiser, optimiser.getFitnessEvaluator().getCurrentFitness(), startSolution);
-		} catch (Exception e) {
+		if (optimiser != null) {
+			try {
+				optimiser.getProgressMonitor().begin(optimiser, optimiser.getFitnessEvaluator().getCurrentFitness(), startSolution);
+			} catch (Exception e) {
 
-		} finally {
+			} finally {
 
+			}
 		}
 		return initialSchedule;
 	}
