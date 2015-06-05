@@ -206,6 +206,47 @@ public class AllowedVesselAssignmentConstraintTest {
 		checkConstraint(cargo, false);
 	}
 
+	@Test
+	public void testAllowedCargo_AllowedList_Market_OK() {
+
+		final VesselClass vesselClass = FleetFactory.eINSTANCE.createVesselClass();
+
+		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
+		final LoadSlot loadSlot = CargoFactory.eINSTANCE.createLoadSlot();
+		final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
+		cargo.getSlots().add(loadSlot);
+		cargo.getSlots().add(dischargeSlot);
+		loadSlot.getAllowedVessels().add(vesselClass);
+
+		// Permitted!
+		CharterInMarket market = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
+		market.setVesselClass(vesselClass);
+		cargo.setVesselAssignmentType(market);
+
+		checkConstraint(cargo, true);
+	}
+
+	@Test
+	public void testAllowedCargo_AllowedList_Market_NOT_OK() {
+
+		final VesselClass vesselClass1 = FleetFactory.eINSTANCE.createVesselClass();
+		final VesselClass vesselClass2 = FleetFactory.eINSTANCE.createVesselClass();
+
+		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
+		final LoadSlot loadSlot = CargoFactory.eINSTANCE.createLoadSlot();
+		final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
+		cargo.getSlots().add(loadSlot);
+		cargo.getSlots().add(dischargeSlot);
+		loadSlot.getAllowedVessels().add(vesselClass1);
+
+		// Not Permitted!
+		CharterInMarket market = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
+		market.setVesselClass(vesselClass2);
+		cargo.setVesselAssignmentType(market);
+
+		checkConstraint(cargo, false);
+	}
+
 	private void checkConstraint(final AssignableElement target, final boolean expectSuccess) {
 		final IConstraintStatus successStatus = mock(IConstraintStatus.class);
 		when(successStatus.isOK()).thenReturn(Boolean.TRUE);
