@@ -26,7 +26,11 @@ Require-Bundle: com.mmxlabs.models.lng.transformer;bundle-version="[3.8.5,4.0.0)
  com.mmxlabs.optimiser.optimiser-common;bundle-version="3.8.5",
  com.mmxlabs.optimiser.optimiser-core;bundle-version="3.8.5",
  com.mmxlabs.optimiser.optimiser-lso;bundle-version="3.8.5",
- com.mmxlabs.models.lng.transformer.ui
+ com.mmxlabs.models.lng.transformer.ui,
+ com.mmxlabs.license.features,
+ org.apache.shiro.core,
+ com.mmxlabs.rcp.common,
+ com.mmxlabs.license.ssl
 Import-Package: org.apache.commons.cli;version="1.2.0",
  org.joda.time;version="2.7.0",
  org.joda.time.base;version="2.7.0",
