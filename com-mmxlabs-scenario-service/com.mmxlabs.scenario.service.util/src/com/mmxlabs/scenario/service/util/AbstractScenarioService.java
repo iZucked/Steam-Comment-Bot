@@ -233,7 +233,8 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 				}
 
 				// Always set the client context on save if missing as we may (or may not) have installed client specific data model items.
-				if (scenarioInstance.getClientVersionContext() == null && scenarioMigrationService != null) {
+				String clientVersionContext = scenarioInstance.getClientVersionContext();
+				if ((clientVersionContext == null || clientVersionContext.isEmpty()) && scenarioMigrationService != null) {
 					scenarioMigrationService.setDefaultClientContext(scenarioInstance);
 				}
 
