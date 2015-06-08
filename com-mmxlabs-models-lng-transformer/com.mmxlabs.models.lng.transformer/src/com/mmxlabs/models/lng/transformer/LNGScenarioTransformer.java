@@ -23,6 +23,7 @@ import java.util.TreeSet;
 
 import javax.inject.Named;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -1447,12 +1448,12 @@ public class LNGScenarioTransformer {
 		return load;
 	}
 
-	private void applySlotVesselRestrictions(Slot modelSlot, IPortSlot optimiserSlot, Association<Vessel, IVessel> vesselAssociation) {
+	private void applySlotVesselRestrictions(final Slot modelSlot, final IPortSlot optimiserSlot, final Association<Vessel, IVessel> vesselAssociation) {
 
-		EList<AVesselSet<Vessel>> allowedVessels = modelSlot.getAllowedVessels();
+		final EList<AVesselSet<Vessel>> allowedVessels = modelSlot.getAllowedVessels();
 		if (!allowedVessels.isEmpty()) {
 			final Set<IVesselAvailability> vesselsForSlot = new HashSet<>();
-			for (AVesselSet<Vessel> vesselSet : allowedVessels) {
+			for (final AVesselSet<Vessel> vesselSet : allowedVessels) {
 				// Expand into vessels
 				final Set<Vessel> eAllowedVessels = SetUtils.getObjects(vesselSet);
 				for (final Vessel eVessel : eAllowedVessels) {
@@ -1463,8 +1464,8 @@ public class LNGScenarioTransformer {
 					}
 				}
 				if (vesselSet instanceof VesselClass) {
-					VesselClass vesselClass = (VesselClass) vesselSet;
-					List<IVesselAvailability> list = spotVesselAvailabilitiesByClass.get(vesselClass);
+					final VesselClass vesselClass = (VesselClass) vesselSet;
+					final List<IVesselAvailability> list = spotVesselAvailabilitiesByClass.get(vesselClass);
 					if (list != null) {
 						vesselsForSlot.addAll(list);
 						{
