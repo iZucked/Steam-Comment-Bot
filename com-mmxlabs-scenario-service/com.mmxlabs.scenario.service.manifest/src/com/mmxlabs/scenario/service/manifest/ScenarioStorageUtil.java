@@ -5,9 +5,15 @@
 package com.mmxlabs.scenario.service.manifest;
 
 import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -15,6 +21,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.validation.internal.util.Log;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
@@ -22,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.io.ByteStreams;
+import com.mmxlabs.common.io.FileDeleter;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ModelReference;
@@ -41,23 +49,55 @@ public class ScenarioStorageUtil {
 	private static final Logger log = LoggerFactory.getLogger(ScenarioStorageUtil.class);
 
 	static final ScenarioStorageUtil INSTANCE = new ScenarioStorageUtil();
-	protected File storageDirectory;
+	protected Path storageDirectory;
 	protected File lastTemporaryFile;
+
+	private static final List<File> tempFiles = new LinkedList<>();
+	private static final List<File> tempDirectories = new LinkedList<>();
 
 	protected ScenarioStorageUtil() {
 		try {
-			storageDirectory = File.createTempFile("ScenarioStorage", "dir");
+			storageDirectory = Files.createTempDirectory("ScenarioStorage");
 			// there is a race here; the only way to really avoid it is to use
 			// something like java.nio in java 7, which has a createTempDir method.
-			if (storageDirectory.delete()) {
-				storageDirectory.mkdir();
-			}
+			// if (storageDirectory.delete()) {
+			// storageDirectory.mkdir();
+			// }
 			// TODO should we delete this on finalize? if the user has copied something she would expect
 			// it to remain copied so perhaps we should delete all but the most recent copied thing?
 			// Is that a job for the copy handler anyway?
+
+			Runtime.getRuntime().addShutdownHook(new Thread() {
+
+				@Override
+				public void run() {
+					/* Delete your file here. */
+					while (!tempFiles.isEmpty()) {
+						final File f = tempFiles.remove(0);
+						try {
+							Files.deleteIfExists(f.toPath());
+						} catch (final IOException e) {
+							log.error(e.getMessage(), e);
+						}
+					}
+					while (!tempDirectories.isEmpty()) {
+						final File f = tempDirectories.remove(0);
+						if (f.exists()) {
+							f.delete();
+						}
+					}
+					try {
+						Files.deleteIfExists(storageDirectory);
+					} catch (final IOException e) {
+						log.error(e.getMessage(), e);
+					}
+				}
+			});
+
 		} catch (final IOException e) {
 			storageDirectory = null;
 		}
+
 	}
 
 	protected File getTemporaryFile(final ScenarioInstance instance) {
@@ -65,9 +105,10 @@ public class ScenarioStorageUtil {
 		final String uuid = instance.getUuid();
 
 		// We create a temporary folder so that the real scenario filename can be used, otherwise Windows paste handler will take the random filename.
-		final File uuidDir = new File(storageDirectory, escape(uuid) + ".d");
+		final File uuidDir = new File(storageDirectory.toFile(), escape(uuid) + ".d");
 		if (uuidDir.exists() == false) {
 			uuidDir.mkdirs();
+			tempDirectories.add(uuidDir);
 		}
 		return new File(uuidDir, escape(name) + ".lingo");
 	}
@@ -78,8 +119,7 @@ public class ScenarioStorageUtil {
 
 	public static String storeToTemporaryFile(final ScenarioInstance instance) throws IOException {
 		final File tempFile = INSTANCE.getTemporaryFile(instance);
-
-		tempFile.deleteOnExit();
+		tempFiles.add(tempFile);
 		storeToFile(instance, tempFile);
 
 		return tempFile.getAbsolutePath();
