@@ -9,7 +9,7 @@
 	</extension>
 	<extension point="org.eclipse.ui.views">
 		<view class="com.mmxlabs.lingo.reports.diff.DiffGroupView" id="com.mmxlabs.lingo.reports.diff.DiffGroupView"
-			name="Changes" restorable="true">
+			name="Changes" restorable="true"  icon="icons/cview16/changes_view.gif">
 		</view>
 	</extension>
 
