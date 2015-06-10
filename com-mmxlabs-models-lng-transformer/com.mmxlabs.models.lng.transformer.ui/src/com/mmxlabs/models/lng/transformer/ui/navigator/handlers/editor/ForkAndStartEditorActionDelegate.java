@@ -58,7 +58,7 @@ public class ForkAndStartEditorActionDelegate extends StartOptimisationEditorAct
 				}
 			}
 
-			final String namePrefix = "O~" + instance.getName();
+			final String namePrefix = instance.getName() + "--O";
 			String newName = namePrefix;
 			int counter = 1;
 			while (existingNames.contains(newName)) {
