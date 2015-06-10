@@ -34,7 +34,6 @@ import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.IHandlerService;
@@ -46,13 +45,6 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
-import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
-import com.mmxlabs.jobmanager.jobs.EJobState;
-import com.mmxlabs.jobmanager.jobs.IJobControl;
-import com.mmxlabs.jobmanager.jobs.IJobControlListener;
-import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
-import com.mmxlabs.jobmanager.manager.IJobManager;
 import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioModel;
@@ -65,14 +57,10 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 	public static final int COLUMN_NAME_IDX = 0;
 	public static final int COLUMN_SHOW_IDX = 1;
-	public static final int COLUMN_PROGRESS_IDX = 2;
 
 	private static final Logger log = LoggerFactory.getLogger(ScenarioServiceNavigator.class);
 
 	private final Image showColumnImage;
-	private final Image optImage;
-
-	// private boolean selectionModeTrackEditor = true;
 
 	protected AdapterFactoryEditingDomain editingDomain;
 
@@ -102,23 +90,17 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 		@Override
 		public void partClosed(final IWorkbenchPart part) {
-			// if (selectionModeTrackEditor) {
 			// If the selection tracks editor, then get the scenario instance and make it the only selection.
 			if (part instanceof IEditorPart) {
 				final IEditorPart editorPart = (IEditorPart) part;
 				final IEditorInput editorInput = editorPart.getEditorInput();
 				final ScenarioInstance scenarioInstance = (ScenarioInstance) editorInput.getAdapter(ScenarioInstance.class);
 				if (scenarioInstance != null) {
-					// ScenarioServiceSelectionProvider selectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
 					if (lastAutoSelection == scenarioInstance) {
 						lastAutoSelection = null;
-						// if (selectionProvider.isSelected(scenarioInstance) && scenarioInstance != selectionProvider.getPinnedInstance()) {
-						// selectionProvider.deselect(scenarioInstance);
-						// }
 					}
 				}
 			}
-			// }
 		}
 
 		@Override
@@ -128,28 +110,15 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 		@Override
 		public void partActivated(final IWorkbenchPart part) {
-			// if (selectionModeTrackEditor) {
-			// If the selection tracks editor, then get the scenario instance and make it the only selection.
 			if (part instanceof IEditorPart) {
 				final IEditorPart editorPart = (IEditorPart) part;
 				final IEditorInput editorInput = editorPart.getEditorInput();
 				final ScenarioInstance scenarioInstance = (ScenarioInstance) editorInput.getAdapter(ScenarioInstance.class);
 				if (scenarioInstance != null) {
-					// ScenarioServiceSelectionProvider selectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
-					// if (lastAutoSelection != null && lastAutoSelection != scenarioInstance) {
-					// if (selectionProvider.isSelected(lastAutoSelection) && selectionProvider.getPinnedInstance() != lastAutoSelection) {
-					// selectionProvider.deselect(lastAutoSelection);
-					// }
-					// lastAutoSelection = null;
-					// }
-					// if (!selectionProvider.isSelected(scenarioInstance)) {
 					lastAutoSelection = scenarioInstance;
-					// selectionProvider.select(scenarioInstance);
-					// }
 				}
 			}
 		}
-		// }
 	};
 
 	private final IScenarioServiceSelectionChangedListener selectionChangedListener = new IScenarioServiceSelectionChangedListener() {
@@ -178,47 +147,6 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		}
 	};
 
-	private final IEclipseJobManagerListener jobManagerListener = new IEclipseJobManagerListener() {
-
-		private final IJobControlListener jobControlListener = new IJobControlListener() {
-			@Override
-			public boolean jobStateChanged(final IJobControl job, final EJobState oldState, final EJobState newState) {
-				tryRefresh();
-				return true;
-			}
-
-			@Override
-			public boolean jobProgressUpdated(final IJobControl job, final int progressDelta) {
-				tryRefresh();
-				return true;
-			}
-		};
-
-		@Override
-		public void jobRemoved(final IEclipseJobManager eclipseJobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
-			if (control != null) {
-				control.removeListener(jobControlListener);
-			}
-			tryRefresh();
-		}
-
-		@Override
-		public void jobManagerRemoved(final IEclipseJobManager eclipseJobManager, final IJobManager jobManager) {
-
-		}
-
-		@Override
-		public void jobManagerAdded(final IEclipseJobManager eclipseJobManager, final IJobManager jobManager) {
-
-		}
-
-		@Override
-		public void jobAdded(final IEclipseJobManager eclipseJobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
-			control.addListener(jobControlListener);
-			tryRefresh();
-		}
-	};
-
 	public ScenarioServiceNavigator() {
 		super();
 
@@ -226,19 +154,15 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		tracker.open();
 
 		Activator.getDefault().getScenarioServiceSelectionProvider().addSelectionChangedListener(selectionChangedListener);
-		Activator.getDefault().getEclipseJobManager().addEclipseJobManagerListener(jobManagerListener);
 		showColumnImage = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/console_view.gif").createImage();
-		optImage = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/opt.gif").createImage();
 	}
 
 	@Override
 	public void dispose() {
 		tracker.close();
 		Activator.getDefault().getScenarioServiceSelectionProvider().removeSelectionChangedListener(selectionChangedListener);
-		Activator.getDefault().getEclipseJobManager().removeEclipseJobManagerListener(jobManagerListener);
 
 		showColumnImage.dispose();
-		optImage.dispose();
 
 		linkHelper.dispose();
 
@@ -282,11 +206,6 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		checkColumn.setAlignment(SWT.CENTER);
 		checkColumn.setWidth(30);
 		checkColumn.setResizable(false);
-
-		final TreeColumn progressColumn = new TreeColumn(viewer.getTree(), SWT.NONE);
-		progressColumn.setImage(optImage);
-		progressColumn.setWidth(30);
-		progressColumn.setResizable(false);
 
 		final Tree tree = viewer.getTree();
 		tree.addMouseListener(new MouseAdapter() {
@@ -418,7 +337,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		 * 
 		 * getViewSite().getActionBars().getToolBarManager().add(a);
 		 */
-		getViewSite().getActionBars().getToolBarManager().update(true);
+		// getViewSite().getActionBars().getToolBarManager().update(true);
 
 		// We cannot set this programatically for a common navigator. Instead look in the plugin.xml!
 		// PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.View_Navigator");
@@ -464,14 +383,12 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		final ExtendedPropertySheetPage propertySheetPage = new ExtendedPropertySheetPage(editingDomain) {
 			@Override
 			public void setSelectionToViewer(final List<?> selection) {
-				// ScenarioServiceNavigator.this.setSelectionToViewer(selection);
 				ScenarioServiceNavigator.this.setFocus();
 			}
 
 			@Override
 			public void setActionBars(final IActionBars actionBars) {
 				super.setActionBars(actionBars);
-				// getActionBarContributor().shareGlobalActions(this, actionBars);
 			}
 		};
 		propertySheetPage.setPropertySourceProvider(new AdapterFactoryContentProvider(adapterFactory));
@@ -483,7 +400,9 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 	@Override
 	public Object getAdapter(final Class key) {
 		if (key.equals(IPropertySheetPage.class)) {
-			return getPropertySheetPage();
+			// Debugging only
+			// return getPropertySheetPage();
+			return null;
 		} else {
 			return super.getAdapter(key);
 		}
@@ -506,37 +425,4 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		}
 
 	}
-	//
-	// @Override
-	// public void saveState(IMemento aMemento) {
-	// // TODO Auto-generated method stub
-	// super.saveState(aMemento);
-	//
-	// Object[] expandedElements = getCommonViewer().getExpandedElements();
-	//
-	// Properties props = new Properties();
-	//
-	// for (Object obj : expandedElements) {
-	//
-	// if (obj instanceof Container) {
-	// Container container = (Container) obj;
-	// IScenarioService scenarioService = container.getScenarioService();
-	// String name = scenarioService.getName();
-	// String uriFragment = container.eResource().getURIFragment(container);
-	// TODO need to make this unique, but easy to parse.
-	// Might be an issue with same path, but different services.
-	// props.put(uriFragment, name);
-	// }
-	//
-	// }
-	//
-	// StringWriter writer = new StringWriter();
-	// try {
-	// props.store(writer, null);
-	// } catch (IOException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	// memento.putString("NAVIGATOR_STATE", writer.getBuffer().toString());
-	// }
 }
