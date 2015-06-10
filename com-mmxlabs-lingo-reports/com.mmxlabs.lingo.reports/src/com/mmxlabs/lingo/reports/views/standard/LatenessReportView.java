@@ -5,7 +5,6 @@
 package com.mmxlabs.lingo.reports.views.standard;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -56,8 +55,8 @@ public class LatenessReportView extends EMFReportView {
 
 				if (object instanceof PortVisit) {
 					final PortVisit slotVisit = (PortVisit) object;
-					long diff = slotVisit.getLateness().getLatenessInHours() * 60 * 60 * 1000;
-					return LatenessUtils.formatLateness(diff);
+					final int lateness = slotVisit.getLateness().getLatenessInHours();
+					return LatenessUtils.formatLatenessHours(lateness);
 				}
 
 				return "";
@@ -155,8 +154,8 @@ public class LatenessReportView extends EMFReportView {
 			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final Schedule schedule, final boolean pinned) {
 
 				final Collection<? extends Object> collectedElements = super.collectElements(scenarioInstance, schedule, pinned);
-				List<EObject> elements = new ArrayList<>(collectedElements.size());
-				for (Object o : collectedElements) {
+				final List<EObject> elements = new ArrayList<>(collectedElements.size());
+				for (final Object o : collectedElements) {
 					if (o instanceof EObject) {
 						elements.add((EObject) o);
 					}
@@ -187,7 +186,7 @@ public class LatenessReportView extends EMFReportView {
 		final ColumnBlock block = getBlockManager().createBlock(blockID, title, columnType);
 		return getBlockManager().createColumn(block, title, formatter, path);
 	}
-	
+
 	@Override
 	public Object getAdapter(final Class adapter) {
 
