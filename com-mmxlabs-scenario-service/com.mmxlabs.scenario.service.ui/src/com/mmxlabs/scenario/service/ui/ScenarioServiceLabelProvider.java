@@ -74,6 +74,13 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 
 			if (object instanceof ScenarioInstance) {
 				final ScenarioInstance scenarioInstance = (ScenarioInstance) object;
+				
+				Container parent = scenarioInstance.getParent();
+				if (parent instanceof ScenarioInstance) {
+					String name = parent.getName();
+					text = text.replace(name, "...");
+				}
+				
 				if (scenarioInstance.isDirty()) {
 					text = "* " + text;
 				}
