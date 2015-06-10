@@ -157,7 +157,9 @@ import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.ui.validation.IStatusProvider.IStatusChangedListener;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
+import com.mmxlabs.models.util.emfpath.EMFMultiPath;
 import com.mmxlabs.models.util.emfpath.EMFPath;
+import com.mmxlabs.models.util.emfpath.IEMFPath;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
@@ -1467,9 +1469,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	}
 
 	private class TradesFilter extends ViewerFilter {
-		final private Map<EMFPath, EObject> filterValues = new HashMap<EMFPath, EObject>();
+		final private Map<IEMFPath, EObject> filterValues = new HashMap<>();
 
-		public void setFilterValue(final EMFPath path, final EObject value) {
+		public void setFilterValue(final IEMFPath path, final EObject value) {
 			// adding a particular filter value resets all others
 			filterValues.clear();
 			if (value != null) {
@@ -1479,7 +1481,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 		}
 
-		public EObject getFilterValue(final EMFPath path) {
+		public EObject getFilterValue(final IEMFPath path) {
 			return filterValues.get(path);
 		}
 
@@ -1489,7 +1491,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			if (element instanceof EObject) {
 				final EObject object = (EObject) element;
 
-				for (final Entry<EMFPath, EObject> entry : filterValues.entrySet()) {
+				for (final Entry<IEMFPath, EObject> entry : filterValues.entrySet()) {
 					final Object value = entry.getKey().get(object);
 					if (value != entry.getValue()) {
 						return false;
@@ -1527,7 +1529,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 			final EMFPath purchaseContractPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.LOAD, CargoPackage.Literals.SLOT__CONTRACT);
 			final EMFPath salesContractPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.DISCHARGE, CargoPackage.Literals.SLOT__CONTRACT);
-			final EMFPath vesselPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.SLOT_OR_CARGO, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
+			final EMFPath vesselPath1 = new RowDataEMFPath(false, false, CargoModelRowTransformer.Type.SLOT_OR_CARGO, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL);
+			final EMFPath vesselPath2 = new RowDataEMFPath(false, false, CargoModelRowTransformer.Type.SLOT_OR_CARGO, CargoPackage.Literals.SLOT__NOMINATED_VESSEL);
 
 			final Action clearAction = new Action("Clear Filter") {
 				@Override
@@ -1540,7 +1543,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			addActionToMenu(clearAction, menu);
 			addActionToMenu(new FilterAction("Purchase Contracts", commercialModel, CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS, purchaseContractPath), menu);
 			addActionToMenu(new FilterAction("Sales Contracts", commercialModel, CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS, salesContractPath), menu);
-			addActionToMenu(new FilterAction("Vessels", fleetModel, FleetPackage.Literals.FLEET_MODEL__VESSELS, vesselPath), menu);
+			addActionToMenu(new FilterAction("Vessels", fleetModel, FleetPackage.Literals.FLEET_MODEL__VESSELS, new EMFMultiPath(true, vesselPath1, vesselPath2)), menu);
 
 		}
 	}
@@ -1548,7 +1551,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	private class FilterAction extends DefaultMenuCreatorAction {
 		private final EObject sourceObject;
 		private final EStructuralFeature sourceFeature;
-		private final EMFPath filterPath;
+		private final IEMFPath filterPath;
 
 		/**
 		 * An action which updates the filter on the trades wiring table and refreshes the table.
@@ -1562,7 +1565,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		 * @param filterPath
 		 *            The path within a cargo row object of the field which the table is being filtered on.
 		 */
-		public FilterAction(final String label, final EObject sourceObject, final EStructuralFeature sourceFeature, final EMFPath filterPath) {
+		public FilterAction(final String label, final EObject sourceObject, final EStructuralFeature sourceFeature, final IEMFPath filterPath) {
 			super(label);
 			this.sourceObject = sourceObject;
 			this.sourceFeature = sourceFeature;

@@ -814,6 +814,11 @@ public class CargoModelRowTransformer {
 			this.type = type;
 			this.primaryRecordOnly = primaryRecordOnly;
 		}
+		public RowDataEMFPath(final boolean failSilently, final boolean primaryRecordOnly, final Type type, final ETypedElement... path) {
+			super(failSilently, path);
+			this.type = type;
+			this.primaryRecordOnly = primaryRecordOnly;
+		}
 
 		@Override
 		public Object get(final EObject root, final int depth) {
