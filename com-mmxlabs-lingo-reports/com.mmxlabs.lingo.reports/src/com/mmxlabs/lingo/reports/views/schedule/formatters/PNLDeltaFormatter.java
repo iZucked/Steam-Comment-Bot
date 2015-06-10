@@ -55,33 +55,33 @@ public class PNLDeltaFormatter extends IntegerFormatter implements IRowSpanProvi
 
 	@Override
 	public int getRowSpan(final ViewerCell cell, final Object object) {
-//		if (object instanceof Row) {
-//			final Row row = (Row) object;
-//
-//			final Table tbl = row.getTable();
-//			if (tbl.getScenarios().size() == 2 && tbl.getPinnedScenario() != null) {
-//				final CycleGroup group = row.getCycleGroup();
-//				if (group != null) {
-//					// Navigate upwards to find the number of rows spanned so far for a given cycle group.
-//					// Note: This *only* works for displayed cells. Cells which have not been drawn yet (ViewerCell.BELOW) or are not visible (outside of current scroll viewport) will be retuned
-//					// as a null neighbour.
-//					{
-//						int count = 0;
-//						ViewerCell neighbour = cell.getNeighbor(ViewerCell.ABOVE, false);
-//						while (neighbour != null && neighbour.getElement() instanceof Row) {
-//							final Row neighbourRow = (Row) neighbour.getElement();
-//							if (neighbourRow.getCycleGroup() == group) {
-//								count++;
-//								neighbour = neighbour.getNeighbor(ViewerCell.ABOVE, false);
-//							} else {
-//								break;
-//							}
-//						}
-//						return count;
-//					}
-//				}
-//			}
-//		}
+		if (object instanceof Row) {
+			final Row row = (Row) object;
+
+			final Table tbl = row.getTable();
+			if (tbl.getScenarios().size() == 2 && tbl.getPinnedScenario() != null) {
+				final CycleGroup group = row.getCycleGroup();
+				if (group != null) {
+					// Navigate upwards to find the number of rows spanned so far for a given cycle group.
+					// Note: This *only* works for displayed cells. Cells which have not been drawn yet (ViewerCell.BELOW) or are not visible (outside of current scroll viewport) will be retuned
+					// as a null neighbour.
+					{
+						int count = 0;
+						ViewerCell neighbour = cell.getNeighbor(ViewerCell.ABOVE, false);
+						while (neighbour != null && neighbour.getElement() instanceof Row) {
+							final Row neighbourRow = (Row) neighbour.getElement();
+							if (neighbourRow.getCycleGroup() == group) {
+								count++;
+								neighbour = neighbour.getNeighbor(ViewerCell.ABOVE, false);
+							} else {
+								break;
+							}
+						}
+						return count;
+					}
+				}
+			}
+		}
 		return 0;
 	}
 }
