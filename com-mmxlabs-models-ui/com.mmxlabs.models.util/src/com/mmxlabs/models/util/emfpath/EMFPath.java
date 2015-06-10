@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -21,7 +20,7 @@ import org.eclipse.emf.ecore.ETypedElement;
  * @author hinton
  * 
  */
-public class EMFPath {
+public class EMFPath implements IEMFPath {
 	final ETypedElement[] path;
 	final boolean failSilently;
 
@@ -49,6 +48,7 @@ public class EMFPath {
 		}
 	}
 
+	@Override
 	public Object get(final EObject root, final int depth) {
 		if (failSilently) {
 			try {
@@ -62,17 +62,6 @@ public class EMFPath {
 			} catch (final InvocationTargetException e) {
 				throw new RuntimeException(e);
 			}
-		}
-	}
-
-	public EClassifier getTargetType() {
-		if (path.length == 0)
-			return null;
-		final Object el = path[path.length - 1];
-		if (el instanceof EOperation) {
-			return ((EOperation) el).getEType();
-		} else {
-			return ((EStructuralFeature) el).getEType();
 		}
 	}
 
@@ -117,16 +106,9 @@ public class EMFPath {
 	 * @param i
 	 * @return
 	 */
+	@Override
 	public Object get(final EObject input) {
 		return get(input, 0);
-	}
-
-	/**
-	 * @param i
-	 * @return
-	 */
-	public Object getPathComponent(final int i) {
-		return path[path.length - (i + 1)];
 	}
 
 	@Override
