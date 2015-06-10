@@ -18,35 +18,21 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.util.tracker.ServiceTracker;
 
-import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
-import com.mmxlabs.jobmanager.jobs.EJobState;
-import com.mmxlabs.jobmanager.jobs.IJobControl;
-import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
-import com.mmxlabs.scenario.service.ui.navigator.PieChartRenderer;
 import com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceComposedAdapterFactory;
 import com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceNavigator;
 
 public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider implements IFontProvider, IColorProvider {
-	
+
 	private final Color Grey = new Color(Display.getCurrent(), new RGB(64, 64, 64));
 
 	private final ServiceTracker<IScenarioServiceSelectionProvider, IScenarioServiceSelectionProvider> selectionProviderTracker = new ServiceTracker<IScenarioServiceSelectionProvider, IScenarioServiceSelectionProvider>(
 			Activator.getDefault().getBundle().getBundleContext(), IScenarioServiceSelectionProvider.class, null);
 
-	private IEclipseJobManager jobManager = null;
 	private final Image showEnabledImage;
 	private final Image showDisabledImage;
-
-	private final Image noJobImage;
-
-	private final Image jobComplete;
-
-	private final Color majorColor;
-
-	private final Color defaultMinorColour;
 
 	private final Image pinImage;
 
@@ -58,11 +44,7 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 		showEnabledImage = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/console_view.gif").createImage();
 		showDisabledImage = ImageDescriptor.createWithFlags(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/console_view.gif"), SWT.IMAGE_DISABLE).createImage();
 		pinImage = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/pin_editor.gif").createImage();
-		noJobImage = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/no_job.gif").createImage();
-		jobComplete = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/complete_job.gif").createImage();
-		majorColor = new Color(Display.getDefault(), 240, 80, 85);
-		defaultMinorColour = new Color(Display.getDefault(), 100, 230, 120);
-		
+
 		final Font systemFont = Display.getDefault().getSystemFont();
 		// Clone the font data
 		final FontData fd = new FontData(systemFont.getFontData()[0].toString());
@@ -77,12 +59,7 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 
 		showEnabledImage.dispose();
 		showDisabledImage.dispose();
-		noJobImage.dispose();
-		jobComplete.dispose();
 		pinImage.dispose();
-
-		defaultMinorColour.dispose();
-		majorColor.dispose();
 
 		boldFont.dispose();
 
@@ -128,28 +105,6 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 				}
 			}
 			return null;
-		case ScenarioServiceNavigator.COLUMN_PROGRESS_IDX:
-			if (object instanceof ScenarioInstance) {
-				final ScenarioInstance instance = (ScenarioInstance) object;
-				if (jobManager == null) {
-					jobManager = Activator.getDefault().getEclipseJobManager();
-				}
-				if (jobManager != null) {
-					final IJobDescriptor job = jobManager.findJobForResource(instance.getUuid());
-					final IJobControl control = jobManager.getControlForJob(job);
-					if (control != null) {
-						if (control.getJobState() == EJobState.COMPLETED) {
-							return jobComplete;
-						}
-						final Color minorColor = (control.getJobState() == EJobState.PAUSED || control.getJobState() == EJobState.PAUSING) ? Display.getDefault().getSystemColor(SWT.COLOR_YELLOW)
-								: defaultMinorColour;
-						return PieChartRenderer.renderPie(minorColor, majorColor, control.getProgress() / 100.0);
-					} else {
-						return noJobImage;
-					}
-				}
-			}
-			break;
 		case ScenarioServiceNavigator.COLUMN_NAME_IDX:
 			return super.getColumnImage(object, columnIndex);
 		}
@@ -164,7 +119,7 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 		}
 		return super.getForeground(object);
 	}
-	
+
 	@Override
 	public Font getFont(Object object) {
 
