@@ -232,11 +232,6 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 					metadata.setLastModified(new Date());
 				}
 
-				// Always set the client context on save if missing as we may (or may not) have installed client specific data model items.
-				if (scenarioInstance.getClientVersionContext() == null && scenarioMigrationService != null) {
-					scenarioMigrationService.setDefaultClientContext(scenarioInstance);
-				}
-
 				final BasicCommandStack commandStack = (BasicCommandStack) scenarioInstance.getAdapters().get(BasicCommandStack.class);
 				if (commandStack != null) {
 					commandStack.saveIsDone();
