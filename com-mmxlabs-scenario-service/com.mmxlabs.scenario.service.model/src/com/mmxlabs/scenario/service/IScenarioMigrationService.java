@@ -22,11 +22,4 @@ public interface IScenarioMigrationService {
 	 * @param scenarioInstance
 	 */
 	void migrateScenario(@NonNull final IScenarioService scenarioService, @NonNull final ScenarioInstance scenarioInstance) throws Exception;
-
-	/**
-	 * If the {@link ScenarioInstance} has no client context, set the default context and latest version.
-	 * 
-	 * @param scenarioInstance
-	 */
-	void setDefaultClientContext(@NonNull final ScenarioInstance scenarioInstance);
 }
