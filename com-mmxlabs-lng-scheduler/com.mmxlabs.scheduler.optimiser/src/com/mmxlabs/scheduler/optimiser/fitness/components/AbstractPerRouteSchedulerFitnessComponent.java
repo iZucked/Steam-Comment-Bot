@@ -147,4 +147,8 @@ public abstract class AbstractPerRouteSchedulerFitnessComponent extends Abstract
 		acceptedFitnesses.putAll(evaluatedFitnesses);
 		super.acceptLastEvaluation();
 	}
+	
+	protected long getEvaluationAccumulator(){
+		return evaluationAccumulator;
+	}
 }
