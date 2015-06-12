@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.pricing.importers;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,6 +21,7 @@ import java.util.TreeMap;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.joda.time.YearMonth;
 
 import com.mmxlabs.common.csv.IExportContext;
@@ -45,8 +48,8 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 	protected static final String EXPRESSION = "expression";
 	protected static final String UNITS = "units";
 
-        final YearMonthAttributeImporter dateParser = new YearMonthAttributeImporter();
-	final LocalDateAttributeImporter dateParser2 = new LocalDateAttributeImporter();
+	protected final YearMonthAttributeImporter dateParser = new YearMonthAttributeImporter();
+	protected final LocalDateAttributeImporter dateParser2 = new LocalDateAttributeImporter();
 
 	protected boolean multipleDataTypeInput = false;
 
@@ -90,7 +93,7 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 			return di;
 		}
 
-		final NumberAttributeImporter nai = new NumberAttributeImporter(context.getDecimalSeparator());
+//		final NumberAttributeImporter nai = new NumberAttributeImporter(context.getDecimalSeparator());
 
 		// for other indices, return a data index
 		final DataIndex<Number> result = PricingFactory.eINSTANCE.createDataIndex();
@@ -115,10 +118,10 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 						// @see http://docs.oracle.com/javase/specs/jls/se7/html/jls-15.html#jls-15.25
 						// @see http://docs.oracle.com/javase/specs/jls/se7/html/jls-5.html#jls-5.6.2
 						if (parseAsInt) {
-							final int value = nai.stringToInt(valueStr);
+							final Integer value = parserIntegerString(valueStr);
 							n = value;
 						} else {
-							final double value = nai.stringToDouble(valueStr);
+							final Double value = parserDoubleString(valueStr);
 							n = value;
 						}
 
@@ -238,4 +241,75 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 	public void setMultipleDataTypeInput(final boolean isMultiple) {
 		this.multipleDataTypeInput = isMultiple;
 	}
+
+	@NonNull
+	private DecimalFormat initDoubleFormatter() {
+
+		String format = "##########.###";
+		final DecimalFormat formatter = format == null ? new DecimalFormat() : new DecimalFormat(format);
+		formatter.setRoundingMode(RoundingMode.HALF_EVEN);
+		return formatter;
+	}
+
+	@NonNull
+	private DecimalFormat initIntegerFormatter() {
+
+		String format = "##########";
+		final DecimalFormat formatter = format == null ? new DecimalFormat() : new DecimalFormat(format);
+		formatter.setParseIntegerOnly(true);
+		formatter.setRoundingMode(RoundingMode.HALF_EVEN);
+		return formatter;
+	}
+
+	private final DecimalFormat doubleImportFormatter = new DecimalFormat();
+	private final DecimalFormat doubleFormatter = initDoubleFormatter();
+	private final DecimalFormat integerImportFormatter = new DecimalFormat();
+	private final DecimalFormat integerFormatter = initIntegerFormatter();
+
+	/**
+	 * Parse the number string, rounding as required.
+	 * 
+	 * @param s
+	 * @return
+	 * @throws ParseException
+	 */
+	@Nullable
+	protected Double parserDoubleString(final String s) throws ParseException {
+		// Read the full number from the string.
+		final Number number = doubleImportFormatter.parse(s);
+		if (number != null) {
+			// Next export to round the number accordingly and then re-import to get a new number object.
+			try {
+				return doubleFormatter.parse(doubleFormatter.format(number));
+			} catch (final ParseException e) {
+				// I do not expect this to happen. The parse exception should only happen from the inputFormatter. Here the formatter should export data it can read.
+				assert false;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Parse the number string, rounding as required.
+	 * 
+	 * @param s
+	 * @return
+	 * @throws ParseException
+	 */
+	@Nullable
+	protected Integer parserIntegerString(final String s) throws ParseException {
+		// Read the full number from the string.
+		final Number number = integerImportFormatter.parse(s);
+		if (number != null) {
+			// Next export to round the number accordingly and then re-import to get a new number object.
+			try {
+				return integerFormatter.parse(integerFormatter.format(number));
+			} catch (final ParseException e) {
+				// I do not expect this to happen. The parse exception should only happen from the inputFormatter. Here the formatter should export data it can read.
+				assert false;
+			}
+		}
+		return null;
+	}
+
 }
