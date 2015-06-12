@@ -19,7 +19,7 @@ public class LatenessUtils {
 
 	public static boolean isLate(final Event e) {
 		if (e instanceof PortVisit) {
-			PortVisitLateness portVisitLateness = ((PortVisit) e).getLateness();
+			final PortVisitLateness portVisitLateness = ((PortVisit) e).getLateness();
 			if (portVisitLateness != null) {
 				return true;
 			}
@@ -58,12 +58,11 @@ public class LatenessUtils {
 		return null;
 	}
 
-	public static String formatLateness(int diffHours) {
-
-		if (diffHours / 24 == 0) {
-			return String.format("%2dh", diffHours % 24);
+	public static String formatLatenessHours(final int hours) {
+		if (hours / 24 == 0) {
+			return String.format("%2dh", hours % 24);
 		} else {
-			return String.format("%2dd, %2dh", diffHours / 24, diffHours % 24);
+			return String.format("%2dd, %2dh", hours / 24, hours % 24);
 		}
 
 	}
