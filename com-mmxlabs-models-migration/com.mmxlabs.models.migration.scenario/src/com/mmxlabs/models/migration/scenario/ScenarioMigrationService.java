@@ -31,13 +31,13 @@ public class ScenarioMigrationService implements IScenarioMigrationService {
 			}
 		}
 		{
-			// String context = scenarioInstance.getClientVersionContext();
+			String context = scenarioInstance.getClientVersionContext();
 
-			// if (context == null || context.isEmpty()) {
-			// context = migrationRegistry.getDefaultClientMigrationContext();
-			// scenarioInstance.setClientVersionContext(context);
-			// scenarioInstance.setClientScenarioVersion(0);
-			// }
+			if (context == null || context.isEmpty()) {
+				context = migrationRegistry.getDefaultClientMigrationContext();
+				scenarioInstance.setClientVersionContext(context);
+				scenarioInstance.setClientScenarioVersion(0);
+			}
 		}
 		final String scenarioContext = scenarioInstance.getVersionContext();
 		final String clientContext = scenarioInstance.getClientVersionContext();
@@ -54,23 +54,6 @@ public class ScenarioMigrationService implements IScenarioMigrationService {
 
 				final ScenarioInstanceMigrator migrator = new ScenarioInstanceMigrator(getMigrationRegistry(), getScenarioCipherProvider());
 				migrator.performMigration(scenarioService, scenarioInstance);
-			}
-
-			// Install default client ctx at latest version.
-			if (clientContext == null) {
-				setDefaultClientContext(scenarioInstance);
-			}
-		}
-	}
-
-	@Override
-	public void setDefaultClientContext(final ScenarioInstance scenarioInstance) {
-		final String clientContext = scenarioInstance.getClientVersionContext();
-		if (clientContext == null || clientContext.isEmpty()) {
-			final String defaultClientContext = migrationRegistry.getDefaultClientMigrationContext();
-			if (defaultClientContext != null) {
-				scenarioInstance.setClientVersionContext(defaultClientContext);
-				scenarioInstance.setClientScenarioVersion(getMigrationRegistry().getLatestClientContextVersion(defaultClientContext));
 			}
 		}
 	}

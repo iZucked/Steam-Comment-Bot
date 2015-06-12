@@ -20,7 +20,6 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.io.ByteStreams;
 import com.mmxlabs.common.io.FileDeleter;
@@ -59,7 +58,7 @@ public class ScenarioInstanceMigrator {
 		assert scenarioContext != null;
 
 		final int latestScenarioVersion = migrationRegistry.getLatestContextVersion(scenarioContext);
-		final int latestClientVersion = clientContext == null ? 0 : migrationRegistry.getLatestClientContextVersion(clientContext);
+		final int latestClientVersion = migrationRegistry.getLatestClientContextVersion(clientContext);
 		int currentScenarioVersion = scenarioInstance.getScenarioVersion();
 		int currentClientVersion = scenarioInstance.getClientScenarioVersion();
 
@@ -85,7 +84,7 @@ public class ScenarioInstanceMigrator {
 				final int lastReleaseVersion = migrationRegistry.getLastReleaseVersion(scenarioContext);
 				currentScenarioVersion = lastReleaseVersion;
 			}
-			if (currentClientVersion < 0 && clientContext != null) {
+			if (currentClientVersion < 0) {
 				final int lastReleaseVersion = migrationRegistry.getLastReleaseClientVersion(clientContext);
 				currentClientVersion = lastReleaseVersion;
 			}
@@ -114,7 +113,7 @@ public class ScenarioInstanceMigrator {
 				throw new ScenarioMigrationException(String.format("Scenario was not migrated to latest version. Expected %d, currently %d.", latestScenarioVersion,
 						scenarioInstance.getScenarioVersion()));
 			}
-			if (clientContext != null && (migratedVersion[1] != latestClientVersion)) {
+			if (migratedVersion[1] != latestClientVersion) {
 				throw new ScenarioMigrationException(String.format("Scenario was not migrated to latest client version. Expected %d, currently %d.", latestClientVersion,
 						scenarioInstance.getClientScenarioVersion()));
 			}
@@ -129,9 +128,7 @@ public class ScenarioInstanceMigrator {
 			}
 
 			scenarioInstance.setScenarioVersion(migratedVersion[0]);
-			if (clientContext != null) {
-				scenarioInstance.setClientScenarioVersion(migratedVersion[1]);
-			}
+			scenarioInstance.setClientScenarioVersion(migratedVersion[1]);
 		} catch (Exception e) {
 			throw new ScenarioMigrationException(e);
 		} finally {
@@ -155,7 +152,7 @@ public class ScenarioInstanceMigrator {
 	 * @return
 	 * @throws Exception
 	 */
-	public int[] applyMigrationChain(@NonNull final String scenarioContext, final int currentScenarioVersion, final int latestScenarioVersion, @Nullable final String clientContext,
+	public int[] applyMigrationChain(@NonNull final String scenarioContext, final int currentScenarioVersion, final int latestScenarioVersion, @NonNull final String clientContext,
 			final int currentClientVersion, final int latestClientVersion, @NonNull final URI tmpURI) throws Exception {
 
 		final List<IMigrationUnit> chain = migrationRegistry
