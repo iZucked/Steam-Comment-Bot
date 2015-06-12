@@ -268,7 +268,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				if (checkLateness) {
 					int lateHours = LatenessUtils.getLatenessInHours(slotVisit);
 					if (lateHours != 0) {
-						eventText.append("LATE by " + LatenessUtils.formatLateness(lateHours) + "\n");
+						eventText.append("LATE by " + LatenessUtils.formatLatenessHours(lateHours) + "\n");
 					}
 				}
 			} else if (element instanceof VesselEventVisit) {
@@ -277,7 +277,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				int lateHours = LatenessUtils.getLatenessInHours(vev);
 				if (lateHours != 0) {
 					eventText.append(" \n");
-					eventText.append("LATE by " + LatenessUtils.formatLateness(lateHours) + "\n");
+					eventText.append("LATE by " + LatenessUtils.formatLatenessHours(lateHours) + "\n");
 				}
 			} else if (element instanceof Idle) {
 				eventText.append("Idle time: " + durationTime);

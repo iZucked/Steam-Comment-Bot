@@ -56,7 +56,7 @@ public class LatenessReportView extends EMFReportView {
 
 				if (object instanceof PortVisit) {
 					final PortVisit slotVisit = (PortVisit) object;
-					return LatenessUtils.formatLateness(LatenessUtils.getLatenessInHours(slotVisit));
+					return LatenessUtils.formatLatenessHours(LatenessUtils.getLatenessInHours(slotVisit));
 				}
 
 				return "";
