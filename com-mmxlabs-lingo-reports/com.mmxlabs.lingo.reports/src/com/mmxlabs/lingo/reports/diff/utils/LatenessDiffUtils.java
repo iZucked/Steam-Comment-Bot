@@ -36,7 +36,7 @@ public class LatenessDiffUtils {
 			} else {
 				prepend = slotType + " decreased lateness by";
 			}
-			return String.format("%s %s", prepend, LatenessUtils.formatLateness(diff));
+			return String.format("%s %s", prepend, LatenessUtils.formatLatenessHours(diff));
 		}
 	}
 }

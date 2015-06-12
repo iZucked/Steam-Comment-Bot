@@ -150,8 +150,8 @@ public class LatenessReportView extends EMFReportView {
 			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final Schedule schedule, final boolean pinned) {
 
 				final Collection<? extends Object> collectedElements = super.collectElements(scenarioInstance, schedule, pinned);
-				List<EObject> elements = new ArrayList<>(collectedElements.size());
-				for (Object o : collectedElements) {
+				final List<EObject> elements = new ArrayList<>(collectedElements.size());
+				for (final Object o : collectedElements) {
 					if (o instanceof EObject) {
 						elements.add((EObject) o);
 					}
