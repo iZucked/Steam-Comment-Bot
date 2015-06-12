@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.IScenarioServiceListener;
@@ -23,6 +24,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  * 
  */
 public abstract class AbstractScenarioServiceListenerHandler implements IScenarioService {
+	@NonNullByDefault
 	protected enum ScenarioServiceEvent {
 		PRE_LOAD, POST_LOAD, PRE_SAVE, POST_SAVE, PRE_DELETE, POST_DELETE,
 		/**

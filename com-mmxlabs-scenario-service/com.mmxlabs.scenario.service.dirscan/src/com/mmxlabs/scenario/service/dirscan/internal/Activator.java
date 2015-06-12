@@ -29,7 +29,7 @@ public class Activator extends AbstractUIPlugin {
 	// The plug-in ID
 	public static final String PLUGIN_ID = "com.mmxlabs.scenario.service.dirscan"; //$NON-NLS-1$
 
-	private static final String[] prefixes = { "", "option2.", "option3" };
+	private static final String[] prefixes = { "", "option2.", "option3." };
 	private static final int SERVICE_COUNT = prefixes.length;
 
 	// The shared instance
@@ -63,8 +63,10 @@ public class Activator extends AbstractUIPlugin {
 			public void propertyChange(final PropertyChangeEvent event) {
 				try {
 					for (int idx = 0; idx < SERVICE_COUNT; ++idx) {
-						if (event.getProperty().equals(prefixes[idx] + PreferenceConstants.P_ENABLED_KEY)) {
-							if (Boolean.TRUE.equals(event.getNewValue())) {
+						String property = event.getProperty();
+						if (property.equals(prefixes[idx] + PreferenceConstants.P_ENABLED_KEY)) {
+							Object newValue = event.getNewValue();
+							if (Boolean.TRUE.equals(newValue)) {
 								enableService(idx);
 							} else {
 								disableService(idx);
