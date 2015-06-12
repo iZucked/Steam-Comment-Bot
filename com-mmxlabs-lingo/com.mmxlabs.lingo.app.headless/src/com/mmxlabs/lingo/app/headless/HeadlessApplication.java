@@ -22,16 +22,24 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.joda.time.LocalDate;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.joda.time.YearMonth;
 
 import com.google.common.collect.Maps;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.license.features.pluginxml.PluginRegistryHook;
+import com.mmxlabs.license.ssl.LicenseChecker;
+import com.mmxlabs.license.ssl.LicenseChecker.LicenseState;
 import com.mmxlabs.lingo.app.headless.exporter.FitnessTraceExporter;
 import com.mmxlabs.lingo.app.headless.exporter.IRunExporter;
 import com.mmxlabs.lingo.app.headless.utils.DoubleMap;
@@ -55,6 +63,7 @@ import com.mmxlabs.models.migration.scenario.MigrationHelper;
 import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger;
 import com.mmxlabs.optimiser.lso.logging.LSOLoggingExporter;
+import com.mmxlabs.rcp.common.viewfactory.ReplaceableViewManager;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -77,6 +86,14 @@ public class HeadlessApplication implements IApplication {
 
 	@Override
 	public Object start(final IApplicationContext context) throws Exception {
+
+		final LicenseState validity = LicenseChecker.checkLicense();
+		if (validity != LicenseState.Valid) {
+
+			return IApplication.EXIT_OK;
+		}
+
+		initAccessControl();
 
 		final List<IRunExporter> exporters = new LinkedList<IRunExporter>();
 		final String[] commandLineArgs = Platform.getCommandLineArgs();
@@ -436,4 +453,18 @@ public class HeadlessApplication implements IApplication {
 		}
 		HeadlessJSONParser.copyJSONFile(jsonFilePath, Paths.get(path, foldername, "parameters.json").toString());
 	}
+	
+	private void initAccessControl() {
+		// Initialise feature enablements
+		LicenseFeatures.initialiseFeatureEnablements();
+
+		// Login our default user
+		final Subject subject = SecurityUtils.getSubject();
+		subject.login(new UsernamePasswordToken("user", "password"));
+
+		PluginRegistryHook.initialisePluginXMLEnablements();
+
+		ReplaceableViewManager.initialiseReplaceableViews();
+	}
+
 }
