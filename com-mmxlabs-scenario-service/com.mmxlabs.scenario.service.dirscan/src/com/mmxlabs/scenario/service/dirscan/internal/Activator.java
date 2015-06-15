@@ -99,6 +99,9 @@ public class Activator extends AbstractUIPlugin {
 
 			final String serviceName = getPreferenceStore().getString(preferencePrefix + PreferenceConstants.P_NAME_KEY);
 			final String path = getPreferenceStore().getString(preferencePrefix + PreferenceConstants.P_PATH_KEY);
+			if (path == null || path.isEmpty()) {
+				return;
+			}
 
 			final Hashtable<String, String> props = new Hashtable<String, String>();
 			props.put(PreferenceConstants.P_NAME_KEY, serviceName);
