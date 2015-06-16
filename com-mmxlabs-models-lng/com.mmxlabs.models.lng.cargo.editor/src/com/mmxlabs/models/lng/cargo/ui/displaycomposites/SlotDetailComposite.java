@@ -207,7 +207,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 					// 64 - magic constant from MultiDetailDialog
 					// gd.widthHint = 80;
 
-					// FIXME: Hack pending proper APi to manipUlate labels
+					// FIXME: Hack pending proper APi to manipulate labels
 					if (feature == CargoPackage.Literals.SLOT__MIN_QUANTITY) {
 						Label label = editor.getLabel();
 						if (label != null) {
