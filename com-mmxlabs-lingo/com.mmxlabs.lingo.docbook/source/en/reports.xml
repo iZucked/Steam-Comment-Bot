@@ -102,7 +102,7 @@
 	</section>
 	<section id="Reports_VerticalSchedule">
 	<?dbeclipse ctx_description="The vertical schedule shows shipping and trading events on a day-by-day basis." ?>
-		<title>Verticle Report</title>
+		<title>Vertical Report</title>
 
 		<itemizedlist>
 			<listitem>
@@ -113,7 +113,7 @@
 				<para>Multiple Scenarios: First selected</para>
 			</listitem>
 			<listitem>
-				<para>Pin/Diff: NBo change over multiple scenarios</para>
+				<para>Pin/Diff: No change over multiple scenarios</para>
 			</listitem>
 		</itemizedlist>
 	</section>

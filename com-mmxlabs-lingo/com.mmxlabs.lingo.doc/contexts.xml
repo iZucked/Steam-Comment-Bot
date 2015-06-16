@@ -90,7 +90,7 @@
    </context>
    <context id="Reports_VerticalSchedule">
       <description>The vertical schedule shows shipping and trading events on a day-by-day basis.</description>
-      <topic label="Verticle Report" href="ch03s04.html"/>
+      <topic label="Vertical Report" href="ch03s04.html"/>
    </context>
    <context id="Reports_Lateness">
       <description>The lateness report shows the late arrivals in the scenario.</description>
