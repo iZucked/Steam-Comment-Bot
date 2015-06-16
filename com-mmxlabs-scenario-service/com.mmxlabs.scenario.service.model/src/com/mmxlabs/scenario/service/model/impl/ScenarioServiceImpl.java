@@ -27,6 +27,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#isSupportsForking <em>Supports Forking</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#isSupportsImport <em>Supports Import</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#getScenarioModel <em>Scenario Model</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioServiceImpl#isLocal <em>Local</em>}</li>
  * </ul>
  * </p>
  *
@@ -122,6 +123,26 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	 * @ordered
 	 */
 	protected ScenarioModel scenarioModel;
+
+	/**
+	 * The default value of the '{@link #isLocal() <em>Local</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isLocal()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean LOCAL_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isLocal() <em>Local</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isLocal()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean local = LOCAL_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -294,6 +315,27 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isLocal() {
+		return local;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setLocal(boolean newLocal) {
+		boolean oldLocal = local;
+		local = newLocal;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_SERVICE__LOCAL, oldLocal, local));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -339,6 +381,8 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 			if (resolve)
 				return getScenarioModel();
 			return basicGetScenarioModel();
+		case ScenarioServicePackage.SCENARIO_SERVICE__LOCAL:
+			return isLocal();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -365,6 +409,9 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 			return;
 		case ScenarioServicePackage.SCENARIO_SERVICE__SCENARIO_MODEL:
 			setScenarioModel((ScenarioModel) newValue);
+			return;
+		case ScenarioServicePackage.SCENARIO_SERVICE__LOCAL:
+			setLocal((Boolean) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);
@@ -393,6 +440,9 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 		case ScenarioServicePackage.SCENARIO_SERVICE__SCENARIO_MODEL:
 			setScenarioModel((ScenarioModel) null);
 			return;
+		case ScenarioServicePackage.SCENARIO_SERVICE__LOCAL:
+			setLocal(LOCAL_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -415,6 +465,8 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 			return supportsImport != SUPPORTS_IMPORT_EDEFAULT;
 		case ScenarioServicePackage.SCENARIO_SERVICE__SCENARIO_MODEL:
 			return scenarioModel != null;
+		case ScenarioServicePackage.SCENARIO_SERVICE__LOCAL:
+			return local != LOCAL_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -438,6 +490,8 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 		result.append(supportsForking);
 		result.append(", supportsImport: ");
 		result.append(supportsImport);
+		result.append(", local: ");
+		result.append(local);
 		result.append(')');
 		return result.toString();
 	}

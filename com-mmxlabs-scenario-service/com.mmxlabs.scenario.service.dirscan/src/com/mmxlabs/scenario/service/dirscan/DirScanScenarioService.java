@@ -173,8 +173,10 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 		final ScenarioService serviceModel = ScenarioServiceFactory.eINSTANCE.createScenarioService();
 		serviceModel.setName(serviceName);
-		serviceModel.setDescription("DirScan scenario service");
+		serviceModel.setDescription("Shared folder scenario service");
+		serviceModel.setLocal(false);
 		serviceModel.eAdapters().add(serviceModelAdapter);
+
 		return serviceModel;
 	}
 
@@ -549,12 +551,11 @@ public class DirScanScenarioService extends AbstractScenarioService {
 			manifest.setUUID(original.getUuid());
 			manifest.setScenarioVersion(original.getScenarioVersion());
 			manifest.setVersionContext(original.getVersionContext());
-			
+
 			manifest.setClientScenarioVersion(original.getClientScenarioVersion());
 			manifest.setClientVersionContext(original.getClientVersionContext());
 			// client version!
-			
-			
+
 			final URI manifestURI = URI.createURI("archive:" + scenarioURI.toString() + "!/MANIFEST.xmi");
 			final Resource manifestResource = instanceResourceSet.createResource(manifestURI);
 
@@ -688,8 +689,6 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 		if (instance.getInstance() == null) {
 
-			
-			
 			try {
 				final EObject eObj = super.load(instance);
 

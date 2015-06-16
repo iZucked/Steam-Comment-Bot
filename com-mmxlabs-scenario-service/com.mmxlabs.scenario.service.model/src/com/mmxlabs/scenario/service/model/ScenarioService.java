@@ -19,6 +19,7 @@ import com.mmxlabs.scenario.service.IScenarioService;
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#isSupportsForking <em>Supports Forking</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#isSupportsImport <em>Supports Import</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#getScenarioModel <em>Scenario Model</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioService#isLocal <em>Local</em>}</li>
  * </ul>
  * </p>
  *
@@ -158,5 +159,31 @@ public interface ScenarioService extends Container {
 	 * @generated
 	 */
 	void setScenarioModel(ScenarioModel value);
+
+	/**
+	 * Returns the value of the '<em><b>Local</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Local</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Local</em>' attribute.
+	 * @see #setLocal(boolean)
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioService_Local()
+	 * @model
+	 * @generated
+	 */
+	boolean isLocal();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioService#isLocal <em>Local</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Local</em>' attribute.
+	 * @see #isLocal()
+	 * @generated
+	 */
+	void setLocal(boolean value);
 
 } // ScenarioService

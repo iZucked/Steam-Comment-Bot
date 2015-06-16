@@ -336,6 +336,15 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getScenarioService_Local() {
+		return (EAttribute) scenarioServiceEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getScenarioInstance() {
 		return scenarioInstanceEClass;
 	}
@@ -757,6 +766,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		createEAttribute(scenarioServiceEClass, SCENARIO_SERVICE__SUPPORTS_FORKING);
 		createEAttribute(scenarioServiceEClass, SCENARIO_SERVICE__SUPPORTS_IMPORT);
 		createEReference(scenarioServiceEClass, SCENARIO_SERVICE__SCENARIO_MODEL);
+		createEAttribute(scenarioServiceEClass, SCENARIO_SERVICE__LOCAL);
 
 		scenarioInstanceEClass = createEClass(SCENARIO_INSTANCE);
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__UUID);
@@ -879,6 +889,8 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getScenarioService_ScenarioModel(), this.getScenarioModel(), this.getScenarioModel_ScenarioServices(), "scenarioModel", null, 0, 1, ScenarioService.class, IS_TRANSIENT,
 				!IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getScenarioService_Local(), ecorePackage.getEBoolean(), "local", null, 0, 1, ScenarioService.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(scenarioInstanceEClass, ScenarioInstance.class, "ScenarioInstance", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getScenarioInstance_Uuid(), ecorePackage.getEString(), "uuid", null, 1, 1, ScenarioInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE,

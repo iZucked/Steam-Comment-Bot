@@ -537,7 +537,8 @@ public class FileScenarioService extends AbstractScenarioService {
 		final ScenarioService result = (ScenarioService) resource.getContents().get(0);
 
 		result.setDescription("File scenario service with store " + storeURI);
-
+		result.setLocal(true);
+		
 		// modify any old scenarios to fix wrong pointing
 		makeRelativeURIs(result);
 		recoverLostScenarios(result);

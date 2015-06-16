@@ -325,13 +325,22 @@ public interface ScenarioServicePackage extends EPackage {
 	int SCENARIO_SERVICE__SCENARIO_MODEL = CONTAINER_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Local</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_SERVICE__LOCAL = CONTAINER_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Scenario Service</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_SERVICE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 5;
+	int SCENARIO_SERVICE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl <em>Scenario Instance</em>}' class.
@@ -992,6 +1001,17 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getScenarioService_ScenarioModel();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioService#isLocal <em>Local</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Local</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioService#isLocal()
+	 * @see #getScenarioService()
+	 * @generated
+	 */
+	EAttribute getScenarioService_Local();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.model.ScenarioInstance <em>Scenario Instance</em>}'.

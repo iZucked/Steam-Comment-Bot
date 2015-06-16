@@ -56,6 +56,7 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider implement
 			addSupportsForkingPropertyDescriptor(object);
 			addSupportsImportPropertyDescriptor(object);
 			addScenarioModelPropertyDescriptor(object);
+			addLocalPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -121,6 +122,18 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider implement
 	}
 
 	/**
+	 * This adds a property descriptor for the Local feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addLocalPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_ScenarioService_local_feature"), getString("_UI_ScenarioService_local_description"), ScenarioServicePackage.eINSTANCE.getScenarioService_Local(), true, false, false,
+				ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+	}
+
+	/**
 	 * This returns ScenarioService.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -159,6 +172,7 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider implement
 		case ScenarioServicePackage.SCENARIO_SERVICE__SERVICE_REF:
 		case ScenarioServicePackage.SCENARIO_SERVICE__SUPPORTS_FORKING:
 		case ScenarioServicePackage.SCENARIO_SERVICE__SUPPORTS_IMPORT:
+		case ScenarioServicePackage.SCENARIO_SERVICE__LOCAL:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		}
