@@ -13,4 +13,8 @@ public class BulkImportBaseFuelCurveHandler extends BulkImportCSVHandler {
 		return FieldChoice.CHOICE_BASE_FUEL_CURVES;
 	}
 
+	@Override
+	public String getTitle() {
+		return "Import base fuel curves";
+	}
 }

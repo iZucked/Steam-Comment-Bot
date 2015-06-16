@@ -13,4 +13,8 @@ public class BulkImportCharterCurveHandler extends BulkImportCSVHandler {
 		return FieldChoice.CHOICE_CHARTER_INDICES;
 	}
 
+	@Override
+	public String getTitle() {
+		return "Import charter curves";
+	}
 }

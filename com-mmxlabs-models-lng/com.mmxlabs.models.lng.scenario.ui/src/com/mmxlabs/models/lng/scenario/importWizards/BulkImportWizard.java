@@ -52,10 +52,10 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 	final private ScenarioInstance currentScenario;
 	private final FieldChoice importedField;
 
-	public BulkImportWizard(final ScenarioInstance scenarioInstance, final FieldChoice fieldChoice) {
+	public BulkImportWizard(final ScenarioInstance scenarioInstance, final FieldChoice fieldChoice, String windowTitle) {
 		currentScenario = scenarioInstance;
 		importedField = fieldChoice;
-		setWindowTitle("Bulk data import");
+		setWindowTitle(windowTitle);
 	}
 
 	@Override

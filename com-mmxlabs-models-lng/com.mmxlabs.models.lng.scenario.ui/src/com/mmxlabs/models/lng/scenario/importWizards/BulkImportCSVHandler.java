@@ -36,7 +36,7 @@ public abstract class BulkImportCSVHandler extends AbstractHandler {
 		final Shell shell = HandlerUtil.getActiveShell(event);
 		final IScenarioServiceEditorInput editor = (IScenarioServiceEditorInput) HandlerUtil.getActiveEditorInput(event);
 
-		final BulkImportWizard wizard = new BulkImportWizard(editor != null ? editor.getScenarioInstance() : null, getFieldToImport());
+		final BulkImportWizard wizard = new BulkImportWizard(editor != null ? editor.getScenarioInstance() : null, getFieldToImport(), getTitle());
 		wizard.init(activeWorkbenchWindow.getWorkbench(), null);
 
 		final WizardDialog dialog = new WizardDialog(shell, wizard);
@@ -45,6 +45,8 @@ public abstract class BulkImportCSVHandler extends AbstractHandler {
 
 		return null;
 	}
+
+	public abstract String getTitle();
 
 	// TODO: replace this by subclass implementations of the getImportAction handler?
 	public abstract FieldChoice getFieldToImport();

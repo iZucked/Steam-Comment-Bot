@@ -13,4 +13,9 @@ public class BulkImportDataHandler extends BulkImportCSVHandler {
 		return FieldChoice.CHOICE_COMMODITY_INDICES;
 	}
 
+	@Override
+	public String getTitle() {
+		return "Import commodity curves";
+	}
+
 }

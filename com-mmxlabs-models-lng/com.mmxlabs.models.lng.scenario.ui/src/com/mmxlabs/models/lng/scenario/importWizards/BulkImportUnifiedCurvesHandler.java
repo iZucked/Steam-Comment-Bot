@@ -13,4 +13,8 @@ public class BulkImportUnifiedCurvesHandler extends BulkImportCSVHandler {
 		return FieldChoice.CHOICE_COMMODITY_CHARTER_BASE_FUEL_INDICIES;
 	}
 
+	@Override
+	public String getTitle() {
+		return "Import market curves";
+	}
 }

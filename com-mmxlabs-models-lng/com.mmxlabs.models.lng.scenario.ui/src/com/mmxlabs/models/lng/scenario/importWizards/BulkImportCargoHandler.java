@@ -13,4 +13,9 @@ public class BulkImportCargoHandler extends BulkImportCSVHandler {
 		return FieldChoice.CHOICE_CARGOES;
 	}
 
+	@Override
+	public String getTitle() {
+		return "Import cargoes";
+	}
+
 }
