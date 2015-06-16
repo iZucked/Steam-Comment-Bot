@@ -20,6 +20,7 @@ import com.mmxlabs.common.parser.ITermFactory;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
@@ -56,8 +57,6 @@ public class Exposures {
 			}
 		}
 	}
-
-	
 
 	/**
 	 * Simple tree class because Java utils inexplicably doesn't provide one
@@ -119,8 +118,8 @@ public class Exposures {
 					case '*':
 						return true;
 					case '%':
-						return b == '/' || b =='+' || b == '-';
- 					case '/':
+						return b == '/' || b == '+' || b == '-';
+					case '/':
 						return b == '+' || b == '-';
 					case '+':
 						return b == '-';
@@ -180,7 +179,7 @@ public class Exposures {
 		// addition: add coefficients of summands
 		if (token.equals("+")) {
 			return getExposureCoefficient(node.children[0], index) + getExposureCoefficient(node.children[1], index);
-		} 
+		}
 		// multiplication: check for index token and return the other value if appropriate
 		else if (token.equals("*") || token.equals("%")) {
 			if (node.children[0].children.length > 0 || node.children[1].children.length > 0) {
@@ -195,7 +194,7 @@ public class Exposures {
 				}
 			}
 
-		} 
+		}
 		// subtraction: subtract coefficients
 		else if (node.token.equals("-")) {
 			return getExposureCoefficient(node.children[0], index) - getExposureCoefficient(node.children[1], index);
@@ -278,6 +277,11 @@ public class Exposures {
 				final Slot slot = slotAllocation.getSlot();
 				final double exposureCoefficient = getExposureCoefficient(slot, index);
 				double exposure = exposureCoefficient * volume;
+
+				if (slot instanceof SpotSlot) {
+					// FIXME - Should spot volumes be included?
+					// continue;
+				}
 
 				if (slot instanceof LoadSlot) {
 					// +ve exposure
