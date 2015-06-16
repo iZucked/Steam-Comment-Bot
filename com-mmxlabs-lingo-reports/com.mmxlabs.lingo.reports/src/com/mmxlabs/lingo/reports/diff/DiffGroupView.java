@@ -30,6 +30,8 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
@@ -72,6 +74,8 @@ public class DiffGroupView extends ViewPart implements ISelectionListener, IMenu
 	private ObservableListTreeContentProvider contentProvider;
 	private Table table;
 	private DiffSelectionAdapter selectionAdapter;
+
+	private boolean filterNonStructuralChanges = false;
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -131,6 +135,8 @@ public class DiffGroupView extends ViewPart implements ISelectionListener, IMenu
 
 				});
 				viewer.setComparator(new DiffGroupViewerComparator());
+
+				viewer.setFilters(createFilters());
 			}
 		});
 
@@ -167,7 +173,17 @@ public class DiffGroupView extends ViewPart implements ISelectionListener, IMenu
 
 		// Filter by change type
 		{
-
+			final Action toggleFilterNonStructuralChanges = new Action("Filter out non-structural changes", SWT.TOGGLE) {
+				@Override
+				public void run() {
+					setFilterNonStructuralChanges(!isFilterNonStructuralChanges());
+					this.setChecked(isFilterNonStructuralChanges());
+					viewer.refresh();
+				}
+			};
+			toggleFilterNonStructuralChanges.setImageDescriptor(Implementation.getImageDescriptor("icons/filter.gif"));
+			actionBars.getToolBarManager().add(toggleFilterNonStructuralChanges);
+			toggleFilterNonStructuralChanges.setChecked(isFilterNonStructuralChanges());
 		}
 
 		actionBars.getToolBarManager().update(true);
@@ -342,4 +358,43 @@ public class DiffGroupView extends ViewPart implements ISelectionListener, IMenu
 		}
 	}
 
+	private ViewerFilter[] createFilters() {
+		return new ViewerFilter[] { createStructuralChangeFilter() };
+	}
+
+	private ViewerFilter createStructuralChangeFilter() {
+		return new ViewerFilter() {
+
+			@Override
+			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
+
+				if (filterNonStructuralChanges) {
+					if (element instanceof CycleGroup) {
+						final CycleGroup cycleGroup = (CycleGroup) element;
+						switch (cycleGroup.getChangeType()) {
+						case VESSEL:
+						case WIRING:
+							return true;
+						case CHARTERING:
+						case DURATION:
+						case PNL:
+						default:
+							return false;
+
+						}
+					}
+				}
+				return true;
+			}
+
+		};
+	}
+
+	public boolean isFilterNonStructuralChanges() {
+		return filterNonStructuralChanges;
+	}
+
+	public void setFilterNonStructuralChanges(boolean filterNonStructuralChanges) {
+		this.filterNonStructuralChanges = filterNonStructuralChanges;
+	}
 }
