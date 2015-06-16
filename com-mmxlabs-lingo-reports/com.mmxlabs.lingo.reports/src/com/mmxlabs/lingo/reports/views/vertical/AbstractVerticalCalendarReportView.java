@@ -95,6 +95,10 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 		makeActions();
 
+		linkHelpSystem();
+	}
+
+	protected void linkHelpSystem() {
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(gridViewer.getControl(), "com.mmxlabs.lingo.doc.Reports_VerticalSchedule");
 	}
 
