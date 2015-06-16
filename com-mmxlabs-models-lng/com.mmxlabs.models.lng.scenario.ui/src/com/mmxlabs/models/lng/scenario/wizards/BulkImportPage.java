@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
@@ -138,7 +137,7 @@ public class BulkImportPage extends WizardPage {
 	 * 
 	 */
 	class ScenarioContentProvider implements ITreeContentProvider {
-		EList<ScenarioService> services;
+		private List<ScenarioService> services;
 
 		public ScenarioContentProvider() {
 		}
@@ -150,7 +149,7 @@ public class BulkImportPage extends WizardPage {
 		@SuppressWarnings("unchecked")
 		@Override
 		public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-			services = (EList<ScenarioService>) newInput;
+			services = (List<ScenarioService>) newInput;
 		}
 
 		@Override
@@ -158,14 +157,24 @@ public class BulkImportPage extends WizardPage {
 			if (services.size() == 1) {
 				return getChildren(services.get(0));
 			} else {
-				return services.toArray();
+				final List<ScenarioService> localServices = new LinkedList<>();
+				for (final ScenarioService ss : services) {
+					if (ss.isLocal()) {
+						localServices.add(ss);
+					}
+				}
+				if (localServices.size() == 1) {
+					return getChildren(localServices.get(0));
+				} else {
+					return localServices.toArray();
+				}
 			}
 		}
 
 		@Override
 		public Object[] getChildren(final Object parentElement) {
-			final LinkedList<Object> result = new LinkedList<Object>();
 
+			final LinkedList<Object> result = new LinkedList<Object>();
 			if (parentElement instanceof Container) {
 				for (final Object element : ((Container) parentElement).getElements()) {
 					if (element instanceof ScenarioInstance) {
@@ -223,7 +232,7 @@ public class BulkImportPage extends WizardPage {
 	protected List<ScenarioInstance> getAllAvailableScenarioInstances() {
 		final List<ScenarioInstance> result = new LinkedList<ScenarioInstance>();
 
-		for (final ScenarioService service : getServices()) {
+		for (final ScenarioService service : getLocalServices()) {
 			result.addAll(getAllDescendantScenarioInstances(service));
 		}
 
@@ -295,7 +304,7 @@ public class BulkImportPage extends WizardPage {
 	 * 
 	 * @return
 	 */
-	EList<ScenarioService> getServices() {
+	private List<ScenarioService> getServices() {
 		final ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry> tracker = new ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry>(Activator.getDefault().getBundle()
 				.getBundleContext(), ScenarioServiceRegistry.class, null);
 		tracker.open();
@@ -303,6 +312,17 @@ public class BulkImportPage extends WizardPage {
 		tracker.close();
 
 		return scenarioModel.getScenarioServices();
+	}
+
+	private List<ScenarioService> getLocalServices() {
+		final List<ScenarioService> localServices = new LinkedList<>();
+
+		for (final ScenarioService ss : getServices()) {
+			if (ss.isLocal()) {
+				localServices.add(ss);
+			}
+		}
+		return localServices;
 	}
 
 	/*
@@ -511,7 +531,7 @@ public class BulkImportPage extends WizardPage {
 		scenarioTreeViewer.setContentProvider(new ScenarioContentProvider());
 		scenarioTreeViewer.setLabelProvider(new ScenarioLabelProvider());
 		scenarioTreeViewer.setAutoExpandLevel(3);
-		scenarioTreeViewer.setInput(getServices());
+		scenarioTreeViewer.setInput(getLocalServices());
 		final GridData viewerLayoutData = new GridData();
 		viewerLayoutData.grabExcessVerticalSpace = true;
 		viewerLayoutData.grabExcessHorizontalSpace = true;
