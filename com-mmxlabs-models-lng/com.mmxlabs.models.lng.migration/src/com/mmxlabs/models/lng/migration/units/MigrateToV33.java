@@ -105,6 +105,7 @@ public class MigrateToV33 extends AbstractMigrationUnit {
 		validPackages.add(loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_PricingModel));
 		validPackages.add(loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScheduleModel));
 		validPackages.add(loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_SpotMarketsModel));
+		validPackages.add(loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel));
 
 		return validPackages;
 	}
