@@ -477,9 +477,16 @@ public class BulkImportPage extends WizardPage {
 		decimalSelectionGroup.setSelectedIndex(decimalValue);
 
 		// create a radiobutton group for specifying how scenarios are selected
-		final String currentScenarioOption = String.format("Current ('%s')", currentScenario.getName());
-		scenarioSelectionGroup = new RadioSelectionGroup(container, "Scenarios", SWT.NONE, new String[] { "All", currentScenarioOption, "Selected" }, new int[] { CHOICE_ALL_SCENARIOS,
-				CHOICE_CURRENT_SCENARIO, CHOICE_SELECTED_SCENARIOS });
+		final int selectedOnlyIndex;
+		if (currentScenario != null) {
+			final String currentScenarioOption = String.format("Current ('%s')", currentScenario.getName());
+			scenarioSelectionGroup = new RadioSelectionGroup(container, "Scenarios", SWT.NONE, new String[] { "All", currentScenarioOption, "Selected" }, new int[] { CHOICE_ALL_SCENARIOS,
+					CHOICE_CURRENT_SCENARIO, CHOICE_SELECTED_SCENARIOS });
+			selectedOnlyIndex = 2;
+		} else {
+			scenarioSelectionGroup = new RadioSelectionGroup(container, "Scenarios", SWT.NONE, new String[] { "All", "Selected" }, new int[] { CHOICE_ALL_SCENARIOS, CHOICE_SELECTED_SCENARIOS });
+			selectedOnlyIndex = 1;
+		}
 		scenarioSelectionGroup.setSelectedIndex(0);
 		final GridData gd3 = new GridData();
 		gd3.horizontalAlignment = SWT.FILL;
@@ -524,7 +531,7 @@ public class BulkImportPage extends WizardPage {
 		});
 
 		// only enable the scenario tree when the appropriate radio button is selected
-		final Button selectedOnlyButton = scenarioSelectionGroup.buttons.get(2);
+		final Button selectedOnlyButton = scenarioSelectionGroup.buttons.get(selectedOnlyIndex);
 		scenarioTreeViewer.getTree().setEnabled(selectedOnlyButton.getSelection());
 		selectedOnlyButton.addSelectionListener(new SelectionListener() {
 			@Override

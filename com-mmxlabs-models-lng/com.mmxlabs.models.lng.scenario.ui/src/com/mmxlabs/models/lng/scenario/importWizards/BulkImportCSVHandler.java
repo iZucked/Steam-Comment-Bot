@@ -36,13 +36,12 @@ public abstract class BulkImportCSVHandler extends AbstractHandler {
 		final Shell shell = HandlerUtil.getActiveShell(event);
 		final IScenarioServiceEditorInput editor = (IScenarioServiceEditorInput) HandlerUtil.getActiveEditorInput(event);
 
-		final BulkImportWizard wizard = new BulkImportWizard(editor.getScenarioInstance(), getFieldToImport());
+		final BulkImportWizard wizard = new BulkImportWizard(editor != null ? editor.getScenarioInstance() : null, getFieldToImport());
 		wizard.init(activeWorkbenchWindow.getWorkbench(), null);
 
 		final WizardDialog dialog = new WizardDialog(shell, wizard);
 		dialog.create();
 		dialog.open();
-
 
 		return null;
 	}
