@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.cargo.impl;
 
+import com.mmxlabs.models.datetime.DateTimeFactory;
+import com.mmxlabs.models.datetime.DateTimePackage;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
@@ -134,7 +136,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final LocalDate WINDOW_START_EDEFAULT = null;
+	protected static final LocalDate WINDOW_START_EDEFAULT = (LocalDate)DateTimeFactory.eINSTANCE.createFromString(DateTimePackage.eINSTANCE.getLocalDate(), "now");
 
 	/**
 	 * The cached value of the '{@link #getWindowStart() <em>Window Start</em>}' attribute.

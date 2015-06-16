@@ -120,6 +120,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 
 	/**
 	 * Returns the value of the '<em><b>Window Start</b></em>' attribute.
+	 * The default value is <code>"now"</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Window Start</em>' attribute isn't clear,
@@ -129,7 +130,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @return the value of the '<em>Window Start</em>' attribute.
 	 * @see #setWindowStart(LocalDate)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_WindowStart()
-	 * @model dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @model default="now" dataType="com.mmxlabs.models.datetime.LocalDate"
 	 * @generated
 	 */
 	LocalDate getWindowStart();
