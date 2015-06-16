@@ -156,8 +156,10 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 									element = null;
 								}
 							}
-							setRowSpan(formatter, cell, element);
 
+							if (col.isVisible()) {
+								setRowSpan(formatter, cell, element);
+							}
 							cell.setText(formatter.render(element));
 
 							if (formatter instanceof IImageProvider) {
