@@ -20,10 +20,10 @@ public class VolumeLimitUnitsInlineEditorFactory implements IInlineEditorFactory
 			final String name;
 			switch (type) {
 			case M3:
-				name = "M³";
+				name = "m³";
 				break;
 			case MMBTU:
-				name = "MMBTu";
+				name = "mmBtu";
 				break;
 			default:
 				name = type.getName();

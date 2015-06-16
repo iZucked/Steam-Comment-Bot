@@ -35,9 +35,10 @@
           propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//Contract/allowedPorts"/>
       <genFeatures notify="false" createChild="false" propertyDescription="The default port to pick for new slots under this contract."
           propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//Contract/preferredPort"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/minQuantity"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/maxQuantity"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/volumeLimitsUnit"/>
+      <genFeatures createChild="false" propertyDescription="Min volume" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/minQuantity"/>
+      <genFeatures createChild="false" propertyDescription="Max volume" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/maxQuantity"/>
+      <genFeatures createChild="false" propertyDescription="The volume units for min/max quantity bounds"
+          ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/volumeLimitsUnit"/>
       <genFeatures createChild="false" propertyDescription="When checked, restricted port and contract pairings are instead the only permitted options"
           ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/restrictedListsArePermissive"/>
       <genFeatures notify="false" createChild="false" propertyDescription="If set, these contracts cannot be paired to this contract"

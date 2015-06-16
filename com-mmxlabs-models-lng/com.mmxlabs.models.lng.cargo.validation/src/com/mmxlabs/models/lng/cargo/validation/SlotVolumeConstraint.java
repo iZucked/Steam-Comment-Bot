@@ -15,6 +15,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
+import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -79,13 +80,23 @@ public class SlotVolumeConstraint extends AbstractModelMultiConstraint {
 			boolean volLimitsOverriden = checkVolumeLimitsOverriden(slot);
 			if (!volLimitsOverriden) {
 				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(slot.getName(),
-						String.format("volume limit units have been set [%s], min and max volume limits must also be set.", slot.getVolumeLimitsUnit().getName())), IStatus.ERROR);
+						String.format("volume limit units have been set [%s], min and max volume limits must also be set.", getString(slot.getVolumeLimitsUnit()))), IStatus.ERROR);
 				status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MinQuantity());
 				status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
 				status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_VolumeLimitsUnit());
 				failures.add(status);
 			}
 		}
+	}
+
+	private Object getString(VolumeUnits volumeLimitsUnit) {
+		switch (volumeLimitsUnit) {
+		case M3:
+			return "m³";
+		case MMBTU:
+			return "mmBtu";
+		}
+		return volumeLimitsUnit.getName();
 	}
 
 	private boolean checkVolumeLimitsOverriden(Slot slot) {

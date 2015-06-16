@@ -50,11 +50,10 @@
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/windowFlex"/>
       <genFeatures createChild="false" propertyCategory="" propertyDescription="The duration of the slot in hours"
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/duration"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/volumeLimitsUnit"/>
-      <genFeatures createChild="false" propertyDescription="Minimum quantity in m3"
-          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/minQuantity"/>
-      <genFeatures createChild="false" propertyDescription="Minimum quantity in m3"
-          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/maxQuantity"/>
+      <genFeatures createChild="false" propertyDescription="The volume units for min/max quantity bounds"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/volumeLimitsUnit"/>
+      <genFeatures createChild="false" propertyDescription="Minimum quantity" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/minQuantity"/>
+      <genFeatures createChild="false" propertyDescription="Minimum quantity" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/maxQuantity"/>
       <genFeatures createChild="false" propertyDescription="If optional, this position may be left open"
           ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/optional"/>
       <genFeatures createChild="false" propertyDescription="The price expression, if any, for this deal"
@@ -82,6 +81,8 @@
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrContractVolumeLimitsUnit"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowEndWithSlotOrPortTime"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowStartWithSlotOrPortTime"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowEndWithSlotOrPortTimeWithFlex"/>
+      <genOperations ecoreOperation="cargo.ecore#//Slot/getWindowStartWithSlotOrPortTimeWithFlex"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrPortWindowSize"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrDelegatedEntity"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrContractRestrictedContracts"/>

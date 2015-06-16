@@ -24,6 +24,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.events.ExpansionEvent;
@@ -90,7 +91,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 
 		mainFeatures = new ArrayList<EStructuralFeature[]>();
 		mainFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Port(), CargoFeatures.getSlot_Entity() });
-		mainFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_MinQuantity(), CargoFeatures.getSlot_MaxQuantity() });
+		mainFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_MinQuantity(), CargoFeatures.getSlot_MaxQuantity(), CargoFeatures.getSlot_VolumeLimitsUnit() });
 		allFeatures.addAll(getAllFeatures(mainFeatures));
 
 		pricingFeatures = new ArrayList<EStructuralFeature[]>();
@@ -205,6 +206,24 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
 					// gd.widthHint = 80;
+
+					// FIXME: Hack pending proper APi to manipUlate labels
+					if (feature == CargoPackage.Literals.SLOT__MIN_QUANTITY) {
+						Label label = editor.getLabel();
+						if (label != null) {
+							label.setText("Volume");
+						}
+						editor.setLabel(null);
+					} else {
+						editor.setLabel(null);
+					}
+					return gd;
+				}
+				if (feature == CargoPackage.Literals.SLOT__VOLUME_LIMITS_UNIT) {
+					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
+					// 64 - magic constant from MultiDetailDialog
+					gd.widthHint = 80;
+					editor.setLabel(null);
 					return gd;
 				}
 				if (feature == CargoPackage.Literals.SLOT__NOTES) {
