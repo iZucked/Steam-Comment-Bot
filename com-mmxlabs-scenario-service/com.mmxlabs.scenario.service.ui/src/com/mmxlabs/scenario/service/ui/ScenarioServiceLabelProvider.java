@@ -37,7 +37,7 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 
 	private final Image pinImage;
 
-	private Font boldFont;
+	private final Font boldFont;
 
 	public ScenarioServiceLabelProvider() {
 		super(ScenarioServiceComposedAdapterFactory.getAdapterFactory());
@@ -75,13 +75,13 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 
 			if (object instanceof ScenarioInstance) {
 				final ScenarioInstance scenarioInstance = (ScenarioInstance) object;
-				
-				Container parent = scenarioInstance.getParent();
+
+				final Container parent = scenarioInstance.getParent();
 				if (parent instanceof ScenarioInstance) {
-					String name = parent.getName();
-					text = text.replace(name, "...");
+					final String name = parent.getName();
+					text = text.replace(name, "");
 				}
-				
+
 				if (scenarioInstance.isDirty()) {
 					text = "* " + text;
 				}
@@ -120,7 +120,7 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 	}
 
 	@Override
-	public Color getForeground(Object object) {
+	public Color getForeground(final Object object) {
 
 		if (object instanceof ScenarioService) {
 			return Grey;
@@ -129,7 +129,7 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 	}
 
 	@Override
-	public Font getFont(Object object) {
+	public Font getFont(final Object object) {
 
 		if (object instanceof ScenarioService) {
 			return boldFont;
