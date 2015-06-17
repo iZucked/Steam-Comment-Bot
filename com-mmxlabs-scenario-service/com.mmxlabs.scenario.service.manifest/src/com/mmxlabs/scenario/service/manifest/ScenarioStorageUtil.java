@@ -114,7 +114,7 @@ public class ScenarioStorageUtil {
 	}
 
 	private String escape(final String name) {
-		return name.replaceAll("[\\W&&[^ ]]+", "-");
+		return name.replaceAll("[\\W&&[^ ]]", "-");
 	}
 
 	public static String storeToTemporaryFile(final ScenarioInstance instance) throws IOException {
