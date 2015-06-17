@@ -53,41 +53,16 @@ public class EventGroupingOverlapProcessor implements IDiffProcessor {
 		} else if (referenceElement instanceof EventGrouping) {
 			referenceGrouping = (EventGrouping) referenceElement;
 		}
-		// Event referenceEvent = (Event) referenceElement;
 		if (referenceGrouping != null) {
-			// SlotVisit slotVisit = (SlotVisit) referenceEvent;
-			// Slot slot = slotVisit.getSlotAllocation().getSlot();
-			// if (slot instanceof LoadSlot) {
-			//
-			// CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
-			EList<Event> events = referenceGrouping.getEvents();
-			Event firstEvent = events.get(0);
-			Event lastEvent = events.get(events.size() - 1);
+			final EList<Event> events = referenceGrouping.getEvents();
+			final Event firstEvent = events.get(0);
+			final Event lastEvent = events.get(events.size() - 1);
 
 			final DateTime start = new DateTime(firstEvent.getStart());
 
 			final DateTime end = new DateTime(lastEvent.getEnd());
 
 			final Interval referenceInterval = new Interval(start, end);
-
-			// bindEvent(referenceRow, referenceInterval, elementToRowMap, slotVisit, interval);
-			// }
-			// }
-
-			//
-			// final Idle referenceIdle = getLastIdle(referenceRow);
-			// if (referenceIdle == null) {
-			// return;
-			// }
-			// if (referenceIdle.isLaden()) {
-			// return;
-			// }
-			//
-			// final Event previousEvent = referenceIdle.getPreviousEvent();
-			// final DateTime start = new DateTime(previousEvent instanceof Journey ? previousEvent.getStart() : referenceIdle.getStart());
-			// final DateTime end = new DateTime(referenceIdle.getEnd());
-			//
-			// final Interval referenceInterval = new Interval(start, end);
 
 			final Sequence referenceSequence = firstEvent.getSequence();
 
@@ -100,28 +75,19 @@ public class EventGroupingOverlapProcessor implements IDiffProcessor {
 							if (scheduleModel.getSchedule() != referenceRow.getSchedule()) {
 								for (final Sequence sequence : scheduleModel.getSchedule().getSequences()) {
 									if (sequence.getName().equals(referenceSequence.getName())) {
-										bindToLadenOverlaps(sequence, referenceRow, referenceInterval, elementToRowMap);
+										bindToOverlaps(sequence, referenceRow, referenceInterval, elementToRowMap);
 									}
 								}
 							}
 						}
-						// }
 					}
 				}
 			}
 		}
 	}
 
-	private void bindToLadenOverlaps(final Sequence sequence, final Row referenceRow, final Interval referenceInterval, final Map<EObject, Row> elementToRowMap) {
+	private void bindToOverlaps(final Sequence sequence, final Row referenceRow, final Interval referenceInterval, final Map<EObject, Row> elementToRowMap) {
 		for (final Event event : sequence.getEvents()) {
-			// if (event instanceof Idle) {
-			// final Idle rowIdle = (Idle) event;
-			// if (rowIdle.isLaden()) {
-			// continue;
-			// }
-			//
-			// bindEvent(referenceRow, referenceInterval, elementToRowMap, rowIdle);
-			// }
 
 			EventGrouping thisGrouping = null;
 			if (event instanceof SlotVisit) {
@@ -129,40 +95,31 @@ public class EventGroupingOverlapProcessor implements IDiffProcessor {
 			} else if (event instanceof EventGrouping) {
 				thisGrouping = (EventGrouping) event;
 			}
-			// Event referenceEvent = (Event) referenceElement;
 			if (thisGrouping != null) {
 
-				if (thisGrouping != null) {
-					// SlotVisit slotVisit = (SlotVisit) event;
-					// Slot slot = slotVisit.getSlotAllocation().getSlot();
-					// if (slot instanceof LoadSlot) {
-					// CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
-					EList<Event> events = thisGrouping.getEvents();
-					Event firstEvent = events.get(0);
-					Event lastEvent = events.get(events.size() - 1);
+				final EList<Event> events = thisGrouping.getEvents();
+				final Event firstEvent = events.get(0);
+				final Event lastEvent = events.get(events.size() - 1);
 
-					final DateTime start = new DateTime(firstEvent.getStart());
+				final DateTime start = new DateTime(firstEvent.getStart());
 
-					final DateTime end = new DateTime(lastEvent.getEnd());
+				final DateTime end = new DateTime(lastEvent.getEnd());
 
-					final Interval interval = new Interval(start, end);
+				final Interval interval = new Interval(start, end);
 
-					bindEvent(referenceRow, referenceInterval, elementToRowMap, firstEvent, interval);
-					// }
-					// }
-				}
+				bindEvent(referenceRow, referenceInterval, elementToRowMap, firstEvent, interval);
 			}
 		}
 	}
 
-	private void bindEvent(final Row referenceRow, final Interval referenceInterval, final Map<EObject, Row> elementToRowMap, Event visit, final Interval interval) {
+	private void bindEvent(final Row referenceRow, final Interval referenceInterval, final Map<EObject, Row> elementToRowMap, final Event visit, final Interval interval) {
 
 		if (referenceInterval.overlaps(interval)) {
 
-			int overlapHours = Hours.hoursIn(referenceInterval.overlap(interval)).getHours();
-			int totalHours = Hours.hoursIn(interval).getHours();
+			final int overlapHours = Hours.hoursIn(referenceInterval.overlap(interval)).getHours();
+			final int totalHours = Hours.hoursIn(interval).getHours();
 
-			double ratio = (double) overlapHours / ((double) totalHours);
+			final double ratio = (double) overlapHours / ((double) totalHours);
 
 			if (ratio > .7) {
 				final CycleGroup group = CycleGroupUtils.createOrReturnCycleGroup(referenceRow.getTable(), referenceRow);
@@ -172,10 +129,10 @@ public class EventGroupingOverlapProcessor implements IDiffProcessor {
 					CycleGroupUtils.addToOrMergeCycleGroup(referenceRow.getTable(), r, group);
 				}
 			} else {
-				int overlapHours2 = Hours.hoursIn(referenceInterval.overlap(interval)).getHours();
-				int totalHours2 = Hours.hoursIn(referenceInterval).getHours();
+				final int overlapHours2 = Hours.hoursIn(referenceInterval.overlap(interval)).getHours();
+				final int totalHours2 = Hours.hoursIn(referenceInterval).getHours();
 
-				double ratio2 = (double) overlapHours2 / ((double) totalHours2);
+				final double ratio2 = (double) overlapHours2 / ((double) totalHours2);
 
 				if (ratio2 > .7) {
 					final CycleGroup group = CycleGroupUtils.createOrReturnCycleGroup(referenceRow.getTable(), referenceRow);
@@ -190,53 +147,6 @@ public class EventGroupingOverlapProcessor implements IDiffProcessor {
 			}
 
 		}
-	}
-
-	private void bindEvent(final Row referenceRow, final Interval referenceInterval, final Map<EObject, Row> elementToRowMap, final Idle event) {
-		final Event previousEvent = event.getPreviousEvent();
-
-		final DateTime start = new DateTime(previousEvent instanceof Journey ? previousEvent.getStart() : event.getStart());
-
-		final DateTime end = new DateTime(event.getEnd());
-
-		final Interval interval = new Interval(start, end);
-
-		if (referenceInterval.overlaps(interval)) {
-			// Min 2 days overlap!
-			if (Days.daysIn(referenceInterval.overlap(interval)).getDays() > 2) {
-				final CycleGroup group = CycleGroupUtils.createOrReturnCycleGroup(referenceRow.getTable(), referenceRow);
-				CycleGroupUtils.setChangeType(group, ChangeType.DURATION);
-				final Row r = elementToRowMap.get(event);
-				if (r != null) {
-					CycleGroupUtils.addToOrMergeCycleGroup(referenceRow.getTable(), r, group);
-				}
-			}
-		}
-	}
-
-	@Nullable
-	private Idle getLastIdle(final Row row) {
-		EventGrouping grouping = null;
-		if (row.getCargoAllocation() != null) {
-			grouping = row.getCargoAllocation();
-
-		} else if (row.getTarget() instanceof EventGrouping) {
-			grouping = (EventGrouping) row.getTarget();
-		}
-		if (grouping != null) {
-			final EList<Event> events = grouping.getEvents();
-			if (!events.isEmpty()) {
-				Event lastEvent = events.get(events.size() - 1);
-				// If last event is a cooldown, then work backwards as idle should preceed this.
-				if (lastEvent instanceof Cooldown) {
-					lastEvent = lastEvent.getPreviousEvent();
-				}
-				if (lastEvent instanceof Idle) {
-					return (Idle) lastEvent;
-				}
-			}
-		}
-		return null;
 	}
 
 	@Override
