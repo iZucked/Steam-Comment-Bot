@@ -10,26 +10,18 @@ import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.jdt.annotation.Nullable;
 import org.joda.time.DateTime;
-import org.joda.time.Days;
 import org.joda.time.Hours;
 import org.joda.time.Interval;
 
 import com.mmxlabs.lingo.reports.views.schedule.model.ChangeType;
-import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
-import com.mmxlabs.models.lng.analytics.Journey;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
-import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -122,11 +114,11 @@ public class EventGroupingOverlapProcessor implements IDiffProcessor {
 			final double ratio = (double) overlapHours / ((double) totalHours);
 
 			if (ratio > .7) {
-				final CycleGroup group = CycleGroupUtils.createOrReturnCycleGroup(referenceRow.getTable(), referenceRow);
-				CycleGroupUtils.setChangeType(group, ChangeType.DURATION);
+				final UserGroup group = CycleGroupUtils.createOrReturnUserGroup(referenceRow.getTable(), referenceRow);
+//				CycleGroupUtils.setChangeType(group, ChangeType.DURATION);
 				final Row r = elementToRowMap.get(visit);
 				if (r != null) {
-					CycleGroupUtils.addToOrMergeCycleGroup(referenceRow.getTable(), r, group);
+					CycleGroupUtils.addToOrMergeUserGroup(referenceRow.getTable(), r, group);
 				}
 			} else {
 				final int overlapHours2 = Hours.hoursIn(referenceInterval.overlap(interval)).getHours();
@@ -135,11 +127,11 @@ public class EventGroupingOverlapProcessor implements IDiffProcessor {
 				final double ratio2 = (double) overlapHours2 / ((double) totalHours2);
 
 				if (ratio2 > .7) {
-					final CycleGroup group = CycleGroupUtils.createOrReturnCycleGroup(referenceRow.getTable(), referenceRow);
-					CycleGroupUtils.setChangeType(group, ChangeType.DURATION);
+					final UserGroup group = CycleGroupUtils.createOrReturnUserGroup(referenceRow.getTable(), referenceRow);
+//					CycleGroupUtils.setChangeType(group, ChangeType.DURATION);
 					final Row r = elementToRowMap.get(visit);
 					if (r != null) {
-						CycleGroupUtils.addToOrMergeCycleGroup(referenceRow.getTable(), r, group);
+						CycleGroupUtils.addToOrMergeUserGroup(referenceRow.getTable(), r, group);
 					}
 
 				}
