@@ -22,12 +22,15 @@ import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.emf.databinding.edit.IEMFEditValueProperty;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -44,6 +47,7 @@ import org.joda.time.YearMonth;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.ui.forms.AbstractDataBindingFormDialog;
 
 /**
@@ -55,11 +59,25 @@ import com.mmxlabs.models.ui.forms.AbstractDataBindingFormDialog;
 public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 
 	public enum DataType {
-		Boolean, PositiveInt, Date, MonthYear
+		Boolean, PositiveInt, Date, MonthYear, Choice
 	}
 
 	public enum DataSection {
 		Main, Advanced
+	}
+
+	public static class ChoiceData {
+
+		private List<Pair<String, Object>> choices = new LinkedList<>();
+		private String defaultChoice = "";
+
+		public void addChoice(String name, Object value) {
+			choices.add(new Pair<>(name, value));
+		}
+
+		public void setDefault(String name) {
+			this.defaultChoice = name;
+		}
 	}
 
 	public static class OptionGroup {
@@ -73,17 +91,24 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		final EObject data;
 		final EObject defaultData;
 		final DataType dataType;
+		final ChoiceData choiceData;
 		final EStructuralFeature[] features;
 		final String label;
 		final EditingDomain editingDomain;
 
+//		public Option(final DataSection dataSection, final OptionGroup group, final EditingDomain editingDomain, final String label, final EObject data, final EObject defaultData,
+//				final DataType dataType, final EStructuralFeature... features) {
+//			this(dataSection, group, editingDomain, label, data, defaultData, dataType, null, features);
+//		}
+
 		public Option(final DataSection dataSection, final OptionGroup group, final EditingDomain editingDomain, final String label, final EObject data, final EObject defaultData,
-				final DataType dataType, final EStructuralFeature... features) {
+				final DataType dataType, ChoiceData choiceData, final EStructuralFeature... features) {
 			this.dataSection = dataSection;
 			this.group = group;
 			this.data = data;
 			this.defaultData = defaultData;
 			this.dataType = dataType;
+			this.choiceData = choiceData;
 			this.features = features;
 			this.editingDomain = editingDomain;
 			this.label = label;
@@ -108,30 +133,33 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		form.setText("Settings");
 		toolkit.decorateFormHeading(form.getForm());
 
-		// Add option to reset to default values
-		form.getToolBarManager().add(new Action("Reset to defaults") {
-			@Override
-			public void run() {
+		// Disable reset button as choice control does not work correctly with it.
 
-				for (final Map.Entry<DataSection, List<Option>> e : optionsMap.entrySet()) {
-
-					for (final Option option : e.getValue()) {
-
-						EObject from = option.defaultData;
-						EObject to = option.data;
-						for (int i = 0; i < option.features.length - 1; ++i) {
-							from = (EObject) from.eGet(option.features[i]);
-							to = (EObject) to.eGet(option.features[i]);
-						}
-						final EStructuralFeature f = option.features[option.features.length - 1];
-						to.eSet(f, from.eGet(f));
-
-					}
-					dbc.updateTargets();
-				}
-			}
-		});
-		form.getToolBarManager().update(true);
+		// // Add option to reset to default values
+		// form.getToolBarManager().add(new Action("Reset to defaults") {
+		// @Override
+		// public void run() {
+		//
+		// for (final Map.Entry<DataSection, List<Option>> e : optionsMap.entrySet()) {
+		//
+		// for (final Option option : e.getValue()) {
+		//
+		// EObject from = option.defaultData;
+		// if (from != null) {
+		// EObject to = option.data;
+		// for (int i = 0; i < option.features.length - 1; ++i) {
+		// from = (EObject) from.eGet(option.features[i]);
+		// to = (EObject) to.eGet(option.features[i]);
+		// }
+		// final EStructuralFeature f = option.features[option.features.length - 1];
+		// to.eSet(f, from.eGet(f));
+		// }
+		// }
+		// dbc.updateTargets();
+		// }
+		// }
+		// });
+		// form.getToolBarManager().update(true);
 
 		final GridLayout layout = new GridLayout(1, true);
 		form.getBody().setLayout(layout);
@@ -203,6 +231,8 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		case MonthYear:
 			createMonthYearEditor(parent, option);
 			break;
+		case Choice:
+			createChoiceEditor(parent, option);
 		default:
 			break;
 		}
@@ -405,6 +435,112 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 
 	}
 
+	private Composite createChoiceEditor(final Composite parent, final Option option) {
+		final Composite area = toolkit.createComposite(parent, SWT.NONE);
+
+		ChoiceData choiceData = option.choiceData;
+
+		area.setLayout(new GridLayout(1 + choiceData.choices.size(), false));
+		area.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
+		toolkit.createLabel(area, option.label);
+
+		EObject owner = option.data;
+		for (int i = 0; i < option.features.length - 1; ++i) {
+			owner = (EObject) owner.eGet(option.features[i]);
+		}
+		final EObject target = owner;
+		final EStructuralFeature lastFeature = option.features[option.features.length - 1];
+
+		boolean actualValueSet = false;
+		for (final Pair<String, Object> p : choiceData.choices) {
+			final Button btn = toolkit.createButton(area, p.getFirst(), SWT.RADIO);
+			if (p.getSecond().equals(target.eGet(lastFeature))) {
+				btn.setSelection(true);
+				actualValueSet = true;
+			} else if (!actualValueSet && p.getFirst().equals(choiceData.defaultChoice)) {
+				btn.setSelection(true);
+			}
+
+			btn.addSelectionListener(new SelectionListener() {
+
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					if (btn.getSelection()) {
+						option.editingDomain.getCommandStack().execute(SetCommand.create(option.editingDomain, target, lastFeature, p.getSecond()));
+					}
+				}
+
+				@Override
+				public void widgetDefaultSelected(SelectionEvent e) {
+
+				}
+			});
+		}
+
+		// final DateTimeFormatter format = DateTimeFormat.forPattern("MM/yy");
+		//
+		// final IValidator validator = new IValidator() {
+		// @Override
+		// public IStatus validate(final Object value) {
+		// if (value instanceof String) {
+		// if (value.equals("") == false) {
+		// try {
+		// format.parseLocalDate((String) value);
+		// } catch (final IllegalArgumentException e) {
+		// return ValidationStatus.error(String.format("'%s' is not a valid date.", value));
+		// }
+		// }
+		// }
+		// return ValidationStatus.ok();
+		// }
+		// };
+		//
+		// final Text text = toolkit.createText(area, null, SWT.NONE);
+		// text.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
+		//
+		// final IEMFEditValueProperty prop = EMFEditProperties.value(option.editingDomain, FeaturePath.fromList(option.features));
+		//
+		// final EMFUpdateValueStrategy stringToDateStrategy = new EMFUpdateValueStrategy() {
+		// @Override
+		// protected IConverter createConverter(final Object fromType, final Object toType) {
+		// return new Converter(fromType, toType) {
+		// @Override
+		// public Object convert(final Object fromObject) {
+		// final String value = fromObject == null ? null : fromObject.toString();
+		// try {
+		// return new YearMonth(format.parseLocalDate(value));
+		// } catch (final Exception e) {
+		// return null;
+		// }
+		// }
+		// };
+		// }
+		// };
+		//
+		// final EMFUpdateValueStrategy dateToStringStrategy = new EMFUpdateValueStrategy() {
+		// @Override
+		// protected IConverter createConverter(final Object fromType, final Object toType) {
+		// return new Converter(fromType, toType) {
+		// @Override
+		// public Object convert(final Object fromObject) {
+		// if (fromObject instanceof YearMonth) {
+		// return format.print((YearMonth) fromObject);
+		// }
+		// return null;
+		// }
+		// };
+		// }
+		// };
+		//
+		// stringToDateStrategy.setAfterGetValidator(validator);
+		//
+		// final Binding bindValue = dbc.bindValue(WidgetProperties.text(SWT.Modify).observeDelayed(500, text), prop.observe(option.data), stringToDateStrategy, dateToStringStrategy);
+		// ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT);
+
+		return area;
+
+	}
+
 	public OptionGroup createGroup(final DataSection dataSection, final String name) {
 		final OptionGroup group = new OptionGroup();
 		group.name = name;
@@ -425,6 +561,22 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 	 */
 	public void addOption(final DataSection dataSection, final OptionGroup group, final EditingDomain editingDomian, final String label, final EObject data, final EObject defaultData,
 			final DataType dataType, final EStructuralFeature... features) {
+		addOption(dataSection, group, editingDomian, label, data, defaultData, dataType, null, features);
+	}
+
+	/**
+	 * Adds new elements to the dialog.
+	 * 
+	 * @param dataSection
+	 * @param editingDomian
+	 * @param label
+	 * @param data
+	 * @param defaultData
+	 * @param dataType
+	 * @param features
+	 */
+	public void addOption(final DataSection dataSection, final OptionGroup group, final EditingDomain editingDomian, final String label, final EObject data, final EObject defaultData,
+			final DataType dataType, ChoiceData choiceData, final EStructuralFeature... features) {
 
 		if (group != null) {
 			if (dataSection != group.dataSection) {
@@ -432,7 +584,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 			}
 		}
 
-		final Option option = new Option(dataSection, group, editingDomian, label, data, defaultData, dataType, features);
+		final Option option = new Option(dataSection, group, editingDomian, label, data, defaultData, dataType, choiceData, features);
 		final List<Option> options;
 		if (optionsMap.containsKey(dataSection)) {
 			options = optionsMap.get(dataSection);

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
+import java.awt.print.PageFormat;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -34,7 +35,9 @@ import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.models.lng.parameters.Objective;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.parameters.provider.ParametersItemProviderAdapterFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
@@ -57,6 +60,8 @@ import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCore;
+import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCoreFactory;
 
 public final class OptimisationHelper {
 
@@ -260,20 +265,12 @@ public final class OptimisationHelper {
 			final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 			adapterFactory.addAdapterFactory(new ParametersItemProviderAdapterFactory());
 			adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
-			final EditingDomain editingDomian = new AdapterFactoryEditingDomain(adapterFactory, new BasicCommandStack());
+			final EditingDomain editingDomain = new AdapterFactoryEditingDomain(adapterFactory, new BasicCommandStack());
 
 			// Fire up a dialog
 			final ParameterModesDialog dialog = new ParameterModesDialog(display.getActiveShell());
 
 			final OptimiserSettings copy = EcoreUtil.copy(previousSettings);
-
-			dialog.addOption(DataSection.Main, null, editingDomian, "Shipping Only Optimisation", copy, defaultSettings, DataType.Boolean,
-					ParametersPackage.eINSTANCE.getOptimiserSettings_ShippingOnly());
-
-			if (SecurityUtils.getSubject().isPermitted("features:optimisation-charter-out-generation")) {
-				dialog.addOption(DataSection.Main, null, editingDomian, "Generate Charter Outs", copy, defaultSettings, DataType.Boolean,
-						ParametersPackage.eINSTANCE.getOptimiserSettings_GenerateCharterOuts());
-			}
 
 			if (!forEvaluation) {
 				// dialog.addOption(DataSection.Advanced, editingDomian, "Number of Iterations", copy, defaultSettings, DataType.PositiveInt,
@@ -282,10 +279,62 @@ public final class OptimisationHelper {
 				// Check period optimisation is permitted
 				if (SecurityUtils.getSubject().isPermitted("features:optimisation-period")) {
 					final OptionGroup group = dialog.createGroup(DataSection.Main, "Optimise between");
-					dialog.addOption(DataSection.Main, group, editingDomian, "Start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear, ParametersPackage.eINSTANCE.getOptimiserSettings_Range(),
+					dialog.addOption(DataSection.Main, group, editingDomain, "Start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear, ParametersPackage.eINSTANCE.getOptimiserSettings_Range(),
 							ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
-					dialog.addOption(DataSection.Main, group, editingDomian, "Up to start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear,
+					dialog.addOption(DataSection.Main, group, editingDomain, "Up to start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear,
 							ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseBefore());
+				}
+
+				final OptionGroup switchesGroup = dialog.createGroup(DataSection.Main, "Switches");
+				{
+					final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+					choiceData.addChoice("Off", Boolean.FALSE);
+					choiceData.addChoice("On", Boolean.TRUE);
+					// choiceData.addChoice("High", 2);
+					choiceData.setDefault("Off");
+					dialog.addOption(DataSection.Main, switchesGroup, editingDomain, "Shipping Only Optimisation: ", copy, defaultSettings, DataType.Choice, choiceData,
+							ParametersPackage.eINSTANCE.getOptimiserSettings_ShippingOnly());
+				}
+				// dialog.addOption(DataSection.Main, null, editingDomian, "Shipping Only Optimisation", copy, defaultSettings, DataType.Boolean,
+				// ParametersPackage.eINSTANCE.getOptimiserSettings_ShippingOnly());
+
+				if (SecurityUtils.getSubject().isPermitted("features:optimisation-charter-out-generation")) {
+					// dialog.addOption(DataSection.Main, null, editingDomian, "Generate Charter Outs", copy, defaultSettings, DataType.Choice,
+					// ParametersPackage.eINSTANCE.getOptimiserSettings_GenerateCharterOuts());
+
+					final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+					choiceData.addChoice("Off", Boolean.FALSE);
+					choiceData.addChoice("On", Boolean.TRUE);
+					// choiceData.addChoice("High", 2);
+					choiceData.setDefault("Off");
+
+					// dialog.addOption(DataSection.Main, null, editingDomian, "Similarity", copy, defaultSettings, DataType.Choice, choiceData,
+					// ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
+					dialog.addOption(DataSection.Main, switchesGroup, editingDomain, "Generate Charter Outs: ", copy, defaultSettings, DataType.Choice, choiceData,
+							ParametersPackage.eINSTANCE.getOptimiserSettings_GenerateCharterOuts());
+
+				}
+				if (true || SecurityUtils.getSubject().isPermitted("features:optimisation-similarity")) {
+
+					final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+					choiceData.addChoice("Off", 0.0);
+					choiceData.addChoice("Low", 250000.0);
+					choiceData.addChoice("High", 1000000.0);
+					choiceData.setDefault("Off");
+
+					Objective objective = findObjective(SimilarityFitnessCoreFactory.NAME, copy);
+					if (objective == null) {
+						objective = ParametersFactory.eINSTANCE.createObjective();
+						objective.setEnabled(true);
+						objective.setWeight(0.0);
+						objective.setName(SimilarityFitnessCoreFactory.NAME);
+						copy.getObjectives().add(objective);
+					}
+
+					if (objective != null) {
+						dialog.addOption(DataSection.Main, switchesGroup, editingDomain, "Similarity: ", objective, findObjective(SimilarityFitnessCoreFactory.NAME, defaultSettings), DataType.Choice,
+								choiceData, ParametersPackage.Literals.OBJECTIVE__WEIGHT);
+					}
 				}
 			}
 
@@ -338,8 +387,30 @@ public final class OptimisationHelper {
 
 		to.setShippingOnly(from.isShippingOnly());
 		to.setGenerateCharterOuts(from.isGenerateCharterOuts());
-		if (from.getSimilaritySettings()!=null) {
+		if (from.getSimilaritySettings() != null) {
 			to.setSimilaritySettings(from.getSimilaritySettings());
 		}
+
+		{
+			final Objective fromSimilarity = findObjective(SimilarityFitnessCoreFactory.NAME, from);
+			final Objective toSimilarity = findObjective(SimilarityFitnessCoreFactory.NAME, to);
+			if (toSimilarity == null && fromSimilarity != null) {
+				to.getObjectives().add(EcoreUtil.copy(fromSimilarity));
+			} else if (toSimilarity != null && fromSimilarity == null) {
+				to.getObjectives().remove(toSimilarity);
+			} else if (toSimilarity != null && fromSimilarity != null) {
+				toSimilarity.setEnabled(fromSimilarity.isEnabled());
+				toSimilarity.setWeight(fromSimilarity.getWeight());
+			}
+		}
+	}
+
+	private static Objective findObjective(final String objective, final OptimiserSettings settings) {
+		for (final Objective o : settings.getObjectives()) {
+			if (SimilarityFitnessCoreFactory.NAME.equals(o.getName())) {
+				return o;
+			}
+		}
+		return null;
 	}
 }
