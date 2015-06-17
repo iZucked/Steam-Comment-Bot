@@ -33,8 +33,8 @@ public class PortRotationsReportTransformer {
 			private final Map<Object, ScenarioInstance> elementMap = new HashMap<>();
 			private final List<Object> elementList =  new ArrayList<>();
 			@Override
-			public void beginCollecting() {
-				super.beginCollecting();
+			public void beginCollecting(final boolean pinDiffMode) {
+				super.beginCollecting(pinDiffMode);
 
 				elements.clear();
 				numberOfSchedules = 0;

@@ -10,8 +10,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
- * Used to collect data elements from potentially multiple scenarios when compiling reports (collectElements(...) 
- * typically returns a list of RowData for each schedule instance).
+ * Used to collect data elements from potentially multiple scenarios when compiling reports (collectElements(...) typically returns a list of RowData for each schedule instance).
  * 
  * @author proshun
  */
@@ -20,7 +19,7 @@ public interface IScenarioInstanceElementCollector {
 	 * Notify implementors that we are beginning a new element collection process. Expect zero or more calls to {@link #collectElements(LNGScenarioModel, boolean)} followed by a call to
 	 * {@link #endCollecting()}
 	 */
-	public void beginCollecting();
+	public void beginCollecting(boolean pinDiffMode);
 
 	/**
 	 * Notify implementors that all scenarios have been presented. Implementors should finalise any data processing. No more calls to {@link #collectElements(LNGScenarioModel, boolean)} are expected.

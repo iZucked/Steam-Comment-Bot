@@ -172,7 +172,7 @@ public class UserManagedScenarioViewerSynchronizer implements IScenarioServiceSe
 		final List<LNGScenarioModel> scenarioModels = new ArrayList<LNGScenarioModel>();
 		final List<LNGPortfolioModel> portfolioModels = new ArrayList<LNGPortfolioModel>();
 
-		collector.beginCollecting();
+		collector.beginCollecting(selectionProvider.getPinnedInstance() != null);
 
 		for (final ScenarioInstance job : selectionProvider.getSelection()) {
 			final IScenarioService scenarioService = job.getScenarioService();

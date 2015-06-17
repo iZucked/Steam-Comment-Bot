@@ -119,7 +119,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		return new IScenarioInstanceElementCollector() {
 
 			@Override
-			public void beginCollecting() {
+			public void beginCollecting(boolean pinDiffMode) {
 
 			}
 

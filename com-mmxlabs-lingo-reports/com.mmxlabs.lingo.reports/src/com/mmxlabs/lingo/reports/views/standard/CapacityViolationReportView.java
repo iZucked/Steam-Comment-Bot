@@ -177,8 +177,8 @@ public class CapacityViolationReportView extends EMFReportView {
 			private EObject dataModelInstance;
 
 			@Override
-			public void beginCollecting() {
-				super.beginCollecting();
+			public void beginCollecting(boolean pinDiffMode) {
+				super.beginCollecting(pinDiffMode);
 				CapacityViolationReportView.this.clearPinModeData();
 
 				dataModelInstance = GenericEMFTableDataModel.createRootInstance(tableDataModel);

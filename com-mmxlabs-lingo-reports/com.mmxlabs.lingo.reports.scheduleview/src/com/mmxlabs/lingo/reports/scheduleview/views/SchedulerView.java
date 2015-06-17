@@ -929,8 +929,8 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 			}
 
 			@Override
-			public void beginCollecting() {
-				super.beginCollecting();
+			public void beginCollecting(final boolean pinDiffMode) {
+				super.beginCollecting(pinDiffMode);
 				SchedulerView.this.clearPinModeData();
 			}
 

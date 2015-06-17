@@ -150,8 +150,8 @@ public class ScheduleReportTransformer {
 			private final List<IDiffProcessor> diffProcessors = new LinkedList<>();
 
 			@Override
-			public void beginCollecting() {
-				super.beginCollecting();
+			public void beginCollecting(final boolean pinDiffMode) {
+				super.beginCollecting(pinDiffMode);
 				numberOfSchedules = 0;
 				isPinned = false;
 				perScenarioElementsByKeyMap.clear();

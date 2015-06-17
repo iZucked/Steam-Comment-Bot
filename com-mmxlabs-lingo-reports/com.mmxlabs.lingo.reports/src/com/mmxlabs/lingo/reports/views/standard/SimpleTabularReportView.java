@@ -266,7 +266,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 			private int numberOfSchedules;
 
 			@Override
-			public void beginCollecting() {
+			public void beginCollecting(boolean pinDiffMode) {
 				hasPin = false;
 				numberOfSchedules = 0;
 			}

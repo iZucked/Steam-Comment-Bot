@@ -314,7 +314,7 @@ public class HorizontalKPIReportView extends ViewPart {
 
 		// Create the help context id for the viewer's control
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Reports_Headline");
-
+		//
 		partListener = new IPartListener() {
 			@Override
 			public void partOpened(final IWorkbenchPart part) {
@@ -379,12 +379,13 @@ public class HorizontalKPIReportView extends ViewPart {
 			// Ignore these errors
 		}
 		viewerSynchronizer = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
-			// private boolean hasPin = false;
+			private boolean pinDiffMode = false;
+
 			// private int numberOfSchedules;
 
 			@Override
-			public void beginCollecting() {
-				// numberOfSchedules = 0;
+			public void beginCollecting(boolean pinDiffMode) {
+				this.pinDiffMode = pinDiffMode;
 			}
 
 			@Override
@@ -394,13 +395,27 @@ public class HorizontalKPIReportView extends ViewPart {
 
 			@Override
 			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final Schedule schedule, final boolean pinned) {
-
-				if (pinned || (scheduleModel != null && schedule == scheduleModel.getSchedule())) {
+				if (pinDiffMode) {
+					// if (pinned ) {//|| (scheduleModel != null && schedule == scheduleModel.getSchedule())) {
 					// ++numberOfSchedules;
-					return Lists.newArrayList(schedule, new Object());
+					return Lists.newArrayList(schedule);
+					// } else {
+					// }
+					// return Lists.newArrayList();
+
 				} else {
-					return Lists.newArrayList(new Object());
+					if (scheduleModel != null && schedule == scheduleModel.getSchedule()) {
+						// ++numberOfSchedules;
+						return Lists.newArrayList(schedule);
+					}
 				}
+
+				// if (pinned ) {//|| (scheduleModel != null && schedule == scheduleModel.getSchedule())) {
+				// ++numberOfSchedules;
+				// return Lists.newArrayList(schedule);
+				// } else {
+				// }
+				return Lists.newArrayList();
 			}
 		});
 	}

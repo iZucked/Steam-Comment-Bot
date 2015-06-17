@@ -141,9 +141,9 @@ public class LatenessReportView extends EMFReportView {
 		return new ScheduledEventCollector() {
 
 			@Override
-			public void beginCollecting() {
+			public void beginCollecting(boolean pinDiffMode) {
 				clearPinModeData();
-				super.beginCollecting();
+				super.beginCollecting(pinDiffMode);
 			}
 
 			@Override

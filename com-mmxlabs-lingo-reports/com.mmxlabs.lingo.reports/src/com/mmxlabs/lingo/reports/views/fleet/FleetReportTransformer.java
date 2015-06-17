@@ -71,8 +71,8 @@ public class FleetReportTransformer {
 			private final List<LNGScenarioModel> rootObjects = new LinkedList<>();
 
 			@Override
-			public void beginCollecting() {
-				super.beginCollecting();
+			public void beginCollecting(boolean pinDiffMode) {
+				super.beginCollecting(pinDiffMode);
 				numberOfSchedules = 0;
 				isPinned = false;
 				perScenarioElementsByKeyMap.clear();

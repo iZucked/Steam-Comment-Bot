@@ -25,18 +25,18 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 public abstract class ScheduleElementCollector implements IScenarioInstanceElementCollector {
 	@Override
 	public Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final LNGScenarioModel rootObject, final boolean pinned) {
-		Schedule lastScheduleFromScenario = getLastScheduleFromScenario(rootObject);
+		final Schedule lastScheduleFromScenario = getLastScheduleFromScenario(rootObject);
 		if (lastScheduleFromScenario != null)
 			return collectElements(scenarioInstance, lastScheduleFromScenario, pinned);
 		else
 			return Collections.emptySet();
 	}
 
-	protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, Schedule schedule) {
+	protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final Schedule schedule) {
 		return collectElements(scenarioInstance, schedule, false);
 	}
 
-	protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, Schedule schedule, boolean pinned) {
+	protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final Schedule schedule, final boolean pinned) {
 		return collectElements(scenarioInstance, schedule);
 	}
 
@@ -57,7 +57,7 @@ public abstract class ScheduleElementCollector implements IScenarioInstanceEleme
 	}
 
 	@Override
-	public void beginCollecting() {
+	public void beginCollecting(final boolean pinDiffMode) {
 
 	}
 
