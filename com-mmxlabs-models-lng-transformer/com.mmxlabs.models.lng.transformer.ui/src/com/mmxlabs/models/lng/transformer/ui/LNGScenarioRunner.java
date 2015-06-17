@@ -338,7 +338,7 @@ public class LNGScenarioRunner {
 
 				final ModelEntityMap subModelEntityMap = subTransformer.getModelEntityMap();
 				final IAnnotatedSolution finalSolution = LNGSchedulerJobUtils.evaluateCurrentState(subTransformer);
-				return LNGSchedulerJobUtils.exportSolution(subTransformer.getInjector(), originalScenario, subTransformer.getOptimiserSettings(), originalEditingDomain, subModelEntityMap,
+				return LNGSchedulerJobUtils.exportSolution(subTransformer.getInjector(), originalScenario, EcoreUtil.copy(optimiserSettings), originalEditingDomain, subModelEntityMap,
 						finalSolution, currentProgress);
 			}
 		}
