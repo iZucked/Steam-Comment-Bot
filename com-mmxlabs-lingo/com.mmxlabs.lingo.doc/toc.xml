@@ -11,20 +11,20 @@
    <topic label="Editing" href="ch02.html">
       <topic label="Trades Tab" href="ch02.html#Editor_Trades"/>
       <topic label="Fleet Tab" href="ch02s02.html">
-         <topic label="Fleet Availability Editor" href="ch02s02.html#d0e604"/>
-         <topic label="Charter Out Editor" href="ch02s02.html#d0e752"/>
-         <topic label="Dry Dock / Maintenance Editor" href="ch02s02.html#d0e886"/>
+         <topic label="Fleet Availability Editor" href="ch02s02.html#d0e623"/>
+         <topic label="Charter Out Editor" href="ch02s02.html#d0e771"/>
+         <topic label="Dry Dock / Maintenance Editor" href="ch02s02.html#d0e905"/>
       </topic>
       <topic label="Commercial Tab" href="ch02s03.html">
-         <topic label="Contract Tab" href="ch02s03.html#d0e983"/>
-         <topic label="Pricing Tab" href="ch02s03.html#d0e1103"/>
-         <topic label="Restrictions Tab" href="ch02s03.html#d0e1109"/>
-         <topic label="Entity Editor" href="ch02s03.html#d0e1180"/>
+         <topic label="Contract Tab" href="ch02s03.html#d0e1002"/>
+         <topic label="Pricing Tab" href="ch02s03.html#d0e1122"/>
+         <topic label="Restrictions Tab" href="ch02s03.html#d0e1128"/>
+         <topic label="Entity Editor" href="ch02s03.html#d0e1199"/>
       </topic>
       <topic label="Markets Tab" href="ch02s04.html"/>
       <topic label="Charters Tab" href="ch02s05.html"/>
       <topic label="Spot Cargoes" href="ch02s06.html">
-         <topic label="Spot Market Editor" href="ch02s06.html#d0e1220"/>
+         <topic label="Spot Market Editor" href="ch02s06.html#d0e1239"/>
       </topic>
       <topic label="Data Perspective: Editing Views" href="ch02s07.html">
          <topic label="Cooldown Costs" href="ch02s07.html#Editor_CooldownCosts"/>
@@ -58,21 +58,21 @@
       <topic label="The Pricing Section" href="ch04s03.html"/>
       <topic label="The Window Section" href="ch04s04.html"/>
       <topic label="The Terms Section" href="ch04s05.html">
-         <topic label="Inputs for load slots only:" href="ch04s05.html#d0e1973"/>
-         <topic label="Terms Inputs for discharge slots only:" href="ch04s05.html#d0e2007"/>
-         <topic label="Terms Inputs for all slots:" href="ch04s05.html#d0e2041"/>
-         <topic label="Terms Inputs for DES purchases and FOB sales only:" href="ch04s05.html#d0e2091"/>
-         <topic label="Terms Inputs for DES purchases only:" href="ch04s05.html#d0e2125"/>
+         <topic label="Inputs for load slots only:" href="ch04s05.html#d0e1992"/>
+         <topic label="Terms Inputs for discharge slots only:" href="ch04s05.html#d0e2026"/>
+         <topic label="Terms Inputs for all slots:" href="ch04s05.html#d0e2060"/>
+         <topic label="Terms Inputs for DES purchases and FOB sales only:" href="ch04s05.html#d0e2110"/>
+         <topic label="Terms Inputs for DES purchases only:" href="ch04s05.html#d0e2144"/>
       </topic>
       <topic label="Vessel Class Fields" href="ch04s06.html">
-         <topic label="Laden / Ballast Attributes" href="ch04s06.html#d0e2289"/>
+         <topic label="Laden / Ballast Attributes" href="ch04s06.html#d0e2308"/>
       </topic>
       <topic label="Contract Fields" href="ch04s07.html">
-         <topic label="The Restrictions Tab" href="ch04s07.html#d0e2463"/>
+         <topic label="The Restrictions Tab" href="ch04s07.html#d0e2482"/>
       </topic>
    </topic>
    <topic label="How Tos" href="ch05.html">
-      <topic label="Enable/Disable auto evaluate" href="ch05.html#d0e2543"/>
+      <topic label="Enable/Disable auto evaluate" href="ch05.html#d0e2562"/>
       <topic label="Undo Changes" href="ch05s02.html"/>
       <topic label="Add a new Cargo" href="ch05s03.html"/>
       <topic label="What Is A Vessel Class?" href="ch05s04.html"/>
