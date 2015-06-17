@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
-import java.awt.print.PageFormat;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -290,8 +289,6 @@ public final class OptimisationHelper {
 					final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
 					choiceData.addChoice("Off", Boolean.FALSE);
 					choiceData.addChoice("On", Boolean.TRUE);
-					// choiceData.addChoice("High", 2);
-					choiceData.setDefault("Off");
 					dialog.addOption(DataSection.Main, switchesGroup, editingDomain, "Shipping Only Optimisation: ", copy, defaultSettings, DataType.Choice, choiceData,
 							ParametersPackage.eINSTANCE.getOptimiserSettings_ShippingOnly());
 				}
@@ -305,8 +302,6 @@ public final class OptimisationHelper {
 					final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
 					choiceData.addChoice("Off", Boolean.FALSE);
 					choiceData.addChoice("On", Boolean.TRUE);
-					// choiceData.addChoice("High", 2);
-					choiceData.setDefault("Off");
 
 					// dialog.addOption(DataSection.Main, null, editingDomian, "Similarity", copy, defaultSettings, DataType.Choice, choiceData,
 					// ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
@@ -320,7 +315,6 @@ public final class OptimisationHelper {
 					choiceData.addChoice("Off", 0.0);
 					choiceData.addChoice("Low", 250000.0);
 					choiceData.addChoice("High", 1000000.0);
-					choiceData.setDefault("Off");
 
 					Objective objective = findObjective(SimilarityFitnessCoreFactory.NAME, copy);
 					if (objective == null) {

@@ -24,7 +24,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.window.IShellProvider;
@@ -69,14 +68,9 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 	public static class ChoiceData {
 
 		private List<Pair<String, Object>> choices = new LinkedList<>();
-		private String defaultChoice = "";
 
 		public void addChoice(String name, Object value) {
 			choices.add(new Pair<>(name, value));
-		}
-
-		public void setDefault(String name) {
-			this.defaultChoice = name;
 		}
 	}
 
@@ -96,10 +90,10 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		final String label;
 		final EditingDomain editingDomain;
 
-//		public Option(final DataSection dataSection, final OptionGroup group, final EditingDomain editingDomain, final String label, final EObject data, final EObject defaultData,
-//				final DataType dataType, final EStructuralFeature... features) {
-//			this(dataSection, group, editingDomain, label, data, defaultData, dataType, null, features);
-//		}
+		// public Option(final DataSection dataSection, final OptionGroup group, final EditingDomain editingDomain, final String label, final EObject data, final EObject defaultData,
+		// final DataType dataType, final EStructuralFeature... features) {
+		// this(dataSection, group, editingDomain, label, data, defaultData, dataType, null, features);
+		// }
 
 		public Option(final DataSection dataSection, final OptionGroup group, final EditingDomain editingDomain, final String label, final EObject data, final EObject defaultData,
 				final DataType dataType, ChoiceData choiceData, final EStructuralFeature... features) {
@@ -451,13 +445,9 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		final EObject target = owner;
 		final EStructuralFeature lastFeature = option.features[option.features.length - 1];
 
-		boolean actualValueSet = false;
 		for (final Pair<String, Object> p : choiceData.choices) {
 			final Button btn = toolkit.createButton(area, p.getFirst(), SWT.RADIO);
 			if (p.getSecond().equals(target.eGet(lastFeature))) {
-				btn.setSelection(true);
-				actualValueSet = true;
-			} else if (!actualValueSet && p.getFirst().equals(choiceData.defaultChoice)) {
 				btn.setSelection(true);
 			}
 
@@ -476,66 +466,6 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 				}
 			});
 		}
-
-		// final DateTimeFormatter format = DateTimeFormat.forPattern("MM/yy");
-		//
-		// final IValidator validator = new IValidator() {
-		// @Override
-		// public IStatus validate(final Object value) {
-		// if (value instanceof String) {
-		// if (value.equals("") == false) {
-		// try {
-		// format.parseLocalDate((String) value);
-		// } catch (final IllegalArgumentException e) {
-		// return ValidationStatus.error(String.format("'%s' is not a valid date.", value));
-		// }
-		// }
-		// }
-		// return ValidationStatus.ok();
-		// }
-		// };
-		//
-		// final Text text = toolkit.createText(area, null, SWT.NONE);
-		// text.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
-		//
-		// final IEMFEditValueProperty prop = EMFEditProperties.value(option.editingDomain, FeaturePath.fromList(option.features));
-		//
-		// final EMFUpdateValueStrategy stringToDateStrategy = new EMFUpdateValueStrategy() {
-		// @Override
-		// protected IConverter createConverter(final Object fromType, final Object toType) {
-		// return new Converter(fromType, toType) {
-		// @Override
-		// public Object convert(final Object fromObject) {
-		// final String value = fromObject == null ? null : fromObject.toString();
-		// try {
-		// return new YearMonth(format.parseLocalDate(value));
-		// } catch (final Exception e) {
-		// return null;
-		// }
-		// }
-		// };
-		// }
-		// };
-		//
-		// final EMFUpdateValueStrategy dateToStringStrategy = new EMFUpdateValueStrategy() {
-		// @Override
-		// protected IConverter createConverter(final Object fromType, final Object toType) {
-		// return new Converter(fromType, toType) {
-		// @Override
-		// public Object convert(final Object fromObject) {
-		// if (fromObject instanceof YearMonth) {
-		// return format.print((YearMonth) fromObject);
-		// }
-		// return null;
-		// }
-		// };
-		// }
-		// };
-		//
-		// stringToDateStrategy.setAfterGetValidator(validator);
-		//
-		// final Binding bindValue = dbc.bindValue(WidgetProperties.text(SWT.Modify).observeDelayed(500, text), prop.observe(option.data), stringToDateStrategy, dateToStringStrategy);
-		// ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT);
 
 		return area;
 
