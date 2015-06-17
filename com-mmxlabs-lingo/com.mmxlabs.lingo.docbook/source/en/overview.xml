@@ -169,15 +169,7 @@
 			optimisation) is being done by the application on a scenario, so
 			that
 			the scenario is not available
-			for editing. A red circle
-			<inlinegraphic fileref="resources/scenario-navigator/nav-progress.png" width="0.477cm" depth="0.53cm" />
-			will appear when work is being done on a scenario, turning
-			gradually
-			green to indicate progress.
-		</para>
-
-		<para>
-			Finally, any scenario
+			for editing. A scenario
 			<inlinegraphic fileref="resources/scenario-navigator/ScenarioInstance.gif" width="0.424cm" depth="0.424cm" />
 			may also be overlaid with icons showing it has validation warnings
 			<inlinegraphic fileref="resources/scenario-navigator/nav-warning.gif" width="0.424cm" depth="0.424cm" />

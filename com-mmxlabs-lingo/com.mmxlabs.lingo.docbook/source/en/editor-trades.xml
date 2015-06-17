@@ -37,41 +37,71 @@
 			</tbody>
 		</tgroup>
 	</informaltable>
-	<para>
-		The central wiring column gives a visualisation of the slots, their
-		types and how they are linked to form cargoes. Each slot is
-		represented by a circle, with
-		purchase slots on the left, and sale
-		slots on the right. Filled circles
-		<inlinegraphic fileref="resources/editor/trades/fob-green.png" depth="0.371cm" />
-		<inlinegraphic fileref="resources/editor/trades/fob-red.png" depth="0.371cm" />
-		indicate FOB slots, and empty circles
-		<inlinegraphic fileref="resources/editor/trades/des-green.png" depth="0.371cm" />
-		<inlinegraphic fileref="resources/editor/trades/des-red.png" depth="0.371cm" />
-		indicate DES slots. A dot in the centre of a circle
-		<inlinegraphic fileref="resources/editor/trades/optional.png" depth="0.371cm" />
-		indicates that the slot is optional; if there is no dot, the slot
-		must be fulfilled.
-		<inlinegraphic fileref="resources/editor/trades/wiring-diagram.png" width="10.48cm" depth="6.496cm" />
-	</para>
-	<para>
-		A grey line
-		<inlinegraphic fileref="resources/editor/trades/grey-line.png" width="2.435cm" depth="0.53cm" />
-		between circles means that the cargo cannot be rewired by the
-		optimiser; these slots will remain paired together after
-		optimisation.
-	</para>
-	<para>
-		If circles are joined by a black line
-		<inlinegraphic fileref="resources/editor/trades/black-line.png" width="2.488cm" depth="0.61cm" />
-		between circles, the optimiser will consider linking the slots with other buy or sell opportunities instead.
-	</para>
+
+
+	<informaltable frame="none">
+		<tgroup cols="2">
+			<colspec colnum="1" colname="col1" colwidth="1*" />
+			<colspec colnum="2" colname="col2" colwidth="4*" />
+			<tbody>
+				<row>
+					<entry>
+						<informalfigure>
+							<mediaobject>
+								<imageobject>
+									<imagedata fileref="resources/editor/trades/wiring-diagram.png" width="10.48cm" depth="6.496cm" />
+								</imageobject>
+							</mediaobject>
+						</informalfigure>
+					</entry>
+					<entry>
+						<para>
+							The central wiring column gives a visualisation of the slots, their
+							types and how they are linked to form cargoes. Each slot is
+							represented by a circle,
+							with
+							purchase slots on the left, and sale
+							slots on the right. Filled circles
+							<inlinegraphic fileref="resources/editor/trades/fob-green.png" depth="0.371cm" />
+							<inlinegraphic fileref="resources/editor/trades/fob-red.png" depth="0.371cm" />
+							indicate FOB slots, and empty circles
+							<inlinegraphic fileref="resources/editor/trades/des-green.png" depth="0.371cm" />
+							<inlinegraphic fileref="resources/editor/trades/des-red.png" depth="0.371cm" />
+							indicate DES slots. A dot in the centre of a circle
+							<inlinegraphic fileref="resources/editor/trades/optional.png" depth="0.371cm" />
+							indicates that the slot is optional; if there is no dot, the slot
+							must be fulfilled.
+						</para>
+						<para>
+							A grey line
+							<inlinegraphic fileref="resources/editor/trades/grey-line.png" width="2.435cm" depth="0.53cm" />
+							between circles means that the cargo cannot be rewired by the
+							optimiser; these slots will remain paired together after
+							optimisation.
+						</para>
+						<para>
+							If circles are joined by a black line
+							<inlinegraphic fileref="resources/editor/trades/black-line.png" width="2.488cm" depth="0.61cm" />
+							between circles, the optimiser will consider linking the slots with other buy or sell opportunities instead.
+						</para>
+					</entry>
+				</row>
+			</tbody>
+		</tgroup>
+	</informaltable>
+
+
+
 	<para>The columns immediately on either side of the wiring column provide information on the slots.
 	</para>
-	<para>
-		<inlinegraphic fileref="resources/editor/trades/mini-trades.png" width="16.511cm" depth="3.282cm" />
-	</para>
-	<para />
+	<informalfigure>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="resources/editor/trades/mini-trades.png" width="16.511cm" depth="3.282cm" align="centre" />
+			</imageobject>
+		</mediaobject>
+
+	</informalfigure>
 	<informaltable frame="all">
 		<tgroup cols="2">
 			<colspec colnum="1" colname="col1" colwidth="1*" />
@@ -115,7 +145,6 @@
 			</tbody>
 		</tgroup>
 	</informaltable>
-	<para />
 	<para>
 		The remaining columns in the table relate to the cargo:
 		<inlinegraphic fileref="resources/editor/trades/trades-rhs.png" width="6.478cm" depth="3.626cm" />
@@ -156,8 +185,6 @@
 			</tbody>
 		</tgroup>
 	</informaltable>
-	<para />
-	<para />
 	<para>
 		By right-clicking a row in the trades table on the left side or
 		right side of the visual summary column, you can bring up a
@@ -278,26 +305,38 @@
 	<para>
 		Rewiring Cargoes
 	</para>
+	<informaltable frame="none">
+		<tgroup cols="2">
+			<colspec colnum="1" colname="col1" colwidth="4*" />
+			<colspec colnum="2" colname="col2" colwidth="1*" />
+			<tbody>
+				<row>
+					<entry>
+						<para>The central wiring column in the Trades Tab allows purchases
+							and sales to be conveniently paired by the user. The lines joining
+							circles in this column
+							indicate slots which are paired to form a
+							complete trade; by (left-)clicking on a circle and dragging the
+							mouse, you can “stretch” the line to join it to a
+							different slot -
+							or unpair a slot entirely.
+						</para>
+					</entry>
+					<entry>
+						<informalfigure>
+							<mediaobject>
+								<imageobject>
+									<imagedata fileref="resources/editor/trades/trades-rewiring-mini.png" width="2.647cm" depth="4.578cm" />
+								</imageobject>
+							</mediaobject>
+						</informalfigure>
+					</entry>
+				</row>
+			</tbody>
+		</tgroup>
+	</informaltable>
 
-	<informalfigure>
-		<mediaobject>
-			<imageobject>
-				<imagedata fileref="resources/editor/trades/trades-rewiring-mini.png" width="2.647cm" depth="4.578cm" />
-			</imageobject>
-		</mediaobject>
-	</informalfigure>
 
-
-	<para />
-	<para>The central wiring column in the Trades Tab allows purchases
-		and sales to be conveniently paired by the user. The lines joining
-		circles in this column
-		indicate slots which are paired to form a
-		complete trade; by (left-)clicking on a circle and dragging the
-		mouse, you can “stretch” the line to join it to a
-		different slot -
-		or unpair a slot entirely.
-	</para>
 	<para>The auto-validation will turn the wire red if pairings
 		violate
 		constraints and similarly will highlight any trades which are
