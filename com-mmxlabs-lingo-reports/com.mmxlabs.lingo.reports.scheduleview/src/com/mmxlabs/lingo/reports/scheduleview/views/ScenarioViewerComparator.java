@@ -36,7 +36,7 @@ public class ScenarioViewerComparator extends ViewerComparator {
 		}
 	};
 
-	private Mode mode = Mode.STACK;
+	private Mode mode = Mode.INTERLEAVE;
 
 	protected final Mode getMode() {
 		return mode;
