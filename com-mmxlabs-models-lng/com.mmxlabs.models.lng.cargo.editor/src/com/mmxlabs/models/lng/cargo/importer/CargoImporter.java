@@ -282,12 +282,12 @@ public class CargoImporter extends DefaultClassImporter {
 		final ImportResults newResult = new ImportResults(cargo);
 
 		boolean keepCargo = true;
-		if (load == null || load.getWindowStart() == null) {
+		if (load == null || load.getWindowStart() == null || load.getName() == null) {
 			keepCargo = false;
 		} else {
 			newResult.add(load);
 		}
-		if (discharge == null || discharge.getWindowStart() == null) {
+		if (discharge == null || discharge.getWindowStart() == null || discharge.getName() == null) {
 			keepCargo = false;
 		} else {
 			newResult.add(discharge);

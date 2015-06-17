@@ -138,7 +138,7 @@ public class CargoImporterTest {
 			row.put("sell." + CargoPackage.eINSTANCE.getSlot_WindowSize().getName().toLowerCase(), "7");
 			row.put("sell.date", "2013-1-1");
 			row.put("sell.time", "9");
-			row.put("sell." + CargoPackage.eINSTANCE.getDischargeSlot_PurchaseDeliveryType().getName().toLowerCase(), "ANY");
+			row.put("sell." + CargoPackage.eINSTANCE.getDischargeSlot_PurchaseDeliveryType().getName().toLowerCase(), "Any");
 		}
 		final CargoImporter cargoImporter = createCargoImporter();
 		final IMMXImportContext context = Mockito.mock(IMMXImportContext.class);
@@ -203,7 +203,7 @@ public class CargoImporterTest {
 			row.put("sell." + CargoPackage.eINSTANCE.getSlot_WindowSize().getName().toLowerCase(), "7");
 			row.put("sell.date", "2013-1-1");
 			row.put("sell.time", "9");
-			row.put("sell." + CargoPackage.eINSTANCE.getDischargeSlot_PurchaseDeliveryType().getName().toLowerCase(), "ANY");
+			row.put("sell." + CargoPackage.eINSTANCE.getDischargeSlot_PurchaseDeliveryType().getName().toLowerCase(), "Any");
 
 			recordData.add(row);
 		}
