@@ -36,7 +36,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 
-public class BallastIdleGroupingProcessor implements IDiffProcessor {
+public class EventGroupingOverlapProcessor implements IDiffProcessor {
 
 	@Override
 	public void processSchedule(final Schedule schedule, final boolean isPinned) {

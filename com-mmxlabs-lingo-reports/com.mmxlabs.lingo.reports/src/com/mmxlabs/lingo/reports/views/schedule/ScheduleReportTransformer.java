@@ -26,7 +26,7 @@ import com.mmxlabs.lingo.reports.ScheduleElementCollector;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.diff.utils.PNLDeltaUtils;
 import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandler;
-import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.BallastIdleGroupingProcessor;
+import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.EventGroupingOverlapProcessor;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.CycleDiffProcessor;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.CycleGroupUtils;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.GCOCycleGroupingProcessor;
@@ -177,7 +177,7 @@ public class ScheduleReportTransformer {
 				if (enableDiffTools) {
 					diffProcessors.add(new GCOCycleGroupingProcessor());
 					diffProcessors.add(new LadenVoyageProcessor());
-					diffProcessors.add(new BallastIdleGroupingProcessor());
+					diffProcessors.add(new EventGroupingOverlapProcessor());
 				}
 			}
 
