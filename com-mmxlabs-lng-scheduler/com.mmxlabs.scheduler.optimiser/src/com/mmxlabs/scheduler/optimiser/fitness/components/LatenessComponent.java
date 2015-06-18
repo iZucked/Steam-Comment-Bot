@@ -4,11 +4,15 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
@@ -31,7 +35,8 @@ public final class LatenessComponent extends AbstractPerRouteSchedulerFitnessCom
 	private long initialPromptLateness = 0;
 	private long initialTotalLateness = 0;
 	private boolean hasBeenInitialised = false;
-
+	private Set<IPortSlot> lateSlots = null;
+	private boolean newLateness = false;
 	@Override
 	public void startEvaluation(@NonNull ScheduledSequences scheduledSequences) {
 		promptLateness = 0;
@@ -64,6 +69,9 @@ public final class LatenessComponent extends AbstractPerRouteSchedulerFitnessCom
 		if (object instanceof PortDetails) {
 			final PortDetails detail = (PortDetails) object;
 			sequenceAccumulator += scheduledSequences.getWeightedLatenessCost(detail.getOptions().getPortSlot());
+			if (lateSlots != null && scheduledSequences.isLateSlot(detail.getOptions().getPortSlot()) && !lateSlots.contains(detail.getOptions().getPortSlot())) {
+				newLateness = true;
+			}
 			Pair<Interval, Long> latenessDetails = scheduledSequences.getLatenessCost(detail.getOptions().getPortSlot());
 			if (latenessDetails != null) {
 				long lateness = latenessDetails.getSecond();
@@ -83,7 +91,8 @@ public final class LatenessComponent extends AbstractPerRouteSchedulerFitnessCom
 	 */
 	@Override
 	protected long endSequenceAndGetCost() {
-		if (initialised() && (promptLateness > getInitialPromptLateness() || totalLateness > getInitialTotalLateness())) {
+		if (initialised() && ((promptLateness > getInitialPromptLateness() || totalLateness > getInitialTotalLateness()) || newLateness == true)) {
+			newLateness = false;
 			return Long.MAX_VALUE;
 		}
 
@@ -95,6 +104,7 @@ public final class LatenessComponent extends AbstractPerRouteSchedulerFitnessCom
 		if (!initialised()) {
 			setInitialPromptLateness(promptLateness);
 			setInitialTotalLateness(totalLateness);
+			lateSlots = scheduledSequences.getLateSlotsSet();
 			setInitialised(true);
 		}
 		return super.endEvaluationAndGetCost();
