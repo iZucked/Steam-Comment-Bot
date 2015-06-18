@@ -92,6 +92,7 @@ public class Move2over2 implements IMove {
 			if (resource2Position < offset) {
 				return false;
 			}
+			
 			final Map<IResource, ISequence> sequenceMap = sequences.getSequences();
 			if (sequenceMap.containsKey(resource1) == false) {
 				return false;
@@ -101,6 +102,12 @@ public class Move2over2 implements IMove {
 			}
 			final ISequence A = sequenceMap.get(resource1);
 			final ISequence B = sequenceMap.get(resource2);
+			
+			// ensure sequences are not of length 0
+			if (resource1Position >= A.size() - 1 && resource2Position >= B.size() - 1) {
+				return false;
+			}
+				
 			if (resource1Position >= (A.size() /*-  offset*/)) {
 				return false;
 			}

@@ -82,6 +82,11 @@ public final class Move4over2 implements IMove {
 		if (resource2End < resource2Start) {
 			return false;
 		}
+		
+		// swapping empty sequences
+		if (resource1Start == resource1End && resource2Start == resource2End) {
+			return false;
+		}
 
 		// Validate parameters against sequences object
 		final Map<IResource, ISequence> sequenceMap = sequences.getSequences();
