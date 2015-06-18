@@ -5,6 +5,8 @@
 package com.mmxlabs.scheduler.optimiser.providers.impl;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import com.mmxlabs.optimiser.core.IResource;
@@ -21,6 +23,7 @@ public final class HashMapVesselEditor implements IVesselProviderEditor {
 
 	private final Map<IResource, IVesselAvailability> resourceVesselAvailabilityMap = new HashMap<>();
 	private final Map<IVesselAvailability, IResource> vesselAvailabilityResourceMap = new HashMap<>();
+	private final List<IResource> resources = new LinkedList<IResource>();
 
 	@Override
 	public IVesselAvailability getVesselAvailability(final IResource resource) {
@@ -46,5 +49,13 @@ public final class HashMapVesselEditor implements IVesselProviderEditor {
 	public void setVesselAvailabilityResource(final IResource resource, final IVesselAvailability vesselAvailability) {
 		vesselAvailabilityResourceMap.put(vesselAvailability, resource);
 		resourceVesselAvailabilityMap.put(resource, vesselAvailability);
+		if (!resources.contains(resource)) {
+			resources.add(resource);
+		}
+	}
+
+	@Override
+	public List<IResource> getSortedResources() {
+		return resources;
 	}
 }
