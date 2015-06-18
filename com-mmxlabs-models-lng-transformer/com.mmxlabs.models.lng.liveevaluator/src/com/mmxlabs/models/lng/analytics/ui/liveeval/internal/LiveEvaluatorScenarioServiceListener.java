@@ -30,6 +30,7 @@ public class LiveEvaluatorScenarioServiceListener extends ScenarioServiceListene
 	private boolean enabled;
 
 	private final ExecutorService executor = Executors.newSingleThreadExecutor();
+	private final ExecutorService hookExecutor = Executors.newSingleThreadExecutor();
 
 	private IScenarioInstanceEvaluator scenarioInstanceEvaluator;
 
@@ -43,13 +44,12 @@ public class LiveEvaluatorScenarioServiceListener extends ScenarioServiceListene
 
 	public void hookExisting(final IScenarioService scenarioService) {
 		// getServiceModel can block for a while causing issues with the service framework. So fire off in a thread.
-
-		new Thread("LiveEvaluatorScenarioServiceListener:hookExisting") {
+		hookExecutor.execute(new Runnable() {
 			@Override
 			public void run() {
 				hookExisting(scenarioService.getServiceModel());
 			}
-		}.start();
+		});
 	}
 
 	private void hookExisting(final Container container) {
@@ -115,7 +115,7 @@ public class LiveEvaluatorScenarioServiceListener extends ScenarioServiceListene
 		}
 	}
 
-	private ScheduleModel getScheduleModel(ScenarioInstance scenarioInstance) {
+	private ScheduleModel getScheduleModel(final ScenarioInstance scenarioInstance) {
 		if (scenarioInstance != null) {
 			final EObject obj = scenarioInstance.getInstance();
 			if (obj instanceof LNGScenarioModel) {
@@ -140,6 +140,9 @@ public class LiveEvaluatorScenarioServiceListener extends ScenarioServiceListene
 			}
 		}
 		evaluatorMap.clear();
+
+		executor.shutdown();
+		hookExecutor.shutdown();
 	}
 
 	public void setEnabled(final boolean enabled) {
