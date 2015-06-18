@@ -122,13 +122,13 @@ public class OptimiserSettingsModule extends AbstractModule {
 	@Provides
 	@Named(SequencesConstrainedMoveGeneratorUnit.OPTIMISER_ENABLE_FOUR_OPT_2)
 	private boolean enableFourOpt2() {
-		return false;
+		return true;
 	}
 	
 	@Provides
 	@Named(TravelTimeConstraintChecker.OPTIMISER_START_ELEMENT_FIX)
 	private boolean enableStartOfSequenceFix() {
-		return false;
+		return true;
 	}
 	
 	@Provides
@@ -184,15 +184,15 @@ public class OptimiserSettingsModule extends AbstractModule {
 		final LatenessComponentParameters lcp = new LatenessComponentParameters();
 
 		lcp.setThreshold(Interval.PROMPT, 48);
-		lcp.setLowWeight(Interval.PROMPT, 250000);
+		lcp.setLowWeight(Interval.PROMPT, 0);
 		lcp.setHighWeight(Interval.PROMPT, 1000000);
 
 		lcp.setThreshold(Interval.MID_TERM, 72);
-		lcp.setLowWeight(Interval.MID_TERM, 250000);
+		lcp.setLowWeight(Interval.MID_TERM, 0);
 		lcp.setHighWeight(Interval.MID_TERM, 1000000);
 
 		lcp.setThreshold(Interval.BEYOND, 72);
-		lcp.setLowWeight(Interval.BEYOND, 250000);
+		lcp.setLowWeight(Interval.BEYOND, 0);
 		lcp.setHighWeight(Interval.BEYOND, 1000000);
 
 		return lcp;
