@@ -51,4 +51,5 @@ Tool: Bnd-1.50.0
 Require-Bundle: com.mmxlabs.optimiser.optimiser-core;bundle-version="[3.8.5,4.0.0)",
  com.mmxlabs.common.common-util;bundle-version="[3.0.0,4.0.0)",
  com.google.inject;bundle-version="3.0.0",
- com.google.guava;bundle-version="13.0.1"
+ com.google.guava;bundle-version="13.0.1",
+ org.apache.commons.math;bundle-version="2.1.0"
