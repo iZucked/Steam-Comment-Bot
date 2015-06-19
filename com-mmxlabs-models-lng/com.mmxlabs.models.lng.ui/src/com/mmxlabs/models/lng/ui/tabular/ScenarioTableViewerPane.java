@@ -116,7 +116,7 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 	/**
 	 */
 	protected Action addAction;
-	
+
 	private final ISelectionListener selectionListener = new ISelectionListener() {
 
 		@Override
@@ -159,7 +159,9 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 
 	@Override
 	public void dispose() {
-		page.removePostSelectionListener(selectionListener);
+		if (page != null) {
+			page.removePostSelectionListener(selectionListener);
+		}
 
 		if (externalToolbarManager != null) {
 			externalToolbarManager.removeAll();
@@ -361,7 +363,7 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 	/**
 	 */
 	protected Action createAddAction(final EReference containment) {
-		return AddModelAction.create(containment.getEReferenceType(), getAddContext(containment), new Action [] {createDuplicateAction()});
+		return AddModelAction.create(containment.getEReferenceType(), getAddContext(containment), new Action[] { createDuplicateAction() });
 
 	}
 
@@ -430,13 +432,10 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 
 		if (addAction != null) {
 			/*
-			// if we can't add one, we can't duplicate one either.
-			final Action dupAction = createDuplicateAction();
-
-			if (dupAction != null) {
-				toolbar.appendToGroup(ADD_REMOVE_GROUP, dupAction);
-			}
-			*/
+			 * // if we can't add one, we can't duplicate one either. final Action dupAction = createDuplicateAction();
+			 * 
+			 * if (dupAction != null) { toolbar.appendToGroup(ADD_REMOVE_GROUP, dupAction); }
+			 */
 
 			toolbar.appendToGroup(ADD_REMOVE_GROUP, addAction);
 		}
