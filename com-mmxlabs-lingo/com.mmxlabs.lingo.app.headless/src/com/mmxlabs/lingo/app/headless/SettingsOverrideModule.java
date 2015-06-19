@@ -48,13 +48,13 @@ public class SettingsOverrideModule extends AbstractModule {
 	 @Provides
 	 @Named(SequencesConstrainedMoveGeneratorUnit.OPTIMISER_ENABLE_FOUR_OPT_2)
 	 private boolean enableFourOpt2() {
-	 return false;
+	 return true;
 	 }
 	
 	 @Provides
 	 @Named(TravelTimeConstraintChecker.OPTIMISER_START_ELEMENT_FIX)
 	 private boolean enableStartOfSequenceFix() {
-	 return false;
+	 return true;
 	 }
 	
 	@Provides
