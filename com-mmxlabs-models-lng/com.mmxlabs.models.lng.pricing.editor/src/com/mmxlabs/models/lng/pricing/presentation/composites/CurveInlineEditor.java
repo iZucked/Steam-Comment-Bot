@@ -4,11 +4,10 @@
  */
 package com.mmxlabs.models.lng.pricing.presentation.composites;
 
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Comparator;
 
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClassifier;
@@ -21,7 +20,6 @@ import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -29,12 +27,14 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
+import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.formattedtext.FormattedTextCellEditor;
 import org.eclipse.nebula.widgets.formattedtext.IntegerFormatter;
 import org.eclipse.nebula.widgets.formattedtext.NumberFormatter;
+import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -46,7 +46,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.joda.time.YearMonth;
 
@@ -66,8 +65,8 @@ import com.mmxlabs.models.ui.editors.impl.BasicAttributeInlineEditor;
 public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILabelLayoutDataProvidingEditor {
 
 	Control control;
-	Table table;
-	TableViewer viewer;
+	Grid table;
+	GridTableViewer viewer;
 	Index<?> index = null;
 	EObject originalInput = null;
 	final Repacker repacker = new Repacker();
@@ -104,21 +103,6 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 				final EList<?> points = index.getPoints();
 				final IndexPoint<?>[] result = points.toArray(new IndexPoint[0]);
 
-				Arrays.sort(result, new Comparator<IndexPoint<?>>() {
-
-					@Override
-					public int compare(final IndexPoint<?> arg0, final IndexPoint<?> arg1) {
-						final YearMonth date0 = arg0.getDate();
-						if (date0 == null)
-							return -1;
-						final YearMonth date1 = arg1.getDate();
-						if (date1 == null)
-							return 1;
-						return date0.compareTo(date1);
-					}
-
-				});
-
 				return result;
 			}
 		};
@@ -127,7 +111,7 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 	abstract class ColumnEditingSupport extends EditingSupport {
 		final EStructuralFeature feature;
 
-		public ColumnEditingSupport(final ColumnViewer viewer, final EStructuralFeature feature) {
+		public ColumnEditingSupport(final GridTableViewer viewer, final EStructuralFeature feature) {
 			super(viewer);
 			this.feature = feature;
 		}
@@ -135,7 +119,10 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 		@Override
 		protected void setValue(final Object element, final Object value) {
 			final EditingDomain ed = commandHandler.getEditingDomain();
-			commandHandler.handleCommand(SetCommand.create(ed, element, feature, value), (EObject) element, feature);
+			Command cmd = SetCommand.create(ed, element, feature, value);
+			assert cmd.canExecute();
+			commandHandler.handleCommand(cmd, (EObject) element, feature);
+			assert ((EObject) element).eGet(feature) == value;
 			viewer.refresh();
 		}
 
@@ -151,8 +138,8 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 
 	}
 
-	public TableViewerColumn createColumn(final TableViewer viewer, final String title) {
-		final TableViewerColumn column = new TableViewerColumn(viewer, SWT.NONE);
+	public GridViewerColumn createColumn(final GridTableViewer viewer, final String title) {
+		final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
 		column.getColumn().setText(title);
 		return column;
 	}
@@ -172,8 +159,8 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 	}
 
 	void createTable(final Composite parent) {
-		viewer = new TableViewer(parent, SWT.FULL_SELECTION);
-		table = viewer.getTable();
+		viewer = new GridTableViewer(parent, SWT.SINGLE);
+		table = viewer.getGrid();
 
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
@@ -182,12 +169,18 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 		layoutData.heightHint = 200;
 		table.setLayoutData(layoutData);
 
-		final TableViewerColumn dateColumn = createColumn(viewer, "Date");
+		final GridViewerColumn dateColumn = createColumn(viewer, "Date");
 		dateColumn.setEditingSupport(new ColumnEditingSupport(viewer, PricingPackage.Literals.INDEX_POINT__DATE) {
+			final FormattedTextCellEditor ed = new FormattedTextCellEditor(table, SWT.BORDER) {
+				@Override
+				public void activate() {
+					super.activate();
+					setFocus();
+				}
+			};
+
 			@Override
 			protected CellEditor getCellEditor(final Object element) {
-
-				final FormattedTextCellEditor ed = new FormattedTextCellEditor(table);
 				ed.setFormatter(new YearMonthTextFormatter());
 				return ed;
 			}
@@ -210,18 +203,25 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 
 		// layout.setColumnData(dateColumn.getColumn(), new ColumnWeightData(70, 100));
 
-		final TableViewerColumn valueColumn = createColumn(viewer, "Value");
+		final GridViewerColumn valueColumn = createColumn(viewer, "Value");
 		valueColumn.setEditingSupport(new ColumnEditingSupport(viewer, PricingPackage.Literals.INDEX_POINT__VALUE) {
+			final FormattedTextCellEditor ed = new FormattedTextCellEditor(table) {
+				@Override
+				public void activate() {
+					super.activate();
+					setFocus();
+				}
+			};
+
 			@Override
 			protected CellEditor getCellEditor(final Object element) {
-				final FormattedTextCellEditor ed = new FormattedTextCellEditor(table) {
-				};
 
 				if (indexRawType.equals(EcorePackage.Literals.EINTEGER_OBJECT) || indexRawType.equals(EcorePackage.Literals.EINT)) {
 					ed.setFormatter(new IntegerFormatter());
 				} else {
 					ed.setFormatter(new NumberFormatter());
 				}
+
 				return ed;
 			}
 
@@ -248,11 +248,32 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 		});
 
 		viewer.setContentProvider(createContentProvider());
+
+		viewer.setComparator(new ViewerComparator() {
+			@Override
+			public int compare(Viewer viewer, Object e1, Object e2) {
+
+				if (e1 instanceof IndexPoint<?> && e2 instanceof IndexPoint<?>) {
+					final IndexPoint<?> arg0 = (IndexPoint<?>) e1;
+					final IndexPoint<?> arg1 = (IndexPoint<?>) e2;
+					final YearMonth date0 = arg0.getDate();
+					if (date0 == null)
+						return -1;
+					final YearMonth date1 = arg1.getDate();
+					if (date1 == null)
+						return 1;
+					return date0.compareTo(date1);
+				}
+
+				return super.compare(viewer, e1, e2);
+			}
+
+		});
 	}
 
 	@Override
 	public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
-		final Composite composite = new Composite(parent, SWT.FULL_SELECTION);
+		final Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
 		createTable(composite);
 		createButtons(composite);
@@ -286,7 +307,11 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 
 						newPoint.setDate(mMonthYear);
 
-						commandHandler.handleCommand(AddCommand.create(commandHandler.getEditingDomain(), index, indexPointsFeature, newPoint), index, indexPointsFeature);
+						Command cmd = AddCommand.create(commandHandler.getEditingDomain(), index, indexPointsFeature, newPoint);
+						assert cmd.canExecute();
+						commandHandler.handleCommand(cmd, index, indexPointsFeature);
+						viewer.refresh();
+
 						viewer.setSelection(new StructuredSelection(newPoint));
 					}
 				}
@@ -305,8 +330,10 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 					return;
 				if (sel instanceof IStructuredSelection) {
 					final IndexPoint<?> indexPoint = (IndexPoint<?>) ((IStructuredSelection) sel).getFirstElement();
-					commandHandler.handleCommand(RemoveCommand.create(commandHandler.getEditingDomain(), indexPoint.eContainer(), indexPoint.eContainingFeature(), indexPoint),
-							indexPoint.eContainer(), indexPoint.eContainingFeature());
+					Command cmd = RemoveCommand.create(commandHandler.getEditingDomain(), indexPoint.eContainer(), indexPoint.eContainingFeature(), indexPoint);
+					assert cmd.canExecute();
+					commandHandler.handleCommand(cmd, indexPoint.eContainer(), indexPoint.eContainingFeature());
+					viewer.getControl().setFocus();
 					viewer.refresh();
 				}
 			}
@@ -349,6 +376,7 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 	protected void updateDisplay(final Object value) {
 		viewer.setInput(value);
 		repacker.repack();
+		viewer.refresh();
 
 	}
 
@@ -360,7 +388,6 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 
 	@Override
 	public Object createLabelLayoutData(final MMXRootObject root, final EObject value, final Control control, final Label label) {
-		// TODO Auto-generated method stub
 		return new GridData(SWT.RIGHT, SWT.TOP, false, false);
 	}
 
