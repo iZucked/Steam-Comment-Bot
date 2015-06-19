@@ -28,6 +28,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
@@ -51,10 +52,9 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 	
 	private final String name;
 
-
 	@Inject
-	private IPortSlotProvider portSlotProvider;
-
+	private IPortTypeProvider portTypeProvider;
+	
 	private long lastFitness = 0;
 	private int lastDifferences = 0;
 
@@ -180,7 +180,7 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 		return diff <= CHANGE_THRESHOLD ? 0 : diff - CHANGE_THRESHOLD;
 	}
 	public PortType getPortType(ISequenceElement element) {
-		return portSlotProvider.getPortTypeFromElement(element);
+		return portTypeProvider.getPortType(element);
 	}
 
 	@Override
