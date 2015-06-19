@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.providers;
 
 import org.eclipse.jdt.annotation.NonNull;
+import java.util.List;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
@@ -17,4 +18,7 @@ public interface IVesselProvider extends IDataComponentProvider {
 
 	@NonNull
 	IResource getResource(@NonNull IVesselAvailability vessel);
+	
+	@NonNull
+	List<IResource> getSortedResources();
 }

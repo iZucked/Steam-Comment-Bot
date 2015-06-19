@@ -6,8 +6,10 @@ package com.mmxlabs.scheduler.optimiser.fitness;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -38,7 +40,8 @@ public final class ScheduledSequences extends ArrayList<ScheduledSequence> {
 	private final Map<IPortSlot, Long> weightedLatenessSum = new HashMap<>();
 	private final Map<VoyagePlan, Long> voyagePlanGroupValue = new HashMap<>();
 	private final Map<IResource, ScheduledSequence> resourceToScheduledSequenceMap = new HashMap<>();
-
+	private final Set<IPortSlot> lateSlots = new HashSet<>();
+	
 	/**
 	 * 
 	 * @param resource
@@ -131,5 +134,23 @@ public final class ScheduledSequences extends ArrayList<ScheduledSequence> {
 			sum += lateness;
 		}
 		return sum;
+	}
+	
+	public void resetLateSlots() {
+		lateSlots.clear();
+	}
+	
+	public void addLateSlot(IPortSlot slot) {
+		lateSlots.add(slot);
+	}
+	
+	public boolean isLateSlot(IPortSlot slot) {
+		return lateSlots.contains(slot);
+	}
+	
+	public Set<IPortSlot> getLateSlotsSet() {
+		Set<IPortSlot> duplicateSet = new HashSet<IPortSlot>();
+		duplicateSet.addAll(lateSlots);
+		return duplicateSet;
 	}
 }

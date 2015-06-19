@@ -71,7 +71,8 @@ public class LatenessChecker {
 	 * @param annotatedSolution
 	 */
 	public void calculateLateness(final ScheduledSequences scheduledSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
-
+		// clear late slots
+		scheduledSequences.resetLateSlots();
 		// Loop over all sequences
 		for (final ScheduledSequence scheduledSequence : scheduledSequences) {
 			final IResource resource = scheduledSequence.getResource();
@@ -79,12 +80,19 @@ public class LatenessChecker {
 			for (IPortSlot portSlot : scheduledSequence.getSequenceSlots()) {
 				final ITimeWindow tw = getTW(portSlot, resource);
 				int latenessInHours = getLateness(portSlot, resource, tw, scheduledSequence.getArrivalTime(portSlot));
+				addLateSlot(portSlot, latenessInHours, scheduledSequences);
 				if (latenessInHours > 0 || (annotatedSolution != null && tw != null)) {
 					Pair<ILatenessComponentParameters.Interval, Long> weightedLatenessPair = getWeightedLateness(tw, latenessInHours);
 					addEntryToLatenessAnnotation(annotatedSolution, portSlot, tw, weightedLatenessPair.getFirst(), latenessInHours,
 							getLatenessWithoutFlex(portSlot, resource, tw, scheduledSequence.getArrivalTime(portSlot)), weightedLatenessPair.getSecond(), scheduledSequences);
 				}
 			}
+		}
+	}
+
+	private void addLateSlot(IPortSlot portSlot, int latenessInHours, ScheduledSequences scheduledSequences) {
+		if (latenessInHours > 0) {
+			scheduledSequences.addLateSlot(portSlot);
 		}
 	}
 
@@ -132,9 +140,9 @@ public class LatenessChecker {
 			// Hit low penalty value
 			weightedLateness = (long) latenessParameters.getLowWeight(interval) * (long) latenessInHours;
 		} else {
-			weightedLateness = (long) latenessParameters.getHighWeight(interval) * (long) latenessInHours;
+			weightedLateness = ((long) latenessParameters.getLowWeight(interval) * (long) latenessParameters.getThreshold(interval)) + (long) latenessParameters.getHighWeight(interval) * ((long) latenessInHours - (long) latenessParameters.getThreshold(interval));
 		}
-
+		
 		return new Pair<>(interval, weightedLateness);
 
 	}
