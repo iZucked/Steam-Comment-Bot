@@ -416,6 +416,7 @@ public final class OptimisationHelper {
 		to.setGenerateCharterOuts(from.isGenerateCharterOuts());
 		if (from.getSimilaritySettings() != null) {
 			to.setSimilaritySettings(from.getSimilaritySettings());
+			to.getSimilaritySettings().unsetThreshold();
 		}
 
 		{
