@@ -10,7 +10,6 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.mmxlabs.optimiser.common.logging.ILoggingDataStore;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -150,9 +149,9 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 			// Update potential sequences
 			move.apply(pinnedPotentialRawSequences);
 			String moveName = move.getClass().getName();
-
 			if (loggingDataStore != null) {
 				loggingDataStore.logAppliedMove(moveName);
+				loggingDataStore.logSequence(pinnedPotentialRawSequences);
 			}
 
 			// Apply sequence manipulators
@@ -164,6 +163,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 				if (checker.checkConstraints(potentialFullSequences) == false) {
 					if (loggingDataStore != null) {
 						loggingDataStore.logFailedConstraints(checker, move);
+						loggingDataStore.logSequenceFailedConstraint(checker, pinnedPotentialRawSequences);
 					}
 
 					// Reject Move
@@ -171,6 +171,10 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 					// Break out
 					continue MAIN_LOOP;
 				}
+			}
+
+			if (loggingDataStore != null) {
+				loggingDataStore.logSequence(pinnedPotentialRawSequences);
 			}
 
 			final IEvaluationState evaluationState = new EvaluationState();
@@ -191,26 +195,30 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 				for (final IReducingContraintChecker checker : getReducingConstraintCheckers()) {
 					checker.sequencesAccepted(potentialFullSequences);
 				}
+				if (loggingDataStore != null) {
+					loggingDataStore.logSequenceAccepted(pinnedPotentialRawSequences, getFitnessEvaluator().getCurrentFitness());
+					loggingDataStore.logSuccessfulMove(move);
+				}
 
 				// Success update state for new sequences
 				updateSequences(pinnedPotentialRawSequences, pinnedCurrentRawSequences, move.getAffectedResources());
 
 				// Update move sequences.
 				getMoveGenerator().setSequences(pinnedPotentialRawSequences);
-				if (loggingDataStore != null) {
-					loggingDataStore.logSuccessfulMove(move);
-				}
 
 				++numberOfMovesAccepted;
 			} else {
 				// Failed, reset state for old sequences
 				++numberOfRejectedMoves;
+				if (loggingDataStore != null) {
+					loggingDataStore.logSequenceRejected(pinnedPotentialRawSequences, getFitnessEvaluator().getCurrentFitness());
+				}
 				updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
 			}
 		}
 
 		setNumberOfIterationsCompleted(numberOfMovesTried);
-
 		return iterationsThisStep;
 	}
+
 }

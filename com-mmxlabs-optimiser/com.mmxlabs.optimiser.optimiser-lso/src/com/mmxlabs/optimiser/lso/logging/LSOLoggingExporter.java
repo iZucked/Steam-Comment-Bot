@@ -100,6 +100,12 @@ public class LSOLoggingExporter {
 		writeDataOverCourseOfRun(keys);
 		exportEndData();
 		exportMovesData();
+		exportSequencesData();
+		exportConstraintFailedSequences();
+		exportAcceptedSequences();
+		exportRejectedSequences();
+//		exportAcceptedFitnesses();
+//		exportRejectedFitnesses();
 	}
 
 	public void exportEndData() {
@@ -113,6 +119,67 @@ public class LSOLoggingExporter {
 		writer.close();
 	}
 
+	private void exportSequencesData() {
+		Path newPath = Paths.get(path, foldername, "sequences" + ".txt");
+		PrintWriter writer = getWriter(newPath.toString());
+		writeSequencesData(writer, lsoLogger.getSequenceFrequencyCounts());
+		writer.close();
+	}
+	
+	private void exportConstraintFailedSequences() {
+		Path newPath = Paths.get(path, foldername, "constraintFailedSequences" + ".txt");
+		PrintWriter writer = getWriter(newPath.toString());
+		writeSequencesData(writer, lsoLogger.getSequenceCountFailedConstraint());
+		writer.close();
+	}
+
+	private void exportAcceptedSequences() {
+		Path newPath = Paths.get(path, foldername, "acceptedSequences" + ".txt");
+		PrintWriter writer = getWriter(newPath.toString());
+		writeSequencesData(writer, lsoLogger.getSequenceCountAccepted());
+		writer.close();
+	}
+
+	private void exportRejectedSequences() {
+		Path newPath = Paths.get(path, foldername, "rejectedSequences" + ".txt");
+		PrintWriter writer = getWriter(newPath.toString());
+		writeSequencesData(writer, lsoLogger.getSequenceCountRejected());
+		writer.close();
+	}
+
+//	private void exportAcceptedFitnesses() {
+//		Path newPath = Paths.get(path, foldername, "acceptedSequencesFitnesses" + ".txt");
+//		PrintWriter writer = getWriter(newPath.toString());
+//		writeSequencesDataFitnessStatistics(writer, lsoLogger.getSequenceFitnessesAccepted());
+//		writer.close();
+//	}
+//	
+//	private void exportRejectedFitnesses() {
+//		Path newPath = Paths.get(path, foldername, "rejectedSequencesFitnesses" + ".txt");
+//		PrintWriter writer = getWriter(newPath.toString());
+//		writeSequencesDataFitnessStatistics(writer, lsoLogger.getSequenceFitnessesRejected());
+//		writer.close();
+//	}
+		
+	private void writeSequencesData(PrintWriter writer, List<Integer> frequencies) {
+		for (int i : frequencies) {
+			writer.println(i);
+		}
+	}
+	
+	private void writeSequencesDataFitnessStatistics(PrintWriter writer, Map<Integer, Double[]> frequencies) {
+		for (int i : frequencies.keySet()) {
+			String row = ""+i+",";
+			for (int di = 0; i < frequencies.get(i).length; i++) {
+				row += frequencies.get(i)[di];
+				if (di < frequencies.get(i).length - 1) {
+					row += ",";
+				}
+			}
+			writer.println(row);
+		}
+	}
+	
 	private void writeLineForFinalData(PrintWriter writer, String key, Object value) {
 		writer.println(String.format("[%s] %s", key, value.toString()));
 	}

@@ -4,17 +4,24 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 
 import com.mmxlabs.optimiser.common.logging.ILoggingDataStore;
 import com.mmxlabs.optimiser.common.logging.impl.EvaluationNumberKey;
+import com.mmxlabs.optimiser.core.IModifiableSequences;
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.optimiser.lso.INullMove;
-
 public class LSOLogger implements ILoggingDataStore {
 	private Map<String, AtomicInteger> moveMap = new HashMap<>();
 	private Map<String, AtomicInteger> successfulMoveMap = new HashMap<>();
@@ -23,6 +30,14 @@ public class LSOLogger implements ILoggingDataStore {
 	private Map<String, Map<String, AtomicInteger>> failedConstraintsMovesMap = new HashMap<>();
 	private Map<EvaluationNumberKey, long[]> progressLogMap = new HashMap<>();
 	private Map<String, Integer> progressKeys = new HashMap<>();
+	private Map<ISequences, SequencesCounts> seenSequencesCount = new HashMap<>();
+	private Map<ISequences, String> constraintsFailedSequences = new HashMap<>();
+	private Map<ISequences, Long> acceptedMovesSequencesFitness = new HashMap<>();
+	private Map<ISequences, Long> rejectedMovesSequencesFitness = new HashMap<>();
+	private Map<ISequences, SequencesCounts> acceptedSequencesCount = new HashMap<>();
+	private Map<ISequences, SequencesCounts> rejectedSequencesCount = new HashMap<>();
+
+	private List<IResource> resourceList = null;
 	private int reportingInterval;
 
 	public LSOLogger(int reportingInterval) {
@@ -228,6 +243,106 @@ public class LSOLogger implements ILoggingDataStore {
 
 	public int getFailedConstraintsMovesIndividualCount(String constraint, String move) {
 		return failedConstraintsMovesMap.get(constraint).get(move).get();
+	}
+	
+	public void logSequence(IModifiableSequences sequence) {
+		SequencesCounts count = seenSequencesCount.get(sequence);
+		if (count == null) {
+			count = new SequencesCounts(0);
+			count.total.set(1);
+			seenSequencesCount.put(new ModifiableSequences(sequence), count);
+		} else {
+			count.total.incrementAndGet();
+		}
+	}
+		
+	public List<Integer> getSequenceFrequencyCounts() {
+		return getFrequencyFromSequencesCounts(seenSequencesCount, SequenceCountType.TOTAL);
+	}
+	
+	private List<Integer> getFrequencyFromSequencesCounts(Map<ISequences, SequencesCounts> counts, SequenceCountType type) {
+		List<Integer> frequencies = new ArrayList<Integer>();
+		for (SequencesCounts s : counts.values()) {
+			frequencies.add(s.getValue(type));
+		}
+		return frequencies;
+	}
+
+	public void logSequenceFailedConstraint(IConstraintChecker checker, ModifiableSequences pinnedPotentialRawSequences) {
+		SequencesCounts counts = seenSequencesCount.get(pinnedPotentialRawSequences);
+		counts.constraints.incrementAndGet();
+	}
+	
+	public List<Integer> getInterestingSequenceFrequencies(Map<ISequences, SequencesCounts> interestingSequences, SequenceCountType type) {
+		List<Integer> frequencies = new ArrayList<Integer>();
+		for (SequencesCounts counts : interestingSequences.values()) {
+			int count = counts.getValue(type);
+			if (count > 0) {
+				frequencies.add(count);
+			}
+		}
+		return frequencies;
+	}
+	
+	public List<Integer> getSequenceCountFailedConstraint() {
+		return getInterestingSequenceFrequencies(seenSequencesCount, SequenceCountType.CONSTRAINTS);
+	}
+
+	public void logSequenceAccepted(ModifiableSequences pinnedPotentialRawSequences, long currentFitness) {
+		SequencesCounts counts = seenSequencesCount.get(pinnedPotentialRawSequences);
+		counts.accepted.incrementAndGet();
+	}
+
+	public List<Integer> getSequenceCountAccepted() {
+		return getInterestingSequenceFrequencies(seenSequencesCount, SequenceCountType.ACCEPTED);
+	}
+		
+	public void logSequenceRejected(ModifiableSequences pinnedPotentialRawSequences, long currentFitness) {
+		SequencesCounts counts = seenSequencesCount.get(pinnedPotentialRawSequences);
+		counts.rejected.incrementAndGet();
+	}
+
+	public List<Integer> getSequenceCountRejected() {
+		return getInterestingSequenceFrequencies(seenSequencesCount, SequenceCountType.REJECTED);
+	}
+	
+	private class SequencesCounts{
+		public AtomicInteger total;
+		public AtomicInteger accepted;
+		public AtomicInteger rejected;
+		public AtomicInteger constraints;
+
+		public SequencesCounts() {
+			this(0);
+		}
+		public SequencesCounts(int initVal) {
+			total = new AtomicInteger(initVal);
+			accepted = new AtomicInteger(initVal);
+			rejected = new AtomicInteger(initVal);
+			constraints = new AtomicInteger(initVal);
+		}
+		public Integer getValue(SequenceCountType type) {
+			switch (type) {
+			case TOTAL:
+				return total.get();
+			case ACCEPTED:
+				return accepted.get();
+			case REJECTED:
+				return rejected.get();
+			case CONSTRAINTS:
+				return constraints.get();
+			default:
+				return null;
+			}
+		
+		}
+	}
+	
+	private enum SequenceCountType {
+		TOTAL,
+		ACCEPTED,
+		REJECTED,
+		CONSTRAINTS
 	}
 
 }

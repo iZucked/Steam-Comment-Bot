@@ -123,4 +123,6 @@ public interface IFitnessEvaluator {
 	 */
 	@Nullable
 	IAnnotatedSolution getCurrentAnnotatedSolution(@NonNull final IOptimisationContext context);
+	
+	void step();
 }

@@ -81,6 +81,11 @@ public class Move3over2 implements IMove {
 		if (resource2Position < 0) {
 			return false;
 		}
+		
+		// insert sequence will be of 0 length
+		if (resource1Start == resource1End) {
+			return false;
+		}
 
 		// Validate parameters against sequences object
 		final Map<IResource, ISequence> sequenceMap = sequences.getSequences();

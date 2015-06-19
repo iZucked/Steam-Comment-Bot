@@ -94,7 +94,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 
 		return accept;
 	}
-
+	
 	/**
 	 * Update internal state, storing new fitness as new current and updating best fitness if required.
 	 * 
@@ -281,5 +281,10 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 	public void setEvaluationProcesses(@NonNull List<IEvaluationProcess> evaluationProcesses) {
 		this.evaluationProcesses = evaluationProcesses;
 
+	}
+
+	@Override
+	public void step() {
+		thresholder.step();
 	}
 }
