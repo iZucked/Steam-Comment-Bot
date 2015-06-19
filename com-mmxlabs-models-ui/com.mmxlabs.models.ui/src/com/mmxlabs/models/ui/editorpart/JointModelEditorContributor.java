@@ -16,11 +16,14 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.internal.PartListenerList;
 import org.eclipse.ui.part.IPage;
 import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
 
@@ -35,10 +38,13 @@ public class JointModelEditorContributor extends MultiPageEditorActionBarContrib
 	private Action cancelAction;
 	private ActionContributionItem applyContributionItem;
 	private ActionContributionItem cancelContributionItem;
+	private IPartListener partListener;
+	private IWorkbenchPage page;
 
 	@Override
 	public void init(final IActionBars actionBars, final IWorkbenchPage page) {
-		super.init(actionBars);
+		this.page = page;
+		super.init(actionBars, page);
 		final ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
 		undoAction = new UndoAction();
 		undoAction.setImageDescriptor(sharedImages.getImageDescriptor(ISharedImages.IMG_TOOL_UNDO));
@@ -81,6 +87,48 @@ public class JointModelEditorContributor extends MultiPageEditorActionBarContrib
 
 		applyContributionItem = new ActionContributionItem(applyAction);
 		cancelContributionItem = new ActionContributionItem(cancelAction);
+
+		partListener = new IPartListener() {
+
+			@Override
+			public void partOpened(final IWorkbenchPart part) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void partDeactivated(final IWorkbenchPart part) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void partClosed(final IWorkbenchPart part) {
+				if (part == activeEditor) {
+					deactivate();
+					activeEditor = null;
+				}
+			}
+
+			@Override
+			public void partBroughtToTop(final IWorkbenchPart part) {
+
+			}
+
+			@Override
+			public void partActivated(final IWorkbenchPart part) {
+
+			}
+		};
+		page.addPartListener(partListener);
+	}
+
+	@Override
+	public void dispose() {
+		if (page != null) {
+			page.removePartListener(partListener);
+			page = null;
+		}
 	}
 
 	@Override

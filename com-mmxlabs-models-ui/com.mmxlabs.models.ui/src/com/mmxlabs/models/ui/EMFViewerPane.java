@@ -243,6 +243,11 @@ public abstract class EMFViewerPane implements IPropertyListener, Listener {
 				parent.getParent().layout();
 			}
 		}
+		@Override
+		public void dispose() {
+			// TODO Auto-generated method stub
+			super.dispose();
+		}
 	}
 
 	/**
@@ -339,13 +344,19 @@ public abstract class EMFViewerPane implements IPropertyListener, Listener {
 	public void dispose() {
 		if ((control != null) && (!control.isDisposed())) {
 			control.removeListener(SWT.Activate, this);
-			control = null;
 			page.removePartListener(partListener);
 		}
+		control = null;
+		page = null;
 
 		if (pullDownImage != null) {
 			pullDownImage.dispose();
 			pullDownImage = null;
+		}
+		
+		if (toolBarManager != null) {
+			toolBarManager.dispose();
+			toolBarManager = null;
 		}
 	}
 
