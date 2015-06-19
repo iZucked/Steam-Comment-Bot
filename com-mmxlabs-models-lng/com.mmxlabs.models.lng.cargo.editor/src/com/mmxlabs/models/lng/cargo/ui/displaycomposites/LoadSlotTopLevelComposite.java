@@ -52,7 +52,7 @@ public class LoadSlotTopLevelComposite extends DefaultTopLevelComposite {
 			} else if (loadSlot.isDESPurchase()) {
 				groupName = "DES Purchase";
 			} else {
-				groupName = "Load";
+				groupName = "FOB Purchase";
 			}
 		}
 

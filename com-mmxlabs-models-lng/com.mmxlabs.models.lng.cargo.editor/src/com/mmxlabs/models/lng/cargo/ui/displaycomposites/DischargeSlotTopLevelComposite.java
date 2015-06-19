@@ -52,7 +52,7 @@ public class DischargeSlotTopLevelComposite extends DefaultTopLevelComposite {
 			} else if (dischargeSlot.isFOBSale()) {
 				groupName = "FOB Sale";
 			} else {
-				groupName = "Discharge";
+				groupName = "DES Sale";
 			}
 		}
 
