@@ -124,6 +124,7 @@ public abstract class MultiScenarioTableViewersView extends ScenarioInstanceView
 
 		if (currentCommandStack != null) {
 			currentCommandStack.removeCommandStackListener(this);
+			currentCommandStack = null;
 		}
 
 		undoAction.setEditingDomain(editingDomain);
@@ -205,5 +206,14 @@ public abstract class MultiScenarioTableViewersView extends ScenarioInstanceView
 	public void commandStackChanged(final EventObject event) {
 		undoAction.update();
 		redoAction.update();
+	}
+
+	@Override
+	public void dispose() {
+		if (currentCommandStack != null) {
+			currentCommandStack.removeCommandStackListener(this);
+			currentCommandStack = null;
+		}
+		super.dispose();
 	}
 }

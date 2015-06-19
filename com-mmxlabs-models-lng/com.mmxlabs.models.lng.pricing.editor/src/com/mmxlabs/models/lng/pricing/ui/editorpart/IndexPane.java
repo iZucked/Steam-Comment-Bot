@@ -107,6 +107,14 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 	}
 
+	@Override
+	public void dispose() {
+		this.pricingModel = null;
+		seriesParsers.clear();
+		transformer.dispose();
+		super.dispose();
+	}
+
 	/**
 	 * Ensures that a given date is visible in the editor column range, as long as the editor is open.
 	 * 

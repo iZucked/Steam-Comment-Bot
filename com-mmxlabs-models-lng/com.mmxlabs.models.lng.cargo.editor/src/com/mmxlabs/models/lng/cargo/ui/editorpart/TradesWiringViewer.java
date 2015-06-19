@@ -199,8 +199,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 	private boolean locked;
 
-	private final CargoEditingCommands cec;
-	private final CargoEditorMenuHelper menuHelper;
+	private CargoEditingCommands cec;
+	private CargoEditorMenuHelper menuHelper;
 
 	private final Image lockedImage;
 	private final Image notesImage;
@@ -228,10 +228,18 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 		this.rootData = null;
 		this.referenceRootData = null;
+		this.sortedChildren = null;
 
 		if (promptToolbarEditor != null) {
-			promptToolbarEditor.dispose();
+			// promptToolbarEditor.dispose();
 			promptToolbarEditor = null;
+		}
+		this.cec = null;
+		this.menuHelper = null;
+
+		if (wiringDiagram != null) {
+			wiringDiagram.dispose();
+			wiringDiagram = null;
 		}
 
 		super.dispose();
@@ -1529,7 +1537,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 			final EMFPath purchaseContractPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.LOAD, CargoPackage.Literals.SLOT__CONTRACT);
 			final EMFPath salesContractPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.DISCHARGE, CargoPackage.Literals.SLOT__CONTRACT);
-			final EMFPath vesselPath1 = new RowDataEMFPath(false, false, CargoModelRowTransformer.Type.SLOT_OR_CARGO, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL);
+			final EMFPath vesselPath1 = new RowDataEMFPath(false, false, CargoModelRowTransformer.Type.SLOT_OR_CARGO, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE,
+					CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL);
 			final EMFPath vesselPath2 = new RowDataEMFPath(false, false, CargoModelRowTransformer.Type.SLOT_OR_CARGO, CargoPackage.Literals.SLOT__NOMINATED_VESSEL);
 
 			final Action clearAction = new Action("Clear Filter") {

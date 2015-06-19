@@ -224,4 +224,9 @@ public class IndexTreeTransformer {
 	public EObject getRootObject() {
 		return root;
 	}
+
+	public void dispose() {
+		root = null;
+		nodeMap.clear();
+	}
 }

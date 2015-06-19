@@ -61,8 +61,8 @@ public class PromptToolbarEditor extends ControlContribution {
 		}
 	}
 
-	private final EditingDomain editingDomain;
-	private final LNGScenarioModel rootObject;
+	private EditingDomain editingDomain;
+	private LNGScenarioModel rootObject;
 
 	private Button periodEndEnabled;
 	private Button periodStartEnabled;
@@ -266,7 +266,11 @@ public class PromptToolbarEditor extends ControlContribution {
 
 	@Override
 	public void dispose() {
-		rootObject.getPortfolioModel().eAdapters().remove(adapter);
+		if (rootObject != null) {
+			rootObject.getPortfolioModel().eAdapters().remove(adapter);
+			rootObject = null;
+		}
+		editingDomain = null;
 		super.dispose();
 	}
 }

@@ -100,6 +100,7 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 
 		if (currentCommandStack != null) {
 			currentCommandStack.removeCommandStackListener(this);
+			currentCommandStack = null;
 		}
 
 		undoAction.setEditingDomain(editingDomain);
@@ -111,7 +112,7 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 		if (editingDomain != null) {
 			currentCommandStack = editingDomain.getCommandStack();
 			currentCommandStack.addCommandStackListener(this);
-			
+
 			undoAction.update();
 			redoAction.update();
 		}
@@ -158,5 +159,14 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 	public void commandStackChanged(final EventObject event) {
 		undoAction.update();
 		redoAction.update();
+	}
+
+	@Override
+	public void dispose() {
+		if (currentCommandStack != null) {
+			currentCommandStack.removeCommandStackListener(this);
+			currentCommandStack = null;
+		}
+		super.dispose();
 	}
 }

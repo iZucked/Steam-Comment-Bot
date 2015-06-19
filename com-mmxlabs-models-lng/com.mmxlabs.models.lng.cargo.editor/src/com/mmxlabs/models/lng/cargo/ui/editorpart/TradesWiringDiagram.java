@@ -535,4 +535,8 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 			}
 		}
 	}
+
+	public void dispose() {
+		rootData = null;
+	}
 }
