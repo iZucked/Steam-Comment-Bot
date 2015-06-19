@@ -42,6 +42,7 @@ public class DataIndexImporter extends AbstractClassImporter {
 	boolean parseAsInt = false;
 	final YearMonthAttributeImporter dateParser = new YearMonthAttributeImporter();
 	final LocalDateAttributeImporter dateParser2 = new LocalDateAttributeImporter();
+	protected NumberImporterHelper numberImporterHelper = new NumberImporterHelper();
 
 	/**
 	 * @return the parseAsInt
@@ -87,17 +88,11 @@ public class DataIndexImporter extends AbstractClassImporter {
 					}
 
 					try {
-						final Number n;
-						// This used to be a ? : statement, but for some reason the int (or even Integer) was always stored as a Double
-						// @see http://docs.oracle.com/javase/specs/jls/se7/html/jls-15.html#jls-15.25
-						// @see http://docs.oracle.com/javase/specs/jls/se7/html/jls-5.html#jls-5.6.2
-						if (parseAsInt) {
-							final int value = Integer.parseInt(row.get(s));
-							n = value;
-						} else {
-							final double value = Double.parseDouble(row.get(s));
-							n = value;
+						final Number n = numberImporterHelper.parseNumberString(s, parseAsInt);
+						if (n == null) {
+							continue;
 						}
+
 						if (!seenDates.add(date)) {
 							context.addProblem(context.createProblem("The month " + s + " is defined multiple times", true, true, true));
 							continue;

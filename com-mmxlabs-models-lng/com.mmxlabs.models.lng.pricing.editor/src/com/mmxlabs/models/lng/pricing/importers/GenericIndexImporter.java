@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.pricing.importers;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,6 +21,7 @@ import java.util.TreeMap;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.joda.time.YearMonth;
 
 import com.mmxlabs.common.csv.IExportContext;
@@ -45,10 +48,12 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 	protected static final String EXPRESSION = "expression";
 	protected static final String UNITS = "units";
 
-        final YearMonthAttributeImporter dateParser = new YearMonthAttributeImporter();
-	final LocalDateAttributeImporter dateParser2 = new LocalDateAttributeImporter();
+	protected final YearMonthAttributeImporter dateParser = new YearMonthAttributeImporter();
+	protected final LocalDateAttributeImporter dateParser2 = new LocalDateAttributeImporter();
 
 	protected boolean multipleDataTypeInput = false;
+
+	protected NumberImporterHelper numberImporterHelper = new NumberImporterHelper();
 
 	@SuppressWarnings("unchecked")
 	protected Index<Double> importDoubleIndex(@NonNull final Map<String, String> row, @NonNull final Set<String> columnsToIgnore, @NonNull final IImportContext context) {
@@ -90,7 +95,7 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 			return di;
 		}
 
-		final NumberAttributeImporter nai = new NumberAttributeImporter(context.getDecimalSeparator());
+		// final NumberAttributeImporter nai = new NumberAttributeImporter(context.getDecimalSeparator());
 
 		// for other indices, return a data index
 		final DataIndex<Number> result = PricingFactory.eINSTANCE.createDataIndex();
@@ -110,16 +115,9 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 					if (valueStr.isEmpty())
 						continue;
 					try {
-						final Number n;
-						// This used to be a ? : statement, but for some reason the int (or even Integer) was always stored as a Double
-						// @see http://docs.oracle.com/javase/specs/jls/se7/html/jls-15.html#jls-15.25
-						// @see http://docs.oracle.com/javase/specs/jls/se7/html/jls-5.html#jls-5.6.2
-						if (parseAsInt) {
-							final int value = nai.stringToInt(valueStr);
-							n = value;
-						} else {
-							final double value = nai.stringToDouble(valueStr);
-							n = value;
+						final Number n = numberImporterHelper.parseNumberString(valueStr, parseAsInt);
+						if (n == null) {
+							continue;
 						}
 
 						if (!seenDates.add(date)) {
@@ -238,4 +236,5 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 	public void setMultipleDataTypeInput(final boolean isMultiple) {
 		this.multipleDataTypeInput = isMultiple;
 	}
+
 }
