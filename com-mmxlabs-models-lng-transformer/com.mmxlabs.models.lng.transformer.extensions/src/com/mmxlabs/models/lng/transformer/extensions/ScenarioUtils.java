@@ -97,9 +97,9 @@ public class ScenarioUtils {
 			objectives.add(createObjective(parametersFactory, "cargo-scheduler-group-profit", 1));
 
 			objectives.add(createObjective(parametersFactory, CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME, 1));
-			objectives.add(createObjective(parametersFactory, CargoSchedulerFitnessCoreFactory.CAPACITY_COMPONENT_NAME, 0.0001));
+			objectives.add(createObjective(parametersFactory, CargoSchedulerFitnessCoreFactory.CAPACITY_COMPONENT_NAME, 0.1));
 			objectives.add(createObjective(parametersFactory, NonOptionalSlotFitnessCoreFactory.NAME, 3000000));
-			objectives.add(createObjective(parametersFactory, "SimilarityFitnessCore", 0.0001));
+			objectives.add(createObjective(parametersFactory, "SimilarityFitnessCore", 0.00001));
 		}
 
 		final AnnealingSettings annealingSettings = parametersFactory.createAnnealingSettings();

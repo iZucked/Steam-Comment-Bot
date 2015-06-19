@@ -67,6 +67,9 @@ public final class OptimisationHelper {
 
 	private static final Logger log = LoggerFactory.getLogger(OptimisationHelper.class);
 
+	public static final int EPOCH_LENGTH_PERIOD = 300;
+	public static final int EPOCH_LENGTH_FULL = 900;
+	
 	public static Object evaluateScenarioInstance(final IEclipseJobManager jobManager, final ScenarioInstance instance, final String parameterMode, final boolean promptForOptimiserSettings,
 			final boolean optimising, final String k) {
 
@@ -398,9 +401,17 @@ public final class OptimisationHelper {
 			to.getRange().setOptimiseBefore(from.getRange().getOptimiseBefore());
 		}
 
-		to.getAnnealingSettings().setIterations(from.getAnnealingSettings().getIterations());
-		to.getAnnealingSettings().setEpochLength(from.getAnnealingSettings().getEpochLength());
+//		to.getAnnealingSettings().setIterations(from.getAnnealingSettings().getIterations());
+//		to.getAnnealingSettings().setEpochLength(from.getAnnealingSettings().getEpochLength());
 
+		// change epoch length
+		// TODO: make this better!
+		if (to.getRange().isSetOptimiseAfter() && to.getRange().isSetOptimiseBefore()) {
+			to.getAnnealingSettings().setEpochLength(EPOCH_LENGTH_PERIOD);
+		} else {
+			to.getAnnealingSettings().setEpochLength(EPOCH_LENGTH_FULL);			
+		}
+		
 		to.setShippingOnly(from.isShippingOnly());
 		to.setGenerateCharterOuts(from.isGenerateCharterOuts());
 		if (from.getSimilaritySettings() != null) {
