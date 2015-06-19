@@ -26,6 +26,7 @@ import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -62,14 +63,14 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 	}
 
 	public enum DataSection {
-		Main, Advanced
+		General, Controls, Toggles, Advanced
 	}
 
 	public static class ChoiceData {
 
-		private List<Pair<String, Object>> choices = new LinkedList<>();
+		private final List<Pair<String, Object>> choices = new LinkedList<>();
 
-		public void addChoice(String name, Object value) {
+		public void addChoice(final String name, final Object value) {
 			choices.add(new Pair<>(name, value));
 		}
 	}
@@ -96,7 +97,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		// }
 
 		public Option(final DataSection dataSection, final OptionGroup group, final EditingDomain editingDomain, final String label, final EObject data, final EObject defaultData,
-				final DataType dataType, ChoiceData choiceData, final EStructuralFeature... features) {
+				final DataType dataType, final ChoiceData choiceData, final EStructuralFeature... features) {
 			this.dataSection = dataSection;
 			this.group = group;
 			this.data = data;
@@ -123,7 +124,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 	protected void doCreateFormContent() {
 		// Get the form object and set a title
 		final ScrolledForm form = managedForm.getForm();
-		form.setLayoutData(new GridData(GridData.FILL_BOTH));
+		form.setLayoutData(new GridData(GridData.FILL_BOTH | GridData.GRAB_HORIZONTAL));
 		form.setText("Settings");
 		toolkit.decorateFormHeading(form.getForm());
 
@@ -160,24 +161,33 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 
 		// Add in standard options
 		final Map<OptionGroup, Composite> groupMap = new HashMap<>();
-		if (optionsMap.containsKey(DataSection.Main)) {
-			final List<Option> options = optionsMap.get(DataSection.Main);
-			for (final Option option : options) {
-				Composite parent = form.getBody();
-				if (option.group != null) {
-					if (groupMap.containsKey(option.group)) {
-						parent = groupMap.get(option.group);
-					} else {
-						final Group g = new Group(form.getBody(), SWT.NONE);
-						g.setText(option.group.name);
-						g.setLayout(new GridLayout(1, true));
-						toolkit.adapt(g);
-						groupMap.put(option.group, g);
-						parent = g;
-					}
-				}
+		if (optionsMap.containsKey(DataSection.General)) {
+			final List<Option> options = optionsMap.get(DataSection.General);
+			createOptionSetControls(form.getBody(), groupMap, options);
+		}
 
-				createOption(parent, option);
+		if (optionsMap.containsKey(DataSection.Controls) || optionsMap.containsKey(DataSection.Toggles)) {
+			final Composite middle = toolkit.createComposite(form.getBody());
+			middle.setLayout(new GridLayout(2, false));
+			// Create Controls
+			{
+				final Group group = new Group(middle, SWT.NONE);
+				toolkit.adapt(group);
+				group.setLayoutData(GridDataFactory.fillDefaults().grab(false, true).create());
+				group.setText("Controls");
+				group.setLayout(new GridLayout(1, true));
+				final List<Option> options = optionsMap.get(DataSection.Controls);
+				createOptionSetControls(group, groupMap, options);
+			}
+			// Create Toggles
+			{
+				final Group group = new Group(middle, SWT.NONE);
+				toolkit.adapt(group);
+				group.setLayoutData(GridDataFactory.fillDefaults().grab(false, true).create());
+				group.setText("Toggles");
+				group.setLayout(new GridLayout(1, true));
+				final List<Option> options = optionsMap.get(DataSection.Toggles);
+				createOptionSetControls(group, groupMap, options);
 			}
 		}
 
@@ -208,6 +218,29 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		}
 
 		hookAggregatedValidationStatusWithResize();
+	}
+
+	protected void createOptionSetControls(final Composite realParent, final Map<OptionGroup, Composite> groupMap, final List<Option> options) {
+		for (final Option option : options) {
+			Composite parent = realParent;
+			if (option.group != null) {
+
+				if (groupMap.containsKey(option.group)) {
+					parent = groupMap.get(option.group);
+				} else {
+					final Group g = new Group(parent, SWT.NONE);
+					g.setText(option.group.name);
+					g.setLayout(new GridLayout(1, true));
+					g.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+
+					toolkit.adapt(g);
+					groupMap.put(option.group, g);
+					parent = g;
+				}
+			}
+
+			createOption(parent, option);
+		}
 	}
 
 	private void createOption(final Composite parent, final Option option) {
@@ -341,7 +374,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 					@Override
 					public Object convert(final Object fromObject) {
 						if (fromObject instanceof LocalDate) {
-							LocalDate localDate = (LocalDate) fromObject;
+							final LocalDate localDate = (LocalDate) fromObject;
 							return format.print(localDate);
 						}
 						return null;
@@ -432,7 +465,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 	private Composite createChoiceEditor(final Composite parent, final Option option) {
 		final Composite area = toolkit.createComposite(parent, SWT.NONE);
 
-		ChoiceData choiceData = option.choiceData;
+		final ChoiceData choiceData = option.choiceData;
 
 		area.setLayout(new GridLayout(1 + choiceData.choices.size(), false));
 		area.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
@@ -454,14 +487,14 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 			btn.addSelectionListener(new SelectionListener() {
 
 				@Override
-				public void widgetSelected(SelectionEvent e) {
+				public void widgetSelected(final SelectionEvent e) {
 					if (btn.getSelection()) {
 						option.editingDomain.getCommandStack().execute(SetCommand.create(option.editingDomain, target, lastFeature, p.getSecond()));
 					}
 				}
 
 				@Override
-				public void widgetDefaultSelected(SelectionEvent e) {
+				public void widgetDefaultSelected(final SelectionEvent e) {
 
 				}
 			});
@@ -506,7 +539,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 	 * @param features
 	 */
 	public void addOption(final DataSection dataSection, final OptionGroup group, final EditingDomain editingDomian, final String label, final EObject data, final EObject defaultData,
-			final DataType dataType, ChoiceData choiceData, final EStructuralFeature... features) {
+			final DataType dataType, final ChoiceData choiceData, final EStructuralFeature... features) {
 
 		if (group != null) {
 			if (dataSection != group.dataSection) {
