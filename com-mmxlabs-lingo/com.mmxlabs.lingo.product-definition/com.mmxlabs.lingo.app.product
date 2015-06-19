@@ -4,7 +4,7 @@
 <product name="LiNGO" uid="com.mmxlabs.lingo.app.product.id" id="com.mmxlabs.lingo.product.product" application="com.mmxlabs.lingo.app.application" version="3.9.0.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
-      <image path="/com.mmxlabs.lingo.product/icons/alt_window_16.gif"/>
+      <image path="icons/logo-square-16.png"/>
       <text>
          LiNGO Platform
 
@@ -21,7 +21,7 @@ Build: {1}
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
 
-   <windowImages i16="/com.mmxlabs.lingo.product/icons/alt_window_16.gif"/>
+   <windowImages i16="icons/logo-square-16.png" i32="icons/logo-square-32.png" i48="icons/logo-square-48.png" i64="icons/logo-square-64.png" i128="icons/logo-square-128.png"/>
 
    <splash
       location="com.mmxlabs.lingo.app"
@@ -31,7 +31,14 @@ Build: {1}
    <launcher name="LiNGO">
       <solaris/>
       <win useIco="false">
-         <bmp/>
+         <bmp
+            winSmallHigh="icons/logo-square-16-32bit.bmp"
+            winSmallLow="icons/logo-square-16-8bit.bmp"
+            winMediumHigh="icons/logo-square-32-32bit.bmp"
+            winMediumLow="icons/logo-square-32-8bit.bmp"
+            winLargeHigh="icons/logo-square-48-32bit.bmp"
+            winLargeLow="icons/logo-square-48-8bit.bmp"
+            winExtraLargeHigh="icons/logo-square-256-32bit.bmp"/>
       </win>
    </launcher>
 
