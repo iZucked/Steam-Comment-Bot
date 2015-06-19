@@ -619,6 +619,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	public void dispose() {
 		UserManagedScenarioViewerSynchronizer.deregisterView(synchronizer);
 		sortingSupport.clearColumnSortOrder();
+		clearInputEquivalents();
 		super.dispose();
 	}
 

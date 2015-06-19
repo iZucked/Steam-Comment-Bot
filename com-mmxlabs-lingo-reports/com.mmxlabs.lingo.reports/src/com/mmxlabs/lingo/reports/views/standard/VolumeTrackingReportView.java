@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jface.viewers.Viewer;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
@@ -115,6 +116,12 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 		return new SimpleContentAndColumnProvider<VolumeData>() {
 
 			@Override
+			public synchronized void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+				overallVolumes.clear();
+				super.inputChanged(viewer, oldInput, newInput);
+			}
+
+			@Override
 			protected List<VolumeData> createData(Schedule schedule, LNGScenarioModel rootObject, LNGPortfolioModel portfolioModel) {
 				final List<VolumeData> output = new ArrayList<VolumeData>();
 
@@ -213,5 +220,11 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 			}
 
 		};
+	}
+
+	@Override
+	public void dispose() {
+		overallVolumes.clear();
+		super.dispose();
 	}
 }

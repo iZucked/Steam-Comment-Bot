@@ -167,7 +167,7 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 	}
 
 	public void processInputs(final List<?> result) {
-
+		clearInputEquivalents();
 		for (final Object event : result) {
 			if (event instanceof SlotVisit) {
 				setInputEquivalents(event, Arrays.asList(new Object[] { ((SlotVisit) event).getSlotAllocation().getCargoAllocation() }));

@@ -261,6 +261,7 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 	}
 
 	public void processInputs(final List<Row> result) {
+		clearInputEquivalents();
 		for (final Row row : result) {
 			setInputEquivalents(row, row.getInputEquivalents());
 		}
