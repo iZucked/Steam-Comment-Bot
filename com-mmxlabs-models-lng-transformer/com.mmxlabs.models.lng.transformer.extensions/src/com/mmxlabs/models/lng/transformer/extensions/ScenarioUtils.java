@@ -97,15 +97,16 @@ public class ScenarioUtils {
 			objectives.add(createObjective(parametersFactory, "cargo-scheduler-group-profit", 1));
 
 			objectives.add(createObjective(parametersFactory, CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME, 1));
-			objectives.add(createObjective(parametersFactory, CargoSchedulerFitnessCoreFactory.CAPACITY_COMPONENT_NAME, 5000000));
+			objectives.add(createObjective(parametersFactory, CargoSchedulerFitnessCoreFactory.CAPACITY_COMPONENT_NAME, 0.0001));
 			objectives.add(createObjective(parametersFactory, NonOptionalSlotFitnessCoreFactory.NAME, 3000000));
+			objectives.add(createObjective(parametersFactory, "SimilarityFitnessCore", 0.0001));
 		}
 
 		final AnnealingSettings annealingSettings = parametersFactory.createAnnealingSettings();
-		annealingSettings.setIterations(80000);
-		annealingSettings.setCooling(0.85);
-		annealingSettings.setEpochLength(10000);
-		annealingSettings.setInitialTemperature(45000);
+		annealingSettings.setIterations(1000000);
+		annealingSettings.setCooling(0.96);
+		annealingSettings.setEpochLength(900); // 900 for full; 300 for period
+		annealingSettings.setInitialTemperature(1000000);
 
 		settings.setAnnealingSettings(annealingSettings);
 

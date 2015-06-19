@@ -48,7 +48,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 		this.modelReference = scenarioInstance.getReference();
 		this.originalScenario = (LNGScenarioModel) modelReference.getInstance();
 		final EditingDomain originalEditingDomain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
-		scenarioRunner = new LNGScenarioRunner(originalScenario, jobDescriptor.getOptimiserSettings(), originalEditingDomain, LNGTransformer.HINT_OPTIMISE_LSO);
+		scenarioRunner = new LNGScenarioRunner(originalScenario, scenarioInstance, jobDescriptor.getOptimiserSettings(), originalEditingDomain, LNGTransformer.HINT_OPTIMISE_LSO);
 		setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));
 
 		// Disable optimisation in P&L testing phase

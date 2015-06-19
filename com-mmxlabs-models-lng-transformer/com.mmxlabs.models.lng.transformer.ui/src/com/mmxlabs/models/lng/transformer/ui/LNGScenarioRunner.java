@@ -48,6 +48,7 @@ import com.mmxlabs.optimiser.core.IOptimiser;
 import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService.ModuleType;
 
 public class LNGScenarioRunner {
@@ -85,12 +86,15 @@ public class LNGScenarioRunner {
 
 	private EnumMap<ModuleType, List<Module>> localOverrides;
 
-	public LNGScenarioRunner(final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings, final String... hints) {
-		this(scenario, optimiserSettings, createLocalEditingDomain(), hints);
-	}
+	private ScenarioInstance scenarioInstance;
 
-	public LNGScenarioRunner(final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings, final EditingDomain editingDomain, final String... hints) {
+	public LNGScenarioRunner(final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings, final String... hints) {
+		this(scenario, null, optimiserSettings, createLocalEditingDomain(), hints);
+	}
+	
+	public LNGScenarioRunner(final LNGScenarioModel scenario, @Nullable final ScenarioInstance scenarioInstance, final OptimiserSettings optimiserSettings, final EditingDomain editingDomain, final String... hints) {
 		this.originalScenario = scenario;
+		this.scenarioInstance = scenarioInstance;
 		this.optimiserSettings = optimiserSettings;
 		this.originalEditingDomain = editingDomain;
 		this.hints = hints;
@@ -234,27 +238,28 @@ public class LNGScenarioRunner {
 			optimiserScenario = t.transform(originalScenario, optimiserSettings, periodMapping);
 
 			// // DEBUGGING - store sub scenario as a "fork"
-			// if (false) {
-			// try {
-			// IScenarioService scenarioService = scenarioInstance.getScenarioService();
-			// ScenarioInstance dup = scenarioService.insert(scenarioInstance, EcoreUtil.copy(optimiserScenario));
-			// dup.setName("Period Scenario");
-			//
-			// // Copy across various bits of information
-			// dup.getMetadata().setContentType(scenarioInstance.getMetadata().getContentType());
-			// dup.getMetadata().setCreated(scenarioInstance.getMetadata().getCreated());
-			// dup.getMetadata().setLastModified(new Date());
-			//
-			// // Copy version context information
-			// dup.setVersionContext(scenarioInstance.getVersionContext());
-			// dup.setScenarioVersion(scenarioInstance.getScenarioVersion());
-			//
-			// dup.setClientVersionContext(scenarioInstance.getClientVersionContext());
-			// dup.setClientScenarioVersion(scenarioInstance.getClientScenarioVersion());
-			// } catch (Exception e) {
-			// e.printStackTrace();
-			// }
-			// }
+//			if (true && scenarioInstance != null) {
+//				try {
+//					IScenarioService scenarioService = scenarioInstance.getScenarioService();
+//					ScenarioInstance dup = scenarioService.insert(scenarioInstance, EcoreUtil.copy(optimiserScenario));
+//					dup.setName("Period Scenario");
+//
+//					// Copy across various bits of information
+//					dup.getMetadata().setContentType(scenarioInstance.getMetadata().getContentType());
+//					dup.getMetadata().setCreated(scenarioInstance.getMetadata().getCreated());
+//					dup.getMetadata().setLastModified(new Date());
+//
+//					// Copy version context information
+//					dup.setVersionContext(scenarioInstance.getVersionContext());
+//					dup.setScenarioVersion(scenarioInstance.getScenarioVersion());
+//
+//					dup.setClientVersionContext(scenarioInstance.getClientVersionContext());
+//					dup.setClientScenarioVersion(scenarioInstance.getClientScenarioVersion());
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+			
 			final BasicCommandStack commandStack = new BasicCommandStack();
 			final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 			adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
