@@ -86,7 +86,7 @@ public class NonShippedVesselAvailabilityConstraint extends AbstractModelMultiCo
 					}
 					DateTime end;
 					if (va.isSetEndBy()) {
-						end = new DateTime(va.getEndBy());
+						end = va.getEndByAsDateTime();
 					} else {
 						end = new DateTime().year().withMaximumValue();
 					}
