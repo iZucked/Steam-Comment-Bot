@@ -316,7 +316,7 @@ public final class OptimisationHelper {
 					optionAdded = true;
 
 				}
-				if (true || SecurityUtils.getSubject().isPermitted("features:optimisation-similarity")) {
+				if (SecurityUtils.getSubject().isPermitted("features:optimisation-similarity")) {
 
 					final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
 					choiceData.addChoice("Off", 0.0);
