@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -77,7 +78,11 @@ public class MultiReferenceInlineEditor extends UnsettableInlineEditor {
 		gl.marginHeight = 0;
 
 		final Label label = toolkit.createLabel(buttonAndLabel, "");
-		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		{
+			// Set a size hint, but allow width to increase if needed.
+			final GridData gd = GridDataFactory.fillDefaults().hint(150, SWT.DEFAULT).grab(true, false).create();
+			label.setLayoutData(gd);
+		}
 
 		button = toolkit.createButton(buttonAndLabel, "Edit", SWT.NONE);
 
