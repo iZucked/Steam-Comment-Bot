@@ -23,7 +23,7 @@ import com.mmxlabs.license.features.internal.FeatureEnablementExtension;
 import com.mmxlabs.license.features.internal.FeatureEnablementModule;
 
 public class LicenseFeatures {
-	public static void initialiseFeatureEnablements() {
+	public static void initialiseFeatureEnablements(final String... extraEnablements) {
 
 		final Injector injector = Guice.createInjector(new FeatureEnablementModule());
 
@@ -45,6 +45,15 @@ public class LicenseFeatures {
 								sai.addStringPermission(permissionKey);
 
 							}
+						}
+					}
+				}
+				if (extraEnablements != null) {
+					for (final String feature : extraEnablements) {
+						if (feature != null) {
+							final String permissionKey = "features:" + clean(feature);
+							sai.addStringPermission(permissionKey);
+
 						}
 					}
 				}
