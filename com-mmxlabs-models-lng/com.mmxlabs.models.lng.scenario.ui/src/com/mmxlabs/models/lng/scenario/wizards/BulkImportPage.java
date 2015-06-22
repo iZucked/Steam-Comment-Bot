@@ -507,7 +507,7 @@ public class BulkImportPage extends WizardPage {
 			scenarioSelectionGroup = new RadioSelectionGroup(container, "Scenarios", SWT.NONE, new String[] { "All", "Selected" }, new int[] { CHOICE_ALL_SCENARIOS, CHOICE_SELECTED_SCENARIOS });
 			selectedOnlyIndex = 1;
 		}
-		scenarioSelectionGroup.setSelectedIndex(0);
+		scenarioSelectionGroup.setSelectedIndex(1);
 		final GridData gd3 = new GridData();
 		gd3.horizontalAlignment = SWT.FILL;
 		gd3.grabExcessHorizontalSpace = true;
