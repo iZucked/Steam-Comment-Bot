@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter xml:lang="en" xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xl="http://www.w3.org/1999/xlink" id="Chapter_Editor">
+<chapter xml:lang="en" xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xl="http://www.w3.org/1999/xlink"
+	id="Chapter_Editor">
 	<title>Editing</title>
+		<?dbeclipse ctx_title="Scenario Editor" ?>
 	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="editor-trades.xml" />
 	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="editor-fleet.xml" />
 	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="editor-commercial.xml" />

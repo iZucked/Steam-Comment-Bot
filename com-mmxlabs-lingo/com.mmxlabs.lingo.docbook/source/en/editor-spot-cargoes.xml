@@ -4,6 +4,7 @@
 	<title>
 		Spot Cargoes
 	</title>
+	<?dbeclipse ctx_title="Scenario Editor - Spot Cargoes" ?>
 	<para>The Spot Cargoes tab defines spot cargo markets for the four
 		types of buy and sell - FOB Purchase, DES Purchase, FOB Sale, and
 		DES

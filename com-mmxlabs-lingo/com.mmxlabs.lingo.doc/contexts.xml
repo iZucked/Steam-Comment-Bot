@@ -12,35 +12,35 @@
       <description>Error Log</description>
       <topic label="Error Log" href="ch01s05.html"/>
    </context>
-   <context id="Chapter_Editor">
+   <context id="Chapter_Editor" title="Scenario Editor">
       <description>Editing</description>
       <topic label="Editing" href="ch02.html"/>
    </context>
-   <context id="Editor_Trades">
+   <context id="Editor_Trades" title="Scenario Editor - Trades">
       <description>Trades Tab</description>
       <topic label="Trades Tab" href="ch02.html#Editor_Trades"/>
    </context>
-   <context id="Editor_Fleet">
+   <context id="Editor_Fleet" title="Scenario Editor - Fleet">
       <description>Fleet Tab</description>
       <topic label="Fleet Tab" href="ch02s02.html"/>
    </context>
-   <context id="Editor_Commercial">
+   <context id="Editor_Commercial" title="Scenario Editor - Commercial">
       <description>Commercial Tab</description>
       <topic label="Commercial Tab" href="ch02s03.html"/>
    </context>
-   <context id="Editor_Markets">
+   <context id="Editor_Markets" title="Scenario Editor - Markets">
       <description>
 		Markets Tab
 	</description>
       <topic label="&#xA;&#x9;&#x9;Markets Tab&#xA;&#x9;" href="ch02s04.html"/>
    </context>
-   <context id="Editor_SpotCharters">
+   <context id="Editor_SpotCharters" title="Scenario Editor - Charters">
       <description>
 		Charters Tab
 	</description>
       <topic label="&#xA;&#x9;&#x9;Charters Tab&#xA;&#x9;" href="ch02s05.html"/>
    </context>
-   <context id="Editor_SpotCargoes">
+   <context id="Editor_SpotCargoes" title="Scenario Editor - Spot Cargoes">
       <description>
 		Spot Cargoes
 	</description>

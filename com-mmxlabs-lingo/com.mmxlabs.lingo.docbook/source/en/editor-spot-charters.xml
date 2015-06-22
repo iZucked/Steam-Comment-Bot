@@ -5,6 +5,7 @@
 	<title>
 		Charters Tab
 	</title>
+	<?dbeclipse ctx_title="Scenario Editor - Charters" ?>
 	<para>Each charter opportunity defines a charter-in and/or a
 		charter-out market for vessels of the selected vessel classes.
 	</para>
