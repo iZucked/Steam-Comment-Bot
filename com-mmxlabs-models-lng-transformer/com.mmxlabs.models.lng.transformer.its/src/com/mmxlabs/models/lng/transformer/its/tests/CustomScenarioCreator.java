@@ -764,11 +764,11 @@ public class CustomScenarioCreator {
 		return new LocalDate(year, 1 + month, day);
 	}
 
-	public LocalDateTime createLocalDateTime(final int year, final int month, final int day, final int hourOfDay) {
+	public static LocalDateTime createLocalDateTime(final int year, final int month, final int day, final int hourOfDay) {
 		return new LocalDateTime(year, 1 + month, day, hourOfDay, 0);
 	}
 
-	public YearMonth createYearMonth(final int year, final int month) {
+	public static YearMonth createYearMonth(final int year, final int month) {
 		return new YearMonth(year, 1 + month);
 	}
 

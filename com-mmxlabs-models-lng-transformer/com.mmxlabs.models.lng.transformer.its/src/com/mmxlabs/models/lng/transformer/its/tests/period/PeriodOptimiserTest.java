@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.joda.time.LocalDateTime;
+import org.joda.time.LocalTime;
 import org.joda.time.YearMonth;
 import org.junit.Assert;
 import org.junit.Test;
@@ -31,6 +33,8 @@ import com.mmxlabs.models.lng.types.PortCapability;
 
 @RunWith(value = ShiroRunner.class)
 public class PeriodOptimiserTest {
+
+	public static final boolean OUTPUT_SCENARIOS = false;
 
 	/**
 	 * Base case - all discharge slots should swap around for best P&L
@@ -87,7 +91,8 @@ public class PeriodOptimiserTest {
 
 	@Test
 	public void testSimpleDischargeSwapPeriodMiddleOnly() throws Exception {
-		final PeriodOptimiserScenarioTester tester = new PeriodOptimiserScenarioTester();
+		final PeriodOptimiserScenarioTester tester = new PeriodOptimiserScenarioTester(CustomScenarioCreator.createLocalDateTime(2014, 7, 1, 0), CustomScenarioCreator.createLocalDateTime(2014, 7, 30,
+				0), CustomScenarioCreator.createLocalDateTime(2014, 9, 1, 0));
 
 		// Check the prices are correct rather than specific slot instances.
 		Assert.assertEquals("5.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
@@ -99,7 +104,7 @@ public class PeriodOptimiserTest {
 		Assert.assertEquals("20.0", tester.cargoB3.getSlots().get(1).getPriceExpression());
 
 		// Pass in null to disable opt range
-		tester.periodOptimise(DateAndCurveHelper.createYearMonth(2014, 7), DateAndCurveHelper.createYearMonth(2014, 8));
+		tester.periodOptimise(DateAndCurveHelper.createYearMonth(2014, 9), DateAndCurveHelper.createYearMonth(2014, 10));
 
 		Assert.assertEquals("5.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("20.0", tester.cargoA2.getSlots().get(1).getPriceExpression());
@@ -129,7 +134,7 @@ public class PeriodOptimiserTest {
 		Assert.assertEquals("20.0", tester.cargoB3.getSlots().get(1).getPriceExpression());
 
 		// Pass in null to disable opt range
-		tester.periodOptimise(DateAndCurveHelper.createYearMonth(2014, 8), DateAndCurveHelper.createYearMonth(2014, 8));
+		tester.periodOptimise(DateAndCurveHelper.createYearMonth(2014, 9), DateAndCurveHelper.createYearMonth(2014, 10));
 
 		Assert.assertEquals("5.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
 		Assert.assertEquals("20.0", tester.cargoA2.getSlots().get(1).getPriceExpression());
@@ -176,7 +181,7 @@ public class PeriodOptimiserTest {
 		Assert.assertEquals("20.0", tester.cargoB3.getSlots().get(0).getPriceExpression());
 
 		// Pass in null to disable opt range
-		tester.periodOptimise(DateAndCurveHelper.createYearMonth(2014, 7), DateAndCurveHelper.createYearMonth(2014, 8));
+		tester.periodOptimise(DateAndCurveHelper.createYearMonth(2014, 8), DateAndCurveHelper.createYearMonth(2014, 9));
 		Assert.assertEquals("5.0", tester.cargoA1.getSlots().get(0).getPriceExpression());
 		Assert.assertEquals("20.0", tester.cargoA2.getSlots().get(0).getPriceExpression());
 		Assert.assertEquals("5.0", tester.cargoA3.getSlots().get(0).getPriceExpression());
@@ -204,6 +209,10 @@ public class PeriodOptimiserTest {
 		public LNGScenarioModel scenario;
 
 		public PeriodOptimiserScenarioTester() {
+			this(CustomScenarioCreator.createLocalDateTime(2014, 7, 1, 0), CustomScenarioCreator.createLocalDateTime(2014, 8, 1, 0), CustomScenarioCreator.createLocalDateTime(2014, 9, 1, 0));
+		}
+
+		public PeriodOptimiserScenarioTester(LocalDateTime dateA, LocalDateTime dateB, LocalDateTime dateC) {
 			final CustomScenarioCreator csc = new CustomScenarioCreator(5.0f);
 			final int fuelPrice = 1;
 			final int smallQty = 50000;
@@ -253,13 +262,13 @@ public class PeriodOptimiserTest {
 			}
 
 			// create two different cargoes
-			cargoA1 = csc.addCargo("Cargo-A1", loadPort, dischargePort, 5, 5.0f, 20.f, csc.createLocalDateTime(2014, 7, 1, 0), 50);
-			cargoA2 = csc.addCargo("Cargo-A2", loadPort, dischargePort, 5, 5.0f, 20.f, csc.createLocalDateTime(2014, 8, 1, 0), 50);
-			cargoA3 = csc.addCargo("Cargo-A3", loadPort, dischargePort, 5, 5.0f, 20.f, csc.createLocalDateTime(2014, 9, 1, 0), 50);
+			cargoA1 = csc.addCargo("Cargo-A1", loadPort, dischargePort, 5, 5.0f, 20.f, dateA, 50);
+			cargoA2 = csc.addCargo("Cargo-A2", loadPort, dischargePort, 5, 5.0f, 20.f, dateB, 50);
+			cargoA3 = csc.addCargo("Cargo-A3", loadPort, dischargePort, 5, 5.0f, 20.f, dateC, 50);
 
-			cargoB1 = csc.addCargo("Cargo-B1", loadPort2, dischargePort2, 5, 20.0f, 20.f, csc.createLocalDateTime(2014, 7, 1, 0), 50);
-			cargoB2 = csc.addCargo("Cargo-B2", loadPort2, dischargePort2, 5, 20.0f, 20.f, csc.createLocalDateTime(2014, 8, 1, 0), 50);
-			cargoB3 = csc.addCargo("Cargo-B3", loadPort2, dischargePort2, 5, 20.0f, 20.f, csc.createLocalDateTime(2014, 9, 1, 0), 50);
+			cargoB1 = csc.addCargo("Cargo-B1", loadPort2, dischargePort2, 5, 20.0f, 20.f, dateA, 50);
+			cargoB2 = csc.addCargo("Cargo-B2", loadPort2, dischargePort2, 5, 20.0f, 20.f, dateB, 50);
+			cargoB3 = csc.addCargo("Cargo-B3", loadPort2, dischargePort2, 5, 20.0f, 20.f, dateC, 50);
 
 			// // make sure they can be rewired
 			cargoA1.setAllowRewiring(true);
@@ -326,14 +335,18 @@ public class PeriodOptimiserTest {
 		public void optimise() throws Exception {
 			try {
 
-				final OptimiserSettings settings = ScenarioUtils.createDefaultSettings();
+				final OptimiserSettings settings = getSettings();
 
 				final LNGScenarioRunner runner = new LNGScenarioRunner((LNGScenarioModel) scenario, settings, LNGTransformer.HINT_OPTIMISE_LSO);
 
 				runner.initAndEval(new TransformerExtensionTestModule());
-				// save(runner.getScenario(), "c:/temp/scenario1.lingo");
+				if (OUTPUT_SCENARIOS) {
+					save(runner.getScenario(), "c:/temp/scenario1.lingo");
+				}
 				runner.run();
-				// save(runner.getScenario(), "c:/temp/scenario2.lingo");
+				if (OUTPUT_SCENARIOS) {
+					save(runner.getScenario(), "c:/temp/scenario2.lingo");
+				}
 			} catch (final Exception er) {
 				// this exception should not occur
 				// Assert.fail("Scenario runner failed to initialise scenario");
@@ -341,21 +354,29 @@ public class PeriodOptimiserTest {
 			}
 		}
 
+		private OptimiserSettings getSettings() {
+			final OptimiserSettings settings = ScenarioUtils.createDefaultSettings();
+			settings.getAnnealingSettings().setIterations(1000);
+			return settings;
+		}
+
 		public void periodOptimise(final YearMonth start, final YearMonth end) throws Exception {
 			try {
 
-				final OptimiserSettings settings = ScenarioUtils.createDefaultSettings();
+				final OptimiserSettings settings = getSettings();
 
 				settings.getRange().setOptimiseAfter(start);
 				settings.getRange().setOptimiseBefore(end);
 
 				final LNGScenarioRunner runner = new LNGScenarioRunner((LNGScenarioModel) scenario, settings, LNGTransformer.HINT_OPTIMISE_LSO);
 				runner.initAndEval(new TransformerExtensionTestModule());
-
-				// save(runner.getScenario(), "c:/temp/scenario1.lingo");
+				if (OUTPUT_SCENARIOS) {
+					save(runner.getScenario(), "c:/temp/scenario1p.lingo");
+				}
 				runner.run();
-
-				// save(runner.getScenario(), "c:/temp/scenario2.lingo");
+				if (OUTPUT_SCENARIOS) {
+					save(runner.getScenario(), "c:/temp/scenario2p.lingo");
+				}
 			} catch (final Exception er) {
 				er.printStackTrace();
 				// this exception should not occur
@@ -368,7 +389,7 @@ public class PeriodOptimiserTest {
 	@SuppressWarnings("unused")
 	private void save(final LNGScenarioModel scenario, final String path) throws IOException {
 		final String context = "com.mmxlabs.lingo";
-		final int version = 26;
+		final int version = 34;
 		ScenarioTools.storeToFile(EcoreUtil.copy(scenario), new File(path), context, version);
 	}
 }
