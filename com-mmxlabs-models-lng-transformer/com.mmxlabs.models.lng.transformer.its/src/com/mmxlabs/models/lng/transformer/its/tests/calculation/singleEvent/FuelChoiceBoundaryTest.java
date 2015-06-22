@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests.calculation.singleEvent;
 
-
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.FuelUsageAssertions;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
@@ -28,6 +29,7 @@ import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
  * @author Adam Semenenko
  * 
  */
+@RunWith(value = ShiroRunner.class)
 public class FuelChoiceBoundaryTest {
 
 	/**
@@ -42,7 +44,8 @@ public class FuelChoiceBoundaryTest {
 		final int fuelConsumptionPerHour = 11;
 		final int NBORatePerHour = 10;
 
-		final SimpleCargoAllocation a = new SimpleCargoAllocation(testPriceConsumption("Base fuel just cheaper than FBO", baseFuelUnitPrice, dischargePrice, cvValue, fuelConsumptionPerHour, NBORatePerHour));
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(testPriceConsumption("Base fuel just cheaper than FBO", baseFuelUnitPrice, dischargePrice, cvValue, fuelConsumptionPerHour,
+				NBORatePerHour));
 
 		// need to check that FBO is never used on any leg or idle.
 		FuelUsageAssertions.assertFuelNotUsed(a.getLadenLeg().getFuels(), Fuel.FBO);
@@ -64,12 +67,13 @@ public class FuelChoiceBoundaryTest {
 		final int fuelConsumptionPerHour = 11;
 		final int NBORatePerHour = 10;
 
-		final SimpleCargoAllocation a = new SimpleCargoAllocation(testPriceConsumption("LNG just cheaper than base fuel", baseFuelUnitPrice, dischargePrice, cvValue, fuelConsumptionPerHour, NBORatePerHour));
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(testPriceConsumption("LNG just cheaper than base fuel", baseFuelUnitPrice, dischargePrice, cvValue, fuelConsumptionPerHour,
+				NBORatePerHour));
 
 		// need to check that base fuel is never used on any leg or idle.
 		FuelUsageAssertions.assertFuelNotUsed(a.getLadenLeg().getFuels(), Fuel.BASE_FUEL);
 		FuelUsageAssertions.assertFuelNotUsed(a.getLadenIdle().getFuels(), Fuel.BASE_FUEL);
-		
+
 		FuelUsageAssertions.assertFuelNotUsed(a.getBallastLeg().getFuels(), Fuel.BASE_FUEL);
 		FuelUsageAssertions.assertFuelNotUsed(a.getBallastIdle().getFuels(), Fuel.BASE_FUEL);
 	}
@@ -126,7 +130,7 @@ public class FuelChoiceBoundaryTest {
 		FuelUsageAssertions.assertFuelNotUsed(a.getBallastLeg().getFuels(), Fuel.BASE_FUEL);
 		FuelUsageAssertions.assertFuelNotUsed(a.getBallastLeg().getFuels(), Fuel.FBO);
 		FuelUsageAssertions.assertFuelUsed(a.getBallastLeg().getFuels(), Fuel.NBO, FuelUnit.M3);
-		
+
 		FuelUsageAssertions.assertFuelUsed(a.getBallastIdle().getFuels(), Fuel.BASE_FUEL, FuelUnit.MT);
 	}
 

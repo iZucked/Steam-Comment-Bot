@@ -6,11 +6,13 @@ package com.mmxlabs.models.lng.transformer.its.tests.calculation.singleEvent;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
@@ -25,18 +27,19 @@ import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
  * @author Adam Semenenko
  * 
  */
+@RunWith(value = ShiroRunner.class)
 public class RouteSameCostTest {
 
 	static class CanalParameters {
-		
-		public String canalName ;
-		public int canalDistance ;
-		public int canalCost ;
-		public int canalTransitFuelPerDay ;
-		public int canalTransitTime ;
-		public int NBOTravelRatePerDay  ;
+
+		public String canalName;
+		public int canalDistance;
+		public int canalCost;
+		public int canalTransitFuelPerDay;
+		public int canalTransitTime;
+		public int NBOTravelRatePerDay;
 	}
-	
+
 	/**
 	 * If a canal and ocean route have the same price then test to see that one is chosen (over more expensive routes), and they are definitely the same price.
 	 */
@@ -50,15 +53,14 @@ public class RouteSameCostTest {
 		final int expensiveDistance2 = 1200;
 
 		final int[] portDistances = { cheapestDistance, expensiveDistance1, expensiveDistance2 };
-		
+
 		CanalParameters params = new CanalParameters();
 		params.canalName = "Canal 1";
 		params.canalDistance = 900;
 		params.canalCost = 50;
 		params.canalTransitFuelPerDay = TimeUnitConvert.convertPerHourToPerDay(0);
 		params.canalTransitTime = 0;
-		params.NBOTravelRatePerDay  = 0;
-
+		params.NBOTravelRatePerDay = 0;
 
 		// the NBO rate is set as the idle consumption rate, so it costs lets to idle than travel. The canal route will allow idle time, but the fee will make the canal the same price as the longer
 		// ocean route.
@@ -172,11 +174,10 @@ public class RouteSameCostTest {
 		final int ladenIdleNBORate = NBOIdleRatePerDay;
 		final int ladenNBORate = NBOTravelRatePerDay;
 
-		final LNGScenarioModel canalScenario = ScenarioTools.createScenarioWithCanals(distancesBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed, maxSpeed,
-				capacity, ballastMinSpeed, ballastMinConsumption, ballastMaxSpeed, ballastMaxConsumption, ballastIdleConsumptionRate, ballastIdleNBORate, ballastNBORate, ladenMinSpeed,
+		final LNGScenarioModel canalScenario = ScenarioTools.createScenarioWithCanals(distancesBetweenPorts, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, minSpeed,
+				maxSpeed, capacity, ballastMinSpeed, ballastMinConsumption, ballastMaxSpeed, ballastMaxConsumption, ballastIdleConsumptionRate, ballastIdleNBORate, ballastNBORate, ladenMinSpeed,
 				ladenMinConsumption, ladenMaxSpeed, ladenMaxConsumption, ladenIdleConsumptionRate, ladenIdleNBORate, ladenNBORate, useDryDock, pilotLightRate, minHeelVolume);
-		
-		
+
 		addCanalParameters(canalCosts, canalScenario);
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(canalScenario);
@@ -198,7 +199,7 @@ public class RouteSameCostTest {
 	 * @return The total cost for the route, including idles.
 	 */
 	private long getPriceOfCanal(final String testName, final CanalParameters canalCost, final int fuelTravelConsumptionPerHour, final int NBORatePerHour) {
-		final SimpleCargoAllocation a = new SimpleCargoAllocation(testEquallyPricedRoutes(testName + ": get canal price", new int[] { 10000 }, canalCost , fuelTravelConsumptionPerHour, NBORatePerHour));
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(testEquallyPricedRoutes(testName + ": get canal price", new int[] { 10000 }, canalCost, fuelTravelConsumptionPerHour, NBORatePerHour));
 
 		return getCargoAllocationCost(a);
 	}
@@ -221,30 +222,28 @@ public class RouteSameCostTest {
 
 	private void addCanalParameters(CanalParameters canalParameters, LNGScenarioModel canalScenario) {
 		if (canalParameters != null) {
-			CustomScenarioCreator.createCanalAndCost(canalScenario, canalParameters.canalName, ScenarioTools.A, ScenarioTools.B, canalParameters.canalDistance, canalParameters.canalDistance, canalParameters.canalCost, canalParameters.canalCost, canalParameters.canalTransitFuelPerDay, canalParameters.NBOTravelRatePerDay  , canalParameters.canalTransitTime);
+			CustomScenarioCreator.createCanalAndCost(canalScenario, canalParameters.canalName, ScenarioTools.A, ScenarioTools.B, canalParameters.canalDistance, canalParameters.canalDistance,
+					canalParameters.canalCost, canalParameters.canalCost, canalParameters.canalTransitFuelPerDay, canalParameters.NBOTravelRatePerDay, canalParameters.canalTransitTime);
 		}
 	}
-	
+
 	long getCargoAllocationCost(SimpleCargoAllocation a) {
-		
+
 		long total = 0;
-		
+
 		total += a.getLadenLeg().getFuelCost();
 		total += a.getLadenLeg().getCharterCost();
 		total += a.getLadenLeg().getToll();
 		total += a.getLadenIdle().getFuelCost();
 		total += a.getLadenIdle().getCharterCost();
-		
+
 		total += a.getBallastLeg().getFuelCost();
 		total += a.getBallastLeg().getCharterCost();
 		total += a.getBallastLeg().getToll();
 		total += a.getBallastIdle().getFuelCost();
 		total += a.getBallastIdle().getCharterCost();
-		
-		
-		
+
 		return total;
-		
-		
+
 	}
 }

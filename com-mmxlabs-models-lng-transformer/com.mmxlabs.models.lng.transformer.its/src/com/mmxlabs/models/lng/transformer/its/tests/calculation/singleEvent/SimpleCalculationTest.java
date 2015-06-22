@@ -7,12 +7,14 @@ package com.mmxlabs.models.lng.transformer.its.tests.calculation.singleEvent;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.FuelUsageAssertions;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
@@ -25,6 +27,7 @@ import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
  * @author hinton
  * 
  */
+@RunWith(value = ShiroRunner.class)
 public class SimpleCalculationTest {
 
 	// Create a dummy scenario

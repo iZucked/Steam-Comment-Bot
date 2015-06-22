@@ -8,8 +8,10 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
+import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 
 /**
@@ -18,6 +20,7 @@ import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
  * @author achurchill
  * 
  */
+@RunWith(value = ShiroRunner.class)
 public class TimeZoneTests {
 	private ModelEntityMap modelEntityMap;
 	private DateAndCurveHelper dateHelper;

@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.transformer.its.tests.calculation.singleEvent;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -15,6 +16,7 @@ import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 
@@ -30,6 +32,8 @@ import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
  * @author Adam Semenenko
  * 
  */
+@RunWith(value = ShiroRunner.class)
+
 public class MinMaxSpeedTest {
 
 	// The min and max speed of the vessel class.

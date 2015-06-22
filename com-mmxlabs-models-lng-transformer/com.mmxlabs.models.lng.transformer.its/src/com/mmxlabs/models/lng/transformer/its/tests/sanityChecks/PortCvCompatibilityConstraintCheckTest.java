@@ -5,26 +5,25 @@
 package com.mmxlabs.models.lng.transformer.its.tests.sanityChecks;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortCvCompatibilityConstraintChecker;
 
+@RunWith(value = ShiroRunner.class)
 public class PortCvCompatibilityConstraintCheckTest {
 	final private float lowCv = 22f;
 	final private float highCv = 24f;
 	final private float midCv = (lowCv + highCv) / 2f;
 
-	public SuboptimalScenarioTester getScenarioWithParams(
-			final double smallLPCv, final double bigLPCv,
-			final double smallDPMinCV, final double smallDPMaxCV,
-			final double bigDPMinCV, final double bigDPMaxCV) {
+	public SuboptimalScenarioTester getScenarioWithParams(final double smallLPCv, final double bigLPCv, final double smallDPMinCV, final double smallDPMaxCV, final double bigDPMinCV,
+			final double bigDPMaxCV) {
 		final SuboptimalScenarioTester result = new SuboptimalScenarioTester() {
 			{
 				// set load cv (from slot as it writes over the load port)
-				((LoadSlot) smallToLargeCargo.getSlots().get(0))
-						.setCargoCV(smallLPCv);
-				((LoadSlot) largeToSmallCargo.getSlots().get(0))
-						.setCargoCV(bigLPCv);
+				((LoadSlot) smallToLargeCargo.getSlots().get(0)).setCargoCV(smallLPCv);
+				((LoadSlot) largeToSmallCargo.getSlots().get(0)).setCargoCV(bigLPCv);
 
 				// set discharge allowed ranges
 				smallDischargePort.setMinCvValue(smallDPMinCV);
@@ -68,8 +67,7 @@ public class PortCvCompatibilityConstraintCheckTest {
 		final SuboptimalScenarioTester sst = maxRangeOnDischargeCvScenario();
 
 		// test the PortCvConstraintChecker
-		sst.testConstraintCheckerPasses(new PortCvCompatibilityConstraintChecker(
-				"PortCvCompatibilityConstraintChecker"));
+		sst.testConstraintCheckerPasses(new PortCvCompatibilityConstraintChecker("PortCvCompatibilityConstraintChecker"));
 	}
 
 	/*
@@ -82,8 +80,7 @@ public class PortCvCompatibilityConstraintCheckTest {
 		final SuboptimalScenarioTester sst = loadMidCvDischargeMidMinCvHighMaxCvScenario();
 
 		// test the PortCvConstraintChecker
-		sst.testConstraintCheckerPasses(new PortCvCompatibilityConstraintChecker(
-				"PortCvCompatibilityConstraintChecker"));
+		sst.testConstraintCheckerPasses(new PortCvCompatibilityConstraintChecker("PortCvCompatibilityConstraintChecker"));
 	}
 
 	/*
@@ -96,8 +93,7 @@ public class PortCvCompatibilityConstraintCheckTest {
 		final SuboptimalScenarioTester sst = loadLowCvDischargeMidMinCvScenario();
 
 		// test the PortCvConstraintChecker
-		sst.testConstraintCheckerFails(new PortCvCompatibilityConstraintChecker(
-				"PortCvCompatibilityConstraintChecker"));
+		sst.testConstraintCheckerFails(new PortCvCompatibilityConstraintChecker("PortCvCompatibilityConstraintChecker"));
 	}
 
 	/*
@@ -113,8 +109,7 @@ public class PortCvCompatibilityConstraintCheckTest {
 	}
 
 	/*
-	 * Test that the case where no discharge Cv constraints are in place. The
-	 * PnL-optimal wiring should be generated.
+	 * Test that the case where no discharge Cv constraints are in place. The PnL-optimal wiring should be generated.
 	 */
 	@Test
 	public void testConstraintsOptimalOptimisation() {
@@ -126,8 +121,7 @@ public class PortCvCompatibilityConstraintCheckTest {
 	}
 
 	/*
-	 * Tests the case where discharge Cv constraints are in place, which prevent
-	 * the PnL-optimal wiring. The PnL-suboptimal wiring should be generated.
+	 * Tests the case where discharge Cv constraints are in place, which prevent the PnL-optimal wiring. The PnL-suboptimal wiring should be generated.
 	 */
 	@Test
 	public void testConstraintsSubOptimalOptimisationScenario1() {
@@ -139,8 +133,7 @@ public class PortCvCompatibilityConstraintCheckTest {
 	}
 
 	/*
-	 * Tests the case where discharge Cv constraints are in place, which prevent
-	 * the PnL-optimal wiring. The PnL-suboptimal wiring should be generated.
+	 * Tests the case where discharge Cv constraints are in place, which prevent the PnL-optimal wiring. The PnL-suboptimal wiring should be generated.
 	 */
 	@Test
 	public void testConstraintsSubOptimalOptimisationScenario2() {

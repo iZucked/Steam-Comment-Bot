@@ -11,6 +11,9 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 
 /**
  * Tests {@link PricingTimesScenario} instances to make sure discharges use the correct sales price, according to a price index and a pricing date
@@ -18,6 +21,7 @@ import org.junit.Test;
  * @author Alex Churchill
  * 
  */
+@RunWith(value = ShiroRunner.class)
 public class PricingTimesScenarioTester {
 	public void testingIndexingAndPriceDating(@NonNull final String name, @NonNull final LocalDate expectedPriceLookupDate, @NonNull final LocalDateTime dischargeDate,
 			@Nullable final LocalDate priceDate, final double priceA, final double priceB, final double priceC) {

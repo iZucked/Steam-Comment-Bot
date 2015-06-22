@@ -7,14 +7,15 @@ package com.mmxlabs.models.lng.transformer.its.tests.sanityChecks;
 import java.io.IOException;
 
 import org.junit.Assert;
-
 import org.eclipse.emf.ecore.change.ChangeDescription;
 import org.eclipse.emf.ecore.change.util.ChangeRecorder;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 
@@ -28,6 +29,7 @@ import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
  * 
  * @author Adam
  */
+@RunWith(value = ShiroRunner.class)
 public class InputAttributesCheckTest {
 
 	private static final int dischargePrice = 1;
