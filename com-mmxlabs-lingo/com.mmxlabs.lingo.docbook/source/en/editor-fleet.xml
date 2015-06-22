@@ -2,6 +2,7 @@
 <section xml:lang="en" xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xl="http://www.w3.org/1999/xlink"
 	id="Editor_Fleet">
 	<title>Fleet Tab</title>
+	<?dbeclipse ctx_title="Scenario Editor - Fleet" ?>
 	<para>The fleet tab shows which vessels are in the fleet and when they are available. This tab also displays the non-cargo vessel events such as dry-docks and
 		charter outs.
 	</para>

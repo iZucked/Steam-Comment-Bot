@@ -155,9 +155,8 @@
 							<para>If the checkboxes next to these inputs are checked, you
 								can
 								specify a minimum or maximum volume of LNG for the
-								transaction.
-								Overrides contract
-								defaults.
+								transaction. This can either be m³ or mmBtu.
+								Overrides contract defaults. 
 							</para>
 						</entry>
 					</row>

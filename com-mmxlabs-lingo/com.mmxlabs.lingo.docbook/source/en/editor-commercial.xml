@@ -3,6 +3,7 @@
 	id="Editor_Commercial">
 
 	<title>Commercial Tab</title>
+	<?dbeclipse ctx_title="Scenario Editor - Commercial" ?>
 	<informalfigure>
 		<mediaobject>
 			<imageobject>

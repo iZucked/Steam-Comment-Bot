@@ -4,6 +4,7 @@
 	<title>
 		Markets Tab
 	</title>
+	<?dbeclipse ctx_title="Scenario Editor - Markets" ?>
 	<para>The Markets tab shows the three types of curve data used in
 		LiNGO. These are Base Fuel curves, Chartering curves and Commodity
 		Curves.
