@@ -50,7 +50,7 @@ public class DateAndCurveHelper {
 	@SuppressWarnings("null")
 	public DateAndCurveHelper(@NonNull final DateTime earliest, @NonNull final DateTime latest) {
 
-		this.earliestTime = earliest.withZone(DateTimeZone.UTC);
+		this.earliestTime = earliest.withZone(DateTimeZone.UTC).withMinuteOfHour(0);
 		assert !earliestTime.isAfter(earliest);
 		this.latestTime = latest;
 	}

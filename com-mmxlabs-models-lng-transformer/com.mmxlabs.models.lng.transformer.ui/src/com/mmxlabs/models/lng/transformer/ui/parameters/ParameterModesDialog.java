@@ -177,7 +177,9 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 				group.setText("Controls");
 				group.setLayout(new GridLayout(1, true));
 				final List<Option> options = optionsMap.get(DataSection.Controls);
-				createOptionSetControls(group, groupMap, options);
+				if (options != null) {
+					createOptionSetControls(group, groupMap, options);
+				}
 			}
 			// Create Toggles
 			{
@@ -187,7 +189,9 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 				group.setText("Toggles");
 				group.setLayout(new GridLayout(1, true));
 				final List<Option> options = optionsMap.get(DataSection.Toggles);
-				createOptionSetControls(group, groupMap, options);
+				if (options != null) {
+					createOptionSetControls(group, groupMap, options);
+				}
 			}
 		}
 

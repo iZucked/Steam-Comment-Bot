@@ -69,7 +69,7 @@ public final class OptimisationHelper {
 
 	public static final int EPOCH_LENGTH_PERIOD = 300;
 	public static final int EPOCH_LENGTH_FULL = 900;
-	
+
 	public static Object evaluateScenarioInstance(final IEclipseJobManager jobManager, final ScenarioInstance instance, final String parameterMode, final boolean promptForOptimiserSettings,
 			final boolean optimising, final String k) {
 
@@ -276,9 +276,9 @@ public final class OptimisationHelper {
 			final OptimiserSettings copy = EcoreUtil.copy(previousSettings);
 
 			if (!forEvaluation) {
-				dialog.addOption(DataSection.Controls, null, editingDomain, "Number of Iterations", copy, defaultSettings, DataType.PositiveInt,
-						ParametersPackage.eINSTANCE.getOptimiserSettings_AnnealingSettings(), ParametersPackage.eINSTANCE.getAnnealingSettings_Iterations());
-				optionAdded = true;
+				// dialog.addOption(DataSection.Controls, null, editingDomain, "Number of Iterations", copy, defaultSettings, DataType.PositiveInt,
+				// ParametersPackage.eINSTANCE.getOptimiserSettings_AnnealingSettings(), ParametersPackage.eINSTANCE.getAnnealingSettings_Iterations());
+				// optionAdded = true;
 
 				// Check period optimisation is permitted
 				if (SecurityUtils.getSubject().isPermitted("features:optimisation-period")) {
@@ -316,7 +316,7 @@ public final class OptimisationHelper {
 					optionAdded = true;
 
 				}
-				if (true || SecurityUtils.getSubject().isPermitted("features:optimisation-similarity")) {
+				if (SecurityUtils.getSubject().isPermitted("features:optimisation-similarity")) {
 
 					final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
 					choiceData.addChoice("Off", 0.0);
@@ -401,17 +401,17 @@ public final class OptimisationHelper {
 			to.getRange().setOptimiseBefore(from.getRange().getOptimiseBefore());
 		}
 
-//		to.getAnnealingSettings().setIterations(from.getAnnealingSettings().getIterations());
-//		to.getAnnealingSettings().setEpochLength(from.getAnnealingSettings().getEpochLength());
+		// to.getAnnealingSettings().setIterations(from.getAnnealingSettings().getIterations());
+		// to.getAnnealingSettings().setEpochLength(from.getAnnealingSettings().getEpochLength());
 
 		// change epoch length
 		// TODO: make this better!
 		if (to.getRange().isSetOptimiseAfter() && to.getRange().isSetOptimiseBefore()) {
 			to.getAnnealingSettings().setEpochLength(EPOCH_LENGTH_PERIOD);
 		} else {
-			to.getAnnealingSettings().setEpochLength(EPOCH_LENGTH_FULL);			
+			to.getAnnealingSettings().setEpochLength(EPOCH_LENGTH_FULL);
 		}
-		
+
 		to.setShippingOnly(from.isShippingOnly());
 		to.setGenerateCharterOuts(from.isGenerateCharterOuts());
 		if (from.getSimilaritySettings() != null) {
