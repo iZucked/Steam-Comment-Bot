@@ -1,0 +1,25 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * All rights reserved.
+ */
+package com.mmxlabs.scheduler.optimiser.fitness.components;
+
+import org.eclipse.jdt.annotation.NonNull;
+
+public interface ISimilarityComponentParameters {
+
+	public enum Interval {
+		@NonNull
+		LOW,
+		@NonNull
+		MEDIUM,
+		@NonNull
+		HIGH,
+		@NonNull
+		OUT_OF_BOUNDS
+	}
+
+	int getThreshold(@NonNull Interval interval);
+
+	int getWeight(@NonNull Interval interval);
+}
