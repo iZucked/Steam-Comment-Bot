@@ -51,6 +51,19 @@ public class LNGHeadlessParameters extends HeadlessParameters {
 		setParameter("lcp-set-beyond-lowWeight", 1, Integer.class, false);
 		setParameter("lcp-set-beyond-highWeight", 1, Integer.class, false);
 
+		// Similarity
+		setParameter("scp-set-low-thresh", 8, Integer.class, false);
+		setParameter("scp-set-low-weight", 1000000, Integer.class, false);
+		
+		setParameter("scp-set-med-thresh", 16, Integer.class, false);
+		setParameter("scp-set-med-weight", 1000000, Integer.class, false);
+		
+		setParameter("scp-set-high-thresh", 30, Integer.class, false);
+		setParameter("scp-set-high-weight", 1000000, Integer.class, false);
+		
+		setParameter("scp-set-outOfBounds-thresh", -1, Integer.class, false);
+		setParameter("scp-set-outOfBounds-weight", 1000000, Integer.class, false);
+		
 		// Similarity settings
 		setParameter("similarity-thresholdNumChanges", -1, Integer.class, false);
 

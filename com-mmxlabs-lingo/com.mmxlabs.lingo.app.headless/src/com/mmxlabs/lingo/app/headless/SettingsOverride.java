@@ -28,6 +28,16 @@ public final class SettingsOverride {
 		"lcp-set-beyond-highWeight",
 	};
 	
+	public static String[] similarityComponentParameters = new String[] {
+		"scp-set-low-thresh",
+		"scp-set-low-weight",
+		"scp-set-med-thresh",
+		"scp-set-med-weight",
+		"scp-set-high-thresh",
+		"scp-set-high-weight",
+		"scp-set-outOfBounds-weight",
+	};
+	
 	private int iterations = 30000;
 	private int seed = 1;
 
@@ -40,6 +50,7 @@ public final class SettingsOverride {
 	private String outputName;
 
 	Map<String, Integer> latenessParameterMap;
+	Map<String, Integer> similarityParameterMap;
 	
 	public String getOutputName() {
 		return outputName;
@@ -103,6 +114,14 @@ public final class SettingsOverride {
 
 	public Map<String, Integer> getlatenessParameterMap() {
 		return latenessParameterMap;
+	}
+	
+	public void setSimilarityParameterMap(Map<String, Integer> similarityParameterMap) {
+		this.similarityParameterMap = similarityParameterMap;
+	}
+	
+	public Map<String, Integer> getSimilarityParameterMap() {
+		return similarityParameterMap;
 	}
 	
 }

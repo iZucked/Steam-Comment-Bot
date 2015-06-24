@@ -18,6 +18,9 @@ import java.util.regex.Pattern;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
+import org.joda.time.YearMonth;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.json.simple.JSONArray;
@@ -27,7 +30,8 @@ import org.json.simple.parser.JSONParser;
 import com.mmxlabs.common.Pair;
 
 public class HeadlessJSONParser {
-	SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY/MM/dd");
+	SimpleDateFormat yearMonthFormat = new SimpleDateFormat("YYYY/MM");
+	SimpleDateFormat localDateFormat = new SimpleDateFormat("YYYY/MM/dd");
 
 	public Map<String, Pair<Object, Class<?>>> openFile(String filePath) {
 		JSONParser parser = new JSONParser();
@@ -117,8 +121,11 @@ public class HeadlessJSONParser {
 							params.put(key, new Pair<Object, Class<?>>(new DoubleMap(doubleMap), DoubleMap.class));
 						}
 					} else if ((value instanceof String) && matchDate((String) value)) {
-						Date parsedDate = parseDate((String) value);
-						params.put(key, new Pair<Object, Class<?>>(parsedDate, Date.class));
+						LocalDate parsedDate = parseDate((String) value);
+						params.put(key, new Pair<Object, Class<?>>(parsedDate, LocalDate.class));
+					} else if ((value instanceof String) && matchYearMonth((String) value)) {
+						YearMonth parsedDate = parseYearMonth((String) value);
+						params.put(key, new Pair<Object, Class<?>>(parsedDate, YearMonth.class));
 					} else if (value instanceof String) {
 						params.put(key, new Pair<Object, Class<?>>(value, String.class));
 					}
@@ -172,9 +179,9 @@ public class HeadlessJSONParser {
 		}
 	}
 	
-	boolean matchDate(String input) {
+	boolean matchYearMonth(String input) {
 	     try {
-	          dateFormat.parse(input);
+	          yearMonthFormat.parse(input);
 	          return true;
 	     }
 	     catch(ParseException e){
@@ -182,12 +189,23 @@ public class HeadlessJSONParser {
 	     }
 	}
 
-	Date parseDate(String dateString) {
-		DateTimeZone timeZone = DateTimeZone.forID( "UTC" );
-		DateTimeFormatter formatter = DateTimeFormat.forPattern( "YYYY/MM/dd" );
-		DateTime dateTime = formatter.withZone( timeZone ).parseDateTime( dateString );
-		return dateTime.toDate();
-
+	YearMonth parseYearMonth(String dateString) {
+		return YearMonth.parse(dateString, DateTimeFormat.forPattern("YYYY/MM"));
 	}
 
+	boolean matchDate(String input) {
+		try {
+			localDateFormat.parse(input);
+			return true;
+		}
+		catch(ParseException e){
+			return false;
+		}
+	}
+	
+	LocalDate parseDate(String dateString) {
+		LocalDate dateTime = LocalDate.parse(dateString, DateTimeFormat.forPattern( "YYYY/MM/dd" ));
+		return dateTime;		
+	}
+	
 }
