@@ -58,3 +58,16 @@ units.2.instructions.configure.import= \
 	org.eclipse.equinox.p2.touchpoint.eclipse.addJvmArg, \
 	org.eclipse.equinox.p2.touchpoint.eclipse.removeJvmArg
 
+units.3.id=configure.com.mmxlabs.lingo.product.configuration.linux.x86_64
+units.3.version=1.0.0
+units.3.provides.1.namespace=org.eclipse.equinox.p2.iu
+units.3.provides.1.name=configure.com.mmxlabs.lingo.product.configuration.linux.x86_64
+units.3.provides.1.version=1.0.0
+units.3.filter=(&(osgi.os=linux) (osgi.arch=x86_64))
+units.3.touchpoint.id=org.eclipse.equinox.p2.osgi
+units.3.touchpoint.version=1.0.0
+units.3.instructions.configure=addJvmArg(jvmArg:-Xmx2048m);
+units.3.instructions.unconfigure=removeJvmArg(jvmArg:-Xmx2048m);
+units.3.instructions.configure.import= \
+	org.eclipse.equinox.p2.touchpoint.eclipse.addJvmArg, \
+	org.eclipse.equinox.p2.touchpoint.eclipse.removeJvmArg
