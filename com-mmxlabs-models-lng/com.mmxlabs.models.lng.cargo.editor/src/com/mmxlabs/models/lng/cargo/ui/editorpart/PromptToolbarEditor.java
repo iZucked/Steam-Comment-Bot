@@ -64,9 +64,6 @@ public class PromptToolbarEditor extends ControlContribution {
 	private EditingDomain editingDomain;
 	private LNGScenarioModel rootObject;
 
-	private Button periodEndEnabled;
-	private Button periodStartEnabled;
-
 	private DateTime periodStartEditor;
 	private DateTime periodEndEditor;
 
@@ -81,11 +78,6 @@ public class PromptToolbarEditor extends ControlContribution {
 					periodStartEditor.setMonth(date.getMonthOfYear() - 1);
 					periodStartEditor.setDay(date.getDayOfMonth());
 					periodStartEditor.setEnabled(true);
-					periodStartEnabled.setSelection(true);
-
-				} else {
-					periodStartEditor.setEnabled(false);
-					periodStartEnabled.setSelection(false);
 				}
 			} else if (notification.getFeature() == LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodEnd()) {
 				if (newValue != null) {
@@ -94,10 +86,6 @@ public class PromptToolbarEditor extends ControlContribution {
 					periodEndEditor.setMonth(date.getMonthOfYear() - 1);
 					periodEndEditor.setDay(date.getDayOfMonth());
 					periodEndEditor.setEnabled(true);
-					periodEndEnabled.setSelection(true);
-				} else {
-					periodEndEditor.setEnabled(false);
-					periodEndEnabled.setSelection(false);
 				}
 			}
 		}
@@ -119,33 +107,7 @@ public class PromptToolbarEditor extends ControlContribution {
 		lbl.setText("Prompt:");
 		lbl.setLayoutData(GridDataFactory.swtDefaults().minSize(1000, -1).create());
 
-		periodStartEnabled = new Button(pparent, SWT.TOGGLE);
-		periodStartEnabled.setText("Start");
-		periodStartEnabled.setLayoutData(GridDataFactory.swtDefaults().minSize(1000, -1).create());
-		periodStartEnabled.addSelectionListener(new SelectionListener() {
-
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-
-				if (periodStartEnabled.getSelection()) {
-					final LocalDate date = new LocalDate();
-					final Command cmd = SetCommand.create(editingDomain, rootObject.getPortfolioModel(), LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodStart(), date);
-					editingDomain.getCommandStack().execute(cmd);
-					periodStartEditor.setEnabled(true);
-				} else {
-					final Command cmd = SetCommand.create(editingDomain, rootObject.getPortfolioModel(), LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodStart(), SetCommand.UNSET_VALUE);
-					editingDomain.getCommandStack().execute(cmd);
-					periodStartEditor.setEnabled(false);
-				}
-			}
-
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
-
-			}
-		});
-		// Limit height to toolbar height.
-		periodStartEnabled.addListener(SWT.Resize, new LimitWidgetHeightListener(pparent, periodStartEnabled));
+		final CompoundCommand setDefaultPromptCommand = new CompoundCommand("Set default prompt");
 
 		periodStartEditor = new DateTime(pparent, SWT.DATE | SWT.BORDER | SWT.DROP_DOWN);
 		periodStartEditor.setLayoutData(GridDataFactory.swtDefaults().minSize(1000, -1).create());
@@ -156,10 +118,9 @@ public class PromptToolbarEditor extends ControlContribution {
 				periodStartEditor.setYear(date.getYear());
 				periodStartEditor.setMonth(date.getMonthOfYear() - 1);
 				periodStartEditor.setDay(date.getDayOfMonth());
-				periodStartEnabled.setSelection(true);
 			} else {
-				periodStartEditor.setEnabled(false);
-				periodStartEnabled.setSelection(false);
+				setDefaultPromptCommand
+						.append(SetCommand.create(editingDomain, rootObject.getPortfolioModel(), LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodStart(), new LocalDate()));
 			}
 		}
 		periodStartEditor.addSelectionListener(new SelectionListener() {
@@ -177,33 +138,9 @@ public class PromptToolbarEditor extends ControlContribution {
 
 			}
 		});
-		periodEndEnabled = new Button(pparent, SWT.TOGGLE);
-		periodEndEnabled.setText("End");
-		periodEndEnabled.setLayoutData(GridDataFactory.swtDefaults().minSize(1000, -1).create());
-		periodEndEnabled.addSelectionListener(new SelectionListener() {
 
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-
-				if (periodEndEnabled.getSelection()) {
-					final LocalDate date = new LocalDate();
-					final Command cmd = SetCommand.create(editingDomain, rootObject.getPortfolioModel(), LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodEnd(), date);
-					editingDomain.getCommandStack().execute(cmd);
-					periodEndEditor.setEnabled(true);
-				} else {
-					final Command cmd = SetCommand.create(editingDomain, rootObject.getPortfolioModel(), LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodEnd(), SetCommand.UNSET_VALUE);
-					editingDomain.getCommandStack().execute(cmd);
-					periodEndEditor.setEnabled(false);
-				}
-			}
-
-			@Override
-			public void widgetDefaultSelected(final SelectionEvent e) {
-
-			}
-		});
-		// Limit height to toolbar height.
-		periodEndEnabled.addListener(SWT.Resize, new LimitWidgetHeightListener(pparent, periodEndEnabled));
+		final Label lbl2 = new Label(pparent, SWT.NONE);
+		lbl2.setText(" to ");
 
 		periodEndEditor = new DateTime(pparent, SWT.DATE | SWT.BORDER | SWT.DROP_DOWN);
 		periodEndEditor.setLayoutData(GridDataFactory.swtDefaults().minSize(1000, -1).create());
@@ -214,10 +151,11 @@ public class PromptToolbarEditor extends ControlContribution {
 				periodEndEditor.setYear(date.getYear());
 				periodEndEditor.setMonth(date.getMonthOfYear() - 1);
 				periodEndEditor.setDay(date.getDayOfMonth());
-				periodEndEnabled.setSelection(true);
+				// periodEndEnabled.setSelection(true);
 			} else {
-				periodEndEditor.setEnabled(false);
-				periodEndEnabled.setSelection(false);
+
+				setDefaultPromptCommand.append(SetCommand.create(editingDomain, rootObject.getPortfolioModel(), LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodEnd(),
+						new LocalDate().plusDays(90)));
 			}
 		}
 		periodEndEditor.addSelectionListener(new SelectionListener() {
@@ -260,6 +198,10 @@ public class PromptToolbarEditor extends ControlContribution {
 
 		// Listen to further changes
 		rootObject.getPortfolioModel().eAdapters().add(adapter);
+
+		if (!setDefaultPromptCommand.isEmpty()) {
+			editingDomain.getCommandStack().execute(setDefaultPromptCommand);
+		}
 
 		return pparent;
 	}
