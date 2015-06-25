@@ -25,6 +25,7 @@ import org.eclipse.emf.validation.service.ModelValidationService;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
+import org.omg.PortableInterceptor.SUCCESSFUL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +50,7 @@ import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModesRegis
 import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog;
 import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog.DataSection;
 import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog.DataType;
+import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog.Option;
 import com.mmxlabs.models.lng.transformer.ui.parameters.ParameterModesDialog.OptionGroup;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
@@ -281,12 +283,17 @@ public final class OptimisationHelper {
 				// optionAdded = true;
 
 				// Check period optimisation is permitted
-				if (SecurityUtils.getSubject().isPermitted("features:optimisation-period")) {
+				// if (SecurityUtils.getSubject().isPermitted("features:optimisation-period")) {
+				{
 					final OptionGroup group = dialog.createGroup(DataSection.Controls, "Optimise between");
-					dialog.addOption(DataSection.Controls, group, editingDomain, "Start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear,
+					final Option optStart = dialog.addOption(DataSection.Controls, group, editingDomain, "Start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear,
 							ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
-					dialog.addOption(DataSection.Controls, group, editingDomain, "Up to start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear,
+					final Option optEnd = dialog.addOption(DataSection.Controls, group, editingDomain, "Up to start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear,
 							ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseBefore());
+					if (!SecurityUtils.getSubject().isPermitted("features:optimisation-period")) {
+						optStart.enabled = false;
+						optEnd.enabled = false;
+					}
 					optionAdded = true;
 				}
 
@@ -300,51 +307,49 @@ public final class OptimisationHelper {
 				}
 				// dialog.addOption(DataSection.Main, null, editingDomian, "Shipping Only Optimisation", copy, defaultSettings, DataType.Boolean,
 				// ParametersPackage.eINSTANCE.getOptimiserSettings_ShippingOnly());
+			}
+			// if (SecurityUtils.getSubject().isPermitted("features:optimisation-charter-out-generation")) {
+			{
+				// dialog.addOption(DataSection.Main, null, editingDomian, "Generate Charter Outs", copy, defaultSettings, DataType.Choice,
+				// ParametersPackage.eINSTANCE.getOptimiserSettings_GenerateCharterOuts());
 
-				if (SecurityUtils.getSubject().isPermitted("features:optimisation-charter-out-generation")) {
-					// dialog.addOption(DataSection.Main, null, editingDomian, "Generate Charter Outs", copy, defaultSettings, DataType.Choice,
-					// ParametersPackage.eINSTANCE.getOptimiserSettings_GenerateCharterOuts());
+				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+				choiceData.addChoice("Off", Boolean.FALSE);
+				choiceData.addChoice("On", Boolean.TRUE);
 
+				choiceData.enabled = SecurityUtils.getSubject().isPermitted("features:optimisation-charter-out-generation");
+				// dialog.addOption(DataSection.Main, null, editingDomian, "Similarity", copy, defaultSettings, DataType.Choice, choiceData,
+				// ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
+				dialog.addOption(DataSection.Toggles, null, editingDomain, "Generate Charter Outs: ", copy, defaultSettings, DataType.Choice, choiceData,
+						ParametersPackage.eINSTANCE.getOptimiserSettings_GenerateCharterOuts());
+				optionAdded = true;
+
+			}
+			if (!forEvaluation) {
+				// if (SecurityUtils.getSubject().isPermitted("features:optimisation-similarity")) {
+				{
 					final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-					choiceData.addChoice("Off", Boolean.FALSE);
-					choiceData.addChoice("On", Boolean.TRUE);
+					choiceData.addChoice("Off", ScenarioUtils.createOffSettings());
+					choiceData.addChoice("Low", ScenarioUtils.createLowSettings());
+					choiceData.addChoice("Med", ScenarioUtils.createMediumSettings());
+					choiceData.addChoice("High", ScenarioUtils.createHighSettings());
 
-					// dialog.addOption(DataSection.Main, null, editingDomian, "Similarity", copy, defaultSettings, DataType.Choice, choiceData,
-					// ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
-					dialog.addOption(DataSection.Toggles, null, editingDomain, "Generate Charter Outs: ", copy, defaultSettings, DataType.Choice, choiceData,
-							ParametersPackage.eINSTANCE.getOptimiserSettings_GenerateCharterOuts());
-					optionAdded = true;
-
-				}
-				if (SecurityUtils.getSubject().isPermitted("features:optimisation-similarity")) {
-
-					final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-					choiceData.addChoice("Off", 0.0);
-					choiceData.addChoice("Low", 250000.0);
-					choiceData.addChoice("Med", 500000.0);
-					choiceData.addChoice("High", 1000000.0);
+					choiceData.enabled = SecurityUtils.getSubject().isPermitted("features:optimisation-similarity");
 
 					Objective objective = findObjective(SimilarityFitnessCoreFactory.NAME, copy);
 					// Create objective if missing.
 					if (objective == null) {
 						objective = ParametersFactory.eINSTANCE.createObjective();
-						objective.setEnabled(true);
-						objective.setWeight(0.0);
 						objective.setName(SimilarityFitnessCoreFactory.NAME);
 						copy.getObjectives().add(objective);
 					}
 
-					if (objective != null) {
-						dialog.addOption(DataSection.Controls, null, editingDomain, "Similarity: ", objective, findObjective(SimilarityFitnessCoreFactory.NAME, defaultSettings), DataType.Choice,
-								choiceData, ParametersPackage.Literals.OBJECTIVE__WEIGHT);
-						optionAdded = true;
-					}
-				} else {
-					// Disable similarity if set up.
-					Objective objective = findObjective(SimilarityFitnessCoreFactory.NAME, copy);
-					if (objective != null) {
-						objective.setWeight(0);
-					}
+					objective.setEnabled(true);
+					objective.setWeight(1.0);
+
+					dialog.addOption(DataSection.Controls, null, editingDomain, "Similarity: ", copy, defaultSettings, DataType.Choice, choiceData,
+							ParametersPackage.Literals.OPTIMISER_SETTINGS__SIMILARITY_SETTINGS);
+					optionAdded = true;
 				}
 			}
 
