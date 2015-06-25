@@ -273,6 +273,29 @@ public class ParametersItemProviderAdapterFactory extends ParametersAdapterFacto
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.SimilarityInterval} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SimilarityIntervalItemProvider similarityIntervalItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.SimilarityInterval}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSimilarityIntervalAdapter() {
+		if (similarityIntervalItemProvider == null) {
+			similarityIntervalItemProvider = new SimilarityIntervalItemProvider(this);
+		}
+
+		return similarityIntervalItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -414,6 +437,7 @@ public class ParametersItemProviderAdapterFactory extends ParametersAdapterFacto
 		if (annealingSettingsItemProvider != null) annealingSettingsItemProvider.dispose();
 		if (argumentItemProvider != null) argumentItemProvider.dispose();
 		if (similaritySettingsItemProvider != null) similaritySettingsItemProvider.dispose();
+		if (similarityIntervalItemProvider != null) similarityIntervalItemProvider.dispose();
 	}
 
 }

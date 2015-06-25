@@ -2,6 +2,7 @@
  */
 package com.mmxlabs.models.lng.parameters;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -13,6 +14,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.parameters.SimilaritySettings#getThreshold <em>Threshold</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.SimilaritySettings#getIntervals <em>Intervals</em>}</li>
  * </ul>
  * </p>
  *
@@ -73,5 +75,21 @@ public interface SimilaritySettings extends EObject {
 	 * @generated
 	 */
 	boolean isSetThreshold();
+
+	/**
+	 * Returns the value of the '<em><b>Intervals</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.parameters.SimilarityInterval}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Intervals</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Intervals</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getSimilaritySettings_Intervals()
+	 * @model containment="true" ordered="false"
+	 * @generated
+	 */
+	EList<SimilarityInterval> getIntervals();
 
 } // SimilaritySettings

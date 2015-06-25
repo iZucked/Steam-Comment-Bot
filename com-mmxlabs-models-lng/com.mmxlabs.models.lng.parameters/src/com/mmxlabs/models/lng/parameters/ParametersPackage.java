@@ -492,13 +492,60 @@ public interface ParametersPackage extends EPackage {
 	int SIMILARITY_SETTINGS__THRESHOLD = 0;
 
 	/**
+	 * The feature id for the '<em><b>Intervals</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMILARITY_SETTINGS__INTERVALS = 1;
+
+	/**
 	 * The number of structural features of the '<em>Similarity Settings</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SIMILARITY_SETTINGS_FEATURE_COUNT = 1;
+	int SIMILARITY_SETTINGS_FEATURE_COUNT = 2;
+
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.SimilarityIntervalImpl <em>Similarity Interval</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.parameters.impl.SimilarityIntervalImpl
+	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getSimilarityInterval()
+	 * @generated
+	 */
+	int SIMILARITY_INTERVAL = 8;
+
+	/**
+	 * The feature id for the '<em><b>Threshold</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMILARITY_INTERVAL__THRESHOLD = 0;
+
+	/**
+	 * The feature id for the '<em><b>Weight</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMILARITY_INTERVAL__WEIGHT = 1;
+
+	/**
+	 * The number of structural features of the '<em>Similarity Interval</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMILARITY_INTERVAL_FEATURE_COUNT = 2;
 
 
 	/**
@@ -835,6 +882,49 @@ public interface ParametersPackage extends EPackage {
 	EAttribute getSimilaritySettings_Threshold();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.parameters.SimilaritySettings#getIntervals <em>Intervals</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Intervals</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.SimilaritySettings#getIntervals()
+	 * @see #getSimilaritySettings()
+	 * @generated
+	 */
+	EReference getSimilaritySettings_Intervals();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.SimilarityInterval <em>Similarity Interval</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Similarity Interval</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.SimilarityInterval
+	 * @generated
+	 */
+	EClass getSimilarityInterval();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.SimilarityInterval#getThreshold <em>Threshold</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Threshold</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.SimilarityInterval#getThreshold()
+	 * @see #getSimilarityInterval()
+	 * @generated
+	 */
+	EAttribute getSimilarityInterval_Threshold();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.SimilarityInterval#getWeight <em>Weight</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Weight</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.SimilarityInterval#getWeight()
+	 * @see #getSimilarityInterval()
+	 * @generated
+	 */
+	EAttribute getSimilarityInterval_Weight();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1119,6 +1209,40 @@ public interface ParametersPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SIMILARITY_SETTINGS__THRESHOLD = eINSTANCE.getSimilaritySettings_Threshold();
+
+		/**
+		 * The meta object literal for the '<em><b>Intervals</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SIMILARITY_SETTINGS__INTERVALS = eINSTANCE.getSimilaritySettings_Intervals();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.SimilarityIntervalImpl <em>Similarity Interval</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.parameters.impl.SimilarityIntervalImpl
+		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getSimilarityInterval()
+		 * @generated
+		 */
+		EClass SIMILARITY_INTERVAL = eINSTANCE.getSimilarityInterval();
+
+		/**
+		 * The meta object literal for the '<em><b>Threshold</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SIMILARITY_INTERVAL__THRESHOLD = eINSTANCE.getSimilarityInterval_Threshold();
+
+		/**
+		 * The meta object literal for the '<em><b>Weight</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SIMILARITY_INTERVAL__WEIGHT = eINSTANCE.getSimilarityInterval_Weight();
 
 	}
 

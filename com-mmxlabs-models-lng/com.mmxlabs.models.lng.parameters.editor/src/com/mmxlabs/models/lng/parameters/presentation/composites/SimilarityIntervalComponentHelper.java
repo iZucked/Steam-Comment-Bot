@@ -1,28 +1,34 @@
 /**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * All rights reserved.
+ */
+/**
  */
 package com.mmxlabs.models.lng.parameters.presentation.composites;
 
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.emf.ecore.EClass;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 
+import org.eclipse.emf.ecore.EClass;
+
 /**
- * A component helper for SimilaritySettings instances
+ * A component helper for SimilarityInterval instances
  *
  * @generated
  */
-public class SimilaritySettingsComponentHelper extends BaseComponentHelper {
+public class SimilarityIntervalComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -30,7 +36,7 @@ public class SimilaritySettingsComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public SimilaritySettingsComponentHelper() {
+	public SimilarityIntervalComponentHelper() {
 		this(Platform.getAdapterManager());
 	}
 
@@ -39,18 +45,18 @@ public class SimilaritySettingsComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public SimilaritySettingsComponentHelper(IAdapterManager adapterManager) {
+	public SimilarityIntervalComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 	}
 	
 	/**
-	 * add editors to a composite, using SimilaritySettings as the supertype
+	 * add editors to a composite, using SimilarityInterval as the supertype
 	 *
 	 * @generated
 	 */
 	 @Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, ParametersPackage.Literals.SIMILARITY_SETTINGS);	
+		addEditorsToComposite(detailComposite, ParametersPackage.Literals.SIMILARITY_INTERVAL);	
 	}
 	
 	/**
@@ -62,23 +68,22 @@ public class SimilaritySettingsComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_thresholdEditor(detailComposite, topClass);
-		add_intervalsEditor(detailComposite, topClass);
+		add_weightEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the threshold feature on SimilaritySettings
+	 * Create the editor for the threshold feature on SimilarityInterval
 	 *
 	 * @generated
 	 */
 	protected void add_thresholdEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ParametersPackage.Literals.SIMILARITY_SETTINGS__THRESHOLD));
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ParametersPackage.Literals.SIMILARITY_INTERVAL__THRESHOLD));
 	}
-
 	/**
-	 * Create the editor for the intervals feature on SimilaritySettings
+	 * Create the editor for the weight feature on SimilarityInterval
 	 *
 	 * @generated
 	 */
-	protected void add_intervalsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ParametersPackage.Literals.SIMILARITY_SETTINGS__INTERVALS));
+	protected void add_weightEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ParametersPackage.Literals.SIMILARITY_INTERVAL__WEIGHT));
 	}
 }

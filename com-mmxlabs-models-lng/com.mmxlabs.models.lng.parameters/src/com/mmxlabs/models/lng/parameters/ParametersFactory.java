@@ -96,6 +96,15 @@ public interface ParametersFactory extends EFactory {
 	SimilaritySettings createSimilaritySettings();
 
 	/**
+	 * Returns a new object of class '<em>Similarity Interval</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Similarity Interval</em>'.
+	 * @generated
+	 */
+	SimilarityInterval createSimilarityInterval();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
