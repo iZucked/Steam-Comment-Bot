@@ -12,12 +12,16 @@ import java.util.Random;
 
 import javax.inject.Singleton;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.mmxlabs.models.lng.parameters.Constraint;
 import com.mmxlabs.models.lng.parameters.Objective;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.SimilarityInterval;
+import com.mmxlabs.models.lng.parameters.SimilaritySettings;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessFactory;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
@@ -120,19 +124,19 @@ public class OptimiserSettingsModule extends AbstractModule {
 	private boolean isOptimiserReevaluating() {
 		return true;
 	}
-	
+
 	@Provides
 	@Named(SequencesConstrainedMoveGeneratorUnit.OPTIMISER_ENABLE_FOUR_OPT_2)
 	private boolean enableFourOpt2() {
 		return true;
 	}
-	
+
 	@Provides
 	@Named(TravelTimeConstraintChecker.OPTIMISER_START_ELEMENT_FIX)
 	private boolean enableStartOfSequenceFix() {
 		return true;
 	}
-	
+
 	@Provides
 	@Named(LocalSearchOptimiserModule.LSO_NUMBER_OF_ITERATIONS)
 	private int getNumberOfIterations(final OptimiserSettings settings) {
@@ -148,7 +152,7 @@ public class OptimiserSettingsModule extends AbstractModule {
 			return -1;
 		}
 	}
-	
+
 	@Provides
 	@Named(SimilarityFitnessCore.SIMILARITY_THRESHOLD)
 	private boolean getSimilarityFitnessThreshold(final OptimiserSettings settings) {
@@ -158,7 +162,7 @@ public class OptimiserSettingsModule extends AbstractModule {
 			return false;
 		}
 	}
-	
+
 	@Provides
 	@Named(LinearFitnessEvaluatorModule.LINEAR_FITNESS_WEIGHTS_MAP)
 	Map<String, Double> provideLSOFitnessWeights(final OptimiserSettings settings, final List<IFitnessComponent> fitnessComponents) {
@@ -199,23 +203,39 @@ public class OptimiserSettingsModule extends AbstractModule {
 
 		return lcp;
 	}
-	
+
 	@Provides
 	@Singleton
-	private ISimilarityComponentParameters provideSimilarityComponentParameters() {
+	private ISimilarityComponentParameters provideSimilarityComponentParameters(@NonNull OptimiserSettings settings) {
+
 		final SimilarityComponentParameters scp = new SimilarityComponentParameters();
-
+		// Set default off
 		scp.setThreshold(ISimilarityComponentParameters.Interval.LOW, 8);
-		scp.setWeight(ISimilarityComponentParameters.Interval.LOW, 1000000);
-
+		scp.setWeight(ISimilarityComponentParameters.Interval.LOW, 0);
 		scp.setThreshold(ISimilarityComponentParameters.Interval.MEDIUM, 16);
-		scp.setWeight(ISimilarityComponentParameters.Interval.MEDIUM, 1000000);
-		
+		scp.setWeight(ISimilarityComponentParameters.Interval.MEDIUM, 0);
 		scp.setThreshold(ISimilarityComponentParameters.Interval.HIGH, 30);
-		scp.setWeight(ISimilarityComponentParameters.Interval.HIGH, 1000000);
+		scp.setWeight(ISimilarityComponentParameters.Interval.HIGH, 0);
+		scp.setWeight(ISimilarityComponentParameters.Interval.OUT_OF_BOUNDS, 0);
 
-		scp.setWeight(ISimilarityComponentParameters.Interval.OUT_OF_BOUNDS, 1000000);
-		
+		// Replace with settings.
+		SimilaritySettings similaritySettings = settings.getSimilaritySettings();
+		// Oops! Bad data model
+		for (SimilarityInterval interval : similaritySettings.getIntervals()) {
+			if (interval.getThreshold() == 0) {
+				scp.setWeight(ISimilarityComponentParameters.Interval.LOW, interval.getWeight());
+			}
+			if (interval.getThreshold() == 8) {
+				scp.setWeight(ISimilarityComponentParameters.Interval.MEDIUM, interval.getWeight());
+			}
+			if (interval.getThreshold() == 16) {
+				scp.setWeight(ISimilarityComponentParameters.Interval.HIGH, interval.getWeight());
+			}
+			if (interval.getThreshold() == 30) {
+				scp.setWeight(ISimilarityComponentParameters.Interval.OUT_OF_BOUNDS, interval.getWeight());
+			}
+		}
+
 		return scp;
 	}
 
