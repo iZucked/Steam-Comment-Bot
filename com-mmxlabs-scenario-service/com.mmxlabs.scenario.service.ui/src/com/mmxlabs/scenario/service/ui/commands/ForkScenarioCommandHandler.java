@@ -71,7 +71,7 @@ public class ForkScenarioCommandHandler extends AbstractHandler {
 									}
 								}
 
-								final String namePrefix = instance.getName() + "--";
+								final String namePrefix = "~" + instance.getName();
 								String newName = namePrefix;
 								int counter = 1;
 								while (existingNames.contains(newName)) {
