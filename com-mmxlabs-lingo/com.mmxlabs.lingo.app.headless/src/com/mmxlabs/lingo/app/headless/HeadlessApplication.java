@@ -362,6 +362,7 @@ public class HeadlessApplication implements IApplication {
 		setLatenessParameters(settingsOverride, headlessParameters);
 		createPromptDates(rootObject, headlessParameters);
 		createSimilaritySettings(settings, headlessParameters);
+		setSimilarityParameters(settingsOverride, headlessParameters);
 	}
 
 	private void createSimilaritySettings(OptimiserSettings settings, HeadlessParameters headlessParameters) {
@@ -396,6 +397,14 @@ public class HeadlessApplication implements IApplication {
 		overrideSettings.setlatenessParameterMap(latenessParameterMap);
 	}
 
+	private void setSimilarityParameters(SettingsOverride overrideSettings, HeadlessParameters headlessParameters) {
+		Map<String, Integer> similarityParameterMap = new HashMap<String, Integer>();
+		for (String key : SettingsOverride.similarityComponentParameters) {
+			similarityParameterMap.put(key, headlessParameters.getParameterValue(key, Integer.class));
+		}
+		overrideSettings.setSimilarityParameterMap(similarityParameterMap);
+	}
+	
 	private void createDateRanges(OptimiserSettings settings, HeadlessParameters headlessParameters) {
 		YearMonth dateBefore = headlessParameters.getParameterValue("periodOptimisationDateBefore", YearMonth.class);
 		YearMonth dateAfter = headlessParameters.getParameterValue("periodOptimisationDateAfter", YearMonth.class);

@@ -15,7 +15,9 @@ import com.google.inject.name.Named;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
+import com.mmxlabs.scheduler.optimiser.fitness.components.ISimilarityComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponentParameters;
+import com.mmxlabs.scheduler.optimiser.fitness.components.SimilarityComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.EnumeratingSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.lso.SequencesConstrainedMoveGeneratorUnit;
 
@@ -78,5 +80,25 @@ public class SettingsOverrideModule extends AbstractModule {
 		return lcp;
 	}
 
+	@Provides
+	@Singleton
+	private ISimilarityComponentParameters provideSimilarityComponentParameters() {
+		Map<String, Integer> scpm = settings.getSimilarityParameterMap();
+		final SimilarityComponentParameters scp = new SimilarityComponentParameters();
+		
+		scp.setThreshold(SimilarityComponentParameters.Interval.LOW, scpm.get("scp-set-low-thresh"));
+		scp.setWeight(SimilarityComponentParameters.Interval.LOW, scpm.get("scp-set-low-weight"));
+		
+		scp.setThreshold(SimilarityComponentParameters.Interval.MEDIUM, scpm.get("scp-set-med-thresh"));
+		scp.setWeight(SimilarityComponentParameters.Interval.MEDIUM, scpm.get("scp-set-med-weight"));
+		
+		scp.setThreshold(SimilarityComponentParameters.Interval.HIGH, scpm.get("scp-set-high-thresh"));
+		scp.setWeight(SimilarityComponentParameters.Interval.HIGH, scpm.get("scp-set-high-weight"));
+
+		scp.setWeight(SimilarityComponentParameters.Interval.OUT_OF_BOUNDS, scpm.get("scp-set-outOfBounds-weight"));
+		
+		return scp;
+	}
+	
 
 }

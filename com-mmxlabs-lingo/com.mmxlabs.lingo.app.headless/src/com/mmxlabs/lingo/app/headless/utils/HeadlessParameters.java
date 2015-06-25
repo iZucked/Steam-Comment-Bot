@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.joda.time.LocalDate;
+import org.joda.time.YearMonth;
+
 import com.mmxlabs.common.Pair;
 
 public class HeadlessParameters {
@@ -62,8 +65,10 @@ public class HeadlessParameters {
 			parameters.put(key, new StringListParameter(key, (StringList) value));
 		} else if (clazz.isAssignableFrom(DoubleMap.class)) {
 			parameters.put(key, new DoubleMapParameter(key, (DoubleMap) value));
-		} else if (clazz.isAssignableFrom(Date.class)) {
-			parameters.put(key, new DateParameter(key, (Date) value));
+		} else if (clazz.isAssignableFrom(LocalDate.class)) {
+			parameters.put(key, new LocalDateParameter(key, (LocalDate) value));
+		} else if (clazz.isAssignableFrom(YearMonth.class)) {
+			parameters.put(key, new YearMonthParameter(key, (YearMonth) value));
 		}
 
 	}
