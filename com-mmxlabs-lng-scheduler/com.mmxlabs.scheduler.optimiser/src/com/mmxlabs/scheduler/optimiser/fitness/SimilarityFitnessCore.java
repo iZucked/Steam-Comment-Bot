@@ -171,11 +171,11 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 				}
 			}
 			numberOfChanges = cargoDifferences + vesselDifferences;
-			if (USE_THRESHOLD) {
+//			if (USE_THRESHOLD) {
 				lastFitness = processDifferencesWithThreshold(numberOfChanges);
-			} else {
-				lastFitness = numberOfChanges;
-			}
+//			} else {
+//				lastFitness = numberOfChanges;
+//			}
 		}
 		lastDifferences = numberOfChanges;
 	}
