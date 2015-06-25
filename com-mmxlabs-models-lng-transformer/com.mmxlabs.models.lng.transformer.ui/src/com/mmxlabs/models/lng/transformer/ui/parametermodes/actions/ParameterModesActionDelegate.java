@@ -4,9 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.parametermodes.actions;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.viewers.ISelection;
@@ -26,7 +23,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
-import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModesRegistry;
 
 public abstract class ParameterModesActionDelegate extends ActionDelegate implements IEditorActionDelegate, IMenuCreator {
@@ -100,8 +96,8 @@ public abstract class ParameterModesActionDelegate extends ActionDelegate implem
 
 				IParameterModesRegistry registry = getParameterModesRegistry();
 
-				final List<String> modes = new ArrayList<String>(registry.getParameterModes());
-				modes.add(OptimisationHelper.PARAMETER_MODE_CUSTOM);
+//				final List<String> modes = new ArrayList<String>(registry.getParameterModes());
+//				modes.add(OptimisationHelper.PARAMETER_MODE_CUSTOM);
 
 				for (final String mode : registry.getParameterModes()) {
 					final MenuItem item = new MenuItem(m, SWT.DEFAULT);
@@ -115,17 +111,17 @@ public abstract class ParameterModesActionDelegate extends ActionDelegate implem
 					});
 				}
 				// Add custom mode
-				{
-					final MenuItem item = new MenuItem(m, SWT.DEFAULT);
-					item.setText("Custom");
-
-					item.addSelectionListener(new SelectionAdapter() {
-						@Override
-						public void widgetSelected(final SelectionEvent e) {
-							runCustomMode();
-						}
-					});
-				}
+//				{
+//					final MenuItem item = new MenuItem(m, SWT.DEFAULT);
+//					item.setText("Custom");
+//
+//					item.addSelectionListener(new SelectionAdapter() {
+//						@Override
+//						public void widgetSelected(final SelectionEvent e) {
+//							runCustomMode();
+//						}
+//					});
+//				}
 				// Add edit menu
 				{
 
