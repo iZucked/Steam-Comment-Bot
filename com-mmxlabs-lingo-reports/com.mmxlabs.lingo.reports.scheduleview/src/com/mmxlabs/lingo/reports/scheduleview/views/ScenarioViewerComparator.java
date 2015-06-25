@@ -36,6 +36,10 @@ public class ScenarioViewerComparator extends ViewerComparator {
 		}
 	};
 
+	private enum Type {
+		DES, FOB, FLEET, CHARTER
+	}
+
 	private Mode mode = Mode.INTERLEAVE;
 
 	protected final Mode getMode() {
@@ -57,6 +61,19 @@ public class ScenarioViewerComparator extends ViewerComparator {
 		return super.category(element);
 	}
 
+	private Type getSequenceType(Sequence s) {
+		if (s.isFleetVessel()) {
+			return Type.FLEET;
+		} else if (s.isSetCharterInMarket()) {
+			return Type.CHARTER;
+		} else if (s.getName().contains("DES")) {
+			return Type.DES;
+		} else if (s.getName().contains("FOB")) {
+			return Type.FOB;
+		}
+		return Type.FLEET;
+	}
+
 	@Override
 	public int compare(final Viewer viewer, final Object e1, final Object e2) {
 
@@ -73,18 +90,18 @@ public class ScenarioViewerComparator extends ViewerComparator {
 			final Sequence s2 = (Sequence) e2;
 
 			// Group by fleet/spot
-			final boolean s1Spot = s1.isSetCharterInMarket();
-			final boolean s2Spot = s2.isSetCharterInMarket();
+			final Type s1Type = getSequenceType(s1);
+			final Type s2Type = getSequenceType(s2);
 
-			if (s1Spot != s2Spot) {
-				return s1Spot ? 1 : -1;
+			if (s1Type != s2Type) {
+				return s1Type.ordinal() - s2Type.ordinal();
 			}
 
 			// Sort by name
-			final String str1 = s1.getVesselAvailability() == null ? null : s1.getVesselAvailability().getVessel().getName();
-			final String str2 = s2.getVesselAvailability() == null ? null : s2.getVesselAvailability().getVessel().getName();
+			final String str1 = s1.getVesselAvailability() == null ? s1.getName() : s1.getVesselAvailability().getVessel().getName();
+			final String str2 = s2.getVesselAvailability() == null ? s2.getName() : s2.getVesselAvailability().getVessel().getName();
 
-			final int c = str1 == null ? -1 : (str2 == null ? 1 : str1.compareTo(str2));
+			final int c = str1.compareTo(str2);
 			if (c != 0) {
 				return c;
 			}
@@ -119,22 +136,21 @@ public class ScenarioViewerComparator extends ViewerComparator {
 				final Sequence s2 = (Sequence) e2;
 
 				// Group by fleet/spot
-				final boolean s1Spot = s1.isSetCharterInMarket();
-				final boolean s2Spot = s2.isSetCharterInMarket();
+				final Type s1Type = getSequenceType(s1);
+				final Type s2Type = getSequenceType(s2);
 
-				if (s1Spot != s2Spot) {
-					return s1Spot ? 1 : -1;
+				if (s1Type != s2Type) {
+					return s1Type.ordinal() - s2Type.ordinal();
 				}
 
 				// Sort by name
-				final String name1 = s1.getName();
-				final String name2 = s2.getName();
+				final String str1 = s1.getVesselAvailability() == null ? s1.getName() : s1.getVesselAvailability().getVessel().getName();
+				final String str2 = s2.getVesselAvailability() == null ? s2.getName() : s2.getVesselAvailability().getVessel().getName();
 
-				final int c = name1.compareTo(name2);
+				final int c = str1.compareTo(str2);
 				if (c != 0) {
 					return c;
 				}
-
 				{
 					// Add scenario instance name to field if multiple scenarios are selected
 					final Object input = viewer.getInput();
