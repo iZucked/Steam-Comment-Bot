@@ -1,4 +1,10 @@
 <?xml version="1.0"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2015
+    All rights reserved.
+
+-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xmlns:d="http://docbook.org/ns/docbook" xmlns:ng="http://docbook.org/docbook-ng"
 	xmlns:db="http://docbook.org/ns/docbook" xmlns:exsl="http://exslt.org/common">
 

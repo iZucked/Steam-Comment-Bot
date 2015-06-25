@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * All rights reserved.
+ */
 package com.mmxlabs.lingo.app.headless.utils;
 
 public abstract class AParameter<T> implements Parameter<T> {

@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2015
+    All rights reserved.
+
+-->
 <project name="LiNGO DocBook" default="Eclipse">
 
 	<property name="docbook.xml.filename" value="docbook" />

@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * All rights reserved.
+ */
 package com.mmxlabs.lingo.app.e4;
 
 import org.eclipse.e4.core.di.annotations.Execute;
