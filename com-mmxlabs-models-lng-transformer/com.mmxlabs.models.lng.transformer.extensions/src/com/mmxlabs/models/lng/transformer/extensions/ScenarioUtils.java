@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.parameters.Objective;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
+import com.mmxlabs.models.lng.parameters.SimilarityInterval;
 import com.mmxlabs.models.lng.parameters.SimilaritySettings;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRequirementConstraintCheckerFactory;
@@ -43,15 +44,15 @@ public class ScenarioUtils {
 
 	private static final boolean SPOT_TO_SPOT_CONSTRAINT = false;
 
-	public static Constraint createConstraint(ParametersFactory parametersFactory, String name, boolean enabled) {
-		Constraint c = parametersFactory.createConstraint();
+	public static Constraint createConstraint(final ParametersFactory parametersFactory, final String name, final boolean enabled) {
+		final Constraint c = parametersFactory.createConstraint();
 		c.setName(name);
 		c.setEnabled(enabled);
 		return c;
 	}
 
-	public static Objective createObjective(ParametersFactory of, String name, double weight) {
-		Objective o = of.createObjective();
+	public static Objective createObjective(final ParametersFactory of, final String name, final double weight) {
+		final Objective o = of.createObjective();
 		o.setName(name);
 		o.setWeight(weight);
 		o.setEnabled(weight > 0);
@@ -65,7 +66,7 @@ public class ScenarioUtils {
 	public static OptimiserSettings createDefaultSettings() {
 		final ParametersFactory parametersFactory = ParametersFactory.eINSTANCE;
 
-		OptimiserSettings settings = parametersFactory.createOptimiserSettings();
+		final OptimiserSettings settings = parametersFactory.createOptimiserSettings();
 
 		settings.setName("Default LSO Settings");
 
@@ -99,7 +100,7 @@ public class ScenarioUtils {
 			objectives.add(createObjective(parametersFactory, CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME, 1));
 			objectives.add(createObjective(parametersFactory, CargoSchedulerFitnessCoreFactory.CAPACITY_COMPONENT_NAME, 0.1));
 			objectives.add(createObjective(parametersFactory, NonOptionalSlotFitnessCoreFactory.NAME, 3000000));
-			objectives.add(createObjective(parametersFactory, "SimilarityFitnessCore", 0.00001));
+			objectives.add(createObjective(parametersFactory, "SimilarityFitnessCore", 1.0));
 		}
 
 		final AnnealingSettings annealingSettings = parametersFactory.createAnnealingSettings();
@@ -113,10 +114,64 @@ public class ScenarioUtils {
 		final OptimisationRange range = parametersFactory.createOptimisationRange();
 		settings.setRange(range);
 		settings.setSeed(0);
-		
+
 		// similarity
-		SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
-		settings.setSimilaritySettings(similaritySettings);
+		settings.setSimilaritySettings(createOffSettings());
+
 		return settings;
 	}
+
+	public static SimilaritySettings createOffSettings() {
+		final SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
+
+		similaritySettings.getIntervals().add(createSimilarityInterval(0, 0));
+		similaritySettings.getIntervals().add(createSimilarityInterval(8, 0));
+		similaritySettings.getIntervals().add(createSimilarityInterval(16, 0));
+		similaritySettings.getIntervals().add(createSimilarityInterval(30, 0));
+
+		return similaritySettings;
+	}
+
+	public static SimilaritySettings createLowSettings() {
+		final SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
+
+		similaritySettings.getIntervals().add(createSimilarityInterval(0, 0));
+		similaritySettings.getIntervals().add(createSimilarityInterval(8, 0));
+		similaritySettings.getIntervals().add(createSimilarityInterval(16, 500000));
+		similaritySettings.getIntervals().add(createSimilarityInterval(30, 5000000));
+
+		return similaritySettings;
+	}
+
+	public static SimilaritySettings createMediumSettings() {
+		final SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
+
+		similaritySettings.getIntervals().add(createSimilarityInterval(0, 0));
+		similaritySettings.getIntervals().add(createSimilarityInterval(8, 250000));
+		similaritySettings.getIntervals().add(createSimilarityInterval(16, 500000));
+		similaritySettings.getIntervals().add(createSimilarityInterval(30, 1000000));
+
+		return similaritySettings;
+	}
+
+	public static SimilaritySettings createHighSettings() {
+		final SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
+
+		similaritySettings.getIntervals().add(createSimilarityInterval(0, 250000));
+		similaritySettings.getIntervals().add(createSimilarityInterval(8, 500000));
+		similaritySettings.getIntervals().add(createSimilarityInterval(16, 1000000));
+		similaritySettings.getIntervals().add(createSimilarityInterval(30, 5000000));
+
+		return similaritySettings;
+	}
+
+	public static SimilarityInterval createSimilarityInterval(final int lowerChangeCount, final int weight) {
+		final SimilarityInterval interval = ParametersFactory.eINSTANCE.createSimilarityInterval();
+
+		interval.setThreshold(lowerChangeCount);
+		interval.setWeight(weight);
+
+		return interval;
+	}
+
 }

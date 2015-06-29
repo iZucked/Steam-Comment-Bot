@@ -31,8 +31,10 @@ import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.EnumeratingSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.lso.SequencesConstrainedMoveGeneratorUnit;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
+import com.mmxlabs.scheduler.optimiser.fitness.components.ISimilarityComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
+import com.mmxlabs.scheduler.optimiser.fitness.components.SimilarityComponentParameters;
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
 
 /**
@@ -197,4 +199,24 @@ public class OptimiserSettingsModule extends AbstractModule {
 
 		return lcp;
 	}
+	
+	@Provides
+	@Singleton
+	private ISimilarityComponentParameters provideSimilarityComponentParameters() {
+		final SimilarityComponentParameters scp = new SimilarityComponentParameters();
+
+		scp.setThreshold(ISimilarityComponentParameters.Interval.LOW, 8);
+		scp.setWeight(ISimilarityComponentParameters.Interval.LOW, 1000000);
+
+		scp.setThreshold(ISimilarityComponentParameters.Interval.MEDIUM, 16);
+		scp.setWeight(ISimilarityComponentParameters.Interval.MEDIUM, 1000000);
+		
+		scp.setThreshold(ISimilarityComponentParameters.Interval.HIGH, 30);
+		scp.setWeight(ISimilarityComponentParameters.Interval.HIGH, 1000000);
+
+		scp.setWeight(ISimilarityComponentParameters.Interval.OUT_OF_BOUNDS, 1000000);
+		
+		return scp;
+	}
+
 }

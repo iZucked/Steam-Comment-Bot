@@ -36,6 +36,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
@@ -66,9 +67,13 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		General, Controls, Toggles, Advanced
 	}
 
+	
+	
+	
 	public static class ChoiceData {
 
 		private final List<Pair<String, Object>> choices = new LinkedList<>();
+		public boolean enabled = true;
 
 		public void addChoice(final String name, final Object value) {
 			choices.add(new Pair<>(name, value));
@@ -80,7 +85,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		DataSection dataSection;
 	}
 
-	private class Option {
+	public class Option {
 		final DataSection dataSection;
 		final OptionGroup group;
 		final EObject data;
@@ -90,6 +95,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		final EStructuralFeature[] features;
 		final String label;
 		final EditingDomain editingDomain;
+		public boolean enabled = true;
 
 		// public Option(final DataSection dataSection, final OptionGroup group, final EditingDomain editingDomain, final String label, final EObject data, final EObject defaultData,
 		// final DataType dataType, final EStructuralFeature... features) {
@@ -171,25 +177,25 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 			middle.setLayout(new GridLayout(2, false));
 			// Create Controls
 			{
-				final Group group = new Group(middle, SWT.NONE);
-				toolkit.adapt(group);
-				group.setLayoutData(GridDataFactory.fillDefaults().grab(false, true).create());
-				group.setText("Controls");
-				group.setLayout(new GridLayout(1, true));
 				final List<Option> options = optionsMap.get(DataSection.Controls);
 				if (options != null) {
+					final Group group = new Group(middle, SWT.NONE);
+					toolkit.adapt(group);
+					group.setLayoutData(GridDataFactory.fillDefaults().grab(false, true).create());
+					// group.setText("Controls");
+					group.setLayout(new GridLayout(1, true));
 					createOptionSetControls(group, groupMap, options);
 				}
 			}
 			// Create Toggles
 			{
-				final Group group = new Group(middle, SWT.NONE);
-				toolkit.adapt(group);
-				group.setLayoutData(GridDataFactory.fillDefaults().grab(false, true).create());
-				group.setText("Toggles");
-				group.setLayout(new GridLayout(1, true));
 				final List<Option> options = optionsMap.get(DataSection.Toggles);
 				if (options != null) {
+					final Group group = new Group(middle, SWT.NONE);
+					toolkit.adapt(group);
+					group.setLayoutData(GridDataFactory.fillDefaults().grab(false, true).create());
+					// group.setText("Toggles");
+					group.setLayout(new GridLayout(1, true));
 					createOptionSetControls(group, groupMap, options);
 				}
 			}
@@ -283,6 +289,16 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		final Binding bindValue = dbc.bindValue(WidgetProperties.selection().observe(btn), prop.observe(option.data));
 		ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT);
 
+		if (!option.enabled) {
+			btn.setEnabled(false);
+			btn.setToolTipText("Module not licensed");
+		}
+
+		if (!option.enabled) {
+			btn.setEnabled(false);
+			btn.setToolTipText("Module not licensed");
+		}
+
 		return btn;
 	}
 
@@ -298,30 +314,38 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 
 		final Composite area = toolkit.createComposite(parent, SWT.NONE);
 		area.setLayout(new GridLayout(2, false));
-		toolkit.createLabel(area, option.label);
+		final Label lbl = toolkit.createLabel(area, option.label);
 		final Text text = toolkit.createText(area, null, SWT.NONE);
-
-		// Define a validator to check that only numbers are entered
-		final IValidator validator = new IValidator() {
-			@Override
-			public IStatus validate(final Object value) {
-				if (value instanceof Integer) {
-					if (value.toString().matches(".*\\d.*")) {
-						return ValidationStatus.ok();
-					}
-				}
-				return ValidationStatus.error("Not a number");
-			}
-		};
 
 		// Create UpdateValueStratgy and assign
 		// to the binding
 		final EMFUpdateValueStrategy strategy = new EMFUpdateValueStrategy();
-		strategy.setBeforeSetValidator(validator);
+		if (option.enabled) {
+			// Define a validator to check that only numbers are entered
+			final IValidator validator = new IValidator() {
+				@Override
+				public IStatus validate(final Object value) {
+					if (value instanceof Integer) {
+						if (value.toString().matches(".*\\d.*")) {
+							return ValidationStatus.ok();
+						}
+					}
+					return ValidationStatus.error("Not a number");
+				}
+			};
+			strategy.setBeforeSetValidator(validator);
+		}
 		final IEMFEditValueProperty prop = EMFEditProperties.value(option.editingDomain, FeaturePath.fromList(option.features));
 		final Binding bindValue = dbc.bindValue(WidgetProperties.text(SWT.Modify).observeDelayed(500, text), prop.observe(option.data), strategy, null);
 
 		ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT);
+
+		if (!option.enabled) {
+			lbl.setEnabled(false);
+			text.setEnabled(false);
+			text.setToolTipText("Module not licensed");
+		}
+
 		return area;
 	}
 
@@ -329,7 +353,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		final Composite area = toolkit.createComposite(parent, SWT.NONE);
 		area.setLayout(new GridLayout(2, false));
 		area.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
-		toolkit.createLabel(area, option.label);
+		final Label lbl = toolkit.createLabel(area, option.label);
 
 		final DateTimeFormatter format = DateTimeFormat.shortDate();
 		// Strict parse mode
@@ -361,6 +385,9 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 					@Override
 					public Object convert(final Object fromObject) {
 						final String value = fromObject == null ? null : fromObject.toString();
+						if (value == null || value.isEmpty()) {
+							return null;
+						}
 						try {
 							return format.parseLocalDate(value);
 						} catch (final Exception e) {
@@ -392,6 +419,24 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		final Binding bindValue = dbc.bindValue(WidgetProperties.text(SWT.Modify).observeDelayed(500, text), prop.observe(option.data), stringToDateStrategy, dateToStringStrategy);
 		ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT);
 
+		if (!option.enabled) {
+			lbl.setEnabled(false);
+			text.setEnabled(false);
+			text.setToolTipText("Module not licensed");
+		}
+
+		if (!option.enabled) {
+			lbl.setEnabled(false);
+			text.setEnabled(false);
+			text.setToolTipText("Module not licensed");
+		}
+
+		if (!option.enabled) {
+			lbl.setEnabled(false);
+			text.setEnabled(false);
+			text.setToolTipText("Module not licensed");
+		}
+
 		return area;
 
 	}
@@ -400,7 +445,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		final Composite area = toolkit.createComposite(parent, SWT.NONE);
 		area.setLayout(new GridLayout(2, false));
 		area.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
-		toolkit.createLabel(area, option.label);
+		final Label lbl = toolkit.createLabel(area, option.label);
 
 		final DateTimeFormatter format = DateTimeFormat.forPattern("MM/yy");
 
@@ -432,6 +477,9 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 					@Override
 					public Object convert(final Object fromObject) {
 						final String value = fromObject == null ? null : fromObject.toString();
+						if (value == null || value.isEmpty()) {
+							return null;
+						}
 						try {
 							return new YearMonth(format.parseLocalDate(value));
 						} catch (final Exception e) {
@@ -462,6 +510,12 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		final Binding bindValue = dbc.bindValue(WidgetProperties.text(SWT.Modify).observeDelayed(500, text), prop.observe(option.data), stringToDateStrategy, dateToStringStrategy);
 		ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT);
 
+		if (!option.enabled) {
+			lbl.setEnabled(false);
+			text.setEnabled(false);
+			text.setToolTipText("Module not licensed");
+		}
+
 		return area;
 
 	}
@@ -473,7 +527,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 
 		area.setLayout(new GridLayout(1 + choiceData.choices.size(), false));
 		area.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
-		toolkit.createLabel(area, option.label);
+		final Label lbl = toolkit.createLabel(area, option.label);
 
 		EObject owner = option.data;
 		for (int i = 0; i < option.features.length - 1; ++i) {
@@ -502,6 +556,13 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 
 				}
 			});
+
+			if (!choiceData.enabled) {
+				lbl.setEnabled(false);
+				btn.setEnabled(false);
+				btn.setToolTipText("Module not licensed");
+			}
+
 		}
 
 		return area;
@@ -526,9 +587,9 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 	 * @param dataType
 	 * @param features
 	 */
-	public void addOption(final DataSection dataSection, final OptionGroup group, final EditingDomain editingDomian, final String label, final EObject data, final EObject defaultData,
+	public Option addOption(final DataSection dataSection, final OptionGroup group, final EditingDomain editingDomian, final String label, final EObject data, final EObject defaultData,
 			final DataType dataType, final EStructuralFeature... features) {
-		addOption(dataSection, group, editingDomian, label, data, defaultData, dataType, null, features);
+		return addOption(dataSection, group, editingDomian, label, data, defaultData, dataType, null, features);
 	}
 
 	/**
@@ -542,7 +603,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 	 * @param dataType
 	 * @param features
 	 */
-	public void addOption(final DataSection dataSection, final OptionGroup group, final EditingDomain editingDomian, final String label, final EObject data, final EObject defaultData,
+	public Option addOption(final DataSection dataSection, final OptionGroup group, final EditingDomain editingDomian, final String label, final EObject data, final EObject defaultData,
 			final DataType dataType, final ChoiceData choiceData, final EStructuralFeature... features) {
 
 		if (group != null) {
@@ -560,5 +621,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 			optionsMap.put(dataSection, options);
 		}
 		options.add(option);
+
+		return option;
 	}
 }
