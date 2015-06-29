@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.app.intro;
 
+import org.apache.shiro.SecurityUtils;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
@@ -25,10 +26,14 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	public void preWindowOpen() {
 		final IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
 		configurer.setInitialSize(new Point(1280, 1024));
-		
+
 		configurer.setShowProgressIndicator(true);
 		configurer.setShowCoolBar(true);
 		configurer.setShowStatusLine(true);
 		configurer.setShowPerspectiveBar(true);
+
+		if (SecurityUtils.getSubject().isPermitted("features:beta-features")) {
+			configurer.setTitle("LiNGO - Beta");
+		}
 	}
 }

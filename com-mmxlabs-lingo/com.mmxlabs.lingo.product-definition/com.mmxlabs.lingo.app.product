@@ -30,15 +30,8 @@ Build: {1}
       startupForegroundColor="000000" />
    <launcher name="LiNGO">
       <solaris/>
-      <win useIco="false">
-         <bmp
-            winSmallHigh="icons/logo-square-16-32bit.bmp"
-            winSmallLow="icons/logo-square-16-8bit.bmp"
-            winMediumHigh="icons/logo-square-32-32bit.bmp"
-            winMediumLow="icons/logo-square-32-8bit.bmp"
-            winLargeHigh="icons/logo-square-48-32bit.bmp"
-            winLargeLow="icons/logo-square-48-8bit.bmp"
-            winExtraLargeHigh="icons/logo-square-256-32bit.bmp"/>
+      <win useIco="true">
+         <ico path="icons/minimax_icon.ico"/>
       </win>
    </launcher>
 

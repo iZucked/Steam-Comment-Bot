@@ -6,21 +6,23 @@ package com.mmxlabs.lingo.app.headless.utils;
 
 import java.util.Date;
 
-public class DateParameter extends AParameter<Date> {
+import org.joda.time.YearMonth;
 
-	DateParameter(String key) {
+public class YearMonthParameter extends AParameter<YearMonth> {
+
+	YearMonthParameter(String key) {
 		this.key = key;
 		this.defaultValue = null;
 		this.value = null;
-		this.parameterClass = Date.class;
+		this.parameterClass = YearMonth.class;
 	}
 	
-	DateParameter(String key, Date defaultValue) {
+	YearMonthParameter(String key, YearMonth defaultValue) {
 		this(key);
 		this.defaultValue = defaultValue;
 	}
 	
-	DateParameter(String key, Date defaultValue, Date value) {
+	YearMonthParameter(String key, YearMonth defaultValue, YearMonth value) {
 		this(key, defaultValue);
 		this.value = value;
 	}

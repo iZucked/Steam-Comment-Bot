@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2015
+    All rights reserved.
+
+-->
 <toc label="LiNGO User Manual" topic="index.html">
    <topic label="Application Overview" href="ch01.html">
       <topic label="Screens (aka Perspectives) and windows (aka Views)" href="ch01.html#d0e58"/>

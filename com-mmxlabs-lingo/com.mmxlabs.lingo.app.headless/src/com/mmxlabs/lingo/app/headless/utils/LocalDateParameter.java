@@ -4,26 +4,25 @@
  */
 package com.mmxlabs.lingo.app.headless.utils;
 
-public class DoubleMapParameter extends AParameter<DoubleMap> {
+import org.joda.time.LocalDate;
 
-	DoubleMapParameter(String key) {
+public class LocalDateParameter extends AParameter<LocalDate> {
+
+	LocalDateParameter(String key) {
 		this.key = key;
 		this.defaultValue = null;
 		this.value = null;
-
-		this.parameterClass = DoubleMap.class;
+		this.parameterClass = LocalDate.class;
 	}
 	
-	DoubleMapParameter(String key, DoubleMap defaultValue) {
+	LocalDateParameter(String key, LocalDate defaultValue) {
 		this(key);
 		this.defaultValue = defaultValue;
 	}
 	
-	DoubleMapParameter(String key, DoubleMap defaultValue, DoubleMap value) {
+	LocalDateParameter(String key, LocalDate defaultValue, LocalDate value) {
 		this(key, defaultValue);
 		this.value = value;
 	}
-	
-
 
 }
