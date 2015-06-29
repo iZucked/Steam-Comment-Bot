@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.transformer.ui.parametermodes.impl;
 
 import org.eclipse.emf.common.util.EList;

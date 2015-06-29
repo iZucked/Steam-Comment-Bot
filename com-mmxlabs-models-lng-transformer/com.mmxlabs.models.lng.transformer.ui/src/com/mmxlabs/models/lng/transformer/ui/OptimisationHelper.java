@@ -343,6 +343,9 @@ public final class OptimisationHelper {
 						objective.setName(SimilarityFitnessCoreFactory.NAME);
 						copy.getObjectives().add(objective);
 					}
+					if (copy.getSimilaritySettings() == null) {
+						copy.setSimilaritySettings(ScenarioUtils.createOffSettings());
+					}
 
 					objective.setEnabled(true);
 					objective.setWeight(1.0);
