@@ -34,14 +34,4 @@ public final class IndexedPortSlotEditor implements IPortSlotProviderEditor {
 		slots.set(element, portSlot);
 		elements.put(portSlot, element);
 	}
-	
-	@Override
-	public PortType getPortTypeFromElement(ISequenceElement element) {
-		IPortSlot slot = getPortSlot(element);
-		if (slot != null) {
-			return slot.getPortType();
-		}
-		return null;
-	}
-
 }

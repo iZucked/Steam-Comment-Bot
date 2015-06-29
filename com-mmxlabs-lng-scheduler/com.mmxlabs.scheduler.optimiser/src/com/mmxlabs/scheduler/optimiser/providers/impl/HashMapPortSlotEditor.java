@@ -45,13 +45,4 @@ public final class HashMapPortSlotEditor implements IPortSlotProviderEditor {
 		}
 		throw new IllegalArgumentException("Unknown port slot");
 	}
-
-	@Override
-	public PortType getPortTypeFromElement(ISequenceElement element) {
-		IPortSlot slot = getPortSlot(element);
-		if (slot != null) {
-			return slot.getPortType();
-		}
-		throw new IllegalArgumentException("Unknown port slot");
-	}
 }

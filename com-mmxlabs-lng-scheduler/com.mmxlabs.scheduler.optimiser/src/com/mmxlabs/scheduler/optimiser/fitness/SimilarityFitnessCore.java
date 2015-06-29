@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2014
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness;
@@ -27,7 +27,10 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.fitness.components.ISimilarityComponentParameters;
+import com.mmxlabs.scheduler.optimiser.fitness.components.ISimilarityComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
@@ -43,17 +46,18 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 	@Inject
 	@Named(SimilarityFitnessCore.SIMILARITY_THRESHOLD_NUM_CHANGES)
 	protected int CHANGE_THRESHOLD;
-	
-	
+
 	@Inject
 	@Named(SimilarityFitnessCore.SIMILARITY_THRESHOLD)
 	private boolean USE_THRESHOLD;
-	
-	private final String name;
-
 
 	@Inject
-	private IPortSlotProvider portSlotProvider;
+	private ISimilarityComponentParameters similarityComponentParameters;
+
+	private final String name;
+
+	@Inject
+	private IPortTypeProvider portTypeProvider;
 
 	private long lastFitness = 0;
 	private int lastDifferences = 0;
@@ -61,7 +65,7 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 	private Map<Integer, Integer> loadDischargeMap = null; // TODO: indexed?
 	private Map<Integer, Integer> loadResourceMap = null; // TODO: indexed?
 	private List<IResource> resources;
-	
+
 	public SimilarityFitnessCore(final String name) {
 		this.name = name;
 	}
@@ -167,20 +171,42 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 				}
 			}
 			numberOfChanges = cargoDifferences + vesselDifferences;
-			if (USE_THRESHOLD){
+//			if (USE_THRESHOLD) {
 				lastFitness = processDifferencesWithThreshold(numberOfChanges);
-			} else {
-				lastFitness = numberOfChanges;
-			}
+//			} else {
+//				lastFitness = numberOfChanges;
+//			}
 		}
 		lastDifferences = numberOfChanges;
 	}
-	
+
 	public int processDifferencesWithThreshold(int diff) {
-		return diff <= CHANGE_THRESHOLD ? 0 : diff - CHANGE_THRESHOLD;
+		int outOfBounds = 0;
+		int high = similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.HIGH)
+				- similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.MEDIUM);
+		int med = similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.MEDIUM)
+				- similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.LOW);
+		int low = similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.LOW);
+
+		if (diff >= similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.HIGH)) {
+			outOfBounds = diff - similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.HIGH);
+		} else if (diff >= similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.MEDIUM)) {
+			high = diff - similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.MEDIUM);
+		} else if (diff >= similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.LOW)) {
+			high = 0;
+			med = diff - similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.LOW);
+		} else {
+			high = 0;
+			med = 0;
+			low = diff;
+		}
+
+		return (outOfBounds * similarityComponentParameters.getWeight(Interval.OUT_OF_BOUNDS) + high * similarityComponentParameters.getWeight(Interval.HIGH) + med
+				* similarityComponentParameters.getWeight(Interval.MEDIUM) + low * similarityComponentParameters.getWeight(Interval.LOW));
 	}
+
 	public PortType getPortType(ISequenceElement element) {
-		return portSlotProvider.getPortTypeFromElement(element);
+		return portTypeProvider.getPortType(element);
 	}
 
 	@Override
@@ -200,5 +226,5 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 	@Override
 	public IFitnessCore getFitnessCore() {
 		return this;
-	}	
+	}
 }

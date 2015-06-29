@@ -36,6 +36,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.SequenceElement;
 import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public class SimilarityFitnessCoreTest {
@@ -53,9 +54,9 @@ public class SimilarityFitnessCoreTest {
 	private SimilarityFitnessCore createSimilarityFitnessCore(final ISequences sequences) {
 		final IOptimisationData data = Mockito.mock(IOptimisationData.class);
 
-		final IPortSlotProvider portSlotProvider = Mockito.mock(IPortSlotProvider.class);
+		final IPortTypeProvider portTypeProvider = Mockito.mock(IPortTypeProvider.class);
 
-		Mockito.when(portSlotProvider.getPortTypeFromElement(Matchers.<ISequenceElement> any())).then(new Answer<PortType>() {
+		Mockito.when(portTypeProvider.getPortType(Matchers.<ISequenceElement> any())).then(new Answer<PortType>() {
 
 			@Override
 			public PortType answer(final InvocationOnMock invocation) throws Throwable {
@@ -88,7 +89,7 @@ public class SimilarityFitnessCoreTest {
 
 			@Override
 			protected void configure() {
-				bind(IPortSlotProvider.class).toInstance(portSlotProvider);
+				bind(IPortTypeProvider.class).toInstance(portTypeProvider);
 			}
 		});
 
