@@ -58,5 +58,13 @@
   <eClassifiers xsi:type="ecore:EClass" name="SimilaritySettings">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="threshold" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="intervals" ordered="false"
+        upperBound="-1" eType="#//SimilarityInterval" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SimilarityInterval">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="threshold" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
 </ecore:EPackage>

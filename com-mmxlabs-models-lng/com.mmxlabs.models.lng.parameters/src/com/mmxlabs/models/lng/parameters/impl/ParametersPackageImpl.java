@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.ParametersModel;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
+import com.mmxlabs.models.lng.parameters.SimilarityInterval;
 import com.mmxlabs.models.lng.parameters.SimilaritySettings;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
@@ -87,6 +88,13 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * @generated
 	 */
 	private EClass similaritySettingsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass similarityIntervalEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -465,6 +473,42 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getSimilaritySettings_Intervals() {
+		return (EReference)similaritySettingsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getSimilarityInterval() {
+		return similarityIntervalEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSimilarityInterval_Threshold() {
+		return (EAttribute)similarityIntervalEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSimilarityInterval_Weight() {
+		return (EAttribute)similarityIntervalEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public ParametersFactory getParametersFactory() {
 		return (ParametersFactory)getEFactoryInstance();
@@ -527,6 +571,11 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 
 		similaritySettingsEClass = createEClass(SIMILARITY_SETTINGS);
 		createEAttribute(similaritySettingsEClass, SIMILARITY_SETTINGS__THRESHOLD);
+		createEReference(similaritySettingsEClass, SIMILARITY_SETTINGS__INTERVALS);
+
+		similarityIntervalEClass = createEClass(SIMILARITY_INTERVAL);
+		createEAttribute(similarityIntervalEClass, SIMILARITY_INTERVAL__THRESHOLD);
+		createEAttribute(similarityIntervalEClass, SIMILARITY_INTERVAL__WEIGHT);
 	}
 
 	/**
@@ -606,6 +655,11 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 
 		initEClass(similaritySettingsEClass, SimilaritySettings.class, "SimilaritySettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSimilaritySettings_Threshold(), ecorePackage.getEInt(), "threshold", null, 1, 1, SimilaritySettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSimilaritySettings_Intervals(), this.getSimilarityInterval(), null, "intervals", null, 0, -1, SimilaritySettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+
+		initEClass(similarityIntervalEClass, SimilarityInterval.class, "SimilarityInterval", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getSimilarityInterval_Threshold(), ecorePackage.getEInt(), "threshold", null, 1, 1, SimilarityInterval.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSimilarityInterval_Weight(), ecorePackage.getEInt(), "weight", null, 1, 1, SimilarityInterval.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

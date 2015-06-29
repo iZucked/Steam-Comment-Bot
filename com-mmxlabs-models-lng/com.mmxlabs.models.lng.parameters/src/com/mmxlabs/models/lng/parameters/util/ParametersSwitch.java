@@ -137,6 +137,12 @@ public class ParametersSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case ParametersPackage.SIMILARITY_INTERVAL: {
+				SimilarityInterval similarityInterval = (SimilarityInterval)theEObject;
+				T result = caseSimilarityInterval(similarityInterval);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -258,6 +264,21 @@ public class ParametersSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSimilaritySettings(SimilaritySettings object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Similarity Interval</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Similarity Interval</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSimilarityInterval(SimilarityInterval object) {
 		return null;
 	}
 

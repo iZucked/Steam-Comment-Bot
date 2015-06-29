@@ -6,40 +6,31 @@
  */
 package com.mmxlabs.models.lng.parameters.impl;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
-import org.joda.time.Interval;
-
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.parameters.SimilarityInterval;
-import com.mmxlabs.models.lng.parameters.SimilaritySettings;
+
+import org.eclipse.emf.common.notify.Notification;
+
+import org.eclipse.emf.ecore.EClass;
+
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Similarity Settings</b></em>'.
+ * An implementation of the model object '<em><b>Similarity Interval</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.parameters.impl.SimilaritySettingsImpl#getThreshold <em>Threshold</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.parameters.impl.SimilaritySettingsImpl#getIntervals <em>Intervals</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.impl.SimilarityIntervalImpl#getThreshold <em>Threshold</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.impl.SimilarityIntervalImpl#getWeight <em>Weight</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class SimilaritySettingsImpl extends EObjectImpl implements SimilaritySettings {
+public class SimilarityIntervalImpl extends EObjectImpl implements SimilarityInterval {
 	/**
 	 * The default value of the '{@link #getThreshold() <em>Threshold</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -70,21 +61,31 @@ public class SimilaritySettingsImpl extends EObjectImpl implements SimilaritySet
 	protected boolean thresholdESet;
 
 	/**
-	 * The cached value of the '{@link #getIntervals() <em>Intervals</em>}' containment reference list.
+	 * The default value of the '{@link #getWeight() <em>Weight</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getIntervals()
+	 * @see #getWeight()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<SimilarityInterval> intervals;
+	protected static final int WEIGHT_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getWeight() <em>Weight</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getWeight()
+	 * @generated
+	 * @ordered
+	 */
+	protected int weight = WEIGHT_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected SimilaritySettingsImpl() {
+	protected SimilarityIntervalImpl() {
 		super();
 	}
 
@@ -95,7 +96,7 @@ public class SimilaritySettingsImpl extends EObjectImpl implements SimilaritySet
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return ParametersPackage.Literals.SIMILARITY_SETTINGS;
+		return ParametersPackage.Literals.SIMILARITY_INTERVAL;
 	}
 
 	/**
@@ -118,7 +119,7 @@ public class SimilaritySettingsImpl extends EObjectImpl implements SimilaritySet
 		boolean oldThresholdESet = thresholdESet;
 		thresholdESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.SIMILARITY_SETTINGS__THRESHOLD, oldThreshold, threshold, !oldThresholdESet));
+			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.SIMILARITY_INTERVAL__THRESHOLD, oldThreshold, threshold, !oldThresholdESet));
 	}
 
 	/**
@@ -132,7 +133,7 @@ public class SimilaritySettingsImpl extends EObjectImpl implements SimilaritySet
 		threshold = THRESHOLD_EDEFAULT;
 		thresholdESet = false;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, ParametersPackage.SIMILARITY_SETTINGS__THRESHOLD, oldThreshold, THRESHOLD_EDEFAULT, oldThresholdESet));
+			eNotify(new ENotificationImpl(this, Notification.UNSET, ParametersPackage.SIMILARITY_INTERVAL__THRESHOLD, oldThreshold, THRESHOLD_EDEFAULT, oldThresholdESet));
 	}
 
 	/**
@@ -149,11 +150,8 @@ public class SimilaritySettingsImpl extends EObjectImpl implements SimilaritySet
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<SimilarityInterval> getIntervals() {
-		if (intervals == null) {
-			intervals = new EObjectContainmentEList<SimilarityInterval>(SimilarityInterval.class, this, ParametersPackage.SIMILARITY_SETTINGS__INTERVALS);
-		}
-		return intervals;
+	public int getWeight() {
+		return weight;
 	}
 
 	/**
@@ -161,13 +159,11 @@ public class SimilaritySettingsImpl extends EObjectImpl implements SimilaritySet
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case ParametersPackage.SIMILARITY_SETTINGS__INTERVALS:
-				return ((InternalEList<?>)getIntervals()).basicRemove(otherEnd, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
+	public void setWeight(int newWeight) {
+		int oldWeight = weight;
+		weight = newWeight;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.SIMILARITY_INTERVAL__WEIGHT, oldWeight, weight));
 	}
 
 	/**
@@ -178,10 +174,10 @@ public class SimilaritySettingsImpl extends EObjectImpl implements SimilaritySet
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ParametersPackage.SIMILARITY_SETTINGS__THRESHOLD:
+			case ParametersPackage.SIMILARITY_INTERVAL__THRESHOLD:
 				return getThreshold();
-			case ParametersPackage.SIMILARITY_SETTINGS__INTERVALS:
-				return getIntervals();
+			case ParametersPackage.SIMILARITY_INTERVAL__WEIGHT:
+				return getWeight();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -191,16 +187,14 @@ public class SimilaritySettingsImpl extends EObjectImpl implements SimilaritySet
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ParametersPackage.SIMILARITY_SETTINGS__THRESHOLD:
+			case ParametersPackage.SIMILARITY_INTERVAL__THRESHOLD:
 				setThreshold((Integer)newValue);
 				return;
-			case ParametersPackage.SIMILARITY_SETTINGS__INTERVALS:
-				getIntervals().clear();
-				getIntervals().addAll((Collection<? extends SimilarityInterval>)newValue);
+			case ParametersPackage.SIMILARITY_INTERVAL__WEIGHT:
+				setWeight((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -214,11 +208,11 @@ public class SimilaritySettingsImpl extends EObjectImpl implements SimilaritySet
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ParametersPackage.SIMILARITY_SETTINGS__THRESHOLD:
+			case ParametersPackage.SIMILARITY_INTERVAL__THRESHOLD:
 				unsetThreshold();
 				return;
-			case ParametersPackage.SIMILARITY_SETTINGS__INTERVALS:
-				getIntervals().clear();
+			case ParametersPackage.SIMILARITY_INTERVAL__WEIGHT:
+				setWeight(WEIGHT_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -232,10 +226,10 @@ public class SimilaritySettingsImpl extends EObjectImpl implements SimilaritySet
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ParametersPackage.SIMILARITY_SETTINGS__THRESHOLD:
+			case ParametersPackage.SIMILARITY_INTERVAL__THRESHOLD:
 				return isSetThreshold();
-			case ParametersPackage.SIMILARITY_SETTINGS__INTERVALS:
-				return intervals != null && !intervals.isEmpty();
+			case ParametersPackage.SIMILARITY_INTERVAL__WEIGHT:
+				return weight != WEIGHT_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -252,31 +246,10 @@ public class SimilaritySettingsImpl extends EObjectImpl implements SimilaritySet
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (threshold: ");
 		if (thresholdESet) result.append(threshold); else result.append("<unset>");
+		result.append(", weight: ");
+		result.append(weight);
 		result.append(')');
 		return result.toString();
 	}
-	
-	/**
-	 * Equals method comparing interval definition.
-	 * Implemented for the ParameterModesDialog
-	 * @generated NOT
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof SimilaritySettings) {
-			SimilaritySettings otherSettings = (SimilaritySettings) obj;
-			Map<Integer, Integer> local = new HashMap<>();
-			for (SimilarityInterval interval : getIntervals()) {
-				local.put(interval.getWeight(), interval.getThreshold());
-			}
-			Map<Integer, Integer> other = new HashMap<>();
-			for (SimilarityInterval interval : otherSettings.getIntervals()) {
-				other.put(interval.getWeight(), interval.getThreshold());
-			}
-			return local.equals(other);
-			
-		}
-		return super.equals(obj);
-	}
 
-} //SimilaritySettingsImpl
+} //SimilarityIntervalImpl
