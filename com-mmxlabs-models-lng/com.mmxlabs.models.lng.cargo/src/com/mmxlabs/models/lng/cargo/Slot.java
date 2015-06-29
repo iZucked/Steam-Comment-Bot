@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.cargo;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
@@ -19,7 +18,6 @@ import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.lng.types.VolumeUnits;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-import java.util.Date;
 
 /**
  * <!-- begin-user-doc -->
@@ -120,7 +118,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 
 	/**
 	 * Returns the value of the '<em><b>Window Start</b></em>' attribute.
-	 * The default value is <code>"now"</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Window Start</em>' attribute isn't clear,
@@ -130,7 +127,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @return the value of the '<em>Window Start</em>' attribute.
 	 * @see #setWindowStart(LocalDate)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_WindowStart()
-	 * @model default="now" dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @model dataType="com.mmxlabs.models.datetime.LocalDate"
 	 * @generated
 	 */
 	LocalDate getWindowStart();
@@ -1166,7 +1163,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
 	 * @generated
 	 */
-	@NonNull
 	DateTime getWindowEndWithSlotOrPortTime();
 
 	/**
@@ -1175,7 +1171,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
 	 * @generated
 	 */
-	@NonNull
 	DateTime getWindowStartWithSlotOrPortTime();
 
 	/**
