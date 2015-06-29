@@ -111,7 +111,7 @@
 	<repositories>
 		<repository>
 			<id>com-mmxlabs-models-datetime.hg</id>
-			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/datetime/com.mmxlabs.models.datetime.p2/1.0.0-SNAPSHOT/com.mmxlabs.models.datetime.p2-1.0.0-SNAPSHOT.zip-unzip/</url>
+			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/datetime/com.mmxlabs.models.datetime.p2/1.0.0.RELEASE/com.mmxlabs.models.datetime.p2-1.0.0.RELEASE.zip-unzip/</url>
 			<layout>p2</layout>
 		</repository>
 		<repository>
