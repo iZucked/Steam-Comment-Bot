@@ -27,9 +27,24 @@ public class LocalDateAttributeManipulator extends BasicAttributeManipulator {
 
 	@Override
 	public CellEditor createCellEditor(final Composite c, final Object object) {
-		final FormattedTextCellEditor editor = new FormattedTextCellEditor(c);
+		final FormattedTextCellEditor editor = new FormattedTextCellEditor(c) {
+			@Override
+			protected Object doGetValue() {
+				final Object superValue = super.doGetValue();
+				if (superValue == null) {
+					return new LocalDate();
+				}
+				return superValue;
+			}
+		};
 		editor.setFormatter(new LocalDateTextFormatter());
 		return editor;
+	}
+	
+	@Override
+	public Object getValue(Object object) {
+		// TODO Auto-generated method stub
+		return super.getValue(object);
 	}
 
 	@Override
@@ -48,5 +63,7 @@ public class LocalDateAttributeManipulator extends BasicAttributeManipulator {
 			return null;
 		}
 	}
+	
+ 
 
 }
