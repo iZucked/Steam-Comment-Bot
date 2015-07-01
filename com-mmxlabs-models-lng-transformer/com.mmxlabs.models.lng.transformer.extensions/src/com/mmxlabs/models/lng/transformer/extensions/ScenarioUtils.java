@@ -124,10 +124,10 @@ public class ScenarioUtils {
 	public static SimilaritySettings createOffSettings() {
 		final SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
 
-		similaritySettings.getIntervals().add(createSimilarityInterval(0, 0));
-		similaritySettings.getIntervals().add(createSimilarityInterval(8, 0));
-		similaritySettings.getIntervals().add(createSimilarityInterval(16, 0));
-		similaritySettings.getIntervals().add(createSimilarityInterval(30, 0));
+		similaritySettings.setLowInterval(createSimilarityInterval(8, 0));
+		similaritySettings.setMedInterval(createSimilarityInterval(16, 0));
+		similaritySettings.setHighInterval(createSimilarityInterval(30, 0));
+		similaritySettings.setOutOfBoundsWeight(0);
 
 		return similaritySettings;
 	}
@@ -135,10 +135,10 @@ public class ScenarioUtils {
 	public static SimilaritySettings createLowSettings() {
 		final SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
 
-		similaritySettings.getIntervals().add(createSimilarityInterval(0, 0));
-		similaritySettings.getIntervals().add(createSimilarityInterval(8, 0));
-		similaritySettings.getIntervals().add(createSimilarityInterval(16, 500000));
-		similaritySettings.getIntervals().add(createSimilarityInterval(30, 5000000));
+		similaritySettings.setLowInterval(createSimilarityInterval(8, 0));
+		similaritySettings.setMedInterval(createSimilarityInterval(16, 0));
+		similaritySettings.setHighInterval(createSimilarityInterval(30, 500000));
+		similaritySettings.setOutOfBoundsWeight(5000000);
 
 		return similaritySettings;
 	}
@@ -146,10 +146,10 @@ public class ScenarioUtils {
 	public static SimilaritySettings createMediumSettings() {
 		final SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
 
-		similaritySettings.getIntervals().add(createSimilarityInterval(0, 0));
-		similaritySettings.getIntervals().add(createSimilarityInterval(8, 250000));
-		similaritySettings.getIntervals().add(createSimilarityInterval(16, 500000));
-		similaritySettings.getIntervals().add(createSimilarityInterval(30, 1000000));
+		similaritySettings.setLowInterval(createSimilarityInterval(8, 0));
+		similaritySettings.setMedInterval(createSimilarityInterval(16, 250000));
+		similaritySettings.setHighInterval(createSimilarityInterval(30, 500000));
+		similaritySettings.setOutOfBoundsWeight(1000000);
 
 		return similaritySettings;
 	}
@@ -157,18 +157,18 @@ public class ScenarioUtils {
 	public static SimilaritySettings createHighSettings() {
 		final SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
 
-		similaritySettings.getIntervals().add(createSimilarityInterval(0, 250000));
-		similaritySettings.getIntervals().add(createSimilarityInterval(8, 500000));
-		similaritySettings.getIntervals().add(createSimilarityInterval(16, 1000000));
-		similaritySettings.getIntervals().add(createSimilarityInterval(30, 5000000));
+		similaritySettings.setLowInterval(createSimilarityInterval(8, 250000));
+		similaritySettings.setMedInterval(createSimilarityInterval(16, 500000));
+		similaritySettings.setHighInterval(createSimilarityInterval(30, 1000000));
+		similaritySettings.setOutOfBoundsWeight(5000000);
 
 		return similaritySettings;
 	}
 
-	public static SimilarityInterval createSimilarityInterval(final int lowerChangeCount, final int weight) {
+	public static SimilarityInterval createSimilarityInterval(final int upperChangeCount, final int weight) {
 		final SimilarityInterval interval = ParametersFactory.eINSTANCE.createSimilarityInterval();
 
-		interval.setThreshold(lowerChangeCount);
+		interval.setThreshold(upperChangeCount);
 		interval.setWeight(weight);
 
 		return interval;

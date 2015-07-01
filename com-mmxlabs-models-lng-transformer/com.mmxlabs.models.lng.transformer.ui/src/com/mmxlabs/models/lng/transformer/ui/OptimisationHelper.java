@@ -409,9 +409,6 @@ public final class OptimisationHelper {
 			to.getRange().setOptimiseBefore(from.getRange().getOptimiseBefore());
 		}
 
-		// to.getAnnealingSettings().setIterations(from.getAnnealingSettings().getIterations());
-		// to.getAnnealingSettings().setEpochLength(from.getAnnealingSettings().getEpochLength());
-
 		// change epoch length
 		// TODO: make this better!
 		if (to.getRange().isSetOptimiseAfter() && to.getRange().isSetOptimiseBefore()) {
@@ -424,7 +421,6 @@ public final class OptimisationHelper {
 		to.setGenerateCharterOuts(from.isGenerateCharterOuts());
 		if (from.getSimilaritySettings() != null) {
 			to.setSimilaritySettings(from.getSimilaritySettings());
-			to.getSimilaritySettings().unsetThreshold();
 		}
 
 		{
