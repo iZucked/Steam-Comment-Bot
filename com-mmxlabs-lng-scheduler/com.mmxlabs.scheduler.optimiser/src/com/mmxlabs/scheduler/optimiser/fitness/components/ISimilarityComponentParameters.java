@@ -15,11 +15,11 @@ public interface ISimilarityComponentParameters {
 		MEDIUM,
 		@NonNull
 		HIGH,
-		@NonNull
-		OUT_OF_BOUNDS
 	}
 
 	int getThreshold(@NonNull Interval interval);
 
 	int getWeight(@NonNull Interval interval);
+	
+	int getOutOfBoundsWeight();
 }

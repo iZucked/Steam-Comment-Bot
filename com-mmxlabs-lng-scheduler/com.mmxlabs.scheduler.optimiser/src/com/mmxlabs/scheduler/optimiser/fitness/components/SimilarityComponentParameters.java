@@ -10,7 +10,7 @@ public class SimilarityComponentParameters implements ISimilarityComponentParame
 
 	private final int[] threshold = new int[ISimilarityComponentParameters.Interval.values().length];
 	private final int[] weight = new int[ISimilarityComponentParameters.Interval.values().length];
-
+	private int outOfBounds;
 	@Override
 	public int getThreshold(@NonNull final Interval interval) {
 		return threshold[interval.ordinal()];
@@ -29,4 +29,12 @@ public class SimilarityComponentParameters implements ISimilarityComponentParame
 		this.weight[interval.ordinal()] = weight;
 	}
 
+	@Override
+	public int getOutOfBoundsWeight() {
+		return outOfBounds;
+	}
+
+	public void setOutOfBoundsWeight(int weight) {
+		outOfBounds = weight;
+	}
 }
