@@ -380,6 +380,9 @@ public class EquivalanceGroupBuilder {
 	}
 
 	private String format(LocalDate date) {
+		if (date == null) {
+			return "<no date>";
+		}
 		return String.format("%04d-%02d", date.getYear(), date.getMonthOfYear());
 
 	}
