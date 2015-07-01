@@ -65,32 +65,10 @@ public class SimilarityIntervalItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addThresholdPropertyDescriptor(object);
 			addWeightPropertyDescriptor(object);
+			addThresholdPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Threshold feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addThresholdPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SimilarityInterval_threshold_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SimilarityInterval_threshold_feature", "_UI_SimilarityInterval_type"),
-				 ParametersPackage.Literals.SIMILARITY_INTERVAL__THRESHOLD,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -107,6 +85,28 @@ public class SimilarityIntervalItemProvider
 				 getString("_UI_SimilarityInterval_weight_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_SimilarityInterval_weight_feature", "_UI_SimilarityInterval_type"),
 				 ParametersPackage.Literals.SIMILARITY_INTERVAL__WEIGHT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Threshold feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addThresholdPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SimilarityInterval_threshold_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SimilarityInterval_threshold_feature", "_UI_SimilarityInterval_type"),
+				 ParametersPackage.Literals.SIMILARITY_INTERVAL__THRESHOLD,
 				 true,
 				 false,
 				 false,
@@ -135,7 +135,7 @@ public class SimilarityIntervalItemProvider
 	@Override
 	public String getText(Object object) {
 		SimilarityInterval similarityInterval = (SimilarityInterval)object;
-		return getString("_UI_SimilarityInterval_type") + " " + similarityInterval.getThreshold();
+		return getString("_UI_SimilarityInterval_type") + " " + similarityInterval.getWeight();
 	}
 
 	/**
@@ -150,8 +150,8 @@ public class SimilarityIntervalItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(SimilarityInterval.class)) {
-			case ParametersPackage.SIMILARITY_INTERVAL__THRESHOLD:
 			case ParametersPackage.SIMILARITY_INTERVAL__WEIGHT:
+			case ParametersPackage.SIMILARITY_INTERVAL__THRESHOLD:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
