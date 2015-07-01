@@ -361,17 +361,7 @@ public class HeadlessApplication implements IApplication {
 		createDateRanges(settings, headlessParameters);
 		setLatenessParameters(settingsOverride, headlessParameters);
 		createPromptDates(rootObject, headlessParameters);
-		createSimilaritySettings(settings, headlessParameters);
 		setSimilarityParameters(settingsOverride, headlessParameters);
-	}
-
-	private void createSimilaritySettings(OptimiserSettings settings, HeadlessParameters headlessParameters) {
-		int similarityThreshold = headlessParameters.getParameterValue("similarity-thresholdNumChanges", Integer.class);
-		if (similarityThreshold > -1) {
-			SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
-			similaritySettings.setThreshold(similarityThreshold);
-			settings.setSimilaritySettings(similaritySettings);
-		}
 	}
 
 	private void createPromptDates(LNGScenarioModel rootObject, HeadlessParameters parameters) {
