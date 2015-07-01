@@ -21,22 +21,27 @@ public class SpotSlotHelper {
 	}
 
 	public static void setSpotSlotTimeWindow(final EditingDomain editingDomain, final Slot slot, final Port oldPort, final Port newPort, final LocalDate newDate, final CompoundCommand cmd) {
-		// Spot market - make a month range.
-		final LocalDate start = newDate.withDayOfMonth(1);
+		if (newDate != null) {
+			// Spot market - make a month range.
+			final LocalDate start = newDate.withDayOfMonth(1);
 
-		// Now find month duration
+			// Now find month duration
 
-		final int windowSize = Hours.hoursBetween(start, start.plusMonths(1)).getHours();
+			final int windowSize = Hours.hoursBetween(start, start.plusMonths(1)).getHours();
 
-		if (slot.getWindowSize() != windowSize) {
-			cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowSize(), windowSize));
-		}
-		if (!slot.getWindowStart().equals(start)) {
-			cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStart(), start));
-		}
-		if (slot.getWindowStartTime() != 0) {
-			cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), 0));
+			if (slot.getWindowSize() != windowSize) {
+				cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowSize(), windowSize));
+			}
+			if (slot.getWindowStart() != null && !slot.getWindowStart().equals(start)) {
+				cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStart(), start));
+			} else {
+				// if slot.getWindowStart() == null ????
+			}
+			if (slot.getWindowStartTime() != 0) {
+				cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), 0));
+			}
+		} else {
+			// ????
 		}
 	}
-
 }

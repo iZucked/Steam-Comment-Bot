@@ -90,6 +90,10 @@ public class FOBDESCargoDatesConstraint extends AbstractModelConstraint {
 
 	private boolean checkDates(final DateTime windowStart, final DateTime windowEnd, final DateTime target) {
 
+		if (target == null) {
+			return false;
+		}
+
 		if (target.isBefore(windowStart)) {
 			return false;
 		}

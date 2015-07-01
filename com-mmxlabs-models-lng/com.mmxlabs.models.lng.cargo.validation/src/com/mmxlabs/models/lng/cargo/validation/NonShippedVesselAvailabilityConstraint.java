@@ -6,6 +6,8 @@ package com.mmxlabs.models.lng.cargo.validation;
 
 import java.util.List;
 
+import javax.swing.text.PlainDocument;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
@@ -43,6 +45,9 @@ public class NonShippedVesselAvailabilityConstraint extends AbstractModelMultiCo
 			if (loadSlot.isDESPurchase()) {
 				nominatedVessel = loadSlot.getNominatedVessel();
 
+				if (loadSlot.getWindowStart() == null) {
+					return Activator.PLUGIN_ID;
+				}
 				final DateTime start = new DateTime(loadSlot.getWindowStartWithSlotOrPortTime());
 				DateTime end = new DateTime(loadSlot.getWindowEndWithSlotOrPortTime());
 				// For divertible cargoes, we should find the round trip time
@@ -56,6 +61,10 @@ public class NonShippedVesselAvailabilityConstraint extends AbstractModelMultiCo
 		} else if (target instanceof DischargeSlot) {
 			final DischargeSlot dischargeSlot = (DischargeSlot) target;
 			if (dischargeSlot.isFOBSale()) {
+				if (dischargeSlot.getWindowStart() == null) {
+					return Activator.PLUGIN_ID;
+				}
+				
 				nominatedVessel = dischargeSlot.getNominatedVessel();
 				final DateTime start = new DateTime(dischargeSlot.getWindowStartWithSlotOrPortTime());
 				final DateTime end = new DateTime(dischargeSlot.getWindowEndWithSlotOrPortTime());
