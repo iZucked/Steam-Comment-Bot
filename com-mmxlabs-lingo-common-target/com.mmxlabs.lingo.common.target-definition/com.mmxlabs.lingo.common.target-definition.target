@@ -36,6 +36,9 @@
 <repository location="http://download.eclipse.org/releases/mars/201506241002/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.apache.log4j" version="0.0.0"/>
+<unit id="org.apache.log4j.source" version="0.0.0"/>
+<unit id="org.hamcrest" version="0.0.0"/>
 <unit id="javax.activation" version="0.0.0"/>
 <unit id="javax.activation.source" version="0.0.0"/>
 <unit id="javax.xml.soap" version="0.0.0"/>
@@ -58,7 +61,15 @@
 <unit id="ch.qos.logback.core.source" version="0.0.0"/>
 <unit id="ch.qos.logback.slf4j" version="0.0.0"/>
 <unit id="ch.qos.logback.slf4j.source" version="0.0.0"/>
-<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/orbit/orbit-buildrepo/R20150124073747/orbit-buildrepo-R20150124073747.zip-unzip/" id="mmxlabs-releases"/>
+<unit id="org.apache.poi" version="3.9.0.v201405241750"/>
+<unit id="org.apache.poi.source" version="3.9.0.v201405241750"/>
+<unit id="org.apache.commons.logging" version="1.1.1.v201101211721"/>
+<unit id="org.apache.commons.logging.source" version="1.1.1.v201101211721"/>
+<unit id="org.apache.commons.codec" version="1.6.0.v201305230611"/>
+<unit id="org.apache.commons.codec.source" version="1.6.0.v201305230611"/>
+<unit id="org.apache.commons.cli" version="1.2.0.v201404270220"/>
+<unit id="org.apache.commons.cli.source" version="1.2.0.v201404270220"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/org/eclipse/orbit/orbit-buildrepo/R20150519210750/orbit-buildrepo-R20150519210750.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.nebula.widgets.grid" version="0.0.0"/>
@@ -79,15 +90,10 @@
 <unit id="org.ops4j.peaberry" version="1.3.0"/>
 <unit id="org.ops4j.peaberry.eclipse" version="1.3.0"/>
 <unit id="org.mockito.mockito-all" version="1.9.5"/>
-<unit id="com.springsource.org.apache.commons.cli" version="1.2.0"/>
 <unit id="org.apache.shiro.core.source" version="1.2.0"/>
 <unit id="org.apache.shiro.guice.source" version="1.2.0"/>
 <unit id="org.apache.shiro.core" version="1.2.0"/>
 <unit id="org.apache.shiro.guice" version="1.2.0"/>
-<unit id="com.springsource.org.apache.poi" version="3.9.0.FINAL"/>
-<unit id="com.springsource.org.apache.poi.source" version="3.9.0.FINAL"/>
-<unit id="com.springsource.org.apache.commons.logging" version="1.1.1"/>
-<unit id="com.springsource.org.apache.commons.codec" version="1.6.0"/>
 <repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/p2/repository/mmxlabs-external/1.0.9/mmxlabs-external-1.0.9-p2-repo.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
