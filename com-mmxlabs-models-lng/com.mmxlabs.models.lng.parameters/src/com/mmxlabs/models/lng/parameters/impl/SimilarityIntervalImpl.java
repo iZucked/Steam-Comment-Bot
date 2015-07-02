@@ -225,8 +225,10 @@ public class SimilarityIntervalImpl extends EObjectImpl implements SimilarityInt
 	public boolean equals(Object obj) {
 		if (obj instanceof SimilarityInterval) {
 			return (this.getThreshold() == ((SimilarityInterval) obj).getThreshold() && this.getWeight() == ((SimilarityInterval) obj).getWeight());
+		} else if (obj != null) {
+			return obj.equals(this);
 		}
-		return obj.equals(this);
+		return false;
 	}
 
 

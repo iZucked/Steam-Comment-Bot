@@ -53,31 +53,39 @@ public class MigrateToV35 extends AbstractMigrationUnit {
 					List<EObjectWrapper> intervalsList = oldSimilaritySettings.getRefAsList("intervals");
 					if (intervalsList != null) {
 						EObject similaritySettings = createSimilaritySettings(loader);
-						for (EObjectWrapper interval : intervalsList) {
-							Integer threshold = interval.getAttrib("threshold");
-							Integer weight = interval.getAttrib("weight");
-							if (threshold != null) {
-								switch ((int) threshold) {
-								case 0:
-									similaritySettings.eSet(reference_SimilaritySettings_lowInterval, createSimilarityInterval(loader, 8, weight));
-									break;
-								case 8:
-									similaritySettings.eSet(reference_SimilaritySettings_medInterval, createSimilarityInterval(loader, 16, weight));
-									break;
-								case 16:
-									similaritySettings.eSet(reference_SimilaritySettings_highInterval, createSimilarityInterval(loader, 30, weight));
-									break;
-								case 30:
-									similaritySettings.eSet(attribute_SimilarityInterval_outOfBoundsWeight, weight);
-									break;
-								default:
-									break;
+						// may be empty
+						if (intervalsList.size() != 0) {
+							for (EObjectWrapper interval : intervalsList) {
+								Integer threshold = interval.getAttrib("threshold");
+								Integer weight = interval.getAttrib("weight");
+								if (threshold != null) {
+									switch ((int) threshold) {
+									case 0:
+										similaritySettings.eSet(reference_SimilaritySettings_lowInterval, createSimilarityInterval(loader, 8, weight));
+										break;
+									case 8:
+										similaritySettings.eSet(reference_SimilaritySettings_medInterval, createSimilarityInterval(loader, 16, weight));
+										break;
+									case 16:
+										similaritySettings.eSet(reference_SimilaritySettings_highInterval, createSimilarityInterval(loader, 30, weight));
+										break;
+									case 30:
+										similaritySettings.eSet(attribute_SimilarityInterval_outOfBoundsWeight, weight);
+										break;
+									default:
+										break;
+									}
 								}
 							}
+						} else {
+							similaritySettings.eSet(reference_SimilaritySettings_lowInterval, createSimilarityInterval(loader, 8, 0));
+							similaritySettings.eSet(reference_SimilaritySettings_medInterval, createSimilarityInterval(loader, 16, 0));
+							similaritySettings.eSet(reference_SimilaritySettings_highInterval, createSimilarityInterval(loader, 30, 0));
+							similaritySettings.eSet(attribute_SimilarityInterval_outOfBoundsWeight, 0);
 						}
-						
+
 						parameters.setRef("similaritySettings", similaritySettings);
-//						parameters.unsetFeature("similaritySettings");
+						// parameters.unsetFeature("similaritySettings");
 					} else {
 						parameters.unsetFeature("similaritySettings");
 					}
@@ -85,7 +93,7 @@ public class MigrateToV35 extends AbstractMigrationUnit {
 			}
 		}
 	}
-	
+
 	private EObject createSimilarityInterval(MetamodelLoader modelLoader, int threshold, int weight) {
 		final EPackage package_ParametersModel = modelLoader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ParametersModel);
 
@@ -95,22 +103,22 @@ public class MigrateToV35 extends AbstractMigrationUnit {
 		final EAttribute attribute_SimilarityInterval_weight = MetamodelUtils.getAttribute(class_SimilarityInterval, "weight");
 
 		EObject newSimilarityInterval = package_ParametersModel.getEFactoryInstance().create(class_SimilarityInterval);
-		
+
 		newSimilarityInterval.eSet(attribute_SimilarityInterval_threshold, threshold);
 		newSimilarityInterval.eSet(attribute_SimilarityInterval_weight, weight);
-		
+
 		return newSimilarityInterval;
 
 	}
-	
+
 	private EObject createSimilaritySettings(MetamodelLoader modelLoader) {
 		final EPackage package_ParametersModel = modelLoader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ParametersModel);
 
 		final EClass class_SimilaritySettings = MetamodelUtils.getEClass(package_ParametersModel, "SimilaritySettings");
 
 		EObject newSimilaritySettings = package_ParametersModel.getEFactoryInstance().create(class_SimilaritySettings);
-		
+
 		return newSimilaritySettings;
 	}
-	
+
 }
