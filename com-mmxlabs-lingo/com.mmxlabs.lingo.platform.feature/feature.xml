@@ -1082,7 +1082,7 @@
          unpack="false"/>
 
    <plugin
-         id="com.springsource.org.apache.commons.cli"
+         id="org.apache.commons.cli"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -1573,7 +1573,7 @@
          unpack="false"/>
 
    <plugin
-         id="com.springsource.org.apache.commons.codec"
+         id="org.apache.commons.codec"
          download-size="0"
          install-size="0"
          version="0.0.0"
