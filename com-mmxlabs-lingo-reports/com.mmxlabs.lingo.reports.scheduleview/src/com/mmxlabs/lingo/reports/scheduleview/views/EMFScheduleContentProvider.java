@@ -11,6 +11,7 @@ import java.util.WeakHashMap;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.Viewer;
+import org.joda.time.DateTime;
 
 import com.mmxlabs.ganttviewer.IGanttChartContentProvider;
 import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
@@ -122,7 +123,10 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 			final SlotVisit visit = (SlotVisit) element;
 			final Slot slot = visit.getSlotAllocation().getSlot();
 			if (slot != null) {
-				return slot.getWindowStartWithSlotOrPortTime().toGregorianCalendar();
+				DateTime windowStartWithSlotOrPortTime = slot.getWindowStartWithSlotOrPortTime();
+				if (windowStartWithSlotOrPortTime != null) {
+					return windowStartWithSlotOrPortTime.toGregorianCalendar();
+				}
 			}
 		}
 
@@ -135,7 +139,10 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 			final SlotVisit visit = (SlotVisit) element;
 			final Slot slot = visit.getSlotAllocation().getSlot();
 			if (slot != null) {
-				return slot.getWindowStartWithSlotOrPortTime().toGregorianCalendar();
+				DateTime windowStartWithSlotOrPortTime = slot.getWindowStartWithSlotOrPortTime();
+				if (windowStartWithSlotOrPortTime != null) {
+					return windowStartWithSlotOrPortTime.toGregorianCalendar();
+				}
 			}
 		}
 
@@ -175,7 +182,7 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 				final Slot slot = slotAllocation.getSlot();
 				Slot transferSlot = null;
 				if (slot instanceof LoadSlot) {
-//					final LoadSlot loadSlot = (LoadSlot) slot;
+					// final LoadSlot loadSlot = (LoadSlot) slot;
 					// transferSlot = loadSlot.getTransferFrom();
 				} else if (slot instanceof DischargeSlot) {
 					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
