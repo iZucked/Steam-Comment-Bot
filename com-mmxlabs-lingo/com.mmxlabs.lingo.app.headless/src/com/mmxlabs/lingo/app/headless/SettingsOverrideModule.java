@@ -95,7 +95,7 @@ public class SettingsOverrideModule extends AbstractModule {
 		scp.setThreshold(SimilarityComponentParameters.Interval.HIGH, scpm.get("scp-set-high-thresh"));
 		scp.setWeight(SimilarityComponentParameters.Interval.HIGH, scpm.get("scp-set-high-weight"));
 
-		scp.setWeight(SimilarityComponentParameters.Interval.OUT_OF_BOUNDS, scpm.get("scp-set-outOfBounds-weight"));
+		scp.setOutOfBoundsWeight(scpm.get("scp-set-outOfBounds-weight"));
 		
 		return scp;
 	}
