@@ -165,7 +165,7 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 				if (Exposures.getExposureCoefficient(slot, index) != 0) {
 					if (!curveCovers(utcDate, indexFinder, index.getData(), ctx)) {
 						final String format = "[Index|'%s'] No data for %s, the window start of slot '%s'.";
-						final String failureMessage = String.format(format, index.getName(), sdf.print(slot.getWindowStart()), slot.getName());
+						final String failureMessage = String.format(format, index.getName(), format(slot), slot.getName());
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.WARNING);
 						if (slot.isSetPriceExpression()) {
 							dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION);
@@ -198,6 +198,14 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 			}
 		}
 
+	}
+
+	private String format(final Slot slot) {
+		LocalDate windowStart = slot.getWindowStart();
+		if (windowStart == null) {
+			return "<no date>";
+		}
+		return sdf.print(windowStart);
 	}
 
 	/**

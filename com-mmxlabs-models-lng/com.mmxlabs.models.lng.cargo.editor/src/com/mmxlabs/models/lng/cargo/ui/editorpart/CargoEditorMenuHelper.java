@@ -749,7 +749,13 @@ public class CargoEditorMenuHelper {
 					continue;
 				}
 				// TODO: Check the change in rounding - does this round down as the previous code did?
-				daysDifference = Days.daysBetween(loadSlot.getWindowStartWithSlotOrPortTime(), dischargeSlot.getWindowStartWithSlotOrPortTime()).getDays();
+				DateTime a = loadSlot.getWindowStartWithSlotOrPortTime();
+				DateTime b = dischargeSlot.getWindowStartWithSlotOrPortTime();
+				if (a != null && b != null) {
+					daysDifference = Days.daysBetween(a, b).getDays();
+				} else {
+					daysDifference = -1;
+				}
 			}
 
 			if (targetCargo == null) {
@@ -764,11 +770,12 @@ public class CargoEditorMenuHelper {
 			if (port != null) {
 				addTargetByDateToSortedSet(target, port.getName(), slotsByPort);
 			}
-			if (daysDifference <= 60) {
+			if (daysDifference == -1) {
+
+			} else if (daysDifference <= 60) {
 				// addTargetByDateToSortedSet(target, "Less than 30 Days", slotsByDate);
 				nearSlotsByDate.add(target);
-			}
-			if (daysDifference > 60 && daysDifference <= 90) {
+			} else if (daysDifference > 60 && daysDifference <= 90) {
 				addTargetByDateToSortedSet(target, "[>60 Days]", slotsByDate);
 			}
 		}
@@ -1336,7 +1343,9 @@ public class CargoEditorMenuHelper {
 	}
 
 	private String formatDate(LocalDate localDate) {
-
+		if (localDate == null) {
+			return "<no date>";
+		}
 		return String.format("%02d %s %04d", localDate.getDayOfMonth(), localDate.monthOfYear().getAsShortText(), localDate.getYear());
 	}
 }

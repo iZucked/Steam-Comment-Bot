@@ -212,6 +212,10 @@ public class AssignmentEditorHelper {
 			final Slot firstSlot = sortedSlots.get(0);
 			final Slot lastSlot = sortedSlots.get(sortedSlots.size() - 1);
 
+			if (firstSlot.getWindowStart() == null || lastSlot.getWindowStart() == null) {
+				return false;
+			}
+
 			if (vesselAvailabilityEndBy != null) {
 				if (firstSlot.getWindowStartWithSlotOrPortTime().isAfter(vesselAvailabilityEndBy)) {
 					return false;
