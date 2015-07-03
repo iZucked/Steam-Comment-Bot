@@ -55,6 +55,7 @@ import com.mmxlabs.models.lng.pricing.importers.PricingModelImporter;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.ui.importers.PromptPeriodImporter;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.importers.ScheduleModelImporter;
@@ -116,6 +117,8 @@ public class CSVImporter {
 		dataMap.put(PricingModelImporter.BASEFUEL_PRICING_KEY, baseFileName + "/" + "Base Fuel Curves.csv");
 		dataMap.put(SpotMarketsModelImporter.SPOT_CARGO_MARKETS_KEY, baseFileName + "/" + "Spot Cargo Markets.csv");
 		// No schedule importers
+
+		dataMap.put(PromptPeriodImporter.PROMPT_PERIOD_KEY, baseFileName + "/" + "Prompt Period.csv");
 
 		for (int i = 0; i < extraMapEntries.length; i += 2) {
 			if (i + 1 < extraMapEntries.length) {
@@ -184,7 +187,7 @@ public class CSVImporter {
 					subModelImporters.put(PortPackage.eINSTANCE.getPortModel(), new PortModelImporter());
 					subModelImporters.put(PricingPackage.eINSTANCE.getPricingModel(), new PricingModelImporter());
 					subModelImporters.put(SchedulePackage.eINSTANCE.getScheduleModel(), new ScheduleModelImporter());
-//					subModelImporters.put(ActualsPackage.eINSTANCE.getActualsModel(), new ActualsModelImporter());
+					// subModelImporters.put(ActualsPackage.eINSTANCE.getActualsModel(), new ActualsModelImporter());
 
 					final Map<EClass, IClassImporter> classImporters = new HashMap<EClass, IClassImporter>();
 					classImporters.put(FleetPackage.eINSTANCE.getBaseFuel(), new BaseFuelImporter());
