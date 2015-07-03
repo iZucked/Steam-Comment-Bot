@@ -9,6 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Singleton;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Matchers;
@@ -20,7 +22,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
-import com.google.inject.name.Named;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.CheckingIndexingContext;
 import com.mmxlabs.optimiser.core.IResource;
@@ -35,7 +36,6 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.impl.SequenceElement;
 import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCoreFactory;
-import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
@@ -74,17 +74,21 @@ public class SimilarityFitnessCoreTest {
 		});
 
 		final Injector injector = Guice.createInjector(new AbstractModule() {
-
 			@Provides
-			@Named(SimilarityFitnessCore.SIMILARITY_THRESHOLD_NUM_CHANGES)
-			private int getSimilarityFitnessThresholdNumChanges() {
-				return -1;
-			}
+			@Singleton
+			private ISimilarityComponentParameters provideSimilarityComponentParameters() {
 
-			@Provides
-			@Named(SimilarityFitnessCore.SIMILARITY_THRESHOLD)
-			private boolean getSimilarityFitnessThreshold() {
-				return false;
+				final SimilarityComponentParameters scp = new SimilarityComponentParameters();
+				
+				scp.setThreshold(ISimilarityComponentParameters.Interval.LOW, 0);
+				scp.setWeight(ISimilarityComponentParameters.Interval.LOW, 1);
+				scp.setThreshold(ISimilarityComponentParameters.Interval.MEDIUM, 0);
+				scp.setWeight(ISimilarityComponentParameters.Interval.MEDIUM, 1);
+				scp.setThreshold(ISimilarityComponentParameters.Interval.HIGH, 0);
+				scp.setWeight(ISimilarityComponentParameters.Interval.HIGH, 1);
+				scp.setOutOfBoundsWeight(1);
+
+				return scp;
 			}
 
 			@Override

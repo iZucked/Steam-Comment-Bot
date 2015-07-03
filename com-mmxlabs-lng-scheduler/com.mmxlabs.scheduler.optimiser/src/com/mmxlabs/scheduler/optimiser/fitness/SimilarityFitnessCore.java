@@ -40,17 +40,6 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * @since 3.7
  */
 public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
-	public final static String SIMILARITY_THRESHOLD_NUM_CHANGES = "similarityThresholdNumChanges";
-	public final static String SIMILARITY_THRESHOLD = "similarityThreshold";
-
-	@Inject
-	@Named(SimilarityFitnessCore.SIMILARITY_THRESHOLD_NUM_CHANGES)
-	protected int CHANGE_THRESHOLD;
-
-	@Inject
-	@Named(SimilarityFitnessCore.SIMILARITY_THRESHOLD)
-	private boolean USE_THRESHOLD;
-
 	@Inject
 	private ISimilarityComponentParameters similarityComponentParameters;
 
@@ -66,13 +55,24 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 	private Map<Integer, Integer> loadResourceMap = null; // TODO: indexed?
 	private List<IResource> resources;
 
+	// per optimisation threshold curve constants
+	private int lowThreshold;
+	private int lowWeight;
+	private int medThreshold;
+	private int medWeight;
+	private int highThreshold;
+	private int highWeight;
+	private int outOfBoundsWeight;
+	private int highRange;
+	private int medRange;
+	private int lowRange;
+	
 	public SimilarityFitnessCore(final String name) {
 		this.name = name;
 	}
 
 	public SimilarityFitnessCore(final String name, boolean threshold) {
 		this.name = name;
-		this.USE_THRESHOLD = threshold;
 	}
 
 	@Override
@@ -103,6 +103,20 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 				prev = current;
 			}
 		}
+		initConstants();
+	}
+
+	private void initConstants() {
+		lowThreshold = similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.LOW);
+		lowWeight = similarityComponentParameters.getWeight(ISimilarityComponentParameters.Interval.LOW);
+		medThreshold = similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.MEDIUM);
+		medWeight = similarityComponentParameters.getWeight(ISimilarityComponentParameters.Interval.MEDIUM);
+		highThreshold = similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.HIGH);
+		highWeight = similarityComponentParameters.getWeight(ISimilarityComponentParameters.Interval.HIGH);
+		outOfBoundsWeight = similarityComponentParameters.getOutOfBoundsWeight();
+		highRange = highThreshold - medThreshold;
+		medRange = medThreshold - lowThreshold;
+		lowRange= lowThreshold;
 	}
 
 	@Override
@@ -171,38 +185,41 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 				}
 			}
 			numberOfChanges = cargoDifferences + vesselDifferences;
-//			if (USE_THRESHOLD) {
-				lastFitness = processDifferencesWithThreshold(numberOfChanges);
-//			} else {
-//				lastFitness = numberOfChanges;
-//			}
+			// store weighted fitness
+			lastFitness = processDifferencesWithThreshold(numberOfChanges);
 		}
+		// store differences for annotation
 		lastDifferences = numberOfChanges;
 	}
 
+	/**
+	 * Calculate a weighted similarity curve, based on three points
+	 * @param diff
+	 * @return
+	 */
 	public int processDifferencesWithThreshold(int diff) {
 		int outOfBounds = 0;
-		int high = similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.HIGH)
-				- similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.MEDIUM);
-		int med = similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.MEDIUM)
-				- similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.LOW);
-		int low = similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.LOW);
+		int high = highRange;
+		int med = medRange;
+		int low = lowRange;
 
-		if (diff >= similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.HIGH)) {
-			outOfBounds = diff - similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.HIGH);
-		} else if (diff >= similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.MEDIUM)) {
-			high = diff - similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.MEDIUM);
-		} else if (diff >= similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.LOW)) {
+		if (diff >= highThreshold) {
+			outOfBounds = diff - highThreshold;
+		} else if (diff >= medThreshold) {
+			high = diff - medThreshold;
+		} else if (diff >= lowThreshold) {
 			high = 0;
-			med = diff - similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.LOW);
+			med = diff - lowThreshold;
 		} else {
 			high = 0;
 			med = 0;
 			low = diff;
 		}
 
-		return (outOfBounds * similarityComponentParameters.getWeight(Interval.OUT_OF_BOUNDS) + high * similarityComponentParameters.getWeight(Interval.HIGH) + med
-				* similarityComponentParameters.getWeight(Interval.MEDIUM) + low * similarityComponentParameters.getWeight(Interval.LOW));
+		return (outOfBounds * outOfBoundsWeight
+				+ high * highWeight
+				+ med * medWeight
+				+ low * lowWeight);
 	}
 
 	public PortType getPortType(ISequenceElement element) {
