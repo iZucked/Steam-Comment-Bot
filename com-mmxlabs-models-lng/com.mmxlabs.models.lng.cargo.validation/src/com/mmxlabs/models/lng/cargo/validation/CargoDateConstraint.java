@@ -127,7 +127,6 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	 */
 	private void validateSlotTravelTime(final IValidationContext ctx, final IExtraValidationContext extraContext, final Cargo cargo, final Slot from, final Slot to, final int availableTime,
 			final List<IStatus> failures) {
-
 		// Skip for FOB/DES cargoes.
 		// TODO: Roll in common des redirection travel time
 		if (cargo.getCargoType() != CargoType.FLEET) {

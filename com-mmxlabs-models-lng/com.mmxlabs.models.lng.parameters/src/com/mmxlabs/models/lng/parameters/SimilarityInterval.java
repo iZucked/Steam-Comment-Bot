@@ -16,8 +16,8 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.parameters.SimilarityInterval#getThreshold <em>Threshold</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.SimilarityInterval#getWeight <em>Weight</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.SimilarityInterval#getThreshold <em>Threshold</em>}</li>
  * </ul>
  * </p>
  *
@@ -26,59 +26,6 @@ import org.eclipse.emf.ecore.EObject;
  * @generated
  */
 public interface SimilarityInterval extends EObject {
-	/**
-	 * Returns the value of the '<em><b>Threshold</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Threshold</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Threshold</em>' attribute.
-	 * @see #isSetThreshold()
-	 * @see #unsetThreshold()
-	 * @see #setThreshold(int)
-	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getSimilarityInterval_Threshold()
-	 * @model unsettable="true" required="true"
-	 * @generated
-	 */
-	int getThreshold();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.SimilarityInterval#getThreshold <em>Threshold</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Threshold</em>' attribute.
-	 * @see #isSetThreshold()
-	 * @see #unsetThreshold()
-	 * @see #getThreshold()
-	 * @generated
-	 */
-	void setThreshold(int value);
-
-	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.parameters.SimilarityInterval#getThreshold <em>Threshold</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isSetThreshold()
-	 * @see #getThreshold()
-	 * @see #setThreshold(int)
-	 * @generated
-	 */
-	void unsetThreshold();
-
-	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.parameters.SimilarityInterval#getThreshold <em>Threshold</em>}' attribute is set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Threshold</em>' attribute is set.
-	 * @see #unsetThreshold()
-	 * @see #getThreshold()
-	 * @see #setThreshold(int)
-	 * @generated
-	 */
-	boolean isSetThreshold();
-
 	/**
 	 * Returns the value of the '<em><b>Weight</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -104,5 +51,31 @@ public interface SimilarityInterval extends EObject {
 	 * @generated
 	 */
 	void setWeight(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Threshold</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Threshold</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Threshold</em>' attribute.
+	 * @see #setThreshold(int)
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getSimilarityInterval_Threshold()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getThreshold();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.SimilarityInterval#getThreshold <em>Threshold</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Threshold</em>' attribute.
+	 * @see #getThreshold()
+	 * @generated
+	 */
+	void setThreshold(int value);
 
 } // SimilarityInterval

@@ -17,8 +17,10 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.parameters.SimilaritySettings#getThreshold <em>Threshold</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.parameters.SimilaritySettings#getIntervals <em>Intervals</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.SimilaritySettings#getLowInterval <em>Low Interval</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.SimilaritySettings#getMedInterval <em>Med Interval</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.SimilaritySettings#getHighInterval <em>High Interval</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.SimilaritySettings#getOutOfBoundsWeight <em>Out Of Bounds Weight</em>}</li>
  * </ul>
  * </p>
  *
@@ -28,72 +30,134 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface SimilaritySettings extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Threshold</b></em>' attribute.
+	 * Returns the value of the '<em><b>Low Interval</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Threshold</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Low Interval</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Threshold</em>' attribute.
-	 * @see #isSetThreshold()
-	 * @see #unsetThreshold()
-	 * @see #setThreshold(int)
-	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getSimilaritySettings_Threshold()
+	 * @return the value of the '<em>Low Interval</em>' containment reference.
+	 * @see #setLowInterval(SimilarityInterval)
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getSimilaritySettings_LowInterval()
+	 * @model containment="true" required="true"
+	 * @generated
+	 */
+	SimilarityInterval getLowInterval();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.SimilaritySettings#getLowInterval <em>Low Interval</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Low Interval</em>' containment reference.
+	 * @see #getLowInterval()
+	 * @generated
+	 */
+	void setLowInterval(SimilarityInterval value);
+
+	/**
+	 * Returns the value of the '<em><b>Med Interval</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Med Interval</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Med Interval</em>' containment reference.
+	 * @see #setMedInterval(SimilarityInterval)
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getSimilaritySettings_MedInterval()
+	 * @model containment="true" required="true"
+	 * @generated
+	 */
+	SimilarityInterval getMedInterval();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.SimilaritySettings#getMedInterval <em>Med Interval</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Med Interval</em>' containment reference.
+	 * @see #getMedInterval()
+	 * @generated
+	 */
+	void setMedInterval(SimilarityInterval value);
+
+	/**
+	 * Returns the value of the '<em><b>High Interval</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>High Interval</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>High Interval</em>' containment reference.
+	 * @see #setHighInterval(SimilarityInterval)
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getSimilaritySettings_HighInterval()
+	 * @model containment="true" required="true"
+	 * @generated
+	 */
+	SimilarityInterval getHighInterval();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.SimilaritySettings#getHighInterval <em>High Interval</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>High Interval</em>' containment reference.
+	 * @see #getHighInterval()
+	 * @generated
+	 */
+	void setHighInterval(SimilarityInterval value);
+
+	/**
+	 * Returns the value of the '<em><b>Out Of Bounds Weight</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Out Of Bounds Weight</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Out Of Bounds Weight</em>' attribute.
+	 * @see #isSetOutOfBoundsWeight()
+	 * @see #unsetOutOfBoundsWeight()
+	 * @see #setOutOfBoundsWeight(int)
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getSimilaritySettings_OutOfBoundsWeight()
 	 * @model unsettable="true" required="true"
 	 * @generated
 	 */
-	int getThreshold();
+	int getOutOfBoundsWeight();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.SimilaritySettings#getThreshold <em>Threshold</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.SimilaritySettings#getOutOfBoundsWeight <em>Out Of Bounds Weight</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Threshold</em>' attribute.
-	 * @see #isSetThreshold()
-	 * @see #unsetThreshold()
-	 * @see #getThreshold()
+	 * @param value the new value of the '<em>Out Of Bounds Weight</em>' attribute.
+	 * @see #isSetOutOfBoundsWeight()
+	 * @see #unsetOutOfBoundsWeight()
+	 * @see #getOutOfBoundsWeight()
 	 * @generated
 	 */
-	void setThreshold(int value);
+	void setOutOfBoundsWeight(int value);
 
 	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.parameters.SimilaritySettings#getThreshold <em>Threshold</em>}' attribute.
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.parameters.SimilaritySettings#getOutOfBoundsWeight <em>Out Of Bounds Weight</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isSetThreshold()
-	 * @see #getThreshold()
-	 * @see #setThreshold(int)
+	 * @see #isSetOutOfBoundsWeight()
+	 * @see #getOutOfBoundsWeight()
+	 * @see #setOutOfBoundsWeight(int)
 	 * @generated
 	 */
-	void unsetThreshold();
+	void unsetOutOfBoundsWeight();
 
 	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.parameters.SimilaritySettings#getThreshold <em>Threshold</em>}' attribute is set.
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.parameters.SimilaritySettings#getOutOfBoundsWeight <em>Out Of Bounds Weight</em>}' attribute is set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Threshold</em>' attribute is set.
-	 * @see #unsetThreshold()
-	 * @see #getThreshold()
-	 * @see #setThreshold(int)
+	 * @return whether the value of the '<em>Out Of Bounds Weight</em>' attribute is set.
+	 * @see #unsetOutOfBoundsWeight()
+	 * @see #getOutOfBoundsWeight()
+	 * @see #setOutOfBoundsWeight(int)
 	 * @generated
 	 */
-	boolean isSetThreshold();
-
-	/**
-	 * Returns the value of the '<em><b>Intervals</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.parameters.SimilarityInterval}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Intervals</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Intervals</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getSimilaritySettings_Intervals()
-	 * @model containment="true" ordered="false"
-	 * @generated
-	 */
-	EList<SimilarityInterval> getIntervals();
+	boolean isSetOutOfBoundsWeight();
 
 } // SimilaritySettings
