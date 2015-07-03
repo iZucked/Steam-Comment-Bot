@@ -238,4 +238,10 @@
                name="Shared Scenario Data Import">
          </command>
       </extension>
+      <extension
+            point="com.mmxlabs.models.util.import.extramodelimporters">
+         <extramodelimporter
+               class="com.mmxlabs.models.lng.scenario.ui.importers.PromptPeriodImporter">
+         </extramodelimporter>
+      </extension>
 </plugin>
