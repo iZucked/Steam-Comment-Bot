@@ -28,7 +28,16 @@ public class YearMonthAttributeManipulator extends BasicAttributeManipulator {
 
 	@Override
 	public CellEditor createCellEditor(final Composite c, final Object object) {
-		final FormattedTextCellEditor editor = new FormattedTextCellEditor(c);
+		final FormattedTextCellEditor editor = new FormattedTextCellEditor(c){
+			@Override
+			protected Object doGetValue() {
+				final Object superValue = super.doGetValue();
+				if (superValue == null) {
+					return new YearMonth();
+				}
+				return superValue;
+			}
+		};
 		editor.setFormatter(new YearMonthTextFormatter());
 		return editor;
 	}
@@ -49,5 +58,9 @@ public class YearMonthAttributeManipulator extends BasicAttributeManipulator {
 			return null;
 		}
 	}
+	
+
+//	 
+
 
 }

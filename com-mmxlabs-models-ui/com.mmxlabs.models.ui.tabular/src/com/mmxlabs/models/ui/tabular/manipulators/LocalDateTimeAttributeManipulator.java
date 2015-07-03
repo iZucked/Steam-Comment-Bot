@@ -28,13 +28,23 @@ public class LocalDateTimeAttributeManipulator extends BasicAttributeManipulator
 
 	@Override
 	public CellEditor createCellEditor(final Composite c, final Object object) {
-		final FormattedTextCellEditor editor = new FormattedTextCellEditor(c);
+		final FormattedTextCellEditor editor = new FormattedTextCellEditor(c) {
+			@Override
+			protected Object doGetValue() {
+				final Object superValue = super.doGetValue();
+				if (superValue == null) {
+					return new LocalDateTime().withHourOfDay(0);
+				}
+				return superValue;
+			}
+		};
 		editor.setFormatter(new LocalDateTimeTextFormatter());
 		return editor;
 	}
 
 	@Override
 	public String renderSetValue(final Object owner, final Object object) {
+
 		final LocalDateTimeTextFormatter formatter = new LocalDateTimeTextFormatter();
 		formatter.setValue(object);
 		return formatter.getDisplayString();
@@ -49,5 +59,4 @@ public class LocalDateTimeAttributeManipulator extends BasicAttributeManipulator
 			return null;
 		}
 	}
-
 }
