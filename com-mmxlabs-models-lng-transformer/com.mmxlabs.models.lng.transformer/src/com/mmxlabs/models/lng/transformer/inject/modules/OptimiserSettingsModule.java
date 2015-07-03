@@ -144,26 +144,6 @@ public class OptimiserSettingsModule extends AbstractModule {
 	}
 
 	@Provides
-	@Named(SimilarityFitnessCore.SIMILARITY_THRESHOLD_NUM_CHANGES)
-	private int getSimilarityFitnessThresholdNumChanges(final OptimiserSettings settings) {
-		if (settings.getSimilaritySettings() != null && settings.getSimilaritySettings().isSetThreshold()) {
-			return settings.getSimilaritySettings().getThreshold();
-		} else {
-			return -1;
-		}
-	}
-
-	@Provides
-	@Named(SimilarityFitnessCore.SIMILARITY_THRESHOLD)
-	private boolean getSimilarityFitnessThreshold(final OptimiserSettings settings) {
-		if (settings.getSimilaritySettings() != null) {
-			return settings.getSimilaritySettings().isSetThreshold();
-		} else {
-			return false;
-		}
-	}
-
-	@Provides
 	@Named(LinearFitnessEvaluatorModule.LINEAR_FITNESS_WEIGHTS_MAP)
 	Map<String, Double> provideLSOFitnessWeights(final OptimiserSettings settings, final List<IFitnessComponent> fitnessComponents) {
 		// Initialise to zero, then take optimiser settings
@@ -209,32 +189,17 @@ public class OptimiserSettingsModule extends AbstractModule {
 	private ISimilarityComponentParameters provideSimilarityComponentParameters(@NonNull OptimiserSettings settings) {
 
 		final SimilarityComponentParameters scp = new SimilarityComponentParameters();
-		// Set default off
-		scp.setThreshold(ISimilarityComponentParameters.Interval.LOW, 8);
-		scp.setWeight(ISimilarityComponentParameters.Interval.LOW, 0);
-		scp.setThreshold(ISimilarityComponentParameters.Interval.MEDIUM, 16);
-		scp.setWeight(ISimilarityComponentParameters.Interval.MEDIUM, 0);
-		scp.setThreshold(ISimilarityComponentParameters.Interval.HIGH, 30);
-		scp.setWeight(ISimilarityComponentParameters.Interval.HIGH, 0);
-		scp.setWeight(ISimilarityComponentParameters.Interval.OUT_OF_BOUNDS, 0);
 
 		// Replace with settings.
 		SimilaritySettings similaritySettings = settings.getSimilaritySettings();
-		// Oops! Bad data model
-		for (SimilarityInterval interval : similaritySettings.getIntervals()) {
-			if (interval.getThreshold() == 0) {
-				scp.setWeight(ISimilarityComponentParameters.Interval.LOW, interval.getWeight());
-			}
-			if (interval.getThreshold() == 8) {
-				scp.setWeight(ISimilarityComponentParameters.Interval.MEDIUM, interval.getWeight());
-			}
-			if (interval.getThreshold() == 16) {
-				scp.setWeight(ISimilarityComponentParameters.Interval.HIGH, interval.getWeight());
-			}
-			if (interval.getThreshold() == 30) {
-				scp.setWeight(ISimilarityComponentParameters.Interval.OUT_OF_BOUNDS, interval.getWeight());
-			}
-		}
+		
+		scp.setThreshold(ISimilarityComponentParameters.Interval.LOW, similaritySettings.getLowInterval().getThreshold());
+		scp.setWeight(ISimilarityComponentParameters.Interval.LOW, similaritySettings.getLowInterval().getWeight());
+		scp.setThreshold(ISimilarityComponentParameters.Interval.MEDIUM, similaritySettings.getMedInterval().getThreshold());
+		scp.setWeight(ISimilarityComponentParameters.Interval.MEDIUM, similaritySettings.getMedInterval().getWeight());
+		scp.setThreshold(ISimilarityComponentParameters.Interval.HIGH, similaritySettings.getHighInterval().getThreshold());
+		scp.setWeight(ISimilarityComponentParameters.Interval.HIGH, similaritySettings.getHighInterval().getWeight());
+		scp.setOutOfBoundsWeight(similaritySettings.getOutOfBoundsWeight());
 
 		return scp;
 	}
