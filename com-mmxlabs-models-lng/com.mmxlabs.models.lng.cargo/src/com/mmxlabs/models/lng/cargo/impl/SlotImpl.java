@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.cargo.impl;
 
-import com.mmxlabs.models.datetime.DateTimeFactory;
-import com.mmxlabs.models.datetime.DateTimePackage;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
@@ -18,7 +16,6 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
-import org.eclipse.jdt.annotation.NonNull;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
@@ -136,7 +133,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final LocalDate WINDOW_START_EDEFAULT = (LocalDate)DateTimeFactory.eINSTANCE.createFromString(DateTimePackage.eINSTANCE.getLocalDate(), "now");
+	protected static final LocalDate WINDOW_START_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getWindowStart() <em>Window Start</em>}' attribute.
@@ -1698,6 +1695,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 */
 	public DateTime getWindowEndWithSlotOrPortTime() {
 		final DateTime startTime = getWindowStartWithSlotOrPortTime();
+		if (startTime == null) {
+			return null;
+		}
 		return startTime.plusHours( getSlotOrPortWindowSize());
 	}
 	
@@ -1706,10 +1706,11 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	@NonNull
 	public DateTime getWindowEndWithSlotOrPortTimeWithFlex() {
 		final DateTime endTime = getWindowEndWithSlotOrPortTime();
-		 
+		if (endTime == null) {
+			return null;
+		}
 		final int slotFlex = getWindowFlex();
 		if (slotFlex > 0) {
 			return endTime.plusHours(slotFlex);
@@ -1727,7 +1728,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	public DateTime getWindowStartWithSlotOrPortTime() {
 		final LocalDate wStart = getWindowStart();
 		if (wStart == null) {
-			throw new IllegalStateException("No window start");
+			return null;
 		}
 		DateTime dateTime = wStart.toDateTimeAtStartOfDay(DateTimeZone.forID(getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart())));
 		final int startTime = (Integer) eGetWithDefault(CargoPackage.eINSTANCE.getSlot_WindowStartTime());
@@ -1742,6 +1743,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 */
 	public DateTime getWindowStartWithSlotOrPortTimeWithFlex() {
 		final DateTime startTime = getWindowStartWithSlotOrPortTime();
+		if (startTime == null) {
+			return null;
+		}
 		final int slotFlex = getWindowFlex();
 		if (slotFlex < 0) {
 			return startTime.plusHours(slotFlex);
