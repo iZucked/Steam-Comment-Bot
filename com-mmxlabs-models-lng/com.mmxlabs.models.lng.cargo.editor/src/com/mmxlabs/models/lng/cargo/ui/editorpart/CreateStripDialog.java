@@ -64,8 +64,11 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.joda.time.Days;
 import org.joda.time.DurationFieldType;
 import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import com.mmxlabs.common.PairKeyedMap;
+import com.mmxlabs.models.datetime.ui.formatters.LocalDateTextFormatter;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -912,6 +915,12 @@ public class CreateStripDialog extends FormDialog {
 			if (element instanceof EObject) {
 				element = ((EObject) element).eGet(feature);
 			}
+			if (element instanceof LocalDate) {
+				final LocalDateTextFormatter formatter = new LocalDateTextFormatter();
+				formatter.setValue(element);
+				return formatter.getDisplayString();
+			}
+
 			if (element instanceof NamedObject) {
 				return ((NamedObject) element).getName();
 			} else if (element != null) {

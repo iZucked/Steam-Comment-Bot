@@ -902,8 +902,10 @@ public class CargoEditorMenuHelper {
 		}
 		final MenuManager subMenu = new MenuManager("New " + menuName + " Market Slot", null);
 
-		for (final SpotMarket market : validMarkets) {
-			subMenu.add(new CreateSlotAction("Create " + market.getName() + " slot", source, market, isSpecial, null));
+		if (source.getWindowStart() != null) {
+			for (final SpotMarket market : validMarkets) {
+				subMenu.add(new CreateSlotAction("Create " + market.getName() + " slot", source, market, isSpecial, null));
+			}
 		}
 
 		manager.add(subMenu);
