@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="&gt;&gt;&gt;&gt; LiNGO Workspace Target  - (Mars GA) &lt;&lt;&lt;&lt;" sequenceNumber="60">
+<?pde version="3.8"?><target name="&gt;&gt;&gt;&gt; LiNGO Workspace Target  - (Mars GA) &lt;&lt;&lt;&lt;" sequenceNumber="63">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.jdt.annotation" version="0.0.0"/>
@@ -38,16 +38,16 @@
 <unit id="org.apache.log4j" version="0.0.0"/>
 <unit id="org.apache.log4j.source" version="0.0.0"/>
 <unit id="org.hamcrest" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest.core" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest.core.source" version="1.1.0.v20090501071000"/>
+<unit id="org.hamcrest.core" version="1.3.0.v201303031735"/>
+<unit id="org.hamcrest.core.source" version="1.3.0.v201303031735"/>
 <unit id="org.hamcrest.text" version="1.1.0.v20090501071000"/>
 <unit id="org.hamcrest.text.source" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest.integration" version="1.1.0.v201303031500"/>
-<unit id="org.hamcrest.integration.source" version="1.1.0.v201303031500"/>
-<unit id="org.hamcrest.library" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest.library.source" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest.generator" version="1.1.0.v20090501071000"/>
-<unit id="org.hamcrest.generator.source" version="1.1.0.v20090501071000"/>
+<unit id="org.hamcrest.integration" version="1.3.0.v201305210900"/>
+<unit id="org.hamcrest.integration.source" version="1.3.0.v201305210900"/>
+<unit id="org.hamcrest.library" version="1.3.0.v201505072020"/>
+<unit id="org.hamcrest.library.source" version="1.3.0.v201505072020"/>
+<unit id="org.hamcrest.generator" version="1.3.0.v201305210900"/>
+<unit id="org.hamcrest.generator.source" version="1.3.0.v201305210900"/>
 <unit id="javax.activation" version="0.0.0"/>
 <unit id="javax.activation.source" version="0.0.0"/>
 <unit id="javax.xml.soap" version="0.0.0"/>
@@ -151,6 +151,10 @@
 <unit id="org.eclipse.net4j.doc.feature.group" version="0.0.0"/>
 <unit id="org.eclipse.emf.cdo.server.db.feature.group" version="0.0.0"/>
 <repository location="http://download.eclipse.org/modeling/emf/cdo/drops/R20140610-0212"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.emf.ecp.emfforms.sdk.feature.feature.group" version="1.6.1.20150626-1237"/>
+<repository location="http://download.eclipse.org/ecp/releases/releases_target_16/"/>
 </location>
 </locations>
 </target>
