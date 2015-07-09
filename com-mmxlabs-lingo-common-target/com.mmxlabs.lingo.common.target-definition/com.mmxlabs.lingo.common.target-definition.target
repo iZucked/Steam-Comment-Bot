@@ -145,5 +145,9 @@
 <unit id="org.eclipse.emf.cdo.server.db.feature.group" version="0.0.0"/>
 <repository location="http://download.eclipse.org/modeling/emf/cdo/drops/R20140610-0212"/>
 </location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.emf.ecp.emfforms.sdk.feature.feature.group" version="1.6.1.20150626-1237"/>
+<repository location="http://download.eclipse.org/ecp/releases/releases_target_16/"/>
+</location>
 </locations>
 </target>
