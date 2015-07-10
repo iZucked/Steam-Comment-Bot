@@ -11,6 +11,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
@@ -124,7 +126,7 @@ public class CSVReader implements Closeable {
 	}
 
 	public Set<String> getUnusedHeaders() {
-		final HashSet<String> result = new HashSet<String>();
+		final HashSet<String> result = new LinkedHashSet<String>();
 		for (final String s : unusedHeaders) {
 			result.add(getCasedColumnName(s));
 		}
@@ -136,7 +138,7 @@ public class CSVReader implements Closeable {
 	 * @throws IOException
 	 */
 	public Map<String, String> readRowFields() throws IOException {
-		final Map<String, String> row = new HashMap<String, String>() {
+		final Map<String, String> row = new LinkedHashMap<String, String>() {
 			private static final long serialVersionUID = -4630946181378550729L;
 
 			@Override
