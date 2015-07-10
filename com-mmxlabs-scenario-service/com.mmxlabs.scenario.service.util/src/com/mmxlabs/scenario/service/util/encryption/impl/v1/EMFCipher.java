@@ -142,16 +142,26 @@ class EMFCipher implements URIConverter.Cipher {
 		// now create the decrypt cipher
 		final Cipher cipher = Cipher.getInstance(ENCRYPTION_ALGORITHM);
 		cipher.init(Cipher.DECRYPT_MODE, keyFile.getKey(), new IvParameterSpec(encryptionIV));
-		in = new CipherInputStream(in, cipher);
+		in = new CipherInputStream(in, cipher) {
+			
+			@Override
+			public void close() throws IOException {
+				try {
+					// http://stackoverflow.com/questions/27124931/java-7-java-8-aes-causes-exception-badpaddingexception-given-final-block
+					// https://bugs.openjdk.java.net/browse/JDK-8061619
+					super.close();
+				} catch (final Exception e) {
+					// ignore IllegalBlockSizeExceptions
+				}
+			}
+		};
 
 		if ((flags[0] & FLAG_ZIPPED) == FLAG_ZIPPED) {
 			final ZipInputStream zipInputStream = new ZipInputStream(in);
 			while (zipInputStream.available() != 0) {
 				final ZipEntry zipEntry = zipInputStream.getNextEntry();
-				// if (isContentZipEntry(zipEntry)) {
 				in = zipInputStream;
 				break;
-				// }
 			}
 		}
 
