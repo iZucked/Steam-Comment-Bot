@@ -5,9 +5,10 @@
 package com.mmxlabs.optimiser.core.scenario.common.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,7 +30,7 @@ import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
  */
 public class HashMapMultiMatrixProvider<T, U extends Comparable<U>> implements IMultiMatrixProvider<T, U>, IMultiMatrixEditor<T, U> {
 
-	private final HashMap<String, IMatrixProvider<T, U>> matricies;
+	private final Map<String, IMatrixProvider<T, U>> matricies = new LinkedHashMap<String, IMatrixProvider<T, U>>();
 
 	/**
 	 * Cached array of keys. This will be reset whenever a new matrix is set and recalculated when {@link #getKeys()} is called.
@@ -37,7 +38,6 @@ public class HashMapMultiMatrixProvider<T, U extends Comparable<U>> implements I
 	private transient String[] keys;
 
 	public HashMapMultiMatrixProvider() {
-		this.matricies = new HashMap<String, IMatrixProvider<T, U>>();
 	}
 
 	@Override
@@ -72,6 +72,7 @@ public class HashMapMultiMatrixProvider<T, U extends Comparable<U>> implements I
 	public final String[] getKeys() {
 		if (keys == null) {
 			keys = matricies.keySet().toArray(new String[matricies.size()]);
+			Arrays.sort(keys);
 		}
 		return keys;
 	}
@@ -80,9 +81,8 @@ public class HashMapMultiMatrixProvider<T, U extends Comparable<U>> implements I
 	public final Collection<MatrixEntry<T, U>> getValues(final T x, final T y) {
 		final List<MatrixEntry<T, U>> entries = new ArrayList<MatrixEntry<T, U>>(matricies.size());
 
-		for (final Map.Entry<String, IMatrixProvider<T, U>> entry : matricies.entrySet()) {
-			final String key = entry.getKey();
-			final IMatrixProvider<T, U> p = entry.getValue();
+		for (final String key : getKeys()) {
+			final IMatrixProvider<T, U> p = matricies.get(key);
 			final U u = p.get(x, y);
 			entries.add(new MatrixEntry<T, U>(key, x, y, u));
 		}
