@@ -56,7 +56,7 @@ public class SlotGroupCountConstraintChecker implements IReducingContraintChecke
 	private static class SlotGroupTracker {
 
 		int currentCount;
-		int constraintedCount;
+		int constrainedCount;
 		int permittedCount;
 	}
 
@@ -77,82 +77,83 @@ public class SlotGroupCountConstraintChecker implements IReducingContraintChecke
 	@Inject
 	public void init() {
 
-		// Initialise state. Create tracker for each slot group and record the "count";
-		for (final SlotGroup group : slotGroupProvider.getGroups()) {
-			final SlotGroupTracker tracker = new SlotGroupTracker();
-			tracker.currentCount = 0;
-			tracker.permittedCount = 0;
-			tracker.constraintedCount = group.getCount();
-			trackers.put(group, tracker);
-		}
+//		// Initialise state. Create tracker for each slot group and record the "count";
+//		for (final SlotGroup group : slotGroupProvider.getGroups()) {
+//			final SlotGroupTracker tracker = new SlotGroupTracker();
+//			tracker.currentCount = 0;
+//			tracker.permittedCount = 0;
+//			tracker.constrainedCount = group.getCount();
+//			trackers.put(group, tracker);
+//		}
 	}
 
 	@Override
 	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final List<String> messages) {
 
-		// Reset counters;
-		for (final SlotGroupTracker tracker : trackers.values()) {
-			tracker.currentCount = 0;
-		}
+//		// Reset counters;
+//		for (final SlotGroupTracker tracker : trackers.values()) {
+//			tracker.currentCount = 0;
+//		}
 
-		for (final IResource resource : sequences.getResources()) {
-			assert resource != null;
-			final ISequence sequence = sequences.getSequence(resource);
-			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-
-			final boolean isVirtualVessel = vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE;
-			final boolean checkSequence = (!isVirtualVessel) || (isVirtualVessel && sequence.size() > 1);
-			if (checkSequence) {
-				for (final ISequenceElement element : sequence) {
-					final Collection<SlotGroup> groups = slotGroupProvider.getGroupsForElement(element);
-					for (final SlotGroup group : groups) {
-						final SlotGroupTracker tracker = trackers.get(group);
-						// Increment group count and reject solution if we break our permitted count limit.
-						if (++tracker.currentCount > tracker.permittedCount) {
-							if (messages != null) {
-								// TODO: Add a message
-							}
-							return false;
-						}
-					}
-				}
-			}
-		}
+//		for (final IResource resource : sequences.getResources()) {
+//			assert resource != null;
+//			final ISequence sequence = sequences.getSequence(resource);
+//			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+//
+//			final boolean isVirtualVessel = vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE;
+//			final boolean checkSequence = (!isVirtualVessel) || (isVirtualVessel && sequence.size() > 1);
+//			if (checkSequence) {
+//				for (final ISequenceElement element : sequence) {
+//					final Collection<SlotGroup> groups = slotGroupProvider.getGroupsForElement(element);
+//					for (final SlotGroup group : groups) {
+//						final SlotGroupTracker tracker = trackers.get(group);
+//						// Increment group count and reject solution if we break our permitted count limit.
+//						if (++tracker.currentCount > tracker.permittedCount) {
+//							if (messages != null) {
+//								// TODO: Add a message
+//							}
+//							return false;
+//						}
+//					}
+//				}
+//			}
+//		}
 		return true;
 	}
 
 	@Override
 	public void sequencesAccepted(@NonNull final ISequences sequences) {
 
-		// Reset current counts to zero;
-		for (final SlotGroupTracker tracker : trackers.values()) {
-			tracker.currentCount = 0;
-		}
-
-		// Loop through and update the current count;
-		for (final IResource resource : sequences.getResources()) {
-			assert resource != null;
-			final ISequence sequence = sequences.getSequence(resource);
-			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
-
-			// Virtual vessels need special treatment. If there is only one element on the route, then it is considered not to be used.
-			final boolean isVirtualVessel = vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE;
-			final boolean checkSequence = (!isVirtualVessel) || (isVirtualVessel && sequence.size() > 1);
-			if (checkSequence) {
-				for (final ISequenceElement element : sequence) {
-					final Collection<SlotGroup> groups = slotGroupProvider.getGroupsForElement(element);
-					for (final SlotGroup group : groups) {
-						final SlotGroupTracker tracker = trackers.get(group);
-						tracker.currentCount++;
-					}
-				}
-			}
-		}
-
-		// Finally, set the new permitted count value - make sure it is not less than the specified count value.
-		for (final SlotGroupTracker tracker : trackers.values()) {
-			tracker.permittedCount = Math.max(tracker.constraintedCount, tracker.currentCount);
-		}
+//		// Reset current counts to zero;
+//		for (final SlotGroupTracker tracker : trackers.values()) {
+//			tracker.currentCount = 0;
+//		}
+//
+//		// Loop through and update the current count;
+//		for (final IResource resource : sequences.getResources()) {
+//			assert resource != null;
+//			final ISequence sequence = sequences.getSequence(resource);
+//			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+//
+//			// Virtual vessels need special treatment. If there is only one element on the route, then it is considered not to be used.
+//			final boolean isVirtualVessel = vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE;
+//			final boolean checkSequence = (!isVirtualVessel) || (isVirtualVessel && sequence.size() > 1);
+//			if (checkSequence) {
+//				for (final ISequenceElement element : sequence) {
+//					final Collection<SlotGroup> groups = slotGroupProvider.getGroupsForElement(element);
+//					for (final SlotGroup group : groups) {
+//						final SlotGroupTracker tracker = trackers.get(group);
+//						tracker.currentCount++;
+//					}
+//				}
+//			}
+//		}
+//
+//		// Finally, set the new permitted count value - make sure it is not less than the specified count value.
+//
+//		for (final SlotGroupTracker tracker : trackers.values()) {
+//			tracker.permittedCount = Math.max(Math.max(tracker.constrainedCount, tracker.currentCount), tracker.permittedCount);
+//		}
 	}
 
 	@Override
