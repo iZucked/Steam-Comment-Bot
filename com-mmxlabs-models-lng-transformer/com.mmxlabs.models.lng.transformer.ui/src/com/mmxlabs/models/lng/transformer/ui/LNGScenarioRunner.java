@@ -91,8 +91,9 @@ public class LNGScenarioRunner {
 	public LNGScenarioRunner(final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings, final String... hints) {
 		this(scenario, null, optimiserSettings, createLocalEditingDomain(), hints);
 	}
-	
-	public LNGScenarioRunner(final LNGScenarioModel scenario, @Nullable final ScenarioInstance scenarioInstance, final OptimiserSettings optimiserSettings, final EditingDomain editingDomain, final String... hints) {
+
+	public LNGScenarioRunner(final LNGScenarioModel scenario, @Nullable final ScenarioInstance scenarioInstance, final OptimiserSettings optimiserSettings, final EditingDomain editingDomain,
+			final String... hints) {
 		this.originalScenario = scenario;
 		this.scenarioInstance = scenarioInstance;
 		this.optimiserSettings = optimiserSettings;
@@ -238,28 +239,28 @@ public class LNGScenarioRunner {
 			optimiserScenario = t.transform(originalScenario, optimiserSettings, periodMapping);
 
 			// // DEBUGGING - store sub scenario as a "fork"
-//			if (true && scenarioInstance != null) {
-//				try {
-//					IScenarioService scenarioService = scenarioInstance.getScenarioService();
-//					ScenarioInstance dup = scenarioService.insert(scenarioInstance, EcoreUtil.copy(optimiserScenario));
-//					dup.setName("Period Scenario");
-//
-//					// Copy across various bits of information
-//					dup.getMetadata().setContentType(scenarioInstance.getMetadata().getContentType());
-//					dup.getMetadata().setCreated(scenarioInstance.getMetadata().getCreated());
-//					dup.getMetadata().setLastModified(new Date());
-//
-//					// Copy version context information
-//					dup.setVersionContext(scenarioInstance.getVersionContext());
-//					dup.setScenarioVersion(scenarioInstance.getScenarioVersion());
-//
-//					dup.setClientVersionContext(scenarioInstance.getClientVersionContext());
-//					dup.setClientScenarioVersion(scenarioInstance.getClientScenarioVersion());
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-			
+			// if (true && scenarioInstance != null) {
+			// try {
+			// IScenarioService scenarioService = scenarioInstance.getScenarioService();
+			// ScenarioInstance dup = scenarioService.insert(scenarioInstance, EcoreUtil.copy(optimiserScenario));
+			// dup.setName("Period Scenario");
+			//
+			// // Copy across various bits of information
+			// dup.getMetadata().setContentType(scenarioInstance.getMetadata().getContentType());
+			// dup.getMetadata().setCreated(scenarioInstance.getMetadata().getCreated());
+			// dup.getMetadata().setLastModified(new Date());
+			//
+			// // Copy version context information
+			// dup.setVersionContext(scenarioInstance.getVersionContext());
+			// dup.setScenarioVersion(scenarioInstance.getScenarioVersion());
+			//
+			// dup.setClientVersionContext(scenarioInstance.getClientVersionContext());
+			// dup.setClientScenarioVersion(scenarioInstance.getClientScenarioVersion());
+			// } catch (Exception e) {
+			// e.printStackTrace();
+			// }
+			// }
+
 			final BasicCommandStack commandStack = new BasicCommandStack();
 			final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 			adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
@@ -300,6 +301,12 @@ public class LNGScenarioRunner {
 		}
 
 		if (optimiser.isFinished()) {
+
+			// Generate the changesets decomposition.
+			if (false) {
+				BreadthOptimiser instance = injector.getInstance(BreadthOptimiser.class);
+				instance.optimise(optimiser.getBestRawSequencecs());
+			}
 			// export final state
 			LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
 			finalSchedule = LNGSchedulerJobUtils.exportSolution(injector, optimiserScenario, transformer.getOptimiserSettings(), optimiserEditingDomain, modelEntityMap, optimiser.getBestSolution(),
@@ -343,8 +350,8 @@ public class LNGScenarioRunner {
 
 				final ModelEntityMap subModelEntityMap = subTransformer.getModelEntityMap();
 				final IAnnotatedSolution finalSolution = LNGSchedulerJobUtils.evaluateCurrentState(subTransformer);
-				return LNGSchedulerJobUtils.exportSolution(subTransformer.getInjector(), originalScenario, EcoreUtil.copy(optimiserSettings), originalEditingDomain, subModelEntityMap,
-						finalSolution, currentProgress);
+				return LNGSchedulerJobUtils.exportSolution(subTransformer.getInjector(), originalScenario, EcoreUtil.copy(optimiserSettings), originalEditingDomain, subModelEntityMap, finalSolution,
+						currentProgress);
 			}
 		}
 		return null;
