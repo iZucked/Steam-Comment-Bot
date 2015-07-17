@@ -85,6 +85,11 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 	}
 
 	@Override
+	public ISequences getBestRawSequencecs() {
+		return fitnessEvaluator.getBestRawSequences();
+	}
+	
+	@Override
 	public final IAnnotatedSolution getBestSolution() {
 		final IAnnotatedSolution annotatedSolution = fitnessEvaluator.getBestAnnotatedSolution(currentContext);
 		if (annotatedSolution == null) {

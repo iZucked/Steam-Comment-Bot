@@ -63,14 +63,15 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 
 	private Pair<ISequences, IEvaluationState> currentSequences = null;
 	private Pair<ISequences, IEvaluationState> bestSequences = null;
+        private Sequences bestRawSequences = null;
 
 	private long currentFitness = Long.MAX_VALUE;
 	private long bestFitness = Long.MAX_VALUE;
 
 	@Override
-	public boolean evaluateSequences(@NonNull final ISequences sequences, @NonNull IEvaluationState evaluationState, @NonNull final Collection<IResource> affectedResources) {
+	public boolean evaluateSequences(@NonNull final ISequences rawSequences, @NonNull final ISequences fullSequences, @NonNull IEvaluationState evaluationState, @NonNull final Collection<IResource> affectedResources) {
 
-		final long totalFitness = evaluateSequencesIntern(sequences, evaluationState, affectedResources);
+		final long totalFitness = evaluateSequencesIntern(fullSequences, evaluationState, affectedResources);
 		boolean accept = false;
 		if (totalFitness != Long.MAX_VALUE) {
 			// Calculate fitness delta
@@ -82,10 +83,10 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 			if (accept) {
 
 				// Update fitness functions state
-				fitnessHelper.acceptFromComponents(getFitnessComponents(), sequences, affectedResources);
+				fitnessHelper.acceptFromComponents(getFitnessComponents(), fullSequences, affectedResources);
 
 				// Update internal state
-				updateBest(sequences, evaluationState, totalFitness);
+				updateBest(rawSequences, fullSequences, evaluationState, totalFitness);
 
 			}
 		}
@@ -94,18 +95,18 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 
 		return accept;
 	}
-	
+
 	/**
 	 * Update internal state, storing new fitness as new current and updating best fitness if required.
 	 * 
 	 * @param sequences
 	 * @param totalFitness
 	 */
-	private void updateBest(@NonNull final ISequences sequences, @NonNull IEvaluationState evaluationState, final long totalFitness) {
+	private void updateBest(@NonNull final ISequences rawSequences, final ISequences fullSequences, @NonNull IEvaluationState evaluationState, final long totalFitness) {
 
 		// Store current fitness and sequences
 		currentFitness = totalFitness;
-		currentSequences = new Pair<ISequences, IEvaluationState>(new Sequences(sequences), evaluationState);
+		currentSequences = new Pair<ISequences, IEvaluationState>(new Sequences(fullSequences), evaluationState);
 
 		for (final IFitnessComponent component : getFitnessComponents()) {
 			currentFitnesses.put(component.getName(), component.getFitness());
@@ -116,6 +117,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 			// Store this as the new best
 			// Do we need to copy here too?
 			bestSequences = currentSequences;
+			bestRawSequences = new Sequences(rawSequences);
 			bestFitness = currentFitness;
 
 			for (final IFitnessComponent component : fitnessComponents) {
@@ -286,5 +288,10 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 	@Override
 	public void step() {
 		thresholder.step();
+	}
+
+	@Override
+	public ISequences getBestRawSequences() {
+		return bestRawSequences;
 	}
 }

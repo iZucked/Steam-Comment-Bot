@@ -68,4 +68,6 @@ public interface ISequencesOptimiser extends IOptimiser {
 
 	boolean isFinished();
 
+	ISequences getBestRawSequencecs();
+
 }
