@@ -63,6 +63,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 		final ISequences initialSequences = optimiserContext.getInitialSequences();
 		final ModifiableSequences currentRawSequences = new ModifiableSequences(initialSequences);
+
 		final ModifiableSequences potentialRawSequences = new ModifiableSequences(currentRawSequences.getResources());
 		updateSequences(currentRawSequences, potentialRawSequences, currentRawSequences.getResources());
 
@@ -189,7 +190,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 			}
 
 			// Test move and update state if accepted
-			if (getFitnessEvaluator().evaluateSequences(potentialFullSequences, evaluationState, move.getAffectedResources())) {
+			if (getFitnessEvaluator().evaluateSequences(potentialRawSequences, potentialFullSequences, evaluationState, move.getAffectedResources())) {
 
 				// Update IReducingConstraintCheckers with new state
 				for (final IReducingContraintChecker checker : getReducingConstraintCheckers()) {

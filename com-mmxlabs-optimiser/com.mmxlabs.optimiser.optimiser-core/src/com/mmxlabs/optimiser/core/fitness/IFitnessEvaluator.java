@@ -12,6 +12,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
+import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -72,9 +73,10 @@ public interface IFitnessEvaluator {
 	 * be recorded and used as the basis for future checks. {@link #setInitialSequences(ISequences)} must have been called previously to setup the initial state.
 	 * 
 	 * @param sequences
+	 * @param potentialFullSequences
 	 * @return
 	 */
-	boolean evaluateSequences(@NonNull ISequences sequences, @NonNull IEvaluationState evaluationState, @NonNull Collection<IResource> affectedResources);
+	boolean evaluateSequences(@NonNull ISequences rawSequences, @NonNull ISequences fullSequences, @NonNull IEvaluationState evaluationState, @NonNull Collection<IResource> affectedResources);
 
 	/**
 	 * Returns the best {@link ISequences} instance seen by this {@link IFitnessEvaluator}. The value of best is determined by the implementation.
@@ -125,4 +127,6 @@ public interface IFitnessEvaluator {
 	IAnnotatedSolution getCurrentAnnotatedSolution(@NonNull final IOptimisationContext context);
 	
 	void step();
+
+        ISequences getBestRawSequences();
 }

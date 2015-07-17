@@ -103,7 +103,7 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		final List<IResource> affectedResources = Collections.emptyList();
 		assert affectedResources != null;
 
-		evaluator.evaluateSequences(source, evaluationState, affectedResources);
+		evaluator.evaluateSequences(source, source, evaluationState, affectedResources);
 
 		Assert.assertEquals(500, evaluator.getBestFitness());
 		Assert.assertEquals(500, evaluator.getCurrentFitness());
@@ -118,7 +118,7 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		Mockito.when(fitnessCombiner.calculateFitness(fitnessComponents)).thenReturn(700l);
 		Mockito.when(thresholder.accept(-200l)).thenReturn(true);
 
-		evaluator.evaluateSequences(source, evaluationState, affectedResources);
+		evaluator.evaluateSequences(source, source, evaluationState, affectedResources);
 
 		Assert.assertEquals(500, evaluator.getBestFitness());
 		Assert.assertEquals(700, evaluator.getCurrentFitness());
@@ -132,7 +132,7 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		Mockito.when(fitnessCombiner.calculateFitness(fitnessComponents)).thenReturn(600l);
 		Mockito.when(thresholder.accept(-100l)).thenReturn(false);
 
-		evaluator.evaluateSequences(source, evaluationState, affectedResources);
+		evaluator.evaluateSequences(source, source, evaluationState, affectedResources);
 
 		Assert.assertEquals(500, evaluator.getBestFitness());
 		Assert.assertEquals(700, evaluator.getCurrentFitness());
