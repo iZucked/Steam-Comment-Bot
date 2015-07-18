@@ -320,7 +320,7 @@ public class BreadthOptimiser {
 	 * TODO: Instead of try depth in the recursive method parameter, check the changes list size. (last attempt got stuck in a recursive loop for some reason, but may have been other bugs rather than
 	 * directly from tryDepth == change.size().
 	 */
-	private final int TRY_DEPTH = 2;
+	private final int TRY_DEPTH = 3;
 
 	@Inject
 	private ISequencesManipulator sequencesManipulator;
@@ -455,11 +455,13 @@ public class BreadthOptimiser {
 		final long time2 = System.currentTimeMillis();
 
 		// This will return a set of job states in the PARTIAL state with a single change in the list.
-		final Collection<JobState> initialChangeStates = search(new ModifiableSequences(initialRawSequences), loadDischargeMap, loadResourceMap, changes, changeSets, DEPTH_SINGLE_CHANGE,
-				MOVE_TYPE_NONE, initialPNL, initialLateness);
+		
+List<JobState> l = new LinkedList();
+l.add(new JobState(new Sequences(initialRawSequences),
+changeSets, changes, initialPNL, 0, initialLateness, 0));
 
 		try {
-			final Collection<JobState> fullChangesSets = findChangeSets(loadDischargeMap, loadResourceMap, reduceAndSortStates(initialChangeStates), 0);
+			final Collection<JobState> fullChangesSets = findChangeSets(loadDischargeMap, loadResourceMap, l, 1);
 			System.out.printf("Found %d results\n", fullChangesSets.size());
 
 			// TODO: Sort by changset P&L and group size.
@@ -488,7 +490,7 @@ public class BreadthOptimiser {
 					// TODO: Change this method to generate more useful file names e.g. include sort index
 					evaluateLeaf(loadDischargeMap, loadResourceMap, jobState.changesAsList, jobState.changeSetsAsList, jobState.currentPNL, new ModifiableSequences(jobState.rawSequences));
 					// Save top 20 results
-					if (i++ > 20) {
+					if (++i >=5 ) {
 						// break;
 					}
 				}
@@ -621,7 +623,7 @@ public class BreadthOptimiser {
 								final List<JobState> subList = new LinkedList<>();//
 								// Run up to 20 at once. Note larger sizes may take up more memory with the returned change set count.
 								// changesets can be detected more easily
-								int limit = Math.min(reducedAndSortedStates.size(), 20);
+								int limit = Math.min(reducedAndSortedStates.size(), 6);
 								for (int i = 0; i < limit; ++i) {
 									subList.add(reducedAndSortedStates.remove(0));
 								}
@@ -645,6 +647,14 @@ public class BreadthOptimiser {
 								}
 								states.clear();
 								states = null;
+								
+								if (depth >0) {
+									
+								
+								// Good, results, return them
+								if (!leafStates.isEmpty()) {
+									return leafStates;
+								}}
 							}
 							// Good, results, return them
 							if (!leafStates.isEmpty()) {
@@ -752,19 +762,23 @@ public class BreadthOptimiser {
 		// Use set / equals to reduce ...
 		// FIXME: The memory consumption when running jobs in a thread pool showed lots of references to a LinkedHashMap$Entry. Possibly (but seems unlikely?) this is the cause. Does the internal
 		// LinkedHashSet state get copied into the LinkedList? Why would it?
-		Set<JobState> reducedJobStates = new LinkedHashSet<>(currentStates);
-		sortedJobStates = new LinkedList<>(reducedJobStates);
-		// Note clear does not reduce the allocated memory of the LinkedHashSet
-		reducedJobStates.clear();
-		reducedJobStates = null;
 
-		// sortedJobStates = new LinkedList<>(currentStates);
+	 sortedJobStates = new LinkedList<>(currentStates);
 
 		Collections.sort(sortedJobStates, new Comparator<JobState>() {
 
 			@Override
 			public int compare(final JobState o1, final JobState o2) {
-				return Long.compare(o2.currentPNLDelta, o1.currentPNLDelta);
+				
+				int counter = Math.min(o1.changeSetsAsList.size(), o2.changeSetsAsList.size());
+				for (int i = 0; i < counter; ++i) {
+
+					int c =Long.compare(o2.changeSetsAsList.get(0).pnlDelta, o1.changeSetsAsList.get(0).pnlDelta);
+					if (c != 0) {
+						return c;
+					}
+				}
+				return -Long.compare(o2.currentPNLDelta, o1.currentPNLDelta);
 			}
 		});
 		return sortedJobStates;
@@ -795,7 +809,7 @@ public class BreadthOptimiser {
 			if (++counter >= limit) {
 				// DONE: Really save remaining group incase the return count is low, bad.
 				// the future should return next states plus leaf states
-				break;
+			//	break;
 			}
 		}
 		// Block until all jobs complete
@@ -1131,7 +1145,7 @@ public class BreadthOptimiser {
 			final JobState leafJobState = new JobState(new Sequences(currentSequences), copiedChangeSets, new LinkedList<Change>(), thisPNL, thisPNL - currentPNL, thisLateness,
 					thisLateness - currentLateness);
 
-			evaluateLeaf(loadDischargeMap, loadResourceMap, leafJobState.changesAsList, leafJobState.changeSetsAsList, leafJobState.currentPNL, new ModifiableSequences(leafJobState.rawSequences));
+	//		evaluateLeaf(loadDischargeMap, loadResourceMap, leafJobState.changesAsList, leafJobState.changeSetsAsList, leafJobState.currentPNL, new ModifiableSequences(leafJobState.rawSequences));
 
 			leafJobState.mode = JobStateMode.LEAF;
 			return Collections.singleton(leafJobState);
