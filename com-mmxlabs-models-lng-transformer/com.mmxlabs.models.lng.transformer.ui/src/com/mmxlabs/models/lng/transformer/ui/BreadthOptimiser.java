@@ -375,6 +375,8 @@ public class BreadthOptimiser {
 	private static final int MOVE_TYPE_VESSEL_SWAP = 1;
 	private static final int MOVE_TYPE_LOAD_SWAP = 2;
 	private static final int MOVE_TYPE_DISCHARGE_SWAP = 3;
+	private static final int MOVE_TYPE_CARGO_REMOVE = 4;
+	private static final int MOVE_TYPE_CARGO_INSERT = 5;
 
 	/**
 	 * The size of the change sets. This is really n+1 changesets as 0 is also valid. Additionally note the first changeset can be +1 again due to the way we create the initial change set size.
@@ -382,7 +384,7 @@ public class BreadthOptimiser {
 	 * TODO: Instead of try depth in the recursive method parameter, check the changes list size. (last attempt got stuck in a recursive loop for some reason, but may have been other bugs rather than
 	 * directly from tryDepth == change.size().
 	 */
-	private final int TRY_DEPTH = 3;
+	private final int TRY_DEPTH = 2;
 
 	@Inject
 	private ISequencesManipulator sequencesManipulator;
@@ -1018,20 +1020,69 @@ public class BreadthOptimiser {
 			ISequenceElement prev = null;
 			for (final ISequenceElement current : sequence) {
 				if (prev != null) {
-					if (portTypeProvider.getPortType(prev) == PortType.Load) {
-
+					// Currently only looking at LD style cargoes
+					if (portTypeProvider.getPortType(prev) == PortType.Load && portTypeProvider.getPortType(current) == PortType.Discharge) {
+						TODO Add to count changes
 						// Wiring Change
 						boolean wiringChange = false;
-						final Integer matchedDischarge = loadDischargeMap.get(prev.getIndex());
-						if (matchedDischarge == null && portTypeProvider.getPortType(current) == PortType.Discharge) {
+						final Integer matchedDischarge = similarityState.getDischargeForLoad(prev);
+						final Integer matchedLoad = similarityState.getLoadForDischarge(current);
+						if (matchedDischarge == null && matchedLoad == null) {
+							// Neither slot appears in target solution.
+							different = true;
+							wiringChange = true;
 
-							// Not previously linked to a load
-							// different = true;
-							// wiringChange = true;
+							final IModifiableSequences copy = new ModifiableSequences(currentSequences);
+							final IModifiableSequence currentResource = copy.getModifiableSequence(resource.getIndex());
+							currentResource.remove(prev);
+							currentResource.remove(current);
+							copy.getUnusedElements().add(prev);
+							copy.getUnusedElements().add(current);
 
-							// TODO: Implement search path
+							final int depth = getNextDepth(tryDepth);
+							final List<Change> changes2 = new ArrayList<>(changes);
+							changes2.add(new Change(String.format("Remove %s and %s\n", prev.getName(), current.getName())));
+							newStates.addAll(search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_CARGO_REMOVE, currentPNL, currentLateness));
 
-							// TODO: This is a load that previously had no discharge, what about discharges that previously had no load?
+						} else if (matchedLoad == null) {
+							
+							TODO Add to count changes
+							// Discharge was previous unused, but the load was
+							different = true;
+							wiringChange = true;
+
+							// FIXME: Currently just unpair both slots and remove from solution
+							final IModifiableSequences copy = new ModifiableSequences(currentSequences);
+							final IModifiableSequence currentResource = copy.getModifiableSequence(resource.getIndex());
+							currentResource.remove(prev);
+							currentResource.remove(current);
+							copy.getUnusedElements().add(prev);
+							copy.getUnusedElements().add(current);
+
+							final int depth = getNextDepth(tryDepth);
+							final List<Change> changes2 = new ArrayList<>(changes);
+							changes2.add(new Change(String.format("Remove %s and %s\n", prev.getName(), current.getName())));
+							newStates.addAll(search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_CARGO_REMOVE, currentPNL, currentLateness));
+
+						} else if (matchedDischarge == null) {
+							
+							TODO Add to count changes
+							// Load was previous unused, but the discharge was
+							different = true;
+							wiringChange = true;
+
+							// FIXME: Currently just unpair both slots and remove from solution
+							final IModifiableSequences copy = new ModifiableSequences(currentSequences);
+							final IModifiableSequence currentResource = copy.getModifiableSequence(resource.getIndex());
+							currentResource.remove(prev);
+							currentResource.remove(current);
+							copy.getUnusedElements().add(prev);
+							copy.getUnusedElements().add(current);
+
+							final int depth = getNextDepth(tryDepth);
+							final List<Change> changes2 = new ArrayList<>(changes);
+							changes2.add(new Change(String.format("Remove %s and %s\n", prev.getName(), current.getName())));
+							newStates.addAll(search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_CARGO_REMOVE, currentPNL, currentLateness));
 
 						} else if (matchedDischarge != current.getIndex()) {
 							different = true;
@@ -1105,6 +1156,79 @@ public class BreadthOptimiser {
 				prev = current;
 			}
 		}
+		
+		TODO Add to count changes
+		
+		for (final ISequenceElement element : currentFullSequences.getUnusedElements()) {
+			// Currently unused element needs to be placed onto a resource
+			if (similarityState.getResourceForElement(element) != null) {
+				// Unused element which should be in the final solution.
+				if (portTypeProvider.getPortType(element) == PortType.Load) {
+					Integer otherDischargeIdx = similarityState.getDischargeForLoad(element);
+					ISequenceElement discharge = similarityState.getElementForIndex(otherDischargeIdx);
+
+					different = true;
+
+					if (currentSequences.getUnusedElements().contains(discharge)) {
+						ISequence originalResource = currentSequences.getSequence(similarityState.getResourceForElement(element));
+						for (int i = 0; i < originalResource.size(); ++i) {
+							if (portTypeProvider.getPortType(originalResource.get(i)) != PortType.Discharge) {
+								final IModifiableSequences copy = new ModifiableSequences(currentSequences);
+								final IModifiableSequence modifiableSequence = copy.getModifiableSequence(similarityState.getResourceForElement(element));
+								modifiableSequence.insert(i, discharge);
+								modifiableSequence.insert(i, element);
+
+								// Iterate over all possible positions and try it. Note we really could do with original index information to reduce the quantity of options generated. This
+								//
+								final int depth = getNextDepth(tryDepth);
+								final List<Change> changes2 = new ArrayList<>(changes);
+								changes2.add(new Change(String.format("Insert cargo %s -> %s on %s\n", element.getName(), discharge.getName(),
+										copy.getResources().get(similarityState.getResourceForElement(element)).getName())));
+
+								newStates.addAll(search(copy, similarityState, changes2, new LinkedList<>(changeSets), depth, MOVE_TYPE_CARGO_INSERT, currentPNL, currentLateness));
+							}
+						}
+					}
+
+				} else if (portTypeProvider.getPortType(element) == PortType.Discharge) {
+					Integer otherLoadIdx = similarityState.getLoadForDischarge(element);
+
+					different = true;
+
+					// If we get here, the load is also unused
+					ISequenceElement load = similarityState.getElementForIndex(otherLoadIdx);
+					if (currentSequences.getUnusedElements().contains(load)) {
+						ISequence originalResource = currentSequences.getSequence(similarityState.getResourceForElement(element));
+						for (int i = 0; i < originalResource.size(); ++i) {
+							if (portTypeProvider.getPortType(originalResource.get(i)) != PortType.Discharge) {
+								final IModifiableSequences copy = new ModifiableSequences(currentSequences);
+								final IModifiableSequence modifiableSequence = copy.getModifiableSequence(similarityState.getResourceForElement(element));
+								modifiableSequence.insert(i, element);
+								modifiableSequence.insert(i, load);
+
+								// Iterate over all possible positions and try it. Note we really could do with original index information to reduce the quantity of options generated. This
+								//
+								final int depth = getNextDepth(tryDepth);
+								final List<Change> changes2 = new ArrayList<>(changes);
+								changes2.add(new Change(String.format("Insert cargo %s -> %s on %s\n", load.getName(), element.getName(),
+										copy.getResources().get(similarityState.getResourceForElement(element)).getName())));
+
+								newStates.addAll(search(copy, similarityState, changes2, new LinkedList<>(changeSets), depth, MOVE_TYPE_CARGO_INSERT, currentPNL, currentLateness));
+							}
+						}
+					} else {
+
+						// Load already exists
+
+					}
+
+				} else {
+					// assume vessel event?
+				}
+			}
+		}
+
+		// FIXME: Also include alternative slots
 
 		if (different) {
 			// Still some (hopefully) correctable changes.
