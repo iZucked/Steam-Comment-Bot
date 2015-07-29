@@ -470,10 +470,10 @@ changeSets, changes, initialPNL, 0, initialLateness, 0));
 
 				@Override
 				public int compare(final JobState o1, final JobState o2) {
-					int counter = Math.min(o1.changeSetsAsList.size(), o2.changeSetsAsList.size());
+					final int counter = Math.min(o1.changeSetsAsList.size(), o2.changeSetsAsList.size());
 					for (int i = 0; i < counter; ++i) {
 
-						int c = Long.compare(o2.changeSetsAsList.get(0).pnlDelta, o1.changeSetsAsList.get(0).pnlDelta);
+						final int c = Long.compare(o2.changeSetsAsList.get(i).pnlDelta, o1.changeSetsAsList.get(i).pnlDelta);
 						if (c != 0) {
 							return c;
 						}
@@ -763,22 +763,22 @@ changeSets, changes, initialPNL, 0, initialLateness, 0));
 		// FIXME: The memory consumption when running jobs in a thread pool showed lots of references to a LinkedHashMap$Entry. Possibly (but seems unlikely?) this is the cause. Does the internal
 		// LinkedHashSet state get copied into the LinkedList? Why would it?
 
-	 sortedJobStates = new LinkedList<>(currentStates);
+		sortedJobStates = new LinkedList<>(currentStates);
 
 		Collections.sort(sortedJobStates, new Comparator<JobState>() {
 
 			@Override
 			public int compare(final JobState o1, final JobState o2) {
-				
-				int counter = Math.min(o1.changeSetsAsList.size(), o2.changeSetsAsList.size());
+
+				final int counter = Math.min(o1.changeSetsAsList.size(), o2.changeSetsAsList.size());
 				for (int i = 0; i < counter; ++i) {
 
-					int c =Long.compare(o2.changeSetsAsList.get(0).pnlDelta, o1.changeSetsAsList.get(0).pnlDelta);
+					final int c = Long.compare(o2.changeSetsAsList.get(i).pnlDelta, o1.changeSetsAsList.get(i).pnlDelta);
 					if (c != 0) {
 						return c;
 					}
 				}
-				return -Long.compare(o2.currentPNLDelta, o1.currentPNLDelta);
+				return Long.compare(o2.currentPNLDelta, o1.currentPNLDelta);
 			}
 		});
 		return sortedJobStates;
