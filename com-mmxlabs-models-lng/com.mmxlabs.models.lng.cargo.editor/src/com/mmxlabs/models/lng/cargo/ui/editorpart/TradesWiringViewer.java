@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.shiro.SecurityUtils;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
@@ -695,7 +696,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				@Override
 				public void onStatusChanged(final IStatusProvider provider, final IStatus status) {
 					final CargoModelRowTransformer transformer = new CargoModelRowTransformer();
-					ScenarioTableViewer scenarioViewer2 = getScenarioViewer();
+					final ScenarioTableViewer scenarioViewer2 = getScenarioViewer();
 					if (scenarioViewer2 != null) {
 						transformer.updateWiringValidity(rootData, scenarioViewer2.getValidationSupport().getValidationErrors());
 						wiringDiagram.redraw();
@@ -846,17 +847,17 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 		addTradesColumn(loadColumns, "Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), new RowDataEMFPath(false, Type.LOAD));
 		addTradesColumn(loadColumns, "Buy At", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(false, Type.LOAD));
-		addTradesColumn(loadColumns, "Price", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(),
-				editingDomain) {
+		addTradesColumn(loadColumns, "Price",
+				new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(), editingDomain) {
 
-			@Override
-			protected String renderSetValue(final Object container, final Object setValue) {
-				if (setValue instanceof Number) {
-					return String.format("$%.2f", ((Number) setValue).doubleValue());
-				}
-				return super.renderSetValue(container, setValue);
-			}
-		}), new RowDataEMFPath(false, Type.LOAD_ALLOCATION));
+					@Override
+					protected String renderSetValue(final Object container, final Object setValue) {
+						if (setValue instanceof Number) {
+							return String.format("$%.2f", ((Number) setValue).doubleValue());
+						}
+						return super.renderSetValue(container, setValue);
+					}
+				}), new RowDataEMFPath(false, Type.LOAD_ALLOCATION));
 		final GridViewerColumn loadDateColumn = addTradesColumn(loadColumns, "Date", new LocalDateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
 			@Override
 			public Comparable<?> getComparable(final Object object) {
@@ -890,17 +891,17 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		dischargeDateColumn.getColumn().setData(EObjectTableViewer.COLUMN_SORT_PATH, new RowDataEMFPath(false, Type.DISCHARGE_OR_LOAD));
 
 		addTradesColumn(dischargeColumns, "Sell At", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
-		addTradesColumn(dischargeColumns, "Price", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(),
-				editingDomain) {
+		addTradesColumn(dischargeColumns, "Price",
+				new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(), editingDomain) {
 
-			@Override
-			protected String renderSetValue(final Object container, final Object setValue) {
-				if (setValue instanceof Number) {
-					return String.format("$%.2f", ((Number) setValue).doubleValue());
-				}
-				return super.renderSetValue(container, setValue);
-			}
-		}), new RowDataEMFPath(false, Type.DISCHARGE_ALLOCATION));
+					@Override
+					protected String renderSetValue(final Object container, final Object setValue) {
+						if (setValue instanceof Number) {
+							return String.format("$%.2f", ((Number) setValue).doubleValue());
+						}
+						return super.renderSetValue(container, setValue);
+					}
+				}), new RowDataEMFPath(false, Type.DISCHARGE_ALLOCATION));
 
 		addTradesColumn(dischargeColumns, "Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
 		// addTradesColumn(dischargeColumns, "D-ID", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
@@ -965,8 +966,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 		}
 
-		addPNLColumn("P&L (Trade)", CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK, new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getProfitAndLossContainer_GroupProfitAndLoss(),
-				editingDomain), new RowDataEMFPath(true, Type.CARGO_OR_MARKET_ALLOCATION));
+		addPNLColumn("P&L (Trade)", CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK,
+				new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getProfitAndLossContainer_GroupProfitAndLoss(), editingDomain), new RowDataEMFPath(true, Type.CARGO_OR_MARKET_ALLOCATION));
 
 		addPNLColumn("P&L (Shipping)", CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK,
 				new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getProfitAndLossContainer_GroupProfitAndLoss(), editingDomain), new RowDataEMFPath(true, Type.CARGO_OR_MARKET_ALLOCATION));
@@ -1068,7 +1069,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		getScenarioViewer().getGrid().addMouseListener(listener);
 	}
 
-	private <T extends ICellManipulator & ICellRenderer> GridViewerColumn addPNLColumn(final String columnName, final EStructuralFeature bookContainmentFeature, final T manipulator, final EMFPath path) {
+	private <T extends ICellManipulator & ICellRenderer> GridViewerColumn addPNLColumn(final String columnName, final EStructuralFeature bookContainmentFeature, final T manipulator,
+			final EMFPath path) {
 
 		final ReadOnlyManipulatorWrapper<T> wrapper = new ReadOnlyManipulatorWrapper<T>(manipulator) {
 			@Override
@@ -1210,11 +1212,12 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 								editorLock.claim();
 								scenarioEditingLocation.setDisableUpdates(true);
 								if (editorTargets.size() > 1) {
-									final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getRootObject(), scenarioEditingLocation
-											.getDefaultCommandHandler());
+									final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getRootObject(),
+											scenarioEditingLocation.getDefaultCommandHandler());
 									mdd.open(scenarioEditingLocation, editorTargets);
 								} else {
-									final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getDefaultCommandHandler(), ~SWT.MAX) {
+									final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getDefaultCommandHandler(),
+											~SWT.MAX) {
 										@Override
 										protected void configureShell(final Shell newShell) {
 											newShell.setMinimumSize(SWT.DEFAULT, 630);
@@ -1238,6 +1241,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	/**
 	 */
 	protected void doWiringChanged(final Map<RowData, RowData> newWiring, final boolean ctrlPressed) {
+
+		final boolean createComplexCargo = ctrlPressed && SecurityUtils.getSubject().isPermitted("features:complex-cargo");
 
 		final List<Command> setCommands = new LinkedList<Command>();
 		final List<Command> deleteCommands = new LinkedList<Command>();
@@ -1263,7 +1268,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					} else {
 						c = loadSide.cargo;
 
-						if (!ctrlPressed) {
+						if (!createComplexCargo) {
 							// Break the existing wiring
 							for (final Slot s : c.getSlots()) {
 								if (s != loadSide.loadSlot) {
@@ -1759,7 +1764,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				addActionToMenu(newFOBSale, menu);
 			}
 
-			{
+			if (SecurityUtils.getSubject().isPermitted("features:complex-cargo")) {
 				final ComplexCargoAction newComplexCargo = new ComplexCargoAction("Complex Cargo");
 				addActionToMenu(newComplexCargo, menu);
 			}

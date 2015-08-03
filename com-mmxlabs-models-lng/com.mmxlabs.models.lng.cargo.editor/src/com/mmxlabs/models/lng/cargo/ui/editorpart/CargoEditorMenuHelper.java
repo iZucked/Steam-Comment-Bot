@@ -275,7 +275,9 @@ public class CargoEditorMenuHelper {
 		}
 		if (cargo != null) {
 			if (cargo.getSlots().size() > 2) {
-				newMenuManager.add(new EditLDDAction("Edit Complex Cargo", cargo));
+				if (SecurityUtils.getSubject().isPermitted("features:complex-cargo")) {
+					newMenuManager.add(new EditLDDAction("Edit Complex Cargo", cargo));
+				}
 			}
 			// newMenuManager.add(new EditAction("Edit Cargo", cargo));
 		}
@@ -304,8 +306,8 @@ public class CargoEditorMenuHelper {
 				}
 			}
 
-			final IReferenceValueProviderFactory valueProviderFactory = Activator.getDefault().getReferenceValueProviderFactoryRegistry()
-					.getValueProviderFactory(CargoPackage.eINSTANCE.getSlot(), CargoPackage.eINSTANCE.getSlot_NominatedVessel());
+			final IReferenceValueProviderFactory valueProviderFactory = Activator.getDefault().getReferenceValueProviderFactoryRegistry().getValueProviderFactory(CargoPackage.eINSTANCE.getSlot(),
+					CargoPackage.eINSTANCE.getSlot_NominatedVessel());
 
 			final IReferenceValueProvider valueProvider = valueProviderFactory.createReferenceValueProvider(CargoPackage.eINSTANCE.getSlot(), CargoPackage.eINSTANCE.getSlot_NominatedVessel(),
 					scenarioModel);
@@ -798,7 +800,7 @@ public class CargoEditorMenuHelper {
 			if (p.getCapabilities().contains(PortCapability.TRANSFER)) {
 				transferPorts.add(p);
 			}
-		}// Sort by name
+		} // Sort by name
 		Collections.sort(transferPorts, new Comparator<Port>() {
 
 			@Override
@@ -1191,7 +1193,7 @@ public class CargoEditorMenuHelper {
 	private void createFOBDESSwitchMenu(final IMenuManager manager, final Slot slot) {
 
 		final Contract contract = slot.getContract();
-		assert (contract == null || contract.getContractType() == ContractType.BOTH);
+		assert(contract == null || contract.getContractType() == ContractType.BOTH);
 
 		if (slot instanceof LoadSlot) {
 			final LoadSlot loadSlot = (LoadSlot) slot;
