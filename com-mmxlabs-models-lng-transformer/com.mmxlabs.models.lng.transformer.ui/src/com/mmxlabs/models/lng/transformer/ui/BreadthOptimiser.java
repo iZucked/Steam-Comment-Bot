@@ -28,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.base.Objects;
 import com.google.inject.Inject;
@@ -541,6 +542,7 @@ public class BreadthOptimiser {
 	}
 
 	// TODO: Consider converting to loop rather than recursive method?
+	@NonNull
 	public Collection<JobState> findChangeSets(@NonNull final SimilarityState similarityState, final Collection<JobState> currentStates, final int depth)
 			throws InterruptedException, ExecutionException {
 
@@ -548,181 +550,81 @@ public class BreadthOptimiser {
 
 		// List of temp files containing persisted LIMITED states.
 		final List<File> files = new LinkedList<>();
-
-		int persistedLimitedStates = 0;
+		List<JobState> branchStates = new LinkedList<>();
 		try {
+			int persistedLimitedStates = 0;
+			final List<JobState> leafStates = new LinkedList<>();
 			{
-				{
-					final List<JobState> leafStates = new LinkedList<>();
-					List<JobState> branchStates = new LinkedList<>();
-					{ // Evolve current change set
-						final JobStore jobStore = new JobStore(depth);
-						final Collection<JobState> nextStates;
-						{
-							System.out.printf("Finding change sets (%d) - page C %d L %d\n", depth, currentStates.size(), persistedLimitedStates);
-							final long timeX = System.currentTimeMillis();
-							nextStates = runJobs(similarityState, currentStates, jobStore);
-							System.out.printf("Run jobs complete -- %d\n", (System.currentTimeMillis() - timeX) / 1000L);
-						}
+				// Evolve current change set
+				final JobStore jobStore = new JobStore(depth);
+				System.out.printf("Finding change sets (%d) - page C %d L %d\n", depth, currentStates.size(), persistedLimitedStates);
+				final long timeX = System.currentTimeMillis();
+				final Collection<JobState> states = runJobs(similarityState, currentStates, jobStore);
+				System.out.printf("Run jobs complete -- %d\n", (System.currentTimeMillis() - timeX) / 1000L);
+				// Process results by mode.
+				sortJobStates(states, leafStates, branchStates);
 
-						// Process results by mode.
-						for (final JobState state : nextStates) {
-							if (state.mode == JobStateMode.LEAF) {
-								leafStates.add(state);
-							} else if (state.mode == JobStateMode.LIMITED) {
-								// Now persisted in JobStore
-								assert false;
-							} else if (state.mode == JobStateMode.BRANCH) {
-								branchStates.add(state);
-							} else {
-								// Invalid, ignore
-							}
-						}
+				// Found some partially completed change sets, persist those in favour of the completed ones.
+				files.addAll(jobStore.getFiles());
+				persistedLimitedStates += jobStore.getPersistedStateCount();
 
-						// Found some partially completed change sets, persist those in favour of the completed ones.
-						files.addAll(jobStore.getFiles());
-						persistedLimitedStates += jobStore.getPersistedStateCount();
-
-						System.out.printf("Found change sets (%d) - C %d L %d B %d\n", depth, currentStates.size(), jobStore.getPersistedStateCount(), branchStates.size());
-					}
-					if (!leafStates.isEmpty()) {
-						// Found a result! return it
-						return leafStates;
-					}
-
-					// Ok, found some complete change sets, continue finding the next set
-					if (!branchStates.isEmpty()) {
-						// Recurse on the branch states
-						{
-							// TODO: Only run on the top x states (iff we have found some leaf results already)?
-							final List<JobState> reducedAndSortedStates = reduceAndSortStates(branchStates);
-							// Clean up mem
-							branchStates.clear();
-							branchStates = null;// new LinkedList<>();
-							// Run small chunks at a time, to limit amount of memory the returned data set will take up
-							while (!reducedAndSortedStates.isEmpty()) {
-								final List<JobState> subList = new LinkedList<>();//
-								// Run up to 20 at once. Note larger sizes may take up more memory with the returned change set count.
-								// changesets can be detected more easily
-								final int limit = Math.min(reducedAndSortedStates.size(), 6);
-								for (int i = 0; i < limit; ++i) {
-									subList.add(reducedAndSortedStates.remove(0));
-								}
-								Collection<JobState> states = findChangeSets(similarityState, subList, depth + 1);
-								// FIXME: Potentially we may get results where there are left over changes which cannot be fixed by the moves (e.g. within vessel swap is currently disabled, unused
-								// slots are currently unsupported, vessel events currently unsupported). I.e. not a leaf position, not an invalid position. Possible a Partial/branch position.
-								// Possible a limited state also.
-								for (final JobState state : states) {
-									if (state.mode == JobStateMode.LEAF) {
-										leafStates.add(state);
-									} else if (state.mode == JobStateMode.LIMITED) {
-										assert false;
-										// limitedStates.add(state);
-									} else if (state.mode == JobStateMode.BRANCH) {
-										assert false;
-
-										// branchStates.add(state);
-									} else {
-										// Invalid , ignore
-									}
-								}
-								states.clear();
-								states = null;
-
-								if (depth > 0) {
-
-									// Good, results, return them
-									if (!leafStates.isEmpty()) {
-										return leafStates;
-									}
-								}
-							}
-							// Good, results, return them
-							if (!leafStates.isEmpty()) {
-								return leafStates;
-							}
-						}
-					}
-
-					// TODO: is the below still a valid condition in other scenarios? What if we can never find a solution?
-
-					// // No results, but still more to try. Persist current limited state set.
-					// // FIXME: This is mixing up partial changesets of this level with partial changeset in the lower level.
-					// // FIXME: In pratice the lower levels should not be found?
-					// if (!sortedJobStates.isEmpty() && !limitedStates.isEmpty()) {
-					// try {
-					// File f = File.createTempFile("breadth-lower-", ".dat");
-					// // JobStateSerialiser.save(optimisationContext.getOptimisationData(), limitedStates, f);
-					// JobStateSerialiser.save(limitedStates, f);
-					// persistedLimitedStates += limitedStates.size();
-					// limitedStates.clear();
-					// limitedStates = new LinkedList<>();
-					// files.add(f);
-					// } catch (Exception e) {
-					// throw new RuntimeException(e);
-					// }
-					//
-					// }
-				}
+				System.out.printf("Found change sets (%d) - C %d L %d B %d\n", depth, currentStates.size(), jobStore.getPersistedStateCount(), branchStates.size());
 			}
-			// Unable to find anything good, re-load the persisted limited change sets and continue.
-			if (persistedLimitedStates > 0) {
+			// Break out early?
+			if (!leafStates.isEmpty()) {
+				// Found a result! return it
+				return leafStates;
+			}
+
+			if (branchStates.isEmpty() && persistedLimitedStates > 0) {
+				// Unable to find any branches, re-load the persisted limited change sets and continue.
 				System.out.printf("No leaf or branch states found (%d), retry extending limited states changeset size\n", depth);
-			}
-			// Could end up with many limited states, run on limited
-			while (persistedLimitedStates > 0 && files.size() > 0) {
-				// Instead of loading everything in, just load in one file at a time,
-				List<JobState> limitedStates = null;
-				try {
-					final File f = files.remove(0);
-					limitedStates = JobStateSerialiser.load(optimisationContext.getOptimisationData(), f);
-					f.delete();
-					persistedLimitedStates -= limitedStates.size();
-				} catch (final Exception e) {
-					throw new RuntimeException(e);
-				}
-				assert limitedStates != null;
-				limitedStates = reduceAndSortStates(limitedStates);
 
-				while (!limitedStates.isEmpty()) {
-					System.out.printf("Limited states run (%d) - L %d\n", depth, limitedStates.size());
-					final List<JobState> subList = new LinkedList<>();//
-					// Run in batches of 100. Smaller number may be quicker, but return a less diverse set of results as we return as soon as we have a leaf result.
-					final int limit = Math.min(limitedStates.size(), 100);
-					for (int i = 0; i < limit; ++i) {
-						subList.add(limitedStates.remove(0));
+				// Could end up with many limited states, run on limited
+				LOOP_LIMITED: while (persistedLimitedStates > 0 && files.size() > 0) {
+					// Instead of loading everything in, just load in one file at a time,
+					List<JobState> limitedStates = null;
+					try {
+						final File f = files.remove(0);
+						limitedStates = JobStateSerialiser.load(optimisationContext.getOptimisationData(), f);
+						// Delete file now it has been reloaded
+						f.delete();
+						// Update persisted state count
+						persistedLimitedStates -= limitedStates.size();
+					} catch (final Exception e) {
+						throw new RuntimeException(e);
 					}
-					final Collection<JobState> states;
-					{
+					assert limitedStates != null;
+					limitedStates = reduceAndSortStates(limitedStates);
+
+					while (!limitedStates.isEmpty()) {
+						System.out.printf("Limited states run (%d) - L %d\n", depth, limitedStates.size());
+						final List<JobState> subList = new LinkedList<>();//
+						// Run in batches of 100. Smaller number may be quicker, but return a less diverse set of results as we return as soon as we have a leaf result.
+						final int limit = Math.min(limitedStates.size(), 100);
+						for (int i = 0; i < limit; ++i) {
+							subList.add(limitedStates.remove(0));
+						}
 						final JobStore jobStore = new JobStore(depth);
-						states = runJobs(similarityState, subList, jobStore);
+						final Collection<JobState> states = runJobs(similarityState, subList, jobStore);
 
 						// Found some partially completed change sets, persist those in favour of the completed ones.
 						files.addAll(jobStore.getFiles());
 						persistedLimitedStates += jobStore.getPersistedStateCount();
-					}
 
-					final List<JobState> leafStates = new LinkedList<>();
+						// Sort results into leaves and branches.
+						sortJobStates(states, leafStates, branchStates);
 
-					for (final JobState state : states) {
-						if (state.mode == JobStateMode.LEAF) {
-							leafStates.add(state);
-						} else if (state.mode == JobStateMode.LIMITED) {
-							// limitedStates.add(state);
-							assert false;
-						} else if (state.mode == JobStateMode.BRANCH) {
-							assert false;
-						} else {
-							// Invalid, ignore
+						if (!leafStates.isEmpty()) {
+							// Found a result, break out early
+							return leafStates;
+						} else if (!branchStates.isEmpty()) {
+							// Found some branch states, break out of the LIMITEDs search
+							break LOOP_LIMITED;
 						}
-					}
-
-					if (!leafStates.isEmpty()) {
-						return leafStates;
 					}
 				}
 			}
-
 		} finally {
 			// Remove any left-over limited state dumps
 			for (final File f : files) {
@@ -730,8 +632,57 @@ public class BreadthOptimiser {
 			}
 			files.clear();
 		}
+
+		// Ok, found some complete change sets, recurse down to the next changeset
+		if (!branchStates.isEmpty()) {
+			final List<JobState> reducedAndSortedStates = reduceAndSortStates(branchStates);
+			// Clean up mem
+			branchStates.clear();
+			branchStates = null;
+
+			// Run small chunks at a time, to limit amount of memory the returned data set will take up
+			while (!reducedAndSortedStates.isEmpty()) {
+				final List<JobState> subList = new LinkedList<>();
+				// Run up to 20 at once. Note larger sizes may take up more memory with the returned change set count.
+				// changesets can be detected more easily
+				final int limit = Math.min(reducedAndSortedStates.size(), 6);
+				for (int i = 0; i < limit; ++i) {
+					subList.add(reducedAndSortedStates.remove(0));
+				}
+				Collection<JobState> states = findChangeSets(similarityState, subList, depth + 1);
+				final List<JobState> leafStates = new LinkedList<>();
+				sortJobStates(states, leafStates, null);
+				states.clear();
+				states = null;
+
+				// Good, results, return them
+				if (!leafStates.isEmpty()) {
+					return leafStates;
+				}
+			}
+		}
 		System.out.printf("No leaf or branch states found (%d), moving back up\n", depth);
 		return Collections.emptyList();
+	}
+
+	protected void sortJobStates(@NonNull final Collection<JobState> states, @NonNull final Collection<JobState> leafStates, @Nullable Collection<JobState> branchStates) {
+		for (final JobState state : states) {
+			if (state.mode == JobStateMode.LEAF) {
+				leafStates.add(state);
+			} else if (state.mode == JobStateMode.LIMITED) {
+				// limitedStates.add(state);
+				// Should be stored in a JobStore
+				assert false;
+			} else if (state.mode == JobStateMode.BRANCH) {
+				if (branchStates != null) {
+					branchStates.add(state);
+				} else {
+					assert false;
+				}
+			} else {
+				// Invalid, ignore
+			}
+		}
 	}
 
 	/**
@@ -768,6 +719,7 @@ public class BreadthOptimiser {
 		return sortedJobStates;
 	}
 
+	@NonNull
 	protected Collection<JobState> runJobs(@NonNull final SimilarityState similarityState, final Collection<JobState> sortedJobStates, final JobStore jobStore) throws InterruptedException {
 		final List<Future<Collection<JobState>>> futures = new LinkedList<>();
 		// final ExecutorService executorService = Executors.newFixedThreadPool(1);
