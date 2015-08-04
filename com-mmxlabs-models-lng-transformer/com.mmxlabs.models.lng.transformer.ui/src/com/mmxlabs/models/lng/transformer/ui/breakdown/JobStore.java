@@ -22,7 +22,7 @@ public final class JobStore {
 	private final List<File> files = new LinkedList<>();
 	private int count = 0;
 
-	ExecutorService backgroundSaver;
+	private ExecutorService backgroundSaver;
 
 	public JobStore(final int depth) {
 		this.depth = depth;
