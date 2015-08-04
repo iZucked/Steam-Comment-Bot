@@ -36,6 +36,8 @@ import com.google.common.base.Objects;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mmxlabs.common.Triple;
+import com.mmxlabs.models.lng.transformer.ui.breakdown.JobStateSerialiser;
+import com.mmxlabs.models.lng.transformer.ui.breakdown.JobStore;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -175,11 +177,13 @@ public class BreadthOptimiser {
 		private final JobState state;
 		private final SimilarityState similarityState;
 		private final BreadthOptimiser optimiser;
+		private final JobStore jobStore;
 
-		private ChangeSetFinderJob(final BreadthOptimiser optimiser, final JobState state, final SimilarityState similarityState) {
+		private ChangeSetFinderJob(final BreadthOptimiser optimiser, final JobState state, final SimilarityState similarityState, final JobStore jobStore) {
 			this.optimiser = optimiser;
 			this.state = state;
 			this.similarityState = similarityState;
+			this.jobStore = jobStore;
 		}
 
 		@Override
@@ -188,7 +192,7 @@ public class BreadthOptimiser {
 				// Perform a recursive search to find the next change set.
 				final int localDepth = state.mode == JobStateMode.LIMITED ? 2 : (state.changesAsList.size() == 0 && state.changeSetsAsList.size() == 0) ? 5 : DEPTH_START;
 				return optimiser.search(new Sequences(state.rawSequences), similarityState, new LinkedList<Change>(state.changesAsList), new LinkedList<ChangeSet>(state.changeSetsAsList), localDepth,
-						MOVE_TYPE_NONE, state.currentPNL, state.currentLateness);
+						MOVE_TYPE_NONE, state.currentPNL, state.currentLateness, jobStore);
 			} catch (final Throwable e) {
 				// Catch issue rather than abort entire search. (Although this should really be debugged).
 				// assert false;
@@ -296,8 +300,8 @@ public class BreadthOptimiser {
 	 *
 	 */
 	public static class JobState implements Serializable {
-		transient ISequences rawSequences;
-		int[][] persistedSequences;
+		public transient ISequences rawSequences;
+		public int[][] persistedSequences;
 
 		final List<Change> changesAsList;
 		final Set<Change> changesAsSet;
@@ -559,11 +563,12 @@ public class BreadthOptimiser {
 					List<JobState> branchStates = new LinkedList<>();
 					final List<JobState> limitedStates = new LinkedList<>();
 					{ // Evolve current change set
+						final JobStore jobStore = new JobStore(depth);
 						List<JobState> nextStates = new LinkedList<>();
 						{
 							System.out.printf("Finding change sets (%d) - page C %d L %d\n", depth, currentStates.size(), persistedLimitedStates);
 							final long timeX = System.currentTimeMillis();
-							List<Future<Collection<JobState>>> futures = runJobs(similarityState, currentStates, currentStates.size());
+							List<Future<Collection<JobState>>> futures = runJobs(similarityState, currentStates, jobStore);
 
 							// Collect unique results
 							for (final Future<Collection<JobState>> f : futures) {
@@ -580,45 +585,51 @@ public class BreadthOptimiser {
 							if (state.mode == JobStateMode.LEAF) {
 								leafStates.add(state);
 							} else if (state.mode == JobStateMode.LIMITED) {
-								limitedStates.add(state);
+								assert false;
+								// limitedStates.add(state);
 							} else if (state.mode == JobStateMode.PARTIAL) {
 								branchStates.add(state);
 							} else {
 								// Invalid , ignore
 							}
 						}
+
+						// Found some partially completed change sets, persist those in favour of the completed ones.
+						files.addAll(jobStore.getFiles());
+						persistedLimitedStates += jobStore.getPersistedStateCount();
+
 						nextStates.clear();
 						nextStates = null;
-						System.out.printf("Found change sets (%d) - C %d L %d B %d\n", depth, currentStates.size(), limitedStates.size(), branchStates.size());
+
+						System.out.printf("Found change sets (%d) - C %d L %d B %d\n", depth, currentStates.size(), jobStore.getPersistedStateCount(), branchStates.size());
 					}
 					if (!leafStates.isEmpty()) {
 						// Found a result! return it
 						return leafStates;
 					}
 
-					// Found some partially completed change sets, persist those in favour of the completed ones.
-					if (!limitedStates.isEmpty()) {
-						try {
-							// Save in small chunks to avoid reloading large amount on memory later on.
-							while (!limitedStates.isEmpty()) {
-
-								final List<JobState> subList = new LinkedList<>();
-								final int limit = Math.min(limitedStates.size(), 10000);
-								for (int i = 0; i < limit; ++i) {
-									subList.add(limitedStates.remove(0));
-								}
-
-								final File f = File.createTempFile(String.format("breadth-%02d-", depth), ".dat");
-								JobStateSerialiser.save(subList, f);
-								persistedLimitedStates += subList.size();
-								// Use new as well to reset map size, otherwise even though the map is empty it has still allocated memory to hold it's previous size.
-								files.add(f);
-							}
-							// limitedStates.clear();
-						} catch (final Exception e) {
-							throw new RuntimeException(e);
-						}
-					}
+					// if (!limitedStates.isEmpty()) {
+					// try {
+					// // Save in small chunks to avoid reloading large amount on memory later on.
+					// while (!limitedStates.isEmpty()) {
+					//
+					// final List<JobState> subList = new LinkedList<>();
+					// final int limit = Math.min(limitedStates.size(), 10000);
+					// for (int i = 0; i < limit; ++i) {
+					// subList.add(limitedStates.remove(0));
+					// }
+					//
+					// final File f = File.createTempFile(String.format("breadth-%02d-", depth), ".dat");
+					// JobStateSerialiser.save(subList, f);
+					// persistedLimitedStates += subList.size();
+					// // Use new as well to reset map size, otherwise even though the map is empty it has still allocated memory to hold it's previous size.
+					// files.add(f);
+					// }
+					// // limitedStates.clear();
+					// } catch (final Exception e) {
+					// throw new RuntimeException(e);
+					// }
+					// }
 
 					// Ok, found some complete change sets, continue finding the next set
 					if (!branchStates.isEmpty()) {
@@ -795,7 +806,8 @@ public class BreadthOptimiser {
 		return sortedJobStates;
 	}
 
-	protected List<Future<Collection<JobState>>> runJobs(@NonNull final SimilarityState similarityState, final Collection<JobState> sortedJobStates, final int limit) throws InterruptedException {
+	protected List<Future<Collection<JobState>>> runJobs(@NonNull final SimilarityState similarityState, final Collection<JobState> sortedJobStates, final JobStore jobStore)
+			throws InterruptedException {
 		final List<Future<Collection<JobState>>> futures = new LinkedList<>();
 		// final ExecutorService executorService = Executors.newFixedThreadPool(1);
 		int counter = 0;
@@ -814,13 +826,7 @@ public class BreadthOptimiser {
 			// Submit a new change set search to the executor
 			// futures.add(executorService.submit(new ChangeSetFinderJob(this, state, elementResourceMap, loadDischargeMap)));
 
-			futures.add(new MyFuture(new ChangeSetFinderJob(this, state, similarityState)));
-
-			if (++counter >= limit) {
-				// DONE: Really save remaining group incase the return count is low, bad.
-				// the future should return next states plus leaf states
-				// break;
-			}
+			futures.add(new MyFuture(new ChangeSetFinderJob(this, state, similarityState, jobStore)));
 		}
 		// Block until all jobs complete
 		// executorService.shutdown();
@@ -874,17 +880,9 @@ public class BreadthOptimiser {
 	}
 
 	public Collection<JobState> search(@NonNull final ISequences currentSequences, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
-			@NonNull final List<ChangeSet> changeSets, final int tryDepth, final int moveType, final long currentPNL, final long currentLateness) {
+			@NonNull final List<ChangeSet> changeSets, final int tryDepth, final int moveType, final long currentPNL, final long currentLateness, @NonNull final JobStore jobStore) {
 		@NonNull
 		final List<JobState> newStates = new LinkedList<>();
-
-		// TODO: Bit hacky, can we avoid this?
-		if (tryDepth == DEPTH_SINGLE_CHANGE_FOUND) {
-			// Special case for initial search leg
-			newStates.add(new JobState(new Sequences(currentSequences), changeSets, changes, currentPNL, 0, currentLateness, 0));
-
-			return newStates;
-		}
 
 		int totalChanges = changes.size();
 		for (final ChangeSet cs : changeSets) {
@@ -1006,7 +1004,10 @@ public class BreadthOptimiser {
 				if (tryDepth == 0) { // changes.size() == TRY_DEPTH) {
 					final JobState s = new JobState(new Sequences(currentSequences), changeSets, new LinkedList<Change>(changes), currentPNL, 0, currentLateness, 0);
 					s.mode = JobStateMode.LIMITED;
-					newStates.add(s);
+
+					jobStore.store(s);
+
+					// newStates.add(s);
 
 					return newStates;
 				}
@@ -1042,7 +1043,7 @@ public class BreadthOptimiser {
 							final int depth = getNextDepth(tryDepth);
 							final List<Change> changes2 = new ArrayList<>(changes);
 							changes2.add(new Change(String.format("Remove %s and %s\n", prev.getName(), current.getName())));
-							newStates.addAll(search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_CARGO_REMOVE, currentPNL, currentLateness));
+							newStates.addAll(search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_CARGO_REMOVE, currentPNL, currentLateness, jobStore));
 
 						} else if (matchedLoad == null) {
 							
@@ -1062,7 +1063,7 @@ public class BreadthOptimiser {
 							final int depth = getNextDepth(tryDepth);
 							final List<Change> changes2 = new ArrayList<>(changes);
 							changes2.add(new Change(String.format("Remove %s and %s\n", prev.getName(), current.getName())));
-							newStates.addAll(search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_CARGO_REMOVE, currentPNL, currentLateness));
+							newStates.addAll(search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_CARGO_REMOVE, currentPNL, currentLateness, jobStore));
 
 						} else if (matchedDischarge == null) {
 							
@@ -1082,7 +1083,7 @@ public class BreadthOptimiser {
 							final int depth = getNextDepth(tryDepth);
 							final List<Change> changes2 = new ArrayList<>(changes);
 							changes2.add(new Change(String.format("Remove %s and %s\n", prev.getName(), current.getName())));
-							newStates.addAll(search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_CARGO_REMOVE, currentPNL, currentLateness));
+							newStates.addAll(search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_CARGO_REMOVE, currentPNL, currentLateness, jobStore));
 
 						} else if (matchedDischarge != current.getIndex()) {
 							different = true;
@@ -1097,21 +1098,22 @@ public class BreadthOptimiser {
 									// Search option 1, swap in original load for this discharge
 									{
 										// TODO: Remember DES purchases do not move
-										newStates.addAll(swapLoad(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, currentPNL, currentLateness));
+										newStates.addAll(swapLoad(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, currentPNL, currentLateness, jobStore));
 									}
 									// Case 2: Keep the load and swap in the original discharge
 									{
 										// TODO: Remember FOB Sales do not move
-										newStates.addAll(swapDischarge(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, currentPNL, currentLateness));
+										newStates.addAll(
+												swapDischarge(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, currentPNL, currentLateness, jobStore));
 									}
 								} else {
 									// Just the load has moved.
-									newStates.addAll(swapLoad(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, currentPNL, currentLateness));
+									newStates.addAll(swapLoad(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, currentPNL, currentLateness, jobStore));
 								}
 							} else {
 								// Load has stayed put, discharge must have moved.
 								// Discharge stayed put
-								newStates.addAll(swapDischarge(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, currentPNL, currentLateness));
+								newStates.addAll(swapDischarge(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, currentPNL, currentLateness, jobStore));
 							}
 						}
 
@@ -1136,8 +1138,8 @@ public class BreadthOptimiser {
 											for (int j = 1; j < originalResource.size(); ++j) {
 												if (portTypeProvider.getPortType(originalResource.get(j)) != PortType.Discharge) {
 
-													newStates.addAll(
-															swapVessel(currentSequences, similarityState, changes, changeSets, tryDepth, currentPNL, currentLateness, resource, prev, current, j));
+													newStates.addAll(swapVessel(currentSequences, similarityState, changes, changeSets, tryDepth, currentPNL, currentLateness, resource, prev, current,
+															j, jobStore));
 												}
 											}
 
@@ -1185,7 +1187,7 @@ public class BreadthOptimiser {
 								changes2.add(new Change(String.format("Insert cargo %s -> %s on %s\n", element.getName(), discharge.getName(),
 										copy.getResources().get(similarityState.getResourceForElement(element)).getName())));
 
-								newStates.addAll(search(copy, similarityState, changes2, new LinkedList<>(changeSets), depth, MOVE_TYPE_CARGO_INSERT, currentPNL, currentLateness));
+								newStates.addAll(search(copy, similarityState, changes2, new LinkedList<>(changeSets), depth, MOVE_TYPE_CARGO_INSERT, currentPNL, currentLateness, jobStore));
 							}
 						}
 					}
@@ -1213,7 +1215,7 @@ public class BreadthOptimiser {
 								changes2.add(new Change(String.format("Insert cargo %s -> %s on %s\n", load.getName(), element.getName(),
 										copy.getResources().get(similarityState.getResourceForElement(element)).getName())));
 
-								newStates.addAll(search(copy, similarityState, changes2, new LinkedList<>(changeSets), depth, MOVE_TYPE_CARGO_INSERT, currentPNL, currentLateness));
+								newStates.addAll(search(copy, similarityState, changes2, new LinkedList<>(changeSets), depth, MOVE_TYPE_CARGO_INSERT, currentPNL, currentLateness, jobStore));
 							}
 						}
 					} else {
@@ -1373,7 +1375,7 @@ public class BreadthOptimiser {
 
 	protected Collection<JobState> swapVessel(@NonNull final ISequences currentSequences, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
 			@NonNull final List<ChangeSet> changeSets, final int tryDepth, final long currentPNL, final long currentLateness, @NonNull final IResource resource, @NonNull final ISequenceElement prev,
-			@NonNull final ISequenceElement current, final int j) {
+			@NonNull final ISequenceElement current, final int j, @NonNull final JobStore jobStore) {
 		{
 
 			if (similarityState.getResourceForElement(prev).equals(resource.getIndex())) {
@@ -1396,7 +1398,7 @@ public class BreadthOptimiser {
 				// return Collections.emptyList();
 			}
 
-			return search(copy, similarityState, changes2, new LinkedList<>(changeSets), depth, MOVE_TYPE_VESSEL_SWAP, currentPNL, currentLateness);
+			return search(copy, similarityState, changes2, new LinkedList<>(changeSets), depth, MOVE_TYPE_VESSEL_SWAP, currentPNL, currentLateness, jobStore);
 		}
 	}
 
@@ -1405,7 +1407,7 @@ public class BreadthOptimiser {
 	 */
 	protected Collection<JobState> swapLoad(@NonNull final ISequences currentSequences, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
 			@NonNull final List<ChangeSet> changeSets, final int tryDepth, @NonNull final IResource resource, @NonNull final ISequenceElement prev, @NonNull final ISequenceElement current,
-			final long currentPNL, final long currentLateness) {
+			final long currentPNL, final long currentLateness, @NonNull final JobStore jobStore) {
 
 		if (!(portSlotProvider.getPortSlot(prev) instanceof ILoadSlot)) {
 			return Collections.emptyList();
@@ -1465,7 +1467,7 @@ public class BreadthOptimiser {
 		final int depth = getNextDepth(tryDepth);
 		final List<Change> changes2 = new ArrayList<>(changes);
 		changes2.add(new Change(String.format("Swap %s onto %s with %s onto %s\n", prev.getName(), otherResource.getName(), originalLoad.getName(), resource.getName())));
-		return search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_LOAD_SWAP, currentPNL, currentLateness);
+		return search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_LOAD_SWAP, currentPNL, currentLateness, jobStore);
 	}
 
 	/**
@@ -1473,7 +1475,7 @@ public class BreadthOptimiser {
 	 */
 	protected Collection<JobState> swapDischarge(@NonNull final ISequences currentSequences, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
 			@NonNull final List<ChangeSet> changeSets, final int tryDepth, @NonNull final IResource resource, @NonNull final ISequenceElement prev, @NonNull final ISequenceElement current,
-			final long currentPNL, final long currentLateness) {
+			final long currentPNL, final long currentLateness, @NonNull final JobStore jobStore) {
 
 		if (!(portSlotProvider.getPortSlot(current) instanceof IDischargeSlot)) {
 			return Collections.emptyList();
@@ -1532,7 +1534,7 @@ public class BreadthOptimiser {
 		final int depth = getNextDepth(tryDepth);
 		final List<Change> changes2 = new ArrayList<>(changes);
 		changes2.add(new Change(String.format("Swap %s (to %s) with %s ( to %s)\n", current.getName(), otherLoad.getName(), originalDischarge.getName(), prev.getName())));
-		return search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_DISCHARGE_SWAP, currentPNL, currentLateness);
+		return search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_DISCHARGE_SWAP, currentPNL, currentLateness, jobStore);
 	}
 
 	protected int getNextDepth(final int tryDepth) {
