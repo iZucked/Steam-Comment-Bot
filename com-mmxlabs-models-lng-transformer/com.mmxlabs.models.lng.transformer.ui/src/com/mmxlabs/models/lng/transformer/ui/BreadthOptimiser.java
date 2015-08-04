@@ -670,7 +670,7 @@ public class BreadthOptimiser {
 				System.out.printf("No leaf or branch states found (%d), retry extending limited states changeset size\n", depth);
 			}
 			// Could end up with many limited states, run on limited
-			while (persistedLimitedStates > 0 && files.size() > 0) {// || !limitedStates.isEmpty()) {
+			while (persistedLimitedStates > 0 && files.size() > 0) {
 				// Instead of loading everything in, just load in one file at a time,
 				List<JobState> limitedStates = null;
 				try {
@@ -692,8 +692,16 @@ public class BreadthOptimiser {
 					for (int i = 0; i < limit; ++i) {
 						subList.add(limitedStates.remove(0));
 					}
-					Collection<JobState> states = findChangeSets(similarityState, subList, depth);
-					// limitedStates.clear();
+					final Collection<JobState> states;
+					{
+						final JobStore jobStore = new JobStore(depth);
+						states = runJobs(similarityState, subList, jobStore);
+
+						// Found some partially completed change sets, persist those in favour of the completed ones.
+						files.addAll(jobStore.getFiles());
+						persistedLimitedStates += jobStore.getPersistedStateCount();
+					}
+
 					final List<JobState> leafStates = new LinkedList<>();
 
 					for (final JobState state : states) {
@@ -704,14 +712,10 @@ public class BreadthOptimiser {
 							assert false;
 						} else if (state.mode == JobStateMode.BRANCH) {
 							assert false;
-							// branchStates.add(state);
 						} else {
-							// Invalid , ignore
+							// Invalid, ignore
 						}
 					}
-					states.clear();
-					states = null;
-					// System.out.printf("Paged change sets %d - %d %d %d\n", depth, sortedJobStates.size(), limitedStates.size(), branchStates.size());
 
 					if (!leafStates.isEmpty()) {
 						return leafStates;
