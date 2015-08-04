@@ -366,8 +366,6 @@ public class BreadthOptimiser {
 	}
 
 	private static final int DEPTH_START = -1;
-	private static final int DEPTH_SINGLE_CHANGE = -2;
-	private static final int DEPTH_SINGLE_CHANGE_FOUND = -3;
 
 	// Move types are for information only
 	private static final int MOVE_TYPE_NONE = 0;
@@ -1498,10 +1496,7 @@ public class BreadthOptimiser {
 	}
 
 	protected int getNextDepth(final int tryDepth) {
-
-		if (tryDepth == DEPTH_SINGLE_CHANGE) {
-			return DEPTH_SINGLE_CHANGE_FOUND;
-		}
+		assert tryDepth >= -1;
 		return tryDepth == DEPTH_START ? TRY_DEPTH : tryDepth - 1;
 	}
 
