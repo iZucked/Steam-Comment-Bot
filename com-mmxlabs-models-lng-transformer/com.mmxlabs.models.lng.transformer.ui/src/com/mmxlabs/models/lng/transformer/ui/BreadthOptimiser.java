@@ -16,7 +16,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +28,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.jface.viewers.ISelection;
 
 import com.google.common.base.Objects;
 import com.google.inject.Inject;
@@ -143,7 +140,7 @@ public class BreadthOptimiser {
 					prev = current;
 				}
 			}
-			for (ISequenceElement current : fullSequences.getUnusedElements()) {
+			for (final ISequenceElement current : fullSequences.getUnusedElements()) {
 				if (elementMap.put(current.getIndex(), current) != null) {
 					assert false;
 				}
@@ -162,7 +159,7 @@ public class BreadthOptimiser {
 			return elementResourceMap.get(element.getIndex());
 		}
 
-		public ISequenceElement getElementForIndex(int index) {
+		public ISequenceElement getElementForIndex(final int index) {
 			return elementMap.get(index);
 		}
 	}
@@ -197,8 +194,6 @@ public class BreadthOptimiser {
 				// Catch issue rather than abort entire search. (Although this should really be debugged).
 				// assert false;
 				return Collections.emptyList();
-			} finally {
-				// cleanThreadLocals();
 			}
 
 		}
@@ -561,7 +556,7 @@ public class BreadthOptimiser {
 				{
 					final List<JobState> leafStates = new LinkedList<>();
 					List<JobState> branchStates = new LinkedList<>();
-					final List<JobState> limitedStates = new LinkedList<>();
+					// final List<JobState> limitedStates = new LinkedList<>();
 					{ // Evolve current change set
 						final JobStore jobStore = new JobStore(depth);
 						List<JobState> nextStates = new LinkedList<>();
@@ -580,7 +575,6 @@ public class BreadthOptimiser {
 							System.out.printf("Run jobs complete -- %d\n", (System.currentTimeMillis() - timeX) / 1000L);
 						}
 						// Process results by mode.
-
 						for (final JobState state : nextStates) {
 							if (state.mode == JobStateMode.LEAF) {
 								leafStates.add(state);
@@ -712,7 +706,6 @@ public class BreadthOptimiser {
 			}
 			// Could end up with many limited states, run on limited
 			while (persistedLimitedStates > 0 && files.size() > 0) {// || !limitedStates.isEmpty()) {
-
 				// Instead of loading everything in, just load in one file at a time,
 				List<JobState> limitedStates = null;
 				try {
@@ -895,17 +888,6 @@ public class BreadthOptimiser {
 		final IModifiableSequences currentFullSequences = new ModifiableSequences(currentSequences);
 		sequencesManipulator.manipulate(currentFullSequences);
 
-		// if (changes.size() == 2) {
-		// int ii = 0;
-		// if (changes.get(0).description.contains("T416") && changes.get(1).description.contains("P29")) {
-		// int ij = 0;
-		// }
-		// if (changes.get(1).description.contains("T416") && changes.get(0).description.contains("P29")) {
-		// int ij = 0;
-		// }
-		//
-		// }
-
 		// Sanity check -- elements only used once.
 		{
 			final Set<ISequenceElement> unique = new HashSet<>();
@@ -1023,7 +1005,7 @@ public class BreadthOptimiser {
 				if (prev != null) {
 					// Currently only looking at LD style cargoes
 					if (portTypeProvider.getPortType(prev) == PortType.Load && portTypeProvider.getPortType(current) == PortType.Discharge) {
-						TODO Add to count changes
+						// TODO Add to count changes
 						// Wiring Change
 						boolean wiringChange = false;
 						final Integer matchedDischarge = similarityState.getDischargeForLoad(prev);
@@ -1046,8 +1028,8 @@ public class BreadthOptimiser {
 							newStates.addAll(search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_CARGO_REMOVE, currentPNL, currentLateness, jobStore));
 
 						} else if (matchedLoad == null) {
-							
-							TODO Add to count changes
+
+							// TODO Add to count changes
 							// Discharge was previous unused, but the load was
 							different = true;
 							wiringChange = true;
@@ -1066,8 +1048,8 @@ public class BreadthOptimiser {
 							newStates.addAll(search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_CARGO_REMOVE, currentPNL, currentLateness, jobStore));
 
 						} else if (matchedDischarge == null) {
-							
-							TODO Add to count changes
+
+							// TODO Add to count changes
 							// Load was previous unused, but the discharge was
 							different = true;
 							wiringChange = true;
@@ -1158,21 +1140,21 @@ public class BreadthOptimiser {
 				prev = current;
 			}
 		}
-		
-		TODO Add to count changes
-		
+
+		// TODO Add to count changes
+
 		for (final ISequenceElement element : currentFullSequences.getUnusedElements()) {
 			// Currently unused element needs to be placed onto a resource
 			if (similarityState.getResourceForElement(element) != null) {
 				// Unused element which should be in the final solution.
 				if (portTypeProvider.getPortType(element) == PortType.Load) {
-					Integer otherDischargeIdx = similarityState.getDischargeForLoad(element);
-					ISequenceElement discharge = similarityState.getElementForIndex(otherDischargeIdx);
+					final Integer otherDischargeIdx = similarityState.getDischargeForLoad(element);
+					final ISequenceElement discharge = similarityState.getElementForIndex(otherDischargeIdx);
 
 					different = true;
 
 					if (currentSequences.getUnusedElements().contains(discharge)) {
-						ISequence originalResource = currentSequences.getSequence(similarityState.getResourceForElement(element));
+						final ISequence originalResource = currentSequences.getSequence(similarityState.getResourceForElement(element));
 						for (int i = 0; i < originalResource.size(); ++i) {
 							if (portTypeProvider.getPortType(originalResource.get(i)) != PortType.Discharge) {
 								final IModifiableSequences copy = new ModifiableSequences(currentSequences);
@@ -1193,14 +1175,14 @@ public class BreadthOptimiser {
 					}
 
 				} else if (portTypeProvider.getPortType(element) == PortType.Discharge) {
-					Integer otherLoadIdx = similarityState.getLoadForDischarge(element);
+					final Integer otherLoadIdx = similarityState.getLoadForDischarge(element);
 
 					different = true;
 
 					// If we get here, the load is also unused
-					ISequenceElement load = similarityState.getElementForIndex(otherLoadIdx);
+					final ISequenceElement load = similarityState.getElementForIndex(otherLoadIdx);
 					if (currentSequences.getUnusedElements().contains(load)) {
-						ISequence originalResource = currentSequences.getSequence(similarityState.getResourceForElement(element));
+						final ISequence originalResource = currentSequences.getSequence(similarityState.getResourceForElement(element));
 						for (int i = 0; i < originalResource.size(); ++i) {
 							if (portTypeProvider.getPortType(originalResource.get(i)) != PortType.Discharge) {
 								final IModifiableSequences copy = new ModifiableSequences(currentSequences);
