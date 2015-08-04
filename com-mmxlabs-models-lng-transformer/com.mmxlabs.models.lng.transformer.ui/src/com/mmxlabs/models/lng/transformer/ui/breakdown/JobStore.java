@@ -3,6 +3,9 @@ package com.mmxlabs.models.lng.transformer.ui.breakdown;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import com.mmxlabs.models.lng.transformer.ui.BreadthOptimiser.JobState;
 
@@ -21,6 +24,8 @@ public final class JobStore {
 	private final List<File> files = new LinkedList<>();
 	private int count = 0;
 
+	ExecutorService backgroundSaver;
+
 	public JobStore(final int depth) {
 		this.depth = depth;
 	}
@@ -36,22 +41,53 @@ public final class JobStore {
 	}
 
 	private void finishFile() {
-		try {
-			final File f = File.createTempFile(String.format("breadth-%02d-", depth), ".dat");
-			count += pendingJobs.size();
-			JobStateSerialiser.save(pendingJobs, f);
-			files.add(f);
-			pendingJobs.clear();
-		} catch (final Exception e) {
-			throw new RuntimeException(e);
+		if (backgroundSaver == null) {
+			backgroundSaver = Executors.newSingleThreadExecutor();
 		}
+
+		final List<JobState> jobs = new LinkedList<>(pendingJobs);
+		count += pendingJobs.size();
+		// Push save into a separate thread to avoid I/O blocks in main search.
+		backgroundSaver.submit(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					final File f = File.createTempFile(String.format("breadth-%02d-", depth), ".dat");
+					JobStateSerialiser.save(jobs, f);
+					jobs.clear();
+					files.add(f);
+				} catch (final Exception e) {
+					throw new RuntimeException(e);
+				}
+			}
+		});
+		pendingJobs.clear();
 	}
 
+	/**
+	 * No more results are expected to be added to this {@link JobStore}, flush any remaining files to disk and return the list of files.
+	 * 
+	 * @return
+	 */
 	public List<File> getFiles() {
-		// Clear exising pending jobs
+		// Clear existing pending jobs
 		if (pendingJobs.size() > 0) {
 			finishFile();
 		}
+
+		if (backgroundSaver != null) {
+			// Block until all jobs complete as we are nearly finished with this object and need all the results persisted.
+			backgroundSaver.shutdown();
+			try {
+				while (!backgroundSaver.awaitTermination(100, TimeUnit.MILLISECONDS))
+					;
+			} catch (final InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			backgroundSaver = null;
+		}
+
 		return files;
 	}
 
