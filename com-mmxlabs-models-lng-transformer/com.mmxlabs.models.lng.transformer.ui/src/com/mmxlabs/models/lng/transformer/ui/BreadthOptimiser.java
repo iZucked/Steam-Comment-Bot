@@ -192,7 +192,7 @@ public class BreadthOptimiser {
 						MOVE_TYPE_NONE, state.currentPNL, state.currentLateness, jobStore);
 			} catch (final Throwable e) {
 				// Catch issue rather than abort entire search. (Although this should really be debugged).
-				// assert false;
+				assert false;
 				return Collections.emptyList();
 			}
 
@@ -810,9 +810,11 @@ public class BreadthOptimiser {
 			itr.remove();
 			// // Should not really need these...
 			if (state.mode == JobStateMode.LEAF) {
+				assert false;
 				continue;
 			}
 			if (state.mode == JobStateMode.INVALID) {
+				assert false;
 				continue;
 			}
 
