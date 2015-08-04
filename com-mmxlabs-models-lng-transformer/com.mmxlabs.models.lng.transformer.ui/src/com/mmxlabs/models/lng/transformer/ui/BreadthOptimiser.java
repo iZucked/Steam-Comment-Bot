@@ -269,7 +269,7 @@ public class BreadthOptimiser {
 		/**
 		 * Default state, either we have a complete change set - or we have just started (changes.size() == 0, unless first level of recursion)
 		 */
-		PARTIAL,
+		BRANCH,
 
 		/**
 		 * Completed job state. we have a full list of changesets to get to the target solution. Do not expect anything in the changes list
@@ -305,7 +305,7 @@ public class BreadthOptimiser {
 		final int hashCode;
 		long currentPNL;
 		long currentPNLDelta;
-		JobStateMode mode = JobStateMode.PARTIAL;
+		JobStateMode mode = JobStateMode.BRANCH;
 		long currentLateness;
 		long currentLatenessDelta;
 
@@ -572,7 +572,7 @@ public class BreadthOptimiser {
 							} else if (state.mode == JobStateMode.LIMITED) {
 								// Now persisted in JobStore
 								assert false;
-							} else if (state.mode == JobStateMode.PARTIAL) {
+							} else if (state.mode == JobStateMode.BRANCH) {
 								branchStates.add(state);
 							} else {
 								// Invalid, ignore
@@ -618,7 +618,7 @@ public class BreadthOptimiser {
 									} else if (state.mode == JobStateMode.LIMITED) {
 										assert false;
 										// limitedStates.add(state);
-									} else if (state.mode == JobStateMode.PARTIAL) {
+									} else if (state.mode == JobStateMode.BRANCH) {
 										assert false;
 
 										// branchStates.add(state);
@@ -702,7 +702,7 @@ public class BreadthOptimiser {
 						} else if (state.mode == JobStateMode.LIMITED) {
 							// limitedStates.add(state);
 							assert false;
-						} else if (state.mode == JobStateMode.PARTIAL) {
+						} else if (state.mode == JobStateMode.BRANCH) {
 							assert false;
 							// branchStates.add(state);
 						} else {
