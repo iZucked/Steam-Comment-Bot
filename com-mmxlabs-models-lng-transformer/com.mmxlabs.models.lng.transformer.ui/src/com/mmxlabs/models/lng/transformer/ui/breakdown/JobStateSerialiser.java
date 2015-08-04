@@ -34,8 +34,8 @@ public final class JobStateSerialiser {
 
 	public static List<BreadthOptimiser.JobState> load(final IOptimisationData data, final File f) throws Exception {
 		System.out.println("Loading state " + f.getAbsolutePath());
-		Map<Integer, ISequenceElement> elementCache = new HashMap<>();
-		for (ISequenceElement e : data.getSequenceElements()) {
+		final Map<Integer, ISequenceElement> elementCache = new HashMap<>();
+		for (final ISequenceElement e : data.getSequenceElements()) {
 			if (elementCache.put(e.getIndex(), e) != null) {
 				assert false;
 			}
@@ -54,17 +54,21 @@ public final class JobStateSerialiser {
 		return states;
 	}
 
-	private static void fixStates(IOptimisationData data, Map<Integer, ISequenceElement> elementCache, JobState obj) {
-		int[][] persistedSequences = obj.persistedSequences;
-		IModifiableSequences sequences = new ModifiableSequences(data.getResources());
-		for (int i = 0; i < persistedSequences.length; ++i) {
-			IModifiableSequence s = sequences.getModifiableSequence(i);
-			for (int j = 0; j < persistedSequences[i].length; ++j) {
-				s.add(elementCache.get(persistedSequences[i][j]));
+	private static void fixStates(final IOptimisationData data, final Map<Integer, ISequenceElement> elementCache, final JobState obj) {
+		final int[][] persistedSequences = obj.persistedSequences;
+		// Could be null if this object has been saved twice to the same object stream. Second loading of the object will have already had the rawSequences recreated and the persistedSequences array
+		// nulled out.
+		if (persistedSequences != null) {
+			final IModifiableSequences sequences = new ModifiableSequences(data.getResources());
+			for (int i = 0; i < persistedSequences.length; ++i) {
+				final IModifiableSequence s = sequences.getModifiableSequence(i);
+				for (int j = 0; j < persistedSequences[i].length; ++j) {
+					s.add(elementCache.get(persistedSequences[i][j]));
+				}
 			}
+			obj.rawSequences = sequences;
+			obj.persistedSequences = null;
 		}
-		obj.rawSequences = sequences;
-		obj.persistedSequences = null;
 	}
 
 }
