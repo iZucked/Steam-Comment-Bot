@@ -548,43 +548,36 @@ public class BreadthOptimiser {
 
 		System.out.printf("Find change sets %d\n", depth);
 
-		int persistedLimitedStates = 0;
-		// // Keep branch states sorted by P&L delta
+		// List of temp files containing persisted LIMITED states.
 		final List<File> files = new LinkedList<>();
+
+		int persistedLimitedStates = 0;
 		try {
 			{
 				{
 					final List<JobState> leafStates = new LinkedList<>();
 					List<JobState> branchStates = new LinkedList<>();
-					// final List<JobState> limitedStates = new LinkedList<>();
 					{ // Evolve current change set
 						final JobStore jobStore = new JobStore(depth);
-						List<JobState> nextStates = new LinkedList<>();
+						final Collection<JobState> nextStates;
 						{
 							System.out.printf("Finding change sets (%d) - page C %d L %d\n", depth, currentStates.size(), persistedLimitedStates);
 							final long timeX = System.currentTimeMillis();
-							List<Future<Collection<JobState>>> futures = runJobs(similarityState, currentStates, jobStore);
-
-							// Collect unique results
-							for (final Future<Collection<JobState>> f : futures) {
-								nextStates.addAll(f.get());
-								// f.get().clear();
-							}
-							futures.clear();
-							futures = null;
+							nextStates = runJobs(similarityState, currentStates, jobStore);
 							System.out.printf("Run jobs complete -- %d\n", (System.currentTimeMillis() - timeX) / 1000L);
 						}
+
 						// Process results by mode.
 						for (final JobState state : nextStates) {
 							if (state.mode == JobStateMode.LEAF) {
 								leafStates.add(state);
 							} else if (state.mode == JobStateMode.LIMITED) {
+								// Now persisted in JobStore
 								assert false;
-								// limitedStates.add(state);
 							} else if (state.mode == JobStateMode.PARTIAL) {
 								branchStates.add(state);
 							} else {
-								// Invalid , ignore
+								// Invalid, ignore
 							}
 						}
 
@@ -592,38 +585,12 @@ public class BreadthOptimiser {
 						files.addAll(jobStore.getFiles());
 						persistedLimitedStates += jobStore.getPersistedStateCount();
 
-						nextStates.clear();
-						nextStates = null;
-
 						System.out.printf("Found change sets (%d) - C %d L %d B %d\n", depth, currentStates.size(), jobStore.getPersistedStateCount(), branchStates.size());
 					}
 					if (!leafStates.isEmpty()) {
 						// Found a result! return it
 						return leafStates;
 					}
-
-					// if (!limitedStates.isEmpty()) {
-					// try {
-					// // Save in small chunks to avoid reloading large amount on memory later on.
-					// while (!limitedStates.isEmpty()) {
-					//
-					// final List<JobState> subList = new LinkedList<>();
-					// final int limit = Math.min(limitedStates.size(), 10000);
-					// for (int i = 0; i < limit; ++i) {
-					// subList.add(limitedStates.remove(0));
-					// }
-					//
-					// final File f = File.createTempFile(String.format("breadth-%02d-", depth), ".dat");
-					// JobStateSerialiser.save(subList, f);
-					// persistedLimitedStates += subList.size();
-					// // Use new as well to reset map size, otherwise even though the map is empty it has still allocated memory to hold it's previous size.
-					// files.add(f);
-					// }
-					// // limitedStates.clear();
-					// } catch (final Exception e) {
-					// throw new RuntimeException(e);
-					// }
-					// }
 
 					// Ok, found some complete change sets, continue finding the next set
 					if (!branchStates.isEmpty()) {
@@ -799,11 +766,10 @@ public class BreadthOptimiser {
 		return sortedJobStates;
 	}
 
-	protected List<Future<Collection<JobState>>> runJobs(@NonNull final SimilarityState similarityState, final Collection<JobState> sortedJobStates, final JobStore jobStore)
-			throws InterruptedException {
+	protected Collection<JobState> runJobs(@NonNull final SimilarityState similarityState, final Collection<JobState> sortedJobStates, final JobStore jobStore) throws InterruptedException {
 		final List<Future<Collection<JobState>>> futures = new LinkedList<>();
 		// final ExecutorService executorService = Executors.newFixedThreadPool(1);
-		int counter = 0;
+
 		final Iterator<JobState> itr = sortedJobStates.iterator();
 		while (itr.hasNext()) {
 			final JobState state = itr.next();
@@ -828,7 +794,17 @@ public class BreadthOptimiser {
 		// while (!executorService.awaitTermination(1, TimeUnit.SECONDS))
 		// ;
 
-		return futures;
+		final List<JobState> states = new LinkedList<>();
+		// Collect all results
+		for (final Future<Collection<JobState>> f : futures) {
+			try {
+				states.addAll(f.get());
+			} catch (final ExecutionException e) {
+				throw new RuntimeException(e);
+			}
+		}
+
+		return states;
 	}
 
 	static class MyFuture implements Future<Collection<JobState>>
