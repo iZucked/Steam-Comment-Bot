@@ -188,7 +188,8 @@ public class BreadthOptimiser {
 		public Collection<JobState> call() {
 			try {
 				// Perform a recursive search to find the next change set.
-				final int localDepth = state.mode == JobStateMode.LIMITED ? 2 : (state.changesAsList.size() == 0 && state.changeSetsAsList.size() == 0) ? 5 : DEPTH_START;
+
+				final int localDepth = state.mode == JobStateMode.LIMITED ? 2 : DEPTH_START;
 				return optimiser.search(new Sequences(state.rawSequences), similarityState, new LinkedList<Change>(state.changesAsList), new LinkedList<ChangeSet>(state.changeSetsAsList), localDepth,
 						MOVE_TYPE_NONE, state.currentPNL, state.currentLateness, jobStore);
 			} catch (final Throwable e) {
