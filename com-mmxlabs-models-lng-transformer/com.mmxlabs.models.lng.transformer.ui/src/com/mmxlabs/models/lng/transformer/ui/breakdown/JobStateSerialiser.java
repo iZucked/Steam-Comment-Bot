@@ -1,4 +1,4 @@
-package com.mmxlabs.models.lng.transformer.ui;
+package com.mmxlabs.models.lng.transformer.ui.breakdown;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.mmxlabs.models.lng.transformer.ui.BreadthOptimiser;
 import com.mmxlabs.models.lng.transformer.ui.BreadthOptimiser.JobState;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -18,7 +19,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
-public class JobStateSerialiser {
+public final class JobStateSerialiser {
 
 	public static void save(final Collection<BreadthOptimiser.JobState> states, final File f) throws Exception {
 		System.out.println("Saving state " + f.getAbsolutePath());
@@ -33,7 +34,7 @@ public class JobStateSerialiser {
 
 	public static List<BreadthOptimiser.JobState> load(final IOptimisationData data, final File f) throws Exception {
 		System.out.println("Loading state " + f.getAbsolutePath());
-		Map<Integer, ISequenceElement> elementCache = new HashMap();
+		Map<Integer, ISequenceElement> elementCache = new HashMap<>();
 		for (ISequenceElement e : data.getSequenceElements()) {
 			if (elementCache.put(e.getIndex(), e) != null) {
 				assert false;
@@ -43,7 +44,7 @@ public class JobStateSerialiser {
 		final List<BreadthOptimiser.JobState> states = new LinkedList<>();
 		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f))) {
 			int numStates = ois.readInt();
-			
+
 			JobState obj = null;
 			while (numStates-- > 0 && (obj = (JobState) ois.readObject()) != null) {
 				fixStates(data, elementCache, obj);
