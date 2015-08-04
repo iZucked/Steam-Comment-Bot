@@ -8,13 +8,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -30,17 +28,19 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.jface.viewers.ISelection;
 
-import com.google.common.base.Objects;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
+import com.mmxlabs.models.lng.transformer.ui.breakdown.Change;
+import com.mmxlabs.models.lng.transformer.ui.breakdown.ChangeSet;
+import com.mmxlabs.models.lng.transformer.ui.breakdown.JobState;
+import com.mmxlabs.models.lng.transformer.ui.breakdown.JobStateMode;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.JobStateSerialiser;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.JobStore;
+import com.mmxlabs.models.lng.transformer.ui.breakdown.SimilarityState;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -114,85 +114,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public class BreadthOptimiser {
 
-	public static class SimilarityState {
-
-		@Inject
-		private IPortTypeProvider portTypeProvider;
-
-		private final Map<Integer, Integer> elementResourceIdxMap = new HashMap<>();
-		private final Map<Integer, Integer> loadDischargeMap = new HashMap<>();
-		private final Map<Integer, Integer> dischargeLoadMap = new HashMap<>();
-		private final Map<Integer, ISequenceElement> elementMap = new HashMap<>();
-		private final Map<Integer, IResource> elementIdxResourceMap = new HashMap<>();
-
-		private final Map<Pair<Integer, Integer>, Pair<Integer, Integer>> cargoToPrevCargoMap = new HashMap<>();
-		private final Map<Pair<Integer, Integer>, Pair<Integer, Integer>> cargoToNextCargoMap = new HashMap<>();
-
-		public void init(@NonNull final ISequences fullSequences) {
-			for (final IResource resource : fullSequences.getResources()) {
-				final ISequence sequence = fullSequences.getSequence(resource.getIndex());
-				ISequenceElement prev = null;
-				Pair<Integer, Integer> prevCargo = new Pair<>(-2, -2); // start
-				Pair<Integer, Integer> currCargo = new Pair<>(-1, -1); // end
-				for (final ISequenceElement current : sequence) {
-					if (elementMap.put(current.getIndex(), current) != null) {
-						assert false;
-					}
-					if (prev != null) {
-						if (portTypeProvider.getPortType(prev) == PortType.Load) {
-							if (portTypeProvider.getPortType(current) == PortType.Discharge) {
-								loadDischargeMap.put(prev.getIndex(), current.getIndex());
-								dischargeLoadMap.put(current.getIndex(), prev.getIndex());
-								currCargo = new Pair<>(prev.getIndex(), current.getIndex());
-								cargoToNextCargoMap.put(prevCargo, currCargo);
-								cargoToPrevCargoMap.put(currCargo, prevCargo);
-								prevCargo = currCargo;
-							}
-						}
-					}
-					elementResourceIdxMap.put(current.getIndex(), resource.getIndex());
-					elementIdxResourceMap.put(current.getIndex(), resource);
-					prev = current;
-				}
-				cargoToNextCargoMap.put(prevCargo, new Pair<>(-1, -1));
-			}
-			for (ISequenceElement current : fullSequences.getUnusedElements()) {
-				if (elementMap.put(current.getIndex(), current) != null) {
-					assert false;
-				}
-			}
-		}
-
-		public Integer getLoadForDischarge(@NonNull final ISequenceElement discharge) {
-			return dischargeLoadMap.get(discharge.getIndex());
-		}
-
-		public Integer getDischargeForLoad(@NonNull final ISequenceElement load) {
-			return loadDischargeMap.get(load.getIndex());
-		}
-
-		public Integer getResourceIdxForElement(@NonNull final ISequenceElement element) {
-			return elementResourceIdxMap.get(element.getIndex());
-		}
-
-		public IResource getResourceForElement(@NonNull final ISequenceElement element) {
-			return elementIdxResourceMap.get(element.getIndex());
-		}
-
-		public ISequenceElement getElementForIndex(int index) {
-			return elementMap.get(index);
-		}
-
-		public Pair<Integer, Integer> getPreviousCargo(Pair<Integer, Integer> cargo) {
-			return cargoToPrevCargoMap.get(cargo);
-		}
-
-		public Pair<Integer, Integer> getNextCargo(Pair<Integer, Integer> cargo) {
-			return cargoToNextCargoMap.get(cargo);
-		}
-
-	}
-
 	/**
 	 * A class that could be passed into an ExecutorService to attempt to find change sets from the current state.
 	 * 
@@ -227,172 +148,6 @@ public class BreadthOptimiser {
 			}
 
 		}
-	}
-
-	/**
-	 * Individual change TODO: Add in detailed information to reproduce the change
-	 *
-	 */
-	public static class Change implements Serializable {
-		String description;
-
-		public Change(final String s) {
-			this.description = s;
-		}
-
-		@Override
-		public boolean equals(final Object obj) {
-			if (obj instanceof Change) {
-				return Objects.equal(description, ((Change) obj).description);
-			}
-			return false;
-		}
-
-		@Override
-		public int hashCode() {
-			return description.hashCode();
-		}
-	}
-
-	/**
-	 * A set of changes that can be actioned together to get to a new state.
-	 * 
-	 * @author sg
-	 *
-	 */
-	public static class ChangeSet implements Serializable {
-		final List<Change> changesList;
-		final Set<Change> changesSet;
-		public long pnlDelta;
-		public long latenessDelta;
-		final int hashCode;
-
-		public ChangeSet(final Collection<Change> changes) {
-			this.changesList = Collections.unmodifiableList(new ArrayList<>(changes));
-			// Use hash sets as we do not care about ordering
-			this.changesSet = Collections.unmodifiableSet(new HashSet<>(changes));
-			this.hashCode = changesSet.hashCode();
-		}
-
-		@Override
-		public boolean equals(final Object obj) {
-			if (obj instanceof ChangeSet) {
-				// Use hash sets as we do not care about ordering
-				return Objects.equal(changesSet, new HashSet<>(((ChangeSet) obj).changesSet));
-			}
-			return false;
-		}
-
-		@Override
-		public int hashCode() {
-			return hashCode;
-		}
-	}
-
-	/**
-	 * The current state of a {@link ChangeSet}.
-	 * 
-	 * @author sg
-	 *
-	 */
-	private enum JobStateMode implements Serializable {
-		/**
-		 * Default state, either we have a complete change set - or we have just started (changes.size() == 0, unless first level of recursion)
-		 */
-		BRANCH,
-
-		/**
-		 * Completed job state. we have a full list of changesets to get to the target solution. Do not expect anything in the changes list
-		 */
-		LEAF,
-
-		/**
-		 * A partial list of changes which does not get to a valid state -- but could do if we allow a larger changeset size.
-		 */
-		LIMITED,
-
-		/**
-		 * We have somehow evolved to a state where we cannot make any further changes, but also we have not reached our target state
-		 */
-		INVALID
-	}
-
-	/**
-	 * The current state of a particular track of search. This contains the list of changesets and the current working set of changes. It also include the current sequences state and P&L/lateness
-	 * total and last changes set deltas (if available).
-	 * 
-	 * @author sg
-	 *
-	 */
-	public static class JobState implements Serializable {
-		public transient ISequences rawSequences;
-		public int[][] persistedSequences;
-
-		final List<Change> changesAsList;
-		final Set<Change> changesAsSet;
-		final List<ChangeSet> changeSetsAsList;
-		final Set<ChangeSet> changeSetsAsSet;
-		final int hashCode;
-		long currentPNL;
-		long currentPNLDelta;
-		JobStateMode mode = JobStateMode.BRANCH;
-		long currentLateness;
-		long currentLatenessDelta;
-
-		public JobState(final ISequences rawSequences, final List<ChangeSet> changeSets, final List<Change> changes, final long currentPNL, final long currentPNLDelta, final long currentLatness,
-				final long currentLatenessDelta) {
-			this.rawSequences = rawSequences;
-			this.currentPNL = currentPNL;
-			this.currentPNLDelta = currentPNLDelta;
-			this.currentLateness = currentLatness;
-			this.currentLatenessDelta = currentLatenessDelta;
-
-			this.changesAsList = Collections.unmodifiableList(new ArrayList<>(changes));
-			this.changesAsSet = Collections.unmodifiableSet(new HashSet<>(changes));
-			this.changeSetsAsList = Collections.unmodifiableList(new ArrayList<>(changeSets));
-			this.changeSetsAsSet = Collections.unmodifiableSet(new HashSet<>(changeSets));
-			this.hashCode = Objects.hashCode(changes, changeSets);
-		}
-
-		@Override
-		public boolean equals(final Object obj) {
-			if (obj instanceof JobState) {
-				return changesAsSet.equals(((JobState) obj).changesAsSet) && changeSetsAsSet.equals(((JobState) obj).changeSetsAsSet) && Objects.equal(rawSequences, ((JobState) obj).rawSequences);
-			}
-			return super.equals(obj);
-		}
-
-		@Override
-		public int hashCode() {
-			return hashCode;
-		}
-
-		private void writeObject(final java.io.ObjectOutputStream out) throws IOException {
-
-			// We cannot persist the rawSequences as this is linked to external data.
-			// However we can store the representation as an int array and re-create the sequences with reference to a IOptimisationData instance.
-			persistedSequences = new int[rawSequences.getResources().size()][];
-			for (int i = 0; i < persistedSequences.length; ++i) {
-				final ISequence s = rawSequences.getSequence(i);
-				persistedSequences[i] = new int[s.size()];
-				for (int j = 0; j < persistedSequences[i].length; ++j) {
-					persistedSequences[i][j] = s.get(j).getIndex();
-				}
-			}
-
-			out.defaultWriteObject();
-
-		}
-
-		private void readObject(final java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
-
-			in.defaultReadObject();
-
-			// Do nothing with the raw sequence as we do not have the information here to generate it from the int array.
-			// @see JobStateSerialiser
-		}
-
-		// private void readObjectNoData() throws ObjectStreamException;
 	}
 
 	private static final int DEPTH_START = -1;
@@ -1031,7 +786,8 @@ public class BreadthOptimiser {
 								final List<Change> changes2 = new ArrayList<>(changes);
 								changes2.add(new Change(String.format("Remove discharge %s (unused in target solution) and insert discharge %s (unused in base solution)\n", current.getName(),
 										matchedDischargeElement.getName())));
-								newStates.addAll(search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_UNUSED_DISCHARGE_SWAPPED, currentPNL, currentLateness, jobStore));
+								newStates
+										.addAll(search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_UNUSED_DISCHARGE_SWAPPED, currentPNL, currentLateness, jobStore));
 							} else {
 								// step (2) remove both slots
 								// FIXME: Currently just unpair both slots and remove from solution
@@ -1042,10 +798,10 @@ public class BreadthOptimiser {
 								copy.getUnusedElements().add(prev);
 								copy.getUnusedElements().add(current);
 
-							final int depth = getNextDepth(tryDepth);
-							final List<Change> changes2 = new ArrayList<>(changes);
-							changes2.add(new Change(String.format("Remove %s and %s\n", prev.getName(), current.getName())));
-							newStates.addAll(search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_CARGO_REMOVE, currentPNL, currentLateness, jobStore));
+								final int depth = getNextDepth(tryDepth);
+								final List<Change> changes2 = new ArrayList<>(changes);
+								changes2.add(new Change(String.format("Remove %s and %s\n", prev.getName(), current.getName())));
+								newStates.addAll(search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_CARGO_REMOVE, currentPNL, currentLateness, jobStore));
 							}
 						} else if (matchedDischarge == null && matchedLoad != null) {
 
@@ -1065,8 +821,8 @@ public class BreadthOptimiser {
 								copy.getUnusedElements().add(prev);
 								final int depth = getNextDepth(tryDepth);
 								final List<Change> changes2 = new ArrayList<>(changes);
-								changes2.add(new Change(String.format("Remove load %s (unused in target solution) and insert load %s (unused in base solution)\n", prev.getName(),
-										matchedLoadElement.getName())));
+								changes2.add(new Change(
+										String.format("Remove load %s (unused in target solution) and insert load %s (unused in base solution)\n", prev.getName(), matchedLoadElement.getName())));
 								newStates.addAll(search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_UNUSED_LOAD_SWAPPED, currentPNL, currentLateness, jobStore));
 							} else {
 								// step (2)
@@ -1078,10 +834,10 @@ public class BreadthOptimiser {
 								copy.getUnusedElements().add(prev);
 								copy.getUnusedElements().add(current);
 
-							final int depth = getNextDepth(tryDepth);
-							final List<Change> changes2 = new ArrayList<>(changes);
-							changes2.add(new Change(String.format("Remove %s and %s\n", prev.getName(), current.getName())));
-							newStates.addAll(search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_CARGO_REMOVE, currentPNL, currentLateness, jobStore));
+								final int depth = getNextDepth(tryDepth);
+								final List<Change> changes2 = new ArrayList<>(changes);
+								changes2.add(new Change(String.format("Remove %s and %s\n", prev.getName(), current.getName())));
+								newStates.addAll(search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_CARGO_REMOVE, currentPNL, currentLateness, jobStore));
 							}
 						} else if (matchedDischarge != current.getIndex()) {
 							different = true;
@@ -1171,7 +927,6 @@ public class BreadthOptimiser {
 				newStates.addAll(insertUnusedElementsIntoSequence(currentSequences, similarityState, changes, changeSets, tryDepth, element, currentPNL, currentLateness, unusedElements, jobStore));
 			}
 		}
-
 
 		// FIXME: Also include alternative slots
 
@@ -1585,8 +1340,8 @@ public class BreadthOptimiser {
 	 * Completely remove a load and discharge from a Sequence
 	 */
 	protected Collection<JobState> processOneHalfOfCargoUnused(@NonNull final ISequences currentSequences, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
-			@NonNull final List<ChangeSet> changeSets, final int tryDepth, @NonNull final IResource resource, @NonNull final ISequenceElement prev, @NonNull final ISequenceElement current, @NonNull final ISequenceElement matchedElement, final int elementIdx,
-			final long currentPNL, final long currentLateness, final boolean isLoadSwap, @NonNull final JobStore jobStore) {
+			@NonNull final List<ChangeSet> changeSets, final int tryDepth, @NonNull final IResource resource, @NonNull final ISequenceElement prev, @NonNull final ISequenceElement current,
+			@NonNull final ISequenceElement matchedElement, final int elementIdx, final long currentPNL, final long currentLateness, final boolean isLoadSwap, @NonNull final JobStore jobStore) {
 
 		// (1) is the correct discharge in the unused? Swap it in
 		if (currentSequences.getUnusedElements().contains(matchedElement)) {
@@ -1600,12 +1355,11 @@ public class BreadthOptimiser {
 			final List<Change> changes2 = new ArrayList<>(changes);
 			final int moveType;
 			if (isLoadSwap) {
-				changes2.add(new Change(String.format("Remove load %s (unused in target solution) and insert load %s (unused in base solution)\n", current.getName(),
-						matchedElement.getName())));
+				changes2.add(new Change(String.format("Remove load %s (unused in target solution) and insert load %s (unused in base solution)\n", current.getName(), matchedElement.getName())));
 				moveType = MOVE_TYPE_UNUSED_LOAD_SWAPPED;
 			} else {
-				changes2.add(new Change(String.format("Remove discharge %s (unused in target solution) and insert discharge %s (unused in base solution)\n", current.getName(),
-						matchedElement.getName())));
+				changes2.add(
+						new Change(String.format("Remove discharge %s (unused in target solution) and insert discharge %s (unused in base solution)\n", current.getName(), matchedElement.getName())));
 				moveType = MOVE_TYPE_UNUSED_DISCHARGE_SWAPPED;
 			}
 			return search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, moveType, currentPNL, currentLateness, jobStore);
@@ -1661,8 +1415,8 @@ public class BreadthOptimiser {
 
 				final int depth = getNextDepth(tryDepth);
 				final List<Change> changes2 = new ArrayList<>(changes);
-				changes2.add(new Change(String.format("Insert cargo %s -> %s on %s\n", load.getName(), discharge.getName(), copy.getResources().get(similarityState.getResourceIdxForElement(load))
-						.getName())));
+				changes2.add(new Change(
+						String.format("Insert cargo %s -> %s on %s\n", load.getName(), discharge.getName(), copy.getResources().get(similarityState.getResourceIdxForElement(load)).getName())));
 
 				return search(copy, similarityState, changes2, new LinkedList<>(changeSets), depth, MOVE_TYPE_CARGO_INSERT, currentPNL, currentLateness, jobStore);
 			}

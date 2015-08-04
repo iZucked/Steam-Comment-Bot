@@ -1,0 +1,30 @@
+package com.mmxlabs.models.lng.transformer.ui.breakdown;
+
+import java.io.Serializable;
+
+import com.google.common.base.Objects;
+
+/**
+ * Individual change TODO: Add in detailed information to reproduce the change
+ *
+ */
+public class Change implements Serializable {
+	public String description;
+
+	public Change(final String s) {
+		this.description = s;
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+		if (obj instanceof Change) {
+			return Objects.equal(description, ((Change) obj).description);
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return description.hashCode();
+	}
+}
