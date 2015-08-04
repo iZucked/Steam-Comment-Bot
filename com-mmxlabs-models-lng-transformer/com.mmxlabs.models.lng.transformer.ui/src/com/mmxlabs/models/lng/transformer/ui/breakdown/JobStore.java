@@ -7,8 +7,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import com.mmxlabs.models.lng.transformer.ui.BreadthOptimiser.JobState;
-
 /**
  * This class is used to persist the {@link JobStateMode#LIMITED} jobs as they are created. For a given depth in the search, an instance is shared for all search evolutions, saving batches of
  * {@link JobState}s as they are created rather than allowing potentially 100,000s of objects to be returned, then serialised as this can lead to memory issues. This class does not take ownership of
