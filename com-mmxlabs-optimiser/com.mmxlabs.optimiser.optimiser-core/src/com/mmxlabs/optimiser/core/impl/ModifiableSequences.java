@@ -186,11 +186,11 @@ public final class ModifiableSequences implements IModifiableSequences {
 				return false;
 			}
 
-			if (!seq.getSequences().equals(seq.getSequences())) {
+			if (!this.getSequences().equals(seq.getSequences())) {
 				return false;
 			}
 
-			if (!seq.getUnusedElements().equals(seq.getUnusedElements())) {
+			if (!this.getUnusedElements().equals(seq.getUnusedElements())) {
 				// TODO this is suggesting order is important, which it shouldn't be.
 				return false;
 			}
