@@ -33,7 +33,7 @@ public final class JobStore {
 		pendingJobs.add(jobState);
 
 		// Hit size limit? Flush to disk
-		if (pendingJobs.size() > 10000) {
+		if (pendingJobs.size() >= 10000) {
 			finishFile();
 		}
 	}
