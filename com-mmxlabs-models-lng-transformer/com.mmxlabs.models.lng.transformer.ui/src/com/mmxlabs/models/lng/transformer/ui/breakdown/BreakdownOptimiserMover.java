@@ -271,8 +271,8 @@ public class BreakdownOptimiserMover {
 							final IModifiableSequence currentResource = copy.getModifiableSequence(resource.getIndex());
 							currentResource.remove(prev);
 							currentResource.remove(current);
-							copy.getUnusedElements().add(prev);
-							copy.getUnusedElements().add(current);
+							copy.getModifiableUnusedElements().add(prev);
+							copy.getModifiableUnusedElements().add(current);
 
 							final int depth = getNextDepth(tryDepth);
 							final List<Change> changes2 = new ArrayList<>(changes);
@@ -292,10 +292,10 @@ public class BreakdownOptimiserMover {
 								final ISequenceElement matchedDischargeElement = similarityState.getElementForIndex(matchedDischarge);
 								final IModifiableSequences copy = new ModifiableSequences(currentSequences);
 								final IModifiableSequence currentResource = copy.getModifiableSequence(resource.getIndex());
-								copy.getUnusedElements().remove(matchedDischargeElement);
+								copy.getModifiableUnusedElements().remove(matchedDischargeElement);
 								currentResource.insert(currIdx, matchedDischargeElement);
 								currentResource.remove(current);
-								copy.getUnusedElements().add(current);
+								copy.getModifiableUnusedElements().add(current);
 								final int depth = getNextDepth(tryDepth);
 								final List<Change> changes2 = new ArrayList<>(changes);
 								changes2.add(new Change(String.format("Remove discharge %s (unused in target solution) and insert discharge %s (unused in base solution)\n", current.getName(),
@@ -310,8 +310,8 @@ public class BreakdownOptimiserMover {
 								final IModifiableSequence currentResource = copy.getModifiableSequence(resource.getIndex());
 								currentResource.remove(prev);
 								currentResource.remove(current);
-								copy.getUnusedElements().add(prev);
-								copy.getUnusedElements().add(current);
+								copy.getModifiableUnusedElements().add(prev);
+								copy.getModifiableUnusedElements().add(current);
 
 								final int depth = getNextDepth(tryDepth);
 								final List<Change> changes2 = new ArrayList<>(changes);
@@ -336,10 +336,10 @@ public class BreakdownOptimiserMover {
 								final ISequenceElement matchedLoadElement = similarityState.getElementForIndex(matchedLoad);
 								final IModifiableSequences copy = new ModifiableSequences(currentSequences);
 								final IModifiableSequence currentResource = copy.getModifiableSequence(resource.getIndex());
-								copy.getUnusedElements().remove(matchedLoadElement);
+								copy.getModifiableUnusedElements().remove(matchedLoadElement);
 								currentResource.insert(prevIdx, matchedLoadElement);
 								currentResource.remove(prev);
-								copy.getUnusedElements().add(prev);
+								copy.getModifiableUnusedElements().add(prev);
 								final int depth = getNextDepth(tryDepth);
 								final List<Change> changes2 = new ArrayList<>(changes);
 								changes2.add(new Change(
@@ -354,8 +354,8 @@ public class BreakdownOptimiserMover {
 								final IModifiableSequence currentResource = copy.getModifiableSequence(resource.getIndex());
 								currentResource.remove(prev);
 								currentResource.remove(current);
-								copy.getUnusedElements().add(prev);
-								copy.getUnusedElements().add(current);
+								copy.getModifiableUnusedElements().add(prev);
+								copy.getModifiableUnusedElements().add(current);
 
 								final int depth = getNextDepth(tryDepth);
 								final List<Change> changes2 = new ArrayList<>(changes);
@@ -369,6 +369,9 @@ public class BreakdownOptimiserMover {
 										search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_CARGO_REMOVE, currentPNL, currentLateness, jobStore, searchElements));
 							}
 						} else if (matchedDischarge != current.getIndex()) {
+							
+							assert matchedLoad != null;
+							assert matchedDischarge != null;
 							different = true;
 							wiringChange = true;
 							differenceCount++;
@@ -380,26 +383,43 @@ public class BreakdownOptimiserMover {
 
 									// Search option 1, swap in original load for this discharge
 									{
-										// TODO: Remember DES purchases do not move
-										newStates.addAll(swapLoad(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, currentPNL, currentLateness, jobStore,
-												targetElements));
+										if (currentSequences.getUnusedElements().contains(similarityState.getElementForIndex(matchedLoad.intValue()))) {
+											int ii = 0;
+										} else {
+											// TODO: Remember DES purchases do not move
+											newStates.addAll(swapLoad(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, currentPNL, currentLateness, jobStore,
+													targetElements));
+										}
 									}
 									// Case 2: Keep the load and swap in the original discharge
 									{
-										// TODO: Remember FOB Sales do not move
-										newStates.addAll(swapDischarge(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, currentPNL, currentLateness, jobStore,
-												targetElements));
+										if (currentSequences.getUnusedElements().contains(similarityState.getElementForIndex(matchedDischarge.intValue()))) {
+											int ii = 0;
+										} else {
+											// TODO: Remember FOB Sales do not move
+											newStates.addAll(swapDischarge(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, currentPNL, currentLateness,
+													jobStore, targetElements));
+										}
 									}
 								} else {
 									// Just the load has moved.
-									newStates.addAll(
-											swapLoad(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, currentPNL, currentLateness, jobStore, targetElements));
+									if (currentSequences.getUnusedElements().contains(similarityState.getElementForIndex(matchedLoad.intValue()))) {
+										int ii = 0;
+									} else {
+										newStates.addAll(swapLoad(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, currentPNL, currentLateness, jobStore,
+												targetElements));
+									}
 								}
 							} else {
+								assert matchedDischarge != null;
 								// Load has stayed put, discharge must have moved.
 								// Discharge stayed put
-								newStates.addAll(swapDischarge(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, currentPNL, currentLateness, jobStore,
-										targetElements));
+								if (currentSequences.getUnusedElements().contains(similarityState.getElementForIndex(matchedDischarge.intValue()))) {
+									int ii = 0;
+								} else {
+									newStates.addAll(swapDischarge(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, currentPNL, currentLateness, jobStore,
+											targetElements));
+								}
 							}
 						}
 
@@ -452,11 +472,13 @@ public class BreakdownOptimiserMover {
 		final Deque<ISequenceElement> unusedElements = new LinkedList<ISequenceElement>(currentSequences.getUnusedElements());
 		while (unusedElements.size() > 0) {
 			final ISequenceElement element = unusedElements.pop();
+			assert element != null;
 			// Currently unused element needs to be placed onto a resource
 			if (similarityState.getResourceIdxForElement(element) != null) {
 				// This is an unused element which should be in the final solution.
 				different = true;
-				newStates.addAll(insertUnusedElementsIntoSequence(currentSequences, similarityState, changes, changeSets, tryDepth, element, currentPNL, currentLateness, unusedElements, jobStore, targetElements));
+				newStates.addAll(insertUnusedElementsIntoSequence(currentSequences, similarityState, changes, changeSets, tryDepth, element, currentPNL, currentLateness, unusedElements, jobStore,
+						targetElements));
 			}
 		}
 
@@ -866,8 +888,8 @@ public class BreakdownOptimiserMover {
 		final IModifiableSequence copyOfTargetSequence = copy.getModifiableSequence(resource.getIndex());
 		copyOfTargetSequence.remove(prev);
 		copyOfTargetSequence.remove(current);
-		copy.getUnusedElements().add(prev);
-		copy.getUnusedElements().add(current);
+		copy.getModifiableUnusedElements().add(prev);
+		copy.getModifiableUnusedElements().add(current);
 
 		final int depth = getNextDepth(tryDepth);
 		final List<Change> changes2 = new ArrayList<>(changes);
@@ -887,10 +909,10 @@ public class BreakdownOptimiserMover {
 		if (currentSequences.getUnusedElements().contains(matchedElement)) {
 			final IModifiableSequences copy = new ModifiableSequences(currentSequences);
 			final IModifiableSequence currentResource = copy.getModifiableSequence(resource.getIndex());
-			copy.getUnusedElements().remove(matchedElement);
+			copy.getModifiableUnusedElements().remove(matchedElement);
 			currentResource.insert(elementIdx, matchedElement);
 			currentResource.remove(current);
-			copy.getUnusedElements().add(current);
+			copy.getModifiableUnusedElements().add(current);
 			final int depth = getNextDepth(tryDepth);
 			final List<Change> changes2 = new ArrayList<>(changes);
 			final int moveType;
@@ -953,6 +975,9 @@ public class BreakdownOptimiserMover {
 				final IModifiableSequence modifiableSequence = copy.getModifiableSequence(similarityState.getResourceIdxForElement(load));
 				modifiableSequence.insert(i, discharge);
 				modifiableSequence.insert(i, load);
+
+				copy.getModifiableUnusedElements().remove(load);
+				copy.getModifiableUnusedElements().remove(discharge);
 
 				final int depth = getNextDepth(tryDepth);
 				final List<Change> changes2 = new ArrayList<>(changes);
