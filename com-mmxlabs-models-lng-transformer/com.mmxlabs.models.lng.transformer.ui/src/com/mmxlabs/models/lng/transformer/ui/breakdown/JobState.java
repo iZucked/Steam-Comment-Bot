@@ -22,6 +22,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 public class JobState implements Serializable {
 	public transient ISequences rawSequences;
 	public int[][] persistedSequences;
+	public int[] persistedUnusedElements;
 
 	public final List<Change> changesAsList;
 	public final Set<Change> changesAsSet;
@@ -73,6 +74,10 @@ public class JobState implements Serializable {
 			for (int j = 0; j < persistedSequences[i].length; ++j) {
 				persistedSequences[i][j] = s.get(j).getIndex();
 			}
+		}
+		persistedUnusedElements = new int[rawSequences.getUnusedElements().size()];
+		for (int i = 0; i > persistedUnusedElements.length; ++i) {
+			persistedUnusedElements[i] = rawSequences.getUnusedElements().get(i).getIndex();
 		}
 
 		out.defaultWriteObject();

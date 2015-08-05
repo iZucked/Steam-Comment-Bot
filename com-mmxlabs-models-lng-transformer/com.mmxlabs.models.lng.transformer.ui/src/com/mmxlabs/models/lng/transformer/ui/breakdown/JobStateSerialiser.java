@@ -64,6 +64,11 @@ public final class JobStateSerialiser {
 					s.add(elementCache.get(persistedSequences[i][j]));
 				}
 			}
+
+			for (int i = 0; i < obj.persistedUnusedElements.length; ++i) {
+				sequences.getModifiableUnusedElements().add(elementCache.get(obj.persistedUnusedElements[i]));
+			}
+
 			obj.rawSequences = sequences;
 			obj.persistedSequences = null;
 		}
