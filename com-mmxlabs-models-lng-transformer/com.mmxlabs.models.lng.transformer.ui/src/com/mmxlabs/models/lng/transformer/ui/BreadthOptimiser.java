@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -372,13 +373,15 @@ public class BreadthOptimiser {
 	 * @return
 	 */
 	protected List<JobState> reduceAndSortStates(final Collection<JobState> currentStates) {
-		List<JobState> sortedJobStates;
 
 		// Use set / equals to reduce ...
 		// FIXME: The memory consumption when running jobs in a thread pool showed lots of references to a LinkedHashMap$Entry. Possibly (but seems unlikely?) this is the cause. Does the internal
 		// LinkedHashSet state get copied into the LinkedList? Why would it?
 
-		sortedJobStates = new LinkedList<>(currentStates);
+		int initialSize = currentStates.size();
+		final List<JobState> sortedJobStates = new LinkedList<>(new LinkedHashSet<>(currentStates));
+		int newSize = sortedJobStates.size();
+		System.out.printf("Reduced %d -> %d\n", initialSize, newSize);
 
 		Collections.sort(sortedJobStates, new Comparator<JobState>() {
 
