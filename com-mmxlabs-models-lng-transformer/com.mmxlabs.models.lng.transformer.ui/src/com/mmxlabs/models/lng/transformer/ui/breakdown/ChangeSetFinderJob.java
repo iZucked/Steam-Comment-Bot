@@ -35,9 +35,7 @@ public final class ChangeSetFinderJob implements Callable<Collection<JobState>> 
 			return optimiser.search(new Sequences(state.rawSequences), similarityState, new LinkedList<Change>(state.changesAsList), new LinkedList<ChangeSet>(state.changeSetsAsList), localDepth,
 					BreakdownOptimiserMover.MOVE_TYPE_NONE, state.currentPNL, state.currentLateness, jobStore);
 		} catch (final Throwable e) {
-			// Catch issue rather than abort entire search. (Although this should really be debugged).
-			assert false;
-			return Collections.emptyList();
+			throw new RuntimeException(e);
 		}
 
 	}
