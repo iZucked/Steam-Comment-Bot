@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -16,12 +17,14 @@ import java.util.concurrent.TimeUnit;
  *
  */
 public final class JobStore {
-
+	private boolean foundBranch = false;
 	private final int depth;
 	private final List<JobState> pendingJobs = new LinkedList<>();
 	private final List<File> files = new LinkedList<>();
 	private int count = 0;
 
+	// Use a Semaphone to limit the number of jobs kept in memory while we wait for I/O to catch up.
+	private Semaphore s = new Semaphore(20);
 	private ExecutorService backgroundSaver;
 
 	public JobStore(final int depth) {
@@ -29,6 +32,11 @@ public final class JobStore {
 	}
 
 	public void store(final JobState jobState) {
+
+		if (foundBranch) {
+			return;
+		}
+
 		// Add current file to list
 		pendingJobs.add(jobState);
 
@@ -45,21 +53,34 @@ public final class JobStore {
 
 		final List<JobState> jobs = new LinkedList<>(pendingJobs);
 		count += pendingJobs.size();
-		// Push save into a separate thread to avoid I/O blocks in main search.
-		backgroundSaver.submit(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					final File f = File.createTempFile(String.format("breadth-%02d-", depth), ".dat");
-					JobStateSerialiser.save(jobs, f);
-					jobs.clear();
-					files.add(f);
-				} catch (final Exception e) {
-					throw new RuntimeException(e);
+
+		try {
+			// Use a semaphore to limit the amount of pending jobs. Slow I/O could result in a lot of pending saves leading to heap issues.
+			s.acquire();
+			// Push save into a separate thread to avoid I/O blocks in main search.
+			backgroundSaver.submit(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						if (foundBranch) {
+							return;
+						}
+						final File f = File.createTempFile(String.format("breadth-%02d-", depth), ".dat");
+						JobStateSerialiser.save(jobs, f);
+						jobs.clear();
+						files.add(f);
+					} catch (final Exception e) {
+						throw new RuntimeException(e);
+					} finally {
+						s.release();
+					}
 				}
-			}
-		});
+			});
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 		pendingJobs.clear();
+
 	}
 
 	/**
@@ -69,7 +90,7 @@ public final class JobStore {
 	 */
 	public List<File> getFiles() {
 		// Clear existing pending jobs
-		if (pendingJobs.size() > 0) {
+		if (!foundBranch && pendingJobs.size() > 0) {
 			finishFile();
 		}
 
@@ -80,7 +101,6 @@ public final class JobStore {
 				while (!backgroundSaver.awaitTermination(100, TimeUnit.MILLISECONDS))
 					;
 			} catch (final InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			backgroundSaver = null;
@@ -91,5 +111,11 @@ public final class JobStore {
 
 	public int getPersistedStateCount() {
 		return count;
+	}
+
+	public void setFoundBranch() {
+		foundBranch = true;
+		pendingJobs.clear();
+		backgroundSaver.shutdownNow();
 	}
 }
