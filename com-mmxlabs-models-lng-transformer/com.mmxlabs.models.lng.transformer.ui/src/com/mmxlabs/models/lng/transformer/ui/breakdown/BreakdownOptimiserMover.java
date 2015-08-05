@@ -50,6 +50,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public class BreakdownOptimiserMover {
+
+	private static final boolean DEBUG_VALIDATION = true;
+
 	public static final int DEPTH_START = -1;
 
 	// Move types are for information only
@@ -100,7 +103,7 @@ public class BreakdownOptimiserMover {
 		}
 
 		// Sanity check -- elements only used once.
-		{
+		if (DEBUG_VALIDATION) {
 			final Set<ISequenceElement> unique = new HashSet<>();
 			for (final IResource resource : currentSequences.getResources()) {
 				final ISequence sequence = currentSequences.getSequence(resource.getIndex());
