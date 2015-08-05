@@ -110,6 +110,9 @@ public class BreakdownOptimiserMover {
 		// Sanity check -- elements only used once.
 		if (DEBUG_VALIDATION) {
 			final Set<ISequenceElement> unique = new HashSet<>();
+			for (final ISequenceElement current : currentSequences.getUnusedElements()) {
+				assert unique.add(current);
+			}
 			for (final IResource resource : currentSequences.getResources()) {
 				final ISequence sequence = currentSequences.getSequence(resource.getIndex());
 				for (final ISequenceElement current : sequence) {
