@@ -175,25 +175,36 @@ public class BreakdownOptimiserMover {
 
 					cs.pnlDelta = thisPNL - currentPNL;
 					cs.latenessDelta = thisLateness - currentLateness;
+
+					cs.pnlDeltaToBase = thisPNL - similarityState.basePNL;
+					cs.latenessDeltaToBase = thisLateness - similarityState.baseLateness;
+
 					changes.clear();
 					changeSets.add(cs);
 
-					newStates.add(new JobState(new Sequences(currentSequences), changeSets, new LinkedList<Change>(), thisPNL, thisPNL - currentPNL, thisLateness, thisLateness - currentLateness));
+					JobState jobState = new JobState(new Sequences(currentSequences), changeSets, new LinkedList<Change>(), thisPNL, thisPNL - currentPNL, thisLateness, thisLateness - currentLateness,
+							thisLateness - similarityState.basePNL, thisPNL - similarityState.baseLateness);
+
+					final int changesCount = changedElements.size();
+					if (changesCount == 0) {
+						jobState.mode = JobStateMode.LEAF;
+					}
+
+					// Found a usable state, we no longer need to store limited states.
+					jobStore.setFoundBranch();
+
+					newStates.add(jobState);
 
 					return newStates;
 
 				}
 			}
 			if (failedEvaluation) {
-				// if (changes.size() == TRY_DEPTH) {
-				// return newStates;
-				// }
-				if (tryDepth == 0) { // changes.size() == TRY_DEPTH) {
-					final JobState s = new JobState(new Sequences(currentSequences), changeSets, new LinkedList<Change>(changes), currentPNL, 0, currentLateness, 0);
+				// Failed to to find valid state at the end of the search depth. Record a limited state and exit
+				if (tryDepth == 0) {
+					final JobState s = new JobState(new Sequences(currentSequences), changeSets, new LinkedList<Change>(changes), currentPNL, 0, currentLateness, 0, 0, 0);
 					s.mode = JobStateMode.LIMITED;
-
 					jobStore.store(s);
-
 					return newStates;
 				}
 			}
@@ -395,57 +406,68 @@ public class BreakdownOptimiserMover {
 		}
 
 		// FIXME: Also include alternative slots
-
-		if (different) {
-			// Still some (hopefully) correctable changes.
-			return newStates;
-		} else {
-
-			// End of the line, nothing more we can do. Have we got to a valid state?
-			// We should have as we have no more changes. However the change count does not cover everything
-			// Exclusion include: Correct vessel, but incorrect position, any vessel event changes, open slot positions.
-			// Spurious changes: Same spot market & month, different instance.
-
-			for (final IConstraintChecker checker : constraintCheckers) {
-				if (checker.checkConstraints(currentFullSequences) == false) {
-					// Break out -- could get here with bad vessel swap position.
-					return newStates;
-				}
-			}
-
-			final IEvaluationState evaluationState = new EvaluationState();
-			for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
-				if (!evaluationProcess.evaluate(currentFullSequences, evaluationState)) {
-					// Ok, don't really expect to get here..
-					return newStates;
-				}
-			}
-
-			// ... valid state, so we are in a leaf position.
-
-			final ScheduledSequences ss = evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class);
-			assert ss != null;
-			final long thisPNL = calculateSchedulePNL(currentFullSequences, ss);
-			final long thisLateness = calculateScheduleLateness(currentFullSequences, ss);
-
-			final ChangeSet cs = new ChangeSet(changes);
-
-			cs.pnlDelta = thisPNL - currentPNL;
-			cs.latenessDelta = thisLateness - currentLateness;
-
-			final ArrayList<ChangeSet> copiedChangeSets = new ArrayList<>(changeSets);
-			copiedChangeSets.add(cs);
-
-			final JobState leafJobState = new JobState(new Sequences(currentSequences), copiedChangeSets, new LinkedList<Change>(), thisPNL, thisPNL - currentPNL, thisLateness,
-					thisLateness - currentLateness);
-
-			// evaluateLeaf(loadDischargeMap, elementResourceMap, leafJobState.changesAsList, leafJobState.changeSetsAsList, leafJobState.currentPNL, new
-			// ModifiableSequences(leafJobState.rawSequences));
-
-			leafJobState.mode = JobStateMode.LEAF;
-			return Collections.singleton(leafJobState);
-		}
-
+		return newStates;
+		//
+		// if (different) {
+		// // Still some (hopefully) correctable changes.
+		// } else {
+		//
+		// // TODO: Combine this code with the section at the beginning?
+		//
+		// final int changesCount = changedElements.size();
+		// if (changesCount > 0) {
+		// // Can get here by short cutting the search above, avoiding setting different to true.
+		// return newStates;
+		// }
+		//
+		// // End of the line, nothing more we can do. Have we got to a valid state?
+		// // We should have as we have no more changes. However the change count does not cover everything
+		// // Exclusion include: Correct vessel, but incorrect position, any vessel event changes, open slot positions.
+		// // Spurious changes: Same spot market & month, different instance.
+		//
+		// final IModifiableSequences currentFullSequences = new ModifiableSequences(currentSequences);
+		// sequencesManipulator.manipulate(currentFullSequences);
+		//
+		// for (final IConstraintChecker checker : constraintCheckers) {
+		// if (checker.checkConstraints(currentFullSequences) == false) {
+		// // Break out -- could get here with bad vessel swap position.
+		// return newStates;
+		// }
+		// }
+		//
+		// final IEvaluationState evaluationState = new EvaluationState();
+		// for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
+		// if (!evaluationProcess.evaluate(currentFullSequences, evaluationState)) {
+		// // Ok, don't really expect to get here..
+		// return newStates;
+		// }
+		// }
+		//
+		// // ... valid state, so we are in a leaf position.
+		//
+		// final ScheduledSequences ss = evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class);
+		// assert ss != null;
+		// final long thisPNL = calculateSchedulePNL(currentFullSequences, ss);
+		// final long thisLateness = calculateScheduleLateness(currentFullSequences, ss);
+		//
+		// // TODO: There should be no need really to create a new change set.
+		// final ChangeSet cs = new ChangeSet(changes);
+		//
+		// cs.pnlDelta = thisPNL - currentPNL;
+		// cs.latenessDelta = thisLateness - currentLateness;
+		//
+		// cs.pnlDeltaToBase = thisPNL - similarityState.basePNL;
+		// cs.latenessDeltaToBase = thisLateness - similarityState.baseLateness;
+		//
+		// final ArrayList<ChangeSet> copiedChangeSets = new ArrayList<>(changeSets);
+		// copiedChangeSets.add(cs);
+		//
+		// final JobState leafJobState = new JobState(new Sequences(currentSequences), copiedChangeSets, new LinkedList<Change>(), thisPNL, thisPNL - currentPNL, thisLateness,
+		// thisLateness - currentLateness, thisLateness - similarityState.basePNL, thisPNL - similarityState.baseLateness);
+		//
+		// leafJobState.mode = JobStateMode.LEAF;
+		// return Collections.singleton(leafJobState);
+		// }
 	}
 
 	private Collection<Integer> findPerfectInsertPoint(SimilarityState similarityState, ISequence sequence, IResource resource, ISequenceElement insertingLoad, ISequenceElement insertingDischarge) {
