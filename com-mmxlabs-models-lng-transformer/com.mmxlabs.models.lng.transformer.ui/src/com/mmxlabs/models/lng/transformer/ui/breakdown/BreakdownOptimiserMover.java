@@ -467,13 +467,9 @@ public class BreakdownOptimiserMover {
 			current = sequence.get(j);
 			currSequenceIndex = j;
 			if (prev != null) {
-				prevSequenceIndex = currSequenceIndex;
 				if (portTypeProvider.getPortType(prev) == PortType.Load) {
 					if (portTypeProvider.getPortType(current) == PortType.Discharge) {
 						currCargo = new Pair<>(prev.getIndex(), current.getIndex());
-						// if (prevCargo.getFirst().intValue() == previousTargetCargo.getFirst().intValue() && currCargo.getSecond().intValue() == nextTargetCargo.getSecond().intValue()) {
-						// int z = 0;
-						// }
 						if (prevCargo.getSecond().equals(previousTargetCargo.getSecond()) && currCargo.getFirst().equals(nextTargetCargo.getFirst())) {
 							validPoints.add(prevSequenceIndex);
 							return validPoints;
@@ -483,6 +479,7 @@ public class BreakdownOptimiserMover {
 			}
 			prev = current;
 			prevCargo = currCargo;
+			prevSequenceIndex = currSequenceIndex;
 		}
 		return validPoints;
 	}
