@@ -94,8 +94,10 @@ public class BreakdownOptimiserMover {
 		@NonNull
 		final List<JobState> newStates = new LinkedList<>();
 
-		final IModifiableSequences currentFullSequences = new ModifiableSequences(currentSequences);
-		sequencesManipulator.manipulate(currentFullSequences);
+		// Debugging quick exit, uncomment following line.
+		if (true) {
+			// return Collections.emptyList();
+		}
 
 		// Sanity check -- elements only used once.
 		{
@@ -109,6 +111,8 @@ public class BreakdownOptimiserMover {
 		}
 
 		if (tryDepth >= 0) {
+			final IModifiableSequences currentFullSequences = new ModifiableSequences(currentSequences);
+			sequencesManipulator.manipulate(currentFullSequences);
 
 			boolean failedEvaluation = false;
 
@@ -212,8 +216,9 @@ public class BreakdownOptimiserMover {
 
 		int differenceCount = 0;
 		boolean different = false;
-		for (final IResource resource : currentFullSequences.getResources()) {
-			final ISequence sequence = currentFullSequences.getSequence(resource.getIndex());
+		//
+		for (final IResource resource : currentSequences.getResources()) {
+			final ISequence sequence = currentSequences.getSequence(resource.getIndex());
 			ISequenceElement prev = null;
 			int prevIdx = -1;
 			int currIdx = -1;
@@ -866,46 +871,80 @@ public class BreakdownOptimiserMover {
 		return tryDepth == DEPTH_START ? TRY_DEPTH : tryDepth - 1;
 	}
 
-	public int countChanges(final SimilarityState similarityState, final ISequences fullSequences) {
-		int changesCount = 0;
-		for (final IResource resource : fullSequences.getResources()) {
-			final ISequence sequence = fullSequences.getSequence(resource.getIndex());
+	public List<ISequenceElement> getChangedElements(final SimilarityState similarityState, final ISequences rawSequences) {
+
+		final List<ISequenceElement> changedElements = new LinkedList<>();
+
+		for (final IResource resource : rawSequences.getResources()) {
+			final ISequence sequence = rawSequences.getSequence(resource.getIndex());
 			ISequenceElement prev = null;
 			for (final ISequenceElement current : sequence) {
 				if (prev != null) {
-					if (portTypeProvider.getPortType(prev) == PortType.Load) {
-
+					// Currently only looking at LD style cargoes
+					if (portTypeProvider.getPortType(prev) == PortType.Load && portTypeProvider.getPortType(current) == PortType.Discharge) {
+						// TODO Add to count changes
 						// Wiring Change
 						boolean wiringChange = false;
 						final Integer matchedDischarge = similarityState.getDischargeForLoad(prev);
-						if (matchedDischarge == null && portTypeProvider.getPortType(current) == PortType.Discharge) {
+						final Integer matchedLoad = similarityState.getLoadForDischarge(current);
+						if (matchedDischarge == null && matchedLoad == null) {
+							changedElements.add(prev);
+							changedElements.add(current);
 
-							// Not previously linked to a load
-							// different = true;
+						} else if (matchedLoad == null && matchedDischarge != null) {
+							changedElements.add(current);
+						} else if (matchedDischarge == null && matchedLoad != null) {
 							wiringChange = true;
-							changesCount++;
-							// TODO: Implement search path to add or remove slots with the unused slot list
+							changedElements.add(prev);
 						} else if (matchedDischarge != current.getIndex()) {
-							changesCount++;
+							wiringChange = true;
+							// Has the load moved vessel?
+							if (similarityState.getResourceIdxForElement(prev).intValue() != resource.getIndex()) {
+								// Hash the discharge moved vessel?
+								if (similarityState.getResourceIdxForElement(current).intValue() != resource.getIndex()) {
+									// Both load and discharge have moved
+									changedElements.add(prev);
+									changedElements.add(current);
+								} else {
+									changedElements.add(prev);
+								}
+							} else {
+								changedElements.add(current);
+							}
 						}
 
 						// Vessel Change
 						if (!wiringChange) {
 							assert prev != null;
 							if (similarityState.getResourceIdxForElement(prev) == null || similarityState.getResourceIdxForElement(prev).intValue() != resource.getIndex()) {
-								// different = true;
-								// Current Cargo load and discharge can move as a pair.
-								if (similarityState.getResourceIdxForElement(prev).equals(similarityState.getResourceIdxForElement(current))) {
-									changesCount++;
-								}
+								changedElements.add(prev);
+								changedElements.add(current);
 							}
 						}
 
+					} else {
+						if (portTypeProvider.getPortType(current) == PortType.CharterOut || portTypeProvider.getPortType(current) == PortType.DryDock
+								|| portTypeProvider.getPortType(current) == PortType.Maintenance) {
+
+							if (similarityState.getResourceIdxForElement(current) == null || similarityState.getResourceIdxForElement(current).intValue() != resource.getIndex()) {
+								changedElements.add(current);
+							}
+						}
 					}
 				}
 				prev = current;
 			}
 		}
-		return changesCount;
+
+		final Deque<ISequenceElement> unusedElements = new LinkedList<ISequenceElement>(rawSequences.getUnusedElements());
+		while (unusedElements.size() > 0) {
+			final ISequenceElement element = unusedElements.pop();
+			// Currently unused element needs to be placed onto a resource
+			if (similarityState.getResourceIdxForElement(element) != null) {
+				changedElements.add(element);
+			}
+		}
+		return changedElements;
 	}
+
 }

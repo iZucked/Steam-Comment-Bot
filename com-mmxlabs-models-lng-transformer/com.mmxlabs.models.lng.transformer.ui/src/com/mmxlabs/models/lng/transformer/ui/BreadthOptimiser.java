@@ -143,15 +143,15 @@ public class BreadthOptimiser {
 
 		// Prepare initial solution state
 		final ISequences initialRawSequences = new ModifiableSequences(optimisationContext.getInitialSequences());
-		final IModifiableSequences initialFullSequences = new ModifiableSequences(initialRawSequences);
-		sequencesManipulator.manipulate(initialFullSequences);
 
 		//// Debugging -- get initial change count
 		{
-			final int changesCount = breakdownOptimiserMover.countChanges(similarityState, initialFullSequences);
+			final int changesCount = breakdownOptimiserMover.getChangedElements(similarityState, initialRawSequences).size();
 			System.out.println("Initial changes " + changesCount);
 		}
 
+		final IModifiableSequences initialFullSequences = new ModifiableSequences(initialRawSequences);
+		sequencesManipulator.manipulate(initialFullSequences);
 		final IEvaluationState evaluationState = new EvaluationState();
 		for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
 			if (!evaluationProcess.evaluate(initialFullSequences, evaluationState)) {
@@ -456,7 +456,7 @@ public class BreadthOptimiser {
 		// boolean different;
 		{
 
-			final int changesCount = breakdownOptimiserMover.countChanges(similarityState, currentFullSequences);
+			final int changesCount = breakdownOptimiserMover.getChangedElements(similarityState, currentFullSequences).size();
 
 			assert changesCount == 0;
 			// Apply hard constraint checkers
