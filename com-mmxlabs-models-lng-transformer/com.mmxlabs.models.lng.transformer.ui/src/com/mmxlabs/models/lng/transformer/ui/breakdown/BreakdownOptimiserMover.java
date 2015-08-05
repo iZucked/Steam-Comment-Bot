@@ -592,57 +592,86 @@ public class BreakdownOptimiserMover {
 			@NonNull final List<ChangeSet> changeSets, final int tryDepth, @NonNull final IResource resource, @NonNull final ISequenceElement prev, @NonNull final ISequenceElement current,
 			final long currentPNL, final long currentLateness, @NonNull final JobStore jobStore) {
 
+		// Skip DES Purchases
 		if (!(portSlotProvider.getPortSlot(prev) instanceof ILoadSlot)) {
 			return Collections.emptyList();
 		}
 
 		final IModifiableSequences copy = new ModifiableSequences(currentSequences);
-		final IModifiableSequence currentResource = copy.getModifiableSequence(resource.getIndex());
+		final IModifiableSequence copyOfFromSequence = copy.getModifiableSequence(resource.getIndex());
 
 		// Find the original load index
 		final Integer originalLoadIdx = similarityState.getLoadForDischarge(current);
+
 		assert originalLoadIdx != null;
 		boolean swapped = false;
+		boolean withinResourceSwap = false;
 
 		// Find the original load element and swap with current load element
 		ISequenceElement originalLoad = null;
-		IResource otherResource = null;
-		LOOP: for (final IResource r : copy.getResources()) {
-			final IModifiableSequence s = copy.getModifiableSequence(r);
+		IResource toResource = null;
+		ISequenceElement otherDischarge = null;
+		LOOP: for (final IResource possibleToResource : copy.getResources()) {
+			final IModifiableSequence copyOfToSequence = copy.getModifiableSequence(possibleToResource);
 
-			for (int j = 0; j < s.size(); ++j) {
-				if (s.get(j).getIndex() == originalLoadIdx.intValue()) {
-					originalLoad = s.get(j);
+			for (int j = 0; j < copyOfToSequence.size(); ++j) {
+				if (copyOfToSequence.get(j).getIndex() == originalLoadIdx.intValue()) {
+					originalLoad = copyOfToSequence.get(j);
 					if (!(portSlotProvider.getPortSlot(originalLoad) instanceof ILoadSlot)) {
+						// Attempt to move a DES Purchase, fail
 						return Collections.emptyList();
 					}
-					otherResource = r;
-					s.set(j, prev);
-					swapped = true;
-					break LOOP;
+
+					// Make sure the sequence does not already have the load here
+					assert copyOfToSequence.get(j) != prev;
+
+					toResource = possibleToResource;
+
+					// Are we swapping a load within the same sequence?
+					if (copyOfFromSequence == copyOfToSequence) {
+						// Within resource swap!
+						// Find the other element in the sequence before making the changes
+						for (int k = 0; k < copyOfToSequence.size(); ++k) {
+							if (copyOfToSequence.get(k) == prev) {
+								copyOfToSequence.set(k, originalLoad);
+								copyOfToSequence.set(j, prev);
+								otherDischarge = copyOfToSequence.get(j + 1);
+								swapped = true;
+								withinResourceSwap = true;
+								break LOOP;
+							}
+						}
+					} else {
+						// Elements are in different resources
+						copyOfToSequence.set(j, prev);
+						otherDischarge = copyOfToSequence.get(j + 1);
+						swapped = true;
+						break LOOP;
+					}
 				}
 			}
 		}
-		assert otherResource != null;
+		assert toResource != null;
 		assert originalLoad != null;
 		assert swapped;
+		assert otherDischarge != null;
 
-		swapped = false;
-		// Swap the current load element with the original one.
-		for (int j = 0; j < currentResource.size(); ++j) {
-			if (currentResource.get(j) == prev) {
-				currentResource.set(j, originalLoad);
-				swapped = true;
-				break;
+		// If we are swapping between different resources, edit the other resource now
+		if (!withinResourceSwap) {
+			swapped = false;
+			// Swap the current load element with the original one.
+			for (int j = 0; j < copyOfFromSequence.size(); ++j) {
+				if (copyOfFromSequence.get(j) == prev) {
+					copyOfFromSequence.set(j, originalLoad);
+					swapped = true;
+					break;
+				}
 			}
 		}
 
-		// FIXME: GEtting a solution where we swap loads within a resource. Seems like discharge has not moved. However, my debuggin attempts do not show the load on this resource....
+		// Make sure we have done something
 		if (copy.equals(currentSequences)) {
-			// assert false;
-		}
-		if (resource.getIndex() == otherResource.getIndex()) {
-			return Collections.emptyList();
+			assert false;
 		}
 
 		assert swapped;
@@ -661,13 +690,14 @@ public class BreakdownOptimiserMover {
 			final long currentPNL, final long currentLateness, @NonNull final JobStore jobStore) {
 
 		if (!(portSlotProvider.getPortSlot(current) instanceof IDischargeSlot)) {
+			// Do not move FOB sales
 			return Collections.emptyList();
 		}
 
 		final IModifiableSequences copy = new ModifiableSequences(currentSequences);
-		final IModifiableSequence currentResource = copy.getModifiableSequence(resource.getIndex());
+		final IModifiableSequence copyOfFromSequence = copy.getModifiableSequence(resource.getIndex());
 
-		// Find the
+		// Find the original discharge for the given load
 		final int originalDischargeIdx = similarityState.getDischargeForLoad(prev);
 
 		boolean swapped = false;
@@ -675,42 +705,73 @@ public class BreakdownOptimiserMover {
 		ISequenceElement otherLoad = null;
 		IResource otherResource = null;
 
-		LOOP: for (final IResource r : copy.getResources()) {
-			assert r != null;
-			final IModifiableSequence s = copy.getModifiableSequence(r);
+		boolean withinResourceSwap = false;
 
-			for (int j = 0; j < s.size(); ++j) {
-				if (s.get(j).getIndex() == originalDischargeIdx) {
-					originalDischarge = s.get(j);
+		LOOP: for (final IResource possibleToResource : copy.getResources()) {
+			assert possibleToResource != null;
+			final IModifiableSequence copyOfPossibleToSequence = copy.getModifiableSequence(possibleToResource);
+
+			for (int j = 0; j < copyOfPossibleToSequence.size(); ++j) {
+				if (copyOfPossibleToSequence.get(j).getIndex() == originalDischargeIdx) {
+					originalDischarge = copyOfPossibleToSequence.get(j);
 					if (!(portSlotProvider.getPortSlot(originalDischarge) instanceof IDischargeSlot)) {
+						// FOB Sale, fail
 						return Collections.emptyList();
 					}
-					otherLoad = s.get(j - 1);
-					otherResource = r;
-					s.set(j, current);
-					swapped = true;
-					break LOOP;
+					otherLoad = copyOfPossibleToSequence.get(j - 1);
+					otherResource = possibleToResource;
+
+					// Are we swapping a load within the same sequence?
+					if (copyOfFromSequence == copyOfPossibleToSequence) {
+						// Within resource swap!
+						for (int k = 0; k < copyOfPossibleToSequence.size(); ++k) {
+							if (copyOfPossibleToSequence.get(k) == current) {
+								copyOfPossibleToSequence.set(k, originalDischarge);
+								copyOfPossibleToSequence.set(j, current);
+
+								swapped = true;
+								withinResourceSwap = true;
+
+								if (DEBUG_VALIDATION) {
+									final Set<ISequenceElement> unique = new HashSet<>();
+									for (final IResource rr : copy.getResources()) {
+										final ISequence sequence = copy.getSequence(rr.getIndex());
+										for (final ISequenceElement aa : sequence) {
+											assert unique.add(aa);
+										}
+									}
+								}
+
+								break LOOP;
+							}
+						}
+					} else {
+						copyOfPossibleToSequence.set(j, current);
+						swapped = true;
+						break LOOP;
+					}
 				}
 			}
 		}
 		assert swapped;
-		swapped = false;
 		assert originalDischarge != null;
 		assert otherLoad != null;
 		assert otherResource != null;
-		for (int j = 0; j < currentResource.size(); ++j) {
-			if (currentResource.get(j) == current) {
-				currentResource.set(j, originalDischarge);
-				swapped = true;
-				break;
+		if (!withinResourceSwap) {
+			swapped = false;
+			for (int j = 0; j < copyOfFromSequence.size(); ++j) {
+				if (copyOfFromSequence.get(j) == current) {
+					copyOfFromSequence.set(j, originalDischarge);
+					swapped = true;
+					break;
 
+				}
 			}
 		}
+
+		// Make sure we have done something
 		if (copy.equals(currentSequences)) {
-			// assert false;
-		}
-		if (resource.getIndex() == otherResource.getIndex()) {
-			return Collections.emptyList();
+			assert false;
 		}
 
 		assert swapped;
