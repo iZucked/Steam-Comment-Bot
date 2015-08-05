@@ -166,6 +166,9 @@ public class BreadthOptimiser {
 		final long initialPNL = breakdownOptimiserMover.calculateSchedulePNL(initialFullSequences, initialScheduledSequences);
 		final long initialLateness = breakdownOptimiserMover.calculateScheduleLateness(initialFullSequences, initialScheduledSequences);
 
+		similarityState.baseLateness = initialLateness;
+		similarityState.basePNL = initialPNL;
+
 		// Generate the initial set of changes, one level deep
 		final List<ChangeSet> changeSets = new LinkedList<>();
 		final List<Change> changes = new LinkedList<>();
@@ -174,7 +177,7 @@ public class BreadthOptimiser {
 		// This will return a set of job states in the PARTIAL state with a single change in the list.
 
 		final List<JobState> l = new LinkedList<>();
-		l.add(new JobState(new Sequences(initialRawSequences), changeSets, changes, initialPNL, 0, initialLateness, 0));
+		l.add(new JobState(new Sequences(initialRawSequences), changeSets, changes, initialPNL, 0, initialLateness, 0, 0, 0));
 
 		try {
 			final Collection<JobState> fullChangesSets = findChangeSets(similarityState, l, 1);
@@ -473,7 +476,7 @@ public class BreadthOptimiser {
 
 				final PrintWriter writer = new PrintWriter(fos);
 				for (final ChangeSet changeSet : changeSets) {
-					writer.println("==ChangeSet== " + String.format("%,d", changeSet.pnlDelta / 1000L));
+					writer.println("==ChangeSet== " + String.format("%,d %,d", changeSet.pnlDelta / 1000L, changeSet.pnlDeltaToBase / 1000L));
 					for (final Change change : changeSet.changesList) {
 						writer.println(change.description);
 					}

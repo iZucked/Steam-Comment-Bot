@@ -17,6 +17,13 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public class SimilarityState {
 
+	public long basePNL = 0;
+	public long baseLateness = 0;
+	
+	public long targetPNL = 0;
+	public long targetLateness = 0;
+	
+	
 	@Inject
 	private IPortTypeProvider portTypeProvider;
 

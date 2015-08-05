@@ -21,6 +21,9 @@ public class ChangeSet implements Serializable {
 	public final Set<Change> changesSet;
 	public long pnlDelta;
 	public long latenessDelta;
+	public long latenessDeltaToBase;
+	public long pnlDeltaToBase;
+
 	private final int hashCode;
 
 	public ChangeSet(final Collection<Change> changes) {

@@ -31,17 +31,21 @@ public class JobState implements Serializable {
 	public final int hashCode;
 	public long currentPNL;
 	public long currentPNLDelta;
+	public long currentPNLDeltaToBase;
 	public JobStateMode mode = JobStateMode.BRANCH;
 	public long currentLateness;
 	public long currentLatenessDelta;
+	public long currentLatenessDeltaToBase;
 
 	public JobState(final ISequences rawSequences, final List<ChangeSet> changeSets, final List<Change> changes, final long currentPNL, final long currentPNLDelta, final long currentLatness,
-			final long currentLatenessDelta) {
+			final long currentLatenessDelta, final long pnlDeltaToBase,final long latenessDeltaToBase) {
 		this.rawSequences = rawSequences;
 		this.currentPNL = currentPNL;
 		this.currentPNLDelta = currentPNLDelta;
 		this.currentLateness = currentLatness;
 		this.currentLatenessDelta = currentLatenessDelta;
+		currentPNLDeltaToBase = pnlDeltaToBase;
+		currentLatenessDeltaToBase = latenessDeltaToBase;
 
 		this.changesAsList = Collections.unmodifiableList(new ArrayList<>(changes));
 		this.changesAsSet = Collections.unmodifiableSet(new HashSet<>(changes));
