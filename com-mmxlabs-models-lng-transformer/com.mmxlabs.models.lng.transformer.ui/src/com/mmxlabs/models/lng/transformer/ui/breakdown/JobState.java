@@ -29,29 +29,28 @@ public class JobState implements Serializable {
 	public final List<ChangeSet> changeSetsAsList;
 	public final Set<ChangeSet> changeSetsAsSet;
 	public final int hashCode;
-	public long currentPNL;
-	public long currentPNLDelta;
-	public long currentPNLDeltaToBase;
-	public JobStateMode mode = JobStateMode.BRANCH;
-	public long currentLateness;
-	public long currentLatenessDelta;
-	public long currentLatenessDeltaToBase;
 
-	public JobState(final ISequences rawSequences, final List<ChangeSet> changeSets, final List<Change> changes, final long currentPNL, final long currentPNLDelta, final long currentLatness,
-			final long currentLatenessDelta, final long pnlDeltaToBase,final long latenessDeltaToBase) {
+	public long[] metric = new long[MetricType.values().length];
+	public long[] metricDelta = new long[MetricType.values().length];
+	public long[] metricDeltaToBase = new long[MetricType.values().length];
+
+	public JobStateMode mode = JobStateMode.BRANCH;
+
+	public JobState(final ISequences rawSequences, final List<ChangeSet> changeSets, final List<Change> changes) {
 		this.rawSequences = rawSequences;
-		this.currentPNL = currentPNL;
-		this.currentPNLDelta = currentPNLDelta;
-		this.currentLateness = currentLatness;
-		this.currentLatenessDelta = currentLatenessDelta;
-		currentPNLDeltaToBase = pnlDeltaToBase;
-		currentLatenessDeltaToBase = latenessDeltaToBase;
 
 		this.changesAsList = Collections.unmodifiableList(new ArrayList<>(changes));
 		this.changesAsSet = Collections.unmodifiableSet(new HashSet<>(changes));
 		this.changeSetsAsList = Collections.unmodifiableList(new ArrayList<>(changeSets));
 		this.changeSetsAsSet = Collections.unmodifiableSet(new HashSet<>(changeSets));
 		this.hashCode = Objects.hashCode(changes, changeSets);
+	}
+
+	public void setMetric(MetricType metricType, long value, long delta, long deltaToBase) {
+		int idx = metricType.ordinal();
+		metric[idx] = value;
+		metricDelta[idx] = delta;
+		metricDeltaToBase[idx] = deltaToBase;
 	}
 
 	@Override

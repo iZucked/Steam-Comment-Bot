@@ -17,13 +17,6 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public class SimilarityState {
 
-	public long basePNL = 0;
-	public long baseLateness = 0;
-	
-	public long targetPNL = 0;
-	public long targetLateness = 0;
-	
-	
 	@Inject
 	private IPortTypeProvider portTypeProvider;
 
@@ -35,6 +28,8 @@ public class SimilarityState {
 
 	private final Map<Pair<Integer, Integer>, Pair<Integer, Integer>> cargoToPrevCargoMap = new HashMap<>();
 	private final Map<Pair<Integer, Integer>, Pair<Integer, Integer>> cargoToNextCargoMap = new HashMap<>();
+
+	public long[] baseMetrics = new long[MetricType.values().length];
 
 	public void init(@NonNull final ISequences fullSequences) {
 		for (final IResource resource : fullSequences.getResources()) {
