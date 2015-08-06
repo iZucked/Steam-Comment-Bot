@@ -166,6 +166,14 @@ public class BreakdownOptimiserMover {
 
 					if (!failedEvaluation) {
 
+						for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
+							// Do PNL bit
+							if (evaluationProcess instanceof SchedulerEvaluationProcess) {
+								SchedulerEvaluationProcess schedulerEvaluationProcess = (SchedulerEvaluationProcess) evaluationProcess;
+								schedulerEvaluationProcess.doPNL(currentFullSequences, evaluationState);
+							}
+						}
+
 						long thisPNL = calculateSchedulePNL(currentFullSequences, ss);
 
 						if (thisPNL <= currentMetrics[MetricType.PNL.ordinal()]) {
