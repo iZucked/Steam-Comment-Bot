@@ -165,19 +165,23 @@ public class BreadthOptimiser {
 
 		final long initialPNL = breakdownOptimiserMover.calculateSchedulePNL(initialFullSequences, initialScheduledSequences);
 		final long initialLateness = breakdownOptimiserMover.calculateScheduleLateness(initialFullSequences, initialScheduledSequences);
+		final long initialCapacity = breakdownOptimiserMover.calculateScheduleCapacity(initialFullSequences, initialScheduledSequences);
 
-		similarityState.baseLateness = initialLateness;
-		similarityState.basePNL = initialPNL;
+		similarityState.baseMetrics[MetricType.LATENESS.ordinal()] = initialLateness;
+		similarityState.baseMetrics[MetricType.CAPACITY.ordinal()] = initialCapacity;
+		similarityState.baseMetrics[MetricType.PNL.ordinal()] = initialPNL;
 
 		// Generate the initial set of changes, one level deep
-		final List<ChangeSet> changeSets = new LinkedList<>();
-		final List<Change> changes = new LinkedList<>();
 		final long time2 = System.currentTimeMillis();
 
 		// This will return a set of job states in the PARTIAL state with a single change in the list.
 
 		final List<JobState> l = new LinkedList<>();
-		l.add(new JobState(new Sequences(initialRawSequences), changeSets, changes, initialPNL, 0, initialLateness, 0, 0, 0));
+		JobState initialState = new JobState(new Sequences(initialRawSequences), new LinkedList<ChangeSet>(), new LinkedList<Change>());
+		initialState.setMetric(MetricType.PNL, initialPNL, 0, 0);
+		initialState.setMetric(MetricType.LATENESS, initialLateness, 0, 0);
+		initialState.setMetric(MetricType.CAPACITY, initialCapacity, 0, 0);
+		l.add(initialState);
 
 		try {
 			final Collection<JobState> fullChangesSets = findChangeSets(similarityState, l, 1);
@@ -192,7 +196,7 @@ public class BreadthOptimiser {
 					final int counter = Math.min(o1.changeSetsAsList.size(), o2.changeSetsAsList.size());
 					for (int i = 0; i < counter; ++i) {
 
-						final int c = Long.compare(o2.changeSetsAsList.get(i).pnlDelta, o1.changeSetsAsList.get(i).pnlDelta);
+						final int c = Long.compare(o2.changeSetsAsList.get(i).metricDelta[MetricType.PNL.ordinal()], o1.changeSetsAsList.get(i).metricDelta[MetricType.PNL.ordinal()]);
 						if (c != 0) {
 							return c;
 						}
@@ -207,7 +211,7 @@ public class BreadthOptimiser {
 			for (final JobState jobState : sortedChangeStates) {
 				if (jobState.mode == JobStateMode.LEAF) {
 					// TODO: Change this method to generate more useful file names e.g. include sort index
-					evaluateLeaf(similarityState, jobState.changesAsList, jobState.changeSetsAsList, jobState.currentPNL, new ModifiableSequences(jobState.rawSequences));
+					evaluateLeaf(similarityState, jobState.changesAsList, jobState.changeSetsAsList, new ModifiableSequences(jobState.rawSequences));
 					// Save top 20 results
 					if (++i >= 5) {
 						// break;
@@ -394,12 +398,12 @@ public class BreadthOptimiser {
 				final int counter = Math.min(o1.changeSetsAsList.size(), o2.changeSetsAsList.size());
 				for (int i = 0; i < counter; ++i) {
 
-					final int c = Long.compare(o2.changeSetsAsList.get(i).pnlDelta, o1.changeSetsAsList.get(i).pnlDelta);
+					final int c = Long.compare(o2.changeSetsAsList.get(i).metricDelta[MetricType.PNL.ordinal()], o1.changeSetsAsList.get(i).metricDelta[MetricType.PNL.ordinal()]);
 					if (c != 0) {
 						return c;
 					}
 				}
-				return Long.compare(o2.currentPNLDelta, o1.currentPNLDelta);
+				return Long.compare(o2.metricDelta[MetricType.PNL.ordinal()], o1.metricDelta[MetricType.PNL.ordinal()]);
 			}
 		});
 		return sortedJobStates;
@@ -447,7 +451,7 @@ public class BreadthOptimiser {
 		return states;
 	}
 
-	private void evaluateLeaf(@NonNull final SimilarityState similarityState, @NonNull final List<Change> changes, @NonNull final List<ChangeSet> changeSets, final long currentPNL,
+	private void evaluateLeaf(@NonNull final SimilarityState similarityState, @NonNull final List<Change> changes, @NonNull final List<ChangeSet> changeSets,
 			@NonNull final ISequences bestRawSequences) {
 
 		final IModifiableSequences currentFullSequences = new ModifiableSequences(bestRawSequences);
@@ -476,7 +480,7 @@ public class BreadthOptimiser {
 
 				final PrintWriter writer = new PrintWriter(fos);
 				for (final ChangeSet changeSet : changeSets) {
-					writer.println("==ChangeSet== " + String.format("%,d %,d", changeSet.pnlDelta / 1000L, changeSet.pnlDeltaToBase / 1000L));
+					writer.println("==ChangeSet== " + String.format("%,d %,d", changeSet.metricDelta[MetricType.PNL.ordinal()] / 1000L, changeSet.metricDeltaToBase[MetricType.PNL.ordinal()] / 1000L));
 					for (final Change change : changeSet.changesList) {
 						writer.println(change.description);
 					}

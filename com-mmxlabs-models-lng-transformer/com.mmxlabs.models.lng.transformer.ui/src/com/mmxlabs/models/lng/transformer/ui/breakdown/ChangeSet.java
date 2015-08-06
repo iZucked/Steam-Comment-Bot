@@ -19,10 +19,10 @@ import com.google.common.base.Objects;
 public class ChangeSet implements Serializable {
 	public final List<Change> changesList;
 	public final Set<Change> changesSet;
-	public long pnlDelta;
-	public long latenessDelta;
-	public long latenessDeltaToBase;
-	public long pnlDeltaToBase;
+
+	public long[] metric = new long[MetricType.values().length];
+	public long[] metricDelta = new long[MetricType.values().length];
+	public long[] metricDeltaToBase = new long[MetricType.values().length];
 
 	private final int hashCode;
 
@@ -31,6 +31,13 @@ public class ChangeSet implements Serializable {
 		// Use hash sets as we do not care about ordering
 		this.changesSet = Collections.unmodifiableSet(new HashSet<>(changes));
 		this.hashCode = changesSet.hashCode();
+	}
+
+	public void setMetric(MetricType metricType, long value, long delta, long deltaToBase) {
+		int idx = metricType.ordinal();
+		metric[idx] = value;
+		metricDelta[idx] = delta;
+		metricDeltaToBase[idx] = deltaToBase;
 	}
 
 	@Override
