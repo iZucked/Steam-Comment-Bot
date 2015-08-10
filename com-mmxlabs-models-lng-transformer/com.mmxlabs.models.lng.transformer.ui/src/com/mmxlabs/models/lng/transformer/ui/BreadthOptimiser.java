@@ -33,6 +33,7 @@ import com.mmxlabs.models.lng.transformer.ui.breakdown.JobState;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.JobStateMode;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.JobStateSerialiser;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.JobStore;
+import com.mmxlabs.models.lng.transformer.ui.breakdown.MetricType;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.MyFuture;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.SimilarityState;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -47,7 +48,6 @@ import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
-import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 
 /**
  * An "optimiser" to generate the sequence of steps required by a user to go from one {@link ISequences} state to another one. I.e. from a pre-optimised state to an optimised state.
@@ -91,25 +91,27 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 public class BreadthOptimiser {
 
 	@Inject
+	@NonNull
 	private ISequencesManipulator sequencesManipulator;
 
 	@Inject
+	@NonNull
 	private IOptimisationContext optimisationContext;
 
 	@Inject
+	@NonNull
 	private List<IConstraintChecker> constraintCheckers;
 
 	@Inject
+	@NonNull
 	private List<IEvaluationProcess> evaluationProcesses;
 
 	@Inject
-	private IPortTypeProvider portTypeProvider;
-
-	@Inject
+	@NonNull
 	private Injector injector;
 
-	@NonNull
 	@Inject
+	@NonNull
 	private BreakdownOptimiserMover breakdownOptimiserMover;
 
 	/**
@@ -480,14 +482,17 @@ public class BreadthOptimiser {
 
 				final PrintWriter writer = new PrintWriter(fos);
 				for (final ChangeSet changeSet : changeSets) {
-					writer.println("==ChangeSet== " + String.format("%,d %,d", changeSet.metricDelta[MetricType.PNL.ordinal()] / 1000L, changeSet.metricDeltaToBase[MetricType.PNL.ordinal()] / 1000L));
+					writer.println("==ChangeSet== "
+							+ String.format("P %,d %,d L %d,%d C %d,%d", changeSet.metricDelta[MetricType.PNL.ordinal()] / 1000L, changeSet.metricDeltaToBase[MetricType.PNL.ordinal()] / 1000L,
+									changeSet.metricDelta[MetricType.LATENESS.ordinal()], changeSet.metricDeltaToBase[MetricType.LATENESS.ordinal()],
+									changeSet.metricDelta[MetricType.CAPACITY.ordinal()], changeSet.metricDeltaToBase[MetricType.CAPACITY.ordinal()]));
 					for (final Change change : changeSet.changesList) {
 						writer.println(change.description);
 					}
 				}
-				writer.println("==LeftOvers==");
 				for (final Change change : changes) {
-					writer.println(change.description);
+					assert false;
+					// writer.println(change.description);
 				}
 				writer.close();
 			} catch (final IOException e) {
