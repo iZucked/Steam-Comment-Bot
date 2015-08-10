@@ -20,7 +20,6 @@ public class SimilarityState {
 	@Inject
 	private IPortTypeProvider portTypeProvider;
 
-	private final Map<Integer, Integer> elementResourceIdxMap = new HashMap<>();
 	private final Map<Integer, Integer> loadDischargeMap = new HashMap<>();
 	private final Map<Integer, Integer> dischargeLoadMap = new HashMap<>();
 	private final Map<Integer, ISequenceElement> elementMap = new HashMap<>();
@@ -33,7 +32,7 @@ public class SimilarityState {
 
 	public void init(@NonNull final ISequences fullSequences) {
 		for (final IResource resource : fullSequences.getResources()) {
-			final ISequence sequence = fullSequences.getSequence(resource.getIndex());
+			final ISequence sequence = fullSequences.getSequence(resource);
 			ISequenceElement prev = null;
 			Pair<Integer, Integer> prevCargo = new Pair<>(-2, -2); // start
 			Pair<Integer, Integer> currCargo = new Pair<>(-1, -1); // end
@@ -53,7 +52,6 @@ public class SimilarityState {
 						}
 					}
 				}
-				elementResourceIdxMap.put(current.getIndex(), resource.getIndex());
 				elementIdxResourceMap.put(current.getIndex(), resource);
 				prev = current;
 			}
@@ -72,10 +70,6 @@ public class SimilarityState {
 
 	public Integer getDischargeForLoad(@NonNull final ISequenceElement load) {
 		return loadDischargeMap.get(load.getIndex());
-	}
-
-	public Integer getResourceIdxForElement(@NonNull final ISequenceElement element) {
-		return elementResourceIdxMap.get(element.getIndex());
 	}
 
 	public IResource getResourceForElement(@NonNull final ISequenceElement element) {
