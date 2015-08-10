@@ -189,8 +189,8 @@ public class BreadthOptimiser {
 			final Collection<JobState> fullChangesSets = findChangeSets(similarityState, l, 1);
 			System.out.printf("Found %d results\n", fullChangesSets.size());
 
-			// TODO: Sort by changset P&L and group size.
-			final List<JobState> sortedChangeStates = new ArrayList<>(fullChangesSets);
+			// Remove duplicates and sort by changeset P&L.
+			final List<JobState> sortedChangeStates = new ArrayList<>(new LinkedHashSet<>(fullChangesSets));
 			Collections.sort(sortedChangeStates, new Comparator<JobState>() {
 
 				@Override
