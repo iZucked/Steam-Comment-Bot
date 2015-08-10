@@ -20,6 +20,7 @@ import com.google.inject.Injector;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -89,6 +90,10 @@ public class BreakdownOptimiserMover {
 
 	@Inject
 	@NonNull
+	private IOptionalElementsProvider optionalElementsProvider;
+
+	@Inject
+	@NonNull
 	private IStartEndRequirementProvider startEndRequirementProvider;
 
 	/**
@@ -145,6 +150,13 @@ public class BreakdownOptimiserMover {
 			if (!failedEvaluation) {
 
 				if (true) {
+					long thisUnusedCompulsarySlotCount = calculateUnusedCompulsarySlot(currentSequences);
+					if (thisUnusedCompulsarySlotCount > currentMetrics[MetricType.COMPULSARY_SLOT.ordinal()]) {
+						// THIS SOMEHOW CAUSES THE SEARCH TO FAIL?
+						failedEvaluation = true;
+					}
+
+					// TODO: Avoid lateness calcs
 					final IEvaluationState evaluationState = new EvaluationState();
 					for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
 						if (!evaluationProcess.evaluate(currentFullSequences, evaluationState)) {
@@ -204,6 +216,8 @@ public class BreakdownOptimiserMover {
 								thisLateness - similarityState.baseMetrics[MetricType.LATENESS.ordinal()]);
 						cs.setMetric(MetricType.CAPACITY, thisCapacity, thisCapacity - currentMetrics[MetricType.CAPACITY.ordinal()],
 								thisCapacity - similarityState.baseMetrics[MetricType.CAPACITY.ordinal()]);
+						cs.setMetric(MetricType.COMPULSARY_SLOT, thisUnusedCompulsarySlotCount, thisUnusedCompulsarySlotCount - currentMetrics[MetricType.COMPULSARY_SLOT.ordinal()],
+								thisUnusedCompulsarySlotCount - similarityState.baseMetrics[MetricType.COMPULSARY_SLOT.ordinal()]);
 
 						changes.clear();
 						changeSets.add(cs);
@@ -215,6 +229,8 @@ public class BreakdownOptimiserMover {
 								thisLateness - similarityState.baseMetrics[MetricType.LATENESS.ordinal()]);
 						jobState.setMetric(MetricType.CAPACITY, thisCapacity, thisCapacity - currentMetrics[MetricType.CAPACITY.ordinal()],
 								thisCapacity - similarityState.baseMetrics[MetricType.CAPACITY.ordinal()]);
+						jobState.setMetric(MetricType.COMPULSARY_SLOT, thisUnusedCompulsarySlotCount, thisUnusedCompulsarySlotCount - currentMetrics[MetricType.COMPULSARY_SLOT.ordinal()],
+								thisUnusedCompulsarySlotCount - similarityState.baseMetrics[MetricType.COMPULSARY_SLOT.ordinal()]);
 
 						final int changesCount = changedElements.size();
 						if (changesCount == 0) {
@@ -239,6 +255,7 @@ public class BreakdownOptimiserMover {
 					jobState.setMetric(MetricType.PNL, currentMetrics[MetricType.PNL.ordinal()], 0, 0);
 					jobState.setMetric(MetricType.LATENESS, currentMetrics[MetricType.LATENESS.ordinal()], 0, 0);
 					jobState.setMetric(MetricType.CAPACITY, currentMetrics[MetricType.CAPACITY.ordinal()], 0, 0);
+					jobState.setMetric(MetricType.COMPULSARY_SLOT, currentMetrics[MetricType.COMPULSARY_SLOT.ordinal()], 0, 0);
 
 					jobState.mode = JobStateMode.LIMITED;
 					jobStore.store(jobState);
@@ -1000,7 +1017,18 @@ public class BreakdownOptimiserMover {
 		return sumPNL;
 	}
 
-	public long calculateScheduleLateness(final IModifiableSequences fullSequences, final ScheduledSequences scheduledSequences) {
+	public long calculateUnusedCompulsarySlot(ISequences rawSequences) {
+
+		int thisUnusedCompulsarySlotCount = 0;
+		for (final ISequenceElement e : rawSequences.getUnusedElements()) {
+			if (optionalElementsProvider.isElementRequired(e)) {
+				thisUnusedCompulsarySlotCount++;
+			}
+		}
+		return thisUnusedCompulsarySlotCount;
+	}
+
+	public long calculateScheduleLateness(final ISequences fullSequences, final ScheduledSequences scheduledSequences) {
 		long sumCost = 0;
 
 		for (final IPortSlot lateSlot : scheduledSequences.getLateSlotsSet()) {

@@ -165,13 +165,15 @@ public class BreadthOptimiser {
 		final ScheduledSequences initialScheduledSequences = evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class);
 		assert initialScheduledSequences != null;
 
-		final long initialPNL = breakdownOptimiserMover.calculateSchedulePNL(initialFullSequences, initialScheduledSequences);
+		final long initialUnusedCompulsarySlot = breakdownOptimiserMover.calculateUnusedCompulsarySlot(initialRawSequences);
 		final long initialLateness = breakdownOptimiserMover.calculateScheduleLateness(initialFullSequences, initialScheduledSequences);
 		final long initialCapacity = breakdownOptimiserMover.calculateScheduleCapacity(initialFullSequences, initialScheduledSequences);
+		final long initialPNL = breakdownOptimiserMover.calculateSchedulePNL(initialFullSequences, initialScheduledSequences);
 
 		similarityState.baseMetrics[MetricType.LATENESS.ordinal()] = initialLateness;
 		similarityState.baseMetrics[MetricType.CAPACITY.ordinal()] = initialCapacity;
 		similarityState.baseMetrics[MetricType.PNL.ordinal()] = initialPNL;
+		similarityState.baseMetrics[MetricType.COMPULSARY_SLOT.ordinal()] = initialUnusedCompulsarySlot;
 
 		// Generate the initial set of changes, one level deep
 		final long time2 = System.currentTimeMillis();
@@ -183,6 +185,7 @@ public class BreadthOptimiser {
 		initialState.setMetric(MetricType.PNL, initialPNL, 0, 0);
 		initialState.setMetric(MetricType.LATENESS, initialLateness, 0, 0);
 		initialState.setMetric(MetricType.CAPACITY, initialCapacity, 0, 0);
+		initialState.setMetric(MetricType.COMPULSARY_SLOT, initialUnusedCompulsarySlot, 0, 0);
 		l.add(initialState);
 
 		try {
@@ -462,7 +465,7 @@ public class BreadthOptimiser {
 		// boolean different;
 		{
 
-			final int changesCount = breakdownOptimiserMover.getChangedElements(similarityState, currentFullSequences).size();
+			final int changesCount = breakdownOptimiserMover.getChangedElements(similarityState, bestRawSequences).size();
 
 			assert changesCount == 0;
 			// Apply hard constraint checkers

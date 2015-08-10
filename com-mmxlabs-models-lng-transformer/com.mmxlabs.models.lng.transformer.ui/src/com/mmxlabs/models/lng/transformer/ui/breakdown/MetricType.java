@@ -1,5 +1,5 @@
 package com.mmxlabs.models.lng.transformer.ui.breakdown;
 
 public enum MetricType {
-	PNL, LATENESS, CAPACITY
+	PNL, LATENESS, CAPACITY, COMPULSARY_SLOT
 }
