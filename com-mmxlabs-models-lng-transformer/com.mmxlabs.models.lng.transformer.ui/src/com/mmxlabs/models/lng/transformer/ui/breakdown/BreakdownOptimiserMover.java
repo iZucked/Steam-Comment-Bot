@@ -155,7 +155,6 @@ public class BreakdownOptimiserMover {
 
 					if (true) {
 
-						// TODO: Avoid lateness calcs
 						final IEvaluationState evaluationState = new EvaluationState();
 						for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
 							if (!evaluationProcess.evaluate(currentFullSequences, evaluationState)) {
@@ -181,8 +180,6 @@ public class BreakdownOptimiserMover {
 							// currentLateness = thisLateness;
 						}
 
-						// TODO: Also take into account removed slots - this should not generate a change set!
-
 						if (!failedEvaluation) {
 
 							for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
@@ -203,12 +200,6 @@ public class BreakdownOptimiserMover {
 							// Convert change list set into a change set and record sate.
 							// TOOD: Get fitness change and only accept improving solutions. (similarity, similarity plus others etc)
 							final ChangeSet cs = new ChangeSet(changes);
-							//
-							// cs.pnlDelta = thisPNL - currentPNL;
-							// cs.latenessDelta = thisLateness - currentLateness;
-							//
-							// cs.pnlDeltaToBase = thisPNL - similarityState.basePNL;
-							// cs.latenessDeltaToBase = thisLateness - similarityState.baseLateness;
 
 							cs.setMetric(MetricType.PNL, thisPNL, thisPNL - currentMetrics[MetricType.PNL.ordinal()], thisPNL - similarityState.baseMetrics[MetricType.PNL.ordinal()]);
 							cs.setMetric(MetricType.LATENESS, thisLateness, thisLateness - currentMetrics[MetricType.LATENESS.ordinal()],
@@ -282,10 +273,6 @@ public class BreakdownOptimiserMover {
 		Collections.shuffle(loopElements, new Random((long) tryDepth));
 
 		// TODO: Now we have this loopElements list, we can decide whether or not to examine the whole list
-
-		// int differenceCount = changedElements.size();
-		// boolean different = false;
-
 		final Deque<ISequenceElement> unusedElements = new LinkedList<ISequenceElement>(currentSequences.getUnusedElements());
 		// while (unusedElements.size() > 0)
 		while (!loopElements.isEmpty()) {
@@ -310,26 +297,11 @@ public class BreakdownOptimiserMover {
 					prev = currIdx > 0 ? sequence.get(currIdx - 1) : null;
 					loopElements.remove(prev);
 				}
-				// }
-				//
-				// //
-				// for (final IResource resource : currentSequences.getResources()) {
-				// final ISequence sequence = currentSequences.getSequence(resource);
-				// ISequenceElement prev = null;
-				// int prevIdx = -1;
-				// int currIdx = -1;
-				// for (final ISequenceElement current : sequence) {
-				// currIdx++;
+
 				if (prev != null) {
-					//
-					// // If we have some target elements, only continue move generation if element is in the list.
-					// if (targetElements != null && !(targetElements.contains(prev) || targetElements.contains(current))) {
-					// continue;
-					// }
 
 					// Currently only looking at LD style cargoes
 					if (portTypeProvider.getPortType(prev) == PortType.Load && portTypeProvider.getPortType(current) == PortType.Discharge) {
-						// TODO Add to count changes
 						// Wiring Change
 						boolean wiringChange = false;
 						final Integer matchedDischarge = similarityState.getDischargeForLoad(prev);
@@ -352,7 +324,6 @@ public class BreakdownOptimiserMover {
 							newStates.addAll(search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_CARGO_REMOVE, currentMetrics, jobStore, targetElements));
 
 						} else if (matchedLoad == null && matchedDischarge != null) {
-							// TODO Add to count changes
 							// Discharge was previous unused, but the load is in correct solution
 							wiringChange = true;
 							//
@@ -374,7 +345,7 @@ public class BreakdownOptimiserMover {
 										search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_UNUSED_DISCHARGE_SWAPPED, currentMetrics, jobStore, targetElements));
 							} else {
 								// step (2) remove both slots
-								// FIXME: Currently just unpair both slots and remove from solution
+								// Currently just unpair both slots and remove from solution
 								final IModifiableSequences copy = new ModifiableSequences(currentSequences);
 								final IModifiableSequence currentResource = copy.getModifiableSequence(resource);
 								currentResource.remove(prev);
@@ -394,7 +365,6 @@ public class BreakdownOptimiserMover {
 							}
 						} else if (matchedDischarge == null && matchedLoad != null) {
 
-							// TODO Add to count changes
 							// Load was previous unused, but the discharge was
 							wiringChange = true;
 
@@ -416,7 +386,7 @@ public class BreakdownOptimiserMover {
 								newStates.addAll(search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_UNUSED_LOAD_SWAPPED, currentMetrics, jobStore, targetElements));
 							} else {
 								// step (2)
-								// FIXME: Currently just unpair both slots and remove from solution
+								// Currently just unpair both slots and remove from solution
 								final IModifiableSequences copy = new ModifiableSequences(currentSequences);
 								final IModifiableSequence currentResource = copy.getModifiableSequence(resource);
 								currentResource.remove(prev);
@@ -500,7 +470,7 @@ public class BreakdownOptimiserMover {
 									final ISequence originalSequence = currentSequences.getSequence(similarityState.getResourceForElement(prev));
 									final ISequence currentSequence = currentSequences.getSequence(resource);
 
-									// TODO: Create and apply change.
+									// Create and apply change.
 									for (int i = 0; i < currentSequence.size(); ++i) {
 										if (currentSequence.get(i) == prev) {
 
@@ -533,25 +503,8 @@ public class BreakdownOptimiserMover {
 					newStates.addAll(insertUnusedElementsIntoSequence(currentSequences, similarityState, stateManager, changes, changeSets, tryDepth, element, currentMetrics, unusedElements, jobStore,
 							targetElements));
 				}
-				// prev = current;
-				// prevIdx = currIdx;
 			}
 		}
-		//
-		// // TODO Add to count changes
-		// final Deque<ISequenceElement> unusedElements = new LinkedList<ISequenceElement>(currentSequences.getUnusedElements());
-		// while (unusedElements.size() > 0)
-		//
-		// {
-		// final ISequenceElement element = unusedElements.pop();
-		// assert element != null;
-		// // Currently unused element needs to be placed onto a resource
-		// if (similarityState.getResourceIdxForElement(element) != null) {
-		// // This is an unused element which should be in the final solution.
-		// different = true;
-		// newStates.addAll(insertUnusedElementsIntoSequence(currentSequences, similarityState, changes, changeSets, tryDepth, element, currentMetrics, unusedElements, jobStore, targetElements));
-		// }
-		// }
 
 		// FIXME: Also include alternative slots
 		return newStates;
