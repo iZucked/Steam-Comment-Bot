@@ -338,7 +338,7 @@ public class BreadthOptimiser {
 				final List<JobState> subList = new LinkedList<>();
 				// Run up to 20 at once. Note larger sizes may take up more memory with the returned change set count.
 				// changesets can be detected more easily
-				final int limit = Math.min(reducedAndSortedStates.size(), 6);
+				final int limit = Math.min(reducedAndSortedStates.size(), 1);
 				for (int i = 0; i < limit; ++i) {
 					subList.add(reducedAndSortedStates.remove(0));
 				}
