@@ -3,6 +3,7 @@ package com.mmxlabs.models.lng.transformer.ui.breakdown;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
@@ -23,7 +24,7 @@ public final class JobStore {
 	private final List<File> files = new LinkedList<>();
 	private int count = 0;
 
-	// Use a Semaphone to limit the number of jobs kept in memory while we wait for I/O to catch up.
+	// Use a Semaphore to limit the number of jobs kept in memory while we wait for I/O to catch up.
 	private Semaphore s = new Semaphore(20);
 	private ExecutorService backgroundSaver;
 
@@ -31,9 +32,16 @@ public final class JobStore {
 		this.depth = depth;
 	}
 
+	Random r = new Random(0);
+
 	public void store(final JobState jobState) {
 
 		if (foundBranch) {
+			return;
+		}
+
+		// Store 1 in a 100 job states
+		if (r.nextInt(100) != 0) {
 			return;
 		}
 
@@ -116,6 +124,9 @@ public final class JobStore {
 	public void setFoundBranch() {
 		foundBranch = true;
 		pendingJobs.clear();
-		backgroundSaver.shutdownNow();
+		if (backgroundSaver != null) {
+			backgroundSaver.shutdownNow();
+			backgroundSaver = null;
+		}
 	}
 }
