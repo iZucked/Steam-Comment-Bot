@@ -15,7 +15,6 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.google.inject.name.Named;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -26,10 +25,7 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ISimilarityComponentParameters;
-import com.mmxlabs.scheduler.optimiser.fitness.components.ISimilarityComponentParameters.Interval;
-import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
@@ -66,12 +62,12 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 	private int highRange;
 	private int medRange;
 	private int lowRange;
-	
+
 	public SimilarityFitnessCore(final String name) {
 		this.name = name;
 	}
 
-	public SimilarityFitnessCore(final String name, boolean threshold) {
+	public SimilarityFitnessCore(final String name, final boolean threshold) {
 		this.name = name;
 	}
 
@@ -86,8 +82,10 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 	 * @param sequences
 	 */
 	public void init(@NonNull final ISequences sequences) {
-		for (IResource resource : resources) {
-			ISequence sequence = sequences.getSequence(resource.getIndex());
+		for (final IResource resource : resources) {
+			assert resource != null;
+
+			final ISequence sequence = sequences.getSequence(resource);
 			ISequenceElement prev = null;
 			for (final ISequenceElement current : sequence) {
 				if (prev != null) {
@@ -116,7 +114,7 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 		outOfBoundsWeight = similarityComponentParameters.getOutOfBoundsWeight();
 		highRange = highThreshold - medThreshold;
 		medRange = medThreshold - lowThreshold;
-		lowRange= lowThreshold;
+		lowRange = lowThreshold;
 	}
 
 	@Override
@@ -124,19 +122,20 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	public Collection<IFitnessComponent> getFitnessComponents() {
 		return Collections.<IFitnessComponent> singleton(this);
 	}
 
 	@Override
-	public boolean evaluate(@NonNull ISequences sequences, @NonNull IEvaluationState evaluationState) {
+	public boolean evaluate(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState) {
 		evaluation(sequences);
 		return true;
 	}
 
 	@Override
-	public boolean evaluate(@NonNull final ISequences sequences, @NonNull IEvaluationState evaluationState, @Nullable final Collection<IResource> affectedResources) {
+	public boolean evaluate(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @Nullable final Collection<IResource> affectedResources) {
 		evaluation(sequences);
 		return true;
 	}
@@ -147,7 +146,7 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 	}
 
 	@Override
-	public void annotate(@NonNull final ISequences sequences, @NonNull IEvaluationState evaluationState, @NonNull final IAnnotatedSolution solution) {
+	public void annotate(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @NonNull final IAnnotatedSolution solution) {
 		if (solution != null) {
 			evaluation(sequences);
 			solution.setGeneralAnnotation(SchedulerConstants.AI_similarityDifferences, lastDifferences);
@@ -164,13 +163,14 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 		} else {
 			int cargoDifferences = 0;
 			int vesselDifferences = 0;
-			for (IResource resource : resources) {
-				ISequence sequence = sequences.getSequence(resource.getIndex());
+			for (final IResource resource : resources) {
+				assert resource != null;
+				final ISequence sequence = sequences.getSequence(resource);
 				ISequenceElement prev = null;
 				for (final ISequenceElement current : sequence) {
 					if (prev != null) {
 						if (getPortType(prev) == PortType.Load) {
-							Integer matchedDischarge = loadDischargeMap.get(prev.getIndex());
+							final Integer matchedDischarge = loadDischargeMap.get(prev.getIndex());
 							if (matchedDischarge == null && getPortType(current) == PortType.Discharge) {
 								cargoDifferences++;
 							} else if (matchedDischarge != current.getIndex()) {
@@ -194,10 +194,11 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 
 	/**
 	 * Calculate a weighted similarity curve, based on three points
+	 * 
 	 * @param diff
 	 * @return
 	 */
-	public int processDifferencesWithThreshold(int diff) {
+	public int processDifferencesWithThreshold(final int diff) {
 		int outOfBounds = 0;
 		int high = highRange;
 		int med = medRange;
@@ -216,13 +217,10 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 			low = diff;
 		}
 
-		return (outOfBounds * outOfBoundsWeight
-				+ high * highWeight
-				+ med * medWeight
-				+ low * lowWeight);
+		return (outOfBounds * outOfBoundsWeight + high * highWeight + med * medWeight + low * lowWeight);
 	}
 
-	public PortType getPortType(ISequenceElement element) {
+	public PortType getPortType(final ISequenceElement element) {
 		return portTypeProvider.getPortType(element);
 	}
 
