@@ -102,7 +102,7 @@ public class BreakdownOptimiserMover {
 	 * TODO: Instead of try depth in the recursive method parameter, check the changes list size. (last attempt got stuck in a recursive loop for some reason, but may have been other bugs rather than
 	 * directly from tryDepth == change.size().
 	 */
-	private final int TRY_DEPTH = 4;
+	private final int TRY_DEPTH = 3;
 
 	public Collection<JobState> search(@NonNull final ISequences currentSequences, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
 			@NonNull final List<ChangeSet> changeSets, final int tryDepth, final int moveType, final long[] currentMetrics, @NonNull final JobStore jobStore,
