@@ -201,9 +201,9 @@ public class BreakdownOptimiserMover {
 
 						cs.setMetric(MetricType.PNL, thisPNL, thisPNL - currentMetrics[MetricType.PNL.ordinal()], thisPNL - similarityState.baseMetrics[MetricType.PNL.ordinal()]);
 						cs.setMetric(MetricType.LATENESS, thisLateness, thisLateness - currentMetrics[MetricType.LATENESS.ordinal()],
-								thisLateness - similarityState.baseMetrics[MetricType.PNL.ordinal()]);
+								thisLateness - similarityState.baseMetrics[MetricType.LATENESS.ordinal()]);
 						cs.setMetric(MetricType.CAPACITY, thisCapacity, thisCapacity - currentMetrics[MetricType.CAPACITY.ordinal()],
-								thisCapacity - similarityState.baseMetrics[MetricType.PNL.ordinal()]);
+								thisCapacity - similarityState.baseMetrics[MetricType.CAPACITY.ordinal()]);
 
 						changes.clear();
 						changeSets.add(cs);
@@ -212,9 +212,9 @@ public class BreakdownOptimiserMover {
 
 						jobState.setMetric(MetricType.PNL, thisPNL, thisPNL - currentMetrics[MetricType.PNL.ordinal()], thisPNL - similarityState.baseMetrics[MetricType.PNL.ordinal()]);
 						jobState.setMetric(MetricType.LATENESS, thisLateness, thisLateness - currentMetrics[MetricType.LATENESS.ordinal()],
-								thisLateness - similarityState.baseMetrics[MetricType.PNL.ordinal()]);
+								thisLateness - similarityState.baseMetrics[MetricType.LATENESS.ordinal()]);
 						jobState.setMetric(MetricType.CAPACITY, thisCapacity, thisCapacity - currentMetrics[MetricType.CAPACITY.ordinal()],
-								thisCapacity - similarityState.baseMetrics[MetricType.PNL.ordinal()]);
+								thisCapacity - similarityState.baseMetrics[MetricType.CAPACITY.ordinal()]);
 
 						final int changesCount = changedElements.size();
 						if (changesCount == 0) {
