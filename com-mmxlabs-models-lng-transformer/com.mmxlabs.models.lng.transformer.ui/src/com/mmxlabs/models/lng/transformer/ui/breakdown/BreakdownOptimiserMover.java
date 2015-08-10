@@ -144,104 +144,106 @@ public class BreakdownOptimiserMover {
 					break;
 				}
 			}
-
 			if (!failedEvaluation) {
 
-				if (true) {
-					long thisUnusedCompulsarySlotCount = calculateUnusedCompulsarySlot(currentSequences);
-					if (thisUnusedCompulsarySlotCount > currentMetrics[MetricType.COMPULSARY_SLOT.ordinal()]) {
-						// THIS SOMEHOW CAUSES THE SEARCH TO FAIL?
-						failedEvaluation = true;
-					}
+				final long thisUnusedCompulsarySlotCount = calculateUnusedCompulsarySlot(currentSequences);
+				if (thisUnusedCompulsarySlotCount > currentMetrics[MetricType.COMPULSARY_SLOT.ordinal()]) {
+					failedEvaluation = true;
+				}
 
-					// TODO: Avoid lateness calcs
-					final IEvaluationState evaluationState = new EvaluationState();
-					for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
-						if (!evaluationProcess.evaluate(currentFullSequences, evaluationState)) {
-							failedEvaluation = true;
-							break;
-						}
-					}
+				if (!failedEvaluation) {
 
-					final ScheduledSequences ss = evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class);
-					assert ss != null;
+					if (true) {
 
-					final long thisLateness = calculateScheduleLateness(currentFullSequences, ss);
-					if (thisLateness > currentMetrics[MetricType.LATENESS.ordinal()]) {
-						failedEvaluation = true;
-					} else {
-						// currentLateness = thisLateness;
-					}
-
-					final long thisCapacity = calculateScheduleCapacity(currentFullSequences, ss);
-					if (thisCapacity > currentMetrics[MetricType.CAPACITY.ordinal()]) {
-						failedEvaluation = true;
-					} else {
-						// currentLateness = thisLateness;
-					}
-
-					// TODO: Also take into account removed slots - this should not generate a change set!
-
-					if (!failedEvaluation) {
-
+						// TODO: Avoid lateness calcs
+						final IEvaluationState evaluationState = new EvaluationState();
 						for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
-							// Do PNL bit
-							if (evaluationProcess instanceof SchedulerEvaluationProcess) {
-								final SchedulerEvaluationProcess schedulerEvaluationProcess = (SchedulerEvaluationProcess) evaluationProcess;
-								schedulerEvaluationProcess.doPNL(currentFullSequences, evaluationState);
+							if (!evaluationProcess.evaluate(currentFullSequences, evaluationState)) {
+								failedEvaluation = true;
+								break;
 							}
 						}
 
-						final long thisPNL = calculateSchedulePNL(currentFullSequences, ss);
+						final ScheduledSequences ss = evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class);
+						assert ss != null;
 
-						if (thisPNL <= currentMetrics[MetricType.PNL.ordinal()]) {
-							// failedEvaluation = true;
+						final long thisLateness = calculateScheduleLateness(currentFullSequences, ss);
+						if (thisLateness > currentMetrics[MetricType.LATENESS.ordinal()]) {
+							failedEvaluation = true;
 						} else {
-							// currentPNL = thisPNL;
-						}
-						// Convert change list set into a change set and record sate.
-						// TOOD: Get fitness change and only accept improving solutions. (similarity, similarity plus others etc)
-						final ChangeSet cs = new ChangeSet(changes);
-						//
-						// cs.pnlDelta = thisPNL - currentPNL;
-						// cs.latenessDelta = thisLateness - currentLateness;
-						//
-						// cs.pnlDeltaToBase = thisPNL - similarityState.basePNL;
-						// cs.latenessDeltaToBase = thisLateness - similarityState.baseLateness;
-
-						cs.setMetric(MetricType.PNL, thisPNL, thisPNL - currentMetrics[MetricType.PNL.ordinal()], thisPNL - similarityState.baseMetrics[MetricType.PNL.ordinal()]);
-						cs.setMetric(MetricType.LATENESS, thisLateness, thisLateness - currentMetrics[MetricType.LATENESS.ordinal()],
-								thisLateness - similarityState.baseMetrics[MetricType.LATENESS.ordinal()]);
-						cs.setMetric(MetricType.CAPACITY, thisCapacity, thisCapacity - currentMetrics[MetricType.CAPACITY.ordinal()],
-								thisCapacity - similarityState.baseMetrics[MetricType.CAPACITY.ordinal()]);
-						cs.setMetric(MetricType.COMPULSARY_SLOT, thisUnusedCompulsarySlotCount, thisUnusedCompulsarySlotCount - currentMetrics[MetricType.COMPULSARY_SLOT.ordinal()],
-								thisUnusedCompulsarySlotCount - similarityState.baseMetrics[MetricType.COMPULSARY_SLOT.ordinal()]);
-
-						changes.clear();
-						changeSets.add(cs);
-
-						final JobState jobState = new JobState(new Sequences(currentSequences), changeSets, new LinkedList<Change>());
-
-						jobState.setMetric(MetricType.PNL, thisPNL, thisPNL - currentMetrics[MetricType.PNL.ordinal()], thisPNL - similarityState.baseMetrics[MetricType.PNL.ordinal()]);
-						jobState.setMetric(MetricType.LATENESS, thisLateness, thisLateness - currentMetrics[MetricType.LATENESS.ordinal()],
-								thisLateness - similarityState.baseMetrics[MetricType.LATENESS.ordinal()]);
-						jobState.setMetric(MetricType.CAPACITY, thisCapacity, thisCapacity - currentMetrics[MetricType.CAPACITY.ordinal()],
-								thisCapacity - similarityState.baseMetrics[MetricType.CAPACITY.ordinal()]);
-						jobState.setMetric(MetricType.COMPULSARY_SLOT, thisUnusedCompulsarySlotCount, thisUnusedCompulsarySlotCount - currentMetrics[MetricType.COMPULSARY_SLOT.ordinal()],
-								thisUnusedCompulsarySlotCount - similarityState.baseMetrics[MetricType.COMPULSARY_SLOT.ordinal()]);
-
-						final int changesCount = changedElements.size();
-						if (changesCount == 0) {
-							jobState.mode = JobStateMode.LEAF;
+							// currentLateness = thisLateness;
 						}
 
-						// Found a usable state, we no longer need to store limited states.
-						jobStore.setFoundBranch();
+						final long thisCapacity = calculateScheduleCapacity(currentFullSequences, ss);
+						if (thisCapacity > currentMetrics[MetricType.CAPACITY.ordinal()]) {
+							failedEvaluation = true;
+						} else {
+							// currentLateness = thisLateness;
+						}
 
-						newStates.add(jobState);
+						// TODO: Also take into account removed slots - this should not generate a change set!
 
-						return newStates;
+						if (!failedEvaluation) {
 
+							for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
+								// Do PNL bit
+								if (evaluationProcess instanceof SchedulerEvaluationProcess) {
+									final SchedulerEvaluationProcess schedulerEvaluationProcess = (SchedulerEvaluationProcess) evaluationProcess;
+									schedulerEvaluationProcess.doPNL(currentFullSequences, evaluationState);
+								}
+							}
+
+							final long thisPNL = calculateSchedulePNL(currentFullSequences, ss);
+
+							if (thisPNL <= currentMetrics[MetricType.PNL.ordinal()]) {
+								// failedEvaluation = true;
+							} else {
+								// currentPNL = thisPNL;
+							}
+							// Convert change list set into a change set and record sate.
+							// TOOD: Get fitness change and only accept improving solutions. (similarity, similarity plus others etc)
+							final ChangeSet cs = new ChangeSet(changes);
+							//
+							// cs.pnlDelta = thisPNL - currentPNL;
+							// cs.latenessDelta = thisLateness - currentLateness;
+							//
+							// cs.pnlDeltaToBase = thisPNL - similarityState.basePNL;
+							// cs.latenessDeltaToBase = thisLateness - similarityState.baseLateness;
+
+							cs.setMetric(MetricType.PNL, thisPNL, thisPNL - currentMetrics[MetricType.PNL.ordinal()], thisPNL - similarityState.baseMetrics[MetricType.PNL.ordinal()]);
+							cs.setMetric(MetricType.LATENESS, thisLateness, thisLateness - currentMetrics[MetricType.LATENESS.ordinal()],
+									thisLateness - similarityState.baseMetrics[MetricType.LATENESS.ordinal()]);
+							cs.setMetric(MetricType.CAPACITY, thisCapacity, thisCapacity - currentMetrics[MetricType.CAPACITY.ordinal()],
+									thisCapacity - similarityState.baseMetrics[MetricType.CAPACITY.ordinal()]);
+							cs.setMetric(MetricType.COMPULSARY_SLOT, thisUnusedCompulsarySlotCount, thisUnusedCompulsarySlotCount - currentMetrics[MetricType.COMPULSARY_SLOT.ordinal()],
+									thisUnusedCompulsarySlotCount - similarityState.baseMetrics[MetricType.COMPULSARY_SLOT.ordinal()]);
+
+							changes.clear();
+							changeSets.add(cs);
+
+							final JobState jobState = new JobState(new Sequences(currentSequences), changeSets, new LinkedList<Change>());
+
+							jobState.setMetric(MetricType.PNL, thisPNL, thisPNL - currentMetrics[MetricType.PNL.ordinal()], thisPNL - similarityState.baseMetrics[MetricType.PNL.ordinal()]);
+							jobState.setMetric(MetricType.LATENESS, thisLateness, thisLateness - currentMetrics[MetricType.LATENESS.ordinal()],
+									thisLateness - similarityState.baseMetrics[MetricType.LATENESS.ordinal()]);
+							jobState.setMetric(MetricType.CAPACITY, thisCapacity, thisCapacity - currentMetrics[MetricType.CAPACITY.ordinal()],
+									thisCapacity - similarityState.baseMetrics[MetricType.CAPACITY.ordinal()]);
+							jobState.setMetric(MetricType.COMPULSARY_SLOT, thisUnusedCompulsarySlotCount, thisUnusedCompulsarySlotCount - currentMetrics[MetricType.COMPULSARY_SLOT.ordinal()],
+									thisUnusedCompulsarySlotCount - similarityState.baseMetrics[MetricType.COMPULSARY_SLOT.ordinal()]);
+
+							final int changesCount = changedElements.size();
+							if (changesCount == 0) {
+								jobState.mode = JobStateMode.LEAF;
+							}
+
+							// Found a usable state, we no longer need to store limited states.
+							jobStore.setFoundBranch();
+
+							newStates.add(jobState);
+
+							return newStates;
+
+						}
 					}
 				}
 			}
@@ -528,8 +530,8 @@ public class BreakdownOptimiserMover {
 				if (similarityState.getResourceForElement(element) != null) {
 					// This is an unused element which should be in the final solution.
 					// different = true;
-					newStates.addAll(
-							insertUnusedElementsIntoSequence(currentSequences, similarityState, changes, changeSets, tryDepth, element, currentMetrics, unusedElements, jobStore, targetElements));
+					newStates.addAll(insertUnusedElementsIntoSequence(currentSequences, similarityState, stateManager, changes, changeSets, tryDepth, element, currentMetrics, unusedElements, jobStore,
+							targetElements));
 				}
 				// prev = current;
 				// prevIdx = currIdx;
@@ -942,31 +944,103 @@ public class BreakdownOptimiserMover {
 		}
 	}
 
-	private Collection<JobState> insertUnusedElementsIntoSequence(@NonNull final ISequences currentSequences, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
-			@NonNull final List<ChangeSet> changeSets, final int tryDepth, @NonNull final ISequenceElement element, final long[] currentMetrics, final Collection<ISequenceElement> unusedElements,
-			@NonNull final JobStore jobStore, @Nullable final List<ISequenceElement> targetElements) {
+	private Collection<JobState> insertUnusedElementsIntoSequence(@NonNull final ISequences currentSequences, @NonNull final SimilarityState similarityState, @NonNull final StateManager stateManager,
+			@NonNull final List<Change> changes, @NonNull final List<ChangeSet> changeSets, final int tryDepth, @NonNull final ISequenceElement element, final long[] currentMetrics,
+			final Collection<ISequenceElement> unusedElements, @NonNull final JobStore jobStore, @Nullable final List<ISequenceElement> targetElements) {
 		if (portTypeProvider.getPortType(element) == PortType.Load) {
 			final Integer otherDischargeIdx = similarityState.getDischargeForLoad(element);
 			final ISequenceElement discharge = similarityState.getElementForIndex(otherDischargeIdx);
-			// as moving as a pair, remove discharge from unusedElements queue that we're looping through
-			unusedElements.remove(discharge);
-			// move as pair
+
 			if (currentSequences.getUnusedElements().contains(discharge)) {
+				// as moving as a pair, remove discharge from unusedElements queue that we're looping through
+				unusedElements.remove(discharge);
 				final IResource resource = similarityState.getResourceForElement(element);
+				// move as pair
 				return insertUnusedCargoIntoSequence(currentSequences, similarityState, changes, changeSets, tryDepth, resource, element, discharge, currentMetrics, jobStore, targetElements);
+			} else {
+
+				final Pair<IResource, Integer> p = stateManager.getPositionForElement(discharge);
+
+				// step (2) remove both slots
+				// FIXME: Currently just unpair both slots and remove from solution
+				final IModifiableSequences copy = new ModifiableSequences(currentSequences);
+				final IModifiableSequence currentSequence = copy.getModifiableSequence(p.getFirst());
+
+				for (int i = 0; i < currentSequence.size(); ++i) {
+					final ISequenceElement e = currentSequence.get(i);
+					if (e == discharge) {
+						final ISequenceElement load = currentSequence.get(i - 1);
+						copy.getModifiableUnusedElements().add(load);
+						copy.getModifiableUnusedElements().add(discharge);
+
+						currentSequence.remove(load);
+						currentSequence.remove(discharge);
+
+						final List<ISequenceElement> searchElements = targetElements == null ? new LinkedList<ISequenceElement>() : new LinkedList<>(targetElements);
+						// Tell next level to focus on the load
+						if (!searchElements.contains(load)) {
+							searchElements.add(load);
+						}
+						if (!searchElements.contains(discharge)) {
+							searchElements.add(discharge);
+						}
+
+						final int depth = getNextDepth(tryDepth);
+						final List<Change> changes2 = new ArrayList<>(changes);
+						changes2.add(new Change(String.format("Remove %s and %s\n", load.getName(), discharge.getName())));
+
+						return search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_CARGO_REMOVE, currentMetrics, jobStore, searchElements);
+					}
+				}
+
+				// Discharge already used, give up on current search and clear hints
+				return search(currentSequences, similarityState, new LinkedList<>(changes), new LinkedList<>(changeSets), getNextDepth(tryDepth), 0, currentMetrics, jobStore, null);
 			}
 		} else if (portTypeProvider.getPortType(element) == PortType.Discharge) {
 			final Integer otherLoadIdx = similarityState.getLoadForDischarge(element);
 			// If we get here, the load is also unused
 			final ISequenceElement load = similarityState.getElementForIndex(otherLoadIdx);
-			// as moving as a pair, remove discharge from unusedElements queue that we're looping through
-			unusedElements.remove(load);
-			// move as a pair
 			if (currentSequences.getUnusedElements().contains(load)) {
+				// as moving as a pair, remove load from unusedElements queue that we're looping through
+				unusedElements.remove(load);
 				final IResource resource = similarityState.getResourceForElement(element);
+				// move as a pair
 				return insertUnusedCargoIntoSequence(currentSequences, similarityState, changes, changeSets, tryDepth, resource, load, element, currentMetrics, jobStore, targetElements);
 			} else {
-				// Load already exists
+				final Pair<IResource, Integer> p = stateManager.getPositionForElement(load);
+
+				// step (2) remove both slots
+				// FIXME: Currently just unpair both slots and remove from solution
+				final IModifiableSequences copy = new ModifiableSequences(currentSequences);
+				final IModifiableSequence currentSequence = copy.getModifiableSequence(p.getFirst());
+
+				for (int i = 0; i < currentSequence.size(); ++i) {
+					final ISequenceElement e = currentSequence.get(i);
+					if (e == load) {
+						copy.getModifiableUnusedElements().add(currentSequence.remove(i));
+						final ISequenceElement discharge = currentSequence.remove(i + 1);
+						assert discharge != null;
+						copy.getModifiableUnusedElements().add(discharge);
+
+						final List<ISequenceElement> searchElements = targetElements == null ? new LinkedList<ISequenceElement>() : new LinkedList<>(targetElements);
+						// Tell next level to focus on the load
+						if (!searchElements.contains(load)) {
+							searchElements.add(load);
+						}
+						if (!searchElements.contains(discharge)) {
+							searchElements.add(discharge);
+						}
+
+						final int depth = getNextDepth(tryDepth);
+						final List<Change> changes2 = new ArrayList<>(changes);
+						changes2.add(new Change(String.format("Remove %s and %s\n", load.getName(), discharge.getName())));
+
+						return search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_CARGO_REMOVE, currentMetrics, jobStore, searchElements);
+					}
+				}
+
+				// // Load already used, give up on current search and clear hints
+				// return search(currentSequences, similarityState, new LinkedList<>(changes), new LinkedList<>(changeSets), getNextDepth(tryDepth), 0, currentMetrics, jobStore, null);
 			}
 		} else {
 			// assume vessel event?
@@ -1015,7 +1089,7 @@ public class BreakdownOptimiserMover {
 		return sumPNL;
 	}
 
-	public long calculateUnusedCompulsarySlot(ISequences rawSequences) {
+	public long calculateUnusedCompulsarySlot(final ISequences rawSequences) {
 
 		int thisUnusedCompulsarySlotCount = 0;
 		for (final ISequenceElement e : rawSequences.getUnusedElements()) {
