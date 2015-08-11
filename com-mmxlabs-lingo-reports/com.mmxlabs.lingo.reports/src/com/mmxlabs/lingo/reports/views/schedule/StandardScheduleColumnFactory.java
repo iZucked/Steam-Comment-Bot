@@ -347,7 +347,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Permutation", null, ColumnType.DIFF, new PermutationDescriptionFormatter());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation_group":
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Permutation Group", null, ColumnType.DIFF, new PermutationGroupFormatter());
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Δ Set", null, ColumnType.DIFF, new PermutationGroupFormatter());
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation_group_pnldelta":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "P&L Delta", null, ColumnType.DIFF, new PNLDeltaFormatter());
