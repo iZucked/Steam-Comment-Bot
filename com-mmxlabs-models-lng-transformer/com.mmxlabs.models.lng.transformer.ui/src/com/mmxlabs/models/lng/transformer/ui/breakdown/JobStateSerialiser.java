@@ -7,9 +7,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -57,20 +59,27 @@ public final class JobStateSerialiser {
 		// Could be null if this object has been saved twice to the same object stream. Second loading of the object will have already had the rawSequences recreated and the persistedSequences array
 		// nulled out.
 		if (persistedSequences != null) {
+			Set<ISequenceElement> seenElements = new HashSet<>();
+
 			final IModifiableSequences sequences = new ModifiableSequences(data.getResources());
 			for (int i = 0; i < persistedSequences.length; ++i) {
 				final IModifiableSequence s = sequences.getModifiableSequence(i);
 				for (int j = 0; j < persistedSequences[i].length; ++j) {
-					s.add(elementCache.get(persistedSequences[i][j]));
+					ISequenceElement element = elementCache.get(persistedSequences[i][j]);
+					s.add(element);
+					assert(seenElements.add(element));
 				}
 			}
-
 			for (int i = 0; i < obj.persistedUnusedElements.length; ++i) {
-				sequences.getModifiableUnusedElements().add(elementCache.get(obj.persistedUnusedElements[i]));
+				int idx = obj.persistedUnusedElements[i];
+				ISequenceElement e = elementCache.get(idx);
+				sequences.getModifiableUnusedElements().add(e);
+				assert(seenElements.add(e));
 			}
 
 			obj.rawSequences = sequences;
 			obj.persistedSequences = null;
+			obj.persistedUnusedElements = null;
 		}
 	}
 
