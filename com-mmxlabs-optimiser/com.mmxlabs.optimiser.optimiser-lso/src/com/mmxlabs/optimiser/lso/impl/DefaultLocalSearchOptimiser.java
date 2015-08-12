@@ -10,6 +10,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -54,6 +55,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 	@Named(LSOLoggingConstants.LSO_LOGGER)
 	private LSOLogger loggingDataStore;
 
+	private Pair<Integer, Long> best = new Pair<>(0,0L);
 	@Override
 	public IAnnotatedSolution start(@NonNull final IOptimisationContext optimiserContext) {
 		setCurrentContext(optimiserContext);
@@ -208,6 +210,11 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 				getMoveGenerator().setSequences(pinnedPotentialRawSequences);
 
 				++numberOfMovesAccepted;
+				if (getFitnessEvaluator().getBestFitness() < best.getSecond()) {
+					best.setFirst(numberOfMovesTried);
+					best.setSecond(getFitnessEvaluator().getBestFitness());
+					System.out.println(best.getFirst()+":"+best.getSecond());
+				}
 			} else {
 				// Failed, reset state for old sequences
 				++numberOfRejectedMoves;
