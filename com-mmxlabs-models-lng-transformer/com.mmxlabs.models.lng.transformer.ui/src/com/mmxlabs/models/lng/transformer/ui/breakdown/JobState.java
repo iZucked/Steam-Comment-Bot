@@ -19,8 +19,9 @@ import com.mmxlabs.optimiser.core.ISequences;
  * @author sg
  *
  */
-public class JobState implements Serializable {
-	public transient ISequences rawSequences;
+public class JobState implements Serializable{
+	protected transient ISequences rawSequences = null;
+	protected transient ISequences fullSequences = null;
 	public int[][] persistedSequences;
 	public int[] persistedUnusedElements;
 
@@ -36,7 +37,9 @@ public class JobState implements Serializable {
 
 	public JobStateMode mode = JobStateMode.BRANCH;
 
-	public JobState(final ISequences rawSequences, final List<ChangeSet> changeSets, final List<Change> changes) {
+	private List<Difference> differencesList = null;
+	
+	public JobState(final ISequences rawSequences, final List<ChangeSet> changeSets, final List<Change> changes, final List<Difference> differencesList) {
 		this.rawSequences = rawSequences;
 
 		this.changesAsList = Collections.unmodifiableList(new ArrayList<>(changes));
@@ -44,7 +47,12 @@ public class JobState implements Serializable {
 		this.changeSetsAsList = Collections.unmodifiableList(new ArrayList<>(changeSets));
 		this.changeSetsAsSet = Collections.unmodifiableSet(new HashSet<>(changeSets));
 		this.hashCode = Objects.hashCode(changes, changeSets);
+		this.differencesList = differencesList;
 	}
+
+	public JobState(final ISequences rawSequences, final List<ChangeSet> changeSets, final List<Change> changes) {
+					this(rawSequences, changeSets, changes, null);
+			 	}
 
 	public void setMetric(MetricType metricType, long value, long delta, long deltaToBase) {
 		int idx = metricType.ordinal();
@@ -93,6 +101,22 @@ public class JobState implements Serializable {
 
 		// Do nothing with the raw sequence as we do not have the information here to generate it from the int array.
 		// @see JobStateSerialiser
+	}
+
+	public ISequences getRawSequences() {
+		return rawSequences;
+	}
+
+	public void setRawSequences(ISequences rawSequences) {
+		this.rawSequences = rawSequences;
+	}
+
+	public ISequences getFullSequences() {
+		return fullSequences;
+	}
+
+	public void setFullSequences(ISequences fullSequences) {
+		this.fullSequences = fullSequences;
 	}
 
 	// private void readObjectNoData() throws ObjectStreamException;

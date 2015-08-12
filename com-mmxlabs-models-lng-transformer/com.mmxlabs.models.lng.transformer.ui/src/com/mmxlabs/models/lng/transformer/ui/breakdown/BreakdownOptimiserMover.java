@@ -96,7 +96,7 @@ public class BreakdownOptimiserMover {
 
 	/**
 	 * The size of the change sets. This is really n+1 changesets as 0 is also valid. Additionally note the first changeset can be +1 again due to the way we create the initial change set size.
-	 *
+	 * 
 	 * TODO: Instead of try depth in the recursive method parameter, check the changes list size. (last attempt got stuck in a recursive loop for some reason, but may have been other bugs rather than
 	 * directly from tryDepth == change.size().
 	 */
@@ -186,7 +186,7 @@ public class BreakdownOptimiserMover {
 								// Do PNL bit
 								if (evaluationProcess instanceof SchedulerEvaluationProcess) {
 									final SchedulerEvaluationProcess schedulerEvaluationProcess = (SchedulerEvaluationProcess) evaluationProcess;
-									schedulerEvaluationProcess.doPNL(currentFullSequences, evaluationState);
+//									schedulerEvaluationProcess.doPNL(currentFullSequences, evaluationState);
 								}
 							}
 
@@ -202,23 +202,23 @@ public class BreakdownOptimiserMover {
 							final ChangeSet cs = new ChangeSet(changes);
 
 							cs.setMetric(MetricType.PNL, thisPNL, thisPNL - currentMetrics[MetricType.PNL.ordinal()], thisPNL - similarityState.baseMetrics[MetricType.PNL.ordinal()]);
-							cs.setMetric(MetricType.LATENESS, thisLateness, thisLateness - currentMetrics[MetricType.LATENESS.ordinal()],
-									thisLateness - similarityState.baseMetrics[MetricType.LATENESS.ordinal()]);
-							cs.setMetric(MetricType.CAPACITY, thisCapacity, thisCapacity - currentMetrics[MetricType.CAPACITY.ordinal()],
-									thisCapacity - similarityState.baseMetrics[MetricType.CAPACITY.ordinal()]);
+							cs.setMetric(MetricType.LATENESS, thisLateness, thisLateness - currentMetrics[MetricType.LATENESS.ordinal()], thisLateness
+									- similarityState.baseMetrics[MetricType.LATENESS.ordinal()]);
+							cs.setMetric(MetricType.CAPACITY, thisCapacity, thisCapacity - currentMetrics[MetricType.CAPACITY.ordinal()], thisCapacity
+									- similarityState.baseMetrics[MetricType.CAPACITY.ordinal()]);
 							cs.setMetric(MetricType.COMPULSARY_SLOT, thisUnusedCompulsarySlotCount, thisUnusedCompulsarySlotCount - currentMetrics[MetricType.COMPULSARY_SLOT.ordinal()],
 									thisUnusedCompulsarySlotCount - similarityState.baseMetrics[MetricType.COMPULSARY_SLOT.ordinal()]);
-
+							cs.setRawSequences(currentSequences);
 							changes.clear();
 							changeSets.add(cs);
 
 							final JobState jobState = new JobState(new Sequences(currentSequences), changeSets, new LinkedList<Change>());
 
 							jobState.setMetric(MetricType.PNL, thisPNL, thisPNL - currentMetrics[MetricType.PNL.ordinal()], thisPNL - similarityState.baseMetrics[MetricType.PNL.ordinal()]);
-							jobState.setMetric(MetricType.LATENESS, thisLateness, thisLateness - currentMetrics[MetricType.LATENESS.ordinal()],
-									thisLateness - similarityState.baseMetrics[MetricType.LATENESS.ordinal()]);
-							jobState.setMetric(MetricType.CAPACITY, thisCapacity, thisCapacity - currentMetrics[MetricType.CAPACITY.ordinal()],
-									thisCapacity - similarityState.baseMetrics[MetricType.CAPACITY.ordinal()]);
+							jobState.setMetric(MetricType.LATENESS, thisLateness, thisLateness - currentMetrics[MetricType.LATENESS.ordinal()], thisLateness
+									- similarityState.baseMetrics[MetricType.LATENESS.ordinal()]);
+							jobState.setMetric(MetricType.CAPACITY, thisCapacity, thisCapacity - currentMetrics[MetricType.CAPACITY.ordinal()], thisCapacity
+									- similarityState.baseMetrics[MetricType.CAPACITY.ordinal()]);
 							jobState.setMetric(MetricType.COMPULSARY_SLOT, thisUnusedCompulsarySlotCount, thisUnusedCompulsarySlotCount - currentMetrics[MetricType.COMPULSARY_SLOT.ordinal()],
 									thisUnusedCompulsarySlotCount - similarityState.baseMetrics[MetricType.COMPULSARY_SLOT.ordinal()]);
 
@@ -341,8 +341,8 @@ public class BreakdownOptimiserMover {
 								changes2.add(new Change(String.format("Remove discharge %s (unused in target solution) and insert discharge %s (unused in base solution)\n", current.getName(),
 										matchedDischargeElement.getName())));
 
-								newStates.addAll(
-										search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_UNUSED_DISCHARGE_SWAPPED, currentMetrics, jobStore, targetElements));
+								newStates.addAll(search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_UNUSED_DISCHARGE_SWAPPED, currentMetrics, jobStore,
+										targetElements));
 							} else {
 								// step (2) remove both slots
 								// Currently just unpair both slots and remove from solution
@@ -380,8 +380,8 @@ public class BreakdownOptimiserMover {
 								copy.getModifiableUnusedElements().add(prev);
 								final int depth = getNextDepth(tryDepth);
 								final List<Change> changes2 = new ArrayList<>(changes);
-								changes2.add(new Change(
-										String.format("Remove load %s (unused in target solution) and insert load %s (unused in base solution)\n", prev.getName(), matchedLoadElement.getName())));
+								changes2.add(new Change(String.format("Remove load %s (unused in target solution) and insert load %s (unused in base solution)\n", prev.getName(),
+										matchedLoadElement.getName())));
 
 								newStates.addAll(search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_UNUSED_LOAD_SWAPPED, currentMetrics, jobStore, targetElements));
 							} else {
@@ -422,8 +422,8 @@ public class BreakdownOptimiserMover {
 											final int ii = 0;
 										} else {
 											// TODO: Remember DES purchases do not move
-											newStates.addAll(
-													swapLoad(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, currentMetrics, jobStore, targetElements));
+											newStates.addAll(swapLoad(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, currentMetrics, jobStore,
+													targetElements));
 										}
 									}
 									// Case 2: Keep the load and swap in the original discharge
@@ -433,8 +433,8 @@ public class BreakdownOptimiserMover {
 											final int ii = 0;
 										} else {
 											// TODO: Remember FOB Sales do not move
-											newStates.addAll(
-													swapDischarge(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, currentMetrics, jobStore, targetElements));
+											newStates.addAll(swapDischarge(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, currentMetrics, jobStore,
+													targetElements));
 										}
 									}
 								} else {
@@ -500,8 +500,8 @@ public class BreakdownOptimiserMover {
 				if (similarityState.getResourceForElement(element) != null) {
 					// This is an unused element which should be in the final solution.
 					// different = true;
-					newStates.addAll(insertUnusedElementsIntoSequence(currentSequences, similarityState, stateManager, changes, changeSets, tryDepth, element, currentMetrics, unusedElements, jobStore,
-							targetElements));
+					newStates.addAll(insertUnusedElementsIntoSequence(currentSequences, similarityState, stateManager, changes, changeSets, tryDepth, element, currentMetrics, unusedElements,
+							jobStore, targetElements));
 				}
 			}
 		}
@@ -886,8 +886,8 @@ public class BreakdownOptimiserMover {
 				changes2.add(new Change(String.format("Remove load %s (unused in target solution) and insert load %s (unused in base solution)\n", current.getName(), matchedElement.getName())));
 				moveType = MOVE_TYPE_UNUSED_LOAD_SWAPPED;
 			} else {
-				changes2.add(
-						new Change(String.format("Remove discharge %s (unused in target solution) and insert discharge %s (unused in base solution)\n", current.getName(), matchedElement.getName())));
+				changes2.add(new Change(String.format("Remove discharge %s (unused in target solution) and insert discharge %s (unused in base solution)\n", current.getName(),
+						matchedElement.getName())));
 				moveType = MOVE_TYPE_UNUSED_DISCHARGE_SWAPPED;
 			}
 			return search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, moveType, currentMetrics, jobStore, targetElements);
@@ -1168,6 +1168,20 @@ public class BreakdownOptimiserMover {
 			}
 		}
 		return changedElements;
+	}
+
+	public IEvaluationState evaluateSequence(IModifiableSequences currentFullSequences) {
+		IEvaluationState evaluationState = new EvaluationState();
+		for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
+			if (!evaluationProcess.evaluate(currentFullSequences, evaluationState)) {
+				break;
+			}
+		}
+
+		final ScheduledSequences ss = evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class);
+		assert ss != null;
+		calculateSchedulePNL(currentFullSequences, ss);
+		return evaluationState;
 	}
 
 }

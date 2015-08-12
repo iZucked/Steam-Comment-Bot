@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.transformer.ui;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.EnumMap;
 import java.util.List;
 
@@ -26,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -46,8 +48,11 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IOptimiser;
 import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
+import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
+import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService.ModuleType;
 
@@ -306,6 +311,10 @@ public class LNGScenarioRunner {
 			if (false) {
 				BreadthOptimiser instance = injector.getInstance(BreadthOptimiser.class);
 				instance.optimise(optimiser.getBestRawSequencecs());
+				List<Pair<ISequences, IEvaluationState>> breakdownSolution = instance.getBestSolution();
+				if (breakdownSolution != null) {
+					storeBreakdownSolutionsAsForks(breakdownSolution);
+				}
 			}
 			// export final state
 			LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
@@ -434,5 +443,39 @@ public class LNGScenarioRunner {
 			}
 		}
 		return optimiserSettings;
+	}
+
+	private void storeBreakdownSolutionsAsForks(List<Pair<ISequences, IEvaluationState>> breakdownSolution) {
+		int changeSetIdx = 0;
+		for (Pair<ISequences, IEvaluationState> changeSet : breakdownSolution) {
+			LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
+			finalSchedule = LNGSchedulerJobUtils.exportSolution(injector, optimiserScenario, transformer.getOptimiserSettings(), optimiserEditingDomain, modelEntityMap, optimiser.getFitnessEvaluator().createAnnotatedSolution(context, changeSet.getFirst(), changeSet.getSecond()),
+					100);
+			Schedule periodSchedule = exportPeriodScenario(100);
+			if (periodSchedule != null) {
+				finalSchedule = periodSchedule;
+			}
+			
+			 try {
+			 IScenarioService scenarioService = scenarioInstance.getScenarioService();
+	
+			 ScenarioInstance dup = scenarioService.insert(scenarioInstance, EcoreUtil.copy(originalScenario));
+			 dup.setName(String.format("changeSet-%s",(++changeSetIdx)));
+			
+			 // Copy across various bits of information
+			 dup.getMetadata().setContentType(scenarioInstance.getMetadata().getContentType());
+			 dup.getMetadata().setCreated(scenarioInstance.getMetadata().getCreated());
+			 dup.getMetadata().setLastModified(new Date());
+			
+			 // Copy version context information
+			 dup.setVersionContext(scenarioInstance.getVersionContext());
+			 dup.setScenarioVersion(scenarioInstance.getScenarioVersion());
+			
+			 dup.setClientVersionContext(scenarioInstance.getClientVersionContext());
+			 dup.setClientScenarioVersion(scenarioInstance.getClientScenarioVersion());
+			 } catch (Exception e) {
+			 e.printStackTrace();
+			 }
+		}
 	}
 }
