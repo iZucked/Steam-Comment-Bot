@@ -294,4 +294,20 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 	public ISequences getBestRawSequences() {
 		return bestRawSequences;
 	}
+	
+	public IAnnotatedSolution createAnnotatedSolution(final IOptimisationContext context, ISequences sequences, IEvaluationState evaluationState) {
+		Pair<ISequences, IEvaluationState> p = getCurrentSequences();
+		if (p == null) {
+			return null;
+		}
+		assert sequences != null;
+		assert evaluationState != null;
+
+		final IAnnotatedSolution result = fitnessHelper.buildAnnotatedSolution(context, sequences, evaluationState, getFitnessComponents(), getEvaluationProcesses());
+
+		result.setGeneralAnnotation(OptimiserConstants.G_AI_fitnessComponents, new HashMap<String, Long>(currentFitnesses));
+
+		return result;
+	}
+
 }
