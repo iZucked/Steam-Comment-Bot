@@ -126,6 +126,8 @@ public interface IFitnessEvaluator {
 	@Nullable
 	IAnnotatedSolution getCurrentAnnotatedSolution(@NonNull final IOptimisationContext context);
 	
+	public IAnnotatedSolution createAnnotatedSolution(final IOptimisationContext context, ISequences sequences, IEvaluationState evaluationState);
+
 	void step();
 
         ISequences getBestRawSequences();
