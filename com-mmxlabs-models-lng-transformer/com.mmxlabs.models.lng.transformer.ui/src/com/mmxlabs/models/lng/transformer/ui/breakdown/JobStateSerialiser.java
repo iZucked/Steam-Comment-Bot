@@ -67,19 +67,24 @@ public final class JobStateSerialiser {
 				for (int j = 0; j < persistedSequences[i].length; ++j) {
 					ISequenceElement element = elementCache.get(persistedSequences[i][j]);
 					s.add(element);
-					assert(seenElements.add(element));
+					assert (seenElements.add(element));
 				}
 			}
 			for (int i = 0; i < obj.persistedUnusedElements.length; ++i) {
 				int idx = obj.persistedUnusedElements[i];
 				ISequenceElement e = elementCache.get(idx);
 				sequences.getModifiableUnusedElements().add(e);
-				assert(seenElements.add(e));
+				assert (seenElements.add(e));
 			}
 
 			obj.rawSequences = sequences;
 			obj.persistedSequences = null;
 			obj.persistedUnusedElements = null;
+
+			for (ChangeSet cs : obj.changeSetsAsList) {
+				ChangeSet.fixStates(data, elementCache, cs);
+			}
+
 		}
 	}
 

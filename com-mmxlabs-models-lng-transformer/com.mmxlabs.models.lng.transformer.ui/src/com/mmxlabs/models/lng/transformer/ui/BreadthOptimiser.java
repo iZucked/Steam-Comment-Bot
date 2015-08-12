@@ -25,6 +25,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.BreakdownOptimiserMover;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.Change;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.ChangeSet;
@@ -113,6 +114,8 @@ public class BreadthOptimiser {
 	@Inject
 	@NonNull
 	private BreakdownOptimiserMover breakdownOptimiserMover;
+
+	private List<List<Pair<ISequences, IEvaluationState>>> bestSolutions = new LinkedList<>();
 
 	/**
 	 * Main entry point, taking a target state, optimised over the injected initial state (from the optimiser context). Generate (in c:\temp\1 -- remember to make the dir!) various instructions for
@@ -216,13 +219,15 @@ public class BreadthOptimiser {
 			for (final JobState jobState : sortedChangeStates) {
 				if (jobState.mode == JobStateMode.LEAF) {
 					// TODO: Change this method to generate more useful file names e.g. include sort index
-					evaluateLeaf(similarityState, jobState.changesAsList, jobState.changeSetsAsList, new ModifiableSequences(jobState.rawSequences));
+					evaluateLeaf(similarityState, jobState.changesAsList, jobState.changeSetsAsList, new ModifiableSequences(jobState.getRawSequences()));
 					// Save top 20 results
 					if (++i >= 5) {
 						// break;
 					}
 				}
 			}
+			
+			processAndStoreBreakdownSolution(sortedChangeStates.get(0));
 
 		} catch (final InterruptedException e) {
 			e.printStackTrace();
@@ -502,6 +507,25 @@ public class BreadthOptimiser {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
+	}
+
+	private void processAndStoreBreakdownSolution(JobState solution) {
+		List<Pair<ISequences, IEvaluationState>> processedSolution = new LinkedList<Pair<ISequences, IEvaluationState>>();
+
+		for (ChangeSet cs : solution.changeSetsAsList) {
+			final IModifiableSequences currentFullSequences = new ModifiableSequences(cs.getRawSequences());
+			sequencesManipulator.manipulate(currentFullSequences);
+			processedSolution.add(new Pair<ISequences, IEvaluationState>(currentFullSequences, breakdownOptimiserMover.evaluateSequence(currentFullSequences)));
+		}
+		bestSolutions.add(processedSolution);
+	}
+	
+	public List<Pair<ISequences, IEvaluationState>> getBestSolution() {
+		if (bestSolutions.size() > 0) {
+			return bestSolutions.get(0);
+		} else {
+			return null;
 		}
 	}
 
