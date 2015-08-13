@@ -316,7 +316,7 @@ public class ChangeSetView implements IAdaptable {
 						}
 						delta = (int) Math.round((double) delta / 1000.0);
 						if (delta != 0) {
-							cell.setText(String.format("%s %,dK", delta < 0 ? "↓" : "↑", delta));
+							cell.setText(String.format("%s %,dK", delta < 0 ? "↓" : "↑", Math.abs(delta)));
 						}
 					} else {
 						double delta = 0;
@@ -327,7 +327,7 @@ public class ChangeSetView implements IAdaptable {
 							delta += t.doubleValue();
 						}
 						if (delta != 0) {
-							cell.setText(String.format("%s %,.2f", delta < 0 ? "↓" : "↑", delta));
+							cell.setText(String.format("%s %,.2f", delta < 0 ? "↓" : "↑", Math.abs(delta)));
 						}
 					}
 				}
@@ -374,7 +374,7 @@ public class ChangeSetView implements IAdaptable {
 					}
 					delta = (int) Math.round((double) delta / 1000.0);
 					if (delta != 0) {
-						cell.setText(String.format("%s %,dK", delta < 0 ? "↓" : "↑", delta));
+						cell.setText(String.format("%s %,dK", delta < 0 ? "↓" : "↑", Math.abs(delta)));
 					}
 
 				}
@@ -452,7 +452,7 @@ public class ChangeSetView implements IAdaptable {
 					}
 					delta = (int) Math.round((double) delta / 1000.0);
 					if (delta != 0) {
-						cell.setText(String.format("%s %,dK", delta < 0 ? "↓" : "↑", delta));
+						cell.setText(String.format("%s %,dK", delta < 0 ? "↓" : "↑", Math.abs(delta)));
 					}
 
 				}
@@ -504,7 +504,7 @@ public class ChangeSetView implements IAdaptable {
 					}
 					delta = (int) Math.round((double) delta / 1000.0);
 					if (delta != 0) {
-						cell.setText(String.format("%s %,dK", delta < 0 ? "↓" : "↑", delta));
+						cell.setText(String.format("%s %,dK", delta < 0 ? "↓" : "↑", Math.abs(delta)));
 					}
 
 				}
