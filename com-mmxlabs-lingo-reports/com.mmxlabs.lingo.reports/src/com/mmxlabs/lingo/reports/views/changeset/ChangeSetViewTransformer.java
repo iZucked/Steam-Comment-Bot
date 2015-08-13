@@ -101,7 +101,7 @@ public class ChangeSetViewTransformer {
 		try
 
 		{
-			monitor.beginTask("Analysing Solutions", stages.size());
+			monitor.beginTask("Analysing changes", stages.size());
 			ScenarioInstance prev = base;
 			for (final ScenarioInstance current : stages) {
 
@@ -625,7 +625,7 @@ public class ChangeSetViewTransformer {
 
 				if (vc.getOriginalVessel() != null && !getName(vc.getOriginalVessel()).equals(getName(vc.getNewVessel()))) {
 
-					 rows.add(row);
+					rows.add(row);
 				}
 
 			}

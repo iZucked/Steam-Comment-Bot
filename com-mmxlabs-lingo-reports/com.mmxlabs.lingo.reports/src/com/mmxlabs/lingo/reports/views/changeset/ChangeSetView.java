@@ -1,5 +1,6 @@
 package com.mmxlabs.lingo.reports.views.changeset;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -11,12 +12,15 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
@@ -35,8 +39,11 @@ import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 
+import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.lingo.reports.diff.utils.ScheduleCostUtils;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
@@ -89,7 +96,7 @@ public class ChangeSetView implements IAdaptable {
 	}
 
 	@PostConstruct
-	public void createPartControl(@Optional IWorkbenchPart legacyPart, final Composite parent) {
+	public void createPartControl(@Optional final IWorkbenchPart legacyPart, final Composite parent) {
 		// Create table
 		viewer = new GridTreeViewer(parent, SWT.V_SCROLL);
 
@@ -111,7 +118,7 @@ public class ChangeSetView implements IAdaptable {
 			gvc.setLabelProvider(createCSLabelProvider());
 		}
 
-		GridColumnGroup loadGroup = new GridColumnGroup(viewer.getGrid(), SWT.NONE);
+		final GridColumnGroup loadGroup = new GridColumnGroup(viewer.getGrid(), SWT.NONE);
 		loadGroup.setText("Load");
 		{
 			final GridColumn gc = new GridColumn(loadGroup, SWT.NONE);
@@ -144,7 +151,7 @@ public class ChangeSetView implements IAdaptable {
 			gvc.setLabelProvider(createStubLabelProvider());
 			this.diagram = createWiringDiagram(gvc);
 		}
-		GridColumnGroup dischargeGroup = new GridColumnGroup(viewer.getGrid(), SWT.NONE);
+		final GridColumnGroup dischargeGroup = new GridColumnGroup(viewer.getGrid(), SWT.NONE);
 		dischargeGroup.setText("Discharge");
 		{
 			final GridColumn gc = new GridColumn(dischargeGroup, SWT.NONE);
@@ -520,7 +527,7 @@ public class ChangeSetView implements IAdaptable {
 				final Object element = cell.getElement();
 				if (element instanceof ChangeSet) {
 					final ChangeSet changeSet = (ChangeSet) element;
-					ChangeSetRoot root = (ChangeSetRoot) changeSet.eContainer();
+					final ChangeSetRoot root = (ChangeSetRoot) changeSet.eContainer();
 					int idx = 0;
 					if (root != null) {
 						idx = root.getChangeSets().indexOf(changeSet);
@@ -543,22 +550,8 @@ public class ChangeSetView implements IAdaptable {
 
 	}
 
-	@PostConstruct
-	public void setInitialData() {
-
-		// Set initial data
-	}
-
 	public void setData(final ScenarioInstance target) {
-		// // Clean up existing cols
-		//
-		// for (GridViewerColumn c : vesselColumns ) {
-		// if (!c.getColumn().isDisposed()) {
-		// c.getColumn().dispose();
-		// }
-		// }
-		// vesselColumns.clear();
-		//
+
 		if (vesselColumnGroup != null && !vesselColumnGroup.isDisposed()) {
 			final GridColumn[] columns = vesselColumnGroup.getColumns();
 			for (final GridColumn c : columns) {
@@ -568,51 +561,66 @@ public class ChangeSetView implements IAdaptable {
 			}
 		}
 
-		// if (existing != null) {
-		// // Clean up model references
-		// }
-
 		if (target == null) {
 
 		} else {
-			// ProgressMonitorDialog d = new ProgressMonitorDialog(parent)
-			final ChangeSetViewTransformer transformer = new ChangeSetViewTransformer();
-			ChangeSetRoot newRoot = transformer.createDataModel(target, new NullProgressMonitor());
+			final Display display = PlatformUI.getWorkbench().getDisplay();
+			final ProgressMonitorDialog d = new ProgressMonitorDialog(display.getActiveShell());
+			try {
+				d.run(true, false, new IRunnableWithProgress() {
 
-			// TODO: Extract vessel columns and generate.
-			final Set<String> vesselnames = new LinkedHashSet<>();
-			if (newRoot != null) {
-				for (final ChangeSet cs : newRoot.getChangeSets()) {
-					for (final ChangeSetRow csr : cs.getChangeSetRowsToPrevious()) {
-						vesselnames.add(csr.getLhsVesselName());
-						vesselnames.add(csr.getRhsVesselName());
+					@Override
+					public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
+						final ChangeSetViewTransformer transformer = new ChangeSetViewTransformer();
+						final ChangeSetRoot newRoot = transformer.createDataModel(target, monitor);
+						display.asyncExec(new Runnable() {
+
+							@Override
+							public void run() {
+								// TODO: Extract vessel columns and generate.
+								final Set<String> vesselnames = new LinkedHashSet<>();
+								if (newRoot != null) {
+									for (final ChangeSet cs : newRoot.getChangeSets()) {
+										for (final ChangeSetRow csr : cs.getChangeSetRowsToPrevious()) {
+											vesselnames.add(csr.getLhsVesselName());
+											vesselnames.add(csr.getRhsVesselName());
+										}
+									}
+								}
+								vesselnames.remove(null);
+								for (final String name : vesselnames) {
+									final GridColumn gc = new GridColumn(vesselColumnGroup, SWT.NONE);
+									final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+									gvc.getColumn().setText(name);
+									gvc.getColumn().setWidth(20);
+									gvc.setLabelProvider(createVesselLabelProvider(name, new ArrayList<>(vesselnames)));
+								}
+
+								// TODO Auto-generated method stub
+								// Sort similar to vert report
+								diagram.setChangeSetRoot(newRoot);
+								viewer.setInput(newRoot);
+								// viewer.refresh();
+
+								// Release after creating the new one so we increment reference counts before decrementing, which could cause a scenario unload/load cycle
+								cleanUp(ChangeSetView.this.root);
+								ChangeSetView.this.root = newRoot;
+							}
+						});
 					}
-				}
+				});
+			} catch (InvocationTargetException | InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			vesselnames.remove(null);
-			for (final String name : vesselnames) {
-				final GridColumn gc = new GridColumn(vesselColumnGroup, SWT.NONE);
-				final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-				gvc.getColumn().setText(name);
-				gvc.getColumn().setWidth(20);
-				gvc.setLabelProvider(createVesselLabelProvider(name, new ArrayList<>(vesselnames)));
-			}
-
-			// Sort similar to vert report
-			diagram.setChangeSetRoot(newRoot);
-			viewer.setInput(newRoot);
-			// viewer.refresh();
-
-			// Release after creating the new one so we increment reference counts before decrementing, which could cause a scenario unload/load cycle
-			cleanUp(this.root);
-			this.root = newRoot;
 		}
 
 	}
 
-	private void cleanUp(ChangeSetRoot root) {
+	private void cleanUp(final ChangeSetRoot root) {
 		if (root != null) {
-			for (ChangeSet cs : root.getChangeSets()) {
+			for (final ChangeSet cs : root.getChangeSets()) {
 				release(cs.getBaseScenarioRef());
 				release(cs.getPrevScenarioRef());
 				release(cs.getCurrentScenarioRef());
@@ -620,7 +628,7 @@ public class ChangeSetView implements IAdaptable {
 		}
 	}
 
-	private void release(ModelReference ref) {
+	private void release(final ModelReference ref) {
 		if (ref != null) {
 			ref.close();
 		}
