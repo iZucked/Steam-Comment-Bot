@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.common.ui.celleditor.SingleColumnTableEditor;
 import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
@@ -49,33 +50,57 @@ public class ChangeSetViewTransformer {
 
 		final ChangeSetRoot root = ChangesetFactory.eINSTANCE.createChangeSetRoot();
 
-		if (!(instance.eContainer() instanceof ScenarioInstance)) {
-			return null;
-		}
-		final ScenarioInstance base = (ScenarioInstance) instance.eContainer();
-		final ScenarioInstance optimised = instance;
-
+		ScenarioInstance base = null;
 		final List<ScenarioInstance> stages = new LinkedList<>();
-		for (final Container child : instance.getElements()) {
-			if (child instanceof ScenarioInstance) {
-				ScenarioInstance scenarioInstance = (ScenarioInstance) child;
-				stages.add(scenarioInstance);
+		if (false) {
+			if (!(instance.eContainer() instanceof ScenarioInstance)) {
+				return null;
+			}
+			base = (ScenarioInstance) instance.eContainer();
+			final ScenarioInstance optimised = instance;
+
+			for (final Container child : instance.getElements()) {
+				if (child instanceof ScenarioInstance) {
+					ScenarioInstance scenarioInstance = (ScenarioInstance) child;
+					stages.add(scenarioInstance);
+				}
+			}
+			Collections.sort(stages, new Comparator<ScenarioInstance>() {
+				@Override
+				public int compare(final ScenarioInstance o1, final ScenarioInstance o2) {
+
+					// Extract name and sort by index
+
+					return 0;
+				}
+			});
+
+			// Make sure these are in the correct place.
+			// stages.add(0, base);
+			stages.add(optimised);
+		} else {
+			base = (ScenarioInstance) instance;
+			final Container c = base.getParent();
+			int i = 1;
+			while (true) {
+				boolean found = false;
+				for (Container cc : c.getElements()) {
+					if (cc.getName().equals(Integer.toString(i))) {
+						if (cc instanceof ScenarioInstance)
+							stages.add((ScenarioInstance) cc);
+						found = true;
+						i++;
+					}
+				}
+				if (!found) {
+					break;
+				}
 			}
 		}
-		Collections.sort(stages, new Comparator<ScenarioInstance>() {
-			@Override
-			public int compare(final ScenarioInstance o1, final ScenarioInstance o2) {
 
-				// Extract name and sort by index
+		try
 
-				return 0;
-			}
-		});
-
-		// Make sure these are in the correct place.
-		// stages.add(0, base);
-		stages.add(optimised);
-		try {
+		{
 			monitor.beginTask("Analysing Solutions", stages.size());
 			ScenarioInstance prev = base;
 			for (final ScenarioInstance current : stages) {
@@ -85,7 +110,9 @@ public class ChangeSetViewTransformer {
 				monitor.worked(1);
 
 			}
-		} finally {
+		} finally
+
+		{
 			monitor.done();
 		}
 
@@ -283,9 +310,9 @@ public class ChangeSetViewTransformer {
 						// TODO: Check vessel change
 					}
 					if (oldVesselName != null && newVesselName != null) {
-						if (!oldVesselName.equals(newVesselName)) {
-							vesselChanges.add(vc);
-						}
+						// if (!oldVesselName.equals(newVesselName)) {
+						vesselChanges.add(vc);
+						// }
 					}
 					// Is is a wiring difference?
 					// final String referenceStr = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
@@ -595,7 +622,12 @@ public class ChangeSetViewTransformer {
 				// row.setLhsVesselChange(vc);
 				// lhsRow.setLhsVesselChange(vc);
 				lhsToRowMap.put(lhsName, row);
-				rows.add(row);
+
+				if (vc.getOriginalVessel() != null && !getName(vc.getOriginalVessel()).equals(getName(vc.getNewVessel()))) {
+
+					 rows.add(row);
+				}
+
 			}
 
 			row.setLhsVesselName(getName(vc.getOriginalVessel()));
