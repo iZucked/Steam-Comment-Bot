@@ -40,7 +40,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
 
 public class EquivalanceGroupBuilder {
 
-	private Set<EObject> checkElementEquivalence(final EObject referenceElement, final List<EObject> elements) {
+	public Set<EObject> checkElementEquivalence(final EObject referenceElement, final List<EObject> elements) {
 
 		if (referenceElement instanceof GeneratedCharterOut) {
 			return Collections.emptySet();
@@ -175,7 +175,7 @@ public class EquivalanceGroupBuilder {
 	 * @param uniqueElements
 	 * @param elementToRowMap2
 	 */
-	void populateEquivalenceGroups(final List<Map<String, List<EObject>>> maps, final Map<EObject, Set<EObject>> equivalancesMap, final List<EObject> uniqueElements,
+	public void populateEquivalenceGroups(final List<Map<String, List<EObject>>> maps, final Map<EObject, Set<EObject>> equivalancesMap, final List<EObject> uniqueElements,
 			final Map<EObject, Row> elementToRowMap) {
 		if (maps == null) {
 			return;
@@ -224,8 +224,6 @@ public class EquivalanceGroupBuilder {
 						continue;
 					}
 
-					final Row referenceRow = elementToRowMap.get(referenceElement);
-
 					final Collection<EObject> equivalences = checkElementEquivalence(referenceElement, elements);
 					if (equivalences != null) {
 						updateHashSetMap(equivalancesMap, referenceElement, equivalences);
@@ -245,31 +243,34 @@ public class EquivalanceGroupBuilder {
 
 					// TODO: Break out into separate function?
 					// Here we attempt to link rows together based on equivalence.
-					if (equivalences != null && !equivalences.isEmpty()) {
+					if (elementToRowMap != null) {
+						if (equivalences != null && !equivalences.isEmpty()) {
 
-						// Skip SlotVisits as rows are linked by SlotAllocations
-						if (referenceElement instanceof SlotVisit) {
-							continue;
-						}
-						// Skip DischargeSlots references as we link by load slot
-						if (referenceElement instanceof SlotAllocation) {
-							if (((SlotAllocation) referenceElement).getSlot() instanceof DischargeSlot) {
+							// Skip SlotVisits as rows are linked by SlotAllocations
+							if (referenceElement instanceof SlotVisit) {
 								continue;
 							}
-						}
-						// Row referenceRow = elementToRowMap.get(referenceElement);
-						for (final EObject e : equivalences) {
-							final Row equivalenceRow = elementToRowMap.get(e);
-							if (equivalenceRow != null) {
-								if (e instanceof SlotAllocation) {
-									if (((SlotAllocation) e).getSlot() instanceof DischargeSlot) {
-										if (equivalenceRow.getReferenceRow() != null) {
-											continue;
+							// Skip DischargeSlots references as we link by load slot
+							if (referenceElement instanceof SlotAllocation) {
+								if (((SlotAllocation) referenceElement).getSlot() instanceof DischargeSlot) {
+									continue;
+								}
+							}
+
+							final Row referenceRow = elementToRowMap.get(referenceElement);
+							for (final EObject e : equivalences) {
+								final Row equivalenceRow = elementToRowMap.get(e);
+								if (equivalenceRow != null) {
+									if (e instanceof SlotAllocation) {
+										if (((SlotAllocation) e).getSlot() instanceof DischargeSlot) {
+											if (equivalenceRow.getReferenceRow() != null) {
+												continue;
+											}
 										}
 									}
-								}
-								if (referenceRow != null) {
-									equivalenceRow.setReferenceRow(referenceRow);
+									if (referenceRow != null) {
+										equivalenceRow.setReferenceRow(referenceRow);
+									}
 								}
 							}
 						}
@@ -372,6 +373,24 @@ public class EquivalanceGroupBuilder {
 			return "end-" + endEvent.getSequence().getName();
 		} else if (element instanceof Event) {
 			return element.eClass().getName() + "-" + ((Event) element).name();
+		}
+		if (element instanceof Slot) {
+			String prefix = "";
+			final Slot slot = (Slot) element;
+			if (slot instanceof LoadSlot) {
+				prefix = "load";
+			} else {
+				prefix = "discharge";
+			}
+			if (slot instanceof SpotSlot) {
+				final SpotMarket market = ((SpotSlot) slot).getMarket();
+				return String.format("%s-%s-%s-%s", prefix, market.eClass().getName(), market.getName(), format(slot.getWindowStart()));
+
+			} else {
+				final String baseName = slot.getName();
+				return prefix + "-" + baseName;
+			}
+
 		}
 		if (element instanceof NamedObject) {
 			return element.getClass().getName() + "-" + ((NamedObject) element).getName();

@@ -16,6 +16,8 @@ import java.util.Map;
 import org.eclipse.emf.databinding.IEMFObservable;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
+import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
+import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
 
@@ -68,10 +70,18 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 		// Setup the builder hooks.
 		this.builder = builder;
 		builder.setBlockManager(getBlockManager());
+		builder.setAdaptableReport(this);
 	}
 
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") final Class adapter) {
+
+		if (GridTableViewer.class.isAssignableFrom(adapter)) {
+			return viewer;
+		}
+		if (Grid.class.isAssignableFrom(adapter)) {
+			return viewer.getGrid();
+		}
 
 		if (Table.class.isAssignableFrom(adapter)) {
 			final Object input = viewer.getInput();
@@ -111,7 +121,7 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 
 				if (table != null && table.getOptions().isFilterSelectedElements() && !table.getSelectedElements().isEmpty()) {
 					if (!table.getSelectedElements().contains(element)) {
-						return false;	
+						return false;
 					}
 				}
 

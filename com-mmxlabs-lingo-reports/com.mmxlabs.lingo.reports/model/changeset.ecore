@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model" nsURI="http://www.minimaxlabs.com/models/changeset/1"
+    nsPrefix="changeset">
+  <eClassifiers xsi:type="ecore:EClass" name="ChangeSetRoot">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="changeSets" upperBound="-1"
+        eType="#//ChangeSet" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ChangeSet">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="changesToBase" upperBound="-1"
+        eType="#//Change" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="changesToPrevious" upperBound="-1"
+        eType="#//Change" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metricsToBase" eType="#//Metrics"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metricsToPrevious" eType="#//Metrics"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="baseScenarioRef" eType="ecore:EClass ../../com.mmxlabs.scenario.service.model/model/scenario.service.ecore#//ModelReference"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="prevScenarioRef" eType="ecore:EClass ../../com.mmxlabs.scenario.service.model/model/scenario.service.ecore#//ModelReference"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="currentScenarioRef" eType="ecore:EClass ../../com.mmxlabs.scenario.service.model/model/scenario.service.ecore#//ModelReference"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="baseScenario" eType="ecore:EClass ../../com.mmxlabs.scenario.service.model/model/scenario.service.ecore#//ScenarioInstance"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="prevScenario" eType="ecore:EClass ../../com.mmxlabs.scenario.service.model/model/scenario.service.ecore#//ScenarioInstance"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="currentScenario" eType="ecore:EClass ../../com.mmxlabs.scenario.service.model/model/scenario.service.ecore#//ScenarioInstance"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="changeSetRowsToBase" upperBound="-1"
+        eType="#//ChangeSetRow" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="changeSetRowsToPrevious"
+        upperBound="-1" eType="#//ChangeSetRow" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Metrics">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pnlDelta" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="latenessDelta" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="capacityDelta" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Change"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EventVesselChange" eSuperTypes="#//Change">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loadSlot_base" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//LoadSlot"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loadSlot_target" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//LoadSlot"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="originalVessel" eType="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VesselAssignmentType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="newVessel" eType="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VesselAssignmentType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WiringChange" eSuperTypes="#//Change">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loadSlot_base" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//LoadSlot"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loadSlot_target" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//LoadSlot"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="originalDischargeSlot"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//DischargeSlot"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="newDischargeSlot" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//DischargeSlot"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="originalLoadAllocation"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="newLoadAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="originalDischargeAllocation"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="newDischargeAllocation"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VesselChange" eSuperTypes="#//Change">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loadSlot_base" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//LoadSlot"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loadSlot_target" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//LoadSlot"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="originalVessel" eType="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VesselAssignmentType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="newVessel" eType="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VesselAssignmentType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeSlot_base" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//DischargeSlot"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeSlot_target" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//DischargeSlot"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="originalLoadAllocation"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="newLoadAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="originalDischargeAllocation"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="newDischargeAllocation"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ChangeSetRow">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lhsName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rhsName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lhsVesselName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rhsVesselName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lhsWiringLink" eType="#//ChangeSetRow"
+        eOpposite="#//ChangeSetRow/rhsWiringLink"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rhsWiringLink" eType="#//ChangeSetRow"
+        eOpposite="#//ChangeSetRow/lhsWiringLink"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lhsWiringChange" eType="#//WiringChange"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rhsWiringChange" eType="#//WiringChange"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lhsVesselChange" eType="#//WiringChange"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loadSlot" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//LoadSlot"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeSlot" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//DischargeSlot"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="originalLoadAllocation"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="newLoadAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="originalDischargeAllocation"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="newDischargeAllocation"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
+  </eClassifiers>
+</ecore:EPackage>

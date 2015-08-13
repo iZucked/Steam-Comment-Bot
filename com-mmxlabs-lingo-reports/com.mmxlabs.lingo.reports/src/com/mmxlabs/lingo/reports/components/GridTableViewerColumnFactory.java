@@ -99,7 +99,7 @@ public class GridTableViewerColumnFactory implements IColumnFactory {
 				}
 				cell.setText(formatter.render(element));
 				if (formatter instanceof IImageProvider) {
-					cell.setImage(((IImageProvider) formatter).getImage(element));
+					cell.setImage(((IImageProvider) formatter).getImage(cell.getElement()));
 				}
 			}
 		});
