@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
@@ -30,14 +31,9 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ScrollBar;
 
-import com.mmxlabs.lingo.reports.views.AbstractConfigurableGridReportView.SortData;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
-import com.mmxlabs.lingo.reports.views.schedule.model.ChangeType;
-import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
-import com.mmxlabs.lingo.reports.views.schedule.model.Row;
-import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
@@ -84,13 +80,11 @@ public class ChangeSetWiringDiagram implements PaintListener {
 	 */
 	private final GridViewerColumn wiringColumn;
 	/**
-	 * The {@link Table} data structure containing all the required data
+	 * The {@link ChangeSetRoot} data structure containing all the required data
 	 */
 	private ChangeSetRoot table;
-	/**
-	 * Class representing the current sort order of the table contents.
-	 */
-	private SortData sortData = new SortData();
+
+	private boolean diffToBase;
 
 	/**
 	 * Create a new wiring diagram
@@ -152,20 +146,13 @@ public class ChangeSetWiringDiagram implements PaintListener {
 			return;
 		}
 
-		int[] sortedIndices = null;
-		int[] reverseSortedIndices = null;
-		if (sortData != null) {
-			sortedIndices = sortData.sortedIndices;
-			reverseSortedIndices = sortData.reverseSortedIndices;
-		}
-
-		// // Copy ref in case of concurrent change during paint
+		// Copy ref in case of concurrent change during paint
 		final ChangeSetRoot root = table;
 		// Get a list of terminal positions from subclass
 		Map<ChangeSetRow, Integer> rowIndices = new HashMap<>();
 		Map<Integer, ChangeSetRow> indexToRow = new HashMap<>();
 
-		final List<Float> terminalPositions = getTerminalPositions(root, rowIndices, indexToRow);
+		final List<Float> terminalPositions = getTerminalPositions(rowIndices, indexToRow);
 		final GC graphics = e.gc;
 
 		graphics.setAntialias(SWT.ON);
@@ -181,39 +168,27 @@ public class ChangeSetWiringDiagram implements PaintListener {
 		// Fill whole area - not for use in a table
 		graphics.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
 
-		// Collect cycle groups
-		// final List<CycleGroup> cycleGroups = new LinkedList<>();
-		// for (final UserGroup g1 : root.getUserGroups()) {
-		// cycleGroups.addAll(g1.getGroups());
-		// }
-		// cycleGroups.addAll(root.getCycleGroups());
-
 		// draw paths
 		for (ChangeSet changeSet : root.getChangeSets()) {
-			for (final ChangeSetRow row : changeSet.getChangeSetRowsToPrevious()) {
+			EList<ChangeSetRow> rows = diffToBase ? changeSet.getChangeSetRowsToBase() : changeSet.getChangeSetRowsToPrevious();
+			for (final ChangeSetRow row : rows) {
 				if (row.getRhsWiringLink() == null) {
 					continue;
 				}
 				ChangeSetRow otherRow = row.getRhsWiringLink();
 
-				if (row.getLoadSlot() != null) {
-					if (row.getLoadSlot().getName().contains("S2")) {
-						int ii = 0;
-					}
-				}
-
-				final Integer unsortedSource = rowIndices.get(row);// ot.getRows().indexOf(row);
-				final Integer unsortedDestination = rowIndices.get(otherRow);// root.getRows().indexOf(changeSet);
-				if (unsortedSource == null || unsortedDestination == null || unsortedSource < 0 || unsortedDestination < 0) {
+				final Integer unsortedSource = rowIndices.get(row);
+				final Integer unsortedDestination = rowIndices.get(otherRow);
+				if (unsortedSource == null || unsortedDestination == null) {
 					// Error?
 					continue;
 				}
 				// Map back between current row (sorted) and data (unsorted)
-				final int sortedDestination = sortedIndices == null ? unsortedDestination : sortedIndices[unsortedDestination];
-				final int sortedSource = sortedIndices == null ? unsortedSource : sortedIndices[unsortedSource];
+				final int sortedDestination = unsortedDestination;
+				final int sortedSource = unsortedSource;
 
 				// Filtering can lead to missing terminals
-				if (sortedDestination == -1 || sortedSource == -1) {
+				if (sortedDestination < 0 || sortedSource < 0) {
 					continue;
 				}
 
@@ -223,7 +198,7 @@ public class ChangeSetWiringDiagram implements PaintListener {
 				// Draw wire - offset by ca.x to as x pos is relative to left hand side
 				final Path path = makeConnector(e.display, ca.x + 1.5f * terminalSize, startMid, ca.x + ca.width - 1.5f * terminalSize, endMid);
 
-				graphics.setForeground(RewirableColour);
+				graphics.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 
 				// if (wire.dashed) {
 				graphics.setLineDash(new int[] { 2, 3 });
@@ -251,29 +226,20 @@ public class ChangeSetWiringDiagram implements PaintListener {
 		for (final float midpoint : terminalPositions) {
 
 			// Map back between current row (sorted) and data (unsorted)
-			final int i = rawI++;// (reverseSortedIndices != null && rawI < reverseSortedIndices.length) ? reverseSortedIndices[rawI] : rawI;
+			final int i = rawI++;
 			// -1 indicates filtered row
 			if (i == -1) {
 				continue;
 			}
-			if (i == 18) {
-				int ii = 0;
-			} else {
-				// continue;
-			}
 
-			final ChangeSetRow row = indexToRow.get(i);// root.getRows().get(i);
+			final ChangeSetRow row = indexToRow.get(i);
 			if (row == null) {
 				continue;
 			}
-			// final CycleGroup cycleGroup = row.getCycleGroup();
-			final boolean drawLoad = row.getLhsName() != null;
-			final boolean drawDischarge = row.getRhsName() != null;// cycleGroup == null ? true : ((cycleGroup.getChangeType() == ChangeType.WIRING) ? row.isReference() : true);
 			if (row.getLhsWiringLink() == null && row.getRhsWiringLink() == null) {
 				continue;
-			} // Draw left hand terminal
-			// if (drawLoad && row.getLoadAllocation() != null) {
-			// if (row.getLoadAllocation() != null && (drawLoad || row.getLoadAllocation().getSlot() instanceof SpotSlot)) {
+			}
+			// Draw left hand terminal
 			if (row.getLoadSlot() != null) {
 				final LoadSlot loadSlot = row.getLoadSlot();// (LoadSlot) row.getLoadAllocation().getSlot();
 				final Color terminalColour = (loadSlot.getCargo() != null || loadSlot.isOptional()) ? ValidTerminalColour : InvalidTerminalColour;
@@ -282,13 +248,11 @@ public class ChangeSetWiringDiagram implements PaintListener {
 
 			graphics.setLineWidth(linewidth);
 			// Draw right hand terminal
-			// if (row.getDischargeAllocation() != null && (drawDischarge || row.getDischargeAllocation().getSlot() instanceof SpotSlot)) {
 			if (row.getDischargeSlot() != null) {
 				final DischargeSlot dischargeSlot = row.getDischargeSlot();// (DischargeSlot) row.getDischargeAllocation().getSlot();
 				final Color terminalColour = (dischargeSlot.getCargo() != null || dischargeSlot.isOptional()) ? ValidTerminalColour : InvalidTerminalColour;
 				drawTerminal(false, !dischargeSlot.isFOBSale(), terminalColour, dischargeSlot.isOptional(), dischargeSlot instanceof SpotSlot, ca, graphics, midpoint);
 			}
-			// rawI++;
 		}
 	}
 
@@ -336,19 +300,9 @@ public class ChangeSetWiringDiagram implements PaintListener {
 		grid.redraw();
 	}
 
-	protected List<Float> getTerminalPositions(final ChangeSetRoot rootData, Map<ChangeSetRow, Integer> rTI, Map<Integer, ChangeSetRow> iTR) {
+	protected List<Float> getTerminalPositions(Map<ChangeSetRow, Integer> rTI, Map<Integer, ChangeSetRow> iTR) {
 
 		// Determine the mid-point in each row and generate an ordered list of heights.
-
-		// int numRows = 0;
-		// for (ChangeSet cs : rootData.getChangeSets()) {
-		// if (false /* diffTobase */) {
-		//
-		// numRows += 1 + cs.getChangesToBase().size();
-		// } else {
-		// numRows += 1 + cs.getChangesToPrevious().size();
-		// }
-		// }
 
 		// TODO: needs to handle tree state
 
@@ -450,16 +404,12 @@ public class ChangeSetWiringDiagram implements PaintListener {
 		return new Rectangle(area.x + offset, area.y + grid.getHeaderHeight(), wiringColumn.getColumn().getWidth(), area.height);
 	}
 
-	public void setTable(final ChangeSetRoot root) {
+	public void setChangeSetRoot(final ChangeSetRoot root) {
 		this.table = root;
 	}
 
-	public SortData getSortData() {
-		return sortData;
-	}
+	public void setDiffToBase(boolean diffToBase) {
+		this.diffToBase = diffToBase;
 
-	public void setSortData(final SortData sortData) {
-		this.sortData = sortData;
 	}
-
 }

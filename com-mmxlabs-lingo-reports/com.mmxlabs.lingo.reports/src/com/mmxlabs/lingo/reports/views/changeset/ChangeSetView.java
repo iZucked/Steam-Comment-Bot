@@ -1,10 +1,8 @@
 package com.mmxlabs.lingo.reports.views.changeset;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -19,6 +17,7 @@ import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -36,7 +35,7 @@ import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.ISelectionService;
+import org.eclipse.ui.IWorkbenchPart;
 
 import com.mmxlabs.lingo.reports.diff.utils.ScheduleCostUtils;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
@@ -50,48 +49,24 @@ import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotPNLDetails;
+import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionChangedListener;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 
 public class ChangeSetView implements IAdaptable {
 
 	private GridTreeViewer viewer;
 
-	// TODO: Needs some shared state with the action handler.
-	private final boolean diffToBase = false;
+	private boolean diffToBase = false;
 
 	private GridColumnGroup vesselColumnGroup;
-	private final List<GridViewerColumn> vesselColumns = new LinkedList<>();
 
 	private ChangeSetWiringDiagram diagram;
 
 	@Inject
 	private IScenarioServiceSelectionProvider scenarioSelectionProvider;
 
-	@Inject
-	private ISelectionService iSelectionSerice;
-
-	private final IScenarioServiceSelectionChangedListener listener = new IScenarioServiceSelectionChangedListener() {
-
-		@Override
-		public void selected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> selected, final boolean block) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioInstance oldPin, final ScenarioInstance newPin, final boolean block) {
-			// TODO Auto-generated method stub
-			// setData(newPin);
-		}
-
-		@Override
-		public void deselected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> deselected, final boolean block) {
-			// TODO Auto-generated method stub
-
-		}
-	};
+	private ChangeSetRoot root;
 
 	@Inject
 	public ChangeSetView() {
@@ -114,7 +89,7 @@ public class ChangeSetView implements IAdaptable {
 	}
 
 	@PostConstruct
-	public void postConstruct(final Composite parent) {
+	public void createPartControl(@Optional IWorkbenchPart legacyPart, final Composite parent) {
 		// Create table
 		viewer = new GridTreeViewer(parent, SWT.V_SCROLL);
 
@@ -122,9 +97,10 @@ public class ChangeSetView implements IAdaptable {
 		viewer.getGrid().setHeaderVisible(true);
 		viewer.getGrid().setLinesVisible(true);
 
+		viewer.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
+
 		// Create content provider
 		viewer.setContentProvider(createContentProvider());
-		// Create label provider
 
 		// Create columns
 		{
@@ -135,22 +111,27 @@ public class ChangeSetView implements IAdaptable {
 			gvc.setLabelProvider(createCSLabelProvider());
 		}
 
+		GridColumnGroup loadGroup = new GridColumnGroup(viewer.getGrid(), SWT.NONE);
+		loadGroup.setText("Load");
 		{
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
-			gvc.getColumn().setText("L-ID");
+			final GridColumn gc = new GridColumn(loadGroup, SWT.NONE);
+			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setText("ID");
 			gvc.getColumn().setWidth(50);
 			gvc.setLabelProvider(createStandardLabelProvider(ChangesetPackage.Literals.CHANGE_SET_ROW__LHS_NAME));
 		}
 		{
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
-			gvc.getColumn().setText("L-Price");
+			final GridColumn gc = new GridColumn(loadGroup, SWT.NONE);
+			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setText("$");
 			gvc.getColumn().setWidth(50);
 			gvc.setLabelProvider(createDeltaLabelProvider(false, ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_LOAD_ALLOCATION, ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_LOAD_ALLOCATION,
 					SchedulePackage.Literals.SLOT_ALLOCATION__PRICE));
 		}
 		{
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
-			gvc.getColumn().setText("L-mmBtu");
+			final GridColumn gc = new GridColumn(loadGroup, SWT.NONE);
+			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setText("mmBtu");
 			gvc.getColumn().setWidth(75);
 			gvc.setLabelProvider(createDeltaLabelProvider(true, ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_LOAD_ALLOCATION, ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_LOAD_ALLOCATION,
 					SchedulePackage.Literals.SLOT_ALLOCATION__ENERGY_TRANSFERRED));
@@ -163,22 +144,29 @@ public class ChangeSetView implements IAdaptable {
 			gvc.setLabelProvider(createStubLabelProvider());
 			this.diagram = createWiringDiagram(gvc);
 		}
+		GridColumnGroup dischargeGroup = new GridColumnGroup(viewer.getGrid(), SWT.NONE);
+		dischargeGroup.setText("Discharge");
 		{
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
-			gvc.getColumn().setText("D-ID");
+			final GridColumn gc = new GridColumn(dischargeGroup, SWT.NONE);
+			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setText("ID");
 			gvc.getColumn().setWidth(50);
 			gvc.setLabelProvider(createStandardLabelProvider(ChangesetPackage.Literals.CHANGE_SET_ROW__RHS_NAME));
 		}
 		{
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
-			gvc.getColumn().setText("D-Price");
+
+			final GridColumn gc = new GridColumn(dischargeGroup, SWT.NONE);
+			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setText("$");
 			gvc.getColumn().setWidth(50);
 			gvc.setLabelProvider(createDeltaLabelProvider(false, ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_DISCHARGE_ALLOCATION,
 					ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_DISCHARGE_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__PRICE));
 		}
 		{
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
-			gvc.getColumn().setText("D-mmBtu");
+
+			final GridColumn gc = new GridColumn(dischargeGroup, SWT.NONE);
+			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setText("mmBtu");
 			gvc.getColumn().setWidth(75);
 			gvc.setLabelProvider(createDeltaLabelProvider(true, ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_DISCHARGE_ALLOCATION,
 					ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_DISCHARGE_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__ENERGY_TRANSFERRED));
@@ -224,9 +212,7 @@ public class ChangeSetView implements IAdaptable {
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
 			gvc.getColumn().setText("Addn. P&L");
 			gvc.getColumn().setWidth(75);
-			gvc.setLabelProvider(createAdditionalPNLDeltaLabelProvider());// (true, ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_LOAD_ALLOCATION,
-			// gvc.setLabelProvider(createDeltaLabelProvider(true, ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_LOAD_ALLOCATION,
-			// ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_LOAD_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__CARGO_ALLOCATIONVOLUME_VALUE));
+			gvc.setLabelProvider(createAdditionalPNLDeltaLabelProvider());
 		}
 
 		// Create sorter
@@ -262,8 +248,8 @@ public class ChangeSetView implements IAdaptable {
 			}
 		});
 
-		// Listen to navigator selection changes
-		scenarioSelectionProvider.addSelectionChangedListener(listener);
+		// TODO: Add scenario service listener for removed scenarios
+
 	}
 
 	private ChangeSetWiringDiagram createWiringDiagram(final GridViewerColumn gvc) {
@@ -328,7 +314,7 @@ public class ChangeSetView implements IAdaptable {
 						if (t != null) {
 							delta += t.intValue();
 						}
-						delta /= 1000;
+						delta = (int) Math.round((double) delta / 1000.0);
 						if (delta != 0) {
 							cell.setText(String.format("%s %,dK", delta < 0 ? "↓" : "↑", delta));
 						}
@@ -386,7 +372,7 @@ public class ChangeSetView implements IAdaptable {
 					if (t != null) {
 						delta += t.intValue();
 					}
-					delta /= 1000;
+					delta = (int) Math.round((double) delta / 1000.0);
 					if (delta != 0) {
 						cell.setText(String.format("%s %,dK", delta < 0 ? "↓" : "↑", delta));
 					}
@@ -464,7 +450,7 @@ public class ChangeSetView implements IAdaptable {
 					if (t != null) {
 						delta += t.intValue();
 					}
-					delta /= 1000;
+					delta = (int) Math.round((double) delta / 1000.0);
 					if (delta != 0) {
 						cell.setText(String.format("%s %,dK", delta < 0 ? "↓" : "↑", delta));
 					}
@@ -516,7 +502,7 @@ public class ChangeSetView implements IAdaptable {
 					if (t != null) {
 						delta += t.intValue();
 					}
-					delta /= 1000;
+					delta = (int) Math.round((double) delta / 1000.0);
 					if (delta != 0) {
 						cell.setText(String.format("%s %,dK", delta < 0 ? "↓" : "↑", delta));
 					}
@@ -584,16 +570,18 @@ public class ChangeSetView implements IAdaptable {
 		if (target == null) {
 
 		} else {
-
+			// ProgressMonitorDialog d = new ProgressMonitorDialog(parent)
 			final ChangeSetViewTransformer transformer = new ChangeSetViewTransformer();
-			final ChangeSetRoot root = transformer.createDataModel(target, new NullProgressMonitor());
+			ChangeSetRoot newRoot = transformer.createDataModel(target, new NullProgressMonitor());
 
 			// TODO: Extract vessel columns and generate.
 			final Set<String> vesselnames = new LinkedHashSet<>();
-			for (final ChangeSet cs : root.getChangeSets()) {
-				for (final ChangeSetRow csr : cs.getChangeSetRowsToPrevious()) {
-					vesselnames.add(csr.getLhsVesselName());
-					vesselnames.add(csr.getRhsVesselName());
+			if (newRoot != null) {
+				for (final ChangeSet cs : newRoot.getChangeSets()) {
+					for (final ChangeSetRow csr : cs.getChangeSetRowsToPrevious()) {
+						vesselnames.add(csr.getLhsVesselName());
+						vesselnames.add(csr.getRhsVesselName());
+					}
 				}
 			}
 			vesselnames.remove(null);
@@ -606,11 +594,31 @@ public class ChangeSetView implements IAdaptable {
 			}
 
 			// Sort similar to vert report
-			diagram.setTable(root);
-			viewer.setInput(root);
-			viewer.refresh();
+			diagram.setChangeSetRoot(newRoot);
+			viewer.setInput(newRoot);
+			// viewer.refresh();
+
+			// Release after creating the new one so we increment reference counts before decrementing, which could cause a scenario unload/load cycle
+			cleanUp(this.root);
+			this.root = newRoot;
 		}
 
+	}
+
+	private void cleanUp(ChangeSetRoot root) {
+		if (root != null) {
+			for (ChangeSet cs : root.getChangeSets()) {
+				release(cs.getBaseScenarioRef());
+				release(cs.getPrevScenarioRef());
+				release(cs.getCurrentScenarioRef());
+			}
+		}
+	}
+
+	private void release(ModelReference ref) {
+		if (ref != null) {
+			ref.close();
+		}
 	}
 
 	private CellLabelProvider createVesselLabelProvider(final String name, final List<String> vesselOrder) {
@@ -627,6 +635,7 @@ public class ChangeSetView implements IAdaptable {
 				final Object element = cell.getElement();
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow changeSetRow = (ChangeSetRow) element;
+					cell.setText("");
 
 					final int fromIdx = vesselOrder.indexOf(changeSetRow.getLhsVesselName());
 					final int toIdx = vesselOrder.indexOf(changeSetRow.getRhsVesselName());
@@ -657,17 +666,13 @@ public class ChangeSetView implements IAdaptable {
 
 	@PreDestroy
 	public void dispose() {
-		scenarioSelectionProvider.removeSelectionChangedListener(listener);
+		cleanUp(this.root);
+		this.root = null;
 	}
 
 	@Focus
 	public void setFocus() {
 		viewer.getControl().setFocus();
-	}
-
-	void linkToScenarioNavigator() {
-		// Find selected scenario.
-
 	}
 
 	private ITreeContentProvider createContentProvider() {
@@ -723,12 +728,19 @@ public class ChangeSetView implements IAdaptable {
 						return changeSet.getChangeSetRowsToBase().toArray();
 					} else {
 						return changeSet.getChangeSetRowsToPrevious().toArray();
-
 					}
 				}
 				return null;
 			}
 		};
+	}
+
+	@Inject
+	@Optional
+	private void handleDiffToBaseToggle(@UIEventTopic("toggle-diff-to-base") final Object o) {
+		diffToBase = !diffToBase;
+		diagram.setDiffToBase(diffToBase);
+		viewer.refresh();
 	}
 
 	@Inject
