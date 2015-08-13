@@ -6,18 +6,33 @@ package com.mmxlabs.lingo.reports.views.schedule;
 
 import static com.mmxlabs.lingo.reports.views.schedule.ScheduleBasedReportBuilder.CARGO_REPORT_TYPE_ID;
 
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypedElement;
+import org.eclipse.jface.viewers.CellLabelProvider;
+import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
+import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.nebula.widgets.grid.Grid;
+import org.eclipse.nebula.widgets.grid.GridColumn;
+import org.eclipse.nebula.widgets.grid.GridColumnGroup;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 
+import com.mmxlabs.lingo.reports.components.ColumnBlock;
+import com.mmxlabs.lingo.reports.components.ColumnBlockManager;
+import com.mmxlabs.lingo.reports.components.ColumnHandler;
 import com.mmxlabs.lingo.reports.components.ColumnType;
+import com.mmxlabs.lingo.reports.components.EmfBlockColumnFactory;
+import com.mmxlabs.lingo.reports.components.IColumnFactory;
 import com.mmxlabs.lingo.reports.components.MultiObjectEmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.components.SimpleEmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.diff.utils.PNLDeltaUtils;
 import com.mmxlabs.lingo.reports.diff.utils.ScheduleCostUtils;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.internal.Activator;
+import com.mmxlabs.lingo.reports.views.AbstractConfigurableGridReportView.SortData;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
@@ -34,6 +49,7 @@ import com.mmxlabs.lingo.reports.views.schedule.formatters.RowTypeFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.formatters.VesselAssignmentFormatter;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
+import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.lingo.reports.views.schedule.model.provider.PinnedScheduleFormatter;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -56,6 +72,9 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
+import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.models.util.emfpath.EMFPath;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
 public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
@@ -83,8 +102,8 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 					ColumnType.MULTIPLE, formatter, ScheduleReportPackage.Literals.ROW__SCENARIO, ScenarioServicePackage.eINSTANCE.getContainer_Name()));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.id":
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "ID", "The main ID for all including discharge slots", ColumnType.NORMAL,
-					Formatters.objectFormatter, nameObjectRef));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
+					new SimpleEmfBlockColumnFactory(columnID, "ID", "The main ID for all including discharge slots", ColumnType.NORMAL, Formatters.objectFormatter, nameObjectRef));
 			break;
 
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.l-id":
@@ -109,14 +128,12 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			}));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.d-id":
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "D-ID", "The discharge ID for discharge slots", ColumnType.NORMAL, Formatters.objectFormatter,
-					name2ObjectRef));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
+					new SimpleEmfBlockColumnFactory(columnID, "D-ID", "The discharge ID for discharge slots", ColumnType.NORMAL, Formatters.objectFormatter, name2ObjectRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.cargotype":
-			columnManager.registerColumn(
-					CARGO_REPORT_TYPE_ID,
-					new SimpleEmfBlockColumnFactory(columnID, "Cargo Type", "", ColumnType.NORMAL, Formatters.objectFormatter, cargoAllocationRef, s.getCargoAllocation_InputCargo(), c
-							.getCargo__GetCargoType()));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Cargo Type", "", ColumnType.NORMAL, Formatters.objectFormatter, cargoAllocationRef,
+					s.getCargoAllocation_InputCargo(), c.getCargo__GetCargoType()));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.vessel":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Vessel", null, ColumnType.NORMAL, new VesselAssignmentFormatter(), targetObjectRef));
@@ -157,10 +174,8 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.purchasecontract":
 
-			columnManager.registerColumn(
-					CARGO_REPORT_TYPE_ID,
-					new SimpleEmfBlockColumnFactory(columnID, "Purchase Contract", null, ColumnType.NORMAL, Formatters.objectFormatter, loadAllocationRef, s.getSlotAllocation_Slot(), c
-							.getSlot_Contract(), name));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Purchase Contract", null, ColumnType.NORMAL, Formatters.objectFormatter, loadAllocationRef,
+					s.getSlotAllocation_Slot(), c.getSlot_Contract(), name));
 
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.salescontract":
@@ -363,6 +378,91 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.pnl_group":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, builder.getEmptyPNLColumnBlockFactory());
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_wiring":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new EmfBlockColumnFactory() {
+
+				@Override
+				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
+					final ColumnBlock block = blockManager.createBlock(columnID, "Wiring", ColumnType.DIFF);
+
+					return blockManager.configureHandler(block, new ColumnHandler(block, null, new ETypedElement[0], "Wiring", new IColumnFactory() {
+
+						ScheduledTradesWiringDiagram diagram;
+
+						@Override
+						public void destroy(final GridViewerColumn gvc) {
+							gvc.getColumn().dispose();
+						}
+
+						@Override
+						public GridViewerColumn createColumn(final ColumnHandler handler) {
+
+							final IAdaptable report = builder.getAdaptableReport();
+							if (report == null) {
+								return null;
+							}
+
+							final GridTableViewer viewer = report.getAdapter(GridTableViewer.class);
+							final Table table = report.getAdapter(Table.class);
+
+							final GridColumnGroup group = handler.block.getOrCreateColumnGroup(viewer.getGrid());
+
+							final String title = handler.title;
+							final ICellRenderer formatter = handler.getFormatter();
+							final String tooltip = handler.getTooltip();
+
+							final GridColumn col;
+							if (group != null) {
+								col = new GridColumn(group, SWT.NONE);
+							} else {
+								col = new GridColumn(viewer.getGrid(), SWT.NONE);
+							}
+							final GridViewerColumn column = new GridViewerColumn(viewer, col);
+							column.getColumn().setText(title);
+							column.getColumn().setData(EObjectTableViewer.COLUMN_RENDERER, formatter);
+
+							// Set a default label provider
+							column.setLabelProvider(new CellLabelProvider() {
+
+								@Override
+								public void update(final ViewerCell cell) {
+									// No normal cell update
+								}
+							});
+
+							final GridColumn tc = column.getColumn();
+
+							tc.setData(ColumnHandler.COLUMN_HANDLER, this);
+							tc.setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, formatter);
+
+							if (tooltip != null) {
+								column.getColumn().setHeaderTooltip(tooltip);
+							}
+
+							column.getColumn().setMinimumWidth(100);
+							column.getColumn().setWidth(100);
+							column.getColumn().setResizeable(false);
+
+							column.getColumn().setVisible(false);
+
+							// Create the custom rendering stuff
+							final Grid grid = viewer.getGrid();
+							diagram = new ScheduledTradesWiringDiagram(grid, column);
+							diagram.setTable(table);
+							// Link the the sort state
+							diagram.setSortData(report.getAdapter(SortData.class));
+							return column;
+						}
+					}) {
+						@Override
+						public void setColumnFactory(final IColumnFactory columnFactory) {
+							// Ignore standard column factory
+						}
+
+					}, false);
+				}
+			});
 			break;
 		}
 	}

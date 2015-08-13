@@ -312,7 +312,7 @@ public class ColumnBlockManager {
 		return configureHandler(block, handler, true);
 	}
 
-	private ColumnHandler configureHandler(final ColumnBlock block, final ColumnHandler handler, final boolean createNow) {
+	public ColumnHandler configureHandler(final ColumnBlock block, final ColumnHandler handler, final boolean createNow) {
 		handlers.add(handler);
 		handlersInOrder.add(handler);
 

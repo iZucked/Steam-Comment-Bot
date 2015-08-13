@@ -5,6 +5,7 @@
 package com.mmxlabs.lingo.reports.views;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -102,6 +103,18 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	private FilterField filterField;
 	protected EObjectTableViewerFilterSupport filterSupport;
 
+	/**
+	 * Small class to hold internal sort state for external reference.
+	 *
+	 */
+	public static class SortData {
+		public Object[] sortedChildren;
+		public int[] sortedIndices;
+		public int[] reverseSortedIndices;
+	}
+
+	private SortData sortData = new SortData();
+
 	private void setColumnsImmovable() {
 		if (viewer != null) {
 			for (final GridColumn column : viewer.getGrid().getColumns()) {
@@ -169,6 +182,25 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 					return adaptSelectionFromWidget(list);
 				}
 
+				@Override
+				protected Object[] getSortedChildren(final Object parent) {
+					// This is the filtered and sorted children.
+					// This may be smaller than the original set.
+					sortData.sortedChildren = super.getSortedChildren(parent);
+
+					sortData.sortedIndices = new int[table == null ? 0 : table.getRows().size()];
+					sortData.reverseSortedIndices = new int[table == null ? 0 : table.getRows().size()];
+
+					Arrays.fill(sortData.sortedIndices, -1);
+					Arrays.fill(sortData.reverseSortedIndices, -1);
+
+					for (int i = 0; i < sortData.sortedChildren.length; ++i) {
+						final int rawIndex = table.getRows().indexOf(sortData.sortedChildren[i]);
+						sortData.sortedIndices[rawIndex] = i;
+						sortData.reverseSortedIndices[i] = rawIndex;
+					}
+					return sortData.sortedChildren;
+				}
 			};
 			viewer.setComparator(sortingSupport.createViewerComparer());
 
@@ -629,6 +661,9 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	@Override
 	public Object getAdapter(final Class adapter) {
 
+		if (SortData.class.isAssignableFrom(adapter)) {
+			return sortData;
+		}
 		if (adapter.isAssignableFrom(IPropertySheetPage.class)) {
 			final PropertySheetPage propertySheetPage = new PropertySheetPage();
 
@@ -650,5 +685,4 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	public ColumnBlockManager getBlockManager() {
 		return blockManager;
 	}
-
 }

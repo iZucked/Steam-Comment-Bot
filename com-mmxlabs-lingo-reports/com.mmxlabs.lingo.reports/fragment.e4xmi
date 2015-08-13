@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmi:id="_2XDjgEGIEeW-SYJZ5d5KDQ">
+  <imports xsi:type="commands:Command" xmi:id="_y3WtAEGJEeW-SYJZ5d5KDQ" elementId="com.mmxlabs.lingo.reports.changeset.analyse"/>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_EYe24EGJEeW-SYJZ5d5KDQ" featurename="handlers" parentElementId="org.eclipse.e4.legacy.ide.application">
+    <elements xsi:type="commands:Handler" xmi:id="_33-uQEGJEeW-SYJZ5d5KDQ" elementId="com.mmxlabs.lingo.reports.handler.0" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.AnalyseScenarioHandler" command="_y3WtAEGJEeW-SYJZ5d5KDQ"/>
+  </fragments>
+</fragment:ModelFragments>

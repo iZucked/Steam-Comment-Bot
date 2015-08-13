@@ -21,46 +21,51 @@ public class ScheduleCostUtils {
 			final EObject eObject = (EObject) object;
 			final CargoAllocation cargoAllocation = (CargoAllocation) eObject.eGet(cargoAllocationRef);
 			final SlotAllocation allocation = (SlotAllocation) eObject.eGet(allocationRef);
-			if (allocation != null && cargoAllocation != null) {
+			return calculateLegCost(cargoAllocation, allocation);
 
-				boolean collecting = false;
-				int total = 0;
-				for (final Event event : cargoAllocation.getEvents()) {
-					if (event instanceof SlotVisit) {
-						final SlotVisit slotVisit = (SlotVisit) event;
-						if (allocation.getSlotVisit() == event) {
-							collecting = true;
-						} else {
-							if (collecting) {
-								// Finished!
-								break;
-							}
-						}
-						if (collecting) {
-							total += slotVisit.getFuelCost();
-							total += slotVisit.getCharterCost();
-							total += slotVisit.getPortCost();
-						}
+		}
+		return null;
+	}
 
-					} else if (event instanceof Journey) {
-						final Journey journey = (Journey) event;
+	public static Integer calculateLegCost(final CargoAllocation cargoAllocation, final SlotAllocation allocation) {
+		if (allocation != null && cargoAllocation != null) {
+
+			boolean collecting = false;
+			int total = 0;
+			for (final Event event : cargoAllocation.getEvents()) {
+				if (event instanceof SlotVisit) {
+					final SlotVisit slotVisit = (SlotVisit) event;
+					if (allocation.getSlotVisit() == event) {
+						collecting = true;
+					} else {
 						if (collecting) {
-							total += journey.getFuelCost();
-							total += journey.getCharterCost();
-							total += journey.getToll();
-						}
-					} else if (event instanceof Idle) {
-						final Idle idle = (Idle) event;
-						if (collecting) {
-							total += idle.getFuelCost();
-							total += idle.getCharterCost();
+							// Finished!
+							break;
 						}
 					}
-				}
+					if (collecting) {
+						total += slotVisit.getFuelCost();
+						total += slotVisit.getCharterCost();
+						total += slotVisit.getPortCost();
+					}
 
-				return total;
+				} else if (event instanceof Journey) {
+					final Journey journey = (Journey) event;
+					if (collecting) {
+						total += journey.getFuelCost();
+						total += journey.getCharterCost();
+						total += journey.getToll();
+					}
+				} else if (event instanceof Idle) {
+					final Idle idle = (Idle) event;
+					if (collecting) {
+						total += idle.getFuelCost();
+						total += idle.getCharterCost();
+					}
+				}
 			}
 
+			return total;
 		}
 		return null;
 	}

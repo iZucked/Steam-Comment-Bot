@@ -127,7 +127,7 @@ public class FilterGanttReportBySelection implements IWorkbenchWindowActionDeleg
 		};
 		window.getPartService().addPartListener(listener);
 		for (final IViewPart view : window.getWorkbench().getActiveWorkbenchWindow().getActivePage().getViews()) {
-			if (view.getViewSite().getId().equals(SCHEDULE_VIEW_ID)) {
+			if (view != null && view.getViewSite().getId().equals(SCHEDULE_VIEW_ID)) {
 				listener.partOpened(view);
 			}
 		}

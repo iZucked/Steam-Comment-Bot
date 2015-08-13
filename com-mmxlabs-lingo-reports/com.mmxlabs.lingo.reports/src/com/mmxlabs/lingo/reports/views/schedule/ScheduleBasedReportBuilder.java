@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jdt.annotation.Nullable;
@@ -44,6 +46,7 @@ import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.ui.tabular.ICellRenderer;
 
 /**
  * Big helper class for any report based on {@link CargoAllocation}s, {@link OpenSlotAllocation}s, or other events. This builds the internal report data model and handles pin/diff comparison hooks.
@@ -141,6 +144,8 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 
 	private final List<String> entityColumnNames = new ArrayList<String>();
 
+	private IAdaptable adaptableReport;
+
 	public EmfBlockColumnFactory getEmptyPNLColumnBlockFactory() {
 		return new EmfBlockColumnFactory() {
 
@@ -220,6 +225,35 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 
 	}
 
+	public ColumnHandler addWiringColumn(final String blockId) {
+		
+		return blockManager.createColumn(blockManager.getBlockByID(blockId), "Wiring", new ICellRenderer() {
+			
+			@Override
+			public Comparable getComparable(Object object) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public String render(Object object) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public Object getFilterValue(Object object) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(Object object) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		}, false, ScheduleReportPackage.Literals.ROW__TARGET);
+	}
 	private ColumnHandler addPNLColumn(final String blockId, final String entityLabel, final String entityKey, final EStructuralFeature bookContainmentFeature) {
 		final String book = bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK ? "Shipping" : "Trading";
 		final String title = String.format("P&L (%s - %s)", entityLabel, book);
@@ -297,5 +331,14 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 
 	public ScheduleDiffUtils getScheduleDiffUtils() {
 		return scheduleDiffUtils;
+	}
+
+	public IAdaptable getAdaptableReport() {
+		return adaptableReport;
+	}
+
+
+	public void setAdaptableReport(IAdaptable adaptableReport) {
+		this.adaptableReport = adaptableReport;
 	}
 }
