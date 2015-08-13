@@ -520,10 +520,15 @@ public class ChangeSetView implements IAdaptable {
 				final Object element = cell.getElement();
 				if (element instanceof ChangeSet) {
 					final ChangeSet changeSet = (ChangeSet) element;
+					ChangeSetRoot root = (ChangeSetRoot) changeSet.eContainer();
+					int idx = 0;
+					if (root != null) {
+						idx = root.getChangeSets().indexOf(changeSet);
+					}
 					if (diffToBase) {
-						cell.setText(String.format("P&L: %,d Lateness: %d Capacity: %d", changeSet.getMetricsToBase().getPnlDelta(), 0, 0));
+						cell.setText(String.format("%d. P&L: %,d Lateness: %d Capacity: %d", idx + 1, changeSet.getMetricsToBase().getPnlDelta(), 0, 0));
 					} else {
-						cell.setText(String.format("P&L: %,d Lateness: %d Capacity: %d", changeSet.getMetricsToPrevious().getPnlDelta(), 0, 0));
+						cell.setText(String.format("%d. P&L: %,d Lateness: %d Capacity: %d", idx + 1, changeSet.getMetricsToPrevious().getPnlDelta(), 0, 0));
 					}
 					final DataVisualizer dv = viewer.getGrid().getDataVisualizer();
 					dv.setColumnSpan((GridItem) cell.getItem(), cell.getColumnIndex(), viewer.getGrid().getColumnCount());
