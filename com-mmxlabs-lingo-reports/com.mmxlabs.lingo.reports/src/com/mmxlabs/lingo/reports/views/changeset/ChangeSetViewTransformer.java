@@ -125,7 +125,7 @@ public class ChangeSetViewTransformer {
 		final ModelReference prevReference = prev.getReference();
 		final ModelReference currentReference = current.getReference();
 
-		// Load
+		// Pre-Load
 		baseReference.getInstance();
 		prevReference.getInstance();
 		currentReference.getInstance();
@@ -311,6 +311,8 @@ public class ChangeSetViewTransformer {
 					}
 					if (oldVesselName != null && newVesselName != null) {
 						// if (!oldVesselName.equals(newVesselName)) {
+						
+						// Always add vessel change here, but filter out later. This allows us to record the current vessel assignment when we create a row.
 						vesselChanges.add(vc);
 						// }
 					}
