@@ -16,6 +16,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
@@ -27,6 +29,7 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.widgets.grid.Grid;
@@ -38,11 +41,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchActionConstants;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.internal.e4.compatibility.CompatibilityView;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
@@ -69,7 +72,7 @@ import com.mmxlabs.rcp.common.actions.PackActionFactory;
  * 
  * @author hinton
  */
-public abstract class EMFReportView extends ViewPart implements ISelectionListener {
+public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener {
 
 	private FilterField filterField;
 
@@ -419,7 +422,9 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 		getSite().setSelectionProvider(viewer);
 		if (handleSelections()) {
-			getSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(this);
+
+			final ESelectionService service = getSite().getService(ESelectionService.class);
+			service.addPostSelectionListener(this);
 		}
 
 		synchronizer = ScenarioViewerSynchronizer.registerView(viewer, getElementCollector());
@@ -509,11 +514,29 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	}
 
 	@Override
-	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
-		if (part == this || part instanceof PropertySheet) {
-			return;
+	public void selectionChanged(final MPart part, final Object selectedObject) {
+		final Object object = part.getObject();
+		if (object instanceof CompatibilityView) {
+			final CompatibilityView compatibilityView = (CompatibilityView) object;
+			final IViewPart view = compatibilityView.getView();
+
+			if (view == this) {
+				return;
+			}
+			if (view instanceof PropertySheet) {
+				return;
+			}
 		}
 
+		ISelection selection = null;
+		// Convert selection
+		if (selectedObject instanceof ISelection) {
+			selection = (ISelection) selectedObject;
+		} else if (selectedObject instanceof Object[]) {
+			selection = new StructuredSelection((Object[]) selectedObject);
+		} else {
+			selection = new StructuredSelection(selectedObject);
+		}
 		viewer.setSelection(selection, true);
 	}
 
@@ -523,6 +546,10 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 	@Override
 	public void dispose() {
+
+		final ESelectionService service = getSite().getService(ESelectionService.class);
+		service.removePostSelectionListener(this);
+
 		ScenarioViewerSynchronizer.deregisterView(synchronizer);
 
 		super.dispose();

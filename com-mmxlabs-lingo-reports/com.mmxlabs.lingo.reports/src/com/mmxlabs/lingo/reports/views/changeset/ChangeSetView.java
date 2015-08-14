@@ -13,10 +13,10 @@ import javax.inject.Inject;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.UIEventTopic;
+import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -28,6 +28,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
@@ -43,7 +44,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
-import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.lingo.reports.diff.utils.ScheduleCostUtils;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
@@ -74,6 +74,9 @@ public class ChangeSetView implements IAdaptable {
 	private IScenarioServiceSelectionProvider scenarioSelectionProvider;
 
 	private ChangeSetRoot root;
+
+	@Inject
+	private ESelectionService eSelectionService;
 
 	@Inject
 	public ChangeSetView() {
@@ -116,6 +119,13 @@ public class ChangeSetView implements IAdaptable {
 			gvc.getColumn().setTree(true);
 			gvc.getColumn().setWidth(20);
 			gvc.setLabelProvider(createCSLabelProvider());
+		}
+
+		{
+			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
+			gvc.getColumn().setText("PNL");
+			gvc.getColumn().setWidth(75);
+			gvc.setLabelProvider(createPNLDeltaLabelProvider());
 		}
 
 		final GridColumnGroup loadGroup = new GridColumnGroup(viewer.getGrid(), SWT.NONE);
@@ -181,12 +191,6 @@ public class ChangeSetView implements IAdaptable {
 		vesselColumnGroup = new GridColumnGroup(viewer.getGrid(), SWT.NONE);
 		vesselColumnGroup.setText("Vessels");
 		// Vessel columns are dynamically created
-		{
-			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
-			gvc.getColumn().setText("PNL");
-			gvc.getColumn().setWidth(75);
-			gvc.setLabelProvider(createPNLDeltaLabelProvider());
-		}
 
 		final GridColumnGroup pnlComponentGroup = new GridColumnGroup(viewer.getGrid(), SWT.NONE);
 		pnlComponentGroup.setText("Components");
@@ -225,6 +229,7 @@ public class ChangeSetView implements IAdaptable {
 		// Create sorter
 		// TODO: ?
 
+		// Selection listener for pin/diff driver.
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			@Override
@@ -255,8 +260,48 @@ public class ChangeSetView implements IAdaptable {
 			}
 		});
 
-		// TODO: Add scenario service listener for removed scenarios
+		// Selection listener for current selection.
+		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
+			@Override
+			public void selectionChanged(final SelectionChangedEvent event) {
+				final IStructuredSelection selection = (IStructuredSelection) event.getSelection();
+
+				final Set<Object> selectedElements = new LinkedHashSet<>();
+				final Iterator<?> itr = selection.iterator();
+				while (itr.hasNext()) {
+					final Object o = itr.next();
+					if (o instanceof ChangeSetRow) {
+						final ChangeSetRow changeSetRow = (ChangeSetRow) o;
+						selectedElements.add(changeSetRow.getLoadSlot());
+						selectedElements.add(changeSetRow.getNewLoadAllocation());
+						selectedElements.add(changeSetRow.getOriginalLoadAllocation());
+						selectedElements.add(changeSetRow.getNewLoadAllocation().getSlotVisit());
+						selectedElements.add(changeSetRow.getOriginalLoadAllocation().getSlotVisit());
+					} else if (o instanceof ChangeSet) {
+						final ChangeSet changeSet = (ChangeSet) o;
+						List<ChangeSetRow> rows;
+						if (diffToBase) {
+							rows = changeSet.getChangeSetRowsToBase();
+						} else {
+							rows = changeSet.getChangeSetRowsToPrevious();
+						}
+						for (final ChangeSetRow changeSetRow : rows) {
+							selectedElements.add(changeSetRow.getLoadSlot());
+							selectedElements.add(changeSetRow.getNewLoadAllocation());
+							selectedElements.add(changeSetRow.getOriginalLoadAllocation());
+							selectedElements.add(changeSetRow.getNewLoadAllocation().getSlotVisit());
+							selectedElements.add(changeSetRow.getOriginalLoadAllocation().getSlotVisit());
+						}
+					}
+				}
+				selectedElements.remove(null);
+				// set the selection to the service
+				eSelectionService.setPostSelection(new StructuredSelection(selectedElements.toArray()));
+			}
+		});
+
+		// TODO: Add scenario service listener for removed scenarios
 	}
 
 	private ChangeSetWiringDiagram createWiringDiagram(final GridViewerColumn gvc) {
@@ -650,19 +695,19 @@ public class ChangeSetView implements IAdaptable {
 					final ChangeSetRow changeSetRow = (ChangeSetRow) element;
 					cell.setText("");
 
-					final int fromIdx = vesselOrder.indexOf(changeSetRow.getLhsVesselName());
-					final int toIdx = vesselOrder.indexOf(changeSetRow.getRhsVesselName());
-					if (fromIdx >= 0 && toIdx >= 0) {
-						if (fromIdx > toIdx) {
-							if (thisIdx >= toIdx && thisIdx <= fromIdx) {
-								cell.setText("<");
-							}
-						} else if (toIdx > fromIdx) {
-							if (thisIdx >= fromIdx && thisIdx <= toIdx) {
-								cell.setText(">");
-							}
-						}
-					}
+					// final int fromIdx = vesselOrder.indexOf(changeSetRow.getLhsVesselName());
+					// final int toIdx = vesselOrder.indexOf(changeSetRow.getRhsVesselName());
+					// if (fromIdx >= 0 && toIdx >= 0) {
+					// if (fromIdx > toIdx) {
+					// if (thisIdx >= toIdx && thisIdx <= fromIdx) {
+					// cell.setText("<");
+					// }
+					// } else if (toIdx > fromIdx) {
+					// if (thisIdx >= fromIdx && thisIdx <= toIdx) {
+					// cell.setText(">");
+					// }
+					// }
+					// }
 					//
 					if (name.equals(changeSetRow.getLhsVesselName())) {
 						// // cell.setBackground(red);

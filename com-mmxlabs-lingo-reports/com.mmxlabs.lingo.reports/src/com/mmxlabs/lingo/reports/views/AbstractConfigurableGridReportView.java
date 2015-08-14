@@ -12,6 +12,8 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.eclipse.core.databinding.ObservablesManager;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.databinding.EMFProperties;
 import org.eclipse.emf.ecore.util.EContentAdapter;
@@ -25,7 +27,7 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IElementComparer;
-import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
@@ -37,16 +39,16 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
-import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchActionConstants;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.XMLMemento;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.internal.e4.compatibility.CompatibilityView;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
@@ -78,7 +80,7 @@ import com.mmxlabs.rcp.common.actions.PackActionFactory;
  * A customisable report for schedule based data. Extension points define the available columns for all instances and initial state for each instance of this report. Optionally a dialog is available
  * for the user to change the default settings.
  */
-public abstract class AbstractConfigurableGridReportView extends ViewPart implements ISelectionListener {
+public abstract class AbstractConfigurableGridReportView extends ViewPart implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener {
 
 	// Memto keys
 	protected static final String CONFIGURABLE_COLUMNS_ORDER = "CONFIGURABLE_COLUMNS_ORDER";
@@ -113,7 +115,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 		public int[] reverseSortedIndices;
 	}
 
-	private SortData sortData = new SortData();
+	private final SortData sortData = new SortData();
 
 	private void setColumnsImmovable() {
 		if (viewer != null) {
@@ -223,6 +225,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 					@Override
 					public boolean equals(Object a, Object b) {
+
 						if (!contents.contains(a) && equivalents.containsKey(a)) {
 							a = equivalents.get(a);
 						}
@@ -246,7 +249,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 			table.eAdapters().add(new EContentAdapter() {
 				@Override
-				public void notifyChanged(Notification notification) {
+				public void notifyChanged(final Notification notification) {
 					super.notifyChanged(notification);
 					if (notification.getFeature() == ScheduleReportPackage.Literals.DIFF_OPTIONS__FILTER_SELECTED_ELEMENTS) {
 						viewer.refresh();
@@ -278,7 +281,9 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 			getSite().setSelectionProvider(viewer);
 			if (handleSelections()) {
-				getSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(this);
+				// Get e4 selection service!
+				final ESelectionService service = getSite().getService(ESelectionService.class);
+				service.addPostSelectionListener(this);
 			}
 
 			// table = ScheduleReportFactory.eINSTANCE.createTable();
@@ -632,15 +637,28 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	}
 
 	@Override
-	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
-		if (part == this || part instanceof PropertySheet) {
-			return;
-		}
+	public void selectionChanged(final MPart part, final Object selection) {
+		final Object object = part.getObject();
+		if (object instanceof CompatibilityView) {
+			final CompatibilityView compatibilityView = (CompatibilityView) object;
+			final IViewPart view = compatibilityView.getView();
 
-		if (part instanceof DiffGroupView) {
-			return;
+			if (view == this) {
+				return;
+			}
+			if (view instanceof PropertySheet) {
+				return;
+			}
+
+			if (view instanceof DiffGroupView) {
+				return;
+			}
 		}
-		viewer.setSelection(selection, true);
+		if (selection instanceof Object[]) {
+			viewer.setSelection(new StructuredSelection((Object[]) selection), true);
+		} else {
+			viewer.setSelection(new StructuredSelection(selection), true);
+		}
 	}
 
 	protected boolean handleSelections() {
@@ -649,6 +667,11 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 	@Override
 	public void dispose() {
+
+		if (handleSelections()) {
+			final ESelectionService service = getSite().getService(ESelectionService.class);
+			service.removePostSelectionListener(this);
+		}
 		UserManagedScenarioViewerSynchronizer.deregisterView(synchronizer);
 		sortingSupport.clearColumnSortOrder();
 		clearInputEquivalents();

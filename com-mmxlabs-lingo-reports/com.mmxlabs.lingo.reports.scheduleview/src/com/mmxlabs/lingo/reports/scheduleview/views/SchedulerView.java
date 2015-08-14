@@ -28,6 +28,8 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChangeEvent;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EContentAdapter;
@@ -61,7 +63,6 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IPartListener;
-import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IViewSite;
@@ -71,6 +72,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.XMLMemento;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.internal.e4.compatibility.CompatibilityView;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
@@ -86,6 +88,7 @@ import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.lingo.reports.ScenarioViewerSynchronizer;
 import com.mmxlabs.lingo.reports.ScheduleElementCollector;
+import com.mmxlabs.lingo.reports.diff.DiffGroupView;
 import com.mmxlabs.lingo.reports.diff.DiffSelectionAdapter;
 import com.mmxlabs.lingo.reports.properties.ScheduledEventPropertySourceProvider;
 import com.mmxlabs.lingo.reports.scheduleview.internal.Activator;
@@ -107,7 +110,7 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
-public class SchedulerView extends ViewPart implements ISelectionListener, IPreferenceChangeListener {
+public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener, IPreferenceChangeListener {
 
 	private static final String SCHEDULER_VIEW_HIDE_COLOUR_SCHEME_ACTION = "SCHEDULER_VIEW_HIDE_COLOUR_SCHEME_ACTION";
 
@@ -512,10 +515,8 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 					for (final Object event : result) {
 						if (event instanceof SlotVisit) {
 							final SlotVisit slotVisit = (SlotVisit) event;
-							setInputEquivalents(
-									event,
-									Arrays.asList(new Object[] { slotVisit.getSlotAllocation(), slotVisit.getSlotAllocation().getSlot(), slotVisit.getSlotAllocation().getCargoAllocation(),
-											slotVisit.getSlotAllocation().getCargoAllocation().getInputCargo() }));
+							setInputEquivalents(event, Arrays.asList(new Object[] { slotVisit.getSlotAllocation(), slotVisit.getSlotAllocation().getSlot(),
+									slotVisit.getSlotAllocation().getCargoAllocation(), slotVisit.getSlotAllocation().getCargoAllocation().getInputCargo() }));
 
 							// } else if (event instanceof Idle) {
 							// setInputEquivalents(event, Arrays.asList(new Object[] { ((Idle) event).getSlotAllocation().getCargoAllocation() }));
@@ -595,7 +596,9 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 		contributeToActionBars();
 
 		getSite().setSelectionProvider(viewer);
-		getSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(this);
+		// Get e4 selection service!
+		final ESelectionService service = getSite().getService(ESelectionService.class);
+		service.addPostSelectionListener(this);
 		jobManagerListener = ScenarioViewerSynchronizer.registerView(viewer, getElementCollector());
 
 		final String colourScheme = memento.getString(SchedulerViewConstants.SCHEDULER_VIEW_COLOUR_SCHEME);
@@ -606,6 +609,10 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 
 	@Override
 	public void dispose() {
+
+		final ESelectionService service = getSite().getService(ESelectionService.class);
+		service.removePostSelectionListener(this);
+
 		// stop this view from listening to preference changes
 		final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode("com.mmxlabs.lingo.reports");
 		prefs.removePreferenceChangeListener(this);
@@ -814,14 +821,34 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 	}
 
 	@Override
-	public void selectionChanged(final IWorkbenchPart part, ISelection selection) {
-		if (part == this) {
-			return;
+	public void selectionChanged(final MPart part, final Object selectedObject) {
+		final Object object = part.getObject();
+		if (object instanceof CompatibilityView) {
+			final CompatibilityView compatibilityView = (CompatibilityView) object;
+			final IViewPart view = compatibilityView.getView();
+
+			if (view == this) {
+				return;
+			}
+			if (view instanceof PropertySheet) {
+				return;
+			}
+
+			if (view instanceof DiffGroupView) {
+				return;
+			}
 		}
-		// Ignore property page activation - otherwise we loose the selection
-		if (part instanceof PropertySheet) {
-			return;
+
+		ISelection selection = null;
+		// Convert selection
+		if (selectedObject instanceof ISelection) {
+			selection = (ISelection) selectedObject;
+		} else if (selectedObject instanceof Object[]) {
+			selection = new StructuredSelection((Object[]) selectedObject);
+		} else {
+			selection = new StructuredSelection(selectedObject);
 		}
+
 		if (table == null) {
 			if (selection instanceof IStructuredSelection) {
 				final IStructuredSelection sel = (IStructuredSelection) selection;
