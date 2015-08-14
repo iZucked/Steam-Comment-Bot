@@ -27,7 +27,6 @@ public class LatenessUtils {
 		return false;
 	}
 
-
 	public static DateTime getWindowStartDate(final Object object) {
 		if (object instanceof SlotVisit) {
 			return ((SlotVisit) object).getSlotAllocation().getSlot().getWindowStartWithSlotOrPortTime();
@@ -70,7 +69,9 @@ public class LatenessUtils {
 	public static int getLatenessInHours(final PortVisit visit) {
 		final DateTime localStart = visit.getStart();
 		final DateTime windowEndDate = getWindowEndDate(visit);
-
+		if (windowEndDate == null || localStart == null) {
+			return 0;
+		}
 		final int diff = Hours.hoursBetween(windowEndDate, localStart).getHours();
 		return diff < 0 ? 0 : diff;
 	}
