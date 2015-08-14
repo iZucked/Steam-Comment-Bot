@@ -427,4 +427,12 @@ public abstract class AbstractVerticalReportVisualiser {
 	public ColourPalette getColourPalette() {
 		return colourPalette;
 	}
+
+	public enum Alignment {
+		LEFT, RIGHT, CENTRE
+	}
+
+	public Alignment getEventTextAlignment(final LocalDate localDate, final Event event) {
+		return Alignment.LEFT;
+	}
 }
