@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -21,15 +22,15 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
-import org.eclipse.ui.ISelectionListener;
-import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.internal.e4.compatibility.CompatibilityView;
 
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
 
-public class DiffSelectionAdapter implements ISelectionListener, ISelectionChangedListener {
+public class DiffSelectionAdapter implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener, ISelectionChangedListener {
 
 	private Table table;
 
@@ -49,8 +50,28 @@ public class DiffSelectionAdapter implements ISelectionListener, ISelectionChang
 	}
 
 	@Override
-	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
-		if (table != null && part instanceof DiffGroupView) {
+	public void selectionChanged(final MPart part, final Object selectedObject) {
+		final Object object = part.getObject();
+		if (object instanceof CompatibilityView) {
+			final CompatibilityView compatibilityView = (CompatibilityView) object;
+			final IViewPart view = compatibilityView.getView();
+
+			if (!(view instanceof DiffGroupView)) {
+				return;
+			}
+		}
+
+		ISelection selection = null;
+		// Convert selection
+		if (selectedObject instanceof ISelection) {
+			selection = (ISelection) selectedObject;
+		} else if (selectedObject instanceof Object[]) {
+			selection = new StructuredSelection((Object[]) selectedObject);
+		} else {
+			selection = new StructuredSelection(selectedObject);
+		}
+	
+		if (table != null) {
 			adaptSelection(table, selection);
 		}
 	}

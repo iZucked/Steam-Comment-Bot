@@ -11,6 +11,8 @@ import java.util.Set;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.ObservablesManager;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.EMFProperties;
 import org.eclipse.emf.ecore.EObject;
@@ -41,11 +43,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IPartListener;
-import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.internal.e4.compatibility.CompatibilityView;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.PropertySheet;
 
@@ -60,7 +62,8 @@ import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.provider.ScheduleReportItemProviderAdapterFactory;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 
-public class DiffGroupView extends ViewPart implements ISelectionListener, IMenuListener {
+public class DiffGroupView extends ViewPart implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener, IMenuListener {
+
 	public static final String ID = "com.mmxlabs.lingo.reports.diff.DiffGroupView";
 	private static final String SCHEDULE_VIEW_ID = "com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport";
 	private GridTreeViewer viewer;
@@ -86,16 +89,7 @@ public class DiffGroupView extends ViewPart implements ISelectionListener, IMenu
 			@Override
 			public void run() {
 
-				viewer = new GridTreeViewer(parent) {
-
-					// @Override
-					// public void setSelection(final ISelection selection) {
-					// setSelection(selection, true);
-					// }
-					//
-					// // super.setSelection(selection, reveal);
-					// // }
-				};
+				viewer = new GridTreeViewer(parent);
 
 				viewer.getGrid().setHeaderVisible(true);
 				viewer.getGrid().setLinesVisible(true);
@@ -142,11 +136,17 @@ public class DiffGroupView extends ViewPart implements ISelectionListener, IMenu
 
 		getSite().setSelectionProvider(viewer);
 
-		getSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(this);
+		// Get e4 selection service!
+		final ESelectionService service = getSite().getService(ESelectionService.class);
+		service.addPostSelectionListener(this);
 	}
 
 	@Override
 	public void dispose() {
+
+		final ESelectionService service = getSite().getService(ESelectionService.class);
+		service.removePostSelectionListener(this);
+
 		if (listener != null) {
 			getViewSite().getPage().removePartListener(listener);
 		}
@@ -297,7 +297,7 @@ public class DiffGroupView extends ViewPart implements ISelectionListener, IMenu
 
 			final IObservableMap[] attributeMaps = new IObservableMap[] { EMFProperties.value(ScheduleReportPackage.Literals.USER_GROUP__DELTA).observeDetail(contentProvider.getKnownElements()),
 					EMFProperties.value(ScheduleReportPackage.Literals.CYCLE_GROUP__DELTA).observeDetail(contentProvider.getKnownElements()),
-			// EMFProperties.value(ScheduleReportPackage.Literals.ROW__NAME).observeDetail(contentProvider.getKnownElements())
+					// EMFProperties.value(ScheduleReportPackage.Literals.ROW__NAME).observeDetail(contentProvider.getKnownElements())
 			};
 			gvc.setLabelProvider(new MixedDeltaCellLabelProvider(attributeMaps));
 			gvc.getColumn().setWidth(100);
@@ -309,11 +309,36 @@ public class DiffGroupView extends ViewPart implements ISelectionListener, IMenu
 		viewer.getControl().setFocus();
 	}
 
+	@SuppressWarnings("restriction")
 	@Override
-	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
-		if (part == this || part instanceof PropertySheet) {
-			return;
+	public void selectionChanged(final MPart part, Object selectedObject) {
+		final Object object = part.getObject();
+		if (object instanceof CompatibilityView) {
+			final CompatibilityView compatibilityView = (CompatibilityView) object;
+			final IViewPart view = compatibilityView.getView();
+
+			if (view == this) {
+				return;
+			}
+			if (view instanceof PropertySheet) {
+				return;
+			}
+
 		}
+
+		ISelection selection = null;
+		// Convert selection
+		if (selectedObject instanceof ISelection) {
+			selection = (ISelection) selectedObject;
+		} else if (selectedObject instanceof Object[]) {
+			selection = new StructuredSelection((Object[]) selectedObject);
+		} else {
+			selection = new StructuredSelection(selectedObject);
+		}
+
+		// if (part == this || part instanceof PropertySheet) {
+		// return;
+		// }
 		if (viewer.getInput() != null) {
 			// Transform external inputs
 			if (!selection.isEmpty()) {
