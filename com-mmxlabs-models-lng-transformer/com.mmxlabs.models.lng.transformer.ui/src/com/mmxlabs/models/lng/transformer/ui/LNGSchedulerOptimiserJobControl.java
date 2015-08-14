@@ -61,7 +61,6 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 	@Override
 	protected void reallyPrepare() {
 		scenarioRunner.initAndEval();
-		scenarioRunner.evaluateInitialState();
 	}
 
 	/*
