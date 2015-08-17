@@ -276,8 +276,12 @@ public class ChangeSetView implements IAdaptable {
 						selectedElements.add(changeSetRow.getLoadSlot());
 						selectedElements.add(changeSetRow.getNewLoadAllocation());
 						selectedElements.add(changeSetRow.getOriginalLoadAllocation());
-						selectedElements.add(changeSetRow.getNewLoadAllocation().getSlotVisit());
-						selectedElements.add(changeSetRow.getOriginalLoadAllocation().getSlotVisit());
+						if (changeSetRow.getNewLoadAllocation() != null) {
+							selectedElements.add(changeSetRow.getNewLoadAllocation().getSlotVisit());
+						}
+						if (changeSetRow.getOriginalLoadAllocation() != null) {
+							selectedElements.add(changeSetRow.getOriginalLoadAllocation().getSlotVisit());
+						}
 					} else if (o instanceof ChangeSet) {
 						final ChangeSet changeSet = (ChangeSet) o;
 						List<ChangeSetRow> rows;
@@ -290,12 +294,17 @@ public class ChangeSetView implements IAdaptable {
 							selectedElements.add(changeSetRow.getLoadSlot());
 							selectedElements.add(changeSetRow.getNewLoadAllocation());
 							selectedElements.add(changeSetRow.getOriginalLoadAllocation());
-							selectedElements.add(changeSetRow.getNewLoadAllocation().getSlotVisit());
-							selectedElements.add(changeSetRow.getOriginalLoadAllocation().getSlotVisit());
+							if (changeSetRow.getNewLoadAllocation() != null) {
+								selectedElements.add(changeSetRow.getNewLoadAllocation().getSlotVisit());
+							}
+							if (changeSetRow.getOriginalLoadAllocation() != null) {
+								selectedElements.add(changeSetRow.getOriginalLoadAllocation().getSlotVisit());
+							}
 						}
 					}
 				}
-				selectedElements.remove(null);
+				while (selectedElements.remove(null))
+					;
 				// set the selection to the service
 				eSelectionService.setPostSelection(new StructuredSelection(selectedElements.toArray()));
 			}
