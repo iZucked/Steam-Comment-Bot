@@ -226,8 +226,9 @@ public class BreadthOptimiser {
 					}
 				}
 			}
-			
-			processAndStoreBreakdownSolution(sortedChangeStates.get(0));
+			if (!sortedChangeStates.isEmpty()) {
+				processAndStoreBreakdownSolution(sortedChangeStates.get(0), initialFullSequences, evaluationState);
+			}
 
 		} catch (final InterruptedException e) {
 			e.printStackTrace();

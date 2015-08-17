@@ -57,6 +57,9 @@ public class LNGTransformer {
 	public static final String HINT_OPTIMISE_LSO = "hint-lngtransformer-optimise-lso";
 	/**
 	 */
+	public static final String HINT_OPTIMISE_BREAKDOWN = "hint-lngtransformer-optimise-breakdown";
+	
+	
 	public static final String HINT_GENERATE_CHARTER_OUTS = "hint-lngtransformer-generate-charter-outs";
 
 	private final LNGScenarioModel scenario;
