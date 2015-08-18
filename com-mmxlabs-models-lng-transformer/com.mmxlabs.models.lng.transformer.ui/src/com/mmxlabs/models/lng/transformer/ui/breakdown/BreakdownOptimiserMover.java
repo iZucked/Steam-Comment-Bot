@@ -14,6 +14,7 @@ import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.viewers.ISelection;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
@@ -337,12 +338,12 @@ public class BreakdownOptimiserMover {
 							if (currentSequences.getUnusedElements().contains(matchedDischarge)) {
 								final ISequenceElement matchedDischargeElement = similarityState.getElementForIndex(matchedDischarge);
 
-								IDischargeOption matchedDischargeSlot = (IDischargeOption) portSlotProvider.getPortSlot(matchedDischargeElement);
+								final IDischargeOption matchedDischargeSlot = (IDischargeOption) portSlotProvider.getPortSlot(matchedDischargeElement);
 
 								if (!(matchedDischargeSlot instanceof IDischargeSlot)) {
 									final IModifiableSequences copy = new ModifiableSequences(currentSequences);
 									final IModifiableSequence currentResource = copy.getModifiableSequence(resource);
-									Collection<IResource> allowedResources = resourceAllocationProvider.getAllowedResources(matchedDischargeElement);
+									final Collection<IResource> allowedResources = resourceAllocationProvider.getAllowedResources(matchedDischargeElement);
 									assert allowedResources.size() == 1;
 
 									final IModifiableSequence fsSequence = copy.getModifiableSequence(allowedResources.iterator().next());
@@ -423,7 +424,7 @@ public class BreakdownOptimiserMover {
 								if (!(portSlotProvider.getPortSlot(matchedLoadElement) instanceof ILoadSlot)) {
 									final IModifiableSequences copy = new ModifiableSequences(currentSequences);
 
-									Collection<IResource> allowedResources = resourceAllocationProvider.getAllowedResources(matchedLoadElement);
+									final Collection<IResource> allowedResources = resourceAllocationProvider.getAllowedResources(matchedLoadElement);
 									assert allowedResources.size() == 1;
 
 									final IModifiableSequence dpSequence = copy.getModifiableSequence(allowedResources.iterator().next());
@@ -497,7 +498,7 @@ public class BreakdownOptimiserMover {
 											if (!(portSlotProvider.getPortSlot(matchedLoadElement) instanceof ILoadSlot)) {
 												final IModifiableSequences copy = new ModifiableSequences(currentSequences);
 
-												Collection<IResource> allowedResources = resourceAllocationProvider.getAllowedResources(matchedLoadElement);
+												final Collection<IResource> allowedResources = resourceAllocationProvider.getAllowedResources(matchedLoadElement);
 												assert allowedResources.size() == 1;
 
 												final IModifiableSequence dpSequence = copy.getModifiableSequence(allowedResources.iterator().next());
@@ -543,11 +544,11 @@ public class BreakdownOptimiserMover {
 										if (currentSequences.getUnusedElements().contains(similarityState.getElementForIndex(matchedDischarge.intValue()))) {
 											final ISequenceElement matchedDischargeElement = similarityState.getElementForIndex(matchedDischarge);
 
-											IDischargeOption matchedDischargeSlot = (IDischargeOption) portSlotProvider.getPortSlot(matchedDischargeElement);
+											final IDischargeOption matchedDischargeSlot = (IDischargeOption) portSlotProvider.getPortSlot(matchedDischargeElement);
 
 											if (!(matchedDischargeSlot instanceof IDischargeSlot)) {
 												final IModifiableSequences copy = new ModifiableSequences(currentSequences);
-												Collection<IResource> allowedResources = resourceAllocationProvider.getAllowedResources(matchedDischargeElement);
+												final Collection<IResource> allowedResources = resourceAllocationProvider.getAllowedResources(matchedDischargeElement);
 												assert allowedResources.size() == 1;
 
 												final IModifiableSequence fsSequence = copy.getModifiableSequence(allowedResources.iterator().next());
@@ -611,7 +612,7 @@ public class BreakdownOptimiserMover {
 										if (!(portSlotProvider.getPortSlot(matchedLoadElement) instanceof ILoadSlot)) {
 											final IModifiableSequences copy = new ModifiableSequences(currentSequences);
 
-											Collection<IResource> allowedResources = resourceAllocationProvider.getAllowedResources(matchedLoadElement);
+											final Collection<IResource> allowedResources = resourceAllocationProvider.getAllowedResources(matchedLoadElement);
 											assert allowedResources.size() == 1;
 
 											final IModifiableSequence dpSequence = copy.getModifiableSequence(allowedResources.iterator().next());
@@ -657,12 +658,12 @@ public class BreakdownOptimiserMover {
 								if (currentSequences.getUnusedElements().contains(similarityState.getElementForIndex(matchedDischarge.intValue()))) {
 									final ISequenceElement matchedDischargeElement = similarityState.getElementForIndex(matchedDischarge);
 
-									IDischargeOption matchedDischargeSlot = (IDischargeOption) portSlotProvider.getPortSlot(matchedDischargeElement);
+									final IDischargeOption matchedDischargeSlot = (IDischargeOption) portSlotProvider.getPortSlot(matchedDischargeElement);
 
 									if (!(matchedDischargeSlot instanceof IDischargeSlot)) {
 										final IModifiableSequences copy = new ModifiableSequences(currentSequences);
 										final IModifiableSequence currentResource = copy.getModifiableSequence(resource);
-										Collection<IResource> allowedResources = resourceAllocationProvider.getAllowedResources(matchedDischargeElement);
+										final Collection<IResource> allowedResources = resourceAllocationProvider.getAllowedResources(matchedDischargeElement);
 										assert allowedResources.size() == 1;
 
 										final IModifiableSequence fsSequence = copy.getModifiableSequence(allowedResources.iterator().next());
@@ -769,7 +770,7 @@ public class BreakdownOptimiserMover {
 		if (newStates.size() == 0)
 
 		{
-			int ii = 0;
+			final int ii = 0;
 			// return search(currentSequences, similarityState, changes, changeSets, getNextDepth(tryDepth), 0, currentMetrics, jobStore, null);
 		}
 
@@ -1337,8 +1338,11 @@ public class BreakdownOptimiserMover {
 	public long calculateScheduleCapacity(final ISequences fullSequences, final ScheduledSequences scheduledSequences) {
 		long sumCost = 0;
 
-		for (final IPortSlot lateSlot : scheduledSequences.getLateSlotsSet()) {
-			sumCost += scheduledSequences.getCapacityViolationCount(lateSlot);
+		for (final ISequence seq : fullSequences.getSequences().values()) {
+			for (final ISequenceElement e : seq) {
+				assert e != null;
+				sumCost += scheduledSequences.getCapacityViolationCount(portSlotProvider.getPortSlot(e));
+			}
 		}
 		return sumCost;
 
@@ -1441,8 +1445,8 @@ public class BreakdownOptimiserMover {
 		return changedElements;
 	}
 
-	public IEvaluationState evaluateSequence(IModifiableSequences currentFullSequences) {
-		IEvaluationState evaluationState = new EvaluationState();
+	public IEvaluationState evaluateSequence(final IModifiableSequences currentFullSequences) {
+		final IEvaluationState evaluationState = new EvaluationState();
 		for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
 			if (!evaluationProcess.evaluate(currentFullSequences, evaluationState)) {
 				break;
