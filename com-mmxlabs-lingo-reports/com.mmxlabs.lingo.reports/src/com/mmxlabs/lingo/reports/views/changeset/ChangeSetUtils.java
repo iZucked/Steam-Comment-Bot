@@ -1,6 +1,7 @@
 package com.mmxlabs.lingo.reports.views.changeset;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.lingo.reports.diff.utils.ScheduleCostUtils;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
@@ -13,7 +14,11 @@ import com.mmxlabs.models.lng.schedule.SlotPNLDetails;
 
 public final class ChangeSetUtils {
 
-	public static long getGroupProfitAndLoss(@NonNull ProfitAndLossContainer profitAndLossContainer) {
+	public static long getGroupProfitAndLoss(@Nullable ProfitAndLossContainer profitAndLossContainer) {
+		if (profitAndLossContainer == null) {
+			return 0L;
+		}
+
 		return profitAndLossContainer.getGroupProfitAndLoss().getProfitAndLoss();
 	}
 

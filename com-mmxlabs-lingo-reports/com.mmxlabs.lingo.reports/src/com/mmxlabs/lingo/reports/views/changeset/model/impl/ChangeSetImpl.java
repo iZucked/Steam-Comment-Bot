@@ -2,7 +2,6 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset.model.impl;
 
-import com.mmxlabs.lingo.reports.views.changeset.model.Change;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
@@ -35,8 +34,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getChangesToBase <em>Changes To Base</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getChangesToPrevious <em>Changes To Previous</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getMetricsToBase <em>Metrics To Base</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getMetricsToPrevious <em>Metrics To Previous</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getBaseScenarioRef <em>Base Scenario Ref</em>}</li>
@@ -52,26 +49,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * @generated
  */
 public class ChangeSetImpl extends MinimalEObjectImpl.Container implements ChangeSet {
-	/**
-	 * The cached value of the '{@link #getChangesToBase() <em>Changes To Base</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getChangesToBase()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<Change> changesToBase;
-
-	/**
-	 * The cached value of the '{@link #getChangesToPrevious() <em>Changes To Previous</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getChangesToPrevious()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<Change> changesToPrevious;
-
 	/**
 	 * The cached value of the '{@link #getMetricsToBase() <em>Metrics To Base</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -189,30 +166,6 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	@Override
 	protected EClass eStaticClass() {
 		return ChangesetPackage.Literals.CHANGE_SET;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList<Change> getChangesToBase() {
-		if (changesToBase == null) {
-			changesToBase = new EObjectContainmentEList<Change>(Change.class, this, ChangesetPackage.CHANGE_SET__CHANGES_TO_BASE);
-		}
-		return changesToBase;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList<Change> getChangesToPrevious() {
-		if (changesToPrevious == null) {
-			changesToPrevious = new EObjectContainmentEList<Change>(Change.class, this, ChangesetPackage.CHANGE_SET__CHANGES_TO_PREVIOUS);
-		}
-		return changesToPrevious;
 	}
 
 	/**
@@ -561,10 +514,6 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case ChangesetPackage.CHANGE_SET__CHANGES_TO_BASE:
-				return ((InternalEList<?>)getChangesToBase()).basicRemove(otherEnd, msgs);
-			case ChangesetPackage.CHANGE_SET__CHANGES_TO_PREVIOUS:
-				return ((InternalEList<?>)getChangesToPrevious()).basicRemove(otherEnd, msgs);
 			case ChangesetPackage.CHANGE_SET__METRICS_TO_BASE:
 				return basicSetMetricsToBase(null, msgs);
 			case ChangesetPackage.CHANGE_SET__METRICS_TO_PREVIOUS:
@@ -585,10 +534,6 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ChangesetPackage.CHANGE_SET__CHANGES_TO_BASE:
-				return getChangesToBase();
-			case ChangesetPackage.CHANGE_SET__CHANGES_TO_PREVIOUS:
-				return getChangesToPrevious();
 			case ChangesetPackage.CHANGE_SET__METRICS_TO_BASE:
 				return getMetricsToBase();
 			case ChangesetPackage.CHANGE_SET__METRICS_TO_PREVIOUS:
@@ -628,14 +573,6 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ChangesetPackage.CHANGE_SET__CHANGES_TO_BASE:
-				getChangesToBase().clear();
-				getChangesToBase().addAll((Collection<? extends Change>)newValue);
-				return;
-			case ChangesetPackage.CHANGE_SET__CHANGES_TO_PREVIOUS:
-				getChangesToPrevious().clear();
-				getChangesToPrevious().addAll((Collection<? extends Change>)newValue);
-				return;
 			case ChangesetPackage.CHANGE_SET__METRICS_TO_BASE:
 				setMetricsToBase((Metrics)newValue);
 				return;
@@ -680,12 +617,6 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ChangesetPackage.CHANGE_SET__CHANGES_TO_BASE:
-				getChangesToBase().clear();
-				return;
-			case ChangesetPackage.CHANGE_SET__CHANGES_TO_PREVIOUS:
-				getChangesToPrevious().clear();
-				return;
 			case ChangesetPackage.CHANGE_SET__METRICS_TO_BASE:
 				setMetricsToBase((Metrics)null);
 				return;
@@ -728,10 +659,6 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ChangesetPackage.CHANGE_SET__CHANGES_TO_BASE:
-				return changesToBase != null && !changesToBase.isEmpty();
-			case ChangesetPackage.CHANGE_SET__CHANGES_TO_PREVIOUS:
-				return changesToPrevious != null && !changesToPrevious.isEmpty();
 			case ChangesetPackage.CHANGE_SET__METRICS_TO_BASE:
 				return metricsToBase != null;
 			case ChangesetPackage.CHANGE_SET__METRICS_TO_PREVIOUS:

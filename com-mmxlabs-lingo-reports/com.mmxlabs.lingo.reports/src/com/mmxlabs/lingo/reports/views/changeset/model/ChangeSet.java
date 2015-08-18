@@ -18,8 +18,6 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getChangesToBase <em>Changes To Base</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getChangesToPrevious <em>Changes To Previous</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getMetricsToBase <em>Metrics To Base</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getMetricsToPrevious <em>Metrics To Previous</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getBaseScenarioRef <em>Base Scenario Ref</em>}</li>
@@ -37,38 +35,6 @@ import org.eclipse.emf.ecore.EObject;
  * @generated
  */
 public interface ChangeSet extends EObject {
-	/**
-	 * Returns the value of the '<em><b>Changes To Base</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.lingo.reports.views.changeset.model.Change}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Changes To Base</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Changes To Base</em>' containment reference list.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSet_ChangesToBase()
-	 * @model containment="true"
-	 * @generated
-	 */
-	EList<Change> getChangesToBase();
-
-	/**
-	 * Returns the value of the '<em><b>Changes To Previous</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.lingo.reports.views.changeset.model.Change}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Changes To Previous</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Changes To Previous</em>' containment reference list.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSet_ChangesToPrevious()
-	 * @model containment="true"
-	 * @generated
-	 */
-	EList<Change> getChangesToPrevious();
-
 	/**
 	 * Returns the value of the '<em><b>Metrics To Base</b></em>' containment reference.
 	 * <!-- begin-user-doc -->

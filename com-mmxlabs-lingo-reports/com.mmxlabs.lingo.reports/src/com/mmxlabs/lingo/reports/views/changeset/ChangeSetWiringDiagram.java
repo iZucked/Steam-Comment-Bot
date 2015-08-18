@@ -172,6 +172,10 @@ public class ChangeSetWiringDiagram implements PaintListener {
 		for (ChangeSet changeSet : root.getChangeSets()) {
 			EList<ChangeSetRow> rows = diffToBase ? changeSet.getChangeSetRowsToBase() : changeSet.getChangeSetRowsToPrevious();
 			for (final ChangeSetRow row : rows) {
+				
+				if (!row.isWiringChange()) {
+					continue;
+				}
 				if (row.getRhsWiringLink() == null) {
 					continue;
 				}

@@ -2,7 +2,10 @@
 package com.mmxlabs.lingo.reports.views.changeset;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,15 +16,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.joda.time.LocalDate;
 
-import com.mmxlabs.lingo.reports.utils.CargoAllocationUtils;
+import com.google.common.base.Objects;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
-import com.mmxlabs.lingo.reports.views.changeset.model.EventVesselChange;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
-import com.mmxlabs.lingo.reports.views.changeset.model.VesselChange;
-import com.mmxlabs.lingo.reports.views.changeset.model.WiringChange;
 import com.mmxlabs.lingo.reports.views.schedule.EquivalanceGroupBuilder;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -149,7 +149,7 @@ public class ChangeSetViewTransformer {
 		changeSet.setCurrentScenario(current);
 		changeSet.setCurrentScenarioRef(currentReference);
 
-		generateDifferences(base, current, changeSet, true);
+		// generateDifferences(base, current, changeSet, true);
 		generateDifferences(prev, current, changeSet, false);
 
 		return changeSet;
@@ -166,6 +166,7 @@ public class ChangeSetViewTransformer {
 		if (schedule == null) {
 			return;
 		}
+
 		for (final Sequence sequence : schedule.getSequences()) {
 			for (final Event event : sequence.getEvents()) {
 				boolean includeEvent = false;
@@ -189,7 +190,6 @@ public class ChangeSetViewTransformer {
 			interestingEvents.add(openSlotAllocation);
 			allEvents.add(openSlotAllocation);
 		}
-
 	}
 
 	private void generateDifferences(final ScenarioInstance from, final ScenarioInstance to, final ChangeSet changeSet, final boolean isBase) {
@@ -208,605 +208,267 @@ public class ChangeSetViewTransformer {
 
 		// Generate the element by key map
 		final List<Map<String, List<EObject>>> perScenarioElementsByKeyMap = new LinkedList<>();
-		perScenarioElementsByKeyMap.add(equivalanceGroupBuilder.generateElementNameGroups(fromInterestingElements));
+		// Make the "to" scenario the reference scenario
 		perScenarioElementsByKeyMap.add(equivalanceGroupBuilder.generateElementNameGroups(toInterestingElements));
+		perScenarioElementsByKeyMap.add(equivalanceGroupBuilder.generateElementNameGroups(fromInterestingElements));
 
 		final Map<EObject, Set<EObject>> equivalancesMap = new HashMap<>();
 		final List<EObject> uniqueElements = new LinkedList<>();
 
 		equivalanceGroupBuilder.populateEquivalenceGroups(perScenarioElementsByKeyMap, equivalancesMap, uniqueElements, null);
 
-		final List<WiringChange> wiringChanges = new LinkedList<>();
-		final List<VesselChange> vesselChanges = new LinkedList<>();
-		final List<WiringChange> otherChanges = new LinkedList<>();
-		final List<EventVesselChange> eventChanges = new LinkedList<>();
-		// Now generate the diff structures.
-		for (final EObject element : fromInterestingElements) {
+		final Map<String, ChangeSetRow> lhsRowMap = new HashMap<>();
+		final Map<String, ChangeSetRow> rhsRowMap = new HashMap<>();
+
+		final List<ChangeSetRow> rows = new LinkedList<>();
+
+		// Pass one, construct current wiring.
+		for (final EObject element : toInterestingElements) {
+
+			if (element instanceof SlotVisit) {
+				final SlotVisit slotVisit = (SlotVisit) element;
+				if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
+					final LoadSlot loadSlot = (LoadSlot) slotVisit.getSlotAllocation().getSlot();
+					createOrUpdateRow(lhsRowMap, rhsRowMap, rows, slotVisit, loadSlot, true);
+				}
+			} else if (element instanceof OpenSlotAllocation) {
+				final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) element;
+				createOrUpdateRow(lhsRowMap, rhsRowMap, rows, openSlotAllocation, true);
+			} else if (element instanceof Event) {
+				final Event event = (Event) element;
+				final ChangeSetRow row = ChangesetFactory.eINSTANCE.createChangeSetRow();
+				rows.add(row);
+
+				// TODO: Unique name?
+				lhsRowMap.put(event.name(), row);
+
+				row.setLhsName(event.name());
+				if (event instanceof ProfitAndLossContainer) {
+					row.setOriginalGroupProfitAndLoss((ProfitAndLossContainer) event);
+				}
+				if (event instanceof EventGrouping) {
+					row.setOriginalEventGrouping((EventGrouping) event);
+				}
+				row.setLhsVesselName(getName(event.getSequence()));
+			}
+		}
+
+		for (final EObject element : uniqueElements) {
+			// Is it a cargo?
+			final boolean isBaseElement = toAllElements.contains(element);
+
+			if (element instanceof SlotVisit) {
+				final SlotVisit slotVisit = (SlotVisit) element;
+				final Slot slot = slotVisit.getSlotAllocation().getSlot();
+				if (slot instanceof LoadSlot) {
+					final LoadSlot loadSlot = (LoadSlot) slot;
+					createOrUpdateRow(lhsRowMap, rhsRowMap, rows, slotVisit, loadSlot, isBaseElement);
+				}
+			} else if (element instanceof OpenSlotAllocation) {
+				final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) element;
+				createOrUpdateRow(lhsRowMap, rhsRowMap, rows, openSlotAllocation, isBaseElement);
+			} else if (element instanceof Event) {
+				assert false;
+			}
+		}
+
+		// Second pass, create the wiring links.
+
+		for (final EObject element : toInterestingElements) {
 			final Set<EObject> equivalents = equivalancesMap.get(element);
 			if (equivalents == null) {
 				continue;
 			}
-			// Is it a cargo?
 			if (element instanceof SlotVisit) {
 				final SlotVisit slotVisit = (SlotVisit) element;
 				if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
+					final LoadSlot loadSlot = (LoadSlot) slotVisit.getSlotAllocation().getSlot();
 
-					String oldVesselName = null;
-					String newVesselName = null;
-
-					final WiringChange wiringChange = ChangesetFactory.eINSTANCE.createWiringChange();
-					final VesselChange vc = ChangesetFactory.eINSTANCE.createVesselChange();
-
-					wiringChange.setOriginalLoadSlot((LoadSlot) slotVisit.getSlotAllocation().getSlot());
-					vc.setOriginalLoadSlot((LoadSlot) slotVisit.getSlotAllocation().getSlot());
-					wiringChange.setOriginalLoadAllocation(slotVisit.getSlotAllocation());
-					vc.setOriginalLoadAllocation(slotVisit.getSlotAllocation());
-
-					wiringChange.setOriginalGroupProfitAndLoss(slotVisit.getSlotAllocation().getCargoAllocation());
-					vc.setOriginalGroupProfitAndLoss(slotVisit.getSlotAllocation().getCargoAllocation());
-					wiringChange.setOriginalEventGrouping(slotVisit.getSlotAllocation().getCargoAllocation());
-					vc.setOriginalEventGrouping(slotVisit.getSlotAllocation().getCargoAllocation());
-
-					// Get original discharge
-					{
-						final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
-						final Sequence sequence = cargoAllocation.getSequence();
-						oldVesselName = sequence.getName();
-
-						if (sequence.isSetCharterInMarket()) {
-							vc.setOriginalVessel(sequence.getCharterInMarket());
-						} else {
-							vc.setOriginalVessel(sequence.getVesselAvailability());
-						}
-						if (cargoAllocation.getSlotAllocations().size() != 2) {
-							throw new RuntimeException("Complex cargoes are not supported");
-						}
-
-						for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
-							if (slotAllocation == slotVisit.getSlotAllocation()) {
-								continue;
-							}
-							// Otherwise it is the original discharge
-							// TODO: Maybe store the slot allocation? Problematic with the open slot allocation....
-							wiringChange.setOriginalDischargeSlot((DischargeSlot) slotAllocation.getSlot());
-							vc.setOriginalDischargeSlot((DischargeSlot) slotAllocation.getSlot());
-
-							wiringChange.setOriginalDischargeAllocation(slotAllocation);
-							vc.setOriginalDischargeAllocation(slotAllocation);
-						}
-					}
 					for (final EObject e : equivalents) {
 						if (e instanceof SlotVisit) {
 							final SlotVisit slotVisit2 = (SlotVisit) e;
-
-							wiringChange.setNewLoadSlot((LoadSlot) slotVisit2.getSlotAllocation().getSlot());
-							vc.setNewLoadSlot((LoadSlot) slotVisit2.getSlotAllocation().getSlot());
-							wiringChange.setNewLoadAllocation(slotVisit2.getSlotAllocation());
-							vc.setNewLoadAllocation(slotVisit2.getSlotAllocation());
-
 							final CargoAllocation cargoAllocation = slotVisit2.getSlotAllocation().getCargoAllocation();
-							final Sequence sequence = cargoAllocation.getSequence();
-							newVesselName = sequence.getName();
-							vc.setNewVessel(sequence.getVesselAvailability());
-							if (sequence.isSetCharterInMarket()) {
-								vc.setNewVessel(sequence.getCharterInMarket());
-							} else {
-								vc.setNewVessel(sequence.getVesselAvailability());
-							}
-							wiringChange.setNewGroupProfitAndLoss(slotVisit2.getSlotAllocation().getCargoAllocation());
-							vc.setNewGroupProfitAndLoss(slotVisit2.getSlotAllocation().getCargoAllocation());
-							wiringChange.setNewEventGrouping(slotVisit2.getSlotAllocation().getCargoAllocation());
-							vc.setNewEventGrouping(slotVisit2.getSlotAllocation().getCargoAllocation());
-
 							if (cargoAllocation.getSlotAllocations().size() != 2) {
 								throw new RuntimeException("Complex cargoes are not supported");
 							}
-							for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
-								if (slotAllocation == slotVisit2.getSlotAllocation()) {
-									continue;
-								}
-								// Otherwise it is the original discharge
-								// TODO: Maybe store the slot allocation? Problematic with the open slot allocation....
-								wiringChange.setNewDischargeSlot((DischargeSlot) slotAllocation.getSlot());
-								vc.setNewDischargeSlot((DischargeSlot) slotAllocation.getSlot());
-								wiringChange.setNewDischargeAllocation(slotAllocation);
-								vc.setNewDischargeAllocation(slotAllocation);
-							}
-						} else if (e instanceof OpenSlotAllocation) {
-							final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) e;
-							wiringChange.setNewDischargeSlot((DischargeSlot) openSlotAllocation.getSlot());
-							wiringChange.setNewGroupProfitAndLoss(openSlotAllocation);
-						} else {
-							assert false;
+							createOrUpdateRow(lhsRowMap, rhsRowMap, rows, slotVisit2, (LoadSlot) slotVisit2.getSlotAllocation().getSlot(), false);
 						}
 					}
-
-					if (wiringChange.getOriginalDischargeSlot() != null && wiringChange.getNewDischargeSlot() != null) {
-						// TODO: Use this?
-						final String referenceStr = CargoAllocationUtils.getSalesWiringAsString(wiringChange.getOriginalLoadAllocation().getCargoAllocation());
-						final String otherStr = CargoAllocationUtils.getSalesWiringAsString(wiringChange.getNewLoadAllocation().getCargoAllocation());
-						if (!referenceStr.equals(otherStr)) {
-							// if (!equivalanceGroupBuilder.getElementKey(wiringChange.getOriginalDischargeSlot()).equals(equivalanceGroupBuilder.getElementKey(wiringChange.getNewDischargeSlot()))) {
-							wiringChanges.add(wiringChange);
-							// Wiring change
-							// Record change
-						} else {
-							// wiringChanges.add(wiringChange);
-							// no change in wiring, discard the wiring change (but use for vessel change?)
-						}
-						// TODO: Check vessel change
-					} else {
-						wiringChanges.add(wiringChange);
-					}
-					if (oldVesselName != null && newVesselName != null) {
-						vesselChanges.add(vc);
-					}
-
-					if (!wiringChanges.contains(wiringChange)) {
-
-						final WiringChange change = wiringChange;
-
-						Number f = null;
-						{
-							final ProfitAndLossContainer originalPNL = change.getOriginalGroupProfitAndLoss();
-							if (originalPNL != null) {
-								f = ChangeSetUtils.getGroupProfitAndLoss(originalPNL);
-							}
-						}
-						Number t = null;
-						{
-							final ProfitAndLossContainer newPNL = change.getNewGroupProfitAndLoss();
-							if (newPNL != null) {
-								t = ChangeSetUtils.getGroupProfitAndLoss(newPNL);
-							}
-						}
-						double delta = 0;
-						if (f != null) {
-							delta -= f.intValue();
-						}
-						if (t != null) {
-							delta += t.intValue();
-						}
-						delta = delta / 1000000.0;
-						if (delta != 0) {
-							otherChanges.add(wiringChange);
-						}
-					}
-
-					// Is is a wiring difference?
-					// final String referenceStr = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
-					// final String otherStr = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
-					//
-					// -- use existing code to check wiring string.
-					// // Make sure we include "unique" elements
-
-					// Is it a vessel difference?
-
-					// Else is another difference?
 				}
 			} else if (element instanceof OpenSlotAllocation) {
-				for (final Object e : equivalents) {
+				final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) element;
+				for (final EObject e : equivalents) {
 					if (e instanceof OpenSlotAllocation) {
-						// No change?
-					} else if (e instanceof SlotVisit) {
-						// Create wiring change stuff as above
+						final OpenSlotAllocation openSlotAllocation2 = (OpenSlotAllocation) e;
+						createOrUpdateRow(lhsRowMap, rhsRowMap, rows, openSlotAllocation2, false);
+					}
+				}
+			} else if (element instanceof Event) {
+				final Event event = (Event) element;
+				final ChangeSetRow row = lhsRowMap.get(event.name());
+
+				if (event instanceof ProfitAndLossContainer) {
+					row.setOriginalGroupProfitAndLoss((ProfitAndLossContainer) event);
+				}
+				if (event instanceof EventGrouping) {
+					row.setOriginalEventGrouping((EventGrouping) event);
+				}
+				row.setRhsVesselName(getName(event.getSequence()));
+			}
+		}
+
+		// Update with vessel and wiring changes
+		for (final ChangeSetRow row : rows) {
+			if (!Objects.equal(row.getLhsVesselName(), row.getRhsVesselName())) {
+				row.setVesselChange(true);
+			}
+			if (row.getLhsWiringLink() != null || row.getRhsWiringLink() != null) {
+				row.setWiringChange(true);
+			}
+
+		}
+
+		// Filter out zero P&L changes
+		final Iterator<ChangeSetRow> itr = rows.iterator();
+		while (itr.hasNext()) {
+			final ChangeSetRow row = itr.next();
+			if (row.isWiringChange()) {
+				continue;
+			}
+			if (row.isVesselChange()) {
+				continue;
+			}
+			final long a = ChangeSetUtils.getGroupProfitAndLoss(row.getOriginalGroupProfitAndLoss());
+			final long b = ChangeSetUtils.getGroupProfitAndLoss(row.getNewGroupProfitAndLoss());
+			if (a == b) {
+				itr.remove();
+				continue;
+			}
+			itr.remove();
+		}
+
+		Collections.sort(rows, new Comparator<ChangeSetRow>() {
+
+			@Override
+			public int compare(final ChangeSetRow o1, final ChangeSetRow o2) {
+				// Sort wiring changes first
+				if (o1.isWiringChange() != o2.isWiringChange()) {
+					if (o1.isWiringChange()) {
+						return -1;
 					} else {
+						return 1;
+					}
+				} else if (o1.isWiringChange() && o2.isWiringChange()) {
+					// If wiring change, sort related blocks together
+
+					// Are these elements related?
+					ChangeSetRow link = o1.getRhsWiringLink();
+					List<ChangeSetRow> group = new LinkedList<>();
+					group.add(o1);
+					while (link != null && !group.contains(link)) {
+						group.add(link);
+						link = link.getRhsWiringLink();
+					}
+					link = o1.getLhsWiringLink();
+					while (link != null && !group.contains(link)) {
+						group.add(link);
+						link = link.getLhsWiringLink();
+					}
+					// Sort the group with head, tail elements fixed then alphabetically
+					// This creates a stable sort even with cyclic wiring groups
+					Collections.sort(group, new Comparator<ChangeSetRow>() {
+
+						@Override
+						public int compare(ChangeSetRow o1, ChangeSetRow o2) {
+
+							if (o1.getLhsWiringLink() == null) {
+								return -1;
+							}
+							if (o2.getLhsWiringLink() == null) {
+								return 1;
+							}
+							if (o1.getRhsWiringLink() == null) {
+								return 1;
+							}
+							if (o2.getRhsWiringLink() == null) {
+								return -1;
+							}
+
+							if (o1.getLhsWiringLink() == o2) {
+								return -1;
+							}
+
+							if (o1.getRhsWiringLink() == o2) {
+								return 1;
+							}
+
+							String n1 = o1.getLhsName();
+							String n2 = o2.getLhsName();
+
+							if (n1 != null && n2 == null) {
+								return -1;
+							}
+							if (n1 == null && n2 != null) {
+								return 1;
+							}
+							if (n1 != null && n2 != null) {
+								return n1.compareTo(n2);
+							}
+
+							n1 = o1.getRhsName();
+							n2 = o2.getRhsName();
+							if (n1 != null && n2 == null) {
+								return -1;
+							}
+							if (n1 == null && n2 != null) {
+								return 1;
+							}
+							if (n1 != null && n2 != null) {
+								return n1.compareTo(n2);
+							}
+
+							return 0;
+						}
+					});
+
+					// Are the rows related?
+					if (group.contains(o2)) {
+						// Start from the first element in the sorted group
+						link = group.get(0);
+						while (link != null) {
+							if (link == o1) {
+								return -1;
+							}
+							if (link == o2) {
+								return 1;
+							}
+							link = link.getRhsWiringLink();
+						}
 						assert false;
-					}
-				}
-			} else {
-				if (element instanceof Event) {
-					Event event = (Event) element;
-					EventVesselChange vc = ChangesetFactory.eINSTANCE.createEventVesselChange();
-					vc.setEventName(event.name());
-					vc.setOriginalEvent(event);
-					if (event instanceof ProfitAndLossContainer) {
-						vc.setOriginalGroupProfitAndLoss((ProfitAndLossContainer) event);
-
-					}
-					if (event instanceof EventGrouping) {
-						vc.setOriginalEventGrouping((EventGrouping) event);
-					}
-					{
-						Sequence sequence = event.getSequence();
-						if (sequence.isSetCharterInMarket()) {
-							vc.setOriginalVessel(sequence.getCharterInMarket());
-						} else {
-							vc.setOriginalVessel(sequence.getVesselAvailability());
-						}
-					}
-
-					for (final EObject e : equivalents) {
-						if (e instanceof Event) {
-							final Event equivalentEvent = (Event) e;
-							vc.setNewEvent(equivalentEvent);
-							Sequence sequence = equivalentEvent.getSequence();
-							if (sequence.isSetCharterInMarket()) {
-								vc.setNewVessel(sequence.getCharterInMarket());
-							} else {
-								vc.setNewVessel(sequence.getVesselAvailability());
-							}
-							if (equivalentEvent instanceof ProfitAndLossContainer) {
-								vc.setNewGroupProfitAndLoss((ProfitAndLossContainer) equivalentEvent);
-							}
-							if (equivalentEvent instanceof EventGrouping) {
-								vc.setNewEventGrouping((EventGrouping) equivalentEvent);
-							}
-						}
-					}
-					eventChanges.add(vc);
-				}
-				// it an event difference
-
-				// Is it a vessel difference?
-
-				// Else is another diffe
-
-			}
-		}
-		for (
-
-		final EObject element : uniqueElements)
-
-		{
-			// Is it a cargo?
-			final boolean isBaseElement = fromAllElements.contains(element);
-			if (element instanceof SlotVisit) {
-				final SlotVisit slotVisit = (SlotVisit) element;
-				if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-
-					String oldVesselName = null;
-					final String newVesselName = null;
-
-					final WiringChange wiringChange = ChangesetFactory.eINSTANCE.createWiringChange();
-					final VesselChange vc = ChangesetFactory.eINSTANCE.createVesselChange();
-
-					// wiringChanges.add(wiringChange);
-					if (isBaseElement) {
-						wiringChange.setOriginalLoadSlot((LoadSlot) slotVisit.getSlotAllocation().getSlot());
-						vc.setOriginalLoadSlot((LoadSlot) slotVisit.getSlotAllocation().getSlot());
-						wiringChange.setOriginalLoadAllocation(slotVisit.getSlotAllocation());
-						vc.setOriginalLoadAllocation(slotVisit.getSlotAllocation());
-
 					} else {
-						wiringChange.setNewLoadSlot((LoadSlot) slotVisit.getSlotAllocation().getSlot());
-						vc.setNewLoadSlot((LoadSlot) slotVisit.getSlotAllocation().getSlot());
-						wiringChange.setNewLoadAllocation(slotVisit.getSlotAllocation());
-						vc.setNewLoadAllocation(slotVisit.getSlotAllocation());
-					}
-					// Get original discharge
-					{
-						final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
-						final Sequence sequence = cargoAllocation.getSequence();
-						oldVesselName = sequence.getName();
-						if (isBaseElement) {
-							if (sequence.isSetCharterInMarket()) {
-								vc.setOriginalVessel(sequence.getCharterInMarket());
-							} else {
-								vc.setOriginalVessel(sequence.getVesselAvailability());
-							}
-							if (sequence.isSetCharterInMarket()) {
-								vc.setNewVessel(sequence.getCharterInMarket());
-							} else {
-								vc.setNewVessel(sequence.getVesselAvailability());
-							}
-						}
-						if (cargoAllocation.getSlotAllocations().size() != 2) {
-							throw new RuntimeException("Complex cargoes are not supported");
-						}
-						for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
-							if (slotAllocation == slotVisit.getSlotAllocation()) {
-								continue;
-							}
-							// Otherwise it is the original discharge
-							// TODO: Maybe store the slot allocation? Problematic with the open slot allocation....
-							if (isBaseElement) {
-								wiringChange.setOriginalDischargeSlot((DischargeSlot) slotAllocation.getSlot());
-								vc.setOriginalDischargeSlot((DischargeSlot) slotAllocation.getSlot());
-								wiringChange.setOriginalDischargeAllocation(slotAllocation);
-								vc.setOriginalDischargeAllocation(slotAllocation);
-
-							} else {
-								wiringChange.setNewDischargeSlot((DischargeSlot) slotAllocation.getSlot());
-								vc.setNewDischargeSlot((DischargeSlot) slotAllocation.getSlot());
-								wiringChange.setNewDischargeAllocation(slotAllocation);
-								vc.setNewDischargeAllocation(slotAllocation);
-								final Set<EObject> localEquivs = equivalancesMap.get(slotAllocation.getSlotVisit());// .getSlotAllocation().getSlot());
-
-							}
-						}
-					}
-					wiringChanges.add(wiringChange);
-					vesselChanges.add(vc);
-				}
-			} else if (element instanceof OpenSlotAllocation) {
-				final int ii = 0;
-				// for (final Object e : equivalents) {
-				// if (e instanceof OpenSlotAllocation) {
-				// // No change?
-				// } else if (e instanceof SlotVisit) {
-				// // Create wiring change stuff as above
-				// } else {
-				// assert false;
-				// }
-				// }
-			} else {
-
-				// it an event difference
-
-				// Is it a vessel difference?
-
-				// Else is another diffe
-
-			}
-		}
-		// Stage 2, generate the row data structures from the wiring and vessel changes
-
-		// Do this later#? Part of viewer comparator?
-		// SOrt wiring change by load ID, then by discharge ID. (or sort all by date?)
-		// APpend vessel changes if required.
-
-		final Map<String, ChangeSetRow> rhsToRowMap = new HashMap<>();
-		final Map<String, ChangeSetRow> lhsToRowMap = new HashMap<>();
-
-		final Collection<ChangeSetRow> rows = new LinkedHashSet<>();
-
-		// First pass of wiring changes, create all the required rows.
-		for (final WiringChange wc : wiringChanges)
-
-		{
-			LoadSlot loadSlot = wc.getOriginalLoadSlot();
-			String lhsName = getRowName(wc.getOriginalLoadSlot());
-			if (lhsName == null) {
-				loadSlot = wc.getNewLoadSlot();
-				lhsName = getRowName(wc.getNewLoadSlot());
-			}
-			final ChangeSetRow row = ChangesetFactory.eINSTANCE.createChangeSetRow();
-			rows.add(row);
-			row.setWiringChange(true);
-
-			if (lhsName != null) {
-				final String lhsKeyName = getKeyName(loadSlot);
-				lhsToRowMap.put(lhsKeyName, row);
-				row.setLhsName(lhsName);
-				lhsToRowMap.put(lhsKeyName, row);
-				row.setLoadSlot(loadSlot);
-				row.setOriginalLoadAllocation(wc.getOriginalLoadAllocation());
-				row.setNewLoadAllocation(wc.getNewLoadAllocation());
-
-				row.setOriginalDischargeAllocation(wc.getOriginalDischargeAllocation());
-				row.setNewDischargeAllocation(wc.getNewDischargeAllocation());
-
-				row.setOriginalGroupProfitAndLoss(wc.getOriginalGroupProfitAndLoss());
-				row.setNewGroupProfitAndLoss(wc.getNewGroupProfitAndLoss());
-				row.setOriginalEventGrouping(wc.getOriginalEventGrouping());
-				row.setNewEventGrouping(wc.getNewEventGrouping());
-			}
-
-			final String rhsName = getRowName(wc.getNewDischargeSlot());
-			if (rhsName != null) {
-				row.setDischargeSlot(wc.getNewDischargeSlot());
-				row.setRhsName(rhsName);
-				final String rhsKeyName = getKeyName(wc.getNewDischargeSlot());
-				rhsToRowMap.put(rhsKeyName, row);
-			}
-		}
-
-		// Second pass, generate the wiring links
-		for (
-
-		final WiringChange wc : wiringChanges)
-
-		{
-			ChangeSetRow lhsRow = null;
-
-			final LoadSlot loadSlot = wc.getOriginalLoadSlot();
-			final String lhsRowKey = getKeyName(loadSlot);
-
-			if (lhsToRowMap.containsKey(lhsRowKey)) {
-				lhsRow = lhsToRowMap.get(lhsRowKey);
-			}
-			ChangeSetRow otherRhsRow = null;
-			final String rhsNewName = getRowName(wc.getOriginalDischargeSlot());
-			final String rhsKeyName = getKeyName(wc.getOriginalDischargeSlot());
-			if (rhsToRowMap.containsKey(rhsKeyName)) {
-				otherRhsRow = rhsToRowMap.get(rhsKeyName);
-			} else {
-				if (wc.getOriginalDischargeSlot() != null) {
-					otherRhsRow = ChangesetFactory.eINSTANCE.createChangeSetRow();
-					rows.add(otherRhsRow);
-					otherRhsRow.setWiringChange(true);
-
-					otherRhsRow.setRhsName(rhsNewName);
-					otherRhsRow.setDischargeSlot(wc.getOriginalDischargeSlot());
-
-					rhsToRowMap.put(rhsKeyName, otherRhsRow);
-
-					otherRhsRow.setOriginalGroupProfitAndLoss(wc.getOriginalGroupProfitAndLoss());
-					otherRhsRow.setNewGroupProfitAndLoss(wc.getNewGroupProfitAndLoss());
-					otherRhsRow.setOriginalEventGrouping(wc.getOriginalEventGrouping());
-					otherRhsRow.setNewEventGrouping(wc.getNewEventGrouping());
-				}
-			}
-			if (lhsRow == null && otherRhsRow != null) {
-				final String lhsName2 = getRowName(wc.getNewLoadSlot());
-				otherRhsRow.setLhsName(lhsName2);
-				otherRhsRow.setLoadSlot(wc.getNewLoadSlot());
-			}
-
-			// Bind the rows for wirings
-			if (lhsRow != null && otherRhsRow != null && lhsRow != otherRhsRow) {
-				lhsRow.setRhsWiringLink(otherRhsRow);
-			}
-		}
-		if (false) {
-			for (final WiringChange vc : otherChanges) {
-				ChangeSetRow row = null;
-				final String lhsName = getRowName(vc.getOriginalLoadSlot());
-				final String rhsName = getRowName(vc.getOriginalDischargeSlot());
-
-				if (lhsToRowMap.containsKey(getKeyName(vc.getOriginalLoadSlot()))) {
-					row = lhsToRowMap.get(getKeyName(vc.getOriginalLoadSlot()));
-				} else {
-					row = ChangesetFactory.eINSTANCE.createChangeSetRow();
-					row.setLhsName(lhsName);
-					row.setLoadSlot(vc.getOriginalLoadSlot());
-					row.setOriginalLoadAllocation(vc.getOriginalLoadAllocation());
-					row.setNewLoadAllocation(vc.getNewLoadAllocation());
-					row.setOriginalDischargeAllocation(vc.getOriginalDischargeAllocation());
-					row.setNewDischargeAllocation(vc.getNewDischargeAllocation());
-					row.setRhsName(rhsName);
-					// row.setLhsVesselChange(vc);
-					// lhsRow.setLhsVesselChange(vc);
-					lhsToRowMap.put(getKeyName(vc.getOriginalLoadSlot()), row);
-
-					row.setOriginalGroupProfitAndLoss(vc.getOriginalGroupProfitAndLoss());
-					row.setNewGroupProfitAndLoss(vc.getNewGroupProfitAndLoss());
-					row.setOriginalEventGrouping(vc.getOriginalEventGrouping());
-					row.setNewEventGrouping(vc.getNewEventGrouping());
-
-					// if (vc.getOriginalVessel() != null && !getName(vc.getOriginalVessel()).equals(getName(vc.getNewVessel()))) {
-					rows.add(row);
-					// row.setVesselChange(true);
-					// }
-
-				}
-
-				// row.setLhsVesselName(getName(vc.getOriginalVessel()));
-				// row.setRhsVesselName(getName(vc.getNewVessel()));
-			}
-		}
-		for (
-
-		final VesselChange vc : vesselChanges)
-
-		{
-			ChangeSetRow row = null;
-			final String lhsName = getRowName(vc.getOriginalLoadSlot());
-			final String rhsName = getRowName(vc.getOriginalDischargeSlot());
-
-			if (lhsToRowMap.containsKey(getKeyName(vc.getOriginalLoadSlot()))) {
-				row = lhsToRowMap.get(getKeyName(vc.getOriginalLoadSlot()));
-			} else {
-				row = ChangesetFactory.eINSTANCE.createChangeSetRow();
-				row.setLhsName(lhsName);
-				row.setLoadSlot(vc.getOriginalLoadSlot());
-				row.setOriginalLoadAllocation(vc.getOriginalLoadAllocation());
-				row.setNewLoadAllocation(vc.getNewLoadAllocation());
-				row.setOriginalDischargeAllocation(vc.getOriginalDischargeAllocation());
-				row.setNewDischargeAllocation(vc.getNewDischargeAllocation());
-				row.setRhsName(rhsName);
-
-				row.setOriginalGroupProfitAndLoss(vc.getOriginalGroupProfitAndLoss());
-				row.setNewGroupProfitAndLoss(vc.getNewGroupProfitAndLoss());
-				row.setOriginalEventGrouping(vc.getOriginalEventGrouping());
-				row.setNewEventGrouping(vc.getNewEventGrouping());
-
-				// row.setLhsVesselChange(vc);
-				// lhsRow.setLhsVesselChange(vc);
-				lhsToRowMap.put(getKeyName(vc.getOriginalLoadSlot()), row);
-
-				if (vc.getOriginalVessel() != null && !getName(vc.getOriginalVessel()).equals(getName(vc.getNewVessel()))) {
-					rows.add(row);
-					row.setVesselChange(true);
-				}
-
-			}
-
-			row.setLhsVesselName(getName(vc.getOriginalVessel()));
-			row.setRhsVesselName(getName(vc.getNewVessel()));
-		}
-		if (false) {
-			for (final EventVesselChange vc : eventChanges) {
-				ChangeSetRow row = null;
-				final String lhsName = vc.getEventName();// (vc.getOriginalLoadSlot());
-				// final String rhsName = getRowName(vc.getOriginalDischargeSlot());
-
-				// if (lhsToRowMap.containsKey(getKeyName(vc.getOriginalLoadSlot()))) {
-				// row = lhsToRowMap.get(getKeyName(vc.getOriginalLoadSlot()));
-				// } else {
-				row = ChangesetFactory.eINSTANCE.createChangeSetRow();
-				row.setLhsName(lhsName);
-				// row.setLoadSlot(vc.getOriginalLoadSlot());
-				// row.setOriginalLoadAllocation(vc.getOriginalLoadAllocation());
-				// row.setNewLoadAllocation(vc.getNewLoadAllocation());
-				// row.setOriginalDischargeAllocation(vc.getOriginalDischargeAllocation());
-				// row.setNewDischargeAllocation(vc.getNewDischargeAllocation());
-				// row.setRhsName(rhsName);
-
-				row.setOriginalGroupProfitAndLoss(vc.getOriginalGroupProfitAndLoss());
-				row.setNewGroupProfitAndLoss(vc.getNewGroupProfitAndLoss());
-				row.setOriginalEventGrouping(vc.getOriginalEventGrouping());
-				row.setNewEventGrouping(vc.getNewEventGrouping());
-
-				// row.setLhsVesselChange(vc);
-				// lhsRow.setLhsVesselChange(vc);
-				// lhsToRowMap.put(getKeyName(vc.getOriginalLoadSlot()), row);
-
-				// if (vc.getOriginalVessel() != null && !getName(vc.getOriginalVessel()).equals(getName(vc.getNewVessel()))) {
-				rows.add(row);
-				// row.setVesselChange(true);
-				// }
-
-				// }
-
-				row.setLhsVesselName(getName(vc.getOriginalVessel()));
-				row.setRhsVesselName(getName(vc.getNewVessel()));
-			}
-		}
-		// TODO
-		// for (OtherChabnge : otherChabnges) {
-		//
-		// }
-
-		final List<ChangeSetRow> sortedRows = new LinkedList<>();
-
-		if (!rows.isEmpty())
-
-		{
-			ChangeSetRow lastRow = null;
-			int idx = 0;
-			while (!rows.isEmpty()) {
-				if (lastRow == null) {
-					lastRow = rows.iterator().next();
-
-					// Some code to find the end of the line
-					ChangeSetRow t = lastRow;
-					while (t != null && t != lastRow) {
-						if (t.getLhsWiringLink() == null) {
-							break;
-						}
-						t = t.getLhsWiringLink();
-					}
-					lastRow = t;
-					idx = sortedRows.size();
-					rows.remove(lastRow);
-					sortedRows.add(lastRow);
-				} else {
-					final ChangeSetRow link = lastRow.getRhsWiringLink();
-					lastRow = null;
-					if (link != null) {
-						if (!sortedRows.contains(link)) {
-							sortedRows.add(idx, link);
-							lastRow = link;
-						}
-						rows.remove(link);
+						// Sort on head element ID
+						return ("" + group.get(0).getLhsName()).compareTo("" + o2.getLhsName());
 					}
 				}
+				// Sort vessel changes above anything else.
+				if (o1.isVesselChange() != o2.isVesselChange()) {
+					if (o1.isVesselChange()) {
+						return -1;
+					} else {
+						return 1;
+					}
+				}
+
+				// Compare name
+				return ("" + o1.getLhsName()).compareTo("" + o2.getLhsName());
 			}
-		}
-		if (isBase)
+		});
 
-		{
-			changeSet.getChangesToBase().addAll(wiringChanges);
-			changeSet.getChangesToBase().addAll(vesselChanges);
-			changeSet.getChangeSetRowsToBase().addAll(sortedRows);
-		} else
-
-		{
-			changeSet.getChangesToPrevious().addAll(wiringChanges);
-			changeSet.getChangesToPrevious().addAll(vesselChanges);
-			changeSet.getChangeSetRowsToPrevious().addAll(sortedRows);
+		// Add to data model
+		if (isBase) {
+			changeSet.getChangeSetRowsToBase().addAll(rows);
+		} else {
+			changeSet.getChangeSetRowsToPrevious().addAll(rows);
 		}
 
 		// Build metrics
@@ -866,7 +528,150 @@ public class ChangeSetViewTransformer {
 
 			}
 		}
+	}
 
+	protected void createOrUpdateRow(final Map<String, ChangeSetRow> lhsRowMap, final Map<String, ChangeSetRow> rhsRowMap, final List<ChangeSetRow> rows, final OpenSlotAllocation openSlotAllocation,
+			final boolean isBase) {
+		final Slot slot = openSlotAllocation.getSlot();
+
+		if (slot instanceof LoadSlot) {
+			final LoadSlot loadSlot = (LoadSlot) slot;
+			final ChangeSetRow row;
+			{
+				final String rowKey = getKeyName(loadSlot);
+				if (lhsRowMap.containsKey(rowKey)) {
+					row = lhsRowMap.get(rowKey);
+				} else {
+					row = ChangesetFactory.eINSTANCE.createChangeSetRow();
+					rows.add(row);
+					row.setLhsName(getRowName(loadSlot));
+					row.setLoadSlot(loadSlot);
+					lhsRowMap.put(getKeyName(loadSlot), row);
+				}
+			}
+			if (isBase) {
+				row.setNewGroupProfitAndLoss(openSlotAllocation);
+			} else {
+				row.setOriginalGroupProfitAndLoss(openSlotAllocation);
+				if (openSlotAllocation.getSlot() != null) {
+					final ChangeSetRow otherRow = lhsRowMap.get(getKeyName(openSlotAllocation.getSlot()));
+					if (otherRow != null) {
+						if (row != otherRow) {
+							row.setLhsWiringLink(otherRow);
+						}
+					}
+				}
+
+			}
+		} else if (slot instanceof DischargeSlot) {
+			final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+			final ChangeSetRow row;
+			{
+				final String rowKey = getKeyName(dischargeSlot);
+				if (rhsRowMap.containsKey(rowKey)) {
+					row = rhsRowMap.get(rowKey);
+				} else {
+					row = ChangesetFactory.eINSTANCE.createChangeSetRow();
+					rows.add(row);
+					row.setRhsName(getRowName(dischargeSlot));
+					row.setDischargeSlot(dischargeSlot);
+					rhsRowMap.put(getKeyName(dischargeSlot), row);
+				}
+			}
+			if (isBase) {
+				row.setNewGroupProfitAndLoss(openSlotAllocation);
+			} else {
+				row.setOriginalGroupProfitAndLoss(openSlotAllocation);
+				if (openSlotAllocation.getSlot() != null) {
+					final ChangeSetRow otherRow = rhsRowMap.get(getKeyName(openSlotAllocation.getSlot()));
+					if (otherRow != null) {
+						if (row != otherRow) {
+							row.setRhsWiringLink(otherRow);
+						}
+					}
+				}
+
+			}
+		} else {
+			//
+			assert false;
+		}
+	}
+
+	protected void createOrUpdateRow(final Map<String, ChangeSetRow> lhsRowMap, final Map<String, ChangeSetRow> rhsRowMap, final List<ChangeSetRow> rows, final SlotVisit slotVisit,
+			final LoadSlot loadSlot, final boolean isBase) {
+		final ChangeSetRow row;
+		{
+			final String rowKey = getKeyName(loadSlot);
+			if (lhsRowMap.containsKey(rowKey)) {
+				row = lhsRowMap.get(rowKey);
+			} else {
+				row = ChangesetFactory.eINSTANCE.createChangeSetRow();
+				rows.add(row);
+				row.setLhsName(getRowName(loadSlot));
+				row.setLoadSlot(loadSlot);
+				lhsRowMap.put(getKeyName(loadSlot), row);
+			}
+		}
+
+		final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
+		if (cargoAllocation.getSlotAllocations().size() != 2) {
+			throw new RuntimeException("Complex cargoes are not supported");
+		}
+		if (isBase) {
+			row.setNewGroupProfitAndLoss(cargoAllocation);
+			row.setNewEventGrouping(cargoAllocation);
+			row.setLhsVesselName(getName(slotVisit.getSequence()));
+			row.setNewLoadAllocation(slotVisit.getSlotAllocation());
+		} else {
+			row.setOriginalGroupProfitAndLoss(cargoAllocation);
+			row.setOriginalEventGrouping(cargoAllocation);
+			row.setOriginalLoadAllocation(slotVisit.getSlotAllocation());
+			row.setRhsVesselName(getName(slotVisit.getSequence()));
+		}
+		// Get discharge data
+		for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
+			if (slotAllocation == slotVisit.getSlotAllocation()) {
+				continue;
+			}
+
+			if (isBase) {
+				row.setRhsName(getRowName(slotAllocation.getSlot()));
+				row.setNewDischargeAllocation(slotAllocation);
+				row.setDischargeSlot((DischargeSlot) slotAllocation.getSlot());
+				rhsRowMap.put(getKeyName(slotAllocation.getSlot()), row);
+			} else {
+				row.setOriginalDischargeAllocation(slotAllocation);
+			}
+			if (!isBase) {
+				if (slotAllocation.getSlot() != null) {
+					ChangeSetRow otherRow = rhsRowMap.get(getKeyName(slotAllocation.getSlot()));
+					if (otherRow == null) {
+						// Special case, a spot slot will have no "OpenSlotAllocation" to pair up to, so create a new row here.
+						assert slotAllocation.getSlot() instanceof SpotSlot;
+						otherRow = ChangesetFactory.eINSTANCE.createChangeSetRow();
+						rows.add(otherRow);
+						otherRow.setRhsName(getRowName(slotAllocation.getSlot()));
+						otherRow.setOriginalDischargeAllocation(slotAllocation);
+						otherRow.setDischargeSlot((DischargeSlot) slotAllocation.getSlot());
+						// otherRow.setWiringChange(true);
+						rhsRowMap.put(getKeyName(slotAllocation.getSlot()), row);
+					}
+					if (row != otherRow) {
+						row.setRhsWiringLink(otherRow);
+					}
+				}
+			}
+		}
+
+	}
+
+	private String getName(final Sequence sequence) {
+		if (sequence.isSetCharterInMarket()) {
+			return getName(sequence.getCharterInMarket());
+		} else {
+			return getName(sequence.getVesselAvailability());
+		}
 	}
 
 	private String getName(final VesselAssignmentType t) {

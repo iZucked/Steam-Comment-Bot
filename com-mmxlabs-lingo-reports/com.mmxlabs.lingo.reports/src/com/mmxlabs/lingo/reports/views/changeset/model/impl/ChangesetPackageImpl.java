@@ -2,22 +2,15 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset.model.impl;
 
-import com.mmxlabs.lingo.reports.views.changeset.model.Change;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
-import com.mmxlabs.lingo.reports.views.changeset.model.EventVesselChange;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
-import com.mmxlabs.lingo.reports.views.changeset.model.VesselChange;
-import com.mmxlabs.lingo.reports.views.changeset.model.WiringChange;
-
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
-import com.mmxlabs.models.lng.types.TypesPackage;
-
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
 import org.eclipse.emf.ecore.EAttribute;
@@ -54,34 +47,6 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * @generated
 	 */
 	private EClass metricsEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass changeEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass eventVesselChangeEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass wiringChangeEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass vesselChangeEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -187,7 +152,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getChangeSet_ChangesToBase() {
+	public EReference getChangeSet_MetricsToBase() {
 		return (EReference)changeSetEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -196,7 +161,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getChangeSet_ChangesToPrevious() {
+	public EReference getChangeSet_MetricsToPrevious() {
 		return (EReference)changeSetEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -205,7 +170,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getChangeSet_MetricsToBase() {
+	public EReference getChangeSet_BaseScenarioRef() {
 		return (EReference)changeSetEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -214,7 +179,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getChangeSet_MetricsToPrevious() {
+	public EReference getChangeSet_PrevScenarioRef() {
 		return (EReference)changeSetEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -223,7 +188,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getChangeSet_BaseScenarioRef() {
+	public EReference getChangeSet_CurrentScenarioRef() {
 		return (EReference)changeSetEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -232,7 +197,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getChangeSet_PrevScenarioRef() {
+	public EReference getChangeSet_BaseScenario() {
 		return (EReference)changeSetEClass.getEStructuralFeatures().get(5);
 	}
 
@@ -241,7 +206,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getChangeSet_CurrentScenarioRef() {
+	public EReference getChangeSet_PrevScenario() {
 		return (EReference)changeSetEClass.getEStructuralFeatures().get(6);
 	}
 
@@ -250,7 +215,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getChangeSet_BaseScenario() {
+	public EReference getChangeSet_CurrentScenario() {
 		return (EReference)changeSetEClass.getEStructuralFeatures().get(7);
 	}
 
@@ -259,7 +224,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getChangeSet_PrevScenario() {
+	public EReference getChangeSet_ChangeSetRowsToBase() {
 		return (EReference)changeSetEClass.getEStructuralFeatures().get(8);
 	}
 
@@ -268,26 +233,8 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getChangeSet_CurrentScenario() {
-		return (EReference)changeSetEClass.getEStructuralFeatures().get(9);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getChangeSet_ChangeSetRowsToBase() {
-		return (EReference)changeSetEClass.getEStructuralFeatures().get(10);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EReference getChangeSet_ChangeSetRowsToPrevious() {
-		return (EReference)changeSetEClass.getEStructuralFeatures().get(11);
+		return (EReference)changeSetEClass.getEStructuralFeatures().get(9);
 	}
 
 	/**
@@ -324,285 +271,6 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 */
 	public EAttribute getMetrics_CapacityDelta() {
 		return (EAttribute)metricsEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getChange() {
-		return changeEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getChange_OriginalGroupProfitAndLoss() {
-		return (EReference)changeEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getChange_NewGroupProfitAndLoss() {
-		return (EReference)changeEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getChange_OriginalEventGrouping() {
-		return (EReference)changeEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getChange_NewEventGrouping() {
-		return (EReference)changeEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getEventVesselChange() {
-		return eventVesselChangeEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getEventVesselChange_OriginalEvent() {
-		return (EReference)eventVesselChangeEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getEventVesselChange_NewEvent() {
-		return (EReference)eventVesselChangeEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getEventVesselChange_OriginalVessel() {
-		return (EReference)eventVesselChangeEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getEventVesselChange_NewVessel() {
-		return (EReference)eventVesselChangeEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getEventVesselChange_EventName() {
-		return (EAttribute)eventVesselChangeEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getWiringChange() {
-		return wiringChangeEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getWiringChange_OriginalLoadSlot() {
-		return (EReference)wiringChangeEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getWiringChange_NewLoadSlot() {
-		return (EReference)wiringChangeEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getWiringChange_OriginalDischargeSlot() {
-		return (EReference)wiringChangeEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getWiringChange_NewDischargeSlot() {
-		return (EReference)wiringChangeEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getWiringChange_OriginalLoadAllocation() {
-		return (EReference)wiringChangeEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getWiringChange_NewLoadAllocation() {
-		return (EReference)wiringChangeEClass.getEStructuralFeatures().get(5);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getWiringChange_OriginalDischargeAllocation() {
-		return (EReference)wiringChangeEClass.getEStructuralFeatures().get(6);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getWiringChange_NewDischargeAllocation() {
-		return (EReference)wiringChangeEClass.getEStructuralFeatures().get(7);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getVesselChange() {
-		return vesselChangeEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getVesselChange_NewLoadSlot() {
-		return (EReference)vesselChangeEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getVesselChange_OriginalDischargeSlot() {
-		return (EReference)vesselChangeEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getVesselChange_NewDischargeSlot() {
-		return (EReference)vesselChangeEClass.getEStructuralFeatures().get(5);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getVesselChange_OriginalVessel() {
-		return (EReference)vesselChangeEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getVesselChange_NewVessel() {
-		return (EReference)vesselChangeEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getVesselChange_OriginalLoadSlot() {
-		return (EReference)vesselChangeEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getVesselChange_OriginalLoadAllocation() {
-		return (EReference)vesselChangeEClass.getEStructuralFeatures().get(6);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getVesselChange_NewLoadAllocation() {
-		return (EReference)vesselChangeEClass.getEStructuralFeatures().get(7);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getVesselChange_OriginalDischargeAllocation() {
-		return (EReference)vesselChangeEClass.getEStructuralFeatures().get(8);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getVesselChange_NewDischargeAllocation() {
-		return (EReference)vesselChangeEClass.getEStructuralFeatures().get(9);
 	}
 
 	/**
@@ -808,8 +476,6 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		createEReference(changeSetRootEClass, CHANGE_SET_ROOT__CHANGE_SETS);
 
 		changeSetEClass = createEClass(CHANGE_SET);
-		createEReference(changeSetEClass, CHANGE_SET__CHANGES_TO_BASE);
-		createEReference(changeSetEClass, CHANGE_SET__CHANGES_TO_PREVIOUS);
 		createEReference(changeSetEClass, CHANGE_SET__METRICS_TO_BASE);
 		createEReference(changeSetEClass, CHANGE_SET__METRICS_TO_PREVIOUS);
 		createEReference(changeSetEClass, CHANGE_SET__BASE_SCENARIO_REF);
@@ -825,41 +491,6 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		createEAttribute(metricsEClass, METRICS__PNL_DELTA);
 		createEAttribute(metricsEClass, METRICS__LATENESS_DELTA);
 		createEAttribute(metricsEClass, METRICS__CAPACITY_DELTA);
-
-		changeEClass = createEClass(CHANGE);
-		createEReference(changeEClass, CHANGE__ORIGINAL_GROUP_PROFIT_AND_LOSS);
-		createEReference(changeEClass, CHANGE__NEW_GROUP_PROFIT_AND_LOSS);
-		createEReference(changeEClass, CHANGE__ORIGINAL_EVENT_GROUPING);
-		createEReference(changeEClass, CHANGE__NEW_EVENT_GROUPING);
-
-		eventVesselChangeEClass = createEClass(EVENT_VESSEL_CHANGE);
-		createEReference(eventVesselChangeEClass, EVENT_VESSEL_CHANGE__ORIGINAL_EVENT);
-		createEReference(eventVesselChangeEClass, EVENT_VESSEL_CHANGE__NEW_EVENT);
-		createEReference(eventVesselChangeEClass, EVENT_VESSEL_CHANGE__ORIGINAL_VESSEL);
-		createEReference(eventVesselChangeEClass, EVENT_VESSEL_CHANGE__NEW_VESSEL);
-		createEAttribute(eventVesselChangeEClass, EVENT_VESSEL_CHANGE__EVENT_NAME);
-
-		wiringChangeEClass = createEClass(WIRING_CHANGE);
-		createEReference(wiringChangeEClass, WIRING_CHANGE__ORIGINAL_LOAD_SLOT);
-		createEReference(wiringChangeEClass, WIRING_CHANGE__NEW_LOAD_SLOT);
-		createEReference(wiringChangeEClass, WIRING_CHANGE__ORIGINAL_DISCHARGE_SLOT);
-		createEReference(wiringChangeEClass, WIRING_CHANGE__NEW_DISCHARGE_SLOT);
-		createEReference(wiringChangeEClass, WIRING_CHANGE__ORIGINAL_LOAD_ALLOCATION);
-		createEReference(wiringChangeEClass, WIRING_CHANGE__NEW_LOAD_ALLOCATION);
-		createEReference(wiringChangeEClass, WIRING_CHANGE__ORIGINAL_DISCHARGE_ALLOCATION);
-		createEReference(wiringChangeEClass, WIRING_CHANGE__NEW_DISCHARGE_ALLOCATION);
-
-		vesselChangeEClass = createEClass(VESSEL_CHANGE);
-		createEReference(vesselChangeEClass, VESSEL_CHANGE__ORIGINAL_VESSEL);
-		createEReference(vesselChangeEClass, VESSEL_CHANGE__NEW_VESSEL);
-		createEReference(vesselChangeEClass, VESSEL_CHANGE__ORIGINAL_LOAD_SLOT);
-		createEReference(vesselChangeEClass, VESSEL_CHANGE__NEW_LOAD_SLOT);
-		createEReference(vesselChangeEClass, VESSEL_CHANGE__ORIGINAL_DISCHARGE_SLOT);
-		createEReference(vesselChangeEClass, VESSEL_CHANGE__NEW_DISCHARGE_SLOT);
-		createEReference(vesselChangeEClass, VESSEL_CHANGE__ORIGINAL_LOAD_ALLOCATION);
-		createEReference(vesselChangeEClass, VESSEL_CHANGE__NEW_LOAD_ALLOCATION);
-		createEReference(vesselChangeEClass, VESSEL_CHANGE__ORIGINAL_DISCHARGE_ALLOCATION);
-		createEReference(vesselChangeEClass, VESSEL_CHANGE__NEW_DISCHARGE_ALLOCATION);
 
 		changeSetRowEClass = createEClass(CHANGE_SET_ROW);
 		createEAttribute(changeSetRowEClass, CHANGE_SET_ROW__LHS_NAME);
@@ -907,26 +538,20 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 
 		// Obtain other dependent packages
 		ScenarioServicePackage theScenarioServicePackage = (ScenarioServicePackage)EPackage.Registry.INSTANCE.getEPackage(ScenarioServicePackage.eNS_URI);
-		SchedulePackage theSchedulePackage = (SchedulePackage)EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI);
-		TypesPackage theTypesPackage = (TypesPackage)EPackage.Registry.INSTANCE.getEPackage(TypesPackage.eNS_URI);
 		CargoPackage theCargoPackage = (CargoPackage)EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI);
+		SchedulePackage theSchedulePackage = (SchedulePackage)EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI);
 
 		// Create type parameters
 
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
-		eventVesselChangeEClass.getESuperTypes().add(this.getChange());
-		wiringChangeEClass.getESuperTypes().add(this.getChange());
-		vesselChangeEClass.getESuperTypes().add(this.getChange());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(changeSetRootEClass, ChangeSetRoot.class, "ChangeSetRoot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getChangeSetRoot_ChangeSets(), this.getChangeSet(), null, "changeSets", null, 0, -1, ChangeSetRoot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(changeSetEClass, ChangeSet.class, "ChangeSet", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getChangeSet_ChangesToBase(), this.getChange(), null, "changesToBase", null, 0, -1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getChangeSet_ChangesToPrevious(), this.getChange(), null, "changesToPrevious", null, 0, -1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getChangeSet_MetricsToBase(), this.getMetrics(), null, "metricsToBase", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getChangeSet_MetricsToPrevious(), this.getMetrics(), null, "metricsToPrevious", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getChangeSet_BaseScenarioRef(), theScenarioServicePackage.getModelReference(), null, "baseScenarioRef", null, 0, 1, ChangeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -942,41 +567,6 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		initEAttribute(getMetrics_PnlDelta(), ecorePackage.getEInt(), "pnlDelta", null, 0, 1, Metrics.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMetrics_LatenessDelta(), ecorePackage.getEInt(), "latenessDelta", null, 0, 1, Metrics.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMetrics_CapacityDelta(), ecorePackage.getEInt(), "capacityDelta", null, 0, 1, Metrics.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(changeEClass, Change.class, "Change", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getChange_OriginalGroupProfitAndLoss(), theSchedulePackage.getProfitAndLossContainer(), null, "originalGroupProfitAndLoss", null, 0, 1, Change.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getChange_NewGroupProfitAndLoss(), theSchedulePackage.getProfitAndLossContainer(), null, "newGroupProfitAndLoss", null, 0, 1, Change.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getChange_OriginalEventGrouping(), theSchedulePackage.getEventGrouping(), null, "originalEventGrouping", null, 0, 1, Change.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getChange_NewEventGrouping(), theSchedulePackage.getEventGrouping(), null, "newEventGrouping", null, 0, 1, Change.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(eventVesselChangeEClass, EventVesselChange.class, "EventVesselChange", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getEventVesselChange_OriginalEvent(), theSchedulePackage.getEvent(), null, "originalEvent", null, 0, 1, EventVesselChange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getEventVesselChange_NewEvent(), theSchedulePackage.getEvent(), null, "newEvent", null, 0, 1, EventVesselChange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getEventVesselChange_OriginalVessel(), theTypesPackage.getVesselAssignmentType(), null, "originalVessel", null, 0, 1, EventVesselChange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getEventVesselChange_NewVessel(), theTypesPackage.getVesselAssignmentType(), null, "newVessel", null, 0, 1, EventVesselChange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getEventVesselChange_EventName(), ecorePackage.getEString(), "eventName", null, 0, 1, EventVesselChange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(wiringChangeEClass, WiringChange.class, "WiringChange", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getWiringChange_OriginalLoadSlot(), theCargoPackage.getLoadSlot(), null, "originalLoadSlot", null, 0, 1, WiringChange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getWiringChange_NewLoadSlot(), theCargoPackage.getLoadSlot(), null, "newLoadSlot", null, 0, 1, WiringChange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getWiringChange_OriginalDischargeSlot(), theCargoPackage.getDischargeSlot(), null, "originalDischargeSlot", null, 0, 1, WiringChange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getWiringChange_NewDischargeSlot(), theCargoPackage.getDischargeSlot(), null, "newDischargeSlot", null, 0, 1, WiringChange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getWiringChange_OriginalLoadAllocation(), theSchedulePackage.getSlotAllocation(), null, "originalLoadAllocation", null, 0, 1, WiringChange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getWiringChange_NewLoadAllocation(), theSchedulePackage.getSlotAllocation(), null, "newLoadAllocation", null, 0, 1, WiringChange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getWiringChange_OriginalDischargeAllocation(), theSchedulePackage.getSlotAllocation(), null, "originalDischargeAllocation", null, 0, 1, WiringChange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getWiringChange_NewDischargeAllocation(), theSchedulePackage.getSlotAllocation(), null, "newDischargeAllocation", null, 0, 1, WiringChange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(vesselChangeEClass, VesselChange.class, "VesselChange", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getVesselChange_OriginalVessel(), theTypesPackage.getVesselAssignmentType(), null, "originalVessel", null, 0, 1, VesselChange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getVesselChange_NewVessel(), theTypesPackage.getVesselAssignmentType(), null, "newVessel", null, 0, 1, VesselChange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getVesselChange_OriginalLoadSlot(), theCargoPackage.getLoadSlot(), null, "originalLoadSlot", null, 0, 1, VesselChange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getVesselChange_NewLoadSlot(), theCargoPackage.getLoadSlot(), null, "newLoadSlot", null, 0, 1, VesselChange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getVesselChange_OriginalDischargeSlot(), theCargoPackage.getDischargeSlot(), null, "originalDischargeSlot", null, 0, 1, VesselChange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getVesselChange_NewDischargeSlot(), theCargoPackage.getDischargeSlot(), null, "newDischargeSlot", null, 0, 1, VesselChange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getVesselChange_OriginalLoadAllocation(), theSchedulePackage.getSlotAllocation(), null, "originalLoadAllocation", null, 0, 1, VesselChange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getVesselChange_NewLoadAllocation(), theSchedulePackage.getSlotAllocation(), null, "newLoadAllocation", null, 0, 1, VesselChange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getVesselChange_OriginalDischargeAllocation(), theSchedulePackage.getSlotAllocation(), null, "originalDischargeAllocation", null, 0, 1, VesselChange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getVesselChange_NewDischargeAllocation(), theSchedulePackage.getSlotAllocation(), null, "newDischargeAllocation", null, 0, 1, VesselChange.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(changeSetRowEClass, ChangeSetRow.class, "ChangeSetRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getChangeSetRow_LhsName(), ecorePackage.getEString(), "lhsName", null, 0, 1, ChangeSetRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

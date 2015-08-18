@@ -7,10 +7,6 @@
         eType="#//ChangeSet" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ChangeSet">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="changesToBase" upperBound="-1"
-        eType="#//Change" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="changesToPrevious" upperBound="-1"
-        eType="#//Change" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="metricsToBase" eType="#//Metrics"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="metricsToPrevious" eType="#//Metrics"
@@ -30,52 +26,6 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="pnlDelta" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="latenessDelta" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="capacityDelta" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Change">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="originalGroupProfitAndLoss"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//ProfitAndLossContainer"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="newGroupProfitAndLoss"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//ProfitAndLossContainer"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="originalEventGrouping"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//EventGrouping"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="newEventGrouping" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//EventGrouping"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="EventVesselChange" eSuperTypes="#//Change">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="originalEvent" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//Event"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="newEvent" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//Event"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="originalVessel" eType="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VesselAssignmentType"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="newVessel" eType="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VesselAssignmentType"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="eventName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="WiringChange" eSuperTypes="#//Change">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="originalLoadSlot" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//LoadSlot"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="newLoadSlot" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//LoadSlot"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="originalDischargeSlot"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//DischargeSlot"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="newDischargeSlot" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//DischargeSlot"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="originalLoadAllocation"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="newLoadAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="originalDischargeAllocation"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="newDischargeAllocation"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="VesselChange" eSuperTypes="#//Change">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="originalVessel" eType="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VesselAssignmentType"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="newVessel" eType="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//VesselAssignmentType"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="originalLoadSlot" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//LoadSlot"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="newLoadSlot" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//LoadSlot"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="originalDischargeSlot"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//DischargeSlot"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="newDischargeSlot" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//DischargeSlot"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="originalLoadAllocation"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="newLoadAllocation" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="originalDischargeAllocation"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="newDischargeAllocation"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//SlotAllocation"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ChangeSetRow">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="lhsName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

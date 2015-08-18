@@ -84,33 +84,6 @@ public class ChangesetSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ChangesetPackage.CHANGE: {
-				Change change = (Change)theEObject;
-				T result = caseChange(change);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case ChangesetPackage.EVENT_VESSEL_CHANGE: {
-				EventVesselChange eventVesselChange = (EventVesselChange)theEObject;
-				T result = caseEventVesselChange(eventVesselChange);
-				if (result == null) result = caseChange(eventVesselChange);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case ChangesetPackage.WIRING_CHANGE: {
-				WiringChange wiringChange = (WiringChange)theEObject;
-				T result = caseWiringChange(wiringChange);
-				if (result == null) result = caseChange(wiringChange);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case ChangesetPackage.VESSEL_CHANGE: {
-				VesselChange vesselChange = (VesselChange)theEObject;
-				T result = caseVesselChange(vesselChange);
-				if (result == null) result = caseChange(vesselChange);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case ChangesetPackage.CHANGE_SET_ROW: {
 				ChangeSetRow changeSetRow = (ChangeSetRow)theEObject;
 				T result = caseChangeSetRow(changeSetRow);
@@ -163,66 +136,6 @@ public class ChangesetSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseMetrics(Metrics object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Change</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Change</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseChange(Change object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Event Vessel Change</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Event Vessel Change</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseEventVesselChange(EventVesselChange object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Wiring Change</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Wiring Change</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseWiringChange(WiringChange object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Vessel Change</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Vessel Change</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseVesselChange(VesselChange object) {
 		return null;
 	}
 
