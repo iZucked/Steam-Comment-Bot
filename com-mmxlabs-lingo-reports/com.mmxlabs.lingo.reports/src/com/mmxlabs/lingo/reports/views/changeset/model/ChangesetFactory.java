@@ -49,42 +49,6 @@ public interface ChangesetFactory extends EFactory {
 	Metrics createMetrics();
 
 	/**
-	 * Returns a new object of class '<em>Change</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Change</em>'.
-	 * @generated
-	 */
-	Change createChange();
-
-	/**
-	 * Returns a new object of class '<em>Event Vessel Change</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Event Vessel Change</em>'.
-	 * @generated
-	 */
-	EventVesselChange createEventVesselChange();
-
-	/**
-	 * Returns a new object of class '<em>Wiring Change</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Wiring Change</em>'.
-	 * @generated
-	 */
-	WiringChange createWiringChange();
-
-	/**
-	 * Returns a new object of class '<em>Vessel Change</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Vessel Change</em>'.
-	 * @generated
-	 */
-	VesselChange createVesselChange();
-
-	/**
 	 * Returns a new object of class '<em>Change Set Row</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

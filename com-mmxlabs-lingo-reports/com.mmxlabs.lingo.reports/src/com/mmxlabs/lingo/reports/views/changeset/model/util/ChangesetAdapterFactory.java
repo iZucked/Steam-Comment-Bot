@@ -80,22 +80,6 @@ public class ChangesetAdapterFactory extends AdapterFactoryImpl {
 				return createMetricsAdapter();
 			}
 			@Override
-			public Adapter caseChange(Change object) {
-				return createChangeAdapter();
-			}
-			@Override
-			public Adapter caseEventVesselChange(EventVesselChange object) {
-				return createEventVesselChangeAdapter();
-			}
-			@Override
-			public Adapter caseWiringChange(WiringChange object) {
-				return createWiringChangeAdapter();
-			}
-			@Override
-			public Adapter caseVesselChange(VesselChange object) {
-				return createVesselChangeAdapter();
-			}
-			@Override
 			public Adapter caseChangeSetRow(ChangeSetRow object) {
 				return createChangeSetRowAdapter();
 			}
@@ -158,62 +142,6 @@ public class ChangesetAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createMetricsAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.lingo.reports.views.changeset.model.Change <em>Change</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.Change
-	 * @generated
-	 */
-	public Adapter createChangeAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.lingo.reports.views.changeset.model.EventVesselChange <em>Event Vessel Change</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.EventVesselChange
-	 * @generated
-	 */
-	public Adapter createEventVesselChangeAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.lingo.reports.views.changeset.model.WiringChange <em>Wiring Change</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.WiringChange
-	 * @generated
-	 */
-	public Adapter createWiringChangeAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange <em>Vessel Change</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.VesselChange
-	 * @generated
-	 */
-	public Adapter createVesselChangeAdapter() {
 		return null;
 	}
 

@@ -59,10 +59,6 @@ public class ChangesetFactoryImpl extends EFactoryImpl implements ChangesetFacto
 			case ChangesetPackage.CHANGE_SET_ROOT: return createChangeSetRoot();
 			case ChangesetPackage.CHANGE_SET: return createChangeSet();
 			case ChangesetPackage.METRICS: return createMetrics();
-			case ChangesetPackage.CHANGE: return createChange();
-			case ChangesetPackage.EVENT_VESSEL_CHANGE: return createEventVesselChange();
-			case ChangesetPackage.WIRING_CHANGE: return createWiringChange();
-			case ChangesetPackage.VESSEL_CHANGE: return createVesselChange();
 			case ChangesetPackage.CHANGE_SET_ROW: return createChangeSetRow();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
@@ -97,46 +93,6 @@ public class ChangesetFactoryImpl extends EFactoryImpl implements ChangesetFacto
 	public Metrics createMetrics() {
 		MetricsImpl metrics = new MetricsImpl();
 		return metrics;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Change createChange() {
-		ChangeImpl change = new ChangeImpl();
-		return change;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EventVesselChange createEventVesselChange() {
-		EventVesselChangeImpl eventVesselChange = new EventVesselChangeImpl();
-		return eventVesselChange;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public WiringChange createWiringChange() {
-		WiringChangeImpl wiringChange = new WiringChangeImpl();
-		return wiringChange;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public VesselChange createVesselChange() {
-		VesselChangeImpl vesselChange = new VesselChangeImpl();
-		return vesselChange;
 	}
 
 	/**
