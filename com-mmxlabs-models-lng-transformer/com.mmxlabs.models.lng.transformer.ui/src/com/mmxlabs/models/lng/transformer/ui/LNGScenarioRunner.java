@@ -252,6 +252,11 @@ public class LNGScenarioRunner {
 			}
 		}
 
+		// Need period optimisation!
+		if (periodMapping == null) {
+			doBreakdownPostOptimisation = false;
+		}
+		
 		if (periodMapping != null) {
 
 			final PeriodTransformer t = new PeriodTransformer(extraModule);
@@ -325,6 +330,7 @@ public class LNGScenarioRunner {
 
 			// Clear any previous optimisation state.
 			if (periodMapping != null) {
+				LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, 100);
 				LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, 100);
 			}
 			LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
@@ -550,8 +556,11 @@ public class LNGScenarioRunner {
 				// Reset state
 				if (periodSchedule != null) {
 					LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, 100);
+					LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, 100);
+					LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
+				} else {
+					LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
 				}
-				LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
 			}
 		}
 	}
