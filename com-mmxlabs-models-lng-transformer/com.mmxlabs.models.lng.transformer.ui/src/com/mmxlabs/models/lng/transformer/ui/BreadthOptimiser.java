@@ -511,8 +511,10 @@ public class BreadthOptimiser {
 		}
 	}
 
-	private void processAndStoreBreakdownSolution(JobState solution) {
+	private void processAndStoreBreakdownSolution(JobState solution, IModifiableSequences initialFullSequences, IEvaluationState evaluationState) {
 		List<Pair<ISequences, IEvaluationState>> processedSolution = new LinkedList<Pair<ISequences, IEvaluationState>>();
+
+		processedSolution.add(new Pair<ISequences, IEvaluationState>(initialFullSequences, evaluationState));
 
 		for (ChangeSet cs : solution.changeSetsAsList) {
 			final IModifiableSequences currentFullSequences = new ModifiableSequences(cs.getRawSequences());
@@ -521,7 +523,7 @@ public class BreadthOptimiser {
 		}
 		bestSolutions.add(processedSolution);
 	}
-	
+
 	public List<Pair<ISequences, IEvaluationState>> getBestSolution() {
 		if (bestSolutions.size() > 0) {
 			return bestSolutions.get(0);

@@ -5,8 +5,10 @@
 package com.mmxlabs.models.lng.transformer.ui;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.EnumMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.management.timer.Timer;
@@ -45,15 +47,24 @@ import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeExtend
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModesRegistry;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
+import com.mmxlabs.optimiser.core.IEvaluationContext;
+import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
-import com.mmxlabs.optimiser.core.IOptimiser;
 import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
+import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationProcessRegistry;
+import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
+import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
+import com.mmxlabs.optimiser.core.impl.EvaluationContext;
+import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
 import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService.ModuleType;
 
 public class LNGScenarioRunner {
@@ -87,11 +98,13 @@ public class LNGScenarioRunner {
 
 	private boolean createOptimiser;
 
+	private boolean doBreakdownPostOptimisation;
+
 	private Module extraModule;
 
 	private EnumMap<ModuleType, List<Module>> localOverrides;
 
-	private ScenarioInstance scenarioInstance;
+	private final ScenarioInstance scenarioInstance;
 
 	public LNGScenarioRunner(final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings, final String... hints) {
 		this(scenario, null, optimiserSettings, createLocalEditingDomain(), hints);
@@ -108,6 +121,9 @@ public class LNGScenarioRunner {
 			for (final String hint : hints) {
 				if (LNGTransformer.HINT_OPTIMISE_LSO.equals(hint)) {
 					createOptimiser = true;
+				}
+				if (LNGTransformer.HINT_OPTIMISE_BREAKDOWN.equals(hint)) {
+					doBreakdownPostOptimisation = true;
 				}
 			}
 		}
@@ -158,7 +174,7 @@ public class LNGScenarioRunner {
 	}
 
 	/**
-	 * Intialise the evaluation/optimisation system. Prepare any period scenarios, creates the {@link LNGTransformer} and the optimiser (if an optimisation hint is specified) .
+	 * Initialise the evaluation/optimisation system. Prepare any period scenarios, creates the {@link LNGTransformer} and the optimiser (if an optimisation hint is specified) .
 	 * 
 	 */
 	public void init(@Nullable final IOptimiserProgressMonitor monitor, @Nullable final Module extraModule, @Nullable final EnumMap<ModuleType, List<Module>> localOverrides) {
@@ -307,20 +323,27 @@ public class LNGScenarioRunner {
 
 		if (optimiser.isFinished()) {
 
+			// Clear any previous optimisation state.
+			if (periodMapping != null) {
+				LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, 100);
+			}
+			LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
+
 			// Generate the changesets decomposition.
-			if (false) {
-				BreadthOptimiser instance = injector.getInstance(BreadthOptimiser.class);
-				instance.optimise(optimiser.getBestRawSequencecs());
-				List<Pair<ISequences, IEvaluationState>> breakdownSolution = instance.getBestSolution();
+			if (true || doBreakdownPostOptimisation) {
+				// Run optimisation
+				final BreadthOptimiser instance = injector.getInstance(BreadthOptimiser.class);
+				instance.optimise(optimiser.getBestRawSequences());
+				// Store the results
+				final List<Pair<ISequences, IEvaluationState>> breakdownSolution = instance.getBestSolution();
 				if (breakdownSolution != null) {
 					storeBreakdownSolutionsAsForks(breakdownSolution);
 				}
 			}
+
 			// export final state
-			LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
 			finalSchedule = LNGSchedulerJobUtils.exportSolution(injector, optimiserScenario, transformer.getOptimiserSettings(), optimiserEditingDomain, modelEntityMap, optimiser.getBestSolution(),
 					100);
-
 			final Schedule periodSchedule = exportPeriodScenario(100);
 			if (periodSchedule != null) {
 				finalSchedule = periodSchedule;
@@ -339,8 +362,6 @@ public class LNGScenarioRunner {
 	@Nullable
 	private Schedule exportPeriodScenario(final int currentProgress) {
 		if (periodMapping != null) {
-			LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, currentProgress);
-
 			final PeriodExporter e = new PeriodExporter();
 			final CompoundCommand cmd = LNGSchedulerJobUtils.createBlankCommand(currentProgress);
 			cmd.append(e.updateOriginal(originalEditingDomain, originalScenario, optimiserScenario, periodMapping));
@@ -445,37 +466,80 @@ public class LNGScenarioRunner {
 		return optimiserSettings;
 	}
 
-	private void storeBreakdownSolutionsAsForks(List<Pair<ISequences, IEvaluationState>> breakdownSolution) {
-		int changeSetIdx = 0;
-		for (Pair<ISequences, IEvaluationState> changeSet : breakdownSolution) {
-			LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
-			finalSchedule = LNGSchedulerJobUtils.exportSolution(injector, optimiserScenario, transformer.getOptimiserSettings(), optimiserEditingDomain, modelEntityMap, optimiser.getFitnessEvaluator().createAnnotatedSolution(context, changeSet.getFirst(), changeSet.getSecond()),
-					100);
-			Schedule periodSchedule = exportPeriodScenario(100);
-			if (periodSchedule != null) {
-				finalSchedule = periodSchedule;
+	private void storeBreakdownSolutionsAsForks(final List<Pair<ISequences, IEvaluationState>> breakdownSolution) {
+
+		// Assuming the scenario data is at the initial state.
+
+		// Remove existing solutions
+		{
+			final List<Container> elementsToRemove = new LinkedList<>();
+			for (final Container c : scenarioInstance.getElements()) {
+				if (c.getName().startsWith("ActionSet-")) {
+					elementsToRemove.add(c);
+				}
 			}
-			
-			 try {
-			 IScenarioService scenarioService = scenarioInstance.getScenarioService();
-	
-			 ScenarioInstance dup = scenarioService.insert(scenarioInstance, EcoreUtil.copy(originalScenario));
-			 dup.setName(String.format("changeSet-%s",(++changeSetIdx)));
-			
-			 // Copy across various bits of information
-			 dup.getMetadata().setContentType(scenarioInstance.getMetadata().getContentType());
-			 dup.getMetadata().setCreated(scenarioInstance.getMetadata().getCreated());
-			 dup.getMetadata().setLastModified(new Date());
-			
-			 // Copy version context information
-			 dup.setVersionContext(scenarioInstance.getVersionContext());
-			 dup.setScenarioVersion(scenarioInstance.getScenarioVersion());
-			
-			 dup.setClientVersionContext(scenarioInstance.getClientVersionContext());
-			 dup.setClientScenarioVersion(scenarioInstance.getClientScenarioVersion());
-			 } catch (Exception e) {
-			 e.printStackTrace();
-			 }
+			for (final Container c : elementsToRemove) {
+				scenarioInstance.getScenarioService().delete(c);
+			}
+		}
+
+		int changeSetIdx = 0;
+		for (final Pair<ISequences, IEvaluationState> changeSet : breakdownSolution) {
+
+			/**
+			 * Start the full evaluation process.
+			 */
+
+			// Get or derive the full sequences from the changeset
+			final IModifiableSequences sequences = new ModifiableSequences(changeSet.getFirst());
+
+			// Perform a full evaluation
+			final EvaluationState state = new EvaluationState();
+			EvaluationProcessRegistry evaluationProcessRegistry = new EvaluationProcessRegistry();
+			final IEvaluationContext evaluationContext = new EvaluationContext(this.context.getOptimisationData(), sequences, Collections.<String> emptyList(), evaluationProcessRegistry);
+
+			final AnnotatedSolution solution = new AnnotatedSolution(sequences, evaluationContext, state);
+			final IEvaluationProcess process = injector.getInstance(SchedulerEvaluationProcess.class);
+			process.annotate(sequences, state, solution);
+
+			// Export the solution onto the scenario
+			LNGSchedulerJobUtils.exportSolution(injector, optimiserScenario, transformer.getOptimiserSettings(), optimiserEditingDomain, modelEntityMap, solution, 100);
+			Schedule periodSchedule = exportPeriodScenario(100);
+
+			// Save the scenario as a fork.
+			try {
+				final IScenarioService scenarioService = scenarioInstance.getScenarioService();
+
+				final ScenarioInstance dup = scenarioService.insert(scenarioInstance, EcoreUtil.copy(originalScenario));
+				if (changeSetIdx == 0) {
+					dup.setName("ActionSet-base");
+					changeSetIdx++;
+				} else {
+					dup.setName(String.format("ActionSet-%s", (changeSetIdx++)));
+				}
+
+				// Copy across various bits of information
+				dup.getMetadata().setContentType(scenarioInstance.getMetadata().getContentType());
+				dup.getMetadata().setCreated(scenarioInstance.getMetadata().getCreated());
+				dup.getMetadata().setLastModified(new Date());
+
+				// Copy version context information
+				dup.setVersionContext(scenarioInstance.getVersionContext());
+				dup.setScenarioVersion(scenarioInstance.getScenarioVersion());
+
+				dup.setClientVersionContext(scenarioInstance.getClientVersionContext());
+				dup.setClientScenarioVersion(scenarioInstance.getClientScenarioVersion());
+
+				// dup.setHidden(true);
+			} catch (final Exception e) {
+				log.error("Unable to store changeset scenario: " + e.getMessage(), e);
+			}
+
+			// Reset state
+			if (periodSchedule != null) {
+				LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, 100);
+			}
+			LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
 		}
 	}
 }
