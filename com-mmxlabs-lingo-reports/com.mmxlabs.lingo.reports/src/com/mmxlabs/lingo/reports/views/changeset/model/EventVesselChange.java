@@ -2,8 +2,7 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset.model;
 
-import com.mmxlabs.models.lng.cargo.LoadSlot;
-
+import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 
 /**
@@ -15,10 +14,11 @@ import com.mmxlabs.models.lng.types.VesselAssignmentType;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.EventVesselChange#getLoadSlot_base <em>Load Slot base</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.EventVesselChange#getLoadSlot_target <em>Load Slot target</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.EventVesselChange#getOriginalEvent <em>Original Event</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.EventVesselChange#getNewEvent <em>New Event</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.EventVesselChange#getOriginalVessel <em>Original Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.EventVesselChange#getNewVessel <em>New Vessel</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.EventVesselChange#getEventName <em>Event Name</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getEventVesselChange()
@@ -27,56 +27,56 @@ import com.mmxlabs.models.lng.types.VesselAssignmentType;
  */
 public interface EventVesselChange extends Change {
 	/**
-	 * Returns the value of the '<em><b>Load Slot base</b></em>' reference.
+	 * Returns the value of the '<em><b>Original Event</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Load Slot base</em>' reference isn't clear,
+	 * If the meaning of the '<em>Original Event</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Load Slot base</em>' reference.
-	 * @see #setLoadSlot_base(LoadSlot)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getEventVesselChange_LoadSlot_base()
+	 * @return the value of the '<em>Original Event</em>' reference.
+	 * @see #setOriginalEvent(Event)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getEventVesselChange_OriginalEvent()
 	 * @model
 	 * @generated
 	 */
-	LoadSlot getLoadSlot_base();
+	Event getOriginalEvent();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.EventVesselChange#getLoadSlot_base <em>Load Slot base</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.EventVesselChange#getOriginalEvent <em>Original Event</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Load Slot base</em>' reference.
-	 * @see #getLoadSlot_base()
+	 * @param value the new value of the '<em>Original Event</em>' reference.
+	 * @see #getOriginalEvent()
 	 * @generated
 	 */
-	void setLoadSlot_base(LoadSlot value);
+	void setOriginalEvent(Event value);
 
 	/**
-	 * Returns the value of the '<em><b>Load Slot target</b></em>' reference.
+	 * Returns the value of the '<em><b>New Event</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Load Slot target</em>' reference isn't clear,
+	 * If the meaning of the '<em>New Event</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Load Slot target</em>' reference.
-	 * @see #setLoadSlot_target(LoadSlot)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getEventVesselChange_LoadSlot_target()
+	 * @return the value of the '<em>New Event</em>' reference.
+	 * @see #setNewEvent(Event)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getEventVesselChange_NewEvent()
 	 * @model
 	 * @generated
 	 */
-	LoadSlot getLoadSlot_target();
+	Event getNewEvent();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.EventVesselChange#getLoadSlot_target <em>Load Slot target</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.EventVesselChange#getNewEvent <em>New Event</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Load Slot target</em>' reference.
-	 * @see #getLoadSlot_target()
+	 * @param value the new value of the '<em>New Event</em>' reference.
+	 * @see #getNewEvent()
 	 * @generated
 	 */
-	void setLoadSlot_target(LoadSlot value);
+	void setNewEvent(Event value);
 
 	/**
 	 * Returns the value of the '<em><b>Original Vessel</b></em>' reference.
@@ -129,5 +129,31 @@ public interface EventVesselChange extends Change {
 	 * @generated
 	 */
 	void setNewVessel(VesselAssignmentType value);
+
+	/**
+	 * Returns the value of the '<em><b>Event Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Event Name</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Event Name</em>' attribute.
+	 * @see #setEventName(String)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getEventVesselChange_EventName()
+	 * @model
+	 * @generated
+	 */
+	String getEventName();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.EventVesselChange#getEventName <em>Event Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Event Name</em>' attribute.
+	 * @see #getEventName()
+	 * @generated
+	 */
+	void setEventName(String value);
 
 } // EventVesselChange

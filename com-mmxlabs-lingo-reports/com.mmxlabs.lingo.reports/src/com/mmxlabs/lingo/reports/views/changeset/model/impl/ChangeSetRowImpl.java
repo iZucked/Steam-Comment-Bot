@@ -4,10 +4,11 @@ package com.mmxlabs.lingo.reports.views.changeset.model.impl;
 
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
-import com.mmxlabs.lingo.reports.views.changeset.model.WiringChange;
-
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.schedule.EventGrouping;
+import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
@@ -31,15 +32,18 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getRhsVesselName <em>Rhs Vessel Name</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getLhsWiringLink <em>Lhs Wiring Link</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getRhsWiringLink <em>Rhs Wiring Link</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getLhsWiringChange <em>Lhs Wiring Change</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getRhsWiringChange <em>Rhs Wiring Change</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getLhsVesselChange <em>Lhs Vessel Change</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getLoadSlot <em>Load Slot</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getDischargeSlot <em>Discharge Slot</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getOriginalLoadAllocation <em>Original Load Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getNewLoadAllocation <em>New Load Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getOriginalDischargeAllocation <em>Original Discharge Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getNewDischargeAllocation <em>New Discharge Allocation</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#isWiringChange <em>Wiring Change</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#isVesselChange <em>Vessel Change</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getOriginalGroupProfitAndLoss <em>Original Group Profit And Loss</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getNewGroupProfitAndLoss <em>New Group Profit And Loss</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getOriginalEventGrouping <em>Original Event Grouping</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getNewEventGrouping <em>New Event Grouping</em>}</li>
  * </ul>
  *
  * @generated
@@ -146,36 +150,6 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	protected ChangeSetRow rhsWiringLink;
 
 	/**
-	 * The cached value of the '{@link #getLhsWiringChange() <em>Lhs Wiring Change</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getLhsWiringChange()
-	 * @generated
-	 * @ordered
-	 */
-	protected WiringChange lhsWiringChange;
-
-	/**
-	 * The cached value of the '{@link #getRhsWiringChange() <em>Rhs Wiring Change</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getRhsWiringChange()
-	 * @generated
-	 * @ordered
-	 */
-	protected WiringChange rhsWiringChange;
-
-	/**
-	 * The cached value of the '{@link #getLhsVesselChange() <em>Lhs Vessel Change</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getLhsVesselChange()
-	 * @generated
-	 * @ordered
-	 */
-	protected WiringChange lhsVesselChange;
-
-	/**
 	 * The cached value of the '{@link #getLoadSlot() <em>Load Slot</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -203,7 +177,7 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * @generated
 	 * @ordered
 	 */
-	protected com.mmxlabs.models.lng.schedule.SlotAllocation originalLoadAllocation;
+	protected SlotAllocation originalLoadAllocation;
 
 	/**
 	 * The cached value of the '{@link #getNewLoadAllocation() <em>New Load Allocation</em>}' reference.
@@ -213,7 +187,7 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * @generated
 	 * @ordered
 	 */
-	protected com.mmxlabs.models.lng.schedule.SlotAllocation newLoadAllocation;
+	protected SlotAllocation newLoadAllocation;
 
 	/**
 	 * The cached value of the '{@link #getOriginalDischargeAllocation() <em>Original Discharge Allocation</em>}' reference.
@@ -223,7 +197,7 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * @generated
 	 * @ordered
 	 */
-	protected com.mmxlabs.models.lng.schedule.SlotAllocation originalDischargeAllocation;
+	protected SlotAllocation originalDischargeAllocation;
 
 	/**
 	 * The cached value of the '{@link #getNewDischargeAllocation() <em>New Discharge Allocation</em>}' reference.
@@ -233,7 +207,87 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * @generated
 	 * @ordered
 	 */
-	protected com.mmxlabs.models.lng.schedule.SlotAllocation newDischargeAllocation;
+	protected SlotAllocation newDischargeAllocation;
+
+	/**
+	 * The default value of the '{@link #isWiringChange() <em>Wiring Change</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isWiringChange()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean WIRING_CHANGE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isWiringChange() <em>Wiring Change</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isWiringChange()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean wiringChange = WIRING_CHANGE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isVesselChange() <em>Vessel Change</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isVesselChange()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean VESSEL_CHANGE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isVesselChange() <em>Vessel Change</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isVesselChange()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean vesselChange = VESSEL_CHANGE_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getOriginalGroupProfitAndLoss() <em>Original Group Profit And Loss</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOriginalGroupProfitAndLoss()
+	 * @generated
+	 * @ordered
+	 */
+	protected ProfitAndLossContainer originalGroupProfitAndLoss;
+
+	/**
+	 * The cached value of the '{@link #getNewGroupProfitAndLoss() <em>New Group Profit And Loss</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNewGroupProfitAndLoss()
+	 * @generated
+	 * @ordered
+	 */
+	protected ProfitAndLossContainer newGroupProfitAndLoss;
+
+	/**
+	 * The cached value of the '{@link #getOriginalEventGrouping() <em>Original Event Grouping</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOriginalEventGrouping()
+	 * @generated
+	 * @ordered
+	 */
+	protected EventGrouping originalEventGrouping;
+
+	/**
+	 * The cached value of the '{@link #getNewEventGrouping() <em>New Event Grouping</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNewEventGrouping()
+	 * @generated
+	 * @ordered
+	 */
+	protected EventGrouping newEventGrouping;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -463,120 +517,6 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public WiringChange getLhsWiringChange() {
-		if (lhsWiringChange != null && lhsWiringChange.eIsProxy()) {
-			InternalEObject oldLhsWiringChange = (InternalEObject)lhsWiringChange;
-			lhsWiringChange = (WiringChange)eResolveProxy(oldLhsWiringChange);
-			if (lhsWiringChange != oldLhsWiringChange) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.CHANGE_SET_ROW__LHS_WIRING_CHANGE, oldLhsWiringChange, lhsWiringChange));
-			}
-		}
-		return lhsWiringChange;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public WiringChange basicGetLhsWiringChange() {
-		return lhsWiringChange;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setLhsWiringChange(WiringChange newLhsWiringChange) {
-		WiringChange oldLhsWiringChange = lhsWiringChange;
-		lhsWiringChange = newLhsWiringChange;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW__LHS_WIRING_CHANGE, oldLhsWiringChange, lhsWiringChange));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public WiringChange getRhsWiringChange() {
-		if (rhsWiringChange != null && rhsWiringChange.eIsProxy()) {
-			InternalEObject oldRhsWiringChange = (InternalEObject)rhsWiringChange;
-			rhsWiringChange = (WiringChange)eResolveProxy(oldRhsWiringChange);
-			if (rhsWiringChange != oldRhsWiringChange) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.CHANGE_SET_ROW__RHS_WIRING_CHANGE, oldRhsWiringChange, rhsWiringChange));
-			}
-		}
-		return rhsWiringChange;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public WiringChange basicGetRhsWiringChange() {
-		return rhsWiringChange;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setRhsWiringChange(WiringChange newRhsWiringChange) {
-		WiringChange oldRhsWiringChange = rhsWiringChange;
-		rhsWiringChange = newRhsWiringChange;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW__RHS_WIRING_CHANGE, oldRhsWiringChange, rhsWiringChange));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public WiringChange getLhsVesselChange() {
-		if (lhsVesselChange != null && lhsVesselChange.eIsProxy()) {
-			InternalEObject oldLhsVesselChange = (InternalEObject)lhsVesselChange;
-			lhsVesselChange = (WiringChange)eResolveProxy(oldLhsVesselChange);
-			if (lhsVesselChange != oldLhsVesselChange) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.CHANGE_SET_ROW__LHS_VESSEL_CHANGE, oldLhsVesselChange, lhsVesselChange));
-			}
-		}
-		return lhsVesselChange;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public WiringChange basicGetLhsVesselChange() {
-		return lhsVesselChange;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setLhsVesselChange(WiringChange newLhsVesselChange) {
-		WiringChange oldLhsVesselChange = lhsVesselChange;
-		lhsVesselChange = newLhsVesselChange;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW__LHS_VESSEL_CHANGE, oldLhsVesselChange, lhsVesselChange));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public LoadSlot getLoadSlot() {
 		if (loadSlot != null && loadSlot.eIsProxy()) {
 			InternalEObject oldLoadSlot = (InternalEObject)loadSlot;
@@ -653,10 +593,10 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public com.mmxlabs.models.lng.schedule.SlotAllocation getOriginalLoadAllocation() {
+	public SlotAllocation getOriginalLoadAllocation() {
 		if (originalLoadAllocation != null && originalLoadAllocation.eIsProxy()) {
 			InternalEObject oldOriginalLoadAllocation = (InternalEObject)originalLoadAllocation;
-			originalLoadAllocation = (com.mmxlabs.models.lng.schedule.SlotAllocation)eResolveProxy(oldOriginalLoadAllocation);
+			originalLoadAllocation = (SlotAllocation)eResolveProxy(oldOriginalLoadAllocation);
 			if (originalLoadAllocation != oldOriginalLoadAllocation) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_LOAD_ALLOCATION, oldOriginalLoadAllocation, originalLoadAllocation));
@@ -670,7 +610,7 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public com.mmxlabs.models.lng.schedule.SlotAllocation basicGetOriginalLoadAllocation() {
+	public SlotAllocation basicGetOriginalLoadAllocation() {
 		return originalLoadAllocation;
 	}
 
@@ -679,8 +619,8 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setOriginalLoadAllocation(com.mmxlabs.models.lng.schedule.SlotAllocation newOriginalLoadAllocation) {
-		com.mmxlabs.models.lng.schedule.SlotAllocation oldOriginalLoadAllocation = originalLoadAllocation;
+	public void setOriginalLoadAllocation(SlotAllocation newOriginalLoadAllocation) {
+		SlotAllocation oldOriginalLoadAllocation = originalLoadAllocation;
 		originalLoadAllocation = newOriginalLoadAllocation;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_LOAD_ALLOCATION, oldOriginalLoadAllocation, originalLoadAllocation));
@@ -691,10 +631,10 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public com.mmxlabs.models.lng.schedule.SlotAllocation getNewLoadAllocation() {
+	public SlotAllocation getNewLoadAllocation() {
 		if (newLoadAllocation != null && newLoadAllocation.eIsProxy()) {
 			InternalEObject oldNewLoadAllocation = (InternalEObject)newLoadAllocation;
-			newLoadAllocation = (com.mmxlabs.models.lng.schedule.SlotAllocation)eResolveProxy(oldNewLoadAllocation);
+			newLoadAllocation = (SlotAllocation)eResolveProxy(oldNewLoadAllocation);
 			if (newLoadAllocation != oldNewLoadAllocation) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.CHANGE_SET_ROW__NEW_LOAD_ALLOCATION, oldNewLoadAllocation, newLoadAllocation));
@@ -708,7 +648,7 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public com.mmxlabs.models.lng.schedule.SlotAllocation basicGetNewLoadAllocation() {
+	public SlotAllocation basicGetNewLoadAllocation() {
 		return newLoadAllocation;
 	}
 
@@ -717,8 +657,8 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setNewLoadAllocation(com.mmxlabs.models.lng.schedule.SlotAllocation newNewLoadAllocation) {
-		com.mmxlabs.models.lng.schedule.SlotAllocation oldNewLoadAllocation = newLoadAllocation;
+	public void setNewLoadAllocation(SlotAllocation newNewLoadAllocation) {
+		SlotAllocation oldNewLoadAllocation = newLoadAllocation;
 		newLoadAllocation = newNewLoadAllocation;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW__NEW_LOAD_ALLOCATION, oldNewLoadAllocation, newLoadAllocation));
@@ -729,10 +669,10 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public com.mmxlabs.models.lng.schedule.SlotAllocation getOriginalDischargeAllocation() {
+	public SlotAllocation getOriginalDischargeAllocation() {
 		if (originalDischargeAllocation != null && originalDischargeAllocation.eIsProxy()) {
 			InternalEObject oldOriginalDischargeAllocation = (InternalEObject)originalDischargeAllocation;
-			originalDischargeAllocation = (com.mmxlabs.models.lng.schedule.SlotAllocation)eResolveProxy(oldOriginalDischargeAllocation);
+			originalDischargeAllocation = (SlotAllocation)eResolveProxy(oldOriginalDischargeAllocation);
 			if (originalDischargeAllocation != oldOriginalDischargeAllocation) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_DISCHARGE_ALLOCATION, oldOriginalDischargeAllocation, originalDischargeAllocation));
@@ -746,7 +686,7 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public com.mmxlabs.models.lng.schedule.SlotAllocation basicGetOriginalDischargeAllocation() {
+	public SlotAllocation basicGetOriginalDischargeAllocation() {
 		return originalDischargeAllocation;
 	}
 
@@ -755,8 +695,8 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setOriginalDischargeAllocation(com.mmxlabs.models.lng.schedule.SlotAllocation newOriginalDischargeAllocation) {
-		com.mmxlabs.models.lng.schedule.SlotAllocation oldOriginalDischargeAllocation = originalDischargeAllocation;
+	public void setOriginalDischargeAllocation(SlotAllocation newOriginalDischargeAllocation) {
+		SlotAllocation oldOriginalDischargeAllocation = originalDischargeAllocation;
 		originalDischargeAllocation = newOriginalDischargeAllocation;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_DISCHARGE_ALLOCATION, oldOriginalDischargeAllocation, originalDischargeAllocation));
@@ -767,10 +707,10 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public com.mmxlabs.models.lng.schedule.SlotAllocation getNewDischargeAllocation() {
+	public SlotAllocation getNewDischargeAllocation() {
 		if (newDischargeAllocation != null && newDischargeAllocation.eIsProxy()) {
 			InternalEObject oldNewDischargeAllocation = (InternalEObject)newDischargeAllocation;
-			newDischargeAllocation = (com.mmxlabs.models.lng.schedule.SlotAllocation)eResolveProxy(oldNewDischargeAllocation);
+			newDischargeAllocation = (SlotAllocation)eResolveProxy(oldNewDischargeAllocation);
 			if (newDischargeAllocation != oldNewDischargeAllocation) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.CHANGE_SET_ROW__NEW_DISCHARGE_ALLOCATION, oldNewDischargeAllocation, newDischargeAllocation));
@@ -784,7 +724,7 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public com.mmxlabs.models.lng.schedule.SlotAllocation basicGetNewDischargeAllocation() {
+	public SlotAllocation basicGetNewDischargeAllocation() {
 		return newDischargeAllocation;
 	}
 
@@ -793,11 +733,205 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setNewDischargeAllocation(com.mmxlabs.models.lng.schedule.SlotAllocation newNewDischargeAllocation) {
-		com.mmxlabs.models.lng.schedule.SlotAllocation oldNewDischargeAllocation = newDischargeAllocation;
+	public void setNewDischargeAllocation(SlotAllocation newNewDischargeAllocation) {
+		SlotAllocation oldNewDischargeAllocation = newDischargeAllocation;
 		newDischargeAllocation = newNewDischargeAllocation;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW__NEW_DISCHARGE_ALLOCATION, oldNewDischargeAllocation, newDischargeAllocation));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isWiringChange() {
+		return wiringChange;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setWiringChange(boolean newWiringChange) {
+		boolean oldWiringChange = wiringChange;
+		wiringChange = newWiringChange;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW__WIRING_CHANGE, oldWiringChange, wiringChange));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isVesselChange() {
+		return vesselChange;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVesselChange(boolean newVesselChange) {
+		boolean oldVesselChange = vesselChange;
+		vesselChange = newVesselChange;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW__VESSEL_CHANGE, oldVesselChange, vesselChange));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ProfitAndLossContainer getOriginalGroupProfitAndLoss() {
+		if (originalGroupProfitAndLoss != null && originalGroupProfitAndLoss.eIsProxy()) {
+			InternalEObject oldOriginalGroupProfitAndLoss = (InternalEObject)originalGroupProfitAndLoss;
+			originalGroupProfitAndLoss = (ProfitAndLossContainer)eResolveProxy(oldOriginalGroupProfitAndLoss);
+			if (originalGroupProfitAndLoss != oldOriginalGroupProfitAndLoss) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_GROUP_PROFIT_AND_LOSS, oldOriginalGroupProfitAndLoss, originalGroupProfitAndLoss));
+			}
+		}
+		return originalGroupProfitAndLoss;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ProfitAndLossContainer basicGetOriginalGroupProfitAndLoss() {
+		return originalGroupProfitAndLoss;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setOriginalGroupProfitAndLoss(ProfitAndLossContainer newOriginalGroupProfitAndLoss) {
+		ProfitAndLossContainer oldOriginalGroupProfitAndLoss = originalGroupProfitAndLoss;
+		originalGroupProfitAndLoss = newOriginalGroupProfitAndLoss;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_GROUP_PROFIT_AND_LOSS, oldOriginalGroupProfitAndLoss, originalGroupProfitAndLoss));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ProfitAndLossContainer getNewGroupProfitAndLoss() {
+		if (newGroupProfitAndLoss != null && newGroupProfitAndLoss.eIsProxy()) {
+			InternalEObject oldNewGroupProfitAndLoss = (InternalEObject)newGroupProfitAndLoss;
+			newGroupProfitAndLoss = (ProfitAndLossContainer)eResolveProxy(oldNewGroupProfitAndLoss);
+			if (newGroupProfitAndLoss != oldNewGroupProfitAndLoss) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.CHANGE_SET_ROW__NEW_GROUP_PROFIT_AND_LOSS, oldNewGroupProfitAndLoss, newGroupProfitAndLoss));
+			}
+		}
+		return newGroupProfitAndLoss;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ProfitAndLossContainer basicGetNewGroupProfitAndLoss() {
+		return newGroupProfitAndLoss;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setNewGroupProfitAndLoss(ProfitAndLossContainer newNewGroupProfitAndLoss) {
+		ProfitAndLossContainer oldNewGroupProfitAndLoss = newGroupProfitAndLoss;
+		newGroupProfitAndLoss = newNewGroupProfitAndLoss;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW__NEW_GROUP_PROFIT_AND_LOSS, oldNewGroupProfitAndLoss, newGroupProfitAndLoss));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EventGrouping getOriginalEventGrouping() {
+		if (originalEventGrouping != null && originalEventGrouping.eIsProxy()) {
+			InternalEObject oldOriginalEventGrouping = (InternalEObject)originalEventGrouping;
+			originalEventGrouping = (EventGrouping)eResolveProxy(oldOriginalEventGrouping);
+			if (originalEventGrouping != oldOriginalEventGrouping) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_EVENT_GROUPING, oldOriginalEventGrouping, originalEventGrouping));
+			}
+		}
+		return originalEventGrouping;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EventGrouping basicGetOriginalEventGrouping() {
+		return originalEventGrouping;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setOriginalEventGrouping(EventGrouping newOriginalEventGrouping) {
+		EventGrouping oldOriginalEventGrouping = originalEventGrouping;
+		originalEventGrouping = newOriginalEventGrouping;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_EVENT_GROUPING, oldOriginalEventGrouping, originalEventGrouping));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EventGrouping getNewEventGrouping() {
+		if (newEventGrouping != null && newEventGrouping.eIsProxy()) {
+			InternalEObject oldNewEventGrouping = (InternalEObject)newEventGrouping;
+			newEventGrouping = (EventGrouping)eResolveProxy(oldNewEventGrouping);
+			if (newEventGrouping != oldNewEventGrouping) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.CHANGE_SET_ROW__NEW_EVENT_GROUPING, oldNewEventGrouping, newEventGrouping));
+			}
+		}
+		return newEventGrouping;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EventGrouping basicGetNewEventGrouping() {
+		return newEventGrouping;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setNewEventGrouping(EventGrouping newNewEventGrouping) {
+		EventGrouping oldNewEventGrouping = newEventGrouping;
+		newEventGrouping = newNewEventGrouping;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW__NEW_EVENT_GROUPING, oldNewEventGrouping, newEventGrouping));
 	}
 
 	/**
@@ -858,15 +992,6 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 			case ChangesetPackage.CHANGE_SET_ROW__RHS_WIRING_LINK:
 				if (resolve) return getRhsWiringLink();
 				return basicGetRhsWiringLink();
-			case ChangesetPackage.CHANGE_SET_ROW__LHS_WIRING_CHANGE:
-				if (resolve) return getLhsWiringChange();
-				return basicGetLhsWiringChange();
-			case ChangesetPackage.CHANGE_SET_ROW__RHS_WIRING_CHANGE:
-				if (resolve) return getRhsWiringChange();
-				return basicGetRhsWiringChange();
-			case ChangesetPackage.CHANGE_SET_ROW__LHS_VESSEL_CHANGE:
-				if (resolve) return getLhsVesselChange();
-				return basicGetLhsVesselChange();
 			case ChangesetPackage.CHANGE_SET_ROW__LOAD_SLOT:
 				if (resolve) return getLoadSlot();
 				return basicGetLoadSlot();
@@ -885,6 +1010,22 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 			case ChangesetPackage.CHANGE_SET_ROW__NEW_DISCHARGE_ALLOCATION:
 				if (resolve) return getNewDischargeAllocation();
 				return basicGetNewDischargeAllocation();
+			case ChangesetPackage.CHANGE_SET_ROW__WIRING_CHANGE:
+				return isWiringChange();
+			case ChangesetPackage.CHANGE_SET_ROW__VESSEL_CHANGE:
+				return isVesselChange();
+			case ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_GROUP_PROFIT_AND_LOSS:
+				if (resolve) return getOriginalGroupProfitAndLoss();
+				return basicGetOriginalGroupProfitAndLoss();
+			case ChangesetPackage.CHANGE_SET_ROW__NEW_GROUP_PROFIT_AND_LOSS:
+				if (resolve) return getNewGroupProfitAndLoss();
+				return basicGetNewGroupProfitAndLoss();
+			case ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_EVENT_GROUPING:
+				if (resolve) return getOriginalEventGrouping();
+				return basicGetOriginalEventGrouping();
+			case ChangesetPackage.CHANGE_SET_ROW__NEW_EVENT_GROUPING:
+				if (resolve) return getNewEventGrouping();
+				return basicGetNewEventGrouping();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -915,15 +1056,6 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 			case ChangesetPackage.CHANGE_SET_ROW__RHS_WIRING_LINK:
 				setRhsWiringLink((ChangeSetRow)newValue);
 				return;
-			case ChangesetPackage.CHANGE_SET_ROW__LHS_WIRING_CHANGE:
-				setLhsWiringChange((WiringChange)newValue);
-				return;
-			case ChangesetPackage.CHANGE_SET_ROW__RHS_WIRING_CHANGE:
-				setRhsWiringChange((WiringChange)newValue);
-				return;
-			case ChangesetPackage.CHANGE_SET_ROW__LHS_VESSEL_CHANGE:
-				setLhsVesselChange((WiringChange)newValue);
-				return;
 			case ChangesetPackage.CHANGE_SET_ROW__LOAD_SLOT:
 				setLoadSlot((LoadSlot)newValue);
 				return;
@@ -931,16 +1063,34 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 				setDischargeSlot((DischargeSlot)newValue);
 				return;
 			case ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_LOAD_ALLOCATION:
-				setOriginalLoadAllocation((com.mmxlabs.models.lng.schedule.SlotAllocation)newValue);
+				setOriginalLoadAllocation((SlotAllocation)newValue);
 				return;
 			case ChangesetPackage.CHANGE_SET_ROW__NEW_LOAD_ALLOCATION:
-				setNewLoadAllocation((com.mmxlabs.models.lng.schedule.SlotAllocation)newValue);
+				setNewLoadAllocation((SlotAllocation)newValue);
 				return;
 			case ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_DISCHARGE_ALLOCATION:
-				setOriginalDischargeAllocation((com.mmxlabs.models.lng.schedule.SlotAllocation)newValue);
+				setOriginalDischargeAllocation((SlotAllocation)newValue);
 				return;
 			case ChangesetPackage.CHANGE_SET_ROW__NEW_DISCHARGE_ALLOCATION:
-				setNewDischargeAllocation((com.mmxlabs.models.lng.schedule.SlotAllocation)newValue);
+				setNewDischargeAllocation((SlotAllocation)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW__WIRING_CHANGE:
+				setWiringChange((Boolean)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW__VESSEL_CHANGE:
+				setVesselChange((Boolean)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_GROUP_PROFIT_AND_LOSS:
+				setOriginalGroupProfitAndLoss((ProfitAndLossContainer)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW__NEW_GROUP_PROFIT_AND_LOSS:
+				setNewGroupProfitAndLoss((ProfitAndLossContainer)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_EVENT_GROUPING:
+				setOriginalEventGrouping((EventGrouping)newValue);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW__NEW_EVENT_GROUPING:
+				setNewEventGrouping((EventGrouping)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -972,15 +1122,6 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 			case ChangesetPackage.CHANGE_SET_ROW__RHS_WIRING_LINK:
 				setRhsWiringLink((ChangeSetRow)null);
 				return;
-			case ChangesetPackage.CHANGE_SET_ROW__LHS_WIRING_CHANGE:
-				setLhsWiringChange((WiringChange)null);
-				return;
-			case ChangesetPackage.CHANGE_SET_ROW__RHS_WIRING_CHANGE:
-				setRhsWiringChange((WiringChange)null);
-				return;
-			case ChangesetPackage.CHANGE_SET_ROW__LHS_VESSEL_CHANGE:
-				setLhsVesselChange((WiringChange)null);
-				return;
 			case ChangesetPackage.CHANGE_SET_ROW__LOAD_SLOT:
 				setLoadSlot((LoadSlot)null);
 				return;
@@ -988,16 +1129,34 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 				setDischargeSlot((DischargeSlot)null);
 				return;
 			case ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_LOAD_ALLOCATION:
-				setOriginalLoadAllocation((com.mmxlabs.models.lng.schedule.SlotAllocation)null);
+				setOriginalLoadAllocation((SlotAllocation)null);
 				return;
 			case ChangesetPackage.CHANGE_SET_ROW__NEW_LOAD_ALLOCATION:
-				setNewLoadAllocation((com.mmxlabs.models.lng.schedule.SlotAllocation)null);
+				setNewLoadAllocation((SlotAllocation)null);
 				return;
 			case ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_DISCHARGE_ALLOCATION:
-				setOriginalDischargeAllocation((com.mmxlabs.models.lng.schedule.SlotAllocation)null);
+				setOriginalDischargeAllocation((SlotAllocation)null);
 				return;
 			case ChangesetPackage.CHANGE_SET_ROW__NEW_DISCHARGE_ALLOCATION:
-				setNewDischargeAllocation((com.mmxlabs.models.lng.schedule.SlotAllocation)null);
+				setNewDischargeAllocation((SlotAllocation)null);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW__WIRING_CHANGE:
+				setWiringChange(WIRING_CHANGE_EDEFAULT);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW__VESSEL_CHANGE:
+				setVesselChange(VESSEL_CHANGE_EDEFAULT);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_GROUP_PROFIT_AND_LOSS:
+				setOriginalGroupProfitAndLoss((ProfitAndLossContainer)null);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW__NEW_GROUP_PROFIT_AND_LOSS:
+				setNewGroupProfitAndLoss((ProfitAndLossContainer)null);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_EVENT_GROUPING:
+				setOriginalEventGrouping((EventGrouping)null);
+				return;
+			case ChangesetPackage.CHANGE_SET_ROW__NEW_EVENT_GROUPING:
+				setNewEventGrouping((EventGrouping)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -1023,12 +1182,6 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 				return lhsWiringLink != null;
 			case ChangesetPackage.CHANGE_SET_ROW__RHS_WIRING_LINK:
 				return rhsWiringLink != null;
-			case ChangesetPackage.CHANGE_SET_ROW__LHS_WIRING_CHANGE:
-				return lhsWiringChange != null;
-			case ChangesetPackage.CHANGE_SET_ROW__RHS_WIRING_CHANGE:
-				return rhsWiringChange != null;
-			case ChangesetPackage.CHANGE_SET_ROW__LHS_VESSEL_CHANGE:
-				return lhsVesselChange != null;
 			case ChangesetPackage.CHANGE_SET_ROW__LOAD_SLOT:
 				return loadSlot != null;
 			case ChangesetPackage.CHANGE_SET_ROW__DISCHARGE_SLOT:
@@ -1041,6 +1194,18 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 				return originalDischargeAllocation != null;
 			case ChangesetPackage.CHANGE_SET_ROW__NEW_DISCHARGE_ALLOCATION:
 				return newDischargeAllocation != null;
+			case ChangesetPackage.CHANGE_SET_ROW__WIRING_CHANGE:
+				return wiringChange != WIRING_CHANGE_EDEFAULT;
+			case ChangesetPackage.CHANGE_SET_ROW__VESSEL_CHANGE:
+				return vesselChange != VESSEL_CHANGE_EDEFAULT;
+			case ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_GROUP_PROFIT_AND_LOSS:
+				return originalGroupProfitAndLoss != null;
+			case ChangesetPackage.CHANGE_SET_ROW__NEW_GROUP_PROFIT_AND_LOSS:
+				return newGroupProfitAndLoss != null;
+			case ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_EVENT_GROUPING:
+				return originalEventGrouping != null;
+			case ChangesetPackage.CHANGE_SET_ROW__NEW_EVENT_GROUPING:
+				return newEventGrouping != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1063,6 +1228,10 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 		result.append(lhsVesselName);
 		result.append(", rhsVesselName: ");
 		result.append(rhsVesselName);
+		result.append(", wiringChange: ");
+		result.append(wiringChange);
+		result.append(", vesselChange: ");
+		result.append(vesselChange);
 		result.append(')');
 		return result.toString();
 	}

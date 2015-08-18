@@ -295,13 +295,49 @@ public interface ChangesetPackage extends EPackage {
 	int CHANGE = 3;
 
 	/**
+	 * The feature id for the '<em><b>Original Group Profit And Loss</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE__ORIGINAL_GROUP_PROFIT_AND_LOSS = 0;
+
+	/**
+	 * The feature id for the '<em><b>New Group Profit And Loss</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE__NEW_GROUP_PROFIT_AND_LOSS = 1;
+
+	/**
+	 * The feature id for the '<em><b>Original Event Grouping</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE__ORIGINAL_EVENT_GROUPING = 2;
+
+	/**
+	 * The feature id for the '<em><b>New Event Grouping</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE__NEW_EVENT_GROUPING = 3;
+
+	/**
 	 * The number of structural features of the '<em>Change</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_FEATURE_COUNT = 0;
+	int CHANGE_FEATURE_COUNT = 4;
 
 	/**
 	 * The number of operations of the '<em>Change</em>' class.
@@ -323,22 +359,58 @@ public interface ChangesetPackage extends EPackage {
 	int EVENT_VESSEL_CHANGE = 4;
 
 	/**
-	 * The feature id for the '<em><b>Load Slot base</b></em>' reference.
+	 * The feature id for the '<em><b>Original Group Profit And Loss</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EVENT_VESSEL_CHANGE__LOAD_SLOT_BASE = CHANGE_FEATURE_COUNT + 0;
+	int EVENT_VESSEL_CHANGE__ORIGINAL_GROUP_PROFIT_AND_LOSS = CHANGE__ORIGINAL_GROUP_PROFIT_AND_LOSS;
 
 	/**
-	 * The feature id for the '<em><b>Load Slot target</b></em>' reference.
+	 * The feature id for the '<em><b>New Group Profit And Loss</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EVENT_VESSEL_CHANGE__LOAD_SLOT_TARGET = CHANGE_FEATURE_COUNT + 1;
+	int EVENT_VESSEL_CHANGE__NEW_GROUP_PROFIT_AND_LOSS = CHANGE__NEW_GROUP_PROFIT_AND_LOSS;
+
+	/**
+	 * The feature id for the '<em><b>Original Event Grouping</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EVENT_VESSEL_CHANGE__ORIGINAL_EVENT_GROUPING = CHANGE__ORIGINAL_EVENT_GROUPING;
+
+	/**
+	 * The feature id for the '<em><b>New Event Grouping</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EVENT_VESSEL_CHANGE__NEW_EVENT_GROUPING = CHANGE__NEW_EVENT_GROUPING;
+
+	/**
+	 * The feature id for the '<em><b>Original Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EVENT_VESSEL_CHANGE__ORIGINAL_EVENT = CHANGE_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>New Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EVENT_VESSEL_CHANGE__NEW_EVENT = CHANGE_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Original Vessel</b></em>' reference.
@@ -359,13 +431,22 @@ public interface ChangesetPackage extends EPackage {
 	int EVENT_VESSEL_CHANGE__NEW_VESSEL = CHANGE_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Event Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EVENT_VESSEL_CHANGE__EVENT_NAME = CHANGE_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Event Vessel Change</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EVENT_VESSEL_CHANGE_FEATURE_COUNT = CHANGE_FEATURE_COUNT + 4;
+	int EVENT_VESSEL_CHANGE_FEATURE_COUNT = CHANGE_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of operations of the '<em>Event Vessel Change</em>' class.
@@ -387,22 +468,58 @@ public interface ChangesetPackage extends EPackage {
 	int WIRING_CHANGE = 5;
 
 	/**
-	 * The feature id for the '<em><b>Load Slot base</b></em>' reference.
+	 * The feature id for the '<em><b>Original Group Profit And Loss</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int WIRING_CHANGE__LOAD_SLOT_BASE = CHANGE_FEATURE_COUNT + 0;
+	int WIRING_CHANGE__ORIGINAL_GROUP_PROFIT_AND_LOSS = CHANGE__ORIGINAL_GROUP_PROFIT_AND_LOSS;
 
 	/**
-	 * The feature id for the '<em><b>Load Slot target</b></em>' reference.
+	 * The feature id for the '<em><b>New Group Profit And Loss</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int WIRING_CHANGE__LOAD_SLOT_TARGET = CHANGE_FEATURE_COUNT + 1;
+	int WIRING_CHANGE__NEW_GROUP_PROFIT_AND_LOSS = CHANGE__NEW_GROUP_PROFIT_AND_LOSS;
+
+	/**
+	 * The feature id for the '<em><b>Original Event Grouping</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WIRING_CHANGE__ORIGINAL_EVENT_GROUPING = CHANGE__ORIGINAL_EVENT_GROUPING;
+
+	/**
+	 * The feature id for the '<em><b>New Event Grouping</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WIRING_CHANGE__NEW_EVENT_GROUPING = CHANGE__NEW_EVENT_GROUPING;
+
+	/**
+	 * The feature id for the '<em><b>Original Load Slot</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WIRING_CHANGE__ORIGINAL_LOAD_SLOT = CHANGE_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>New Load Slot</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WIRING_CHANGE__NEW_LOAD_SLOT = CHANGE_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Original Discharge Slot</b></em>' reference.
@@ -487,22 +604,40 @@ public interface ChangesetPackage extends EPackage {
 	int VESSEL_CHANGE = 6;
 
 	/**
-	 * The feature id for the '<em><b>Load Slot base</b></em>' reference.
+	 * The feature id for the '<em><b>Original Group Profit And Loss</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CHANGE__LOAD_SLOT_BASE = CHANGE_FEATURE_COUNT + 0;
+	int VESSEL_CHANGE__ORIGINAL_GROUP_PROFIT_AND_LOSS = CHANGE__ORIGINAL_GROUP_PROFIT_AND_LOSS;
 
 	/**
-	 * The feature id for the '<em><b>Load Slot target</b></em>' reference.
+	 * The feature id for the '<em><b>New Group Profit And Loss</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CHANGE__LOAD_SLOT_TARGET = CHANGE_FEATURE_COUNT + 1;
+	int VESSEL_CHANGE__NEW_GROUP_PROFIT_AND_LOSS = CHANGE__NEW_GROUP_PROFIT_AND_LOSS;
+
+	/**
+	 * The feature id for the '<em><b>Original Event Grouping</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CHANGE__ORIGINAL_EVENT_GROUPING = CHANGE__ORIGINAL_EVENT_GROUPING;
+
+	/**
+	 * The feature id for the '<em><b>New Event Grouping</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CHANGE__NEW_EVENT_GROUPING = CHANGE__NEW_EVENT_GROUPING;
 
 	/**
 	 * The feature id for the '<em><b>Original Vessel</b></em>' reference.
@@ -511,7 +646,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CHANGE__ORIGINAL_VESSEL = CHANGE_FEATURE_COUNT + 2;
+	int VESSEL_CHANGE__ORIGINAL_VESSEL = CHANGE_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>New Vessel</b></em>' reference.
@@ -520,25 +655,43 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CHANGE__NEW_VESSEL = CHANGE_FEATURE_COUNT + 3;
+	int VESSEL_CHANGE__NEW_VESSEL = CHANGE_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Discharge Slot base</b></em>' reference.
+	 * The feature id for the '<em><b>Original Load Slot</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CHANGE__DISCHARGE_SLOT_BASE = CHANGE_FEATURE_COUNT + 4;
+	int VESSEL_CHANGE__ORIGINAL_LOAD_SLOT = CHANGE_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Discharge Slot target</b></em>' reference.
+	 * The feature id for the '<em><b>New Load Slot</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CHANGE__DISCHARGE_SLOT_TARGET = CHANGE_FEATURE_COUNT + 5;
+	int VESSEL_CHANGE__NEW_LOAD_SLOT = CHANGE_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Original Discharge Slot</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CHANGE__ORIGINAL_DISCHARGE_SLOT = CHANGE_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>New Discharge Slot</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CHANGE__NEW_DISCHARGE_SLOT = CHANGE_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Original Load Allocation</b></em>' reference.
@@ -659,40 +812,13 @@ public interface ChangesetPackage extends EPackage {
 	int CHANGE_SET_ROW__RHS_WIRING_LINK = 5;
 
 	/**
-	 * The feature id for the '<em><b>Lhs Wiring Change</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHANGE_SET_ROW__LHS_WIRING_CHANGE = 6;
-
-	/**
-	 * The feature id for the '<em><b>Rhs Wiring Change</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHANGE_SET_ROW__RHS_WIRING_CHANGE = 7;
-
-	/**
-	 * The feature id for the '<em><b>Lhs Vessel Change</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHANGE_SET_ROW__LHS_VESSEL_CHANGE = 8;
-
-	/**
 	 * The feature id for the '<em><b>Load Slot</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW__LOAD_SLOT = 9;
+	int CHANGE_SET_ROW__LOAD_SLOT = 6;
 
 	/**
 	 * The feature id for the '<em><b>Discharge Slot</b></em>' reference.
@@ -701,7 +827,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW__DISCHARGE_SLOT = 10;
+	int CHANGE_SET_ROW__DISCHARGE_SLOT = 7;
 
 	/**
 	 * The feature id for the '<em><b>Original Load Allocation</b></em>' reference.
@@ -710,7 +836,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW__ORIGINAL_LOAD_ALLOCATION = 11;
+	int CHANGE_SET_ROW__ORIGINAL_LOAD_ALLOCATION = 8;
 
 	/**
 	 * The feature id for the '<em><b>New Load Allocation</b></em>' reference.
@@ -719,7 +845,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW__NEW_LOAD_ALLOCATION = 12;
+	int CHANGE_SET_ROW__NEW_LOAD_ALLOCATION = 9;
 
 	/**
 	 * The feature id for the '<em><b>Original Discharge Allocation</b></em>' reference.
@@ -728,7 +854,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW__ORIGINAL_DISCHARGE_ALLOCATION = 13;
+	int CHANGE_SET_ROW__ORIGINAL_DISCHARGE_ALLOCATION = 10;
 
 	/**
 	 * The feature id for the '<em><b>New Discharge Allocation</b></em>' reference.
@@ -737,7 +863,61 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW__NEW_DISCHARGE_ALLOCATION = 14;
+	int CHANGE_SET_ROW__NEW_DISCHARGE_ALLOCATION = 11;
+
+	/**
+	 * The feature id for the '<em><b>Wiring Change</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_ROW__WIRING_CHANGE = 12;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Change</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_ROW__VESSEL_CHANGE = 13;
+
+	/**
+	 * The feature id for the '<em><b>Original Group Profit And Loss</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_ROW__ORIGINAL_GROUP_PROFIT_AND_LOSS = 14;
+
+	/**
+	 * The feature id for the '<em><b>New Group Profit And Loss</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_ROW__NEW_GROUP_PROFIT_AND_LOSS = 15;
+
+	/**
+	 * The feature id for the '<em><b>Original Event Grouping</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_ROW__ORIGINAL_EVENT_GROUPING = 16;
+
+	/**
+	 * The feature id for the '<em><b>New Event Grouping</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET_ROW__NEW_EVENT_GROUPING = 17;
 
 	/**
 	 * The number of structural features of the '<em>Change Set Row</em>' class.
@@ -746,7 +926,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW_FEATURE_COUNT = 15;
+	int CHANGE_SET_ROW_FEATURE_COUNT = 18;
 
 	/**
 	 * The number of operations of the '<em>Change Set Row</em>' class.
@@ -975,6 +1155,50 @@ public interface ChangesetPackage extends EPackage {
 	EClass getChange();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.Change#getOriginalGroupProfitAndLoss <em>Original Group Profit And Loss</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Original Group Profit And Loss</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.Change#getOriginalGroupProfitAndLoss()
+	 * @see #getChange()
+	 * @generated
+	 */
+	EReference getChange_OriginalGroupProfitAndLoss();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.Change#getNewGroupProfitAndLoss <em>New Group Profit And Loss</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>New Group Profit And Loss</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.Change#getNewGroupProfitAndLoss()
+	 * @see #getChange()
+	 * @generated
+	 */
+	EReference getChange_NewGroupProfitAndLoss();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.Change#getOriginalEventGrouping <em>Original Event Grouping</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Original Event Grouping</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.Change#getOriginalEventGrouping()
+	 * @see #getChange()
+	 * @generated
+	 */
+	EReference getChange_OriginalEventGrouping();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.Change#getNewEventGrouping <em>New Event Grouping</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>New Event Grouping</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.Change#getNewEventGrouping()
+	 * @see #getChange()
+	 * @generated
+	 */
+	EReference getChange_NewEventGrouping();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.changeset.model.EventVesselChange <em>Event Vessel Change</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -985,26 +1209,26 @@ public interface ChangesetPackage extends EPackage {
 	EClass getEventVesselChange();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.EventVesselChange#getLoadSlot_base <em>Load Slot base</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.EventVesselChange#getOriginalEvent <em>Original Event</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Load Slot base</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.EventVesselChange#getLoadSlot_base()
+	 * @return the meta object for the reference '<em>Original Event</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.EventVesselChange#getOriginalEvent()
 	 * @see #getEventVesselChange()
 	 * @generated
 	 */
-	EReference getEventVesselChange_LoadSlot_base();
+	EReference getEventVesselChange_OriginalEvent();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.EventVesselChange#getLoadSlot_target <em>Load Slot target</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.EventVesselChange#getNewEvent <em>New Event</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Load Slot target</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.EventVesselChange#getLoadSlot_target()
+	 * @return the meta object for the reference '<em>New Event</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.EventVesselChange#getNewEvent()
 	 * @see #getEventVesselChange()
 	 * @generated
 	 */
-	EReference getEventVesselChange_LoadSlot_target();
+	EReference getEventVesselChange_NewEvent();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.EventVesselChange#getOriginalVessel <em>Original Vessel</em>}'.
@@ -1029,6 +1253,17 @@ public interface ChangesetPackage extends EPackage {
 	EReference getEventVesselChange_NewVessel();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.EventVesselChange#getEventName <em>Event Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Event Name</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.EventVesselChange#getEventName()
+	 * @see #getEventVesselChange()
+	 * @generated
+	 */
+	EAttribute getEventVesselChange_EventName();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.changeset.model.WiringChange <em>Wiring Change</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1039,26 +1274,26 @@ public interface ChangesetPackage extends EPackage {
 	EClass getWiringChange();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.WiringChange#getLoadSlot_base <em>Load Slot base</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.WiringChange#getOriginalLoadSlot <em>Original Load Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Load Slot base</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.WiringChange#getLoadSlot_base()
+	 * @return the meta object for the reference '<em>Original Load Slot</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.WiringChange#getOriginalLoadSlot()
 	 * @see #getWiringChange()
 	 * @generated
 	 */
-	EReference getWiringChange_LoadSlot_base();
+	EReference getWiringChange_OriginalLoadSlot();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.WiringChange#getLoadSlot_target <em>Load Slot target</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.WiringChange#getNewLoadSlot <em>New Load Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Load Slot target</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.WiringChange#getLoadSlot_target()
+	 * @return the meta object for the reference '<em>New Load Slot</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.WiringChange#getNewLoadSlot()
 	 * @see #getWiringChange()
 	 * @generated
 	 */
-	EReference getWiringChange_LoadSlot_target();
+	EReference getWiringChange_NewLoadSlot();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.WiringChange#getOriginalDischargeSlot <em>Original Discharge Slot</em>}'.
@@ -1137,26 +1372,37 @@ public interface ChangesetPackage extends EPackage {
 	EClass getVesselChange();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getLoadSlot_base <em>Load Slot base</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getNewLoadSlot <em>New Load Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Load Slot base</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getLoadSlot_base()
+	 * @return the meta object for the reference '<em>New Load Slot</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getNewLoadSlot()
 	 * @see #getVesselChange()
 	 * @generated
 	 */
-	EReference getVesselChange_LoadSlot_base();
+	EReference getVesselChange_NewLoadSlot();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getLoadSlot_target <em>Load Slot target</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getOriginalDischargeSlot <em>Original Discharge Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Load Slot target</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getLoadSlot_target()
+	 * @return the meta object for the reference '<em>Original Discharge Slot</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getOriginalDischargeSlot()
 	 * @see #getVesselChange()
 	 * @generated
 	 */
-	EReference getVesselChange_LoadSlot_target();
+	EReference getVesselChange_OriginalDischargeSlot();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getNewDischargeSlot <em>New Discharge Slot</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>New Discharge Slot</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getNewDischargeSlot()
+	 * @see #getVesselChange()
+	 * @generated
+	 */
+	EReference getVesselChange_NewDischargeSlot();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getOriginalVessel <em>Original Vessel</em>}'.
@@ -1181,26 +1427,15 @@ public interface ChangesetPackage extends EPackage {
 	EReference getVesselChange_NewVessel();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getDischargeSlot_base <em>Discharge Slot base</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getOriginalLoadSlot <em>Original Load Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Discharge Slot base</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getDischargeSlot_base()
+	 * @return the meta object for the reference '<em>Original Load Slot</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getOriginalLoadSlot()
 	 * @see #getVesselChange()
 	 * @generated
 	 */
-	EReference getVesselChange_DischargeSlot_base();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getDischargeSlot_target <em>Discharge Slot target</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Discharge Slot target</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getDischargeSlot_target()
-	 * @see #getVesselChange()
-	 * @generated
-	 */
-	EReference getVesselChange_DischargeSlot_target();
+	EReference getVesselChange_OriginalLoadSlot();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getOriginalLoadAllocation <em>Original Load Allocation</em>}'.
@@ -1323,39 +1558,6 @@ public interface ChangesetPackage extends EPackage {
 	EReference getChangeSetRow_RhsWiringLink();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getLhsWiringChange <em>Lhs Wiring Change</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Lhs Wiring Change</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getLhsWiringChange()
-	 * @see #getChangeSetRow()
-	 * @generated
-	 */
-	EReference getChangeSetRow_LhsWiringChange();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getRhsWiringChange <em>Rhs Wiring Change</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Rhs Wiring Change</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getRhsWiringChange()
-	 * @see #getChangeSetRow()
-	 * @generated
-	 */
-	EReference getChangeSetRow_RhsWiringChange();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getLhsVesselChange <em>Lhs Vessel Change</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Lhs Vessel Change</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getLhsVesselChange()
-	 * @see #getChangeSetRow()
-	 * @generated
-	 */
-	EReference getChangeSetRow_LhsVesselChange();
-
-	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getLoadSlot <em>Load Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1420,6 +1622,72 @@ public interface ChangesetPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getChangeSetRow_NewDischargeAllocation();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#isWiringChange <em>Wiring Change</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Wiring Change</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#isWiringChange()
+	 * @see #getChangeSetRow()
+	 * @generated
+	 */
+	EAttribute getChangeSetRow_WiringChange();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#isVesselChange <em>Vessel Change</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Vessel Change</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#isVesselChange()
+	 * @see #getChangeSetRow()
+	 * @generated
+	 */
+	EAttribute getChangeSetRow_VesselChange();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getOriginalGroupProfitAndLoss <em>Original Group Profit And Loss</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Original Group Profit And Loss</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getOriginalGroupProfitAndLoss()
+	 * @see #getChangeSetRow()
+	 * @generated
+	 */
+	EReference getChangeSetRow_OriginalGroupProfitAndLoss();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewGroupProfitAndLoss <em>New Group Profit And Loss</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>New Group Profit And Loss</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewGroupProfitAndLoss()
+	 * @see #getChangeSetRow()
+	 * @generated
+	 */
+	EReference getChangeSetRow_NewGroupProfitAndLoss();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getOriginalEventGrouping <em>Original Event Grouping</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Original Event Grouping</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getOriginalEventGrouping()
+	 * @see #getChangeSetRow()
+	 * @generated
+	 */
+	EReference getChangeSetRow_OriginalEventGrouping();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewEventGrouping <em>New Event Grouping</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>New Event Grouping</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewEventGrouping()
+	 * @see #getChangeSetRow()
+	 * @generated
+	 */
+	EReference getChangeSetRow_NewEventGrouping();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -1613,6 +1881,38 @@ public interface ChangesetPackage extends EPackage {
 		EClass CHANGE = eINSTANCE.getChange();
 
 		/**
+		 * The meta object literal for the '<em><b>Original Group Profit And Loss</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHANGE__ORIGINAL_GROUP_PROFIT_AND_LOSS = eINSTANCE.getChange_OriginalGroupProfitAndLoss();
+
+		/**
+		 * The meta object literal for the '<em><b>New Group Profit And Loss</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHANGE__NEW_GROUP_PROFIT_AND_LOSS = eINSTANCE.getChange_NewGroupProfitAndLoss();
+
+		/**
+		 * The meta object literal for the '<em><b>Original Event Grouping</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHANGE__ORIGINAL_EVENT_GROUPING = eINSTANCE.getChange_OriginalEventGrouping();
+
+		/**
+		 * The meta object literal for the '<em><b>New Event Grouping</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHANGE__NEW_EVENT_GROUPING = eINSTANCE.getChange_NewEventGrouping();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.EventVesselChangeImpl <em>Event Vessel Change</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1623,20 +1923,20 @@ public interface ChangesetPackage extends EPackage {
 		EClass EVENT_VESSEL_CHANGE = eINSTANCE.getEventVesselChange();
 
 		/**
-		 * The meta object literal for the '<em><b>Load Slot base</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Original Event</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference EVENT_VESSEL_CHANGE__LOAD_SLOT_BASE = eINSTANCE.getEventVesselChange_LoadSlot_base();
+		EReference EVENT_VESSEL_CHANGE__ORIGINAL_EVENT = eINSTANCE.getEventVesselChange_OriginalEvent();
 
 		/**
-		 * The meta object literal for the '<em><b>Load Slot target</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>New Event</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference EVENT_VESSEL_CHANGE__LOAD_SLOT_TARGET = eINSTANCE.getEventVesselChange_LoadSlot_target();
+		EReference EVENT_VESSEL_CHANGE__NEW_EVENT = eINSTANCE.getEventVesselChange_NewEvent();
 
 		/**
 		 * The meta object literal for the '<em><b>Original Vessel</b></em>' reference feature.
@@ -1655,6 +1955,14 @@ public interface ChangesetPackage extends EPackage {
 		EReference EVENT_VESSEL_CHANGE__NEW_VESSEL = eINSTANCE.getEventVesselChange_NewVessel();
 
 		/**
+		 * The meta object literal for the '<em><b>Event Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute EVENT_VESSEL_CHANGE__EVENT_NAME = eINSTANCE.getEventVesselChange_EventName();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.WiringChangeImpl <em>Wiring Change</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1665,20 +1973,20 @@ public interface ChangesetPackage extends EPackage {
 		EClass WIRING_CHANGE = eINSTANCE.getWiringChange();
 
 		/**
-		 * The meta object literal for the '<em><b>Load Slot base</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Original Load Slot</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference WIRING_CHANGE__LOAD_SLOT_BASE = eINSTANCE.getWiringChange_LoadSlot_base();
+		EReference WIRING_CHANGE__ORIGINAL_LOAD_SLOT = eINSTANCE.getWiringChange_OriginalLoadSlot();
 
 		/**
-		 * The meta object literal for the '<em><b>Load Slot target</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>New Load Slot</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference WIRING_CHANGE__LOAD_SLOT_TARGET = eINSTANCE.getWiringChange_LoadSlot_target();
+		EReference WIRING_CHANGE__NEW_LOAD_SLOT = eINSTANCE.getWiringChange_NewLoadSlot();
 
 		/**
 		 * The meta object literal for the '<em><b>Original Discharge Slot</b></em>' reference feature.
@@ -1739,20 +2047,28 @@ public interface ChangesetPackage extends EPackage {
 		EClass VESSEL_CHANGE = eINSTANCE.getVesselChange();
 
 		/**
-		 * The meta object literal for the '<em><b>Load Slot base</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>New Load Slot</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference VESSEL_CHANGE__LOAD_SLOT_BASE = eINSTANCE.getVesselChange_LoadSlot_base();
+		EReference VESSEL_CHANGE__NEW_LOAD_SLOT = eINSTANCE.getVesselChange_NewLoadSlot();
 
 		/**
-		 * The meta object literal for the '<em><b>Load Slot target</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Original Discharge Slot</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference VESSEL_CHANGE__LOAD_SLOT_TARGET = eINSTANCE.getVesselChange_LoadSlot_target();
+		EReference VESSEL_CHANGE__ORIGINAL_DISCHARGE_SLOT = eINSTANCE.getVesselChange_OriginalDischargeSlot();
+
+		/**
+		 * The meta object literal for the '<em><b>New Discharge Slot</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_CHANGE__NEW_DISCHARGE_SLOT = eINSTANCE.getVesselChange_NewDischargeSlot();
 
 		/**
 		 * The meta object literal for the '<em><b>Original Vessel</b></em>' reference feature.
@@ -1771,20 +2087,12 @@ public interface ChangesetPackage extends EPackage {
 		EReference VESSEL_CHANGE__NEW_VESSEL = eINSTANCE.getVesselChange_NewVessel();
 
 		/**
-		 * The meta object literal for the '<em><b>Discharge Slot base</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Original Load Slot</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference VESSEL_CHANGE__DISCHARGE_SLOT_BASE = eINSTANCE.getVesselChange_DischargeSlot_base();
-
-		/**
-		 * The meta object literal for the '<em><b>Discharge Slot target</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference VESSEL_CHANGE__DISCHARGE_SLOT_TARGET = eINSTANCE.getVesselChange_DischargeSlot_target();
+		EReference VESSEL_CHANGE__ORIGINAL_LOAD_SLOT = eINSTANCE.getVesselChange_OriginalLoadSlot();
 
 		/**
 		 * The meta object literal for the '<em><b>Original Load Allocation</b></em>' reference feature.
@@ -1877,30 +2185,6 @@ public interface ChangesetPackage extends EPackage {
 		EReference CHANGE_SET_ROW__RHS_WIRING_LINK = eINSTANCE.getChangeSetRow_RhsWiringLink();
 
 		/**
-		 * The meta object literal for the '<em><b>Lhs Wiring Change</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CHANGE_SET_ROW__LHS_WIRING_CHANGE = eINSTANCE.getChangeSetRow_LhsWiringChange();
-
-		/**
-		 * The meta object literal for the '<em><b>Rhs Wiring Change</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CHANGE_SET_ROW__RHS_WIRING_CHANGE = eINSTANCE.getChangeSetRow_RhsWiringChange();
-
-		/**
-		 * The meta object literal for the '<em><b>Lhs Vessel Change</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CHANGE_SET_ROW__LHS_VESSEL_CHANGE = eINSTANCE.getChangeSetRow_LhsVesselChange();
-
-		/**
 		 * The meta object literal for the '<em><b>Load Slot</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1947,6 +2231,54 @@ public interface ChangesetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CHANGE_SET_ROW__NEW_DISCHARGE_ALLOCATION = eINSTANCE.getChangeSetRow_NewDischargeAllocation();
+
+		/**
+		 * The meta object literal for the '<em><b>Wiring Change</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHANGE_SET_ROW__WIRING_CHANGE = eINSTANCE.getChangeSetRow_WiringChange();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Change</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHANGE_SET_ROW__VESSEL_CHANGE = eINSTANCE.getChangeSetRow_VesselChange();
+
+		/**
+		 * The meta object literal for the '<em><b>Original Group Profit And Loss</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHANGE_SET_ROW__ORIGINAL_GROUP_PROFIT_AND_LOSS = eINSTANCE.getChangeSetRow_OriginalGroupProfitAndLoss();
+
+		/**
+		 * The meta object literal for the '<em><b>New Group Profit And Loss</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHANGE_SET_ROW__NEW_GROUP_PROFIT_AND_LOSS = eINSTANCE.getChangeSetRow_NewGroupProfitAndLoss();
+
+		/**
+		 * The meta object literal for the '<em><b>Original Event Grouping</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHANGE_SET_ROW__ORIGINAL_EVENT_GROUPING = eINSTANCE.getChangeSetRow_OriginalEventGrouping();
+
+		/**
+		 * The meta object literal for the '<em><b>New Event Grouping</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHANGE_SET_ROW__NEW_EVENT_GROUPING = eINSTANCE.getChangeSetRow_NewEventGrouping();
 
 	}
 

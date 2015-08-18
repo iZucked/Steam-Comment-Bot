@@ -16,8 +16,10 @@ import java.util.Set;
 import org.eclipse.emf.ecore.EObject;
 import org.joda.time.LocalDate;
 
+import com.google.common.base.Joiner;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -97,7 +99,7 @@ public class EquivalanceGroupBuilder {
 		}
 
 		if (referenceElement instanceof SlotVisit) {
-			SlotVisit slotVisit = (SlotVisit) referenceElement;
+			final SlotVisit slotVisit = (SlotVisit) referenceElement;
 			final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();// (SlotAllocation) referenceElement;
 			if (slotAllocation.getSlot() instanceof SpotLoadSlot) {
 				final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
@@ -108,7 +110,7 @@ public class EquivalanceGroupBuilder {
 
 					for (final EObject eObject : elements) {
 						if (eObject instanceof SlotVisit) {
-							SlotVisit slotVisit2 = (SlotVisit) eObject;
+							final SlotVisit slotVisit2 = (SlotVisit) eObject;
 							final SlotAllocation eObjectslotAllocation = slotVisit2.getSlotAllocation();
 							final CargoAllocation eObjectcargoAllocation = eObjectslotAllocation.getCargoAllocation();
 							for (final SlotAllocation eObjectsa : eObjectcargoAllocation.getSlotAllocations()) {
@@ -130,7 +132,7 @@ public class EquivalanceGroupBuilder {
 					}
 					for (final EObject eObject : elements) {
 						if (eObject instanceof SlotVisit) {
-							SlotVisit slotVisit2 = (SlotVisit) eObject;
+							final SlotVisit slotVisit2 = (SlotVisit) eObject;
 							final SlotAllocation eObjectslotAllocation = slotVisit2.getSlotAllocation();
 
 							final CargoAllocation eObjectcargoAllocation = eObjectslotAllocation.getCargoAllocation();
@@ -316,7 +318,7 @@ public class EquivalanceGroupBuilder {
 	 * @param element
 	 * @return
 	 */
-	public String getElementKey(EObject element) {
+	public static String getElementKey(EObject element) {
 		if (element instanceof Row) {
 			if (element.eIsSet(ScheduleReportPackage.Literals.ROW__CARGO_ALLOCATION)) {
 				element = (EObject) element.eGet(ScheduleReportPackage.Literals.ROW__CARGO_ALLOCATION);
@@ -340,7 +342,24 @@ public class EquivalanceGroupBuilder {
 			}
 			if (slot instanceof SpotSlot) {
 				final SpotMarket market = ((SpotSlot) slot).getMarket();
-				return String.format("%s-%s-%s-%s", prefix, market.eClass().getName(), market.getName(), format(slot.getWindowStart()));
+				final String id = String.format("%s-%s-%s", market.eClass().getName(), market.getName(), format(slot.getWindowStart()));
+				final Cargo c = slot.getCargo();
+
+				if (c != null) {
+					final List<String> elements = new LinkedList<>();
+					for (final Slot s : c.getSortedSlots()) {
+						if (s == slot) {
+							elements.add(id);
+						} else if (s instanceof SpotSlot) {
+							elements.add("spot");
+						} else {
+							elements.add(getElementKey(s));
+						}
+					}
+					return prefix + "-" + Joiner.on("--").join(elements);
+				} else {
+					return prefix + "-" + id;
+				}
 
 			} else {
 				final String baseName = slotAllocation.getName();
@@ -359,8 +378,24 @@ public class EquivalanceGroupBuilder {
 			}
 			if (slot instanceof SpotSlot) {
 				final SpotMarket market = ((SpotSlot) slot).getMarket();
-				return String.format("%s-%s-%s-%s", prefix, market.eClass().getName(), market.getName(), format(slot.getWindowStart()));
+				final String id = String.format("%s-%s-%s", market.eClass().getName(), market.getName(), format(slot.getWindowStart()));
+				final Cargo c = slot.getCargo();
 
+				if (c != null) {
+					final List<String> elements = new LinkedList<>();
+					for (final Slot s : c.getSortedSlots()) {
+						if (s == slot) {
+							elements.add(id);
+						} else if (s instanceof SpotSlot) {
+							elements.add("spot");
+						} else {
+							elements.add(getElementKey(s));
+						}
+					}
+					return prefix + "-" + Joiner.on("--").join(elements);
+				} else {
+					return prefix + "-" + id;
+				}
 			} else {
 				final String baseName = openSlotAllocation.getSlot().getName();
 				return prefix + "-" + baseName;
@@ -384,8 +419,24 @@ public class EquivalanceGroupBuilder {
 			}
 			if (slot instanceof SpotSlot) {
 				final SpotMarket market = ((SpotSlot) slot).getMarket();
-				return String.format("%s-%s-%s-%s", prefix, market.eClass().getName(), market.getName(), format(slot.getWindowStart()));
+				final String id = String.format("%s-%s-%s", market.eClass().getName(), market.getName(), format(slot.getWindowStart()));
+				final Cargo c = slot.getCargo();
 
+				if (c != null) {
+					final List<String> elements = new LinkedList<>();
+					for (final Slot s : c.getSortedSlots()) {
+						if (s == slot) {
+							elements.add(id);
+						} else if (s instanceof SpotSlot) {
+							elements.add("spot");
+						} else {
+							elements.add(getElementKey(s));
+						}
+					}
+					return prefix + "-" + Joiner.on("--").join(elements);
+				} else {
+					return prefix + "-" + id;
+				}
 			} else {
 				final String baseName = slot.getName();
 				return prefix + "-" + baseName;
@@ -398,7 +449,7 @@ public class EquivalanceGroupBuilder {
 		return element.toString();
 	}
 
-	private String format(LocalDate date) {
+	private static String format(final LocalDate date) {
 		if (date == null) {
 			return "<no date>";
 		}

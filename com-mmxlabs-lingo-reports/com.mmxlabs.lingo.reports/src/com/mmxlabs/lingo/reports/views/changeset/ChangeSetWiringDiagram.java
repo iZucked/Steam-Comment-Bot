@@ -236,7 +236,7 @@ public class ChangeSetWiringDiagram implements PaintListener {
 			if (row == null) {
 				continue;
 			}
-			if (row.getLhsWiringLink() == null && row.getRhsWiringLink() == null) {
+			if (!row.isWiringChange()) {
 				continue;
 			}
 			// Draw left hand terminal

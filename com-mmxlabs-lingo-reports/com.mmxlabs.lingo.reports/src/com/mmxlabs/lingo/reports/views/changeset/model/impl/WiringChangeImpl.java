@@ -8,6 +8,7 @@ import com.mmxlabs.lingo.reports.views.changeset.model.WiringChange;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
@@ -23,8 +24,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.WiringChangeImpl#getLoadSlot_base <em>Load Slot base</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.WiringChangeImpl#getLoadSlot_target <em>Load Slot target</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.WiringChangeImpl#getOriginalLoadSlot <em>Original Load Slot</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.WiringChangeImpl#getNewLoadSlot <em>New Load Slot</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.WiringChangeImpl#getOriginalDischargeSlot <em>Original Discharge Slot</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.WiringChangeImpl#getNewDischargeSlot <em>New Discharge Slot</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.WiringChangeImpl#getOriginalLoadAllocation <em>Original Load Allocation</em>}</li>
@@ -37,24 +38,24 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  */
 public class WiringChangeImpl extends ChangeImpl implements WiringChange {
 	/**
-	 * The cached value of the '{@link #getLoadSlot_base() <em>Load Slot base</em>}' reference.
+	 * The cached value of the '{@link #getOriginalLoadSlot() <em>Original Load Slot</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getLoadSlot_base()
+	 * @see #getOriginalLoadSlot()
 	 * @generated
 	 * @ordered
 	 */
-	protected LoadSlot loadSlot_base;
+	protected LoadSlot originalLoadSlot;
 
 	/**
-	 * The cached value of the '{@link #getLoadSlot_target() <em>Load Slot target</em>}' reference.
+	 * The cached value of the '{@link #getNewLoadSlot() <em>New Load Slot</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getLoadSlot_target()
+	 * @see #getNewLoadSlot()
 	 * @generated
 	 * @ordered
 	 */
-	protected LoadSlot loadSlot_target;
+	protected LoadSlot newLoadSlot;
 
 	/**
 	 * The cached value of the '{@link #getOriginalDischargeSlot() <em>Original Discharge Slot</em>}' reference.
@@ -84,7 +85,7 @@ public class WiringChangeImpl extends ChangeImpl implements WiringChange {
 	 * @generated
 	 * @ordered
 	 */
-	protected com.mmxlabs.models.lng.schedule.SlotAllocation originalLoadAllocation;
+	protected SlotAllocation originalLoadAllocation;
 
 	/**
 	 * The cached value of the '{@link #getNewLoadAllocation() <em>New Load Allocation</em>}' reference.
@@ -94,7 +95,7 @@ public class WiringChangeImpl extends ChangeImpl implements WiringChange {
 	 * @generated
 	 * @ordered
 	 */
-	protected com.mmxlabs.models.lng.schedule.SlotAllocation newLoadAllocation;
+	protected SlotAllocation newLoadAllocation;
 
 	/**
 	 * The cached value of the '{@link #getOriginalDischargeAllocation() <em>Original Discharge Allocation</em>}' reference.
@@ -104,7 +105,7 @@ public class WiringChangeImpl extends ChangeImpl implements WiringChange {
 	 * @generated
 	 * @ordered
 	 */
-	protected com.mmxlabs.models.lng.schedule.SlotAllocation originalDischargeAllocation;
+	protected SlotAllocation originalDischargeAllocation;
 
 	/**
 	 * The cached value of the '{@link #getNewDischargeAllocation() <em>New Discharge Allocation</em>}' reference.
@@ -114,7 +115,7 @@ public class WiringChangeImpl extends ChangeImpl implements WiringChange {
 	 * @generated
 	 * @ordered
 	 */
-	protected com.mmxlabs.models.lng.schedule.SlotAllocation newDischargeAllocation;
+	protected SlotAllocation newDischargeAllocation;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -140,16 +141,16 @@ public class WiringChangeImpl extends ChangeImpl implements WiringChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LoadSlot getLoadSlot_base() {
-		if (loadSlot_base != null && loadSlot_base.eIsProxy()) {
-			InternalEObject oldLoadSlot_base = (InternalEObject)loadSlot_base;
-			loadSlot_base = (LoadSlot)eResolveProxy(oldLoadSlot_base);
-			if (loadSlot_base != oldLoadSlot_base) {
+	public LoadSlot getOriginalLoadSlot() {
+		if (originalLoadSlot != null && originalLoadSlot.eIsProxy()) {
+			InternalEObject oldOriginalLoadSlot = (InternalEObject)originalLoadSlot;
+			originalLoadSlot = (LoadSlot)eResolveProxy(oldOriginalLoadSlot);
+			if (originalLoadSlot != oldOriginalLoadSlot) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.WIRING_CHANGE__LOAD_SLOT_BASE, oldLoadSlot_base, loadSlot_base));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.WIRING_CHANGE__ORIGINAL_LOAD_SLOT, oldOriginalLoadSlot, originalLoadSlot));
 			}
 		}
-		return loadSlot_base;
+		return originalLoadSlot;
 	}
 
 	/**
@@ -157,8 +158,8 @@ public class WiringChangeImpl extends ChangeImpl implements WiringChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LoadSlot basicGetLoadSlot_base() {
-		return loadSlot_base;
+	public LoadSlot basicGetOriginalLoadSlot() {
+		return originalLoadSlot;
 	}
 
 	/**
@@ -166,11 +167,11 @@ public class WiringChangeImpl extends ChangeImpl implements WiringChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setLoadSlot_base(LoadSlot newLoadSlot_base) {
-		LoadSlot oldLoadSlot_base = loadSlot_base;
-		loadSlot_base = newLoadSlot_base;
+	public void setOriginalLoadSlot(LoadSlot newOriginalLoadSlot) {
+		LoadSlot oldOriginalLoadSlot = originalLoadSlot;
+		originalLoadSlot = newOriginalLoadSlot;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.WIRING_CHANGE__LOAD_SLOT_BASE, oldLoadSlot_base, loadSlot_base));
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.WIRING_CHANGE__ORIGINAL_LOAD_SLOT, oldOriginalLoadSlot, originalLoadSlot));
 	}
 
 	/**
@@ -178,16 +179,16 @@ public class WiringChangeImpl extends ChangeImpl implements WiringChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LoadSlot getLoadSlot_target() {
-		if (loadSlot_target != null && loadSlot_target.eIsProxy()) {
-			InternalEObject oldLoadSlot_target = (InternalEObject)loadSlot_target;
-			loadSlot_target = (LoadSlot)eResolveProxy(oldLoadSlot_target);
-			if (loadSlot_target != oldLoadSlot_target) {
+	public LoadSlot getNewLoadSlot() {
+		if (newLoadSlot != null && newLoadSlot.eIsProxy()) {
+			InternalEObject oldNewLoadSlot = (InternalEObject)newLoadSlot;
+			newLoadSlot = (LoadSlot)eResolveProxy(oldNewLoadSlot);
+			if (newLoadSlot != oldNewLoadSlot) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.WIRING_CHANGE__LOAD_SLOT_TARGET, oldLoadSlot_target, loadSlot_target));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.WIRING_CHANGE__NEW_LOAD_SLOT, oldNewLoadSlot, newLoadSlot));
 			}
 		}
-		return loadSlot_target;
+		return newLoadSlot;
 	}
 
 	/**
@@ -195,8 +196,8 @@ public class WiringChangeImpl extends ChangeImpl implements WiringChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LoadSlot basicGetLoadSlot_target() {
-		return loadSlot_target;
+	public LoadSlot basicGetNewLoadSlot() {
+		return newLoadSlot;
 	}
 
 	/**
@@ -204,11 +205,11 @@ public class WiringChangeImpl extends ChangeImpl implements WiringChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setLoadSlot_target(LoadSlot newLoadSlot_target) {
-		LoadSlot oldLoadSlot_target = loadSlot_target;
-		loadSlot_target = newLoadSlot_target;
+	public void setNewLoadSlot(LoadSlot newNewLoadSlot) {
+		LoadSlot oldNewLoadSlot = newLoadSlot;
+		newLoadSlot = newNewLoadSlot;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.WIRING_CHANGE__LOAD_SLOT_TARGET, oldLoadSlot_target, loadSlot_target));
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.WIRING_CHANGE__NEW_LOAD_SLOT, oldNewLoadSlot, newLoadSlot));
 	}
 
 	/**
@@ -292,10 +293,10 @@ public class WiringChangeImpl extends ChangeImpl implements WiringChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public com.mmxlabs.models.lng.schedule.SlotAllocation getOriginalLoadAllocation() {
+	public SlotAllocation getOriginalLoadAllocation() {
 		if (originalLoadAllocation != null && originalLoadAllocation.eIsProxy()) {
 			InternalEObject oldOriginalLoadAllocation = (InternalEObject)originalLoadAllocation;
-			originalLoadAllocation = (com.mmxlabs.models.lng.schedule.SlotAllocation)eResolveProxy(oldOriginalLoadAllocation);
+			originalLoadAllocation = (SlotAllocation)eResolveProxy(oldOriginalLoadAllocation);
 			if (originalLoadAllocation != oldOriginalLoadAllocation) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.WIRING_CHANGE__ORIGINAL_LOAD_ALLOCATION, oldOriginalLoadAllocation, originalLoadAllocation));
@@ -309,7 +310,7 @@ public class WiringChangeImpl extends ChangeImpl implements WiringChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public com.mmxlabs.models.lng.schedule.SlotAllocation basicGetOriginalLoadAllocation() {
+	public SlotAllocation basicGetOriginalLoadAllocation() {
 		return originalLoadAllocation;
 	}
 
@@ -318,8 +319,8 @@ public class WiringChangeImpl extends ChangeImpl implements WiringChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setOriginalLoadAllocation(com.mmxlabs.models.lng.schedule.SlotAllocation newOriginalLoadAllocation) {
-		com.mmxlabs.models.lng.schedule.SlotAllocation oldOriginalLoadAllocation = originalLoadAllocation;
+	public void setOriginalLoadAllocation(SlotAllocation newOriginalLoadAllocation) {
+		SlotAllocation oldOriginalLoadAllocation = originalLoadAllocation;
 		originalLoadAllocation = newOriginalLoadAllocation;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.WIRING_CHANGE__ORIGINAL_LOAD_ALLOCATION, oldOriginalLoadAllocation, originalLoadAllocation));
@@ -330,10 +331,10 @@ public class WiringChangeImpl extends ChangeImpl implements WiringChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public com.mmxlabs.models.lng.schedule.SlotAllocation getNewLoadAllocation() {
+	public SlotAllocation getNewLoadAllocation() {
 		if (newLoadAllocation != null && newLoadAllocation.eIsProxy()) {
 			InternalEObject oldNewLoadAllocation = (InternalEObject)newLoadAllocation;
-			newLoadAllocation = (com.mmxlabs.models.lng.schedule.SlotAllocation)eResolveProxy(oldNewLoadAllocation);
+			newLoadAllocation = (SlotAllocation)eResolveProxy(oldNewLoadAllocation);
 			if (newLoadAllocation != oldNewLoadAllocation) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.WIRING_CHANGE__NEW_LOAD_ALLOCATION, oldNewLoadAllocation, newLoadAllocation));
@@ -347,7 +348,7 @@ public class WiringChangeImpl extends ChangeImpl implements WiringChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public com.mmxlabs.models.lng.schedule.SlotAllocation basicGetNewLoadAllocation() {
+	public SlotAllocation basicGetNewLoadAllocation() {
 		return newLoadAllocation;
 	}
 
@@ -356,8 +357,8 @@ public class WiringChangeImpl extends ChangeImpl implements WiringChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setNewLoadAllocation(com.mmxlabs.models.lng.schedule.SlotAllocation newNewLoadAllocation) {
-		com.mmxlabs.models.lng.schedule.SlotAllocation oldNewLoadAllocation = newLoadAllocation;
+	public void setNewLoadAllocation(SlotAllocation newNewLoadAllocation) {
+		SlotAllocation oldNewLoadAllocation = newLoadAllocation;
 		newLoadAllocation = newNewLoadAllocation;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.WIRING_CHANGE__NEW_LOAD_ALLOCATION, oldNewLoadAllocation, newLoadAllocation));
@@ -368,10 +369,10 @@ public class WiringChangeImpl extends ChangeImpl implements WiringChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public com.mmxlabs.models.lng.schedule.SlotAllocation getOriginalDischargeAllocation() {
+	public SlotAllocation getOriginalDischargeAllocation() {
 		if (originalDischargeAllocation != null && originalDischargeAllocation.eIsProxy()) {
 			InternalEObject oldOriginalDischargeAllocation = (InternalEObject)originalDischargeAllocation;
-			originalDischargeAllocation = (com.mmxlabs.models.lng.schedule.SlotAllocation)eResolveProxy(oldOriginalDischargeAllocation);
+			originalDischargeAllocation = (SlotAllocation)eResolveProxy(oldOriginalDischargeAllocation);
 			if (originalDischargeAllocation != oldOriginalDischargeAllocation) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.WIRING_CHANGE__ORIGINAL_DISCHARGE_ALLOCATION, oldOriginalDischargeAllocation, originalDischargeAllocation));
@@ -385,7 +386,7 @@ public class WiringChangeImpl extends ChangeImpl implements WiringChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public com.mmxlabs.models.lng.schedule.SlotAllocation basicGetOriginalDischargeAllocation() {
+	public SlotAllocation basicGetOriginalDischargeAllocation() {
 		return originalDischargeAllocation;
 	}
 
@@ -394,8 +395,8 @@ public class WiringChangeImpl extends ChangeImpl implements WiringChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setOriginalDischargeAllocation(com.mmxlabs.models.lng.schedule.SlotAllocation newOriginalDischargeAllocation) {
-		com.mmxlabs.models.lng.schedule.SlotAllocation oldOriginalDischargeAllocation = originalDischargeAllocation;
+	public void setOriginalDischargeAllocation(SlotAllocation newOriginalDischargeAllocation) {
+		SlotAllocation oldOriginalDischargeAllocation = originalDischargeAllocation;
 		originalDischargeAllocation = newOriginalDischargeAllocation;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.WIRING_CHANGE__ORIGINAL_DISCHARGE_ALLOCATION, oldOriginalDischargeAllocation, originalDischargeAllocation));
@@ -406,10 +407,10 @@ public class WiringChangeImpl extends ChangeImpl implements WiringChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public com.mmxlabs.models.lng.schedule.SlotAllocation getNewDischargeAllocation() {
+	public SlotAllocation getNewDischargeAllocation() {
 		if (newDischargeAllocation != null && newDischargeAllocation.eIsProxy()) {
 			InternalEObject oldNewDischargeAllocation = (InternalEObject)newDischargeAllocation;
-			newDischargeAllocation = (com.mmxlabs.models.lng.schedule.SlotAllocation)eResolveProxy(oldNewDischargeAllocation);
+			newDischargeAllocation = (SlotAllocation)eResolveProxy(oldNewDischargeAllocation);
 			if (newDischargeAllocation != oldNewDischargeAllocation) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.WIRING_CHANGE__NEW_DISCHARGE_ALLOCATION, oldNewDischargeAllocation, newDischargeAllocation));
@@ -423,7 +424,7 @@ public class WiringChangeImpl extends ChangeImpl implements WiringChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public com.mmxlabs.models.lng.schedule.SlotAllocation basicGetNewDischargeAllocation() {
+	public SlotAllocation basicGetNewDischargeAllocation() {
 		return newDischargeAllocation;
 	}
 
@@ -432,8 +433,8 @@ public class WiringChangeImpl extends ChangeImpl implements WiringChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setNewDischargeAllocation(com.mmxlabs.models.lng.schedule.SlotAllocation newNewDischargeAllocation) {
-		com.mmxlabs.models.lng.schedule.SlotAllocation oldNewDischargeAllocation = newDischargeAllocation;
+	public void setNewDischargeAllocation(SlotAllocation newNewDischargeAllocation) {
+		SlotAllocation oldNewDischargeAllocation = newDischargeAllocation;
 		newDischargeAllocation = newNewDischargeAllocation;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.WIRING_CHANGE__NEW_DISCHARGE_ALLOCATION, oldNewDischargeAllocation, newDischargeAllocation));
@@ -447,12 +448,12 @@ public class WiringChangeImpl extends ChangeImpl implements WiringChange {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ChangesetPackage.WIRING_CHANGE__LOAD_SLOT_BASE:
-				if (resolve) return getLoadSlot_base();
-				return basicGetLoadSlot_base();
-			case ChangesetPackage.WIRING_CHANGE__LOAD_SLOT_TARGET:
-				if (resolve) return getLoadSlot_target();
-				return basicGetLoadSlot_target();
+			case ChangesetPackage.WIRING_CHANGE__ORIGINAL_LOAD_SLOT:
+				if (resolve) return getOriginalLoadSlot();
+				return basicGetOriginalLoadSlot();
+			case ChangesetPackage.WIRING_CHANGE__NEW_LOAD_SLOT:
+				if (resolve) return getNewLoadSlot();
+				return basicGetNewLoadSlot();
 			case ChangesetPackage.WIRING_CHANGE__ORIGINAL_DISCHARGE_SLOT:
 				if (resolve) return getOriginalDischargeSlot();
 				return basicGetOriginalDischargeSlot();
@@ -483,11 +484,11 @@ public class WiringChangeImpl extends ChangeImpl implements WiringChange {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ChangesetPackage.WIRING_CHANGE__LOAD_SLOT_BASE:
-				setLoadSlot_base((LoadSlot)newValue);
+			case ChangesetPackage.WIRING_CHANGE__ORIGINAL_LOAD_SLOT:
+				setOriginalLoadSlot((LoadSlot)newValue);
 				return;
-			case ChangesetPackage.WIRING_CHANGE__LOAD_SLOT_TARGET:
-				setLoadSlot_target((LoadSlot)newValue);
+			case ChangesetPackage.WIRING_CHANGE__NEW_LOAD_SLOT:
+				setNewLoadSlot((LoadSlot)newValue);
 				return;
 			case ChangesetPackage.WIRING_CHANGE__ORIGINAL_DISCHARGE_SLOT:
 				setOriginalDischargeSlot((DischargeSlot)newValue);
@@ -496,16 +497,16 @@ public class WiringChangeImpl extends ChangeImpl implements WiringChange {
 				setNewDischargeSlot((DischargeSlot)newValue);
 				return;
 			case ChangesetPackage.WIRING_CHANGE__ORIGINAL_LOAD_ALLOCATION:
-				setOriginalLoadAllocation((com.mmxlabs.models.lng.schedule.SlotAllocation)newValue);
+				setOriginalLoadAllocation((SlotAllocation)newValue);
 				return;
 			case ChangesetPackage.WIRING_CHANGE__NEW_LOAD_ALLOCATION:
-				setNewLoadAllocation((com.mmxlabs.models.lng.schedule.SlotAllocation)newValue);
+				setNewLoadAllocation((SlotAllocation)newValue);
 				return;
 			case ChangesetPackage.WIRING_CHANGE__ORIGINAL_DISCHARGE_ALLOCATION:
-				setOriginalDischargeAllocation((com.mmxlabs.models.lng.schedule.SlotAllocation)newValue);
+				setOriginalDischargeAllocation((SlotAllocation)newValue);
 				return;
 			case ChangesetPackage.WIRING_CHANGE__NEW_DISCHARGE_ALLOCATION:
-				setNewDischargeAllocation((com.mmxlabs.models.lng.schedule.SlotAllocation)newValue);
+				setNewDischargeAllocation((SlotAllocation)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -519,11 +520,11 @@ public class WiringChangeImpl extends ChangeImpl implements WiringChange {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ChangesetPackage.WIRING_CHANGE__LOAD_SLOT_BASE:
-				setLoadSlot_base((LoadSlot)null);
+			case ChangesetPackage.WIRING_CHANGE__ORIGINAL_LOAD_SLOT:
+				setOriginalLoadSlot((LoadSlot)null);
 				return;
-			case ChangesetPackage.WIRING_CHANGE__LOAD_SLOT_TARGET:
-				setLoadSlot_target((LoadSlot)null);
+			case ChangesetPackage.WIRING_CHANGE__NEW_LOAD_SLOT:
+				setNewLoadSlot((LoadSlot)null);
 				return;
 			case ChangesetPackage.WIRING_CHANGE__ORIGINAL_DISCHARGE_SLOT:
 				setOriginalDischargeSlot((DischargeSlot)null);
@@ -532,16 +533,16 @@ public class WiringChangeImpl extends ChangeImpl implements WiringChange {
 				setNewDischargeSlot((DischargeSlot)null);
 				return;
 			case ChangesetPackage.WIRING_CHANGE__ORIGINAL_LOAD_ALLOCATION:
-				setOriginalLoadAllocation((com.mmxlabs.models.lng.schedule.SlotAllocation)null);
+				setOriginalLoadAllocation((SlotAllocation)null);
 				return;
 			case ChangesetPackage.WIRING_CHANGE__NEW_LOAD_ALLOCATION:
-				setNewLoadAllocation((com.mmxlabs.models.lng.schedule.SlotAllocation)null);
+				setNewLoadAllocation((SlotAllocation)null);
 				return;
 			case ChangesetPackage.WIRING_CHANGE__ORIGINAL_DISCHARGE_ALLOCATION:
-				setOriginalDischargeAllocation((com.mmxlabs.models.lng.schedule.SlotAllocation)null);
+				setOriginalDischargeAllocation((SlotAllocation)null);
 				return;
 			case ChangesetPackage.WIRING_CHANGE__NEW_DISCHARGE_ALLOCATION:
-				setNewDischargeAllocation((com.mmxlabs.models.lng.schedule.SlotAllocation)null);
+				setNewDischargeAllocation((SlotAllocation)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -555,10 +556,10 @@ public class WiringChangeImpl extends ChangeImpl implements WiringChange {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ChangesetPackage.WIRING_CHANGE__LOAD_SLOT_BASE:
-				return loadSlot_base != null;
-			case ChangesetPackage.WIRING_CHANGE__LOAD_SLOT_TARGET:
-				return loadSlot_target != null;
+			case ChangesetPackage.WIRING_CHANGE__ORIGINAL_LOAD_SLOT:
+				return originalLoadSlot != null;
+			case ChangesetPackage.WIRING_CHANGE__NEW_LOAD_SLOT:
+				return newLoadSlot != null;
 			case ChangesetPackage.WIRING_CHANGE__ORIGINAL_DISCHARGE_SLOT:
 				return originalDischargeSlot != null;
 			case ChangesetPackage.WIRING_CHANGE__NEW_DISCHARGE_SLOT:

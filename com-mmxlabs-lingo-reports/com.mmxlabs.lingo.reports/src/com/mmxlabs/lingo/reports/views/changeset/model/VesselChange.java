@@ -17,12 +17,12 @@ import com.mmxlabs.models.lng.types.VesselAssignmentType;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getLoadSlot_base <em>Load Slot base</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getLoadSlot_target <em>Load Slot target</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getOriginalVessel <em>Original Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getNewVessel <em>New Vessel</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getDischargeSlot_base <em>Discharge Slot base</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getDischargeSlot_target <em>Discharge Slot target</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getOriginalLoadSlot <em>Original Load Slot</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getNewLoadSlot <em>New Load Slot</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getOriginalDischargeSlot <em>Original Discharge Slot</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getNewDischargeSlot <em>New Discharge Slot</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getOriginalLoadAllocation <em>Original Load Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getNewLoadAllocation <em>New Load Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getOriginalDischargeAllocation <em>Original Discharge Allocation</em>}</li>
@@ -35,56 +35,82 @@ import com.mmxlabs.models.lng.types.VesselAssignmentType;
  */
 public interface VesselChange extends Change {
 	/**
-	 * Returns the value of the '<em><b>Load Slot base</b></em>' reference.
+	 * Returns the value of the '<em><b>New Load Slot</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Load Slot base</em>' reference isn't clear,
+	 * If the meaning of the '<em>New Load Slot</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Load Slot base</em>' reference.
-	 * @see #setLoadSlot_base(LoadSlot)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getVesselChange_LoadSlot_base()
+	 * @return the value of the '<em>New Load Slot</em>' reference.
+	 * @see #setNewLoadSlot(LoadSlot)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getVesselChange_NewLoadSlot()
 	 * @model
 	 * @generated
 	 */
-	LoadSlot getLoadSlot_base();
+	LoadSlot getNewLoadSlot();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getLoadSlot_base <em>Load Slot base</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getNewLoadSlot <em>New Load Slot</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Load Slot base</em>' reference.
-	 * @see #getLoadSlot_base()
+	 * @param value the new value of the '<em>New Load Slot</em>' reference.
+	 * @see #getNewLoadSlot()
 	 * @generated
 	 */
-	void setLoadSlot_base(LoadSlot value);
+	void setNewLoadSlot(LoadSlot value);
 
 	/**
-	 * Returns the value of the '<em><b>Load Slot target</b></em>' reference.
+	 * Returns the value of the '<em><b>Original Discharge Slot</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Load Slot target</em>' reference isn't clear,
+	 * If the meaning of the '<em>Original Discharge Slot</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Load Slot target</em>' reference.
-	 * @see #setLoadSlot_target(LoadSlot)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getVesselChange_LoadSlot_target()
+	 * @return the value of the '<em>Original Discharge Slot</em>' reference.
+	 * @see #setOriginalDischargeSlot(DischargeSlot)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getVesselChange_OriginalDischargeSlot()
 	 * @model
 	 * @generated
 	 */
-	LoadSlot getLoadSlot_target();
+	DischargeSlot getOriginalDischargeSlot();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getLoadSlot_target <em>Load Slot target</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getOriginalDischargeSlot <em>Original Discharge Slot</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Load Slot target</em>' reference.
-	 * @see #getLoadSlot_target()
+	 * @param value the new value of the '<em>Original Discharge Slot</em>' reference.
+	 * @see #getOriginalDischargeSlot()
 	 * @generated
 	 */
-	void setLoadSlot_target(LoadSlot value);
+	void setOriginalDischargeSlot(DischargeSlot value);
+
+	/**
+	 * Returns the value of the '<em><b>New Discharge Slot</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>New Discharge Slot</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>New Discharge Slot</em>' reference.
+	 * @see #setNewDischargeSlot(DischargeSlot)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getVesselChange_NewDischargeSlot()
+	 * @model
+	 * @generated
+	 */
+	DischargeSlot getNewDischargeSlot();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getNewDischargeSlot <em>New Discharge Slot</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>New Discharge Slot</em>' reference.
+	 * @see #getNewDischargeSlot()
+	 * @generated
+	 */
+	void setNewDischargeSlot(DischargeSlot value);
 
 	/**
 	 * Returns the value of the '<em><b>Original Vessel</b></em>' reference.
@@ -139,56 +165,30 @@ public interface VesselChange extends Change {
 	void setNewVessel(VesselAssignmentType value);
 
 	/**
-	 * Returns the value of the '<em><b>Discharge Slot base</b></em>' reference.
+	 * Returns the value of the '<em><b>Original Load Slot</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Discharge Slot base</em>' reference isn't clear,
+	 * If the meaning of the '<em>Original Load Slot</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Discharge Slot base</em>' reference.
-	 * @see #setDischargeSlot_base(DischargeSlot)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getVesselChange_DischargeSlot_base()
+	 * @return the value of the '<em>Original Load Slot</em>' reference.
+	 * @see #setOriginalLoadSlot(LoadSlot)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getVesselChange_OriginalLoadSlot()
 	 * @model
 	 * @generated
 	 */
-	DischargeSlot getDischargeSlot_base();
+	LoadSlot getOriginalLoadSlot();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getDischargeSlot_base <em>Discharge Slot base</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getOriginalLoadSlot <em>Original Load Slot</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Discharge Slot base</em>' reference.
-	 * @see #getDischargeSlot_base()
+	 * @param value the new value of the '<em>Original Load Slot</em>' reference.
+	 * @see #getOriginalLoadSlot()
 	 * @generated
 	 */
-	void setDischargeSlot_base(DischargeSlot value);
-
-	/**
-	 * Returns the value of the '<em><b>Discharge Slot target</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Discharge Slot target</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Discharge Slot target</em>' reference.
-	 * @see #setDischargeSlot_target(DischargeSlot)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getVesselChange_DischargeSlot_target()
-	 * @model
-	 * @generated
-	 */
-	DischargeSlot getDischargeSlot_target();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.VesselChange#getDischargeSlot_target <em>Discharge Slot target</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Discharge Slot target</em>' reference.
-	 * @see #getDischargeSlot_target()
-	 * @generated
-	 */
-	void setDischargeSlot_target(DischargeSlot value);
+	void setOriginalLoadSlot(LoadSlot value);
 
 	/**
 	 * Returns the value of the '<em><b>Original Load Allocation</b></em>' reference.
