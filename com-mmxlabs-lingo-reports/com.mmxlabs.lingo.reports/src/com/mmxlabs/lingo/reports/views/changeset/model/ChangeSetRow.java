@@ -4,6 +4,9 @@ package com.mmxlabs.lingo.reports.views.changeset.model;
 
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.schedule.EventGrouping;
+import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -21,15 +24,18 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getRhsVesselName <em>Rhs Vessel Name</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getLhsWiringLink <em>Lhs Wiring Link</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getRhsWiringLink <em>Rhs Wiring Link</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getLhsWiringChange <em>Lhs Wiring Change</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getRhsWiringChange <em>Rhs Wiring Change</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getLhsVesselChange <em>Lhs Vessel Change</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getLoadSlot <em>Load Slot</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getDischargeSlot <em>Discharge Slot</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getOriginalLoadAllocation <em>Original Load Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewLoadAllocation <em>New Load Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getOriginalDischargeAllocation <em>Original Discharge Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewDischargeAllocation <em>New Discharge Allocation</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#isWiringChange <em>Wiring Change</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#isVesselChange <em>Vessel Change</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getOriginalGroupProfitAndLoss <em>Original Group Profit And Loss</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewGroupProfitAndLoss <em>New Group Profit And Loss</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getOriginalEventGrouping <em>Original Event Grouping</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewEventGrouping <em>New Event Grouping</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRow()
@@ -198,84 +204,6 @@ public interface ChangeSetRow extends EObject {
 	void setRhsWiringLink(ChangeSetRow value);
 
 	/**
-	 * Returns the value of the '<em><b>Lhs Wiring Change</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Lhs Wiring Change</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Lhs Wiring Change</em>' reference.
-	 * @see #setLhsWiringChange(WiringChange)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRow_LhsWiringChange()
-	 * @model
-	 * @generated
-	 */
-	WiringChange getLhsWiringChange();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getLhsWiringChange <em>Lhs Wiring Change</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Lhs Wiring Change</em>' reference.
-	 * @see #getLhsWiringChange()
-	 * @generated
-	 */
-	void setLhsWiringChange(WiringChange value);
-
-	/**
-	 * Returns the value of the '<em><b>Rhs Wiring Change</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Rhs Wiring Change</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Rhs Wiring Change</em>' reference.
-	 * @see #setRhsWiringChange(WiringChange)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRow_RhsWiringChange()
-	 * @model
-	 * @generated
-	 */
-	WiringChange getRhsWiringChange();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getRhsWiringChange <em>Rhs Wiring Change</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Rhs Wiring Change</em>' reference.
-	 * @see #getRhsWiringChange()
-	 * @generated
-	 */
-	void setRhsWiringChange(WiringChange value);
-
-	/**
-	 * Returns the value of the '<em><b>Lhs Vessel Change</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Lhs Vessel Change</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Lhs Vessel Change</em>' reference.
-	 * @see #setLhsVesselChange(WiringChange)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRow_LhsVesselChange()
-	 * @model
-	 * @generated
-	 */
-	WiringChange getLhsVesselChange();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getLhsVesselChange <em>Lhs Vessel Change</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Lhs Vessel Change</em>' reference.
-	 * @see #getLhsVesselChange()
-	 * @generated
-	 */
-	void setLhsVesselChange(WiringChange value);
-
-	/**
 	 * Returns the value of the '<em><b>Load Slot</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -336,12 +264,12 @@ public interface ChangeSetRow extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Original Load Allocation</em>' reference.
-	 * @see #setOriginalLoadAllocation(com.mmxlabs.models.lng.schedule.SlotAllocation)
+	 * @see #setOriginalLoadAllocation(SlotAllocation)
 	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRow_OriginalLoadAllocation()
 	 * @model
 	 * @generated
 	 */
-	com.mmxlabs.models.lng.schedule.SlotAllocation getOriginalLoadAllocation();
+	SlotAllocation getOriginalLoadAllocation();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getOriginalLoadAllocation <em>Original Load Allocation</em>}' reference.
@@ -351,7 +279,7 @@ public interface ChangeSetRow extends EObject {
 	 * @see #getOriginalLoadAllocation()
 	 * @generated
 	 */
-	void setOriginalLoadAllocation(com.mmxlabs.models.lng.schedule.SlotAllocation value);
+	void setOriginalLoadAllocation(SlotAllocation value);
 
 	/**
 	 * Returns the value of the '<em><b>New Load Allocation</b></em>' reference.
@@ -362,12 +290,12 @@ public interface ChangeSetRow extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>New Load Allocation</em>' reference.
-	 * @see #setNewLoadAllocation(com.mmxlabs.models.lng.schedule.SlotAllocation)
+	 * @see #setNewLoadAllocation(SlotAllocation)
 	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRow_NewLoadAllocation()
 	 * @model
 	 * @generated
 	 */
-	com.mmxlabs.models.lng.schedule.SlotAllocation getNewLoadAllocation();
+	SlotAllocation getNewLoadAllocation();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewLoadAllocation <em>New Load Allocation</em>}' reference.
@@ -377,7 +305,7 @@ public interface ChangeSetRow extends EObject {
 	 * @see #getNewLoadAllocation()
 	 * @generated
 	 */
-	void setNewLoadAllocation(com.mmxlabs.models.lng.schedule.SlotAllocation value);
+	void setNewLoadAllocation(SlotAllocation value);
 
 	/**
 	 * Returns the value of the '<em><b>Original Discharge Allocation</b></em>' reference.
@@ -388,12 +316,12 @@ public interface ChangeSetRow extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Original Discharge Allocation</em>' reference.
-	 * @see #setOriginalDischargeAllocation(com.mmxlabs.models.lng.schedule.SlotAllocation)
+	 * @see #setOriginalDischargeAllocation(SlotAllocation)
 	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRow_OriginalDischargeAllocation()
 	 * @model
 	 * @generated
 	 */
-	com.mmxlabs.models.lng.schedule.SlotAllocation getOriginalDischargeAllocation();
+	SlotAllocation getOriginalDischargeAllocation();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getOriginalDischargeAllocation <em>Original Discharge Allocation</em>}' reference.
@@ -403,7 +331,7 @@ public interface ChangeSetRow extends EObject {
 	 * @see #getOriginalDischargeAllocation()
 	 * @generated
 	 */
-	void setOriginalDischargeAllocation(com.mmxlabs.models.lng.schedule.SlotAllocation value);
+	void setOriginalDischargeAllocation(SlotAllocation value);
 
 	/**
 	 * Returns the value of the '<em><b>New Discharge Allocation</b></em>' reference.
@@ -414,12 +342,12 @@ public interface ChangeSetRow extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>New Discharge Allocation</em>' reference.
-	 * @see #setNewDischargeAllocation(com.mmxlabs.models.lng.schedule.SlotAllocation)
+	 * @see #setNewDischargeAllocation(SlotAllocation)
 	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRow_NewDischargeAllocation()
 	 * @model
 	 * @generated
 	 */
-	com.mmxlabs.models.lng.schedule.SlotAllocation getNewDischargeAllocation();
+	SlotAllocation getNewDischargeAllocation();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewDischargeAllocation <em>New Discharge Allocation</em>}' reference.
@@ -429,6 +357,162 @@ public interface ChangeSetRow extends EObject {
 	 * @see #getNewDischargeAllocation()
 	 * @generated
 	 */
-	void setNewDischargeAllocation(com.mmxlabs.models.lng.schedule.SlotAllocation value);
+	void setNewDischargeAllocation(SlotAllocation value);
+
+	/**
+	 * Returns the value of the '<em><b>Wiring Change</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Wiring Change</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Wiring Change</em>' attribute.
+	 * @see #setWiringChange(boolean)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRow_WiringChange()
+	 * @model
+	 * @generated
+	 */
+	boolean isWiringChange();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#isWiringChange <em>Wiring Change</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Wiring Change</em>' attribute.
+	 * @see #isWiringChange()
+	 * @generated
+	 */
+	void setWiringChange(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Vessel Change</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Vessel Change</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Vessel Change</em>' attribute.
+	 * @see #setVesselChange(boolean)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRow_VesselChange()
+	 * @model
+	 * @generated
+	 */
+	boolean isVesselChange();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#isVesselChange <em>Vessel Change</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Vessel Change</em>' attribute.
+	 * @see #isVesselChange()
+	 * @generated
+	 */
+	void setVesselChange(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Original Group Profit And Loss</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Original Group Profit And Loss</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Original Group Profit And Loss</em>' reference.
+	 * @see #setOriginalGroupProfitAndLoss(ProfitAndLossContainer)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRow_OriginalGroupProfitAndLoss()
+	 * @model
+	 * @generated
+	 */
+	ProfitAndLossContainer getOriginalGroupProfitAndLoss();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getOriginalGroupProfitAndLoss <em>Original Group Profit And Loss</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Original Group Profit And Loss</em>' reference.
+	 * @see #getOriginalGroupProfitAndLoss()
+	 * @generated
+	 */
+	void setOriginalGroupProfitAndLoss(ProfitAndLossContainer value);
+
+	/**
+	 * Returns the value of the '<em><b>New Group Profit And Loss</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>New Group Profit And Loss</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>New Group Profit And Loss</em>' reference.
+	 * @see #setNewGroupProfitAndLoss(ProfitAndLossContainer)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRow_NewGroupProfitAndLoss()
+	 * @model
+	 * @generated
+	 */
+	ProfitAndLossContainer getNewGroupProfitAndLoss();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewGroupProfitAndLoss <em>New Group Profit And Loss</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>New Group Profit And Loss</em>' reference.
+	 * @see #getNewGroupProfitAndLoss()
+	 * @generated
+	 */
+	void setNewGroupProfitAndLoss(ProfitAndLossContainer value);
+
+	/**
+	 * Returns the value of the '<em><b>Original Event Grouping</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Original Event Grouping</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Original Event Grouping</em>' reference.
+	 * @see #setOriginalEventGrouping(EventGrouping)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRow_OriginalEventGrouping()
+	 * @model
+	 * @generated
+	 */
+	EventGrouping getOriginalEventGrouping();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getOriginalEventGrouping <em>Original Event Grouping</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Original Event Grouping</em>' reference.
+	 * @see #getOriginalEventGrouping()
+	 * @generated
+	 */
+	void setOriginalEventGrouping(EventGrouping value);
+
+	/**
+	 * Returns the value of the '<em><b>New Event Grouping</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>New Event Grouping</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>New Event Grouping</em>' reference.
+	 * @see #setNewEventGrouping(EventGrouping)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRow_NewEventGrouping()
+	 * @model
+	 * @generated
+	 */
+	EventGrouping getNewEventGrouping();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewEventGrouping <em>New Event Grouping</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>New Event Grouping</em>' reference.
+	 * @see #getNewEventGrouping()
+	 * @generated
+	 */
+	void setNewEventGrouping(EventGrouping value);
 
 } // ChangeSetRow

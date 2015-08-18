@@ -4,6 +4,7 @@ package com.mmxlabs.lingo.reports.views.changeset.model;
 
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 
 /**
  * <!-- begin-user-doc -->
@@ -14,8 +15,8 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.WiringChange#getLoadSlot_base <em>Load Slot base</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.WiringChange#getLoadSlot_target <em>Load Slot target</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.WiringChange#getOriginalLoadSlot <em>Original Load Slot</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.WiringChange#getNewLoadSlot <em>New Load Slot</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.WiringChange#getOriginalDischargeSlot <em>Original Discharge Slot</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.WiringChange#getNewDischargeSlot <em>New Discharge Slot</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.WiringChange#getOriginalLoadAllocation <em>Original Load Allocation</em>}</li>
@@ -30,56 +31,56 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
  */
 public interface WiringChange extends Change {
 	/**
-	 * Returns the value of the '<em><b>Load Slot base</b></em>' reference.
+	 * Returns the value of the '<em><b>Original Load Slot</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Load Slot base</em>' reference isn't clear,
+	 * If the meaning of the '<em>Original Load Slot</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Load Slot base</em>' reference.
-	 * @see #setLoadSlot_base(LoadSlot)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getWiringChange_LoadSlot_base()
+	 * @return the value of the '<em>Original Load Slot</em>' reference.
+	 * @see #setOriginalLoadSlot(LoadSlot)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getWiringChange_OriginalLoadSlot()
 	 * @model
 	 * @generated
 	 */
-	LoadSlot getLoadSlot_base();
+	LoadSlot getOriginalLoadSlot();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.WiringChange#getLoadSlot_base <em>Load Slot base</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.WiringChange#getOriginalLoadSlot <em>Original Load Slot</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Load Slot base</em>' reference.
-	 * @see #getLoadSlot_base()
+	 * @param value the new value of the '<em>Original Load Slot</em>' reference.
+	 * @see #getOriginalLoadSlot()
 	 * @generated
 	 */
-	void setLoadSlot_base(LoadSlot value);
+	void setOriginalLoadSlot(LoadSlot value);
 
 	/**
-	 * Returns the value of the '<em><b>Load Slot target</b></em>' reference.
+	 * Returns the value of the '<em><b>New Load Slot</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Load Slot target</em>' reference isn't clear,
+	 * If the meaning of the '<em>New Load Slot</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Load Slot target</em>' reference.
-	 * @see #setLoadSlot_target(LoadSlot)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getWiringChange_LoadSlot_target()
+	 * @return the value of the '<em>New Load Slot</em>' reference.
+	 * @see #setNewLoadSlot(LoadSlot)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getWiringChange_NewLoadSlot()
 	 * @model
 	 * @generated
 	 */
-	LoadSlot getLoadSlot_target();
+	LoadSlot getNewLoadSlot();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.WiringChange#getLoadSlot_target <em>Load Slot target</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.WiringChange#getNewLoadSlot <em>New Load Slot</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Load Slot target</em>' reference.
-	 * @see #getLoadSlot_target()
+	 * @param value the new value of the '<em>New Load Slot</em>' reference.
+	 * @see #getNewLoadSlot()
 	 * @generated
 	 */
-	void setLoadSlot_target(LoadSlot value);
+	void setNewLoadSlot(LoadSlot value);
 
 	/**
 	 * Returns the value of the '<em><b>Original Discharge Slot</b></em>' reference.
@@ -142,12 +143,12 @@ public interface WiringChange extends Change {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Original Load Allocation</em>' reference.
-	 * @see #setOriginalLoadAllocation(com.mmxlabs.models.lng.schedule.SlotAllocation)
+	 * @see #setOriginalLoadAllocation(SlotAllocation)
 	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getWiringChange_OriginalLoadAllocation()
 	 * @model
 	 * @generated
 	 */
-	com.mmxlabs.models.lng.schedule.SlotAllocation getOriginalLoadAllocation();
+	SlotAllocation getOriginalLoadAllocation();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.WiringChange#getOriginalLoadAllocation <em>Original Load Allocation</em>}' reference.
@@ -157,7 +158,7 @@ public interface WiringChange extends Change {
 	 * @see #getOriginalLoadAllocation()
 	 * @generated
 	 */
-	void setOriginalLoadAllocation(com.mmxlabs.models.lng.schedule.SlotAllocation value);
+	void setOriginalLoadAllocation(SlotAllocation value);
 
 	/**
 	 * Returns the value of the '<em><b>New Load Allocation</b></em>' reference.
@@ -168,12 +169,12 @@ public interface WiringChange extends Change {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>New Load Allocation</em>' reference.
-	 * @see #setNewLoadAllocation(com.mmxlabs.models.lng.schedule.SlotAllocation)
+	 * @see #setNewLoadAllocation(SlotAllocation)
 	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getWiringChange_NewLoadAllocation()
 	 * @model
 	 * @generated
 	 */
-	com.mmxlabs.models.lng.schedule.SlotAllocation getNewLoadAllocation();
+	SlotAllocation getNewLoadAllocation();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.WiringChange#getNewLoadAllocation <em>New Load Allocation</em>}' reference.
@@ -183,7 +184,7 @@ public interface WiringChange extends Change {
 	 * @see #getNewLoadAllocation()
 	 * @generated
 	 */
-	void setNewLoadAllocation(com.mmxlabs.models.lng.schedule.SlotAllocation value);
+	void setNewLoadAllocation(SlotAllocation value);
 
 	/**
 	 * Returns the value of the '<em><b>Original Discharge Allocation</b></em>' reference.
@@ -194,12 +195,12 @@ public interface WiringChange extends Change {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Original Discharge Allocation</em>' reference.
-	 * @see #setOriginalDischargeAllocation(com.mmxlabs.models.lng.schedule.SlotAllocation)
+	 * @see #setOriginalDischargeAllocation(SlotAllocation)
 	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getWiringChange_OriginalDischargeAllocation()
 	 * @model
 	 * @generated
 	 */
-	com.mmxlabs.models.lng.schedule.SlotAllocation getOriginalDischargeAllocation();
+	SlotAllocation getOriginalDischargeAllocation();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.WiringChange#getOriginalDischargeAllocation <em>Original Discharge Allocation</em>}' reference.
@@ -209,7 +210,7 @@ public interface WiringChange extends Change {
 	 * @see #getOriginalDischargeAllocation()
 	 * @generated
 	 */
-	void setOriginalDischargeAllocation(com.mmxlabs.models.lng.schedule.SlotAllocation value);
+	void setOriginalDischargeAllocation(SlotAllocation value);
 
 	/**
 	 * Returns the value of the '<em><b>New Discharge Allocation</b></em>' reference.
@@ -220,12 +221,12 @@ public interface WiringChange extends Change {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>New Discharge Allocation</em>' reference.
-	 * @see #setNewDischargeAllocation(com.mmxlabs.models.lng.schedule.SlotAllocation)
+	 * @see #setNewDischargeAllocation(SlotAllocation)
 	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getWiringChange_NewDischargeAllocation()
 	 * @model
 	 * @generated
 	 */
-	com.mmxlabs.models.lng.schedule.SlotAllocation getNewDischargeAllocation();
+	SlotAllocation getNewDischargeAllocation();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.WiringChange#getNewDischargeAllocation <em>New Discharge Allocation</em>}' reference.
@@ -235,6 +236,6 @@ public interface WiringChange extends Change {
 	 * @see #getNewDischargeAllocation()
 	 * @generated
 	 */
-	void setNewDischargeAllocation(com.mmxlabs.models.lng.schedule.SlotAllocation value);
+	void setNewDischargeAllocation(SlotAllocation value);
 
 } // WiringChange

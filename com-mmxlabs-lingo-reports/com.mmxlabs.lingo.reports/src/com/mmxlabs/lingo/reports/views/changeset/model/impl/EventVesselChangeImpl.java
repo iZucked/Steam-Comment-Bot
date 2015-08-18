@@ -4,9 +4,7 @@ package com.mmxlabs.lingo.reports.views.changeset.model.impl;
 
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
 import com.mmxlabs.lingo.reports.views.changeset.model.EventVesselChange;
-
-import com.mmxlabs.models.lng.cargo.LoadSlot;
-
+import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -24,34 +22,35 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.EventVesselChangeImpl#getLoadSlot_base <em>Load Slot base</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.EventVesselChangeImpl#getLoadSlot_target <em>Load Slot target</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.EventVesselChangeImpl#getOriginalEvent <em>Original Event</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.EventVesselChangeImpl#getNewEvent <em>New Event</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.EventVesselChangeImpl#getOriginalVessel <em>Original Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.EventVesselChangeImpl#getNewVessel <em>New Vessel</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.EventVesselChangeImpl#getEventName <em>Event Name</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class EventVesselChangeImpl extends ChangeImpl implements EventVesselChange {
 	/**
-	 * The cached value of the '{@link #getLoadSlot_base() <em>Load Slot base</em>}' reference.
+	 * The cached value of the '{@link #getOriginalEvent() <em>Original Event</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getLoadSlot_base()
+	 * @see #getOriginalEvent()
 	 * @generated
 	 * @ordered
 	 */
-	protected LoadSlot loadSlot_base;
+	protected Event originalEvent;
 
 	/**
-	 * The cached value of the '{@link #getLoadSlot_target() <em>Load Slot target</em>}' reference.
+	 * The cached value of the '{@link #getNewEvent() <em>New Event</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getLoadSlot_target()
+	 * @see #getNewEvent()
 	 * @generated
 	 * @ordered
 	 */
-	protected LoadSlot loadSlot_target;
+	protected Event newEvent;
 
 	/**
 	 * The cached value of the '{@link #getOriginalVessel() <em>Original Vessel</em>}' reference.
@@ -72,6 +71,26 @@ public class EventVesselChangeImpl extends ChangeImpl implements EventVesselChan
 	 * @ordered
 	 */
 	protected VesselAssignmentType newVessel;
+
+	/**
+	 * The default value of the '{@link #getEventName() <em>Event Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEventName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String EVENT_NAME_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getEventName() <em>Event Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEventName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String eventName = EVENT_NAME_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -97,16 +116,16 @@ public class EventVesselChangeImpl extends ChangeImpl implements EventVesselChan
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LoadSlot getLoadSlot_base() {
-		if (loadSlot_base != null && loadSlot_base.eIsProxy()) {
-			InternalEObject oldLoadSlot_base = (InternalEObject)loadSlot_base;
-			loadSlot_base = (LoadSlot)eResolveProxy(oldLoadSlot_base);
-			if (loadSlot_base != oldLoadSlot_base) {
+	public Event getOriginalEvent() {
+		if (originalEvent != null && originalEvent.eIsProxy()) {
+			InternalEObject oldOriginalEvent = (InternalEObject)originalEvent;
+			originalEvent = (Event)eResolveProxy(oldOriginalEvent);
+			if (originalEvent != oldOriginalEvent) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.EVENT_VESSEL_CHANGE__LOAD_SLOT_BASE, oldLoadSlot_base, loadSlot_base));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.EVENT_VESSEL_CHANGE__ORIGINAL_EVENT, oldOriginalEvent, originalEvent));
 			}
 		}
-		return loadSlot_base;
+		return originalEvent;
 	}
 
 	/**
@@ -114,8 +133,8 @@ public class EventVesselChangeImpl extends ChangeImpl implements EventVesselChan
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LoadSlot basicGetLoadSlot_base() {
-		return loadSlot_base;
+	public Event basicGetOriginalEvent() {
+		return originalEvent;
 	}
 
 	/**
@@ -123,11 +142,11 @@ public class EventVesselChangeImpl extends ChangeImpl implements EventVesselChan
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setLoadSlot_base(LoadSlot newLoadSlot_base) {
-		LoadSlot oldLoadSlot_base = loadSlot_base;
-		loadSlot_base = newLoadSlot_base;
+	public void setOriginalEvent(Event newOriginalEvent) {
+		Event oldOriginalEvent = originalEvent;
+		originalEvent = newOriginalEvent;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.EVENT_VESSEL_CHANGE__LOAD_SLOT_BASE, oldLoadSlot_base, loadSlot_base));
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.EVENT_VESSEL_CHANGE__ORIGINAL_EVENT, oldOriginalEvent, originalEvent));
 	}
 
 	/**
@@ -135,16 +154,16 @@ public class EventVesselChangeImpl extends ChangeImpl implements EventVesselChan
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LoadSlot getLoadSlot_target() {
-		if (loadSlot_target != null && loadSlot_target.eIsProxy()) {
-			InternalEObject oldLoadSlot_target = (InternalEObject)loadSlot_target;
-			loadSlot_target = (LoadSlot)eResolveProxy(oldLoadSlot_target);
-			if (loadSlot_target != oldLoadSlot_target) {
+	public Event getNewEvent() {
+		if (newEvent != null && newEvent.eIsProxy()) {
+			InternalEObject oldNewEvent = (InternalEObject)newEvent;
+			newEvent = (Event)eResolveProxy(oldNewEvent);
+			if (newEvent != oldNewEvent) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.EVENT_VESSEL_CHANGE__LOAD_SLOT_TARGET, oldLoadSlot_target, loadSlot_target));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.EVENT_VESSEL_CHANGE__NEW_EVENT, oldNewEvent, newEvent));
 			}
 		}
-		return loadSlot_target;
+		return newEvent;
 	}
 
 	/**
@@ -152,8 +171,8 @@ public class EventVesselChangeImpl extends ChangeImpl implements EventVesselChan
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LoadSlot basicGetLoadSlot_target() {
-		return loadSlot_target;
+	public Event basicGetNewEvent() {
+		return newEvent;
 	}
 
 	/**
@@ -161,11 +180,11 @@ public class EventVesselChangeImpl extends ChangeImpl implements EventVesselChan
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setLoadSlot_target(LoadSlot newLoadSlot_target) {
-		LoadSlot oldLoadSlot_target = loadSlot_target;
-		loadSlot_target = newLoadSlot_target;
+	public void setNewEvent(Event newNewEvent) {
+		Event oldNewEvent = newEvent;
+		newEvent = newNewEvent;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.EVENT_VESSEL_CHANGE__LOAD_SLOT_TARGET, oldLoadSlot_target, loadSlot_target));
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.EVENT_VESSEL_CHANGE__NEW_EVENT, oldNewEvent, newEvent));
 	}
 
 	/**
@@ -249,21 +268,44 @@ public class EventVesselChangeImpl extends ChangeImpl implements EventVesselChan
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getEventName() {
+		return eventName;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setEventName(String newEventName) {
+		String oldEventName = eventName;
+		eventName = newEventName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.EVENT_VESSEL_CHANGE__EVENT_NAME, oldEventName, eventName));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ChangesetPackage.EVENT_VESSEL_CHANGE__LOAD_SLOT_BASE:
-				if (resolve) return getLoadSlot_base();
-				return basicGetLoadSlot_base();
-			case ChangesetPackage.EVENT_VESSEL_CHANGE__LOAD_SLOT_TARGET:
-				if (resolve) return getLoadSlot_target();
-				return basicGetLoadSlot_target();
+			case ChangesetPackage.EVENT_VESSEL_CHANGE__ORIGINAL_EVENT:
+				if (resolve) return getOriginalEvent();
+				return basicGetOriginalEvent();
+			case ChangesetPackage.EVENT_VESSEL_CHANGE__NEW_EVENT:
+				if (resolve) return getNewEvent();
+				return basicGetNewEvent();
 			case ChangesetPackage.EVENT_VESSEL_CHANGE__ORIGINAL_VESSEL:
 				if (resolve) return getOriginalVessel();
 				return basicGetOriginalVessel();
 			case ChangesetPackage.EVENT_VESSEL_CHANGE__NEW_VESSEL:
 				if (resolve) return getNewVessel();
 				return basicGetNewVessel();
+			case ChangesetPackage.EVENT_VESSEL_CHANGE__EVENT_NAME:
+				return getEventName();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -276,17 +318,20 @@ public class EventVesselChangeImpl extends ChangeImpl implements EventVesselChan
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ChangesetPackage.EVENT_VESSEL_CHANGE__LOAD_SLOT_BASE:
-				setLoadSlot_base((LoadSlot)newValue);
+			case ChangesetPackage.EVENT_VESSEL_CHANGE__ORIGINAL_EVENT:
+				setOriginalEvent((Event)newValue);
 				return;
-			case ChangesetPackage.EVENT_VESSEL_CHANGE__LOAD_SLOT_TARGET:
-				setLoadSlot_target((LoadSlot)newValue);
+			case ChangesetPackage.EVENT_VESSEL_CHANGE__NEW_EVENT:
+				setNewEvent((Event)newValue);
 				return;
 			case ChangesetPackage.EVENT_VESSEL_CHANGE__ORIGINAL_VESSEL:
 				setOriginalVessel((VesselAssignmentType)newValue);
 				return;
 			case ChangesetPackage.EVENT_VESSEL_CHANGE__NEW_VESSEL:
 				setNewVessel((VesselAssignmentType)newValue);
+				return;
+			case ChangesetPackage.EVENT_VESSEL_CHANGE__EVENT_NAME:
+				setEventName((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -300,17 +345,20 @@ public class EventVesselChangeImpl extends ChangeImpl implements EventVesselChan
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ChangesetPackage.EVENT_VESSEL_CHANGE__LOAD_SLOT_BASE:
-				setLoadSlot_base((LoadSlot)null);
+			case ChangesetPackage.EVENT_VESSEL_CHANGE__ORIGINAL_EVENT:
+				setOriginalEvent((Event)null);
 				return;
-			case ChangesetPackage.EVENT_VESSEL_CHANGE__LOAD_SLOT_TARGET:
-				setLoadSlot_target((LoadSlot)null);
+			case ChangesetPackage.EVENT_VESSEL_CHANGE__NEW_EVENT:
+				setNewEvent((Event)null);
 				return;
 			case ChangesetPackage.EVENT_VESSEL_CHANGE__ORIGINAL_VESSEL:
 				setOriginalVessel((VesselAssignmentType)null);
 				return;
 			case ChangesetPackage.EVENT_VESSEL_CHANGE__NEW_VESSEL:
 				setNewVessel((VesselAssignmentType)null);
+				return;
+			case ChangesetPackage.EVENT_VESSEL_CHANGE__EVENT_NAME:
+				setEventName(EVENT_NAME_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -324,16 +372,34 @@ public class EventVesselChangeImpl extends ChangeImpl implements EventVesselChan
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ChangesetPackage.EVENT_VESSEL_CHANGE__LOAD_SLOT_BASE:
-				return loadSlot_base != null;
-			case ChangesetPackage.EVENT_VESSEL_CHANGE__LOAD_SLOT_TARGET:
-				return loadSlot_target != null;
+			case ChangesetPackage.EVENT_VESSEL_CHANGE__ORIGINAL_EVENT:
+				return originalEvent != null;
+			case ChangesetPackage.EVENT_VESSEL_CHANGE__NEW_EVENT:
+				return newEvent != null;
 			case ChangesetPackage.EVENT_VESSEL_CHANGE__ORIGINAL_VESSEL:
 				return originalVessel != null;
 			case ChangesetPackage.EVENT_VESSEL_CHANGE__NEW_VESSEL:
 				return newVessel != null;
+			case ChangesetPackage.EVENT_VESSEL_CHANGE__EVENT_NAME:
+				return EVENT_NAME_EDEFAULT == null ? eventName != null : !EVENT_NAME_EDEFAULT.equals(eventName);
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (eventName: ");
+		result.append(eventName);
+		result.append(')');
+		return result.toString();
 	}
 
 } //EventVesselChangeImpl

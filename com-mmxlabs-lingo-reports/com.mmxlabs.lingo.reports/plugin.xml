@@ -143,7 +143,7 @@
             class="com.mmxlabs.lingo.reports.views.changeset.ChangeSetView"
             icon="icons/cview16/changes_view.gif"
             id="com.mmxlabs.lingo.reports.views.changeset.ChangeSetView"
-            name="Change Set View"
+            name="Change Sets"
             restorable="true">
       </e4view>
    </extension>
@@ -708,7 +708,7 @@
          <command
                commandId="com.mmxlabs.lingo.reports.changeset.analyse"
                icon="icons/cview16/changes_view.gif"
-               label="Analyse"
+               label="Open action sets"
                style="push">
             <visibleWhen
                   checkEnabled="false">
@@ -734,7 +734,7 @@
          point="org.eclipse.ui.commands">
       <command
             id="com.mmxlabs.lingo.reports.changeset.analyse"
-            name="Analyse Scenario">
+            name="Open action sets">
       </command>
    </extension>
 

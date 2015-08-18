@@ -9,6 +9,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -49,6 +50,38 @@ public class ScheduleCostUtils {
 						total += slotVisit.getPortCost();
 					}
 
+				} else if (event instanceof Journey) {
+					final Journey journey = (Journey) event;
+					if (collecting) {
+						total += journey.getFuelCost();
+						total += journey.getCharterCost();
+						total += journey.getToll();
+					}
+				} else if (event instanceof Idle) {
+					final Idle idle = (Idle) event;
+					if (collecting) {
+						total += idle.getFuelCost();
+						total += idle.getCharterCost();
+					}
+				}
+			}
+
+			return total;
+		}
+		return null;
+	}
+
+	public static Integer calculateLegCost(final EventGrouping grouping) {
+		if (grouping != null) {
+
+			boolean collecting = false;
+			int total = 0;
+			for (final Event event : grouping.getEvents()) {
+				if (event instanceof SlotVisit) {
+					SlotVisit slotVisit = (SlotVisit) event;
+					total += slotVisit.getFuelCost();
+					total += slotVisit.getCharterCost();
+					total += slotVisit.getPortCost();
 				} else if (event instanceof Journey) {
 					final Journey journey = (Journey) event;
 					if (collecting) {

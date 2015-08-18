@@ -26,12 +26,12 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.VesselChangeImpl#getLoadSlot_base <em>Load Slot base</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.VesselChangeImpl#getLoadSlot_target <em>Load Slot target</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.VesselChangeImpl#getOriginalVessel <em>Original Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.VesselChangeImpl#getNewVessel <em>New Vessel</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.VesselChangeImpl#getDischargeSlot_base <em>Discharge Slot base</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.VesselChangeImpl#getDischargeSlot_target <em>Discharge Slot target</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.VesselChangeImpl#getOriginalLoadSlot <em>Original Load Slot</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.VesselChangeImpl#getNewLoadSlot <em>New Load Slot</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.VesselChangeImpl#getOriginalDischargeSlot <em>Original Discharge Slot</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.VesselChangeImpl#getNewDischargeSlot <em>New Discharge Slot</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.VesselChangeImpl#getOriginalLoadAllocation <em>Original Load Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.VesselChangeImpl#getNewLoadAllocation <em>New Load Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.VesselChangeImpl#getOriginalDischargeAllocation <em>Original Discharge Allocation</em>}</li>
@@ -41,26 +41,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * @generated
  */
 public class VesselChangeImpl extends ChangeImpl implements VesselChange {
-	/**
-	 * The cached value of the '{@link #getLoadSlot_base() <em>Load Slot base</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getLoadSlot_base()
-	 * @generated
-	 * @ordered
-	 */
-	protected LoadSlot loadSlot_base;
-
-	/**
-	 * The cached value of the '{@link #getLoadSlot_target() <em>Load Slot target</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getLoadSlot_target()
-	 * @generated
-	 * @ordered
-	 */
-	protected LoadSlot loadSlot_target;
-
 	/**
 	 * The cached value of the '{@link #getOriginalVessel() <em>Original Vessel</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -82,24 +62,44 @@ public class VesselChangeImpl extends ChangeImpl implements VesselChange {
 	protected VesselAssignmentType newVessel;
 
 	/**
-	 * The cached value of the '{@link #getDischargeSlot_base() <em>Discharge Slot base</em>}' reference.
+	 * The cached value of the '{@link #getOriginalLoadSlot() <em>Original Load Slot</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getDischargeSlot_base()
+	 * @see #getOriginalLoadSlot()
 	 * @generated
 	 * @ordered
 	 */
-	protected DischargeSlot dischargeSlot_base;
+	protected LoadSlot originalLoadSlot;
 
 	/**
-	 * The cached value of the '{@link #getDischargeSlot_target() <em>Discharge Slot target</em>}' reference.
+	 * The cached value of the '{@link #getNewLoadSlot() <em>New Load Slot</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getDischargeSlot_target()
+	 * @see #getNewLoadSlot()
 	 * @generated
 	 * @ordered
 	 */
-	protected DischargeSlot dischargeSlot_target;
+	protected LoadSlot newLoadSlot;
+
+	/**
+	 * The cached value of the '{@link #getOriginalDischargeSlot() <em>Original Discharge Slot</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOriginalDischargeSlot()
+	 * @generated
+	 * @ordered
+	 */
+	protected DischargeSlot originalDischargeSlot;
+
+	/**
+	 * The cached value of the '{@link #getNewDischargeSlot() <em>New Discharge Slot</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNewDischargeSlot()
+	 * @generated
+	 * @ordered
+	 */
+	protected DischargeSlot newDischargeSlot;
 
 	/**
 	 * The cached value of the '{@link #getOriginalLoadAllocation() <em>Original Load Allocation</em>}' reference.
@@ -165,16 +165,16 @@ public class VesselChangeImpl extends ChangeImpl implements VesselChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LoadSlot getLoadSlot_base() {
-		if (loadSlot_base != null && loadSlot_base.eIsProxy()) {
-			InternalEObject oldLoadSlot_base = (InternalEObject)loadSlot_base;
-			loadSlot_base = (LoadSlot)eResolveProxy(oldLoadSlot_base);
-			if (loadSlot_base != oldLoadSlot_base) {
+	public LoadSlot getNewLoadSlot() {
+		if (newLoadSlot != null && newLoadSlot.eIsProxy()) {
+			InternalEObject oldNewLoadSlot = (InternalEObject)newLoadSlot;
+			newLoadSlot = (LoadSlot)eResolveProxy(oldNewLoadSlot);
+			if (newLoadSlot != oldNewLoadSlot) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.VESSEL_CHANGE__LOAD_SLOT_BASE, oldLoadSlot_base, loadSlot_base));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.VESSEL_CHANGE__NEW_LOAD_SLOT, oldNewLoadSlot, newLoadSlot));
 			}
 		}
-		return loadSlot_base;
+		return newLoadSlot;
 	}
 
 	/**
@@ -182,8 +182,8 @@ public class VesselChangeImpl extends ChangeImpl implements VesselChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LoadSlot basicGetLoadSlot_base() {
-		return loadSlot_base;
+	public LoadSlot basicGetNewLoadSlot() {
+		return newLoadSlot;
 	}
 
 	/**
@@ -191,11 +191,11 @@ public class VesselChangeImpl extends ChangeImpl implements VesselChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setLoadSlot_base(LoadSlot newLoadSlot_base) {
-		LoadSlot oldLoadSlot_base = loadSlot_base;
-		loadSlot_base = newLoadSlot_base;
+	public void setNewLoadSlot(LoadSlot newNewLoadSlot) {
+		LoadSlot oldNewLoadSlot = newLoadSlot;
+		newLoadSlot = newNewLoadSlot;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.VESSEL_CHANGE__LOAD_SLOT_BASE, oldLoadSlot_base, loadSlot_base));
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.VESSEL_CHANGE__NEW_LOAD_SLOT, oldNewLoadSlot, newLoadSlot));
 	}
 
 	/**
@@ -203,16 +203,16 @@ public class VesselChangeImpl extends ChangeImpl implements VesselChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LoadSlot getLoadSlot_target() {
-		if (loadSlot_target != null && loadSlot_target.eIsProxy()) {
-			InternalEObject oldLoadSlot_target = (InternalEObject)loadSlot_target;
-			loadSlot_target = (LoadSlot)eResolveProxy(oldLoadSlot_target);
-			if (loadSlot_target != oldLoadSlot_target) {
+	public DischargeSlot getOriginalDischargeSlot() {
+		if (originalDischargeSlot != null && originalDischargeSlot.eIsProxy()) {
+			InternalEObject oldOriginalDischargeSlot = (InternalEObject)originalDischargeSlot;
+			originalDischargeSlot = (DischargeSlot)eResolveProxy(oldOriginalDischargeSlot);
+			if (originalDischargeSlot != oldOriginalDischargeSlot) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.VESSEL_CHANGE__LOAD_SLOT_TARGET, oldLoadSlot_target, loadSlot_target));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.VESSEL_CHANGE__ORIGINAL_DISCHARGE_SLOT, oldOriginalDischargeSlot, originalDischargeSlot));
 			}
 		}
-		return loadSlot_target;
+		return originalDischargeSlot;
 	}
 
 	/**
@@ -220,8 +220,8 @@ public class VesselChangeImpl extends ChangeImpl implements VesselChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LoadSlot basicGetLoadSlot_target() {
-		return loadSlot_target;
+	public DischargeSlot basicGetOriginalDischargeSlot() {
+		return originalDischargeSlot;
 	}
 
 	/**
@@ -229,11 +229,49 @@ public class VesselChangeImpl extends ChangeImpl implements VesselChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setLoadSlot_target(LoadSlot newLoadSlot_target) {
-		LoadSlot oldLoadSlot_target = loadSlot_target;
-		loadSlot_target = newLoadSlot_target;
+	public void setOriginalDischargeSlot(DischargeSlot newOriginalDischargeSlot) {
+		DischargeSlot oldOriginalDischargeSlot = originalDischargeSlot;
+		originalDischargeSlot = newOriginalDischargeSlot;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.VESSEL_CHANGE__LOAD_SLOT_TARGET, oldLoadSlot_target, loadSlot_target));
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.VESSEL_CHANGE__ORIGINAL_DISCHARGE_SLOT, oldOriginalDischargeSlot, originalDischargeSlot));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public DischargeSlot getNewDischargeSlot() {
+		if (newDischargeSlot != null && newDischargeSlot.eIsProxy()) {
+			InternalEObject oldNewDischargeSlot = (InternalEObject)newDischargeSlot;
+			newDischargeSlot = (DischargeSlot)eResolveProxy(oldNewDischargeSlot);
+			if (newDischargeSlot != oldNewDischargeSlot) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.VESSEL_CHANGE__NEW_DISCHARGE_SLOT, oldNewDischargeSlot, newDischargeSlot));
+			}
+		}
+		return newDischargeSlot;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public DischargeSlot basicGetNewDischargeSlot() {
+		return newDischargeSlot;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setNewDischargeSlot(DischargeSlot newNewDischargeSlot) {
+		DischargeSlot oldNewDischargeSlot = newDischargeSlot;
+		newDischargeSlot = newNewDischargeSlot;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.VESSEL_CHANGE__NEW_DISCHARGE_SLOT, oldNewDischargeSlot, newDischargeSlot));
 	}
 
 	/**
@@ -317,16 +355,16 @@ public class VesselChangeImpl extends ChangeImpl implements VesselChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public DischargeSlot getDischargeSlot_base() {
-		if (dischargeSlot_base != null && dischargeSlot_base.eIsProxy()) {
-			InternalEObject oldDischargeSlot_base = (InternalEObject)dischargeSlot_base;
-			dischargeSlot_base = (DischargeSlot)eResolveProxy(oldDischargeSlot_base);
-			if (dischargeSlot_base != oldDischargeSlot_base) {
+	public LoadSlot getOriginalLoadSlot() {
+		if (originalLoadSlot != null && originalLoadSlot.eIsProxy()) {
+			InternalEObject oldOriginalLoadSlot = (InternalEObject)originalLoadSlot;
+			originalLoadSlot = (LoadSlot)eResolveProxy(oldOriginalLoadSlot);
+			if (originalLoadSlot != oldOriginalLoadSlot) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.VESSEL_CHANGE__DISCHARGE_SLOT_BASE, oldDischargeSlot_base, dischargeSlot_base));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.VESSEL_CHANGE__ORIGINAL_LOAD_SLOT, oldOriginalLoadSlot, originalLoadSlot));
 			}
 		}
-		return dischargeSlot_base;
+		return originalLoadSlot;
 	}
 
 	/**
@@ -334,8 +372,8 @@ public class VesselChangeImpl extends ChangeImpl implements VesselChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public DischargeSlot basicGetDischargeSlot_base() {
-		return dischargeSlot_base;
+	public LoadSlot basicGetOriginalLoadSlot() {
+		return originalLoadSlot;
 	}
 
 	/**
@@ -343,49 +381,11 @@ public class VesselChangeImpl extends ChangeImpl implements VesselChange {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setDischargeSlot_base(DischargeSlot newDischargeSlot_base) {
-		DischargeSlot oldDischargeSlot_base = dischargeSlot_base;
-		dischargeSlot_base = newDischargeSlot_base;
+	public void setOriginalLoadSlot(LoadSlot newOriginalLoadSlot) {
+		LoadSlot oldOriginalLoadSlot = originalLoadSlot;
+		originalLoadSlot = newOriginalLoadSlot;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.VESSEL_CHANGE__DISCHARGE_SLOT_BASE, oldDischargeSlot_base, dischargeSlot_base));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public DischargeSlot getDischargeSlot_target() {
-		if (dischargeSlot_target != null && dischargeSlot_target.eIsProxy()) {
-			InternalEObject oldDischargeSlot_target = (InternalEObject)dischargeSlot_target;
-			dischargeSlot_target = (DischargeSlot)eResolveProxy(oldDischargeSlot_target);
-			if (dischargeSlot_target != oldDischargeSlot_target) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ChangesetPackage.VESSEL_CHANGE__DISCHARGE_SLOT_TARGET, oldDischargeSlot_target, dischargeSlot_target));
-			}
-		}
-		return dischargeSlot_target;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public DischargeSlot basicGetDischargeSlot_target() {
-		return dischargeSlot_target;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setDischargeSlot_target(DischargeSlot newDischargeSlot_target) {
-		DischargeSlot oldDischargeSlot_target = dischargeSlot_target;
-		dischargeSlot_target = newDischargeSlot_target;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.VESSEL_CHANGE__DISCHARGE_SLOT_TARGET, oldDischargeSlot_target, dischargeSlot_target));
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.VESSEL_CHANGE__ORIGINAL_LOAD_SLOT, oldOriginalLoadSlot, originalLoadSlot));
 	}
 
 	/**
@@ -548,24 +548,24 @@ public class VesselChangeImpl extends ChangeImpl implements VesselChange {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ChangesetPackage.VESSEL_CHANGE__LOAD_SLOT_BASE:
-				if (resolve) return getLoadSlot_base();
-				return basicGetLoadSlot_base();
-			case ChangesetPackage.VESSEL_CHANGE__LOAD_SLOT_TARGET:
-				if (resolve) return getLoadSlot_target();
-				return basicGetLoadSlot_target();
 			case ChangesetPackage.VESSEL_CHANGE__ORIGINAL_VESSEL:
 				if (resolve) return getOriginalVessel();
 				return basicGetOriginalVessel();
 			case ChangesetPackage.VESSEL_CHANGE__NEW_VESSEL:
 				if (resolve) return getNewVessel();
 				return basicGetNewVessel();
-			case ChangesetPackage.VESSEL_CHANGE__DISCHARGE_SLOT_BASE:
-				if (resolve) return getDischargeSlot_base();
-				return basicGetDischargeSlot_base();
-			case ChangesetPackage.VESSEL_CHANGE__DISCHARGE_SLOT_TARGET:
-				if (resolve) return getDischargeSlot_target();
-				return basicGetDischargeSlot_target();
+			case ChangesetPackage.VESSEL_CHANGE__ORIGINAL_LOAD_SLOT:
+				if (resolve) return getOriginalLoadSlot();
+				return basicGetOriginalLoadSlot();
+			case ChangesetPackage.VESSEL_CHANGE__NEW_LOAD_SLOT:
+				if (resolve) return getNewLoadSlot();
+				return basicGetNewLoadSlot();
+			case ChangesetPackage.VESSEL_CHANGE__ORIGINAL_DISCHARGE_SLOT:
+				if (resolve) return getOriginalDischargeSlot();
+				return basicGetOriginalDischargeSlot();
+			case ChangesetPackage.VESSEL_CHANGE__NEW_DISCHARGE_SLOT:
+				if (resolve) return getNewDischargeSlot();
+				return basicGetNewDischargeSlot();
 			case ChangesetPackage.VESSEL_CHANGE__ORIGINAL_LOAD_ALLOCATION:
 				if (resolve) return getOriginalLoadAllocation();
 				return basicGetOriginalLoadAllocation();
@@ -590,23 +590,23 @@ public class VesselChangeImpl extends ChangeImpl implements VesselChange {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ChangesetPackage.VESSEL_CHANGE__LOAD_SLOT_BASE:
-				setLoadSlot_base((LoadSlot)newValue);
-				return;
-			case ChangesetPackage.VESSEL_CHANGE__LOAD_SLOT_TARGET:
-				setLoadSlot_target((LoadSlot)newValue);
-				return;
 			case ChangesetPackage.VESSEL_CHANGE__ORIGINAL_VESSEL:
 				setOriginalVessel((VesselAssignmentType)newValue);
 				return;
 			case ChangesetPackage.VESSEL_CHANGE__NEW_VESSEL:
 				setNewVessel((VesselAssignmentType)newValue);
 				return;
-			case ChangesetPackage.VESSEL_CHANGE__DISCHARGE_SLOT_BASE:
-				setDischargeSlot_base((DischargeSlot)newValue);
+			case ChangesetPackage.VESSEL_CHANGE__ORIGINAL_LOAD_SLOT:
+				setOriginalLoadSlot((LoadSlot)newValue);
 				return;
-			case ChangesetPackage.VESSEL_CHANGE__DISCHARGE_SLOT_TARGET:
-				setDischargeSlot_target((DischargeSlot)newValue);
+			case ChangesetPackage.VESSEL_CHANGE__NEW_LOAD_SLOT:
+				setNewLoadSlot((LoadSlot)newValue);
+				return;
+			case ChangesetPackage.VESSEL_CHANGE__ORIGINAL_DISCHARGE_SLOT:
+				setOriginalDischargeSlot((DischargeSlot)newValue);
+				return;
+			case ChangesetPackage.VESSEL_CHANGE__NEW_DISCHARGE_SLOT:
+				setNewDischargeSlot((DischargeSlot)newValue);
 				return;
 			case ChangesetPackage.VESSEL_CHANGE__ORIGINAL_LOAD_ALLOCATION:
 				setOriginalLoadAllocation((SlotAllocation)newValue);
@@ -632,23 +632,23 @@ public class VesselChangeImpl extends ChangeImpl implements VesselChange {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ChangesetPackage.VESSEL_CHANGE__LOAD_SLOT_BASE:
-				setLoadSlot_base((LoadSlot)null);
-				return;
-			case ChangesetPackage.VESSEL_CHANGE__LOAD_SLOT_TARGET:
-				setLoadSlot_target((LoadSlot)null);
-				return;
 			case ChangesetPackage.VESSEL_CHANGE__ORIGINAL_VESSEL:
 				setOriginalVessel((VesselAssignmentType)null);
 				return;
 			case ChangesetPackage.VESSEL_CHANGE__NEW_VESSEL:
 				setNewVessel((VesselAssignmentType)null);
 				return;
-			case ChangesetPackage.VESSEL_CHANGE__DISCHARGE_SLOT_BASE:
-				setDischargeSlot_base((DischargeSlot)null);
+			case ChangesetPackage.VESSEL_CHANGE__ORIGINAL_LOAD_SLOT:
+				setOriginalLoadSlot((LoadSlot)null);
 				return;
-			case ChangesetPackage.VESSEL_CHANGE__DISCHARGE_SLOT_TARGET:
-				setDischargeSlot_target((DischargeSlot)null);
+			case ChangesetPackage.VESSEL_CHANGE__NEW_LOAD_SLOT:
+				setNewLoadSlot((LoadSlot)null);
+				return;
+			case ChangesetPackage.VESSEL_CHANGE__ORIGINAL_DISCHARGE_SLOT:
+				setOriginalDischargeSlot((DischargeSlot)null);
+				return;
+			case ChangesetPackage.VESSEL_CHANGE__NEW_DISCHARGE_SLOT:
+				setNewDischargeSlot((DischargeSlot)null);
 				return;
 			case ChangesetPackage.VESSEL_CHANGE__ORIGINAL_LOAD_ALLOCATION:
 				setOriginalLoadAllocation((SlotAllocation)null);
@@ -674,18 +674,18 @@ public class VesselChangeImpl extends ChangeImpl implements VesselChange {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ChangesetPackage.VESSEL_CHANGE__LOAD_SLOT_BASE:
-				return loadSlot_base != null;
-			case ChangesetPackage.VESSEL_CHANGE__LOAD_SLOT_TARGET:
-				return loadSlot_target != null;
 			case ChangesetPackage.VESSEL_CHANGE__ORIGINAL_VESSEL:
 				return originalVessel != null;
 			case ChangesetPackage.VESSEL_CHANGE__NEW_VESSEL:
 				return newVessel != null;
-			case ChangesetPackage.VESSEL_CHANGE__DISCHARGE_SLOT_BASE:
-				return dischargeSlot_base != null;
-			case ChangesetPackage.VESSEL_CHANGE__DISCHARGE_SLOT_TARGET:
-				return dischargeSlot_target != null;
+			case ChangesetPackage.VESSEL_CHANGE__ORIGINAL_LOAD_SLOT:
+				return originalLoadSlot != null;
+			case ChangesetPackage.VESSEL_CHANGE__NEW_LOAD_SLOT:
+				return newLoadSlot != null;
+			case ChangesetPackage.VESSEL_CHANGE__ORIGINAL_DISCHARGE_SLOT:
+				return originalDischargeSlot != null;
+			case ChangesetPackage.VESSEL_CHANGE__NEW_DISCHARGE_SLOT:
+				return newDischargeSlot != null;
 			case ChangesetPackage.VESSEL_CHANGE__ORIGINAL_LOAD_ALLOCATION:
 				return originalLoadAllocation != null;
 			case ChangesetPackage.VESSEL_CHANGE__NEW_LOAD_ALLOCATION:
