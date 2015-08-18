@@ -149,7 +149,7 @@ public class ChangeSetViewTransformer {
 		changeSet.setCurrentScenario(current);
 		changeSet.setCurrentScenarioRef(currentReference);
 
-		// generateDifferences(base, current, changeSet, true);
+		generateDifferences(base, current, changeSet, true);
 		generateDifferences(prev, current, changeSet, false);
 
 		return changeSet;
