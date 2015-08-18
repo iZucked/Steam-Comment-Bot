@@ -45,8 +45,13 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
+import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
+import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.Sequences;
+import com.mmxlabs.optimiser.lso.IFitnessCombiner;
+import com.mmxlabs.optimiser.lso.impl.LinearFitnessCombiner;
+import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 
@@ -105,6 +110,17 @@ public class BreadthOptimiser {
 
 	@Inject
 	@NonNull
+	private List<IFitnessComponent> fitnessComponents;
+
+	@Inject
+	@NonNull
+	private IFitnessHelper fitnessHelper;
+	@Inject
+	@NonNull
+	private IFitnessCombiner fitnessCombiner;
+
+	@Inject
+	@NonNull
 	private List<IEvaluationProcess> evaluationProcesses;
 
 	@Inject
@@ -115,7 +131,7 @@ public class BreadthOptimiser {
 	@NonNull
 	private BreakdownOptimiserMover breakdownOptimiserMover;
 
-	private List<List<Pair<ISequences, IEvaluationState>>> bestSolutions = new LinkedList<>();
+	private final List<List<Pair<ISequences, IEvaluationState>>> bestSolutions = new LinkedList<>();
 
 	/**
 	 * Main entry point, taking a target state, optimised over the injected initial state (from the optimiser context). Generate (in c:\temp\1 -- remember to make the dir!) various instructions for
@@ -125,13 +141,14 @@ public class BreadthOptimiser {
 	 * 
 	 * @param bestRawSequences
 	 */
-	public void optimise(@NonNull final ISequences bestRawSequences) {
+	public boolean optimise(@NonNull final ISequences bestRawSequences) {
 
 		final long time1 = System.currentTimeMillis();
 
 		final SimilarityState similarityState = injector.getInstance(SimilarityState.class);
 
 		// Generate the similarity data structures to the target solution
+		final long bestFitness;
 		{
 			final IModifiableSequences potentialFullSequences = new ModifiableSequences(bestRawSequences);
 			sequencesManipulator.manipulate(potentialFullSequences);
@@ -144,6 +161,10 @@ public class BreadthOptimiser {
 				}
 			}
 			similarityState.init(potentialFullSequences);
+
+			fitnessHelper.evaluateSequencesFromComponents(potentialFullSequences, evaluationState, fitnessComponents, null);
+			bestFitness = fitnessCombiner.calculateFitness(fitnessComponents);
+
 		}
 
 		// Prepare initial solution state
@@ -184,13 +205,14 @@ public class BreadthOptimiser {
 		// This will return a set of job states in the PARTIAL state with a single change in the list.
 
 		final List<JobState> l = new LinkedList<>();
-		JobState initialState = new JobState(new Sequences(initialRawSequences), new LinkedList<ChangeSet>(), new LinkedList<Change>());
+		final JobState initialState = new JobState(new Sequences(initialRawSequences), new LinkedList<ChangeSet>(), new LinkedList<Change>());
 		initialState.setMetric(MetricType.PNL, initialPNL, 0, 0);
 		initialState.setMetric(MetricType.LATENESS, initialLateness, 0, 0);
 		initialState.setMetric(MetricType.CAPACITY, initialCapacity, 0, 0);
 		initialState.setMetric(MetricType.COMPULSARY_SLOT, initialUnusedCompulsarySlot, 0, 0);
 		l.add(initialState);
 
+		boolean betterSolutionFound = false;
 		try {
 			final Collection<JobState> fullChangesSets = findChangeSets(similarityState, l, 1);
 			System.out.printf("Found %d results\n", fullChangesSets.size());
@@ -226,8 +248,9 @@ public class BreadthOptimiser {
 					}
 				}
 			}
+
 			if (!sortedChangeStates.isEmpty()) {
-				processAndStoreBreakdownSolution(sortedChangeStates.get(0), initialFullSequences, evaluationState);
+				betterSolutionFound = processAndStoreBreakdownSolution(sortedChangeStates.get(0), initialFullSequences, evaluationState, bestFitness);
 			}
 
 		} catch (final InterruptedException e) {
@@ -238,6 +261,8 @@ public class BreadthOptimiser {
 		final long time3 = System.currentTimeMillis();
 
 		System.out.printf("Setup time %d -- Search time %d\n", (time2 - time1) / 1000L, (time3 - time2) / 1000L);
+
+		return betterSolutionFound;
 	}
 
 	// TODO: Consider converting to loop rather than recursive method?
@@ -364,7 +389,7 @@ public class BreadthOptimiser {
 		return Collections.emptyList();
 	}
 
-	protected void sortJobStates(@NonNull final Collection<JobState> states, @NonNull final Collection<JobState> leafStates, @Nullable Collection<JobState> branchStates) {
+	protected void sortJobStates(@NonNull final Collection<JobState> states, @NonNull final Collection<JobState> leafStates, @Nullable final Collection<JobState> branchStates) {
 		for (final JobState state : states) {
 			if (state.mode == JobStateMode.LEAF) {
 				leafStates.add(state);
@@ -396,9 +421,9 @@ public class BreadthOptimiser {
 		// FIXME: The memory consumption when running jobs in a thread pool showed lots of references to a LinkedHashMap$Entry. Possibly (but seems unlikely?) this is the cause. Does the internal
 		// LinkedHashSet state get copied into the LinkedList? Why would it?
 
-		int initialSize = currentStates.size();
+		final int initialSize = currentStates.size();
 		final List<JobState> sortedJobStates = new LinkedList<>(new LinkedHashSet<>(currentStates));
-		int newSize = sortedJobStates.size();
+		final int newSize = sortedJobStates.size();
 		System.out.printf("Reduced %d -> %d\n", initialSize, newSize);
 
 		Collections.sort(sortedJobStates, new Comparator<JobState>() {
@@ -511,17 +536,38 @@ public class BreadthOptimiser {
 		}
 	}
 
-	private void processAndStoreBreakdownSolution(JobState solution, IModifiableSequences initialFullSequences, IEvaluationState evaluationState) {
+	private boolean processAndStoreBreakdownSolution(final JobState solution, final IModifiableSequences initialFullSequences, final IEvaluationState evaluationState, long bestSolutionFitness) {
 		List<Pair<ISequences, IEvaluationState>> processedSolution = new LinkedList<Pair<ISequences, IEvaluationState>>();
 
 		processedSolution.add(new Pair<ISequences, IEvaluationState>(initialFullSequences, evaluationState));
 
-		for (ChangeSet cs : solution.changeSetsAsList) {
+		long fitness = Long.MAX_VALUE;
+		int bestIdx = -1;
+		int idx = 1;
+		for (final ChangeSet cs : solution.changeSetsAsList) {
 			final IModifiableSequences currentFullSequences = new ModifiableSequences(cs.getRawSequences());
 			sequencesManipulator.manipulate(currentFullSequences);
-			processedSolution.add(new Pair<ISequences, IEvaluationState>(currentFullSequences, breakdownOptimiserMover.evaluateSequence(currentFullSequences)));
+			IEvaluationState changeSetEvaluationState = breakdownOptimiserMover.evaluateSequence(currentFullSequences);
+
+			fitnessHelper.evaluateSequencesFromComponents(currentFullSequences, changeSetEvaluationState, fitnessComponents, null);
+			long currentFitness = fitnessCombiner.calculateFitness(fitnessComponents);
+			if (currentFitness < fitness) {
+				fitness = currentFitness;
+				bestIdx = idx;
+			}
+			processedSolution.add(new Pair<ISequences, IEvaluationState>(currentFullSequences, changeSetEvaluationState));
+			idx++;
 		}
-		bestSolutions.add(processedSolution);
+
+		// Have we found a better solution?
+		if (fitness < bestSolutionFitness) {
+			bestSolutions.add(processedSolution.subList(0, bestIdx + 1));
+			return true;
+		} else {
+			bestSolutions.add(processedSolution);
+			return false;
+		}
+
 	}
 
 	public List<Pair<ISequences, IEvaluationState>> getBestSolution() {
