@@ -13,7 +13,7 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_GKQYsEGYEeW-SYJZ5d5KDQ" featurename="toolbar" parentElementId="com.mmxlabs.lingo.reports.views.changeset.ChangeSetView">
     <elements xsi:type="menu:ToolBar" xmi:id="_PjR9kEGYEeW-SYJZ5d5KDQ" elementId="com.mmxlabs.lingo.reports.toolbar.0">
-      <children xsi:type="menu:HandledToolItem" xmi:id="_QYj_wEGYEeW-SYJZ5d5KDQ" elementId="com.mmxlabs.lingo.reports.handledtoolitem.toggle" label="Compare to Base" iconURI="" type="Check" command="__RYcYEGXEeW-SYJZ5d5KDQ"/>
+      <children xsi:type="menu:HandledToolItem" xmi:id="_QYj_wEGYEeW-SYJZ5d5KDQ" elementId="com.mmxlabs.lingo.reports.handledtoolitem.toggle" label="Compare to Base" iconURI="platform:/plugin/com.mmxlabs.lingo.reports/icons/compare_to_base.gif" type="Check" command="__RYcYEGXEeW-SYJZ5d5KDQ"/>
       <children xsi:type="menu:HandledToolItem" xmi:id="_dn0AoEW8EeWQ86g0inrF4Q" elementId="com.mmxlabs.lingo.reports.handledtoolitem.filternonstructualchanges" label="Filter Non Structural Changes" iconURI="platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif" selected="true" type="Check" command="_i3B3gEW8EeWQ86g0inrF4Q"/>
     </elements>
   </fragments>
