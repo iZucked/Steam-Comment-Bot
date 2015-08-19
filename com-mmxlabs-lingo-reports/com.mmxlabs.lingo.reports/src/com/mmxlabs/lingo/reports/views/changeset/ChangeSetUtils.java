@@ -1,20 +1,27 @@
 package com.mmxlabs.lingo.reports.views.changeset;
 
+import java.util.Map;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.lingo.reports.diff.utils.ScheduleCostUtils;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
+import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.GeneralPNLDetails;
+import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotPNLDetails;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 
 public final class ChangeSetUtils {
 
-	public static long getGroupProfitAndLoss(@Nullable ProfitAndLossContainer profitAndLossContainer) {
+	public static long getGroupProfitAndLoss(@Nullable final ProfitAndLossContainer profitAndLossContainer) {
 		if (profitAndLossContainer == null) {
 			return 0L;
 		}
@@ -22,7 +29,7 @@ public final class ChangeSetUtils {
 		return profitAndLossContainer.getGroupProfitAndLoss().getProfitAndLoss();
 	}
 
-	public static long getAdditionalProfitAndLoss(@NonNull ProfitAndLossContainer profitAndLossContainer) {
+	public static long getAdditionalProfitAndLoss(@NonNull final ProfitAndLossContainer profitAndLossContainer) {
 		long addnPNL = 0;
 		for (final GeneralPNLDetails generalPNLDetails : profitAndLossContainer.getGeneralPNLDetails()) {
 			if (generalPNLDetails instanceof SlotPNLDetails) {
@@ -37,13 +44,40 @@ public final class ChangeSetUtils {
 		return addnPNL;
 	}
 
-	public static long getTotalShippingCost(@NonNull EventGrouping eventGrouping) {
+	public static long getLateness(@NonNull final EventGrouping eventGrouping) {
+		long lateness = 0;
+		for (final Event evt : eventGrouping.getEvents()) {
+			if (evt instanceof PortVisit) {
+				final PortVisit visit = (PortVisit) evt;
+
+				if (LatenessUtils.isLate(evt)) {
+					lateness += LatenessUtils.getLatenessInHours(visit);
+				}
+			}
+		}
+		return lateness;
+	}
+
+	public static long getCapacityViolationCount(@NonNull final EventGrouping eventGrouping) {
+		long violations = 0;
+		for (final Event evt : eventGrouping.getEvents()) {
+			if (evt instanceof SlotVisit) {
+				final SlotVisit visit = (SlotVisit) evt;
+				for (Map.Entry<CapacityViolationType, ?> entry : visit.getViolations().entrySet()) {
+					violations++;
+				}
+			}
+		}
+		return violations;
+	}
+
+	public static long getTotalShippingCost(@NonNull final EventGrouping eventGrouping) {
 		return ScheduleCostUtils.calculateLegCost(eventGrouping);
 	}
 
-	public static long getTotalShippingCost(@NonNull CargoAllocation cargoAllocation) {
+	public static long getTotalShippingCost(@NonNull final CargoAllocation cargoAllocation) {
 		long shippingCost = 0;
-		for (SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
+		for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
 			shippingCost += ScheduleCostUtils.calculateLegCost(cargoAllocation, slotAllocation);
 		}
 		return shippingCost;

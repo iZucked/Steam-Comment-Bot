@@ -344,7 +344,6 @@ public class ChangeSetViewTransformer {
 				itr.remove();
 				continue;
 			}
-			itr.remove();
 		}
 
 		Collections.sort(rows, new Comparator<ChangeSetRow>() {

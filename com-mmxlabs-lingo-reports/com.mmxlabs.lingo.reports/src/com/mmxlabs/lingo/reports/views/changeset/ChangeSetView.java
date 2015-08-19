@@ -33,6 +33,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.DataVisualizer;
@@ -70,6 +71,7 @@ public class ChangeSetView implements IAdaptable {
 	private GridTreeViewer viewer;
 
 	private boolean diffToBase = false;
+	private boolean showNonStructuralChanges = false;
 
 	private GridColumnGroup vesselColumnGroup;
 
@@ -267,13 +269,13 @@ public class ChangeSetView implements IAdaptable {
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
 			gvc.getColumn().setText("Lateness");
 			gvc.getColumn().setWidth(20);
-			gvc.setLabelProvider(createStubLabelProvider());
+			gvc.setLabelProvider(createLatenessDeltaLabelProvider());
 		}
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
 			gvc.getColumn().setText("Capacity");
 			gvc.getColumn().setWidth(20);
-			gvc.setLabelProvider(createStubLabelProvider());
+			gvc.setLabelProvider(createViolationsDeltaLabelProvider());
 		}
 
 		// Create sorter
@@ -359,6 +361,25 @@ public class ChangeSetView implements IAdaptable {
 				eSelectionService.setPostSelection(new StructuredSelection(selectedElements.toArray()));
 			}
 		});
+
+		ViewerFilter[] filters = new ViewerFilter[1];
+		filters[0] = new ViewerFilter() {
+
+			@Override
+			public boolean select(Viewer viewer, Object parentElement, Object element) {
+
+				if (!showNonStructuralChanges) {
+					if (element instanceof ChangeSetRow) {
+						ChangeSetRow row = (ChangeSetRow) element;
+						if (!row.isWiringChange() && !row.isVesselChange()) {
+							return false;
+						}
+					}
+				}
+				return true;
+			}
+		};
+		viewer.setFilters(filters);
 
 		// TODO: Add scenario service listener for removed scenarios
 	}
@@ -496,6 +517,88 @@ public class ChangeSetView implements IAdaptable {
 					delta = delta / 1000000.0;
 					if (delta != 0) {
 						cell.setText(String.format("%s %,.3G", delta < 0 ? "↓" : "↑", Math.abs(delta)));
+					}
+
+				}
+			}
+		};
+	}
+
+	private CellLabelProvider createLatenessDeltaLabelProvider() {
+		return new CellLabelProvider() {
+
+			@Override
+			public void update(final ViewerCell cell) {
+				final Object element = cell.getElement();
+
+				if (element instanceof ChangeSetRow) {
+					final ChangeSetRow change = (ChangeSetRow) element;
+					setFont(cell, change);
+
+					Number f = null;
+					{
+						final EventGrouping eventGrouping = change.getOriginalEventGrouping();
+						if (eventGrouping != null) {
+							f = ChangeSetUtils.getLateness(eventGrouping);
+						}
+					}
+					Number t = null;
+					{
+						final EventGrouping eventGrouping = change.getNewEventGrouping();
+						if (eventGrouping != null) {
+							t = ChangeSetUtils.getLateness(eventGrouping);
+						}
+					}
+					int delta = 0;
+					if (f != null) {
+						delta -= f.intValue();
+					}
+					if (t != null) {
+						delta += t.intValue();
+					}
+					if (delta != 0) {
+						cell.setText(String.format("%s %d", delta < 0 ? "↓" : "↑", Math.abs(delta)));
+					}
+
+				}
+			}
+		};
+	}
+
+	private CellLabelProvider createViolationsDeltaLabelProvider() {
+		return new CellLabelProvider() {
+
+			@Override
+			public void update(final ViewerCell cell) {
+				final Object element = cell.getElement();
+
+				if (element instanceof ChangeSetRow) {
+					final ChangeSetRow change = (ChangeSetRow) element;
+					setFont(cell, change);
+
+					Number f = null;
+					{
+						final EventGrouping eventGrouping = change.getOriginalEventGrouping();
+						if (eventGrouping != null) {
+							f = ChangeSetUtils.getCapacityViolationCount(eventGrouping);
+						}
+					}
+					Number t = null;
+					{
+						final EventGrouping eventGrouping = change.getNewEventGrouping();
+						if (eventGrouping != null) {
+							t = ChangeSetUtils.getCapacityViolationCount(eventGrouping);
+						}
+					}
+					int delta = 0;
+					if (f != null) {
+						delta -= f.intValue();
+					}
+					if (t != null) {
+						delta += t.intValue();
+					}
+					if (delta != 0) {
+						cell.setText(String.format("%s %d", delta < 0 ? "↓" : "↑", Math.abs(delta)));
 					}
 
 				}
@@ -852,7 +955,7 @@ public class ChangeSetView implements IAdaptable {
 
 	@Inject
 	@Optional
-	private void handleDiffToBaseToggle(@UIEventTopic("toggle-diff-to-base") final Object o) {
+	private void handleDiffToBaseToggle(@UIEventTopic(ChangeSetViewEventConstants.EVENT_TOGGLE_COMPARE_TO_BASE) final Object o) {
 		diffToBase = !diffToBase;
 		diagram.setDiffToBase(diffToBase);
 		viewer.refresh();
@@ -860,7 +963,14 @@ public class ChangeSetView implements IAdaptable {
 
 	@Inject
 	@Optional
-	private void handleAnalyseScenario(@UIEventTopic("analyse-scenario") final ScenarioInstance target) {
+	private void handleShowStructuralChangesToggle(@UIEventTopic(ChangeSetViewEventConstants.EVENT_TOGGLE_FILTER_NON_STRUCTURAL_CHANGES) final Object o) {
+		showNonStructuralChanges = !showNonStructuralChanges;
+		viewer.refresh();
+	}
+
+	@Inject
+	@Optional
+	private void handleAnalyseScenario(@UIEventTopic(ChangeSetViewEventConstants.EVENT_ANALYSE_ACTION_SETS) final ScenarioInstance target) {
 		setData(target);
 	}
 }
