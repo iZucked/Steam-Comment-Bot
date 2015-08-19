@@ -8,14 +8,14 @@ import org.eclipse.e4.core.services.events.IEventBroker;
 
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetViewEventConstants;
 
-public class ToggleDiffToBaseHandler {
+public class ToggleShowStructuralChangesHandler {
 
 	@Inject
 	private IEventBroker eventBroker;
 
 	@Execute
 	public void execute() {
-		eventBroker.post(ChangeSetViewEventConstants.EVENT_TOGGLE_COMPARE_TO_BASE, null);
+		eventBroker.post(ChangeSetViewEventConstants.EVENT_TOGGLE_FILTER_NON_STRUCTURAL_CHANGES, null);
 	}
 
 }
