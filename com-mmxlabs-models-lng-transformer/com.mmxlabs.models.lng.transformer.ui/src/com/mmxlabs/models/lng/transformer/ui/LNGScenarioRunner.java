@@ -13,6 +13,7 @@ import java.util.List;
 
 import javax.management.timer.Timer;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -42,6 +43,7 @@ import com.mmxlabs.models.lng.transformer.period.InclusionChecker;
 import com.mmxlabs.models.lng.transformer.period.PeriodExporter;
 import com.mmxlabs.models.lng.transformer.period.PeriodTransformer;
 import com.mmxlabs.models.lng.transformer.period.ScenarioEntityMapping;
+import com.mmxlabs.models.lng.transformer.ui.breakdown.BreadthOptimiser;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeExtender;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModesRegistry;
@@ -256,7 +258,7 @@ public class LNGScenarioRunner {
 		if (periodMapping == null) {
 			doBreakdownPostOptimisation = false;
 		}
-		
+
 		if (periodMapping != null) {
 
 			final PeriodTransformer t = new PeriodTransformer(extraModule);
@@ -320,7 +322,9 @@ public class LNGScenarioRunner {
 	public boolean step(final int percent) {
 		assert createOptimiser;
 		final IOptimiserProgressMonitor monitor = optimiser.getProgressMonitor();
-		optimiser.step(percent);
+
+		int optimiserPercent = percent;// doBreakdownPostOptimisation ? (int) ((double) percent * 1.2) : percent;
+		optimiser.step(optimiserPercent);
 		if (monitor != null) {
 			monitor.report(optimiser, optimiser.getNumberOfIterationsCompleted(), optimiser.getFitnessEvaluator().getCurrentFitness(), optimiser.getFitnessEvaluator().getBestFitness(),
 					optimiser.getCurrentSolution(), optimiser.getBestSolution());
@@ -339,8 +343,10 @@ public class LNGScenarioRunner {
 			// Generate the changesets decomposition.
 			if (true || doBreakdownPostOptimisation) {
 				// Run optimisation
+
 				final BreadthOptimiser instance = injector.getInstance(BreadthOptimiser.class);
-				boolean foundBetterResult = instance.optimise(optimiser.getBestRawSequences());
+				boolean foundBetterResult = instance.optimise(optimiser.getBestRawSequences(), new NullProgressMonitor());
+
 				// Store the results
 				final List<Pair<ISequences, IEvaluationState>> breakdownSolution = instance.getBestSolution();
 				if (breakdownSolution != null) {

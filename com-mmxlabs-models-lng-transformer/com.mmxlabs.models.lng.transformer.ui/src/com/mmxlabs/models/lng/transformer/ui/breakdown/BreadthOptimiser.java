@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.ui;
+package com.mmxlabs.models.lng.transformer.ui.breakdown;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -20,23 +20,14 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.common.util.concurrent.Monitor;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.BreakdownOptimiserMover;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.Change;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.ChangeSet;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.ChangeSetFinderJob;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.JobState;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.JobStateMode;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.JobStateSerialiser;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.JobStore;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.MetricType;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.MyFuture;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.SimilarityState;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -50,8 +41,6 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.optimiser.lso.IFitnessCombiner;
-import com.mmxlabs.optimiser.lso.impl.LinearFitnessCombiner;
-import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 
@@ -140,8 +129,9 @@ public class BreadthOptimiser {
 	 * TODO: Return a data structure for the best set of instructions and then convert to EMF.
 	 * 
 	 * @param bestRawSequences
+	 * @param subProgressMonitor
 	 */
-	public boolean optimise(@NonNull final ISequences bestRawSequences) {
+	public boolean optimise(@NonNull final ISequences bestRawSequences, IProgressMonitor progressMonitor) {
 
 		final long time1 = System.currentTimeMillis();
 
@@ -173,7 +163,12 @@ public class BreadthOptimiser {
 		//// Debugging -- get initial change count
 		{
 			final int changesCount = breakdownOptimiserMover.getChangedElements(similarityState, initialRawSequences).size();
+			if (changesCount > 40) {
+				System.out.println("High change count, aborting breakdown");
+				return false;
+			}
 			System.out.println("Initial changes " + changesCount);
+			progressMonitor.beginTask("Analse changes", changesCount);
 		}
 
 		final IModifiableSequences initialFullSequences = new ModifiableSequences(initialRawSequences);
@@ -214,7 +209,7 @@ public class BreadthOptimiser {
 
 		boolean betterSolutionFound = false;
 		try {
-			final Collection<JobState> fullChangesSets = findChangeSets(similarityState, l, 1);
+			final Collection<JobState> fullChangesSets = findChangeSets(similarityState, l, null);
 			System.out.printf("Found %d results\n", fullChangesSets.size());
 
 			// Remove duplicates and sort by changeset P&L.
@@ -260,12 +255,54 @@ public class BreadthOptimiser {
 		}
 		final long time3 = System.currentTimeMillis();
 
+		progressMonitor.done();
 		System.out.printf("Setup time %d -- Search time %d\n", (time2 - time1) / 1000L, (time3 - time2) / 1000L);
 
 		return betterSolutionFound;
 	}
 
 	// TODO: Consider converting to loop rather than recursive method?
+	@NonNull
+	public Collection<JobState> findChangeSets(@NonNull final SimilarityState similarityState, final Collection<JobState> initialStates, IProgressMonitor progressMonitor)
+			throws InterruptedException, ExecutionException {
+
+		List<JobState> currentStates = new LinkedList<>(initialStates);
+		int depth = 0;
+		while (true) {
+			++depth;
+			// Ok, found some complete change sets, recurse down to the next changeset
+			if (!currentStates.isEmpty()) {
+				currentStates = reduceAndSortStates(currentStates);
+
+				// Run small chunks at a time, to limit amount of memory the returned data set will take up
+				final List<JobState> branchStates = new LinkedList<>();
+				while (!currentStates.isEmpty()) {
+					final List<JobState> subList = new LinkedList<>();
+					// Run up to 20 at once. Note larger sizes may take up more memory with the returned change set count.
+					// changesets can be detected more easily
+					final int limit = Math.min(currentStates.size(), 1);
+					for (int i = 0; i < limit; ++i) {
+						subList.add(currentStates.remove(0));
+					}
+					Collection<JobState> states = findChangeSets(similarityState, subList, depth);
+					final List<JobState> leafStates = new LinkedList<>();
+
+					sortJobStates(states, leafStates, branchStates);
+
+					// Good, results, return them
+					if (!leafStates.isEmpty()) {
+						return leafStates;
+					}
+				}
+				currentStates = branchStates;
+			} else {
+				System.out.printf("No leaf or branch states found (%d), terminating\n", depth);
+				return Collections.emptyList();
+			}
+		}
+
+	}
+
 	@NonNull
 	public Collection<JobState> findChangeSets(@NonNull final SimilarityState similarityState, final Collection<JobState> currentStates, final int depth)
 			throws InterruptedException, ExecutionException {
@@ -329,6 +366,7 @@ public class BreadthOptimiser {
 						for (int i = 0; i < limit; ++i) {
 							subList.add(limitedStates.remove(0));
 						}
+
 						final JobStore jobStore = new JobStore(depth);
 						final Collection<JobState> states = runJobs(similarityState, subList, jobStore);
 
@@ -338,6 +376,11 @@ public class BreadthOptimiser {
 
 						// Sort results into leaves and branches.
 						sortJobStates(states, leafStates, branchStates);
+
+						// Ignore the rest!
+						if (!files.isEmpty()) {
+							limitedStates.clear();
+						}
 
 						if (!leafStates.isEmpty()) {
 							// Found a result, break out early
@@ -357,40 +400,14 @@ public class BreadthOptimiser {
 			files.clear();
 		}
 
-		// Ok, found some complete change sets, recurse down to the next changeset
-		if (!branchStates.isEmpty()) {
-			final List<JobState> reducedAndSortedStates = reduceAndSortStates(branchStates);
-			// Clean up mem
-			branchStates.clear();
-			branchStates = null;
-
-			// Run small chunks at a time, to limit amount of memory the returned data set will take up
-			while (!reducedAndSortedStates.isEmpty()) {
-				final List<JobState> subList = new LinkedList<>();
-				// Run up to 20 at once. Note larger sizes may take up more memory with the returned change set count.
-				// changesets can be detected more easily
-				final int limit = Math.min(reducedAndSortedStates.size(), 1);
-				for (int i = 0; i < limit; ++i) {
-					subList.add(reducedAndSortedStates.remove(0));
-				}
-				Collection<JobState> states = findChangeSets(similarityState, subList, depth + 1);
-				final List<JobState> leafStates = new LinkedList<>();
-				sortJobStates(states, leafStates, null);
-				states.clear();
-				states = null;
-
-				// Good, results, return them
-				if (!leafStates.isEmpty()) {
-					return leafStates;
-				}
-			}
-		}
-		System.out.printf("No leaf or branch states found (%d), moving back up\n", depth);
-		return Collections.emptyList();
+		return branchStates;
 	}
 
 	protected void sortJobStates(@NonNull final Collection<JobState> states, @NonNull final Collection<JobState> leafStates, @Nullable final Collection<JobState> branchStates) {
-		for (final JobState state : states) {
+		Iterator<JobState> itr = states.iterator();
+		while (itr.hasNext()) {
+			JobState state = itr.next();
+			itr.remove();
 			if (state.mode == JobStateMode.LEAF) {
 				leafStates.add(state);
 			} else if (state.mode == JobStateMode.LIMITED) {
