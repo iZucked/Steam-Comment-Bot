@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.schedule.util;
 
 import org.joda.time.DateTime;
-import org.joda.time.Hours;
 
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -67,13 +66,12 @@ public class LatenessUtils {
 	}
 
 	public static int getLatenessInHours(final PortVisit visit) {
-		final DateTime localStart = visit.getStart();
-		final DateTime windowEndDate = getWindowEndDate(visit);
-		if (windowEndDate == null || localStart == null) {
-			return 0;
+
+		final PortVisitLateness portVisitLateness = visit.getLateness();
+		if (portVisitLateness != null) {
+			return portVisitLateness.getLatenessInHours();
 		}
-		final int diff = Hours.hoursBetween(windowEndDate, localStart).getHours();
-		return diff < 0 ? 0 : diff;
+		return 0;
 	}
 
 }
