@@ -131,7 +131,7 @@ public class BreadthOptimiser {
 	 * @param bestRawSequences
 	 * @param subProgressMonitor
 	 */
-	public boolean optimise(@NonNull final ISequences bestRawSequences, IProgressMonitor progressMonitor) {
+	public boolean optimise(@NonNull final ISequences bestRawSequences, final IProgressMonitor progressMonitor) {
 
 		final long time1 = System.currentTimeMillis();
 
@@ -164,11 +164,11 @@ public class BreadthOptimiser {
 		{
 			final int changesCount = breakdownOptimiserMover.getChangedElements(similarityState, initialRawSequences).size();
 			if (changesCount > 40) {
-				System.out.println("High change count, aborting breakdown");
+				// System.out.println("High change count, aborting breakdown");
 				return false;
 			}
-			System.out.println("Initial changes " + changesCount);
-			progressMonitor.beginTask("Analse changes", changesCount);
+			// System.out.println("Initial changes " + changesCount);
+			progressMonitor.beginTask("Analyse changes", changesCount);
 		}
 
 		final IModifiableSequences initialFullSequences = new ModifiableSequences(initialRawSequences);
@@ -210,7 +210,7 @@ public class BreadthOptimiser {
 		boolean betterSolutionFound = false;
 		try {
 			final Collection<JobState> fullChangesSets = findChangeSets(similarityState, l, null);
-			System.out.printf("Found %d results\n", fullChangesSets.size());
+			// System.out.printf("Found %d results\n", fullChangesSets.size());
 
 			// Remove duplicates and sort by changeset P&L.
 			final List<JobState> sortedChangeStates = new ArrayList<>(new LinkedHashSet<>(fullChangesSets));
@@ -231,15 +231,18 @@ public class BreadthOptimiser {
 				}
 			});
 
-			// Save results.
-			int i = 0;
-			for (final JobState jobState : sortedChangeStates) {
-				if (jobState.mode == JobStateMode.LEAF) {
-					// TODO: Change this method to generate more useful file names e.g. include sort index
-					evaluateLeaf(similarityState, jobState.changesAsList, jobState.changeSetsAsList, new ModifiableSequences(jobState.getRawSequences()));
-					// Save top 20 results
-					if (++i >= 5) {
-						// break;
+			// DEBUGGING CODE
+			if (false) {
+				// Save results.
+				int i = 0;
+				for (final JobState jobState : sortedChangeStates) {
+					if (jobState.mode == JobStateMode.LEAF) {
+						// TODO: Change this method to generate more useful file names e.g. include sort index
+						evaluateLeaf(similarityState, jobState.changesAsList, jobState.changeSetsAsList, new ModifiableSequences(jobState.getRawSequences()));
+						// Save top 20 results
+						if (++i >= 5) {
+							// break;
+						}
 					}
 				}
 			}
@@ -256,14 +259,14 @@ public class BreadthOptimiser {
 		final long time3 = System.currentTimeMillis();
 
 		progressMonitor.done();
-		System.out.printf("Setup time %d -- Search time %d\n", (time2 - time1) / 1000L, (time3 - time2) / 1000L);
+		// System.out.printf("Setup time %d -- Search time %d\n", (time2 - time1) / 1000L, (time3 - time2) / 1000L);
 
 		return betterSolutionFound;
 	}
 
 	// TODO: Consider converting to loop rather than recursive method?
 	@NonNull
-	public Collection<JobState> findChangeSets(@NonNull final SimilarityState similarityState, final Collection<JobState> initialStates, IProgressMonitor progressMonitor)
+	public Collection<JobState> findChangeSets(@NonNull final SimilarityState similarityState, final Collection<JobState> initialStates, final IProgressMonitor progressMonitor)
 			throws InterruptedException, ExecutionException {
 
 		List<JobState> currentStates = new LinkedList<>(initialStates);
@@ -284,7 +287,7 @@ public class BreadthOptimiser {
 					for (int i = 0; i < limit; ++i) {
 						subList.add(currentStates.remove(0));
 					}
-					Collection<JobState> states = findChangeSets(similarityState, subList, depth);
+					final Collection<JobState> states = findChangeSets(similarityState, subList, depth);
 					final List<JobState> leafStates = new LinkedList<>();
 
 					sortJobStates(states, leafStates, branchStates);
@@ -296,7 +299,7 @@ public class BreadthOptimiser {
 				}
 				currentStates = branchStates;
 			} else {
-				System.out.printf("No leaf or branch states found (%d), terminating\n", depth);
+				// System.out.printf("No leaf or branch states found (%d), terminating\n", depth);
 				return Collections.emptyList();
 			}
 		}
@@ -307,21 +310,21 @@ public class BreadthOptimiser {
 	public Collection<JobState> findChangeSets(@NonNull final SimilarityState similarityState, final Collection<JobState> currentStates, final int depth)
 			throws InterruptedException, ExecutionException {
 
-		System.out.printf("Find change sets %d\n", depth);
+		// System.out.printf("Find change sets %d\n", depth);
 
 		// List of temp files containing persisted LIMITED states.
 		final List<File> files = new LinkedList<>();
-		List<JobState> branchStates = new LinkedList<>();
+		final List<JobState> branchStates = new LinkedList<>();
 		try {
 			int persistedLimitedStates = 0;
 			final List<JobState> leafStates = new LinkedList<>();
 			{
 				// Evolve current change set
 				final JobStore jobStore = new JobStore(depth);
-				System.out.printf("Finding change sets (%d) - page C %d L %d\n", depth, currentStates.size(), persistedLimitedStates);
+				// System.out.printf("Finding change sets (%d) - page C %d L %d\n", depth, currentStates.size(), persistedLimitedStates);
 				final long timeX = System.currentTimeMillis();
 				final Collection<JobState> states = runJobs(similarityState, currentStates, jobStore);
-				System.out.printf("Run jobs complete -- %d\n", (System.currentTimeMillis() - timeX) / 1000L);
+				// System.out.printf("Run jobs complete -- %d\n", (System.currentTimeMillis() - timeX) / 1000L);
 				// Process results by mode.
 				sortJobStates(states, leafStates, branchStates);
 
@@ -329,7 +332,7 @@ public class BreadthOptimiser {
 				files.addAll(jobStore.getFiles());
 				persistedLimitedStates += jobStore.getPersistedStateCount();
 
-				System.out.printf("Found change sets (%d) - C %d L %d B %d\n", depth, currentStates.size(), jobStore.getPersistedStateCount(), branchStates.size());
+				// System.out.printf("Found change sets (%d) - C %d L %d B %d\n", depth, currentStates.size(), jobStore.getPersistedStateCount(), branchStates.size());
 			}
 			// Break out early?
 			if (!leafStates.isEmpty()) {
@@ -339,7 +342,7 @@ public class BreadthOptimiser {
 
 			if (branchStates.isEmpty() && persistedLimitedStates > 0) {
 				// Unable to find any branches, re-load the persisted limited change sets and continue.
-				System.out.printf("No leaf or branch states found (%d), retry extending limited states changeset size\n", depth);
+				// System.out.printf("No leaf or branch states found (%d), retry extending limited states changeset size\n", depth);
 
 				// Could end up with many limited states, run on limited
 				LOOP_LIMITED: while (persistedLimitedStates > 0 && files.size() > 0) {
@@ -359,7 +362,7 @@ public class BreadthOptimiser {
 					limitedStates = reduceAndSortStates(limitedStates);
 
 					while (!limitedStates.isEmpty()) {
-						System.out.printf("Limited states run (%d) - L %d\n", depth, limitedStates.size());
+						// System.out.printf("Limited states run (%d) - L %d\n", depth, limitedStates.size());
 						final List<JobState> subList = new LinkedList<>();//
 						// Run in batches of 100. Smaller number may be quicker, but return a less diverse set of results as we return as soon as we have a leaf result.
 						final int limit = Math.min(limitedStates.size(), 100);
@@ -404,9 +407,9 @@ public class BreadthOptimiser {
 	}
 
 	protected void sortJobStates(@NonNull final Collection<JobState> states, @NonNull final Collection<JobState> leafStates, @Nullable final Collection<JobState> branchStates) {
-		Iterator<JobState> itr = states.iterator();
+		final Iterator<JobState> itr = states.iterator();
 		while (itr.hasNext()) {
-			JobState state = itr.next();
+			final JobState state = itr.next();
 			itr.remove();
 			if (state.mode == JobStateMode.LEAF) {
 				leafStates.add(state);
@@ -438,10 +441,10 @@ public class BreadthOptimiser {
 		// FIXME: The memory consumption when running jobs in a thread pool showed lots of references to a LinkedHashMap$Entry. Possibly (but seems unlikely?) this is the cause. Does the internal
 		// LinkedHashSet state get copied into the LinkedList? Why would it?
 
-		final int initialSize = currentStates.size();
+		// final int initialSize = currentStates.size();
 		final List<JobState> sortedJobStates = new LinkedList<>(new LinkedHashSet<>(currentStates));
-		final int newSize = sortedJobStates.size();
-		System.out.printf("Reduced %d -> %d\n", initialSize, newSize);
+		// final int newSize = sortedJobStates.size();
+		// System.out.printf("Reduced %d -> %d\n", initialSize, newSize);
 
 		Collections.sort(sortedJobStates, new Comparator<JobState>() {
 
@@ -553,8 +556,8 @@ public class BreadthOptimiser {
 		}
 	}
 
-	private boolean processAndStoreBreakdownSolution(final JobState solution, final IModifiableSequences initialFullSequences, final IEvaluationState evaluationState, long bestSolutionFitness) {
-		List<Pair<ISequences, IEvaluationState>> processedSolution = new LinkedList<Pair<ISequences, IEvaluationState>>();
+	private boolean processAndStoreBreakdownSolution(final JobState solution, final IModifiableSequences initialFullSequences, final IEvaluationState evaluationState, final long bestSolutionFitness) {
+		final List<Pair<ISequences, IEvaluationState>> processedSolution = new LinkedList<Pair<ISequences, IEvaluationState>>();
 
 		processedSolution.add(new Pair<ISequences, IEvaluationState>(initialFullSequences, evaluationState));
 
@@ -564,10 +567,10 @@ public class BreadthOptimiser {
 		for (final ChangeSet cs : solution.changeSetsAsList) {
 			final IModifiableSequences currentFullSequences = new ModifiableSequences(cs.getRawSequences());
 			sequencesManipulator.manipulate(currentFullSequences);
-			IEvaluationState changeSetEvaluationState = breakdownOptimiserMover.evaluateSequence(currentFullSequences);
+			final IEvaluationState changeSetEvaluationState = breakdownOptimiserMover.evaluateSequence(currentFullSequences);
 
 			fitnessHelper.evaluateSequencesFromComponents(currentFullSequences, changeSetEvaluationState, fitnessComponents, null);
-			long currentFitness = fitnessCombiner.calculateFitness(fitnessComponents);
+			final long currentFitness = fitnessCombiner.calculateFitness(fitnessComponents);
 			if (currentFitness < fitness) {
 				fitness = currentFitness;
 				bestIdx = idx;
