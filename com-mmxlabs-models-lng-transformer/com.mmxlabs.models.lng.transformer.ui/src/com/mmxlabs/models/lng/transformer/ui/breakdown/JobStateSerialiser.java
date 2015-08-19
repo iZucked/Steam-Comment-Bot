@@ -22,7 +22,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 public final class JobStateSerialiser {
 
 	public static void save(final Collection<JobState> states, final File f) throws Exception {
-		System.out.println("Saving state " + f.getAbsolutePath());
+		// System.out.println("Saving state " + f.getAbsolutePath());
 		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(f))) {
 			oos.writeInt(states.size());
 			for (final JobState s : states) {
@@ -33,7 +33,7 @@ public final class JobStateSerialiser {
 	}
 
 	public static List<JobState> load(final IOptimisationData data, final File f) throws Exception {
-		System.out.println("Loading state " + f.getAbsolutePath());
+		// System.out.println("Loading state " + f.getAbsolutePath());
 		final Map<Integer, ISequenceElement> elementCache = new HashMap<>();
 		for (final ISequenceElement e : data.getSequenceElements()) {
 			if (elementCache.put(e.getIndex(), e) != null) {
@@ -59,29 +59,29 @@ public final class JobStateSerialiser {
 		// Could be null if this object has been saved twice to the same object stream. Second loading of the object will have already had the rawSequences recreated and the persistedSequences array
 		// nulled out.
 		if (persistedSequences != null) {
-			Set<ISequenceElement> seenElements = new HashSet<>();
+			final Set<ISequenceElement> seenElements = new HashSet<>();
 
 			final IModifiableSequences sequences = new ModifiableSequences(data.getResources());
 			for (int i = 0; i < persistedSequences.length; ++i) {
 				final IModifiableSequence s = sequences.getModifiableSequence(i);
 				for (int j = 0; j < persistedSequences[i].length; ++j) {
-					ISequenceElement element = elementCache.get(persistedSequences[i][j]);
+					final ISequenceElement element = elementCache.get(persistedSequences[i][j]);
 					s.add(element);
-					assert (seenElements.add(element));
+					assert(seenElements.add(element));
 				}
 			}
 			for (int i = 0; i < obj.persistedUnusedElements.length; ++i) {
-				int idx = obj.persistedUnusedElements[i];
-				ISequenceElement e = elementCache.get(idx);
+				final int idx = obj.persistedUnusedElements[i];
+				final ISequenceElement e = elementCache.get(idx);
 				sequences.getModifiableUnusedElements().add(e);
-				assert (seenElements.add(e));
+				assert(seenElements.add(e));
 			}
 
 			obj.rawSequences = sequences;
 			obj.persistedSequences = null;
 			obj.persistedUnusedElements = null;
 
-			for (ChangeSet cs : obj.changeSetsAsList) {
+			for (final ChangeSet cs : obj.changeSetsAsList) {
 				ChangeSet.fixStates(data, elementCache, cs);
 			}
 
