@@ -20,6 +20,8 @@ public class SimilarityState {
 	@Inject
 	private IPortTypeProvider portTypeProvider;
 
+	private final Map<ISequenceElement, ISequenceElement> loadDischargeElementMap = new HashMap<>();
+	private final Map<ISequenceElement, ISequenceElement> dischargeLoadElementMap = new HashMap<>();
 	private final Map<Integer, Integer> loadDischargeMap = new HashMap<>();
 	private final Map<Integer, Integer> dischargeLoadMap = new HashMap<>();
 	private final Map<Integer, ISequenceElement> elementMap = new HashMap<>();
@@ -32,11 +34,15 @@ public class SimilarityState {
 
 	public void init(@NonNull final ISequences fullSequences) {
 		for (final IResource resource : fullSequences.getResources()) {
+			assert resource != null;
 			final ISequence sequence = fullSequences.getSequence(resource);
+			assert sequence != null;
+
 			ISequenceElement prev = null;
 			Pair<Integer, Integer> prevCargo = new Pair<>(-2, -2); // start
 			Pair<Integer, Integer> currCargo = new Pair<>(-1, -1); // end
 			for (final ISequenceElement current : sequence) {
+				assert current != null;
 				if (elementMap.put(current.getIndex(), current) != null) {
 					assert false;
 				}
@@ -45,6 +51,8 @@ public class SimilarityState {
 						if (portTypeProvider.getPortType(current) == PortType.Discharge) {
 							loadDischargeMap.put(prev.getIndex(), current.getIndex());
 							dischargeLoadMap.put(current.getIndex(), prev.getIndex());
+							loadDischargeElementMap.put(prev, current);
+							dischargeLoadElementMap.put(current, prev);
 							currCargo = new Pair<>(prev.getIndex(), current.getIndex());
 							cargoToNextCargoMap.put(prevCargo, currCargo);
 							cargoToPrevCargoMap.put(currCargo, prevCargo);
@@ -62,6 +70,14 @@ public class SimilarityState {
 				assert false;
 			}
 		}
+	}
+
+	public ISequenceElement getLoadElementForDischarge(@NonNull final ISequenceElement discharge) {
+		return dischargeLoadElementMap.get(discharge);
+	}
+
+	public ISequenceElement getDischargeElementForLoad(@NonNull final ISequenceElement load) {
+		return loadDischargeElementMap.get(load);
 	}
 
 	public Integer getLoadForDischarge(@NonNull final ISequenceElement discharge) {
