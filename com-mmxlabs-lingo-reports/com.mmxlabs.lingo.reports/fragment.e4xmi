@@ -5,13 +5,16 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_EYe24EGJEeW-SYJZ5d5KDQ" featurename="handlers" parentElementId="org.eclipse.e4.legacy.ide.application">
     <elements xsi:type="commands:Handler" xmi:id="_33-uQEGJEeW-SYJZ5d5KDQ" elementId="com.mmxlabs.lingo.reports.handler.0" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.AnalyseScenarioHandler" command="_y3WtAEGJEeW-SYJZ5d5KDQ"/>
     <elements xsi:type="commands:Handler" xmi:id="_AiZ_YEGYEeW-SYJZ5d5KDQ" elementId="com.mmxlabs.lingo.reports.handler.1" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleDiffToBaseHandler" command="__RYcYEGXEeW-SYJZ5d5KDQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_pJO1YEW8EeWQ86g0inrF4Q" elementId="com.mmxlabs.lingo.reports.handler.2" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleShowStructuralChangesHandler" command="_i3B3gEW8EeWQ86g0inrF4Q"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_9BVsYEGXEeW-SYJZ5d5KDQ" featurename="commands" parentElementId="org.eclipse.e4.legacy.ide.application">
     <elements xsi:type="commands:Command" xmi:id="__RYcYEGXEeW-SYJZ5d5KDQ" elementId="com.mmxlabs.lingo.reports.changeset.toggle-diff-to-base" commandName="Toggle compare to base"/>
+    <elements xsi:type="commands:Command" xmi:id="_i3B3gEW8EeWQ86g0inrF4Q" elementId="com.mmxlabs.lingo.reports.changeset.toggle-filter-non-structural-changes" commandName="Toggle filter non-structural changes"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_GKQYsEGYEeW-SYJZ5d5KDQ" featurename="toolbar" parentElementId="com.mmxlabs.lingo.reports.views.changeset.ChangeSetView">
     <elements xsi:type="menu:ToolBar" xmi:id="_PjR9kEGYEeW-SYJZ5d5KDQ" elementId="com.mmxlabs.lingo.reports.toolbar.0">
       <children xsi:type="menu:HandledToolItem" xmi:id="_QYj_wEGYEeW-SYJZ5d5KDQ" elementId="com.mmxlabs.lingo.reports.handledtoolitem.toggle" label="Compare to Base" iconURI="" type="Check" command="__RYcYEGXEeW-SYJZ5d5KDQ"/>
+      <children xsi:type="menu:HandledToolItem" xmi:id="_dn0AoEW8EeWQ86g0inrF4Q" elementId="com.mmxlabs.lingo.reports.handledtoolitem.filternonstructualchanges" label="Filter Non Structural Changes" iconURI="platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif" selected="true" type="Check" command="_i3B3gEW8EeWQ86g0inrF4Q"/>
     </elements>
   </fragments>
 </fragment:ModelFragments>

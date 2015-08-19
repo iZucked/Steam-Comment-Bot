@@ -20,6 +20,7 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
+import com.mmxlabs.lingo.reports.views.changeset.ChangeSetViewEventConstants;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -94,8 +95,7 @@ public class AnalyseScenarioHandler {
 			final Object o = ss.getFirstElement();
 			if (o instanceof ScenarioInstance) {
 				final ScenarioInstance scenarioInstance = (ScenarioInstance) o;
-				eventBroker.post("analyse-scenario", scenarioInstance);
-
+				eventBroker.post(ChangeSetViewEventConstants.EVENT_ANALYSE_ACTION_SETS, scenarioInstance);
 			}
 		}
 	}
