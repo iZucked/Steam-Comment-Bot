@@ -25,6 +25,7 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.CellLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -34,6 +35,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerFilter;
+import org.eclipse.jface.window.ToolTip;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.DataVisualizer;
@@ -54,6 +56,7 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
+import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
@@ -137,10 +140,11 @@ public class ChangeSetView implements IAdaptable {
 	public void createPartControl(@Optional final IWorkbenchPart legacyPart, final Composite parent) {
 		final Font systemFont = Display.getDefault().getSystemFont();
 		final FontData fontData = systemFont.getFontData()[0];
-		italicFont = new Font(Display.getDefault(), new FontData(fontData.getName(), fontData.getHeight(), SWT.ITALIC));
-		italicBoldFont = new Font(Display.getDefault(), new FontData(fontData.getName(), fontData.getHeight(), SWT.ITALIC | SWT.BOLD));
+		italicFont = new Font(Display.getDefault(), new FontData(fontData.getName(), fontData.getHeight(), SWT.NONE));
+		italicBoldFont = new Font(Display.getDefault(), new FontData(fontData.getName(), fontData.getHeight(), SWT.BOLD));
 		// Create table
-		viewer = new GridTreeViewer(parent, SWT.V_SCROLL);
+		viewer = new GridTreeViewer(parent, SWT.V_SCROLL | SWT.H_SCROLL);
+		ColumnViewerToolTipSupport.enableFor(viewer, ToolTip.NO_RECREATE);
 
 		viewer.getGrid().setHeaderVisible(true);
 		viewer.getGrid().setLinesVisible(true);
@@ -268,13 +272,13 @@ public class ChangeSetView implements IAdaptable {
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
 			gvc.getColumn().setText("Lateness");
-			gvc.getColumn().setWidth(20);
+			gvc.getColumn().setWidth(50);
 			gvc.setLabelProvider(createLatenessDeltaLabelProvider());
 		}
 		{
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
 			gvc.getColumn().setText("Capacity");
-			gvc.getColumn().setWidth(20);
+			gvc.getColumn().setWidth(50);
 			gvc.setLabelProvider(createViolationsDeltaLabelProvider());
 		}
 
@@ -408,6 +412,7 @@ public class ChangeSetView implements IAdaptable {
 			@Override
 			public void update(final ViewerCell cell) {
 				final Object element = cell.getElement();
+				cell.setText("");
 
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow change = (ChangeSetRow) element;
@@ -435,6 +440,7 @@ public class ChangeSetView implements IAdaptable {
 			@Override
 			public void update(final ViewerCell cell) {
 				final Object element = cell.getElement();
+				cell.setText("");
 
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow change = (ChangeSetRow) element;
@@ -488,6 +494,7 @@ public class ChangeSetView implements IAdaptable {
 			@Override
 			public void update(final ViewerCell cell) {
 				final Object element = cell.getElement();
+				cell.setText("");
 
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow change = (ChangeSetRow) element;
@@ -530,6 +537,7 @@ public class ChangeSetView implements IAdaptable {
 			@Override
 			public void update(final ViewerCell cell) {
 				final Object element = cell.getElement();
+				cell.setText("");
 
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow change = (ChangeSetRow) element;
@@ -556,6 +564,7 @@ public class ChangeSetView implements IAdaptable {
 					if (t != null) {
 						delta += t.intValue();
 					}
+					delta = (int) Math.round((double) delta / 24.0);
 					if (delta != 0) {
 						cell.setText(String.format("%s %d", delta < 0 ? "↓" : "↑", Math.abs(delta)));
 					}
@@ -571,6 +580,7 @@ public class ChangeSetView implements IAdaptable {
 			@Override
 			public void update(final ViewerCell cell) {
 				final Object element = cell.getElement();
+				cell.setText("");
 
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow change = (ChangeSetRow) element;
@@ -612,6 +622,7 @@ public class ChangeSetView implements IAdaptable {
 			@Override
 			public void update(final ViewerCell cell) {
 				final Object element = cell.getElement();
+				cell.setText("");
 
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow change = (ChangeSetRow) element;
@@ -663,6 +674,7 @@ public class ChangeSetView implements IAdaptable {
 			@Override
 			public void update(final ViewerCell cell) {
 				final Object element = cell.getElement();
+				cell.setText("");
 
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow change = (ChangeSetRow) element;
@@ -706,6 +718,8 @@ public class ChangeSetView implements IAdaptable {
 			@Override
 			public void update(final ViewerCell cell) {
 				final Object element = cell.getElement();
+				cell.setText("");
+
 				if (element instanceof ChangeSet) {
 
 					cell.setFont(italicBoldFont);
@@ -716,11 +730,15 @@ public class ChangeSetView implements IAdaptable {
 					if (root != null) {
 						idx = root.getChangeSets().indexOf(changeSet);
 					}
+					Metrics metrics;
 					if (diffToBase) {
-						cell.setText(String.format("Action Set %d. P&L: %,d  Lateness: %d  Capacity: %d", idx + 1, changeSet.getMetricsToBase().getPnlDelta(), 0, 0));
+						metrics = changeSet.getMetricsToBase();
 					} else {
-						cell.setText(String.format("Action Set %d. P&L: %,d  Lateness: %d  Capacity: %d", idx + 1, changeSet.getMetricsToPrevious().getPnlDelta(), 0, 0));
+						metrics = changeSet.getMetricsToPrevious();
 					}
+					int latenessDelta = (int) Math.round((double) metrics.getLatenessDelta() / 24.0);
+					cell.setText(String.format("Action Set %d. P&L: %,d  Lateness: %d  Capacity: %d", idx + 1, metrics.getPnlDelta(), latenessDelta, metrics.getCapacityDelta()));
+
 					final DataVisualizer dv = viewer.getGrid().getDataVisualizer();
 					dv.setColumnSpan((GridItem) cell.getItem(), cell.getColumnIndex(), viewer.getGrid().getColumnCount());
 				}
@@ -860,20 +878,34 @@ public class ChangeSetView implements IAdaptable {
 
 			@Override
 			public void update(final ViewerCell cell) {
+				cell.setText("");
 
-				// TODO Auto-generated method stub
 				final Object element = cell.getElement();
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow changeSetRow = (ChangeSetRow) element;
-					cell.setText("");
 
 					if (name.equals(changeSetRow.getLhsVesselName())) {
-						cell.setText(".");
+						cell.setText("○");
 					}
 					if (name.equals(changeSetRow.getRhsVesselName())) {
-						cell.setText("O");
+						cell.setText("●");
 					}
 				}
+			}
+
+			@Override
+			public String getToolTipText(Object element) {
+				if (element instanceof ChangeSetRow) {
+					final ChangeSetRow changeSetRow = (ChangeSetRow) element;
+
+					if (name.equals(changeSetRow.getLhsVesselName())) {
+						return name;
+					}
+					if (name.equals(changeSetRow.getRhsVesselName())) {
+						return name;
+					}
+				}
+				return null;
 			}
 		};
 	}
