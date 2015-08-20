@@ -24,7 +24,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.google.common.util.concurrent.Monitor;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mmxlabs.common.Pair;
@@ -163,105 +162,95 @@ public class BreadthOptimiser {
 		//// Debugging -- get initial change count
 		{
 			final int changesCount = breakdownOptimiserMover.getChangedElements(similarityState, initialRawSequences).size();
-			if (changesCount > 40) {
-				// System.out.println("High change count, aborting breakdown");
-				return false;
-			}
 			// System.out.println("Initial changes " + changesCount);
 			progressMonitor.beginTask("Analyse changes", changesCount);
 		}
-
-		final IModifiableSequences initialFullSequences = new ModifiableSequences(initialRawSequences);
-		sequencesManipulator.manipulate(initialFullSequences);
-		final IEvaluationState evaluationState = new EvaluationState();
-		for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
-			if (!evaluationProcess.evaluate(initialFullSequences, evaluationState)) {
-				// We expect the initial solution to be valid....
-				assert false;
-			}
-		}
-
-		final ScheduledSequences initialScheduledSequences = evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class);
-		assert initialScheduledSequences != null;
-
-		final long initialUnusedCompulsarySlot = breakdownOptimiserMover.calculateUnusedCompulsarySlot(initialRawSequences);
-		final long initialLateness = breakdownOptimiserMover.calculateScheduleLateness(initialFullSequences, initialScheduledSequences);
-		final long initialCapacity = breakdownOptimiserMover.calculateScheduleCapacity(initialFullSequences, initialScheduledSequences);
-		final long initialPNL = breakdownOptimiserMover.calculateSchedulePNL(initialFullSequences, initialScheduledSequences);
-
-		similarityState.baseMetrics[MetricType.LATENESS.ordinal()] = initialLateness;
-		similarityState.baseMetrics[MetricType.CAPACITY.ordinal()] = initialCapacity;
-		similarityState.baseMetrics[MetricType.PNL.ordinal()] = initialPNL;
-		similarityState.baseMetrics[MetricType.COMPULSARY_SLOT.ordinal()] = initialUnusedCompulsarySlot;
-
-		// Generate the initial set of changes, one level deep
-		final long time2 = System.currentTimeMillis();
-
-		// This will return a set of job states in the PARTIAL state with a single change in the list.
-
-		final List<JobState> l = new LinkedList<>();
-		final JobState initialState = new JobState(new Sequences(initialRawSequences), new LinkedList<ChangeSet>(), new LinkedList<Change>());
-		initialState.setMetric(MetricType.PNL, initialPNL, 0, 0);
-		initialState.setMetric(MetricType.LATENESS, initialLateness, 0, 0);
-		initialState.setMetric(MetricType.CAPACITY, initialCapacity, 0, 0);
-		initialState.setMetric(MetricType.COMPULSARY_SLOT, initialUnusedCompulsarySlot, 0, 0);
-		l.add(initialState);
-
-		boolean betterSolutionFound = false;
 		try {
-			final Collection<JobState> fullChangesSets = findChangeSets(similarityState, l, null);
-			// System.out.printf("Found %d results\n", fullChangesSets.size());
-
-			// Remove duplicates and sort by changeset P&L.
-			final List<JobState> sortedChangeStates = new ArrayList<>(new LinkedHashSet<>(fullChangesSets));
-			Collections.sort(sortedChangeStates, new Comparator<JobState>() {
-
-				@Override
-				public int compare(final JobState o1, final JobState o2) {
-					final int counter = Math.min(o1.changeSetsAsList.size(), o2.changeSetsAsList.size());
-					for (int i = 0; i < counter; ++i) {
-
-						final int c = Long.compare(o2.changeSetsAsList.get(i).metricDelta[MetricType.PNL.ordinal()], o1.changeSetsAsList.get(i).metricDelta[MetricType.PNL.ordinal()]);
-						if (c != 0) {
-							return c;
-						}
-					}
-					return o1.changeSetsAsList.size() - o2.changeSetsAsList.size();
-
-				}
-			});
-
-			// DEBUGGING CODE
-			if (false) {
-				// Save results.
-				int i = 0;
-				for (final JobState jobState : sortedChangeStates) {
-					if (jobState.mode == JobStateMode.LEAF) {
-						// TODO: Change this method to generate more useful file names e.g. include sort index
-						evaluateLeaf(similarityState, jobState.changesAsList, jobState.changeSetsAsList, new ModifiableSequences(jobState.getRawSequences()));
-						// Save top 20 results
-						if (++i >= 5) {
-							// break;
-						}
-					}
+			final IModifiableSequences initialFullSequences = new ModifiableSequences(initialRawSequences);
+			sequencesManipulator.manipulate(initialFullSequences);
+			final IEvaluationState evaluationState = new EvaluationState();
+			for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
+				if (!evaluationProcess.evaluate(initialFullSequences, evaluationState)) {
+					// We expect the initial solution to be valid....
+					assert false;
 				}
 			}
 
-			if (!sortedChangeStates.isEmpty()) {
-				betterSolutionFound = processAndStoreBreakdownSolution(sortedChangeStates.get(0), initialFullSequences, evaluationState, bestFitness);
-			}
+			final ScheduledSequences initialScheduledSequences = evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class);
+			assert initialScheduledSequences != null;
 
-		} catch (final InterruptedException e) {
-			e.printStackTrace();
-		} catch (final ExecutionException e) {
-			e.printStackTrace();
+			final long initialUnusedCompulsarySlot = breakdownOptimiserMover.calculateUnusedCompulsarySlot(initialRawSequences);
+			final long initialLateness = breakdownOptimiserMover.calculateScheduleLateness(initialFullSequences, initialScheduledSequences);
+			final long initialCapacity = breakdownOptimiserMover.calculateScheduleCapacity(initialFullSequences, initialScheduledSequences);
+			final long initialPNL = breakdownOptimiserMover.calculateSchedulePNL(initialFullSequences, initialScheduledSequences);
+
+			similarityState.baseMetrics[MetricType.LATENESS.ordinal()] = initialLateness;
+			similarityState.baseMetrics[MetricType.CAPACITY.ordinal()] = initialCapacity;
+			similarityState.baseMetrics[MetricType.PNL.ordinal()] = initialPNL;
+			similarityState.baseMetrics[MetricType.COMPULSARY_SLOT.ordinal()] = initialUnusedCompulsarySlot;
+
+			// Generate the initial set of changes, one level deep
+			final long time2 = System.currentTimeMillis();
+
+			// This will return a set of job states in the PARTIAL state with a single change in the list.
+
+			final List<JobState> l = new LinkedList<>();
+			final JobState initialState = new JobState(new Sequences(initialRawSequences), new LinkedList<ChangeSet>(), new LinkedList<Change>());
+			initialState.setMetric(MetricType.PNL, initialPNL, 0, 0);
+			initialState.setMetric(MetricType.LATENESS, initialLateness, 0, 0);
+			initialState.setMetric(MetricType.CAPACITY, initialCapacity, 0, 0);
+			initialState.setMetric(MetricType.COMPULSARY_SLOT, initialUnusedCompulsarySlot, 0, 0);
+			l.add(initialState);
+
+			boolean betterSolutionFound = false;
+			try {
+				final Collection<JobState> fullChangesSets = findChangeSets(similarityState, l, progressMonitor);
+				// System.out.printf("Found %d results\n", fullChangesSets.size());
+
+				// Remove duplicates and sort by changeset P&L.
+				final List<JobState> sortedChangeStates = new ArrayList<>(new LinkedHashSet<>(fullChangesSets));
+				Collections.sort(sortedChangeStates, new Comparator<JobState>() {
+
+					@Override
+					public int compare(final JobState o1, final JobState o2) {
+						final int counter = Math.min(o1.changeSetsAsList.size(), o2.changeSetsAsList.size());
+						for (int i = 0; i < counter; ++i) {
+
+							final int c = Long.compare(o2.changeSetsAsList.get(i).metricDelta[MetricType.PNL.ordinal()], o1.changeSetsAsList.get(i).metricDelta[MetricType.PNL.ordinal()]);
+							if (c != 0) {
+								return c;
+							}
+						}
+						return o1.changeSetsAsList.size() - o2.changeSetsAsList.size();
+
+					}
+				});
+
+				// DEBUGGING CODE
+				if (false && !sortedChangeStates.isEmpty()) {
+					// Save results.
+					final JobState jobState = sortedChangeStates.get(0);
+					assert(jobState.mode == JobStateMode.LEAF);
+					// TODO: Change this method to generate more useful file names e.g. include sort index
+					evaluateLeaf(similarityState, jobState.changesAsList, jobState.changeSetsAsList, new ModifiableSequences(jobState.getRawSequences()));
+				}
+
+				if (!sortedChangeStates.isEmpty()) {
+					betterSolutionFound = processAndStoreBreakdownSolution(sortedChangeStates.get(0), initialFullSequences, evaluationState, bestFitness);
+				}
+
+			} catch (final InterruptedException e) {
+				e.printStackTrace();
+			} catch (final ExecutionException e) {
+				e.printStackTrace();
+			}
+			final long time3 = System.currentTimeMillis();
+			System.out.printf("Setup time %d -- Search time %d\n", (time2 - time1) / 1000L, (time3 - time2) / 1000L);
+
+			return betterSolutionFound;
+		} finally {
+			progressMonitor.done();
 		}
-		final long time3 = System.currentTimeMillis();
-
-		progressMonitor.done();
-		// System.out.printf("Setup time %d -- Search time %d\n", (time2 - time1) / 1000L, (time3 - time2) / 1000L);
-
-		return betterSolutionFound;
 	}
 
 	// TODO: Consider converting to loop rather than recursive method?
@@ -272,20 +261,26 @@ public class BreadthOptimiser {
 		List<JobState> currentStates = new LinkedList<>(initialStates);
 		int depth = 0;
 		while (true) {
+
 			++depth;
 			// Ok, found some complete change sets, recurse down to the next changeset
+			JobState best = null;
 			if (!currentStates.isEmpty()) {
 				currentStates = reduceAndSortStates(currentStates);
 
 				// Run small chunks at a time, to limit amount of memory the returned data set will take up
 				final List<JobState> branchStates = new LinkedList<>();
-				while (!currentStates.isEmpty()) {
+
+				while (!currentStates.isEmpty()) { // && branchStates.size() < 100) {
 					final List<JobState> subList = new LinkedList<>();
 					// Run up to 20 at once. Note larger sizes may take up more memory with the returned change set count.
 					// changesets can be detected more easily
 					final int limit = Math.min(currentStates.size(), 1);
 					for (int i = 0; i < limit; ++i) {
 						subList.add(currentStates.remove(0));
+					}
+					if (best == null) {
+						best = subList.get(0);
 					}
 					final Collection<JobState> states = findChangeSets(similarityState, subList, depth);
 					final List<JobState> leafStates = new LinkedList<>();
@@ -300,7 +295,15 @@ public class BreadthOptimiser {
 				currentStates = branchStates;
 			} else {
 				// System.out.printf("No leaf or branch states found (%d), terminating\n", depth);
+				JobState next = best;
+				if (next != null) {
+					evaluateLeaf(similarityState, next.changesAsList, next.changeSetsAsList, next.rawSequences);
+				}
 				return Collections.emptyList();
+			}
+			if (progressMonitor != null) {
+				progressMonitor.worked(1);
+				Thread.sleep(1000);
 			}
 		}
 
@@ -452,14 +455,32 @@ public class BreadthOptimiser {
 			public int compare(final JobState o1, final JobState o2) {
 
 				final int counter = Math.min(o1.changeSetsAsList.size(), o2.changeSetsAsList.size());
-				for (int i = 0; i < counter; ++i) {
+				// for (int i = 0; i < counter; ++i) {
+				// final int c = Long.compare(o1.changeSetsAsList.size(), o2.changeSetsAsList.size());
+				// if (c != 0) {
+				// return c;
+				// }
+				// }
 
+				// long o1p = 0;
+				// for (ChangeSet cs : o1.changeSetsAsList) {
+				// o1p += cs.metricDelta[MetricType.PNL.ordinal()];
+				// }
+				// long o2p = 0;
+				// for (ChangeSet cs : o2.changeSetsAsList) {
+				// o1p += cs.metricDelta[MetricType.PNL.ordinal()];
+				// }
+				// return Long.compare(o2p, o1p);//o2p - o1p;
+
+				// final int counter = Math.min(o1.changeSetsAsList.size(), o2.changeSetsAsList.size());
+				for (int i = 0; i < counter; ++i) {
 					final int c = Long.compare(o2.changeSetsAsList.get(i).metricDelta[MetricType.PNL.ordinal()], o1.changeSetsAsList.get(i).metricDelta[MetricType.PNL.ordinal()]);
 					if (c != 0) {
 						return c;
 					}
 				}
-				return Long.compare(o2.metricDelta[MetricType.PNL.ordinal()], o1.metricDelta[MetricType.PNL.ordinal()]);
+				// return Long.compare(o2.metricDelta[MetricType.PNL.ordinal()], o1.metricDelta[MetricType.PNL.ordinal()]);
+				return Long.compare(o2.metricDeltaToBase[MetricType.PNL.ordinal()], o1.metricDeltaToBase[MetricType.PNL.ordinal()]);
 			}
 		});
 		return sortedJobStates;
@@ -518,7 +539,7 @@ public class BreadthOptimiser {
 
 			final int changesCount = breakdownOptimiserMover.getChangedElements(similarityState, bestRawSequences).size();
 
-			assert changesCount == 0;
+			// assert changesCount == 0;
 			// Apply hard constraint checkers
 			for (final IConstraintChecker checker : constraintCheckers) {
 				if (checker.checkConstraints(currentFullSequences) == false) {
@@ -562,19 +583,25 @@ public class BreadthOptimiser {
 		processedSolution.add(new Pair<ISequences, IEvaluationState>(initialFullSequences, evaluationState));
 
 		long fitness = Long.MAX_VALUE;
+		long lastFitness = Long.MAX_VALUE;
 		int bestIdx = -1;
 		int idx = 1;
 		for (final ChangeSet cs : solution.changeSetsAsList) {
 			final IModifiableSequences currentFullSequences = new ModifiableSequences(cs.getRawSequences());
 			sequencesManipulator.manipulate(currentFullSequences);
-			final IEvaluationState changeSetEvaluationState = breakdownOptimiserMover.evaluateSequence(currentFullSequences);
 
+			final IEvaluationState changeSetEvaluationState = breakdownOptimiserMover.evaluateSequence(currentFullSequences);
 			fitnessHelper.evaluateSequencesFromComponents(currentFullSequences, changeSetEvaluationState, fitnessComponents, null);
 			final long currentFitness = fitnessCombiner.calculateFitness(fitnessComponents);
+
+			if (currentFitness == lastFitness) {
+				continue;
+			}
 			if (currentFitness < fitness) {
 				fitness = currentFitness;
 				bestIdx = idx;
 			}
+			lastFitness = currentFitness;
 			processedSolution.add(new Pair<ISequences, IEvaluationState>(currentFullSequences, changeSetEvaluationState));
 			idx++;
 		}
