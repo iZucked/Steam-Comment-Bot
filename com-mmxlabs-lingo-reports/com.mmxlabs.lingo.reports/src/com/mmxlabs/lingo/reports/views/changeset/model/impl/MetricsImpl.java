@@ -20,73 +20,73 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.MetricsImpl#getPnlDelta <em>Pnl Delta</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.MetricsImpl#getLatenessDelta <em>Lateness Delta</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.MetricsImpl#getCapacityDelta <em>Capacity Delta</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.MetricsImpl#getPnl <em>Pnl</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.MetricsImpl#getLateness <em>Lateness</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.MetricsImpl#getCapacity <em>Capacity</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class MetricsImpl extends MinimalEObjectImpl.Container implements Metrics {
 	/**
-	 * The default value of the '{@link #getPnlDelta() <em>Pnl Delta</em>}' attribute.
+	 * The default value of the '{@link #getPnl() <em>Pnl</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getPnlDelta()
+	 * @see #getPnl()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int PNL_DELTA_EDEFAULT = 0;
+	protected static final int PNL_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getPnlDelta() <em>Pnl Delta</em>}' attribute.
+	 * The cached value of the '{@link #getPnl() <em>Pnl</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getPnlDelta()
+	 * @see #getPnl()
 	 * @generated
 	 * @ordered
 	 */
-	protected int pnlDelta = PNL_DELTA_EDEFAULT;
+	protected int pnl = PNL_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getLatenessDelta() <em>Lateness Delta</em>}' attribute.
+	 * The default value of the '{@link #getLateness() <em>Lateness</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getLatenessDelta()
+	 * @see #getLateness()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int LATENESS_DELTA_EDEFAULT = 0;
+	protected static final int LATENESS_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getLatenessDelta() <em>Lateness Delta</em>}' attribute.
+	 * The cached value of the '{@link #getLateness() <em>Lateness</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getLatenessDelta()
+	 * @see #getLateness()
 	 * @generated
 	 * @ordered
 	 */
-	protected int latenessDelta = LATENESS_DELTA_EDEFAULT;
+	protected int lateness = LATENESS_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getCapacityDelta() <em>Capacity Delta</em>}' attribute.
+	 * The default value of the '{@link #getCapacity() <em>Capacity</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getCapacityDelta()
+	 * @see #getCapacity()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int CAPACITY_DELTA_EDEFAULT = 0;
+	protected static final int CAPACITY_EDEFAULT = 0;
 
 	/**
-	 * The cached value of the '{@link #getCapacityDelta() <em>Capacity Delta</em>}' attribute.
+	 * The cached value of the '{@link #getCapacity() <em>Capacity</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getCapacityDelta()
+	 * @see #getCapacity()
 	 * @generated
 	 * @ordered
 	 */
-	protected int capacityDelta = CAPACITY_DELTA_EDEFAULT;
+	protected int capacity = CAPACITY_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -112,8 +112,8 @@ public class MetricsImpl extends MinimalEObjectImpl.Container implements Metrics
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getPnlDelta() {
-		return pnlDelta;
+	public int getPnl() {
+		return pnl;
 	}
 
 	/**
@@ -121,11 +121,11 @@ public class MetricsImpl extends MinimalEObjectImpl.Container implements Metrics
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setPnlDelta(int newPnlDelta) {
-		int oldPnlDelta = pnlDelta;
-		pnlDelta = newPnlDelta;
+	public void setPnl(int newPnl) {
+		int oldPnl = pnl;
+		pnl = newPnl;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.METRICS__PNL_DELTA, oldPnlDelta, pnlDelta));
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.METRICS__PNL, oldPnl, pnl));
 	}
 
 	/**
@@ -133,8 +133,8 @@ public class MetricsImpl extends MinimalEObjectImpl.Container implements Metrics
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getLatenessDelta() {
-		return latenessDelta;
+	public int getLateness() {
+		return lateness;
 	}
 
 	/**
@@ -142,11 +142,11 @@ public class MetricsImpl extends MinimalEObjectImpl.Container implements Metrics
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setLatenessDelta(int newLatenessDelta) {
-		int oldLatenessDelta = latenessDelta;
-		latenessDelta = newLatenessDelta;
+	public void setLateness(int newLateness) {
+		int oldLateness = lateness;
+		lateness = newLateness;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.METRICS__LATENESS_DELTA, oldLatenessDelta, latenessDelta));
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.METRICS__LATENESS, oldLateness, lateness));
 	}
 
 	/**
@@ -154,8 +154,8 @@ public class MetricsImpl extends MinimalEObjectImpl.Container implements Metrics
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getCapacityDelta() {
-		return capacityDelta;
+	public int getCapacity() {
+		return capacity;
 	}
 
 	/**
@@ -163,11 +163,11 @@ public class MetricsImpl extends MinimalEObjectImpl.Container implements Metrics
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setCapacityDelta(int newCapacityDelta) {
-		int oldCapacityDelta = capacityDelta;
-		capacityDelta = newCapacityDelta;
+	public void setCapacity(int newCapacity) {
+		int oldCapacity = capacity;
+		capacity = newCapacity;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.METRICS__CAPACITY_DELTA, oldCapacityDelta, capacityDelta));
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.METRICS__CAPACITY, oldCapacity, capacity));
 	}
 
 	/**
@@ -178,12 +178,12 @@ public class MetricsImpl extends MinimalEObjectImpl.Container implements Metrics
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ChangesetPackage.METRICS__PNL_DELTA:
-				return getPnlDelta();
-			case ChangesetPackage.METRICS__LATENESS_DELTA:
-				return getLatenessDelta();
-			case ChangesetPackage.METRICS__CAPACITY_DELTA:
-				return getCapacityDelta();
+			case ChangesetPackage.METRICS__PNL:
+				return getPnl();
+			case ChangesetPackage.METRICS__LATENESS:
+				return getLateness();
+			case ChangesetPackage.METRICS__CAPACITY:
+				return getCapacity();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -196,14 +196,14 @@ public class MetricsImpl extends MinimalEObjectImpl.Container implements Metrics
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ChangesetPackage.METRICS__PNL_DELTA:
-				setPnlDelta((Integer)newValue);
+			case ChangesetPackage.METRICS__PNL:
+				setPnl((Integer)newValue);
 				return;
-			case ChangesetPackage.METRICS__LATENESS_DELTA:
-				setLatenessDelta((Integer)newValue);
+			case ChangesetPackage.METRICS__LATENESS:
+				setLateness((Integer)newValue);
 				return;
-			case ChangesetPackage.METRICS__CAPACITY_DELTA:
-				setCapacityDelta((Integer)newValue);
+			case ChangesetPackage.METRICS__CAPACITY:
+				setCapacity((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -217,14 +217,14 @@ public class MetricsImpl extends MinimalEObjectImpl.Container implements Metrics
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ChangesetPackage.METRICS__PNL_DELTA:
-				setPnlDelta(PNL_DELTA_EDEFAULT);
+			case ChangesetPackage.METRICS__PNL:
+				setPnl(PNL_EDEFAULT);
 				return;
-			case ChangesetPackage.METRICS__LATENESS_DELTA:
-				setLatenessDelta(LATENESS_DELTA_EDEFAULT);
+			case ChangesetPackage.METRICS__LATENESS:
+				setLateness(LATENESS_EDEFAULT);
 				return;
-			case ChangesetPackage.METRICS__CAPACITY_DELTA:
-				setCapacityDelta(CAPACITY_DELTA_EDEFAULT);
+			case ChangesetPackage.METRICS__CAPACITY:
+				setCapacity(CAPACITY_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -238,12 +238,12 @@ public class MetricsImpl extends MinimalEObjectImpl.Container implements Metrics
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ChangesetPackage.METRICS__PNL_DELTA:
-				return pnlDelta != PNL_DELTA_EDEFAULT;
-			case ChangesetPackage.METRICS__LATENESS_DELTA:
-				return latenessDelta != LATENESS_DELTA_EDEFAULT;
-			case ChangesetPackage.METRICS__CAPACITY_DELTA:
-				return capacityDelta != CAPACITY_DELTA_EDEFAULT;
+			case ChangesetPackage.METRICS__PNL:
+				return pnl != PNL_EDEFAULT;
+			case ChangesetPackage.METRICS__LATENESS:
+				return lateness != LATENESS_EDEFAULT;
+			case ChangesetPackage.METRICS__CAPACITY:
+				return capacity != CAPACITY_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -258,12 +258,12 @@ public class MetricsImpl extends MinimalEObjectImpl.Container implements Metrics
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (pnlDelta: ");
-		result.append(pnlDelta);
-		result.append(", latenessDelta: ");
-		result.append(latenessDelta);
-		result.append(", capacityDelta: ");
-		result.append(capacityDelta);
+		result.append(" (pnl: ");
+		result.append(pnl);
+		result.append(", lateness: ");
+		result.append(lateness);
+		result.append(", capacity: ");
+		result.append(capacity);
 		result.append(')');
 		return result.toString();
 	}

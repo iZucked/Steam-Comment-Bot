@@ -49,6 +49,15 @@ public interface ChangesetFactory extends EFactory {
 	Metrics createMetrics();
 
 	/**
+	 * Returns a new object of class '<em>Delta Metrics</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Delta Metrics</em>'.
+	 * @generated
+	 */
+	DeltaMetrics createDeltaMetrics();
+
+	/**
 	 * Returns a new object of class '<em>Change Set Row</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

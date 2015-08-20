@@ -5,6 +5,7 @@ package com.mmxlabs.lingo.reports.views.changeset.model.impl;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
+import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
 
 import com.mmxlabs.scenario.service.model.ModelReference;
@@ -44,6 +45,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getCurrentScenario <em>Current Scenario</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getChangeSetRowsToBase <em>Change Set Rows To Base</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getChangeSetRowsToPrevious <em>Change Set Rows To Previous</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetImpl#getCurrentMetrics <em>Current Metrics</em>}</li>
  * </ul>
  *
  * @generated
@@ -57,7 +59,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * @generated
 	 * @ordered
 	 */
-	protected Metrics metricsToBase;
+	protected DeltaMetrics metricsToBase;
 
 	/**
 	 * The cached value of the '{@link #getMetricsToPrevious() <em>Metrics To Previous</em>}' containment reference.
@@ -67,7 +69,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * @generated
 	 * @ordered
 	 */
-	protected Metrics metricsToPrevious;
+	protected DeltaMetrics metricsToPrevious;
 
 	/**
 	 * The cached value of the '{@link #getBaseScenarioRef() <em>Base Scenario Ref</em>}' reference.
@@ -150,6 +152,16 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	protected EList<ChangeSetRow> changeSetRowsToPrevious;
 
 	/**
+	 * The cached value of the '{@link #getCurrentMetrics() <em>Current Metrics</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCurrentMetrics()
+	 * @generated
+	 * @ordered
+	 */
+	protected Metrics currentMetrics;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -173,7 +185,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Metrics getMetricsToBase() {
+	public DeltaMetrics getMetricsToBase() {
 		return metricsToBase;
 	}
 
@@ -182,8 +194,8 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetMetricsToBase(Metrics newMetricsToBase, NotificationChain msgs) {
-		Metrics oldMetricsToBase = metricsToBase;
+	public NotificationChain basicSetMetricsToBase(DeltaMetrics newMetricsToBase, NotificationChain msgs) {
+		DeltaMetrics oldMetricsToBase = metricsToBase;
 		metricsToBase = newMetricsToBase;
 		if (eNotificationRequired()) {
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET__METRICS_TO_BASE, oldMetricsToBase, newMetricsToBase);
@@ -197,7 +209,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setMetricsToBase(Metrics newMetricsToBase) {
+	public void setMetricsToBase(DeltaMetrics newMetricsToBase) {
 		if (newMetricsToBase != metricsToBase) {
 			NotificationChain msgs = null;
 			if (metricsToBase != null)
@@ -216,7 +228,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Metrics getMetricsToPrevious() {
+	public DeltaMetrics getMetricsToPrevious() {
 		return metricsToPrevious;
 	}
 
@@ -225,8 +237,8 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetMetricsToPrevious(Metrics newMetricsToPrevious, NotificationChain msgs) {
-		Metrics oldMetricsToPrevious = metricsToPrevious;
+	public NotificationChain basicSetMetricsToPrevious(DeltaMetrics newMetricsToPrevious, NotificationChain msgs) {
+		DeltaMetrics oldMetricsToPrevious = metricsToPrevious;
 		metricsToPrevious = newMetricsToPrevious;
 		if (eNotificationRequired()) {
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET__METRICS_TO_PREVIOUS, oldMetricsToPrevious, newMetricsToPrevious);
@@ -240,7 +252,7 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setMetricsToPrevious(Metrics newMetricsToPrevious) {
+	public void setMetricsToPrevious(DeltaMetrics newMetricsToPrevious) {
 		if (newMetricsToPrevious != metricsToPrevious) {
 			NotificationChain msgs = null;
 			if (metricsToPrevious != null)
@@ -511,6 +523,49 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Metrics getCurrentMetrics() {
+		return currentMetrics;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetCurrentMetrics(Metrics newCurrentMetrics, NotificationChain msgs) {
+		Metrics oldCurrentMetrics = currentMetrics;
+		currentMetrics = newCurrentMetrics;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET__CURRENT_METRICS, oldCurrentMetrics, newCurrentMetrics);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCurrentMetrics(Metrics newCurrentMetrics) {
+		if (newCurrentMetrics != currentMetrics) {
+			NotificationChain msgs = null;
+			if (currentMetrics != null)
+				msgs = ((InternalEObject)currentMetrics).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ChangesetPackage.CHANGE_SET__CURRENT_METRICS, null, msgs);
+			if (newCurrentMetrics != null)
+				msgs = ((InternalEObject)newCurrentMetrics).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ChangesetPackage.CHANGE_SET__CURRENT_METRICS, null, msgs);
+			msgs = basicSetCurrentMetrics(newCurrentMetrics, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET__CURRENT_METRICS, newCurrentMetrics, newCurrentMetrics));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -522,6 +577,8 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 				return ((InternalEList<?>)getChangeSetRowsToBase()).basicRemove(otherEnd, msgs);
 			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_PREVIOUS:
 				return ((InternalEList<?>)getChangeSetRowsToPrevious()).basicRemove(otherEnd, msgs);
+			case ChangesetPackage.CHANGE_SET__CURRENT_METRICS:
+				return basicSetCurrentMetrics(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -560,6 +617,8 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 				return getChangeSetRowsToBase();
 			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_PREVIOUS:
 				return getChangeSetRowsToPrevious();
+			case ChangesetPackage.CHANGE_SET__CURRENT_METRICS:
+				return getCurrentMetrics();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -574,10 +633,10 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case ChangesetPackage.CHANGE_SET__METRICS_TO_BASE:
-				setMetricsToBase((Metrics)newValue);
+				setMetricsToBase((DeltaMetrics)newValue);
 				return;
 			case ChangesetPackage.CHANGE_SET__METRICS_TO_PREVIOUS:
-				setMetricsToPrevious((Metrics)newValue);
+				setMetricsToPrevious((DeltaMetrics)newValue);
 				return;
 			case ChangesetPackage.CHANGE_SET__BASE_SCENARIO_REF:
 				setBaseScenarioRef((ModelReference)newValue);
@@ -605,6 +664,9 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 				getChangeSetRowsToPrevious().clear();
 				getChangeSetRowsToPrevious().addAll((Collection<? extends ChangeSetRow>)newValue);
 				return;
+			case ChangesetPackage.CHANGE_SET__CURRENT_METRICS:
+				setCurrentMetrics((Metrics)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -618,10 +680,10 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case ChangesetPackage.CHANGE_SET__METRICS_TO_BASE:
-				setMetricsToBase((Metrics)null);
+				setMetricsToBase((DeltaMetrics)null);
 				return;
 			case ChangesetPackage.CHANGE_SET__METRICS_TO_PREVIOUS:
-				setMetricsToPrevious((Metrics)null);
+				setMetricsToPrevious((DeltaMetrics)null);
 				return;
 			case ChangesetPackage.CHANGE_SET__BASE_SCENARIO_REF:
 				setBaseScenarioRef((ModelReference)null);
@@ -646,6 +708,9 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 				return;
 			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_PREVIOUS:
 				getChangeSetRowsToPrevious().clear();
+				return;
+			case ChangesetPackage.CHANGE_SET__CURRENT_METRICS:
+				setCurrentMetrics((Metrics)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -679,6 +744,8 @@ public class ChangeSetImpl extends MinimalEObjectImpl.Container implements Chang
 				return changeSetRowsToBase != null && !changeSetRowsToBase.isEmpty();
 			case ChangesetPackage.CHANGE_SET__CHANGE_SET_ROWS_TO_PREVIOUS:
 				return changeSetRowsToPrevious != null && !changeSetRowsToPrevious.isEmpty();
+			case ChangesetPackage.CHANGE_SET__CURRENT_METRICS:
+				return currentMetrics != null;
 		}
 		return super.eIsSet(featureID);
 	}

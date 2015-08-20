@@ -80,6 +80,10 @@ public class ChangesetAdapterFactory extends AdapterFactoryImpl {
 				return createMetricsAdapter();
 			}
 			@Override
+			public Adapter caseDeltaMetrics(DeltaMetrics object) {
+				return createDeltaMetricsAdapter();
+			}
+			@Override
 			public Adapter caseChangeSetRow(ChangeSetRow object) {
 				return createChangeSetRowAdapter();
 			}
@@ -142,6 +146,20 @@ public class ChangesetAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createMetricsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics <em>Delta Metrics</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics
+	 * @generated
+	 */
+	public Adapter createDeltaMetricsAdapter() {
 		return null;
 	}
 

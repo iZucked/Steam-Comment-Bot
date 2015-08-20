@@ -194,13 +194,22 @@ public interface ChangesetPackage extends EPackage {
 	int CHANGE_SET__CHANGE_SET_ROWS_TO_PREVIOUS = 9;
 
 	/**
+	 * The feature id for the '<em><b>Current Metrics</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHANGE_SET__CURRENT_METRICS = 10;
+
+	/**
 	 * The number of structural features of the '<em>Change Set</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_FEATURE_COUNT = 10;
+	int CHANGE_SET_FEATURE_COUNT = 11;
 
 	/**
 	 * The number of operations of the '<em>Change Set</em>' class.
@@ -222,31 +231,31 @@ public interface ChangesetPackage extends EPackage {
 	int METRICS = 2;
 
 	/**
-	 * The feature id for the '<em><b>Pnl Delta</b></em>' attribute.
+	 * The feature id for the '<em><b>Pnl</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int METRICS__PNL_DELTA = 0;
+	int METRICS__PNL = 0;
 
 	/**
-	 * The feature id for the '<em><b>Lateness Delta</b></em>' attribute.
+	 * The feature id for the '<em><b>Lateness</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int METRICS__LATENESS_DELTA = 1;
+	int METRICS__LATENESS = 1;
 
 	/**
-	 * The feature id for the '<em><b>Capacity Delta</b></em>' attribute.
+	 * The feature id for the '<em><b>Capacity</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int METRICS__CAPACITY_DELTA = 2;
+	int METRICS__CAPACITY = 2;
 
 	/**
 	 * The number of structural features of the '<em>Metrics</em>' class.
@@ -267,6 +276,61 @@ public interface ChangesetPackage extends EPackage {
 	int METRICS_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.DeltaMetricsImpl <em>Delta Metrics</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.impl.DeltaMetricsImpl
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangesetPackageImpl#getDeltaMetrics()
+	 * @generated
+	 */
+	int DELTA_METRICS = 3;
+
+	/**
+	 * The feature id for the '<em><b>Pnl Delta</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DELTA_METRICS__PNL_DELTA = 0;
+
+	/**
+	 * The feature id for the '<em><b>Lateness Delta</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DELTA_METRICS__LATENESS_DELTA = 1;
+
+	/**
+	 * The feature id for the '<em><b>Capacity Delta</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DELTA_METRICS__CAPACITY_DELTA = 2;
+
+	/**
+	 * The number of structural features of the '<em>Delta Metrics</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DELTA_METRICS_FEATURE_COUNT = 3;
+
+	/**
+	 * The number of operations of the '<em>Delta Metrics</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DELTA_METRICS_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl <em>Change Set Row</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -274,7 +338,7 @@ public interface ChangesetPackage extends EPackage {
 	 * @see com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangesetPackageImpl#getChangeSetRow()
 	 * @generated
 	 */
-	int CHANGE_SET_ROW = 3;
+	int CHANGE_SET_ROW = 4;
 
 	/**
 	 * The feature id for the '<em><b>Lhs Name</b></em>' attribute.
@@ -599,6 +663,17 @@ public interface ChangesetPackage extends EPackage {
 	EReference getChangeSet_ChangeSetRowsToPrevious();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getCurrentMetrics <em>Current Metrics</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Current Metrics</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getCurrentMetrics()
+	 * @see #getChangeSet()
+	 * @generated
+	 */
+	EReference getChangeSet_CurrentMetrics();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.changeset.model.Metrics <em>Metrics</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -609,37 +684,80 @@ public interface ChangesetPackage extends EPackage {
 	EClass getMetrics();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.Metrics#getPnlDelta <em>Pnl Delta</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.Metrics#getPnl <em>Pnl</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Pnl</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.Metrics#getPnl()
+	 * @see #getMetrics()
+	 * @generated
+	 */
+	EAttribute getMetrics_Pnl();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.Metrics#getLateness <em>Lateness</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Lateness</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.Metrics#getLateness()
+	 * @see #getMetrics()
+	 * @generated
+	 */
+	EAttribute getMetrics_Lateness();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.Metrics#getCapacity <em>Capacity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Capacity</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.Metrics#getCapacity()
+	 * @see #getMetrics()
+	 * @generated
+	 */
+	EAttribute getMetrics_Capacity();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics <em>Delta Metrics</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Delta Metrics</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics
+	 * @generated
+	 */
+	EClass getDeltaMetrics();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics#getPnlDelta <em>Pnl Delta</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Pnl Delta</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.Metrics#getPnlDelta()
-	 * @see #getMetrics()
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics#getPnlDelta()
+	 * @see #getDeltaMetrics()
 	 * @generated
 	 */
-	EAttribute getMetrics_PnlDelta();
+	EAttribute getDeltaMetrics_PnlDelta();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.Metrics#getLatenessDelta <em>Lateness Delta</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics#getLatenessDelta <em>Lateness Delta</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Lateness Delta</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.Metrics#getLatenessDelta()
-	 * @see #getMetrics()
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics#getLatenessDelta()
+	 * @see #getDeltaMetrics()
 	 * @generated
 	 */
-	EAttribute getMetrics_LatenessDelta();
+	EAttribute getDeltaMetrics_LatenessDelta();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.Metrics#getCapacityDelta <em>Capacity Delta</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics#getCapacityDelta <em>Capacity Delta</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Capacity Delta</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.Metrics#getCapacityDelta()
-	 * @see #getMetrics()
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics#getCapacityDelta()
+	 * @see #getDeltaMetrics()
 	 * @generated
 	 */
-	EAttribute getMetrics_CapacityDelta();
+	EAttribute getDeltaMetrics_CapacityDelta();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow <em>Change Set Row</em>}'.
@@ -981,6 +1099,14 @@ public interface ChangesetPackage extends EPackage {
 		EReference CHANGE_SET__CHANGE_SET_ROWS_TO_PREVIOUS = eINSTANCE.getChangeSet_ChangeSetRowsToPrevious();
 
 		/**
+		 * The meta object literal for the '<em><b>Current Metrics</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHANGE_SET__CURRENT_METRICS = eINSTANCE.getChangeSet_CurrentMetrics();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.MetricsImpl <em>Metrics</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -991,12 +1117,46 @@ public interface ChangesetPackage extends EPackage {
 		EClass METRICS = eINSTANCE.getMetrics();
 
 		/**
+		 * The meta object literal for the '<em><b>Pnl</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute METRICS__PNL = eINSTANCE.getMetrics_Pnl();
+
+		/**
+		 * The meta object literal for the '<em><b>Lateness</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute METRICS__LATENESS = eINSTANCE.getMetrics_Lateness();
+
+		/**
+		 * The meta object literal for the '<em><b>Capacity</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute METRICS__CAPACITY = eINSTANCE.getMetrics_Capacity();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.DeltaMetricsImpl <em>Delta Metrics</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.lingo.reports.views.changeset.model.impl.DeltaMetricsImpl
+		 * @see com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangesetPackageImpl#getDeltaMetrics()
+		 * @generated
+		 */
+		EClass DELTA_METRICS = eINSTANCE.getDeltaMetrics();
+
+		/**
 		 * The meta object literal for the '<em><b>Pnl Delta</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute METRICS__PNL_DELTA = eINSTANCE.getMetrics_PnlDelta();
+		EAttribute DELTA_METRICS__PNL_DELTA = eINSTANCE.getDeltaMetrics_PnlDelta();
 
 		/**
 		 * The meta object literal for the '<em><b>Lateness Delta</b></em>' attribute feature.
@@ -1004,7 +1164,7 @@ public interface ChangesetPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute METRICS__LATENESS_DELTA = eINSTANCE.getMetrics_LatenessDelta();
+		EAttribute DELTA_METRICS__LATENESS_DELTA = eINSTANCE.getDeltaMetrics_LatenessDelta();
 
 		/**
 		 * The meta object literal for the '<em><b>Capacity Delta</b></em>' attribute feature.
@@ -1012,7 +1172,7 @@ public interface ChangesetPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute METRICS__CAPACITY_DELTA = eINSTANCE.getMetrics_CapacityDelta();
+		EAttribute DELTA_METRICS__CAPACITY_DELTA = eINSTANCE.getDeltaMetrics_CapacityDelta();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl <em>Change Set Row</em>}' class.
