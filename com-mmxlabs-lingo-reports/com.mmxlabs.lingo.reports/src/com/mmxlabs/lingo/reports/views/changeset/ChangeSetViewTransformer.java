@@ -1,6 +1,7 @@
 
 package com.mmxlabs.lingo.reports.views.changeset;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -244,10 +245,10 @@ public class ChangeSetViewTransformer {
 
 				row.setLhsName(event.name());
 				if (event instanceof ProfitAndLossContainer) {
-					row.setOriginalGroupProfitAndLoss((ProfitAndLossContainer) event);
+					row.setNewGroupProfitAndLoss((ProfitAndLossContainer) event);
 				}
 				if (event instanceof EventGrouping) {
-					row.setOriginalEventGrouping((EventGrouping) event);
+					row.setNewEventGrouping((EventGrouping) event);
 				}
 				row.setLhsVesselName(getName(event.getSequence()));
 			}
@@ -338,14 +339,33 @@ public class ChangeSetViewTransformer {
 			if (row.isVesselChange()) {
 				continue;
 			}
-			final long a = ChangeSetUtils.getGroupProfitAndLoss(row.getOriginalGroupProfitAndLoss());
-			final long b = ChangeSetUtils.getGroupProfitAndLoss(row.getNewGroupProfitAndLoss());
+			long a = ChangeSetUtils.getGroupProfitAndLoss(row.getOriginalGroupProfitAndLoss());
+			long b = ChangeSetUtils.getGroupProfitAndLoss(row.getNewGroupProfitAndLoss());
 			if (a == b) {
-				itr.remove();
-				continue;
+				a = ChangeSetUtils.getCapacityViolationCount(row.getOriginalEventGrouping());
+				b = ChangeSetUtils.getCapacityViolationCount(row.getNewEventGrouping());
+				if (a == b) {
+					a = ChangeSetUtils.getLateness(row.getOriginalEventGrouping());
+					b = ChangeSetUtils.getLateness(row.getNewEventGrouping());
+					if (a == b) {
+						itr.remove();
+						continue;
+					}
+				}
 			}
 		}
 
+		// Sort into wiring groups.
+		final Map<ChangeSetRow, Collection<ChangeSetRow>> rowToRowGroup = new HashMap<>();
+		for (ChangeSetRow row : rows) {
+			updateRowGroups(row, rowToRowGroup);
+		}
+
+		convertToSortedGroups(rowToRowGroup);
+		for (ChangeSetRow row : rows) {
+			assert rowToRowGroup.containsKey(row);
+			// updateRowGroups(row, rowToRowGroup);
+		}
 		Collections.sort(rows, new Comparator<ChangeSetRow>() {
 
 			@Override
@@ -360,25 +380,180 @@ public class ChangeSetViewTransformer {
 				} else if (o1.isWiringChange() && o2.isWiringChange()) {
 					// If wiring change, sort related blocks together
 
-					// Are these elements related?
-					ChangeSetRow link = o1.getRhsWiringLink();
-					List<ChangeSetRow> group = new LinkedList<>();
-					group.add(o1);
-					while (link != null && !group.contains(link)) {
-						group.add(link);
-						link = link.getRhsWiringLink();
+					if (rowToRowGroup.containsKey(o1) && rowToRowGroup.get(o1).contains(o2)) {
+						// Related elements, sort together.
+
+						// Are these elements related?
+						// ChangeSetRow link = o1.getRhsWiringLink();
+						final Collection<ChangeSetRow> group = rowToRowGroup.get(o1);
+						// group.add(o1);
+						// while (link != null && !group.contains(link)) {
+						// group.add(link);
+						// link = link.getRhsWiringLink();
+						// }
+						// link = o1.getLhsWiringLink();
+						// while (link != null && !group.contains(link)) {
+						// group.add(link);
+						// link = link.getLhsWiringLink();
+						// }
+
+						// Are the rows related?
+						// if (group.contains(o2)) {
+						// Start from the first element in the sorted group
+						ChangeSetRow link = group.iterator().next();// get(0);
+						while (link != null) {
+							if (link == o1) {
+								return -1;
+							}
+							if (link == o2) {
+								return 1;
+							}
+							link = link.getRhsWiringLink();
+						}
+						assert false;
+					} else {
+						final Collection<ChangeSetRow> group1 = rowToRowGroup.get(o1);
+						final Collection<ChangeSetRow> group2 = rowToRowGroup.get(o2);
+
+						// Sort on head element ID
+						return ("" + group1.iterator().next().getLhsName()).compareTo("" + group2.iterator().next().getLhsName());
 					}
-					link = o1.getLhsWiringLink();
-					while (link != null && !group.contains(link)) {
-						group.add(link);
-						link = link.getLhsWiringLink();
+				}
+				// Sort vessel changes above anything else.
+				if (o1.isVesselChange() != o2.isVesselChange()) {
+					if (o1.isVesselChange()) {
+						return -1;
+					} else {
+						return 1;
 					}
+				}
+
+				// Compare name
+				return ("" + o1.getLhsName()).compareTo("" + o2.getLhsName());
+			}
+		});
+
+		// Add to data model
+		if (isBase) {
+			changeSet.getChangeSetRowsToBase().addAll(rows);
+		} else {
+			changeSet.getChangeSetRowsToPrevious().addAll(rows);
+		}
+
+		// Build metrics
+		{
+			final Metrics metrics = ChangesetFactory.eINSTANCE.createMetrics();
+
+			long pnl = 0;
+			long lateness = 0;
+			long violations = 0;
+			{
+				for (final Sequence sequence : fromSchedule.getSequences()) {
+					for (final Event event : sequence.getEvents()) {
+						if (event instanceof ProfitAndLossContainer) {
+							final ProfitAndLossContainer profitAndLossContainer = (ProfitAndLossContainer) event;
+							final GroupProfitAndLoss groupProfitAndLoss = profitAndLossContainer.getGroupProfitAndLoss();
+							if (groupProfitAndLoss != null) {
+								pnl += groupProfitAndLoss.getProfitAndLoss();
+							}
+						} else if (event instanceof SlotVisit) {
+							final SlotVisit slotVisit = (SlotVisit) event;
+							if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
+								final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
+								pnl += cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
+								lateness += ChangeSetUtils.getLateness(cargoAllocation);
+								violations += ChangeSetUtils.getCapacityViolationCount(cargoAllocation);
+							}
+						}
+					}
+				}
+
+				for (final OpenSlotAllocation openSlotAllocation : fromSchedule.getOpenSlotAllocations()) {
+					pnl += openSlotAllocation.getGroupProfitAndLoss().getProfitAndLoss();
+				}
+			}
+			{
+				for (final Sequence sequence : toSchedule.getSequences()) {
+					for (final Event event : sequence.getEvents()) {
+						if (event instanceof ProfitAndLossContainer) {
+							final ProfitAndLossContainer profitAndLossContainer = (ProfitAndLossContainer) event;
+							final GroupProfitAndLoss groupProfitAndLoss = profitAndLossContainer.getGroupProfitAndLoss();
+							if (groupProfitAndLoss != null) {
+								pnl -= groupProfitAndLoss.getProfitAndLoss();
+							}
+						} else if (event instanceof SlotVisit) {
+							final SlotVisit slotVisit = (SlotVisit) event;
+							if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
+								final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
+								pnl -= cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
+								lateness -= ChangeSetUtils.getLateness(cargoAllocation);
+								violations -= ChangeSetUtils.getCapacityViolationCount(cargoAllocation);
+							}
+						}
+					}
+				}
+
+				for (final OpenSlotAllocation openSlotAllocation : toSchedule.getOpenSlotAllocations()) {
+					pnl -= openSlotAllocation.getGroupProfitAndLoss().getProfitAndLoss();
+				}
+			}
+			metrics.setPnlDelta((int) -pnl);
+			metrics.setLatenessDelta((int) -lateness);
+			metrics.setCapacityDelta((int) -violations);
+			if (isBase) {
+				changeSet.setMetricsToBase(metrics);
+			} else {
+				changeSet.setMetricsToPrevious(metrics);
+
+			}
+		}
+	}
+
+	private void convertToSortedGroups(final Map<ChangeSetRow, Collection<ChangeSetRow>> rowToGroups) {
+
+		for (Map.Entry<ChangeSetRow, Collection<ChangeSetRow>> entry : rowToGroups.entrySet()) {
+			Collection<ChangeSetRow> value = entry.getValue();
+			if (value.size() < 2) {
+				continue;
+			}
+			if (value instanceof Set<?>) {
+				if (true) {
+					// Convert to list and sort.
+					List<ChangeSetRow> newGroup = new ArrayList<>(value.size());
+
+					ChangeSetRow firstAlphabetically = null;
+					ChangeSetRow head = null;
+					for (ChangeSetRow r : value) {
+						if (r.getLhsWiringLink() == null) {
+							head = r;
+							break;
+						}
+						if (firstAlphabetically == null && r.getLhsName() != null) {
+							firstAlphabetically = r;
+						} else if (firstAlphabetically != null && r.getLhsName() != null) {
+							if (firstAlphabetically.getLhsName().compareTo(r.getLhsName()) > 0) {
+								firstAlphabetically = r;
+							}
+						}
+					}
+					if (head == null) {
+						head = firstAlphabetically;
+					}
+					while (head != null && !newGroup.contains(head)) {
+						newGroup.add(head);
+						head = head.getRhsWiringLink();
+					}
+
+					entry.setValue(newGroup);
+				} else {
+					List<ChangeSetRow> newGroup = new LinkedList<>(value);
+
 					// Sort the group with head, tail elements fixed then alphabetically
 					// This creates a stable sort even with cyclic wiring groups
-					Collections.sort(group, new Comparator<ChangeSetRow>() {
+					Collections.sort(newGroup, new Comparator<ChangeSetRow>() {
 
 						@Override
-						public int compare(ChangeSetRow o1, ChangeSetRow o2) {
+						public int compare(final ChangeSetRow o1, final ChangeSetRow o2) {
 
 							if (o1.getLhsWiringLink() == null) {
 								return -1;
@@ -429,104 +604,59 @@ public class ChangeSetViewTransformer {
 							return 0;
 						}
 					});
-
-					// Are the rows related?
-					if (group.contains(o2)) {
-						// Start from the first element in the sorted group
-						link = group.get(0);
-						while (link != null) {
-							if (link == o1) {
-								return -1;
-							}
-							if (link == o2) {
-								return 1;
-							}
-							link = link.getRhsWiringLink();
-						}
-						assert false;
-					} else {
-						// Sort on head element ID
-						return ("" + group.get(0).getLhsName()).compareTo("" + o2.getLhsName());
-					}
+					entry.setValue(newGroup);
 				}
-				// Sort vessel changes above anything else.
-				if (o1.isVesselChange() != o2.isVesselChange()) {
-					if (o1.isVesselChange()) {
-						return -1;
-					} else {
-						return 1;
-					}
-				}
-
-				// Compare name
-				return ("" + o1.getLhsName()).compareTo("" + o2.getLhsName());
 			}
-		});
-
-		// Add to data model
-		if (isBase) {
-			changeSet.getChangeSetRowsToBase().addAll(rows);
-		} else {
-			changeSet.getChangeSetRowsToPrevious().addAll(rows);
 		}
 
-		// Build metrics
-		{
-			final Metrics metrics = ChangesetFactory.eINSTANCE.createMetrics();
+	}
 
-			long pnl = 0;
-			{
-				for (final Sequence sequence : fromSchedule.getSequences()) {
-					for (final Event event : sequence.getEvents()) {
-						if (event instanceof ProfitAndLossContainer) {
-							final ProfitAndLossContainer profitAndLossContainer = (ProfitAndLossContainer) event;
-							final GroupProfitAndLoss groupProfitAndLoss = profitAndLossContainer.getGroupProfitAndLoss();
-							if (groupProfitAndLoss != null) {
-								pnl += groupProfitAndLoss.getProfitAndLoss();
-							}
-						} else if (event instanceof SlotVisit) {
-							final SlotVisit slotVisit = (SlotVisit) event;
-							if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-								pnl += slotVisit.getSlotAllocation().getCargoAllocation().getGroupProfitAndLoss().getProfitAndLoss();
-							}
-						}
-					}
-				}
-
-				for (final OpenSlotAllocation openSlotAllocation : fromSchedule.getOpenSlotAllocations()) {
-					pnl += openSlotAllocation.getGroupProfitAndLoss().getProfitAndLoss();
-				}
+	private void updateRowGroups(final ChangeSetRow row, final Map<ChangeSetRow, Collection<ChangeSetRow>> rowToGroups) {
+		if (rowToGroups.containsKey(row)) {
+			return;
+		}
+		// Try and find an existing group.
+		Collection<ChangeSetRow> group = null;
+		if (row.getLhsWiringLink() != null) {
+			if (rowToGroups.containsKey(row.getLhsWiringLink())) {
+				group = rowToGroups.get(row.getLhsWiringLink());
 			}
-			{
-				for (final Sequence sequence : toSchedule.getSequences()) {
-					for (final Event event : sequence.getEvents()) {
-						if (event instanceof ProfitAndLossContainer) {
-							final ProfitAndLossContainer profitAndLossContainer = (ProfitAndLossContainer) event;
-							final GroupProfitAndLoss groupProfitAndLoss = profitAndLossContainer.getGroupProfitAndLoss();
-							if (groupProfitAndLoss != null) {
-								pnl -= groupProfitAndLoss.getProfitAndLoss();
-							}
-						} else if (event instanceof SlotVisit) {
-							final SlotVisit slotVisit = (SlotVisit) event;
-							if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-								pnl -= slotVisit.getSlotAllocation().getCargoAllocation().getGroupProfitAndLoss().getProfitAndLoss();
-							}
-						}
-					}
-				}
-
-				for (final OpenSlotAllocation openSlotAllocation : toSchedule.getOpenSlotAllocations()) {
-					pnl -= openSlotAllocation.getGroupProfitAndLoss().getProfitAndLoss();
-				}
-			}
-			metrics.setPnlDelta((int) -pnl);
-			if (isBase) {
-				changeSet.setMetricsToBase(metrics);
-			} else {
-				changeSet.setMetricsToPrevious(metrics);
-
+		} else if (row.getRhsWiringLink() != null) {
+			if (rowToGroups.containsKey(row.getRhsWiringLink())) {
+				group = rowToGroups.get(row.getRhsWiringLink());
 			}
 		}
+		// Create new group if required.
+		if (group == null) {
+			group = new LinkedHashSet<>();
+		}
+		rowToGroups.put(row, group);
+		// Add to group
+		group.add(row);
+		// Merge existing groups if required.
+		if (row.getLhsWiringLink() != null) {
+			if (rowToGroups.containsKey(row.getLhsWiringLink())) {
+				final Collection<ChangeSetRow> otherGroup = rowToGroups.get(row.getLhsWiringLink());
+				if (otherGroup != null && group != otherGroup) {
+					group.addAll(otherGroup);
+					for (final ChangeSetRow r : otherGroup) {
+						rowToGroups.put(r, group);
+					}
+				}
+			}
+		}
+		if (row.getRhsWiringLink() != null) {
+			if (rowToGroups.containsKey(row.getRhsWiringLink())) {
+				final Collection<ChangeSetRow> otherGroup = rowToGroups.get(row.getRhsWiringLink());
+				if (otherGroup != null && group != otherGroup) {
+					group.addAll(otherGroup);
+					for (final ChangeSetRow r : otherGroup) {
+						rowToGroups.put(r, group);
+					}
+				}
+			}
+		}
+		assert rowToGroups.containsKey(row);
 	}
 
 	protected void createOrUpdateRow(final Map<String, ChangeSetRow> lhsRowMap, final Map<String, ChangeSetRow> rhsRowMap, final List<ChangeSetRow> rows, final OpenSlotAllocation openSlotAllocation,
