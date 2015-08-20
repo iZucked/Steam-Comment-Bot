@@ -8,6 +8,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.lingo.reports.diff.utils.ScheduleCostUtils;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
+import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
@@ -44,13 +45,13 @@ public final class ChangeSetUtils {
 		return addnPNL;
 	}
 
-	public static long getLateness(@NonNull final EventGrouping eventGrouping) {
+	public static long getLateness(@Nullable final EventGrouping eventGrouping) {
 		long lateness = 0;
-		for (final Event evt : eventGrouping.getEvents()) {
-			if (evt instanceof PortVisit) {
-				final PortVisit visit = (PortVisit) evt;
+		if (eventGrouping != null) {
 
-				if (LatenessUtils.isLate(evt)) {
+			for (final Event evt : eventGrouping.getEvents()) {
+				if (evt instanceof PortVisit) {
+					final PortVisit visit = (PortVisit) evt;
 					lateness += LatenessUtils.getLatenessInHours(visit);
 				}
 			}
@@ -58,13 +59,15 @@ public final class ChangeSetUtils {
 		return lateness;
 	}
 
-	public static long getCapacityViolationCount(@NonNull final EventGrouping eventGrouping) {
+	public static long getCapacityViolationCount(@Nullable final EventGrouping eventGrouping) {
 		long violations = 0;
-		for (final Event evt : eventGrouping.getEvents()) {
-			if (evt instanceof SlotVisit) {
-				final SlotVisit visit = (SlotVisit) evt;
-				for (Map.Entry<CapacityViolationType, ?> entry : visit.getViolations().entrySet()) {
-					violations++;
+		if (eventGrouping != null) {
+			for (final Event evt : eventGrouping.getEvents()) {
+				if (evt instanceof SlotVisit) {
+					if (evt instanceof CapacityViolationsHolder) {
+						final CapacityViolationsHolder capacityViolationsHolder = (CapacityViolationsHolder) evt;
+						violations += capacityViolationsHolder.getViolations().size();
+					}
 				}
 			}
 		}
