@@ -13,9 +13,9 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.Metrics#getPnlDelta <em>Pnl Delta</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.Metrics#getLatenessDelta <em>Lateness Delta</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.Metrics#getCapacityDelta <em>Capacity Delta</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.Metrics#getPnl <em>Pnl</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.Metrics#getLateness <em>Lateness</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.Metrics#getCapacity <em>Capacity</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getMetrics()
@@ -24,81 +24,81 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface Metrics extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Pnl Delta</b></em>' attribute.
+	 * Returns the value of the '<em><b>Pnl</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Pnl Delta</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Pnl</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Pnl Delta</em>' attribute.
-	 * @see #setPnlDelta(int)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getMetrics_PnlDelta()
+	 * @return the value of the '<em>Pnl</em>' attribute.
+	 * @see #setPnl(int)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getMetrics_Pnl()
 	 * @model
 	 * @generated
 	 */
-	int getPnlDelta();
+	int getPnl();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.Metrics#getPnlDelta <em>Pnl Delta</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.Metrics#getPnl <em>Pnl</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Pnl Delta</em>' attribute.
-	 * @see #getPnlDelta()
+	 * @param value the new value of the '<em>Pnl</em>' attribute.
+	 * @see #getPnl()
 	 * @generated
 	 */
-	void setPnlDelta(int value);
+	void setPnl(int value);
 
 	/**
-	 * Returns the value of the '<em><b>Lateness Delta</b></em>' attribute.
+	 * Returns the value of the '<em><b>Lateness</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Lateness Delta</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Lateness</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Lateness Delta</em>' attribute.
-	 * @see #setLatenessDelta(int)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getMetrics_LatenessDelta()
+	 * @return the value of the '<em>Lateness</em>' attribute.
+	 * @see #setLateness(int)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getMetrics_Lateness()
 	 * @model
 	 * @generated
 	 */
-	int getLatenessDelta();
+	int getLateness();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.Metrics#getLatenessDelta <em>Lateness Delta</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.Metrics#getLateness <em>Lateness</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Lateness Delta</em>' attribute.
-	 * @see #getLatenessDelta()
+	 * @param value the new value of the '<em>Lateness</em>' attribute.
+	 * @see #getLateness()
 	 * @generated
 	 */
-	void setLatenessDelta(int value);
+	void setLateness(int value);
 
 	/**
-	 * Returns the value of the '<em><b>Capacity Delta</b></em>' attribute.
+	 * Returns the value of the '<em><b>Capacity</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Capacity Delta</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Capacity</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Capacity Delta</em>' attribute.
-	 * @see #setCapacityDelta(int)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getMetrics_CapacityDelta()
+	 * @return the value of the '<em>Capacity</em>' attribute.
+	 * @see #setCapacity(int)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getMetrics_Capacity()
 	 * @model
 	 * @generated
 	 */
-	int getCapacityDelta();
+	int getCapacity();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.Metrics#getCapacityDelta <em>Capacity Delta</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.Metrics#getCapacity <em>Capacity</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Capacity Delta</em>' attribute.
-	 * @see #getCapacityDelta()
+	 * @param value the new value of the '<em>Capacity</em>' attribute.
+	 * @see #getCapacity()
 	 * @generated
 	 */
-	void setCapacityDelta(int value);
+	void setCapacity(int value);
 
 } // Metrics

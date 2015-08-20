@@ -22,6 +22,7 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
+import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
 import com.mmxlabs.lingo.reports.views.schedule.EquivalanceGroupBuilder;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -442,13 +443,14 @@ public class ChangeSetViewTransformer {
 
 		// Build metrics
 		{
-			final Metrics metrics = ChangesetFactory.eINSTANCE.createMetrics();
+			final Metrics currentMetrics = ChangesetFactory.eINSTANCE.createMetrics();
+			final DeltaMetrics deltaMetrics = ChangesetFactory.eINSTANCE.createDeltaMetrics();
 
 			long pnl = 0;
 			long lateness = 0;
 			long violations = 0;
 			{
-				for (final Sequence sequence : fromSchedule.getSequences()) {
+				for (final Sequence sequence : toSchedule.getSequences()) {
 					for (final Event event : sequence.getEvents()) {
 						if (event instanceof ProfitAndLossContainer) {
 							final ProfitAndLossContainer profitAndLossContainer = (ProfitAndLossContainer) event;
@@ -472,8 +474,12 @@ public class ChangeSetViewTransformer {
 					pnl += openSlotAllocation.getGroupProfitAndLoss().getProfitAndLoss();
 				}
 			}
+			// THIS SHOULD BE THE TO SCHENAR> -- FLIP CODE ROUND
+			currentMetrics.setPnl((int) pnl);
+			currentMetrics.setCapacity((int) violations);
+			currentMetrics.setLateness((int) lateness);
 			{
-				for (final Sequence sequence : toSchedule.getSequences()) {
+				for (final Sequence sequence : fromSchedule.getSequences()) {
 					for (final Event event : sequence.getEvents()) {
 						if (event instanceof ProfitAndLossContainer) {
 							final ProfitAndLossContainer profitAndLossContainer = (ProfitAndLossContainer) event;
@@ -497,15 +503,15 @@ public class ChangeSetViewTransformer {
 					pnl -= openSlotAllocation.getGroupProfitAndLoss().getProfitAndLoss();
 				}
 			}
-			metrics.setPnlDelta((int) -pnl);
-			metrics.setLatenessDelta((int) -lateness);
-			metrics.setCapacityDelta((int) -violations);
+			deltaMetrics.setPnlDelta((int) -pnl);
+			deltaMetrics.setLatenessDelta((int) lateness);
+			deltaMetrics.setCapacityDelta((int) violations);
 			if (isBase) {
-				changeSet.setMetricsToBase(metrics);
+				changeSet.setMetricsToBase(deltaMetrics);
 			} else {
-				changeSet.setMetricsToPrevious(metrics);
-
+				changeSet.setMetricsToPrevious(deltaMetrics);
 			}
+			changeSet.setCurrentMetrics(currentMetrics);
 		}
 	}
 

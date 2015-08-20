@@ -28,6 +28,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getCurrentScenario <em>Current Scenario</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getChangeSetRowsToBase <em>Change Set Rows To Base</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getChangeSetRowsToPrevious <em>Change Set Rows To Previous</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getCurrentMetrics <em>Current Metrics</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSet()
@@ -44,12 +45,12 @@ public interface ChangeSet extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Metrics To Base</em>' containment reference.
-	 * @see #setMetricsToBase(Metrics)
+	 * @see #setMetricsToBase(DeltaMetrics)
 	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSet_MetricsToBase()
 	 * @model containment="true"
 	 * @generated
 	 */
-	Metrics getMetricsToBase();
+	DeltaMetrics getMetricsToBase();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getMetricsToBase <em>Metrics To Base</em>}' containment reference.
@@ -59,7 +60,7 @@ public interface ChangeSet extends EObject {
 	 * @see #getMetricsToBase()
 	 * @generated
 	 */
-	void setMetricsToBase(Metrics value);
+	void setMetricsToBase(DeltaMetrics value);
 
 	/**
 	 * Returns the value of the '<em><b>Metrics To Previous</b></em>' containment reference.
@@ -70,12 +71,12 @@ public interface ChangeSet extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Metrics To Previous</em>' containment reference.
-	 * @see #setMetricsToPrevious(Metrics)
+	 * @see #setMetricsToPrevious(DeltaMetrics)
 	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSet_MetricsToPrevious()
 	 * @model containment="true"
 	 * @generated
 	 */
-	Metrics getMetricsToPrevious();
+	DeltaMetrics getMetricsToPrevious();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getMetricsToPrevious <em>Metrics To Previous</em>}' containment reference.
@@ -85,7 +86,7 @@ public interface ChangeSet extends EObject {
 	 * @see #getMetricsToPrevious()
 	 * @generated
 	 */
-	void setMetricsToPrevious(Metrics value);
+	void setMetricsToPrevious(DeltaMetrics value);
 
 	/**
 	 * Returns the value of the '<em><b>Base Scenario Ref</b></em>' reference.
@@ -274,5 +275,31 @@ public interface ChangeSet extends EObject {
 	 * @generated
 	 */
 	EList<ChangeSetRow> getChangeSetRowsToPrevious();
+
+	/**
+	 * Returns the value of the '<em><b>Current Metrics</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Current Metrics</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Current Metrics</em>' containment reference.
+	 * @see #setCurrentMetrics(Metrics)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSet_CurrentMetrics()
+	 * @model containment="true"
+	 * @generated
+	 */
+	Metrics getCurrentMetrics();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet#getCurrentMetrics <em>Current Metrics</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Current Metrics</em>' containment reference.
+	 * @see #getCurrentMetrics()
+	 * @generated
+	 */
+	void setCurrentMetrics(Metrics value);
 
 } // ChangeSet

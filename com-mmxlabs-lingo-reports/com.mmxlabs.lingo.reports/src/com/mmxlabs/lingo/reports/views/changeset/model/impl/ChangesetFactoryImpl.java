@@ -59,6 +59,7 @@ public class ChangesetFactoryImpl extends EFactoryImpl implements ChangesetFacto
 			case ChangesetPackage.CHANGE_SET_ROOT: return createChangeSetRoot();
 			case ChangesetPackage.CHANGE_SET: return createChangeSet();
 			case ChangesetPackage.METRICS: return createMetrics();
+			case ChangesetPackage.DELTA_METRICS: return createDeltaMetrics();
 			case ChangesetPackage.CHANGE_SET_ROW: return createChangeSetRow();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
@@ -93,6 +94,16 @@ public class ChangesetFactoryImpl extends EFactoryImpl implements ChangesetFacto
 	public Metrics createMetrics() {
 		MetricsImpl metrics = new MetricsImpl();
 		return metrics;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public DeltaMetrics createDeltaMetrics() {
+		DeltaMetricsImpl deltaMetrics = new DeltaMetricsImpl();
+		return deltaMetrics;
 	}
 
 	/**

@@ -7,9 +7,9 @@
         eType="#//ChangeSet" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ChangeSet">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="metricsToBase" eType="#//Metrics"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metricsToBase" eType="#//DeltaMetrics"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="metricsToPrevious" eType="#//Metrics"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metricsToPrevious" eType="#//DeltaMetrics"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="baseScenarioRef" eType="ecore:EClass ../../com.mmxlabs.scenario.service.model/model/scenario.service.ecore#//ModelReference"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="prevScenarioRef" eType="ecore:EClass ../../com.mmxlabs.scenario.service.model/model/scenario.service.ecore#//ModelReference"/>
@@ -21,8 +21,15 @@
         eType="#//ChangeSetRow" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="changeSetRowsToPrevious"
         upperBound="-1" eType="#//ChangeSetRow" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="currentMetrics" eType="#//Metrics"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Metrics">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pnl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lateness" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="capacity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DeltaMetrics">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="pnlDelta" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="latenessDelta" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="capacityDelta" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
