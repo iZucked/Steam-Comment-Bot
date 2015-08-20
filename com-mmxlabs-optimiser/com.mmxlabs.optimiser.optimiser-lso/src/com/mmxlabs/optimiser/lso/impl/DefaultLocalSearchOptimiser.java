@@ -213,7 +213,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 				if (getFitnessEvaluator().getBestFitness() < best.getSecond()) {
 					best.setFirst(numberOfMovesTried);
 					best.setSecond(getFitnessEvaluator().getBestFitness());
-					System.out.println(best.getFirst()+":"+best.getSecond());
+//					System.out.println(best.getFirst()+":"+best.getSecond());
 				}
 			} else {
 				// Failed, reset state for old sequences
