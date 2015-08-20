@@ -3,6 +3,7 @@ package com.mmxlabs.models.lng.transformer.ui.breakdown;
 import java.io.Serializable;
 
 import com.google.common.base.Objects;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 
 /**
  * Individual change TODO: Add in detailed information to reproduce the change
@@ -10,6 +11,17 @@ import com.google.common.base.Objects;
  */
 public class Change implements Serializable {
 	public String description;
+
+	/**
+	 * SG Testing constructor -- ignore
+	 * 
+	 * @param s
+	 * @param e
+	 * @param others
+	 */
+	public Change(final String s, final ISequenceElement e, final ISequenceElement... others) {
+		this(s);
+	}
 
 	public Change(final String s) {
 		this.description = s;

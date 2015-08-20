@@ -3,6 +3,8 @@ package com.mmxlabs.models.lng.transformer.ui.breakdown;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -13,8 +15,17 @@ public final class StateManager {
 
 	private final Map<ISequenceElement, Pair<IResource, Integer>> lookupTable = new HashMap<>();
 
-	public StateManager(final ISequences rawSequences) {
+	@NonNull
+	private final ISequences rawSequences;
+
+	@NonNull
+	private final ISequences fullSequences;
+
+	public StateManager(@NonNull final ISequences rawSequences, @NonNull final ISequences fullSequences) {
+		this.rawSequences = rawSequences;
+		this.fullSequences = fullSequences;
 		for (final IResource r : rawSequences.getResources()) {
+			assert r != null;
 			final ISequence s = rawSequences.getSequence(r);
 			int idx = 0;
 			for (final ISequenceElement e : s) {
@@ -36,8 +47,21 @@ public final class StateManager {
 	 * @param element
 	 * @return
 	 */
+	@NonNull
 	public Pair<IResource, Integer> getPositionForElement(final ISequenceElement element) {
-		return lookupTable.get(element);
+		Pair<IResource, Integer> pair = lookupTable.get(element);
+		assert pair != null;
+		return pair;
+	}
+
+	@NonNull
+	public ISequences getRawSequences() {
+		return rawSequences;
+	}
+
+	@NonNull
+	public ISequences getFullSequences() {
+		return fullSequences;
 	}
 
 }
