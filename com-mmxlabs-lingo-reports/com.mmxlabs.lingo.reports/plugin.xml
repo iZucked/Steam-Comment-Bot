@@ -137,13 +137,6 @@
             class="com.mmxlabs.lingo.reports.views.standard.PNLDetailsReport"
             id="com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport">
       </view>
-      <e4view
-            class="com.mmxlabs.lingo.reports.views.changeset.ChangeSetView"
-            icon="icons/cview16/changes_view.gif"
-            id="com.mmxlabs.lingo.reports.views.changeset.ChangeSetView"
-            name="Change Sets"
-            restorable="true">
-      </e4view>
    </extension>
    <extension
          point="org.ops4j.peaberry.eclipse.modules">
@@ -689,51 +682,6 @@
             uri="http://www.minimaxlabs.com/models/changeset/1"
             class="com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage">
       </package>
-   </extension>
-   <extension
-         id="com.mmxlabs.lingo.reports.fragment"
-         point="org.eclipse.e4.workbench.model">
-      <fragment
-            apply="always"
-            uri="fragment.e4xmi">
-      </fragment>
-   </extension>
-   <extension
-         point="org.eclipse.ui.menus">
-      <menuContribution
-            allPopups="false"
-            locationURI="popup:com.mmxlabs.scenario.service.ui.navigator">
-         <command
-               commandId="com.mmxlabs.lingo.reports.changeset.analyse"
-               icon="icons/cview16/changes_view.gif"
-               label="Open action sets"
-               style="push">
-            <visibleWhen
-                  checkEnabled="false">
-               <and>
-                  <with
-                        variable="selection">
-                     <iterate
-                           ifEmpty="false">
-                        <instanceof
-                              value="com.mmxlabs.scenario.service.model.ScenarioInstance">
-                        </instanceof>
-                     </iterate>
-                  </with>
-                  <count
-                        value="1">
-                  </count>
-               </and>
-            </visibleWhen>
-         </command>
-      </menuContribution>
-   </extension>
-   <extension
-         point="org.eclipse.ui.commands">
-      <command
-            id="com.mmxlabs.lingo.reports.changeset.analyse"
-            name="Open action sets">
-      </command>
    </extension>
 
 </plugin>
