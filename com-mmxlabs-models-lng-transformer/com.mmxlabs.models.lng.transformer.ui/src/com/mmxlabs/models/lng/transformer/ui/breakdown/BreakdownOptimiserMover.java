@@ -696,6 +696,9 @@ public class BreakdownOptimiserMover {
 
 		// Record the "other discharge"
 		final ISequenceElement otherDischargeElement = copyOfToSequence.get(j + 1);
+		if (j > 0) {
+			searchElements.add(copyOfToSequence.get(j - 1));
+		}
 
 		// Move the matched load into the "from" sequence
 		final Pair<IResource, Integer> p2 = currentState.getPositionForElement(prev);
@@ -705,6 +708,10 @@ public class BreakdownOptimiserMover {
 		final IModifiableSequence copyOfFromSequence = copy.getModifiableSequence(resource);
 		assert(copyOfFromSequence.get(k) == prev);
 		copyOfFromSequence.set(k, originalLoadElement);
+
+		if (k > 0) {
+			searchElements.add(copyOfFromSequence.get(k - 1));
+		}
 
 		// Make sure we have done something
 		assert(!copy.equals(currentState.getRawSequences()));
@@ -756,6 +763,10 @@ public class BreakdownOptimiserMover {
 		final int j = p.getSecond();
 		assert(copyOfToSequence.get(j) == originalDischargeElement);
 		copyOfToSequence.set(j, current);
+		if (j + 1 < copyOfToSequence.size()) {
+			searchElements.add(copyOfToSequence.get(j + 1));
+		}
+
 		// Record the "other load"
 		final ISequenceElement otherLoadElement = copyOfToSequence.get(j - 1);
 		assert otherLoadElement != null;
@@ -768,6 +779,9 @@ public class BreakdownOptimiserMover {
 		final int k = p2.getSecond();
 		assert(copyOfFromSequence.get(k) == current);
 		copyOfFromSequence.set(k, originalDischargeElement);
+		if (k + 1 < copyOfFromSequence.size()) {
+			searchElements.add(copyOfFromSequence.get(k + 1));
+		}
 
 		// Make sure we have done something
 		assert(!copy.equals(currentState.getRawSequences()));
