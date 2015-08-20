@@ -624,7 +624,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<ModelReference> getModelReferences() {
+	public synchronized EList<ModelReference> getModelReferences() {
 		if (modelReferences == null) {
 			modelReferences = new EObjectContainmentWithInverseEList<ModelReference>(ModelReference.class, this, ScenarioServicePackage.SCENARIO_INSTANCE__MODEL_REFERENCES,
 					ScenarioServicePackage.MODEL_REFERENCE__SCENARIO_INSTANCE);
@@ -880,8 +880,10 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	public void unload() {
 
 		final IScenarioService scenarioService = getScenarioService();
-		if (scenarioService == null) {
-			log.error("Request #unload() on a ScenarioInstance with no ScenarioService");
+		if (scenarioService == null ) {
+			if (instance != null) {
+				log.error("Request #unload() on a ScenarioInstance with no ScenarioService");
+			}
 			// setInstance(null);
 			return;
 		}
