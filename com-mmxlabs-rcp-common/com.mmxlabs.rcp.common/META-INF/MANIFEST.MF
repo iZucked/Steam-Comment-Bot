@@ -34,6 +34,7 @@ Export-Package: com.mmxlabs.rcp.common,
  com.mmxlabs.rcp.common.dialogs,
  com.mmxlabs.rcp.common.ecore,
  com.mmxlabs.rcp.common.editors,
+ com.mmxlabs.rcp.common.handlers,
  com.mmxlabs.rcp.common.loginject,
  com.mmxlabs.rcp.common.viewfactory
 Import-Package: javax.inject;version="1.0.0",

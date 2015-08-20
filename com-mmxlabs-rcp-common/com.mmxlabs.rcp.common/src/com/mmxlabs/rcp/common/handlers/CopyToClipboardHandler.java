@@ -14,35 +14,37 @@ import org.eclipse.e4.ui.model.application.commands.MCommandsFactory;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.menu.MHandledToolItem;
 import org.eclipse.e4.ui.model.application.ui.menu.MMenuFactory;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.nebula.widgets.grid.Grid;
-import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.osgi.framework.FrameworkUtil;
 
+import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
+
 /**
- * Eclipse e4 command handler to pack columns in parts adapting to a {@link Grid}.
+ * Eclipse e4 command handler to copy {@link Grid} data to the clipboard
  * 
  * @author Simon Goodall
  * 
  */
-public class PackGridHandler {
+public class CopyToClipboardHandler {
 
-	public static final String COMMAND_ID = "com.mmxlabs.rcp.common.command.pack";
+	public static final String COMMAND_ID = "org.eclipse.ui.edit.copy";
 
 	/**
 	 * Create an Eclipse e4 tool item for this command;
 	 * 
 	 * @return
 	 */
-	public static MHandledToolItem createPackAction() {
+	public static MHandledToolItem createCopyAction() {
 
 		final MCommand command = MCommandsFactory.INSTANCE.createCommand();
-		command.setCommandName("Pack table data");
+		command.setCommandName("Copy data to clipboard");
 		command.setElementId(COMMAND_ID);
 
 		final MHandledToolItem element = MMenuFactory.INSTANCE.createHandledToolItem();
 		element.setLabel("Pack");
-		element.setIconURI(FrameworkUtil.getBundle(PackGridHandler.class).getEntry("/icons/pack.gif").toString());
-		final String location = FrameworkUtil.getBundle(PackGridHandler.class).getSymbolicName();
+		element.setIconURI(FrameworkUtil.getBundle(CopyToClipboardHandler.class).getEntry("/icons/copy.gif").toString());
+		final String location = FrameworkUtil.getBundle(CopyToClipboardHandler.class).getSymbolicName();
 		element.setContributorURI(location);
 		element.setCommand(command);
 
@@ -60,18 +62,14 @@ public class PackGridHandler {
 
 		final Grid grid = adaptToGrid(part, adapterManager);
 		if (grid != null) {
-			packGrid(grid);
+			copyGrid(grid);
 		}
 	}
 
-	protected static void packGrid(final Grid grid) {
+	protected static void copyGrid(@NonNull final Grid grid) {
 		if (!grid.isDisposed()) {
-			final GridColumn[] columns = grid.getColumns();
-			for (final GridColumn c : columns) {
-				if (c.getResizeable()) {
-					c.pack();
-				}
-			}
+			CopyGridToClipboardAction action = new CopyGridToClipboardAction(grid);
+			action.run();
 		}
 	}
 
