@@ -63,7 +63,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 
 	private Pair<ISequences, IEvaluationState> currentSequences = null;
 	private Pair<ISequences, IEvaluationState> bestSequences = null;
-        private Sequences bestRawSequences = null;
+	private Sequences bestRawSequences = null;
 
 	private long currentFitness = Long.MAX_VALUE;
 	private long bestFitness = Long.MAX_VALUE;
@@ -294,12 +294,9 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 	public ISequences getBestRawSequences() {
 		return bestRawSequences;
 	}
-	
+
+	@Override
 	public IAnnotatedSolution createAnnotatedSolution(final IOptimisationContext context, ISequences sequences, IEvaluationState evaluationState) {
-		Pair<ISequences, IEvaluationState> p = getCurrentSequences();
-		if (p == null) {
-			return null;
-		}
 		assert sequences != null;
 		assert evaluationState != null;
 

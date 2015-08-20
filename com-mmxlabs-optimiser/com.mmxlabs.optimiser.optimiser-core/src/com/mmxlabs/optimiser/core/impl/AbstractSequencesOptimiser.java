@@ -85,7 +85,7 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 	}
 
 	@Override
-	public ISequences getBestRawSequencecs() {
+	public ISequences getBestRawSequences() {
 		return fitnessEvaluator.getBestRawSequences();
 	}
 	
