@@ -13,7 +13,8 @@ import java.util.List;
 
 import javax.management.timer.Timer;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -31,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl2;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -71,6 +73,10 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService.Module
 
 public class LNGScenarioRunner {
 
+	private static final int PROGRESS_OPTIMISATION = 100;
+	private static final int PROGRESS_ACTION_SET_OPTIMISATION = 20;
+	private static final int PROGRESS_ACTION_SET_SAVE = 5;
+
 	private static final Logger log = LoggerFactory.getLogger(LNGScenarioRunner.class);
 
 	private final LNGScenarioModel originalScenario;
@@ -100,7 +106,7 @@ public class LNGScenarioRunner {
 
 	private boolean createOptimiser;
 
-	private boolean doBreakdownPostOptimisation;
+	private boolean doActionSetPostOptimisation;
 
 	private Module extraModule;
 
@@ -125,10 +131,11 @@ public class LNGScenarioRunner {
 					createOptimiser = true;
 				}
 				if (LNGTransformer.HINT_OPTIMISE_BREAKDOWN.equals(hint)) {
-					doBreakdownPostOptimisation = true;
+					doActionSetPostOptimisation = true;
 				}
 			}
 		}
+		doActionSetPostOptimisation = true;
 		optimiserScenario = originalScenario;
 		optimiserEditingDomain = originalEditingDomain;
 	}
@@ -256,7 +263,7 @@ public class LNGScenarioRunner {
 
 		// Need period optimisation!
 		if (periodMapping == null) {
-			doBreakdownPostOptimisation = false;
+			doActionSetPostOptimisation = false;
 		}
 
 		if (periodMapping != null) {
@@ -340,20 +347,20 @@ public class LNGScenarioRunner {
 			LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
 
 			boolean exportOptimiserSolution = true;
-			// Generate the changesets decomposition.
-			if (true || doBreakdownPostOptimisation) {
-				// Run optimisation
-
-				final BreadthOptimiser instance = injector.getInstance(BreadthOptimiser.class);
-				boolean foundBetterResult = instance.optimise(optimiser.getBestRawSequences(), new NullProgressMonitor());
-
-				// Store the results
-				final List<Pair<ISequences, IEvaluationState>> breakdownSolution = instance.getBestSolution();
-				if (breakdownSolution != null) {
-					storeBreakdownSolutionsAsForks(breakdownSolution, foundBetterResult);
-					exportOptimiserSolution = false;
-				}
-			}
+			// // Generate the changesets decomposition.
+			// if (true || doBreakdownPostOptimisation) {
+			// // Run optimisation
+			//
+			// final BreadthOptimiser instance = injector.getInstance(BreadthOptimiser.class);
+			// boolean foundBetterResult = instance.optimise(optimiser.getBestRawSequences(), new NullProgressMonitor());
+			//
+			// // Store the results
+			// final List<Pair<ISequences, IEvaluationState>> breakdownSolution = instance.getBestSolution();
+			// if (breakdownSolution != null) {
+			// storeBreakdownSolutionsAsForks(breakdownSolution, foundBetterResult, new NullProgressMonitor());
+			// exportOptimiserSolution = false;
+			// }
+			// }
 
 			// The breakdown optimiser may find a better solution. This will be saved in storeBreakdownSolutionsAsForks
 			if (exportOptimiserSolution) {
@@ -483,7 +490,7 @@ public class LNGScenarioRunner {
 		return optimiserSettings;
 	}
 
-	private void storeBreakdownSolutionsAsForks(final List<Pair<ISequences, IEvaluationState>> breakdownSolution, boolean keepFinalResult) {
+	private void storeBreakdownSolutionsAsForks(final List<Pair<ISequences, IEvaluationState>> breakdownSolution, boolean keepFinalResult, @NonNull final IProgressMonitor progressMonitor) {
 
 		// Assuming the scenario data is at the initial state.
 
@@ -500,74 +507,162 @@ public class LNGScenarioRunner {
 			}
 		}
 
-		int changeSetIdx = 0;
-		for (final Pair<ISequences, IEvaluationState> changeSet : breakdownSolution) {
+		progressMonitor.beginTask("Saving action sets", breakdownSolution.size());
+		try {
+			int changeSetIdx = 0;
+			for (final Pair<ISequences, IEvaluationState> changeSet : breakdownSolution) {
 
-			/**
-			 * Start the full evaluation process.
-			 */
+				/**
+				 * Start the full evaluation process.
+				 */
 
-			// Get or derive the full sequences from the changeset
-			final IModifiableSequences sequences = new ModifiableSequences(changeSet.getFirst());
+				// Get or derive the full sequences from the changeset
+				final IModifiableSequences sequences = new ModifiableSequences(changeSet.getFirst());
 
-			// Perform a full evaluation
-			final EvaluationState state = new EvaluationState();
-			EvaluationProcessRegistry evaluationProcessRegistry = new EvaluationProcessRegistry();
-			final IEvaluationContext evaluationContext = new EvaluationContext(this.context.getOptimisationData(), sequences, Collections.<String> emptyList(), evaluationProcessRegistry);
+				// Perform a full evaluation
+				final EvaluationState state = new EvaluationState();
+				EvaluationProcessRegistry evaluationProcessRegistry = new EvaluationProcessRegistry();
+				final IEvaluationContext evaluationContext = new EvaluationContext(this.context.getOptimisationData(), sequences, Collections.<String> emptyList(), evaluationProcessRegistry);
 
-			final AnnotatedSolution solution = new AnnotatedSolution(sequences, evaluationContext, state);
-			final IEvaluationProcess process = injector.getInstance(SchedulerEvaluationProcess.class);
-			process.annotate(sequences, state, solution);
+				final AnnotatedSolution solution = new AnnotatedSolution(sequences, evaluationContext, state);
+				final IEvaluationProcess process = injector.getInstance(SchedulerEvaluationProcess.class);
+				process.annotate(sequences, state, solution);
 
-			// Export the solution onto the scenario
-			Schedule finalSchedule = LNGSchedulerJobUtils.exportSolution(injector, optimiserScenario, transformer.getOptimiserSettings(), optimiserEditingDomain, modelEntityMap, solution, 100);
-			Schedule periodSchedule = exportPeriodScenario(100);
-			if (periodSchedule != null) {
-				finalSchedule = periodSchedule;
-			}
-
-			// Save the scenario as a fork.
-			try {
-				final IScenarioService scenarioService = scenarioInstance.getScenarioService();
-
-				final ScenarioInstance dup = scenarioService.insert(scenarioInstance, EcoreUtil.copy(originalScenario));
-				if (changeSetIdx == 0) {
-					dup.setName("ActionSet-base");
-					changeSetIdx++;
-				} else {
-					dup.setName(String.format("ActionSet-%s", (changeSetIdx++)));
-				}
-
-				// Copy across various bits of information
-				dup.getMetadata().setContentType(scenarioInstance.getMetadata().getContentType());
-				dup.getMetadata().setCreated(scenarioInstance.getMetadata().getCreated());
-				dup.getMetadata().setLastModified(new Date());
-
-				// Copy version context information
-				dup.setVersionContext(scenarioInstance.getVersionContext());
-				dup.setScenarioVersion(scenarioInstance.getScenarioVersion());
-
-				dup.setClientVersionContext(scenarioInstance.getClientVersionContext());
-				dup.setClientScenarioVersion(scenarioInstance.getClientScenarioVersion());
-
-				// dup.setHidden(true);
-			} catch (final Exception e) {
-				log.error("Unable to store changeset scenario: " + e.getMessage(), e);
-			}
-
-			// If we are keeping the best result, then update the field and do not execute the undo commands
-			if (keepFinalResult && breakdownSolution.get(breakdownSolution.size() - 1) == changeSet) {
-				this.finalSchedule = finalSchedule;
-			} else {
-				// Reset state
+				// Export the solution onto the scenario
+				Schedule finalSchedule = LNGSchedulerJobUtils.exportSolution(injector, optimiserScenario, transformer.getOptimiserSettings(), optimiserEditingDomain, modelEntityMap, solution, 100);
+				Schedule periodSchedule = exportPeriodScenario(100);
 				if (periodSchedule != null) {
-					LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, 100);
-					LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, 100);
-					LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
+					finalSchedule = periodSchedule;
+				}
+
+				// Save the scenario as a fork.
+				try {
+					final IScenarioService scenarioService = scenarioInstance.getScenarioService();
+
+					final ScenarioInstance dup = scenarioService.insert(scenarioInstance, EcoreUtil.copy(originalScenario));
+					if (changeSetIdx == 0) {
+						dup.setName("ActionSet-base");
+						changeSetIdx++;
+					} else {
+						dup.setName(String.format("ActionSet-%s", (changeSetIdx++)));
+					}
+
+					// Copy across various bits of information
+					dup.getMetadata().setContentType(scenarioInstance.getMetadata().getContentType());
+					dup.getMetadata().setCreated(scenarioInstance.getMetadata().getCreated());
+					dup.getMetadata().setLastModified(new Date());
+
+					// Copy version context information
+					dup.setVersionContext(scenarioInstance.getVersionContext());
+					dup.setScenarioVersion(scenarioInstance.getScenarioVersion());
+
+					dup.setClientVersionContext(scenarioInstance.getClientVersionContext());
+					dup.setClientScenarioVersion(scenarioInstance.getClientScenarioVersion());
+
+					// dup.setHidden(true);
+				} catch (final Exception e) {
+					log.error("Unable to store changeset scenario: " + e.getMessage(), e);
+				}
+
+				// If we are keeping the best result, then update the field and do not execute the undo commands
+				if (keepFinalResult && breakdownSolution.get(breakdownSolution.size() - 1) == changeSet) {
+					this.finalSchedule = finalSchedule;
 				} else {
+					// Reset state
+					if (periodSchedule != null) {
+						LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, 100);
+						LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, 100);
+						LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
+					} else {
+						LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
+					}
+				}
+
+				progressMonitor.worked(1);
+			}
+		} finally {
+			progressMonitor.done();
+		}
+	}
+
+	/**
+	 * used by {@link AbstractEclipseJobControl2} / {@link LNGSchedulerOptimiserJobControl2}
+	 * 
+	 * @param progressMonitor
+	 */
+	public void runWithProgress(final @NonNull IProgressMonitor progressMonitor) {
+		assert createOptimiser;
+
+		int totalWork = PROGRESS_OPTIMISATION + (doActionSetPostOptimisation ? PROGRESS_ACTION_SET_OPTIMISATION + PROGRESS_ACTION_SET_SAVE : 0);
+		progressMonitor.beginTask("", totalWork);
+		try {
+			IAnnotatedSolution bestSolution = null;
+			ISequences bestRawSequences = null;
+			// Main Optimisation Loop
+			{
+				final IOptimiserProgressMonitor monitor = optimiser.getProgressMonitor();
+
+				while (!optimiser.isFinished()) {
+					optimiser.step(1);
+					if (monitor != null) {
+						monitor.report(optimiser, optimiser.getNumberOfIterationsCompleted(), optimiser.getFitnessEvaluator().getCurrentFitness(), optimiser.getFitnessEvaluator().getBestFitness(),
+								optimiser.getCurrentSolution(), optimiser.getBestSolution());
+					}
+					progressMonitor.worked(1);
+				}
+				assert optimiser.isFinished();
+
+				if (optimiser.isFinished()) {
+
+					// Clear any previous optimisation state.
+					if (periodMapping != null) {
+						LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, 100);
+						LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, 100);
+					}
 					LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
+
+					if (monitor != null) {
+						monitor.done(optimiser, optimiser.getFitnessEvaluator().getBestFitness(), optimiser.getBestSolution());
+					}
+					bestRawSequences = optimiser.getBestRawSequences();
+					bestSolution = optimiser.getBestSolution();
+
+					optimiser = null;
+
 				}
 			}
+
+			if (doActionSetPostOptimisation) {
+
+				assert bestRawSequences != null;
+				assert bestSolution != null;
+
+				boolean exportOptimiserSolution = true;
+				// Generate the changesets decomposition.
+				// Run optimisation
+
+				final BreadthOptimiser instance = injector.getInstance(BreadthOptimiser.class);
+				boolean foundBetterResult = instance.optimise(bestRawSequences, new SubProgressMonitor(progressMonitor, PROGRESS_ACTION_SET_OPTIMISATION));
+
+				// Store the results
+				final List<Pair<ISequences, IEvaluationState>> breakdownSolution = instance.getBestSolution();
+				if (breakdownSolution != null) {
+					storeBreakdownSolutionsAsForks(breakdownSolution, foundBetterResult, new SubProgressMonitor(progressMonitor, PROGRESS_ACTION_SET_SAVE));
+				}
+
+				// The breakdown optimiser may find a better solution. This will be saved in storeBreakdownSolutionsAsForks
+				if (exportOptimiserSolution) {
+					// export final state
+					finalSchedule = LNGSchedulerJobUtils.exportSolution(injector, optimiserScenario, transformer.getOptimiserSettings(), optimiserEditingDomain, modelEntityMap, bestSolution, 100);
+					final Schedule periodSchedule = exportPeriodScenario(100);
+					if (periodSchedule != null) {
+						finalSchedule = periodSchedule;
+					}
+				}
+			}
+		} finally {
+			progressMonitor.done();
 		}
+		log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
 	}
 }
