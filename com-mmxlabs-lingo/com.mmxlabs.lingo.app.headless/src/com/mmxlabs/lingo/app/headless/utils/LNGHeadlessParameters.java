@@ -67,6 +67,14 @@ public class LNGHeadlessParameters extends HeadlessParameters {
 		
 		setParameter("scp-set-outOfBounds-thresh", -1, Integer.class, false);
 		setParameter("scp-set-outOfBounds-weight", 0, Integer.class, false);
+		
+		// Restarting
+		setParameter("restarting-useRestarting", false, Boolean.class, false);
+		setParameter("restarting-restartThreshold", 0, Integer.class, false);
 
+		// Hill Climbing
+		setParameter("hillClimbing-useHillClimbing", false, Boolean.class, false);
+		setParameter("hillClimbing-iterations", 0, Integer.class, false);
+		
 	}
 }
