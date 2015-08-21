@@ -64,6 +64,7 @@ import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.optimiser.core.impl.EvaluationContext;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.lso.impl.ArbitraryStateLocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
 import com.mmxlabs.scenario.service.IScenarioService;
@@ -75,6 +76,7 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService.Module
 public class LNGScenarioRunner {
 
 	private static final int PROGRESS_OPTIMISATION = 100;
+	private static final int PROGRESS_HILLCLIMBING_OPTIMISATION = 10;
 	private static final int PROGRESS_ACTION_SET_OPTIMISATION = 20;
 	private static final int PROGRESS_ACTION_SET_SAVE = 5;
 
@@ -343,7 +345,7 @@ public class LNGScenarioRunner {
 				ArbitraryStateLocalSearchOptimiser hillClimber = injector.getInstance(ArbitraryStateLocalSearchOptimiser.class);
 				// The optimiser may not have a best sequence set
 				System.out.println("Performing hill climbing...");
-				ISequences initialSequence = optimiser.getBestRawSequencecs() == null ? context.getInitialSequences() : optimiser.getBestRawSequencecs();
+				ISequences initialSequence = optimiser.getBestRawSequences() == null ? context.getInitialSequences() : optimiser.getBestRawSequences();
 				hillClimber.start(context, initialSequence);
 				hillClimber.step(100);
 				optimiser = hillClimber;
@@ -603,7 +605,7 @@ public class LNGScenarioRunner {
 	public void runWithProgress(final @NonNull IProgressMonitor progressMonitor) {
 		assert createOptimiser;
 
-		int totalWork = PROGRESS_OPTIMISATION + (doActionSetPostOptimisation ? PROGRESS_ACTION_SET_OPTIMISATION + PROGRESS_ACTION_SET_SAVE : 0);
+		int totalWork = (PROGRESS_OPTIMISATION) + PROGRESS_HILLCLIMBING_OPTIMISATION + (doActionSetPostOptimisation ? PROGRESS_ACTION_SET_OPTIMISATION + PROGRESS_ACTION_SET_SAVE : 0);
 		progressMonitor.beginTask("", totalWork);
 		try {
 			IAnnotatedSolution bestSolution = null;
@@ -637,9 +639,18 @@ public class LNGScenarioRunner {
 					bestRawSequences = optimiser.getBestRawSequences();
 					bestSolution = optimiser.getBestSolution();
 
-					optimiser = null;
 
+					optimiser = performSolutionImprovement(progressMonitor, bestRawSequences);
+					
+					if (optimiser != null) {
+						if (optimiser.getBestRawSequences() != null) {
+							bestRawSequences = optimiser.getBestRawSequences();
+							bestSolution = optimiser.getBestSolution();
+						}
+					}
+					optimiser = null;
 				}
+
 			}
 
 			if (doActionSetPostOptimisation) {
@@ -674,5 +685,24 @@ public class LNGScenarioRunner {
 			progressMonitor.done();
 		}
 		log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
+	}
+
+	private LocalSearchOptimiser performSolutionImprovement(final IProgressMonitor progressMonitor, ISequences bestRawSequences) {
+		if (this.optimiserSettings.getSolutionImprovementSettings() != null && this.optimiserSettings.getSolutionImprovementSettings().isImprovingSolutions()) {
+			ArbitraryStateLocalSearchOptimiser hillClimber = injector.getInstance(ArbitraryStateLocalSearchOptimiser.class);
+			// The optimiser may not have a best sequence set
+			System.out.println("Performing hill climbing...");
+			ISequences sequenceToImprove = bestRawSequences == null ? context.getInitialSequences() : bestRawSequences;
+			hillClimber.start(context, sequenceToImprove);
+			int hillClimberWork = 0;
+			while (!hillClimber.isFinished()) {
+				hillClimber.step(1);
+				if (++hillClimberWork % PROGRESS_HILLCLIMBING_OPTIMISATION == 0) {
+					progressMonitor.worked(1);
+				}
+			}
+			return hillClimber;
+		}
+		return null;
 	}
 }
