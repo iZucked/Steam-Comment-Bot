@@ -142,6 +142,12 @@ public class OptimiserSettingsModule extends AbstractModule {
 	private int getNumberOfIterations(final OptimiserSettings settings) {
 		return settings.getAnnealingSettings().getIterations();
 	}
+	
+	@Provides
+	@Named(LocalSearchOptimiserModule.SOLUTION_IMPROVER_NUMBER_OF_ITERATIONS)
+	private int getNumberOfSolutionImprovementIterations(final OptimiserSettings settings) {
+		return 50000;
+	}
 
 	@Provides
 	@Named(LinearFitnessEvaluatorModule.LINEAR_FITNESS_WEIGHTS_MAP)
