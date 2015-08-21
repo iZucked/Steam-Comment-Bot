@@ -11,7 +11,6 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-import java.util.Date;
 import org.joda.time.LocalDate;
 
 /**
