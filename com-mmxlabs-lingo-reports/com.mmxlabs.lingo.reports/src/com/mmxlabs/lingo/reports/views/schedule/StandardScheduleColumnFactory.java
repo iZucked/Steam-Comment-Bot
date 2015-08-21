@@ -32,7 +32,6 @@ import com.mmxlabs.lingo.reports.diff.utils.PNLDeltaUtils;
 import com.mmxlabs.lingo.reports.diff.utils.ScheduleCostUtils;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.internal.Activator;
-import com.mmxlabs.lingo.reports.views.AbstractConfigurableGridReportView.SortData;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
@@ -74,7 +73,6 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
-import com.mmxlabs.models.util.emfpath.EMFPath;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
 public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
@@ -451,7 +449,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 							diagram = new ScheduledTradesWiringDiagram(grid, column);
 							diagram.setTable(table);
 							// Link the the sort state
-							diagram.setSortData((SortData) report.getAdapter(SortData.class));
+//							diagram.setSortData((SortData) report.getAdapter(SortData.class));
 							return column;
 						}
 					}) {
