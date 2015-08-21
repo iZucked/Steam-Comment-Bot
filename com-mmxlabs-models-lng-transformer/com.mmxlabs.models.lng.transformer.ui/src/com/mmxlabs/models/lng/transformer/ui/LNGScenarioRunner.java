@@ -58,6 +58,7 @@ import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
+import com.mmxlabs.optimiser.lso.impl.ArbitraryStateLocalSearchOptimiser;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
@@ -229,7 +230,7 @@ public class LNGScenarioRunner {
 			final IOptimisationContext pContext = this.context;
 			assert pContext != null;
 
-			startSolution = optimiser.start(pContext);
+			startSolution = optimiser.start(pContext, pContext.getInitialSequences());
 		} else {
 			startSolution = LNGSchedulerJobUtils.evaluateCurrentState(transformer);
 		}
@@ -338,6 +339,12 @@ public class LNGScenarioRunner {
 		}
 
 		if (optimiser.isFinished()) {
+			ArbitraryStateLocalSearchOptimiser hillClimber = injector.getInstance(ArbitraryStateLocalSearchOptimiser.class);
+			// The optimiser may not have a best sequence set
+			ISequences initialSequence = optimiser.getBestRawSequencecs() == null ? context.getInitialSequences() : optimiser.getBestRawSequencecs();
+			hillClimber.start(context, initialSequence);
+			hillClimber.step(100);
+			optimiser = hillClimber;
 
 			// Clear any previous optimisation state.
 			if (periodMapping != null) {
