@@ -332,10 +332,10 @@ public final class OptimisationHelper {
 					final OptionGroup group = dialog.createGroup(DataSection.Controls, "Similarity");
 
 					final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-					choiceData.addChoice("Off", ScenarioUtils.createOffSettings());
-					choiceData.addChoice("Low", ScenarioUtils.createLowSettings());
-					choiceData.addChoice("Med", ScenarioUtils.createMediumSettings());
-					choiceData.addChoice("High", ScenarioUtils.createHighSettings());
+					choiceData.addChoice("Off", ScenarioUtils.createOffSimilaritySettings());
+					choiceData.addChoice("Low", ScenarioUtils.createLowSimilaritySettings());
+					choiceData.addChoice("Med", ScenarioUtils.createMediumSimilaritySettings());
+					choiceData.addChoice("High", ScenarioUtils.createHighSimilaritySettings());
 
 					choiceData.enabled = SecurityUtils.getSubject().isPermitted("features:optimisation-similarity");
 
@@ -347,7 +347,7 @@ public final class OptimisationHelper {
 						copy.getObjectives().add(objective);
 					}
 					if (copy.getSimilaritySettings() == null) {
-						copy.setSimilaritySettings(ScenarioUtils.createOffSettings());
+						copy.setSimilaritySettings(ScenarioUtils.createOffSimilaritySettings());
 					}
 
 					objective.setEnabled(true);
@@ -465,8 +465,13 @@ public final class OptimisationHelper {
 			} else if (toSimilarity != null && fromSimilarity != null) {
 				toSimilarity.setEnabled(fromSimilarity.isEnabled());
 				toSimilarity.setWeight(fromSimilarity.getWeight());
+				// make changes to restarts based on similarity settings (hidden from UI)
+				if (toSimilarity != null && to.getSimilaritySettings().equals(ScenarioUtils.createHighSimilaritySettings())) {
+					to.getAnnealingSettings().setRestarting(true);
+				}
 			}
 		}
+		
 	}
 
 	private static Objective findObjective(final String objective, final OptimiserSettings settings) {

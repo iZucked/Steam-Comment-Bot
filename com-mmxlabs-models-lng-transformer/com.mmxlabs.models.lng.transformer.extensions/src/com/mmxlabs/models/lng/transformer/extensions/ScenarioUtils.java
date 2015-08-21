@@ -9,6 +9,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.parameters.AnnealingSettings;
 import com.mmxlabs.models.lng.parameters.Constraint;
+import com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings;
 import com.mmxlabs.models.lng.parameters.Objective;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
@@ -111,7 +112,10 @@ public class ScenarioUtils {
 		annealingSettings.setCooling(0.96);
 		annealingSettings.setEpochLength(900); // 900 for full; 300 for period
 		annealingSettings.setInitialTemperature(1000000);
-
+//		annealingSettings.setInitialTemperature(45000);
+		// restarts
+		annealingSettings.setRestarting(false);
+		annealingSettings.setRestartIterationsThreshold(50000);
 		settings.setAnnealingSettings(annealingSettings);
 
 		final OptimisationRange range = parametersFactory.createOptimisationRange();
@@ -119,12 +123,17 @@ public class ScenarioUtils {
 		settings.setSeed(0);
 
 		// similarity
-		settings.setSimilaritySettings(createOffSettings());
+		settings.setSimilaritySettings(createOffSimilaritySettings());
 
+		// hill climbing
+		IndividualSolutionImprovementSettings solutionImprovementSettings = parametersFactory.createIndividualSolutionImprovementSettings();
+		solutionImprovementSettings.setImprovingSolutions(true);
+		solutionImprovementSettings.setIterations(50000);
+		settings.setSolutionImprovementSettings(solutionImprovementSettings);
 		return settings;
 	}
 
-	public static SimilaritySettings createOffSettings() {
+	public static SimilaritySettings createOffSimilaritySettings() {
 		final SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
 
 		similaritySettings.setLowInterval(createSimilarityInterval(8, 0));
@@ -135,7 +144,7 @@ public class ScenarioUtils {
 		return similaritySettings;
 	}
 
-	public static SimilaritySettings createLowSettings() {
+	public static SimilaritySettings createLowSimilaritySettings() {
 		final SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
 
 		similaritySettings.setLowInterval(createSimilarityInterval(8, 0));
@@ -146,7 +155,7 @@ public class ScenarioUtils {
 		return similaritySettings;
 	}
 
-	public static SimilaritySettings createMediumSettings() {
+	public static SimilaritySettings createMediumSimilaritySettings() {
 		final SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
 
 		similaritySettings.setLowInterval(createSimilarityInterval(8, 0));
@@ -157,7 +166,7 @@ public class ScenarioUtils {
 		return similaritySettings;
 	}
 
-	public static SimilaritySettings createHighSettings() {
+	public static SimilaritySettings createHighSimilaritySettings() {
 		final SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
 
 		similaritySettings.setLowInterval(createSimilarityInterval(8, 250000));

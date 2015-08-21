@@ -27,6 +27,7 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.modules.OptimiserCoreModule;
 import com.mmxlabs.optimiser.lso.IThresholder;
+import com.mmxlabs.optimiser.lso.impl.RestartingLocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.thresholders.GeometricThresholder;
 import com.mmxlabs.optimiser.lso.modules.LinearFitnessEvaluatorModule;
 import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
@@ -122,7 +123,7 @@ public class OptimiserSettingsModule extends AbstractModule {
 	@Provides
 	@Named(EnumeratingSequenceScheduler.OPTIMISER_REEVALUATE)
 	private boolean isOptimiserReevaluating() {
-		return true;
+		return false;
 	}
 
 	@Provides
@@ -146,7 +147,19 @@ public class OptimiserSettingsModule extends AbstractModule {
 	@Provides
 	@Named(LocalSearchOptimiserModule.SOLUTION_IMPROVER_NUMBER_OF_ITERATIONS)
 	private int getNumberOfSolutionImprovementIterations(final OptimiserSettings settings) {
-		return 50000;
+		return settings.getSolutionImprovementSettings() != null ? settings.getSolutionImprovementSettings().getIterations() : 0;
+	}
+
+	@Provides
+	@Named(LocalSearchOptimiserModule.USE_RESTARTING_OPTIMISER)
+	private boolean isLSORestarting(final OptimiserSettings settings) {
+		return settings.getAnnealingSettings().isRestarting();
+	}
+	
+	@Provides
+	@Named(RestartingLocalSearchOptimiser.RESTART_ITERATIONS_THRESHOLD)
+	private int getRestartIterationsThreshold(final OptimiserSettings settings) {
+		return settings.getAnnealingSettings().getRestartIterationsThreshold();
 	}
 
 	@Provides
