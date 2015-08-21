@@ -112,7 +112,6 @@ public class ScenarioUtils {
 		annealingSettings.setCooling(0.96);
 		annealingSettings.setEpochLength(900); // 900 for full; 300 for period
 		annealingSettings.setInitialTemperature(1000000);
-//		annealingSettings.setInitialTemperature(45000);
 		// restarts
 		annealingSettings.setRestarting(false);
 		annealingSettings.setRestartIterationsThreshold(50000);

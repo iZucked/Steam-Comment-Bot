@@ -123,7 +123,7 @@ public class OptimiserSettingsModule extends AbstractModule {
 	@Provides
 	@Named(EnumeratingSequenceScheduler.OPTIMISER_REEVALUATE)
 	private boolean isOptimiserReevaluating() {
-		return false;
+		return true;
 	}
 
 	@Provides
