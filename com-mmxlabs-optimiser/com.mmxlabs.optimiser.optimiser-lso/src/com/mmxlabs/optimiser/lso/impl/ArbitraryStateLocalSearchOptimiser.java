@@ -76,30 +76,30 @@ public class ArbitraryStateLocalSearchOptimiser extends DefaultLocalSearchOptimi
 	@Override
 	public int getNumberOfMovesTried() {
 		// adding on previous values for logs
-		return numberOfMovesTried + loggingDataStore.getNumberOfMovesTried();
+		return numberOfMovesTried + (loggingDataStore != null ? loggingDataStore.getNumberOfMovesTried() : 0);
 	}
 	
 	@Override
 	public int getNumberOfMovesAccepted() {
 		// adding on previous values for logs
-		return numberOfMovesAccepted + loggingDataStore.getNumberOfMovesAccepted();
+		return numberOfMovesAccepted + (loggingDataStore != null ? loggingDataStore.getNumberOfMovesAccepted() : 0);
 	}
 
 	@Override
 	public int getNumberOfRejectedMoves() {
 		// adding on previous values for logs
-		return numberOfRejectedMoves + loggingDataStore.getNumberOfRejectedMoves();
+		return numberOfRejectedMoves + (loggingDataStore != null ? loggingDataStore.getNumberOfRejectedMoves() : 0);
 	}
 
 	@Override
 	public int getNumberOfFailedEvaluations() {
 		// adding on previous values for logs
-		return numberOfFailedEvaluations + loggingDataStore.getNumberOfFailedEvaluations();
+		return numberOfFailedEvaluations + (loggingDataStore != null ? loggingDataStore.getNumberOfFailedEvaluations() : 0);
 	}
 
 	@Override
 	public int getNumberOfFailedToValidate() {
 		// adding on previous values for logs
-		return numberOfFailedToValidate + loggingDataStore.getNumberOfFailedToValidate();
+		return numberOfFailedToValidate + (loggingDataStore != null ? loggingDataStore.getNumberOfFailedToValidate() : 0);
 	}
 }
