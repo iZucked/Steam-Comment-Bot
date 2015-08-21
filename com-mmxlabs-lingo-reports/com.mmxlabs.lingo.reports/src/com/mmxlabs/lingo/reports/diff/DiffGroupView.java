@@ -137,14 +137,14 @@ public class DiffGroupView extends ViewPart implements org.eclipse.e4.ui.workben
 		getSite().setSelectionProvider(viewer);
 
 		// Get e4 selection service!
-		final ESelectionService service = getSite().getService(ESelectionService.class);
+		final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
 		service.addPostSelectionListener(this);
 	}
 
 	@Override
 	public void dispose() {
 
-		final ESelectionService service = getSite().getService(ESelectionService.class);
+		final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
 		service.removePostSelectionListener(this);
 
 		if (listener != null) {

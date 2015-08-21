@@ -123,13 +123,13 @@ public class ChangeSetView implements IAdaptable {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T getAdapter(final Class<T> adapter) {
+	public Object getAdapter(final Class adapter) {
 		if (GridTreeViewer.class.isAssignableFrom(adapter)) {
-			return (T) viewer;
+			return viewer;
 		}
 		if (Grid.class.isAssignableFrom(adapter)) {
 			if (viewer != null) {
-				return (T) viewer.getGrid();
+				return viewer.getGrid();
 			}
 		}
 

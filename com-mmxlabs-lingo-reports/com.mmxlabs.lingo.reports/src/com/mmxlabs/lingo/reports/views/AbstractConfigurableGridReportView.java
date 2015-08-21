@@ -282,7 +282,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 			getSite().setSelectionProvider(viewer);
 			if (handleSelections()) {
 				// Get e4 selection service!
-				final ESelectionService service = getSite().getService(ESelectionService.class);
+				final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
 				service.addPostSelectionListener(this);
 			}
 
@@ -669,7 +669,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	public void dispose() {
 
 		if (handleSelections()) {
-			final ESelectionService service = getSite().getService(ESelectionService.class);
+			final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
 			service.removePostSelectionListener(this);
 		}
 		UserManagedScenarioViewerSynchronizer.deregisterView(synchronizer);

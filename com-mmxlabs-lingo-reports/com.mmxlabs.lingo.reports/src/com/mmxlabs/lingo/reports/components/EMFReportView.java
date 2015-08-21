@@ -423,7 +423,7 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 		getSite().setSelectionProvider(viewer);
 		if (handleSelections()) {
 
-			final ESelectionService service = getSite().getService(ESelectionService.class);
+			final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
 			service.addPostSelectionListener(this);
 		}
 
@@ -547,7 +547,7 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 	@Override
 	public void dispose() {
 
-		final ESelectionService service = getSite().getService(ESelectionService.class);
+		final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
 		service.removePostSelectionListener(this);
 
 		ScenarioViewerSynchronizer.deregisterView(synchronizer);

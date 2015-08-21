@@ -597,7 +597,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 
 		getSite().setSelectionProvider(viewer);
 		// Get e4 selection service!
-		final ESelectionService service = getSite().getService(ESelectionService.class);
+		final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
 		service.addPostSelectionListener(this);
 		jobManagerListener = ScenarioViewerSynchronizer.registerView(viewer, getElementCollector());
 
@@ -610,7 +610,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 	@Override
 	public void dispose() {
 
-		final ESelectionService service = getSite().getService(ESelectionService.class);
+		final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
 		service.removePostSelectionListener(this);
 
 		// stop this view from listening to preference changes

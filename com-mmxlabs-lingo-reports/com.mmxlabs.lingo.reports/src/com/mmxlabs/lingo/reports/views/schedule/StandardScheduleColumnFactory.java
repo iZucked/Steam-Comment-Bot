@@ -403,8 +403,8 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 								return null;
 							}
 
-							final GridTableViewer viewer = report.getAdapter(GridTableViewer.class);
-							final Table table = report.getAdapter(Table.class);
+							final GridTableViewer viewer = (GridTableViewer) report.getAdapter(GridTableViewer.class);
+							final Table table = (Table) report.getAdapter(Table.class);
 
 							final GridColumnGroup group = handler.block.getOrCreateColumnGroup(viewer.getGrid());
 
@@ -451,7 +451,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 							diagram = new ScheduledTradesWiringDiagram(grid, column);
 							diagram.setTable(table);
 							// Link the the sort state
-							diagram.setSortData(report.getAdapter(SortData.class));
+							diagram.setSortData((SortData) report.getAdapter(SortData.class));
 							return column;
 						}
 					}) {
