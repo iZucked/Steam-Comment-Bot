@@ -25,6 +25,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
+import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
@@ -57,14 +58,19 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 	@Inject
 	private IFitnessCombiner fitnessCombiner;
 
+	private final Map<String, Long> initialFitnesses = new HashMap<String, Long>();
 	private final Map<String, Long> currentFitnesses = new HashMap<String, Long>();
 	private final Map<String, Long> bestFitnesses = new HashMap<String, Long>();
 
+	private Pair<ISequences, IEvaluationState> initialSequences = null;
 	private Pair<ISequences, IEvaluationState> currentSequences = null;
 	private Pair<ISequences, IEvaluationState> bestSequences = null;
+
 	private Sequences bestRawSequences = null;
 
+        private long initialFitness = Long.MAX_VALUE;
 	private long currentFitness = Long.MAX_VALUE;
+	private long lastFitness = Long.MAX_VALUE;
 	private long bestFitness = Long.MAX_VALUE;
 
 	@Override
@@ -89,9 +95,9 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 
 			}
 		}
+		lastFitness = totalFitness;
 		// Step to the next threshold levels
 		thresholder.step();
-
 		return accept;
 	}
 
@@ -111,7 +117,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 			currentFitnesses.put(component.getName(), component.getFitness());
 		}
 
-		// If this is the best state seen so far, then record it.
+		// If this is the best state seen so far (this restart), then record it.
 		if (currentFitness < bestFitness) {
 			// Store this as the new best
 			// Do we need to copy here too?
@@ -122,7 +128,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 			for (final IFitnessComponent component : fitnessComponents) {
 				bestFitnesses.put(component.getName(), component.getFitness());
 			}
-		}
+		}		
 	}
 
 	/**
@@ -173,7 +179,10 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 		}
 
 		bestFitness = totalFitness;
+		initialFitness = totalFitness;
 		currentFitness = totalFitness;
+		
+		this.initialSequences = new Pair<ISequences, IEvaluationState>(new Sequences(initialSequences), evaluationState);
 		bestSequences = new Pair<ISequences, IEvaluationState>(new Sequences(initialSequences), evaluationState);
 		currentSequences = new Pair<ISequences, IEvaluationState>(new Sequences(initialSequences), evaluationState);
 
@@ -308,5 +317,17 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 
 	public void setThresholder(IThresholder thresholder) {
 		this.thresholder = thresholder;
+	}
+
+	@Override
+	public void restart() {
+		currentFitness = initialFitness;
+		currentSequences = initialSequences;
+		thresholder.reset();
+	}
+
+	@Override
+	public long getLastFitness() {
+		return lastFitness;
 	}
 }

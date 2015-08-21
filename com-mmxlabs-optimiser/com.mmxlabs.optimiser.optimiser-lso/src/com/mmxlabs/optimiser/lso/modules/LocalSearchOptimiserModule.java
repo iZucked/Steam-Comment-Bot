@@ -26,6 +26,7 @@ import com.mmxlabs.optimiser.lso.impl.ArbitraryStateLocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.DefaultLocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
+import com.mmxlabs.optimiser.lso.impl.RestartingLocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.thresholders.GreedyThresholder;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.InstrumentingMoveGenerator;
 
@@ -41,6 +42,7 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 
 	public static final String LSO_NUMBER_OF_ITERATIONS = "LSO-NumberOfIterations";
 	public static final String SOLUTION_IMPROVER_NUMBER_OF_ITERATIONS = "SOLUTION_IMPROVER-NumberOfIterations";
+	public static final String USE_RESTARTING_OPTIMISER = "useRestartingOptimiser";
 	public static final String RANDOM_SEED = "RandomSeed";
 
 	@Override
@@ -49,14 +51,37 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	LocalSearchOptimiser buildOptimiser(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator,
+	LocalSearchOptimiser buildDefaultOptimiser(@NonNull final Injector injector, @Named(USE_RESTARTING_OPTIMISER) final boolean isRestarting) {
+		if (isRestarting) {
+			return injector.getInstance(RestartingLocalSearchOptimiser.class);
+		} else {
+			return injector.getInstance(DefaultLocalSearchOptimiser.class);
+		}
+	}
+	
+	@Provides
+	@Singleton
+	DefaultLocalSearchOptimiser buildDefaultOptimiser(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator,
 			@NonNull final IMoveGenerator moveGenerator, @NonNull final InstrumentingMoveGenerator instrumentingMoveGenerator, @NonNull final IFitnessEvaluator fitnessEvaluator,
 			@Named(RANDOM_SEED) final long seed, @Named(LSO_NUMBER_OF_ITERATIONS) final int numberOfIterations, @NonNull final List<IConstraintChecker> constraintCheckers,
 			@NonNull final List<IEvaluationProcess> evaluationProcesses) {
 
-		final LocalSearchOptimiser lso = new DefaultLocalSearchOptimiser();
+		final DefaultLocalSearchOptimiser lso = new DefaultLocalSearchOptimiser();
 		setLSO(injector, context, manipulator, moveGenerator, instrumentingMoveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluationProcesses, lso);
 
+		return lso;
+	}
+	
+	@Provides
+	@Singleton
+	RestartingLocalSearchOptimiser buildRestartingOptimiser(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator,
+			@NonNull final IMoveGenerator moveGenerator, @NonNull final InstrumentingMoveGenerator instrumentingMoveGenerator, @NonNull final IFitnessEvaluator fitnessEvaluator,
+			@Named(RANDOM_SEED) final long seed, @Named(LSO_NUMBER_OF_ITERATIONS) final int numberOfIterations, @NonNull final List<IConstraintChecker> constraintCheckers,
+			@NonNull final List<IEvaluationProcess> evaluationProcesses) {
+		
+		final RestartingLocalSearchOptimiser lso = new RestartingLocalSearchOptimiser();
+		setLSO(injector, context, manipulator, moveGenerator, instrumentingMoveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluationProcesses, lso);
+		
 		return lso;
 	}
 

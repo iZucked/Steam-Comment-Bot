@@ -55,8 +55,7 @@ public class GeometricThresholder implements IThresholder {
 
 	@Override
 	public void init() {
-		ticks = 0;
-		temperature = T0;
+		reset();
 	}
 
 	@Override
@@ -82,6 +81,12 @@ public class GeometricThresholder implements IThresholder {
 //			System.out.println("Next epoch, temperature = " + temperature);
 
 		}
+	}
+
+	@Override
+	public void reset() {
+		ticks = 0;
+		temperature = T0;
 	}
 
 }

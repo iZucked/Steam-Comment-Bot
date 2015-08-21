@@ -124,4 +124,9 @@ public class CalibratingGeometricThresholder implements IThresholder {
 		return calibratedTemperature;
 	}
 
+	@Override
+	public void reset() {
+		assert false : "Not implemented";
+	}
+
 }

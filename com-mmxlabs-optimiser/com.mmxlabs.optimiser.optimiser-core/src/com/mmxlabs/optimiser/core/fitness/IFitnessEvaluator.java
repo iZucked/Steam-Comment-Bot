@@ -109,6 +109,13 @@ public interface IFitnessEvaluator {
 	long getCurrentFitness();
 
 	/**
+	 * Returns the fitness value of the last {@link ISequences} instance returned by {@link #getCurrentSequences()};
+	 * 
+	 * @return
+	 */
+	long getLastFitness();
+
+	/**
 	 * Returns an annotated solution for the best sequences so far
 	 * 
 	 * @param context
@@ -131,4 +138,8 @@ public interface IFitnessEvaluator {
 	void step();
 
         ISequences getBestRawSequences();
+
+		void restart();
+
+		
 }

@@ -66,4 +66,9 @@ public final class StepThresholder implements IThresholder {
 		currentThreshold -= stepSize;
 	}
 
+	@Override
+	public void reset() {
+		assert false : "Not implemented";
+	}
+
 }
