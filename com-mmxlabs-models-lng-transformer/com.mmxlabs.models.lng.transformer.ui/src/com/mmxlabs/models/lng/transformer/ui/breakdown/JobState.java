@@ -87,7 +87,7 @@ public class JobState implements Serializable{
 			}
 		}
 		persistedUnusedElements = new int[rawSequences.getUnusedElements().size()];
-		for (int i = 0; i > persistedUnusedElements.length; ++i) {
+		for (int i = 0; i < persistedUnusedElements.length; ++i) {
 			persistedUnusedElements[i] = rawSequences.getUnusedElements().get(i).getIndex();
 		}
 
