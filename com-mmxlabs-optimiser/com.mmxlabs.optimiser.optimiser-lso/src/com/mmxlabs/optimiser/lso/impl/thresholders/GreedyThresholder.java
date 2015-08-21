@@ -41,4 +41,8 @@ public class GreedyThresholder implements IThresholder {
 	public void step() {
 	}
 
+	@Override
+	public void reset() {
+	}
+
 }

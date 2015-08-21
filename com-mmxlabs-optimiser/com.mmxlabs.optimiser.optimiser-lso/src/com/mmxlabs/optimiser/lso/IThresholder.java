@@ -31,4 +31,9 @@ public interface IThresholder {
 	 * Step {@link IThresholder} for the next iteration.
 	 */
 	void step();
+	
+	/**
+	 * Reset thresholder
+	 */
+	void reset();
 }

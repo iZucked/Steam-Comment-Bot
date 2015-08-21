@@ -68,4 +68,38 @@ public class ArbitraryStateLocalSearchOptimiser extends DefaultLocalSearchOptimi
 		return annotatedBestSolution;
 	}
 
+	@Override
+	protected void initProgressLog() {
+		// do nothing
+	}
+
+	@Override
+	public int getNumberOfMovesTried() {
+		// adding on previous values for logs
+		return numberOfMovesTried + loggingDataStore.getNumberOfMovesTried();
+	}
+	
+	@Override
+	public int getNumberOfMovesAccepted() {
+		// adding on previous values for logs
+		return numberOfMovesAccepted + loggingDataStore.getNumberOfMovesAccepted();
+	}
+
+	@Override
+	public int getNumberOfRejectedMoves() {
+		// adding on previous values for logs
+		return numberOfRejectedMoves + loggingDataStore.getNumberOfRejectedMoves();
+	}
+
+	@Override
+	public int getNumberOfFailedEvaluations() {
+		// adding on previous values for logs
+		return numberOfFailedEvaluations + loggingDataStore.getNumberOfFailedEvaluations();
+	}
+
+	@Override
+	public int getNumberOfFailedToValidate() {
+		// adding on previous values for logs
+		return numberOfFailedToValidate + loggingDataStore.getNumberOfFailedToValidate();
+	}
 }

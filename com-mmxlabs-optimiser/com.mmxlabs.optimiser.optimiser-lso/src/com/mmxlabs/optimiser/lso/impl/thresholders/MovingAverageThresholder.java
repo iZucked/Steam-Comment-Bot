@@ -89,4 +89,10 @@ public class MovingAverageThresholder implements IThresholder {
 			tick++;
 		}
 	}
+	
+	@Override
+	public void reset() {
+		assert false : "Not implemented";
+	}
+
 }

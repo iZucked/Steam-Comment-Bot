@@ -15,6 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.logging.ILoggingDataStore;
 import com.mmxlabs.optimiser.common.logging.impl.EvaluationNumberKey;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -40,9 +41,17 @@ public class LSOLogger implements ILoggingDataStore {
 	private Map<ISequences, Long> rejectedMovesSequencesFitness = new HashMap<>();
 	private Map<ISequences, SequencesCounts> acceptedSequencesCount = new HashMap<>();
 	private Map<ISequences, SequencesCounts> rejectedSequencesCount = new HashMap<>();
+	private List<Pair<Integer, Long>> acceptedSolutionFitnesses = new LinkedList<Pair<Integer,Long>>();
+	private List<Pair<Integer, Long>> rejectedSolutionFitnesses = new LinkedList<Pair<Integer,Long>>();
 
 	private List<IResource> resourceList = null;
+
 	private int reportingInterval;
+	private int numberOfMovesTried;
+	private int numberOfMovesAccepted;
+	private int numberOfRejectedMoves;
+	private int numberOfFailedEvaluations;
+	private int numberOfFailedToValidate;
 
 	public LSOLogger(int reportingInterval) {
 		nullMovesMap.put("null", new AtomicInteger(0));
@@ -92,9 +101,18 @@ public class LSOLogger implements ILoggingDataStore {
 		logMoveEvent(moveName, moveMap);
 	}
 
-	public void logSuccessfulMove(IMove move) {
+	public void logSuccessfulMove(IMove move, int numberOfMovesTried, long fitness) {
 		String moveName = move.getClass().getName();
 		logSuccessfulMove(moveName);
+		addFitnessIterationPoint(acceptedSolutionFitnesses, numberOfMovesTried, fitness);
+	}
+	
+	public void logRejectedMove(IMove move, int numberOfMovesTried, long fitness) {
+		addFitnessIterationPoint(rejectedSolutionFitnesses, numberOfMovesTried, fitness);
+	}
+	
+	private void addFitnessIterationPoint(List<Pair<Integer, Long>> log, int iteration, long fitness) {
+		log.add(new Pair<Integer, Long>(iteration, fitness));
 	}
 	
 	public void logSuccessfulMove(String moveName) {
@@ -310,6 +328,54 @@ public class LSOLogger implements ILoggingDataStore {
 		return getInterestingSequenceFrequencies(seenSequencesCount, SequenceCountType.REJECTED);
 	}
 	
+	public List<Pair<Integer, Long>> getAcceptedFitnesses() {
+		return acceptedSolutionFitnesses;
+	}
+
+	public List<Pair<Integer, Long>> getRejectedFitnesses() {
+		return rejectedSolutionFitnesses;
+	}
+
+	public int getNumberOfMovesTried() {
+		return numberOfMovesTried;
+	}
+
+	public void setNumberOfMovesTried(int numberOfMovesTried) {
+		this.numberOfMovesTried = numberOfMovesTried;
+	}
+
+	public int getNumberOfMovesAccepted() {
+		return numberOfMovesAccepted;
+	}
+
+	public void setNumberOfMovesAccepted(int numberOfMovesAccepted) {
+		this.numberOfMovesAccepted = numberOfMovesAccepted;
+	}
+
+	public int getNumberOfRejectedMoves() {
+		return numberOfRejectedMoves;
+	}
+
+	public void setNumberOfRejectedMoves(int numberOfRejectedMoves) {
+		this.numberOfRejectedMoves = numberOfRejectedMoves;
+	}
+
+	public int getNumberOfFailedEvaluations() {
+		return numberOfFailedEvaluations;
+	}
+
+	public void setNumberOfFailedEvaluations(int numberOfFailedEvaluations) {
+		this.numberOfFailedEvaluations = numberOfFailedEvaluations;
+	}
+
+	public int getNumberOfFailedToValidate() {
+		return numberOfFailedToValidate;
+	}
+
+	public void setNumberOfFailedToValidate(int numberOfFailedToValidate) {
+		this.numberOfFailedToValidate = numberOfFailedToValidate;
+	}
+
 	private class SequencesCounts{
 		public AtomicInteger total;
 		public AtomicInteger accepted;

@@ -34,4 +34,9 @@ public class InstrumentingThresholder implements IThresholder {
 	public void step() {
 		delegate.step();
 	}
+
+	@Override
+	public void reset() {
+		delegate.reset();
+	}
 }

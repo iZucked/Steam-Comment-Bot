@@ -19,6 +19,7 @@ import java.nio.file.Paths;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.logging.impl.EvaluationNumberKey;
 import com.mmxlabs.optimiser.lso.LSOLoggingConstants;
 
@@ -108,8 +109,8 @@ public class LSOLoggingExporter {
 		exportConstraintFailedSequences();
 		exportAcceptedSequences();
 		exportRejectedSequences();
-//		exportAcceptedFitnesses();
-//		exportRejectedFitnesses();
+		exportAcceptedFitnesses();
+		exportRejectedFitnesses();
 	}
 
 	public void exportEndData() {
@@ -148,6 +149,26 @@ public class LSOLoggingExporter {
 		Path newPath = Paths.get(path, foldername, "rejectedSequences" + ".txt");
 		PrintWriter writer = getWriter(newPath.toString());
 		writeSequencesData(writer, lsoLogger.getSequenceCountRejected());
+		writer.close();
+	}
+
+	private void exportIterationsList(List<Pair<Integer, Long>> iterations, PrintWriter writer) {
+		for (Pair<Integer, Long> i : iterations) {
+			writer.println(String.format("%s,%s", i.getFirst(), i.getSecond()));
+		}
+	}
+
+	private void exportAcceptedFitnesses() {
+		Path newPath = Paths.get(path, foldername, "acceptedFitnesses" + ".txt");
+		PrintWriter writer = getWriter(newPath.toString());
+		exportIterationsList(lsoLogger.getAcceptedFitnesses(), writer);
+		writer.close();
+	}
+	
+	private void exportRejectedFitnesses() {
+		Path newPath = Paths.get(path, foldername, "rejectedFitnesses" + ".txt");
+		PrintWriter writer = getWriter(newPath.toString());
+		exportIterationsList(lsoLogger.getRejectedFitnesses(), writer);
 		writer.close();
 	}
 
