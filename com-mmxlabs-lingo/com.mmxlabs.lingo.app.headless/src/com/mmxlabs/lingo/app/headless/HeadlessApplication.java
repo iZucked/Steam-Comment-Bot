@@ -50,6 +50,7 @@ import com.mmxlabs.lingo.app.headless.utils.JSONParseResult;
 import com.mmxlabs.lingo.app.headless.utils.LNGHeadlessParameters;
 import com.mmxlabs.lingo.app.headless.utils.StringParameter;
 import com.mmxlabs.models.lng.parameters.AnnealingSettings;
+import com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -354,6 +355,9 @@ public class HeadlessApplication implements IApplication {
 		annealingSettings.setEpochLength(headlessParameters.getParameterValue("sa-epoch-length", Integer.class));
 		annealingSettings.setIterations(headlessParameters.getParameterValue("iterations", Integer.class));
 		annealingSettings.setCooling(headlessParameters.getParameterValue("sa-cooling", Double.class));
+		annealingSettings.setRestarting(headlessParameters.getParameterValue("restarting-useRestarting", Boolean.class));
+		annealingSettings.setRestartIterationsThreshold(headlessParameters.getParameterValue("restarting-restartThreshold", Integer.class));
+		setHillClimbingParameters(settings, headlessParameters);
 		// Scenario settings
 		settings.setShippingOnly(headlessParameters.getParameterValue("shippingonly-optimisation", Boolean.class));
 		settings.setGenerateCharterOuts(headlessParameters.getParameterValue("generatedcharterouts-optimisation", Boolean.class));
@@ -364,6 +368,13 @@ public class HeadlessApplication implements IApplication {
 		setSimilarityParameters(settingsOverride, headlessParameters);
 	}
 
+	private void setHillClimbingParameters(OptimiserSettings settings, HeadlessParameters parameters) {
+		IndividualSolutionImprovementSettings solutionImprovementSettings = ParametersFactory.eINSTANCE.createIndividualSolutionImprovementSettings();
+		solutionImprovementSettings.setImprovingSolutions(parameters.getParameterValue("hillClimbing-useHillClimbing", Boolean.class));
+		solutionImprovementSettings.setIterations(parameters.getParameterValue("hillClimbing-iterations", Integer.class));
+		settings.setSolutionImprovementSettings(solutionImprovementSettings);
+	}
+	
 	private void createPromptDates(LNGScenarioModel rootObject, HeadlessParameters parameters) {
 		LocalDate promptStart = parameters.getParameterValue("promptStart", LocalDate.class);
 		LocalDate promptEnd = parameters.getParameterValue("promptEnd", LocalDate.class);
