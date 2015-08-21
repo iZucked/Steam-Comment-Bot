@@ -60,6 +60,43 @@ public interface ParametersPackage extends EPackage {
 	ParametersPackage eINSTANCE = com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl.init();
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.IndividualSolutionImprovementSettingsImpl <em>Individual Solution Improvement Settings</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.parameters.impl.IndividualSolutionImprovementSettingsImpl
+	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getIndividualSolutionImprovementSettings()
+	 * @generated
+	 */
+	int INDIVIDUAL_SOLUTION_IMPROVEMENT_SETTINGS = 0;
+
+	/**
+	 * The feature id for the '<em><b>Iterations</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDIVIDUAL_SOLUTION_IMPROVEMENT_SETTINGS__ITERATIONS = 0;
+
+	/**
+	 * The feature id for the '<em><b>Improving Solutions</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDIVIDUAL_SOLUTION_IMPROVEMENT_SETTINGS__IMPROVING_SOLUTIONS = 1;
+
+	/**
+	 * The number of structural features of the '<em>Individual Solution Improvement Settings</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDIVIDUAL_SOLUTION_IMPROVEMENT_SETTINGS_FEATURE_COUNT = 2;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ParametersModelImpl <em>Model</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -67,7 +104,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getParametersModel()
 	 * @generated
 	 */
-	int PARAMETERS_MODEL = 0;
+	int PARAMETERS_MODEL = 1;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -122,7 +159,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getOptimiserSettings()
 	 * @generated
 	 */
-	int OPTIMISER_SETTINGS = 1;
+	int OPTIMISER_SETTINGS = 2;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -233,13 +270,31 @@ public interface ParametersPackage extends EPackage {
 	int OPTIMISER_SETTINGS__SIMILARITY_SETTINGS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
 
 	/**
+	 * The feature id for the '<em><b>Solution Improvement Settings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISER_SETTINGS__SOLUTION_IMPROVEMENT_SETTINGS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+
+	/**
+	 * The feature id for the '<em><b>Build Action Sets</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISER_SETTINGS__BUILD_ACTION_SETS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
+
+	/**
 	 * The number of structural features of the '<em>Optimiser Settings</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISER_SETTINGS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+	int OPTIMISER_SETTINGS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ObjectiveImpl <em>Objective</em>}' class.
@@ -249,7 +304,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getObjective()
 	 * @generated
 	 */
-	int OBJECTIVE = 2;
+	int OBJECTIVE = 3;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -304,7 +359,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getConstraint()
 	 * @generated
 	 */
-	int CONSTRAINT = 3;
+	int CONSTRAINT = 4;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -350,7 +405,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getOptimisationRange()
 	 * @generated
 	 */
-	int OPTIMISATION_RANGE = 4;
+	int OPTIMISATION_RANGE = 5;
 
 	/**
 	 * The feature id for the '<em><b>Optimise After</b></em>' attribute.
@@ -387,7 +442,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getAnnealingSettings()
 	 * @generated
 	 */
-	int ANNEALING_SETTINGS = 5;
+	int ANNEALING_SETTINGS = 6;
 
 	/**
 	 * The feature id for the '<em><b>Iterations</b></em>' attribute.
@@ -426,13 +481,31 @@ public interface ParametersPackage extends EPackage {
 	int ANNEALING_SETTINGS__INITIAL_TEMPERATURE = 3;
 
 	/**
+	 * The feature id for the '<em><b>Restarting</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANNEALING_SETTINGS__RESTARTING = 4;
+
+	/**
+	 * The feature id for the '<em><b>Restart Iterations Threshold</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANNEALING_SETTINGS__RESTART_ITERATIONS_THRESHOLD = 5;
+
+	/**
 	 * The number of structural features of the '<em>Annealing Settings</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANNEALING_SETTINGS_FEATURE_COUNT = 4;
+	int ANNEALING_SETTINGS_FEATURE_COUNT = 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ArgumentImpl <em>Argument</em>}' class.
@@ -442,7 +515,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getArgument()
 	 * @generated
 	 */
-	int ARGUMENT = 6;
+	int ARGUMENT = 7;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -480,7 +553,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getSimilaritySettings()
 	 * @generated
 	 */
-	int SIMILARITY_SETTINGS = 7;
+	int SIMILARITY_SETTINGS = 8;
 
 	/**
 	 * The feature id for the '<em><b>Low Interval</b></em>' containment reference.
@@ -536,7 +609,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getSimilarityInterval()
 	 * @generated
 	 */
-	int SIMILARITY_INTERVAL = 8;
+	int SIMILARITY_INTERVAL = 9;
 
 	/**
 	 * The feature id for the '<em><b>Weight</b></em>' attribute.
@@ -565,6 +638,38 @@ public interface ParametersPackage extends EPackage {
 	 */
 	int SIMILARITY_INTERVAL_FEATURE_COUNT = 2;
 
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings <em>Individual Solution Improvement Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Individual Solution Improvement Settings</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings
+	 * @generated
+	 */
+	EClass getIndividualSolutionImprovementSettings();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings#getIterations <em>Iterations</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Iterations</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings#getIterations()
+	 * @see #getIndividualSolutionImprovementSettings()
+	 * @generated
+	 */
+	EAttribute getIndividualSolutionImprovementSettings_Iterations();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings#isImprovingSolutions <em>Improving Solutions</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Improving Solutions</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings#isImprovingSolutions()
+	 * @see #getIndividualSolutionImprovementSettings()
+	 * @generated
+	 */
+	EAttribute getIndividualSolutionImprovementSettings_ImprovingSolutions();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.ParametersModel <em>Model</em>}'.
@@ -708,6 +813,28 @@ public interface ParametersPackage extends EPackage {
 	EReference getOptimiserSettings_SimilaritySettings();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getSolutionImprovementSettings <em>Solution Improvement Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Solution Improvement Settings</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.OptimiserSettings#getSolutionImprovementSettings()
+	 * @see #getOptimiserSettings()
+	 * @generated
+	 */
+	EReference getOptimiserSettings_SolutionImprovementSettings();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#isBuildActionSets <em>Build Action Sets</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Build Action Sets</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.OptimiserSettings#isBuildActionSets()
+	 * @see #getOptimiserSettings()
+	 * @generated
+	 */
+	EAttribute getOptimiserSettings_BuildActionSets();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.Objective <em>Objective</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -845,6 +972,28 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getAnnealingSettings_InitialTemperature();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.AnnealingSettings#isRestarting <em>Restarting</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Restarting</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.AnnealingSettings#isRestarting()
+	 * @see #getAnnealingSettings()
+	 * @generated
+	 */
+	EAttribute getAnnealingSettings_Restarting();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.AnnealingSettings#getRestartIterationsThreshold <em>Restart Iterations Threshold</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Restart Iterations Threshold</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.AnnealingSettings#getRestartIterationsThreshold()
+	 * @see #getAnnealingSettings()
+	 * @generated
+	 */
+	EAttribute getAnnealingSettings_RestartIterationsThreshold();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.Argument <em>Argument</em>}'.
@@ -987,6 +1136,32 @@ public interface ParametersPackage extends EPackage {
 	 */
 	interface Literals {
 		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.IndividualSolutionImprovementSettingsImpl <em>Individual Solution Improvement Settings</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.parameters.impl.IndividualSolutionImprovementSettingsImpl
+		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getIndividualSolutionImprovementSettings()
+		 * @generated
+		 */
+		EClass INDIVIDUAL_SOLUTION_IMPROVEMENT_SETTINGS = eINSTANCE.getIndividualSolutionImprovementSettings();
+
+		/**
+		 * The meta object literal for the '<em><b>Iterations</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INDIVIDUAL_SOLUTION_IMPROVEMENT_SETTINGS__ITERATIONS = eINSTANCE.getIndividualSolutionImprovementSettings_Iterations();
+
+		/**
+		 * The meta object literal for the '<em><b>Improving Solutions</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INDIVIDUAL_SOLUTION_IMPROVEMENT_SETTINGS__IMPROVING_SOLUTIONS = eINSTANCE.getIndividualSolutionImprovementSettings_ImprovingSolutions();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.ParametersModelImpl <em>Model</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1093,6 +1268,22 @@ public interface ParametersPackage extends EPackage {
 		 * @generated
 		 */
 		EReference OPTIMISER_SETTINGS__SIMILARITY_SETTINGS = eINSTANCE.getOptimiserSettings_SimilaritySettings();
+
+		/**
+		 * The meta object literal for the '<em><b>Solution Improvement Settings</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference OPTIMISER_SETTINGS__SOLUTION_IMPROVEMENT_SETTINGS = eINSTANCE.getOptimiserSettings_SolutionImprovementSettings();
+
+		/**
+		 * The meta object literal for the '<em><b>Build Action Sets</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute OPTIMISER_SETTINGS__BUILD_ACTION_SETS = eINSTANCE.getOptimiserSettings_BuildActionSets();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.ObjectiveImpl <em>Objective</em>}' class.
@@ -1205,6 +1396,22 @@ public interface ParametersPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ANNEALING_SETTINGS__INITIAL_TEMPERATURE = eINSTANCE.getAnnealingSettings_InitialTemperature();
+
+		/**
+		 * The meta object literal for the '<em><b>Restarting</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ANNEALING_SETTINGS__RESTARTING = eINSTANCE.getAnnealingSettings_Restarting();
+
+		/**
+		 * The meta object literal for the '<em><b>Restart Iterations Threshold</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ANNEALING_SETTINGS__RESTART_ITERATIONS_THRESHOLD = eINSTANCE.getAnnealingSettings_RestartIterationsThreshold();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.ArgumentImpl <em>Argument</em>}' class.

@@ -65,6 +65,8 @@ public class AnnealingSettingsItemProvider
 			addEpochLengthPropertyDescriptor(object);
 			addCoolingPropertyDescriptor(object);
 			addInitialTemperaturePropertyDescriptor(object);
+			addRestartingPropertyDescriptor(object);
+			addRestartIterationsThresholdPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -158,6 +160,50 @@ public class AnnealingSettingsItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Restarting feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRestartingPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AnnealingSettings_restarting_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AnnealingSettings_restarting_feature", "_UI_AnnealingSettings_type"),
+				 ParametersPackage.Literals.ANNEALING_SETTINGS__RESTARTING,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Restart Iterations Threshold feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRestartIterationsThresholdPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AnnealingSettings_restartIterationsThreshold_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AnnealingSettings_restartIterationsThreshold_feature", "_UI_AnnealingSettings_type"),
+				 ParametersPackage.Literals.ANNEALING_SETTINGS__RESTART_ITERATIONS_THRESHOLD,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns AnnealingSettings.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -196,6 +242,8 @@ public class AnnealingSettingsItemProvider
 			case ParametersPackage.ANNEALING_SETTINGS__EPOCH_LENGTH:
 			case ParametersPackage.ANNEALING_SETTINGS__COOLING:
 			case ParametersPackage.ANNEALING_SETTINGS__INITIAL_TEMPERATURE:
+			case ParametersPackage.ANNEALING_SETTINGS__RESTARTING:
+			case ParametersPackage.ANNEALING_SETTINGS__RESTART_ITERATIONS_THRESHOLD:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

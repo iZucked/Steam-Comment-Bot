@@ -25,6 +25,8 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#isGenerateCharterOuts <em>Generate Charter Outs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#isShippingOnly <em>Shipping Only</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getSimilaritySettings <em>Similarity Settings</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getSolutionImprovementSettings <em>Solution Improvement Settings</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#isBuildActionSets <em>Build Action Sets</em>}</li>
  * </ul>
  * </p>
  *
@@ -236,6 +238,58 @@ public interface OptimiserSettings extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setSimilaritySettings(SimilaritySettings value);
+
+	/**
+	 * Returns the value of the '<em><b>Solution Improvement Settings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Solution Improvement Settings</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Solution Improvement Settings</em>' containment reference.
+	 * @see #setSolutionImprovementSettings(IndividualSolutionImprovementSettings)
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getOptimiserSettings_SolutionImprovementSettings()
+	 * @model containment="true" required="true"
+	 * @generated
+	 */
+	IndividualSolutionImprovementSettings getSolutionImprovementSettings();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getSolutionImprovementSettings <em>Solution Improvement Settings</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Solution Improvement Settings</em>' containment reference.
+	 * @see #getSolutionImprovementSettings()
+	 * @generated
+	 */
+	void setSolutionImprovementSettings(IndividualSolutionImprovementSettings value);
+
+	/**
+	 * Returns the value of the '<em><b>Build Action Sets</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Build Action Sets</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Build Action Sets</em>' attribute.
+	 * @see #setBuildActionSets(boolean)
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getOptimiserSettings_BuildActionSets()
+	 * @model
+	 * @generated
+	 */
+	boolean isBuildActionSets();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#isBuildActionSets <em>Build Action Sets</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Build Action Sets</em>' attribute.
+	 * @see #isBuildActionSets()
+	 * @generated
+	 */
+	void setBuildActionSets(boolean value);
 
 } // end of  OptimiserSettings
 

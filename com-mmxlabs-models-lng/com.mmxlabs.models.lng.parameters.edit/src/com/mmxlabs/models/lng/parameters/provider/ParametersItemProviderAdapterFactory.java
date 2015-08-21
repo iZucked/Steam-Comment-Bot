@@ -89,6 +89,29 @@ public class ParametersItemProviderAdapterFactory extends ParametersAdapterFacto
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected IndividualSolutionImprovementSettingsItemProvider individualSolutionImprovementSettingsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createIndividualSolutionImprovementSettingsAdapter() {
+		if (individualSolutionImprovementSettingsItemProvider == null) {
+			individualSolutionImprovementSettingsItemProvider = new IndividualSolutionImprovementSettingsItemProvider(this);
+		}
+
+		return individualSolutionImprovementSettingsItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.ParametersModel} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -429,6 +452,7 @@ public class ParametersItemProviderAdapterFactory extends ParametersAdapterFacto
 	 */
 	@Override
 	public void dispose() {
+		if (individualSolutionImprovementSettingsItemProvider != null) individualSolutionImprovementSettingsItemProvider.dispose();
 		if (parametersModelItemProvider != null) parametersModelItemProvider.dispose();
 		if (optimiserSettingsItemProvider != null) optimiserSettingsItemProvider.dispose();
 		if (objectiveItemProvider != null) objectiveItemProvider.dispose();

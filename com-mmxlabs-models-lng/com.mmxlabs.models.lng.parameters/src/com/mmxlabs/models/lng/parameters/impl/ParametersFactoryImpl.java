@@ -67,6 +67,7 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
+			case ParametersPackage.INDIVIDUAL_SOLUTION_IMPROVEMENT_SETTINGS: return createIndividualSolutionImprovementSettings();
 			case ParametersPackage.PARAMETERS_MODEL: return createParametersModel();
 			case ParametersPackage.OPTIMISER_SETTINGS: return createOptimiserSettings();
 			case ParametersPackage.OBJECTIVE: return createObjective();
@@ -79,6 +80,16 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public IndividualSolutionImprovementSettings createIndividualSolutionImprovementSettings() {
+		IndividualSolutionImprovementSettingsImpl individualSolutionImprovementSettings = new IndividualSolutionImprovementSettingsImpl();
+		return individualSolutionImprovementSettings;
 	}
 
 	/**
