@@ -11,6 +11,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
+import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesOptimiser;
 import com.mmxlabs.optimiser.core.impl.AbstractSequencesOptimiser;
 import com.mmxlabs.optimiser.ga.IGeneticAlgorithm;
@@ -39,7 +40,7 @@ public class GeneticAlgorithmOptimiser extends AbstractSequencesOptimiser implem
 
 	@Override
 	@Nullable
-	public IAnnotatedSolution start(@NonNull final IOptimisationContext optimiserContext) {
+	public IAnnotatedSolution start(@NonNull final IOptimisationContext optimiserContext, @NonNull ISequences initialSequences) {
 
 		throw new UnsupportedOperationException("Not yet implemented");
 	}

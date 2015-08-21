@@ -19,10 +19,14 @@ import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
+import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
+import com.mmxlabs.optimiser.lso.impl.ArbitraryStateLocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.DefaultLocalSearchOptimiser;
+import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
+import com.mmxlabs.optimiser.lso.impl.thresholders.GreedyThresholder;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.InstrumentingMoveGenerator;
 
 /**
@@ -36,6 +40,7 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 	public static final boolean instrumenting = true;
 
 	public static final String LSO_NUMBER_OF_ITERATIONS = "LSO-NumberOfIterations";
+	public static final String SOLUTION_IMPROVER_NUMBER_OF_ITERATIONS = "SOLUTION_IMPROVER-NumberOfIterations";
 	public static final String RANDOM_SEED = "RandomSeed";
 
 	@Override
@@ -49,12 +54,17 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 			@Named(RANDOM_SEED) final long seed, @Named(LSO_NUMBER_OF_ITERATIONS) final int numberOfIterations, @NonNull final List<IConstraintChecker> constraintCheckers,
 			@NonNull final List<IEvaluationProcess> evaluationProcesses) {
 
-		final DefaultLocalSearchOptimiser lso = new DefaultLocalSearchOptimiser();
+		final LocalSearchOptimiser lso = new DefaultLocalSearchOptimiser();
+		setLSO(injector, context, manipulator, moveGenerator, instrumentingMoveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluationProcesses, lso);
+
+		return lso;
+	}
+
+	private void setLSO(final Injector injector, final IOptimisationContext context, final ISequencesManipulator manipulator, final IMoveGenerator moveGenerator,
+			final InstrumentingMoveGenerator instrumentingMoveGenerator, final IFitnessEvaluator fitnessEvaluator, final int numberOfIterations, final List<IConstraintChecker> constraintCheckers,
+			final List<IEvaluationProcess> evaluationProcesses, final LocalSearchOptimiser lso) {
 		injector.injectMembers(lso);
 		lso.setNumberOfIterations(numberOfIterations);
-		// .. Should not be performed here, but needs to be somewhere.
-		// Need to co-ordinate with AnalyticsTransformer over the init method. Analytics Transformer creates the opt data manually.
-		// final ChainedSequencesManipulator sequencesManipulator = injector.getInstance(ChainedSequencesManipulator.class);
 		manipulator.init(context.getOptimisationData());
 
 		lso.setSequenceManipulator(manipulator);
@@ -65,7 +75,27 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 		lso.setEvaluationProcesses(evaluationProcesses);
 
 		lso.setReportInterval(Math.max(10, numberOfIterations / 100));
+	}
+	
+	@Provides
+	@Singleton
+	ArbitraryStateLocalSearchOptimiser buildSolutionImprovingOptimiser(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator,
+			@NonNull final IMoveGenerator moveGenerator, @NonNull final InstrumentingMoveGenerator instrumentingMoveGenerator,
+			@Named(RANDOM_SEED) final long seed, @Named(SOLUTION_IMPROVER_NUMBER_OF_ITERATIONS) final int numberOfIterations, @NonNull final List<IConstraintChecker> constraintCheckers,
+			@NonNull final List<IEvaluationProcess> evaluationProcesses, @NonNull List<IFitnessComponent> fitnessComponents) {
+
+		final ArbitraryStateLocalSearchOptimiser lso = new ArbitraryStateLocalSearchOptimiser();
+		
+		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = new LinearSimulatedAnnealingFitnessEvaluator();
+		injector.injectMembers(fitnessEvaluator);
+		fitnessEvaluator.setThresholder(new GreedyThresholder());
+		fitnessEvaluator.setFitnessComponents(fitnessComponents);
+		fitnessEvaluator.setEvaluationProcesses(evaluationProcesses);
+		fitnessEvaluator.init();
+
+		setLSO(injector, context, manipulator, moveGenerator, instrumentingMoveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluationProcesses, lso);
 
 		return lso;
 	}
+
 }
