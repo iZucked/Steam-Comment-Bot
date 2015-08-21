@@ -66,6 +66,7 @@ public class OptimiserSettingsItemProvider
 			addSeedPropertyDescriptor(object);
 			addGenerateCharterOutsPropertyDescriptor(object);
 			addShippingOnlyPropertyDescriptor(object);
+			addBuildActionSetsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -159,6 +160,28 @@ public class OptimiserSettingsItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Build Action Sets feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addBuildActionSetsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_OptimiserSettings_buildActionSets_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_OptimiserSettings_buildActionSets_feature", "_UI_OptimiserSettings_type"),
+				 ParametersPackage.Literals.OPTIMISER_SETTINGS__BUILD_ACTION_SETS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -176,6 +199,7 @@ public class OptimiserSettingsItemProvider
 			childrenFeatures.add(ParametersPackage.Literals.OPTIMISER_SETTINGS__ANNEALING_SETTINGS);
 			childrenFeatures.add(ParametersPackage.Literals.OPTIMISER_SETTINGS__ARGUMENTS);
 			childrenFeatures.add(ParametersPackage.Literals.OPTIMISER_SETTINGS__SIMILARITY_SETTINGS);
+			childrenFeatures.add(ParametersPackage.Literals.OPTIMISER_SETTINGS__SOLUTION_IMPROVEMENT_SETTINGS);
 		}
 		return childrenFeatures;
 	}
@@ -234,6 +258,7 @@ public class OptimiserSettingsItemProvider
 			case ParametersPackage.OPTIMISER_SETTINGS__SEED:
 			case ParametersPackage.OPTIMISER_SETTINGS__GENERATE_CHARTER_OUTS:
 			case ParametersPackage.OPTIMISER_SETTINGS__SHIPPING_ONLY:
+			case ParametersPackage.OPTIMISER_SETTINGS__BUILD_ACTION_SETS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case ParametersPackage.OPTIMISER_SETTINGS__OBJECTIVES:
@@ -242,6 +267,7 @@ public class OptimiserSettingsItemProvider
 			case ParametersPackage.OPTIMISER_SETTINGS__ANNEALING_SETTINGS:
 			case ParametersPackage.OPTIMISER_SETTINGS__ARGUMENTS:
 			case ParametersPackage.OPTIMISER_SETTINGS__SIMILARITY_SETTINGS:
+			case ParametersPackage.OPTIMISER_SETTINGS__SOLUTION_IMPROVEMENT_SETTINGS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -288,6 +314,11 @@ public class OptimiserSettingsItemProvider
 			(createChildParameter
 				(ParametersPackage.Literals.OPTIMISER_SETTINGS__SIMILARITY_SETTINGS,
 				 ParametersFactory.eINSTANCE.createSimilaritySettings()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ParametersPackage.Literals.OPTIMISER_SETTINGS__SOLUTION_IMPROVEMENT_SETTINGS,
+				 ParametersFactory.eINSTANCE.createIndividualSolutionImprovementSettings()));
 	}
 
 }

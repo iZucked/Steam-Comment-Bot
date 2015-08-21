@@ -17,6 +17,8 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.parameters.AnnealingSettings#getEpochLength <em>Epoch Length</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.AnnealingSettings#getCooling <em>Cooling</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.AnnealingSettings#getInitialTemperature <em>Initial Temperature</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.AnnealingSettings#isRestarting <em>Restarting</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.AnnealingSettings#getRestartIterationsThreshold <em>Restart Iterations Threshold</em>}</li>
  * </ul>
  * </p>
  *
@@ -128,6 +130,58 @@ public interface AnnealingSettings extends EObject {
 	 * @generated
 	 */
 	void setInitialTemperature(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Restarting</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Restarting</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Restarting</em>' attribute.
+	 * @see #setRestarting(boolean)
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getAnnealingSettings_Restarting()
+	 * @model
+	 * @generated
+	 */
+	boolean isRestarting();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.AnnealingSettings#isRestarting <em>Restarting</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Restarting</em>' attribute.
+	 * @see #isRestarting()
+	 * @generated
+	 */
+	void setRestarting(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Restart Iterations Threshold</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Restart Iterations Threshold</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Restart Iterations Threshold</em>' attribute.
+	 * @see #setRestartIterationsThreshold(int)
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getAnnealingSettings_RestartIterationsThreshold()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getRestartIterationsThreshold();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.AnnealingSettings#getRestartIterationsThreshold <em>Restart Iterations Threshold</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Restart Iterations Threshold</em>' attribute.
+	 * @see #getRestartIterationsThreshold()
+	 * @generated
+	 */
+	void setRestartIterationsThreshold(int value);
 
 } // end of  AnnealingSettings
 

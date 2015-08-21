@@ -25,10 +25,31 @@ import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -130,6 +151,8 @@ public class OptimiserSettingsComponentHelper extends BaseComponentHelper {
 		add_generateCharterOutsEditor(detailComposite, topClass);
 		add_shippingOnlyEditor(detailComposite, topClass);
 		add_similaritySettingsEditor(detailComposite, topClass);
+		add_solutionImprovementSettingsEditor(detailComposite, topClass);
+		add_buildActionSetsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the objectives feature on OptimiserSettings
@@ -205,5 +228,23 @@ public class OptimiserSettingsComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_similaritySettingsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ParametersPackage.Literals.OPTIMISER_SETTINGS__SIMILARITY_SETTINGS));
+	}
+
+	/**
+	 * Create the editor for the solutionImprovementSettings feature on OptimiserSettings
+	 *
+	 * @generated
+	 */
+	protected void add_solutionImprovementSettingsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ParametersPackage.Literals.OPTIMISER_SETTINGS__SOLUTION_IMPROVEMENT_SETTINGS));
+	}
+
+	/**
+	 * Create the editor for the buildActionSets feature on OptimiserSettings
+	 *
+	 * @generated
+	 */
+	protected void add_buildActionSetsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ParametersPackage.Literals.OPTIMISER_SETTINGS__BUILD_ACTION_SETS));
 	}
 }

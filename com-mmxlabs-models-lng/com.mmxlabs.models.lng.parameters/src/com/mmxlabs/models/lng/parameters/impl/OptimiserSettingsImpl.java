@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import com.mmxlabs.models.lng.parameters.AnnealingSettings;
 import com.mmxlabs.models.lng.parameters.Argument;
 import com.mmxlabs.models.lng.parameters.Constraint;
+import com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings;
 import com.mmxlabs.models.lng.parameters.Objective;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
@@ -43,6 +44,8 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#isGenerateCharterOuts <em>Generate Charter Outs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#isShippingOnly <em>Shipping Only</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#getSimilaritySettings <em>Similarity Settings</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#getSolutionImprovementSettings <em>Solution Improvement Settings</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#isBuildActionSets <em>Build Action Sets</em>}</li>
  * </ul>
  * </p>
  *
@@ -188,6 +191,36 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * @ordered
 	 */
 	protected SimilaritySettings similaritySettings;
+
+	/**
+	 * The cached value of the '{@link #getSolutionImprovementSettings() <em>Solution Improvement Settings</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSolutionImprovementSettings()
+	 * @generated
+	 * @ordered
+	 */
+	protected IndividualSolutionImprovementSettings solutionImprovementSettings;
+
+	/**
+	 * The default value of the '{@link #isBuildActionSets() <em>Build Action Sets</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isBuildActionSets()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean BUILD_ACTION_SETS_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isBuildActionSets() <em>Build Action Sets</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isBuildActionSets()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean buildActionSets = BUILD_ACTION_SETS_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -477,6 +510,70 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public IndividualSolutionImprovementSettings getSolutionImprovementSettings() {
+		return solutionImprovementSettings;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetSolutionImprovementSettings(IndividualSolutionImprovementSettings newSolutionImprovementSettings, NotificationChain msgs) {
+		IndividualSolutionImprovementSettings oldSolutionImprovementSettings = solutionImprovementSettings;
+		solutionImprovementSettings = newSolutionImprovementSettings;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ParametersPackage.OPTIMISER_SETTINGS__SOLUTION_IMPROVEMENT_SETTINGS, oldSolutionImprovementSettings, newSolutionImprovementSettings);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSolutionImprovementSettings(IndividualSolutionImprovementSettings newSolutionImprovementSettings) {
+		if (newSolutionImprovementSettings != solutionImprovementSettings) {
+			NotificationChain msgs = null;
+			if (solutionImprovementSettings != null)
+				msgs = ((InternalEObject)solutionImprovementSettings).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ParametersPackage.OPTIMISER_SETTINGS__SOLUTION_IMPROVEMENT_SETTINGS, null, msgs);
+			if (newSolutionImprovementSettings != null)
+				msgs = ((InternalEObject)newSolutionImprovementSettings).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ParametersPackage.OPTIMISER_SETTINGS__SOLUTION_IMPROVEMENT_SETTINGS, null, msgs);
+			msgs = basicSetSolutionImprovementSettings(newSolutionImprovementSettings, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.OPTIMISER_SETTINGS__SOLUTION_IMPROVEMENT_SETTINGS, newSolutionImprovementSettings, newSolutionImprovementSettings));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isBuildActionSets() {
+		return buildActionSets;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setBuildActionSets(boolean newBuildActionSets) {
+		boolean oldBuildActionSets = buildActionSets;
+		buildActionSets = newBuildActionSets;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.OPTIMISER_SETTINGS__BUILD_ACTION_SETS, oldBuildActionSets, buildActionSets));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -492,6 +589,8 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 				return ((InternalEList<?>)getArguments()).basicRemove(otherEnd, msgs);
 			case ParametersPackage.OPTIMISER_SETTINGS__SIMILARITY_SETTINGS:
 				return basicSetSimilaritySettings(null, msgs);
+			case ParametersPackage.OPTIMISER_SETTINGS__SOLUTION_IMPROVEMENT_SETTINGS:
+				return basicSetSolutionImprovementSettings(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -524,6 +623,10 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 				return isShippingOnly();
 			case ParametersPackage.OPTIMISER_SETTINGS__SIMILARITY_SETTINGS:
 				return getSimilaritySettings();
+			case ParametersPackage.OPTIMISER_SETTINGS__SOLUTION_IMPROVEMENT_SETTINGS:
+				return getSolutionImprovementSettings();
+			case ParametersPackage.OPTIMISER_SETTINGS__BUILD_ACTION_SETS:
+				return isBuildActionSets();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -570,6 +673,12 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 			case ParametersPackage.OPTIMISER_SETTINGS__SIMILARITY_SETTINGS:
 				setSimilaritySettings((SimilaritySettings)newValue);
 				return;
+			case ParametersPackage.OPTIMISER_SETTINGS__SOLUTION_IMPROVEMENT_SETTINGS:
+				setSolutionImprovementSettings((IndividualSolutionImprovementSettings)newValue);
+				return;
+			case ParametersPackage.OPTIMISER_SETTINGS__BUILD_ACTION_SETS:
+				setBuildActionSets((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -612,6 +721,12 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 			case ParametersPackage.OPTIMISER_SETTINGS__SIMILARITY_SETTINGS:
 				setSimilaritySettings((SimilaritySettings)null);
 				return;
+			case ParametersPackage.OPTIMISER_SETTINGS__SOLUTION_IMPROVEMENT_SETTINGS:
+				setSolutionImprovementSettings((IndividualSolutionImprovementSettings)null);
+				return;
+			case ParametersPackage.OPTIMISER_SETTINGS__BUILD_ACTION_SETS:
+				setBuildActionSets(BUILD_ACTION_SETS_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -644,6 +759,10 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 				return shippingOnly != SHIPPING_ONLY_EDEFAULT;
 			case ParametersPackage.OPTIMISER_SETTINGS__SIMILARITY_SETTINGS:
 				return similaritySettings != null;
+			case ParametersPackage.OPTIMISER_SETTINGS__SOLUTION_IMPROVEMENT_SETTINGS:
+				return solutionImprovementSettings != null;
+			case ParametersPackage.OPTIMISER_SETTINGS__BUILD_ACTION_SETS:
+				return buildActionSets != BUILD_ACTION_SETS_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -698,6 +817,8 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 		result.append(generateCharterOuts);
 		result.append(", shippingOnly: ");
 		result.append(shippingOnly);
+		result.append(", buildActionSets: ");
+		result.append(buildActionSets);
 		result.append(')');
 		return result.toString();
 	}
