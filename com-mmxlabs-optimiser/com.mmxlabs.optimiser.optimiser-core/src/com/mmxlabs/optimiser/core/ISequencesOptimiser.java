@@ -56,7 +56,7 @@ public interface ISequencesOptimiser extends IOptimiser {
 	ISequencesManipulator getSequenceManipulator();
 
 	@Nullable
-	IAnnotatedSolution start(@NonNull IOptimisationContext context);
+	IAnnotatedSolution start(@NonNull IOptimisationContext context, @NonNull ISequences initialSequences);
 
 	@Nullable
 	IAnnotatedSolution getBestSolution();

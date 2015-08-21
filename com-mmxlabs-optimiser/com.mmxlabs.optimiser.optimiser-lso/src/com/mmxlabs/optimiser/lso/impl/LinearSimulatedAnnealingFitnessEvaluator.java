@@ -52,7 +52,6 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 	private List<IFitnessComponent> fitnessComponents = Collections.emptyList();
 	private List<IEvaluationProcess> evaluationProcesses = Collections.emptyList();
 
-	@Inject
 	private IThresholder thresholder;
 
 	@Inject
@@ -307,4 +306,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 		return result;
 	}
 
+	public void setThresholder(IThresholder thresholder) {
+		this.thresholder = thresholder;
+	}
 }

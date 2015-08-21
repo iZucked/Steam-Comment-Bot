@@ -35,11 +35,11 @@ import com.mmxlabs.optimiser.lso.logging.LSOLogger;
  * 
  */
 public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
-	private IOptimisationData data;
+	protected IOptimisationData data;
 
-	private int numberOfMovesTried;
+	protected int numberOfMovesTried;
 
-	private int numberOfMovesAccepted;
+	protected int numberOfMovesAccepted;
 
 	private int numberOfRejectedMoves;
 
@@ -47,9 +47,9 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 	private int numberOfFailedToValidate;
 
-	private ModifiableSequences currentRawSequences;
+	protected ModifiableSequences currentRawSequences;
 
-	private ModifiableSequences potentialRawSequences;
+	protected ModifiableSequences potentialRawSequences;
 
 	@Inject(optional = true)
 	@Named(LSOLoggingConstants.LSO_LOGGER)
@@ -57,13 +57,12 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 	private Pair<Integer, Long> best = new Pair<>(0,0L);
 	@Override
-	public IAnnotatedSolution start(@NonNull final IOptimisationContext optimiserContext) {
+	public IAnnotatedSolution start(@NonNull final IOptimisationContext optimiserContext, @NonNull final ISequences initialSequences) {
 		setCurrentContext(optimiserContext);
 		data = optimiserContext.getOptimisationData();
 		numberOfMovesTried = 0;
 		numberOfMovesAccepted = 0;
 
-		final ISequences initialSequences = optimiserContext.getInitialSequences();
 		final ModifiableSequences currentRawSequences = new ModifiableSequences(initialSequences);
 
 		final ModifiableSequences potentialRawSequences = new ModifiableSequences(currentRawSequences.getResources());

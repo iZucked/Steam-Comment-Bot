@@ -70,7 +70,7 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 	 */
 	@Override
 	public final void optimise(@NonNull final IOptimisationContext optimiserContext) {
-		final IAnnotatedSolution startSolution = start(optimiserContext);
+		final IAnnotatedSolution startSolution = start(optimiserContext, optimiserContext.getInitialSequences());
 		getProgressMonitor().begin(this, fitnessEvaluator.getBestFitness(), startSolution);
 		final int percentage = (100 * getReportInterval()) / getNumberOfIterations();
 

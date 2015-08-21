@@ -73,7 +73,7 @@ public class LinearFitnessEvaluatorModule extends AbstractModule {
 
 		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = new LinearSimulatedAnnealingFitnessEvaluator();
 		injector.injectMembers(fitnessEvaluator);
-
+		fitnessEvaluator.setThresholder(thresholder);
 		fitnessEvaluator.setFitnessComponents(fitnessComponents);
 		fitnessEvaluator.setEvaluationProcesses(evaluationProcesses);
 

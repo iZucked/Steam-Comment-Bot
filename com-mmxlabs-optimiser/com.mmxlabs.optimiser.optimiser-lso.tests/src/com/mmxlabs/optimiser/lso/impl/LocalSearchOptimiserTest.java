@@ -18,6 +18,7 @@ import org.mockito.Mockito;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
+import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
@@ -88,7 +89,7 @@ public class LocalSearchOptimiserTest {
 
 		@Override
 		@Nullable
-		public IAnnotatedSolution start(@NonNull final IOptimisationContext context) {
+		public IAnnotatedSolution start(@NonNull final IOptimisationContext context, @NonNull ISequences initialSequences) {
 			fail("This is not part of the test.");
 			return null;
 		}
