@@ -404,6 +404,10 @@ public class BreadthOptimiser {
 						for (int i = 0; i < limit; ++i) {
 							subList.add(limitedStates.remove(0));
 						}
+						//// Ignore the rest!
+						// if (!files.isEmpty()) {
+						// limitedStates.clear();
+						// }
 
 						final JobStore jobStore = new JobStore(depth);
 						final Collection<JobState> states = runJobs(similarityState, subList, jobStore);
@@ -414,11 +418,6 @@ public class BreadthOptimiser {
 
 						// Sort results into leaves and branches.
 						sortJobStates(states, leafStates, branchStates);
-
-						// Ignore the rest!
-						if (!files.isEmpty()) {
-							limitedStates.clear();
-						}
 
 						if (!leafStates.isEmpty()) {
 							// Found a result, break out early
