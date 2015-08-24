@@ -13,6 +13,7 @@ import java.util.List;
 
 import javax.management.timer.Timer;
 
+import org.apache.shiro.SecurityUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubProgressMonitor;
@@ -134,9 +135,12 @@ public class LNGScenarioRunner {
 				if (LNGTransformer.HINT_OPTIMISE_LSO.equals(hint)) {
 					createOptimiser = true;
 				}
-				if (LNGTransformer.HINT_OPTIMISE_BREAKDOWN.equals(hint)) {
-					doActionSetPostOptimisation = true;
-				}
+			}
+		}
+		// Check for break down optimisation here.
+		if (optimiserSettings.isBuildActionSets()) {
+			if (SecurityUtils.getSubject().isPermitted("features:optimisation-actionset")) {
+				doActionSetPostOptimisation = true;
 			}
 		}
 		optimiserScenario = originalScenario;
@@ -642,9 +646,8 @@ public class LNGScenarioRunner {
 					bestRawSequences = optimiser.getBestRawSequences();
 					bestSolution = optimiser.getBestSolution();
 
-
 					optimiser = performSolutionImprovement(progressMonitor, bestRawSequences);
-					
+
 					if (optimiser != null) {
 						if (optimiser.getBestRawSequences() != null) {
 							bestRawSequences = optimiser.getBestRawSequences();
@@ -657,7 +660,7 @@ public class LNGScenarioRunner {
 			}
 
 			if (doActionSetPostOptimisation) {
-//				assert optimiser.isFinished();
+				// assert optimiser.isFinished();
 				assert bestRawSequences != null;
 				assert bestSolution != null;
 

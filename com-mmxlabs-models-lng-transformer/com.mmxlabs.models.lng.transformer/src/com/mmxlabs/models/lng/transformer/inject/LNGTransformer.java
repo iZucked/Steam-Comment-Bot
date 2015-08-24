@@ -118,8 +118,10 @@ public class LNGTransformer {
 				hints.add(HINT_GENERATE_CHARTER_OUTS);
 			}
 		}
+
+		// Too late for LNGScenarioRunner, but add to hints for modules in case it is needed in the future.
 		if (optimiserSettings.isBuildActionSets()) {
-			if (SecurityUtils.getSubject().isPermitted("features:optimisation-action-sets")) {
+			if (SecurityUtils.getSubject().isPermitted("features:optimisation-actionset")) {
 				hints.add(HINT_OPTIMISE_BREAKDOWN);
 			}
 		}
