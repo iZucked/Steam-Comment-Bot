@@ -654,7 +654,7 @@ public class LNGScenarioRunner {
 			}
 
 			if (doActionSetPostOptimisation) {
-
+//				assert optimiser.isFinished();
 				assert bestRawSequences != null;
 				assert bestSolution != null;
 
@@ -669,6 +669,7 @@ public class LNGScenarioRunner {
 				final List<Pair<ISequences, IEvaluationState>> breakdownSolution = instance.getBestSolution();
 				if (breakdownSolution != null) {
 					storeBreakdownSolutionsAsForks(breakdownSolution, foundBetterResult, new SubProgressMonitor(progressMonitor, PROGRESS_ACTION_SET_SAVE));
+					exportOptimiserSolution = !foundBetterResult;
 				}
 
 				// The breakdown optimiser may find a better solution. This will be saved in storeBreakdownSolutionsAsForks
