@@ -282,7 +282,7 @@ public class BreadthOptimiser {
 					if (best == null) {
 						best = subList.get(0);
 					}
-					final Collection<JobState> states = findChangeSets(similarityState, subList, depth);
+					final Collection<JobState> states = findChangeSets(similarityState, subList, depth, progressMonitor);
 					final List<JobState> leafStates = new LinkedList<>();
 
 					sortJobStates(states, leafStates, branchStates);
@@ -314,7 +314,7 @@ public class BreadthOptimiser {
 	}
 
 	@NonNull
-	public Collection<JobState> findChangeSets(@NonNull final SimilarityState similarityState, final Collection<JobState> currentStates, final int depth)
+	public Collection<JobState> findChangeSets(@NonNull final SimilarityState similarityState, final Collection<JobState> currentStates, final int depth, IProgressMonitor checkCancelledStateMonitor)
 			throws InterruptedException, ExecutionException {
 
 		// System.out.printf("Find change sets %d\n", depth);
@@ -353,6 +353,9 @@ public class BreadthOptimiser {
 
 				// Could end up with many limited states, run on limited
 				LOOP_LIMITED: while (persistedLimitedStates > 0 && files.size() > 0) {
+					if (checkCancelledStateMonitor.isCanceled()) {
+						return leafStates;
+					}
 					// Instead of loading everything in, just load in one file at a time,
 					List<JobState> limitedStates = null;
 					try {
@@ -369,6 +372,9 @@ public class BreadthOptimiser {
 					limitedStates = reduceAndSortStates(limitedStates);
 
 					while (!limitedStates.isEmpty()) {
+						if (checkCancelledStateMonitor.isCanceled()) {
+							return leafStates;
+						}
 						// System.out.printf("Limited states run (%d) - L %d\n", depth, limitedStates.size());
 						final List<JobState> subList = new LinkedList<>();//
 						// Run in batches of 100. Smaller number may be quicker, but return a less diverse set of results as we return as soon as we have a leaf result.
