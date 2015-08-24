@@ -23,6 +23,8 @@ import java.util.concurrent.Future;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -85,6 +87,8 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 public class BreadthOptimiser {
 
 	private static final boolean DEBUG = false;
+
+	private static final Logger LOG = LoggerFactory.getLogger(BreadthOptimiser.class);
 
 	@Inject
 	@NonNull
@@ -240,7 +244,9 @@ public class BreadthOptimiser {
 				if (!sortedChangeStates.isEmpty()) {
 					betterSolutionFound = processAndStoreBreakdownSolution(sortedChangeStates.get(0), initialFullSequences, evaluationState, bestFitness);
 				}
-
+				if (sortedChangeStates.isEmpty()) {
+					LOG.error("Unable to find action sets");
+				}
 			} catch (final InterruptedException e) {
 				e.printStackTrace();
 			} catch (final ExecutionException e) {
