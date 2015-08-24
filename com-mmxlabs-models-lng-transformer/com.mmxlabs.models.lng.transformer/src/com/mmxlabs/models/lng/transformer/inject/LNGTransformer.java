@@ -58,8 +58,7 @@ public class LNGTransformer {
 	/**
 	 */
 	public static final String HINT_OPTIMISE_BREAKDOWN = "hint-lngtransformer-optimise-breakdown";
-	
-	
+
 	public static final String HINT_GENERATE_CHARTER_OUTS = "hint-lngtransformer-generate-charter-outs";
 
 	private final LNGScenarioModel scenario;
@@ -117,6 +116,11 @@ public class LNGTransformer {
 		if (optimiserSettings.isGenerateCharterOuts()) {
 			if (SecurityUtils.getSubject().isPermitted("features:optimisation-charter-out-generation")) {
 				hints.add(HINT_GENERATE_CHARTER_OUTS);
+			}
+		}
+		if (optimiserSettings.isBuildActionSets()) {
+			if (SecurityUtils.getSubject().isPermitted("features:optimisation-action-sets")) {
+				hints.add(HINT_OPTIMISE_BREAKDOWN);
 			}
 		}
 
@@ -261,6 +265,7 @@ public class LNGTransformer {
 	public IEvaluationContext getEvaluationContext() {
 		return injector.getInstance(IEvaluationContext.class);
 	}
+
 	@NonNull
 	public IOptimisationContext getOptimisationContext() {
 		return injector.getInstance(IOptimisationContext.class);
