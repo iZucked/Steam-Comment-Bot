@@ -383,7 +383,7 @@ public final class OptimisationHelper {
 					// objective.setWeight(1.0);
 
 					dialog.addOption(DataSection.Controls, group, editingDomain, " ", copy, defaultSettings, DataType.Choice, choiceData,
-							ParametersPackage.eINSTANCE.getOptimiserSettings_ShippingOnly());
+							ParametersPackage.eINSTANCE.getOptimiserSettings_BuildActionSets());
 					optionAdded = true;
 				}
 			}

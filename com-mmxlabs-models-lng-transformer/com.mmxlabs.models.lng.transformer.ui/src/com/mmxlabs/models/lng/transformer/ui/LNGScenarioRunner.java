@@ -139,7 +139,6 @@ public class LNGScenarioRunner {
 				}
 			}
 		}
-		doActionSetPostOptimisation = true;
 		optimiserScenario = originalScenario;
 		optimiserEditingDomain = originalEditingDomain;
 	}
