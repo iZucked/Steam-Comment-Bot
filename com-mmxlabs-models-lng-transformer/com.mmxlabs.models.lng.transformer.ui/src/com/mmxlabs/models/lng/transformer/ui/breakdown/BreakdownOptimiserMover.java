@@ -281,7 +281,7 @@ public class BreakdownOptimiserMover {
 		final StateManager stateManager = new StateManager(currentSequences, currentFullSequences);
 
 		// targetElements = null;
-		final List<ISequenceElement> loopElements = targetElements == null ? new LinkedList<>(changedElements) : new LinkedList<>(targetElements);
+		final List<ISequenceElement> loopElements = targetElements == null ? new LinkedList<>(new LinkedHashSet<>(changedElements)) : new LinkedList<>(new LinkedHashSet<>(targetElements));
 		Collections.shuffle(loopElements, new Random((long) tryDepth));
 
 		// TODO: Now we have this loopElements list, we can decide whether or not to examine the whole list
