@@ -114,7 +114,7 @@ public class ScenarioUtils {
 		annealingSettings.setInitialTemperature(1000000);
 		// restarts
 		annealingSettings.setRestarting(false);
-		annealingSettings.setRestartIterationsThreshold(50000);
+		annealingSettings.setRestartIterationsThreshold(500000);
 		settings.setAnnealingSettings(annealingSettings);
 
 		final OptimisationRange range = parametersFactory.createOptimisationRange();
