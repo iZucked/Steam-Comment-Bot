@@ -291,6 +291,10 @@ public class BreadthOptimiser {
 					if (!leafStates.isEmpty()) {
 						return leafStates;
 					}
+					// Only use first batch of results
+					if (!branchStates.isEmpty()) {
+						break;
+					}
 				}
 				currentStates = branchStates;
 			} else {
