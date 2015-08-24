@@ -537,7 +537,7 @@ public class ChangeSetView implements IAdaptable {
 						metrics = changeSet.getMetricsToPrevious();
 					}
 					// int latenessDelta = (int) Math.round((double) metrics.getLatenessDelta() / 24.0);
-					cell.setText(String.format("%s%d", metrics.getPnlDelta() < 0 ? "↓" : "↑", Math.abs(metrics.getPnlDelta())));
+					cell.setText(String.format("%s%,d", metrics.getPnlDelta() < 0 ? "↓" : "↑", Math.abs(metrics.getPnlDelta())));
 					// final DataVisualizer dv = viewer.getGrid().getDataVisualizer();
 					// dv.setColumnSpan((GridItem) cell.getItem(), cell.getColumnIndex(), viewer.getGrid().getColumnCount());
 				}

@@ -503,7 +503,7 @@ public class ChangeSetViewTransformer {
 					pnl -= openSlotAllocation.getGroupProfitAndLoss().getProfitAndLoss();
 				}
 			}
-			deltaMetrics.setPnlDelta((int) -pnl);
+			deltaMetrics.setPnlDelta((int) pnl);
 			deltaMetrics.setLatenessDelta((int) lateness);
 			deltaMetrics.setCapacityDelta((int) violations);
 			if (isBase) {
