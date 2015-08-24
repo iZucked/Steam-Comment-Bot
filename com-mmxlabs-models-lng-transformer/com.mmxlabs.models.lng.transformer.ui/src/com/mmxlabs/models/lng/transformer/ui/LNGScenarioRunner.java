@@ -14,6 +14,7 @@ import java.util.List;
 import javax.management.timer.Timer;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -619,6 +620,9 @@ public class LNGScenarioRunner {
 					if (monitor != null) {
 						monitor.report(optimiser, optimiser.getNumberOfIterationsCompleted(), optimiser.getFitnessEvaluator().getCurrentFitness(), optimiser.getFitnessEvaluator().getBestFitness(),
 								optimiser.getCurrentSolution(), optimiser.getBestSolution());
+					}
+					if (progressMonitor.isCanceled()) {
+						throw new OperationCanceledException();
 					}
 					progressMonitor.worked(1);
 				}
