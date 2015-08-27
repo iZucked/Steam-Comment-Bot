@@ -506,22 +506,16 @@ public class BreakdownOptimiserMover {
 								if (similarityState.getResourceForElement(prev) == similarityState.getResourceForElement(current)) {
 									// Find insertion point
 									final ISequence originalSequence = currentSequences.getSequence(similarityState.getResourceForElement(prev));
-									final ISequence currentSequence = currentSequences.getSequence(resource);
 
+									assert p.getFirst() == resource;
 									// Create and apply change.
-									for (int i = 0; i < currentSequence.size(); ++i) {
-										if (currentSequence.get(i) == prev) {
-											// Iterate over all possible positions and try it. Note we really could do with original index information to reduce the quantity of options generated.
-											// This can get very long and quickly explodes the search space.
-											for (final int j : findInsertPoints(similarityState, originalSequence, resource, prev, current)) {
-												if (portTypeProvider.getPortType(originalSequence.get(j)) != PortType.Discharge) {
+									// Iterate over all possible positions and try it. Note we really could do with original index information to reduce the quantity of options generated.
+									// This can get very long and quickly explodes the search space.
+									for (final int j : findInsertPoints(similarityState, originalSequence, resource, prev, current)) {
+										if (portTypeProvider.getPortType(originalSequence.get(j)) != PortType.Discharge) {
 
-													newStates.addAll(swapVessel(currentSequences, similarityState, changes, changeSets, tryDepth, currentMetrics, resource, prev, current, j, jobStore,
-															targetElements));
-												}
-											}
-
-											break;
+											newStates.addAll(
+													swapVessel(currentSequences, similarityState, changes, changeSets, tryDepth, currentMetrics, resource, prev, current, j, jobStore, targetElements));
 										}
 									}
 								} else {
