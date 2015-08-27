@@ -23,6 +23,8 @@ import java.util.concurrent.Future;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -246,6 +248,12 @@ public class BreadthOptimiser {
 				}
 				if (sortedChangeStates.isEmpty()) {
 					LOG.error("Unable to find action sets");
+					if (System.getProperty("lingo.suppress.dialogs") == null) {
+						final Display display = Display.getDefault();
+						if (display != null) {
+							MessageDialog.openError(display.getActiveShell(), "", "Unable to find action sets");
+						}
+					}
 				}
 			} catch (final InterruptedException e) {
 				e.printStackTrace();
