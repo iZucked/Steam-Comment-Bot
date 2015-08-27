@@ -1094,9 +1094,9 @@ public class BreakdownOptimiserMover {
 			for (final ISequenceElement current : sequence) {
 				assert current != null;
 				if (prev != null) {
+
 					// Currently only looking at LD style cargoes
 					if (portTypeProvider.getPortType(prev) == PortType.Load && portTypeProvider.getPortType(current) == PortType.Discharge) {
-						// TODO Add to count changes
 						// Wiring Change
 						boolean wiringChange = false;
 						final ISequenceElement matchedDischargeElement = similarityState.getDischargeElementForLoad(prev);
@@ -1104,29 +1104,13 @@ public class BreakdownOptimiserMover {
 
 						final IResource resourceForElement = similarityState.getResourceForElement(prev);
 						if (matchedDischargeElement == null && matchedLoadElement == null) {
-							changedElements.add(prev);
-							changedElements.add(current);
-
-						} else if (matchedLoadElement == null && matchedDischargeElement != null) {
-							changedElements.add(current);
-						} else if (matchedDischargeElement == null && matchedLoadElement != null) {
 							wiringChange = true;
 							changedElements.add(prev);
+							changedElements.add(current);
 						} else if (matchedDischargeElement != current) {
 							wiringChange = true;
-							// Has the load moved vessel?
-							if (resourceForElement != resource) {
-								// Hash the discharge moved vessel?
-								if (similarityState.getResourceForElement(current) != resource) {
-									// Both load and discharge have moved
-									changedElements.add(prev);
-									changedElements.add(current);
-								} else {
-									changedElements.add(prev);
-								}
-							} else {
-								changedElements.add(current);
-							}
+							changedElements.add(prev);
+							changedElements.add(current);
 						}
 
 						// Vessel Change
