@@ -370,6 +370,7 @@ public class BreakdownOptimiserMover {
 								final List<ISequenceElement> searchElements = targetElements == null ? new LinkedList<ISequenceElement>() : new LinkedList<>(targetElements);
 								// Tell next level to focus on the load
 								searchElements.add(prev);
+								searchElements.add(matchedDischargeElement);
 
 								newStates.addAll(removeElementsFromSequence(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, currentMetrics, jobStore,
 										searchElements));
@@ -395,6 +396,7 @@ public class BreakdownOptimiserMover {
 								final List<ISequenceElement> searchElements = targetElements == null ? new LinkedList<ISequenceElement>() : new LinkedList<>(targetElements);
 								// Focus on the discharge
 								searchElements.add(current);
+								searchElements.add(matchedLoadElement);
 
 								newStates.addAll(removeElementsFromSequence(currentSequences, similarityState, changes, changeSets, tryDepth, resource, prev, current, currentMetrics, jobStore,
 										searchElements));
