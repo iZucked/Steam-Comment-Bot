@@ -17,14 +17,6 @@
 		<view class="com.mmxlabs.lingo.reports.diff.DiffGroupView" id="com.mmxlabs.lingo.reports.diff.DiffGroupView"
 			name="Changes" restorable="true" icon="icons/cview16/changes_view.gif">
 		</view>
-      <e4view
-            class="com.mmxlabs.lingo.reports.views.changeset.ChangeSetView"
-            icon="icons/cview16/changes_view.gif"
-            id="com.mmxlabs.lingo.reports.views.changeset.ChangeSetView"
-            name="Change Sets"
-            restorable="true">
-      </e4view>
-		
 	</extension>
 
 	<extension point="org.eclipse.ui.actionSets">
