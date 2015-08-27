@@ -118,6 +118,7 @@ public class LNGScenarioRunner {
 	private EnumMap<ModuleType, List<Module>> localOverrides;
 
 	private final ScenarioInstance scenarioInstance;
+	private boolean doHillClimb;
 
 	public LNGScenarioRunner(final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings, final String... hints) {
 		this(scenario, null, optimiserSettings, createLocalEditingDomain(), hints);
@@ -143,6 +144,7 @@ public class LNGScenarioRunner {
 				doActionSetPostOptimisation = true;
 			}
 		}
+		doHillClimb = SecurityUtils.getSubject().isPermitted("features:optimisation-hillclimb");
 		optimiserScenario = originalScenario;
 		optimiserEditingDomain = originalEditingDomain;
 	}
@@ -609,7 +611,8 @@ public class LNGScenarioRunner {
 	public void runWithProgress(final @NonNull IProgressMonitor progressMonitor) {
 		assert createOptimiser;
 
-		int totalWork = (PROGRESS_OPTIMISATION) + PROGRESS_HILLCLIMBING_OPTIMISATION + (doActionSetPostOptimisation ? PROGRESS_ACTION_SET_OPTIMISATION + PROGRESS_ACTION_SET_SAVE : 0);
+		int totalWork = (PROGRESS_OPTIMISATION) + (doHillClimb ? PROGRESS_HILLCLIMBING_OPTIMISATION : 0)
+				+ (doActionSetPostOptimisation ? PROGRESS_ACTION_SET_OPTIMISATION + PROGRESS_ACTION_SET_SAVE : 0);
 		progressMonitor.beginTask("", totalWork);
 		try {
 			IAnnotatedSolution bestSolution = null;
@@ -646,12 +649,14 @@ public class LNGScenarioRunner {
 					bestRawSequences = optimiser.getBestRawSequences();
 					bestSolution = optimiser.getBestSolution();
 
-					optimiser = performSolutionImprovement(progressMonitor, bestRawSequences);
+					if (doHillClimb) {
+						optimiser = performSolutionImprovement(progressMonitor, bestRawSequences);
 
-					if (optimiser != null) {
-						if (optimiser.getBestRawSequences() != null) {
-							bestRawSequences = optimiser.getBestRawSequences();
-							bestSolution = optimiser.getBestSolution();
+						if (optimiser != null) {
+							if (optimiser.getBestRawSequences() != null) {
+								bestRawSequences = optimiser.getBestRawSequences();
+								bestSolution = optimiser.getBestSolution();
+							}
 						}
 					}
 					optimiser = null;

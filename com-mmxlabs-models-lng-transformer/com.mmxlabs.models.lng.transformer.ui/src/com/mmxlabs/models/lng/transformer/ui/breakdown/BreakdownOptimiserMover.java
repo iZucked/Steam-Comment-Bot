@@ -265,7 +265,7 @@ public class BreakdownOptimiserMover {
 				}
 
 				// Failed to to find valid state at the end of the search depth. Record a limited state and exit
-				if (tryDepth == 0 && changedElements.size() > 2) {
+				if (tryDepth == 0) {
 					final JobState jobState = new JobState(new Sequences(currentSequences), changeSets, new LinkedList<Change>(changes));
 
 					jobState.setMetric(MetricType.PNL, currentMetrics[MetricType.PNL.ordinal()], 0, 0);
