@@ -202,8 +202,8 @@ public class ChangeSetViewTransformer {
 		final EquivalanceGroupBuilder equivalanceGroupBuilder = new EquivalanceGroupBuilder();
 
 		final Set<EObject> fromInterestingElements = new LinkedHashSet<>();
-		final Set<EObject> fromAllElements = new LinkedHashSet<>();
 		final Set<EObject> toInterestingElements = new LinkedHashSet<>();
+		final Set<EObject> fromAllElements = new LinkedHashSet<>();
 		final Set<EObject> toAllElements = new LinkedHashSet<>();
 
 		final Schedule fromSchedule = ((LNGScenarioModel) from.getInstance()).getPortfolioModel().getScheduleModel().getSchedule();
@@ -262,12 +262,13 @@ public class ChangeSetViewTransformer {
 		for (final EObject element : uniqueElements) {
 			// Is it a cargo?
 			final boolean isBaseElement = toAllElements.contains(element);
-
 			if (element instanceof SlotVisit) {
+
 				final SlotVisit slotVisit = (SlotVisit) element;
 				final Slot slot = slotVisit.getSlotAllocation().getSlot();
 				if (slot instanceof LoadSlot) {
 					final LoadSlot loadSlot = (LoadSlot) slot;
+
 					createOrUpdateRow(lhsRowMap, rhsRowMap, rows, slotVisit, loadSlot, isBaseElement);
 				}
 			} else if (element instanceof OpenSlotAllocation) {
@@ -330,6 +331,10 @@ public class ChangeSetViewTransformer {
 			}
 			if (row.getLhsWiringLink() != null || row.getRhsWiringLink() != null) {
 				row.setWiringChange(true);
+			} else if ((row.getNewDischargeAllocation() == null) != (row.getOriginalDischargeAllocation() == null)) {
+				row.setWiringChange(true);
+			} else if ((row.getNewLoadAllocation() == null) != (row.getOriginalLoadAllocation() == null)) {
+				row.setWiringChange(true);
 			}
 
 		}
@@ -387,25 +392,10 @@ public class ChangeSetViewTransformer {
 
 					if (rowToRowGroup.containsKey(o1) && rowToRowGroup.get(o1).contains(o2)) {
 						// Related elements, sort together.
-
 						// Are these elements related?
-						// ChangeSetRow link = o1.getRhsWiringLink();
 						final Collection<ChangeSetRow> group = rowToRowGroup.get(o1);
-						// group.add(o1);
-						// while (link != null && !group.contains(link)) {
-						// group.add(link);
-						// link = link.getRhsWiringLink();
-						// }
-						// link = o1.getLhsWiringLink();
-						// while (link != null && !group.contains(link)) {
-						// group.add(link);
-						// link = link.getLhsWiringLink();
-						// }
-
-						// Are the rows related?
-						// if (group.contains(o2)) {
 						// Start from the first element in the sorted group
-						ChangeSetRow link = group.iterator().next();// get(0);
+						ChangeSetRow link = group.iterator().next();
 						while (link != null) {
 							if (link == o1) {
 								return -1;
@@ -729,7 +719,6 @@ public class ChangeSetViewTransformer {
 						}
 					}
 				}
-
 			}
 		} else {
 			//
@@ -739,6 +728,7 @@ public class ChangeSetViewTransformer {
 
 	protected void createOrUpdateRow(final Map<String, ChangeSetRow> lhsRowMap, final Map<String, ChangeSetRow> rhsRowMap, final List<ChangeSetRow> rows, final SlotVisit slotVisit,
 			final LoadSlot loadSlot, final boolean isBase) {
+
 		final ChangeSetRow row;
 		{
 			final String rowKey = getKeyName(loadSlot);
@@ -749,7 +739,7 @@ public class ChangeSetViewTransformer {
 				rows.add(row);
 				row.setLhsName(getRowName(loadSlot));
 				row.setLoadSlot(loadSlot);
-				lhsRowMap.put(getKeyName(loadSlot), row);
+				lhsRowMap.put(rowKey, row);
 			}
 		}
 
@@ -778,6 +768,7 @@ public class ChangeSetViewTransformer {
 				row.setRhsName(getRowName(slotAllocation.getSlot()));
 				row.setNewDischargeAllocation(slotAllocation);
 				row.setDischargeSlot((DischargeSlot) slotAllocation.getSlot());
+				// FIXME: This can replace an existing entry -- is this ok?
 				rhsRowMap.put(getKeyName(slotAllocation.getSlot()), row);
 			} else {
 				row.setOriginalDischargeAllocation(slotAllocation);
@@ -794,7 +785,7 @@ public class ChangeSetViewTransformer {
 						otherRow.setOriginalDischargeAllocation(slotAllocation);
 						otherRow.setDischargeSlot((DischargeSlot) slotAllocation.getSlot());
 						// otherRow.setWiringChange(true);
-						rhsRowMap.put(getKeyName(slotAllocation.getSlot()), row);
+						rhsRowMap.put(getKeyName(slotAllocation.getSlot()), otherRow);
 					}
 					if (row != otherRow) {
 						row.setRhsWiringLink(otherRow);
