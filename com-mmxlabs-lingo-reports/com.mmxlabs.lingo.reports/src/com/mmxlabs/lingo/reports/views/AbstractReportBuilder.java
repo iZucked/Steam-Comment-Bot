@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.ui.IMemento;
 
 import com.mmxlabs.lingo.reports.components.ColumnBlockManager;
@@ -33,6 +34,7 @@ public abstract class AbstractReportBuilder {
 	public OptionInfo[] ROW_FILTER_ALL;
 	public OptionInfo[] DIFF_FILTER_ALL;
 
+	@NonNull
 	public static final OptionInfo DIFF_FILTER_PINNDED_SCENARIO = new OptionInfo("DIFF_FILTER_PINNDED_SCENARIO", "Show Pinned Scenario");
 
 	/**

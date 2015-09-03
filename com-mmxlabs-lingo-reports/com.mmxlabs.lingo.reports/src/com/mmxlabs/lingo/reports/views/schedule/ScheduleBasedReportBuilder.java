@@ -28,6 +28,7 @@ import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandlerExtension;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.AbstractReportBuilder;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
+import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -43,6 +44,7 @@ import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
@@ -84,6 +86,23 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 
 	}
 
+	public boolean showRow(Row row) {
+		OpenSlotAllocation openSlotAllocation = row.getOpenSlotAllocation();
+		if (openSlotAllocation != null) {
+			return showOpenSlot(openSlotAllocation);
+		}
+		SlotAllocation loadAllocation = row.getLoadAllocation();
+		if (loadAllocation != null){
+			return showEvent(loadAllocation.getSlotVisit());
+		}
+		EObject target = row.getTarget();
+		if (target instanceof Event) {
+			return showEvent((Event)target);
+		}
+		
+		return true;
+	}
+	
 	public boolean showOpenSlot(final OpenSlotAllocation openSlotAllocation) {
 
 		if (openSlotAllocation.getSlot() instanceof LoadSlot) {
@@ -341,4 +360,6 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 	public void setAdaptableReport(IAdaptable adaptableReport) {
 		this.adaptableReport = adaptableReport;
 	}
+
+	
 }

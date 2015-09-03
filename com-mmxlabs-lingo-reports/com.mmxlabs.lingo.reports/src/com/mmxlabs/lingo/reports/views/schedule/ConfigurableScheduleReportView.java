@@ -8,12 +8,17 @@
 package com.mmxlabs.lingo.reports.views.schedule;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import org.eclipse.emf.databinding.IEMFObservable;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
@@ -27,6 +32,10 @@ import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
+import com.mmxlabs.lingo.reports.services.EDiffOption;
+import com.mmxlabs.lingo.reports.services.IScenarioComparisonServiceListener;
+import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.views.AbstractConfigurableGridReportView;
 import com.mmxlabs.lingo.reports.views.AbstractReportBuilder;
@@ -38,7 +47,9 @@ import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportIni
 import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportInitialStateExtension.InitialRowType;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
  * A customisable report for schedule based data. Extension points define the available columns for all instances and initial state for each instance of this report. Optionally a dialog is available
@@ -61,7 +72,8 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 	@Inject(optional = true)
 	private Iterable<IScheduleBasedReportInitialStateExtension> initialStates;
 
-	private ScheduleReportTransformer transformer;
+	@Inject
+	private ScenarioComparisonService scenarioComparisonService;
 
 	@Inject
 	public ConfigurableScheduleReportView(final ScheduleBasedReportBuilder builder) {
@@ -83,15 +95,6 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 			return viewer.getGrid();
 		}
 
-		if (Table.class.isAssignableFrom(adapter)) {
-			final Object input = viewer.getInput();
-			if (input instanceof IEMFObservable) {
-				final IEMFObservable observable = (IEMFObservable) input;
-				return observable.getObserved();
-			}
-			return input;
-		}
-
 		if (IReportContents.class.isAssignableFrom(adapter)) {
 
 			final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
@@ -109,19 +112,79 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 	}
 
 	@Override
+	protected boolean isUseSynchroniser() {
+		return false;
+	}
+
+	private IScenarioComparisonServiceListener scenarioComparisonServiceListener = new IScenarioComparisonServiceListener() {
+
+		@Override
+		public void compareDataUpdate(@NonNull ISelectedDataProvider selectedDataProvider, @NonNull ScenarioInstance pin, @NonNull ScenarioInstance other, @NonNull Table table,
+				@NonNull List<LNGScenarioModel> rootObjects, @NonNull Map<EObject, Set<EObject>> equivalancesMap) {
+			clearInputEquivalents();
+			builder.refreshPNLColumns(rootObjects);
+			processInputs(table.getRows());
+			viewer.setInput(new ArrayList<>(table.getRows()));
+
+			for (final ColumnBlock handler : builder.getBlockManager().getBlocksInVisibleOrder()) {
+				if (handler != null) {
+					handler.setViewState(true, true);
+				}
+			}
+
+		}
+
+		@Override
+		public void multiDataUpdate(@NonNull ISelectedDataProvider selectedDataProvider, @NonNull Collection<ScenarioInstance> others, @NonNull Table table,
+				@NonNull List<LNGScenarioModel> rootObjects) {
+			clearInputEquivalents();
+			builder.refreshPNLColumns(rootObjects);
+			processInputs(table.getRows());
+			viewer.setInput(new ArrayList<>(table.getRows()));
+
+			int numberOfSchedules = others.size();
+			for (final ColumnBlock handler : builder.getBlockManager().getBlocksInVisibleOrder()) {
+				if (handler != null) {
+					handler.setViewState(numberOfSchedules > 1, false);
+				}
+			}
+		}
+
+		@Override
+		public void diffOptionChanged(EDiffOption d, Object oldValue, Object newValue) {
+			viewer.refresh();
+		}
+
+	};
+
+	@Override
 	public void initPartControl(final Composite parent) {
 		super.initPartControl(parent);
 
-		// Add a filter to only show certain rows.
+		viewer.setContentProvider(new ArrayContentProvider());
+		scenarioComparisonService.addListener(scenarioComparisonServiceListener);
 
+		// Add a filter to only show certain rows.
 		viewer.setFilters(new ViewerFilter[] { super.filterSupport.createViewerFilter(), new ViewerFilter() {
 
 			@Override
 			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
-
-				if (table != null && table.getOptions().isFilterSelectedElements() && !table.getSelectedElements().isEmpty()) {
-					if (!table.getSelectedElements().contains(element)) {
-						return false;
+				if (scenarioComparisonService.getDiffOptions().isFilterSelectedElements() && !scenarioComparisonService.getSelectedElements().isEmpty()) {
+					if (!scenarioComparisonService.getSelectedElements().contains(element)) {
+						if (element instanceof Row) {
+							Row row = (Row) element;
+							Set<EObject> elements = new HashSet<>();
+							elements.add(row.getTarget());
+							elements.add(row.getCargoAllocation());
+							elements.add(row.getLoadAllocation());
+							elements.add(row.getDischargeAllocation());
+							elements.add(row.getOpenSlotAllocation());
+							elements.addAll(row.getInputEquivalents());
+							elements.retainAll(scenarioComparisonService.getSelectedElements());
+							if (elements.isEmpty()) {
+								return false;
+							}
+						}
 					}
 				}
 
@@ -133,6 +196,12 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 							return false;
 						}
 					}
+
+					// Element type filters
+					if (!builder.showRow(row)) {
+						return false;
+					}
+
 					// Only show visible rows
 					return row.isVisible();
 				}
@@ -140,6 +209,12 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 			}
 		} });
 
+	}
+
+	@Override
+	public void dispose() {
+		scenarioComparisonService.removeListener(scenarioComparisonServiceListener);
+		super.dispose();
 	}
 
 	@Override
@@ -257,7 +332,7 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 									diffOptions.add(ScheduleBasedReportBuilder.DIFF_FILTER_VESSEL_CHANGES.id);
 									break;
 								case "scenario":
-									diffOptions.add(ScheduleBasedReportBuilder.DIFF_FILTER_PINNDED_SCENARIO.id);
+									diffOptions.add(AbstractReportBuilder.DIFF_FILTER_PINNDED_SCENARIO.id);
 									break;
 								}
 							}
@@ -279,9 +354,7 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 
 	@Override
 	protected IScenarioInstanceElementCollector getElementCollector() {
-
-		transformer = new ScheduleReportTransformer(table, builder, builder.getCustomRelatedSlotHandlers());
-		return transformer.getElementCollector(this);
+		throw new UnsupportedOperationException();
 	}
 
 	@Override

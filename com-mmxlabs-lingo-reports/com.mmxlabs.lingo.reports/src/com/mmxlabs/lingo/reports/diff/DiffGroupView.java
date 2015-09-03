@@ -4,13 +4,17 @@
  */
 package com.mmxlabs.lingo.reports.diff;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.ObservablesManager;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
@@ -21,6 +25,7 @@ import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
 import org.eclipse.emf.edit.ui.dnd.ViewerDragAdapter;
 import org.eclipse.emf.edit.ui.provider.UnwrappingSelectionProvider;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -44,28 +49,33 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IViewReference;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.internal.e4.compatibility.CompatibilityView;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.PropertySheet;
 
 import com.google.common.collect.Sets;
+import com.mmxlabs.common.csv.IExportContext;
 import com.mmxlabs.lingo.reports.diff.actions.DeleteDiffAction;
 import com.mmxlabs.lingo.reports.diff.actions.ExtractCycleGroupAction;
 import com.mmxlabs.lingo.reports.internal.Activator.Implementation;
+import com.mmxlabs.lingo.reports.services.EDiffOption;
+import com.mmxlabs.lingo.reports.services.IScenarioComparisonServiceListener;
+import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.provider.ScheduleReportItemProviderAdapterFactory;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class DiffGroupView extends ViewPart implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener, IMenuListener {
 
 	public static final String ID = "com.mmxlabs.lingo.reports.diff.DiffGroupView";
-	private static final String SCHEDULE_VIEW_ID = "com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport";
+	// private static final String SCHEDULE_VIEW_ID = "com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport";
 	private GridTreeViewer viewer;
 
 	private IViewPart scheduleView;
@@ -80,8 +90,54 @@ public class DiffGroupView extends ViewPart implements org.eclipse.e4.ui.workben
 
 	private boolean filterNonStructuralChanges = false;
 
+	private ScenarioComparisonService scenarioComparisonService;
+
+	private IScenarioComparisonServiceListener scenarioComparisonServiceListener = new IScenarioComparisonServiceListener() {
+
+		@Override
+		public void compareDataUpdate(@NonNull ISelectedDataProvider selectedDataProvider, @NonNull ScenarioInstance pin, @NonNull ScenarioInstance other, @NonNull Table table,
+				@NonNull List<LNGScenarioModel> rootObjects, @NonNull Map<EObject, Set<EObject>> equivalancesMap) {
+			if (viewer.getInput() != table) {
+				viewer.setInput(table);
+				DiffGroupView.this.table = table;
+				if (selectionAdapter != null) {
+					selectionAdapter.setTable(table);
+				}
+			}
+		}
+
+		@Override
+		public void multiDataUpdate(@NonNull ISelectedDataProvider selectedDataProvider, @NonNull Collection<ScenarioInstance> others, @NonNull Table table,
+				@NonNull List<LNGScenarioModel> rootObjects) {
+			if (viewer.getInput() != table) {
+				viewer.setInput(table);
+				DiffGroupView.this.table = table;
+				if (selectionAdapter != null) {
+					selectionAdapter.setTable(table);
+				}
+			}
+		}
+
+		@Override
+		public void diffOptionChanged(EDiffOption d, Object oldValue, Object newValue) {
+			if (viewer.getInput() != table) {
+				viewer.setInput(table);
+				DiffGroupView.this.table = table;
+				if (selectionAdapter != null) {
+					selectionAdapter.setTable(table);
+				}
+			}
+		}
+
+	};
+
 	@Override
 	public void createPartControl(final Composite parent) {
+
+		IEclipseContext e4Context = (IEclipseContext) getSite().getService(IEclipseContext.class);
+		this.scenarioComparisonService = e4Context.getActive(ScenarioComparisonService.class);
+
+		scenarioComparisonService.addListener(scenarioComparisonServiceListener);
 
 		mgr = new ObservablesManager();
 		mgr.runAndCollect(new Runnable() {
@@ -111,7 +167,7 @@ public class DiffGroupView extends ViewPart implements org.eclipse.e4.ui.workben
 
 				makeActions();
 				// ... etc
-				hookToScheduleView();
+				// hookToScheduleView();
 
 				viewer.setComparer(new IElementComparer() {
 					@Override
@@ -143,6 +199,7 @@ public class DiffGroupView extends ViewPart implements org.eclipse.e4.ui.workben
 
 	@Override
 	public void dispose() {
+		scenarioComparisonService.removeListener(scenarioComparisonServiceListener);
 
 		final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
 		service.removePostSelectionListener(this);
@@ -210,70 +267,70 @@ public class DiffGroupView extends ViewPart implements org.eclipse.e4.ui.workben
 		viewer.addDropSupport(dndOperations, transfers, new DiffViewDropTargetAdapter());
 	}
 
-	protected void hookToScheduleView() {
-		listener = new IPartListener() {
-
-			@Override
-			public void partOpened(final IWorkbenchPart part) {
-				if (part instanceof IViewPart) {
-					final IViewPart viewPart = (IViewPart) part;
-					if (viewPart.getViewSite().getId().equals(SCHEDULE_VIEW_ID)) {
-						scheduleView = viewPart;
-						observeInput((Table) scheduleView.getAdapter(Table.class));
-					}
-				}
-			}
-
-			private void observeInput(final Table table) {
-				if (viewer.getInput() != table) {
-					viewer.setInput(table);
-					DiffGroupView.this.table = table;
-					if (selectionAdapter != null) {
-						selectionAdapter.setTable(table);
-					}
-				}
-			}
-
-			@Override
-			public void partDeactivated(final IWorkbenchPart part) {
-
-			}
-
-			@Override
-			public void partClosed(final IWorkbenchPart part) {
-				if (part instanceof IViewPart) {
-					final IViewPart viewPart = (IViewPart) part;
-					if (viewPart.getViewSite().getId().equals(SCHEDULE_VIEW_ID)) {
-						scheduleView = null;
-						observeInput(null);
-					}
-				}
-
-			}
-
-			@Override
-			public void partBroughtToTop(final IWorkbenchPart part) {
-
-			}
-
-			@Override
-			public void partActivated(final IWorkbenchPart part) {
-				if (part instanceof IViewPart) {
-					final IViewPart viewPart = (IViewPart) part;
-					if (viewPart.getViewSite().getId().equals(SCHEDULE_VIEW_ID)) {
-						scheduleView = viewPart;
-						observeInput((Table) scheduleView.getAdapter(Table.class));
-					}
-				}
-			}
-		};
-		getViewSite().getPage().addPartListener(listener);
-		for (final IViewReference view : getViewSite().getPage().getViewReferences()) {
-			if (view.getId().equals(SCHEDULE_VIEW_ID)) {
-				listener.partOpened(view.getView(false));
-			}
-		}
-	}
+	// protected void hookToScheduleView() {
+	// listener = new IPartListener() {
+	//
+	// @Override
+	// public void partOpened(final IWorkbenchPart part) {
+	// if (part instanceof IViewPart) {
+	// final IViewPart viewPart = (IViewPart) part;
+	// if (viewPart.getViewSite().getId().equals(SCHEDULE_VIEW_ID)) {
+	// scheduleView = viewPart;
+	// observeInput((Table) scheduleView.getAdapter(Table.class));
+	// }
+	// }
+	// }
+	//
+	// private void observeInput(final Table table) {
+	// if (viewer.getInput() != table) {
+	// viewer.setInput(table);
+	// DiffGroupView.this.table = table;
+	// if (selectionAdapter != null) {
+	// selectionAdapter.setTable(table);
+	// }
+	// }
+	// }
+	//
+	// @Override
+	// public void partDeactivated(final IWorkbenchPart part) {
+	//
+	// }
+	//
+	// @Override
+	// public void partClosed(final IWorkbenchPart part) {
+	// if (part instanceof IViewPart) {
+	// final IViewPart viewPart = (IViewPart) part;
+	// if (viewPart.getViewSite().getId().equals(SCHEDULE_VIEW_ID)) {
+	// scheduleView = null;
+	// observeInput(null);
+	// }
+	// }
+	//
+	// }
+	//
+	// @Override
+	// public void partBroughtToTop(final IWorkbenchPart part) {
+	//
+	// }
+	//
+	// @Override
+	// public void partActivated(final IWorkbenchPart part) {
+	// if (part instanceof IViewPart) {
+	// final IViewPart viewPart = (IViewPart) part;
+	// if (viewPart.getViewSite().getId().equals(SCHEDULE_VIEW_ID)) {
+	// scheduleView = viewPart;
+	// observeInput((Table) scheduleView.getAdapter(Table.class));
+	// }
+	// }
+	// }
+	// };
+	// getViewSite().getPage().addPartListener(listener);
+	// for (final IViewReference view : getViewSite().getPage().getViewReferences()) {
+	// if (view.getId().equals(SCHEDULE_VIEW_ID)) {
+	// listener.partOpened(view.getView(false));
+	// }
+	// }
+	// }
 
 	protected void createColumns(final GridTreeViewer viewer) {
 		final DataModelCellEditingSupport editingSupport = new DataModelCellEditingSupport(viewer, dbc);

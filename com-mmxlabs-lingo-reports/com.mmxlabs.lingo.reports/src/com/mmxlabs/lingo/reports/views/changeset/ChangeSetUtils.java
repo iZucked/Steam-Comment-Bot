@@ -30,6 +30,14 @@ public final class ChangeSetUtils {
 
 		return profitAndLossContainer.getGroupProfitAndLoss().getProfitAndLoss();
 	}
+	
+	public static long getGroupPreTaxProfitAndLoss(@Nullable final ProfitAndLossContainer profitAndLossContainer) {
+		if (profitAndLossContainer == null) {
+			return 0L;
+		}
+		
+		return profitAndLossContainer.getGroupProfitAndLoss().getProfitAndLossPreTax();
+	}
 
 	public static long getAdditionalProfitAndLoss(@NonNull final ProfitAndLossContainer profitAndLossContainer) {
 		long addnPNL = 0;

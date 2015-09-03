@@ -87,6 +87,9 @@ public class CycleDiffProcessor implements IDiffProcessor {
 			boolean different = false;
 			{
 				final String currentWiring = CargoAllocationUtils.getSalesWiringAsString(referenceRowCargoAllocation);
+				if (currentWiring.contains("KG3")) {
+					int ii = 0;
+				}
 				// if (referenceRow == null) {
 				for (final Row referringRow : referenceRow.getReferringRows()) {
 					final CargoAllocation pinnedCargoAllocation = referringRow.getCargoAllocation();

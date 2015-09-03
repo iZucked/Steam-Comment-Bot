@@ -28,11 +28,10 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChangeEvent;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
-import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
@@ -62,12 +61,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
-import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchActionConstants;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.XMLMemento;
@@ -93,11 +89,15 @@ import com.mmxlabs.lingo.reports.diff.DiffSelectionAdapter;
 import com.mmxlabs.lingo.reports.properties.ScheduledEventPropertySourceProvider;
 import com.mmxlabs.lingo.reports.scheduleview.internal.Activator;
 import com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ISchedulerViewColourSchemeExtension;
+import com.mmxlabs.lingo.reports.services.EDiffOption;
+import com.mmxlabs.lingo.reports.services.IScenarioComparisonServiceListener;
+import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
-import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
@@ -157,11 +157,13 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 
 	private final Set<EObject> pinnedObjects = new LinkedHashSet<EObject>();
 
-	// New diff stuff
+	// // New diff stuff
 	private Table table;
-	private IPartListener listener;
-	private static final String SCHEDULE_VIEW_ID = "com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport";
-	private IViewPart scheduleView;
+	// private IPartListener listener;
+	// private static final String SCHEDULE_VIEW_ID = "com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport";
+	// private IViewPart scheduleView;
+
+	private ScenarioComparisonService scenarioComparisonService;
 
 	/**
 	 * The constructor.
@@ -211,6 +213,8 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 	@Override
 	public void createPartControl(final Composite parent) {
 
+		e4Context = (IEclipseContext) getSite().getService(IEclipseContext.class);
+		this.scenarioComparisonService = e4Context.getActive(ScenarioComparisonService.class);
 		// Inject the extension points
 		Activator.getDefault().getInjector().injectMembers(this);
 
@@ -403,7 +407,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 					// Clear selection
 					selectedEvents = new ArrayList<GanttEvent>(0);
 				}
-				if (table != null && table.getOptions().isFilterSelectedSequences()) {
+				if (scenarioComparisonService != null && scenarioComparisonService.getDiffOptions().isFilterSelectedSequences()) {
 					final Set<GanttSection> selectedSections = new HashSet<>();
 					for (final GanttEvent event : selectedEvents) {
 						selectedSections.add(event.getGanttSection());
@@ -585,8 +589,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 
 		viewer.setInput(getViewSite());
 
-		hookToScheduleView();
-
+		scenarioComparisonService.addListener(scenarioComparisonServiceListener);
 		// Create the help context id for the viewer's control. This is in the
 		// format of pluginid.contextId
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Reports_ScheduleChart");
@@ -605,6 +608,8 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 		// if (colourScheme != null) {
 		labelProvider.setScheme(colourScheme);
 		// }
+
+		scenarioComparisonService.triggerListener(scenarioComparisonServiceListener);
 	}
 
 	@Override
@@ -621,9 +626,10 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 		// getSite().getPage().removeSelectionListener(
 		// "com.mmxlabs.rcp.navigator", selectionListener);
 
-		if (listener != null) {
-			getViewSite().getPage().removePartListener(listener);
-		}
+		// if (listener != null) {
+		// getViewSite().getPage().removePartListener(listener);
+		// }
+		scenarioComparisonService.removeListener(scenarioComparisonServiceListener);
 
 		super.dispose();
 	}
@@ -1035,79 +1041,105 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 		viewer.setInput(viewer.getInput());
 	}
 
-	protected void hookToScheduleView() {
-		listener = new IPartListener() {
+	private IScenarioComparisonServiceListener scenarioComparisonServiceListener = new IScenarioComparisonServiceListener() {
 
-			EContentAdapter adapter = new EContentAdapter() {
-				@Override
-				public void notifyChanged(final Notification notification) {
-					super.notifyChanged(notification);
-					if (notification.getFeature() == ScheduleReportPackage.Literals.DIFF_OPTIONS__FILTER_SELECTED_SEQUENCES) {
-						viewer.setSelection(viewer.getSelection());
-					}
-				}
-			};
-
-			@Override
-			public void partOpened(final IWorkbenchPart part) {
-				if (part instanceof IViewPart) {
-					final IViewPart viewPart = (IViewPart) part;
-					if (viewPart.getViewSite().getId().equals(SCHEDULE_VIEW_ID)) {
-						scheduleView = viewPart;
-						observeInput((Table) scheduleView.getAdapter(Table.class));
-					}
-				}
-			}
-
-			private void observeInput(final Table table) {
-
-				if (SchedulerView.this.table != null) {
-					SchedulerView.this.table.eAdapters().remove(adapter);
-				}
-				SchedulerView.this.table = table;
-				if (SchedulerView.this.table != null) {
-					SchedulerView.this.table.eAdapters().add(adapter);
-				}
-			}
-
-			@Override
-			public void partDeactivated(final IWorkbenchPart part) {
-
-			}
-
-			@Override
-			public void partClosed(final IWorkbenchPart part) {
-				if (part instanceof IViewPart) {
-					final IViewPart viewPart = (IViewPart) part;
-					if (viewPart.getViewSite().getId().equals(SCHEDULE_VIEW_ID)) {
-						scheduleView = null;
-						observeInput(null);
-					}
-				}
-
-			}
-
-			@Override
-			public void partBroughtToTop(final IWorkbenchPart part) {
-
-			}
-
-			@Override
-			public void partActivated(final IWorkbenchPart part) {
-				if (part instanceof IViewPart) {
-					final IViewPart viewPart = (IViewPart) part;
-					if (viewPart.getViewSite().getId().equals(SCHEDULE_VIEW_ID)) {
-						scheduleView = viewPart;
-						observeInput((Table) scheduleView.getAdapter(Table.class));
-					}
-				}
-			}
-		};
-		getViewSite().getPage().addPartListener(listener);
-		for (final IViewReference view : getViewSite().getPage().getViewReferences()) {
-			if (view.getId().equals(SCHEDULE_VIEW_ID)) {
-				listener.partOpened(view.getView(false));
+		@Override
+		public void diffOptionChanged(EDiffOption d, Object oldValue, Object newValue) {
+			if (d == EDiffOption.FILTER_SCHEDULE_CHART_BY_SELECTION) {
+				viewer.setSelection(viewer.getSelection());
 			}
 		}
-	}
+
+		@Override
+		public void compareDataUpdate(ISelectedDataProvider selectedDataProvider, ScenarioInstance pin, ScenarioInstance other, Table table, List<LNGScenarioModel> rootObjects,
+				Map<EObject, Set<EObject>> equivalancesMap) {
+			// Do Nothing
+			SchedulerView.this.table = table;
+		}
+
+		@Override
+		public void multiDataUpdate(ISelectedDataProvider selectedDataProvider, Collection<ScenarioInstance> others, Table table, List<LNGScenarioModel> rootObjects) {
+			// Do Nothing
+			SchedulerView.this.table = table;
+		}
+
+	};
+
+	private IEclipseContext e4Context;
+
+	// protected void hookToScheduleView() {
+	// listener = new IPartListener() {
+	//
+	// EContentAdapter adapter = new EContentAdapter() {
+	// @Override
+	// public void notifyChanged(final Notification notification) {
+	// super.notifyChanged(notification);
+	// if (notification.getFeature() == ScheduleReportPackage.Literals.DIFF_OPTIONS__FILTER_SELECTED_SEQUENCES) {
+	// viewer.setSelection(viewer.getSelection());
+	// }
+	// }
+	// };
+	//
+	// @Override
+	// public void partOpened(final IWorkbenchPart part) {
+	// if (part instanceof IViewPart) {
+	// final IViewPart viewPart = (IViewPart) part;
+	// if (viewPart.getViewSite().getId().equals(SCHEDULE_VIEW_ID)) {
+	// scheduleView = viewPart;
+	// observeInput((Table) scheduleView.getAdapter(Table.class));
+	// }
+	// }
+	// }
+	//
+	// private void observeInput(final Table table) {
+	//
+	// if (SchedulerView.this.table != null) {
+	// SchedulerView.this.table.eAdapters().remove(adapter);
+	// }
+	// SchedulerView.this.table = table;
+	// if (SchedulerView.this.table != null) {
+	// SchedulerView.this.table.eAdapters().add(adapter);
+	// }
+	// }
+	//
+	// @Override
+	// public void partDeactivated(final IWorkbenchPart part) {
+	//
+	// }
+	//
+	// @Override
+	// public void partClosed(final IWorkbenchPart part) {
+	// if (part instanceof IViewPart) {
+	// final IViewPart viewPart = (IViewPart) part;
+	// if (viewPart.getViewSite().getId().equals(SCHEDULE_VIEW_ID)) {
+	// scheduleView = null;
+	// observeInput(null);
+	// }
+	// }
+	//
+	// }
+	//
+	// @Override
+	// public void partBroughtToTop(final IWorkbenchPart part) {
+	//
+	// }
+	//
+	// @Override
+	// public void partActivated(final IWorkbenchPart part) {
+	// if (part instanceof IViewPart) {
+	// final IViewPart viewPart = (IViewPart) part;
+	// if (viewPart.getViewSite().getId().equals(SCHEDULE_VIEW_ID)) {
+	// scheduleView = viewPart;
+	// observeInput((Table) scheduleView.getAdapter(Table.class));
+	// }
+	// }
+	// }
+	// };
+	// getViewSite().getPage().addPartListener(listener);
+	// for (final IViewReference view : getViewSite().getPage().getViewReferences()) {
+	// if (view.getId().equals(SCHEDULE_VIEW_ID)) {
+	// listener.partOpened(view.getView(false));
+	// }
+	// }
+	// }
 }

@@ -8,22 +8,19 @@
 package com.mmxlabs.lingo.reports.views.fleet;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.databinding.IEMFObservable;
-import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
-import org.eclipse.ui.IPartListener;
-import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IViewReference;
-import org.eclipse.ui.IWorkbenchPart;
 
 import com.google.inject.Inject;
 import com.mmxlabs.lingo.reports.IReportContents;
@@ -31,6 +28,10 @@ import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
+import com.mmxlabs.lingo.reports.services.EDiffOption;
+import com.mmxlabs.lingo.reports.services.IScenarioComparisonServiceListener;
+import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.views.AbstractConfigurableGridReportView;
 import com.mmxlabs.lingo.reports.views.AbstractReportBuilder;
@@ -41,9 +42,10 @@ import com.mmxlabs.lingo.reports.views.fleet.extpoint.IFleetBasedReportInitialSt
 import com.mmxlabs.lingo.reports.views.fleet.extpoint.IFleetBasedReportInitialStateExtension.InitialDiffOption;
 import com.mmxlabs.lingo.reports.views.fleet.extpoint.IFleetBasedReportInitialStateExtension.InitialRowType;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
-import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
  * A customisable report for fleet based data. Extension points define the available columns for all instances and initial state for each instance of this report. Optionally a dialog is available for
@@ -68,11 +70,9 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 
 	private FleetReportTransformer transformer;
 
-	// New diff stuff
-	private IPartListener listener;
-	private static final String SCHEDULE_VIEW_ID = "com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport";
-	private IViewPart scheduleView;
-	private Table scheduleReportTable;
+	@Inject
+	@NonNull
+	private ScenarioComparisonService scenarioComparisonService;
 
 	@Inject
 	public ConfigurableFleetReportView(final FleetBasedReportBuilder builder) {
@@ -85,14 +85,14 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") final Class adapter) {
-		if (Table.class.isAssignableFrom(adapter)) {
-			final Object input = viewer.getInput();
-			if (input instanceof IEMFObservable) {
-				final IEMFObservable observable = (IEMFObservable) input;
-				return observable.getObserved();
-			}
-			return input;
-		}
+		// if (Table.class.isAssignableFrom(adapter)) {
+		// final Object input = viewer.getInput();
+		// if (input instanceof IEMFObservable) {
+		// final IEMFObservable observable = (IEMFObservable) input;
+		// return observable.getObserved();
+		// }
+		// return input;
+		// }
 
 		if (IReportContents.class.isAssignableFrom(adapter)) {
 
@@ -135,21 +135,43 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 		return true;
 	}
 
+	private IScenarioComparisonServiceListener scenarioComparisonServiceListener = new IScenarioComparisonServiceListener() {
+
+		@Override
+		public void compareDataUpdate(@NonNull ISelectedDataProvider selectedDataProvider, @NonNull ScenarioInstance pin, @NonNull ScenarioInstance other, @NonNull Table table,
+				@NonNull List<LNGScenarioModel> rootObjects, @NonNull Map<EObject, Set<EObject>> equivalancesMap) {
+			viewer.refresh();
+		}
+
+		@Override
+		public void multiDataUpdate(@NonNull ISelectedDataProvider selectedDataProvider, @NonNull Collection<ScenarioInstance> others, @NonNull Table table,
+				@NonNull List<LNGScenarioModel> rootObjects) {
+			viewer.refresh();
+		}
+
+		@Override
+		public void diffOptionChanged(EDiffOption d, Object oldValue, Object newValue) {
+			viewer.refresh();
+		}
+
+	};
+
 	@Override
 	public void initPartControl(final Composite parent) {
 		super.initPartControl(parent);
 
-		// Add a filter to only show certain rows.
+		scenarioComparisonService.addListener(scenarioComparisonServiceListener);
 
+		// Add a filter to only show certain rows.
 		viewer.setFilters(new ViewerFilter[] { super.filterSupport.createViewerFilter(), new ViewerFilter() {
 
 			@Override
 			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
 
-				if (scheduleReportTable != null && scheduleReportTable.getOptions().isFilterSelectedSequences() && !scheduleReportTable.getSelectedElements().isEmpty()) {
+				if (scenarioComparisonService.getDiffOptions().isFilterSelectedSequences() && !scenarioComparisonService.getSelectedElements().isEmpty()) {
 					if (element instanceof Row) {
 						Row row = (Row) element;
-						if (!scheduleReportTable.getSelectedElements().contains(row.getSequence())) {
+						if (!scenarioComparisonService.getSelectedElements().contains(row.getSequence())) {
 							return false;
 						}
 					}
@@ -169,21 +191,12 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 				return true;
 			}
 		} });
-
-		hookToScheduleView();
-
 	}
 
 	@Override
 	public void dispose() {
 
-		if (scheduleReportTable != null) {
-			scheduleReportTable.eAdapters().remove(adapter);
-		}
-
-		if (listener != null) {
-			getViewSite().getPage().removePartListener(listener);
-		}
+		scenarioComparisonService.removeListener(scenarioComparisonServiceListener);
 
 		super.dispose();
 	}
@@ -356,91 +369,8 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 		manager.addColumns(FleetBasedReportBuilder.FLEET_REPORT_TYPE_ID, getBlockManager());
 	}
 
-	// not always disposed
-	private final EContentAdapter adapter = new EContentAdapter() {
-		@Override
-		public void notifyChanged(final Notification notification) {
-			super.notifyChanged(notification);
-			if (notification.getFeature() == ScheduleReportPackage.Literals.DIFF_OPTIONS__FILTER_SELECTED_SEQUENCES) {
-				// viewer.setSelection(viewer.getSelection());
-				viewer.refresh();
-			}
-			if (notification.getFeature() == ScheduleReportPackage.Literals.TABLE__SELECTED_ELEMENTS) {
-
-				// Copy across data
-				table.getSelectedElements().clear();
-				table.getSelectedElements().addAll(scheduleReportTable.getSelectedElements());
-				// viewer.setSelection(viewer.getSelection());
-				viewer.refresh();
-			}
-		}
-	};
-
-	protected void hookToScheduleView() {
-		listener = new IPartListener() {
-
-			@Override
-			public void partOpened(final IWorkbenchPart part) {
-				if (part instanceof IViewPart) {
-					final IViewPart viewPart = (IViewPart) part;
-					if (viewPart.getViewSite().getId().equals(SCHEDULE_VIEW_ID)) {
-						scheduleView = viewPart;
-						observeInput((Table) scheduleView.getAdapter(Table.class));
-					}
-				}
-			}
-
-			private void observeInput(final Table table) {
-
-				if (ConfigurableFleetReportView.this.scheduleReportTable != null) {
-					ConfigurableFleetReportView.this.scheduleReportTable.eAdapters().remove(adapter);
-				}
-				ConfigurableFleetReportView.this.scheduleReportTable = table;
-				if (ConfigurableFleetReportView.this.scheduleReportTable != null) {
-					ConfigurableFleetReportView.this.scheduleReportTable.eAdapters().add(adapter);
-				}
-			}
-
-			@Override
-			public void partDeactivated(final IWorkbenchPart part) {
-
-			}
-
-			@Override
-			public void partClosed(final IWorkbenchPart part) {
-				if (part instanceof IViewPart) {
-					final IViewPart viewPart = (IViewPart) part;
-					if (viewPart.getViewSite().getId().equals(SCHEDULE_VIEW_ID)) {
-						scheduleView = null;
-						observeInput(null);
-					}
-				}
-
-			}
-
-			@Override
-			public void partBroughtToTop(final IWorkbenchPart part) {
-
-			}
-
-			@Override
-			public void partActivated(final IWorkbenchPart part) {
-				if (part instanceof IViewPart) {
-					final IViewPart viewPart = (IViewPart) part;
-					if (viewPart.getViewSite().getId().equals(SCHEDULE_VIEW_ID)) {
-						scheduleView = viewPart;
-						observeInput((Table) scheduleView.getAdapter(Table.class));
-					}
-				}
-			}
-		};
-		getViewSite().getPage().addPartListener(listener);
-		for (final IViewReference view : getViewSite().getPage().getViewReferences()) {
-			if (view.getId().equals(SCHEDULE_VIEW_ID)) {
-				listener.partOpened(view.getView(false));
-			}
-		}
+	@Override
+	protected boolean isUseSynchroniser() {
+		return true;
 	}
-
-
 }
