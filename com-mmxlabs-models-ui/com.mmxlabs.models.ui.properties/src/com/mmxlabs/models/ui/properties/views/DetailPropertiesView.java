@@ -7,6 +7,8 @@ package com.mmxlabs.models.ui.properties.views;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -17,14 +19,15 @@ import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.ISelectionListener;
-import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.internal.e4.compatibility.CompatibilityView;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.PropertySheet;
 
@@ -34,7 +37,7 @@ import com.mmxlabs.rcp.common.actions.PackActionFactory;
 public abstract class DetailPropertiesView extends ViewPart {
 
 	protected GridTreeViewer viewer;
-	private ISelectionListener selectionListener;
+	private org.eclipse.e4.ui.workbench.modeling.ISelectionListener selectionListener;
 
 	private final String category;
 	private final String helpContextId;
@@ -93,7 +96,8 @@ public abstract class DetailPropertiesView extends ViewPart {
 
 		// Hook up selection listener
 		selectionListener = createSelectionChangedListener();
-		getSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(selectionListener);
+		final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
+		service.addPostSelectionListener(selectionListener);
 
 		makeActions();
 
@@ -110,7 +114,10 @@ public abstract class DetailPropertiesView extends ViewPart {
 	}
 
 	protected void updateFromSelection() {
-		selectionListener.selectionChanged(null, getSite().getPage().getSelection());
+		final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
+		service.addPostSelectionListener(selectionListener);
+
+		selectionListener.selectionChanged(null, service.getSelection());
 	}
 
 	protected void makeActions() {
@@ -128,9 +135,9 @@ public abstract class DetailPropertiesView extends ViewPart {
 	public void dispose() {
 		removeAdapters();
 
-		if (selectionListener != null) {
-			getSite().getWorkbenchWindow().getSelectionService().removePostSelectionListener(selectionListener);
-		}
+		final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
+		service.removePostSelectionListener(selectionListener);
+
 		super.dispose();
 	}
 
@@ -139,14 +146,37 @@ public abstract class DetailPropertiesView extends ViewPart {
 		viewer.getControl().setFocus();
 	}
 
-	protected ISelectionListener createSelectionChangedListener() {
-		return new ISelectionListener() {
+	protected org.eclipse.e4.ui.workbench.modeling.ISelectionListener createSelectionChangedListener() {
+		return new org.eclipse.e4.ui.workbench.modeling.ISelectionListener() {
 
 			@Override
-			public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
-				if (part instanceof PropertySheet) {
-					// Ignore
-					return;
+			public void selectionChanged(final MPart part, final Object selectedObject) {
+				if (part != null) {
+					final Object object = part.getObject();
+					if (object instanceof CompatibilityView) {
+						final CompatibilityView compatibilityView = (CompatibilityView) object;
+						final IViewPart view = compatibilityView.getView();
+
+						if (view == DetailPropertiesView.this) {
+							return;
+						}
+						if (view instanceof PropertySheet) {
+							return;
+						}
+
+					}
+				}
+				ISelection selection = null;
+				// Convert selection
+				if (selectedObject == null) {
+					selection = new StructuredSelection();
+
+				} else if (selectedObject instanceof ISelection) {
+					selection = (ISelection) selectedObject;
+				} else if (selectedObject instanceof Object[]) {
+					selection = new StructuredSelection((Object[]) selectedObject);
+				} else {
+					selection = new StructuredSelection(selectedObject);
 				}
 
 				removeAdapters();
