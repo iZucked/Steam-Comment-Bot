@@ -170,7 +170,7 @@ public class BreadthOptimiser {
 		//// Debugging -- get initial change count
 		{
 			final int changesCount = breakdownOptimiserMover.getChangedElements(similarityState, initialRawSequences).size();
-			// System.out.println("Initial changes " + changesCount);
+			 System.out.println("Initial changes " + changesCount);
 			progressMonitor.beginTask("Generate changes", changesCount / 3);
 		}
 		try {
@@ -329,7 +329,7 @@ public class BreadthOptimiser {
 				JobState next = best;
 				if (next != null) {
 					JobStore store = new JobStore(-1);
-					Collection<JobState> search = breakdownOptimiserMover.search(next.rawSequences, similarityState, next.changesAsList, next.changeSetsAsList, -1, 0, next.metric, store, null);
+					Collection<JobState> search = breakdownOptimiserMover.search(next.rawSequences, similarityState, next.changesAsList, next.changeSetsAsList, -1, 0, next.metric, store, null, next.getDifferencesList());
 					evaluateLeaf(similarityState, next.changesAsList, next.changeSetsAsList, next.rawSequences);
 				}
 			}
