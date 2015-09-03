@@ -673,8 +673,8 @@ public class LNGScenarioRunner {
 					// Generate the changesets decomposition.
 					// Run optimisation
 
-					final BreadthOptimiser instance = injector.getInstance(BreadthOptimiser.class);
-					boolean foundBetterResult = instance.optimise(bestRawSequences, new SubProgressMonitor(progressMonitor, PROGRESS_ACTION_SET_OPTIMISATION));
+					final BagOptimiser instance = injector.getInstance(BagOptimiser.class);
+					boolean foundBetterResult = instance.optimise(bestRawSequences, new SubProgressMonitor(progressMonitor, PROGRESS_ACTION_SET_OPTIMISATION), 3);
 
 					// Store the results
 					final List<Pair<ISequences, IEvaluationState>> breakdownSolution = instance.getBestSolution();

@@ -114,7 +114,21 @@ public class BagMover extends BreakdownOptimiserMover {
 		
 		if (tryDepth == 0 || differencesList.size() == 0) {
 
+			if (differencesList.size() == 0) { 
+				int zzz = 0;
+				for (final IResource resource : currentFullSequences.getResources()) {
+					final ISequence sequence = currentFullSequences.getSequence(resource);
+					final ISequence originalSequence = similarityState.getOriginalSequences().getSequence(resource);
+					for (int i = 0; i < sequence.size(); i++) {
+						ISequenceElement element = sequence.get(i);
+						ISequenceElement originalElement = originalSequence.get(i);
+						if (element != originalElement) {
+//							System.out.println(String.format("element %s != [%s] on %s", element.getName(), originalElement.getName(), resource.getName()));
+						}
+					}
+				}
 
+			}
 			boolean failedEvaluation = false;
 
 			// Apply hard constraint checkers
@@ -128,7 +142,7 @@ public class BagMover extends BreakdownOptimiserMover {
 			if (!failedEvaluation) {
 
 				final long thisUnusedCompulsarySlotCount = calculateUnusedCompulsarySlot(currentSequences);
-				if (thisUnusedCompulsarySlotCount > currentMetrics[MetricType.COMPULSARY_SLOT.ordinal()]) {
+				if (thisUnusedCompulsarySlotCount > similarityState.getBaseMetrics()[MetricType.COMPULSARY_SLOT.ordinal()]) {
 					// System.out.println("failed comp");
 					failedEvaluation = true;
 				}
@@ -149,19 +163,19 @@ public class BagMover extends BreakdownOptimiserMover {
 						assert ss != null;
 
 						final long thisLateness = calculateScheduleLateness(currentFullSequences, ss);
-						if (thisLateness > currentMetrics[MetricType.LATENESS.ordinal()]) {
+						if (thisLateness > similarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()]) {
 							failedEvaluation = true;
 						} else {
 							// currentLateness = thisLateness;
 						}
 
 						final long thisCapacity = calculateScheduleCapacity(currentFullSequences, ss);
-						if (thisCapacity > currentMetrics[MetricType.CAPACITY.ordinal()]) {
+						if (thisCapacity > similarityState.getBaseMetrics()[MetricType.CAPACITY.ordinal()]) {
 							failedEvaluation = true;
 						} else {
 							// currentLateness = thisLateness;
 						}
-
+						long thisPNL = Long.MAX_VALUE;
 						if (!failedEvaluation) {
 
 							for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
@@ -172,37 +186,40 @@ public class BagMover extends BreakdownOptimiserMover {
 								}
 							}
 
-							final long thisPNL = calculateSchedulePNL(currentFullSequences, ss);
+							thisPNL = calculateSchedulePNL(currentFullSequences, ss);
 
-							if (thisPNL <= currentMetrics[MetricType.PNL.ordinal()]) {
-								// failedEvaluation = true;
+							if (thisPNL - currentMetrics[MetricType.PNL.ordinal()] < 0 && thisLateness >= similarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()]) {
+								 failedEvaluation = true;
 							} else {
 								// currentPNL = thisPNL;
 							}
+						}
+						if (!failedEvaluation) {
+
 							// Convert change list set into a change set and record sate.
 							// TOOD: Get fitness change and only accept improving solutions. (similarity, similarity plus others etc)
 							final ChangeSet cs = new ChangeSet(changes);
 
-							cs.setMetric(MetricType.PNL, thisPNL, thisPNL - currentMetrics[MetricType.PNL.ordinal()], thisPNL - similarityState.baseMetrics[MetricType.PNL.ordinal()]);
+							cs.setMetric(MetricType.PNL, thisPNL, thisPNL - currentMetrics[MetricType.PNL.ordinal()], thisPNL - similarityState.getBaseMetrics()[MetricType.PNL.ordinal()]);
 							cs.setMetric(MetricType.LATENESS, thisLateness, thisLateness - currentMetrics[MetricType.LATENESS.ordinal()], thisLateness
-									- similarityState.baseMetrics[MetricType.LATENESS.ordinal()]);
+									- similarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()]);
 							cs.setMetric(MetricType.CAPACITY, thisCapacity, thisCapacity - currentMetrics[MetricType.CAPACITY.ordinal()], thisCapacity
-									- similarityState.baseMetrics[MetricType.CAPACITY.ordinal()]);
+									- similarityState.getBaseMetrics()[MetricType.CAPACITY.ordinal()]);
 							cs.setMetric(MetricType.COMPULSARY_SLOT, thisUnusedCompulsarySlotCount, thisUnusedCompulsarySlotCount - currentMetrics[MetricType.COMPULSARY_SLOT.ordinal()],
-									thisUnusedCompulsarySlotCount - similarityState.baseMetrics[MetricType.COMPULSARY_SLOT.ordinal()]);
+									thisUnusedCompulsarySlotCount - similarityState.getBaseMetrics()[MetricType.COMPULSARY_SLOT.ordinal()]);
 							cs.setRawSequences(currentSequences);
 							changes.clear();
 							changeSets.add(cs);
 
 							final JobState jobState = new JobState(new Sequences(currentSequences), changeSets, new LinkedList<Change>(), differencesList);
 
-							jobState.setMetric(MetricType.PNL, thisPNL, thisPNL - currentMetrics[MetricType.PNL.ordinal()], thisPNL - similarityState.baseMetrics[MetricType.PNL.ordinal()]);
+							jobState.setMetric(MetricType.PNL, thisPNL, thisPNL - currentMetrics[MetricType.PNL.ordinal()], thisPNL - similarityState.getBaseMetrics()[MetricType.PNL.ordinal()]);
 							jobState.setMetric(MetricType.LATENESS, thisLateness, thisLateness - currentMetrics[MetricType.LATENESS.ordinal()], thisLateness
-									- similarityState.baseMetrics[MetricType.LATENESS.ordinal()]);
+									- similarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()]);
 							jobState.setMetric(MetricType.CAPACITY, thisCapacity, thisCapacity - currentMetrics[MetricType.CAPACITY.ordinal()], thisCapacity
-									- similarityState.baseMetrics[MetricType.CAPACITY.ordinal()]);
+									- similarityState.getBaseMetrics()[MetricType.CAPACITY.ordinal()]);
 							jobState.setMetric(MetricType.COMPULSARY_SLOT, thisUnusedCompulsarySlotCount, thisUnusedCompulsarySlotCount - currentMetrics[MetricType.COMPULSARY_SLOT.ordinal()],
-									thisUnusedCompulsarySlotCount - similarityState.baseMetrics[MetricType.COMPULSARY_SLOT.ordinal()]);
+									thisUnusedCompulsarySlotCount - similarityState.getBaseMetrics()[MetricType.COMPULSARY_SLOT.ordinal()]);
 
 							final int changesCount = differencesList.size();
 							if (changesCount == 0) {

@@ -161,7 +161,7 @@ public class BreakdownOptimiserMover {
 			if (!failedEvaluation) {
 
 				final long thisUnusedCompulsarySlotCount = calculateUnusedCompulsarySlot(currentSequences);
-				if (thisUnusedCompulsarySlotCount > currentMetrics[MetricType.COMPULSARY_SLOT.ordinal()]) {
+				if (thisUnusedCompulsarySlotCount > similarityState.getBaseMetrics()[MetricType.COMPULSARY_SLOT.ordinal()]) {
 					failedEvaluation = true;
 				}
 
@@ -181,14 +181,14 @@ public class BreakdownOptimiserMover {
 						assert ss != null;
 
 						final long thisLateness = calculateScheduleLateness(currentFullSequences, ss);
-						if (thisLateness > currentMetrics[MetricType.LATENESS.ordinal()]) {
+						if (thisLateness > similarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()]) {
 							failedEvaluation = true;
 						} else {
 							// currentLateness = thisLateness;
 						}
 
 						final long thisCapacity = calculateScheduleCapacity(currentFullSequences, ss);
-						if (thisCapacity > currentMetrics[MetricType.CAPACITY.ordinal()]) {
+						if (thisCapacity > similarityState.getBaseMetrics()[MetricType.CAPACITY.ordinal()]) {
 							failedEvaluation = true;
 						} else {
 							// currentLateness = thisLateness;
@@ -216,26 +216,26 @@ public class BreakdownOptimiserMover {
 							// TOOD: Get fitness change and only accept improving solutions. (similarity, similarity plus others etc)
 							final ChangeSet cs = new ChangeSet(changes);
 
-							cs.setMetric(MetricType.PNL, thisPNL, thisPNL - currentMetrics[MetricType.PNL.ordinal()], thisPNL - similarityState.baseMetrics[MetricType.PNL.ordinal()]);
+							cs.setMetric(MetricType.PNL, thisPNL, thisPNL - currentMetrics[MetricType.PNL.ordinal()], thisPNL - similarityState.getBaseMetrics()[MetricType.PNL.ordinal()]);
 							cs.setMetric(MetricType.LATENESS, thisLateness, thisLateness - currentMetrics[MetricType.LATENESS.ordinal()],
-									thisLateness - similarityState.baseMetrics[MetricType.LATENESS.ordinal()]);
+									thisLateness - similarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()]);
 							cs.setMetric(MetricType.CAPACITY, thisCapacity, thisCapacity - currentMetrics[MetricType.CAPACITY.ordinal()],
-									thisCapacity - similarityState.baseMetrics[MetricType.CAPACITY.ordinal()]);
+									thisCapacity - similarityState.getBaseMetrics()[MetricType.CAPACITY.ordinal()]);
 							cs.setMetric(MetricType.COMPULSARY_SLOT, thisUnusedCompulsarySlotCount, thisUnusedCompulsarySlotCount - currentMetrics[MetricType.COMPULSARY_SLOT.ordinal()],
-									thisUnusedCompulsarySlotCount - similarityState.baseMetrics[MetricType.COMPULSARY_SLOT.ordinal()]);
+									thisUnusedCompulsarySlotCount - similarityState.getBaseMetrics()[MetricType.COMPULSARY_SLOT.ordinal()]);
 							cs.setRawSequences(currentSequences);
 							changes.clear();
 							changeSets.add(cs);
 
 							final JobState jobState = new JobState(new Sequences(currentSequences), changeSets, new LinkedList<Change>());
 
-							jobState.setMetric(MetricType.PNL, thisPNL, thisPNL - currentMetrics[MetricType.PNL.ordinal()], thisPNL - similarityState.baseMetrics[MetricType.PNL.ordinal()]);
+							jobState.setMetric(MetricType.PNL, thisPNL, thisPNL - currentMetrics[MetricType.PNL.ordinal()], thisPNL - similarityState.getBaseMetrics()[MetricType.PNL.ordinal()]);
 							jobState.setMetric(MetricType.LATENESS, thisLateness, thisLateness - currentMetrics[MetricType.LATENESS.ordinal()],
-									thisLateness - similarityState.baseMetrics[MetricType.LATENESS.ordinal()]);
+									thisLateness - similarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()]);
 							jobState.setMetric(MetricType.CAPACITY, thisCapacity, thisCapacity - currentMetrics[MetricType.CAPACITY.ordinal()],
-									thisCapacity - similarityState.baseMetrics[MetricType.CAPACITY.ordinal()]);
+									thisCapacity - similarityState.getBaseMetrics()[MetricType.CAPACITY.ordinal()]);
 							jobState.setMetric(MetricType.COMPULSARY_SLOT, thisUnusedCompulsarySlotCount, thisUnusedCompulsarySlotCount - currentMetrics[MetricType.COMPULSARY_SLOT.ordinal()],
-									thisUnusedCompulsarySlotCount - similarityState.baseMetrics[MetricType.COMPULSARY_SLOT.ordinal()]);
+									thisUnusedCompulsarySlotCount - similarityState.getBaseMetrics()[MetricType.COMPULSARY_SLOT.ordinal()]);
 
 							final int changesCount = changedElements.size();
 							if (changesCount == 0) {

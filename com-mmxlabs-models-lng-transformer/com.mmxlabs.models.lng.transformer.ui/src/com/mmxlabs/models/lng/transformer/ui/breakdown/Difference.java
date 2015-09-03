@@ -28,4 +28,10 @@ public final class Difference {
 		}
 		return super.equals(obj);
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("%s %s %s %s", this.move, this.load, this.discharge, this.resource);
+	}
+
 }
