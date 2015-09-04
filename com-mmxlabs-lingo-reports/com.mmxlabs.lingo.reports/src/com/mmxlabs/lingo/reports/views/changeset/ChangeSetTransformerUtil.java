@@ -27,6 +27,7 @@ import com.mmxlabs.lingo.reports.views.schedule.EquivalanceGroupBuilder;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -72,11 +73,27 @@ public final class ChangeSetTransformerUtil {
 			if (lhsRowMap.containsKey(rowKey)) {
 				row = lhsRowMap.get(rowKey);
 			} else {
-				row = ChangesetFactory.eINSTANCE.createChangeSetRow();
-				rows.add(row);
-				row.setLhsName(getRowName(loadSlot));
-				row.setLoadSlot(loadSlot);
-				lhsRowMap.put(rowKey, row);
+				String rowName = getRowName(loadSlot);
+				// String rowName = getRowName(loadSlot);
+				if (loadSlot instanceof SpotSlot) {
+					if (lhsRowMap.containsKey("market-" + loadSlot.getName())) {
+						row = lhsRowMap.get("market-" + loadSlot.getName());
+					} else {
+						row = ChangesetFactory.eINSTANCE.createChangeSetRow();
+						rows.add(row);
+						row.setLhsName(rowName);
+						row.setLoadSlot(loadSlot);
+						lhsRowMap.put(rowKey, row);
+						lhsRowMap.put("market-" + loadSlot.getName(), row);
+					}
+				} else {
+
+					row = ChangesetFactory.eINSTANCE.createChangeSetRow();
+					rows.add(row);
+					row.setLhsName(rowName);
+					row.setLoadSlot(loadSlot);
+					lhsRowMap.put(rowKey, row);
+				}
 			}
 		}
 
@@ -107,22 +124,46 @@ public final class ChangeSetTransformerUtil {
 				row.setDischargeSlot((DischargeSlot) slotAllocation.getSlot());
 				// FIXME: This can replace an existing entry -- is this ok?
 				rhsRowMap.put(getKeyName(slotAllocation.getSlot()), row);
+				{
+					// String rowName = getRowName(slotAllocation.getSlot());
+					if (slotAllocation.getSlot() instanceof SpotSlot) {
+						rhsRowMap.put("market-" + slotAllocation.getSlot().getName(), row);
+					}
+				}
 			} else {
 				row.setOriginalDischargeAllocation(slotAllocation);
 			}
 			if (!isBase) {
 				if (slotAllocation.getSlot() != null) {
 					ChangeSetRow otherRow = rhsRowMap.get(getKeyName(slotAllocation.getSlot()));
+
 					if (otherRow == null) {
-						// Special case, a spot slot will have no "OpenSlotAllocation" to pair up to, so create a new row here.
-						assert slotAllocation.getSlot() instanceof SpotSlot;
-						otherRow = ChangesetFactory.eINSTANCE.createChangeSetRow();
-						rows.add(otherRow);
-						otherRow.setRhsName(getRowName(slotAllocation.getSlot()));
+						// String rowName = getRowName(slotAllocation.getSlot());
+						// if (loadSlot instanceof SpotSlot) {
+						if (rhsRowMap.containsKey("market-" + slotAllocation.getSlot().getName())) {
+							otherRow = rhsRowMap.get("market-" + slotAllocation.getSlot().getName());
+						} else {
+							// row = ChangesetFactory.eINSTANCE.createChangeSetRow();
+							// rows.add(row);
+							// row.setLhsName(rowName);
+							// row.setLoadSlot(loadSlot);
+							// lhsRowMap.put(rowKey, row);
+							// lhsRowMap.put(row.getLhsName(), row);
+							// }
+							// } else
+							//
+
+							// Special case, a spot slot will have no "OpenSlotAllocation" to pair up to, so create a new row here.
+							assert slotAllocation.getSlot() instanceof SpotSlot;
+							otherRow = ChangesetFactory.eINSTANCE.createChangeSetRow();
+							rows.add(otherRow);
+							rhsRowMap.put(getKeyName(slotAllocation.getSlot()), otherRow);
+							rhsRowMap.put("market-" + slotAllocation.getSlot().getName(), otherRow);
+							otherRow.setRhsName(getRowName(slotAllocation.getSlot()));
+						}
 						otherRow.setOriginalDischargeAllocation(slotAllocation);
 						otherRow.setDischargeSlot((DischargeSlot) slotAllocation.getSlot());
 						// otherRow.setWiringChange(true);
-						rhsRowMap.put(getKeyName(slotAllocation.getSlot()), otherRow);
 					}
 					if (row != otherRow) {
 						row.setRhsWiringLink(otherRow);

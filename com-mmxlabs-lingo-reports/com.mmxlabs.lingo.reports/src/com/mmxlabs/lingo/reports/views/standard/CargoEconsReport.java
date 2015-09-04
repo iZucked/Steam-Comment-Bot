@@ -860,6 +860,7 @@ public class CargoEconsReport extends ViewPart {
 						for (GeneralPNLDetails details : slotPNLDetails.getGeneralPNLDetails()) {
 							if (details instanceof BasicSlotPNLDetails) {
 								addnPNL += ((BasicSlotPNLDetails) details).getAdditionalPNL();
+								addnPNL += ((BasicSlotPNLDetails) details).getExtraShippingPNL();
 							}
 						}
 					}

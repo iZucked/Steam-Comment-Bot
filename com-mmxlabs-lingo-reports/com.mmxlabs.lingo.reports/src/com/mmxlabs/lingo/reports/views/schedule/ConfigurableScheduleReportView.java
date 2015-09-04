@@ -208,7 +208,7 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 				return true;
 			}
 		} });
-		
+
 		scenarioComparisonService.triggerListener(scenarioComparisonServiceListener);
 	}
 

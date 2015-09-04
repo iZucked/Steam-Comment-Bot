@@ -169,9 +169,7 @@ public class ChangeSetView implements IAdaptable {
 
 	private final Map<ScenarioInstance, ScenarioInstanceDeletedListener> listenerMap = new HashMap<>();
 
-	// TODO - Rename, remove italic, remove first option
-	private Font italicFont;
-	private Font italicBoldFont;
+	private Font boldFont;
 
 	private Image imageClosedCircle;
 
@@ -297,8 +295,7 @@ public class ChangeSetView implements IAdaptable {
 
 		final Font systemFont = Display.getDefault().getSystemFont();
 		final FontData fontData = systemFont.getFontData()[0];
-		italicFont = new Font(Display.getDefault(), new FontData(fontData.getName(), fontData.getHeight(), SWT.NONE));
-		italicBoldFont = new Font(Display.getDefault(), new FontData(fontData.getName(), fontData.getHeight(), SWT.BOLD));
+		boldFont = new Font(Display.getDefault(), new FontData(fontData.getName(), fontData.getHeight(), SWT.BOLD));
 		// Create table
 		viewer = new GridTreeViewer(parent, SWT.V_SCROLL | SWT.H_SCROLL);
 		ColumnViewerToolTipSupport.enableFor(viewer, ToolTip.RECREATE);
@@ -446,9 +443,17 @@ public class ChangeSetView implements IAdaptable {
 		{
 			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setText("Shipping Cost");
+			gvc.getColumn().setText("FOB Shipping");
 			gvc.getColumn().setWidth(70);
 			gvc.setLabelProvider(createShippingDeltaLabelProvider());
+			createWordWrapRenderer(gvc);
+		}
+		{
+			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
+			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setText("DES Shipping");
+			gvc.getColumn().setWidth(70);
+			gvc.setLabelProvider(createAdditionalShippingPNLDeltaLabelProvider());
 			createWordWrapRenderer(gvc);
 		}
 		{
@@ -638,21 +643,10 @@ public class ChangeSetView implements IAdaptable {
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow change = (ChangeSetRow) element;
 					cell.setText((String) change.eGet(attrib));
-
-					setFont(cell, change);
-
 				}
 			}
 
 		};
-	}
-
-	protected void setFont(final ViewerCell cell, final ChangeSetRow change) {
-		if (!change.isVesselChange() && !change.isWiringChange()) {
-			cell.setFont(italicFont);
-		} else {
-			cell.setFont(null);
-		}
 	}
 
 	private CellLabelProvider createDeltaLabelProvider(final boolean asInt, final EStructuralFeature from, final EStructuralFeature to, final EStructuralFeature attrib) {
@@ -665,8 +659,6 @@ public class ChangeSetView implements IAdaptable {
 
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow change = (ChangeSetRow) element;
-
-					setFont(cell, change);
 
 					Number f = null;
 					try {
@@ -730,7 +722,7 @@ public class ChangeSetView implements IAdaptable {
 				cell.setText("");
 				if (element instanceof ChangeSet) {
 
-					cell.setFont(italicBoldFont);
+					cell.setFont(boldFont);
 
 					final ChangeSet changeSet = (ChangeSet) element;
 					final DeltaMetrics metrics;
@@ -749,7 +741,6 @@ public class ChangeSetView implements IAdaptable {
 				}
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow change = (ChangeSetRow) element;
-					setFont(cell, change);
 
 					Number f = null;
 					{
@@ -810,7 +801,6 @@ public class ChangeSetView implements IAdaptable {
 				// }
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow change = (ChangeSetRow) element;
-					setFont(cell, change);
 
 					Number f = null;
 					{
@@ -853,7 +843,7 @@ public class ChangeSetView implements IAdaptable {
 				cell.setForeground(null);
 				if (element instanceof ChangeSet) {
 
-					cell.setFont(italicBoldFont);
+//					cell.setFont(italicBoldFont);
 
 					final ChangeSet changeSet = (ChangeSet) element;
 					final Metrics scenarioMetrics = changeSet.getCurrentMetrics();
@@ -875,7 +865,6 @@ public class ChangeSetView implements IAdaptable {
 				}
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow change = (ChangeSetRow) element;
-					setFont(cell, change);
 
 					Number f = null;
 					{
@@ -918,8 +907,6 @@ public class ChangeSetView implements IAdaptable {
 				cell.setForeground(null);
 				if (element instanceof ChangeSet) {
 
-					cell.setFont(italicBoldFont);
-
 					final ChangeSet changeSet = (ChangeSet) element;
 					final Metrics scenarioMetrics = changeSet.getCurrentMetrics();
 					final DeltaMetrics deltaMetrics;
@@ -939,7 +926,6 @@ public class ChangeSetView implements IAdaptable {
 				}
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow change = (ChangeSetRow) element;
-					setFont(cell, change);
 
 					Number f = null;
 					{
@@ -981,7 +967,6 @@ public class ChangeSetView implements IAdaptable {
 
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow change = (ChangeSetRow) element;
-					setFont(cell, change);
 
 					Number f = null;
 					{
@@ -1022,6 +1007,56 @@ public class ChangeSetView implements IAdaptable {
 		};
 
 	}
+	private CellLabelProvider createAdditionalShippingPNLDeltaLabelProvider() {
+		return new CellLabelProvider() {
+			
+			@Override
+			public void update(final ViewerCell cell) {
+				final Object element = cell.getElement();
+				cell.setText("");
+				
+				if (element instanceof ChangeSetRow) {
+					final ChangeSetRow change = (ChangeSetRow) element;
+					
+					Number f = null;
+					{
+						final SlotAllocation originalLoadAllocation = change.getOriginalLoadAllocation();
+						if (originalLoadAllocation != null) {
+							final CargoAllocation cargoAllocation = originalLoadAllocation.getCargoAllocation();
+							if (cargoAllocation != null) {
+								final long addnPNL = ChangeSetUtils.getAdditionalShippingProfitAndLoss(cargoAllocation);
+								f = -addnPNL;
+							}
+						}
+					}
+					Number t = null;
+					{
+						final SlotAllocation newLoadAllocation = change.getNewLoadAllocation();
+						if (newLoadAllocation != null) {
+							final CargoAllocation cargoAllocation = newLoadAllocation.getCargoAllocation();
+							if (cargoAllocation != null) {
+								final long addnPNL = ChangeSetUtils.getAdditionalShippingProfitAndLoss(cargoAllocation);
+								t = -addnPNL;
+							}
+						}
+					}
+					double delta = 0;
+					if (f != null) {
+						delta -= f.intValue();
+					}
+					if (t != null) {
+						delta += t.intValue();
+					}
+					delta = delta / 1000000.0;
+					if (delta != 0) {
+						cell.setText(String.format("%s %,.3f", delta < 0 ? "↓" : "↑", Math.abs(delta)));
+					}
+					
+				}
+			}
+		};
+		
+	}
 
 	private CellLabelProvider createShippingDeltaLabelProvider() {
 		return new CellLabelProvider() {
@@ -1033,7 +1068,6 @@ public class ChangeSetView implements IAdaptable {
 
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow change = (ChangeSetRow) element;
-					setFont(cell, change);
 
 					Number f = null;
 					{
@@ -1077,7 +1111,7 @@ public class ChangeSetView implements IAdaptable {
 
 				if (element instanceof ChangeSet) {
 
-					cell.setFont(italicBoldFont);
+					cell.setFont(boldFont);
 
 					final ChangeSet changeSet = (ChangeSet) element;
 					final ChangeSetRoot root = (ChangeSetRoot) changeSet.eContainer();
@@ -1302,9 +1336,9 @@ public class ChangeSetView implements IAdaptable {
 			listenerMap.clear();
 		}
 
-		if (italicFont != null) {
-			italicFont.dispose();
-			italicFont = null;
+		if (boldFont != null) {
+			boldFont.dispose();
+			boldFont = null;
 		}
 		if (imageOpenCircle != null) {
 			imageOpenCircle.dispose();

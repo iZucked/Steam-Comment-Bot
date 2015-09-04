@@ -43,6 +43,10 @@ public class ScenarioComparisonService {
 
 	private DiffOptions diffOptions = ScheduleReportFactory.eINSTANCE.createDiffOptions();
 
+	/**
+	 * Special counter to try and avoid multiple update requests happening at once.
+	 * TODO: What happens if we hit Integer.MAX_VALUE?
+	 */
 	private AtomicInteger counter = new AtomicInteger();
 
 	@NonNull
@@ -56,6 +60,7 @@ public class ScenarioComparisonService {
 
 	private ScenarioComparisonServiceTransformer.TransformResult lastResult;
 
+	// FIXME: This can retain elements from unloaded scenarios.
 	private Collection<Object> selectedElements = new LinkedList<>();
 
 	public ScenarioComparisonService() {
@@ -136,7 +141,6 @@ public class ScenarioComparisonService {
 				if (value == counter.get()) {
 					log.error(e.getMessage(), e);
 				}
-				log.error(e.getMessage(), e);
 			}
 		}
 
@@ -160,10 +164,7 @@ public class ScenarioComparisonService {
 					l.multiDataUpdate(lastResult.selectedDataProvider, lastResult.others, lastResult.table, lastResult.rootObjects);
 				}
 			} catch (final Exception e) {
-				// Counter mismatch? data probably been changed, ignore exceptions in this case. However if counter matches, log the exception.
-				// if (value == counter.get()) {
 				log.error(e.getMessage(), e);
-				// }
 			}
 		}
 	}
