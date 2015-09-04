@@ -21,10 +21,10 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.OpenSlotAllocationImpl#getSlot <em>Slot</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

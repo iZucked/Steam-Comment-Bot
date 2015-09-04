@@ -28,11 +28,11 @@ import com.mmxlabs.models.lng.schedule.SlotPNLDetails;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotPNLDetailsImpl#getSlot <em>Slot</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotPNLDetailsImpl#getGeneralPNLDetails <em>General PNL Details</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

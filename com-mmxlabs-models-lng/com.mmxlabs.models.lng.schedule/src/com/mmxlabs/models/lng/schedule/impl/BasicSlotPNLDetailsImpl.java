@@ -19,16 +19,37 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl#getExtraShippingPNL <em>Extra Shipping PNL</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl#getAdditionalPNL <em>Additional PNL</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl#getCancellationFees <em>Cancellation Fees</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl#getHedgingValue <em>Hedging Value</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
 public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements BasicSlotPNLDetails {
+	/**
+	 * The default value of the '{@link #getExtraShippingPNL() <em>Extra Shipping PNL</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getExtraShippingPNL()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int EXTRA_SHIPPING_PNL_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getExtraShippingPNL() <em>Extra Shipping PNL</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getExtraShippingPNL()
+	 * @generated
+	 * @ordered
+	 */
+	protected int extraShippingPNL = EXTRA_SHIPPING_PNL_EDEFAULT;
+
 	/**
 	 * The default value of the '{@link #getAdditionalPNL() <em>Additional PNL</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -124,6 +145,27 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	@Override
 	protected EClass eStaticClass() {
 		return SchedulePackage.Literals.BASIC_SLOT_PNL_DETAILS;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getExtraShippingPNL() {
+		return extraShippingPNL;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setExtraShippingPNL(int newExtraShippingPNL) {
+		int oldExtraShippingPNL = extraShippingPNL;
+		extraShippingPNL = newExtraShippingPNL;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.BASIC_SLOT_PNL_DETAILS__EXTRA_SHIPPING_PNL, oldExtraShippingPNL, extraShippingPNL));
 	}
 
 	/**
@@ -247,6 +289,8 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__EXTRA_SHIPPING_PNL:
+				return getExtraShippingPNL();
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__ADDITIONAL_PNL:
 				return getAdditionalPNL();
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__CANCELLATION_FEES:
@@ -265,6 +309,9 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__EXTRA_SHIPPING_PNL:
+				setExtraShippingPNL((Integer)newValue);
+				return;
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__ADDITIONAL_PNL:
 				setAdditionalPNL((Integer)newValue);
 				return;
@@ -286,6 +333,9 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__EXTRA_SHIPPING_PNL:
+				setExtraShippingPNL(EXTRA_SHIPPING_PNL_EDEFAULT);
+				return;
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__ADDITIONAL_PNL:
 				setAdditionalPNL(ADDITIONAL_PNL_EDEFAULT);
 				return;
@@ -307,6 +357,8 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__EXTRA_SHIPPING_PNL:
+				return extraShippingPNL != EXTRA_SHIPPING_PNL_EDEFAULT;
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__ADDITIONAL_PNL:
 				return additionalPNL != ADDITIONAL_PNL_EDEFAULT;
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__CANCELLATION_FEES:
@@ -327,7 +379,9 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (additionalPNL: ");
+		result.append(" (extraShippingPNL: ");
+		result.append(extraShippingPNL);
+		result.append(", additionalPNL: ");
 		result.append(additionalPNL);
 		result.append(", cancellationFees: ");
 		if (cancellationFeesESet) result.append(cancellationFees); else result.append("<unset>");

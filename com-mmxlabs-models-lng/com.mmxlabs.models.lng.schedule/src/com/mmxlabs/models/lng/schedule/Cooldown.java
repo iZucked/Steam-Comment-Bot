@@ -11,11 +11,11 @@ package com.mmxlabs.models.lng.schedule;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Cooldown#getVolume <em>Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Cooldown#getCost <em>Cost</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getCooldown()
  * @model

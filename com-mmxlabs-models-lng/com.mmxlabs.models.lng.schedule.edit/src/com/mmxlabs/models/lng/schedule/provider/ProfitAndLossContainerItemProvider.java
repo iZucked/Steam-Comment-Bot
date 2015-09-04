@@ -34,13 +34,7 @@ import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
  * @generated
  */
 public class ProfitAndLossContainerItemProvider
-	extends MMXObjectItemProvider
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+	extends MMXObjectItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->

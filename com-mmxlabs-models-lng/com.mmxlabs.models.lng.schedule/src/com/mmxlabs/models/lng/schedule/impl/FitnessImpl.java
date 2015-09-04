@@ -17,10 +17,10 @@ import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.FitnessImpl#getFitnessValue <em>Fitness Value</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

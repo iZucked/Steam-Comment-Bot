@@ -23,11 +23,11 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.PortVisitLatenessImpl#getType <em>Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.PortVisitLatenessImpl#getLatenessInHours <em>Lateness In Hours</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

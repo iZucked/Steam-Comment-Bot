@@ -12,12 +12,12 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.FuelAmount#getUnit <em>Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.FuelAmount#getQuantity <em>Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.FuelAmount#getUnitPrice <em>Unit Price</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getFuelAmount()
  * @model

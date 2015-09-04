@@ -20,11 +20,11 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleModelImpl#getSchedule <em>Schedule</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleModelImpl#isDirty <em>Dirty</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

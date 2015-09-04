@@ -33,13 +33,7 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
  * @generated
  */
 public class SlotVisitItemProvider
-	extends EventItemProvider
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+	extends EventItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->

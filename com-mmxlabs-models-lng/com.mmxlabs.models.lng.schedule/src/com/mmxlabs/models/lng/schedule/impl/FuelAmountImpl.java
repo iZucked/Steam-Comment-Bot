@@ -18,12 +18,12 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.FuelAmountImpl#getUnit <em>Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.FuelAmountImpl#getQuantity <em>Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.FuelAmountImpl#getUnitPrice <em>Unit Price</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
