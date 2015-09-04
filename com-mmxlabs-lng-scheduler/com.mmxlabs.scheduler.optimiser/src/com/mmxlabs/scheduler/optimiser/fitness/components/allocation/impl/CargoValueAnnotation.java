@@ -27,7 +27,8 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 
 	private static class SlotAllocationAnnotation {
 		public long value;
-		public long additionalPNL;
+		public long additionalOtherPNL;
+		public long additionalShippingPNL;
 		public int pricePerMMBTu;
 		public IEntity entity;
 	}
@@ -61,18 +62,32 @@ public final class CargoValueAnnotation implements ICargoValueAnnotation {
 	}
 
 	@Override
-	public long getSlotAdditionalPNL(final IPortSlot slot) {
+	public long getSlotAdditionalOtherPNL(final IPortSlot slot) {
 
 		final SlotAllocationAnnotation allocation = getOrCreateSlotAllocation(slot);
 		if (allocation != null) {
-			return allocation.additionalPNL;
+			return allocation.additionalOtherPNL;
 		}
 
 		return 0;
 	}
 
-	public void setSlotAdditionalPNL(final IPortSlot slot, final long additionalPNL) {
-		getOrCreateSlotAllocation(slot).additionalPNL = additionalPNL;
+	public void setSlotAdditionalOtherPNL(final IPortSlot slot, final long additionalOtherPNL) {
+		getOrCreateSlotAllocation(slot).additionalOtherPNL = additionalOtherPNL;
+	}
+	@Override
+	public long getSlotAdditionalShippingPNL(final IPortSlot slot) {
+		
+		final SlotAllocationAnnotation allocation = getOrCreateSlotAllocation(slot);
+		if (allocation != null) {
+			return allocation.additionalShippingPNL;
+		}
+		
+		return 0;
+	}
+	
+	public void setSlotAdditionalShippingPNL(final IPortSlot slot, final long additionalShippingPNL) {
+		getOrCreateSlotAllocation(slot).additionalShippingPNL = additionalShippingPNL;
 	}
 
 	@Override
