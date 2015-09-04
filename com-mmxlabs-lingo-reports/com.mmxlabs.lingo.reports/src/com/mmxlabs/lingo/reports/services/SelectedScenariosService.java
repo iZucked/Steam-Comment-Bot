@@ -28,6 +28,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.scenario.service.IScenarioServiceListener;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionChangedListener;
@@ -67,6 +68,63 @@ public class SelectedScenariosService {
 					}
 				}
 			}
+		}
+	};
+
+	private class OnLoadScenarioServiceListener implements IScenarioServiceListener {
+
+		private final ScenarioInstance targetInstance;
+
+		public OnLoadScenarioServiceListener(@NonNull final ScenarioInstance targetInstance) {
+			this.targetInstance = targetInstance;
+		}
+
+		@Override
+		public void onPreScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+			if (scenarioInstance == targetInstance) {
+				scenarioService.removeScenarioServiceListener(this);
+			}
+		}
+
+		@Override
+		public void onPreScenarioInstanceSave(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+
+		}
+
+		@Override
+		public void onPreScenarioInstanceLoad(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+
+		}
+
+		@Override
+		public void onPreScenarioInstanceDelete(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+			if (scenarioInstance == targetInstance) {
+				scenarioService.removeScenarioServiceListener(this);
+			}
+		}
+
+		@Override
+		public void onPostScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+		}
+
+		@Override
+		public void onPostScenarioInstanceSave(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+
+		}
+
+		@Override
+		public void onPostScenarioInstanceLoad(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+			if (scenarioInstance == targetInstance) {
+				detachScenarioInstance(scenarioInstance);
+				attachScenarioInstance(scenarioInstance);
+				scenarioService.removeScenarioServiceListener(this);
+				updateSelectedScenarios(false);
+			}
+		}
+
+		@Override
+		public void onPostScenarioInstanceDelete(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+
 		}
 	};
 
@@ -127,7 +185,7 @@ public class SelectedScenariosService {
 			// Clean up scenarios.
 			while (!scenarioReferences.isEmpty()) {
 				final Map.Entry<ScenarioInstance, ModelReference> e = scenarioReferences.entrySet().iterator().next();
-				ScenarioInstance key = e.getKey();
+				final ScenarioInstance key = e.getKey();
 				assert key != null;
 				detachScenarioInstance(key);
 			}
@@ -169,6 +227,12 @@ public class SelectedScenariosService {
 			commandStack.addCommandStackListener(this.commandStackListener);
 			this.commandStacks.add(commandStack);
 			commandStackMap.put(commandStack, instance);
+		} else {
+			// No command stack? Probably not loaded, so register a listener
+			final IScenarioService scenarioService = instance.getScenarioService();
+			if (scenarioService != null) {
+				scenarioService.addScenarioServiceListener(new OnLoadScenarioServiceListener(instance));
+			}
 		}
 		this.scenarioReferences.put(instance, instance.getReference());
 	}
@@ -178,6 +242,7 @@ public class SelectedScenariosService {
 		if (commandStack != null) {
 			commandStack.removeCommandStackListener(this.commandStackListener);
 			this.commandStacks.remove(commandStack);
+			commandStackMap.remove(commandStack);
 		}
 		final ModelReference ref = scenarioReferences.remove(instance);
 		if (ref != null) {
@@ -223,16 +288,20 @@ public class SelectedScenariosService {
 	private static final class KeyValueRecord {
 		@NonNull
 		private final ScenarioInstance scenarioInstance;
+
 		@NonNull
 		private final LNGScenarioModel scenarioModel;
+
 		@NonNull
 		private final LNGPortfolioModel portfolioModel;
+
 		@Nullable
 		private final Schedule schedule;
+
 		@NonNull
 		private final Collection<EObject> children;
 
-		private ModelReference ref;
+		private final ModelReference ref;
 
 		public KeyValueRecord(@NonNull final ScenarioInstance scenarioInstance, @NonNull final LNGScenarioModel scenarioModel, @NonNull final LNGPortfolioModel portfolioModel,
 				@Nullable final Schedule schedule, @NonNull final Collection<EObject> children) {
@@ -244,6 +313,7 @@ public class SelectedScenariosService {
 			ref = scenarioInstance.getReference();
 		}
 
+		@Override
 		protected void finalize() throws Throwable {
 			ref.close();
 		};

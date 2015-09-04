@@ -179,7 +179,7 @@ public class ChangeSetView implements IAdaptable {
 
 	private ViewMode viewMode = ViewMode.COMPARE;
 
-	private MPart part;
+//	private MPart part;
 
 	private final class ViewUpdateRunnable implements Runnable {
 		private final ChangeSetRoot newRoot;
@@ -566,11 +566,11 @@ public class ChangeSetView implements IAdaptable {
 				selectedElements.add(changeSetRow.getOriginalGroupProfitAndLoss());
 				selectedElements.add(changeSetRow.getNewEventGrouping());
 				if (changeSetRow.getNewEventGrouping() instanceof Event) {
-					selectedElements.add(((Event)changeSetRow.getNewEventGrouping()).getSequence());
+					selectedElements.add(((Event) changeSetRow.getNewEventGrouping()).getSequence());
 				}
 				selectedElements.add(changeSetRow.getOriginalEventGrouping());
 				if (changeSetRow.getOriginalEventGrouping() instanceof Event) {
-					selectedElements.add(((Event)changeSetRow.getOriginalEventGrouping()).getSequence());
+					selectedElements.add(((Event) changeSetRow.getOriginalEventGrouping()).getSequence());
 				}
 			}
 		});
@@ -1285,9 +1285,23 @@ public class ChangeSetView implements IAdaptable {
 
 	@PreDestroy
 	public void dispose() {
+
 		scenarioComparisonService.removeListener(listener);
 		cleanUp(this.root);
+		diagram.setChangeSetRoot(ChangesetFactory.eINSTANCE.createChangeSetRoot());
 		this.root = null;
+		{
+			for (Map.Entry<ScenarioInstance, ScenarioInstanceDeletedListener> e : listenerMap.entrySet()) {
+				ScenarioInstance scenarioInstance = e.getKey();
+				final IScenarioService scenarioService = scenarioInstance.getScenarioService();
+				final ScenarioInstanceDeletedListener listener = e.getValue();
+				if (scenarioService != null && listener != null) {
+					scenarioService.removeScenarioServiceListener(listener);
+				}
+			}
+			listenerMap.clear();
+		}
+
 		if (italicFont != null) {
 			italicFont.dispose();
 			italicFont = null;
