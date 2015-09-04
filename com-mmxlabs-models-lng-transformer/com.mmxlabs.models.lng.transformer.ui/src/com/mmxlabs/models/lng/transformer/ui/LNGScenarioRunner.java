@@ -347,16 +347,17 @@ public class LNGScenarioRunner {
 		}
 
 		if (optimiser.isFinished()) {
-			if (this.optimiserSettings.getSolutionImprovementSettings() != null && this.optimiserSettings.getSolutionImprovementSettings().isImprovingSolutions()) {
-				ArbitraryStateLocalSearchOptimiser hillClimber = injector.getInstance(ArbitraryStateLocalSearchOptimiser.class);
-				// The optimiser may not have a best sequence set
-				System.out.println("Performing hill climbing...");
-				ISequences initialSequence = optimiser.getBestRawSequences() == null ? context.getInitialSequences() : optimiser.getBestRawSequences();
-				hillClimber.start(context, initialSequence);
-				hillClimber.step(100);
-				optimiser = hillClimber;
+			if (doHillClimb) {
+				if (this.optimiserSettings.getSolutionImprovementSettings() != null && this.optimiserSettings.getSolutionImprovementSettings().isImprovingSolutions()) {
+					ArbitraryStateLocalSearchOptimiser hillClimber = injector.getInstance(ArbitraryStateLocalSearchOptimiser.class);
+					// The optimiser may not have a best sequence set
+					System.out.println("Performing hill climbing...");
+					ISequences initialSequence = optimiser.getBestRawSequences() == null ? context.getInitialSequences() : optimiser.getBestRawSequences();
+					hillClimber.start(context, initialSequence);
+					hillClimber.step(100);
+					optimiser = hillClimber;
+				}
 			}
-
 			// Clear any previous optimisation state.
 			if (periodMapping != null) {
 				LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, 100);
