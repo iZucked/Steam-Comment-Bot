@@ -122,7 +122,7 @@ public class BagOptimiser {
 	 * 
 	 * @param bestRawSequences
 	 */
-	public boolean optimise(@NonNull final ISequences bestRawSequences, final IProgressMonitor progressMonitor, @NonNull int maxLeafs) {
+	public boolean optimise(@NonNull final ISequences bestRawSequences, final IProgressMonitor progressMonitor, int maxLeafs) {
 
 		final long time1 = System.currentTimeMillis();
 
@@ -300,7 +300,7 @@ public class BagOptimiser {
 					}
 				}
 				if (!sortedChangeStates.isEmpty()) {
-					betterSolutionFound = processAndStoreBreakdownSolution(sortedChangeStates.get(9), initialFullSequences, evaluationState, bestFitness);
+					betterSolutionFound = processAndStoreBreakdownSolution(sortedChangeStates.get(0), initialFullSequences, evaluationState, bestFitness);
 				}
 				if (sortedChangeStates.isEmpty()) {
 					LOG.error("Unable to find action sets");
