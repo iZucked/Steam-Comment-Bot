@@ -34,9 +34,11 @@ public class SimilarityState {
 	private final Map<Pair<Integer, Integer>, Pair<Integer, Integer>> cargoToPrevCargoMap = new HashMap<>();
 	private final Map<Pair<Integer, Integer>, Pair<Integer, Integer>> cargoToNextCargoMap = new HashMap<>();
 
-	public long[] baseMetrics = new long[MetricType.values().length];
+	private long[] baseMetrics = new long[MetricType.values().length];
 
+	private ISequences originalSequences = null;
 	public void init(@NonNull final ISequences fullSequences) {
+		setOriginalSequences(fullSequences);
 		for (final IResource resource : fullSequences.getResources()) {
 			assert resource != null;
 			final ISequence sequence = fullSequences.getSequence(resource);
@@ -106,6 +108,22 @@ public class SimilarityState {
 
 	public Pair<Integer, Integer> getNextCargo(final Pair<Integer, Integer> cargo) {
 		return cargoToNextCargoMap.get(cargo);
+	}
+
+	public ISequences getOriginalSequences() {
+		return originalSequences;
+	}
+
+	public void setOriginalSequences(ISequences originalSequences) {
+		this.originalSequences = originalSequences;
+	}
+
+	public long[] getBaseMetrics() {
+		return baseMetrics;
+	}
+
+	public void setBaseMetrics(long[] baseMetrics) {
+		this.baseMetrics = baseMetrics;
 	}
 
 }
