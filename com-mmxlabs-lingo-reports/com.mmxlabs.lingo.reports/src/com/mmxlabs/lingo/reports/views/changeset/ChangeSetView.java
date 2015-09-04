@@ -177,7 +177,7 @@ public class ChangeSetView implements IAdaptable {
 
 	private ViewMode viewMode = ViewMode.COMPARE;
 
-//	private MPart part;
+	// private MPart part;
 
 	private final class ViewUpdateRunnable implements Runnable {
 		private final ChangeSetRoot newRoot;
@@ -419,12 +419,12 @@ public class ChangeSetView implements IAdaptable {
 		}
 
 		final GridColumnGroup pnlComponentGroup = new GridColumnGroup(viewer.getGrid(), SWT.NONE);
-		pnlComponentGroup.setText("Components");
+		pnlComponentGroup.setText("P&L Components");
 
 		{
 			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setText("Sales Revenue");
+			gvc.getColumn().setText("+ Sales");
 			gvc.getColumn().setWidth(70);
 			gvc.setLabelProvider(createDeltaLabelProvider(true, ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_DISCHARGE_ALLOCATION,
 					ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_DISCHARGE_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__VOLUME_VALUE));
@@ -434,7 +434,7 @@ public class ChangeSetView implements IAdaptable {
 		{
 			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setText("Purchase Cost");
+			gvc.getColumn().setText("- Purchase");
 			gvc.getColumn().setWidth(70);
 			gvc.setLabelProvider(createDeltaLabelProvider(true, ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_LOAD_ALLOCATION, ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_LOAD_ALLOCATION,
 					SchedulePackage.Literals.SLOT_ALLOCATION__VOLUME_VALUE));
@@ -443,7 +443,7 @@ public class ChangeSetView implements IAdaptable {
 		{
 			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setText("FOB Shipping");
+			gvc.getColumn().setText("- Ship FOB");
 			gvc.getColumn().setWidth(70);
 			gvc.setLabelProvider(createShippingDeltaLabelProvider());
 			createWordWrapRenderer(gvc);
@@ -451,7 +451,7 @@ public class ChangeSetView implements IAdaptable {
 		{
 			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setText("DES Shipping");
+			gvc.getColumn().setText("- Ship DES");
 			gvc.getColumn().setWidth(70);
 			gvc.setLabelProvider(createAdditionalShippingPNLDeltaLabelProvider());
 			createWordWrapRenderer(gvc);
@@ -459,7 +459,7 @@ public class ChangeSetView implements IAdaptable {
 		{
 			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setText("Other Cargo P&L");
+			gvc.getColumn().setText("+ Cargo other");
 			gvc.getColumn().setWidth(70);
 			gvc.setLabelProvider(createAdditionalPNLDeltaLabelProvider());
 			createWordWrapRenderer(gvc);
@@ -467,7 +467,7 @@ public class ChangeSetView implements IAdaptable {
 		{
 			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
-			gvc.getColumn().setText("Tax, etc. P&L");
+			gvc.getColumn().setText("+ Tax, etc.");
 			gvc.getColumn().setWidth(70);
 			gvc.setLabelProvider(createTaxDeltaLabelProvider());
 			createWordWrapRenderer(gvc);
@@ -843,7 +843,7 @@ public class ChangeSetView implements IAdaptable {
 				cell.setForeground(null);
 				if (element instanceof ChangeSet) {
 
-//					cell.setFont(italicBoldFont);
+					// cell.setFont(italicBoldFont);
 
 					final ChangeSet changeSet = (ChangeSet) element;
 					final Metrics scenarioMetrics = changeSet.getCurrentMetrics();
@@ -1007,17 +1007,18 @@ public class ChangeSetView implements IAdaptable {
 		};
 
 	}
+
 	private CellLabelProvider createAdditionalShippingPNLDeltaLabelProvider() {
 		return new CellLabelProvider() {
-			
+
 			@Override
 			public void update(final ViewerCell cell) {
 				final Object element = cell.getElement();
 				cell.setText("");
-				
+
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow change = (ChangeSetRow) element;
-					
+
 					Number f = null;
 					{
 						final SlotAllocation originalLoadAllocation = change.getOriginalLoadAllocation();
@@ -1051,11 +1052,11 @@ public class ChangeSetView implements IAdaptable {
 					if (delta != 0) {
 						cell.setText(String.format("%s %,.3f", delta < 0 ? "↓" : "↑", Math.abs(delta)));
 					}
-					
+
 				}
 			}
 		};
-		
+
 	}
 
 	private CellLabelProvider createShippingDeltaLabelProvider() {
