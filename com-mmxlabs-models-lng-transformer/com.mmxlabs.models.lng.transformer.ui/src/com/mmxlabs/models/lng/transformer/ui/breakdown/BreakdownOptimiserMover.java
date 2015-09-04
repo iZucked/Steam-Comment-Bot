@@ -59,7 +59,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public class BreakdownOptimiserMover {
 
-	private static final boolean DEBUG_VALIDATION = true;
+	protected static final boolean DEBUG_VALIDATION = false;
 
 	public static final int DEPTH_START = -1;
 

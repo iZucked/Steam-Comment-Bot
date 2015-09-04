@@ -8,10 +8,6 @@
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -21,8 +17,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -37,25 +31,18 @@ import com.google.inject.Injector;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.transformer.stochasticactionsets.StochasticActionSetUtils;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.BagMover;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.BreadthOptimiser;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.BreakdownOptimiserMover;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.Change;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.ChangeChecker;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.ChangeSet;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.ChangeSetFinderJob;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.Difference;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.JobState;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.JobStateMode;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.JobStateSerialiser;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.JobStore;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.MetricType;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.MyFuture;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.SimilarityState;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
-import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.optimiser.core.ISequence;
-import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
@@ -68,7 +55,6 @@ import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.optimiser.lso.IFitnessCombiner;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 
@@ -95,9 +81,6 @@ public class BagOptimiser {
 	private IOptimisationContext optimisationContext;
 
 	@Inject
-	private List<IConstraintChecker> constraintCheckers;
-
-	@Inject
 	@NonNull
 	private List<IFitnessComponent> fitnessComponents;
 
@@ -112,9 +95,6 @@ public class BagOptimiser {
 	private List<IEvaluationProcess> evaluationProcesses;
 
 	@Inject
-	private IPortTypeProvider portTypeProvider;
-
-	@Inject
 	private Injector injector;
 
 	@NonNull
@@ -123,7 +103,7 @@ public class BagOptimiser {
 
 	private static final Logger LOG = LoggerFactory.getLogger(BagOptimiser.class);
 
-	private final int limitedStateFileLimit = 10000;
+	private static final boolean DEBUG = false;
 
 	private final Random rdm = new Random(0);
 
@@ -226,8 +206,12 @@ public class BagOptimiser {
 				Collection<JobState> fullChangesSets = Collections.EMPTY_LIST;
 				Collection<JobState> oldFullChangesSets = Collections.EMPTY_LIST;
 				Collection<JobState> initialPopulation = addChangeSetLevel(targetSimilarityState, l, changeChecker, oldFullChangesSets, initialPopulationSize);
-				System.out.println("initial pop");
-				printJobStates(initialPopulation);
+
+				if (DEBUG) {
+					System.out.println("initial pop");
+					printJobStates(initialPopulation);
+				}
+
 				Collection<JobState> finalPopulation = new LinkedList<>();
 				Collection<JobState> limitedStates = new LinkedList<>();
 				progressMonitor.beginTask("Generate changes", initialPopulation.size());
@@ -243,16 +227,10 @@ public class BagOptimiser {
 							states.add(new JobState(root));
 						}
 						oldFullChangesSets = new LinkedList<>(states);
-						System.out.println("testing = " + root);
 						int zz = 0;
 						while (!foundLeaf(states) && !(fullChangesSets != null && fullChangesSets.size() == 0)) {
-							System.out.println("--------------------------- root ----------------- " + (zz++));
-							for (ChangeSet changeSet : root.changeSetsAsList) {
-								for (Change change : changeSet.changesList) {
-									if (change.description.contains("Vessel P22-P.Melchorita from Asia Excellence to Galea")) {
-										int ii = 0;
-									}
-								}
+							if (DEBUG) {
+								System.out.println("--------------------------- root ----------------- " + (zz++));
 							}
 							fullChangesSets = addChangeSetLevel(targetSimilarityState, states, changeChecker, oldFullChangesSets, 10);
 							if (fullChangesSets.isEmpty()) {
@@ -260,24 +238,12 @@ public class BagOptimiser {
 							}
 							oldFullChangesSets = fullChangesSets;
 						}
-						// if (foundLeaf && potentiallyBetterBranch) {
-						// for (JobState state: fullChangesSets) {
-						// if (state.mode == JobStateMode.LEAF) {
-						// leafStates.add(state);
-						// }
-						// }
-						// fullChangesSets.removeAll(leafStates);
-						// for (int i = 0; i < normalSearchSize; i++) {
-						// states.add(new JobState(((List<JobState>) fullChangesSets).get(rdm.nextInt(fullChangesSets.size()))));
-						// }
-						// fullChangesSets = addChangeSetLevel(targetSimilarityState, states, changeChecker, states, 10);
-						// oldFullChangesSets = fullChangesSets;
-						//
-						// }
+
 						// TODO: make more efficient
 						if (foundLeaf(fullChangesSets)) {
 							limitedStates.addAll(getPromisingBranches(fullChangesSets));
 						}
+
 						finalPopulation.addAll(getLeafs(fullChangesSets));
 						progressMonitor.worked(1);
 						if (finalPopulation.size() > maxLeafs) {
@@ -287,7 +253,6 @@ public class BagOptimiser {
 				}
 
 				if (finalPopulation.size() < maxLeafs) {
-					System.out.println("loading promising");
 					for (JobState promising : limitedStates) {
 						finalPopulation.addAll(expandNode(promising, 250, targetSimilarityState, changeChecker));
 					}
@@ -314,26 +279,28 @@ public class BagOptimiser {
 						}
 					}
 				});
-				int zz = 1;
-				for (JobState s : finalPopulation) {
-					System.out.println("######## Final " + (zz++) + "########");
-					System.out.println("m:" + s.mode);
-					System.out.println("pnl:" + s.metricDelta[MetricType.PNL.ordinal()]);
-					System.out.println("late:" + s.metricDelta[MetricType.LATENESS.ordinal()]);
-					System.out.println(s.changeSetsAsList.get(0).changesList.size());
-					System.out.println("diffs:" + s.getDifferencesList().size());
-					if (s.mode == JobStateMode.LEAF && s.metricDeltaToBase[MetricType.LATENESS.ordinal()] <= 0) {
-						for (ChangeSet cs : s.changeSetsAsList) {
-							System.out.println(String.format("#### CS %s ####", cs.metricDelta[MetricType.PNL.ordinal()]));
-							for (Change c : cs.changesList) {
-								System.out.println(c.description);
+				if (DEBUG) {
+					int popIndex = 1;
+					for (JobState s : finalPopulation) {
+						System.out.println("######## Final " + (popIndex++) + "########");
+						System.out.println("m:" + s.mode);
+						System.out.println("pnl:" + s.metricDelta[MetricType.PNL.ordinal()]);
+						System.out.println("late:" + s.metricDelta[MetricType.LATENESS.ordinal()]);
+						System.out.println(s.changeSetsAsList.get(0).changesList.size());
+						System.out.println("diffs:" + s.getDifferencesList().size());
+						if (s.mode == JobStateMode.LEAF && s.metricDeltaToBase[MetricType.LATENESS.ordinal()] <= 0) {
+							for (ChangeSet cs : s.changeSetsAsList) {
+								System.out.println(String.format("#### CS %s ####", cs.metricDelta[MetricType.PNL.ordinal()]));
+								for (Change c : cs.changesList) {
+									System.out.println(c.description);
+								}
 							}
+							System.out.println("-----------------");
 						}
-						System.out.println("-----------------");
 					}
 				}
 				if (!sortedChangeStates.isEmpty()) {
-					betterSolutionFound = processAndStoreBreakdownSolution(sortedChangeStates.get(0), initialFullSequences, evaluationState, bestFitness);
+					betterSolutionFound = processAndStoreBreakdownSolution(sortedChangeStates.get(9), initialFullSequences, evaluationState, bestFitness);
 				}
 				if (sortedChangeStates.isEmpty()) {
 					LOG.error("Unable to find action sets");
@@ -399,7 +366,6 @@ public class BagOptimiser {
 			System.out.println("late:" + s.metricDelta[MetricType.LATENESS.ordinal()]);
 			System.out.println(s.changeSetsAsList.get(0).changesList.size());
 			System.out.println("diffs:" + s.getDifferencesList().size());
-			// if (s.mode == JobStateMode.LEAF && s.metricDeltaToBase[MetricType.LATENESS.ordinal()] <= 0) {
 			for (ChangeSet cs : s.changeSetsAsList) {
 				System.out.println(String.format("#### CS %s ####", cs.metricDelta[MetricType.PNL.ordinal()]));
 				for (Change c : cs.changesList) {
@@ -407,7 +373,6 @@ public class BagOptimiser {
 				}
 			}
 			System.out.println("-----------------");
-			// }
 		}
 
 	}
@@ -481,51 +446,6 @@ public class BagOptimiser {
 		for (JobState js : fullChangesSets) {
 			best.add(new JobState(js));
 		}
-		// if (best.get(0).getDifferencesList().size() == 4) {
-		// for (IResource r : best.get(0).getRawSequences().getResources()) {
-		// for (ISequenceElement s : best.get(0).getRawSequences().getSequence(r)) {
-		// if (s.getName().contains("AP-2015-05-0-Tokyo")) {
-		// System.out.println(String.format("%s|%s", r.getName(), s.getName()));
-		// }
-		// if (s.getName().contains("ME-2015-06-0-ANYWHERE")) {
-		// System.out.println(String.format("%s|%s", r.getName(), s.getName()));
-		// }
-		// // if (s.getName().contains("RI04-Hazira")) {
-		// // System.out.println(String.format("%s|%s", r.getName(), s.getName()));
-		// // }
-		// // if (s.getName().contains("ME-2015-06-0-Hazira")) {
-		// // System.out.println(String.format("%s|%s", r.getName(), s.getName()));
-		// // }
-		// if (s.getName().contains("NE01-Dampier")) {
-		// System.out.println(String.format("%s|%s", r.getName(), s.getName()));
-		// if (targetSimilarityState.getDischargeForLoad(s) != null) {
-		// System.out.println(targetSimilarityState.getElementForIndex(targetSimilarityState.getDischargeForLoad(s)).getName());
-		// } else {
-		// System.out.println("unused");
-		// }
-		// // System.out.println(targetSimilarityState.getResourceForElement(s).getName());
-		// }
-		// if (s.getName().contains("TRF2")) {
-		// System.out.println(String.format("%s|%s", r.getName(), s.getName()));
-		// if (targetSimilarityState.getDischargeForLoad(s) != null) {
-		// System.out.println(targetSimilarityState.getElementForIndex(targetSimilarityState.getDischargeForLoad(s)).getName());
-		// } else {
-		// System.out.println("unused");
-		// }
-		// // System.out.println(targetSimilarityState.getResourceForElement(s).getName());
-		// }
-		// }
-		// }
-		// for (Difference d : best.get(0).getDifferencesList()) {
-		// System.out.println(d);
-		// }
-		// System.out.println("---------------real d----------------");
-		// changeChecker.init(null, targetSimilarityState, best.get(0).getRawSequences());
-		// for (Difference d : changeChecker.getFullDifferences()) {
-		// System.out.println(d);
-		// }
-		//
-		// }
 		for (int i = 0; i < normalSearchSize; i++) {
 			l.add(new JobState(best.get(rdm.nextInt(best.size()))));
 		}
@@ -562,7 +482,6 @@ public class BagOptimiser {
 				reducedStates.add(js);
 				seenList.add(new Pair<Long, Long>(pnl, changes));
 			} else {
-				// System.out.println("seen:" + pnl + "," + changes);
 			}
 		}
 
@@ -596,7 +515,6 @@ public class BagOptimiser {
 			System.out.println(String.format("##%s## [%s] / [%s] = %s", 0, pnl, changes, pnl / changes));
 		}
 		return states;
-		// return Collections.emptyList();
 	}
 
 	protected void sortJobStates(@NonNull final Collection<JobState> states, @NonNull final Collection<JobState> leafStates, @Nullable Collection<JobState> branchStates) {
@@ -673,7 +591,6 @@ public class BagOptimiser {
 	@NonNull
 	protected Collection<JobState> runJobs(@NonNull final SimilarityState similarityState, final Collection<JobState> sortedJobStates, final JobStore jobStore) throws InterruptedException {
 		final List<Future<Collection<JobState>>> futures = new LinkedList<>();
-		// final ExecutorService executorService = Executors.newFixedThreadPool(1);
 
 		final Iterator<JobState> itr = sortedJobStates.iterator();
 		while (itr.hasNext()) {
@@ -681,14 +598,8 @@ public class BagOptimiser {
 			itr.remove();
 
 			// Submit a new change set search to the executor
-			// futures.add(executorService.submit(new ChangeSetFinderJob(this, state, elementResourceMap, loadDischargeMap)));
-
 			futures.add(new MyFuture(new ChangeSetFinderJob(bagMover, state, similarityState, jobStore)));
 		}
-		// Block until all jobs complete
-		// executorService.shutdown();
-		// while (!executorService.awaitTermination(1, TimeUnit.SECONDS))
-		// ;
 
 		final List<JobState> states = new LinkedList<>();
 		// Collect all results
@@ -702,17 +613,6 @@ public class BagOptimiser {
 
 		return states;
 	}
-
-	// private void processAndStoreBreakdownSolution(JobState solution) {
-	// List<Pair<ISequences, IEvaluationState>> processedSolution = new LinkedList<Pair<ISequences, IEvaluationState>>();
-	//
-	// for (ChangeSet cs : solution.changeSetsAsList) {
-	// final IModifiableSequences currentFullSequences = new ModifiableSequences(cs.getRawSequences());
-	// sequencesManipulator.manipulate(currentFullSequences);
-	// processedSolution.add(new Pair<ISequences, IEvaluationState>(currentFullSequences, bagMover.evaluateSequence(currentFullSequences)));
-	// }
-	// bestSolutions.add(processedSolution);
-	// }
 
 	protected boolean processAndStoreBreakdownSolution(final JobState solution, final IModifiableSequences initialFullSequences, final IEvaluationState evaluationState, final long bestSolutionFitness) {
 		final List<Pair<ISequences, IEvaluationState>> processedSolution = new LinkedList<Pair<ISequences, IEvaluationState>>();

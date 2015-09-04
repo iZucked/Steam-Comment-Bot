@@ -7,9 +7,7 @@ package com.mmxlabs.models.lng.transformer.ui.breakdown;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Deque;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +22,6 @@ import com.google.inject.Injector;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.ChangeChecker.DifferenceType;
-import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -42,9 +39,6 @@ import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
-import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
@@ -70,65 +64,42 @@ public class BagMover extends BreakdownOptimiserMover {
 			@NonNull final List<ChangeSet> changeSets, final int tryDepth, final int moveType, final long[] currentMetrics, @NonNull final JobStore jobStore,
 			@Nullable List<ISequenceElement> targetElements, List<Difference> differencesList) {
 		final List<JobState> newStates = new LinkedList<>();
-		ChangeChecker cc = injector.getInstance(ChangeChecker.class);
-		cc.init(similarityState, similarityState, currentSequences);
-		boolean hasBad = checkBad(cc);
-		// boolean notInDifferences();
-		List<Difference> otherDL = cc.getFullDifferences();
-		for (Difference d : differencesList) {
-			if (!otherDL.contains(d)) {
-				System.out.println(d);
-				assert false;
-			}
-		}
-		for (Difference d : otherDL) {
-			if (!differencesList.contains(d)) {
-				System.out.println(d);
-				assert false;
-			}
-		}
-		// System.out.println("in search - try depth " + tryDepth + " last move - " + moveType);
-		// Sanity check -- elements only used once.
-		{
-			// for (IResource r : currentSequences.getResources()) {
-			// for (ISequenceElement s : currentSequences.getSequence(r)) {
-			// if (s.getName().contains("KP8")) {
-			// System.out.println("-ddddd-" + r.getName() + "|" + s.getName());
-			// }
-			// }
-			// }
-
-			final Set<ISequenceElement> unique = new HashSet<>();
-			for (final IResource resource : currentSequences.getResources()) {
-				final ISequence sequence = currentSequences.getSequence(resource);
-				for (final ISequenceElement current : sequence) {
-					if (unique.contains(current))
-						System.out.println(String.format("%s|%s", resource.getName(), current.getName()));
-					assert unique.add(current);
-				}
-			}
-		}
-		
-		final IModifiableSequences currentFullSequences = new ModifiableSequences(currentSequences);
-		sequencesManipulator.manipulate(currentFullSequences);
-		
-		if (tryDepth == 0 || differencesList.size() == 0) {
-
-			if (differencesList.size() == 0) { 
-				int zzz = 0;
-				for (final IResource resource : currentFullSequences.getResources()) {
-					final ISequence sequence = currentFullSequences.getSequence(resource);
-					final ISequence originalSequence = similarityState.getOriginalSequences().getSequence(resource);
-					for (int i = 0; i < sequence.size(); i++) {
-						ISequenceElement element = sequence.get(i);
-						ISequenceElement originalElement = originalSequence.get(i);
-						if (element != originalElement) {
-//							System.out.println(String.format("element %s != [%s] on %s", element.getName(), originalElement.getName(), resource.getName()));
-						}
+		if (DEBUG_VALIDATION) {
+			// check no spurious differences
+			{
+				ChangeChecker cc = injector.getInstance(ChangeChecker.class);
+				cc.init(similarityState, similarityState, currentSequences);
+				List<Difference> otherDL = cc.getFullDifferences();
+				for (Difference d : differencesList) {
+					if (!otherDL.contains(d)) {
+						assert false;
 					}
 				}
-
+				for (Difference d : otherDL) {
+					if (!differencesList.contains(d)) {
+						System.out.println(d);
+						assert false;
+					}
+				}
 			}
+			// Sanity check -- elements only used once.
+			{
+				final Set<ISequenceElement> unique = new HashSet<>();
+				for (final IResource resource : currentSequences.getResources()) {
+					final ISequence sequence = currentSequences.getSequence(resource);
+					for (final ISequenceElement current : sequence) {
+						if (unique.contains(current))
+							System.out.println(String.format("%s|%s", resource.getName(), current.getName()));
+						assert unique.add(current);
+					}
+				}
+			}
+		}
+
+		final IModifiableSequences currentFullSequences = new ModifiableSequences(currentSequences);
+		sequencesManipulator.manipulate(currentFullSequences);
+
+		if (tryDepth == 0 || differencesList.size() == 0) {
 			boolean failedEvaluation = false;
 
 			// Apply hard constraint checkers
@@ -143,7 +114,6 @@ public class BagMover extends BreakdownOptimiserMover {
 
 				final long thisUnusedCompulsarySlotCount = calculateUnusedCompulsarySlot(currentSequences);
 				if (thisUnusedCompulsarySlotCount > similarityState.getBaseMetrics()[MetricType.COMPULSARY_SLOT.ordinal()]) {
-					// System.out.println("failed comp");
 					failedEvaluation = true;
 				}
 
@@ -189,7 +159,7 @@ public class BagMover extends BreakdownOptimiserMover {
 							thisPNL = calculateSchedulePNL(currentFullSequences, ss);
 
 							if (thisPNL - currentMetrics[MetricType.PNL.ordinal()] < 0 && thisLateness >= similarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()]) {
-								 failedEvaluation = true;
+								failedEvaluation = true;
 							} else {
 								// currentPNL = thisPNL;
 							}
@@ -343,15 +313,6 @@ public class BagMover extends BreakdownOptimiserMover {
 		return newStates;
 	}
 
-	private boolean checkBad(ChangeChecker cc) {
-		for (Difference d : cc.getFullDifferences()) {
-			if (d.toString().contains("UNUSED_LOAD_IN_TARGET AP-2015-05-0-ANYWHERE KG3-Inchon Resource virtual-AP-2015-05-0-ANYWHERE")) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	private <T> T pickRandomElementFromList(List<T> list, Random randomState) {
 		return list.get(randomState.nextInt(list.size()));
 	}
@@ -375,7 +336,6 @@ public class BagMover extends BreakdownOptimiserMover {
 			final int depth = getNextDepth(tryDepth);
 			final List<Change> changes2 = new ArrayList<>(changes);
 			changes2.add(new Change(String.format("Vessel %s from %s to %s\n", prev.getName(), resource.getName(), similarityState.getResourceForElement(prev).getName())));
-			// System.out.println(String.format("Vessel %s from %s to %s\n", prev.getName(), resource.getName(), similarityState.getResourceForElement(prev).getName()));
 			if (copy.equals(currentSequences)) {
 				// FIXME: Why do we get here?
 				// return Collections.emptyList();
@@ -478,9 +438,6 @@ public class BagMover extends BreakdownOptimiserMover {
 		differences.remove(new Difference(DifferenceType.CARGO_WRONG_WIRING, prev, current, resource));
 		// (3) new load wrong vessel?
 		if (!similarityState.getResourceForElement(otherLoad).equals(resource)) {
-			if (new Difference(DifferenceType.CARGO_WRONG_VESSEL, otherLoad, current, resource).toString().contains("CARGO_WRONG_VESSEL N210-Bonny STA03-Bonny Resource virtual-N158-Bonny")) {
-				int z = 0;
-			}
 			differences.add(new Difference(DifferenceType.CARGO_WRONG_VESSEL, otherLoad, current, resource));
 			differences.remove(new Difference(DifferenceType.DISCHARGE_WRONG_VESSEL, null, current, resource));
 		} else {
@@ -505,10 +462,6 @@ public class BagMover extends BreakdownOptimiserMover {
 		} else {
 			if (originalDischarge != null && originalDischarge.equals(matchedDischargeForOldLoad)) {
 				if (!prevOnCorrectVessel) {
-					if (new Difference(DifferenceType.CARGO_WRONG_VESSEL, otherLoad, current, resource).toString().contains("CARGO_WRONG_VESSEL N210-Bonny STA03-Bonny Resource virtual-N158-Bonny")) {
-						int z = 0;
-					}
-
 					differences.add(new Difference(DifferenceType.CARGO_WRONG_VESSEL, prev, originalDischarge, otherResource));
 					differences.remove(new Difference(DifferenceType.DISCHARGE_WRONG_VESSEL, null, originalDischarge, otherResource));
 				}
@@ -542,12 +495,6 @@ public class BagMover extends BreakdownOptimiserMover {
 		}
 		final IModifiableSequences copy = new ModifiableSequences(currentSequences);
 		final IModifiableSequence currentResource = copy.getModifiableSequence(resource);
-		// System.out.println(String.format("swapping discharge (%s) meant for this load:%s", similarityState.getElementForIndex(similarityState.getDischargeForLoad(prev)).getName(), prev.getName()));
-		// if (similarityState.getElementForIndex(similarityState.getDischargeForLoad(prev)).getName().contains("KP8")) {
-		// for (Difference d : differences) {
-		// System.out.println(d);
-		// }
-		// }
 
 		boolean swapped = false;
 		ISequenceElement originalDischarge = null;
@@ -592,8 +539,6 @@ public class BagMover extends BreakdownOptimiserMover {
 		if (resource.getIndex() == otherResource.getIndex()) {
 			return Collections.emptyList();
 		}
-		String message = String.format("Swap %s (to %s) with %s ( to %s)\n", current.getName(), otherLoad.getName(), originalDischarge.getName(), prev.getName());
-		// System.out.println(message);
 		assert swapped;
 		final int depth = getNextDepth(tryDepth);
 		final List<Change> changes2 = new ArrayList<>(changes);
@@ -610,9 +555,6 @@ public class BagMover extends BreakdownOptimiserMover {
 		differences.remove(new Difference(DifferenceType.CARGO_WRONG_WIRING, prev, current, resource));
 		// (3) new cargo wrong vessel?
 		if (!similarityState.getResourceForElement(originalDischarge).equals(resource)) {
-			if (new Difference(DifferenceType.CARGO_WRONG_VESSEL, otherLoad, current, resource).toString().contains("CARGO_WRONG_VESSEL N210-Bonny STA03-Bonny Resource virtual-N158-Bonny")) {
-				int z = 0;
-			}
 			differences.add(new Difference(DifferenceType.CARGO_WRONG_VESSEL, prev, originalDischarge, resource));
 			differences.remove(new Difference(DifferenceType.LOAD_WRONG_VESSEL, prev, null, resource));
 		} else {
@@ -637,9 +579,6 @@ public class BagMover extends BreakdownOptimiserMover {
 		} else {
 			if (otherLoad != null && otherLoad.equals(matchedLoadForOldDischarge)) {
 				if (!currOnCorrectResource) {
-					if (new Difference(DifferenceType.CARGO_WRONG_VESSEL, otherLoad, current, resource).toString().contains("CARGO_WRONG_VESSEL N210-Bonny STA03-Bonny Resource virtual-N158-Bonny")) {
-						int z = 0;
-					}
 					differences.add(new Difference(DifferenceType.CARGO_WRONG_VESSEL, otherLoad, current, otherResource));
 					differences.remove(new Difference(DifferenceType.LOAD_WRONG_VESSEL, otherLoad, null, otherResource));
 				}
@@ -681,10 +620,6 @@ public class BagMover extends BreakdownOptimiserMover {
 			} else {
 				load = current;
 				discharge = prev;
-			}
-			// if (load.getName().equals("ME-2015-06-0-ANYWHERE") && discharge.getName().equals("KG3-Inchon")) {
-			if (load.getName().equals("ME-2015-06-0-ANYWHERE")) {
-				int z = 0;
 			}
 			differences.remove(new Difference(DifferenceType.UNUSED_LOAD_IN_TARGET, load, discharge, resource));
 			updateWrongVesselDifferenceLoad(differences, load);
@@ -729,16 +664,8 @@ public class BagMover extends BreakdownOptimiserMover {
 				&& currentSequences.getUnusedElements().contains(matchedElement)) {
 
 			if ((portSlotProvider.getPortSlot(matchedElement) instanceof ILoadSlot) || (portSlotProvider.getPortSlot(matchedElement) instanceof IDischargeSlot)) {
-				// if (false) {
 				final IModifiableSequences copy = new ModifiableSequences(currentSequences);
 				final IModifiableSequence currentResource = copy.getModifiableSequence(resource);
-				// for (IResource r : copy.getResources()) {
-				// for (ISequenceElement s : copy.getSequence(r)) {
-				// if (s.getName().contains("KP8")) {
-				// System.out.println("-c1-" + r.getName() + "|" + s.getName());
-				// }
-				// }
-				// }
 
 				copy.getModifiableUnusedElements().remove(matchedElement);
 				Integer elementIdx = -11;
@@ -750,14 +677,12 @@ public class BagMover extends BreakdownOptimiserMover {
 				assert elementIdx != null;
 				currentResource.insert(elementIdx, matchedElement);
 				currentResource.remove(elementToRemove);
-				// System.out.println(String.format("removing: %s adding: %s matched: %s", elementToRemove.getName(), elementToKeep.getName(), matchedElement.getName()));
+
 				copy.getModifiableUnusedElements().add(elementToRemove);
 				final int depth = getNextDepth(tryDepth);
 				final List<Change> changes2 = new ArrayList<>(changes);
 				final int moveType;
 				if (isLoadSwap) {
-//					System.out.println(String.format("Lo: keep: %s matched: %s resource: %s", elementToKeep.getName(),
-//							similarityState.getElementForIndex(similarityState.getLoadForDischarge(elementToKeep)), similarityState.getResourceForElement(elementToKeep).getName()));
 					changes2.add(new Change(String.format("Remove load %s (unused in target solution) and insert load %s (unused in base solution)\n", elementToRemove.getName(),
 							matchedElement.getName())));
 					moveType = MOVE_TYPE_UNUSED_LOAD_SWAPPED;
@@ -768,13 +693,6 @@ public class BagMover extends BreakdownOptimiserMover {
 					updateDifferencesRemoveUnusedLoadInBase(differencesList, matchedElement);
 					checkAndAddDifferenceForWrongVesselCargo(similarityState, differencesList, matchedElement, elementToKeep, resource);
 				} else {
-//					if (String.format("keep: %s matched: %s resource: %s", elementToKeep.getName(),
-//							similarityState.getElementForIndex(similarityState.getDischargeForLoad(elementToKeep)), similarityState.getResourceForElement(elementToKeep).getName()).contains("keep : T224-Point Fortin remove: AP-2015-05-3-Tokyo matched: RI04-Hazira resource: G Solaris")) {
-//						int z = 0;
-//					}
-					if (elementToKeep.getName().contains("T224") && elementToRemove.getName().equals("AP-2015-05-3-Tokyo")) {
-						int z = 0;
-					}
 					changes2.add(new Change(String.format("Remove discharge %s (unused in target solution) and insert discharge %s (unused in base solution)\n", elementToRemove.getName(),
 							matchedElement.getName())));
 					moveType = MOVE_TYPE_UNUSED_DISCHARGE_SWAPPED;
@@ -785,7 +703,6 @@ public class BagMover extends BreakdownOptimiserMover {
 					updateDifferencesRemoveUnusedDischargeInBase(differencesList, matchedElement);
 					checkAndAddDifferenceForWrongVesselCargo(similarityState, differencesList, elementToKeep, matchedElement, resource);
 				}
-//				System.out.println(String.format("keep : %s remove: %s matched: %s resource: %s", elementToKeep.getName(), elementToRemove.getName(), matchedElement.getName(), resource.getName()));
 				return search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, moveType, currentMetrics, jobStore, targetElements, differencesList);
 			} else {
 				// FOB SALE OR DES PURCHASE
@@ -841,14 +758,6 @@ public class BagMover extends BreakdownOptimiserMover {
 				}
 			}
 		} else {
-			// for (IResource r : currentSequences.getResources()) {
-			// for (ISequenceElement s : currentSequences.getSequence(r)) {
-			// if (s.equals(elementToKeep) || s.equals(elementToRemove)) {
-			// System.out.println("-removing-" + r.getName() + "|" + s.getName());
-			// }
-			// }
-			// }
-
 			// (2) remove both slots
 			return removeElementsFromSequence(currentSequences, similarityState, changes, new ArrayList<>(changeSets), tryDepth, resource, elementToKeep, elementToRemove, currentMetrics, jobStore,
 					targetElements, differencesList);
@@ -897,7 +806,6 @@ public class BagMover extends BreakdownOptimiserMover {
 
 						final int depth = getNextDepth(tryDepth);
 						final List<Change> changes2 = new ArrayList<>(changes);
-						// System.out.println(String.format("Remove %s and %s\n", load.getName(), discharge.getName()));
 						changes2.add(new Change(String.format("Remove %s and %s\n", load.getName(), discharge.getName())));
 						updateDifferencesListAfterElementsRemoval(similarityState, differencesList, load, discharge);
 
@@ -984,7 +892,6 @@ public class BagMover extends BreakdownOptimiserMover {
 	}
 
 	private void checkAndAddDifferenceForWrongVesselCargo(SimilarityState similarityState, List<Difference> differencesList, ISequenceElement load, ISequenceElement discharge, IResource resource) {
-		// System.out.println("correct resource:"+similarityState.getResourceForElement(load));
 		if (similarityState.getResourceForElement(load) != resource) {
 			updateWrongVesselDifferenceLoad(differencesList, load);
 			updateWrongVesselDifferenceDischarge(differencesList, discharge);
@@ -1038,9 +945,9 @@ public class BagMover extends BreakdownOptimiserMover {
 	}
 
 	private void updateDifferencesRemoveUnusedDischargeInTarget(List<Difference> differencesList, ISequenceElement discharge) {
-//		for (Difference d : differencesList) {
-			for (int i = differencesList.size() - 1; i >= 0; i--) {
-				Difference d = differencesList.get(i);
+		// for (Difference d : differencesList) {
+		for (int i = differencesList.size() - 1; i >= 0; i--) {
+			Difference d = differencesList.get(i);
 			if (d.move == DifferenceType.UNUSED_DISCHARGE_IN_TARGET && d.discharge == discharge) {
 				differencesList.remove(i);
 			}
@@ -1079,9 +986,6 @@ public class BagMover extends BreakdownOptimiserMover {
 			@NonNull final List<ChangeSet> changeSets, final int tryDepth, @NonNull final IResource resource, @NonNull final ISequenceElement load, @NonNull final ISequenceElement discharge,
 			final long[] currentMetrics, @NonNull final JobStore jobStore, @Nullable final List<ISequenceElement> targetElements, @NonNull List<Difference> differencesList) {
 		final ISequence sequenceOfOriginalResource = currentSequences.getSequence(similarityState.getResourceForElement(load));
-		if (load.getName().equals("AP-2015-05-0-ANYWHERE")) {
-			int z = 0;
-		}
 		for (IResource r : currentSequences.getResources()) {
 			for (ISequenceElement element : currentSequences.getSequence(r)) {
 				assert element != load;
