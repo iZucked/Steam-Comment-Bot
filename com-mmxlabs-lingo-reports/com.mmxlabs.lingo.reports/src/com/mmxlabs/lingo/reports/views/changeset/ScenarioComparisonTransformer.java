@@ -199,7 +199,7 @@ public class ScenarioComparisonTransformer {
 
 					for (final CycleGroup cycleGroup : g.getGroups()) {
 						processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, rows, equivalancesMap, 0);
-						 processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, rows, equivalancesMap, 1);
+						processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, rows, equivalancesMap, 1);
 						processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, rows, equivalancesMap, 2);
 					}
 					processRows(toSchedule, fromSchedule, rows, changeSet);
@@ -213,7 +213,7 @@ public class ScenarioComparisonTransformer {
 					final ChangeSet changeSet = createChangeSet(root, from, to);
 
 					processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, rows, equivalancesMap, 0);
-					 processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, rows, equivalancesMap, 1);
+					processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, rows, equivalancesMap, 1);
 					processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, rows, equivalancesMap, 2);
 
 					processRows(toSchedule, fromSchedule, rows, changeSet);
@@ -225,7 +225,26 @@ public class ScenarioComparisonTransformer {
 
 					@Override
 					public int compare(ChangeSet o1, ChangeSet o2) {
-						// TODO Auto-generated method stub
+						boolean o1HasStructureChange = false;
+						boolean o2HasStructureChange = false;
+
+						for (ChangeSetRow r : o1.getChangeSetRowsToPrevious()) {
+							o1HasStructureChange |= r.isWiringChange();
+							o1HasStructureChange |= r.isVesselChange();
+						}
+						for (ChangeSetRow r : o2.getChangeSetRowsToPrevious()) {
+							o2HasStructureChange |= r.isWiringChange();
+							o2HasStructureChange |= r.isVesselChange();
+						}
+
+						if (o1HasStructureChange != o2HasStructureChange) {
+							if (o1HasStructureChange) {
+								return -1;
+							} else {
+								return 1;
+							}
+						}
+
 						return Integer.compare(o2.getMetricsToPrevious().getPnlDelta(), o1.getMetricsToPrevious().getPnlDelta());
 					}
 				});
@@ -542,7 +561,7 @@ public class ScenarioComparisonTransformer {
 				continue;
 			}
 			if (pass == 2 && !r.isReference()) {
-				 continue;
+				continue;
 			}
 			// if (pass == 1) {
 			// if (r.isReference()) {
@@ -572,17 +591,17 @@ public class ScenarioComparisonTransformer {
 				ChangeSetTransformerUtil.createOrUpdateRow(lhsRowMap, rhsRowMap, rows, element, isBase);
 			} else if (pass == 1) {
 				if (r.isReference()) {
-//				final Set<EObject> equivalents = equivalancesMap.get(element);
-//				if (equivalents == null) {
+					// final Set<EObject> equivalents = equivalancesMap.get(element);
+					// if (equivalents == null) {
 					ChangeSetTransformerUtil.createOrUpdateRow(lhsRowMap, rhsRowMap, rows, element, false);
 
 					continue;
 				}
-//				ChangeSetTransformerUtil.createOrUpdateRow(lhsRowMap, rhsRowMap, rows, element, isBase);
-			} else if(pass == 3 && !r.isReference()){
+				// ChangeSetTransformerUtil.createOrUpdateRow(lhsRowMap, rhsRowMap, rows, element, isBase);
+			} else if (pass == 3 && !r.isReference()) {
 				final Set<EObject> equivalents = equivalancesMap.get(element);
 				if (equivalents == null) {
-//					 ChangeSetTransformerUtil.createOrUpdateRow(lhsRowMap, rhsRowMap, rows, element, !r.isReference());
+					// ChangeSetTransformerUtil.createOrUpdateRow(lhsRowMap, rhsRowMap, rows, element, !r.isReference());
 
 					continue;
 				}
