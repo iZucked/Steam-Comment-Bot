@@ -99,7 +99,8 @@ public class BasicSlotPNLExporterExtension implements IExporterExtension {
 						final BasicSlotPNLDetails details = ScheduleFactory.eINSTANCE.createBasicSlotPNLDetails();
 
 						if (cargoValueAnnotation != null) {
-							details.setAdditionalPNL(OptimiserUnitConvertor.convertToExternalFixedCost(cargoValueAnnotation.getSlotAdditionalPNL(slotProvider.getPortSlot(element))));
+							details.setAdditionalPNL(OptimiserUnitConvertor.convertToExternalFixedCost(cargoValueAnnotation.getSlotAdditionalOtherPNL(slotProvider.getPortSlot(element))));
+							details.setExtraShippingPNL(OptimiserUnitConvertor.convertToExternalFixedCost(cargoValueAnnotation.getSlotAdditionalShippingPNL(slotProvider.getPortSlot(element))));
 						}
 						if (hedgingAnnotation != null) {
 							details.setHedgingValue(OptimiserUnitConvertor.convertToExternalFixedCost(hedgingAnnotation.getHedgingValue()));
