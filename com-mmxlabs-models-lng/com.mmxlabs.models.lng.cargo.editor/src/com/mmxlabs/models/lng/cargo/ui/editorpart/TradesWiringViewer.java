@@ -1423,6 +1423,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		if (this.locked == locked) {
 			return;
 		}
+		if (promptToolbarEditor != null) {
+			promptToolbarEditor.setLocked(locked);
+		}
+		
 		this.locked = locked;
 		super.setLocked(locked);
 		wiringDiagram.setLocked(locked);
