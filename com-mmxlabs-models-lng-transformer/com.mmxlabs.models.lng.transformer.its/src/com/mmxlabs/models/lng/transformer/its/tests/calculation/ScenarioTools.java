@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.URI;
@@ -25,6 +26,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.YearMonth;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -103,6 +105,7 @@ public class ScenarioTools {
 
 	public static final Port A = PortFactory.eINSTANCE.createPort();
 	public static final Port B = PortFactory.eINSTANCE.createPort();
+
 	static {
 		A.setName("A");
 		B.setName("B");
@@ -250,10 +253,10 @@ public class ScenarioTools {
 		final FleetModel fleetModel = scenario.getFleetModel();
 		fleetModel.getBaseFuels().add(baseFuel);
 
-		PortModel portModel = scenario.getPortModel();
+		final PortModel portModel = scenario.getPortModel();
 
-		LNGPortfolioModel portfolioModel = scenario.getPortfolioModel();
-		CargoModel cargoModel = portfolioModel.getCargoModel();
+		final LNGPortfolioModel portfolioModel = scenario.getPortfolioModel();
+		final CargoModel cargoModel = portfolioModel.getCargoModel();
 
 		final VesselClass vc = FleetFactory.eINSTANCE.createVesselClass();
 		final VesselStateAttributes laden = FleetFactory.eINSTANCE.createVesselStateAttributes();
@@ -374,7 +377,7 @@ public class ScenarioTools {
 		final CommodityIndex sales = PricingFactory.eINSTANCE.createCommodityIndex();
 		final DataIndex<Double> salesData = PricingFactory.eINSTANCE.createDataIndex();
 		sales.setName("Sales");
-		IndexPoint<Double> pt = PricingFactory.eINSTANCE.createIndexPoint();
+		final IndexPoint<Double> pt = PricingFactory.eINSTANCE.createIndexPoint();
 		pt.setDate(new YearMonth(0));
 		pt.setValue(0.0);
 		salesData.getPoints().add(pt);
@@ -618,7 +621,7 @@ public class ScenarioTools {
 		final CommodityIndex sales = PricingFactory.eINSTANCE.createCommodityIndex();
 		final DataIndex<Double> salesData = PricingFactory.eINSTANCE.createDataIndex();
 		sales.setName("Sales");
-		IndexPoint<Double> pt = PricingFactory.eINSTANCE.createIndexPoint();
+		final IndexPoint<Double> pt = PricingFactory.eINSTANCE.createIndexPoint();
 		pt.setDate(new YearMonth(0));
 		pt.setValue(0.0);
 		salesData.getPoints().add(pt);
@@ -706,8 +709,9 @@ public class ScenarioTools {
 		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 		final EditingDomain ed = new AdapterFactoryEditingDomain(adapterFactory, commandStack);
 
-		return LNGSchedulerJobUtils.exportSolution(transformer.getInjector(), scenario, transformer.getOptimiserSettings(), ed, modelEntityMap, startSolution, 0);// Solution(ed, scenario, schedule,
-		// scenario.getSubModel(InputModel.class),
+		final Pair<Schedule, Command> p = LNGSchedulerJobUtils.exportSolution(transformer.getInjector(), scenario, transformer.getOptimiserSettings(), ed, modelEntityMap, startSolution);
+		ed.getCommandStack().execute(p.getSecond());
+		return p.getFirst();
 	}
 
 	/**
@@ -724,7 +728,7 @@ public class ScenarioTools {
 		// FIXME: Update for API changes
 		// System.err.println("Total cost: " + a.getTotalCost() + ", Total LNG volume used for fuel: " + a.getFuelVolume() + "M3");
 
-		SimpleCargoAllocation a = new SimpleCargoAllocation(ca);
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(ca);
 		if (a.getLadenLeg() != null) {
 			printJourney("Laden Leg", a.getLadenLeg());
 		}
@@ -831,7 +835,7 @@ public class ScenarioTools {
 			} else if (e instanceof SlotVisit) {
 				final SlotVisit sv = (SlotVisit) e;
 				System.err.println("SlotVisit:");
-				SlotAllocation slotAllocation = sv.getSlotAllocation();
+				final SlotAllocation slotAllocation = sv.getSlotAllocation();
 				final Slot slot = slotAllocation.getSlot();
 				final String description = (slot instanceof LoadSlot ? "load: " : "discharge: ");
 				final int volume = slotAllocation.getVolumeTransferred();
@@ -860,10 +864,10 @@ public class ScenarioTools {
 
 			// show any capacity violations
 			if (e instanceof CapacityViolationsHolder) {
-				EMap<CapacityViolationType, Long> violations = ((CapacityViolationsHolder) e).getViolations();
+				final EMap<CapacityViolationType, Long> violations = ((CapacityViolationsHolder) e).getViolations();
 				if (violations != null && !violations.isEmpty()) {
 					String violationString = null;
-					for (Map.Entry<CapacityViolationType, Long> entry : violations) {
+					for (final Map.Entry<CapacityViolationType, Long> entry : violations) {
 						if (violationString == null) {
 							violationString = "\tCapacity violations: ";
 						} else {
@@ -900,7 +904,7 @@ public class ScenarioTools {
 		}
 	}
 
-	public static void storeToFile(final MMXRootObject instance, final File file, String versionContext, int scenarioVersion) throws IOException {
+	public static void storeToFile(final MMXRootObject instance, final File file, final String versionContext, final int scenarioVersion) throws IOException {
 		final ResourceSetImpl resourceSet = new ResourceSetImpl();
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 		final Manifest manifest = ManifestFactory.eINSTANCE.createManifest();
@@ -924,14 +928,14 @@ public class ScenarioTools {
 		manifestResource.save(null);
 	}
 
-	public static BaseFuelCost createBaseFuelCost(BaseFuel baseFuel, double price) {
-		BaseFuelCost bfc = PricingFactory.eINSTANCE.createBaseFuelCost();
+	public static BaseFuelCost createBaseFuelCost(final BaseFuel baseFuel, final double price) {
+		final BaseFuelCost bfc = PricingFactory.eINSTANCE.createBaseFuelCost();
 
 		final BaseFuelIndex bfi = PricingFactory.eINSTANCE.createBaseFuelIndex();
 		bfi.setName(baseFuel.getName());
 		final DataIndex<Double> indexData = PricingFactory.eINSTANCE.createDataIndex();
 		bfi.setData(indexData);
-		IndexPoint<Double> point = PricingFactory.eINSTANCE.createIndexPoint();
+		final IndexPoint<Double> point = PricingFactory.eINSTANCE.createIndexPoint();
 		point.setValue((double) price);
 		point.setDate(new YearMonth());
 		indexData.getPoints().add(point);

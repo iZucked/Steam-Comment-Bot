@@ -27,6 +27,7 @@ import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -98,8 +99,8 @@ public class LNGSchedulerJobUtils {
 	 * @param LABEL_PREFIX
 	 * @return
 	 */
-	public static Schedule exportSolution(final Injector injector, final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings, final EditingDomain editingDomain,
-			final ModelEntityMap modelEntityMap, final IAnnotatedSolution solution, final int solutionCurrentProgress) {
+	public static Pair<Schedule, Command> exportSolution(final Injector injector, final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings, final EditingDomain editingDomain,
+			final ModelEntityMap modelEntityMap, final IAnnotatedSolution solution) {
 
 		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
 		{
@@ -112,42 +113,31 @@ public class LNGSchedulerJobUtils {
 		final ScheduleModel scheduleModel = portfolioModel.getScheduleModel();
 		final CargoModel cargoModel = portfolioModel.getCargoModel();
 
-		final CompoundCommand command = createBlankCommand(solutionCurrentProgress);
+		final CompoundCommand command = new CompoundCommand();
 
+		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Schedule(), schedule));
+
+		final Injector childInjector = injector.createChildInjector(new PostExportProcessorModule());
+
+		final Key<List<IPostExportProcessor>> key = Key.get(new TypeLiteral<List<IPostExportProcessor>>() {
+		});
+
+		Iterable<IPostExportProcessor> postExportProcessors;
 		try {
-
-			if (editingDomain instanceof CommandProviderAwareEditingDomain) {
-				((CommandProviderAwareEditingDomain) editingDomain).setCommandProvidersDisabled(true);
-			}
-			command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Schedule(), schedule));
-
-			final Injector childInjector = injector.createChildInjector(new PostExportProcessorModule());
-
-			final Key<List<IPostExportProcessor>> key = Key.get(new TypeLiteral<List<IPostExportProcessor>>() {
-			});
-
-			Iterable<IPostExportProcessor> postExportProcessors;
-			try {
-				postExportProcessors = childInjector.getInstance(key);
-				//
-			} catch (final ConfigurationException e) {
-				postExportProcessors = null;
-			}
-
-			command.append(derive(editingDomain, scenario, schedule, cargoModel, postExportProcessors));
-			// command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Dirty(), false));
-			command.append(SetCommand.create(editingDomain, portfolioModel, LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_Parameters(), optimiserSettings));
-
-			// Mark schedule as clean
-			command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY, Boolean.FALSE));
-		} finally {
-			if (editingDomain instanceof CommandProviderAwareEditingDomain) {
-				((CommandProviderAwareEditingDomain) editingDomain).setCommandProvidersDisabled(false);
-			}
+			postExportProcessors = childInjector.getInstance(key);
+			//
+		} catch (final ConfigurationException e) {
+			postExportProcessors = null;
 		}
-		editingDomain.getCommandStack().execute(command);
-		//
-		return schedule;
+
+		command.append(derive(editingDomain, scenario, schedule, cargoModel, postExportProcessors));
+		// command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Dirty(), false));
+		command.append(SetCommand.create(editingDomain, portfolioModel, LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_Parameters(), optimiserSettings));
+
+		// Mark schedule as clean
+		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY, Boolean.FALSE));
+
+		return new Pair<Schedule, Command>(schedule, command);
 	}
 
 	public static CompoundCommand createBlankCommand(final int solutionCurrentProgress) {
