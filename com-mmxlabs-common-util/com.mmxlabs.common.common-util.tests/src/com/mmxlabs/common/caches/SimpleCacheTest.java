@@ -16,6 +16,7 @@ public class SimpleCacheTest {
 	@Test
 	public void testSimpleCache() {
 		final String name = "name";
+		@SuppressWarnings("unchecked")
 		final IKeyEvaluator<String, Object> evaluator = Mockito.mock(IKeyEvaluator.class);
 		final int binCount = 21;
 
@@ -32,6 +33,7 @@ public class SimpleCacheTest {
 	@Test
 	public void testSimpleCache2() {
 		final String name = "name";
+		@SuppressWarnings("unchecked")
 		final IKeyEvaluator<String, Object> evaluator = Mockito.mock(IKeyEvaluator.class);
 		final int binCount = 21;
 		final int maxMisses = 30;
