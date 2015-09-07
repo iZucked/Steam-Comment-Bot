@@ -14,6 +14,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
 import org.slf4j.Logger;
@@ -45,36 +46,27 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 
 		@Override
 		public IStatus run(final IProgressMonitor monitor) {
+			monitor.beginTask("", 100);
 			try {
-				monitor.beginTask("", 100);
-				while (true) {
-					if (monitor.isCanceled()) {
-						kill();
-						setJobState(EJobState.CANCELLED);
-						return Status.CANCEL_STATUS;
-					} else if (paused) {
-						synchronized (this) {
-							if (paused) {
-								setJobState(EJobState.PAUSED);
-								wait();
-							}
-						}
-					} else {
-						setJobState(EJobState.RUNNING);
-						final int p0 = getProgress();
-						final boolean more = step();
-						final int p1 = getProgress();
-						if (p1 > p0) {
-							monitor.worked(p1 - p0);
-						}
-						if (!more) {
-							setProgress(100);
-							setJobState(EJobState.COMPLETED);
-							return Status.OK_STATUS;
-						}
-
+				doRunJob(new SubProgressMonitor(monitor, 100) {
+					@Override
+					public void worked(int work) {
+						super.worked(work);
+						AbstractEclipseJobControl.this.setProgress(progress + work);
 					}
+				});
+				if (monitor.isCanceled()) {
+					kill();
+					setJobState(EJobState.CANCELLED);
+					return Status.CANCEL_STATUS;
+				} else if (paused) {
+					setJobState(EJobState.COMPLETED);
+					setProgress(100);
+					return Status.OK_STATUS;
 				}
+				setProgress(100);
+				setJobState(EJobState.COMPLETED);
+				return Status.OK_STATUS;
 			} catch (final Exception | AssertionError e) {
 				LOG.error(e.getMessage(), e);
 				kill();
@@ -84,15 +76,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 			} finally {
 				monitor.done();
 			}
-		}
-
-		public synchronized void pause() {
-			paused = true;
-		}
-
-		public synchronized void resume() {
-			paused = false;
-			notifyAll();
+//			return Status.OK_STATUS;
 		}
 
 		@Override
@@ -110,6 +94,8 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 	public AbstractEclipseJobControl(final String jobName) {
 		this(jobName, Collections.<QualifiedName, Object> emptyMap());
 	}
+
+	protected abstract void doRunJob(IProgressMonitor progressMonitor);
 
 	/**
 	 * Constructor taking a map of properties to pass into the internal {@link Job}
@@ -209,14 +195,12 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 
 	@Override
 	public void pause() {
-		setJobState(EJobState.PAUSING);
-		runner.pause();
+		// DO NOTHING
 	}
 
 	@Override
 	public void resume() {
-		setJobState(EJobState.RESUMING);
-		runner.resume();
+		// DO NOTHING
 	}
 
 	@Override
@@ -266,13 +250,6 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 	 * This method should prepare the job for execution
 	 */
 	protected abstract void reallyPrepare();
-
-	/**
-	 * This method should do a reasonably-sized unit of work
-	 * 
-	 * @return whether there are more units of work to do; return value of false means finished.
-	 */
-	protected abstract boolean step();
 
 	/**
 	 * This method will be called if the job gets killed; clean up any resources.
