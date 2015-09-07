@@ -28,7 +28,6 @@ import org.eclipse.ui.IMemento;
 
 import com.google.inject.Inject;
 import com.mmxlabs.lingo.reports.IReportContents;
-import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
@@ -109,11 +108,6 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 
 		}
 		return super.getAdapter(adapter);
-	}
-
-	@Override
-	protected boolean isUseSynchroniser() {
-		return false;
 	}
 
 	private IScenarioComparisonServiceListener scenarioComparisonServiceListener = new IScenarioComparisonServiceListener() {
@@ -351,11 +345,6 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 		for (final Row row : result) {
 			setInputEquivalents(row, row.getInputEquivalents());
 		}
-	}
-
-	@Override
-	protected IScenarioInstanceElementCollector getElementCollector() {
-		throw new UnsupportedOperationException();
 	}
 
 	@Override

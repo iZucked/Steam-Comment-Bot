@@ -5,6 +5,8 @@
 package com.mmxlabs.lingo.reports.views.vertical;
 
 import java.util.Collection;
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -21,11 +23,11 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
-import com.google.common.collect.Lists;
-import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
-import com.mmxlabs.lingo.reports.ScenarioViewerSynchronizer;
+import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
+import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.views.vertical.providers.EventProvider;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
@@ -63,8 +65,29 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 	public static final String ID = "com.mmxlabs.lingo.reports.verticalreport";
 
+	private SelectedScenariosService selectedScenariosService;
+
+	@NonNull
+	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
+
+		@Override
+		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
+			final List<ScenarioInstance> scenarios = new LinkedList<>(others);
+			if (pinned != null) {
+				scenarios.add(0, pinned);
+			}
+			if (!scenarios.isEmpty()) {
+				final ScenarioInstance scenario = scenarios.get(0);
+				if (scenario.getInstance() != gridViewer.getInput()) {
+					gridViewer.setInput(scenario.getInstance());
+				}
+			} else {
+				gridViewer.setInput(null);
+			}
+		}
+	};
+
 	protected GridTableViewer gridViewer;
-	private ScenarioViewerSynchronizer jobManagerListener;
 
 	protected ReportNebulaGridManager manager;
 
@@ -78,6 +101,9 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 	@Override
 	public void createPartControl(final Composite parent) {
+
+		selectedScenariosService = (SelectedScenariosService) getSite().getService(SelectedScenariosService.class);
+
 		final Composite container = new Composite(parent, SWT.NONE);
 		final FillLayout layout = new FillLayout();
 		layout.marginHeight = layout.marginWidth = 0;
@@ -91,11 +117,12 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 		gridViewer.getGrid().setRowHeaderVisible(true);
 
-		jobManagerListener = ScenarioViewerSynchronizer.registerView(gridViewer, createElementCollector());
-
 		makeActions();
 
 		linkHelpSystem();
+
+		selectedScenariosService.addListener(selectedScenariosServiceListener);
+		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 	}
 
 	protected void linkHelpSystem() {
@@ -113,26 +140,6 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 		getViewSite().getActionBars().getToolBarManager().add(packColumnsAction);
 		getViewSite().getActionBars().getToolBarManager().add(copyToClipboardAction);
-	}
-
-	private IScenarioInstanceElementCollector createElementCollector() {
-		return new IScenarioInstanceElementCollector() {
-
-			@Override
-			public void beginCollecting(boolean pinDiffMode) {
-
-			}
-
-			@Override
-			public Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final LNGScenarioModel rootObject, final boolean isPinned) {
-				return Lists.newArrayList(rootObject);
-			}
-
-			@Override
-			public void endCollecting() {
-
-			}
-		};
 	}
 
 	protected ReportNebulaGridManager createContentProvider() {
@@ -156,8 +163,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 	@Override
 	public void dispose() {
-		ScenarioViewerSynchronizer.deregisterView(jobManagerListener);
-
+		selectedScenariosService.removeListener(selectedScenariosServiceListener);
 		verticalReportVisualiser.dispose();
 
 		super.dispose();

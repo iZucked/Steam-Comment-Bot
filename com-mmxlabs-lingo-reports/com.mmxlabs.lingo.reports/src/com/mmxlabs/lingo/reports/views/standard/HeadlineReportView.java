@@ -5,8 +5,12 @@
 package com.mmxlabs.lingo.reports.views.standard;
 
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.IFontProvider;
 import org.eclipse.jface.viewers.ITableColorProvider;
@@ -30,12 +34,13 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
-import com.google.common.collect.Lists;
-import com.mmxlabs.lingo.reports.ScenarioViewerSynchronizer;
-import com.mmxlabs.lingo.reports.ScheduleElementCollector;
-import com.mmxlabs.lingo.reports.views.standard.HorizontalKPIContentProvider.RowData;
+import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
+import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
+import com.mmxlabs.lingo.reports.views.standard.HeadlineReportTransformer.RowData;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.scenario.service.model.ModelReference;
@@ -46,19 +51,17 @@ import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
  * The "Headline" Report.
  * 
  */
-public class HorizontalKPIReportView extends ViewPart {
+public class HeadlineReportView extends ViewPart {
 
 	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.HorizontalKPIReportView";
 
-	private GridTableViewer viewer;
+	private SelectedScenariosService selectedScenariosService;
 
-	private HorizontalKPIContentProvider contentProvider;
+	private GridTableViewer viewer;
 
 	private ScheduleModel scheduleModel;
 
 	private IPartListener partListener;
-
-	private ScenarioViewerSynchronizer viewerSynchronizer;
 
 	private IEditorPart currentActiveEditor;
 
@@ -78,13 +81,13 @@ public class HorizontalKPIReportView extends ViewPart {
 	 * which is used to calculate the required colum width.
 	 */
 	public enum ColumnDefinition {
-		LABEL_PNL(ColumnType.Label, "P&L", null), VALUE_PNL(ColumnType.Value, 1000000000l, KPIContentProvider.TYPE_COST), //
-		LABEL_TRADING(ColumnType.Label, "Trading", null), VALUE_TRADING(ColumnType.Value, 1000000000l, KPIContentProvider.TYPE_COST), //
-		LABEL_SHIPPING(ColumnType.Label, "Shipping", null), VALUE_SHIPPING(ColumnType.Value, 1000000000l, KPIContentProvider.TYPE_COST), //
-		LABEL_GCO(ColumnType.Label, "Charter Out (virt)", null), VALUE_GCO_DAYS(ColumnType.Value, 2400l, KPIContentProvider.TYPE_TIME), VALUE_GCO_REVENUE(ColumnType.Value, 1000000000l,
-				KPIContentProvider.TYPE_COST), //
-		LABEL_VIOLATIONS(ColumnType.Label, "Violations", null), VALUE_VIOLATIONS(ColumnType.Value, 100l, ""), //
-		LABEL_LATENESS(ColumnType.Label, "Late", null), VALUE_LATENESS(ColumnType.Value, 5200l, KPIContentProvider.TYPE_TIME); //
+		LABEL_PNL(ColumnType.Label, "P&L", null), VALUE_PNL(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
+		LABEL_TRADING(ColumnType.Label, "Trading", null), VALUE_TRADING(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
+		LABEL_SHIPPING(ColumnType.Label, "Shipping", null), VALUE_SHIPPING(ColumnType.Value, 1000000000l, KPIReportTransformer.TYPE_COST), //
+		LABEL_GCO(ColumnType.Label, "Charter Out (virt)", null), VALUE_GCO_DAYS(ColumnType.Value, 2400l, KPIReportTransformer.TYPE_TIME), VALUE_GCO_REVENUE(ColumnType.Value, 1000000000l,
+				KPIReportTransformer.TYPE_COST), //
+				LABEL_VIOLATIONS(ColumnType.Label, "Violations", null), VALUE_VIOLATIONS(ColumnType.Value, 100l, ""), //
+				LABEL_LATENESS(ColumnType.Label, "Late", null), VALUE_LATENESS(ColumnType.Value, 5200l, KPIReportTransformer.TYPE_TIME); //
 
 		private final ColumnType columnType;
 		private final Object labelOrDefaultLong;
@@ -114,6 +117,47 @@ public class HorizontalKPIReportView extends ViewPart {
 
 		}
 	}
+
+	private RowData pinnedData = null;
+	@NonNull
+	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
+
+		HeadlineReportTransformer transformer = new HeadlineReportTransformer();
+
+		@Override
+		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
+
+			// if (scheduleModel != null && schedule == scheduleModel.getSchedule()) {
+			// // ++numberOfSchedules;
+			// return Lists.newArrayList(schedule);
+			// }
+			//
+			final List<Object> rowElements = new LinkedList<>();
+			// int numberOfSchedules = 0;
+			// List<RowData> pinnedData = null;
+			if (pinned != null) {
+				LNGScenarioModel instance = (LNGScenarioModel) pinned.getInstance();
+				if (instance != null) {
+					final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
+					if (schedule != null) {
+						pinnedData = transformer.transform(schedule, pinned);
+					}
+				}
+			}
+
+			for (final ScenarioInstance other : others) {
+				LNGScenarioModel instance = (LNGScenarioModel) other.getInstance();
+				if (instance != null) {
+					final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
+					if (schedule != null && scheduleModel != null && schedule == scheduleModel.getSchedule()) {
+						rowElements.add(transformer.transform(schedule, other));
+					}
+				}
+			}
+
+			setInput(rowElements);
+		}
+	};
 
 	class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, IFontProvider, ITableColorProvider {
 
@@ -157,7 +201,7 @@ public class HorizontalKPIReportView extends ViewPart {
 				if (d.dummy) {
 					return "";
 				}
-				final RowData pinD = contentProvider.getPinnedData();
+				final RowData pinD = pinnedData;
 
 				final ColumnDefinition columnDefinition = ColumnDefinition.values()[index];
 				if (columnDefinition.columnType == ColumnType.Label) {
@@ -195,7 +239,7 @@ public class HorizontalKPIReportView extends ViewPart {
 				if (d.dummy) {
 					return null;
 				}
-				final RowData pinD = contentProvider.getPinnedData();
+				final RowData pinD = pinnedData;
 				int color = SWT.COLOR_DARK_GRAY;
 				final ColumnDefinition columnDefinition = ColumnDefinition.values()[columnIndex];
 				if (columnDefinition.getColumnType() == ColumnType.Label) {
@@ -262,7 +306,7 @@ public class HorizontalKPIReportView extends ViewPart {
 	/**
 	 * The constructor.
 	 */
-	public HorizontalKPIReportView() {
+	public HeadlineReportView() {
 
 	}
 
@@ -271,6 +315,7 @@ public class HorizontalKPIReportView extends ViewPart {
 	 */
 	@Override
 	public void createPartControl(final Composite parent) {
+		selectedScenariosService = (SelectedScenariosService) getSite().getService(SelectedScenariosService.class);
 
 		{
 			final Font systemFont = Display.getDefault().getSystemFont();
@@ -283,8 +328,8 @@ public class HorizontalKPIReportView extends ViewPart {
 
 		viewer = new GridTableViewer(parent, SWT.FULL_SELECTION | SWT.H_SCROLL);
 		viewer.getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL));
-		this.contentProvider = new HorizontalKPIContentProvider();
-		viewer.setContentProvider(contentProvider);
+		viewer.setContentProvider(new ArrayContentProvider());
+
 		viewer.setInput(getViewSite());
 
 		// For some reason we've ended up with a small row height.
@@ -335,9 +380,7 @@ public class HorizontalKPIReportView extends ViewPart {
 						// Ignore
 					}
 				}
-				if (viewerSynchronizer != null) {
-					viewerSynchronizer.refreshViewer(false);
-				}
+				selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 			}
 
 			@Override
@@ -350,9 +393,7 @@ public class HorizontalKPIReportView extends ViewPart {
 						// Ignore
 					}
 				}
-				if (viewerSynchronizer != null) {
-					viewerSynchronizer.refreshViewer(false);
-				}
+				selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 			}
 
 			@Override
@@ -365,9 +406,7 @@ public class HorizontalKPIReportView extends ViewPart {
 						// Ignore
 					}
 				}
-				if (viewerSynchronizer != null) {
-					viewerSynchronizer.refreshViewer(false);
-				}
+				selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 			}
 
 		};
@@ -378,46 +417,9 @@ public class HorizontalKPIReportView extends ViewPart {
 		} catch (final Throwable t) {
 			// Ignore these errors
 		}
-		viewerSynchronizer = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
-			private boolean pinDiffMode = false;
 
-			// private int numberOfSchedules;
-
-			@Override
-			public void beginCollecting(boolean pinDiffMode) {
-				this.pinDiffMode = pinDiffMode;
-			}
-
-			@Override
-			public void endCollecting() {
-				// setShowColumns(false, 1);
-			}
-
-			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final Schedule schedule, final boolean pinned) {
-				if (pinDiffMode) {
-					// if (pinned ) {//|| (scheduleModel != null && schedule == scheduleModel.getSchedule())) {
-					// ++numberOfSchedules;
-					return Lists.newArrayList(schedule);
-					// } else {
-					// }
-					// return Lists.newArrayList();
-
-				} else {
-					if (scheduleModel != null && schedule == scheduleModel.getSchedule()) {
-						// ++numberOfSchedules;
-						return Lists.newArrayList(schedule);
-					}
-				}
-
-				// if (pinned ) {//|| (scheduleModel != null && schedule == scheduleModel.getSchedule())) {
-				// ++numberOfSchedules;
-				// return Lists.newArrayList(schedule);
-				// } else {
-				// }
-				return Lists.newArrayList();
-			}
-		});
+		selectedScenariosService.addListener(selectedScenariosServiceListener);
+		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 	}
 
 	int getTextWidth(final int minWidth, final String string) {
@@ -469,14 +471,11 @@ public class HorizontalKPIReportView extends ViewPart {
 			boldFont = null;
 		}
 
-		if (viewerSynchronizer != null) {
-			ScenarioViewerSynchronizer.deregisterView(viewerSynchronizer);
-			viewerSynchronizer = null;
-		}
 		if (modelReference != null) {
 			modelReference.close();
 			modelReference = null;
 		}
+		selectedScenariosService.removeListener(selectedScenariosServiceListener);
 
 		getSite().getPage().removePartListener(partListener);
 
@@ -521,11 +520,11 @@ public class HorizontalKPIReportView extends ViewPart {
 	private String format(final Long value, final String type) {
 		if (value == null)
 			return "";
-		if (KPIContentProvider.TYPE_TIME.equals(type)) {
+		if (KPIReportTransformer.TYPE_TIME.equals(type)) {
 			final long days = value / 24;
 			final long hours = value % 24;
 			return "" + days + "d, " + hours + "h";
-		} else if (KPIContentProvider.TYPE_COST.equals(type)) {
+		} else if (KPIReportTransformer.TYPE_COST.equals(type)) {
 			return String.format("$%,d", value);
 		} else {
 			return String.format("%,d", value);

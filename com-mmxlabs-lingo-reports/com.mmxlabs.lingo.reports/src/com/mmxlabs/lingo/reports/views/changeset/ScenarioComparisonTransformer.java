@@ -9,13 +9,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.shiro.SecurityUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
@@ -23,8 +21,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
-import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandler;
-import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
@@ -32,13 +28,6 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
 import com.mmxlabs.lingo.reports.views.schedule.EquivalanceGroupBuilder;
-import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.CycleDiffProcessor;
-import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.CycleGroupUtils;
-import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.EventGroupingOverlapProcessor;
-import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.GCOCycleGroupingProcessor;
-import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.IDiffProcessor;
-import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.LadenVoyageProcessor;
-import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.StructuralDifferencesProcessor;
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.RowGroup;
@@ -95,8 +84,8 @@ public class ScenarioComparisonTransformer {
 	//// this.customRelatedSlotHandlers = customRelatedSlotHandlers;
 	// }
 
-	public ChangeSetRoot createDataModel(ISelectedDataProvider selectedDataProvider, Map<EObject, Set<EObject>> equivalancesMap, @NonNull Table table, @NonNull final ScenarioInstance from,
-			@NonNull final ScenarioInstance to, final IProgressMonitor monitor) {
+	public ChangeSetRoot createDataModel(final ISelectedDataProvider selectedDataProvider, final Map<EObject, Set<EObject>> equivalancesMap, @NonNull final Table table,
+			@NonNull final ScenarioInstance from, @NonNull final ScenarioInstance to, final IProgressMonitor monitor) {
 		monitor.beginTask("Opening change sets", 1);
 		final ChangeSetRoot root = ChangesetFactory.eINSTANCE.createChangeSetRoot();
 		assert root != null;
@@ -178,16 +167,23 @@ public class ScenarioComparisonTransformer {
 		// diffProcessor.runDiffProcess(table, referenceElements, uniqueElements, equivalancesMap, elementToRowMap);
 		// }
 
-		try (ModelReference toRef = to.getReference()) {
+		try (final ModelReference toRef = to.getReference()) {
 			toRef.getInstance();
-			try (ModelReference fromRef = from.getReference()) {
+			try (final ModelReference fromRef = from.getReference()) {
 				fromRef.getInstance();
-				Schedule toSchedule = selectedDataProvider.getSchedule(to.getInstance());
-				Schedule fromSchedule = selectedDataProvider.getSchedule(from.getInstance());
+				final Schedule toSchedule = selectedDataProvider.getSchedule(to.getInstance());
+				final Schedule fromSchedule = selectedDataProvider.getSchedule(from.getInstance());
+
+				if (fromSchedule == null) {
+					return root;
+				}
+				if (toSchedule == null) {
+					return root;
+				}
 
 				final Map<String, ChangeSetRow> lhsRowMap = new HashMap<>();
 				final Map<String, ChangeSetRow> rhsRowMap = new HashMap<>();
-				List<ChangeSet> changeSets = new LinkedList<>();
+				final List<ChangeSet> changeSets = new LinkedList<>();
 
 				// Convert into new data model.
 				for (final UserGroup g : table.getUserGroups()) {
@@ -224,15 +220,15 @@ public class ScenarioComparisonTransformer {
 				Collections.sort(changeSets, new Comparator<ChangeSet>() {
 
 					@Override
-					public int compare(ChangeSet o1, ChangeSet o2) {
+					public int compare(final ChangeSet o1, final ChangeSet o2) {
 						boolean o1HasStructureChange = false;
 						boolean o2HasStructureChange = false;
 
-						for (ChangeSetRow r : o1.getChangeSetRowsToPrevious()) {
+						for (final ChangeSetRow r : o1.getChangeSetRowsToPrevious()) {
 							o1HasStructureChange |= r.isWiringChange();
 							o1HasStructureChange |= r.isVesselChange();
 						}
-						for (ChangeSetRow r : o2.getChangeSetRowsToPrevious()) {
+						for (final ChangeSetRow r : o2.getChangeSetRowsToPrevious()) {
 							o2HasStructureChange |= r.isWiringChange();
 							o2HasStructureChange |= r.isVesselChange();
 						}
@@ -555,7 +551,7 @@ public class ScenarioComparisonTransformer {
 			@NonNull final List<ChangeSetRow> rows, final Map<EObject, Set<EObject>> equivalancesMap, final int pass) {
 		for (final Row r : cycleGroup.getRows()) {
 
-			boolean isBase = true;
+			final boolean isBase = true;
 
 			if (pass == 0 && r.isReference()) {
 				continue;
@@ -576,10 +572,10 @@ public class ScenarioComparisonTransformer {
 
 			EObject element = r.getTarget();
 			if (element instanceof CargoAllocation) {
-				CargoAllocation cargoAllocation = (CargoAllocation) element;
-				for (SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
+				final CargoAllocation cargoAllocation = (CargoAllocation) element;
+				for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
 					if (slotAllocation.getSlot() instanceof LoadSlot) {
-						SlotVisit slotVisit = slotAllocation.getSlotVisit();
+						final SlotVisit slotVisit = slotAllocation.getSlotVisit();
 						element = slotVisit;
 						break;
 					}
@@ -689,29 +685,29 @@ public class ScenarioComparisonTransformer {
 		violations = 0;
 		lateness = 0;
 		{
-			for (ChangeSetRow row : changeSet.getChangeSetRowsToPrevious()) {
+			for (final ChangeSetRow row : changeSet.getChangeSetRowsToPrevious()) {
 				{
-					ProfitAndLossContainer newGroupProfitAndLoss = row.getNewGroupProfitAndLoss();
+					final ProfitAndLossContainer newGroupProfitAndLoss = row.getNewGroupProfitAndLoss();
 					if (newGroupProfitAndLoss != null) {
 						final GroupProfitAndLoss groupProfitAndLoss = newGroupProfitAndLoss.getGroupProfitAndLoss();
 						if (groupProfitAndLoss != null) {
 							pnl += groupProfitAndLoss.getProfitAndLoss();
 						}
 						if (groupProfitAndLoss instanceof CargoAllocation) {
-							CargoAllocation cargoAllocation = (CargoAllocation) groupProfitAndLoss;
+							final CargoAllocation cargoAllocation = (CargoAllocation) groupProfitAndLoss;
 							lateness += ChangeSetUtils.getLateness(cargoAllocation);
 							violations += ChangeSetUtils.getCapacityViolationCount(cargoAllocation);
 						}
 					}
 
-					ProfitAndLossContainer originalGroupProfitAndLoss = row.getOriginalGroupProfitAndLoss();
+					final ProfitAndLossContainer originalGroupProfitAndLoss = row.getOriginalGroupProfitAndLoss();
 					if (originalGroupProfitAndLoss != null) {
 						final GroupProfitAndLoss groupProfitAndLoss = originalGroupProfitAndLoss.getGroupProfitAndLoss();
 						if (groupProfitAndLoss != null) {
 							pnl -= groupProfitAndLoss.getProfitAndLoss();
 						}
 						if (groupProfitAndLoss instanceof CargoAllocation) {
-							CargoAllocation cargoAllocation = (CargoAllocation) groupProfitAndLoss;
+							final CargoAllocation cargoAllocation = (CargoAllocation) groupProfitAndLoss;
 							lateness -= ChangeSetUtils.getLateness(cargoAllocation);
 							violations -= ChangeSetUtils.getCapacityViolationCount(cargoAllocation);
 						}

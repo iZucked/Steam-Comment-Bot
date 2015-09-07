@@ -17,9 +17,11 @@ import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IMemento;
 
 import com.google.inject.Inject;
@@ -31,7 +33,9 @@ import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
 import com.mmxlabs.lingo.reports.services.IScenarioComparisonServiceListener;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
+import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.views.AbstractConfigurableGridReportView;
 import com.mmxlabs.lingo.reports.views.AbstractReportBuilder;
@@ -42,6 +46,7 @@ import com.mmxlabs.lingo.reports.views.fleet.extpoint.IFleetBasedReportInitialSt
 import com.mmxlabs.lingo.reports.views.fleet.extpoint.IFleetBasedReportInitialStateExtension.InitialDiffOption;
 import com.mmxlabs.lingo.reports.views.fleet.extpoint.IFleetBasedReportInitialStateExtension.InitialRowType;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
+import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
@@ -68,11 +73,13 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 	@Inject(optional = true)
 	private Iterable<IFleetBasedReportInitialStateExtension> initialStates;
 
-	private FleetReportTransformer transformer;
-
 	@Inject
 	@NonNull
 	private ScenarioComparisonService scenarioComparisonService;
+
+	@Inject
+	@NonNull
+	private SelectedScenariosService selectedScenariosService;
 
 	@Inject
 	public ConfigurableFleetReportView(final FleetBasedReportBuilder builder) {
@@ -135,32 +142,72 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 		return true;
 	}
 
-	private IScenarioComparisonServiceListener scenarioComparisonServiceListener = new IScenarioComparisonServiceListener() {
+	private final IScenarioComparisonServiceListener scenarioComparisonServiceListener = new IScenarioComparisonServiceListener() {
 
 		@Override
-		public void compareDataUpdate(@NonNull ISelectedDataProvider selectedDataProvider, @NonNull ScenarioInstance pin, @NonNull ScenarioInstance other, @NonNull Table table,
-				@NonNull List<LNGScenarioModel> rootObjects, @NonNull Map<EObject, Set<EObject>> equivalancesMap) {
+		public void compareDataUpdate(@NonNull final ISelectedDataProvider selectedDataProvider, @NonNull final ScenarioInstance pin, @NonNull final ScenarioInstance other, @NonNull final Table table,
+				@NonNull final List<LNGScenarioModel> rootObjects, @NonNull final Map<EObject, Set<EObject>> equivalancesMap) {
 			viewer.refresh();
 		}
 
 		@Override
-		public void multiDataUpdate(@NonNull ISelectedDataProvider selectedDataProvider, @NonNull Collection<ScenarioInstance> others, @NonNull Table table,
-				@NonNull List<LNGScenarioModel> rootObjects) {
+		public void multiDataUpdate(@NonNull final ISelectedDataProvider selectedDataProvider, @NonNull final Collection<ScenarioInstance> others, @NonNull final Table table,
+				@NonNull final List<LNGScenarioModel> rootObjects) {
 			viewer.refresh();
 		}
 
 		@Override
-		public void diffOptionChanged(EDiffOption d, Object oldValue, Object newValue) {
+		public void diffOptionChanged(final EDiffOption d, final Object oldValue, final Object newValue) {
 			viewer.refresh();
 		}
 
 	};
 
+	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
+
+		@Override
+		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
+
+			final Runnable r = new Runnable() {
+				@Override
+				public void run() {
+					final Table table = ScheduleReportFactory.eINSTANCE.createTable();
+
+					final FleetReportTransformer transformer = new FleetReportTransformer(table, builder);
+					final IScenarioInstanceElementCollector elementCollector = transformer.getElementCollector(ConfigurableFleetReportView.this);
+
+					elementCollector.beginCollecting(pinned != null);
+					if (pinned != null) {
+						elementCollector.collectElements(pinned, (LNGScenarioModel) pinned.getInstance(), true);
+					}
+					for (final ScenarioInstance other : others) {
+						elementCollector.collectElements(other, (LNGScenarioModel) other.getInstance(), false);
+					}
+					elementCollector.endCollecting();
+					setInput(table.getRows());
+				}
+			};
+			if (block) {
+				if (Display.getDefault().getThread() == Thread.currentThread()) {
+					r.run();
+				} else {
+					Display.getDefault().syncExec(r);
+				}
+			} else {
+				Display.getDefault().asyncExec(r);
+			}
+		}
+	};
+
 	@Override
 	public void initPartControl(final Composite parent) {
+
 		super.initPartControl(parent);
 
 		scenarioComparisonService.addListener(scenarioComparisonServiceListener);
+		selectedScenariosService.addListener(selectedScenariosServiceListener);
+
+		viewer.setContentProvider(new ArrayContentProvider());
 
 		// Add a filter to only show certain rows.
 		viewer.setFilters(new ViewerFilter[] { super.filterSupport.createViewerFilter(), new ViewerFilter() {
@@ -170,7 +217,7 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 
 				if (scenarioComparisonService.getDiffOptions().isFilterSelectedSequences() && !scenarioComparisonService.getSelectedElements().isEmpty()) {
 					if (element instanceof Row) {
-						Row row = (Row) element;
+						final Row row = (Row) element;
 						if (!scenarioComparisonService.getSelectedElements().contains(row.getSequence())) {
 							return false;
 						}
@@ -191,11 +238,13 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 				return true;
 			}
 		} });
+
+		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 	}
 
 	@Override
 	public void dispose() {
-
+		selectedScenariosService.removeListener(selectedScenariosServiceListener);
 		scenarioComparisonService.removeListener(scenarioComparisonServiceListener);
 
 		super.dispose();
@@ -300,13 +349,6 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 	}
 
 	@Override
-	protected IScenarioInstanceElementCollector getElementCollector() {
-
-		transformer = new FleetReportTransformer(table, builder);
-		return transformer.getElementCollector(this);
-	}
-
-	@Override
 	protected List<?> adaptSelectionFromWidget(final List<?> selection) {
 		return builder.adaptSelectionFromWidget(selection);
 	}
@@ -367,10 +409,5 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 
 		// Create the actual columns instances.
 		manager.addColumns(FleetBasedReportBuilder.FLEET_REPORT_TYPE_ID, getBlockManager());
-	}
-
-	@Override
-	protected boolean isUseSynchroniser() {
-		return true;
 	}
 }

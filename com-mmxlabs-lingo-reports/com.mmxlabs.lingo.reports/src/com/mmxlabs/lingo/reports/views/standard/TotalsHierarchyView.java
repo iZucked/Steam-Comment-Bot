@@ -7,11 +7,12 @@ package com.mmxlabs.lingo.reports.views.standard;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuListener;
@@ -33,9 +34,11 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
-import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
-import com.mmxlabs.lingo.reports.ScenarioViewerSynchronizer;
-import com.mmxlabs.lingo.reports.ScheduleElementCollector;
+import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
+import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
@@ -73,6 +76,8 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 public class TotalsHierarchyView extends ViewPart {
 	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.TotalsHierarchyView";
 
+	private SelectedScenariosService selectedScenariosService;
+
 	protected static final String TREE_DATA_KEY = "THVTreeData";
 
 	private TreeViewer viewer;
@@ -83,7 +88,60 @@ public class TotalsHierarchyView extends ViewPart {
 
 	static final DecimalFormat myFormat = new DecimalFormat("$###,###,###");
 
-	private ScenarioViewerSynchronizer jobManagerListener;
+	@NonNull
+	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
+
+		@Override
+		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
+
+			int numberOfSchedules = others.size() + (pinned == null ? 0 : 1);
+			List<ScenarioInstance> instances = new LinkedList<>(others);
+			if (pinned != null) {
+				instances.add(0, pinned);
+			}
+
+			final TreeData dummy = new TreeData("");
+			if (instances.size() == 1) {
+				for (final ScenarioInstance other : instances) {
+					LNGScenarioModel instance = (LNGScenarioModel) other.getInstance();
+					if (instance != null) {
+						final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
+						if (schedule != null) {
+							dummy.addChild(createCostsTreeData(schedule));
+							break;
+						}
+					}
+				}
+			} else {
+
+				for (final ScenarioInstance other : instances) {
+					LNGScenarioModel instance = (LNGScenarioModel) other.getInstance();
+					if (instance != null) {
+						final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
+						if (schedule != null) {
+							final String scheduleName = other.getName();
+
+							// final String scheduleName = schedule.getName();
+							// don't sum costs and profits, because it's meaningless
+							// (profits already include costs)
+							final TreeData group = new TreeData(scheduleName, true);
+							group.addChild(createCostsTreeData(schedule));
+							// group.addChild(createProfitTreeData(schedule));
+							dummy.addChild(group);
+
+						}
+					}
+				}
+			}
+			viewer.setInput(dummy);
+
+			if (!dummy.children.isEmpty()) {
+				if (packColumnsAction != null) {
+					packColumnsAction.run();
+				}
+			}
+		}
+	};
 
 	private static class TreeData {
 
@@ -157,29 +215,27 @@ public class TotalsHierarchyView extends ViewPart {
 		}
 	}
 
-	private TreeData createTreeData(final IScenarioViewerSynchronizerOutput object) {
-		final TreeData dummy = new TreeData("");
-
-		final Collection<Schedule> schedules = (Collection) object.getCollectedElements();
-
-		if (schedules.size() == 1) {
-			final Schedule schedule = schedules.iterator().next();
-			dummy.addChild(createCostsTreeData(schedule));
-			// dummy.addChild(createProfitTreeData(schedule));
-		} else {
-			for (final Schedule schedule : schedules) {
-				final String scheduleName = object.getScenarioInstance(schedule).getName();
-				// final String scheduleName = schedule.getName();
-				// don't sum costs and profits, because it's meaningless
-				// (profits already include costs)
-				final TreeData group = new TreeData(scheduleName, true);
-				group.addChild(createCostsTreeData(schedule));
-				// group.addChild(createProfitTreeData(schedule));
-				dummy.addChild(group);
-			}
-		}
-		return dummy;
-	}
+	// private TreeData createTreeData(final Collection<Schedule> schedules) {
+	// final TreeData dummy = new TreeData("");
+	//
+	// if (schedules.size() == 1) {
+	// final Schedule schedule = schedules.iterator().next();
+	// dummy.addChild(createCostsTreeData(schedule));
+	// // dummy.addChild(createProfitTreeData(schedule));
+	// } else {
+	// for (final Schedule schedule : schedules) {
+	// final String scheduleName = object.getScenarioInstance(schedule).getName();
+	// // final String scheduleName = schedule.getName();
+	// // don't sum costs and profits, because it's meaningless
+	// // (profits already include costs)
+	// final TreeData group = new TreeData(scheduleName, true);
+	// group.addChild(createCostsTreeData(schedule));
+	// // group.addChild(createProfitTreeData(schedule));
+	// dummy.addChild(group);
+	// }
+	// }
+	// return dummy;
+	// }
 
 	// private TreeData createProfitTreeData(final Schedule schedule) {
 	// final TreeData top = new TreeData("Total Profit");
@@ -332,8 +388,8 @@ public class TotalsHierarchyView extends ViewPart {
 				if (event instanceof Journey) {
 					final Journey j = (Journey) event;
 					if (j.getToll() > 0) {
-						final TreeData thisLeg = new TreeData((j.isLaden() ? "Laden" : "Ballast") + " voyage from " + j.getPort().getName() + " to " + j.getDestination().getName() + " via "
-								+ j.getRoute(), j.getToll());
+						final TreeData thisLeg = new TreeData(
+								(j.isLaden() ? "Laden" : "Ballast") + " voyage from " + j.getPort().getName() + " to " + j.getDestination().getName() + " via " + j.getRoute(), j.getToll());
 						thisVessel.addChild(thisLeg);
 					}
 				}
@@ -375,23 +431,10 @@ public class TotalsHierarchyView extends ViewPart {
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		this.viewer = new TreeViewer(parent, SWT.FULL_SELECTION | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL) {
-			@Override
-			protected void inputChanged(final Object input, final Object oldInput) {
-				super.inputChanged(input, oldInput);
 
-				final boolean inputEmpty = (input == null) || ((input instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) input).getCollectedElements().isEmpty());
-				final boolean oldInputEmpty = (oldInput == null)
-						|| ((oldInput instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) oldInput).getCollectedElements().isEmpty());
+		selectedScenariosService = (SelectedScenariosService) getSite().getService(SelectedScenariosService.class);
 
-				if (inputEmpty != oldInputEmpty) {
-					if (packColumnsAction != null) {
-						packColumnsAction.run();
-					}
-				}
-			};
-		};
-		;
+		this.viewer = new TreeViewer(parent, SWT.FULL_SELECTION | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 
 		// autopack and set alternating colours - disabled because no longer
 		// required
@@ -440,10 +483,7 @@ public class TotalsHierarchyView extends ViewPart {
 
 			@Override
 			public Object[] getElements(final Object object) {
-				if (object instanceof IScenarioViewerSynchronizerOutput) {
-					final TreeData top = createTreeData((IScenarioViewerSynchronizerOutput) object);
-					return getChildren(top);
-				} else if (object instanceof TreeData) {
+				if (object instanceof TreeData) {
 					final TreeData data = (TreeData) object;
 					// if (data.getParent() == null) {
 					// return new Object[]{object};
@@ -506,14 +546,8 @@ public class TotalsHierarchyView extends ViewPart {
 		// .getSelection("com.mmxlabs.rcp.navigator");
 		//
 		// selectionChanged(null, selection);
-
-		jobManagerListener = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
-			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, Schedule schedule) {
-				return Collections.singleton(schedule);
-			}
-		});
-
+		selectedScenariosService.addListener(selectedScenariosServiceListener);
+		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 	}
 
 	@Override
@@ -571,10 +605,7 @@ public class TotalsHierarchyView extends ViewPart {
 	@Override
 	public void dispose() {
 
-		// getSite().getPage().removeSelectionListener(
-		// "com.mmxlabs.rcp.navigator", this);
-
-		ScenarioViewerSynchronizer.deregisterView(jobManagerListener);
+		selectedScenariosService.removeListener(selectedScenariosServiceListener);
 
 		super.dispose();
 	}

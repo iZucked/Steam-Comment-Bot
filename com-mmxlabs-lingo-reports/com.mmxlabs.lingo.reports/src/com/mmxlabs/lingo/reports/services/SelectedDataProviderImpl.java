@@ -29,6 +29,7 @@ class SelectedDataProviderImpl implements ISelectedDataProvider {
 	private final Map<EObject, LNGScenarioModel> scenarioModelMap = new HashMap<>();
 	private final Map<EObject, LNGPortfolioModel> portfolioModelMap = new HashMap<>();
 	private final Map<EObject, Schedule> scheduleMap = new HashMap<>();
+	private ScenarioInstance pinnedScenarioInstance;
 
 	public void addScenario(@NonNull final ScenarioInstance scenarioInstance, @NonNull final LNGScenarioModel scenarioModel, @NonNull final LNGPortfolioModel portfolioModel,
 			@Nullable final Schedule schedule, @NonNull final Collection<EObject> children) {
@@ -77,5 +78,21 @@ class SelectedDataProviderImpl implements ISelectedDataProvider {
 	@Override
 	public Schedule getSchedule(final EObject eObject) {
 		return scheduleMap.get(eObject);
+	}
+
+	@Override
+	public ScenarioInstance getPinnedScenarioInstance() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isPinnedObject(EObject eObject) {
+
+		return getScenarioInstance(eObject) == pinnedScenarioInstance;
+	}
+
+	public void setPinnedScenarioInstance(ScenarioInstance pinnedScenarioInstance) {
+		this.pinnedScenarioInstance = pinnedScenarioInstance;
 	}
 }

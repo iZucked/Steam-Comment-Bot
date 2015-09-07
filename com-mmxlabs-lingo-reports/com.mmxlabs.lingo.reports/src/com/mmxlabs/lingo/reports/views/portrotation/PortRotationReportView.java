@@ -5,6 +5,7 @@
 package com.mmxlabs.lingo.reports.views.portrotation;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -13,6 +14,7 @@ import java.util.Map;
 
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.list.WritableList;
+import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.swt.widgets.Composite;
 
 import com.google.inject.Inject;
@@ -22,12 +24,16 @@ import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.components.ColumnHandler;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
+import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
+import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.views.AbstractConfigurableGridReportView;
 import com.mmxlabs.lingo.reports.views.portrotation.extpoint.IPortRotationBasedColumnExtension;
 import com.mmxlabs.lingo.reports.views.portrotation.extpoint.IPortRotationBasedColumnFactoryExtension;
 import com.mmxlabs.lingo.reports.views.portrotation.extpoint.IPortRotationBasedReportInitialStateExtension;
 import com.mmxlabs.lingo.reports.views.portrotation.extpoint.IPortRotationBasedReportInitialStateExtension.InitialColumn;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
@@ -58,6 +64,29 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 	private Map<Object, ScenarioInstance> elementMap;
 
 	private IObservableList elements;
+
+	@Inject
+	private SelectedScenariosService selectedScenariosService;
+
+	private ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
+
+		@Override
+		public void selectionChanged(ISelectedDataProvider selectedDataProvider, ScenarioInstance pinned, Collection<ScenarioInstance> others, boolean block) {
+			elements.clear();
+			setInput(new WritableList());
+			elementCollector.beginCollecting(pinned != null);
+			if (pinned != null) {
+				elementCollector.collectElements(pinned, (LNGScenarioModel) pinned.getInstance(), true);
+			}
+			for (final ScenarioInstance other : others) {
+				elementCollector.collectElements(other, (LNGScenarioModel) other.getInstance(), false);
+			}
+			elementCollector.endCollecting();
+			setInput(elements);
+		}
+	};
+
+	private IScenarioInstanceElementCollector elementCollector;
 
 	@Inject
 	public PortRotationReportView(final PortRotationBasedReportBuilder builder) {
@@ -185,64 +214,6 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 	}
 
 	@Override
-	protected IScenarioInstanceElementCollector getElementCollector() {
-		elements = new WritableList();
-
-		transformer = new PortRotationsReportTransformer(builder);
-		return transformer.getElementCollector(elements, this);
-	}
-
-	// @Override
-	// protected ITreeContentProvider getContentProvider() {
-	// final ITreeContentProvider superProvider = super.getContentProvider();
-	// return new ITreeContentProvider() {
-	//
-	// @Override
-	// public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-	// superProvider.inputChanged(viewer, oldInput, newInput);
-	// }
-	//
-	// @Override
-	// public void dispose() {
-	// superProvider.dispose();
-	// }
-	//
-	// @Override
-	// public boolean hasChildren(final Object element) {
-	// return superProvider.hasChildren(element);
-	// }
-	//
-	// @Override
-	// public Object getParent(final Object element) {
-	// return superProvider.getParent(element);
-	// }
-	//
-	// @Override
-	// public Object[] getElements(final Object inputElement) {
-	// clearInputEquivalents();
-	// final Object[] result = superProvider.getElements(inputElement);
-	//
-	// for (final Object event : result) {
-	// if (event instanceof SlotVisit) {
-	// setInputEquivalents(event, Arrays.asList(new Object[] { ((SlotVisit) event).getSlotAllocation().getCargoAllocation() }));
-	// } else if (event instanceof VesselEventVisit) {
-	// setInputEquivalents(event, Arrays.asList(new Object[] { ((VesselEventVisit) event).getVesselEvent() }));
-	// } else {
-	// setInputEquivalents(event, Collections.emptyList());
-	// }
-	// }
-	//
-	// return result;
-	// }
-	//
-	// @Override
-	// public Object[] getChildren(final Object parentElement) {
-	// return superProvider.getChildren(parentElement);
-	// }
-	// };
-	// }
-
-	@Override
 	protected boolean handleSelections() {
 		return true;
 	}
@@ -312,6 +283,10 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 
 	@Override
 	public void initPartControl(final Composite parent) {
+		elements = new WritableList();
+		transformer = new PortRotationsReportTransformer(builder);
+		elementCollector = transformer.getElementCollector(elements, this);
+
 		super.initPartControl(parent);
 		final ColumnBlock[] initialReverseSortOrder = { getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.portrotation.startdate"),
 				getBlockManager().getBlockByID("com.mmxlabs.lingo.reports.components.columns.portrotation.vessel"),
@@ -327,6 +302,18 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 				}
 			}
 		}
+		viewer.setContentProvider(new ObservableListContentProvider());
+		setInput(elements);
+
+		selectedScenariosService.addListener(selectedScenariosServiceListener);
+
+		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
+	}
+
+	@Override
+	public void dispose() {
+		selectedScenariosService.removeListener(selectedScenariosServiceListener);
+		super.dispose();
 	}
 
 	@Override
@@ -346,10 +333,5 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 
 		}
 		return super.getAdapter(adapter);
-	}
-	
-	@Override
-	protected boolean isUseSynchroniser() {
-		return true;
 	}
 }

@@ -23,7 +23,6 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
@@ -51,19 +50,15 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.internal.e4.compatibility.CompatibilityView;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
-import org.eclipse.ui.views.properties.PropertySheetPage;
 
 import com.mmxlabs.common.Equality;
-import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.components.ColumnBlockManager;
 import com.mmxlabs.lingo.reports.components.ColumnHandler;
 import com.mmxlabs.lingo.reports.components.GridTableViewerColumnFactory;
 import com.mmxlabs.lingo.reports.diff.DiffGroupView;
 import com.mmxlabs.lingo.reports.internal.Activator;
-import com.mmxlabs.lingo.reports.properties.ScheduledEventPropertySourceProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnInfoProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnUpdater;
@@ -104,18 +99,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 	private FilterField filterField;
 	protected EObjectTableViewerFilterSupport filterSupport;
-
-	// /**
-	// * Small class to hold internal sort state for external reference.
-	// *
-	// */
-	// public static class SortData {
-	// public Object[] sortedChildren;
-	// public int[] sortedIndices;
-	// public int[] reverseSortedIndices;
-	// }
-	//
-	// private final SortData sortData = new SortData();
 
 	private void setColumnsImmovable() {
 		if (viewer != null) {
@@ -283,15 +266,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 				final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
 				service.addPostSelectionListener(this);
 			}
-
-			// table = ScheduleReportFactory.eINSTANCE.createTable();
-			// viewer.setInput(EMFProperties.list(ScheduleReportPackage.Literals.TABLE__ROWS).observe(table));
-
-			if (isUseSynchroniser()) {
-				viewer.setContentProvider(new ObservableListContentProvider());
-				synchronizer = UserManagedScenarioViewerSynchronizer.registerView(viewer, getElementCollector());
-				setInput();
-			}
 		}
 
 		// Look at the extension points for the initial visibilities, rows and diff options
@@ -315,8 +289,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	protected void setInput() {
 		viewer.setInput(EMFProperties.list(ScheduleReportPackage.Literals.TABLE__ROWS).observe(table));
 	}
-
-	protected abstract boolean isUseSynchroniser();
 
 	protected abstract void registerReportColumns();
 
@@ -445,11 +417,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 					nonVisibleIcon.dispose();
 					visibleIcon.dispose();
 
-					if (synchronizer != null) {
-						synchronizer.refreshViewer(false);
-					} else {
-						viewer.refresh();
-					}
+					viewer.refresh();
 				}
 
 			};
@@ -476,7 +444,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	private Action copyTableAction;
 
 	private final String helpContextId;
-	protected UserManagedScenarioViewerSynchronizer synchronizer;
 
 	/**
 	 * Finds the view index of the specified column handler, i.e. the index from left to right of the column in the grid's display.
@@ -574,8 +541,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 		equivalents.clear();
 		contents.clear();
 	}
-
-	protected abstract IScenarioInstanceElementCollector getElementCollector();
 
 	private void hookContextMenu() {
 		final MenuManager menuMgr = new MenuManager("#PopupMenu");
@@ -681,9 +646,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 		if (handleSelections()) {
 			final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
 			service.removePostSelectionListener(this);
-		}
-		if (synchronizer != null) {
-			UserManagedScenarioViewerSynchronizer.deregisterView(synchronizer);
 		}
 		sortingSupport.clearColumnSortOrder();
 		clearInputEquivalents();

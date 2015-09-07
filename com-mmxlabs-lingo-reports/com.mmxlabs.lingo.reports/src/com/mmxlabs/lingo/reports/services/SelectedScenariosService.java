@@ -44,6 +44,8 @@ public class SelectedScenariosService {
 
 	private IScenarioServiceSelectionProvider selectionProvider;
 
+	private ISelectedDataProvider currentSelectedDataProvider;
+
 	private final Set<ISelectedScenariosServiceListener> listeners = new HashSet<>();
 
 	/**
@@ -263,7 +265,10 @@ public class SelectedScenariosService {
 	 */
 	public void updateSelectedScenarios(final boolean block) {
 		synchronized (this) {
+			// Null out until new version is ready
+			currentSelectedDataProvider = null;
 			final ISelectedDataProvider selectedDataProvider = createSelectedDataProvider();
+			currentSelectedDataProvider = selectedDataProvider;
 
 			final LinkedHashSet<ScenarioInstance> others = new LinkedHashSet<>(selectionProvider.getSelection());
 			ScenarioInstance pinnedInstance = selectionProvider.getPinnedInstance();
@@ -277,7 +282,7 @@ public class SelectedScenariosService {
 
 			for (final ISelectedScenariosServiceListener l : listeners) {
 				try {
-					l.selectionChanged(selectedDataProvider, pinnedInstance, others, block);
+					l.selectionChanged(currentSelectedDataProvider, pinnedInstance, others, block);
 				} catch (final Exception e) {
 					log.error(e.getMessage(), e);
 				}
@@ -372,7 +377,7 @@ public class SelectedScenariosService {
 	}
 
 	@NonNull
-	private ISelectedDataProvider createSelectedDataProvider() {
+	private SelectedDataProviderImpl createSelectedDataProvider() {
 
 		final SelectedDataProviderImpl provider = new SelectedDataProviderImpl();
 		for (final ScenarioInstance scenarioInstance : selectionProvider.getSelection()) {
@@ -387,7 +392,46 @@ public class SelectedScenariosService {
 			assert record != null;
 			provider.addScenario(record.getScenarioInstance(), record.getScenarioModel(), record.getPortfolioModel(), record.getSchedule(), record.getChildren());
 		}
+		provider.setPinnedScenarioInstance(selectionProvider.getPinnedInstance());
 		return provider;
 	}
 
+	public void triggerListener(@NonNull final ISelectedScenariosServiceListener l, final boolean block) {
+		final SelectedDataProviderImpl selectedDataProvider = createSelectedDataProvider();
+
+		final LinkedHashSet<ScenarioInstance> others = new LinkedHashSet<>(selectionProvider.getSelection());
+		ScenarioInstance pinnedInstance = selectionProvider.getPinnedInstance();
+		// If there is only the pinned scenario, pretend it is just selected.
+		// If there is a pin and other scenarios, remove the pin from the others list
+		if (others.size() < 2) {
+			pinnedInstance = null;
+		} else {
+			others.remove(pinnedInstance);
+		}
+		try {
+			l.selectionChanged(selectedDataProvider, pinnedInstance, others, block);
+		} catch (final Exception e) {
+			log.error(e.getMessage(), e);
+		}
+
+	}
+
+	@Nullable
+	public ISelectedDataProvider getCurrentSelectedDataProvider() {
+		return currentSelectedDataProvider;
+	}
+
+	/**
+	 * Wrapped around {@link IScenarioServiceSelectionProvider#getPinnedInstance()}
+	 * 
+	 * @return The current pinned instance or null
+	 */
+	@Nullable
+	public ScenarioInstance getPinnedScenario() {
+		final IScenarioServiceSelectionProvider pProvider = selectionProvider;
+		if (pProvider != null) {
+			return pProvider.getPinnedInstance();
+		}
+		return null;
+	}
 }

@@ -4,16 +4,15 @@
  */
 package com.mmxlabs.lingo.reports.views.standard;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.joda.time.DateTime;
 import org.joda.time.Hours;
 
-import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
@@ -42,26 +41,37 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  * @author Simon Goodall
  * 
  */
-public class KPIContentProvider implements IStructuredContentProvider {
+public class KPIReportTransformer {
 
+	@NonNull
 	public static final String LATENESS = "Lateness";
+	@NonNull
 	private static final String IDLE = "Idle Time";
+	@NonNull
 	private static final String TOTAL_COST = "Shipping Cost";
+	@NonNull
 	private static final String TOTAL_PNL = "P&L";
+	@NonNull
 	private static final String SHIPPING_PNL = "Shipping P&L";
+	@NonNull
 	private static final String TRADING_PNL = "Trading P&L";
+	@NonNull
 	private static final String MTM_PNL = "MtM P&L";
 
+	@NonNull
 	public static final String TYPE_COST = "Cost";
+	@NonNull
 	public static final String TYPE_TIME = "Days, hours";
 
 	public static class RowData {
-		public RowData(final String scheduleName, final String component, final String type, final long value, final String viewID, final boolean minimise) {
+		public RowData(final String scheduleName, final String component, final String type, final long value, final Long deltaValue, final String viewID, final boolean minimise) {
 			super();
 			this.scheduleName = scheduleName;
 			this.component = component;
 			this.type = type;
 			this.value = value;
+			this.deltaValue = deltaValue;
+
 			this.viewID = viewID;
 			this.minimise = minimise;
 		}
@@ -71,19 +81,13 @@ public class KPIContentProvider implements IStructuredContentProvider {
 		public final String type;
 		public final String viewID;
 		public final long value;
+		public final Long deltaValue;
 		public final boolean minimise;
 
 	}
 
-	private RowData[] rowData = new RowData[0];
-
-	@Override
-	public Object[] getElements(final Object inputElement) {
-		return rowData;
-	}
-
-	private void createRowData(final Schedule schedule, final ScenarioInstance scenarioInstance, final List<RowData> output) {
-
+	public final List<RowData> transform(final Schedule schedule, final ScenarioInstance scenarioInstance, @Nullable final List<RowData> pinnedData) {
+		final List<RowData> output = new LinkedList<>();
 		long totalCost = 0l;
 		long lateness = 0l;
 		long totalTradingPNL = 0l;
@@ -172,14 +176,21 @@ public class KPIContentProvider implements IStructuredContentProvider {
 			totalMtMPNL += getElementShippingPNL(marketAllocation);
 		}
 
-		output.add(new RowData(scenarioInstance.getName(), TOTAL_PNL, TYPE_COST, totalTradingPNL + totalShippingPNL, TotalsHierarchyView.ID, false));
-		output.add(new RowData(scenarioInstance.getName(), TRADING_PNL, TYPE_COST, totalTradingPNL, TotalsHierarchyView.ID, false));
-		output.add(new RowData(scenarioInstance.getName(), SHIPPING_PNL, TYPE_COST, totalShippingPNL, TotalsHierarchyView.ID, false));
-		output.add(new RowData(scenarioInstance.getName(), MTM_PNL, TYPE_COST, totalMtMPNL, TotalsHierarchyView.ID, false));
+		output.add(createRow(scenarioInstance.getName(), TOTAL_PNL, TYPE_COST, totalTradingPNL + totalShippingPNL, TotalsHierarchyView.ID, false, pinnedData));
+		output.add(createRow(scenarioInstance.getName(), TRADING_PNL, TYPE_COST, totalTradingPNL, TotalsHierarchyView.ID, false, pinnedData));
+		output.add(createRow(scenarioInstance.getName(), SHIPPING_PNL, TYPE_COST, totalShippingPNL, TotalsHierarchyView.ID, false, pinnedData));
+		output.add(createRow(scenarioInstance.getName(), MTM_PNL, TYPE_COST, totalMtMPNL, TotalsHierarchyView.ID, false, pinnedData));
 
-		output.add(new RowData(scenarioInstance.getName(), TOTAL_COST, TYPE_COST, totalCost, TotalsHierarchyView.ID, true));
-		output.add(new RowData(scenarioInstance.getName(), LATENESS, TYPE_TIME, lateness, LatenessReportView.ID, true));
-		output.add(new RowData(scenarioInstance.getName(), IDLE, TYPE_TIME, totalIdleHours, null, true));
+		output.add(createRow(scenarioInstance.getName(), TOTAL_COST, TYPE_COST, totalCost, TotalsHierarchyView.ID, true, pinnedData));
+		output.add(createRow(scenarioInstance.getName(), LATENESS, TYPE_TIME, lateness, LatenessReportView.ID, true, pinnedData));
+		output.add(createRow(scenarioInstance.getName(), IDLE, TYPE_TIME, totalIdleHours, null, true, pinnedData));
+
+		return output;
+	}
+
+	private RowData createRow(final String scenarioInstanceName, @NonNull final String component, final String type, final long value, final String viewID, final boolean minimise,
+			@Nullable final List<RowData> pinnedData) {
+		return new RowData(scenarioInstanceName, component, type, value, getDelta(component, value, pinnedData), viewID, minimise);
 	}
 
 	private long getElementShippingPNL(final ProfitAndLossContainer container) {
@@ -215,36 +226,16 @@ public class KPIContentProvider implements IStructuredContentProvider {
 		return 0;
 	}
 
-	private final List<RowData> pinnedData = new ArrayList<RowData>();
-
-	public List<RowData> getPinnedData() {
-		return pinnedData;
-	}
-
-	@Override
-	public synchronized void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-		rowData = new RowData[0];
-		pinnedData.clear();
-		if (newInput instanceof IScenarioViewerSynchronizerOutput) {
-			final IScenarioViewerSynchronizerOutput synchOutput = (IScenarioViewerSynchronizerOutput) newInput;
-			final ArrayList<RowData> rowDataList = new ArrayList<RowData>();
-			for (final Object o : synchOutput.getCollectedElements()) {
-				if (o instanceof Schedule) {
-					final ScenarioInstance scenarioInstance = synchOutput.getScenarioInstance(o);
-					final boolean isPinned = synchOutput.isPinned(o);
-					createRowData((Schedule) o, scenarioInstance, isPinned ? pinnedData : rowDataList);
-					if (isPinned) {
-						rowDataList.addAll(pinnedData);
-					}
-				}
-			}
-			rowData = rowDataList.toArray(rowData);
+	@Nullable
+	private Long getDelta(@NonNull final String component, final long value, @Nullable final List<RowData> pinnedData) {
+		if (pinnedData == null) {
+			return null;
 		}
-
-	}
-
-	@Override
-	public void dispose() {
-
+		for (final RowData data : pinnedData) {
+			if (component.equals(data.component)) {
+				return data.value - value;
+			}
+		}
+		return null;
 	}
 }

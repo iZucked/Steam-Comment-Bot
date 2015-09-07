@@ -6,10 +6,11 @@ package com.mmxlabs.lingo.reports.views.standard;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuListener;
@@ -17,6 +18,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.IFontProvider;
 import org.eclipse.jface.viewers.ITableColorProvider;
@@ -45,16 +47,21 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
-import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
-import com.mmxlabs.lingo.reports.ScenarioViewerSynchronizer;
-import com.mmxlabs.lingo.reports.ScheduleElementCollector;
-import com.mmxlabs.lingo.reports.views.standard.TotalsContentProvider.RowData;
+import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
+import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
+import com.mmxlabs.lingo.reports.views.standard.TotalsTransformer.RowData;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class TotalsReportView extends ViewPart {
+
+	private SelectedScenariosService selectedScenariosService;
+
 	private final ArrayList<Integer> sortColumns = new ArrayList<Integer>(4);
 
 	private boolean inverseSort = false;
@@ -69,13 +76,52 @@ public class TotalsReportView extends ViewPart {
 
 	private Action copyTableAction;
 
-	private ScenarioViewerSynchronizer viewerSynchronizer;
-
-	private TotalsContentProvider contentProvider;
-
 	private GridViewerColumn delta;
 
 	private GridViewerColumn scheduleColumnViewer;
+	@NonNull
+	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
+
+		private final TotalsTransformer transformer = new TotalsTransformer();
+
+		@Override
+		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
+			final List<Object> rowElements = new LinkedList<>();
+			int numberOfSchedules = 0;
+			List<RowData> pinnedData = null;
+			if (pinned != null) {
+				LNGScenarioModel instance = (LNGScenarioModel) pinned.getInstance();
+				if (instance != null) {
+					final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
+					if (schedule != null) {
+						pinnedData = transformer.transform(schedule, pinned.getName(), null);
+						rowElements.addAll(pinnedData);
+						numberOfSchedules++;
+					}
+				}
+			}
+			for (final ScenarioInstance other : others) {
+				LNGScenarioModel instance = (LNGScenarioModel) other.getInstance();
+				if (instance != null) {
+					final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
+					if (schedule != null) {
+						rowElements.addAll(transformer.transform(schedule, other.getName(), pinnedData));
+						numberOfSchedules++;
+					}
+				}
+			}
+
+			setShowColumns(pinned != null, numberOfSchedules);
+
+			setInput(rowElements);
+
+			if (!rowElements.isEmpty()) {
+				if (packColumnsAction != null) {
+					packColumnsAction.run();
+				}
+			}
+		}
+	};
 
 	class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, IFontProvider, ITableColorProvider {
 
@@ -96,17 +142,6 @@ public class TotalsReportView extends ViewPart {
 			super.dispose();
 		}
 
-		protected Long getDelta(final RowData d) {
-			final List<RowData> pinned = TotalsReportView.this.contentProvider.getPinnedScenarioData();
-			for (final RowData ref : pinned) {
-				if (d.component.equals(ref.component)) {
-					final long delta = d.fitness - ref.fitness;
-					return delta;
-				}
-			}
-			return null;
-		}
-
 		@Override
 		public String getColumnText(final Object obj, final int index) {
 			if (obj instanceof RowData) {
@@ -119,7 +154,7 @@ public class TotalsReportView extends ViewPart {
 				case 2:
 					return d.type;
 				case 3:
-					if (TotalsContentProvider.TYPE_TIME.equals(d.type)) {
+					if (TotalsTransformer.TYPE_TIME.equals(d.type)) {
 						final long days = d.fitness / 24;
 						final long hours = d.fitness % 24;
 						return "" + days + "d, " + hours + "h";
@@ -127,9 +162,9 @@ public class TotalsReportView extends ViewPart {
 						return String.format("%,d", d.fitness);
 					}
 				case 4:
-					final Long l = getDelta(d);
+					final Long l = d.deltaFitness;
 					if (l != null) {
-						if (TotalsContentProvider.TYPE_TIME.equals(d.type)) {
+						if (TotalsTransformer.TYPE_TIME.equals(d.type)) {
 							return String.format("%dd, %dh", l / 24, l % 24);
 						} else {
 							return String.format("%,d", l);
@@ -166,7 +201,7 @@ public class TotalsReportView extends ViewPart {
 		public Color getForeground(final Object element, final int columnIndex) {
 			if (columnIndex == 4 && element instanceof RowData) {
 				final RowData rowData = (RowData) element;
-				final Long l = getDelta(rowData);
+				final Long l = rowData.deltaFitness;
 				if (l == null || l.longValue() == 0l) {
 					return null;
 				} else if ((l < 0 && !rowData.minimise) || (l > 0 && rowData.minimise)) {
@@ -229,24 +264,11 @@ public class TotalsReportView extends ViewPart {
 	 */
 	@Override
 	public void createPartControl(final Composite parent) {
-		viewer = new GridTableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION) {
-			@Override
-			protected void inputChanged(final Object input, final Object oldInput) {
-				super.inputChanged(input, oldInput);
 
-				final boolean inputEmpty = (input == null) || ((input instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) input).getCollectedElements().isEmpty());
-				final boolean oldInputEmpty = (oldInput == null)
-						|| ((oldInput instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) oldInput).getCollectedElements().isEmpty());
+		selectedScenariosService = (SelectedScenariosService) getSite().getService(SelectedScenariosService.class);
 
-				if (inputEmpty != oldInputEmpty) {
-					if (packColumnsAction != null) {
-						packColumnsAction.run();
-					}
-				}
-			};
-		};
-		this.contentProvider = new TotalsContentProvider();
-		viewer.setContentProvider(contentProvider);
+		viewer = new GridTableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		viewer.setContentProvider(new ArrayContentProvider());
 		viewer.setInput(getViewSite());
 
 		scheduleColumnViewer = new GridViewerColumn(viewer, SWT.NONE);
@@ -319,28 +341,9 @@ public class TotalsReportView extends ViewPart {
 		hookContextMenu();
 		contributeToActionBars();
 
-		viewerSynchronizer = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
-			private boolean hasPin = false;
-			private int numberOfSchedules;
+		selectedScenariosService.addListener(selectedScenariosServiceListener);
+		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 
-			@Override
-			public void beginCollecting(boolean pinDiffMode) {
-				hasPin = false;
-				numberOfSchedules = 0;
-			}
-
-			@Override
-			public void endCollecting() {
-				setShowColumns(hasPin, numberOfSchedules);
-			}
-
-			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final Schedule schedule, final boolean pinned) {
-				hasPin = hasPin || pinned;
-				++numberOfSchedules;
-				return Collections.singleton(schedule);
-			}
-		});
 	}
 
 	private void hookContextMenu() {
@@ -425,7 +428,8 @@ public class TotalsReportView extends ViewPart {
 	@Override
 	public void dispose() {
 
-		ScenarioViewerSynchronizer.deregisterView(viewerSynchronizer);
+		selectedScenariosService.removeListener(selectedScenariosServiceListener);
+
 		super.dispose();
 	}
 

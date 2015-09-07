@@ -10,9 +10,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.jface.viewers.Viewer;
 import org.joda.time.YearMonth;
 
-import com.mmxlabs.lingo.reports.components.SimpleContentAndColumnProvider;
+import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportContentProvider;
+import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.PricingModel;
@@ -24,15 +26,25 @@ import com.mmxlabs.models.lng.schedule.Schedule;
  */
 public class ExposureReportView extends SimpleTabularReportView<IndexExposureData> {
 	public final Map<String, Map<YearMonth, Double>> overallExposures = new HashMap<String, Map<YearMonth, Double>>();
-	
+
 	public ExposureReportView() {
 		super("com.mmxlabs.lingo.doc.Reports_IndexExposures");
 	}
-	
+
 	@Override
-	protected SimpleContentAndColumnProvider<IndexExposureData> createContentProvider() {
-		// TODO Auto-generated method stub
-		return new SimpleContentAndColumnProvider<IndexExposureData>() {
+	protected AbstractSimpleTabularReportContentProvider<IndexExposureData> createContentProvider() {
+		return new AbstractSimpleTabularReportContentProvider<IndexExposureData>() {
+
+			@Override
+			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+
+			}
+		};
+	}
+
+	@Override
+	protected AbstractSimpleTabularReportTransformer<IndexExposureData> createTransformer() {
+		return new AbstractSimpleTabularReportTransformer<IndexExposureData>() {
 
 			/**
 			 * Returns the list of year / month labels for the entire known exposure data range. This may conceivably include months in which no transactions occur.
@@ -106,7 +118,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			}
 
 			@Override
-			protected List<IndexExposureData> createData(Schedule schedule, LNGScenarioModel rootObject, LNGPortfolioModel portfolioModel) {
+			public List<IndexExposureData> createData(Schedule schedule, LNGScenarioModel rootObject, LNGPortfolioModel portfolioModel) {
 				final List<IndexExposureData> output = new ArrayList<IndexExposureData>();
 
 				PricingModel pm = rootObject.getPricingModel();

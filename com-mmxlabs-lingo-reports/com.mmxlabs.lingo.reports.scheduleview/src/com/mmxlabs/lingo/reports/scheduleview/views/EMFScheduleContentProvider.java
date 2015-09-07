@@ -6,6 +6,7 @@ package com.mmxlabs.lingo.reports.scheduleview.views;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.List;
 import java.util.WeakHashMap;
 
@@ -14,7 +15,6 @@ import org.eclipse.jface.viewers.Viewer;
 import org.joda.time.DateTime;
 
 import com.mmxlabs.ganttviewer.IGanttChartContentProvider;
-import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -44,10 +44,10 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 	@Override
 	public Object[] getChildren(final Object parent) {
 
-		if (parent instanceof IScenarioViewerSynchronizerOutput) {
-			final IScenarioViewerSynchronizerOutput synchronizerOutput = (IScenarioViewerSynchronizerOutput) parent;
+		if (parent instanceof Collection<?>) {
+			Collection<?> collection = (Collection<?>) parent;
 			final List<Object> result = new ArrayList<Object>();
-			for (final Object o : synchronizerOutput.getCollectedElements()) {
+			for (final Object o : collection) {
 				if (o instanceof Schedule) {
 					final EList<Sequence> sequences = ((Schedule) o).getSequences();
 
