@@ -27,7 +27,6 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.joda.time.Months;
 import org.joda.time.YearMonth;
-import org.omg.PortableInterceptor.SUCCESSFUL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

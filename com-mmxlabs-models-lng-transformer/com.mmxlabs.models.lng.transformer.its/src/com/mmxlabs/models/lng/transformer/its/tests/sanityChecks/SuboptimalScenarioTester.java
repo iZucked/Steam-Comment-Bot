@@ -23,8 +23,6 @@ import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
-import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
-import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListSequence;

@@ -4,10 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.breakdown;
 
-import java.io.IOException;
-import java.io.Serializable;
-
-import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 
 public class PersistedSequencesWriter {

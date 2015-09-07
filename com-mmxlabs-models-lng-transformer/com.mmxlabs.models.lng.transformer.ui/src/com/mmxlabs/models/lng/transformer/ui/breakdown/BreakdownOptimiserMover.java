@@ -919,6 +919,7 @@ public class BreakdownOptimiserMover {
 				// as moving as a pair, remove load from unusedElements queue that we're looping through
 				unusedElements.remove(otherLoadElement);
 				final IResource resource = similarityState.getResourceForElement(element);
+				assert resource != null;
 				// move as a pair
 				return insertUnusedCargoIntoSequence(currentSequences, similarityState, changes, changeSets, tryDepth, resource, otherLoadElement, element, currentMetrics, jobStore, targetElements, differencesList);
 			} else {

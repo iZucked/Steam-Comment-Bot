@@ -8,8 +8,6 @@ import java.util.TreeMap;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.VesselClass;

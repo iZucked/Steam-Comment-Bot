@@ -5,9 +5,6 @@
 package com.mmxlabs.models.lng.transformer.its.tests.sanityChecks;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
 import org.joda.time.LocalDateTime;
 import org.junit.Assert;
 import org.junit.Test;

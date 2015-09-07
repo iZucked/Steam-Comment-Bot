@@ -6,14 +6,9 @@ package com.mmxlabs.models.lng.transformer.contracts;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.components.IVesselEvent;
-import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 
 public interface IVesselAvailabilityTransformer extends ITransformerExtension {
 

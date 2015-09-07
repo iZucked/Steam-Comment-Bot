@@ -4,18 +4,14 @@
  */
 package com.mmxlabs.models.lng.transformer.period;
 
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TimeZone;
-
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -81,7 +77,6 @@ import com.mmxlabs.models.lng.transformer.period.InclusionChecker.InclusionType;
 import com.mmxlabs.models.lng.transformer.period.InclusionChecker.PeriodRecord;
 import com.mmxlabs.models.lng.transformer.period.InclusionChecker.Position;
 import com.mmxlabs.models.lng.transformer.period.extensions.IPeriodTransformerExtension;
-import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;

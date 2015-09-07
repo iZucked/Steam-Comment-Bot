@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests;
 
-import java.util.Date;
-
 import org.joda.time.DateTime;
 
 import com.mmxlabs.models.lng.cargo.Cargo;

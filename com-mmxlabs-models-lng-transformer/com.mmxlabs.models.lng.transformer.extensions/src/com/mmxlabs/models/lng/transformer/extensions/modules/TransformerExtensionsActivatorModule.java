@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.transformer.extensions.modules;
 
 import org.ops4j.peaberry.activation.util.PeaberryActivationModule;
 
-import com.mmxlabs.models.lng.transformer.extensions.charterout.GeneratedCharterOutTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.charterout.GeneratedCharterOutTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.entities.EntityTransformerExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsModule;

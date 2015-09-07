@@ -11,15 +11,11 @@ import java.util.List;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.google.inject.Injector;
 import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
-import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
-import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 

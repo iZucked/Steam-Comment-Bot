@@ -9,7 +9,6 @@ import java.io.IOException;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.joda.time.LocalDateTime;
-import org.joda.time.LocalTime;
 import org.joda.time.YearMonth;
 import org.junit.Assert;
 import org.junit.Test;

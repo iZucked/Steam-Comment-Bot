@@ -4,10 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests;
 
-import java.util.Date;
-
-import javax.management.timer.Timer;
-
 import org.eclipse.emf.common.util.EList;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;

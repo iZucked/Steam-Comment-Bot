@@ -45,7 +45,6 @@ import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
-import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
@@ -56,7 +55,6 @@ import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.optimiser.lso.IFitnessCombiner;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
-import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 
 /**
  * An "optimiser" to generate the sequence of steps required by a user to go from one {@link ISequences} state to another one. I.e. from a pre-optimised state to an optimised state.

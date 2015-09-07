@@ -14,7 +14,6 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.progress.IProgressConstants;
 
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl2;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
