@@ -164,6 +164,7 @@ import com.mmxlabs.models.util.emfpath.IEMFPath;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
+import com.mmxlabs.rcp.common.actions.LockableAction;
 import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 
@@ -1432,7 +1433,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		wiringDiagram.setLocked(locked);
 	}
 
-	private abstract class DefaultMenuCreatorAction extends Action implements IMenuCreator {
+	private abstract class DefaultMenuCreatorAction extends LockableAction implements IMenuCreator {
 		private Menu lastMenu;
 
 		public DefaultMenuCreatorAction(final String label) {
@@ -1793,7 +1794,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 	}
 
-	private final class ComplexCargoAction extends Action {
+	private final class ComplexCargoAction extends LockableAction {
 
 		private ComplexCargoAction(final String text) {
 			super(text);
@@ -1952,7 +1953,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		}
 	}
 
-	private class CreateStripMenuAction extends Action implements IMenuCreator {
+	private class CreateStripMenuAction extends LockableAction implements IMenuCreator {
 
 		private Menu lastMenu;
 
@@ -2020,7 +2021,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 	}
 
-	private class CreateStripAction extends Action {
+	private class CreateStripAction extends LockableAction {
 
 		private final CreateStripDialog.StripType stripType;
 
