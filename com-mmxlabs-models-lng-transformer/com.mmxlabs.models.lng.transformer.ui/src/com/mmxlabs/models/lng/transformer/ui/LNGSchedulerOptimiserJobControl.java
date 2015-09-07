@@ -5,7 +5,9 @@
 package com.mmxlabs.models.lng.transformer.ui;
 
 import org.apache.shiro.SecurityUtils;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -24,8 +26,8 @@ import com.mmxlabs.scenario.service.util.ScenarioInstanceSchedulingRule;
 
 public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
-	private static final int REPORT_PERCENTAGE = 1;
-	private int currentProgress = 0;
+	// private static final int REPORT_PERCENTAGE = 1;
+	// private int currentProgress = 0;
 
 	private final LNGSchedulerJobDescriptor jobDescriptor;
 
@@ -63,27 +65,48 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 		scenarioRunner.initAndEval();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.mmxlabs.jobcontroller.core.AbstractManagedJob#step()
-	 */
 	@Override
-	protected boolean step() {
-		if (jobDescriptor.isOptimising() == false) {
-			return false; // if we are not optimising, finish.
-		}
-		scenarioRunner.step(REPORT_PERCENTAGE);
-		currentProgress += REPORT_PERCENTAGE;
+	protected void doRunJob(IProgressMonitor progressMonitor) {
 
-		super.setProgress(currentProgress);
-		if (scenarioRunner.isFinished()) {
+		progressMonitor.beginTask("Optimise", 100);
+		try {
+			// TODO Auto-generated method stub
+			if (jobDescriptor.isOptimising() == false) {
+				return; // if we are not optimising, finish.
+			}
+			scenarioRunner.runWithProgress(new SubProgressMonitor(progressMonitor, 100));
 			super.setProgress(100);
-			return false;
-		} else {
-			return true;
+		} finally {
+			progressMonitor.done();
 		}
+		// if (scenarioRunner.isFinished()) {
+		// return false;
+		// } else {
+		// return true;
+		// }
 	}
+
+	// /*
+	// * (non-Javadoc)
+	// *
+	// * @see com.mmxlabs.jobcontroller.core.AbstractManagedJob#step()
+	// */
+	// @Override
+	// protected boolean step() {
+	// if (jobDescriptor.isOptimising() == false) {
+	// return false; // if we are not optimising, finish.
+	// }
+	// scenarioRunner.step(REPORT_PERCENTAGE);
+	// currentProgress += REPORT_PERCENTAGE;
+	//
+	// super.setProgress(currentProgress);
+	// if (scenarioRunner.isFinished()) {
+	// super.setProgress(100);
+	// return false;
+	// } else {
+	// return true;
+	// }
+	// }
 
 	/*
 	 * (non-Javadoc)

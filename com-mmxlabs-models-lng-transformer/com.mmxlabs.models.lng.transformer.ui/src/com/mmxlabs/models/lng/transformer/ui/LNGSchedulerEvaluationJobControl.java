@@ -38,8 +38,7 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 	}
 
 	@Override
-	public @NonNull
-	IJobDescriptor getJobDescriptor() {
+	public @NonNull IJobDescriptor getJobDescriptor() {
 		return jobDescriptor;
 	}
 
@@ -63,15 +62,6 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 			} finally {
 				runner.dispose();
 			}
-
-			// // Create the transformer and object reference to the data objects
-			// final LNGTransformer transformer = new LNGTransformer(scenario, jobDescriptor.getOptimiserSettings());
-			//
-			// final Injector injector = transformer.getInjector();
-			// final IAnnotatedSolution solution = LNGSchedulerJobUtils.evaluateCurrentState(transformer);
-			//
-			// // Pass annotated solution to utils to create a new Schedule object and update the other data models as required.
-			// LNGSchedulerJobUtils.exportSolution(injector, scenario, jobDescriptor.getOptimiserSettings(), editingDomain, transformer.getModelEntityMap(), solution, 0);
 
 			setJobState(EJobState.COMPLETED);
 		} catch (final Throwable e) {

@@ -15,6 +15,7 @@ import javax.management.timer.Timer;
 
 import org.apache.shiro.SecurityUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.emf.common.command.BasicCommandStack;
@@ -35,7 +36,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl2;
+import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
@@ -322,76 +323,8 @@ public class LNGScenarioRunner {
 	 * 
 	 * @return
 	 */
-	public boolean run() {
-		return step(100);
-	}
-
-	/**
-	 * Step the optimisation by x% of the total number of iterations. Only call if an optimisation hint has been specified.
-	 * 
-	 * @return Return true if the optimisation still has more work to do.
-	 * 
-	 */
-	public boolean step(final int percent) {
-		assert createOptimiser;
-		final IOptimiserProgressMonitor monitor = optimiser.getProgressMonitor();
-
-		final int optimiserPercent = percent;// doBreakdownPostOptimisation ? (int) ((double) percent * 1.2) : percent;
-		optimiser.step(optimiserPercent);
-		if (monitor != null) {
-			monitor.report(optimiser, optimiser.getNumberOfIterationsCompleted(), optimiser.getFitnessEvaluator().getCurrentFitness(), optimiser.getFitnessEvaluator().getBestFitness(),
-					optimiser.getCurrentSolution(), optimiser.getBestSolution());
-		}
-
-		if (optimiser.isFinished()) {
-			if (doHillClimb) {
-				if (this.optimiserSettings.getSolutionImprovementSettings() != null && this.optimiserSettings.getSolutionImprovementSettings().isImprovingSolutions()) {
-					final ArbitraryStateLocalSearchOptimiser hillClimber = injector.getInstance(ArbitraryStateLocalSearchOptimiser.class);
-					// The optimiser may not have a best sequence set
-					System.out.println("Performing hill climbing...");
-					final ISequences initialSequence = optimiser.getBestRawSequences() == null ? context.getInitialSequences() : optimiser.getBestRawSequences();
-					hillClimber.start(context, initialSequence);
-					hillClimber.step(100);
-					optimiser = hillClimber;
-				}
-			}
-			// Clear any previous optimisation state.
-			if (periodMapping != null) {
-				LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, 100);
-			}
-			LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
-
-			final boolean exportOptimiserSolution = true;
-			// // Generate the changesets decomposition.
-			// if (true || doBreakdownPostOptimisation) {
-			// // Run optimisation
-			//
-			// final BreadthOptimiser instance = injector.getInstance(BreadthOptimiser.class);
-			// boolean foundBetterResult = instance.optimise(optimiser.getBestRawSequences(), new NullProgressMonitor());
-			//
-			// // Store the results
-			// final List<Pair<ISequences, IEvaluationState>> breakdownSolution = instance.getBestSolution();
-			// if (breakdownSolution != null) {
-			// storeBreakdownSolutionsAsForks(breakdownSolution, foundBetterResult, new NullProgressMonitor());
-			// exportOptimiserSolution = false;
-			// }
-			// }
-
-			// The breakdown optimiser may find a better solution. This will be saved in storeBreakdownSolutionsAsForks
-			if (exportOptimiserSolution) {
-				// export final state
-				finalSchedule = exportSchedule(100, optimiser.getBestSolution());
-			}
-
-			if (monitor != null) {
-				monitor.done(optimiser, optimiser.getFitnessEvaluator().getBestFitness(), optimiser.getBestSolution());
-			}
-			optimiser = null;
-			log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
-			return false;
-		} else {
-			return true;
-		}
+	public void run() {
+		runWithProgress(new NullProgressMonitor());
 	}
 
 	/**
@@ -663,7 +596,7 @@ public class LNGScenarioRunner {
 	}
 
 	/**
-	 * used by {@link AbstractEclipseJobControl2} / {@link LNGSchedulerOptimiserJobControl2}
+	 * used by {@link AbstractEclipseJobControl} / {@link LNGSchedulerOptimiserJobControl}
 	 * 
 	 * @param progressMonitor
 	 */
