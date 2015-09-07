@@ -51,6 +51,7 @@ import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
+import org.eclipse.nebula.widgets.grid.internal.DefaultColumnGroupHeaderRenderer;
 import org.eclipse.nebula.widgets.grid.internal.DefaultColumnHeaderRenderer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
@@ -346,6 +347,7 @@ public class ChangeSetView implements IAdaptable {
 		}
 		vesselColumnGroup = new GridColumnGroup(viewer.getGrid(), SWT.CENTER);
 		vesselColumnGroup.setText("Vessels");
+		createCenteringGroupRenderer(vesselColumnGroup);
 		// Vessel columns are dynamically created - create a stub column to lock down the position in the table
 		{
 			final GridColumn gc = new GridColumn(vesselColumnGroup, SWT.CENTER);
@@ -359,6 +361,7 @@ public class ChangeSetView implements IAdaptable {
 		}
 		final GridColumnGroup loadGroup = new GridColumnGroup(viewer.getGrid(), SWT.CENTER);
 		loadGroup.setText("Purchase");
+		createCenteringGroupRenderer(loadGroup);
 		{
 			final GridColumn gc = new GridColumn(loadGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
@@ -390,8 +393,10 @@ public class ChangeSetView implements IAdaptable {
 			gvc.setLabelProvider(createStubLabelProvider());
 			this.diagram = createWiringDiagram(gvc);
 		}
-		final GridColumnGroup dischargeGroup = new GridColumnGroup(viewer.getGrid(), SWT.NONE);
+		final GridColumnGroup dischargeGroup = new GridColumnGroup(viewer.getGrid(), SWT.CENTER);
 		dischargeGroup.setText("Sale");
+		createCenteringGroupRenderer(dischargeGroup);
+
 		{
 			final GridColumn gc = new GridColumn(dischargeGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
@@ -418,8 +423,9 @@ public class ChangeSetView implements IAdaptable {
 					ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_DISCHARGE_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__ENERGY_TRANSFERRED));
 		}
 
-		final GridColumnGroup pnlComponentGroup = new GridColumnGroup(viewer.getGrid(), SWT.NONE);
+		final GridColumnGroup pnlComponentGroup = new GridColumnGroup(viewer.getGrid(), SWT.CENTER);
 		pnlComponentGroup.setText("P&L Components");
+		createCenteringGroupRenderer(pnlComponentGroup);
 
 		{
 			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
@@ -429,7 +435,6 @@ public class ChangeSetView implements IAdaptable {
 			gvc.setLabelProvider(createDeltaLabelProvider(true, ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_DISCHARGE_ALLOCATION,
 					ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_DISCHARGE_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__VOLUME_VALUE));
 			createWordWrapRenderer(gvc);
-
 		}
 		{
 			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
@@ -603,10 +608,17 @@ public class ChangeSetView implements IAdaptable {
 		scenarioComparisonService.triggerListener(listener);
 	}
 
+	@SuppressWarnings("restriction")
 	private void createWordWrapRenderer(final GridViewerColumn gvc) {
 		final DefaultColumnHeaderRenderer renderer = new DefaultColumnHeaderRenderer();
 		renderer.setWordWrap(true);
 		gvc.getColumn().setHeaderRenderer(renderer);
+	}
+
+	private void createCenteringGroupRenderer(final GridColumnGroup gcg) {
+		final CenteringColumnGroupHeaderRenderer renderer = new CenteringColumnGroupHeaderRenderer();
+		// renderer.setWordWrap(true);
+		gcg.setHeaderRenderer(renderer);
 	}
 
 	// @PostConstruct
