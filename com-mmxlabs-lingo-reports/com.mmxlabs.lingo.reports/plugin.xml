@@ -685,5 +685,14 @@
             class="com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage">
       </package>
    </extension>
+   <extension
+         id="id1"
+         point="org.eclipse.e4.workbench.model">
+      <processor
+            apply="always"
+            beforefragment="true"
+            class="com.mmxlabs.lingo.reports.internal.FixActionSetsModelProcessor">
+      </processor>
+   </extension>
 
 </plugin>

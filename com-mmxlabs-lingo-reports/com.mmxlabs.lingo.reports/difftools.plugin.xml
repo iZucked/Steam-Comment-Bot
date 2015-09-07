@@ -22,6 +22,18 @@
 	<extension point="org.eclipse.ui.actionSets">
 		<actionSet id="com.mmxlabs.lingo.reports.diff.actionset"
 			label="Change Set Tools">
+			<action
+				class="com.mmxlabs.lingo.reports.services.handlers.FilterScheduleReportBySelectionAction"
+				icon="icons/FilterBySelection.gif"
+				id="com.mmxlabs.lingo.reports.services.handlers.FilterScheduleReportBySelectionAction"
+				label="Filter Schedule Report" style="toggle" toolbarPath="additions">
+			</action>
+			<action
+				class="com.mmxlabs.lingo.reports.services.handlers.FilterScheduleChartBySelectionAction"
+				icon="icons/filterGantt.gif"
+				id="com.mmxlabs.lingo.reports.services.handlers.FilterScheduleReportBySelectionAction"
+				label="Filter Schedule" style="toggle" toolbarPath="additions">
+			</action>
 		</actionSet>
 	</extension>
 	<extension point="org.eclipse.ui.perspectiveExtensions">
@@ -126,14 +138,6 @@
       <command
             id="com.mmxlabs.lingo.reports.changeset.analyse"
             name="Open action sets">
-      </command>
-      <command
-            id="com.mmxlabs.lingo.reports.commands.FilterScheduleChartBySelection"
-            name="Filter Schedule Chart By Selection">
-      </command>
-      <command
-            id="com.mmxlabs.lingo.reports.commands.FilterScheduleSummaryBySelection"
-            name="Filter Schedule Summary By Selection">
       </command>
    </extension>
    
