@@ -125,25 +125,34 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		@Override
 		public void selected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> deselected, boolean block) {
 			if (viewer != null) {
-				for (final ScenarioInstance instance : deselected)
+				for (final ScenarioInstance instance : deselected) {
 					viewer.refresh(instance, true);
+				}
 			}
 		}
 
 		@Override
 		public void deselected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> deselected, boolean block) {
 			if (viewer != null) {
-				for (final ScenarioInstance instance : deselected)
+				for (final ScenarioInstance instance : deselected) {
 					viewer.refresh(instance, true);
+				}
 			}
 		}
 
 		@Override
 		public void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioInstance oldPin, final ScenarioInstance newPin, boolean block) {
-			if (oldPin != null)
+			if (oldPin != null) {
 				viewer.refresh(oldPin, true);
-			if (newPin != null)
+			}
+			if (newPin != null) {
 				viewer.refresh(newPin, true);
+			}
+		}
+
+		@Override
+		public void selectionChanged(ScenarioInstance pinned, Collection<ScenarioInstance> others, boolean block) {
+
 		}
 	};
 
@@ -423,6 +432,5 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		} else {
 			super.handleDoubleClick(anEvent);
 		}
-
 	}
 }
