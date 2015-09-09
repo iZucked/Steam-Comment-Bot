@@ -12,7 +12,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public final class HashMapPortSlotEditor implements IPortSlotProviderEditor {
 
