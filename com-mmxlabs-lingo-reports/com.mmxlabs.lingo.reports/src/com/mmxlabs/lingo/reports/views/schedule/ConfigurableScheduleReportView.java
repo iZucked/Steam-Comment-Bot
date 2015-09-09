@@ -118,7 +118,6 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 			clearInputEquivalents();
 			builder.refreshPNLColumns(rootObjects);
 			processInputs(table.getRows());
-			viewer.setInput(new ArrayList<>(table.getRows()));
 
 			for (final ColumnBlock handler : builder.getBlockManager().getBlocksInVisibleOrder()) {
 				if (handler != null) {
@@ -126,6 +125,7 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 				}
 			}
 
+			viewer.setInput(new ArrayList<>(table.getRows()));
 		}
 
 		@Override
@@ -134,7 +134,6 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 			clearInputEquivalents();
 			builder.refreshPNLColumns(rootObjects);
 			processInputs(table.getRows());
-			viewer.setInput(new ArrayList<>(table.getRows()));
 
 			int numberOfSchedules = others.size();
 			for (final ColumnBlock handler : builder.getBlockManager().getBlocksInVisibleOrder()) {
@@ -142,6 +141,8 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 					handler.setViewState(numberOfSchedules > 1, false);
 				}
 			}
+
+			viewer.setInput(new ArrayList<>(table.getRows()));
 		}
 
 		@Override

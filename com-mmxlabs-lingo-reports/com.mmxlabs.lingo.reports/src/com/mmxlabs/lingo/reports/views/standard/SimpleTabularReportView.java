@@ -35,6 +35,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -78,66 +79,81 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 
 		@Override
 		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
-			AbstractSimpleTabularReportTransformer<T> transformer = createTransformer();
 
-			columnManagers.clear();
+			final Runnable r = new Runnable() {
+				@Override
+				public void run() {
+					AbstractSimpleTabularReportTransformer<T> transformer = createTransformer();
 
-			// pinnedData.clear();
-			// rowData = (T[]) new Object[0];
-			// if (newInput instanceof IScenarioViewerSynchronizerOutput) {
-			// final IScenarioViewerSynchronizerOutput synchOutput = (IScenarioViewerSynchronizerOutput) newInput;
-			// for (final Object o : synchOutput.getCollectedElements()) {
-			// if (o instanceof Schedule) {
-			// rowData = createData((Schedule) o, synchOutput.getLNGScenarioModel(o), synchOutput.getLNGPortfolioModel(o)).toArray(rowData);
-			// return;
-			// }
-			// }
-			// }
-			//
-			final List<Object> rowElements = new LinkedList<>();
-			int numberOfSchedules = 0;
-			List<T> pinnedData = null;
-			if (pinned != null) {
-				LNGScenarioModel instance = (LNGScenarioModel) pinned.getInstance();
-				if (instance != null) {
-					final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
-					if (schedule != null) {
+					columnManagers.clear();
 
-						// pinnedData = createData((Schedule) o, synchOutput.getLNGScenarioModel(o), synchOutput.getLNGPortfolioModel(o)).toArray(rowData);
+					// pinnedData.clear();
+					// rowData = (T[]) new Object[0];
+					// if (newInput instanceof IScenarioViewerSynchronizerOutput) {
+					// final IScenarioViewerSynchronizerOutput synchOutput = (IScenarioViewerSynchronizerOutput) newInput;
+					// for (final Object o : synchOutput.getCollectedElements()) {
+					// if (o instanceof Schedule) {
+					// rowData = createData((Schedule) o, synchOutput.getLNGScenarioModel(o), synchOutput.getLNGPortfolioModel(o)).toArray(rowData);
+					// return;
+					// }
+					// }
+					// }
+					//
+					final List<Object> rowElements = new LinkedList<>();
+					int numberOfSchedules = 0;
+					List<T> pinnedData = null;
+					if (pinned != null) {
+						LNGScenarioModel instance = (LNGScenarioModel) pinned.getInstance();
+						if (instance != null) {
+							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
+							if (schedule != null) {
 
-						pinnedData = transformer.createData(schedule, selectedDataProvider.getScenarioModel(schedule), selectedDataProvider.getPortfolioModel(schedule));
-						rowElements.addAll(pinnedData);
-						numberOfSchedules++;
+								// pinnedData = createData((Schedule) o, synchOutput.getLNGScenarioModel(o), synchOutput.getLNGPortfolioModel(o)).toArray(rowData);
+
+								pinnedData = transformer.createData(schedule, selectedDataProvider.getScenarioModel(schedule), selectedDataProvider.getPortfolioModel(schedule));
+								rowElements.addAll(pinnedData);
+								numberOfSchedules++;
+							}
+						}
+					}
+					for (final ScenarioInstance other : others) {
+						LNGScenarioModel instance = (LNGScenarioModel) other.getInstance();
+						if (instance != null) {
+							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
+							if (schedule != null) {
+								rowElements.addAll(transformer.createData(schedule, selectedDataProvider.getScenarioModel(schedule), selectedDataProvider.getPortfolioModel(schedule)));
+
+								// rowElements.addAll(transformer.transform(schedule, other, pinnedData));
+								numberOfSchedules++;
+							}
+						}
+					}
+
+					columnManagers.addAll(transformer.getColumnManagers());
+					clearColumns();
+					addColumns();
+					setShowColumns(pinned != null, numberOfSchedules);
+
+					viewer.getLabelProvider().dispose();
+					viewer.setLabelProvider(new ViewLabelProvider());
+
+					setInput(rowElements);
+
+					if (!rowElements.isEmpty()) {
+						if (packColumnsAction != null) {
+							packColumnsAction.run();
+						}
 					}
 				}
-			}
-			for (final ScenarioInstance other : others) {
-				LNGScenarioModel instance = (LNGScenarioModel) other.getInstance();
-				if (instance != null) {
-					final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
-					if (schedule != null) {
-						rowElements.addAll(transformer.createData(schedule, selectedDataProvider.getScenarioModel(schedule), selectedDataProvider.getPortfolioModel(schedule)));
-
-						// rowElements.addAll(transformer.transform(schedule, other, pinnedData));
-						numberOfSchedules++;
-					}
+			};
+			if (block) {
+				if (Display.getDefault().getThread() == Thread.currentThread()) {
+					r.run();
+				} else {
+					Display.getDefault().syncExec(r);
 				}
-			}
-
-			columnManagers.addAll(transformer.getColumnManagers());
-			clearColumns();
-			addColumns();
-			setShowColumns(pinned != null, numberOfSchedules);
-
-			viewer.getLabelProvider().dispose();
-			viewer.setLabelProvider(new ViewLabelProvider());
-
-			setInput(rowElements);
-
-			if (!rowElements.isEmpty()) {
-				if (packColumnsAction != null) {
-					packColumnsAction.run();
-				}
+			} else {
+				Display.getDefault().asyncExec(r);
 			}
 		}
 	};

@@ -490,64 +490,59 @@ public class ChangeSetView implements IAdaptable {
 				final ISelection selection = event.getSelection();
 				if (selection instanceof IStructuredSelection) {
 					final IStructuredSelection iStructuredSelection = (IStructuredSelection) selection;
-					final Iterator<?> itr = iStructuredSelection.iterator();
-					while (itr.hasNext()) {
-						Object o = itr.next();
-						if (o instanceof ChangeSetRow) {
-							o = ((ChangeSetRow) o).eContainer();
-						}
-						if (o instanceof ChangeSet) {
-							final ChangeSet changeSet = (ChangeSet) o;
-							if (diffToBase) {
-								scenarioSelectionProvider.setPinnedInstance(changeSet.getBaseScenario());
-							} else {
-								scenarioSelectionProvider.setPinnedInstance(changeSet.getPrevScenario());
+					{
+						final Iterator<?> itr = iStructuredSelection.iterator();
+						while (itr.hasNext()) {
+							Object o = itr.next();
+							if (o instanceof ChangeSetRow) {
+								o = ((ChangeSetRow) o).eContainer();
 							}
-							scenarioSelectionProvider.select(changeSet.getCurrentScenario());
-						}
-						return;
-					}
-				}
-
-			}
-		});
-
-		// Selection listener for current selection.
-		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
-
-			@Override
-			public void selectionChanged(final SelectionChangedEvent event) {
-				final IStructuredSelection selection = (IStructuredSelection) event.getSelection();
-
-				final Set<Object> selectedElements = new LinkedHashSet<>();
-				final Iterator<?> itr = selection.iterator();
-				while (itr.hasNext()) {
-					final Object o = itr.next();
-					if (o instanceof ChangeSetRow) {
-						final ChangeSetRow changeSetRow = (ChangeSetRow) o;
-						selectRow(selectedElements, changeSetRow);
-					} else if (o instanceof ChangeSet) {
-						final ChangeSet changeSet = (ChangeSet) o;
-						List<ChangeSetRow> rows;
-						if (diffToBase) {
-							rows = changeSet.getChangeSetRowsToBase();
-						} else {
-							rows = changeSet.getChangeSetRowsToPrevious();
-						}
-						for (final ChangeSetRow changeSetRow : rows) {
-							selectRow(selectedElements, changeSetRow);
+							if (o instanceof ChangeSet) {
+								final ChangeSet changeSet = (ChangeSet) o;
+								final ScenarioInstance other;
+								if (diffToBase) {
+									other = changeSet.getBaseScenario();
+								} else {
+									other = changeSet.getPrevScenario();
+								}
+								scenarioSelectionProvider.setPinnedPair(changeSet.getCurrentScenario(), other, true);
+								break;
+							}
 						}
 					}
+					{
+
+						final Set<Object> selectedElements = new LinkedHashSet<>();
+						final Iterator<?> itr = iStructuredSelection.iterator();
+						while (itr.hasNext()) {
+							final Object o = itr.next();
+							if (o instanceof ChangeSetRow) {
+								final ChangeSetRow changeSetRow = (ChangeSetRow) o;
+								selectRow(selectedElements, changeSetRow);
+							} else if (o instanceof ChangeSet) {
+								final ChangeSet changeSet = (ChangeSet) o;
+								List<ChangeSetRow> rows;
+								if (diffToBase) {
+									rows = changeSet.getChangeSetRowsToBase();
+								} else {
+									rows = changeSet.getChangeSetRowsToPrevious();
+								}
+								for (final ChangeSetRow changeSetRow : rows) {
+									selectRow(selectedElements, changeSetRow);
+								}
+							}
+						}
+
+						while (selectedElements.remove(null))
+							;
+
+						// Update selected elements
+						scenarioComparisonService.setSelectedElements(selectedElements);
+
+						// set the selection to the service
+						eSelectionService.setPostSelection(new StructuredSelection(selectedElements.toArray()));
+					}
 				}
-				while (selectedElements.remove(null))
-					;
-
-				// Update selected elements
-				scenarioComparisonService.setSelectedElements(selectedElements);
-
-				// set the selection to the service
-				eSelectionService.setPostSelection(new StructuredSelection(selectedElements.toArray()));
-
 			}
 
 			private void selectRow(final Set<Object> selectedElements, final ChangeSetRow changeSetRow) {
@@ -584,6 +579,79 @@ public class ChangeSetView implements IAdaptable {
 				}
 			}
 		});
+		//
+		// // Selection listener for current selection.
+		// viewer.addSelectionChangedListener(new ISelectionChangedListener() {
+		//
+		// @Override
+		// public void selectionChanged(final SelectionChangedEvent event) {
+		// final IStructuredSelection selection = (IStructuredSelection) event.getSelection();
+		//
+		// final Set<Object> selectedElements = new LinkedHashSet<>();
+		// final Iterator<?> itr = selection.iterator();
+		// while (itr.hasNext()) {
+		// final Object o = itr.next();
+		// if (o instanceof ChangeSetRow) {
+		// final ChangeSetRow changeSetRow = (ChangeSetRow) o;
+		// selectRow(selectedElements, changeSetRow);
+		// } else if (o instanceof ChangeSet) {
+		// final ChangeSet changeSet = (ChangeSet) o;
+		// List<ChangeSetRow> rows;
+		// if (diffToBase) {
+		// rows = changeSet.getChangeSetRowsToBase();
+		// } else {
+		// rows = changeSet.getChangeSetRowsToPrevious();
+		// }
+		// for (final ChangeSetRow changeSetRow : rows) {
+		// selectRow(selectedElements, changeSetRow);
+		// }
+		// }
+		// }
+		// while (selectedElements.remove(null))
+		// ;
+		//
+		// // Update selected elements
+		// scenarioComparisonService.setSelectedElements(selectedElements);
+		//
+		// // set the selection to the service
+		// eSelectionService.setPostSelection(new StructuredSelection(selectedElements.toArray()));
+		//
+		// }
+		//
+		// private void selectRow(final Set<Object> selectedElements, final ChangeSetRow changeSetRow) {
+		// selectedElements.add(changeSetRow.getLoadSlot());
+		// selectedElements.add(changeSetRow.getNewLoadAllocation());
+		// selectedElements.add(changeSetRow.getOriginalLoadAllocation());
+		// if (changeSetRow.getNewLoadAllocation() != null) {
+		// selectedElements.add(changeSetRow.getNewLoadAllocation().getSlotVisit());
+		// selectedElements.add(changeSetRow.getNewLoadAllocation().getSlotVisit().getSequence());
+		// }
+		// if (changeSetRow.getOriginalLoadAllocation() != null) {
+		// selectedElements.add(changeSetRow.getOriginalLoadAllocation().getSlotVisit());
+		// selectedElements.add(changeSetRow.getOriginalLoadAllocation().getSlotVisit().getSequence());
+		// }
+		// selectedElements.add(changeSetRow.getNewDischargeAllocation());
+		// selectedElements.add(changeSetRow.getOriginalDischargeAllocation());
+		// if (changeSetRow.getNewDischargeAllocation() != null) {
+		// selectedElements.add(changeSetRow.getNewDischargeAllocation().getSlotVisit());
+		// selectedElements.add(changeSetRow.getNewDischargeAllocation().getSlotVisit().getSequence());
+		// }
+		// if (changeSetRow.getOriginalDischargeAllocation() != null) {
+		// selectedElements.add(changeSetRow.getOriginalDischargeAllocation().getSlotVisit());
+		// selectedElements.add(changeSetRow.getOriginalDischargeAllocation().getSlotVisit().getSequence());
+		// }
+		// selectedElements.add(changeSetRow.getNewGroupProfitAndLoss());
+		// selectedElements.add(changeSetRow.getOriginalGroupProfitAndLoss());
+		// selectedElements.add(changeSetRow.getNewEventGrouping());
+		// if (changeSetRow.getNewEventGrouping() instanceof Event) {
+		// selectedElements.add(((Event) changeSetRow.getNewEventGrouping()).getSequence());
+		// }
+		// selectedElements.add(changeSetRow.getOriginalEventGrouping());
+		// if (changeSetRow.getOriginalEventGrouping() instanceof Event) {
+		// selectedElements.add(((Event) changeSetRow.getOriginalEventGrouping()).getSequence());
+		// }
+		// }
+		// });
 
 		final ViewerFilter[] filters = new ViewerFilter[1];
 		filters[0] = new ViewerFilter() {

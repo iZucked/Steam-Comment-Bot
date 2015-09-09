@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
@@ -20,6 +21,8 @@ import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,6 +50,11 @@ public class SelectedScenariosService {
 	private ISelectedDataProvider currentSelectedDataProvider;
 
 	private final Set<ISelectedScenariosServiceListener> listeners = new HashSet<>();
+
+	/**
+	 * Special counter to try and avoid multiple update requests happening at once. TODO: What happens if we hit Integer.MAX_VALUE?
+	 */
+	private AtomicInteger counter = new AtomicInteger();
 
 	/**
 	 * Command stack listener method, cause the linked viewer to refresh on command execution
@@ -138,12 +146,12 @@ public class SelectedScenariosService {
 				assert instance != null;
 				attachScenarioInstance(instance);
 			}
-			updateSelectedScenarios(block);
+			// updateSelectedScenarios(block);
 		}
 
 		@Override
 		public void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioInstance oldPin, final ScenarioInstance newPin, final boolean block) {
-			updateSelectedScenarios(block);
+			// updateSelectedScenarios(block);
 		}
 
 		@Override
@@ -152,6 +160,11 @@ public class SelectedScenariosService {
 				assert instance != null;
 				detachScenarioInstance(instance);
 			}
+			// updateSelectedScenarios(block);
+		}
+
+		@Override
+		public void selectionChanged(ScenarioInstance pinned, Collection<ScenarioInstance> others, boolean block) {
 			updateSelectedScenarios(block);
 		}
 
@@ -261,14 +274,41 @@ public class SelectedScenariosService {
 		listeners.remove(listener);
 	}
 
+	private void updateSelectedScenarios(final boolean block) {
+		// Null out until new version is ready
+		currentSelectedDataProvider = null;
+		final int value = counter.incrementAndGet();
+		if (PlatformUI.isWorkbenchRunning()) {
+
+			Runnable r = new Runnable() {
+
+				@Override
+				public void run() {
+					// Mismatch, assume pending job
+					if (value != counter.get()) {
+						return;
+					}
+					doUpdateSelectedScenarios(value, block);
+				}
+			};
+			IWorkbench wb = PlatformUI.getWorkbench();
+			if (block) {
+				if (wb.getDisplay().getThread() == Thread.currentThread()) {
+					r.run();
+				} else {
+					wb.getDisplay().syncExec(r);
+				}
+			} else {
+				wb.getDisplay().asyncExec(r);
+			}
+		}
+	}
+
 	/**
 	 */
-	public void updateSelectedScenarios(final boolean block) {
+	public void doUpdateSelectedScenarios(final int value, final boolean block) {
 		synchronized (this) {
-			// Null out until new version is ready
-			currentSelectedDataProvider = null;
 			final ISelectedDataProvider selectedDataProvider = createSelectedDataProvider();
-			currentSelectedDataProvider = selectedDataProvider;
 
 			final LinkedHashSet<ScenarioInstance> others = new LinkedHashSet<>(selectionProvider.getSelection());
 			ScenarioInstance pinnedInstance = selectionProvider.getPinnedInstance();
@@ -280,11 +320,14 @@ public class SelectedScenariosService {
 				others.remove(pinnedInstance);
 			}
 
+			currentSelectedDataProvider = selectedDataProvider;
 			for (final ISelectedScenariosServiceListener l : listeners) {
 				try {
 					l.selectionChanged(currentSelectedDataProvider, pinnedInstance, others, block);
 				} catch (final Exception e) {
-					log.error(e.getMessage(), e);
+					if (value == counter.get()) {
+						log.error(e.getMessage(), e);
+					}
 				}
 			}
 		}

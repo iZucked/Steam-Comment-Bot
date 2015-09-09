@@ -187,6 +187,7 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 					setInput(table.getRows());
 				}
 			};
+
 			if (block) {
 				if (Display.getDefault().getThread() == Thread.currentThread()) {
 					r.run();

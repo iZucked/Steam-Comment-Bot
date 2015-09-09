@@ -14,8 +14,11 @@ import java.util.Map;
 
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.list.WritableList;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
 import com.google.inject.Inject;
 import com.mmxlabs.lingo.reports.IReportContents;
@@ -63,26 +66,41 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 
 	private Map<Object, ScenarioInstance> elementMap;
 
-	private IObservableList elements;
+	private List<Object> elements;
 
 	@Inject
 	private SelectedScenariosService selectedScenariosService;
 
-	private ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
+	@NonNull
+	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
 
 		@Override
-		public void selectionChanged(ISelectedDataProvider selectedDataProvider, ScenarioInstance pinned, Collection<ScenarioInstance> others, boolean block) {
-			elements.clear();
-			setInput(new WritableList());
-			elementCollector.beginCollecting(pinned != null);
-			if (pinned != null) {
-				elementCollector.collectElements(pinned, (LNGScenarioModel) pinned.getInstance(), true);
+		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
+
+			final Runnable r = new Runnable() {
+				@Override
+				public void run() {
+					elements.clear();
+					elementCollector.beginCollecting(pinned != null);
+					if (pinned != null) {
+						elementCollector.collectElements(pinned, (LNGScenarioModel) pinned.getInstance(), true);
+					}
+					for (final ScenarioInstance other : others) {
+						elementCollector.collectElements(other, (LNGScenarioModel) other.getInstance(), false);
+					}
+					elementCollector.endCollecting();
+					viewer.setInput(elements);
+				}
+			};
+			if (block) {
+				if (Display.getDefault().getThread() == Thread.currentThread()) {
+					r.run();
+				} else {
+					Display.getDefault().syncExec(r);
+				}
+			} else {
+				Display.getDefault().asyncExec(r);
 			}
-			for (final ScenarioInstance other : others) {
-				elementCollector.collectElements(other, (LNGScenarioModel) other.getInstance(), false);
-			}
-			elementCollector.endCollecting();
-			setInput(elements);
 		}
 	};
 
@@ -283,7 +301,7 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 
 	@Override
 	public void initPartControl(final Composite parent) {
-		elements = new WritableList();
+		elements = new LinkedList<Object>();
 		transformer = new PortRotationsReportTransformer(builder);
 		elementCollector = transformer.getElementCollector(elements, this);
 
@@ -302,7 +320,7 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 				}
 			}
 		}
-		viewer.setContentProvider(new ObservableListContentProvider());
+		viewer.setContentProvider(new ArrayContentProvider());
 		setInput(elements);
 
 		selectedScenariosService.addListener(selectedScenariosServiceListener);

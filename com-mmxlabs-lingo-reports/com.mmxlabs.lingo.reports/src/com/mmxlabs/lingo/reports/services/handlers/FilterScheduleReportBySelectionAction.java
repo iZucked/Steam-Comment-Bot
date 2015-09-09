@@ -34,7 +34,7 @@ public class FilterScheduleReportBySelectionAction implements IWorkbenchWindowAc
 	public void run(final IAction action) {
 		final ScenarioComparisonService scenarioComparisonService = (ScenarioComparisonService) window.getWorkbench().getService(ScenarioComparisonService.class);
 		if (scenarioComparisonService != null) {
-			scenarioComparisonService.toggleDiffOption(EDiffOption.FILTER_SCHEDULE_CHART_BY_SELECTION);
+			scenarioComparisonService.toggleDiffOption(EDiffOption.FILTER_SCHEDULE_SUMMARY_BY_SELECTION);
 			setActionChecked(scenarioComparisonService.getDiffOptions().isFilterSelectedElements());
 		}
 	}

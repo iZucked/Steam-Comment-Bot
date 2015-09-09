@@ -126,36 +126,49 @@ public class HeadlineReportView extends ViewPart {
 
 		@Override
 		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
-
-			// if (scheduleModel != null && schedule == scheduleModel.getSchedule()) {
-			// // ++numberOfSchedules;
-			// return Lists.newArrayList(schedule);
-			// }
-			//
-			final List<Object> rowElements = new LinkedList<>();
-			// int numberOfSchedules = 0;
-			// List<RowData> pinnedData = null;
-			if (pinned != null) {
-				LNGScenarioModel instance = (LNGScenarioModel) pinned.getInstance();
-				if (instance != null) {
-					final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
-					if (schedule != null) {
-						pinnedData = transformer.transform(schedule, pinned);
+			final Runnable r = new Runnable() {
+				@Override
+				public void run() {
+					// if (scheduleModel != null && schedule == scheduleModel.getSchedule()) {
+					// // ++numberOfSchedules;
+					// return Lists.newArrayList(schedule);
+					// }
+					//
+					final List<Object> rowElements = new LinkedList<>();
+					// int numberOfSchedules = 0;
+					// List<RowData> pinnedData = null;
+					if (pinned != null) {
+						LNGScenarioModel instance = (LNGScenarioModel) pinned.getInstance();
+						if (instance != null) {
+							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
+							if (schedule != null) {
+								pinnedData = transformer.transform(schedule, pinned);
+							}
+						}
 					}
-				}
-			}
 
-			for (final ScenarioInstance other : others) {
-				LNGScenarioModel instance = (LNGScenarioModel) other.getInstance();
-				if (instance != null) {
-					final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
-					if (schedule != null && scheduleModel != null && schedule == scheduleModel.getSchedule()) {
-						rowElements.add(transformer.transform(schedule, other));
+					for (final ScenarioInstance other : others) {
+						LNGScenarioModel instance = (LNGScenarioModel) other.getInstance();
+						if (instance != null) {
+							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
+							if (schedule != null && scheduleModel != null && schedule == scheduleModel.getSchedule()) {
+								rowElements.add(transformer.transform(schedule, other));
+							}
+						}
 					}
-				}
-			}
 
-			setInput(rowElements);
+					setInput(rowElements);
+				}
+			};
+			if (block) {
+				if (Display.getDefault().getThread() == Thread.currentThread()) {
+					r.run();
+				} else {
+					Display.getDefault().syncExec(r);
+				}
+			} else {
+				Display.getDefault().asyncExec(r);
+			}
 		}
 	};
 

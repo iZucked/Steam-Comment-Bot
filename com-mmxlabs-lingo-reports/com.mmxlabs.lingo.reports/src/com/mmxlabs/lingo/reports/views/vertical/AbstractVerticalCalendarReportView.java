@@ -19,6 +19,7 @@ import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
@@ -72,17 +73,32 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 		@Override
 		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
-			final List<ScenarioInstance> scenarios = new LinkedList<>(others);
-			if (pinned != null) {
-				scenarios.add(0, pinned);
-			}
-			if (!scenarios.isEmpty()) {
-				final ScenarioInstance scenario = scenarios.get(0);
-				if (scenario.getInstance() != gridViewer.getInput()) {
-					gridViewer.setInput(scenario.getInstance());
+
+			final Runnable r = new Runnable() {
+				@Override
+				public void run() {
+					final List<ScenarioInstance> scenarios = new LinkedList<>(others);
+					if (pinned != null) {
+						scenarios.add(0, pinned);
+					}
+					if (!scenarios.isEmpty()) {
+						final ScenarioInstance scenario = scenarios.get(0);
+						if (scenario.getInstance() != gridViewer.getInput()) {
+							gridViewer.setInput(scenario.getInstance());
+						}
+					} else {
+						gridViewer.setInput(null);
+					}
+				}
+			};
+			if (block) {
+				if (Display.getDefault().getThread() == Thread.currentThread()) {
+					r.run();
+				} else {
+					Display.getDefault().syncExec(r);
 				}
 			} else {
-				gridViewer.setInput(null);
+				Display.getDefault().asyncExec(r);
 			}
 		}
 	};

@@ -25,7 +25,7 @@ public class PortRotationsReportTransformer {
 		this.builder = builder;
 	}
 
-	public IScenarioInstanceElementCollector getElementCollector(final IObservableList elements, final PortRotationReportView viewer) {
+	public IScenarioInstanceElementCollector getElementCollector(final List<Object> elements, final PortRotationReportView viewer) {
 		return new ScheduledEventCollector() {
 
 			private int numberOfSchedules;

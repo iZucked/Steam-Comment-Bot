@@ -59,6 +59,7 @@ import org.eclipse.nebula.widgets.ganttchart.ISettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
@@ -1035,18 +1036,34 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 
 		@Override
 		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
+			final Runnable r = new Runnable() {
+				@Override
+				public void run() {
+					List<Object> rowElements = new LinkedList<>();
+					IScenarioInstanceElementCollector elementCollector = getElementCollector();
+					elementCollector.beginCollecting(pinned != null);
+					if (pinned != null) {
+						rowElements.addAll(elementCollector.collectElements(pinned, (LNGScenarioModel) pinned.getInstance(), true));
+					}
+					for (final ScenarioInstance other : others) {
+						rowElements.addAll(elementCollector.collectElements(other, (LNGScenarioModel) other.getInstance(), false));
+					}
+					elementCollector.endCollecting();
+					viewer.setInput(rowElements);
 
-			List<Object> rowElements = new LinkedList<>();
-			IScenarioInstanceElementCollector elementCollector = getElementCollector();
-			elementCollector.beginCollecting(pinned != null);
-			if (pinned != null) {
-				rowElements.addAll(elementCollector.collectElements(pinned, (LNGScenarioModel) pinned.getInstance(), true));
+//					setInput(rowElements);
+//					packAction.run();
+				}
+			};
+			if (block) {
+				if (Display.getDefault().getThread() == Thread.currentThread()) {
+					r.run();
+				} else {
+					Display.getDefault().syncExec(r);
+				}
+			} else {
+				Display.getDefault().asyncExec(r);
 			}
-			for (final ScenarioInstance other : others) {
-				rowElements.addAll(elementCollector.collectElements(other, (LNGScenarioModel) other.getInstance(), false));
-			}
-			elementCollector.endCollecting();
-			setInput(rowElements);
 		}
 	};
 

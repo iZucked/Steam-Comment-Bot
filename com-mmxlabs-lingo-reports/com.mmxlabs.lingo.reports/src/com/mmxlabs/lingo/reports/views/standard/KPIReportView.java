@@ -85,39 +85,55 @@ public class KPIReportView extends ViewPart {
 
 		@Override
 		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
-			final List<Object> rowElements = new LinkedList<>();
-			int numberOfSchedules = 0;
-			List<RowData> pinnedData = null;
-			if (pinned != null) {
-				LNGScenarioModel instance = (LNGScenarioModel) pinned.getInstance();
-				if (instance != null) {
-					final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
-					if (schedule != null) {
-						pinnedData = transformer.transform(schedule, pinned, null);
-						rowElements.addAll(pinnedData);
-						numberOfSchedules++;
+			final Runnable r = new Runnable() {
+				@Override
+				public void run() {
+
+					final List<Object> rowElements = new LinkedList<>();
+
+					int numberOfSchedules = 0;
+					List<RowData> pinnedData = null;
+					if (pinned != null) {
+						LNGScenarioModel instance = (LNGScenarioModel) pinned.getInstance();
+						if (instance != null) {
+							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
+							if (schedule != null) {
+								pinnedData = transformer.transform(schedule, pinned, null);
+								rowElements.addAll(pinnedData);
+								numberOfSchedules++;
+							}
+						}
+					}
+					for (final ScenarioInstance other : others) {
+						LNGScenarioModel instance = (LNGScenarioModel) other.getInstance();
+						if (instance != null) {
+							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
+							if (schedule != null) {
+								rowElements.addAll(transformer.transform(schedule, other, pinnedData));
+								numberOfSchedules++;
+							}
+						}
+					}
+
+					setShowColumns(pinned != null, numberOfSchedules);
+
+					setInput(rowElements);
+					if (!rowElements.isEmpty()) {
+						if (packColumnsAction != null) {
+							packColumnsAction.run();
+						}
 					}
 				}
-			}
-			for (final ScenarioInstance other : others) {
-				LNGScenarioModel instance = (LNGScenarioModel) other.getInstance();
-				if (instance != null) {
-					final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
-					if (schedule != null) {
-						rowElements.addAll(transformer.transform(schedule, other, pinnedData));
-						numberOfSchedules++;
-					}
+			};
+
+			if (block) {
+				if (Display.getDefault().getThread() == Thread.currentThread()) {
+					r.run();
+				} else {
+					Display.getDefault().syncExec(r);
 				}
-			}
-
-			setShowColumns(pinned != null, numberOfSchedules);
-
-			setInput(rowElements);
-
-			if (!rowElements.isEmpty()) {
-				if (packColumnsAction != null) {
-					packColumnsAction.run();
-				}
+			} else {
+				Display.getDefault().asyncExec(r);
 			}
 		}
 	};
@@ -268,7 +284,7 @@ public class KPIReportView extends ViewPart {
 		selectedScenariosService = (SelectedScenariosService) getSite().getService(SelectedScenariosService.class);
 
 		viewer = new GridTableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
-		
+
 		viewer.setContentProvider(new ArrayContentProvider());
 		viewer.setInput(getViewSite());
 

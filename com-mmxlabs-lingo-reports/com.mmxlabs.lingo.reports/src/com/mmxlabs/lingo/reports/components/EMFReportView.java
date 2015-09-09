@@ -41,6 +41,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
@@ -99,35 +100,48 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 
 		@Override
 		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
+			final Runnable r = new Runnable() {
+				@Override
+				public void run() {
+					// Add Difference/Change columns when in Pin/Diff mode
+					final boolean pinDiffMode = !others.isEmpty() && pinned != null;
+					final int numberOfSchedules = others.size() + (pinned == null ? 0 : 1);
+					for (final ColumnBlock handler : getBlockManager().getBlocksInVisibleOrder()) {
+						if (handler != null) {
+							handler.setViewState(numberOfSchedules > 1, pinDiffMode);
+						}
+					}
 
-			// Add Difference/Change columns when in Pin/Diff mode
-			final boolean pinDiffMode = !others.isEmpty() && pinned != null;
-			final int numberOfSchedules = others.size() + (pinned == null ? 0 : 1);
-			for (final ColumnBlock handler : getBlockManager().getBlocksInVisibleOrder()) {
-				if (handler != null) {
-					handler.setViewState(numberOfSchedules > 1, pinDiffMode);
+					final List<Object> rowElements = new LinkedList<>();
+					final IScenarioInstanceElementCollector elementCollector = getElementCollector();
+					elementCollector.beginCollecting(pinned != null);
+					if (pinned != null) {
+						final Collection<? extends Object> elements = elementCollector.collectElements(pinned, (LNGScenarioModel) pinned.getInstance(), true);
+						for (final Object e : elements) {
+							elementMapping.put(e, new WeakReference<>(pinned));
+						}
+						rowElements.addAll(elements);
+					}
+					for (final ScenarioInstance other : others) {
+						final Collection<? extends Object> elements = elementCollector.collectElements(other, (LNGScenarioModel) other.getInstance(), false);
+						for (final Object e : elements) {
+							elementMapping.put(e, new WeakReference<>(other));
+						}
+						rowElements.addAll(elements);
+					}
+					elementCollector.endCollecting();
+					setInput(rowElements);
 				}
-			}
-
-			final List<Object> rowElements = new LinkedList<>();
-			final IScenarioInstanceElementCollector elementCollector = getElementCollector();
-			elementCollector.beginCollecting(pinned != null);
-			if (pinned != null) {
-				final Collection<? extends Object> elements = elementCollector.collectElements(pinned, (LNGScenarioModel) pinned.getInstance(), true);
-				for (final Object e : elements) {
-					elementMapping.put(e, new WeakReference<>(pinned));
+			};
+			if (block) {
+				if (Display.getDefault().getThread() == Thread.currentThread()) {
+					r.run();
+				} else {
+					Display.getDefault().syncExec(r);
 				}
-				rowElements.addAll(elements);
+			} else {
+				Display.getDefault().asyncExec(r);
 			}
-			for (final ScenarioInstance other : others) {
-				final Collection<? extends Object> elements = elementCollector.collectElements(other, (LNGScenarioModel) other.getInstance(), false);
-				for (final Object e : elements) {
-					elementMapping.put(e, new WeakReference<>(other));
-				}
-				rowElements.addAll(elements);
-			}
-			elementCollector.endCollecting();
-			setInput(rowElements);
 		}
 	};
 
@@ -373,21 +387,21 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 		container.setLayout(layout);
 
 		viewer = new EObjectTableViewer(container, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION) {
-//			@Override
-//			protected void inputChanged(final Object input, final Object oldInput) {
-//				super.inputChanged(input, oldInput);
-//
-//				final boolean inputEmpty = (input == null) || ((input instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) input).getCollectedElements().isEmpty());
-//				final boolean oldInputEmpty = (oldInput == null)
-//						|| ((oldInput instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) oldInput).getCollectedElements().isEmpty());
-//
-//				if (inputEmpty != oldInputEmpty) {
-//					// Disabled because running this takes up 50% of the runtime when displaying a new schedule (!)
-//					// if (packColumnsAction != null) {
-//					// packColumnsAction.run();
-//					// }
-//				}
-//			};
+			// @Override
+			// protected void inputChanged(final Object input, final Object oldInput) {
+			// super.inputChanged(input, oldInput);
+			//
+			// final boolean inputEmpty = (input == null) || ((input instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) input).getCollectedElements().isEmpty());
+			// final boolean oldInputEmpty = (oldInput == null)
+			// || ((oldInput instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) oldInput).getCollectedElements().isEmpty());
+			//
+			// if (inputEmpty != oldInputEmpty) {
+			// // Disabled because running this takes up 50% of the runtime when displaying a new schedule (!)
+			// // if (packColumnsAction != null) {
+			// // packColumnsAction.run();
+			// // }
+			// }
+			// };
 
 			@Override
 			protected List<?> getSelectionFromWidget() {

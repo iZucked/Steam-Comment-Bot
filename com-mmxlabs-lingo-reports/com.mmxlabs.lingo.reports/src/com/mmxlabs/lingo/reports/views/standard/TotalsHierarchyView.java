@@ -27,6 +27,7 @@ import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -93,52 +94,65 @@ public class TotalsHierarchyView extends ViewPart {
 
 		@Override
 		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
+			final Runnable r = new Runnable() {
+				@Override
+				public void run() {
+					int numberOfSchedules = others.size() + (pinned == null ? 0 : 1);
+					List<ScenarioInstance> instances = new LinkedList<>(others);
+					if (pinned != null) {
+						instances.add(0, pinned);
+					}
 
-			int numberOfSchedules = others.size() + (pinned == null ? 0 : 1);
-			List<ScenarioInstance> instances = new LinkedList<>(others);
-			if (pinned != null) {
-				instances.add(0, pinned);
-			}
+					final TreeData dummy = new TreeData("");
+					if (instances.size() == 1) {
+						for (final ScenarioInstance other : instances) {
+							LNGScenarioModel instance = (LNGScenarioModel) other.getInstance();
+							if (instance != null) {
+								final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
+								if (schedule != null) {
+									dummy.addChild(createCostsTreeData(schedule));
+									break;
+								}
+							}
+						}
+					} else {
 
-			final TreeData dummy = new TreeData("");
-			if (instances.size() == 1) {
-				for (final ScenarioInstance other : instances) {
-					LNGScenarioModel instance = (LNGScenarioModel) other.getInstance();
-					if (instance != null) {
-						final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
-						if (schedule != null) {
-							dummy.addChild(createCostsTreeData(schedule));
-							break;
+						for (final ScenarioInstance other : instances) {
+							LNGScenarioModel instance = (LNGScenarioModel) other.getInstance();
+							if (instance != null) {
+								final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
+								if (schedule != null) {
+									final String scheduleName = other.getName();
+
+									// final String scheduleName = schedule.getName();
+									// don't sum costs and profits, because it's meaningless
+									// (profits already include costs)
+									final TreeData group = new TreeData(scheduleName, true);
+									group.addChild(createCostsTreeData(schedule));
+									// group.addChild(createProfitTreeData(schedule));
+									dummy.addChild(group);
+
+								}
+							}
 						}
 					}
+					viewer.setInput(dummy);
+
+					if (!dummy.children.isEmpty()) {
+						if (packColumnsAction != null) {
+							packColumnsAction.run();
+						}
+					}
+				}
+			};
+			if (block) {
+				if (Display.getDefault().getThread() == Thread.currentThread()) {
+					r.run();
+				} else {
+					Display.getDefault().syncExec(r);
 				}
 			} else {
-
-				for (final ScenarioInstance other : instances) {
-					LNGScenarioModel instance = (LNGScenarioModel) other.getInstance();
-					if (instance != null) {
-						final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
-						if (schedule != null) {
-							final String scheduleName = other.getName();
-
-							// final String scheduleName = schedule.getName();
-							// don't sum costs and profits, because it's meaningless
-							// (profits already include costs)
-							final TreeData group = new TreeData(scheduleName, true);
-							group.addChild(createCostsTreeData(schedule));
-							// group.addChild(createProfitTreeData(schedule));
-							dummy.addChild(group);
-
-						}
-					}
-				}
-			}
-			viewer.setInput(dummy);
-
-			if (!dummy.children.isEmpty()) {
-				if (packColumnsAction != null) {
-					packColumnsAction.run();
-				}
+				Display.getDefault().asyncExec(r);
 			}
 		}
 	};
