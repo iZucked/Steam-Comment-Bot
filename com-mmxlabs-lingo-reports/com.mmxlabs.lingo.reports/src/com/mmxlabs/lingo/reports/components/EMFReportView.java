@@ -45,11 +45,11 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.internal.e4.compatibility.CompatibilityView;
+import org.eclipse.ui.internal.e4.compatibility.CompatibilityPart;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
@@ -580,9 +580,9 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 	@Override
 	public void selectionChanged(final MPart part, final Object selectedObject) {
 		final Object object = part.getObject();
-		if (object instanceof CompatibilityView) {
-			final CompatibilityView compatibilityView = (CompatibilityView) object;
-			final IViewPart view = compatibilityView.getView();
+		if (object instanceof CompatibilityPart) {
+			final CompatibilityPart compatibilityView = (CompatibilityPart) object;
+			final IWorkbenchPart view = compatibilityView.getPart();
 
 			if (view == this) {
 				return;

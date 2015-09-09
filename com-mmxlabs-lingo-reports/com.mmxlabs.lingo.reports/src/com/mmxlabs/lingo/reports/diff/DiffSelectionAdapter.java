@@ -22,8 +22,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
-import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.internal.e4.compatibility.CompatibilityView;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.internal.e4.compatibility.CompatibilityPart;
 
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
@@ -52,9 +52,9 @@ public class DiffSelectionAdapter implements org.eclipse.e4.ui.workbench.modelin
 	@Override
 	public void selectionChanged(final MPart part, final Object selectedObject) {
 		final Object object = part.getObject();
-		if (object instanceof CompatibilityView) {
-			final CompatibilityView compatibilityView = (CompatibilityView) object;
-			final IViewPart view = compatibilityView.getView();
+		if (object instanceof CompatibilityPart) {
+			final CompatibilityPart compatibilityView = (CompatibilityPart) object;
+			final IWorkbenchPart view = compatibilityView.getPart();
 
 			if (!(view instanceof DiffGroupView)) {
 				return;

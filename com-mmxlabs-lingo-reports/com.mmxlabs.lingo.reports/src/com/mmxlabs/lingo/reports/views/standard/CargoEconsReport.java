@@ -37,6 +37,7 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.internal.e4.compatibility.CompatibilityPart;
 import org.eclipse.ui.internal.e4.compatibility.CompatibilityView;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.PropertySheet;
@@ -125,10 +126,10 @@ public class CargoEconsReport extends ViewPart {
 			@Override
 			public void selectionChanged(MPart part, Object selectedObjects) {
 				final Object object = part.getObject();
-				IViewPart e3part = null;
-				if (object instanceof CompatibilityView) {
-					final CompatibilityView compatibilityView = (CompatibilityView) object;
-					e3part = compatibilityView.getView();
+				IWorkbenchPart e3part = null;
+				if (object instanceof CompatibilityPart) {
+					final CompatibilityPart compatibilityView = (CompatibilityPart) object;
+					e3part = compatibilityView.getPart();
 
 					if (e3part == CargoEconsReport.this) {
 						return;

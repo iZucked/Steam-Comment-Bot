@@ -49,13 +49,13 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.internal.e4.compatibility.CompatibilityView;
+import org.eclipse.ui.internal.e4.compatibility.CompatibilityPart;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.PropertySheet;
 
 import com.google.common.collect.Sets;
-import com.mmxlabs.common.csv.IExportContext;
 import com.mmxlabs.lingo.reports.diff.actions.DeleteDiffAction;
 import com.mmxlabs.lingo.reports.diff.actions.ExtractCycleGroupAction;
 import com.mmxlabs.lingo.reports.internal.Activator.Implementation;
@@ -373,9 +373,9 @@ public class DiffGroupView extends ViewPart implements org.eclipse.e4.ui.workben
 	@Override
 	public void selectionChanged(final MPart part, Object selectedObject) {
 		final Object object = part.getObject();
-		if (object instanceof CompatibilityView) {
-			final CompatibilityView compatibilityView = (CompatibilityView) object;
-			final IViewPart view = compatibilityView.getView();
+		if (object instanceof CompatibilityPart) {
+			final CompatibilityPart compatibilityView = (CompatibilityPart) object;
+			final IWorkbenchPart view = compatibilityView.getPart();
 
 			if (view == this) {
 				return;
