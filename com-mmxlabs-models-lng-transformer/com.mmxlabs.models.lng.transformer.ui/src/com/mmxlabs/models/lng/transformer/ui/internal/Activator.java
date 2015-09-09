@@ -86,6 +86,11 @@ public class Activator extends ValidationPlugin {
 		@Override
 		public void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioInstance oldPin, final ScenarioInstance newPin, boolean block) {
 		}
+
+		@Override
+		public void selectionChanged(ScenarioInstance pinned, Collection<ScenarioInstance> others, boolean block) {
+
+		}
 	};
 
 	/**
