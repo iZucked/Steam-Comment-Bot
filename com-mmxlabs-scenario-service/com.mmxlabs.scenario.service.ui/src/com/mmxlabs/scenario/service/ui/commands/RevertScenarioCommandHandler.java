@@ -14,14 +14,12 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
-import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
 import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceEditorInput;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
 
