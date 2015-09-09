@@ -59,7 +59,7 @@ public class RevertScenarioCommandHandler extends AbstractHandler {
 								try {
 
 									// Deselect from view
-									Activator.getDefault().getScenarioServiceSelectionProvider().deselect(scenarioInstance);
+									Activator.getDefault().getScenarioServiceSelectionProvider().deselect(scenarioInstance, true);
 
 									final ScenarioServiceEditorInput editorInput = new ScenarioServiceEditorInput(scenarioInstance);
 									final IEditorReference[] editorReferences = activePage.findEditors(editorInput, null, IWorkbenchPage.MATCH_INPUT);
@@ -75,10 +75,10 @@ public class RevertScenarioCommandHandler extends AbstractHandler {
 
 									if (editorReferences != null && editorReferences.length > 0) {
 										// scenarioInstance.getScenarioService().load(scenarioInstance);
-										OpenScenarioUtils.openScenarioInstance(activePage, scenarioInstance);
+//										OpenScenarioUtils.openScenarioInstance(activePage, scenarioInstance);
 									}
-								} catch (final PartInitException e) {
-									log.error(e.getMessage(), e);
+//								} catch (final PartInitException e) {
+//									log.error(e.getMessage(), e);
 								} finally {
 									lock.release();
 								}
