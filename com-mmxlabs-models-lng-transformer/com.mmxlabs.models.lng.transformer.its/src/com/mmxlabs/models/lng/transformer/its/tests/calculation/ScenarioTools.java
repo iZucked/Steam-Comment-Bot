@@ -709,9 +709,9 @@ public class ScenarioTools {
 		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 		final EditingDomain ed = new AdapterFactoryEditingDomain(adapterFactory, commandStack);
 
-		final Pair<Schedule, Command> p = LNGSchedulerJobUtils.exportSolution(transformer.getInjector(), scenario, transformer.getOptimiserSettings(), ed, modelEntityMap, startSolution);
-		ed.getCommandStack().execute(p.getSecond());
-		return p.getFirst();
+		final Pair<Command, Schedule> p = LNGSchedulerJobUtils.exportSolution(transformer.getInjector(), scenario, transformer.getOptimiserSettings(), ed, modelEntityMap, startSolution);
+		ed.getCommandStack().execute(p.getFirst());
+		return p.getSecond();
 	}
 
 	/**

@@ -610,8 +610,8 @@ public class PeriodTransformer {
 		r.getContents().add(output);
 		ed.getResourceSet().getResources().add(r);
 
-		final Pair<Schedule, Command> p = LNGSchedulerJobUtils.exportSolution(transformer.getInjector(), output, transformer.getOptimiserSettings(), ed, modelEntityMap, startSolution);
-		ed.getCommandStack().execute(p.getSecond());
+		final Pair<Command, Schedule> p = LNGSchedulerJobUtils.exportSolution(transformer.getInjector(), output, transformer.getOptimiserSettings(), ed, modelEntityMap, startSolution);
+		ed.getCommandStack().execute(p.getFirst());
 
 		return ed;
 	}

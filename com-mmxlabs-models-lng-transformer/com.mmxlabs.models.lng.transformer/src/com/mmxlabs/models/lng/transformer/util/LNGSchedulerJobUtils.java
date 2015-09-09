@@ -99,7 +99,7 @@ public class LNGSchedulerJobUtils {
 	 * @param LABEL_PREFIX
 	 * @return
 	 */
-	public static Pair<Schedule, Command> exportSolution(final Injector injector, final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings, final EditingDomain editingDomain,
+	public static Pair<Command, Schedule> exportSolution(final Injector injector, final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings, final EditingDomain editingDomain,
 			final ModelEntityMap modelEntityMap, final IAnnotatedSolution solution) {
 
 		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
@@ -137,7 +137,7 @@ public class LNGSchedulerJobUtils {
 		// Mark schedule as clean
 		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY, Boolean.FALSE));
 
-		return new Pair<Schedule, Command>(schedule, command);
+		return new Pair<Command, Schedule>(command, schedule);
 	}
 
 	public static CompoundCommand createBlankCommand(final int solutionCurrentProgress) {

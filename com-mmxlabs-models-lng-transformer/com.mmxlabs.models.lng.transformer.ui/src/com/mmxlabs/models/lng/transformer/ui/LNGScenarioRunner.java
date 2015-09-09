@@ -340,9 +340,9 @@ public class LNGScenarioRunner {
 				((CommandProviderAwareEditingDomain) originalEditingDomain).setCommandProvidersDisabled(true);
 			}
 
-			final Pair<Schedule, Command> commandPair = creatExportScheduleCommand(currentProgress, solution);
-			originalEditingDomain.getCommandStack().execute(commandPair.getSecond());
-			return commandPair.getFirst();
+			final Pair<Command, Schedule> commandPair = creatExportScheduleCommand(currentProgress, solution);
+			originalEditingDomain.getCommandStack().execute(commandPair.getFirst());
+			return commandPair.getSecond();
 		} finally {
 			if (originalEditingDomain instanceof CommandProviderAwareEditingDomain) {
 				((CommandProviderAwareEditingDomain) originalEditingDomain).setCommandProvidersDisabled(false);
@@ -350,13 +350,19 @@ public class LNGScenarioRunner {
 		}
 	}
 
-	private Pair<Schedule, Command> creatExportScheduleCommand(final int currentProgress, @Nullable final IAnnotatedSolution solution) {
+	/**
+	 * Returns a Pair containing a command and a null schedule. Once the Command has been executed, the Schedule will be populated.
+	 * 
+	 * @param currentProgress
+	 * @param solution
+	 * @return
+	 */
+	private Pair<Command, Schedule> creatExportScheduleCommand(final int currentProgress, @Nullable final IAnnotatedSolution solution) {
 
 		// Create a "wrapper" to set the user friendly command name for the undo menu
 		final CompoundCommand wrapper = LNGSchedulerJobUtils.createBlankCommand(currentProgress);
 		// Create a reference to be able to grab the Schedule object from the command state.
-		final Schedule[] scheduleRef = new Schedule[1];
-
+		final Pair<Command, Schedule> p = new Pair<>();
 		// Create a custom compound command to create and execute changes as they are created during the command to allow us to have a single command in the history rather than several.
 		final CompoundCommand c = new CompoundCommand() {
 			@Override
@@ -375,16 +381,16 @@ public class LNGScenarioRunner {
 			public void execute() {
 
 				// This either applies to the real scenario or the period copy if present.
-				final Pair<Schedule, Command> updateCommand = LNGSchedulerJobUtils.exportSolution(injector, optimiserScenario, optimiserSettings, optimiserEditingDomain, modelEntityMap, solution);
+				final Pair<Command, Schedule> updateCommand = LNGSchedulerJobUtils.exportSolution(injector, optimiserScenario, optimiserSettings, optimiserEditingDomain, modelEntityMap, solution);
 				if (periodMapping == null) {
 					// Apply to real scenario
-					appendAndExecute(updateCommand.getSecond());
-					scheduleRef[0] = updateCommand.getFirst();
+					appendAndExecute(updateCommand.getFirst());
+					p.setSecond(updateCommand.getSecond());
 				} else {
 					// Period optimisation code path, apply the dual commands to the real scenario.
 
 					// Execute the update command on the period scenario
-					optimiserEditingDomain.getCommandStack().execute(updateCommand.getSecond());
+					optimiserEditingDomain.getCommandStack().execute(updateCommand.getFirst());
 
 					// Export the period scenario changes into the original scenario
 					final PeriodExporter e = new PeriodExporter();
@@ -406,23 +412,24 @@ public class LNGScenarioRunner {
 
 						final ModelEntityMap subModelEntityMap = subTransformer.getModelEntityMap();
 						final IAnnotatedSolution finalSolution = LNGSchedulerJobUtils.evaluateCurrentState(subTransformer);
-						final Pair<Schedule, Command> part2 = LNGSchedulerJobUtils.exportSolution(subTransformer.getInjector(), originalScenario, EcoreUtil.copy(optimiserSettings),
+						final Pair<Command, Schedule> part2 = LNGSchedulerJobUtils.exportSolution(subTransformer.getInjector(), originalScenario, EcoreUtil.copy(optimiserSettings),
 								originalEditingDomain, subModelEntityMap, finalSolution);
-						if (part2.getSecond().canExecute()) {
-							appendAndExecute(part2.getSecond());
+						if (part2.getFirst().canExecute()) {
+							appendAndExecute(part2.getFirst());
 						} else {
 							throw new RuntimeException("Unable to execute period optimisation update command");
 						}
 
 						// Store reference to the final schedule model
-						scheduleRef[0] = part2.getFirst();
+						p.setSecond(part2.getSecond());
 					}
 				}
 			}
 		};
 
 		wrapper.append(c);
-		return new Pair<Schedule, Command>(scheduleRef[0], wrapper);
+		p.setFirst(wrapper);
+		return p;
 
 	}
 
@@ -676,11 +683,11 @@ public class LNGScenarioRunner {
 					// The breakdown optimiser may find a better solution. This will be saved in storeBreakdownSolutionsAsForks
 					if (exportOptimiserSolution) {
 						// export final state
-						exportSchedule(100, bestSolution);
+						finalSchedule = exportSchedule(100, bestSolution);
 					}
 				}
 			} else {
-				exportSchedule(100, bestSolution);
+				finalSchedule = exportSchedule(100, bestSolution);
 			}
 		} finally {
 			progressMonitor.done();
