@@ -15,7 +15,7 @@ import com.mmxlabs.lingo.reports.views.schedule.ConfigurableScheduleReportView;
 import com.mmxlabs.lingo.reports.views.standard.CapacityViolationReportView;
 import com.mmxlabs.lingo.reports.views.standard.CooldownReportView;
 import com.mmxlabs.lingo.reports.views.standard.FitnessReportView;
-import com.mmxlabs.lingo.reports.views.standard.HorizontalKPIReportView;
+import com.mmxlabs.lingo.reports.views.standard.HeadlineReportView;
 import com.mmxlabs.lingo.reports.views.standard.KPIReportView;
 import com.mmxlabs.lingo.reports.views.standard.LatenessReportView;
 import com.mmxlabs.lingo.reports.views.standard.TotalsHierarchyView;
@@ -44,8 +44,8 @@ public class AnalysisPerspective implements IPerspectiveFactory {
 		}
 		// Horizontal KPI
 		{
-			layout.addStandaloneView(HorizontalKPIReportView.ID, false, IPageLayout.TOP, 0.03f, IPageLayout.ID_EDITOR_AREA);
-			final IViewLayout viewLayout = layout.getViewLayout(HorizontalKPIReportView.ID);
+			layout.addStandaloneView(HeadlineReportView.ID, false, IPageLayout.TOP, 0.03f, IPageLayout.ID_EDITOR_AREA);
+			final IViewLayout viewLayout = layout.getViewLayout(HeadlineReportView.ID);
 			viewLayout.setCloseable(false);
 			viewLayout.setMoveable(false);
 		}
