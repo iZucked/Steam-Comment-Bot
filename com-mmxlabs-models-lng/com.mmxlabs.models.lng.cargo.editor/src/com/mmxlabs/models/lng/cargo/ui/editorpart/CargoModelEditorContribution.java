@@ -68,11 +68,11 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 
 		eventPage = editorPart.addPage(sash);
 		editorPart.setPageText(eventPage, "Fleet");
-		
+
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(tradesViewer.getControl(), "com.mmxlabs.lingo.doc.Editor_Trades");
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(vesselViewerPane.getControl(), "com.mmxlabs.lingo.doc.Editor_Fleet");
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(eventViewerPane.getControl(), "com.mmxlabs.lingo.doc.Editor_Fleet");
-		
+
 	}
 
 	@Override
@@ -86,11 +86,11 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			eventViewerPane.setLocked(locked);
 	}
 
+	private static final Class<?>[] handledClasses = { Vessel.class, VesselAvailability.class, VesselEvent.class, HeelOptions.class, Cargo.class, LoadSlot.class, DischargeSlot.class,
+			SlotContractParams.class, SlotVisit.class, EndEvent.class };
+
 	@Override
 	public boolean canHandle(final IStatus status) {
-
-		final Class<?>[] handledClasses = { Vessel.class, VesselAvailability.class, VesselEvent.class, HeelOptions.class, Cargo.class, LoadSlot.class, DischargeSlot.class, SlotContractParams.class,
-				SlotVisit.class, EndEvent.class };
 
 		if (status instanceof DetailConstraintStatusDecorator) {
 			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
@@ -100,6 +100,13 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			for (final Class<?> clazz : handledClasses) {
 				if (clazz.isInstance(target)) {
 					return true;
+				}
+			}
+			for (EObject o : dcsd.getObjects()) {
+				for (final Class<?> clazz : handledClasses) {
+					if (clazz.isInstance(o)) {
+						return true;
+					}
 				}
 			}
 
@@ -112,10 +119,33 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 	public void handle(final IStatus status) {
 		if (status instanceof DetailConstraintStatusDecorator) {
 			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
+
+			EObject target = dcsd.getTarget();
+			// Look in child items for potentially handles classes.
+			{
+				boolean foundTarget = false;
+				for (final Class<?> clazz : handledClasses) {
+					if (clazz.isInstance(target)) {
+						foundTarget = true;
+						break;
+					}
+				}
+				if (!foundTarget) {
+					for (EObject o : dcsd.getObjects()) {
+						for (final Class<?> clazz : handledClasses) {
+							if (clazz.isInstance(o)) {
+								target = o;
+								foundTarget = true;
+							}
+						}
+					}
+				}
+
+			}
+
 			Cargo cargo = null;
 			LoadSlot loadSlot = null;
 			DischargeSlot dischargeSlot = null;
-			EObject target = dcsd.getTarget();
 			if (target instanceof SlotContractParams) {
 				target = target.eContainer();
 			}
