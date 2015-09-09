@@ -24,10 +24,10 @@ import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.internal.e4.compatibility.CompatibilityView;
+import org.eclipse.ui.internal.e4.compatibility.CompatibilityPart;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.PropertySheet;
 
@@ -153,9 +153,9 @@ public abstract class DetailPropertiesView extends ViewPart {
 			public void selectionChanged(final MPart part, final Object selectedObject) {
 				if (part != null) {
 					final Object object = part.getObject();
-					if (object instanceof CompatibilityView) {
-						final CompatibilityView compatibilityView = (CompatibilityView) object;
-						final IViewPart view = compatibilityView.getView();
+					if (object instanceof CompatibilityPart) {
+						final CompatibilityPart compatibilityView = (CompatibilityPart) object;
+						final IWorkbenchPart view = compatibilityView.getPart();
 
 						if (view == DetailPropertiesView.this) {
 							return;
