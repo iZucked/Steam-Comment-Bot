@@ -27,4 +27,7 @@ public interface IAdditionalAttributeProvider {
 	 */
 	@Nullable
 	String[] getAdditionalAttributes(final GridItem item, final int columnIdx);
+
+	@Nullable
+	String[] getAdditionalRowHeaderAttributes(GridItem item);
 }

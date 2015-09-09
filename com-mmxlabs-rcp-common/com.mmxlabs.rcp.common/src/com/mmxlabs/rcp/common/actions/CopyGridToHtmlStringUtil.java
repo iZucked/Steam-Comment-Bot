@@ -155,7 +155,9 @@ public class CopyGridToHtmlStringUtil {
 		sw.write("<tr>");
 
 		if (rowHeadersIncluded) {
-			addCell(sw, item.getHeaderText(), new String[] { "bgcolor='gray'" });
+
+			addCell(sw, item.getHeaderText(), getAdditionalRowHeaderAttributes(item));
+			;
 		}
 
 		final int[] columnOrder = includeAllColumns ? getAllColumns(table) : table.getColumnOrder();
@@ -178,8 +180,7 @@ public class CopyGridToHtmlStringUtil {
 				} else {
 					colourString = "";
 				}
-				addCell(sw,
-						item.getText(colIdx),
+				addCell(sw, item.getText(colIdx),
 						combineAttributes(new String[] { colourString, String.format("rowSpan='%d'", 1 + item.getRowSpan(colIdx)), String.format("colSpan='%d'", 1 + item.getColumnSpan(colIdx)) },
 								getAdditionalAttributes(item, colIdx)));
 				// Increment col idx.
@@ -210,6 +211,13 @@ public class CopyGridToHtmlStringUtil {
 		System.arraycopy(additionalAttributes, 0, combined, strings.length, additionalAttributes.length);
 
 		return combined;
+	}
+
+	private String[] getAdditionalRowHeaderAttributes(GridItem item) {
+		if (additionalAttributeProvider != null) {
+			return additionalAttributeProvider.getAdditionalRowHeaderAttributes(item);
+		}
+		return null;
 	}
 
 	private String[] getAdditionalHeaderAttributes(final GridColumn column) {
