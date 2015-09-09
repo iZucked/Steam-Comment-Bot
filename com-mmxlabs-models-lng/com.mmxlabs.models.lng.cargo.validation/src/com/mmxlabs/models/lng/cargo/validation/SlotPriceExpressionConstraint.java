@@ -9,6 +9,7 @@ import java.util.List;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
+import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.joda.time.DateTime;
 import org.joda.time.YearMonth;
 
@@ -16,7 +17,9 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
+import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils.ValidationResult;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
+import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
@@ -37,7 +40,13 @@ public class SlotPriceExpressionConstraint extends AbstractModelMultiConstraint 
 				final String priceExpression = slot.getPriceExpression();
 				// Permit break even marker
 				if (!"?".equals(priceExpression)) {
-					PriceExpressionUtils.validatePriceExpression(ctx, slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION, priceExpression, failures);
+					ValidationResult result = PriceExpressionUtils.validatePriceExpression(ctx, slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION, priceExpression);
+					if (!result.isOk()) {
+						String message = String.format("[Slot|'%s']%s", slot.getName(), result.getErrorDetails());
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+						dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION);
+						failures.add(dsd);
+					}
 				}
 
 				final DateTime start = slot.getWindowStartWithSlotOrPortTime();
