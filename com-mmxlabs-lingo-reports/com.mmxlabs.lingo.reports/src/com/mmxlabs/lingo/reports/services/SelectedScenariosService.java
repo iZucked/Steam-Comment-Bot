@@ -43,6 +43,7 @@ public class SelectedScenariosService {
 	private final Set<CommandStack> commandStacks = new HashSet<>();
 	private final Map<ScenarioInstance, ModelReference> scenarioReferences = new HashMap<>();
 	private final Map<CommandStack, ScenarioInstance> commandStackMap = new HashMap<>();
+	// TODO: Create an explicity remove/updateRecord method set to ensure record.dispose() is called.
 	private final Map<ScenarioInstance, KeyValueRecord> scenarioRecords = new HashMap<>();
 
 	private IScenarioServiceSelectionProvider selectionProvider;
@@ -73,7 +74,10 @@ public class SelectedScenariosService {
 				for (final Object o : result) {
 					if (o instanceof ScheduleModel || o instanceof Schedule) {
 						updateSelectedScenarios(false);
-						scenarioRecords.remove(commandStackMap.get(commandStack));
+						KeyValueRecord record = scenarioRecords.remove(commandStackMap.get(commandStack));
+						if (record != null) {
+							record.dispose();
+						}
 						return;
 					}
 				}
@@ -263,7 +267,10 @@ public class SelectedScenariosService {
 		if (ref != null) {
 			ref.close();
 		}
-		scenarioRecords.remove(instance);
+		final KeyValueRecord record = scenarioRecords.remove(instance);
+		if (record != null) {
+			record.dispose();
+		}
 	}
 
 	public void addListener(@NonNull final ISelectedScenariosServiceListener listener) {
@@ -349,7 +356,7 @@ public class SelectedScenariosService {
 		@NonNull
 		private final Collection<EObject> children;
 
-		private final ModelReference ref;
+		private ModelReference ref;
 
 		public KeyValueRecord(@NonNull final ScenarioInstance scenarioInstance, @NonNull final LNGScenarioModel scenarioModel, @NonNull final LNGPortfolioModel portfolioModel,
 				@Nullable final Schedule schedule, @NonNull final Collection<EObject> children) {
@@ -358,12 +365,23 @@ public class SelectedScenariosService {
 			this.portfolioModel = portfolioModel;
 			this.schedule = schedule;
 			this.children = children;
-			ref = scenarioInstance.getReference();
+			this.ref = scenarioInstance.getReference();
+		}
+
+		public void dispose() {
+			if (ref != null) {
+				ref.close();
+				ref = null;
+			}
+
 		}
 
 		@Override
 		protected void finalize() throws Throwable {
-			ref.close();
+			if (ref != null) {
+				ref.close();
+				ref = null;
+			}
 		};
 
 		@NonNull
@@ -430,7 +448,10 @@ public class SelectedScenariosService {
 				record = scenarioRecords.get(scenarioInstance);
 			} else {
 				record = createKeyValueRecord(scenarioInstance);
-				scenarioRecords.put(scenarioInstance, record);
+				KeyValueRecord oldRecord = scenarioRecords.put(scenarioInstance, record);
+				if (oldRecord != null) {
+					oldRecord.dispose();
+				}
 			}
 			assert record != null;
 			provider.addScenario(record.getScenarioInstance(), record.getScenarioModel(), record.getPortfolioModel(), record.getSchedule(), record.getChildren());

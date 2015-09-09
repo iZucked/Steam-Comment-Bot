@@ -189,6 +189,11 @@ public class ChangeSetView implements IAdaptable {
 
 		@Override
 		public void run() {
+
+			if (viewer.getControl().isDisposed()) {
+				return;
+			}
+
 			// TODO: Extract vessel columns and generate.
 			final Set<String> vesselnames = new LinkedHashSet<>();
 			if (newRoot != null) {
@@ -227,7 +232,6 @@ public class ChangeSetView implements IAdaptable {
 
 			diagram.setChangeSetRoot(newRoot);
 			viewer.setInput(newRoot);
-
 			// Release after creating the new one so we increment reference counts before decrementing, which could cause a scenario unload/load cycle
 			cleanUp(ChangeSetView.this.root);
 			ChangeSetView.this.root = newRoot;
@@ -244,15 +248,40 @@ public class ChangeSetView implements IAdaptable {
 		}
 
 		@Override
-		public void onPreScenarioInstanceDelete(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+		public void onPreScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
 			if (scenarioInstance == this.scenarioInstance) {
-				Display.getDefault().asyncExec(new Runnable() {
+				final Runnable r = new Runnable() {
+
 					@Override
 					public void run() {
-
 						view.handleAnalyseScenario(null);
 					}
-				});
+				};
+				final Display display = PlatformUI.getWorkbench().getDisplay();
+				if (display.getThread() == Thread.currentThread()) {
+					r.run();
+				} else {
+					display.syncExec(r);
+				}
+			}
+		}
+
+		@Override
+		public void onPreScenarioInstanceDelete(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+			if (scenarioInstance == this.scenarioInstance) {
+				final Runnable r = new Runnable() {
+
+					@Override
+					public void run() {
+						view.handleAnalyseScenario(null);
+					}
+				};
+				final Display display = PlatformUI.getWorkbench().getDisplay();
+				if (display.getThread() == Thread.currentThread()) {
+					r.run();
+				} else {
+					display.syncExec(r);
+				}
 			}
 		}
 	}
@@ -1263,7 +1292,9 @@ public class ChangeSetView implements IAdaptable {
 	private void setEmptyData() {
 		final ChangeSetRoot newRoot = ChangesetFactory.eINSTANCE.createChangeSetRoot();
 		diagram.setChangeSetRoot(newRoot);
-		viewer.setInput(newRoot);
+		if (!viewer.getControl().isDisposed()) {
+			viewer.setInput(newRoot);
+		}
 		cleanUp(ChangeSetView.this.root);
 		ChangeSetView.this.root = newRoot;
 	}
@@ -1406,8 +1437,8 @@ public class ChangeSetView implements IAdaptable {
 		diagram.setChangeSetRoot(ChangesetFactory.eINSTANCE.createChangeSetRoot());
 		this.root = null;
 		{
-			for (Map.Entry<ScenarioInstance, ScenarioInstanceDeletedListener> e : listenerMap.entrySet()) {
-				ScenarioInstance scenarioInstance = e.getKey();
+			for (final Map.Entry<ScenarioInstance, ScenarioInstanceDeletedListener> e : listenerMap.entrySet()) {
+				final ScenarioInstance scenarioInstance = e.getKey();
 				final IScenarioService scenarioService = scenarioInstance.getScenarioService();
 				final ScenarioInstanceDeletedListener listener = e.getValue();
 				if (scenarioService != null && listener != null) {
