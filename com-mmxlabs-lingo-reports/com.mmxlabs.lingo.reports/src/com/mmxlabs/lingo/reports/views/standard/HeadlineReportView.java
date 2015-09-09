@@ -157,6 +157,10 @@ public class HeadlineReportView extends ViewPart {
 						}
 					}
 
+					if (rowElements.isEmpty()) {
+						rowElements.add(new RowData("", null, null, null, null, null, null, null, null, null, null));
+					}
+
 					setInput(rowElements);
 				}
 			};
@@ -527,7 +531,9 @@ public class HeadlineReportView extends ViewPart {
 	}
 
 	public void setInput(final Object input) {
-		viewer.setInput(input);
+		if (viewer.getControl() != null && !viewer.getControl().isDisposed()) {
+			viewer.setInput(input);
+		}
 	}
 
 	private String format(final Long value, final String type) {
