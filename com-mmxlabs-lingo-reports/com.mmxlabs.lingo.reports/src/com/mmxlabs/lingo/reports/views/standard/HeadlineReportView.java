@@ -165,7 +165,7 @@ public class HeadlineReportView extends ViewPart {
 
 					if (rowElements.isEmpty()) {
 						if (pPinnedData != null) {
-							rowElements.add(pinnedData);
+							rowElements.add(pPinnedData);
 							pPinnedData = null;
 						} else {
 							rowElements.add(new RowData("", null, null, null, null, null, null, null, null, null, null));
