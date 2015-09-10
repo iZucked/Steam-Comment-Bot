@@ -135,13 +135,14 @@ public class HeadlineReportView extends ViewPart {
 				@Override
 				public void run() {
 					pinnedData = null;
+					RowData pPinnedData = null;
 					final List<Object> rowElements = new LinkedList<>();
 					if (pinned != null) {
 						final LNGScenarioModel instance = (LNGScenarioModel) pinned.getInstance();
 						if (instance != null) {
 							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
 							if (schedule != null) {
-								pinnedData = transformer.transform(schedule, pinned);
+								pPinnedData = transformer.transform(schedule, pinned);
 							}
 						}
 					}
@@ -151,7 +152,7 @@ public class HeadlineReportView extends ViewPart {
 						if (instance != null) {
 							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
 							if (schedule != null) {
-								if (pinnedData != null) {
+								if (pPinnedData != null) {
 									rowElements.add(transformer.transform(schedule, other));
 								} else {
 									if (scheduleModel != null && schedule == scheduleModel.getSchedule()) {
@@ -163,14 +164,15 @@ public class HeadlineReportView extends ViewPart {
 					}
 
 					if (rowElements.isEmpty()) {
-						if (pinned != null) {
+						if (pPinnedData != null) {
 							rowElements.add(pinnedData);
-							pinnedData = null;
+							pPinnedData = null;
 						} else {
 							rowElements.add(new RowData("", null, null, null, null, null, null, null, null, null, null));
 						}
 					}
 
+					pinnedData = pPinnedData;
 					ViewerHelper.setInput(viewer, true, rowElements);
 				}
 			};
