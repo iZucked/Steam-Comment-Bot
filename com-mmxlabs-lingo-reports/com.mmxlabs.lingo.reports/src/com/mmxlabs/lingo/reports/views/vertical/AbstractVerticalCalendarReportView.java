@@ -5,7 +5,6 @@
 package com.mmxlabs.lingo.reports.views.vertical;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,7 +26,6 @@ import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.views.vertical.providers.EventProvider;
-import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
@@ -67,6 +65,11 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 	public static final String ID = "com.mmxlabs.lingo.reports.verticalreport";
 
+	/**
+	 * Property used in combination with unit tests so copy/paste to clipboard returns a constant date rather than the current date.
+	 */
+	public static final String PROPERTY_RUNNING_ITS = "com.mmxlabs.lingo.reports.verticalreport.running.its";
+
 	private SelectedScenariosService selectedScenariosService;
 
 	@NonNull
@@ -86,11 +89,14 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 						final ScenarioInstance scenario = scenarios.get(0);
 						if (scenario.getInstance() != gridViewer.getInput()) {
 							ViewerHelper.setInput(gridViewer, true, scenario.getInstance());
+							setCurrentScenario(scenario);
 						}
 					} else {
 						ViewerHelper.setInput(gridViewer, true, null);
+						setCurrentScenario(null);
 					}
 				}
+
 			};
 			RunnerHelper.exec(r, block);
 		}
@@ -216,4 +222,8 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	 * @param data
 	 */
 	protected abstract List<CalendarColumn> createCalendarCols(final ScheduleSequenceData data);
+
+	protected void setCurrentScenario(@Nullable ScenarioInstance instance) {
+		// For sub classes
+	}
 }
