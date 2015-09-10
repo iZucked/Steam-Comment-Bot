@@ -31,7 +31,6 @@ import com.mmxlabs.lingo.reports.views.schedule.EquivalanceGroupBuilder;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -142,32 +141,19 @@ public final class ChangeSetTransformerUtil {
 					ChangeSetRow otherRow = rhsRowMap.get(getKeyName(slotAllocation.getSlot()));
 
 					if (otherRow == null) {
-						// String rowName = getRowName(slotAllocation.getSlot());
-						// if (loadSlot instanceof SpotSlot) {
-						if (rhsRowMap.containsKey("market-" + slotAllocation.getSlot().getName())) {
+						if (slotAllocation.getSlot() instanceof SpotSlot && rhsRowMap.containsKey("market-" + slotAllocation.getSlot().getName())) {
 							otherRow = rhsRowMap.get("market-" + slotAllocation.getSlot().getName());
 						} else {
-							// row = ChangesetFactory.eINSTANCE.createChangeSetRow();
-							// rows.add(row);
-							// row.setLhsName(rowName);
-							// row.setLoadSlot(loadSlot);
-							// lhsRowMap.put(rowKey, row);
-							// lhsRowMap.put(row.getLhsName(), row);
-							// }
-							// } else
-							//
-
-							// Special case, a spot slot will have no "OpenSlotAllocation" to pair up to, so create a new row here.
-							assert slotAllocation.getSlot() instanceof SpotSlot;
 							otherRow = ChangesetFactory.eINSTANCE.createChangeSetRow();
 							rows.add(otherRow);
 							rhsRowMap.put(getKeyName(slotAllocation.getSlot()), otherRow);
-							rhsRowMap.put("market-" + slotAllocation.getSlot().getName(), otherRow);
+							if (slotAllocation.getSlot() instanceof SpotSlot) {
+								rhsRowMap.put("market-" + slotAllocation.getSlot().getName(), otherRow);
+							}
 							otherRow.setRhsName(getRowName(slotAllocation.getSlot()));
 						}
 						otherRow.setOriginalDischargeAllocation(slotAllocation);
 						otherRow.setDischargeSlot((DischargeSlot) slotAllocation.getSlot());
-						// otherRow.setWiringChange(true);
 					}
 					if (row != otherRow) {
 						row.setRhsWiringLink(otherRow);
