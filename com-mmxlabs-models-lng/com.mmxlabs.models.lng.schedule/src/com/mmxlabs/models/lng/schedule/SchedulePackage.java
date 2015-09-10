@@ -3999,13 +3999,22 @@ public interface SchedulePackage extends EPackage {
 	int BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE = GENERAL_PNL_DETAILS_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Extra Upside PNL</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL = GENERAL_PNL_DETAILS_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Basic Slot PNL Details</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASIC_SLOT_PNL_DETAILS_FEATURE_COUNT = GENERAL_PNL_DETAILS_FEATURE_COUNT + 4;
+	int BASIC_SLOT_PNL_DETAILS_FEATURE_COUNT = GENERAL_PNL_DETAILS_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of operations of the '<em>Basic Slot PNL Details</em>' class.
@@ -5574,6 +5583,17 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getBasicSlotPNLDetails_HedgingValue();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getExtraUpsidePNL <em>Extra Upside PNL</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Extra Upside PNL</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getExtraUpsidePNL()
+	 * @see #getBasicSlotPNLDetails()
+	 * @generated
+	 */
+	EAttribute getBasicSlotPNLDetails_ExtraUpsidePNL();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.EventGrouping <em>Event Grouping</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6830,6 +6850,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE = eINSTANCE.getBasicSlotPNLDetails_HedgingValue();
+
+		/**
+		 * The meta object literal for the '<em><b>Extra Upside PNL</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL = eINSTANCE.getBasicSlotPNLDetails_ExtraUpsidePNL();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.EventGroupingImpl <em>Event Grouping</em>}' class.

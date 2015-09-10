@@ -253,6 +253,7 @@
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="hedgingValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
         unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="extraUpsidePNL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EventGrouping">
     <eStructuralFeatures xsi:type="ecore:EReference" name="events" lowerBound="1"

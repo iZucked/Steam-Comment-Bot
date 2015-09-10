@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl#getAdditionalPNL <em>Additional PNL</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl#getCancellationFees <em>Cancellation Fees</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl#getHedgingValue <em>Hedging Value</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl#getExtraUpsidePNL <em>Extra Upside PNL</em>}</li>
  * </ul>
  *
  * @generated
@@ -127,6 +128,26 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	 * @ordered
 	 */
 	protected boolean hedgingValueESet;
+
+	/**
+	 * The default value of the '{@link #getExtraUpsidePNL() <em>Extra Upside PNL</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getExtraUpsidePNL()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int EXTRA_UPSIDE_PNL_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getExtraUpsidePNL() <em>Extra Upside PNL</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getExtraUpsidePNL()
+	 * @generated
+	 * @ordered
+	 */
+	protected int extraUpsidePNL = EXTRA_UPSIDE_PNL_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -286,6 +307,27 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getExtraUpsidePNL() {
+		return extraUpsidePNL;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setExtraUpsidePNL(int newExtraUpsidePNL) {
+		int oldExtraUpsidePNL = extraUpsidePNL;
+		extraUpsidePNL = newExtraUpsidePNL;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL, oldExtraUpsidePNL, extraUpsidePNL));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -297,6 +339,8 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 				return getCancellationFees();
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE:
 				return getHedgingValue();
+			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL:
+				return getExtraUpsidePNL();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -320,6 +364,9 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 				return;
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE:
 				setHedgingValue((Integer)newValue);
+				return;
+			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL:
+				setExtraUpsidePNL((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -345,6 +392,9 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE:
 				unsetHedgingValue();
 				return;
+			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL:
+				setExtraUpsidePNL(EXTRA_UPSIDE_PNL_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -365,6 +415,8 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 				return isSetCancellationFees();
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE:
 				return isSetHedgingValue();
+			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL:
+				return extraUpsidePNL != EXTRA_UPSIDE_PNL_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -387,6 +439,8 @@ public class BasicSlotPNLDetailsImpl extends GeneralPNLDetailsImpl implements Ba
 		if (cancellationFeesESet) result.append(cancellationFees); else result.append("<unset>");
 		result.append(", hedgingValue: ");
 		if (hedgingValueESet) result.append(hedgingValue); else result.append("<unset>");
+		result.append(", extraUpsidePNL: ");
+		result.append(extraUpsidePNL);
 		result.append(')');
 		return result.toString();
 	}
