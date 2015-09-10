@@ -68,6 +68,8 @@ import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.filter.FilterField;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.SelectionHelper;
+import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -130,7 +132,7 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 						rowElements.addAll(elements);
 					}
 					elementCollector.endCollecting();
-					setInput(rowElements);
+					ViewerHelper.setInput(viewer, true, rowElements);
 				}
 			};
 
@@ -553,29 +555,13 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 
 	@Override
 	public void setFocus() {
-		if (!viewer.getGrid().isDisposed()) {
-			viewer.getGrid().setFocus();
-		}
-	}
-
-	public void setInput(final Object input) {
-		RunnerHelper.asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				if (!viewer.getControl().isDisposed()) {
-					viewer.setInput(input);
-				}
-			}
-		});
+		ViewerHelper.setFocus(viewer);
 	}
 
 	@Override
 	public void selectionChanged(final MPart part, final Object selectedObject) {
-		final Object object = part.getObject();
-		if (object instanceof CompatibilityPart) {
-			final CompatibilityPart compatibilityView = (CompatibilityPart) object;
-			final IWorkbenchPart view = compatibilityView.getPart();
+		{
+			final IWorkbenchPart view = SelectionHelper.getE3Part(part);
 
 			if (view == this) {
 				return;
@@ -585,16 +571,9 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 			}
 		}
 
-		ISelection selection = null;
 		// Convert selection
-		if (selectedObject instanceof ISelection) {
-			selection = (ISelection) selectedObject;
-		} else if (selectedObject instanceof Object[]) {
-			selection = new StructuredSelection((Object[]) selectedObject);
-		} else {
-			selection = new StructuredSelection(selectedObject);
-		}
-		viewer.setSelection(selection, true);
+		final ISelection selection = SelectionHelper.adaptSelection(selectedObject);
+		ViewerHelper.setSelection(viewer, true, selection, true);
 	}
 
 	protected boolean handleSelections() {
