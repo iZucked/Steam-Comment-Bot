@@ -89,7 +89,7 @@ public class AbstractOptimisationResultTester {
 	/**
 	 * Toggle between storing fitness names and values in a properties file and testing the current fitnesses against the stored values. Should be run as part of a plugin test.
 	 */
-	private static final boolean storeFitnessMap = true;
+	private static final boolean storeFitnessMap = false;
 	private static final boolean storeReports = false;
 
 	static {
