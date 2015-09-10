@@ -481,8 +481,18 @@ public class FileScenarioService extends AbstractScenarioService {
 		backupLock.release();
 
 		boolean attemptBackup = true;
-		resource = resourceSet.createResource(storeURI);
+		boolean mainFileExists = false;
+		boolean backupFileExists = false;
+		if (storeURI.isFile() && !new File(storeURI.toFileString()).exists()) {
+			resource = null;
+			mainFileExists = false;
+		} else {
+			// Assume it exists
+			mainFileExists = true;
+			resource = resourceSet.createResource(storeURI);
+		}
 		boolean resourceExisted = false;
+		URI backupURI = URI.createURI(storeURI.toString() + ".backup");
 		try {
 			resource.load(options);
 			resourceExisted = true;
@@ -493,14 +503,30 @@ public class FileScenarioService extends AbstractScenarioService {
 			attemptBackup = false;
 			// "Unload" the resource -- this clears the loaded flag
 			resource.unload();
-			// Change to the bnack URI
-			resource.setURI(URI.createURI(storeURI.toString() + ".backup"));
+			// Change to the backup URI
+			if (backupURI.isFile() && !new File(backupURI.toFileString()).exists()) {
+				backupFileExists = false;
+			} else {
+				// Assume it exists
+				backupFileExists = true;
+			}
+
+			resource.setURI(backupURI);
+
 			try {
 				resource.load(options);
 				resourceExisted = true;
 			} catch (final IOException ex2) {
-				// FIXME: We can also get here on a clean workspace start up where the models have not yet been created.
-				log.error("Error reading both main and backup scenario service models.", ex2);
+				if (mainFileExists && backupFileExists) {
+					// FIXME: We can also get here on a clean workspace start up where the models have not yet been created.
+					log.error("Error reading both main and backup scenario service models.", ex2);
+				} else if (!mainFileExists && backupFileExists) {
+					// FIXME: We can also get here on a clean workspace start up where the models have not yet been created.
+					log.error("Error reading backup scenario service models.", ex2);
+				} else if (mainFileExists && !backupFileExists) {
+					// FIXME: We can also get here on a clean workspace start up where the models have not yet been created.
+					log.error("Error reading main scenario service models.", ex2);
+				}
 			} finally {
 				// Restore original URI for saves later on
 				resource.setURI(storeURI);
@@ -519,7 +545,7 @@ public class FileScenarioService extends AbstractScenarioService {
 				log.debug("Backing up " + storeURI);
 				final InputStream inputStream = resourceSet.getURIConverter().createInputStream(storeURI);
 				try {
-					final OutputStream outputStream = resourceSet.getURIConverter().createOutputStream(URI.createURI(storeURI.toString() + ".backup"));
+					final OutputStream outputStream = resourceSet.getURIConverter().createOutputStream(backupURI);
 					int x;
 					while ((x = inputStream.read()) != -1) {
 						outputStream.write(x);
@@ -538,7 +564,7 @@ public class FileScenarioService extends AbstractScenarioService {
 
 		result.setDescription("File scenario service with store " + storeURI);
 		result.setLocal(true);
-		
+
 		// modify any old scenarios to fix wrong pointing
 		makeRelativeURIs(result);
 		recoverLostScenarios(result);
