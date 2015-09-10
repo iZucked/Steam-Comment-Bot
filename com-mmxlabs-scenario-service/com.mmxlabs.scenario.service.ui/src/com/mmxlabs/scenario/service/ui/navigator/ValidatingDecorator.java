@@ -17,6 +17,7 @@ import org.eclipse.jface.viewers.LabelProviderChangedEvent;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
@@ -71,7 +72,7 @@ public class ValidatingDecorator extends LabelProvider implements ILightweightLa
 				super.notifyChanged(notification);
 				if (notification.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_ValidationStatusCode()) {
 					final LabelProviderChangedEvent event = new LabelProviderChangedEvent(ValidatingDecorator.this, scenarioInstance);
-					Display.getDefault().asyncExec(new Runnable() {
+					RunnerHelper.asyncExec(new Runnable() {
 						@Override
 						public void run() {
 							fireLabelProviderChanged(event);
