@@ -43,6 +43,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lingo.its.internal.Activator;
 import com.mmxlabs.lingo.reports.IReportContents;
+import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalCalendarReportView;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -111,6 +112,8 @@ public class AbstractOptimisationResultTester {
 
 		// Enforce UK Locale Needed for running tests on build server. Keeps date format consistent.
 		Locale.setDefault(Locale.UK);
+		
+		System.setProperty(AbstractVerticalCalendarReportView.PROPERTY_RUNNING_ITS, Boolean.TRUE.toString());
 	}
 
 	// Key prefixes used in the properties file.
