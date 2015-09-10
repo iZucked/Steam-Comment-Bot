@@ -51,7 +51,6 @@ import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
-import org.eclipse.nebula.widgets.grid.internal.DefaultColumnGroupHeaderRenderer;
 import org.eclipse.nebula.widgets.grid.internal.DefaultColumnHeaderRenderer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
@@ -83,6 +82,7 @@ import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.IScenarioServiceListener;
 import com.mmxlabs.scenario.service.impl.ScenarioServiceListener;
@@ -132,10 +132,8 @@ public class ChangeSetView implements IAdaptable {
 				final List<LNGScenarioModel> rootObjects, final Map<EObject, Set<EObject>> equivalancesMap) {
 			if (ChangeSetView.this.viewMode == ViewMode.COMPARE) {
 				cleanUpVesselColumns();
-
 				if (pin == null || other == null) {
 					setEmptyData();
-
 				} else {
 					final Display display = PlatformUI.getWorkbench().getDisplay();
 					final ProgressMonitorDialog d = new ProgressMonitorDialog(display.getActiveShell());
@@ -190,7 +188,6 @@ public class ChangeSetView implements IAdaptable {
 
 		@Override
 		public void run() {
-
 			if (viewer.getControl().isDisposed()) {
 				return;
 			}
@@ -234,8 +231,9 @@ public class ChangeSetView implements IAdaptable {
 			diagram.setChangeSetRoot(newRoot);
 			viewer.setInput(newRoot);
 			// Release after creating the new one so we increment reference counts before decrementing, which could cause a scenario unload/load cycle
-			cleanUp(ChangeSetView.this.root);
+			ChangeSetRoot oldRoot = ChangeSetView.this.root;
 			ChangeSetView.this.root = newRoot;
+			cleanUp(oldRoot);
 		}
 	}
 
@@ -250,15 +248,28 @@ public class ChangeSetView implements IAdaptable {
 
 		@Override
 		public void onPreScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-			if (scenarioInstance == this.scenarioInstance) {
+			boolean linkedScenario = false;
+			ChangeSetRoot root = view.root;
+			if (root != null) {
+				for (ChangeSet cs : root.getChangeSets()) {
+					if (scenarioInstance == cs.getBaseScenario()) {
+						linkedScenario = true;
+					} else if (scenarioInstance == cs.getCurrentScenario()) {
+						linkedScenario = true;
+					} else if (scenarioInstance == cs.getPrevScenario()) {
+						linkedScenario = true;
+					}
+				}
+			}
+			if (linkedScenario) {
 				final Runnable r = new Runnable() {
 
 					@Override
 					public void run() {
+
 						view.handleAnalyseScenario(null);
 					}
 				};
-
 				RunnerHelper.syncExec(r);
 			}
 		}
@@ -266,14 +277,30 @@ public class ChangeSetView implements IAdaptable {
 		@Override
 		public void onPreScenarioInstanceDelete(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
 			if (scenarioInstance == this.scenarioInstance) {
-				final Runnable r = new Runnable() {
-
-					@Override
-					public void run() {
-						view.handleAnalyseScenario(null);
+				boolean linkedScenario = false;
+				ChangeSetRoot root = view.root;
+				if (root != null) {
+					for (ChangeSet cs : root.getChangeSets()) {
+						if (scenarioInstance == cs.getBaseScenario()) {
+							linkedScenario = true;
+						} else if (scenarioInstance == cs.getCurrentScenario()) {
+							linkedScenario = true;
+						} else if (scenarioInstance == cs.getPrevScenario()) {
+							linkedScenario = true;
+						}
 					}
-				};
-				RunnerHelper.syncExec(r);
+				}
+				if (linkedScenario) {
+					final Runnable r = new Runnable() {
+
+						@Override
+						public void run() {
+
+							view.handleAnalyseScenario(null);
+						}
+					};
+					RunnerHelper.syncExec(r);
+				}
 			}
 		}
 	}
@@ -1341,46 +1368,14 @@ public class ChangeSetView implements IAdaptable {
 
 	private void setEmptyData() {
 		final ChangeSetRoot newRoot = ChangesetFactory.eINSTANCE.createChangeSetRoot();
-		diagram.setChangeSetRoot(newRoot);
-		if (!viewer.getControl().isDisposed()) {
-			viewer.setInput(newRoot);
-		}
-		cleanUp(ChangeSetView.this.root);
-		ChangeSetView.this.root = newRoot;
-	}
 
-	// public void setChangeSetData(final ScenarioInstance pin, final ScenarioInstance diff) {
-	//
-	// cleanUpVesselColumns();
-	//
-	// if (pin == null || diff == null) {
-	// setEmptyData();
-	//
-	// } else {
-	// final Display display = PlatformUI.getWorkbench().getDisplay();
-	// final ProgressMonitorDialog d = new ProgressMonitorDialog(display.getActiveShell());
-	// try {
-	// d.run(true, false, new IRunnableWithProgress() {
-	//
-	// @Override
-	// public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-	//
-	// final ScheduleDiffUtils scheduleDiffUtils = new ScheduleDiffUtils();
-	// scheduleDiffUtils.setCheckAssignmentDifferences(true);
-	// scheduleDiffUtils.setCheckSpotMarketDifferences(true);
-	// scheduleDiffUtils.setCheckNextPortDifferences(true);
-	// final ChangeSetTransformer transformer = new ChangeSetTransformer(scheduleDiffUtils, Collections.<ICustomRelatedSlotHandler> emptyList());
-	// final ChangeSetRoot newRoot = transformer.createDataModel(pin, diff, monitor);
-	// display.asyncExec(new ViewUpdateRunnable(newRoot));
-	// }
-	// });
-	// } catch (InvocationTargetException | InterruptedException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	// }
-	//
-	// }
+		diagram.setChangeSetRoot(newRoot);
+		ViewerHelper.setInput(viewer, true, newRoot);
+
+		ChangeSetRoot oldRoot = ChangeSetView.this.root;
+		ChangeSetView.this.root = newRoot;
+		cleanUp(oldRoot);
+	}
 
 	private void cleanUpVesselColumns() {
 		if (vesselColumnGroup != null && !vesselColumnGroup.isDisposed()) {
@@ -1514,7 +1509,7 @@ public class ChangeSetView implements IAdaptable {
 
 	@Focus
 	public void setFocus() {
-		viewer.getControl().setFocus();
+		ViewerHelper.setFocus(viewer);
 	}
 
 	private ITreeContentProvider createContentProvider() {
@@ -1599,69 +1594,6 @@ public class ChangeSetView implements IAdaptable {
 			return;
 		}
 		this.viewMode = ViewMode.ACTION_SET;
-		// updateToolItem(part, viewMode);
 		setActionSetData(target);
 	}
-
-	// @Inject
-	// @Optional
-	// private void handleChangeSetsScenario(@UIEventTopic(ChangeSetViewEventConstants.EVENT_ANALYSE_CHANGE_SETS) final Object _unused_) {
-	//
-	// final ScenarioInstance pin = scenarioSelectionProvider.getPinnedInstance();
-	// ScenarioInstance diff = null;
-	//
-	// for (final ScenarioInstance s : scenarioSelectionProvider.getSelection()) {
-	// if (s != pin) {
-	// diff = s;
-	// break;
-	// }
-	// }
-	// setChangeSetData(pin, diff);
-	// }
-
-	// @Inject
-	// @Optional
-	// public void handleViewMode(@UIEventTopic(ChangeSetViewEventConstants.EVENT_SET_VIEW_MODE) final Object _unused_) {
-	//
-	// final ViewMode newMode = ViewMode.COMPARE;
-	// if (this.viewMode != newMode) {
-	// this.viewMode = newMode;
-	//
-	//// updateToolItem(part, viewMode);
-	//
-	// if (viewMode == ViewMode.COMPARE) {
-	// // Reload current compare state
-	// scenarioComparisonService.triggerListener(listener);
-	// } else {
-	// // Wait for action sets to come through
-	// handleAnalyseScenario(null);
-	// }
-	// }
-	// }
-
-	// private void updateToolItem(final MPart part, final ViewMode viewMode) {
-	// if (part == null || part.getToolbar() == null) {
-	// return;
-	// }
-	// final List<MToolBarElement> children = part.getToolbar().getChildren();
-	// for (final MToolBarElement e : children) {
-	// if ("com.mmxlabs.lingo.reports.directtoolitem.viewmode".equals(e.getElementId())) {
-	// if (e instanceof MUILabel) {
-	// final MUILabel mLabel = (MUILabel) e;
-	// mLabel.setLabel("Mode: " + getModeName(viewMode));
-	//
-	// }
-	// }
-	// }
-	// }
-
-	// private String getModeName(final ViewMode mode) {
-	// switch (mode) {
-	// case ACTION_SET:
-	// return "Action Set";
-	// case COMPARE:
-	// return "Compare";
-	// }
-	// return mode.name();
-	// }
 }
