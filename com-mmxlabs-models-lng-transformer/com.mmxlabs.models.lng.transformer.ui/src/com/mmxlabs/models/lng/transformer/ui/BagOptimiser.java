@@ -16,7 +16,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -41,10 +43,12 @@ import com.mmxlabs.models.lng.transformer.ui.breakdown.JobStore;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.MetricType;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.MyFuture;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.SimilarityState;
+import com.mmxlabs.models.lng.transformer.ui.breakdown.independence.ActionSetIndependenceChecking;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
+import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
@@ -55,6 +59,7 @@ import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.optimiser.lso.IFitnessCombiner;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 
 /**
  * An "optimiser" to generate the sequence of steps required by a user to go from one {@link ISequences} state to another one. I.e. from a pre-optimised state to an optimised state.
@@ -63,10 +68,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
  * correct vessel. A change set is the minimal set of changes required to pass the constraint checkers and other criteria (such as positive P&L change). A single change may create invalid solutions.
  * Overall we aim to generate a list of change sets to get between the initial and target solutions.
  * 
- * The process is a breadth first search. Given the initial state, create the full set of possible initial changes and generate the first change set. We then recurse to generate the successive change
- * sets until we get to the target state. At each level we prune out undesirable solutions to avoid a fully exhaustive search. Undesirable solutions may be those which require large (and unactionable)
- * change sets to get to a valid solution (note we retain these incase we are not able to find desirable solutions continue searching them by permitting large change sets). It may be that some initial
- * change sets generate less P&L than others. Typically we want the "best" changes sets first, and the least useful change sets last.
+ * The process is a stochastic search.
  * 
  * @author achurchill/simon
  */
@@ -103,6 +105,8 @@ public class BagOptimiser {
 
 	private static final boolean DEBUG = false;
 
+	private static final boolean BUILD_DEPENDANCY_GRAPH = false;
+
 	private final Random rdm = new Random(0);
 
 	private List<List<Pair<ISequences, IEvaluationState>>> bestSolutions = new LinkedList<>();
@@ -120,7 +124,7 @@ public class BagOptimiser {
 	 * 
 	 * @param bestRawSequences
 	 */
-	public boolean optimise(@NonNull final ISequences bestRawSequences, final IProgressMonitor progressMonitor, int maxLeafs) {
+	public boolean optimise(@NonNull final ISequences bestRawSequences, @NonNull final IProgressMonitor progressMonitor, int maxLeafs) {
 
 		final long time1 = System.currentTimeMillis();
 
@@ -298,6 +302,15 @@ public class BagOptimiser {
 					}
 				}
 				if (!sortedChangeStates.isEmpty()) {
+					if (BUILD_DEPENDANCY_GRAPH) {
+						ActionSetIndependenceChecking actionSetIndependenceChecking = injector.getInstance(ActionSetIndependenceChecking.class);
+						List<ChangeSet> bestChangeSets = new LinkedList<>();
+						for (ChangeSet cs : sortedChangeStates.get(0).changeSetsAsList) {
+							bestChangeSets.add(cs);
+						}
+						Map<ChangeSet, Set<List<ChangeSet>>> independenceSets = actionSetIndependenceChecking.getChangeSetIndependence(bestChangeSets, initialRawSequences, targetSimilarityState,
+								targetSimilarityState.getBaseMetrics());
+					}
 					betterSolutionFound = processAndStoreBreakdownSolution(sortedChangeStates.get(0), initialFullSequences, evaluationState, bestFitness);
 				}
 				if (sortedChangeStates.isEmpty()) {
