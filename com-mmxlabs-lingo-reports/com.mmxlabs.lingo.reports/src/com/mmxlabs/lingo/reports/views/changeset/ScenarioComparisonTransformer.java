@@ -160,6 +160,7 @@ public class ScenarioComparisonTransformer {
 	}
 
 	private void processRows(@NonNull final Schedule toSchedule, @NonNull final Schedule fromSchedule, @NonNull final List<ChangeSetRow> rows, @NonNull final ChangeSet changeSet) {
+		ChangeSetTransformerUtil.mergeSpots(rows);
 		ChangeSetTransformerUtil.setRowFlags(rows);
 		// ChangeSetTransformerUtil.filterRows(rows);
 		ChangeSetTransformerUtil.sortRows(rows);

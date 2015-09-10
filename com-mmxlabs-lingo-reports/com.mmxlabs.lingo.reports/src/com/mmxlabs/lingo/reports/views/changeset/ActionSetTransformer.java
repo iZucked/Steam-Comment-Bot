@@ -258,6 +258,7 @@ public class ActionSetTransformer {
 			}
 		}
 
+		ChangeSetTransformerUtil.mergeSpots(rows);
 		ChangeSetTransformerUtil.setRowFlags(rows);
 		ChangeSetTransformerUtil.filterRows(rows);
 		ChangeSetTransformerUtil.sortRows(rows);

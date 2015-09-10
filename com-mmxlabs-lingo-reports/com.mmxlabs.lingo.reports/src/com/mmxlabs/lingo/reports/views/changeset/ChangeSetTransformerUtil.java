@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.shiro.io.XmlSerializer;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -250,7 +251,16 @@ public final class ChangeSetTransformerUtil {
 			}
 			row.setLhsVesselName(getName(event.getSequence()));
 		} else {
-			final ChangeSetRow row = lhsRowMap.get(eventName);
+			ChangeSetRow row = lhsRowMap.get(eventName);
+			if (row == null) {
+				row = ChangesetFactory.eINSTANCE.createChangeSetRow();
+				row.setLhsName(eventName);
+				rows.add(row);
+
+				// TODO: Unique name?
+				lhsRowMap.put(eventName, row);
+
+			}
 
 			if (event instanceof ProfitAndLossContainer) {
 				row.setOriginalGroupProfitAndLoss((ProfitAndLossContainer) event);
@@ -652,5 +662,46 @@ public final class ChangeSetTransformerUtil {
 			}
 			changeSet.setCurrentMetrics(currentMetrics);
 		}
+	}
+
+	public static void mergeSpots(List<ChangeSetRow> rows) {
+
+		final Map<ChangeSetRow, Collection<ChangeSetRow>> rowToRowGroup = new HashMap<>();
+		Map<ChangeSetRow, ChangeSetRow> headToTails = new HashMap();
+		for (final ChangeSetRow row : rows) {
+			if (row.getLhsWiringLink() == null) {
+				ChangeSetRow link = row.getRhsWiringLink();
+				ChangeSetRow tail = link;
+				while (link != null) {
+					tail = link;
+					link = link.getRhsWiringLink();
+				}
+				headToTails.put(row, tail);
+			}
+		}
+		for (Map.Entry<ChangeSetRow, ChangeSetRow> e : headToTails.entrySet()) {
+			if (merge(e.getKey(), e.getValue())) {
+				rows.remove(e.getValue());
+			}
+		}
+
+	}
+
+	private static boolean merge(@Nullable ChangeSetRow head, @Nullable ChangeSetRow tail) {
+
+		assert head != tail;
+		if (head == null || !(head.getDischargeSlot() instanceof SpotSlot)) {
+			return false;
+		}
+		if (tail == null || !(tail.getDischargeSlot() instanceof SpotSlot)) {
+			return false;
+		}
+
+		if (head.getRhsName() != null && head.getRhsName().equals(tail.getRhsName())) {
+			ChangeSetRow lhsWiringLink = tail.getLhsWiringLink();
+			head.setLhsWiringLink(lhsWiringLink);
+			return true;
+		}
+		return false;
 	}
 }
