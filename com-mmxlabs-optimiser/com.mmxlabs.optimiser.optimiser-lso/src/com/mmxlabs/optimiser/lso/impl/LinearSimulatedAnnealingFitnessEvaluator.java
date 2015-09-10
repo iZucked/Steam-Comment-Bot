@@ -67,13 +67,14 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 
 	private Sequences bestRawSequences = null;
 
-        private long initialFitness = Long.MAX_VALUE;
+	private long initialFitness = Long.MAX_VALUE;
 	private long currentFitness = Long.MAX_VALUE;
 	private long lastFitness = Long.MAX_VALUE;
 	private long bestFitness = Long.MAX_VALUE;
 
 	@Override
-	public boolean evaluateSequences(@NonNull final ISequences rawSequences, @NonNull final ISequences fullSequences, @NonNull IEvaluationState evaluationState, @NonNull final Collection<IResource> affectedResources) {
+	public boolean evaluateSequences(@NonNull final ISequences rawSequences, @NonNull final ISequences fullSequences, @NonNull IEvaluationState evaluationState,
+			@NonNull final Collection<IResource> affectedResources) {
 
 		final long totalFitness = evaluateSequencesIntern(fullSequences, evaluationState, affectedResources);
 		boolean accept = false;
@@ -127,7 +128,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 			for (final IFitnessComponent component : fitnessComponents) {
 				bestFitnesses.put(component.getName(), component.getFitness());
 			}
-		}		
+		}
 	}
 
 	/**
@@ -158,6 +159,9 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 		if (fitnessComponents == null) {
 			throw new IllegalStateException("No fitness components set");
 		}
+		if (thresholder == null) {
+			throw new IllegalStateException("No thresholder set");
+		}
 	}
 
 	@Override
@@ -180,7 +184,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 		bestFitness = totalFitness;
 		initialFitness = totalFitness;
 		currentFitness = totalFitness;
-		
+
 		this.initialSequences = new Pair<ISequences, IEvaluationState>(new Sequences(initialSequences), evaluationState);
 		bestSequences = new Pair<ISequences, IEvaluationState>(new Sequences(initialSequences), evaluationState);
 		currentSequences = new Pair<ISequences, IEvaluationState>(new Sequences(initialSequences), evaluationState);
