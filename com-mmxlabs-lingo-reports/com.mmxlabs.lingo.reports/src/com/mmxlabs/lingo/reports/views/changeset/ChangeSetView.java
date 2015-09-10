@@ -560,7 +560,7 @@ public class ChangeSetView implements IAdaptable {
 								} else {
 									other = changeSet.getPrevScenario();
 								}
-								scenarioSelectionProvider.setPinnedPair(changeSet.getCurrentScenario(), other, true);
+								scenarioSelectionProvider.setPinnedPair(other, changeSet.getCurrentScenario(), true);
 								break;
 							}
 						}
