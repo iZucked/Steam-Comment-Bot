@@ -515,11 +515,10 @@ public class ChangeSetView implements IAdaptable {
 
 			@Override
 			public void selectionChanged(final SelectionChangedEvent event) {
-				// TODO Auto-generated method stub
 				final ISelection selection = event.getSelection();
 				if (selection instanceof IStructuredSelection) {
 					final IStructuredSelection iStructuredSelection = (IStructuredSelection) selection;
-					{
+					if (viewMode == ViewMode.ACTION_SET) {
 						final Iterator<?> itr = iStructuredSelection.iterator();
 						while (itr.hasNext()) {
 							Object o = itr.next();
