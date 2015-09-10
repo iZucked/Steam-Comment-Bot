@@ -19,7 +19,6 @@ import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
@@ -27,10 +26,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.internal.e4.compatibility.CompatibilityPart;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.PropertySheet;
 
+import com.mmxlabs.rcp.common.SelectionHelper;
+import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 
@@ -42,7 +42,7 @@ public abstract class DetailPropertiesView extends ViewPart {
 	private final String category;
 	private final String helpContextId;
 
-	private boolean showUnitsInColumn;
+	private final boolean showUnitsInColumn;
 	private Action packColumnsAction;
 
 	protected DetailPropertiesView(@NonNull final String category) {
@@ -143,7 +143,7 @@ public abstract class DetailPropertiesView extends ViewPart {
 
 	@Override
 	public void setFocus() {
-		viewer.getControl().setFocus();
+		ViewerHelper.setFocus(viewer);
 	}
 
 	protected org.eclipse.e4.ui.workbench.modeling.ISelectionListener createSelectionChangedListener() {
@@ -152,36 +152,19 @@ public abstract class DetailPropertiesView extends ViewPart {
 			@Override
 			public void selectionChanged(final MPart part, final Object selectedObject) {
 				if (part != null) {
-					final Object object = part.getObject();
-					if (object instanceof CompatibilityPart) {
-						final CompatibilityPart compatibilityView = (CompatibilityPart) object;
-						final IWorkbenchPart view = compatibilityView.getPart();
+					final IWorkbenchPart view = SelectionHelper.getE3Part(part);
 
-						if (view == DetailPropertiesView.this) {
-							return;
-						}
-						if (view instanceof PropertySheet) {
-							return;
-						}
-
+					if (view == DetailPropertiesView.this) {
+						return;
+					}
+					if (view instanceof PropertySheet) {
+						return;
 					}
 				}
-				ISelection selection = null;
-				// Convert selection
-				if (selectedObject == null) {
-					selection = new StructuredSelection();
-
-				} else if (selectedObject instanceof ISelection) {
-					selection = (ISelection) selectedObject;
-				} else if (selectedObject instanceof Object[]) {
-					selection = new StructuredSelection((Object[]) selectedObject);
-				} else {
-					selection = new StructuredSelection(selectedObject);
-				}
-
+				final ISelection selection = SelectionHelper.adaptSelection(selectedObject);
 				removeAdapters();
 				final Collection<?> adaptSelection = adaptSelection(selection);
-				viewer.setInput(adaptSelection);
+				ViewerHelper.setInput(viewer, true, adaptSelection);
 				hookAdapters(adaptSelection);
 				if (packColumnsAction != null) {
 					packColumnsAction.run();
