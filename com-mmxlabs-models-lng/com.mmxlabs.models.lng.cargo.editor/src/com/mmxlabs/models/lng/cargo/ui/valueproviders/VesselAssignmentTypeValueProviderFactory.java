@@ -170,7 +170,7 @@ public class VesselAssignmentTypeValueProviderFactory implements IReferenceValue
 
 						// Always show the option if the option is the null option
 						// or the current value for the cargo is set to this vessel-set
-						if (Equality.isEqual(vessel, currentValue) || vessel == null) {
+						if (Equality.isEqual(vessel, currentValue) || (currentValue instanceof VesselAvailability && Equality.isEqual(vessel, ((VesselAvailability)currentValue).getVessel())  ) || vessel == null) {
 							display = true;
 						}
 
