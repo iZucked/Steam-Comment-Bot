@@ -155,9 +155,7 @@ public class CopyGridToHtmlStringUtil {
 		sw.write("<tr>");
 
 		if (rowHeadersIncluded) {
-
 			addCell(sw, item.getHeaderText(), getAdditionalRowHeaderAttributes(item));
-			;
 		}
 
 		final int[] columnOrder = includeAllColumns ? getAllColumns(table) : table.getColumnOrder();
@@ -240,7 +238,7 @@ public class CopyGridToHtmlStringUtil {
 
 	public final void addCell(final StringWriter sw, final String tag, String text, final String[] attributes) {
 		if (attributes == null) {
-			sw.write("<" + tag + ">" + text + "</" + tag + ">");
+			sw.write("<" + tag + ">");
 		} else {
 			sw.write("<" + tag);
 			for (final String attribute : attributes) {
