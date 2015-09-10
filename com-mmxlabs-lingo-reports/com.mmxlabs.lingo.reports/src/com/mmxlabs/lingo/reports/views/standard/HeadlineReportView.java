@@ -43,6 +43,8 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
@@ -158,21 +160,17 @@ public class HeadlineReportView extends ViewPart {
 					}
 
 					if (rowElements.isEmpty()) {
-						rowElements.add(new RowData("", null, null, null, null, null, null, null, null, null, null));
+						if (pinned != null) {
+							rowElements.add(pinned);
+						} else {
+							rowElements.add(new RowData("", null, null, null, null, null, null, null, null, null, null));
+						}
 					}
 
-					setInput(rowElements);
+					ViewerHelper.setInput(viewer, true, rowElements);
 				}
 			};
-			if (block) {
-				if (Display.getDefault().getThread() == Thread.currentThread()) {
-					r.run();
-				} else {
-					Display.getDefault().syncExec(r);
-				}
-			} else {
-				Display.getDefault().asyncExec(r);
-			}
+			RunnerHelper.exec(r, block);
 		}
 	};
 
@@ -466,19 +464,7 @@ public class HeadlineReportView extends ViewPart {
 	 */
 	@Override
 	public void setFocus() {
-		viewer.getControl().setFocus();
-	}
-
-	public void refresh() {
-		getSite().getShell().getDisplay().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				if (!viewer.getControl().isDisposed()) {
-					viewer.refresh();
-				}
-			}
-		});
+		ViewerHelper.setFocus(viewer);
 	}
 
 	@Override
@@ -528,12 +514,6 @@ public class HeadlineReportView extends ViewPart {
 		}
 		// this.activeEditor = activeEditor;
 		this.scheduleModel = scheduleModel;
-	}
-
-	public void setInput(final Object input) {
-		if (viewer.getControl() != null && !viewer.getControl().isDisposed()) {
-			viewer.setInput(input);
-		}
 	}
 
 	private String format(final Long value, final String type) {

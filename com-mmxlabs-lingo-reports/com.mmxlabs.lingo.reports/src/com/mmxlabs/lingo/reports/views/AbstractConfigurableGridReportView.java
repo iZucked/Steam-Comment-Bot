@@ -10,11 +10,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import org.eclipse.core.databinding.ObservablesManager;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.databinding.EMFProperties;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
@@ -26,7 +24,6 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
@@ -47,7 +44,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.XMLMemento;
 import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.internal.e4.compatibility.CompatibilityPart;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.views.properties.PropertySheet;
@@ -68,6 +64,8 @@ import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerFilterSupport;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerSortingSupport;
 import com.mmxlabs.models.ui.tabular.filter.FilterField;
+import com.mmxlabs.rcp.common.SelectionHelper;
+import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 
@@ -81,8 +79,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	protected static final String CONFIGURABLE_COLUMNS_ORDER = "CONFIGURABLE_COLUMNS_ORDER";
 	protected static final String CONFIGURABLE_ROWS_ORDER = "CONFIGURABLE_ROWS_ORDER";
 	protected static final String CONFIGURABLE_COLUMNS_REPORT_KEY = "CONFIGURABLE_COLUMNS_REPORT_KEY";
-	protected final ObservablesManager observablesManager = new ObservablesManager();
-	private ObservablesManager mgr;
 	private IMemento memento;
 
 	private boolean customisableReport = true;
@@ -132,14 +128,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 	@Override
 	public final void createPartControl(final Composite parent) {
-		mgr = new ObservablesManager();
-		mgr.runAndCollect(new Runnable() {
-
-			@Override
-			public void run() {
-				initPartControl(parent);
-			}
-		});
+		initPartControl(parent);
 	}
 
 	public void initPartControl(final Composite parent) {
@@ -284,10 +273,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 			}
 		}
 
-	}
-
-	protected void setInput() {
-		viewer.setInput(EMFProperties.list(ScheduleReportPackage.Literals.TABLE__ROWS).observe(table));
 	}
 
 	protected abstract void registerReportColumns();
@@ -591,49 +576,30 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 	@Override
 	public void setFocus() {
-		if (!viewer.getGrid().isDisposed()) {
-			viewer.getGrid().setFocus();
-		}
+		ViewerHelper.setFocus(viewer);
 	}
 
-	public void setInput(final Object input) {
-		getSite().getShell().getDisplay().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				if (!viewer.getControl().isDisposed()) {
-					viewer.setInput(input);
-				}
-			}
-		});
-	}
+	//
 
 	@Override
-	public void selectionChanged(final MPart part, final Object selection) {
-		final Object object = part.getObject();
-		if (object instanceof CompatibilityPart) {
-			final CompatibilityPart compatibilityView = (CompatibilityPart) object;
-			final IWorkbenchPart view = compatibilityView.getPart();
+	public void selectionChanged(final MPart part, final Object selectionObject) {
 
-			if (view == this) {
+		final IWorkbenchPart e3Part = SelectionHelper.getE3Part(part);
+		if (e3Part != null) {
+			if (e3Part == this) {
 				return;
 			}
-			if (view instanceof PropertySheet) {
+			if (e3Part instanceof PropertySheet) {
 				return;
 			}
 
-			if (view instanceof DiffGroupView) {
+			if (e3Part instanceof DiffGroupView) {
 				return;
 			}
 		}
-		if (selection instanceof ISelection) {
-			viewer.setSelection((ISelection) selection, true);
-		} else if (selection instanceof Object[]) {
-			viewer.setSelection(new StructuredSelection(selection), true);
-		} else {
-			viewer.setSelection(new StructuredSelection(selection), true);
-		}
-		viewer.refresh();
+		final ISelection selection = SelectionHelper.adaptSelection(selectionObject);
+		viewer.setSelection(selection, true);
+		ViewerHelper.refresh(viewer, true);
 	}
 
 	protected boolean handleSelections() {

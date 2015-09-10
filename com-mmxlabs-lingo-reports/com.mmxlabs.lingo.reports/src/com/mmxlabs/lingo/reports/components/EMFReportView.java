@@ -41,7 +41,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
@@ -68,6 +67,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.filter.FilterField;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -133,15 +133,8 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 					setInput(rowElements);
 				}
 			};
-			if (block) {
-				if (Display.getDefault().getThread() == Thread.currentThread()) {
-					r.run();
-				} else {
-					Display.getDefault().syncExec(r);
-				}
-			} else {
-				Display.getDefault().asyncExec(r);
-			}
+
+			RunnerHelper.exec(r, block);
 		}
 	};
 
@@ -566,7 +559,7 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 	}
 
 	public void setInput(final Object input) {
-		getSite().getShell().getDisplay().asyncExec(new Runnable() {
+		RunnerHelper.asyncExec(new Runnable() {
 
 			@Override
 			public void run() {

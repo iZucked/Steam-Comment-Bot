@@ -21,7 +21,6 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IMemento;
 
 import com.google.inject.Inject;
@@ -49,6 +48,8 @@ import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -147,18 +148,18 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 		@Override
 		public void compareDataUpdate(@NonNull final ISelectedDataProvider selectedDataProvider, @NonNull final ScenarioInstance pin, @NonNull final ScenarioInstance other, @NonNull final Table table,
 				@NonNull final List<LNGScenarioModel> rootObjects, @NonNull final Map<EObject, Set<EObject>> equivalancesMap) {
-			viewer.refresh();
+			ViewerHelper.refresh(viewer, true);
 		}
 
 		@Override
 		public void multiDataUpdate(@NonNull final ISelectedDataProvider selectedDataProvider, @NonNull final Collection<ScenarioInstance> others, @NonNull final Table table,
 				@NonNull final List<LNGScenarioModel> rootObjects) {
-			viewer.refresh();
+			ViewerHelper.refresh(viewer, true);
 		}
 
 		@Override
 		public void diffOptionChanged(final EDiffOption d, final Object oldValue, final Object newValue) {
-			viewer.refresh();
+			ViewerHelper.refresh(viewer, true);
 		}
 
 	};
@@ -184,19 +185,11 @@ public class ConfigurableFleetReportView extends AbstractConfigurableGridReportV
 						elementCollector.collectElements(other, (LNGScenarioModel) other.getInstance(), false);
 					}
 					elementCollector.endCollecting();
-					setInput(table.getRows());
+					ViewerHelper.setInput(viewer, true, table.getRows());
 				}
 			};
 
-			if (block) {
-				if (Display.getDefault().getThread() == Thread.currentThread()) {
-					r.run();
-				} else {
-					Display.getDefault().syncExec(r);
-				}
-			} else {
-				Display.getDefault().asyncExec(r);
-			}
+			RunnerHelper.exec(r, block);
 		}
 	};
 

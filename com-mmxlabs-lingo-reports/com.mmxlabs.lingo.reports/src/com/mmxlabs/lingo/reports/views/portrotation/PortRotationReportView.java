@@ -12,10 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.databinding.observable.list.IObservableList;
-import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -39,6 +36,7 @@ import com.mmxlabs.lingo.reports.views.portrotation.extpoint.IPortRotationBasedR
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -227,11 +225,6 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 	}
 
 	@Override
-	protected void setInput() {
-		viewer.setInput(elements);
-	}
-
-	@Override
 	protected boolean handleSelections() {
 		return true;
 	}
@@ -321,7 +314,7 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 			}
 		}
 		viewer.setContentProvider(new ArrayContentProvider());
-		setInput(elements);
+		ViewerHelper.setInput(viewer, true, elements);
 
 		selectedScenariosService.addListener(selectedScenariosServiceListener);
 

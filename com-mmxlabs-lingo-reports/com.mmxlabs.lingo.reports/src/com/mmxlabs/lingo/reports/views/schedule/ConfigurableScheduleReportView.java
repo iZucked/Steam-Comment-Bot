@@ -47,6 +47,7 @@ import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportIni
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -125,7 +126,7 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 				}
 			}
 
-			viewer.setInput(new ArrayList<>(table.getRows()));
+			ViewerHelper.setInput(viewer, true, new ArrayList<>(table.getRows()));
 		}
 
 		@Override
@@ -142,12 +143,12 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 				}
 			}
 
-			viewer.setInput(new ArrayList<>(table.getRows()));
+			ViewerHelper.setInput(viewer, true, new ArrayList<>(table.getRows()));
 		}
 
 		@Override
 		public void diffOptionChanged(EDiffOption d, Object oldValue, Object newValue) {
-			viewer.refresh();
+			ViewerHelper.refresh(viewer, true);
 		}
 
 	};

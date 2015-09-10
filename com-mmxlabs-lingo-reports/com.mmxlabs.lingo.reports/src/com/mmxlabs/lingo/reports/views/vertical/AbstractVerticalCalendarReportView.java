@@ -19,7 +19,6 @@ import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
@@ -29,6 +28,8 @@ import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.views.vertical.providers.EventProvider;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
@@ -84,22 +85,14 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 					if (!scenarios.isEmpty()) {
 						final ScenarioInstance scenario = scenarios.get(0);
 						if (scenario.getInstance() != gridViewer.getInput()) {
-							gridViewer.setInput(scenario.getInstance());
+							ViewerHelper.setInput(gridViewer, true, scenario.getInstance());
 						}
 					} else {
-						gridViewer.setInput(null);
+						ViewerHelper.setInput(gridViewer, true, null);
 					}
 				}
 			};
-			if (block) {
-				if (Display.getDefault().getThread() == Thread.currentThread()) {
-					r.run();
-				} else {
-					Display.getDefault().syncExec(r);
-				}
-			} else {
-				Display.getDefault().asyncExec(r);
-			}
+			RunnerHelper.exec(r, block);
 		}
 	};
 
@@ -174,7 +167,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 	@Override
 	public void setFocus() {
-		gridViewer.getControl().setFocus();
+		ViewerHelper.setFocus(gridViewer);
 	}
 
 	@Override

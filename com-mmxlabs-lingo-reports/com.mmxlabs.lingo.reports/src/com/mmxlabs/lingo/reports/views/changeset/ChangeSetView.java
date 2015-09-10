@@ -82,6 +82,7 @@ import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.IScenarioServiceListener;
 import com.mmxlabs.scenario.service.impl.ScenarioServiceListener;
@@ -257,12 +258,8 @@ public class ChangeSetView implements IAdaptable {
 						view.handleAnalyseScenario(null);
 					}
 				};
-				final Display display = PlatformUI.getWorkbench().getDisplay();
-				if (display.getThread() == Thread.currentThread()) {
-					r.run();
-				} else {
-					display.syncExec(r);
-				}
+
+				RunnerHelper.syncExec(r);
 			}
 		}
 
@@ -276,12 +273,7 @@ public class ChangeSetView implements IAdaptable {
 						view.handleAnalyseScenario(null);
 					}
 				};
-				final Display display = PlatformUI.getWorkbench().getDisplay();
-				if (display.getThread() == Thread.currentThread()) {
-					r.run();
-				} else {
-					display.syncExec(r);
-				}
+				RunnerHelper.syncExec(r);
 			}
 		}
 	}

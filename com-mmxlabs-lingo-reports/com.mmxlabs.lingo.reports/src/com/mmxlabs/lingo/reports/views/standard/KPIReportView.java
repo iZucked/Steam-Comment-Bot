@@ -52,6 +52,8 @@ import com.mmxlabs.lingo.reports.views.standard.KPIReportTransformer.RowData;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -117,7 +119,7 @@ public class KPIReportView extends ViewPart {
 
 					setShowColumns(pinned != null, numberOfSchedules);
 
-					setInput(rowElements);
+					ViewerHelper.setInput(viewer, true, rowElements);
 					if (!rowElements.isEmpty()) {
 						if (packColumnsAction != null) {
 							packColumnsAction.run();
@@ -126,15 +128,7 @@ public class KPIReportView extends ViewPart {
 				}
 			};
 
-			if (block) {
-				if (Display.getDefault().getThread() == Thread.currentThread()) {
-					r.run();
-				} else {
-					Display.getDefault().syncExec(r);
-				}
-			} else {
-				Display.getDefault().asyncExec(r);
-			}
+			RunnerHelper.exec(r, block);
 		}
 	};
 
@@ -439,31 +433,7 @@ public class KPIReportView extends ViewPart {
 	 */
 	@Override
 	public void setFocus() {
-		viewer.getControl().setFocus();
-	}
-
-	public void refresh() {
-		getSite().getShell().getDisplay().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				if (!viewer.getControl().isDisposed()) {
-					viewer.refresh();
-				}
-			}
-		});
-	}
-
-	public void setInput(final Object input) {
-		getSite().getShell().getDisplay().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				if (!viewer.getControl().isDisposed()) {
-					viewer.setInput(input);
-				}
-			}
-		});
+		ViewerHelper.setFocus(viewer);
 	}
 
 	@Override

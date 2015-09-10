@@ -27,7 +27,6 @@ import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -48,6 +47,8 @@ import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackTreeColumnsAction;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -136,7 +137,7 @@ public class TotalsHierarchyView extends ViewPart {
 							}
 						}
 					}
-					viewer.setInput(dummy);
+					ViewerHelper.setInput(viewer, true, dummy);
 
 					if (!dummy.children.isEmpty()) {
 						if (packColumnsAction != null) {
@@ -145,15 +146,7 @@ public class TotalsHierarchyView extends ViewPart {
 					}
 				}
 			};
-			if (block) {
-				if (Display.getDefault().getThread() == Thread.currentThread()) {
-					r.run();
-				} else {
-					Display.getDefault().syncExec(r);
-				}
-			} else {
-				Display.getDefault().asyncExec(r);
-			}
+			RunnerHelper.exec(r, block);
 		}
 	};
 
@@ -566,7 +559,7 @@ public class TotalsHierarchyView extends ViewPart {
 
 	@Override
 	public void setFocus() {
-		viewer.getControl().setFocus();
+		ViewerHelper.setFocus(viewer);
 	}
 
 	private void hookContextMenu() {

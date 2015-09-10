@@ -22,7 +22,6 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
@@ -33,12 +32,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.internal.e4.compatibility.CompatibilityPart;
-import org.eclipse.ui.internal.e4.compatibility.CompatibilityView;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.PropertySheet;
 
@@ -74,6 +70,8 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.rcp.common.SelectionHelper;
+import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -124,13 +122,10 @@ public class CargoEconsReport extends ViewPart {
 		selectionListener = new org.eclipse.e4.ui.workbench.modeling.ISelectionListener() {
 
 			@Override
-			public void selectionChanged(MPart part, Object selectedObjects) {
-				final Object object = part.getObject();
-				IWorkbenchPart e3part = null;
-				if (object instanceof CompatibilityPart) {
-					final CompatibilityPart compatibilityView = (CompatibilityPart) object;
-					e3part = compatibilityView.getPart();
-
+			public void selectionChanged(final MPart part, final Object selectedObjects) {
+				final IWorkbenchPart e3part = SelectionHelper.getE3Part(part);
+				{
+					// TODO: Ignore navigator
 					if (e3part == CargoEconsReport.this) {
 						return;
 					}
@@ -143,17 +138,7 @@ public class CargoEconsReport extends ViewPart {
 					}
 				}
 
-				ISelection selection = null;
-				// Convert selection
-				if (selectedObjects instanceof ISelection) {
-					selection = (ISelection) selectedObjects;
-				} else if (selectedObjects instanceof Object[]) {
-					selection = new StructuredSelection((Object[]) selectedObjects);
-				} else {
-					selection = new StructuredSelection(selectedObjects);
-				}
-
-				// TODO: Ignore navigator
+				final ISelection selection = SelectionHelper.adaptSelection(selectedObjects);
 
 				// Dispose old data columns - clone list to try to avoid concurrent modification exceptions
 				final List<GridViewerColumn> oldColumns = new ArrayList<GridViewerColumn>(dataColumns);
@@ -193,7 +178,7 @@ public class CargoEconsReport extends ViewPart {
 				}
 
 				// Trigger view refresh
-				viewer.setInput(FieldType.values());
+				ViewerHelper.setInput(viewer, true, FieldType.values());
 
 			}
 		};
@@ -222,10 +207,7 @@ public class CargoEconsReport extends ViewPart {
 
 	@Override
 	public void setFocus() {
-		final Control control = viewer.getControl();
-		if (control != null) {
-			control.setFocus();
-		}
+		ViewerHelper.setFocus(viewer);
 	}
 
 	static final DecimalFormat DollarsFormat = new DecimalFormat("$##,###,###,###");

@@ -59,7 +59,6 @@ import org.eclipse.nebula.widgets.ganttchart.ISettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
@@ -70,7 +69,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.XMLMemento;
 import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.internal.e4.compatibility.CompatibilityPart;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
@@ -110,6 +108,9 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.SelectionHelper;
+import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener, IPreferenceChangeListener {
@@ -701,7 +702,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 	}
 
 	public void redraw() {
-		getSite().getShell().getDisplay().asyncExec(new Runnable() {
+		RunnerHelper.asyncExec(new Runnable() {
 
 			@Override
 			public void run() {
@@ -715,7 +716,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 	}
 
 	public void refresh() {
-		getSite().getShell().getDisplay().asyncExec(new Runnable() {
+		RunnerHelper.asyncExec(new Runnable() {
 
 			@Override
 			public void run() {
@@ -728,7 +729,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 	}
 
 	public void setInput(final Object input) {
-		getSite().getShell().getDisplay().asyncExec(new Runnable() {
+		RunnerHelper.asyncExec(new Runnable() {
 
 			@Override
 			public void run() {
@@ -818,10 +819,8 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 
 	@Override
 	public void selectionChanged(final MPart part, final Object selectedObject) {
-		final Object object = part.getObject();
-		if (object instanceof CompatibilityPart) {
-			final CompatibilityPart compatibilityView = (CompatibilityPart) object;
-			final IWorkbenchPart view = compatibilityView.getPart();
+		{
+			final IWorkbenchPart view = SelectionHelper.getE3Part(part);
 
 			if (view == this) {
 				return;
@@ -835,15 +834,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 			}
 		}
 
-		ISelection selection = null;
-		// Convert selection
-		if (selectedObject instanceof ISelection) {
-			selection = (ISelection) selectedObject;
-		} else if (selectedObject instanceof Object[]) {
-			selection = new StructuredSelection((Object[]) selectedObject);
-		} else {
-			selection = new StructuredSelection(selectedObject);
-		}
+		ISelection selection = SelectionHelper.adaptSelection(selectedObject);
 
 		if (table == null) {
 			if (selection instanceof IStructuredSelection) {
@@ -868,9 +859,9 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 				objects = expandSelection(objects);
 				selection = new StructuredSelection(objects);
 			}
-			viewer.setSelection(selection);
+			ViewerHelper.setSelection(viewer, true, selection);
 		} else {
-			viewer.setSelection(DiffSelectionAdapter.expandDown(selection, table));
+			ViewerHelper.setSelection(viewer, true, DiffSelectionAdapter.expandDown(selection, table));
 		}
 	}
 
@@ -1039,8 +1030,8 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 			final Runnable r = new Runnable() {
 				@Override
 				public void run() {
-					List<Object> rowElements = new LinkedList<>();
-					IScenarioInstanceElementCollector elementCollector = getElementCollector();
+					final List<Object> rowElements = new LinkedList<>();
+					final IScenarioInstanceElementCollector elementCollector = getElementCollector();
 					elementCollector.beginCollecting(pinned != null);
 					if (pinned != null) {
 						rowElements.addAll(elementCollector.collectElements(pinned, (LNGScenarioModel) pinned.getInstance(), true));
@@ -1049,21 +1040,13 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 						rowElements.addAll(elementCollector.collectElements(other, (LNGScenarioModel) other.getInstance(), false));
 					}
 					elementCollector.endCollecting();
-					viewer.setInput(rowElements);
+					ViewerHelper.setInput(viewer, true, rowElements);
 
-//					setInput(rowElements);
-//					packAction.run();
+					// setInput(rowElements);
+					// packAction.run();
 				}
 			};
-			if (block) {
-				if (Display.getDefault().getThread() == Thread.currentThread()) {
-					r.run();
-				} else {
-					Display.getDefault().syncExec(r);
-				}
-			} else {
-				Display.getDefault().asyncExec(r);
-			}
+			RunnerHelper.exec(r, block);
 		}
 	};
 

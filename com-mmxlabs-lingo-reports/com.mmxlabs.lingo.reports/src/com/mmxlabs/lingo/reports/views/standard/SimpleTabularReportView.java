@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuListener;
@@ -35,7 +36,6 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -52,6 +52,8 @@ import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -75,6 +77,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 
 	private String helpContextId;
 
+	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
 
 		@Override
@@ -137,7 +140,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 					viewer.getLabelProvider().dispose();
 					viewer.setLabelProvider(new ViewLabelProvider());
 
-					setInput(rowElements);
+					ViewerHelper.setInput(viewer, true, rowElements);
 
 					if (!rowElements.isEmpty()) {
 						if (packColumnsAction != null) {
@@ -146,15 +149,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 					}
 				}
 			};
-			if (block) {
-				if (Display.getDefault().getThread() == Thread.currentThread()) {
-					r.run();
-				} else {
-					Display.getDefault().syncExec(r);
-				}
-			} else {
-				Display.getDefault().asyncExec(r);
-			}
+			RunnerHelper.exec(r, block);
 		}
 	};
 
@@ -251,7 +246,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 			sortColumns.add(0, value);
 		}
 
-		viewer.refresh();
+		ViewerHelper.refresh(viewer, true);
 	}
 
 	final List<GridViewerColumn> viewerColumns = new ArrayList<GridViewerColumn>();
@@ -393,31 +388,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 	 */
 	@Override
 	public void setFocus() {
-		viewer.getControl().setFocus();
-	}
-
-	public void refresh() {
-		getSite().getShell().getDisplay().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				if (!viewer.getControl().isDisposed()) {
-					viewer.refresh();
-				}
-			}
-		});
-	}
-
-	public void setInput(final Object input) {
-		getSite().getShell().getDisplay().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				if (!viewer.getControl().isDisposed()) {
-					viewer.setInput(input);
-				}
-			}
-		});
+		ViewerHelper.setFocus(viewer);
 	}
 
 	@Override
