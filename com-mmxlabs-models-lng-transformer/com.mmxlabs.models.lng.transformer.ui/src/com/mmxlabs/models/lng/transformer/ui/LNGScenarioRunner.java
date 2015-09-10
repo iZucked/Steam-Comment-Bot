@@ -183,12 +183,16 @@ public class LNGScenarioRunner {
 	 * Convenience method to initialise the evaluation/optimiser system and evaluate the initial state. Calls {@link #init(IOptimiserProgressMonitor,Module, EnumMap)}, and
 	 * {@link #evaluateInitialState()} passing in the {@link Module} to {@link #init(IOptimiserProgressMonitor,Module, EnumMap)} and optionally overriding the number of iterations.
 	 */
-	public void initAndEval(@Nullable final Module extraModule, @Nullable final Integer iterations) {
+	public void initAndEval(@Nullable final Module extraModule, @Nullable final Integer iterations, @Nullable final Boolean useHillClimbing) {
 		init(null, extraModule, null);
 
 		// FIXME: Only for ITS!
 		if (iterations != null && optimiser != null) {
 			optimiser.setNumberOfIterations(iterations.intValue());
+		}
+		
+		if (useHillClimbing != null) {
+			doHillClimb = useHillClimbing;
 		}
 		evaluateInitialState();
 	}
