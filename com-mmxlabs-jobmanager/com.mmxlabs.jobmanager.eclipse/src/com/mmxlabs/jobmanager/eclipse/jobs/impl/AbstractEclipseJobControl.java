@@ -12,6 +12,7 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
@@ -67,6 +68,10 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 				setProgress(100);
 				setJobState(EJobState.COMPLETED);
 				return Status.OK_STATUS;
+			} catch (final OperationCanceledException e) {
+				kill();
+				setJobState(EJobState.CANCELLED);
+				return Status.CANCEL_STATUS;
 			} catch (final Exception | AssertionError e) {
 				LOG.error(e.getMessage(), e);
 				kill();
