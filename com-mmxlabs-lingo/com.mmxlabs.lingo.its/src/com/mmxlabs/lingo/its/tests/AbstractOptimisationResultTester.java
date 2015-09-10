@@ -89,7 +89,7 @@ public class AbstractOptimisationResultTester {
 	/**
 	 * Toggle between storing fitness names and values in a properties file and testing the current fitnesses against the stored values. Should be run as part of a plugin test.
 	 */
-	private static final boolean storeFitnessMap = false;
+	private static final boolean storeFitnessMap = true;
 	private static final boolean storeReports = false;
 
 	static {
@@ -224,7 +224,7 @@ public class AbstractOptimisationResultTester {
 
 		final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(originalScenario, LNGScenarioRunner.createDefaultSettings(), LNGTransformer.HINT_OPTIMISE_LSO);
 		// Limit number of iterations to keep runtime down.
-		scenarioRunner.initAndEval(new TransformerExtensionTestModule(), 10000);
+		scenarioRunner.initAndEval(new TransformerExtensionTestModule(), 10000, true);
 
 		Schedule intialSchedule = scenarioRunner.getIntialSchedule();
 		Assert.assertNotNull(intialSchedule);
@@ -305,7 +305,7 @@ public class AbstractOptimisationResultTester {
 		}
 		// Create scenario runner with optimisation params incase we want to run optimisation outside of the opt run method.
 		final LNGScenarioRunner originalScenarioRunner = new LNGScenarioRunner(originalScenario, LNGScenarioRunner.createDefaultSettings(), LNGTransformer.HINT_OPTIMISE_LSO);
-		originalScenarioRunner.initAndEval(new TransformerExtensionTestModule(), 10000);
+		originalScenarioRunner.initAndEval(new TransformerExtensionTestModule(), 10000, true);
 
 		return originalScenarioRunner;
 	}
