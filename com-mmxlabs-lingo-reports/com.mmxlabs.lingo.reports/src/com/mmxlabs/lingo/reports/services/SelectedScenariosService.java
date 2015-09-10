@@ -97,6 +97,8 @@ public class SelectedScenariosService {
 		public void onPreScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
 			if (scenarioInstance == targetInstance) {
 				scenarioService.removeScenarioServiceListener(this);
+				detachScenarioInstance(scenarioInstance);
+				updateSelectedScenarios(false);
 			}
 		}
 
@@ -114,6 +116,8 @@ public class SelectedScenariosService {
 		public void onPreScenarioInstanceDelete(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
 			if (scenarioInstance == targetInstance) {
 				scenarioService.removeScenarioServiceListener(this);
+				detachScenarioInstance(scenarioInstance);
+				updateSelectedScenarios(false);
 			}
 		}
 
