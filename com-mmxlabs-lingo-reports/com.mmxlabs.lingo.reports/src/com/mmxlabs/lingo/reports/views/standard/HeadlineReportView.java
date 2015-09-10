@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.IFontProvider;
@@ -120,27 +121,23 @@ public class HeadlineReportView extends ViewPart {
 		}
 	}
 
+	@Nullable
 	private RowData pinnedData = null;
+
 	@NonNull
 	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
 
-		HeadlineReportTransformer transformer = new HeadlineReportTransformer();
+		private final HeadlineReportTransformer transformer = new HeadlineReportTransformer();
 
 		@Override
 		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
 			final Runnable r = new Runnable() {
 				@Override
 				public void run() {
-					// if (scheduleModel != null && schedule == scheduleModel.getSchedule()) {
-					// // ++numberOfSchedules;
-					// return Lists.newArrayList(schedule);
-					// }
-					//
+					pinnedData = null;
 					final List<Object> rowElements = new LinkedList<>();
-					// int numberOfSchedules = 0;
-					// List<RowData> pinnedData = null;
 					if (pinned != null) {
-						LNGScenarioModel instance = (LNGScenarioModel) pinned.getInstance();
+						final LNGScenarioModel instance = (LNGScenarioModel) pinned.getInstance();
 						if (instance != null) {
 							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
 							if (schedule != null) {
@@ -150,18 +147,25 @@ public class HeadlineReportView extends ViewPart {
 					}
 
 					for (final ScenarioInstance other : others) {
-						LNGScenarioModel instance = (LNGScenarioModel) other.getInstance();
+						final LNGScenarioModel instance = (LNGScenarioModel) other.getInstance();
 						if (instance != null) {
 							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
-							if (schedule != null && scheduleModel != null && schedule == scheduleModel.getSchedule()) {
-								rowElements.add(transformer.transform(schedule, other));
+							if (schedule != null) {
+								if (pinnedData != null) {
+									rowElements.add(transformer.transform(schedule, other));
+								} else {
+									if (scheduleModel != null && schedule == scheduleModel.getSchedule()) {
+										rowElements.add(transformer.transform(schedule, other));
+									}
+								}
 							}
 						}
 					}
 
 					if (rowElements.isEmpty()) {
 						if (pinned != null) {
-							rowElements.add(pinned);
+							rowElements.add(pinnedData);
+							pinnedData = null;
 						} else {
 							rowElements.add(new RowData("", null, null, null, null, null, null, null, null, null, null));
 						}
@@ -395,7 +399,7 @@ public class HeadlineReportView extends ViewPart {
 						// Ignore
 					}
 				}
-				selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
+				selectedScenariosService.triggerListener(selectedScenariosServiceListener, true);
 			}
 
 			@Override
@@ -408,7 +412,7 @@ public class HeadlineReportView extends ViewPart {
 						// Ignore
 					}
 				}
-				selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
+				selectedScenariosService.triggerListener(selectedScenariosServiceListener, true);
 			}
 
 			@Override
@@ -421,7 +425,7 @@ public class HeadlineReportView extends ViewPart {
 						// Ignore
 					}
 				}
-				selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
+				selectedScenariosService.triggerListener(selectedScenariosServiceListener, true);
 			}
 
 		};
