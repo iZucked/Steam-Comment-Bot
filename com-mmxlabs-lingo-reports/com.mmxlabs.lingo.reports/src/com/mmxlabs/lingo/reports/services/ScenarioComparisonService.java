@@ -33,6 +33,7 @@ import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.schedule.model.DiffOptions;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class ScenarioComparisonService {
@@ -116,16 +117,7 @@ public class ScenarioComparisonService {
 					doRebuildCompare(value, selectedDataProvider, pinned, others);
 				}
 			};
-			IWorkbench wb = PlatformUI.getWorkbench();
-			if (block) {
-				if (wb.getDisplay().getThread() == Thread.currentThread()) {
-					r.run();
-				} else {
-					wb.getDisplay().syncExec(r);
-				}
-			} else {
-				wb.getDisplay().asyncExec(r);
-			}
+			RunnerHelper.exec(r, block);
 		}
 
 	}
