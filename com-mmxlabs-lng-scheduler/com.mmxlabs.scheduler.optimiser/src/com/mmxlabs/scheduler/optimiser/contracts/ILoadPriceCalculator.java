@@ -89,9 +89,10 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * 
 	 * @return Positive value for profit, negative value for loss (Normal scale factor) // TODO: Copy API for calulcateLoadPrice
 	 */
-	static final int IDX_UPSIDE_VALUE = 0;
+	static final int IDX_OTHER_VALUE = 0;
 	static final int IDX_SHIPPING_VALUE = 1;
-	static final int ADDITIONAL_PNL_COMPONENT_SIZE = 2;
+	static final int IDX_UPSIDE_VALUE = 2;
+	static final int ADDITIONAL_PNL_COMPONENT_SIZE = 3;
 	static final long[] EMPTY_ADDITIONAL_PNL_RESULT = new long[ADDITIONAL_PNL_COMPONENT_SIZE];
 
 	public long[] calculateAdditionalProfitAndLoss(@NonNull ILoadOption loadOption, @NonNull IAllocationAnnotation allocationAnnotation, @NonNull int[] slotPricesPerMMBTu,
