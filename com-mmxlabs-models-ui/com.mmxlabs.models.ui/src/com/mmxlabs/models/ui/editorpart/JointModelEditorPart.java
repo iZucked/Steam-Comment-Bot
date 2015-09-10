@@ -90,6 +90,7 @@ import com.mmxlabs.models.ui.validation.gui.IValidationStatusGoto;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.editors.IPartGotoTarget;
 import com.mmxlabs.rcp.common.editors.IReasonProvider;
 import com.mmxlabs.scenario.service.model.ModelReference;
@@ -229,7 +230,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	 */
 	@Override
 	public void setLocked(final boolean locked) {
-		Display.getDefault().asyncExec(new Runnable() {
+		RunnerHelper.asyncExec(new Runnable() {
 			@Override
 			public void run() {
 				final ScenarioInstance scenarioInstance2 = getScenarioInstance();
@@ -459,18 +460,20 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 				@Override
 				public void notifyChanged(final Notification msg) {
 					if (msg.isTouch() == false && msg.getFeature() == ScenarioServicePackage.eINSTANCE.getContainer_Name()) {
-						setPartName(msg.getNewStringValue());
+						RunnerHelper.asyncExec(new Runnable() {
+							@Override
+							public void run() {
+								setPartName(msg.getNewStringValue());
+							}
+						});
 					}
 					if (msg.isTouch() == false && msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_Dirty()) {
-						if (!getContainer().isDisposed()) {
-							final Display display = getContainer().getDisplay();
-							display.asyncExec(new Runnable() {
-								@Override
-								public void run() {
-									firePropertyChange(IEditorPart.PROP_DIRTY);
-								}
-							});
-						}
+						RunnerHelper.asyncExec(new Runnable() {
+							@Override
+							public void run() {
+								firePropertyChange(IEditorPart.PROP_DIRTY);
+							}
+						});
 					}
 				}
 			};
@@ -488,14 +491,12 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 				commandStack.addCommandStackListener(new CommandStackListener() {
 					@Override
 					public void commandStackChanged(final EventObject event) {
-						if (!getContainer().isDisposed()) {
-							getContainer().getDisplay().asyncExec(new Runnable() {
-								@Override
-								public void run() {
-									firePropertyChange(IEditorPart.PROP_DIRTY);
-								}
-							});
-						}
+						RunnerHelper.asyncExec(new Runnable() {
+							@Override
+							public void run() {
+								firePropertyChange(IEditorPart.PROP_DIRTY);
+							}
+						});
 					}
 				});
 
