@@ -485,6 +485,14 @@ public class ChangeSetView implements IAdaptable {
 		{
 			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setText("- Upside");
+			gvc.getColumn().setWidth(70);
+			gvc.setLabelProvider(createAdditionalUpsidePNLDeltaLabelProvider());
+			createWordWrapRenderer(gvc);
+		}
+		{
+			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
+			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
 			gvc.getColumn().setText("+ Cargo other");
 			gvc.getColumn().setWidth(70);
 			gvc.setLabelProvider(createAdditionalPNLDeltaLabelProvider());
@@ -1138,6 +1146,57 @@ public class ChangeSetView implements IAdaptable {
 							final CargoAllocation cargoAllocation = newLoadAllocation.getCargoAllocation();
 							if (cargoAllocation != null) {
 								final long addnPNL = ChangeSetUtils.getAdditionalShippingProfitAndLoss(cargoAllocation);
+								t = -addnPNL;
+							}
+						}
+					}
+					double delta = 0;
+					if (f != null) {
+						delta -= f.intValue();
+					}
+					if (t != null) {
+						delta += t.intValue();
+					}
+					delta = delta / 1000000.0;
+					if (delta != 0) {
+						cell.setText(String.format("%s %,.3f", delta < 0 ? "↓" : "↑", Math.abs(delta)));
+					}
+
+				}
+			}
+		};
+
+	}
+
+	private CellLabelProvider createAdditionalUpsidePNLDeltaLabelProvider() {
+		return new CellLabelProvider() {
+
+			@Override
+			public void update(final ViewerCell cell) {
+				final Object element = cell.getElement();
+				cell.setText("");
+
+				if (element instanceof ChangeSetRow) {
+					final ChangeSetRow change = (ChangeSetRow) element;
+
+					Number f = null;
+					{
+						final SlotAllocation originalLoadAllocation = change.getOriginalLoadAllocation();
+						if (originalLoadAllocation != null) {
+							final CargoAllocation cargoAllocation = originalLoadAllocation.getCargoAllocation();
+							if (cargoAllocation != null) {
+								final long addnPNL = ChangeSetUtils.getAdditionalUpsideProfitAndLoss(cargoAllocation);
+								f = -addnPNL;
+							}
+						}
+					}
+					Number t = null;
+					{
+						final SlotAllocation newLoadAllocation = change.getNewLoadAllocation();
+						if (newLoadAllocation != null) {
+							final CargoAllocation cargoAllocation = newLoadAllocation.getCargoAllocation();
+							if (cargoAllocation != null) {
+								final long addnPNL = ChangeSetUtils.getAdditionalUpsideProfitAndLoss(cargoAllocation);
 								t = -addnPNL;
 							}
 						}

@@ -840,10 +840,11 @@ public class CargoEconsReport extends ViewPart {
 				for (final GeneralPNLDetails generalPNLDetails : container.getGeneralPNLDetails()) {
 					if (generalPNLDetails instanceof SlotPNLDetails) {
 						final SlotPNLDetails slotPNLDetails = (SlotPNLDetails) generalPNLDetails;
-						for (GeneralPNLDetails details : slotPNLDetails.getGeneralPNLDetails()) {
+						for (final GeneralPNLDetails details : slotPNLDetails.getGeneralPNLDetails()) {
 							if (details instanceof BasicSlotPNLDetails) {
 								addnPNL += ((BasicSlotPNLDetails) details).getAdditionalPNL();
 								addnPNL += ((BasicSlotPNLDetails) details).getExtraShippingPNL();
+								addnPNL += ((BasicSlotPNLDetails) details).getExtraUpsidePNL();
 							}
 						}
 					}
