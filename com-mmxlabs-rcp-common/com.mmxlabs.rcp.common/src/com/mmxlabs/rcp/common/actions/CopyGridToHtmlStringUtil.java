@@ -88,9 +88,9 @@ public class CopyGridToHtmlStringUtil {
 
 		// top left blank cell
 		if (rowHeadersIncluded) {
-			addCell(topRow, "th", "", new String[] { "bgcolor='grey'" });
-			addCell(bottomRow, "th", "", new String[] { "bgcolor='grey'" });
-			addCell(singleRow, "th", "", new String[] { "bgcolor='grey'" });
+			addCell(topRow, "th", getTopLeftCellUpperText(), new String[] {});
+			addCell(bottomRow, "th", getTopLeftCellLowerText(), new String[] {});
+			addCell(singleRow, "th", getTopLeftCellText(), new String[] {});
 		}
 		// Set of column groups already seen. This assumes all columns within a group are next to each other
 		final Set<GridColumnGroup> seenGroups = new HashSet<>();
@@ -139,6 +139,30 @@ public class CopyGridToHtmlStringUtil {
 			sw.write("</tr>\n</thead>\n");
 
 		}
+	}
+
+	@NonNull
+	protected String getTopLeftCellText() {
+		if (additionalAttributeProvider != null) {
+			return additionalAttributeProvider.getTopLeftCellText();
+		}
+		return "";
+	}
+
+	@NonNull
+	protected String getTopLeftCellUpperText() {
+		if (additionalAttributeProvider != null) {
+			return additionalAttributeProvider.getTopLeftCellUpperText();
+		}
+		return "";
+	}
+
+	@NonNull
+	protected String getTopLeftCellLowerText() {
+		if (additionalAttributeProvider != null) {
+			return additionalAttributeProvider.getTopLeftCellLowerText();
+		}
+		return "";
 	}
 
 	@NonNull
