@@ -365,8 +365,7 @@ public final class OptimisationHelper {
 					choiceData.addChoice("Off", Boolean.FALSE);
 					choiceData.addChoice("On", Boolean.TRUE);
 
-					choiceData.enabled = false;
-					SecurityUtils.getSubject().isPermitted("features:optimisation-actionset");
+					choiceData.enabled = SecurityUtils.getSubject().isPermitted("features:optimisation-actionset");
 
 					// Objective objective = findObjective(SimilarityFitnessCoreFactory.NAME, copy);
 					// // Create objective if missing.
@@ -383,7 +382,7 @@ public final class OptimisationHelper {
 					// objective.setWeight(1.0);
 
 					dialog.addOption(DataSection.Controls, group, editingDomain, " ", copy, defaultSettings, DataType.Choice, choiceData,
-							ParametersPackage.eINSTANCE.getOptimiserSettings_ShippingOnly());
+							ParametersPackage.eINSTANCE.getOptimiserSettings_BuildActionSets());
 					optionAdded = true;
 				}
 			}
@@ -449,6 +448,7 @@ public final class OptimisationHelper {
 			to.getAnnealingSettings().setEpochLength(EPOCH_LENGTH_FULL);
 		}
 
+		to.setBuildActionSets(from.isBuildActionSets());
 		to.setShippingOnly(from.isShippingOnly());
 		to.setGenerateCharterOuts(from.isGenerateCharterOuts());
 		if (from.getSimilaritySettings() != null) {
@@ -471,7 +471,7 @@ public final class OptimisationHelper {
 				}
 			}
 		}
-		
+
 	}
 
 	private static Objective findObjective(final String objective, final OptimiserSettings settings) {

@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.transformer.ui.breakdown;
 
 import java.util.ArrayList;
@@ -110,7 +114,7 @@ public class BreakdownOptimiserMover {
 	private final int TRY_DEPTH = 2;
 
 	public Collection<JobState> search(@NonNull final ISequences currentSequences, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
-			@NonNull final List<ChangeSet> changeSets, final int tryDepth, final int moveType, final long[] currentMetrics, @NonNull final JobStore jobStore,
+			@NonNull final List<ChangeSet> changeSets, int tryDepth, final int moveType, final long[] currentMetrics, @NonNull final JobStore jobStore,
 			@Nullable List<ISequenceElement> targetElements) {
 
 		final List<JobState> newStates = new LinkedList<>();
@@ -250,8 +254,18 @@ public class BreakdownOptimiserMover {
 				}
 			}
 			if (failedEvaluation) {
+				// Failed to find valid state, but only a few elements left, so allow extensions
+				if (tryDepth == 0 && changedElements.size() <= 2) {
+					tryDepth = 902;
+				}
+				if (tryDepth == 900) {
+
+					// limit re-try to avoid infinite loops
+					tryDepth = 0;
+				}
+
 				// Failed to to find valid state at the end of the search depth. Record a limited state and exit
-				if (tryDepth == 0) {
+				if (tryDepth == 0 && changedElements.size() > 2) {
 					final JobState jobState = new JobState(new Sequences(currentSequences), changeSets, new LinkedList<Change>(changes));
 
 					jobState.setMetric(MetricType.PNL, currentMetrics[MetricType.PNL.ordinal()], 0, 0);
@@ -281,7 +295,7 @@ public class BreakdownOptimiserMover {
 		final StateManager stateManager = new StateManager(currentSequences, currentFullSequences);
 
 		// targetElements = null;
-		final List<ISequenceElement> loopElements = targetElements == null ? new LinkedList<>(changedElements) : new LinkedList<>(targetElements);
+		final List<ISequenceElement> loopElements = targetElements == null ? new LinkedList<>(new LinkedHashSet<>(changedElements)) : new LinkedList<>(new LinkedHashSet<>(targetElements));
 		Collections.shuffle(loopElements, new Random((long) tryDepth));
 
 		// TODO: Now we have this loopElements list, we can decide whether or not to examine the whole list

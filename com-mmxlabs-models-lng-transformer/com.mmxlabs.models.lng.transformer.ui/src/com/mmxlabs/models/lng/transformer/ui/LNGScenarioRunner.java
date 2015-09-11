@@ -13,7 +13,9 @@ import java.util.List;
 
 import javax.management.timer.Timer;
 
+import org.apache.shiro.SecurityUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -133,12 +135,14 @@ public class LNGScenarioRunner {
 				if (LNGTransformer.HINT_OPTIMISE_LSO.equals(hint)) {
 					createOptimiser = true;
 				}
-				if (LNGTransformer.HINT_OPTIMISE_BREAKDOWN.equals(hint)) {
-					doActionSetPostOptimisation = true;
-				}
 			}
 		}
-		doActionSetPostOptimisation = true;
+		// Check for break down optimisation here.
+		if (optimiserSettings.isBuildActionSets()) {
+			if (SecurityUtils.getSubject().isPermitted("features:optimisation-actionset")) {
+				doActionSetPostOptimisation = true;
+			}
+		}
 		optimiserScenario = originalScenario;
 		optimiserEditingDomain = originalEditingDomain;
 	}
@@ -620,6 +624,9 @@ public class LNGScenarioRunner {
 						monitor.report(optimiser, optimiser.getNumberOfIterationsCompleted(), optimiser.getFitnessEvaluator().getCurrentFitness(), optimiser.getFitnessEvaluator().getBestFitness(),
 								optimiser.getCurrentSolution(), optimiser.getBestSolution());
 					}
+					if (progressMonitor.isCanceled()) {
+						throw new OperationCanceledException();
+					}
 					progressMonitor.worked(1);
 				}
 				assert optimiser.isFinished();
@@ -639,9 +646,8 @@ public class LNGScenarioRunner {
 					bestRawSequences = optimiser.getBestRawSequences();
 					bestSolution = optimiser.getBestSolution();
 
-
 					optimiser = performSolutionImprovement(progressMonitor, bestRawSequences);
-					
+
 					if (optimiser != null) {
 						if (optimiser.getBestRawSequences() != null) {
 							bestRawSequences = optimiser.getBestRawSequences();
@@ -654,7 +660,7 @@ public class LNGScenarioRunner {
 			}
 
 			if (doActionSetPostOptimisation) {
-
+				// assert optimiser.isFinished();
 				assert bestRawSequences != null;
 				assert bestSolution != null;
 
@@ -669,6 +675,7 @@ public class LNGScenarioRunner {
 				final List<Pair<ISequences, IEvaluationState>> breakdownSolution = instance.getBestSolution();
 				if (breakdownSolution != null) {
 					storeBreakdownSolutionsAsForks(breakdownSolution, foundBetterResult, new SubProgressMonitor(progressMonitor, PROGRESS_ACTION_SET_SAVE));
+					exportOptimiserSolution = !foundBetterResult;
 				}
 
 				// The breakdown optimiser may find a better solution. This will be saved in storeBreakdownSolutionsAsForks

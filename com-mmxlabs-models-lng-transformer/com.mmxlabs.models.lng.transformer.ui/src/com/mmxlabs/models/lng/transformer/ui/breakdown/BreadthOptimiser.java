@@ -58,7 +58,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
  * 
  * TODO: (lots!)
  * @formatter:off
- * * Fix gaps 
+ * * Fix gaps
  *   -- slots optimised in/out
  *   -- vessel events
  *   -- complex cargoes
@@ -83,6 +83,8 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
  * 
  */
 public class BreadthOptimiser {
+
+	private static final boolean DEBUG = false;
 
 	@Inject
 	@NonNull
@@ -163,7 +165,7 @@ public class BreadthOptimiser {
 		{
 			final int changesCount = breakdownOptimiserMover.getChangedElements(similarityState, initialRawSequences).size();
 			// System.out.println("Initial changes " + changesCount);
-			progressMonitor.beginTask("Analyse changes", changesCount);
+			progressMonitor.beginTask("Generate changes", changesCount / 3);
 		}
 		try {
 			final IModifiableSequences initialFullSequences = new ModifiableSequences(initialRawSequences);
@@ -227,7 +229,7 @@ public class BreadthOptimiser {
 				});
 
 				// DEBUGGING CODE
-				if (false && !sortedChangeStates.isEmpty()) {
+				if (DEBUG && !sortedChangeStates.isEmpty()) {
 					// Save results.
 					final JobState jobState = sortedChangeStates.get(0);
 					assert(jobState.mode == JobStateMode.LEAF);
@@ -245,8 +247,9 @@ public class BreadthOptimiser {
 				e.printStackTrace();
 			}
 			final long time3 = System.currentTimeMillis();
-			System.out.printf("Setup time %d -- Search time %d\n", (time2 - time1) / 1000L, (time3 - time2) / 1000L);
-
+			if (DEBUG) {
+				System.out.printf("Setup time %d -- Search time %d\n", (time2 - time1) / 1000L, (time3 - time2) / 1000L);
+			}
 			return betterSolutionFound;
 		} finally {
 			progressMonitor.done();
@@ -263,6 +266,9 @@ public class BreadthOptimiser {
 		while (true) {
 
 			++depth;
+			if (DEBUG) {
+				System.out.println("New depth " + depth);
+			}
 			// Ok, found some complete change sets, recurse down to the next changeset
 			JobState best = null;
 			if (!currentStates.isEmpty()) {
@@ -271,7 +277,7 @@ public class BreadthOptimiser {
 				// Run small chunks at a time, to limit amount of memory the returned data set will take up
 				final List<JobState> branchStates = new LinkedList<>();
 
-				while (!currentStates.isEmpty()) { // && branchStates.size() < 100) {
+				while (!currentStates.isEmpty()) {// && branchStates.size() < 100) {
 					final List<JobState> subList = new LinkedList<>();
 					// Run up to 20 at once. Note larger sizes may take up more memory with the returned change set count.
 					// changesets can be detected more easily
@@ -282,7 +288,7 @@ public class BreadthOptimiser {
 					if (best == null) {
 						best = subList.get(0);
 					}
-					final Collection<JobState> states = findChangeSets(similarityState, subList, depth);
+					final Collection<JobState> states = findChangeSets(similarityState, subList, depth, progressMonitor);
 					final List<JobState> leafStates = new LinkedList<>();
 
 					sortJobStates(states, leafStates, branchStates);
@@ -291,30 +297,41 @@ public class BreadthOptimiser {
 					if (!leafStates.isEmpty()) {
 						return leafStates;
 					}
+					// Only use first batch of results
+					if (!branchStates.isEmpty()) {
+						break;
+					}
 				}
 				currentStates = branchStates;
 			} else {
-				// System.out.printf("No leaf or branch states found (%d), terminating\n", depth);
-				JobState next = best;
-				if (next != null) {
-					evaluateLeaf(similarityState, next.changesAsList, next.changeSetsAsList, next.rawSequences);
+				if (DEBUG) {
+					System.out.printf("No leaf or branch states found (%d), terminating\n", depth);
 				}
 				return Collections.emptyList();
 			}
+
+			if (DEBUG && currentStates.isEmpty()) {
+				// Early terminate, dump current state.
+				JobState next = best;
+				if (next != null) {
+					JobStore store = new JobStore(-1);
+					Collection<JobState> search = breakdownOptimiserMover.search(next.rawSequences, similarityState, next.changesAsList, next.changeSetsAsList, -1, 0, next.metric, store, null);
+					evaluateLeaf(similarityState, next.changesAsList, next.changeSetsAsList, next.rawSequences);
+				}
+			}
 			if (progressMonitor != null) {
 				progressMonitor.worked(1);
-				Thread.sleep(1000);
 			}
 		}
 
 	}
 
 	@NonNull
-	public Collection<JobState> findChangeSets(@NonNull final SimilarityState similarityState, final Collection<JobState> currentStates, final int depth)
+	public Collection<JobState> findChangeSets(@NonNull final SimilarityState similarityState, final Collection<JobState> currentStates, final int depth, IProgressMonitor checkCancelledStateMonitor)
 			throws InterruptedException, ExecutionException {
-
-		// System.out.printf("Find change sets %d\n", depth);
-
+		if (DEBUG) {
+			System.out.printf("Find change sets %d\n", depth);
+		}
 		// List of temp files containing persisted LIMITED states.
 		final List<File> files = new LinkedList<>();
 		final List<JobState> branchStates = new LinkedList<>();
@@ -324,10 +341,14 @@ public class BreadthOptimiser {
 			{
 				// Evolve current change set
 				final JobStore jobStore = new JobStore(depth);
-				// System.out.printf("Finding change sets (%d) - page C %d L %d\n", depth, currentStates.size(), persistedLimitedStates);
+				if (DEBUG) {
+					System.out.printf("Finding change sets (%d) - page C %d L %d\n", depth, currentStates.size(), persistedLimitedStates);
+				}
 				final long timeX = System.currentTimeMillis();
 				final Collection<JobState> states = runJobs(similarityState, currentStates, jobStore);
-				// System.out.printf("Run jobs complete -- %d\n", (System.currentTimeMillis() - timeX) / 1000L);
+				if (DEBUG) {
+					System.out.printf("Run jobs complete -- %d\n", (System.currentTimeMillis() - timeX) / 1000L);
+				}
 				// Process results by mode.
 				sortJobStates(states, leafStates, branchStates);
 
@@ -335,7 +356,9 @@ public class BreadthOptimiser {
 				files.addAll(jobStore.getFiles());
 				persistedLimitedStates += jobStore.getPersistedStateCount();
 
-				// System.out.printf("Found change sets (%d) - C %d L %d B %d\n", depth, currentStates.size(), jobStore.getPersistedStateCount(), branchStates.size());
+				if (DEBUG) {
+					System.out.printf("Found change sets (%d) - C %d L %d B %d\n", depth, currentStates.size(), jobStore.getPersistedStateCount(), branchStates.size());
+				}
 			}
 			// Break out early?
 			if (!leafStates.isEmpty()) {
@@ -345,10 +368,14 @@ public class BreadthOptimiser {
 
 			if (branchStates.isEmpty() && persistedLimitedStates > 0) {
 				// Unable to find any branches, re-load the persisted limited change sets and continue.
-				// System.out.printf("No leaf or branch states found (%d), retry extending limited states changeset size\n", depth);
-
+				if (DEBUG) {
+					System.out.printf("No leaf or branch states found (%d), retry extending limited states changeset size\n", depth);
+				}
 				// Could end up with many limited states, run on limited
 				LOOP_LIMITED: while (persistedLimitedStates > 0 && files.size() > 0) {
+					if (checkCancelledStateMonitor.isCanceled()) {
+						return leafStates;
+					}
 					// Instead of loading everything in, just load in one file at a time,
 					List<JobState> limitedStates = null;
 					try {
@@ -365,13 +392,22 @@ public class BreadthOptimiser {
 					limitedStates = reduceAndSortStates(limitedStates);
 
 					while (!limitedStates.isEmpty()) {
-						// System.out.printf("Limited states run (%d) - L %d\n", depth, limitedStates.size());
+						if (checkCancelledStateMonitor.isCanceled()) {
+							return leafStates;
+						}
+						if (DEBUG) {
+							System.out.printf("Limited states run (%d) - L %d\n", depth, limitedStates.size());
+						}
 						final List<JobState> subList = new LinkedList<>();//
 						// Run in batches of 100. Smaller number may be quicker, but return a less diverse set of results as we return as soon as we have a leaf result.
 						final int limit = Math.min(limitedStates.size(), 100);
 						for (int i = 0; i < limit; ++i) {
 							subList.add(limitedStates.remove(0));
 						}
+						//// Ignore the rest!
+						// if (!files.isEmpty()) {
+						// limitedStates.clear();
+						// }
 
 						final JobStore jobStore = new JobStore(depth);
 						final Collection<JobState> states = runJobs(similarityState, subList, jobStore);
@@ -382,11 +418,6 @@ public class BreadthOptimiser {
 
 						// Sort results into leaves and branches.
 						sortJobStates(states, leafStates, branchStates);
-
-						// Ignore the rest!
-						if (!files.isEmpty()) {
-							limitedStates.clear();
-						}
 
 						if (!leafStates.isEmpty()) {
 							// Found a result, break out early
