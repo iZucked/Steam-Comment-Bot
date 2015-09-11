@@ -347,16 +347,17 @@ public class LNGScenarioRunner {
 		}
 
 		if (optimiser.isFinished()) {
-			if (this.optimiserSettings.getSolutionImprovementSettings() != null && this.optimiserSettings.getSolutionImprovementSettings().isImprovingSolutions()) {
-				ArbitraryStateLocalSearchOptimiser hillClimber = injector.getInstance(ArbitraryStateLocalSearchOptimiser.class);
-				// The optimiser may not have a best sequence set
-				System.out.println("Performing hill climbing...");
-				ISequences initialSequence = optimiser.getBestRawSequences() == null ? context.getInitialSequences() : optimiser.getBestRawSequences();
-				hillClimber.start(context, initialSequence);
-				hillClimber.step(100);
-				optimiser = hillClimber;
+			if (doHillClimb) {
+				if (this.optimiserSettings.getSolutionImprovementSettings() != null && this.optimiserSettings.getSolutionImprovementSettings().isImprovingSolutions()) {
+					ArbitraryStateLocalSearchOptimiser hillClimber = injector.getInstance(ArbitraryStateLocalSearchOptimiser.class);
+					// The optimiser may not have a best sequence set
+					System.out.println("Performing hill climbing...");
+					ISequences initialSequence = optimiser.getBestRawSequences() == null ? context.getInitialSequences() : optimiser.getBestRawSequences();
+					hillClimber.start(context, initialSequence);
+					hillClimber.step(100);
+					optimiser = hillClimber;
+				}
 			}
-
 			// Clear any previous optimisation state.
 			if (periodMapping != null) {
 				LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, 100);
@@ -665,31 +666,32 @@ public class LNGScenarioRunner {
 			}
 
 			if (doActionSetPostOptimisation) {
-				// assert optimiser.isFinished();
-				assert bestRawSequences != null;
-				assert bestSolution != null;
+				if (bestRawSequences == null) {
+					log.error("Unable to find action sets");
+				} else {
 
-				boolean exportOptimiserSolution = true;
-				// Generate the changesets decomposition.
-				// Run optimisation
+					boolean exportOptimiserSolution = true;
+					// Generate the changesets decomposition.
+					// Run optimisation
 
-				final BreadthOptimiser instance = injector.getInstance(BreadthOptimiser.class);
-				boolean foundBetterResult = instance.optimise(bestRawSequences, new SubProgressMonitor(progressMonitor, PROGRESS_ACTION_SET_OPTIMISATION));
+					final BagOptimiser instance = injector.getInstance(BagOptimiser.class);
+					boolean foundBetterResult = instance.optimise(bestRawSequences, new SubProgressMonitor(progressMonitor, PROGRESS_ACTION_SET_OPTIMISATION), 3);
 
-				// Store the results
-				final List<Pair<ISequences, IEvaluationState>> breakdownSolution = instance.getBestSolution();
-				if (breakdownSolution != null) {
-					storeBreakdownSolutionsAsForks(breakdownSolution, foundBetterResult, new SubProgressMonitor(progressMonitor, PROGRESS_ACTION_SET_SAVE));
-					exportOptimiserSolution = !foundBetterResult;
-				}
+					// Store the results
+					final List<Pair<ISequences, IEvaluationState>> breakdownSolution = instance.getBestSolution();
+					if (breakdownSolution != null) {
+						storeBreakdownSolutionsAsForks(breakdownSolution, foundBetterResult, new SubProgressMonitor(progressMonitor, PROGRESS_ACTION_SET_SAVE));
+						exportOptimiserSolution = !foundBetterResult;
+					}
 
-				// The breakdown optimiser may find a better solution. This will be saved in storeBreakdownSolutionsAsForks
-				if (exportOptimiserSolution) {
-					// export final state
-					finalSchedule = LNGSchedulerJobUtils.exportSolution(injector, optimiserScenario, transformer.getOptimiserSettings(), optimiserEditingDomain, modelEntityMap, bestSolution, 100);
-					final Schedule periodSchedule = exportPeriodScenario(100);
-					if (periodSchedule != null) {
-						finalSchedule = periodSchedule;
+					// The breakdown optimiser may find a better solution. This will be saved in storeBreakdownSolutionsAsForks
+					if (exportOptimiserSolution) {
+						// export final state
+						finalSchedule = LNGSchedulerJobUtils.exportSolution(injector, optimiserScenario, transformer.getOptimiserSettings(), optimiserEditingDomain, modelEntityMap, bestSolution, 100);
+						final Schedule periodSchedule = exportPeriodScenario(100);
+						if (periodSchedule != null) {
+							finalSchedule = periodSchedule;
+						}
 					}
 				}
 			}

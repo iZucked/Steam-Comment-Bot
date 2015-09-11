@@ -27,13 +27,11 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.PortCvCompatibilityConst
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ShippingHoursRestrictionCheckerFactory;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.SlotGroupCountConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.SpotToSpotConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TimeSortConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.VirtualVesselConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
-import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCoreFactory;
 
 /**
  * Utility class for handling scenarios.
@@ -43,7 +41,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCoreFactory;
  */
 public class ScenarioUtils {
 
-	private static final boolean SPOT_TO_SPOT_CONSTRAINT = false;
+	private static final boolean SPOT_TO_SPOT_CONSTRAINT = true;
 
 	public static Constraint createConstraint(final ParametersFactory parametersFactory, final String name, final boolean enabled) {
 		final Constraint c = parametersFactory.createConstraint();

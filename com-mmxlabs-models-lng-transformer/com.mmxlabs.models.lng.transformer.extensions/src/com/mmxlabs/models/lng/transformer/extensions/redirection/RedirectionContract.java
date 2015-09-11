@@ -363,9 +363,9 @@ public class RedirectionContract implements ILoadPriceCalculator {
 	}
 
 	@Override
-	public long calculateAdditionalProfitAndLoss(final ILoadOption loadOption, final IAllocationAnnotation allocationAnnotation, final int[] dischargePricesPerMMBTu,
+	public long[] calculateAdditionalProfitAndLoss(final ILoadOption loadOption, final IAllocationAnnotation allocationAnnotation, final int[] dischargePricesPerMMBTu,
 			final IVesselAvailability vesselAvailability, final int vesselStartTime, final VoyagePlan plan, final IDetailTree annotations) {
-		return 0;
+		return EMPTY_ADDITIONAL_PNL_RESULT;
 	}
 
 	@Override

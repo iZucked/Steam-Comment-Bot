@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -51,8 +52,18 @@ public class JobState implements Serializable{
 		this.changeSetsAsList = Collections.unmodifiableList(new ArrayList<>(changeSets));
 		this.changeSetsAsSet = Collections.unmodifiableSet(new HashSet<>(changeSets));
 		this.hashCode = Objects.hashCode(changes, changeSets);
-		this.differencesList = differencesList;
+		this.setDifferencesList(differencesList);
 	}
+	
+	public JobState(JobState parent) {
+		this(parent.rawSequences, new ArrayList<ChangeSet>(parent.changeSetsAsList), new ArrayList<Change>(parent.changesAsList), new LinkedList<Difference>(parent.getDifferencesList()));
+		this.setMetric(MetricType.PNL, parent.metric[MetricType.PNL.ordinal()], parent.metricDelta[MetricType.PNL.ordinal()], parent.metricDeltaToBase[MetricType.PNL.ordinal()]);
+		this.setMetric(MetricType.LATENESS, parent.metric[MetricType.LATENESS.ordinal()], parent.metricDelta[MetricType.LATENESS.ordinal()], parent.metricDeltaToBase[MetricType.LATENESS.ordinal()]);
+		this.setMetric(MetricType.CAPACITY, parent.metric[MetricType.CAPACITY.ordinal()], parent.metricDelta[MetricType.CAPACITY.ordinal()], parent.metricDeltaToBase[MetricType.CAPACITY.ordinal()]);
+		this.setMetric(MetricType.COMPULSARY_SLOT, parent.metric[MetricType.COMPULSARY_SLOT.ordinal()], parent.metricDelta[MetricType.COMPULSARY_SLOT.ordinal()], parent.metricDeltaToBase[MetricType.COMPULSARY_SLOT.ordinal()]);
+		this.mode = parent.mode;
+	}
+
 
 	public JobState(final ISequences rawSequences, final List<ChangeSet> changeSets, final List<Change> changes) {
 					this(rawSequences, changeSets, changes, null);
@@ -121,6 +132,14 @@ public class JobState implements Serializable{
 
 	public void setFullSequences(ISequences fullSequences) {
 		this.fullSequences = fullSequences;
+	}
+
+	public List<Difference> getDifferencesList() {
+		return differencesList;
+	}
+
+	public void setDifferencesList(List<Difference> differencesList) {
+		this.differencesList = differencesList;
 	}
 
 	// private void readObjectNoData() throws ObjectStreamException;
