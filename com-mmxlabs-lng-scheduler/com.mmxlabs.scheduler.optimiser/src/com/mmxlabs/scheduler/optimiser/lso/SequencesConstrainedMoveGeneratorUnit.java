@@ -9,8 +9,6 @@ import java.util.List;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import org.eclipse.jdt.annotation.NonNull;
-
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.optimiser.core.IResource;

@@ -11,7 +11,6 @@ import com.mmxlabs.common.indexedobjects.impl.ArrayIndexMap;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public final class IndexedPortSlotEditor implements IPortSlotProviderEditor {
 	private final IIndexMap<ISequenceElement, IPortSlot> slots = new ArrayIndexMap<ISequenceElement, IPortSlot>();

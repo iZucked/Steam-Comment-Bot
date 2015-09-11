@@ -79,7 +79,7 @@ public final class GeneralTestUtils {
 
 		final FitnessHelper fitnessHelper = new FitnessHelper();
 		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = createFitnessEvaluatorInstance(combiner, thresholder, fitnessHelper);
-
+		fitnessEvaluator.setThresholder(thresholder);
 		fitnessEvaluator.setFitnessComponents(fitnessComponents);
 		fitnessEvaluator.setEvaluationProcesses(evaluationProcesses);
 
@@ -88,7 +88,8 @@ public final class GeneralTestUtils {
 		return fitnessEvaluator;
 	}
 
-	public static LocalSearchOptimiser buildOptimiser(final IOptimisationContext context, final Random random, final int numberOfIterations, final int stepSize, final IOptimiserProgressMonitor monitor) {
+	public static LocalSearchOptimiser buildOptimiser(final IOptimisationContext context, final Random random, final int numberOfIterations, final int stepSize,
+			final IOptimiserProgressMonitor monitor) {
 
 		final EvaluationProcessInstantiator evaluationProcessInstantiator = new EvaluationProcessInstantiator();
 		final List<IEvaluationProcess> evaluationProcesses = evaluationProcessInstantiator.instantiateEvaluationProcesses(context.getEvaluationProcessRegistry(), context.getEvaluationProcesses(),

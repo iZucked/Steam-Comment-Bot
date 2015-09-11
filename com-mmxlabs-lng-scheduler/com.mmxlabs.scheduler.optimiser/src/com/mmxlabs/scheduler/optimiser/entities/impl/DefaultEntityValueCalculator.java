@@ -263,7 +263,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 				final long[] additionProfitAndLossComponents = loadOption.getLoadPriceCalculator().calculateAdditionalProfitAndLoss(loadOption, cargoPNLData, slotPricesPerMMBTu, vesselAvailability,
 						vesselStartTime, plan, portSlotDetails);
-				cargoPNLData.setSlotAdditionalOtherPNL(slot, additionProfitAndLossComponents[ILoadPriceCalculator.IDX_UPSIDE_VALUE]);
+				cargoPNLData.setSlotAdditionalOtherPNL(slot, additionProfitAndLossComponents[ILoadPriceCalculator.IDX_OTHER_VALUE]);
+				cargoPNLData.setSlotAdditionalUpsidePNL(slot, additionProfitAndLossComponents[ILoadPriceCalculator.IDX_UPSIDE_VALUE]);
 				cargoPNLData.setSlotAdditionalShippingPNL(slot, additionProfitAndLossComponents[ILoadPriceCalculator.IDX_SHIPPING_VALUE]);
 			}
 			idx++;
@@ -392,6 +393,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				// Sum up entity p&L
 				addEntityBookProfit(entityPreTaxProfit, entity.getTradingBook(), -value);
 				addEntityBookProfit(entityPreTaxProfit, entity.getTradingBook(), cargoPNLData.getSlotAdditionalShippingPNL(slot));
+				addEntityBookProfit(entityPreTaxProfit, entity.getTradingBook(), cargoPNLData.getSlotAdditionalUpsidePNL(slot));
 				addEntityBookProfit(entityPreTaxProfit, entity.getTradingBook(), cargoPNLData.getSlotAdditionalOtherPNL(slot));
 
 			} else if (slot instanceof IDischargeOption) {
