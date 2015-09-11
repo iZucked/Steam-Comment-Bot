@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.rcp.common.actions;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridItem;
@@ -27,4 +28,16 @@ public interface IAdditionalAttributeProvider {
 	 */
 	@Nullable
 	String[] getAdditionalAttributes(final GridItem item, final int columnIdx);
+
+	@Nullable
+	String[] getAdditionalRowHeaderAttributes(GridItem item);
+
+	@NonNull
+	String getTopLeftCellLowerText();
+
+	@NonNull
+	String getTopLeftCellUpperText();
+
+	@NonNull
+	String getTopLeftCellText();
 }

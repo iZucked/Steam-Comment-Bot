@@ -88,9 +88,9 @@ public class CopyGridToHtmlStringUtil {
 
 		// top left blank cell
 		if (rowHeadersIncluded) {
-			addCell(topRow, "th", "", new String[] { "bgcolor='grey'" });
-			addCell(bottomRow, "th", "", new String[] { "bgcolor='grey'" });
-			addCell(singleRow, "th", "", new String[] { "bgcolor='grey'" });
+			addCell(topRow, "th", getTopLeftCellUpperText(), new String[] {});
+			addCell(bottomRow, "th", getTopLeftCellLowerText(), new String[] {});
+			addCell(singleRow, "th", getTopLeftCellText(), new String[] {});
 		}
 		// Set of column groups already seen. This assumes all columns within a group are next to each other
 		final Set<GridColumnGroup> seenGroups = new HashSet<>();
@@ -142,6 +142,30 @@ public class CopyGridToHtmlStringUtil {
 	}
 
 	@NonNull
+	protected String getTopLeftCellText() {
+		if (additionalAttributeProvider != null) {
+			return additionalAttributeProvider.getTopLeftCellText();
+		}
+		return "";
+	}
+
+	@NonNull
+	protected String getTopLeftCellUpperText() {
+		if (additionalAttributeProvider != null) {
+			return additionalAttributeProvider.getTopLeftCellUpperText();
+		}
+		return "";
+	}
+
+	@NonNull
+	protected String getTopLeftCellLowerText() {
+		if (additionalAttributeProvider != null) {
+			return additionalAttributeProvider.getTopLeftCellLowerText();
+		}
+		return "";
+	}
+
+	@NonNull
 	private int[] getAllColumns(final Grid table) {
 		final int[] indicies = new int[table.getColumnCount()];
 		for (int i = 0; i < indicies.length; ++i) {
@@ -155,7 +179,7 @@ public class CopyGridToHtmlStringUtil {
 		sw.write("<tr>");
 
 		if (rowHeadersIncluded) {
-			addCell(sw, item.getHeaderText(), new String[] { "bgcolor='gray'" });
+			addCell(sw, item.getHeaderText(), getAdditionalRowHeaderAttributes(item));
 		}
 
 		final int[] columnOrder = includeAllColumns ? getAllColumns(table) : table.getColumnOrder();
@@ -178,8 +202,7 @@ public class CopyGridToHtmlStringUtil {
 				} else {
 					colourString = "";
 				}
-				addCell(sw,
-						item.getText(colIdx),
+				addCell(sw, item.getText(colIdx),
 						combineAttributes(new String[] { colourString, String.format("rowSpan='%d'", 1 + item.getRowSpan(colIdx)), String.format("colSpan='%d'", 1 + item.getColumnSpan(colIdx)) },
 								getAdditionalAttributes(item, colIdx)));
 				// Increment col idx.
@@ -212,6 +235,13 @@ public class CopyGridToHtmlStringUtil {
 		return combined;
 	}
 
+	private String[] getAdditionalRowHeaderAttributes(GridItem item) {
+		if (additionalAttributeProvider != null) {
+			return additionalAttributeProvider.getAdditionalRowHeaderAttributes(item);
+		}
+		return null;
+	}
+
 	private String[] getAdditionalHeaderAttributes(final GridColumn column) {
 		if (additionalAttributeProvider != null) {
 			return additionalAttributeProvider.getAdditionalHeaderAttributes(column);
@@ -232,7 +262,7 @@ public class CopyGridToHtmlStringUtil {
 
 	public final void addCell(final StringWriter sw, final String tag, String text, final String[] attributes) {
 		if (attributes == null) {
-			sw.write("<" + tag + ">" + text + "</" + tag + ">");
+			sw.write("<" + tag + ">");
 		} else {
 			sw.write("<" + tag);
 			for (final String attribute : attributes) {
