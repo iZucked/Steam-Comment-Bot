@@ -227,7 +227,7 @@ public class AbstractOptimisationResultTester {
 
 		final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(originalScenario, LNGScenarioRunner.createDefaultSettings(), LNGTransformer.HINT_OPTIMISE_LSO);
 		// Limit number of iterations to keep runtime down.
-		scenarioRunner.initAndEval(new TransformerExtensionTestModule(), 10000, true);
+		scenarioRunner.initAndEval(new TransformerExtensionTestModule(), 10000, false);
 
 		Schedule intialSchedule = scenarioRunner.getIntialSchedule();
 		Assert.assertNotNull(intialSchedule);
@@ -308,7 +308,7 @@ public class AbstractOptimisationResultTester {
 		}
 		// Create scenario runner with optimisation params incase we want to run optimisation outside of the opt run method.
 		final LNGScenarioRunner originalScenarioRunner = new LNGScenarioRunner(originalScenario, LNGScenarioRunner.createDefaultSettings(), LNGTransformer.HINT_OPTIMISE_LSO);
-		originalScenarioRunner.initAndEval(new TransformerExtensionTestModule(), 10000, true);
+		originalScenarioRunner.initAndEval(new TransformerExtensionTestModule(), 10000, false);
 
 		return originalScenarioRunner;
 	}
