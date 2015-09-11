@@ -28,7 +28,8 @@ public interface ICargoValueAnnotation extends IAllocationAnnotation {
 	 */
 	long getSlotValue(IPortSlot portSlot);
 
-	long getSlotAdditionalPNL(IPortSlot slot);
+	long getSlotAdditionalShippingPNL(IPortSlot slot);
+	long getSlotAdditionalOtherPNL(IPortSlot slot);
 
 	IEntity getSlotEntity(IPortSlot slot);
 
