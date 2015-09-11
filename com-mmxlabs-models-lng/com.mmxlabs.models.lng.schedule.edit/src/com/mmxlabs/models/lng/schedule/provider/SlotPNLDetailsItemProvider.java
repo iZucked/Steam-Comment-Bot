@@ -33,13 +33,7 @@ import com.mmxlabs.models.lng.schedule.SlotPNLDetails;
  * @generated
  */
 public class SlotPNLDetailsItemProvider
-	extends GeneralPNLDetailsItemProvider
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+	extends GeneralPNLDetailsItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->

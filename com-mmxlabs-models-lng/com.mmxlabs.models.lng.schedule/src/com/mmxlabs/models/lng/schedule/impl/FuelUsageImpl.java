@@ -24,10 +24,10 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.FuelUsageImpl#getFuels <em>Fuels</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

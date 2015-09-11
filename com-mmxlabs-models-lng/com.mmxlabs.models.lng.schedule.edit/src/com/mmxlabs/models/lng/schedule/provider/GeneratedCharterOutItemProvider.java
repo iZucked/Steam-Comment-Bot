@@ -33,13 +33,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
  * @generated
  */
 public class GeneratedCharterOutItemProvider
-	extends PortVisitItemProvider
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+	extends PortVisitItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->

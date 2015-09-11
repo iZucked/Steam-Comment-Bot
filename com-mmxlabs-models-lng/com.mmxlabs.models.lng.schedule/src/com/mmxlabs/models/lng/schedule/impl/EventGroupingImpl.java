@@ -23,10 +23,10 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EventGroupingImpl#getEvents <em>Events</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

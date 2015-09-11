@@ -16,6 +16,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Event#getStart <em>Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Event#getEnd <em>End</em>}</li>
@@ -27,7 +28,6 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.schedule.Event#getHeelAtStart <em>Heel At Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Event#getHeelAtEnd <em>Heel At End</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getEvent()
  * @model

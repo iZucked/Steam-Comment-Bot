@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.MarketAllocation#getSlot <em>Slot</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.MarketAllocation#getMarket <em>Market</em>}</li>
@@ -23,7 +24,6 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
  *   <li>{@link com.mmxlabs.models.lng.schedule.MarketAllocation#getPrice <em>Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.MarketAllocation#getSlotVisit <em>Slot Visit</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getMarketAllocation()
  * @model

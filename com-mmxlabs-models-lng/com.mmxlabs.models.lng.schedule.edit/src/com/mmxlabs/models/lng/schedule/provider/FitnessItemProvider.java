@@ -31,13 +31,7 @@ import com.mmxlabs.models.mmxcore.provider.NamedObjectItemProvider;
  * @generated
  */
 public class FitnessItemProvider
-	extends NamedObjectItemProvider
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+	extends NamedObjectItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->

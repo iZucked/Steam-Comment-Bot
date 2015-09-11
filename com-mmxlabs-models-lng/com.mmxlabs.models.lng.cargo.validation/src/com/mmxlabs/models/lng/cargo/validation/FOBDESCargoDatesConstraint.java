@@ -61,6 +61,9 @@ public class FOBDESCargoDatesConstraint extends AbstractModelConstraint {
 					// Check this is the correct type of DES Purchase and FOB Sale
 					if (SlotClassifier.classify(loadSlot) == SlotType.DES_Buy || SlotClassifier.classify(dischargeSlot) == SlotType.FOB_Sale) {
 						final boolean valid;
+						if (loadSlot.getWindowStart() == null || dischargeSlot.getWindowStart() == null) {
+							valid = false;
+						} else
 						if (loadSlot.getWindowStartWithSlotOrPortTimeWithFlex().isBefore(dischargeSlot.getWindowStartWithSlotOrPortTimeWithFlex())) {
 							valid = checkDates(loadSlot.getWindowStartWithSlotOrPortTimeWithFlex(), loadSlot.getWindowEndWithSlotOrPortTime(), dischargeSlot.getWindowEndWithSlotOrPortTimeWithFlex())
 									|| checkDates(loadSlot.getWindowStartWithSlotOrPortTime(), loadSlot.getWindowEndWithSlotOrPortTime(), dischargeSlot.getWindowStartWithSlotOrPortTimeWithFlex());

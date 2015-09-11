@@ -33,13 +33,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
  * @generated
  */
 public class IdleItemProvider
-	extends EventItemProvider
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+	extends EventItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->

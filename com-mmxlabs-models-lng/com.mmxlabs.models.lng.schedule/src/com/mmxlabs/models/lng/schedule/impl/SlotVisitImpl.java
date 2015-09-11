@@ -37,6 +37,7 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl#getFuels <em>Fuels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl#getViolations <em>Violations</em>}</li>
@@ -44,7 +45,6 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl#getLateness <em>Lateness</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl#getSlotAllocation <em>Slot Allocation</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

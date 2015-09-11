@@ -34,13 +34,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
  * @generated
  */
 public class MarketAllocationItemProvider
-	extends ProfitAndLossContainerItemProvider
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+	extends ProfitAndLossContainerItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->

@@ -14,18 +14,45 @@ package com.mmxlabs.models.lng.schedule;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getExtraShippingPNL <em>Extra Shipping PNL</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getAdditionalPNL <em>Additional PNL</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getCancellationFees <em>Cancellation Fees</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getHedgingValue <em>Hedging Value</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getBasicSlotPNLDetails()
  * @model
  * @generated
  */
 public interface BasicSlotPNLDetails extends GeneralPNLDetails {
+	/**
+	 * Returns the value of the '<em><b>Extra Shipping PNL</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Extra Shipping PNL</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Extra Shipping PNL</em>' attribute.
+	 * @see #setExtraShippingPNL(int)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getBasicSlotPNLDetails_ExtraShippingPNL()
+	 * @model
+	 * @generated
+	 */
+	int getExtraShippingPNL();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getExtraShippingPNL <em>Extra Shipping PNL</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Extra Shipping PNL</em>' attribute.
+	 * @see #getExtraShippingPNL()
+	 * @generated
+	 */
+	void setExtraShippingPNL(int value);
+
 	/**
 	 * Returns the value of the '<em><b>Additional PNL</b></em>' attribute.
 	 * <!-- begin-user-doc -->

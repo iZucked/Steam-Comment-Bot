@@ -20,11 +20,11 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CapacityMapEntryImpl#getTypedKey <em>Key</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CapacityMapEntryImpl#getTypedValue <em>Value</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

@@ -16,10 +16,10 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.EventGrouping#getEvents <em>Events</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getEventGrouping()
  * @model

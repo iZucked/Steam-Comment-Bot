@@ -3733,13 +3733,22 @@ public interface SchedulePackage extends EPackage {
 	int GROUP_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX = 1;
 
 	/**
+	 * The feature id for the '<em><b>Tax Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUP_PROFIT_AND_LOSS__TAX_VALUE = 2;
+
+	/**
 	 * The feature id for the '<em><b>Entity Profit And Losses</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int GROUP_PROFIT_AND_LOSS__ENTITY_PROFIT_AND_LOSSES = 2;
+	int GROUP_PROFIT_AND_LOSS__ENTITY_PROFIT_AND_LOSSES = 3;
 
 	/**
 	 * The number of structural features of the '<em>Group Profit And Loss</em>' class.
@@ -3748,7 +3757,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GROUP_PROFIT_AND_LOSS_FEATURE_COUNT = 3;
+	int GROUP_PROFIT_AND_LOSS_FEATURE_COUNT = 4;
 
 	/**
 	 * The number of operations of the '<em>Group Profit And Loss</em>' class.
@@ -3954,13 +3963,22 @@ public interface SchedulePackage extends EPackage {
 	int BASIC_SLOT_PNL_DETAILS = 29;
 
 	/**
+	 * The feature id for the '<em><b>Extra Shipping PNL</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASIC_SLOT_PNL_DETAILS__EXTRA_SHIPPING_PNL = GENERAL_PNL_DETAILS_FEATURE_COUNT + 0;
+
+	/**
 	 * The feature id for the '<em><b>Additional PNL</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASIC_SLOT_PNL_DETAILS__ADDITIONAL_PNL = GENERAL_PNL_DETAILS_FEATURE_COUNT + 0;
+	int BASIC_SLOT_PNL_DETAILS__ADDITIONAL_PNL = GENERAL_PNL_DETAILS_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Cancellation Fees</b></em>' attribute.
@@ -3969,7 +3987,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASIC_SLOT_PNL_DETAILS__CANCELLATION_FEES = GENERAL_PNL_DETAILS_FEATURE_COUNT + 1;
+	int BASIC_SLOT_PNL_DETAILS__CANCELLATION_FEES = GENERAL_PNL_DETAILS_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Hedging Value</b></em>' attribute.
@@ -3978,7 +3996,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE = GENERAL_PNL_DETAILS_FEATURE_COUNT + 2;
+	int BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE = GENERAL_PNL_DETAILS_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Basic Slot PNL Details</em>' class.
@@ -3987,7 +4005,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASIC_SLOT_PNL_DETAILS_FEATURE_COUNT = GENERAL_PNL_DETAILS_FEATURE_COUNT + 3;
+	int BASIC_SLOT_PNL_DETAILS_FEATURE_COUNT = GENERAL_PNL_DETAILS_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of operations of the '<em>Basic Slot PNL Details</em>' class.
@@ -5352,6 +5370,17 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getGroupProfitAndLoss_ProfitAndLossPreTax();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getTaxValue <em>Tax Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Tax Value</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getTaxValue()
+	 * @see #getGroupProfitAndLoss()
+	 * @generated
+	 */
+	EAttribute getGroupProfitAndLoss_TaxValue();
+
+	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getEntityProfitAndLosses <em>Entity Profit And Losses</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5499,6 +5528,17 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EClass getBasicSlotPNLDetails();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getExtraShippingPNL <em>Extra Shipping PNL</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Extra Shipping PNL</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getExtraShippingPNL()
+	 * @see #getBasicSlotPNLDetails()
+	 * @generated
+	 */
+	EAttribute getBasicSlotPNLDetails_ExtraShippingPNL();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getAdditionalPNL <em>Additional PNL</em>}'.
@@ -6630,6 +6670,14 @@ public interface SchedulePackage extends EPackage {
 		EAttribute GROUP_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX = eINSTANCE.getGroupProfitAndLoss_ProfitAndLossPreTax();
 
 		/**
+		 * The meta object literal for the '<em><b>Tax Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute GROUP_PROFIT_AND_LOSS__TAX_VALUE = eINSTANCE.getGroupProfitAndLoss_TaxValue();
+
+		/**
 		 * The meta object literal for the '<em><b>Entity Profit And Losses</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6750,6 +6798,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EClass BASIC_SLOT_PNL_DETAILS = eINSTANCE.getBasicSlotPNLDetails();
+
+		/**
+		 * The meta object literal for the '<em><b>Extra Shipping PNL</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BASIC_SLOT_PNL_DETAILS__EXTRA_SHIPPING_PNL = eINSTANCE.getBasicSlotPNLDetails_ExtraShippingPNL();
 
 		/**
 		 * The meta object literal for the '<em><b>Additional PNL</b></em>' attribute feature.

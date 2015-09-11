@@ -33,13 +33,7 @@ import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
  * @generated
  */
 public class ScheduleModelItemProvider
-	extends UUIDObjectItemProvider
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+	extends UUIDObjectItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->

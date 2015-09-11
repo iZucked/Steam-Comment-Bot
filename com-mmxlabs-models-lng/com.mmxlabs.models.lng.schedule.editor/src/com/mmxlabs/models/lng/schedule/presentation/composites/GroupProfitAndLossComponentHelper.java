@@ -66,6 +66,7 @@ public class GroupProfitAndLossComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_profitAndLossEditor(detailComposite, topClass);
 		add_profitAndLossPreTaxEditor(detailComposite, topClass);
+		add_taxValueEditor(detailComposite, topClass);
 		add_entityProfitAndLossesEditor(detailComposite, topClass);
 	}
 	/**
@@ -83,6 +84,15 @@ public class GroupProfitAndLossComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_profitAndLossPreTaxEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.GROUP_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX));
+	}
+
+	/**
+	 * Create the editor for the taxValue feature on GroupProfitAndLoss
+	 *
+	 * @generated
+	 */
+	protected void add_taxValueEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.GROUP_PROFIT_AND_LOSS__TAX_VALUE));
 	}
 
 	/**

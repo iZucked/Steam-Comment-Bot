@@ -23,13 +23,13 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EntityProfitAndLossImpl#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EntityProfitAndLossImpl#getEntityBook <em>Entity Book</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EntityProfitAndLossImpl#getProfitAndLoss <em>Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EntityProfitAndLossImpl#getProfitAndLossPreTax <em>Profit And Loss Pre Tax</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

@@ -28,12 +28,13 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.GroupProfitAndLossImpl#getProfitAndLoss <em>Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.GroupProfitAndLossImpl#getProfitAndLossPreTax <em>Profit And Loss Pre Tax</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.GroupProfitAndLossImpl#getTaxValue <em>Tax Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.GroupProfitAndLossImpl#getEntityProfitAndLosses <em>Entity Profit And Losses</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
@@ -77,6 +78,26 @@ public class GroupProfitAndLossImpl extends EObjectImpl implements GroupProfitAn
 	 * @ordered
 	 */
 	protected long profitAndLossPreTax = PROFIT_AND_LOSS_PRE_TAX_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getTaxValue() <em>Tax Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTaxValue()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final long TAX_VALUE_EDEFAULT = 0L;
+
+	/**
+	 * The cached value of the '{@link #getTaxValue() <em>Tax Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTaxValue()
+	 * @generated
+	 * @ordered
+	 */
+	protected long taxValue = TAX_VALUE_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getEntityProfitAndLosses() <em>Entity Profit And Losses</em>}' containment reference list.
@@ -154,6 +175,27 @@ public class GroupProfitAndLossImpl extends EObjectImpl implements GroupProfitAn
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public long getTaxValue() {
+		return taxValue;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setTaxValue(long newTaxValue) {
+		long oldTaxValue = taxValue;
+		taxValue = newTaxValue;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.GROUP_PROFIT_AND_LOSS__TAX_VALUE, oldTaxValue, taxValue));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EList<EntityProfitAndLoss> getEntityProfitAndLosses() {
 		if (entityProfitAndLosses == null) {
 			entityProfitAndLosses = new EObjectContainmentEList<EntityProfitAndLoss>(EntityProfitAndLoss.class, this, SchedulePackage.GROUP_PROFIT_AND_LOSS__ENTITY_PROFIT_AND_LOSSES);
@@ -187,6 +229,8 @@ public class GroupProfitAndLossImpl extends EObjectImpl implements GroupProfitAn
 				return getProfitAndLoss();
 			case SchedulePackage.GROUP_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX:
 				return getProfitAndLossPreTax();
+			case SchedulePackage.GROUP_PROFIT_AND_LOSS__TAX_VALUE:
+				return getTaxValue();
 			case SchedulePackage.GROUP_PROFIT_AND_LOSS__ENTITY_PROFIT_AND_LOSSES:
 				return getEntityProfitAndLosses();
 		}
@@ -207,6 +251,9 @@ public class GroupProfitAndLossImpl extends EObjectImpl implements GroupProfitAn
 				return;
 			case SchedulePackage.GROUP_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX:
 				setProfitAndLossPreTax((Long)newValue);
+				return;
+			case SchedulePackage.GROUP_PROFIT_AND_LOSS__TAX_VALUE:
+				setTaxValue((Long)newValue);
 				return;
 			case SchedulePackage.GROUP_PROFIT_AND_LOSS__ENTITY_PROFIT_AND_LOSSES:
 				getEntityProfitAndLosses().clear();
@@ -230,6 +277,9 @@ public class GroupProfitAndLossImpl extends EObjectImpl implements GroupProfitAn
 			case SchedulePackage.GROUP_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX:
 				setProfitAndLossPreTax(PROFIT_AND_LOSS_PRE_TAX_EDEFAULT);
 				return;
+			case SchedulePackage.GROUP_PROFIT_AND_LOSS__TAX_VALUE:
+				setTaxValue(TAX_VALUE_EDEFAULT);
+				return;
 			case SchedulePackage.GROUP_PROFIT_AND_LOSS__ENTITY_PROFIT_AND_LOSSES:
 				getEntityProfitAndLosses().clear();
 				return;
@@ -249,6 +299,8 @@ public class GroupProfitAndLossImpl extends EObjectImpl implements GroupProfitAn
 				return profitAndLoss != PROFIT_AND_LOSS_EDEFAULT;
 			case SchedulePackage.GROUP_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX:
 				return profitAndLossPreTax != PROFIT_AND_LOSS_PRE_TAX_EDEFAULT;
+			case SchedulePackage.GROUP_PROFIT_AND_LOSS__TAX_VALUE:
+				return taxValue != TAX_VALUE_EDEFAULT;
 			case SchedulePackage.GROUP_PROFIT_AND_LOSS__ENTITY_PROFIT_AND_LOSSES:
 				return entityProfitAndLosses != null && !entityProfitAndLosses.isEmpty();
 		}
@@ -269,6 +321,8 @@ public class GroupProfitAndLossImpl extends EObjectImpl implements GroupProfitAn
 		result.append(profitAndLoss);
 		result.append(", profitAndLossPreTax: ");
 		result.append(profitAndLossPreTax);
+		result.append(", taxValue: ");
+		result.append(taxValue);
 		result.append(')');
 		return result.toString();
 	}

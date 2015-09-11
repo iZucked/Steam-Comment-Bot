@@ -67,6 +67,7 @@ public class GroupProfitAndLossItemProvider
 
 			addProfitAndLossPropertyDescriptor(object);
 			addProfitAndLossPreTaxPropertyDescriptor(object);
+			addTaxValuePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -107,6 +108,28 @@ public class GroupProfitAndLossItemProvider
 				 getString("_UI_GroupProfitAndLoss_profitAndLossPreTax_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_GroupProfitAndLoss_profitAndLossPreTax_feature", "_UI_GroupProfitAndLoss_type"),
 				 SchedulePackage.Literals.GROUP_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Tax Value feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTaxValuePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_GroupProfitAndLoss_taxValue_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_GroupProfitAndLoss_taxValue_feature", "_UI_GroupProfitAndLoss_type"),
+				 SchedulePackage.Literals.GROUP_PROFIT_AND_LOSS__TAX_VALUE,
 				 true,
 				 false,
 				 false,
@@ -182,6 +205,7 @@ public class GroupProfitAndLossItemProvider
 		switch (notification.getFeatureID(GroupProfitAndLoss.class)) {
 			case SchedulePackage.GROUP_PROFIT_AND_LOSS__PROFIT_AND_LOSS:
 			case SchedulePackage.GROUP_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX:
+			case SchedulePackage.GROUP_PROFIT_AND_LOSS__TAX_VALUE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case SchedulePackage.GROUP_PROFIT_AND_LOSS__ENTITY_PROFIT_AND_LOSSES:

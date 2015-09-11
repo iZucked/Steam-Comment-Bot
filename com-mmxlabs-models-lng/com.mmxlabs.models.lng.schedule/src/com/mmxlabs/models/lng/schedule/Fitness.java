@@ -12,10 +12,10 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Fitness#getFitnessValue <em>Fitness Value</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getFitness()
  * @model

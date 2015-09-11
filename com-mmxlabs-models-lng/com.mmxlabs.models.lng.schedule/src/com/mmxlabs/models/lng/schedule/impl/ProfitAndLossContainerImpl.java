@@ -29,11 +29,11 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ProfitAndLossContainerImpl#getGroupProfitAndLoss <em>Group Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ProfitAndLossContainerImpl#getGeneralPNLDetails <em>General PNL Details</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
