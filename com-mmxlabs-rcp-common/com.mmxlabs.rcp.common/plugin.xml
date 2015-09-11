@@ -34,5 +34,17 @@
             uri="fragment.e4xmi">
       </fragment>
    </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            id="com.mmxlabs.rcp.common.openview"
+            name="Open View">
+         <commandParameter
+               id="view.id"
+               name="ID of part to open"
+               optional="true">
+         </commandParameter>
+      </command>
+   </extension>
 
 </plugin>
