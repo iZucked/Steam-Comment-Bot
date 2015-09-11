@@ -16,7 +16,6 @@ import org.joda.time.LocalDate;
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.common.csv.IFieldMap;
 import com.mmxlabs.models.datetime.importers.LocalDateAttributeImporter;
-import com.mmxlabs.models.lng.actuals.ActualsModel;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;

@@ -6,8 +6,6 @@ package com.mmxlabs.models.lng.cargo.validation;
 
 import java.util.List;
 
-import javax.swing.text.PlainDocument;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;

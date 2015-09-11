@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.pricing.importers;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,7 +19,6 @@ import java.util.TreeMap;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 import org.joda.time.YearMonth;
 
 import com.mmxlabs.common.csv.IExportContext;
