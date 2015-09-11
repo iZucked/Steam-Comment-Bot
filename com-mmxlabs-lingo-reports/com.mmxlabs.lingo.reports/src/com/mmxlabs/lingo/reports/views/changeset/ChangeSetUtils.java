@@ -30,6 +30,14 @@ public final class ChangeSetUtils {
 
 		return profitAndLossContainer.getGroupProfitAndLoss().getProfitAndLoss();
 	}
+	
+	public static long getGroupPreTaxProfitAndLoss(@Nullable final ProfitAndLossContainer profitAndLossContainer) {
+		if (profitAndLossContainer == null) {
+			return 0L;
+		}
+		
+		return profitAndLossContainer.getGroupProfitAndLoss().getProfitAndLossPreTax();
+	}
 
 	public static long getAdditionalProfitAndLoss(@NonNull final ProfitAndLossContainer profitAndLossContainer) {
 		long addnPNL = 0;
@@ -39,6 +47,20 @@ public final class ChangeSetUtils {
 				for (final GeneralPNLDetails details : slotPNLDetails.getGeneralPNLDetails()) {
 					if (details instanceof BasicSlotPNLDetails) {
 						addnPNL += ((BasicSlotPNLDetails) details).getAdditionalPNL();
+					}
+				}
+			}
+		}
+		return addnPNL;
+	}
+	public static long getAdditionalShippingProfitAndLoss(@NonNull final ProfitAndLossContainer profitAndLossContainer) {
+		long addnPNL = 0;
+		for (final GeneralPNLDetails generalPNLDetails : profitAndLossContainer.getGeneralPNLDetails()) {
+			if (generalPNLDetails instanceof SlotPNLDetails) {
+				final SlotPNLDetails slotPNLDetails = (SlotPNLDetails) generalPNLDetails;
+				for (final GeneralPNLDetails details : slotPNLDetails.getGeneralPNLDetails()) {
+					if (details instanceof BasicSlotPNLDetails) {
+						addnPNL += ((BasicSlotPNLDetails) details).getExtraShippingPNL();
 					}
 				}
 			}

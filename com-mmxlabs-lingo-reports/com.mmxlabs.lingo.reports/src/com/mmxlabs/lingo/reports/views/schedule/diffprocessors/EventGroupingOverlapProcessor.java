@@ -14,7 +14,6 @@ import org.joda.time.DateTime;
 import org.joda.time.Hours;
 import org.joda.time.Interval;
 
-import com.mmxlabs.lingo.reports.views.schedule.model.ChangeType;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;

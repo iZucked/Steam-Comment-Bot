@@ -347,4 +347,9 @@ public class PortRotationReportView extends AbstractConfigurableGridReportView {
 		}
 		return super.getAdapter(adapter);
 	}
+	
+	@Override
+	protected boolean isUseSynchroniser() {
+		return true;
+	}
 }

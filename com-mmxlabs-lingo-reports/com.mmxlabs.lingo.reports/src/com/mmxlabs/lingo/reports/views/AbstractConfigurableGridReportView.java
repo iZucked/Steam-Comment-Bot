@@ -5,7 +5,6 @@
 package com.mmxlabs.lingo.reports.views;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,6 +26,7 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IElementComparer;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.widgets.grid.Grid;
@@ -105,17 +105,17 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	private FilterField filterField;
 	protected EObjectTableViewerFilterSupport filterSupport;
 
-//	/**
-//	 * Small class to hold internal sort state for external reference.
-//	 *
-//	 */
-//	public static class SortData {
-//		public Object[] sortedChildren;
-//		public int[] sortedIndices;
-//		public int[] reverseSortedIndices;
-//	}
-//
-//	private final SortData sortData = new SortData();
+	// /**
+	// * Small class to hold internal sort state for external reference.
+	// *
+	// */
+	// public static class SortData {
+	// public Object[] sortedChildren;
+	// public int[] sortedIndices;
+	// public int[] reverseSortedIndices;
+	// }
+	//
+	// private final SortData sortData = new SortData();
 
 	private void setColumnsImmovable() {
 		if (viewer != null) {
@@ -183,26 +183,26 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 					return adaptSelectionFromWidget(list);
 				}
-//
-//				@Override
-//				protected Object[] getSortedChildren(final Object parent) {
-//					// This is the filtered and sorted children.
-//					// This may be smaller than the original set.
-//					sortData.sortedChildren = super.getSortedChildren(parent);
-//
-//					sortData.sortedIndices = new int[sortData.sortedChildren == null ? 0 : sortData.sortedChildren.length];
-//					sortData.reverseSortedIndices = new int[sortData.sortedChildren == null ? 0 : sortData.sortedChildren.length];
-//
-//					Arrays.fill(sortData.sortedIndices, -1);
-//					Arrays.fill(sortData.reverseSortedIndices, -1);
-//
-//					for (int i = 0; i < sortData.sortedChildren.length; ++i) {
-//						final int rawIndex = table.getRows().indexOf(sortData.sortedChildren[i]);
-//						sortData.sortedIndices[rawIndex] = i;
-//						sortData.reverseSortedIndices[i] = rawIndex;
-//					}
-//					return sortData.sortedChildren;
-//				}
+				//
+				// @Override
+				// protected Object[] getSortedChildren(final Object parent) {
+				// // This is the filtered and sorted children.
+				// // This may be smaller than the original set.
+				// sortData.sortedChildren = super.getSortedChildren(parent);
+				//
+				// sortData.sortedIndices = new int[sortData.sortedChildren == null ? 0 : sortData.sortedChildren.length];
+				// sortData.reverseSortedIndices = new int[sortData.sortedChildren == null ? 0 : sortData.sortedChildren.length];
+				//
+				// Arrays.fill(sortData.sortedIndices, -1);
+				// Arrays.fill(sortData.reverseSortedIndices, -1);
+				//
+				// for (int i = 0; i < sortData.sortedChildren.length; ++i) {
+				// final int rawIndex = table.getRows().indexOf(sortData.sortedChildren[i]);
+				// sortData.sortedIndices[rawIndex] = i;
+				// sortData.reverseSortedIndices[i] = rawIndex;
+				// }
+				// return sortData.sortedChildren;
+				// }
 			};
 			viewer.setComparator(sortingSupport.createViewerComparer());
 
@@ -239,8 +239,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 			viewer.getGrid().setHeaderVisible(true);
 			viewer.getGrid().setLinesVisible(true);
-
-			viewer.setContentProvider(new ObservableListContentProvider());
 
 			// table = ScheduleReportFactory.eINSTANCE.createTable();
 			table = ScheduleReportFactory.eINSTANCE.createTable();
@@ -288,8 +286,12 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 			// table = ScheduleReportFactory.eINSTANCE.createTable();
 			// viewer.setInput(EMFProperties.list(ScheduleReportPackage.Literals.TABLE__ROWS).observe(table));
-			synchronizer = UserManagedScenarioViewerSynchronizer.registerView(viewer, getElementCollector());
-			setInput();
+
+			if (isUseSynchroniser()) {
+				viewer.setContentProvider(new ObservableListContentProvider());
+				synchronizer = UserManagedScenarioViewerSynchronizer.registerView(viewer, getElementCollector());
+				setInput();
+			}
 		}
 
 		// Look at the extension points for the initial visibilities, rows and diff options
@@ -313,6 +315,8 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	protected void setInput() {
 		viewer.setInput(EMFProperties.list(ScheduleReportPackage.Literals.TABLE__ROWS).observe(table));
 	}
+
+	protected abstract boolean isUseSynchroniser();
 
 	protected abstract void registerReportColumns();
 
@@ -441,8 +445,11 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 					nonVisibleIcon.dispose();
 					visibleIcon.dispose();
 
-					synchronizer.refreshViewer(false);
-
+					if (synchronizer != null) {
+						synchronizer.refreshViewer(false);
+					} else {
+						viewer.refresh();
+					}
 				}
 
 			};
@@ -654,11 +661,14 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 				return;
 			}
 		}
-		if (selection instanceof Object[]) {
-			viewer.setSelection(new StructuredSelection((Object[]) selection), true);
+		if (selection instanceof ISelection) {
+			viewer.setSelection((ISelection) selection, true);
+		} else if (selection instanceof Object[]) {
+			viewer.setSelection(new StructuredSelection(selection), true);
 		} else {
 			viewer.setSelection(new StructuredSelection(selection), true);
 		}
+		viewer.refresh();
 	}
 
 	protected boolean handleSelections() {
@@ -672,7 +682,9 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 			final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
 			service.removePostSelectionListener(this);
 		}
-		UserManagedScenarioViewerSynchronizer.deregisterView(synchronizer);
+		if (synchronizer != null) {
+			UserManagedScenarioViewerSynchronizer.deregisterView(synchronizer);
+		}
 		sortingSupport.clearColumnSortOrder();
 		clearInputEquivalents();
 		super.dispose();
@@ -684,15 +696,15 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	@Override
 	public Object getAdapter(final Class adapter) {
 
-//		if (SortData.class.isAssignableFrom(adapter)) {
-//			return sortData;
-//		}
-		if (adapter.isAssignableFrom(IPropertySheetPage.class)) {
-			final PropertySheetPage propertySheetPage = new PropertySheetPage();
-
-			propertySheetPage.setPropertySourceProvider(new ScheduledEventPropertySourceProvider());
-			return propertySheetPage;
-		}
+		// if (SortData.class.isAssignableFrom(adapter)) {
+		// return sortData;
+		// }
+		// if (adapter.isAssignableFrom(IPropertySheetPage.class)) {
+		// final PropertySheetPage propertySheetPage = new PropertySheetPage();
+		//
+		// propertySheetPage.setPropertySourceProvider(new ScheduledEventPropertySourceProvider());
+		// return propertySheetPage;
+		// }
 		return super.getAdapter(adapter);
 	}
 

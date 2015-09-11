@@ -1,20 +1,46 @@
 <?xml version="1.0" encoding="ASCII"?>
-<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_2XDjgEGIEeW-SYJZ5d5KDQ">
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:basic_1="http://www.eclipse.org/ui/2010/UIModel/application/descriptor/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_2XDjgEGIEeW-SYJZ5d5KDQ">
   <imports xsi:type="commands:Command" xmi:id="_y3WtAEGJEeW-SYJZ5d5KDQ" elementId="com.mmxlabs.lingo.reports.changeset.analyse"/>
-  <imports xsi:type="basic:Part" xmi:id="_VpzP0ETNEeW-SYJZ5d5KDQ" elementId="com.mmxlabs.lingo.reports.views.changeset.ChangeSetView"/>
+  <imports xsi:type="commands:Command" xmi:id="_0L5mIFGEEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.commands.FilterScheduleChartBySelection"/>
+  <imports xsi:type="commands:Command" xmi:id="_1MUhUFGEEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.commands.FilterScheduleSummaryBySelection"/>
+  <imports xsi:type="basic:TrimmedWindow" xmi:id="_HpKhwFIiEeWoN4jo1OIdrw" elementId="IDEWindow"/>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_EYe24EGJEeW-SYJZ5d5KDQ" featurename="handlers" parentElementId="org.eclipse.e4.legacy.ide.application">
     <elements xsi:type="commands:Handler" xmi:id="_33-uQEGJEeW-SYJZ5d5KDQ" elementId="com.mmxlabs.lingo.reports.handler.0" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.AnalyseScenarioHandler" command="_y3WtAEGJEeW-SYJZ5d5KDQ"/>
-    <elements xsi:type="commands:Handler" xmi:id="_AiZ_YEGYEeW-SYJZ5d5KDQ" elementId="com.mmxlabs.lingo.reports.handler.1" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleDiffToBaseHandler" command="__RYcYEGXEeW-SYJZ5d5KDQ"/>
-    <elements xsi:type="commands:Handler" xmi:id="_pJO1YEW8EeWQ86g0inrF4Q" elementId="com.mmxlabs.lingo.reports.handler.2" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleShowStructuralChangesHandler" command="_i3B3gEW8EeWQ86g0inrF4Q"/>
+    <elements xsi:type="commands:Handler" xmi:id="_3iCbgFGEEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.handler.1" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.services.handlers.FilterScheduleChartBySelectionHandler" command="_0L5mIFGEEeWoN4jo1OIdrw"/>
+    <elements xsi:type="commands:Handler" xmi:id="_IGcpAFGFEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.handler.2" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.services.handlers.FilterScheduleSummaryBySelectionHandler" command="_1MUhUFGEEeWoN4jo1OIdrw"/>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_9BVsYEGXEeW-SYJZ5d5KDQ" featurename="commands" parentElementId="org.eclipse.e4.legacy.ide.application">
-    <elements xsi:type="commands:Command" xmi:id="__RYcYEGXEeW-SYJZ5d5KDQ" elementId="com.mmxlabs.lingo.reports.changeset.toggle-diff-to-base" commandName="Toggle compare to base"/>
-    <elements xsi:type="commands:Command" xmi:id="_i3B3gEW8EeWQ86g0inrF4Q" elementId="com.mmxlabs.lingo.reports.changeset.toggle-filter-non-structural-changes" commandName="Toggle filter non-structural changes"/>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_e3NEAEyjEeWRXMz4UJzhKw" featurename="sharedElements" parentElementId="IDEWindow">
+    <elements xsi:type="basic:Part" xmi:id="_OYReEFIiEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.views.changeset.ChangeSetView" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.ChangeSetView" label="Change Sets" iconURI="platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/changes_view.gif" tooltip="" closeable="true">
+      <tags>change-set</tags>
+      <toolbar xmi:id="_SGHo0FIiEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.toolbar.1">
+        <children xsi:type="menu:DirectToolItem" xmi:id="_1ho0kEyjEeWRXMz4UJzhKw" elementId="com.mmxlabs.lingo.reports.directtoolitem.filternonstructuralchanges" label="Filter Non Structural Changes" iconURI="platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif" selected="true" type="Check" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleShowStructuralChangesHandler"/>
+      </toolbar>
+    </elements>
+    <elements xsi:type="basic:Part" xmi:id="_jxW7gFIiEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.views.changeset.ActionSetView" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.ChangeSetView" label="Action Sets" iconURI="platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/actionsets_view.jpg" closeable="true">
+      <tags>action-set</tags>
+      <toolbar xmi:id="_kD3AwFIiEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.toolbar.0">
+        <children xsi:type="menu:DirectToolItem" xmi:id="_kphSkFIiEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.directtoolitem.filternonstructuralchanges" label="Filter Non Structural Changes" iconURI="platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif" selected="true" type="Check" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleShowStructuralChangesHandler"/>
+        <children xsi:type="menu:DirectToolItem" xmi:id="_k7mhEFIiEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.directtoolitem.comparetobase" label="Compare to Base" iconURI="platform:/plugin/com.mmxlabs.lingo.reports/icons/compare_to_base.gif" type="Check" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleDiffToBaseHandler"/>
+      </toolbar>
+    </elements>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_GKQYsEGYEeW-SYJZ5d5KDQ" featurename="toolbar" parentElementId="com.mmxlabs.lingo.reports.views.changeset.ChangeSetView">
-    <elements xsi:type="menu:ToolBar" xmi:id="_PjR9kEGYEeW-SYJZ5d5KDQ" elementId="com.mmxlabs.lingo.reports.toolbar.0">
-      <children xsi:type="menu:HandledToolItem" xmi:id="_QYj_wEGYEeW-SYJZ5d5KDQ" elementId="com.mmxlabs.lingo.reports.handledtoolitem.toggle" label="Compare to Base" iconURI="platform:/plugin/com.mmxlabs.lingo.reports/icons/compare_to_base.gif" type="Check" command="__RYcYEGXEeW-SYJZ5d5KDQ"/>
-      <children xsi:type="menu:HandledToolItem" xmi:id="_dn0AoEW8EeWQ86g0inrF4Q" elementId="com.mmxlabs.lingo.reports.handledtoolitem.filternonstructualchanges" label="Filter Non Structural Changes" iconURI="platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif" selected="true" type="Check" command="_i3B3gEW8EeWQ86g0inrF4Q"/>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_deSwUFGFEeWoN4jo1OIdrw" featurename="children" parentElementId="com.mmxlabs.lingo.reports.diff.actionset">
+    <elements xsi:type="menu:HandledToolItem" xmi:id="_pBl-8FGGEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.handledtoolitem.filterschedulechartbyselection" label="Filter Schedule Chart by selection" iconURI="platform:/plugin/com.mmxlabs.lingo.reports/icons/filterGantt.gif" type="Check" command="_0L5mIFGEEeWoN4jo1OIdrw"/>
+    <elements xsi:type="menu:HandledToolItem" xmi:id="_uq8NEFGGEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.handledtoolitem.filterschedulesummarybyselection" label="Filter Schedule Summary by selection" iconURI="platform:/plugin/com.mmxlabs.lingo.reports/icons/FilterBySelection.gif" type="Check" command="_1MUhUFGEEeWoN4jo1OIdrw"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_QH_9QFGIEeWoN4jo1OIdrw" featurename="descriptors" parentElementId="org.eclipse.e4.legacy.ide.application">
+    <elements xsi:type="basic_1:PartDescriptor" xmi:id="_qC3gYFIjEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.views.changeset.ChangeSetView" label="Change Sets" iconURI="platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/changes_view.gif" category="org.eclipse.e4.secondaryDataStack" closeable="true" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.ChangeSetView">
+      <tags>change-set</tags>
+      <toolbar xmi:id="_v8XqYFIjEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.toolbar.2">
+        <children xsi:type="menu:DirectToolItem" xmi:id="_x_hN4FIjEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.directtoolitem.filternonstructuralchanges" label="Filter Non Structural Changes" iconURI="platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif" selected="true" type="Check" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleShowStructuralChangesHandler"/>
+      </toolbar>
+    </elements>
+    <elements xsi:type="basic_1:PartDescriptor" xmi:id="_su0wUFIjEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.views.changeset.ActionSetView" label="Action Sets" iconURI="platform:/plugin/com.mmxlabs.lingo.reports/icons/cview16/actionsets_view.jpg" category="org.eclipse.e4.secondaryDataStack" closeable="true" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.ChangeSetView">
+      <tags>action-set</tags>
+      <toolbar xmi:id="_y0wz0FIjEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.toolbar.3">
+        <children xsi:type="menu:DirectToolItem" xmi:id="_zS2eAFIjEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.directtoolitem.filternonstructuralchanges" label="Filter Non Structural Changes" iconURI="platform:/plugin/com.mmxlabs.lingo.reports/icons/filter.gif" selected="true" type="Check" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleShowStructuralChangesHandler"/>
+        <children xsi:type="menu:DirectToolItem" xmi:id="_zjVxEFIjEeWoN4jo1OIdrw" elementId="com.mmxlabs.lingo.reports.directtoolitem.comparetobase" label="Compare to Base" iconURI="platform:/plugin/com.mmxlabs.lingo.reports/icons/compare_to_base.gif" type="Check" contributionURI="bundleclass://com.mmxlabs.lingo.reports/com.mmxlabs.lingo.reports.views.changeset.handlers.ToggleDiffToBaseHandler"/>
+      </toolbar>
     </elements>
   </fragments>
 </fragment:ModelFragments>

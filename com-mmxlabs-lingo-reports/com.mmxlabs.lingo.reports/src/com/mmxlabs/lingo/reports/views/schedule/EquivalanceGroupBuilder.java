@@ -271,6 +271,7 @@ public class EquivalanceGroupBuilder {
 										}
 									}
 									if (referenceRow != null) {
+										assert referenceRow != equivalenceRow;
 										equivalenceRow.setReferenceRow(referenceRow);
 									}
 								}

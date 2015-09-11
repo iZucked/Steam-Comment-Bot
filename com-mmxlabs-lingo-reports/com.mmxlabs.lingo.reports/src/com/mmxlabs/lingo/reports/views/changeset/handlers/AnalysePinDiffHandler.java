@@ -27,8 +27,9 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetViewEventConstants;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 
-public class AnalyseScenarioHandler {
+public class AnalysePinDiffHandler {
 
 	@Inject
 	private IEventBroker eventBroker;
@@ -43,45 +44,20 @@ public class AnalyseScenarioHandler {
 	private EModelService modelService;
 	@Inject
 	private MApplication application;
+	@Inject
+	private IScenarioServiceSelectionProvider scenarioSelectionProvider;
 
 	@CanExecute
 	public boolean canExecute(@Optional @Named(IServiceConstants.ACTIVE_PART) final MPart part) {
-		if (part == null) {
-			return false;
-		}
-		final Object selection = selectionService.getSelection(part.getElementId());
-		if (selection instanceof IStructuredSelection) {
-			final IStructuredSelection ss = (IStructuredSelection) selection;
-			if (ss.size() == 1) {
-				final Object o = ss.getFirstElement();
-				if (o instanceof ScenarioInstance) {
-					final ScenarioInstance scenarioInstance = (ScenarioInstance) o;
 
-					// Check forks
-					for (final Container c : scenarioInstance.getElements()) {
-						if (c.getName().toLowerCase().startsWith("actionset")) {
-							return true;
-						}
-					}
-
-					// Check siblings.
-					final Container parent = scenarioInstance.getParent();
-					for (final Container c : parent.getElements()) {
-						if (c.getName().toLowerCase().startsWith("actionset")) {
-							return true;
-						}
-					}
-				}
-			}
-		}
-		return false;
+		return true;
 	}
 
 	@Execute
-	public void execute(@Optional @Named(IServiceConstants.ACTIVE_PART) final MPart part) {
-		if (part == null) {
-			return;
-		}
+	public void execute(@Optional @Named(IServiceConstants.ACTIVE_PART) final MPart _part) {
+//		if (part == null) {
+//			return;
+//		}
 		// Switch perspective
 		final List<MPerspective> perspectives = modelService.findElements(application, null, MPerspective.class, null);
 		for (final MPerspective p : perspectives) {
@@ -91,17 +67,17 @@ public class AnalyseScenarioHandler {
 		}
 
 		// Activate change set view
-		partService.showPart("com.mmxlabs.lingo.reports.views.changeset.ActionSetView", PartState.ACTIVATE);
+		partService.showPart("com.mmxlabs.lingo.reports.views.changeset.ChangeSetView", PartState.ACTIVATE);
 
-		final Object selection = selectionService.getSelection(part.getElementId());
-		if (selection instanceof IStructuredSelection) {
-			final IStructuredSelection ss = (IStructuredSelection) selection;
-			final Object o = ss.getFirstElement();
-			if (o instanceof ScenarioInstance) {
-				final ScenarioInstance scenarioInstance = (ScenarioInstance) o;
-				eventBroker.post(ChangeSetViewEventConstants.EVENT_ANALYSE_ACTION_SETS, scenarioInstance);
-			}
-		}
+		// final Object selection = selectionService.getSelection(part.getElementId());
+		// if (selection instanceof IStructuredSelection) {
+		// final IStructuredSelection ss = (IStructuredSelection) selection;
+		// final Object o = ss.getFirstElement();
+		// if (o instanceof ScenarioInstance) {
+		// final ScenarioInstance scenarioInstance = (ScenarioInstance) o;
+		eventBroker.post(ChangeSetViewEventConstants.EVENT_ANALYSE_CHANGE_SETS, null);
+		// }
+		// }
 	}
 
 }

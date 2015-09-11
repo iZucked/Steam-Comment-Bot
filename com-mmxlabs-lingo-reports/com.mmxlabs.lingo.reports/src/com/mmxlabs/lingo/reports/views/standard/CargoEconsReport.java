@@ -13,6 +13,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.Action;
@@ -20,6 +22,7 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
@@ -30,14 +33,16 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.internal.e4.compatibility.CompatibilityView;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.PropertySheet;
 
 import com.google.common.collect.Sets;
+import com.mmxlabs.lingo.reports.diff.DiffGroupView;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -87,7 +92,7 @@ public class CargoEconsReport extends ViewPart {
 	 */
 	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.CargoEconsReport";
 	private GridTableViewer viewer;
-	private ISelectionListener selectionListener;
+	private org.eclipse.e4.ui.workbench.modeling.ISelectionListener selectionListener;
 
 	/**
 	 * List of dynamically generated columns to be disposed on selection changes
@@ -115,18 +120,38 @@ public class CargoEconsReport extends ViewPart {
 
 		viewer.getGrid().setHeaderVisible(true);
 
-		selectionListener = new ISelectionListener() {
+		selectionListener = new org.eclipse.e4.ui.workbench.modeling.ISelectionListener() {
 
 			@Override
-			public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
-				// Filter out uninteresting views
-				if (part == CargoEconsReport.this) {
-					return;
+			public void selectionChanged(MPart part, Object selectedObjects) {
+				final Object object = part.getObject();
+				IViewPart e3part = null;
+				if (object instanceof CompatibilityView) {
+					final CompatibilityView compatibilityView = (CompatibilityView) object;
+					e3part = compatibilityView.getView();
+
+					if (e3part == CargoEconsReport.this) {
+						return;
+					}
+					if (e3part instanceof PropertySheet) {
+						return;
+					}
+
+					if (e3part instanceof DiffGroupView) {
+						return;
+					}
 				}
-				// Ignore properties view
-				if (part instanceof PropertySheet) {
-					return;
+
+				ISelection selection = null;
+				// Convert selection
+				if (selectedObjects instanceof ISelection) {
+					selection = (ISelection) selectedObjects;
+				} else if (selectedObjects instanceof Object[]) {
+					selection = new StructuredSelection((Object[]) selectedObjects);
+				} else {
+					selection = new StructuredSelection(selectedObjects);
 				}
+
 				// TODO: Ignore navigator
 
 				// Dispose old data columns - clone list to try to avoid concurrent modification exceptions
@@ -138,7 +163,7 @@ public class CargoEconsReport extends ViewPart {
 
 				// Find valid, selected objects
 
-				final Collection<Object> validObjects = processSelection(part, selection);
+				final Collection<Object> validObjects = processSelection(e3part, selection);
 
 				for (final Object selectedObject : validObjects) {
 
@@ -178,15 +203,18 @@ public class CargoEconsReport extends ViewPart {
 		getViewSite().getActionBars().getToolBarManager().add(copyAction);
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyAction);
 
-		getSite().getPage().addSelectionListener(selectionListener);
-		
+		// Get e4 selection service!
+		final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
+		service.addPostSelectionListener(selectionListener);
+
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Reports_CargoEcons");
 	}
 
 	@Override
 	public void dispose() {
 
-		getSite().getPage().removeSelectionListener(selectionListener);
+		final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
+		service.removePostSelectionListener(selectionListener);
 
 		super.dispose();
 	}
@@ -320,9 +348,9 @@ public class CargoEconsReport extends ViewPart {
 			case PNL_TOTAL: {
 				return CargoEconsReport.getPNLValue(cargoAllocation);
 			}
-			// case PNL_TOTAL_NO_TC: {
-			// return CargoEconsReport.getPNLValueNoTC(cargoAllocation);
-			// }
+				// case PNL_TOTAL_NO_TC: {
+				// return CargoEconsReport.getPNLValueNoTC(cargoAllocation);
+				// }
 			case SELL_REVENUE_TOTAL: {
 				double cv = 0.0;
 				// Find the CV
@@ -333,7 +361,7 @@ public class CargoEconsReport extends ViewPart {
 						// TODO: Avg CV
 						cv = loadSlot.getSlotOrDelegatedCV();
 						break;
-					}// cooldowncooldownviolationsCountviolationsCountviolationsCount violationsCount += cc;
+					} // cooldowncooldownviolationsCountviolationsCountviolationsCount violationsCount += cc;
 				}
 				long revenue = 0;
 				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
@@ -498,9 +526,9 @@ public class CargoEconsReport extends ViewPart {
 			case PNL_TOTAL: {
 				return CargoEconsReport.getPNLValue(marketAllocation);
 			}
-			// case PNL_TOTAL_NO_TC: {
-			// return CargoEconsReport.getPNLValueNoTC(marketAllocation);
-			// }
+				// case PNL_TOTAL_NO_TC: {
+				// return CargoEconsReport.getPNLValueNoTC(marketAllocation);
+				// }
 			case SELL_REVENUE_TOTAL: {
 				// Find the CV & price
 				final double cv;
@@ -832,6 +860,7 @@ public class CargoEconsReport extends ViewPart {
 						for (GeneralPNLDetails details : slotPNLDetails.getGeneralPNLDetails()) {
 							if (details instanceof BasicSlotPNLDetails) {
 								addnPNL += ((BasicSlotPNLDetails) details).getAdditionalPNL();
+								addnPNL += ((BasicSlotPNLDetails) details).getExtraShippingPNL();
 							}
 						}
 					}
