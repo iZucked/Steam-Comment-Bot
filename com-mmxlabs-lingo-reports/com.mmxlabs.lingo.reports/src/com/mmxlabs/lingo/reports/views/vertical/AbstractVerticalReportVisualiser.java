@@ -102,14 +102,19 @@ public abstract class AbstractVerticalReportVisualiser {
 				return colourPalette.getColourFor(ColourPaletteItems.Voyage_Ballast_Journey, ColourElements.Background);
 			}
 		}
-		if (event instanceof CharterOutEvent) {
-			return colourPalette.getColourFor(ColourPaletteItems.Event_CharterOut, ColourElements.Background);
-		}
-		if (event instanceof DryDockEvent) {
-			return colourPalette.getColourFor(ColourPaletteItems.Event_DryDock, ColourElements.Background);
-		}
-		if (event instanceof MaintenanceEvent) {
-			return colourPalette.getColourFor(ColourPaletteItems.Event_Maintenence, ColourElements.Background);
+
+		if (event instanceof VesselEventVisit) {
+			final VesselEvent vesselEvent = ((VesselEventVisit) event).getVesselEvent();
+
+			if (vesselEvent instanceof CharterOutEvent) {
+				return colourPalette.getColourFor(ColourPaletteItems.Event_CharterOut, ColourElements.Background);
+			}
+			if (vesselEvent instanceof DryDockEvent) {
+				return colourPalette.getColourFor(ColourPaletteItems.Event_DryDock, ColourElements.Background);
+			}
+			if (vesselEvent instanceof MaintenanceEvent) {
+				return colourPalette.getColourFor(ColourPaletteItems.Event_Maintenence, ColourElements.Background);
+			}
 		}
 		if (event instanceof GeneratedCharterOut) {
 			return colourPalette.getColourFor(ColourPaletteItems.Voyage_GeneratedCharterOut, ColourElements.Background);
@@ -421,5 +426,13 @@ public abstract class AbstractVerticalReportVisualiser {
 
 	public ColourPalette getColourPalette() {
 		return colourPalette;
+	}
+
+	public enum Alignment {
+		LEFT, RIGHT, CENTRE
+	}
+
+	public Alignment getEventTextAlignment(final LocalDate localDate, final Event event) {
+		return Alignment.LEFT;
 	}
 }

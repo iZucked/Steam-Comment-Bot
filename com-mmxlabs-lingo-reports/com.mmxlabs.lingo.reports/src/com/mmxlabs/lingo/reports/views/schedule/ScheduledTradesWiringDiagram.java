@@ -30,7 +30,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
 
-import com.mmxlabs.lingo.reports.views.AbstractConfigurableGridReportView.SortData;
+//import com.mmxlabs.lingo.reports.views.AbstractConfigurableGridReportView.SortData;
 import com.mmxlabs.lingo.reports.views.schedule.model.ChangeType;
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
@@ -85,10 +85,10 @@ public class ScheduledTradesWiringDiagram implements PaintListener {
 	 * The {@link Table} data structure containing all the required data
 	 */
 	private Table table;
-	/**
-	 * Class representing the current sort order of the table contents.
-	 */
-	private SortData sortData;
+//	/**
+//	 * Class representing the current sort order of the table contents.
+//	 */
+//	private SortData sortData;
 
 	/**
 	 * Create a new wiring diagram
@@ -152,10 +152,10 @@ public class ScheduledTradesWiringDiagram implements PaintListener {
 
 		int[] sortedIndices = null;
 		int[] reverseSortedIndices = null;
-		if (sortData != null) {
-			sortedIndices = sortData.sortedIndices;
-			reverseSortedIndices = sortData.reverseSortedIndices;
-		}
+//		if (sortData != null) {
+//			sortedIndices = sortData.sortedIndices;
+//			reverseSortedIndices = sortData.reverseSortedIndices;
+//		}
 
 		// // Copy ref in case of concurrent change during paint
 		final Table root = table;
@@ -435,13 +435,13 @@ public class ScheduledTradesWiringDiagram implements PaintListener {
 	public void setTable(final Table table) {
 		this.table = table;
 	}
-
-	public SortData getSortData() {
-		return sortData;
-	}
-
-	public void setSortData(final SortData sortData) {
-		this.sortData = sortData;
-	}
+//
+//	public SortData getSortData() {
+//		return sortData;
+//	}
+//
+//	public void setSortData(final SortData sortData) {
+//		this.sortData = sortData;
+//	}
 
 }

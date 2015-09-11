@@ -10,6 +10,7 @@ import org.eclipse.swt.graphics.Font;
 import org.joda.time.LocalDate;
 
 import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalReportVisualiser;
+import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalReportVisualiser.Alignment;
 import com.mmxlabs.models.lng.schedule.Event;
 
 /**
@@ -41,5 +42,9 @@ public class EventLabelProvider {
 
 	protected Color getForeground(@NonNull final LocalDate date, @NonNull final Event event) {
 		return verticalReportVisualiser.getEventForegroundColor(date, event);
+	}
+
+	public Alignment getTextAlignment(@NonNull final LocalDate date, @NonNull final Event event) {
+		return verticalReportVisualiser.getEventTextAlignment(date, event);
 	}
 }
