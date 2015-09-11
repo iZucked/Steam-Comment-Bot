@@ -6,8 +6,6 @@ package com.mmxlabs.optimiser.lso.impl;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedList;
-
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.IModifiableSequences;

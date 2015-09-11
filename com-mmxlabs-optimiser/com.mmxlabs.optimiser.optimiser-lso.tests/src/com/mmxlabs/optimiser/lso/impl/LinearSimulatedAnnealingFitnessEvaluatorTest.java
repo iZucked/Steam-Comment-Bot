@@ -43,18 +43,27 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 
 		final List<IFitnessComponent> fitnessComponents = Collections.emptyList();
 		assert fitnessComponents != null;
-		evaluator.setFitnessComponents(fitnessComponents);
 
+		final IThresholder thresholder = Mockito.mock(IThresholder.class);
+
+		evaluator.setFitnessComponents(fitnessComponents);
+		evaluator.setThresholder(thresholder);
 		evaluator.init();
 
 	}
 
-	// @Test(expected = IllegalStateException.class)
-	// public void testInit2() {
-	// final LinearSimulatedAnnealingFitnessEvaluator evaluator = new LinearSimulatedAnnealingFitnessEvaluator();
-	//
-	// evaluator.init();
-	// }
+	@Test(expected = IllegalStateException.class)
+	public void testInit2() {
+		final LinearSimulatedAnnealingFitnessEvaluator evaluator = new LinearSimulatedAnnealingFitnessEvaluator();
+		final List<IFitnessComponent> fitnessComponents = Collections.emptyList();
+		assert fitnessComponents != null;
+
+		final IThresholder thresholder = Mockito.mock(IThresholder.class);
+
+		evaluator.setFitnessComponents(fitnessComponents);
+		// evaluator.setThresholder(thresholder);
+		evaluator.init();
+	}
 
 	@Test
 	public void testCheckSequences() {
@@ -75,6 +84,7 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 
 		final LinearSimulatedAnnealingFitnessEvaluator evaluator = createFitnessEvaluator(fitnessCombiner, thresholder, fitnessHelper);
 		evaluator.setFitnessComponents(fitnessComponents);
+		evaluator.setThresholder(thresholder);
 		evaluator.init();
 
 		Assert.assertEquals(Long.MAX_VALUE, evaluator.getBestFitness());
@@ -164,7 +174,7 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 
 		final LinearSimulatedAnnealingFitnessEvaluator evaluator = createFitnessEvaluator(fitnessCombiner, thresholder, fitnessHelper);
 		evaluator.setFitnessComponents(fitnessComponents);
-
+		evaluator.setThresholder(thresholder);
 		evaluator.init();
 
 		Assert.assertEquals(Long.MAX_VALUE, evaluator.getBestFitness());

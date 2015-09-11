@@ -62,7 +62,7 @@ public final class MoveSnake implements IMove {
 			assert to != null;
 			final IModifiableSequence toSequence = sequences.getModifiableSequence(to);
 			final ISegment segment = segments.get(i);
-			assert segment != null;
+//			assert segment != null;
 			toSequence.insert(insertionPositions.get(i), segment);
 		}
 
@@ -73,7 +73,7 @@ public final class MoveSnake implements IMove {
 			final IModifiableSequence fromSequence = sequences.getModifiableSequence(from);
 
 			final ISegment segment = segments.get(i);
-			assert segment != null;
+//			assert segment != null;
 			fromSequence.remove(segment);
 		}
 	}

@@ -108,6 +108,8 @@ public final class GeneralTestUtils {
 
 		fitnessEvaluator.setFitnessComponents(fitnessComponents);
 
+		fitnessEvaluator.setThresholder(thresholder);
+		
 		fitnessEvaluator.init();
 
 		return fitnessEvaluator;

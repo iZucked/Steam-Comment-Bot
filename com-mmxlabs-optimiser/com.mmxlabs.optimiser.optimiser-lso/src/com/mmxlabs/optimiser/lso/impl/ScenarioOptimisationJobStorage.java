@@ -13,9 +13,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
-import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.core.OptimiserConstants;
-
 public class ScenarioOptimisationJobStorage {
 
 	private PrintWriter writer;
