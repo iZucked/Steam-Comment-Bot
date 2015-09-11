@@ -25,6 +25,8 @@ import org.eclipse.emf.validation.service.ModelValidationService;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
+import org.joda.time.Months;
+import org.joda.time.YearMonth;
 import org.omg.PortableInterceptor.SUCCESSFUL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -448,7 +450,6 @@ public final class OptimisationHelper {
 			to.getAnnealingSettings().setEpochLength(EPOCH_LENGTH_FULL);
 		}
 
-		to.setBuildActionSets(from.isBuildActionSets());
 		to.setShippingOnly(from.isShippingOnly());
 		to.setGenerateCharterOuts(from.isGenerateCharterOuts());
 		if (from.getSimilaritySettings() != null) {
@@ -468,6 +469,34 @@ public final class OptimisationHelper {
 				// make changes to restarts based on similarity settings (hidden from UI)
 				if (toSimilarity != null && to.getSimilaritySettings().equals(ScenarioUtils.createHighSimilaritySettings())) {
 					to.getAnnealingSettings().setRestarting(true);
+				}
+			}
+		}
+		to.setBuildActionSets(from.isBuildActionSets());
+
+		// Turn off if settings are not nice
+		if (to.isBuildActionSets()) {
+			if (to.getSimilaritySettings().equals(ScenarioUtils.createOffSimilaritySettings())) {
+				to.setBuildActionSets(false);
+				log.info("Disabling Action sets as similarity is turned off");
+			}
+			if (to.isBuildActionSets()) {
+				if (to.getRange() == null) {
+					log.info("Disabling Action sets as there is no period range set");
+					to.setBuildActionSets(false);
+				} else {
+					YearMonth optimiseBefore = to.getRange().getOptimiseBefore();
+					YearMonth optimiseAfter = to.getRange().getOptimiseAfter();
+					if (optimiseAfter != null && optimiseBefore != null) {
+						// 3 month window?
+						if (Months.monthsBetween(optimiseAfter, optimiseBefore).getMonths() > 3) {
+							log.info("Disabling Action sets as the period range is too big");
+							to.setBuildActionSets(false);
+						}
+					} else {
+						log.info("Disabling Action sets as the period range is too big");
+						to.setBuildActionSets(false);
+					}
 				}
 			}
 		}
