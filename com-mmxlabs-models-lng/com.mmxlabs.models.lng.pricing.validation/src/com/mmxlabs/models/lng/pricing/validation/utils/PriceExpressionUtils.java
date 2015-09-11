@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.eclipse.jdt.annotation.NonNull;
 import org.joda.time.YearMonth;
 
 import com.mmxlabs.common.parser.IExpression;
@@ -41,10 +42,44 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
  * 
  */
 public class PriceExpressionUtils {
+	public static class ValidationResult {
+		private final boolean ok;
+		@NonNull
+		private final String errorDetails;
+
+		@NonNull
+		private static final ValidationResult OK_RESULT = new ValidationResult(true, "");
+
+		private ValidationResult(final boolean ok, @NonNull final String errorDetails) {
+			this.ok = ok;
+			this.errorDetails = errorDetails;
+		}
+
+		@NonNull
+		public static ValidationResult createOKStatus() {
+			return OK_RESULT;
+		}
+
+		@NonNull
+		public static ValidationResult createErrorStatus(@NonNull final String errorDetails) {
+			return new ValidationResult(false, errorDetails);
+		}
+
+		public boolean isOk() {
+			return ok;
+		}
+
+		public String getErrorDetails() {
+			return errorDetails;
+		}
+
+	}
+
 	static Pattern pattern = Pattern.compile("([^0-9 a-zA-Z_+-/*%()])");
 
-	public static void validatePriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression, final List<IStatus> failures) {
-		validatePriceExpression(ctx, object, feature, priceExpression, getCommodityParser(null), failures);
+	@NonNull
+	public static ValidationResult validatePriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression) {
+		return validatePriceExpression(ctx, object, feature, priceExpression, getCommodityParser(null));
 	}
 
 	/**
@@ -65,24 +100,19 @@ public class PriceExpressionUtils {
 	 * @param failures
 	 *            The list of validation failures to append to.
 	 */
-	public static void validatePriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression, final SeriesParser parser,
-			final List<IStatus> failures) {
+	@NonNull
+	public static ValidationResult validatePriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression,
+			final SeriesParser parser) {
 
 		if (priceExpression == null || priceExpression.isEmpty()) {
-			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Price Expression is missing."));
-			dsd.addEObjectAndFeature(object, feature);
-			failures.add(dsd);
-			return;
+			return ValidationResult.createErrorStatus("Price Expression is missing.");
 		}
 
 		final Matcher matcher = pattern.matcher(priceExpression);
 
 		if (matcher.find()) {
 			final String message = String.format("[Price expression|'%s'] Contains unexpected character '%s'.", priceExpression, matcher.group(1));
-			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-			dsd.addEObjectAndFeature(object, feature);
-			failures.add(dsd);
-			return;
+			return ValidationResult.createErrorStatus("Expression '%s' Contains unexpected character '%s'.");
 		}
 
 		if (parser != null) {
@@ -105,13 +135,10 @@ public class PriceExpressionUtils {
 				hints = e.getMessage();
 			}
 			if (parsed == null) {
-				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Price expression|" + priceExpression
-						+ "] Unable to parse: " + hints));
-				dsd.addEObjectAndFeature(object, feature);
-				failures.add(dsd);
+				return ValidationResult.createErrorStatus("Unable to parse: " + hints);
 			}
 		}
-
+		return ValidationResult.createOKStatus();
 	}
 
 	/**

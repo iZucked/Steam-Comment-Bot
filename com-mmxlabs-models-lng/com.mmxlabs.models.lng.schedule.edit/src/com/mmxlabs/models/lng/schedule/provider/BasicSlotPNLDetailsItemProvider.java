@@ -13,12 +13,7 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
-import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
@@ -58,6 +53,7 @@ public class BasicSlotPNLDetailsItemProvider
 			addAdditionalPNLPropertyDescriptor(object);
 			addCancellationFeesPropertyDescriptor(object);
 			addHedgingValuePropertyDescriptor(object);
+			addExtraUpsidePNLPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -151,6 +147,28 @@ public class BasicSlotPNLDetailsItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Extra Upside PNL feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addExtraUpsidePNLPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_BasicSlotPNLDetails_extraUpsidePNL_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_BasicSlotPNLDetails_extraUpsidePNL_feature", "_UI_BasicSlotPNLDetails_type"),
+				 SchedulePackage.Literals.BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns BasicSlotPNLDetails.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -189,6 +207,7 @@ public class BasicSlotPNLDetailsItemProvider
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__ADDITIONAL_PNL:
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__CANCELLATION_FEES:
 			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE:
+			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__EXTRA_UPSIDE_PNL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

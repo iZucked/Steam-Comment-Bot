@@ -67,6 +67,8 @@ public class PromptToolbarEditor extends ControlContribution {
 	private DateTime periodStartEditor;
 	private DateTime periodEndEditor;
 
+	private boolean locked = false;
+
 	private final EContentAdapter adapter = new EContentAdapter() {
 		public void notifyChanged(final Notification notification) {
 			final Object newValue = notification.getNewValue();
@@ -90,6 +92,7 @@ public class PromptToolbarEditor extends ControlContribution {
 			}
 		}
 	};
+	private Button btn90Day;
 
 	public PromptToolbarEditor(final String id, final EditingDomain editingDomain, final LNGScenarioModel rootObject) {
 		super(id);
@@ -154,8 +157,8 @@ public class PromptToolbarEditor extends ControlContribution {
 				// periodEndEnabled.setSelection(true);
 			} else {
 
-				setDefaultPromptCommand.append(SetCommand.create(editingDomain, rootObject.getPortfolioModel(), LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodEnd(),
-						new LocalDate().plusDays(90)));
+				setDefaultPromptCommand
+						.append(SetCommand.create(editingDomain, rootObject.getPortfolioModel(), LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodEnd(), new LocalDate().plusDays(90)));
 			}
 		}
 		periodEndEditor.addSelectionListener(new SelectionListener() {
@@ -173,11 +176,11 @@ public class PromptToolbarEditor extends ControlContribution {
 			}
 		});
 
-		final Button btn = new Button(pparent, SWT.PUSH);
-		btn.setText("90d");
-		btn.setToolTipText("Set prompt period to 90 days from today");
+		btn90Day = new Button(pparent, SWT.PUSH);
+		btn90Day.setText("90d");
+		btn90Day.setToolTipText("Set prompt period to 90 days from today");
 
-		btn.addSelectionListener(new SelectionListener() {
+		btn90Day.addSelectionListener(new SelectionListener() {
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
@@ -194,7 +197,7 @@ public class PromptToolbarEditor extends ControlContribution {
 			}
 		});
 		// Limit height to toolbar height.
-		btn.addListener(SWT.Resize, new LimitWidgetHeightListener(pparent, btn));
+		btn90Day.addListener(SWT.Resize, new LimitWidgetHeightListener(pparent, btn90Day));
 
 		// Listen to further changes
 		rootObject.getPortfolioModel().eAdapters().add(adapter);
@@ -214,5 +217,16 @@ public class PromptToolbarEditor extends ControlContribution {
 		}
 		editingDomain = null;
 		super.dispose();
+	}
+
+	public boolean isLocked() {
+		return locked;
+	}
+
+	public void setLocked(final boolean locked) {
+		this.locked = locked;
+		periodStartEditor.setEnabled(!locked);
+		periodEndEditor.setEnabled(!locked);
+		btn90Day.setEnabled(!locked);
 	}
 }
