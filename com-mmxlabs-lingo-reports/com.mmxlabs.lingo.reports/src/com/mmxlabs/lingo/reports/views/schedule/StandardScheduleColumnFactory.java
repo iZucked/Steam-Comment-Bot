@@ -319,6 +319,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 										if (details instanceof BasicSlotPNLDetails) {
 											addnPNL += ((BasicSlotPNLDetails) details).getAdditionalPNL();
 											addnPNL += ((BasicSlotPNLDetails) details).getExtraShippingPNL();
+											addnPNL += ((BasicSlotPNLDetails) details).getExtraUpsidePNL();
 										}
 									}
 								}

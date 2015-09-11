@@ -6,10 +6,8 @@ package com.mmxlabs.lingo.reports.views.standard;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -40,7 +38,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  * @author Simon Goodall
  * 
  */
-class HorizontalKPIContentProvider implements IStructuredContentProvider {
+class HeadlineReportTransformer {
 
 	public static class RowData {
 		public RowData(final String scheduleName, final Long totalPNL, final Long tradingPNL, final Long shippingPNL, final Long mtmPnl, final Long shippingCost, final Long idleTime,
@@ -90,14 +88,8 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 		public final Long lateness;
 	}
 
-	private final RowData[] rowData = new RowData[] { null, new RowData() };
-
-	@Override
-	public Object[] getElements(final Object inputElement) {
-		return rowData;
-	}
-
-	private RowData createRowData(final Schedule schedule, final ScenarioInstance scenarioInstance) {
+	@NonNull
+	public RowData transform(@NonNull final Schedule schedule, @NonNull final ScenarioInstance scenarioInstance) {
 
 		long totalCost = 0l;
 		long totalTradingPNL = 0l;
@@ -215,50 +207,4 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 		}
 		return 0;
 	}
-
-	@Override
-	public synchronized void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-
-		rowData[0] = null;
-
-		RowData newRowData = null;
-		pinnedData = null;
-		if (newInput instanceof IScenarioViewerSynchronizerOutput) {
-			final IScenarioViewerSynchronizerOutput synchOutput = (IScenarioViewerSynchronizerOutput) newInput;
-			for (final Object o : synchOutput.getCollectedElements()) {
-				if (o instanceof Schedule) {
-					final RowData rd = createRowData((Schedule) o, synchOutput.getScenarioInstance(o));
-					// Exclude pin to avoid multiple rows....
-					if (synchOutput.isPinned(o)) {
-						pinnedData = rd;
-					} else {
-						assert newRowData == null;
-						newRowData = rd;
-					}
-				}
-			}
-			// ...but add it in if it is the only row!
-			if (newRowData == null && pinnedData != null) {
-				newRowData = pinnedData;
-			}
-			rowData[0] = newRowData;
-		}
-
-		if (rowData[0] == null) {
-			rowData[0] = new RowData("", null, null, null, null, null, null, null, null, null, null);
-		}
-
-	}
-
-	private RowData pinnedData = new RowData("", null, null, null, null, null, null, null, null, null, null);
-
-	public RowData getPinnedData() {
-		return pinnedData;
-	}
-
-	@Override
-	public void dispose() {
-
-	}
-
 }

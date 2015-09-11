@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.shiro.io.XmlSerializer;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -31,7 +32,6 @@ import com.mmxlabs.lingo.reports.views.schedule.EquivalanceGroupBuilder;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -142,32 +142,19 @@ public final class ChangeSetTransformerUtil {
 					ChangeSetRow otherRow = rhsRowMap.get(getKeyName(slotAllocation.getSlot()));
 
 					if (otherRow == null) {
-						// String rowName = getRowName(slotAllocation.getSlot());
-						// if (loadSlot instanceof SpotSlot) {
-						if (rhsRowMap.containsKey("market-" + slotAllocation.getSlot().getName())) {
+						if (slotAllocation.getSlot() instanceof SpotSlot && rhsRowMap.containsKey("market-" + slotAllocation.getSlot().getName())) {
 							otherRow = rhsRowMap.get("market-" + slotAllocation.getSlot().getName());
 						} else {
-							// row = ChangesetFactory.eINSTANCE.createChangeSetRow();
-							// rows.add(row);
-							// row.setLhsName(rowName);
-							// row.setLoadSlot(loadSlot);
-							// lhsRowMap.put(rowKey, row);
-							// lhsRowMap.put(row.getLhsName(), row);
-							// }
-							// } else
-							//
-
-							// Special case, a spot slot will have no "OpenSlotAllocation" to pair up to, so create a new row here.
-							assert slotAllocation.getSlot() instanceof SpotSlot;
 							otherRow = ChangesetFactory.eINSTANCE.createChangeSetRow();
 							rows.add(otherRow);
 							rhsRowMap.put(getKeyName(slotAllocation.getSlot()), otherRow);
-							rhsRowMap.put("market-" + slotAllocation.getSlot().getName(), otherRow);
+							if (slotAllocation.getSlot() instanceof SpotSlot) {
+								rhsRowMap.put("market-" + slotAllocation.getSlot().getName(), otherRow);
+							}
 							otherRow.setRhsName(getRowName(slotAllocation.getSlot()));
 						}
 						otherRow.setOriginalDischargeAllocation(slotAllocation);
 						otherRow.setDischargeSlot((DischargeSlot) slotAllocation.getSlot());
-						// otherRow.setWiringChange(true);
 					}
 					if (row != otherRow) {
 						row.setRhsWiringLink(otherRow);
@@ -264,7 +251,16 @@ public final class ChangeSetTransformerUtil {
 			}
 			row.setLhsVesselName(getName(event.getSequence()));
 		} else {
-			final ChangeSetRow row = lhsRowMap.get(eventName);
+			ChangeSetRow row = lhsRowMap.get(eventName);
+			if (row == null) {
+				row = ChangesetFactory.eINSTANCE.createChangeSetRow();
+				row.setLhsName(eventName);
+				rows.add(row);
+
+				// TODO: Unique name?
+				lhsRowMap.put(eventName, row);
+
+			}
 
 			if (event instanceof ProfitAndLossContainer) {
 				row.setOriginalGroupProfitAndLoss((ProfitAndLossContainer) event);
@@ -666,5 +662,46 @@ public final class ChangeSetTransformerUtil {
 			}
 			changeSet.setCurrentMetrics(currentMetrics);
 		}
+	}
+
+	public static void mergeSpots(List<ChangeSetRow> rows) {
+
+		final Map<ChangeSetRow, Collection<ChangeSetRow>> rowToRowGroup = new HashMap<>();
+		Map<ChangeSetRow, ChangeSetRow> headToTails = new HashMap();
+		for (final ChangeSetRow row : rows) {
+			if (row.getLhsWiringLink() == null) {
+				ChangeSetRow link = row.getRhsWiringLink();
+				ChangeSetRow tail = link;
+				while (link != null) {
+					tail = link;
+					link = link.getRhsWiringLink();
+				}
+				headToTails.put(row, tail);
+			}
+		}
+		for (Map.Entry<ChangeSetRow, ChangeSetRow> e : headToTails.entrySet()) {
+			if (merge(e.getKey(), e.getValue())) {
+				rows.remove(e.getValue());
+			}
+		}
+
+	}
+
+	private static boolean merge(@Nullable ChangeSetRow head, @Nullable ChangeSetRow tail) {
+
+		assert head != tail;
+		if (head == null || !(head.getDischargeSlot() instanceof SpotSlot)) {
+			return false;
+		}
+		if (tail == null || !(tail.getDischargeSlot() instanceof SpotSlot)) {
+			return false;
+		}
+
+		if (head.getRhsName() != null && head.getRhsName().equals(tail.getRhsName())) {
+			ChangeSetRow lhsWiringLink = tail.getLhsWiringLink();
+			head.setLhsWiringLink(lhsWiringLink);
+			return true;
+		}
+		return false;
 	}
 }

@@ -6,10 +6,11 @@ package com.mmxlabs.lingo.reports.views.standard;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuListener;
@@ -17,6 +18,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -41,11 +43,15 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
-import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
-import com.mmxlabs.lingo.reports.ScenarioViewerSynchronizer;
-import com.mmxlabs.lingo.reports.ScheduleElementCollector;
-import com.mmxlabs.lingo.reports.views.standard.FitnessContentProvider.RowData;
+import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
+import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
+import com.mmxlabs.lingo.reports.views.standard.FitnessTransformer.RowData;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -54,6 +60,8 @@ public class FitnessReportView extends ViewPart {
 	private final ArrayList<Integer> sortColumns = new ArrayList<Integer>(4);
 
 	private boolean inverseSort = false;
+
+	private SelectedScenariosService selectedScenariosService;
 
 	protected void setSortColumn(final GridColumn column, final int value) {
 		if (sortColumns.get(0) == value) {
@@ -66,8 +74,7 @@ public class FitnessReportView extends ViewPart {
 
 		// viewer.getTable().setSortColumn(column);
 		// viewer.getTable().setSortDirection(inverseSort ? SWT.DOWN : SWT.UP);
-
-		viewer.refresh();
+		ViewerHelper.refresh(viewer, true);
 	}
 
 	private void addSortSelectionListener(final GridColumn column, final int value) {
@@ -100,13 +107,61 @@ public class FitnessReportView extends ViewPart {
 
 	private Action copyTableAction;
 
-	private ScenarioViewerSynchronizer jobManagerListener;
-
-	private FitnessContentProvider contentProvider;
-
 	private GridViewerColumn delta;
 
 	private GridViewerColumn scheduleColumnViewer;
+
+	@NonNull
+	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
+
+		FitnessTransformer transformer = new FitnessTransformer();
+
+		@Override
+		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
+			final Runnable r = new Runnable() {
+				@Override
+				public void run() {
+
+					final List<Object> rowElements = new LinkedList<>();
+
+					int numberOfSchedules = 0;
+					List<RowData> pinnedData = null;
+					if (pinned != null) {
+						LNGScenarioModel instance = (LNGScenarioModel) pinned.getInstance();
+						if (instance != null) {
+							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
+							if (schedule != null) {
+								pinnedData = transformer.transform(schedule, selectedDataProvider, null);
+								rowElements.addAll(pinnedData);
+								numberOfSchedules++;
+							}
+						}
+					}
+					for (final ScenarioInstance other : others) {
+						LNGScenarioModel instance = (LNGScenarioModel) other.getInstance();
+						if (instance != null) {
+							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
+							if (schedule != null) {
+								rowElements.addAll(transformer.transform(schedule, selectedDataProvider, pinnedData));
+								numberOfSchedules++;
+							}
+						}
+					}
+
+					setShowColumns(pinned != null, numberOfSchedules);
+
+					ViewerHelper.setInput(viewer, true, rowElements);
+
+					if (!rowElements.isEmpty()) {
+						if (packColumnsAction != null) {
+							packColumnsAction.run();
+						}
+					}
+				}
+			};
+			RunnerHelper.exec(r, block);
+		}
+	};
 
 	class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, ITableColorProvider {
 		@Override
@@ -131,23 +186,13 @@ public class FitnessReportView extends ViewPart {
 						return String.format("%,d", d.fitness);
 					}
 				} else if (index == 5) {
-					final Long delta = getDelta(d);
+					final Long delta = d.deltaFitness;
 					if (delta != null) {
 						return String.format("%,d", delta);
 					}
 				}
 			}
 			return "";
-		}
-
-		private Long getDelta(final RowData d) {
-			final List<RowData> pinnedData = contentProvider.getPinnedData();
-			for (final RowData data : pinnedData) {
-				if (d.component.equals(data.component)) {
-					return data.fitness - d.fitness;
-				}
-			}
-			return null;
 		}
 
 		@Override
@@ -163,7 +208,7 @@ public class FitnessReportView extends ViewPart {
 		@Override
 		public Color getForeground(final Object element, final int columnIndex) {
 			if (columnIndex == 5 && element instanceof RowData) {
-				final Long l = getDelta((RowData) element);
+				final Long l = ((RowData) element).deltaFitness;
 				if (l == null || l.longValue() == 0l) {
 					return null;
 				} else if (l < 0) {
@@ -192,25 +237,10 @@ public class FitnessReportView extends ViewPart {
 	 */
 	@Override
 	public void createPartControl(final Composite parent) {
-		viewer = new GridTableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL) {
-			@Override
-			protected void inputChanged(final Object input, final Object oldInput) {
-				super.inputChanged(input, oldInput);
+		selectedScenariosService = (SelectedScenariosService) getSite().getService(SelectedScenariosService.class);
 
-				final boolean inputEmpty = (input == null) || ((input instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) input).getCollectedElements().isEmpty());
-				final boolean oldInputEmpty = (oldInput == null)
-						|| ((oldInput instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) oldInput).getCollectedElements().isEmpty());
-
-				if (inputEmpty != oldInputEmpty) {
-
-					if (packColumnsAction != null) {
-						packColumnsAction.run();
-					}
-				}
-			};
-		};
-		this.contentProvider = new FitnessContentProvider();
-		viewer.setContentProvider(contentProvider);
+		viewer = new GridTableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
+		viewer.setContentProvider(new ArrayContentProvider());
 		viewer.setInput(getViewSite());
 
 		scheduleColumnViewer = new GridViewerColumn(viewer, SWT.NONE);
@@ -299,40 +329,10 @@ public class FitnessReportView extends ViewPart {
 		makeActions();
 		hookContextMenu();
 		contributeToActionBars();
-		//
-		// getSite().getPage().addSelectionListener("com.mmxlabs.rcp.navigator",
-		// this);
-		//
-		// // Trigger initial view state
-		// final ISelection selection = getSite().getWorkbenchWindow()
-		// .getSelectionService()
-		// .getSelection("com.mmxlabs.rcp.navigator");
-		//
-		// selectionChanged(null, selection);
 
-		jobManagerListener = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
-			private boolean hasPin = false;
-			private int numberOfSchedules;
+		selectedScenariosService.addListener(selectedScenariosServiceListener);
+		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 
-			@Override
-			public void beginCollecting(final boolean pinDiffMode) {
-				hasPin = false;
-				numberOfSchedules = 0;
-			}
-
-			@Override
-			public void endCollecting() {
-				setShowColumns(hasPin, numberOfSchedules);
-			}
-
-			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final Schedule schedule, final boolean pinned) {
-				hasPin = hasPin || pinned;
-				++numberOfSchedules;
-				return Collections.singleton(schedule);
-			}
-
-		});
 	}
 
 	private void hookContextMenu() {
@@ -394,37 +394,14 @@ public class FitnessReportView extends ViewPart {
 	 */
 	@Override
 	public void setFocus() {
-		viewer.getControl().setFocus();
-	}
-
-	public void refresh() {
-		getSite().getShell().getDisplay().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				if (!viewer.getControl().isDisposed()) {
-					viewer.refresh();
-				}
-			}
-		});
-	}
-
-	public void setInput(final Object input) {
-		getSite().getShell().getDisplay().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				if (!viewer.getControl().isDisposed()) {
-					viewer.setInput(input);
-				}
-			}
-		});
+		ViewerHelper.setFocus(viewer);
 	}
 
 	@Override
 	public void dispose() {
 
-		ScenarioViewerSynchronizer.deregisterView(jobManagerListener);
+		selectedScenariosService.removeListener(selectedScenariosServiceListener);
+
 		super.dispose();
 	}
 

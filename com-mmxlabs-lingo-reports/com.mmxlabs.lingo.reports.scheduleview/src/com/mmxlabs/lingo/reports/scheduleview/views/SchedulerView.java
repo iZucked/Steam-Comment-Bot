@@ -32,6 +32,7 @@ import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
@@ -61,14 +62,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.XMLMemento;
 import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.internal.e4.compatibility.CompatibilityView;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
@@ -81,8 +81,6 @@ import com.mmxlabs.ganttviewer.actions.SaveFullImageAction;
 import com.mmxlabs.ganttviewer.actions.ZoomInAction;
 import com.mmxlabs.ganttviewer.actions.ZoomOutAction;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
-import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
-import com.mmxlabs.lingo.reports.ScenarioViewerSynchronizer;
 import com.mmxlabs.lingo.reports.ScheduleElementCollector;
 import com.mmxlabs.lingo.reports.diff.DiffGroupView;
 import com.mmxlabs.lingo.reports.diff.DiffSelectionAdapter;
@@ -92,7 +90,9 @@ import com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ISchedulerView
 import com.mmxlabs.lingo.reports.services.EDiffOption;
 import com.mmxlabs.lingo.reports.services.IScenarioComparisonServiceListener;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.ScenarioComparisonService;
+import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -108,6 +108,9 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.SelectionHelper;
+import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener, IPreferenceChangeListener {
@@ -135,9 +138,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 
 	private Action sortModeAction;
 
-	private final ScenarioViewerComparator viewerComparator = new ScenarioViewerComparator();
-
-	private ScenarioViewerSynchronizer jobManagerListener;
+	private ScenarioViewerComparator viewerComparator;
 
 	private IMemento memento;
 	private IMemento highlightMemento;
@@ -157,13 +158,12 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 
 	private final Set<EObject> pinnedObjects = new LinkedHashSet<EObject>();
 
-	// // New diff stuff
-	private Table table;
-	// private IPartListener listener;
-	// private static final String SCHEDULE_VIEW_ID = "com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport";
-	// private IViewPart scheduleView;
-
+	private IEclipseContext e4Context;
 	private ScenarioComparisonService scenarioComparisonService;
+	private SelectedScenariosService selectedScenariosService;
+
+	// New diff stuff
+	private Table table;
 
 	/**
 	 * The constructor.
@@ -215,6 +215,8 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 
 		e4Context = (IEclipseContext) getSite().getService(IEclipseContext.class);
 		this.scenarioComparisonService = e4Context.getActive(ScenarioComparisonService.class);
+		this.selectedScenariosService = e4Context.getActive(SelectedScenariosService.class);
+
 		// Inject the extension points
 		Activator.getDefault().getInjector().injectMembers(this);
 
@@ -340,21 +342,21 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 		};
 
 		viewer = new GanttChartViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | GanttFlags.H_SCROLL_FIXED_RANGE, settings, colourManager) {
-			@Override
-			protected synchronized void inputChanged(final Object input, final Object oldInput) {
-				super.inputChanged(input, oldInput);
-
-				final boolean inputEmpty = (input == null) || ((input instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) input).getCollectedElements().isEmpty());
-				final boolean oldInputEmpty = (oldInput == null)
-						|| ((oldInput instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) oldInput).getCollectedElements().isEmpty());
-
-				if (inputEmpty != oldInputEmpty) {
-
-					if (packAction != null) {
-						packAction.run();
-					}
-				}
-			}
+			// @Override
+			// protected synchronized void inputChanged(final Object input, final Object oldInput) {
+			// super.inputChanged(input, oldInput);
+			//
+			// final boolean inputEmpty = (input == null) || ((input instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) input).getCollectedElements().isEmpty());
+			// final boolean oldInputEmpty = (oldInput == null)
+			// || ((oldInput instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) oldInput).getCollectedElements().isEmpty());
+			//
+			// if (inputEmpty != oldInputEmpty) {
+			//
+			// if (packAction != null) {
+			// packAction.run();
+			// }
+			// }
+			// }
 
 			@Override
 			protected void setSelectionToWidget(@SuppressWarnings("rawtypes") final List l, final boolean reveal) {
@@ -369,18 +371,11 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 							ganttEvent.setStatusAlpha(130);
 							final Event evt = (Event) ganttEvent.getData();
 							if (table != null) {
-								// Add scenario instance name to field if multiple scenarios are selected
-								final Object input = viewer.getInput();
-								if (input instanceof IScenarioViewerSynchronizerOutput) {
-									final IScenarioViewerSynchronizerOutput output = (IScenarioViewerSynchronizerOutput) input;
-
-									final Collection<Object> collectedElements = output.getCollectedElements();
-									if (collectedElements.size() > 1) {
-										if (output.hasPinnedScenario()) {
-											if (output.isPinned(evt.getSequence().eContainer())) {
-												ganttEvent.setStatusAlpha(50);
-											}
-										}
+								// Change alpha for pinned elements
+								final ISelectedDataProvider selectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
+								if (selectedDataProvider != null) {
+									if (selectedDataProvider.getScenarioInstance(evt) == selectedScenariosService.getPinnedScenario()) {
+										ganttEvent.setStatusAlpha(50);
 									}
 								}
 							}
@@ -549,7 +544,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 			}
 		};
 		viewer.setContentProvider(contentProvider);
-		final EMFScheduleLabelProvider labelProvider = new EMFScheduleLabelProvider(viewer, memento);
+		final EMFScheduleLabelProvider labelProvider = new EMFScheduleLabelProvider(viewer, memento, selectedScenariosService);
 
 		for (final ISchedulerViewColourSchemeExtension ext : this.colourSchemeExtensions) {
 			final IScheduleViewColourScheme cs = ext.createInstance();
@@ -567,6 +562,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 		// Then refresh
 		// E.g. mode?
 		// Move into separate class
+		viewerComparator = new ScenarioViewerComparator(selectedScenariosService);
 		viewer.setComparator(viewerComparator);
 
 		viewer.setComparer(new IElementComparer() {
@@ -589,6 +585,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 
 		viewer.setInput(getViewSite());
 
+		selectedScenariosService.addListener(selectedScenariosServiceListener);
 		scenarioComparisonService.addListener(scenarioComparisonServiceListener);
 		// Create the help context id for the viewer's control. This is in the
 		// format of pluginid.contextId
@@ -602,13 +599,13 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 		// Get e4 selection service!
 		final ESelectionService service = getSite().getService(ESelectionService.class);
 		service.addPostSelectionListener(this);
-		jobManagerListener = ScenarioViewerSynchronizer.registerView(viewer, getElementCollector());
 
 		final String colourScheme = memento.getString(SchedulerViewConstants.SCHEDULER_VIEW_COLOUR_SCHEME);
 		// if (colourScheme != null) {
 		labelProvider.setScheme(colourScheme);
 		// }
 
+		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 		scenarioComparisonService.triggerListener(scenarioComparisonServiceListener);
 	}
 
@@ -622,14 +619,8 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 		final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode("com.mmxlabs.lingo.reports");
 		prefs.removePreferenceChangeListener(this);
 
-		ScenarioViewerSynchronizer.deregisterView(jobManagerListener);
-		// getSite().getPage().removeSelectionListener(
-		// "com.mmxlabs.rcp.navigator", selectionListener);
-
-		// if (listener != null) {
-		// getViewSite().getPage().removePartListener(listener);
-		// }
 		scenarioComparisonService.removeListener(scenarioComparisonServiceListener);
+		selectedScenariosService.removeListener(selectedScenariosServiceListener);
 
 		super.dispose();
 	}
@@ -711,7 +702,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 	}
 
 	public void redraw() {
-		getSite().getShell().getDisplay().asyncExec(new Runnable() {
+		RunnerHelper.asyncExec(new Runnable() {
 
 			@Override
 			public void run() {
@@ -725,7 +716,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 	}
 
 	public void refresh() {
-		getSite().getShell().getDisplay().asyncExec(new Runnable() {
+		RunnerHelper.asyncExec(new Runnable() {
 
 			@Override
 			public void run() {
@@ -738,7 +729,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 	}
 
 	public void setInput(final Object input) {
-		getSite().getShell().getDisplay().asyncExec(new Runnable() {
+		RunnerHelper.asyncExec(new Runnable() {
 
 			@Override
 			public void run() {
@@ -828,10 +819,8 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 
 	@Override
 	public void selectionChanged(final MPart part, final Object selectedObject) {
-		final Object object = part.getObject();
-		if (object instanceof CompatibilityView) {
-			final CompatibilityView compatibilityView = (CompatibilityView) object;
-			final IViewPart view = compatibilityView.getView();
+		{
+			final IWorkbenchPart view = SelectionHelper.getE3Part(part);
 
 			if (view == this) {
 				return;
@@ -845,15 +834,7 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 			}
 		}
 
-		ISelection selection = null;
-		// Convert selection
-		if (selectedObject instanceof ISelection) {
-			selection = (ISelection) selectedObject;
-		} else if (selectedObject instanceof Object[]) {
-			selection = new StructuredSelection((Object[]) selectedObject);
-		} else {
-			selection = new StructuredSelection(selectedObject);
-		}
+		ISelection selection = SelectionHelper.adaptSelection(selectedObject);
 
 		if (table == null) {
 			if (selection instanceof IStructuredSelection) {
@@ -878,9 +859,9 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 				objects = expandSelection(objects);
 				selection = new StructuredSelection(objects);
 			}
-			viewer.setSelection(selection);
+			ViewerHelper.setSelection(viewer, true, selection);
 		} else {
-			viewer.setSelection(DiffSelectionAdapter.expandDown(selection, table));
+			ViewerHelper.setSelection(viewer, true, DiffSelectionAdapter.expandDown(selection, table));
 		}
 	}
 
@@ -1041,105 +1022,55 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 		viewer.setInput(viewer.getInput());
 	}
 
-	private IScenarioComparisonServiceListener scenarioComparisonServiceListener = new IScenarioComparisonServiceListener() {
+	@NonNull
+	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
 
 		@Override
-		public void diffOptionChanged(EDiffOption d, Object oldValue, Object newValue) {
+		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
+			final Runnable r = new Runnable() {
+				@Override
+				public void run() {
+					final List<Object> rowElements = new LinkedList<>();
+					final IScenarioInstanceElementCollector elementCollector = getElementCollector();
+					elementCollector.beginCollecting(pinned != null);
+					if (pinned != null) {
+						rowElements.addAll(elementCollector.collectElements(pinned, (LNGScenarioModel) pinned.getInstance(), true));
+					}
+					for (final ScenarioInstance other : others) {
+						rowElements.addAll(elementCollector.collectElements(other, (LNGScenarioModel) other.getInstance(), false));
+					}
+					elementCollector.endCollecting();
+					ViewerHelper.setInput(viewer, true, rowElements);
+
+					// setInput(rowElements);
+					// packAction.run();
+				}
+			};
+			RunnerHelper.exec(r, block);
+		}
+	};
+
+	private final IScenarioComparisonServiceListener scenarioComparisonServiceListener = new IScenarioComparisonServiceListener() {
+
+		@Override
+		public void diffOptionChanged(final EDiffOption d, final Object oldValue, final Object newValue) {
 			if (d == EDiffOption.FILTER_SCHEDULE_CHART_BY_SELECTION) {
 				viewer.setSelection(viewer.getSelection());
 			}
 		}
 
 		@Override
-		public void compareDataUpdate(ISelectedDataProvider selectedDataProvider, ScenarioInstance pin, ScenarioInstance other, Table table, List<LNGScenarioModel> rootObjects,
-				Map<EObject, Set<EObject>> equivalancesMap) {
+		public void compareDataUpdate(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pin, final ScenarioInstance other, final Table table,
+				final List<LNGScenarioModel> rootObjects, final Map<EObject, Set<EObject>> equivalancesMap) {
 			// Do Nothing
 			SchedulerView.this.table = table;
 		}
 
 		@Override
-		public void multiDataUpdate(ISelectedDataProvider selectedDataProvider, Collection<ScenarioInstance> others, Table table, List<LNGScenarioModel> rootObjects) {
+		public void multiDataUpdate(final ISelectedDataProvider selectedDataProvider, final Collection<ScenarioInstance> others, final Table table, final List<LNGScenarioModel> rootObjects) {
 			// Do Nothing
 			SchedulerView.this.table = table;
 		}
-
 	};
 
-	private IEclipseContext e4Context;
-
-	// protected void hookToScheduleView() {
-	// listener = new IPartListener() {
-	//
-	// EContentAdapter adapter = new EContentAdapter() {
-	// @Override
-	// public void notifyChanged(final Notification notification) {
-	// super.notifyChanged(notification);
-	// if (notification.getFeature() == ScheduleReportPackage.Literals.DIFF_OPTIONS__FILTER_SELECTED_SEQUENCES) {
-	// viewer.setSelection(viewer.getSelection());
-	// }
-	// }
-	// };
-	//
-	// @Override
-	// public void partOpened(final IWorkbenchPart part) {
-	// if (part instanceof IViewPart) {
-	// final IViewPart viewPart = (IViewPart) part;
-	// if (viewPart.getViewSite().getId().equals(SCHEDULE_VIEW_ID)) {
-	// scheduleView = viewPart;
-	// observeInput((Table) scheduleView.getAdapter(Table.class));
-	// }
-	// }
-	// }
-	//
-	// private void observeInput(final Table table) {
-	//
-	// if (SchedulerView.this.table != null) {
-	// SchedulerView.this.table.eAdapters().remove(adapter);
-	// }
-	// SchedulerView.this.table = table;
-	// if (SchedulerView.this.table != null) {
-	// SchedulerView.this.table.eAdapters().add(adapter);
-	// }
-	// }
-	//
-	// @Override
-	// public void partDeactivated(final IWorkbenchPart part) {
-	//
-	// }
-	//
-	// @Override
-	// public void partClosed(final IWorkbenchPart part) {
-	// if (part instanceof IViewPart) {
-	// final IViewPart viewPart = (IViewPart) part;
-	// if (viewPart.getViewSite().getId().equals(SCHEDULE_VIEW_ID)) {
-	// scheduleView = null;
-	// observeInput(null);
-	// }
-	// }
-	//
-	// }
-	//
-	// @Override
-	// public void partBroughtToTop(final IWorkbenchPart part) {
-	//
-	// }
-	//
-	// @Override
-	// public void partActivated(final IWorkbenchPart part) {
-	// if (part instanceof IViewPart) {
-	// final IViewPart viewPart = (IViewPart) part;
-	// if (viewPart.getViewSite().getId().equals(SCHEDULE_VIEW_ID)) {
-	// scheduleView = viewPart;
-	// observeInput((Table) scheduleView.getAdapter(Table.class));
-	// }
-	// }
-	// }
-	// };
-	// getViewSite().getPage().addPartListener(listener);
-	// for (final IViewReference view : getViewSite().getPage().getViewReferences()) {
-	// if (view.getId().equals(SCHEDULE_VIEW_ID)) {
-	// listener.partOpened(view.getView(false));
-	// }
-	// }
-	// }
 }

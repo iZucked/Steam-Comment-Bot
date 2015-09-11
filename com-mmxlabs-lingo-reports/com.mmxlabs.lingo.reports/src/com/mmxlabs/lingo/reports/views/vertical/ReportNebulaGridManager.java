@@ -5,6 +5,7 @@
 package com.mmxlabs.lingo.reports.views.vertical;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -21,7 +22,6 @@ import org.eclipse.nebula.widgets.grid.GridItem;
 import org.joda.time.LocalDate;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Event;
 
@@ -91,22 +91,22 @@ public class ReportNebulaGridManager implements IStructuredContentProvider {
 
 	@Override
 	public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-		final ScheduleSequenceData data;
 		root = null;
 		rowCache.clear();
 		verticalReportVisualiser.inputChanged();
-		if (newInput != null) {
-			// svso.getCollectedElements in this case returns a singleton list containing the root object
-			final IScenarioViewerSynchronizerOutput svso = (IScenarioViewerSynchronizerOutput) newInput;
-			for (final Object element : svso.getCollectedElements()) {
-				root = (LNGScenarioModel) element;
-			}
+		if (newInput instanceof LNGScenarioModel) {
+			root = (LNGScenarioModel) newInput;
+		} else if (newInput instanceof Collection<?>) {
 
-			// extract the relevant data from the root object
-			data = new ScheduleSequenceData(root, verticalReportVisualiser);
-		} else {
-			data = new ScheduleSequenceData(null, verticalReportVisualiser);
+			Collection<?> collection = (Collection<?>) newInput;
+			// svso.getCollectedElements in this case returns a singleton list containing the root object
+			for (final Object element : collection) {
+				root = (LNGScenarioModel) element;
+				break;
+			}
 		}
+		// extract the relevant data from the root object
+		final ScheduleSequenceData data = new ScheduleSequenceData(root, verticalReportVisualiser);
 
 		verticalReport.setData(data);
 		// setup table columns and rows

@@ -7,10 +7,12 @@ package com.mmxlabs.lingo.reports.scheduleview.views;
 import java.util.Collection;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 
-import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
+import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.models.lng.schedule.Sequence;
 
 /**
@@ -42,6 +44,13 @@ public class ScenarioViewerComparator extends ViewerComparator {
 
 	private Mode mode = Mode.INTERLEAVE;
 
+	@NonNull
+	private final SelectedScenariosService selectedScenariosService;
+
+	public ScenarioViewerComparator(@NonNull final SelectedScenariosService selectedScenariosService) {
+		this.selectedScenariosService = selectedScenariosService;
+	}
+
 	protected final Mode getMode() {
 		return mode;
 	}
@@ -61,7 +70,7 @@ public class ScenarioViewerComparator extends ViewerComparator {
 		return super.category(element);
 	}
 
-	private Type getSequenceType(Sequence s) {
+	private Type getSequenceType(final Sequence s) {
 		if (s.isFleetVessel()) {
 			return Type.FLEET;
 		} else if (s.isSetCharterInMarket()) {
@@ -108,19 +117,22 @@ public class ScenarioViewerComparator extends ViewerComparator {
 			{
 				// Add scenario instance name to field if multiple scenarios are selected
 				final Object input = viewer.getInput();
-				if (input instanceof IScenarioViewerSynchronizerOutput) {
-					final IScenarioViewerSynchronizerOutput output = (IScenarioViewerSynchronizerOutput) input;
+				if (input instanceof Collection<?>) {
+					final Collection<?> collection = (Collection<?>) input;
 
-					final Collection<Object> collectedElements = output.getCollectedElements();
-					if (collectedElements.size() > 1) {
-						if (output.hasPinnedScenario()) {
-							final boolean s1Pinned = output.isPinned(s1.eContainer());
-							final boolean s2Pinned = output.isPinned(s2.eContainer());
-							if (s1Pinned != s2Pinned) {
-								if (s1Pinned) {
-									return -1;
-								} else {
-									return 1;
+					if (collection.size() > 1) {
+						if (selectedScenariosService.getPinnedScenario() != null) {
+							final ISelectedDataProvider selectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
+							if (selectedDataProvider != null) {
+
+								final boolean s1Pinned = selectedDataProvider.isPinnedObject(s1);
+								final boolean s2Pinned = selectedDataProvider.isPinnedObject(s2);
+								if (s1Pinned != s2Pinned) {
+									if (s1Pinned) {
+										return -1;
+									} else {
+										return 1;
+									}
 								}
 							}
 						}
@@ -154,19 +166,22 @@ public class ScenarioViewerComparator extends ViewerComparator {
 				{
 					// Add scenario instance name to field if multiple scenarios are selected
 					final Object input = viewer.getInput();
-					if (input instanceof IScenarioViewerSynchronizerOutput) {
-						final IScenarioViewerSynchronizerOutput output = (IScenarioViewerSynchronizerOutput) input;
+					if (input instanceof Collection<?>) {
+						final Collection<?> collection = (Collection<?>) input;
 
-						final Collection<Object> collectedElements = output.getCollectedElements();
-						if (collectedElements.size() > 1) {
-							if (output.hasPinnedScenario()) {
-								final boolean s1Pinned = output.isPinned(s1.eContainer());
-								final boolean s2Pinned = output.isPinned(s2.eContainer());
-								if (s1Pinned != s2Pinned) {
-									if (s1Pinned) {
-										return -1;
-									} else {
-										return 1;
+						if (collection.size() > 1) {
+							if (selectedScenariosService.getPinnedScenario() != null) {
+								final ISelectedDataProvider selectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
+								if (selectedDataProvider != null) {
+									final boolean s1Pinned = selectedDataProvider.isPinnedObject(s1);
+									final boolean s2Pinned = selectedDataProvider.isPinnedObject(s2);
+
+									if (s1Pinned != s2Pinned) {
+										if (s1Pinned) {
+											return -1;
+										} else {
+											return 1;
+										}
 									}
 								}
 							}

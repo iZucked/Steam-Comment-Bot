@@ -10,11 +10,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import org.eclipse.core.databinding.ObservablesManager;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.databinding.EMFProperties;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
@@ -23,11 +21,9 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
@@ -39,31 +35,26 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.XMLMemento;
 import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.internal.e4.compatibility.CompatibilityView;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
-import org.eclipse.ui.views.properties.PropertySheetPage;
 
 import com.mmxlabs.common.Equality;
-import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.components.ColumnBlockManager;
 import com.mmxlabs.lingo.reports.components.ColumnHandler;
 import com.mmxlabs.lingo.reports.components.GridTableViewerColumnFactory;
 import com.mmxlabs.lingo.reports.diff.DiffGroupView;
 import com.mmxlabs.lingo.reports.internal.Activator;
-import com.mmxlabs.lingo.reports.properties.ScheduledEventPropertySourceProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnInfoProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnUpdater;
@@ -73,6 +64,8 @@ import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerFilterSupport;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerSortingSupport;
 import com.mmxlabs.models.ui.tabular.filter.FilterField;
+import com.mmxlabs.rcp.common.SelectionHelper;
+import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 
@@ -86,8 +79,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	protected static final String CONFIGURABLE_COLUMNS_ORDER = "CONFIGURABLE_COLUMNS_ORDER";
 	protected static final String CONFIGURABLE_ROWS_ORDER = "CONFIGURABLE_ROWS_ORDER";
 	protected static final String CONFIGURABLE_COLUMNS_REPORT_KEY = "CONFIGURABLE_COLUMNS_REPORT_KEY";
-	protected final ObservablesManager observablesManager = new ObservablesManager();
-	private ObservablesManager mgr;
 	private IMemento memento;
 
 	private boolean customisableReport = true;
@@ -104,18 +95,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 	private FilterField filterField;
 	protected EObjectTableViewerFilterSupport filterSupport;
-
-	// /**
-	// * Small class to hold internal sort state for external reference.
-	// *
-	// */
-	// public static class SortData {
-	// public Object[] sortedChildren;
-	// public int[] sortedIndices;
-	// public int[] reverseSortedIndices;
-	// }
-	//
-	// private final SortData sortData = new SortData();
 
 	private void setColumnsImmovable() {
 		if (viewer != null) {
@@ -149,14 +128,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 	@Override
 	public final void createPartControl(final Composite parent) {
-		mgr = new ObservablesManager();
-		mgr.runAndCollect(new Runnable() {
-
-			@Override
-			public void run() {
-				initPartControl(parent);
-			}
-		});
+		initPartControl(parent);
 	}
 
 	public void initPartControl(final Composite parent) {
@@ -283,15 +255,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 				final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
 				service.addPostSelectionListener(this);
 			}
-
-			// table = ScheduleReportFactory.eINSTANCE.createTable();
-			// viewer.setInput(EMFProperties.list(ScheduleReportPackage.Literals.TABLE__ROWS).observe(table));
-
-			if (isUseSynchroniser()) {
-				viewer.setContentProvider(new ObservableListContentProvider());
-				synchronizer = UserManagedScenarioViewerSynchronizer.registerView(viewer, getElementCollector());
-				setInput();
-			}
 		}
 
 		// Look at the extension points for the initial visibilities, rows and diff options
@@ -311,12 +274,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 		}
 
 	}
-
-	protected void setInput() {
-		viewer.setInput(EMFProperties.list(ScheduleReportPackage.Literals.TABLE__ROWS).observe(table));
-	}
-
-	protected abstract boolean isUseSynchroniser();
 
 	protected abstract void registerReportColumns();
 
@@ -445,11 +402,7 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 					nonVisibleIcon.dispose();
 					visibleIcon.dispose();
 
-					if (synchronizer != null) {
-						synchronizer.refreshViewer(false);
-					} else {
-						viewer.refresh();
-					}
+					viewer.refresh();
 				}
 
 			};
@@ -476,7 +429,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 	private Action copyTableAction;
 
 	private final String helpContextId;
-	protected UserManagedScenarioViewerSynchronizer synchronizer;
 
 	/**
 	 * Finds the view index of the specified column handler, i.e. the index from left to right of the column in the grid's display.
@@ -575,8 +527,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 		contents.clear();
 	}
 
-	protected abstract IScenarioInstanceElementCollector getElementCollector();
-
 	private void hookContextMenu() {
 		final MenuManager menuMgr = new MenuManager("#PopupMenu");
 		menuMgr.setRemoveAllWhenShown(true);
@@ -626,49 +576,30 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 	@Override
 	public void setFocus() {
-		if (!viewer.getGrid().isDisposed()) {
-			viewer.getGrid().setFocus();
-		}
+		ViewerHelper.setFocus(viewer);
 	}
 
-	public void setInput(final Object input) {
-		getSite().getShell().getDisplay().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				if (!viewer.getControl().isDisposed()) {
-					viewer.setInput(input);
-				}
-			}
-		});
-	}
+	//
 
 	@Override
-	public void selectionChanged(final MPart part, final Object selection) {
-		final Object object = part.getObject();
-		if (object instanceof CompatibilityView) {
-			final CompatibilityView compatibilityView = (CompatibilityView) object;
-			final IViewPart view = compatibilityView.getView();
+	public void selectionChanged(final MPart part, final Object selectionObject) {
 
-			if (view == this) {
+		final IWorkbenchPart e3Part = SelectionHelper.getE3Part(part);
+		if (e3Part != null) {
+			if (e3Part == this) {
 				return;
 			}
-			if (view instanceof PropertySheet) {
+			if (e3Part instanceof PropertySheet) {
 				return;
 			}
 
-			if (view instanceof DiffGroupView) {
+			if (e3Part instanceof DiffGroupView) {
 				return;
 			}
 		}
-		if (selection instanceof ISelection) {
-			viewer.setSelection((ISelection) selection, true);
-		} else if (selection instanceof Object[]) {
-			viewer.setSelection(new StructuredSelection(selection), true);
-		} else {
-			viewer.setSelection(new StructuredSelection(selection), true);
-		}
-		viewer.refresh();
+		final ISelection selection = SelectionHelper.adaptSelection(selectionObject);
+		viewer.setSelection(selection, true);
+		ViewerHelper.refresh(viewer, true);
 	}
 
 	protected boolean handleSelections() {
@@ -681,9 +612,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 		if (handleSelections()) {
 			final ESelectionService service = (ESelectionService) getSite().getService(ESelectionService.class);
 			service.removePostSelectionListener(this);
-		}
-		if (synchronizer != null) {
-			UserManagedScenarioViewerSynchronizer.deregisterView(synchronizer);
 		}
 		sortingSupport.clearColumnSortOrder();
 		clearInputEquivalents();

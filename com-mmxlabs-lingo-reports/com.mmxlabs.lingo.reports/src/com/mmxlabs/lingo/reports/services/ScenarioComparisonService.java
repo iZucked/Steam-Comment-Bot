@@ -15,6 +15,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.PlatformUI;
 import org.ops4j.peaberry.Peaberry;
 import org.ops4j.peaberry.eclipse.EclipseRegistry;
 import org.slf4j.Logger;
@@ -31,6 +33,7 @@ import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.schedule.model.DiffOptions;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
+import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class ScenarioComparisonService {
@@ -48,8 +51,7 @@ public class ScenarioComparisonService {
 	private DiffOptions diffOptions = ScheduleReportFactory.eINSTANCE.createDiffOptions();
 
 	/**
-	 * Special counter to try and avoid multiple update requests happening at once.
-	 * TODO: What happens if we hit Integer.MAX_VALUE?
+	 * Special counter to try and avoid multiple update requests happening at once. TODO: What happens if we hit Integer.MAX_VALUE?
 	 */
 	private AtomicInteger counter = new AtomicInteger();
 
@@ -102,17 +104,21 @@ public class ScenarioComparisonService {
 			final boolean block) {
 		lastResult = null;
 		final int value = counter.incrementAndGet();
-		Display.getDefault().asyncExec(new Runnable() {
+		if (PlatformUI.isWorkbenchRunning()) {
 
-			@Override
-			public void run() {
-				// Mismatch, assume pending job
-				if (value != counter.get()) {
-					return;
+			Runnable r = new Runnable() {
+
+				@Override
+				public void run() {
+					// Mismatch, assume pending job
+					if (value != counter.get()) {
+						return;
+					}
+					doRebuildCompare(value, selectedDataProvider, pinned, others);
 				}
-				doRebuildCompare(value, selectedDataProvider, pinned, others);
-			}
-		});
+			};
+			RunnerHelper.exec(r, block);
+		}
 
 	}
 

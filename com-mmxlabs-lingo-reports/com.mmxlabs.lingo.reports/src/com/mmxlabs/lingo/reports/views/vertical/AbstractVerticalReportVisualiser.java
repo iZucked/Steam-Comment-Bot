@@ -435,4 +435,13 @@ public abstract class AbstractVerticalReportVisualiser {
 	public Alignment getEventTextAlignment(final LocalDate localDate, final Event event) {
 		return Alignment.LEFT;
 	}
+
+	/**
+	 * Flag indicating whether or not to strip out rows after last interesting event. TODO: Add API to define interesting
+	 * 
+	 * @return
+	 */
+	public boolean filterAfterLastEvent() {
+		return false;
+	}
 }

@@ -28,13 +28,12 @@ import org.eclipse.swt.widgets.Display;
  */
 public class VesselNameColumnHeaderRenderer extends GridHeaderRenderer {
 
-	int leftMargin = 6;
+	int leftMargin = 3;
 
-	int rightMargin = 6;
+	int rightMargin = 3;
+	int topMargin = 6;
 
-	int topMargin = 3;
-
-	int bottomMargin = 3;
+	int bottomMargin = 6;
 
 	int arrowMargin = 6;
 
@@ -123,7 +122,6 @@ public class VesselNameColumnHeaderRenderer extends GridHeaderRenderer {
 				y = getBounds().y + pushedDrawingOffset + getBounds().height - bottomMargin - column.getImage().getBounds().height;
 			}
 
-			gc.drawImage(column.getImage(), getBounds().x + x + pushedDrawingOffset, y);
 			x += column.getImage().getBounds().width + imageSpacing;
 		}
 
@@ -135,7 +133,7 @@ public class VesselNameColumnHeaderRenderer extends GridHeaderRenderer {
 		} else {
 			width -= arrowMargin + arrowRenderer.getSize().x + arrowMargin;
 		}
-
+		
 		gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND));
 
 		// y = bottomMargin;

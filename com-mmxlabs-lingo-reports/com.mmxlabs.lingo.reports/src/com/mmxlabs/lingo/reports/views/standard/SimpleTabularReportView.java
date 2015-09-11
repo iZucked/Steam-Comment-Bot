@@ -6,9 +6,10 @@ package com.mmxlabs.lingo.reports.views.standard;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuListener;
@@ -42,12 +43,17 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
-import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
-import com.mmxlabs.lingo.reports.ScenarioViewerSynchronizer;
-import com.mmxlabs.lingo.reports.ScheduleElementCollector;
-import com.mmxlabs.lingo.reports.components.SimpleContentAndColumnProvider;
-import com.mmxlabs.lingo.reports.components.SimpleContentAndColumnProvider.ColumnManager;
+import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportContentProvider;
+import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
+import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer.ColumnManager;
+import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
+import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -55,6 +61,9 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 /**
  */
 public abstract class SimpleTabularReportView<T> extends ViewPart {
+
+	private SelectedScenariosService selectedScenariosService;
+
 	private final ArrayList<ColumnManager<T>> sortColumns = new ArrayList<ColumnManager<T>>();
 	private final ArrayList<ColumnManager<T>> columnManagers = new ArrayList<ColumnManager<T>>();
 
@@ -66,10 +75,83 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 
 	private Action copyTableAction;
 
-	private ScenarioViewerSynchronizer viewerSynchronizer;
 	private String helpContextId;
 
-	// private SimpleContentAndColumnProvider<T> contentProvider;
+	@NonNull
+	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
+
+		@Override
+		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
+
+			final Runnable r = new Runnable() {
+				@Override
+				public void run() {
+					AbstractSimpleTabularReportTransformer<T> transformer = createTransformer();
+
+					columnManagers.clear();
+
+					// pinnedData.clear();
+					// rowData = (T[]) new Object[0];
+					// if (newInput instanceof IScenarioViewerSynchronizerOutput) {
+					// final IScenarioViewerSynchronizerOutput synchOutput = (IScenarioViewerSynchronizerOutput) newInput;
+					// for (final Object o : synchOutput.getCollectedElements()) {
+					// if (o instanceof Schedule) {
+					// rowData = createData((Schedule) o, synchOutput.getLNGScenarioModel(o), synchOutput.getLNGPortfolioModel(o)).toArray(rowData);
+					// return;
+					// }
+					// }
+					// }
+					//
+					final List<Object> rowElements = new LinkedList<>();
+					int numberOfSchedules = 0;
+					List<T> pinnedData = null;
+					if (pinned != null) {
+						LNGScenarioModel instance = (LNGScenarioModel) pinned.getInstance();
+						if (instance != null) {
+							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
+							if (schedule != null) {
+
+								// pinnedData = createData((Schedule) o, synchOutput.getLNGScenarioModel(o), synchOutput.getLNGPortfolioModel(o)).toArray(rowData);
+
+								pinnedData = transformer.createData(schedule, selectedDataProvider.getScenarioModel(schedule), selectedDataProvider.getPortfolioModel(schedule));
+								rowElements.addAll(pinnedData);
+								numberOfSchedules++;
+							}
+						}
+					}
+					for (final ScenarioInstance other : others) {
+						LNGScenarioModel instance = (LNGScenarioModel) other.getInstance();
+						if (instance != null) {
+							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
+							if (schedule != null) {
+								rowElements.addAll(transformer.createData(schedule, selectedDataProvider.getScenarioModel(schedule), selectedDataProvider.getPortfolioModel(schedule)));
+
+								// rowElements.addAll(transformer.transform(schedule, other, pinnedData));
+								numberOfSchedules++;
+							}
+						}
+					}
+
+					columnManagers.addAll(transformer.getColumnManagers());
+					clearColumns();
+					addColumns();
+					setShowColumns(pinned != null, numberOfSchedules);
+
+					viewer.getLabelProvider().dispose();
+					viewer.setLabelProvider(new ViewLabelProvider());
+
+					ViewerHelper.setInput(viewer, true, rowElements);
+
+					if (!rowElements.isEmpty()) {
+						if (packColumnsAction != null) {
+							packColumnsAction.run();
+						}
+					}
+				}
+			};
+			RunnerHelper.exec(r, block);
+		}
+	};
 
 	public class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, IFontProvider, ITableColorProvider {
 
@@ -164,66 +246,22 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 			sortColumns.add(0, value);
 		}
 
-		viewer.refresh();
+		ViewerHelper.refresh(viewer, true);
 	}
+
+	final List<GridViewerColumn> viewerColumns = new ArrayList<GridViewerColumn>();
 
 	/**
 	 * This is a callback that will allow us to create the viewer and initialise it.
 	 */
 	@Override
 	public void createPartControl(final Composite parent) {
-		final SimpleContentAndColumnProvider<T> contentProvider = createContentProvider();
-		// this.contentProvider = contentProvider;
 
-		viewer = new GridTreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION) {
-			final List<GridViewerColumn> viewerColumns = new ArrayList<GridViewerColumn>();
+		selectedScenariosService = (SelectedScenariosService) getSite().getService(SelectedScenariosService.class);
 
-			@Override
-			protected void inputChanged(final Object input, final Object oldInput) {
-				super.inputChanged(input, oldInput);
+		viewer = new GridTreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 
-				final boolean inputEmpty = (input == null) || ((input instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) input).getCollectedElements().isEmpty());
-				final boolean oldInputEmpty = (oldInput == null)
-						|| ((oldInput instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) oldInput).getCollectedElements().isEmpty());
-
-				columnManagers.clear();
-				columnManagers.addAll(contentProvider.getColumnManagers());
-				clearColumns();
-				addColumns();
-				viewer.getLabelProvider().dispose();
-				setLabelProvider(new ViewLabelProvider());
-
-				if (inputEmpty != oldInputEmpty) {
-					if (packColumnsAction != null) {
-						packColumnsAction.run();
-					}
-				}
-			};
-
-			protected void addColumns() {
-				for (ColumnManager<T> cv : columnManagers) {
-					String name = cv.getName();
-					GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
-					viewerColumns.add(gvc);
-					GridColumn gc = gvc.getColumn();
-					gc.setText(name);
-					gc.pack();
-					addSortSelectionListener(gc, cv);
-					if (cv.isTree()) {
-						// Enable the tree controls on this column
-						gvc.getColumn().setTree(true);
-					}
-				}
-			}
-
-			protected void clearColumns() {
-				for (GridViewerColumn gvc : viewerColumns) {
-					gvc.getColumn().dispose();
-				}
-				viewerColumns.clear();
-			}
-		};
-		viewer.setContentProvider(contentProvider);
+		viewer.setContentProvider(createContentProvider());
 		viewer.setInput(getViewSite());
 
 		// get a list of column managers from the content / column provider
@@ -261,28 +299,31 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 		hookContextMenu();
 		contributeToActionBars();
 
-		viewerSynchronizer = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
-			private boolean hasPin = false;
-			private int numberOfSchedules;
+		// viewerSynchronizer = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
+		// private boolean hasPin = false;
+		// private int numberOfSchedules;
+		//
+		// @Override
+		// public void beginCollecting(boolean pinDiffMode) {
+		// hasPin = false;
+		// numberOfSchedules = 0;
+		// }
+		//
+		// @Override
+		// public void endCollecting() {
+		// setShowColumns(hasPin, numberOfSchedules);
+		// }
+		//
+		// @Override
+		// protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final Schedule schedule, final boolean pinned) {
+		// hasPin = hasPin || pinned;
+		// ++numberOfSchedules;
+		// return Collections.singleton(schedule);
+		// }
+		// });
 
-			@Override
-			public void beginCollecting(boolean pinDiffMode) {
-				hasPin = false;
-				numberOfSchedules = 0;
-			}
-
-			@Override
-			public void endCollecting() {
-				setShowColumns(hasPin, numberOfSchedules);
-			}
-
-			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final Schedule schedule, final boolean pinned) {
-				hasPin = hasPin || pinned;
-				++numberOfSchedules;
-				return Collections.singleton(schedule);
-			}
-		});
+		selectedScenariosService.addListener(selectedScenariosServiceListener);
+		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 	}
 
 	/**
@@ -291,7 +332,9 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 	 * 
 	 * @return
 	 */
-	abstract protected SimpleContentAndColumnProvider<T> createContentProvider();
+	abstract protected AbstractSimpleTabularReportContentProvider<T> createContentProvider();
+
+	abstract protected AbstractSimpleTabularReportTransformer<T> createTransformer();
 
 	private void hookContextMenu() {
 		final MenuManager menuMgr = new MenuManager("#PopupMenu");
@@ -345,42 +388,41 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 	 */
 	@Override
 	public void setFocus() {
-		viewer.getControl().setFocus();
-	}
-
-	public void refresh() {
-		getSite().getShell().getDisplay().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				if (!viewer.getControl().isDisposed()) {
-					viewer.refresh();
-				}
-			}
-		});
-	}
-
-	public void setInput(final Object input) {
-		getSite().getShell().getDisplay().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				if (!viewer.getControl().isDisposed()) {
-					viewer.setInput(input);
-				}
-			}
-		});
+		ViewerHelper.setFocus(viewer);
 	}
 
 	@Override
 	public void dispose() {
-		if (viewerSynchronizer != null) {
-			ScenarioViewerSynchronizer.deregisterView(viewerSynchronizer);
-		}
+
+		selectedScenariosService.removeListener(selectedScenariosServiceListener);
+
 		super.dispose();
 	}
 
 	private void setShowColumns(final boolean showDeltaColumn, int numberOfSchedules) {
 
+	}
+
+	private void addColumns() {
+		for (ColumnManager<T> cv : columnManagers) {
+			String name = cv.getName();
+			GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
+			viewerColumns.add(gvc);
+			GridColumn gc = gvc.getColumn();
+			gc.setText(name);
+			gc.pack();
+			addSortSelectionListener(gc, cv);
+			if (cv.isTree()) {
+				// Enable the tree controls on this column
+				gvc.getColumn().setTree(true);
+			}
+		}
+	}
+
+	private void clearColumns() {
+		for (GridViewerColumn gvc : viewerColumns) {
+			gvc.getColumn().dispose();
+		}
+		viewerColumns.clear();
 	}
 }

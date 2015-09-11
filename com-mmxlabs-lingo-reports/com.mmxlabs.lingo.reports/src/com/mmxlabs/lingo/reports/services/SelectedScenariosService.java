@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
@@ -20,6 +21,8 @@ import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,11 +43,19 @@ public class SelectedScenariosService {
 	private final Set<CommandStack> commandStacks = new HashSet<>();
 	private final Map<ScenarioInstance, ModelReference> scenarioReferences = new HashMap<>();
 	private final Map<CommandStack, ScenarioInstance> commandStackMap = new HashMap<>();
+	// TODO: Create an explicity remove/updateRecord method set to ensure record.dispose() is called.
 	private final Map<ScenarioInstance, KeyValueRecord> scenarioRecords = new HashMap<>();
 
 	private IScenarioServiceSelectionProvider selectionProvider;
 
+	private ISelectedDataProvider currentSelectedDataProvider;
+
 	private final Set<ISelectedScenariosServiceListener> listeners = new HashSet<>();
+
+	/**
+	 * Special counter to try and avoid multiple update requests happening at once. TODO: What happens if we hit Integer.MAX_VALUE?
+	 */
+	private AtomicInteger counter = new AtomicInteger();
 
 	/**
 	 * Command stack listener method, cause the linked viewer to refresh on command execution
@@ -63,7 +74,10 @@ public class SelectedScenariosService {
 				for (final Object o : result) {
 					if (o instanceof ScheduleModel || o instanceof Schedule) {
 						updateSelectedScenarios(false);
-						scenarioRecords.remove(commandStackMap.get(commandStack));
+						KeyValueRecord record = scenarioRecords.remove(commandStackMap.get(commandStack));
+						if (record != null) {
+							record.dispose();
+						}
 						return;
 					}
 				}
@@ -83,6 +97,8 @@ public class SelectedScenariosService {
 		public void onPreScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
 			if (scenarioInstance == targetInstance) {
 				scenarioService.removeScenarioServiceListener(this);
+				detachScenarioInstance(scenarioInstance);
+				updateSelectedScenarios(false);
 			}
 		}
 
@@ -100,6 +116,8 @@ public class SelectedScenariosService {
 		public void onPreScenarioInstanceDelete(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
 			if (scenarioInstance == targetInstance) {
 				scenarioService.removeScenarioServiceListener(this);
+				detachScenarioInstance(scenarioInstance);
+				updateSelectedScenarios(false);
 			}
 		}
 
@@ -136,12 +154,12 @@ public class SelectedScenariosService {
 				assert instance != null;
 				attachScenarioInstance(instance);
 			}
-			updateSelectedScenarios(block);
+			// updateSelectedScenarios(block);
 		}
 
 		@Override
 		public void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioInstance oldPin, final ScenarioInstance newPin, final boolean block) {
-			updateSelectedScenarios(block);
+			// updateSelectedScenarios(block);
 		}
 
 		@Override
@@ -150,6 +168,11 @@ public class SelectedScenariosService {
 				assert instance != null;
 				detachScenarioInstance(instance);
 			}
+			// updateSelectedScenarios(block);
+		}
+
+		@Override
+		public void selectionChanged(ScenarioInstance pinned, Collection<ScenarioInstance> others, boolean block) {
 			updateSelectedScenarios(block);
 		}
 
@@ -248,7 +271,10 @@ public class SelectedScenariosService {
 		if (ref != null) {
 			ref.close();
 		}
-		scenarioRecords.remove(instance);
+		final KeyValueRecord record = scenarioRecords.remove(instance);
+		if (record != null) {
+			record.dispose();
+		}
 	}
 
 	public void addListener(@NonNull final ISelectedScenariosServiceListener listener) {
@@ -259,9 +285,39 @@ public class SelectedScenariosService {
 		listeners.remove(listener);
 	}
 
+	private void updateSelectedScenarios(final boolean block) {
+		// Null out until new version is ready
+		currentSelectedDataProvider = null;
+		final int value = counter.incrementAndGet();
+		if (PlatformUI.isWorkbenchRunning()) {
+
+			Runnable r = new Runnable() {
+
+				@Override
+				public void run() {
+					// Mismatch, assume pending job
+					if (value != counter.get()) {
+						return;
+					}
+					doUpdateSelectedScenarios(value, block);
+				}
+			};
+			IWorkbench wb = PlatformUI.getWorkbench();
+			if (block) {
+				if (wb.getDisplay().getThread() == Thread.currentThread()) {
+					r.run();
+				} else {
+					wb.getDisplay().syncExec(r);
+				}
+			} else {
+				wb.getDisplay().asyncExec(r);
+			}
+		}
+	}
+
 	/**
 	 */
-	public void updateSelectedScenarios(final boolean block) {
+	public void doUpdateSelectedScenarios(final int value, final boolean block) {
 		synchronized (this) {
 			final ISelectedDataProvider selectedDataProvider = createSelectedDataProvider();
 
@@ -275,11 +331,14 @@ public class SelectedScenariosService {
 				others.remove(pinnedInstance);
 			}
 
+			currentSelectedDataProvider = selectedDataProvider;
 			for (final ISelectedScenariosServiceListener l : listeners) {
 				try {
-					l.selectionChanged(selectedDataProvider, pinnedInstance, others, block);
+					l.selectionChanged(currentSelectedDataProvider, pinnedInstance, others, block);
 				} catch (final Exception e) {
-					log.error(e.getMessage(), e);
+					if (value == counter.get()) {
+						log.error(e.getMessage(), e);
+					}
 				}
 			}
 		}
@@ -301,7 +360,7 @@ public class SelectedScenariosService {
 		@NonNull
 		private final Collection<EObject> children;
 
-		private final ModelReference ref;
+		private ModelReference ref;
 
 		public KeyValueRecord(@NonNull final ScenarioInstance scenarioInstance, @NonNull final LNGScenarioModel scenarioModel, @NonNull final LNGPortfolioModel portfolioModel,
 				@Nullable final Schedule schedule, @NonNull final Collection<EObject> children) {
@@ -310,12 +369,23 @@ public class SelectedScenariosService {
 			this.portfolioModel = portfolioModel;
 			this.schedule = schedule;
 			this.children = children;
-			ref = scenarioInstance.getReference();
+			this.ref = scenarioInstance.getReference();
+		}
+
+		public void dispose() {
+			if (ref != null) {
+				ref.close();
+				ref = null;
+			}
+
 		}
 
 		@Override
 		protected void finalize() throws Throwable {
-			ref.close();
+			if (ref != null) {
+				ref.close();
+				ref = null;
+			}
 		};
 
 		@NonNull
@@ -372,7 +442,7 @@ public class SelectedScenariosService {
 	}
 
 	@NonNull
-	private ISelectedDataProvider createSelectedDataProvider() {
+	private SelectedDataProviderImpl createSelectedDataProvider() {
 
 		final SelectedDataProviderImpl provider = new SelectedDataProviderImpl();
 		for (final ScenarioInstance scenarioInstance : selectionProvider.getSelection()) {
@@ -382,12 +452,54 @@ public class SelectedScenariosService {
 				record = scenarioRecords.get(scenarioInstance);
 			} else {
 				record = createKeyValueRecord(scenarioInstance);
-				scenarioRecords.put(scenarioInstance, record);
+				KeyValueRecord oldRecord = scenarioRecords.put(scenarioInstance, record);
+				if (oldRecord != null) {
+					oldRecord.dispose();
+				}
 			}
 			assert record != null;
 			provider.addScenario(record.getScenarioInstance(), record.getScenarioModel(), record.getPortfolioModel(), record.getSchedule(), record.getChildren());
 		}
+		provider.setPinnedScenarioInstance(selectionProvider.getPinnedInstance());
 		return provider;
 	}
 
+	public void triggerListener(@NonNull final ISelectedScenariosServiceListener l, final boolean block) {
+		final SelectedDataProviderImpl selectedDataProvider = createSelectedDataProvider();
+
+		final LinkedHashSet<ScenarioInstance> others = new LinkedHashSet<>(selectionProvider.getSelection());
+		ScenarioInstance pinnedInstance = selectionProvider.getPinnedInstance();
+		// If there is only the pinned scenario, pretend it is just selected.
+		// If there is a pin and other scenarios, remove the pin from the others list
+		if (others.size() < 2) {
+			pinnedInstance = null;
+		} else {
+			others.remove(pinnedInstance);
+		}
+		try {
+			l.selectionChanged(selectedDataProvider, pinnedInstance, others, block);
+		} catch (final Exception e) {
+			log.error(e.getMessage(), e);
+		}
+
+	}
+
+	@Nullable
+	public ISelectedDataProvider getCurrentSelectedDataProvider() {
+		return currentSelectedDataProvider;
+	}
+
+	/**
+	 * Wrapped around {@link IScenarioServiceSelectionProvider#getPinnedInstance()}
+	 * 
+	 * @return The current pinned instance or null
+	 */
+	@Nullable
+	public ScenarioInstance getPinnedScenario() {
+		final IScenarioServiceSelectionProvider pProvider = selectionProvider;
+		if (pProvider != null) {
+			return pProvider.getPinnedInstance();
+		}
+		return null;
+	}
 }

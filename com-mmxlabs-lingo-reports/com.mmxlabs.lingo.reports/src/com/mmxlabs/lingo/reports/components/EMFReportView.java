@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.components;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,11 +15,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.WeakHashMap;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuListener;
@@ -41,11 +44,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.internal.e4.compatibility.CompatibilityView;
+import org.eclipse.ui.internal.e4.compatibility.CompatibilityPart;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
@@ -53,17 +56,23 @@ import org.eclipse.ui.views.properties.PropertySheetPage;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
-import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
-import com.mmxlabs.lingo.reports.ScenarioViewerSynchronizer;
 import com.mmxlabs.lingo.reports.properties.ScheduledEventPropertySourceProvider;
+import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
+import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.utils.PinDiffModeColumnManager;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.filter.FilterField;
+import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.SelectionHelper;
+import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
  * Base class for views which show things from the EMF output model.
@@ -82,8 +91,54 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 
 	private final Map<String, List<EObject>> allObjectsByKey = new LinkedHashMap<>();
 	private final Map<String, Integer> keyPresentInSchedulesCount = new LinkedHashMap<>();
+	private final Map<Object, WeakReference<ScenarioInstance>> elementMapping = new WeakHashMap<>();
 
 	private final ColumnBlockManager blockManager = new ColumnBlockManager();
+
+	private SelectedScenariosService selectedScenariosService;
+
+	@NonNull
+	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
+
+		@Override
+		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
+			final Runnable r = new Runnable() {
+				@Override
+				public void run() {
+					// Add Difference/Change columns when in Pin/Diff mode
+					final boolean pinDiffMode = !others.isEmpty() && pinned != null;
+					final int numberOfSchedules = others.size() + (pinned == null ? 0 : 1);
+					for (final ColumnBlock handler : getBlockManager().getBlocksInVisibleOrder()) {
+						if (handler != null) {
+							handler.setViewState(numberOfSchedules > 1, pinDiffMode);
+						}
+					}
+
+					final List<Object> rowElements = new LinkedList<>();
+					final IScenarioInstanceElementCollector elementCollector = getElementCollector();
+					elementCollector.beginCollecting(pinned != null);
+					if (pinned != null) {
+						final Collection<? extends Object> elements = elementCollector.collectElements(pinned, (LNGScenarioModel) pinned.getInstance(), true);
+						for (final Object e : elements) {
+							elementMapping.put(e, new WeakReference<>(pinned));
+						}
+						rowElements.addAll(elements);
+					}
+					for (final ScenarioInstance other : others) {
+						final Collection<? extends Object> elements = elementCollector.collectElements(other, (LNGScenarioModel) other.getInstance(), false);
+						for (final Object e : elements) {
+							elementMapping.put(e, new WeakReference<>(other));
+						}
+						rowElements.addAll(elements);
+					}
+					elementCollector.endCollecting();
+					ViewerHelper.setInput(viewer, true, rowElements);
+				}
+			};
+
+			RunnerHelper.exec(r, block);
+		}
+	};
 
 	protected EMFReportView(final String helpContextId) {
 		this.helpContextId = helpContextId;
@@ -92,9 +147,27 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 	protected final ICellRenderer containingScheduleFormatter = new BaseFormatter() {
 		@Override
 		public String render(final Object object) {
-			return synchronizerOutput.getScenarioInstance(object).getName();
+			if (object instanceof EObject) {
+				final EObject eObject = (EObject) object;
+				final ISelectedDataProvider selectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
+				if (selectedDataProvider != null) {
+					ScenarioInstance instance = selectedDataProvider.getScenarioInstance(eObject);
+					if (instance != null) {
+						return instance.getName();
+					}
+					if (elementMapping.containsKey(eObject)) {
+						final WeakReference<ScenarioInstance> ref = elementMapping.get(eObject);
+						if (ref != null) {
+							instance = ref.get();
+						}
+						if (instance != null) {
+							return instance.getName();
+						}
+					}
+				}
+			}
+			return null;
 		}
-
 	};
 
 	/**
@@ -103,11 +176,7 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 
 	private Action packColumnsAction;
 	private Action copyTableAction;
-	// BE private Action sortModeAction; //BE
 	private final String helpContextId;
-	protected ScenarioViewerSynchronizer synchronizer;
-
-	protected IScenarioViewerSynchronizerOutput synchronizerOutput = null;
 
 	/**
 	 */
@@ -115,23 +184,11 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 		return new ITreeContentProvider() {
 			@Override
 			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-				synchronizerOutput = null;
-				if (newInput instanceof IScenarioViewerSynchronizerOutput) {
-					synchronizerOutput = (IScenarioViewerSynchronizerOutput) newInput;
 
-					// Add Difference/Change columns when in Pin/Diff mode
-					final boolean pinDiffMode = numberOfSchedules > 1 && currentlyPinned;
-					for (final ColumnBlock handler : getBlockManager().getBlocksInVisibleOrder()) {
-						if (handler != null) {
-							handler.setViewState(numberOfSchedules > 1, pinDiffMode);
-						}
-					}
-				}
 			}
 
 			@Override
 			public void dispose() {
-				synchronizerOutput = null;
 			}
 
 			@Override
@@ -189,9 +246,9 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 					result = objects.toArray();
 
 				} else {
-					if (inputElement instanceof IScenarioViewerSynchronizerOutput) {
-						final IScenarioViewerSynchronizerOutput output = (IScenarioViewerSynchronizerOutput) inputElement;
-						result = output.getCollectedElements().toArray(new Object[output.getCollectedElements().size()]);
+					if (inputElement instanceof Collection<?>) {
+						final Collection<?> collection = (Collection<?>) inputElement;
+						return collection.toArray();
 					} else {
 						result = new Object[0];
 					}
@@ -325,21 +382,21 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 		container.setLayout(layout);
 
 		viewer = new EObjectTableViewer(container, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION) {
-			@Override
-			protected void inputChanged(final Object input, final Object oldInput) {
-				super.inputChanged(input, oldInput);
-
-				final boolean inputEmpty = (input == null) || ((input instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) input).getCollectedElements().isEmpty());
-				final boolean oldInputEmpty = (oldInput == null)
-						|| ((oldInput instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) oldInput).getCollectedElements().isEmpty());
-
-				if (inputEmpty != oldInputEmpty) {
-					// Disabled because running this takes up 50% of the runtime when displaying a new schedule (!)
-					// if (packColumnsAction != null) {
-					// packColumnsAction.run();
-					// }
-				}
-			};
+			// @Override
+			// protected void inputChanged(final Object input, final Object oldInput) {
+			// super.inputChanged(input, oldInput);
+			//
+			// final boolean inputEmpty = (input == null) || ((input instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) input).getCollectedElements().isEmpty());
+			// final boolean oldInputEmpty = (oldInput == null)
+			// || ((oldInput instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) oldInput).getCollectedElements().isEmpty());
+			//
+			// if (inputEmpty != oldInputEmpty) {
+			// // Disabled because running this takes up 50% of the runtime when displaying a new schedule (!)
+			// // if (packColumnsAction != null) {
+			// // packColumnsAction.run();
+			// // }
+			// }
+			// };
 
 			@Override
 			protected List<?> getSelectionFromWidget() {
@@ -427,7 +484,9 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 			service.addPostSelectionListener(this);
 		}
 
-		synchronizer = ScenarioViewerSynchronizer.registerView(viewer, getElementCollector());
+		selectedScenariosService = (SelectedScenariosService) getSite().getService(SelectedScenariosService.class);
+		selectedScenariosService.addListener(selectedScenariosServiceListener);
+		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
 	}
 
 	protected abstract IScenarioInstanceElementCollector getElementCollector();
@@ -496,29 +555,13 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 
 	@Override
 	public void setFocus() {
-		if (!viewer.getGrid().isDisposed()) {
-			viewer.getGrid().setFocus();
-		}
-	}
-
-	public void setInput(final Object input) {
-		getSite().getShell().getDisplay().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				if (!viewer.getControl().isDisposed()) {
-					viewer.setInput(input);
-				}
-			}
-		});
+		ViewerHelper.setFocus(viewer);
 	}
 
 	@Override
 	public void selectionChanged(final MPart part, final Object selectedObject) {
-		final Object object = part.getObject();
-		if (object instanceof CompatibilityView) {
-			final CompatibilityView compatibilityView = (CompatibilityView) object;
-			final IViewPart view = compatibilityView.getView();
+		{
+			final IWorkbenchPart view = SelectionHelper.getE3Part(part);
 
 			if (view == this) {
 				return;
@@ -528,16 +571,9 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 			}
 		}
 
-		ISelection selection = null;
 		// Convert selection
-		if (selectedObject instanceof ISelection) {
-			selection = (ISelection) selectedObject;
-		} else if (selectedObject instanceof Object[]) {
-			selection = new StructuredSelection((Object[]) selectedObject);
-		} else {
-			selection = new StructuredSelection(selectedObject);
-		}
-		viewer.setSelection(selection, true);
+		final ISelection selection = SelectionHelper.adaptSelection(selectedObject);
+		ViewerHelper.setSelection(viewer, true, selection, true);
 	}
 
 	protected boolean handleSelections() {
@@ -550,7 +586,7 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 		final ESelectionService service = getSite().getService(ESelectionService.class);
 		service.removePostSelectionListener(this);
 
-		ScenarioViewerSynchronizer.deregisterView(synchronizer);
+		selectedScenariosService.removeListener(selectedScenariosServiceListener);
 
 		super.dispose();
 	}
@@ -659,15 +695,6 @@ public abstract class EMFReportView extends ViewPart implements org.eclipse.e4.u
 	 */
 	protected List<?> adaptSelectionFromWidget(final List<?> selection) {
 		return selection;
-	}
-
-	/**
-	 * Return the current IScenarioViewerSynchronizerOutput instance, or null. This object could change over time.
-	 * 
-	 * @return
-	 */
-	public IScenarioViewerSynchronizerOutput getSynchronizerOutput() {
-		return synchronizerOutput;
 	}
 
 	public ColumnBlockManager getBlockManager() {

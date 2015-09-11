@@ -4,17 +4,16 @@
  */
 package com.mmxlabs.lingo.reports.views.standard;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -40,20 +39,25 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  * @author Simon Goodall
  * 
  */
-public class TotalsContentProvider implements IStructuredContentProvider {
+public class TotalsTransformer {
 
+	@NonNull
 	private static final String TOTAL_COST = "Total Cost";
 
+	@NonNull
 	private static final String TYPE_COST = "Cost";
+
+	@NonNull
 	public static final String TYPE_TIME = "Days, hours";
 
 	public static class RowData {
-		public RowData(final String scheduleName, final String component, final String type, final long fitness, final boolean minimise) {
+		public RowData(final String scheduleName, final String component, final String type, final long fitness, Long deltaFitness, final boolean minimise) {
 			super();
 			this.scheduleName = scheduleName;
 			this.component = component;
 			this.type = type;
 			this.fitness = fitness;
+			this.deltaFitness = deltaFitness;
 			this.minimise = minimise;
 		}
 
@@ -61,17 +65,13 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 		public final String component;
 		public final String type;
 		public final long fitness;
+		public final Long deltaFitness;
 		public final boolean minimise;
 	}
 
-	private RowData[] rowData = new RowData[0];
+	public List<RowData> transform(final Schedule schedule, final String scheduleName, @Nullable List<RowData> pinnedData) {
 
-	@Override
-	public Object[] getElements(final Object inputElement) {
-		return rowData;
-	}
-
-	private void createRowData(final Schedule schedule, final String scheduleName, final List<RowData> output) {
+		final List<RowData> output = new LinkedList<>();
 		/**
 		 * Stores the total fuel costs for each type of fuel - this may not be the detailed output we want, I don't know
 		 */
@@ -161,50 +161,37 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 		}
 
 		for (final Entry<Fuel, Long> entry : totalFuelCosts.entrySet()) {
-			output.add(new RowData(scheduleName, entry.getKey().toString(), TYPE_COST, entry.getValue(), true));
+			output.add(createRow(scheduleName, entry.getKey().toString(), TYPE_COST, entry.getValue(), true, pinnedData));
 		}
 
-		output.add(new RowData(scheduleName, "Canal Fees", TYPE_COST, canals, true));
-		output.add(new RowData(scheduleName, "Charter Fees", TYPE_COST, hire, true));
-		output.add(new RowData(scheduleName, "Distance", TYPE_COST, distance, true));
+		output.add(createRow(scheduleName, "Canal Fees", TYPE_COST, canals, true, pinnedData));
+		output.add(createRow(scheduleName, "Charter Fees", TYPE_COST, hire, true, pinnedData));
+		output.add(createRow(scheduleName, "Distance", TYPE_COST, distance, true, pinnedData));
 
-		output.add(new RowData(scheduleName, "Port Costs", TYPE_COST, portCost, true));
-		output.add(new RowData(scheduleName, "Lateness", TYPE_TIME, lateness, true));
-		output.add(new RowData(scheduleName, "Capacity", "Count", capacityViolations, true));
+		output.add(createRow(scheduleName, "Port Costs", TYPE_COST, portCost, true, pinnedData));
+		output.add(createRow(scheduleName, "Lateness", TYPE_TIME, lateness, true, pinnedData));
+		output.add(createRow(scheduleName, "Capacity", "Count", capacityViolations, true, pinnedData));
 
-		output.add(new RowData(scheduleName, TOTAL_COST, TYPE_COST, totalCost, true));
+		output.add(createRow(scheduleName, TOTAL_COST, TYPE_COST, totalCost, true, pinnedData));
+
+		return output;
 	}
 
-	@Override
-	public synchronized void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-		pinnedData.clear();
-		rowData = new RowData[0];
-		if (newInput instanceof IScenarioViewerSynchronizerOutput) {
-			final IScenarioViewerSynchronizerOutput synchOutput = (IScenarioViewerSynchronizerOutput) newInput;
-			final ArrayList<RowData> rowDataList = new ArrayList<RowData>();
-			for (final Object o : synchOutput.getCollectedElements()) {
-				if (o instanceof Schedule) {
-					if (synchOutput.isPinned(o)) {
-						createRowData((Schedule) o, synchOutput.getScenarioInstance(o).getName(), pinnedData);
-						rowDataList.addAll(pinnedData);
-					} else {
-						createRowData((Schedule) o, synchOutput.getScenarioInstance(o).getName(), rowDataList);
-					}
-				}
+	private RowData createRow(final String scenarioInstanceName, @NonNull final String component, final String type, final long value, final boolean minimise,
+			@Nullable final List<RowData> pinnedData) {
+		return new RowData(scenarioInstanceName, component, type, value, getDelta(component, value, pinnedData), minimise);
+	}
+
+	@Nullable
+	private Long getDelta(@NonNull final String component, final long fitness, @Nullable final List<RowData> pinnedData) {
+		if (pinnedData == null) {
+			return null;
+		}
+		for (final RowData data : pinnedData) {
+			if (component.equals(data.component)) {
+				return data.fitness - fitness;
 			}
-			rowData = rowDataList.toArray(rowData);
 		}
-
-	}
-
-	private final List<RowData> pinnedData = new ArrayList<RowData>();
-
-	public List<RowData> getPinnedScenarioData() {
-		return pinnedData;
-	}
-
-	@Override
-	public void dispose() {
-
+		return null;
 	}
 }

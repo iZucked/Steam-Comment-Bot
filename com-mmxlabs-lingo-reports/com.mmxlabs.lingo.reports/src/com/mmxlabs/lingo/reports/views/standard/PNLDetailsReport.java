@@ -17,7 +17,6 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
@@ -43,6 +42,7 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 import com.mmxlabs.models.ui.properties.views.DetailPropertiesView;
+import com.mmxlabs.rcp.common.ViewerHelper;
 
 public class PNLDetailsReport extends DetailPropertiesView {
 
@@ -229,28 +229,14 @@ public class PNLDetailsReport extends DetailPropertiesView {
 		@Override
 		public void reallyNotifyChanged(final Notification notification) {
 			if (notification.getEventType() != Notification.REMOVING_ADAPTER) {
-				Display.getDefault().asyncExec(new Runnable() {
-
-					@Override
-					public void run() {
-						PNLDetailsReport.this.refresh();
-					}
-				});
+				ViewerHelper.refresh(viewer, false);
 			}
 		}
 
 		@Override
 		protected void missedNotifications(final List<Notification> missed) {
-			Display.getDefault().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					PNLDetailsReport.this.refresh();
-				}
-			});
-
+			ViewerHelper.refresh(viewer, false);
 		}
-
 	};
 
 	@Override

@@ -6,8 +6,10 @@ package com.mmxlabs.lingo.reports.views.standard;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuListener;
@@ -15,6 +17,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.IFontProvider;
 import org.eclipse.jface.viewers.IOpenListener;
@@ -42,11 +45,15 @@ import org.eclipse.ui.part.ViewPart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
-import com.mmxlabs.lingo.reports.ScenarioViewerSynchronizer;
-import com.mmxlabs.lingo.reports.ScheduleElementCollector;
-import com.mmxlabs.lingo.reports.views.standard.KPIContentProvider.RowData;
+import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
+import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
+import com.mmxlabs.lingo.reports.views.standard.KPIReportTransformer.RowData;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -54,6 +61,8 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 public class KPIReportView extends ViewPart {
 
 	private static final Logger log = LoggerFactory.getLogger(KPIReportView.class);
+
+	private SelectedScenariosService selectedScenariosService;
 
 	private final ArrayList<Integer> sortColumns = new ArrayList<Integer>(4);
 
@@ -68,13 +77,60 @@ public class KPIReportView extends ViewPart {
 
 	private Action copyTableAction;
 
-	private ScenarioViewerSynchronizer viewerSynchronizer;
-
-	private KPIContentProvider contentProvider;
-
 	private GridViewerColumn delta;
 
 	private GridViewerColumn scheduleColumnViewer;
+	@NonNull
+	private final ISelectedScenariosServiceListener selectedScenariosServiceListener = new ISelectedScenariosServiceListener() {
+
+		KPIReportTransformer transformer = new KPIReportTransformer();
+
+		@Override
+		public void selectionChanged(final ISelectedDataProvider selectedDataProvider, final ScenarioInstance pinned, final Collection<ScenarioInstance> others, final boolean block) {
+			final Runnable r = new Runnable() {
+				@Override
+				public void run() {
+
+					final List<Object> rowElements = new LinkedList<>();
+
+					int numberOfSchedules = 0;
+					List<RowData> pinnedData = null;
+					if (pinned != null) {
+						LNGScenarioModel instance = (LNGScenarioModel) pinned.getInstance();
+						if (instance != null) {
+							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
+							if (schedule != null) {
+								pinnedData = transformer.transform(schedule, pinned, null);
+								rowElements.addAll(pinnedData);
+								numberOfSchedules++;
+							}
+						}
+					}
+					for (final ScenarioInstance other : others) {
+						LNGScenarioModel instance = (LNGScenarioModel) other.getInstance();
+						if (instance != null) {
+							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
+							if (schedule != null) {
+								rowElements.addAll(transformer.transform(schedule, other, pinnedData));
+								numberOfSchedules++;
+							}
+						}
+					}
+
+					setShowColumns(pinned != null, numberOfSchedules);
+
+					ViewerHelper.setInput(viewer, true, rowElements);
+					if (!rowElements.isEmpty()) {
+						if (packColumnsAction != null) {
+							packColumnsAction.run();
+						}
+					}
+				}
+			};
+
+			RunnerHelper.exec(r, block);
+		}
+	};
 
 	class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, IFontProvider, ITableColorProvider {
 		private final Font boldFont;
@@ -94,15 +150,6 @@ public class KPIReportView extends ViewPart {
 			super.dispose();
 		}
 
-		private Long getDelta(final RowData d) {
-			for (final RowData ref : contentProvider.getPinnedData()) {
-				if (ref.component.equals(d.component)) {
-					return d.value - ref.value;
-				}
-			}
-			return null;
-		}
-
 		@Override
 		public String getColumnText(final Object obj, final int index) {
 			if (obj instanceof RowData) {
@@ -115,7 +162,9 @@ public class KPIReportView extends ViewPart {
 				case 2:
 					return format(d.value, d.type);
 				case 3:
-					return format(getDelta(d), d.type);
+					if (d.deltaValue != null) {
+						return format(d.deltaValue, d.type);
+					}
 				}
 			}
 			return "";
@@ -124,11 +173,11 @@ public class KPIReportView extends ViewPart {
 		private String format(final Long value, final String type) {
 			if (value == null)
 				return "";
-			if (KPIContentProvider.TYPE_TIME.equals(type)) {
+			if (KPIReportTransformer.TYPE_TIME.equals(type)) {
 				final long days = value / 24;
 				final long hours = value % 24;
 				return "" + days + "d, " + hours + "h";
-			} else if (KPIContentProvider.TYPE_COST.equals(type)) {
+			} else if (KPIReportTransformer.TYPE_COST.equals(type)) {
 				return String.format("$%,d", value);
 			} else {
 				return String.format("%,d", value);
@@ -161,7 +210,7 @@ public class KPIReportView extends ViewPart {
 		public Color getForeground(final Object element, final int columnIndex) {
 			if (columnIndex == 3 && element instanceof RowData) {
 				final RowData rowData = (RowData) element;
-				final Long l = getDelta(rowData);
+				final Long l = rowData.deltaValue;
 				if (l == null || l.longValue() == 0l) {
 					return null;
 				} else if ((l < 0 && !rowData.minimise) || (l > 0 && rowData.minimise)) {
@@ -184,81 +233,69 @@ public class KPIReportView extends ViewPart {
 	 */
 	public KPIReportView() {
 	}
-//
-//	private void addSortSelectionListener(final GridColumn column, final int value) {
-//		column.addSelectionListener(new SelectionAdapter() {
-//			{
-//				final SelectionAdapter self = this;
-//				column.addDisposeListener(new DisposeListener() {
-//					@Override
-//					public void widgetDisposed(final DisposeEvent e) {
-//						column.removeSelectionListener(self);
-//					}
-//				});
-//			}
-//
-//			@Override
-//			public void widgetSelected(final SelectionEvent e) {
-//				setSortColumn(column, value);
-//			}
-//		});
-//	}
-//
-//	protected void setSortColumn(final GridColumn column, final int value) {
-//		if (sortColumns.get(0) == value) {
-//			inverseSort = !inverseSort;
-//		} else {
-//			inverseSort = false;
-//			sortColumns.remove((Object) value);
-//			sortColumns.add(0, value);
-//		}
-//
-//		// viewer.getGrid().setSortColumn(column);
-//		// viewer.getGrid().setSortDirection(inverseSort ? SWT.DOWN : SWT.UP);
-//
-//		viewer.refresh();
-//	}
-//
+
+	//
+	// private void addSortSelectionListener(final GridColumn column, final int value) {
+	// column.addSelectionListener(new SelectionAdapter() {
+	// {
+	// final SelectionAdapter self = this;
+	// column.addDisposeListener(new DisposeListener() {
+	// @Override
+	// public void widgetDisposed(final DisposeEvent e) {
+	// column.removeSelectionListener(self);
+	// }
+	// });
+	// }
+	//
+	// @Override
+	// public void widgetSelected(final SelectionEvent e) {
+	// setSortColumn(column, value);
+	// }
+	// });
+	// }
+	//
+	// protected void setSortColumn(final GridColumn column, final int value) {
+	// if (sortColumns.get(0) == value) {
+	// inverseSort = !inverseSort;
+	// } else {
+	// inverseSort = false;
+	// sortColumns.remove((Object) value);
+	// sortColumns.add(0, value);
+	// }
+	//
+	// // viewer.getGrid().setSortColumn(column);
+	// // viewer.getGrid().setSortDirection(inverseSort ? SWT.DOWN : SWT.UP);
+	//
+	// viewer.refresh();
+	// }
+	//
 	/**
 	 * This is a callback that will allow us to create the viewer and initialise it.
 	 */
 	@Override
 	public void createPartControl(final Composite parent) {
-		viewer = new GridTableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION) {
-			@Override
-			protected void inputChanged(final Object input, final Object oldInput) {
-				super.inputChanged(input, oldInput);
 
-				final boolean inputEmpty = (input == null) || ((input instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) input).getCollectedElements().isEmpty());
-				final boolean oldInputEmpty = (oldInput == null)
-						|| ((oldInput instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) oldInput).getCollectedElements().isEmpty());
+		selectedScenariosService = (SelectedScenariosService) getSite().getService(SelectedScenariosService.class);
 
-				if (inputEmpty != oldInputEmpty) {
+		viewer = new GridTableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 
-					if (packColumnsAction != null) {
-						packColumnsAction.run();
-					}
-				}
-			};
-		};
-		this.contentProvider = new KPIContentProvider();
-		viewer.setContentProvider(contentProvider);
+		viewer.setContentProvider(new ArrayContentProvider());
 		viewer.setInput(getViewSite());
 
 		scheduleColumnViewer = new GridViewerColumn(viewer, SWT.NONE);
 		scheduleColumnViewer.getColumn().setText("Schedule");
 		scheduleColumnViewer.getColumn().pack();
-//		addSortSelectionListener(scheduleColumnViewer.getColumn(), 0);
+		// addSortSelectionListener(scheduleColumnViewer.getColumn(), 0);
 
 		final GridViewerColumn tvc1 = new GridViewerColumn(viewer, SWT.NONE);
 		tvc1.getColumn().setText("KPI");
 		tvc1.getColumn().pack();
-//		addSortSelectionListener(tvc1.getColumn(), 1);
+		// addSortSelectionListener(tvc1.getColumn(), 1);
 
 		final GridViewerColumn tvc2 = new GridViewerColumn(viewer, SWT.NONE);
 		tvc2.getColumn().setText("Value");
 		tvc2.getColumn().pack();
-//		addSortSelectionListener(tvc2.getColumn(), 2);
+		// addSortSelectionListener(tvc2.getColumn(), 2);
 
 		viewer.setLabelProvider(new ViewLabelProvider());
 
@@ -270,72 +307,49 @@ public class KPIReportView extends ViewPart {
 		sortColumns.add(2);
 		sortColumns.add(3);
 
-//		viewer.getGrid().setSortColumn(scheduleColumnViewer.getColumn());
-//		viewer.getGrid().setSortDirection(SWT.UP);
+		// viewer.getGrid().setSortColumn(scheduleColumnViewer.getColumn());
+		// viewer.getGrid().setSortDirection(SWT.UP);
 
-//		viewer.setComparator(new ViewerComparator() {
-//			@Override
-//			public int compare(final Viewer viewer, final Object e1, final Object e2) {
-//				final RowData r1 = (RowData) e1;
-//				final RowData r2 = (RowData) e2;
-//
-//				final int d = inverseSort ? -1 : 1;
-//				int sort = 0;
-//				final Iterator<Integer> iterator = sortColumns.iterator();
-//				while (iterator.hasNext() && (sort == 0)) {
-//					switch (iterator.next()) {
-//					case 0:
-//						sort = r1.scheduleName.compareTo(r2.scheduleName);
-//						break;
-//					case 1:
-//						if(r1.component.equalsIgnoreCase(KPIContentProvider.LATENESS)){
-//							sort = 1;
-//						}
-//						else if(r2.component.equalsIgnoreCase(KPIContentProvider.LATENESS)){
-//							sort = -1;
-//						}
-//						else{
-//							sort = r1.component.compareTo(r2.component);
-//						}
-//						break;
-//					case 2:
-//						sort = ((Long) r1.value).compareTo(r2.value);
-//						break;
-//					}
-//				}
-//
-//				return d * sort;
-//			}
-//		});
+		// viewer.setComparator(new ViewerComparator() {
+		// @Override
+		// public int compare(final Viewer viewer, final Object e1, final Object e2) {
+		// final RowData r1 = (RowData) e1;
+		// final RowData r2 = (RowData) e2;
+		//
+		// final int d = inverseSort ? -1 : 1;
+		// int sort = 0;
+		// final Iterator<Integer> iterator = sortColumns.iterator();
+		// while (iterator.hasNext() && (sort == 0)) {
+		// switch (iterator.next()) {
+		// case 0:
+		// sort = r1.scheduleName.compareTo(r2.scheduleName);
+		// break;
+		// case 1:
+		// if(r1.component.equalsIgnoreCase(KPIContentProvider.LATENESS)){
+		// sort = 1;
+		// }
+		// else if(r2.component.equalsIgnoreCase(KPIContentProvider.LATENESS)){
+		// sort = -1;
+		// }
+		// else{
+		// sort = r1.component.compareTo(r2.component);
+		// }
+		// break;
+		// case 2:
+		// sort = ((Long) r1.value).compareTo(r2.value);
+		// break;
+		// }
+		// }
+		//
+		// return d * sort;
+		// }
+		// });
 
 		// Create the help context id for the viewer's control
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.lingo.doc.Reports_KPI");
 		makeActions();
 		hookContextMenu();
 		contributeToActionBars();
-
-		viewerSynchronizer = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
-			private boolean hasPin = false;
-			private int numberOfSchedules;
-
-			@Override
-			public void beginCollecting(boolean pinDiffMode) {
-				hasPin = false;
-				numberOfSchedules = 0;
-			}
-
-			@Override
-			public void endCollecting() {
-				setShowColumns(hasPin, numberOfSchedules);
-			}
-
-			@Override
-			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final Schedule schedule, final boolean pinned) {
-				hasPin = hasPin || pinned;
-				++numberOfSchedules;
-				return Collections.singleton(schedule);
-			}
-		});
 
 		viewer.addOpenListener(new IOpenListener() {
 
@@ -361,6 +375,10 @@ public class KPIReportView extends ViewPart {
 				}
 			}
 		});
+
+		selectedScenariosService.addListener(selectedScenariosServiceListener);
+		selectedScenariosService.triggerListener(selectedScenariosServiceListener, false);
+
 	}
 
 	private void hookContextMenu() {
@@ -415,37 +433,14 @@ public class KPIReportView extends ViewPart {
 	 */
 	@Override
 	public void setFocus() {
-		viewer.getControl().setFocus();
-	}
-
-	public void refresh() {
-		getSite().getShell().getDisplay().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				if (!viewer.getControl().isDisposed()) {
-					viewer.refresh();
-				}
-			}
-		});
-	}
-
-	public void setInput(final Object input) {
-		getSite().getShell().getDisplay().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				if (!viewer.getControl().isDisposed()) {
-					viewer.setInput(input);
-				}
-			}
-		});
+		ViewerHelper.setFocus(viewer);
 	}
 
 	@Override
 	public void dispose() {
 
-		ScenarioViewerSynchronizer.deregisterView(viewerSynchronizer);
+		selectedScenariosService.removeListener(selectedScenariosServiceListener);
+
 		super.dispose();
 	}
 
@@ -455,7 +450,7 @@ public class KPIReportView extends ViewPart {
 				delta = new GridViewerColumn(viewer, SWT.NONE);
 				delta.getColumn().setText("Change");
 				delta.getColumn().pack();
-//				addSortSelectionListener(delta.getColumn(), 4);
+				// addSortSelectionListener(delta.getColumn(), 4);
 				viewer.setLabelProvider(viewer.getLabelProvider());
 			}
 		} else {

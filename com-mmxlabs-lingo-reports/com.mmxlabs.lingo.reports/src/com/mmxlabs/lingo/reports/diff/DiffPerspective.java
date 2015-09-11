@@ -12,7 +12,7 @@ import org.eclipse.ui.IViewLayout;
 import com.mmxlabs.lingo.reports.views.fleet.ConfigurableFleetReportView;
 import com.mmxlabs.lingo.reports.views.schedule.ConfigurableScheduleReportView;
 import com.mmxlabs.lingo.reports.views.standard.CargoEconsReport;
-import com.mmxlabs.lingo.reports.views.standard.HorizontalKPIReportView;
+import com.mmxlabs.lingo.reports.views.standard.HeadlineReportView;
 import com.mmxlabs.lingo.reports.views.standard.PNLDetailsReport;
 
 public class DiffPerspective implements IPerspectiveFactory {
@@ -26,8 +26,8 @@ public class DiffPerspective implements IPerspectiveFactory {
 		final IFolderLayout diffArea = layout.createFolder("diffArea", IPageLayout.LEFT, 0.2f, IPageLayout.ID_EDITOR_AREA);
 
 		// Horizontal KPI
-		layout.addStandaloneView(HorizontalKPIReportView.ID, false, IPageLayout.TOP, 0.04f, IPageLayout.ID_EDITOR_AREA);
-		final IViewLayout viewLayout = layout.getViewLayout(HorizontalKPIReportView.ID);
+		layout.addStandaloneView(HeadlineReportView.ID, false, IPageLayout.TOP, 0.04f, IPageLayout.ID_EDITOR_AREA);
+		final IViewLayout viewLayout = layout.getViewLayout(HeadlineReportView.ID);
 		viewLayout.setCloseable(false);
 		viewLayout.setMoveable(false);
 
@@ -49,7 +49,7 @@ public class DiffPerspective implements IPerspectiveFactory {
 		layout.addShowViewShortcut(CargoEconsReport.ID);
 		layout.addShowViewShortcut("com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport");
 
-		layout.addShowViewShortcut(HorizontalKPIReportView.ID);
+		layout.addShowViewShortcut(HeadlineReportView.ID);
 		layout.addShowViewShortcut(ConfigurableScheduleReportView.ID);
 		layout.addShowViewShortcut(ConfigurableFleetReportView.ID);
 		layout.addShowViewShortcut("com.mmxlabs.scheduleview.views.SchedulerView");

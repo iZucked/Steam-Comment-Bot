@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 
 /**
  * Record class for holding information on the sequences in a Schedule. Provides the following fields:
@@ -59,6 +60,7 @@ public class ScheduleSequenceData {
 		LocalDate startDate = null;
 		LocalDate endDate = null;
 
+		Event latestInterestingEvent = null;
 		// find start and end dates of entire calendar
 		for (final Sequence seq : schedule.getSequences()) {
 			for (final Event event : seq.getEvents()) {
@@ -74,6 +76,26 @@ public class ScheduleSequenceData {
 				if (endDate == null || endDate.isBefore(eDate)) {
 					endDate = eDate;
 				}
+				// Track interesting events and record the latest event
+				if (event instanceof SlotVisit) {
+					if (latestInterestingEvent == null) {
+						latestInterestingEvent = event;
+
+					} else {
+						final LocalDate interestingDate = verticalReportVisualiser.getLocalDateFor(latestInterestingEvent.getEnd());
+						if (endDate == null || interestingDate.isBefore(eDate)) {
+							latestInterestingEvent = event;
+						}
+					}
+
+				}
+			}
+		}
+		// Ignore anything after the latest interesting event.
+		if (verticalReportVisualiser.filterAfterLastEvent() && latestInterestingEvent != null) {
+			final LocalDate eDate = verticalReportVisualiser.getLocalDateFor(latestInterestingEvent.getEnd());
+			if (endDate == null || eDate.isBefore(endDate)) {
+				endDate = eDate;
 			}
 		}
 		// set the final record fields

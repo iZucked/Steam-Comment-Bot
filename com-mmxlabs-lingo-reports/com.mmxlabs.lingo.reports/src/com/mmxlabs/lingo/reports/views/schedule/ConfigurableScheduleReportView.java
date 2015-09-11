@@ -28,7 +28,6 @@ import org.eclipse.ui.IMemento;
 
 import com.google.inject.Inject;
 import com.mmxlabs.lingo.reports.IReportContents;
-import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
@@ -48,6 +47,7 @@ import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportIni
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -111,11 +111,6 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 		return super.getAdapter(adapter);
 	}
 
-	@Override
-	protected boolean isUseSynchroniser() {
-		return false;
-	}
-
 	private IScenarioComparisonServiceListener scenarioComparisonServiceListener = new IScenarioComparisonServiceListener() {
 
 		@Override
@@ -124,7 +119,6 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 			clearInputEquivalents();
 			builder.refreshPNLColumns(rootObjects);
 			processInputs(table.getRows());
-			viewer.setInput(new ArrayList<>(table.getRows()));
 
 			for (final ColumnBlock handler : builder.getBlockManager().getBlocksInVisibleOrder()) {
 				if (handler != null) {
@@ -132,6 +126,7 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 				}
 			}
 
+			ViewerHelper.setInput(viewer, true, new ArrayList<>(table.getRows()));
 		}
 
 		@Override
@@ -140,7 +135,6 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 			clearInputEquivalents();
 			builder.refreshPNLColumns(rootObjects);
 			processInputs(table.getRows());
-			viewer.setInput(new ArrayList<>(table.getRows()));
 
 			int numberOfSchedules = others.size();
 			for (final ColumnBlock handler : builder.getBlockManager().getBlocksInVisibleOrder()) {
@@ -148,11 +142,13 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 					handler.setViewState(numberOfSchedules > 1, false);
 				}
 			}
+
+			ViewerHelper.setInput(viewer, true, new ArrayList<>(table.getRows()));
 		}
 
 		@Override
 		public void diffOptionChanged(EDiffOption d, Object oldValue, Object newValue) {
-			viewer.refresh();
+			ViewerHelper.refresh(viewer, true);
 		}
 
 	};
@@ -351,11 +347,6 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 		for (final Row row : result) {
 			setInputEquivalents(row, row.getInputEquivalents());
 		}
-	}
-
-	@Override
-	protected IScenarioInstanceElementCollector getElementCollector() {
-		throw new UnsupportedOperationException();
 	}
 
 	@Override

@@ -8,13 +8,13 @@ import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstant
 import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstants.SCHEDULER_VIEW_COLOUR_SCHEME;
 import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstants.Show_Canals;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
@@ -25,7 +25,8 @@ import org.joda.time.format.DateTimeFormat;
 import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.ganttviewer.IGanttChartColourProvider;
 import com.mmxlabs.ganttviewer.IGanttChartToolTipProvider;
-import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
+import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
+import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -68,12 +69,13 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 	private final IMemento memento;
 
-
 	private boolean showCanals = false;
+	private final SelectedScenariosService selectedScenariosService;
 
-	public EMFScheduleLabelProvider(final GanttChartViewer viewer, final IMemento memento) {
+	public EMFScheduleLabelProvider(final GanttChartViewer viewer, final IMemento memento, @NonNull final SelectedScenariosService selectedScenariosService) {
 		this.viewer = viewer;
 		this.memento = memento;
+		this.selectedScenariosService = selectedScenariosService;
 		this.showCanals = memento.getBoolean(Show_Canals);
 	}
 
@@ -92,18 +94,22 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 			// Add scenario instance name to field if multiple scenarios are selected
 			final Object input = viewer.getInput();
-			if (input instanceof IScenarioViewerSynchronizerOutput) {
-				final IScenarioViewerSynchronizerOutput output = (IScenarioViewerSynchronizerOutput) input;
+			if (input instanceof Collection<?>) {
+				final Collection<?> collection = (Collection<?>) input;
 
-				final Collection<Object> collectedElements = output.getCollectedElements();
-				if (collectedElements.size() > 1) {
-					if (output.hasPinnedScenario()) {
-						if (output.isPinned(sequence.eContainer())) {
-							seqText += " (pinned)";
+				if (collection.size() > 1) {
+					final ISelectedDataProvider selectedDataProvider = selectedScenariosService.getCurrentSelectedDataProvider();
+					if (selectedDataProvider != null) {
+						if (selectedScenariosService.getPinnedScenario() != null) {
+							if (selectedDataProvider.isPinnedObject(sequence)) {
+								seqText += " (pinned)";
+							}
+						} else {
+							final ScenarioInstance instance = selectedDataProvider.getScenarioInstance(sequence);
+							if (instance != null) {
+								seqText += "\n" + instance.getName();
+							}
 						}
-					} else {
-						final ScenarioInstance instance = output.getScenarioInstance(sequence.eContainer());
-						seqText += "\n" + instance.getName();
 					}
 				}
 			}
@@ -266,7 +272,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 				// lateness
 				if (checkLateness) {
-					int lateHours = LatenessUtils.getLatenessInHours(slotVisit);
+					final int lateHours = LatenessUtils.getLatenessInHours(slotVisit);
 					if (lateHours != 0) {
 						eventText.append("LATE by " + LatenessUtils.formatLatenessHours(lateHours) + "\n");
 					}
@@ -274,7 +280,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			} else if (element instanceof VesselEventVisit) {
 				eventText.append("Duration: " + durationTime + "\n");
 				final VesselEventVisit vev = (VesselEventVisit) element;
-				int lateHours = LatenessUtils.getLatenessInHours(vev);
+				final int lateHours = LatenessUtils.getLatenessInHours(vev);
 				if (lateHours != 0) {
 					eventText.append(" \n");
 					eventText.append("LATE by " + LatenessUtils.formatLatenessHours(lateHours) + "\n");

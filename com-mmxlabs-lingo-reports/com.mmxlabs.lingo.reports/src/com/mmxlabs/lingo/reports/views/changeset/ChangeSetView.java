@@ -81,6 +81,8 @@ import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.rcp.common.RunnerHelper;
+import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.IScenarioServiceListener;
 import com.mmxlabs.scenario.service.impl.ScenarioServiceListener;
@@ -130,10 +132,8 @@ public class ChangeSetView implements IAdaptable {
 				final List<LNGScenarioModel> rootObjects, final Map<EObject, Set<EObject>> equivalancesMap) {
 			if (ChangeSetView.this.viewMode == ViewMode.COMPARE) {
 				cleanUpVesselColumns();
-
 				if (pin == null || other == null) {
 					setEmptyData();
-
 				} else {
 					final Display display = PlatformUI.getWorkbench().getDisplay();
 					final ProgressMonitorDialog d = new ProgressMonitorDialog(display.getActiveShell());
@@ -188,6 +188,10 @@ public class ChangeSetView implements IAdaptable {
 
 		@Override
 		public void run() {
+			if (viewer.getControl().isDisposed()) {
+				return;
+			}
+
 			// TODO: Extract vessel columns and generate.
 			final Set<String> vesselnames = new LinkedHashSet<>();
 			if (newRoot != null) {
@@ -226,10 +230,10 @@ public class ChangeSetView implements IAdaptable {
 
 			diagram.setChangeSetRoot(newRoot);
 			viewer.setInput(newRoot);
-
 			// Release after creating the new one so we increment reference counts before decrementing, which could cause a scenario unload/load cycle
-			cleanUp(ChangeSetView.this.root);
+			ChangeSetRoot oldRoot = ChangeSetView.this.root;
 			ChangeSetView.this.root = newRoot;
+			cleanUp(oldRoot);
 		}
 	}
 
@@ -243,15 +247,60 @@ public class ChangeSetView implements IAdaptable {
 		}
 
 		@Override
-		public void onPreScenarioInstanceDelete(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-			if (scenarioInstance == this.scenarioInstance) {
-				Display.getDefault().asyncExec(new Runnable() {
+		public void onPreScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+			boolean linkedScenario = false;
+			ChangeSetRoot root = view.root;
+			if (root != null) {
+				for (ChangeSet cs : root.getChangeSets()) {
+					if (scenarioInstance == cs.getBaseScenario()) {
+						linkedScenario = true;
+					} else if (scenarioInstance == cs.getCurrentScenario()) {
+						linkedScenario = true;
+					} else if (scenarioInstance == cs.getPrevScenario()) {
+						linkedScenario = true;
+					}
+				}
+			}
+			if (linkedScenario) {
+				final Runnable r = new Runnable() {
+
 					@Override
 					public void run() {
 
 						view.handleAnalyseScenario(null);
 					}
-				});
+				};
+				RunnerHelper.syncExec(r);
+			}
+		}
+
+		@Override
+		public void onPreScenarioInstanceDelete(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+			if (scenarioInstance == this.scenarioInstance) {
+				boolean linkedScenario = false;
+				ChangeSetRoot root = view.root;
+				if (root != null) {
+					for (ChangeSet cs : root.getChangeSets()) {
+						if (scenarioInstance == cs.getBaseScenario()) {
+							linkedScenario = true;
+						} else if (scenarioInstance == cs.getCurrentScenario()) {
+							linkedScenario = true;
+						} else if (scenarioInstance == cs.getPrevScenario()) {
+							linkedScenario = true;
+						}
+					}
+				}
+				if (linkedScenario) {
+					final Runnable r = new Runnable() {
+
+						@Override
+						public void run() {
+
+							view.handleAnalyseScenario(null);
+						}
+					};
+					RunnerHelper.syncExec(r);
+				}
 			}
 		}
 	}
@@ -346,6 +395,7 @@ public class ChangeSetView implements IAdaptable {
 		}
 		vesselColumnGroup = new GridColumnGroup(viewer.getGrid(), SWT.CENTER);
 		vesselColumnGroup.setText("Vessels");
+		createCenteringGroupRenderer(vesselColumnGroup);
 		// Vessel columns are dynamically created - create a stub column to lock down the position in the table
 		{
 			final GridColumn gc = new GridColumn(vesselColumnGroup, SWT.CENTER);
@@ -359,6 +409,7 @@ public class ChangeSetView implements IAdaptable {
 		}
 		final GridColumnGroup loadGroup = new GridColumnGroup(viewer.getGrid(), SWT.CENTER);
 		loadGroup.setText("Purchase");
+		createCenteringGroupRenderer(loadGroup);
 		{
 			final GridColumn gc = new GridColumn(loadGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
@@ -390,8 +441,10 @@ public class ChangeSetView implements IAdaptable {
 			gvc.setLabelProvider(createStubLabelProvider());
 			this.diagram = createWiringDiagram(gvc);
 		}
-		final GridColumnGroup dischargeGroup = new GridColumnGroup(viewer.getGrid(), SWT.NONE);
+		final GridColumnGroup dischargeGroup = new GridColumnGroup(viewer.getGrid(), SWT.CENTER);
 		dischargeGroup.setText("Sale");
+		createCenteringGroupRenderer(dischargeGroup);
+
 		{
 			final GridColumn gc = new GridColumn(dischargeGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
@@ -418,8 +471,9 @@ public class ChangeSetView implements IAdaptable {
 					ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_DISCHARGE_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__ENERGY_TRANSFERRED));
 		}
 
-		final GridColumnGroup pnlComponentGroup = new GridColumnGroup(viewer.getGrid(), SWT.NONE);
+		final GridColumnGroup pnlComponentGroup = new GridColumnGroup(viewer.getGrid(), SWT.CENTER);
 		pnlComponentGroup.setText("P&L Components");
+		createCenteringGroupRenderer(pnlComponentGroup);
 
 		{
 			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
@@ -429,7 +483,6 @@ public class ChangeSetView implements IAdaptable {
 			gvc.setLabelProvider(createDeltaLabelProvider(true, ChangesetPackage.Literals.CHANGE_SET_ROW__ORIGINAL_DISCHARGE_ALLOCATION,
 					ChangesetPackage.Literals.CHANGE_SET_ROW__NEW_DISCHARGE_ALLOCATION, SchedulePackage.Literals.SLOT_ALLOCATION__VOLUME_VALUE));
 			createWordWrapRenderer(gvc);
-
 		}
 		{
 			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
@@ -459,6 +512,14 @@ public class ChangeSetView implements IAdaptable {
 		{
 			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
+			gvc.getColumn().setText("- Upside");
+			gvc.getColumn().setWidth(70);
+			gvc.setLabelProvider(createAdditionalUpsidePNLDeltaLabelProvider());
+			createWordWrapRenderer(gvc);
+		}
+		{
+			final GridColumn gc = new GridColumn(pnlComponentGroup, SWT.CENTER);
+			final GridViewerColumn gvc = new GridViewerColumn(viewer, gc);
 			gvc.getColumn().setText("+ Cargo other");
 			gvc.getColumn().setWidth(70);
 			gvc.setLabelProvider(createAdditionalPNLDeltaLabelProvider());
@@ -481,68 +542,62 @@ public class ChangeSetView implements IAdaptable {
 
 			@Override
 			public void selectionChanged(final SelectionChangedEvent event) {
-				// TODO Auto-generated method stub
 				final ISelection selection = event.getSelection();
 				if (selection instanceof IStructuredSelection) {
 					final IStructuredSelection iStructuredSelection = (IStructuredSelection) selection;
-					final Iterator<?> itr = iStructuredSelection.iterator();
-					while (itr.hasNext()) {
-						Object o = itr.next();
-						if (o instanceof ChangeSetRow) {
-							o = ((ChangeSetRow) o).eContainer();
-						}
-						if (o instanceof ChangeSet) {
-							final ChangeSet changeSet = (ChangeSet) o;
-							if (diffToBase) {
-								scenarioSelectionProvider.setPinnedInstance(changeSet.getBaseScenario());
-							} else {
-								scenarioSelectionProvider.setPinnedInstance(changeSet.getPrevScenario());
+					if (viewMode == ViewMode.ACTION_SET) {
+						final Iterator<?> itr = iStructuredSelection.iterator();
+						while (itr.hasNext()) {
+							Object o = itr.next();
+							if (o instanceof ChangeSetRow) {
+								o = ((ChangeSetRow) o).eContainer();
 							}
-							scenarioSelectionProvider.select(changeSet.getCurrentScenario());
-						}
-						return;
-					}
-				}
-
-			}
-		});
-
-		// Selection listener for current selection.
-		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
-
-			@Override
-			public void selectionChanged(final SelectionChangedEvent event) {
-				final IStructuredSelection selection = (IStructuredSelection) event.getSelection();
-
-				final Set<Object> selectedElements = new LinkedHashSet<>();
-				final Iterator<?> itr = selection.iterator();
-				while (itr.hasNext()) {
-					final Object o = itr.next();
-					if (o instanceof ChangeSetRow) {
-						final ChangeSetRow changeSetRow = (ChangeSetRow) o;
-						selectRow(selectedElements, changeSetRow);
-					} else if (o instanceof ChangeSet) {
-						final ChangeSet changeSet = (ChangeSet) o;
-						List<ChangeSetRow> rows;
-						if (diffToBase) {
-							rows = changeSet.getChangeSetRowsToBase();
-						} else {
-							rows = changeSet.getChangeSetRowsToPrevious();
-						}
-						for (final ChangeSetRow changeSetRow : rows) {
-							selectRow(selectedElements, changeSetRow);
+							if (o instanceof ChangeSet) {
+								final ChangeSet changeSet = (ChangeSet) o;
+								final ScenarioInstance other;
+								if (diffToBase) {
+									other = changeSet.getBaseScenario();
+								} else {
+									other = changeSet.getPrevScenario();
+								}
+								scenarioSelectionProvider.setPinnedPair(other, changeSet.getCurrentScenario(), true);
+								break;
+							}
 						}
 					}
+					{
+
+						final Set<Object> selectedElements = new LinkedHashSet<>();
+						final Iterator<?> itr = iStructuredSelection.iterator();
+						while (itr.hasNext()) {
+							final Object o = itr.next();
+							if (o instanceof ChangeSetRow) {
+								final ChangeSetRow changeSetRow = (ChangeSetRow) o;
+								selectRow(selectedElements, changeSetRow);
+							} else if (o instanceof ChangeSet) {
+								final ChangeSet changeSet = (ChangeSet) o;
+								List<ChangeSetRow> rows;
+								if (diffToBase) {
+									rows = changeSet.getChangeSetRowsToBase();
+								} else {
+									rows = changeSet.getChangeSetRowsToPrevious();
+								}
+								for (final ChangeSetRow changeSetRow : rows) {
+									selectRow(selectedElements, changeSetRow);
+								}
+							}
+						}
+
+						while (selectedElements.remove(null))
+							;
+
+						// Update selected elements
+						scenarioComparisonService.setSelectedElements(selectedElements);
+
+						// set the selection to the service
+						eSelectionService.setPostSelection(new StructuredSelection(selectedElements.toArray()));
+					}
 				}
-				while (selectedElements.remove(null))
-					;
-
-				// Update selected elements
-				scenarioComparisonService.setSelectedElements(selectedElements);
-
-				// set the selection to the service
-				eSelectionService.setPostSelection(new StructuredSelection(selectedElements.toArray()));
-
 			}
 
 			private void selectRow(final Set<Object> selectedElements, final ChangeSetRow changeSetRow) {
@@ -579,6 +634,79 @@ public class ChangeSetView implements IAdaptable {
 				}
 			}
 		});
+		//
+		// // Selection listener for current selection.
+		// viewer.addSelectionChangedListener(new ISelectionChangedListener() {
+		//
+		// @Override
+		// public void selectionChanged(final SelectionChangedEvent event) {
+		// final IStructuredSelection selection = (IStructuredSelection) event.getSelection();
+		//
+		// final Set<Object> selectedElements = new LinkedHashSet<>();
+		// final Iterator<?> itr = selection.iterator();
+		// while (itr.hasNext()) {
+		// final Object o = itr.next();
+		// if (o instanceof ChangeSetRow) {
+		// final ChangeSetRow changeSetRow = (ChangeSetRow) o;
+		// selectRow(selectedElements, changeSetRow);
+		// } else if (o instanceof ChangeSet) {
+		// final ChangeSet changeSet = (ChangeSet) o;
+		// List<ChangeSetRow> rows;
+		// if (diffToBase) {
+		// rows = changeSet.getChangeSetRowsToBase();
+		// } else {
+		// rows = changeSet.getChangeSetRowsToPrevious();
+		// }
+		// for (final ChangeSetRow changeSetRow : rows) {
+		// selectRow(selectedElements, changeSetRow);
+		// }
+		// }
+		// }
+		// while (selectedElements.remove(null))
+		// ;
+		//
+		// // Update selected elements
+		// scenarioComparisonService.setSelectedElements(selectedElements);
+		//
+		// // set the selection to the service
+		// eSelectionService.setPostSelection(new StructuredSelection(selectedElements.toArray()));
+		//
+		// }
+		//
+		// private void selectRow(final Set<Object> selectedElements, final ChangeSetRow changeSetRow) {
+		// selectedElements.add(changeSetRow.getLoadSlot());
+		// selectedElements.add(changeSetRow.getNewLoadAllocation());
+		// selectedElements.add(changeSetRow.getOriginalLoadAllocation());
+		// if (changeSetRow.getNewLoadAllocation() != null) {
+		// selectedElements.add(changeSetRow.getNewLoadAllocation().getSlotVisit());
+		// selectedElements.add(changeSetRow.getNewLoadAllocation().getSlotVisit().getSequence());
+		// }
+		// if (changeSetRow.getOriginalLoadAllocation() != null) {
+		// selectedElements.add(changeSetRow.getOriginalLoadAllocation().getSlotVisit());
+		// selectedElements.add(changeSetRow.getOriginalLoadAllocation().getSlotVisit().getSequence());
+		// }
+		// selectedElements.add(changeSetRow.getNewDischargeAllocation());
+		// selectedElements.add(changeSetRow.getOriginalDischargeAllocation());
+		// if (changeSetRow.getNewDischargeAllocation() != null) {
+		// selectedElements.add(changeSetRow.getNewDischargeAllocation().getSlotVisit());
+		// selectedElements.add(changeSetRow.getNewDischargeAllocation().getSlotVisit().getSequence());
+		// }
+		// if (changeSetRow.getOriginalDischargeAllocation() != null) {
+		// selectedElements.add(changeSetRow.getOriginalDischargeAllocation().getSlotVisit());
+		// selectedElements.add(changeSetRow.getOriginalDischargeAllocation().getSlotVisit().getSequence());
+		// }
+		// selectedElements.add(changeSetRow.getNewGroupProfitAndLoss());
+		// selectedElements.add(changeSetRow.getOriginalGroupProfitAndLoss());
+		// selectedElements.add(changeSetRow.getNewEventGrouping());
+		// if (changeSetRow.getNewEventGrouping() instanceof Event) {
+		// selectedElements.add(((Event) changeSetRow.getNewEventGrouping()).getSequence());
+		// }
+		// selectedElements.add(changeSetRow.getOriginalEventGrouping());
+		// if (changeSetRow.getOriginalEventGrouping() instanceof Event) {
+		// selectedElements.add(((Event) changeSetRow.getOriginalEventGrouping()).getSequence());
+		// }
+		// }
+		// });
 
 		final ViewerFilter[] filters = new ViewerFilter[1];
 		filters[0] = new ViewerFilter() {
@@ -603,10 +731,17 @@ public class ChangeSetView implements IAdaptable {
 		scenarioComparisonService.triggerListener(listener);
 	}
 
+	@SuppressWarnings("restriction")
 	private void createWordWrapRenderer(final GridViewerColumn gvc) {
 		final DefaultColumnHeaderRenderer renderer = new DefaultColumnHeaderRenderer();
 		renderer.setWordWrap(true);
 		gvc.getColumn().setHeaderRenderer(renderer);
+	}
+
+	private void createCenteringGroupRenderer(final GridColumnGroup gcg) {
+		final CenteringColumnGroupHeaderRenderer renderer = new CenteringColumnGroupHeaderRenderer();
+		// renderer.setWordWrap(true);
+		gcg.setHeaderRenderer(renderer);
 	}
 
 	// @PostConstruct
@@ -1059,6 +1194,57 @@ public class ChangeSetView implements IAdaptable {
 
 	}
 
+	private CellLabelProvider createAdditionalUpsidePNLDeltaLabelProvider() {
+		return new CellLabelProvider() {
+
+			@Override
+			public void update(final ViewerCell cell) {
+				final Object element = cell.getElement();
+				cell.setText("");
+
+				if (element instanceof ChangeSetRow) {
+					final ChangeSetRow change = (ChangeSetRow) element;
+
+					Number f = null;
+					{
+						final SlotAllocation originalLoadAllocation = change.getOriginalLoadAllocation();
+						if (originalLoadAllocation != null) {
+							final CargoAllocation cargoAllocation = originalLoadAllocation.getCargoAllocation();
+							if (cargoAllocation != null) {
+								final long addnPNL = ChangeSetUtils.getAdditionalUpsideProfitAndLoss(cargoAllocation);
+								f = -addnPNL;
+							}
+						}
+					}
+					Number t = null;
+					{
+						final SlotAllocation newLoadAllocation = change.getNewLoadAllocation();
+						if (newLoadAllocation != null) {
+							final CargoAllocation cargoAllocation = newLoadAllocation.getCargoAllocation();
+							if (cargoAllocation != null) {
+								final long addnPNL = ChangeSetUtils.getAdditionalUpsideProfitAndLoss(cargoAllocation);
+								t = -addnPNL;
+							}
+						}
+					}
+					double delta = 0;
+					if (f != null) {
+						delta -= f.intValue();
+					}
+					if (t != null) {
+						delta += t.intValue();
+					}
+					delta = delta / 1000000.0;
+					if (delta != 0) {
+						cell.setText(String.format("%s %,.3f", delta < 0 ? "↓" : "↑", Math.abs(delta)));
+					}
+
+				}
+			}
+		};
+
+	}
+
 	private CellLabelProvider createShippingDeltaLabelProvider() {
 		return new CellLabelProvider() {
 
@@ -1182,44 +1368,14 @@ public class ChangeSetView implements IAdaptable {
 
 	private void setEmptyData() {
 		final ChangeSetRoot newRoot = ChangesetFactory.eINSTANCE.createChangeSetRoot();
-		diagram.setChangeSetRoot(newRoot);
-		viewer.setInput(newRoot);
-		cleanUp(ChangeSetView.this.root);
-		ChangeSetView.this.root = newRoot;
-	}
 
-	// public void setChangeSetData(final ScenarioInstance pin, final ScenarioInstance diff) {
-	//
-	// cleanUpVesselColumns();
-	//
-	// if (pin == null || diff == null) {
-	// setEmptyData();
-	//
-	// } else {
-	// final Display display = PlatformUI.getWorkbench().getDisplay();
-	// final ProgressMonitorDialog d = new ProgressMonitorDialog(display.getActiveShell());
-	// try {
-	// d.run(true, false, new IRunnableWithProgress() {
-	//
-	// @Override
-	// public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-	//
-	// final ScheduleDiffUtils scheduleDiffUtils = new ScheduleDiffUtils();
-	// scheduleDiffUtils.setCheckAssignmentDifferences(true);
-	// scheduleDiffUtils.setCheckSpotMarketDifferences(true);
-	// scheduleDiffUtils.setCheckNextPortDifferences(true);
-	// final ChangeSetTransformer transformer = new ChangeSetTransformer(scheduleDiffUtils, Collections.<ICustomRelatedSlotHandler> emptyList());
-	// final ChangeSetRoot newRoot = transformer.createDataModel(pin, diff, monitor);
-	// display.asyncExec(new ViewUpdateRunnable(newRoot));
-	// }
-	// });
-	// } catch (InvocationTargetException | InterruptedException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	// }
-	//
-	// }
+		diagram.setChangeSetRoot(newRoot);
+		ViewerHelper.setInput(viewer, true, newRoot);
+
+		ChangeSetRoot oldRoot = ChangeSetView.this.root;
+		ChangeSetView.this.root = newRoot;
+		cleanUp(oldRoot);
+	}
 
 	private void cleanUpVesselColumns() {
 		if (vesselColumnGroup != null && !vesselColumnGroup.isDisposed()) {
@@ -1326,8 +1482,8 @@ public class ChangeSetView implements IAdaptable {
 		diagram.setChangeSetRoot(ChangesetFactory.eINSTANCE.createChangeSetRoot());
 		this.root = null;
 		{
-			for (Map.Entry<ScenarioInstance, ScenarioInstanceDeletedListener> e : listenerMap.entrySet()) {
-				ScenarioInstance scenarioInstance = e.getKey();
+			for (final Map.Entry<ScenarioInstance, ScenarioInstanceDeletedListener> e : listenerMap.entrySet()) {
+				final ScenarioInstance scenarioInstance = e.getKey();
 				final IScenarioService scenarioService = scenarioInstance.getScenarioService();
 				final ScenarioInstanceDeletedListener listener = e.getValue();
 				if (scenarioService != null && listener != null) {
@@ -1353,7 +1509,7 @@ public class ChangeSetView implements IAdaptable {
 
 	@Focus
 	public void setFocus() {
-		viewer.getControl().setFocus();
+		ViewerHelper.setFocus(viewer);
 	}
 
 	private ITreeContentProvider createContentProvider() {
@@ -1438,69 +1594,6 @@ public class ChangeSetView implements IAdaptable {
 			return;
 		}
 		this.viewMode = ViewMode.ACTION_SET;
-		// updateToolItem(part, viewMode);
 		setActionSetData(target);
 	}
-
-	// @Inject
-	// @Optional
-	// private void handleChangeSetsScenario(@UIEventTopic(ChangeSetViewEventConstants.EVENT_ANALYSE_CHANGE_SETS) final Object _unused_) {
-	//
-	// final ScenarioInstance pin = scenarioSelectionProvider.getPinnedInstance();
-	// ScenarioInstance diff = null;
-	//
-	// for (final ScenarioInstance s : scenarioSelectionProvider.getSelection()) {
-	// if (s != pin) {
-	// diff = s;
-	// break;
-	// }
-	// }
-	// setChangeSetData(pin, diff);
-	// }
-
-	// @Inject
-	// @Optional
-	// public void handleViewMode(@UIEventTopic(ChangeSetViewEventConstants.EVENT_SET_VIEW_MODE) final Object _unused_) {
-	//
-	// final ViewMode newMode = ViewMode.COMPARE;
-	// if (this.viewMode != newMode) {
-	// this.viewMode = newMode;
-	//
-	//// updateToolItem(part, viewMode);
-	//
-	// if (viewMode == ViewMode.COMPARE) {
-	// // Reload current compare state
-	// scenarioComparisonService.triggerListener(listener);
-	// } else {
-	// // Wait for action sets to come through
-	// handleAnalyseScenario(null);
-	// }
-	// }
-	// }
-
-	// private void updateToolItem(final MPart part, final ViewMode viewMode) {
-	// if (part == null || part.getToolbar() == null) {
-	// return;
-	// }
-	// final List<MToolBarElement> children = part.getToolbar().getChildren();
-	// for (final MToolBarElement e : children) {
-	// if ("com.mmxlabs.lingo.reports.directtoolitem.viewmode".equals(e.getElementId())) {
-	// if (e instanceof MUILabel) {
-	// final MUILabel mLabel = (MUILabel) e;
-	// mLabel.setLabel("Mode: " + getModeName(viewMode));
-	//
-	// }
-	// }
-	// }
-	// }
-
-	// private String getModeName(final ViewMode mode) {
-	// switch (mode) {
-	// case ACTION_SET:
-	// return "Action Set";
-	// case COMPARE:
-	// return "Compare";
-	// }
-	// return mode.name();
-	// }
 }

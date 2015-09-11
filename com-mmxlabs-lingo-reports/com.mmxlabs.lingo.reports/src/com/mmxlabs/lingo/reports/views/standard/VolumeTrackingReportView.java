@@ -14,7 +14,8 @@ import org.eclipse.jface.viewers.Viewer;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
-import com.mmxlabs.lingo.reports.components.SimpleContentAndColumnProvider;
+import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportContentProvider;
+import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -111,18 +112,25 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 	}
 
 	@Override
-	protected SimpleContentAndColumnProvider<VolumeData> createContentProvider() {
+	protected AbstractSimpleTabularReportContentProvider<VolumeData> createContentProvider() {
 
-		return new SimpleContentAndColumnProvider<VolumeData>() {
+		return new AbstractSimpleTabularReportContentProvider<VolumeData>() {
 
 			@Override
-			public synchronized void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-				overallVolumes.clear();
-				super.inputChanged(viewer, oldInput, newInput);
+			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+
 			}
+		};
+
+	}
+
+	@Override
+	protected AbstractSimpleTabularReportTransformer<VolumeData> createTransformer() {
+
+		return new AbstractSimpleTabularReportTransformer<VolumeData>() {
 
 			@Override
-			protected List<VolumeData> createData(Schedule schedule, LNGScenarioModel rootObject, LNGPortfolioModel portfolioModel) {
+			public List<VolumeData> createData(Schedule schedule, LNGScenarioModel rootObject, LNGPortfolioModel portfolioModel) {
 				final List<VolumeData> output = new ArrayList<VolumeData>();
 
 				overallVolumes.clear();
