@@ -21,7 +21,6 @@ import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
-import com.mmxlabs.models.lng.transformer.contracts.ISlotTransformer;
 import com.mmxlabs.models.lng.transformer.contracts.IVesselAvailabilityTransformer;
 import com.mmxlabs.models.lng.transformer.contracts.IVesselEventTransformer;
 import com.mmxlabs.optimiser.core.IResource;

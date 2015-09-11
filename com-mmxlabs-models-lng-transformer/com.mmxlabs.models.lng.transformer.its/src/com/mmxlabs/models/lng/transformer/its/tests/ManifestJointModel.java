@@ -4,31 +4,19 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.models.lng.cargo.CargoFactory;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
-import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.port.PortFactory;
-import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
-import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
-import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 /**
  * This is an example LNG joint model; each client will have a different implementation of this.

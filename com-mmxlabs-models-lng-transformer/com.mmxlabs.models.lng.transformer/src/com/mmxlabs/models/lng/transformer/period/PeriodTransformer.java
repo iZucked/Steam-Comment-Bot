@@ -4,20 +4,18 @@
  */
 package com.mmxlabs.models.lng.transformer.period;
 
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TimeZone;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.command.BasicCommandStack;
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
@@ -81,7 +79,6 @@ import com.mmxlabs.models.lng.transformer.period.InclusionChecker.InclusionType;
 import com.mmxlabs.models.lng.transformer.period.InclusionChecker.PeriodRecord;
 import com.mmxlabs.models.lng.transformer.period.InclusionChecker.Position;
 import com.mmxlabs.models.lng.transformer.period.extensions.IPeriodTransformerExtension;
-import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
@@ -165,7 +162,7 @@ public class PeriodTransformer {
 		}
 
 		if (endDate != null) {
-			periodRecord.upperBoundary =endDate.toLocalDate(1).toDateTimeAtStartOfDay(DateTimeZone.UTC);
+			periodRecord.upperBoundary = endDate.toLocalDate(1).toDateTimeAtStartOfDay(DateTimeZone.UTC);
 			periodRecord.upperCutoff = periodRecord.upperBoundary.plusMonths(boundaryFlexInMonths);
 		}
 
@@ -613,7 +610,8 @@ public class PeriodTransformer {
 		r.getContents().add(output);
 		ed.getResourceSet().getResources().add(r);
 
-		LNGSchedulerJobUtils.exportSolution(transformer.getInjector(), output, transformer.getOptimiserSettings(), ed, modelEntityMap, startSolution, 0);
+		final Pair<Command, Schedule> p = LNGSchedulerJobUtils.exportSolution(transformer.getInjector(), output, transformer.getOptimiserSettings(), ed, modelEntityMap, startSolution);
+		ed.getCommandStack().execute(p.getFirst());
 
 		return ed;
 	}
@@ -773,7 +771,8 @@ public class PeriodTransformer {
 		trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getFobSalesSpotMarket(), earliestDate, latestDate);
 	}
 
-	public void trimSpotMarketCurves(final EditingDomain internalDomain, final PeriodRecord periodRecord, final SpotMarketGroup spotMarketGroup, final DateTime earliestDate, final DateTime latestDate) {
+	public void trimSpotMarketCurves(final EditingDomain internalDomain, final PeriodRecord periodRecord, final SpotMarketGroup spotMarketGroup, final DateTime earliestDate,
+			final DateTime latestDate) {
 		if (spotMarketGroup != null) {
 			if (spotMarketGroup == null) {
 				return;
@@ -793,8 +792,8 @@ public class PeriodTransformer {
 				final DataIndex<Integer> curve = availability.getCurve();
 				final List<IndexPoint<Integer>> pointsToRemove = new LinkedList<>();
 				for (final IndexPoint<Integer> value : curve.getPoints()) {
-					YearMonth date = value.getDate();
-					DateTime dateAsDateTime = date.toLocalDate(1).toDateTimeAtStartOfDay(DateTimeZone.UTC);
+					final YearMonth date = value.getDate();
+					final DateTime dateAsDateTime = date.toLocalDate(1).toDateTimeAtStartOfDay(DateTimeZone.UTC);
 					if (date.isBefore(getDateFromStartOfMonth(earliestDate))) {
 						// remove
 						pointsToRemove.add(value);
@@ -832,7 +831,7 @@ public class PeriodTransformer {
 		}
 	}
 
-        private YearMonth getDateFromStartOfMonth(final DateTime date) {
+	private YearMonth getDateFromStartOfMonth(final DateTime date) {
 		return new YearMonth(date);
 	}
 

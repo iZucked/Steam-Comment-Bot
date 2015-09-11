@@ -7,14 +7,11 @@ package com.mmxlabs.models.lng.transformer.its.tests;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.TimeZone;
-
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.YearMonth;
 import org.junit.Assert;

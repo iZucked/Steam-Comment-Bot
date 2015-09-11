@@ -15,9 +15,11 @@ import javax.management.timer.Timer;
 
 import org.apache.shiro.SecurityUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.emf.common.command.BasicCommandStack;
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -34,7 +36,8 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl2;
+import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
+import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -47,7 +50,6 @@ import com.mmxlabs.models.lng.transformer.period.InclusionChecker;
 import com.mmxlabs.models.lng.transformer.period.PeriodExporter;
 import com.mmxlabs.models.lng.transformer.period.PeriodTransformer;
 import com.mmxlabs.models.lng.transformer.period.ScenarioEntityMapping;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.BreadthOptimiser;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeExtender;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModesRegistry;
@@ -60,7 +62,6 @@ import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
-import com.mmxlabs.optimiser.lso.impl.ArbitraryStateLocalSearchOptimiser;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
@@ -145,6 +146,7 @@ public class LNGScenarioRunner {
 			}
 		}
 		doHillClimb = SecurityUtils.getSubject().isPermitted("features:optimisation-hillclimb");
+
 		optimiserScenario = originalScenario;
 		optimiserEditingDomain = originalEditingDomain;
 	}
@@ -181,12 +183,16 @@ public class LNGScenarioRunner {
 	 * Convenience method to initialise the evaluation/optimiser system and evaluate the initial state. Calls {@link #init(IOptimiserProgressMonitor,Module, EnumMap)}, and
 	 * {@link #evaluateInitialState()} passing in the {@link Module} to {@link #init(IOptimiserProgressMonitor,Module, EnumMap)} and optionally overriding the number of iterations.
 	 */
-	public void initAndEval(@Nullable final Module extraModule, @Nullable final Integer iterations) {
+	public void initAndEval(@Nullable final Module extraModule, @Nullable final Integer iterations, @Nullable final Boolean useHillClimbing) {
 		init(null, extraModule, null);
 
 		// FIXME: Only for ITS!
 		if (iterations != null && optimiser != null) {
 			optimiser.setNumberOfIterations(iterations.intValue());
+		}
+		
+		if (useHillClimbing != null) {
+			doHillClimb = useHillClimbing;
 		}
 		evaluateInitialState();
 	}
@@ -243,11 +249,7 @@ public class LNGScenarioRunner {
 			startSolution = LNGSchedulerJobUtils.evaluateCurrentState(transformer);
 		}
 
-		initialSchedule = LNGSchedulerJobUtils.exportSolution(injector, optimiserScenario, transformer.getOptimiserSettings(), optimiserEditingDomain, modelEntityMap, startSolution, 0);
-		final Schedule periodSchedule = exportPeriodScenario(0);
-		if (periodSchedule != null) {
-			initialSchedule = periodSchedule;
-		}
+		initialSchedule = exportSchedule(0, startSolution);
 		final LocalSearchOptimiser pOptimiser = this.optimiser;
 		if (pOptimiser != null) {
 			try {
@@ -282,28 +284,28 @@ public class LNGScenarioRunner {
 
 			optimiserScenario = t.transform(originalScenario, optimiserSettings, periodMapping);
 
-			// // DEBUGGING - store sub scenario as a "fork"
-			// if (true && scenarioInstance != null) {
-			// try {
-			// IScenarioService scenarioService = scenarioInstance.getScenarioService();
-			// ScenarioInstance dup = scenarioService.insert(scenarioInstance, EcoreUtil.copy(optimiserScenario));
-			// dup.setName("Period Scenario");
-			//
-			// // Copy across various bits of information
-			// dup.getMetadata().setContentType(scenarioInstance.getMetadata().getContentType());
-			// dup.getMetadata().setCreated(scenarioInstance.getMetadata().getCreated());
-			// dup.getMetadata().setLastModified(new Date());
-			//
-			// // Copy version context information
-			// dup.setVersionContext(scenarioInstance.getVersionContext());
-			// dup.setScenarioVersion(scenarioInstance.getScenarioVersion());
-			//
-			// dup.setClientVersionContext(scenarioInstance.getClientVersionContext());
-			// dup.setClientScenarioVersion(scenarioInstance.getClientScenarioVersion());
-			// } catch (Exception e) {
-			// e.printStackTrace();
-			// }
-			// }
+			// DEBUGGING - store sub scenario as a "fork"
+			if (false && scenarioInstance != null) {
+				try {
+					IScenarioService scenarioService = scenarioInstance.getScenarioService();
+					ScenarioInstance dup = scenarioService.insert(scenarioInstance, EcoreUtil.copy(optimiserScenario));
+					dup.setName("Period Scenario");
+
+					// Copy across various bits of information
+					dup.getMetadata().setContentType(scenarioInstance.getMetadata().getContentType());
+					dup.getMetadata().setCreated(scenarioInstance.getMetadata().getCreated());
+					dup.getMetadata().setLastModified(new Date());
+
+					// Copy version context information
+					dup.setVersionContext(scenarioInstance.getVersionContext());
+					dup.setScenarioVersion(scenarioInstance.getScenarioVersion());
+
+					dup.setClientVersionContext(scenarioInstance.getClientVersionContext());
+					dup.setClientScenarioVersion(scenarioInstance.getClientScenarioVersion());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 
 			final BasicCommandStack commandStack = new BasicCommandStack();
 			final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
@@ -325,109 +327,114 @@ public class LNGScenarioRunner {
 	 * 
 	 * @return
 	 */
-	public boolean run() {
-		return step(100);
+	public void run() {
+		runWithProgress(new NullProgressMonitor());
 	}
 
 	/**
-	 * Step the optimisation by x% of the total number of iterations. Only call if an optimisation hint has been specified.
+	 * Export the current solution (and re-combine into original if period optimisation).
 	 * 
-	 * @return Return true if the optimisation still has more work to do.
-	 * 
+	 * @param currentProgress
+	 * @param solution
+	 * @return
 	 */
-	public boolean step(final int percent) {
-		assert createOptimiser;
-		final IOptimiserProgressMonitor monitor = optimiser.getProgressMonitor();
-
-		int optimiserPercent = percent;// doBreakdownPostOptimisation ? (int) ((double) percent * 1.2) : percent;
-		optimiser.step(optimiserPercent);
-		if (monitor != null) {
-			monitor.report(optimiser, optimiser.getNumberOfIterationsCompleted(), optimiser.getFitnessEvaluator().getCurrentFitness(), optimiser.getFitnessEvaluator().getBestFitness(),
-					optimiser.getCurrentSolution(), optimiser.getBestSolution());
-		}
-
-		if (optimiser.isFinished()) {
-			if (doHillClimb) {
-				if (this.optimiserSettings.getSolutionImprovementSettings() != null && this.optimiserSettings.getSolutionImprovementSettings().isImprovingSolutions()) {
-					ArbitraryStateLocalSearchOptimiser hillClimber = injector.getInstance(ArbitraryStateLocalSearchOptimiser.class);
-					// The optimiser may not have a best sequence set
-					System.out.println("Performing hill climbing...");
-					ISequences initialSequence = optimiser.getBestRawSequences() == null ? context.getInitialSequences() : optimiser.getBestRawSequences();
-					hillClimber.start(context, initialSequence);
-					hillClimber.step(100);
-					optimiser = hillClimber;
-				}
+	private Schedule exportSchedule(final int currentProgress, @Nullable final IAnnotatedSolution solution) {
+		try {
+			if (originalEditingDomain instanceof CommandProviderAwareEditingDomain) {
+				((CommandProviderAwareEditingDomain) originalEditingDomain).setCommandProvidersDisabled(true);
 			}
-			// Clear any previous optimisation state.
-			if (periodMapping != null) {
-				LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, 100);
-				LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, 100);
-			}
-			LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
 
-			boolean exportOptimiserSolution = true;
-			// // Generate the changesets decomposition.
-			// if (true || doBreakdownPostOptimisation) {
-			// // Run optimisation
-			//
-			// final BreadthOptimiser instance = injector.getInstance(BreadthOptimiser.class);
-			// boolean foundBetterResult = instance.optimise(optimiser.getBestRawSequences(), new NullProgressMonitor());
-			//
-			// // Store the results
-			// final List<Pair<ISequences, IEvaluationState>> breakdownSolution = instance.getBestSolution();
-			// if (breakdownSolution != null) {
-			// storeBreakdownSolutionsAsForks(breakdownSolution, foundBetterResult, new NullProgressMonitor());
-			// exportOptimiserSolution = false;
-			// }
-			// }
-
-			// The breakdown optimiser may find a better solution. This will be saved in storeBreakdownSolutionsAsForks
-			if (exportOptimiserSolution) {
-				// export final state
-				finalSchedule = LNGSchedulerJobUtils.exportSolution(injector, optimiserScenario, transformer.getOptimiserSettings(), optimiserEditingDomain, modelEntityMap,
-						optimiser.getBestSolution(), 100);
-				final Schedule periodSchedule = exportPeriodScenario(100);
-				if (periodSchedule != null) {
-					finalSchedule = periodSchedule;
-				}
+			final Pair<Command, Schedule> commandPair = creatExportScheduleCommand(currentProgress, solution);
+			originalEditingDomain.getCommandStack().execute(commandPair.getFirst());
+			return commandPair.getSecond();
+		} finally {
+			if (originalEditingDomain instanceof CommandProviderAwareEditingDomain) {
+				((CommandProviderAwareEditingDomain) originalEditingDomain).setCommandProvidersDisabled(false);
 			}
-			if (monitor != null) {
-				monitor.done(optimiser, optimiser.getFitnessEvaluator().getBestFitness(), optimiser.getBestSolution());
-			}
-			optimiser = null;
-			log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
-			return false;
-		} else {
-			return true;
 		}
 	}
 
-	@Nullable
-	private Schedule exportPeriodScenario(final int currentProgress) {
-		if (periodMapping != null) {
-			final PeriodExporter e = new PeriodExporter();
-			final CompoundCommand cmd = LNGSchedulerJobUtils.createBlankCommand(currentProgress);
-			cmd.append(e.updateOriginal(originalEditingDomain, originalScenario, optimiserScenario, periodMapping));
-			if (cmd.canExecute()) {
-				originalEditingDomain.getCommandStack().execute(cmd);
-			} else {
-				throw new RuntimeException("Unable to execute period optimisation merge command");
+	/**
+	 * Returns a Pair containing a command and a null schedule. Once the Command has been executed, the Schedule will be populated.
+	 * 
+	 * @param currentProgress
+	 * @param solution
+	 * @return
+	 */
+	private Pair<Command, Schedule> creatExportScheduleCommand(final int currentProgress, @Nullable final IAnnotatedSolution solution) {
+
+		// Create a "wrapper" to set the user friendly command name for the undo menu
+		final CompoundCommand wrapper = LNGSchedulerJobUtils.createBlankCommand(currentProgress);
+		// Create a reference to be able to grab the Schedule object from the command state.
+		final Pair<Command, Schedule> p = new Pair<>();
+		// Create a custom compound command to create and execute changes as they are created during the command to allow us to have a single command in the history rather than several.
+		final CompoundCommand c = new CompoundCommand() {
+			@Override
+			protected boolean prepare() {
+				// Always prepared
+				return true;
 			}
 
-			{
-				final OptimiserSettings evalSettings = EcoreUtil.copy(transformer.getOptimiserSettings());
-				// final OptimiserSettings evalSettings = EcoreUtil.copy(optimiserSettings);
-				evalSettings.getRange().unsetOptimiseAfter();
-				evalSettings.getRange().unsetOptimiseBefore();
-				final LNGTransformer subTransformer = new LNGTransformer(originalScenario, evalSettings, extraModule, localOverrides);
-
-				final ModelEntityMap subModelEntityMap = subTransformer.getModelEntityMap();
-				final IAnnotatedSolution finalSolution = LNGSchedulerJobUtils.evaluateCurrentState(subTransformer);
-				return LNGSchedulerJobUtils.exportSolution(subTransformer.getInjector(), originalScenario, EcoreUtil.copy(optimiserSettings), originalEditingDomain, subModelEntityMap, finalSolution,
-						currentProgress);
+			@Override
+			public boolean canExecute() {
+				// Always true
+				return true;
 			}
-		}
-		return null;
+
+			@Override
+			public void execute() {
+
+				// This either applies to the real scenario or the period copy if present.
+				final Pair<Command, Schedule> updateCommand = LNGSchedulerJobUtils.exportSolution(injector, optimiserScenario, optimiserSettings, optimiserEditingDomain, modelEntityMap, solution);
+				if (periodMapping == null) {
+					// Apply to real scenario
+					appendAndExecute(updateCommand.getFirst());
+					p.setSecond(updateCommand.getSecond());
+				} else {
+					// Period optimisation code path, apply the dual commands to the real scenario.
+
+					// Execute the update command on the period scenario
+					optimiserEditingDomain.getCommandStack().execute(updateCommand.getFirst());
+
+					// Export the period scenario changes into the original scenario
+					final PeriodExporter e = new PeriodExporter();
+					final CompoundCommand part1 = LNGSchedulerJobUtils.createBlankCommand(currentProgress);
+					part1.append(e.updateOriginal(originalEditingDomain, originalScenario, optimiserScenario, periodMapping));
+					if (part1.canExecute()) {
+						appendAndExecute(part1);
+					} else {
+						throw new RuntimeException("Unable to execute period optimisation merge command");
+					}
+
+					// Re-evaluate command
+					{
+						final OptimiserSettings evalSettings = EcoreUtil.copy(transformer.getOptimiserSettings());
+						// final OptimiserSettings evalSettings = EcoreUtil.copy(optimiserSettings);
+						evalSettings.getRange().unsetOptimiseAfter();
+						evalSettings.getRange().unsetOptimiseBefore();
+						final LNGTransformer subTransformer = new LNGTransformer(originalScenario, evalSettings, extraModule, localOverrides);
+
+						final ModelEntityMap subModelEntityMap = subTransformer.getModelEntityMap();
+						final IAnnotatedSolution finalSolution = LNGSchedulerJobUtils.evaluateCurrentState(subTransformer);
+						final Pair<Command, Schedule> part2 = LNGSchedulerJobUtils.exportSolution(subTransformer.getInjector(), originalScenario, EcoreUtil.copy(optimiserSettings),
+								originalEditingDomain, subModelEntityMap, finalSolution);
+						if (part2.getFirst().canExecute()) {
+							appendAndExecute(part2.getFirst());
+						} else {
+							throw new RuntimeException("Unable to execute period optimisation update command");
+						}
+
+						// Store reference to the final schedule model
+						p.setSecond(part2.getSecond());
+					}
+				}
+			}
+		};
+
+		wrapper.append(c);
+		p.setFirst(wrapper);
+		return p;
+
 	}
 
 	public void dispose() {
@@ -509,7 +516,7 @@ public class LNGScenarioRunner {
 		return optimiserSettings;
 	}
 
-	private void storeBreakdownSolutionsAsForks(final List<Pair<ISequences, IEvaluationState>> breakdownSolution, boolean keepFinalResult, @NonNull final IProgressMonitor progressMonitor) {
+	private void storeBreakdownSolutionsAsForks(final List<Pair<ISequences, IEvaluationState>> breakdownSolution, final boolean keepFinalResult, @NonNull final IProgressMonitor progressMonitor) {
 
 		// Assuming the scenario data is at the initial state.
 
@@ -540,7 +547,7 @@ public class LNGScenarioRunner {
 
 				// Perform a full evaluation
 				final EvaluationState state = new EvaluationState();
-				EvaluationProcessRegistry evaluationProcessRegistry = new EvaluationProcessRegistry();
+				final EvaluationProcessRegistry evaluationProcessRegistry = new EvaluationProcessRegistry();
 				final IEvaluationContext evaluationContext = new EvaluationContext(this.context.getOptimisationData(), sequences, Collections.<String> emptyList(), evaluationProcessRegistry);
 
 				final AnnotatedSolution solution = new AnnotatedSolution(sequences, evaluationContext, state);
@@ -548,11 +555,7 @@ public class LNGScenarioRunner {
 				process.annotate(sequences, state, solution);
 
 				// Export the solution onto the scenario
-				Schedule finalSchedule = LNGSchedulerJobUtils.exportSolution(injector, optimiserScenario, transformer.getOptimiserSettings(), optimiserEditingDomain, modelEntityMap, solution, 100);
-				Schedule periodSchedule = exportPeriodScenario(100);
-				if (periodSchedule != null) {
-					finalSchedule = periodSchedule;
-				}
+				Schedule finalSchedule = exportSchedule(100, solution);
 
 				// Save the scenario as a fork.
 				try {
@@ -588,8 +591,7 @@ public class LNGScenarioRunner {
 					this.finalSchedule = finalSchedule;
 				} else {
 					// Reset state
-					if (periodSchedule != null) {
-						LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, 100);
+					if (periodMapping != null) {
 						LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, 100);
 						LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
 					} else {
@@ -605,14 +607,14 @@ public class LNGScenarioRunner {
 	}
 
 	/**
-	 * used by {@link AbstractEclipseJobControl2} / {@link LNGSchedulerOptimiserJobControl2}
+	 * used by {@link AbstractEclipseJobControl} / {@link LNGSchedulerOptimiserJobControl}
 	 * 
 	 * @param progressMonitor
 	 */
 	public void runWithProgress(final @NonNull IProgressMonitor progressMonitor) {
 		assert createOptimiser;
 
-		int totalWork = (PROGRESS_OPTIMISATION) + (doHillClimb ? PROGRESS_HILLCLIMBING_OPTIMISATION : 0)
+		final int totalWork = (PROGRESS_OPTIMISATION) + (doHillClimb ? PROGRESS_HILLCLIMBING_OPTIMISATION : 0)
 				+ (doActionSetPostOptimisation ? PROGRESS_ACTION_SET_OPTIMISATION + PROGRESS_ACTION_SET_SAVE : 0);
 		progressMonitor.beginTask("", totalWork);
 		try {
@@ -639,7 +641,6 @@ public class LNGScenarioRunner {
 
 					// Clear any previous optimisation state.
 					if (periodMapping != null) {
-						LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, 100);
 						LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, 100);
 					}
 					LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
@@ -675,7 +676,7 @@ public class LNGScenarioRunner {
 					// Run optimisation
 
 					final BagOptimiser instance = injector.getInstance(BagOptimiser.class);
-					boolean foundBetterResult = instance.optimise(bestRawSequences, new SubProgressMonitor(progressMonitor, PROGRESS_ACTION_SET_OPTIMISATION), 3);
+					final boolean foundBetterResult = instance.optimise(bestRawSequences, new SubProgressMonitor(progressMonitor, PROGRESS_ACTION_SET_OPTIMISATION), 3);
 
 					// Store the results
 					final List<Pair<ISequences, IEvaluationState>> breakdownSolution = instance.getBestSolution();
@@ -683,17 +684,14 @@ public class LNGScenarioRunner {
 						storeBreakdownSolutionsAsForks(breakdownSolution, foundBetterResult, new SubProgressMonitor(progressMonitor, PROGRESS_ACTION_SET_SAVE));
 						exportOptimiserSolution = !foundBetterResult;
 					}
-
 					// The breakdown optimiser may find a better solution. This will be saved in storeBreakdownSolutionsAsForks
 					if (exportOptimiserSolution) {
 						// export final state
-						finalSchedule = LNGSchedulerJobUtils.exportSolution(injector, optimiserScenario, transformer.getOptimiserSettings(), optimiserEditingDomain, modelEntityMap, bestSolution, 100);
-						final Schedule periodSchedule = exportPeriodScenario(100);
-						if (periodSchedule != null) {
-							finalSchedule = periodSchedule;
-						}
+						finalSchedule = exportSchedule(100, bestSolution);
 					}
 				}
+			} else {
+				finalSchedule = exportSchedule(100, bestSolution);
 			}
 		} finally {
 			progressMonitor.done();
@@ -701,12 +699,12 @@ public class LNGScenarioRunner {
 		log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
 	}
 
-	private LocalSearchOptimiser performSolutionImprovement(final IProgressMonitor progressMonitor, ISequences bestRawSequences) {
+	private LocalSearchOptimiser performSolutionImprovement(final IProgressMonitor progressMonitor, final ISequences bestRawSequences) {
 		if (this.optimiserSettings.getSolutionImprovementSettings() != null && this.optimiserSettings.getSolutionImprovementSettings().isImprovingSolutions()) {
-			ArbitraryStateLocalSearchOptimiser hillClimber = injector.getInstance(ArbitraryStateLocalSearchOptimiser.class);
+			final ArbitraryStateLocalSearchOptimiser hillClimber = injector.getInstance(ArbitraryStateLocalSearchOptimiser.class);
 			// The optimiser may not have a best sequence set
 			System.out.println("Performing hill climbing...");
-			ISequences sequenceToImprove = bestRawSequences == null ? context.getInitialSequences() : bestRawSequences;
+			final ISequences sequenceToImprove = bestRawSequences == null ? context.getInitialSequences() : bestRawSequences;
 			hillClimber.start(context, sequenceToImprove);
 			int hillClimberWork = 0;
 			while (!hillClimber.isFinished()) {

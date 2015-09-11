@@ -20,7 +20,6 @@ import com.google.inject.name.Named;
 import com.mmxlabs.models.lng.parameters.Constraint;
 import com.mmxlabs.models.lng.parameters.Objective;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
-import com.mmxlabs.models.lng.parameters.SimilarityInterval;
 import com.mmxlabs.models.lng.parameters.SimilaritySettings;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessFactory;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
@@ -32,7 +31,6 @@ import com.mmxlabs.optimiser.lso.impl.thresholders.GeometricThresholder;
 import com.mmxlabs.optimiser.lso.modules.LinearFitnessEvaluatorModule;
 import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChecker;
-import com.mmxlabs.scheduler.optimiser.fitness.SimilarityFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.EnumeratingSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.lso.SequencesConstrainedMoveGeneratorUnit;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
@@ -40,7 +38,6 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.ISimilarityComponentPa
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.fitness.components.SimilarityComponentParameters;
-import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProvider;
 
 /**
  * The {@link OptimiserSettingsModule} provides user-definable parameters derived from the {@link OptimiserSettings} object such as the random seed and number of iterations

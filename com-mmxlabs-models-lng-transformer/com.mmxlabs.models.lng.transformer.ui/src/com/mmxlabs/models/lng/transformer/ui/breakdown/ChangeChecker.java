@@ -11,14 +11,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import com.mmxlabs.common.Pair;
-import com.mmxlabs.optimiser.core.IModifiableSequence;
-import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 

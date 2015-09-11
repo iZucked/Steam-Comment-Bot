@@ -11,15 +11,11 @@ import java.util.List;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.google.inject.Injector;
 import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
-import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
-import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -42,8 +38,7 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 	}
 
 	@Override
-	public @NonNull
-	IJobDescriptor getJobDescriptor() {
+	public @NonNull IJobDescriptor getJobDescriptor() {
 		return jobDescriptor;
 	}
 
@@ -67,15 +62,6 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 			} finally {
 				runner.dispose();
 			}
-
-			// // Create the transformer and object reference to the data objects
-			// final LNGTransformer transformer = new LNGTransformer(scenario, jobDescriptor.getOptimiserSettings());
-			//
-			// final Injector injector = transformer.getInjector();
-			// final IAnnotatedSolution solution = LNGSchedulerJobUtils.evaluateCurrentState(transformer);
-			//
-			// // Pass annotated solution to utils to create a new Schedule object and update the other data models as required.
-			// LNGSchedulerJobUtils.exportSolution(injector, scenario, jobDescriptor.getOptimiserSettings(), editingDomain, transformer.getModelEntityMap(), solution, 0);
 
 			setJobState(EJobState.COMPLETED);
 		} catch (final Throwable e) {

@@ -23,8 +23,6 @@ import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
-import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
-import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
@@ -122,7 +120,7 @@ public class SuboptimalScenarioTester {
 
 		// optimise the scenario
 		final LNGScenarioRunner runner = new LNGScenarioRunner((LNGScenarioModel) scenario, LNGScenarioRunner.createDefaultSettings(), LNGTransformer.HINT_OPTIMISE_LSO);
-		runner.initAndEval(new TransformerExtensionTestModule(), 10000);
+		runner.initAndEval(new TransformerExtensionTestModule(), 10000, false);
 		runner.run();
 
 		final Schedule schedule = runner.getFinalSchedule();

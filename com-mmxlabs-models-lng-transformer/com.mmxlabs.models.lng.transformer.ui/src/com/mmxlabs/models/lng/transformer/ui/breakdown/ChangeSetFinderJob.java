@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.transformer.ui.breakdown;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.concurrent.Callable;
 

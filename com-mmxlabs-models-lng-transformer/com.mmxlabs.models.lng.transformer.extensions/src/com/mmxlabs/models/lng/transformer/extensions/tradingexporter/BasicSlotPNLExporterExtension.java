@@ -48,6 +48,7 @@ public class BasicSlotPNLExporterExtension implements IExporterExtension {
 	@Override
 	public void finishExporting() {
 		for (final ISequenceElement element : annotatedSolution.getContext().getOptimisationData().getSequenceElements()) {
+			assert element != null;
 			final IPortSlot slot = slotProvider.getPortSlot(element);
 
 			ProfitAndLossContainer profitAndLossContainer = null;
@@ -100,6 +101,7 @@ public class BasicSlotPNLExporterExtension implements IExporterExtension {
 
 						if (cargoValueAnnotation != null) {
 							details.setAdditionalPNL(OptimiserUnitConvertor.convertToExternalFixedCost(cargoValueAnnotation.getSlotAdditionalOtherPNL(slotProvider.getPortSlot(element))));
+							details.setExtraUpsidePNL(OptimiserUnitConvertor.convertToExternalFixedCost(cargoValueAnnotation.getSlotAdditionalUpsidePNL(slotProvider.getPortSlot(element))));
 							details.setExtraShippingPNL(OptimiserUnitConvertor.convertToExternalFixedCost(cargoValueAnnotation.getSlotAdditionalShippingPNL(slotProvider.getPortSlot(element))));
 						}
 						if (hedgingAnnotation != null) {
