@@ -893,10 +893,10 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 				return;
 			}
 			// Model references are still present! (note revert command will now break!)
-			if (!getModelReferences().isEmpty()) {
-				log.error("Attempting to unload a scenario which still has open model references");
-				return;
-			}
+//			if (!getModelReferences().isEmpty()) {
+//				log.error("Attempting to unload a scenario which still has open model references");
+//				return;
+//			}
 			scenarioService.unload(this);
 		}
 	}

@@ -147,7 +147,7 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 //											log.error("Unable to paste scenario: " + scenarioInstance.getName(), new RuntimeException());
 										}
 									} catch (final Exception e) {
-										log.error("Unable to paste scenario: " + scenarioInstance.getName(), new RuntimeException());
+										log.error("Unable to paste scenario: " + scenarioInstance.getName(), e);
 									}
 								}
 								monitor.worked(1);

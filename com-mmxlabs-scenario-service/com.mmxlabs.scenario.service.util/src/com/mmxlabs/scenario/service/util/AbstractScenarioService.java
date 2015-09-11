@@ -349,6 +349,12 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 		}
 
 		fireEvent(ScenarioServiceEvent.PRE_UNLOAD, instance);
+		
+		if (!instance.getModelReferences().isEmpty()) {
+			log.error("Attempting to unload a scenario which still has open model references");
+//			return;
+		}
+		
 		if (instance.getAdapters() != null) {
 			instance.getAdapters().remove(EditingDomain.class);
 			instance.getAdapters().remove(CommandStack.class);

@@ -14,14 +14,12 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
-import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
 import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceEditorInput;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
 
@@ -59,7 +57,7 @@ public class RevertScenarioCommandHandler extends AbstractHandler {
 								try {
 
 									// Deselect from view
-									Activator.getDefault().getScenarioServiceSelectionProvider().deselect(scenarioInstance);
+									Activator.getDefault().getScenarioServiceSelectionProvider().deselect(scenarioInstance, true);
 
 									final ScenarioServiceEditorInput editorInput = new ScenarioServiceEditorInput(scenarioInstance);
 									final IEditorReference[] editorReferences = activePage.findEditors(editorInput, null, IWorkbenchPage.MATCH_INPUT);
@@ -75,10 +73,10 @@ public class RevertScenarioCommandHandler extends AbstractHandler {
 
 									if (editorReferences != null && editorReferences.length > 0) {
 										// scenarioInstance.getScenarioService().load(scenarioInstance);
-										OpenScenarioUtils.openScenarioInstance(activePage, scenarioInstance);
+//										OpenScenarioUtils.openScenarioInstance(activePage, scenarioInstance);
 									}
-								} catch (final PartInitException e) {
-									log.error(e.getMessage(), e);
+//								} catch (final PartInitException e) {
+//									log.error(e.getMessage(), e);
 								} finally {
 									lock.release();
 								}

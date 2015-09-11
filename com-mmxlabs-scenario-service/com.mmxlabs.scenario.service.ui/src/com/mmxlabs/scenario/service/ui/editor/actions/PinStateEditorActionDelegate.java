@@ -6,6 +6,7 @@ package com.mmxlabs.scenario.service.ui.editor.actions;
 
 import java.util.Collection;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Event;
@@ -25,7 +26,29 @@ public class PinStateEditorActionDelegate implements IEditorActionDelegate, IAct
 	private ScenarioServiceSelectionProvider selectionProvider;
 	private IEditorPart targetEditor;
 	private IAction action;
-	private IScenarioServiceSelectionChangedListener selectionChangedListener;
+	@NonNull
+	private final IScenarioServiceSelectionChangedListener selectionChangedListener = new IScenarioServiceSelectionChangedListener() {
+
+		@Override
+		public void selected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> selected, boolean block) {
+
+		}
+
+		@Override
+		public void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioInstance oldPin, final ScenarioInstance newPin, boolean block) {
+
+		}
+
+		@Override
+		public void deselected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> deselected, boolean block) {
+
+		}
+
+		@Override
+		public void selectionChanged(ScenarioInstance pinned, Collection<ScenarioInstance> others, boolean block) {
+			updateActionState();
+		}
+	};
 
 	@Override
 	public void run(final IAction action) {
@@ -68,23 +91,6 @@ public class PinStateEditorActionDelegate implements IEditorActionDelegate, IAct
 	@Override
 	public void init(final IAction action) {
 		selectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
-		selectionChangedListener = new IScenarioServiceSelectionChangedListener() {
-
-			@Override
-			public void selected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> selected, boolean block) {
-
-			}
-
-			@Override
-			public void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioInstance oldPin, final ScenarioInstance newPin, boolean block) {
-				updateActionState();
-			}
-
-			@Override
-			public void deselected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> deselected, boolean block) {
-
-			}
-		};
 		selectionProvider.addSelectionChangedListener(selectionChangedListener);
 	}
 

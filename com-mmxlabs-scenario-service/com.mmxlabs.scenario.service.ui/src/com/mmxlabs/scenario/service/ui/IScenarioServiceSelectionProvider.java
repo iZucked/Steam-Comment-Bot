@@ -6,6 +6,9 @@ package com.mmxlabs.scenario.service.ui;
 
 import java.util.Collection;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
@@ -21,28 +24,32 @@ public interface IScenarioServiceSelectionProvider {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	Collection<ScenarioInstance> getSelection();
 
 	/**
 	 * @return the currently pinned instance; this is always a member of the selection.
 	 */
+	@Nullable
 	ScenarioInstance getPinnedInstance();
 
 	/**
 	 * Set pinned scenario. Do not block.
 	 */
-	void setPinnedInstance(ScenarioInstance referenceInstance);
+	void setPinnedInstance(@Nullable ScenarioInstance referenceInstance);
 
 	/**
 	 * Set pinned scenario. If block is true, do not return until UI is fully refreshed.
 	 */
-	void setPinnedInstance(ScenarioInstance referenceInstance, boolean block);
+	void setPinnedInstance(@Nullable ScenarioInstance referenceInstance, boolean block);
 
-	void addSelectionChangedListener(IScenarioServiceSelectionChangedListener listener);
+	void setPinnedPair(@NonNull ScenarioInstance pinInstance, @NonNull ScenarioInstance otherInstance, boolean block);
 
-	void removeSelectionChangedListener(IScenarioServiceSelectionChangedListener listener);
+	void addSelectionChangedListener(@NonNull IScenarioServiceSelectionChangedListener listener);
 
-	boolean isSelected(ScenarioInstance instance);
+	void removeSelectionChangedListener(@NonNull IScenarioServiceSelectionChangedListener listener);
+
+	boolean isSelected(@NonNull ScenarioInstance instance);
 
 	/**
 	 * Deselect all scenarios. Do not block.
@@ -57,21 +64,21 @@ public interface IScenarioServiceSelectionProvider {
 	/**
 	 * Select a scenario. Do not block.
 	 */
-	void select(ScenarioInstance scenarioInstance);
+	void select(@NonNull ScenarioInstance scenarioInstance);
 
 	/**
 	 * Select a scenario. If block is true, do not return until UI is fully refreshed.
 	 */
-	void select(ScenarioInstance scenarioInstance, boolean block);
+	void select(@NonNull ScenarioInstance scenarioInstance, boolean block);
 
 	/**
 	 * Deselect a scenario. Do not block.
 	 */
-	void deselect(ScenarioInstance scenarioInstance);
+	void deselect(@NonNull ScenarioInstance scenarioInstance);
 
 	/**
 	 * Deselect a scenario. If block is true, do not return until UI is fully refreshed.
 	 */
-	void deselect(ScenarioInstance scenarioInstance, boolean block);
+	void deselect(@NonNull ScenarioInstance scenarioInstance, boolean block);
 
 }
