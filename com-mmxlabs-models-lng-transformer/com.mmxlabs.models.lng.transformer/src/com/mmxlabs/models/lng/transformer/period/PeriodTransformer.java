@@ -318,7 +318,7 @@ public class PeriodTransformer {
 				cargoesToRemove.add(cargo);
 				slotsToRemove.addAll(cargo.getSlots());
 			} else if (inclusionType == InclusionType.Boundary) {
-				if (pos == Position.Both) {
+				if (pos == Position.Both || cargo.getVesselAssignmentType() == null) {
 					// lock whole cargo if both slots are outside period or if there is no vessel
 					lockDownCargoDates(slotAllocationMap, cargo);
 				} else {
