@@ -34,6 +34,7 @@ import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.ide.IIDEActionConstants;
 import org.eclipse.ui.internal.IWorkbenchHelpContextIds;
+import org.eclipse.ui.internal.ShowViewMenu;
 import org.eclipse.ui.internal.WorkbenchMessages;
 import org.eclipse.ui.internal.WorkbenchPlugin;
 import org.eclipse.ui.internal.handlers.IActionCommandMappingService;
@@ -352,7 +353,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// // ActionContributionItem(editActionSetAction));
 		// coolBar.setContextMenuManager(coolbarPopupMenuManager);
 		// final IMenuService menuService = (IMenuService) window.getService(IMenuService.class);
-		//			menuService.populateContributionManager(coolbarPopupMenuManager, "popup:windowCoolbarContextMenu"); //$NON-NLS-1$
+		// menuService.populateContributionManager(coolbarPopupMenuManager, "popup:windowCoolbarContextMenu"); //$NON-NLS-1$
 		// }
 		coolBar.add(new GroupMarker(IIDEActionConstants.GROUP_FILE));
 		{ // File Group
@@ -450,7 +451,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// final String newText = IDEWorkbenchMessages.Workbench_new;
 		// final String newId = ActionFactory.NEW.getId();
 		// final MenuManager newMenu = new MenuManager(newText, newId);
-		//			newMenu.setActionDefinitionId("org.eclipse.ui.file.newQuickMenu"); //$NON-NLS-1$
+		// newMenu.setActionDefinitionId("org.eclipse.ui.file.newQuickMenu"); //$NON-NLS-1$
 		// newMenu.add(new Separator(newId));
 		// this.newWizardMenu = new NewWizardMenu(getWindow());
 		// newMenu.add(this.newWizardMenu);
@@ -568,7 +569,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	// menu.add(new Separator(IWorkbenchActionConstants.SHOW_EXT));
 	// {
 	// MenuManager showInSubMenu = new MenuManager(
-	//					IDEWorkbenchMessages.Workbench_showIn, "showIn"); //$NON-NLS-1$
+	// IDEWorkbenchMessages.Workbench_showIn, "showIn"); //$NON-NLS-1$
 	// // showInSubMenu.setActionDefinitionId(showInQuickMenu
 	// // .getActionDefinitionId());
 	// showInSubMenu.add(ContributionItemFactory.VIEWS_SHOW_IN
@@ -652,10 +653,11 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		{
 			{
 				final MenuManager showViewMenuMgr = new MenuManager(IDEWorkbenchMessages.Workbench_showView, "showView"); //$NON-NLS-1$
-				final IContributionItem showViewMenu = ContributionItemFactory.VIEWS_SHORTLIST.create(getWindow());
+				final IContributionItem showViewMenu = new com.mmxlabs.lingo.app.intro.ShowViewMenu(getWindow(), "viewsShortlist");
 				showViewMenuMgr.add(showViewMenu);
 				menu.add(showViewMenuMgr);
 			}
+
 			menu.add(resetPerspectiveAction);
 			final String openText = IDEWorkbenchMessages.Workbench_openPerspective;
 			final MenuManager changePerspMenuMgr = new MenuManager(openText, "openPerspective"); //$NON-NLS-1$
@@ -687,7 +689,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	// * Adds the keyboard navigation submenu to the specified menu.
 	// */
 	// private void addKeyboardShortcuts(final MenuManager menu) {
-	//		final MenuManager subMenu = new MenuManager(IDEWorkbenchMessages.Workbench_shortcuts, "shortcuts"); //$NON-NLS-1$
+	// final MenuManager subMenu = new MenuManager(IDEWorkbenchMessages.Workbench_shortcuts, "shortcuts"); //$NON-NLS-1$
 	// menu.add(subMenu);
 	// // subMenu.add(showPartPaneMenuAction);
 	// // subMenu.add(showViewMenuAction);
@@ -1116,7 +1118,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// };
 		// register(showInQuickMenu);
 
-		//        final String newQuickMenuId = "org.eclipse.ui.file.newQuickMenu"; //$NON-NLS-1$
+		// final String newQuickMenuId = "org.eclipse.ui.file.newQuickMenu"; //$NON-NLS-1$
 		// newQuickMenu = new QuickMenuAction(newQuickMenuId) {
 		// protected void fillMenu(IMenuManager menu) {
 		// menu.add(new NewWizardMenu(window));
@@ -1150,10 +1152,10 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// // just add the action.
 		// final String quickStartKey = IDEActionFactory.QUICK_START.getId();
 		// final String showQuickStart = prefs.getString(quickStartKey);
-		//		if (sameState && "true".equals(showQuickStart)) { //$NON-NLS-1$
+		// if (sameState && "true".equals(showQuickStart)) { //$NON-NLS-1$
 		// quickStartAction = IDEActionFactory.QUICK_START.create(window);
 		// register(quickStartAction);
-		//		} else if (sameState && "false".equals(showQuickStart)) { //$NON-NLS-1$
+		// } else if (sameState && "false".equals(showQuickStart)) { //$NON-NLS-1$
 		// // do nothing
 		// } else {
 		// // do the work
@@ -1171,10 +1173,10 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// // just add the action.
 		// final String tipsAndTricksKey = IDEActionFactory.TIPS_AND_TRICKS.getId();
 		// final String showTipsAndTricks = prefs.getString(tipsAndTricksKey);
-		//		if (sameState && "true".equals(showTipsAndTricks)) { //$NON-NLS-1$
+		// if (sameState && "true".equals(showTipsAndTricks)) { //$NON-NLS-1$
 		// tipsAndTricksAction = IDEActionFactory.TIPS_AND_TRICKS.create(window);
 		// register(tipsAndTricksAction);
-		//		} else if (sameState && "false".equals(showTipsAndTricks)) { //$NON-NLS-1$
+		// } else if (sameState && "false".equals(showTipsAndTricks)) { //$NON-NLS-1$
 		// // do nothing
 		// } else {
 		// // do the work
@@ -1258,14 +1260,14 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	// .find(IWorkbenchActionConstants.TOOLBAR_FILE);
 	// if (!(cbItem instanceof IToolBarContributionItem)) {
 	// // This should not happen
-	//		            IDEWorkbenchPlugin.log("File toolbar contribution item is missing"); //$NON-NLS-1$
+	// IDEWorkbenchPlugin.log("File toolbar contribution item is missing"); //$NON-NLS-1$
 	// return;
 	// }
 	// IToolBarContributionItem toolBarItem = (IToolBarContributionItem) cbItem;
 	// IToolBarManager toolBarManager = toolBarItem.getToolBarManager();
 	// if (toolBarManager == null) {
 	// // error if this happens, file toolbar assumed to always exist
-	//		            IDEWorkbenchPlugin.log("File toolbar is missing"); //$NON-NLS-1$
+	// IDEWorkbenchPlugin.log("File toolbar is missing"); //$NON-NLS-1$
 	// return;
 	// }
 	// //add the build button if build actions are enabled, and remove it
@@ -1357,7 +1359,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	// }
 
 	private IContributionItem getSelectAllItem() {
-		return getItem(ActionFactory.SELECT_ALL.getId(), ActionFactory.SELECT_ALL.getCommandId(), null, null, WorkbenchMessages.Workbench_selectAll, WorkbenchMessages.Workbench_selectAllToolTip, null);
+		return getItem(ActionFactory.SELECT_ALL.getId(), ActionFactory.SELECT_ALL.getCommandId(), null, null, WorkbenchMessages.Workbench_selectAll, WorkbenchMessages.Workbench_selectAllToolTip,
+				null);
 	}
 
 	// private IContributionItem getFindItem() {
