@@ -43,7 +43,9 @@ import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
@@ -51,6 +53,9 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public class BagMover extends BreakdownOptimiserMover {
@@ -107,6 +112,15 @@ public class BagMover extends BreakdownOptimiserMover {
 		sequencesManipulator.manipulate(currentFullSequences);
 
 		if (tryDepth == 0 || differencesList.size() == 0) {
+			boolean contains = true;
+			for (Change c : changes) {
+				if (!(c.description.contains("Swap KP11-Mina Al Ahmadi (to N237-Bonny) with KP10-Mina Al Ahmadi ( to T227-Point Fortin)")
+						|| c.description.contains("Swap KP13-Mina Al Ahmadi (to N259-Bonny) with KP12-Mina Al Ahmadi ( to ME-2015-08-0-ANYWHERE)")
+						|| c.description.contains("Vessel T229-Point Fortin from Gallina to Bilbao K"))) {
+					contains = false;
+					break;
+				}
+			}
 			boolean failedEvaluation = false;
 
 			// Apply hard constraint checkers
@@ -118,6 +132,9 @@ public class BagMover extends BreakdownOptimiserMover {
 				}
 			}
 			if (!failedEvaluation) {
+				if (contains && changes.size() == 3) {
+					int z = 0;
+				}
 
 				final long thisUnusedCompulsarySlotCount = calculateUnusedCompulsarySlot(currentSequences);
 				if (thisUnusedCompulsarySlotCount > similarityState.getBaseMetrics()[MetricType.COMPULSARY_SLOT.ordinal()]) {
@@ -1032,13 +1049,38 @@ public class BagMover extends BreakdownOptimiserMover {
 		long sumPNL = 0;
 
 		for (final ScheduledSequence scheduledSequence : scheduledSequences) {
+			long sumA = 0;
 			for (final Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord> p : scheduledSequence.getVoyagePlans()) {
 				sumPNL += scheduledSequences.getVoyagePlanGroupValue(p.getFirst());
+				sumA += scheduledSequences.getVoyagePlanGroupValue(p.getFirst());
+				p.getFirst().getSequence();
+				IPortSlot load = null;
+				IPortSlot discharge = null;
+				for (IDetailsSequenceElement e : p.getFirst().getSequence()) {
+					if (e instanceof PortDetails) {
+						IPortSlot ps = ((PortDetails) e).getOptions().getPortSlot();
+						if (ps instanceof ILoadOption && load == null) {
+							load = ps;
+						} else if (ps instanceof IDischargeOption && discharge == null) {
+							discharge = ps;
+						}
+					}
+				}
+				if (load != null && discharge != null) {
+//					System.out.println(String.format("%s,%s,%s", load.getId(), discharge.getId(), scheduledSequences.getVoyagePlanGroupValue(p.getFirst())/1000));
+				}
 			}
+			long sumB = 0;
+//			System.out.println("sumPNL[0]:"+sumPNL);
 			for (final ISequenceElement element : fullSequences.getUnusedElements()) {
 				final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
 				assert portSlot != null;
 				sumPNL += scheduledSequences.getUnusedSlotGroupValue(portSlot);
+				sumB += scheduledSequences.getUnusedSlotGroupValue(portSlot);
+			}
+//			System.out.println("sumPNL[1]:"+sumPNL);
+			if (sumB != 0) {
+				int z = 0;
 			}
 		}
 		return sumPNL;
