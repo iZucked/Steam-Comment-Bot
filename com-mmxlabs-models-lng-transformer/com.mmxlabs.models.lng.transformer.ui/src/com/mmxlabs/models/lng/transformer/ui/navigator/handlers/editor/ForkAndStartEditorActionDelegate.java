@@ -5,18 +5,9 @@
 package com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.dialogs.IInputValidator;
-import org.eclipse.jface.dialogs.InputDialog;
-import org.eclipse.jface.window.Window;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.PartInitException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.jobs.EJobState;
@@ -25,18 +16,14 @@ import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
-import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
-import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
+import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
 public class ForkAndStartEditorActionDelegate extends StartOptimisationEditorActionDelegate {
-
-	private static final Logger log = LoggerFactory.getLogger(ForkAndStartEditorActionDelegate.class);
 
 	public ForkAndStartEditorActionDelegate() {
 		super(true);
@@ -46,52 +33,16 @@ public class ForkAndStartEditorActionDelegate extends StartOptimisationEditorAct
 	protected void doRun(final IEclipseJobManager jobManager, final ScenarioInstance instance, final String parameterMode, final boolean promptForOptimiserSettings, final boolean optimising,
 			final String k) {
 
-		final IScenarioService scenarioService = instance.getScenarioService();
-
-		try {
-			final Set<String> existingNames = new HashSet<String>();
-			for (final Container c : instance.getElements()) {
-				if (c instanceof Folder) {
-					existingNames.add(((Folder) c).getName());
-				} else if (c instanceof ScenarioInstance) {
-					existingNames.add(((ScenarioInstance) c).getName());
+		if (instance != null) {
+			try {
+				ScenarioInstance fork = ScenarioServiceModelUtils.createAndOpenFork(instance, true);
+				if (fork != null) {
+					OptimisationHelper.evaluateScenarioInstance(jobManager, fork, parameterMode, promptForOptimiserSettings, optimising, k);
 				}
+			} catch (final IOException e) {
+				throw new RuntimeException("Unable to fork scenario", e);
 			}
-
-			final String namePrefix = "O~" + instance.getName();
-			String newName = namePrefix;
-			int counter = 1;
-			while (existingNames.contains(newName)) {
-				newName = namePrefix + " (" + counter++ + ")";
-			}
-
-			final String finalNewName = getNewName(instance.getName(), newName);
-			if (finalNewName != null) {
-				final ScenarioInstance fork = scenarioService.duplicate(instance, instance);
-
-				fork.setName(finalNewName);
-
-				try {
-					OpenScenarioUtils.openScenarioInstance(editor.getSite().getPage(), fork);
-				} catch (final PartInitException e) {
-					log.error(e.getMessage(), e);
-				}
-				OptimisationHelper.evaluateScenarioInstance(jobManager, fork, parameterMode, promptForOptimiserSettings, optimising, k);
-			}
-		} catch (final IOException e) {
-			throw new RuntimeException("Unable to fork scenario", e);
 		}
-	}
-
-	private String getNewName(final String oldName, final String suggestedName) {
-		// TODO: Hook in an element specific validator
-		final IInputValidator validator = null;
-		final InputDialog dialog = new InputDialog(Display.getDefault().getActiveShell(), "Fork " + oldName, "Choose new name for fork", suggestedName, validator);
-
-		if (dialog.open() == Window.OK) {
-			return dialog.getValue();
-		}
-		return null;
 	}
 
 	@Override
