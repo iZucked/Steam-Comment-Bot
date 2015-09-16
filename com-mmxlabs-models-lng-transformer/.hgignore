@@ -8,6 +8,5 @@ syntax: regexp
 syntax: regexp
 ^.*/target$
 
-.project
 syntax: glob
 *.atxa
