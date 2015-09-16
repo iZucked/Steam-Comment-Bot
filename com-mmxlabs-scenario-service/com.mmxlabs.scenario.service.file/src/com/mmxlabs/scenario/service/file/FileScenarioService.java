@@ -483,13 +483,12 @@ public class FileScenarioService extends AbstractScenarioService {
 		boolean attemptBackup = true;
 		boolean mainFileExists = false;
 		boolean backupFileExists = false;
+		resource = resourceSet.createResource(storeURI);
 		if (storeURI.isFile() && !new File(storeURI.toFileString()).exists()) {
-			resource = null;
 			mainFileExists = false;
 		} else {
 			// Assume it exists
 			mainFileExists = true;
-			resource = resourceSet.createResource(storeURI);
 		}
 		boolean resourceExisted = false;
 		URI backupURI = URI.createURI(storeURI.toString() + ".backup");
@@ -516,6 +515,7 @@ public class FileScenarioService extends AbstractScenarioService {
 			try {
 				resource.load(options);
 				resourceExisted = true;
+				log.warn("Scenario service model restored from backup.");
 			} catch (final IOException ex2) {
 				if (mainFileExists && backupFileExists) {
 					// FIXME: We can also get here on a clean workspace start up where the models have not yet been created.
@@ -531,7 +531,6 @@ public class FileScenarioService extends AbstractScenarioService {
 				// Restore original URI for saves later on
 				resource.setURI(storeURI);
 			}
-			log.warn("Scenario service model restored from backup.");
 		}
 
 		if (resource.getContents().isEmpty()) {
