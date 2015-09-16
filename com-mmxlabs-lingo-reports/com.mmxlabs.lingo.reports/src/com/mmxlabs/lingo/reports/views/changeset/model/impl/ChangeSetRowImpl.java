@@ -32,8 +32,8 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getLhsName <em>Lhs Name</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getRhsName <em>Rhs Name</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getLhsVesselName <em>Lhs Vessel Name</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getRhsVesselName <em>Rhs Vessel Name</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getOriginalVesselName <em>Original Vessel Name</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getNewVesselName <em>New Vessel Name</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getLhsWiringLink <em>Lhs Wiring Link</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getRhsWiringLink <em>Rhs Wiring Link</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.impl.ChangeSetRowImpl#getLoadSlot <em>Load Slot</em>}</li>
@@ -94,44 +94,44 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	protected String rhsName = RHS_NAME_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getLhsVesselName() <em>Lhs Vessel Name</em>}' attribute.
+	 * The default value of the '{@link #getOriginalVesselName() <em>Original Vessel Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getLhsVesselName()
+	 * @see #getOriginalVesselName()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String LHS_VESSEL_NAME_EDEFAULT = null;
+	protected static final String ORIGINAL_VESSEL_NAME_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getLhsVesselName() <em>Lhs Vessel Name</em>}' attribute.
+	 * The cached value of the '{@link #getOriginalVesselName() <em>Original Vessel Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getLhsVesselName()
+	 * @see #getOriginalVesselName()
 	 * @generated
 	 * @ordered
 	 */
-	protected String lhsVesselName = LHS_VESSEL_NAME_EDEFAULT;
+	protected String originalVesselName = ORIGINAL_VESSEL_NAME_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getRhsVesselName() <em>Rhs Vessel Name</em>}' attribute.
+	 * The default value of the '{@link #getNewVesselName() <em>New Vessel Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getRhsVesselName()
+	 * @see #getNewVesselName()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String RHS_VESSEL_NAME_EDEFAULT = null;
+	protected static final String NEW_VESSEL_NAME_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getRhsVesselName() <em>Rhs Vessel Name</em>}' attribute.
+	 * The cached value of the '{@link #getNewVesselName() <em>New Vessel Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getRhsVesselName()
+	 * @see #getNewVesselName()
 	 * @generated
 	 * @ordered
 	 */
-	protected String rhsVesselName = RHS_VESSEL_NAME_EDEFAULT;
+	protected String newVesselName = NEW_VESSEL_NAME_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getLhsWiringLink() <em>Lhs Wiring Link</em>}' reference.
@@ -359,8 +359,8 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String getLhsVesselName() {
-		return lhsVesselName;
+	public String getOriginalVesselName() {
+		return originalVesselName;
 	}
 
 	/**
@@ -368,11 +368,11 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setLhsVesselName(String newLhsVesselName) {
-		String oldLhsVesselName = lhsVesselName;
-		lhsVesselName = newLhsVesselName;
+	public void setOriginalVesselName(String newOriginalVesselName) {
+		String oldOriginalVesselName = originalVesselName;
+		originalVesselName = newOriginalVesselName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW__LHS_VESSEL_NAME, oldLhsVesselName, lhsVesselName));
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_VESSEL_NAME, oldOriginalVesselName, originalVesselName));
 	}
 
 	/**
@@ -380,8 +380,8 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String getRhsVesselName() {
-		return rhsVesselName;
+	public String getNewVesselName() {
+		return newVesselName;
 	}
 
 	/**
@@ -389,11 +389,11 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setRhsVesselName(String newRhsVesselName) {
-		String oldRhsVesselName = rhsVesselName;
-		rhsVesselName = newRhsVesselName;
+	public void setNewVesselName(String newNewVesselName) {
+		String oldNewVesselName = newVesselName;
+		newVesselName = newNewVesselName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW__RHS_VESSEL_NAME, oldRhsVesselName, rhsVesselName));
+			eNotify(new ENotificationImpl(this, Notification.SET, ChangesetPackage.CHANGE_SET_ROW__NEW_VESSEL_NAME, oldNewVesselName, newVesselName));
 	}
 
 	/**
@@ -986,10 +986,10 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 				return getLhsName();
 			case ChangesetPackage.CHANGE_SET_ROW__RHS_NAME:
 				return getRhsName();
-			case ChangesetPackage.CHANGE_SET_ROW__LHS_VESSEL_NAME:
-				return getLhsVesselName();
-			case ChangesetPackage.CHANGE_SET_ROW__RHS_VESSEL_NAME:
-				return getRhsVesselName();
+			case ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_VESSEL_NAME:
+				return getOriginalVesselName();
+			case ChangesetPackage.CHANGE_SET_ROW__NEW_VESSEL_NAME:
+				return getNewVesselName();
 			case ChangesetPackage.CHANGE_SET_ROW__LHS_WIRING_LINK:
 				if (resolve) return getLhsWiringLink();
 				return basicGetLhsWiringLink();
@@ -1048,11 +1048,11 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 			case ChangesetPackage.CHANGE_SET_ROW__RHS_NAME:
 				setRhsName((String)newValue);
 				return;
-			case ChangesetPackage.CHANGE_SET_ROW__LHS_VESSEL_NAME:
-				setLhsVesselName((String)newValue);
+			case ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_VESSEL_NAME:
+				setOriginalVesselName((String)newValue);
 				return;
-			case ChangesetPackage.CHANGE_SET_ROW__RHS_VESSEL_NAME:
-				setRhsVesselName((String)newValue);
+			case ChangesetPackage.CHANGE_SET_ROW__NEW_VESSEL_NAME:
+				setNewVesselName((String)newValue);
 				return;
 			case ChangesetPackage.CHANGE_SET_ROW__LHS_WIRING_LINK:
 				setLhsWiringLink((ChangeSetRow)newValue);
@@ -1114,11 +1114,11 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 			case ChangesetPackage.CHANGE_SET_ROW__RHS_NAME:
 				setRhsName(RHS_NAME_EDEFAULT);
 				return;
-			case ChangesetPackage.CHANGE_SET_ROW__LHS_VESSEL_NAME:
-				setLhsVesselName(LHS_VESSEL_NAME_EDEFAULT);
+			case ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_VESSEL_NAME:
+				setOriginalVesselName(ORIGINAL_VESSEL_NAME_EDEFAULT);
 				return;
-			case ChangesetPackage.CHANGE_SET_ROW__RHS_VESSEL_NAME:
-				setRhsVesselName(RHS_VESSEL_NAME_EDEFAULT);
+			case ChangesetPackage.CHANGE_SET_ROW__NEW_VESSEL_NAME:
+				setNewVesselName(NEW_VESSEL_NAME_EDEFAULT);
 				return;
 			case ChangesetPackage.CHANGE_SET_ROW__LHS_WIRING_LINK:
 				setLhsWiringLink((ChangeSetRow)null);
@@ -1178,10 +1178,10 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 				return LHS_NAME_EDEFAULT == null ? lhsName != null : !LHS_NAME_EDEFAULT.equals(lhsName);
 			case ChangesetPackage.CHANGE_SET_ROW__RHS_NAME:
 				return RHS_NAME_EDEFAULT == null ? rhsName != null : !RHS_NAME_EDEFAULT.equals(rhsName);
-			case ChangesetPackage.CHANGE_SET_ROW__LHS_VESSEL_NAME:
-				return LHS_VESSEL_NAME_EDEFAULT == null ? lhsVesselName != null : !LHS_VESSEL_NAME_EDEFAULT.equals(lhsVesselName);
-			case ChangesetPackage.CHANGE_SET_ROW__RHS_VESSEL_NAME:
-				return RHS_VESSEL_NAME_EDEFAULT == null ? rhsVesselName != null : !RHS_VESSEL_NAME_EDEFAULT.equals(rhsVesselName);
+			case ChangesetPackage.CHANGE_SET_ROW__ORIGINAL_VESSEL_NAME:
+				return ORIGINAL_VESSEL_NAME_EDEFAULT == null ? originalVesselName != null : !ORIGINAL_VESSEL_NAME_EDEFAULT.equals(originalVesselName);
+			case ChangesetPackage.CHANGE_SET_ROW__NEW_VESSEL_NAME:
+				return NEW_VESSEL_NAME_EDEFAULT == null ? newVesselName != null : !NEW_VESSEL_NAME_EDEFAULT.equals(newVesselName);
 			case ChangesetPackage.CHANGE_SET_ROW__LHS_WIRING_LINK:
 				return lhsWiringLink != null;
 			case ChangesetPackage.CHANGE_SET_ROW__RHS_WIRING_LINK:
@@ -1228,10 +1228,10 @@ public class ChangeSetRowImpl extends MinimalEObjectImpl.Container implements Ch
 		result.append(lhsName);
 		result.append(", rhsName: ");
 		result.append(rhsName);
-		result.append(", lhsVesselName: ");
-		result.append(lhsVesselName);
-		result.append(", rhsVesselName: ");
-		result.append(rhsVesselName);
+		result.append(", originalVesselName: ");
+		result.append(originalVesselName);
+		result.append(", newVesselName: ");
+		result.append(newVesselName);
 		result.append(", wiringChange: ");
 		result.append(wiringChange);
 		result.append(", vesselChange: ");
