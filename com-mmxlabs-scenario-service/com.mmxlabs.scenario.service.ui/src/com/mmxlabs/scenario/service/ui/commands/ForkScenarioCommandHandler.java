@@ -5,31 +5,21 @@
 package com.mmxlabs.scenario.service.ui.commands;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.jface.dialogs.IInputValidator;
-import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.custom.BusyIndicator;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.scenario.service.IScenarioService;
-import com.mmxlabs.scenario.service.model.Container;
-import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
+import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
 
 /**
  * @author Simon Goodall
@@ -58,37 +48,8 @@ public class ForkScenarioCommandHandler extends AbstractHandler {
 
 						if (element instanceof ScenarioInstance) {
 							final ScenarioInstance instance = (ScenarioInstance) element;
-
-							final IScenarioService scenarioService = instance.getScenarioService();
-
 							try {
-								final Set<String> existingNames = new HashSet<String>();
-								for (final Container c : instance.getElements()) {
-									if (c instanceof Folder) {
-										existingNames.add(((Folder) c).getName());
-									} else if (c instanceof ScenarioInstance) {
-										existingNames.add(((ScenarioInstance) c).getName());
-									}
-								}
-
-								final String namePrefix = "~" + instance.getName();
-								String newName = namePrefix;
-								int counter = 1;
-								while (existingNames.contains(newName)) {
-									newName = namePrefix + " (" + counter++ + ")";
-								}
-
-								final String finalNewName = getNewName(instance.getName(), newName);
-								if (finalNewName != null) {
-									final ScenarioInstance fork = scenarioService.duplicate(instance, instance);
-									fork.setName(finalNewName);
-
-									try {
-										OpenScenarioUtils.openScenarioInstance(HandlerUtil.getActiveSite(event).getPage(), fork);
-									} catch (final PartInitException e) {
-										log.error(e.getMessage(), e);
-									}
-								}
+								ScenarioServiceModelUtils.createAndOpenFork(instance, false);
 							} catch (final IOException e) {
 								exceptions[0] = e;
 							}
@@ -103,16 +64,6 @@ public class ForkScenarioCommandHandler extends AbstractHandler {
 		}
 
 		return null;
-	}
 
-	private String getNewName(final String oldName, final String suggestedName) {
-		// TODO: Hook in an element specific validator
-		final IInputValidator validator = null;
-		final InputDialog dialog = new InputDialog(Display.getDefault().getActiveShell(), "Fork " + oldName, "Choose new name for fork", suggestedName, validator);
-
-		if (dialog.open() == Window.OK) {
-			return dialog.getValue();
-		}
-		return null;
 	}
 }
