@@ -1,6 +1,5 @@
 
 ~$
 .swp$
-\.project$
 syntax: regexp
 .*/target$
