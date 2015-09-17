@@ -16,6 +16,7 @@ import java.util.Set;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
@@ -212,7 +213,8 @@ public class PeriodTransformer {
 		updateVesselAvailabilities(periodRecord, cargoModel, spotMarketsModel, startConditionMap, endConditionMap, eventDependencies.getFirst(), eventDependencies.getSecond());
 		checkIfRemovedSlotsAreStillNeeded(seenSlots, slotsToRemove, cargoesToRemove, newVesselAvailabilities, startConditionMap, endConditionMap, slotAllocationMap);
 		removeExcludedSlotsAndCargoes(internalDomain, mapping, slotsToRemove, cargoesToRemove);
-
+		// Some slots are brought in from outside the period, make sure they are locked
+		lockOpenSlots(output.getPortfolioModel().getCargoModel(), periodRecord);
 		// TEMP HACK UNTIL MULTIPLE AVAILABILITES PROPERLY IN PLACE AND filterSlotsAndCargoes can properly handle this.
 		for (final VesselAvailability newVA : newVesselAvailabilities) {
 			for (final VesselAvailability vesselAvailability : wholeScenario.getPortfolioModel().getCargoModel().getVesselAvailabilities()) {
@@ -238,6 +240,17 @@ public class PeriodTransformer {
 		output.getPortfolioModel().getScheduleModel().setSchedule(null);
 
 		return output;
+	}
+
+	private void lockOpenSlots(CargoModel cargoModel, PeriodRecord periodRecord) {
+		for (List<Slot> slotList : new List[] {cargoModel.getLoadSlots(), cargoModel.getDischargeSlots()}) {
+			for (Slot slot : slotList) {
+				if (inclusionChecker.getObjectInclusionType(slot, periodRecord).getFirst() == InclusionType.Out) {
+					slot.setLocked(true);
+				}
+			}
+			
+		}
 	}
 
 	private void updateSlotsToRemoveWithDependencies(final Map<Slot, SlotAllocation> slotAllocationMap, final Set<Slot> slotsToRemove, final Set<Cargo> cargoesToRemove, final Set<Cargo> cargoesToKeep) {
@@ -344,6 +357,7 @@ public class PeriodTransformer {
 			seenSlots.addAll(cargo.getSlots());
 		}
 
+		// open slots
 		for (final LoadSlot slot : cargoModel.getLoadSlots()) {
 			if (seenSlots.contains(slot)) {
 				continue;
