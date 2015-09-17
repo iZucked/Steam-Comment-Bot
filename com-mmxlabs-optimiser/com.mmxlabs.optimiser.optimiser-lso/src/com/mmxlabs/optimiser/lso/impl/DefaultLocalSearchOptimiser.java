@@ -17,7 +17,8 @@ import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
-import com.mmxlabs.optimiser.core.constraints.IReducingContraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IInitialSequencesConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IReducingConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
@@ -72,25 +73,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		updateSequences(currentRawSequences, potentialRawSequences, currentRawSequences.getResources());
 
 		// Evaluate initial sequences
-		{
-			// Apply sequence manipulators
-			final IModifiableSequences fullSequences = new ModifiableSequences(currentRawSequences);
-			getSequenceManipulator().manipulate(fullSequences);
-
-			// Prime IReducingConstraintCheckers with initial state
-			for (final IReducingContraintChecker checker : getReducingConstraintCheckers()) {
-				checker.sequencesAccepted(fullSequences);
-			}
-
-			final IEvaluationState evaluationState = new EvaluationState();
-			for (final IEvaluationProcess evaluationProcess : getEvaluationProcesses()) {
-				evaluationProcess.evaluate(fullSequences, evaluationState);
-			}
-
-			// Prime fitness cores with initial sequences
-			getFitnessEvaluator().setOptimisationData(data);
-			getFitnessEvaluator().setInitialSequences(fullSequences, evaluationState);
-		}
+		evaluateInitialSequences(currentRawSequences);
 
 		// Set initial sequences
 		getMoveGenerator().setSequences(potentialRawSequences);
@@ -202,7 +185,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 			if (getFitnessEvaluator().evaluateSequences(potentialRawSequences, potentialFullSequences, evaluationState, move.getAffectedResources())) {
 
 				// Update IReducingConstraintCheckers with new state
-				for (final IReducingContraintChecker checker : getReducingConstraintCheckers()) {
+				for (final IReducingConstraintChecker checker : getReducingConstraintCheckers()) {
 					checker.sequencesAccepted(potentialFullSequences);
 				}
 				if (loggingDataStore != null) {
@@ -241,6 +224,31 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		
 		updateProgressLogs();
 		return iterationsThisStep;
+	}
+
+	protected void evaluateInitialSequences(final ModifiableSequences currentRawSequences) {
+		// Apply sequence manipulators
+		final IModifiableSequences fullSequences = new ModifiableSequences(currentRawSequences);
+		getSequenceManipulator().manipulate(fullSequences);
+	
+		// Prime IReducingConstraintCheckers with initial state
+		for (final IReducingConstraintChecker checker : getReducingConstraintCheckers()) {
+			checker.sequencesAccepted(fullSequences);
+		}
+		
+		// Prime IInitialSequencesConstraintCheckers with initial state
+		for (final IInitialSequencesConstraintChecker checker : getInitialSequencesConstraintCheckers()) {
+			checker.sequencesAccepted(fullSequences);
+		}
+	
+		final IEvaluationState evaluationState = new EvaluationState();
+		for (final IEvaluationProcess evaluationProcess : getEvaluationProcesses()) {
+			evaluationProcess.evaluate(fullSequences, evaluationState);
+		}
+	
+		// Prime fitness cores with initial sequences
+		getFitnessEvaluator().setOptimisationData(data);
+		getFitnessEvaluator().setInitialSequences(fullSequences, evaluationState);
 	}
 
 	protected void initProgressLog() {

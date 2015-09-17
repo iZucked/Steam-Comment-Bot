@@ -12,7 +12,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
-import com.mmxlabs.optimiser.core.constraints.IReducingContraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IReducingConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
@@ -122,7 +122,7 @@ public class RestartingLocalSearchOptimiser extends DefaultLocalSearchOptimiser 
 			if (getFitnessEvaluator().evaluateSequences(potentialRawSequences, potentialFullSequences, evaluationState, move.getAffectedResources())) {
 
 				// Update IReducingConstraintCheckers with new state
-				for (final IReducingContraintChecker checker : getReducingConstraintCheckers()) {
+				for (final IReducingConstraintChecker checker : getReducingConstraintCheckers()) {
 					checker.sequencesAccepted(potentialFullSequences);
 				}
 				if (loggingDataStore != null) {

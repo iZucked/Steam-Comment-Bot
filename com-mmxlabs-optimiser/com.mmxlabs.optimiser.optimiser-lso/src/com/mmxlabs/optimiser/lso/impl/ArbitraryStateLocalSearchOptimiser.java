@@ -11,7 +11,7 @@ import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
-import com.mmxlabs.optimiser.core.constraints.IReducingContraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IReducingConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
@@ -30,25 +30,7 @@ public class ArbitraryStateLocalSearchOptimiser extends DefaultLocalSearchOptimi
 		updateSequences(currentRawSequences, potentialRawSequences, currentRawSequences.getResources());
 
 		// Evaluate initial sequences
-		{
-			// Apply sequence manipulators
-			final IModifiableSequences fullSequences = new ModifiableSequences(currentRawSequences);
-			getSequenceManipulator().manipulate(fullSequences);
-
-			// Prime IReducingConstraintCheckers with initial state
-			for (final IReducingContraintChecker checker : getReducingConstraintCheckers()) {
-				checker.sequencesAccepted(fullSequences);
-			}
-
-			final IEvaluationState evaluationState = new EvaluationState();
-			for (final IEvaluationProcess evaluationProcess : getEvaluationProcesses()) {
-				evaluationProcess.evaluate(fullSequences, evaluationState);
-			}
-
-			// Prime fitness cores with initial sequences
-			getFitnessEvaluator().setOptimisationData(data);
-			getFitnessEvaluator().setInitialSequences(fullSequences, evaluationState);
-		}
+		evaluateInitialSequences(currentRawSequences);
 
 		// Set initial sequences
 		getMoveGenerator().setSequences(potentialRawSequences);
