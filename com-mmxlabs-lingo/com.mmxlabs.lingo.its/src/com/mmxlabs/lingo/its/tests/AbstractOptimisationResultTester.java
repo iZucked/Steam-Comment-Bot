@@ -48,6 +48,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -172,44 +173,74 @@ public class AbstractOptimisationResultTester {
 	 */
 	public LNGScenarioRunner runScenario(@NonNull final URL url) throws Exception {
 
+		final LNGScenarioModel originalScenario = getScenarioModelFromURL(url);
+
+		return runScenario(originalScenario, url);
+	}
+
+	private LNGScenarioModel getScenarioModelFromURL(final URL url) throws IOException {
 		final URI uri = URI.createURI(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20"));
 
 		final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, getScenarioCipherProvider());
 
-		File f = null;
-		try {
-			f = MigrationHelper.migrateAndLoad(instance);
-
-			final LNGScenarioModel originalScenario = (LNGScenarioModel) instance.getInstance();
-
-			return runScenario(originalScenario, url);
-		} finally {
-			if (f != null && f.exists()) {
-				f.delete();
-			}
-		}
+		final LNGScenarioModel originalScenario = getScenarioModel(instance);
+		return originalScenario;
 	}
 
 	public LNGScenarioRunner evaluateScenario(@NonNull final URL url) throws Exception {
 
-		final URI uri = URI.createURI(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20"));
+		final LNGScenarioModel originalScenario = getScenarioModelFromURL(url);
+		
+		return evaluateScenario(originalScenario, url);
+	}
 
-		final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, getScenarioCipherProvider());
+	public LNGScenarioRunner evaluateScenario(@NonNull final URL url, OptimiserSettings optimiserSettings) throws Exception {
+		
+		final LNGScenarioModel originalScenario = getScenarioModelFromURL(url);
+		final LNGScenarioRunner originalScenarioRunner = createScenarioRunner(originalScenario, optimiserSettings);
 
+		return evaluateScenario(originalScenario, url, originalScenarioRunner);
+	}
+	
+	public LNGScenarioRunner evaluateScenario(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL) throws IOException, IncompleteScenarioException {
+		
+		// TODO: Does EcoreUtil.copy work -- do we need to do it here?
+		if (false) {
+			saveScenarioModel(originalScenario);
+		}
+		// Create scenario runner with optimisation params incase we want to run optimisation outside of the opt run method.
+		final LNGScenarioRunner originalScenarioRunner = createScenarioRunner(originalScenario);
+		return evaluateScenario(originalScenario, origURL, originalScenarioRunner);
+	}
+
+	public LNGScenarioRunner evaluateScenario(@NonNull final LNGScenarioModel originalScenario, @Nullable final URL origURL, @NonNull LNGScenarioRunner scenarioRunner) throws IOException, IncompleteScenarioException {
+		scenarioRunner.initAndEval(new TransformerExtensionTestModule(), 10000);
+	
+		return scenarioRunner;
+	}
+
+	private LNGScenarioModel getScenarioModel(final ScenarioInstance instance) throws IOException {
 		File f = null;
 		try {
 			f = MigrationHelper.migrateAndLoad(instance);
 
-			final LNGScenarioModel originalScenario = (LNGScenarioModel) instance.getInstance();
-
-			return evaluateScenario(originalScenario, url);
 		} finally {
 			if (f != null && f.exists()) {
 				f.delete();
 			}
 		}
+		assert f != null;
+		final LNGScenarioModel originalScenario = (LNGScenarioModel) instance.getInstance();
+		return originalScenario;
 	}
 
+	public LNGScenarioRunner runScenario(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL) throws IOException, IncompleteScenarioException {
+
+		final LNGScenarioRunner scenarioRunner = createScenarioRunner(originalScenario);
+		assert scenarioRunner != null;
+		return runScenario(originalScenario, origURL, scenarioRunner);
+	}
+	
 	/**
 	 * If run on two separate occasions the fitnesses generated need to be identical. This method tests this by being run twice. The first execution prints out a map that maps the name of the fitness
 	 * to the value to the console. This is copied and pasted into the method. The second execution will test that map against a the fitnesses that have been generated again.
