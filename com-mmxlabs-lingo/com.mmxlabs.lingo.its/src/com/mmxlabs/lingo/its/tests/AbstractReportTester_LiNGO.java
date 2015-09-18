@@ -30,7 +30,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  * Abstract class to run parameterised tests on report generation. Sub classes should create a method similar to the one below to run test cases. May need to also include the @RunWith annotation.
  * 
  * <pre>
- * @Parameters(name = "{0}")
+ * &#64;Parameters(name = "{0}")
  * 	public static Iterable<Object[]> generateTests() {
  * 		return Arrays.asList(new Object[][] {
  * 				{ "Test Prefix", "scenario path.lingo" }, //
@@ -44,7 +44,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 @RunWith(value = Parameterized.class)
 public abstract class AbstractReportTester_LiNGO extends AbstractOptimisationResultTester {
 
-	private static Map<Pair<String, String>, Triple<URL, ScenarioInstance, File>> cache = new HashMap<>();
+	private static Map<Pair<String, String>, Pair<URL, ScenarioInstance>> cache = new HashMap<>();
 
 	private final Pair<String, String> key;
 
@@ -56,30 +56,28 @@ public abstract class AbstractReportTester_LiNGO extends AbstractOptimisationRes
 			final URI uri = URI.createURI(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20"));
 			final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, getScenarioCipherProvider());
 			Assert.assertNotNull(instance);
-			final File f = MigrationHelper.migrateAndLoad(instance);
+
+			MigrationHelper.migrateAndLoad(instance);
+
 			Assert.assertNotNull(instance.getInstance());
-			cache.put(key, new Triple<>(url, instance, f));
+			cache.put(key, new Pair<>(url, instance));
 		}
 	}
 
 	@AfterClass
 	public static void clearCache() throws Exception {
 
-		final Iterator<Map.Entry<Pair<String, String>, Triple<URL, ScenarioInstance, File>>> itr = cache.entrySet().iterator();
+		final Iterator<Map.Entry<Pair<String, String>, Pair<URL, ScenarioInstance>>> itr = cache.entrySet().iterator();
 		while (itr.hasNext()) {
-			final Map.Entry<Pair<String, String>, Triple<URL, ScenarioInstance, File>> e = itr.next();
+			final Map.Entry<Pair<String, String>, Pair<URL, ScenarioInstance>> e = itr.next();
 			itr.remove();
-			final File f = e.getValue().getThird();
-			if (f != null && f.exists()) {
-				f.delete();
-			}
 		}
 	}
 
 	protected void testReports(final String reportID, final String shortName, final String extension) throws Exception {
 		Assert.assertTrue(cache.containsKey(key));
 
-		final Triple<URL, ScenarioInstance, File> triple = cache.get(key);
+		final Pair<URL, ScenarioInstance> triple = cache.get(key);
 		final URL url = triple.getFirst();
 		Assert.assertNotNull(url);
 
