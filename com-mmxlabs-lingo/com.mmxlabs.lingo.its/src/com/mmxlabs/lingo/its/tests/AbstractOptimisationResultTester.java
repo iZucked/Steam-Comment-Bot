@@ -250,15 +250,14 @@ public class AbstractOptimisationResultTester {
 	 * @throws MigrationException
 	 * @throws InterruptedException
 	 */
-	public LNGScenarioRunner runScenario(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL) throws IOException, IncompleteScenarioException {
+	public LNGScenarioRunner runScenario(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL, @NonNull LNGScenarioRunner scenarioRunner) throws IOException, IncompleteScenarioException {
 
 		if (false) {
 			saveScenarioModel(originalScenario);
 		}
 
-		final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(originalScenario, LNGScenarioRunner.createDefaultSettings(), LNGTransformer.HINT_OPTIMISE_LSO);
 		// Limit number of iterations to keep runtime down.
-		scenarioRunner.initAndEval(new TransformerExtensionTestModule(), 10000, false);
+		scenarioRunner.initAndEval(new TransformerExtensionTestModule(), 10000);
 
 		Schedule intialSchedule = scenarioRunner.getIntialSchedule();
 		Assert.assertNotNull(intialSchedule);
@@ -331,16 +330,12 @@ public class AbstractOptimisationResultTester {
 		return scenarioRunner;
 	}
 
-	public LNGScenarioRunner evaluateScenario(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL) throws IOException, IncompleteScenarioException {
+	private LNGScenarioRunner createScenarioRunner(final LNGScenarioModel originalScenario) {
+		return createScenarioRunner(originalScenario, LNGScenarioRunner.createDefaultSettings());
+	}
 
-		// TODO: Does EcoreUtil.copy work -- do we need to do it here?
-		if (false) {
-			saveScenarioModel(originalScenario);
-		}
-		// Create scenario runner with optimisation params incase we want to run optimisation outside of the opt run method.
-		final LNGScenarioRunner originalScenarioRunner = new LNGScenarioRunner(originalScenario, LNGScenarioRunner.createDefaultSettings(), LNGTransformer.HINT_OPTIMISE_LSO);
-		originalScenarioRunner.initAndEval(new TransformerExtensionTestModule(), 10000, false);
-
+	private LNGScenarioRunner createScenarioRunner(final LNGScenarioModel originalScenario, OptimiserSettings settings) {
+		final LNGScenarioRunner originalScenarioRunner = new LNGScenarioRunner(originalScenario, settings, LNGTransformer.HINT_OPTIMISE_LSO);
 		return originalScenarioRunner;
 	}
 
