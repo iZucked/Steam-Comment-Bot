@@ -624,7 +624,7 @@ public class LNGScenarioRunner {
 
 				while (!optimiser.isFinished()) {
 					optimiser.step(1);
-					if (monitor != null) {
+					if (monitor != null && optimiser != null) {
 						monitor.report(optimiser, optimiser.getNumberOfIterationsCompleted(), optimiser.getFitnessEvaluator().getCurrentFitness(), optimiser.getFitnessEvaluator().getBestFitness(),
 								optimiser.getCurrentSolution(), optimiser.getBestSolution());
 					}
