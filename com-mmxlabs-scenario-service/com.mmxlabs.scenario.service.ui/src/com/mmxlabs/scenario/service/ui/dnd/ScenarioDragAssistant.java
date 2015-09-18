@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -46,6 +47,7 @@ import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
+import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
 import com.mmxlabs.scenario.service.ui.commands.PasteScenarioCommandHandler;
 import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
 
@@ -244,28 +246,10 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 											try {
 												// Get basic name
 												String scenarioName = new File(filePath).getName();
-												if (scenarioName.toLowerCase().endsWith(".lingo")) {
-													scenarioName = scenarioName.replaceAll("(?i).lingo", "");
-												}
+												scenarioName = ScenarioServiceModelUtils.stripFileExtension(scenarioName);
 
-												// Avoid name clashes
-												final Set<String> existingNames = new HashSet<String>();
-												for (final Container c : container.getElements()) {
-													if (c instanceof Folder) {
-														existingNames.add(((Folder) c).getName());
-													} else if (c instanceof ScenarioInstance) {
-														existingNames.add(((ScenarioInstance) c).getName());
-													}
-												}
-
-												final String namePrefix = scenarioName;
-												String newName = namePrefix;
-												int counter = 1;
-												while (existingNames.contains(newName)) {
-													newName = namePrefix + " (" + counter++ + ")";
-												}
-
-												container.getScenarioService().duplicate(instance, container).setName(newName);
+												final Set<String> existingNames = ScenarioServiceModelUtils.getExistingNames(container);
+												ScenarioServiceModelUtils.copyScenario(instance, container, scenarioName, existingNames);
 											} catch (final IOException e) {
 												log.error(e.getMessage(), e);
 											}
@@ -291,11 +275,10 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 		return Status.CANCEL_STATUS;
 	}
 
-	private void copyScenario(final Container container, final ScenarioInstance scenario, final IProgressMonitor monitor) throws IOException {
+	private void copyScenario(@NonNull final Container container, @NonNull final ScenarioInstance scenario, @NonNull final IProgressMonitor monitor) throws IOException {
 		monitor.beginTask("Copying " + scenario.getName(), 10);
 		try {
-			final IScenarioService scenarioService = container.getScenarioService();
-			final ScenarioInstance instance = scenarioService.duplicate(scenario, container);
+			final ScenarioInstance instance = ScenarioServiceModelUtils.copyScenario(scenario, container, ScenarioServiceModelUtils.getExistingNames(container));
 
 			if (instance != null) {
 				for (final Container c : scenario.getElements()) {
@@ -315,28 +298,14 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 		}
 	}
 
-	private void copyFolder(final Container container, final Folder folder, final IProgressMonitor monitor) throws IOException {
+	private void copyFolder(@NonNull final Container container, @NonNull final Folder folder, @NonNull final IProgressMonitor monitor) throws IOException {
 
+//		move all of thing into ScenarioServiceModelUtisl
 		monitor.beginTask("Copying " + folder.getName(), 10 * folder.getElements().size());
 		try {
 			// Ensure name is unique in the destination container
 			String name = folder.getName();
-			boolean clean = false;
-			while (!clean) {
-				clean = true;
-				for (final Container c : container.getElements()) {
-					if (c.getName().equals(name)) {
-						clean = false;
-						name = "Copy of " + name;
-						break;
-					}
-				}
-			}
-
-			final Folder f = ScenarioServiceFactory.eINSTANCE.createFolder();
-			f.setName(name);
-			f.setMetadata(EcoreUtil.copy(folder.getMetadata()));
-			container.getElements().add(f);
+			final Folder f = ScenarioServiceModelUtils.copyFolder(folder, container, name, ScenarioServiceModelUtils.getExistingNames(container));
 
 			for (final Container c : folder.getElements()) {
 				if (monitor.isCanceled()) {

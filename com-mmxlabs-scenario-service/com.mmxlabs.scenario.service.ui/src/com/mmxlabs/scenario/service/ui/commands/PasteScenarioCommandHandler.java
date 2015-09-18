@@ -45,6 +45,7 @@ import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
+import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
 import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
 
 /**
@@ -99,14 +100,7 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 		final Object localData = clipboard.getContents(LocalTransfer.getInstance());
 		final IScenarioService service = container.getScenarioService();
 
-		final Set<String> existingNames = new HashSet<String>();
-		for (final Container c : container.getElements()) {
-			if (c instanceof Folder) {
-				existingNames.add(((Folder) c).getName());
-			} else if (c instanceof ScenarioInstance) {
-				existingNames.add(((ScenarioInstance) c).getName());
-			}
-		}
+		final Set<String> existingNames = ScenarioServiceModelUtils.getExistingNames(container);
 
 		if (localData instanceof Iterable) {
 			final Iterable<?> iterable = (Iterable<?>) localData;
@@ -131,20 +125,9 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 									monitor.subTask("Copying " + scenarioInstance.getName());
 									log.debug("Local paste " + scenarioInstance.getName());
 									try {
-										final ScenarioInstance duplicate = service.duplicate(scenarioInstance, container);
+										final ScenarioInstance duplicate = ScenarioServiceModelUtils.copyScenario(scenarioInstance, container, existingNames);
 										if (duplicate != null) {
-
-											final String namePrefix = "Copy of " + scenarioInstance.getName();
-											String newName = namePrefix;
-											int counter = 1;
-											while (existingNames.contains(newName)) {
-												newName = namePrefix + " (" + counter++ + ")";
-											}
-
-											duplicate.setName(newName);
-											existingNames.add(newName);
-										} else {
-//											log.error("Unable to paste scenario: " + scenarioInstance.getName(), new RuntimeException());
+											existingNames.add(duplicate.getName());
 										}
 									} catch (final Exception e) {
 										log.error("Unable to paste scenario: " + scenarioInstance.getName(), e);
@@ -254,33 +237,12 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 								final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromFile(f.getAbsolutePath(), scenarioCipherProvider);
 								if (instance != null) {
 									Container destinationContainer = scenarioContainerMap.get(f);
+									assert destinationContainer != null;
 
 									// Get basic name
-									String scenarioName = f.getName();
-									if (scenarioName.toLowerCase().toLowerCase().endsWith(".lingo")) {
-										// Guava 14+
-										// scenarioName = Files.getNameWithoutExtension(f);
-										scenarioName = scenarioName.replaceAll("(?i).lingo", "");
-									}
-
-									// Avoid name clashes
-									final Set<String> existingNames = new HashSet<String>();
-									for (final Container c : destinationContainer.getElements()) {
-										if (c instanceof Folder) {
-											existingNames.add(((Folder) c).getName());
-										} else if (c instanceof ScenarioInstance) {
-											existingNames.add(((ScenarioInstance) c).getName());
-										}
-									}
-
-									final String namePrefix = scenarioName;
-									String newName = namePrefix;
-									int counter = 1;
-									while (existingNames.contains(newName)) {
-										newName = namePrefix + " (" + counter++ + ")";
-									}
-
-									service.duplicate(instance, destinationContainer).setName(newName);
+									String scenarioName = ScenarioServiceModelUtils.stripFileExtension(f.getName());
+									final Set<String> existingNames = ScenarioServiceModelUtils.getExistingNames(destinationContainer);
+									ScenarioInstance duplicate = ScenarioServiceModelUtils.copyScenario(instance, destinationContainer, scenarioName, existingNames);
 								}
 								monitor.worked(1);
 

@@ -37,6 +37,7 @@ import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
 import com.mmxlabs.scenario.service.ui.editing.internal.ScenarioServiceDiffingEditorInput;
 
 public class DiffEditScenarioCommandHandler extends AbstractHandler {
@@ -86,21 +87,11 @@ public class DiffEditScenarioCommandHandler extends AbstractHandler {
 
 							try {
 
-								final Set<String> existingNames = new HashSet<String>();
-								for (final Container c : instance.getElements()) {
-									if (c instanceof Folder) {
-										existingNames.add(((Folder) c).getName());
-									} else if (c instanceof ScenarioInstance) {
-										existingNames.add(((ScenarioInstance) c).getName());
-									}
-								}
+								final Set<String> existingNames = ScenarioServiceModelUtils.getExistingNames(instance);
 
 								final String namePrefix = "[S] " + instance.getName();
-								String newName = namePrefix;
-								int counter = 1;
-								while (existingNames.contains(newName)) {
-									newName = namePrefix + " (" + counter++ + ")";
-								}
+								String newName = ScenarioServiceModelUtils.getNextName(namePrefix, existingNames);
+
 								final ScenarioInstance fork = scenarioService.duplicate(instance, instance);
 								fork.setName(newName);
 								fork.setHidden(true);
