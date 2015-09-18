@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.its.tests;
 
-import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -15,16 +14,17 @@ import org.eclipse.emf.common.util.URI;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.Triple;
-import com.mmxlabs.lingo.its.tests.category.QuickTest;
 import com.mmxlabs.models.migration.scenario.MigrationHelper;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
 
 /**
  * Abstract class to run parameterised tests on report generation. Sub classes should create a method similar to the one below to run test cases. May need to also include the @RunWith annotation.
@@ -54,13 +54,20 @@ public abstract class AbstractReportTester_LiNGO extends AbstractOptimisationRes
 		if (!cache.containsKey(key)) {
 			final URL url = getClass().getResource(scenarioPath);
 			final URI uri = URI.createURI(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20"));
-			final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, getScenarioCipherProvider());
-			Assert.assertNotNull(instance);
 
-			MigrationHelper.migrateAndLoad(instance);
+			final BundleContext bundleContext = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class).getBundleContext();
+			final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
+			try {
+				final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, bundleContext.getService(serviceReference));
+				Assert.assertNotNull(instance);
 
-			Assert.assertNotNull(instance.getInstance());
-			cache.put(key, new Pair<>(url, instance));
+				MigrationHelper.migrateAndLoad(instance);
+
+				Assert.assertNotNull(instance.getInstance());
+				cache.put(key, new Pair<>(url, instance));
+			} finally {
+				bundleContext.ungetService(serviceReference);
+			}
 		}
 	}
 

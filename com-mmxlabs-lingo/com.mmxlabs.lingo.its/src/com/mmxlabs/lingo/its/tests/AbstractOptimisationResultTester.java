@@ -144,19 +144,19 @@ public class AbstractOptimisationResultTester {
 		}
 	}
 
-	@Nullable
-	protected IScenarioCipherProvider getScenarioCipherProvider() {
-
-		final Bundle bundle = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class);
-		if (bundle != null) {
-			final BundleContext bundleContext = bundle.getBundleContext();
-			final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
-			if (serviceReference != null) {
-				return bundleContext.getService(serviceReference);
-			}
-		}
-		return null;
-	}
+//	@Nullable
+//	protected IScenarioCipherProvider getScenarioCipherProvider() {
+//
+//		final Bundle bundle = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class);
+//		if (bundle != null) {
+//			final BundleContext bundleContext = bundle.getBundleContext();
+//			final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
+//			if (serviceReference != null) {
+//				return bundleContext.getService(serviceReference);
+//			}
+//		}
+//		return null;
+//	}
 
 	public AbstractOptimisationResultTester() {
 		super();
@@ -180,11 +180,16 @@ public class AbstractOptimisationResultTester {
 
 	private LNGScenarioModel getScenarioModelFromURL(final URL url) throws IOException {
 		final URI uri = URI.createURI(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20"));
-
-		final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, getScenarioCipherProvider());
-
-		final LNGScenarioModel originalScenario = getScenarioModel(instance);
-		return originalScenario;
+		
+		final BundleContext bundleContext = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class).getBundleContext();
+		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
+		try {
+			final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, bundleContext.getService(serviceReference));
+			final LNGScenarioModel originalScenario = getScenarioModel(instance);
+			return originalScenario;
+		} finally {
+			bundleContext.ungetService(serviceReference);
+		}
 	}
 
 	public LNGScenarioRunner evaluateScenario(@NonNull final URL url) throws Exception {
@@ -432,9 +437,16 @@ public class AbstractOptimisationResultTester {
 	public void testReports(final URL scenarioURL, final String reportID, final String shortName, final String extension) throws Exception {
 
 		final URI uri = URI.createURI(FileLocator.toFileURL(scenarioURL).toString().replaceAll(" ", "%20"));
-		final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, getScenarioCipherProvider());
-		MigrationHelper.migrateAndLoad(instance);
-		testReports(instance, scenarioURL, reportID, shortName, extension);
+		
+		final BundleContext bundleContext = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class).getBundleContext();
+		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
+		try {
+			final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, bundleContext.getService(serviceReference));
+			MigrationHelper.migrateAndLoad(instance);
+			testReports(instance, scenarioURL, reportID, shortName, extension);
+		} finally {
+			bundleContext.ungetService(serviceReference);
+		}
 	}
 
 	public void testReports(final LNGScenarioModel model, final URL scenarioURL, final String reportID, final String shortName, final String extension) throws Exception {
