@@ -87,18 +87,19 @@ public class EventGroupingOverlapProcessor implements IDiffProcessor {
 				thisGrouping = (EventGrouping) event;
 			}
 			if (thisGrouping != null) {
-
 				final EList<Event> events = thisGrouping.getEvents();
-				final Event firstEvent = events.get(0);
-				final Event lastEvent = events.get(events.size() - 1);
+				if (!events.isEmpty()) {
+					final Event firstEvent = events.get(0);
+					final Event lastEvent = events.get(events.size() - 1);
 
-				final DateTime start = new DateTime(firstEvent.getStart());
+					final DateTime start = new DateTime(firstEvent.getStart());
 
-				final DateTime end = new DateTime(lastEvent.getEnd());
+					final DateTime end = new DateTime(lastEvent.getEnd());
 
-				final Interval interval = new Interval(start, end);
+					final Interval interval = new Interval(start, end);
 
-				bindEvent(referenceRow, referenceInterval, elementToRowMap, firstEvent, interval);
+					bindEvent(referenceRow, referenceInterval, elementToRowMap, firstEvent, interval);
+				}
 			}
 		}
 	}
@@ -114,7 +115,7 @@ public class EventGroupingOverlapProcessor implements IDiffProcessor {
 
 			if (ratio > .7) {
 				final UserGroup group = CycleGroupUtils.createOrReturnUserGroup(referenceRow.getTable(), referenceRow);
-//				CycleGroupUtils.setChangeType(group, ChangeType.DURATION);
+				// CycleGroupUtils.setChangeType(group, ChangeType.DURATION);
 				final Row r = elementToRowMap.get(visit);
 				if (r != null) {
 					CycleGroupUtils.addToOrMergeUserGroup(referenceRow.getTable(), r, group);
@@ -127,7 +128,7 @@ public class EventGroupingOverlapProcessor implements IDiffProcessor {
 
 				if (ratio2 > .7) {
 					final UserGroup group = CycleGroupUtils.createOrReturnUserGroup(referenceRow.getTable(), referenceRow);
-//					CycleGroupUtils.setChangeType(group, ChangeType.DURATION);
+					// CycleGroupUtils.setChangeType(group, ChangeType.DURATION);
 					final Row r = elementToRowMap.get(visit);
 					if (r != null) {
 						CycleGroupUtils.addToOrMergeUserGroup(referenceRow.getTable(), r, group);
