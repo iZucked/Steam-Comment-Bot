@@ -34,6 +34,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.BasicAttributeInlineEditor;
 import com.mmxlabs.models.ui.editors.util.CommandUtil;
+import com.mmxlabs.rcp.common.ViewerHelper;
 
 /**
  * Editor for port groups which displays as a ticklist (maybe with categories?)
@@ -143,8 +144,8 @@ public class PortGroupContentsEditor extends BasicAttributeInlineEditor {
 
 	@Override
 	protected void updateDisplay(Object value) {
-		viewer.setInput(portModel);
-		viewer.refresh();
+		ViewerHelper.setInput(viewer, true, portModel);
+//		viewer.refresh();
 	}
 
 	@Override
