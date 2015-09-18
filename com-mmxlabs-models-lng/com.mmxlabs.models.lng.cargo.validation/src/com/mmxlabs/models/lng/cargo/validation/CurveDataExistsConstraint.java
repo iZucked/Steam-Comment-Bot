@@ -187,8 +187,8 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 
 			// check entity tax rates
 			if (entity != null && !curveCovers(portLocalDate.toLocalDate(), taxFinder, entity.getTradingBook().getTaxRates(), ctx)) {
-				final String format = "[Entity|'%s'] No tax data for %s, the window start of slot '%s'.";
-				final String failureMessage = String.format(format, entity.getName(), sdf.print(utcDate), slot.getName());
+				final String format = "[Entity|'%s'] No tax data for %02d/%04d, the window start of slot '%s'.";
+				final String failureMessage = String.format(format, entity.getName(), utcDate.getMonthOfYear(), utcDate.getYear(), slot.getName());
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.WARNING);
 				dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__WINDOW_START);
 				dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__CONTRACT);
