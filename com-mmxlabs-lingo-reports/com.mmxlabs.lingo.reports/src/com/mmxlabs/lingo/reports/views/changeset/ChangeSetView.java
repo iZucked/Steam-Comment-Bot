@@ -1576,14 +1576,14 @@ public class ChangeSetView implements IAdaptable {
 	private void handleDiffToBaseToggle(@UIEventTopic(ChangeSetViewEventConstants.EVENT_TOGGLE_COMPARE_TO_BASE) final Object o) {
 		diffToBase = !diffToBase;
 		diagram.setDiffToBase(diffToBase);
-		viewer.refresh();
+		ViewerHelper.refresh(viewer, true);
 	}
 
 	@Inject
 	@Optional
 	private void handleShowStructuralChangesToggle(@UIEventTopic(ChangeSetViewEventConstants.EVENT_TOGGLE_FILTER_NON_STRUCTURAL_CHANGES) final Object o) {
 		showNonStructuralChanges = !showNonStructuralChanges;
-		viewer.refresh();
+		ViewerHelper.refresh(viewer, true);
 	}
 
 	@Inject
