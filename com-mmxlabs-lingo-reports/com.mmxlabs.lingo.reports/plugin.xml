@@ -271,14 +271,6 @@
             handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
             id="com.mmxlabs.lingo.reports.components.columns.schedule.totalcost">
       </ScheduleBasedColumn>
-      <ScheduleBasedColumn
-            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
-            id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_prevvessel">
-      </ScheduleBasedColumn>
-      <ScheduleBasedColumn
-            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
-            id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_prevwiring">
-      </ScheduleBasedColumn>
    </extension>
    <extension
          point="com.mmxlabs.lingo.reports.ScheduleBasedReportInitialState">
@@ -313,16 +305,10 @@
                id="com.mmxlabs.lingo.reports.components.columns.schedule.d-id">
          </InitialColumn>
          <InitialColumn
-               id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_prevwiring">
-         </InitialColumn>
-         <InitialColumn
                id="com.mmxlabs.lingo.reports.components.columns.schedule.type">
          </InitialColumn>
          <InitialColumn
                id="com.mmxlabs.lingo.reports.components.columns.schedule.vessel">
-         </InitialColumn>
-         <InitialColumn
-               id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_prevvessel">
          </InitialColumn>
          <InitialColumn
                id="com.mmxlabs.lingo.reports.components.columns.schedule.pnl_total">
