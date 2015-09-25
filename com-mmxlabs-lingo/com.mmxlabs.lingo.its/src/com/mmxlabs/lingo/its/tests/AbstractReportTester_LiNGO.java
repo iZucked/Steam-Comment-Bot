@@ -14,6 +14,7 @@ import org.eclipse.emf.common.util.URI;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.osgi.framework.BundleContext;
@@ -21,6 +22,7 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.lingo.its.tests.category.ReportTest;
 import com.mmxlabs.models.migration.scenario.MigrationHelper;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -95,36 +97,43 @@ public abstract class AbstractReportTester_LiNGO extends AbstractOptimisationRes
 	}
 
 	@Test
+	@Category(ReportTest.class)
 	public void testVerticalReport() throws Exception {
 		testReports(ReportTester.VERTICAL_REPORT_ID, ReportTester.VERTICAL_REPORT_SHORTNAME, "html");
 	}
 
 	@Test
+	@Category(ReportTest.class)
 	public void testScheduleSummary() throws Exception {
 		testReports(ReportTester.SCHEDULE_SUMMARY_ID, ReportTester.SCHEDULE_SUMMARY_SHORTNAME, "html");
 	}
 
 	@Test
+	@Category(ReportTest.class)
 	public void testPortRotations() throws Exception {
 		testReports(ReportTester.PORT_ROTATIONS_ID, ReportTester.PORT_ROTATIONS_SHORTNAME, "html");
 	}
 
 	@Test
+	@Category(ReportTest.class)
 	public void testLatenessReport() throws Exception {
 		testReports(ReportTester.LATENESS_REPORT_ID, ReportTester.LATENESS_REPORT_SHORTNAME, "html");
 	}
 
 	@Test
+	@Category(ReportTest.class)
 	public void testCapacityReport() throws Exception {
 		testReports(ReportTester.CAPACITY_REPORT_ID, ReportTester.CAPACITY_REPORT_SHORTNAME, "html");
 	}
 
 	@Test
+	@Category(ReportTest.class)
 	public void testVesselReport() throws Exception {
 		testReports(ReportTester.VESSEL_REPORT_ID, ReportTester.VESSEL_REPORT_SHORTNAME, "html");
 	}
 
 	@Test
+	@Category(ReportTest.class)
 	public void testCooldownReport() throws Exception {
 		testReports(ReportTester.COOLDOWN_REPORT_ID, ReportTester.COOLDOWN_REPORT_SHORTNAME, "html");
 	}
