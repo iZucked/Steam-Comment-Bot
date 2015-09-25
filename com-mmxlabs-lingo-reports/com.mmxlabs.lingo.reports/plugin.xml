@@ -693,6 +693,16 @@
             beforefragment="true"
             class="com.mmxlabs.lingo.reports.internal.FixActionSetsModelProcessor">
       </processor>
+      <processor
+            apply="always"
+            beforefragment="false"
+            class="com.mmxlabs.lingo.reports.views.changeset.ActionPlanModuleProcessor">
+      </processor>
+      <processor
+            apply="always"
+            beforefragment="false"
+            class="com.mmxlabs.lingo.reports.views.changeset.CompareModuleProcessor">
+      </processor>
    </extension>
 
 </plugin>
