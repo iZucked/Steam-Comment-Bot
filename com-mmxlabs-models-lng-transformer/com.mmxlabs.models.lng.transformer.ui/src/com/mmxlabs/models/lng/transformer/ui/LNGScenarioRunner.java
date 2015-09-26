@@ -283,7 +283,7 @@ public class LNGScenarioRunner {
 			optimiserScenario = t.transform(originalScenario, optimiserSettings, periodMapping);
 
 			// DEBUGGING - store sub scenario as a "fork"
-			if (true && scenarioInstance != null) {
+			if (false && scenarioInstance != null) {
 				try {
 					IScenarioService scenarioService = scenarioInstance.getScenarioService();
 					ScenarioInstance dup = scenarioService.insert(scenarioInstance, EcoreUtil.copy(optimiserScenario));
