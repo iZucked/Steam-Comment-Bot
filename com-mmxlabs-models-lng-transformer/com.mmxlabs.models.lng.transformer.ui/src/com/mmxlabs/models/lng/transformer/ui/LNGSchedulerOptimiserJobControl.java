@@ -86,28 +86,6 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 		// }
 	}
 
-	// /*
-	// * (non-Javadoc)
-	// *
-	// * @see com.mmxlabs.jobcontroller.core.AbstractManagedJob#step()
-	// */
-	// @Override
-	// protected boolean step() {
-	// if (jobDescriptor.isOptimising() == false) {
-	// return false; // if we are not optimising, finish.
-	// }
-	// scenarioRunner.step(REPORT_PERCENTAGE);
-	// currentProgress += REPORT_PERCENTAGE;
-	//
-	// super.setProgress(currentProgress);
-	// if (scenarioRunner.isFinished()) {
-	// super.setProgress(100);
-	// return false;
-	// } else {
-	// return true;
-	// }
-	// }
-
 	/*
 	 * (non-Javadoc)
 	 * 

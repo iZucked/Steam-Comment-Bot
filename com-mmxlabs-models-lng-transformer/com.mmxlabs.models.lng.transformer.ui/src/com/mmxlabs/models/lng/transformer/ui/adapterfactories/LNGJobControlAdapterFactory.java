@@ -4,11 +4,15 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.adapterfactories;
 
+import java.io.IOException;
+
 import org.eclipse.core.runtime.IAdapterFactory;
 
 import com.mmxlabs.jobmanager.jobs.IJobControl;
+import com.mmxlabs.models.lng.transformer.ui.LNGRunAllSimilarityJobDescriptor;
 import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerEvaluationJobControl;
 import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerJobDescriptor;
+import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerManyJobsControl;
 import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerOptimiserJobControl;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 
@@ -23,7 +27,18 @@ public class LNGJobControlAdapterFactory implements IAdapterFactory {
 	@Override
 	public Object getAdapter(final Object adaptableObject, @SuppressWarnings("rawtypes") final Class adapterType) {
 
-		if (adaptableObject instanceof LNGSchedulerJobDescriptor) {
+		if (adaptableObject instanceof LNGRunAllSimilarityJobDescriptor) {
+
+			final LNGRunAllSimilarityJobDescriptor descriptor = (LNGRunAllSimilarityJobDescriptor) adaptableObject;
+			if (descriptor.isOptimising()) {
+				try {
+//					return new LNGSchedulerRunAllSimilarityJobControl(descriptor);
+					return new LNGSchedulerManyJobsControl(descriptor);
+				} catch (final IOException e) {
+					throw new RuntimeException(e);
+				}
+			}
+		} else if (adaptableObject instanceof LNGSchedulerJobDescriptor) {
 
 			final LNGSchedulerJobDescriptor descriptor = (LNGSchedulerJobDescriptor) adaptableObject;
 			if (descriptor.isOptimising()) {

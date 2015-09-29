@@ -212,6 +212,13 @@
                   type="org.eclipse.core.runtime.IStatus">
             </adapter>
          </factory>
+         <factory
+               adaptableType="com.mmxlabs.models.lng.transformer.ui.LNGRunAllSimilarityJobDescriptor"
+               class="com.mmxlabs.models.lng.transformer.ui.adapterfactories.LNGJobControlAdapterFactory">
+            <adapter
+                  type="com.mmxlabs.jobmanager.jobs.IJobControl">
+            </adapter>
+         </factory>
       </extension>
    
       <extension
