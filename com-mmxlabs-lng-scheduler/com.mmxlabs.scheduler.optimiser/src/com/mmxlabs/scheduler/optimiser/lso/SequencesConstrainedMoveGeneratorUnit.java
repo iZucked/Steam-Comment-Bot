@@ -7,6 +7,8 @@ package com.mmxlabs.scheduler.optimiser.lso;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
@@ -85,7 +87,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 	NullMove nullMoveC = new NullMoveC();
 	NullMove nullMoveD = new NullMoveD();
 
-	public SequencesConstrainedMoveGeneratorUnit(final ConstrainedMoveGenerator owner) {
+	public SequencesConstrainedMoveGeneratorUnit(@NonNull final ConstrainedMoveGenerator owner) {
 		super();
 		this.owner = owner;
 
