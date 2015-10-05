@@ -22,14 +22,4 @@ public final class NullSequencesManipulator implements ISequencesManipulator {
 	public void manipulate(@NonNull final IModifiableSequences sequence) {
 		// Do nothing
 	}
-
-	@Override
-	public void dispose() {
-		// Do nothing
-	}
-
-	@Override
-	public void init(@NonNull final IOptimisationData data) {
-		// Do nothing
-	}
 }

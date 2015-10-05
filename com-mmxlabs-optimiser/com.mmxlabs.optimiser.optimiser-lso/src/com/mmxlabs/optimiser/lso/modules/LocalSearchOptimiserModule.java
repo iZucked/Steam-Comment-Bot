@@ -90,7 +90,6 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 			final List<IEvaluationProcess> evaluationProcesses, final LocalSearchOptimiser lso) {
 		injector.injectMembers(lso);
 		lso.setNumberOfIterations(numberOfIterations);
-		manipulator.init(context.getOptimisationData());
 
 		lso.setSequenceManipulator(manipulator);
 
