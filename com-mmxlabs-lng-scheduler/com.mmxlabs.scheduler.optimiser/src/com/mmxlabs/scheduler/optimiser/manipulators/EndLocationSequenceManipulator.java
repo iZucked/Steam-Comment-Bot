@@ -97,7 +97,7 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 	@Inject
 	private IVesselProvider vesselProvider;
 
-	@Inject(optional=true)
+	@Inject(optional = true)
 	private IGeneratedCharterOutEvaluator charterOutEvaluator;
 
 	@Inject
@@ -109,7 +109,7 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 
 	/**
 	 */
-	@Override
+	@Inject
 	public void init(final IOptimisationData data) {
 
 		for (final IResource resource : data.getResources()) {
@@ -235,6 +235,7 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 
 	/**
 	 * Return to the closest port to the last in the user defined set of ports
+	 * 
 	 * @param resource
 	 * @param sequence
 	 */
@@ -242,16 +243,17 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 		final IStartEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
 		returnToClosestInSet(resource, sequence, endRequirement.getLocations());
 	}
-	
+
 	/**
 	 * Return to the closest charter out port to the last in the port in the sequence
+	 * 
 	 * @param resource
 	 * @param sequence
 	 */
 	private final void returnToClosestCharterOutPort(final IResource resource, final IModifiableSequence sequence) {
 		returnToClosestInSet(resource, sequence, getCharterMarketPortsForResource(resource));
 	}
-	
+
 	/**
 	 * Swap the dummy element in for the given sequence, and set its location to the given port.
 	 * 
@@ -370,11 +372,6 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 			return ruleMap.get(resource);
 		}
 		return EndLocationRule.NONE;
-	}
-
-	@Override
-	public void dispose() {
-		ruleMap.clear();
 	}
 
 	public IStartEndRequirementProvider getStartEndRequirementProvider() {
