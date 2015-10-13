@@ -40,4 +40,7 @@ public interface IAdditionalAttributeProvider {
 
 	@NonNull
 	String getTopLeftCellText();
+
+	@Nullable
+	String[] getAdditionalPreRows();
 }
