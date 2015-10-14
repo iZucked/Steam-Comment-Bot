@@ -71,8 +71,6 @@ import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scenario.service.util.MMXAdaptersAwareCommandStack;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
-import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.DirectRandomSequenceScheduler;
 
 /**
  * @author Simon Goodall
@@ -458,12 +456,9 @@ public class LNGSchedulerJobUtils {
 		// Run through the sequences manipulator of things such as start/end port replacement
 
 		final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
-		manipulator.init(data);
+
 		// this will set the return elements to the right places, and remove the start elements.
 		manipulator.manipulate(sequences);
-
-		// run a scheduler on the sequences - there is no SchedulerFitnessEvaluator to guide it!
-		final ISequenceScheduler scheduler = injector.getInstance(DirectRandomSequenceScheduler.class);
 
 		final EvaluationState state = new EvaluationState();
 		// The output data structured, a solution with all the output data as annotations
