@@ -162,7 +162,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 				text += pe != null ? pe : "";
 				textClient.setText(text);
 				textClient.update();
-				// ec.setText(baseTitle + ":   " + text);
+				// ec.setText(baseTitle + ": " + text);
 			}
 		};
 
@@ -178,7 +178,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 					final int wsize = (Integer) mmxEo.eGetWithDefault(WindowSize);
 					final String text = formatDate(d, time) + " - " + wsize + " hours";
 					textClient.setText(text);
-					// ec.setText(baseTitle + ":   " + text);
+					// ec.setText(baseTitle + ": " + text);
 				}
 			}
 		};
@@ -209,7 +209,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 
 					// FIXME: Hack pending proper APi to manipulate labels
 					if (feature == CargoPackage.Literals.SLOT__MIN_QUANTITY) {
-						Label label = editor.getLabel();
+						final Label label = editor.getLabel();
 						if (label != null) {
 							label.setText("Volume");
 						}
@@ -261,10 +261,11 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		esPricing.init(eo);
 		esWindow.init(eo);
 		esTerms.init(eo);
+		esTerms.init(eo);
 	}
 
 	@Override
-	public void createControls(IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final EMFDataBindingContext dbc) {
+	public void createControls(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final EMFDataBindingContext dbc) {
 
 		toolkit.adapt(this);
 
@@ -311,15 +312,15 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 			missedFeaturesList.remove(f);
 		}
 
-		makeExpandable(dialogContext, root, object, dbc, esPricing, pricingFeatures, pricingTitleFeatures, false);
+		makeExpandable(dialogContext, root, object, dbc, esPricing, pricingFeatures, pricingTitleFeatures, true);
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(esPricing.ec, "com.mmxlabs.lingo.doc.DataModel_lng_cargo_Slot_Pricing");
 
 		createSpacer();
-		makeExpandable(dialogContext, root, object, dbc, esWindow, windowFeatures, windowTitleFeatures, false);
+		makeExpandable(dialogContext, root, object, dbc, esWindow, windowFeatures, windowTitleFeatures, true);
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(esWindow.ec, "com.mmxlabs.lingo.doc.DataModel_lng_cargo_Slot_Window");
 
 		createSpacer();
-		makeExpandable(dialogContext, root, object, dbc, esTerms, isLoad ? loadTermsFeatures : dischargeTermsFeatures, null, false);
+		makeExpandable(dialogContext, root, object, dbc, esTerms, isLoad ? loadTermsFeatures : dischargeTermsFeatures, null, true);
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(esTerms.ec, "com.mmxlabs.lingo.doc.DataModel_lng_cargo_Slot_Terms");
 
 		if (!missedFeaturesList.isEmpty()) {
@@ -336,7 +337,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 			// System.out.println(eStructuralFeature);
 			// }
 			// }
-			makeExpandable(dialogContext, root, object, dbc, esOther, missedFeatures, null, false);
+			makeExpandable(dialogContext, root, object, dbc, esOther, missedFeatures, null, true);
 		}
 
 		for (final EStructuralFeature[] fs : noteFeatures) {
@@ -344,7 +345,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		}
 	}
 
-	private void makeExpandable(IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final EMFDataBindingContext dbc, final ExpandableSet expandable,
+	private void makeExpandable(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final EMFDataBindingContext dbc, final ExpandableSet expandable,
 			final List<EStructuralFeature[]> features, final Set<EStructuralFeature> titleFeatures, final boolean expanded) {
 		expandable.setFeatures(features, titleFeatures);
 		expandable.create(dialogContext, contentComposite, root, object, feature2Editor, dbc, layoutProvider, toolkit);
@@ -394,7 +395,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		return fs;
 	}
 
-	private String formatDate(LocalDate localDate, int hourOfDay) {
+	private String formatDate(final LocalDate localDate, final int hourOfDay) {
 
 		return String.format("%02d %s %04d %02d:00", localDate.getDayOfMonth(), localDate.monthOfYear().getAsShortText(), localDate.getYear(), hourOfDay);
 	}
