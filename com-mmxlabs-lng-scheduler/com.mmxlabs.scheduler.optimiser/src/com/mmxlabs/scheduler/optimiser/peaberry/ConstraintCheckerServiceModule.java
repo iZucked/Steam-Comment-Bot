@@ -9,6 +9,7 @@ import org.ops4j.peaberry.util.TypeLiterals;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
+import com.mmxlabs.optimiser.common.constraints.LockedUnusedElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
@@ -69,9 +70,12 @@ public class ConstraintCheckerServiceModule extends AbstractModule {
 
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(DifferentSTSVesselsConstraintCheckerFactory.class.getCanonicalName())).toProvider(
 				Peaberry.service(new DifferentSTSVesselsConstraintCheckerFactory()).export());
-
+		
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(ShippingHoursRestrictionCheckerFactory.class.getCanonicalName())).toProvider(
 				Peaberry.service(new ShippingHoursRestrictionCheckerFactory()).export());
+
+		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(LockedUnusedElementsConstraintCheckerFactory.class.getCanonicalName())).toProvider(
+				Peaberry.service(new LockedUnusedElementsConstraintCheckerFactory()).export());
 
 	}
 }

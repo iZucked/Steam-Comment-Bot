@@ -11,6 +11,8 @@ import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProviderEditor;
+import com.mmxlabs.optimiser.common.dcproviders.ILockedElementsProvider;
+import com.mmxlabs.optimiser.common.dcproviders.ILockedElementsProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.IOrderedSequenceElementsDataComponentProvider;
@@ -24,6 +26,7 @@ import com.mmxlabs.optimiser.common.dcproviders.impl.OrderedSequenceElementsData
 import com.mmxlabs.optimiser.common.dcproviders.impl.ResourceAllocationConstraintProvider;
 import com.mmxlabs.optimiser.common.dcproviders.impl.TimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedElementDurationEditor;
+import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedLockedElementsEditor;
 import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedOptionalElementsEditor;
 import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedOrderedSequenceElementsEditor;
 import com.mmxlabs.optimiser.common.dcproviders.impl.indexed.IndexedTimeWindowEditor;
@@ -268,10 +271,14 @@ public class DataComponentProviderModule extends AbstractModule {
 		final HashSetCalculatorProviderEditor calculatorProvider = new HashSetCalculatorProviderEditor();
 		bind(ICalculatorProvider.class).toInstance(calculatorProvider);
 		bind(ICalculatorProviderEditor.class).toInstance(calculatorProvider);
-
+		
 		final IOptionalElementsProviderEditor optionalElements = new IndexedOptionalElementsEditor();
 		bind(IOptionalElementsProvider.class).toInstance(optionalElements);
 		bind(IOptionalElementsProviderEditor.class).toInstance(optionalElements);
+
+		final ILockedElementsProviderEditor lockedElements = new IndexedLockedElementsEditor();
+		bind(ILockedElementsProviderEditor.class).toInstance(lockedElements);
+		bind(ILockedElementsProvider.class).toInstance(lockedElements);
 
 		final ISpotMarketSlotsProviderEditor spotMarketSlots = new HashMapSpotMarketSlotsEditor();
 		bind(ISpotMarketSlotsProvider.class).toInstance(spotMarketSlots);

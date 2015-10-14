@@ -422,22 +422,23 @@ public interface ISchedulerBuilder {
 	 *            Scaled minimum loadable quantity of LNG in M3
 	 * @param maxVolume
 	 *            Scaled maximum loadable quantity of LNG in M3
-	 * @param price
-	 *            Scaled purchase price in $/MMBTu
 	 * @param cargoCVValue
 	 *            Scaled conversion factor to convert from M3 to MMBTU of LNG
+	 * @param slotIsLocked TODO
+	 * @param price
+	 *            Scaled purchase price in $/MMBTu
 	 * @return
 	 */
 	@NonNull
 	ILoadSlot createLoadSlot(String id, @NonNull IPort port, @NonNull ITimeWindow window, long minVolume, long maxVolume, @NonNull ILoadPriceCalculator priceCalculator, int cargoCVValue,
-			int durationHours, boolean cooldownSet, boolean cooldownForbidden, int pricingDate, @NonNull PricingEventType pricingEvent, boolean slotIsOptional, boolean isSpotMarketSlot,
-			boolean isVolumeLimitInM3);
+			int durationHours, boolean cooldownSet, boolean cooldownForbidden, int pricingDate, @NonNull PricingEventType pricingEvent, boolean slotIsOptional, boolean slotIsLocked,
+			boolean isSpotMarketSlot, boolean isVolumeLimitInM3);
 
 	/**
 	 */
 	@NonNull
 	ILoadOption createDESPurchaseLoadSlot(String id, @Nullable IPort port, ITimeWindow window, long minVolume, long maxVolume, @NonNull ILoadPriceCalculator priceCalculator, int cargoCVValue,
-			int durationInHours, int pricingDate, @NonNull PricingEventType pricingEvent, boolean slotIsOptional, boolean isSpotMarketSlot, boolean isVolumeLimitInM3);
+			int durationInHours, int pricingDate, @NonNull PricingEventType pricingEvent, boolean slotIsOptional, boolean slotIslocked, boolean isSpotMarketSlot, boolean isVolumeLimitInM3);
 
 	/**
 	 * Create a new {@link IDischargeSlot} instance. This is currently expected to be assigned to a cargo.
@@ -455,7 +456,7 @@ public interface ISchedulerBuilder {
 	 */
 	@NonNull
 	IDischargeSlot createDischargeSlot(String id, @NonNull IPort port, @NonNull ITimeWindow window, long minVolumeInM3, long maxVolumeInM3, long minCvValue, long maxCvValue,
-			@NonNull ISalesPriceCalculator pricePerMMBTu, int durationHours, int pricingDate, @NonNull PricingEventType pricingEvent, boolean optional, boolean isSpotMarketSlot,
+			@NonNull ISalesPriceCalculator pricePerMMBTu, int durationHours, int pricingDate, @NonNull PricingEventType pricingEvent, boolean optional, boolean isLockedSlot, boolean isSpotMarketSlot,
 			boolean isVolumeLimitInM3);
 
 	/**
@@ -471,7 +472,7 @@ public interface ISchedulerBuilder {
 	 */
 	@NonNull
 	IDischargeOption createFOBSaleDischargeSlot(@NonNull String id, @Nullable IPort port, @NonNull ITimeWindow window, long minVolume, long maxVolume, long minCvValue, long maxCvValue,
-			@NonNull ISalesPriceCalculator priceCalculator, int durationInHours, int pricingDate, PricingEventType pricingEvent, boolean slotIsOptional, boolean isSpotMarketSlot,
+			@NonNull ISalesPriceCalculator priceCalculator, int durationInHours, int pricingDate, PricingEventType pricingEvent, boolean slotIsOptional, boolean slotIsLocked, boolean isSpotMarketSlot,
 			boolean isVolumeLimitInM3);
 
 	/**

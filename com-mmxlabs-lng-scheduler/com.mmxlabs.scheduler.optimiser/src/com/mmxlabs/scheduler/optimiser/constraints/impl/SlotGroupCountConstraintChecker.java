@@ -14,24 +14,24 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.constraints.IReducingContraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IReducingConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.providers.ISlotGroupCountProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.SlotGroup;
 
 /**
- * The {@link SlotGroupCountConstraintChecker} is a {@link IReducingContraintChecker} implementation. This constraint checker ensures that there is never more than the specified number of elements
- * from a {@link SlotGroup} present in the {@link ISequences} solution. However this is a {@link IReducingContraintChecker} and the initial {@link ISequences} is used to relax these constraints to the
+ * The {@link SlotGroupCountConstraintChecker} is a {@link IReducingConstraintChecker} implementation. This constraint checker ensures that there is never more than the specified number of elements
+ * from a {@link SlotGroup} present in the {@link ISequences} solution. However this is a {@link IReducingConstraintChecker} and the initial {@link ISequences} is used to relax these constraints to the
  * current count. This permits some initial violation of the {@link SlotGroup} counts, but does not allow the violation to get worse. I.e. this constraint only allows the optimiser to make changes
  * which preserve the current state or improve it.
  * 
- * As an {@link IReducingContraintChecker} state is retained.
+ * As an {@link IReducingConstraintChecker} state is retained.
  * 
  * @author Simon Goodall
  * 
  */
-public class SlotGroupCountConstraintChecker implements IReducingContraintChecker {
+public class SlotGroupCountConstraintChecker implements IReducingConstraintChecker {
 	@NonNull
 	private final String name;
 
