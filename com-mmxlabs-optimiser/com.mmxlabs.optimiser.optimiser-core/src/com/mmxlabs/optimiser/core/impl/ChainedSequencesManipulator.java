@@ -11,7 +11,6 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 /**
  * A sequences manipulator which applies a sequence of other sequences manipulators. Use the {@code addDelegate(..)} method to add another manipulator to the list of delegates.
@@ -31,24 +30,6 @@ public class ChainedSequencesManipulator implements ISequencesManipulator {
 	public void manipulate(@NonNull final IModifiableSequences sequences) {
 		for (final ISequencesManipulator manipulator : delegates) {
 			manipulator.manipulate(sequences);
-		}
-	}
-
-	@Override
-	public void dispose() {
-		for (final ISequencesManipulator manipulator : delegates) {
-			manipulator.dispose();
-		}
-		delegates.clear();
-	}
-
-	/**
-	 * Init method. This will call {@link ISequencesManipulator#init(IOptimisationData)} on all delegates.
-	 */
-	@Override
-	public void init(@NonNull final IOptimisationData data) {
-		for (final ISequencesManipulator manipulator : delegates) {
-			manipulator.init(data);
 		}
 	}
 }

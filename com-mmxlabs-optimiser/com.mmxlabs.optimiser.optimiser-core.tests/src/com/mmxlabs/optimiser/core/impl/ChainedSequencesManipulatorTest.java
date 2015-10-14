@@ -31,24 +31,4 @@ public class ChainedSequencesManipulatorTest {
 		Mockito.verify(mock1).manipulate(sequences);
 		Mockito.verify(mock2).manipulate(sequences);
 	}
-
-	@Test
-	public void testDispose() {
-		final ChainedSequencesManipulator manipulator = new ChainedSequencesManipulator();
-
-		final ISequencesManipulator mock1 = Mockito.mock(ISequencesManipulator.class, "mock1");
-		final ISequencesManipulator mock2 = Mockito.mock(ISequencesManipulator.class, "mock2");
-
-		manipulator.addDelegate(mock1);
-		manipulator.addDelegate(mock2);
-
-		final IModifiableSequences sequences = Mockito.mock(IModifiableSequences.class);
-
-		manipulator.dispose();
-		manipulator.manipulate(sequences);
-
-		Mockito.verify(mock1).dispose();
-		Mockito.verify(mock2).dispose();
-	}
-
 }
