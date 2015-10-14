@@ -15,7 +15,6 @@ import com.mmxlabs.optimiser.core.ISegment;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.impl.DisconnectedSegment;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -37,11 +36,6 @@ public class ShortCargoSequenceManipulator implements ISequencesManipulator {
 
 	@Inject
 	private IShortCargoReturnElementProvider shortCargoReturnElementProvider;
-
-	@Override
-	public void init(final IOptimisationData data) {
-
-	}
 
 	@Override
 	public void manipulate(final IModifiableSequences sequences) {
@@ -68,12 +62,4 @@ public class ShortCargoSequenceManipulator implements ISequencesManipulator {
 			}
 		}
 	}
-
-	@Override
-	public void dispose() {
-		portTypeProvider = null;
-		vesselProvider = null;
-		shortCargoReturnElementProvider = null;
-	}
-
 }

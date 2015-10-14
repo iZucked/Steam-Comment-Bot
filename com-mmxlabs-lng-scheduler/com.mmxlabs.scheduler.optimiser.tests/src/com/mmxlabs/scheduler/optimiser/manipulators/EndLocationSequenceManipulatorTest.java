@@ -50,11 +50,5 @@ public class EndLocationSequenceManipulatorTest {
 		Assert.assertSame(EndLocationRule.NONE, manipulator.getEndLocationRule(resource1));
 		Assert.assertSame(EndLocationRule.RETURN_TO_FIRST_LOAD, manipulator.getEndLocationRule(resource2));
 		Assert.assertSame(EndLocationRule.RETURN_TO_LAST_LOAD, manipulator.getEndLocationRule(resource3));
-
-		manipulator.dispose();
-
-		Assert.assertSame(EndLocationRule.NONE, manipulator.getEndLocationRule(resource1));
-		Assert.assertSame(EndLocationRule.NONE, manipulator.getEndLocationRule(resource2));
-		Assert.assertSame(EndLocationRule.NONE, manipulator.getEndLocationRule(resource3));
 	}
 }

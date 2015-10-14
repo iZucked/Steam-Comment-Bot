@@ -46,11 +46,6 @@ public class StartLocationRemovingSequenceManipulator implements ISequencesManip
 		}
 	}
 
-	@Override
-	public void dispose() {
-		resourcesToManipulate.clear();
-	}
-
 	/**
 	 * Set whether the given resource should have its start element removed (typically this will be if it is a spot charter vessel).
 	 * 
@@ -72,7 +67,7 @@ public class StartLocationRemovingSequenceManipulator implements ISequencesManip
 
 	/**
 	 */
-	@Override
+	@Inject
 	public void init(final IOptimisationData data) {
 
 		for (final IResource resource : data.getResources()) {
