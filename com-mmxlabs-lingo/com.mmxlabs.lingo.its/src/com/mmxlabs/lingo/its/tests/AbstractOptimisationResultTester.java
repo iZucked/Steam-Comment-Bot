@@ -48,6 +48,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -112,7 +113,7 @@ public class AbstractOptimisationResultTester {
 
 		// Enforce UK Locale Needed for running tests on build server. Keeps date format consistent.
 		Locale.setDefault(Locale.UK);
-		
+
 		System.setProperty(AbstractVerticalCalendarReportView.PROPERTY_RUNNING_ITS, Boolean.TRUE.toString());
 	}
 
@@ -143,19 +144,19 @@ public class AbstractOptimisationResultTester {
 		}
 	}
 
-	@Nullable
-	protected IScenarioCipherProvider getScenarioCipherProvider() {
-
-		final Bundle bundle = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class);
-		if (bundle != null) {
-			final BundleContext bundleContext = bundle.getBundleContext();
-			final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
-			if (serviceReference != null) {
-				return bundleContext.getService(serviceReference);
-			}
-		}
-		return null;
-	}
+//	@Nullable
+//	protected IScenarioCipherProvider getScenarioCipherProvider() {
+//
+//		final Bundle bundle = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class);
+//		if (bundle != null) {
+//			final BundleContext bundleContext = bundle.getBundleContext();
+//			final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
+//			if (serviceReference != null) {
+//				return bundleContext.getService(serviceReference);
+//			}
+//		}
+//		return null;
+//	}
 
 	public AbstractOptimisationResultTester() {
 		super();
@@ -172,42 +173,70 @@ public class AbstractOptimisationResultTester {
 	 */
 	public LNGScenarioRunner runScenario(@NonNull final URL url) throws Exception {
 
+		final LNGScenarioModel originalScenario = getScenarioModelFromURL(url);
+
+		return runScenario(originalScenario, url);
+	}
+
+	private LNGScenarioModel getScenarioModelFromURL(final URL url) throws IOException {
 		final URI uri = URI.createURI(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20"));
-
-		final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, getScenarioCipherProvider());
-
-		File f = null;
+		
+		final BundleContext bundleContext = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class).getBundleContext();
+		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
 		try {
-			f = MigrationHelper.migrateAndLoad(instance);
-
-			final LNGScenarioModel originalScenario = (LNGScenarioModel) instance.getInstance();
-
-			return runScenario(originalScenario, url);
+			final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, bundleContext.getService(serviceReference));
+			final LNGScenarioModel originalScenario = getScenarioModel(instance);
+			return originalScenario;
 		} finally {
-			if (f != null && f.exists()) {
-				f.delete();
-			}
+			bundleContext.ungetService(serviceReference);
 		}
 	}
 
 	public LNGScenarioRunner evaluateScenario(@NonNull final URL url) throws Exception {
 
-		final URI uri = URI.createURI(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20"));
+		final LNGScenarioModel originalScenario = getScenarioModelFromURL(url);
 
-		final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, getScenarioCipherProvider());
+		return evaluateScenario(originalScenario, url);
+	}
 
-		File f = null;
-		try {
-			f = MigrationHelper.migrateAndLoad(instance);
+	public LNGScenarioRunner evaluateScenario(@NonNull final URL url, OptimiserSettings optimiserSettings) throws Exception {
 
-			final LNGScenarioModel originalScenario = (LNGScenarioModel) instance.getInstance();
+		final LNGScenarioModel originalScenario = getScenarioModelFromURL(url);
+		final LNGScenarioRunner originalScenarioRunner = createScenarioRunner(originalScenario, optimiserSettings);
 
-			return evaluateScenario(originalScenario, url);
-		} finally {
-			if (f != null && f.exists()) {
-				f.delete();
-			}
+		return evaluateScenario(originalScenario, url, originalScenarioRunner);
+	}
+
+	public LNGScenarioRunner evaluateScenario(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL) throws IOException, IncompleteScenarioException {
+
+		// TODO: Does EcoreUtil.copy work -- do we need to do it here?
+		if (false) {
+			saveScenarioModel(originalScenario);
 		}
+		// Create scenario runner with optimisation params incase we want to run optimisation outside of the opt run method.
+		final LNGScenarioRunner originalScenarioRunner = createScenarioRunner(originalScenario);
+		return evaluateScenario(originalScenario, origURL, originalScenarioRunner);
+	}
+
+	public LNGScenarioRunner evaluateScenario(@NonNull final LNGScenarioModel originalScenario, @Nullable final URL origURL, @NonNull LNGScenarioRunner scenarioRunner)
+			throws IOException, IncompleteScenarioException {
+		scenarioRunner.initAndEval(new TransformerExtensionTestModule(), 10000);
+
+		return scenarioRunner;
+	}
+
+	private LNGScenarioModel getScenarioModel(final ScenarioInstance instance) throws IOException {
+		MigrationHelper.migrateAndLoad(instance);
+
+		final LNGScenarioModel originalScenario = (LNGScenarioModel) instance.getInstance();
+		return originalScenario;
+	}
+
+	public LNGScenarioRunner runScenario(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL) throws IOException, IncompleteScenarioException {
+
+		final LNGScenarioRunner scenarioRunner = createScenarioRunner(originalScenario);
+		assert scenarioRunner != null;
+		return runScenario(originalScenario, origURL, scenarioRunner);
 	}
 
 	/**
@@ -219,15 +248,15 @@ public class AbstractOptimisationResultTester {
 	 * @throws MigrationException
 	 * @throws InterruptedException
 	 */
-	public LNGScenarioRunner runScenario(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL) throws IOException, IncompleteScenarioException {
+	public LNGScenarioRunner runScenario(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL, @NonNull LNGScenarioRunner scenarioRunner)
+			throws IOException, IncompleteScenarioException {
 
 		if (false) {
 			saveScenarioModel(originalScenario);
 		}
 
-		final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(originalScenario, LNGScenarioRunner.createDefaultSettings(), LNGTransformer.HINT_OPTIMISE_LSO);
 		// Limit number of iterations to keep runtime down.
-		scenarioRunner.initAndEval(new TransformerExtensionTestModule(), 10000, false);
+		scenarioRunner.initAndEval(new TransformerExtensionTestModule(), 10000);
 
 		Schedule intialSchedule = scenarioRunner.getIntialSchedule();
 		Assert.assertNotNull(intialSchedule);
@@ -300,16 +329,12 @@ public class AbstractOptimisationResultTester {
 		return scenarioRunner;
 	}
 
-	public LNGScenarioRunner evaluateScenario(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL) throws IOException, IncompleteScenarioException {
+	private LNGScenarioRunner createScenarioRunner(final LNGScenarioModel originalScenario) {
+		return createScenarioRunner(originalScenario, LNGScenarioRunner.createDefaultSettings());
+	}
 
-		// TODO: Does EcoreUtil.copy work -- do we need to do it here?
-		if (false) {
-			saveScenarioModel(originalScenario);
-		}
-		// Create scenario runner with optimisation params incase we want to run optimisation outside of the opt run method.
-		final LNGScenarioRunner originalScenarioRunner = new LNGScenarioRunner(originalScenario, LNGScenarioRunner.createDefaultSettings(), LNGTransformer.HINT_OPTIMISE_LSO);
-		originalScenarioRunner.initAndEval(new TransformerExtensionTestModule(), 10000, false);
-
+	private LNGScenarioRunner createScenarioRunner(final LNGScenarioModel originalScenario, OptimiserSettings settings) {
+		final LNGScenarioRunner originalScenarioRunner = new LNGScenarioRunner(originalScenario, settings, LNGTransformer.HINT_OPTIMISE_LSO);
 		return originalScenarioRunner;
 	}
 
@@ -412,15 +437,15 @@ public class AbstractOptimisationResultTester {
 	public void testReports(final URL scenarioURL, final String reportID, final String shortName, final String extension) throws Exception {
 
 		final URI uri = URI.createURI(FileLocator.toFileURL(scenarioURL).toString().replaceAll(" ", "%20"));
-		final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, getScenarioCipherProvider());
-		File f = null;
+		
+		final BundleContext bundleContext = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class).getBundleContext();
+		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
 		try {
-			f = MigrationHelper.migrateAndLoad(instance);
+			final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, bundleContext.getService(serviceReference));
+			MigrationHelper.migrateAndLoad(instance);
 			testReports(instance, scenarioURL, reportID, shortName, extension);
 		} finally {
-			if (f != null && f.exists()) {
-				f.delete();
-			}
+			bundleContext.ungetService(serviceReference);
 		}
 	}
 

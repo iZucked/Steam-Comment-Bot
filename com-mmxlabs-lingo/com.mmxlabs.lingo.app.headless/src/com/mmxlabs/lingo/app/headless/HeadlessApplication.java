@@ -29,7 +29,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.joda.time.LocalDate;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.joda.time.YearMonth;
 
 import com.google.common.collect.Maps;
@@ -54,7 +53,6 @@ import com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
-import com.mmxlabs.models.lng.parameters.SimilaritySettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
@@ -242,6 +240,7 @@ public class HeadlessApplication implements IApplication {
 		}
 
 		MigrationHelper.migrateAndLoad(instance);
+
 		return instance;
 	}
 
@@ -281,17 +280,13 @@ public class HeadlessApplication implements IApplication {
 		// "(Equinox) If specified, the secure storage treats contents of the file as a default password. When not set, password providers are used to obtain a password.");
 		options.addOption("feature", true, "(Equinox) equivalent to setting eclipse.product to <feature id>");
 		options.addOption("framework", true, "(Equinox) equivalent to setting osgi.framework to <location>");
-		options.addOption(
-				"initialize",
-				false,
+		options.addOption("initialize", false,
 				"(OSGi) initializes the configuration being run. All runtime related data structures and caches are refreshed. Any user/plug-in defined configuration data is not purged. No application is run, any product specifications are ignored and no UI is presented (e.g., the splash screen is not drawn)");
 		options.addOption("install", true, "(OSGi) OSGi install area");
 		options.addOption("keyring", true, "(OSGi) the location of the authorization database on disk. This argument has to be used together with the -password argument.");
 		// various --launcher options
 
-		options.addOption(
-				"name",
-				true,
+		options.addOption("name", true,
 				"(OSGi) The name to be displayed in the task bar item for the splash screen when the application starts up (not applicable on Windows). Also used as the title of error dialogs opened by the launcher. When not set, the name is the name of the executable.");
 
 		options.addOption("nl", true, "(OSGi) equivalent to setting osgi.nl to <locale>");
@@ -305,9 +300,7 @@ public class HeadlessApplication implements IApplication {
 		options.addOption("product", true, "(OSGi) Product ID");
 
 		options.addOption("registryMultiLanguage", false, "(OSGi) equivalent to setting eclipse.registry.MultiLanguage to \"true\"");
-		options.addOption(
-				"showSplash",
-				true,
+		options.addOption("showSplash", true,
 				"(OSGi) The location of jar used to startup eclipse. The jar referred to should have the Main-Class attribute set to org.eclipse.equinox.launcher.Main. If this parameter is not set, the executable will look in the plugins directory for theorg.eclipse.equinox.launcher bundle with the highest version.");
 
 		options.addOption("startup", true, "(OSGi) Set location of startup jar");
@@ -374,7 +367,7 @@ public class HeadlessApplication implements IApplication {
 		solutionImprovementSettings.setIterations(parameters.getParameterValue("hillClimbing-iterations", Integer.class));
 		settings.setSolutionImprovementSettings(solutionImprovementSettings);
 	}
-	
+
 	private void createPromptDates(LNGScenarioModel rootObject, HeadlessParameters parameters) {
 		LocalDate promptStart = parameters.getParameterValue("promptStart", LocalDate.class);
 		LocalDate promptEnd = parameters.getParameterValue("promptEnd", LocalDate.class);
@@ -405,7 +398,7 @@ public class HeadlessApplication implements IApplication {
 		}
 		overrideSettings.setSimilarityParameterMap(similarityParameterMap);
 	}
-	
+
 	private void createDateRanges(OptimiserSettings settings, HeadlessParameters headlessParameters) {
 		YearMonth dateBefore = headlessParameters.getParameterValue("periodOptimisationDateBefore", YearMonth.class);
 		YearMonth dateAfter = headlessParameters.getParameterValue("periodOptimisationDateAfter", YearMonth.class);
@@ -463,7 +456,7 @@ public class HeadlessApplication implements IApplication {
 		}
 		HeadlessJSONParser.copyJSONFile(jsonFilePath, Paths.get(path, foldername, "parameters.json").toString());
 	}
-	
+
 	private void initAccessControl() {
 		// Initialise feature enablements
 		LicenseFeatures.initialiseFeatureEnablements();
