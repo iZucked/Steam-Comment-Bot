@@ -15,6 +15,10 @@ import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.Guice;
 import com.google.inject.Inject;
@@ -23,6 +27,9 @@ import com.mmxlabs.license.features.internal.FeatureEnablementExtension;
 import com.mmxlabs.license.features.internal.FeatureEnablementModule;
 
 public class LicenseFeatures {
+
+	private static final Logger LOG = LoggerFactory.getLogger(LoggerFactory.class);
+
 	public static void initialiseFeatureEnablements(final String... extraEnablements) {
 
 		final Injector injector = Guice.createInjector(new FeatureEnablementModule());
@@ -42,8 +49,28 @@ public class LicenseFeatures {
 							final String feature = featureEnablementExtension.getFeature();
 							if (feature != null) {
 								final String permissionKey = "features:" + clean(feature);
-								sai.addStringPermission(permissionKey);
 
+								final String expiryDate = featureEnablementExtension.getExpiryDate();
+								if (expiryDate != null) {
+									try {
+										// Feature can expire, check the date string for now. If unable to parse the date, then treat it as expired.
+										final LocalDate date = DateTimeFormat.forPattern("yyyy-MM-dd").parseLocalDate(expiryDate);
+										final LocalDate now = LocalDate.now();
+										if (date != null && now != null) {
+											if (!now.isAfter(date)) {
+												sai.addStringPermission(permissionKey);
+											} else {
+												// LOG.warn("Feature %s has expired.", feature);
+											}
+										}
+									} catch (final IllegalArgumentException e) {
+										// Unable to parse string
+										LOG.error("Features: Unable to parse date %s", expiryDate);
+									}
+								} else {
+									// No expiry date, so permit now
+									sai.addStringPermission(permissionKey);
+								}
 							}
 						}
 					}

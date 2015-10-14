@@ -56,6 +56,13 @@
                </documentation>
             </annotation>
          </attribute>
+         <attribute name="expiry-date" type="string">
+            <annotation>
+               <documentation>
+                  Expiry date must be in format: yyyy-MM-dd
+               </documentation>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 

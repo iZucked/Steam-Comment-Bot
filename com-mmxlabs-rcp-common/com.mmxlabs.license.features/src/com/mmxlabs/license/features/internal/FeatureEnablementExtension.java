@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.license.features.internal;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.ops4j.peaberry.eclipse.ExtensionBean;
 import org.ops4j.peaberry.eclipse.MapName;
 
@@ -11,5 +13,10 @@ import org.ops4j.peaberry.eclipse.MapName;
 public interface FeatureEnablementExtension {
 
 	@MapName("feature")
+	@NonNull
 	String getFeature();
+
+	@MapName("expiry-date")
+	@Nullable
+	String getExpiryDate();
 }
