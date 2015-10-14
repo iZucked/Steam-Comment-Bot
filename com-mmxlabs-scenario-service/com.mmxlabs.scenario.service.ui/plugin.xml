@@ -215,48 +215,40 @@
       <handler
             class="com.mmxlabs.scenario.service.ui.commands.CopyScenarioCommandHandler"
             commandId="org.eclipse.ui.edit.copy">
-         <activeWhen>
-               <with
-                     variable="selection">
-            <iterate
-                  ifEmpty="false">
-               <and>
-                  <instanceof
-                        value="com.mmxlabs.scenario.service.model.ScenarioInstance">
-                  </instanceof>
-               </and>
-            </iterate>
-               </with>
+                     <activeWhen>
+                
+
+            		<with variable="activePartId">
+                <equals value="com.mmxlabs.scenario.service.ui.navigator" />
+            </with>         
+        
          </activeWhen>
          <enabledWhen>
                 <with
                      variable="selection">
-            <iterate
-                  ifEmpty="false">
-               <and>
-                  <instanceof
-                        value="com.mmxlabs.scenario.service.model.ScenarioInstance">
-                  </instanceof>
-               </and>
-            </iterate>
+		            <iterate
+		                  ifEmpty="false">
+		               <and>
+		                  <instanceof
+		                        value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+		                  </instanceof>
+		               </and>
+		            </iterate>
             </with>
+	 
+         
          </enabledWhen>
       </handler>
       <handler
             class="com.mmxlabs.scenario.service.ui.commands.PasteScenarioCommandHandler"
             commandId="org.eclipse.ui.edit.paste">
          <activeWhen>
-                <with
-                     variable="selection">
-            <iterate
-                  ifEmpty="false">
-               <and>
-                  <instanceof
-                        value="com.mmxlabs.scenario.service.model.Container">
-                  </instanceof>
-               </and>
-            </iterate>
-            </with>
+                
+
+            		<with variable="activePartId">
+                <equals value="com.mmxlabs.scenario.service.ui.navigator" />
+            </with>         
+        
          </activeWhen>
          <enabledWhen>
                 <with

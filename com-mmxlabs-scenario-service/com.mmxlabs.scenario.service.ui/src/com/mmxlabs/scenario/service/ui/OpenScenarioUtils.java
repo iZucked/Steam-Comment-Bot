@@ -34,7 +34,7 @@ public class OpenScenarioUtils {
 
 	private static final Logger log = LoggerFactory.getLogger(OpenScenarioUtils.class);
 
-	public static void openScenarioInstance(final IWorkbenchPage activePage, final ScenarioInstance model) throws PartInitException {
+	public static void openScenarioInstance(final ScenarioInstance model) throws PartInitException {
 
 		final ScenarioServiceEditorInput editorInput = new ScenarioServiceEditorInput(model);
 
