@@ -6,6 +6,7 @@ package com.mmxlabs.lingo.reports.views.vertical.providers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +28,8 @@ import com.mmxlabs.models.lng.schedule.Event;
 public class HashMapEventProvider extends EventProvider {
 	protected Map<LocalDate, List<Event>> events = new HashMap<>();
 	protected final Event[] noEvents = new Event[0];
-
+	private final List<Event> allEvents = new LinkedList<>();
+	
 	public HashMapEventProvider(@NonNull final LocalDate start, @NonNull final LocalDate end, @NonNull final EventProvider wrapped) {
 		this(null);
 		for (final LocalDate day : VerticalReportUtils.getUTCDaysBetween(start, end)) {
@@ -45,6 +47,9 @@ public class HashMapEventProvider extends EventProvider {
 		final List<Event> list = events.containsKey(date) ? events.get(date) : new ArrayList<Event>();
 		list.add(event);
 		this.events.put(date, list);
+		if (!allEvents.contains(event)) {
+			allEvents.add(event);
+		}
 	}
 
 	@Override
@@ -53,5 +58,9 @@ public class HashMapEventProvider extends EventProvider {
 			return events.get(date).toArray(noEvents);
 		}
 		return noEvents;
+	}
+	
+	public List<Event> getEvents() {
+		return allEvents;
 	}
 }

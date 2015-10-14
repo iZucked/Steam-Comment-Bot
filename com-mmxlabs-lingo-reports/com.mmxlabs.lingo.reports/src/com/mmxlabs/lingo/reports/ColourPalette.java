@@ -136,7 +136,7 @@ public final class ColourPalette {
 
 	// @formatter:off
 	public enum ColourPaletteItems {
-		LONG, SHORT,
+		LONG, SHORT, OPTIONAL,
 		FOB_Purchase, FOB_Sale, DES_Purchase, DES_Sale,
 		Voyage_Start, Voyage_End,
 		Voyage_Load, Voyage_Discharge,
