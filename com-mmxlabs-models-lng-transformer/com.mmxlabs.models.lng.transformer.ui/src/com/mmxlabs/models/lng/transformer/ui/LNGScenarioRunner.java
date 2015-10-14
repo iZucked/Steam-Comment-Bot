@@ -41,7 +41,10 @@ import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomai
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
@@ -183,16 +186,12 @@ public class LNGScenarioRunner {
 	 * Convenience method to initialise the evaluation/optimiser system and evaluate the initial state. Calls {@link #init(IOptimiserProgressMonitor,Module, EnumMap)}, and
 	 * {@link #evaluateInitialState()} passing in the {@link Module} to {@link #init(IOptimiserProgressMonitor,Module, EnumMap)} and optionally overriding the number of iterations.
 	 */
-	public void initAndEval(@Nullable final Module extraModule, @Nullable final Integer iterations, @Nullable final Boolean useHillClimbing) {
+	public void initAndEval(@Nullable final Module extraModule, @Nullable final Integer iterations) {
 		init(null, extraModule, null);
 
 		// FIXME: Only for ITS!
 		if (iterations != null && optimiser != null) {
 			optimiser.setNumberOfIterations(iterations.intValue());
-		}
-		
-		if (useHillClimbing != null) {
-			doHillClimb = useHillClimbing;
 		}
 		evaluateInitialState();
 	}
@@ -243,7 +242,6 @@ public class LNGScenarioRunner {
 			// Pin variable for null analysis
 			final IOptimisationContext pContext = this.context;
 			assert pContext != null;
-
 			startSolution = optimiser.start(pContext, pContext.getInitialSequences());
 		} else {
 			startSolution = LNGSchedulerJobUtils.evaluateCurrentState(transformer);
@@ -626,7 +624,7 @@ public class LNGScenarioRunner {
 
 				while (!optimiser.isFinished()) {
 					optimiser.step(1);
-					if (monitor != null) {
+					if (monitor != null && optimiser != null) {
 						monitor.report(optimiser, optimiser.getNumberOfIterationsCompleted(), optimiser.getFitnessEvaluator().getCurrentFitness(), optimiser.getFitnessEvaluator().getBestFitness(),
 								optimiser.getCurrentSolution(), optimiser.getBestSolution());
 					}
@@ -699,7 +697,7 @@ public class LNGScenarioRunner {
 		log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
 	}
 
-	private LocalSearchOptimiser performSolutionImprovement(final IProgressMonitor progressMonitor, final ISequences bestRawSequences) {
+	private LocalSearchOptimiser performSolutionImprovement(final IProgressMonitor progressMonitor, final ISequences bestRawSequences) throws OperationCanceledException{
 		if (this.optimiserSettings.getSolutionImprovementSettings() != null && this.optimiserSettings.getSolutionImprovementSettings().isImprovingSolutions()) {
 			final ArbitraryStateLocalSearchOptimiser hillClimber = injector.getInstance(ArbitraryStateLocalSearchOptimiser.class);
 			// The optimiser may not have a best sequence set
@@ -708,6 +706,9 @@ public class LNGScenarioRunner {
 			hillClimber.start(context, sequenceToImprove);
 			int hillClimberWork = 0;
 			while (!hillClimber.isFinished()) {
+				if (progressMonitor.isCanceled()) {
+					throw new OperationCanceledException();
+				}
 				hillClimber.step(1);
 				if (++hillClimberWork % PROGRESS_HILLCLIMBING_OPTIMISATION == 0) {
 					progressMonitor.worked(1);

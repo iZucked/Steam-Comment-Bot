@@ -69,7 +69,7 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 				action.setEnabled(false);
 				return;
 			}
-			
+
 			try (final ModelReference modelReference = instance.getReference()) {
 				final Object object = modelReference.getInstance();
 				if (object instanceof MMXRootObject) {
@@ -100,6 +100,7 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 			}
 		}
 		if (action != null) {
+			// TODO: Exceptions can be thrown here on application shutdown. It appears the eclipse code does not check for disposed state.
 			action.setEnabled(enabled);
 		}
 	}

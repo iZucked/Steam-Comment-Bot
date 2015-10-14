@@ -120,7 +120,7 @@ public class SuboptimalScenarioTester {
 
 		// optimise the scenario
 		final LNGScenarioRunner runner = new LNGScenarioRunner((LNGScenarioModel) scenario, LNGScenarioRunner.createDefaultSettings(), LNGTransformer.HINT_OPTIMISE_LSO);
-		runner.initAndEval(new TransformerExtensionTestModule(), 10000, false);
+		runner.initAndEval(new TransformerExtensionTestModule(), 10000);
 		runner.run();
 
 		final Schedule schedule = runner.getFinalSchedule();

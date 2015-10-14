@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.parameters.SimilarityInterval;
 import com.mmxlabs.models.lng.parameters.SimilaritySettings;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRequirementConstraintCheckerFactory;
+import com.mmxlabs.optimiser.common.constraints.LockedUnusedElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.fitness.NonOptionalSlotFitnessCoreFactory;
@@ -92,6 +93,7 @@ public class ScenarioUtils {
 			constraints.add(createConstraint(parametersFactory, DifferentSTSVesselsConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(parametersFactory, ShippingTypeRequirementConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(parametersFactory, ShippingHoursRestrictionCheckerFactory.NAME, true));
+			constraints.add(createConstraint(parametersFactory, LockedUnusedElementsConstraintCheckerFactory.NAME, true));
 		}
 
 		// create objectives

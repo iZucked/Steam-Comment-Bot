@@ -23,6 +23,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
@@ -219,6 +220,7 @@ public class BagOptimiser {
 				progressMonitor.beginTask("Generate changes", initialPopulation.size());
 				progressMonitor.worked(1);
 				for (JobState root : initialPopulation) {
+					checkIfCancelled(progressMonitor);
 					if (root.mode == JobStateMode.LEAF) {
 						finalPopulation.add(root);
 					} else {
@@ -231,6 +233,7 @@ public class BagOptimiser {
 						oldFullChangesSets = new LinkedList<>(states);
 						int zz = 0;
 						while (!foundLeaf(states) && !(fullChangesSets != null && fullChangesSets.size() == 0)) {
+							checkIfCancelled(progressMonitor);
 							if (DEBUG) {
 								System.out.println("--------------------------- root ----------------- " + (zz++));
 							}
@@ -254,6 +257,7 @@ public class BagOptimiser {
 					}
 				}
 
+				checkIfCancelled(progressMonitor);
 				if (finalPopulation.size() < maxLeafs) {
 					for (JobState promising : limitedStates) {
 						finalPopulation.addAll(expandNode(promising, 250, targetSimilarityState, changeChecker));
@@ -277,13 +281,13 @@ public class BagOptimiser {
 							return Double.compare(pnlPC1, pnlPC2);
 						} else {
 							return Double.compare(StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(o1.changeSetsAsList, 0.75),
-									StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(o2.changeSetsAsList, 0.5));
+									StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(o2.changeSetsAsList, 0.75));
 						}
 					}
 				});
 				if (DEBUG) {
 					int popIndex = 1;
-					for (JobState s : finalPopulation) {
+					for (JobState s : sortedChangeStates) {
 						System.out.println("######## Final " + (popIndex++) + "########");
 						System.out.println("m:" + s.mode);
 						System.out.println("pnl:" + s.metricDelta[MetricType.PNL.ordinal()]);
@@ -328,6 +332,12 @@ public class BagOptimiser {
 			return betterSolutionFound;
 		} finally {
 			progressMonitor.done();
+		}
+	}
+
+	private void checkIfCancelled(final IProgressMonitor progressMonitor) {
+		if (progressMonitor.isCanceled()) {
+			throw new OperationCanceledException();
 		}
 	}
 

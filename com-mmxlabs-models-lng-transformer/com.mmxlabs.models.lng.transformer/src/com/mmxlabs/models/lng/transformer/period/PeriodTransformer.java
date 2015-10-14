@@ -16,6 +16,7 @@ import java.util.Set;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
@@ -27,6 +28,7 @@ import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.jdt.annotation.Nullable;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDate;
 import org.joda.time.YearMonth;
 import org.ops4j.peaberry.Peaberry;
 import org.ops4j.peaberry.util.TypeLiterals;
@@ -38,6 +40,7 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -45,13 +48,16 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.pricing.DataIndex;
@@ -64,6 +70,7 @@ import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
@@ -82,6 +89,7 @@ import com.mmxlabs.models.lng.transformer.period.extensions.IPeriodTransformerEx
 import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
+import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 
 /***
@@ -190,19 +198,23 @@ public class PeriodTransformer {
 		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
 		generateSlotAllocationMap(output, slotAllocationMap);
 
-		// Update vessel availabilities
-		updateVesselAvailabilities(periodRecord, cargoModel, spotMarketsModel, startConditionMap, endConditionMap);
-
 		// List of new vessel availabilities for cargoes outside normal range
 		final List<VesselAvailability> newVesselAvailabilities = new LinkedList<>();
 		final Set<Slot> seenSlots = new HashSet<>();
 		final Set<Slot> slotsToRemove = new HashSet<>();
 		final Set<Cargo> cargoesToRemove = new HashSet<>();
+
 		// Filter out slots and cargoes, create new availabilities for special cases.
 		findSlotsAndCargoesToRemove(internalDomain, periodRecord, cargoModel, seenSlots, slotsToRemove, cargoesToRemove, slotAllocationMap);
+		final Triple<Set<Cargo>, Set<Event>, Set<VesselEvent>> eventDependencies = findVesselEventsToRemoveAndDependencies(output.getPortfolioModel().getScheduleModel().getSchedule(), periodRecord,
+				cargoModel);
+		updateSlotsToRemoveWithDependencies(slotAllocationMap, slotsToRemove, cargoesToRemove, eventDependencies.getFirst());
+		// Update vessel availabilities
+		updateVesselAvailabilities(periodRecord, cargoModel, spotMarketsModel, startConditionMap, endConditionMap, eventDependencies.getFirst(), eventDependencies.getSecond());
 		checkIfRemovedSlotsAreStillNeeded(seenSlots, slotsToRemove, cargoesToRemove, newVesselAvailabilities, startConditionMap, endConditionMap, slotAllocationMap);
 		removeExcludedSlotsAndCargoes(internalDomain, mapping, slotsToRemove, cargoesToRemove);
-
+		// Some slots are brought in from outside the period, make sure they are locked
+		lockOpenSlots(output.getPortfolioModel().getCargoModel(), periodRecord);
 		// TEMP HACK UNTIL MULTIPLE AVAILABILITES PROPERLY IN PLACE AND filterSlotsAndCargoes can properly handle this.
 		for (final VesselAvailability newVA : newVesselAvailabilities) {
 			for (final VesselAvailability vesselAvailability : wholeScenario.getPortfolioModel().getCargoModel().getVesselAvailabilities()) {
@@ -214,9 +226,8 @@ public class PeriodTransformer {
 				}
 			}
 		}
-
 		// Filter out vessel events
-		filterVesselEvents(internalDomain, periodRecord, cargoModel, mapping);
+		filterVesselEvents(internalDomain, eventDependencies.getThird(), cargoModel, mapping);
 
 		// Filter out vessels
 		filterVesselAvailabilities(internalDomain, periodRecord, cargoModel, mapping);
@@ -229,6 +240,27 @@ public class PeriodTransformer {
 		output.getPortfolioModel().getScheduleModel().setSchedule(null);
 
 		return output;
+	}
+
+	private void lockOpenSlots(CargoModel cargoModel, PeriodRecord periodRecord) {
+		for (List<Slot> slotList : new List[] {cargoModel.getLoadSlots(), cargoModel.getDischargeSlots()}) {
+			for (Slot slot : slotList) {
+				if (inclusionChecker.getObjectInclusionType(slot, periodRecord).getFirst() == InclusionType.Out) {
+					slot.setLocked(true);
+				}
+			}
+			
+		}
+	}
+
+	private void updateSlotsToRemoveWithDependencies(final Map<Slot, SlotAllocation> slotAllocationMap, final Set<Slot> slotsToRemove, final Set<Cargo> cargoesToRemove, final Set<Cargo> cargoesToKeep) {
+		for (Cargo cargo : cargoesToKeep) {
+			if (cargoesToRemove.contains(cargo)) {
+				lockDownCargoDates(slotAllocationMap, cargo);
+			}
+			slotsToRemove.removeAll(cargo.getSlots());
+			cargoesToRemove.remove(cargo);
+		}
 	}
 
 	public void filterVesselAvailabilities(final EditingDomain internalDomain, final PeriodRecord periodRecord, final CargoModel cargoModel, final IScenarioEntityMapping mapping) {
@@ -246,14 +278,8 @@ public class PeriodTransformer {
 
 	}
 
-	public void filterVesselEvents(final EditingDomain internalDomain, final PeriodRecord periodRecord, final CargoModel cargoModel, final IScenarioEntityMapping mapping) {
-		final Set<VesselEvent> eventsToRemove = new HashSet<>();
-
+	public void filterVesselEvents(final EditingDomain internalDomain, final Set<VesselEvent> eventsToRemove, final CargoModel cargoModel, final IScenarioEntityMapping mapping) {
 		for (final VesselEvent event : cargoModel.getVesselEvents()) {
-			if (inclusionChecker.getObjectInclusionType(event, periodRecord).getFirst() == InclusionType.Out) {
-				eventsToRemove.add(event);
-				mapping.registerRemovedOriginal(mapping.getOriginalFromCopy(event));
-			}
 			if (event instanceof CharterOutEvent) {
 				// If in boundary, limit available vessels to assigned vessel
 				event.getAllowedVessels().clear();
@@ -263,15 +289,40 @@ public class PeriodTransformer {
 				}
 			}
 		}
+		for (final VesselEvent event : eventsToRemove) {
+			mapping.registerRemovedOriginal(mapping.getOriginalFromCopy(event));
+		}
 		internalDomain.getCommandStack().execute(DeleteCommand.create(internalDomain, eventsToRemove));
+	}
 
+	public Triple<Set<Cargo>, Set<Event>, Set<VesselEvent>> findVesselEventsToRemoveAndDependencies(final Schedule schedule, final PeriodRecord periodRecord, final CargoModel cargoModel) {
+		final Set<VesselEvent> eventsToRemove = new HashSet<>();
+		final Set<Event> eventsToKeep = new HashSet<>();
+		final Set<Cargo> cargoesToKeep = new HashSet<>();
+
+		for (final VesselEvent event : cargoModel.getVesselEvents()) {
+			boolean removed = false;
+			if (inclusionChecker.getObjectInclusionType(event, periodRecord).getFirst() == InclusionType.Out) {
+				eventsToRemove.add(event);
+				removed = true;
+			}
+			if (removed == false && (event instanceof DryDockEvent || event instanceof MaintenanceEvent)) {
+				Pair<Set<Cargo>, Set<Event>> eventsAndCargoesToKeep = getDependenciesForEvent(schedule, event);
+				if (eventsAndCargoesToKeep != null) {
+					cargoesToKeep.addAll(eventsAndCargoesToKeep.getFirst());
+					eventsToKeep.addAll(eventsAndCargoesToKeep.getSecond());
+				}
+			}
+		}
+		// update events to remove
+		eventsToRemove.removeAll(eventsToKeep);
+		return new Triple<>(cargoesToKeep, eventsToKeep, eventsToRemove);
 	}
 
 	public void findSlotsAndCargoesToRemove(final EditingDomain internalDomain, final PeriodRecord periodRecord, final CargoModel cargoModel, final Set<Slot> seenSlots,
 			final Collection<Slot> slotsToRemove, final Collection<Cargo> cargoesToRemove, final Map<Slot, SlotAllocation> slotAllocationMap) {
 
 		for (final Cargo cargo : cargoModel.getCargoes()) {
-
 			final Pair<InclusionType, Position> inclusionResult = inclusionChecker.getObjectInclusionType(cargo, periodRecord);
 			final InclusionType inclusionType = inclusionResult.getFirst();
 			final Position pos = inclusionResult.getSecond();
@@ -280,8 +331,8 @@ public class PeriodTransformer {
 				cargoesToRemove.add(cargo);
 				slotsToRemove.addAll(cargo.getSlots());
 			} else if (inclusionType == InclusionType.Boundary) {
-				if (pos == Position.Both) {
-					// lock whole cargo
+				if (pos == Position.Both || cargo.getVesselAssignmentType() == null) {
+					// lock whole cargo if both slots are outside period or if there is no vessel
 					lockDownCargoDates(slotAllocationMap, cargo);
 				} else {
 					// lock only one slot
@@ -306,6 +357,7 @@ public class PeriodTransformer {
 			seenSlots.addAll(cargo.getSlots());
 		}
 
+		// open slots
 		for (final LoadSlot slot : cargoModel.getLoadSlots()) {
 			if (seenSlots.contains(slot)) {
 				continue;
@@ -350,33 +402,39 @@ public class PeriodTransformer {
 			if (slotsToRemove.contains(slot)) {
 				continue;
 			}
-			final List<Slot> slotDependencies = getExtraDependenciesForSlot(slot);
-			for (final Slot dep : slotDependencies) {
-				if (slotsToRemove.contains(dep)) {
-					slotsToRemove.remove(dep);
-					final Cargo depCargo = dep.getCargo();
-					if (depCargo != null) {
-						// Include all deps too
-						slotsToRemove.removeAll(depCargo.getSlots());
-						cargoesToRemove.remove(depCargo);
-						if (depCargo.getCargoType() == CargoType.FLEET) {
-							final VesselAssignmentType vesselAssignmentType = depCargo.getVesselAssignmentType();
-							if (vesselAssignmentType instanceof VesselAvailability) {
-								final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
-								final VesselAvailability newVesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
-								newVesselAvailability.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
-								newVesselAvailability.setVessel(vesselAvailability.getVessel());
+			final Set<Slot> slotDependencies = new HashSet<>(getExtraDependenciesForSlot(slot));
+			updateSlotDependencies(slotsToRemove, cargoesToRemove, newVesselAvailabilities, startConditionMap, endConditionMap, slotAllocationMap, slotDependencies);
+		}
+	}
 
-								// TODO: set charter rate, set entity. Once multiple avail complete, grab from assignment.
+	private void updateSlotDependencies(final Collection<Slot> slotsToRemove, final Collection<Cargo> cargoesToRemove, final List<VesselAvailability> newVesselAvailabilities,
+			final Map<AssignableElement, PortVisit> startConditionMap, final Map<AssignableElement, PortVisit> endConditionMap, final Map<Slot, SlotAllocation> slotAllocationMap,
+			final Set<Slot> slotDependencies) {
+		for (final Slot dep : slotDependencies) {
+			if (slotsToRemove.contains(dep)) {
+				slotsToRemove.remove(dep);
+				final Cargo depCargo = dep.getCargo();
+				if (depCargo != null) {
+					// Include all deps too
+					slotsToRemove.removeAll(depCargo.getSlots());
+					cargoesToRemove.remove(depCargo);
+					if (depCargo.getCargoType() == CargoType.FLEET) {
+						final VesselAssignmentType vesselAssignmentType = depCargo.getVesselAssignmentType();
+						if (vesselAssignmentType instanceof VesselAvailability) {
+							final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
+							final VesselAvailability newVesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+							newVesselAvailability.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
+							newVesselAvailability.setVessel(vesselAvailability.getVessel());
 
-								newVesselAvailabilities.add(newVesselAvailability);
-								updateVesselAvailabilityConditions(newVesselAvailability, depCargo, startConditionMap, endConditionMap);
-							}
+							// TODO: set charter rate, set entity. Once multiple avail complete, grab from assignment.
 
+							newVesselAvailabilities.add(newVesselAvailability);
+							updateVesselAvailabilityConditions(newVesselAvailability, depCargo, startConditionMap, endConditionMap);
 						}
-						// Remove any vessel & time window flexibility
-						lockDownCargoDates(slotAllocationMap, depCargo);
+
 					}
+					// Remove any vessel & time window flexibility
+					lockDownCargoDates(slotAllocationMap, depCargo);
 				}
 			}
 		}
@@ -496,15 +554,15 @@ public class PeriodTransformer {
 	}
 
 	public void updateVesselAvailabilities(final PeriodRecord periodRecord, final CargoModel cargoModel, final SpotMarketsModel spotMarketsModel,
-			final Map<AssignableElement, PortVisit> startConditionMap, final Map<AssignableElement, PortVisit> endConditionMap) {
+			final Map<AssignableElement, PortVisit> startConditionMap, final Map<AssignableElement, PortVisit> endConditionMap, final Set<Cargo> cargoesToKeep, final Set<Event> eventsToKeep) {
 
 		final List<CollectedAssignment> collectedAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, spotMarketsModel);
 
-		updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap);
+		updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, cargoesToKeep, eventsToKeep);
 	}
 
 	public void updateVesselAvailabilities(final PeriodRecord periodRecord, final List<CollectedAssignment> collectedAssignments, final Map<AssignableElement, PortVisit> startConditionMap,
-			final Map<AssignableElement, PortVisit> endConditionMap) {
+			final Map<AssignableElement, PortVisit> endConditionMap, final Set<Cargo> cargoesToKeep, final Set<Event> eventsToKeep) {
 
 		// Here we loop through all the collected assignments, trimming the vessel availability to anything outside of the date range.
 		// This can handle out-of-order assignments by checking to see whether or not a cargo has already been trimmed out of the date range before updating
@@ -517,6 +575,16 @@ public class PeriodTransformer {
 			final VesselAvailability vesselAvailability = collectedAssignment.getVesselAvailability();
 			if (vesselAvailability != null) {
 				for (final AssignableElement assignedObject : assignedObjects) {
+					if (assignedObject instanceof Cargo) {
+						if (cargoesToKeep.contains(assignedObject)) {
+							continue;
+						}
+					}
+					if (assignedObject instanceof VesselEvent) {
+						if (eventsToKeep.contains(assignedObject)) {
+							continue;
+						}
+					}
 					final Pair<InclusionType, Position> result = inclusionChecker.getObjectInclusionType(assignedObject, periodRecord);
 					if (result.getFirst() == InclusionType.Out) {
 						final Position position = result.getSecond();
@@ -573,6 +641,49 @@ public class PeriodTransformer {
 				}
 			}
 		}
+	}
+
+	private Pair<Set<Cargo>, Set<Event>> getDependenciesForEvent(Schedule schedule, VesselEvent ve) {
+		VesselEventVisit interestingVesselEventVisit = null;
+		Set<Cargo> previousCargoes = new HashSet<>();
+		Set<Event> previousEvents = new HashSet<>();
+		Set<Vessel> vessels = SetUtils.getObjects(ve.getAllowedVessels());
+
+		for (final Sequence sequence : schedule.getSequences()) {
+
+			if (!(sequence.getSequenceType() == SequenceType.VESSEL && vessels.contains(sequence.getVesselAvailability().getVessel()))) {
+				continue;
+			}
+			for (final Event event : sequence.getEvents()) {
+				if (event instanceof VesselEventVisit) {
+					if (((VesselEventVisit) event).getVesselEvent() == ve) {
+						interestingVesselEventVisit = (VesselEventVisit) event;
+						break;
+					}
+				}
+			}
+			if (interestingVesselEventVisit != null) {
+				break;
+			}
+		}
+		if (interestingVesselEventVisit != null) {
+			Event currentEvent = interestingVesselEventVisit.getPreviousEvent();
+			boolean foundCargo = false;
+			while (currentEvent.getPreviousEvent() != null) {
+				if (currentEvent instanceof SlotVisit) {
+					previousCargoes.add(((SlotVisit) currentEvent).getSlotAllocation().getCargoAllocation().getInputCargo());
+					foundCargo = true;
+					break;
+				} else if (currentEvent instanceof PortVisit) {
+					previousEvents.add(currentEvent);
+				}
+				currentEvent = currentEvent.getPreviousEvent();
+			}
+			if (foundCargo) {
+				return new Pair<>(previousCargoes, previousEvents);
+			}
+		}
+		return null;
 	}
 
 	public LNGScenarioModel copyScenario(final LNGScenarioModel wholeScenario, final IScenarioEntityMapping mapping) {
@@ -747,6 +858,9 @@ public class PeriodTransformer {
 				}
 				vesselAvailability.getEndHeel().setTargetEndHeel(heel);
 			} else {
+				if (vesselAvailability.getEndHeel() == null) {
+					vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+				}
 				vesselAvailability.getEndHeel().unsetTargetEndHeel();
 			}
 		}
@@ -771,8 +885,7 @@ public class PeriodTransformer {
 		trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getFobSalesSpotMarket(), earliestDate, latestDate);
 	}
 
-	public void trimSpotMarketCurves(final EditingDomain internalDomain, final PeriodRecord periodRecord, final SpotMarketGroup spotMarketGroup, final DateTime earliestDate,
-			final DateTime latestDate) {
+	public void trimSpotMarketCurves(final EditingDomain internalDomain, final PeriodRecord periodRecord, final SpotMarketGroup spotMarketGroup, final DateTime earliestDate, final DateTime latestDate) {
 		if (spotMarketGroup != null) {
 			if (spotMarketGroup == null) {
 				return;

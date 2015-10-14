@@ -278,6 +278,9 @@ public final class OptimisationHelper {
 
 			final OptimiserSettings copy = EcoreUtil.copy(previousSettings);
 
+			// Reset disabled features
+			resetDisabledFeatures(copy);
+
 			if (!forEvaluation) {
 				// dialog.addOption(DataSection.Controls, null, editingDomain, "Number of Iterations", copy, defaultSettings, DataType.PositiveInt,
 				// ParametersPackage.eINSTANCE.getOptimiserSettings_AnnealingSettings(), ParametersPackage.eINSTANCE.getAnnealingSettings_Iterations());
@@ -425,7 +428,26 @@ public final class OptimisationHelper {
 		return defaultSettings;
 	}
 
+	private static void resetDisabledFeatures(OptimiserSettings copy) {
+		if (!SecurityUtils.getSubject().isPermitted("features:optimisation-actionset")) {
+			copy.setBuildActionSets(false);
+		}
+		if (!SecurityUtils.getSubject().isPermitted("features:optimisation-period")) {
+			copy.getRange().unsetOptimiseBefore();
+			copy.getRange().unsetOptimiseAfter();
+		}
+		if (!SecurityUtils.getSubject().isPermitted("features:optimisation-charter-out-generation")) {
+			copy.setGenerateCharterOuts(false);
+		}
+		if (!SecurityUtils.getSubject().isPermitted("features:optimisation-similarity")) {
+			copy.setSimilaritySettings(ScenarioUtils.createOffSimilaritySettings());
+		}
+	}
+
 	private static void mergeFields(final OptimiserSettings from, final OptimiserSettings to) {
+
+		resetDisabledFeatures(from);
+
 		// TODO: replace all this ugly code by a list of EStructuralFeatures and loop through
 		// them doing the right thing
 
