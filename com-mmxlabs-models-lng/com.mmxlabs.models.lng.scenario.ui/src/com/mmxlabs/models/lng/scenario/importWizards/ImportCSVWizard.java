@@ -8,9 +8,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.models.lng.scenario.wizards.ScenarioServiceNewScenarioPage;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -37,8 +35,7 @@ public class ImportCSVWizard extends Wizard implements IImportWizard {
 		final ScenarioInstance instance = filesPage.getScenarioInstance();
 		if (instance != null) {
 			try {
-				final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-				OpenScenarioUtils.openScenarioInstance(page, instance);
+				OpenScenarioUtils.openScenarioInstance(instance);
 			} catch (PartInitException e) {
 			}
 		}

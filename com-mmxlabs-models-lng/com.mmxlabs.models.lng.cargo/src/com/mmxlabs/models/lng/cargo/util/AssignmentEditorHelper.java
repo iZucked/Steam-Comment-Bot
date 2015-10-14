@@ -14,6 +14,7 @@ import java.util.TreeMap;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.Nullable;
 import org.joda.time.DateTime;
 
 import com.mmxlabs.common.Pair;
@@ -53,6 +54,7 @@ public class AssignmentEditorHelper {
 		}
 	}
 
+	@Nullable
 	public static DateTime getEndDate(final AssignableElement task) {
 		if (task instanceof Cargo) {
 			final Cargo cargo = (Cargo) task;
@@ -61,14 +63,21 @@ public class AssignmentEditorHelper {
 				return null;
 			}
 			final Slot lastSlot = slots.get(slots.size() - 1);
-			return lastSlot.getWindowEndWithSlotOrPortTime();
+			if (lastSlot.getWindowStart() != null) {
+				return lastSlot.getWindowEndWithSlotOrPortTime();
+			}
 		} else if (task instanceof VesselEvent) {
-			return ((VesselEvent) task).getStartByAsDateTime().plusDays(((VesselEvent) task).getDurationInDays());
+			final DateTime dateTime = ((VesselEvent) task).getStartByAsDateTime();
+			if (dateTime != null) {
+				return dateTime.plusDays(((VesselEvent) task).getDurationInDays());
+			}
 		} else if (task instanceof Slot) {
-			return ((Slot) task).getWindowEndWithSlotOrPortTime();
-		} else {
-			return null;
+			final Slot slot = (Slot) task;
+			if (slot.getWindowStart() != null) {
+				return slot.getWindowEndWithSlotOrPortTime();
+			}
 		}
+		return null;
 	}
 
 	public static List<CollectedAssignment> collectAssignments(final CargoModel cargoModel, final SpotMarketsModel spotMarketsModel) {
