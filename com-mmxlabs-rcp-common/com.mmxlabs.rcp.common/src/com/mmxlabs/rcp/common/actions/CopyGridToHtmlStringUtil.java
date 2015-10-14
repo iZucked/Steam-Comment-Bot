@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
@@ -59,6 +60,7 @@ public class CopyGridToHtmlStringUtil {
 
 		}
 		try {
+			addPreTableRows(sw);
 			addHeader(sw);
 			// Ensure at least 1 column to grab data
 			final int numberOfColumns = Math.max(5, numColumns);
@@ -76,7 +78,16 @@ public class CopyGridToHtmlStringUtil {
 		return sw.toString();
 	}
 
-	private void addHeader(final StringWriter sw) {
+	private void addPreTableRows(@NonNull final StringWriter sw) {
+		final String[] additionalPreRows = getAdditionalPreRows();
+		if (additionalPreRows != null) {
+			for (final String r : additionalPreRows) {
+				sw.write(r);
+			}
+		}
+	}
+
+	private void addHeader(@NonNull final StringWriter sw) {
 		// final int numColumns = table.getColumnCount();
 		// write the head
 		sw.write("<thead>\n");
@@ -235,9 +246,17 @@ public class CopyGridToHtmlStringUtil {
 		return combined;
 	}
 
-	private String[] getAdditionalRowHeaderAttributes(GridItem item) {
+	private String[] getAdditionalRowHeaderAttributes(final GridItem item) {
 		if (additionalAttributeProvider != null) {
 			return additionalAttributeProvider.getAdditionalRowHeaderAttributes(item);
+		}
+		return null;
+	}
+
+	@Nullable
+	private String[] getAdditionalPreRows() {
+		if (additionalAttributeProvider != null) {
+			return additionalAttributeProvider.getAdditionalPreRows();
 		}
 		return null;
 	}
@@ -305,7 +324,7 @@ public class CopyGridToHtmlStringUtil {
 		this.showBackgroundColours = showBackgroundColours;
 	}
 
-	public void setAdditionalAttributeProvider(IAdditionalAttributeProvider additionalAttributeProvider) {
+	public void setAdditionalAttributeProvider(final IAdditionalAttributeProvider additionalAttributeProvider) {
 		this.additionalAttributeProvider = additionalAttributeProvider;
 	}
 
