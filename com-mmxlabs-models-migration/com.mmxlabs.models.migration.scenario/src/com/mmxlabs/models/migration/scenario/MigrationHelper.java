@@ -20,6 +20,7 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
 import com.google.common.io.ByteStreams;
+import com.mmxlabs.common.io.FileDeleter;
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -65,29 +66,29 @@ public class MigrationHelper {
 
 	}
 
-	public static File migrateAndLoad(final ScenarioInstance instance, final IScenarioCipherProvider scenarioCipherProvider) throws IOException {
+	public static void migrateAndLoad(final ScenarioInstance instance, final IScenarioCipherProvider scenarioCipherProvider) throws IOException {
 
 		final BundleContext bundleContext = FrameworkUtil.getBundle(MigrationHelper.class).getBundleContext();
 		final ServiceReference<IMigrationRegistry> serviceReference = bundleContext.getServiceReference(IMigrationRegistry.class);
 		try {
-			return migrateAndLoad(instance, scenarioCipherProvider, bundleContext.getService(serviceReference));
+			migrateAndLoad(instance, scenarioCipherProvider, bundleContext.getService(serviceReference));
 		} finally {
 			bundleContext.ungetService(serviceReference);
 		}
 	}
 
-	public static File migrateAndLoad(final ScenarioInstance instance) throws IOException {
+	public static void migrateAndLoad(final ScenarioInstance instance) throws IOException {
 
 		final BundleContext bundleContext = FrameworkUtil.getBundle(MigrationHelper.class).getBundleContext();
 		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
 		try {
-			return migrateAndLoad(instance, bundleContext.getService(serviceReference));
+			migrateAndLoad(instance, bundleContext.getService(serviceReference));
 		} finally {
 			bundleContext.ungetService(serviceReference);
 		}
 	}
 
-	public static File migrateAndLoad(final ScenarioInstance instance, final IScenarioCipherProvider scenarioCipherProvider, final IMigrationRegistry migrationRegistry) throws IOException {
+	public static void migrateAndLoad(final ScenarioInstance instance, final IScenarioCipherProvider scenarioCipherProvider, final IMigrationRegistry migrationRegistry) throws IOException {
 
 		final ScenarioMigrationService migrationService = new ScenarioMigrationService();
 		migrationService.setMigrationRegistry(migrationRegistry);
@@ -98,8 +99,8 @@ public class MigrationHelper {
 		scenarioService.setScenarioMigrationService(migrationService);
 		scenarioService.setScenarioCipherProvider(scenarioCipherProvider);
 
-		final File f;
-		{
+		File f = null;
+		try {
 
 			final String subModelURI = instance.getRootObjectURI();
 
@@ -122,11 +123,14 @@ public class MigrationHelper {
 
 			instance.setRootObjectURI(tmpURI.toString());
 
+			scenarioService.load(instance);
+		} finally {
+			if (f != null && f.exists()) {
+				FileDeleter.delete(f);
+				f = null;
+			}
 		}
 
-		scenarioService.load(instance);
-
-		return f;
 	}
 
 	public static void copyURIData(@NonNull final URIConverter uc, @NonNull final URI sourceURI, @NonNull final URI destURI) throws IOException {
