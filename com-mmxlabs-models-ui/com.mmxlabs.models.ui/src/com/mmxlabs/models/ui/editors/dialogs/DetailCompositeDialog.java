@@ -467,7 +467,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		displayComposite.display(dialogContext, rootObject, duplicate, ranges.get(selection), dbc);
 
 		getShell().layout(true, true);
-
+		getShell().pack();
 		// handle enablement
 		validate();
 
