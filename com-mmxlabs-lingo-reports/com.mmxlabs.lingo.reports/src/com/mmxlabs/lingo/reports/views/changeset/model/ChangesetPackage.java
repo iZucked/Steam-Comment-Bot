@@ -363,22 +363,22 @@ public interface ChangesetPackage extends EPackage {
 	int CHANGE_SET_ROW__RHS_NAME = 1;
 
 	/**
-	 * The feature id for the '<em><b>Lhs Vessel Name</b></em>' attribute.
+	 * The feature id for the '<em><b>Original Vessel Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW__LHS_VESSEL_NAME = 2;
+	int CHANGE_SET_ROW__ORIGINAL_VESSEL_NAME = 2;
 
 	/**
-	 * The feature id for the '<em><b>Rhs Vessel Name</b></em>' attribute.
+	 * The feature id for the '<em><b>New Vessel Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHANGE_SET_ROW__RHS_VESSEL_NAME = 3;
+	int CHANGE_SET_ROW__NEW_VESSEL_NAME = 3;
 
 	/**
 	 * The feature id for the '<em><b>Lhs Wiring Link</b></em>' reference.
@@ -796,26 +796,26 @@ public interface ChangesetPackage extends EPackage {
 	EAttribute getChangeSetRow_RhsName();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getLhsVesselName <em>Lhs Vessel Name</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getOriginalVesselName <em>Original Vessel Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Lhs Vessel Name</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getLhsVesselName()
+	 * @return the meta object for the attribute '<em>Original Vessel Name</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getOriginalVesselName()
 	 * @see #getChangeSetRow()
 	 * @generated
 	 */
-	EAttribute getChangeSetRow_LhsVesselName();
+	EAttribute getChangeSetRow_OriginalVesselName();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getRhsVesselName <em>Rhs Vessel Name</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewVesselName <em>New Vessel Name</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Rhs Vessel Name</em>'.
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getRhsVesselName()
+	 * @return the meta object for the attribute '<em>New Vessel Name</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewVesselName()
 	 * @see #getChangeSetRow()
 	 * @generated
 	 */
-	EAttribute getChangeSetRow_RhsVesselName();
+	EAttribute getChangeSetRow_NewVesselName();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getLhsWiringLink <em>Lhs Wiring Link</em>}'.
@@ -1205,20 +1205,20 @@ public interface ChangesetPackage extends EPackage {
 		EAttribute CHANGE_SET_ROW__RHS_NAME = eINSTANCE.getChangeSetRow_RhsName();
 
 		/**
-		 * The meta object literal for the '<em><b>Lhs Vessel Name</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Original Vessel Name</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute CHANGE_SET_ROW__LHS_VESSEL_NAME = eINSTANCE.getChangeSetRow_LhsVesselName();
+		EAttribute CHANGE_SET_ROW__ORIGINAL_VESSEL_NAME = eINSTANCE.getChangeSetRow_OriginalVesselName();
 
 		/**
-		 * The meta object literal for the '<em><b>Rhs Vessel Name</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>New Vessel Name</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute CHANGE_SET_ROW__RHS_VESSEL_NAME = eINSTANCE.getChangeSetRow_RhsVesselName();
+		EAttribute CHANGE_SET_ROW__NEW_VESSEL_NAME = eINSTANCE.getChangeSetRow_NewVesselName();
 
 		/**
 		 * The meta object literal for the '<em><b>Lhs Wiring Link</b></em>' reference feature.

@@ -10,6 +10,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.shiro.SecurityUtils;
 import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.di.annotations.Optional;
@@ -41,11 +42,17 @@ public class AnalyseScenarioHandler {
 
 	@Inject
 	private EModelService modelService;
+
 	@Inject
 	private MApplication application;
 
 	@CanExecute
 	public boolean canExecute(@Optional @Named(IServiceConstants.ACTIVE_PART) final MPart part) {
+
+		if (!SecurityUtils.getSubject().isPermitted("features:optimisation-actionset")) {
+			return false;
+		}
+
 		if (part == null) {
 			return false;
 		}

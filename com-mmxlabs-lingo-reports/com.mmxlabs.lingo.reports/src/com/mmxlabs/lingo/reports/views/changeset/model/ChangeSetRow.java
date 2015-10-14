@@ -24,8 +24,8 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getLhsName <em>Lhs Name</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getRhsName <em>Rhs Name</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getLhsVesselName <em>Lhs Vessel Name</em>}</li>
- *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getRhsVesselName <em>Rhs Vessel Name</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getOriginalVesselName <em>Original Vessel Name</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewVesselName <em>New Vessel Name</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getLhsWiringLink <em>Lhs Wiring Link</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getRhsWiringLink <em>Rhs Wiring Link</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getLoadSlot <em>Load Slot</em>}</li>
@@ -100,56 +100,56 @@ public interface ChangeSetRow extends EObject {
 	void setRhsName(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Lhs Vessel Name</b></em>' attribute.
+	 * Returns the value of the '<em><b>Original Vessel Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Lhs Vessel Name</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Original Vessel Name</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Lhs Vessel Name</em>' attribute.
-	 * @see #setLhsVesselName(String)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRow_LhsVesselName()
+	 * @return the value of the '<em>Original Vessel Name</em>' attribute.
+	 * @see #setOriginalVesselName(String)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRow_OriginalVesselName()
 	 * @model
 	 * @generated
 	 */
-	String getLhsVesselName();
+	String getOriginalVesselName();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getLhsVesselName <em>Lhs Vessel Name</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getOriginalVesselName <em>Original Vessel Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Lhs Vessel Name</em>' attribute.
-	 * @see #getLhsVesselName()
+	 * @param value the new value of the '<em>Original Vessel Name</em>' attribute.
+	 * @see #getOriginalVesselName()
 	 * @generated
 	 */
-	void setLhsVesselName(String value);
+	void setOriginalVesselName(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Rhs Vessel Name</b></em>' attribute.
+	 * Returns the value of the '<em><b>New Vessel Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Rhs Vessel Name</em>' attribute isn't clear,
+	 * If the meaning of the '<em>New Vessel Name</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Rhs Vessel Name</em>' attribute.
-	 * @see #setRhsVesselName(String)
-	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRow_RhsVesselName()
+	 * @return the value of the '<em>New Vessel Name</em>' attribute.
+	 * @see #setNewVesselName(String)
+	 * @see com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage#getChangeSetRow_NewVesselName()
 	 * @model
 	 * @generated
 	 */
-	String getRhsVesselName();
+	String getNewVesselName();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getRhsVesselName <em>Rhs Vessel Name</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow#getNewVesselName <em>New Vessel Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Rhs Vessel Name</em>' attribute.
-	 * @see #getRhsVesselName()
+	 * @param value the new value of the '<em>New Vessel Name</em>' attribute.
+	 * @see #getNewVesselName()
 	 * @generated
 	 */
-	void setRhsVesselName(String value);
+	void setNewVesselName(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Lhs Wiring Link</b></em>' reference.

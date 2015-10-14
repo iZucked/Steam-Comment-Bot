@@ -362,7 +362,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getChangeSetRow_LhsVesselName() {
+	public EAttribute getChangeSetRow_OriginalVesselName() {
 		return (EAttribute)changeSetRowEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -371,7 +371,7 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getChangeSetRow_RhsVesselName() {
+	public EAttribute getChangeSetRow_NewVesselName() {
 		return (EAttribute)changeSetRowEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -558,8 +558,8 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		changeSetRowEClass = createEClass(CHANGE_SET_ROW);
 		createEAttribute(changeSetRowEClass, CHANGE_SET_ROW__LHS_NAME);
 		createEAttribute(changeSetRowEClass, CHANGE_SET_ROW__RHS_NAME);
-		createEAttribute(changeSetRowEClass, CHANGE_SET_ROW__LHS_VESSEL_NAME);
-		createEAttribute(changeSetRowEClass, CHANGE_SET_ROW__RHS_VESSEL_NAME);
+		createEAttribute(changeSetRowEClass, CHANGE_SET_ROW__ORIGINAL_VESSEL_NAME);
+		createEAttribute(changeSetRowEClass, CHANGE_SET_ROW__NEW_VESSEL_NAME);
 		createEReference(changeSetRowEClass, CHANGE_SET_ROW__LHS_WIRING_LINK);
 		createEReference(changeSetRowEClass, CHANGE_SET_ROW__RHS_WIRING_LINK);
 		createEReference(changeSetRowEClass, CHANGE_SET_ROW__LOAD_SLOT);
@@ -640,8 +640,8 @@ public class ChangesetPackageImpl extends EPackageImpl implements ChangesetPacka
 		initEClass(changeSetRowEClass, ChangeSetRow.class, "ChangeSetRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getChangeSetRow_LhsName(), ecorePackage.getEString(), "lhsName", null, 0, 1, ChangeSetRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getChangeSetRow_RhsName(), ecorePackage.getEString(), "rhsName", null, 0, 1, ChangeSetRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getChangeSetRow_LhsVesselName(), ecorePackage.getEString(), "lhsVesselName", null, 0, 1, ChangeSetRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getChangeSetRow_RhsVesselName(), ecorePackage.getEString(), "rhsVesselName", null, 0, 1, ChangeSetRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getChangeSetRow_OriginalVesselName(), ecorePackage.getEString(), "originalVesselName", null, 0, 1, ChangeSetRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getChangeSetRow_NewVesselName(), ecorePackage.getEString(), "newVesselName", null, 0, 1, ChangeSetRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getChangeSetRow_LhsWiringLink(), this.getChangeSetRow(), this.getChangeSetRow_RhsWiringLink(), "lhsWiringLink", null, 0, 1, ChangeSetRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getChangeSetRow_RhsWiringLink(), this.getChangeSetRow(), this.getChangeSetRow_LhsWiringLink(), "rhsWiringLink", null, 0, 1, ChangeSetRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getChangeSetRow_LoadSlot(), theCargoPackage.getLoadSlot(), null, "loadSlot", null, 0, 1, ChangeSetRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

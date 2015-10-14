@@ -197,8 +197,8 @@ public class ChangeSetView implements IAdaptable {
 			if (newRoot != null) {
 				for (final ChangeSet cs : newRoot.getChangeSets()) {
 					for (final ChangeSetRow csr : cs.getChangeSetRowsToPrevious()) {
-						vesselnames.add(csr.getLhsVesselName());
-						vesselnames.add(csr.getRhsVesselName());
+						vesselnames.add(csr.getOriginalVesselName());
+						vesselnames.add(csr.getNewVesselName());
 					}
 				}
 			}
@@ -1446,13 +1446,12 @@ public class ChangeSetView implements IAdaptable {
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow changeSetRow = (ChangeSetRow) element;
 
-					if (name.equals(changeSetRow.getLhsVesselName())) {
-						cell.setImage(imageOpenCircle);
-						// cell.setText("○");
-					}
-					if (name.equals(changeSetRow.getRhsVesselName())) {
+					if (name.equals(changeSetRow.getNewVesselName())) {
 						cell.setImage(imageClosedCircle);
 						// cell.setText("●");
+					} else if (name.equals(changeSetRow.getOriginalVesselName())) {
+						cell.setImage(imageOpenCircle);
+						// cell.setText("○");
 					}
 				}
 			}
@@ -1462,10 +1461,10 @@ public class ChangeSetView implements IAdaptable {
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow changeSetRow = (ChangeSetRow) element;
 
-					if (name.equals(changeSetRow.getLhsVesselName())) {
+					if (name.equals(changeSetRow.getNewVesselName())) {
 						return name;
 					}
-					if (name.equals(changeSetRow.getRhsVesselName())) {
+					if (name.equals(changeSetRow.getOriginalVesselName())) {
 						return name;
 					}
 				}
@@ -1577,14 +1576,14 @@ public class ChangeSetView implements IAdaptable {
 	private void handleDiffToBaseToggle(@UIEventTopic(ChangeSetViewEventConstants.EVENT_TOGGLE_COMPARE_TO_BASE) final Object o) {
 		diffToBase = !diffToBase;
 		diagram.setDiffToBase(diffToBase);
-		viewer.refresh();
+		ViewerHelper.refresh(viewer, true);
 	}
 
 	@Inject
 	@Optional
 	private void handleShowStructuralChangesToggle(@UIEventTopic(ChangeSetViewEventConstants.EVENT_TOGGLE_FILTER_NON_STRUCTURAL_CHANGES) final Object o) {
 		showNonStructuralChanges = !showNonStructuralChanges;
-		viewer.refresh();
+		ViewerHelper.refresh(viewer, true);
 	}
 
 	@Inject

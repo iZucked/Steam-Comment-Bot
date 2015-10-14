@@ -108,13 +108,13 @@ public final class ChangeSetTransformerUtil {
 		if (isBase) {
 			row.setNewGroupProfitAndLoss(cargoAllocation);
 			row.setNewEventGrouping(cargoAllocation);
-			row.setLhsVesselName(getName(slotVisit.getSequence()));
 			row.setNewLoadAllocation(slotVisit.getSlotAllocation());
+			row.setNewVesselName(getName(slotVisit.getSequence()));
 		} else {
 			row.setOriginalGroupProfitAndLoss(cargoAllocation);
 			row.setOriginalEventGrouping(cargoAllocation);
 			row.setOriginalLoadAllocation(slotVisit.getSlotAllocation());
-			row.setRhsVesselName(getName(slotVisit.getSequence()));
+			row.setOriginalVesselName(getName(slotVisit.getSequence()));
 		}
 		// Get discharge data
 		for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
@@ -249,7 +249,7 @@ public final class ChangeSetTransformerUtil {
 			if (event instanceof EventGrouping) {
 				row.setNewEventGrouping((EventGrouping) event);
 			}
-			row.setLhsVesselName(getName(event.getSequence()));
+			row.setNewVesselName(getName(event.getSequence()));
 		} else {
 			ChangeSetRow row = lhsRowMap.get(eventName);
 			if (row == null) {
@@ -268,7 +268,7 @@ public final class ChangeSetTransformerUtil {
 			if (event instanceof EventGrouping) {
 				row.setOriginalEventGrouping((EventGrouping) event);
 			}
-			row.setRhsVesselName(getName(event.getSequence()));
+			row.setOriginalVesselName(getName(event.getSequence()));
 		}
 	}
 
@@ -483,7 +483,7 @@ public final class ChangeSetTransformerUtil {
 	public static void setRowFlags(@NonNull final List<ChangeSetRow> rows) {
 		// Update with vessel and wiring changes
 		for (final ChangeSetRow row : rows) {
-			if (!Objects.equal(row.getLhsVesselName(), row.getRhsVesselName())) {
+			if (!Objects.equal(row.getOriginalVesselName(), row.getNewVesselName())) {
 				row.setVesselChange(true);
 			}
 			if (row.getLhsWiringLink() != null || row.getRhsWiringLink() != null) {
