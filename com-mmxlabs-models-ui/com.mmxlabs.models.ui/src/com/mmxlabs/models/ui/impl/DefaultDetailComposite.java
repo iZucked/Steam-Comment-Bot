@@ -133,6 +133,7 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 		for (final IInlineEditor editor : editors) {
 			editor.display(dialogContext, root, object, range);
 		}
+		checkVisibility(dialogContext);
 	}
 
 	private void clear() {
