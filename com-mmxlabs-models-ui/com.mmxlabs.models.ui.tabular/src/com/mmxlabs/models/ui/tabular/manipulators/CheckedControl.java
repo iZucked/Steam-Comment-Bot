@@ -80,7 +80,7 @@ public class CheckedControl<T extends Control> extends Composite {
 
 	@Override
 	public boolean isFocusControl() {
-		return super.isFocusControl() || check.isFocusControl() || control.isFocusControl();
+		return control.isDisposed() ? false : (super.isFocusControl() || check.isFocusControl() || control.isFocusControl());
 	}
 	
 	public boolean isCheckFocusControl() {
