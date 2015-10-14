@@ -10,7 +10,8 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
-import com.mmxlabs.optimiser.core.constraints.IReducingContraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IInitialSequencesConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IReducingConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 
 /**
@@ -35,14 +36,22 @@ public interface ISequencesOptimiser extends IOptimiser {
 	 */
 	@NonNull
 	List<IConstraintChecker> getConstraintCheckers();
-
+	
 	/**
 	 * Returns the list of {@link #getConstraintCheckers()} which also implement @link {IReducingContraintChecker}
 	 * 
 	 * @return
 	 */
 	@NonNull
-	List<IReducingContraintChecker> getReducingConstraintCheckers();
+	List<IReducingConstraintChecker> getReducingConstraintCheckers();
+
+	/**
+	 * Returns the list of {@link #getConstraintCheckers()} which also implement @link {IInitialSequencesConstraintChecker}
+	 * 
+	 * @return
+	 */
+	@NonNull
+	List<IInitialSequencesConstraintChecker> getInitialSequencesConstraintCheckers();
 
 	@NonNull
 	List<IEvaluationProcess> getEvaluationProcesses();

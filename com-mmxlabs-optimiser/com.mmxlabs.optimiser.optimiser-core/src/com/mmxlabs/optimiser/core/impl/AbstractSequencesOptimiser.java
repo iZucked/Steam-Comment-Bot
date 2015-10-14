@@ -24,7 +24,8 @@ import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.ISequencesOptimiser;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
-import com.mmxlabs.optimiser.core.constraints.IReducingContraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IInitialSequencesConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IReducingConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 
@@ -50,7 +51,9 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 
 	private long startTime;
 
-	private List<IReducingContraintChecker> reducingConstraintCheckers;
+	private List<IReducingConstraintChecker> reducingConstraintCheckers;
+
+	private List<IInitialSequencesConstraintChecker> initialSequencesConstraintCheckers;
 
 	/**
 	 * Initialise method checking the object has all the correct pieces of data to be able to perform the {@link #optimise(IOptimisationContext, Collection, Object)} method. Throws an
@@ -160,13 +163,17 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 	public final int getNumberOfIterations() {
 		return numberOfIterations;
 	}
-
+	
 	public final void setConstraintCheckers(@NonNull final List<IConstraintChecker> constraintCheckers) {
 		this.constraintCheckers = constraintCheckers;
-		this.reducingConstraintCheckers = new ArrayList<IReducingContraintChecker>(constraintCheckers.size());
+		this.reducingConstraintCheckers = new ArrayList<IReducingConstraintChecker>(constraintCheckers.size());
+		this.initialSequencesConstraintCheckers = new ArrayList<IInitialSequencesConstraintChecker>(constraintCheckers.size());
 		for (final IConstraintChecker checker : constraintCheckers) {
-			if (checker instanceof IReducingContraintChecker) {
-				reducingConstraintCheckers.add((IReducingContraintChecker) checker);
+			if (checker instanceof IReducingConstraintChecker) {
+				reducingConstraintCheckers.add((IReducingConstraintChecker) checker);
+			}
+			if (checker instanceof IInitialSequencesConstraintChecker) {
+				initialSequencesConstraintCheckers.add((IInitialSequencesConstraintChecker) checker);
 			}
 		}
 	}
@@ -186,11 +193,17 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 	public final List<IEvaluationProcess> getEvaluationProcesses() {
 		return evaluationProcesses;
 	}
+	
+	@Override
+	@NonNull
+	public final List<IReducingConstraintChecker> getReducingConstraintCheckers() {
+		return reducingConstraintCheckers;
+	}
 
 	@Override
 	@NonNull
-	public final List<IReducingContraintChecker> getReducingConstraintCheckers() {
-		return reducingConstraintCheckers;
+	public final List<IInitialSequencesConstraintChecker> getInitialSequencesConstraintCheckers() {
+		return initialSequencesConstraintCheckers;
 	}
 
 	public final void setFitnessEvaluator(final IFitnessEvaluator fitnessEvaluator) {
