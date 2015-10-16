@@ -63,17 +63,9 @@ public class FOBDESCargoDatesConstraint extends AbstractModelConstraint {
 						final boolean valid;
 						if (loadSlot.getWindowStart() == null || dischargeSlot.getWindowStart() == null) {
 							valid = false;
-						} else
-						if (loadSlot.getWindowStartWithSlotOrPortTimeWithFlex().isBefore(dischargeSlot.getWindowStartWithSlotOrPortTimeWithFlex())) {
-							valid = checkDates(loadSlot.getWindowStartWithSlotOrPortTimeWithFlex(), loadSlot.getWindowEndWithSlotOrPortTime(), dischargeSlot.getWindowEndWithSlotOrPortTimeWithFlex())
-									|| checkDates(loadSlot.getWindowStartWithSlotOrPortTime(), loadSlot.getWindowEndWithSlotOrPortTime(), dischargeSlot.getWindowStartWithSlotOrPortTimeWithFlex());
 						} else {
-							valid = checkDates(dischargeSlot.getWindowStartWithSlotOrPortTimeWithFlex(), dischargeSlot.getWindowEndWithSlotOrPortTimeWithFlex(),
-									loadSlot.getWindowEndWithSlotOrPortTimeWithFlex())
-									|| checkDates(dischargeSlot.getWindowStartWithSlotOrPortTimeWithFlex(), dischargeSlot.getWindowEndWithSlotOrPortTimeWithFlex(),
-											loadSlot.getWindowStartWithSlotOrPortTimeWithFlex());
+							valid = checkDates(loadSlot.getWindowStartWithSlotOrPortTime(), loadSlot.getWindowEndWithSlotOrPortTimeWithFlex(), dischargeSlot.getWindowStartWithSlotOrPortTime(), dischargeSlot.getWindowEndWithSlotOrPortTimeWithFlex());
 						}
-
 						if (!valid) {
 
 							final String message = String.format("[Cargo|%s] Incompatible slot windows.", cargo.getLoadName());
@@ -91,16 +83,21 @@ public class FOBDESCargoDatesConstraint extends AbstractModelConstraint {
 		return ctx.createSuccessStatus();
 	}
 
-	private boolean checkDates(final DateTime windowStart, final DateTime windowEnd, final DateTime target) {
+	private boolean checkDates(final DateTime loadWindowStart, final DateTime loadWindowEnd, final DateTime dischargeWindowStart, final DateTime dischargeWindowEnd) {
 
-		if (target == null) {
+		if (loadWindowStart == null || loadWindowEnd == null || dischargeWindowStart == null || dischargeWindowEnd == null) {
 			return false;
 		}
 
-		if (target.isBefore(windowStart)) {
+		if (loadWindowEnd.isBefore(dischargeWindowStart)) {
 			return false;
 		}
-		if (target.isAfter(windowEnd)) {
+		
+		if (loadWindowStart.isAfter(dischargeWindowEnd)) {
+			return false;
+		}
+		
+		if ((loadWindowEnd.equals(dischargeWindowStart) && !(loadWindowStart.equals(loadWindowEnd)))) {
 			return false;
 		}
 		return true;

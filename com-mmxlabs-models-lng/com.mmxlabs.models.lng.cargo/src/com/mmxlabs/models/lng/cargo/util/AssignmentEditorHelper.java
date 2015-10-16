@@ -14,6 +14,7 @@ import java.util.TreeMap;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.joda.time.DateTime;
 
@@ -23,6 +24,7 @@ import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -35,29 +37,63 @@ import com.mmxlabs.models.lng.types.util.SetUtils;
 /**
  */
 public class AssignmentEditorHelper {
-	public static DateTime getStartDate(final AssignableElement task) {
+	public static DateTime getStartDateIgnoreSpots(@Nullable final AssignableElement element) {
+		if (element instanceof Cargo) {
+			final Cargo cargo = (Cargo) element;
+			final List<Slot> sortedSlots = cargo.getSortedSlots();
+			if (sortedSlots != null) {
+				for (final Slot slot : sortedSlots) {
+					if (slot instanceof SpotSlot) {
+						continue;
+					}
+					return slot.getWindowStartWithSlotOrPortTime();
+				}
+			}
+		}
+		return getStartDate(element);
+	}
 
-		if (task instanceof Cargo) {
-			final Cargo cargo = (Cargo) task;
+	public static DateTime getStartDate(@Nullable final AssignableElement element) {
+
+		if (element instanceof Cargo) {
+			final Cargo cargo = (Cargo) element;
 			final EList<Slot> slots = cargo.getSortedSlots();
 			if (slots.isEmpty()) {
 				return null;
 			}
 			final Slot firstSlot = slots.get(0);
 			return firstSlot.getWindowStartWithSlotOrPortTime();
-		} else if (task instanceof VesselEvent) {
-			return ((VesselEvent) task).getStartByAsDateTime();
-		} else if (task instanceof Slot) {
-			return ((Slot) task).getWindowStartWithSlotOrPortTime();
+		} else if (element instanceof VesselEvent) {
+			return ((VesselEvent) element).getStartByAsDateTime();
+		} else if (element instanceof Slot) {
+			return ((Slot) element).getWindowStartWithSlotOrPortTime();
 		} else {
 			return null;
 		}
 	}
 
 	@Nullable
-	public static DateTime getEndDate(final AssignableElement task) {
-		if (task instanceof Cargo) {
-			final Cargo cargo = (Cargo) task;
+	public static DateTime getEndDateIgnoreSpots(@Nullable final AssignableElement element) {
+
+		if (element instanceof Cargo) {
+			final Cargo cargo = (Cargo) element;
+			final List<Slot> sortedSlots = cargo.getSortedSlots();
+			if (sortedSlots != null) {
+				for (final Slot slot : sortedSlots) {
+					if (slot instanceof SpotSlot) {
+						continue;
+					}
+					return slot.getWindowStartWithSlotOrPortTime();
+				}
+			}
+		}
+		return getEndDate(element);
+	}
+
+	@Nullable
+	public static DateTime getEndDate(@Nullable final AssignableElement element) {
+		if (element instanceof Cargo) {
+			final Cargo cargo = (Cargo) element;
 			final EList<Slot> slots = cargo.getSortedSlots();
 			if (slots.isEmpty()) {
 				return null;
@@ -66,13 +102,13 @@ public class AssignmentEditorHelper {
 			if (lastSlot.getWindowStart() != null) {
 				return lastSlot.getWindowEndWithSlotOrPortTime();
 			}
-		} else if (task instanceof VesselEvent) {
-			final DateTime dateTime = ((VesselEvent) task).getStartByAsDateTime();
+		} else if (element instanceof VesselEvent) {
+			final DateTime dateTime = ((VesselEvent) element).getStartByAsDateTime();
 			if (dateTime != null) {
-				return dateTime.plusDays(((VesselEvent) task).getDurationInDays());
+				return dateTime.plusDays(((VesselEvent) element).getDurationInDays());
 			}
-		} else if (task instanceof Slot) {
-			final Slot slot = (Slot) task;
+		} else if (element instanceof Slot) {
+			final Slot slot = (Slot) element;
 			if (slot.getWindowStart() != null) {
 				return slot.getWindowEndWithSlotOrPortTime();
 			}
@@ -80,11 +116,12 @@ public class AssignmentEditorHelper {
 		return null;
 	}
 
-	public static List<CollectedAssignment> collectAssignments(final CargoModel cargoModel, final SpotMarketsModel spotMarketsModel) {
+	public static List<CollectedAssignment> collectAssignments(@NonNull final CargoModel cargoModel, @NonNull final SpotMarketsModel spotMarketsModel) {
 		return collectAssignments(cargoModel, spotMarketsModel, new AssignableElementDateComparator());
 	}
 
-	public static List<CollectedAssignment> collectAssignments(final CargoModel cargoModel, final SpotMarketsModel spotMarketsModel, final IAssignableElementComparator assignableElementComparator) {
+	public static List<CollectedAssignment> collectAssignments(@NonNull final CargoModel cargoModel, @NonNull final SpotMarketsModel spotMarketsModel,
+			@NonNull final IAssignableElementComparator assignableElementComparator) {
 		final List<CollectedAssignment> result = new ArrayList<CollectedAssignment>();
 		// Enforce consistent order
 		final Map<Pair<VesselAvailability, Integer>, List<AssignableElement>> fleetGrouping = new TreeMap<Pair<VesselAvailability, Integer>, List<AssignableElement>>(
@@ -187,7 +224,8 @@ public class AssignmentEditorHelper {
 		return result;
 	}
 
-	public static VesselAvailability findVesselAvailability(final Vessel vessel, final AssignableElement assignableElement, final List<VesselAvailability> vesselAvailabilities) {
+	public static VesselAvailability findVesselAvailability(@NonNull final Vessel vessel, @NonNull final AssignableElement assignableElement,
+			@NonNull final List<VesselAvailability> vesselAvailabilities) {
 
 		int mightMatchCount = 0;
 		for (final VesselAvailability vesselAvailability : vesselAvailabilities) {
@@ -211,7 +249,7 @@ public class AssignmentEditorHelper {
 		return null;
 	}
 
-	private static boolean isElementInVesselAvailability(final AssignableElement element, final VesselAvailability vesselAvailability) {
+	private static boolean isElementInVesselAvailability(@NonNull final AssignableElement element, @NonNull final VesselAvailability vesselAvailability) {
 
 		final DateTime vesselAvailabilityEndBy = vesselAvailability.getEndByAsDateTime();
 		final DateTime vesselAvailabilityStartAfter = vesselAvailability.getStartAfterAsDateTime();
@@ -255,7 +293,7 @@ public class AssignmentEditorHelper {
 		return true;
 	}
 
-	public static int getMaxSpot(final CargoModel cargoModel) {
+	public static int getMaxSpot(@NonNull final CargoModel cargoModel) {
 		int maxSpot = 0;
 		for (final Cargo cargo : cargoModel.getCargoes()) {
 			final VesselAssignmentType vesselAssignmentType = cargo.getVesselAssignmentType();
@@ -273,7 +311,7 @@ public class AssignmentEditorHelper {
 		return maxSpot;
 	}
 
-	public static boolean compileAllowedVessels(List<AVesselSet<Vessel>> allowedVessels, EObject target) {
+	public static boolean compileAllowedVessels(@NonNull final List<AVesselSet<Vessel>> allowedVessels, @NonNull EObject target) {
 		// The slot intersection may mean no vessels are permitted at all!
 		boolean noVesselsAllowed = false;
 		// populate the list of allowed vessels for the target object
@@ -345,7 +383,7 @@ public class AssignmentEditorHelper {
 			final VesselEvent event = (VesselEvent) target;
 			allowedVessels.addAll(event.getAllowedVessels());
 		} else {
-			allowedVessels = null;
+			// allowedVessels = null;
 		}
 		return noVesselsAllowed;
 	}

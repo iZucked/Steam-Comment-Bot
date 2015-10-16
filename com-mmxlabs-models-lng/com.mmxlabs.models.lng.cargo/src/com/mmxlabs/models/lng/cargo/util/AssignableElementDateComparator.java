@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.cargo.util;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.joda.time.DateTime;
 
 import com.mmxlabs.models.lng.cargo.AssignableElement;
@@ -13,22 +15,19 @@ import com.mmxlabs.models.lng.cargo.AssignableElement;
  */
 public class AssignableElementDateComparator implements IAssignableElementComparator {
 	@Override
-	public int compare(final AssignableElement arg0, final AssignableElement arg1) {
+	public int compare(@Nullable final AssignableElement arg0, @Nullable final AssignableElement arg1) {
 		final DateTime start0 = getStartDate(arg0);
 		final DateTime start1 = getStartDate(arg1);
 		final DateTime end0 = getEndDate(arg0);
 		final DateTime end1 = getEndDate(arg1);
 
-		final boolean null0 = start0 == null || end0 == null;
-		final boolean null1 = start1 == null || end1 == null;
-
-		if (null0) {
-			if (null1) {
+		if (start0 == null || end0 == null) {
+			if (start1 == null || end1 == null) {
 				return 0;
 			} else {
 				return -1;
 			}
-		} else if (null1) {
+		} else if (start1 == null || end1 == null) {
 			return 1;
 		}
 
@@ -40,16 +39,17 @@ public class AssignableElementDateComparator implements IAssignableElementCompar
 		}
 	}
 
-	protected boolean overlaps(final DateTime start0, final DateTime end0, final DateTime start1, final DateTime end1) {
+	protected boolean overlaps(@NonNull final DateTime start0, @NonNull final DateTime end0, @NonNull final DateTime start1, @NonNull final DateTime end1) {
 		return !(end0.isBefore(start1) || end1.isBefore(start0));
 	}
 
-	protected DateTime getStartDate(final AssignableElement element) {
-		return AssignmentEditorHelper.getStartDate(element);
+	protected DateTime getStartDate(@Nullable final AssignableElement element) {
+
+		return AssignmentEditorHelper.getStartDateIgnoreSpots(element);
 	}
 
-	protected DateTime getEndDate(final AssignableElement element) {
-		return AssignmentEditorHelper.getEndDate(element);
+	protected DateTime getEndDate(@Nullable final AssignableElement element) {
 
+		return AssignmentEditorHelper.getEndDateIgnoreSpots(element);
 	}
 }
