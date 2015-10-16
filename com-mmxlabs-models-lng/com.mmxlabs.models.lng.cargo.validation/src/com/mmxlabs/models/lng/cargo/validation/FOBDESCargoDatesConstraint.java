@@ -64,15 +64,6 @@ public class FOBDESCargoDatesConstraint extends AbstractModelConstraint {
 						if (loadSlot.getWindowStart() == null || dischargeSlot.getWindowStart() == null) {
 							valid = false;
 						} else {
-//						if (loadSlot.getWindowStartWithSlotOrPortTimeWithFlex().isBefore(dischargeSlot.getWindowStartWithSlotOrPortTimeWithFlex())) {
-//							valid = checkDates(loadSlot.getWindowStartWithSlotOrPortTimeWithFlex(), loadSlot.getWindowEndWithSlotOrPortTime(), dischargeSlot.getWindowEndWithSlotOrPortTimeWithFlex())
-//									|| checkDates(loadSlot.getWindowStartWithSlotOrPortTime(), loadSlot.getWindowEndWithSlotOrPortTime(), dischargeSlot.getWindowStartWithSlotOrPortTimeWithFlex());
-//						} else {
-//							valid = checkDates(dischargeSlot.getWindowStartWithSlotOrPortTimeWithFlex(), dischargeSlot.getWindowEndWithSlotOrPortTimeWithFlex(),
-//									loadSlot.getWindowEndWithSlotOrPortTimeWithFlex())
-//									|| checkDates(dischargeSlot.getWindowStartWithSlotOrPortTimeWithFlex(), dischargeSlot.getWindowEndWithSlotOrPortTimeWithFlex(),
-//											loadSlot.getWindowStartWithSlotOrPortTimeWithFlex());
-//						}
 							valid = checkDates(loadSlot.getWindowStartWithSlotOrPortTime(), loadSlot.getWindowEndWithSlotOrPortTimeWithFlex(), dischargeSlot.getWindowStartWithSlotOrPortTime(), dischargeSlot.getWindowEndWithSlotOrPortTimeWithFlex());
 						}
 						if (!valid) {
