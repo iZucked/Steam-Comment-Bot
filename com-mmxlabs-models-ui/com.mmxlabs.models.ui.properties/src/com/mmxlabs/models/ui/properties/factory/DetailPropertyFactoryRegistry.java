@@ -73,8 +73,8 @@ public class DetailPropertyFactoryRegistry {
 		}
 	}
 
-	public @Nullable
-	IDetailPropertyFactory getFactory(@NonNull final String category, @NonNull final EClass eClass) {
+	@Nullable
+	public IDetailPropertyFactory getFactory(@NonNull final String category, @NonNull final EClass eClass) {
 		final Map<String, DetailPropertyFactoryExtensionPoint> map;
 		if (factories.containsKey(category)) {
 			map = factories.get(category);
@@ -100,12 +100,14 @@ public class DetailPropertyFactoryRegistry {
 
 		return null;
 	}
-	
+
 	/**
 	 * Create a {@link DetailPropertyFactoryRegistry} and initialise it with known extension points.
 	 * 
 	 * @return
 	 */
+	@SuppressWarnings("null")
+	@NonNull
 	public static DetailPropertyFactoryRegistry createRegistry() {
 		final BundleContext bc = FrameworkUtil.getBundle(DetailPropertyFactoryRegistry.class).getBundleContext();
 		final Injector injector = Guice.createInjector(new AbstractModule() {
