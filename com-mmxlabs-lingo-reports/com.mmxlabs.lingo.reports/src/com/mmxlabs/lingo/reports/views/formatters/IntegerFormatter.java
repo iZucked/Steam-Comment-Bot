@@ -32,6 +32,11 @@ public class IntegerFormatter implements ICellRenderer {
 	}
 
 	@Override
+	public boolean isValueUnset(Object object) {
+		return false;
+	}
+
+	@Override
 	public Comparable getComparable(final Object object) {
 		final Integer x = getIntValue(object);
 		if (x == null) {

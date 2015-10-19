@@ -92,17 +92,17 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 			return showOpenSlot(openSlotAllocation);
 		}
 		SlotAllocation loadAllocation = row.getLoadAllocation();
-		if (loadAllocation != null){
+		if (loadAllocation != null) {
 			return showEvent(loadAllocation.getSlotVisit());
 		}
 		EObject target = row.getTarget();
 		if (target instanceof Event) {
-			return showEvent((Event)target);
+			return showEvent((Event) target);
 		}
-		
+
 		return true;
 	}
-	
+
 	public boolean showOpenSlot(final OpenSlotAllocation openSlotAllocation) {
 
 		if (openSlotAllocation.getSlot() instanceof LoadSlot) {
@@ -245,34 +245,41 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 	}
 
 	public ColumnHandler addWiringColumn(final String blockId) {
-		
+
 		return blockManager.createColumn(blockManager.getBlockByID(blockId), "Wiring", new ICellRenderer() {
-			
+
 			@Override
 			public Comparable getComparable(Object object) {
 				// TODO Auto-generated method stub
 				return null;
 			}
-			
+
 			@Override
 			public String render(Object object) {
 				// TODO Auto-generated method stub
 				return null;
 			}
-			
+
 			@Override
 			public Object getFilterValue(Object object) {
 				// TODO Auto-generated method stub
 				return null;
 			}
-			
+
 			@Override
 			public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(Object object) {
 				// TODO Auto-generated method stub
 				return null;
 			}
+
+			@Override
+			public boolean isValueUnset(Object object) {
+				return false;
+			}
+
 		}, false, ScheduleReportPackage.Literals.ROW__TARGET);
 	}
+
 	private ColumnHandler addPNLColumn(final String blockId, final String entityLabel, final String entityKey, final EStructuralFeature bookContainmentFeature) {
 		final String book = bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK ? "Shipping" : "Trading";
 		final String title = String.format("P&L (%s - %s)", entityLabel, book);
@@ -356,10 +363,8 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 		return adaptableReport;
 	}
 
-
 	public void setAdaptableReport(IAdaptable adaptableReport) {
 		this.adaptableReport = adaptableReport;
 	}
 
-	
 }

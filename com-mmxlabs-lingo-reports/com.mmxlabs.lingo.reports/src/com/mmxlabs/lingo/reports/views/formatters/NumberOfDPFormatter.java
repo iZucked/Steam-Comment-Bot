@@ -35,6 +35,11 @@ public class NumberOfDPFormatter implements ICellRenderer {
 	}
 
 	@Override
+	public boolean isValueUnset(final Object object) {
+		return false;
+	}
+
+	@Override
 	public String render(final Object object) {
 		if (object == null) {
 			return "";
@@ -61,7 +66,7 @@ public class NumberOfDPFormatter implements ICellRenderer {
 	}
 
 	@Override
-	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(Object object) {
+	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
 		return null;
 	}
 }
