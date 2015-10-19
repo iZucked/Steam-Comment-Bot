@@ -100,6 +100,11 @@ public class OptimiserSettingsEditorPane extends ScenarioTableViewerPane {
 			}
 			return 1;
 		}
+		
+		@Override
+		public boolean isValueUnset(Object object) {
+			return false;
+		}
 
 		@Override
 		public boolean canEdit(final Object object) {
