@@ -49,6 +49,11 @@ public class BasicOperationRenderer implements ICellManipulator, ICellRenderer {
 		}
 		return null;
 	}
+	
+	@Override
+	public boolean isValueUnset(Object object) {
+		return false;
+	}
 
 	protected String renderUnsetValue(final Object container, final Object unsetDefault) {
 		return renderSetValue(container, unsetDefault);

@@ -45,7 +45,7 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 		if (object == null) {
 			return null;
 		}
-		
+
 		// if the object for some reason does not support the field (e.g. it's a placeholder row in a table)
 		// ignore it
 		if (object instanceof EObject && !((EObject) object).eClass().getEAllStructuralFeatures().contains(field)) {
@@ -135,6 +135,17 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 		} else {
 			return result;
 		}
+	}
+
+	@Override
+	public boolean isValueUnset(final Object object) {
+		if (object == null) {
+			return false;
+		}
+		if (field.isUnsettable() && ((EObject) object).eIsSet(field) == false) {
+			return true;
+		}
+		return false;
 	}
 
 	@Override

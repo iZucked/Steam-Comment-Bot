@@ -79,6 +79,18 @@ public class BasicNamedAttributeManipulator implements ICellManipulator, ICellRe
 		}
 	}
 
+	@Override
+	public boolean isValueUnset(final Object object) {
+		if (object == null) {
+			return false;
+		}
+		final EStructuralFeature field = getNamedField(object);
+		if (field.isUnsettable() && ((EObject) object).eIsSet(field) == false) {
+			return true;
+		}
+		return false;
+	}
+
 	protected EStructuralFeature getNamedField(final Object object) {
 		return ((EObject) object).eClass().getEStructuralFeature(fieldName);
 	}
