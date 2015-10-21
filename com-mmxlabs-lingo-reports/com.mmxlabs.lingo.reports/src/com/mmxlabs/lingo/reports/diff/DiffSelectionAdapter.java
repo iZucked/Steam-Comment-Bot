@@ -12,14 +12,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.ui.IWorkbenchPart;
@@ -30,7 +27,7 @@ import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
 
-public class DiffSelectionAdapter implements org.eclipse.e4.ui.workbench.modeling.ISelectionListener, ISelectionChangedListener {
+public class DiffSelectionAdapter {
 
 	private Table table;
 
@@ -40,40 +37,6 @@ public class DiffSelectionAdapter implements org.eclipse.e4.ui.workbench.modelin
 
 	public void setTable(final Table table) {
 		this.table = table;
-	}
-
-	@Override
-	public void selectionChanged(final SelectionChangedEvent event) {
-		if (table != null) {
-			adaptSelection(table, event.getSelection());
-		}
-	}
-
-	@Override
-	public void selectionChanged(final MPart part, final Object selectedObject) {
-		final Object object = part.getObject();
-		if (object instanceof CompatibilityPart) {
-			final CompatibilityPart compatibilityView = (CompatibilityPart) object;
-			final IWorkbenchPart view = compatibilityView.getPart();
-
-			if (!(view instanceof DiffGroupView)) {
-				return;
-			}
-		}
-
-		ISelection selection = null;
-		// Convert selection
-		if (selectedObject instanceof ISelection) {
-			selection = (ISelection) selectedObject;
-		} else if (selectedObject instanceof Object[]) {
-			selection = new StructuredSelection((Object[]) selectedObject);
-		} else {
-			selection = new StructuredSelection(selectedObject);
-		}
-	
-		if (table != null) {
-			adaptSelection(table, selection);
-		}
 	}
 
 	public static void adaptSelection(Table table, final ISelection selection) {

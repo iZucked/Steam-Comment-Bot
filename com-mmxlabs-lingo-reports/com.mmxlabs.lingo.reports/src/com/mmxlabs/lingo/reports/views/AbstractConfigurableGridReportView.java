@@ -53,7 +53,6 @@ import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.components.ColumnBlockManager;
 import com.mmxlabs.lingo.reports.components.ColumnHandler;
 import com.mmxlabs.lingo.reports.components.GridTableViewerColumnFactory;
-import com.mmxlabs.lingo.reports.diff.DiffGroupView;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnInfoProvider;
@@ -590,10 +589,6 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 				return;
 			}
 			if (e3Part instanceof PropertySheet) {
-				return;
-			}
-
-			if (e3Part instanceof DiffGroupView) {
 				return;
 			}
 		}

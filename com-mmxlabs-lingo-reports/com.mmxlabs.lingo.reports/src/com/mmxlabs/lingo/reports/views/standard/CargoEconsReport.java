@@ -28,7 +28,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -39,7 +38,6 @@ import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.PropertySheet;
 
 import com.google.common.collect.Sets;
-import com.mmxlabs.lingo.reports.diff.DiffGroupView;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -130,10 +128,6 @@ public class CargoEconsReport extends ViewPart {
 						return;
 					}
 					if (e3part instanceof PropertySheet) {
-						return;
-					}
-
-					if (e3part instanceof DiffGroupView) {
 						return;
 					}
 				}

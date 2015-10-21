@@ -82,7 +82,6 @@ import com.mmxlabs.ganttviewer.actions.ZoomInAction;
 import com.mmxlabs.ganttviewer.actions.ZoomOutAction;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ScheduleElementCollector;
-import com.mmxlabs.lingo.reports.diff.DiffGroupView;
 import com.mmxlabs.lingo.reports.diff.DiffSelectionAdapter;
 import com.mmxlabs.lingo.reports.properties.ScheduledEventPropertySourceProvider;
 import com.mmxlabs.lingo.reports.scheduleview.internal.Activator;
@@ -826,10 +825,6 @@ public class SchedulerView extends ViewPart implements org.eclipse.e4.ui.workben
 				return;
 			}
 			if (view instanceof PropertySheet) {
-				return;
-			}
-
-			if (view instanceof DiffGroupView) {
 				return;
 			}
 		}
