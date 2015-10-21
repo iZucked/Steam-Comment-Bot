@@ -17,21 +17,22 @@ Build: {1}
    </configIni>
 
    <launcherArgs>
-      <vmArgs>-ea -server -Xmx768m</vmArgs>
-      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
+      <vmArgs>-ea -server -Xmx768m
+      </vmArgs>
+      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
+      </vmArgsMac>
    </launcherArgs>
 
    <windowImages i16="icons/logo-square-16.png" i32="icons/logo-square-32.png" i48="icons/logo-square-48.png" i64="icons/logo-square-64.png" i128="icons/logo-square-128.png"/>
 
    <splash
       location="com.mmxlabs.lingo.app"
-      startupProgressRect="20,210,440,15"
-      startupMessageRect="20,220,440,20"
-      startupForegroundColor="000000" />
+      startupProgressRect="20,210,440,15" />
    <launcher name="LiNGO">
       <solaris/>
       <win useIco="true">
          <ico path="icons/minimax_icon.ico"/>
+         <bmp/>
       </win>
    </launcher>
 
