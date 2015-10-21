@@ -5,6 +5,7 @@
 package com.mmxlabs.optimiser.core.scenario.impl;
 
 import java.util.List;
+
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
