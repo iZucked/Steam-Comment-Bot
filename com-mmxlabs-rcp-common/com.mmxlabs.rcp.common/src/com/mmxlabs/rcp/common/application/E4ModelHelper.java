@@ -14,6 +14,7 @@ import org.eclipse.e4.ui.model.application.ui.MElementContainer;
 import org.eclipse.e4.ui.model.application.ui.MUIElement;
 import org.eclipse.e4.ui.model.application.ui.advanced.MPerspective;
 import org.eclipse.e4.ui.model.application.ui.advanced.MPlaceholder;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.jdt.annotation.NonNull;
@@ -70,11 +71,42 @@ public class E4ModelHelper {
 		}
 
 		// Remove part descriptor
-		final Iterator<MPartDescriptor> itr = application.getDescriptors().iterator();
-		while (itr.hasNext()) {
-			final MPartDescriptor descriptor = itr.next();
+		final Iterator<MPartDescriptor> descriptorItr = application.getDescriptors().iterator();
+		while (descriptorItr.hasNext()) {
+			final MPartDescriptor descriptor = descriptorItr.next();
 			if (viewId.equals(descriptor.getElementId())) {
-				itr.remove();
+				descriptorItr.remove();
+			}
+		}
+		final List<MPart> parts = modelService.findElements(application, viewId, MPart.class, null);
+		for (final MPart part : parts) {
+			part.setToBeRendered(false);
+			final MElementContainer<MUIElement> parent = part.getParent();
+			if (parent != null) {
+				parent.getChildren().remove(part);
+				if (parent.getSelectedElement() == part) {
+					if (!parent.getChildren().isEmpty()) {
+						parent.setSelectedElement(parent.getChildren().get(0));
+					} else {
+						// Parent is empty.
+						// Might be better to remove the parent too, this could get recursive however.
+						parent.setToBeRendered(false);
+						parent.setSelectedElement(null);
+					}
+				}
+			}
+		}
+
+		// Remove perspective tags
+		final List<MPerspective> perspectives = modelService.findElements(application, null, MPerspective.class, null);
+		final String viewTag = "persp.viewSC:" + viewId;
+		for (final MPerspective p : perspectives) {
+			final Iterator<String> tagItr = p.getTags().iterator();
+			while (tagItr.hasNext()) {
+				final String tag = tagItr.next();
+				if (viewTag.equals(tag)) {
+					tagItr.remove();
+				}
 			}
 		}
 	}
