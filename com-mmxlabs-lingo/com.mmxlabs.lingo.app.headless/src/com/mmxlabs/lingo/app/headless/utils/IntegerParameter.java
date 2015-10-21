@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.lingo.app.headless.utils;
 
-import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
-
 public class IntegerParameter extends AParameter<Integer> {
 
 	IntegerParameter(String key) {

@@ -6,7 +6,6 @@ package com.mmxlabs.lingo.its.uat.suite.testers;
 
 import com.mmxlabs.lingo.its.uat.suite.cases.UATMultiCargoCase;
 import com.mmxlabs.lingo.its.uat.suite.cases.UATTypedCase;
-import com.mmxlabs.lingo.its.uat.suite.testers.GlobalUATTestsConfig;
 import com.mmxlabs.lingo.its.uat.suite.utils.FeatureBasedUAT;
 import com.mmxlabs.models.lng.schedule.Schedule;
 

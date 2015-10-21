@@ -5,8 +5,8 @@
 package com.mmxlabs.lingo.its.tests.scenarios;
 
 import java.net.URL;
+import java.time.LocalDate;
 
-import org.joda.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Test;
 
