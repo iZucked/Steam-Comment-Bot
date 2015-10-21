@@ -14,11 +14,11 @@ import com.mmxlabs.models.lng.pricing.DataIndex;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotAvailability#getConstant <em>Constant</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotAvailability#getCurve <em>Curve</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getSpotAvailability()
  * @model

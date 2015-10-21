@@ -12,11 +12,11 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.fleet.FuelConsumption#getSpeed <em>Speed</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.FuelConsumption#getConsumption <em>Consumption</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.fleet.FleetPackage#getFuelConsumption()
  * @model

@@ -16,6 +16,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getPort <em>Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getDate <em>Date</em>}</li>
@@ -25,7 +26,6 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getHeelVolume <em>Heel Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#isIncludePortCosts <em>Include Port Costs</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getShippingCostRow()
  * @model

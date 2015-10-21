@@ -24,13 +24,13 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteLineImpl#getFrom <em>From</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteLineImpl#getTo <em>To</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteLineImpl#getDistance <em>Distance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.RouteLineImpl#getVias <em>Vias</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

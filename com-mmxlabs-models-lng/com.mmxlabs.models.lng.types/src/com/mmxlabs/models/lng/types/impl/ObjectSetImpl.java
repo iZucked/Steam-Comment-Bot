@@ -23,10 +23,10 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.types.impl.ObjectSetImpl#getName <em>Name</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

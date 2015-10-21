@@ -16,10 +16,10 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselTypeGroup#getVesselType <em>Vessel Type</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselTypeGroup()
  * @model

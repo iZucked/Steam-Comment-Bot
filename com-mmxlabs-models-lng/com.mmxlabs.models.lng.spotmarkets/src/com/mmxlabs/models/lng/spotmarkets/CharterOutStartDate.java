@@ -6,8 +6,9 @@
  */
 package com.mmxlabs.models.lng.spotmarkets;
 
+import java.time.LocalDate;
+
 import org.eclipse.emf.ecore.EObject;
-import org.joda.time.LocalDate;
 
 /**
  * <!-- begin-user-doc -->
@@ -16,10 +17,10 @@ import org.joda.time.LocalDate;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate#getCharterOutStartDate <em>Charter Out Start Date</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterOutStartDate()
  * @model

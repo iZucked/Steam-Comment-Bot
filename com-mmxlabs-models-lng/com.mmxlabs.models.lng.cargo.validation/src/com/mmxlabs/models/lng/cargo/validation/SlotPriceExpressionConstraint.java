@@ -4,14 +4,14 @@
  */
 package com.mmxlabs.models.lng.cargo.validation;
 
+import java.time.YearMonth;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.joda.time.DateTime;
-import org.joda.time.YearMonth;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -49,9 +49,9 @@ public class SlotPriceExpressionConstraint extends AbstractModelMultiConstraint 
 					}
 				}
 
-				final DateTime start = slot.getWindowStartWithSlotOrPortTime();
+				final ZonedDateTime start = slot.getWindowStartWithSlotOrPortTime();
 				if (start != null) {
-					final YearMonth key = new YearMonth(start.toLocalDate());
+					final YearMonth key = YearMonth.of(start.toLocalDate().getYear(), start.toLocalDate().getMonthValue());
 					PriceExpressionUtils.constrainPriceExpression(ctx, slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION, priceExpression, minExpressionValue, maxExpressionValue, key, failures);
 				}
 			}

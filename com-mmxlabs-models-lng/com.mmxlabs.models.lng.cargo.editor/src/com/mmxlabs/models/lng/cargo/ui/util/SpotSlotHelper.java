@@ -4,11 +4,11 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.util;
 
+import java.time.LocalDate;
+
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.joda.time.Hours;
-import org.joda.time.LocalDate;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;

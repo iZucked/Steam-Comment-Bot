@@ -7,6 +7,9 @@
 package com.mmxlabs.models.lng.cargo.impl;
 
 import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -16,9 +19,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDateTime;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.EndHeelOptions;
@@ -36,6 +36,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getVessel <em>Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getEntity <em>Entity</em>}</li>
@@ -49,7 +50,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getStartHeel <em>Start Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getEndHeel <em>End Heel</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
@@ -707,11 +707,11 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public DateTime getStartByAsDateTime() {
+	public ZonedDateTime getStartByAsDateTime() {
 		if (isSetStartBy()) {
 			final LocalDateTime ldt = getStartBy();
 			if (ldt != null) {
-				return ldt.toDateTime(DateTimeZone.UTC);
+				return ldt.atZone(ZoneId.of("UTC"));
 			}
 		}
 		return null;
@@ -722,11 +722,11 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public DateTime getStartAfterAsDateTime() {
+	public ZonedDateTime getStartAfterAsDateTime() {
 		if (isSetStartAfter()) {
 			final LocalDateTime ldt = getStartAfter();
 			if (ldt != null) {
-				return ldt.toDateTime(DateTimeZone.UTC);
+				return ldt.atZone(ZoneId.of("UTC"));
 			}
 		}
 		return null;
@@ -737,11 +737,11 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public DateTime getEndByAsDateTime() {
+	public ZonedDateTime getEndByAsDateTime() {
 		if (isSetEndBy()) {
 			final LocalDateTime ldt = getEndBy();
 			if (ldt != null) {
-				return ldt.toDateTime(DateTimeZone.UTC);
+				return ldt.atZone(ZoneId.of("UTC"));
 			}
 		}
 		return null;
@@ -752,12 +752,12 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public DateTime getEndAfterAsDateTime() {
+	public ZonedDateTime getEndAfterAsDateTime() {
 		
 		if (isSetEndAfter()) {
 			final LocalDateTime ldt = getEndAfter();
 			if (ldt != null) {
-				return ldt.toDateTime(DateTimeZone.UTC);
+				return ldt.atZone(ZoneId.of("UTC"));
 			}
 		}
 		return null;

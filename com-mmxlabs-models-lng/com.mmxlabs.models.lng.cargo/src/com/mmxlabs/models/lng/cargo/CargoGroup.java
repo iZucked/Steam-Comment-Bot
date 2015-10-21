@@ -14,10 +14,10 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CargoGroup#getCargoes <em>Cargoes</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargoGroup()
  * @model

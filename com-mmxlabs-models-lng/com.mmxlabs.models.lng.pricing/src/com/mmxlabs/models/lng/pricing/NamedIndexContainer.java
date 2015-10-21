@@ -16,11 +16,11 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.NamedIndexContainer#getData <em>Data</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.NamedIndexContainer#getUnits <em>Units</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.pricing.PricingPackage#getNamedIndexContainer()
  * @model
@@ -64,7 +64,7 @@ public interface NamedIndexContainer<Value> extends UUIDObject, NamedObject {
 	 * @return the value of the '<em>Units</em>' attribute.
 	 * @see #setUnits(String)
 	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getNamedIndexContainer_Units()
-	 * @model required="true"
+	 * @model
 	 * @generated
 	 */
 	String getUnits();

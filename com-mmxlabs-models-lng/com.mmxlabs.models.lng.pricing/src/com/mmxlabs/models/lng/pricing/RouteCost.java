@@ -14,13 +14,13 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.RouteCost#getRoute <em>Route</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.RouteCost#getVesselClass <em>Vessel Class</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.RouteCost#getLadenCost <em>Laden Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.RouteCost#getBallastCost <em>Ballast Cost</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.pricing.PricingPackage#getRouteCost()
  * @model

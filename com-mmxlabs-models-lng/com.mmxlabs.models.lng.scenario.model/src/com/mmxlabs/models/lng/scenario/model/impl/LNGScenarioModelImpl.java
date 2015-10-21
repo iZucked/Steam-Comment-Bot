@@ -29,6 +29,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXRootObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getPortModel <em>Port Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getFleetModel <em>Fleet Model</em>}</li>
@@ -38,7 +39,6 @@ import com.mmxlabs.models.mmxcore.impl.MMXRootObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getAnalyticsModel <em>Analytics Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getPortfolioModel <em>Portfolio Model</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

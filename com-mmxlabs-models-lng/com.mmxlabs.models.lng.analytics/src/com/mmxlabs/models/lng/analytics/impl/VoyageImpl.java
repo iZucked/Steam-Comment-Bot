@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.port.Route;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.VoyageImpl#getRoute <em>Route</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.VoyageImpl#getRouteCost <em>Route Cost</em>}</li>
@@ -26,7 +27,6 @@ import com.mmxlabs.models.lng.port.Route;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.VoyageImpl#getIdleTime <em>Idle Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.VoyageImpl#getTravelTime <em>Travel Time</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

@@ -22,11 +22,11 @@ import com.mmxlabs.models.lng.types.APortSet;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.DESPurchaseMarketImpl#getCv <em>Cv</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.DESPurchaseMarketImpl#getDestinationPorts <em>Destination Ports</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

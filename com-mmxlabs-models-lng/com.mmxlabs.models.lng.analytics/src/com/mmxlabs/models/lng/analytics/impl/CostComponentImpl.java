@@ -25,12 +25,12 @@ import com.mmxlabs.models.lng.analytics.FuelCost;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.CostComponentImpl#getDuration <em>Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.CostComponentImpl#getHireCost <em>Hire Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.CostComponentImpl#getFuelCosts <em>Fuel Costs</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

@@ -32,6 +32,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getFromPorts <em>From Ports</em>}</li>
@@ -54,7 +55,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getLadenTimeAllowance <em>Laden Time Allowance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getBallastTimeAllowance <em>Ballast Time Allowance</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

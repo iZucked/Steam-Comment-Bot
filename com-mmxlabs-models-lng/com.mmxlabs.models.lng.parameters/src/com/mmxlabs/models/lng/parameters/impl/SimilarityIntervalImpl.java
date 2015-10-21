@@ -6,13 +6,13 @@
  */
 package com.mmxlabs.models.lng.parameters.impl;
 
-import com.mmxlabs.models.lng.parameters.ParametersPackage;
-import com.mmxlabs.models.lng.parameters.SimilarityInterval;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
+import com.mmxlabs.models.lng.parameters.ParametersPackage;
+import com.mmxlabs.models.lng.parameters.SimilarityInterval;
 
 /**
  * <!-- begin-user-doc -->
@@ -20,11 +20,11 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.SimilarityIntervalImpl#getWeight <em>Weight</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.SimilarityIntervalImpl#getThreshold <em>Threshold</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

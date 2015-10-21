@@ -13,12 +13,12 @@ package com.mmxlabs.models.lng.actuals;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.actuals.LoadActuals#getContractType <em>Contract Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.LoadActuals#getStartingHeelM3 <em>Starting Heel M3</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.LoadActuals#getStartingHeelMMBTu <em>Starting Heel MMB Tu</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getLoadActuals()
  * @model

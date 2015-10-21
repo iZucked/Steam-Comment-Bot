@@ -15,11 +15,11 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings#getIterations <em>Iterations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings#isImprovingSolutions <em>Improving Solutions</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getIndividualSolutionImprovementSettings()
  * @model

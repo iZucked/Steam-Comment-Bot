@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.pricing.ui.editorpart;
 
+import java.time.YearMonth;
 import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -46,7 +47,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
-import org.joda.time.YearMonth;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.series.ISeries;
@@ -93,7 +93,7 @@ import com.mmxlabs.scenario.service.model.ScenarioLock;
  */
 public class IndexPane extends ScenarioTableViewerPane {
 
-	private static final YearMonth dateZero = new YearMonth();
+	private static final YearMonth dateZero = YearMonth.now();
 
 	private YearMonth minDisplayDate = null;
 	private YearMonth maxDisplayDate = null;
@@ -328,7 +328,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 					}
 					YearMonth localDate = minDisplayDate;
 					while (!localDate.isAfter(maxDisplayDate)) {
-						addColumn(new YearMonth(localDate), true);
+						addColumn(localDate, true);
 						localDate = localDate.plusMonths(1);
 					}
 				}
@@ -354,7 +354,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 		private void addColumn(final YearMonth cal, final boolean sortable) {
 
-			final String date = String.format("%4d-%02d", cal.getYear(), (cal.getMonthOfYear()));
+			final String date = String.format("%4d-%02d", cal.getYear(), (cal.getMonthValue()));
 			final GridViewerColumn col = addSimpleColumn(date, sortable);
 			col.getColumn().setData("date", cal);
 
@@ -430,7 +430,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 				private <T extends Number> void setIndexPoint(final T value, final DataIndex<T> di, final YearMonth colDate) {
 
 					for (final IndexPoint<T> p : di.getPoints()) {
-						if (p.getDate().getYear() == colDate.getYear() && p.getDate().getMonthOfYear() == colDate.getMonthOfYear()) {
+						if (p.getDate().getYear() == colDate.getYear() && p.getDate().getMonthValue() == colDate.getMonthValue()) {
 
 							final Command cmd;
 							if (value == null) {

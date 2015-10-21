@@ -3,10 +3,11 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.Contract;
@@ -26,6 +27,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getContract <em>Contract</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getPort <em>Port</em>}</li>
@@ -56,7 +58,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getNominatedVessel <em>Nominated Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isLocked <em>Locked</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot()
  * @model abstract="true"
@@ -1163,7 +1164,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
 	 * @generated
 	 */
-	DateTime getWindowEndWithSlotOrPortTime();
+	ZonedDateTime getWindowEndWithSlotOrPortTime();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1171,7 +1172,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
 	 * @generated
 	 */
-	DateTime getWindowStartWithSlotOrPortTime();
+	ZonedDateTime getWindowStartWithSlotOrPortTime();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1179,7 +1180,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
 	 * @generated
 	 */
-	DateTime getWindowEndWithSlotOrPortTimeWithFlex();
+	ZonedDateTime getWindowEndWithSlotOrPortTimeWithFlex();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1187,7 +1188,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
 	 * @generated
 	 */
-	DateTime getWindowStartWithSlotOrPortTimeWithFlex();
+	ZonedDateTime getWindowStartWithSlotOrPortTimeWithFlex();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1253,7 +1254,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 * @generated
 	 */
 	@NonNull
-	DateTime getPricingDateAsDateTime();
+	ZonedDateTime getPricingDateAsDateTime();
 
 } // end of  Slot
 

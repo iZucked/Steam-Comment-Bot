@@ -11,10 +11,10 @@ package com.mmxlabs.models.lng.commercial;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.ExpressionPriceParameters#getPriceExpression <em>Price Expression</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getExpressionPriceParameters()
  * @model

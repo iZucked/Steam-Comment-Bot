@@ -17,6 +17,7 @@ import com.mmxlabs.models.mmxcore.OtherNamesObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getShortName <em>Short Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getCapabilities <em>Capabilities</em>}</li>
@@ -37,7 +38,6 @@ import com.mmxlabs.models.mmxcore.OtherNamesObject;
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getMinCvValue <em>Min Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Port#getMaxCvValue <em>Max Cv Value</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.port.PortPackage#getPort()
  * @model annotation="http://www.mmxlabs.com/models/mmxcore/annotations/namedobject showOtherNames='true'"

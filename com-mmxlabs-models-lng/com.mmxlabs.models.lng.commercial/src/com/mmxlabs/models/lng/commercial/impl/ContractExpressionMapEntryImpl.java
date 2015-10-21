@@ -22,11 +22,11 @@ import com.mmxlabs.models.lng.commercial.ContractExpressionMapEntry;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractExpressionMapEntryImpl#getContract <em>Contract</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractExpressionMapEntryImpl#getExpression <em>Expression</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

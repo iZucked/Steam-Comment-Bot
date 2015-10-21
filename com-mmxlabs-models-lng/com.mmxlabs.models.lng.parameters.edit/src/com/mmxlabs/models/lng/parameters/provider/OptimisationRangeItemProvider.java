@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.parameters.provider;
 
 
+import java.time.YearMonth;
 import java.util.Collection;
 import java.util.List;
 
@@ -22,7 +23,6 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.joda.time.YearMonth;
 
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;

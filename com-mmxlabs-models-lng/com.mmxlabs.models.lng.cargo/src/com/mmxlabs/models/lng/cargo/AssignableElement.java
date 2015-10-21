@@ -17,13 +17,13 @@ import com.mmxlabs.models.lng.types.VesselAssignmentType;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.AssignableElement#getSequenceHint <em>Sequence Hint</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.AssignableElement#getVesselAssignmentType <em>Vessel Assignment Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.AssignableElement#getSpotIndex <em>Spot Index</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.AssignableElement#isLocked <em>Locked</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getAssignableElement()
  * @model abstract="true"

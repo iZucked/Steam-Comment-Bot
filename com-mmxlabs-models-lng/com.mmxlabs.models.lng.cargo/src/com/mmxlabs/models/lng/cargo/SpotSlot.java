@@ -13,10 +13,10 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.SpotSlot#getMarket <em>Market</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSpotSlot()
  * @model interface="true" abstract="true"

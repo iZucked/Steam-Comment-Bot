@@ -3,6 +3,7 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.impl;
+import java.time.YearMonth;
 import java.util.Collections;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -12,7 +13,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.joda.time.YearMonth;
 
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -23,10 +23,10 @@ import com.mmxlabs.models.lng.pricing.PricingPackage;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.DerivedIndexImpl#getExpression <em>Expression</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
@@ -183,7 +183,7 @@ public class DerivedIndexImpl<Value> extends IndexImpl<Value> implements Derived
 
 	@Override
 	public EList<YearMonth> getDates() {
-		return new BasicEList<YearMonth>(Collections.singleton(new YearMonth()));
+		return new BasicEList<YearMonth>(Collections.singleton(YearMonth.now()));
 	}
 	
 	@Override

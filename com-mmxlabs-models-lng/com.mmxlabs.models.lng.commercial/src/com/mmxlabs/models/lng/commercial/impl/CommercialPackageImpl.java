@@ -816,7 +816,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEAttribute(getPurchaseContract_SalesDeliveryType(), theTypesPackage.getCargoDeliveryType(), "salesDeliveryType", "Any", 1, 1, PurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(taxRateEClass, TaxRate.class, "TaxRate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getTaxRate_Date(), theDateTimePackage.getLocalDate(), "date", null, 0, 1, TaxRate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getTaxRate_Date(), theDateTimePackage.getLocalDate(), "date", null, 1, 1, TaxRate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTaxRate_Value(), ecorePackage.getEFloat(), "value", null, 1, 1, TaxRate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(lngPriceCalculatorParametersEClass, LNGPriceCalculatorParameters.class, "LNGPriceCalculatorParameters", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -864,40 +864,40 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	protected void createNumberFormatAnnotations() {
-		String source = "http://www.mmxlabs.com/models/ui/numberFormat";		
+		String source = "http://www.mmxlabs.com/models/ui/numberFormat";	
 		addAnnotation
 		  (getContract_MinQuantity(), 
 		   source, 
 		   new String[] {
 			 "formatString", "#,###,##0"
-		   });		
+		   });	
 		addAnnotation
 		  (getContract_MaxQuantity(), 
 		   source, 
 		   new String[] {
 			 "formatString", "#,###,##0"
-		   });		
+		   });	
 		addAnnotation
 		  (getContract_CancellationFee(), 
 		   source, 
 		   new String[] {
 			 "formatString", "###,###,##0",
 			 "unitPrefix", "$"
-		   });		
+		   });	
 		addAnnotation
 		  (getSalesContract_MinCvValue(), 
 		   source, 
 		   new String[] {
 			 "unit", "mmBtu/m\u00b3",
 			 "formatString", "#0.###"
-		   });		
+		   });	
 		addAnnotation
 		  (getSalesContract_MaxCvValue(), 
 		   source, 
 		   new String[] {
 			 "unit", "mmBtu/m\u00b3",
 			 "formatString", "#0.###"
-		   });		
+		   });	
 		addAnnotation
 		  (getPurchaseContract_CargoCV(), 
 		   source, 

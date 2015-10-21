@@ -16,10 +16,10 @@ import com.mmxlabs.models.lng.pricing.PricingPackage;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.CooldownPriceImpl#isLumpsum <em>Lumpsum</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

@@ -6,14 +6,13 @@ package com.mmxlabs.models.lng.cargo.validation;
 
 import static org.ops4j.peaberry.Peaberry.osgiModule;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.joda.time.DateTime;
-import org.joda.time.Hours;
 import org.ops4j.peaberry.Peaberry;
 import org.osgi.framework.FrameworkUtil;
 
@@ -184,10 +183,10 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 								final int ladenMinWindowInHours;
 								{
 									// TODO: check overlaps
-									final DateTime loadDateStart = desPurchase.getWindowStartWithSlotOrPortTime();
-									final DateTime loadDateEnd = desPurchase.getWindowEndWithSlotOrPortTime();
-									final DateTime dischargeDateStart = dischargeSlot.getWindowStartWithSlotOrPortTime();
-									final DateTime dischargeDateEnd = dischargeSlot.getWindowEndWithSlotOrPortTime();
+									final ZonedDateTime loadDateStart = desPurchase.getWindowStartWithSlotOrPortTime();
+									final ZonedDateTime loadDateEnd = desPurchase.getWindowEndWithSlotOrPortTime();
+									final ZonedDateTime dischargeDateStart = dischargeSlot.getWindowStartWithSlotOrPortTime();
+									final ZonedDateTime dischargeDateEnd = dischargeSlot.getWindowEndWithSlotOrPortTime();
 
 									if (loadDateStart != null && dischargeDateEnd != null) {
 										ladenMaxWindowInHours = Math.max(0, Hours.hoursBetween(loadDateStart, dischargeDateEnd).getHours() - (loadDurationInHours));

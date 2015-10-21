@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.time.format.TextStyle;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -11,6 +14,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -32,10 +36,6 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
-import org.joda.time.DateTime;
-import org.joda.time.Days;
-import org.joda.time.Hours;
-import org.joda.time.LocalDate;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
@@ -594,10 +594,10 @@ public class CargoEditorMenuHelper {
 	}
 
 	private boolean areSlotWindowsCompatible(final LoadSlot load, final DischargeSlot discharge) {
-		final DateTime loadStart = load.getWindowStartWithSlotOrPortTimeWithFlex();
-		final DateTime loadEnd = load.getWindowEndWithSlotOrPortTimeWithFlex();
-		final DateTime dischargeStart = discharge.getWindowStartWithSlotOrPortTimeWithFlex();
-		final DateTime dischargeEnd = discharge.getWindowEndWithSlotOrPortTimeWithFlex();
+		final ZonedDateTime loadStart = load.getWindowStartWithSlotOrPortTimeWithFlex();
+		final ZonedDateTime loadEnd = load.getWindowEndWithSlotOrPortTimeWithFlex();
+		final ZonedDateTime dischargeStart = discharge.getWindowStartWithSlotOrPortTimeWithFlex();
+		final ZonedDateTime dischargeEnd = discharge.getWindowEndWithSlotOrPortTimeWithFlex();
 
 		// slots with unknown time windows are incompatible
 		if (loadStart == null || dischargeStart == null || loadEnd == null || dischargeEnd == null) {
@@ -751,8 +751,8 @@ public class CargoEditorMenuHelper {
 					continue;
 				}
 				// TODO: Check the change in rounding - does this round down as the previous code did?
-				DateTime a = loadSlot.getWindowStartWithSlotOrPortTime();
-				DateTime b = dischargeSlot.getWindowStartWithSlotOrPortTime();
+				ZonedDateTime a = loadSlot.getWindowStartWithSlotOrPortTime();
+				ZonedDateTime b = dischargeSlot.getWindowStartWithSlotOrPortTime();
 				if (a != null && b != null) {
 					daysDifference = Days.daysBetween(a, b).getDays();
 				} else {
@@ -966,7 +966,7 @@ public class CargoEditorMenuHelper {
 		private final Port shipToShipPort;
 
 		private String getKeyForDate(final LocalDate date) {
-			final String key = String.format("%04d-%02d", date.getYear(), date.getMonthOfYear());
+			final String key = String.format("%04d-%02d", date.getYear(), date.getMonthValue());
 			return key;
 		}
 
@@ -1002,7 +1002,7 @@ public class CargoEditorMenuHelper {
 					} else {
 						dischargeSlot = cec.createNewSpotDischarge(setCommands, cargoModel, isDesPurchaseOrFobSale, market);
 						// Get start of month and create full sized window
-						DateTime cal = source.getWindowStartWithSlotOrPortTime();
+						ZonedDateTime cal = source.getWindowStartWithSlotOrPortTime();
 						// Take into account travel time
 						if (loadSlot.isDESPurchase() && loadSlot.isDivertible()) {
 							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), loadSlot.getNominatedVessel());
@@ -1034,7 +1034,7 @@ public class CargoEditorMenuHelper {
 							dischargeSlot.setPort(source.getPort());
 						}
 						// Set back to start of month
-						cal = cal.withDayOfMonth(1).withHourOfDay(0);
+						cal = cal.withDayOfMonth(1).withHour(0);
 						LocalDate dishargeCal = cal.toLocalDate();
 						final String yearMonthString = getKeyForDate(dishargeCal);
 						dischargeSlot.setWindowStart(dishargeCal);
@@ -1176,7 +1176,7 @@ public class CargoEditorMenuHelper {
 							continue;
 						}
 
-						final DateTime slotDate = slot.getWindowStartWithSlotOrPortTime();
+						final ZonedDateTime slotDate = slot.getWindowStartWithSlotOrPortTime();
 						if (slotDate == null || target.getWindowEndWithSlotOrPortTime().isBefore(slotDate)) {
 							currentWiringCommand.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), c, MMXCorePackage.eINSTANCE.getNamedObject_Name(), target.getName()));
 						} else {
@@ -1350,6 +1350,6 @@ public class CargoEditorMenuHelper {
 		if (localDate == null) {
 			return "<no date>";
 		}
-		return String.format("%02d %s %04d", localDate.getDayOfMonth(), localDate.monthOfYear().getAsShortText(), localDate.getYear());
+		return String.format("%02d %s %04d", localDate.getDayOfMonth(), localDate.getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault()), localDate.getYear());
 	}
 }

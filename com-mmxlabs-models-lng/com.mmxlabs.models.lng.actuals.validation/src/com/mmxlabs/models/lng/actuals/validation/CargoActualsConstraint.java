@@ -4,13 +4,13 @@
  */
 package com.mmxlabs.models.lng.actuals.validation;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.joda.time.DateTime;
 
 import com.mmxlabs.models.lng.actuals.ActualsPackage;
 import com.mmxlabs.models.lng.actuals.CargoActuals;
@@ -214,7 +214,7 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 
 					final ReturnActuals returnActuals = cargoActuals.getReturnActuals();
 					if (returnActuals != null) {
-						final DateTime returnOperationsStart = returnActuals.getOperationsStartAsDateTime();
+						final ZonedDateTime returnOperationsStart = returnActuals.getOperationsStartAsDateTime();
 						if (returnOperationsStart != null && slotActuals.getOperationsStartAsDateTime() != null) {
 							if (returnOperationsStart.isBefore(slotActuals.getOperationsStartAsDateTime())) {
 								final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(

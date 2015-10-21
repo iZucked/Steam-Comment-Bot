@@ -17,11 +17,11 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotCharterMarket#isEnabled <em>Enabled</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotCharterMarket#getVesselClass <em>Vessel Class</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getSpotCharterMarket()
  * @model abstract="true"

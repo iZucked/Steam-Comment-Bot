@@ -17,13 +17,13 @@ import com.mmxlabs.models.lng.analytics.FuelCost;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.FuelCostImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.FuelCostImpl#getUnit <em>Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.FuelCostImpl#getQuantity <em>Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.FuelCostImpl#getCost <em>Cost</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

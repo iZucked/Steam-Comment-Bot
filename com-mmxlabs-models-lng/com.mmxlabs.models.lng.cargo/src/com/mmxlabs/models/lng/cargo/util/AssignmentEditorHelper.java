@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.util;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
@@ -16,7 +17,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.joda.time.DateTime;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
@@ -37,7 +37,7 @@ import com.mmxlabs.models.lng.types.util.SetUtils;
 /**
  */
 public class AssignmentEditorHelper {
-	public static DateTime getStartDateIgnoreSpots(@Nullable final AssignableElement element) {
+	public static ZonedDateTime getStartDateIgnoreSpots(@Nullable final AssignableElement element) {
 		if (element instanceof Cargo) {
 			final Cargo cargo = (Cargo) element;
 			final List<Slot> sortedSlots = cargo.getSortedSlots();
@@ -53,7 +53,7 @@ public class AssignmentEditorHelper {
 		return getStartDate(element);
 	}
 
-	public static DateTime getStartDate(@Nullable final AssignableElement element) {
+	public static ZonedDateTime getStartDate(@Nullable final AssignableElement element) {
 
 		if (element instanceof Cargo) {
 			final Cargo cargo = (Cargo) element;
@@ -73,7 +73,7 @@ public class AssignmentEditorHelper {
 	}
 
 	@Nullable
-	public static DateTime getEndDateIgnoreSpots(@Nullable final AssignableElement element) {
+	public static ZonedDateTime getEndDateIgnoreSpots(@Nullable final AssignableElement element) {
 
 		if (element instanceof Cargo) {
 			final Cargo cargo = (Cargo) element;
@@ -91,7 +91,7 @@ public class AssignmentEditorHelper {
 	}
 
 	@Nullable
-	public static DateTime getEndDate(@Nullable final AssignableElement element) {
+	public static ZonedDateTime getEndDate(@Nullable final AssignableElement element) {
 		if (element instanceof Cargo) {
 			final Cargo cargo = (Cargo) element;
 			final EList<Slot> slots = cargo.getSortedSlots();
@@ -103,7 +103,7 @@ public class AssignmentEditorHelper {
 				return lastSlot.getWindowEndWithSlotOrPortTime();
 			}
 		} else if (element instanceof VesselEvent) {
-			final DateTime dateTime = ((VesselEvent) element).getStartByAsDateTime();
+			final ZonedDateTime dateTime = ((VesselEvent) element).getStartByAsDateTime();
 			if (dateTime != null) {
 				return dateTime.plusDays(((VesselEvent) element).getDurationInDays());
 			}
@@ -251,8 +251,8 @@ public class AssignmentEditorHelper {
 
 	private static boolean isElementInVesselAvailability(@NonNull final AssignableElement element, @NonNull final VesselAvailability vesselAvailability) {
 
-		final DateTime vesselAvailabilityEndBy = vesselAvailability.getEndByAsDateTime();
-		final DateTime vesselAvailabilityStartAfter = vesselAvailability.getStartAfterAsDateTime();
+		final ZonedDateTime vesselAvailabilityEndBy = vesselAvailability.getEndByAsDateTime();
+		final ZonedDateTime vesselAvailabilityStartAfter = vesselAvailability.getStartAfterAsDateTime();
 		if (element instanceof Cargo) {
 			final Cargo cargo = (Cargo) element;
 			final List<Slot> sortedSlots = cargo.getSortedSlots();
@@ -276,13 +276,13 @@ public class AssignmentEditorHelper {
 		} else if (element instanceof VesselEvent) {
 			final VesselEvent event = (VesselEvent) element;
 			if (vesselAvailabilityEndBy != null) {
-				final DateTime eventStartAfter = event.getStartAfterAsDateTime();
+				final ZonedDateTime eventStartAfter = event.getStartAfterAsDateTime();
 				if (eventStartAfter.isAfter(vesselAvailabilityEndBy)) {
 					return false;
 				}
 			}
 			if (vesselAvailabilityStartAfter != null) {
-				DateTime eventStartBy = event.getStartByAsDateTime();
+				ZonedDateTime eventStartBy = event.getStartByAsDateTime();
 				eventStartBy = eventStartBy.plusDays(event.getDurationInDays());
 				if (eventStartBy.isBefore(vesselAvailabilityStartAfter)) {
 					return false;

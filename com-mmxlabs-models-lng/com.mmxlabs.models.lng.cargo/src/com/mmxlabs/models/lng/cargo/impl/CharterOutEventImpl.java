@@ -26,13 +26,13 @@ import com.mmxlabs.models.lng.port.Port;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl#getRelocateTo <em>Relocate To</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl#getHeelOptions <em>Heel Options</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl#getRepositioningFee <em>Repositioning Fee</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl#getHireRate <em>Hire Rate</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

@@ -11,10 +11,10 @@ package com.mmxlabs.models.lng.analytics;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.Visit#getPortCost <em>Port Cost</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getVisit()
  * @model

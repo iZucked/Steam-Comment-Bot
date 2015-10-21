@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl#isFOBSale <em>FOB Sale</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl#getPurchaseDeliveryType <em>Purchase Delivery Type</em>}</li>
@@ -34,7 +35,6 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl#getMinCvValue <em>Min Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl#getMaxCvValue <em>Max Cv Value</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

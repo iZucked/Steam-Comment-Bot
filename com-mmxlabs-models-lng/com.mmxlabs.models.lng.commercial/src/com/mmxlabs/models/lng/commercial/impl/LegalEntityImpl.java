@@ -12,8 +12,6 @@ import com.mmxlabs.models.lng.commercial.LegalEntity;
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Legal Entity</b></em>'.
  * <!-- end-user-doc -->
- * <p>
- * </p>
  *
  * @generated
  */

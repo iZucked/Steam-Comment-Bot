@@ -3,8 +3,9 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing;
+import java.time.YearMonth;
+
 import org.eclipse.emf.ecore.EObject;
-import org.joda.time.YearMonth;
 
 /**
  * <!-- begin-user-doc -->
@@ -13,11 +14,11 @@ import org.joda.time.YearMonth;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.IndexPoint#getDate <em>Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.IndexPoint#getValue <em>Value</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.pricing.PricingPackage#getIndexPoint()
  * @model

@@ -711,13 +711,13 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	protected void createNamedobjectAnnotations() {
-		String source = "http://www.mmxlabs.com/models/mmxcore/annotations/namedobject";		
+		String source = "http://www.mmxlabs.com/models/mmxcore/annotations/namedobject";	
 		addAnnotation
 		  (portEClass, 
 		   source, 
 		   new String[] {
 			 "showOtherNames", "true"
-		   });								
+		   });
 	}
 
 	/**
@@ -727,53 +727,53 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	protected void createNumberFormatAnnotations() {
-		String source = "http://www.mmxlabs.com/models/ui/numberFormat";			
+		String source = "http://www.mmxlabs.com/models/ui/numberFormat";	
 		addAnnotation
 		  (getPort_LoadDuration(), 
 		   source, 
 		   new String[] {
 			 "unit", "hours",
 			 "formatString", "##,##0"
-		   });		
+		   });	
 		addAnnotation
 		  (getPort_DischargeDuration(), 
 		   source, 
 		   new String[] {
 			 "unit", "hours",
 			 "formatString", "##,##0"
-		   });		
+		   });	
 		addAnnotation
 		  (getPort_CvValue(), 
 		   source, 
 		   new String[] {
 			 "unit", "mmBtu/m\u00b3",
 			 "formatString", "#0.###"
-		   });		
+		   });	
 		addAnnotation
 		  (getPort_DefaultWindowSize(), 
 		   source, 
 		   new String[] {
 			 "unit", "hours",
 			 "formatString", "##,##0"
-		   });		
+		   });	
 		addAnnotation
 		  (getPort_MinCvValue(), 
 		   source, 
 		   new String[] {
 			 "formatString", "#0.###"
-		   });		
+		   });	
 		addAnnotation
 		  (getPort_MaxCvValue(), 
 		   source, 
 		   new String[] {
 			 "formatString", "#0.###"
-		   });		
+		   });	
 		addAnnotation
 		  (getLocation_Lat(), 
 		   source, 
 		   new String[] {
 			 "formatString", "-###.###"
-		   });		
+		   });	
 		addAnnotation
 		  (getLocation_Lon(), 
 		   source, 

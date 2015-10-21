@@ -23,13 +23,13 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ProvisionalCargoImpl#getBuy <em>Buy</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ProvisionalCargoImpl#getSell <em>Sell</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ProvisionalCargoImpl#getVessel <em>Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ProvisionalCargoImpl#getPortfolioModel <em>Portfolio Model</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

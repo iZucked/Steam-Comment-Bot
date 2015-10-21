@@ -19,11 +19,11 @@ import com.mmxlabs.models.lng.port.Port;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.JourneyImpl#getFrom <em>From</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.JourneyImpl#getTo <em>To</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

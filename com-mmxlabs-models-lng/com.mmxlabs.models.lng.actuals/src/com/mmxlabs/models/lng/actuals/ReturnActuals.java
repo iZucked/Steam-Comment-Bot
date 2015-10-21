@@ -6,8 +6,8 @@
  */
 package com.mmxlabs.models.lng.actuals;
 
-import org.joda.time.DateTime;
-import org.joda.time.LocalDateTime;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
@@ -19,12 +19,12 @@ import com.mmxlabs.models.lng.types.ITimezoneProvider;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.actuals.ReturnActuals#getTitleTransferPoint <em>Title Transfer Point</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.ReturnActuals#getOperationsStart <em>Operations Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.ReturnActuals#getEndHeelM3 <em>End Heel M3</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getReturnActuals()
  * @model
@@ -115,6 +115,6 @@ public interface ReturnActuals extends ITimezoneProvider {
 	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime" required="true"
 	 * @generated
 	 */
-	DateTime getOperationsStartAsDateTime();
+	ZonedDateTime getOperationsStartAsDateTime();
 
 } // ReturnActuals

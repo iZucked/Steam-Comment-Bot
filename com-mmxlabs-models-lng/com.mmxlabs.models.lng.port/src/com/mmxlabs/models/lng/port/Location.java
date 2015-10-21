@@ -12,12 +12,12 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.port.Location#getCountry <em>Country</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Location#getLat <em>Lat</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.Location#getLon <em>Lon</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.port.PortPackage#getLocation()
  * @model

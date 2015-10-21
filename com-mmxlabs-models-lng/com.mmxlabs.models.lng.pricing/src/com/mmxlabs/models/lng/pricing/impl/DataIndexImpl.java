@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.pricing.impl;
 
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -17,7 +18,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.joda.time.YearMonth;
 
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
@@ -29,10 +29,10 @@ import com.mmxlabs.models.lng.pricing.PricingPackage;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.DataIndexImpl#getPoints <em>Points</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
@@ -171,7 +171,7 @@ public class DataIndexImpl<Value> extends IndexImpl<Value> implements DataIndex<
 	public Value getValueForMonth(final YearMonth date) {
 		for (final IndexPoint<Value> point : getSortedPoints()) {
 			YearMonth pDate = point.getDate();
-			if (pDate.getYear() == date.getYear() && pDate.getMonthOfYear() == date.getMonthOfYear()) {
+			if (pDate.getYear() == date.getYear() && pDate.getMonthValue() == date.getMonthValue()) {
 				return point.getValue();
 			}
 			// Sorted set, so break out if this condition is true
@@ -186,7 +186,7 @@ public class DataIndexImpl<Value> extends IndexImpl<Value> implements DataIndex<
 	public Value getForwardValueForMonth(final YearMonth date) {
 		for (final IndexPoint<Value> point : getSortedPoints()) {
 			YearMonth pDate = point.getDate();
-			if (pDate.getYear() == date.getYear() && pDate.getMonthOfYear() >= date.getMonthOfYear() || pDate.getYear() > date.getYear()) {
+			if (pDate.getYear() == date.getYear() && pDate.getMonthValue() >= date.getMonthValue() || pDate.getYear() > date.getYear()) {
 				return point.getValue();
 			}
 			// Sorted set, so break out if this condition is true
@@ -202,7 +202,7 @@ public class DataIndexImpl<Value> extends IndexImpl<Value> implements DataIndex<
 		IndexPoint<Value> lastPoint = null;
 		for (final IndexPoint<Value> point : getSortedPoints()) {
 			YearMonth pDate = point.getDate();
-			if (pDate.getYear() == date.getYear() && pDate.getMonthOfYear() == date.getMonthOfYear()) {
+			if (pDate.getYear() == date.getYear() && pDate.getMonthValue() == date.getMonthValue()) {
 				return point.getValue();
 			}
 			// Sorted set, so break out if this condition is true

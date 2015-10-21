@@ -33,6 +33,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getSequenceHint <em>Sequence Hint</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getVesselAssignmentType <em>Vessel Assignment Type</em>}</li>
@@ -41,7 +42,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#isAllowRewiring <em>Allow Rewiring</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getSlots <em>Slots</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

@@ -14,10 +14,10 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.FleetCostModel#getBaseFuelPrices <em>Base Fuel Prices</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.pricing.PricingPackage#getFleetCostModel()
  * @model

@@ -19,12 +19,12 @@ import com.mmxlabs.models.lng.actuals.LoadActuals;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.LoadActualsImpl#getContractType <em>Contract Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.LoadActualsImpl#getStartingHeelM3 <em>Starting Heel M3</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.LoadActualsImpl#getStartingHeelMMBTu <em>Starting Heel MMB Tu</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

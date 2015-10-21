@@ -19,12 +19,12 @@ import com.mmxlabs.models.lng.actuals.DischargeActuals;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.DischargeActualsImpl#getDeliveryType <em>Delivery Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.DischargeActualsImpl#getEndHeelM3 <em>End Heel M3</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.DischargeActualsImpl#getEndHeelMMBTu <em>End Heel MMB Tu</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

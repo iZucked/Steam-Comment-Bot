@@ -26,12 +26,12 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PortsSplitExpressionMapImpl#getPorts <em>Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PortsSplitExpressionMapImpl#getExpression1 <em>Expression1</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PortsSplitExpressionMapImpl#getExpression2 <em>Expression2</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

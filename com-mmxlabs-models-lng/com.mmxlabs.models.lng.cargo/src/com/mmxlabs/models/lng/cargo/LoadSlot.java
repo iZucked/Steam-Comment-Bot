@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#getCargoCV <em>Cargo CV</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#isArriveCold <em>Arrive Cold</em>}</li>
@@ -20,7 +21,6 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
  *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#getTransferFrom <em>Transfer From</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#getSalesDeliveryType <em>Sales Delivery Type</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getLoadSlot()
  * @model

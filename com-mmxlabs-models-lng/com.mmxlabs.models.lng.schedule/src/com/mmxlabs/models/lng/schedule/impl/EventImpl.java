@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 import java.lang.reflect.InvocationTargetException;
+import java.time.ZonedDateTime;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -13,8 +14,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.joda.time.DateTime;
-import org.joda.time.Hours;
 
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -54,7 +53,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final DateTime START_EDEFAULT = null;
+	protected static final ZonedDateTime START_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getStart() <em>Start</em>}' attribute.
@@ -64,7 +63,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * @generated
 	 * @ordered
 	 */
-	protected DateTime start = START_EDEFAULT;
+	protected ZonedDateTime start = START_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getEnd() <em>End</em>}' attribute.
@@ -74,7 +73,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final DateTime END_EDEFAULT = null;
+	protected static final ZonedDateTime END_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getEnd() <em>End</em>}' attribute.
@@ -84,7 +83,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * @generated
 	 * @ordered
 	 */
-	protected DateTime end = END_EDEFAULT;
+	protected ZonedDateTime end = END_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
@@ -200,7 +199,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public DateTime getStart() {
+	public ZonedDateTime getStart() {
 		return start;
 	}
 
@@ -209,8 +208,8 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setStart(DateTime newStart) {
-		DateTime oldStart = start;
+	public void setStart(ZonedDateTime newStart) {
+		ZonedDateTime oldStart = start;
 		start = newStart;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.EVENT__START, oldStart, start));
@@ -221,7 +220,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public DateTime getEnd() {
+	public ZonedDateTime getEnd() {
 		return end;
 	}
 
@@ -230,8 +229,8 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setEnd(DateTime newEnd) {
-		DateTime oldEnd = end;
+	public void setEnd(ZonedDateTime newEnd) {
+		ZonedDateTime oldEnd = end;
 		end = newEnd;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.EVENT__END, oldEnd, end));
@@ -637,10 +636,10 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case SchedulePackage.EVENT__START:
-				setStart((DateTime)newValue);
+				setStart((ZonedDateTime)newValue);
 				return;
 			case SchedulePackage.EVENT__END:
-				setEnd((DateTime)newValue);
+				setEnd((ZonedDateTime)newValue);
 				return;
 			case SchedulePackage.EVENT__PORT:
 				setPort((Port)newValue);

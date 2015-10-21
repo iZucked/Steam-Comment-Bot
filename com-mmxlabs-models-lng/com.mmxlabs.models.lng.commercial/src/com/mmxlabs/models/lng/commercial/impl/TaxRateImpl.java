@@ -3,11 +3,12 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.impl;
+import java.time.LocalDate;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-import org.joda.time.LocalDate;
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.TaxRate;
@@ -18,11 +19,11 @@ import com.mmxlabs.models.lng.commercial.TaxRate;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.TaxRateImpl#getDate <em>Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.TaxRateImpl#getValue <em>Value</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

@@ -3,8 +3,9 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.parameters;
+import java.time.YearMonth;
+
 import org.eclipse.emf.ecore.EObject;
-import org.joda.time.YearMonth;
 
 /**
  * <!-- begin-user-doc -->
@@ -13,11 +14,11 @@ import org.joda.time.YearMonth;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.parameters.OptimisationRange#getOptimiseAfter <em>Optimise After</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.OptimisationRange#getOptimiseBefore <em>Optimise Before</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getOptimisationRange()
  * @model

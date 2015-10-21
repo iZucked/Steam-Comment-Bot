@@ -23,10 +23,10 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselGroupImpl#getVessels <em>Vessels</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

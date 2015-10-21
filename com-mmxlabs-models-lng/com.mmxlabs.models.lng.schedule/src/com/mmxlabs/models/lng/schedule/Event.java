@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule;
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
@@ -43,12 +43,12 @@ public interface Event extends MMXObject, ITimezoneProvider {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Start</em>' attribute.
-	 * @see #setStart(DateTime)
+	 * @see #setStart(ZonedDateTime)
 	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getEvent_Start()
 	 * @model dataType="com.mmxlabs.models.datetime.DateTime" required="true"
 	 * @generated
 	 */
-	DateTime getStart();
+	ZonedDateTime getStart();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Event#getStart <em>Start</em>}' attribute.
@@ -58,7 +58,7 @@ public interface Event extends MMXObject, ITimezoneProvider {
 	 * @see #getStart()
 	 * @generated
 	 */
-	void setStart(DateTime value);
+	void setStart(ZonedDateTime value);
 
 	/**
 	 * Returns the value of the '<em><b>End</b></em>' attribute.
@@ -69,12 +69,12 @@ public interface Event extends MMXObject, ITimezoneProvider {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>End</em>' attribute.
-	 * @see #setEnd(DateTime)
+	 * @see #setEnd(ZonedDateTime)
 	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getEvent_End()
 	 * @model dataType="com.mmxlabs.models.datetime.DateTime" required="true"
 	 * @generated
 	 */
-	DateTime getEnd();
+	ZonedDateTime getEnd();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Event#getEnd <em>End</em>}' attribute.
@@ -84,7 +84,7 @@ public interface Event extends MMXObject, ITimezoneProvider {
 	 * @see #getEnd()
 	 * @generated
 	 */
-	void setEnd(DateTime value);
+	void setEnd(ZonedDateTime value);
 
 	/**
 	 * Returns the value of the '<em><b>Port</b></em>' reference.

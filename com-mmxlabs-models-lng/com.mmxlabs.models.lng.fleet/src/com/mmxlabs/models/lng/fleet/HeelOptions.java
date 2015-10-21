@@ -12,12 +12,12 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.fleet.HeelOptions#getVolumeAvailable <em>Volume Available</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.HeelOptions#getCvValue <em>Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.HeelOptions#getPricePerMMBTU <em>Price Per MMBTU</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.fleet.FleetPackage#getHeelOptions()
  * @model

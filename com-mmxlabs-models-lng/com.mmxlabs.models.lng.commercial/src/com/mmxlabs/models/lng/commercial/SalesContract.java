@@ -13,12 +13,12 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.SalesContract#getMinCvValue <em>Min Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.SalesContract#getMaxCvValue <em>Max Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.SalesContract#getPurchaseDeliveryType <em>Purchase Delivery Type</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getSalesContract()
  * @model

@@ -4,6 +4,11 @@
  */
 package com.mmxlabs.models.lng.migration.units;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,11 +23,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.joda.time.YearMonth;
 
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
@@ -76,10 +76,10 @@ public class MigrateToV33 extends AbstractMigrationUnit {
 							} else if (tmpFeature.getEType().getInstanceClassName() == "org.joda.time.LocalDateTime") {
 								mDate = new LocalDateTime(cal.get(Calendar.YEAR), 1 + cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY), 0);
 							} else if (tmpFeature.getEType().getInstanceClassName() == "org.joda.time.YearMonth") {
-								mDate = new YearMonth(cal.get(Calendar.YEAR), 1 + cal.get(Calendar.MONTH));
+								mDate = YearMonth.of(cal.get(Calendar.YEAR), 1 + cal.get(Calendar.MONTH));
 							} else if (tmpFeature.getEType().getInstanceClassName() == "org.joda.time.DateTime") {
-								mDate = new DateTime(cal.get(Calendar.YEAR), 1 + cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY), 0,
-										DateTimeZone.forTimeZone(cal.getTimeZone()));
+								mDate = new ZonedDateTime(cal.get(Calendar.YEAR), 1 + cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY), 0,
+										ZoneId.forTimeZone(cal.getTimeZone()));
 							}
 							if (mDate != null) {
 								eObj.eUnset(feature);

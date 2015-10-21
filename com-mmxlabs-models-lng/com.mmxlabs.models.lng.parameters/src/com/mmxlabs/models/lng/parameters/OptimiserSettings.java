@@ -15,6 +15,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getObjectives <em>Objectives</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getConstraints <em>Constraints</em>}</li>
@@ -28,7 +29,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getSolutionImprovementSettings <em>Solution Improvement Settings</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#isBuildActionSets <em>Build Action Sets</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getOptimiserSettings()
  * @model

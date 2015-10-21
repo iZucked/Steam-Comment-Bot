@@ -19,11 +19,11 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PortsExpressionMap#getPorts <em>Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PortsExpressionMap#getExpression <em>Expression</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPortsExpressionMap()
  * @model

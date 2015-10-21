@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -92,7 +93,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.menus.IMenuService;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.joda.time.LocalDate;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Equality;

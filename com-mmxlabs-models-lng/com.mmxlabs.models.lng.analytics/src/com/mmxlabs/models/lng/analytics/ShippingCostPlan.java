@@ -15,13 +15,13 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.ShippingCostPlan#getVessel <em>Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.ShippingCostPlan#getNotionalDayRate <em>Notional Day Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.ShippingCostPlan#getBaseFuelPrice <em>Base Fuel Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.ShippingCostPlan#getRows <em>Rows</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getShippingCostPlan()
  * @model

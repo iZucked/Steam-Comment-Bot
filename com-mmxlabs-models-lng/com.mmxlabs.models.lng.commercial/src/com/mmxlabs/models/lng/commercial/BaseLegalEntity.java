@@ -16,11 +16,11 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity#getShippingBook <em>Shipping Book</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity#getTradingBook <em>Trading Book</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getBaseLegalEntity()
  * @model abstract="true"

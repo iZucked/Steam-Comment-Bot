@@ -20,10 +20,10 @@ import com.mmxlabs.models.lng.types.APortSet;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.FOBSalesMarketImpl#getOriginPorts <em>Origin Ports</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

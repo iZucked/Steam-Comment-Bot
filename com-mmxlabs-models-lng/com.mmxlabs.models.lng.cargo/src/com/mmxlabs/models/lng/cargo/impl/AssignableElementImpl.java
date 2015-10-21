@@ -22,13 +22,13 @@ import com.mmxlabs.models.lng.types.VesselAssignmentType;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.AssignableElementImpl#getSequenceHint <em>Sequence Hint</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.AssignableElementImpl#getVesselAssignmentType <em>Vessel Assignment Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.AssignableElementImpl#getSpotIndex <em>Spot Index</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.AssignableElementImpl#isLocked <em>Locked</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

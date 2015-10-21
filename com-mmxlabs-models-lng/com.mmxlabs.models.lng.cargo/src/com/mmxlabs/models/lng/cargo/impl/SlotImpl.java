@@ -5,6 +5,9 @@
 package com.mmxlabs.models.lng.cargo.impl;
 
 import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -16,9 +19,6 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -42,6 +42,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * <!-- begin-user-doc --> An implementation of the model object '<em><b>Slot</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getContract <em>Contract</em>}</li>
@@ -73,7 +74,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getNominatedVessel <em>Nominated Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isLocked <em>Locked</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
@@ -1693,8 +1693,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public DateTime getWindowEndWithSlotOrPortTime() {
-		final DateTime startTime = getWindowStartWithSlotOrPortTime();
+	public ZonedDateTime getWindowEndWithSlotOrPortTime() {
+		final ZonedDateTime startTime = getWindowStartWithSlotOrPortTime();
 		if (startTime == null) {
 			return null;
 		}
@@ -1706,8 +1706,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public DateTime getWindowEndWithSlotOrPortTimeWithFlex() {
-		final DateTime endTime = getWindowEndWithSlotOrPortTime();
+	public ZonedDateTime getWindowEndWithSlotOrPortTimeWithFlex() {
+		final ZonedDateTime endTime = getWindowEndWithSlotOrPortTime();
 		if (endTime == null) {
 			return null;
 		}
@@ -1725,14 +1725,14 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * 
 	 * @generated NOT
 	 */
-	public DateTime getWindowStartWithSlotOrPortTime() {
+	public ZonedDateTime getWindowStartWithSlotOrPortTime() {
 		final LocalDate wStart = getWindowStart();
 		if (wStart == null) {
 			return null;
 		}
-		DateTime dateTime = wStart.toDateTimeAtStartOfDay(DateTimeZone.forID(getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart())));
+		ZonedDateTime dateTime = wStart.atStartOfDay(ZoneId.of(getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart())));
 		final int startTime = (Integer) eGetWithDefault(CargoPackage.eINSTANCE.getSlot_WindowStartTime());
-		dateTime = dateTime.withHourOfDay(startTime);
+		dateTime = dateTime.withHour(startTime);
 		return dateTime;
 	}
 	/**
@@ -1741,8 +1741,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * 
 	 * @generated NOT
 	 */
-	public DateTime getWindowStartWithSlotOrPortTimeWithFlex() {
-		final DateTime startTime = getWindowStartWithSlotOrPortTime();
+	public ZonedDateTime getWindowStartWithSlotOrPortTimeWithFlex() {
+		final ZonedDateTime startTime = getWindowStartWithSlotOrPortTime();
 		if (startTime == null) {
 			return null;
 		}
@@ -1823,10 +1823,10 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public DateTime getPricingDateAsDateTime() {
+	public ZonedDateTime getPricingDateAsDateTime() {
 		if (isSetPricingDate()) {
 			final LocalDate ld = getPricingDate();
-			return ld.toDateTimeAtStartOfDay(DateTimeZone.forID(getTimeZone(CargoPackage.Literals.SLOT__PRICING_DATE)));
+			return ld.atStartOfDay(ZoneId.of(getTimeZone(CargoPackage.Literals.SLOT__PRICING_DATE)));
 		}
 		throw new IllegalStateException("No pricing date");
 	}

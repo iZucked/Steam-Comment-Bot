@@ -15,12 +15,12 @@ import com.mmxlabs.models.lng.types.APortSet;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket#getNotionalPort <em>Notional Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket#getCv <em>Cv</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket#getMarketPorts <em>Market Ports</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getFOBPurchasesMarket()
  * @model

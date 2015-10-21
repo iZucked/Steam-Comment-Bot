@@ -16,8 +16,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Slot Contract Params</b></em>'.
  * <!-- end-user-doc -->
- * <p>
- * </p>
  *
  * @generated
  */

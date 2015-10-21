@@ -27,13 +27,13 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getRoundTripMatrices <em>Round Trip Matrices</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getSelectedMatrix <em>Selected Matrix</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getShippingCostPlans <em>Shipping Cost Plans</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getCargoSandboxes <em>Cargo Sandboxes</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

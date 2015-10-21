@@ -12,11 +12,11 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.parameters.Objective#getWeight <em>Weight</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.Objective#isEnabled <em>Enabled</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getObjective()
  * @model

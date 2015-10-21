@@ -13,12 +13,10 @@ import com.mmxlabs.models.lng.types.TypesPackage;
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>AVessel Set</b></em>'.
  * <!-- end-user-doc -->
- * <p>
- * </p>
  *
  * @generated
  */
-public abstract class AVesselSetImpl<U> extends ObjectSetImpl<AVesselSet<U>, U> implements AVesselSet<U> {
+public abstract class AVesselSetImpl<U> extends ObjectSetImpl<AVesselSet<U>, U>implements AVesselSet<U> {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

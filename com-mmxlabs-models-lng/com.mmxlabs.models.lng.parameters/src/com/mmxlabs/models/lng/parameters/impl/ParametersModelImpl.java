@@ -27,11 +27,11 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.ParametersModelImpl#getSettings <em>Settings</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.ParametersModelImpl#getActiveSetting <em>Active Setting</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

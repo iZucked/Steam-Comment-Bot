@@ -35,6 +35,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterOutMarketImpl#getExtensions <em>Extensions</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterOutMarketImpl#getName <em>Name</em>}</li>
@@ -42,7 +43,6 @@ import com.mmxlabs.models.mmxcore.NamedObject;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterOutMarketImpl#getMinCharterOutDuration <em>Min Charter Out Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterOutMarketImpl#getAvailablePorts <em>Available Ports</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

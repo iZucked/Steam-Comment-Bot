@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.pricing.importers;
 
 import java.text.ParseException;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -19,7 +20,6 @@ import java.util.TreeMap;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
-import org.joda.time.YearMonth;
 
 import com.mmxlabs.common.csv.IExportContext;
 import com.mmxlabs.common.csv.IImportContext;
@@ -192,7 +192,7 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 		try {
 			return dateParser.parseYearMonth(s);
 		} catch (final Exception e) {
-			return new YearMonth(dateParser2.parseLocalDate(s));
+			return YearMonth.of(dateParser2.parseLocalDate(s).getYear(), dateParser2.parseLocalDate(s).getMonthValue());
 		}
 	}
 

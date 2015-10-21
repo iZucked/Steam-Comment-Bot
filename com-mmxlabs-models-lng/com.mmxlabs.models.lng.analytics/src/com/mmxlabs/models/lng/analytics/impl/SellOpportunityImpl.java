@@ -3,11 +3,12 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics.impl;
+import java.time.LocalDate;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.joda.time.LocalDate;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
@@ -21,13 +22,13 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl#getPort <em>Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl#getContract <em>Contract</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl#getDate <em>Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl#getPriceExpression <em>Price Expression</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

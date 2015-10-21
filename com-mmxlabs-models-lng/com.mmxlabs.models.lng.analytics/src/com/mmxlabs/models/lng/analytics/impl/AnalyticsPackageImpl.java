@@ -1449,55 +1449,55 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	protected void createNumberFormatAnnotations() {
-		String source = "http://www.mmxlabs.com/models/ui/numberFormat";		
+		String source = "http://www.mmxlabs.com/models/ui/numberFormat";	
 		addAnnotation
 		  (getUnitCostMatrix_NotionalDayRate(), 
 		   source, 
 		   new String[] {
 			 "unit", "$/day"
-		   });		
+		   });	
 		addAnnotation
 		  (getUnitCostMatrix_Speed(), 
 		   source, 
 		   new String[] {
 			 "unit", "kts"
-		   });		
+		   });	
 		addAnnotation
 		  (getUnitCostMatrix_MinimumLoad(), 
 		   source, 
 		   new String[] {
 			 "unit", "m3"
-		   });		
+		   });	
 		addAnnotation
 		  (getUnitCostMatrix_MaximumLoad(), 
 		   source, 
 		   new String[] {
 			 "unit", "m3"
-		   });		
+		   });	
 		addAnnotation
 		  (getUnitCostMatrix_MinimumDischarge(), 
 		   source, 
 		   new String[] {
 			 "unit", "m3"
-		   });		
+		   });	
 		addAnnotation
 		  (getUnitCostMatrix_MaximumDischarge(), 
 		   source, 
 		   new String[] {
 			 "unit", "m3"
-		   });		
+		   });	
 		addAnnotation
 		  (getUnitCostMatrix_CargoPrice(), 
 		   source, 
 		   new String[] {
 			 "unit", "$/mmbtu"
-		   });		
+		   });	
 		addAnnotation
 		  (getUnitCostMatrix_BaseFuelPrice(), 
 		   source, 
 		   new String[] {
 			 "unit", "$/MT"
-		   });		
+		   });	
 		addAnnotation
 		  (getUnitCostMatrix_RevenueShare(), 
 		   source, 
@@ -1505,7 +1505,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 			 "scale", "100",
 			 "formatString", "###.#",
 			 "unit", "%"
-		   });		
+		   });	
 		addAnnotation
 		  (getUnitCostMatrix_LadenTimeAllowance(), 
 		   source, 
@@ -1513,7 +1513,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 			 "scale", "100",
 			 "formatString", "##0.#",
 			 "unit", "%"
-		   });		
+		   });	
 		addAnnotation
 		  (getUnitCostMatrix_BallastTimeAllowance(), 
 		   source, 
@@ -1521,19 +1521,19 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 			 "scale", "100",
 			 "formatString", "##0.#",
 			 "unit", "%"
-		   });				
+		   });	
 		addAnnotation
 		  (getShippingCostPlan_NotionalDayRate(), 
 		   source, 
 		   new String[] {
 			 "unit", "$/day"
-		   });		
+		   });	
 		addAnnotation
 		  (getShippingCostPlan_BaseFuelPrice(), 
 		   source, 
 		   new String[] {
 			 "unit", "$/MT"
-		   });		
+		   });	
 		addAnnotation
 		  (getShippingCostRow_CargoPrice(), 
 		   source, 

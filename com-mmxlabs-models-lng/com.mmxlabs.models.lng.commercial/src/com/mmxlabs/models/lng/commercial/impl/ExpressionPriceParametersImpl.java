@@ -16,10 +16,10 @@ import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ExpressionPriceParametersImpl#getPriceExpression <em>Price Expression</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

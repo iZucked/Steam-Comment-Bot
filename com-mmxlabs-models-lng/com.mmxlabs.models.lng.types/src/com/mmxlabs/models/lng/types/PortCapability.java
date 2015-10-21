@@ -59,13 +59,13 @@ public enum PortCapability implements Enumerator {
 	 * @ordered
 	 */
 	MAINTENANCE(3, "MAINTENANCE", "MAINTENANCE"), /**
-													 * The '<em><b>TRANSFER</b></em>' literal object.
-													 * <!-- begin-user-doc -->
+													* The '<em><b>TRANSFER</b></em>' literal object.
+													* <!-- begin-user-doc -->
 													 * <!-- end-user-doc -->
-													 * @see #TRANSFER_VALUE
-													 * @generated
-													 * @ordered
-													 */
+													* @see #TRANSFER_VALUE
+													* @generated
+													* @ordered
+													*/
 	TRANSFER(4, "TRANSFER", "TRANSFER");
 
 	/**
@@ -163,6 +163,8 @@ public enum PortCapability implements Enumerator {
 	 * Returns the '<em><b>Port Capability</b></em>' literal with the specified literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @param literal the literal.
+	 * @return the matching enumerator or <code>null</code>.
 	 * @generated
 	 */
 	public static PortCapability get(String literal) {
@@ -179,6 +181,8 @@ public enum PortCapability implements Enumerator {
 	 * Returns the '<em><b>Port Capability</b></em>' literal with the specified name.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @param name the name.
+	 * @return the matching enumerator or <code>null</code>.
 	 * @generated
 	 */
 	public static PortCapability getByName(String name) {
@@ -195,6 +199,8 @@ public enum PortCapability implements Enumerator {
 	 * Returns the '<em><b>Port Capability</b></em>' literal with the specified integer value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @param value the integer value.
+	 * @return the matching enumerator or <code>null</code>.
 	 * @generated
 	 */
 	public static PortCapability get(int value) {

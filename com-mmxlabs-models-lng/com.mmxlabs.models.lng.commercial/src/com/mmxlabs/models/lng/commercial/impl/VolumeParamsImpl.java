@@ -16,8 +16,6 @@ import com.mmxlabs.models.lng.commercial.VolumeParams;
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Volume Params</b></em>'.
  * <!-- end-user-doc -->
- * <p>
- * </p>
  *
  * @generated
  */

@@ -3,11 +3,12 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.parameters.impl;
+import java.time.YearMonth;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-import org.joda.time.YearMonth;
 
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
@@ -18,11 +19,11 @@ import com.mmxlabs.models.lng.parameters.ParametersPackage;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimisationRangeImpl#getOptimiseAfter <em>Optimise After</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimisationRangeImpl#getOptimiseBefore <em>Optimise Before</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

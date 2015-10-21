@@ -14,11 +14,11 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.parameters.ParametersModel#getSettings <em>Settings</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.ParametersModel#getActiveSetting <em>Active Setting</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getParametersModel()
  * @model

@@ -21,6 +21,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPortModel <em>Port Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getFleetModel <em>Fleet Model</em>}</li>
@@ -30,7 +31,6 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getAnalyticsModel <em>Analytics Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPortfolioModel <em>Portfolio Model</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel()
  * @model

@@ -18,10 +18,10 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.DESSalesMarketImpl#getNotionalPort <em>Notional Port</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

@@ -4,14 +4,16 @@
  */
 package com.mmxlabs.models.lng.cargo.validation;
 
+import java.time.Year;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.joda.time.DateTime;
-import org.joda.time.Interval;
+import org.eclipse.swt.widgets.DateTime;
 
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -46,8 +48,8 @@ public class NonShippedVesselAvailabilityConstraint extends AbstractModelMultiCo
 				if (loadSlot.getWindowStart() == null) {
 					return Activator.PLUGIN_ID;
 				}
-				final DateTime start = new DateTime(loadSlot.getWindowStartWithSlotOrPortTime());
-				DateTime end = new DateTime(loadSlot.getWindowEndWithSlotOrPortTime());
+				final ZonedDateTime start = new ZonedDateTime(loadSlot.getWindowStartWithSlotOrPortTime());
+				ZonedDateTime end = new ZonedDateTime(loadSlot.getWindowEndWithSlotOrPortTime());
 				// For divertible cargoes, we should find the round trip time
 				if (loadSlot.isDivertible()) {
 					end = end.plusDays(loadSlot.getShippingDaysRestriction());
@@ -64,8 +66,8 @@ public class NonShippedVesselAvailabilityConstraint extends AbstractModelMultiCo
 				}
 				
 				nominatedVessel = dischargeSlot.getNominatedVessel();
-				final DateTime start = new DateTime(dischargeSlot.getWindowStartWithSlotOrPortTime());
-				final DateTime end = new DateTime(dischargeSlot.getWindowEndWithSlotOrPortTime());
+				final ZonedDateTime start = new ZonedDateTime(dischargeSlot.getWindowStartWithSlotOrPortTime());
+				final ZonedDateTime end = new ZonedDateTime(dischargeSlot.getWindowEndWithSlotOrPortTime());
 				interval = new Interval(start, end);
 				type = "FOB Sale";
 				name = dischargeSlot.getName();
@@ -85,17 +87,17 @@ public class NonShippedVesselAvailabilityConstraint extends AbstractModelMultiCo
 				Interval availabilityInterval = null;
 
 				{
-					DateTime start;
+					ZonedDateTime start;
 					if (va.isSetStartAfter()) {
 						start = va.getStartAfterAsDateTime();
 					} else {
-						start = new DateTime(0);
+						start = ZonedDateTime.of(1970, 1, 1, 0, 0, 0, 0, ZoneId.of("UTC"));
 					}
-					DateTime end;
+					ZonedDateTime end;
 					if (va.isSetEndBy()) {
 						end = va.getEndByAsDateTime();
 					} else {
-						end = new DateTime().year().withMaximumValue();
+						end = ZonedDateTime.now().withYear(Year.MAX_VALUE);
 					}
 					availabilityInterval = new Interval(start, end);
 				}

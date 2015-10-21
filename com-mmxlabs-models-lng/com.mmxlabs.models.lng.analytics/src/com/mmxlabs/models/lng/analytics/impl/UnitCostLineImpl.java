@@ -26,6 +26,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl#getUnitCost <em>Unit Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl#getMmbtuDelivered <em>Mmbtu Delivered</em>}</li>
@@ -41,7 +42,6 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl#getPortCost <em>Port Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl#getProfit <em>Profit</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

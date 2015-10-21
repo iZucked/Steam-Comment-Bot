@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.util;
 
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -12,7 +13,6 @@ import java.util.TimeZone;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
-import org.joda.time.DateTime;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -41,8 +41,8 @@ public class CargoSlotSorter {
 				return c;
 			}
 
-			final DateTime d1 = o1.getWindowStartWithSlotOrPortTime();
-			final DateTime d2 = o2.getWindowStartWithSlotOrPortTime();
+			final ZonedDateTime d1 = o1.getWindowStartWithSlotOrPortTime();
+			final ZonedDateTime d2 = o2.getWindowStartWithSlotOrPortTime();
 			if (d1 == null) {
 				return -1;
 			} else if (d2 == null) {

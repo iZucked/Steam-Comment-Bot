@@ -6,8 +6,8 @@
  */
 package com.mmxlabs.models.lng.actuals;
 
-import org.joda.time.DateTime;
-import org.joda.time.LocalDateTime;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.port.Port;
@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.types.ITimezoneProvider;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getSlot <em>Slot</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getCounterparty <em>Counterparty</em>}</li>
@@ -42,7 +43,6 @@ import com.mmxlabs.models.lng.types.ITimezoneProvider;
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getPortCharges <em>Port Charges</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getCapacityCharges <em>Capacity Charges</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals()
  * @model abstract="true"
@@ -133,7 +133,7 @@ public interface SlotActuals extends ITimezoneProvider {
 	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime" required="true"
 	 * @generated
 	 */
-	DateTime getOperationsStartAsDateTime();
+	ZonedDateTime getOperationsStartAsDateTime();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -141,7 +141,7 @@ public interface SlotActuals extends ITimezoneProvider {
 	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime" required="true"
 	 * @generated
 	 */
-	DateTime getOperationsEndAsDateTime();
+	ZonedDateTime getOperationsEndAsDateTime();
 
 	/**
 	 * Returns the value of the '<em><b>Base Fuel Consumption</b></em>' attribute.

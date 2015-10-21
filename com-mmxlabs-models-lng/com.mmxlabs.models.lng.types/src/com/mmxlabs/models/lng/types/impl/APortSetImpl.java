@@ -13,12 +13,10 @@ import com.mmxlabs.models.lng.types.TypesPackage;
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>APort Set</b></em>'.
  * <!-- end-user-doc -->
- * <p>
- * </p>
  *
  * @generated
  */
-public abstract class APortSetImpl<U> extends ObjectSetImpl<APortSet<U>, U> implements APortSet<U> {
+public abstract class APortSetImpl<U> extends ObjectSetImpl<APortSet<U>, U>implements APortSet<U> {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

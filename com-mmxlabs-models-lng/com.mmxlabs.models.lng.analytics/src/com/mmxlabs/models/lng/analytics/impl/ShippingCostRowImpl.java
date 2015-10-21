@@ -22,6 +22,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostRowImpl#getPort <em>Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostRowImpl#getDate <em>Date</em>}</li>
@@ -31,7 +32,6 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostRowImpl#getHeelVolume <em>Heel Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostRowImpl#isIncludePortCosts <em>Include Port Costs</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
