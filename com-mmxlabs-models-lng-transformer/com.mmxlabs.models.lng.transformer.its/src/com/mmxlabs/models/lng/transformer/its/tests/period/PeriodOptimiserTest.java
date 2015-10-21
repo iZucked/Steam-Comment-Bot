@@ -6,10 +6,10 @@ package com.mmxlabs.models.lng.transformer.its.tests.period;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.YearMonth;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.joda.time.LocalDateTime;
-import org.joda.time.YearMonth;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

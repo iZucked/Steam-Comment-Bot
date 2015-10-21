@@ -4,11 +4,11 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests.sanityChecks;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.joda.time.LocalDateTime;
 import org.junit.Assert;
 
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
@@ -78,7 +78,7 @@ public class SuboptimalScenarioTester {
 		// createVessels creates and adds the vessels to the scenario.
 		csc.addVesselSimple("classOne", numOfClassOne, fuelPrice, 25, 1000000, 10, 10, 0, 500, false);
 
-		final LocalDateTime cargoStart = new LocalDateTime();
+		final LocalDateTime cargoStart = LocalDateTime.now();
 
 		// create two different cargoes
 		smallToLargeCargo = csc.addCargo("S-L-Cargo", smallLoadPort, bigDischargePort, loadPrice, dischargePrice, 22, cargoStart, 50);

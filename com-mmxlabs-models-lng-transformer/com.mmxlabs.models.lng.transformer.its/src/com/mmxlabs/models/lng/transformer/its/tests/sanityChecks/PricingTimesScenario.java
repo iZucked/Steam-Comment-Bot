@@ -4,15 +4,16 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests.sanityChecks;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.joda.time.YearMonth;
+import org.eclipse.swt.widgets.DateTime;
 import org.junit.Assert;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -164,23 +165,23 @@ public class PricingTimesScenario {
 	 * Helper date methods
 	 */
 	@NonNull
-	static DateTime createDateTime(final int year, final int month, final int day, final int hour, final String timeZone) {
-		return new DateTime(year, 1 + month, day, hour, 0, DateTimeZone.forID(timeZone));
+	static ZonedDateTime createDateTime(final int year, final int month, final int day, final int hour, final String timeZone) {
+		return ZonedDateTime.of(year, 1 + month, day, hour, 0, 0, 0, ZoneId.of(timeZone));
 	}
 
 	@NonNull
 	static LocalDateTime createLocalDateTime(final int year, final int month, final int day, final int hour) {
-		return new LocalDateTime(year, 1 + month, day, hour, 0);
+		return LocalDateTime.of(year, 1 + month, day, hour, 0);
 	}
 
 	@NonNull
 	static LocalDate createLocalDate(final int year, final int month, final int day) {
-		return new LocalDate(year, 1 + month, day);
+		return LocalDate.of(year, 1 + month, day);
 	}
 
 	@NonNull
 	static YearMonth createYearMonth(final int year, final int month) {
-		return new YearMonth(year, 1 + month);
+		return YearMonth.of(year, 1 + month);
 	}
 
 }

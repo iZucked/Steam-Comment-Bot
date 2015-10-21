@@ -4,6 +4,11 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -13,11 +18,6 @@ import java.util.TimeZone;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.joda.time.YearMonth;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -427,13 +427,13 @@ public class CustomScenarioCreator {
 
 		load.setWindowSize(0);
 
-		final DateTimeZone dischargeZone = DateTimeZone.forID(dischargePort.getTimeZone() == null || dischargePort.getTimeZone().isEmpty() ? "UTC" : dischargePort.getTimeZone());
+		final ZoneId dischargeZone = ZoneId.of(dischargePort.getTimeZone() == null || dischargePort.getTimeZone().isEmpty() ? "UTC" : dischargePort.getTimeZone());
 
 		load.setWindowStart(loadWindowStart.toLocalDate());
-		load.setWindowStartTime(loadWindowStart.getHourOfDay());
+		load.setWindowStartTime(loadWindowStart.getHour());
 
-		final DateTime dischargeDate = load.getWindowStartWithSlotOrPortTime().withZone(dischargeZone).plusHours(travelTime);
-		dis.setWindowStartTime(dischargeDate.getHourOfDay());
+		final ZonedDateTime dischargeDate = load.getWindowStartWithSlotOrPortTime().withZone(dischargeZone).plusHours(travelTime);
+		dis.setWindowStartTime(dischargeDate.getHour());
 		dis.setWindowStart(dischargeDate.toLocalDate());
 		dis.setWindowSize(0);
 
@@ -761,15 +761,15 @@ public class CustomScenarioCreator {
 	}
 
 	public LocalDate createLocalDate(final int year, final int month, final int day) {
-		return new LocalDate(year, 1 + month, day);
+		return  LocalDate.of(year, 1 + month, day);
 	}
 
 	public static LocalDateTime createLocalDateTime(final int year, final int month, final int day, final int hourOfDay) {
-		return new LocalDateTime(year, 1 + month, day, hourOfDay, 0);
+		return LocalDateTime.of(year, 1 + month, day, hourOfDay, 0);
 	}
 
 	public static YearMonth createYearMonth(final int year, final int month) {
-		return new YearMonth(year, 1 + month);
+		return YearMonth.of(year, 1 + month);
 	}
 
 	public LNGPortfolioModel getPortfolioModel() {

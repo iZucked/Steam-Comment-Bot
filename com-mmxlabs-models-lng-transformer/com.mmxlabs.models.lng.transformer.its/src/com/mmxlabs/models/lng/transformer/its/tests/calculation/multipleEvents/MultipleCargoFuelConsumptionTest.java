@@ -4,7 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests.calculation.multipleEvents;
 
-import org.joda.time.LocalDateTime;
+import java.time.LocalDateTime;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -64,7 +65,7 @@ public class MultipleCargoFuelConsumptionTest {
 		csc.addVesselSimple(vesselClassName, numOfVesselsToCreate, baseFuelUnitPrice, speed, capacity, consumption, NBORate, pilotLightRate, minHeelVolume, false);
 
 		// Set up start dates and durations.
-		final LocalDateTime cargoAStart = new LocalDateTime();
+		final LocalDateTime cargoAStart = LocalDateTime.now();
 		final int cargoADuration = 10;
 		// cargo B starts one hour after the vessel makes it back to port A (the vessel takes 10 hours to get to portB, then 10 hours to travel back to portA).
 		final LocalDateTime cargoBStart = cargoAStart.plusHours(2 * legDuration);
@@ -228,7 +229,7 @@ public class MultipleCargoFuelConsumptionTest {
 		csc.addVesselSimple(vesselClassName, numOfVesselsToCreate, baseFuelUnitPrice, speed, capacity, consumption, NBORate, pilotLightRate, minHeelVolume, false);
 
 		// Set up start dates and durations.
-		final LocalDateTime cargoAStart = new LocalDateTime();
+		final LocalDateTime cargoAStart = LocalDateTime.now();
 		final int cargoADuration = 10;
 		// cargo B starts one hour after the vessel makes it back to port A (the vessel takes 10 hours to get to portB, then 10 hours to travel back to portA).
 		final LocalDateTime cargoBStart = cargoAStart.plusHours(2 * legDuration);

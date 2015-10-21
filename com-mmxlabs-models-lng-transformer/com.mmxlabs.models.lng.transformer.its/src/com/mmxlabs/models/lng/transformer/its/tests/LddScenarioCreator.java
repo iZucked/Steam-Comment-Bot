@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -95,14 +95,14 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 			slot.setMaxQuantity(1000);
 		}
 
-		final DateTime loadDate = cargo.getSlots().get(0).getWindowStartWithSlotOrPortTime();
-		final DateTime lastDischargeDate = cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
+		final ZonedDateTime loadDate = cargo.getSlots().get(0).getWindowStartWithSlotOrPortTime();
+		final ZonedDateTime lastDischargeDate = cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
 
-		final DateTime startDate = loadDate.minusHours(2 * getTravelTime(originPort, loadPort, null, (int) maxSpeed));
-		final DateTime endDate = lastDischargeDate.plusHours(2 * getTravelTime(dischargePort2, originPort, null, (int) maxSpeed));
+		final ZonedDateTime startDate = loadDate.minusHours(2 * getTravelTime(originPort, loadPort, null, (int) maxSpeed));
+		final ZonedDateTime endDate = lastDischargeDate.plusHours(2 * getTravelTime(dischargePort2, originPort, null, (int) maxSpeed));
 
-		this.vesselAvailability = fleetCreator.setAvailability(portfolioModel.getCargoModel(), vessel, originPort, startDate.withZone(DateTimeZone.UTC).toLocalDateTime(), originPort, endDate
-				.withZone(DateTimeZone.UTC).toLocalDateTime());
+		this.vesselAvailability = fleetCreator.setAvailability(portfolioModel.getCargoModel(), vessel, originPort, startDate.withZone(ZoneId.of("UTC")).toLocalDateTime(), originPort, endDate
+				.withZone(ZoneId.of("UTC")).toLocalDateTime());
 
 		cargo.setVesselAssignmentType(vesselAvailability);
 	}

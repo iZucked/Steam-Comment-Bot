@@ -4,6 +4,10 @@
  */
 package com.mmxlabs.models.lng.transformer;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -27,11 +31,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.Hours;
-import org.joda.time.LocalDate;
-import org.joda.time.YearMonth;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -811,7 +810,7 @@ public class LNGScenarioTransformer {
 	private void buildVesselEvents(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @NonNull final Association<VesselClass, IVesselClass> classes,
 			@NonNull final ModelEntityMap modelEntityMap) {
 
-		final DateTime latestDate = dateHelper.getLatestTime();
+		final ZonedDateTime latestDate = dateHelper.getLatestTime();
 
 		final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
 
@@ -888,7 +887,7 @@ public class LNGScenarioTransformer {
 			}
 		}
 
-		final DateTime latestDate = dateHelper.getLatestTime();
+		final ZonedDateTime latestDate = dateHelper.getLatestTime();
 
 		final Set<LoadSlot> usedLoadSlots = new HashSet<LoadSlot>();
 		final Set<DischargeSlot> usedDischargeSlots = new HashSet<DischargeSlot>();
@@ -1029,8 +1028,8 @@ public class LNGScenarioTransformer {
 
 		if (modelSlot instanceof SpotSlot) {
 			// TODO: IS this with flex or not??
-			final DateTime startTime = modelSlot.getWindowStartWithSlotOrPortTime();
-			final DateTime endTime = modelSlot.getWindowEndWithSlotOrPortTime();
+			final ZonedDateTime startTime = modelSlot.getWindowStartWithSlotOrPortTime();
+			final ZonedDateTime endTime = modelSlot.getWindowEndWithSlotOrPortTime();
 			// Convert port local external date/time into UTC based internal time units
 			final int twStart = timeZoneToUtcOffsetProvider.UTC(dateHelper.convertTime(startTime), port);
 			final int twEnd = timeZoneToUtcOffsetProvider.UTC(dateHelper.convertTime(endTime), port);
@@ -1479,8 +1478,8 @@ public class LNGScenarioTransformer {
 		if (spotMarketsModel == null) {
 			return;
 		}
-		final DateTime earliestDate = dateHelper.getEarliestTime();
-		final DateTime latestDate = dateHelper.getLatestTime();
+		final ZonedDateTime earliestDate = dateHelper.getEarliestTime();
+		final ZonedDateTime latestDate = dateHelper.getLatestTime();
 
 		buildDESPurchaseSpotMarket(builder, portAssociation, contractTransformers, modelEntityMap, earliestDate, latestDate, spotMarketsModel.getDesPurchaseSpotMarket());
 		buildDESSalesSpotMarket(builder, portAssociation, contractTransformers, modelEntityMap, earliestDate, latestDate, spotMarketsModel.getDesSalesSpotMarket());
@@ -1490,17 +1489,17 @@ public class LNGScenarioTransformer {
 	}
 
 	private void buildDESPurchaseSpotMarket(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Collection<IContractTransformer> contractTransformers,
-			final ModelEntityMap modelEntityMap, final DateTime earliestDate, final DateTime latestDate, final SpotMarketGroup desPurchaseSpotMarket) {
+			final ModelEntityMap modelEntityMap, final ZonedDateTime earliestDate, final ZonedDateTime latestDate, final SpotMarketGroup desPurchaseSpotMarket) {
 		if (desPurchaseSpotMarket != null) {
 
 			final SpotAvailability groupAvailability = desPurchaseSpotMarket.getAvailability();
 
 			/** Loop over the date range in the optimisation generating market slots */
 			// Get the YearMonth of the earliest date in the scenario.
-			final YearMonth initialYearMonth = new YearMonth(earliestDate.toDateTime(DateTimeZone.UTC).toLocalDate());
+			final YearMonth initialYearMonth = new YearMonth(earliestDate.toDateTime(ZoneId.of("UTC")).toLocalDate());
 
 			// Convert this to the 1st of the month in the notional port timezone.
-			DateTime tzStartTime = initialYearMonth.toLocalDate(1).toDateTimeAtStartOfDay(DateTimeZone.UTC);
+			ZonedDateTime tzStartTime = initialYearMonth.toLocalDate(1).toDateTimeAtStartOfDay(ZoneId.of("UTC"));
 			while (tzStartTime.isBefore(latestDate)) {
 
 				// Convert into timezoneless date objects (for EMF slot object)
@@ -1511,7 +1510,7 @@ public class LNGScenarioTransformer {
 				final String yearMonthString = getKeyForDate(startTime);
 
 				// Calculate timezone end date for time window
-				final DateTime tzEndTime = tzStartTime.plusMonths(1);
+				final ZonedDateTime tzEndTime = tzStartTime.plusMonths(1);
 
 				final List<IPortSlot> marketGroupSlots = new ArrayList<IPortSlot>();
 
@@ -1580,7 +1579,7 @@ public class LNGScenarioTransformer {
 								desSlot.setDESPurchase(true);
 								desSlot.setName(id);
 								desSlot.setArriveCold(false);
-								desSlot.setWindowStart(new LocalDate(startTime));
+								desSlot.setWindowStart(LocalDate.of(startTime.getYear(), startTime.getMonthValue(), startTime.getDayOfMonth()));
 								desSlot.setWindowStartTime(0);
 								// desSlot.setContract(desPurchaseMarket.getContract());
 								desSlot.setOptional(true);
@@ -1626,17 +1625,17 @@ public class LNGScenarioTransformer {
 	}
 
 	private void buildFOBSalesSpotMarket(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Collection<IContractTransformer> contractTransformers,
-			final ModelEntityMap modelEntityMap, final DateTime earliestDate, final DateTime latestDate, final SpotMarketGroup fobSalesSpotMarket) {
+			final ModelEntityMap modelEntityMap, final ZonedDateTime earliestDate, final ZonedDateTime latestDate, final SpotMarketGroup fobSalesSpotMarket) {
 		if (fobSalesSpotMarket != null) {
 
 			final SpotAvailability groupAvailability = fobSalesSpotMarket.getAvailability();
 
 			/** Loop over the date range in the optimisation generating market slots */
 			// Get the YearMonth of the earliest date in the scenario.
-			final YearMonth initialYearMonth = new YearMonth(earliestDate.toDateTime(DateTimeZone.UTC).toLocalDate());
+			final YearMonth initialYearMonth = new YearMonth(earliestDate.toDateTime(ZoneId.of("UTC")).toLocalDate());
 
 			// Convert this to the 1st of the month in the notional port timezone.
-			DateTime tzStartTime = initialYearMonth.toLocalDate(1).toDateTimeAtStartOfDay(DateTimeZone.UTC);
+			ZonedDateTime tzStartTime = initialYearMonth.toLocalDate(1).toDateTimeAtStartOfDay(ZoneId.of("UTC"));
 			while (tzStartTime.isBefore(latestDate)) {
 
 				// Convert into timezoneless date objects (for EMF slot object)
@@ -1647,7 +1646,7 @@ public class LNGScenarioTransformer {
 				final String yearMonthString = getKeyForDate(startTime);
 
 				// Calculate timezone end date for time window
-				final DateTime tzEndTime = tzStartTime.plusMonths(1);
+				final ZonedDateTime tzEndTime = tzStartTime.plusMonths(1);
 
 				final List<IPortSlot> marketGroupSlots = new ArrayList<IPortSlot>();
 
@@ -1775,8 +1774,8 @@ public class LNGScenarioTransformer {
 	}
 
 	private void buildDESSalesSpotMarket(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation,
-			@NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap, @NonNull final DateTime earliestDate,
-			@NonNull final DateTime latestDate, @Nullable final SpotMarketGroup desSalesSpotMarket) {
+			@NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap, @NonNull final ZonedDateTime earliestDate,
+			@NonNull final ZonedDateTime latestDate, @Nullable final SpotMarketGroup desSalesSpotMarket) {
 		if (desSalesSpotMarket != null) {
 
 			final SpotAvailability groupAvailability = desSalesSpotMarket.getAvailability();
@@ -1799,9 +1798,9 @@ public class LNGScenarioTransformer {
 
 					/** Loop over the date range in the optimisation generating market slots */
 					// Get the YearMonth of the earliest date in the scenario.
-					final YearMonth initialYearMonth = new YearMonth(earliestDate.toDateTime(DateTimeZone.UTC).toLocalDate());
+					final YearMonth initialYearMonth = new YearMonth(earliestDate.toDateTime(ZoneId.of("UTC")).toLocalDate());
 					// Convert this to the 1st of the month in the notional port timezone.
-					DateTime tzStartTime = initialYearMonth.toLocalDate(1).toDateTimeAtStartOfDay(DateTimeZone.forID(notionalAPort.getTimeZone()));
+					ZonedDateTime tzStartTime = initialYearMonth.toLocalDate(1).toDateTimeAtStartOfDay(ZoneId.of(notionalAPort.getTimeZone()));
 					// Loop!
 					while (tzStartTime.isBefore(latestDate)) {
 
@@ -1813,7 +1812,7 @@ public class LNGScenarioTransformer {
 						final String yearMonthString = getKeyForDate(startTime);
 
 						// Calculate timezone end date for time window
-						final DateTime tzEndTime = tzStartTime.plusMonths(1);
+						final ZonedDateTime tzEndTime = tzStartTime.plusMonths(1);
 
 						final Collection<Slot> existing = getSpotSlots(market, getKeyForDate(startTime));
 						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
@@ -1892,7 +1891,7 @@ public class LNGScenarioTransformer {
 	}
 
 	private void buildFOBPurchaseSpotMarket(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Collection<IContractTransformer> contractTransformers,
-			final ModelEntityMap modelEntityMap, final DateTime earliestDate, final DateTime latestDate, final SpotMarketGroup fobPurchaseSpotMarket) {
+			final ModelEntityMap modelEntityMap, final ZonedDateTime earliestDate, final ZonedDateTime latestDate, final SpotMarketGroup fobPurchaseSpotMarket) {
 		if (fobPurchaseSpotMarket != null) {
 
 			final SpotAvailability groupAvailability = fobPurchaseSpotMarket.getAvailability();
@@ -1915,10 +1914,10 @@ public class LNGScenarioTransformer {
 
 					/** Loop over the date range in the optimisation generating market slots */
 					// Get the YearMonth of the earliest date in the scenario.
-					final YearMonth initialYearMonth = new YearMonth(earliestDate.toDateTime(DateTimeZone.UTC).toLocalDate());
+					final YearMonth initialYearMonth = new YearMonth(earliestDate.toDateTime(ZoneId.of("UTC")).toLocalDate());
 
 					// Convert this to the 1st of the month in the notional port timezone.
-					DateTime tzStartTime = initialYearMonth.toLocalDate(1).toDateTimeAtStartOfDay(DateTimeZone.forID(notionalAPort.getTimeZone()));
+					ZonedDateTime tzStartTime = initialYearMonth.toLocalDate(1).toDateTimeAtStartOfDay(ZoneId.of(notionalAPort.getTimeZone()));
 
 					while (tzStartTime.isBefore(latestDate)) {
 
@@ -1930,7 +1929,7 @@ public class LNGScenarioTransformer {
 						final String yearMonthString = getKeyForDate(startTime);
 
 						// Calculate timezone end date for time window
-						final DateTime tzEndTime = tzStartTime.plusMonths(1);
+						final ZonedDateTime tzEndTime = tzStartTime.plusMonths(1);
 
 						final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(fobPurchaseMarket.getCv());
 
@@ -2014,7 +2013,7 @@ public class LNGScenarioTransformer {
 			if (availability.isSetCurve()) {
 				final Index<Integer> curve = availability.getCurve();
 
-				final Integer value = curve.getValueForMonth(new YearMonth(startTime));
+				final Integer value = curve.getValueForMonth(YearMonth.of(startTime.getYear(), startTime.getMonthValue());
 				if (value != null) {
 					count = value;
 					valueSet = true;
@@ -2398,7 +2397,7 @@ public class LNGScenarioTransformer {
 
 			final CharterOutStartDate charterOutStartDate = spotMarketsModel.getCharterOutStartDate();
 			if (charterOutStartDate != null && charterOutStartDate.getCharterOutStartDate() != null) {
-				builder.setGeneratedCharterOutStartTime(dateHelper.convertTime(charterOutStartDate.getCharterOutStartDate().toDateTimeAtStartOfDay(DateTimeZone.UTC)));
+				builder.setGeneratedCharterOutStartTime(dateHelper.convertTime(charterOutStartDate.getCharterOutStartDate().toDateTimeAtStartOfDay(ZoneId.of("UTC"))));
 			} else {
 				builder.setGeneratedCharterOutStartTime(0);
 			}
@@ -2475,8 +2474,8 @@ public class LNGScenarioTransformer {
 	 * @return
 	 */
 	@NonNull
-	private IStartRequirement createStartRequirement(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @Nullable final DateTime from,
-			@Nullable final DateTime to, @Nullable final Port port, @Nullable final HeelOptions eHeelOptions) {
+	private IStartRequirement createStartRequirement(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @Nullable final ZonedDateTime from,
+			@Nullable final ZonedDateTime to, @Nullable final Port port, @Nullable final HeelOptions eHeelOptions) {
 		ITimeWindow window = null;
 
 		if (from == null && to != null) {
@@ -2510,8 +2509,8 @@ public class LNGScenarioTransformer {
 	 * @return
 	 */
 	@NonNull
-	private IEndRequirement createEndRequirement(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @Nullable final DateTime from,
-			@Nullable final DateTime to, @Nullable final Set<Port> ports, final boolean endCold, final long targetHeelInM3) {
+	private IEndRequirement createEndRequirement(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @Nullable final ZonedDateTime from,
+			@Nullable final ZonedDateTime to, @Nullable final Set<Port> ports, final boolean endCold, final long targetHeelInM3) {
 		ITimeWindow window = null;
 
 		if (from == null && to != null) {
@@ -2584,7 +2583,7 @@ public class LNGScenarioTransformer {
 
 	@NonNull
 	private String getKeyForDate(@NonNull final LocalDate date) {
-		return String.format("%04d-%02d", date.getYear(), date.getMonthOfYear());
+		return String.format("%04d-%02d", date.getYear(), date.getMonthValue());
 	}
 
 	@NonNull
@@ -2606,7 +2605,7 @@ public class LNGScenarioTransformer {
 	private int getSlotPricingDate(@NonNull final Slot slot) {
 		int pricingDate;
 		if (slot.isSetPricingDate()) {
-			final DateTime dateTime = slot.getPricingDateAsDateTime();
+			final ZonedDateTime dateTime = slot.getPricingDateAsDateTime();
 			assert dateTime != null;
 			pricingDate = dateHelper.convertTime(dateTime);
 		} else {

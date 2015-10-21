@@ -6,11 +6,12 @@ package com.mmxlabs.models.lng.transformer.inject.modules;
 
 import static org.ops4j.peaberry.Peaberry.service;
 
+import java.time.ZonedDateTime;
+
 import javax.inject.Singleton;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.annotation.NonNull;
-import org.joda.time.DateTime;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -182,7 +183,7 @@ public class LNGTransformerModule extends AbstractModule {
 	@Singleton
 	@Provides
 	@Named(EARLIEST_AND_LATEST_TIMES)
-	private Pair<DateTime, DateTime> provideEarliestAndLatestTime(@NonNull final LNGScenarioModel scenario) {
+	private Pair<ZonedDateTime, ZonedDateTime> provideEarliestAndLatestTime(@NonNull final LNGScenarioModel scenario) {
 		return LNGScenarioUtils.findEarliestAndLatestTimes(scenario);
 	}
 }

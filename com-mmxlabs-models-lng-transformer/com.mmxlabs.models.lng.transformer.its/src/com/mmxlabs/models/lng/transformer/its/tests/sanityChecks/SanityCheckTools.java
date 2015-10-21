@@ -4,10 +4,9 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests.sanityChecks;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.joda.time.LocalDateTime;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
@@ -72,7 +71,7 @@ public class SanityCheckTools {
 		final Cargo[] inputCargoes = new Cargo[numOfCargoes];
 		int i = 0;
 
-		LocalDateTime cargoStart = new LocalDateTime();
+		LocalDateTime cargoStart = LocalDateTime.now();
 		int duration = 50;
 
 		for (final Port portX : ports) {
@@ -138,7 +137,7 @@ public class SanityCheckTools {
 	 */
 	public static void addDrydocks(final CustomScenarioCreator csc, final Port[] ports, final Vessel allowedDrydockVessel, final VesselClass allowedDrydockVesselClass) {
 
-		LocalDateTime start = new LocalDateTime();
+		LocalDateTime start = LocalDateTime.now();
 		for (final Port portA : ports) {
 			for (final Port portB : ports) {
 				if (!portA.equals(portB)) {
@@ -171,7 +170,7 @@ public class SanityCheckTools {
 	public static void addCharterOuts(final CustomScenarioCreator csc, final Port[] ports, final Vessel allowedCharterOutVessel, final VesselClass allowedCharterOutVesselClass, final float cvValue,
 			final float dischargePrice) {
 
-		final LocalDateTime start = new LocalDateTime();
+		final LocalDateTime start = LocalDateTime.now();
 		int charterOutDurationDays = 1;
 		for (final Port portA : ports) {
 			for (final Port portB : ports) {

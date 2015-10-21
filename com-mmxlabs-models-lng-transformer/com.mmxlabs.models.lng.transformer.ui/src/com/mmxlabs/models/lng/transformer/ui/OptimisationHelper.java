@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
+import java.time.YearMonth;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -25,8 +26,6 @@ import org.eclipse.emf.validation.service.ModelValidationService;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
-import org.joda.time.Months;
-import org.joda.time.YearMonth;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

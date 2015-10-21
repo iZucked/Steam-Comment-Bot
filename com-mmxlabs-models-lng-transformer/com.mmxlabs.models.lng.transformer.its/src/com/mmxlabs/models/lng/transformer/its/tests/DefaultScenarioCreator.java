@@ -4,16 +4,17 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests;
 
+import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDateTime;
-import org.joda.time.YearMonth;
 import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -115,7 +116,7 @@ public class DefaultScenarioCreator {
 	/** A list of canal costs that will be added to every class of vessel when the scenario is retrieved for use. */
 	// private final ArrayList<VesselClassCost> canalCostsForAllVesselClasses = new ArrayList<VesselClassCost>();
 
-	private static final String timeZone = DateTimeZone.UTC.getID();
+	private static final String timeZone = ZoneId.of("UTC").getID();
 
 	public DefaultScenarioCreator() {
 		scenario = ManifestJointModel.createEmptyInstance(null);
@@ -265,7 +266,7 @@ public class DefaultScenarioCreator {
 		}
 
 		public void setBaseFuelPrice(final BaseFuelCost bfc, final double price) {
-			setBaseFuelPrice(bfc, price, new YearMonth(2000, 1));
+			setBaseFuelPrice(bfc, price, YearMonth.of(2000, 1));
 		}
 
 		/**
@@ -576,7 +577,7 @@ public class DefaultScenarioCreator {
 
 		public void setDefaultSlotWindow(final Slot slot, final LocalDateTime time) {
 			slot.setWindowSize(defaultWindowSize);
-			slot.setWindowStartTime(time.getHourOfDay());
+			slot.setWindowStartTime(time.getHour());
 			slot.setWindowStart(time.toLocalDate());
 		}
 
@@ -631,7 +632,7 @@ public class DefaultScenarioCreator {
 
 			// if load time is not specified, set it to the current datetime
 			if (loadTime == null) {
-				loadTime = new LocalDateTime();
+				loadTime = LocalDateTime.now();
 			}
 
 			// if name is not specified, set it to a sensible default
@@ -692,10 +693,10 @@ public class DefaultScenarioCreator {
 			final IndexPoint<T> startPoint = PricingFactory.eINSTANCE.createIndexPoint();
 			final IndexPoint<T> endPoint = PricingFactory.eINSTANCE.createIndexPoint();
 
-			startPoint.setDate(new YearMonth(1000, 1));
+			startPoint.setDate(YearMonth.of(1000, 1));
 			startPoint.setValue(value);
 
-			endPoint.setDate(new YearMonth(3000, 1));
+			endPoint.setDate(YearMonth.of(3000, 1));
 			endPoint.setValue(value);
 
 			final DataIndex<T> result = PricingFactory.eINSTANCE.createDataIndex();

@@ -4,10 +4,10 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests.evaluation;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
-import org.joda.time.LocalDateTime;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

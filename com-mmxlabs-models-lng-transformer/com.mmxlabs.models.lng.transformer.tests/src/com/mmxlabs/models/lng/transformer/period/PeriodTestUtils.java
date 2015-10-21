@@ -4,6 +4,11 @@
  */
 package com.mmxlabs.models.lng.transformer.period;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
@@ -13,11 +18,7 @@ import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.joda.time.YearMonth;
+import org.eclipse.swt.widgets.DateTime;
 
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -74,19 +75,19 @@ import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 public class PeriodTestUtils {
 
 	public static YearMonth createYearMonth(final int year, final int month) {
-		return new YearMonth(year, 1 + month);
+		return YearMonth.of(year, 1 + month);
 	}
 
-	public static DateTime createDate(final int year, final int month, final int day, final int hour) {
-		return new DateTime(year, 1 + month, day, hour, 0, DateTimeZone.UTC);
+	public static ZonedDateTime createDate(final int year, final int month, final int day, final int hour) {
+		return ZonedDateTime.of(year, 1 + month, day, hour, 0, 0, 0, ZoneId.of("UTC"));
 	}
 
-	public static DateTime createDate(final String timezoneCode, final int year, final int month, final int day, final int hour) {
-		return new DateTime(year, 1 + month, day, hour, 0, DateTimeZone.forID(timezoneCode));
+	public static ZonedDateTime createDate(final String timezoneCode, final int year, final int month, final int day, final int hour) {
+		return ZonedDateTime.of(year, 1 + month, day, hour, 0, 0, 0, ZoneId.of(timezoneCode));
 	}
 
-	static DateTime createDate(final int year, final int month, final int day) {
-		return new DateTime(year, 1 + month, day, 0, 0, DateTimeZone.UTC);
+	static ZonedDateTime createDate(final int year, final int month, final int day) {
+		return ZonedDateTime.of(year, 1 + month, day, 0, 0, 0, 0, ZoneId.of("UTC"));
 	}
 
 	static LocalDate createLocalDate(final int year, final int month, final int day) {
@@ -94,11 +95,11 @@ public class PeriodTestUtils {
 	}
 
 	static LocalDateTime createLocalDateTime(final int year, final int month, final int day, int hourOfDay) {
-		return new LocalDateTime(year, 1 + month, day, hourOfDay, 0);
+		return LocalDateTime.of(year, 1 + month, day, hourOfDay, 0);
 	}
 
-	static DateTime createDate(final String timezoneCode, final int year, final int month, final int day) {
-		return new DateTime(year, 1 + month, day, 0, 0, DateTimeZone.forID(timezoneCode));
+	static ZonedDateTime createDate(final String timezoneCode, final int year, final int month, final int day) {
+		return ZonedDateTime.of(year, 1 + month, day, 0, 0, 0, 0, ZoneId.of(timezoneCode));
 	}
 
 	public static LNGScenarioModel createBasicScenario() {
@@ -170,7 +171,7 @@ public class PeriodTestUtils {
 		vesselEventVisit.setStart(vesselEvent.getStartAfterAsDateTime());
 
 		if (vesselEventVisit.getStart() != null) {
-			final DateTime date = vesselEventVisit.getStart().plusDays(vesselEvent.getDurationInDays());
+			final ZonedDateTime date = vesselEventVisit.getStart().plusDays(vesselEvent.getDurationInDays());
 			vesselEventVisit.setEnd(date);
 		}
 		return vesselEventVisit;
@@ -321,7 +322,7 @@ public class PeriodTestUtils {
 		market.setAvailability(availability);
 	}
 
-	public static PortVisit createPortVisit(final Port port, final DateTime date) {
+	public static PortVisit createPortVisit(final Port port, final ZonedDateTime date) {
 
 		final PortVisit portVisit = ScheduleFactory.eINSTANCE.createPortVisit();
 		portVisit.setPort(port);

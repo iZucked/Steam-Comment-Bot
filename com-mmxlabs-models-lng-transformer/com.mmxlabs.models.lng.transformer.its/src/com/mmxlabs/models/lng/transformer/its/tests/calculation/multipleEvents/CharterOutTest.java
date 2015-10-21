@@ -4,7 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests.calculation.multipleEvents;
 
-import org.joda.time.LocalDateTime;
+import java.time.LocalDateTime;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -80,7 +81,7 @@ public class CharterOutTest {
 		final int dryDockDurationDays = 0;
 		final float cvValue = 1;
 
-		final LocalDateTime startFirstCharterOut = new LocalDateTime();
+		final LocalDateTime startFirstCharterOut = LocalDateTime.now();
 		final LocalDateTime endFirstCharterOut = startFirstCharterOut.plusDays(charterOutDurationDays);
 		final LocalDateTime startFirstDryDock = endFirstCharterOut.plusHours(legDurationHours);
 		final LocalDateTime startSecondCharterOut = new LocalDateTime(startFirstDryDock);

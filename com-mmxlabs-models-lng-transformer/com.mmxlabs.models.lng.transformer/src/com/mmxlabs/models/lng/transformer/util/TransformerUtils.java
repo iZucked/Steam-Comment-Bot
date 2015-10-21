@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.transformer.util;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
@@ -28,7 +29,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
-import org.joda.time.DateTime;
+import org.eclipse.swt.widgets.DateTime;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -129,7 +130,7 @@ public class TransformerUtils {
 
 	}
 
-	private static void updateMinMax(Pair<DateTime, DateTime> pair, DateTime date) {
+	private static void updateMinMax(Pair<ZonedDateTime, ZonedDateTime> pair, ZonedDateTime date) {
 		if (date == null)
 			return;
 		if (pair.getFirst() == null || date.isBefore(pair.getFirst()))
@@ -139,8 +140,8 @@ public class TransformerUtils {
 
 	}
 
-	public static Pair<DateTime, DateTime> findEarliestAndLatestEvents(final MMXRootObject rootObject) {
-		final Pair<DateTime, DateTime> result = new Pair<>(null, null);
+	public static Pair<ZonedDateTime, ZonedDateTime> findEarliestAndLatestEvents(final MMXRootObject rootObject) {
+		final Pair<ZonedDateTime, ZonedDateTime> result = new Pair<>(null, null);
 
 		final TreeIterator<EObject> iterator = rootObject.eAllContents();
 		while (iterator.hasNext()) {
