@@ -4,8 +4,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers;
 
-import org.eclipse.jdt.annotation.NonNull;
 import java.util.List;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;

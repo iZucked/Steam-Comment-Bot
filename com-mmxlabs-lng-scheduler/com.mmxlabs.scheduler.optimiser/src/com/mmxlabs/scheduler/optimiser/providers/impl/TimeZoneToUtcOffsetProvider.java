@@ -4,9 +4,10 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers.impl;
 
+import java.time.ZoneId;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.joda.time.DateTimeZone;
 
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -33,7 +34,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
  * needed.
  * 
  * 
- * TO USE: make sure the joda-time jar/bundle is in place; enable "import org.joda.time.DateTimeZone", and alter the functions UTC(int localTime, String timezoneId) and getUtcOffset(String timezoneId,
+ * TO USE: make sure the joda-time jar/bundle is in place; enable "import org.joda.time.ZoneId", and alter the functions UTC(int localTime, String timezoneId) and getUtcOffset(String timezoneId,
  * int localTime) below.
  * 
  * 
@@ -58,7 +59,7 @@ public class TimeZoneToUtcOffsetProvider implements ITimeZoneToUtcOffsetProvider
 	}
 
 	// MAYBE - in case we need to initialise joda-time, do our own caching etc.
-	// private final Map<String, DateTimeZone> map = new HashMap<String, DateTimeZone>();
+	// private final Map<String, ZoneId> map = new HashMap<String, ZoneId>();
 	// public TimeZoneToUtcOffsetProvider() { }
 
 	/**
@@ -83,7 +84,7 @@ public class TimeZoneToUtcOffsetProvider implements ITimeZoneToUtcOffsetProvider
 	 */
 	@Override
 	public int UTC(final int localTime, final String timezoneId) {
-		final DateTimeZone tz = timezoneId == null ? DateTimeZone.forID("UTC") : DateTimeZone.forID(timezoneId);
+		final ZoneId tz = timezoneId == null ? ZoneId.of("UTC") : ZoneId.of(timezoneId);
 
 		// for now, re-throw any exceptions
 		try {
@@ -123,7 +124,7 @@ public class TimeZoneToUtcOffsetProvider implements ITimeZoneToUtcOffsetProvider
 
 	@Override
 	public int localTime(final int utcTime, @Nullable final String timezoneId) {
-		final DateTimeZone tz = DateTimeZone.forID(timezoneId);
+		final ZoneId tz = ZoneId.of(timezoneId);
 
 		// for now, re-throw any exceptions
 		try {
@@ -175,7 +176,7 @@ public class TimeZoneToUtcOffsetProvider implements ITimeZoneToUtcOffsetProvider
 		try {
 			// TODO: switch to using joda-time when the jar is in place
 			// return 0; //
-			return DateTimeZone.forID(timezoneId).getOffsetFromLocal(localTimeInMillis);
+			return ZoneId.of(timezoneId).getOffsetFromLocal(localTimeInMillis);
 		} catch (final Exception e) {
 			throw (e);
 		}

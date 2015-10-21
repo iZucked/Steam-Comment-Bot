@@ -9,6 +9,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.builder;
 
+import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -17,7 +18,6 @@ import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.joda.time.DateTime;
 
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -638,7 +638,7 @@ public interface ISchedulerBuilder {
 	 * Set the earliest {@link Date} that will represent time zero.
 	 * 
 	 */
-	void setEarliestDate(@NonNull DateTime earliestTime);
+	void setEarliestDate(@NonNull ZonedDateTime earliestTime);
 
 	/**
 	 * @param vesselClass

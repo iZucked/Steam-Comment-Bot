@@ -5,7 +5,6 @@
 package com.mmxlabs.scheduler.optimiser.providers.guice;
 
 import org.junit.Assert;
-
 import org.junit.Test;
 
 import com.google.inject.Guice;
