@@ -4,6 +4,11 @@
  */
 package com.mmxlabs.scenario.service.model.impl;
 
+import static com.mmxlabs.scenario.service.model.ScenarioServicePackage.CONTAINER;
+
+import java.io.Closeable;
+import java.io.IOException;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
@@ -24,8 +29,6 @@ import com.mmxlabs.scenario.service.model.ScenarioModel;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
-import java.io.Closeable;
-import java.io.IOException;
 
 /**
  * <!-- begin-user-doc -->

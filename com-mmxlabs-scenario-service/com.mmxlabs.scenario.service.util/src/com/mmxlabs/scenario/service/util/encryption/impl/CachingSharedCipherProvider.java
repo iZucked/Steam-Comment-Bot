@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
-import com.mmxlabs.scenario.service.util.encryption.impl.KeyFileLoader;
 
 /**
  * Implementation of {@link IScenarioCipherProvider} which loads the {@link Cipher} and caches it for further use

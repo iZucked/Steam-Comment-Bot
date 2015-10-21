@@ -5,6 +5,7 @@
 package com.mmxlabs.scenario.service.util.internal;
 
 import org.eclipse.core.runtime.IAdapterFactory;
+
 import com.mmxlabs.rcp.common.editors.IReasonProvider;
 import com.mmxlabs.scenario.service.util.encryption.ScenarioEncryptionException;
 

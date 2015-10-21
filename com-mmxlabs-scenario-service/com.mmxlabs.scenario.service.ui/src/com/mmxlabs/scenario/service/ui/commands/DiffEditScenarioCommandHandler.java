@@ -6,7 +6,6 @@ package com.mmxlabs.scenario.service.ui.commands;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -35,7 +34,6 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
-import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceModelUtils;
 import com.mmxlabs.scenario.service.ui.editing.internal.ScenarioServiceDiffingEditorInput;
