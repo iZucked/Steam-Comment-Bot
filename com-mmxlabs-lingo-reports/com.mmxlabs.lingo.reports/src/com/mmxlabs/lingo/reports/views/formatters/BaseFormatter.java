@@ -22,6 +22,11 @@ public class BaseFormatter implements ICellRenderer {
 	}
 
 	@Override
+	public boolean isValueUnset(Object object) {
+		return false;
+	}
+
+	@Override
 	public Comparable getComparable(final Object object) {
 		return render(object);
 	}

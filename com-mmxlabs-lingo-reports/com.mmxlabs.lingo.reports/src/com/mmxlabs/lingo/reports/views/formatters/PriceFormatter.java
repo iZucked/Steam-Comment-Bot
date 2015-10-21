@@ -17,7 +17,7 @@ public class PriceFormatter implements ICellRenderer {
 
 	private final String formatString;
 
-	public PriceFormatter(final boolean includeUnits, int dp) {
+	public PriceFormatter(final boolean includeUnits, final int dp) {
 		this.formatString = (includeUnits ? "$" : "") + "%,." + Integer.toString(dp) + "f";
 	}
 
@@ -28,6 +28,11 @@ public class PriceFormatter implements ICellRenderer {
 		return ((Number) object).doubleValue();
 	}
 
+	@Override
+	public boolean isValueUnset(final Object object) {
+		return false;
+	}
+	
 	@Override
 	public String render(final Object object) {
 		if (object == null) {
@@ -55,7 +60,7 @@ public class PriceFormatter implements ICellRenderer {
 	}
 
 	@Override
-	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(Object object) {
+	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
 		return null;
 	}
 }

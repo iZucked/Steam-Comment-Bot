@@ -175,7 +175,7 @@ public class ScenarioComparisonTransformer {
 			if (r.getOpenSlotAllocation() != null) {
 				int ii = 0;
 			}
-			
+
 			final boolean isBase = true;
 
 			if (pass == 0 && r.isReference()) {
@@ -257,7 +257,7 @@ public class ScenarioComparisonTransformer {
 		long lateness = 0;
 		long violations = 0;
 		{
-			for (final Sequence sequence : toSchedule.getSequences()) {
+			for (final Sequence sequence : fromSchedule.getSequences()) {
 				for (final Event event : sequence.getEvents()) {
 					if (event instanceof ProfitAndLossContainer) {
 						final ProfitAndLossContainer profitAndLossContainer = (ProfitAndLossContainer) event;
@@ -292,13 +292,14 @@ public class ScenarioComparisonTransformer {
 			for (final ChangeSetRow row : changeSet.getChangeSetRowsToPrevious()) {
 				{
 					final ProfitAndLossContainer newGroupProfitAndLoss = row.getNewGroupProfitAndLoss();
+
 					if (newGroupProfitAndLoss != null) {
 						final GroupProfitAndLoss groupProfitAndLoss = newGroupProfitAndLoss.getGroupProfitAndLoss();
 						if (groupProfitAndLoss != null) {
 							pnl += groupProfitAndLoss.getProfitAndLoss();
 						}
-						if (groupProfitAndLoss instanceof CargoAllocation) {
-							final CargoAllocation cargoAllocation = (CargoAllocation) groupProfitAndLoss;
+						if (newGroupProfitAndLoss instanceof CargoAllocation) {
+							final CargoAllocation cargoAllocation = (CargoAllocation) newGroupProfitAndLoss;
 							lateness += ChangeSetUtils.getLateness(cargoAllocation);
 							violations += ChangeSetUtils.getCapacityViolationCount(cargoAllocation);
 						}
@@ -310,8 +311,8 @@ public class ScenarioComparisonTransformer {
 						if (groupProfitAndLoss != null) {
 							pnl -= groupProfitAndLoss.getProfitAndLoss();
 						}
-						if (groupProfitAndLoss instanceof CargoAllocation) {
-							final CargoAllocation cargoAllocation = (CargoAllocation) groupProfitAndLoss;
+						if (originalGroupProfitAndLoss instanceof CargoAllocation) {
+							final CargoAllocation cargoAllocation = (CargoAllocation) originalGroupProfitAndLoss;
 							lateness -= ChangeSetUtils.getLateness(cargoAllocation);
 							violations -= ChangeSetUtils.getCapacityViolationCount(cargoAllocation);
 						}
