@@ -81,13 +81,6 @@
 					</target>
 
 					<environments>
-						<!--32 Windows -->
-						<environment>
-							<os>win32</os>
-							<ws>win32</ws>
-							<arch>x86</arch>
-						</environment>
-
 						<!-- 64 Windows -->
 						<environment>
 							<os>win32</os>
