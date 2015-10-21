@@ -4,12 +4,13 @@
  */
 package com.mmxlabs.models.ui.tabular.manipulators;
 
+import java.time.LocalDate;
+
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.nebula.widgets.formattedtext.FormattedTextCellEditor;
 import org.eclipse.swt.widgets.Composite;
-import org.joda.time.LocalDate;
 
 import com.mmxlabs.models.datetime.ui.formatters.LocalDateTextFormatter;
 

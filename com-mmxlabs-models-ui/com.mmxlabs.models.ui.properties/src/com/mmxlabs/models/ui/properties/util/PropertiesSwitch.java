@@ -6,12 +6,12 @@
  */
 package com.mmxlabs.models.ui.properties.util;
 
-import com.mmxlabs.models.ui.properties.*;
-
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.util.Switch;
+
+import com.mmxlabs.models.ui.properties.DetailProperty;
+import com.mmxlabs.models.ui.properties.PropertiesPackage;
 
 /**
  * <!-- begin-user-doc -->

@@ -4,14 +4,15 @@
  */
 package com.mmxlabs.models.ui.tabular.manipulators;
 
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
+
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.nebula.widgets.formattedtext.FormattedTextCellEditor;
 import org.eclipse.swt.widgets.Composite;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
+import org.eclipse.swt.widgets.DateTime;
 
 import com.mmxlabs.models.datetime.ui.formatters.LocalDateTextFormatter;
 
@@ -45,7 +46,7 @@ public class DateTimeAttributeManipulator extends BasicAttributeManipulator {
 	public Comparable<?> getComparable(final Object object) {
 		final Object o = getValue(object);
 		if (o instanceof DateTime) {
-			return (DateTime) o;
+			return (ZonedDateTime) o;
 		} else {
 			return null;
 		}

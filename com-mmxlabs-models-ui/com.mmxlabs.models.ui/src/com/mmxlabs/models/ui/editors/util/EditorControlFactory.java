@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.ui.editors.util;
 
+import static com.mmxlabs.models.ui.editors.IDisplayComposite.LABEL_CONTROL_KEY;
+
 import java.util.Map;
 
 import org.eclipse.emf.databinding.EMFDataBindingContext;
@@ -22,8 +24,6 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
-
-import static com.mmxlabs.models.ui.editors.IDisplayComposite.LABEL_CONTROL_KEY;
 
 ;
 

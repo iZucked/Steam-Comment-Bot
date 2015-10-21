@@ -15,6 +15,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+
 import com.mmxlabs.models.ui.properties.DetailProperty;
 import com.mmxlabs.models.ui.properties.factory.DetailPropertyFactoryRegistry;
 import com.mmxlabs.models.ui.properties.factory.IDetailPropertyFactory;

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.ui.editors.dialogs;
 
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;

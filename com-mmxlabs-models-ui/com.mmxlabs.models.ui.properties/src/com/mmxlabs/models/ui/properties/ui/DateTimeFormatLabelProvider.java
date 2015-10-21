@@ -4,14 +4,13 @@
  */
 package com.mmxlabs.models.ui.properties.ui;
 
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.TimeZone;
 
 import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.graphics.Image;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 public class DateTimeFormatLabelProvider extends BaseLabelProvider implements ILabelProvider {
 
@@ -34,8 +33,8 @@ public class DateTimeFormatLabelProvider extends BaseLabelProvider implements IL
 
 	@Override
 	public String getText(final Object element) {
-		if (element instanceof DateTime) {
-			final DateTime dateTime = (DateTime) element;
+		if (element instanceof ZonedDateTime) {
+			final ZonedDateTime dateTime = (ZonedDateTime) element;
 			return formatter.print(dateTime) + (showZone ? (" (" + dateTime.getZone().toTimeZone().getDisplayName(false, TimeZone.SHORT) + ")") : "");
 		} else {
 			throw new IllegalArgumentException("Can only format DateTimes!");

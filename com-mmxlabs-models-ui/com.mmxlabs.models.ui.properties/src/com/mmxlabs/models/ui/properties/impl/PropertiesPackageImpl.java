@@ -6,20 +6,18 @@
  */
 package com.mmxlabs.models.ui.properties.impl;
 
-import com.mmxlabs.models.ui.properties.DetailProperty;
-import com.mmxlabs.models.ui.properties.PropertiesFactory;
-import com.mmxlabs.models.ui.properties.PropertiesPackage;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
-
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-
 import org.eclipse.jface.viewers.ILabelProvider;
+
+import com.mmxlabs.models.ui.properties.DetailProperty;
+import com.mmxlabs.models.ui.properties.PropertiesFactory;
+import com.mmxlabs.models.ui.properties.PropertiesPackage;
 
 /**
  * <!-- begin-user-doc -->
