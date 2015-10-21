@@ -71,6 +71,7 @@ import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -471,7 +472,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			protected GridCellRenderer createCellRenderer() {
 				return new DefaultCellRenderer();
 			}
-
 		};
 
 		scenarioViewer.setToolTipProvider(new DefaultToolTipProvider() {
@@ -859,6 +859,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						return super.renderSetValue(container, setValue);
 					}
 				}), new RowDataEMFPath(false, Type.LOAD_ALLOCATION));
+		final GridViewerColumn loadVol = addTradesColumn(loadColumns, "Volume", new VolumeAttributeManipulator(pkg.getSlot_MaxQuantity(), editingDomain), new RowDataEMFPath(false, Type.LOAD));
+		loadVol.getColumn().setHeaderTooltip("in 1000's m³");
+
 		final GridViewerColumn loadDateColumn = addTradesColumn(loadColumns, "Date", new LocalDateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain) {
 			@Override
 			public Comparable<?> getComparable(final Object object) {
@@ -904,6 +907,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					}
 				}), new RowDataEMFPath(false, Type.DISCHARGE_ALLOCATION));
 
+		addTradesColumn(dischargeColumns, "Volume", new VolumeAttributeManipulator(pkg.getSlot_MaxQuantity(), editingDomain), new RowDataEMFPath(false, Type.DISCHARGE)).getColumn()
+				.setHeaderTooltip("in 1000's m³");
 		addTradesColumn(dischargeColumns, "Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
 		// addTradesColumn(dischargeColumns, "D-ID", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
 		{
@@ -1417,6 +1422,20 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		if (group != null) {
 			group.add(col.getColumn());
 		}
+
+		col.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), manipulator, path) {
+			public Color getForeground(final Object element) {
+				if (element instanceof EObject) {
+					final EObject eObject = (EObject) element;
+					final Object o = path.get(eObject);
+					if (manipulator.isValueUnset(o)) {
+						return Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
+					}
+				}
+				return null;
+			};
+		});
+
 		return col;
 	}
 
@@ -1427,7 +1446,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		if (promptToolbarEditor != null) {
 			promptToolbarEditor.setLocked(locked);
 		}
-		
+
 		this.locked = locked;
 		super.setLocked(locked);
 		wiringDiagram.setLocked(locked);

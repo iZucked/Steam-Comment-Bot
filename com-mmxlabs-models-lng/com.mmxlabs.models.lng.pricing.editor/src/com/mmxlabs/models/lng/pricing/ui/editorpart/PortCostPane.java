@@ -120,6 +120,11 @@ public class PortCostPane extends ScenarioTableViewerPane {
 		}
 
 		@Override
+		public boolean isValueUnset(Object object) {
+			return false;
+		}
+		
+		@Override
 		public String render(Object object) {
 			return String.format("$%,d", getValue(object));
 		}

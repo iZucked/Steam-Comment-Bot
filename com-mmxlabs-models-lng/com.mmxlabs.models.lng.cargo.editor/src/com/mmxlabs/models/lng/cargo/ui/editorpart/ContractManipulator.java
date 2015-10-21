@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -214,6 +215,15 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 		return setValue == null ? "" : setValue.toString();
 	}
 
+	@Override
+	public boolean isValueUnset(Object object) {
+		if (object instanceof Slot) {
+			Slot slot = (Slot) object;
+			return !slot.isSetContract();
+		}
+		return false;
+	}
+	
 	@Override
 	public final void setValue(final Object object, final Object value) {
 		if (value == SetCommand.UNSET_VALUE && CargoPackage.eINSTANCE.getSlot_Contract().isUnsettable()) {

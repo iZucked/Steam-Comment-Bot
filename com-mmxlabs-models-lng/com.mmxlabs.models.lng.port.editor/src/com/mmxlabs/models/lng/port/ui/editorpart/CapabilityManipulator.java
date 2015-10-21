@@ -78,6 +78,11 @@ class CapabilityManipulator implements ICellRenderer, ICellManipulator {
 	}
 
 	@Override
+	public boolean isValueUnset(Object object) {
+		return false;
+	}
+	
+	@Override
 	public Object getFilterValue(final Object object) {
 		return getComparable(object);
 	}

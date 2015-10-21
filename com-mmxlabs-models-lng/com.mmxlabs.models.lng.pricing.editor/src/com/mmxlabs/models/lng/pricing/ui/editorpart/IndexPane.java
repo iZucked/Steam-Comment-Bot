@@ -366,6 +366,11 @@ public class IndexPane extends ScenarioTableViewerPane {
 				}
 
 				@Override
+				public boolean isValueUnset(Object object) {
+					return false;
+				}
+				
+				@Override
 				public Object getFilterValue(final Object object) {
 					return null;
 				}

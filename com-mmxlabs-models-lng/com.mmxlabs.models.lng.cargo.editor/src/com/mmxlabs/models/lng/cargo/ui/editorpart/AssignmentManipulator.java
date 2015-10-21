@@ -64,6 +64,11 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 	}
 
 	@Override
+	public boolean isValueUnset(Object object) {
+		return false;
+	}
+	
+	@Override
 	public void setValue(final Object object, final Object value) {
 		// grar.
 		final EditingDomain ed = location.getEditingDomain();
