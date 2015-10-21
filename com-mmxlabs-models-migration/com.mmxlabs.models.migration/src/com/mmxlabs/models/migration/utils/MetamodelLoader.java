@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.migration.utils;
 
+import java.time.ZonedDateTime;
+
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
@@ -20,7 +22,6 @@ import org.eclipse.emf.ecore.resource.impl.ResourceFactoryRegistryImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.jdt.annotation.NonNull;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.YearMonth;
@@ -92,7 +93,7 @@ public class MetamodelLoader {
 				if (eDataType.getInstanceClassName() != null) {
 					if (eDataType.getInstanceClassName().equals("org.joda.time.YearMonth")) {
 						LocalDate localDate = DateTimeFormat.forPattern("yyyy/MM").parseLocalDate(stringValue);
-						return new YearMonth(localDate.getYear(), localDate.getMonthOfYear());
+						return new YearMonth(localDate.getYear(), localDate.getMonthOfYear);
 					} else if (eDataType.getInstanceClassName().equals("org.joda.time.LocalDate")) {
 						return DateTimeFormat.forPattern("yyyy/MM/dd").parseLocalDate(stringValue);
 					} else if (eDataType.getInstanceClassName().equals("org.joda.time.LocalDateTime")) {
@@ -115,7 +116,7 @@ public class MetamodelLoader {
 					} else if (eDataType.getInstanceClassName().equals("org.joda.time.LocalDateTime")) {
 						return DateTimeFormat.forPattern("yyyy/MM/dd HH:mm").print((LocalDateTime) objectValue);
 					} else if (eDataType.getInstanceClassName().equals("org.joda.time.DateTime")) {
-						return DateTimeFormat.forPattern("yyyy/MM/dd HH:mm Z").print((DateTime) objectValue);
+						return DateTimeFormat.forPattern("yyyy/MM/dd HH:mm Z").print((ZonedDateTime) objectValue);
 					}
 				}
 				return super.convertToString(eDataType, objectValue);
