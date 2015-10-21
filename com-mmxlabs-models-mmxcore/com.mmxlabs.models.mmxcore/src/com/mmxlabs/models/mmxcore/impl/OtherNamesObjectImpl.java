@@ -6,16 +6,14 @@
  */
 package com.mmxlabs.models.mmxcore.impl;
 
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.mmxcore.OtherNamesObject;
-
 import java.util.Collection;
 
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
+
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.OtherNamesObject;
 
 /**
  * <!-- begin-user-doc -->

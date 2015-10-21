@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.models.mmxcore.impl;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +14,6 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.junit.Assert;
 import org.junit.Test;
-import static org.mockito.Mockito.*;
 
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 

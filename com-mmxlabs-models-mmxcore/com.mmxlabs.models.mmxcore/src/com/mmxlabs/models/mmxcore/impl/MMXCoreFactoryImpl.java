@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.mmxcore.impl;
 
-import com.mmxlabs.models.mmxcore.*;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -15,6 +14,7 @@ import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.OtherNamesObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**

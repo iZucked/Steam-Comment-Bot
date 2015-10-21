@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.mmxcore.util;
 
-import com.mmxlabs.models.mmxcore.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
@@ -13,6 +12,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.OtherNamesObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
