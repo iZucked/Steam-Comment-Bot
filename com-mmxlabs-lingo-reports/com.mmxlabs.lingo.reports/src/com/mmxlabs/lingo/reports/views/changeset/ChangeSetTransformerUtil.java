@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -16,11 +17,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.shiro.io.XmlSerializer;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.joda.time.LocalDate;
 
 import com.google.common.base.Objects;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
@@ -476,7 +475,7 @@ public final class ChangeSetTransformerUtil {
 		if (date == null) {
 			return "<no date>";
 		}
-		return String.format("%04d-%02d", date.getYear(), date.getMonthOfYear());
+		return String.format("%04d-%02d", date.getYear(), date.getMonthValue());
 
 	}
 

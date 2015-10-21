@@ -5,9 +5,10 @@
 package com.mmxlabs.lingo.reports.views.formatters;
 
 import java.text.DateFormat;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
-import org.joda.time.DateTime;
-import org.joda.time.LocalDateTime;
+import org.eclipse.swt.widgets.DateTime;
 
 public class AsLocalDateFormatter extends BaseFormatter {
 	final DateFormat dateFormat;
@@ -33,7 +34,7 @@ public class AsLocalDateFormatter extends BaseFormatter {
 		if (object instanceof LocalDateTime) {
 			localDate = (LocalDateTime) object;
 		} else if (object instanceof DateTime) {
-			DateTime dateTime = (DateTime) object;
+			ZonedDateTime dateTime = (ZonedDateTime) object;
 			localDate = dateTime.toLocalDateTime();
 		}
 		return localDate;

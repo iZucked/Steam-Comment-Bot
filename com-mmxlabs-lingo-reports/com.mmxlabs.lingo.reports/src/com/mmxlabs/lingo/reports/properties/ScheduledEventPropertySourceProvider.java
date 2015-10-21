@@ -4,16 +4,15 @@
  */
 package com.mmxlabs.lingo.reports.properties;
 
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.TimeZone;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
-import org.joda.time.DateTime;
-import org.joda.time.ReadablePartial;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -40,7 +39,7 @@ public class ScheduledEventPropertySourceProvider implements IPropertySourceProv
 				final DateTimeFormatter df = DateTimeFormat.shortDateTime();
 				return df.print(readablePartial);
 			} else if (element instanceof DateTime) {
-				final DateTime dateTime = (DateTime) element;
+				final ZonedDateTime dateTime = (ZonedDateTime) element;
 				final DateTimeFormatter df = DateTimeFormat.shortDateTime();
 				return df.print(dateTime) + " (" + dateTime.getZone().toTimeZone().getDisplayName(false, TimeZone.SHORT) + ")";
 			}

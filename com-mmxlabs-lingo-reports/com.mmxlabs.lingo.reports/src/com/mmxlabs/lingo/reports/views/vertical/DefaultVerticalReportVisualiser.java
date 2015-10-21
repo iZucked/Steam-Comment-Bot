@@ -4,10 +4,10 @@
  */
 package com.mmxlabs.lingo.reports.views.vertical;
 
-import org.eclipse.swt.graphics.Color;
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
 
-import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalReportVisualiser;
+import org.eclipse.swt.graphics.Color;
+
 import com.mmxlabs.models.lng.schedule.Event;
 
 public class DefaultVerticalReportVisualiser extends AbstractVerticalReportVisualiser {

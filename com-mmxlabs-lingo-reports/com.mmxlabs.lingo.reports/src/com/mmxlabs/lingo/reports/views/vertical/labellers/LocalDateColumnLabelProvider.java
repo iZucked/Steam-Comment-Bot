@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.lingo.reports.views.vertical.labellers;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -11,8 +13,6 @@ import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridColumnLabelProvider;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
-import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormatter;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.views.vertical.ReportNebulaGridManager;

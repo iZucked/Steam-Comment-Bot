@@ -4,13 +4,14 @@
  */
 package com.mmxlabs.lingo.reports.views.vertical;
 
+import java.time.format.DateTimeFormatter;
+
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
-import org.joda.time.format.DateTimeFormatter;
 
-import com.mmxlabs.lingo.reports.views.vertical.labellers.LocalDateColumnLabelProvider;
 import com.mmxlabs.lingo.reports.views.vertical.labellers.EventLabelProvider;
+import com.mmxlabs.lingo.reports.views.vertical.labellers.LocalDateColumnLabelProvider;
 import com.mmxlabs.lingo.reports.views.vertical.providers.EventProvider;
 
 /**

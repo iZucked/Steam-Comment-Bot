@@ -6,10 +6,8 @@
  */
 package com.mmxlabs.lingo.reports.views.schedule.model.impl;
 
-import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
-import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
-import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
 import java.util.Collection;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
@@ -19,6 +17,10 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
+
+import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
+import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
+import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
 
 /**
  * <!-- begin-user-doc -->

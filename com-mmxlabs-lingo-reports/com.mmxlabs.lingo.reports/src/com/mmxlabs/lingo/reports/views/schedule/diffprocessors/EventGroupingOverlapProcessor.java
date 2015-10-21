@@ -4,15 +4,14 @@
  */
 package com.mmxlabs.lingo.reports.views.schedule.diffprocessors;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.joda.time.DateTime;
-import org.joda.time.Hours;
-import org.joda.time.Interval;
+import org.eclipse.swt.widgets.DateTime;
 
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
@@ -49,9 +48,9 @@ public class EventGroupingOverlapProcessor implements IDiffProcessor {
 			final Event firstEvent = events.get(0);
 			final Event lastEvent = events.get(events.size() - 1);
 
-			final DateTime start = new DateTime(firstEvent.getStart());
+			final ZonedDateTime start = ZonedDateTime.of(firstEvent.getStart());
 
-			final DateTime end = new DateTime(lastEvent.getEnd());
+			final ZonedDateTime end = new ZonedDateTime(lastEvent.getEnd());
 
 			final Interval referenceInterval = new Interval(start, end);
 
@@ -92,9 +91,9 @@ public class EventGroupingOverlapProcessor implements IDiffProcessor {
 					final Event firstEvent = events.get(0);
 					final Event lastEvent = events.get(events.size() - 1);
 
-					final DateTime start = new DateTime(firstEvent.getStart());
+					final ZonedDateTime start = new ZonedDateTime(firstEvent.getStart());
 
-					final DateTime end = new DateTime(lastEvent.getEnd());
+					final ZonedDateTime end = new ZonedDateTime(lastEvent.getEnd());
 
 					final Interval interval = new Interval(start, end);
 

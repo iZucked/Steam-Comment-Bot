@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.lingo.reports.views.standard;
 
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -11,8 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jface.viewers.Viewer;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportContentProvider;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
@@ -102,11 +102,11 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 	 * @param calendar
 	 * @return
 	 */
-	private int getGasYear(DateTime calendar) {
+	private int getGasYear(ZonedDateTime calendar) {
 		final LocalDate utc = calendar.toLocalDate();
 
 		// subtract one year from the reported year for dates prior to october
-		int yearOffset = (utc.getMonthOfYear() < Calendar.OCTOBER) ? -1 : 0;
+		int yearOffset = (utc.getMonthValue() < Calendar.OCTOBER) ? -1 : 0;
 
 		return utc.getYear() + yearOffset;
 	}

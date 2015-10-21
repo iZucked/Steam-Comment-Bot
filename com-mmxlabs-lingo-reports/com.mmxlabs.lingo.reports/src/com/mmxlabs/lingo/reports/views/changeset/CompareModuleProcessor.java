@@ -5,7 +5,6 @@
 package com.mmxlabs.lingo.reports.views.changeset;
 
 import org.apache.shiro.SecurityUtils;
-import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;

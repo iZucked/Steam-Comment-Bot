@@ -8,6 +8,7 @@ import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstant
 import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstants.SCHEDULER_VIEW_COLOUR_SCHEME;
 import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstants.Show_Canals;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -19,8 +20,6 @@ import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IMemento;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
 
 import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.ganttviewer.IGanttChartColourProvider;
@@ -203,7 +202,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		return currentHighlighters.contains(hi);
 	}
 
-	private String dateToString(final DateTime date) {
+	private String dateToString(final ZonedDateTime date) {
 		return DateTimeFormat.shortDateTime().print(date);
 	}
 

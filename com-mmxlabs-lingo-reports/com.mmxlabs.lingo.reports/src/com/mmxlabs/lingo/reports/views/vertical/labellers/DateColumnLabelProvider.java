@@ -4,9 +4,10 @@
  */
 package com.mmxlabs.lingo.reports.views.vertical.labellers;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import org.eclipse.jdt.annotation.NonNull;
-import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormatter;
 
 import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalReportVisualiser;
 import com.mmxlabs.models.lng.schedule.Event;

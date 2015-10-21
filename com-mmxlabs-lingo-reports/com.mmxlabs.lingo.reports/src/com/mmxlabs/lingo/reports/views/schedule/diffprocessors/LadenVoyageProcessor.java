@@ -4,13 +4,13 @@
  */
 package com.mmxlabs.lingo.reports.views.schedule.diffprocessors;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
-import org.joda.time.DateTime;
-import org.joda.time.Interval;
+import org.eclipse.swt.widgets.DateTime;
 
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
@@ -70,8 +70,8 @@ public class LadenVoyageProcessor implements IDiffProcessor {
 	}
 
 	private void processEventForOverlaps(final Map<EObject, Row> elementToRowMap, final Row referenceRow, final Sequence referenceSequence, final Event event) {
-		final DateTime start = new DateTime(event.getStart());
-		final DateTime end = new DateTime(event.getEnd());
+		final ZonedDateTime start = new ZonedDateTime(event.getStart());
+		final ZonedDateTime end = new ZonedDateTime(event.getEnd());
 
 		final Interval referenceInterval = new Interval(start, end);
 
@@ -119,8 +119,8 @@ public class LadenVoyageProcessor implements IDiffProcessor {
 	}
 
 	private void bindEvent(final Row referenceRow, final Interval referenceInterval, final Map<EObject, Row> elementToRowMap, final Event event) {
-		final DateTime start = new DateTime(event.getStart());
-		final DateTime end = new DateTime(event.getEnd());
+		final ZonedDateTime start = new ZonedDateTime(event.getStart());
+		final ZonedDateTime end = new ZonedDateTime(event.getEnd());
 
 		final Interval interval = new Interval(start, end);
 

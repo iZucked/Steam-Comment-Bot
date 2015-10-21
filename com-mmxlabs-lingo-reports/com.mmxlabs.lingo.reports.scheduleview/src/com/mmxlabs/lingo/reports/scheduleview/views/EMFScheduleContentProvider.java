@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.scheduleview.views;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -12,7 +13,6 @@ import java.util.WeakHashMap;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.Viewer;
-import org.joda.time.DateTime;
 
 import com.mmxlabs.ganttviewer.IGanttChartContentProvider;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -123,7 +123,7 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 			final SlotVisit visit = (SlotVisit) element;
 			final Slot slot = visit.getSlotAllocation().getSlot();
 			if (slot != null) {
-				DateTime windowStartWithSlotOrPortTime = slot.getWindowStartWithSlotOrPortTime();
+				ZonedDateTime windowStartWithSlotOrPortTime = slot.getWindowStartWithSlotOrPortTime();
 				if (windowStartWithSlotOrPortTime != null) {
 					return windowStartWithSlotOrPortTime.toGregorianCalendar();
 				}
@@ -139,7 +139,7 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 			final SlotVisit visit = (SlotVisit) element;
 			final Slot slot = visit.getSlotAllocation().getSlot();
 			if (slot != null) {
-				DateTime windowStartWithSlotOrPortTime = slot.getWindowStartWithSlotOrPortTime();
+				ZonedDateTime windowStartWithSlotOrPortTime = slot.getWindowStartWithSlotOrPortTime();
 				if (windowStartWithSlotOrPortTime != null) {
 					return windowStartWithSlotOrPortTime.toGregorianCalendar();
 				}

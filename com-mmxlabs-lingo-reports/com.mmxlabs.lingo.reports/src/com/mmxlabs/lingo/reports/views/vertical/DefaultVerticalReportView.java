@@ -8,10 +8,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.mmxlabs.lingo.reports.IReportContents;
-import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalCalendarReportView;
-import com.mmxlabs.lingo.reports.views.vertical.CalendarColumn;
-import com.mmxlabs.lingo.reports.views.vertical.ReportNebulaGridManager;
-import com.mmxlabs.lingo.reports.views.vertical.ScheduleSequenceData;
 import com.mmxlabs.lingo.reports.views.vertical.labellers.EventLabelProvider;
 import com.mmxlabs.lingo.reports.views.vertical.providers.SequenceEventProvider;
 import com.mmxlabs.models.lng.schedule.Sequence;
