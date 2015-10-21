@@ -41,6 +41,11 @@ public abstract class NonEditableColumn implements ICellManipulator, ICellRender
 	}
 
 	@Override
+	public boolean isValueUnset(Object object) {
+		return false;
+	}
+	
+	@Override
 	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
 		return Collections.emptySet();
 	}

@@ -21,15 +21,19 @@ import com.mmxlabs.models.ui.properties.factory.IDetailPropertyFactory;
 
 public class DelegatingDetailPropertyContentProvider implements ITreeContentProvider {
 
+	@NonNull
 	private final ITreeContentProvider delegate;
 
+	@NonNull
 	private final String category;
 
 	/**
 	 * Maps a {@link DetailProperty} to the originating element. Used {@link #getParent(Object)}
 	 */
+	@NonNull
 	private final Map<DetailProperty, Object> propertyParentMap = new HashMap<>();
 
+	@NonNull
 	private final DetailPropertyFactoryRegistry registry;
 
 	public DelegatingDetailPropertyContentProvider(@NonNull final ITreeContentProvider delegate, @NonNull final String category, @NonNull final DetailPropertyFactoryRegistry registry) {
@@ -65,12 +69,14 @@ public class DelegatingDetailPropertyContentProvider implements ITreeContentProv
 		}
 
 		final Object[] children = delegate.getElements(inputElement);
-		final IDetailPropertyFactory factory = getDetailPropertyFactory(inputElement);
-		if (factory != null) {
-			final DetailProperty property = factory.createProperties((EObject) inputElement);
-			if (property != null) {
-				propertyParentMap.put(property, inputElement);
-				return merge(children, Collections.singleton(property));
+		if (inputElement != null) {
+			final IDetailPropertyFactory factory = getDetailPropertyFactory(inputElement);
+			if (factory != null) {
+				final DetailProperty property = factory.createProperties((EObject) inputElement);
+				if (property != null) {
+					propertyParentMap.put(property, inputElement);
+					return merge(children, Collections.singleton(property));
+				}
 			}
 		}
 
@@ -117,8 +123,7 @@ public class DelegatingDetailPropertyContentProvider implements ITreeContentProv
 		return arr != null && arr.length > 0;
 	}
 
-	private @Nullable
-	IDetailPropertyFactory getDetailPropertyFactory(@Nullable final Object object) {
+	private @Nullable IDetailPropertyFactory getDetailPropertyFactory(@Nullable final Object object) {
 		if (object instanceof EObject) {
 			final EObject eObject = (EObject) object;
 			return registry.getFactory(category, eObject.eClass());
@@ -126,8 +131,10 @@ public class DelegatingDetailPropertyContentProvider implements ITreeContentProv
 		return null;
 	}
 
+	@NonNull
 	private Object[] merge(@NonNull final Object[] original, @NonNull final Collection<?> col) {
 		final Object[] a = Arrays.copyOf(original, original.length + col.size());
+		assert a != null;
 
 		int idx = original.length;
 		for (final Object o : col) {

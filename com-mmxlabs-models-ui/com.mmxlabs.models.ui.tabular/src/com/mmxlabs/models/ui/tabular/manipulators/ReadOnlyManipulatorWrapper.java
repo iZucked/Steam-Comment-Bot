@@ -51,6 +51,11 @@ public class ReadOnlyManipulatorWrapper<T extends ICellManipulator & ICellRender
 	}
 
 	@Override
+	public boolean isValueUnset(final Object object) {
+		return wrapped.isValueUnset(object);
+	}
+	
+	@Override
 	public void setValue(final Object object, final Object value) {
 
 	}

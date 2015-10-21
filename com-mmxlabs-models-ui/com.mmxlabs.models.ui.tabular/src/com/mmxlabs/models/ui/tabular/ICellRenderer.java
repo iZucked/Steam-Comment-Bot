@@ -36,6 +36,8 @@ public interface ICellRenderer extends IComparableProvider {
 	// */
 	// Comparable getComparable(Object object);
 
+	boolean isValueUnset(Object object);
+	
 	/**
 	 * Get a representation useful for filtering.
 	 * 

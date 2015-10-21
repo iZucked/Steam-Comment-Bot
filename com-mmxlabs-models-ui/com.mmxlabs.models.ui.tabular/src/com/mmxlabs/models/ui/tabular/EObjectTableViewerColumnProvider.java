@@ -46,6 +46,14 @@ public class EObjectTableViewerColumnProvider extends ColumnLabelProvider {
 			}
 		}
 
+		if (element instanceof EObject) {
+			final EObject eObject = (EObject) element;
+			final Object o = path == null ? eObject : path.get(eObject);
+			if (renderer != null && renderer.isValueUnset(o)) {
+				return Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
+			}
+		}
+
 		return super.getForeground(element);
 	}
 
@@ -83,7 +91,7 @@ public class EObjectTableViewerColumnProvider extends ColumnLabelProvider {
 				return getMessages(s);
 			}
 		}
-		
+
 		if (this.eObjectTableViewer.delegateToolTipProvider != null) {
 			final String toolTip = this.eObjectTableViewer.delegateToolTipProvider.getToolTipText(element);
 			if (toolTip != null) {
@@ -101,29 +109,29 @@ public class EObjectTableViewerColumnProvider extends ColumnLabelProvider {
 		}
 		return super.getToolTipDisplayDelayTime(object);
 	}
-	
+
 	@Override
 	public Image getToolTipImage(Object object) {
 		if (this.eObjectTableViewer.delegateToolTipProvider != null) {
 			final Image im = this.eObjectTableViewer.delegateToolTipProvider.getToolTipImage(object);
-			if(im!=null){
+			if (im != null) {
 				return im;
 			}
 		}
 		return super.getToolTipImage(object);
 	}
-	
+
 	@Override
 	public Point getToolTipShift(Object object) {
 		if (this.eObjectTableViewer.delegateToolTipProvider != null) {
 			Point p = this.eObjectTableViewer.delegateToolTipProvider.getToolTipShift(object);
-			if(p!=null){
+			if (p != null) {
 				return p;
 			}
-		}		
+		}
 		return super.getToolTipShift(object);
 	}
-	
+
 	@Override
 	public int getToolTipTimeDisplayed(Object object) {
 		if (this.eObjectTableViewer.delegateToolTipProvider != null) {
@@ -131,7 +139,7 @@ public class EObjectTableViewerColumnProvider extends ColumnLabelProvider {
 		}
 		return super.getToolTipTimeDisplayed(object);
 	}
-	
+
 	/**
 	 * Extract message hierarchy and construct the tool tip message.
 	 * 
