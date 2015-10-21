@@ -5,7 +5,6 @@
 package com.mmxlabs.common;
 
 import org.junit.Assert;
-
 import org.junit.Test;
 
 public class PairTest {

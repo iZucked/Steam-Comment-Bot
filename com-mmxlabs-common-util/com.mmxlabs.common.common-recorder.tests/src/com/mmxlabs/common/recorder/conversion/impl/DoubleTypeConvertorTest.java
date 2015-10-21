@@ -5,7 +5,6 @@
 package com.mmxlabs.common.recorder.conversion.impl;
 
 import org.junit.Assert;
-
 import org.junit.Test;
 
 public class DoubleTypeConvertorTest {

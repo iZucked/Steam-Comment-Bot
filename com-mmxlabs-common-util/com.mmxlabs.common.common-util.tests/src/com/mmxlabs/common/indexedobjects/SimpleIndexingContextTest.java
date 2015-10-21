@@ -5,7 +5,6 @@
 package com.mmxlabs.common.indexedobjects;
 
 import org.junit.Assert;
-
 import org.junit.Test;
 
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
