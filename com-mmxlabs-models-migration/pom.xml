@@ -122,7 +122,7 @@
 		</repository>
 		<repository>
 			<id>com-mmxlabs-common-util.hg</id>
-			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/common/com.mmxlabs.common.util.p2/3.1.0-SNAPSHOT/com.mmxlabs.common.util.p2-3.1.0-SNAPSHOT.zip-unzip/</url>
+			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/common/com.mmxlabs.common.util.p2/${project.version}/com.mmxlabs.common.util.p2-${project.version}.zip-unzip/</url>
 			<layout>p2</layout>
 		</repository>
 		<repository>
