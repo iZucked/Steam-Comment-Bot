@@ -6,12 +6,16 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset.model.util;
 
-import com.mmxlabs.lingo.reports.views.changeset.model.*;
-
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.util.Switch;
+
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRoot;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSetRow;
+import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetPackage;
+import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
+import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
 
 /**
  * <!-- begin-user-doc -->

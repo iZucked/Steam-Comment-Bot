@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.views.vertical.providers;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -12,7 +13,6 @@ import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.joda.time.LocalDate;
 
 import com.mmxlabs.lingo.reports.views.vertical.VerticalReportUtils;
 import com.mmxlabs.lingo.reports.views.vertical.filters.EventFilter;

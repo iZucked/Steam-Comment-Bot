@@ -4,24 +4,11 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset.service;
 
-import java.util.WeakHashMap;
-
-import javax.inject.Inject;
-
 import org.eclipse.emf.ecore.EObject;
 
-import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
-import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.scenario.service.IScenarioService;
-import com.mmxlabs.scenario.service.IScenarioServiceListener;
-import com.mmxlabs.scenario.service.model.ModelReference;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 
 public abstract class EquivalenceService {
 

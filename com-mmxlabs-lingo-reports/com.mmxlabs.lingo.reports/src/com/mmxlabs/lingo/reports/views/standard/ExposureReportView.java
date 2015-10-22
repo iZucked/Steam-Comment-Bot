@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.views.standard;
 
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +12,6 @@ import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.Viewer;
-import org.joda.time.YearMonth;
 
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportContentProvider;
 import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransformer;
@@ -98,7 +98,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				});
 
 				for (final YearMonth date : dateRange()) {
-					result.add(new ColumnManager<IndexExposureData>(String.format("%04d-%02d", date.getYear(), date.getMonthOfYear())) {
+					result.add(new ColumnManager<IndexExposureData>(String.format("%04d-%02d", date.getYear(), date.getMonthValue())) {
 						@Override
 						public String getColumnText(IndexExposureData data) {
 							double result = data.exposures.containsKey(date) ? data.exposures.get(date) : 0;

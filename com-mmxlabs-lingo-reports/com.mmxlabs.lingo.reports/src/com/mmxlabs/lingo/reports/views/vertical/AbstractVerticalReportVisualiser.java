@@ -4,6 +4,11 @@
  */
 package com.mmxlabs.lingo.reports.views.vertical;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,13 +20,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.Days;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import com.google.common.collect.Range;
 import com.mmxlabs.common.Pair;
@@ -399,22 +397,22 @@ public abstract class AbstractVerticalReportVisualiser {
 	// }
 	// }
 
-	public LocalDate getLocalDateFor(final DateTime dateTime) {
+	public LocalDate getLocalDateFor(final ZonedDateTime dateTime) {
 		if (dateTime == null) {
 			return null;
 		}
 		if (datesAreUTCEquivalent()) {
-			return dateTime.withZone(DateTimeZone.UTC).toLocalDate();
+			return dateTime.withZone(ZoneId.of("UTC")).toLocalDate();
 		}
 		return dateTime.toLocalDate();
 	}
 
-	public LocalDateTime getLocalDateTimeFor(final DateTime dateTime) {
+	public LocalDateTime getLocalDateTimeFor(final ZonedDateTime dateTime) {
 		if (dateTime == null) {
 			return null;
 		}
 		if (datesAreUTCEquivalent()) {
-			return dateTime.withZone(DateTimeZone.UTC).toLocalDateTime();
+			return dateTime.withZone(ZoneId.of("UTC")).toLocalDateTime();
 		}
 		return dateTime.toLocalDateTime();
 	}

@@ -4,8 +4,9 @@
  */
 package com.mmxlabs.lingo.reports.views.vertical.filters;
 
+import java.time.LocalDate;
+
 import org.eclipse.jdt.annotation.NonNull;
-import org.joda.time.LocalDate;
 
 import com.mmxlabs.models.lng.schedule.Event;
 

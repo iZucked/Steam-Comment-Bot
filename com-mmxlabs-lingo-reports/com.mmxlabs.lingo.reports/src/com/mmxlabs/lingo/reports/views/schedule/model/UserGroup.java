@@ -7,7 +7,6 @@
 package com.mmxlabs.lingo.reports.views.schedule.model;
 
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EObject;
 
 /**

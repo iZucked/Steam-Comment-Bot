@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.views.schedule;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -14,7 +15,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
-import org.joda.time.LocalDate;
 
 import com.google.common.base.Joiner;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
@@ -454,7 +454,7 @@ public class EquivalanceGroupBuilder {
 		if (date == null) {
 			return "<no date>";
 		}
-		return String.format("%04d-%02d", date.getYear(), date.getMonthOfYear());
+		return String.format("%04d-%02d", date.getYear(), date.getMonthValue());
 
 	}
 }

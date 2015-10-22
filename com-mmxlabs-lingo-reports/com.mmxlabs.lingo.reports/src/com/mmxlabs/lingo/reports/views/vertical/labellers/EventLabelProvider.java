@@ -4,10 +4,11 @@
  */
 package com.mmxlabs.lingo.reports.views.vertical.labellers;
 
+import java.time.LocalDate;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
-import org.joda.time.LocalDate;
 
 import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalReportVisualiser;
 import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalReportVisualiser.Alignment;

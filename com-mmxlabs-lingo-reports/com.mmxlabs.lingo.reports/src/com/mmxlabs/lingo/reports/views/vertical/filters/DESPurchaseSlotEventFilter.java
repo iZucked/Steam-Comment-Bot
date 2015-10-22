@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.views.vertical.filters;
 
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
 
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;

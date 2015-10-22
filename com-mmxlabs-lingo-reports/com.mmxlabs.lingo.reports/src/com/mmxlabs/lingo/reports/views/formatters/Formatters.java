@@ -6,8 +6,6 @@ package com.mmxlabs.lingo.reports.views.formatters;
 
 import java.text.DateFormat;
 
-import org.joda.time.format.DateTimeFormat;
-
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 
 public final class Formatters {

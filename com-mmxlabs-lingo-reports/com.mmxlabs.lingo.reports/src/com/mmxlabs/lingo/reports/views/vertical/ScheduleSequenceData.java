@@ -4,10 +4,9 @@
  */
 package com.mmxlabs.lingo.reports.views.vertical;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.joda.time.LocalDate;
 
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;

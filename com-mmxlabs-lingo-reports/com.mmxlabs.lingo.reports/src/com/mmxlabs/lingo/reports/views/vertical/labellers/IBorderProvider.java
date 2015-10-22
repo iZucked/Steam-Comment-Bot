@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.views.vertical.labellers;
 
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
 
 import com.mmxlabs.models.lng.schedule.Event;
 

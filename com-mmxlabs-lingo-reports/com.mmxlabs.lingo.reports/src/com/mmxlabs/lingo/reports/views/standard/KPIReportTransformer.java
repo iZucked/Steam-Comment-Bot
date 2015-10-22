@@ -4,14 +4,13 @@
  */
 package com.mmxlabs.lingo.reports.views.standard;
 
+import java.time.ZonedDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.joda.time.DateTime;
-import org.joda.time.Hours;
 
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
@@ -138,12 +137,12 @@ public class KPIReportTransformer {
 					}
 					if (seq.getEvents().indexOf(visit) == 0) {
 
-						final DateTime startBy = availability.getStartByAsDateTime();
+						final ZonedDateTime startBy = availability.getStartByAsDateTime();
 						if (startBy != null && visit.getStart().isAfter(startBy)) {
 							lateness += Hours.hoursBetween(startBy, visit.getStart()).getHours();
 						}
 					} else if (seq.getEvents().indexOf(visit) == seq.getEvents().size() - 1) {
-						final DateTime endBy = availability.getEndAfterAsDateTime();
+						final ZonedDateTime endBy = availability.getEndAfterAsDateTime();
 						if (endBy != null && visit.getStart().isAfter(endBy)) {
 							lateness += Hours.hoursBetween(endBy, visit.getStart()).getHours();
 						}

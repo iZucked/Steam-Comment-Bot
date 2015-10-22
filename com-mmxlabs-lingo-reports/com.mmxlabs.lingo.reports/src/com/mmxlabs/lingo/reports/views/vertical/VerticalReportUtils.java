@@ -4,9 +4,10 @@
  */
 package com.mmxlabs.lingo.reports.views.vertical;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import org.joda.time.LocalDate;
+
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
@@ -82,11 +83,11 @@ public final class VerticalReportUtils {
 //		return getLocalDateFor(cal, asUTCEquivalent);
 //	}
 //
-//	public static LocalDateTime getLocalDateFor(final DateTime cal, final boolean asUTCEquivalent) {
+//	public static LocalDateTime getLocalDateFor(final ZonedDateTime cal, final boolean asUTCEquivalent) {
 //		if (asUTCEquivalent) {
 //			return cal.toLocalDateTime();
 //		} else {
-//			return cal.withZone(DateTimeZone.UTC).toLocalDateTime();
+//			return cal.withZone(ZoneId.of("UTC")).toLocalDateTime();
 //		}
 //	}
 //

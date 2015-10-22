@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.views.vertical;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -19,7 +20,6 @@ import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.DataVisualizer;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridItem;
-import org.joda.time.LocalDate;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;

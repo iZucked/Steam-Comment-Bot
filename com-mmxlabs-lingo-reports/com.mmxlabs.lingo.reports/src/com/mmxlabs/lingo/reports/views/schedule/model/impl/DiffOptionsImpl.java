@@ -6,15 +6,13 @@
  */
 package com.mmxlabs.lingo.reports.views.schedule.model.impl;
 
-import com.mmxlabs.lingo.reports.views.schedule.model.DiffOptions;
-import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
-
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
+import com.mmxlabs.lingo.reports.views.schedule.model.DiffOptions;
+import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 
 /**
  * <!-- begin-user-doc -->

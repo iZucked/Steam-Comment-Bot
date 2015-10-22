@@ -4,13 +4,15 @@
  */
 package com.mmxlabs.lingo.reports.views.formatters;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Year;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.TimeZone;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.joda.time.format.DateTimeFormatter;
+import org.eclipse.swt.widgets.DateTime;
 
 public class AsDateTimeFormatter extends BaseFormatter {
 	final DateTimeFormatter dateFormat;
@@ -26,39 +28,39 @@ public class AsDateTimeFormatter extends BaseFormatter {
 		if (object == null) {
 			return "";
 		}
-		final DateTime dateTime = getDateTime(object);
+		final ZonedDateTime dateTime = getDateTime(object);
 		if (dateTime != null) {
 			return dateFormat.print(dateTime) + (showZone ? (" (" + dateTime.getZone().toTimeZone().getDisplayName(false, TimeZone.SHORT) + ")") : "");
 		}
 		return null;
 	}
 
-	protected DateTime getDateTime(final Object object) {
-		DateTime localDate = null;
+	protected ZonedDateTime getDateTime(final Object object) {
+		ZonedDateTime localDate = null;
 		if (object instanceof DateTime) {
-			localDate = (DateTime) object;
+			localDate = (ZonedDateTime) object;
 		} else if (object instanceof LocalDate) {
 			final LocalDate dateTime = (LocalDate) object;
-			localDate = dateTime.toDateTimeAtStartOfDay(DateTimeZone.UTC);
+			localDate = dateTime.toDateTimeAtStartOfDay(ZoneId.of("UTC"));
 		} else if (object instanceof LocalDateTime) {
 			final LocalDateTime dateTime = (LocalDateTime) object;
-			localDate = dateTime.toDateTime(DateTimeZone.UTC);
+			localDate = dateTime.toDateTime(ZoneId.of("UTC"));
 		}
 		return localDate;
 	}
 
 	@Override
 	public Comparable<?> getComparable(final Object object) {
-		final DateTime localDate = getDateTime(object);
+		final ZonedDateTime localDate = getDateTime(object);
 		if (localDate == null) {
-			new LocalDate(2000, 1, 1).year().withMinimumValue();
+			FIXME localDate= ? LocalDate.of(Year.MIN_VALUE, 1, 1);
 		}
 		return localDate;
 	}
 
 	@Override
 	public Object getFilterValue(final Object object) {
-		final DateTime localDate = getDateTime(object);
+		final ZonedDateTime localDate = getDateTime(object);
 		if (localDate != null) {
 			return localDate;
 		}

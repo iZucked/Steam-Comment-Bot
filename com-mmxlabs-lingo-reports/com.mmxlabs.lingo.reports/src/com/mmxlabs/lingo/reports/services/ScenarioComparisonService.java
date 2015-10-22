@@ -14,8 +14,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.ops4j.peaberry.Peaberry;
 import org.ops4j.peaberry.eclipse.EclipseRegistry;

@@ -22,11 +22,8 @@ import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
-import org.eclipse.jface.viewers.IStructuredSelection;
 
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetViewEventConstants;
-import com.mmxlabs.scenario.service.model.Container;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 
 public class AnalysePinDiffHandler {

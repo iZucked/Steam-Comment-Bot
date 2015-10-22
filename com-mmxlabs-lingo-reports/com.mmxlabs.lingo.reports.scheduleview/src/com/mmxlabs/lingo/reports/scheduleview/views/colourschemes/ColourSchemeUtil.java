@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.scheduleview.views.colourschemes;
 
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 
 import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -85,7 +85,7 @@ public class ColourSchemeUtil {
 	}
 
 	public static boolean isOutsideTimeWindow(final Event ev) {
-		final DateTime start = ev.getStart();
+		final ZonedDateTime start = ev.getStart();
 		if (ev instanceof VesselEventVisit && start.isAfter(((VesselEventVisit) ev).getVesselEvent().getStartByAsDateTime())) {
 			return true;
 		}
