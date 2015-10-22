@@ -1977,7 +1977,7 @@ public class PeriodTransformerTests {
 			Assert.assertTrue(availability.getCurve().getPoints().size() > 0);
 			for (IndexPoint<Integer> point : availability.getCurve().getPoints()) {
 				YearMonth date = point.getDate();
-				ZonedDateTime dateAsDateTime = date.toLocalDate(1).toDateTimeAtStartOfDay(ZoneId.of("UTC"));
+				ZonedDateTime dateAsDateTime = date.atDay(1).atStartOfDay(ZoneId.of("UTC"));
 				Assert.assertTrue(dateAsDateTime.isAfter(periodRecord.lowerCutoff));
 				Assert.assertTrue(dateAsDateTime.isBefore(periodRecord.upperBoundary));
 			}

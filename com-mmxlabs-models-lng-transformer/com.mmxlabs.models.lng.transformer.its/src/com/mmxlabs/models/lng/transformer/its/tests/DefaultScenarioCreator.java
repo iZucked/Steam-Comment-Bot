@@ -116,7 +116,7 @@ public class DefaultScenarioCreator {
 	/** A list of canal costs that will be added to every class of vessel when the scenario is retrieved for use. */
 	// private final ArrayList<VesselClassCost> canalCostsForAllVesselClasses = new ArrayList<VesselClassCost>();
 
-	private static final String timeZone = ZoneId.of("UTC").getID();
+	private static final String timeZone = ZoneId.of("UTC").getId();
 
 	public DefaultScenarioCreator() {
 		scenario = ManifestJointModel.createEmptyInstance(null);
@@ -588,7 +588,7 @@ public class DefaultScenarioCreator {
 
 			// if load time is not specified, set it to the current datetime
 			if (loadTime == null) {
-				loadTime = new LocalDateTime(2015, 5, 1, 0, 0);
+				loadTime = LocalDateTime.of(2015, 5, 1, 0, 0);
 			}
 
 			// if name is not specified, set it to a sensible default

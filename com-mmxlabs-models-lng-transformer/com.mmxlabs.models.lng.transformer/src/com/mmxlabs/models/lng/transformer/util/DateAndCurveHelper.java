@@ -4,16 +4,17 @@
  */
 package com.mmxlabs.models.lng.transformer.util;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.TimeZone;
 
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.swt.widgets.DateTime;
 
 import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
@@ -43,15 +44,15 @@ public class DateAndCurveHelper {
 
 	@SuppressWarnings("null")
 	@Inject
-	public DateAndCurveHelper(@Named(LNGTransformerModule.EARLIEST_AND_LATEST_TIMES) @NonNull final Pair<DateTime, DateTime> earliestAndLatestTime) {
+	public DateAndCurveHelper(@Named(LNGTransformerModule.EARLIEST_AND_LATEST_TIMES) @NonNull final Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTime) {
 		this(earliestAndLatestTime.getFirst(), earliestAndLatestTime.getSecond());
 	}
 
 	@SuppressWarnings("null")
 	public DateAndCurveHelper(@NonNull final ZonedDateTime earliest, @NonNull final ZonedDateTime latest) {
 
-		this.earliestTime = earliest.withZone(ZoneId.of("UTC")).withMinuteOfHour(0);
-		assert !earliestTime.isAfter(earliest);
+		this.earliestTime = earliest.withZoneSameInstant(ZoneId.of("UTC")).truncatedTo(ChronoUnit.HOURS);
+		assert!earliestTime.isAfter(earliest);
 		this.latestTime = latest;
 	}
 
@@ -63,7 +64,7 @@ public class DateAndCurveHelper {
 	 * @return number of hours between earliest and windowStart
 	 */
 	public int convertTime(@NonNull final ZonedDateTime earliest, @NonNull final ZonedDateTime windowStart) {
-		return Hours.hoursBetween(earliest, windowStart).getHours();
+		return (int) Duration.between(earliest, windowStart).toHours();
 	}
 
 	public int convertTime(@NonNull final ZonedDateTime earliest, @NonNull final YearMonth windowStart) {
@@ -73,7 +74,7 @@ public class DateAndCurveHelper {
 	@SuppressWarnings("null")
 	@NonNull
 	protected ZonedDateTime yearMonthToDateTime(@NonNull final YearMonth windowStart) {
-		return windowStart.toLocalDate(1).toDateTimeAtStartOfDay(ZoneId.of("UTC"));
+		return ZonedDateTime.of(windowStart.getYear(), windowStart.getMonthValue(), 1, 0, 0, 0, 0, ZoneId.of("UTC"));
 	}
 
 	public StepwiseIntegerCurve createCurveForDoubleIndex(final Index<Double> index, final double scale) {
@@ -178,7 +179,7 @@ public class DateAndCurveHelper {
 
 	@SuppressWarnings("null")
 	public int convertTime(@NonNull final LocalDate time) {
-		return convertTime(time.toDateTimeAtStartOfDay(ZoneId.of("UTC")));
+		return convertTime(time.atStartOfDay(ZoneId.of("UTC")));
 	}
 
 	public int convertTime(@NonNull final ZonedDateTime startTime) {
@@ -231,11 +232,11 @@ public class DateAndCurveHelper {
 	 * @return
 	 */
 	public static int getHourRoundingRemainder(@NonNull final ZonedDateTime date) {
-		return date.withZone(ZoneId.of("UTC")).getMinuteOfHour();
+		return date.withZoneSameInstant(ZoneId.of("UTC")).getMinute();
 	}
 
 	public static ZonedDateTime createDate(final int year, final int month, final int dayOfMonth, final int hourOfDay, final String newTimeZone) {
-		return ZonedDateTime.of(year, month, dayOfMonth, hourOfDay, 0, ZoneId.of(newTimeZone));
+		return ZonedDateTime.of(year, month, dayOfMonth, hourOfDay, 0, 0, 0, ZoneId.of(newTimeZone));
 	}
 
 	public static YearMonth createYearMonth(final int year, final int month) {

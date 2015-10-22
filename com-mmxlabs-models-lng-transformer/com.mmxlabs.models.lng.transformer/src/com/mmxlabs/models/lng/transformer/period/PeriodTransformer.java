@@ -164,12 +164,12 @@ public class PeriodTransformer {
 
 		// Get dates with flex
 		if (startDate != null) {
-			periodRecord.lowerBoundary = startDate.toLocalDate(1).toDateTimeAtStartOfDay(ZoneId.of("UTC"));
+			periodRecord.lowerBoundary = startDate.atDay(1).atStartOfDay(ZoneId.of("UTC"));
 			periodRecord.lowerCutoff = periodRecord.lowerBoundary.minusMonths(boundaryFlexInMonths);
 		}
 
 		if (endDate != null) {
-			periodRecord.upperBoundary = endDate.toLocalDate(1).toDateTimeAtStartOfDay(ZoneId.of("UTC"));
+			periodRecord.upperBoundary = endDate.atDay(1).atStartOfDay(ZoneId.of("UTC"));
 			periodRecord.upperCutoff = periodRecord.upperBoundary.plusMonths(boundaryFlexInMonths);
 		}
 
@@ -744,14 +744,14 @@ public class PeriodTransformer {
 				vesselAvailability.getStartAt().add(portVisit.getPort());
 			}
 
-			vesselAvailability.setStartAfter(portVisit.getStart().withZone(ZoneId.of("UTC")).toLocalDateTime());
-			vesselAvailability.setStartBy(portVisit.getStart().withZone(ZoneId.of("UTC")).toLocalDateTime());
+			vesselAvailability.setStartAfter(portVisit.getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
+			vesselAvailability.setStartBy(portVisit.getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
 
 			// Check end after bounds. Do they still apply?
 			// TODO: Add this to unit tests
 			if (vesselAvailability.isSetEndAfter()) {
 				if (vesselAvailability.getEndAfterAsDateTime().isBefore(portVisit.getStart())) {
-					vesselAvailability.setEndAfter(portVisit.getStart().withZone(ZoneId.of("UTC")).toLocalDateTime());
+					vesselAvailability.setEndAfter(portVisit.getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
 				}
 			}
 
@@ -775,8 +775,8 @@ public class PeriodTransformer {
 			vesselAvailability.getEndAt().clear();
 			vesselAvailability.getEndAt().add(portVisit.getPort());
 
-			vesselAvailability.setEndAfter(portVisit.getStart().withZone(ZoneId.of("UTC")).toLocalDateTime());
-			vesselAvailability.setEndBy(portVisit.getStart().withZone(ZoneId.of("UTC")).toLocalDateTime());
+			vesselAvailability.setEndAfter(portVisit.getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
+			vesselAvailability.setEndBy(portVisit.getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
 			if (vesselAvailability.getEndHeel() == null) {
 				vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
 			}
@@ -818,8 +818,8 @@ public class PeriodTransformer {
 			vesselAvailability.getStartAt().clear();
 			vesselAvailability.getStartAt().add(portVisit.getPort());
 
-			vesselAvailability.setStartAfter(portVisit.getStart().withZone(ZoneId.of("UTC")).toLocalDateTime());
-			vesselAvailability.setStartBy(portVisit.getStart().withZone(ZoneId.of("UTC")).toLocalDateTime());
+			vesselAvailability.setStartAfter(portVisit.getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
+			vesselAvailability.setStartBy(portVisit.getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
 
 			// Check end after bounds. Do they still apply?
 			// TODO: Add this to unit tests
@@ -846,8 +846,8 @@ public class PeriodTransformer {
 			vesselAvailability.getEndAt().clear();
 			vesselAvailability.getEndAt().add(portVisit.getPort());
 
-			vesselAvailability.setEndAfter(portVisit.getStart().withZone(ZoneId.of("UTC")).toLocalDateTime());
-			vesselAvailability.setEndBy(portVisit.getStart().withZone(ZoneId.of("UTC")).toLocalDateTime());
+			vesselAvailability.setEndAfter(portVisit.getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
+			vesselAvailability.setEndBy(portVisit.getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
 
 			// Set must arrive cold with target heel volume
 			final int heel = portVisit.getHeelAtStart();
@@ -905,7 +905,7 @@ public class PeriodTransformer {
 				final List<IndexPoint<Integer>> pointsToRemove = new LinkedList<>();
 				for (final IndexPoint<Integer> value : curve.getPoints()) {
 					final YearMonth date = value.getDate();
-					final ZonedDateTime dateAsDateTime = date.toLocalDate(1).toDateTimeAtStartOfDay(ZoneId.of("UTC"));
+					final ZonedDateTime dateAsDateTime = date.atDay(1).atStartOfDay(ZoneId.of("UTC"));
 					if (date.isBefore(getDateFromStartOfMonth(earliestDate))) {
 						// remove
 						pointsToRemove.add(value);

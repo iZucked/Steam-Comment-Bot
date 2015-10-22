@@ -101,8 +101,8 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 		final ZonedDateTime startDate = loadDate.minusHours(2 * getTravelTime(originPort, loadPort, null, (int) maxSpeed));
 		final ZonedDateTime endDate = lastDischargeDate.plusHours(2 * getTravelTime(dischargePort2, originPort, null, (int) maxSpeed));
 
-		this.vesselAvailability = fleetCreator.setAvailability(portfolioModel.getCargoModel(), vessel, originPort, startDate.withZone(ZoneId.of("UTC")).toLocalDateTime(), originPort, endDate
-				.withZone(ZoneId.of("UTC")).toLocalDateTime());
+		this.vesselAvailability = fleetCreator.setAvailability(portfolioModel.getCargoModel(), vessel, originPort, startDate.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime(), originPort, endDate
+				.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
 
 		cargo.setVesselAssignmentType(vesselAvailability);
 	}

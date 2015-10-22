@@ -28,6 +28,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.threeten.extra.Months;
 
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.eclipse.manager.impl.DisposeOnRemoveEclipseListener;
@@ -509,7 +510,7 @@ public final class OptimisationHelper {
 					YearMonth optimiseAfter = to.getRange().getOptimiseAfter();
 					if (optimiseAfter != null && optimiseBefore != null) {
 						// 3 month window?
-						if (Months.monthsBetween(optimiseAfter, optimiseBefore).getMonths() > 3) {
+						if (Months.between(optimiseAfter, optimiseBefore).getAmount() > 3) {
 							log.info("Disabling Action sets as the period range is too big");
 							to.setBuildActionSets(false);
 						}

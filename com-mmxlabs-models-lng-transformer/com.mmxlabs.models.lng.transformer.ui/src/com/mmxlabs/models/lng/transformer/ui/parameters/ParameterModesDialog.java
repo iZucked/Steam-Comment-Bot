@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.transformer.ui.parameters;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -66,9 +67,6 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		General, Controls, Toggles, Advanced
 	}
 
-	
-	
-	
 	public static class ChoiceData {
 
 		private final List<Pair<String, Object>> choices = new LinkedList<>();
@@ -354,7 +352,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		area.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
 		final Label lbl = toolkit.createLabel(area, option.label);
 
-		final DateTimeFormatter format = DateTimeFormat.shortDate();
+		final DateTimeFormatter format = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 		// Strict parse mode
 		final IValidator validator = new IValidator() {
 			@Override
@@ -362,7 +360,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 				if (value instanceof String) {
 					if (value.equals("") == false) {
 						try {
-							format.parseLocalDate((String) value);
+							LocalDate.parse((String) value, format);
 						} catch (final IllegalArgumentException e) {
 							return ValidationStatus.error(String.format("'%s' is not a valid date.", value));
 						}
@@ -388,7 +386,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 							return null;
 						}
 						try {
-							return format.parseLocalDate(value);
+							return LocalDate.parse((String) value, format);
 						} catch (final Exception e) {
 							return null;
 						}
@@ -405,7 +403,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 					public Object convert(final Object fromObject) {
 						if (fromObject instanceof LocalDate) {
 							final LocalDate localDate = (LocalDate) fromObject;
-							return format.print(localDate);
+							return localDate.format(format);
 						}
 						return null;
 					}
@@ -446,7 +444,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		area.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
 		final Label lbl = toolkit.createLabel(area, option.label);
 
-		final DateTimeFormatter format = DateTimeFormat.forPattern("MM/yy");
+		final DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/yy");
 
 		final IValidator validator = new IValidator() {
 			@Override
@@ -454,7 +452,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 				if (value instanceof String) {
 					if (value.equals("") == false) {
 						try {
-							format.parseLocalDate((String) value);
+							LocalDate.parse((String)value, format);
 						} catch (final IllegalArgumentException e) {
 							return ValidationStatus.error(String.format("'%s' is not a valid date.", value));
 						}
@@ -480,7 +478,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 							return null;
 						}
 						try {
-							return new YearMonth(format.parseLocalDate(value));
+							return YearMonth.parse(value, format);
 						} catch (final Exception e) {
 							return null;
 						}
@@ -496,7 +494,8 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 					@Override
 					public Object convert(final Object fromObject) {
 						if (fromObject instanceof YearMonth) {
-							return format.print((YearMonth) fromObject);
+							YearMonth yearMonth = (YearMonth) fromObject;
+							return yearMonth.format(format);
 						}
 						return null;
 					}

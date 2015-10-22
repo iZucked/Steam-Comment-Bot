@@ -110,7 +110,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		} else {
 			final ZonedDateTime date = appointment.getSecond();
 			final Port port = appointment.getFirst();
-			loadTime = date.plusHours(getMarginHours(port, loadPort)).withZone(ZoneId.of(loadPort.getTimeZone())).toLocalDateTime();
+			loadTime = date.plusHours(getMarginHours(port, loadPort)).withZoneSameInstant(ZoneId.of(loadPort.getTimeZone())).toLocalDateTime();
 		}
 
 		return cargoCreator.createDefaultCargo(null, loadPort, dischargePort, loadTime, getMarginHours(loadPort, dischargePort));
@@ -132,14 +132,14 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		final ZonedDateTime endDate = lastDischargeDate.plusHours(getMarginHours(lastAppointment.getFirst(), endPort));
 
 		final CargoModel cargoModel = scenario.getPortfolioModel().getCargoModel();
-		this.vesselAvailability = fleetCreator.setAvailability(cargoModel, vessel, originPort, startDate.withZone(ZoneId.of("UTC")).toLocalDateTime(), originPort, endDate.withZone(ZoneId.of("UTC"))
+		this.vesselAvailability = fleetCreator.setAvailability(cargoModel, vessel, originPort, startDate.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime(), originPort, endDate.withZoneSameInstant(ZoneId.of("UTC"))
 				.toLocalDateTime());
 	}
 
 	public VesselEvent createDefaultMaintenanceEvent(final String name, final Port port, LocalDateTime startDate) {
 		if (startDate == null) {
 			final Pair<Port, ZonedDateTime> last = getLastAppointment();
-			startDate = last.getSecond().plusHours(getMarginHours(last.getFirst(), port)).withZone(ZoneId.of(port.getTimeZone())).toLocalDateTime();
+			startDate = last.getSecond().plusHours(getMarginHours(last.getFirst(), port)).withZoneSameInstant(ZoneId.of(port.getTimeZone())).toLocalDateTime();
 		}
 
 		final VesselEvent result = CargoFactory.eINSTANCE.createMaintenanceEvent();
@@ -279,8 +279,8 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 	public CharterOutEvent makeCharterOut(MinimalScenarioCreator msc, MMXRootObject scenario, Port startPort, Port endPort) {
 		// change to default: add a charter out event 2-3 hrs after discharge window ends
 		final ZonedDateTime endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
-		final LocalDateTime charterStartByDate = endLoad.plusHours(3).withZone(ZoneId.of(startPort.getTimeZone())).toLocalDateTime();
-		final LocalDateTime charterStartAfterDate = endLoad.plusHours(2).withZone(ZoneId.of(startPort.getTimeZone())).toLocalDateTime();
+		final LocalDateTime charterStartByDate = endLoad.plusHours(3).withZoneSameInstant(ZoneId.of(startPort.getTimeZone())).toLocalDateTime();
+		final LocalDateTime charterStartAfterDate = endLoad.plusHours(2).withZoneSameInstant(ZoneId.of(startPort.getTimeZone())).toLocalDateTime();
 		int charterOutRate = 24;
 		CharterOutEvent event = msc.vesselEventCreator.createCharterOutEvent("CharterOut", startPort, endPort, charterStartByDate, charterStartAfterDate, charterOutRate);
 		event.getHeelOptions().setVolumeAvailable(0);

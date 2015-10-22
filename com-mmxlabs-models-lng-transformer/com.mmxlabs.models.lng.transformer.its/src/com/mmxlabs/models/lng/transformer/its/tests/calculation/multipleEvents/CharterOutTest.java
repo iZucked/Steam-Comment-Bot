@@ -84,7 +84,7 @@ public class CharterOutTest {
 		final LocalDateTime startFirstCharterOut = LocalDateTime.now();
 		final LocalDateTime endFirstCharterOut = startFirstCharterOut.plusDays(charterOutDurationDays);
 		final LocalDateTime startFirstDryDock = endFirstCharterOut.plusHours(legDurationHours);
-		final LocalDateTime startSecondCharterOut = new LocalDateTime(startFirstDryDock);
+		final LocalDateTime startSecondCharterOut = startFirstDryDock;
 		final LocalDateTime endSecondCharterOut = startSecondCharterOut.plusDays(charterOutDurationDays);
 		final LocalDateTime startSecondDryDock = endSecondCharterOut.plusHours(legDurationHours);
 

@@ -480,13 +480,13 @@ public class AnnotatedSolutionExporter {
 				final Port port = event.getPort();
 				if (port != null) {
 					final ZoneId zone = ZoneId.of(port.getTimeZone());
-					event.setStart(event.getStart().withZone(zone));
+					event.setStart(event.getStart().withZoneSameInstant(zone));
 					if (event instanceof Journey) {
 						final Journey journey = (Journey) event;
 						final ZoneId eZone = ZoneId.of(journey.getDestination().getTimeZone());
-						journey.setEnd(journey.getEnd().withZone(eZone));
+						journey.setEnd(journey.getEnd().withZoneSameInstant(eZone));
 					} else {
-						event.setEnd(event.getEnd().withZone(zone));
+						event.setEnd(event.getEnd().withZoneSameInstant(zone));
 					}
 				}
 			}

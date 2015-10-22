@@ -432,7 +432,7 @@ public class CustomScenarioCreator {
 		load.setWindowStart(loadWindowStart.toLocalDate());
 		load.setWindowStartTime(loadWindowStart.getHour());
 
-		final ZonedDateTime dischargeDate = load.getWindowStartWithSlotOrPortTime().withZone(dischargeZone).plusHours(travelTime);
+		final ZonedDateTime dischargeDate = load.getWindowStartWithSlotOrPortTime().withZoneSameInstant(dischargeZone).plusHours(travelTime);
 		dis.setWindowStartTime(dischargeDate.getHour());
 		dis.setWindowStart(dischargeDate.toLocalDate());
 		dis.setWindowSize(0);

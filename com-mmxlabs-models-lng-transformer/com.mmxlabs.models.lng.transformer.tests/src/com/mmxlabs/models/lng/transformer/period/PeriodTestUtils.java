@@ -91,7 +91,7 @@ public class PeriodTestUtils {
 	}
 
 	static LocalDate createLocalDate(final int year, final int month, final int day) {
-		return new LocalDate(year, 1 + month, day);
+		return LocalDate.of(year, 1 + month, day);
 	}
 
 	static LocalDateTime createLocalDateTime(final int year, final int month, final int day, int hourOfDay) {

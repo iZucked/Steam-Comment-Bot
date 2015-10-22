@@ -20,7 +20,7 @@ public class EntityTransformerUtils {
 		final StepwiseIntegerCurve taxCurve = new StepwiseIntegerCurve();
 		taxCurve.setDefaultValue(0);
 		for (final TaxRate taxRate : taxRates) {
-			final int convertedDate = dateAndCurveHelper.convertTime(earliestDate, taxRate.getDate().toDateTimeAtStartOfDay(ZoneId.of("UTC")));
+			final int convertedDate = dateAndCurveHelper.convertTime(earliestDate, taxRate.getDate().atStartOfDay(ZoneId.of("UTC")));
 			taxCurve.setValueAfter(convertedDate, (int) (taxRate.getValue() * Calculator.ScaleFactor));
 		}
 		return taxCurve;

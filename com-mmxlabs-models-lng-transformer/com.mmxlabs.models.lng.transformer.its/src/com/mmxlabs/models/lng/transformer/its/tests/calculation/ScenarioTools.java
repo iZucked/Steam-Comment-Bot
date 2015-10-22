@@ -109,6 +109,9 @@ public class ScenarioTools {
 	static {
 		A.setName("A");
 		B.setName("B");
+		A.setTimeZone("UTC");
+		B.setTimeZone("UTC");
+		
 	}
 
 	// The default route name of the ocean route between ports.
@@ -415,7 +418,7 @@ public class ScenarioTools {
 
 		load.setCargoCV(cvValue);
 
-		final ZonedDateTime now = new LocalDate().toDateTimeAtStartOfDay(ZoneId.of("UTC"));
+		final ZonedDateTime now = LocalDate.now().atStartOfDay(ZoneId.of("UTC"));
 
 		load.setWindowSize(0);
 		load.setDuration(0);
@@ -423,14 +426,14 @@ public class ScenarioTools {
 
 		final ZoneId portBZone = ZoneId.of(B.getTimeZone() == null || B.getTimeZone().isEmpty() ? "UTC" : B.getTimeZone());
 
-		final ZonedDateTime loadDate = now.withZone(portAZone);
+		final ZonedDateTime loadDate = now.withZoneSameInstant(portAZone);
 		load.setWindowStartTime(loadDate.getHour());
 		load.setWindowStart(loadDate.toLocalDate());
 
 		// System.err.println(load.getWindowStartWithSlotOrPortTime());
 		// System.err.println(now);
 
-		final ZonedDateTime dischargeDate = loadDate.withZone(portBZone).plusHours(travelTime);
+		final ZonedDateTime dischargeDate = loadDate.withZoneSameInstant(portBZone).plusHours(travelTime);
 
 		dis.setWindowStartTime(dischargeDate.getHour());
 		dis.setWindowStart(dischargeDate.toLocalDate());
@@ -450,7 +453,7 @@ public class ScenarioTools {
 			// add to scenario's fleet model
 			cargoModel.getVesselEvents().add(dryDock);
 			// set the date to be after the discharge date
-			final LocalDateTime thenNext = dischargeDate.plusHours(travelTime).withZone(portAZone).toLocalDateTime();
+			final LocalDateTime thenNext = dischargeDate.plusHours(travelTime).withZoneSameInstant(portAZone).toLocalDateTime();
 			dryDock.setStartAfter(thenNext);
 			dryDock.setStartBy(thenNext);
 
@@ -621,8 +624,8 @@ public class ScenarioTools {
 		final CommodityIndex sales = PricingFactory.eINSTANCE.createCommodityIndex();
 		final DataIndex<Double> salesData = PricingFactory.eINSTANCE.createDataIndex();
 		sales.setName("Sales");
-		pt.setDate(YearMonth.of(1970, 1));
 		final IndexPoint<Double> pt = PricingFactory.eINSTANCE.createIndexPoint();
+		pt.setDate(YearMonth.of(1970, 1));
 		pt.setValue(0.0);
 		salesData.getPoints().add(pt);
 		sales.setData(salesData);

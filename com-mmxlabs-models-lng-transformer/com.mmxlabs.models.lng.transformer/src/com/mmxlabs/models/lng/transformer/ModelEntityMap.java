@@ -110,7 +110,7 @@ public class ModelEntityMap {
 	public ZonedDateTime getDateFromHours(final int hours, final String tz) {
 		final String timeZone = (tz == null) ? "UTC" : tz;
 		final int offsetMinutes = DateAndCurveHelper.getOffsetInMinutesFromTimeZone(timeZone);
-		return new ZonedDateTime(dateHelper.getEarliestTime()).withZone(ZoneId.of(timeZone)).plusHours(hours).plusMinutes(offsetMinutes);
+		return dateHelper.getEarliestTime().withZoneSameInstant(ZoneId.of(timeZone)).plusHours(hours).plusMinutes(offsetMinutes);
 	}
 
 	/**
