@@ -22,7 +22,7 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class SensibleAvailabilityDateConstraint extends AbstractModelMultiConstraint {
 
-	private LocalDateTime earliestDate = new LocalDateTime(2000, 1, 1, 0, 0);
+	private LocalDateTime earliestDate = LocalDateTime.of(2000, 1, 1, 0, 0);
 	private EStructuralFeature[] availabilityDateFields = { CargoPackage.Literals.VESSEL_AVAILABILITY__END_AFTER, CargoPackage.Literals.VESSEL_AVAILABILITY__END_BY,
 			CargoPackage.Literals.VESSEL_AVAILABILITY__START_AFTER, CargoPackage.Literals.VESSEL_AVAILABILITY__START_BY };
 
@@ -37,8 +37,8 @@ public class SensibleAvailabilityDateConstraint extends AbstractModelMultiConstr
 			for (EStructuralFeature feature : availabilityDateFields) {
 				final LocalDateTime date = (LocalDateTime) object.eGet(feature);
 				if (date != null && date.isBefore(earliestDate)) {
-					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(vesselAvailability.getVessel().getName(),
-							feature.getName(), earliestDate.toString()));
+					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
+							(IConstraintStatus) ctx.createFailureStatus(vesselAvailability.getVessel().getName(), feature.getName(), earliestDate.toString()));
 					status.addEObjectAndFeature(object, feature);
 					failures.add(status);
 				}

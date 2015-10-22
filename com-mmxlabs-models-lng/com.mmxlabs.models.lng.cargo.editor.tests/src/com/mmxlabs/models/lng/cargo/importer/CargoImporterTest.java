@@ -105,7 +105,7 @@ public class CargoImporterTest {
 				// Assert.assertEquals("PortName", loadSlot.getPort());
 				Assert.assertEquals("PRICE+1", loadSlot.getPriceExpression());
 				Assert.assertEquals(7, loadSlot.getWindowSize());
-				Assert.assertEquals(new LocalDate(2013, 1, 1), loadSlot.getWindowStart());
+				Assert.assertEquals(LocalDate.of(2013, 1, 1), loadSlot.getWindowStart());
 				Assert.assertEquals(9, loadSlot.getWindowStartTime());
 				Assert.assertEquals(23.702, loadSlot.getCargoCV(), 0);
 			}
@@ -169,7 +169,7 @@ public class CargoImporterTest {
 				// Assert.assertEquals("PortName", loadSlot.getPort());
 				Assert.assertEquals("PRICE+1", dischargeSlot.getPriceExpression());
 				Assert.assertEquals(7, dischargeSlot.getWindowSize());
-				Assert.assertEquals(new LocalDate(2013, 1, 1), dischargeSlot.getWindowStart());
+				Assert.assertEquals(LocalDate.of(2013, 1, 1), dischargeSlot.getWindowStart());
 				Assert.assertEquals(9, dischargeSlot.getWindowStartTime());
 				Assert.assertEquals(CargoDeliveryType.ANY, dischargeSlot.getPurchaseDeliveryType());
 			}
@@ -233,7 +233,7 @@ public class CargoImporterTest {
 				// Assert.assertEquals("PortName", loadSlot.getPort());
 				Assert.assertEquals("PRICE+1", dischargeSlot.getPriceExpression());
 				Assert.assertEquals(7, dischargeSlot.getWindowSize());
-				Assert.assertEquals(new LocalDate(2013, 1, 1), dischargeSlot.getWindowStart());
+				Assert.assertEquals(LocalDate.of(2013, 1, 1), dischargeSlot.getWindowStart());
 				Assert.assertEquals(9, dischargeSlot.getWindowStartTime());
 				Assert.assertEquals(CargoDeliveryType.ANY, dischargeSlot.getPurchaseDeliveryType());
 			} finally {

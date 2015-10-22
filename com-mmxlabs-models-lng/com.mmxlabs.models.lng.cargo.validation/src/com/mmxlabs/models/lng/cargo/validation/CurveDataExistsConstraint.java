@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +48,7 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 	private final IndexStartFinder indexFinder = new IndexStartFinder();
 	private final TaxRateStartFinder taxFinder = new TaxRateStartFinder();
 
-	private final DateTimeFormatter sdf = DateTimeFormat.shortDate();
+	private final DateTimeFormatter sdf = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 
 	interface CurveStartFinder<CurveType, DateType> {
 		DateType getStart(CurveType curve);
@@ -204,7 +205,7 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 		if (windowStart == null) {
 			return "<no date>";
 		}
-		return sdf.print(windowStart);
+		return windowStart.format(sdf);
 	}
 
 	/**

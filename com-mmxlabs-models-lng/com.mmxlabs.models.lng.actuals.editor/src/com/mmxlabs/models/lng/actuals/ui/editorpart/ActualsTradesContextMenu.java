@@ -368,7 +368,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 										returnActuals.setOperationsStart(nextEvent.getStart().toLocalDateTime());
 									} else {
 										// In the past to trigger validation error.
-										returnActuals.setOperationsStart(new LocalDateTime().withYear(2010));
+										returnActuals.setOperationsStart(LocalDateTime.now().withYear(2010));
 
 										if (isDivertableDESPurchase && loadPort != null) {
 											returnActuals.setTitleTransferPoint(loadPort);

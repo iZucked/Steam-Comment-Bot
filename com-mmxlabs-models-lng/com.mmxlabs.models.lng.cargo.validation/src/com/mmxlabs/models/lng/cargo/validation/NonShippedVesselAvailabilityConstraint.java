@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.cargo.validation;
 
+import java.time.Instant;
+import java.time.Period;
 import java.time.Year;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -13,7 +15,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.eclipse.swt.widgets.DateTime;
+import org.threeten.extra.Interval;
 
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -48,13 +50,13 @@ public class NonShippedVesselAvailabilityConstraint extends AbstractModelMultiCo
 				if (loadSlot.getWindowStart() == null) {
 					return Activator.PLUGIN_ID;
 				}
-				final ZonedDateTime start = new ZonedDateTime(loadSlot.getWindowStartWithSlotOrPortTime());
-				ZonedDateTime end = new ZonedDateTime(loadSlot.getWindowEndWithSlotOrPortTime());
+				final ZonedDateTime start = loadSlot.getWindowStartWithSlotOrPortTime();
+				ZonedDateTime end = loadSlot.getWindowEndWithSlotOrPortTime();
 				// For divertible cargoes, we should find the round trip time
 				if (loadSlot.isDivertible()) {
 					end = end.plusDays(loadSlot.getShippingDaysRestriction());
 				}
-				interval = new Interval(start, end);
+				interval = Interval.of(Instant.from(start), Instant.from(end));
 				type = "DES Purchase";
 				name = loadSlot.getName();
 			}
@@ -64,11 +66,11 @@ public class NonShippedVesselAvailabilityConstraint extends AbstractModelMultiCo
 				if (dischargeSlot.getWindowStart() == null) {
 					return Activator.PLUGIN_ID;
 				}
-				
+
 				nominatedVessel = dischargeSlot.getNominatedVessel();
-				final ZonedDateTime start = new ZonedDateTime(dischargeSlot.getWindowStartWithSlotOrPortTime());
-				final ZonedDateTime end = new ZonedDateTime(dischargeSlot.getWindowEndWithSlotOrPortTime());
-				interval = new Interval(start, end);
+				final ZonedDateTime start = dischargeSlot.getWindowStartWithSlotOrPortTime();
+				final ZonedDateTime end = dischargeSlot.getWindowEndWithSlotOrPortTime();
+				interval = Interval.of(Instant.from(start), Instant.from(end));
 				type = "FOB Sale";
 				name = dischargeSlot.getName();
 			}
@@ -99,7 +101,7 @@ public class NonShippedVesselAvailabilityConstraint extends AbstractModelMultiCo
 					} else {
 						end = ZonedDateTime.now().withYear(Year.MAX_VALUE);
 					}
-					availabilityInterval = new Interval(start, end);
+					availabilityInterval = Interval.of(Instant.from(start), Instant.from(end));
 				}
 
 				if (nominatedVessel == va.getVessel() || extraContext.getOriginal(nominatedVessel) == va.getVessel()) {

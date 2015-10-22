@@ -1836,8 +1836,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				final DischargeSlot discharge1 = CargoFactory.eINSTANCE.createDischargeSlot();
 				final DischargeSlot discharge2 = CargoFactory.eINSTANCE.createDischargeSlot();
 
-				discharge1.setWindowStart(new LocalDate());
-				discharge2.setWindowStart(new LocalDate());
+				discharge1.setWindowStart(LocalDate.now());
+				discharge2.setWindowStart(LocalDate.now());
 
 				cargo.getSlots().addAll(Lists.newArrayList(load, discharge1, discharge2));
 				final int ret = editor.open(cargo);

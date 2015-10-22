@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.analytics.validation;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -152,7 +153,7 @@ public class ProvisionalCargoConstraint extends AbstractModelMultiConstraint {
 				// } else if(lastRow.getDestinationType() == DestinationType.OTHER) {
 				// visitDuration = 24;
 				// }
-				final int availableTime = Hours.hoursBetween(lastRow.getDate(), row.getDate()).getHours() - visitDuration;
+				final int availableTime = (int) Duration.between(lastRow.getDate(), row.getDate()).toHours() - visitDuration;
 
 				if (availableTime < 0) {
 					final String msg = String.format("Date is before the previous date.");

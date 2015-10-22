@@ -26,8 +26,8 @@ import com.mmxlabs.models.lng.commercial.TaxRate;
 import com.mmxlabs.models.lng.commercial.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
-public class EntityBookTaxRateRangeConstraint extends AbstractModelConstraint  {
-	final DateTimeFormatter shortDate = DateTimeFormat.forPattern("yyyy-MM-dd");
+public class EntityBookTaxRateRangeConstraint extends AbstractModelConstraint {
+	final DateTimeFormatter shortDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 	@Override
 	public IStatus validate(IValidationContext ctx) {
@@ -37,36 +37,36 @@ public class EntityBookTaxRateRangeConstraint extends AbstractModelConstraint  {
 		if (target instanceof BaseEntityBook) {
 			final BaseEntityBook entityBook = (BaseEntityBook) target;
 			final EList<TaxRate> rates = entityBook.getTaxRates();
-			
+
 			String entityName = ((BaseLegalEntity) entityBook.eContainer()).getName();
-			// if there are no tax rates, raise a validation error and do not check any more problems 
+			// if there are no tax rates, raise a validation error and do not check any more problems
 			if (rates.isEmpty()) {
 				String failureMessage = String.format("Entity '%s' has no tax data", entityName);
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
 				dsd.addEObjectAndFeature(entityBook, CommercialPackage.Literals.BASE_ENTITY_BOOK__TAX_RATES);
-				return dsd;				
+				return dsd;
 			}
 
-			// count number of entries per date (to amalgamate multiple duplicates 
+			// count number of entries per date (to amalgamate multiple duplicates
 			// for the same date into one validation error)
 			final Map<String, Integer> dateCount = new LinkedHashMap<String, Integer>();
-			for (final TaxRate rate: rates) {
-				final String date = shortDate.print(rate.getDate());
+			for (final TaxRate rate : rates) {
+				final String date = rate.getDate().format(shortDate);
 				Integer count = dateCount.get(date);
 				dateCount.put(date, count == null ? 1 : count + 1);
 			}
-			
+
 			// create validation errors for duplicate dates
-			for (final Entry<String, Integer> entry: dateCount.entrySet()) {
+			for (final Entry<String, Integer> entry : dateCount.entrySet()) {
 				Integer count = entry.getValue();
 				String date = entry.getKey();
 				if (entry.getValue() > 1) {
 					String failureMessage = String.format("Entity '%s' has %d tax rate entries for the date '%s'.", entityName, count, date);
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
 					dsd.addEObjectAndFeature(entityBook, CommercialPackage.Literals.BASE_ENTITY_BOOK__TAX_RATES);
-					failures.add(dsd);									
+					failures.add(dsd);
 				}
-			}					
+			}
 		}
 
 		if (failures.isEmpty()) {

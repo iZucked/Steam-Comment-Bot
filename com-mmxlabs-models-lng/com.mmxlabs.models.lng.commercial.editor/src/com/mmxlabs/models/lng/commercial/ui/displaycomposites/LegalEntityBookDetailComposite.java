@@ -302,7 +302,7 @@ public class LegalEntityBookDetailComposite extends Composite implements IDispla
 				}
 				final TaxRate newTaxRate = CommercialFactory.eINSTANCE.createTaxRate();
 				newTaxRate.setValue(0);
-				newTaxRate.setDate(new LocalDate());
+				newTaxRate.setDate(LocalDate.now());
 				commandHandler.handleCommand(AddCommand.create(commandHandler.getEditingDomain(), oldValue, editedAttribute, newTaxRate), oldValue, editedAttribute);
 				tableViewer.setSelection(new StructuredSelection(newTaxRate));
 			}

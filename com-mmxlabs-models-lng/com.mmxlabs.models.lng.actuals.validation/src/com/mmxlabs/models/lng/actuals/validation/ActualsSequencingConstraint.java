@@ -6,6 +6,8 @@ package com.mmxlabs.models.lng.actuals.validation;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -286,7 +288,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 	}
 
 	private String getDateString(final LocalDateTime date) {
-		return DateTimeFormat.shortDate().print(date);
+		return date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
 	}
 
 	private String getID(final EObject target) {

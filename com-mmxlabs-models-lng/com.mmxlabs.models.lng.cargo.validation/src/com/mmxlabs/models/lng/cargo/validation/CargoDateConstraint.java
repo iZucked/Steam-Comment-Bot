@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.cargo.validation;
 
 import static org.ops4j.peaberry.Peaberry.osgiModule;
 
+import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -93,7 +94,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	 * @param availableTime
 	 * @return
 	 */
-	private void validateSlotOrder(final IValidationContext ctx, final Cargo cargo, final Slot slot, final int availableTime, final List<IStatus> failures) {
+	private void validateSlotOrder(final IValidationContext ctx, final Cargo cargo, final Slot slot, final long availableTime, final List<IStatus> failures) {
 		if (availableTime < 0) {
 			final int severity = IStatus.ERROR;
 			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'" + cargo.getLoadName() + "'"), severity);
@@ -102,16 +103,16 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 		}
 	}
 
-	private String formatHours(final int hours) {
-		if (hours < 24) {
+	private String formatHours(final long hours) {
+		if (hours < 24L) {
 			if (hours == 1) {
 				return hours + " hour";
 			} else {
 				return hours + " hours";
 			}
 		} else {
-			final int remainderHours = hours % 24;
-			final int days = hours / 24;
+			final long remainderHours = hours % 24L;
+			final long days = hours / 24L;
 			return days + " day" + (days > 1 ? "s" : "") + (remainderHours > 0 ? (", " + remainderHours + " hour" + (remainderHours > 1 ? "s" : "")) : "");
 		}
 	}
@@ -124,7 +125,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	 * @param availableTime
 	 * @return
 	 */
-	private void validateSlotTravelTime(final IValidationContext ctx, final IExtraValidationContext extraContext, final Cargo cargo, final Slot from, final Slot to, final int availableTime,
+	private void validateSlotTravelTime(final IValidationContext ctx, final IExtraValidationContext extraContext, final Cargo cargo, final Slot from, final Slot to, final long availableTime,
 			final List<IStatus> failures) {
 		// Skip for FOB/DES cargoes.
 		// TODO: Roll in common des redirection travel time
@@ -199,14 +200,15 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 				} else {
 					if (minTime > availableTime) {
 						// If difference is within the slot flex, then downgrade to warning.
-						final int diff = minTime - availableTime;
+						final long diff = minTime - availableTime;
 						// We want to sum the negative flex on the from to the positive flex on the to - this gives the sum additional flex on top of the windows.
 						final int totalFlex = -from.getWindowFlex() + to.getWindowFlex();
 						if (diff < totalFlex) {
 							severity = IStatus.WARNING;
 						}
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'" + cargo.getLoadName() + "'",
-								formatHours(minTime - availableTime)), (cargo.isAllowRewiring()) ? IStatus.WARNING : severity);
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
+								(IConstraintStatus) ctx.createFailureStatus("'" + cargo.getLoadName() + "'", formatHours(minTime - availableTime)),
+								(cargo.isAllowRewiring()) ? IStatus.WARNING : severity);
 						dsd.addEObjectAndFeature(from, CargoPackage.eINSTANCE.getSlot_WindowStart());
 						dsd.addEObjectAndFeature(to, CargoPackage.eINSTANCE.getSlot_WindowStart());
 						failures.add(dsd);
@@ -239,11 +241,11 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	 * @param availableTime
 	 * @return
 	 */
-	private void validateSlotAvailableTime(final IValidationContext ctx, final Cargo cargo, final Slot slot, final int availableTime, final List<IStatus> failures) {
+	private void validateSlotAvailableTime(final IValidationContext ctx, final Cargo cargo, final Slot slot, final long availableTime, final List<IStatus> failures) {
 		if ((availableTime / 24) > SENSIBLE_TRAVEL_TIME) {
 			final int severity = IStatus.WARNING;
-			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'" + cargo.getLoadName() + "'", availableTime / 24,
-					SENSIBLE_TRAVEL_TIME), severity);
+			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
+					(IConstraintStatus) ctx.createFailureStatus("'" + cargo.getLoadName() + "'", availableTime / 24L, SENSIBLE_TRAVEL_TIME), severity);
 			status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
 			failures.add(status);
 		}
@@ -274,7 +276,8 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 							final ZonedDateTime windowStartWithSlotOrPortTime = prevSlot.getWindowStartWithSlotOrPortTime();
 
 							if (windowEndWithSlotOrPortTime != null && windowStartWithSlotOrPortTime != null) {
-								final int availableTime = Hours.hoursBetween(windowStartWithSlotOrPortTime, windowEndWithSlotOrPortTime).getHours() - prevSlot.getSlotOrPortDuration();
+
+								final long availableTime = Duration.between(windowStartWithSlotOrPortTime, windowEndWithSlotOrPortTime).toHours() - prevSlot.getSlotOrPortDuration();
 
 								if (constraintID.equals(DATE_ORDER_ID)) {
 									validateSlotOrder(ctx, cargo, prevSlot, availableTime, failures);
@@ -309,16 +312,16 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 		if (vessel == null) {
 			return;
 		}
-		Integer windowLength = getLadenMaxWindow(from, to);
+		Long windowLength = getLadenMaxWindow(from, to);
 		if (windowLength == null) {
 			return;
 		}
 		int travelTime = TravelTimeUtils.getMinRouteTimeInHours(from, to, shippingDaysSpeedProvider, TravelTimeUtils.getScenarioModel(extraContext), vessel,
 				TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, from, vessel.getVesselClass(), true));
 		if (travelTime + from.getSlotOrPortDuration() > windowLength) {
-			final String message = String.format("Purchase|%s is paired with a sale at %s. However the laden travel time (%s) is greater than the shortest possible journey by %s", from.getName(), to
-					.getPort().getName(), TravelTimeUtils.formatHours(travelTime + from.getSlotOrPortDuration()), TravelTimeUtils.formatHours((travelTime + from.getSlotOrPortDuration())
-					- windowLength));
+			final String message = String.format("Purchase|%s is paired with a sale at %s. However the laden travel time (%s) is greater than the shortest possible journey by %s", from.getName(),
+					to.getPort().getName(), TravelTimeUtils.formatHours(travelTime + from.getSlotOrPortDuration()),
+					TravelTimeUtils.formatHours((travelTime + from.getSlotOrPortDuration()) - windowLength));
 			final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
 			dsd.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargoModel_Cargoes());
@@ -327,12 +330,12 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 
 	}
 
-	private Integer getLadenMaxWindow(Slot startSlot, Slot endSlot) {
+	private Long getLadenMaxWindow(Slot startSlot, Slot endSlot) {
 		final ZonedDateTime dateStart = startSlot.getWindowStartWithSlotOrPortTime();
 		final ZonedDateTime dateEnd = endSlot.getWindowEndWithSlotOrPortTime();
 
 		if (dateStart != null && dateEnd != null) {
-			return Hours.hoursBetween(dateStart, dateEnd).getHours();
+			return Duration.between(dateStart, dateEnd).toHours();
 		} else {
 			return null;
 		}

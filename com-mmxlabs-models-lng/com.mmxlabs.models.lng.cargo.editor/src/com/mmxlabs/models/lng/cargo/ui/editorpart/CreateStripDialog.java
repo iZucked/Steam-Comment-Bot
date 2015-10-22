@@ -4,8 +4,10 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
+import java.time.Duration;
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -223,7 +225,7 @@ public class CreateStripDialog extends FormDialog {
 		}
 
 		// // Set a default window start
-		sample.eSet(CargoPackage.eINSTANCE.getSlot_WindowStart(), new LocalDate());
+		sample.eSet(CargoPackage.eINSTANCE.getSlot_WindowStart(), LocalDate.now());
 
 		// Copy valid features across
 		if (selectedObject != null) {
@@ -553,12 +555,12 @@ public class CreateStripDialog extends FormDialog {
 		repeatType.setSelection(new StructuredSelection(RepeatType.Periodic));
 		intervalType.setSelection(new StructuredSelection(IntervalType.days));
 
-		LocalDate localDate = new LocalDate();
+		final LocalDate localDate;
 		// Only valid for slots
 		if (sample.eIsSet(CargoPackage.eINSTANCE.getSlot_WindowStart())) {
 			localDate = (LocalDate) sample.eGet(CargoPackage.eINSTANCE.getSlot_WindowStart());
 		} else {
-			localDate = new LocalDate();
+			localDate = LocalDate.now();
 		}
 		pattern_periodStart.setDate(localDate.getYear(), 1 + localDate.getMonthValue(), localDate.getDayOfMonth());
 		pattern_periodEnd.setDate(localDate.getYear(), 1 + localDate.getMonthValue(), localDate.getDayOfMonth());
@@ -605,7 +607,7 @@ public class CreateStripDialog extends FormDialog {
 		// Generate the dates
 		final List<LocalDate> dates = new LinkedList<>();
 
-		DurationFieldType calUnit = DurationFieldType.months();
+		TemporalUnit calUnit = ChronoUnit.MONTHS;
 		int calSpacing = 1;
 		try {
 			calSpacing = Integer.parseInt(pattern_n.getText());
@@ -619,7 +621,7 @@ public class CreateStripDialog extends FormDialog {
 		final LocalDate fromDate = getLocalDateFromDateTimeWidget(pattern_periodStart);
 
 		// ABS as sanity check...
-		final int diffInDays = Days.daysBetween(fromDate, toDate).getDays();
+		final int diffInDays = (int) Duration.between(fromDate, toDate).toDays();
 
 		{
 
@@ -630,13 +632,13 @@ public class CreateStripDialog extends FormDialog {
 			final RepeatType rt = RepeatType.values()[rtIdx];
 			switch (rt) {
 			case Distributed: {
-				calUnit = DurationFieldType.days();
+				calUnit = ChronoUnit.DAYS;
 				calSpacing = diffInDays / calSpacing;
 				calSpacing = Math.max(1, calSpacing);
 			}
 				break;
 			case Periodic: {
-				calUnit = DurationFieldType.days();
+				calUnit = ChronoUnit.DAYS;
 				final int itIdx = intervalType.getCombo().getSelectionIndex();
 				if (itIdx < 0) {
 					return Collections.emptyList();
@@ -644,13 +646,13 @@ public class CreateStripDialog extends FormDialog {
 				final IntervalType it = IntervalType.values()[itIdx];
 				switch (it) {
 				case days:
-					calUnit = DurationFieldType.days();
+					calUnit = ChronoUnit.DAYS;
 					break;
 				case months:
-					calUnit = DurationFieldType.months();
+					calUnit = ChronoUnit.MONTHS;
 					break;
 				case weeks:
-					calUnit = DurationFieldType.weeks();
+					calUnit = ChronoUnit.WEEKS;
 					break;
 				default:
 					break;
@@ -668,11 +670,11 @@ public class CreateStripDialog extends FormDialog {
 		if (sample.eIsSet(CargoPackage.eINSTANCE.getSlot_WindowStart())) {
 			sampleDate = (LocalDate) sample.eGet(CargoPackage.eINSTANCE.getSlot_WindowStart());
 		} else {
-			sampleDate = new LocalDate();
+			sampleDate = LocalDate.now();
 		}
 		while (toDate.isAfter(sampleDate)) {
-			dates.add(new LocalDate(sampleDate));
-			sampleDate = sampleDate.withFieldAdded(calUnit, calSpacing);
+			dates.add(sampleDate);
+			sampleDate = sampleDate.plus(calSpacing, calUnit);
 		}
 
 		// Pricing date special case - keep the difference in months constant
@@ -957,7 +959,7 @@ public class CreateStripDialog extends FormDialog {
 		}
 	}
 
-	private LocalDate getLocalDateFromDateTimeWidget(final ZonedDateTime dateTime) {
-		return LocalDate.of(dateTime.getYear(), 1 + dateTime.getMonthValue(), dateTime.getDayOfMonth());
+	private LocalDate getLocalDateFromDateTimeWidget(final DateTime dateTime) {
+		return LocalDate.of(dateTime.getYear(), 1 + dateTime.getMonth(), dateTime.getDay());
 	}
 }

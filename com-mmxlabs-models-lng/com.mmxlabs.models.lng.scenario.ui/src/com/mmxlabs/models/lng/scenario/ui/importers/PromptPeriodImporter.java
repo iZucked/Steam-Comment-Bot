@@ -52,8 +52,8 @@ public class PromptPeriodImporter implements IExtraModelImporter {
 			if (portfolioModel != null) {
 
 				// Always set a default period. Then overwrite with values from the CSV file.
-				portfolioModel.setPromptPeriodStart(new LocalDate());
-				portfolioModel.setPromptPeriodEnd(new LocalDate().plusDays(90));
+				portfolioModel.setPromptPeriodStart(LocalDate.now());
+				portfolioModel.setPromptPeriodEnd(LocalDate.now().plusDays(90));
 				
 				final CSVReader reader = inputs.get(PROMPT_PERIOD_KEY);
 				if (reader != null) {

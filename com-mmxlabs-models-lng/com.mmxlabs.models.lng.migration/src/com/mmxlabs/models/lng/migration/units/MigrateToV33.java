@@ -7,7 +7,6 @@ package com.mmxlabs.models.lng.migration.units;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
@@ -71,15 +70,15 @@ public class MigrateToV33 extends AbstractMigrationUnit {
 						final EStructuralFeature tmpFeature = eClass.getEStructuralFeature(feature.getName() + "Tmp");
 						if (tmpFeature != null) {
 							Object mDate = null;
-							if (tmpFeature.getEType().getInstanceClassName() == "org.joda.time.LocalDate") {
-								mDate = new LocalDate(cal.get(Calendar.YEAR), 1 + cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
-							} else if (tmpFeature.getEType().getInstanceClassName() == "org.joda.time.LocalDateTime") {
-								mDate = new LocalDateTime(cal.get(Calendar.YEAR), 1 + cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY), 0);
-							} else if (tmpFeature.getEType().getInstanceClassName() == "org.joda.time.YearMonth") {
+							if (tmpFeature.getEType().getInstanceClassName() == "java.time.LocalDate") {
+								mDate = LocalDate.of(cal.get(Calendar.YEAR), 1 + cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+							} else if (tmpFeature.getEType().getInstanceClassName() == "java.time.LocalDateTime") {
+								mDate = LocalDateTime.of(cal.get(Calendar.YEAR), 1 + cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY), 0);
+							} else if (tmpFeature.getEType().getInstanceClassName() == "java.time.YearMonth") {
 								mDate = YearMonth.of(cal.get(Calendar.YEAR), 1 + cal.get(Calendar.MONTH));
-							} else if (tmpFeature.getEType().getInstanceClassName() == "org.joda.time.DateTime") {
-								mDate = new ZonedDateTime(cal.get(Calendar.YEAR), 1 + cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY), 0,
-										ZoneId.forTimeZone(cal.getTimeZone()));
+							} else if (tmpFeature.getEType().getInstanceClassName() == "java.time.ZonedDateTime") {
+								mDate = ZonedDateTime.of(cal.get(Calendar.YEAR), 1 + cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.HOUR_OF_DAY), 0, 0, 0,
+										cal.getTimeZone().toZoneId());
 							}
 							if (mDate != null) {
 								eObj.eUnset(feature);

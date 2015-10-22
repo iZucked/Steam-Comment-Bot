@@ -241,6 +241,6 @@ public class CargoSlotOrderConstraintTest {
 	}
 
 	private void setDate(final Slot slot, final int year, final int month, final int day) {
-		slot.setWindowStart(new LocalDate(year, month, day));
+		slot.setWindowStart(LocalDate.of(year, month, day));
 	}
 }

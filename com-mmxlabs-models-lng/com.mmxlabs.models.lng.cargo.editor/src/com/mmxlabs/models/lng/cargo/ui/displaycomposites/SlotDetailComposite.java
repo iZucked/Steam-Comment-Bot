@@ -5,12 +5,14 @@
 package com.mmxlabs.models.lng.cargo.ui.displaycomposites;
 
 import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -397,6 +399,6 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 
 	private String formatDate(final LocalDate localDate, final int hourOfDay) {
 
-		return String.format("%02d %s %04d %02d:00", localDate.getDayOfMonth(), localDate.monthOfYear().getAsShortText(), localDate.getYear(), hourOfDay);
+		return String.format("%02d %s %04d %02d:00", localDate.getDayOfMonth(), localDate.getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault()), localDate.getYear(), hourOfDay);
 	}
 }

@@ -73,7 +73,7 @@ public class TravelTimeUtils {
 		return Integer.MAX_VALUE;
 	}
 	
-	public static String formatHours(final int hours) {
+	public static String formatHours(final long hours) {
 		if (hours < 24) {
 			if (hours == 1) {
 				return hours + " hour";
@@ -81,8 +81,8 @@ public class TravelTimeUtils {
 				return hours + " hours";
 			}
 		} else {
-			final int remainderHours = hours % 24;
-			final int days = hours / 24;
+			final long remainderHours = hours % 24L;
+			final long days = hours / 24L;
 			return days + " day" + (days > 1 ? "s" : "") + (remainderHours > 0 ? (", " + remainderHours + " hour" + (remainderHours > 1 ? "s" : "")) : "");
 		}
 	}

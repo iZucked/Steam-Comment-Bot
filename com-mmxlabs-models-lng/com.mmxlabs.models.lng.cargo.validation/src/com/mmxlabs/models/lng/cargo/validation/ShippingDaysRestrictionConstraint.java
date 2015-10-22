@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.cargo.validation;
 
 import static org.ops4j.peaberry.Peaberry.osgiModule;
 
+import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -171,12 +172,13 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 									return Activator.PLUGIN_ID;
 								}
 
-
 								final int loadDurationInHours = desPurchase.getSlotOrPortDuration();
 								final int dischargeDurationInHours = dischargeSlot.getSlotOrPortDuration();
 
-								final int ladenTravelTimeInHours = TravelTimeUtils.getMinRouteTimeInHours(desPurchase, dischargeSlot, shippingDaysSpeedProvider, lngScenarioModel, vessel, TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, desPurchase, vesselClass, true));
-								final int ballastTravelTimeInHours = TravelTimeUtils.getMinRouteTimeInHours(dischargeSlot, desPurchase, shippingDaysSpeedProvider, lngScenarioModel, vessel, TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, desPurchase, vesselClass, false));
+								final int ladenTravelTimeInHours = TravelTimeUtils.getMinRouteTimeInHours(desPurchase, dischargeSlot, shippingDaysSpeedProvider, lngScenarioModel, vessel,
+										TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, desPurchase, vesselClass, true));
+								final int ballastTravelTimeInHours = TravelTimeUtils.getMinRouteTimeInHours(dischargeSlot, desPurchase, shippingDaysSpeedProvider, lngScenarioModel, vessel,
+										TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, desPurchase, vesselClass, false));
 
 								// Calculate minimum time due to slot windows
 								final int ladenMaxWindowInHours;
@@ -189,7 +191,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 									final ZonedDateTime dischargeDateEnd = dischargeSlot.getWindowEndWithSlotOrPortTime();
 
 									if (loadDateStart != null && dischargeDateEnd != null) {
-										ladenMaxWindowInHours = Math.max(0, Hours.hoursBetween(loadDateStart, dischargeDateEnd).getHours() - (loadDurationInHours));
+										ladenMaxWindowInHours = Math.max(0, (int) Duration.between(loadDateStart, dischargeDateEnd).toHours() - (loadDurationInHours));
 
 									} else {
 										return Activator.PLUGIN_ID;
@@ -198,7 +200,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 									if (loadDateEnd != null && dischargeDateStart != null) {
 										// There could be an overlap
 										// Note: loadDateStart is the value used in the ShippingHoursRestrictionChecker
-										ladenMinWindowInHours = Math.max(0, Hours.hoursBetween(loadDateStart, dischargeDateStart).getHours() - (loadDurationInHours));
+										ladenMinWindowInHours = Math.max(0, (int) Duration.between(loadDateStart, dischargeDateStart).toHours() - (loadDurationInHours));
 									} else {
 										return Activator.PLUGIN_ID;
 									}
@@ -222,8 +224,10 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 
 								if (totalRoundTripTimeInHours > desPurchase.getShippingDaysRestriction() * 24) {
 									final String message = String.format(
-											"DES Purchase|%s is paired with a sale at %s. However the round trip time (%s) is greater than the permitted restriction (%s) by (%s).", desPurchase.getName(),
-											dischargeSlot.getPort().getName(), TravelTimeUtils.formatHours(totalRoundTripTimeInHours), TravelTimeUtils.formatHours(desPurchase.getShippingDaysRestriction() * 24), TravelTimeUtils.formatHours(totalRoundTripTimeInHours - desPurchase.getShippingDaysRestriction() * 24));
+											"DES Purchase|%s is paired with a sale at %s. However the round trip time (%s) is greater than the permitted restriction (%s) by (%s).",
+											desPurchase.getName(), dischargeSlot.getPort().getName(), TravelTimeUtils.formatHours(totalRoundTripTimeInHours),
+											TravelTimeUtils.formatHours(desPurchase.getShippingDaysRestriction() * 24),
+											TravelTimeUtils.formatHours(totalRoundTripTimeInHours - desPurchase.getShippingDaysRestriction() * 24));
 									final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
 									final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
 									dsd.addEObjectAndFeature(desPurchase, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
@@ -243,5 +247,5 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 		}
 
 		return Activator.PLUGIN_ID;
-	}	
+	}
 }

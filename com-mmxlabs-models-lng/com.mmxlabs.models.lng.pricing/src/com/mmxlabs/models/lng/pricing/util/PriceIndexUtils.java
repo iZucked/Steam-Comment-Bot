@@ -4,7 +4,10 @@
  */
 package com.mmxlabs.models.lng.pricing.util;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.time.YearMonth;
+import java.time.ZoneId;
 import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -101,6 +104,6 @@ public class PriceIndexUtils {
 	 * @return
 	 */
 	public static int convertTime(final YearMonth earliest, final YearMonth windowStart) {
-		return Hours.hoursBetween(earliest, windowStart).getHours();
+		return (int) Duration.between(Instant.from(earliest.atDay(1).atStartOfDay(ZoneId.of("UTC"))), Instant.from(windowStart.atDay(1).atStartOfDay(ZoneId.of("UTC")))).toHours();
 	}
 }

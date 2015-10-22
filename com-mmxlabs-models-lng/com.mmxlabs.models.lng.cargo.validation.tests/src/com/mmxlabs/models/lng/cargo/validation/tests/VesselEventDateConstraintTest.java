@@ -10,7 +10,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.validation.IValidationContext;
@@ -27,8 +29,8 @@ public class VesselEventDateConstraintTest {
 
 	// Create some dates to test.
 	private static final long time = System.currentTimeMillis();
-	private static final LocalDateTime now = new LocalDateTime(time);
-	private static final LocalDateTime nowPlusOne = new LocalDateTime(time + 1);
+	private static final LocalDateTime now = LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.of("UTC"));
+	private static final LocalDateTime nowPlusOne = LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.of("UTC"));
 
 	/**
 	 * Test the constraint succeeds with the correct input.
@@ -106,7 +108,7 @@ public class VesselEventDateConstraintTest {
 		when(vesselEvent.getStartBy()).thenReturn(end);
 		if (expectSuccess) {
 			when(validationContext.createSuccessStatus()).thenReturn(resultStatus);
-			//when(resultStatus.getSeverity()).thenReturn(IStatus.OK);
+			// when(resultStatus.getSeverity()).thenReturn(IStatus.OK);
 		} else {
 			when(vesselEvent.getName()).thenReturn(vesselEventID);
 			when(validationContext.createFailureStatus(vesselEventID)).thenReturn(resultStatus);

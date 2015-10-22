@@ -8,6 +8,7 @@ import static com.mmxlabs.models.lng.cargo.util.SlotClassifier.classify;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -44,7 +45,7 @@ public class SlotDateOverlapConstraint extends AbstractModelMultiConstraint {
 
 		private final Map<Port, Map<String, Collection<Slot>>> countingMap = new HashMap<Port, Map<String, Collection<Slot>>>();
 
-		private final DateTimeFormatter df = DateTimeFormat.shortDate();
+		private final DateTimeFormatter df = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
 
 		/**
 		 * Returns a modifiable {@link Collection} of {@link Slot} objects which overlap the given {@link Slot}.
@@ -167,7 +168,7 @@ public class SlotDateOverlapConstraint extends AbstractModelMultiConstraint {
 		}
 
 		private String dateToString(final ZonedDateTime date) {
-			return df.print(date.toLocalDate());
+			return date.toLocalDate().format(df);
 		}
 	}
 

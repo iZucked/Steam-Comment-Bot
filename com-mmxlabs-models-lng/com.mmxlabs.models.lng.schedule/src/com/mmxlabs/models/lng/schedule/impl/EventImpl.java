@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 import java.lang.reflect.InvocationTargetException;
+import java.time.Duration;
 import java.time.ZonedDateTime;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -504,7 +505,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * @generated NOT
 	 */
 	public int getDuration() {
-		return Hours.hoursBetween(getStart(),  getEnd()).getHours();
+		return (int)Duration.between(getStart(),  getEnd()).toHours();
 	}
 
 	/**

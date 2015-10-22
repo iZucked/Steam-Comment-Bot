@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.TextStyle;
@@ -612,7 +613,7 @@ public class CargoEditorMenuHelper {
 		final boolean overlap = (dischargeStart.isBefore(loadEnd));
 
 		// TODO: Check the change in rounding - does this round down as the previous code did?
-		final int daysDifference = Days.daysBetween(loadStart, dischargeEnd).getDays();
+		final int daysDifference = (int) Duration.between(loadStart, dischargeEnd).toDays();
 
 		// DES load
 		if (load.isDESPurchase()) {
@@ -754,7 +755,7 @@ public class CargoEditorMenuHelper {
 				ZonedDateTime a = loadSlot.getWindowStartWithSlotOrPortTime();
 				ZonedDateTime b = dischargeSlot.getWindowStartWithSlotOrPortTime();
 				if (a != null && b != null) {
-					daysDifference = Days.daysBetween(a, b).getDays();
+					daysDifference = (int) Duration.between(a, b).toDays();
 				} else {
 					daysDifference = -1;
 				}
@@ -1040,7 +1041,7 @@ public class CargoEditorMenuHelper {
 						dischargeSlot.setWindowStart(dishargeCal);
 						dischargeSlot.setWindowStartTime(0);
 
-						dischargeSlot.setWindowSize(Hours.hoursBetween(dishargeCal, dishargeCal.plusMonths(1)).getHours());
+						dischargeSlot.setWindowSize((int) Duration.between(dishargeCal, dishargeCal.plusMonths(1)).toHours());
 
 						final String idPrefix = market.getName() + "-" + yearMonthString + "-";
 						int i = 0;
@@ -1065,7 +1066,7 @@ public class CargoEditorMenuHelper {
 
 						loadSlot.setWindowStart(cal);
 						loadSlot.setWindowStartTime(0);
-						loadSlot.setWindowSize(Hours.hoursBetween(cal, cal.plusMonths(1)).getHours());
+						loadSlot.setWindowSize((int) Duration.between(cal, cal.plusMonths(1)).toHours());
 
 						// Get existing names
 						final Set<String> usedIDStrings = new HashSet<>();
