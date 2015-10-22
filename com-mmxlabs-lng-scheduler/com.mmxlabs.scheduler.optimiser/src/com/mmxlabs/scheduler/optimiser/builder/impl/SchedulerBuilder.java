@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.builder.impl;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -1951,7 +1952,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	public void setEarliestDate(@NonNull final ZonedDateTime earliestTime) {
-		dateKeyProviderEditor.setTimeZero(earliestTime.getMillis());
+		dateKeyProviderEditor.setTimeZero(Instant.from(earliestTime).toEpochMilli());
 	}
 
 	/**

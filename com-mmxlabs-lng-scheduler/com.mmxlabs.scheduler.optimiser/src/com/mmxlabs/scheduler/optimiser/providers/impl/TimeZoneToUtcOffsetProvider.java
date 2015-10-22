@@ -4,7 +4,10 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers.impl;
 
+import java.time.Instant;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.zone.ZoneRules;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -90,9 +93,16 @@ public class TimeZoneToUtcOffsetProvider implements ITimeZoneToUtcOffsetProvider
 		try {
 			// check for illegal/wrong timezoneId
 			if (tz != null) {
-				final long localTimeInMillis = convertInternalToMillis(localTime);
-				// final long utcInMillis = tz.convertLocalToUTC(localTimeInMillis, true);
-				final long utcInMillis = localTimeInMillis + tz.getOffsetFromLocal(localTimeInMillis);
+				
+				Instant i = Instant.ofEpochMilli( convertInternalToMillis(localTime));
+				ZonedDateTime atZone = i.atZone(tz);
+				Instant i2 = Instant.from(atZone.withZoneSameLocal(ZoneId.of("UTC")));
+				
+				final long utcInMillis = i2.toEpochMilli();//utcTimeInMillis - tz.getOffsetFromLocal(utcTimeInMillis);
+				
+//				final long localTimeInMillis = convertInternalToMillis(localTime);
+//				// final long utcInMillis = tz.convertLocalToUTC(localTimeInMillis, true);
+//				final long utcInMillis = localTimeInMillis + tz.getOffsetFromLocal(localTimeInMillis);
 
 				return convertMillisToInternal(utcInMillis);
 			} else {
@@ -132,7 +142,11 @@ public class TimeZoneToUtcOffsetProvider implements ITimeZoneToUtcOffsetProvider
 			if (tz != null) {
 				final long utcTimeInMillis = convertInternalToMillis(utcTime);
 				// final long utcInMillis = tz.convertLocalToUTC(localTimeInMillis, true);
-				final long localInMillis = utcTimeInMillis - tz.getOffsetFromLocal(utcTimeInMillis);
+				Instant i = Instant.ofEpochMilli(utcTimeInMillis);
+				ZonedDateTime atZone = i.atZone(ZoneId.of("UTC"));
+				Instant i2 = Instant.from(atZone.withZoneSameLocal(tz));
+				
+				final long localInMillis = i2.toEpochMilli();//utcTimeInMillis - tz.getOffsetFromLocal(utcTimeInMillis);
 
 				return convertMillisToInternal(localInMillis);
 			} else {
@@ -162,47 +176,47 @@ public class TimeZoneToUtcOffsetProvider implements ITimeZoneToUtcOffsetProvider
 		return localTime(utcTime, timeZoneId);
 	}
 
-	/**
-	 * Get the local time - UTC offset in milliseconds
-	 * 
-	 * @param a
-	 *            time zone id
-	 * @param a
-	 *            local time instant in the specified timezone
-	 * @return the millisecond offset to subtract from local time to get UTC time
-	 */
-	private int getUtcOffset(final String timezoneId, final long localTimeInMillis) {
-		// for now, see if we're calling this method properly; also re-throw any exceptions
-		try {
-			// TODO: switch to using joda-time when the jar is in place
-			// return 0; //
-			return ZoneId.of(timezoneId).getOffsetFromLocal(localTimeInMillis);
-		} catch (final Exception e) {
-			throw (e);
-		}
-	}
+//	/**
+//	 * Get the local time - UTC offset in milliseconds
+//	 * 
+//	 * @param a
+//	 *            time zone id
+//	 * @param a
+//	 *            local time instant in the specified timezone
+//	 * @return the millisecond offset to subtract from local time to get UTC time
+//	 */
+//	private int getUtcOffset(final String timezoneId, final long localTimeInMillis) {
+//		// for now, see if we're calling this method properly; also re-throw any exceptions
+//		try {
+//			// TODO: switch to using joda-time when the jar is in place
+//			// return 0; //
+//			return ZoneId.of(timezoneId).getOffsetFromLocal(localTimeInMillis);
+//		} catch (final Exception e) {
+//			throw (e);
+//		}
+//	}
 
-	/**
-	 * @param a
-	 *            port in a time zone
-	 * @param a
-	 *            local time instant at the specified port
-	 * @return the millisecond offset to subtract from local time at port to get UTC time
-	 */
-	private int getUtcOffset(@NonNull final IPort port, final int localTimeInMillis) {
-		return getUtcOffset(port.getTimeZoneId(), localTimeInMillis);
-	}
-
-	/**
-	 * @param a
-	 *            portSlot from which we can retrieve the port's timezone id
-	 * @param a
-	 *            local time instant at the specified port
-	 * @return the millisecond offset to subtract from local time at port to get UTC time
-	 */
-	private int getUtcOffset(@NonNull final IPortSlot portSlot, final int localTimeInMillis) {
-		return getUtcOffset(portSlot.getPort().getTimeZoneId(), localTimeInMillis);
-	}
+//	/**
+//	 * @param a
+//	 *            port in a time zone
+//	 * @param a
+//	 *            local time instant at the specified port
+//	 * @return the millisecond offset to subtract from local time at port to get UTC time
+//	 */
+//	private int getUtcOffset(@NonNull final IPort port, final int localTimeInMillis) {
+//		return getUtcOffset(port.getTimeZoneId(), localTimeInMillis);
+//	}
+//
+//	/**
+//	 * @param a
+//	 *            portSlot from which we can retrieve the port's timezone id
+//	 * @param a
+//	 *            local time instant at the specified port
+//	 * @return the millisecond offset to subtract from local time at port to get UTC time
+//	 */
+//	private int getUtcOffset(@NonNull final IPortSlot portSlot, final int localTimeInMillis) {
+//		return getUtcOffset(portSlot.getPort().getTimeZoneId(), localTimeInMillis);
+//	}
 
 	public long getTimeZeroInMillis() {
 		return timeZeroInMillis;
