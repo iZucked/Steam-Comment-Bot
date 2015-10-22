@@ -4,11 +4,10 @@
  */
 package com.mmxlabs.lingo.app.headless.utils;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.joda.time.LocalDate;
-import org.joda.time.YearMonth;
 
 import com.mmxlabs.optimiser.common.fitness.NonOptionalSlotFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;

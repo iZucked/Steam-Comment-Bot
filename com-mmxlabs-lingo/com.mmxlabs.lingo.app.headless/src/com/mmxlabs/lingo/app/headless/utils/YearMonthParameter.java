@@ -4,9 +4,7 @@
  */
 package com.mmxlabs.lingo.app.headless.utils;
 
-import java.util.Date;
-
-import org.joda.time.YearMonth;
+import java.time.YearMonth;
 
 public class YearMonthParameter extends AParameter<YearMonth> {
 

@@ -5,8 +5,6 @@
 package com.mmxlabs.lingo.app.headless.utils;
 
 import java.lang.reflect.ParameterizedType;
-import java.util.LinkedList;
-import java.util.List;
 
 public class StringListParameter extends AParameter<StringList> {
 

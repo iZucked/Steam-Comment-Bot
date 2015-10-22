@@ -7,9 +7,9 @@ package com.mmxlabs.lingo.its.tests.csv.microcases;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
-import org.joda.time.DateTime;
-import org.joda.time.LocalDateTime;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -71,13 +71,13 @@ public class SpotDESPurchaseTimezoneBoundaryTest extends AbstractOptimisationRes
 		for (final SlotAllocation slotAllcocation : cargoAllocation.getSlotAllocations()) {
 			if (slotAllcocation.getSlot() instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) slotAllcocation.getSlot();
-				final DateTime cal = loadSlot.getWindowStartWithSlotOrPortTime();
+				final ZonedDateTime cal = loadSlot.getWindowStartWithSlotOrPortTime();
 				final LocalDateTime localDateTime = cal.toLocalDateTime();
-				Assert.assertEquals(1, localDateTime.getMonthOfYear());
+				Assert.assertEquals(1, localDateTime.getMonthValue());
 				Assert.assertEquals(1, localDateTime.getDayOfMonth());
-				Assert.assertEquals(0, localDateTime.getHourOfDay());
-				Assert.assertEquals(0, localDateTime.getMinuteOfHour());
-				Assert.assertEquals(0, localDateTime.getSecondOfMinute());
+				Assert.assertEquals(0, localDateTime.getHour());
+				Assert.assertEquals(0, localDateTime.getMinute());
+				Assert.assertEquals(0, localDateTime.getSecond());
 				Assert.assertEquals(0, localDateTime.getMillisOfSecond());
 				return;
 			}

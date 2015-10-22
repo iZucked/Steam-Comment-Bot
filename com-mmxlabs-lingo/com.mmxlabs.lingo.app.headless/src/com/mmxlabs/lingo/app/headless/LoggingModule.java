@@ -10,16 +10,10 @@ import java.util.Map;
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.google.inject.Provides;
-import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.mmxlabs.optimiser.common.logging.ILoggingDataStore;
-import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.lso.LSOLoggingConstants;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChecker;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.EnumeratingSequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.lso.SequencesConstrainedMoveGeneratorUnit;
 
 /**
  * A {@link Module} providing the data from {@link ILoggingDataStore} to the {@link Injector} framework.

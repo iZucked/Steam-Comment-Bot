@@ -7,6 +7,8 @@ package com.mmxlabs.lingo.app.headless;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -28,8 +30,6 @@ import org.apache.shiro.subject.Subject;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
-import org.joda.time.LocalDate;
-import org.joda.time.YearMonth;
 
 import com.google.common.collect.Maps;
 import com.google.inject.Injector;

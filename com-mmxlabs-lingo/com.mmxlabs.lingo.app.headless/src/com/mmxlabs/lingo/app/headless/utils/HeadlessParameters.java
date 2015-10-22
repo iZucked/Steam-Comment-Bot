@@ -4,13 +4,11 @@
  */
 package com.mmxlabs.lingo.app.headless.utils;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
-import org.joda.time.LocalDate;
-import org.joda.time.YearMonth;
 
 import com.mmxlabs.common.Pair;
 

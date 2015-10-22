@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.lingo.app.headless.utils;
 
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
 
 public class LocalDateParameter extends AParameter<LocalDate> {
 
