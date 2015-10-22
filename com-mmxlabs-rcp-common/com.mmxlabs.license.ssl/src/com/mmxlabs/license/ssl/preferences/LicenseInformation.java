@@ -5,6 +5,7 @@
 package com.mmxlabs.license.ssl.preferences;
 
 import java.security.cert.X509Certificate;
+
 import javax.naming.InvalidNameException;
 import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
