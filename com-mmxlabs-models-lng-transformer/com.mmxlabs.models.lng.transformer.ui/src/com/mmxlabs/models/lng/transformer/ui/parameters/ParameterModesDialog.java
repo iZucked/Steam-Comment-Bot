@@ -444,7 +444,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		area.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
 		final Label lbl = toolkit.createLabel(area, option.label);
 
-		final DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/yy");
+		final DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/yyyy");
 
 		final IValidator validator = new IValidator() {
 			@Override
@@ -452,7 +452,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 				if (value instanceof String) {
 					if (value.equals("") == false) {
 						try {
-							LocalDate.parse((String)value, format);
+							YearMonth.parse((String)value, format);
 						} catch (final IllegalArgumentException e) {
 							return ValidationStatus.error(String.format("'%s' is not a valid date.", value));
 						}
