@@ -15,6 +15,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -188,7 +189,7 @@ public class HeadlessJSONParser {
 	}
 
 	YearMonth parseYearMonth(String dateString) {
-		return YearMonth.parse(dateString, DateTimeFormat.forPattern("YYYY/MM"));
+		return YearMonth.parse(dateString, DateTimeFormatter.ofPattern("YYYY/MM"));
 	}
 
 	boolean matchDate(String input) {
@@ -202,7 +203,7 @@ public class HeadlessJSONParser {
 	}
 	
 	LocalDate parseDate(String dateString) {
-		LocalDate dateTime = LocalDate.parse(dateString, DateTimeFormat.forPattern( "YYYY/MM/dd" ));
+		LocalDate dateTime = LocalDate.parse(dateString, DateTimeFormatter.ofPattern( "YYYY/MM/dd" ));
 		return dateTime;		
 	}
 	

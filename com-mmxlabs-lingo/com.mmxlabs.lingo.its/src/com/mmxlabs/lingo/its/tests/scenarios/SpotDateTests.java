@@ -42,7 +42,7 @@ public class SpotDateTests extends AbstractOptimisationResultTester {
 				final Slot s = sa.getSlot();
 				if (s instanceof SpotLoadSlot) {
 					final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) s;
-					Assert.assertEquals(new LocalDate(2014, 5, 1), spotLoadSlot.getWindowStart());
+					Assert.assertEquals(LocalDate.of(2014, 5, 1), spotLoadSlot.getWindowStart());
 				}
 			}
 		}
@@ -54,7 +54,7 @@ public class SpotDateTests extends AbstractOptimisationResultTester {
 				final Slot s = sa.getSlot();
 				if (s instanceof SpotLoadSlot) {
 					final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) s;
-					Assert.assertEquals(new LocalDate(2014, 6, 1), spotLoadSlot.getWindowStart());
+					Assert.assertEquals(LocalDate.of(2014, 6, 1), spotLoadSlot.getWindowStart());
 				}
 			}
 		}

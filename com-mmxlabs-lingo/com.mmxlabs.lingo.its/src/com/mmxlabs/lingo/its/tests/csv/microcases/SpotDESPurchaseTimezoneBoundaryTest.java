@@ -78,7 +78,7 @@ public class SpotDESPurchaseTimezoneBoundaryTest extends AbstractOptimisationRes
 				Assert.assertEquals(0, localDateTime.getHour());
 				Assert.assertEquals(0, localDateTime.getMinute());
 				Assert.assertEquals(0, localDateTime.getSecond());
-				Assert.assertEquals(0, localDateTime.getMillisOfSecond());
+				Assert.assertEquals(0, localDateTime.getNano());
 				return;
 			}
 		}
