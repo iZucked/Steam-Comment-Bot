@@ -15,8 +15,6 @@ import com.mmxlabs.models.lng.cargo.DryDockEvent;
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Dry Dock Event</b></em>'.
  * <!-- end-user-doc -->
- * <p>
- * </p>
  *
  * @generated
  */

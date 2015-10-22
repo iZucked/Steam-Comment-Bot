@@ -14,12 +14,12 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup#getAvailability <em>Availability</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup#getType <em>Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup#getMarkets <em>Markets</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getSpotMarketGroup()
  * @model

@@ -35,6 +35,7 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getBaseFuel <em>Base Fuel</em>}</li>
@@ -51,7 +52,6 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getPilotLightRate <em>Pilot Light Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getMinBaseFuelConsumption <em>Min Base Fuel Consumption</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

@@ -23,10 +23,10 @@ import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.CargoSandboxImpl#getCargoes <em>Cargoes</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

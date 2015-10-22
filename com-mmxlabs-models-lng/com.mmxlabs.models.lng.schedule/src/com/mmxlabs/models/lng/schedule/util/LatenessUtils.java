@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.models.lng.schedule.util;
 
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -26,7 +26,7 @@ public class LatenessUtils {
 		return false;
 	}
 
-	public static DateTime getWindowStartDate(final Object object) {
+	public static ZonedDateTime getWindowStartDate(final Object object) {
 		if (object instanceof SlotVisit) {
 			return ((SlotVisit) object).getSlotAllocation().getSlot().getWindowStartWithSlotOrPortTime();
 		} else if (object instanceof VesselEventVisit) {
@@ -35,7 +35,7 @@ public class LatenessUtils {
 		return null;
 	}
 
-	public static DateTime getWindowEndDate(final Object object) {
+	public static ZonedDateTime getWindowEndDate(final Object object) {
 		if (object instanceof SlotVisit) {
 			return ((SlotVisit) object).getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime();
 		} else if (object instanceof VesselEventVisit) {

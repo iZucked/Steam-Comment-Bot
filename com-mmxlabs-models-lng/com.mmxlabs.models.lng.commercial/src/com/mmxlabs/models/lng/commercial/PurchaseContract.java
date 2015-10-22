@@ -14,11 +14,11 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getCargoCV <em>Cargo CV</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getSalesDeliveryType <em>Sales Delivery Type</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getPurchaseContract()
  * @model

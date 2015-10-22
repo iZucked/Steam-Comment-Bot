@@ -118,6 +118,8 @@ public enum ContractType implements Enumerator {
 	 * Returns the '<em><b>Contract Type</b></em>' literal with the specified literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @param literal the literal.
+	 * @return the matching enumerator or <code>null</code>.
 	 * @generated
 	 */
 	public static ContractType get(String literal) {
@@ -134,6 +136,8 @@ public enum ContractType implements Enumerator {
 	 * Returns the '<em><b>Contract Type</b></em>' literal with the specified name.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @param name the name.
+	 * @return the matching enumerator or <code>null</code>.
 	 * @generated
 	 */
 	public static ContractType getByName(String name) {
@@ -150,6 +154,8 @@ public enum ContractType implements Enumerator {
 	 * Returns the '<em><b>Contract Type</b></em>' literal with the specified integer value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @param value the integer value.
+	 * @return the matching enumerator or <code>null</code>.
 	 * @generated
 	 */
 	public static ContractType get(int value) {

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.pricing.presentation.composites;
 
+import java.time.YearMonth;
 import java.util.Calendar;
 import java.util.Collection;
 
@@ -47,7 +48,6 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.joda.time.YearMonth;
 
 import com.mmxlabs.models.datetime.ui.formatters.YearMonthTextFormatter;
 import com.mmxlabs.models.lng.pricing.DataIndex;
@@ -303,7 +303,7 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 						// add a new Date with zero time
 						final Calendar cal = Calendar.getInstance();
 
-						final YearMonth mMonthYear = new YearMonth(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH));
+						final YearMonth mMonthYear = YearMonth.of(cal.get(Calendar.YEAR), 1 + cal.get(Calendar.MONTH));
 
 						newPoint.setDate(mMonthYear);
 

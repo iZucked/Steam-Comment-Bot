@@ -7,6 +7,9 @@
 package com.mmxlabs.models.lng.actuals.impl;
 
 import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
@@ -15,9 +18,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDateTime;
 
 import com.mmxlabs.models.lng.actuals.ActualsPackage;
 import com.mmxlabs.models.lng.actuals.PenaltyType;
@@ -32,6 +32,7 @@ import com.mmxlabs.models.lng.port.Route;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getSlot <em>Slot</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getCounterparty <em>Counterparty</em>}</li>
@@ -53,7 +54,6 @@ import com.mmxlabs.models.lng.port.Route;
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getPortCharges <em>Port Charges</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getCapacityCharges <em>Capacity Charges</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
@@ -502,10 +502,10 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * @generated NOT
 	 */
 	@Override
-	public DateTime getOperationsStartAsDateTime() {
+	public ZonedDateTime getOperationsStartAsDateTime() {
 		final LocalDateTime os = getOperationsStart();
 		if (os != null) {
-			return os.toDateTime(DateTimeZone.forID(getTimeZone(ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START)));
+			return os.atZone(ZoneId.of(getTimeZone(ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START)));
 		}
 		return null;
 	}
@@ -516,10 +516,10 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * @generated NOT
 	 */
 	@Override
-	public DateTime getOperationsEndAsDateTime() {
+	public ZonedDateTime getOperationsEndAsDateTime() {
 		final LocalDateTime os = getOperationsEnd();
 		if (os != null) {
-			return os.toDateTime(DateTimeZone.forID(getTimeZone(ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_END)));
+			return os.atZone(ZoneId.of(getTimeZone(ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_END)));
 		}
 		return null;
 	}

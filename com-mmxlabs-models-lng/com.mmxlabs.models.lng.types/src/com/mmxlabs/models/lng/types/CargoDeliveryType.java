@@ -112,6 +112,8 @@ public enum CargoDeliveryType implements Enumerator {
 	 * Returns the '<em><b>Cargo Delivery Type</b></em>' literal with the specified literal value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @param literal the literal.
+	 * @return the matching enumerator or <code>null</code>.
 	 * @generated
 	 */
 	public static CargoDeliveryType get(String literal) {
@@ -128,6 +130,8 @@ public enum CargoDeliveryType implements Enumerator {
 	 * Returns the '<em><b>Cargo Delivery Type</b></em>' literal with the specified name.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @param name the name.
+	 * @return the matching enumerator or <code>null</code>.
 	 * @generated
 	 */
 	public static CargoDeliveryType getByName(String name) {
@@ -144,6 +148,8 @@ public enum CargoDeliveryType implements Enumerator {
 	 * Returns the '<em><b>Cargo Delivery Type</b></em>' literal with the specified integer value.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @param value the integer value.
+	 * @return the matching enumerator or <code>null</code>.
 	 * @generated
 	 */
 	public static CargoDeliveryType get(int value) {

@@ -15,10 +15,10 @@ import com.mmxlabs.models.lng.types.APortSet;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.port.PortGroup#getContents <em>Contents</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.port.PortPackage#getPortGroup()
  * @model

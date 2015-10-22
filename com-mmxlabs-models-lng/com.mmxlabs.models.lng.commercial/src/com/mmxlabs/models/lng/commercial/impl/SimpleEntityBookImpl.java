@@ -15,8 +15,6 @@ import com.mmxlabs.models.lng.commercial.SimpleEntityBook;
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Simple Entity Book</b></em>'.
  * <!-- end-user-doc -->
- * <p>
- * </p>
  *
  * @generated
  */

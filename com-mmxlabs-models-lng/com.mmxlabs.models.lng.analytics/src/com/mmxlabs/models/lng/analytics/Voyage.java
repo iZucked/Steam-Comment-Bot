@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.port.Route;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.Voyage#getRoute <em>Route</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.Voyage#getRouteCost <em>Route Cost</em>}</li>
@@ -21,7 +22,6 @@ import com.mmxlabs.models.lng.port.Route;
  *   <li>{@link com.mmxlabs.models.lng.analytics.Voyage#getIdleTime <em>Idle Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.Voyage#getTravelTime <em>Travel Time</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getVoyage()
  * @model

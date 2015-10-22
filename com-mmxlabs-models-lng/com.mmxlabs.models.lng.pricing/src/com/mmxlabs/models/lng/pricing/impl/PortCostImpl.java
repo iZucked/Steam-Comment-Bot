@@ -30,12 +30,12 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PortCostImpl#getPorts <em>Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PortCostImpl#getEntries <em>Entries</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PortCostImpl#getReferenceCapacity <em>Reference Capacity</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

@@ -20,13 +20,13 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.RouteCostImpl#getRoute <em>Route</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.RouteCostImpl#getVesselClass <em>Vessel Class</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.RouteCostImpl#getLadenCost <em>Laden Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.RouteCostImpl#getBallastCost <em>Ballast Cost</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

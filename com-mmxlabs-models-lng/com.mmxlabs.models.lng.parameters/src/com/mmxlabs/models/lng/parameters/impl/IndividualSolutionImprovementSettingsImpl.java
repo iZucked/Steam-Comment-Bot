@@ -6,15 +6,13 @@
  */
 package com.mmxlabs.models.lng.parameters.impl;
 
-import com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings;
-import com.mmxlabs.models.lng.parameters.ParametersPackage;
-
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
+import com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings;
+import com.mmxlabs.models.lng.parameters.ParametersPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -22,11 +20,11 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.IndividualSolutionImprovementSettingsImpl#getIterations <em>Iterations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.IndividualSolutionImprovementSettingsImpl#isImprovingSolutions <em>Improving Solutions</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

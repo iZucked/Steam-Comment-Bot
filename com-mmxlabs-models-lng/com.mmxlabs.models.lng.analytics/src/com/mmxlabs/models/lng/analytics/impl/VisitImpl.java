@@ -16,10 +16,10 @@ import com.mmxlabs.models.lng.analytics.Visit;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.VisitImpl#getPortCost <em>Port Cost</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

@@ -19,11 +19,11 @@ import com.mmxlabs.models.lng.parameters.ParametersPackage;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.ArgumentImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.ArgumentImpl#getValue <em>Value</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

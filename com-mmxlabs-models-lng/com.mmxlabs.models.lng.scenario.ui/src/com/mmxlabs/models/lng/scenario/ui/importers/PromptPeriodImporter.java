@@ -5,13 +5,13 @@
 package com.mmxlabs.models.lng.scenario.ui.importers;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.joda.time.LocalDate;
 
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.common.csv.IFieldMap;

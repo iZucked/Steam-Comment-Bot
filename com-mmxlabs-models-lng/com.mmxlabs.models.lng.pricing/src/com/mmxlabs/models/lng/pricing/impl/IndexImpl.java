@@ -3,10 +3,11 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.impl;
+import java.time.YearMonth;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-import org.joda.time.YearMonth;
 
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -15,8 +16,6 @@ import com.mmxlabs.models.lng.pricing.PricingPackage;
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Index</b></em>'.
  * <!-- end-user-doc -->
- * <p>
- * </p>
  *
  * @generated
  */

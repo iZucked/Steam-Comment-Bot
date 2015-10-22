@@ -11,10 +11,10 @@ package com.mmxlabs.models.lng.pricing;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.CooldownPrice#isLumpsum <em>Lumpsum</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.pricing.PricingPackage#getCooldownPrice()
  * @model

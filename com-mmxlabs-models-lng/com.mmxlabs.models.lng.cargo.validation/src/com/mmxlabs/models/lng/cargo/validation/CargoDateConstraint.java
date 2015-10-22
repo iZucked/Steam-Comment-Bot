@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.cargo.validation;
 
 import static org.ops4j.peaberry.Peaberry.osgiModule;
 
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -16,8 +17,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.joda.time.DateTime;
-import org.joda.time.Hours;
 import org.ops4j.peaberry.Peaberry;
 import org.osgi.framework.FrameworkUtil;
 
@@ -271,8 +270,8 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 						final Port dischargePort = slot.getPort();
 						if ((loadPort != null) && (dischargePort != null)) {
 
-							final DateTime windowEndWithSlotOrPortTime = slot.getWindowEndWithSlotOrPortTime();
-							final DateTime windowStartWithSlotOrPortTime = prevSlot.getWindowStartWithSlotOrPortTime();
+							final ZonedDateTime windowEndWithSlotOrPortTime = slot.getWindowEndWithSlotOrPortTime();
+							final ZonedDateTime windowStartWithSlotOrPortTime = prevSlot.getWindowStartWithSlotOrPortTime();
 
 							if (windowEndWithSlotOrPortTime != null && windowStartWithSlotOrPortTime != null) {
 								final int availableTime = Hours.hoursBetween(windowStartWithSlotOrPortTime, windowEndWithSlotOrPortTime).getHours() - prevSlot.getSlotOrPortDuration();
@@ -329,8 +328,8 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	}
 
 	private Integer getLadenMaxWindow(Slot startSlot, Slot endSlot) {
-		final DateTime dateStart = startSlot.getWindowStartWithSlotOrPortTime();
-		final DateTime dateEnd = endSlot.getWindowEndWithSlotOrPortTime();
+		final ZonedDateTime dateStart = startSlot.getWindowStartWithSlotOrPortTime();
+		final ZonedDateTime dateEnd = endSlot.getWindowEndWithSlotOrPortTime();
 
 		if (dateStart != null && dateEnd != null) {
 			return Hours.hoursBetween(dateStart, dateEnd).getHours();

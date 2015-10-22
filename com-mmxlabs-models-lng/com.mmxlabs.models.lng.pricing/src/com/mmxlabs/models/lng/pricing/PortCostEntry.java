@@ -14,11 +14,11 @@ import com.mmxlabs.models.lng.types.PortCapability;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PortCostEntry#getActivity <em>Activity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PortCostEntry#getCost <em>Cost</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPortCostEntry()
  * @model

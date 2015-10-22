@@ -27,10 +27,10 @@ import com.mmxlabs.models.lng.types.VolumeUnits;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SpotLoadSlotImpl#getMarket <em>Market</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

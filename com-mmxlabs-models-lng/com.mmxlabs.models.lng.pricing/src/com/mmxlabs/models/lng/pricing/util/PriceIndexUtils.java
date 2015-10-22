@@ -4,12 +4,10 @@
  */
 package com.mmxlabs.models.lng.pricing.util;
 
+import java.time.YearMonth;
 import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
-
-import org.joda.time.Hours;
-import org.joda.time.YearMonth;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.series.SeriesParser;

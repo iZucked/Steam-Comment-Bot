@@ -4,6 +4,10 @@
  */
 package com.mmxlabs.models.lng.cargo.validation;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,11 +17,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.YearMonth;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -150,7 +149,7 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 			}
 
 			// earliest slot date
-			final DateTime portLocalDate = slot.getWindowStartWithSlotOrPortTime();
+			final ZonedDateTime portLocalDate = slot.getWindowStartWithSlotOrPortTime();
 			if (portLocalDate == null) {
 				return;
 			}
@@ -158,7 +157,7 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 			if (port == null) {
 				return;
 			}
-			final YearMonth utcDate = new YearMonth(portLocalDate.toLocalDate());
+			final YearMonth utcDate = YearMonth.of(portLocalDate.toLocalDate().getYear(), portLocalDate.toLocalDate().getMonthValue());
 
 			// check market indices
 			for (final CommodityIndex index : pricingModel.getCommodityIndices()) {
@@ -188,7 +187,7 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 			// check entity tax rates
 			if (entity != null && !curveCovers(portLocalDate.toLocalDate(), taxFinder, entity.getTradingBook().getTaxRates(), ctx)) {
 				final String format = "[Entity|'%s'] No tax data for %02d/%04d, the window start of slot '%s'.";
-				final String failureMessage = String.format(format, entity.getName(), utcDate.getMonthOfYear(), utcDate.getYear(), slot.getName());
+				final String failureMessage = String.format(format, entity.getName(), utcDate.getMonthValue(), utcDate.getYear(), slot.getName());
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.WARNING);
 				dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__WINDOW_START);
 				dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__CONTRACT);
@@ -223,7 +222,7 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 
 		// for (final Slot slot : cargo.getSlots()) {
 
-		// final DateTime date = slot.getWindowStartWithSlotOrPortTime();
+		// final ZonedDateTime date = slot.getWindowStartWithSlotOrPortTime();
 		// final BaseLegalEntity entity = commercialModel.getShippingEntity(); // get default shipping entity
 
 		// check entity tax rates

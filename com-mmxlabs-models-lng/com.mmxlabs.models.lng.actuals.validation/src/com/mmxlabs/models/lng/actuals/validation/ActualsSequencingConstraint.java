@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.actuals.validation;
 
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,9 +15,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDateTime;
-import org.joda.time.format.DateTimeFormat;
 
 import com.mmxlabs.models.lng.actuals.ActualsModel;
 import com.mmxlabs.models.lng.actuals.ActualsPackage;
@@ -132,7 +131,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 					if (va != null && currentElementHasActuals && loadActuals != null) {
 
 						final Port actualPort = loadActuals.getTitleTransferPoint();
-						final DateTime actualOperationsStart = loadActuals.getOperationsStartAsDateTime();
+						final ZonedDateTime actualOperationsStart = loadActuals.getOperationsStartAsDateTime();
 						if (actualOperationsStart != null) {
 							final Set<Port> startPorts = SetUtils.getObjects(va.getStartAt());
 							if (startPorts.isEmpty()) {

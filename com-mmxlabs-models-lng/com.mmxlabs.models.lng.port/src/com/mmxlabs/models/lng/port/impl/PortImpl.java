@@ -31,6 +31,7 @@ import com.mmxlabs.models.mmxcore.OtherNamesObject;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getOtherNames <em>Other Names</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getShortName <em>Short Name</em>}</li>
@@ -52,7 +53,6 @@ import com.mmxlabs.models.mmxcore.OtherNamesObject;
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getMinCvValue <em>Min Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getMaxCvValue <em>Max Cv Value</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

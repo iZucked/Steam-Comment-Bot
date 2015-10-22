@@ -12,13 +12,13 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.FuelCost#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.FuelCost#getUnit <em>Unit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.FuelCost#getQuantity <em>Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.FuelCost#getCost <em>Cost</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getFuelCost()
  * @model

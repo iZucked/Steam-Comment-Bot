@@ -25,12 +25,12 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.BaseLegalEntityImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.BaseLegalEntityImpl#getShippingBook <em>Shipping Book</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.BaseLegalEntityImpl#getTradingBook <em>Trading Book</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

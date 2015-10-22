@@ -13,10 +13,10 @@ import com.mmxlabs.models.lng.types.PortCapability;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.port.CapabilityGroup#getCapability <em>Capability</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.port.PortPackage#getCapabilityGroup()
  * @model

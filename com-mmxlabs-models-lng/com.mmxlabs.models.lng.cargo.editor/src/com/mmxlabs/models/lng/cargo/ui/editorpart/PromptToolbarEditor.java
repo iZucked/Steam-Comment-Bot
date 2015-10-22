@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
+
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.Notification;
@@ -24,7 +27,6 @@ import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
-import org.joda.time.LocalDate;
 
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -77,7 +79,7 @@ public class PromptToolbarEditor extends ControlContribution {
 
 					final LocalDate date = (LocalDate) newValue;
 					periodStartEditor.setYear(date.getYear());
-					periodStartEditor.setMonth(date.getMonthOfYear() - 1);
+					periodStartEditor.setMonth(date.getMonthValue() - 1);
 					periodStartEditor.setDay(date.getDayOfMonth());
 					periodStartEditor.setEnabled(true);
 				}
@@ -85,7 +87,7 @@ public class PromptToolbarEditor extends ControlContribution {
 				if (newValue != null) {
 					final LocalDate date = (LocalDate) newValue;
 					periodEndEditor.setYear(date.getYear());
-					periodEndEditor.setMonth(date.getMonthOfYear() - 1);
+					periodEndEditor.setMonth(date.getMonthValue() - 1);
 					periodEndEditor.setDay(date.getDayOfMonth());
 					periodEndEditor.setEnabled(true);
 				}
@@ -119,7 +121,7 @@ public class PromptToolbarEditor extends ControlContribution {
 			if (portfolioModel.isSetPromptPeriodStart()) {
 				final LocalDate date = portfolioModel.getPromptPeriodStart();
 				periodStartEditor.setYear(date.getYear());
-				periodStartEditor.setMonth(date.getMonthOfYear() - 1);
+				periodStartEditor.setMonth(date.getMonthValue() - 1);
 				periodStartEditor.setDay(date.getDayOfMonth());
 			} else {
 				setDefaultPromptCommand
@@ -152,7 +154,7 @@ public class PromptToolbarEditor extends ControlContribution {
 			if (portfolioModel.isSetPromptPeriodEnd()) {
 				final LocalDate date = portfolioModel.getPromptPeriodEnd();
 				periodEndEditor.setYear(date.getYear());
-				periodEndEditor.setMonth(date.getMonthOfYear() - 1);
+				periodEndEditor.setMonth(date.getMonthValue() - 1);
 				periodEndEditor.setDay(date.getDayOfMonth());
 				// periodEndEnabled.setSelection(true);
 			} else {

@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.parameters.SimilarityInterval;
 import com.mmxlabs.models.lng.parameters.SimilaritySettings;
@@ -22,13 +23,13 @@ import com.mmxlabs.models.lng.parameters.SimilaritySettings;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.SimilaritySettingsImpl#getLowInterval <em>Low Interval</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.SimilaritySettingsImpl#getMedInterval <em>Med Interval</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.SimilaritySettingsImpl#getHighInterval <em>High Interval</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.SimilaritySettingsImpl#getOutOfBoundsWeight <em>Out Of Bounds Weight</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

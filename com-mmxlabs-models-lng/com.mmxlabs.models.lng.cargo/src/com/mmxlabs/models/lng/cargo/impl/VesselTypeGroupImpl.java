@@ -32,10 +32,10 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselTypeGroupImpl#getVesselType <em>Vessel Type</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

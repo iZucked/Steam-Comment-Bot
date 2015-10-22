@@ -4,12 +4,11 @@
  */
 package com.mmxlabs.models.lng.commercial.parseutils;
 
+import java.time.YearMonth;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.joda.time.DateTime;
-import org.joda.time.YearMonth;
 
 import com.mmxlabs.common.parser.ExpressionParser;
 import com.mmxlabs.common.parser.IExpression;
@@ -292,8 +291,8 @@ public class Exposures {
 					// Unknown slot type!
 					throw new IllegalStateException("Unsupported slot type");
 				}
-				final DateTime date = slotAllocation.getSlotVisit().getStart();
-				result.plusEquals(new YearMonth(date), exposure);
+				final ZonedDateTime date = slotAllocation.getSlotVisit().getStart();
+				result.plusEquals(YearMonth.of(date.getYear(), date.getMonthValue()), exposure);
 			}
 		}
 

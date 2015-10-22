@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.parameters.ParametersPackage;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.AnnealingSettingsImpl#getIterations <em>Iterations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.AnnealingSettingsImpl#getEpochLength <em>Epoch Length</em>}</li>
@@ -25,7 +26,6 @@ import com.mmxlabs.models.lng.parameters.ParametersPackage;
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.AnnealingSettingsImpl#isRestarting <em>Restarting</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.AnnealingSettingsImpl#getRestartIterationsThreshold <em>Restart Iterations Threshold</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

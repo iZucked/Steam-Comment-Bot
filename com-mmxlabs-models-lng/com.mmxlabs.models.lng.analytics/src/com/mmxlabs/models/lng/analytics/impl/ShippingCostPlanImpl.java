@@ -26,13 +26,13 @@ import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostPlanImpl#getVessel <em>Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostPlanImpl#getNotionalDayRate <em>Notional Day Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostPlanImpl#getBaseFuelPrice <em>Base Fuel Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostPlanImpl#getRows <em>Rows</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

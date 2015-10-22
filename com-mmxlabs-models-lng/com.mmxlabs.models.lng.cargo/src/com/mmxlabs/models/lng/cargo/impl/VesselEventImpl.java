@@ -7,6 +7,9 @@
 package com.mmxlabs.models.lng.cargo.impl;
 
 import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -16,9 +19,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDateTime;
 
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -39,6 +39,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselEventImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselEventImpl#getSequenceHint <em>Sequence Hint</em>}</li>
@@ -51,7 +52,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselEventImpl#getStartAfter <em>Start After</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselEventImpl#getStartBy <em>Start By</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
@@ -485,10 +485,10 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public DateTime getStartByAsDateTime() {
+	public ZonedDateTime getStartByAsDateTime() {
 		final LocalDateTime ldt = getStartBy();
 		if (ldt != null) {
-			return ldt.toDateTime(DateTimeZone.forID(getTimeZone(CargoPackage.Literals.VESSEL_EVENT__START_BY)));
+			return ldt.atZone(ZoneId.of(getTimeZone(CargoPackage.Literals.VESSEL_EVENT__START_BY)));
 		}
 		return null;
 	}
@@ -498,10 +498,10 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public DateTime getStartAfterAsDateTime() {
+	public ZonedDateTime getStartAfterAsDateTime() {
 		final LocalDateTime ldt = getStartAfter();
 		if (ldt != null) {
-			return ldt.toDateTime(DateTimeZone.forID(getTimeZone(CargoPackage.Literals.VESSEL_EVENT__START_AFTER)));
+			return ldt.atZone(ZoneId.of(getTimeZone(CargoPackage.Literals.VESSEL_EVENT__START_AFTER)));
 		}
 		return null;
 	}

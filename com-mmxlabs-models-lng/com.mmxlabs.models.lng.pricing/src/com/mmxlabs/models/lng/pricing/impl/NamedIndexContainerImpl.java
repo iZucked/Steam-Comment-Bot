@@ -25,12 +25,12 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.NamedIndexContainerImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.NamedIndexContainerImpl#getData <em>Data</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.NamedIndexContainerImpl#getUnits <em>Units</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

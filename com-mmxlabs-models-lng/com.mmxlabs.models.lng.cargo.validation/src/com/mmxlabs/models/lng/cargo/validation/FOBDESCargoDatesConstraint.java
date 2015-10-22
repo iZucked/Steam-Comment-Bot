@@ -4,12 +4,13 @@
  */
 package com.mmxlabs.models.lng.cargo.validation;
 
+import java.time.ZonedDateTime;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.joda.time.DateTime;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -83,7 +84,7 @@ public class FOBDESCargoDatesConstraint extends AbstractModelConstraint {
 		return ctx.createSuccessStatus();
 	}
 
-	private boolean checkDates(final DateTime loadWindowStart, final DateTime loadWindowEnd, final DateTime dischargeWindowStart, final DateTime dischargeWindowEnd) {
+	private boolean checkDates(final ZonedDateTime loadWindowStart, final ZonedDateTime loadWindowEnd, final ZonedDateTime dischargeWindowStart, final ZonedDateTime dischargeWindowEnd) {
 
 		if (loadWindowStart == null || loadWindowEnd == null || dischargeWindowStart == null || dischargeWindowEnd == null) {
 			return false;

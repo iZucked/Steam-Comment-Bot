@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.schedule.provider;
 
 
+import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -14,7 +15,6 @@ import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.joda.time.DateTime;
 
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -256,7 +256,7 @@ public class EventItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		DateTime labelValue = ((Event)object).getStart();
+		ZonedDateTime labelValue = ((Event)object).getStart();
 		String label = labelValue == null ? null : labelValue.toString();
 		return label == null || label.length() == 0 ?
 			getString("_UI_Event_type") :

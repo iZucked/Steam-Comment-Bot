@@ -15,8 +15,6 @@ import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Maintenance Event</b></em>'.
  * <!-- end-user-doc -->
- * <p>
- * </p>
  *
  * @generated
  */

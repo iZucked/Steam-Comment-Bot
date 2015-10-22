@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.assignment.validation;
 
+import java.time.ZonedDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,7 +13,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.joda.time.DateTime;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
@@ -56,8 +56,8 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 			for (final CollectedAssignment collectedAssignment : collectAssignments) {
 				AssignableElement prevAssignment = null;
 				for (final AssignableElement assignment : collectedAssignment.getAssignedObjects()) {
-					final DateTime left = getEndDate(prevAssignment);
-					final DateTime right = getStartDate(assignment);
+					final ZonedDateTime left = getEndDate(prevAssignment);
+					final ZonedDateTime right = getStartDate(assignment);
 
 					if (left != null && right != null) {
 						if (left.isAfter(right)) {
@@ -107,7 +107,7 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 		}
 	}
 
-	private DateTime getStartDate(final AssignableElement uuidObject) {
+	private ZonedDateTime getStartDate(final AssignableElement uuidObject) {
 		if (uuidObject instanceof Cargo) {
 			final Cargo cargo = (Cargo) uuidObject;
 			final EList<Slot> sortedSlots = cargo.getSortedSlots();
@@ -123,7 +123,7 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 		return null;
 	}
 
-	private DateTime getEndDate(final AssignableElement uuidObject) {
+	private ZonedDateTime getEndDate(final AssignableElement uuidObject) {
 		if (uuidObject instanceof Cargo) {
 			final Cargo cargo = (Cargo) uuidObject;
 			final EList<Slot> sortedSlots = cargo.getSortedSlots();
@@ -131,7 +131,7 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 			if (slot instanceof SpotSlot) {
 				return null;
 			}
-			final DateTime windowStartWithSlotOrPortTime = slot.getWindowStartWithSlotOrPortTime();
+			final ZonedDateTime windowStartWithSlotOrPortTime = slot.getWindowStartWithSlotOrPortTime();
 			if (windowStartWithSlotOrPortTime != null) {
 				return windowStartWithSlotOrPortTime.plusHours(slot.getSlotOrPortDuration());
 			}

@@ -19,6 +19,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getFromPorts <em>From Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getToPorts <em>To Ports</em>}</li>
@@ -40,7 +41,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getLadenTimeAllowance <em>Laden Time Allowance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getBallastTimeAllowance <em>Ballast Time Allowance</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getUnitCostMatrix()
  * @model

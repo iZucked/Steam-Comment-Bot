@@ -20,10 +20,10 @@ import com.mmxlabs.models.lng.cargo.EndHeelOptions;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.EndHeelOptionsImpl#getTargetEndHeel <em>Target End Heel</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

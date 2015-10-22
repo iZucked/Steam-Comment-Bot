@@ -14,11 +14,11 @@ import com.mmxlabs.models.lng.port.Port;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.Journey#getFrom <em>From</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.Journey#getTo <em>To</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getJourney()
  * @model

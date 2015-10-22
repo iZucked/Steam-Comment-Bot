@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.analytics;
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
 
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.port.Port;
@@ -16,13 +16,13 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getPort <em>Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getContract <em>Contract</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getDate <em>Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getPriceExpression <em>Price Expression</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getBuyOpportunity()
  * @model

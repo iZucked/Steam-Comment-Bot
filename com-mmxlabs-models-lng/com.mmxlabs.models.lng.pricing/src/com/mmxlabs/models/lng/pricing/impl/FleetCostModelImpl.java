@@ -23,10 +23,10 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.FleetCostModelImpl#getBaseFuelPrices <em>Base Fuel Prices</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

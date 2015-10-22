@@ -4,19 +4,20 @@
  */
 package com.mmxlabs.models.lng.pricing.validation;
 
+import java.time.YearMonth;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.joda.time.YearMonth;
 
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 
 public class SensibleIndexDateConstraint extends AbstractModelConstraint {
-	private final YearMonth earliestDate = new YearMonth(2000, 1);
+	private final YearMonth earliestDate = YearMonth.of(2000, 1);
 
 	@Override
 	public IStatus validate(final IValidationContext ctx) {

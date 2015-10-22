@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.pricing.validation.utils;
 
+import java.time.YearMonth;
 import java.util.EmptyStackException;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -16,7 +17,6 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.NonNull;
-import org.joda.time.YearMonth;
 
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;

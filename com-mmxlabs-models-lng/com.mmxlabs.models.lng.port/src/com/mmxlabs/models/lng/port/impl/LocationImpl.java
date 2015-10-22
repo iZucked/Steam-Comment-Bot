@@ -17,12 +17,12 @@ import com.mmxlabs.models.lng.port.PortPackage;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.LocationImpl#getCountry <em>Country</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.LocationImpl#getLat <em>Lat</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.LocationImpl#getLon <em>Lon</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

@@ -18,11 +18,11 @@ import com.mmxlabs.models.lng.types.PortCapability;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PortCostEntryImpl#getActivity <em>Activity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PortCostEntryImpl#getCost <em>Cost</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

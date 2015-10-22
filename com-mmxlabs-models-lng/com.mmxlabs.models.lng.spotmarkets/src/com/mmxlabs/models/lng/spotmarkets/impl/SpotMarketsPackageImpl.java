@@ -869,26 +869,26 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * @generated
 	 */
 	protected void createNumberFormatAnnotations() {
-		String source = "http://www.mmxlabs.com/models/ui/numberFormat";		
+		String source = "http://www.mmxlabs.com/models/ui/numberFormat";	
 		addAnnotation
 		  (getSpotMarket_MinQuantity(), 
 		   source, 
 		   new String[] {
 			 "formatString", "#,###,##0"
-		   });		
+		   });	
 		addAnnotation
 		  (getSpotMarket_MaxQuantity(), 
 		   source, 
 		   new String[] {
 			 "formatString", "#,###,##0"
-		   });		
+		   });	
 		addAnnotation
 		  (getDESPurchaseMarket_Cv(), 
 		   source, 
 		   new String[] {
 			 "unit", "mmBtu/m\u00b3",
 			 "formatString", "#0.###"
-		   });		
+		   });	
 		addAnnotation
 		  (getFOBPurchasesMarket_Cv(), 
 		   source, 

@@ -14,10 +14,10 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselGroup#getVessels <em>Vessels</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselGroup()
  * @model

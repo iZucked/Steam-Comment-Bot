@@ -26,10 +26,10 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.BaseEntityBookImpl#getTaxRates <em>Tax Rates</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

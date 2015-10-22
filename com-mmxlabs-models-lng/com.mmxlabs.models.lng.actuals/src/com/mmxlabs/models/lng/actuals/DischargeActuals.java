@@ -13,12 +13,12 @@ package com.mmxlabs.models.lng.actuals;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.actuals.DischargeActuals#getDeliveryType <em>Delivery Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.DischargeActuals#getEndHeelM3 <em>End Heel M3</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.DischargeActuals#getEndHeelMMBTu <em>End Heel MMB Tu</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getDischargeActuals()
  * @model

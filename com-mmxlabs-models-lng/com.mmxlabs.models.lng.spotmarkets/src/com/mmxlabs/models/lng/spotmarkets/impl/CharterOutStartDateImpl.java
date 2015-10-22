@@ -6,11 +6,12 @@
  */
 package com.mmxlabs.models.lng.spotmarkets.impl;
 
+import java.time.LocalDate;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-import org.joda.time.LocalDate;
 
 import com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
@@ -21,10 +22,10 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterOutStartDateImpl#getCharterOutStartDate <em>Charter Out Start Date</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

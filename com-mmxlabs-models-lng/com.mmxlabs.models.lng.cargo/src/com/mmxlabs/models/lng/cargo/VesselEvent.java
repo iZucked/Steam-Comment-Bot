@@ -6,9 +6,10 @@
  */
 package com.mmxlabs.models.lng.cargo;
 
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+
 import org.eclipse.emf.common.util.EList;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDateTime;
 
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
@@ -24,6 +25,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselEvent#getDurationInDays <em>Duration In Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselEvent#getAllowedVessels <em>Allowed Vessels</em>}</li>
@@ -31,7 +33,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselEvent#getStartAfter <em>Start After</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselEvent#getStartBy <em>Start By</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselEvent()
  * @model abstract="true"
@@ -165,7 +166,7 @@ public interface VesselEvent extends UUIDObject, NamedObject, ITimezoneProvider,
 	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
 	 * @generated
 	 */
-	DateTime getStartByAsDateTime();
+	ZonedDateTime getStartByAsDateTime();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -173,6 +174,6 @@ public interface VesselEvent extends UUIDObject, NamedObject, ITimezoneProvider,
 	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
 	 * @generated
 	 */
-	DateTime getStartAfterAsDateTime();
+	ZonedDateTime getStartAfterAsDateTime();
 
 } // VesselEvent

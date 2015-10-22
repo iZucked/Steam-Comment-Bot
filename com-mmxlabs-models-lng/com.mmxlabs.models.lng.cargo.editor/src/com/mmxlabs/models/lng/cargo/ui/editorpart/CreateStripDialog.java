@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -61,9 +63,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.joda.time.Days;
-import org.joda.time.DurationFieldType;
-import org.joda.time.LocalDate;
+
 import com.mmxlabs.common.PairKeyedMap;
 import com.mmxlabs.models.datetime.ui.formatters.LocalDateTextFormatter;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -560,8 +560,8 @@ public class CreateStripDialog extends FormDialog {
 		} else {
 			localDate = new LocalDate();
 		}
-		pattern_periodStart.setDate(localDate.getYear(), 1 + localDate.getMonthOfYear(), localDate.getDayOfMonth());
-		pattern_periodEnd.setDate(localDate.getYear(), 1 + localDate.getMonthOfYear(), localDate.getDayOfMonth());
+		pattern_periodStart.setDate(localDate.getYear(), 1 + localDate.getMonthValue(), localDate.getDayOfMonth());
+		pattern_periodEnd.setDate(localDate.getYear(), 1 + localDate.getMonthValue(), localDate.getDayOfMonth());
 
 		// Hook up refresh handlers
 		final EContentAdapter changedAdapter = new EContentAdapter() {
@@ -599,7 +599,7 @@ public class CreateStripDialog extends FormDialog {
 			// Only valid for slots
 			if (sample.eIsSet(CargoPackage.eINSTANCE.getSlot_WindowStart())) {
 				final LocalDate date = (LocalDate) sample.eGet(CargoPackage.eINSTANCE.getSlot_WindowStart());
-				pattern_periodStart.setDate(date.getYear(), date.getMonthOfYear() - 1, date.getDayOfMonth());
+				pattern_periodStart.setDate(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth());
 			}
 		}
 		// Generate the dates
@@ -679,8 +679,8 @@ public class CreateStripDialog extends FormDialog {
 		int pricingMonthDiff = 0;
 		final LocalDate pricingDate = (LocalDate) sample.eGet(CargoPackage.eINSTANCE.getSlot_PricingDate());
 		if (sample.eIsSet(CargoPackage.eINSTANCE.getSlot_PricingDate())) {
-			final int sampleKey = sampleDate.getYear() * 100 + sampleDate.getMonthOfYear();
-			final int pricingKey = pricingDate.getYear() * 100 + pricingDate.getMonthOfYear();
+			final int sampleKey = sampleDate.getYear() * 100 + sampleDate.getMonthValue();
+			final int pricingKey = pricingDate.getYear() * 100 + pricingDate.getMonthValue();
 			pricingMonthDiff = pricingKey - sampleKey;
 		}
 
@@ -957,7 +957,7 @@ public class CreateStripDialog extends FormDialog {
 		}
 	}
 
-	private LocalDate getLocalDateFromDateTimeWidget(final DateTime dateTime) {
-		return new LocalDate(dateTime.getYear(), 1 + dateTime.getMonth(), dateTime.getDay());
+	private LocalDate getLocalDateFromDateTimeWidget(final ZonedDateTime dateTime) {
+		return LocalDate.of(dateTime.getYear(), 1 + dateTime.getMonthValue(), dateTime.getDayOfMonth());
 	}
 }

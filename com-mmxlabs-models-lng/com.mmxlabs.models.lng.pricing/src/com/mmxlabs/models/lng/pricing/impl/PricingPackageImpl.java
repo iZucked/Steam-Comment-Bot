@@ -1002,7 +1002,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		g2 = createEGenericType(namedIndexContainerEClass_Value);
 		g1.getETypeArguments().add(g2);
 		initEReference(getNamedIndexContainer_Data(), g1, null, "data", null, 1, 1, NamedIndexContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getNamedIndexContainer_Units(), ecorePackage.getEString(), "units", null, 1, 1, NamedIndexContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getNamedIndexContainer_Units(), ecorePackage.getEString(), "units", null, 0, 1, NamedIndexContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(portsPriceMapEClass, PortsPriceMap.class, "PortsPriceMap", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		g1 = createEGenericType(theTypesPackage.getAPortSet());
@@ -1049,28 +1049,28 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	protected void createNumberFormatAnnotations() {
-		String source = "http://www.mmxlabs.com/models/ui/numberFormat";		
+		String source = "http://www.mmxlabs.com/models/ui/numberFormat";	
 		addAnnotation
 		  (getRouteCost_LadenCost(), 
 		   source, 
 		   new String[] {
 			 "unitPrefix", "$",
 			 "formatString", "##,###,##0"
-		   });		
+		   });	
 		addAnnotation
 		  (getRouteCost_BallastCost(), 
 		   source, 
 		   new String[] {
 			 "unitPrefix", "$",
 			 "formatString", "##,###,##0"
-		   });			
+		   });	
 		addAnnotation
 		  (getPortCost_ReferenceCapacity(), 
 		   source, 
 		   new String[] {
 			 "unit", "m\u00b3",
 			 "formatString", "#,###,##0"
-		   });		
+		   });	
 		addAnnotation
 		  (getPortCostEntry_Cost(), 
 		   source, 

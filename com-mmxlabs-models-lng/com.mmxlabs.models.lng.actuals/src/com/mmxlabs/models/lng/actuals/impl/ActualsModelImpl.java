@@ -26,10 +26,10 @@ import com.mmxlabs.models.lng.actuals.CargoActuals;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.ActualsModelImpl#getCargoActuals <em>Cargo Actuals</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

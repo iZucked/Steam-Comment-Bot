@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.cargo.util;
 
 import java.util.Collection;
+
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.cargo.LoadSlot;

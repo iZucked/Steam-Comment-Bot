@@ -17,12 +17,12 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl#getMinCvValue <em>Min Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl#getMaxCvValue <em>Max Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl#getPurchaseDeliveryType <em>Purchase Delivery Type</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

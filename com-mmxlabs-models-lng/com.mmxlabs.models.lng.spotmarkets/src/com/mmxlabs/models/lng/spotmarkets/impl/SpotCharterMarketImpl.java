@@ -22,11 +22,11 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotCharterMarketImpl#isEnabled <em>Enabled</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotCharterMarketImpl#getVesselClass <em>Vessel Class</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

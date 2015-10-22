@@ -17,12 +17,12 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.HeelOptionsImpl#getVolumeAvailable <em>Volume Available</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.HeelOptionsImpl#getCvValue <em>Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.HeelOptionsImpl#getPricePerMMBTU <em>Price Per MMBTU</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

@@ -15,13 +15,13 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.port.RouteLine#getFrom <em>From</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.RouteLine#getTo <em>To</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.RouteLine#getDistance <em>Distance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.RouteLine#getVias <em>Vias</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.port.PortPackage#getRouteLine()
  * @model

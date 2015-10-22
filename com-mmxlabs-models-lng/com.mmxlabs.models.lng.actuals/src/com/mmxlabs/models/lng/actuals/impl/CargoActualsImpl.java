@@ -31,6 +31,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.CargoActualsImpl#getActuals <em>Actuals</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.CargoActualsImpl#getReturnActuals <em>Return Actuals</em>}</li>
@@ -46,7 +47,6 @@ import com.mmxlabs.models.lng.fleet.Vessel;
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.CargoActualsImpl#getBaseFuelPrice <em>Base Fuel Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.CargoActualsImpl#getInsurancePremium <em>Insurance Premium</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

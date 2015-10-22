@@ -17,11 +17,11 @@ import com.mmxlabs.models.lng.fleet.FuelConsumption;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FuelConsumptionImpl#getSpeed <em>Speed</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FuelConsumptionImpl#getConsumption <em>Consumption</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

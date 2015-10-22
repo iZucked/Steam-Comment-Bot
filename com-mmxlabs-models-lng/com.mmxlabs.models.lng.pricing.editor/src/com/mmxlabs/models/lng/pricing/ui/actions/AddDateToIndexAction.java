@@ -5,12 +5,12 @@
 package com.mmxlabs.models.lng.pricing.ui.actions;
 
 import java.text.ParseException;
+import java.time.YearMonth;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
-import org.joda.time.YearMonth;
 
 import com.mmxlabs.models.datetime.importers.YearMonthAttributeImporter;
 import com.mmxlabs.models.lng.pricing.ui.editorpart.IndexPane;

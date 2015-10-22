@@ -19,6 +19,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassRouteParametersImpl#getRoute <em>Route</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassRouteParametersImpl#getExtraTransitTime <em>Extra Transit Time</em>}</li>
@@ -27,7 +28,6 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassRouteParametersImpl#getBallastConsumptionRate <em>Ballast Consumption Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassRouteParametersImpl#getBallastNBORate <em>Ballast NBO Rate</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

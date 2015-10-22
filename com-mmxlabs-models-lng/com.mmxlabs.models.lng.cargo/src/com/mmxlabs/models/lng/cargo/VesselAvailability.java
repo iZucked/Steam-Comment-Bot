@@ -6,9 +6,10 @@
  */
 package com.mmxlabs.models.lng.cargo;
 
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+
 import org.eclipse.emf.common.util.EList;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDateTime;
 
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.fleet.HeelOptions;
@@ -25,6 +26,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getVessel <em>Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEntity <em>Entity</em>}</li>
@@ -38,7 +40,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getStartHeel <em>Start Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEndHeel <em>End Heel</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability()
  * @model
@@ -427,7 +428,7 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
 	 * @generated
 	 */
-	DateTime getStartByAsDateTime();
+	ZonedDateTime getStartByAsDateTime();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -435,7 +436,7 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
 	 * @generated
 	 */
-	DateTime getStartAfterAsDateTime();
+	ZonedDateTime getStartAfterAsDateTime();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -443,7 +444,7 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
 	 * @generated
 	 */
-	DateTime getEndByAsDateTime();
+	ZonedDateTime getEndByAsDateTime();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -451,7 +452,7 @@ public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	 * @model kind="operation" dataType="com.mmxlabs.models.datetime.DateTime"
 	 * @generated
 	 */
-	DateTime getEndAfterAsDateTime();
+	ZonedDateTime getEndAfterAsDateTime();
 
 	/**
 	 * Returns the value of the '<em><b>Entity</b></em>' reference.
