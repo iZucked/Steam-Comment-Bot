@@ -403,7 +403,7 @@ public abstract class AbstractVerticalReportVisualiser {
 			return null;
 		}
 		if (datesAreUTCEquivalent()) {
-			return dateTime.withZoneSameLocal(ZoneId.of("UTC")).toLocalDate();
+			return dateTime.withZoneSameInstant(ZoneId.of("UTC")).toLocalDate();
 		}
 		return dateTime.toLocalDate();
 	}
@@ -413,7 +413,7 @@ public abstract class AbstractVerticalReportVisualiser {
 			return null;
 		}
 		if (datesAreUTCEquivalent()) {
-			return dateTime.withZoneSameLocal(ZoneId.of("UTC")).toLocalDateTime();
+			return dateTime.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime();
 		}
 		return dateTime.toLocalDateTime();
 	}
