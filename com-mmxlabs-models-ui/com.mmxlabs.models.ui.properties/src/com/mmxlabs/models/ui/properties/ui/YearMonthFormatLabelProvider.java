@@ -4,10 +4,11 @@
  */
 package com.mmxlabs.models.ui.properties.ui;
 
+import java.time.YearMonth;
+
 import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.graphics.Image;
-import org.joda.time.YearMonth;
 
 public class YearMonthFormatLabelProvider extends BaseLabelProvider implements ILabelProvider {
 
@@ -20,7 +21,7 @@ public class YearMonthFormatLabelProvider extends BaseLabelProvider implements I
 	public String getText(final Object element) {
 		if (element instanceof YearMonth) {
 			final YearMonth yearMonth = (YearMonth) element;
-			return String.format("%02d/%02d", yearMonth.getMonthOfYear(), yearMonth.getYear());
+			return String.format("%02d/%02d", yearMonth.getMonthValue(), yearMonth.getYear());
 		} else {
 			throw new IllegalArgumentException("Can only format YearMonth s!");
 		}

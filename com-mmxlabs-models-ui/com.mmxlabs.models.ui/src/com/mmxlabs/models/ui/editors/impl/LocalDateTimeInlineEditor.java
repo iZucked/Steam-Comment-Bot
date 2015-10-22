@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.ui.editors.impl;
 
+import java.time.LocalDateTime;
+
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.nebula.widgets.formattedtext.DateTimeFormatter;
 import org.eclipse.nebula.widgets.formattedtext.FormattedText;
@@ -12,7 +14,6 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
-import org.joda.time.LocalDateTime;
 
 import com.mmxlabs.models.datetime.ui.formatters.LocalDateTimeTextFormatter;
 
@@ -39,7 +40,7 @@ public class LocalDateTimeInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected Object getInitialUnsetValue() {
-		return new LocalDateTime();
+		return LocalDateTime.now();
 	}
 
 	@Override

@@ -5,6 +5,9 @@
 package com.mmxlabs.models.util.importer.impl;
 
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.YearMonth;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
@@ -13,9 +16,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.joda.time.YearMonth;
 
 import com.mmxlabs.models.datetime.DateTimePackage;
 import com.mmxlabs.models.datetime.importers.LocalDateAttributeImporter;
@@ -183,7 +183,7 @@ public class DefaultAttributeImporter implements IAttributeImporter {
 			return new LocalDateTimeAttributeImporter().formatLocalDateTime((LocalDateTime) value);
 		}
 		if (dt == DateTimePackage.Literals.DATE_TIME) {
-			// return new DateTimeAttributeImporter().formatDateTime((DateTime) value);
+			// return new DateTimeAttributeImporter().formatDateTime((ZonedDateTime) value);
 		}
 		return null;
 	}

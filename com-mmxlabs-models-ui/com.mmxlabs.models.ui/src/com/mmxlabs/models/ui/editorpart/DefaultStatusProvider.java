@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
+
 import com.mmxlabs.models.ui.validation.IStatusProvider;
 
 /**

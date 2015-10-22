@@ -6,14 +6,13 @@
  */
 package com.mmxlabs.models.ui.properties.util;
 
-import com.mmxlabs.models.ui.properties.*;
-
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
-
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
 import org.eclipse.emf.ecore.EObject;
+
+import com.mmxlabs.models.ui.properties.DetailProperty;
+import com.mmxlabs.models.ui.properties.PropertiesPackage;
 
 /**
  * <!-- begin-user-doc -->

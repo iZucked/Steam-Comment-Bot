@@ -5,13 +5,13 @@
 package com.mmxlabs.models.ui.tabular.filter;
 
 import java.text.DateFormatSymbols;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
 
 import com.mmxlabs.common.Pair;
 
@@ -98,8 +98,8 @@ class Match implements IFilter {
 				}
 				return likeLowercaseString(renderedValue);
 			}
-			if (value instanceof DateTime) {
-				if (likeDateTime((DateTime) value)) {
+			if (value instanceof ZonedDateTime) {
+				if (likeDateTime((ZonedDateTime) value)) {
 					return true;
 				}
 				return likeLowercaseString(renderedValue);
@@ -181,13 +181,13 @@ class Match implements IFilter {
 		return false;
 	}
 
-	private boolean likeDateTime(@NonNull final DateTime calendar) {
+	private boolean likeDateTime(@NonNull final ZonedDateTime calendar) {
 		if (integerValue != null) {
 			final int i = integerValue;
-			return (calendar.getYear() == integerValue) || (calendar.getDayOfMonth() == i) || (calendar.getMonthOfYear() == i);
+			return (calendar.getYear() == integerValue) || (calendar.getDayOfMonth() == i) || (calendar.getMonthValue() == i);
 		}
 
-		if (likeLowercaseString(dateFormatSymbols.getMonths()[calendar.getMonthOfYear() - 1])) {
+		if (likeLowercaseString(dateFormatSymbols.getMonths()[calendar.getMonthValue() - 1])) {
 			return true;
 		}
 
@@ -197,10 +197,10 @@ class Match implements IFilter {
 	private boolean likeLocalDateTime(@NonNull final LocalDateTime calendar) {
 		if (integerValue != null) {
 			final int i = integerValue;
-			return (calendar.getYear() == integerValue) || (calendar.getDayOfMonth() == i) || (calendar.getMonthOfYear() == i);
+			return (calendar.getYear() == integerValue) || (calendar.getDayOfMonth() == i) || (calendar.getMonthValue() == i);
 		}
 
-		if (likeLowercaseString(dateFormatSymbols.getMonths()[calendar.getMonthOfYear() - 1])) {
+		if (likeLowercaseString(dateFormatSymbols.getMonths()[calendar.getMonthValue() - 1])) {
 			return true;
 		}
 
@@ -210,10 +210,10 @@ class Match implements IFilter {
 	private boolean likeLocalDate(@NonNull final LocalDate calendar) {
 		if (integerValue != null) {
 			final int i = integerValue;
-			return (calendar.getYear() == integerValue) || (calendar.getDayOfMonth() == i) || (calendar.getMonthOfYear() == i);
+			return (calendar.getYear() == integerValue) || (calendar.getDayOfMonth() == i) || (calendar.getMonthValue() == i);
 		}
 
-		if (likeLowercaseString(dateFormatSymbols.getMonths()[calendar.getMonthOfYear() - 1])) {
+		if (likeLowercaseString(dateFormatSymbols.getMonths()[calendar.getMonthValue() - 1])) {
 			return true;
 		}
 

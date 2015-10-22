@@ -7,9 +7,7 @@
 package com.mmxlabs.models.ui.properties;
 
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EObject;
-
 import org.eclipse.jface.viewers.ILabelProvider;
 
 /**
