@@ -4,8 +4,9 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests.evaluation;
 
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDateTime;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -717,7 +718,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// add a charter out event prior to the first cargo.
-		final LocalDateTime startLoad = msc.getFirstAppointment().getSecond().withZone(DateTimeZone.forID(msc.originPort.getTimeZone())).toLocalDateTime();
+		final LocalDateTime startLoad = msc.getFirstAppointment().getSecond().withZone(ZoneId.of(msc.originPort.getTimeZone())).toLocalDateTime();
 		final LocalDateTime charterStartByDate = startLoad.minusHours(25);
 		final LocalDateTime charterStartAfterDate = startLoad.minusHours(25);
 		int charterOutRate = 24;

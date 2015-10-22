@@ -4,11 +4,13 @@
  */
 package com.mmxlabs.models.lng.transformer.util;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.HashSet;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.joda.time.DateTime;
+import org.eclipse.swt.widgets.DateTime;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -18,6 +20,8 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 
 public class LNGScenarioUtils {
+	
+	public static final ZonedDateTime EarliestDate = ZonedDateTime.of(1970, 1, 1, 0, 0, 0, 0, ZoneId.of("UTC"));
 
 	/**
 	 * Find the earliest and latest times set by events in the model. This takes into account:
@@ -28,12 +32,12 @@ public class LNGScenarioUtils {
 	 * <li>Vessel availability dates</li>
 	 * </ul>
 	 */
-	public static Pair<DateTime, DateTime> findEarliestAndLatestTimes(@NonNull final LNGScenarioModel rootObject) {
-		DateTime earliestTime = null;
-		DateTime latestTime = null;
+	public static Pair<ZonedDateTime, ZonedDateTime> findEarliestAndLatestTimes(@NonNull final LNGScenarioModel rootObject) {
+		ZonedDateTime earliestTime = null;
+		ZonedDateTime latestTime = null;
 		final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
 
-		final HashSet<DateTime> allDates = new HashSet<>();
+		final HashSet<ZonedDateTime> allDates = new HashSet<>();
 
 		for (final VesselEvent event : cargoModel.getVesselEvents()) {
 			allDates.add(event.getStartByAsDateTime());
@@ -59,11 +63,11 @@ public class LNGScenarioUtils {
 			allDates.add(s.getWindowEndWithSlotOrPortTimeWithFlex());
 		}
 
-		earliestTime = allDates.isEmpty() ? new DateTime(0) : Collections.min(allDates);
+		earliestTime = allDates.isEmpty() ? EarliestDate : Collections.min(allDates);
 //		 round down earliest time
 //		earliestTime = DateAndCurveHelper.roundTimeDown(earliestTime);
-		latestTime = allDates.isEmpty() ? new DateTime(0) : Collections.max(allDates);
-		return new Pair<DateTime, DateTime>(earliestTime, latestTime);
+		latestTime = allDates.isEmpty() ? EarliestDate : Collections.max(allDates);
+		return new Pair<ZonedDateTime, ZonedDateTime>(earliestTime, latestTime);
 	}
 
 }

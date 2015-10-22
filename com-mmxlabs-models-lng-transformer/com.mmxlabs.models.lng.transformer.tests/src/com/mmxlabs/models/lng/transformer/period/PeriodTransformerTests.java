@@ -4,21 +4,20 @@
  */
 package com.mmxlabs.models.lng.transformer.period;
 
+import java.time.YearMonth;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.YearMonth;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -1978,7 +1977,7 @@ public class PeriodTransformerTests {
 			Assert.assertTrue(availability.getCurve().getPoints().size() > 0);
 			for (IndexPoint<Integer> point : availability.getCurve().getPoints()) {
 				YearMonth date = point.getDate();
-				DateTime dateAsDateTime = date.toLocalDate(1).toDateTimeAtStartOfDay(DateTimeZone.UTC);
+				ZonedDateTime dateAsDateTime = date.toLocalDate(1).toDateTimeAtStartOfDay(ZoneId.of("UTC"));
 				Assert.assertTrue(dateAsDateTime.isAfter(periodRecord.lowerCutoff));
 				Assert.assertTrue(dateAsDateTime.isBefore(periodRecord.upperBoundary));
 			}

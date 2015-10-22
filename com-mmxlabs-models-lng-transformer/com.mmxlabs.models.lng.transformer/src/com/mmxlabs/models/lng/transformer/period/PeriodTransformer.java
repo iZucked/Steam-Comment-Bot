@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.models.lng.transformer.period;
 
+import java.time.YearMonth;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -16,7 +19,6 @@ import java.util.Set;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
@@ -26,10 +28,7 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.jdt.annotation.Nullable;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
-import org.joda.time.YearMonth;
+import org.eclipse.swt.widgets.DateTime;
 import org.ops4j.peaberry.Peaberry;
 import org.ops4j.peaberry.util.TypeLiterals;
 import org.osgi.framework.FrameworkUtil;
@@ -165,12 +164,12 @@ public class PeriodTransformer {
 
 		// Get dates with flex
 		if (startDate != null) {
-			periodRecord.lowerBoundary = startDate.toLocalDate(1).toDateTimeAtStartOfDay(DateTimeZone.UTC);
+			periodRecord.lowerBoundary = startDate.toLocalDate(1).toDateTimeAtStartOfDay(ZoneId.of("UTC"));
 			periodRecord.lowerCutoff = periodRecord.lowerBoundary.minusMonths(boundaryFlexInMonths);
 		}
 
 		if (endDate != null) {
-			periodRecord.upperBoundary = endDate.toLocalDate(1).toDateTimeAtStartOfDay(DateTimeZone.UTC);
+			periodRecord.upperBoundary = endDate.toLocalDate(1).toDateTimeAtStartOfDay(ZoneId.of("UTC"));
 			periodRecord.upperCutoff = periodRecord.upperBoundary.plusMonths(boundaryFlexInMonths);
 		}
 
@@ -493,9 +492,9 @@ public class PeriodTransformer {
 			if (cargoSlotAllocation != null) {
 				slot.setWindowSize(0);
 				slot.setWindowFlex(0);
-				final DateTime localStart = cargoSlotAllocation.getSlotVisit().getStart();
+				final ZonedDateTime localStart = cargoSlotAllocation.getSlotVisit().getStart();
 				slot.setWindowStart(localStart.toLocalDate());
-				slot.setWindowStartTime(localStart.getHourOfDay());
+				slot.setWindowStartTime(localStart.getHour());
 			}
 		}
 		cargo.setAllowRewiring(false);
@@ -523,9 +522,9 @@ public class PeriodTransformer {
 		if (cargoSlotAllocation != null) {
 			slot.setWindowSize(0);
 			slot.setWindowFlex(0);
-			final DateTime localStart = cargoSlotAllocation.getSlotVisit().getStart();
+			final ZonedDateTime localStart = cargoSlotAllocation.getSlotVisit().getStart();
 			slot.setWindowStart(localStart.toLocalDate());
-			slot.setWindowStartTime(localStart.getHourOfDay());
+			slot.setWindowStartTime(localStart.getHour());
 			slot.getAllowedVessels().clear();
 			final VesselAssignmentType vat = slot.getCargo().getVesselAssignmentType();
 			if (vat instanceof VesselAvailability) {
@@ -745,14 +744,14 @@ public class PeriodTransformer {
 				vesselAvailability.getStartAt().add(portVisit.getPort());
 			}
 
-			vesselAvailability.setStartAfter(portVisit.getStart().withZone(DateTimeZone.UTC).toLocalDateTime());
-			vesselAvailability.setStartBy(portVisit.getStart().withZone(DateTimeZone.UTC).toLocalDateTime());
+			vesselAvailability.setStartAfter(portVisit.getStart().withZone(ZoneId.of("UTC")).toLocalDateTime());
+			vesselAvailability.setStartBy(portVisit.getStart().withZone(ZoneId.of("UTC")).toLocalDateTime());
 
 			// Check end after bounds. Do they still apply?
 			// TODO: Add this to unit tests
 			if (vesselAvailability.isSetEndAfter()) {
 				if (vesselAvailability.getEndAfterAsDateTime().isBefore(portVisit.getStart())) {
-					vesselAvailability.setEndAfter(portVisit.getStart().withZone(DateTimeZone.UTC).toLocalDateTime());
+					vesselAvailability.setEndAfter(portVisit.getStart().withZone(ZoneId.of("UTC")).toLocalDateTime());
 				}
 			}
 
@@ -776,8 +775,8 @@ public class PeriodTransformer {
 			vesselAvailability.getEndAt().clear();
 			vesselAvailability.getEndAt().add(portVisit.getPort());
 
-			vesselAvailability.setEndAfter(portVisit.getStart().withZone(DateTimeZone.UTC).toLocalDateTime());
-			vesselAvailability.setEndBy(portVisit.getStart().withZone(DateTimeZone.UTC).toLocalDateTime());
+			vesselAvailability.setEndAfter(portVisit.getStart().withZone(ZoneId.of("UTC")).toLocalDateTime());
+			vesselAvailability.setEndBy(portVisit.getStart().withZone(ZoneId.of("UTC")).toLocalDateTime());
 			if (vesselAvailability.getEndHeel() == null) {
 				vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
 			}
@@ -819,8 +818,8 @@ public class PeriodTransformer {
 			vesselAvailability.getStartAt().clear();
 			vesselAvailability.getStartAt().add(portVisit.getPort());
 
-			vesselAvailability.setStartAfter(portVisit.getStart().withZone(DateTimeZone.UTC).toLocalDateTime());
-			vesselAvailability.setStartBy(portVisit.getStart().withZone(DateTimeZone.UTC).toLocalDateTime());
+			vesselAvailability.setStartAfter(portVisit.getStart().withZone(ZoneId.of("UTC")).toLocalDateTime());
+			vesselAvailability.setStartBy(portVisit.getStart().withZone(ZoneId.of("UTC")).toLocalDateTime());
 
 			// Check end after bounds. Do they still apply?
 			// TODO: Add this to unit tests
@@ -847,8 +846,8 @@ public class PeriodTransformer {
 			vesselAvailability.getEndAt().clear();
 			vesselAvailability.getEndAt().add(portVisit.getPort());
 
-			vesselAvailability.setEndAfter(portVisit.getStart().withZone(DateTimeZone.UTC).toLocalDateTime());
-			vesselAvailability.setEndBy(portVisit.getStart().withZone(DateTimeZone.UTC).toLocalDateTime());
+			vesselAvailability.setEndAfter(portVisit.getStart().withZone(ZoneId.of("UTC")).toLocalDateTime());
+			vesselAvailability.setEndBy(portVisit.getStart().withZone(ZoneId.of("UTC")).toLocalDateTime());
 
 			// Set must arrive cold with target heel volume
 			final int heel = portVisit.getHeelAtStart();
@@ -868,10 +867,10 @@ public class PeriodTransformer {
 
 	public void trimSpotMarketCurves(final EditingDomain internalDomain, final PeriodRecord periodRecord, final LNGScenarioModel scenario) {
 		final SpotMarketsModel spotMarketsModel = scenario.getSpotMarketsModel();
-		DateTime earliestDate = periodRecord.lowerBoundary;
-		DateTime latestDate = periodRecord.upperBoundary;
+		ZonedDateTime earliestDate = periodRecord.lowerBoundary;
+		ZonedDateTime latestDate = periodRecord.upperBoundary;
 		if (periodRecord.lowerBoundary == null || periodRecord.upperBoundary == null) {
-			final Pair<DateTime, DateTime> earliestAndLatestTimes = LNGScenarioUtils.findEarliestAndLatestTimes(scenario);
+			final Pair<ZonedDateTime, ZonedDateTime> earliestAndLatestTimes = LNGScenarioUtils.findEarliestAndLatestTimes(scenario);
 			if (periodRecord.lowerBoundary == null) {
 				earliestDate = earliestAndLatestTimes.getFirst();
 			}
@@ -885,7 +884,7 @@ public class PeriodTransformer {
 		trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getFobSalesSpotMarket(), earliestDate, latestDate);
 	}
 
-	public void trimSpotMarketCurves(final EditingDomain internalDomain, final PeriodRecord periodRecord, final SpotMarketGroup spotMarketGroup, final DateTime earliestDate, final DateTime latestDate) {
+	public void trimSpotMarketCurves(final EditingDomain internalDomain, final PeriodRecord periodRecord, final SpotMarketGroup spotMarketGroup, final ZonedDateTime earliestDate, final ZonedDateTime latestDate) {
 		if (spotMarketGroup != null) {
 			if (spotMarketGroup == null) {
 				return;
@@ -906,7 +905,7 @@ public class PeriodTransformer {
 				final List<IndexPoint<Integer>> pointsToRemove = new LinkedList<>();
 				for (final IndexPoint<Integer> value : curve.getPoints()) {
 					final YearMonth date = value.getDate();
-					final DateTime dateAsDateTime = date.toLocalDate(1).toDateTimeAtStartOfDay(DateTimeZone.UTC);
+					final ZonedDateTime dateAsDateTime = date.toLocalDate(1).toDateTimeAtStartOfDay(ZoneId.of("UTC"));
 					if (date.isBefore(getDateFromStartOfMonth(earliestDate))) {
 						// remove
 						pointsToRemove.add(value);
@@ -926,10 +925,10 @@ public class PeriodTransformer {
 				// Fill in curve gaps with the original constant value.
 				if (constantValue != 0) {
 					YearMonth cal = getDateFromStartOfMonth(earliestDate);
-					while (cal.toLocalDate(1).toDateTimeAtStartOfDay(DateTimeZone.UTC).isBefore(latestDate)) {
+					while (cal.atDay(1).atStartOfDay(ZoneId.of("UTC")).isBefore(latestDate)) {
 						if (!seenDates.contains(cal)) {
 							final IndexPoint<Integer> newValue = PricingFactory.eINSTANCE.createIndexPoint();
-							newValue.setDate(new YearMonth(cal));
+							newValue.setDate(cal);
 							newValue.setValue(constantValue);
 							// Add
 							curve.getPoints().add(newValue);
@@ -944,8 +943,8 @@ public class PeriodTransformer {
 		}
 	}
 
-	private YearMonth getDateFromStartOfMonth(final DateTime date) {
-		return new YearMonth(date);
+	private YearMonth getDateFromStartOfMonth(final ZonedDateTime date) {
+		return YearMonth.of(date.getYear(), date.getMonthValue());
 	}
 
 }

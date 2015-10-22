@@ -4,7 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests.evaluation;
 
-import org.joda.time.LocalDateTime;
+import java.time.LocalDateTime;
+
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;

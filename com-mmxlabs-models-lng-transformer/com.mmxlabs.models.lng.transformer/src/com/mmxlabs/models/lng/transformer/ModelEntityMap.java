@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -15,8 +17,7 @@ import javax.inject.Inject;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
+import org.eclipse.swt.widgets.DateTime;
 
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
@@ -106,10 +107,10 @@ public class ModelEntityMap {
 
 	@SuppressWarnings("null")
 	@NonNull
-	public DateTime getDateFromHours(final int hours, final String tz) {
+	public ZonedDateTime getDateFromHours(final int hours, final String tz) {
 		final String timeZone = (tz == null) ? "UTC" : tz;
 		final int offsetMinutes = DateAndCurveHelper.getOffsetInMinutesFromTimeZone(timeZone);
-		return new DateTime(dateHelper.getEarliestTime()).withZone(DateTimeZone.forID(timeZone)).plusHours(hours).plusMinutes(offsetMinutes);
+		return new ZonedDateTime(dateHelper.getEarliestTime()).withZone(ZoneId.of(timeZone)).plusHours(hours).plusMinutes(offsetMinutes);
 	}
 
 	/**
@@ -120,7 +121,7 @@ public class ModelEntityMap {
 	 * @return
 	 */
 	@NonNull
-	public DateTime getDateFromHours(final int hours, @Nullable final IPort port) {
+	public ZonedDateTime getDateFromHours(final int hours, @Nullable final IPort port) {
 		if (port == null) {
 			return getDateFromHours(hours, "UTC");
 		}
@@ -135,7 +136,7 @@ public class ModelEntityMap {
 	 * @return
 	 */
 	@NonNull
-	public DateTime getDateFromHours(final int hours, @Nullable final Port port) {
+	public ZonedDateTime getDateFromHours(final int hours, @Nullable final Port port) {
 		if (port == null) {
 			return getDateFromHours(hours, "UTC");
 		}

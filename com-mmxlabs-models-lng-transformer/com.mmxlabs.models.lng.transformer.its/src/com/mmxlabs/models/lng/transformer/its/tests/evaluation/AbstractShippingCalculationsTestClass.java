@@ -12,8 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.AssertionFailedError;
-
 import org.eclipse.emf.common.util.EList;
 import org.junit.Assert;
 
@@ -40,6 +38,8 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+
+import junit.framework.AssertionFailedError;
 
 public class AbstractShippingCalculationsTestClass {
 

@@ -4,9 +4,10 @@
  */
 package com.mmxlabs.models.lng.transformer.period;
 
+import java.time.ZonedDateTime;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.joda.time.DateTime;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -49,10 +50,10 @@ public class InclusionChecker {
 	 * 
 	 */
 	public static class PeriodRecord {
-		public DateTime lowerCutoff;
-		public DateTime lowerBoundary;
-		public DateTime upperBoundary;
-		public DateTime upperCutoff;
+		public ZonedDateTime lowerCutoff;
+		public ZonedDateTime lowerBoundary;
+		public ZonedDateTime upperBoundary;
+		public ZonedDateTime upperCutoff;
 	}
 
 	public Pair<InclusionType, Position> getObjectInclusionType(final EObject object, final PeriodRecord periodRecord) {
@@ -119,7 +120,7 @@ public class InclusionChecker {
 				}
 			}
 			if (periodRecord.lowerCutoff != null) {
-				DateTime cal = event.getStartAfterAsDateTime().plusDays(event.getDurationInDays());
+				ZonedDateTime cal = event.getStartAfterAsDateTime().plusDays(event.getDurationInDays());
 				if (cal.isBefore(periodRecord.lowerCutoff)) {
 					return new Pair<>(InclusionType.Out, Position.Before);
 				}

@@ -4,16 +4,16 @@
  */
 package com.mmxlabs.models.lng.transformer.util;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.TimeZone;
 
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.Hours;
-import org.joda.time.LocalDate;
-import org.joda.time.YearMonth;
+import org.eclipse.swt.widgets.DateTime;
 
 import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
@@ -36,10 +36,10 @@ import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
 public class DateAndCurveHelper {
 
 	@NonNull
-	private final DateTime earliestTime;
+	private final ZonedDateTime earliestTime;
 
 	@NonNull
-	private final DateTime latestTime;
+	private final ZonedDateTime latestTime;
 
 	@SuppressWarnings("null")
 	@Inject
@@ -48,9 +48,9 @@ public class DateAndCurveHelper {
 	}
 
 	@SuppressWarnings("null")
-	public DateAndCurveHelper(@NonNull final DateTime earliest, @NonNull final DateTime latest) {
+	public DateAndCurveHelper(@NonNull final ZonedDateTime earliest, @NonNull final ZonedDateTime latest) {
 
-		this.earliestTime = earliest.withZone(DateTimeZone.UTC).withMinuteOfHour(0);
+		this.earliestTime = earliest.withZone(ZoneId.of("UTC")).withMinuteOfHour(0);
 		assert !earliestTime.isAfter(earliest);
 		this.latestTime = latest;
 	}
@@ -62,18 +62,18 @@ public class DateAndCurveHelper {
 	 * @param windowStart
 	 * @return number of hours between earliest and windowStart
 	 */
-	public int convertTime(@NonNull final DateTime earliest, @NonNull final DateTime windowStart) {
+	public int convertTime(@NonNull final ZonedDateTime earliest, @NonNull final ZonedDateTime windowStart) {
 		return Hours.hoursBetween(earliest, windowStart).getHours();
 	}
 
-	public int convertTime(@NonNull final DateTime earliest, @NonNull final YearMonth windowStart) {
+	public int convertTime(@NonNull final ZonedDateTime earliest, @NonNull final YearMonth windowStart) {
 		return convertTime(earliest, yearMonthToDateTime(windowStart));
 	}
 
 	@SuppressWarnings("null")
 	@NonNull
-	protected DateTime yearMonthToDateTime(@NonNull final YearMonth windowStart) {
-		return windowStart.toLocalDate(1).toDateTimeAtStartOfDay(DateTimeZone.UTC);
+	protected ZonedDateTime yearMonthToDateTime(@NonNull final YearMonth windowStart) {
+		return windowStart.toLocalDate(1).toDateTimeAtStartOfDay(ZoneId.of("UTC"));
 	}
 
 	public StepwiseIntegerCurve createCurveForDoubleIndex(final Index<Double> index, final double scale) {
@@ -178,21 +178,21 @@ public class DateAndCurveHelper {
 
 	@SuppressWarnings("null")
 	public int convertTime(@NonNull final LocalDate time) {
-		return convertTime(time.toDateTimeAtStartOfDay(DateTimeZone.UTC));
+		return convertTime(time.toDateTimeAtStartOfDay(ZoneId.of("UTC")));
 	}
 
-	public int convertTime(@NonNull final DateTime startTime) {
+	public int convertTime(@NonNull final ZonedDateTime startTime) {
 		assert earliestTime != null;
 		return convertTime(earliestTime, startTime);
 	}
 
 	@NonNull
-	public DateTime getEarliestTime() {
+	public ZonedDateTime getEarliestTime() {
 		return earliestTime;
 	}
 
 	@NonNull
-	public DateTime getLatestTime() {
+	public ZonedDateTime getLatestTime() {
 		return latestTime;
 	}
 
@@ -230,15 +230,15 @@ public class DateAndCurveHelper {
 	 * @param date
 	 * @return
 	 */
-	public static int getHourRoundingRemainder(@NonNull final DateTime date) {
-		return date.withZone(DateTimeZone.UTC).getMinuteOfHour();
+	public static int getHourRoundingRemainder(@NonNull final ZonedDateTime date) {
+		return date.withZone(ZoneId.of("UTC")).getMinuteOfHour();
 	}
 
-	public static DateTime createDate(final int year, final int month, final int dayOfMonth, final int hourOfDay, final String newTimeZone) {
-		return new DateTime(year, month, dayOfMonth, hourOfDay, 0, DateTimeZone.forID(newTimeZone));
+	public static ZonedDateTime createDate(final int year, final int month, final int dayOfMonth, final int hourOfDay, final String newTimeZone) {
+		return ZonedDateTime.of(year, month, dayOfMonth, hourOfDay, 0, ZoneId.of(newTimeZone));
 	}
 
 	public static YearMonth createYearMonth(final int year, final int month) {
-		return new YearMonth(year, month);
+		return YearMonth.of(year, month);
 	}
 }

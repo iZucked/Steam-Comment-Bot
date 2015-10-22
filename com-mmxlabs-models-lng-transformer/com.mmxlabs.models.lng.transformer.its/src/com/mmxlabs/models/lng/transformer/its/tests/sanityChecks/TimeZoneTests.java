@@ -4,8 +4,10 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests.sanityChecks;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+
+import org.eclipse.swt.widgets.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,7 +42,7 @@ public class TimeZoneTests {
 				setJulyEarliestTime();
 		}
 		for (int i = 0; i < 24; i++) {
-			DateTime dateToTest = createDate(year, month, day, i, timeZone);
+			ZonedDateTime dateToTest = createDate(year, month, day, i, timeZone);
 			testDate(dateToTest, timeZone);
 		}
 	}
@@ -49,19 +51,19 @@ public class TimeZoneTests {
 		testTimeZone(year, month, day, timeZone, isJanEarliestTime, false);
 	}
 
-	public static DateTime createDate(int year, int month, int day, int hour, String timeZone) {
-		return new DateTime(year, 1 + month, day, hour, 0, DateTimeZone.forID(timeZone));
+	public static ZonedDateTime createDate(int year, int month, int day, int hour, String timeZone) {
+		return ZonedDateTime.of(year, 1 + month, day, hour, 0, 0, 0, ZoneId.of(timeZone));
 	}
 
-	public void testDate(DateTime dateToTest, String timeZone) {
+	public void testDate(ZonedDateTime dateToTest, String timeZone) {
 		int dhToInt = dateHelper.convertTime(dateToTest);
-		DateTime intToDate = modelEntityMap.getDateFromHours(dhToInt, timeZone);
+		ZonedDateTime intToDate = modelEntityMap.getDateFromHours(dhToInt, timeZone);
 		System.out.println(String.format("In: %s Out: %s", dateToTest, intToDate));
 		Assert.assertEquals(dateToTest, intToDate);
 	}
 
 	private void setJanuaryEarliestTime(String timeZone) {
-		DateTime jan = createDate(2014, 0, 10, 0, timeZone);
+		ZonedDateTime jan = createDate(2014, 0, 10, 0, timeZone);
 		setEarliestTime(jan);
 	}
 
@@ -70,7 +72,7 @@ public class TimeZoneTests {
 	}
 
 	private void setJulyEarliestTime(String timeZone) {
-		DateTime jul = createDate(2013, 6, 10, 0, timeZone);
+		ZonedDateTime jul = createDate(2013, 6, 10, 0, timeZone);
 		setEarliestTime(jul);
 	}
 
@@ -86,7 +88,7 @@ public class TimeZoneTests {
 		setJulyEarliestTime("Asia/Calcutta");
 	}
 
-	private void setEarliestTime(final DateTime earliestTime) {
+	private void setEarliestTime(final ZonedDateTime earliestTime) {
 		dateHelper = new DateAndCurveHelper(earliestTime, earliestTime.plusYears(2));
 		modelEntityMap = new ModelEntityMap(dateHelper);
 	}

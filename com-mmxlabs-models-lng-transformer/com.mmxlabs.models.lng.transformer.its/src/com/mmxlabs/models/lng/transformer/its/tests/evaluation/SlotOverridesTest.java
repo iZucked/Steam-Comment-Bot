@@ -9,8 +9,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-import org.junit.Assert;
 import org.eclipse.emf.ecore.EObject;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

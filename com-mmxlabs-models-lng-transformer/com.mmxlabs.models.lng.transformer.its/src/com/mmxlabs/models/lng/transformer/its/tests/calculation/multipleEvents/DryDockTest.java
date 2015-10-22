@@ -4,9 +4,9 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests.calculation.multipleEvents;
 
+import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 
-import org.joda.time.LocalDateTime;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -75,7 +75,7 @@ public class DryDockTest {
 		final int dryDockDurationDays = 10;
 		// final float cvValue = 1;
 
-		final LocalDateTime startFirstDryDock = new LocalDateTime();
+		final LocalDateTime startFirstDryDock = LocalDateTime.now();
 		final LocalDateTime endFirstDryDock = startFirstDryDock.plusDays(dryDockDurationDays);
 		final LocalDateTime startSecondDryDock = endFirstDryDock.plusHours(legDurationHours);
 		final LocalDateTime endSecondDryDock = startSecondDryDock.plusDays(dryDockDurationDays);

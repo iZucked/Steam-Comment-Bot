@@ -6,9 +6,9 @@ package com.mmxlabs.models.lng.transformer.its.tests.sanityChecks;
 
 import java.io.IOException;
 
-import org.junit.Assert;
 import org.eclipse.emf.ecore.change.ChangeDescription;
 import org.eclipse.emf.ecore.change.util.ChangeRecorder;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;

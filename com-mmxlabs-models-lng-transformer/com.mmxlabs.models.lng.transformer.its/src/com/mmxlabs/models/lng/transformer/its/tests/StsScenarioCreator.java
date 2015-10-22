@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests;
 
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -111,17 +111,17 @@ public class StsScenarioCreator extends DefaultScenarioCreator {
 		// setup transfer slots as sts
 		// loadTransferSlot.setTransferTo(dischargeTransferSlot);
 
-		final DateTime loadDate = loadCargo.getSlots().get(0).getWindowStartWithSlotOrPortTime();
-		final DateTime transferDate = loadCargo.getSlots().get(1).getWindowStartWithSlotOrPortTime();
+		final ZonedDateTime loadDate = loadCargo.getSlots().get(0).getWindowStartWithSlotOrPortTime();
+		final ZonedDateTime transferDate = loadCargo.getSlots().get(1).getWindowStartWithSlotOrPortTime();
 		// final Date dischargeDate = dischargeCargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
 
 		// vessel one will start before the load date and end before the discharge date
-		final DateTime preLoadDate = loadDate.minusHours(2 * getTravelTime(originPort, loadPort, null, (int) maxSpeed));
+		final ZonedDateTime preLoadDate = loadDate.minusHours(2 * getTravelTime(originPort, loadPort, null, (int) maxSpeed));
 		// final Date preDischargeDate = addHours(dischargeDate, -2);
 		// fleetCreator.setAvailability(portfolioModel.getScenarioFleetModel(), vessels[0], originPort, preLoadDate, transferPort, preDischargeDate);
 
 		// vessel two will start after the load date and end after the discharge date
-		final DateTime postLoadDate = loadDate.plusHours(2);
+		final ZonedDateTime postLoadDate = loadDate.plusHours(2);
 		// final Date postDischargeDate = addHours(dischargeDate, 2 * getTravelTime(dischargePort, originPort, null, (int) maxSpeed));
 		// fleetCreator.setAvailability(portfolioModel.getScenarioFleetModel(), vessels[1], transferPort, postLoadDate, originPort, postDischargeDate);
 

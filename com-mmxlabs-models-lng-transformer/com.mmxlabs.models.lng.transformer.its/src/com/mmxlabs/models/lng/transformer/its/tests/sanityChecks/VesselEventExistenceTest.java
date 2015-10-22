@@ -4,8 +4,9 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests.sanityChecks;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import org.joda.time.LocalDateTime;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -63,7 +64,7 @@ public class VesselEventExistenceTest {
 		csc.addVesselSimple("classThree", numOfClassThree, 11, 12, 500000, 13, 15, 15, 0, true);
 
 		// add some VesselEvents, i.e. CharterOuts and DryDocks in a random-ish manner.
-		LocalDateTime start = new LocalDateTime();
+		LocalDateTime start = LocalDateTime.now();
 		for (final Port portA : ports) {
 			for (final Port portB : ports) {
 				if (!portA.equals(portB)) {
@@ -73,7 +74,7 @@ public class VesselEventExistenceTest {
 			}
 		}
 
-		start = new LocalDateTime();
+		start = LocalDateTime.now();
 		int charterOutDurationDays = 1;
 		for (final Port portA : ports) {
 			for (final Port portB : ports) {

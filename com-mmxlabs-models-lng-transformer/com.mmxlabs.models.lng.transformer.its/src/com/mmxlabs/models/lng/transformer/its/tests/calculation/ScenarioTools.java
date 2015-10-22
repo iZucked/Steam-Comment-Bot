@@ -6,6 +6,11 @@ package com.mmxlabs.models.lng.transformer.its.tests.calculation;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Map;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
@@ -20,11 +25,6 @@ import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.joda.time.YearMonth;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -378,7 +378,7 @@ public class ScenarioTools {
 		final DataIndex<Double> salesData = PricingFactory.eINSTANCE.createDataIndex();
 		sales.setName("Sales");
 		final IndexPoint<Double> pt = PricingFactory.eINSTANCE.createIndexPoint();
-		pt.setDate(new YearMonth(0));
+		pt.setDate(YearMonth.of(1970, 1));
 		pt.setValue(0.0);
 		salesData.getPoints().add(pt);
 		sales.setData(salesData);
@@ -415,24 +415,24 @@ public class ScenarioTools {
 
 		load.setCargoCV(cvValue);
 
-		final DateTime now = new LocalDate().toDateTimeAtStartOfDay(DateTimeZone.UTC);
+		final ZonedDateTime now = new LocalDate().toDateTimeAtStartOfDay(ZoneId.of("UTC"));
 
 		load.setWindowSize(0);
 		load.setDuration(0);
-		final DateTimeZone portAZone = DateTimeZone.forID(A.getTimeZone() == null || A.getTimeZone().isEmpty() ? "UTC" : A.getTimeZone());
+		final ZoneId portAZone = ZoneId.of(A.getTimeZone() == null || A.getTimeZone().isEmpty() ? "UTC" : A.getTimeZone());
 
-		final DateTimeZone portBZone = DateTimeZone.forID(B.getTimeZone() == null || B.getTimeZone().isEmpty() ? "UTC" : B.getTimeZone());
+		final ZoneId portBZone = ZoneId.of(B.getTimeZone() == null || B.getTimeZone().isEmpty() ? "UTC" : B.getTimeZone());
 
-		final DateTime loadDate = now.withZone(portAZone);
-		load.setWindowStartTime(loadDate.getHourOfDay());
+		final ZonedDateTime loadDate = now.withZone(portAZone);
+		load.setWindowStartTime(loadDate.getHour());
 		load.setWindowStart(loadDate.toLocalDate());
 
 		// System.err.println(load.getWindowStartWithSlotOrPortTime());
 		// System.err.println(now);
 
-		final DateTime dischargeDate = loadDate.withZone(portBZone).plusHours(travelTime);
+		final ZonedDateTime dischargeDate = loadDate.withZone(portBZone).plusHours(travelTime);
 
-		dis.setWindowStartTime(dischargeDate.getHourOfDay());
+		dis.setWindowStartTime(dischargeDate.getHour());
 		dis.setWindowStart(dischargeDate.toLocalDate());
 
 		dis.setWindowSize(0);
@@ -621,8 +621,8 @@ public class ScenarioTools {
 		final CommodityIndex sales = PricingFactory.eINSTANCE.createCommodityIndex();
 		final DataIndex<Double> salesData = PricingFactory.eINSTANCE.createDataIndex();
 		sales.setName("Sales");
+		pt.setDate(YearMonth.of(1970, 1));
 		final IndexPoint<Double> pt = PricingFactory.eINSTANCE.createIndexPoint();
-		pt.setDate(new YearMonth(0));
 		pt.setValue(0.0);
 		salesData.getPoints().add(pt);
 		sales.setData(salesData);
@@ -637,7 +637,7 @@ public class ScenarioTools {
 		commercialModel.getSalesContracts().add(sc);
 		commercialModel.getPurchaseContracts().add(pc);
 
-		final LocalDateTime startCharterOut = new LocalDateTime();
+		final LocalDateTime startCharterOut = LocalDateTime.now();
 		final LocalDateTime endCharterOut = startCharterOut.plusDays(charterOutTimeDays);
 		final LocalDateTime dryDockJourneyStartDate = endCharterOut.plusHours(travelTime);
 
@@ -937,7 +937,7 @@ public class ScenarioTools {
 		bfi.setData(indexData);
 		final IndexPoint<Double> point = PricingFactory.eINSTANCE.createIndexPoint();
 		point.setValue((double) price);
-		point.setDate(new YearMonth());
+		point.setDate(YearMonth.now());
 		indexData.getPoints().add(point);
 		bfc.setIndex(bfi);
 

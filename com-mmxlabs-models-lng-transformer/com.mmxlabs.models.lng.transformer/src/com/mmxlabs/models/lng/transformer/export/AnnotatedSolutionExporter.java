@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.export;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -16,7 +17,6 @@ import javax.inject.Inject;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jdt.annotation.NonNull;
-import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -479,11 +479,11 @@ public class AnnotatedSolutionExporter {
 			for (final Event event : eSequence.getEvents()) {
 				final Port port = event.getPort();
 				if (port != null) {
-					final DateTimeZone zone = DateTimeZone.forID(port.getTimeZone());
+					final ZoneId zone = ZoneId.of(port.getTimeZone());
 					event.setStart(event.getStart().withZone(zone));
 					if (event instanceof Journey) {
 						final Journey journey = (Journey) event;
-						final DateTimeZone eZone = DateTimeZone.forID(journey.getDestination().getTimeZone());
+						final ZoneId eZone = ZoneId.of(journey.getDestination().getTimeZone());
 						journey.setEnd(journey.getEnd().withZone(eZone));
 					} else {
 						event.setEnd(event.getEnd().withZone(zone));
