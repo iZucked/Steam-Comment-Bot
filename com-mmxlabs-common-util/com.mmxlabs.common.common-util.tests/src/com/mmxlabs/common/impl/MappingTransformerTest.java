@@ -7,7 +7,6 @@ package com.mmxlabs.common.impl;
 import java.util.Map;
 
 import org.junit.Assert;
-
 import org.junit.Test;
 
 import com.mmxlabs.common.CollectionsUtil;

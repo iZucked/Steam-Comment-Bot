@@ -5,7 +5,6 @@
 package com.mmxlabs.common.caches;
 
 import org.junit.Assert;
-
 import org.junit.Test;
 import org.mockito.Mockito;
 

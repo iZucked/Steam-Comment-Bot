@@ -5,7 +5,6 @@
 package com.mmxlabs.common.curves;
 
 import org.junit.Assert;
-
 import org.junit.Test;
 
 public class UnitCurveTest {
