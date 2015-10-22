@@ -7,14 +7,9 @@ package com.mmxlabs.optimiser.lso.impl;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
-import com.mmxlabs.optimiser.core.constraints.IReducingConstraintChecker;
-import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
-import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
-import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 
 public class ArbitraryStateLocalSearchOptimiser extends DefaultLocalSearchOptimiser {

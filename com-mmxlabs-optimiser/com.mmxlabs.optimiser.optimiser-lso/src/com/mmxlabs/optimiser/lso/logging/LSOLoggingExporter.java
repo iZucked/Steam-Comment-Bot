@@ -9,13 +9,13 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
