@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.components;
 
+import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
+
 /**
  * This interface defines a BaseFuel
  * 

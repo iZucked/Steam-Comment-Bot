@@ -5,8 +5,6 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import com.mmxlabs.common.Equality;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.FBOVoyagePlanChoice;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 
 /**

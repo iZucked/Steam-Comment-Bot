@@ -5,7 +5,6 @@
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
 import org.junit.Assert;
-
 import org.junit.Test;
 import org.mockito.Mockito;
 
