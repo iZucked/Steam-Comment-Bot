@@ -5,6 +5,7 @@
 package com.mmxlabs.license.features;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -54,7 +55,7 @@ public class LicenseFeatures {
 								if (expiryDate != null) {
 									try {
 										// Feature can expire, check the date string for now. If unable to parse the date, then treat it as expired.
-										final LocalDate date = DateTimeFormat.forPattern("yyyy-MM-dd").parseLocalDate(expiryDate);
+										final LocalDate date = LocalDate.parse(expiryDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 										final LocalDate now = LocalDate.now();
 										if (date != null && now != null) {
 											if (!now.isAfter(date)) {
