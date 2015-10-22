@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
@@ -65,6 +64,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.threeten.extra.Days;
 
 import com.mmxlabs.common.PairKeyedMap;
 import com.mmxlabs.models.datetime.ui.formatters.LocalDateTextFormatter;
@@ -621,10 +621,9 @@ public class CreateStripDialog extends FormDialog {
 		final LocalDate fromDate = getLocalDateFromDateTimeWidget(pattern_periodStart);
 
 		// ABS as sanity check...
-		final int diffInDays = (int) Duration.between(fromDate, toDate).toDays();
+		final int diffInDays = Days.between(fromDate, toDate).getAmount();
 
 		{
-
 			final int rtIdx = repeatType.getCombo().getSelectionIndex();
 			if (rtIdx < 0) {
 				return Collections.emptyList();
