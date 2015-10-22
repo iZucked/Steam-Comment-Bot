@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
+import org.threeten.extra.Days;
 
 import com.google.common.collect.Range;
 import com.mmxlabs.common.Pair;
@@ -69,7 +70,7 @@ public abstract class AbstractVerticalReportVisualiser {
 	}
 
 	public DateTimeFormatter createDateFormat() {
-		return DateTimeFormat.forPattern("dd/MMM/yy");
+		return DateTimeFormatter.ofPattern("dd/MMM/yy");
 	}
 
 	public Color getColorFor(final LocalDate date, final SlotVisit visit) {
@@ -145,7 +146,7 @@ public abstract class AbstractVerticalReportVisualiser {
 			final LocalDate eventStart = getLocalDateFor(event.getStart());
 
 			// how many days since the start of the event?
-			int days = Days.daysBetween(eventStart, date).getDays();
+			int days = Days.between(eventStart, date).getAmount();
 			days += 1;
 			return Integer.toString(days) + (days == 1 ? String.format(" (%.02f)", ((Journey) event).getSpeed()) : "");
 		}
@@ -402,7 +403,7 @@ public abstract class AbstractVerticalReportVisualiser {
 			return null;
 		}
 		if (datesAreUTCEquivalent()) {
-			return dateTime.withZone(ZoneId.of("UTC")).toLocalDate();
+			return dateTime.withZoneSameLocal(ZoneId.of("UTC")).toLocalDate();
 		}
 		return dateTime.toLocalDate();
 	}
@@ -412,7 +413,7 @@ public abstract class AbstractVerticalReportVisualiser {
 			return null;
 		}
 		if (datesAreUTCEquivalent()) {
-			return dateTime.withZone(ZoneId.of("UTC")).toLocalDateTime();
+			return dateTime.withZoneSameLocal(ZoneId.of("UTC")).toLocalDateTime();
 		}
 		return dateTime.toLocalDateTime();
 	}

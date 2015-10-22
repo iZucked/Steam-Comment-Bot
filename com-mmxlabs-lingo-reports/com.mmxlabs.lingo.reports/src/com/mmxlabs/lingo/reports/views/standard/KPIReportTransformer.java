@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.lingo.reports.views.standard;
 
+import java.time.Duration;
+import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.LinkedList;
 import java.util.List;
@@ -120,13 +122,13 @@ public class KPIReportTransformer {
 				if (evt instanceof SlotVisit) {
 					final SlotVisit visit = (SlotVisit) evt;
 					if (visit.getStart().isAfter(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime())) {
-						lateness += Hours.hoursBetween(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime(), visit.getStart()).getHours();
+						lateness += (int) Duration.between(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime(), visit.getStart()).toHours();
 					}
 
 				} else if (evt instanceof VesselEventVisit) {
 					final VesselEventVisit vev = (VesselEventVisit) evt;
 					if (vev.getStart().isAfter(vev.getVesselEvent().getStartByAsDateTime())) {
-						lateness += Hours.hoursBetween(vev.getVesselEvent().getStartByAsDateTime(), evt.getStart()).getHours();
+						lateness += (int) Duration.between(vev.getVesselEvent().getStartByAsDateTime(), evt.getStart()).toHours();
 
 					}
 				} else if (evt instanceof PortVisit) {
@@ -139,12 +141,12 @@ public class KPIReportTransformer {
 
 						final ZonedDateTime startBy = availability.getStartByAsDateTime();
 						if (startBy != null && visit.getStart().isAfter(startBy)) {
-							lateness += Hours.hoursBetween(startBy, visit.getStart()).getHours();
+							lateness += (int) Duration.between(startBy, visit.getStart()).toHours();
 						}
 					} else if (seq.getEvents().indexOf(visit) == seq.getEvents().size() - 1) {
 						final ZonedDateTime endBy = availability.getEndAfterAsDateTime();
 						if (endBy != null && visit.getStart().isAfter(endBy)) {
-							lateness += Hours.hoursBetween(endBy, visit.getStart()).getHours();
+							lateness += (int) Duration.between(endBy, visit.getStart()).toHours();
 						}
 					}
 				}

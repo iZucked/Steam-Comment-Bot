@@ -9,6 +9,8 @@ import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstant
 import static com.mmxlabs.lingo.reports.scheduleview.views.SchedulerViewConstants.Show_Canals;
 
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -203,7 +205,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 	}
 
 	private String dateToString(final ZonedDateTime date) {
-		return DateTimeFormat.shortDateTime().print(date);
+		return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).format(date);
 	}
 
 	@Override

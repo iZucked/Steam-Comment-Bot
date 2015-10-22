@@ -69,7 +69,7 @@ public class LocalDateColumnLabelProvider extends GridColumnLabelProvider {
 	public String getRowHeaderText(final Object element) {
 		final Pair<LocalDate, Integer> pair = castPair(element);
 		final LocalDate date = pair.getFirst();
-		return df.print(date);
+		return date.format(df);
 	}
 
 	@Override

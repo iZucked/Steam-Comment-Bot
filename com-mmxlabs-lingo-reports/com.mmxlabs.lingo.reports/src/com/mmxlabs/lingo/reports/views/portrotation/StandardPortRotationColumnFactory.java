@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.lingo.reports.views.portrotation;
 
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -149,7 +151,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.startdate":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Start Date", null, ColumnType.NORMAL,
-					new AsDateTimeFormatter(DateTimeFormat.shortDateTime(), true) {
+					new AsDateTimeFormatter(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT), true) {
 						@Override
 						public String render(Object o) {
 							return super.render(((Event) o).getStart());

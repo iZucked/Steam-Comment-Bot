@@ -10,7 +10,11 @@ import java.time.Year;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
+import java.util.Locale;
+import java.util.Locale.Category;
 import java.util.TimeZone;
+import java.util.spi.TimeZoneNameProvider;
 
 import org.eclipse.swt.widgets.DateTime;
 
@@ -30,21 +34,25 @@ public class AsDateTimeFormatter extends BaseFormatter {
 		}
 		final ZonedDateTime dateTime = getDateTime(object);
 		if (dateTime != null) {
-			return dateFormat.print(dateTime) + (showZone ? (" (" + dateTime.getZone().toTimeZone().getDisplayName(false, TimeZone.SHORT) + ")") : "");
+			if (showZone) {
+				return String.format("%s (%s)", dateTime.format(dateFormat), TimeZone.getTimeZone(dateTime.getZone()).getDisplayName(false, TimeZone.SHORT));
+			} else {
+				return dateTime.format(dateFormat);
+			}
 		}
 		return null;
 	}
 
 	protected ZonedDateTime getDateTime(final Object object) {
 		ZonedDateTime localDate = null;
-		if (object instanceof DateTime) {
+		if (object instanceof ZonedDateTime) {
 			localDate = (ZonedDateTime) object;
 		} else if (object instanceof LocalDate) {
 			final LocalDate dateTime = (LocalDate) object;
-			localDate = dateTime.toDateTimeAtStartOfDay(ZoneId.of("UTC"));
+			localDate = dateTime.atStartOfDay(ZoneId.of("UTC"));
 		} else if (object instanceof LocalDateTime) {
 			final LocalDateTime dateTime = (LocalDateTime) object;
-			localDate = dateTime.toDateTime(ZoneId.of("UTC"));
+			localDate = dateTime.atZone(ZoneId.of("UTC"));
 		}
 		return localDate;
 	}
@@ -53,7 +61,8 @@ public class AsDateTimeFormatter extends BaseFormatter {
 	public Comparable<?> getComparable(final Object object) {
 		final ZonedDateTime localDate = getDateTime(object);
 		if (localDate == null) {
-			FIXME localDate= ? LocalDate.of(Year.MIN_VALUE, 1, 1);
+			// FIXME localDate= ?
+			LocalDate.of(Year.MIN_VALUE, 1, 1);
 		}
 		return localDate;
 	}

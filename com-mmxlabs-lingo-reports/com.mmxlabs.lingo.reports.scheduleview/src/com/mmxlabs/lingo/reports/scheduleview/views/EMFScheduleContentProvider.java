@@ -8,6 +8,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.WeakHashMap;
 
@@ -102,7 +103,7 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 	public Calendar getElementStartTime(final Object element) {
 		if (element instanceof Event) {
 			final Event event = (Event) element;
-			return event.getStart().toGregorianCalendar();
+			return GregorianCalendar.from(event.getStart());
 		}
 		return null;
 	}
@@ -112,7 +113,7 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 		if (element instanceof Event) {
 			final Event event = (Event) element;
 
-			return event.getEnd().toGregorianCalendar();
+			return GregorianCalendar.from(event.getEnd());
 		}
 		return null;
 	}
@@ -125,7 +126,7 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 			if (slot != null) {
 				ZonedDateTime windowStartWithSlotOrPortTime = slot.getWindowStartWithSlotOrPortTime();
 				if (windowStartWithSlotOrPortTime != null) {
-					return windowStartWithSlotOrPortTime.toGregorianCalendar();
+					return GregorianCalendar.from(windowStartWithSlotOrPortTime);
 				}
 			}
 		}
@@ -141,7 +142,7 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 			if (slot != null) {
 				ZonedDateTime windowStartWithSlotOrPortTime = slot.getWindowStartWithSlotOrPortTime();
 				if (windowStartWithSlotOrPortTime != null) {
-					return windowStartWithSlotOrPortTime.toGregorianCalendar();
+					return GregorianCalendar.from(windowStartWithSlotOrPortTime);
 				}
 			}
 		}

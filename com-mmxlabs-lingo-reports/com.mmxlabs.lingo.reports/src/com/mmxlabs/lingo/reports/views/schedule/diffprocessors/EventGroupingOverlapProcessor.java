@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.lingo.reports.views.schedule.diffprocessors;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +13,7 @@ import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.swt.widgets.DateTime;
+import org.threeten.extra.Interval;
 
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
@@ -48,11 +50,11 @@ public class EventGroupingOverlapProcessor implements IDiffProcessor {
 			final Event firstEvent = events.get(0);
 			final Event lastEvent = events.get(events.size() - 1);
 
-			final ZonedDateTime start = ZonedDateTime.of(firstEvent.getStart());
+			final ZonedDateTime start = firstEvent.getStart();
 
-			final ZonedDateTime end = new ZonedDateTime(lastEvent.getEnd());
+			final ZonedDateTime end = lastEvent.getEnd();
 
-			final Interval referenceInterval = new Interval(start, end);
+			final Interval referenceInterval = Interval.of(Instant.from(start), Instant.from(end));
 
 			final Sequence referenceSequence = firstEvent.getSequence();
 
@@ -91,11 +93,11 @@ public class EventGroupingOverlapProcessor implements IDiffProcessor {
 					final Event firstEvent = events.get(0);
 					final Event lastEvent = events.get(events.size() - 1);
 
-					final ZonedDateTime start = new ZonedDateTime(firstEvent.getStart());
+					final ZonedDateTime start = firstEvent.getStart();
 
-					final ZonedDateTime end = new ZonedDateTime(lastEvent.getEnd());
+					final ZonedDateTime end = lastEvent.getEnd();
 
-					final Interval interval = new Interval(start, end);
+					final Interval interval = Interval.of(Instant.from(start), Instant.from(end));
 
 					bindEvent(referenceRow, referenceInterval, elementToRowMap, firstEvent, interval);
 				}
@@ -106,9 +108,11 @@ public class EventGroupingOverlapProcessor implements IDiffProcessor {
 	private void bindEvent(final Row referenceRow, final Interval referenceInterval, final Map<EObject, Row> elementToRowMap, final Event visit, final Interval interval) {
 
 		if (referenceInterval.overlaps(interval)) {
+			Instant s = referenceInterval.getStart().isBefore(interval.getStart()) ? interval.getStart() : referenceInterval.getStart();
+			Instant e = referenceInterval.getEnd().isBefore(interval.getEnd()) ? interval.getEnd() : referenceInterval.getEnd();
 
-			final int overlapHours = Hours.hoursIn(referenceInterval.overlap(interval)).getHours();
-			final int totalHours = Hours.hoursIn(interval).getHours();
+			final int overlapHours = (int) Duration.between(s, e).toHours();
+			final int totalHours = (int) Duration.between(interval.getStart(), interval.getEnd()).toHours();
 
 			final double ratio = (double) overlapHours / ((double) totalHours);
 
@@ -120,10 +124,10 @@ public class EventGroupingOverlapProcessor implements IDiffProcessor {
 					CycleGroupUtils.addToOrMergeUserGroup(referenceRow.getTable(), r, group);
 				}
 			} else {
-				final int overlapHours2 = Hours.hoursIn(referenceInterval.overlap(interval)).getHours();
-				final int totalHours2 = Hours.hoursIn(referenceInterval).getHours();
 
-				final double ratio2 = (double) overlapHours2 / ((double) totalHours2);
+				final int totalHours2 = (int) Duration.between(referenceInterval.getStart(), referenceInterval.getEnd()).toHours();
+
+				final double ratio2 = (double) overlapHours / ((double) totalHours2);
 
 				if (ratio2 > .7) {
 					final UserGroup group = CycleGroupUtils.createOrReturnUserGroup(referenceRow.getTable(), referenceRow);

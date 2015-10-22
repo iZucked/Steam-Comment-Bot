@@ -4,13 +4,16 @@
  */
 package com.mmxlabs.lingo.reports.properties;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.TimeZone;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
 
@@ -22,6 +25,8 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 public class ScheduledEventPropertySourceProvider implements IPropertySourceProvider {
 
 	static class SimpleLabelProvider extends ColumnLabelProvider {
+		final DateTimeFormatter df = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT);
+
 		public SimpleLabelProvider() {
 
 		}
@@ -34,14 +39,18 @@ public class ScheduledEventPropertySourceProvider implements IPropertySourceProv
 				return String.format("%.1f", element);
 			} else if (element instanceof Port) {
 				return ((Port) element).getName();
-			} else if (element instanceof ReadablePartial) {
-				final ReadablePartial readablePartial = (ReadablePartial) element;
-				final DateTimeFormatter df = DateTimeFormat.shortDateTime();
-				return df.print(readablePartial);
-			} else if (element instanceof DateTime) {
+			} else if (element instanceof ZonedDateTime) {
 				final ZonedDateTime dateTime = (ZonedDateTime) element;
-				final DateTimeFormatter df = DateTimeFormat.shortDateTime();
-				return df.print(dateTime) + " (" + dateTime.getZone().toTimeZone().getDisplayName(false, TimeZone.SHORT) + ")";
+				return String.format("%s (%s)", dateTime.format(df), TimeZone.getTimeZone(dateTime.getZone()).getDisplayName(false, TimeZone.SHORT));
+			} else if (element instanceof LocalDate) {
+				final LocalDate readablePartial = (LocalDate) element;
+				return readablePartial.format(df);
+			} else if (element instanceof LocalDateTime) {
+				final LocalDateTime readablePartial = (LocalDateTime) element;
+				return readablePartial.format(df);
+			} else if (element instanceof YearMonth) {
+				final YearMonth readablePartial = (YearMonth) element;
+				return readablePartial.format(df);
 			}
 			return super.getText(element);
 		}

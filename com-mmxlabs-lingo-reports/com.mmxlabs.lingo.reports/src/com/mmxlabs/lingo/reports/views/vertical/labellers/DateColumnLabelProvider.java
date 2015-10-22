@@ -28,6 +28,6 @@ public class DateColumnLabelProvider extends EventLabelProvider {
 
 	@Override
 	protected String getText(@NonNull final LocalDate date, @NonNull final Event event) {
-		return df.print(date);
+		return date.format(df);
 	}
 }

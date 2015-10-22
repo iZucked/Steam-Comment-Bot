@@ -111,8 +111,8 @@ public class CargoAllocationUtils {
 				} else {
 					first = false;
 				}
-				final DateTimeFormatter df = DateTimeFormat.forPattern("yyyy-MM");
-				sb.append(String.format("'%s-%s'", slot.getMarket().getName(), df.print(slot.getWindowStart())));
+				final DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM");
+				sb.append(String.format("'%s-%s'", slot.getMarket().getName(), slot.getWindowStart().format(df)));
 			} else if (sa.getSlot() instanceof DischargeSlot) {
 				if (!first) {
 					sb.append(" -- ");
@@ -146,8 +146,8 @@ public class CargoAllocationUtils {
 				} else {
 					first = false;
 				}
-				final DateTimeFormatter df = DateTimeFormat.forPattern("yyyy-MM");
-				sb.append(String.format("'%s-%s'", slot.getMarket().getName(), df.print(slot.getWindowStart())));
+				final DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM");
+				sb.append(String.format("'%s-%s'", slot.getMarket().getName(), slot.getWindowStart().format(df)));
 			} else if (sa.getSlot() instanceof LoadSlot) {
 				if (!first) {
 					sb.append(" -- ");

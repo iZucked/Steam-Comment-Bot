@@ -4,13 +4,14 @@
  */
 package com.mmxlabs.lingo.reports.views.schedule.diffprocessors;
 
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.swt.widgets.DateTime;
+import org.threeten.extra.Interval;
 
 import com.mmxlabs.lingo.reports.views.schedule.model.ChangeType;
 import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
@@ -39,10 +40,10 @@ public class GCOCycleGroupingProcessor implements IDiffProcessor {
 		if (referenceRow.getTarget() instanceof GeneratedCharterOut) {
 			final GeneratedCharterOut event = (GeneratedCharterOut) referenceRow.getTarget();
 
-			final ZonedDateTime start = new ZonedDateTime(event.getStart());
-			final ZonedDateTime end = new ZonedDateTime(event.getEnd());
+			final ZonedDateTime start = event.getStart();
+			final ZonedDateTime end = event.getEnd();
 
-			final Interval referenceInterval = new Interval(start, end);
+			final Interval referenceInterval = Interval.of(Instant.from(start), Instant.from(end));
 
 			final Sequence referenceSequence = event.getSequence();
 
@@ -76,10 +77,10 @@ public class GCOCycleGroupingProcessor implements IDiffProcessor {
 	}
 
 	private void bindEvent(final Row referenceRow, final Interval referenceInterval, final Map<EObject, Row> elementToRowMap, final Event event) {
-		final ZonedDateTime start = new ZonedDateTime(event.getStart());
-		final ZonedDateTime end = new ZonedDateTime(event.getEnd());
+		final ZonedDateTime start = event.getStart();
+		final ZonedDateTime end = event.getEnd();
 
-		final Interval interval = new Interval(start, end);
+		final Interval interval = Interval.of(Instant.from(start), Instant.from(end));
 
 		if (referenceInterval.overlaps(interval)) {
 

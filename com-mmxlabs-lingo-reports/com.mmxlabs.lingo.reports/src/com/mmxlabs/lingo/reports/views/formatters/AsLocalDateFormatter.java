@@ -4,16 +4,15 @@
  */
 package com.mmxlabs.lingo.reports.views.formatters;
 
-import java.text.DateFormat;
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.time.ZonedDateTime;
-
-import org.eclipse.swt.widgets.DateTime;
+import java.time.format.DateTimeFormatter;
 
 public class AsLocalDateFormatter extends BaseFormatter {
-	final DateFormat dateFormat;
+	final DateTimeFormatter dateFormat;
 
-	public AsLocalDateFormatter(final DateFormat dateFormat) {
+	public AsLocalDateFormatter(final DateTimeFormatter dateFormat) {
 		this.dateFormat = dateFormat;
 	}
 
@@ -24,7 +23,7 @@ public class AsLocalDateFormatter extends BaseFormatter {
 		}
 		LocalDateTime localDate = getLocalDate(object);
 		if (localDate != null) {
-			return dateFormat.format(localDate.toDate());
+			return localDate.format(dateFormat);
 		}
 		return null;
 	}
@@ -33,7 +32,7 @@ public class AsLocalDateFormatter extends BaseFormatter {
 		LocalDateTime localDate = null;
 		if (object instanceof LocalDateTime) {
 			localDate = (LocalDateTime) object;
-		} else if (object instanceof DateTime) {
+		} else if (object instanceof ZonedDateTime) {
 			ZonedDateTime dateTime = (ZonedDateTime) object;
 			localDate = dateTime.toLocalDateTime();
 		}
@@ -44,7 +43,7 @@ public class AsLocalDateFormatter extends BaseFormatter {
 	public Comparable<?> getComparable(final Object object) {
 		LocalDateTime localDate = getLocalDate(object);
 		if (object == null) {
-			localDate.year().withMinimumValue();
+			localDate.withYear(Year.MIN_VALUE);
 		}
 		return localDate;
 	}
