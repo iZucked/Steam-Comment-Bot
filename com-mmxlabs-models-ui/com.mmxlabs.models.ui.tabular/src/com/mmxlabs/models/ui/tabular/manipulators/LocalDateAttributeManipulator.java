@@ -33,7 +33,7 @@ public class LocalDateAttributeManipulator extends BasicAttributeManipulator {
 			protected Object doGetValue() {
 				final Object superValue = super.doGetValue();
 				if (superValue == null) {
-					return new LocalDate();
+					return LocalDate.now();
 				}
 				return superValue;
 			}
@@ -44,7 +44,6 @@ public class LocalDateAttributeManipulator extends BasicAttributeManipulator {
 	
 	@Override
 	public Object getValue(Object object) {
-		// TODO Auto-generated method stub
 		return super.getValue(object);
 	}
 

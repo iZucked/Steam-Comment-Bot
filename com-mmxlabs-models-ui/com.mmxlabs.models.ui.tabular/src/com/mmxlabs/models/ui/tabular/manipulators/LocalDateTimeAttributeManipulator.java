@@ -34,7 +34,7 @@ public class LocalDateTimeAttributeManipulator extends BasicAttributeManipulator
 			protected Object doGetValue() {
 				final Object superValue = super.doGetValue();
 				if (superValue == null) {
-					return new LocalDateTime().withHourOfDay(0);
+					return LocalDateTime.now().withHour(0);
 				}
 				return superValue;
 			}

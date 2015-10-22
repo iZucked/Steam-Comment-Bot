@@ -6,7 +6,9 @@ package com.mmxlabs.models.ui.properties.ui;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.TimeZone;
+import java.time.format.FormatStyle;
+import java.time.format.TextStyle;
+import java.util.Locale;
 
 import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -18,7 +20,7 @@ public class DateTimeFormatLabelProvider extends BaseLabelProvider implements IL
 	private final boolean showZone;
 
 	public DateTimeFormatLabelProvider(final boolean showZone) {
-		this(DateTimeFormat.shortDateTime(), showZone);
+		this(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT), showZone);
 	}
 
 	public DateTimeFormatLabelProvider(final DateTimeFormatter formatter, final boolean showZone) {
@@ -35,7 +37,12 @@ public class DateTimeFormatLabelProvider extends BaseLabelProvider implements IL
 	public String getText(final Object element) {
 		if (element instanceof ZonedDateTime) {
 			final ZonedDateTime dateTime = (ZonedDateTime) element;
-			return formatter.print(dateTime) + (showZone ? (" (" + dateTime.getZone().toTimeZone().getDisplayName(false, TimeZone.SHORT) + ")") : "");
+			String timeStr = dateTime.format(formatter);
+			if (showZone) {
+				return String.format("%s (%s)", timeStr, dateTime.getZone().getDisplayName(TextStyle.SHORT, Locale.getDefault()));
+			} else {
+				return timeStr;
+			}
 		} else {
 			throw new IllegalArgumentException("Can only format DateTimes!");
 		}
