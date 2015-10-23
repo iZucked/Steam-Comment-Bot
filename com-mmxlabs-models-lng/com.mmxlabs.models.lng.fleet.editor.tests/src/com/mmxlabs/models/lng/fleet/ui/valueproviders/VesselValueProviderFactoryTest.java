@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -44,7 +45,9 @@ public class VesselValueProviderFactoryTest {
 	
 	private LNGScenarioModel buildScenario(FleetModel fleetModel) {
 		LNGScenarioModel lngScenarioModel = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
-		lngScenarioModel.setFleetModel(fleetModel);
+		LNGReferenceModel lngReferenceModel = LNGScenarioFactory.eINSTANCE.createLNGReferenceModel();
+		lngScenarioModel.setReferenceModel(lngReferenceModel);
+		lngReferenceModel.setFleetModel(fleetModel);
 		return lngScenarioModel;
 	}
 
@@ -80,17 +83,17 @@ public class VesselValueProviderFactoryTest {
 	}
 	
 	private void changeVesselName(LNGScenarioModel model, int index, String name) {
-		List<Vessel> vessels = model.getFleetModel().getVessels();
+		List<Vessel> vessels = model.getReferenceModel().getFleetModel().getVessels();
 		vessels.get(index).setName(name);
 	}
 	
 	private void removeVessel(LNGScenarioModel model, int index) {
-		List<Vessel> vessels = model.getFleetModel().getVessels();
+		List<Vessel> vessels = model.getReferenceModel().getFleetModel().getVessels();
 		vessels.remove(index);
 	}
 	
 	private void addVessel(LNGScenarioModel model, String vesselName) {
-		List<Vessel> vessels = model.getFleetModel().getVessels();
+		List<Vessel> vessels = model.getReferenceModel().getFleetModel().getVessels();
 		vessels.add(buildVessel(vesselName));
 	}
 	
