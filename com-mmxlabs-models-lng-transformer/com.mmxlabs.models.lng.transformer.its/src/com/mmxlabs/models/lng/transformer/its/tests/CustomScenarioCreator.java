@@ -55,9 +55,9 @@ import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
+import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
-import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
@@ -86,6 +86,7 @@ public class CustomScenarioCreator {
 	private final CargoModel cargoModel;
 	private final PortModel portModel;
 	private final FleetModel fleetModel;
+	private final CostModel costModel;
 	private final PricingModel pricingModel;
 	private final SpotMarketsModel spotMarketsModel;
 	private final LNGPortfolioModel portfolioModel;
@@ -110,6 +111,7 @@ public class CustomScenarioCreator {
 		portModel = scenario.getPortModel();
 		fleetModel = scenario.getFleetModel();
 		pricingModel = scenario.getPricingModel();
+		costModel = scenario.getCostModel();
 		commercialModel = scenario.getCommercialModel();
 		spotMarketsModel = scenario.getSpotMarketsModel();
 
@@ -189,8 +191,6 @@ public class CustomScenarioCreator {
 			final int ladenMaxConsumption, final int ladenIdleConsumptionRate, final int ladenIdleNBORate, final int ladenNBORate, final int pilotLightRate, final int minHeelVolume,
 			final boolean isTimeChartered) {
 
-		final FleetCostModel fleetCostModel = pricingModel.getFleetCost();
-
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class
 		final int warmupTime = Integer.MAX_VALUE;
@@ -205,7 +205,7 @@ public class CustomScenarioCreator {
 		fleetModel.getBaseFuels().add(baseFuel);
 
 		final BaseFuelCost bfc = ScenarioTools.createBaseFuelCost(baseFuel, baseFuelUnitPrice);
-		fleetCostModel.getBaseFuelPrices().add(bfc);
+		costModel.getBaseFuelCosts().add(bfc);
 		pricingModel.getBaseFuelPrices().add(bfc.getIndex());
 
 		final VesselClass vc = FleetFactory.eINSTANCE.createVesselClass();
@@ -603,7 +603,7 @@ public class CustomScenarioCreator {
 			vc.getRouteParameters().add(EcoreUtil.copy(params));
 			final RouteCost rc2 = EcoreUtil.copy(canalCost);
 			rc2.setVesselClass(vc);
-			scenario.getPricingModel().getRouteCosts().add(rc2);
+			scenario.getCostModel().getRouteCosts().add(rc2);
 		}
 	}
 
@@ -757,7 +757,7 @@ public class CustomScenarioCreator {
 			price.getPorts().add(port);
 		}
 
-		pricingModel.getCooldownPrices().add(price);
+		costModel.getCooldownCosts().add(price);
 	}
 
 	public LocalDate createLocalDate(final int year, final int month, final int day) {

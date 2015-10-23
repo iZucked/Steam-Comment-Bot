@@ -15,8 +15,7 @@ import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
-import com.mmxlabs.models.lng.pricing.FleetCostModel;
-import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
@@ -56,9 +55,8 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		msc.vc.setMinHeel(5000);
 
 		// Push up base fuel price for force NBO+FBO
-		final PricingModel pricingModel = scenario.getPricingModel();
-		final FleetCostModel fleetCostModel = pricingModel.getFleetCost();
-		final BaseFuelCost fuelPrice = fleetCostModel.getBaseFuelPrices().get(0);
+		final CostModel costModel = scenario.getCostModel();
+		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
 
 		// base fuel is now 10x more expensive, so FBO is economical
 		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
@@ -72,38 +70,38 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		// first journey should use NBO and base fuel (not just base fuel)
 
 		// Orphan Ballast
-		int totalOprhanLNGUsed = 0;
+		// int totalOprhanLNGUsed = 0;
 		{
 			// Forced BF use
-			int expectedDuration = 1;
-			int expectedNBO = expectedDuration * 0;
-			int expectedFBO = expectedDuration * 0;
-			int expectedBF = expectedDuration * 15;
+			final int expectedDuration = 1;
+			final int expectedNBO = expectedDuration * 0;
+			final int expectedFBO = expectedDuration * 0;
+			final int expectedBF = expectedDuration * 15;
 			checker.setExpectedValue(expectedNBO, Expectations.NBO_USAGE, Journey.class, 0);
 			checker.setExpectedValue(expectedFBO, Expectations.FBO_USAGE, Journey.class, 0);
 			checker.setExpectedValue(expectedBF, Expectations.BF_USAGE, Journey.class, 0);
 
 			// cost of first journey should be changed accordingly
-			int expectedCosts = (expectedNBO + expectedFBO) * 21 + expectedBF * 100;
+			// final int expectedCosts = (expectedNBO + expectedFBO) * 21 + expectedBF * 100;
 			// checker.setExpectedValue(expectedCosts, Expectations.FUEL_COSTS, Journey.class, 0);
 
-			totalOprhanLNGUsed += expectedNBO;
-			totalOprhanLNGUsed += expectedFBO;
+			// totalOprhanLNGUsed += expectedNBO;
+			// totalOprhanLNGUsed += expectedFBO;
 		}
-		int expectedHeelRolledOver = 0;
+		final int expectedHeelRolledOver = 0;
 
 		int totalLNGUsed = 0;
 		// Laden leg
 		{
-			int expectedDuration = 2;
-			int expectedNBO = expectedDuration * 10;
-			int expectedFBO = expectedDuration * 5;
-			int expectedBF = expectedDuration * 0;
+			final int expectedDuration = 2;
+			final int expectedNBO = expectedDuration * 10;
+			final int expectedFBO = expectedDuration * 5;
+			final int expectedBF = expectedDuration * 0;
 			checker.setExpectedValue(expectedNBO, Expectations.NBO_USAGE, Journey.class, 1);
 			checker.setExpectedValue(expectedFBO, Expectations.FBO_USAGE, Journey.class, 1);
 			checker.setExpectedValue(expectedBF, Expectations.BF_USAGE, Journey.class, 1);
 
-			int expectedCosts = (expectedNBO + expectedFBO) * 21 + expectedBF * 100;
+			// final int expectedCosts = (expectedNBO + expectedFBO) * 21 + expectedBF * 100;
 			// checker.setExpectedValue(expectedCosts, Expectations.FUEL_COSTS, Journey.class, 1);
 
 			totalLNGUsed += expectedNBO;
@@ -111,8 +109,8 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		}
 		// Laden idle -- same as default
 		{
-			int expectedDuration = 1;
-			int expectedNBO = expectedDuration * 10;
+			final int expectedDuration = 1;
+			final int expectedNBO = expectedDuration * 10;
 			// checker.setExpectedValue(expectedNBO, Expectations.NBO_USAGE, Idle.class, 1);
 			// checker.setExpectedValue(0, Expectations.BF_USAGE, Idle.class, 1);
 			//
@@ -123,17 +121,17 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		}
 		// Ballast leg
 		{
-			int expectedDuration = 1;
-			int expectedNBO = expectedDuration * 10;
-			int expectedFBO = expectedDuration * 5;
-			int expectedBF = expectedDuration * 0;
+			final int expectedDuration = 1;
+			final int expectedNBO = expectedDuration * 10;
+			final int expectedFBO = expectedDuration * 5;
+			final int expectedBF = expectedDuration * 0;
 
 			checker.setExpectedValue(expectedNBO, Expectations.NBO_USAGE, Journey.class, 2);
 			checker.setExpectedValue(expectedFBO, Expectations.FBO_USAGE, Journey.class, 2);
 			checker.setExpectedValue(expectedBF, Expectations.BF_USAGE, Journey.class, 2);
 
 			// 15m3 * 21 (CV) * 1 (price) = 315 (per time units)
-			int expectedCosts = (expectedNBO + expectedFBO) * 21 + expectedBF * 100;
+			// final int expectedCosts = (expectedNBO + expectedFBO) * 21 + expectedBF * 100;
 			// checker.setExpectedValue(expectedCosts, Expectations.FUEL_COSTS, Journey.class, 2);
 
 			totalLNGUsed += expectedNBO;
@@ -141,14 +139,14 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		}
 		// No ballast idle
 
-		int vesselCapacity = (int) (msc.vessel.getVesselOrVesselClassCapacity() * msc.vessel.getVesselOrVesselClassFillCapacity());
-		int maxQuantity = msc.cargo.getSlots().get(0).getMaxQuantity();
-		int expectedLoadVolume = Math.min(vesselCapacity, maxQuantity) - expectedHeelRolledOver;
+		final int vesselCapacity = (int) (msc.vessel.getVesselOrVesselClassCapacity() * msc.vessel.getVesselOrVesselClassFillCapacity());
+		final int maxQuantity = msc.cargo.getSlots().get(0).getMaxQuantity();
+		final int expectedLoadVolume = Math.min(vesselCapacity, maxQuantity) - expectedHeelRolledOver;
 		// change from default scenario
 		// first load should be only 5010
 		// 5010 = 10000 [vessel capacity] - (5000 [start heel] - 10 [journey boiloff])
 		checker.setExpectedValue(expectedLoadVolume, Expectations.LOAD_DISCHARGE, SlotVisit.class, 0);
-		int expectedDischargeVolume = expectedLoadVolume + expectedHeelRolledOver - totalLNGUsed;
+		final int expectedDischargeVolume = expectedLoadVolume + expectedHeelRolledOver - totalLNGUsed;
 		checker.setExpectedValue(-expectedDischargeVolume, Expectations.LOAD_DISCHARGE, SlotVisit.class, 1);
 
 		checker.setupOrdinaryFuelCosts();
@@ -177,9 +175,8 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		vesselAvailability.getStartHeel().setPricePerMMBTU(1);
 
 		// Push up base fuel price for force NBO+FBO
-		final PricingModel pricingModel = scenario.getPricingModel();
-		final FleetCostModel fleetCostModel = pricingModel.getFleetCost();
-		final BaseFuelCost fuelPrice = fleetCostModel.getBaseFuelPrices().get(0);
+		final CostModel costModel = scenario.getCostModel();
+		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
 
 		// base fuel is now 10x more expensive, so FBO is economical
 		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
@@ -191,35 +188,35 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		// Orphan Ballast
 		int totalOprhanLNGUsed = 0;
 		{
-			int expectedDuration = 1;
-			int expectedNBO = expectedDuration * 10;
-			int expectedFBO = expectedDuration * 5;
+			final int expectedDuration = 1;
+			final int expectedNBO = expectedDuration * 10;
+			final int expectedFBO = expectedDuration * 5;
 			checker.setExpectedValue(expectedNBO, Expectations.NBO_USAGE, Journey.class, 0);
 			checker.setExpectedValue(expectedFBO, Expectations.FBO_USAGE, Journey.class, 0);
 			checker.setExpectedValue(0, Expectations.BF_USAGE, Journey.class, 0);
 
 			// cost of first journey should be changed accordingly
 			// 15m3 * 21 (CV) * 1 (price) = 315
-			int expectedCosts = (expectedNBO + expectedFBO) * 21;
+			final int expectedCosts = (expectedNBO + expectedFBO) * 21;
 			checker.setExpectedValue(expectedCosts, Expectations.FUEL_COSTS, Journey.class, 0);
 
 			totalOprhanLNGUsed += expectedNBO;
 			totalOprhanLNGUsed += expectedFBO;
 		}
-		int expectedHeelRolledOver = 5000 - totalOprhanLNGUsed;
+		final int expectedHeelRolledOver = 5000 - totalOprhanLNGUsed;
 
 		int totalLNGUsed = 0;
 		// Laden leg
 		{
-			int expectedDuration = 2;
-			int expectedNBO = expectedDuration * 10;
-			int expectedFBO = expectedDuration * 5;
+			final int expectedDuration = 2;
+			final int expectedNBO = expectedDuration * 10;
+			final int expectedFBO = expectedDuration * 5;
 			checker.setExpectedValue(expectedNBO, Expectations.NBO_USAGE, Journey.class, 1);
 			checker.setExpectedValue(expectedFBO, Expectations.FBO_USAGE, Journey.class, 1);
 			checker.setExpectedValue(0, Expectations.BF_USAGE, Journey.class, 1);
 
 			// 15m3 * 21 (CV) * 1 (price) = 315 (per time units)
-			int expectedCosts = (expectedNBO + expectedFBO) * 21;
+			final int expectedCosts = (expectedNBO + expectedFBO) * 21;
 			checker.setExpectedValue(expectedCosts, Expectations.FUEL_COSTS, Journey.class, 1);
 
 			totalLNGUsed += expectedNBO;
@@ -227,8 +224,8 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		}
 		// Laden idle -- same as default
 		{
-			int expectedDuration = 1;
-			int expectedNBO = expectedDuration * 10;
+			final int expectedDuration = 1;
+			final int expectedNBO = expectedDuration * 10;
 			// checker.setExpectedValue(expectedNBO, Expectations.NBO_USAGE, Idle.class, 1);
 			// checker.setExpectedValue(0, Expectations.BF_USAGE, Idle.class, 1);
 			//
@@ -239,15 +236,15 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		}
 		// Ballast leg
 		{
-			int expectedDuration = 1;
-			int expectedNBO = expectedDuration * 10;
-			int expectedFBO = expectedDuration * 5;
+			final int expectedDuration = 1;
+			final int expectedNBO = expectedDuration * 10;
+			final int expectedFBO = expectedDuration * 5;
 			checker.setExpectedValue(expectedNBO, Expectations.NBO_USAGE, Journey.class, 2);
 			checker.setExpectedValue(expectedFBO, Expectations.FBO_USAGE, Journey.class, 2);
 			checker.setExpectedValue(0, Expectations.BF_USAGE, Journey.class, 2);
 
 			// 15m3 * 21 (CV) * 1 (price) = 315 (per time units)
-			int expectedCosts = (expectedNBO + expectedFBO) * 21;
+			final int expectedCosts = (expectedNBO + expectedFBO) * 21;
 			checker.setExpectedValue(expectedCosts, Expectations.FUEL_COSTS, Journey.class, 2);
 
 			totalLNGUsed += expectedNBO;
@@ -255,14 +252,14 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		}
 		// No ballast idle
 
-		int vesselCapacity = (int) (msc.vessel.getVesselOrVesselClassCapacity() * msc.vessel.getVesselOrVesselClassFillCapacity());
-		int maxQuantity = msc.cargo.getSlots().get(0).getMaxQuantity();
-		int expectedLoadVolume = Math.min(vesselCapacity, maxQuantity) - expectedHeelRolledOver;
+		final int vesselCapacity = (int) (msc.vessel.getVesselOrVesselClassCapacity() * msc.vessel.getVesselOrVesselClassFillCapacity());
+		final int maxQuantity = msc.cargo.getSlots().get(0).getMaxQuantity();
+		final int expectedLoadVolume = Math.min(vesselCapacity, maxQuantity) - expectedHeelRolledOver;
 		// change from default scenario
 		// first load should be only 5010
 		// 5010 = 10000 [vessel capacity] - (5000 [start heel] - 10 [journey boiloff])
 		checker.setExpectedValue(expectedLoadVolume, Expectations.LOAD_DISCHARGE, SlotVisit.class, 0);
-		int expectedDischargeVolume = expectedLoadVolume + expectedHeelRolledOver - totalLNGUsed;
+		final int expectedDischargeVolume = expectedLoadVolume + expectedHeelRolledOver - totalLNGUsed;
 		checker.setExpectedValue(-expectedDischargeVolume, Expectations.LOAD_DISCHARGE, SlotVisit.class, 1);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
@@ -396,10 +393,10 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 
 		// Orphan Ballast
 		{
-			int expectedDuration = 1;
-			int expectedNBO = expectedDuration * 10;
-			int expectedFBO = expectedDuration * 0;
-			int expectedBF = expectedDuration * 5;
+			final int expectedDuration = 1;
+			final int expectedNBO = expectedDuration * 10;
+			final int expectedFBO = expectedDuration * 0;
+			final int expectedBF = expectedDuration * 5;
 			checker.setExpectedValue(expectedNBO, Expectations.NBO_USAGE, Journey.class, 0);
 			checker.setExpectedValue(expectedFBO, Expectations.FBO_USAGE, Journey.class, 0);
 			checker.setExpectedValue(expectedBF, Expectations.BF_USAGE, Journey.class, 0);
@@ -407,10 +404,10 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		}
 		// Laden leg
 		{
-			int expectedDuration = 2;
-			int expectedNBO = expectedDuration * 10;
-			int expectedFBO = expectedDuration * 0;
-			int expectedBF = expectedDuration * 5;
+			final int expectedDuration = 2;
+			final int expectedNBO = expectedDuration * 10;
+			final int expectedFBO = expectedDuration * 0;
+			final int expectedBF = expectedDuration * 5;
 			checker.setExpectedValue(expectedNBO, Expectations.NBO_USAGE, Journey.class, 1);
 			checker.setExpectedValue(expectedFBO, Expectations.FBO_USAGE, Journey.class, 1);
 			checker.setExpectedValue(expectedBF, Expectations.BF_USAGE, Journey.class, 1);
@@ -418,47 +415,47 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		// Laden idle -- same as default
 		// Ballast leg
 		{
-			int expectedDuration = 1;
-			int expectedNBO = expectedDuration * 0;
-			int expectedFBO = expectedDuration * 0;
-			int expectedBF = expectedDuration * 15;
+			final int expectedDuration = 1;
+			final int expectedNBO = expectedDuration * 0;
+			final int expectedFBO = expectedDuration * 0;
+			final int expectedBF = expectedDuration * 15;
 			checker.setExpectedValue(expectedNBO, Expectations.NBO_USAGE, Journey.class, 2);
 			checker.setExpectedValue(expectedFBO, Expectations.FBO_USAGE, Journey.class, 2);
 			checker.setExpectedValue(expectedBF, Expectations.BF_USAGE, Journey.class, 2);
 		}
 		// No ballast idle
 
-		int[] legLNG = new int[3];
+		final int[] legLNG = new int[3];
 		for (int i = 0; i < legLNG.length; ++i) {
-			Integer[] journeyNBO = checker.getExpectedValues(Expectations.NBO_USAGE, Journey.class);
+			final Integer[] journeyNBO = checker.getExpectedValues(Expectations.NBO_USAGE, Journey.class);
 			if (journeyNBO[i] != null) {
 				legLNG[i] += journeyNBO[i].intValue();
 			}
-			Integer[] journeyFBO = checker.getExpectedValues(Expectations.FBO_USAGE, Journey.class);
+			final Integer[] journeyFBO = checker.getExpectedValues(Expectations.FBO_USAGE, Journey.class);
 			if (journeyFBO[i] != null) {
 				legLNG[i] += journeyFBO[i].intValue();
 			}
-			Integer[] idleNBO = checker.getExpectedValues(Expectations.NBO_USAGE, Idle.class);
+			final Integer[] idleNBO = checker.getExpectedValues(Expectations.NBO_USAGE, Idle.class);
 			if (idleNBO[i] != null) {
 				legLNG[i] += idleNBO[i].intValue();
 			}
-			Integer[] idleFBO = checker.getExpectedValues(Expectations.FBO_USAGE, Idle.class);
+			final Integer[] idleFBO = checker.getExpectedValues(Expectations.FBO_USAGE, Idle.class);
 			if (idleFBO[i] != null) {
 				legLNG[i] += idleFBO[i].intValue();
 			}
 		}
 
-		int expectedHeelRolledOver = vesselAvailability.getStartHeel().getVolumeAvailable() - legLNG[0];
-		int totalLNGUsed = legLNG[1] + legLNG[2];
+		final int expectedHeelRolledOver = vesselAvailability.getStartHeel().getVolumeAvailable() - legLNG[0];
+		final int totalLNGUsed = legLNG[1] + legLNG[2];
 
-		int vesselCapacity = (int) (msc.vessel.getVesselOrVesselClassCapacity() * msc.vessel.getVesselOrVesselClassFillCapacity());
-		int maxQuantity = msc.cargo.getSlots().get(0).getMaxQuantity();
-		int expectedLoadVolume = Math.min(vesselCapacity, maxQuantity) - expectedHeelRolledOver;
+		final int vesselCapacity = (int) (msc.vessel.getVesselOrVesselClassCapacity() * msc.vessel.getVesselOrVesselClassFillCapacity());
+		final int maxQuantity = msc.cargo.getSlots().get(0).getMaxQuantity();
+		final int expectedLoadVolume = Math.min(vesselCapacity, maxQuantity) - expectedHeelRolledOver;
 		// change from default scenario
 		// first load should be only 5010
 		// 5010 = 10000 [vessel capacity] - (5000 [start heel] - 10 [journey boiloff])
 		checker.setExpectedValue(expectedLoadVolume, Expectations.LOAD_DISCHARGE, SlotVisit.class, 0);
-		int expectedDischargeVolume = expectedLoadVolume + expectedHeelRolledOver - totalLNGUsed;
+		final int expectedDischargeVolume = expectedLoadVolume + expectedHeelRolledOver - totalLNGUsed;
 		checker.setExpectedValue(-expectedDischargeVolume, Expectations.LOAD_DISCHARGE, SlotVisit.class, 1);
 
 		checker.setupOrdinaryFuelCosts();
@@ -490,10 +487,9 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 
 		msc.vc.setMinHeel(500);
 
-		final PricingModel pricingModel = scenario.getPricingModel();
-		final FleetCostModel fleetCostModel = pricingModel.getFleetCost();
+		final CostModel costModel = scenario.getCostModel();
 
-		final BaseFuelCost fuelPrice = fleetCostModel.getBaseFuelPrices().get(0);
+		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
 
 		// base fuel is now 10x more expensive, so FBO is economical
 		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
@@ -508,7 +504,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 				SlotVisit.class, Journey.class, Idle.class, // discharge to end
 				EndEvent.class };
 
-		SequenceTester checker = getDefaultTester(classes);
+		final SequenceTester checker = getDefaultTester(classes);
 
 		checker.setExpectedValues(Expectations.DURATIONS, Journey.class, new Integer[] { 1, 2, 2, 2, 1 });
 		checker.setExpectedValues(Expectations.BF_USAGE, Journey.class, new Integer[] { 0, 0, 0, 0, 0 });
@@ -520,21 +516,21 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		checker.setExpectedValues(Expectations.FBO_USAGE, Idle.class, new Integer[] { 0, 0, 0, 0, 0 });
 		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer[] { 0, 10, 10, 10, 0 });
 
-		int[] legLNG = new int[5];
+		final int[] legLNG = new int[5];
 		for (int i = 0; i < legLNG.length; ++i) {
-			Integer[] journeyNBO = checker.getExpectedValues(Expectations.NBO_USAGE, Journey.class);
+			final Integer[] journeyNBO = checker.getExpectedValues(Expectations.NBO_USAGE, Journey.class);
 			if (journeyNBO[i] != null) {
 				legLNG[i] += journeyNBO[i].intValue();
 			}
-			Integer[] journeyFBO = checker.getExpectedValues(Expectations.FBO_USAGE, Journey.class);
+			final Integer[] journeyFBO = checker.getExpectedValues(Expectations.FBO_USAGE, Journey.class);
 			if (journeyFBO[i] != null) {
 				legLNG[i] += journeyFBO[i].intValue();
 			}
-			Integer[] idleNBO = checker.getExpectedValues(Expectations.NBO_USAGE, Idle.class);
+			final Integer[] idleNBO = checker.getExpectedValues(Expectations.NBO_USAGE, Idle.class);
 			if (idleNBO[i] != null) {
 				legLNG[i] += idleNBO[i].intValue();
 			}
-			Integer[] idleFBO = checker.getExpectedValues(Expectations.FBO_USAGE, Idle.class);
+			final Integer[] idleFBO = checker.getExpectedValues(Expectations.FBO_USAGE, Idle.class);
 			if (idleFBO[i] != null) {
 				legLNG[i] += idleFBO[i].intValue();
 			}
@@ -544,12 +540,12 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		// at first discharge, retain 530m3 (500 min heel plus 30m3 travel fuel) and 40m3 was used to get here
 		// at next load, load back up to full (500 min heel minus 10m3 idle fuel was on board)
 		// at next discharge, retain 515m3 (500 min heel plus 15m3 travel fuel) and 40m3 was used to get here
-		int startheel = vesselAvailability.getStartHeel().getVolumeAvailable();
-		int orphanHeel = startheel - legLNG[0];
-		int firstLoad = 10000 - orphanHeel; // No start event heel rollover
-		int firstDischarge = firstLoad + orphanHeel - (legLNG[1] + legLNG[2]) - msc.vc.getMinHeel();
-		int secondLoad = 10000 - msc.vc.getMinHeel();
-		int secondDischarges = secondLoad + msc.vc.getMinHeel() - (legLNG[3] + legLNG[4]); // Can arrive warm
+		final int startheel = vesselAvailability.getStartHeel().getVolumeAvailable();
+		final int orphanHeel = startheel - legLNG[0];
+		final int firstLoad = 10000 - orphanHeel; // No start event heel rollover
+		final int firstDischarge = firstLoad + orphanHeel - (legLNG[1] + legLNG[2]) - msc.vc.getMinHeel();
+		final int secondLoad = 10000 - msc.vc.getMinHeel();
+		final int secondDischarges = secondLoad + msc.vc.getMinHeel() - (legLNG[3] + legLNG[4]); // Can arrive warm
 
 		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer[] { firstLoad, -firstDischarge, secondLoad, -secondDischarges });
 
@@ -568,7 +564,8 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// create an additional cargo
-		Cargo secondCargo = msc.createDefaultCargo(msc.loadPort, msc.dischargePort);
+		@SuppressWarnings("unused")
+		final Cargo secondCargo = msc.createDefaultCargo(msc.loadPort, msc.dischargePort);
 		// and send the vessel back to the origin port at end of itinerary
 		msc.setDefaultAvailability(msc.originPort, msc.originPort);
 
@@ -582,10 +579,9 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		msc.vessel.getVesselClass().setWarmingTime(0);
 		msc.vessel.getVesselClass().setCoolingVolume(500);
 
-		final PricingModel pricingModel = scenario.getPricingModel();
-		final FleetCostModel fleetCostModel = pricingModel.getFleetCost();
+		final CostModel costModel = scenario.getCostModel();
 
-		final BaseFuelCost fuelPrice = fleetCostModel.getBaseFuelPrices().get(0);
+		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
 
 		// base fuel is now 10x more expensive, so FBO is economical
 		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
@@ -605,7 +601,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 				SlotVisit.class, Journey.class, Idle.class, // discharge to end
 				EndEvent.class };
 
-		SequenceTester checker = getDefaultTester(classes);
+		final SequenceTester checker = getDefaultTester(classes);
 
 		checker.setExpectedValues(Expectations.DURATIONS, Journey.class, new Integer[] { 1, 2, 2, 2, 1 });
 		checker.setExpectedValues(Expectations.BF_USAGE, Journey.class, new Integer[] { 0, 10, 30, 0, 0 });
@@ -617,33 +613,33 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		checker.setExpectedValues(Expectations.FBO_USAGE, Idle.class, new Integer[] { 0, 0, 0, 0, 0 });
 		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer[] { 0, 10, 0, 10, 0 });
 
-		int[] legLNG = new int[5];
+		final int[] legLNG = new int[5];
 		for (int i = 0; i < legLNG.length; ++i) {
-			Integer[] journeyNBO = checker.getExpectedValues(Expectations.NBO_USAGE, Journey.class);
+			final Integer[] journeyNBO = checker.getExpectedValues(Expectations.NBO_USAGE, Journey.class);
 			if (journeyNBO[i] != null) {
 				legLNG[i] += journeyNBO[i].intValue();
 			}
-			Integer[] journeyFBO = checker.getExpectedValues(Expectations.FBO_USAGE, Journey.class);
+			final Integer[] journeyFBO = checker.getExpectedValues(Expectations.FBO_USAGE, Journey.class);
 			if (journeyFBO[i] != null) {
 				legLNG[i] += journeyFBO[i].intValue();
 			}
-			Integer[] idleNBO = checker.getExpectedValues(Expectations.NBO_USAGE, Idle.class);
+			final Integer[] idleNBO = checker.getExpectedValues(Expectations.NBO_USAGE, Idle.class);
 			if (idleNBO[i] != null) {
 				legLNG[i] += idleNBO[i].intValue();
 			}
-			Integer[] idleFBO = checker.getExpectedValues(Expectations.FBO_USAGE, Idle.class);
+			final Integer[] idleFBO = checker.getExpectedValues(Expectations.FBO_USAGE, Idle.class);
 			if (idleFBO[i] != null) {
 				legLNG[i] += idleFBO[i].intValue();
 			}
 		}
 
-		int startheel = vesselAvailability.getStartHeel().getVolumeAvailable();
-		int orphanHeel = startheel - legLNG[0];
-		int firstLoad = 10000 - orphanHeel;
+		final int startheel = vesselAvailability.getStartHeel().getVolumeAvailable();
+		final int orphanHeel = startheel - legLNG[0];
+		final int firstLoad = 10000 - orphanHeel;
 		// No safety heel
-		int firstDischarge = firstLoad + orphanHeel - (legLNG[1] + legLNG[2]);
-		int secondLoad = 10000;
-		int secondDischarges = secondLoad - (legLNG[3] + legLNG[4]); // Can arrive warm
+		final int firstDischarge = firstLoad + orphanHeel - (legLNG[1] + legLNG[2]);
+		final int secondLoad = 10000;
+		final int secondDischarges = secondLoad - (legLNG[3] + legLNG[4]); // Can arrive warm
 
 		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer[] { firstLoad, -firstDischarge, secondLoad, -secondDischarges });
 
@@ -665,7 +661,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// create a maintenance event after the cargo
-		Port eventPort = msc.loadPort;
+		final Port eventPort = msc.loadPort;
 
 		msc.createDefaultMaintenanceEvent("Maintenance", eventPort, null);
 
@@ -675,10 +671,9 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		// force a heel rollover at the maintenance port
 		msc.vc.setMinHeel(500);
 
-		final PricingModel pricingModel = scenario.getPricingModel();
-		final FleetCostModel fleetCostModel = pricingModel.getFleetCost();
+		final CostModel costModel = scenario.getCostModel();
 
-		final BaseFuelCost fuelPrice = fleetCostModel.getBaseFuelPrices().get(0);
+		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
 
 		// base fuel is now 10x more expensive, so FBO is economical
 		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
@@ -721,8 +716,8 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		final LocalDateTime startLoad = msc.getFirstAppointment().getSecond().withZoneSameInstant(ZoneId.of(msc.originPort.getTimeZone())).toLocalDateTime();
 		final LocalDateTime charterStartByDate = startLoad.minusHours(25);
 		final LocalDateTime charterStartAfterDate = startLoad.minusHours(25);
-		int charterOutRate = 24;
-		CharterOutEvent event = msc.vesselEventCreator.createCharterOutEvent("CharterOut", msc.originPort, msc.originPort, charterStartByDate, charterStartAfterDate, charterOutRate);
+		final int charterOutRate = 24;
+		final CharterOutEvent event = msc.vesselEventCreator.createCharterOutEvent("CharterOut", msc.originPort, msc.originPort, charterStartByDate, charterStartAfterDate, charterOutRate);
 
 		// set the charter out required end heel to 5000 (and set some other things)
 		event.getHeelOptions().setVolumeAvailable(5000);
@@ -733,10 +728,10 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		msc.setDefaultAvailability(msc.originPort, msc.originPort);
 
 		// we now expect an idle and a vessel event visit before the first journey
-		Class<?>[] expectedClasses = { StartEvent.class, Idle.class, VesselEventVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class,
-				Idle.class, EndEvent.class };
+		final Class<?>[] expectedClasses = { StartEvent.class, Idle.class, VesselEventVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class,
+				Journey.class, Idle.class, EndEvent.class };
 
-		SequenceTester checker = getDefaultTester(expectedClasses);
+		final SequenceTester checker = getDefaultTester(expectedClasses);
 
 		// expected charter out duration
 		checker.setExpectedValues(Expectations.DURATIONS, VesselEventVisit.class, new Integer[] { 24 });
@@ -774,9 +769,10 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
 
-		CharterOutEvent event = msc.makeCharterOut(msc, scenario, msc.loadPort, msc.loadPort);
+		@SuppressWarnings("unused")
+		final CharterOutEvent event = msc.makeCharterOut(msc, scenario, msc.loadPort, msc.loadPort);
 
-		SequenceTester checker = getTesterForVesselEventPostDischarge();
+		final SequenceTester checker = getTesterForVesselEventPostDischarge();
 		// SequenceTester checker = getDefaultTester();
 
 		// expected charter out duration
@@ -801,13 +797,13 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
 
-		CharterOutEvent event = msc.makeCharterOut(msc, scenario, msc.loadPort, msc.loadPort);
+		final CharterOutEvent event = msc.makeCharterOut(msc, scenario, msc.loadPort, msc.loadPort);
 
 		event.getHeelOptions().setCvValue(21);
 		event.getHeelOptions().setPricePerMMBTU(1);
 		event.getHeelOptions().setVolumeAvailable(40);
 
-		SequenceTester checker = getTesterForVesselEventPostDischarge();
+		final SequenceTester checker = getTesterForVesselEventPostDischarge();
 
 		// expected charter out duration
 		checker.setExpectedValues(Expectations.DURATIONS, VesselEventVisit.class, new Integer[] { 24 });

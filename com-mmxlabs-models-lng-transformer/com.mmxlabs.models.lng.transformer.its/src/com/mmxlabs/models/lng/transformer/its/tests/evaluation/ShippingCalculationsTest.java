@@ -25,8 +25,8 @@ import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.CharterIndex;
+import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
-import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
@@ -242,10 +242,9 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario
-		final PricingModel pricingModel = scenario.getPricingModel();
-		final FleetCostModel fleetCostModel = pricingModel.getFleetCost();
+		final CostModel costModel = scenario.getCostModel();
 
-		final BaseFuelCost fuelPrice = fleetCostModel.getBaseFuelPrices().get(0);
+		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
 		// base fuel is now 10x more expensive, so FBO is economical
 
 		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
@@ -257,6 +256,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		msc.vc.setMinHeel(10);
 
 		// Create second cargo to require arriving cold
+		@SuppressWarnings("unused")
 		Cargo secondCargo = msc.createDefaultCargo(msc.loadPort, msc.dischargePort);
 
 		// and send the vessel back to the origin port at end of itinerary
@@ -321,10 +321,9 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario
-		final PricingModel pricingModel = scenario.getPricingModel();
-		final FleetCostModel fleetCostModel = pricingModel.getFleetCost();
+		final CostModel costModel = scenario.getCostModel();
 
-		final BaseFuelCost fuelPrice = fleetCostModel.getBaseFuelPrices().get(0);
+		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
 		// base fuel is now 10x more expensive, so FBO is economical
 		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
 
@@ -480,9 +479,8 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario: base fuel price more expensive, so FBO is economical
-		final PricingModel pricingModel = scenario.getPricingModel();
-		final FleetCostModel fleetCostModel = pricingModel.getFleetCost();
-		final BaseFuelCost fuelPrice = fleetCostModel.getBaseFuelPrices().get(0);
+		final CostModel costModel = scenario.getCostModel();
+		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
 		// base fuel is now 10x more expensive, so FBO is economical
 		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
 
@@ -519,9 +517,8 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario: base fuel price more expensive, so FBO is economical
-		final PricingModel pricingModel = scenario.getPricingModel();
-		final FleetCostModel fleetCostModel = pricingModel.getFleetCost();
-		final BaseFuelCost fuelPrice = fleetCostModel.getBaseFuelPrices().get(0);
+		final CostModel costModel = scenario.getCostModel();
+		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
 		// base fuel is now 10x more expensive, so FBO is economical
 		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
 
@@ -1346,6 +1343,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
 
+		@SuppressWarnings("unused")
 		CharterOutEvent event = msc.makeCharterOut(msc, scenario, msc.loadPort, msc.originPort);
 
 		// FIXME: Note - there are three idle events in a row due to the way the internal optimisation represents the transition from charter start to charter end. Not great API but this is the way it
@@ -1436,6 +1434,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
 
+		@SuppressWarnings("unused")
 		final Sequence sequence = schedule.getSequences().get(0);
 
 	}

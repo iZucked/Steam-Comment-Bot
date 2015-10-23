@@ -25,6 +25,7 @@ import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -58,8 +59,8 @@ import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
+import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.DataIndex;
-import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
@@ -220,7 +221,7 @@ public class ScenarioTools {
 		final LNGScenarioModel scenario = ManifestJointModel.createEmptyInstance(null);
 
 		final PricingModel pricingModel = scenario.getPricingModel();
-		final FleetCostModel fleetCostModel = pricingModel.getFleetCost();
+		final CostModel costModel = scenario.getCostModel();
 		final SpotMarketsModel spotMarketsModel = scenario.getSpotMarketsModel();
 
 		// 'magic' numbers that could be set in the arguments.
@@ -250,7 +251,7 @@ public class ScenarioTools {
 		baseFuel.setEquivalenceFactor(equivalenceFactor);
 
 		final BaseFuelCost bfc = createBaseFuelCost(baseFuel, baseFuelUnitPrice);
-		fleetCostModel.getBaseFuelPrices().add(bfc);
+		costModel.getBaseFuelCosts().add(bfc);
 		pricingModel.getBaseFuelPrices().add(bfc.getIndex());
 
 		final FleetModel fleetModel = scenario.getFleetModel();
@@ -481,7 +482,7 @@ public class ScenarioTools {
 		final PortModel portModel = scenario.getPortModel();
 		final FleetModel fleetModel = scenario.getFleetModel();
 		final PricingModel pricingModel = scenario.getPricingModel();
-		final FleetCostModel fleetCostModel = pricingModel.getFleetCost();
+		final CostModel costModel = scenario.getCostModel();
 		final SpotMarketsModel spotMarketsModel = scenario.getSpotMarketsModel();
 
 		final LNGPortfolioModel portfolioModel = scenario.getPortfolioModel();
@@ -489,7 +490,6 @@ public class ScenarioTools {
 
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class
-		final int cooldownTime = 0;
 		final int warmupTime = Integer.MAX_VALUE;
 		final int cooldownVolume = 0;
 		final int minHeelVolume = 0;
@@ -504,7 +504,7 @@ public class ScenarioTools {
 		baseFuel.setEquivalenceFactor(equivalenceFactor);
 
 		final BaseFuelCost bfc = createBaseFuelCost(baseFuel, baseFuelUnitPrice);
-		fleetCostModel.getBaseFuelPrices().add(bfc);
+		costModel.getBaseFuelCosts().add(bfc);
 		pricingModel.getBaseFuelPrices().add(bfc.getIndex());
 
 		fleetModel.getBaseFuels().add(baseFuel);
@@ -683,7 +683,7 @@ public class ScenarioTools {
 	 * @param scenario
 	 * @return the evaluated schedule
 	 */
-	public static Schedule evaluate(final LNGScenarioModel scenario) {
+	public static Schedule evaluate(@NonNull final LNGScenarioModel scenario) {
 
 		// String[] hints = null;
 		// if (optimise) {

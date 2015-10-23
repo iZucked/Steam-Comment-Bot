@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mmxlabs.common.Association;
+import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ICurve;
@@ -86,6 +87,7 @@ import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
+import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
@@ -506,8 +508,10 @@ public class LNGScenarioTransformer {
 		 */
 		final PortModel portModel = rootObject.getPortModel();
 
+		final CostModel costModel = rootObject.getCostModel();
+
 		final Map<Port, ICooldownCalculator> cooldownCalculators = new HashMap<Port, ICooldownCalculator>();
-		for (final CooldownPrice price : pricingModel.getCooldownPrices()) {
+		for (final CooldownPrice price : costModel.getCooldownCosts()) {
 			final ICooldownCalculator cooldownCalculator;
 			// Check here if price is indexed or expression
 			if (price.isLumpsum()) {
@@ -549,7 +553,7 @@ public class LNGScenarioTransformer {
 
 		// Generate base fuels
 		{
-			for (final BaseFuelCost baseFuelCost : pricingModel.getFleetCost().getBaseFuelPrices()) {
+			for (final BaseFuelCost baseFuelCost : costModel.getBaseFuelCosts()) {
 				final BaseFuelIndex index = baseFuelCost.getIndex();
 				assert index != null;
 
@@ -568,8 +572,8 @@ public class LNGScenarioTransformer {
 			extension.startTransforming(rootObject, modelEntityMap, builder);
 		}
 
-		final Pair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>> vesselAssociations = buildFleet(builder, portAssociation, baseFuelIndexAssociation, charterIndexAssociation,
-				modelEntityMap);
+		final NonNullPair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>> vesselAssociations = buildFleet(builder, portAssociation, baseFuelIndexAssociation,
+				charterIndexAssociation, modelEntityMap);
 		for (final IVesselAvailability vesselAvailability : allVesselAvailabilities) {
 			assert vesselAvailability != null;
 
@@ -617,44 +621,41 @@ public class LNGScenarioTransformer {
 		}
 
 		// process port costs
-		final PricingModel pricing = rootObject.getPricingModel();
-		if (pricing != null) {
-			for (final PortCost cost : pricing.getPortCosts()) {
-				for (final Port port : SetUtils.getObjects(cost.getPorts())) {
-					for (final PortCostEntry entry : cost.getEntries()) {
-						PortType type = null;
-						switch (entry.getActivity()) {
-						case LOAD:
-							type = PortType.Load;
-							break;
-						case DISCHARGE:
-							type = PortType.Discharge;
-							break;
-						case DRYDOCK:
-							type = PortType.DryDock;
-							break;
-						case MAINTENANCE:
-							type = PortType.Maintenance;
-							break;
+		for (final PortCost cost : costModel.getPortCosts()) {
+			for (final Port port : SetUtils.getObjects(cost.getPorts())) {
+				for (final PortCostEntry entry : cost.getEntries()) {
+					PortType type = null;
+					switch (entry.getActivity()) {
+					case LOAD:
+						type = PortType.Load;
+						break;
+					case DISCHARGE:
+						type = PortType.Discharge;
+						break;
+					case DRYDOCK:
+						type = PortType.DryDock;
+						break;
+					case MAINTENANCE:
+						type = PortType.Maintenance;
+						break;
+					}
+
+					if (type != null) {
+						final Set<IVessel> vessels = new HashSet<>();
+						// Add all pyhsical vessels including reference vessels ...
+						vessels.addAll(allVessels.values());
+						// ... however this excludes the spot vessels, so add them from here
+						for (final IVesselAvailability vesselAvailability : allVesselAvailabilities) {
+							vessels.add(vesselAvailability.getVessel());
+						}
+						// Now create port costs for all the vessel instances.
+						for (final IVessel v : vessels) {
+							// TODO should the builder handle the application of costs to vessel classes?
+							final VesselClass vesselClass = vesselAssociations.getFirst().reverseLookup(v.getVesselClass());
+							final long activityCost = OptimiserUnitConvertor.convertToInternalFixedCost(cost.getPortCost(vesselClass, entry.getActivity()));
+							builder.setPortCost(portAssociation.lookupNullChecked((Port) port), v, type, activityCost);
 						}
 
-						if (type != null) {
-							final Set<IVessel> vessels = new HashSet<>();
-							// Add all pyhsical vessels including reference vessels ...
-							vessels.addAll(allVessels.values());
-							// ... however this excludes the spot vessels, so add them from here
-							for (final IVesselAvailability vesselAvailability : allVesselAvailabilities) {
-								vessels.add(vesselAvailability.getVessel());
-							}
-							// Now create port costs for all the vessel instances.
-							for (final IVessel v : vessels) {
-								// TODO should the builder handle the application of costs to vessel classes?
-								final VesselClass vesselClass = vesselAssociations.getFirst().reverseLookup(v.getVesselClass());
-								final long activityCost = OptimiserUnitConvertor.convertToInternalFixedCost(cost.getPortCost(vesselClass, entry.getActivity()));
-								builder.setPortCost(portAssociation.lookupNullChecked((Port) port), v, type, activityCost);
-							}
-
-						}
 					}
 				}
 			}
@@ -750,7 +751,7 @@ public class LNGScenarioTransformer {
 				continue;
 			}
 			final boolean freeze = assignableElement.isLocked();
-			final Pair<Boolean, Set<Slot>> containsLockedSlots = checkAndCollectLockedSlots(assignableElement);
+			final NonNullPair<Boolean, Set<Slot>> containsLockedSlots = checkAndCollectLockedSlots(assignableElement);
 			final Set<Slot> lockedSlots = containsLockedSlots.getSecond();
 			if (!freeze && !containsLockedSlots.getFirst()) {
 				continue;
@@ -793,9 +794,8 @@ public class LNGScenarioTransformer {
 		}
 	}
 
-	private Pair<Boolean, Set<Slot>> checkAndCollectLockedSlots(@NonNull final AssignableElement assignableElement) {
-		final Pair<Boolean, Set<Slot>> lockedSlots = new Pair<>();
-		lockedSlots.setBoth(false, new HashSet<Slot>());
+	private NonNullPair<Boolean, Set<Slot>> checkAndCollectLockedSlots(@NonNull final AssignableElement assignableElement) {
+		final NonNullPair<Boolean, Set<Slot>> lockedSlots = new NonNullPair<Boolean, Set<Slot>>(false, new HashSet<Slot>());
 
 		if (assignableElement instanceof Cargo) {
 			final Cargo cargo = (Cargo) assignableElement;
@@ -1262,9 +1262,9 @@ public class LNGScenarioTransformer {
 					// builder.setShippingHoursRestriction(discharge, dischargeWindow, dischargeSlot.getShippingDaysRestriction() * 24);
 				}
 			} else {
-				discharge = builder.createDischargeSlot(name, portAssociation.lookupNullChecked(dischargeSlot.getPort()), dischargeWindow, minVolume, maxVolume, minCv, maxCv,
-						dischargePriceCalculator, dischargeSlot.getSlotOrPortDuration(), pricingDate, transformPricingEvent(dischargeSlot.getSlotOrDelegatedPricingEvent()),
-						dischargeSlot.isOptional(), dischargeSlot.isLocked(), isSpot, isVolumeLimitInM3);
+				discharge = builder.createDischargeSlot(name, portAssociation.lookupNullChecked(dischargeSlot.getPort()), dischargeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator,
+						dischargeSlot.getSlotOrPortDuration(), pricingDate, transformPricingEvent(dischargeSlot.getSlotOrDelegatedPricingEvent()), dischargeSlot.isOptional(), dischargeSlot.isLocked(),
+						isSpot, isVolumeLimitInM3);
 			}
 		}
 
@@ -1473,8 +1473,8 @@ public class LNGScenarioTransformer {
 		//
 	}
 
-	private void buildSpotCargoMarkets(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Collection<IContractTransformer> contractTransformers,
-			final ModelEntityMap modelEntityMap) {
+	private void buildSpotCargoMarkets(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation,
+			@NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap) {
 
 		final SpotMarketsModel spotMarketsModel = rootObject.getSpotMarketsModel();
 		if (spotMarketsModel == null) {
@@ -2193,7 +2193,7 @@ public class LNGScenarioTransformer {
 	 */
 	private void buildDistances(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @NonNull final List<IPort> allPorts,
 			@NonNull final Map<IPort, Integer> portIndices, @NonNull final Association<VesselClass, IVesselClass> vesselAssociation, @NonNull final ModelEntityMap modelEntityMap)
-			throws IncompleteScenarioException {
+					throws IncompleteScenarioException {
 
 		/*
 		 * Now fill out the distances from the distance model. Firstly we need to create the default distance matrix.
@@ -2230,8 +2230,8 @@ public class LNGScenarioTransformer {
 			}
 
 			// set tolls
-			final PricingModel pm = rootObject.getPricingModel();
-			for (final RouteCost routeCost : pm.getRouteCosts()) {
+			final CostModel costModel = rootObject.getCostModel();
+			for (final RouteCost routeCost : costModel.getRouteCosts()) {
 				final IVesselClass vesselClass = vesselAssociation.lookupNullChecked(routeCost.getVesselClass());
 
 				builder.setVesselClassRouteCost(routeCost.getRoute().getName(), vesselClass, VesselState.Laden, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getLadenCost()));
@@ -2250,8 +2250,9 @@ public class LNGScenarioTransformer {
 	 * @param modelEntityMap
 	 * @return
 	 */
-	private Pair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>> buildFleet(@NonNull final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation,
-			final Association<BaseFuelIndex, ICurve> baseFuelIndexAssociation, final Association<CharterIndex, ICurve> charterIndexAssociation, final ModelEntityMap modelEntityMap) {
+	private NonNullPair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>> buildFleet(@NonNull final ISchedulerBuilder builder,
+			@NonNull final Association<Port, IPort> portAssociation, @NonNull final Association<BaseFuelIndex, ICurve> baseFuelIndexAssociation,
+			@NonNull final Association<CharterIndex, ICurve> charterIndexAssociation, @NonNull final ModelEntityMap modelEntityMap) {
 
 		/*
 		 * Build the fleet model - first we must create the vessel classes from the model
@@ -2264,7 +2265,6 @@ public class LNGScenarioTransformer {
 
 		final FleetModel fleetModel = rootObject.getFleetModel();
 		final PortModel portModel = rootObject.getPortModel();
-		final PricingModel pricingModel = rootObject.getPricingModel();
 
 		// look up prices
 
@@ -2381,8 +2381,8 @@ public class LNGScenarioTransformer {
 
 			final IVessel vessel = vesselAssociation.lookupNullChecked(eVessel);
 
-			final IVesselAvailability vesselAvailability = builder.createVesselAvailability(vessel, dailyCharterInCurve, eVesselAvailability.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER
-					: VesselInstanceType.FLEET, startRequirement, endRequirement);
+			final IVesselAvailability vesselAvailability = builder.createVesselAvailability(vessel, dailyCharterInCurve,
+					eVesselAvailability.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement);
 			vesselAvailabilityAssociation.add(eVesselAvailability, vesselAvailability);
 
 			modelEntityMap.addModelObject(eVesselAvailability, vesselAvailability);
@@ -2464,7 +2464,7 @@ public class LNGScenarioTransformer {
 			}
 		}
 
-		return new Pair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>>(vesselClassAssociation, vesselAssociation);
+		return new NonNullPair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>>(vesselClassAssociation, vesselAssociation);
 	}
 
 	/**

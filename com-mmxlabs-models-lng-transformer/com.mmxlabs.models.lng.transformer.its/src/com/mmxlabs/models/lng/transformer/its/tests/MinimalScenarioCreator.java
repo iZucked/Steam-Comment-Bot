@@ -26,8 +26,8 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
+import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
-import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -245,7 +245,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 	 * Sets up a cooldown pricing model including an index
 	 */
 	public void setupCooldown(final double value) {
-		final PricingModel pricingModel = scenario.getPricingModel();
+		final CostModel costModel = scenario.getCostModel();
 		final PortModel portModel = scenario.getPortModel();
 
 		final CommodityIndex cooldownIndex = pricingCreator.createDefaultCommodityIndex("cooldown", value);
@@ -256,14 +256,14 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 			price.getPorts().add(port);
 		}
 
-		pricingModel.getCooldownPrices().add(price);
+		costModel.getCooldownCosts().add(price);
 	}
 
 	/**
 	 * Sets up a cooldown pricing model including an index
 	 */
 	public void setupCooldownLumpSum(String expression) {
-		final PricingModel pricingModel = scenario.getPricingModel();
+		final CostModel costModel = scenario.getCostModel();
 		final PortModel portModel = scenario.getPortModel();
 
 		final CooldownPrice price = PricingFactory.eINSTANCE.createCooldownPrice();
@@ -273,7 +273,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 			price.getPorts().add(port);
 		}
 
-		pricingModel.getCooldownPrices().add(price);
+		costModel.getCooldownCosts().add(price);
 	}
 
 	public CharterOutEvent makeCharterOut(MinimalScenarioCreator msc, MMXRootObject scenario, Port startPort, Port endPort) {
