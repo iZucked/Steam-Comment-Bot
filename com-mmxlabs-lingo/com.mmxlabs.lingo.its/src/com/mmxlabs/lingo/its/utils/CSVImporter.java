@@ -49,6 +49,7 @@ import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.importer.PortModelImporter;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.importers.CostModelImporter;
 import com.mmxlabs.models.lng.pricing.importers.DataIndexImporter;
 import com.mmxlabs.models.lng.pricing.importers.PortCostImporter;
 import com.mmxlabs.models.lng.pricing.importers.PricingModelImporter;
@@ -111,8 +112,8 @@ public class CSVImporter {
 
 		dataMap.put(PricingModelImporter.CHARTER_CURVE_KEY, baseFileName + "/" + "Charter Curves.csv");
 		dataMap.put(SpotMarketsModelImporter.CHARTER_PRICING_KEY, baseFileName + "/" + "Charter Markets.csv");
-		dataMap.put(PricingModelImporter.COOLDOWN_PRICING_KEY, baseFileName + "/" + "Cooldown Prices.csv");
-		dataMap.put(PricingModelImporter.PORT_COSTS_KEY, baseFileName + "/" + "Port Costs.csv");
+		dataMap.put(CostModelImporter.COOLDOWN_PRICING_KEY, baseFileName + "/" + "Cooldown Prices.csv");
+		dataMap.put(CostModelImporter.PORT_COSTS_KEY, baseFileName + "/" + "Port Costs.csv");
 		dataMap.put(PricingModelImporter.PRICE_CURVE_KEY, baseFileName + "/" + "Commodity Curves.csv");
 		dataMap.put(PricingModelImporter.BASEFUEL_PRICING_KEY, baseFileName + "/" + "Base Fuel Curves.csv");
 		dataMap.put(SpotMarketsModelImporter.SPOT_CARGO_MARKETS_KEY, baseFileName + "/" + "Spot Cargo Markets.csv");
