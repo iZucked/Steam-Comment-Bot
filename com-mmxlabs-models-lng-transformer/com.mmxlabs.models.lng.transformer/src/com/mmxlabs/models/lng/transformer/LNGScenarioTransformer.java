@@ -385,11 +385,11 @@ public class LNGScenarioTransformer {
 
 		timeZoneToUtcOffsetProvider.setTimeZeroInMillis(Instant.from(dateHelper.getEarliestTime()).toEpochMilli());
 
-		if (rootObject.getPortfolioModel().isSetPromptPeriodStart()) {
-			promptPeriodProviderEditor.setStartOfPromptPeriod(dateHelper.convertTime(rootObject.getPortfolioModel().getPromptPeriodStart()));
+		if (rootObject.isSetPromptPeriodStart()) {
+			promptPeriodProviderEditor.setStartOfPromptPeriod(dateHelper.convertTime(rootObject.getPromptPeriodStart()));
 		}
-		if (rootObject.getPortfolioModel().isSetPromptPeriodEnd()) {
-			promptPeriodProviderEditor.setEndOfPromptPeriod(dateHelper.convertTime(rootObject.getPortfolioModel().getPromptPeriodEnd()));
+		if (rootObject.isSetPromptPeriodEnd()) {
+			promptPeriodProviderEditor.setEndOfPromptPeriod(dateHelper.convertTime(rootObject.getPromptPeriodEnd()));
 		}
 
 		/**
@@ -400,7 +400,7 @@ public class LNGScenarioTransformer {
 		final Association<BaseFuelIndex, ICurve> baseFuelIndexAssociation = new Association<BaseFuelIndex, ICurve>();
 		final Association<CharterIndex, ICurve> charterIndexAssociation = new Association<CharterIndex, ICurve>();
 
-		final PricingModel pricingModel = rootObject.getPricingModel();
+		final PricingModel pricingModel = rootObject.getReferenceModel().getPricingModel();
 		// For each curve, register with the SeriesParser object
 		for (final CommodityIndex commodityIndex : pricingModel.getCommodityIndices()) {
 			final Index<Double> index = commodityIndex.getData();
@@ -506,9 +506,9 @@ public class LNGScenarioTransformer {
 		/*
 		 * Construct ports for each port in the scenario port model, and keep them in a two-way lookup table (the two-way lookup is needed to do things like setting distances later).
 		 */
-		final PortModel portModel = rootObject.getPortModel();
+		final PortModel portModel = rootObject.getReferenceModel().getPortModel();
 
-		final CostModel costModel = rootObject.getCostModel();
+		final CostModel costModel = rootObject.getReferenceModel().getCostModel();
 
 		final Map<Port, ICooldownCalculator> cooldownCalculators = new HashMap<Port, ICooldownCalculator>();
 		for (final CooldownPrice price : costModel.getCooldownCosts()) {
@@ -589,7 +589,7 @@ public class LNGScenarioTransformer {
 			}
 		}
 
-		final CommercialModel commercialModel = rootObject.getCommercialModel();
+		final CommercialModel commercialModel = rootObject.getReferenceModel().getCommercialModel();
 
 		// Any NPE's in the following code are likely due to missing associations between a IContractTransformer and the EMF AContract object. IContractTransformer instances are typically OSGi
 		// services. Ensure their bundles have been started!
@@ -715,7 +715,7 @@ public class LNGScenarioTransformer {
 
 	private void setNominatedVessels(@NonNull final ISchedulerBuilder builder, @NonNull final ModelEntityMap modelEntityMap) {
 
-		final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
+		final CargoModel cargoModel = rootObject.getCargoModel();
 		if (cargoModel != null) {
 
 			for (final LoadSlot loadSlot : cargoModel.getLoadSlots()) {
@@ -742,8 +742,8 @@ public class LNGScenarioTransformer {
 		// TODO: Freeze as part of the buildXXX methods when object is created rather than here.
 
 		final Set<AssignableElement> assignableElements = new LinkedHashSet<>();
-		assignableElements.addAll(rootObject.getPortfolioModel().getCargoModel().getCargoes());
-		assignableElements.addAll(rootObject.getPortfolioModel().getCargoModel().getVesselEvents());
+		assignableElements.addAll(rootObject.getCargoModel().getCargoes());
+		assignableElements.addAll(rootObject.getCargoModel().getVesselEvents());
 
 		for (final AssignableElement assignableElement : assignableElements) {
 			final VesselAssignmentType vesselAssignmentType = assignableElement.getVesselAssignmentType();
@@ -814,7 +814,7 @@ public class LNGScenarioTransformer {
 
 		final ZonedDateTime latestDate = dateHelper.getLatestTime();
 
-		final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
+		final CargoModel cargoModel = rootObject.getCargoModel();
 
 		for (final VesselEvent event : cargoModel.getVesselEvents()) {
 
@@ -894,7 +894,7 @@ public class LNGScenarioTransformer {
 		final Set<LoadSlot> usedLoadSlots = new HashSet<LoadSlot>();
 		final Set<DischargeSlot> usedDischargeSlots = new HashSet<DischargeSlot>();
 
-		final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
+		final CargoModel cargoModel = rootObject.getCargoModel();
 		final Map<Slot, IPortSlot> transferSlotMap = new HashMap<Slot, IPortSlot>();
 
 		for (final Cargo eCargo : cargoModel.getCargoes()) {
@@ -1476,7 +1476,7 @@ public class LNGScenarioTransformer {
 	private void buildSpotCargoMarkets(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation,
 			@NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap) {
 
-		final SpotMarketsModel spotMarketsModel = rootObject.getSpotMarketsModel();
+		final SpotMarketsModel spotMarketsModel = rootObject.getReferenceModel().getSpotMarketsModel();
 		if (spotMarketsModel == null) {
 			return;
 		}
@@ -2034,7 +2034,7 @@ public class LNGScenarioTransformer {
 	private void buildMarkToMarkets(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Collection<IContractTransformer> contractTransformers,
 			final ModelEntityMap modelEntityMap) {
 
-		final SpotMarketsModel spotMarketsModel = rootObject.getSpotMarketsModel();
+		final SpotMarketsModel spotMarketsModel = rootObject.getReferenceModel().getSpotMarketsModel();
 		if (spotMarketsModel == null) {
 			return;
 		}
@@ -2198,7 +2198,7 @@ public class LNGScenarioTransformer {
 		/*
 		 * Now fill out the distances from the distance model. Firstly we need to create the default distance matrix.
 		 */
-		final PortModel portModel = rootObject.getPortModel();
+		final PortModel portModel = rootObject.getReferenceModel().getPortModel();
 		for (final Route r : portModel.getRoutes()) {
 			// Store Route under it's name
 			modelEntityMap.addModelObject(r, r.getName());
@@ -2213,7 +2213,7 @@ public class LNGScenarioTransformer {
 			}
 
 			// Set extra time and fuel consumption
-			final FleetModel fleetModel = rootObject.getFleetModel();
+			final FleetModel fleetModel = rootObject.getReferenceModel().getFleetModel();
 			for (final VesselClass evc : fleetModel.getVesselClasses()) {
 				for (final VesselClassRouteParameters routeParameters : evc.getRouteParameters()) {
 					builder.setVesselClassRouteTransitTime(routeParameters.getRoute().getName(), vesselAssociation.lookupNullChecked(evc), routeParameters.getExtraTransitTime());
@@ -2230,7 +2230,7 @@ public class LNGScenarioTransformer {
 			}
 
 			// set tolls
-			final CostModel costModel = rootObject.getCostModel();
+			final CostModel costModel = rootObject.getReferenceModel().getCostModel();
 			for (final RouteCost routeCost : costModel.getRouteCosts()) {
 				final IVesselClass vesselClass = vesselAssociation.lookupNullChecked(routeCost.getVesselClass());
 
@@ -2263,8 +2263,8 @@ public class LNGScenarioTransformer {
 		// TODO: Check that we are mutliplying/dividing correctly to maintain
 		// precision
 
-		final FleetModel fleetModel = rootObject.getFleetModel();
-		final PortModel portModel = rootObject.getPortModel();
+		final FleetModel fleetModel = rootObject.getReferenceModel().getFleetModel();
+		final PortModel portModel = rootObject.getReferenceModel().getPortModel();
 
 		// look up prices
 
@@ -2301,7 +2301,7 @@ public class LNGScenarioTransformer {
 		// Sorted by fleet model vessel order
 		final List<VesselAvailability> sortedAvailabilities = new ArrayList<>();
 		{
-			final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
+			final CargoModel cargoModel = rootObject.getCargoModel();
 			for (final Vessel vessel : fleetModel.getVessels()) {
 
 				for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
@@ -2394,7 +2394,7 @@ public class LNGScenarioTransformer {
 
 		// Spot market generation
 		{
-			final SpotMarketsModel spotMarketsModel = rootObject.getSpotMarketsModel();
+			final SpotMarketsModel spotMarketsModel = rootObject.getReferenceModel().getSpotMarketsModel();
 			int charterCount = 0;
 
 			final CharterOutStartDate charterOutStartDate = spotMarketsModel.getCharterOutStartDate();

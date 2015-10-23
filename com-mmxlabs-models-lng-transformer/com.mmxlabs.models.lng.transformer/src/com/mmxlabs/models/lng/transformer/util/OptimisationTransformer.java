@@ -161,7 +161,7 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 						assert vesselAvailability != null;
 
 						final IResource resource = vp.getResource(vesselAvailability);
-						assert (resource != null);
+						assert(resource != null);
 
 						final EList<Slot> slots = cargo.getSortedSlots();
 						for (final Slot currentSlot : slots) {
@@ -232,8 +232,8 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 		}
 
 		// final Map<Vessel, VesselAvailability> vesselAvailabilityMap = new HashMap<Vessel, VesselAvailability>();
-		final SpotMarketsModel spotMarketsModel = rootObject.getSpotMarketsModel();
-		final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
+		final SpotMarketsModel spotMarketsModel = rootObject.getReferenceModel().getSpotMarketsModel();
+		final CargoModel cargoModel = rootObject.getCargoModel();
 		// for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
 		// vesselAvailabilityMap.put(va.getVessel(), va);
 		// }

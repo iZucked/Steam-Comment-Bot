@@ -43,7 +43,7 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -104,24 +104,24 @@ public class PeriodTestUtils {
 
 	public static LNGScenarioModel createBasicScenario() {
 		final LNGScenarioModel scenarioModel = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
-		final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
+		final LNGReferenceModel referenceModel = LNGScenarioFactory.eINSTANCE.createLNGReferenceModel();
 		final CargoModel cargoModel = CargoFactory.eINSTANCE.createCargoModel();
 		final FleetModel fleetModel = FleetFactory.eINSTANCE.createFleetModel();
 		final PortModel portModel = PortFactory.eINSTANCE.createPortModel();
 		final ScheduleModel scheduleModel = ScheduleFactory.eINSTANCE.createScheduleModel();
+		scenarioModel.setReferenceModel(referenceModel);
 
-		scenarioModel.setFleetModel(fleetModel);
-		scenarioModel.setPortfolioModel(portfolioModel);
-		scenarioModel.setPortModel(portModel);
-		portfolioModel.setCargoModel(cargoModel);
-		portfolioModel.setScheduleModel(scheduleModel);
+		referenceModel.setFleetModel(fleetModel);
+		referenceModel.setPortModel(portModel);
+		scenarioModel.setCargoModel(cargoModel);
+		scenarioModel.setScheduleModel(scheduleModel);
 
 		return scenarioModel;
 	}
 
 	public static Schedule createSchedule(final LNGScenarioModel scenarioModel) {
 		final Schedule schedule = ScheduleFactory.eINSTANCE.createSchedule();
-		scenarioModel.getPortfolioModel().getScheduleModel().setSchedule(schedule);
+		scenarioModel.getScheduleModel().setSchedule(schedule);
 
 		return schedule;
 	}
@@ -129,7 +129,7 @@ public class PeriodTestUtils {
 	public static CargoAllocation createCargoAllocation(final LNGScenarioModel scenarioModel, final Cargo cargo, final SlotAllocation loadAllocation, final SlotAllocation dischargeAllocation,
 			final Event... events) {
 		final CargoAllocation cargoAllocation = ScheduleFactory.eINSTANCE.createCargoAllocation();
-		scenarioModel.getPortfolioModel().getScheduleModel().getSchedule().getCargoAllocations().add(cargoAllocation);
+		scenarioModel.getScheduleModel().getSchedule().getCargoAllocations().add(cargoAllocation);
 
 		cargoAllocation.setInputCargo(cargo);
 		cargoAllocation.getSlotAllocations().add(loadAllocation);
@@ -144,7 +144,7 @@ public class PeriodTestUtils {
 
 	public static SlotAllocation createSlotAllocation(final LNGScenarioModel scenarioModel, final Slot slot) {
 		final SlotAllocation slotAllocation = ScheduleFactory.eINSTANCE.createSlotAllocation();
-		scenarioModel.getPortfolioModel().getScheduleModel().getSchedule().getSlotAllocations().add(slotAllocation);
+		scenarioModel.getScheduleModel().getSchedule().getSlotAllocations().add(slotAllocation);
 
 		slotAllocation.setSlot(slot);
 
@@ -180,7 +180,7 @@ public class PeriodTestUtils {
 	public static Vessel createVessel(final LNGScenarioModel scenarioModel, final String name) {
 		final Vessel vessel = FleetFactory.eINSTANCE.createVessel();
 		vessel.setName(name);
-		scenarioModel.getFleetModel().getVessels().add(vessel);
+		scenarioModel.getReferenceModel().getFleetModel().getVessels().add(vessel);
 		return vessel;
 	}
 
@@ -191,7 +191,7 @@ public class PeriodTestUtils {
 		final HeelOptions heelOptions = FleetFactory.eINSTANCE.createHeelOptions();
 		vesselAvailability.setStartHeel(heelOptions);
 
-		scenarioModel.getPortfolioModel().getCargoModel().getVesselAvailabilities().add(vesselAvailability);
+		scenarioModel.getCargoModel().getVesselAvailabilities().add(vesselAvailability);
 		return vesselAvailability;
 	}
 
@@ -199,13 +199,13 @@ public class PeriodTestUtils {
 		final Port port = PortFactory.eINSTANCE.createPort();
 		port.setName(name);
 		port.setTimeZone("Etc/UTC");
-		scenarioModel.getPortModel().getPorts().add(port);
+		scenarioModel.getReferenceModel().getPortModel().getPorts().add(port);
 		return port;
 	}
 
 	public static Cargo createCargo(final LNGScenarioModel scenarioModel, final Slot... slots) {
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
-		scenarioModel.getPortfolioModel().getCargoModel().getCargoes().add(cargo);
+		scenarioModel.getCargoModel().getCargoes().add(cargo);
 
 		for (final Slot slot : slots) {
 			cargo.getSlots().add(slot);
@@ -216,17 +216,17 @@ public class PeriodTestUtils {
 
 	public static Cargo createCargo(final LNGScenarioModel scenarioModel, final String name, final Port loadPort, final LocalDate loadDate, final Port dischargePort, final LocalDate dischargeDate) {
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
-		scenarioModel.getPortfolioModel().getCargoModel().getCargoes().add(cargo);
+		scenarioModel.getCargoModel().getCargoes().add(cargo);
 
 		final LoadSlot loadSlot = createLoadSlot(scenarioModel, name + "-load");
 		loadSlot.setWindowStart(loadDate);
 		cargo.getSlots().add(loadSlot);
-		scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().add(loadSlot);
+		scenarioModel.getCargoModel().getLoadSlots().add(loadSlot);
 
 		final DischargeSlot dischargeSlot = createDischargeSlot(scenarioModel, name + "-discharge");
 		dischargeSlot.setWindowStart(dischargeDate);
 		cargo.getSlots().add(dischargeSlot);
-		scenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().add(dischargeSlot);
+		scenarioModel.getCargoModel().getDischargeSlots().add(dischargeSlot);
 
 		return cargo;
 	}
@@ -234,7 +234,7 @@ public class PeriodTestUtils {
 	public static CharterOutEvent createCharterOutEvent(final LNGScenarioModel scenarioModel, final String name) {
 		final CharterOutEvent event = CargoFactory.eINSTANCE.createCharterOutEvent();
 		event.setName(name);
-		scenarioModel.getPortfolioModel().getCargoModel().getVesselEvents().add(event);
+		scenarioModel.getCargoModel().getVesselEvents().add(event);
 
 		return event;
 	}
@@ -242,7 +242,7 @@ public class PeriodTestUtils {
 	public static VesselEvent createCharterOutEvent(final LNGScenarioModel scenarioModel, final String name, final Port port, final LocalDateTime date, final int duration) {
 		final CharterOutEvent event = CargoFactory.eINSTANCE.createCharterOutEvent();
 		event.setName(name);
-		scenarioModel.getPortfolioModel().getCargoModel().getVesselEvents().add(event);
+		scenarioModel.getCargoModel().getVesselEvents().add(event);
 
 		event.setStartBy(date);
 		event.setStartAfter(date);
@@ -255,28 +255,28 @@ public class PeriodTestUtils {
 	public static LoadSlot createLoadSlot(final LNGScenarioModel scenarioModel, final String name) {
 		final LoadSlot slot = CargoFactory.eINSTANCE.createLoadSlot();
 		slot.setName(name);
-		scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().add(slot);
+		scenarioModel.getCargoModel().getLoadSlots().add(slot);
 		return slot;
 	}
 
 	public static SpotLoadSlot createSpotLoadSlot(final LNGScenarioModel scenarioModel, final String name) {
 		final SpotLoadSlot slot = CargoFactory.eINSTANCE.createSpotLoadSlot();
 		slot.setName(name);
-		scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().add(slot);
+		scenarioModel.getCargoModel().getLoadSlots().add(slot);
 		return slot;
 	}
 
 	public static DischargeSlot createDischargeSlot(final LNGScenarioModel scenarioModel, final String name) {
 		final DischargeSlot slot = CargoFactory.eINSTANCE.createDischargeSlot();
 		slot.setName(name);
-		scenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().add(slot);
+		scenarioModel.getCargoModel().getDischargeSlots().add(slot);
 		return slot;
 	}
 
 	public static SpotDischargeSlot createSpotDischargeSlot(final LNGScenarioModel scenarioModel, final String name) {
 		final SpotDischargeSlot slot = CargoFactory.eINSTANCE.createSpotDischargeSlot();
 		slot.setName(name);
-		scenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().add(slot);
+		scenarioModel.getCargoModel().getDischargeSlots().add(slot);
 		return slot;
 	}
 
@@ -334,7 +334,7 @@ public class PeriodTestUtils {
 
 	public static Sequence createSequence(final LNGScenarioModel scenarioModel, final Event... events) {
 		final Sequence sequence = ScheduleFactory.eINSTANCE.createSequence();
-		scenarioModel.getPortfolioModel().getScheduleModel().getSchedule().getSequences().add(sequence);
+		scenarioModel.getScheduleModel().getSchedule().getSequences().add(sequence);
 
 		Event prevEvent = null;
 		for (final Event event : events) {

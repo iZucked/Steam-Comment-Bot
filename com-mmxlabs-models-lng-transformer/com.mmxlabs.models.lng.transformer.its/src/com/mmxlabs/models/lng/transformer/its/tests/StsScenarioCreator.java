@@ -9,12 +9,9 @@ import java.time.ZonedDateTime;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.commercial.CommercialModel;
-import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 
 /**
@@ -43,9 +40,6 @@ public class StsScenarioCreator extends DefaultScenarioCreator {
 	public StsScenarioCreator() {
 		scenario = ManifestJointModel.createEmptyInstance(null);
 
-		final CommercialModel commercialModel = scenario.getCommercialModel();
-		final FleetModel fleetModel = scenario.getFleetModel();
-		final LNGPortfolioModel portfolioModel = scenario.getPortfolioModel();
 		// need to create a legal entity for contracts
 		contractEntity = addEntity("Third-parties");
 		// need to create a legal entity for shipping
@@ -61,7 +55,7 @@ public class StsScenarioCreator extends DefaultScenarioCreator {
 		vessels = fleetCreator.createMultipleDefaultVessels(vc, 2, shippingEntity);
 		final VesselAvailability[] vesselAvailabilities = new VesselAvailability[vessels.length];
 		for (int i = 0; i < vessels.length; ++i) {
-			for (VesselAvailability vesselAvailability : scenario.getPortfolioModel().getCargoModel().getVesselAvailabilities()) {
+			for (VesselAvailability vesselAvailability : scenario.getCargoModel().getVesselAvailabilities()) {
 				if (vesselAvailability.getVessel() == vessels[i]) {
 					vesselAvailabilities[i] = vesselAvailability;
 				}

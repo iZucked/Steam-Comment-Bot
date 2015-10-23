@@ -17,7 +17,6 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -41,12 +40,8 @@ public class RedirectionPostExportProcessor implements IPostExportProcessor {
 
 		if (rootObject instanceof LNGScenarioModel) {
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
-			final LNGPortfolioModel portfolioModel = lngScenarioModel.getPortfolioModel();
-			if (portfolioModel == null) {
-				return;
-			}
-
-			final CargoModel cargoModel = portfolioModel.getCargoModel();
+		
+			final CargoModel cargoModel = lngScenarioModel.getCargoModel();
 			if (cargoModel == null) {
 				return;
 			}

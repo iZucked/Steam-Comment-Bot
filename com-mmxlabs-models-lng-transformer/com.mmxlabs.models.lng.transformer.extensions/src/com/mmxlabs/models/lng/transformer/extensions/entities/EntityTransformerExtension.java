@@ -58,7 +58,7 @@ public class EntityTransformerExtension implements ITransformerExtension {
 		this.modelEntityMap = modelEntityMap;
 
 		// Register entities first, then in finish transforming create the books.
-		final CommercialModel commercialModel = rootObject.getCommercialModel();
+		final CommercialModel commercialModel = rootObject.getReferenceModel().getCommercialModel();
 
 		for (final BaseLegalEntity e : commercialModel.getEntities()) {
 			if (e instanceof LegalEntity) {
@@ -72,7 +72,7 @@ public class EntityTransformerExtension implements ITransformerExtension {
 	@Override
 	public void finishTransforming() {
 
-		final CommercialModel commercialModel = rootObject.getCommercialModel();
+		final CommercialModel commercialModel = rootObject.getReferenceModel().getCommercialModel();
 		for (final BaseLegalEntity e : commercialModel.getEntities()) {
 			IEntity entity = modelEntityMap.getOptimiserObject(e, IEntity.class);
 			if (e.getShippingBook() instanceof SimpleEntityBook) {
@@ -94,7 +94,7 @@ public class EntityTransformerExtension implements ITransformerExtension {
 		}
 
 		// Generic stuff -> split into separate extension
-		final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
+		final CargoModel cargoModel = rootObject.getCargoModel();
 		for (final VesselAvailability eVesselAvailability : cargoModel.getVesselAvailabilities()) {
 			final IVesselAvailability vesselAvailability = modelEntityMap.getOptimiserObject(eVesselAvailability, IVesselAvailability.class);
 			final IEntity entity = modelEntityMap.getOptimiserObject(eVesselAvailability.getEntity(), IEntity.class);

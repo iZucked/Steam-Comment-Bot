@@ -41,7 +41,6 @@ import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.parameters.provider.ParametersItemProviderAdapterFactory;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
@@ -231,10 +230,7 @@ public final class OptimisationHelper {
 
 		OptimiserSettings previousSettings = null;
 		if (scenario != null) {
-			final LNGPortfolioModel portfolioModel = scenario.getPortfolioModel();
-			if (portfolioModel != null) {
-				previousSettings = portfolioModel.getParameters();
-			}
+			previousSettings = scenario.getParameters();
 		}
 
 		final OptimiserSettings defaultSettings = ScenarioUtils.createDefaultSettings();

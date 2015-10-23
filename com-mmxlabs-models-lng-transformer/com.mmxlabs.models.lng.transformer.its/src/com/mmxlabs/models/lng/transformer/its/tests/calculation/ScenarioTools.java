@@ -64,7 +64,6 @@ import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
@@ -220,9 +219,9 @@ public class ScenarioTools {
 
 		final LNGScenarioModel scenario = ManifestJointModel.createEmptyInstance(null);
 
-		final PricingModel pricingModel = scenario.getPricingModel();
-		final CostModel costModel = scenario.getCostModel();
-		final SpotMarketsModel spotMarketsModel = scenario.getSpotMarketsModel();
+		final PricingModel pricingModel = scenario.getReferenceModel().getPricingModel();
+		final CostModel costModel = scenario.getReferenceModel().getCostModel();
+		final SpotMarketsModel spotMarketsModel = scenario.getReferenceModel().getSpotMarketsModel();
 
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class
@@ -254,13 +253,12 @@ public class ScenarioTools {
 		costModel.getBaseFuelCosts().add(bfc);
 		pricingModel.getBaseFuelPrices().add(bfc.getIndex());
 
-		final FleetModel fleetModel = scenario.getFleetModel();
+		final FleetModel fleetModel = scenario.getReferenceModel().getFleetModel();
 		fleetModel.getBaseFuels().add(baseFuel);
 
-		final PortModel portModel = scenario.getPortModel();
+		final PortModel portModel = scenario.getReferenceModel().getPortModel();
 
-		final LNGPortfolioModel portfolioModel = scenario.getPortfolioModel();
-		final CargoModel cargoModel = portfolioModel.getCargoModel();
+		final CargoModel cargoModel = scenario.getCargoModel();
 
 		final VesselClass vc = FleetFactory.eINSTANCE.createVesselClass();
 		final VesselStateAttributes laden = FleetFactory.eINSTANCE.createVesselStateAttributes();
@@ -355,7 +353,7 @@ public class ScenarioTools {
 			r.getLines().add(distancLineBack);
 		}
 
-		final CommercialModel commercialModel = scenario.getCommercialModel();
+		final CommercialModel commercialModel = scenario.getReferenceModel().getCommercialModel();
 
 		final LegalEntity e = CommercialFactory.eINSTANCE.createLegalEntity();
 		e.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
@@ -479,14 +477,13 @@ public class ScenarioTools {
 			final int charterOutTimeDays, final int heelLimit) {
 
 		final LNGScenarioModel scenario = ManifestJointModel.createEmptyInstance(null);
-		final PortModel portModel = scenario.getPortModel();
-		final FleetModel fleetModel = scenario.getFleetModel();
-		final PricingModel pricingModel = scenario.getPricingModel();
-		final CostModel costModel = scenario.getCostModel();
-		final SpotMarketsModel spotMarketsModel = scenario.getSpotMarketsModel();
+		final PortModel portModel = scenario.getReferenceModel().getPortModel();
+		final FleetModel fleetModel = scenario.getReferenceModel().getFleetModel();
+		final PricingModel pricingModel = scenario.getReferenceModel().getPricingModel();
+		final CostModel costModel = scenario.getReferenceModel().getCostModel();
+		final SpotMarketsModel spotMarketsModel = scenario.getReferenceModel().getSpotMarketsModel();
 
-		final LNGPortfolioModel portfolioModel = scenario.getPortfolioModel();
-		final CargoModel cargoModel = portfolioModel.getCargoModel();
+		final CargoModel cargoModel = scenario.getCargoModel();
 
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class
@@ -600,7 +597,7 @@ public class ScenarioTools {
 		r.getLines().add(distance);
 		r.getLines().add(distance2);
 
-		final CommercialModel commercialModel = scenario.getCommercialModel();
+		final CommercialModel commercialModel = scenario.getReferenceModel().getCommercialModel();
 		final LegalEntity e = CommercialFactory.eINSTANCE.createLegalEntity();
 		e.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
 		e.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());

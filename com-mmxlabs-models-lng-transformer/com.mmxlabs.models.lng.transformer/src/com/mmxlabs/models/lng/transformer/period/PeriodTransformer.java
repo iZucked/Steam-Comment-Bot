@@ -186,8 +186,8 @@ public class PeriodTransformer {
 		// Evaluate copy!
 		final EditingDomain internalDomain = evaluateScenario(optimiserSettings, output);
 
-		final CargoModel cargoModel = output.getPortfolioModel().getCargoModel();
-		final SpotMarketsModel spotMarketsModel = output.getSpotMarketsModel();
+		final CargoModel cargoModel = output.getCargoModel();
+		final SpotMarketsModel spotMarketsModel = output.getReferenceModel().getSpotMarketsModel();
 
 		// Generate the schedule map - maps cargoes and events to schedule information for date, port and heel data extraction
 		final Map<AssignableElement, PortVisit> startConditionMap = new HashMap<>();
@@ -205,18 +205,17 @@ public class PeriodTransformer {
 
 		// Filter out slots and cargoes, create new availabilities for special cases.
 		findSlotsAndCargoesToRemove(internalDomain, periodRecord, cargoModel, seenSlots, slotsToRemove, cargoesToRemove, slotAllocationMap);
-		final Triple<Set<Cargo>, Set<Event>, Set<VesselEvent>> eventDependencies = findVesselEventsToRemoveAndDependencies(output.getPortfolioModel().getScheduleModel().getSchedule(), periodRecord,
-				cargoModel);
+		final Triple<Set<Cargo>, Set<Event>, Set<VesselEvent>> eventDependencies = findVesselEventsToRemoveAndDependencies(output.getScheduleModel().getSchedule(), periodRecord, cargoModel);
 		updateSlotsToRemoveWithDependencies(slotAllocationMap, slotsToRemove, cargoesToRemove, eventDependencies.getFirst());
 		// Update vessel availabilities
 		updateVesselAvailabilities(periodRecord, cargoModel, spotMarketsModel, startConditionMap, endConditionMap, eventDependencies.getFirst(), eventDependencies.getSecond());
 		checkIfRemovedSlotsAreStillNeeded(seenSlots, slotsToRemove, cargoesToRemove, newVesselAvailabilities, startConditionMap, endConditionMap, slotAllocationMap);
 		removeExcludedSlotsAndCargoes(internalDomain, mapping, slotsToRemove, cargoesToRemove);
 		// Some slots are brought in from outside the period, make sure they are locked
-		lockOpenSlots(output.getPortfolioModel().getCargoModel(), periodRecord);
+		lockOpenSlots(output.getCargoModel(), periodRecord);
 		// TEMP HACK UNTIL MULTIPLE AVAILABILITES PROPERLY IN PLACE AND filterSlotsAndCargoes can properly handle this.
 		for (final VesselAvailability newVA : newVesselAvailabilities) {
-			for (final VesselAvailability vesselAvailability : wholeScenario.getPortfolioModel().getCargoModel().getVesselAvailabilities()) {
+			for (final VesselAvailability vesselAvailability : wholeScenario.getCargoModel().getVesselAvailabilities()) {
 				if (newVA.getVessel() == mapping.getCopyFromOriginal(vesselAvailability.getVessel())) {
 					newVA.setEntity(mapping.getCopyFromOriginal(vesselAvailability.getEntity()));
 					if (vesselAvailability.isSetTimeCharterRate()) {
@@ -231,28 +230,29 @@ public class PeriodTransformer {
 		// Filter out vessels
 		filterVesselAvailabilities(internalDomain, periodRecord, cargoModel, mapping);
 
-		output.getPortfolioModel().getCargoModel().getVesselAvailabilities().addAll(newVesselAvailabilities);
+		output.getCargoModel().getVesselAvailabilities().addAll(newVesselAvailabilities);
 
 		trimSpotMarketCurves(internalDomain, periodRecord, output);
 
 		// Remove schedule model
-		output.getPortfolioModel().getScheduleModel().setSchedule(null);
+		output.getScheduleModel().setSchedule(null);
 
 		return output;
 	}
 
 	private void lockOpenSlots(CargoModel cargoModel, PeriodRecord periodRecord) {
-		for (List<Slot> slotList : new List[] {cargoModel.getLoadSlots(), cargoModel.getDischargeSlots()}) {
+		for (List<Slot> slotList : new List[] { cargoModel.getLoadSlots(), cargoModel.getDischargeSlots() }) {
 			for (Slot slot : slotList) {
 				if (inclusionChecker.getObjectInclusionType(slot, periodRecord).getFirst() == InclusionType.Out) {
 					slot.setLocked(true);
 				}
 			}
-			
+
 		}
 	}
 
-	private void updateSlotsToRemoveWithDependencies(final Map<Slot, SlotAllocation> slotAllocationMap, final Set<Slot> slotsToRemove, final Set<Cargo> cargoesToRemove, final Set<Cargo> cargoesToKeep) {
+	private void updateSlotsToRemoveWithDependencies(final Map<Slot, SlotAllocation> slotAllocationMap, final Set<Slot> slotsToRemove, final Set<Cargo> cargoesToRemove,
+			final Set<Cargo> cargoesToKeep) {
 		for (Cargo cargo : cargoesToKeep) {
 			if (cargoesToRemove.contains(cargo)) {
 				lockDownCargoDates(slotAllocationMap, cargo);
@@ -603,7 +603,7 @@ public class PeriodTransformer {
 	}
 
 	public void generateStartAndEndConditionsMap(final LNGScenarioModel output, final Map<AssignableElement, PortVisit> startConditionMap, final Map<AssignableElement, PortVisit> endConditionMap) {
-		final ScheduleModel scheduleModel = output.getPortfolioModel().getScheduleModel();
+		final ScheduleModel scheduleModel = output.getScheduleModel();
 		final Schedule schedule = scheduleModel.getSchedule();
 		for (final Sequence sequence : schedule.getSequences()) {
 			for (final Event event : sequence.getEvents()) {
@@ -695,7 +695,7 @@ public class PeriodTransformer {
 	}
 
 	public void generateSlotAllocationMap(final LNGScenarioModel output, final Map<Slot, SlotAllocation> slotAllocationMap) {
-		final ScheduleModel scheduleModel = output.getPortfolioModel().getScheduleModel();
+		final ScheduleModel scheduleModel = output.getScheduleModel();
 		final Schedule schedule = scheduleModel.getSchedule();
 		for (final SlotAllocation slotAllocation : schedule.getSlotAllocations()) {
 			slotAllocationMap.put(slotAllocation.getSlot(), slotAllocation);
@@ -866,7 +866,7 @@ public class PeriodTransformer {
 	}
 
 	public void trimSpotMarketCurves(final EditingDomain internalDomain, final PeriodRecord periodRecord, final LNGScenarioModel scenario) {
-		final SpotMarketsModel spotMarketsModel = scenario.getSpotMarketsModel();
+		final SpotMarketsModel spotMarketsModel = scenario.getReferenceModel().getSpotMarketsModel();
 		ZonedDateTime earliestDate = periodRecord.lowerBoundary;
 		ZonedDateTime latestDate = periodRecord.upperBoundary;
 		if (periodRecord.lowerBoundary == null || periodRecord.upperBoundary == null) {

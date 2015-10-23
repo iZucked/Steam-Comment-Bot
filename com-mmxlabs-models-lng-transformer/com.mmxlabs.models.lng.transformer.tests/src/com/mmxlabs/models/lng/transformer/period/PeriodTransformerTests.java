@@ -900,7 +900,7 @@ public class PeriodTransformerTests {
 		final Set<Cargo> removedCargoes = new HashSet<>();
 		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
 
-		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), seenSlots, removedSlots,
+		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots,
 				removedCargoes, slotAllocationMap);
 
 		// Verify relevant slots and cargoes marked as remove
@@ -912,9 +912,9 @@ public class PeriodTransformerTests {
 		Assert.assertTrue(removedCargoes.contains(copyCargo));
 
 		// No change to copy scenario
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
+		Assert.assertTrue(copyScenarioModel.getCargoModel().getCargoes().contains(copyCargo));
+		Assert.assertTrue(copyScenarioModel.getCargoModel().getLoadSlots().contains(copyLoadSlot));
+		Assert.assertTrue(copyScenarioModel.getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
 	}
 
 	@Test
@@ -947,7 +947,7 @@ public class PeriodTransformerTests {
 		final Set<Cargo> removedCargoes = new HashSet<>();
 		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
 
-		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), seenSlots, removedSlots,
+		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots,
 				removedCargoes, slotAllocationMap);
 
 		// Verify relevant slots and cargoes marked as remove
@@ -1027,7 +1027,7 @@ public class PeriodTransformerTests {
 		final Set<Cargo> removedCargoes = new HashSet<>();
 		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
 
-		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), seenSlots, removedSlots,
+		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots,
 				removedCargoes, slotAllocationMap);
 
 		// Verify relevant slots and cargoes marked as remove
@@ -1153,7 +1153,7 @@ public class PeriodTransformerTests {
 		final Set<Cargo> removedCargoes = new HashSet<>();
 		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
 
-		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), seenSlots, removedSlots,
+		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots,
 				removedCargoes, slotAllocationMap);
 
 		// Verify relevant slots and cargoes marked as remove
@@ -1230,7 +1230,7 @@ public class PeriodTransformerTests {
 		final Set<Cargo> removedCargoes = new HashSet<>();
 		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
 
-		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), seenSlots, removedSlots,
+		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots,
 				removedCargoes, slotAllocationMap);
 
 		// Verify relevant slots and cargoes marked as remove
@@ -1287,7 +1287,7 @@ public class PeriodTransformerTests {
 		final Set<Cargo> removedCargoes = new HashSet<>();
 		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
 
-		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), seenSlots, removedSlots,
+		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots,
 				removedCargoes, slotAllocationMap);
 
 		// Verify relevant slots and cargoes marked as remove
@@ -1337,7 +1337,7 @@ public class PeriodTransformerTests {
 		final Set<Cargo> removedCargoes = new HashSet<>();
 		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
 
-		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), seenSlots, removedSlots,
+		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots,
 				removedCargoes, slotAllocationMap);
 
 		// Verify relevant slots and cargoes marked as remove
@@ -1388,7 +1388,7 @@ public class PeriodTransformerTests {
 		final Set<Cargo> removedCargoes = new HashSet<>();
 		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
 
-		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), seenSlots, removedSlots,
+		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots,
 				removedCargoes, slotAllocationMap);
 
 		// Verify relevant slots and cargoes marked as remove
@@ -1444,7 +1444,7 @@ public class PeriodTransformerTests {
 		final Set<Cargo> removedCargoes = new HashSet<>();
 		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
 
-		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), seenSlots, removedSlots,
+		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots,
 				removedCargoes, slotAllocationMap);
 
 		// Verify relevant slots and cargoes marked as remove
@@ -1506,7 +1506,7 @@ public class PeriodTransformerTests {
 		final Set<Cargo> removedCargoes = new HashSet<>();
 		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
 
-		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), seenSlots, removedSlots,
+		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), seenSlots, removedSlots,
 				removedCargoes, slotAllocationMap);
 
 		// Verify relevant slots and cargoes marked as remove
@@ -1571,13 +1571,13 @@ public class PeriodTransformerTests {
 		Schedule mockSchedule = Mockito.mock(Schedule.class);
 		EList<Sequence> l = ECollections.emptyEList();
 		Mockito.when(mockSchedule.getSequences()).thenReturn(l);
-		Triple<Set<Cargo>, Set<Event>, Set<VesselEvent>> eventDependencies = transformer.findVesselEventsToRemoveAndDependencies(mockSchedule, periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel());
-		transformer.filterVesselEvents(PeriodTestUtils.createEditingDomain(copyScenarioModel), eventDependencies.getThird(), copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+		Triple<Set<Cargo>, Set<Event>, Set<VesselEvent>> eventDependencies = transformer.findVesselEventsToRemoveAndDependencies(mockSchedule, periodRecord, copyScenarioModel.getCargoModel());
+		transformer.filterVesselEvents(PeriodTestUtils.createEditingDomain(copyScenarioModel), eventDependencies.getThird(), copyScenarioModel.getCargoModel(), mapping);
 
 		// No change to original
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getVesselEvents().contains(event));
+		Assert.assertTrue(scenarioModel.getCargoModel().getVesselEvents().contains(event));
 
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getVesselEvents().isEmpty());
+		Assert.assertTrue(copyScenarioModel.getCargoModel().getVesselEvents().isEmpty());
 
 		// Registered objects as removed.
 		Mockito.verify(mapping).registerRemovedOriginal(event);
@@ -1618,12 +1618,12 @@ public class PeriodTransformerTests {
 		EList<Sequence> l = ECollections.emptyEList();
 		Mockito.when(mockSchedule.getSequences()).thenReturn(l);
 
-		Triple<Set<Cargo>, Set<Event>, Set<VesselEvent>> eventDependencies = transformer.findVesselEventsToRemoveAndDependencies(mockSchedule, periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel());
-		transformer.filterVesselEvents(PeriodTestUtils.createEditingDomain(copyScenarioModel), eventDependencies.getThird(), copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+		Triple<Set<Cargo>, Set<Event>, Set<VesselEvent>> eventDependencies = transformer.findVesselEventsToRemoveAndDependencies(mockSchedule, periodRecord, copyScenarioModel.getCargoModel());
+		transformer.filterVesselEvents(PeriodTestUtils.createEditingDomain(copyScenarioModel), eventDependencies.getThird(), copyScenarioModel.getCargoModel(), mapping);
 
 		// No change to original
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getVesselEvents().contains(event));
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getVesselEvents().contains(copyEvent));
+		Assert.assertTrue(scenarioModel.getCargoModel().getVesselEvents().contains(event));
+		Assert.assertTrue(copyScenarioModel.getCargoModel().getVesselEvents().contains(copyEvent));
 
 		// Registered objects as removed.
 		Mockito.verifyNoMoreInteractions(mapping);
@@ -1664,12 +1664,12 @@ public class PeriodTransformerTests {
 		EList<Sequence> l = ECollections.emptyEList();
 		Mockito.when(mockSchedule.getSequences()).thenReturn(l);
 		
-		Triple<Set<Cargo>, Set<Event>, Set<VesselEvent>> eventDependencies = transformer.findVesselEventsToRemoveAndDependencies(mockSchedule, periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel());
-		transformer.filterVesselEvents(PeriodTestUtils.createEditingDomain(copyScenarioModel), eventDependencies.getThird(), copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+		Triple<Set<Cargo>, Set<Event>, Set<VesselEvent>> eventDependencies = transformer.findVesselEventsToRemoveAndDependencies(mockSchedule, periodRecord, copyScenarioModel.getCargoModel());
+		transformer.filterVesselEvents(PeriodTestUtils.createEditingDomain(copyScenarioModel), eventDependencies.getThird(), copyScenarioModel.getCargoModel(), mapping);
 
 		// No change to original
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getVesselEvents().contains(event));
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getVesselEvents().contains(copyEvent));
+		Assert.assertTrue(scenarioModel.getCargoModel().getVesselEvents().contains(event));
+		Assert.assertTrue(copyScenarioModel.getCargoModel().getVesselEvents().contains(copyEvent));
 
 		// Registered objects as removed.
 		Mockito.verifyNoMoreInteractions(mapping);
@@ -1710,13 +1710,13 @@ public class PeriodTransformerTests {
 		EList<Sequence> l = ECollections.emptyEList();
 		Mockito.when(mockSchedule.getSequences()).thenReturn(l);
 		
-		Triple<Set<Cargo>, Set<Event>, Set<VesselEvent>> eventDependencies = transformer.findVesselEventsToRemoveAndDependencies(mockSchedule, periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel());
-		transformer.filterVesselEvents(PeriodTestUtils.createEditingDomain(copyScenarioModel), eventDependencies.getThird(), copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+		Triple<Set<Cargo>, Set<Event>, Set<VesselEvent>> eventDependencies = transformer.findVesselEventsToRemoveAndDependencies(mockSchedule, periodRecord, copyScenarioModel.getCargoModel());
+		transformer.filterVesselEvents(PeriodTestUtils.createEditingDomain(copyScenarioModel), eventDependencies.getThird(), copyScenarioModel.getCargoModel(), mapping);
 
 		// No change to original
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getVesselEvents().contains(event));
+		Assert.assertTrue(scenarioModel.getCargoModel().getVesselEvents().contains(event));
 
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getVesselEvents().isEmpty());
+		Assert.assertTrue(copyScenarioModel.getCargoModel().getVesselEvents().isEmpty());
 
 		// Registered objects as removed.
 		Mockito.verify(mapping).registerRemovedOriginal(event);
@@ -1757,12 +1757,12 @@ public class PeriodTransformerTests {
 		Mockito.when(mapping.getCopyFromOriginal(vesselAvailability)).thenReturn(copyVesselAvailability);
 		Mockito.when(mapping.getOriginalFromCopy(copyVesselAvailability)).thenReturn(vesselAvailability);
 
-		transformer.filterVesselAvailabilities(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+		transformer.filterVesselAvailabilities(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), mapping);
 
 		// No change to original
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getVesselAvailabilities().contains(vesselAvailability));
+		Assert.assertTrue(scenarioModel.getCargoModel().getVesselAvailabilities().contains(vesselAvailability));
 
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getVesselAvailabilities().isEmpty());
+		Assert.assertTrue(copyScenarioModel.getCargoModel().getVesselAvailabilities().isEmpty());
 
 		// Registered objects as removed.
 		Mockito.verify(mapping).registerRemovedOriginal(vesselAvailability);
@@ -1802,13 +1802,13 @@ public class PeriodTransformerTests {
 
 		Mockito.when(mapping.getCopyFromOriginal(vesselAvailability)).thenReturn(copyVesselAvailability);
 		Mockito.when(mapping.getOriginalFromCopy(copyVesselAvailability)).thenReturn(vesselAvailability);
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getVesselAvailabilities().contains(copyVesselAvailability));
+		Assert.assertTrue(copyScenarioModel.getCargoModel().getVesselAvailabilities().contains(copyVesselAvailability));
 
-		transformer.filterVesselAvailabilities(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+		transformer.filterVesselAvailabilities(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), mapping);
 
 		// No change to original
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getVesselAvailabilities().contains(vesselAvailability));
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getVesselAvailabilities().contains(copyVesselAvailability));
+		Assert.assertTrue(scenarioModel.getCargoModel().getVesselAvailabilities().contains(vesselAvailability));
+		Assert.assertTrue(copyScenarioModel.getCargoModel().getVesselAvailabilities().contains(copyVesselAvailability));
 
 		// Registered objects as removed.
 		Mockito.verifyNoMoreInteractions(mapping);
@@ -1849,11 +1849,11 @@ public class PeriodTransformerTests {
 		Mockito.when(mapping.getCopyFromOriginal(vesselAvailability)).thenReturn(copyVesselAvailability);
 		Mockito.when(mapping.getOriginalFromCopy(copyVesselAvailability)).thenReturn(vesselAvailability);
 
-		transformer.filterVesselAvailabilities(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+		transformer.filterVesselAvailabilities(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), mapping);
 
 		// No change to original
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getVesselAvailabilities().contains(vesselAvailability));
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getVesselAvailabilities().contains(copyVesselAvailability));
+		Assert.assertTrue(scenarioModel.getCargoModel().getVesselAvailabilities().contains(vesselAvailability));
+		Assert.assertTrue(copyScenarioModel.getCargoModel().getVesselAvailabilities().contains(copyVesselAvailability));
 
 		// Registered objects as removed.
 		Mockito.verifyNoMoreInteractions(mapping);
@@ -1894,12 +1894,12 @@ public class PeriodTransformerTests {
 		Mockito.when(mapping.getCopyFromOriginal(vesselAvailability)).thenReturn(copyVesselAvailability);
 		Mockito.when(mapping.getOriginalFromCopy(copyVesselAvailability)).thenReturn(vesselAvailability);
 
-		transformer.filterVesselAvailabilities(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+		transformer.filterVesselAvailabilities(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), mapping);
 
 		// No change to original
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getVesselAvailabilities().contains(vesselAvailability));
+		Assert.assertTrue(scenarioModel.getCargoModel().getVesselAvailabilities().contains(vesselAvailability));
 
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getVesselAvailabilities().isEmpty());
+		Assert.assertTrue(copyScenarioModel.getCargoModel().getVesselAvailabilities().isEmpty());
 
 		// Registered objects as removed.
 		Mockito.verify(mapping).registerRemovedOriginal(vesselAvailability);
@@ -1940,11 +1940,11 @@ public class PeriodTransformerTests {
 		Mockito.when(mapping.getCopyFromOriginal(vesselAvailability)).thenReturn(copyVesselAvailability);
 		Mockito.when(mapping.getOriginalFromCopy(copyVesselAvailability)).thenReturn(vesselAvailability);
 
-		transformer.filterVesselAvailabilities(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+		transformer.filterVesselAvailabilities(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getCargoModel(), mapping);
 
 		// No change to original
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getVesselAvailabilities().contains(vesselAvailability));
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getVesselAvailabilities().contains(copyVesselAvailability));
+		Assert.assertTrue(scenarioModel.getCargoModel().getVesselAvailabilities().contains(vesselAvailability));
+		Assert.assertTrue(copyScenarioModel.getCargoModel().getVesselAvailabilities().contains(copyVesselAvailability));
 
 		// Registered objects as removed.
 		Mockito.verifyNoMoreInteractions(mapping);
@@ -1964,12 +1964,12 @@ public class PeriodTransformerTests {
 
 		// // Create a sample scenario
 		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
-		scenarioModel.setSpotMarketsModel(PeriodTestUtils.createSpotMarkets(scenarioModel, "testSpots"));
+		scenarioModel.getReferenceModel().setSpotMarketsModel(PeriodTestUtils.createSpotMarkets(scenarioModel, "testSpots"));
 
 		transformer.trimSpotMarketCurves(PeriodTestUtils.createEditingDomain(scenarioModel), periodRecord, scenarioModel);
 
-		for (SpotMarketGroup group : new SpotMarketGroup[] { scenarioModel.getSpotMarketsModel().getDesPurchaseSpotMarket(), scenarioModel.getSpotMarketsModel().getDesSalesSpotMarket(),
-				scenarioModel.getSpotMarketsModel().getFobPurchasesSpotMarket(), scenarioModel.getSpotMarketsModel().getFobSalesSpotMarket(), }) {
+		for (SpotMarketGroup group : new SpotMarketGroup[] { scenarioModel.getReferenceModel().getSpotMarketsModel().getDesPurchaseSpotMarket(), scenarioModel.getReferenceModel().getSpotMarketsModel().getDesSalesSpotMarket(),
+				scenarioModel.getReferenceModel().getSpotMarketsModel().getFobPurchasesSpotMarket(), scenarioModel.getReferenceModel().getSpotMarketsModel().getFobSalesSpotMarket(), }) {
 			EList<SpotMarket> markets = group.getMarkets();
 			SpotMarket market = markets.get(0);
 			SpotAvailability availability = market.getAvailability();
@@ -2198,13 +2198,13 @@ public class PeriodTransformerTests {
 		transformer.removeExcludedSlotsAndCargoes(PeriodTestUtils.createEditingDomain(copyScenarioModel), mapping, removedSlots, removedCargoes);
 
 		// Removed from copy
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo1));
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot1));
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot1));
+		Assert.assertTrue(copyScenarioModel.getCargoModel().getCargoes().contains(copyCargo1));
+		Assert.assertTrue(copyScenarioModel.getCargoModel().getLoadSlots().contains(copyLoadSlot1));
+		Assert.assertTrue(copyScenarioModel.getCargoModel().getDischargeSlots().contains(copyDischargeSlot1));
 
-		Assert.assertFalse(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo2));
-		Assert.assertFalse(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot2));
-		Assert.assertFalse(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot2));
+		Assert.assertFalse(copyScenarioModel.getCargoModel().getCargoes().contains(copyCargo2));
+		Assert.assertFalse(copyScenarioModel.getCargoModel().getLoadSlots().contains(copyLoadSlot2));
+		Assert.assertFalse(copyScenarioModel.getCargoModel().getDischargeSlots().contains(copyDischargeSlot2));
 
 		// Registered objects as removed.
 		Mockito.verify(mapping).registerRemovedOriginal(cargo2);

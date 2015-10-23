@@ -55,7 +55,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		msc.vc.setMinHeel(5000);
 
 		// Push up base fuel price for force NBO+FBO
-		final CostModel costModel = scenario.getCostModel();
+		final CostModel costModel = scenario.getReferenceModel().getCostModel();
 		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
 
 		// base fuel is now 10x more expensive, so FBO is economical
@@ -175,7 +175,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		vesselAvailability.getStartHeel().setPricePerMMBTU(1);
 
 		// Push up base fuel price for force NBO+FBO
-		final CostModel costModel = scenario.getCostModel();
+		final CostModel costModel = scenario.getReferenceModel().getCostModel();
 		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
 
 		// base fuel is now 10x more expensive, so FBO is economical
@@ -487,7 +487,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 
 		msc.vc.setMinHeel(500);
 
-		final CostModel costModel = scenario.getCostModel();
+		final CostModel costModel = scenario.getReferenceModel().getCostModel();
 
 		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
 
@@ -579,7 +579,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		msc.vessel.getVesselClass().setWarmingTime(0);
 		msc.vessel.getVesselClass().setCoolingVolume(500);
 
-		final CostModel costModel = scenario.getCostModel();
+		final CostModel costModel = scenario.getReferenceModel().getCostModel();
 
 		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
 
@@ -671,7 +671,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		// force a heel rollover at the maintenance port
 		msc.vc.setMinHeel(500);
 
-		final CostModel costModel = scenario.getCostModel();
+		final CostModel costModel = scenario.getReferenceModel().getCostModel();
 
 		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
 

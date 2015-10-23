@@ -58,9 +58,9 @@ public class PeriodExporterTests {
 			mapping.registerRemovedOriginal(discharge1);
 			mapping.registerRemovedOriginal(cargo1);
 
-			periodScenario.getPortfolioModel().getCargoModel().getCargoes().clear();
-			periodScenario.getPortfolioModel().getCargoModel().getLoadSlots().clear();
-			periodScenario.getPortfolioModel().getCargoModel().getDischargeSlots().clear();
+			periodScenario.getCargoModel().getCargoes().clear();
+			periodScenario.getCargoModel().getLoadSlots().clear();
+			periodScenario.getCargoModel().getDischargeSlots().clear();
 		}
 
 		// Execute update
@@ -70,9 +70,9 @@ public class PeriodExporterTests {
 		}
 		// Check original scenario state
 		{
-			Assert.assertSame(cargo1, originalScenario.getPortfolioModel().getCargoModel().getCargoes().get(0));
-			Assert.assertSame(load1, originalScenario.getPortfolioModel().getCargoModel().getLoadSlots().get(0));
-			Assert.assertSame(discharge1, originalScenario.getPortfolioModel().getCargoModel().getDischargeSlots().get(0));
+			Assert.assertSame(cargo1, originalScenario.getCargoModel().getCargoes().get(0));
+			Assert.assertSame(load1, originalScenario.getCargoModel().getLoadSlots().get(0));
+			Assert.assertSame(discharge1, originalScenario.getCargoModel().getDischargeSlots().get(0));
 			Assert.assertSame(cargo1, load1.getCargo());
 			Assert.assertSame(cargo1, discharge1.getCargo());
 		}
@@ -116,9 +116,9 @@ public class PeriodExporterTests {
 		}
 		// Check original scenario state
 		{
-			Assert.assertSame(cargo1, originalScenario.getPortfolioModel().getCargoModel().getCargoes().get(0));
-			Assert.assertSame(load1, originalScenario.getPortfolioModel().getCargoModel().getLoadSlots().get(0));
-			Assert.assertSame(discharge1, originalScenario.getPortfolioModel().getCargoModel().getDischargeSlots().get(0));
+			Assert.assertSame(cargo1, originalScenario.getCargoModel().getCargoes().get(0));
+			Assert.assertSame(load1, originalScenario.getCargoModel().getLoadSlots().get(0));
+			Assert.assertSame(discharge1, originalScenario.getCargoModel().getDischargeSlots().get(0));
 		}
 	}
 
@@ -276,7 +276,7 @@ public class PeriodExporterTests {
 			copyLoad1.setCargo(null);
 			copyDischarge1.setCargo(null);
 
-			periodScenario.getPortfolioModel().getCargoModel().getCargoes().remove(copyCargo1);
+			periodScenario.getCargoModel().getCargoes().remove(copyCargo1);
 		}
 
 		// Execute update
@@ -287,13 +287,13 @@ public class PeriodExporterTests {
 		// Check original scenario state
 		{
 
-			Assert.assertSame(load1, originalScenario.getPortfolioModel().getCargoModel().getLoadSlots().get(0));
-			Assert.assertSame(discharge1, originalScenario.getPortfolioModel().getCargoModel().getDischargeSlots().get(0));
+			Assert.assertSame(load1, originalScenario.getCargoModel().getLoadSlots().get(0));
+			Assert.assertSame(discharge1, originalScenario.getCargoModel().getDischargeSlots().get(0));
 
 			Assert.assertNull(load1.getCargo());
 			Assert.assertNull(discharge1.getCargo());
 
-			Assert.assertTrue(originalScenario.getPortfolioModel().getCargoModel().getCargoes().isEmpty());
+			Assert.assertTrue(originalScenario.getCargoModel().getCargoes().isEmpty());
 		}
 	}
 
@@ -334,8 +334,8 @@ public class PeriodExporterTests {
 			copyLoad1.setCargo(null);
 			copyDischarge1.setCargo(null);
 
-			periodScenario.getPortfolioModel().getCargoModel().getCargoes().remove(copyCargo1);
-			periodScenario.getPortfolioModel().getCargoModel().getDischargeSlots().remove(copyDischarge1);
+			periodScenario.getCargoModel().getCargoes().remove(copyCargo1);
+			periodScenario.getCargoModel().getDischargeSlots().remove(copyDischarge1);
 		}
 
 		// Execute update
@@ -346,11 +346,11 @@ public class PeriodExporterTests {
 		// Check original scenario state
 		{
 
-			Assert.assertSame(load1, originalScenario.getPortfolioModel().getCargoModel().getLoadSlots().get(0));
+			Assert.assertSame(load1, originalScenario.getCargoModel().getLoadSlots().get(0));
 			Assert.assertNull(load1.getCargo());
 
-			Assert.assertTrue(originalScenario.getPortfolioModel().getCargoModel().getCargoes().isEmpty());
-			Assert.assertTrue(originalScenario.getPortfolioModel().getCargoModel().getDischargeSlots().isEmpty());
+			Assert.assertTrue(originalScenario.getCargoModel().getCargoes().isEmpty());
+			Assert.assertTrue(originalScenario.getCargoModel().getDischargeSlots().isEmpty());
 		}
 	}
 
@@ -406,13 +406,13 @@ public class PeriodExporterTests {
 		// Check original scenario state
 		{
 
-			Assert.assertFalse(originalScenario.getPortfolioModel().getCargoModel().getCargoes().isEmpty());
-			final Cargo newCargo = originalScenario.getPortfolioModel().getCargoModel().getCargoes().get(0);
+			Assert.assertFalse(originalScenario.getCargoModel().getCargoes().isEmpty());
+			final Cargo newCargo = originalScenario.getCargoModel().getCargoes().get(0);
 
 			Assert.assertSame(vesselAvailability1, newCargo.getVesselAssignmentType());
 
-			Assert.assertSame(load1, originalScenario.getPortfolioModel().getCargoModel().getLoadSlots().get(0));
-			Assert.assertSame(discharge1, originalScenario.getPortfolioModel().getCargoModel().getDischargeSlots().get(0));
+			Assert.assertSame(load1, originalScenario.getCargoModel().getLoadSlots().get(0));
+			Assert.assertSame(discharge1, originalScenario.getCargoModel().getDischargeSlots().get(0));
 
 			Assert.assertSame(newCargo, load1.getCargo());
 			Assert.assertSame(newCargo, discharge1.getCargo());
@@ -476,16 +476,16 @@ public class PeriodExporterTests {
 		// Check original scenario state
 		{
 
-			Assert.assertFalse(originalScenario.getPortfolioModel().getCargoModel().getCargoes().isEmpty());
-			final Cargo newCargo = originalScenario.getPortfolioModel().getCargoModel().getCargoes().get(0);
+			Assert.assertFalse(originalScenario.getCargoModel().getCargoes().isEmpty());
+			final Cargo newCargo = originalScenario.getCargoModel().getCargoes().get(0);
 
-			Assert.assertFalse(originalScenario.getPortfolioModel().getCargoModel().getDischargeSlots().isEmpty());
-			final DischargeSlot newDischarge = originalScenario.getPortfolioModel().getCargoModel().getDischargeSlots().get(0);
+			Assert.assertFalse(originalScenario.getCargoModel().getDischargeSlots().isEmpty());
+			final DischargeSlot newDischarge = originalScenario.getCargoModel().getDischargeSlots().get(0);
 			Assert.assertTrue(newDischarge instanceof SpotSlot);
 
 			Assert.assertSame(vesselAvailability1, newCargo.getVesselAssignmentType());
 
-			Assert.assertSame(load1, originalScenario.getPortfolioModel().getCargoModel().getLoadSlots().get(0));
+			Assert.assertSame(load1, originalScenario.getCargoModel().getLoadSlots().get(0));
 
 			Assert.assertSame(newCargo, load1.getCargo());
 			Assert.assertSame(newCargo, newDischarge.getCargo());

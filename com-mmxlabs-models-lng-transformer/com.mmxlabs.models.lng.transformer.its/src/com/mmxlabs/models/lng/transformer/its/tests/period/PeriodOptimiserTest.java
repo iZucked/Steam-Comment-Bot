@@ -90,8 +90,8 @@ public class PeriodOptimiserTest {
 
 	@Test
 	public void testSimpleDischargeSwapPeriodMiddleOnly() throws Exception {
-		final PeriodOptimiserScenarioTester tester = new PeriodOptimiserScenarioTester(CustomScenarioCreator.createLocalDateTime(2014, 7, 1, 0), CustomScenarioCreator.createLocalDateTime(2014, 7, 30,
-				0), CustomScenarioCreator.createLocalDateTime(2014, 9, 1, 0));
+		final PeriodOptimiserScenarioTester tester = new PeriodOptimiserScenarioTester(CustomScenarioCreator.createLocalDateTime(2014, 7, 1, 0),
+				CustomScenarioCreator.createLocalDateTime(2014, 7, 30, 0), CustomScenarioCreator.createLocalDateTime(2014, 9, 1, 0));
 
 		// Check the prices are correct rather than specific slot instances.
 		Assert.assertEquals("5.0", tester.cargoA1.getSlots().get(1).getPriceExpression());
@@ -253,7 +253,7 @@ public class PeriodOptimiserTest {
 
 			final VesselAvailability[] vesselAvailabilities = new VesselAvailability[vessels.length];
 			for (int i = 0; i < vessels.length; ++i) {
-				for (VesselAvailability vesselAvailability : csc.getPortfolioModel().getCargoModel().getVesselAvailabilities()) {
+				for (VesselAvailability vesselAvailability : scenario.getCargoModel().getVesselAvailabilities()) {
 					if (vesselAvailability.getVessel() == vessels[i]) {
 						vesselAvailabilities[i] = vesselAvailability;
 					}

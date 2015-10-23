@@ -35,7 +35,7 @@ public class BreakEvenCharterOutConstraint extends AbstractModelMultiConstraint 
 			final Slot slot = (Slot) target;
 			final MMXRootObject rootObject = extraContext.getRootObject();
 			if (rootObject instanceof LNGScenarioModel) {
-				final SpotMarketsModel spotMarketsModel = ((LNGScenarioModel) rootObject).getSpotMarketsModel();
+				final SpotMarketsModel spotMarketsModel = ((LNGScenarioModel) rootObject).getReferenceModel().getSpotMarketsModel();
 
 				if (spotMarketsModel == null) {
 					// Nothing to validate against

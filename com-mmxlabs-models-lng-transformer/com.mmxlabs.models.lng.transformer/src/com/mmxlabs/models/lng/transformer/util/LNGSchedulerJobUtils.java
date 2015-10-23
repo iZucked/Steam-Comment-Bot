@@ -39,7 +39,6 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -105,11 +104,10 @@ public class LNGSchedulerJobUtils {
 			final Injector childInjector = injector.createChildInjector(new ExporterExtensionsModule());
 			childInjector.injectMembers(exporter);
 		}
-		final LNGPortfolioModel portfolioModel = scenario.getPortfolioModel();
 
 		final Schedule schedule = exporter.exportAnnotatedSolution(modelEntityMap, solution);
-		final ScheduleModel scheduleModel = portfolioModel.getScheduleModel();
-		final CargoModel cargoModel = portfolioModel.getCargoModel();
+		final ScheduleModel scheduleModel = scenario.getScheduleModel();
+		final CargoModel cargoModel = scenario.getCargoModel();
 
 		final CompoundCommand command = new CompoundCommand();
 
@@ -130,7 +128,7 @@ public class LNGSchedulerJobUtils {
 
 		command.append(derive(editingDomain, scenario, schedule, cargoModel, postExportProcessors));
 		// command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Dirty(), false));
-		command.append(SetCommand.create(editingDomain, portfolioModel, LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_Parameters(), optimiserSettings));
+		command.append(SetCommand.create(editingDomain, scenario, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_Parameters(), optimiserSettings));
 
 		// Mark schedule as clean
 		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY, Boolean.FALSE));

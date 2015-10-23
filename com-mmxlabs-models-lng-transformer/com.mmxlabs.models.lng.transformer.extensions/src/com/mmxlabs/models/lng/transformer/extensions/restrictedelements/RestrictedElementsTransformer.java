@@ -135,9 +135,9 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 
 	@Override
 	public void finishTransforming() {
-		final CommercialModel commercialModel = rootObject.getCommercialModel();
+		final CommercialModel commercialModel = rootObject.getReferenceModel().getCommercialModel();
 		if (commercialModel != null) {
-			final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
+			final CargoModel cargoModel = rootObject.getCargoModel();
 
 			// Process purchase contract restrictions - these are the follower restrictions
 			for (final LoadSlot slot : cargoModel.getLoadSlots()) {

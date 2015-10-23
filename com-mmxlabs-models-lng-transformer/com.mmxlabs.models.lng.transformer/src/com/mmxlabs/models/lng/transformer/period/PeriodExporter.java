@@ -48,7 +48,7 @@ public class PeriodExporter {
 
 		// First the easy part, update vessel events. (assigned vessel).
 		{
-			final CargoModel newCargoModel = periodScenario.getPortfolioModel().getCargoModel();
+			final CargoModel newCargoModel = periodScenario.getCargoModel();
 			for (final VesselEvent newVesselEvent : newCargoModel.getVesselEvents()) {
 
 				final VesselEvent oldVesselEvent = mapping.getOriginalFromCopy(newVesselEvent);
@@ -74,8 +74,8 @@ public class PeriodExporter {
 		// Second the harder part, reconcile cargo model changes
 		{
 
-			final CargoModel oldCargoModel = originalScenario.getPortfolioModel().getCargoModel();
-			final CargoModel newCargoModel = periodScenario.getPortfolioModel().getCargoModel();
+			final CargoModel oldCargoModel = originalScenario.getCargoModel();
+			final CargoModel newCargoModel = periodScenario.getCargoModel();
 
 			// Grab existing slot ids
 			final Set<String> usedIDStrings = new HashSet<String>();
@@ -163,7 +163,8 @@ public class PeriodExporter {
 				// Update vessel assignment bits.
 
 				final VesselAssignmentType vesselAssignmentType = newCargo.getVesselAssignmentType();
-				cmd.append(SetCommand.create(editingDomain, oldCargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, mapping.getOriginalFromCopy(newCargo.getVesselAssignmentType())));
+				cmd.append(
+						SetCommand.create(editingDomain, oldCargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, mapping.getOriginalFromCopy(newCargo.getVesselAssignmentType())));
 				cmd.append(SetCommand.create(editingDomain, oldCargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, newCargo.getSequenceHint()));
 
 				if (vesselAssignmentType instanceof CharterInMarket) {
@@ -225,8 +226,7 @@ public class PeriodExporter {
 		}
 
 		// Copy params model
-		cmd.append(SetCommand.create(editingDomain, originalScenario.getPortfolioModel(), LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_Parameters(),
-				EcoreUtil.copy(periodScenario.getPortfolioModel().getParameters())));
+		cmd.append(SetCommand.create(editingDomain, originalScenario, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_Parameters(), EcoreUtil.copy(periodScenario.getParameters())));
 
 		if (cmd.isEmpty()) {
 			return IdentityCommand.INSTANCE;

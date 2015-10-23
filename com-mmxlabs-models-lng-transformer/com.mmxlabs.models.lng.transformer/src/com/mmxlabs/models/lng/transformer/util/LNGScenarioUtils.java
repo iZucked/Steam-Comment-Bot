@@ -35,7 +35,7 @@ public class LNGScenarioUtils {
 	public static Pair<ZonedDateTime, ZonedDateTime> findEarliestAndLatestTimes(@NonNull final LNGScenarioModel rootObject) {
 		ZonedDateTime earliestTime = null;
 		ZonedDateTime latestTime = null;
-		final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
+		final CargoModel cargoModel = rootObject.getCargoModel();
 
 		final HashSet<ZonedDateTime> allDates = new HashSet<>();
 

@@ -28,7 +28,6 @@ import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
@@ -51,7 +50,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 	public MinimalScenarioCreator() {
 		super();
 
-		final CommercialModel commercialModel = scenario.getCommercialModel();
+		final CommercialModel commercialModel = scenario.getReferenceModel().getCommercialModel();
 
 		// need to create a legal entity for contracts
 		contractEntity = addEntity("Third-parties");
@@ -131,7 +130,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		final ZonedDateTime startDate = firstLoadDate.minusHours(getMarginHours(startPort, firstAppointment.getFirst()));
 		final ZonedDateTime endDate = lastDischargeDate.plusHours(getMarginHours(lastAppointment.getFirst(), endPort));
 
-		final CargoModel cargoModel = scenario.getPortfolioModel().getCargoModel();
+		final CargoModel cargoModel = scenario.getCargoModel();
 		this.vesselAvailability = fleetCreator.setAvailability(cargoModel, vessel, originPort, startDate.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime(), originPort, endDate.withZoneSameInstant(ZoneId.of("UTC"))
 				.toLocalDateTime());
 	}
@@ -149,8 +148,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		result.setStartAfter(startDate);
 		result.setStartBy(startDate);
 
-		final LNGPortfolioModel portfolioModel = scenario.getPortfolioModel();
-		final CargoModel cargoModel = portfolioModel.getCargoModel();
+		final CargoModel cargoModel = scenario.getCargoModel();
 
 		cargoModel.getVesselEvents().add(result);
 
@@ -169,7 +167,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		ZonedDateTime date = null;
 		Port port = null;
 
-		final EList<Cargo> cargoes = scenario.getPortfolioModel().getCargoModel().getCargoes();
+		final EList<Cargo> cargoes = scenario.getCargoModel().getCargoes();
 		for (final Cargo cargo : cargoes) {
 			final EList<Slot> slots = cargo.getSortedSlots();
 			final Slot slot = slots.get(slots.size() - 1);
@@ -181,7 +179,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 			}
 		}
 
-		final EList<VesselEvent> events = scenario.getPortfolioModel().getCargoModel().getVesselEvents();
+		final EList<VesselEvent> events = scenario.getCargoModel().getVesselEvents();
 		for (final VesselEvent event : events) {
 			ZonedDateTime eventDate = event.getStartByAsDateTime();
 			if (eventDate == null) {
@@ -208,7 +206,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		ZonedDateTime date = null;
 		Port port = null;
 
-		final EList<Cargo> cargoes = scenario.getPortfolioModel().getCargoModel().getCargoes();
+		final EList<Cargo> cargoes = scenario.getCargoModel().getCargoes();
 		for (final Cargo cargo : cargoes) {
 			final EList<Slot> slots = cargo.getSortedSlots();
 			final Slot slot = slots.get(0);
@@ -220,7 +218,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 			}
 		}
 
-		final EList<VesselEvent> events = scenario.getPortfolioModel().getCargoModel().getVesselEvents();
+		final EList<VesselEvent> events = scenario.getCargoModel().getVesselEvents();
 		for (final VesselEvent event : events) {
 			ZonedDateTime eventDate = event.getStartAfterAsDateTime();
 			if (eventDate == null) {
@@ -245,8 +243,8 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 	 * Sets up a cooldown pricing model including an index
 	 */
 	public void setupCooldown(final double value) {
-		final CostModel costModel = scenario.getCostModel();
-		final PortModel portModel = scenario.getPortModel();
+		final CostModel costModel = scenario.getReferenceModel().getCostModel();
+		final PortModel portModel = scenario.getReferenceModel().getPortModel();
 
 		final CommodityIndex cooldownIndex = pricingCreator.createDefaultCommodityIndex("cooldown", value);
 
@@ -263,8 +261,8 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 	 * Sets up a cooldown pricing model including an index
 	 */
 	public void setupCooldownLumpSum(String expression) {
-		final CostModel costModel = scenario.getCostModel();
-		final PortModel portModel = scenario.getPortModel();
+		final CostModel costModel = scenario.getReferenceModel().getCostModel();
+		final PortModel portModel = scenario.getReferenceModel().getPortModel();
 
 		final CooldownPrice price = PricingFactory.eINSTANCE.createCooldownPrice();
 		price.setExpression(expression);

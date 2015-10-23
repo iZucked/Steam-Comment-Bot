@@ -146,7 +146,7 @@ public class LiveEvaluator extends MMXAdapterImpl {
 										if (instance.getValidationStatusCode() == IStatus.ERROR) {
 											return null;
 										}
-										final ScheduleModel scheduleModel = root.getPortfolioModel().getScheduleModel();
+										final ScheduleModel scheduleModel = root.getScheduleModel();
 										if (!scheduleModel.isDirty()) {
 											return null;
 										}
@@ -189,7 +189,7 @@ public class LiveEvaluator extends MMXAdapterImpl {
 			// We we re-enable check the dirty status and queue an evaluation if it is dirty
 			final LNGScenarioModel root = (LNGScenarioModel) instance.getInstance();
 			if (root != null) {
-				final ScheduleModel scheduleModel = root.getPortfolioModel().getScheduleModel();
+				final ScheduleModel scheduleModel = root.getScheduleModel();
 				if (scheduleModel.isDirty()) {
 					queueEvaluate();
 				}

@@ -62,7 +62,7 @@ import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
@@ -89,7 +89,7 @@ public class CustomScenarioCreator {
 	private final CostModel costModel;
 	private final PricingModel pricingModel;
 	private final SpotMarketsModel spotMarketsModel;
-	private final LNGPortfolioModel portfolioModel;
+	private final LNGReferenceModel referenceModel;
 
 	final SalesContract sc;
 	final PurchaseContract pc;
@@ -107,16 +107,16 @@ public class CustomScenarioCreator {
 		this.timeZone = timeZone;
 
 		scenario = ManifestJointModel.createEmptyInstance(null);
+		referenceModel = scenario.getReferenceModel();
+		cargoModel = scenario.getCargoModel();
 
-		portModel = scenario.getPortModel();
-		fleetModel = scenario.getFleetModel();
-		pricingModel = scenario.getPricingModel();
-		costModel = scenario.getCostModel();
-		commercialModel = scenario.getCommercialModel();
-		spotMarketsModel = scenario.getSpotMarketsModel();
+		portModel = referenceModel.getPortModel();
+		fleetModel = referenceModel.getFleetModel();
+		pricingModel = referenceModel.getPricingModel();
+		costModel = referenceModel.getCostModel();
+		commercialModel = referenceModel.getCommercialModel();
+		spotMarketsModel = referenceModel.getSpotMarketsModel();
 
-		portfolioModel = scenario.getPortfolioModel();
-		cargoModel = portfolioModel.getCargoModel();
 
 		contractEntity = CommercialFactory.eINSTANCE.createLegalEntity();
 		contractEntity.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
@@ -566,7 +566,7 @@ public class CustomScenarioCreator {
 
 		final Route canal = PortFactory.eINSTANCE.createRoute();
 		canal.setCanal(true);
-		scenario.getPortModel().getRoutes().add(canal);
+		scenario.getReferenceModel().getPortModel().getRoutes().add(canal);
 		canal.setName(canalName);
 		// add distance lines, as for the main distance model:
 		final RouteLine atob = PortFactory.eINSTANCE.createRouteLine();
@@ -588,7 +588,7 @@ public class CustomScenarioCreator {
 		canalCost.setLadenCost(canalLadenCost); // cost in dollars for a laden vessel
 		canalCost.setBallastCost(canalUnladenCost); // cost in dollars for a ballast vessel
 
-		final FleetModel fleetModel = scenario.getFleetModel();
+		final FleetModel fleetModel = scenario.getReferenceModel().getFleetModel();
 
 		final VesselClassRouteParameters params = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
 
@@ -603,7 +603,7 @@ public class CustomScenarioCreator {
 			vc.getRouteParameters().add(EcoreUtil.copy(params));
 			final RouteCost rc2 = EcoreUtil.copy(canalCost);
 			rc2.setVesselClass(vc);
-			scenario.getCostModel().getRouteCosts().add(rc2);
+			scenario.getReferenceModel().getCostModel().getRouteCosts().add(rc2);
 		}
 	}
 
@@ -738,8 +738,8 @@ public class CustomScenarioCreator {
 	 * Sets up a cooldown pricing model including an index
 	 */
 	public void setupCooldown(final double value) {
-		final PricingModel pricingModel = scenario.getPricingModel();
-		final PortModel portModel = scenario.getPortModel();
+		final PricingModel pricingModel = scenario.getReferenceModel().getPricingModel();
+		final PortModel portModel = scenario.getReferenceModel().getPortModel();
 
 		final DerivedIndex<Double> result = PricingFactory.eINSTANCE.createDerivedIndex();
 		result.setExpression(Double.toString(value));
@@ -772,7 +772,7 @@ public class CustomScenarioCreator {
 		return YearMonth.of(year, 1 + month);
 	}
 
-	public LNGPortfolioModel getPortfolioModel() {
-		return portfolioModel;
+	public LNGReferenceModel getReferenceModel() {
+		return referenceModel;
 	}
 }

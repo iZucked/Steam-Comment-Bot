@@ -242,7 +242,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario
-		final CostModel costModel = scenario.getCostModel();
+		final CostModel costModel = scenario.getReferenceModel().getCostModel();
 
 		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
 		// base fuel is now 10x more expensive, so FBO is economical
@@ -321,7 +321,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario
-		final CostModel costModel = scenario.getCostModel();
+		final CostModel costModel = scenario.getReferenceModel().getCostModel();
 
 		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
 		// base fuel is now 10x more expensive, so FBO is economical
@@ -479,7 +479,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario: base fuel price more expensive, so FBO is economical
-		final CostModel costModel = scenario.getCostModel();
+		final CostModel costModel = scenario.getReferenceModel().getCostModel();
 		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
 		// base fuel is now 10x more expensive, so FBO is economical
 		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
@@ -517,7 +517,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// change from default scenario: base fuel price more expensive, so FBO is economical
-		final CostModel costModel = scenario.getCostModel();
+		final CostModel costModel = scenario.getReferenceModel().getCostModel();
 		final BaseFuelCost fuelPrice = costModel.getBaseFuelCosts().get(0);
 		// base fuel is now 10x more expensive, so FBO is economical
 		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
@@ -778,10 +778,10 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// Remove default vessel
-		final FleetModel fleetModel = scenario.getFleetModel();
+		final FleetModel fleetModel = scenario.getReferenceModel().getFleetModel();
 		fleetModel.getVessels().clear();
 
-		final CargoModel cargoModel = scenario.getPortfolioModel().getCargoModel();
+		final CargoModel cargoModel = scenario.getCargoModel();
 		cargoModel.getVesselAvailabilities().clear();
 		// Cannot null as final
 		// msc.vessel = null;
@@ -794,11 +794,11 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		spotMarketRateData.setExpression("" + charterRatePerDay);
 		spotMarketRate.setData(spotMarketRateData);
 
-		final PricingModel pricingModel = scenario.getPricingModel();
+		final PricingModel pricingModel = scenario.getReferenceModel().getPricingModel();
 		pricingModel.getCharterIndices().add(spotMarketRate);
 
 		// Create a charter-in market object
-		final SpotMarketsModel sportMarketsModel = scenario.getSpotMarketsModel();
+		final SpotMarketsModel sportMarketsModel = scenario.getReferenceModel().getSpotMarketsModel();
 		final EList<CharterInMarket> charteringSpotMarkets = sportMarketsModel.getCharterInMarkets();
 
 		final CharterInMarket charterModel = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
@@ -1198,7 +1198,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
 
-		msc.pricingCreator.createDefaultCharterCostModel(msc.vc, 1, 96, scenario.getPortModel().getPorts());
+		msc.pricingCreator.createDefaultCharterCostModel(msc.vc, 1, 96, scenario.getReferenceModel().getPortModel().getPorts());
 
 		// change from default scenario: set a "return after" date
 		// somewhat later than the end of the discharge window
@@ -1257,7 +1257,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
 
-		msc.pricingCreator.createDefaultCharterCostModel(msc.vc, 1, 96, scenario.getPortModel().getPorts());
+		msc.pricingCreator.createDefaultCharterCostModel(msc.vc, 1, 96, scenario.getReferenceModel().getPortModel().getPorts());
 
 		// change from default scenario: set a "return after" date
 		// somewhat later than the end of the discharge window
@@ -1321,7 +1321,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
 
-		msc.pricingCreator.createDefaultCharterCostModel(msc.vc, 1, 96, scenario.getPortModel().getPorts());
+		msc.pricingCreator.createDefaultCharterCostModel(msc.vc, 1, 96, scenario.getReferenceModel().getPortModel().getPorts());
 
 		SequenceTester checker = getDefaultTester();
 

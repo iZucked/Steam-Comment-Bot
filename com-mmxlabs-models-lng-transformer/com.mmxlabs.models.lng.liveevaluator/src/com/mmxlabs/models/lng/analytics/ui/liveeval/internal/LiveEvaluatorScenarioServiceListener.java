@@ -120,7 +120,7 @@ public class LiveEvaluatorScenarioServiceListener extends ScenarioServiceListene
 			final EObject obj = scenarioInstance.getInstance();
 			if (obj instanceof LNGScenarioModel) {
 				final LNGScenarioModel rootObject = (LNGScenarioModel) obj;
-				final ScheduleModel scheduleModel = rootObject.getPortfolioModel().getScheduleModel();
+				final ScheduleModel scheduleModel = rootObject.getScheduleModel();
 				return scheduleModel;
 			}
 		}
