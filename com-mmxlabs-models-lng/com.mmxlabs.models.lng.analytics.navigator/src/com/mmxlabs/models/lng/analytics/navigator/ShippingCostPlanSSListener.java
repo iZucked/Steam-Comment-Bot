@@ -62,7 +62,7 @@ public class ShippingCostPlanSSListener extends ScenarioServiceListener {
 		 */
 		private void processScenario() {
 			final LNGScenarioModel rootObject = (LNGScenarioModel) scenarioInstance.getInstance();
-			analyticsModel = rootObject.getAnalyticsModel();
+			analyticsModel = rootObject.getReferenceModel().getAnalyticsModel();
 
 			if (analyticsModel != null) {
 				for (final ShippingCostPlan plan : analyticsModel.getShippingCostPlans()) {

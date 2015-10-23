@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
@@ -99,21 +100,20 @@ public class CanalCostsDialog extends Dialog {
 
 		final List<VesselClassRouteParameters> l = (List<VesselClassRouteParameters>) this.container.eGet(containment);
 		if (rootObject instanceof LNGScenarioModel) {
-			final PortModel pm = ((LNGScenarioModel)rootObject).getPortModel();
-			if (pm != null) {
-				route_loop: for (final Route r : pm.getRoutes()) {
-					if (r.isCanal() == false)
+			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+			final PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
+			route_loop: for (final Route r : portModel.getRoutes()) {
+				if (r.isCanal() == false)
+					continue route_loop;
+				for (final VesselClassRouteParameters vcrp : l) {
+					if (vcrp.getRoute() == r) {
 						continue route_loop;
-					for (final VesselClassRouteParameters vcrp : l) {
-						if (vcrp.getRoute() == r) {
-							continue route_loop;
-						}
 					}
-
-					final VesselClassRouteParameters vcrp = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
-					vcrp.setRoute(r);
-					l.add(vcrp);
 				}
+
+				final VesselClassRouteParameters vcrp = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
+				vcrp.setRoute(r);
+				l.add(vcrp);
 			}
 		}
 

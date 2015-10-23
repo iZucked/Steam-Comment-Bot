@@ -12,7 +12,7 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
@@ -80,8 +80,8 @@ public class LNGScenarioAdapterFactory extends AdapterFactoryImpl {
 				return createLNGScenarioModelAdapter();
 			}
 			@Override
-			public Adapter caseLNGPortfolioModel(LNGPortfolioModel object) {
-				return createLNGPortfolioModelAdapter();
+			public Adapter caseLNGReferenceModel(LNGReferenceModel object) {
+				return createLNGReferenceModelAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -130,16 +130,16 @@ public class LNGScenarioAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel <em>LNG Portfolio Model</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.scenario.model.LNGReferenceModel <em>LNG Reference Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGReferenceModel
 	 * @generated
 	 */
-	public Adapter createLNGPortfolioModelAdapter() {
+	public Adapter createLNGReferenceModelAdapter() {
 		return null;
 	}
 

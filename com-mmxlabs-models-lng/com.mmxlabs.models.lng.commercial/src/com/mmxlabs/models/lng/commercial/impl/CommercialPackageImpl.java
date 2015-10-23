@@ -34,6 +34,7 @@ import com.mmxlabs.models.lng.commercial.VolumeParams;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import org.eclipse.emf.common.util.URI;
 
 /**
  * <!-- begin-user-doc -->
@@ -855,6 +856,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		// Create annotations
 		// http://www.mmxlabs.com/models/ui/numberFormat
 		createNumberFormatAnnotations();
+		// slotContractParams
+		createSlotContractParamsAnnotations();
 	}
 
 	/**
@@ -904,6 +907,24 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		   new String[] {
 			 "unit", "mmBtu/m\u00b3",
 			 "formatString", "#0.###"
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>slotContractParams</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createSlotContractParamsAnnotations() {
+		String source = "slotContractParams";	
+		addAnnotation
+		  (lngPriceCalculatorParametersEClass, 
+		   source, 
+		   new String[] {
+		   },
+		   new URI[] {
+			 URI.createURI(eNS_URI).appendFragment("//SlotContractParams")
 		   });
 	}
 

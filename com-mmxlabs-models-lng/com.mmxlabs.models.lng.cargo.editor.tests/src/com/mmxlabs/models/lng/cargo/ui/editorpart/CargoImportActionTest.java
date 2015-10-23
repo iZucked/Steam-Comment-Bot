@@ -30,7 +30,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.provider.CargoItemProviderAdapterFactory;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -156,9 +155,7 @@ public class CargoImportActionTest {
 		// Build the MMXRootObject used when replacing references
 		{
 			final LNGScenarioModel rootObject = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
-			final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
-			rootObject.setPortfolioModel(portfolioModel);
-			portfolioModel.setCargoModel(cargoModel);
+			rootObject.setCargoModel(cargoModel);
 			Mockito.when(location.getRootObject()).thenReturn(rootObject);
 		}
 		final List<EObject> imports = new ArrayList<EObject>();
@@ -226,9 +223,7 @@ public class CargoImportActionTest {
 		// Build the MMXRootObject used when replacing references
 		{
 			final LNGScenarioModel rootObject = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
-			final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
-			rootObject.setPortfolioModel(portfolioModel);
-			portfolioModel.setCargoModel(cargoModel);
+			rootObject.setCargoModel(cargoModel);
 			Mockito.when(location.getRootObject()).thenReturn(rootObject);
 		}
 		final List<EObject> imports = new ArrayList<EObject>();
@@ -356,9 +351,7 @@ public class CargoImportActionTest {
 		// Build the MMXRootObject used when replacing references
 		{
 			final LNGScenarioModel rootObject = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
-			final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
-			rootObject.setPortfolioModel(portfolioModel);
-			portfolioModel.setCargoModel(cargoModel);
+			rootObject.setCargoModel(cargoModel);
 			Mockito.when(location.getRootObject()).thenReturn(rootObject);
 		}
 		final List<EObject> imports = new ArrayList<EObject>();
@@ -426,9 +419,7 @@ public class CargoImportActionTest {
 		// Build the MMXRootObject used when replacing references
 		{
 			final LNGScenarioModel rootObject = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
-			final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
-			rootObject.setPortfolioModel(portfolioModel);
-			portfolioModel.setCargoModel(cargoModel);
+			rootObject.setCargoModel(cargoModel);
 			Mockito.when(location.getRootObject()).thenReturn(rootObject);
 		}
 		final List<EObject> imports = new ArrayList<EObject>();
@@ -502,9 +493,7 @@ public class CargoImportActionTest {
 		// Build the MMXRootObject used when replacing references
 		{
 			final LNGScenarioModel rootObject = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
-			final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
-			rootObject.setPortfolioModel(portfolioModel);
-			portfolioModel.setCargoModel(cargoModel);
+			rootObject.setCargoModel(cargoModel);
 			Mockito.when(location.getRootObject()).thenReturn(rootObject);
 		}
 		final List<EObject> imports = new ArrayList<EObject>();
@@ -600,9 +589,7 @@ public class CargoImportActionTest {
 		// Build the MMXRootObject used when replacing references
 		{
 			final LNGScenarioModel rootObject = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
-			final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
-			rootObject.setPortfolioModel(portfolioModel);
-			portfolioModel.setCargoModel(cargoModel);
+			rootObject.setCargoModel(cargoModel);
 			Mockito.when(location.getRootObject()).thenReturn(rootObject);
 		}
 		final List<EObject> imports = new ArrayList<EObject>();
@@ -741,9 +728,7 @@ public class CargoImportActionTest {
 		// Build the MMXRootObject used when replacing references
 		{
 			final LNGScenarioModel rootObject = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
-			final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
-			rootObject.setPortfolioModel(portfolioModel);
-			portfolioModel.setCargoModel(cargoModel);
+			rootObject.setCargoModel(cargoModel);
 			Mockito.when(location.getRootObject()).thenReturn(rootObject);
 		}
 		final List<EObject> imports = new ArrayList<EObject>();
@@ -926,9 +911,7 @@ public class CargoImportActionTest {
 		// Build the MMXRootObject used when replacing references
 		{
 			final LNGScenarioModel rootObject = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
-			final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
-			rootObject.setPortfolioModel(portfolioModel);
-			portfolioModel.setCargoModel(cargoModel);
+			rootObject.setCargoModel(cargoModel);
 			Mockito.when(location.getRootObject()).thenReturn(rootObject);
 		}
 		final List<EObject> imports = new ArrayList<EObject>();
@@ -1068,7 +1051,6 @@ public class CargoImportActionTest {
 			originalCargo2.getSlots().add(originalDischargeSlot2);
 			originalCargo2.setAllowRewiring(false);
 
-
 			originalLoadSlot1.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "originalUUID1");
 			originalDischargeSlot1.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "originalUUID2");
 			originalCargo1.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), "originalUUID3");
@@ -1121,9 +1103,7 @@ public class CargoImportActionTest {
 		// Build the MMXRootObject used when replacing references
 		{
 			final LNGScenarioModel rootObject = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
-			final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
-			rootObject.setPortfolioModel(portfolioModel);
-			portfolioModel.setCargoModel(cargoModel);
+			rootObject.setCargoModel(cargoModel);
 			Mockito.when(location.getRootObject()).thenReturn(rootObject);
 		}
 		final List<EObject> imports = new ArrayList<EObject>();

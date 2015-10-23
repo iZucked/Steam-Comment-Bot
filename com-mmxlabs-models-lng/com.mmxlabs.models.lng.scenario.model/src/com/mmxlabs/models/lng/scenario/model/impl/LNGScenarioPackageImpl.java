@@ -21,7 +21,7 @@ import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
@@ -48,7 +48,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass lngPortfolioModelEClass = null;
+	private EClass lngReferenceModelEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -131,7 +131,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getLNGScenarioModel_PortModel() {
+	public EReference getLNGScenarioModel_CargoModel() {
 		return (EReference)lngScenarioModelEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -140,7 +140,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getLNGScenarioModel_FleetModel() {
+	public EReference getLNGScenarioModel_ScheduleModel() {
 		return (EReference)lngScenarioModelEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -149,7 +149,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getLNGScenarioModel_PricingModel() {
+	public EReference getLNGScenarioModel_Parameters() {
 		return (EReference)lngScenarioModelEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -158,7 +158,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getLNGScenarioModel_CommercialModel() {
+	public EReference getLNGScenarioModel_ActualsModel() {
 		return (EReference)lngScenarioModelEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -167,8 +167,8 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getLNGScenarioModel_SpotMarketsModel() {
-		return (EReference)lngScenarioModelEClass.getEStructuralFeatures().get(4);
+	public EAttribute getLNGScenarioModel_PromptPeriodStart() {
+		return (EAttribute)lngScenarioModelEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -176,8 +176,8 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getLNGScenarioModel_AnalyticsModel() {
-		return (EReference)lngScenarioModelEClass.getEStructuralFeatures().get(5);
+	public EAttribute getLNGScenarioModel_PromptPeriodEnd() {
+		return (EAttribute)lngScenarioModelEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -185,7 +185,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getLNGScenarioModel_PortfolioModel() {
+	public EReference getLNGScenarioModel_ReferenceModel() {
 		return (EReference)lngScenarioModelEClass.getEStructuralFeatures().get(6);
 	}
 
@@ -194,8 +194,8 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getLNGScenarioModel_CostModel() {
-		return (EReference)lngScenarioModelEClass.getEStructuralFeatures().get(7);
+	public EClass getLNGReferenceModel() {
+		return lngReferenceModelEClass;
 	}
 
 	/**
@@ -203,8 +203,8 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getLNGPortfolioModel() {
-		return lngPortfolioModelEClass;
+	public EReference getLNGReferenceModel_PortModel() {
+		return (EReference)lngReferenceModelEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -212,8 +212,8 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getLNGPortfolioModel_CargoModel() {
-		return (EReference)lngPortfolioModelEClass.getEStructuralFeatures().get(0);
+	public EReference getLNGReferenceModel_FleetModel() {
+		return (EReference)lngReferenceModelEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -221,8 +221,8 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getLNGPortfolioModel_ScheduleModel() {
-		return (EReference)lngPortfolioModelEClass.getEStructuralFeatures().get(1);
+	public EReference getLNGReferenceModel_PricingModel() {
+		return (EReference)lngReferenceModelEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -230,8 +230,8 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getLNGPortfolioModel_Parameters() {
-		return (EReference)lngPortfolioModelEClass.getEStructuralFeatures().get(2);
+	public EReference getLNGReferenceModel_CommercialModel() {
+		return (EReference)lngReferenceModelEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -239,8 +239,8 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getLNGPortfolioModel_ActualsModel() {
-		return (EReference)lngPortfolioModelEClass.getEStructuralFeatures().get(3);
+	public EReference getLNGReferenceModel_SpotMarketsModel() {
+		return (EReference)lngReferenceModelEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -248,8 +248,8 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getLNGPortfolioModel_PromptPeriodStart() {
-		return (EAttribute)lngPortfolioModelEClass.getEStructuralFeatures().get(4);
+	public EReference getLNGReferenceModel_AnalyticsModel() {
+		return (EReference)lngReferenceModelEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -257,8 +257,8 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getLNGPortfolioModel_PromptPeriodEnd() {
-		return (EAttribute)lngPortfolioModelEClass.getEStructuralFeatures().get(5);
+	public EReference getLNGReferenceModel_CostModel() {
+		return (EReference)lngReferenceModelEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -290,22 +290,22 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 
 		// Create classes and their features
 		lngScenarioModelEClass = createEClass(LNG_SCENARIO_MODEL);
-		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__PORT_MODEL);
-		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__FLEET_MODEL);
-		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__PRICING_MODEL);
-		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__COMMERCIAL_MODEL);
-		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__SPOT_MARKETS_MODEL);
-		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__ANALYTICS_MODEL);
-		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__PORTFOLIO_MODEL);
-		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__COST_MODEL);
+		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__CARGO_MODEL);
+		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__SCHEDULE_MODEL);
+		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__PARAMETERS);
+		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__ACTUALS_MODEL);
+		createEAttribute(lngScenarioModelEClass, LNG_SCENARIO_MODEL__PROMPT_PERIOD_START);
+		createEAttribute(lngScenarioModelEClass, LNG_SCENARIO_MODEL__PROMPT_PERIOD_END);
+		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__REFERENCE_MODEL);
 
-		lngPortfolioModelEClass = createEClass(LNG_PORTFOLIO_MODEL);
-		createEReference(lngPortfolioModelEClass, LNG_PORTFOLIO_MODEL__CARGO_MODEL);
-		createEReference(lngPortfolioModelEClass, LNG_PORTFOLIO_MODEL__SCHEDULE_MODEL);
-		createEReference(lngPortfolioModelEClass, LNG_PORTFOLIO_MODEL__PARAMETERS);
-		createEReference(lngPortfolioModelEClass, LNG_PORTFOLIO_MODEL__ACTUALS_MODEL);
-		createEAttribute(lngPortfolioModelEClass, LNG_PORTFOLIO_MODEL__PROMPT_PERIOD_START);
-		createEAttribute(lngPortfolioModelEClass, LNG_PORTFOLIO_MODEL__PROMPT_PERIOD_END);
+		lngReferenceModelEClass = createEClass(LNG_REFERENCE_MODEL);
+		createEReference(lngReferenceModelEClass, LNG_REFERENCE_MODEL__PORT_MODEL);
+		createEReference(lngReferenceModelEClass, LNG_REFERENCE_MODEL__FLEET_MODEL);
+		createEReference(lngReferenceModelEClass, LNG_REFERENCE_MODEL__PRICING_MODEL);
+		createEReference(lngReferenceModelEClass, LNG_REFERENCE_MODEL__COMMERCIAL_MODEL);
+		createEReference(lngReferenceModelEClass, LNG_REFERENCE_MODEL__SPOT_MARKETS_MODEL);
+		createEReference(lngReferenceModelEClass, LNG_REFERENCE_MODEL__ANALYTICS_MODEL);
+		createEReference(lngReferenceModelEClass, LNG_REFERENCE_MODEL__COST_MODEL);
 	}
 
 	/**
@@ -333,17 +333,17 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 
 		// Obtain other dependent packages
 		MMXCorePackage theMMXCorePackage = (MMXCorePackage)EPackage.Registry.INSTANCE.getEPackage(MMXCorePackage.eNS_URI);
+		CargoPackage theCargoPackage = (CargoPackage)EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI);
+		SchedulePackage theSchedulePackage = (SchedulePackage)EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI);
+		ParametersPackage theParametersPackage = (ParametersPackage)EPackage.Registry.INSTANCE.getEPackage(ParametersPackage.eNS_URI);
+		ActualsPackage theActualsPackage = (ActualsPackage)EPackage.Registry.INSTANCE.getEPackage(ActualsPackage.eNS_URI);
+		DateTimePackage theDateTimePackage = (DateTimePackage)EPackage.Registry.INSTANCE.getEPackage(DateTimePackage.eNS_URI);
 		PortPackage thePortPackage = (PortPackage)EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI);
 		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
 		PricingPackage thePricingPackage = (PricingPackage)EPackage.Registry.INSTANCE.getEPackage(PricingPackage.eNS_URI);
 		CommercialPackage theCommercialPackage = (CommercialPackage)EPackage.Registry.INSTANCE.getEPackage(CommercialPackage.eNS_URI);
 		SpotMarketsPackage theSpotMarketsPackage = (SpotMarketsPackage)EPackage.Registry.INSTANCE.getEPackage(SpotMarketsPackage.eNS_URI);
 		AnalyticsPackage theAnalyticsPackage = (AnalyticsPackage)EPackage.Registry.INSTANCE.getEPackage(AnalyticsPackage.eNS_URI);
-		CargoPackage theCargoPackage = (CargoPackage)EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI);
-		SchedulePackage theSchedulePackage = (SchedulePackage)EPackage.Registry.INSTANCE.getEPackage(SchedulePackage.eNS_URI);
-		ParametersPackage theParametersPackage = (ParametersPackage)EPackage.Registry.INSTANCE.getEPackage(ParametersPackage.eNS_URI);
-		ActualsPackage theActualsPackage = (ActualsPackage)EPackage.Registry.INSTANCE.getEPackage(ActualsPackage.eNS_URI);
-		DateTimePackage theDateTimePackage = (DateTimePackage)EPackage.Registry.INSTANCE.getEPackage(DateTimePackage.eNS_URI);
 
 		// Create type parameters
 
@@ -351,26 +351,26 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 
 		// Add supertypes to classes
 		lngScenarioModelEClass.getESuperTypes().add(theMMXCorePackage.getMMXRootObject());
-		lngPortfolioModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		lngReferenceModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(lngScenarioModelEClass, LNGScenarioModel.class, "LNGScenarioModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getLNGScenarioModel_PortModel(), thePortPackage.getPortModel(), null, "portModel", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getLNGScenarioModel_FleetModel(), theFleetPackage.getFleetModel(), null, "fleetModel", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getLNGScenarioModel_PricingModel(), thePricingPackage.getPricingModel(), null, "pricingModel", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getLNGScenarioModel_CommercialModel(), theCommercialPackage.getCommercialModel(), null, "commercialModel", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getLNGScenarioModel_SpotMarketsModel(), theSpotMarketsPackage.getSpotMarketsModel(), null, "spotMarketsModel", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getLNGScenarioModel_AnalyticsModel(), theAnalyticsPackage.getAnalyticsModel(), null, "analyticsModel", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getLNGScenarioModel_PortfolioModel(), this.getLNGPortfolioModel(), null, "portfolioModel", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getLNGScenarioModel_CostModel(), thePricingPackage.getCostModel(), null, "costModel", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLNGScenarioModel_CargoModel(), theCargoPackage.getCargoModel(), null, "cargoModel", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLNGScenarioModel_ScheduleModel(), theSchedulePackage.getScheduleModel(), null, "scheduleModel", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLNGScenarioModel_Parameters(), theParametersPackage.getOptimiserSettings(), null, "parameters", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLNGScenarioModel_ActualsModel(), theActualsPackage.getActualsModel(), null, "actualsModel", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getLNGScenarioModel_PromptPeriodStart(), theDateTimePackage.getLocalDate(), "promptPeriodStart", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getLNGScenarioModel_PromptPeriodEnd(), theDateTimePackage.getLocalDate(), "promptPeriodEnd", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLNGScenarioModel_ReferenceModel(), this.getLNGReferenceModel(), null, "referenceModel", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(lngPortfolioModelEClass, LNGPortfolioModel.class, "LNGPortfolioModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getLNGPortfolioModel_CargoModel(), theCargoPackage.getCargoModel(), null, "cargoModel", null, 0, 1, LNGPortfolioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getLNGPortfolioModel_ScheduleModel(), theSchedulePackage.getScheduleModel(), null, "scheduleModel", null, 0, 1, LNGPortfolioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getLNGPortfolioModel_Parameters(), theParametersPackage.getOptimiserSettings(), null, "parameters", null, 0, 1, LNGPortfolioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getLNGPortfolioModel_ActualsModel(), theActualsPackage.getActualsModel(), null, "actualsModel", null, 0, 1, LNGPortfolioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getLNGPortfolioModel_PromptPeriodStart(), theDateTimePackage.getLocalDate(), "promptPeriodStart", null, 0, 1, LNGPortfolioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getLNGPortfolioModel_PromptPeriodEnd(), theDateTimePackage.getLocalDate(), "promptPeriodEnd", null, 0, 1, LNGPortfolioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(lngReferenceModelEClass, LNGReferenceModel.class, "LNGReferenceModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getLNGReferenceModel_PortModel(), thePortPackage.getPortModel(), null, "portModel", null, 0, 1, LNGReferenceModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLNGReferenceModel_FleetModel(), theFleetPackage.getFleetModel(), null, "fleetModel", null, 0, 1, LNGReferenceModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLNGReferenceModel_PricingModel(), thePricingPackage.getPricingModel(), null, "pricingModel", null, 0, 1, LNGReferenceModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLNGReferenceModel_CommercialModel(), theCommercialPackage.getCommercialModel(), null, "commercialModel", null, 0, 1, LNGReferenceModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLNGReferenceModel_SpotMarketsModel(), theSpotMarketsPackage.getSpotMarketsModel(), null, "spotMarketsModel", null, 0, 1, LNGReferenceModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLNGReferenceModel_AnalyticsModel(), theAnalyticsPackage.getAnalyticsModel(), null, "analyticsModel", null, 0, 1, LNGReferenceModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLNGReferenceModel_CostModel(), thePricingPackage.getCostModel(), null, "costModel", null, 0, 1, LNGReferenceModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

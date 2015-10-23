@@ -162,7 +162,7 @@ public class PortGroupView extends ScenarioInstanceView {
 				viewerPane.setExternalMenuManager((MenuManager) getViewSite().getActionBars().getMenuManager());
 				viewerPane.setExternalToolBarManager((ToolBarManager) getViewSite().getActionBars().getToolBarManager());
 				viewerPane.createControl(sash);
-				viewerPane.init(Lists.newArrayList(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PortModel(), PortPackage.eINSTANCE.getPortModel_PortGroups()), getAdapterFactory(),
+				viewerPane.init(Lists.newArrayList(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ReferenceModel(), LNGScenarioPackage.eINSTANCE.getLNGReferenceModel_PortModel(), PortPackage.eINSTANCE.getPortModel_PortGroups()), getAdapterFactory(),
 						getEditingDomain().getCommandStack());
 				viewerPane.getViewer().setInput(getRootObject());
 

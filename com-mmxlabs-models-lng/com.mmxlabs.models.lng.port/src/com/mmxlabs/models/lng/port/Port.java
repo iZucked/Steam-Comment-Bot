@@ -100,7 +100,8 @@ public interface Port extends APortSet<Port>, OtherNamesObject {
 	 * @return the value of the '<em>Load Duration</em>' attribute.
 	 * @see #setLoadDuration(int)
 	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_LoadDuration()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='hours' formatString='##,##0'"
+	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='hours' formatString='##,##0'"
 	 * @generated
 	 */
 	int getLoadDuration();
@@ -126,7 +127,8 @@ public interface Port extends APortSet<Port>, OtherNamesObject {
 	 * @return the value of the '<em>Discharge Duration</em>' attribute.
 	 * @see #setDischargeDuration(int)
 	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_DischargeDuration()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='hours' formatString='##,##0'"
+	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='hours' formatString='##,##0'"
 	 * @generated
 	 */
 	int getDischargeDuration();
@@ -179,7 +181,8 @@ public interface Port extends APortSet<Port>, OtherNamesObject {
 	 * @return the value of the '<em>Cv Value</em>' attribute.
 	 * @see #setCvValue(double)
 	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_CvValue()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='mmBtu/m\263' formatString='#0.###'"
+	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='mmBtu/m\263' formatString='#0.###'"
 	 * @generated
 	 */
 	double getCvValue();
@@ -231,7 +234,7 @@ public interface Port extends APortSet<Port>, OtherNamesObject {
 	 * @return the value of the '<em>Allow Cooldown</em>' attribute.
 	 * @see #setAllowCooldown(boolean)
 	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_AllowCooldown()
-	 * @model
+	 * @model required="true"
 	 * @generated
 	 */
 	boolean isAllowCooldown();

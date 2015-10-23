@@ -21,7 +21,6 @@ import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -101,11 +100,10 @@ public class VesselAvailabilityPortConstraint extends AbstractModelMultiConstrai
 			if (rootObject instanceof LNGScenarioModel) {
 
 				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
-				final LNGPortfolioModel portfolioModel = lngScenarioModel.getPortfolioModel();
 
 				final HashSet<String> badPorts = new HashSet<String>();
 				final List<String> badVessels = new LinkedList<String>();
-				for (final VesselAvailability availability : portfolioModel.getCargoModel().getVesselAvailabilities()) {
+				for (final VesselAvailability availability : lngScenarioModel.getCargoModel().getVesselAvailabilities()) {
 					final Vessel v = availability.getVessel();
 					if (v != null && extraContext.getReplacement(vesselClass) == v.getVesselClass()) {
 

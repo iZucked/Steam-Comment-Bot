@@ -121,15 +121,16 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 	private List<UUIDObject> getSubModels(final LNGScenarioModel scenarioModel) {
 		final List<UUIDObject> subModels = new ArrayList<UUIDObject>();
 
-		subModels.add(scenarioModel.getPortModel());
-		subModels.add(scenarioModel.getFleetModel());
-		subModels.add(scenarioModel.getPricingModel());
-		subModels.add(scenarioModel.getCommercialModel());
-		subModels.add(scenarioModel.getSpotMarketsModel());
-		subModels.add(scenarioModel.getAnalyticsModel());
+		subModels.add(scenarioModel.getReferenceModel().getPortModel());
+		subModels.add(scenarioModel.getReferenceModel().getFleetModel());
+		subModels.add(scenarioModel.getReferenceModel().getPricingModel());
+		subModels.add(scenarioModel.getReferenceModel().getCommercialModel());
+		subModels.add(scenarioModel.getReferenceModel().getSpotMarketsModel());
+		subModels.add(scenarioModel.getReferenceModel().getAnalyticsModel());
 
-		subModels.add(scenarioModel.getPortfolioModel().getCargoModel());
-		subModels.add(scenarioModel.getPortfolioModel().getScheduleModel());
+		subModels.add(scenarioModel.getCargoModel());
+//		subModels.add(scenarioModel.getActualsModel());
+		subModels.add(scenarioModel.getScheduleModel());
 
 		// Remove any null references
 		while (subModels.remove(null))

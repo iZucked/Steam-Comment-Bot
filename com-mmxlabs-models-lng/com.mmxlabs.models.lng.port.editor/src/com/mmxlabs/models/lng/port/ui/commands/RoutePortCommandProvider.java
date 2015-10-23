@@ -35,7 +35,7 @@ public class RoutePortCommandProvider extends BaseModelCommandProvider<Object> {
 
 		if (rootObject instanceof LNGScenarioModel) {
 
-			final PortModel portModel = ((LNGScenarioModel) rootObject).getPortModel();
+			final PortModel portModel = ((LNGScenarioModel) rootObject).getReferenceModel().getPortModel();
 			if (portModel == null)
 				return null;
 			final HashSet<RouteLine> dead = new HashSet<RouteLine>();

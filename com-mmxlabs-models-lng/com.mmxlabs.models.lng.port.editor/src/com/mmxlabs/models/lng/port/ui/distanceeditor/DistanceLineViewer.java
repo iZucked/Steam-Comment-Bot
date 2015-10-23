@@ -89,7 +89,7 @@ public class DistanceLineViewer extends GridTableViewer {
 				if (inputElement instanceof Route) {
 					final Route dm = (Route) inputElement;
 					final Map<Port, Map<Port, RouteLine>> values = new HashMap<Port, Map<Port, RouteLine>>();
-					final PortModel portModel = scenario.getPortModel();
+					final PortModel portModel = scenario.getReferenceModel().getPortModel();
 					for (final Port p : portModel.getPorts()) {
 						values.put(p, new HashMap<Port, RouteLine>());
 					}
@@ -117,7 +117,7 @@ public class DistanceLineViewer extends GridTableViewer {
 		});
 
 		final ArrayList<Port> ports = new ArrayList<Port>();
-		final PortModel portModel = scenario.getPortModel();
+		final PortModel portModel = scenario.getReferenceModel().getPortModel();
 		ports.addAll(portModel.getPorts());
 		Collections.sort(ports, new Comparator<Port>() {
 			@Override

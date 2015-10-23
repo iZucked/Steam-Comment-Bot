@@ -66,7 +66,7 @@ public class VesselAssignmentTypeValueProviderFactory implements IReferenceValue
 		}
 		final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
 
-		final CargoModel cargoModel = scenarioModel.getPortfolioModel().getCargoModel();
+		final CargoModel cargoModel = scenarioModel.getCargoModel();
 		final EClass referenceClass = reference.getEReferenceType();
 		final TypesPackage types = TypesPackage.eINSTANCE;
 

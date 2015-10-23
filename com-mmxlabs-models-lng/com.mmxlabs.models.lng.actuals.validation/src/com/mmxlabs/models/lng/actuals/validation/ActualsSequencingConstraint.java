@@ -67,8 +67,8 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 		if (target instanceof ActualsModel) {
 			final ActualsModel actualsModel = (ActualsModel) target;
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
-			final SpotMarketsModel spotMarketsModel = scenarioModel.getSpotMarketsModel();
-			final CargoModel cargoModel = scenarioModel.getPortfolioModel().getCargoModel();
+			final SpotMarketsModel spotMarketsModel = scenarioModel.getReferenceModel().getSpotMarketsModel();
+			final CargoModel cargoModel = scenarioModel.getCargoModel();
 
 			// Build up lookup tables
 			final Map<Cargo, CargoActuals> cargoActualsMap = new HashMap<>();

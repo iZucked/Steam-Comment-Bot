@@ -17,11 +17,11 @@ import com.mmxlabs.models.common.commandservice.BaseModelCommandProvider;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 public class VesselAvailabilityCommandProvider extends BaseModelCommandProvider<Object> {
+
 	@Override
 	protected boolean shouldHandleDeletion(final Object deletedObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
 		return (deletedObject instanceof Vessel);
@@ -30,23 +30,20 @@ public class VesselAvailabilityCommandProvider extends BaseModelCommandProvider<
 	@Override
 	protected Command objectDeleted(final EditingDomain domain, final MMXRootObject rootObject, final Object deleted, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
 		if (rootObject instanceof LNGScenarioModel) {
-			final LNGPortfolioModel portfolioModel = ((LNGScenarioModel) rootObject).getPortfolioModel();
-			if (portfolioModel == null) {
-				return null;
-			}
-			
-			final CargoModel cargoModel = portfolioModel.getCargoModel();
-			
+			LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
+
+			final CargoModel cargoModel = scenarioModel.getCargoModel();
+
 			EList<VesselAvailability> availabilities = cargoModel.getVesselAvailabilities();
-			for (VesselAvailability availability: availabilities) {
+			for (VesselAvailability availability : availabilities) {
 				if (availability.getVessel() == deleted) {
 					return DeleteCommand.create(domain, availability);
 				}
 			}
-			
+
 		}
-		
+
 		return null;
 	}
-	
+
 }

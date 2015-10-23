@@ -7,8 +7,10 @@ package com.mmxlabs.models.lng.port.ui.valueproviders;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EReference;
 
+import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
@@ -19,10 +21,12 @@ public class RouteValueProviderFactory implements IReferenceValueProviderFactory
 	public IReferenceValueProvider createReferenceValueProvider(final EClass owner, final EReference reference, final MMXRootObject rootObject) {
 		if (rootObject instanceof LNGScenarioModel) {
 
-			LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+			final PortModel portModel = ScenarioModelUtil.getPortModel(lngScenarioModel);
+
 			final EClass referenceClass = reference.getEReferenceType();
 			if (PortPackage.eINSTANCE.getRoute().isSuperTypeOf(referenceClass)) {
-				return new SimpleReferenceValueProvider(lngScenarioModel.getPortModel(), PortPackage.eINSTANCE.getPortModel_Routes());
+				return new SimpleReferenceValueProvider(portModel, PortPackage.eINSTANCE.getPortModel_Routes());
 			}
 		}
 		return null;

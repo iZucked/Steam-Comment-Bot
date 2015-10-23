@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -28,17 +29,19 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class TravelTimeUtils {
-	public static int getMinRouteTimeInHours(final Slot from, final Slot to, final IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider, final LNGScenarioModel lngScenarioModel, final Vessel vessel, final double referenceSpeed) {
+	public static int getMinRouteTimeInHours(final Slot from, final Slot to, final IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider, final LNGScenarioModel lngScenarioModel,
+			final Vessel vessel, final double referenceSpeed) {
 		Collection<Route> allowedRoutes = null;
+		final PortModel portModel = lngScenarioModel.getReferenceModel().getPortModel();
 		try {
-			allowedRoutes = shippingDaysSpeedProvider.getValidRoutes(lngScenarioModel.getPortModel(), vessel.getVesselClass());
-		} catch (org.ops4j.peaberry.ServiceUnavailableException e) {
+			allowedRoutes = shippingDaysSpeedProvider.getValidRoutes(portModel, vessel.getVesselClass());
+		} catch (final org.ops4j.peaberry.ServiceUnavailableException e) {
 		}
 
 		if (allowedRoutes == null || allowedRoutes.isEmpty()) {
-			allowedRoutes = lngScenarioModel.getPortModel().getRoutes();
+			allowedRoutes = portModel.getRoutes();
 		}
-		
+
 		int minDuration = Integer.MAX_VALUE;
 		for (final Route route : allowedRoutes) {
 			assert route != null;
@@ -87,7 +90,7 @@ public class TravelTimeUtils {
 		}
 	}
 
-	public static Pair<LoadSlot, DischargeSlot> getDESSlots(Cargo cargo) {
+	public static Pair<LoadSlot, DischargeSlot> getDESSlots(final Cargo cargo) {
 		if (cargo.getCargoType() == CargoType.DES) {
 			LoadSlot desPurchase = null;
 			DischargeSlot dischargeSlot = null;
@@ -105,7 +108,7 @@ public class TravelTimeUtils {
 		}
 		return new Pair<LoadSlot, DischargeSlot>();
 	}
-	
+
 	public static LNGScenarioModel getScenarioModel(final IExtraValidationContext extraContext) {
 		final MMXRootObject scenario = extraContext.getRootObject();
 		if (scenario instanceof LNGScenarioModel) {
@@ -113,26 +116,26 @@ public class TravelTimeUtils {
 		}
 		return null;
 	}
-	
-	public static double getReferenceSpeed(IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider, final VesselClass vesselClass, final boolean isLaden) {
+
+	public static double getReferenceSpeed(final IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider, final VesselClass vesselClass, final boolean isLaden) {
 		double referenceSpeed;
 
 		// catch error in case no service registered
 		try {
 			referenceSpeed = shippingDaysSpeedProvider.getSpeed(vesselClass, isLaden);
-		} catch (org.ops4j.peaberry.ServiceUnavailableException e) {
+		} catch (final org.ops4j.peaberry.ServiceUnavailableException e) {
 			referenceSpeed = vesselClass.getMaxSpeed();
 		}
 		return referenceSpeed;
 	}
 
-	public static double getReferenceSpeed(IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider, final LoadSlot loadSlot, final VesselClass vesselClass, final boolean isLaden) {
+	public static double getReferenceSpeed(final IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider, final LoadSlot loadSlot, final VesselClass vesselClass, final boolean isLaden) {
 		double referenceSpeed;
 
 		// catch error in case no service registered
 		try {
 			referenceSpeed = shippingDaysSpeedProvider.getSpeed(loadSlot, vesselClass, isLaden);
-		} catch (org.ops4j.peaberry.ServiceUnavailableException e) {
+		} catch (final org.ops4j.peaberry.ServiceUnavailableException e) {
 			referenceSpeed = vesselClass.getMaxSpeed();
 		}
 		return referenceSpeed;

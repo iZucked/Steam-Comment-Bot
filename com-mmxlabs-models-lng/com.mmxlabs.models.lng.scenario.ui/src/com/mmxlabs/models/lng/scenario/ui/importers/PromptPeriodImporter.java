@@ -16,7 +16,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.common.csv.IFieldMap;
 import com.mmxlabs.models.datetime.importers.LocalDateAttributeImporter;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.util.importer.IExtraModelImporter;
@@ -48,64 +47,61 @@ public class PromptPeriodImporter implements IExtraModelImporter {
 	public void importModel(final MMXRootObject rootObject, final Map<String, CSVReader> inputs, final IMMXImportContext context) {
 		if (rootObject instanceof LNGScenarioModel) {
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
-			final LNGPortfolioModel portfolioModel = lngScenarioModel.getPortfolioModel();
-			if (portfolioModel != null) {
+			
+                        // Always set a default period. Then overwrite with values from the CSV file.
+			lngScenarioModel.setPromptPeriodStart(LocalDate.now());
+			lngScenarioModel.setPromptPeriodEnd(LocalDate.now().plusDays(90));
+	
+                        final CSVReader reader = inputs.get(PROMPT_PERIOD_KEY);
+                        if (reader != null) {
 
-				// Always set a default period. Then overwrite with values from the CSV file.
-				portfolioModel.setPromptPeriodStart(LocalDate.now());
-				portfolioModel.setPromptPeriodEnd(LocalDate.now().plusDays(90));
-				
-				final CSVReader reader = inputs.get(PROMPT_PERIOD_KEY);
-				if (reader != null) {
+                                try {
+                                        context.pushReader(reader);
 
-					try {
-						context.pushReader(reader);
-
-						IFieldMap row = null;
-						try {
-							row = reader.readRow(true);
-						} catch (final IOException e1) {
-							context.createProblem("Error parsing row", true, true, true);
-							return;
-						}
-						if (row != null) {
-							{
-								final String periodStart = row.get(PROMPT_PERIOD_START_KEY);
-								if (periodStart != null && !periodStart.isEmpty()) {
-									try {
-										final LocalDate periodStartDate = dateImporter.parseLocalDate(periodStart);
-										if (periodStartDate != null) {
-											portfolioModel.setPromptPeriodStart(periodStartDate);
-										}
-									} catch (final Exception e) {
-										context.createProblem("Error parsing date", true, true, true);
-									}
-								}
-							}
-							{
-								final String periodEnd = row.get(PROMPT_PERIOD_END_KEY);
-								if (periodEnd != null && !periodEnd.isEmpty()) {
-									try {
-										final LocalDate periodEndDate = dateImporter.parseLocalDate(periodEnd);
-										if (periodEndDate != null) {
-											portfolioModel.setPromptPeriodEnd(periodEndDate);
-										}
-									} catch (final Exception e) {
-										context.createProblem("Error parsing date", true, true, true);
-									}
-								}
-							}
-						}
-					} finally {
-						try {
-							reader.close();
-						} catch (final IOException e) {
-						}
-						context.popReader();
-					}
-				}
-			}
-		}
+                                        IFieldMap row = null;
+                                        try {
+                                                row = reader.readRow(true);
+                                        } catch (final IOException e1) {
+                                                context.createProblem("Error parsing row", true, true, true);
+                                                return;
+                                        }
+                                        if (row != null) {
+                                                {
+                                                        final String periodStart = row.get(PROMPT_PERIOD_START_KEY);
+                                                        if (periodStart != null && !periodStart.isEmpty()) {
+                                                                try {
+                                                                        final LocalDate periodStartDate = dateImporter.parseLocalDate(periodStart);
+                                                                        if (periodStartDate != null) {
+                                                                                lngScenarioModel.setPromptPeriodStart(periodStartDate);
+                                                                        }
+                                                                } catch (final Exception e) {
+                                                                        context.createProblem("Error parsing date", true, true, true);
+                                                                }
+                                                        }
+                                                }
+                                                {
+                                                        final String periodEnd = row.get(PROMPT_PERIOD_END_KEY);
+                                                        if (periodEnd != null && !periodEnd.isEmpty()) {
+                                                                try {
+                                                                        final LocalDate periodEndDate = dateImporter.parseLocalDate(periodEnd);
+                                                                        if (periodEndDate != null) {
+                                                                                lngScenarioModel.setPromptPeriodEnd(periodEndDate);
+                                                                        }
+                                                                } catch (final Exception e) {
+                                                                        context.createProblem("Error parsing date", true, true, true);
+                                                                }
+                                                        }
+                                                }
+                                        }
+                                } finally {
+                                        try {
+                                                reader.close();
+                                        } catch (final IOException e) {
+                                        }
+                                        context.popReader();
+                                }
+                        }
+                }
 	}
 
 	@Override
@@ -113,14 +109,11 @@ public class PromptPeriodImporter implements IExtraModelImporter {
 		final MMXRootObject rootObject = context.getRootObject();
 		if (rootObject instanceof LNGScenarioModel) {
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
-			final LNGPortfolioModel portfolioModel = lngScenarioModel.getPortfolioModel();
-			if (portfolioModel != null) {
-				final Map<String, String> row = new LinkedHashMap<>();
-				row.put(PROMPT_PERIOD_START_KEY, dateImporter.formatLocalDate(portfolioModel.getPromptPeriodStart()));
-				row.put(PROMPT_PERIOD_END_KEY, dateImporter.formatLocalDate(portfolioModel.getPromptPeriodEnd()));
+			final Map<String, String> row = new LinkedHashMap<>();
+			row.put(PROMPT_PERIOD_START_KEY, dateImporter.formatLocalDate(lngScenarioModel.getPromptPeriodStart()));
+			row.put(PROMPT_PERIOD_END_KEY, dateImporter.formatLocalDate(lngScenarioModel.getPromptPeriodEnd()));
 
-				output.put(PROMPT_PERIOD_KEY, Collections.singleton(row));
-			}
+			output.put(PROMPT_PERIOD_KEY, Collections.singleton(row));
 		}
 	}
 }

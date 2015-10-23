@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EReference;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
@@ -21,7 +22,8 @@ public class CharterIndexReferenceValueProviderFactory implements IReferenceValu
 
 		if (rootObject instanceof LNGScenarioModel) {
 
-			final PricingModel model = ((LNGScenarioModel) rootObject).getPricingModel();
+			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+			final PricingModel model = ScenarioModelUtil.getPricingModel(lngScenarioModel);
 			final EClass referenceClass = reference.getEReferenceType();
 
 			// TODO; there needs to be more cleverness involved here.

@@ -69,7 +69,7 @@ public class SpotMarketReferenceValueProvider extends BaseReferenceValueProvider
 
 			if (feature != null) {
 
-				final SpotMarketsModel spotMarketsModel = lngScenarioModel.getSpotMarketsModel();
+				final SpotMarketsModel spotMarketsModel = lngScenarioModel.getReferenceModel().getSpotMarketsModel();
 				final SpotMarketGroup group = (SpotMarketGroup) spotMarketsModel.eGet(feature);
 				if (group != null) {
 					final List<Pair<String, EObject>> values = Lists.transform(group.getMarkets(), new Function<SpotMarket, Pair<String, EObject>>() {

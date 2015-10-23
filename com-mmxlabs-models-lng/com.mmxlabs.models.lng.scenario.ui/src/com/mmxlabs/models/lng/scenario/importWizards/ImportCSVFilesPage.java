@@ -41,14 +41,16 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.common.csv.FileCSVReader;
 import com.mmxlabs.common.csv.IImportContext;
+import com.mmxlabs.models.lng.actuals.ActualsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.internal.Activator;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage.RadioSelectionGroup;
@@ -344,8 +346,8 @@ public class ImportCSVFilesPage extends WizardPage {
 	public LNGScenarioModel doImport(final DefaultImportContext context) {
 
 		final LNGScenarioModel scenarioModel = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
-		final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
-		scenarioModel.setPortfolioModel(portfolioModel);
+		final LNGReferenceModel referenceModel = LNGScenarioFactory.eINSTANCE.createLNGReferenceModel();
+		scenarioModel.setReferenceModel(referenceModel);
 
 		final char delimiter = csvSelectionGroup.getSelectedValue() == CHOICE_COMMA ? ',' : ';';
 
@@ -421,23 +423,27 @@ public class ImportCSVFilesPage extends WizardPage {
 	}
 
 	private void setSubModel(final LNGScenarioModel scenarioModel, final EObject subModel) {
-		final LNGPortfolioModel portfolioModel = scenarioModel.getPortfolioModel();
+		final LNGReferenceModel referenceModel = scenarioModel.getReferenceModel();
 		if (subModel instanceof PortModel) {
-			scenarioModel.setPortModel((PortModel) subModel);
+			referenceModel.setPortModel((PortModel) subModel);
 		} else if (subModel instanceof FleetModel) {
-			scenarioModel.setFleetModel((FleetModel) subModel);
+			referenceModel.setFleetModel((FleetModel) subModel);
 		} else if (subModel instanceof PricingModel) {
-			scenarioModel.setPricingModel((PricingModel) subModel);
+			referenceModel.setPricingModel((PricingModel) subModel);
+		} else if (subModel instanceof CostModel) {
+			referenceModel.setCostModel((CostModel) subModel);
 		} else if (subModel instanceof CommercialModel) {
-			scenarioModel.setCommercialModel((CommercialModel) subModel);
+			referenceModel.setCommercialModel((CommercialModel) subModel);
 		} else if (subModel instanceof SpotMarketsModel) {
-			scenarioModel.setSpotMarketsModel((SpotMarketsModel) subModel);
+			referenceModel.setSpotMarketsModel((SpotMarketsModel) subModel);
 		} else if (subModel instanceof AnalyticsModel) {
-			scenarioModel.setAnalyticsModel((AnalyticsModel) subModel);
+			referenceModel.setAnalyticsModel((AnalyticsModel) subModel);
 		} else if (subModel instanceof CargoModel) {
-			portfolioModel.setCargoModel((CargoModel) subModel);
+			scenarioModel.setCargoModel((CargoModel) subModel);
+		} else if (subModel instanceof ActualsModel) {
+			scenarioModel.setActualsModel((ActualsModel) subModel);
 		} else if (subModel instanceof ScheduleModel) {
-			portfolioModel.setScheduleModel((ScheduleModel) subModel);
+			scenarioModel.setScheduleModel((ScheduleModel) subModel);
 		} else {
 			log.error("Unknown sub model type: " + subModel.eClass().getName());
 		}

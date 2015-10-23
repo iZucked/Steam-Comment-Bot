@@ -121,7 +121,6 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
@@ -220,8 +219,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		super(page, part, scenarioEditingLocation, actionBars);
 
 		final LNGScenarioModel scenarioModel = (LNGScenarioModel) scenarioEditingLocation.getRootObject();
-		this.cec = new CargoEditingCommands(scenarioEditingLocation.getEditingDomain(), scenarioModel, scenarioModel.getPortfolioModel());
-		this.menuHelper = new CargoEditorMenuHelper(part.getSite().getShell(), scenarioEditingLocation, scenarioModel, scenarioModel.getPortfolioModel());
+		this.cec = new CargoEditingCommands(scenarioEditingLocation.getEditingDomain(), scenarioModel);
+		this.menuHelper = new CargoEditorMenuHelper(part.getSite().getShell(), scenarioEditingLocation, scenarioModel);
 		lockedImage = CargoEditorPlugin.getPlugin().getImage(CargoEditorPlugin.IMAGE_CARGO_LOCK);
 		notesImage = CargoEditorPlugin.getPlugin().getImage(CargoEditorPlugin.IMAGE_CARGO_NOTES);
 	}
@@ -273,7 +272,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 			@Override
 			public EObject getCurrentContainer() {
-				return getPortfolioModel().getCargoModel();
+				return getScenarioModel().getCargoModel();
 			}
 
 			/**
@@ -346,8 +345,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					@Override
 					public Object[] getElements(final Object inputElement) {
 
-						final CargoModel cargoModel = getPortfolioModel().getCargoModel();
-						final ScheduleModel scheduleModel = getPortfolioModel().getScheduleModel();
+						final CargoModel cargoModel = getScenarioModel().getCargoModel();
+						final ScheduleModel scheduleModel = getScenarioModel().getScheduleModel();
 
 						final RootData root = setCargoes(cargoModel, scheduleModel, referenceRootData);
 
@@ -1253,7 +1252,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		final List<Command> setCommands = new LinkedList<Command>();
 		final List<Command> deleteCommands = new LinkedList<Command>();
 
-		final CargoModel cargoModel = getPortfolioModel().getCargoModel();
+		final CargoModel cargoModel = getScenarioModel().getCargoModel();
 
 		final Set<Slot> slotsToRemove = new HashSet<Slot>();
 		final Set<Slot> slotsToKeep = new HashSet<Slot>();
@@ -1368,8 +1367,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 	/**
 	 */
-	protected LNGPortfolioModel getPortfolioModel() {
-		return ((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getPortfolioModel();
+	protected LNGScenarioModel getScenarioModel() {
+		return ((LNGScenarioModel) scenarioEditingLocation.getRootObject());
 	}
 
 	private void executeCurrentWiringCommand(final CompoundCommand currentWiringCommand) {
@@ -1561,8 +1560,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		@Override
 		protected void populate(final Menu menu) {
 			final LNGScenarioModel scenario = (LNGScenarioModel) scenarioEditingLocation.getRootObject();
-			final CommercialModel commercialModel = scenario.getCommercialModel();
-			final FleetModel fleetModel = scenario.getFleetModel();
+			final CommercialModel commercialModel = scenario.getReferenceModel().getCommercialModel();
+			final FleetModel fleetModel = scenario.getReferenceModel().getFleetModel();
 
 			final EMFPath purchaseContractPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.LOAD, CargoPackage.Literals.SLOT__CONTRACT);
 			final EMFPath salesContractPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.DISCHARGE, CargoPackage.Literals.SLOT__CONTRACT);
@@ -1684,7 +1683,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				addActionToMenu(result, menu);
 			}
 
-			final CargoModel cargoModel = getPortfolioModel().getCargoModel();
+			final CargoModel cargoModel = getScenarioModel().getCargoModel();
 
 			RowData discoveredRowData = null;
 			final ISelection selection = getScenarioViewer().getSelection();
@@ -1844,7 +1843,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				final CommandStack commandStack = scenarioEditingLocation.getEditingDomain().getCommandStack();
 				if (ret == Window.OK) {
 
-					final CargoModel cargomodel = getPortfolioModel().getCargoModel();
+					final CargoModel cargomodel = getScenarioModel().getCargoModel();
 
 					final CompoundCommand cmd = new CompoundCommand("New LDD Cargo");
 					cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargomodel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), Collections.singleton(cargo)));
@@ -2095,7 +2094,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						}
 					};
 					if (Window.OK == d.open()) {
-						final Command cmd = d.createStrip(scenarioModel.getPortfolioModel().getCargoModel(), getEditingDomain());
+						final Command cmd = d.createStrip(scenarioModel.getCargoModel(), getEditingDomain());
 						if (cmd.canExecute()) {
 							getEditingDomain().getCommandStack().execute(cmd);
 						}

@@ -198,10 +198,9 @@ public class ActualsActionBarContributor
 		//
 		submenuManager.addMenuListener
 			(new IMenuListener() {
-                                @Override
-				public void menuAboutToShow(IMenuManager menuManager) {
-					menuManager.updateAll(true);
-				}
+				 public void menuAboutToShow(IMenuManager menuManager) {
+					 menuManager.updateAll(true);
+				 }
 			 });
 
 		addGlobalActions(submenuManager);

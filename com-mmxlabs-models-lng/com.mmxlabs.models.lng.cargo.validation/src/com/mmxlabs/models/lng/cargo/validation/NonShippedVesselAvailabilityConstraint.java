@@ -24,7 +24,6 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -83,8 +82,7 @@ public class NonShippedVesselAvailabilityConstraint extends AbstractModelMultiCo
 		final MMXRootObject rootObject = extraContext.getRootObject();
 		if (rootObject instanceof LNGScenarioModel) {
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
-			final LNGPortfolioModel portfolioModel = lngScenarioModel.getPortfolioModel();
-			final CargoModel cargoModel = portfolioModel.getCargoModel();
+			final CargoModel cargoModel = lngScenarioModel.getCargoModel();
 			for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
 				Interval availabilityInterval = null;
 

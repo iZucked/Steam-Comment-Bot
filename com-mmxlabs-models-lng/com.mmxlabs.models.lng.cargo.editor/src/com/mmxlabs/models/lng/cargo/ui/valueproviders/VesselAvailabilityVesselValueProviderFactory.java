@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -31,44 +32,45 @@ public class VesselAvailabilityVesselValueProviderFactory implements IReferenceV
 	@Override
 	public IReferenceValueProvider createReferenceValueProvider(final EClass owner, final EReference reference, final MMXRootObject rootObject) {
 		if (rootObject instanceof LNGScenarioModel) {
-			final FleetModel fleetModel = ((LNGScenarioModel)rootObject).getFleetModel();
-			final CargoModel cargoModel = ((LNGScenarioModel) rootObject).getPortfolioModel().getCargoModel();
+			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+			final LNGReferenceModel referenceModel = lngScenarioModel.getReferenceModel();
+			final CargoModel cargoModel = lngScenarioModel.getCargoModel();
+			final FleetModel fleetModel = referenceModel.getFleetModel();
 
 			return new SimpleReferenceValueProvider(fleetModel, FleetPackage.Literals.FLEET_MODEL__VESSELS) {
-				
+
 				@Override
-				public List<Pair<String, EObject>> getAllowedValues(EObject target,
-						EStructuralFeature field) {
+				public List<Pair<String, EObject>> getAllowedValues(final EObject target, final EStructuralFeature field) {
 					// determine the current vessel attached to the availability
 					Vessel currentValue = null;
-					
+
 					if (target instanceof VesselAvailability) {
 						currentValue = ((VesselAvailability) target).getVessel();
 					}
-					
+
 					// make a list of admissible vessels
-					final Set<Vessel> admissible = new HashSet<Vessel>();		
-					
-					// if there is no vessel assigned to this availability, 
+					final Set<Vessel> admissible = new HashSet<Vessel>();
+
+					// if there is no vessel assigned to this availability,
 					if (currentValue == null) {
 						// allow it to be any vessel...
 						admissible.addAll(fleetModel.getVessels());
 						// ... which not already available
-						for (VesselAvailability availability: cargoModel.getVesselAvailabilities()) {
+						for (final VesselAvailability availability : cargoModel.getVesselAvailabilities()) {
 							admissible.remove(availability.getVessel());
 						}
-					}	
+					}
 					// if there is a vessel assigned to this availability,
 					else {
 						// don't allow any other value
 						admissible.add(currentValue);
 					}
-					
-					return getSortedNames(new BasicEList<Vessel>(admissible), MMXCorePackage.Literals.NAMED_OBJECT__NAME);						
+
+					return getSortedNames(new BasicEList<Vessel>(admissible), MMXCorePackage.Literals.NAMED_OBJECT__NAME);
 				}
-				
+
 			};
-			
+
 		}
 
 		return null;

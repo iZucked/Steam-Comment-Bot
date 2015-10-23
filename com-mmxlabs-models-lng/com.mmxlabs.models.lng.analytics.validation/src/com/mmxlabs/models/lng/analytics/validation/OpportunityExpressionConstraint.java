@@ -89,7 +89,7 @@ public class OpportunityExpressionConstraint extends AbstractModelMultiConstrain
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 			final SeriesParser indices = new SeriesParser();
 
-			final PricingModel pricingModel = lngScenarioModel.getPricingModel();
+			final PricingModel pricingModel = lngScenarioModel.getReferenceModel().getPricingModel();
 			for (final CommodityIndex commodityIndex : pricingModel.getCommodityIndices()) {
 				final Index<Double> index = commodityIndex.getData();
 				if (index instanceof DataIndex) {

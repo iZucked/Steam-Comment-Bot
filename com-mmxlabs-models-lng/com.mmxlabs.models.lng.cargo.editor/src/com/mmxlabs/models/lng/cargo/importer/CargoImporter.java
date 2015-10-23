@@ -567,8 +567,8 @@ public class CargoImporter extends DefaultClassImporter {
 							} else {
 								final Vessel v = (Vessel) context.getNamedObject(vesselName.trim(), FleetPackage.Literals.VESSEL);
 								if (v != null) {
-									final VesselAvailability availability = AssignmentEditorHelper.findVesselAvailability(v, assignableElement, ((LNGScenarioModel) context.getRootObject())
-											.getPortfolioModel().getCargoModel().getVesselAvailabilities());
+									final VesselAvailability availability = AssignmentEditorHelper.findVesselAvailability(v, assignableElement,
+											((LNGScenarioModel) context.getRootObject()).getCargoModel().getVesselAvailabilities());
 									assignableElement.setVesselAssignmentType(availability);
 								}
 							}
@@ -578,7 +578,7 @@ public class CargoImporter extends DefaultClassImporter {
 
 								final VesselClass vc = (VesselClass) context.getNamedObject(assignment.trim(), FleetPackage.Literals.VESSEL_CLASS);
 								if (vc != null) {
-									for (CharterInMarket charterInMarket : ((LNGScenarioModel) context.getRootObject()).getSpotMarketsModel().getCharterInMarkets()) {
+									for (CharterInMarket charterInMarket : ((LNGScenarioModel) context.getRootObject()).getReferenceModel().getSpotMarketsModel().getCharterInMarkets()) {
 										if (vc.equals(charterInMarket.getVesselClass())) {
 											assignableElement.setVesselAssignmentType(charterInMarket);
 											break;
@@ -589,8 +589,8 @@ public class CargoImporter extends DefaultClassImporter {
 							} else {
 								final Vessel v = (Vessel) context.getNamedObject(assignment.trim(), FleetPackage.Literals.VESSEL);
 								if (v != null) {
-									final VesselAvailability availability = AssignmentEditorHelper.findVesselAvailability(v, assignableElement, ((LNGScenarioModel) context.getRootObject())
-											.getPortfolioModel().getCargoModel().getVesselAvailabilities());
+									final VesselAvailability availability = AssignmentEditorHelper.findVesselAvailability(v, assignableElement,
+											((LNGScenarioModel) context.getRootObject()).getCargoModel().getVesselAvailabilities());
 									assignableElement.setVesselAssignmentType(availability);
 								}
 							}

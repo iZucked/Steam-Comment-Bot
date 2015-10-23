@@ -25,7 +25,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.importer.CargoImporter;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
@@ -101,15 +100,13 @@ public final class CargoImportAction extends SimpleImportAction {
 
 		final List<IMappingDescriptor> descriptors = new LinkedList<IMappingDescriptor>();
 		final LNGScenarioModel importModel = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
-		final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
-		importModel.setPortfolioModel(portfolioModel);
-		portfolioModel.setCargoModel(tmpCargoModel);
+		importModel.setCargoModel(tmpCargoModel);
 
 		final LNGScenarioModel destScenarioModel = (LNGScenarioModel) importHooksProvider.getRootObject();
 
-		descriptors.add(EMFModelMergeTools.generateMappingDescriptor(tmpCargoModel, destScenarioModel.getPortfolioModel().getCargoModel(), CargoPackage.eINSTANCE.getCargoModel_Cargoes()));
-		descriptors.add(EMFModelMergeTools.generateMappingDescriptor(tmpCargoModel, destScenarioModel.getPortfolioModel().getCargoModel(), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots()));
-		descriptors.add(EMFModelMergeTools.generateMappingDescriptor(tmpCargoModel, destScenarioModel.getPortfolioModel().getCargoModel(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots()));
+		descriptors.add(EMFModelMergeTools.generateMappingDescriptor(tmpCargoModel, destScenarioModel.getCargoModel(), CargoPackage.eINSTANCE.getCargoModel_Cargoes()));
+		descriptors.add(EMFModelMergeTools.generateMappingDescriptor(tmpCargoModel, destScenarioModel.getCargoModel(), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots()));
+		descriptors.add(EMFModelMergeTools.generateMappingDescriptor(tmpCargoModel, destScenarioModel.getCargoModel(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots()));
 
 		// Fix up the descriptor data references to point to destination objects in the cases where the source is not being transferred across
 		EMFModelMergeTools.rewriteMappingDescriptors(descriptors, importModel, destScenarioModel);

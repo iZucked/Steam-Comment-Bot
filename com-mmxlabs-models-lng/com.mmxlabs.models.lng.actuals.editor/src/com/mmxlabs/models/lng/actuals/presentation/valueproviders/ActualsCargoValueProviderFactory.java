@@ -29,7 +29,7 @@ public class ActualsCargoValueProviderFactory implements IReferenceValueProvider
 	public IReferenceValueProvider createReferenceValueProvider(final EClass owner, final EReference reference, final MMXRootObject rootObject) {
 		if (rootObject instanceof LNGScenarioModel) {
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
-			final CargoModel cm = lngScenarioModel.getPortfolioModel().getCargoModel();
+			final CargoModel cm = lngScenarioModel.getCargoModel();
 			if (cm == null) {
 				return null;
 			}

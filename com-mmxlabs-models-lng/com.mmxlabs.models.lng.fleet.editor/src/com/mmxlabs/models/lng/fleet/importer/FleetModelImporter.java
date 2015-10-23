@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.fleet.VesselGroup;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
@@ -56,6 +57,7 @@ public class FleetModelImporter implements ISubmodelImporter {
 	private final FuelCurveImporter fuelCurveImporter = new FuelCurveImporter();
 
 	private static final Map<String, String> inputs = new HashMap<String, String>();
+
 	static {
 		inputs.put(VESSELS_KEY, "Vessels");
 		inputs.put(VESSEL_CLASSES_KEY, "Vessel Classes");
@@ -98,8 +100,8 @@ public class FleetModelImporter implements ISubmodelImporter {
 			fleetModel.getVessels().addAll((Collection<? extends Vessel>) vesselImporter.importObjects(FleetPackage.eINSTANCE.getVessel(), inputs.get(VESSELS_KEY), context));
 
 		if (inputs.containsKey(VESSEL_CLASSES_KEY))
-			fleetModel.getVesselClasses().addAll(
-					(Collection<? extends VesselClass>) vesselClassImporter.importObjects(FleetPackage.eINSTANCE.getVesselClass(), inputs.get(VESSEL_CLASSES_KEY), context));
+			fleetModel.getVesselClasses()
+					.addAll((Collection<? extends VesselClass>) vesselClassImporter.importObjects(FleetPackage.eINSTANCE.getVesselClass(), inputs.get(VESSEL_CLASSES_KEY), context));
 
 		if (inputs.containsKey(FUELS_KEY))
 			fleetModel.getBaseFuels().addAll((Collection<? extends BaseFuel>) baseFuelImporter.importObjects(FleetPackage.eINSTANCE.getBaseFuel(), inputs.get(FUELS_KEY), context));
@@ -117,8 +119,9 @@ public class FleetModelImporter implements ISubmodelImporter {
 				final MMXRootObject rootObject = context.getRootObject();
 				if (rootObject instanceof LNGScenarioModel) {
 					final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
-					final FleetModel fleetModel = scenarioModel.getFleetModel();
-					final PortModel portModel = scenarioModel.getPortModel();
+
+					final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenarioModel);
+					final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
 
 					for (final Route route : portModel.getRoutes()) {
 						if (route.isCanal() == true) {

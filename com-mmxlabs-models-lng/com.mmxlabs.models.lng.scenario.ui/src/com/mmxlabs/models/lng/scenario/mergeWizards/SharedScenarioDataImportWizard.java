@@ -210,33 +210,33 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 			final LNGScenarioModel copiedModel = EcoreUtil.copy(sourceScenarioModel);
 
 			if (dataOptions.contains(DataOptions.PortData)) {
-				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getPortModel(), destScenarioModel.getPortModel(), PortPackage.eINSTANCE.getPortModel_Ports()));
-				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getPortModel(), destScenarioModel.getPortModel(), PortPackage.eINSTANCE.getPortModel_Routes()));
-				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getPortModel(), destScenarioModel.getPortModel(), PortPackage.eINSTANCE.getPortModel_PortGroups()));
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getReferenceModel().getPortModel(), destScenarioModel.getReferenceModel().getPortModel(), PortPackage.eINSTANCE.getPortModel_Ports()));
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getReferenceModel().getPortModel(), destScenarioModel.getReferenceModel().getPortModel(), PortPackage.eINSTANCE.getPortModel_Routes()));
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getReferenceModel().getPortModel(), destScenarioModel.getReferenceModel().getPortModel(), PortPackage.eINSTANCE.getPortModel_PortGroups()));
 			}
 
 			if (dataOptions.contains(DataOptions.FleetDatabase)) {
-				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getFleetModel(), destScenarioModel.getFleetModel(), FleetPackage.eINSTANCE.getFleetModel_VesselClasses()));
-				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getFleetModel(), destScenarioModel.getFleetModel(), FleetPackage.eINSTANCE.getFleetModel_Vessels()));
-				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getFleetModel(), destScenarioModel.getFleetModel(), FleetPackage.eINSTANCE.getFleetModel_VesselGroups()));
-				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getFleetModel(), destScenarioModel.getFleetModel(), FleetPackage.eINSTANCE.getFleetModel_BaseFuels()));
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getReferenceModel().getFleetModel(), destScenarioModel.getReferenceModel().getFleetModel(), FleetPackage.eINSTANCE.getFleetModel_VesselClasses()));
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getReferenceModel().getFleetModel(), destScenarioModel.getReferenceModel().getFleetModel(), FleetPackage.eINSTANCE.getFleetModel_Vessels()));
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getReferenceModel().getFleetModel(), destScenarioModel.getReferenceModel().getFleetModel(), FleetPackage.eINSTANCE.getFleetModel_VesselGroups()));
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getReferenceModel().getFleetModel(), destScenarioModel.getReferenceModel().getFleetModel(), FleetPackage.eINSTANCE.getFleetModel_BaseFuels()));
 			}
 
 			if (dataOptions.contains(DataOptions.CommercialData)) {
-				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getCommercialModel(), destScenarioModel.getCommercialModel(),
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getReferenceModel().getCommercialModel(), destScenarioModel.getReferenceModel().getCommercialModel(),
 						CommercialPackage.eINSTANCE.getCommercialModel_Entities()));
-				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getCommercialModel(), destScenarioModel.getCommercialModel(),
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getReferenceModel().getCommercialModel(), destScenarioModel.getReferenceModel().getCommercialModel(),
 						CommercialPackage.eINSTANCE.getCommercialModel_PurchaseContracts()));
-				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getCommercialModel(), destScenarioModel.getCommercialModel(),
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getReferenceModel().getCommercialModel(), destScenarioModel.getReferenceModel().getCommercialModel(),
 						CommercialPackage.eINSTANCE.getCommercialModel_SalesContracts()));
 			}
 
 			if (dataOptions.contains(DataOptions.PricingData)) {
-				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getPricingModel(), destScenarioModel.getPricingModel(),
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getReferenceModel().getPricingModel(), destScenarioModel.getReferenceModel().getPricingModel(),
 						PricingPackage.eINSTANCE.getPricingModel_CommodityIndices()));
-				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getPricingModel(), destScenarioModel.getPricingModel(),
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getReferenceModel().getPricingModel(), destScenarioModel.getReferenceModel().getPricingModel(),
 						PricingPackage.eINSTANCE.getPricingModel_CharterIndices()));
-				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getPricingModel(), destScenarioModel.getPricingModel(),
+				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getReferenceModel().getPricingModel(), destScenarioModel.getReferenceModel().getPricingModel(),
 						PricingPackage.eINSTANCE.getPricingModel_BaseFuelPrices()));
 			}
 

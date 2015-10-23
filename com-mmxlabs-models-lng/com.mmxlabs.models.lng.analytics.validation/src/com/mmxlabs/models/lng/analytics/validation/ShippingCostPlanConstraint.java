@@ -127,7 +127,7 @@ public class ShippingCostPlanConstraint extends AbstractModelMultiConstraint {
 					collectMinTimes(minTimes, parameters.getRoute(), parameters.getExtraTransitTime(), maxSpeedKnots);
 				}
 
-				for (final Route route : scenario.getPortModel().getRoutes()) {
+				for (final Route route : scenario.getReferenceModel().getPortModel().getRoutes()) {
 					if (route.isCanal() == false) {
 						collectMinTimes(minTimes, route, 0, maxSpeedKnots);
 					}

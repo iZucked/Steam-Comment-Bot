@@ -103,7 +103,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 				final MMXRootObject rootObject = getJointModelEditorPart().getRootObject();
 				if (rootObject instanceof LNGScenarioModel) {
 					final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
-					dcd.open(getJointModelEditorPart(), rootObject, lngScenarioModel.getPortModel(), PortPackage.eINSTANCE.getPortModel_PortGroups());
+					dcd.open(getJointModelEditorPart(), rootObject, lngScenarioModel.getReferenceModel().getPortModel(), PortPackage.eINSTANCE.getPortModel_PortGroups());
 				}
 			}
 		});
@@ -176,7 +176,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 				addActionToMenu(importPorts, menu);
 				final MMXRootObject rootObject = getJointModelEditorPart().getRootObject();
 				if (rootObject instanceof LNGScenarioModel) {
-					final PortModel pm = ((LNGScenarioModel) rootObject).getPortModel();
+					final PortModel pm = ((LNGScenarioModel) rootObject).getReferenceModel().getPortModel();
 					new MenuItem(menu, SWT.SEPARATOR);
 
 					final HashSet<String> existingNames = new HashSet<String>();
@@ -362,7 +362,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 		protected void populate(final Menu menu) {
 			final MMXRootObject rootObject = getJointModelEditorPart().getRootObject();
 			if (rootObject instanceof LNGScenarioModel) {
-				final PortModel portModel = ((LNGScenarioModel) rootObject).getPortModel();
+				final PortModel portModel = ((LNGScenarioModel) rootObject).getReferenceModel().getPortModel();
 				for (final Route canal : portModel.getRoutes()) {
 					final Action canalEditor = new AbstractMenuAction(canal.getName()) {
 						@Override

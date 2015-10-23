@@ -132,7 +132,8 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 		return file.isFile() && file.canRead();
 	}
 
-	void bulkImport(final FieldChoice importTarget, final List<ScenarioInstance> instances, final String filename, final char listSeparator, final char decimalSeparator, final IProgressMonitor monitor) {
+	void bulkImport(final FieldChoice importTarget, final List<ScenarioInstance> instances, final String filename, final char listSeparator, final char decimalSeparator,
+			final IProgressMonitor monitor) {
 		monitor.beginTask("Import", instances.size());
 		final Set<String> uniqueProblems = new HashSet<String>();
 		final List<String> allProblems = new ArrayList<String>();
@@ -167,10 +168,11 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 		}
 	}
 
-	private void doImportAction(final FieldChoice importTarget, final String filename, final char listSeparator, final char decimalSeparator, final ScenarioInstance instance, final Set<String> uniqueProblems, final List<String> allProblems, final boolean multipleDetails) {
+	private void doImportAction(final FieldChoice importTarget, final String filename, final char listSeparator, final char decimalSeparator, final ScenarioInstance instance,
+			final Set<String> uniqueProblems, final List<String> allProblems, final boolean multipleDetails) {
 		try (final ModelReference modelReference = instance.getReference()) {
 			final ImportAction.ImportHooksProvider ihp = getHooksProvider(instance, modelReference, getShell(), filename, listSeparator, decimalSeparator);
-			
+
 			final ImportAction action = getImportAction(importTarget, ihp, multipleDetails);
 
 			final DefaultImportContext context = action.safelyImport();
@@ -190,13 +192,9 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 			}
 		}
 	}
-	
+
 	private FieldChoice[] getUnifiedChoices() {
-		return new FieldChoice[] {
-				FieldChoice.CHOICE_COMMODITY_INDICES,
-				FieldChoice.CHOICE_CHARTER_INDICES,
-				FieldChoice.CHOICE_BASE_FUEL_CURVES
-		};
+		return new FieldChoice[] { FieldChoice.CHOICE_COMMODITY_INDICES, FieldChoice.CHOICE_CHARTER_INDICES, FieldChoice.CHOICE_BASE_FUEL_CURVES };
 	}
 
 	public ImportAction.ImportHooksProvider getHooksProvider(final ScenarioInstance instance, final ModelReference modelReference, final Shell shell, final String importFilePath,
@@ -255,23 +253,23 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 	public ImportAction getImportAction(final FieldChoice importTarget, final ImportAction.ImportHooksProvider ihp) {
 		return getImportAction(importTarget, ihp, false);
 	}
-	
+
 	public ImportAction getImportAction(final FieldChoice importTarget, final ImportAction.ImportHooksProvider ihp, final boolean isMultipleDataTypesInput) {
 		final MMXRootObject root = ihp.getRootObject();
 		if (root instanceof LNGScenarioModel) {
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) root;
 			switch (importTarget) {
 			case CHOICE_COMMODITY_INDICES: {
-				return new GenericIndexImportAction(ihp, scenarioModel.getPricingModel(), PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES, isMultipleDataTypesInput);
+				return new GenericIndexImportAction(ihp, scenarioModel.getReferenceModel().getPricingModel(), PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES, isMultipleDataTypesInput);
 			}
 			case CHOICE_CARGOES: {
-				return new CargoImportAction(ihp, scenarioModel.getPortfolioModel().getCargoModel(), CargoPackage.Literals.CARGO_MODEL__CARGOES);
+				return new CargoImportAction(ihp, scenarioModel.getCargoModel(), CargoPackage.Literals.CARGO_MODEL__CARGOES);
 			}
 			case CHOICE_CHARTER_INDICES: {
-				return new GenericIndexImportAction(ihp, scenarioModel.getPricingModel(), PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES, isMultipleDataTypesInput);
+				return new GenericIndexImportAction(ihp, scenarioModel.getReferenceModel().getPricingModel(), PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES, isMultipleDataTypesInput);
 			}
 			case CHOICE_BASE_FUEL_CURVES: {
-				return new GenericIndexImportAction(ihp, scenarioModel.getPricingModel(), PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES, isMultipleDataTypesInput);
+				return new GenericIndexImportAction(ihp, scenarioModel.getReferenceModel().getPricingModel(), PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES, isMultipleDataTypesInput);
 			}
 			}
 		}

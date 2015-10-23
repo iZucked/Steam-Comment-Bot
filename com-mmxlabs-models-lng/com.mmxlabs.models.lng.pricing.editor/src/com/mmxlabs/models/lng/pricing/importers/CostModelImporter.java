@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
@@ -100,9 +101,10 @@ public class CostModelImporter implements ISubmodelImporter {
 				final MMXRootObject root = context.getRootObject();
 				if (root instanceof LNGScenarioModel) {
 					LNGScenarioModel scenarioModel = (LNGScenarioModel) root;
-					final PricingModel pricing = scenarioModel.getPricingModel();
-					final FleetModel fleet = scenarioModel.getFleetModel();
-					final PortModel port = scenarioModel.getPortModel();
+
+					final PricingModel pricing = ScenarioModelUtil.getPricingModel(scenarioModel);
+					final FleetModel fleet = ScenarioModelUtil.getFleetModel(scenarioModel);
+					final PortModel port = ScenarioModelUtil.getPortModel(scenarioModel);
 					if (pricing != null && fleet != null && port != null) {
 						for (final Route route : port.getRoutes()) {
 							if (route.isCanal()) {

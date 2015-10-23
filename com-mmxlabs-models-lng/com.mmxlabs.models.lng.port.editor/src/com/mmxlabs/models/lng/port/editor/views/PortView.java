@@ -39,7 +39,7 @@ public class PortView extends ScenarioTableViewerView<PortEditorPane> {
 	protected void initViewerPane(final PortEditorPane pane) {
 		final EditingDomain domain = getEditingDomain();
 		if (domain != null) {
-			pane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PortModel(), PortPackage.eINSTANCE.getPortModel_Ports() }), null, domain.getCommandStack());
+			pane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ReferenceModel(), LNGScenarioPackage.eINSTANCE.getLNGReferenceModel_PortModel(), PortPackage.eINSTANCE.getPortModel_Ports() }), null, domain.getCommandStack());
 			pane.getViewer().setInput(getRootObject());
 
 			// Add action to create and edit cargo groups

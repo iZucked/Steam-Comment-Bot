@@ -137,7 +137,7 @@ public class PortGroupContentsEditor extends BasicAttributeInlineEditor {
 	@Override
 	public void display(final IDialogEditingContext dialogContext, MMXRootObject rootObject, EObject input, Collection<EObject> range) {
 		if (rootObject instanceof LNGScenarioModel) {
-			portModel = ((LNGScenarioModel) rootObject).getPortModel();
+			portModel = ((LNGScenarioModel) rootObject).getReferenceModel().getPortModel();
 		}
 		super.display(dialogContext, rootObject, input, range);
 	}

@@ -36,6 +36,7 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
@@ -98,7 +99,9 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 		protected void populate(final Menu menu) {
 			final MMXRootObject rootObject = jointModelEditor.getRootObject();
 			if (rootObject instanceof LNGScenarioModel) {
-				final FleetModel fleetModel = ((LNGScenarioModel) rootObject).getFleetModel();
+				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+				final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(lngScenarioModel);
+
 				boolean b = false;
 				for (final BaseFuel baseFuel : fleetModel.getBaseFuels()) {
 					b = true;

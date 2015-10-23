@@ -26,7 +26,7 @@ public class CargoValueProviderFactory implements IReferenceValueProviderFactory
 	public IReferenceValueProvider createReferenceValueProvider(final EClass owner, final EReference reference, final MMXRootObject rootObject) {
 		if (rootObject instanceof LNGScenarioModel) {
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
-			final CargoModel cm = lngScenarioModel.getPortfolioModel().getCargoModel();
+			final CargoModel cm = lngScenarioModel.getCargoModel();
 			if (cm == null) {
 				return null;
 			}
@@ -46,13 +46,11 @@ public class CargoValueProviderFactory implements IReferenceValueProviderFactory
 						}
 						return super.getName(referer, feature, referenceValue);
 					}
-					
+
 					@Override
 					protected boolean isRelevantTarget(Object target, Object feature) {
 						// check for a change to a vessel availability
-						boolean isContainingReferenceSuperType = (containingReference
-								.getEReferenceType().isSuperTypeOf(((EObject) target)
-								.eClass()));
+						boolean isContainingReferenceSuperType = (containingReference.getEReferenceType().isSuperTypeOf(((EObject) target).eClass()));
 						// check for a change to the vessel reference
 						boolean isFeatureVessel = false;
 						if (feature instanceof EReference) {
@@ -60,8 +58,7 @@ public class CargoValueProviderFactory implements IReferenceValueProviderFactory
 						}
 						// check for a change to the list of vessel availabilities
 						boolean featureIsContainingReference = feature == containingReference;
-						return (isFeatureVessel && isContainingReferenceSuperType)
-								|| featureIsContainingReference;
+						return (isFeatureVessel && isContainingReferenceSuperType) || featureIsContainingReference;
 					}
 
 				};

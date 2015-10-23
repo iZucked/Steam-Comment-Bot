@@ -91,76 +91,67 @@ public interface LNGScenarioPackage extends EPackage {
 	int LNG_SCENARIO_MODEL__UUID = MMXCorePackage.MMX_ROOT_OBJECT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Port Model</b></em>' containment reference.
+	 * The feature id for the '<em><b>Cargo Model</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_SCENARIO_MODEL__PORT_MODEL = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 0;
+	int LNG_SCENARIO_MODEL__CARGO_MODEL = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Fleet Model</b></em>' containment reference.
+	 * The feature id for the '<em><b>Schedule Model</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_SCENARIO_MODEL__FLEET_MODEL = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 1;
+	int LNG_SCENARIO_MODEL__SCHEDULE_MODEL = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Pricing Model</b></em>' containment reference.
+	 * The feature id for the '<em><b>Parameters</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_SCENARIO_MODEL__PRICING_MODEL = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 2;
+	int LNG_SCENARIO_MODEL__PARAMETERS = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Commercial Model</b></em>' containment reference.
+	 * The feature id for the '<em><b>Actuals Model</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_SCENARIO_MODEL__COMMERCIAL_MODEL = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 3;
+	int LNG_SCENARIO_MODEL__ACTUALS_MODEL = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Spot Markets Model</b></em>' containment reference.
+	 * The feature id for the '<em><b>Prompt Period Start</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_SCENARIO_MODEL__SPOT_MARKETS_MODEL = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 4;
+	int LNG_SCENARIO_MODEL__PROMPT_PERIOD_START = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 4;
 
 	/**
-	 * The feature id for the '<em><b>Analytics Model</b></em>' containment reference.
+	 * The feature id for the '<em><b>Prompt Period End</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_SCENARIO_MODEL__ANALYTICS_MODEL = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 5;
+	int LNG_SCENARIO_MODEL__PROMPT_PERIOD_END = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 5;
 
 	/**
-	 * The feature id for the '<em><b>Portfolio Model</b></em>' containment reference.
+	 * The feature id for the '<em><b>Reference Model</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_SCENARIO_MODEL__PORTFOLIO_MODEL = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 6;
-
-	/**
-	 * The feature id for the '<em><b>Cost Model</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LNG_SCENARIO_MODEL__COST_MODEL = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 7;
+	int LNG_SCENARIO_MODEL__REFERENCE_MODEL = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -169,7 +160,7 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_SCENARIO_MODEL_FEATURE_COUNT = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 8;
+	int LNG_SCENARIO_MODEL_FEATURE_COUNT = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -178,7 +169,7 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_SCENARIO_MODEL___GET_UNSET_VALUE__ESTRUCTURALFEATURE_1 = MMXCorePackage.MMX_ROOT_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+	int LNG_SCENARIO_MODEL___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.MMX_ROOT_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
@@ -187,7 +178,7 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_SCENARIO_MODEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE_1 = MMXCorePackage.MMX_ROOT_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+	int LNG_SCENARIO_MODEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.MMX_ROOT_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
@@ -208,14 +199,14 @@ public interface LNGScenarioPackage extends EPackage {
 	int LNG_SCENARIO_MODEL_OPERATION_COUNT = MMXCorePackage.MMX_ROOT_OBJECT_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.scenario.model.impl.LNGPortfolioModelImpl <em>LNG Portfolio Model</em>}' class.
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.scenario.model.impl.LNGReferenceModelImpl <em>LNG Reference Model</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.scenario.model.impl.LNGPortfolioModelImpl
-	 * @see com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioPackageImpl#getLNGPortfolioModel()
+	 * @see com.mmxlabs.models.lng.scenario.model.impl.LNGReferenceModelImpl
+	 * @see com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioPackageImpl#getLNGReferenceModel()
 	 * @generated
 	 */
-	int LNG_PORTFOLIO_MODEL = 1;
+	int LNG_REFERENCE_MODEL = 1;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -224,7 +215,7 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_PORTFOLIO_MODEL__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+	int LNG_REFERENCE_MODEL__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -233,70 +224,79 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_PORTFOLIO_MODEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+	int LNG_REFERENCE_MODEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Cargo Model</b></em>' containment reference.
+	 * The feature id for the '<em><b>Port Model</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_PORTFOLIO_MODEL__CARGO_MODEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+	int LNG_REFERENCE_MODEL__PORT_MODEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Schedule Model</b></em>' containment reference.
+	 * The feature id for the '<em><b>Fleet Model</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_PORTFOLIO_MODEL__SCHEDULE_MODEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int LNG_REFERENCE_MODEL__FLEET_MODEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Parameters</b></em>' containment reference.
+	 * The feature id for the '<em><b>Pricing Model</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_PORTFOLIO_MODEL__PARAMETERS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int LNG_REFERENCE_MODEL__PRICING_MODEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Actuals Model</b></em>' containment reference.
+	 * The feature id for the '<em><b>Commercial Model</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_PORTFOLIO_MODEL__ACTUALS_MODEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int LNG_REFERENCE_MODEL__COMMERCIAL_MODEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Prompt Period Start</b></em>' attribute.
+	 * The feature id for the '<em><b>Spot Markets Model</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_PORTFOLIO_MODEL__PROMPT_PERIOD_START = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int LNG_REFERENCE_MODEL__SPOT_MARKETS_MODEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
-	 * The feature id for the '<em><b>Prompt Period End</b></em>' attribute.
+	 * The feature id for the '<em><b>Analytics Model</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_PORTFOLIO_MODEL__PROMPT_PERIOD_END = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int LNG_REFERENCE_MODEL__ANALYTICS_MODEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
-	 * The number of structural features of the '<em>LNG Portfolio Model</em>' class.
+	 * The feature id for the '<em><b>Cost Model</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_PORTFOLIO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int LNG_REFERENCE_MODEL__COST_MODEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+
+	/**
+	 * The number of structural features of the '<em>LNG Reference Model</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LNG_REFERENCE_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -305,7 +305,7 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_PORTFOLIO_MODEL___GET_UNSET_VALUE__ESTRUCTURALFEATURE_1 = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+	int LNG_REFERENCE_MODEL___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
@@ -314,7 +314,7 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_PORTFOLIO_MODEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE_1 = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+	int LNG_REFERENCE_MODEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
@@ -323,17 +323,16 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_PORTFOLIO_MODEL___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
+	int LNG_REFERENCE_MODEL___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
 
 	/**
-	 * The number of operations of the '<em>LNG Portfolio Model</em>' class.
+	 * The number of operations of the '<em>LNG Reference Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_PORTFOLIO_MODEL_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
-
+	int LNG_REFERENCE_MODEL_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel <em>Model</em>}'.
@@ -346,168 +345,168 @@ public interface LNGScenarioPackage extends EPackage {
 	EClass getLNGScenarioModel();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPortModel <em>Port Model</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Port Model</em>'.
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPortModel()
-	 * @see #getLNGScenarioModel()
-	 * @generated
-	 */
-	EReference getLNGScenarioModel_PortModel();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getFleetModel <em>Fleet Model</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Fleet Model</em>'.
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getFleetModel()
-	 * @see #getLNGScenarioModel()
-	 * @generated
-	 */
-	EReference getLNGScenarioModel_FleetModel();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPricingModel <em>Pricing Model</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Pricing Model</em>'.
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPricingModel()
-	 * @see #getLNGScenarioModel()
-	 * @generated
-	 */
-	EReference getLNGScenarioModel_PricingModel();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getCommercialModel <em>Commercial Model</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Commercial Model</em>'.
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getCommercialModel()
-	 * @see #getLNGScenarioModel()
-	 * @generated
-	 */
-	EReference getLNGScenarioModel_CommercialModel();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getSpotMarketsModel <em>Spot Markets Model</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Spot Markets Model</em>'.
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getSpotMarketsModel()
-	 * @see #getLNGScenarioModel()
-	 * @generated
-	 */
-	EReference getLNGScenarioModel_SpotMarketsModel();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getAnalyticsModel <em>Analytics Model</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Analytics Model</em>'.
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getAnalyticsModel()
-	 * @see #getLNGScenarioModel()
-	 * @generated
-	 */
-	EReference getLNGScenarioModel_AnalyticsModel();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPortfolioModel <em>Portfolio Model</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Portfolio Model</em>'.
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPortfolioModel()
-	 * @see #getLNGScenarioModel()
-	 * @generated
-	 */
-	EReference getLNGScenarioModel_PortfolioModel();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getCostModel <em>Cost Model</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Cost Model</em>'.
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getCostModel()
-	 * @see #getLNGScenarioModel()
-	 * @generated
-	 */
-	EReference getLNGScenarioModel_CostModel();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel <em>LNG Portfolio Model</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>LNG Portfolio Model</em>'.
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel
-	 * @generated
-	 */
-	EClass getLNGPortfolioModel();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getCargoModel <em>Cargo Model</em>}'.
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getCargoModel <em>Cargo Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference '<em>Cargo Model</em>'.
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getCargoModel()
-	 * @see #getLNGPortfolioModel()
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getCargoModel()
+	 * @see #getLNGScenarioModel()
 	 * @generated
 	 */
-	EReference getLNGPortfolioModel_CargoModel();
+	EReference getLNGScenarioModel_CargoModel();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getScheduleModel <em>Schedule Model</em>}'.
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getScheduleModel <em>Schedule Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference '<em>Schedule Model</em>'.
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getScheduleModel()
-	 * @see #getLNGPortfolioModel()
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getScheduleModel()
+	 * @see #getLNGScenarioModel()
 	 * @generated
 	 */
-	EReference getLNGPortfolioModel_ScheduleModel();
+	EReference getLNGScenarioModel_ScheduleModel();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getParameters <em>Parameters</em>}'.
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getParameters <em>Parameters</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference '<em>Parameters</em>'.
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getParameters()
-	 * @see #getLNGPortfolioModel()
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getParameters()
+	 * @see #getLNGScenarioModel()
 	 * @generated
 	 */
-	EReference getLNGPortfolioModel_Parameters();
+	EReference getLNGScenarioModel_Parameters();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getActualsModel <em>Actuals Model</em>}'.
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getActualsModel <em>Actuals Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference '<em>Actuals Model</em>'.
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getActualsModel()
-	 * @see #getLNGPortfolioModel()
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getActualsModel()
+	 * @see #getLNGScenarioModel()
 	 * @generated
 	 */
-	EReference getLNGPortfolioModel_ActualsModel();
+	EReference getLNGScenarioModel_ActualsModel();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getPromptPeriodStart <em>Prompt Period Start</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPromptPeriodStart <em>Prompt Period Start</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Prompt Period Start</em>'.
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getPromptPeriodStart()
-	 * @see #getLNGPortfolioModel()
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPromptPeriodStart()
+	 * @see #getLNGScenarioModel()
 	 * @generated
 	 */
-	EAttribute getLNGPortfolioModel_PromptPeriodStart();
+	EAttribute getLNGScenarioModel_PromptPeriodStart();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getPromptPeriodEnd <em>Prompt Period End</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPromptPeriodEnd <em>Prompt Period End</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Prompt Period End</em>'.
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getPromptPeriodEnd()
-	 * @see #getLNGPortfolioModel()
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPromptPeriodEnd()
+	 * @see #getLNGScenarioModel()
 	 * @generated
 	 */
-	EAttribute getLNGPortfolioModel_PromptPeriodEnd();
+	EAttribute getLNGScenarioModel_PromptPeriodEnd();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getReferenceModel <em>Reference Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Reference Model</em>'.
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getReferenceModel()
+	 * @see #getLNGScenarioModel()
+	 * @generated
+	 */
+	EReference getLNGScenarioModel_ReferenceModel();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.scenario.model.LNGReferenceModel <em>LNG Reference Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>LNG Reference Model</em>'.
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGReferenceModel
+	 * @generated
+	 */
+	EClass getLNGReferenceModel();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGReferenceModel#getPortModel <em>Port Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Port Model</em>'.
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGReferenceModel#getPortModel()
+	 * @see #getLNGReferenceModel()
+	 * @generated
+	 */
+	EReference getLNGReferenceModel_PortModel();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGReferenceModel#getFleetModel <em>Fleet Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Fleet Model</em>'.
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGReferenceModel#getFleetModel()
+	 * @see #getLNGReferenceModel()
+	 * @generated
+	 */
+	EReference getLNGReferenceModel_FleetModel();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGReferenceModel#getPricingModel <em>Pricing Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Pricing Model</em>'.
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGReferenceModel#getPricingModel()
+	 * @see #getLNGReferenceModel()
+	 * @generated
+	 */
+	EReference getLNGReferenceModel_PricingModel();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGReferenceModel#getCommercialModel <em>Commercial Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Commercial Model</em>'.
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGReferenceModel#getCommercialModel()
+	 * @see #getLNGReferenceModel()
+	 * @generated
+	 */
+	EReference getLNGReferenceModel_CommercialModel();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGReferenceModel#getSpotMarketsModel <em>Spot Markets Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Spot Markets Model</em>'.
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGReferenceModel#getSpotMarketsModel()
+	 * @see #getLNGReferenceModel()
+	 * @generated
+	 */
+	EReference getLNGReferenceModel_SpotMarketsModel();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGReferenceModel#getAnalyticsModel <em>Analytics Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Analytics Model</em>'.
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGReferenceModel#getAnalyticsModel()
+	 * @see #getLNGReferenceModel()
+	 * @generated
+	 */
+	EReference getLNGReferenceModel_AnalyticsModel();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGReferenceModel#getCostModel <em>Cost Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Cost Model</em>'.
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGReferenceModel#getCostModel()
+	 * @see #getLNGReferenceModel()
+	 * @generated
+	 */
+	EReference getLNGReferenceModel_CostModel();
 
 	/**
 	 * Returns the factory that creates the instances of the model.

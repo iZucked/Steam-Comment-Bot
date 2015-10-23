@@ -11,7 +11,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
@@ -84,11 +84,11 @@ public class LNGScenarioSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL: {
-				LNGPortfolioModel lngPortfolioModel = (LNGPortfolioModel)theEObject;
-				T result = caseLNGPortfolioModel(lngPortfolioModel);
-				if (result == null) result = caseUUIDObject(lngPortfolioModel);
-				if (result == null) result = caseMMXObject(lngPortfolioModel);
+			case LNGScenarioPackage.LNG_REFERENCE_MODEL: {
+				LNGReferenceModel lngReferenceModel = (LNGReferenceModel)theEObject;
+				T result = caseLNGReferenceModel(lngReferenceModel);
+				if (result == null) result = caseUUIDObject(lngReferenceModel);
+				if (result == null) result = caseMMXObject(lngReferenceModel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -112,17 +112,17 @@ public class LNGScenarioSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>LNG Portfolio Model</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>LNG Reference Model</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>LNG Portfolio Model</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>LNG Reference Model</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseLNGPortfolioModel(LNGPortfolioModel object) {
+	public T caseLNGReferenceModel(LNGReferenceModel object) {
 		return null;
 	}
 

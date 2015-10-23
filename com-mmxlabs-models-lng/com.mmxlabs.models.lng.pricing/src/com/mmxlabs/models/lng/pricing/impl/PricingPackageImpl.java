@@ -993,19 +993,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEClass(cooldownPriceEClass, CooldownPrice.class, "CooldownPrice", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCooldownPrice_Lumpsum(), ecorePackage.getEBoolean(), "lumpsum", null, 0, 1, CooldownPrice.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(commodityIndexEClass, CommodityIndex.class, "CommodityIndex", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
-		initEClass(charterIndexEClass, CharterIndex.class, "CharterIndex", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
-		initEClass(baseFuelIndexEClass, BaseFuelIndex.class, "BaseFuelIndex", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
-		initEClass(namedIndexContainerEClass, NamedIndexContainer.class, "NamedIndexContainer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		g1 = createEGenericType(this.getIndex());
-		g2 = createEGenericType(namedIndexContainerEClass_Value);
-		g1.getETypeArguments().add(g2);
-		initEReference(getNamedIndexContainer_Data(), g1, null, "data", null, 1, 1, NamedIndexContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getNamedIndexContainer_Units(), ecorePackage.getEString(), "units", null, 0, 1, NamedIndexContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
 		initEClass(portsPriceMapEClass, PortsPriceMap.class, "PortsPriceMap", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		g1 = createEGenericType(theTypesPackage.getAPortSet());
 		g2 = createEGenericType(thePortPackage.getPort());

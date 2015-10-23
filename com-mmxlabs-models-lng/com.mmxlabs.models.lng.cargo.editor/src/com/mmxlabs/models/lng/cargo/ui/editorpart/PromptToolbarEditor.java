@@ -28,7 +28,6 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 
@@ -64,7 +63,7 @@ public class PromptToolbarEditor extends ControlContribution {
 	}
 
 	private EditingDomain editingDomain;
-	private LNGScenarioModel rootObject;
+	private LNGScenarioModel scenarioModel;
 
 	private DateTime periodStartEditor;
 	private DateTime periodEndEditor;
@@ -74,7 +73,7 @@ public class PromptToolbarEditor extends ControlContribution {
 	private final EContentAdapter adapter = new EContentAdapter() {
 		public void notifyChanged(final Notification notification) {
 			final Object newValue = notification.getNewValue();
-			if (notification.getFeature() == LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodStart()) {
+			if (notification.getFeature() == LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PromptPeriodStart()) {
 				if (newValue != null) {
 
 					final LocalDate date = (LocalDate) newValue;
@@ -83,7 +82,7 @@ public class PromptToolbarEditor extends ControlContribution {
 					periodStartEditor.setDay(date.getDayOfMonth());
 					periodStartEditor.setEnabled(true);
 				}
-			} else if (notification.getFeature() == LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodEnd()) {
+			} else if (notification.getFeature() == LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PromptPeriodEnd()) {
 				if (newValue != null) {
 					final LocalDate date = (LocalDate) newValue;
 					periodEndEditor.setYear(date.getYear());
@@ -96,10 +95,10 @@ public class PromptToolbarEditor extends ControlContribution {
 	};
 	private Button btn90Day;
 
-	public PromptToolbarEditor(final String id, final EditingDomain editingDomain, final LNGScenarioModel rootObject) {
+	public PromptToolbarEditor(final String id, final EditingDomain editingDomain, final LNGScenarioModel scenarioModel) {
 		super(id);
 		this.editingDomain = editingDomain;
-		this.rootObject = rootObject;
+		this.scenarioModel = scenarioModel;
 	}
 
 	@Override
@@ -117,15 +116,14 @@ public class PromptToolbarEditor extends ControlContribution {
 		periodStartEditor = new DateTime(pparent, SWT.DATE | SWT.BORDER | SWT.DROP_DOWN);
 		periodStartEditor.setLayoutData(GridDataFactory.swtDefaults().minSize(1000, -1).create());
 		{
-			final LNGPortfolioModel portfolioModel = rootObject.getPortfolioModel();
-			if (portfolioModel.isSetPromptPeriodStart()) {
-				final LocalDate date = portfolioModel.getPromptPeriodStart();
+                        if (scenarioModel.isSetPromptPeriodStart()) {
+				final LocalDate date = scenarioModel.getPromptPeriodStart();
 				periodStartEditor.setYear(date.getYear());
 				periodStartEditor.setMonth(date.getMonthValue() - 1);
 				periodStartEditor.setDay(date.getDayOfMonth());
 			} else {
 				setDefaultPromptCommand
-						.append(SetCommand.create(editingDomain, rootObject.getPortfolioModel(), LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodStart(), LocalDate.now()));
+						.append(SetCommand.create(editingDomain, scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PromptPeriodStart(), LocalDate.now()));
 			}
 		}
 		periodStartEditor.addSelectionListener(new SelectionListener() {
@@ -134,7 +132,7 @@ public class PromptToolbarEditor extends ControlContribution {
 			public void widgetSelected(final SelectionEvent e) {
 
 				final LocalDate date = LocalDate.of(periodStartEditor.getYear(), periodStartEditor.getMonth() + 1, periodStartEditor.getDay());
-				final Command cmd = SetCommand.create(editingDomain, rootObject.getPortfolioModel(), LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodStart(), date);
+				final Command cmd = SetCommand.create(editingDomain, scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PromptPeriodStart(), date);
 				editingDomain.getCommandStack().execute(cmd);
 			}
 
@@ -150,9 +148,8 @@ public class PromptToolbarEditor extends ControlContribution {
 		periodEndEditor = new DateTime(pparent, SWT.DATE | SWT.BORDER | SWT.DROP_DOWN);
 		periodEndEditor.setLayoutData(GridDataFactory.swtDefaults().minSize(1000, -1).create());
 		{
-			final LNGPortfolioModel portfolioModel = rootObject.getPortfolioModel();
-			if (portfolioModel.isSetPromptPeriodEnd()) {
-				final LocalDate date = portfolioModel.getPromptPeriodEnd();
+			if (scenarioModel.isSetPromptPeriodEnd()) {
+				final LocalDate date = scenarioModel.getPromptPeriodEnd();
 				periodEndEditor.setYear(date.getYear());
 				periodEndEditor.setMonth(date.getMonthValue() - 1);
 				periodEndEditor.setDay(date.getDayOfMonth());
@@ -160,7 +157,7 @@ public class PromptToolbarEditor extends ControlContribution {
 			} else {
 
 				setDefaultPromptCommand
-						.append(SetCommand.create(editingDomain, rootObject.getPortfolioModel(), LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodEnd(), LocalDate.now().plusDays(90)));
+						.append(SetCommand.create(editingDomain, scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PromptPeriodEnd(), LocalDate.now().plusDays(90)));
 			}
 		}
 		periodEndEditor.addSelectionListener(new SelectionListener() {
@@ -168,7 +165,7 @@ public class PromptToolbarEditor extends ControlContribution {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 				final LocalDate date = LocalDate.of(periodEndEditor.getYear(), periodEndEditor.getMonth() + 1, periodEndEditor.getDay());
-				final Command cmd = SetCommand.create(editingDomain, rootObject.getPortfolioModel(), LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodEnd(), date);
+				final Command cmd = SetCommand.create(editingDomain, scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PromptPeriodEnd(), date);
 				editingDomain.getCommandStack().execute(cmd);
 			}
 
@@ -188,8 +185,8 @@ public class PromptToolbarEditor extends ControlContribution {
 			public void widgetSelected(final SelectionEvent e) {
 				final LocalDate date = LocalDate.now();
 				final CompoundCommand cc = new CompoundCommand("Set prompt");
-				cc.append(SetCommand.create(editingDomain, rootObject.getPortfolioModel(), LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodStart(), date));
-				cc.append(SetCommand.create(editingDomain, rootObject.getPortfolioModel(), LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_PromptPeriodEnd(), date.plusDays(90)));
+				cc.append(SetCommand.create(editingDomain, scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PromptPeriodStart(), date));
+				cc.append(SetCommand.create(editingDomain, scenarioModel, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PromptPeriodEnd(), date.plusDays(90)));
 				editingDomain.getCommandStack().execute(cc);
 			}
 
@@ -202,7 +199,7 @@ public class PromptToolbarEditor extends ControlContribution {
 		btn90Day.addListener(SWT.Resize, new LimitWidgetHeightListener(pparent, btn90Day));
 
 		// Listen to further changes
-		rootObject.getPortfolioModel().eAdapters().add(adapter);
+		scenarioModel.eAdapters().add(adapter);
 
 		if (!setDefaultPromptCommand.isEmpty()) {
 			editingDomain.getCommandStack().execute(setDefaultPromptCommand);
@@ -213,9 +210,9 @@ public class PromptToolbarEditor extends ControlContribution {
 
 	@Override
 	public void dispose() {
-		if (rootObject != null) {
-			rootObject.getPortfolioModel().eAdapters().remove(adapter);
-			rootObject = null;
+		if (scenarioModel != null) {
+			scenarioModel.eAdapters().remove(adapter);
+			scenarioModel = null;
 		}
 		editingDomain = null;
 		super.dispose();

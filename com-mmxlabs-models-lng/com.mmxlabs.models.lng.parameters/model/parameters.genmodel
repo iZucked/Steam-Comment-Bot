@@ -3,11 +3,15 @@
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.models.lng.parameters/src" modelPluginID="com.mmxlabs.models.lng.parameters"
     templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.template/templates/"
     dynamicTemplates="true" modelName="Parameters" testsDirectory="" importerID="org.eclipse.emf.importer.ecore"
-    complianceLevel="7.0" copyrightFields="false" runtimeVersion="2.8" usedGenPackages="../../com.mmxlabs.models.datetime/model/datetime.genmodel#//datetime platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore">
+    complianceLevel="8.0" copyrightFields="false" runtimeVersion="2.11" usedGenPackages="../../com.mmxlabs.models.datetime/model/datetime.genmodel#//datetime platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore">
   <foreignModel>parameters.ecore</foreignModel>
   <genPackages prefix="Parameters" basePackage="com.mmxlabs.models.lng" disposableProviderFactory="true"
       multipleEditorPages="false" generateModelWizard="false" extensibleProviderFactory="true"
       childCreationExtenders="true" ecorePackage="parameters.ecore#/">
+    <genClasses ecoreClass="parameters.ecore#//IndividualSolutionImprovementSettings">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//IndividualSolutionImprovementSettings/iterations"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//IndividualSolutionImprovementSettings/improvingSolutions"/>
+    </genClasses>
     <genClasses ecoreClass="parameters.ecore#//ParametersModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//ParametersModel/settings"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference parameters.ecore#//ParametersModel/activeSetting"/>
@@ -25,6 +29,9 @@
           ecoreFeature="ecore:EReference parameters.ecore#//OptimiserSettings/arguments"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//OptimiserSettings/generateCharterOuts"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//OptimiserSettings/shippingOnly"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//OptimiserSettings/similaritySettings"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//OptimiserSettings/solutionImprovementSettings"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//OptimiserSettings/buildActionSets"/>
     </genClasses>
     <genClasses ecoreClass="parameters.ecore#//Objective">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//Objective/weight"/>
@@ -48,10 +55,22 @@
           ecoreFeature="ecore:EAttribute parameters.ecore#//AnnealingSettings/cooling"/>
       <genFeatures createChild="false" propertyDescription="The starting temperature for the annealer"
           ecoreFeature="ecore:EAttribute parameters.ecore#//AnnealingSettings/initialTemperature"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//AnnealingSettings/restarting"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//AnnealingSettings/restartIterationsThreshold"/>
     </genClasses>
     <genClasses ecoreClass="parameters.ecore#//Argument">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//Argument/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//Argument/value"/>
+    </genClasses>
+    <genClasses ecoreClass="parameters.ecore#//SimilaritySettings">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//SimilaritySettings/lowInterval"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//SimilaritySettings/medInterval"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference parameters.ecore#//SimilaritySettings/highInterval"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//SimilaritySettings/outOfBoundsWeight"/>
+    </genClasses>
+    <genClasses ecoreClass="parameters.ecore#//SimilarityInterval">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//SimilarityInterval/weight"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute parameters.ecore#//SimilarityInterval/threshold"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

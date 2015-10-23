@@ -289,7 +289,7 @@ public class DistanceEditorDialog extends Dialog {
 		this.distanceModel = EcoreUtil.copy(dm);
 		currentDistanceModel = new WeakReference<Route>(distanceModel);
 		this.rootObject = (LNGScenarioModel) sel.getRootObject();
-		currentPortModel = new WeakReference<PortModel>(rootObject.getPortModel());
+		currentPortModel = new WeakReference<PortModel>(rootObject.getReferenceModel().getPortModel());
 		return super.open();
 	}
 

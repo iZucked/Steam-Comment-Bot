@@ -20,7 +20,7 @@ public class SlotEntityValueProviderFactory implements IReferenceValueProviderFa
 	@Override
 	public IReferenceValueProvider createReferenceValueProvider(final EClass owner, final EReference reference, final MMXRootObject theRootObject) {
 
-		return new SimpleReferenceValueProvider(((LNGScenarioModel) theRootObject).getCommercialModel(), CommercialPackage.eINSTANCE.getCommercialModel_Entities()) {
+		return new SimpleReferenceValueProvider(((LNGScenarioModel) theRootObject).getReferenceModel().getCommercialModel(), CommercialPackage.eINSTANCE.getCommercialModel_Entities()) {
 
 			@Override
 			protected Pair<String, EObject> getEmptyObject() {

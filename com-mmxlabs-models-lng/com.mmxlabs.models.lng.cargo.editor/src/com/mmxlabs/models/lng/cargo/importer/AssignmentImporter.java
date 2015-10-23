@@ -96,7 +96,7 @@ public class AssignmentImporter {
 											final Vessel v = (Vessel) context.getNamedObject(vesselAssignment.trim(), FleetPackage.Literals.VESSEL);
 											if (v != null) {
 												final VesselAvailability availability = AssignmentEditorHelper.findVesselAvailability(v, assignableElement,
-														((LNGScenarioModel) context.getRootObject()).getPortfolioModel().getCargoModel().getVesselAvailabilities());
+														((LNGScenarioModel) context.getRootObject()).getCargoModel().getVesselAvailabilities());
 												assignableElement.setVesselAssignmentType(availability);
 											}
 										}
@@ -163,7 +163,7 @@ public class AssignmentImporter {
 											final Vessel v = (Vessel) context.getNamedObject(vesselName.trim(), FleetPackage.eINSTANCE.getVessel());
 											if (v != null) {
 												final VesselAvailability availability = AssignmentEditorHelper.findVesselAvailability(v, assignableElement,
-														((LNGScenarioModel) context.getRootObject()).getPortfolioModel().getCargoModel().getVesselAvailabilities());
+														((LNGScenarioModel) context.getRootObject()).getCargoModel().getVesselAvailabilities());
 												assignableElement.setVesselAssignmentType(availability);
 											}
 										} else {
@@ -171,7 +171,7 @@ public class AssignmentImporter {
 											if (v2 instanceof VesselClass) {
 
 												VesselClass vc = (VesselClass) v2;
-												for (CharterInMarket charterInMarket : ((LNGScenarioModel) context.getRootObject()).getSpotMarketsModel().getCharterInMarkets()) {
+												for (CharterInMarket charterInMarket : ((LNGScenarioModel) context.getRootObject()).getReferenceModel().getSpotMarketsModel().getCharterInMarkets()) {
 													if (vc.equals(charterInMarket.getVesselClass())) {
 														assignableElement.setVesselAssignmentType(charterInMarket);
 														break;

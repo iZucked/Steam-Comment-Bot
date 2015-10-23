@@ -32,8 +32,11 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
  */
 public class VesselAndClassView extends MultiScenarioTableViewersView {
 
-	private final EReference[][] rootPaths = new EReference[][] { new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_FleetModel(), FleetPackage.eINSTANCE.getFleetModel_Vessels() },
-			new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_FleetModel(), FleetPackage.eINSTANCE.getFleetModel_VesselClasses() } };
+	private final EReference[][] rootPaths = new EReference[][] {
+			new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ReferenceModel(), LNGScenarioPackage.eINSTANCE.getLNGReferenceModel_FleetModel(),
+					FleetPackage.eINSTANCE.getFleetModel_Vessels() },
+			new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ReferenceModel(), LNGScenarioPackage.eINSTANCE.getLNGReferenceModel_FleetModel(),
+					FleetPackage.eINSTANCE.getFleetModel_VesselClasses() } };
 
 	private VesselClassViewerPane vesselClassViewerPane;
 	private VesselViewerPane_View vesselViewerPane;

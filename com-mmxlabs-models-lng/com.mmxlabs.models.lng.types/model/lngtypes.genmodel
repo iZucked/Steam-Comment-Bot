@@ -5,8 +5,8 @@
     templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.template/templates/"
     dynamicTemplates="true" modelName="LNGTypes" featureMapWrapperInternalInterface=""
     featureMapWrapperClass="" codeFormatting="true" testsDirectory="" booleanFlagsField=""
-    importerID="org.eclipse.emf.importer.ecore" complianceLevel="7.0" copyrightFields="false"
-    runtimeVersion="2.8" language="" usedGenPackages="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="8.0" copyrightFields="false"
+    runtimeVersion="2.11" language="" usedGenPackages="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore"
     operationReflection="true">
   <foreignModel>lngtypes.ecore</foreignModel>
   <genPackages prefix="Types" basePackage="com.mmxlabs.models.lng" disposableProviderFactory="true"

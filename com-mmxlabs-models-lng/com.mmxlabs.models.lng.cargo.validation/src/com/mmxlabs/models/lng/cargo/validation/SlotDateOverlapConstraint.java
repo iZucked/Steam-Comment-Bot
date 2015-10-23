@@ -256,7 +256,7 @@ public class SlotDateOverlapConstraint extends AbstractModelMultiConstraint {
 
 		final MMXRootObject rootObject = extraContext.getRootObject();
 		if (rootObject instanceof LNGScenarioModel) {
-			final CargoModel cargoModel = ((LNGScenarioModel) rootObject).getPortfolioModel().getCargoModel();
+			final CargoModel cargoModel = ((LNGScenarioModel) rootObject).getCargoModel();
 
 			for (final LoadSlot slot : cargoModel.getLoadSlots()) {
 				if (slot instanceof SpotSlot) {

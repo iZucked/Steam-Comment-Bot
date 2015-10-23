@@ -143,7 +143,7 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 		final MMXRootObject rootObject = extraContext.getRootObject();
 		if (rootObject instanceof LNGScenarioModel) {
 
-			final PricingModel pricingModel = ((LNGScenarioModel) rootObject).getPricingModel();
+			final PricingModel pricingModel = ((LNGScenarioModel) rootObject).getReferenceModel().getPricingModel();
 
 			if (pricingModel == null) {
 				return;

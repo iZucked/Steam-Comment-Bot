@@ -28,7 +28,6 @@ import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
@@ -42,18 +41,15 @@ import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
  */
 public class CargoEditingCommands {
 
-	private final LNGPortfolioModel portfolioModel;
-
 	private final EditingDomain editingDomain;
 
-	private final LNGScenarioModel rootObject;
+	private final LNGScenarioModel scenarioModel;
 
 	/**
 	 */
-	public CargoEditingCommands(final EditingDomain editingDomain, final LNGScenarioModel rootObject, final LNGPortfolioModel portfolioModel) {
+	public CargoEditingCommands(final EditingDomain editingDomain, final LNGScenarioModel rootObject) {
 		this.editingDomain = editingDomain;
-		this.rootObject = rootObject;
-		this.portfolioModel = portfolioModel;
+		this.scenarioModel = rootObject;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -63,7 +59,7 @@ public class CargoEditingCommands {
 		// TODO: Pre-generate and link to UI
 		// TODO: Add FOB/DES etc as explicit slot types.
 		final IModelFactory factory = factories.get(0);
-		final Collection<? extends ISetting> settings = factory.createInstance(rootObject, container, reference, StructuredSelection.EMPTY);
+		final Collection<? extends ISetting> settings = factory.createInstance(scenarioModel, container, reference, StructuredSelection.EMPTY);
 		if (settings.isEmpty() == false) {
 
 			for (final ISetting setting : settings) {
@@ -222,7 +218,7 @@ public class CargoEditingCommands {
 	}
 
 	public void runWiringUpdate(final List<Command> setCommands, final List<Command> deleteCommands, final LoadSlot loadSlot, final DischargeSlot dischargeSlot) {
-		final CargoModel cargoModel = portfolioModel.getCargoModel();
+		final CargoModel cargoModel = scenarioModel.getCargoModel();
 
 		// Discharge has an existing slot, so remove the cargo & wiring
 		if (dischargeSlot.getCargo() != null) {

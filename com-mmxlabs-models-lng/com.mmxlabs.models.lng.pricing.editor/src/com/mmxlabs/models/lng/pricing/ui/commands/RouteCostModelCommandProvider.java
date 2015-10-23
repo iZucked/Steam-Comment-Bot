@@ -71,7 +71,7 @@ public class RouteCostModelCommandProvider extends BaseModelCommandProvider<Obje
 			if (((Route) addedObject).isCanal() == false) {
 				return null;
 			}
-			final FleetModel fleetModel = scenarioModel.getFleetModel();
+			final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenarioModel);
 			add_costs_for_new_route: for (final VesselClass vesselClass : fleetModel.getVesselClasses()) {
 				for (final RouteCost routeCost : costModel.getRouteCosts()) {
 					if (routeCost.getVesselClass() == vesselClass && routeCost.getRoute() == addedObject)
@@ -92,7 +92,7 @@ public class RouteCostModelCommandProvider extends BaseModelCommandProvider<Obje
 			}
 
 		} else if (addedObject instanceof VesselClass) {
-			final PortModel portModel = scenarioModel.getPortModel();
+			final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
 			add_costs_for_new_vc: for (final Route route : portModel.getRoutes()) {
 				for (final RouteCost routeCost : costModel.getRouteCosts()) {
 					if (routeCost.getVesselClass() == addedObject && routeCost.getRoute() == route)

@@ -35,13 +35,13 @@ public interface LNGScenarioFactory extends EFactory {
 	LNGScenarioModel createLNGScenarioModel();
 
 	/**
-	 * Returns a new object of class '<em>LNG Portfolio Model</em>'.
+	 * Returns a new object of class '<em>LNG Reference Model</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>LNG Portfolio Model</em>'.
+	 * @return a new object of class '<em>LNG Reference Model</em>'.
 	 * @generated
 	 */
-	LNGPortfolioModel createLNGPortfolioModel();
+	LNGReferenceModel createLNGReferenceModel();
 
 	/**
 	 * Returns the package supported by this factory.

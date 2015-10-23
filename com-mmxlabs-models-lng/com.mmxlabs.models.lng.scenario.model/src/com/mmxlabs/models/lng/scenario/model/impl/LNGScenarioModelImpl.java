@@ -6,21 +6,27 @@
  */
 package com.mmxlabs.models.lng.scenario.model.impl;
 
+import java.time.LocalDate;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import com.mmxlabs.models.lng.actuals.ActualsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PricingModel;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.mmxcore.impl.MMXRootObjectImpl;
 
@@ -32,97 +38,125 @@ import com.mmxlabs.models.mmxcore.impl.MMXRootObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getPortModel <em>Port Model</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getFleetModel <em>Fleet Model</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getPricingModel <em>Pricing Model</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getCommercialModel <em>Commercial Model</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getSpotMarketsModel <em>Spot Markets Model</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getAnalyticsModel <em>Analytics Model</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getPortfolioModel <em>Portfolio Model</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getCargoModel <em>Cargo Model</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getScheduleModel <em>Schedule Model</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getParameters <em>Parameters</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getActualsModel <em>Actuals Model</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getPromptPeriodStart <em>Prompt Period Start</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getPromptPeriodEnd <em>Prompt Period End</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getReferenceModel <em>Reference Model</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenarioModel {
 	/**
-	 * The cached value of the '{@link #getPortModel() <em>Port Model</em>}' containment reference.
+	 * The cached value of the '{@link #getCargoModel() <em>Cargo Model</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getPortModel()
+	 * @see #getCargoModel()
 	 * @generated
 	 * @ordered
 	 */
-	protected PortModel portModel;
+	protected CargoModel cargoModel;
 
 	/**
-	 * The cached value of the '{@link #getFleetModel() <em>Fleet Model</em>}' containment reference.
+	 * The cached value of the '{@link #getScheduleModel() <em>Schedule Model</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getFleetModel()
+	 * @see #getScheduleModel()
 	 * @generated
 	 * @ordered
 	 */
-	protected FleetModel fleetModel;
+	protected ScheduleModel scheduleModel;
 
 	/**
-	 * The cached value of the '{@link #getPricingModel() <em>Pricing Model</em>}' containment reference.
+	 * The cached value of the '{@link #getParameters() <em>Parameters</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getPricingModel()
+	 * @see #getParameters()
 	 * @generated
 	 * @ordered
 	 */
-	protected PricingModel pricingModel;
+	protected OptimiserSettings parameters;
 
 	/**
-	 * The cached value of the '{@link #getCommercialModel() <em>Commercial Model</em>}' containment reference.
+	 * The cached value of the '{@link #getActualsModel() <em>Actuals Model</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getCommercialModel()
+	 * @see #getActualsModel()
 	 * @generated
 	 * @ordered
 	 */
-	protected CommercialModel commercialModel;
+	protected ActualsModel actualsModel;
 
 	/**
-	 * The cached value of the '{@link #getSpotMarketsModel() <em>Spot Markets Model</em>}' containment reference.
+	 * The default value of the '{@link #getPromptPeriodStart() <em>Prompt Period Start</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getSpotMarketsModel()
+	 * @see #getPromptPeriodStart()
 	 * @generated
 	 * @ordered
 	 */
-	protected SpotMarketsModel spotMarketsModel;
+	protected static final LocalDate PROMPT_PERIOD_START_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getAnalyticsModel() <em>Analytics Model</em>}' containment reference.
+	 * The cached value of the '{@link #getPromptPeriodStart() <em>Prompt Period Start</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getAnalyticsModel()
+	 * @see #getPromptPeriodStart()
 	 * @generated
 	 * @ordered
 	 */
-	protected AnalyticsModel analyticsModel;
+	protected LocalDate promptPeriodStart = PROMPT_PERIOD_START_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getPortfolioModel() <em>Portfolio Model</em>}' containment reference.
+	 * This is true if the Prompt Period Start attribute has been set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getPortfolioModel()
 	 * @generated
 	 * @ordered
 	 */
-	protected LNGPortfolioModel portfolioModel;
+	protected boolean promptPeriodStartESet;
 
 	/**
-	 * The cached value of the '{@link #getCostModel() <em>Cost Model</em>}' containment reference.
+	 * The default value of the '{@link #getPromptPeriodEnd() <em>Prompt Period End</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getCostModel()
+	 * @see #getPromptPeriodEnd()
 	 * @generated
 	 * @ordered
 	 */
-	protected CostModel costModel;
+	protected static final LocalDate PROMPT_PERIOD_END_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getPromptPeriodEnd() <em>Prompt Period End</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPromptPeriodEnd()
+	 * @generated
+	 * @ordered
+	 */
+	protected LocalDate promptPeriodEnd = PROMPT_PERIOD_END_EDEFAULT;
+
+	/**
+	 * This is true if the Prompt Period End attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean promptPeriodEndESet;
+
+	/**
+	 * The cached value of the '{@link #getReferenceModel() <em>Reference Model</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getReferenceModel()
+	 * @generated
+	 * @ordered
+	 */
+	protected LNGReferenceModel referenceModel;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -148,22 +182,22 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public PortModel getPortModel() {
-		if (portModel != null && portModel.eIsProxy()) {
-			InternalEObject oldPortModel = (InternalEObject)portModel;
-			portModel = (PortModel)eResolveProxy(oldPortModel);
-			if (portModel != oldPortModel) {
-				InternalEObject newPortModel = (InternalEObject)portModel;
-				NotificationChain msgs = oldPortModel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__PORT_MODEL, null, null);
-				if (newPortModel.eInternalContainer() == null) {
-					msgs = newPortModel.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__PORT_MODEL, null, msgs);
+	public CargoModel getCargoModel() {
+		if (cargoModel != null && cargoModel.eIsProxy()) {
+			InternalEObject oldCargoModel = (InternalEObject)cargoModel;
+			cargoModel = (CargoModel)eResolveProxy(oldCargoModel);
+			if (cargoModel != oldCargoModel) {
+				InternalEObject newCargoModel = (InternalEObject)cargoModel;
+				NotificationChain msgs = oldCargoModel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__CARGO_MODEL, null, null);
+				if (newCargoModel.eInternalContainer() == null) {
+					msgs = newCargoModel.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__CARGO_MODEL, null, msgs);
 				}
 				if (msgs != null) msgs.dispatch();
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LNGScenarioPackage.LNG_SCENARIO_MODEL__PORT_MODEL, oldPortModel, portModel));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LNGScenarioPackage.LNG_SCENARIO_MODEL__CARGO_MODEL, oldCargoModel, cargoModel));
 			}
 		}
-		return portModel;
+		return cargoModel;
 	}
 
 	/**
@@ -171,8 +205,8 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public PortModel basicGetPortModel() {
-		return portModel;
+	public CargoModel basicGetCargoModel() {
+		return cargoModel;
 	}
 
 	/**
@@ -180,11 +214,11 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetPortModel(PortModel newPortModel, NotificationChain msgs) {
-		PortModel oldPortModel = portModel;
-		portModel = newPortModel;
+	public NotificationChain basicSetCargoModel(CargoModel newCargoModel, NotificationChain msgs) {
+		CargoModel oldCargoModel = cargoModel;
+		cargoModel = newCargoModel;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__PORT_MODEL, oldPortModel, newPortModel);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__CARGO_MODEL, oldCargoModel, newCargoModel);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
@@ -195,18 +229,18 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setPortModel(PortModel newPortModel) {
-		if (newPortModel != portModel) {
+	public void setCargoModel(CargoModel newCargoModel) {
+		if (newCargoModel != cargoModel) {
 			NotificationChain msgs = null;
-			if (portModel != null)
-				msgs = ((InternalEObject)portModel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__PORT_MODEL, null, msgs);
-			if (newPortModel != null)
-				msgs = ((InternalEObject)newPortModel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__PORT_MODEL, null, msgs);
-			msgs = basicSetPortModel(newPortModel, msgs);
+			if (cargoModel != null)
+				msgs = ((InternalEObject)cargoModel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__CARGO_MODEL, null, msgs);
+			if (newCargoModel != null)
+				msgs = ((InternalEObject)newCargoModel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__CARGO_MODEL, null, msgs);
+			msgs = basicSetCargoModel(newCargoModel, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__PORT_MODEL, newPortModel, newPortModel));
+			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__CARGO_MODEL, newCargoModel, newCargoModel));
 	}
 
 	/**
@@ -214,22 +248,22 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public FleetModel getFleetModel() {
-		if (fleetModel != null && fleetModel.eIsProxy()) {
-			InternalEObject oldFleetModel = (InternalEObject)fleetModel;
-			fleetModel = (FleetModel)eResolveProxy(oldFleetModel);
-			if (fleetModel != oldFleetModel) {
-				InternalEObject newFleetModel = (InternalEObject)fleetModel;
-				NotificationChain msgs = oldFleetModel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__FLEET_MODEL, null, null);
-				if (newFleetModel.eInternalContainer() == null) {
-					msgs = newFleetModel.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__FLEET_MODEL, null, msgs);
+	public ScheduleModel getScheduleModel() {
+		if (scheduleModel != null && scheduleModel.eIsProxy()) {
+			InternalEObject oldScheduleModel = (InternalEObject)scheduleModel;
+			scheduleModel = (ScheduleModel)eResolveProxy(oldScheduleModel);
+			if (scheduleModel != oldScheduleModel) {
+				InternalEObject newScheduleModel = (InternalEObject)scheduleModel;
+				NotificationChain msgs = oldScheduleModel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__SCHEDULE_MODEL, null, null);
+				if (newScheduleModel.eInternalContainer() == null) {
+					msgs = newScheduleModel.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__SCHEDULE_MODEL, null, msgs);
 				}
 				if (msgs != null) msgs.dispatch();
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LNGScenarioPackage.LNG_SCENARIO_MODEL__FLEET_MODEL, oldFleetModel, fleetModel));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LNGScenarioPackage.LNG_SCENARIO_MODEL__SCHEDULE_MODEL, oldScheduleModel, scheduleModel));
 			}
 		}
-		return fleetModel;
+		return scheduleModel;
 	}
 
 	/**
@@ -237,8 +271,8 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public FleetModel basicGetFleetModel() {
-		return fleetModel;
+	public ScheduleModel basicGetScheduleModel() {
+		return scheduleModel;
 	}
 
 	/**
@@ -246,11 +280,11 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetFleetModel(FleetModel newFleetModel, NotificationChain msgs) {
-		FleetModel oldFleetModel = fleetModel;
-		fleetModel = newFleetModel;
+	public NotificationChain basicSetScheduleModel(ScheduleModel newScheduleModel, NotificationChain msgs) {
+		ScheduleModel oldScheduleModel = scheduleModel;
+		scheduleModel = newScheduleModel;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__FLEET_MODEL, oldFleetModel, newFleetModel);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__SCHEDULE_MODEL, oldScheduleModel, newScheduleModel);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
@@ -261,18 +295,18 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setFleetModel(FleetModel newFleetModel) {
-		if (newFleetModel != fleetModel) {
+	public void setScheduleModel(ScheduleModel newScheduleModel) {
+		if (newScheduleModel != scheduleModel) {
 			NotificationChain msgs = null;
-			if (fleetModel != null)
-				msgs = ((InternalEObject)fleetModel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__FLEET_MODEL, null, msgs);
-			if (newFleetModel != null)
-				msgs = ((InternalEObject)newFleetModel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__FLEET_MODEL, null, msgs);
-			msgs = basicSetFleetModel(newFleetModel, msgs);
+			if (scheduleModel != null)
+				msgs = ((InternalEObject)scheduleModel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__SCHEDULE_MODEL, null, msgs);
+			if (newScheduleModel != null)
+				msgs = ((InternalEObject)newScheduleModel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__SCHEDULE_MODEL, null, msgs);
+			msgs = basicSetScheduleModel(newScheduleModel, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__FLEET_MODEL, newFleetModel, newFleetModel));
+			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__SCHEDULE_MODEL, newScheduleModel, newScheduleModel));
 	}
 
 	/**
@@ -280,22 +314,22 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public PricingModel getPricingModel() {
-		if (pricingModel != null && pricingModel.eIsProxy()) {
-			InternalEObject oldPricingModel = (InternalEObject)pricingModel;
-			pricingModel = (PricingModel)eResolveProxy(oldPricingModel);
-			if (pricingModel != oldPricingModel) {
-				InternalEObject newPricingModel = (InternalEObject)pricingModel;
-				NotificationChain msgs = oldPricingModel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__PRICING_MODEL, null, null);
-				if (newPricingModel.eInternalContainer() == null) {
-					msgs = newPricingModel.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__PRICING_MODEL, null, msgs);
+	public OptimiserSettings getParameters() {
+		if (parameters != null && parameters.eIsProxy()) {
+			InternalEObject oldParameters = (InternalEObject)parameters;
+			parameters = (OptimiserSettings)eResolveProxy(oldParameters);
+			if (parameters != oldParameters) {
+				InternalEObject newParameters = (InternalEObject)parameters;
+				NotificationChain msgs = oldParameters.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS, null, null);
+				if (newParameters.eInternalContainer() == null) {
+					msgs = newParameters.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS, null, msgs);
 				}
 				if (msgs != null) msgs.dispatch();
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LNGScenarioPackage.LNG_SCENARIO_MODEL__PRICING_MODEL, oldPricingModel, pricingModel));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS, oldParameters, parameters));
 			}
 		}
-		return pricingModel;
+		return parameters;
 	}
 
 	/**
@@ -303,8 +337,8 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public PricingModel basicGetPricingModel() {
-		return pricingModel;
+	public OptimiserSettings basicGetParameters() {
+		return parameters;
 	}
 
 	/**
@@ -312,11 +346,11 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetPricingModel(PricingModel newPricingModel, NotificationChain msgs) {
-		PricingModel oldPricingModel = pricingModel;
-		pricingModel = newPricingModel;
+	public NotificationChain basicSetParameters(OptimiserSettings newParameters, NotificationChain msgs) {
+		OptimiserSettings oldParameters = parameters;
+		parameters = newParameters;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__PRICING_MODEL, oldPricingModel, newPricingModel);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS, oldParameters, newParameters);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
@@ -327,18 +361,18 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setPricingModel(PricingModel newPricingModel) {
-		if (newPricingModel != pricingModel) {
+	public void setParameters(OptimiserSettings newParameters) {
+		if (newParameters != parameters) {
 			NotificationChain msgs = null;
-			if (pricingModel != null)
-				msgs = ((InternalEObject)pricingModel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__PRICING_MODEL, null, msgs);
-			if (newPricingModel != null)
-				msgs = ((InternalEObject)newPricingModel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__PRICING_MODEL, null, msgs);
-			msgs = basicSetPricingModel(newPricingModel, msgs);
+			if (parameters != null)
+				msgs = ((InternalEObject)parameters).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS, null, msgs);
+			if (newParameters != null)
+				msgs = ((InternalEObject)newParameters).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS, null, msgs);
+			msgs = basicSetParameters(newParameters, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__PRICING_MODEL, newPricingModel, newPricingModel));
+			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS, newParameters, newParameters));
 	}
 
 	/**
@@ -346,22 +380,22 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CommercialModel getCommercialModel() {
-		if (commercialModel != null && commercialModel.eIsProxy()) {
-			InternalEObject oldCommercialModel = (InternalEObject)commercialModel;
-			commercialModel = (CommercialModel)eResolveProxy(oldCommercialModel);
-			if (commercialModel != oldCommercialModel) {
-				InternalEObject newCommercialModel = (InternalEObject)commercialModel;
-				NotificationChain msgs = oldCommercialModel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__COMMERCIAL_MODEL, null, null);
-				if (newCommercialModel.eInternalContainer() == null) {
-					msgs = newCommercialModel.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__COMMERCIAL_MODEL, null, msgs);
+	public ActualsModel getActualsModel() {
+		if (actualsModel != null && actualsModel.eIsProxy()) {
+			InternalEObject oldActualsModel = (InternalEObject)actualsModel;
+			actualsModel = (ActualsModel)eResolveProxy(oldActualsModel);
+			if (actualsModel != oldActualsModel) {
+				InternalEObject newActualsModel = (InternalEObject)actualsModel;
+				NotificationChain msgs = oldActualsModel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__ACTUALS_MODEL, null, null);
+				if (newActualsModel.eInternalContainer() == null) {
+					msgs = newActualsModel.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__ACTUALS_MODEL, null, msgs);
 				}
 				if (msgs != null) msgs.dispatch();
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LNGScenarioPackage.LNG_SCENARIO_MODEL__COMMERCIAL_MODEL, oldCommercialModel, commercialModel));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LNGScenarioPackage.LNG_SCENARIO_MODEL__ACTUALS_MODEL, oldActualsModel, actualsModel));
 			}
 		}
-		return commercialModel;
+		return actualsModel;
 	}
 
 	/**
@@ -369,8 +403,8 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CommercialModel basicGetCommercialModel() {
-		return commercialModel;
+	public ActualsModel basicGetActualsModel() {
+		return actualsModel;
 	}
 
 	/**
@@ -378,11 +412,11 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetCommercialModel(CommercialModel newCommercialModel, NotificationChain msgs) {
-		CommercialModel oldCommercialModel = commercialModel;
-		commercialModel = newCommercialModel;
+	public NotificationChain basicSetActualsModel(ActualsModel newActualsModel, NotificationChain msgs) {
+		ActualsModel oldActualsModel = actualsModel;
+		actualsModel = newActualsModel;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__COMMERCIAL_MODEL, oldCommercialModel, newCommercialModel);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__ACTUALS_MODEL, oldActualsModel, newActualsModel);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
@@ -393,18 +427,18 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setCommercialModel(CommercialModel newCommercialModel) {
-		if (newCommercialModel != commercialModel) {
+	public void setActualsModel(ActualsModel newActualsModel) {
+		if (newActualsModel != actualsModel) {
 			NotificationChain msgs = null;
-			if (commercialModel != null)
-				msgs = ((InternalEObject)commercialModel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__COMMERCIAL_MODEL, null, msgs);
-			if (newCommercialModel != null)
-				msgs = ((InternalEObject)newCommercialModel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__COMMERCIAL_MODEL, null, msgs);
-			msgs = basicSetCommercialModel(newCommercialModel, msgs);
+			if (actualsModel != null)
+				msgs = ((InternalEObject)actualsModel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__ACTUALS_MODEL, null, msgs);
+			if (newActualsModel != null)
+				msgs = ((InternalEObject)newActualsModel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__ACTUALS_MODEL, null, msgs);
+			msgs = basicSetActualsModel(newActualsModel, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__COMMERCIAL_MODEL, newCommercialModel, newCommercialModel));
+			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__ACTUALS_MODEL, newActualsModel, newActualsModel));
 	}
 
 	/**
@@ -412,22 +446,114 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public SpotMarketsModel getSpotMarketsModel() {
-		if (spotMarketsModel != null && spotMarketsModel.eIsProxy()) {
-			InternalEObject oldSpotMarketsModel = (InternalEObject)spotMarketsModel;
-			spotMarketsModel = (SpotMarketsModel)eResolveProxy(oldSpotMarketsModel);
-			if (spotMarketsModel != oldSpotMarketsModel) {
-				InternalEObject newSpotMarketsModel = (InternalEObject)spotMarketsModel;
-				NotificationChain msgs = oldSpotMarketsModel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__SPOT_MARKETS_MODEL, null, null);
-				if (newSpotMarketsModel.eInternalContainer() == null) {
-					msgs = newSpotMarketsModel.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__SPOT_MARKETS_MODEL, null, msgs);
+	public LocalDate getPromptPeriodStart() {
+		return promptPeriodStart;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPromptPeriodStart(LocalDate newPromptPeriodStart) {
+		LocalDate oldPromptPeriodStart = promptPeriodStart;
+		promptPeriodStart = newPromptPeriodStart;
+		boolean oldPromptPeriodStartESet = promptPeriodStartESet;
+		promptPeriodStartESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_START, oldPromptPeriodStart, promptPeriodStart, !oldPromptPeriodStartESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetPromptPeriodStart() {
+		LocalDate oldPromptPeriodStart = promptPeriodStart;
+		boolean oldPromptPeriodStartESet = promptPeriodStartESet;
+		promptPeriodStart = PROMPT_PERIOD_START_EDEFAULT;
+		promptPeriodStartESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_START, oldPromptPeriodStart, PROMPT_PERIOD_START_EDEFAULT, oldPromptPeriodStartESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetPromptPeriodStart() {
+		return promptPeriodStartESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public LocalDate getPromptPeriodEnd() {
+		return promptPeriodEnd;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPromptPeriodEnd(LocalDate newPromptPeriodEnd) {
+		LocalDate oldPromptPeriodEnd = promptPeriodEnd;
+		promptPeriodEnd = newPromptPeriodEnd;
+		boolean oldPromptPeriodEndESet = promptPeriodEndESet;
+		promptPeriodEndESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_END, oldPromptPeriodEnd, promptPeriodEnd, !oldPromptPeriodEndESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetPromptPeriodEnd() {
+		LocalDate oldPromptPeriodEnd = promptPeriodEnd;
+		boolean oldPromptPeriodEndESet = promptPeriodEndESet;
+		promptPeriodEnd = PROMPT_PERIOD_END_EDEFAULT;
+		promptPeriodEndESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_END, oldPromptPeriodEnd, PROMPT_PERIOD_END_EDEFAULT, oldPromptPeriodEndESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetPromptPeriodEnd() {
+		return promptPeriodEndESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public LNGReferenceModel getReferenceModel() {
+		if (referenceModel != null && referenceModel.eIsProxy()) {
+			InternalEObject oldReferenceModel = (InternalEObject)referenceModel;
+			referenceModel = (LNGReferenceModel)eResolveProxy(oldReferenceModel);
+			if (referenceModel != oldReferenceModel) {
+				InternalEObject newReferenceModel = (InternalEObject)referenceModel;
+				NotificationChain msgs = oldReferenceModel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__REFERENCE_MODEL, null, null);
+				if (newReferenceModel.eInternalContainer() == null) {
+					msgs = newReferenceModel.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__REFERENCE_MODEL, null, msgs);
 				}
 				if (msgs != null) msgs.dispatch();
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LNGScenarioPackage.LNG_SCENARIO_MODEL__SPOT_MARKETS_MODEL, oldSpotMarketsModel, spotMarketsModel));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LNGScenarioPackage.LNG_SCENARIO_MODEL__REFERENCE_MODEL, oldReferenceModel, referenceModel));
 			}
 		}
-		return spotMarketsModel;
+		return referenceModel;
 	}
 
 	/**
@@ -435,8 +561,8 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public SpotMarketsModel basicGetSpotMarketsModel() {
-		return spotMarketsModel;
+	public LNGReferenceModel basicGetReferenceModel() {
+		return referenceModel;
 	}
 
 	/**
@@ -444,11 +570,11 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetSpotMarketsModel(SpotMarketsModel newSpotMarketsModel, NotificationChain msgs) {
-		SpotMarketsModel oldSpotMarketsModel = spotMarketsModel;
-		spotMarketsModel = newSpotMarketsModel;
+	public NotificationChain basicSetReferenceModel(LNGReferenceModel newReferenceModel, NotificationChain msgs) {
+		LNGReferenceModel oldReferenceModel = referenceModel;
+		referenceModel = newReferenceModel;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__SPOT_MARKETS_MODEL, oldSpotMarketsModel, newSpotMarketsModel);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__REFERENCE_MODEL, oldReferenceModel, newReferenceModel);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
@@ -459,216 +585,18 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setSpotMarketsModel(SpotMarketsModel newSpotMarketsModel) {
-		if (newSpotMarketsModel != spotMarketsModel) {
+	public void setReferenceModel(LNGReferenceModel newReferenceModel) {
+		if (newReferenceModel != referenceModel) {
 			NotificationChain msgs = null;
-			if (spotMarketsModel != null)
-				msgs = ((InternalEObject)spotMarketsModel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__SPOT_MARKETS_MODEL, null, msgs);
-			if (newSpotMarketsModel != null)
-				msgs = ((InternalEObject)newSpotMarketsModel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__SPOT_MARKETS_MODEL, null, msgs);
-			msgs = basicSetSpotMarketsModel(newSpotMarketsModel, msgs);
+			if (referenceModel != null)
+				msgs = ((InternalEObject)referenceModel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__REFERENCE_MODEL, null, msgs);
+			if (newReferenceModel != null)
+				msgs = ((InternalEObject)newReferenceModel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__REFERENCE_MODEL, null, msgs);
+			msgs = basicSetReferenceModel(newReferenceModel, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__SPOT_MARKETS_MODEL, newSpotMarketsModel, newSpotMarketsModel));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public AnalyticsModel getAnalyticsModel() {
-		if (analyticsModel != null && analyticsModel.eIsProxy()) {
-			InternalEObject oldAnalyticsModel = (InternalEObject)analyticsModel;
-			analyticsModel = (AnalyticsModel)eResolveProxy(oldAnalyticsModel);
-			if (analyticsModel != oldAnalyticsModel) {
-				InternalEObject newAnalyticsModel = (InternalEObject)analyticsModel;
-				NotificationChain msgs = oldAnalyticsModel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__ANALYTICS_MODEL, null, null);
-				if (newAnalyticsModel.eInternalContainer() == null) {
-					msgs = newAnalyticsModel.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__ANALYTICS_MODEL, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LNGScenarioPackage.LNG_SCENARIO_MODEL__ANALYTICS_MODEL, oldAnalyticsModel, analyticsModel));
-			}
-		}
-		return analyticsModel;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public AnalyticsModel basicGetAnalyticsModel() {
-		return analyticsModel;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetAnalyticsModel(AnalyticsModel newAnalyticsModel, NotificationChain msgs) {
-		AnalyticsModel oldAnalyticsModel = analyticsModel;
-		analyticsModel = newAnalyticsModel;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__ANALYTICS_MODEL, oldAnalyticsModel, newAnalyticsModel);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setAnalyticsModel(AnalyticsModel newAnalyticsModel) {
-		if (newAnalyticsModel != analyticsModel) {
-			NotificationChain msgs = null;
-			if (analyticsModel != null)
-				msgs = ((InternalEObject)analyticsModel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__ANALYTICS_MODEL, null, msgs);
-			if (newAnalyticsModel != null)
-				msgs = ((InternalEObject)newAnalyticsModel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__ANALYTICS_MODEL, null, msgs);
-			msgs = basicSetAnalyticsModel(newAnalyticsModel, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__ANALYTICS_MODEL, newAnalyticsModel, newAnalyticsModel));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public LNGPortfolioModel getPortfolioModel() {
-		if (portfolioModel != null && portfolioModel.eIsProxy()) {
-			InternalEObject oldPortfolioModel = (InternalEObject)portfolioModel;
-			portfolioModel = (LNGPortfolioModel)eResolveProxy(oldPortfolioModel);
-			if (portfolioModel != oldPortfolioModel) {
-				InternalEObject newPortfolioModel = (InternalEObject)portfolioModel;
-				NotificationChain msgs = oldPortfolioModel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__PORTFOLIO_MODEL, null, null);
-				if (newPortfolioModel.eInternalContainer() == null) {
-					msgs = newPortfolioModel.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__PORTFOLIO_MODEL, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LNGScenarioPackage.LNG_SCENARIO_MODEL__PORTFOLIO_MODEL, oldPortfolioModel, portfolioModel));
-			}
-		}
-		return portfolioModel;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public LNGPortfolioModel basicGetPortfolioModel() {
-		return portfolioModel;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetPortfolioModel(LNGPortfolioModel newPortfolioModel, NotificationChain msgs) {
-		LNGPortfolioModel oldPortfolioModel = portfolioModel;
-		portfolioModel = newPortfolioModel;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__PORTFOLIO_MODEL, oldPortfolioModel, newPortfolioModel);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setPortfolioModel(LNGPortfolioModel newPortfolioModel) {
-		if (newPortfolioModel != portfolioModel) {
-			NotificationChain msgs = null;
-			if (portfolioModel != null)
-				msgs = ((InternalEObject)portfolioModel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__PORTFOLIO_MODEL, null, msgs);
-			if (newPortfolioModel != null)
-				msgs = ((InternalEObject)newPortfolioModel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__PORTFOLIO_MODEL, null, msgs);
-			msgs = basicSetPortfolioModel(newPortfolioModel, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__PORTFOLIO_MODEL, newPortfolioModel, newPortfolioModel));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public CostModel getCostModel() {
-		if (costModel != null && costModel.eIsProxy()) {
-			InternalEObject oldCostModel = (InternalEObject)costModel;
-			costModel = (CostModel)eResolveProxy(oldCostModel);
-			if (costModel != oldCostModel) {
-				InternalEObject newCostModel = (InternalEObject)costModel;
-				NotificationChain msgs = oldCostModel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__COST_MODEL, null, null);
-				if (newCostModel.eInternalContainer() == null) {
-					msgs = newCostModel.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__COST_MODEL, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LNGScenarioPackage.LNG_SCENARIO_MODEL__COST_MODEL, oldCostModel, costModel));
-			}
-		}
-		return costModel;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public CostModel basicGetCostModel() {
-		return costModel;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetCostModel(CostModel newCostModel, NotificationChain msgs) {
-		CostModel oldCostModel = costModel;
-		costModel = newCostModel;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__COST_MODEL, oldCostModel, newCostModel);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setCostModel(CostModel newCostModel) {
-		if (newCostModel != costModel) {
-			NotificationChain msgs = null;
-			if (costModel != null)
-				msgs = ((InternalEObject)costModel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__COST_MODEL, null, msgs);
-			if (newCostModel != null)
-				msgs = ((InternalEObject)newCostModel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__COST_MODEL, null, msgs);
-			msgs = basicSetCostModel(newCostModel, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__COST_MODEL, newCostModel, newCostModel));
+			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__REFERENCE_MODEL, newReferenceModel, newReferenceModel));
 	}
 
 	/**
@@ -679,22 +607,16 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PORT_MODEL:
-				return basicSetPortModel(null, msgs);
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__FLEET_MODEL:
-				return basicSetFleetModel(null, msgs);
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PRICING_MODEL:
-				return basicSetPricingModel(null, msgs);
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__COMMERCIAL_MODEL:
-				return basicSetCommercialModel(null, msgs);
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SPOT_MARKETS_MODEL:
-				return basicSetSpotMarketsModel(null, msgs);
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANALYTICS_MODEL:
-				return basicSetAnalyticsModel(null, msgs);
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PORTFOLIO_MODEL:
-				return basicSetPortfolioModel(null, msgs);
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__COST_MODEL:
-				return basicSetCostModel(null, msgs);
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__CARGO_MODEL:
+				return basicSetCargoModel(null, msgs);
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SCHEDULE_MODEL:
+				return basicSetScheduleModel(null, msgs);
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS:
+				return basicSetParameters(null, msgs);
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ACTUALS_MODEL:
+				return basicSetActualsModel(null, msgs);
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__REFERENCE_MODEL:
+				return basicSetReferenceModel(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -707,30 +629,25 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PORT_MODEL:
-				if (resolve) return getPortModel();
-				return basicGetPortModel();
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__FLEET_MODEL:
-				if (resolve) return getFleetModel();
-				return basicGetFleetModel();
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PRICING_MODEL:
-				if (resolve) return getPricingModel();
-				return basicGetPricingModel();
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__COMMERCIAL_MODEL:
-				if (resolve) return getCommercialModel();
-				return basicGetCommercialModel();
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SPOT_MARKETS_MODEL:
-				if (resolve) return getSpotMarketsModel();
-				return basicGetSpotMarketsModel();
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANALYTICS_MODEL:
-				if (resolve) return getAnalyticsModel();
-				return basicGetAnalyticsModel();
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PORTFOLIO_MODEL:
-				if (resolve) return getPortfolioModel();
-				return basicGetPortfolioModel();
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__COST_MODEL:
-				if (resolve) return getCostModel();
-				return basicGetCostModel();
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__CARGO_MODEL:
+				if (resolve) return getCargoModel();
+				return basicGetCargoModel();
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SCHEDULE_MODEL:
+				if (resolve) return getScheduleModel();
+				return basicGetScheduleModel();
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS:
+				if (resolve) return getParameters();
+				return basicGetParameters();
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ACTUALS_MODEL:
+				if (resolve) return getActualsModel();
+				return basicGetActualsModel();
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_START:
+				return getPromptPeriodStart();
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_END:
+				return getPromptPeriodEnd();
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__REFERENCE_MODEL:
+				if (resolve) return getReferenceModel();
+				return basicGetReferenceModel();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -743,29 +660,26 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PORT_MODEL:
-				setPortModel((PortModel)newValue);
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__CARGO_MODEL:
+				setCargoModel((CargoModel)newValue);
 				return;
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__FLEET_MODEL:
-				setFleetModel((FleetModel)newValue);
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SCHEDULE_MODEL:
+				setScheduleModel((ScheduleModel)newValue);
 				return;
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PRICING_MODEL:
-				setPricingModel((PricingModel)newValue);
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS:
+				setParameters((OptimiserSettings)newValue);
 				return;
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__COMMERCIAL_MODEL:
-				setCommercialModel((CommercialModel)newValue);
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ACTUALS_MODEL:
+				setActualsModel((ActualsModel)newValue);
 				return;
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SPOT_MARKETS_MODEL:
-				setSpotMarketsModel((SpotMarketsModel)newValue);
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_START:
+				setPromptPeriodStart((LocalDate)newValue);
 				return;
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANALYTICS_MODEL:
-				setAnalyticsModel((AnalyticsModel)newValue);
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_END:
+				setPromptPeriodEnd((LocalDate)newValue);
 				return;
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PORTFOLIO_MODEL:
-				setPortfolioModel((LNGPortfolioModel)newValue);
-				return;
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__COST_MODEL:
-				setCostModel((CostModel)newValue);
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__REFERENCE_MODEL:
+				setReferenceModel((LNGReferenceModel)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -779,29 +693,26 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PORT_MODEL:
-				setPortModel((PortModel)null);
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__CARGO_MODEL:
+				setCargoModel((CargoModel)null);
 				return;
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__FLEET_MODEL:
-				setFleetModel((FleetModel)null);
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SCHEDULE_MODEL:
+				setScheduleModel((ScheduleModel)null);
 				return;
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PRICING_MODEL:
-				setPricingModel((PricingModel)null);
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS:
+				setParameters((OptimiserSettings)null);
 				return;
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__COMMERCIAL_MODEL:
-				setCommercialModel((CommercialModel)null);
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ACTUALS_MODEL:
+				setActualsModel((ActualsModel)null);
 				return;
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SPOT_MARKETS_MODEL:
-				setSpotMarketsModel((SpotMarketsModel)null);
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_START:
+				unsetPromptPeriodStart();
 				return;
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANALYTICS_MODEL:
-				setAnalyticsModel((AnalyticsModel)null);
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_END:
+				unsetPromptPeriodEnd();
 				return;
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PORTFOLIO_MODEL:
-				setPortfolioModel((LNGPortfolioModel)null);
-				return;
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__COST_MODEL:
-				setCostModel((CostModel)null);
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__REFERENCE_MODEL:
+				setReferenceModel((LNGReferenceModel)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -815,24 +726,40 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PORT_MODEL:
-				return portModel != null;
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__FLEET_MODEL:
-				return fleetModel != null;
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PRICING_MODEL:
-				return pricingModel != null;
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__COMMERCIAL_MODEL:
-				return commercialModel != null;
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SPOT_MARKETS_MODEL:
-				return spotMarketsModel != null;
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANALYTICS_MODEL:
-				return analyticsModel != null;
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PORTFOLIO_MODEL:
-				return portfolioModel != null;
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__COST_MODEL:
-				return costModel != null;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__CARGO_MODEL:
+				return cargoModel != null;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SCHEDULE_MODEL:
+				return scheduleModel != null;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS:
+				return parameters != null;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ACTUALS_MODEL:
+				return actualsModel != null;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_START:
+				return isSetPromptPeriodStart();
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_END:
+				return isSetPromptPeriodEnd();
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__REFERENCE_MODEL:
+				return referenceModel != null;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (promptPeriodStart: ");
+		if (promptPeriodStartESet) result.append(promptPeriodStart); else result.append("<unset>");
+		result.append(", promptPeriodEnd: ");
+		if (promptPeriodEndESet) result.append(promptPeriodEnd); else result.append("<unset>");
+		result.append(')');
+		return result.toString();
 	}
 
 } //LNGScenarioModelImpl

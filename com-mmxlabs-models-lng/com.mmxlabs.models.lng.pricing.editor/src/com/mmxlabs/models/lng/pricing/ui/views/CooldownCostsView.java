@@ -30,7 +30,7 @@ public class CooldownCostsView extends ScenarioTableViewerView<CooldownCostsPane
 	protected void initViewerPane(final CooldownCostsPane pane) {
 		final EditingDomain domain = getEditingDomain();
 		if (domain != null) {
-			pane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_CostModel(), PricingPackage.eINSTANCE.getCostModel_CooldownCosts() }), getAdapterFactory(),
+			pane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ReferenceModel(), LNGScenarioPackage.eINSTANCE.getLNGReferenceModel_CostModel(), PricingPackage.eINSTANCE.getCostModel_CooldownCosts() }), getAdapterFactory(),
 					domain.getCommandStack());
 			pane.getViewer().setInput(getRootObject());
 		}

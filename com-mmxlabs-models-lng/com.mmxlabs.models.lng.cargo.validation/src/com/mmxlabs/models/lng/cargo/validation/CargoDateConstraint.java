@@ -138,8 +138,8 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 			if (scenario instanceof LNGScenarioModel) {
 
 				double maxSpeedKnots = 0.0;
-				final CargoModel cargoModel = ((LNGScenarioModel) scenario).getPortfolioModel().getCargoModel();
-				final SpotMarketsModel spotMarketsModel = ((LNGScenarioModel) scenario).getSpotMarketsModel();
+				final CargoModel cargoModel = ((LNGScenarioModel) scenario).getCargoModel();
+				final SpotMarketsModel spotMarketsModel = ((LNGScenarioModel) scenario).getReferenceModel().getSpotMarketsModel();
 
 				final Set<VesselClass> usedClasses = new HashSet<>();
 
@@ -177,7 +177,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 						}
 					}
 
-					for (final Route route : ((LNGScenarioModel) scenario).getPortModel().getRoutes()) {
+					for (final Route route : ((LNGScenarioModel) scenario).getReferenceModel().getPortModel().getRoutes()) {
 						if (route.isCanal() == false) {
 							collectMinTimes(minTimes, route, 0, maxSpeedKnots);
 						}

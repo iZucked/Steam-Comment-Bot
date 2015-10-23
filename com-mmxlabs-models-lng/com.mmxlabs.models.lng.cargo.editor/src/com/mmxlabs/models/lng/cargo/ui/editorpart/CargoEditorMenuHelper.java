@@ -60,7 +60,6 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
@@ -89,8 +88,6 @@ public class CargoEditorMenuHelper {
 
 	private final IScenarioEditingLocation scenarioEditingLocation;
 
-	private final LNGPortfolioModel portfolioModel;
-
 	private final CargoEditingCommands cec;
 
 	private final LNGScenarioModel scenarioModel;
@@ -99,12 +96,11 @@ public class CargoEditorMenuHelper {
 
 	/**
 	 */
-	public CargoEditorMenuHelper(final Shell shell, final IScenarioEditingLocation scenarioEditingLocation, final LNGScenarioModel scenarioModel, final LNGPortfolioModel portfolioModel) {
+	public CargoEditorMenuHelper(final Shell shell, final IScenarioEditingLocation scenarioEditingLocation, final LNGScenarioModel scenarioModel) {
 		this.shell = shell;
 		this.scenarioEditingLocation = scenarioEditingLocation;
 		this.scenarioModel = scenarioModel;
-		this.portfolioModel = portfolioModel;
-		cec = new CargoEditingCommands(scenarioEditingLocation.getEditingDomain(), scenarioModel, portfolioModel);
+		cec = new CargoEditingCommands(scenarioEditingLocation.getEditingDomain(), scenarioModel);
 	}
 
 	private final class EditAction extends Action {
@@ -236,7 +232,7 @@ public class CargoEditorMenuHelper {
 	}
 
 	IMenuListener createDischargeSlotMenuListener(final List<DischargeSlot> dischargeSlots, final int index) {
-		final CargoModel cargoModel = portfolioModel.getCargoModel();
+		final CargoModel cargoModel = scenarioModel.getCargoModel();
 		return new IMenuListener() {
 
 			@Override
@@ -470,7 +466,7 @@ public class CargoEditorMenuHelper {
 	}
 
 	public IMenuListener createLoadSlotMenuListener(final List<LoadSlot> loadSlots, final int index) {
-		final CargoModel cargoModel = portfolioModel.getCargoModel();
+		final CargoModel cargoModel = scenarioModel.getCargoModel();
 		return new IMenuListener() {
 
 			@Override
@@ -503,7 +499,7 @@ public class CargoEditorMenuHelper {
 	/**
 	 */
 	public IMenuListener createSwapSlotsMenuListener(final List<Slot> slots, final int index) {
-		final CargoModel cargoModel = portfolioModel.getCargoModel();
+		final CargoModel cargoModel = scenarioModel.getCargoModel();
 		return new IMenuListener() {
 
 			@Override
@@ -752,8 +748,8 @@ public class CargoEditorMenuHelper {
 					continue;
 				}
 				// TODO: Check the change in rounding - does this round down as the previous code did?
-				ZonedDateTime a = loadSlot.getWindowStartWithSlotOrPortTime();
-				ZonedDateTime b = dischargeSlot.getWindowStartWithSlotOrPortTime();
+				final ZonedDateTime a = loadSlot.getWindowStartWithSlotOrPortTime();
+				final ZonedDateTime b = dischargeSlot.getWindowStartWithSlotOrPortTime();
 				if (a != null && b != null) {
 					daysDifference = (int) Duration.between(a, b).toDays();
 				} else {
@@ -797,7 +793,7 @@ public class CargoEditorMenuHelper {
 	void createNewSlotMenu(final IMenuManager menuManager, final Slot source) {
 
 		final List<Port> transferPorts = new LinkedList<Port>();
-		for (final Port p : scenarioModel.getPortModel().getPorts()) {
+		for (final Port p : scenarioModel.getReferenceModel().getPortModel().getPorts()) {
 			if (p.getCapabilities().contains(PortCapability.TRANSFER)) {
 				transferPorts.add(p);
 			}
@@ -872,7 +868,7 @@ public class CargoEditorMenuHelper {
 	}
 
 	void createSpotMarketMenu(final IMenuManager manager, final SpotType spotType, final Slot source) {
-		final SpotMarketsModel pricingModel = scenarioModel.getSpotMarketsModel();
+		final SpotMarketsModel pricingModel = scenarioModel.getReferenceModel().getSpotMarketsModel();
 		final Collection<SpotMarket> validMarkets = new LinkedList<SpotMarket>();
 		String menuName = "";
 		boolean isSpecial = false;
@@ -982,7 +978,7 @@ public class CargoEditorMenuHelper {
 
 		@Override
 		public void run() {
-			final CargoModel cargoModel = portfolioModel.getCargoModel();
+			final CargoModel cargoModel = scenarioModel.getCargoModel();
 
 			final List<Command> setCommands = new LinkedList<Command>();
 			final List<Command> deleteCommands = new LinkedList<Command>();
@@ -1036,7 +1032,7 @@ public class CargoEditorMenuHelper {
 						}
 						// Set back to start of month
 						cal = cal.withDayOfMonth(1).withHour(0);
-						LocalDate dishargeCal = cal.toLocalDate();
+						final LocalDate dishargeCal = cal.toLocalDate();
 						final String yearMonthString = getKeyForDate(dishargeCal);
 						dischargeSlot.setWindowStart(dishargeCal);
 						dischargeSlot.setWindowStartTime(0);
@@ -1281,7 +1277,7 @@ public class CargoEditorMenuHelper {
 			final int ret = editor.open(cargo);
 			final CommandStack commandStack = scenarioEditingLocation.getEditingDomain().getCommandStack();
 			if (ret == Window.OK) {
-				final CargoModel cargomodel = portfolioModel.getCargoModel();
+				final CargoModel cargomodel = scenarioModel.getCargoModel();
 
 				final CompoundCommand cmd = new CompoundCommand("Edit LDD Cargo");
 				if (cargo.eContainer() == null) {
@@ -1330,7 +1326,7 @@ public class CargoEditorMenuHelper {
 		}
 
 		int distance = 0;
-		LOOP_ROUTES: for (final Route route : scenarioModel.getPortModel().getRoutes()) {
+		LOOP_ROUTES: for (final Route route : scenarioModel.getReferenceModel().getPortModel().getRoutes()) {
 			if (route.isCanal() == false) {
 				for (final RouteLine dl : route.getLines()) {
 					if (dl.getFrom().equals(from) && dl.getTo().equals(to)) {
@@ -1347,7 +1343,7 @@ public class CargoEditorMenuHelper {
 		return travelTime;
 	}
 
-	private String formatDate(LocalDate localDate) {
+	private String formatDate(final LocalDate localDate) {
 		if (localDate == null) {
 			return "<no date>";
 		}

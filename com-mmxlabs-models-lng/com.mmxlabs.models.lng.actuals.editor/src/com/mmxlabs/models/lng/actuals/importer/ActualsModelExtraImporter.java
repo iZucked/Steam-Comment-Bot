@@ -15,7 +15,6 @@ import com.mmxlabs.models.lng.actuals.ActualsFactory;
 import com.mmxlabs.models.lng.actuals.ActualsModel;
 import com.mmxlabs.models.lng.actuals.ActualsPackage;
 import com.mmxlabs.models.lng.actuals.CargoActuals;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.util.importer.IExtraModelImporter;
@@ -42,21 +41,18 @@ public class ActualsModelExtraImporter implements IExtraModelImporter {
 	public void importModel(final MMXRootObject rootObject, final Map<String, CSVReader> inputs, final IMMXImportContext context) {
 		if (rootObject instanceof LNGScenarioModel) {
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
-			final LNGPortfolioModel portfolioModel = lngScenarioModel.getPortfolioModel();
-			if (portfolioModel != null) {
 
-				final CSVReader reader = inputs.get(ACTUALS_KEY);
-				if (reader != null) {
-					final Collection<EObject> importObjects = actualsImporter.importObjects(ActualsPackage.Literals.CARGO_ACTUALS, reader, context);
-					final ActualsModel actualsModel = ActualsFactory.eINSTANCE.createActualsModel();
-					for (final EObject e : importObjects) {
-						if (e instanceof CargoActuals) {
-							CargoActuals cargoActuals = (CargoActuals) e;
-							actualsModel.getCargoActuals().add(cargoActuals);
-						}
+			final CSVReader reader = inputs.get(ACTUALS_KEY);
+			if (reader != null) {
+				final Collection<EObject> importObjects = actualsImporter.importObjects(ActualsPackage.Literals.CARGO_ACTUALS, reader, context);
+				final ActualsModel actualsModel = ActualsFactory.eINSTANCE.createActualsModel();
+				for (final EObject e : importObjects) {
+					if (e instanceof CargoActuals) {
+						CargoActuals cargoActuals = (CargoActuals) e;
+						actualsModel.getCargoActuals().add(cargoActuals);
 					}
-					portfolioModel.setActualsModel(actualsModel);
 				}
+				lngScenarioModel.setActualsModel(actualsModel);
 			}
 		}
 	}
@@ -66,12 +62,9 @@ public class ActualsModelExtraImporter implements IExtraModelImporter {
 		MMXRootObject rootObject = context.getRootObject();
 		if (rootObject instanceof LNGScenarioModel) {
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
-			final LNGPortfolioModel portfolioModel = lngScenarioModel.getPortfolioModel();
-			if (portfolioModel != null) {
-				final ActualsModel actualsModel = portfolioModel.getActualsModel();
-				if (actualsModel != null) {
-					output.put(ACTUALS_KEY, actualsImporter.exportActuals(actualsModel.getCargoActuals(), context));
-				}
+			final ActualsModel actualsModel = lngScenarioModel.getActualsModel();
+			if (actualsModel != null) {
+				output.put(ACTUALS_KEY, actualsImporter.exportActuals(actualsModel.getCargoActuals(), context));
 			}
 		}
 	}

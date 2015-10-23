@@ -75,7 +75,6 @@ import com.mmxlabs.models.lng.actuals.ui.editorpart.ActualsModelRowTransformer.R
 import com.mmxlabs.models.lng.actuals.ui.editorpart.ActualsModelRowTransformer.RowData;
 import com.mmxlabs.models.lng.actuals.ui.editorpart.ActualsModelRowTransformer.RowDataEMFPath;
 import com.mmxlabs.models.lng.actuals.ui.editorpart.ActualsModelRowTransformer.Type;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
@@ -547,8 +546,8 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 		// final IReferenceValueProviderProvider provider = scenarioEditingLocation.getReferenceValueProviderCache();
 		final EditingDomain editingDomain = scenarioEditingLocation.getEditingDomain();
 
-//		addActualsColumn(cargoColumns, "C-ID", new BasicOperationRenderer(CargoPackage.Literals.CARGO___GET_LOAD_NAME, editingDomain),
-//				new RowDataEMFPath(false, Type.CARGO, pkg.getCargoActuals_Cargo()));
+		// addActualsColumn(cargoColumns, "C-ID", new BasicOperationRenderer(CargoPackage.Literals.CARGO___GET_LOAD_NAME, editingDomain),
+		// new RowDataEMFPath(false, Type.CARGO, pkg.getCargoActuals_Cargo()));
 
 		addActualsColumn(loadColumns, "L-ID", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(MMXCorePackage.Literals.NAMED_OBJECT__NAME, editingDomain)),
 				new RowDataEMFPath(false, Type.LOAD, pkg.getSlotActuals_Slot()));
@@ -615,11 +614,12 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 								editorLock.claim();
 								scenarioEditingLocation.setDisableUpdates(true);
 								if (editorTargets.size() > 1) {
-									final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getRootObject(), scenarioEditingLocation
-											.getDefaultCommandHandler());
+									final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getRootObject(),
+											scenarioEditingLocation.getDefaultCommandHandler());
 									mdd.open(scenarioEditingLocation, editorTargets);
 								} else {
-									final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getDefaultCommandHandler(), ~SWT.MAX) {
+									final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getDefaultCommandHandler(),
+											~SWT.MAX) {
 										@Override
 										protected void configureShell(final Shell newShell) {
 											newShell.setMinimumSize(SWT.DEFAULT, 630);
@@ -640,8 +640,8 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 		});
 	}
 
-	protected LNGPortfolioModel getPortfolioModel() {
-		return ((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getPortfolioModel();
+	protected LNGScenarioModel getScenarioModel() {
+		return ((LNGScenarioModel) scenarioEditingLocation.getRootObject());
 	}
 
 	// private <T extends ICellManipulator & ICellRenderer> GridViewerColumn addActualsColumn(final String columnName, final T manipulator, final EMFPath path) {
@@ -1102,7 +1102,7 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 	}
 
 	private ActualsModel getActualsModel() {
-		return getPortfolioModel().getActualsModel();
+		return getScenarioModel().getActualsModel();
 	}
 
 }

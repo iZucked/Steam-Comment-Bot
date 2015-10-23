@@ -13,7 +13,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
@@ -63,7 +63,7 @@ public class LNGScenarioFactoryImpl extends EFactoryImpl implements LNGScenarioF
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL: return createLNGScenarioModel();
-			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL: return createLNGPortfolioModel();
+			case LNGScenarioPackage.LNG_REFERENCE_MODEL: return createLNGReferenceModel();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -84,9 +84,9 @@ public class LNGScenarioFactoryImpl extends EFactoryImpl implements LNGScenarioF
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LNGPortfolioModel createLNGPortfolioModel() {
-		LNGPortfolioModelImpl lngPortfolioModel = new LNGPortfolioModelImpl();
-		return lngPortfolioModel;
+	public LNGReferenceModel createLNGReferenceModel() {
+		LNGReferenceModelImpl lngReferenceModel = new LNGReferenceModelImpl();
+		return lngReferenceModel;
 	}
 
 	/**

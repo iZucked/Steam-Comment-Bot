@@ -10,7 +10,6 @@ import java.util.Map;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -43,13 +42,10 @@ public class AssignmentModelImporter implements IExtraModelImporter {
 		final MMXRootObject rootObject = context.getRootObject();
 		if (rootObject instanceof LNGScenarioModel) {
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
-			final LNGPortfolioModel portfolioModel = lngScenarioModel.getPortfolioModel();
-			final SpotMarketsModel spotMarketsModel = lngScenarioModel.getSpotMarketsModel();
-			if (portfolioModel != null) {
-				final CargoModel cargoModel = portfolioModel.getCargoModel();
-				if (cargoModel != null) {
-					output.put(ASSIGNMENTS, importer.exportObjects(cargoModel, spotMarketsModel, context));
-				}
+			final SpotMarketsModel spotMarketsModel = lngScenarioModel.getReferenceModel().getSpotMarketsModel();
+			final CargoModel cargoModel = lngScenarioModel.getCargoModel();
+			if (cargoModel != null) {
+				output.put(ASSIGNMENTS, importer.exportObjects(cargoModel, spotMarketsModel, context));
 			}
 		}
 	}

@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.util.PriceIndexUtils;
 import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -240,7 +241,7 @@ public class PriceExpressionUtils {
 				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 				final SeriesParser indices = new SeriesParser();
 
-				final PricingModel pricingModel = lngScenarioModel.getPricingModel();
+				final PricingModel pricingModel = ScenarioModelUtil.getPricingModel(lngScenarioModel);
 				final List<NamedIndexContainer<? extends Number>> namedIndexContainerList = (List<NamedIndexContainer<? extends Number>>) pricingModel.eGet(reference);
 				for (final NamedIndexContainer<? extends Number> namedIndexContainer : namedIndexContainerList) {
 					final Index<? extends Number> index = namedIndexContainer.getData();

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.analytics.impl;
 
+import com.mmxlabs.models.lng.analytics.*;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;

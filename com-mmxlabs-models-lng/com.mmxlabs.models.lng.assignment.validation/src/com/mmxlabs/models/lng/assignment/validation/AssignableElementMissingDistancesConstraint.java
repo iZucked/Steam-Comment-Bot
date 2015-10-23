@@ -35,6 +35,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
+import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.types.util.SetUtils;
@@ -58,15 +59,16 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 		final MMXRootObject rootObject = extraContext.getRootObject();
 		if (target instanceof CargoModel) {
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
-			final SpotMarketsModel spotMarketsModel = scenarioModel.getSpotMarketsModel();
-			final CargoModel cargoModel = scenarioModel.getPortfolioModel().getCargoModel();
+			final LNGReferenceModel referenceModel = scenarioModel.getReferenceModel();
+			final SpotMarketsModel spotMarketsModel = referenceModel.getSpotMarketsModel();
+			final CargoModel cargoModel = scenarioModel.getCargoModel();
 
 			final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, spotMarketsModel);
 
 			@SuppressWarnings("unchecked")
 			Map<Pair<Port, Port>, Boolean> hasDistanceMap = (Map<Pair<Port, Port>, Boolean>) ctx.getCurrentConstraintData();
 			if (hasDistanceMap == null) {
-				hasDistanceMap = checkDistances(((LNGScenarioModel) rootObject).getPortModel());
+				hasDistanceMap = checkDistances(referenceModel.getPortModel());
 				ctx.putCurrentConstraintData(hasDistanceMap);
 			}
 
@@ -154,7 +156,7 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 				// Check end port
 				if (prevPort != null && endPorts != null && !endPorts.isEmpty()) {
 					boolean foundDistance = false;
-					for (Port p : endPorts) {
+					for (final Port p : endPorts) {
 
 						if (hasDistance(hasDistanceMap, prevPort, p)) {
 							foundDistance = true;
@@ -201,7 +203,7 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 			return "<Unspecified vessel>";
 		}
 
-		Vessel vessel = vesselAvailability.getVessel();
+		final Vessel vessel = vesselAvailability.getVessel();
 		if (vessel == null) {
 			return "<Unspecified vessel>";
 		}

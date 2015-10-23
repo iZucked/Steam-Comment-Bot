@@ -32,6 +32,7 @@ import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
@@ -64,22 +65,17 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 		addTypicalColumn("Capacity (m³)", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVessel_Capacity(), editingDomain));
 		addTypicalColumn("Class", new SingleReferenceManipulator(FleetPackage.eINSTANCE.getVessel_VesselClass(), jointModelEditor.getReferenceValueProviderCache(), editingDomain));
 
-//		getToolBarManager().appendToGroup(EDIT_GROUP, new BaseFuelEditorAction());
+		// getToolBarManager().appendToGroup(EDIT_GROUP, new BaseFuelEditorAction());
 		/*
-		getToolBarManager().appendToGroup(EDIT_GROUP, new Action("VC") {
-			@Override
-			public void run() {
-
-				final MMXRootObject rootObject = jointModelEditor.getRootObject();
-				if (rootObject instanceof LNGScenarioModel) {
-					final FleetModel fleetModel = ((LNGScenarioModel) rootObject).getFleetModel();
-					final DetailCompositeDialog dcd = new DetailCompositeDialog(VesselViewerPane_View.this.getJointModelEditorPart().getShell(), VesselViewerPane_View.this.getJointModelEditorPart()
-							.getDefaultCommandHandler());
-					dcd.open(getJointModelEditorPart(), getJointModelEditorPart().getRootObject(), fleetModel, FleetPackage.eINSTANCE.getFleetModel_VesselClasses());
-				}
-			}
-		});
-		*/
+		 * getToolBarManager().appendToGroup(EDIT_GROUP, new Action("VC") {
+		 * 
+		 * @Override public void run() {
+		 * 
+		 * final MMXRootObject rootObject = jointModelEditor.getRootObject(); if (rootObject instanceof LNGScenarioModel) { final FleetModel fleetModel = ((LNGScenarioModel)
+		 * rootObject).getFleetModel(); final DetailCompositeDialog dcd = new DetailCompositeDialog(VesselViewerPane_View.this.getJointModelEditorPart().getShell(),
+		 * VesselViewerPane_View.this.getJointModelEditorPart() .getDefaultCommandHandler()); dcd.open(getJointModelEditorPart(), getJointModelEditorPart().getRootObject(), fleetModel,
+		 * FleetPackage.eINSTANCE.getFleetModel_VesselClasses()); } } });
+		 */
 
 		getToolBarManager().appendToGroup(EDIT_GROUP, new Action() {
 			{
@@ -90,15 +86,17 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 			public void run() {
 				final MMXRootObject rootObject = jointModelEditor.getRootObject();
 				if (rootObject instanceof LNGScenarioModel) {
-					final FleetModel fleetModel = ((LNGScenarioModel) rootObject).getFleetModel();
-					final DetailCompositeDialog dcd = new DetailCompositeDialog(VesselViewerPane_View.this.getJointModelEditorPart().getShell(), VesselViewerPane_View.this.getJointModelEditorPart()
-							.getDefaultCommandHandler());
+					final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+					final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(lngScenarioModel);
+
+					final DetailCompositeDialog dcd = new DetailCompositeDialog(VesselViewerPane_View.this.getJointModelEditorPart().getShell(),
+							VesselViewerPane_View.this.getJointModelEditorPart().getDefaultCommandHandler());
 					dcd.open(getJointModelEditorPart(), getJointModelEditorPart().getRootObject(), fleetModel, FleetPackage.eINSTANCE.getFleetModel_VesselGroups());
 				}
 			}
 		});
 		getToolBarManager().update(true);
-		
+
 		setTitle("Vessels", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}
 
@@ -115,9 +113,10 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 		public void run() {
 			final MMXRootObject rootObject = jointModelEditor.getRootObject();
 			if (rootObject instanceof LNGScenarioModel) {
-				final FleetModel fleetModel = ((LNGScenarioModel) rootObject).getFleetModel();
-				final DetailCompositeDialog dcd = new DetailCompositeDialog(VesselViewerPane_View.this.getJointModelEditorPart().getShell(), VesselViewerPane_View.this.getJointModelEditorPart()
-						.getDefaultCommandHandler());
+				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+				final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(lngScenarioModel);
+				final DetailCompositeDialog dcd = new DetailCompositeDialog(VesselViewerPane_View.this.getJointModelEditorPart().getShell(),
+						VesselViewerPane_View.this.getJointModelEditorPart().getDefaultCommandHandler());
 				dcd.open(getJointModelEditorPart(), getJointModelEditorPart().getRootObject(), fleetModel, FleetPackage.eINSTANCE.getFleetModel_BaseFuels());
 			}
 		}
@@ -126,7 +125,7 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 		protected void populate(final Menu menu) {
 			if (jointModelEditor.getRootObject() instanceof LNGScenarioModel) {
 				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) jointModelEditor.getRootObject();
-				final FleetModel fleetModel = lngScenarioModel.getFleetModel();
+				final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(lngScenarioModel);
 				boolean b = false;
 				for (final BaseFuel baseFuel : fleetModel.getBaseFuels()) {
 					b = true;

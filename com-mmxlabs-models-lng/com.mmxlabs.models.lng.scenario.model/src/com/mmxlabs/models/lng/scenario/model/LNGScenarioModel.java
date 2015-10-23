@@ -6,13 +6,12 @@
  */
 package com.mmxlabs.models.lng.scenario.model;
 
-import com.mmxlabs.models.lng.analytics.AnalyticsModel;
-import com.mmxlabs.models.lng.commercial.CommercialModel;
-import com.mmxlabs.models.lng.fleet.FleetModel;
-import com.mmxlabs.models.lng.port.PortModel;
-import com.mmxlabs.models.lng.pricing.CostModel;
-import com.mmxlabs.models.lng.pricing.PricingModel;
-import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
+import java.time.LocalDate;
+
+import com.mmxlabs.models.lng.actuals.ActualsModel;
+import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
@@ -24,13 +23,13 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPortModel <em>Port Model</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getFleetModel <em>Fleet Model</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPricingModel <em>Pricing Model</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getCommercialModel <em>Commercial Model</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getSpotMarketsModel <em>Spot Markets Model</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getAnalyticsModel <em>Analytics Model</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPortfolioModel <em>Portfolio Model</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getCargoModel <em>Cargo Model</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getScheduleModel <em>Schedule Model</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getParameters <em>Parameters</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getActualsModel <em>Actuals Model</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPromptPeriodStart <em>Prompt Period Start</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPromptPeriodEnd <em>Prompt Period End</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getReferenceModel <em>Reference Model</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel()
@@ -39,211 +38,239 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  */
 public interface LNGScenarioModel extends MMXRootObject {
 	/**
-	 * Returns the value of the '<em><b>Port Model</b></em>' containment reference.
+	 * Returns the value of the '<em><b>Cargo Model</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Port Model</em>' containment reference isn't clear,
+	 * If the meaning of the '<em>Cargo Model</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Port Model</em>' containment reference.
-	 * @see #setPortModel(PortModel)
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel_PortModel()
+	 * @return the value of the '<em>Cargo Model</em>' containment reference.
+	 * @see #setCargoModel(CargoModel)
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel_CargoModel()
 	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
-	PortModel getPortModel();
+	CargoModel getCargoModel();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPortModel <em>Port Model</em>}' containment reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getCargoModel <em>Cargo Model</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Port Model</em>' containment reference.
-	 * @see #getPortModel()
+	 * @param value the new value of the '<em>Cargo Model</em>' containment reference.
+	 * @see #getCargoModel()
 	 * @generated
 	 */
-	void setPortModel(PortModel value);
+	void setCargoModel(CargoModel value);
 
 	/**
-	 * Returns the value of the '<em><b>Fleet Model</b></em>' containment reference.
+	 * Returns the value of the '<em><b>Schedule Model</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Fleet Model</em>' containment reference isn't clear,
+	 * If the meaning of the '<em>Schedule Model</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Fleet Model</em>' containment reference.
-	 * @see #setFleetModel(FleetModel)
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel_FleetModel()
+	 * @return the value of the '<em>Schedule Model</em>' containment reference.
+	 * @see #setScheduleModel(ScheduleModel)
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel_ScheduleModel()
 	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
-	FleetModel getFleetModel();
+	ScheduleModel getScheduleModel();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getFleetModel <em>Fleet Model</em>}' containment reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getScheduleModel <em>Schedule Model</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Fleet Model</em>' containment reference.
-	 * @see #getFleetModel()
+	 * @param value the new value of the '<em>Schedule Model</em>' containment reference.
+	 * @see #getScheduleModel()
 	 * @generated
 	 */
-	void setFleetModel(FleetModel value);
+	void setScheduleModel(ScheduleModel value);
 
 	/**
-	 * Returns the value of the '<em><b>Pricing Model</b></em>' containment reference.
+	 * Returns the value of the '<em><b>Parameters</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Pricing Model</em>' containment reference isn't clear,
+	 * If the meaning of the '<em>Parameters</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Pricing Model</em>' containment reference.
-	 * @see #setPricingModel(PricingModel)
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel_PricingModel()
+	 * @return the value of the '<em>Parameters</em>' containment reference.
+	 * @see #setParameters(OptimiserSettings)
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel_Parameters()
 	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
-	PricingModel getPricingModel();
+	OptimiserSettings getParameters();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPricingModel <em>Pricing Model</em>}' containment reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getParameters <em>Parameters</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Pricing Model</em>' containment reference.
-	 * @see #getPricingModel()
+	 * @param value the new value of the '<em>Parameters</em>' containment reference.
+	 * @see #getParameters()
 	 * @generated
 	 */
-	void setPricingModel(PricingModel value);
+	void setParameters(OptimiserSettings value);
 
 	/**
-	 * Returns the value of the '<em><b>Commercial Model</b></em>' containment reference.
+	 * Returns the value of the '<em><b>Actuals Model</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Commercial Model</em>' containment reference isn't clear,
+	 * If the meaning of the '<em>Actuals Model</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Commercial Model</em>' containment reference.
-	 * @see #setCommercialModel(CommercialModel)
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel_CommercialModel()
+	 * @return the value of the '<em>Actuals Model</em>' containment reference.
+	 * @see #setActualsModel(ActualsModel)
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel_ActualsModel()
 	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
-	CommercialModel getCommercialModel();
+	ActualsModel getActualsModel();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getCommercialModel <em>Commercial Model</em>}' containment reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getActualsModel <em>Actuals Model</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Commercial Model</em>' containment reference.
-	 * @see #getCommercialModel()
+	 * @param value the new value of the '<em>Actuals Model</em>' containment reference.
+	 * @see #getActualsModel()
 	 * @generated
 	 */
-	void setCommercialModel(CommercialModel value);
+	void setActualsModel(ActualsModel value);
 
 	/**
-	 * Returns the value of the '<em><b>Spot Markets Model</b></em>' containment reference.
+	 * Returns the value of the '<em><b>Prompt Period Start</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Spot Markets Model</em>' containment reference isn't clear,
+	 * If the meaning of the '<em>Prompt Period Start</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Spot Markets Model</em>' containment reference.
-	 * @see #setSpotMarketsModel(SpotMarketsModel)
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel_SpotMarketsModel()
-	 * @model containment="true" resolveProxies="true"
+	 * @return the value of the '<em>Prompt Period Start</em>' attribute.
+	 * @see #isSetPromptPeriodStart()
+	 * @see #unsetPromptPeriodStart()
+	 * @see #setPromptPeriodStart(LocalDate)
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel_PromptPeriodStart()
+	 * @model unsettable="true" dataType="com.mmxlabs.models.datetime.LocalDate"
 	 * @generated
 	 */
-	SpotMarketsModel getSpotMarketsModel();
+	LocalDate getPromptPeriodStart();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getSpotMarketsModel <em>Spot Markets Model</em>}' containment reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPromptPeriodStart <em>Prompt Period Start</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Spot Markets Model</em>' containment reference.
-	 * @see #getSpotMarketsModel()
+	 * @param value the new value of the '<em>Prompt Period Start</em>' attribute.
+	 * @see #isSetPromptPeriodStart()
+	 * @see #unsetPromptPeriodStart()
+	 * @see #getPromptPeriodStart()
 	 * @generated
 	 */
-	void setSpotMarketsModel(SpotMarketsModel value);
+	void setPromptPeriodStart(LocalDate value);
 
 	/**
-	 * Returns the value of the '<em><b>Analytics Model</b></em>' containment reference.
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPromptPeriodStart <em>Prompt Period Start</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetPromptPeriodStart()
+	 * @see #getPromptPeriodStart()
+	 * @see #setPromptPeriodStart(LocalDate)
+	 * @generated
+	 */
+	void unsetPromptPeriodStart();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPromptPeriodStart <em>Prompt Period Start</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Prompt Period Start</em>' attribute is set.
+	 * @see #unsetPromptPeriodStart()
+	 * @see #getPromptPeriodStart()
+	 * @see #setPromptPeriodStart(LocalDate)
+	 * @generated
+	 */
+	boolean isSetPromptPeriodStart();
+
+	/**
+	 * Returns the value of the '<em><b>Prompt Period End</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Analytics Model</em>' containment reference isn't clear,
+	 * If the meaning of the '<em>Prompt Period End</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Analytics Model</em>' containment reference.
-	 * @see #setAnalyticsModel(AnalyticsModel)
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel_AnalyticsModel()
-	 * @model containment="true" resolveProxies="true"
+	 * @return the value of the '<em>Prompt Period End</em>' attribute.
+	 * @see #isSetPromptPeriodEnd()
+	 * @see #unsetPromptPeriodEnd()
+	 * @see #setPromptPeriodEnd(LocalDate)
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel_PromptPeriodEnd()
+	 * @model unsettable="true" dataType="com.mmxlabs.models.datetime.LocalDate"
 	 * @generated
 	 */
-	AnalyticsModel getAnalyticsModel();
+	LocalDate getPromptPeriodEnd();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getAnalyticsModel <em>Analytics Model</em>}' containment reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPromptPeriodEnd <em>Prompt Period End</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Analytics Model</em>' containment reference.
-	 * @see #getAnalyticsModel()
+	 * @param value the new value of the '<em>Prompt Period End</em>' attribute.
+	 * @see #isSetPromptPeriodEnd()
+	 * @see #unsetPromptPeriodEnd()
+	 * @see #getPromptPeriodEnd()
 	 * @generated
 	 */
-	void setAnalyticsModel(AnalyticsModel value);
+	void setPromptPeriodEnd(LocalDate value);
 
 	/**
-	 * Returns the value of the '<em><b>Portfolio Model</b></em>' containment reference.
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPromptPeriodEnd <em>Prompt Period End</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetPromptPeriodEnd()
+	 * @see #getPromptPeriodEnd()
+	 * @see #setPromptPeriodEnd(LocalDate)
+	 * @generated
+	 */
+	void unsetPromptPeriodEnd();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPromptPeriodEnd <em>Prompt Period End</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Prompt Period End</em>' attribute is set.
+	 * @see #unsetPromptPeriodEnd()
+	 * @see #getPromptPeriodEnd()
+	 * @see #setPromptPeriodEnd(LocalDate)
+	 * @generated
+	 */
+	boolean isSetPromptPeriodEnd();
+
+	/**
+	 * Returns the value of the '<em><b>Reference Model</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Portfolio Model</em>' containment reference isn't clear,
+	 * If the meaning of the '<em>Reference Model</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Portfolio Model</em>' containment reference.
-	 * @see #setPortfolioModel(LNGPortfolioModel)
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel_PortfolioModel()
+	 * @return the value of the '<em>Reference Model</em>' containment reference.
+	 * @see #setReferenceModel(LNGReferenceModel)
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel_ReferenceModel()
 	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
-	LNGPortfolioModel getPortfolioModel();
+	LNGReferenceModel getReferenceModel();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getPortfolioModel <em>Portfolio Model</em>}' containment reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getReferenceModel <em>Reference Model</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Portfolio Model</em>' containment reference.
-	 * @see #getPortfolioModel()
+	 * @param value the new value of the '<em>Reference Model</em>' containment reference.
+	 * @see #getReferenceModel()
 	 * @generated
 	 */
-	void setPortfolioModel(LNGPortfolioModel value);
-
-	/**
-	 * Returns the value of the '<em><b>Cost Model</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Cost Model</em>' containment reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Cost Model</em>' containment reference.
-	 * @see #setCostModel(CostModel)
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel_CostModel()
-	 * @model containment="true" resolveProxies="true"
-	 * @generated
-	 */
-	CostModel getCostModel();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getCostModel <em>Cost Model</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Cost Model</em>' containment reference.
-	 * @see #getCostModel()
-	 * @generated
-	 */
-	void setCostModel(CostModel value);
+	void setReferenceModel(LNGReferenceModel value);
 
 } // LNGScenarioModel

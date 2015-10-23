@@ -118,26 +118,26 @@ public class LNGScenarioItemProviderAdapterFactory extends LNGScenarioAdapterFac
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.scenario.model.LNGReferenceModel} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected LNGPortfolioModelItemProvider lngPortfolioModelItemProvider;
+	protected LNGReferenceModelItemProvider lngReferenceModelItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.scenario.model.LNGReferenceModel}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createLNGPortfolioModelAdapter() {
-		if (lngPortfolioModelItemProvider == null) {
-			lngPortfolioModelItemProvider = new LNGPortfolioModelItemProvider(this);
+	public Adapter createLNGReferenceModelAdapter() {
+		if (lngReferenceModelItemProvider == null) {
+			lngReferenceModelItemProvider = new LNGReferenceModelItemProvider(this);
 		}
 
-		return lngPortfolioModelItemProvider;
+		return lngReferenceModelItemProvider;
 	}
 
 	/**
@@ -275,7 +275,7 @@ public class LNGScenarioItemProviderAdapterFactory extends LNGScenarioAdapterFac
 	@Override
 	public void dispose() {
 		if (lngScenarioModelItemProvider != null) lngScenarioModelItemProvider.dispose();
-		if (lngPortfolioModelItemProvider != null) lngPortfolioModelItemProvider.dispose();
+		if (lngReferenceModelItemProvider != null) lngReferenceModelItemProvider.dispose();
 	}
 
 	/**
@@ -333,7 +333,7 @@ public class LNGScenarioItemProviderAdapterFactory extends LNGScenarioAdapterFac
 				newChildDescriptors.add
 					(createChildParameter
 						(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
-						 LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel()));
+						 LNGScenarioFactory.eINSTANCE.createLNGReferenceModel()));
 
 				return null;
 			}

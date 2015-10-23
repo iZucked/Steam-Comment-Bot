@@ -13,18 +13,18 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
-import com.mmxlabs.models.lng.commercial.CommercialFactory;
-import com.mmxlabs.models.lng.fleet.FleetFactory;
-import com.mmxlabs.models.lng.port.PortFactory;
-import com.mmxlabs.models.lng.pricing.PricingFactory;
+import com.mmxlabs.models.lng.actuals.ActualsFactory;
+import com.mmxlabs.models.lng.cargo.CargoFactory;
+import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
-import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
+import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.mmxcore.provider.MMXRootObjectItemProvider;
 
 /**
@@ -56,8 +56,54 @@ public class LNGScenarioModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addPromptPeriodStartPropertyDescriptor(object);
+			addPromptPeriodEndPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Prompt Period Start feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPromptPeriodStartPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_LNGScenarioModel_promptPeriodStart_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_LNGScenarioModel_promptPeriodStart_feature", "_UI_LNGScenarioModel_type"),
+				 LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PromptPeriodStart(),
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Prompt Period End feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPromptPeriodEndPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_LNGScenarioModel_promptPeriodEnd_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_LNGScenarioModel_promptPeriodEnd_feature", "_UI_LNGScenarioModel_type"),
+				 LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PromptPeriodEnd(),
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -72,14 +118,11 @@ public class LNGScenarioModelItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PortModel());
-			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_FleetModel());
-			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PricingModel());
-			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_CommercialModel());
-			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_SpotMarketsModel());
-			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AnalyticsModel());
-			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PortfolioModel());
-			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_CostModel());
+			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_CargoModel());
+			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ScheduleModel());
+			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_Parameters());
+			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ActualsModel());
+			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ReferenceModel());
 		}
 		return childrenFeatures;
 	}
@@ -134,14 +177,15 @@ public class LNGScenarioModelItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(LNGScenarioModel.class)) {
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PORT_MODEL:
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__FLEET_MODEL:
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PRICING_MODEL:
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__COMMERCIAL_MODEL:
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SPOT_MARKETS_MODEL:
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANALYTICS_MODEL:
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PORTFOLIO_MODEL:
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__COST_MODEL:
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_START:
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PROMPT_PERIOD_END:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__CARGO_MODEL:
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SCHEDULE_MODEL:
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS:
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ACTUALS_MODEL:
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__REFERENCE_MODEL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -161,43 +205,28 @@ public class LNGScenarioModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PortModel(),
-				 PortFactory.eINSTANCE.createPortModel()));
+				(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_CargoModel(),
+				 CargoFactory.eINSTANCE.createCargoModel()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_FleetModel(),
-				 FleetFactory.eINSTANCE.createFleetModel()));
+				(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ScheduleModel(),
+				 ScheduleFactory.eINSTANCE.createScheduleModel()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PricingModel(),
-				 PricingFactory.eINSTANCE.createPricingModel()));
+				(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_Parameters(),
+				 ParametersFactory.eINSTANCE.createOptimiserSettings()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_CommercialModel(),
-				 CommercialFactory.eINSTANCE.createCommercialModel()));
+				(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ActualsModel(),
+				 ActualsFactory.eINSTANCE.createActualsModel()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_SpotMarketsModel(),
-				 SpotMarketsFactory.eINSTANCE.createSpotMarketsModel()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AnalyticsModel(),
-				 AnalyticsFactory.eINSTANCE.createAnalyticsModel()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PortfolioModel(),
-				 LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_CostModel(),
-				 PricingFactory.eINSTANCE.createCostModel()));
+				(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ReferenceModel(),
+				 LNGScenarioFactory.eINSTANCE.createLNGReferenceModel()));
 	}
 
 }

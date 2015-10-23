@@ -45,8 +45,8 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 		final EObject target = ctx.getTarget();
 		if (target instanceof LNGScenarioModel) {
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) target;
-			final SpotMarketsModel spotMarketsModel = scenarioModel.getSpotMarketsModel();
-			final CargoModel cargoModel = scenarioModel.getPortfolioModel().getCargoModel();
+			final SpotMarketsModel spotMarketsModel = scenarioModel.getReferenceModel().getSpotMarketsModel();
+			final CargoModel cargoModel = scenarioModel.getCargoModel();
 
 			final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, spotMarketsModel);
 

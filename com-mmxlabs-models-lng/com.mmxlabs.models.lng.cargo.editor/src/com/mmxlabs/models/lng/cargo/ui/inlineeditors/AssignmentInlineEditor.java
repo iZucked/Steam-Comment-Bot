@@ -55,7 +55,7 @@ public final class AssignmentInlineEditor extends ReferenceInlineEditor {
 								// assign to a new spot
 								if (rootObject instanceof LNGScenarioModel) {
 
-									final CargoModel cargoModel = ((LNGScenarioModel) rootObject).getPortfolioModel().getCargoModel();
+									final CargoModel cargoModel = ((LNGScenarioModel) rootObject).getCargoModel();
 									final int maxSpot = AssignmentEditorHelper.getMaxSpot(cargoModel) + 1;
 
 									commandHandler.handleCommand(

@@ -34,10 +34,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getCommodityIndices <em>Commodity Indices</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getCharterIndices <em>Charter Indices</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getFleetCost <em>Fleet Cost</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getRouteCosts <em>Route Costs</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getPortCosts <em>Port Costs</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getCooldownPrices <em>Cooldown Prices</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getBaseFuelPrices <em>Base Fuel Prices</em>}</li>
  * </ul>
  *

@@ -104,7 +104,6 @@ public class ComplexCargoEditor extends Dialog {
 
 	private IDialogEditingContext dialogContext;
 
-
 	public ComplexCargoEditor(final IShellProvider parentShell, final IScenarioEditingLocation scenarioEditingLocation, final boolean isCargoObjectNew) {
 		super(parentShell);
 		this.dialogContext = new DefaultDialogEditingContext(new NullDialogController(), scenarioEditingLocation, false, isCargoObjectNew);
@@ -287,7 +286,7 @@ public class ComplexCargoEditor extends Dialog {
 				private final LNGScenarioModel scenarioModel = (LNGScenarioModel) sel.getRootObject();
 
 				private Menu menu;
-				private final CargoEditorMenuHelper menuHelper = new CargoEditorMenuHelper(viewer.getGrid().getShell(), dialogContext.getScenarioEditingLocation(), scenarioModel, scenarioModel.getPortfolioModel());
+				private final CargoEditorMenuHelper menuHelper = new CargoEditorMenuHelper(viewer.getGrid().getShell(), dialogContext.getScenarioEditingLocation(), scenarioModel);
 
 				@Override
 				public void menuDetected(final MenuDetectEvent e) {

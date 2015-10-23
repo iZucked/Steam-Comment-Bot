@@ -20,6 +20,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
@@ -69,27 +70,25 @@ public class CharterOutMarketPane extends ScenarioTableViewerPane {
 				final MMXRootObject rootObject = scenarioEditingLocation.getRootObject();
 				if (rootObject instanceof LNGScenarioModel) {
 					final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
-					final SpotMarketsModel spotMarketsModel = scenarioModel.getSpotMarketsModel();
-					if (spotMarketsModel != null) {
+					final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(scenarioModel);
 
-						CharterOutStartDate charterOutStartDate = spotMarketsModel.getCharterOutStartDate();
-						if (charterOutStartDate == null) {
-							charterOutStartDate = SpotMarketsFactory.eINSTANCE.createCharterOutStartDate();
-							final Command cmd = SetCommand.create(getEditingDomain(), spotMarketsModel, SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_OUT_START_DATE, charterOutStartDate);
-							getEditingDomain().getCommandStack().execute(cmd);
-						}
+					CharterOutStartDate charterOutStartDate = spotMarketsModel.getCharterOutStartDate();
+					if (charterOutStartDate == null) {
+						charterOutStartDate = SpotMarketsFactory.eINSTANCE.createCharterOutStartDate();
+						final Command cmd = SetCommand.create(getEditingDomain(), spotMarketsModel, SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_OUT_START_DATE, charterOutStartDate);
+						getEditingDomain().getCommandStack().execute(cmd);
+					}
 
-						final DetailCompositeDialog editor = new DetailCompositeDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell(), scenarioEditingLocation.getDefaultCommandHandler());
+					final DetailCompositeDialog editor = new DetailCompositeDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell(), scenarioEditingLocation.getDefaultCommandHandler());
 
-						final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
-						try {
-							editorLock.claim();
-							scenarioEditingLocation.setDisableUpdates(true);
-							editor.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), Collections.<EObject> singletonList(charterOutStartDate));
-						} finally {
-							scenarioEditingLocation.setDisableUpdates(false);
-							editorLock.release();
-						}
+					final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
+					try {
+						editorLock.claim();
+						scenarioEditingLocation.setDisableUpdates(true);
+						editor.open(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), Collections.<EObject> singletonList(charterOutStartDate));
+					} finally {
+						scenarioEditingLocation.setDisableUpdates(false);
+						editorLock.release();
 					}
 				}
 			}

@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
@@ -60,23 +61,18 @@ public class RouteParametersCommandProvider extends BaseModelCommandProvider<Obj
 		}
 		final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
 
-		final PricingModel pricing = scenarioModel.getPricingModel();
-		if (pricing == null) {
-			return null;
-		}
-
-		CompoundCommand cmd = new CompoundCommand();
+		final CompoundCommand cmd = new CompoundCommand();
 
 		final Set<Object> objects = getAddedObjects();
 		objects.add(addedObject);
 
 		if (addedObject instanceof Route) {
-			Route route = (Route) addedObject;
+			final Route route = (Route) addedObject;
 			if (route.isCanal() == false) {
 				return null;
 			}
 
-			final FleetModel fleetModel = scenarioModel.getFleetModel();
+			final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenarioModel);
 			add_data_for_new_route: for (final VesselClass vesselClass : fleetModel.getVesselClasses()) {
 				for (final VesselClassRouteParameters routeCost : vesselClass.getRouteParameters()) {
 					if (routeCost.getRoute() == addedObject) {
@@ -98,8 +94,9 @@ public class RouteParametersCommandProvider extends BaseModelCommandProvider<Obj
 			}
 
 		} else if (addedObject instanceof VesselClass) {
-			VesselClass vesselClass = (VesselClass) addedObject;
-			final PortModel portModel = scenarioModel.getPortModel();
+			final VesselClass vesselClass = (VesselClass) addedObject;
+
+			final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
 			add_costs_for_new_vc: for (final Route route : portModel.getRoutes()) {
 				for (final VesselClassRouteParameters routeCost : vesselClass.getRouteParameters()) {
 					if (routeCost.getRoute() == route) {
@@ -144,8 +141,9 @@ public class RouteParametersCommandProvider extends BaseModelCommandProvider<Obj
 		final List<VesselClassRouteParameters> deletedObjects = new ArrayList<VesselClassRouteParameters>();
 
 		if (deletedObject instanceof Route) {
-			for (VesselClass vesselClass : scenarioModel.getFleetModel().getVesselClasses()) {
-				for (VesselClassRouteParameters params : vesselClass.getRouteParameters()) {
+			final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenarioModel);
+			for (final VesselClass vesselClass : fleetModel.getVesselClasses()) {
+				for (final VesselClassRouteParameters params : vesselClass.getRouteParameters()) {
 					if (params.getRoute() == deletedObject) {
 						deletedObjects.add(params);
 

@@ -8,13 +8,17 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PricingModel;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGReferenceModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 
 /**
  * Utility class to navigate the {@link LNGScenarioModel}
@@ -43,6 +47,15 @@ public final class ScenarioModelUtil {
 		return (LNGScenarioModel) container;
 	}
 
+	@Nullable
+	public static LNGScenarioModel findScenarioModel(@NonNull final CargoModel cargoModel) {
+		final EObject container = cargoModel.eContainer();
+		if (container instanceof LNGScenarioModel) {
+			return (LNGScenarioModel) container;
+		}
+		return null;
+	}
+
 	/**
 	 * Find the containing {@link LNGPortfolioModel} for this Schedule.
 	 * 
@@ -50,34 +63,39 @@ public final class ScenarioModelUtil {
 	 * @return
 	 */
 	@Nullable
-	public static LNGPortfolioModel findPortfolioModel(@NonNull final Schedule schedule) {
+	public static LNGReferenceModel findReferenceModel(@NonNull final Schedule schedule) {
 		EObject container = schedule.eContainer();
-		while (container != null && !(container instanceof LNGPortfolioModel)) {
+		while (container != null && !(container instanceof LNGScenarioModel)) {
 			container = container.eContainer();
 		}
-		return (LNGPortfolioModel) container;
+		final LNGScenarioModel scenarioModel = (LNGScenarioModel) container;
+		if (scenarioModel != null) {
+			return scenarioModel.getReferenceModel();
+		}
+		return null;
 	}
 
 	@Nullable
-	public static LNGPortfolioModel findPortfolioModel(@NonNull final LNGScenarioModel scenarioModel) {
-		return scenarioModel.getPortfolioModel();
+	public static LNGReferenceModel findReferenceModel(@NonNull final LNGScenarioModel scenarioModel) {
+		return scenarioModel.getReferenceModel();
 	}
 
 	@Nullable
 	public static Schedule findSchedule(@NonNull final LNGScenarioModel scenarioModel) {
-		final LNGPortfolioModel portfolioModel = findPortfolioModel(scenarioModel);
-		if (portfolioModel != null) {
-			final ScheduleModel scheduleModel = portfolioModel.getScheduleModel();
-			if (scheduleModel != null) {
-				return scheduleModel.getSchedule();
-			}
+		final ScheduleModel scheduleModel = scenarioModel.getScheduleModel();
+		if (scheduleModel != null) {
+			return scheduleModel.getSchedule();
 		}
 		return null;
 	}
 
 	@NonNull
 	public static PricingModel getPricingModel(@NonNull final LNGScenarioModel lngScenarioModel) {
-		final PricingModel pricingModel = lngScenarioModel.getPricingModel();
+		final LNGReferenceModel referenceModel = findReferenceModel(lngScenarioModel);
+		if (referenceModel == null) {
+			throw new IllegalArgumentException("Invalid scenario model");
+		}
+		final PricingModel pricingModel = referenceModel.getPricingModel();
 		if (pricingModel == null) {
 			throw new IllegalArgumentException("Invalid scenario model");
 		}
@@ -86,7 +104,11 @@ public final class ScenarioModelUtil {
 
 	@NonNull
 	public static CostModel getCostModel(@NonNull final LNGScenarioModel lngScenarioModel) {
-		final CostModel costModel = lngScenarioModel.getCostModel();
+		final LNGReferenceModel referenceModel = findReferenceModel(lngScenarioModel);
+		if (referenceModel == null) {
+			throw new IllegalArgumentException("Invalid scenario model");
+		}
+		final CostModel costModel = referenceModel.getCostModel();
 		if (costModel == null) {
 			throw new IllegalArgumentException("Invalid scenario model");
 		}
@@ -95,10 +117,58 @@ public final class ScenarioModelUtil {
 
 	@NonNull
 	public static PortModel getPortModel(@NonNull final LNGScenarioModel lngScenarioModel) {
-		final PortModel portModel = lngScenarioModel.getPortModel();
+		final LNGReferenceModel referenceModel = findReferenceModel(lngScenarioModel);
+		if (referenceModel == null) {
+			throw new IllegalArgumentException("Invalid scenario model");
+		}
+		final PortModel portModel = referenceModel.getPortModel();
 		if (portModel == null) {
 			throw new IllegalArgumentException("Invalid scenario model");
 		}
 		return portModel;
+	}
+
+	@NonNull
+	public static FleetModel getFleetModel(@NonNull final LNGScenarioModel lngScenarioModel) {
+		final LNGReferenceModel referenceModel = findReferenceModel(lngScenarioModel);
+		if (referenceModel == null) {
+			throw new IllegalArgumentException("Invalid scenario model");
+		}
+		final FleetModel fleetModel = referenceModel.getFleetModel();
+		if (fleetModel == null) {
+			throw new IllegalArgumentException("Invalid scenario model");
+		}
+		return fleetModel;
+	}
+
+	@Nullable
+	public static ScheduleModel getScheduleModel(@NonNull final LNGScenarioModel lngScenarioModel) {
+		return lngScenarioModel.getScheduleModel();
+	}
+
+	@NonNull
+	public static SpotMarketsModel getSpotMarketsModel(@NonNull final LNGScenarioModel lngScenarioModel) {
+		final LNGReferenceModel referenceModel = findReferenceModel(lngScenarioModel);
+		if (referenceModel == null) {
+			throw new IllegalArgumentException("Invalid scenario model");
+		}
+		final SpotMarketsModel spotMarketsModel = referenceModel.getSpotMarketsModel();
+		if (spotMarketsModel == null) {
+			throw new IllegalArgumentException("Invalid scenario model");
+		}
+		return spotMarketsModel;
+	}
+
+	@NonNull
+	public static CommercialModel getCommercialModel(@NonNull final LNGScenarioModel lngScenarioModel) {
+		final LNGReferenceModel referenceModel = findReferenceModel(lngScenarioModel);
+		if (referenceModel == null) {
+			throw new IllegalArgumentException("Invalid scenario model");
+		}
+		final CommercialModel commercialModel = referenceModel.getCommercialModel();
+		if (commercialModel == null) {
+			throw new IllegalArgumentException("Invalid scenario model");
+		}
+		return commercialModel;
 	}
 }

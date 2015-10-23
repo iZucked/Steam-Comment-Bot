@@ -14,8 +14,8 @@ import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
 import com.mmxlabs.models.common.commandservice.AbstractModelCommandProvider;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -33,17 +33,14 @@ public class ScheduleModelDirtyCommandProvider extends AbstractModelCommandProvi
 		if (getProvisionDepth() == 1) {
 			if (rootObject instanceof LNGScenarioModel) {
 				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
-				final LNGPortfolioModel portfolioModel = lngScenarioModel.getPortfolioModel();
-				if (portfolioModel != null) {
-					final ScheduleModel scheduleModel = portfolioModel.getScheduleModel();
-					if (scheduleModel != null) {
-						// Avoid recursion
-						if (parameter.getEStructuralFeature() == SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY) {
-							return null;
-						}
-
-						return SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY, Boolean.TRUE);
+				final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(lngScenarioModel);
+				if (scheduleModel != null) {
+					// Avoid recursion
+					if (parameter.getEStructuralFeature() == SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY) {
+						return null;
 					}
+
+					return SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY, Boolean.TRUE);
 				}
 			}
 		}

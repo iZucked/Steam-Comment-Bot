@@ -17,6 +17,7 @@ import com.mmxlabs.common.csv.FieldMap;
 import com.mmxlabs.common.csv.IDeferment;
 import com.mmxlabs.common.csv.IFieldMap;
 import com.mmxlabs.common.csv.IImportContext;
+import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
@@ -103,7 +104,10 @@ public class VesselClassImporter extends DefaultClassImporter {
 								if (cost.getRoute() != null && cost.getVesselClass() != null) {
 									final MMXRootObject rootObject = context.getRootObject();
 									if (rootObject instanceof LNGScenarioModel) {
-										((LNGScenarioModel) rootObject).getCostModel().getRouteCosts().add(cost);
+										final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+										final CostModel costModel = ScenarioModelUtil.getCostModel(lngScenarioModel);
+
+										costModel.getRouteCosts().add(cost);
 									}
 								}
 							}

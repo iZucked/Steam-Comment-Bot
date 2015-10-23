@@ -49,8 +49,8 @@ public class CanalCostConstraint extends AbstractModelConstraint {
 			if (rootObject instanceof LNGScenarioModel) {
 				LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 				final StringBuffer missingCanalNames = new StringBuffer();
-				final CostModel costModel = lngScenarioModel.getCostModel();
-				final PortModel portModel = lngScenarioModel.getPortModel();
+				final CostModel costModel = lngScenarioModel.getReferenceModel().getCostModel();
+				final PortModel portModel = lngScenarioModel.getReferenceModel().getPortModel();
 				if (costModel != null && portModel != null) {
 
 					boolean seenAnyCanalCosts = false;

@@ -30,8 +30,8 @@ public class CanalCostsView extends ScenarioTableViewerView<CanalCostsPane> {
 	protected void initViewerPane(final CanalCostsPane pane) {
 		final EditingDomain domain = getEditingDomain();
 		if (domain != null) {
-			pane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_CostModel(), PricingPackage.eINSTANCE.getCostModel_RouteCosts() }), getAdapterFactory(),
-					domain.getCommandStack());
+			pane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ReferenceModel(), LNGScenarioPackage.eINSTANCE.getLNGReferenceModel_CostModel(),
+					PricingPackage.eINSTANCE.getCostModel_RouteCosts() }), getAdapterFactory(), domain.getCommandStack());
 			pane.getViewer().setInput(getRootObject());
 		}
 	}

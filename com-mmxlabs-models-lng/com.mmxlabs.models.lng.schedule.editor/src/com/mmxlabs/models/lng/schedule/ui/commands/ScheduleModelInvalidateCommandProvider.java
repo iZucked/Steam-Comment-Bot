@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
@@ -32,7 +33,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  * 
  */
 public class ScheduleModelInvalidateCommandProvider extends BaseModelCommandProvider<Object> {
-	
+
 	@Override
 	protected boolean shouldHandleDeletion(final Object deletedObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
 		if (getContext() != null)
@@ -56,7 +57,7 @@ public class ScheduleModelInvalidateCommandProvider extends BaseModelCommandProv
 
 		if (rootObject instanceof LNGScenarioModel) {
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
-			final ScheduleModel scheduleModel = scenarioModel.getPortfolioModel().getScheduleModel();
+			final ScheduleModel scheduleModel = ScenarioModelUtil.getScheduleModel(scenarioModel);
 			if (scheduleModel == null) {
 				return null;
 			}
