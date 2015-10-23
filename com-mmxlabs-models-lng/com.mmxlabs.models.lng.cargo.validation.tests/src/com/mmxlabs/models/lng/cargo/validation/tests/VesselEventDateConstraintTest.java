@@ -30,7 +30,7 @@ public class VesselEventDateConstraintTest {
 	// Create some dates to test.
 	private static final long time = System.currentTimeMillis();
 	private static final LocalDateTime now = LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.of("UTC"));
-	private static final LocalDateTime nowPlusOne = LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.of("UTC"));
+	private static final LocalDateTime nowPlusOne = LocalDateTime.ofInstant(Instant.ofEpochMilli(time + 1), ZoneId.of("UTC"));
 
 	/**
 	 * Test the constraint succeeds with the correct input.
