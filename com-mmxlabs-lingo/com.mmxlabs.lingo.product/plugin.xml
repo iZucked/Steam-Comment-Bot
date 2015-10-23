@@ -23,20 +23,8 @@
                value="LiNGO">
          </property>
          <property
-               name="startupForegroundColor"
-               value="000000">
-         </property>
-         <property
-               name="startupMessageRect"
-               value="20,220,440,20">
-         </property>
-         <property
                name="startupProgressRect"
                value="20,210,440,15">
-         </property>
-         <property
-               name="preferenceCustomization"
-               value="plugin_customization.ini">
          </property>
          <property
                name="aboutImage"
@@ -46,6 +34,10 @@
         name="aboutText"
         value="LiNGO Platform&#x0A;&#x0A;Version: {0}&#x0A;Build: {1}">
        </property>
+  <property
+        name="preferenceCustomization"
+        value="plugin_customization.ini">
+  </property>
       </product>
    </extension>
    <extension
