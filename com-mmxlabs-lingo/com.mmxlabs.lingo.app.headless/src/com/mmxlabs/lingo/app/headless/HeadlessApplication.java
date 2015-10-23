@@ -138,7 +138,7 @@ public class HeadlessApplication implements IApplication {
 
 		final String outputFile = overrideSettings.getOutput();
 
-		final OptimiserSettings optimiserSettings = rootObject.getPortfolioModel().getParameters() == null ? ScenarioUtils.createDefaultSettings() : rootObject.getPortfolioModel().getParameters();
+		final OptimiserSettings optimiserSettings = rootObject.getParameters() == null ? ScenarioUtils.createDefaultSettings() : rootObject.getParameters();
 		assert optimiserSettings != null;
 
 		updateOptimiserSettings(rootObject, optimiserSettings, overrideSettings, headlessParameters);
@@ -372,14 +372,14 @@ public class HeadlessApplication implements IApplication {
 		LocalDate promptStart = parameters.getParameterValue("promptStart", LocalDate.class);
 		LocalDate promptEnd = parameters.getParameterValue("promptEnd", LocalDate.class);
 		if (promptStart != null) {
-			rootObject.getPortfolioModel().setPromptPeriodStart(promptStart);
+			rootObject.setPromptPeriodStart(promptStart);
 		} else {
-			rootObject.getPortfolioModel().unsetPromptPeriodStart();
+			rootObject.unsetPromptPeriodStart();
 		}
 		if (promptEnd != null) {
-			rootObject.getPortfolioModel().setPromptPeriodEnd(promptEnd);
+			rootObject.setPromptPeriodEnd(promptEnd);
 		} else {
-			rootObject.getPortfolioModel().unsetPromptPeriodEnd();
+			rootObject.unsetPromptPeriodEnd();
 		}
 	}
 
