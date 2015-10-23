@@ -14,26 +14,12 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.common.csv.CSVReader;
-import com.mmxlabs.common.csv.IDeferment;
-import com.mmxlabs.common.csv.IImportContext;
-import com.mmxlabs.models.lng.fleet.BaseFuel;
-import com.mmxlabs.models.lng.fleet.FleetModel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
-import com.mmxlabs.models.lng.port.PortModel;
-import com.mmxlabs.models.lng.port.Route;
-import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
-import com.mmxlabs.models.lng.pricing.CooldownPrice;
-import com.mmxlabs.models.lng.pricing.FleetCostModel;
-import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.lng.pricing.RouteCost;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.IClassImporter;
@@ -48,18 +34,12 @@ public class PricingModelImporter implements ISubmodelImporter {
 	private static final HashMap<String, String> inputs = new HashMap<String, String>();
 	public static final String PRICE_CURVE_KEY = "PRICE_CURVES";
 	public static final String CHARTER_CURVE_KEY = "CHARTER_CURVES";
-	public static final String COOLDOWN_PRICING_KEY = "COOLDOWN_PRICING";
-	/**
-	 */
 	public static final String BASEFUEL_PRICING_KEY = "BF_PRICING";
-	public static final String PORT_COSTS_KEY = "PORT_COSTS";
 
 	static {
 		inputs.put(PRICE_CURVE_KEY, "Commodity Curves");
 		inputs.put(CHARTER_CURVE_KEY, "Charter Curves");
-		inputs.put(COOLDOWN_PRICING_KEY, "Cooldown Prices");
 		inputs.put(BASEFUEL_PRICING_KEY, "Base Fuel Curves");
-		inputs.put(PORT_COSTS_KEY, "Port Costs");
 	}
 
 	@Inject
@@ -67,11 +47,7 @@ public class PricingModelImporter implements ISubmodelImporter {
 
 	private IClassImporter commodityIndexImporter;
 	private IClassImporter charterIndexImporter;
-
-	private IClassImporter cooldownPriceImporter;
 	private IClassImporter baseFuelIndexImporter;
-
-	private IClassImporter portCostImporter;
 
 	/**
 	 */
@@ -89,9 +65,7 @@ public class PricingModelImporter implements ISubmodelImporter {
 		if (importerRegistry != null) {
 			commodityIndexImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getCommodityIndex());
 			charterIndexImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getCharterIndex());
-			cooldownPriceImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getCooldownPrice());
 			baseFuelIndexImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getBaseFuelIndex());
-			portCostImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getPortCost());
 		}
 	}
 
@@ -102,85 +76,18 @@ public class PricingModelImporter implements ISubmodelImporter {
 
 	@Override
 	public UUIDObject importModel(final Map<String, CSVReader> inputs, final IMMXImportContext context) {
-		final PricingModel pricing = PricingFactory.eINSTANCE.createPricingModel();
+		final PricingModel pricingModel = PricingFactory.eINSTANCE.createPricingModel();
 		if (inputs.containsKey(PRICE_CURVE_KEY)) {
-			importCommodityCurves(pricing, inputs.get(PRICE_CURVE_KEY), context);
+			importCommodityCurves(pricingModel, inputs.get(PRICE_CURVE_KEY), context);
 		}
 		if (inputs.containsKey(CHARTER_CURVE_KEY)) {
-			importCharterCurves(pricing, inputs.get(CHARTER_CURVE_KEY), context);
+			importCharterCurves(pricingModel, inputs.get(CHARTER_CURVE_KEY), context);
 		}
 		if (inputs.containsKey(BASEFUEL_PRICING_KEY)) {
-			importBaseFuelCurves(pricing, inputs.get(BASEFUEL_PRICING_KEY), context);
-		}
-		if (inputs.containsKey(PORT_COSTS_KEY)) {
-			pricing.getPortCosts().addAll((Collection<? extends PortCost>) portCostImporter.importObjects(PricingPackage.eINSTANCE.getPortCost(), inputs.get(PORT_COSTS_KEY), context));
+			importBaseFuelCurves(pricingModel, inputs.get(BASEFUEL_PRICING_KEY), context);
 		}
 
-		final FleetCostModel fcm = PricingFactory.eINSTANCE.createFleetCostModel();
-		pricing.setFleetCost(fcm);
-
-		if (inputs.containsKey(COOLDOWN_PRICING_KEY)) {
-			pricing.getCooldownPrices().addAll(
-					(Collection<? extends CooldownPrice>) cooldownPriceImporter.importObjects(PricingPackage.eINSTANCE.getCooldownPrice(), inputs.get(COOLDOWN_PRICING_KEY), context));
-		}
-
-		context.doLater(new IDeferment() {
-			@Override
-			public void run(final IImportContext importContext) {
-				final IMMXImportContext context = (IMMXImportContext) importContext;
-				final MMXRootObject root = context.getRootObject();
-				if (root instanceof LNGScenarioModel) {
-					LNGScenarioModel scenarioModel = (LNGScenarioModel) root;
-					final PricingModel pricing = scenarioModel.getPricingModel();
-					final FleetModel fleet = scenarioModel.getFleetModel();
-					final PortModel port = scenarioModel.getPortModel();
-					if (pricing != null && fleet != null && port != null) {
-						for (final Route route : port.getRoutes()) {
-							if (route.isCanal()) {
-								for (final VesselClass vesselClass : fleet.getVesselClasses()) {
-									boolean found = false;
-									for (final RouteCost cost : pricing.getRouteCosts()) {
-										if (cost.getVesselClass() == vesselClass && cost.getRoute() == route) {
-											found = true;
-											break;
-										}
-									}
-									if (!found) {
-										context.addProblem(context.createProblem("There was no route cost for " + route.getName() + " with " + vesselClass.getName(), false, false, false));
-										final RouteCost cost = PricingFactory.eINSTANCE.createRouteCost();
-										cost.setRoute(route);
-										cost.setVesselClass(vesselClass);
-										pricing.getRouteCosts().add(cost);
-									}
-								}
-							}
-						}
-					}
-					if (pricing != null && fleet != null) {
-						for (final BaseFuel baseFuel : fleet.getBaseFuels()) {
-							boolean found = false;
-							for (final BaseFuelCost cost : pricing.getFleetCost().getBaseFuelPrices()) {
-								found = cost.getFuel() == baseFuel;
-								if (found)
-									break;
-							}
-							if (!found) {
-								final BaseFuelCost cost = PricingFactory.eINSTANCE.createBaseFuelCost();
-								cost.setFuel(baseFuel);
-								pricing.getFleetCost().getBaseFuelPrices().add(cost);
-							}
-						}
-					}
-				}
-			}
-
-			@Override
-			public int getStage() {
-				return IMMXImportContext.STAGE_MODIFY_SUBMODELS;
-			}
-		});
-
-		return pricing;
+		return pricingModel;
 	}
 
 	private void importCommodityCurves(final PricingModel pricing, final CSVReader csvReader, final IMMXImportContext context) {
@@ -201,8 +108,6 @@ public class PricingModelImporter implements ISubmodelImporter {
 		output.put(PRICE_CURVE_KEY, commodityIndexImporter.exportObjects(pricing.getCommodityIndices(), context));
 		output.put(CHARTER_CURVE_KEY, charterIndexImporter.exportObjects(pricing.getCharterIndices(), context));
 		output.put(BASEFUEL_PRICING_KEY, baseFuelIndexImporter.exportObjects(pricing.getBaseFuelPrices(), context));
-		output.put(COOLDOWN_PRICING_KEY, cooldownPriceImporter.exportObjects(pricing.getCooldownPrices(), context));
-		output.put(PORT_COSTS_KEY, portCostImporter.exportObjects(pricing.getPortCosts(), context));
 	}
 
 	@Override

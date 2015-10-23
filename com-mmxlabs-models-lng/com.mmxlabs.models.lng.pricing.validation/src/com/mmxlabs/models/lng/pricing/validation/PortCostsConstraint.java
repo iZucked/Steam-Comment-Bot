@@ -52,13 +52,13 @@ public class PortCostsConstraint extends AbstractModelMultiConstraint {
 				if (capability.equals(PortCapability.LOAD) && containsLoad && entry.getCost() <= 0) {
 					final String failureMessage = String.format("Port%s [%s] contain%s a load capability but load cost is <= $0", portNames.size() > 1 ? "s" : "", portsInQuestion, portNames.size() > 1 ? "" : "s");
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage, IStatus.WARNING));
-					dsd.addEObjectAndFeature(portCost, PricingPackage.Literals.PRICING_MODEL__PORT_COSTS);
+					dsd.addEObjectAndFeature(portCost, PricingPackage.Literals.COST_MODEL__PORT_COSTS);
 					failures.add(dsd);
 				}
 				if (capability.equals(PortCapability.DISCHARGE) && containsDischarge && entry.getCost() <= 0) {
 					final String failureMessage = String.format("Port%s [%s] contain%s a discharge capability but discharge cost is <= $0", portNames.size() > 1 ? "s" : "", portsInQuestion, portNames.size() > 1 ? "" : "s");
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage, IStatus.WARNING));
-					dsd.addEObjectAndFeature(portCost, PricingPackage.Literals.PRICING_MODEL__PORT_COSTS);
+					dsd.addEObjectAndFeature(portCost, PricingPackage.Literals.COST_MODEL__PORT_COSTS);
 					failures.add(dsd);
 				}
 			}

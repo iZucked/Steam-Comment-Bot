@@ -79,6 +79,7 @@ public class LNGScenarioModelItemProvider
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_SpotMarketsModel());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AnalyticsModel());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PortfolioModel());
+			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_CostModel());
 		}
 		return childrenFeatures;
 	}
@@ -140,6 +141,7 @@ public class LNGScenarioModelItemProvider
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SPOT_MARKETS_MODEL:
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANALYTICS_MODEL:
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PORTFOLIO_MODEL:
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__COST_MODEL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -191,6 +193,11 @@ public class LNGScenarioModelItemProvider
 			(createChildParameter
 				(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PortfolioModel(),
 				 LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_CostModel(),
+				 PricingFactory.eINSTANCE.createCostModel()));
 	}
 
 }

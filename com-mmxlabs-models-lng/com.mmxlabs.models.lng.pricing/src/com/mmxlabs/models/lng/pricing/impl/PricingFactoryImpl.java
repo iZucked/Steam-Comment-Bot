@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.pricing.impl;
 
+import com.mmxlabs.models.lng.pricing.*;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -17,7 +18,6 @@ import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
-import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.PortCost;
@@ -79,16 +79,16 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 			case PricingPackage.DATA_INDEX: return createDataIndex();
 			case PricingPackage.DERIVED_INDEX: return createDerivedIndex();
 			case PricingPackage.INDEX_POINT: return createIndexPoint();
-			case PricingPackage.FLEET_COST_MODEL: return createFleetCostModel();
+			case PricingPackage.COMMODITY_INDEX: return createCommodityIndex();
+			case PricingPackage.CHARTER_INDEX: return createCharterIndex();
+			case PricingPackage.BASE_FUEL_INDEX: return createBaseFuelIndex();
+			case PricingPackage.NAMED_INDEX_CONTAINER: return createNamedIndexContainer();
+			case PricingPackage.COST_MODEL: return createCostModel();
 			case PricingPackage.ROUTE_COST: return createRouteCost();
 			case PricingPackage.BASE_FUEL_COST: return createBaseFuelCost();
 			case PricingPackage.PORT_COST: return createPortCost();
 			case PricingPackage.PORT_COST_ENTRY: return createPortCostEntry();
 			case PricingPackage.COOLDOWN_PRICE: return createCooldownPrice();
-			case PricingPackage.COMMODITY_INDEX: return createCommodityIndex();
-			case PricingPackage.CHARTER_INDEX: return createCharterIndex();
-			case PricingPackage.BASE_FUEL_INDEX: return createBaseFuelIndex();
-			case PricingPackage.NAMED_INDEX_CONTAINER: return createNamedIndexContainer();
 			case PricingPackage.PORTS_PRICE_MAP: return createPortsPriceMap();
 			case PricingPackage.PORTS_EXPRESSION_MAP: return createPortsExpressionMap();
 			case PricingPackage.PORTS_SPLIT_PRICE_MAP: return createPortsSplitPriceMap();
@@ -136,16 +136,6 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	public <Value> IndexPoint<Value> createIndexPoint() {
 		IndexPointImpl<Value> indexPoint = new IndexPointImpl<Value>();
 		return indexPoint;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public FleetCostModel createFleetCostModel() {
-		FleetCostModelImpl fleetCostModel = new FleetCostModelImpl();
-		return fleetCostModel;
 	}
 
 	/**
@@ -236,6 +226,16 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	public <Value> NamedIndexContainer<Value> createNamedIndexContainer() {
 		NamedIndexContainerImpl<Value> namedIndexContainer = new NamedIndexContainerImpl<Value>();
 		return namedIndexContainer;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CostModel createCostModel() {
+		CostModelImpl costModel = new CostModelImpl();
+		return costModel;
 	}
 
 	/**

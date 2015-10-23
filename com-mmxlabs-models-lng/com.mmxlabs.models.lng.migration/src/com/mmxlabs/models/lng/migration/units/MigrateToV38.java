@@ -18,12 +18,12 @@ public class MigrateToV38 extends AbstractMigrationUnit {
 
 	@Override
 	public int getScenarioSourceVersion() {
-		return 36;
+		return 37;
 	}
 
 	@Override
 	public int getScenarioDestinationVersion() {
-		return 37;
+		return 38;
 	}
 
 	@Override

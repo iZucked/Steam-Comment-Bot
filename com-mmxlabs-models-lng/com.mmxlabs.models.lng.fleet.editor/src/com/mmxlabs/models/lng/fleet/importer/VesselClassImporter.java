@@ -20,10 +20,11 @@ import com.mmxlabs.common.csv.IImportContext;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
-import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.IClassImporter;
@@ -102,7 +103,7 @@ public class VesselClassImporter extends DefaultClassImporter {
 								if (cost.getRoute() != null && cost.getVesselClass() != null) {
 									final MMXRootObject rootObject = context.getRootObject();
 									if (rootObject instanceof LNGScenarioModel) {
-										((LNGScenarioModel) rootObject).getPricingModel().getRouteCosts().add(cost);
+										((LNGScenarioModel) rootObject).getCostModel().getRouteCosts().add(cost);
 									}
 								}
 							}
@@ -174,18 +175,16 @@ public class VesselClassImporter extends DefaultClassImporter {
 		final MMXRootObject rootObject = context.getRootObject();
 		if (rootObject instanceof LNGScenarioModel) {
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
-			final PricingModel pm = lngScenarioModel.getPricingModel();
-			if (pm != null) {
-				for (final RouteCost rc : pm.getRouteCosts()) {
-					if (rc.getVesselClass() == vc) {
-						final Map<String, String> exportedCost = routeCostImporter.exportObjects(Collections.singleton(rc), context).iterator().next();
-						exportedCost.remove("vesselclass");
-						final String route = exportedCost.get("route");
-						exportedCost.remove("route");
-						final String prefix = route + ".pricing.";
-						for (final Map.Entry<String, String> e : exportedCost.entrySet()) {
-							result.put(prefix + e.getKey(), e.getValue());
-						}
+			final CostModel costModel = ScenarioModelUtil.getCostModel(lngScenarioModel);
+			for (final RouteCost rc : costModel.getRouteCosts()) {
+				if (rc.getVesselClass() == vc) {
+					final Map<String, String> exportedCost = routeCostImporter.exportObjects(Collections.singleton(rc), context).iterator().next();
+					exportedCost.remove("vesselclass");
+					final String route = exportedCost.get("route");
+					exportedCost.remove("route");
+					final String prefix = route + ".pricing.";
+					for (final Map.Entry<String, String> e : exportedCost.entrySet()) {
+						result.put(prefix + e.getKey(), e.getValue());
 					}
 				}
 			}

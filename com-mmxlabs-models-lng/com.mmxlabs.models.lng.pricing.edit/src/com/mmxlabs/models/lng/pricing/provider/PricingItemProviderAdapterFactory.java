@@ -179,29 +179,6 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.FleetCostModel} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected FleetCostModelItemProvider fleetCostModelItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.FleetCostModel}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createFleetCostModelAdapter() {
-		if (fleetCostModelItemProvider == null) {
-			fleetCostModelItemProvider = new FleetCostModelItemProvider(this);
-		}
-
-		return fleetCostModelItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.RouteCost} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -406,6 +383,29 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		}
 
 		return namedIndexContainerItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.CostModel} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CostModelItemProvider costModelItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.CostModel}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCostModelAdapter() {
+		if (costModelItemProvider == null) {
+			costModelItemProvider = new CostModelItemProvider(this);
+		}
+
+		return costModelItemProvider;
 	}
 
 	/**
@@ -630,16 +630,16 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		if (dataIndexItemProvider != null) dataIndexItemProvider.dispose();
 		if (derivedIndexItemProvider != null) derivedIndexItemProvider.dispose();
 		if (indexPointItemProvider != null) indexPointItemProvider.dispose();
-		if (fleetCostModelItemProvider != null) fleetCostModelItemProvider.dispose();
+		if (commodityIndexItemProvider != null) commodityIndexItemProvider.dispose();
+		if (charterIndexItemProvider != null) charterIndexItemProvider.dispose();
+		if (baseFuelIndexItemProvider != null) baseFuelIndexItemProvider.dispose();
+		if (namedIndexContainerItemProvider != null) namedIndexContainerItemProvider.dispose();
+		if (costModelItemProvider != null) costModelItemProvider.dispose();
 		if (routeCostItemProvider != null) routeCostItemProvider.dispose();
 		if (baseFuelCostItemProvider != null) baseFuelCostItemProvider.dispose();
 		if (portCostItemProvider != null) portCostItemProvider.dispose();
 		if (portCostEntryItemProvider != null) portCostEntryItemProvider.dispose();
 		if (cooldownPriceItemProvider != null) cooldownPriceItemProvider.dispose();
-		if (commodityIndexItemProvider != null) commodityIndexItemProvider.dispose();
-		if (charterIndexItemProvider != null) charterIndexItemProvider.dispose();
-		if (baseFuelIndexItemProvider != null) baseFuelIndexItemProvider.dispose();
-		if (namedIndexContainerItemProvider != null) namedIndexContainerItemProvider.dispose();
 		if (portsPriceMapItemProvider != null) portsPriceMapItemProvider.dispose();
 		if (portsExpressionMapItemProvider != null) portsExpressionMapItemProvider.dispose();
 		if (portsSplitPriceMapItemProvider != null) portsSplitPriceMapItemProvider.dispose();

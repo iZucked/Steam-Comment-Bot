@@ -21,11 +21,12 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
-import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
@@ -60,21 +61,19 @@ public class RouteCostModelCommandProvider extends BaseModelCommandProvider<Obje
 		}
 		final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
 
-		final PricingModel pricing = scenarioModel.getPricingModel();
-		if (pricing == null) {
-			return null;
-		}
+		final CostModel costModel = ScenarioModelUtil.getCostModel(scenarioModel);
 
 		final Set<Object> objects = getAddedObjects();
 		objects.add(addedObject);
 
 		final List<RouteCost> extraCosts = new ArrayList<RouteCost>();
 		if (addedObject instanceof Route) {
-			if (((Route) addedObject).isCanal() == false)
+			if (((Route) addedObject).isCanal() == false) {
 				return null;
+			}
 			final FleetModel fleetModel = scenarioModel.getFleetModel();
 			add_costs_for_new_route: for (final VesselClass vesselClass : fleetModel.getVesselClasses()) {
-				for (final RouteCost routeCost : pricing.getRouteCosts()) {
+				for (final RouteCost routeCost : costModel.getRouteCosts()) {
 					if (routeCost.getVesselClass() == vesselClass && routeCost.getRoute() == addedObject)
 						continue add_costs_for_new_route;
 				}
@@ -84,7 +83,7 @@ public class RouteCostModelCommandProvider extends BaseModelCommandProvider<Obje
 			add_costs_for_new_route: for (final Object obj : objects) {
 				if (obj instanceof VesselClass) {
 					final VesselClass vesselClass = (VesselClass) obj;
-					for (final RouteCost routeCost : pricing.getRouteCosts()) {
+					for (final RouteCost routeCost : costModel.getRouteCosts()) {
 						if (routeCost.getVesselClass() == vesselClass && routeCost.getRoute() == addedObject)
 							continue add_costs_for_new_route;
 					}
@@ -95,7 +94,7 @@ public class RouteCostModelCommandProvider extends BaseModelCommandProvider<Obje
 		} else if (addedObject instanceof VesselClass) {
 			final PortModel portModel = scenarioModel.getPortModel();
 			add_costs_for_new_vc: for (final Route route : portModel.getRoutes()) {
-				for (final RouteCost routeCost : pricing.getRouteCosts()) {
+				for (final RouteCost routeCost : costModel.getRouteCosts()) {
 					if (routeCost.getVesselClass() == addedObject && routeCost.getRoute() == route)
 						continue add_costs_for_new_vc;
 				}
@@ -107,7 +106,7 @@ public class RouteCostModelCommandProvider extends BaseModelCommandProvider<Obje
 			add_costs_for_new_vc: for (final Object obj : objects) {
 				if (obj instanceof Route) {
 					final Route route = (Route) obj;
-					for (final RouteCost routeCost : pricing.getRouteCosts()) {
+					for (final RouteCost routeCost : costModel.getRouteCosts()) {
 						if (routeCost.getVesselClass() == addedObject && routeCost.getRoute() == route)
 							continue add_costs_for_new_vc;
 					}
@@ -120,7 +119,7 @@ public class RouteCostModelCommandProvider extends BaseModelCommandProvider<Obje
 		if (extraCosts.isEmpty()) {
 			return null;
 		} else {
-			return AddCommand.create(domain, pricing, PricingPackage.eINSTANCE.getPricingModel_RouteCosts(), extraCosts);
+			return AddCommand.create(domain, costModel, PricingPackage.eINSTANCE.getCostModel_RouteCosts(), extraCosts);
 		}
 	}
 
@@ -131,13 +130,11 @@ public class RouteCostModelCommandProvider extends BaseModelCommandProvider<Obje
 		}
 		final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
 
-		final PricingModel pricing = scenarioModel.getPricingModel();
-		if (pricing == null) {
-			return null;
-		}
+		final CostModel costModel = ScenarioModelUtil.getCostModel(scenarioModel);
+
 		final List<RouteCost> deletedCosts = new ArrayList<RouteCost>();
 
-		for (final RouteCost cost : pricing.getRouteCosts()) {
+		for (final RouteCost cost : costModel.getRouteCosts()) {
 			if (cost.getRoute() == deletedObject || cost.getVesselClass() == deletedObject) {
 				deletedCosts.add(cost);
 			}

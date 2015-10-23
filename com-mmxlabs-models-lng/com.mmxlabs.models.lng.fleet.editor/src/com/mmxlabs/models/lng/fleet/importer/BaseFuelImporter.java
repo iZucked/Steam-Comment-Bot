@@ -16,10 +16,11 @@ import com.mmxlabs.common.csv.IImportContext;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
+import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
-import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.util.importer.IMMXExportContext;
 import com.mmxlabs.models.util.importer.IMMXImportContext;
@@ -42,7 +43,7 @@ public class BaseFuelImporter extends DefaultClassImporter {
 		if (row.containsKey(indexKey)) {
 
 			final String indexName = row.get(indexKey);
-			// cost.setPrice(Double.parseDouble(row.get("price")));
+			assert indexName != null;
 
 			context.doLater(new IDeferment() {
 
@@ -51,23 +52,22 @@ public class BaseFuelImporter extends DefaultClassImporter {
 					final IMMXImportContext context = (IMMXImportContext) importContext;
 					final MMXRootObject rootObject = context.getRootObject();
 					if (rootObject instanceof LNGScenarioModel) {
-						final PricingModel pricingModel = ((LNGScenarioModel) rootObject).getPricingModel();
+						final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+						final CostModel costModel = ScenarioModelUtil.getCostModel(lngScenarioModel);
 						final BaseFuelIndex index = (BaseFuelIndex) context.getNamedObject(indexName, PricingPackage.Literals.BASE_FUEL_INDEX);
-						if (pricingModel != null) {
 
-							final EList<BaseFuelCost> baseFuelPrices = pricingModel.getFleetCost().getBaseFuelPrices();
-							for (final BaseFuelCost baseFuelCost : baseFuelPrices) {
-								if (baseFuelCost.getFuel() == fuel) {
-									baseFuelCost.setIndex(index);
-									return;
-								}
+						final EList<BaseFuelCost> baseFuelPrices = costModel.getBaseFuelCosts();
+						for (final BaseFuelCost baseFuelCost : baseFuelPrices) {
+							if (baseFuelCost.getFuel() == fuel) {
+								baseFuelCost.setIndex(index);
+								return;
 							}
-							final BaseFuelCost baseFuelCost = PricingFactory.eINSTANCE.createBaseFuelCost();
-							baseFuelCost.setFuel(fuel);
-							baseFuelCost.setIndex(index);
-
-							baseFuelPrices.add(baseFuelCost);
 						}
+						final BaseFuelCost baseFuelCost = PricingFactory.eINSTANCE.createBaseFuelCost();
+						baseFuelCost.setFuel(fuel);
+						baseFuelCost.setIndex(index);
+
+						baseFuelPrices.add(baseFuelCost);
 					}
 				}
 
@@ -89,13 +89,12 @@ public class BaseFuelImporter extends DefaultClassImporter {
 		final Map<String, String> result = super.exportObject(object, context);
 		final MMXRootObject rootObject = context.getRootObject();
 		if (rootObject instanceof LNGScenarioModel) {
-			final PricingModel pm = ((LNGScenarioModel) rootObject).getPricingModel();
-			if (pm != null) {
-				for (final BaseFuelCost cost : pm.getFleetCost().getBaseFuelPrices()) {
-					if (cost.getFuel() == bf) {
-						result.put("index", cost.getIndex().getName());
-						break;
-					}
+			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+			final CostModel costModel = ScenarioModelUtil.getCostModel(lngScenarioModel);
+			for (final BaseFuelCost cost : costModel.getBaseFuelCosts()) {
+				if (cost.getFuel() == bf) {
+					result.put("index", cost.getIndex().getName());
+					break;
 				}
 			}
 		}

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.pricing.util;
 
+import com.mmxlabs.models.lng.pricing.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
@@ -15,7 +16,6 @@ import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
-import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
@@ -123,48 +123,6 @@ public class PricingSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case PricingPackage.FLEET_COST_MODEL: {
-				FleetCostModel fleetCostModel = (FleetCostModel)theEObject;
-				T result = caseFleetCostModel(fleetCostModel);
-				if (result == null) result = caseMMXObject(fleetCostModel);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case PricingPackage.ROUTE_COST: {
-				RouteCost routeCost = (RouteCost)theEObject;
-				T result = caseRouteCost(routeCost);
-				if (result == null) result = caseMMXObject(routeCost);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case PricingPackage.BASE_FUEL_COST: {
-				BaseFuelCost baseFuelCost = (BaseFuelCost)theEObject;
-				T result = caseBaseFuelCost(baseFuelCost);
-				if (result == null) result = caseMMXObject(baseFuelCost);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case PricingPackage.PORT_COST: {
-				PortCost portCost = (PortCost)theEObject;
-				T result = casePortCost(portCost);
-				if (result == null) result = caseMMXObject(portCost);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case PricingPackage.PORT_COST_ENTRY: {
-				PortCostEntry portCostEntry = (PortCostEntry)theEObject;
-				T result = casePortCostEntry(portCostEntry);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case PricingPackage.COOLDOWN_PRICE: {
-				CooldownPrice cooldownPrice = (CooldownPrice)theEObject;
-				T result = caseCooldownPrice(cooldownPrice);
-				if (result == null) result = casePortsExpressionMap(cooldownPrice);
-				if (result == null) result = caseMMXObject(cooldownPrice);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case PricingPackage.COMMODITY_INDEX: {
 				CommodityIndex commodityIndex = (CommodityIndex)theEObject;
 				T result = caseCommodityIndex(commodityIndex);
@@ -201,6 +159,49 @@ public class PricingSwitch<T> extends Switch<T> {
 				if (result == null) result = caseUUIDObject(namedIndexContainer);
 				if (result == null) result = caseNamedObject(namedIndexContainer);
 				if (result == null) result = caseMMXObject(namedIndexContainer);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.COST_MODEL: {
+				CostModel costModel = (CostModel)theEObject;
+				T result = caseCostModel(costModel);
+				if (result == null) result = caseUUIDObject(costModel);
+				if (result == null) result = caseMMXObject(costModel);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.ROUTE_COST: {
+				RouteCost routeCost = (RouteCost)theEObject;
+				T result = caseRouteCost(routeCost);
+				if (result == null) result = caseMMXObject(routeCost);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.BASE_FUEL_COST: {
+				BaseFuelCost baseFuelCost = (BaseFuelCost)theEObject;
+				T result = caseBaseFuelCost(baseFuelCost);
+				if (result == null) result = caseMMXObject(baseFuelCost);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.PORT_COST: {
+				PortCost portCost = (PortCost)theEObject;
+				T result = casePortCost(portCost);
+				if (result == null) result = caseMMXObject(portCost);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.PORT_COST_ENTRY: {
+				PortCostEntry portCostEntry = (PortCostEntry)theEObject;
+				T result = casePortCostEntry(portCostEntry);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.COOLDOWN_PRICE: {
+				CooldownPrice cooldownPrice = (CooldownPrice)theEObject;
+				T result = caseCooldownPrice(cooldownPrice);
+				if (result == null) result = casePortsExpressionMap(cooldownPrice);
+				if (result == null) result = caseMMXObject(cooldownPrice);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -308,21 +309,6 @@ public class PricingSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public <Value> T caseIndex(Index<Value> object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Fleet Cost Model</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Fleet Cost Model</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseFleetCostModel(FleetCostModel object) {
 		return null;
 	}
 
@@ -458,6 +444,21 @@ public class PricingSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public <Value> T caseNamedIndexContainer(NamedIndexContainer<Value> object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Cost Model</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Cost Model</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCostModel(CostModel object) {
 		return null;
 	}
 

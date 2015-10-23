@@ -16,10 +16,11 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import com.mmxlabs.models.common.commandservice.BaseModelCommandProvider;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
+import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
-import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
@@ -43,20 +44,17 @@ public class BaseFuelCostModelCommandProvider extends BaseModelCommandProvider<O
 			if (!(rootObject instanceof LNGScenarioModel)) {
 				return null;
 			}
-			LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
+			final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
 
-			final PricingModel pricing = scenarioModel.getPricingModel();
-			if (pricing == null) {
-				return null;
-			}
-			for (final BaseFuelCost existing : pricing.getFleetCost().getBaseFuelPrices()) {
+			final CostModel costModel = ScenarioModelUtil.getCostModel(scenarioModel);
+			for (final BaseFuelCost existing : costModel.getBaseFuelCosts()) {
 				if (existing.getFuel() == added) {
 					return null;
 				}
 			}
 			final BaseFuelCost cost = PricingFactory.eINSTANCE.createBaseFuelCost();
 			cost.setFuel((BaseFuel) added);
-			return AddCommand.create(domain, pricing.getFleetCost(), PricingPackage.eINSTANCE.getFleetCostModel_BaseFuelPrices(), cost);
+			return AddCommand.create(domain, costModel, PricingPackage.eINSTANCE.getCostModel_BaseFuelCosts(), cost);
 		}
 		return null;
 	}
@@ -67,13 +65,10 @@ public class BaseFuelCostModelCommandProvider extends BaseModelCommandProvider<O
 			if (!(rootObject instanceof LNGScenarioModel)) {
 				return null;
 			}
-			LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
+			final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
 
-			final PricingModel pricing = scenarioModel.getPricingModel();
-			if (pricing == null) {
-				return null;
-			}
-			for (final BaseFuelCost cost : pricing.getFleetCost().getBaseFuelPrices()) {
+			final CostModel costModel = ScenarioModelUtil.getCostModel(scenarioModel);
+			for (final BaseFuelCost cost : costModel.getBaseFuelCosts()) {
 				if (cost.getFuel() == deleted) {
 					return DeleteCommand.create(domain, cost);
 				}

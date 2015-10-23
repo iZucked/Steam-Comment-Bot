@@ -49,31 +49,8 @@ public class PricingModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addPortCostsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Port Costs feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addPortCostsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_PricingModel_portCosts_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PricingModel_portCosts_feature", "_UI_PricingModel_type"),
-				 PricingPackage.Literals.PRICING_MODEL__PORT_COSTS,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
 	}
 
 	/**
@@ -90,10 +67,6 @@ public class PricingModelItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES);
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES);
-			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__FLEET_COST);
-			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__ROUTE_COSTS);
-			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__PORT_COSTS);
-			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__COOLDOWN_PRICES);
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES);
 		}
 		return childrenFeatures;
@@ -151,10 +124,6 @@ public class PricingModelItemProvider
 		switch (notification.getFeatureID(PricingModel.class)) {
 			case PricingPackage.PRICING_MODEL__COMMODITY_INDICES:
 			case PricingPackage.PRICING_MODEL__CHARTER_INDICES:
-			case PricingPackage.PRICING_MODEL__FLEET_COST:
-			case PricingPackage.PRICING_MODEL__ROUTE_COSTS:
-			case PricingPackage.PRICING_MODEL__PORT_COSTS:
-			case PricingPackage.PRICING_MODEL__COOLDOWN_PRICES:
 			case PricingPackage.PRICING_MODEL__BASE_FUEL_PRICES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
@@ -182,26 +151,6 @@ public class PricingModelItemProvider
 			(createChildParameter
 				(PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES,
 				 PricingFactory.eINSTANCE.createCharterIndex()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PricingPackage.Literals.PRICING_MODEL__FLEET_COST,
-				 PricingFactory.eINSTANCE.createFleetCostModel()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PricingPackage.Literals.PRICING_MODEL__ROUTE_COSTS,
-				 PricingFactory.eINSTANCE.createRouteCost()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PricingPackage.Literals.PRICING_MODEL__PORT_COSTS,
-				 PricingFactory.eINSTANCE.createPortCost()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PricingPackage.Literals.PRICING_MODEL__COOLDOWN_PRICES,
-				 PricingFactory.eINSTANCE.createCooldownPrice()));
 
 		newChildDescriptors.add
 			(createChildParameter

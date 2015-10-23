@@ -170,6 +170,11 @@
           subModelClassName="com.mmxlabs.models.lng.pricing.PricingModel"
           subModelImporterClass="com.mmxlabs.models.lng.pricing.importers.PricingModelImporter">
     </submodelImporter>
+    <submodelImporter
+          ID="com.mmxlabs.models.lng.pricing.editor.costModelImporter"
+          subModelClassName="com.mmxlabs.models.lng.pricing.CostModel"
+          subModelImporterClass="com.mmxlabs.models.lng.pricing.importers.CostModelImporter">
+    </submodelImporter>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.jointmodeleditors">

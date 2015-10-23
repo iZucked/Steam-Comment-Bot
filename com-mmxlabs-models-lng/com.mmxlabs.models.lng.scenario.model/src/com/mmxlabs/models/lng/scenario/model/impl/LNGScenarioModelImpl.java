@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -112,6 +113,16 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * @ordered
 	 */
 	protected LNGPortfolioModel portfolioModel;
+
+	/**
+	 * The cached value of the '{@link #getCostModel() <em>Cost Model</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCostModel()
+	 * @generated
+	 * @ordered
+	 */
+	protected CostModel costModel;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -599,6 +610,72 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public CostModel getCostModel() {
+		if (costModel != null && costModel.eIsProxy()) {
+			InternalEObject oldCostModel = (InternalEObject)costModel;
+			costModel = (CostModel)eResolveProxy(oldCostModel);
+			if (costModel != oldCostModel) {
+				InternalEObject newCostModel = (InternalEObject)costModel;
+				NotificationChain msgs = oldCostModel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__COST_MODEL, null, null);
+				if (newCostModel.eInternalContainer() == null) {
+					msgs = newCostModel.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__COST_MODEL, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LNGScenarioPackage.LNG_SCENARIO_MODEL__COST_MODEL, oldCostModel, costModel));
+			}
+		}
+		return costModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CostModel basicGetCostModel() {
+		return costModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetCostModel(CostModel newCostModel, NotificationChain msgs) {
+		CostModel oldCostModel = costModel;
+		costModel = newCostModel;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__COST_MODEL, oldCostModel, newCostModel);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCostModel(CostModel newCostModel) {
+		if (newCostModel != costModel) {
+			NotificationChain msgs = null;
+			if (costModel != null)
+				msgs = ((InternalEObject)costModel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__COST_MODEL, null, msgs);
+			if (newCostModel != null)
+				msgs = ((InternalEObject)newCostModel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__COST_MODEL, null, msgs);
+			msgs = basicSetCostModel(newCostModel, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__COST_MODEL, newCostModel, newCostModel));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -616,6 +693,8 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 				return basicSetAnalyticsModel(null, msgs);
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PORTFOLIO_MODEL:
 				return basicSetPortfolioModel(null, msgs);
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__COST_MODEL:
+				return basicSetCostModel(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -649,6 +728,9 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PORTFOLIO_MODEL:
 				if (resolve) return getPortfolioModel();
 				return basicGetPortfolioModel();
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__COST_MODEL:
+				if (resolve) return getCostModel();
+				return basicGetCostModel();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -681,6 +763,9 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 				return;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PORTFOLIO_MODEL:
 				setPortfolioModel((LNGPortfolioModel)newValue);
+				return;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__COST_MODEL:
+				setCostModel((CostModel)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -715,6 +800,9 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PORTFOLIO_MODEL:
 				setPortfolioModel((LNGPortfolioModel)null);
 				return;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__COST_MODEL:
+				setCostModel((CostModel)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -741,6 +829,8 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 				return analyticsModel != null;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PORTFOLIO_MODEL:
 				return portfolioModel != null;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__COST_MODEL:
+				return costModel != null;
 		}
 		return super.eIsSet(featureID);
 	}

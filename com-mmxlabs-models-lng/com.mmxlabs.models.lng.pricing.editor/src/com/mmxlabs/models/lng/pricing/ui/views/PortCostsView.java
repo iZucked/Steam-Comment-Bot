@@ -30,7 +30,7 @@ public class PortCostsView extends ScenarioTableViewerView<PortCostPane> {
 	protected void initViewerPane(final PortCostPane pane) {
 		final EditingDomain domain = getEditingDomain();
 		if (domain != null) {
-			pane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PricingModel(), PricingPackage.eINSTANCE.getPricingModel_PortCosts() }), getAdapterFactory(),
+			pane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_CostModel(), PricingPackage.eINSTANCE.getCostModel_PortCosts() }), getAdapterFactory(),
 					domain.getCommandStack());
 			pane.getViewer().setInput(getRootObject());
 		}

@@ -66,10 +66,6 @@ public class PricingModelComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_commodityIndicesEditor(detailComposite, topClass);
 		add_charterIndicesEditor(detailComposite, topClass);
-		add_fleetCostEditor(detailComposite, topClass);
-		add_routeCostsEditor(detailComposite, topClass);
-		add_portCostsEditor(detailComposite, topClass);
-		add_cooldownPricesEditor(detailComposite, topClass);
 		add_baseFuelPricesEditor(detailComposite, topClass);
 	}
 	/**
@@ -88,40 +84,6 @@ public class PricingModelComponentHelper extends BaseComponentHelper {
 	protected void add_charterIndicesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES));
 	}
-	/**
-	 * Create the editor for the fleetCost feature on PricingModel
-	 *
-	 * @generated
-	 */
-	protected void add_fleetCostEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__FLEET_COST));
-	}
-	/**
-	 * Create the editor for the routeCosts feature on PricingModel
-	 *
-	 * @generated
-	 */
-	protected void add_routeCostsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__ROUTE_COSTS));
-	}
-	/**
-	 * Create the editor for the portCosts feature on PricingModel
-	 *
-	 * @generated
-	 */
-	protected void add_portCostsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__PORT_COSTS));
-	}
-
-	/**
-	 * Create the editor for the cooldownPrices feature on PricingModel
-	 *
-	 * @generated
-	 */
-	protected void add_cooldownPricesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__COOLDOWN_PRICES));
-	}
-
 	/**
 	 * Create the editor for the baseFuelPrices feature on PricingModel
 	 *

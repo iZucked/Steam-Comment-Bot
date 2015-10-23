@@ -60,15 +60,6 @@ public interface PricingFactory extends EFactory {
 	<Value> IndexPoint<Value> createIndexPoint();
 
 	/**
-	 * Returns a new object of class '<em>Fleet Cost Model</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Fleet Cost Model</em>'.
-	 * @generated
-	 */
-	FleetCostModel createFleetCostModel();
-
-	/**
 	 * Returns a new object of class '<em>Route Cost</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -148,6 +139,15 @@ public interface PricingFactory extends EFactory {
 	 * @generated
 	 */
 	<Value> NamedIndexContainer<Value> createNamedIndexContainer();
+
+	/**
+	 * Returns a new object of class '<em>Cost Model</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Cost Model</em>'.
+	 * @generated
+	 */
+	CostModel createCostModel();
 
 	/**
 	 * Returns a new object of class '<em>Ports Price Map</em>'.

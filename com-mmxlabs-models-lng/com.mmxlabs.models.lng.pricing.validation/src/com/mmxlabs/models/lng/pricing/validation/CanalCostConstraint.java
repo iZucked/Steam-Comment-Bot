@@ -17,7 +17,7 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
-import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
@@ -49,9 +49,9 @@ public class CanalCostConstraint extends AbstractModelConstraint {
 			if (rootObject instanceof LNGScenarioModel) {
 				LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 				final StringBuffer missingCanalNames = new StringBuffer();
-				final PricingModel pricingModel = lngScenarioModel.getPricingModel();
+				final CostModel costModel = lngScenarioModel.getCostModel();
 				final PortModel portModel = lngScenarioModel.getPortModel();
-				if (pricingModel != null && portModel != null) {
+				if (costModel != null && portModel != null) {
 
 					boolean seenAnyCanalCosts = false;
 					boolean seenAnyCanalParameters = false;
@@ -60,7 +60,7 @@ public class CanalCostConstraint extends AbstractModelConstraint {
 						if (route.isCanal()) {
 							// If the vessel class container is null, then we are probably in a dialog and may not have route costs yet - however the dialog cannot create them, so skip this check
 							boolean seenCanalCost = vesselClass.eContainer() == null;
-							routeCosts: for (final RouteCost routeCost : pricingModel.getRouteCosts()) {
+							routeCosts: for (final RouteCost routeCost : costModel.getRouteCosts()) {
 								if ((routeCost.getVesselClass() == replacement || routeCost.getVesselClass() == original) && routeCost.getRoute() == route) {
 									seenCanalCost = true;
 									break routeCosts;

@@ -8,6 +8,9 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.pricing.CostModel;
+import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -70,5 +73,32 @@ public final class ScenarioModelUtil {
 			}
 		}
 		return null;
+	}
+
+	@NonNull
+	public static PricingModel getPricingModel(@NonNull final LNGScenarioModel lngScenarioModel) {
+		final PricingModel pricingModel = lngScenarioModel.getPricingModel();
+		if (pricingModel == null) {
+			throw new IllegalArgumentException("Invalid scenario model");
+		}
+		return pricingModel;
+	}
+
+	@NonNull
+	public static CostModel getCostModel(@NonNull final LNGScenarioModel lngScenarioModel) {
+		final CostModel costModel = lngScenarioModel.getCostModel();
+		if (costModel == null) {
+			throw new IllegalArgumentException("Invalid scenario model");
+		}
+		return costModel;
+	}
+
+	@NonNull
+	public static PortModel getPortModel(@NonNull final LNGScenarioModel lngScenarioModel) {
+		final PortModel portModel = lngScenarioModel.getPortModel();
+		if (portModel == null) {
+			throw new IllegalArgumentException("Invalid scenario model");
+		}
+		return portModel;
 	}
 }

@@ -194,6 +194,15 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getLNGScenarioModel_CostModel() {
+		return (EReference)lngScenarioModelEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getLNGPortfolioModel() {
 		return lngPortfolioModelEClass;
 	}
@@ -288,6 +297,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__SPOT_MARKETS_MODEL);
 		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__ANALYTICS_MODEL);
 		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__PORTFOLIO_MODEL);
+		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__COST_MODEL);
 
 		lngPortfolioModelEClass = createEClass(LNG_PORTFOLIO_MODEL);
 		createEReference(lngPortfolioModelEClass, LNG_PORTFOLIO_MODEL__CARGO_MODEL);
@@ -352,6 +362,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 		initEReference(getLNGScenarioModel_SpotMarketsModel(), theSpotMarketsPackage.getSpotMarketsModel(), null, "spotMarketsModel", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getLNGScenarioModel_AnalyticsModel(), theAnalyticsPackage.getAnalyticsModel(), null, "analyticsModel", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getLNGScenarioModel_PortfolioModel(), this.getLNGPortfolioModel(), null, "portfolioModel", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLNGScenarioModel_CostModel(), thePricingPackage.getCostModel(), null, "costModel", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(lngPortfolioModelEClass, LNGPortfolioModel.class, "LNGPortfolioModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getLNGPortfolioModel_CargoModel(), theCargoPackage.getCargoModel(), null, "cargoModel", null, 0, 1, LNGPortfolioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

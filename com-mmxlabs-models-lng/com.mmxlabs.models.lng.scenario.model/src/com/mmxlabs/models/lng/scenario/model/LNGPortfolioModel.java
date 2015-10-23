@@ -17,7 +17,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>LNG Portfolio Model</b></em>'.
- * <!-- end-user-doc -->
+rr * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:

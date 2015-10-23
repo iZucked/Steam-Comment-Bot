@@ -21,12 +21,13 @@ import com.google.common.base.Joiner;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
-import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils.ValidationResult;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.util.SetUtils;
@@ -64,52 +65,52 @@ public class CooldownPricingConstraint extends AbstractModelMultiConstraint {
 			}
 		}
 
-		if (target instanceof PricingModel) {
-			final PricingModel pm = (PricingModel) target;
+		if (target instanceof CostModel) {
+			final CostModel costModel = (CostModel) target;
 			final MMXRootObject rootObject = extraContext.getRootObject();
 			if (rootObject instanceof LNGScenarioModel) {
-				final PortModel ports = ((LNGScenarioModel) rootObject).getPortModel();
-				if (ports != null) {
-					// count the number of cooldown prices attached to each port
-					final HashMap<Port, Set<CooldownPrice>> pricingPerPort = new HashMap<Port, Set<CooldownPrice>>();
-					for (final Port port : ports.getPorts()) {
-						pricingPerPort.put(port, new HashSet<CooldownPrice>());
+				final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
+				final PortModel portModel = ScenarioModelUtil.getPortModel(scenarioModel);
+				// count the number of cooldown prices attached to each port
+				final HashMap<Port, Set<CooldownPrice>> pricingPerPort = new HashMap<Port, Set<CooldownPrice>>();
+				for (final Port port : portModel.getPorts()) {
+					pricingPerPort.put(port, new HashSet<CooldownPrice>());
+				}
+
+				for (final CooldownPrice c : costModel.getCooldownCosts()) {
+					for (final Port port : SetUtils.getObjects(c.getPorts())) {
+						pricingPerPort.get(port).add(c);
 					}
 
-					for (final CooldownPrice c : pm.getCooldownPrices()) {
-						for (final Port port : SetUtils.getObjects(c.getPorts())) {
-							pricingPerPort.get(port).add(c);
-						}
+				}
 
-					}
+				for (final Entry<Port, Set<CooldownPrice>> entry : pricingPerPort.entrySet()) {
+					final Port port = entry.getKey();
+					final int count = entry.getValue().size();
 
-					for (final Entry<Port, Set<CooldownPrice>> entry : pricingPerPort.entrySet()) {
-						final Port port = entry.getKey();
-						final int count = entry.getValue().size();
-
-						if (count != 1 && port.getCapabilities().contains(PortCapability.LOAD)) {
-							final String message = String.format("Load port %s has %d cooldown prices specified - there should be exactly one price.", port.getName(), count);
-							final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-							dcsd.addEObjectAndFeature(port, null);
-							if (count > 0) {
-								for (final CooldownPrice c : entry.getValue()) {
-									dcsd.addEObjectAndFeature(c, PricingPackage.Literals.PORTS_EXPRESSION_MAP__PORTS);
-								}
+					if (count != 1 && port.getCapabilities().contains(PortCapability.LOAD)) {
+						final String message = String.format("Load port %s has %d cooldown prices specified - there should be exactly one price.", port.getName(), count);
+						final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+						dcsd.addEObjectAndFeature(port, null);
+						if (count > 0) {
+							for (final CooldownPrice c : entry.getValue()) {
+								dcsd.addEObjectAndFeature(c, PricingPackage.Literals.PORTS_EXPRESSION_MAP__PORTS);
 							}
-							failures.add(dcsd);
 						}
+						failures.add(dcsd);
 					}
 				}
 			}
 		}
 
 		return Activator.PLUGIN_ID;
+
 	}
 
 	@SuppressWarnings("null")
 	@NonNull
 	private String getPorts(@NonNull CooldownPrice c) {
-		
+
 		List<String> portNames = new LinkedList<>();
 		for (APortSet<Port> p : c.getPorts()) {
 			portNames.add(p.getName());

@@ -154,13 +154,22 @@ public interface LNGScenarioPackage extends EPackage {
 	int LNG_SCENARIO_MODEL__PORTFOLIO_MODEL = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 6;
 
 	/**
+	 * The feature id for the '<em><b>Cost Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LNG_SCENARIO_MODEL__COST_MODEL = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 7;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_SCENARIO_MODEL_FEATURE_COUNT = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 7;
+	int LNG_SCENARIO_MODEL_FEATURE_COUNT = MMXCorePackage.MMX_ROOT_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -169,7 +178,7 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_SCENARIO_MODEL___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.MMX_ROOT_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+	int LNG_SCENARIO_MODEL___GET_UNSET_VALUE__ESTRUCTURALFEATURE_1 = MMXCorePackage.MMX_ROOT_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
@@ -178,7 +187,7 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_SCENARIO_MODEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.MMX_ROOT_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+	int LNG_SCENARIO_MODEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE_1 = MMXCorePackage.MMX_ROOT_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
@@ -296,7 +305,7 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_PORTFOLIO_MODEL___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+	int LNG_PORTFOLIO_MODEL___GET_UNSET_VALUE__ESTRUCTURALFEATURE_1 = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
@@ -305,7 +314,7 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_PORTFOLIO_MODEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+	int LNG_PORTFOLIO_MODEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE_1 = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
@@ -412,6 +421,17 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getLNGScenarioModel_PortfolioModel();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getCostModel <em>Cost Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Cost Model</em>'.
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getCostModel()
+	 * @see #getLNGScenarioModel()
+	 * @generated
+	 */
+	EReference getLNGScenarioModel_CostModel();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel <em>LNG Portfolio Model</em>}'.

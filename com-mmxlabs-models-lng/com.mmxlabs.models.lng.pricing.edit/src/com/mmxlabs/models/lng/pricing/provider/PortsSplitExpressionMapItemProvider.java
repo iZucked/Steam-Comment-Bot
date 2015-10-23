@@ -30,7 +30,7 @@ import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
 public class PortsSplitExpressionMapItemProvider
 	extends MMXObjectItemProvider {
 	/**
-	 * This constructs an instance from a factory and a notifier.
+ 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated

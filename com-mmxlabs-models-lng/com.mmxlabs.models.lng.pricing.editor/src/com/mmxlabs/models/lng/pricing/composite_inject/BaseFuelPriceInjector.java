@@ -19,9 +19,10 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
-import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
@@ -43,12 +44,8 @@ public class BaseFuelPriceInjector extends BaseComponentHelper {
 			return null;
 		}
 		final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
-
-		final PricingModel pricingModel = scenarioModel.getPricingModel();
-		if (pricingModel == null) {
-			return null;
-		}
-		for (final BaseFuelCost cost : pricingModel.getFleetCost().getBaseFuelPrices()) {
+		final CostModel costModel = ScenarioModelUtil.getCostModel(scenarioModel);
+		for (final BaseFuelCost cost : costModel.getBaseFuelCosts()) {
 			if (cost.getFuel() == value) {
 				return Collections.singletonList((EObject) cost);
 			}
@@ -153,12 +150,11 @@ public class BaseFuelPriceInjector extends BaseComponentHelper {
 			}
 
 			@Override
-			public Object createLayoutData(MMXRootObject root, EObject value,
-					Control control) {
+			public Object createLayoutData(MMXRootObject root, EObject value, Control control) {
 				// TODO Auto-generated method stub
 				return null;
 			}
-			
+
 		});
 	}
 

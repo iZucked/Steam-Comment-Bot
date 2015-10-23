@@ -10,6 +10,7 @@ import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -218,5 +219,31 @@ public interface LNGScenarioModel extends MMXRootObject {
 	 * @generated
 	 */
 	void setPortfolioModel(LNGPortfolioModel value);
+
+	/**
+	 * Returns the value of the '<em><b>Cost Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Cost Model</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cost Model</em>' containment reference.
+	 * @see #setCostModel(CostModel)
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGScenarioModel_CostModel()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	CostModel getCostModel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGScenarioModel#getCostModel <em>Cost Model</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cost Model</em>' containment reference.
+	 * @see #getCostModel()
+	 * @generated
+	 */
+	void setCostModel(CostModel value);
 
 } // LNGScenarioModel
