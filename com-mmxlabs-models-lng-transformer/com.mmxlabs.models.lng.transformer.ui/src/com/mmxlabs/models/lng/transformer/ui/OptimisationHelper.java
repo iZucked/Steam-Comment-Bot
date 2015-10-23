@@ -26,6 +26,7 @@ import org.eclipse.emf.validation.service.ModelValidationService;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.threeten.extra.Months;
@@ -412,7 +413,9 @@ public final class OptimisationHelper {
 		}
 
 		// Only merge across specific fields - not all of them. This permits additions to the default settings to pass through to the scenario.
-		mergeFields(previousSettings, defaultSettings);
+		if (!mergeFields(previousSettings, defaultSettings)) {
+			return null;
+		}
 
 		final Collection<IParameterModeExtender> extenders = parameterModesRegistry.getExtenders();
 		if (extenders != null) {
@@ -424,7 +427,7 @@ public final class OptimisationHelper {
 		return defaultSettings;
 	}
 
-	private static void resetDisabledFeatures(OptimiserSettings copy) {
+	private static void resetDisabledFeatures(final OptimiserSettings copy) {
 		if (!SecurityUtils.getSubject().isPermitted("features:optimisation-actionset")) {
 			copy.setBuildActionSets(false);
 		}
@@ -440,7 +443,14 @@ public final class OptimisationHelper {
 		}
 	}
 
-	private static void mergeFields(final OptimiserSettings from, final OptimiserSettings to) {
+	/**
+	 * Returns true if merged parameters are valid.
+	 * 
+	 * @param from
+	 * @param to
+	 * @return
+	 */
+	private static boolean mergeFields(final OptimiserSettings from, final OptimiserSettings to) {
 
 		resetDisabledFeatures(from);
 
@@ -493,31 +503,53 @@ public final class OptimisationHelper {
 
 		// Turn off if settings are not nice
 		if (to.isBuildActionSets()) {
+
+			String actionSetErrorMessage = null;
+
 			if (to.getSimilaritySettings().equals(ScenarioUtils.createOffSimilaritySettings())) {
 				to.setBuildActionSets(false);
-				log.info("Disabling Action sets as similarity is turned off");
+				actionSetErrorMessage = "Unable to run with Action Sets as similarity is turned off";
 			}
 			if (to.isBuildActionSets()) {
 				if (to.getRange() == null) {
-					log.info("Disabling Action sets as there is no period range set");
+					actionSetErrorMessage = "Unable to run with Action Sets as there is no period range set";
 					to.setBuildActionSets(false);
 				} else {
-					YearMonth optimiseBefore = to.getRange().getOptimiseBefore();
-					YearMonth optimiseAfter = to.getRange().getOptimiseAfter();
+					final YearMonth optimiseBefore = to.getRange().getOptimiseBefore();
+					final YearMonth optimiseAfter = to.getRange().getOptimiseAfter();
 					if (optimiseAfter != null && optimiseBefore != null) {
 						// 3 month window?
 						if (Months.between(optimiseAfter, optimiseBefore).getAmount() > 3) {
-							log.info("Disabling Action sets as the period range is too big");
+							actionSetErrorMessage = "Unable to run with Action Sets as the period range is too big";
 							to.setBuildActionSets(false);
 						}
 					} else {
-						log.info("Disabling Action sets as the period range is too big");
+						actionSetErrorMessage = "Unable to run with Action Sets as the period range is too big";
 						to.setBuildActionSets(false);
 					}
 				}
 			}
-		}
 
+			if (actionSetErrorMessage != null) {
+				log.info(actionSetErrorMessage);
+
+				if (System.getProperty("lingo.suppress.dialogs") == null) {
+					final String errMessage = actionSetErrorMessage;
+					final Display display = PlatformUI.getWorkbench().getDisplay();
+					if (display != null) {
+						display.syncExec(new Runnable() {
+
+							@Override
+							public void run() {
+								MessageDialog.openError(display.getActiveShell(), "Unable to start optimisation", errMessage);
+							}
+						});
+					}
+				}
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private static Objective findObjective(final String objective, final OptimiserSettings settings) {
