@@ -105,7 +105,7 @@
 <unit id="org.apache.shiro.guice.source" version="1.2.0"/>
 <unit id="org.apache.shiro.core" version="1.2.0"/>
 <unit id="org.apache.shiro.guice" version="1.2.0"/>
-<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/p2/repository/mmxlabs-external/1.10.0/mmxlabs-external-1.10.0-p2-repo.zip-unzip/" id="mmxlabs-releases"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/p2/repository/mmxlabs-external/1.0.10/mmxlabs-external-1.0.10-p2-repo.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.feature.feature.group" version="0.0.0"/>
