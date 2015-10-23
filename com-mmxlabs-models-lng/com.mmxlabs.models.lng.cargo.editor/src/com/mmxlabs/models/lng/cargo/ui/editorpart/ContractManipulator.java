@@ -219,7 +219,7 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 	public boolean isValueUnset(Object object) {
 		if (object instanceof Slot) {
 			Slot slot = (Slot) object;
-			return !slot.isSetContract();
+			return !slot.isSetContract() && !slot.isSetPriceExpression();
 		}
 		return false;
 	}
