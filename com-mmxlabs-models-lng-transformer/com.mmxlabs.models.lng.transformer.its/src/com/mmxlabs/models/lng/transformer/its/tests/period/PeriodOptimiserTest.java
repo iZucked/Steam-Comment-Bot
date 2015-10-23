@@ -253,7 +253,7 @@ public class PeriodOptimiserTest {
 
 			final VesselAvailability[] vesselAvailabilities = new VesselAvailability[vessels.length];
 			for (int i = 0; i < vessels.length; ++i) {
-				for (VesselAvailability vesselAvailability : scenario.getCargoModel().getVesselAvailabilities()) {
+				for (VesselAvailability vesselAvailability : csc.getScenario().getCargoModel().getVesselAvailabilities()) {
 					if (vesselAvailability.getVessel() == vessels[i]) {
 						vesselAvailabilities[i] = vesselAvailability;
 					}

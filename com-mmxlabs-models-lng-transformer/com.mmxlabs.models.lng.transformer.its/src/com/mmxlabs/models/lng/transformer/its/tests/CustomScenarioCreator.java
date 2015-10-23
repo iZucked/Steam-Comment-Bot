@@ -775,4 +775,8 @@ public class CustomScenarioCreator {
 	public LNGReferenceModel getReferenceModel() {
 		return referenceModel;
 	}
+
+	public LNGScenarioModel getScenario() {
+		return scenario;
+	}
 }
