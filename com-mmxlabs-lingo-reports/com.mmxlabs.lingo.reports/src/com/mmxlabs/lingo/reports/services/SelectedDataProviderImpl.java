@@ -14,7 +14,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -23,24 +22,20 @@ class SelectedDataProviderImpl implements ISelectedDataProvider {
 
 	private final List<ScenarioInstance> scenarioInstances = new LinkedList<>();
 	private final List<LNGScenarioModel> scenarioModels = new LinkedList<>();
-	private final List<LNGPortfolioModel> portfolioModels = new LinkedList<>();
 
 	private final Map<EObject, ScenarioInstance> scenarioInstanceMap = new HashMap<>();
 	private final Map<EObject, LNGScenarioModel> scenarioModelMap = new HashMap<>();
-	private final Map<EObject, LNGPortfolioModel> portfolioModelMap = new HashMap<>();
 	private final Map<EObject, Schedule> scheduleMap = new HashMap<>();
 	private ScenarioInstance pinnedScenarioInstance;
 
-	public void addScenario(@NonNull final ScenarioInstance scenarioInstance, @NonNull final LNGScenarioModel scenarioModel, @NonNull final LNGPortfolioModel portfolioModel,
-			@Nullable final Schedule schedule, @NonNull final Collection<EObject> children) {
+	public void addScenario(@NonNull final ScenarioInstance scenarioInstance, @NonNull final LNGScenarioModel scenarioModel, @Nullable final Schedule schedule,
+			@NonNull final Collection<EObject> children) {
 		scenarioInstances.add(scenarioInstance);
 		scenarioModels.add(scenarioModel);
-		portfolioModels.add(portfolioModel);
 
 		for (final EObject e : children) {
 			scenarioInstanceMap.put(e, scenarioInstance);
 			scenarioModelMap.put(e, scenarioModel);
-			portfolioModelMap.put(e, portfolioModel);
 			scheduleMap.put(e, schedule);
 		}
 	}
@@ -48,11 +43,6 @@ class SelectedDataProviderImpl implements ISelectedDataProvider {
 	@Override
 	public Collection<LNGScenarioModel> getScenarioModels() {
 		return scenarioModels;
-	}
-
-	@Override
-	public Collection<LNGPortfolioModel> getPortfolioModels() {
-		return portfolioModels;
 	}
 
 	@Override
@@ -68,11 +58,6 @@ class SelectedDataProviderImpl implements ISelectedDataProvider {
 	@Override
 	public LNGScenarioModel getScenarioModel(final EObject eObject) {
 		return scenarioModelMap.get(eObject);
-	}
-
-	@Override
-	public LNGPortfolioModel getPortfolioModel(final EObject eObject) {
-		return portfolioModelMap.get(eObject);
 	}
 
 	@Override

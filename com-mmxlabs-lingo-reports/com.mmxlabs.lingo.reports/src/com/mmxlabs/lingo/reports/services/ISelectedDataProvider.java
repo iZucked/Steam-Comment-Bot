@@ -10,7 +10,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -18,9 +17,6 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 public interface ISelectedDataProvider {
 	@NonNull
 	Collection<LNGScenarioModel> getScenarioModels();
-
-	@NonNull
-	Collection<LNGPortfolioModel> getPortfolioModels();
 
 	@NonNull
 	Collection<ScenarioInstance> getScenarioInstances();
@@ -34,9 +30,6 @@ public interface ISelectedDataProvider {
 
 	@Nullable
 	LNGScenarioModel getScenarioModel(EObject eObject);
-
-	@Nullable
-	LNGPortfolioModel getPortfolioModel(EObject eObject);
 
 	@Nullable
 	Schedule getSchedule(EObject eObject);

@@ -9,7 +9,6 @@ import java.util.List;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 
@@ -65,5 +64,5 @@ public abstract class AbstractSimpleTabularReportTransformer<T> {
 
 	/**
 	 */
-	abstract public List<T> createData(final Schedule schedule, LNGScenarioModel rootObject, LNGPortfolioModel portfolioModel);
+	abstract public List<T> createData(final Schedule schedule, LNGScenarioModel rootObject);
 }

@@ -44,7 +44,7 @@ public class ScheduleSequenceData {
 	/** Extracts the relevant information from the model */
 	public ScheduleSequenceData(final LNGScenarioModel model, final AbstractVerticalReportVisualiser verticalReportVisualiser) {
 		this.verticalReportVisualiser = verticalReportVisualiser;
-		final ScheduleModel scheduleModel = (model == null ? null : model.getPortfolioModel().getScheduleModel());
+		final ScheduleModel scheduleModel = (model == null ? null : model.getScheduleModel());
 		final Schedule schedule = (scheduleModel == null ? null : scheduleModel.getSchedule());
 
 		if (schedule == null) {

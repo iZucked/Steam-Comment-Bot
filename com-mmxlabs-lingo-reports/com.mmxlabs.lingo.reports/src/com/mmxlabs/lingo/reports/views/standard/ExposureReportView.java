@@ -18,7 +18,6 @@ import com.mmxlabs.lingo.reports.components.AbstractSimpleTabularReportTransform
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.PricingModel;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 
@@ -118,10 +117,10 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			}
 
 			@Override
-			public List<IndexExposureData> createData(Schedule schedule, LNGScenarioModel rootObject, LNGPortfolioModel portfolioModel) {
+			public List<IndexExposureData> createData(Schedule schedule, LNGScenarioModel rootObject ) {
 				final List<IndexExposureData> output = new ArrayList<IndexExposureData>();
 
-				PricingModel pm = rootObject.getPricingModel();
+				PricingModel pm = rootObject.getReferenceModel().getPricingModel();
 				EList<CommodityIndex> indices = pm.getCommodityIndices();
 
 				overallExposures.clear();

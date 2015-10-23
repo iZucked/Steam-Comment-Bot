@@ -113,7 +113,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 
 								// pinnedData = createData((Schedule) o, synchOutput.getLNGScenarioModel(o), synchOutput.getLNGPortfolioModel(o)).toArray(rowData);
 
-								pinnedData = transformer.createData(schedule, selectedDataProvider.getScenarioModel(schedule), selectedDataProvider.getPortfolioModel(schedule));
+								pinnedData = transformer.createData(schedule, selectedDataProvider.getScenarioModel(schedule));
 								rowElements.addAll(pinnedData);
 								numberOfSchedules++;
 							}
@@ -124,7 +124,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 						if (instance != null) {
 							final Schedule schedule = ScenarioModelUtil.findSchedule(instance);
 							if (schedule != null) {
-								rowElements.addAll(transformer.createData(schedule, selectedDataProvider.getScenarioModel(schedule), selectedDataProvider.getPortfolioModel(schedule)));
+								rowElements.addAll(transformer.createData(schedule, selectedDataProvider.getScenarioModel(schedule)));
 
 								// rowElements.addAll(transformer.transform(schedule, other, pinnedData));
 								numberOfSchedules++;

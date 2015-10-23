@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.lingo.reports.utils;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -16,7 +18,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
  */
 public interface ICustomRelatedSlotHandler {
 
-	void addRelatedSlots(RelatedSlotAllocations relatedSlotAllocations, Schedule schedule, CargoAllocation cargoAllocation);
+	void addRelatedSlots(@NonNull RelatedSlotAllocations relatedSlotAllocations, @NonNull Schedule schedule, @NonNull CargoAllocation cargoAllocation);
 
-	void addRelatedSlots(RelatedSlotAllocations relatedSlotAllocations, Schedule schedule, OpenSlotAllocation openSlotAllocation);
+	void addRelatedSlots(@NonNull RelatedSlotAllocations relatedSlotAllocations, @NonNull Schedule schedule, @NonNull OpenSlotAllocation openSlotAllocation);
 }

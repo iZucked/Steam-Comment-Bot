@@ -187,8 +187,8 @@ public class ActionSetTransformer {
 		final Set<EObject> fromAllElements = new LinkedHashSet<>();
 		final Set<EObject> toAllElements = new LinkedHashSet<>();
 
-		final Schedule fromSchedule = ((LNGScenarioModel) from.getInstance()).getPortfolioModel().getScheduleModel().getSchedule();
-		final Schedule toSchedule = ((LNGScenarioModel) to.getInstance()).getPortfolioModel().getScheduleModel().getSchedule();
+		final Schedule fromSchedule = ((LNGScenarioModel) from.getInstance()).getScheduleModel().getSchedule();
+		final Schedule toSchedule = ((LNGScenarioModel) to.getInstance()).getScheduleModel().getSchedule();
 
 		extractElements(fromSchedule, fromInterestingElements, fromAllElements);
 		extractElements(toSchedule, toInterestingElements, toAllElements);

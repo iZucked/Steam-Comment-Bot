@@ -18,7 +18,6 @@ import org.threeten.extra.Interval;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
@@ -60,15 +59,13 @@ public class EventGroupingOverlapProcessor implements IDiffProcessor {
 
 			for (final EObject scenario : table.getScenarios()) {
 				if (scenario instanceof LNGScenarioModel) {
-					final LNGPortfolioModel portfolioModel = ((LNGScenarioModel) scenario).getPortfolioModel();
-					if (portfolioModel != null) {
-						final ScheduleModel scheduleModel = portfolioModel.getScheduleModel();
-						if (scheduleModel != null) {
-							if (scheduleModel.getSchedule() != referenceRow.getSchedule()) {
-								for (final Sequence sequence : scheduleModel.getSchedule().getSequences()) {
-									if (sequence.getName().equals(referenceSequence.getName())) {
-										bindToOverlaps(sequence, referenceRow, referenceInterval, elementToRowMap);
-									}
+					LNGScenarioModel scenarioModel = (LNGScenarioModel) scenario;
+					final ScheduleModel scheduleModel = scenarioModel.getScheduleModel();
+					if (scheduleModel != null) {
+						if (scheduleModel.getSchedule() != referenceRow.getSchedule()) {
+							for (final Sequence sequence : scheduleModel.getSchedule().getSequences()) {
+								if (sequence.getName().equals(referenceSequence.getName())) {
+									bindToOverlaps(sequence, referenceRow, referenceInterval, elementToRowMap);
 								}
 							}
 						}

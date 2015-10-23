@@ -15,7 +15,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.models.lng.parameters.Objective;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -60,30 +59,28 @@ public class FitnessTransformer {
 
 		final LNGScenarioModel lngScenarioModel = selectedDataProvider.getScenarioModel(schedule);
 		if (lngScenarioModel != null) {
-			final LNGPortfolioModel portfolioModel = lngScenarioModel.getPortfolioModel();
-			if (portfolioModel != null) {
-				final OptimiserSettings settings = portfolioModel.getParameters();
-				final Map<String, Double> weightsMap = new HashMap<String, Double>();
-				if (settings != null) {
-					for (final Objective objective : settings.getObjectives()) {
-						weightsMap.put(objective.getName(), objective.getWeight());
-					}
-				}
 
-				long total = 0l;
-				for (final Fitness f : schedule.getFitnesses()) {
-					final Double weightObj = weightsMap.get(f.getName());
-					final double weight = weightObj == null ? 0.0 : weightObj.doubleValue();
-					final long raw = f.getFitnessValue();
-					final long fitness = (long) (weight * (double) raw);
-					final Long deltaFitness = pinnedData == null ? null : getDelta(f.getName(), fitness, pinnedData);
-					rowDataList.add(createRow(selectedDataProvider.getScenarioInstance(schedule), f.getName(), weight, raw, fitness, deltaFitness));
-					if (!(f.getName().equals("iterations") || f.getName().equals("runtime"))) {
-						total += fitness;
-					}
+			final OptimiserSettings settings = lngScenarioModel.getParameters();
+			final Map<String, Double> weightsMap = new HashMap<String, Double>();
+			if (settings != null) {
+				for (final Objective objective : settings.getObjectives()) {
+					weightsMap.put(objective.getName(), objective.getWeight());
 				}
-				rowDataList.add(createRow(selectedDataProvider.getScenarioInstance(schedule), "Total", null, null, total, null));
 			}
+
+			long total = 0l;
+			for (final Fitness f : schedule.getFitnesses()) {
+				final Double weightObj = weightsMap.get(f.getName());
+				final double weight = weightObj == null ? 0.0 : weightObj.doubleValue();
+				final long raw = f.getFitnessValue();
+				final long fitness = (long) (weight * (double) raw);
+				final Long deltaFitness = pinnedData == null ? null : getDelta(f.getName(), fitness, pinnedData);
+				rowDataList.add(createRow(selectedDataProvider.getScenarioInstance(schedule), f.getName(), weight, raw, fitness, deltaFitness));
+				if (!(f.getName().equals("iterations") || f.getName().equals("runtime"))) {
+					total += fitness;
+				}
+			}
+			rowDataList.add(createRow(selectedDataProvider.getScenarioInstance(schedule), "Total", null, null, total, null));
 		}
 		return rowDataList;
 	}

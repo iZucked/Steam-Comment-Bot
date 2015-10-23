@@ -39,7 +39,6 @@ import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
 import com.mmxlabs.lingo.reports.views.standard.HeadlineReportTransformer.RowData;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -509,10 +508,7 @@ public class HeadlineReportView extends ViewPart {
 						final EObject instance = modelReference.getInstance();
 						if (instance instanceof LNGScenarioModel) {
 							final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) instance;
-							final LNGPortfolioModel portfolioModel = lngScenarioModel.getPortfolioModel();
-							if (portfolioModel != null) {
-								scheduleModel = portfolioModel.getScheduleModel();
-							}
+							scheduleModel = lngScenarioModel.getScheduleModel();
 						}
 					}
 				}

@@ -37,6 +37,7 @@ import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -193,8 +194,8 @@ public class ScheduleBasedReportBuilder extends AbstractReportBuilder {
 		List<ColumnHandler> handlers = new LinkedList<>();
 		for (final LNGScenarioModel rootObject : rootObjects) {
 
-			final CommercialModel commercialModel = rootObject.getCommercialModel();
-			if (commercialModel != null) {
+			if (rootObject != null) {
+				final CommercialModel commercialModel = ScenarioModelUtil.getCommercialModel(rootObject);
 				for (final BaseLegalEntity e : commercialModel.getEntities()) {
 					handlers.add(addPNLColumn(COLUMN_BLOCK_PNL, e.getName(), e.getName(), CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK));
 					handlers.add(addPNLColumn(COLUMN_BLOCK_PNL, e.getName(), e.getName(), CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK));

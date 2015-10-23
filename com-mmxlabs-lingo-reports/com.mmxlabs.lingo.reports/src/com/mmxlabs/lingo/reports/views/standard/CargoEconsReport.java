@@ -712,7 +712,7 @@ public class CargoEconsReport extends ViewPart {
 								final EObject instance = scenarioInstance.getInstance();
 								if (instance instanceof LNGScenarioModel) {
 									final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) instance;
-									final ScheduleModel scheduleModel = lngScenarioModel.getPortfolioModel().getScheduleModel();
+									final ScheduleModel scheduleModel = lngScenarioModel.getScheduleModel();
 									if (scheduleModel != null) {
 										final Schedule schedule = scheduleModel.getSchedule();
 										if (schedule != null) {
@@ -740,7 +740,7 @@ public class CargoEconsReport extends ViewPart {
 								final EObject instance = scenarioInstance.getInstance();
 								if (instance instanceof LNGScenarioModel) {
 									final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) instance;
-									final ScheduleModel scheduleModel = lngScenarioModel.getPortfolioModel().getScheduleModel();
+									final ScheduleModel scheduleModel = lngScenarioModel.getScheduleModel();
 									if (scheduleModel != null) {
 										final Schedule schedule = scheduleModel.getSchedule();
 										if (schedule != null) {

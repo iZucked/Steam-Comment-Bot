@@ -47,7 +47,7 @@ public abstract class ScheduleElementCollector implements IScenarioInstanceEleme
 			return null;
 		}
 
-		final ScheduleModel scheduleModel = scenario.getPortfolioModel().getScheduleModel();
+		final ScheduleModel scheduleModel = scenario.getScheduleModel();
 		if (scheduleModel != null) {
 			if (scheduleModel.getSchedule() != null) {
 				return scheduleModel.getSchedule();

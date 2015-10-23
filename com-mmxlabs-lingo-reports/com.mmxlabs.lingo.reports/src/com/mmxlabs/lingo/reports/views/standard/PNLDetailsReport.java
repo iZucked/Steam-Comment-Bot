@@ -25,8 +25,8 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
@@ -135,10 +135,9 @@ public class PNLDetailsReport extends DetailPropertiesView {
 			final EObject eContainer = cargo.eContainer();
 			if (eContainer instanceof CargoModel) {
 				final CargoModel cargoModel = (CargoModel) eContainer;
-				final EObject eContainer2 = cargoModel.eContainer();
-				if (eContainer2 instanceof LNGPortfolioModel) {
-					final LNGPortfolioModel lngPortfolioModel = (LNGPortfolioModel) eContainer2;
-					final ScheduleModel scheduleModel = lngPortfolioModel.getScheduleModel();
+				final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(cargoModel);
+				if (scenarioModel != null) {
+					final ScheduleModel scheduleModel = scenarioModel.getScheduleModel();
 					if (scheduleModel != null) {
 						final Schedule schedule = scheduleModel.getSchedule();
 						if (scheduleModel.getSchedule() != null) {
@@ -158,10 +157,9 @@ public class PNLDetailsReport extends DetailPropertiesView {
 			final EObject eContainer = slot.eContainer();
 			if (eContainer instanceof CargoModel) {
 				final CargoModel cargoModel = (CargoModel) eContainer;
-				final EObject eContainer2 = cargoModel.eContainer();
-				if (eContainer2 instanceof LNGPortfolioModel) {
-					final LNGPortfolioModel lngPortfolioModel = (LNGPortfolioModel) eContainer2;
-					final ScheduleModel scheduleModel = lngPortfolioModel.getScheduleModel();
+				final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(cargoModel);
+				if (scenarioModel != null) {
+					final ScheduleModel scheduleModel = scenarioModel.getScheduleModel();
 					if (scheduleModel != null) {
 						final Schedule schedule = scheduleModel.getSchedule();
 						if (scheduleModel.getSchedule() != null) {
@@ -196,10 +194,9 @@ public class PNLDetailsReport extends DetailPropertiesView {
 			final EObject eContainer = vesselEvent.eContainer();
 			if (eContainer instanceof CargoModel) {
 				final CargoModel cargoModel = (CargoModel) eContainer;
-				final EObject eContainer2 = cargoModel.eContainer();
-				if (eContainer2 instanceof LNGPortfolioModel) {
-					final LNGPortfolioModel lngPortfolioModel = (LNGPortfolioModel) eContainer2;
-					final ScheduleModel scheduleModel = lngPortfolioModel.getScheduleModel();
+				final LNGScenarioModel scenarioModel = ScenarioModelUtil.findScenarioModel(cargoModel);
+				if (scenarioModel != null) {
+					final ScheduleModel scheduleModel = scenarioModel.getScheduleModel();
 					if (scheduleModel != null) {
 						final Schedule schedule = scheduleModel.getSchedule();
 						if (scheduleModel.getSchedule() != null) {
@@ -251,12 +248,9 @@ public class PNLDetailsReport extends DetailPropertiesView {
 
 				if (eObject instanceof LNGScenarioModel) {
 					final LNGScenarioModel scenarioModel = (LNGScenarioModel) eObject;
-					final LNGPortfolioModel portfolioModel = scenarioModel.getPortfolioModel();
-					if (portfolioModel != null) {
-						final ScheduleModel scheduleModel = portfolioModel.getScheduleModel();
-						if (scheduleModel != null) {
-							schedules.add(scheduleModel);
-						}
+					final ScheduleModel scheduleModel = scenarioModel.getScheduleModel();
+					if (scheduleModel != null) {
+						schedules.add(scheduleModel);
 					}
 
 				}

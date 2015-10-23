@@ -26,7 +26,6 @@ import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
@@ -302,6 +301,7 @@ public class SelectedScenariosService {
 					doUpdateSelectedScenarios(value, block);
 				}
 			};
+			// Viewer helper!
 			IWorkbench wb = PlatformUI.getWorkbench();
 			if (block) {
 				if (wb.getDisplay().getThread() == Thread.currentThread()) {
@@ -351,9 +351,6 @@ public class SelectedScenariosService {
 		@NonNull
 		private final LNGScenarioModel scenarioModel;
 
-		@NonNull
-		private final LNGPortfolioModel portfolioModel;
-
 		@Nullable
 		private final Schedule schedule;
 
@@ -362,11 +359,10 @@ public class SelectedScenariosService {
 
 		private ModelReference ref;
 
-		public KeyValueRecord(@NonNull final ScenarioInstance scenarioInstance, @NonNull final LNGScenarioModel scenarioModel, @NonNull final LNGPortfolioModel portfolioModel,
-				@Nullable final Schedule schedule, @NonNull final Collection<EObject> children) {
+		public KeyValueRecord(@NonNull final ScenarioInstance scenarioInstance, @NonNull final LNGScenarioModel scenarioModel, @Nullable final Schedule schedule,
+				@NonNull final Collection<EObject> children) {
 			this.scenarioInstance = scenarioInstance;
 			this.scenarioModel = scenarioModel;
-			this.portfolioModel = portfolioModel;
 			this.schedule = schedule;
 			this.children = children;
 			this.ref = scenarioInstance.getReference();
@@ -398,11 +394,6 @@ public class SelectedScenariosService {
 			return scenarioModel;
 		}
 
-		@NonNull
-		public LNGPortfolioModel getPortfolioModel() {
-			return portfolioModel;
-		}
-
 		@Nullable
 		public Schedule getSchedule() {
 			return schedule;
@@ -422,8 +413,7 @@ public class SelectedScenariosService {
 
 			if (instance instanceof LNGScenarioModel) {
 				final LNGScenarioModel scenarioModel = (LNGScenarioModel) instance;
-				final LNGPortfolioModel portfolioModel = scenarioModel.getPortfolioModel();
-				final ScheduleModel scheduleModel = portfolioModel.getScheduleModel();
+				final ScheduleModel scheduleModel = scenarioModel.getScheduleModel();
 				Schedule schedule = null;
 				if (scheduleModel != null) {
 					schedule = scheduleModel.getSchedule();
@@ -435,7 +425,7 @@ public class SelectedScenariosService {
 					children.add(itr.next());
 				}
 				children.add(scenarioModel);
-				return new KeyValueRecord(scenarioInstance, scenarioModel, portfolioModel, schedule, children);
+				return new KeyValueRecord(scenarioInstance, scenarioModel, schedule, children);
 			}
 		}
 		return null;
@@ -458,7 +448,7 @@ public class SelectedScenariosService {
 				}
 			}
 			assert record != null;
-			provider.addScenario(record.getScenarioInstance(), record.getScenarioModel(), record.getPortfolioModel(), record.getSchedule(), record.getChildren());
+			provider.addScenario(record.getScenarioInstance(), record.getScenarioModel(), record.getSchedule(), record.getChildren());
 		}
 		provider.setPinnedScenarioInstance(selectionProvider.getPinnedInstance());
 		return provider;

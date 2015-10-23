@@ -24,7 +24,6 @@ import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.commercial.impl.PurchaseContractImpl;
 import com.mmxlabs.models.lng.commercial.impl.SalesContractImpl;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -130,7 +129,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 		return new AbstractSimpleTabularReportTransformer<VolumeData>() {
 
 			@Override
-			public List<VolumeData> createData(Schedule schedule, LNGScenarioModel rootObject, LNGPortfolioModel portfolioModel) {
+			public List<VolumeData> createData(Schedule schedule, LNGScenarioModel rootObject) {
 				final List<VolumeData> output = new ArrayList<VolumeData>();
 
 				overallVolumes.clear();

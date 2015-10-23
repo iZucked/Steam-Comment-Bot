@@ -16,7 +16,6 @@ import org.threeten.extra.Interval;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -78,23 +77,20 @@ public class LadenVoyageProcessor implements IDiffProcessor {
 
 		for (final EObject scenario : referenceRow.getTable().getScenarios()) {
 			if (scenario instanceof LNGScenarioModel) {
-				final LNGPortfolioModel portfolioModel = ((LNGScenarioModel) scenario).getPortfolioModel();
-				if (portfolioModel != null) {
-					final ScheduleModel scheduleModel = portfolioModel.getScheduleModel();
-					if (scheduleModel != null) {
-						if (scheduleModel.getSchedule() != referenceRow.getSchedule()) {
-							for (final Sequence sequence : scheduleModel.getSchedule().getSequences()) {
-								if (sequence.getName().equals(referenceSequence.getName())) {
-									bindToLadenOverlaps(sequence, referenceRow, referenceInterval, elementToRowMap);
-								}
+				LNGScenarioModel scenarioModel = (LNGScenarioModel) scenario;
+				final ScheduleModel scheduleModel = scenarioModel.getScheduleModel();
+				if (scheduleModel != null) {
+					if (scheduleModel.getSchedule() != referenceRow.getSchedule()) {
+						for (final Sequence sequence : scheduleModel.getSchedule().getSequences()) {
+							if (sequence.getName().equals(referenceSequence.getName())) {
+								bindToLadenOverlaps(sequence, referenceRow, referenceInterval, elementToRowMap);
 							}
-
 						}
+
 					}
 				}
 			}
 		}
-
 	}
 
 	private void bindToLadenOverlaps(final Sequence sequence, final Row referenceRow, final Interval referenceInterval, final Map<EObject, Row> elementToRowMap) {
