@@ -17,7 +17,9 @@ Build: {1}
    </configIni>
 
    <launcherArgs>
-      <vmArgs>-ea -server -Xmx768m
+      <vmArgs>-ea -server
+         <argsX86>-Xmx768m</argsX86>
+         <argsX86_64>-Xmx3G</argsX86_64>
       </vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
@@ -44,6 +46,7 @@ Build: {1}
       <solaris include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</solaris>
       <windows include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</windows>
    </vm>
+
 
    <plugins>
    </plugins>
@@ -76,8 +79,19 @@ Build: {1}
       <property name="applicationCSSResources" value="platform:/plugin/org.eclipse.ui.themes/images/" />
       <property name="applicationXMI" value="org.eclipse.platform/LegacyIDE.e4xmi" />
       <property name="cssTheme" value="org.eclipse.e4.ui.css.theme.e4_default" />
-      <property name="org.eclipse.update.reconcile" value="false" />
       <property name="java.locale.providers" value="HOST" />
+      <property name="org.eclipse.update.reconcile" value="false" />
    </configurations>
+
+   <repositories>
+      <repository location="https://server1.mmxlabs.com/updates/LiNGO/" enabled="true" />
+   </repositories>
+
+   <preferencesInfo>
+      <targetfile overwrite="false"/>
+   </preferencesInfo>
+
+   <cssInfo>
+   </cssInfo>
 
 </product>
