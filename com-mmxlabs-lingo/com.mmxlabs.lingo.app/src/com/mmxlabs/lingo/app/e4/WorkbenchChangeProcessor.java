@@ -43,5 +43,6 @@ public class WorkbenchChangeProcessor {
 		}
 
 		E4ModelHelper.removeViewPart("com.mmxlabs.lingo.reports.diff.DiffGroupView", application, modelService);
+		E4ModelHelper.removeViewPart("com.mmxlabs.shiplingo.platform.reports.views.ExposureReportView", application, modelService);
 	}
 }
