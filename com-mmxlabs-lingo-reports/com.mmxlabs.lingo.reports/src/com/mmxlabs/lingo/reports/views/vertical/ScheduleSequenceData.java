@@ -97,6 +97,22 @@ public class ScheduleSequenceData {
 				endDate = eDate;
 			}
 		}
+
+		// Run this after the interesting event selection to ensure we keep these events.
+		for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
+			final LocalDate sDate = verticalReportVisualiser.getLocalDateFor(openSlotAllocation.getSlot().getWindowStartWithSlotOrPortTime());
+			final LocalDate eDate = sDate;// verticalReportVisualiser.getLocalDateFor(openSlotAllocation.getSlot().getWindowStartWithSlotOrPortTime());
+
+			// final Date sDate = event.getStart();
+			// final Date eDate = event.getEnd();
+			if (startDate == null || startDate.isAfter(sDate)) {
+				startDate = sDate;
+			}
+			if (endDate == null || endDate.isBefore(eDate)) {
+				endDate = eDate;
+			}
+		}
+
 		// set the final record fields
 		start = startDate;
 		end = endDate;
@@ -137,5 +153,4 @@ public class ScheduleSequenceData {
 		this.longLoads = new VirtualSequence(longLoadList);
 		this.shortDischarges = new VirtualSequence(shortDischargeList);
 	}
-
 }
