@@ -444,7 +444,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		area.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
 		final Label lbl = toolkit.createLabel(area, option.label);
 
-		final DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/yyyy");
+		final DateTimeFormatter format = DateTimeFormatter.ofPattern("M/yyyy");
 
 		final IValidator validator = new IValidator() {
 			@Override
