@@ -373,6 +373,12 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 					}
 				}
 
+				if (cargo.getCargoType() == CargoType.FLEET && cargoActuals.getReturnActuals() == null) {
+					final ReturnActuals returnActuals = ActualsFactory.eINSTANCE.createReturnActuals();
+					cargoActuals.setReturnActuals(returnActuals);
+
+				}
+
 				cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), actualsModel, ActualsPackage.Literals.ACTUALS_MODEL__CARGO_ACTUALS, cargoActuals));
 				// Disallow re-wiring
 				cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, CargoPackage.Literals.CARGO__ALLOW_REWIRING, Boolean.FALSE));
@@ -400,3 +406,4 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 		}
 	}
 }
+	
