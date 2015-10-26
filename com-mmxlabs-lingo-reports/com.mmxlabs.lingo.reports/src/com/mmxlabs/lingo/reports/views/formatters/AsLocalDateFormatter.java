@@ -43,7 +43,7 @@ public class AsLocalDateFormatter extends BaseFormatter {
 	public Comparable<?> getComparable(final Object object) {
 		LocalDateTime localDate = getLocalDate(object);
 		if (object == null) {
-			localDate.withYear(Year.MIN_VALUE);
+			return LocalDateTime.now().withYear(Year.MIN_VALUE);
 		}
 		return localDate;
 	}
