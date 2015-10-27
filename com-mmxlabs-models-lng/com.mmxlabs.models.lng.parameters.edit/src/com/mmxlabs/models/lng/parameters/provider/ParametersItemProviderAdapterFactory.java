@@ -89,6 +89,29 @@ public class ParametersItemProviderAdapterFactory extends ParametersAdapterFacto
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.UserSettings} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected UserSettingsItemProvider userSettingsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.UserSettings}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createUserSettingsAdapter() {
+		if (userSettingsItemProvider == null) {
+			userSettingsItemProvider = new UserSettingsItemProvider(this);
+		}
+
+		return userSettingsItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -452,6 +475,7 @@ public class ParametersItemProviderAdapterFactory extends ParametersAdapterFacto
 	 */
 	@Override
 	public void dispose() {
+		if (userSettingsItemProvider != null) userSettingsItemProvider.dispose();
 		if (individualSolutionImprovementSettingsItemProvider != null) individualSolutionImprovementSettingsItemProvider.dispose();
 		if (parametersModelItemProvider != null) parametersModelItemProvider.dispose();
 		if (optimiserSettingsItemProvider != null) optimiserSettingsItemProvider.dispose();

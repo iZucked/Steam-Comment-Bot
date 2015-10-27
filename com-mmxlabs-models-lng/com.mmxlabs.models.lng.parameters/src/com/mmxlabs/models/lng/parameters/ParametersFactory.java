@@ -24,6 +24,15 @@ public interface ParametersFactory extends EFactory {
 	ParametersFactory eINSTANCE = com.mmxlabs.models.lng.parameters.impl.ParametersFactoryImpl.init();
 
 	/**
+	 * Returns a new object of class '<em>User Settings</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>User Settings</em>'.
+	 * @generated
+	 */
+	UserSettings createUserSettings();
+
+	/**
 	 * Returns a new object of class '<em>Individual Solution Improvement Settings</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

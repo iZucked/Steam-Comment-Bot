@@ -8,6 +8,7 @@ package com.mmxlabs.models.lng.parameters.impl;
 
 import com.mmxlabs.models.lng.parameters.*;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
@@ -70,6 +71,7 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
+			case ParametersPackage.USER_SETTINGS: return createUserSettings();
 			case ParametersPackage.INDIVIDUAL_SOLUTION_IMPROVEMENT_SETTINGS: return createIndividualSolutionImprovementSettings();
 			case ParametersPackage.PARAMETERS_MODEL: return createParametersModel();
 			case ParametersPackage.OPTIMISER_SETTINGS: return createOptimiserSettings();
@@ -83,6 +85,46 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object createFromString(EDataType eDataType, String initialValue) {
+		switch (eDataType.getClassifierID()) {
+			case ParametersPackage.SIMILARITY_MODE:
+				return createSimilarityModeFromString(eDataType, initialValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String convertToString(EDataType eDataType, Object instanceValue) {
+		switch (eDataType.getClassifierID()) {
+			case ParametersPackage.SIMILARITY_MODE:
+				return convertSimilarityModeToString(eDataType, instanceValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public UserSettings createUserSettings() {
+		UserSettingsImpl userSettings = new UserSettingsImpl();
+		return userSettings;
 	}
 
 	/**
@@ -190,6 +232,26 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	public SimilarityInterval createSimilarityInterval() {
 		SimilarityIntervalImpl similarityInterval = new SimilarityIntervalImpl();
 		return similarityInterval;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SimilarityMode createSimilarityModeFromString(EDataType eDataType, String initialValue) {
+		SimilarityMode result = SimilarityMode.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertSimilarityModeToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
 	}
 
 	/**

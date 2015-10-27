@@ -84,6 +84,10 @@ public class ParametersAdapterFactory extends AdapterFactoryImpl {
 	protected ParametersSwitch<Adapter> modelSwitch =
 		new ParametersSwitch<Adapter>() {
 			@Override
+			public Adapter caseUserSettings(UserSettings object) {
+				return createUserSettingsAdapter();
+			}
+			@Override
 			public Adapter caseIndividualSolutionImprovementSettings(IndividualSolutionImprovementSettings object) {
 				return createIndividualSolutionImprovementSettingsAdapter();
 			}
@@ -154,6 +158,20 @@ public class ParametersAdapterFactory extends AdapterFactoryImpl {
 		return modelSwitch.doSwitch((EObject)target);
 	}
 
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.UserSettings <em>User Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.parameters.UserSettings
+	 * @generated
+	 */
+	public Adapter createUserSettingsAdapter() {
+		return null;
+	}
 
 	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings <em>Individual Solution Improvement Settings</em>}'.

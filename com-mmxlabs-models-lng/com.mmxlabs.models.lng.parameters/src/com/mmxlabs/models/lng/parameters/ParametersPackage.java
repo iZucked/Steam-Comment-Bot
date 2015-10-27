@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.parameters;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -60,6 +61,79 @@ public interface ParametersPackage extends EPackage {
 	ParametersPackage eINSTANCE = com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl.init();
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl <em>User Settings</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl
+	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getUserSettings()
+	 * @generated
+	 */
+	int USER_SETTINGS = 0;
+
+	/**
+	 * The feature id for the '<em><b>Period Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USER_SETTINGS__PERIOD_START = 0;
+
+	/**
+	 * The feature id for the '<em><b>Period End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USER_SETTINGS__PERIOD_END = 1;
+
+	/**
+	 * The feature id for the '<em><b>Shipping Only</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USER_SETTINGS__SHIPPING_ONLY = 2;
+
+	/**
+	 * The feature id for the '<em><b>Generate Charter Outs</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USER_SETTINGS__GENERATE_CHARTER_OUTS = 3;
+
+	/**
+	 * The feature id for the '<em><b>Build Action Sets</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USER_SETTINGS__BUILD_ACTION_SETS = 4;
+
+	/**
+	 * The feature id for the '<em><b>Similarity Mode</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USER_SETTINGS__SIMILARITY_MODE = 5;
+
+	/**
+	 * The number of structural features of the '<em>User Settings</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int USER_SETTINGS_FEATURE_COUNT = 6;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.IndividualSolutionImprovementSettingsImpl <em>Individual Solution Improvement Settings</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -67,7 +141,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getIndividualSolutionImprovementSettings()
 	 * @generated
 	 */
-	int INDIVIDUAL_SOLUTION_IMPROVEMENT_SETTINGS = 0;
+	int INDIVIDUAL_SOLUTION_IMPROVEMENT_SETTINGS = 1;
 
 	/**
 	 * The feature id for the '<em><b>Iterations</b></em>' attribute.
@@ -104,7 +178,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getParametersModel()
 	 * @generated
 	 */
-	int PARAMETERS_MODEL = 1;
+	int PARAMETERS_MODEL = 2;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -159,7 +233,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getOptimiserSettings()
 	 * @generated
 	 */
-	int OPTIMISER_SETTINGS = 2;
+	int OPTIMISER_SETTINGS = 3;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -304,7 +378,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getObjective()
 	 * @generated
 	 */
-	int OBJECTIVE = 3;
+	int OBJECTIVE = 4;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -359,7 +433,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getConstraint()
 	 * @generated
 	 */
-	int CONSTRAINT = 4;
+	int CONSTRAINT = 5;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -405,7 +479,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getOptimisationRange()
 	 * @generated
 	 */
-	int OPTIMISATION_RANGE = 5;
+	int OPTIMISATION_RANGE = 6;
 
 	/**
 	 * The feature id for the '<em><b>Optimise After</b></em>' attribute.
@@ -442,7 +516,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getAnnealingSettings()
 	 * @generated
 	 */
-	int ANNEALING_SETTINGS = 6;
+	int ANNEALING_SETTINGS = 7;
 
 	/**
 	 * The feature id for the '<em><b>Iterations</b></em>' attribute.
@@ -515,7 +589,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getArgument()
 	 * @generated
 	 */
-	int ARGUMENT = 7;
+	int ARGUMENT = 8;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -553,7 +627,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getSimilaritySettings()
 	 * @generated
 	 */
-	int SIMILARITY_SETTINGS = 8;
+	int SIMILARITY_SETTINGS = 9;
 
 	/**
 	 * The feature id for the '<em><b>Low Interval</b></em>' containment reference.
@@ -609,7 +683,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getSimilarityInterval()
 	 * @generated
 	 */
-	int SIMILARITY_INTERVAL = 9;
+	int SIMILARITY_INTERVAL = 10;
 
 	/**
 	 * The feature id for the '<em><b>Weight</b></em>' attribute.
@@ -638,6 +712,93 @@ public interface ParametersPackage extends EPackage {
 	 */
 	int SIMILARITY_INTERVAL_FEATURE_COUNT = 2;
 
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.SimilarityMode <em>Similarity Mode</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.parameters.SimilarityMode
+	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getSimilarityMode()
+	 * @generated
+	 */
+	int SIMILARITY_MODE = 11;
+
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.UserSettings <em>User Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>User Settings</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.UserSettings
+	 * @generated
+	 */
+	EClass getUserSettings();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#getPeriodStart <em>Period Start</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Period Start</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.UserSettings#getPeriodStart()
+	 * @see #getUserSettings()
+	 * @generated
+	 */
+	EAttribute getUserSettings_PeriodStart();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#getPeriodEnd <em>Period End</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Period End</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.UserSettings#getPeriodEnd()
+	 * @see #getUserSettings()
+	 * @generated
+	 */
+	EAttribute getUserSettings_PeriodEnd();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#isShippingOnly <em>Shipping Only</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Shipping Only</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.UserSettings#isShippingOnly()
+	 * @see #getUserSettings()
+	 * @generated
+	 */
+	EAttribute getUserSettings_ShippingOnly();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#isGenerateCharterOuts <em>Generate Charter Outs</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Generate Charter Outs</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.UserSettings#isGenerateCharterOuts()
+	 * @see #getUserSettings()
+	 * @generated
+	 */
+	EAttribute getUserSettings_GenerateCharterOuts();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#isBuildActionSets <em>Build Action Sets</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Build Action Sets</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.UserSettings#isBuildActionSets()
+	 * @see #getUserSettings()
+	 * @generated
+	 */
+	EAttribute getUserSettings_BuildActionSets();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.UserSettings#getSimilarityMode <em>Similarity Mode</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Similarity Mode</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.UserSettings#getSimilarityMode()
+	 * @see #getUserSettings()
+	 * @generated
+	 */
+	EAttribute getUserSettings_SimilarityMode();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.IndividualSolutionImprovementSettings <em>Individual Solution Improvement Settings</em>}'.
@@ -1114,6 +1275,16 @@ public interface ParametersPackage extends EPackage {
 	EAttribute getSimilarityInterval_Threshold();
 
 	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.parameters.SimilarityMode <em>Similarity Mode</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Similarity Mode</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.SimilarityMode
+	 * @generated
+	 */
+	EEnum getSimilarityMode();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1135,6 +1306,64 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 */
 	interface Literals {
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl <em>User Settings</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.parameters.impl.UserSettingsImpl
+		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getUserSettings()
+		 * @generated
+		 */
+		EClass USER_SETTINGS = eINSTANCE.getUserSettings();
+
+		/**
+		 * The meta object literal for the '<em><b>Period Start</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute USER_SETTINGS__PERIOD_START = eINSTANCE.getUserSettings_PeriodStart();
+
+		/**
+		 * The meta object literal for the '<em><b>Period End</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute USER_SETTINGS__PERIOD_END = eINSTANCE.getUserSettings_PeriodEnd();
+
+		/**
+		 * The meta object literal for the '<em><b>Shipping Only</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute USER_SETTINGS__SHIPPING_ONLY = eINSTANCE.getUserSettings_ShippingOnly();
+
+		/**
+		 * The meta object literal for the '<em><b>Generate Charter Outs</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute USER_SETTINGS__GENERATE_CHARTER_OUTS = eINSTANCE.getUserSettings_GenerateCharterOuts();
+
+		/**
+		 * The meta object literal for the '<em><b>Build Action Sets</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute USER_SETTINGS__BUILD_ACTION_SETS = eINSTANCE.getUserSettings_BuildActionSets();
+
+		/**
+		 * The meta object literal for the '<em><b>Similarity Mode</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute USER_SETTINGS__SIMILARITY_MODE = eINSTANCE.getUserSettings_SimilarityMode();
+
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.IndividualSolutionImprovementSettingsImpl <em>Individual Solution Improvement Settings</em>}' class.
 		 * <!-- begin-user-doc -->
@@ -1506,6 +1735,16 @@ public interface ParametersPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SIMILARITY_INTERVAL__THRESHOLD = eINSTANCE.getSimilarityInterval_Threshold();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.SimilarityMode <em>Similarity Mode</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.parameters.SimilarityMode
+		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getSimilarityMode()
+		 * @generated
+		 */
+		EEnum SIMILARITY_MODE = eINSTANCE.getSimilarityMode();
 
 	}
 

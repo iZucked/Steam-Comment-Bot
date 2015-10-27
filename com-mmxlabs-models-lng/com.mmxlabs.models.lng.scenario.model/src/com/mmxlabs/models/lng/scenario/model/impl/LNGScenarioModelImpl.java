@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PricingModel;
@@ -45,6 +46,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXRootObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getPromptPeriodStart <em>Prompt Period Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getPromptPeriodEnd <em>Prompt Period End</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getReferenceModel <em>Reference Model</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGScenarioModelImpl#getUserSettings <em>User Settings</em>}</li>
  * </ul>
  *
  * @generated
@@ -157,6 +159,16 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * @ordered
 	 */
 	protected LNGReferenceModel referenceModel;
+
+	/**
+	 * The cached value of the '{@link #getUserSettings() <em>User Settings</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getUserSettings()
+	 * @generated
+	 * @ordered
+	 */
+	protected UserSettings userSettings;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -604,6 +616,72 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public UserSettings getUserSettings() {
+		if (userSettings != null && userSettings.eIsProxy()) {
+			InternalEObject oldUserSettings = (InternalEObject)userSettings;
+			userSettings = (UserSettings)eResolveProxy(oldUserSettings);
+			if (userSettings != oldUserSettings) {
+				InternalEObject newUserSettings = (InternalEObject)userSettings;
+				NotificationChain msgs = oldUserSettings.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__USER_SETTINGS, null, null);
+				if (newUserSettings.eInternalContainer() == null) {
+					msgs = newUserSettings.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__USER_SETTINGS, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LNGScenarioPackage.LNG_SCENARIO_MODEL__USER_SETTINGS, oldUserSettings, userSettings));
+			}
+		}
+		return userSettings;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public UserSettings basicGetUserSettings() {
+		return userSettings;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetUserSettings(UserSettings newUserSettings, NotificationChain msgs) {
+		UserSettings oldUserSettings = userSettings;
+		userSettings = newUserSettings;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__USER_SETTINGS, oldUserSettings, newUserSettings);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setUserSettings(UserSettings newUserSettings) {
+		if (newUserSettings != userSettings) {
+			NotificationChain msgs = null;
+			if (userSettings != null)
+				msgs = ((InternalEObject)userSettings).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__USER_SETTINGS, null, msgs);
+			if (newUserSettings != null)
+				msgs = ((InternalEObject)newUserSettings).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_SCENARIO_MODEL__USER_SETTINGS, null, msgs);
+			msgs = basicSetUserSettings(newUserSettings, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_SCENARIO_MODEL__USER_SETTINGS, newUserSettings, newUserSettings));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -617,6 +695,8 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 				return basicSetActualsModel(null, msgs);
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__REFERENCE_MODEL:
 				return basicSetReferenceModel(null, msgs);
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__USER_SETTINGS:
+				return basicSetUserSettings(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -648,6 +728,9 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__REFERENCE_MODEL:
 				if (resolve) return getReferenceModel();
 				return basicGetReferenceModel();
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__USER_SETTINGS:
+				if (resolve) return getUserSettings();
+				return basicGetUserSettings();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -680,6 +763,9 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 				return;
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__REFERENCE_MODEL:
 				setReferenceModel((LNGReferenceModel)newValue);
+				return;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__USER_SETTINGS:
+				setUserSettings((UserSettings)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -714,6 +800,9 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__REFERENCE_MODEL:
 				setReferenceModel((LNGReferenceModel)null);
 				return;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__USER_SETTINGS:
+				setUserSettings((UserSettings)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -740,6 +829,8 @@ public class LNGScenarioModelImpl extends MMXRootObjectImpl implements LNGScenar
 				return isSetPromptPeriodEnd();
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__REFERENCE_MODEL:
 				return referenceModel != null;
+			case LNGScenarioPackage.LNG_SCENARIO_MODEL__USER_SETTINGS:
+				return userSettings != null;
 		}
 		return super.eIsSet(featureID);
 	}

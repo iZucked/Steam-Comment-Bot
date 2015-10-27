@@ -8,6 +8,7 @@ package com.mmxlabs.models.lng.parameters.impl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
@@ -24,7 +25,9 @@ import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.ParametersModel;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.parameters.SimilarityInterval;
+import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.SimilaritySettings;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 /**
@@ -34,6 +37,13 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
  * @generated
  */
 public class ParametersPackageImpl extends EPackageImpl implements ParametersPackage {
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass userSettingsEClass = null;
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -105,6 +115,13 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	private EClass similarityIntervalEClass = null;
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum similarityModeEEnum = null;
+
+	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
@@ -167,6 +184,69 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(ParametersPackage.eNS_URI, theParametersPackage);
 		return theParametersPackage;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getUserSettings() {
+		return userSettingsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getUserSettings_PeriodStart() {
+		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getUserSettings_PeriodEnd() {
+		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getUserSettings_ShippingOnly() {
+		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getUserSettings_GenerateCharterOuts() {
+		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getUserSettings_BuildActionSets() {
+		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getUserSettings_SimilarityMode() {
+		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -598,6 +678,15 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EEnum getSimilarityMode() {
+		return similarityModeEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public ParametersFactory getParametersFactory() {
 		return (ParametersFactory)getEFactoryInstance();
@@ -622,6 +711,14 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		isCreated = true;
 
 		// Create classes and their features
+		userSettingsEClass = createEClass(USER_SETTINGS);
+		createEAttribute(userSettingsEClass, USER_SETTINGS__PERIOD_START);
+		createEAttribute(userSettingsEClass, USER_SETTINGS__PERIOD_END);
+		createEAttribute(userSettingsEClass, USER_SETTINGS__SHIPPING_ONLY);
+		createEAttribute(userSettingsEClass, USER_SETTINGS__GENERATE_CHARTER_OUTS);
+		createEAttribute(userSettingsEClass, USER_SETTINGS__BUILD_ACTION_SETS);
+		createEAttribute(userSettingsEClass, USER_SETTINGS__SIMILARITY_MODE);
+
 		individualSolutionImprovementSettingsEClass = createEClass(INDIVIDUAL_SOLUTION_IMPROVEMENT_SETTINGS);
 		createEAttribute(individualSolutionImprovementSettingsEClass, INDIVIDUAL_SOLUTION_IMPROVEMENT_SETTINGS__ITERATIONS);
 		createEAttribute(individualSolutionImprovementSettingsEClass, INDIVIDUAL_SOLUTION_IMPROVEMENT_SETTINGS__IMPROVING_SOLUTIONS);
@@ -675,6 +772,9 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		similarityIntervalEClass = createEClass(SIMILARITY_INTERVAL);
 		createEAttribute(similarityIntervalEClass, SIMILARITY_INTERVAL__WEIGHT);
 		createEAttribute(similarityIntervalEClass, SIMILARITY_INTERVAL__THRESHOLD);
+
+		// Create enums
+		similarityModeEEnum = createEEnum(SIMILARITY_MODE);
 	}
 
 	/**
@@ -701,8 +801,8 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
-		MMXCorePackage theMMXCorePackage = (MMXCorePackage)EPackage.Registry.INSTANCE.getEPackage(MMXCorePackage.eNS_URI);
 		DateTimePackage theDateTimePackage = (DateTimePackage)EPackage.Registry.INSTANCE.getEPackage(DateTimePackage.eNS_URI);
+		MMXCorePackage theMMXCorePackage = (MMXCorePackage)EPackage.Registry.INSTANCE.getEPackage(MMXCorePackage.eNS_URI);
 
 		// Create type parameters
 
@@ -716,6 +816,14 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		constraintEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 
 		// Initialize classes and features; add operations and parameters
+		initEClass(userSettingsEClass, UserSettings.class, "UserSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getUserSettings_PeriodStart(), theDateTimePackage.getYearMonth(), "periodStart", null, 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUserSettings_PeriodEnd(), theDateTimePackage.getYearMonth(), "periodEnd", null, 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUserSettings_ShippingOnly(), ecorePackage.getEBoolean(), "shippingOnly", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUserSettings_GenerateCharterOuts(), ecorePackage.getEBoolean(), "generateCharterOuts", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUserSettings_BuildActionSets(), ecorePackage.getEBoolean(), "buildActionSets", "false", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUserSettings_SimilarityMode(), this.getSimilarityMode(), "similarityMode", "OFF", 0, 1, UserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		initEClass(individualSolutionImprovementSettingsEClass, IndividualSolutionImprovementSettings.class, "IndividualSolutionImprovementSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getIndividualSolutionImprovementSettings_Iterations(), ecorePackage.getEInt(), "iterations", null, 1, 1, IndividualSolutionImprovementSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getIndividualSolutionImprovementSettings_ImprovingSolutions(), ecorePackage.getEBoolean(), "improvingSolutions", null, 0, 1, IndividualSolutionImprovementSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -769,6 +877,14 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		initEClass(similarityIntervalEClass, SimilarityInterval.class, "SimilarityInterval", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSimilarityInterval_Weight(), ecorePackage.getEInt(), "weight", null, 1, 1, SimilarityInterval.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSimilarityInterval_Threshold(), ecorePackage.getEInt(), "threshold", null, 1, 1, SimilarityInterval.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		// Initialize enums and add enum literals
+		initEEnum(similarityModeEEnum, SimilarityMode.class, "SimilarityMode");
+		addEEnumLiteral(similarityModeEEnum, SimilarityMode.ALL);
+		addEEnumLiteral(similarityModeEEnum, SimilarityMode.OFF);
+		addEEnumLiteral(similarityModeEEnum, SimilarityMode.LOW);
+		addEEnumLiteral(similarityModeEEnum, SimilarityMode.MEDIUM);
+		addEEnumLiteral(similarityModeEEnum, SimilarityMode.HIGH);
 
 		// Create resource
 		createResource(eNS_URI);
