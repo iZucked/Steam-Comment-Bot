@@ -18,16 +18,21 @@ import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.conversion.Converter;
 import org.eclipse.core.databinding.conversion.IConverter;
 import org.eclipse.core.databinding.validation.IValidator;
+import org.eclipse.core.databinding.validation.MultiValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.databinding.EMFUpdateValueStrategy;
 import org.eclipse.emf.databinding.FeaturePath;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.emf.databinding.edit.IEMFEditValueProperty;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -94,10 +99,8 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		final EditingDomain editingDomain;
 		public boolean enabled = true;
 
-		// public Option(final DataSection dataSection, final OptionGroup group, final EditingDomain editingDomain, final String label, final EObject data, final EObject defaultData,
-		// final DataType dataType, final EStructuralFeature... features) {
-		// this(dataSection, group, editingDomain, label, data, defaultData, dataType, null, features);
-		// }
+		@NonNull
+		public final List<IValidator> validators = new LinkedList<>();
 
 		public Option(final DataSection dataSection, final OptionGroup group, final EditingDomain editingDomain, final String label, final EObject data, final EObject defaultData,
 				final DataType dataType, final ChoiceData choiceData, final EStructuralFeature... features) {
@@ -282,19 +285,25 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 	 */
 	private Button createCheckBox(final Composite form, final Option option) {
 		final Button btn = toolkit.createButton(form, option.label, SWT.CHECK);
+		if (!option.enabled) {
+			btn.setEnabled(false);
+			btn.setToolTipText("Module not licensed");
+		}
+
+		if (!option.enabled) {
+			btn.setEnabled(false);
+			btn.setToolTipText("Module not licensed");
+		}
+
+		final EMFUpdateValueStrategy stringToValueStrategy = new EMFUpdateValueStrategy();
+
+		final CompositeValidator v = new CompositeValidator();
+		v.addValidators(option.validators);
+		stringToValueStrategy.setAfterGetValidator(v);
+
 		final IEMFEditValueProperty prop = EMFEditProperties.value(option.editingDomain, FeaturePath.fromList(option.features));
-		final Binding bindValue = dbc.bindValue(WidgetProperties.selection().observe(btn), prop.observe(option.data));
+		final Binding bindValue = dbc.bindValue(WidgetProperties.selection().observe(btn), prop.observe(option.data), stringToValueStrategy, null);
 		ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT);
-
-		if (!option.enabled) {
-			btn.setEnabled(false);
-			btn.setToolTipText("Module not licensed");
-		}
-
-		if (!option.enabled) {
-			btn.setEnabled(false);
-			btn.setToolTipText("Module not licensed");
-		}
 
 		return btn;
 	}
@@ -332,6 +341,11 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 			};
 			strategy.setBeforeSetValidator(validator);
 		}
+
+		final CompositeValidator v = new CompositeValidator();
+		v.addValidators(option.validators);
+		strategy.setAfterGetValidator(v);
+
 		final IEMFEditValueProperty prop = EMFEditProperties.value(option.editingDomain, FeaturePath.fromList(option.features));
 		final Binding bindValue = dbc.bindValue(WidgetProperties.text(SWT.Modify).observeDelayed(500, text), prop.observe(option.data), strategy, null);
 
@@ -411,22 +425,14 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 			}
 		};
 
-		stringToDateStrategy.setAfterGetValidator(validator);
+		final CompositeValidator v = new CompositeValidator();
+		v.addValidator(validator);
+		v.addValidators(option.validators);
+
+		stringToDateStrategy.setAfterGetValidator(v);
 
 		final Binding bindValue = dbc.bindValue(WidgetProperties.text(SWT.Modify).observeDelayed(500, text), prop.observe(option.data), stringToDateStrategy, dateToStringStrategy);
 		ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT);
-
-		if (!option.enabled) {
-			lbl.setEnabled(false);
-			text.setEnabled(false);
-			text.setToolTipText("Module not licensed");
-		}
-
-		if (!option.enabled) {
-			lbl.setEnabled(false);
-			text.setEnabled(false);
-			text.setToolTipText("Module not licensed");
-		}
 
 		if (!option.enabled) {
 			lbl.setEnabled(false);
@@ -452,7 +458,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 				if (value instanceof String) {
 					if (value.equals("") == false) {
 						try {
-							YearMonth.parse((String)value, format);
+							YearMonth.parse((String) value, format);
 						} catch (final IllegalArgumentException e) {
 							return ValidationStatus.error(String.format("'%s' is not a valid date.", value));
 						}
@@ -494,7 +500,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 					@Override
 					public Object convert(final Object fromObject) {
 						if (fromObject instanceof YearMonth) {
-							YearMonth yearMonth = (YearMonth) fromObject;
+							final YearMonth yearMonth = (YearMonth) fromObject;
 							return yearMonth.format(format);
 						}
 						return null;
@@ -503,7 +509,10 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 			}
 		};
 
-		stringToDateStrategy.setAfterGetValidator(validator);
+		final CompositeValidator v = new CompositeValidator();
+		v.addValidator(validator);
+		v.addValidators(option.validators);
+		stringToDateStrategy.setAfterGetValidator(v);
 
 		final Binding bindValue = dbc.bindValue(WidgetProperties.text(SWT.Modify).observeDelayed(500, text), prop.observe(option.data), stringToDateStrategy, dateToStringStrategy);
 		ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT);
@@ -534,6 +543,12 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		final EObject target = owner;
 		final EStructuralFeature lastFeature = option.features[option.features.length - 1];
 
+		final CompositeValidator v = new CompositeValidator();
+		v.addValidators(option.validators);
+
+		// Create the multi-validator
+		final MyValidator validator = new MyValidator(option, v);
+
 		for (final Pair<String, Object> p : choiceData.choices) {
 			final Button btn = toolkit.createButton(area, p.getFirst(), SWT.RADIO);
 			if (p.getSecond().equals(target.eGet(lastFeature))) {
@@ -562,6 +577,11 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 			}
 
 		}
+
+		dbc.addValidationStatusProvider(validator);
+
+		// ValidationStatusProvider
+		ControlDecorationSupport.create(validator, SWT.TOP | SWT.LEFT, area);
 
 		return area;
 
@@ -621,5 +641,80 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		options.add(option);
 
 		return option;
+	}
+
+	public void addValidation(final Option option, final IValidator validator) {
+		option.validators.add(validator);
+	}
+
+	private static class CompositeValidator implements IValidator {
+
+		private final List<IValidator> validators = new LinkedList<>();
+
+		public void addValidator(@NonNull final IValidator validator) {
+			validators.add(validator);
+		}
+
+		public void addValidators(@NonNull final List<IValidator> validators) {
+			for (final IValidator validator : validators) {
+				if (validator != null) {
+					this.validators.add(validator);
+				}
+			}
+		}
+
+		@Override
+		public IStatus validate(final Object value) {
+
+			for (final IValidator validator : validators) {
+				final IStatus status = validator.validate(value);
+				if (!status.isOK()) {
+					return status;
+				}
+			}
+
+			return Status.OK_STATUS;
+		}
+
+	}
+
+	/**
+	 * A validation status provider that is triggered on any value change. Intended for use where a data binding is not available (e.g. the choice controls). Ensure dispose is called. Registering this
+	 * with the data binding context should be sufficient.
+	 * 
+	 * @author Simon Goodall
+	 *
+	 */
+	private static class MyValidator extends MultiValidator {
+		@NonNull
+		private final Option option;
+
+		@NonNull
+		private final IValidator v;
+
+		@Override
+		public void dispose() {
+			option.data.eAdapters().remove(adapter);
+			super.dispose();
+		}
+
+		private final EContentAdapter adapter = new EContentAdapter() {
+			@Override
+			public void notifyChanged(final Notification notification) {
+				super.notifyChanged(notification);
+				revalidate();
+			}
+		};
+
+		public MyValidator(@NonNull final Option option, @NonNull final IValidator v) {
+			this.option = option;
+			this.v = v;
+			option.data.eAdapters().add(adapter);
+		}
+
+		@Override
+		protected IStatus validate() {
+			return v.validate(option.data);
+		}
 	}
 }

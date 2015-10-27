@@ -80,8 +80,8 @@ public final class OptimisationHelper {
 	public static final int EPOCH_LENGTH_PERIOD = 300;
 	public static final int EPOCH_LENGTH_FULL = 900;
 
-	public static Object evaluateScenarioInstance(@NonNull final IEclipseJobManager jobManager, @NonNull final ScenarioInstance instance, @Nullable final String parameterMode,
-			final boolean promptForOptimiserSettings, final boolean optimising, final String k) {
+	public static Object evaluateScenarioInstance(@NonNull final IEclipseJobManager jobManager, @NonNull final ScenarioInstance instance, @Nullable final String parameterMode, final boolean promptForOptimiserSettings,
+			final boolean optimising, final String k) {
 
 		final IScenarioService service = instance.getScenarioService();
 		if (service == null) {
@@ -349,7 +349,8 @@ public final class OptimisationHelper {
 
 				choiceData.enabled = SecurityUtils.getSubject().isPermitted("features:optimisation-similarity");
 
-				dialog.addOption(DataSection.Controls, group, editingDomain, "", copy, defaultSettings, DataType.Choice, choiceData, ParametersPackage.Literals.USER_SETTINGS__SIMILARITY_MODE);
+				Option option = dialog.addOption(DataSection.Controls, group, editingDomain, "", copy, defaultSettings, DataType.Choice, choiceData,
+						ParametersPackage.Literals.USER_SETTINGS__SIMILARITY_MODE);
 				optionAdded = true;
 
 			}
@@ -363,8 +364,34 @@ public final class OptimisationHelper {
 
 				choiceData.enabled = SecurityUtils.getSubject().isPermitted("features:optimisation-actionset");
 
-				dialog.addOption(DataSection.Controls, group, editingDomain, " ", copy, defaultSettings, DataType.Choice, choiceData, ParametersPackage.eINSTANCE.getUserSettings_BuildActionSets());
+				Option option = dialog.addOption(DataSection.Controls, group, editingDomain, " ", copy, defaultSettings, DataType.Choice, choiceData,
+						ParametersPackage.eINSTANCE.getUserSettings_BuildActionSets());
 				optionAdded = true;
+				dialog.addValidation(option, new IValidator() {
+
+					@Override
+					public IStatus validate(Object value) {
+						if (value instanceof UserSettings) {
+							UserSettings userSettings = (UserSettings) value;
+							if (userSettings.isBuildActionSets()) {
+								if (userSettings.getSimilarityMode() == SimilarityMode.OFF) {
+									return ValidationStatus.error("Similarity must be enabled to use action sets");
+								}
+								final YearMonth periodStart = userSettings.getPeriodStart();
+								final YearMonth periodEnd = userSettings.getPeriodEnd();
+								if (periodStart != null && periodEnd != null) {
+									// 3 month window?
+									if (Months.between(periodStart, periodEnd).getAmount() > 3) {
+										return ValidationStatus.error("Unable to run with Action Sets as the period range is greater than three months");
+									}
+								} else {
+									return ValidationStatus.error("Unable to run with Action Sets as the period range is greater than three months");
+								}
+							}
+						}
+						return Status.OK_STATUS;
+					}
+				});
 			}
 		}
 
