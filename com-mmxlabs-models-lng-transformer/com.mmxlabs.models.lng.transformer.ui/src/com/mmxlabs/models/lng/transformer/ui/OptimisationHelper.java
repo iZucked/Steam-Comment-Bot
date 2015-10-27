@@ -14,8 +14,10 @@ import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.command.BasicCommandStack;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
@@ -36,6 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.threeten.extra.Months;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.eclipse.manager.impl.DisposeOnRemoveEclipseListener;
 import com.mmxlabs.jobmanager.jobs.EJobState;
@@ -50,6 +53,7 @@ import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.parameters.provider.ParametersItemProviderAdapterFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeCustomiser;
@@ -80,8 +84,8 @@ public final class OptimisationHelper {
 	public static final int EPOCH_LENGTH_PERIOD = 300;
 	public static final int EPOCH_LENGTH_FULL = 900;
 
-	public static Object evaluateScenarioInstance(@NonNull final IEclipseJobManager jobManager, @NonNull final ScenarioInstance instance, @Nullable final String parameterMode, final boolean promptForOptimiserSettings,
-			final boolean optimising, final String k) {
+	public static Object evaluateScenarioInstance(@NonNull final IEclipseJobManager jobManager, @NonNull final ScenarioInstance instance, @Nullable final String parameterMode,
+			final boolean promptForOptimiserSettings, final boolean optimising, final String k) {
 
 		final IScenarioService service = instance.getScenarioService();
 		if (service == null) {
@@ -103,10 +107,18 @@ public final class OptimisationHelper {
 						return null;
 					}
 				}
-				final OptimiserSettings optimiserSettings = getOptimiserSettings(root, !optimising, parameterMode, promptForOptimiserSettings);
-				if (optimiserSettings == null) {
+				final Pair<UserSettings, OptimiserSettings> optimiserSettings = getOptimiserSettings(root, !optimising, parameterMode, promptForOptimiserSettings);
+
+				if (optimiserSettings == null || optimiserSettings.getSecond() == null) {
 					return null;
 				}
+				final EditingDomain editingDomain = (EditingDomain) instance.getAdapters().get(EditingDomain.class);
+				if (editingDomain != null) {
+					final CompoundCommand cmd = new CompoundCommand("Update settings");
+					cmd.append(SetCommand.create(editingDomain, root, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_UserSettings(), optimiserSettings.getFirst()));
+					editingDomain.getCommandStack().execute(cmd);
+				}
+				// Pair<UserSettings, OptimiserSettings>
 
 				final ScenarioLock scenarioLock = instance.getLock(k);
 				if (scenarioLock.awaitClaim()) {
@@ -114,7 +126,7 @@ public final class OptimisationHelper {
 					IJobDescriptor job = null;
 					try {
 						// create a new job
-						job = new LNGSchedulerJobDescriptor(instance.getName(), instance, optimiserSettings, optimising);
+						job = new LNGSchedulerJobDescriptor(instance.getName(), instance, optimiserSettings.getSecond(), optimising);
 
 						// New optimisation, so check there are no validation errors.
 						if (!validateScenario(root, optimising)) {
@@ -236,7 +248,8 @@ public final class OptimisationHelper {
 	}
 
 	@Nullable
-	public static OptimiserSettings getOptimiserSettings(@NonNull final LNGScenarioModel scenario, final boolean forEvaluation, @Nullable final String parameterMode, final boolean promptUser) {
+	public static Pair<UserSettings, OptimiserSettings> getOptimiserSettings(@NonNull final LNGScenarioModel scenario, final boolean forEvaluation, @Nullable final String parameterMode,
+			final boolean promptUser) {
 
 		UserSettings previousSettings = null;
 		if (scenario != null) {
@@ -262,12 +275,17 @@ public final class OptimisationHelper {
 			return null;
 		}
 
-		OptimiserSettings optimiserSettings = transformUserSettings(defaultSettings, parameterMode);
+		final OptimiserSettings optimiserSettings = transformUserSettings(defaultSettings, parameterMode);
 
-		return optimiserSettings;
+		// Tmp hack - need to update customiser API to avoid needing to back-apply
+		defaultSettings.setGenerateCharterOuts(optimiserSettings.isGenerateCharterOuts());
+		defaultSettings.setBuildActionSets(optimiserSettings.isBuildActionSets());
+		defaultSettings.setShippingOnly(optimiserSettings.isShippingOnly());
+
+		return new Pair<UserSettings, OptimiserSettings>(defaultSettings, optimiserSettings);
 	}
 
-	private static UserSettings openUserDialog(final boolean forEvaluation, UserSettings previousSettings, final UserSettings defaultSettings) {
+	private static UserSettings openUserDialog(final boolean forEvaluation, final UserSettings previousSettings, final UserSettings defaultSettings) {
 		boolean optionAdded = false;
 
 		final Display display = PlatformUI.getWorkbench().getDisplay();
@@ -350,7 +368,7 @@ public final class OptimisationHelper {
 
 				choiceData.enabled = SecurityUtils.getSubject().isPermitted("features:optimisation-similarity");
 
-				Option option = dialog.addOption(DataSection.Controls, group, editingDomain, "", copy, defaultSettings, DataType.Choice, choiceData,
+				final Option option = dialog.addOption(DataSection.Controls, group, editingDomain, "", copy, defaultSettings, DataType.Choice, choiceData,
 						ParametersPackage.Literals.USER_SETTINGS__SIMILARITY_MODE);
 				optionAdded = true;
 
@@ -365,15 +383,15 @@ public final class OptimisationHelper {
 
 				choiceData.enabled = SecurityUtils.getSubject().isPermitted("features:optimisation-actionset");
 
-				Option option = dialog.addOption(DataSection.Controls, group, editingDomain, " ", copy, defaultSettings, DataType.Choice, choiceData,
+				final Option option = dialog.addOption(DataSection.Controls, group, editingDomain, " ", copy, defaultSettings, DataType.Choice, choiceData,
 						ParametersPackage.eINSTANCE.getUserSettings_BuildActionSets());
 				optionAdded = true;
 				dialog.addValidation(option, new IValidator() {
 
 					@Override
-					public IStatus validate(Object value) {
+					public IStatus validate(final Object value) {
 						if (value instanceof UserSettings) {
-							UserSettings userSettings = (UserSettings) value;
+							final UserSettings userSettings = (UserSettings) value;
 							if (userSettings.isBuildActionSets()) {
 								if (userSettings.getSimilarityMode() == SimilarityMode.OFF) {
 									return ValidationStatus.error("Similarity must be enabled to use action sets");
@@ -415,7 +433,7 @@ public final class OptimisationHelper {
 
 	public static OptimiserSettings transformUserSettings(@NonNull final UserSettings userSettings, @Nullable final String parameterMode) {
 
-		OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
+		final OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
 
 		Objective similarityObjective = findObjective(SimilarityFitnessCoreFactory.NAME, optimiserSettings);
 		if (similarityObjective == null) {
