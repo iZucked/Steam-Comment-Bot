@@ -93,7 +93,10 @@ public class BaseFuelImporter extends DefaultClassImporter {
 			final CostModel costModel = ScenarioModelUtil.getCostModel(lngScenarioModel);
 			for (final BaseFuelCost cost : costModel.getBaseFuelCosts()) {
 				if (cost.getFuel() == bf) {
-					result.put("index", cost.getIndex().getName());
+					final BaseFuelIndex index = cost.getIndex();
+					if (index != null) {
+						result.put("index", index.getName());
+					}
 					break;
 				}
 			}
