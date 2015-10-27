@@ -496,13 +496,15 @@ public class DefaultClassImporter extends AbstractClassImporter {
 					if (extensions != null) {
 						int count = 0;
 						for (final EObject extension : extensions) {
-							final IClassImporter importer = Activator.getDefault().getImporterRegistry().getClassImporter(extension.eClass());
-							if (importer != null) {
-								final Map<String, String> subMap = importer.exportObjects(Collections.singleton(extension), context).iterator().next();
-								for (final Map.Entry<String, String> e : subMap.entrySet()) {
-									result.put(reference.getName() + DOT + count + DOT + e.getKey(), e.getValue());
+							if (shouldExportExtension(object, extension)) {
+								final IClassImporter importer = Activator.getDefault().getImporterRegistry().getClassImporter(extension.eClass());
+								if (importer != null) {
+									final Map<String, String> subMap = importer.exportObjects(Collections.singleton(extension), context).iterator().next();
+									for (final Map.Entry<String, String> e : subMap.entrySet()) {
+										result.put(reference.getName() + DOT + count + DOT + e.getKey(), e.getValue());
+									}
+									++count;
 								}
-								++count;
 							}
 						}
 						if (count > 0) {
@@ -535,6 +537,10 @@ public class DefaultClassImporter extends AbstractClassImporter {
 				}
 			}
 		}
+	}
+
+	protected boolean shouldExportExtension(EObject object, EObject extension) {
+		return true;
 	}
 
 	protected boolean shouldExportFeature(final EStructuralFeature feature) {
