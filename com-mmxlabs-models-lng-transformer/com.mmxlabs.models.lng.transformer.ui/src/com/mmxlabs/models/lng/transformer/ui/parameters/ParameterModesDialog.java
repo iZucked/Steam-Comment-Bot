@@ -33,6 +33,7 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.databinding.fieldassist.ControlDecorationSupport;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -117,6 +118,9 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 	}
 
 	private final Map<DataSection, List<Option>> optionsMap = new EnumMap<DataSection, List<Option>>(DataSection.class);
+	
+	@Nullable
+	private String title;
 
 	public ParameterModesDialog(final Shell parentShell) {
 		super(parentShell);
@@ -128,10 +132,15 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 
 	@Override
 	protected void doCreateFormContent() {
+
 		// Get the form object and set a title
 		final ScrolledForm form = managedForm.getForm();
 		form.setLayoutData(new GridData(GridData.FILL_BOTH | GridData.GRAB_HORIZONTAL));
-		form.setText("Settings");
+		if (title != null) {
+			form.setText(title);
+		} else {
+			form.setText("Settings");
+		}
 		toolkit.decorateFormHeading(form.getForm());
 
 		// Disable reset button as choice control does not work correctly with it.
@@ -716,5 +725,13 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		protected IStatus validate() {
 			return v.validate(option.data);
 		}
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 }

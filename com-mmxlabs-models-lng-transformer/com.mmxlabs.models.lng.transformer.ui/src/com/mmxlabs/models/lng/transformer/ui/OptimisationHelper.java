@@ -279,6 +279,7 @@ public final class OptimisationHelper {
 		//
 		// Fire up a dialog
 		final ParameterModesDialog dialog = new ParameterModesDialog(display.getActiveShell());
+		dialog.setTitle(forEvaluation ? "Evaluation Settings" : "Optimisation Settings");
 
 		// final OptimiserSettings copy = EcoreUtil.copy(previousSettings);
 		final UserSettings copy = EcoreUtil.copy(previousSettings);
