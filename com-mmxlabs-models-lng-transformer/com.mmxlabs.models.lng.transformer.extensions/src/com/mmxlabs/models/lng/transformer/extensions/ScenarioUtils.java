@@ -15,7 +15,9 @@ import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityInterval;
+import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.SimilaritySettings;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRequirementConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.LockedUnusedElementsConstraintCheckerFactory;
@@ -183,6 +185,18 @@ public class ScenarioUtils {
 		interval.setWeight(weight);
 
 		return interval;
+	}
+
+	@NonNull
+	public static UserSettings createDefaultUserSettings() {
+		UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
+
+		userSettings.setBuildActionSets(false);
+		userSettings.setGenerateCharterOuts(false);
+		userSettings.setShippingOnly(false);
+		userSettings.setSimilarityMode(SimilarityMode.OFF);
+
+		return userSettings;
 	}
 
 }

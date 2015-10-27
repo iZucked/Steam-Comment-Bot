@@ -9,7 +9,10 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.apache.shiro.SecurityUtils;
+import org.eclipse.core.databinding.validation.IValidator;
+import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -23,6 +26,8 @@ import org.eclipse.emf.validation.service.IBatchValidator;
 import org.eclipse.emf.validation.service.IConstraintDescriptor;
 import org.eclipse.emf.validation.service.IConstraintFilter;
 import org.eclipse.emf.validation.service.ModelValidationService;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
@@ -41,6 +46,8 @@ import com.mmxlabs.models.lng.parameters.Objective;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
+import com.mmxlabs.models.lng.parameters.SimilarityMode;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.parameters.provider.ParametersItemProviderAdapterFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
@@ -73,8 +80,8 @@ public final class OptimisationHelper {
 	public static final int EPOCH_LENGTH_PERIOD = 300;
 	public static final int EPOCH_LENGTH_FULL = 900;
 
-	public static Object evaluateScenarioInstance(final IEclipseJobManager jobManager, final ScenarioInstance instance, final String parameterMode, final boolean promptForOptimiserSettings,
-			final boolean optimising, final String k) {
+	public static Object evaluateScenarioInstance(@NonNull final IEclipseJobManager jobManager, @NonNull final ScenarioInstance instance, @Nullable final String parameterMode,
+			final boolean promptForOptimiserSettings, final boolean optimising, final String k) {
 
 		final IScenarioService service = instance.getScenarioService();
 		if (service == null) {
@@ -162,6 +169,7 @@ public final class OptimisationHelper {
 									final String message = StringEscaper.escapeUIString(ex.getMessage());
 									MessageDialog.openError(display.getActiveShell(), "Error starting optimisation", "An error occured. See Error Log for more details.\n" + message);
 								}
+
 							});
 						}
 					}
@@ -227,20 +235,201 @@ public final class OptimisationHelper {
 		return true;
 	}
 
-	public static OptimiserSettings getOptimiserSettings(final LNGScenarioModel scenario, final boolean forEvaluation, final String parameterMode, final boolean promptUser) {
+	@Nullable
+	public static OptimiserSettings getOptimiserSettings(@NonNull final LNGScenarioModel scenario, final boolean forEvaluation, @Nullable final String parameterMode, final boolean promptUser) {
 
-		OptimiserSettings previousSettings = null;
+		UserSettings previousSettings = null;
 		if (scenario != null) {
-			previousSettings = scenario.getParameters();
+			previousSettings = scenario.getUserSettings();
 		}
 
-		final OptimiserSettings defaultSettings = ScenarioUtils.createDefaultSettings();
+		final UserSettings defaultSettings = ScenarioUtils.createDefaultUserSettings();
 		if (previousSettings == null) {
 			previousSettings = defaultSettings;
 		}
 
+		// Permit the user to override the settings object. Use the previous settings as the initial value
+		if (promptUser) {
+			previousSettings = openUserDialog(forEvaluation, previousSettings, defaultSettings);
+		}
+
 		if (previousSettings == null) {
 			return null;
+		}
+
+		// Only merge across specific fields - not all of them. This permits additions to the default settings to pass through to the scenario.
+		if (!mergeFields(previousSettings, defaultSettings)) {
+			return null;
+		}
+
+		OptimiserSettings optimiserSettings = transformUserSettings(defaultSettings, parameterMode);
+
+		return optimiserSettings;
+	}
+
+	private static UserSettings openUserDialog(final boolean forEvaluation, UserSettings previousSettings, final UserSettings defaultSettings) {
+		boolean optionAdded = false;
+
+		final Display display = PlatformUI.getWorkbench().getDisplay();
+
+		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+		adapterFactory.addAdapterFactory(new ParametersItemProviderAdapterFactory());
+		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
+		final EditingDomain editingDomain = new AdapterFactoryEditingDomain(adapterFactory, new BasicCommandStack());
+		//
+		// Fire up a dialog
+		final ParameterModesDialog dialog = new ParameterModesDialog(display.getActiveShell());
+
+		// final OptimiserSettings copy = EcoreUtil.copy(previousSettings);
+		final UserSettings copy = EcoreUtil.copy(previousSettings);
+
+		// Reset disabled features
+		resetDisabledFeatures(copy);
+
+		if (!forEvaluation) {
+			// dialog.addOption(DataSection.Controls, null, editingDomain, "Number of Iterations", copy, defaultSettings, DataType.PositiveInt,
+			// ParametersPackage.eINSTANCE.getOptimiserSettings_AnnealingSettings(), ParametersPackage.eINSTANCE.getAnnealingSettings_Iterations());
+			// optionAdded = true;
+
+			// Check period optimisation is permitted
+			// if (SecurityUtils.getSubject().isPermitted("features:optimisation-period")) {
+			{
+				final OptionGroup group = dialog.createGroup(DataSection.Controls, "Optimise period");
+				final Option optStart = dialog.addOption(DataSection.Controls, group, editingDomain, "Start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear,
+						ParametersPackage.eINSTANCE.getUserSettings_PeriodStart());
+				final Option optEnd = dialog.addOption(DataSection.Controls, group, editingDomain, "Up to start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear,
+						ParametersPackage.eINSTANCE.getUserSettings_PeriodEnd());
+				if (!SecurityUtils.getSubject().isPermitted("features:optimisation-period")) {
+					optStart.enabled = false;
+					optEnd.enabled = false;
+				}
+				optionAdded = true;
+			}
+
+			{
+				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+				choiceData.addChoice("Off", Boolean.FALSE);
+				choiceData.addChoice("On", Boolean.TRUE);
+				dialog.addOption(DataSection.Toggles, null, editingDomain, "Shipping only: ", copy, defaultSettings, DataType.Choice, choiceData,
+						ParametersPackage.eINSTANCE.getUserSettings_ShippingOnly());
+				optionAdded = true;
+			}
+			// dialog.addOption(DataSection.Main, null, editingDomian, "Shipping Only Optimisation", copy, defaultSettings, DataType.Boolean,
+			// ParametersPackage.eINSTANCE.getOptimiserSettings_ShippingOnly());
+		}
+		// if (SecurityUtils.getSubject().isPermitted("features:optimisation-charter-out-generation")) {
+		{
+			// dialog.addOption(DataSection.Main, null, editingDomian, "Generate Charter Outs", copy, defaultSettings, DataType.Choice,
+			// ParametersPackage.eINSTANCE.getOptimiserSettings_GenerateCharterOuts());
+
+			final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+			choiceData.addChoice("Off", Boolean.FALSE);
+			choiceData.addChoice("On", Boolean.TRUE);
+
+			choiceData.enabled = SecurityUtils.getSubject().isPermitted("features:optimisation-charter-out-generation");
+			// dialog.addOption(DataSection.Main, null, editingDomian, "Similarity", copy, defaultSettings, DataType.Choice, choiceData,
+			// ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
+			dialog.addOption(DataSection.Toggles, null, editingDomain, "Generate charter outs: ", copy, defaultSettings, DataType.Choice, choiceData,
+					ParametersPackage.eINSTANCE.getUserSettings_GenerateCharterOuts());
+			optionAdded = true;
+		}
+
+		if (!forEvaluation) {
+			// if (SecurityUtils.getSubject().isPermitted("features:optimisation-similarity")) {
+			{
+
+				final OptionGroup group = dialog.createGroup(DataSection.Controls, "Similarity");
+
+				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+				choiceData.addChoice("Off", SimilarityMode.OFF);
+				choiceData.addChoice("Low", SimilarityMode.LOW);
+				choiceData.addChoice("Med", SimilarityMode.MEDIUM);
+				choiceData.addChoice("High", SimilarityMode.HIGH);
+				// choiceData.addChoice("All", SimilarityMode.ALL);
+
+				choiceData.enabled = SecurityUtils.getSubject().isPermitted("features:optimisation-similarity");
+
+				dialog.addOption(DataSection.Controls, group, editingDomain, "", copy, defaultSettings, DataType.Choice, choiceData, ParametersPackage.Literals.USER_SETTINGS__SIMILARITY_MODE);
+				optionAdded = true;
+
+			}
+			{
+
+				final OptionGroup group = dialog.createGroup(DataSection.Controls, "Action sets");
+
+				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
+				choiceData.addChoice("Off", Boolean.FALSE);
+				choiceData.addChoice("On", Boolean.TRUE);
+
+				choiceData.enabled = SecurityUtils.getSubject().isPermitted("features:optimisation-actionset");
+
+				dialog.addOption(DataSection.Controls, group, editingDomain, " ", copy, defaultSettings, DataType.Choice, choiceData, ParametersPackage.eINSTANCE.getUserSettings_BuildActionSets());
+				optionAdded = true;
+			}
+		}
+
+		if (optionAdded) {
+			final int[] ret = new int[1];
+			display.syncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					ret[0] = dialog.open();
+				}
+			});
+
+			if (ret[0] != Window.OK) {
+				return null;
+			}
+		}
+		return copy;
+	}
+
+	public static OptimiserSettings transformUserSettings(@NonNull final UserSettings userSettings, @Nullable final String parameterMode) {
+
+		OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
+
+		Objective similarityObjective = findObjective(SimilarityFitnessCoreFactory.NAME, optimiserSettings);
+		if (similarityObjective == null) {
+			similarityObjective = ParametersFactory.eINSTANCE.createObjective();
+			similarityObjective.setName(SimilarityFitnessCoreFactory.NAME);
+			optimiserSettings.getObjectives().add(similarityObjective);
+		}
+
+		similarityObjective.setEnabled(true);
+		similarityObjective.setWeight(1.0);
+
+		switch (userSettings.getSimilarityMode()) {
+		case ALL:
+			assert false;
+			break;
+		case HIGH:
+			optimiserSettings.setSimilaritySettings(ScenarioUtils.createHighSimilaritySettings());
+			optimiserSettings.getAnnealingSettings().setRestarting(true);
+			break;
+		case LOW:
+			optimiserSettings.setSimilaritySettings(ScenarioUtils.createLowSimilaritySettings());
+			optimiserSettings.getAnnealingSettings().setRestarting(false);
+			break;
+		case MEDIUM:
+			optimiserSettings.setSimilaritySettings(ScenarioUtils.createMediumSimilaritySettings());
+			optimiserSettings.getAnnealingSettings().setRestarting(false);
+			break;
+		case OFF:
+			optimiserSettings.setSimilaritySettings(ScenarioUtils.createOffSimilaritySettings());
+			optimiserSettings.getAnnealingSettings().setRestarting(false);
+			break;
+		default:
+			assert false;
+			break;
+
+		}
+		// change epoch length
+		// TODO: make this better!
+		if (userSettings.isSetPeriodStart() && userSettings.isSetPeriodEnd()) {
+			optimiserSettings.getAnnealingSettings().setEpochLength(EPOCH_LENGTH_PERIOD);
+		} else {
+			optimiserSettings.getAnnealingSettings().setEpochLength(EPOCH_LENGTH_FULL);
 		}
 
 		final IParameterModesRegistry parameterModesRegistry = Activator.getDefault().getParameterModesRegistry();
@@ -253,193 +442,34 @@ public final class OptimisationHelper {
 
 				final IParameterModeCustomiser customiser = parameterModesRegistry.getCustomiser(parameterMode);
 				if (customiser != null) {
-					customiser.customise(previousSettings);
+					customiser.customise(optimiserSettings);
 				}
 			}
-		}
-
-		// Permit the user to override the settings object. Use the previous settings as the initial value
-		if (promptUser) {
-
-			boolean optionAdded = false;
-
-			final Display display = Display.getDefault();
-
-			final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
-			adapterFactory.addAdapterFactory(new ParametersItemProviderAdapterFactory());
-			adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
-			final EditingDomain editingDomain = new AdapterFactoryEditingDomain(adapterFactory, new BasicCommandStack());
-
-			// Fire up a dialog
-			final ParameterModesDialog dialog = new ParameterModesDialog(display.getActiveShell());
-
-			final OptimiserSettings copy = EcoreUtil.copy(previousSettings);
-
-			// Reset disabled features
-			resetDisabledFeatures(copy);
-
-			if (!forEvaluation) {
-				// dialog.addOption(DataSection.Controls, null, editingDomain, "Number of Iterations", copy, defaultSettings, DataType.PositiveInt,
-				// ParametersPackage.eINSTANCE.getOptimiserSettings_AnnealingSettings(), ParametersPackage.eINSTANCE.getAnnealingSettings_Iterations());
-				// optionAdded = true;
-
-				// Check period optimisation is permitted
-				// if (SecurityUtils.getSubject().isPermitted("features:optimisation-period")) {
-				{
-					final OptionGroup group = dialog.createGroup(DataSection.Controls, "Optimise period");
-					final Option optStart = dialog.addOption(DataSection.Controls, group, editingDomain, "Start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear,
-							ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
-					final Option optEnd = dialog.addOption(DataSection.Controls, group, editingDomain, "Up to start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear,
-							ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseBefore());
-					if (!SecurityUtils.getSubject().isPermitted("features:optimisation-period")) {
-						optStart.enabled = false;
-						optEnd.enabled = false;
-					}
-					optionAdded = true;
-				}
-
-				{
-					final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-					choiceData.addChoice("Off", Boolean.FALSE);
-					choiceData.addChoice("On", Boolean.TRUE);
-					dialog.addOption(DataSection.Toggles, null, editingDomain, "Shipping only: ", copy, defaultSettings, DataType.Choice, choiceData,
-							ParametersPackage.eINSTANCE.getOptimiserSettings_ShippingOnly());
-					optionAdded = true;
-				}
-				// dialog.addOption(DataSection.Main, null, editingDomian, "Shipping Only Optimisation", copy, defaultSettings, DataType.Boolean,
-				// ParametersPackage.eINSTANCE.getOptimiserSettings_ShippingOnly());
-			}
-			// if (SecurityUtils.getSubject().isPermitted("features:optimisation-charter-out-generation")) {
-			{
-				// dialog.addOption(DataSection.Main, null, editingDomian, "Generate Charter Outs", copy, defaultSettings, DataType.Choice,
-				// ParametersPackage.eINSTANCE.getOptimiserSettings_GenerateCharterOuts());
-
-				final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-				choiceData.addChoice("Off", Boolean.FALSE);
-				choiceData.addChoice("On", Boolean.TRUE);
-
-				choiceData.enabled = SecurityUtils.getSubject().isPermitted("features:optimisation-charter-out-generation");
-				// dialog.addOption(DataSection.Main, null, editingDomian, "Similarity", copy, defaultSettings, DataType.Choice, choiceData,
-				// ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
-				dialog.addOption(DataSection.Toggles, null, editingDomain, "Generate charter outs: ", copy, defaultSettings, DataType.Choice, choiceData,
-						ParametersPackage.eINSTANCE.getOptimiserSettings_GenerateCharterOuts());
-				optionAdded = true;
-
-			}
-			if (!forEvaluation) {
-				// if (SecurityUtils.getSubject().isPermitted("features:optimisation-similarity")) {
-				{
-
-					final OptionGroup group = dialog.createGroup(DataSection.Controls, "Similarity");
-
-					final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-					choiceData.addChoice("Off", ScenarioUtils.createOffSimilaritySettings());
-					choiceData.addChoice("Low", ScenarioUtils.createLowSimilaritySettings());
-					choiceData.addChoice("Med", ScenarioUtils.createMediumSimilaritySettings());
-					choiceData.addChoice("High", ScenarioUtils.createHighSimilaritySettings());
-
-					choiceData.enabled = SecurityUtils.getSubject().isPermitted("features:optimisation-similarity");
-
-					Objective objective = findObjective(SimilarityFitnessCoreFactory.NAME, copy);
-					// Create objective if missing.
-					if (objective == null) {
-						objective = ParametersFactory.eINSTANCE.createObjective();
-						objective.setName(SimilarityFitnessCoreFactory.NAME);
-						copy.getObjectives().add(objective);
-					}
-					if (copy.getSimilaritySettings() == null) {
-						copy.setSimilaritySettings(ScenarioUtils.createOffSimilaritySettings());
-					}
-
-					objective.setEnabled(true);
-					objective.setWeight(1.0);
-
-					dialog.addOption(DataSection.Controls, group, editingDomain, "", copy, defaultSettings, DataType.Choice, choiceData,
-							ParametersPackage.Literals.OPTIMISER_SETTINGS__SIMILARITY_SETTINGS);
-					optionAdded = true;
-				}
-				{
-
-					final OptionGroup group = dialog.createGroup(DataSection.Controls, "Action sets");
-
-					final ParameterModesDialog.ChoiceData choiceData = new ParameterModesDialog.ChoiceData();
-					choiceData.addChoice("Off", Boolean.FALSE);
-					choiceData.addChoice("On", Boolean.TRUE);
-
-					choiceData.enabled = SecurityUtils.getSubject().isPermitted("features:optimisation-actionset");
-
-					// Objective objective = findObjective(SimilarityFitnessCoreFactory.NAME, copy);
-					// // Create objective if missing.
-					// if (objective == null) {
-					// objective = ParametersFactory.eINSTANCE.createObjective();
-					// objective.setName(SimilarityFitnessCoreFactory.NAME);
-					// copy.getObjectives().add(objective);
-					// }
-					// if (copy.getSimilaritySettings() == null) {
-					// copy.setSimilaritySettings(ScenarioUtils.createOffSettings());
-					// }
-
-					// objective.setEnabled(false);
-					// objective.setWeight(1.0);
-
-					dialog.addOption(DataSection.Controls, group, editingDomain, " ", copy, defaultSettings, DataType.Choice, choiceData,
-							ParametersPackage.eINSTANCE.getOptimiserSettings_BuildActionSets());
-					optionAdded = true;
-				}
-			}
-
-			if (optionAdded) {
-				final int[] ret = new int[1];
-				display.syncExec(new Runnable() {
-
-					@Override
-					public void run() {
-						ret[0] = dialog.open();
-					}
-				});
-
-				if (ret[0] != Window.OK) {
-					return null;
-				}
-			}
-			previousSettings = copy;
-		}
-
-		// TODO: Hard code or use extender?
-		if (previousSettings.getRange().isSetOptimiseAfter() && previousSettings.getRange().isSetOptimiseBefore()) {
-			// Set epoch lengths
-		} else {
-			// Set epoch lengths
-		}
-
-		// Only merge across specific fields - not all of them. This permits additions to the default settings to pass through to the scenario.
-		if (!mergeFields(previousSettings, defaultSettings)) {
-			return null;
 		}
 
 		final Collection<IParameterModeExtender> extenders = parameterModesRegistry.getExtenders();
 		if (extenders != null) {
 			for (final IParameterModeExtender extender : extenders) {
-				extender.extend(defaultSettings, parameterMode);
+				extender.extend(optimiserSettings, parameterMode);
 			}
 		}
 
-		return defaultSettings;
+		return optimiserSettings;
 	}
 
-	private static void resetDisabledFeatures(final OptimiserSettings copy) {
+	private static void resetDisabledFeatures(@NonNull final UserSettings copy) {
 		if (!SecurityUtils.getSubject().isPermitted("features:optimisation-actionset")) {
 			copy.setBuildActionSets(false);
 		}
 		if (!SecurityUtils.getSubject().isPermitted("features:optimisation-period")) {
-			copy.getRange().unsetOptimiseBefore();
-			copy.getRange().unsetOptimiseAfter();
+			copy.unsetPeriodStart();
+			copy.unsetPeriodEnd();
 		}
 		if (!SecurityUtils.getSubject().isPermitted("features:optimisation-charter-out-generation")) {
 			copy.setGenerateCharterOuts(false);
 		}
 		if (!SecurityUtils.getSubject().isPermitted("features:optimisation-similarity")) {
-			copy.setSimilaritySettings(ScenarioUtils.createOffSimilaritySettings());
+			copy.setSimilarityMode(SimilarityMode.OFF);
 		}
 	}
 
@@ -450,54 +480,29 @@ public final class OptimisationHelper {
 	 * @param to
 	 * @return
 	 */
-	private static boolean mergeFields(final OptimiserSettings from, final OptimiserSettings to) {
+	private static boolean mergeFields(@NonNull final UserSettings from, @NonNull final UserSettings to) {
 
 		resetDisabledFeatures(from);
 
 		// TODO: replace all this ugly code by a list of EStructuralFeatures and loop through
 		// them doing the right thing
 
-		if (from.getRange().isSetOptimiseAfter() == false) {
-			to.getRange().unsetOptimiseAfter();
+		if (from.isSetPeriodStart() == false) {
+			to.unsetPeriodStart();
 		} else {
-			to.getRange().setOptimiseAfter(from.getRange().getOptimiseAfter());
+			to.setPeriodStart(from.getPeriodStart());
 		}
-
-		if (from.getRange().isSetOptimiseBefore() == false) {
-			to.getRange().unsetOptimiseBefore();
+		if (from.isSetPeriodEnd() == false) {
+			to.unsetPeriodEnd();
 		} else {
-			to.getRange().setOptimiseBefore(from.getRange().getOptimiseBefore());
-		}
-
-		// change epoch length
-		// TODO: make this better!
-		if (to.getRange().isSetOptimiseAfter() && to.getRange().isSetOptimiseBefore()) {
-			to.getAnnealingSettings().setEpochLength(EPOCH_LENGTH_PERIOD);
-		} else {
-			to.getAnnealingSettings().setEpochLength(EPOCH_LENGTH_FULL);
+			to.setPeriodEnd(from.getPeriodEnd());
 		}
 
 		to.setShippingOnly(from.isShippingOnly());
 		to.setGenerateCharterOuts(from.isGenerateCharterOuts());
-		if (from.getSimilaritySettings() != null) {
-			to.setSimilaritySettings(from.getSimilaritySettings());
-		}
 
-		{
-			final Objective fromSimilarity = findObjective(SimilarityFitnessCoreFactory.NAME, from);
-			final Objective toSimilarity = findObjective(SimilarityFitnessCoreFactory.NAME, to);
-			if (toSimilarity == null && fromSimilarity != null) {
-				to.getObjectives().add(EcoreUtil.copy(fromSimilarity));
-			} else if (toSimilarity != null && fromSimilarity == null) {
-				to.getObjectives().remove(toSimilarity);
-			} else if (toSimilarity != null && fromSimilarity != null) {
-				toSimilarity.setEnabled(fromSimilarity.isEnabled());
-				toSimilarity.setWeight(fromSimilarity.getWeight());
-				// make changes to restarts based on similarity settings (hidden from UI)
-				if (toSimilarity != null && to.getSimilaritySettings().equals(ScenarioUtils.createHighSimilaritySettings())) {
-					to.getAnnealingSettings().setRestarting(true);
-				}
-			}
+		if (from.getSimilarityMode() != null) {
+			to.setSimilarityMode(from.getSimilarityMode());
 		}
 		to.setBuildActionSets(from.isBuildActionSets());
 
@@ -506,20 +511,20 @@ public final class OptimisationHelper {
 
 			String actionSetErrorMessage = null;
 
-			if (to.getSimilaritySettings().equals(ScenarioUtils.createOffSimilaritySettings())) {
+			if (to.getSimilarityMode() == SimilarityMode.OFF) {
 				to.setBuildActionSets(false);
 				actionSetErrorMessage = "Unable to run with Action Sets as similarity is turned off";
 			}
 			if (to.isBuildActionSets()) {
-				if (to.getRange() == null) {
+				if (to.getPeriodStart() == null && to.getPeriodEnd() == null) {
 					actionSetErrorMessage = "Unable to run with Action Sets as there is no period range set";
 					to.setBuildActionSets(false);
 				} else {
-					final YearMonth optimiseBefore = to.getRange().getOptimiseBefore();
-					final YearMonth optimiseAfter = to.getRange().getOptimiseAfter();
-					if (optimiseAfter != null && optimiseBefore != null) {
+					final YearMonth periodStart = to.getPeriodStart();
+					final YearMonth periodEnd = to.getPeriodEnd();
+					if (periodStart != null && periodEnd != null) {
 						// 3 month window?
-						if (Months.between(optimiseAfter, optimiseBefore).getAmount() > 3) {
+						if (Months.between(periodStart, periodEnd).getAmount() > 3) {
 							actionSetErrorMessage = "Unable to run with Action Sets as the period range is too big";
 							to.setBuildActionSets(false);
 						}
