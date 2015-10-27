@@ -12,6 +12,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
+import com.mmxlabs.models.lng.commercial.SlotContractParams;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.AVesselSet;
@@ -1255,6 +1256,14 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	 */
 	@NonNull
 	ZonedDateTime getPricingDateAsDateTime();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	SlotContractParams getSlotContractParams();
 
 } // end of  Slot
 

@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.cargo.util;
 
+import org.eclipse.emf.ecore.EAnnotation;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -14,6 +16,8 @@ import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
 
 public final class SlotContractParamsHelper {
+
+	public static final String ANNOTATION_SLOT_CONTRACT_PARAMS = "http://minimaxlabs.com/models/commercial/slot/parameters";
 
 	/**
 	 * Find and return if present a valid {@link SlotContractParams} instance, otherwise return null. A valid params instance is one that is valid for the current contract. It is possible that a slot
@@ -42,6 +46,40 @@ public final class SlotContractParamsHelper {
 		for (final EObject ext : slot.getExtensions()) {
 			if (paramsCls.isInstance(ext)) {
 				return paramsCls.cast(ext);
+			}
+		}
+		return null;
+	}
+
+	@Nullable
+	public static SlotContractParams findSlotContractParams(@NonNull final Slot slot) {
+		final Contract contract = slot.getContract();
+		if (contract == null) {
+			return null;
+		}
+		final LNGPriceCalculatorParameters priceInfo = contract.getPriceInfo();
+		if (priceInfo == null) {
+			return null;
+		}
+		final EClass priceInfoClass = priceInfo.eClass();
+		final EAnnotation annotation = priceInfoClass.getEAnnotation(ANNOTATION_SLOT_CONTRACT_PARAMS);
+		if (annotation == null) {
+			return null;
+		}
+		final EClass paramsObjectEClass = (EClass) annotation.getReferences().get(0);
+		if (paramsObjectEClass == null ) {
+			return null;
+		}
+		Class<?> cls = paramsObjectEClass.getInstanceClass();
+		
+		if (!SlotContractParams.class.isAssignableFrom(cls)) {
+			return null;
+		}
+		if (paramsObjectEClass != null) {
+			for (final EObject ext : slot.getExtensions()) {
+				if (paramsObjectEClass.isInstance(ext)) {
+					return (SlotContractParams) ext;
+				}
 			}
 		}
 		return null;
