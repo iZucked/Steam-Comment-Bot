@@ -18,6 +18,7 @@ import java.util.Map;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.threeten.extra.Days;
@@ -267,64 +268,6 @@ public abstract class AbstractVerticalReportVisualiser {
 	 * @param date
 	 * @return
 	 */
-	public Event[] getEventsByWindowStart(final Sequence seq, final LocalDate date) {
-		return getEventsByWindowStart(seq, date, date.plusDays(1));
-	}
-
-	/**
-	 * Returns the events, if any, occurring between the two dates specified.
-	 */
-	public Event[] getEventsByWindowStart(final Sequence seq, final LocalDate start, final LocalDate end) {
-		final List<Event> result = new ArrayList<>();
-		if (seq != null && start != null && end != null) {
-			for (final Event event : seq.getEvents()) {
-
-				final LocalDate eventStart;
-				final LocalDate eventEnd;
-
-				if (event instanceof SlotVisit) {
-					final SlotVisit slotVisit = (SlotVisit) event;
-					final Pair<LocalDate, LocalDate> p = getWindowDatesForSlotVisit(slotVisit);
-					eventStart = p.getFirst();
-					eventEnd = p.getSecond();
-				} else if (event instanceof VesselEventVisit) {
-					final VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
-					final VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
-					eventStart = getLocalDateFor(vesselEvent.getStartAfterAsDateTime());
-					eventEnd = getLocalDateFor(vesselEvent.getStartByAsDateTime());
-				} else {
-					eventStart = getLocalDateFor(event.getStart());
-					eventEnd = getLocalDateFor(event.getEnd());
-				}
-				// when we get to an event after the search window, break the loop
-				// NO: events are not guaranteed to be sorted by date :(
-				if (eventStart.isAfter(end)) {
-					// break;
-				}
-				// otherwise, as long as the event is in the search window, add it to the results
-				// if the event ends at midnight, we do *not* count it towards this day
-				else if (start.isBefore(eventEnd)) {
-					result.add(event);
-				}
-			}
-		}
-		return result.toArray(new Event[0]);
-	}
-
-	public Pair<LocalDate, LocalDate> getWindowDatesForSlotVisit(final SlotVisit slotVisit) {
-		final Slot slot = slotVisit.getSlotAllocation().getSlot();
-		final LocalDate eventStart = getLocalDateFor(slot.getWindowStartWithSlotOrPortTime());
-		final LocalDate eventEnd = getLocalDateFor(slot.getWindowEndWithSlotOrPortTime());
-		return new Pair<>(eventStart, eventEnd);
-	}
-
-	/**
-	 * Returns all events in the specified sequence which overlap with the 24 hr period starting with the specified date
-	 * 
-	 * @param seq
-	 * @param date
-	 * @return
-	 */
 	public Event[] getEventsByScheduledDate(final Sequence seq, final LocalDate date) {
 		return getEventsByScheduledDate(seq, date, date.plusDays(1));
 	}
@@ -398,20 +341,16 @@ public abstract class AbstractVerticalReportVisualiser {
 	// }
 	// }
 
-	public LocalDate getLocalDateFor(final ZonedDateTime dateTime) {
-		if (dateTime == null) {
-			return null;
-		}
+	@NonNull
+	public LocalDate getLocalDateFor(@NonNull final ZonedDateTime dateTime) {
 		if (datesAreUTCEquivalent()) {
 			return dateTime.withZoneSameInstant(ZoneId.of("UTC")).toLocalDate();
 		}
 		return dateTime.toLocalDate();
 	}
 
-	public LocalDateTime getLocalDateTimeFor(final ZonedDateTime dateTime) {
-		if (dateTime == null) {
-			return null;
-		}
+	@NonNull
+	public LocalDateTime getLocalDateTimeFor(@NonNull final ZonedDateTime dateTime) {
 		if (datesAreUTCEquivalent()) {
 			return dateTime.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime();
 		}
