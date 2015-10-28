@@ -50,7 +50,7 @@ public class EObjectTableViewerColumnProvider extends ColumnLabelProvider {
 			final EObject eObject = (EObject) element;
 			final Object o = path == null ? eObject : path.get(eObject);
 			if (renderer != null && renderer.isValueUnset(o)) {
-				return Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
+				return Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY);
 			}
 		}
 
