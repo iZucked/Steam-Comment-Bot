@@ -1428,7 +1428,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					final EObject eObject = (EObject) element;
 					final Object o = path.get(eObject);
 					if (manipulator.isValueUnset(o)) {
-						return Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
+						return Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY);
 					}
 				}
 				return null;
