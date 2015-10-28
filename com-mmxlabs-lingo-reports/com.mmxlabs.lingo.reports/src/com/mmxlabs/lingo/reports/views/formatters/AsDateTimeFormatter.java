@@ -10,13 +10,7 @@ import java.time.Year;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.TextStyle;
-import java.util.Locale;
-import java.util.Locale.Category;
 import java.util.TimeZone;
-import java.util.spi.TimeZoneNameProvider;
-
-import org.eclipse.swt.widgets.DateTime;
 
 public class AsDateTimeFormatter extends BaseFormatter {
 	final DateTimeFormatter dateFormat;
@@ -61,8 +55,7 @@ public class AsDateTimeFormatter extends BaseFormatter {
 	public Comparable<?> getComparable(final Object object) {
 		final ZonedDateTime localDate = getDateTime(object);
 		if (localDate == null) {
-			// FIXME localDate= ?
-			LocalDate.of(Year.MIN_VALUE, 1, 1);
+			return ZonedDateTime.of(Year.MIN_VALUE, 1, 1, 0, 0, 0, 0, ZoneId.of("UTC"));
 		}
 		return localDate;
 	}
