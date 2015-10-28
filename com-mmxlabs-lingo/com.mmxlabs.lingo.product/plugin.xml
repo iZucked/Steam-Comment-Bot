@@ -35,6 +35,14 @@
         value="LiNGO Platform&#x0A;&#x0A;Version: {0}&#x0A;Build: {1}">
        </property>
   <property
+        name="startupForegroundColor"
+        value="FFFFFF">
+  </property>
+  <property
+        name="startupMessageRect"
+        value="0,0,0,0">
+  </property>
+  <property
         name="preferenceCustomization"
         value="plugin_customization.ini">
   </property>

@@ -29,7 +29,9 @@ Build: {1}
 
    <splash
       location="com.mmxlabs.lingo.app"
-      startupProgressRect="20,210,440,15" />
+      startupProgressRect="20,210,440,15"
+      startupMessageRect="0,0,0,0"
+      startupForegroundColor="FFFFFF" />
    <launcher name="LiNGO">
       <solaris/>
       <win useIco="true">
@@ -46,7 +48,6 @@ Build: {1}
       <solaris include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</solaris>
       <windows include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8</windows>
    </vm>
-
 
    <plugins>
    </plugins>
