@@ -59,6 +59,12 @@ public final class ViewerHelper {
 		}
 	}
 
+	public static void setFocus(@Nullable final Control control) {
+		if (control != null && !control.isDisposed()) {
+			control.setFocus();
+		}
+	}
+
 	public static void setSelection(@Nullable final Viewer viewer, final boolean syncExec, @Nullable final ISelection selection) {
 		if (viewer == null) {
 			return;
