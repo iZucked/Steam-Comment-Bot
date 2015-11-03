@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.EcorePackage;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 
@@ -114,13 +115,25 @@ public class GenericEMFTableDataModel {
 	 * @param value
 	 * @return
 	 */
-	private static EReference createRowReference(final String value) {
+	@NonNull
+	public static EReference createRowReference(final String value) {
+		return createRowPlainReference(FEATURE_VALUE_PREFIX + value);
+	}
+
+	/**
+	 * Create an {@link EReference} for use with a "Row" object.
+	 * 
+	 * @param value
+	 * @return
+	 */
+	@NonNull
+	public static EReference createRowPlainReference(final String value) {
 		final EReference valueRef = EcoreFactory.eINSTANCE.createEReference();
 		valueRef.setContainment(false);
 		valueRef.setLowerBound(0);
 		valueRef.setUpperBound(1);
 		valueRef.setEType(EcorePackage.Literals.EJAVA_OBJECT);
-		valueRef.setName(FEATURE_VALUE_PREFIX + value);
+		valueRef.setName(value);
 		return valueRef;
 	}
 
@@ -130,6 +143,7 @@ public class GenericEMFTableDataModel {
 	 * @param value
 	 * @return
 	 */
+	@NonNull
 	public static EAttribute createRowAttribute(final EClass owner, final EClassifier type, final String value) {
 		final EAttribute valueRef = EcoreFactory.eINSTANCE.createEAttribute();
 		valueRef.setLowerBound(0);
@@ -201,6 +215,7 @@ public class GenericEMFTableDataModel {
 	 * @param group
 	 * @return
 	 */
+	@NonNull
 	public static EObject createRow(final EPackage dataModel, final EObject dataModelInstance, final EObject group) {
 		final EFactory factory = dataModel.getEFactoryInstance();
 		final EClass nodeClass = (EClass) dataModel.getEClassifier(CLASS_NAME_ROW);
@@ -295,6 +310,7 @@ public class GenericEMFTableDataModel {
 	 * Return the EClass instance representing the row
 	 * 
 	 */
+	@NonNull
 	public static EClass getRowClass(final EPackage dataModel) {
 		return (EClass) dataModel.getEClassifier(CLASS_NAME_ROW);
 	}
