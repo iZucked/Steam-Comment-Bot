@@ -21,11 +21,11 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
-import org.threeten.extra.Days;
 
 import com.google.common.collect.Range;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
+import com.mmxlabs.common.time.Days;
 import com.mmxlabs.lingo.reports.ColourPalette;
 import com.mmxlabs.lingo.reports.ColourPalette.ColourElements;
 import com.mmxlabs.lingo.reports.ColourPalette.ColourPaletteItems;
@@ -147,7 +147,7 @@ public abstract class AbstractVerticalReportVisualiser {
 			final LocalDate eventStart = getLocalDateFor(event.getStart());
 
 			// how many days since the start of the event?
-			int days = Days.between(eventStart, date).getAmount();
+			int days = Days.between(eventStart, date);
 			days += 1;
 			return Integer.toString(days) + (days == 1 ? String.format(" (%.02f)", ((Journey) event).getSpeed()) : "");
 		}
