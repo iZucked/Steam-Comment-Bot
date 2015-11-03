@@ -9,8 +9,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.threeten.extra.Days;
 
+import com.mmxlabs.common.time.Days;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
@@ -34,7 +34,7 @@ public class EventWindowConstraint extends AbstractModelConstraint {
 
 			if (event.getStartAfter() != null && event.getStartBy() != null) {
 
-				final int windowSizeInDays = Days.between(event.getStartAfter(), event.getStartBy()).getAmount();
+				final int windowSizeInDays = Days.between(event.getStartAfter(), event.getStartBy());
 
 				if (windowSizeInDays > maxWindowSizeInDays) {
 					String message = String.format("Event duration %d days (> %d days maximum)", windowSizeInDays, maxWindowSizeInDays);

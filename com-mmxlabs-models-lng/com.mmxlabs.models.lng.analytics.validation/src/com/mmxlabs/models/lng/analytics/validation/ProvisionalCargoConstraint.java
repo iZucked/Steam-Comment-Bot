@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.analytics.validation;
 
-import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +14,7 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.ProvisionalCargo;
@@ -153,7 +153,7 @@ public class ProvisionalCargoConstraint extends AbstractModelMultiConstraint {
 				// } else if(lastRow.getDestinationType() == DestinationType.OTHER) {
 				// visitDuration = 24;
 				// }
-				final int availableTime = (int) Duration.between(lastRow.getDate(), row.getDate()).toHours() - visitDuration;
+				final int availableTime = Hours.between(lastRow.getDate(), row.getDate()) - visitDuration;
 
 				if (availableTime < 0) {
 					final String msg = String.format("Date is before the previous date.");

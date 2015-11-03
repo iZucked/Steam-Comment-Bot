@@ -4,13 +4,13 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.util;
 
-import java.time.Duration;
 import java.time.LocalDate;
 
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
+import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.port.Port;
@@ -28,7 +28,7 @@ public class SpotSlotHelper {
 
 			// Now find month duration
 
-			final int windowSize = (int) Duration.between(start, start.plusMonths(1)).toHours();
+			final int windowSize = Hours.between(start, start.plusMonths(1));
 
 			if (slot.getWindowSize() != windowSize) {
 				cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowSize(), windowSize));

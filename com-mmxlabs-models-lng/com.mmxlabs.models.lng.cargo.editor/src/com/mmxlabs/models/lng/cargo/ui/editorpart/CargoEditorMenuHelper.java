@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.TextStyle;
@@ -39,6 +38,8 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.time.Days;
+import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -609,7 +610,7 @@ public class CargoEditorMenuHelper {
 		final boolean overlap = (dischargeStart.isBefore(loadEnd));
 
 		// TODO: Check the change in rounding - does this round down as the previous code did?
-		final int daysDifference = (int) Duration.between(loadStart, dischargeEnd).toDays();
+		final int daysDifference = Days.between(loadStart, dischargeEnd);
 
 		// DES load
 		if (load.isDESPurchase()) {
@@ -751,7 +752,7 @@ public class CargoEditorMenuHelper {
 				final ZonedDateTime a = loadSlot.getWindowStartWithSlotOrPortTime();
 				final ZonedDateTime b = dischargeSlot.getWindowStartWithSlotOrPortTime();
 				if (a != null && b != null) {
-					daysDifference = (int) Duration.between(a, b).toDays();
+					daysDifference = Days.between(a, b);
 				} else {
 					daysDifference = -1;
 				}
@@ -1037,7 +1038,7 @@ public class CargoEditorMenuHelper {
 						dischargeSlot.setWindowStart(dishargeCal);
 						dischargeSlot.setWindowStartTime(0);
 
-						dischargeSlot.setWindowSize((int) Duration.between(dishargeCal, dishargeCal.plusMonths(1)).toHours());
+						dischargeSlot.setWindowSize(Hours.between(dishargeCal, dishargeCal.plusMonths(1)));
 
 						final String idPrefix = market.getName() + "-" + yearMonthString + "-";
 						int i = 0;
@@ -1062,7 +1063,7 @@ public class CargoEditorMenuHelper {
 
 						loadSlot.setWindowStart(cal);
 						loadSlot.setWindowStartTime(0);
-						loadSlot.setWindowSize((int) Duration.between(cal, cal.plusMonths(1)).toHours());
+						loadSlot.setWindowSize(Hours.between(cal, cal.plusMonths(1)));
 
 						// Get existing names
 						final Set<String> usedIDStrings = new HashSet<>();
@@ -1190,7 +1191,7 @@ public class CargoEditorMenuHelper {
 	private void createFOBDESSwitchMenu(final IMenuManager manager, final Slot slot) {
 
 		final Contract contract = slot.getContract();
-		assert(contract == null || contract.getContractType() == ContractType.BOTH);
+		assert (contract == null || contract.getContractType() == ContractType.BOTH);
 
 		if (slot instanceof LoadSlot) {
 			final LoadSlot loadSlot = (LoadSlot) slot;
