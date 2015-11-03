@@ -36,9 +36,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.threeten.extra.Months;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.time.Months;
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.eclipse.manager.impl.DisposeOnRemoveEclipseListener;
 import com.mmxlabs.jobmanager.jobs.EJobState;
@@ -400,7 +400,7 @@ public final class OptimisationHelper {
 								final YearMonth periodEnd = userSettings.getPeriodEnd();
 								if (periodStart != null && periodEnd != null) {
 									// 3 month window?
-									if (Months.between(periodStart, periodEnd).getAmount() > 3) {
+									if (Months.between(periodStart, periodEnd) > 3) {
 										return ValidationStatus.error("Unable to run with Action Sets as the period range is greater than three months");
 									}
 								} else {
@@ -570,7 +570,7 @@ public final class OptimisationHelper {
 					final YearMonth periodEnd = to.getPeriodEnd();
 					if (periodStart != null && periodEnd != null) {
 						// 3 month window?
-						if (Months.between(periodStart, periodEnd).getAmount() > 3) {
+						if (Months.between(periodStart, periodEnd) > 3) {
 							actionSetErrorMessage = "Unable to run with Action Sets as the period range is too big";
 							to.setBuildActionSets(false);
 						}

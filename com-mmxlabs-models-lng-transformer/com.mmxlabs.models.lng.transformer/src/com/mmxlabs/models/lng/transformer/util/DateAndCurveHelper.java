@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.util;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.ZoneId;
@@ -23,6 +22,7 @@ import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
@@ -64,7 +64,7 @@ public class DateAndCurveHelper {
 	 * @return number of hours between earliest and windowStart
 	 */
 	public int convertTime(@NonNull final ZonedDateTime earliest, @NonNull final ZonedDateTime windowStart) {
-		return (int) Duration.between(earliest, windowStart).toHours();
+		return Hours.between(earliest, windowStart);
 	}
 
 	public int convertTime(@NonNull final ZonedDateTime earliest, @NonNull final YearMonth windowStart) {
