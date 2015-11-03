@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
@@ -98,7 +99,12 @@ public class MetamodelLoader {
 					} else if (eDataType.getInstanceClassName().equals("java.time.LocalDateTime")) {
 						return LocalDateTime.parse(stringValue, DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
 					} else if (eDataType.getInstanceClassName().equals("java.time.ZonedDateTime")) {
-						return ZonedDateTime.parse(stringValue, DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm Z"));
+						try {
+							return ZonedDateTime.parse(stringValue, DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm VV"));
+						} catch (DateTimeParseException e) {
+							// Fallback
+							return ZonedDateTime.parse(stringValue, DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm Z"));
+						}
 					}
 				}
 				return super.createFromString(eDataType, stringValue);
@@ -108,13 +114,13 @@ public class MetamodelLoader {
 			public String convertToString(EDataType eDataType, Object objectValue) {
 				if (eDataType.getInstanceClassName() != null) {
 					if (eDataType.getInstanceClassName().equals("java.time.YearMonth")) {
-						return ((YearMonth)objectValue).format(DateTimeFormatter.ofPattern("yyyy/MM"));
+						return ((YearMonth) objectValue).format(DateTimeFormatter.ofPattern("yyyy/MM"));
 					} else if (eDataType.getInstanceClassName().equals("java.time.LocalDate")) {
-						return ((LocalDate)objectValue).format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+						return ((LocalDate) objectValue).format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
 					} else if (eDataType.getInstanceClassName().equals("java.time.LocalDateTime")) {
 						return ((LocalDateTime) objectValue).format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
 					} else if (eDataType.getInstanceClassName().equals("java.time.ZonedDateTime")) {
-						return ((ZonedDateTime) objectValue).format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm Z"));
+						return ((ZonedDateTime) objectValue).format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm VV"));
 					}
 				}
 				return super.convertToString(eDataType, objectValue);
