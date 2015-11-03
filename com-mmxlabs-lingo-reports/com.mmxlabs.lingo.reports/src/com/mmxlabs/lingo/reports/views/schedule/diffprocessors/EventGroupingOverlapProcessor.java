@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.lingo.reports.views.schedule.diffprocessors;
 
-import java.time.Duration;
-import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
@@ -13,8 +11,11 @@ import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.threeten.extra.Interval;
+import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.common.NonNullPair;
+import com.mmxlabs.common.time.Hours;
+import com.mmxlabs.common.time.TimeUtils;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
@@ -53,13 +54,13 @@ public class EventGroupingOverlapProcessor implements IDiffProcessor {
 
 			final ZonedDateTime end = lastEvent.getEnd();
 
-			final Interval referenceInterval = Interval.of(Instant.from(start), Instant.from(end));
+			final NonNullPair<ZonedDateTime, ZonedDateTime> referenceInterval = new NonNullPair<>(start, end);
 
 			final Sequence referenceSequence = firstEvent.getSequence();
 
 			for (final EObject scenario : table.getScenarios()) {
 				if (scenario instanceof LNGScenarioModel) {
-					LNGScenarioModel scenarioModel = (LNGScenarioModel) scenario;
+					final LNGScenarioModel scenarioModel = (LNGScenarioModel) scenario;
 					final ScheduleModel scheduleModel = scenarioModel.getScheduleModel();
 					if (scheduleModel != null) {
 						if (scheduleModel.getSchedule() != referenceRow.getSchedule()) {
@@ -75,7 +76,8 @@ public class EventGroupingOverlapProcessor implements IDiffProcessor {
 		}
 	}
 
-	private void bindToOverlaps(final Sequence sequence, final Row referenceRow, final Interval referenceInterval, final Map<EObject, Row> elementToRowMap) {
+	private void bindToOverlaps(@NonNull final Sequence sequence, @NonNull final Row referenceRow, @NonNull final NonNullPair<ZonedDateTime, ZonedDateTime> referenceInterval,
+			@NonNull final Map<EObject, Row> elementToRowMap) {
 		for (final Event event : sequence.getEvents()) {
 
 			EventGrouping thisGrouping = null;
@@ -91,10 +93,9 @@ public class EventGroupingOverlapProcessor implements IDiffProcessor {
 					final Event lastEvent = events.get(events.size() - 1);
 
 					final ZonedDateTime start = firstEvent.getStart();
-
 					final ZonedDateTime end = lastEvent.getEnd();
 
-					final Interval interval = Interval.of(Instant.from(start), Instant.from(end));
+					final NonNullPair<ZonedDateTime, ZonedDateTime> interval = new NonNullPair<>(start, end);
 
 					bindEvent(referenceRow, referenceInterval, elementToRowMap, firstEvent, interval);
 				}
@@ -102,14 +103,14 @@ public class EventGroupingOverlapProcessor implements IDiffProcessor {
 		}
 	}
 
-	private void bindEvent(final Row referenceRow, final Interval referenceInterval, final Map<EObject, Row> elementToRowMap, final Event visit, final Interval interval) {
+	private void bindEvent(@NonNull final Row referenceRow, @NonNull final NonNullPair<ZonedDateTime, ZonedDateTime> referenceInterval, @NonNull final Map<EObject, Row> elementToRowMap,
+			@NonNull final Event visit, @NonNull final NonNullPair<ZonedDateTime, ZonedDateTime> interval) {
 
-		if (referenceInterval.overlaps(interval)) {
-			Instant s = referenceInterval.getStart().isBefore(interval.getStart()) ? interval.getStart() : referenceInterval.getStart();
-			Instant e = referenceInterval.getEnd().isBefore(interval.getEnd()) ? interval.getEnd() : referenceInterval.getEnd();
+		if (TimeUtils.overlaps(referenceInterval, interval)) {
+			final NonNullPair<ZonedDateTime, ZonedDateTime> intersection = TimeUtils.intersect(referenceInterval, interval);
 
-			final int overlapHours = (int) Duration.between(s, e).toHours();
-			final int totalHours = (int) Duration.between(interval.getStart(), interval.getEnd()).toHours();
+			final int overlapHours = Hours.in(intersection);
+			final int totalHours = Hours.in(interval);
 
 			final double ratio = (double) overlapHours / ((double) totalHours);
 
@@ -122,7 +123,7 @@ public class EventGroupingOverlapProcessor implements IDiffProcessor {
 				}
 			} else {
 
-				final int totalHours2 = (int) Duration.between(referenceInterval.getStart(), referenceInterval.getEnd()).toHours();
+				final int totalHours2 = Hours.in(referenceInterval);
 
 				final double ratio2 = (double) overlapHours / ((double) totalHours2);
 

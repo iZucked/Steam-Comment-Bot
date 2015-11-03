@@ -5,7 +5,6 @@
 package com.mmxlabs.lingo.reports.views.standard;
 
 import java.time.Duration;
-import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,6 +13,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
@@ -122,13 +122,13 @@ public class KPIReportTransformer {
 				if (evt instanceof SlotVisit) {
 					final SlotVisit visit = (SlotVisit) evt;
 					if (visit.getStart().isAfter(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime())) {
-						lateness += (int) Duration.between(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime(), visit.getStart()).toHours();
+						lateness += Hours.between(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime(), visit.getStart());
 					}
 
 				} else if (evt instanceof VesselEventVisit) {
 					final VesselEventVisit vev = (VesselEventVisit) evt;
 					if (vev.getStart().isAfter(vev.getVesselEvent().getStartByAsDateTime())) {
-						lateness += (int) Duration.between(vev.getVesselEvent().getStartByAsDateTime(), evt.getStart()).toHours();
+						lateness += Hours.between(vev.getVesselEvent().getStartByAsDateTime(), evt.getStart());
 
 					}
 				} else if (evt instanceof PortVisit) {
@@ -141,12 +141,12 @@ public class KPIReportTransformer {
 
 						final ZonedDateTime startBy = availability.getStartByAsDateTime();
 						if (startBy != null && visit.getStart().isAfter(startBy)) {
-							lateness += (int) Duration.between(startBy, visit.getStart()).toHours();
+							lateness += Hours.between(startBy, visit.getStart());
 						}
 					} else if (seq.getEvents().indexOf(visit) == seq.getEvents().size() - 1) {
 						final ZonedDateTime endBy = availability.getEndAfterAsDateTime();
 						if (endBy != null && visit.getStart().isAfter(endBy)) {
-							lateness += (int) Duration.between(endBy, visit.getStart()).toHours();
+							lateness += Hours.between(endBy, visit.getStart());
 						}
 					}
 				}

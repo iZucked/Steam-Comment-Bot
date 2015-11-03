@@ -4,15 +4,16 @@
  */
 package com.mmxlabs.lingo.reports.views.schedule.diffprocessors;
 
-import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
-import org.threeten.extra.Interval;
+import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.common.NonNullPair;
+import com.mmxlabs.common.time.TimeUtils;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
@@ -30,10 +31,11 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 public class LadenVoyageProcessor implements IDiffProcessor {
 
 	@Override
-	public void processSchedule(final Schedule schedule, final boolean isPinned) {
+	public void processSchedule(@NonNull final Schedule schedule, final boolean isPinned) {
 	}
 
-	private void generateCycleDiffForElement(final Table table, final Map<EObject, Set<EObject>> equivalancesMap, final Map<EObject, Row> elementToRowMap, final EObject referenceElement) {
+	private void generateCycleDiffForElement(@NonNull final Table table, @NonNull final Map<EObject, Set<EObject>> equivalancesMap, @NonNull final Map<EObject, Row> elementToRowMap,
+			@NonNull final EObject referenceElement) {
 
 		final Row referenceRow = elementToRowMap.get(referenceElement);
 		if (referenceRow == null) {
@@ -69,11 +71,11 @@ public class LadenVoyageProcessor implements IDiffProcessor {
 		}
 	}
 
-	private void processEventForOverlaps(final Map<EObject, Row> elementToRowMap, final Row referenceRow, final Sequence referenceSequence, final Event event) {
+	private void processEventForOverlaps(@NonNull final Map<EObject, Row> elementToRowMap, @NonNull final Row referenceRow, @NonNull final Sequence referenceSequence, @NonNull final Event event) {
 		final ZonedDateTime start = event.getStart();
 		final ZonedDateTime end = event.getEnd();
 
-		final Interval referenceInterval = Interval.of(Instant.from(start), Instant.from(end));
+		final NonNullPair<ZonedDateTime, ZonedDateTime> referenceInterval = new NonNullPair<>(start, end);
 
 		for (final EObject scenario : referenceRow.getTable().getScenarios()) {
 			if (scenario instanceof LNGScenarioModel) {
@@ -93,7 +95,8 @@ public class LadenVoyageProcessor implements IDiffProcessor {
 		}
 	}
 
-	private void bindToLadenOverlaps(final Sequence sequence, final Row referenceRow, final Interval referenceInterval, final Map<EObject, Row> elementToRowMap) {
+	private void bindToLadenOverlaps(@NonNull final Sequence sequence, @NonNull final Row referenceRow, final @NonNull NonNullPair<ZonedDateTime, ZonedDateTime> referenceInterval,
+			@NonNull final Map<EObject, Row> elementToRowMap) {
 		for (final Event event : sequence.getEvents()) {
 
 			if (event instanceof Journey) {
@@ -115,13 +118,14 @@ public class LadenVoyageProcessor implements IDiffProcessor {
 		}
 	}
 
-	private void bindEvent(final Row referenceRow, final Interval referenceInterval, final Map<EObject, Row> elementToRowMap, final Event event) {
+	private void bindEvent(@NonNull final Row referenceRow, @NonNull final NonNullPair<ZonedDateTime, ZonedDateTime> referenceInterval, @NonNull final Map<EObject, Row> elementToRowMap,
+			@NonNull final Event event) {
 		final ZonedDateTime start = event.getStart();
 		final ZonedDateTime end = event.getEnd();
 
-		final Interval interval = Interval.of(Instant.from(start), Instant.from(end));
+		final NonNullPair<ZonedDateTime, ZonedDateTime> interval = new NonNullPair<>(start, end);
 
-		if (referenceInterval.overlaps(interval)) {
+		if (TimeUtils.overlaps(referenceInterval, interval)) {
 
 			final UserGroup group = CycleGroupUtils.createOrReturnUserGroup(referenceRow.getTable(), referenceRow);
 			final Row r = elementToRowMap.get(event);
@@ -132,8 +136,8 @@ public class LadenVoyageProcessor implements IDiffProcessor {
 	}
 
 	@Override
-	public void runDiffProcess(final Table table, final List<EObject> referenceElements, final List<EObject> uniqueElements, final Map<EObject, Set<EObject>> equivalancesMap,
-			final Map<EObject, Row> elementToRowMap) {
+	public void runDiffProcess(@NonNull final Table table, @NonNull final List<EObject> referenceElements, @NonNull final List<EObject> uniqueElements,
+			@NonNull final Map<EObject, Set<EObject>> equivalancesMap, @NonNull final Map<EObject, Row> elementToRowMap) {
 
 		for (final EObject referenceElement : referenceElements) {
 			generateCycleDiffForElement(table, equivalancesMap, elementToRowMap, referenceElement);
