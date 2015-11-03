@@ -4,16 +4,14 @@
  */
 package com.mmxlabs.models.lng.pricing.util;
 
-import java.time.Duration;
-import java.time.Instant;
 import java.time.YearMonth;
-import java.time.ZoneId;
 import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
@@ -104,6 +102,6 @@ public class PriceIndexUtils {
 	 * @return
 	 */
 	public static int convertTime(final YearMonth earliest, final YearMonth windowStart) {
-		return (int) Duration.between(Instant.from(earliest.atDay(1).atStartOfDay(ZoneId.of("UTC"))), Instant.from(windowStart.atDay(1).atStartOfDay(ZoneId.of("UTC")))).toHours();
+		return Hours.between(earliest, windowStart);
 	}
 }

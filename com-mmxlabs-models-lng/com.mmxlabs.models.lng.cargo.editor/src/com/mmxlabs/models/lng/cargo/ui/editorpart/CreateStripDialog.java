@@ -64,9 +64,9 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.threeten.extra.Days;
 
 import com.mmxlabs.common.PairKeyedMap;
+import com.mmxlabs.common.time.Days;
 import com.mmxlabs.models.datetime.ui.formatters.LocalDateTextFormatter;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -621,7 +621,7 @@ public class CreateStripDialog extends FormDialog {
 		final LocalDate fromDate = getLocalDateFromDateTimeWidget(pattern_periodStart);
 
 		// ABS as sanity check...
-		final int diffInDays = Days.between(fromDate, toDate).getAmount();
+		final int diffInDays = Days.between(fromDate, toDate);
 
 		{
 			final int rtIdx = repeatType.getCombo().getSelectionIndex();
@@ -958,7 +958,8 @@ public class CreateStripDialog extends FormDialog {
 		}
 	}
 
-	private LocalDate getLocalDateFromDateTimeWidget(final DateTime dateTime) {
+	@NonNull
+	private LocalDate getLocalDateFromDateTimeWidget(@NonNull final DateTime dateTime) {
 		return LocalDate.of(dateTime.getYear(), 1 + dateTime.getMonth(), dateTime.getDay());
 	}
 }

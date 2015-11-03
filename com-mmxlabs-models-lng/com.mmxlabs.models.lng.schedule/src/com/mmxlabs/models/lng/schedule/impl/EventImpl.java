@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 import java.lang.reflect.InvocationTargetException;
-import java.time.Duration;
 import java.time.ZonedDateTime;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -16,6 +15,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
+import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -505,7 +505,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * @generated NOT
 	 */
 	public int getDuration() {
-		return (int)Duration.between(getStart(),  getEnd()).toHours();
+		return Hours.between(getStart(),  getEnd());
 	}
 
 	/**

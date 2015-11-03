@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.cargo.validation;
 
-import java.time.Instant;
-import java.time.Period;
 import java.time.Year;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -15,8 +13,9 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
-import org.threeten.extra.Interval;
 
+import com.mmxlabs.common.NonNullPair;
+import com.mmxlabs.common.time.TimeUtils;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -37,7 +36,7 @@ public class NonShippedVesselAvailabilityConstraint extends AbstractModelMultiCo
 
 		Vessel nominatedVessel = null;
 
-		Interval interval = null;
+		NonNullPair<ZonedDateTime, ZonedDateTime> interval = null;
 		String type = "";
 		String name = "";
 		final EObject target = ctx.getTarget();
@@ -55,7 +54,7 @@ public class NonShippedVesselAvailabilityConstraint extends AbstractModelMultiCo
 				if (loadSlot.isDivertible()) {
 					end = end.plusDays(loadSlot.getShippingDaysRestriction());
 				}
-				interval = Interval.of(Instant.from(start), Instant.from(end));
+				interval = new NonNullPair<>(start, end);
 				type = "DES Purchase";
 				name = loadSlot.getName();
 			}
@@ -69,7 +68,7 @@ public class NonShippedVesselAvailabilityConstraint extends AbstractModelMultiCo
 				nominatedVessel = dischargeSlot.getNominatedVessel();
 				final ZonedDateTime start = dischargeSlot.getWindowStartWithSlotOrPortTime();
 				final ZonedDateTime end = dischargeSlot.getWindowEndWithSlotOrPortTime();
-				interval = Interval.of(Instant.from(start), Instant.from(end));
+				interval = new NonNullPair<>(start, end);
 				type = "FOB Sale";
 				name = dischargeSlot.getName();
 			}
@@ -84,7 +83,7 @@ public class NonShippedVesselAvailabilityConstraint extends AbstractModelMultiCo
 			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 			final CargoModel cargoModel = lngScenarioModel.getCargoModel();
 			for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
-				Interval availabilityInterval = null;
+				NonNullPair<ZonedDateTime, ZonedDateTime> availabilityInterval = null;
 
 				{
 					ZonedDateTime start;
@@ -99,12 +98,12 @@ public class NonShippedVesselAvailabilityConstraint extends AbstractModelMultiCo
 					} else {
 						end = ZonedDateTime.now().withYear(Year.MAX_VALUE);
 					}
-					availabilityInterval = Interval.of(Instant.from(start), Instant.from(end));
+					availabilityInterval = new NonNullPair<>(start, end);
 				}
 
 				if (nominatedVessel == va.getVessel() || extraContext.getOriginal(nominatedVessel) == va.getVessel()) {
 					// Match dates to availability.
-					if (availabilityInterval.overlaps(interval)) {
+					if (TimeUtils.overlaps(availabilityInterval, interval)) {
 						// Error
 						final String message = String.format("%s %s| Nominated vessel is also used for shipped cargoes during the assigned period.", type, name);
 						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));

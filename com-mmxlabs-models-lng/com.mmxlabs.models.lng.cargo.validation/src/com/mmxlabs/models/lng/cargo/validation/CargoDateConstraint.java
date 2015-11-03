@@ -26,6 +26,7 @@ import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -277,7 +278,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 
 							if (windowEndWithSlotOrPortTime != null && windowStartWithSlotOrPortTime != null) {
 
-								final long availableTime = Duration.between(windowStartWithSlotOrPortTime, windowEndWithSlotOrPortTime).toHours() - prevSlot.getSlotOrPortDuration();
+								final int availableTime = Hours.between(windowStartWithSlotOrPortTime, windowEndWithSlotOrPortTime) - prevSlot.getSlotOrPortDuration();
 
 								if (constraintID.equals(DATE_ORDER_ID)) {
 									validateSlotOrder(ctx, cargo, prevSlot, availableTime, failures);
@@ -312,7 +313,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 		if (vessel == null) {
 			return;
 		}
-		Long windowLength = getLadenMaxWindow(from, to);
+		Integer windowLength = getLadenMaxWindow(from, to);
 		if (windowLength == null) {
 			return;
 		}
@@ -330,12 +331,12 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 
 	}
 
-	private Long getLadenMaxWindow(Slot startSlot, Slot endSlot) {
+	private Integer getLadenMaxWindow(Slot startSlot, Slot endSlot) {
 		final ZonedDateTime dateStart = startSlot.getWindowStartWithSlotOrPortTime();
 		final ZonedDateTime dateEnd = endSlot.getWindowEndWithSlotOrPortTime();
 
 		if (dateStart != null && dateEnd != null) {
-			return Duration.between(dateStart, dateEnd).toHours();
+			return Hours.between(dateStart, dateEnd);
 		} else {
 			return null;
 		}

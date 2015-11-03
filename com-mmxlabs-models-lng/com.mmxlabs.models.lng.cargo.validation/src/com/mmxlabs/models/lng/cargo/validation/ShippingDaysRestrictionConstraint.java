@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.cargo.validation;
 
 import static org.ops4j.peaberry.Peaberry.osgiModule;
 
-import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -21,6 +20,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
@@ -191,8 +191,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 									final ZonedDateTime dischargeDateEnd = dischargeSlot.getWindowEndWithSlotOrPortTime();
 
 									if (loadDateStart != null && dischargeDateEnd != null) {
-										ladenMaxWindowInHours = Math.max(0, (int) Duration.between(loadDateStart, dischargeDateEnd).toHours() - (loadDurationInHours));
-
+										ladenMaxWindowInHours = Math.max(0, Hours.between(loadDateStart, dischargeDateEnd) - (loadDurationInHours));
 									} else {
 										return Activator.PLUGIN_ID;
 									}
@@ -200,7 +199,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 									if (loadDateEnd != null && dischargeDateStart != null) {
 										// There could be an overlap
 										// Note: loadDateStart is the value used in the ShippingHoursRestrictionChecker
-										ladenMinWindowInHours = Math.max(0, (int) Duration.between(loadDateStart, dischargeDateStart).toHours() - (loadDurationInHours));
+										ladenMinWindowInHours = Math.max(0, Hours.between(loadDateStart, dischargeDateStart) - (loadDurationInHours));
 									} else {
 										return Activator.PLUGIN_ID;
 									}
