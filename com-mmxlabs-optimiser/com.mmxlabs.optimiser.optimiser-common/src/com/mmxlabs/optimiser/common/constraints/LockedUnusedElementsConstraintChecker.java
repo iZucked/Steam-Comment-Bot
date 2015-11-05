@@ -21,8 +21,8 @@ import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 /**
- * A {@link IConstraintChecker} implementation which enforces elements that are locked and initially unlocked can never be used in the final solution. This implements an early break-out, meaning only the first violation of
- * this constraint is logged.
+ * A {@link IConstraintChecker} implementation which enforces elements that are locked and initially unlocked can never be used in the final solution. This implements an early break-out, meaning only
+ * the first violation of this constraint is logged.
  * 
  * @author achurchill
  * 
@@ -36,7 +36,7 @@ public final class LockedUnusedElementsConstraintChecker implements IPairwiseCon
 	private ILockedElementsProvider lockedElementsProvider;
 
 	private ISequences initialSequences = null;
-	
+
 	public LockedUnusedElementsConstraintChecker(@NonNull final String name) {
 		this.name = name;
 	}
@@ -49,8 +49,8 @@ public final class LockedUnusedElementsConstraintChecker implements IPairwiseCon
 	@Override
 	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final List<String> messages) {
 		if (isInitialised()) {
-			for (IResource resource : sequences.getResources()) {
-				for (ISequenceElement element : sequences.getSequence(resource)) {
+			for (final IResource resource : sequences.getResources()) {
+				for (final ISequenceElement element : sequences.getSequence(resource)) {
 					if (!checkElement(element)) {
 						return false;
 					}
@@ -90,29 +90,29 @@ public final class LockedUnusedElementsConstraintChecker implements IPairwiseCon
 		return true;
 	}
 
-	private boolean checkElementUnusedInitially(ISequenceElement element) {
+	private boolean checkElementUnusedInitially(final ISequenceElement element) {
 		return getInitialSequences().getUnusedElements().contains(element);
 	}
 
 	private boolean isInitialised() {
 		return getInitialSequences() != null;
 	}
-	
+
 	public ISequences getInitialSequences() {
 		return initialSequences;
 	}
 
-	public void setInitialSequences(ISequences initialSequences) {
+	public void setInitialSequences(final ISequences initialSequences) {
 		this.initialSequences = initialSequences;
 	}
 
 	@Override
-	public String explain(ISequenceElement first, ISequenceElement second, IResource resource) {
+	public String explain(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
 		return String.format("%s --> %s, %s --> %s", first.getName(), checkElement(first), second.getName(), checkElement(second));
 	}
 
 	@Override
-	public void sequencesAccepted(ISequences sequences) {
-		setInitialSequences(sequences);
+	public void sequencesAccepted(@NonNull final ISequences rawSequences, @NonNull final ISequences fullSequences) {
+		setInitialSequences(fullSequences);
 	}
 }

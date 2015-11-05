@@ -90,7 +90,7 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		Assert.assertEquals(Long.MAX_VALUE, evaluator.getBestFitness());
 		Assert.assertEquals(Long.MAX_VALUE, evaluator.getCurrentFitness());
 
-		evaluator.setInitialSequences(source, evaluationState);
+		evaluator.setInitialSequences(source, source, evaluationState);
 
 		Assert.assertEquals(1000, evaluator.getBestFitness());
 		Assert.assertEquals(1000, evaluator.getCurrentFitness());
@@ -180,7 +180,7 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		Assert.assertEquals(Long.MAX_VALUE, evaluator.getBestFitness());
 		Assert.assertEquals(Long.MAX_VALUE, evaluator.getCurrentFitness());
 
-		evaluator.setInitialSequences(source, evaluationState);
+		evaluator.setInitialSequences(source, source, evaluationState);
 
 		Assert.assertEquals(1000, evaluator.getBestFitness());
 		Assert.assertEquals(1000, evaluator.getCurrentFitness());

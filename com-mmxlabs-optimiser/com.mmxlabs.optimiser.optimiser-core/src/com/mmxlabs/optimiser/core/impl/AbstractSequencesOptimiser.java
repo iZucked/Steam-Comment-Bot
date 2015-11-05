@@ -73,7 +73,7 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 	 */
 	@Override
 	public final void optimise(@NonNull final IOptimisationContext optimiserContext) {
-		final IAnnotatedSolution startSolution = start(optimiserContext, optimiserContext.getInitialSequences());
+		final IAnnotatedSolution startSolution = start(optimiserContext, optimiserContext.getInputSequences(), optimiserContext.getInputSequences());
 		getProgressMonitor().begin(this, fitnessEvaluator.getBestFitness(), startSolution);
 		final int percentage = (100 * getReportInterval()) / getNumberOfIterations();
 
@@ -91,7 +91,7 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 	public ISequences getBestRawSequences() {
 		return fitnessEvaluator.getBestRawSequences();
 	}
-	
+
 	@Override
 	public final IAnnotatedSolution getBestSolution() {
 		final IAnnotatedSolution annotatedSolution = fitnessEvaluator.getBestAnnotatedSolution(currentContext);
@@ -163,7 +163,7 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 	public final int getNumberOfIterations() {
 		return numberOfIterations;
 	}
-	
+
 	public final void setConstraintCheckers(@NonNull final List<IConstraintChecker> constraintCheckers) {
 		this.constraintCheckers = constraintCheckers;
 		this.reducingConstraintCheckers = new ArrayList<IReducingConstraintChecker>(constraintCheckers.size());
@@ -193,7 +193,7 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 	public final List<IEvaluationProcess> getEvaluationProcesses() {
 		return evaluationProcesses;
 	}
-	
+
 	@Override
 	@NonNull
 	public final List<IReducingConstraintChecker> getReducingConstraintCheckers() {

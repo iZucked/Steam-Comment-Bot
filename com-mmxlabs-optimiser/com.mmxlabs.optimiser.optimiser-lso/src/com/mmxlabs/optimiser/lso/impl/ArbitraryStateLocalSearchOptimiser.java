@@ -15,23 +15,26 @@ import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 public class ArbitraryStateLocalSearchOptimiser extends DefaultLocalSearchOptimiser {
 
 	@Override
-	public IAnnotatedSolution start(@NonNull final IOptimisationContext optimiserContext, @NonNull ISequences initialSequences) {
+	public IAnnotatedSolution start(@NonNull final IOptimisationContext optimiserContext, @NonNull ISequences initialRawSequences, @NonNull ISequences inputRawSequences) {
 		setCurrentContext(optimiserContext);
 		data = optimiserContext.getOptimisationData();
 
-		final ModifiableSequences currentRawSequences = new ModifiableSequences(initialSequences);
+		final ModifiableSequences currentRawSequences = new ModifiableSequences(inputRawSequences);
 
 		final ModifiableSequences potentialRawSequences = new ModifiableSequences(currentRawSequences.getResources());
 		updateSequences(currentRawSequences, potentialRawSequences, currentRawSequences.getResources());
 
 		// Evaluate initial sequences
-		evaluateInitialSequences(currentRawSequences);
+		setInitialSequences(initialRawSequences);
+		evaluateInputSequences(inputRawSequences);
 
 		// Set initial sequences
 		getMoveGenerator().setSequences(potentialRawSequences);
 
 		final IAnnotatedSolution annotatedBestSolution = getFitnessEvaluator().getBestAnnotatedSolution(optimiserContext);
 		if (annotatedBestSolution == null) {
+//			!!!!!
+			// FIXME: Throw exception!
 			return null;
 		}
 
@@ -44,7 +47,6 @@ public class ArbitraryStateLocalSearchOptimiser extends DefaultLocalSearchOptimi
 
 		this.currentRawSequences = currentRawSequences;
 		this.potentialRawSequences = potentialRawSequences;
-
 
 		return annotatedBestSolution;
 	}
@@ -59,7 +61,7 @@ public class ArbitraryStateLocalSearchOptimiser extends DefaultLocalSearchOptimi
 		// adding on previous values for logs
 		return numberOfMovesTried + (loggingDataStore != null ? loggingDataStore.getNumberOfMovesTried() : 0);
 	}
-	
+
 	@Override
 	public int getNumberOfMovesAccepted() {
 		// adding on previous values for logs

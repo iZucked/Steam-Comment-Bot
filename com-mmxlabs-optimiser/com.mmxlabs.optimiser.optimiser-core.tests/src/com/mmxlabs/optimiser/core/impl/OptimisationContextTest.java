@@ -37,7 +37,7 @@ public class OptimisationContextTest {
 				evaluationProcesses, evaluationProcessRegistry);
 
 		Assert.assertSame(optimisationData, optContext.getOptimisationData());
-		Assert.assertSame(initialSequences, optContext.getInitialSequences());
+		Assert.assertSame(initialSequences, optContext.getInputSequences());
 		Assert.assertSame(fitnessComponents, optContext.getFitnessComponents());
 		Assert.assertSame(fitnessFunctionRegistry, optContext.getFitnessFunctionRegistry());
 		Assert.assertSame(constraintCheckers, optContext.getConstraintCheckers());

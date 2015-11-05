@@ -61,19 +61,20 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 	protected boolean DO_SEQUENCE_LOGGING = false;
 
 	@Override
-	public IAnnotatedSolution start(@NonNull final IOptimisationContext optimiserContext, @NonNull final ISequences initialSequences) {
+	public IAnnotatedSolution start(@NonNull final IOptimisationContext optimiserContext, @NonNull final ISequences initialRawSequences, @NonNull final ISequences inputRawSequences) {
 		setCurrentContext(optimiserContext);
 		data = optimiserContext.getOptimisationData();
 		numberOfMovesTried = 0;
 		numberOfMovesAccepted = 0;
 
-		final ModifiableSequences currentRawSequences = new ModifiableSequences(initialSequences);
+		final ModifiableSequences currentRawSequences = new ModifiableSequences(initialRawSequences);
 
 		final ModifiableSequences potentialRawSequences = new ModifiableSequences(currentRawSequences.getResources());
 		updateSequences(currentRawSequences, potentialRawSequences, currentRawSequences.getResources());
 
 		// Evaluate initial sequences
-		evaluateInitialSequences(currentRawSequences);
+		setInitialSequences(inputRawSequences);
+		evaluateInputSequences(currentRawSequences);
 
 		// Set initial sequences
 		getMoveGenerator().setSequences(potentialRawSequences);
@@ -94,7 +95,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		this.potentialRawSequences = potentialRawSequences;
 
 		initProgressLog();
-		
+
 		return annotatedBestSolution;
 	}
 
@@ -109,8 +110,8 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		MAIN_LOOP: for (int i = 0; i < iterationsThisStep; i++) {
 			++numberOfMovesTried;
 			if (loggingDataStore != null && (numberOfMovesTried % loggingDataStore.getReportingInterval()) == 0) {
-				loggingDataStore.logProgress(getNumberOfMovesTried(), getNumberOfMovesAccepted(), getNumberOfRejectedMoves(), getNumberOfFailedEvaluations(), getNumberOfFailedToValidate(), getFitnessEvaluator()
-						.getBestFitness(), getFitnessEvaluator().getCurrentFitness(), new Date().getTime());
+				loggingDataStore.logProgress(getNumberOfMovesTried(), getNumberOfMovesAccepted(), getNumberOfRejectedMoves(), getNumberOfFailedEvaluations(), getNumberOfFailedToValidate(),
+						getFitnessEvaluator().getBestFitness(), getFitnessEvaluator().getCurrentFitness(), new Date().getTime());
 			}
 
 			// Generate a new move
@@ -135,7 +136,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 			// Update potential sequences
 			move.apply(pinnedPotentialRawSequences);
-			String moveName = move.getClass().getName();
+			final String moveName = move.getClass().getName();
 			if (loggingDataStore != null) {
 				loggingDataStore.logAppliedMove(moveName);
 				if (DO_SEQUENCE_LOGGING) {
@@ -205,7 +206,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 				if (getFitnessEvaluator().getBestFitness() < best.getSecond()) {
 					best.setFirst(getNumberOfMovesTried());
 					best.setSecond(getFitnessEvaluator().getBestFitness());
-//					System.out.println(best.getFirst()+":"+best.getSecond());
+					// System.out.println(best.getFirst()+":"+best.getSecond());
 				}
 			} else {
 				// Failed, reset state for old sequences
@@ -221,34 +222,45 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		}
 
 		setNumberOfIterationsCompleted(numberOfMovesTried);
-		
+
 		updateProgressLogs();
 		return iterationsThisStep;
 	}
 
-	protected void evaluateInitialSequences(final ModifiableSequences currentRawSequences) {
+	protected void evaluateInputSequences(@NonNull final ISequences currentRawSequences) {
 		// Apply sequence manipulators
 		final IModifiableSequences fullSequences = new ModifiableSequences(currentRawSequences);
 		getSequenceManipulator().manipulate(fullSequences);
-	
+
 		// Prime IReducingConstraintCheckers with initial state
 		for (final IReducingConstraintChecker checker : getReducingConstraintCheckers()) {
 			checker.sequencesAccepted(fullSequences);
 		}
-		
-		// Prime IInitialSequencesConstraintCheckers with initial state
-		for (final IInitialSequencesConstraintChecker checker : getInitialSequencesConstraintCheckers()) {
-			checker.sequencesAccepted(fullSequences);
-		}
-	
+
+		// // Prime IInitialSequencesConstraintCheckers with initial state
+		// for (final IInitialSequencesConstraintChecker checker : getInitialSequencesConstraintCheckers()) {
+		// checker.sequencesAccepted(fullSequences);
+		// }
+
 		final IEvaluationState evaluationState = new EvaluationState();
 		for (final IEvaluationProcess evaluationProcess : getEvaluationProcesses()) {
 			evaluationProcess.evaluate(fullSequences, evaluationState);
 		}
-	
+
 		// Prime fitness cores with initial sequences
 		getFitnessEvaluator().setOptimisationData(data);
-		getFitnessEvaluator().setInitialSequences(fullSequences, evaluationState);
+		getFitnessEvaluator().setInitialSequences(currentRawSequences, fullSequences, evaluationState);
+	}
+
+	protected void setInitialSequences(@NonNull final ISequences initialSequences) {
+		// Apply sequence manipulators
+		final IModifiableSequences fullSequences = new ModifiableSequences(initialSequences);
+		getSequenceManipulator().manipulate(fullSequences);
+
+		// Prime IInitialSequencesConstraintCheckers with initial state
+		for (final IInitialSequencesConstraintChecker checker : getInitialSequencesConstraintCheckers()) {
+			checker.sequencesAccepted(initialSequences, fullSequences);
+		}
 	}
 
 	protected void initProgressLog() {
@@ -263,7 +275,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 			loggingDataStore.setNumberOfMovesAccepted(getNumberOfMovesAccepted());
 			loggingDataStore.setNumberOfRejectedMoves(getNumberOfRejectedMoves());
 			loggingDataStore.setNumberOfFailedToValidate(getNumberOfFailedToValidate());
-			loggingDataStore.setNumberOfFailedEvaluations(getNumberOfFailedEvaluations());			
+			loggingDataStore.setNumberOfFailedEvaluations(getNumberOfFailedEvaluations());
 		}
 	}
 
@@ -271,7 +283,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		return numberOfMovesTried;
 	}
 
-	public void setNumberOfMovesTried(int numberOfMovesTried) {
+	public void setNumberOfMovesTried(final int numberOfMovesTried) {
 		this.numberOfMovesTried = numberOfMovesTried;
 	}
 
@@ -279,7 +291,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		return numberOfMovesAccepted;
 	}
 
-	public void setNumberOfMovesAccepted(int numberOfMovesAccepted) {
+	public void setNumberOfMovesAccepted(final int numberOfMovesAccepted) {
 		this.numberOfMovesAccepted = numberOfMovesAccepted;
 	}
 
@@ -287,7 +299,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		return numberOfRejectedMoves;
 	}
 
-	public void setNumberOfRejectedMoves(int numberOfRejectedMoves) {
+	public void setNumberOfRejectedMoves(final int numberOfRejectedMoves) {
 		this.numberOfRejectedMoves = numberOfRejectedMoves;
 	}
 
@@ -295,7 +307,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		return numberOfFailedEvaluations;
 	}
 
-	public void setNumberOfFailedEvaluations(int numberOfFailedEvaluations) {
+	public void setNumberOfFailedEvaluations(final int numberOfFailedEvaluations) {
 		this.numberOfFailedEvaluations = numberOfFailedEvaluations;
 	}
 
@@ -303,7 +315,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		return numberOfFailedToValidate;
 	}
 
-	public void setNumberOfFailedToValidate(int numberOfFailedToValidate) {
+	public void setNumberOfFailedToValidate(final int numberOfFailedToValidate) {
 		this.numberOfFailedToValidate = numberOfFailedToValidate;
 	}
 

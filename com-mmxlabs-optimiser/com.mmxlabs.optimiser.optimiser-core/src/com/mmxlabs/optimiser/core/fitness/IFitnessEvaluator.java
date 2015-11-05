@@ -65,7 +65,7 @@ public interface IFitnessEvaluator {
 	 * 
 	 * @param sequences
 	 */
-	void setInitialSequences(@NonNull ISequences sequences, @NonNull IEvaluationState evaluationState);
+	void setInitialSequences(@NonNull ISequences initialRawSequences, @NonNull ISequences initialFullSequences, @NonNull IEvaluationState evaluationState);
 
 	/**
 	 * Evaluate the given {@link ISequences} to determine whether or not they are accepted as a better state than the previously accepted state. If accepted, then the {@link ISequences} "state" will
