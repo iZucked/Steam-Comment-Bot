@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -30,8 +30,8 @@ import org.apache.shiro.subject.Subject;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
+import org.eclipse.jdt.annotation.NonNull;
 
-import com.google.common.collect.Maps;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.mmxlabs.common.Pair;
@@ -56,8 +56,9 @@ import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.migration.scenario.MigrationHelper;
 import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger;
@@ -66,7 +67,6 @@ import com.mmxlabs.rcp.common.viewfactory.ReplaceableViewManager;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
-import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService.ModuleType;
 
 /**
  * Note duplication with various bits of ITS including ScenarioRunner and MigrationHelper
@@ -101,18 +101,18 @@ public class HeadlessApplication implements IApplication {
 			return IApplication.EXIT_OK;
 		}
 
-		String jsonFilePath = overrideSettings.getJSON();
-		Pair<JSONParseResult, LNGHeadlessParameters> jsonParse = setParametersFromJSON(overrideSettings, jsonFilePath);
+		final String jsonFilePath = overrideSettings.getJSON();
+		final Pair<JSONParseResult, LNGHeadlessParameters> jsonParse = setParametersFromJSON(overrideSettings, jsonFilePath);
 		if (!jsonParse.getFirst().allRequirementsPassed()) {
 			// json parse failed
-			for (String error : jsonParse.getFirst().getRequiredMissingText()) {
+			for (final String error : jsonParse.getFirst().getRequiredMissingText()) {
 				System.err.println(error);
 			}
 			return IApplication.EXIT_OK;
 		}
-		LNGHeadlessParameters headlessParameters = jsonParse.getSecond();
+		final LNGHeadlessParameters headlessParameters = jsonParse.getSecond();
 		// set output file
-		String path = overrideSettings.getOutputPath();
+		final String path = overrideSettings.getOutputPath();
 		// set scenario file
 		overrideSettings.setScenario(headlessParameters.getParameter("scenario", StringParameter.class).getValue());
 
@@ -143,22 +143,34 @@ public class HeadlessApplication implements IApplication {
 
 		updateOptimiserSettings(rootObject, optimiserSettings, overrideSettings, headlessParameters);
 
-		String outputFolderName = overrideSettings.getOutputName() == null ? getFolderNameFromSettings(optimiserSettings) : getFolderNameFromSettings(overrideSettings);
+		final String outputFolderName = overrideSettings.getOutputName() == null ? getFolderNameFromSettings(optimiserSettings) : getFolderNameFromSettings(overrideSettings);
 
 		addFitnessTraceExporter(exporters, path, outputFolderName);
 		addLatenessExporter(exporters, path, outputFolderName);
 
-		final LNGScenarioRunner runner = new LNGScenarioRunner(rootObject, LNGScenarioRunner.createExtendedSettings(optimiserSettings), LNGTransformer.HINT_OPTIMISE_LSO);
-
 		final IOptimiserProgressMonitor monitor = new RunExporterProgressMonitor(exporters);
 
 		// FIXME: Replace with an IParameterMode thing
-		final EnumMap<ModuleType, List<Module>> localOverrides = Maps.newEnumMap(IOptimiserInjectorService.ModuleType.class);
-		localOverrides.put(IOptimiserInjectorService.ModuleType.Module_ParametersModule, Collections.<Module> singletonList(new SettingsOverrideModule(overrideSettings)));
+		final IOptimiserInjectorService localOverrides = new IOptimiserInjectorService() {
+			@Override
+			public Module requestModule(@NonNull final ModuleType moduleType, @NonNull final Collection<String> hints) {
+				return null;
+			}
+
+			@Override
+			public List<Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<String> hints) {
+				if (moduleType == ModuleType.Module_ParametersModule) {
+					return Collections.<Module> singletonList(new SettingsOverrideModule(overrideSettings));
+				}
+				return null;
+			}
+		};
 
 		// Create logging module
-		Module loggingModule = createLoggingModule();
-		runner.init(monitor, loggingModule, localOverrides);
+		final Module loggingModule = createLoggingModule();
+
+		final LNGScenarioRunner runner = new LNGScenarioRunner(rootObject, null, LNGScenarioRunnerUtils.createExtendedSettings(optimiserSettings), LNGScenarioRunnerUtils.createLocalEditingDomain(),
+				loggingModule, localOverrides, LNGTransformerHelper.HINT_OPTIMISE_LSO);
 
 		for (final IRunExporter ex : exporters) {
 			ex.setScenarioRunner(runner);
@@ -200,32 +212,32 @@ public class HeadlessApplication implements IApplication {
 
 	}
 
-	private void addFitnessTraceExporter(final List<IRunExporter> exporters, String path, String outputFolderName) {
+	private void addFitnessTraceExporter(final List<IRunExporter> exporters, final String path, final String outputFolderName) {
 		final FitnessTraceExporter exporter = new FitnessTraceExporter();
 		addExporter(exporters, path, outputFolderName, "fitnessTrace.txt", exporter);
 	}
 
-	private void addExporter(final List<IRunExporter> exporters, String path, String outputFolderName, String filename, final IRunExporter exporter) {
+	private void addExporter(final List<IRunExporter> exporters, final String path, final String outputFolderName, final String filename, final IRunExporter exporter) {
 		exporter.setOutputFile(Paths.get(path, outputFolderName, filename).toFile());
 		exporters.add(exporter);
 	}
 
-	private void addLatenessExporter(final List<IRunExporter> exporters, String path, String outputFolderName) {
+	private void addLatenessExporter(final List<IRunExporter> exporters, final String path, final String outputFolderName) {
 		final GeneralAnnotationsExporter exporter = new GeneralAnnotationsExporter();
 		addExporter(exporters, path, outputFolderName, "generalAnnotationsReport.txt", exporter);
 	}
 
 	private Module createLoggingModule() {
-		LSOLogger lsoLogger = new LSOLogger(1000);
-		LoggingModule loggingModule = new LoggingModule(lsoLogger);
+		final LSOLogger lsoLogger = new LSOLogger(1000);
+		final LoggingModule loggingModule = new LoggingModule(lsoLogger);
 		return loggingModule;
 	}
 
-	private Pair<JSONParseResult, LNGHeadlessParameters> setParametersFromJSON(final SettingsOverride settings, String json) {
-		LNGHeadlessParameters headlessParameters = new LNGHeadlessParameters();
-		HeadlessJSONParser headlessJSONParser = new HeadlessJSONParser();
-		Map<String, Pair<Object, Class<?>>> parsed = headlessJSONParser.parseJSON(json);
-		JSONParseResult result = headlessParameters.setParametersFromJSON(parsed);
+	private Pair<JSONParseResult, LNGHeadlessParameters> setParametersFromJSON(final SettingsOverride settings, final String json) {
+		final LNGHeadlessParameters headlessParameters = new LNGHeadlessParameters();
+		final HeadlessJSONParser headlessJSONParser = new HeadlessJSONParser();
+		final Map<String, Pair<Object, Class<?>>> parsed = headlessJSONParser.parseJSON(json);
+		final JSONParseResult result = headlessParameters.setParametersFromJSON(parsed);
 
 		return new Pair<>(result, headlessParameters);
 	}
@@ -339,11 +351,11 @@ public class HeadlessApplication implements IApplication {
 		return true;
 	}
 
-	private void updateOptimiserSettings(LNGScenarioModel rootObject, OptimiserSettings settings, SettingsOverride settingsOverride, HeadlessParameters headlessParameters) {
+	private void updateOptimiserSettings(final LNGScenarioModel rootObject, final OptimiserSettings settings, final SettingsOverride settingsOverride, final HeadlessParameters headlessParameters) {
 		// standard settings
 		settings.setSeed(headlessParameters.getParameter("seed", IntegerParameter.class).getValue());
 		// LSO settings
-		AnnealingSettings annealingSettings = settings.getAnnealingSettings();
+		final AnnealingSettings annealingSettings = settings.getAnnealingSettings();
 		annealingSettings.setInitialTemperature(headlessParameters.getParameterValue("sa-temperature", Integer.class));
 		annealingSettings.setEpochLength(headlessParameters.getParameterValue("sa-epoch-length", Integer.class));
 		annealingSettings.setIterations(headlessParameters.getParameterValue("iterations", Integer.class));
@@ -361,16 +373,16 @@ public class HeadlessApplication implements IApplication {
 		setSimilarityParameters(settingsOverride, headlessParameters);
 	}
 
-	private void setHillClimbingParameters(OptimiserSettings settings, HeadlessParameters parameters) {
-		IndividualSolutionImprovementSettings solutionImprovementSettings = ParametersFactory.eINSTANCE.createIndividualSolutionImprovementSettings();
+	private void setHillClimbingParameters(final OptimiserSettings settings, final HeadlessParameters parameters) {
+		final IndividualSolutionImprovementSettings solutionImprovementSettings = ParametersFactory.eINSTANCE.createIndividualSolutionImprovementSettings();
 		solutionImprovementSettings.setImprovingSolutions(parameters.getParameterValue("hillClimbing-useHillClimbing", Boolean.class));
 		solutionImprovementSettings.setIterations(parameters.getParameterValue("hillClimbing-iterations", Integer.class));
 		settings.setSolutionImprovementSettings(solutionImprovementSettings);
 	}
 
-	private void createPromptDates(LNGScenarioModel rootObject, HeadlessParameters parameters) {
-		LocalDate promptStart = parameters.getParameterValue("promptStart", LocalDate.class);
-		LocalDate promptEnd = parameters.getParameterValue("promptEnd", LocalDate.class);
+	private void createPromptDates(final LNGScenarioModel rootObject, final HeadlessParameters parameters) {
+		final LocalDate promptStart = parameters.getParameterValue("promptStart", LocalDate.class);
+		final LocalDate promptEnd = parameters.getParameterValue("promptEnd", LocalDate.class);
 		if (promptStart != null) {
 			rootObject.setPromptPeriodStart(promptStart);
 		} else {
@@ -383,25 +395,25 @@ public class HeadlessApplication implements IApplication {
 		}
 	}
 
-	private void setLatenessParameters(SettingsOverride overrideSettings, HeadlessParameters headlessParameters) {
-		Map<String, Integer> latenessParameterMap = new HashMap<String, Integer>();
-		for (String latenessKey : SettingsOverride.latenessComponentParameters) {
+	private void setLatenessParameters(final SettingsOverride overrideSettings, final HeadlessParameters headlessParameters) {
+		final Map<String, Integer> latenessParameterMap = new HashMap<String, Integer>();
+		for (final String latenessKey : SettingsOverride.latenessComponentParameters) {
 			latenessParameterMap.put(latenessKey, headlessParameters.getParameterValue(latenessKey, Integer.class));
 		}
 		overrideSettings.setlatenessParameterMap(latenessParameterMap);
 	}
 
-	private void setSimilarityParameters(SettingsOverride overrideSettings, HeadlessParameters headlessParameters) {
-		Map<String, Integer> similarityParameterMap = new HashMap<String, Integer>();
-		for (String key : SettingsOverride.similarityComponentParameters) {
+	private void setSimilarityParameters(final SettingsOverride overrideSettings, final HeadlessParameters headlessParameters) {
+		final Map<String, Integer> similarityParameterMap = new HashMap<String, Integer>();
+		for (final String key : SettingsOverride.similarityComponentParameters) {
 			similarityParameterMap.put(key, headlessParameters.getParameterValue(key, Integer.class));
 		}
 		overrideSettings.setSimilarityParameterMap(similarityParameterMap);
 	}
 
-	private void createDateRanges(OptimiserSettings settings, HeadlessParameters headlessParameters) {
-		YearMonth dateBefore = headlessParameters.getParameterValue("periodOptimisationDateBefore", YearMonth.class);
-		YearMonth dateAfter = headlessParameters.getParameterValue("periodOptimisationDateAfter", YearMonth.class);
+	private void createDateRanges(final OptimiserSettings settings, final HeadlessParameters headlessParameters) {
+		final YearMonth dateBefore = headlessParameters.getParameterValue("periodOptimisationDateBefore", YearMonth.class);
+		final YearMonth dateAfter = headlessParameters.getParameterValue("periodOptimisationDateAfter", YearMonth.class);
 		final OptimisationRange range = ParametersFactory.eINSTANCE.createOptimisationRange();
 		if (dateBefore != null) {
 			range.setOptimiseBefore(dateBefore);
@@ -412,30 +424,30 @@ public class HeadlessApplication implements IApplication {
 		settings.setRange(range);
 	}
 
-	private void createObjectives(OptimiserSettings settings, DoubleMap doubleMap) {
-		ParametersFactory parametersFactory = ParametersFactory.eINSTANCE;
+	private void createObjectives(final OptimiserSettings settings, final DoubleMap doubleMap) {
+		final ParametersFactory parametersFactory = ParametersFactory.eINSTANCE;
 		settings.getObjectives().clear();
-		for (String objectiveName : doubleMap.getDoubleMap().keySet()) {
+		for (final String objectiveName : doubleMap.getDoubleMap().keySet()) {
 			settings.getObjectives().add(ScenarioUtils.createObjective(parametersFactory, objectiveName, doubleMap.getDoubleMap().get(objectiveName)));
 		}
 	}
 
-	private String getFolderNameFromSettings(OptimiserSettings settings) {
-		Map<String, Object> nameMap = getSettingsFileNameMap(settings);
+	private String getFolderNameFromSettings(final OptimiserSettings settings) {
+		final Map<String, Object> nameMap = getSettingsFileNameMap(settings);
 		String name = "";
 		int count = 0;
-		for (String key : nameMap.keySet()) {
+		for (final String key : nameMap.keySet()) {
 			name += String.format("%s-%s%s", key, nameMap.get(key), ++count < nameMap.size() ? "-" : "");
 		}
 		return name;
 	}
 
-	private String getFolderNameFromSettings(SettingsOverride settings) {
+	private String getFolderNameFromSettings(final SettingsOverride settings) {
 		return settings.getOutputName();
 	}
 
-	private Map<String, Object> getSettingsFileNameMap(OptimiserSettings settings) {
-		Map<String, Object> nameMap = new LinkedHashMap<>();
+	private Map<String, Object> getSettingsFileNameMap(final OptimiserSettings settings) {
+		final Map<String, Object> nameMap = new LinkedHashMap<>();
 		nameMap.put("seed", settings.getSeed());
 		nameMap.put("iterations", settings.getAnnealingSettings().getIterations());
 		nameMap.put("temperature", settings.getAnnealingSettings().getInitialTemperature());
@@ -446,9 +458,9 @@ public class HeadlessApplication implements IApplication {
 		return nameMap;
 	}
 
-	private void exportData(Injector injector, String path, String foldername, List<IRunExporter> exporters, String jsonFilePath) {
+	private void exportData(final Injector injector, final String path, final String foldername, final List<IRunExporter> exporters, final String jsonFilePath) {
 		// first export logging data
-		LSOLoggingExporter lsoLoggingExporter = new LSOLoggingExporter(path, foldername);
+		final LSOLoggingExporter lsoLoggingExporter = new LSOLoggingExporter(path, foldername);
 		injector.injectMembers(lsoLoggingExporter);
 		lsoLoggingExporter.exportData("best-fitness", "current-fitness");
 		for (final IRunExporter exporter : exporters) {

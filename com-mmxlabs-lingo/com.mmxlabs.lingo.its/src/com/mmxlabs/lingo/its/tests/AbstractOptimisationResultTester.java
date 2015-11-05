@@ -58,10 +58,11 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
-import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
+import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.migration.scenario.MigrationHelper;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -122,7 +123,6 @@ public class AbstractOptimisationResultTester {
 	private static final String endFitnessesMapName = "endFitnesses";
 
 	// // Register a cipher provider with the osgi framework for running these tests
-
 	private static ServiceRegistration<IScenarioCipherProvider> cipherServiceRef = null;
 
 	@BeforeClass
@@ -143,20 +143,6 @@ public class AbstractOptimisationResultTester {
 			cipherServiceRef = null;
 		}
 	}
-
-//	@Nullable
-//	protected IScenarioCipherProvider getScenarioCipherProvider() {
-//
-//		final Bundle bundle = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class);
-//		if (bundle != null) {
-//			final BundleContext bundleContext = bundle.getBundleContext();
-//			final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
-//			if (serviceReference != null) {
-//				return bundleContext.getService(serviceReference);
-//			}
-//		}
-//		return null;
-//	}
 
 	public AbstractOptimisationResultTester() {
 		super();
@@ -180,7 +166,7 @@ public class AbstractOptimisationResultTester {
 
 	private LNGScenarioModel getScenarioModelFromURL(final URL url) throws IOException {
 		final URI uri = URI.createURI(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20"));
-		
+
 		final BundleContext bundleContext = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class).getBundleContext();
 		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
 		try {
@@ -220,8 +206,8 @@ public class AbstractOptimisationResultTester {
 
 	public LNGScenarioRunner evaluateScenario(@NonNull final LNGScenarioModel originalScenario, @Nullable final URL origURL, @NonNull LNGScenarioRunner scenarioRunner)
 			throws IOException, IncompleteScenarioException {
-		scenarioRunner.initAndEval(new TransformerExtensionTestModule(), 10000);
-
+		// scenarioRunner.initAndEval(new TransformerExtensionTestBootstrapModule(), 10000);
+		scenarioRunner.evaluateInitialState();
 		return scenarioRunner;
 	}
 
@@ -256,7 +242,8 @@ public class AbstractOptimisationResultTester {
 		}
 
 		// Limit number of iterations to keep runtime down.
-		scenarioRunner.initAndEval(new TransformerExtensionTestModule(), 10000);
+		// scenarioRunner.initAndEval(new TransformerExtensionTestBootstrapModule(), 10000);
+		scenarioRunner.evaluateInitialState();
 
 		Schedule intialSchedule = scenarioRunner.getIntialSchedule();
 		Assert.assertNotNull(intialSchedule);
@@ -330,11 +317,13 @@ public class AbstractOptimisationResultTester {
 	}
 
 	private LNGScenarioRunner createScenarioRunner(final LNGScenarioModel originalScenario) {
-		return createScenarioRunner(originalScenario, LNGScenarioRunner.createDefaultSettings());
+		OptimiserSettings createDefaultSettings = LNGScenarioRunnerUtils.createDefaultSettings();
+		createDefaultSettings.getAnnealingSettings().setIterations(10000);
+		return createScenarioRunner(originalScenario, createDefaultSettings);
 	}
 
 	private LNGScenarioRunner createScenarioRunner(final LNGScenarioModel originalScenario, OptimiserSettings settings) {
-		final LNGScenarioRunner originalScenarioRunner = new LNGScenarioRunner(originalScenario, settings, LNGTransformer.HINT_OPTIMISE_LSO);
+		final LNGScenarioRunner originalScenarioRunner = new LNGScenarioRunner(originalScenario, settings, new TransformerExtensionTestBootstrapModule(), LNGTransformerHelper.HINT_OPTIMISE_LSO);
 		return originalScenarioRunner;
 	}
 
@@ -437,7 +426,7 @@ public class AbstractOptimisationResultTester {
 	public void testReports(final URL scenarioURL, final String reportID, final String shortName, final String extension) throws Exception {
 
 		final URI uri = URI.createURI(FileLocator.toFileURL(scenarioURL).toString().replaceAll(" ", "%20"));
-		
+
 		final BundleContext bundleContext = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class).getBundleContext();
 		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
 		try {
