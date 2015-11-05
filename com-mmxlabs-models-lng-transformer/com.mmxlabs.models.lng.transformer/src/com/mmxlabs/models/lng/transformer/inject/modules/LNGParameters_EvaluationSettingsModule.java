@@ -1,0 +1,118 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * All rights reserved.
+ */
+package com.mmxlabs.models.lng.transformer.inject.modules;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Singleton;
+
+import org.eclipse.jdt.annotation.NonNull;
+
+import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
+import com.google.inject.name.Named;
+import com.mmxlabs.models.lng.parameters.Constraint;
+import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessFactory;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
+import com.mmxlabs.optimiser.core.modules.ConstraintCheckerInstantiatorModule;
+import com.mmxlabs.optimiser.core.modules.EvaluationProcessInstantiatorModule;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
+import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
+import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponentParameters;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.EnumeratingSequenceScheduler;
+
+/**
+ * The {@link LNGParameters_EvaluationSettingsModule} provides user-definable parameters derived from the {@link OptimiserSettings} object such as the random seed and number of iterations
+ * 
+ */
+public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
+
+	@NonNull
+	private final OptimiserSettings settings;
+
+	public LNGParameters_EvaluationSettingsModule(@NonNull OptimiserSettings settings) {
+		this.settings = settings;
+	}
+
+	@Override
+	protected void configure() {
+
+	}
+
+	@Provides
+	@Singleton
+	@Named(ConstraintCheckerInstantiatorModule.ENABLED_CONSTRAINT_NAMES)
+	private List<String> provideEnabledConstraintNames() {
+		// settings.getConstraints().stream().filter(c -> c.isEnabled()).map(Constraint::getName()).collect(Collectors.toList());
+
+		final List<String> result = new ArrayList<String>();
+
+		for (final Constraint c : settings.getConstraints()) {
+			if (c.isEnabled()) {
+				result.add(c.getName());
+			}
+		}
+
+		return result;
+	}
+
+	@Provides
+	@Singleton
+	@Named(EvaluationProcessInstantiatorModule.ENABLED_EVALUATION_PROCESS_NAMES)
+	private List<String> provideEnabledEvaluationProcessNames(final IEvaluationProcessRegistry registry) {
+		final List<String> result = new ArrayList<String>();
+
+//		registry.getEvaluationProcessNames().stream()//.filter(c->c.isEnabled())
+//		.map(IEvaluationProcessFactory::getName()).collect(Collectors.toList());
+		
+		// Enable all processes.
+		for (final IEvaluationProcessFactory f : registry.getEvaluationProcessFactories()) {
+			result.add(f.getName());
+		}
+		// for (final Constraint c : settings.getConstraints()) {
+		// if (c.isEnabled()) {
+		// result.add(c.getName());
+		// }
+		// }
+
+		return result;
+	}
+
+	@Provides
+	@Named(EnumeratingSequenceScheduler.OPTIMISER_REEVALUATE)
+	private boolean isOptimiserReevaluating() {
+		return true;
+	}
+
+	@Provides
+	@Named(TravelTimeConstraintChecker.OPTIMISER_START_ELEMENT_FIX)
+	private boolean enableStartOfSequenceFix() {
+		return true;
+	}
+
+	@Provides
+	@Singleton
+	private ILatenessComponentParameters provideLatenessComponentParameters() {
+		final LatenessComponentParameters lcp = new LatenessComponentParameters();
+
+		lcp.setThreshold(Interval.PROMPT, 48);
+		lcp.setLowWeight(Interval.PROMPT, 0);
+		lcp.setHighWeight(Interval.PROMPT, 1000000);
+
+		lcp.setThreshold(Interval.MID_TERM, 72);
+		lcp.setLowWeight(Interval.MID_TERM, 0);
+		lcp.setHighWeight(Interval.MID_TERM, 1000000);
+
+		lcp.setThreshold(Interval.BEYOND, 72);
+		lcp.setLowWeight(Interval.BEYOND, 0);
+		lcp.setHighWeight(Interval.BEYOND, 1000000);
+
+		return lcp;
+	}
+
+}

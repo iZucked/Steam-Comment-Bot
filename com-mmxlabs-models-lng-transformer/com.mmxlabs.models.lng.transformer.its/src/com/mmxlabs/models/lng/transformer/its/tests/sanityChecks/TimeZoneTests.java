@@ -7,11 +7,11 @@ package com.mmxlabs.models.lng.transformer.its.tests.sanityChecks;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-import org.eclipse.swt.widgets.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.mmxlabs.models.lng.transformer.DefaultModelEntityMap;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
@@ -90,7 +90,7 @@ public class TimeZoneTests {
 
 	private void setEarliestTime(final ZonedDateTime earliestTime) {
 		dateHelper = new DateAndCurveHelper(earliestTime, earliestTime.plusYears(2));
-		modelEntityMap = new ModelEntityMap(dateHelper);
+		modelEntityMap = new DefaultModelEntityMap(dateHelper);
 	}
 
 	@Test

@@ -256,14 +256,14 @@ public final class OptimisationHelper {
 			previousSettings = scenario.getUserSettings();
 		}
 
-		final UserSettings defaultSettings = ScenarioUtils.createDefaultUserSettings();
+		final UserSettings userSettings = ScenarioUtils.createDefaultUserSettings();
 		if (previousSettings == null) {
-			previousSettings = defaultSettings;
+			previousSettings = userSettings;
 		}
 
 		// Permit the user to override the settings object. Use the previous settings as the initial value
 		if (promptUser) {
-			previousSettings = openUserDialog(forEvaluation, previousSettings, defaultSettings);
+			previousSettings = openUserDialog(forEvaluation, previousSettings, userSettings);
 		}
 
 		if (previousSettings == null) {
@@ -271,18 +271,20 @@ public final class OptimisationHelper {
 		}
 
 		// Only merge across specific fields - not all of them. This permits additions to the default settings to pass through to the scenario.
-		if (!mergeFields(previousSettings, defaultSettings)) {
+		mergeFields(previousSettings, userSettings);
+
+		if (!checkUserSettings(userSettings, false)) {
 			return null;
 		}
 
-		final OptimiserSettings optimiserSettings = transformUserSettings(defaultSettings, parameterMode);
+		final OptimiserSettings optimiserSettings = transformUserSettings(userSettings, parameterMode);
 
 		// Tmp hack - need to update customiser API to avoid needing to back-apply
-		defaultSettings.setGenerateCharterOuts(optimiserSettings.isGenerateCharterOuts());
-		defaultSettings.setBuildActionSets(optimiserSettings.isBuildActionSets());
-		defaultSettings.setShippingOnly(optimiserSettings.isShippingOnly());
+		userSettings.setGenerateCharterOuts(optimiserSettings.isGenerateCharterOuts());
+		userSettings.setBuildActionSets(optimiserSettings.isBuildActionSets());
+		userSettings.setShippingOnly(optimiserSettings.isShippingOnly());
 
-		return new Pair<UserSettings, OptimiserSettings>(defaultSettings, optimiserSettings);
+		return new Pair<UserSettings, OptimiserSettings>(userSettings, optimiserSettings);
 	}
 
 	private static UserSettings openUserDialog(final boolean forEvaluation, final UserSettings previousSettings, final UserSettings defaultSettings) {
@@ -435,6 +437,18 @@ public final class OptimisationHelper {
 
 		final OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
 
+		// Copy across params
+		if (userSettings.isSetPeriodStart()) {
+			optimiserSettings.getRange().setOptimiseAfter(userSettings.getPeriodStart());
+		}
+		if (userSettings.isSetPeriodEnd()) {
+			optimiserSettings.getRange().setOptimiseBefore(userSettings.getPeriodEnd());
+		}
+
+		optimiserSettings.setBuildActionSets(userSettings.isBuildActionSets());
+		optimiserSettings.setGenerateCharterOuts(userSettings.isGenerateCharterOuts());
+		optimiserSettings.setShippingOnly(userSettings.isShippingOnly());
+
 		Objective similarityObjective = findObjective(SimilarityFitnessCoreFactory.NAME, optimiserSettings);
 		if (similarityObjective == null) {
 			similarityObjective = ParametersFactory.eINSTANCE.createObjective();
@@ -464,25 +478,14 @@ public final class OptimisationHelper {
 		case OFF:
 			optimiserSettings.setSimilaritySettings(ScenarioUtils.createOffSimilaritySettings());
 			optimiserSettings.getAnnealingSettings().setRestarting(false);
+			optimiserSettings.setBuildActionSets(false);
 			break;
 		default:
 			assert false;
 			break;
 
 		}
-		
-		// Copy across params
-		if (userSettings.isSetPeriodStart()) {
-			optimiserSettings.getRange().setOptimiseAfter(userSettings.getPeriodStart());
-		}
-		if (userSettings.isSetPeriodEnd()) {
-			optimiserSettings.getRange().setOptimiseBefore(userSettings.getPeriodEnd());
-		}
-		
-		optimiserSettings.setBuildActionSets(userSettings.isBuildActionSets());
-		optimiserSettings.setGenerateCharterOuts(userSettings.isGenerateCharterOuts());
-		optimiserSettings.setShippingOnly(userSettings.isShippingOnly());
-		
+
 		// change epoch length
 		// TODO: make this better!
 		if (userSettings.isSetPeriodStart() && userSettings.isSetPeriodEnd()) {
@@ -539,7 +542,7 @@ public final class OptimisationHelper {
 	 * @param to
 	 * @return
 	 */
-	private static boolean mergeFields(@NonNull final UserSettings from, @NonNull final UserSettings to) {
+	private static void mergeFields(@NonNull final UserSettings from, @NonNull final UserSettings to) {
 
 		resetDisabledFeatures(from);
 
@@ -564,6 +567,10 @@ public final class OptimisationHelper {
 			to.setSimilarityMode(from.getSimilarityMode());
 		}
 		to.setBuildActionSets(from.isBuildActionSets());
+	}
+
+	public static boolean checkUserSettings(@NonNull final UserSettings to, boolean quiet) {
+		resetDisabledFeatures(to);
 
 		// Turn off if settings are not nice
 		if (to.isBuildActionSets()) {
@@ -594,7 +601,7 @@ public final class OptimisationHelper {
 				}
 			}
 
-			if (actionSetErrorMessage != null) {
+			if (!quiet && actionSetErrorMessage != null) {
 				log.info(actionSetErrorMessage);
 
 				if (System.getProperty("lingo.suppress.dialogs") == null) {

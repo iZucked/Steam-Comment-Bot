@@ -1004,7 +1004,7 @@ public class BreakdownOptimiserMover {
 		return new LinkedList<JobState>();
 	}
 
-	public long calculateSchedulePNL(@NonNull final IModifiableSequences fullSequences, @NonNull final ScheduledSequences scheduledSequences) {
+	public long calculateSchedulePNL(@NonNull final ISequences fullSequences, @NonNull final ScheduledSequences scheduledSequences) {
 		long sumPNL = 0;
 
 		for (final ScheduledSequence scheduledSequence : scheduledSequences) {
@@ -1143,7 +1143,7 @@ public class BreakdownOptimiserMover {
 		return changedElements;
 	}
 
-	public IEvaluationState evaluateSequence(@NonNull final IModifiableSequences currentFullSequences) {
+	public IEvaluationState evaluateSequence(@NonNull final ISequences currentFullSequences) {
 		final IEvaluationState evaluationState = new EvaluationState();
 		for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
 			if (!evaluationProcess.evaluate(currentFullSequences, evaluationState)) {

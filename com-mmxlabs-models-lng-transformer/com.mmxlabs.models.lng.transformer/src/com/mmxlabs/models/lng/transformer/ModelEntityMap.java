@@ -30,88 +30,28 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
  * @author hinton
  * 
  */
-public class ModelEntityMap {
-
-	@NonNull
-	private final DateAndCurveHelper dateHelper;
-
-	@NonNull
-	private final Map<Object, Object> modelToOptimiser = new HashMap<Object, Object>();
-
-	@NonNull
-	private final Map<Object, Object> optimiserToModel = new HashMap<Object, Object>();
-
-	@Inject
-	public ModelEntityMap(@NonNull final DateAndCurveHelper dateHelper) {
-		this.dateHelper = dateHelper;
-	}
+public interface ModelEntityMap {
 
 	@Nullable
-	public <U> U getModelObject(@NonNull final Object internalObject, @NonNull final Class<? extends U> clz) {
-		return clz.cast(optimiserToModel.get(internalObject));
-	}
+	<U> U getModelObject(@NonNull final Object internalObject, @NonNull final Class<? extends U> clz);
 
-	@SuppressWarnings("null")
 	@NonNull
-	public <U> U getModelObjectNullChecked(@Nullable final Object internalObject, @NonNull final Class<? extends U> clz) {
-		if (internalObject == null) {
-			throw new IllegalArgumentException("Optimiser object is null");
-		}
-		final Object o = optimiserToModel.get(internalObject);
-		if (o == null) {
-			throw new IllegalArgumentException("No model object found");
-		}
-		return clz.cast(o);
-	}
+	<U> U getModelObjectNullChecked(@Nullable final Object internalObject, @NonNull final Class<? extends U> clz);
 
-	public void addModelObject(@NonNull final EObject modelObject, @NonNull final Object internalObject) {
-		modelToOptimiser.put(modelObject, internalObject);
-		optimiserToModel.put(internalObject, modelObject);
-	}
+	void addModelObject(@NonNull final EObject modelObject, @NonNull final Object internalObject);
 
-	@SuppressWarnings("null")
 	@NonNull
-	public <T> T getOptimiserObjectNullChecked(@Nullable final EObject modelObject, final Class<? extends T> clz) {
-		if (modelObject == null) {
-			throw new IllegalArgumentException("Model object is null");
-		}
-		final Object o = modelToOptimiser.get(modelObject);
-		if (o == null) {
-			throw new IllegalArgumentException("No optimiser object found");
-		}
-		return clz.cast(o);
-	}
+	<T> T getOptimiserObjectNullChecked(@Nullable final EObject modelObject, final Class<? extends T> clz);
 
 	@Nullable
-	public <T> T getOptimiserObject(@NonNull final EObject modelObject, @NonNull final Class<? extends T> clz) {
-		return clz.cast(modelToOptimiser.get(modelObject));
-	}
-
-	public void dispose() {
-		modelToOptimiser.clear();
-		optimiserToModel.clear();
-	}
+	<T> T getOptimiserObject(@NonNull final EObject modelObject, @NonNull final Class<? extends T> clz);
 
 	/**
 	 */
-	public <T extends EObject> Collection<T> getAllModelObjects(@NonNull final Class<? extends T> clz) {
+	<T extends EObject> Collection<T> getAllModelObjects(@NonNull final Class<? extends T> clz);
 
-		final List<T> objects = new LinkedList<T>();
-		for (final Object obj : modelToOptimiser.keySet()) {
-			if (clz.isInstance(obj)) {
-				objects.add(clz.cast(obj));
-			}
-		}
-		return objects;
-	}
-
-	@SuppressWarnings("null")
 	@NonNull
-	public ZonedDateTime getDateFromHours(final int hours, final String tz) {
-		final String timeZone = (tz == null) ? "UTC" : tz;
-		final int offsetMinutes = DateAndCurveHelper.getOffsetInMinutesFromTimeZone(timeZone);
-		return dateHelper.getEarliestTime().withZoneSameInstant(ZoneId.of(timeZone)).plusHours(hours).plusMinutes(offsetMinutes);
-	}
+	ZonedDateTime getDateFromHours(final int hours, final String tz);
 
 	/**
 	 * Convert from hours, relative to earliest time, to a Date object
@@ -121,12 +61,7 @@ public class ModelEntityMap {
 	 * @return
 	 */
 	@NonNull
-	public ZonedDateTime getDateFromHours(final int hours, @Nullable final IPort port) {
-		if (port == null) {
-			return getDateFromHours(hours, "UTC");
-		}
-		return getDateFromHours(hours, port.getTimeZoneId());
-	}
+	ZonedDateTime getDateFromHours(final int hours, @Nullable final IPort port);
 
 	/**
 	 * Convert from hours, relative to earliest time, to a Date object
@@ -136,11 +71,5 @@ public class ModelEntityMap {
 	 * @return
 	 */
 	@NonNull
-	public ZonedDateTime getDateFromHours(final int hours, @Nullable final Port port) {
-		if (port == null) {
-			return getDateFromHours(hours, "UTC");
-		}
-		return getDateFromHours(hours, port.getTimeZone());
-	}
-
+	ZonedDateTime getDateFromHours(final int hours, @Nullable final Port port);
 }

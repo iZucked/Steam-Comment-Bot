@@ -29,7 +29,7 @@ import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.IScenarioService;
@@ -83,7 +83,7 @@ public class LNGSchedulerRunAllSimilarityJobControl extends AbstractEclipseJobCo
 		public void init() {
 			{
 				//
-				runner.initAndEval();
+				runner.evaluateInitialState();
 			}
 
 		}
@@ -122,9 +122,6 @@ public class LNGSchedulerRunAllSimilarityJobControl extends AbstractEclipseJobCo
 		}
 
 		public void dispose() {
-			if (runner != null) {
-				runner.dispose();
-			}
 			if (lock != null) {
 				lock.release();
 			}
@@ -172,7 +169,7 @@ public class LNGSchedulerRunAllSimilarityJobControl extends AbstractEclipseJobCo
 				throw new IllegalStateException();
 			}
 
-			this.jobs[i] = new SimilarityFuture(scenarioInstance, originalScenario, name, optimiserSettings, LNGTransformer.HINT_OPTIMISE_LSO);
+			this.jobs[i] = new SimilarityFuture(scenarioInstance, originalScenario, name, optimiserSettings, LNGTransformerHelper.HINT_OPTIMISE_LSO);
 		}
 		// Hmm...
 		final int numberOfThreads = Runtime.getRuntime().availableProcessors() - 1;

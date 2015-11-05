@@ -4,11 +4,10 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.restrictedelements;
 
-import java.util.Collections;
-import java.util.EnumMap;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.ops4j.peaberry.activation.util.PeaberryActivationModule;
 
 import com.google.inject.AbstractModule;
@@ -34,36 +33,31 @@ public class RestrictedElementsModule extends PeaberryActivationModule {
 	}
 
 	/**
-	 * Module to contribute the DCP to the builder via the @link{RestrictedElementsInjectorService}
-	 * 
-	 * 
-	 */
-	public static class RestrictedElementsDCPModule extends AbstractModule {
-		@Override
-		protected void configure() {
-
-			final HashMapRestrictedElementsProviderEditor restrictedElementsProviderEditor = new HashMapRestrictedElementsProviderEditor();
-			bind(IRestrictedElementsProvider.class).toInstance(restrictedElementsProviderEditor);
-			bind(IRestrictedElementsProviderEditor.class).toInstance(restrictedElementsProviderEditor);
-		}
-	}
-
-	/**
 	 * An implementation of @link{IOptimiserInjectorService} to bind a @link{IRestrictedElementsProvider} to the DCP module
 	 */
 	public static class RestrictedElementsInjectorService implements IOptimiserInjectorService {
 
 		@Override
-		public Module requestModule(final String... hints) {
+		public Module requestModule(@NonNull final ModuleType moduleType, @NonNull final Collection<String> hints) {
+
+			if (moduleType == ModuleType.Module_DataComponentProviderModule) {
+				return new AbstractModule() {
+
+					@Override
+					protected void configure() {
+						final HashMapRestrictedElementsProviderEditor restrictedElementsProviderEditor = new HashMapRestrictedElementsProviderEditor();
+						bind(IRestrictedElementsProvider.class).toInstance(restrictedElementsProviderEditor);
+						bind(IRestrictedElementsProviderEditor.class).toInstance(restrictedElementsProviderEditor);
+					}
+				};
+			}
+
 			return null;
 		}
 
 		@Override
-		public Map<ModuleType, List<Module>> requestModuleOverrides(final String... hints) {
-			final Map<ModuleType, List<Module>> map = new EnumMap<ModuleType, List<Module>>(ModuleType.class);
-			map.put(ModuleType.Module_DataComponentProviderModule, Collections.<Module> singletonList(new RestrictedElementsDCPModule()));
-
-			return map;
+		public List<Module> requestModuleOverrides(ModuleType moduleType, @NonNull final Collection<String> hints) {
+			return null;
 		}
 	}
 }

@@ -7,13 +7,19 @@ package com.mmxlabs.models.lng.transformer.its.tests.evaluation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Module;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -22,25 +28,30 @@ import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.IRestrictedElementsProvider;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
+import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.MinimalScenarioCreator;
-import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
-import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
+import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeModule;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
+import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 
 @RunWith(value = ShiroRunner.class)
 public class SlotOverridesTest {
@@ -53,25 +64,38 @@ public class SlotOverridesTest {
 	 */
 
 	static class SlotTester {
-		final LNGTransformer transformer;
+		@NonNull
+		private final Injector parentInjector;
+
+		@NonNull
 		final ModelEntityMap modelEntityMap;
 
-		public SlotTester(LNGScenarioModel scenario) {
+		public SlotTester(@NonNull final LNGScenarioModel scenario) {
 			this(scenario, false);
 		}
 
-		public SlotTester(LNGScenarioModel scenario, boolean failSilently) {
-			transformer = new LNGTransformer(scenario, ScenarioUtils.createDefaultSettings(), new TransformerExtensionTestModule());
-			try {
-				LNGSchedulerJobUtils.evaluateCurrentState(transformer);
-			} catch (Exception e) {
-				if (failSilently == false)
-					e.printStackTrace(System.err);
-			}
-			modelEntityMap = transformer.getModelEntityMap();
+		public SlotTester(@NonNull final LNGScenarioModel scenario, final boolean failSilently) {
+
+			final OptimiserSettings settings = ScenarioUtils.createDefaultSettings();
+			final Set<String> hints = LNGTransformerHelper.getHints(settings);
+
+			final Collection<IOptimiserInjectorService> services = LNGTransformerHelper.getOptimiserInjectorServices(new TransformerExtensionTestBootstrapModule(), null);
+
+			final List<Module> modules = new LinkedList<>();
+			modules.add(new PerChainUnitScopeModule());
+			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new DataComponentProviderModule(), services, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule, hints));
+			modules.addAll(
+					LNGTransformerHelper.getModulesWithOverrides(new LNGTransformerModule(scenario, settings), services, IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, hints));
+
+			parentInjector = Guice.createInjector(modules);
+
+			modelEntityMap = parentInjector.getInstance(ModelEntityMap.class);
+
+			// This triggers a side-effect of building the internal optimisation data and must be called.
+			parentInjector.getInstance(IOptimisationData.class);
 		}
 
-		public <T> T getOptimiserObject(final EObject modelObject, final Class<? extends T> clz) {
+		public <T> T getOptimiserObject(@NonNull final EObject modelObject, @NonNull final Class<? extends T> clz) {
 			return modelEntityMap.getOptimiserObject(modelObject, clz);
 		}
 
@@ -80,39 +104,39 @@ public class SlotOverridesTest {
 		}
 
 		public <T> T getProvider(final Class<? extends T> clz) {
-			return transformer.getInjector().getInstance(clz);
+			return parentInjector.getInstance(clz);
 		}
 
-		public List<Slot> getRestrictedFollowerSlots(Slot slot) {
+		public List<Slot> getRestrictedFollowerSlots(final Slot slot) {
 			final IPortSlotProvider psProvider = getProvider(IPortSlotProvider.class);
 
 			// pull the load slot out of the transformed data
 			final ILoadSlot oSlot = getOptimiserObject(slot, ILoadSlot.class);
 
-			ISequenceElement element = psProvider.getElement(oSlot);
-			IRestrictedElementsProvider reProvider = getProvider(IRestrictedElementsProvider.class);
+			final ISequenceElement element = psProvider.getElement(oSlot);
+			final IRestrictedElementsProvider reProvider = getProvider(IRestrictedElementsProvider.class);
 
-			ArrayList<Slot> result = new ArrayList<Slot>();
-			for (ISequenceElement restricted : reProvider.getRestrictedFollowerElements(element)) {
-				IPortSlot restrictedSlot = psProvider.getPortSlot(restricted);
+			final ArrayList<Slot> result = new ArrayList<Slot>();
+			for (final ISequenceElement restricted : reProvider.getRestrictedFollowerElements(element)) {
+				final IPortSlot restrictedSlot = psProvider.getPortSlot(restricted);
 				result.add(getModelObject(restrictedSlot, Slot.class));
 			}
 
 			return result;
 		}
 
-		public List<Slot> getRestrictedPrecedingSlots(Slot slot) {
+		public List<Slot> getRestrictedPrecedingSlots(final Slot slot) {
 			final IPortSlotProvider psProvider = getProvider(IPortSlotProvider.class);
 
 			// pull the load slot out of the transformed data
 			final IDischargeSlot oSlot = getOptimiserObject(slot, IDischargeSlot.class);
 
-			ISequenceElement element = psProvider.getElement(oSlot);
-			IRestrictedElementsProvider reProvider = getProvider(IRestrictedElementsProvider.class);
+			final ISequenceElement element = psProvider.getElement(oSlot);
+			final IRestrictedElementsProvider reProvider = getProvider(IRestrictedElementsProvider.class);
 
-			ArrayList<Slot> result = new ArrayList<Slot>();
-			for (ISequenceElement restricted : reProvider.getRestrictedPrecedingElements(element)) {
-				IPortSlot restrictedSlot = psProvider.getPortSlot(restricted);
+			final ArrayList<Slot> result = new ArrayList<Slot>();
+			for (final ISequenceElement restricted : reProvider.getRestrictedPrecedingElements(element)) {
+				final IPortSlot restrictedSlot = psProvider.getPortSlot(restricted);
 				result.add(getModelObject(restrictedSlot, Slot.class));
 			}
 
@@ -138,7 +162,7 @@ public class SlotOverridesTest {
 		// pull the entity out of the transformed data
 		final IEntityProvider entityProvider = tester.getProvider(IEntityProvider.class);
 		final IPortSlot oSlot = tester.getOptimiserObject(eSlot, IPortSlot.class);
-		IEntity oEntity = entityProvider.getEntityForSlot(oSlot);
+		final IEntity oEntity = entityProvider.getEntityForSlot(oSlot);
 
 		// make sure it matches
 		Assert.assertEquals(eEntity, tester.getModelObject(oEntity, LegalEntity.class));
@@ -163,7 +187,7 @@ public class SlotOverridesTest {
 		// pull the entity out of the transformed data
 		final IEntityProvider entityProvider = tester.getProvider(IEntityProvider.class);
 		final IPortSlot oSlot = tester.getOptimiserObject(eSlot, IPortSlot.class);
-		IEntity oEntity = entityProvider.getEntityForSlot(oSlot);
+		final IEntity oEntity = entityProvider.getEntityForSlot(oSlot);
 
 		// make sure it matches
 		Assert.assertEquals(eEntity, tester.getModelObject(oEntity, BaseLegalEntity.class));
@@ -174,14 +198,14 @@ public class SlotOverridesTest {
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
 
-		int CONTRACT_MIN_CV = 10;
-		int CONTRACT_MAX_CV = 100;
-		int SLOT_MIN_CV = 15;
-		int SLOT_MAX_CV = 150;
+		final int CONTRACT_MIN_CV = 10;
+		final int CONTRACT_MAX_CV = 100;
+		final int SLOT_MIN_CV = 15;
+		final int SLOT_MAX_CV = 150;
 
 		// override the discharge slot's min & max CV
 		final DischargeSlot eSlot = (DischargeSlot) msc.cargo.getSortedSlots().get(1);
-		SalesContract eSalesContract = (SalesContract) eSlot.getContract();
+		final SalesContract eSalesContract = (SalesContract) eSlot.getContract();
 		eSalesContract.setMinCvValue(CONTRACT_MIN_CV);
 		eSalesContract.setMaxCvValue(CONTRACT_MAX_CV);
 		eSlot.setMinCvValue(SLOT_MIN_CV);
@@ -193,8 +217,8 @@ public class SlotOverridesTest {
 		// pull the discharge slot out of the transformed data
 		final IDischargeSlot oSlot = tester.getOptimiserObject(eSlot, IDischargeSlot.class);
 
-		long minCv = oSlot.getMinCvValue();
-		long maxCv = oSlot.getMaxCvValue();
+		final long minCv = oSlot.getMinCvValue();
+		final long maxCv = oSlot.getMaxCvValue();
 
 		// make sure it matches
 		Assert.assertEquals(Calculator.HighScaleFactor * SLOT_MIN_CV, minCv);
@@ -206,12 +230,12 @@ public class SlotOverridesTest {
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
 
-		int CONTRACT_MIN_CV = 10;
-		int CONTRACT_MAX_CV = 100;
+		final int CONTRACT_MIN_CV = 10;
+		final int CONTRACT_MAX_CV = 100;
 
 		// override the discharge slot's min & max CV
 		final DischargeSlot eSlot = (DischargeSlot) msc.cargo.getSortedSlots().get(1);
-		SalesContract eSalesContract = (SalesContract) eSlot.getContract();
+		final SalesContract eSalesContract = (SalesContract) eSlot.getContract();
 		eSalesContract.setMinCvValue(CONTRACT_MIN_CV);
 		eSalesContract.setMaxCvValue(CONTRACT_MAX_CV);
 
@@ -221,8 +245,8 @@ public class SlotOverridesTest {
 		// pull the discharge slot out of the transformed data
 		final IDischargeSlot oSlot = tester.getOptimiserObject(eSlot, IDischargeSlot.class);
 
-		long minCv = oSlot.getMinCvValue();
-		long maxCv = oSlot.getMaxCvValue();
+		final long minCv = oSlot.getMinCvValue();
+		final long maxCv = oSlot.getMaxCvValue();
 
 		// make sure it matches
 		Assert.assertEquals(Calculator.HighScaleFactor * CONTRACT_MIN_CV, minCv);
@@ -243,18 +267,18 @@ public class SlotOverridesTest {
 		// pull the discharge slot out of the transformed data
 		final IDischargeSlot oSlot = tester.getOptimiserObject(eSlot, IDischargeSlot.class);
 
-		long minCv = oSlot.getMinCvValue();
-		long maxCv = oSlot.getMaxCvValue();
+		final long minCv = oSlot.getMinCvValue();
+		final long maxCv = oSlot.getMaxCvValue();
 
 		// make sure it matches
 		Assert.assertEquals(0l, minCv);
 		Assert.assertEquals(Long.MAX_VALUE, maxCv);
 	}
 
-	public <T> void assertArrayEqualsCollection(T[] expected, Collection<T> actual) {
+	public <T> void assertArrayEqualsCollection(final T[] expected, final Collection<T> actual) {
 		Assert.assertEquals(expected.length, actual.size());
-		HashSet<T> expectedSet = new HashSet<T>();
-		HashSet<T> remainder = new HashSet<T>();
+		final HashSet<T> expectedSet = new HashSet<T>();
+		final HashSet<T> remainder = new HashSet<T>();
 
 		for (int i = 0; i < expected.length; i++) {
 			expectedSet.add(expected[i]);
@@ -329,7 +353,7 @@ public class SlotOverridesTest {
 		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// set up a new contract on discharge slot 1
-		Contract forbidden = msc.addSalesContract("Forbidden Purchase Contract", 14);
+		final Contract forbidden = msc.addSalesContract("Forbidden Purchase Contract", 14);
 		msc.dischargeSlots[1].setContract(forbidden);
 
 		// do override the contracts' restricted contracts
@@ -353,7 +377,7 @@ public class SlotOverridesTest {
 		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// set up a new contract on discharge slot 1
-		Contract forbidden = msc.addSalesContract("Forbidden Purchase Contract", 14);
+		final Contract forbidden = msc.addSalesContract("Forbidden Purchase Contract", 14);
 		msc.dischargeSlots[1].setContract(forbidden);
 
 		// do override the contracts' restricted contracts
@@ -436,7 +460,7 @@ public class SlotOverridesTest {
 
 		// override the discharge slot's delivery type
 		final DischargeSlot eSlot = (DischargeSlot) msc.cargo.getSortedSlots().get(1);
-		SalesContract eSalesContract = (SalesContract) eSlot.getContract();
+		final SalesContract eSalesContract = (SalesContract) eSlot.getContract();
 		eSalesContract.setPurchaseDeliveryType(CargoDeliveryType.NOT_SHIPPED);
 		eSlot.setPurchaseDeliveryType(CargoDeliveryType.SHIPPED);
 

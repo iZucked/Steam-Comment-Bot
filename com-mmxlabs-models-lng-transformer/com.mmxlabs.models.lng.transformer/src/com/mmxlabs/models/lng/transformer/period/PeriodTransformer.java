@@ -27,8 +27,8 @@ import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.swt.widgets.DateTime;
 import org.ops4j.peaberry.Peaberry;
 import org.ops4j.peaberry.util.TypeLiterals;
 import org.osgi.framework.FrameworkUtil;
@@ -59,6 +59,7 @@ import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
@@ -80,7 +81,12 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
+import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
+import com.mmxlabs.models.lng.transformer.chain.impl.LNGEvaluationTransformerUnit;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
+import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
+import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
+import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
 import com.mmxlabs.models.lng.transformer.period.InclusionChecker.InclusionType;
 import com.mmxlabs.models.lng.transformer.period.InclusionChecker.PeriodRecord;
 import com.mmxlabs.models.lng.transformer.period.InclusionChecker.Position;
@@ -89,7 +95,7 @@ import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.util.SetUtils;
-import com.mmxlabs.optimiser.core.IAnnotatedSolution;
+import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 /***
  * TODO
@@ -110,10 +116,10 @@ public class PeriodTransformer {
 
 	@Inject(optional = true)
 	private Iterable<IPeriodTransformerExtension> extensions;
-	private Module testingModule;
+	private Module bootstrapModule;
 
-	public PeriodTransformer(@Nullable final Module testingModule) {
-		this.testingModule = testingModule;
+	public PeriodTransformer(@Nullable final Module bootstrapModule) {
+		this.bootstrapModule = bootstrapModule;
 		injectExtensions();
 	}
 
@@ -143,12 +149,13 @@ public class PeriodTransformer {
 	@Inject
 	private InclusionChecker inclusionChecker;
 
-	public LNGScenarioModel transform(final LNGScenarioModel wholeScenario, final OptimiserSettings optimiserSettings, final IScenarioEntityMapping mapping) {
+	public LNGScenarioModel transform(final LNGScenarioModel wholeScenario, final OptimiserSettings optimiserSettings, final IScenarioEntityMapping mapping,
+			@NonNull final Collection<IOptimiserInjectorService> services) {
 		final PeriodRecord periodRecord = createPeriodRecord(optimiserSettings);
-		return transform(wholeScenario, optimiserSettings, periodRecord, mapping);
+		return transform(wholeScenario, optimiserSettings, periodRecord, mapping, services);
 	}
 
-	public PeriodRecord createPeriodRecord(final OptimiserSettings optimiserSettings) {
+	public PeriodRecord createPeriodRecord(@NonNull final OptimiserSettings optimiserSettings) {
 
 		final PeriodRecord periodRecord = new PeriodRecord();
 
@@ -176,7 +183,8 @@ public class PeriodTransformer {
 		return periodRecord;
 	}
 
-	public LNGScenarioModel transform(final LNGScenarioModel wholeScenario, final OptimiserSettings optimiserSettings, final PeriodRecord periodRecord, final IScenarioEntityMapping mapping) {
+	public LNGScenarioModel transform(final LNGScenarioModel wholeScenario, final OptimiserSettings optimiserSettings, final PeriodRecord periodRecord, final IScenarioEntityMapping mapping,
+			@NonNull final Collection<IOptimiserInjectorService> services) {
 
 		// assert - passed validation
 
@@ -184,7 +192,7 @@ public class PeriodTransformer {
 		final LNGScenarioModel output = copyScenario(wholeScenario, mapping);
 
 		// Evaluate copy!
-		final EditingDomain internalDomain = evaluateScenario(optimiserSettings, output);
+		final EditingDomain internalDomain = evaluateScenario(optimiserSettings, output, services);
 
 		final CargoModel cargoModel = output.getCargoModel();
 		final SpotMarketsModel spotMarketsModel = output.getReferenceModel().getSpotMarketsModel();
@@ -240,7 +248,7 @@ public class PeriodTransformer {
 		return output;
 	}
 
-	private void lockOpenSlots(CargoModel cargoModel, PeriodRecord periodRecord) {
+	private void lockOpenSlots(final CargoModel cargoModel, final PeriodRecord periodRecord) {
 		for (List<Slot> slotList : new List[] { cargoModel.getLoadSlots(), cargoModel.getDischargeSlots() }) {
 			for (Slot slot : slotList) {
 				if (inclusionChecker.getObjectInclusionType(slot, periodRecord).getFirst() == InclusionType.Out) {
@@ -306,7 +314,7 @@ public class PeriodTransformer {
 				removed = true;
 			}
 			if (removed == false && (event instanceof DryDockEvent || event instanceof MaintenanceEvent)) {
-				Pair<Set<Cargo>, Set<Event>> eventsAndCargoesToKeep = getDependenciesForEvent(schedule, event);
+				final Pair<Set<Cargo>, Set<Event>> eventsAndCargoesToKeep = getDependenciesForEvent(schedule, event);
 				if (eventsAndCargoesToKeep != null) {
 					cargoesToKeep.addAll(eventsAndCargoesToKeep.getFirst());
 					eventsToKeep.addAll(eventsAndCargoesToKeep.getSecond());
@@ -642,11 +650,11 @@ public class PeriodTransformer {
 		}
 	}
 
-	private Pair<Set<Cargo>, Set<Event>> getDependenciesForEvent(Schedule schedule, VesselEvent ve) {
+	private Pair<Set<Cargo>, Set<Event>> getDependenciesForEvent(final Schedule schedule, final VesselEvent ve) {
 		VesselEventVisit interestingVesselEventVisit = null;
-		Set<Cargo> previousCargoes = new HashSet<>();
-		Set<Event> previousEvents = new HashSet<>();
-		Set<Vessel> vessels = SetUtils.getObjects(ve.getAllowedVessels());
+		final Set<Cargo> previousCargoes = new HashSet<>();
+		final Set<Event> previousEvents = new HashSet<>();
+		final Set<Vessel> vessels = SetUtils.getObjects(ve.getAllowedVessels());
 
 		for (final Sequence sequence : schedule.getSequences()) {
 
@@ -702,12 +710,12 @@ public class PeriodTransformer {
 		}
 	}
 
-	public EditingDomain evaluateScenario(final OptimiserSettings optimiserSettings, final LNGScenarioModel output) {
+	public EditingDomain evaluateScenario(@NonNull final OptimiserSettings optimiserSettings, @NonNull final LNGScenarioModel output, @NonNull final Collection<IOptimiserInjectorService> services) {
 
-		final LNGTransformer transformer = new LNGTransformer(output, optimiserSettings, testingModule);
-
+		Set<String> hints = LNGTransformerHelper.getHints(optimiserSettings);
+		final LNGDataTransformer transformer = new LNGDataTransformer(output, optimiserSettings, hints, services);
+		
 		final ModelEntityMap modelEntityMap = transformer.getModelEntityMap();
-		final IAnnotatedSolution startSolution = LNGSchedulerJobUtils.evaluateCurrentState(transformer);
 
 		// Construct internal command stack to generate correct output schedule
 		final BasicCommandStack commandStack = new BasicCommandStack();
@@ -720,7 +728,19 @@ public class PeriodTransformer {
 		r.getContents().add(output);
 		ed.getResourceSet().getResources().add(r);
 
-		final Pair<Command, Schedule> p = LNGSchedulerJobUtils.exportSolution(transformer.getInjector(), output, transformer.getOptimiserSettings(), ed, modelEntityMap, startSolution);
+		Injector evaluationInjector;
+		{
+			final List<Module> modules = new LinkedList<>();
+			modules.add(new InputSequencesModule(transformer.getInitialSequences()));
+			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(transformer.getOptimiserSettings()), services,
+					IOptimiserInjectorService.ModuleType.Module_ParametersModule, hints));
+			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
+			evaluationInjector = transformer.getInjector().createChildInjector(modules);
+		}
+		
+		
+		final Pair<Command, Schedule> p = LNGSchedulerJobUtils.exportSolution(evaluationInjector, output, transformer.getOptimiserSettings(), ed, modelEntityMap,
+				transformer.getInitialSequences(), null);
 		ed.getCommandStack().execute(p.getFirst());
 
 		return ed;
@@ -884,7 +904,8 @@ public class PeriodTransformer {
 		trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getFobSalesSpotMarket(), earliestDate, latestDate);
 	}
 
-	public void trimSpotMarketCurves(final EditingDomain internalDomain, final PeriodRecord periodRecord, final SpotMarketGroup spotMarketGroup, final ZonedDateTime earliestDate, final ZonedDateTime latestDate) {
+	public void trimSpotMarketCurves(final EditingDomain internalDomain, final PeriodRecord periodRecord, final SpotMarketGroup spotMarketGroup, final ZonedDateTime earliestDate,
+			final ZonedDateTime latestDate) {
 		if (spotMarketGroup != null) {
 			if (spotMarketGroup == null) {
 				return;

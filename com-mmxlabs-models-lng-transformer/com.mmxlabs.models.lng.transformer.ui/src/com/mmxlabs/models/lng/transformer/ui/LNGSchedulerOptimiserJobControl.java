@@ -17,7 +17,7 @@ import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.model.ModelReference;
@@ -50,7 +50,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 		this.modelReference = scenarioInstance.getReference();
 		this.originalScenario = (LNGScenarioModel) modelReference.getInstance();
 		final EditingDomain originalEditingDomain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
-		scenarioRunner = new LNGScenarioRunner(originalScenario, scenarioInstance, jobDescriptor.getOptimiserSettings(), originalEditingDomain, LNGTransformer.HINT_OPTIMISE_LSO);
+		scenarioRunner = new LNGScenarioRunner(originalScenario, scenarioInstance, jobDescriptor.getOptimiserSettings(), originalEditingDomain, LNGTransformerHelper.HINT_OPTIMISE_LSO);
 		setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));
 
 		// Disable optimisation in P&L testing phase
@@ -62,7 +62,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
 	@Override
 	protected void reallyPrepare() {
-		scenarioRunner.initAndEval();
+		scenarioRunner.evaluateInitialState();
 	}
 
 	@Override
@@ -97,9 +97,9 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
 	@Override
 	public void dispose() {
-		if (scenarioRunner != null) {
-			scenarioRunner.dispose();
-		}
+		// if (scenarioRunner != null) {
+		// scenarioRunner.dispose();
+		// }
 		super.dispose();
 	}
 

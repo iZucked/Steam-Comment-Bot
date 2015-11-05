@@ -58,9 +58,9 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 
 			LNGScenarioRunner runner = new LNGScenarioRunner(scenario, null, jobDescriptor.getOptimiserSettings(), editingDomain);
 			try {
-				runner.initAndEval();
+				runner.evaluateInitialState();
 			} finally {
-				runner.dispose();
+//				runner.dispose();
 			}
 
 			setJobState(EJobState.COMPLETED);

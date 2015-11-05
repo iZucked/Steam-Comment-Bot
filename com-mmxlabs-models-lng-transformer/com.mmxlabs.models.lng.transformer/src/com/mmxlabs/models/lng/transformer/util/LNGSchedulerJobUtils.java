@@ -22,6 +22,8 @@ import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
@@ -53,13 +55,13 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.IPostExportProcessor;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.inject.modules.ExporterExtensionsModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.PostExportProcessorModule;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IEvaluationContext;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
+import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationProcessRegistry;
@@ -67,6 +69,7 @@ import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.optimiser.core.impl.EvaluationContext;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scenario.service.util.MMXAdaptersAwareCommandStack;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
@@ -90,6 +93,7 @@ public class LNGSchedulerJobUtils {
 	 * @param scenario
 	 * @param editingDomain
 	 * @param modelEntityMap
+	 * @param extraAnnotations
 	 * @param solution
 	 * @param lockKey
 	 * @param solutionCurrentProgress
@@ -97,43 +101,57 @@ public class LNGSchedulerJobUtils {
 	 * @return
 	 */
 	public static Pair<Command, Schedule> exportSolution(final Injector injector, final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings, final EditingDomain editingDomain,
-			final ModelEntityMap modelEntityMap, final IAnnotatedSolution solution) {
+			@NonNull final ModelEntityMap modelEntityMap, @NonNull final ISequences rawSequences, @Nullable final Map<String, Object> extraAnnotations) {
 
+		// new LNGExportTransformer(eveal/optimisationTransofrmer, hints);
+		// exporter == transformer.createASE();
 		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
 		{
 			final Injector childInjector = injector.createChildInjector(new ExporterExtensionsModule());
 			childInjector.injectMembers(exporter);
 		}
+		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+			scope.enter();
 
-		final Schedule schedule = exporter.exportAnnotatedSolution(modelEntityMap, solution);
-		final ScheduleModel scheduleModel = scenario.getScheduleModel();
-		final CargoModel cargoModel = scenario.getCargoModel();
+			final IOptimisationData optimisationData = injector.getInstance(IOptimisationData.class);
+			final IAnnotatedSolution solution = LNGSchedulerJobUtils.evaluateCurrentState(injector, optimisationData, rawSequences);
 
-		final CompoundCommand command = new CompoundCommand();
+			// Copy extra annotations - e.g. fitness information
+			if (extraAnnotations != null) {
+				extraAnnotations.entrySet().forEach(e -> solution.setGeneralAnnotation(e.getKey(), e.getValue()));
+			}
 
-		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Schedule(), schedule));
+			final Schedule schedule = exporter.exportAnnotatedSolution(modelEntityMap, solution);
+			final ScheduleModel scheduleModel = scenario.getScheduleModel();
+			final CargoModel cargoModel = scenario.getCargoModel();
 
-		final Injector childInjector = injector.createChildInjector(new PostExportProcessorModule());
+			final CompoundCommand command = new CompoundCommand();
 
-		final Key<List<IPostExportProcessor>> key = Key.get(new TypeLiteral<List<IPostExportProcessor>>() {
-		});
+			command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Schedule(), schedule));
 
-		Iterable<IPostExportProcessor> postExportProcessors;
-		try {
-			postExportProcessors = childInjector.getInstance(key);
-			//
-		} catch (final ConfigurationException e) {
-			postExportProcessors = null;
+			// new LNGExportTransformer(eveal/optimisationTransofrmer, hints);
+			final Injector childInjector = injector.createChildInjector(new PostExportProcessorModule());
+
+			final Key<List<IPostExportProcessor>> key = Key.get(new TypeLiteral<List<IPostExportProcessor>>() {
+			});
+
+			Iterable<IPostExportProcessor> postExportProcessors;
+			try {
+				postExportProcessors = childInjector.getInstance(key);
+				//
+			} catch (final ConfigurationException e) {
+				postExportProcessors = null;
+			}
+
+			command.append(derive(editingDomain, scenario, schedule, cargoModel, postExportProcessors));
+			// command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Dirty(), false));
+			command.append(SetCommand.create(editingDomain, scenario, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_Parameters(), optimiserSettings));
+
+			// Mark schedule as clean
+			command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY, Boolean.FALSE));
+
+			return new Pair<Command, Schedule>(command, schedule);
 		}
-
-		command.append(derive(editingDomain, scenario, schedule, cargoModel, postExportProcessors));
-		// command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Dirty(), false));
-		command.append(SetCommand.create(editingDomain, scenario, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_Parameters(), optimiserSettings));
-
-		// Mark schedule as clean
-		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY, Boolean.FALSE));
-
-		return new Pair<Command, Schedule>(command, schedule);
 	}
 
 	public static CompoundCommand createBlankCommand(final int solutionCurrentProgress) {
@@ -440,35 +458,31 @@ public class LNGSchedulerJobUtils {
 
 	}
 
-	public static IAnnotatedSolution evaluateCurrentState(final LNGTransformer transformer) {
-		final ModelEntityMap modelEntityMap = transformer.getModelEntityMap();
-		final IOptimisationData data = transformer.getOptimisationData();
-		final Injector injector = transformer.getInjector();
+	public static IAnnotatedSolution evaluateCurrentState(@NonNull final Injector injector, @NonNull final IOptimisationData data, @NonNull final ISequences rawSequences) {
 		/**
 		 * Start the full evaluation process.
 		 */
 
 		// Step 1. Get or derive the initial sequences from the input scenario data
-		final IModifiableSequences sequences = new ModifiableSequences(transformer.getOptimisationTransformer().createInitialSequences(data, modelEntityMap));
+		final IModifiableSequences mSequences = new ModifiableSequences(rawSequences);
 
 		// Run through the sequences manipulator of things such as start/end port replacement
 
 		final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
-
 		// this will set the return elements to the right places, and remove the start elements.
-		manipulator.manipulate(sequences);
+		manipulator.manipulate(mSequences);
 
 		final EvaluationState state = new EvaluationState();
 		// The output data structured, a solution with all the output data as annotations
 		// Create a fake context
-		EvaluationProcessRegistry evaluationProcessRegistry = new EvaluationProcessRegistry();
-		final IEvaluationContext context = new EvaluationContext(data, sequences, Collections.<String> emptyList(), evaluationProcessRegistry);
+		final EvaluationProcessRegistry evaluationProcessRegistry = new EvaluationProcessRegistry();
+		final IEvaluationContext context = new EvaluationContext(data, mSequences, Collections.<String> emptyList(), evaluationProcessRegistry);
 
-		final AnnotatedSolution solution = new AnnotatedSolution(sequences, context, state);
+		final AnnotatedSolution solution = new AnnotatedSolution(mSequences, context, state);
 
 		final IEvaluationProcess process = injector.getInstance(SchedulerEvaluationProcess.class);
 
-		process.annotate(sequences, state, solution);
+		process.annotate(mSequences, state, solution);
 
 		return solution;
 	}

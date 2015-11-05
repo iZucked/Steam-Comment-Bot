@@ -21,30 +21,27 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.transformer.IOptimisationTransformer;
+import com.mmxlabs.models.lng.transformer.DefaultModelEntityMap;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
-import com.mmxlabs.models.lng.transformer.util.OptimisationTransformer;
 import com.mmxlabs.optimiser.core.IEvaluationContext;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
-import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
-import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
-import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
-import com.mmxlabs.optimiser.core.modules.OptimiserCoreModule;
+import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.calculators.IDivertableDESShippingTimesCalculator;
+import com.mmxlabs.scheduler.optimiser.calculators.impl.DefaultDivertableDESShippingTimesCalculator;
+import com.mmxlabs.scheduler.optimiser.components.impl.GeneratedVesselEventFactory;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.VoyagePlanStartDateCharterRateCalculator;
+import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
+import com.mmxlabs.scheduler.optimiser.entities.impl.DefaultEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedVolumeAllocator;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.CachingVoyagePlanOptimiser;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.DirectRandomSequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorModule;
-import com.mmxlabs.scheduler.optimiser.peaberry.SchedulerModule;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 
@@ -66,8 +63,6 @@ public class LNGTransformerModule extends AbstractModule {
 	 */
 	public static final String Parser_Charter = "Charter";
 
-	private final static int DEFAULT_VPO_CACHE_SIZE = 20000;
-
 	private final LNGScenarioModel scenario;
 
 	private final OptimiserSettings optimiserSettings;
@@ -83,13 +78,10 @@ public class LNGTransformerModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		install(new OptimiserCoreModule());
 		install(new ScheduleBuilderModule());
-		install(new SequencesManipulatorModule());
-		install(new SchedulerModule());
 
 		bind(LNGScenarioModel.class).toInstance(scenario);
-		bind(OptimiserSettings.class).toInstance(optimiserSettings);
+//		bind(OptimiserSettings.class).toInstance(optimiserSettings);
 
 		// Parser for each section
 		final SeriesParser commodityParser = new SeriesParser();
@@ -103,81 +95,34 @@ public class LNGTransformerModule extends AbstractModule {
 
 		bind(DateAndCurveHelper.class).in(Singleton.class);
 
-		bind(ModelEntityMap.class).in(Singleton.class);
+		bind(ModelEntityMap.class).to(DefaultModelEntityMap.class).in(Singleton.class);
 
 		bind(ILNGVoyageCalculator.class).to(LNGVoyageCalculator.class);
 		bind(LNGVoyageCalculator.class).in(Singleton.class);
 
+		bind(VoyagePlanStartDateCharterRateCalculator.class).in(Singleton.class);
+		bind(ICharterRateCalculator.class).to(VoyagePlanStartDateCharterRateCalculator.class);
+
+		bind(IVesselBaseFuelCalculator.class).to(VesselBaseFuelCalculator.class);
+		bind(VesselBaseFuelCalculator.class).in(Singleton.class);
+
+		bind(IDivertableDESShippingTimesCalculator.class).to(DefaultDivertableDESShippingTimesCalculator.class);
+		bind(DefaultDivertableDESShippingTimesCalculator.class).in(Singleton.class);
+
+		// Register default implementations
 		bind(IVolumeAllocator.class).to(UnconstrainedVolumeAllocator.class).in(Singleton.class);
-
-		bind(VoyagePlanOptimiser.class);
-
-		bind(IOptimisationTransformer.class).to(OptimisationTransformer.class).in(Singleton.class);
-
-		bind(DirectRandomSequenceScheduler.class).in(Singleton.class);
-		bind(ISequenceScheduler.class).to(DirectRandomSequenceScheduler.class);
-
-		if (Platform.isRunning()) {
-			bind(IFitnessFunctionRegistry.class).toProvider(service(IFitnessFunctionRegistry.class).single());
-			bind(IConstraintCheckerRegistry.class).toProvider(service(IConstraintCheckerRegistry.class).single());
-			bind(IEvaluationProcessRegistry.class).toProvider(service(IEvaluationProcessRegistry.class).single());
-		}
-
-	}
-
-	@Provides
-	IVoyagePlanOptimiser provideVoyagePlanOptimiser(final VoyagePlanOptimiser delegate) {
-		final CachingVoyagePlanOptimiser cachingVoyagePlanOptimiser = new CachingVoyagePlanOptimiser(delegate, DEFAULT_VPO_CACHE_SIZE);
-		return cachingVoyagePlanOptimiser;
+		bind(IEntityValueCalculator.class).to(DefaultEntityValueCalculator.class);
+		
+		
+		bind(GeneratedVesselEventFactory.class).in(PerChainUnitScope.class);
 	}
 
 	@Provides
 	@Singleton
-	IOptimisationData provideOptimisationData(final LNGScenarioTransformer lngScenarioTransformer, final ModelEntityMap modelEntityMap) throws IncompleteScenarioException {
+	private IOptimisationData provideOptimisationData(@NonNull final LNGScenarioTransformer lngScenarioTransformer, @NonNull final ModelEntityMap modelEntityMap) throws IncompleteScenarioException {
 		final IOptimisationData optimisationData = lngScenarioTransformer.createOptimisationData(modelEntityMap);
 
 		return optimisationData;
-	}
-
-	@Provides
-	@Singleton
-	IEvaluationContext provideEvaluationData(IOptimisationContext context) {
-		return context;
-	}
-
-	// @Provides
-	// @Singleton
-	// /**
-	// * Utility method for getting the current optimisation settings from this scenario. TODO maybe put this in another file/model somewhere else.
-	// *
-	// * @return
-	// */
-	// OptimiserSettings getOptimisationSettings(LNGScenarioModel rootObject) {
-	// final ParametersModel om = rootObject.getParametersModel();
-	// if (om != null) {
-	// // select settings
-	// final OptimiserSettings x = om.getActiveSetting();
-	// if (x != null)
-	// return x;
-	// }
-	// // if (defaultSettings == null) {
-	// OptimiserSettings defaultSettings = ScenarioUtils.createDefaultSettings();
-	// if (om != null) {
-	// om.getSettings().add(defaultSettings);
-	// om.setActiveSetting(defaultSettings);
-	// }
-	// // }
-	// return defaultSettings;
-	// }
-
-	@Provides
-	@Singleton
-	@Named("Initial")
-	private ISequences provideInitialSequences(final IOptimisationTransformer optimisationTransformer, final IOptimisationData data, final ModelEntityMap modelEntityMap) {
-
-		final ISequences sequences = optimisationTransformer.createInitialSequences(data, modelEntityMap);
-
-		return sequences;
 	}
 
 	@Singleton

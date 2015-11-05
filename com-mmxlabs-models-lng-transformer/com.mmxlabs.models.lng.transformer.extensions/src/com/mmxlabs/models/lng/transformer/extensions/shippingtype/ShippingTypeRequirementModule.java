@@ -4,11 +4,11 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.shippingtype;
 
+import java.util.Collection;
 import java.util.Collections;
-import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.ops4j.peaberry.activation.util.PeaberryActivationModule;
 
 import com.google.inject.AbstractModule;
@@ -54,16 +54,16 @@ public class ShippingTypeRequirementModule extends PeaberryActivationModule {
 	public static class DesPermissionInjectorService implements IOptimiserInjectorService {
 
 		@Override
-		public Module requestModule(final String... hints) {
+		public Module requestModule(@NonNull final ModuleType moduleType, @NonNull final Collection<String> hints) {
 			return null;
 		}
 
 		@Override
-		public Map<ModuleType, List<Module>> requestModuleOverrides(final String... hints) {
-			final Map<ModuleType, List<Module>> map = new EnumMap<ModuleType, List<Module>>(ModuleType.class);
-			map.put(ModuleType.Module_DataComponentProviderModule, Collections.<Module> singletonList(new DesPermissionDCPModule()));
-
-			return map;
+		public List<Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<String> hints) {
+			if (moduleType == ModuleType.Module_DataComponentProviderModule) {
+				return Collections.<Module> singletonList(new DesPermissionDCPModule());
+			}
+			return null;
 		}
 	}
 }

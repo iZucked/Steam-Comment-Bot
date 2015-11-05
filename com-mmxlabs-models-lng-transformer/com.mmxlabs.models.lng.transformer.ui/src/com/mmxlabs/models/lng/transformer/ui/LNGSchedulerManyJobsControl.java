@@ -28,7 +28,7 @@ import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.IScenarioService;
@@ -85,7 +85,7 @@ public class LNGSchedulerManyJobsControl extends AbstractEclipseJobControl {
 		public void init() {
 			{
 				//
-				runner.initAndEval();
+				runner.evaluateInitialState();
 			}
 
 		}
@@ -124,9 +124,6 @@ public class LNGSchedulerManyJobsControl extends AbstractEclipseJobControl {
 		}
 
 		public void dispose() {
-			if (runner != null) {
-				runner.dispose();
-			}
 			if (lock != null) {
 				lock.release();
 			}
@@ -151,7 +148,7 @@ public class LNGSchedulerManyJobsControl extends AbstractEclipseJobControl {
 			final OptimiserSettings optimiserSettings = EcoreUtil.copy(jobDescriptor.getOptimiserSettings());
 			String name = String.format("Job %02d", i);
 //			optimiserSettings.setSeed(i);
-			this.jobs[i] = new SimilarityFuture(scenarioInstance, originalScenario, name, optimiserSettings, LNGTransformer.HINT_OPTIMISE_LSO);
+			this.jobs[i] = new SimilarityFuture(scenarioInstance, originalScenario, name, optimiserSettings, LNGTransformerHelper.HINT_OPTIMISE_LSO);
 		}
 		// Hmm...
 		setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));

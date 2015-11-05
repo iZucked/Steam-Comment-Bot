@@ -20,6 +20,8 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+import javax.inject.Named;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -127,6 +129,11 @@ public class BreadthOptimiser {
 	@NonNull
 	private BreakdownOptimiserMover breakdownOptimiserMover;
 
+	@Inject
+	@Named("Initial")
+	@NonNull
+	private ISequences initialRawSequences;
+	
 	private final List<List<Pair<ISequences, IEvaluationState>>> bestSolutions = new LinkedList<>();
 
 	/**
@@ -138,7 +145,7 @@ public class BreadthOptimiser {
 	 * @param bestRawSequences
 	 * @param subProgressMonitor
 	 */
-	public boolean optimise(@NonNull final ISequences bestRawSequences, final IProgressMonitor progressMonitor) {
+	public boolean optimise(@NonNull final ISequences targetRawSequences, final IProgressMonitor progressMonitor) {
 
 		final long time1 = System.currentTimeMillis();
 
@@ -147,25 +154,24 @@ public class BreadthOptimiser {
 		// Generate the similarity data structures to the target solution
 		final long bestFitness;
 		{
-			final IModifiableSequences potentialFullSequences = new ModifiableSequences(bestRawSequences);
-			sequencesManipulator.manipulate(potentialFullSequences);
+			final IModifiableSequences targetFullSequences = new ModifiableSequences(targetRawSequences);
+			sequencesManipulator.manipulate(targetFullSequences);
 
 			final IEvaluationState evaluationState = new EvaluationState();
 			for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
-				if (!evaluationProcess.evaluate(potentialFullSequences, evaluationState)) {
+				if (!evaluationProcess.evaluate(targetFullSequences, evaluationState)) {
 					// We expect the input solution to be valid....
 					assert false;
 				}
 			}
-			similarityState.init(potentialFullSequences);
+			similarityState.init(targetFullSequences);
 
-			fitnessHelper.evaluateSequencesFromComponents(potentialFullSequences, evaluationState, fitnessComponents, null);
+			fitnessHelper.evaluateSequencesFromComponents(targetFullSequences, evaluationState, fitnessComponents, null);
 			bestFitness = fitnessCombiner.calculateFitness(fitnessComponents);
 
 		}
 
 		// Prepare initial solution state
-		final ISequences initialRawSequences = new ModifiableSequences(optimisationContext.getInitialSequences());
 
 		//// Debugging -- get initial change count
 		{

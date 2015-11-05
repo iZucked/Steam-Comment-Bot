@@ -21,10 +21,10 @@ import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
-import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
+import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
@@ -336,9 +336,8 @@ public class PeriodOptimiserTest {
 
 				final OptimiserSettings settings = getSettings();
 
-				final LNGScenarioRunner runner = new LNGScenarioRunner((LNGScenarioModel) scenario, settings, LNGTransformer.HINT_OPTIMISE_LSO);
-
-				runner.initAndEval(new TransformerExtensionTestModule());
+				final LNGScenarioRunner runner = new LNGScenarioRunner((LNGScenarioModel) scenario, settings, new TransformerExtensionTestBootstrapModule(), LNGTransformerHelper.HINT_OPTIMISE_LSO);
+				runner.evaluateInitialState();
 				if (OUTPUT_SCENARIOS) {
 					save(runner.getScenario(), "c:/temp/scenario1.lingo");
 				}
@@ -367,8 +366,9 @@ public class PeriodOptimiserTest {
 				settings.getRange().setOptimiseAfter(start);
 				settings.getRange().setOptimiseBefore(end);
 
-				final LNGScenarioRunner runner = new LNGScenarioRunner((LNGScenarioModel) scenario, settings, LNGTransformer.HINT_OPTIMISE_LSO);
-				runner.initAndEval(new TransformerExtensionTestModule());
+				final LNGScenarioRunner runner = new LNGScenarioRunner((LNGScenarioModel) scenario, settings, new TransformerExtensionTestBootstrapModule(), LNGTransformerHelper.HINT_OPTIMISE_LSO);
+				runner.evaluateInitialState();
+
 				if (OUTPUT_SCENARIOS) {
 					save(runner.getScenario(), "c:/temp/scenario1p.lingo");
 				}

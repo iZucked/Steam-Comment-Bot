@@ -8,21 +8,25 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Assert;
 
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
-import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
+import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
@@ -119,8 +123,10 @@ public class SuboptimalScenarioTester {
 		final int n = loadPorts.length;
 
 		// optimise the scenario
-		final LNGScenarioRunner runner = new LNGScenarioRunner((LNGScenarioModel) scenario, LNGScenarioRunner.createDefaultSettings(), LNGTransformer.HINT_OPTIMISE_LSO);
-		runner.initAndEval(new TransformerExtensionTestModule(), 10000);
+		OptimiserSettings settings = LNGScenarioRunnerUtils.createDefaultSettings();
+		settings.getAnnealingSettings().setIterations(10000);
+		final LNGScenarioRunner runner = new LNGScenarioRunner((LNGScenarioModel) scenario, settings, new TransformerExtensionTestBootstrapModule(), LNGTransformerHelper.HINT_OPTIMISE_LSO);
+		runner.evaluateInitialState();
 		runner.run();
 
 		final Schedule schedule = runner.getFinalSchedule();
@@ -142,8 +148,9 @@ public class SuboptimalScenarioTester {
 
 			if (index >= 0) {
 				found[index] = true;
-				Assert.assertTrue(String.format("Expected solution wires '%s' to '%s' but the allocation wires it to '%s'. (load cv = %f; discharge min cv = %f; discharge max cv = %f",
-						loadPort.getName(), dischargePorts[index].getName(), dischargePort.getName(), loadPort.getCvValue(), dischargePort.getMinCvValue(), dischargePort.getMaxCvValue()),
+				Assert.assertTrue(
+						String.format("Expected solution wires '%s' to '%s' but the allocation wires it to '%s'. (load cv = %f; discharge min cv = %f; discharge max cv = %f", loadPort.getName(),
+								dischargePorts[index].getName(), dischargePort.getName(), loadPort.getCvValue(), dischargePort.getMinCvValue(), dischargePort.getMaxCvValue()),
 						dischargePorts[index].equals(dischargePort));
 			}
 		}
@@ -203,7 +210,14 @@ public class SuboptimalScenarioTester {
 	 */
 	// TODO: rewrite to take a constraint checker factory instead of a constraint checker, so that the expected parameter does not have weird not-initialised semantics
 	public void testConstraintChecker(final boolean expectedResult, final AbstractPairwiseConstraintChecker checker) {
-		final LNGTransformer transformer = new LNGTransformer(scenario, ScenarioUtils.createDefaultSettings(), new TransformerExtensionTestModule());
+	
+		
+		final OptimiserSettings settings = ScenarioUtils.createDefaultSettings();
+		final Set<String> hints = LNGTransformerHelper.getHints(settings);
+		final LNGDataTransformer transformer = new LNGDataTransformer(scenario, settings, hints,
+				LNGTransformerHelper.getOptimiserInjectorServices(new TransformerExtensionTestBootstrapModule(), null));
+
+//		final LNGDataTransformer transformer = new LNGDataTransformer(scenario, ScenarioUtils.createDefaultSettings(), new TransformerExtensionTestBootstrapModule(), null);
 		final IOptimisationData data = transformer.getOptimisationData();
 
 		transformer.getInjector().injectMembers(checker);
