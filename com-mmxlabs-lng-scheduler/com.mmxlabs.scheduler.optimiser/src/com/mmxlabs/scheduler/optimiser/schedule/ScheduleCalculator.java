@@ -291,6 +291,11 @@ public class ScheduleCalculator {
 	public ScheduledSequences schedule(@NonNull final ISequences sequences, @NonNull final int[][] arrivalTimes, @Nullable final IAnnotatedSolution solution) {
 		final ScheduledSequences result = new ScheduledSequences();
 
+		if (scheduledDataLookupProvider != null) {
+			scheduledDataLookupProvider.reset();
+		}
+
+		
 		for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
 			shippingCalculator.prepareEvaluation(sequences);
 		}

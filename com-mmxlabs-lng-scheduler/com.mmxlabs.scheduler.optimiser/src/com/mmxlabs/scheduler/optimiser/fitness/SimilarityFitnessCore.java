@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -20,9 +21,11 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
+import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ISimilarityComponentParameters;
@@ -40,6 +43,15 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 	private ISimilarityComponentParameters similarityComponentParameters;
 
 	private final String name;
+
+	@Inject
+	@NonNull
+	private ISequencesManipulator sequenceManipulator;
+
+	@Inject
+	@Named("Initial")
+	@NonNull
+	private ISequences initialSequences;
 
 	@Inject
 	private IPortTypeProvider portTypeProvider;
@@ -81,7 +93,10 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 	 * 
 	 * @param sequences
 	 */
-	public void init(@NonNull final ISequences sequences) {
+	public void initWithState(@NonNull final ISequences rawSequences) {
+		ModifiableSequences sequences = new ModifiableSequences(rawSequences);
+		sequenceManipulator.manipulate(sequences);
+
 		for (final IResource resource : resources) {
 			assert resource != null;
 
@@ -158,9 +173,10 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 		if (loadDischargeMap == null) {
 			loadDischargeMap = new HashMap<Integer, Integer>();
 			loadResourceMap = new HashMap<Integer, Integer>();
-			init(sequences);
+			initWithState(initialSequences);
 			lastFitness = 0;
-		} else {
+		}
+		{
 			int cargoDifferences = 0;
 			int vesselDifferences = 0;
 			for (final IResource resource : resources) {
