@@ -76,7 +76,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public class ScheduleCalculator {
 
 	@Inject(optional = true)
-	private ScheduledDataLookupProvider scheduledDataLookupProvider;
+	private Provider<ScheduledDataLookupProvider> scheduledDataLookupProviderProvider;
 
 	@Inject
 	private CapacityViolationChecker capacityViolationChecker;
@@ -282,8 +282,8 @@ public class ScheduleCalculator {
 		// TODO: This is not the place!
 		final IAllocationAnnotation annotation = volumeAllocator.allocate(vesselAvailability, vesselStartTime, currentPlan, portTimesRecord);
 
-		final ScheduledSequence scheduledSequence = new ScheduledSequence(resource, sequence, startTime, Collections.singletonList(new Triple<>(currentPlan, Collections
-				.<IPortSlot, IHeelLevelAnnotation> emptyMap(), (IPortTimesRecord) annotation)));
+		final ScheduledSequence scheduledSequence = new ScheduledSequence(resource, sequence, startTime,
+				Collections.singletonList(new Triple<>(currentPlan, Collections.<IPortSlot, IHeelLevelAnnotation> emptyMap(), (IPortTimesRecord) annotation)));
 
 		return scheduledSequence;
 	}
@@ -291,11 +291,11 @@ public class ScheduleCalculator {
 	public ScheduledSequences schedule(@NonNull final ISequences sequences, @NonNull final int[][] arrivalTimes, @Nullable final IAnnotatedSolution solution) {
 		final ScheduledSequences result = new ScheduledSequences();
 
-		if (scheduledDataLookupProvider != null) {
+		if (scheduledDataLookupProviderProvider != null) {
+			ScheduledDataLookupProvider scheduledDataLookupProvider = scheduledDataLookupProviderProvider.get();
 			scheduledDataLookupProvider.reset();
 		}
 
-		
 		for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
 			shippingCalculator.prepareEvaluation(sequences);
 		}
@@ -325,7 +325,8 @@ public class ScheduleCalculator {
 
 	private void calculateSchedule(final ISequences sequences, final ScheduledSequences scheduledSequences, final IAnnotatedSolution annotatedSolution) {
 
-		if (scheduledDataLookupProvider != null) {
+		if (scheduledDataLookupProviderProvider != null) {
+			ScheduledDataLookupProvider scheduledDataLookupProvider = scheduledDataLookupProviderProvider.get();
 			scheduledDataLookupProvider.reset();
 		}
 
@@ -375,7 +376,8 @@ public class ScheduleCalculator {
 			}
 		}
 
-		if (scheduledDataLookupProvider != null) {
+		if (scheduledDataLookupProviderProvider != null) {
+			ScheduledDataLookupProvider scheduledDataLookupProvider = scheduledDataLookupProviderProvider.get();
 			scheduledDataLookupProvider.setInputs(scheduledSequences);
 		}
 
@@ -388,7 +390,7 @@ public class ScheduleCalculator {
 	}
 
 	// TODO: Push into entity value calculator?
-	private void calculateProfitAndLoss(final ISequences sequences, final ScheduledSequences scheduledSequences,// final Map<VoyagePlan, IAllocationAnnotation> allocations,
+	private void calculateProfitAndLoss(final ISequences sequences, final ScheduledSequences scheduledSequences, // final Map<VoyagePlan, IAllocationAnnotation> allocations,
 			final IAnnotatedSolution annotatedSolution) {
 
 		if (entityValueCalculator == null) {
@@ -429,8 +431,8 @@ public class ScheduleCalculator {
 					}
 
 					// TODO: this logic looks decidedly shaky - plan sequence length could change with logic changes
-					final boolean isDesFobCase = ((vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) && plan
-							.getSequence().length == 2);
+					final boolean isDesFobCase = ((vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE
+							|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) && plan.getSequence().length == 2);
 					if (currentAllocation != null) {
 						final CargoValueAnnotation cargoValueAnnotation = new CargoValueAnnotation(currentAllocation);
 						cargo = true;
