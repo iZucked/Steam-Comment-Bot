@@ -35,7 +35,7 @@ public class LNGExporterUnit {
 				try {
 					try {
 						// Save the scenario as a fork.
-						ScenarioInstance child = runner.storeSolutionAsChild(pState.getBestSolution().getFirst(), name, parent);
+						ScenarioInstance child = runner.storeAsCopy(pState.getBestSolution().getFirst(), name, parent, null);
 						resultProvider.set(child);
 					} catch (final Exception e) {
 						throw new RuntimeException("Unable to store scenario: " + e.getMessage(), e);

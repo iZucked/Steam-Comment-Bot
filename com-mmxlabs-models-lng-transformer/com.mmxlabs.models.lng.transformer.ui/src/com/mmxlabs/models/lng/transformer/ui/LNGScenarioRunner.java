@@ -20,6 +20,7 @@ import com.google.inject.Module;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.chain.IChainRunner;
 import com.mmxlabs.models.lng.transformer.chain.IMultiStateResult;
@@ -82,7 +83,7 @@ public class LNGScenarioRunner {
 		scenarioDataTransformer = new LNGScenarioDataTransformer(scenarioModel, scenarioInstance, optimiserSettings, editingDomain, extraModule, localOverrides,
 				LNGTransformerHelper.HINT_OPTIMISE_LSO);
 
-		if (false) {
+		if (true) {
 			chainRunner = LNGScenarioChainBuilder.createRunAllSimilarityOptimisationChain(scenarioDataTransformer.getDataTransformer(), scenarioDataTransformer, optimiserSettings,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
 		} else {
@@ -99,12 +100,14 @@ public class LNGScenarioRunner {
 	public Schedule evaluateInitialState() {
 		startTimeMillis = System.currentTimeMillis();
 
-		final IMultiStateResult result = chainRunner.getInitialState();
-
-		final ISequences startRawSequences = result.getBestSolution().getFirst();
-		final Map<String, Object> extraAnnotations = scenarioDataTransformer.extractOptimisationAnnotations(result.getBestSolution().getSecond());
-		initialSchedule = scenarioDataTransformer.exportSchedule(0, startRawSequences, extraAnnotations);
-
+//		final IMultiStateResult result = chainRunner.getInitialState();
+//
+//		final ISequences startRawSequences = result.getBestSolution().getFirst();
+//		final Map<String, Object> extraAnnotations = scenarioDataTransformer.extractOptimisationAnnotations(result.getBestSolution().getSecond());
+//		initialSchedule = scenarioDataTransformer.overwrite(0, startRawSequences, extraAnnotations);
+		initialSchedule= ScenarioModelUtil.getScheduleModel(scenarioModel).getSchedule();
+		
+//need to undo this.chainRunner..
 		return initialSchedule;
 	}
 
@@ -126,7 +129,7 @@ public class LNGScenarioRunner {
 
 		final IMultiStateResult p = chainRunner.run(progressMonitor);
 
-		finalSchedule = scenarioDataTransformer.exportSchedule(100, p.getBestSolution().getFirst(), scenarioDataTransformer.extractOptimisationAnnotations(p.getBestSolution().getSecond()));
+		finalSchedule = scenarioDataTransformer.overwrite(100, p.getBestSolution().getFirst(), scenarioDataTransformer.extractOptimisationAnnotations(p.getBestSolution().getSecond()));
 		log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
 	}
 

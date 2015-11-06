@@ -52,8 +52,8 @@ public class MultiChainRunner implements IChainRunner {
 	@NonNull
 	public IMultiStateResult run(@NonNull final IProgressMonitor monitor) {
 		monitor.beginTask("Execute chains", 1000 * chains.size());
+		final ExecutorService pool = Executors.newFixedThreadPool(numThreads);
 		try {
-			final ExecutorService pool = Executors.newFixedThreadPool(numThreads);
 			final List<Future<IMultiStateResult>> results = new ArrayList<>(numThreads);
 
 			for (final IChainRunner chain : chains) {
@@ -64,10 +64,11 @@ public class MultiChainRunner implements IChainRunner {
 			for (final Future<IMultiStateResult> f : results) {
 				f.get();
 			}
-		} catch (final Exception e) {
+		} catch (final Throwable e) {
 			e.printStackTrace();
 		} finally {
 			monitor.done();
+			pool.shutdown();
 		}
 		return initialState;
 	}

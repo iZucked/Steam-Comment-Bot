@@ -72,7 +72,7 @@ public class LNGScenarioRunnerUtils {
 	}
 
 	@NonNull
-	public static ScenarioInstance saveScenarioAsChild(@NonNull ScenarioInstance originalScenarioInstance, @NonNull Container target, @NonNull LNGScenarioModel scenarioModel, @NonNull String newName)
+	public static ScenarioInstance saveScenarioAsChild(@NonNull final ScenarioInstance originalScenarioInstance, @NonNull final Container target, @NonNull final LNGScenarioModel scenarioModel, @NonNull final String newName)
 			throws IOException {
 
 		return saveNewScenario(originalScenarioInstance, target, EcoreUtil.copy(scenarioModel), newName);
@@ -88,7 +88,8 @@ public class LNGScenarioRunnerUtils {
 	 * @return
 	 * @throws IOException
 	 */
-	public static ScenarioInstance saveNewScenario(@NonNull ScenarioInstance originalScenarioInstance, @NonNull Container target, @NonNull LNGScenarioModel scenarioModel, @NonNull String newName)
+	@NonNull
+	public static ScenarioInstance saveNewScenario(@NonNull final ScenarioInstance originalScenarioInstance, @NonNull final Container target, @NonNull final LNGScenarioModel scenarioModel, @NonNull final String newName)
 			throws IOException {
 		final IScenarioService scenarioService = target.getScenarioService();
 

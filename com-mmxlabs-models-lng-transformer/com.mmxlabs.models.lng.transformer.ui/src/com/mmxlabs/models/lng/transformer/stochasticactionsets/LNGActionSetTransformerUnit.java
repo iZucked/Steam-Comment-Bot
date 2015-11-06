@@ -129,7 +129,7 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 
 						try {
 							// Save the scenario as a fork.
-							runner.storeSolutionAsChild(changeSet.getFirst(), newName, parent);
+							runner.storeAsCopy(changeSet.getFirst(), newName, parent, null);
 						} catch (final Exception e) {
 							throw new RuntimeException("Unable to store scenario: " + e.getMessage(), e);
 						}
