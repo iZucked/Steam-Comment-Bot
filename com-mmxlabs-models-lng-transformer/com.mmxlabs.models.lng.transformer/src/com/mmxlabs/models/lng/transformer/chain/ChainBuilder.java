@@ -8,6 +8,12 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 
+/**
+ * A helper class to construct a {@link ChainRunner} from a set of {@link IChainLink}s
+ * 
+ * @author Simon Goodall
+ *
+ */
 public class ChainBuilder {
 
 	@NonNull

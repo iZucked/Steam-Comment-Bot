@@ -13,6 +13,12 @@ import com.mmxlabs.models.lng.transformer.chain.impl.MultiStateResult;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequences;
 
+/**
+ * The default implementation of {@link IChainRunner}
+ * 
+ * @author Simon Goodall
+ *
+ */
 public class ChainRunner implements IChainRunner {
 
 	@NonNull

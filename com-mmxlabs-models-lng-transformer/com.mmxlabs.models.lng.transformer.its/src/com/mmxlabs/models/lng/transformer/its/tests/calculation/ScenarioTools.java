@@ -94,10 +94,8 @@ import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_Evaluatio
 import com.mmxlabs.models.lng.transformer.its.tests.ManifestJointModel;
 import com.mmxlabs.models.lng.transformer.its.tests.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.manifest.ManifestFactory;
@@ -721,7 +719,7 @@ public class ScenarioTools {
 		// final IAnnotatedSolution startSolution = LNGSchedulerJobUtils.evaluateCurrentState(transformer);
 
 		// Construct internal command stack to generate correct output schedule
-		final EditingDomain ed = LNGScenarioRunnerUtils.createLocalEditingDomain();
+		final EditingDomain ed = LNGSchedulerJobUtils.createLocalEditingDomain();
 
 		final Pair<Command, Schedule> p = LNGSchedulerJobUtils.exportSolution(evaluationInjector, scenario, dataTransformer.getOptimiserSettings(), ed, modelEntityMap,
 				dataTransformer.getInitialSequences(), null);

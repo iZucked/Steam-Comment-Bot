@@ -11,7 +11,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class LNGExporterUnit {
 
-	public static IChainLink export(final ChainBuilder chainBuilder, final int progressTicks, @NonNull final LNGScenarioDataTransformer runner, String name,
+	public static IChainLink export(final ChainBuilder chainBuilder, final int progressTicks, @NonNull final LNGScenarioToOptimiserBridge runner, String name,
 			@NonNull ContainerProvider containerProvider, @NonNull ContainerProvider resultProvider) {
 		final IChainLink link = new IChainLink() {
 

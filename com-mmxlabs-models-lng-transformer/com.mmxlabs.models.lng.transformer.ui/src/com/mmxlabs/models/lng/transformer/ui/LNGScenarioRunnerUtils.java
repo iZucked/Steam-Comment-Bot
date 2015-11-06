@@ -29,15 +29,6 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 public class LNGScenarioRunnerUtils {
 
 	@NonNull
-	public static EditingDomain createLocalEditingDomain() {
-		final BasicCommandStack commandStack = new BasicCommandStack();
-		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
-		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
-		final EditingDomain ed = new AdapterFactoryEditingDomain(adapterFactory, commandStack);
-		return ed;
-	}
-
-	@NonNull
 	public static OptimiserSettings createDefaultSettings() {
 		final OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
 		assert optimiserSettings != null;

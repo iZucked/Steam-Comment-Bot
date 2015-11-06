@@ -14,6 +14,8 @@ import com.google.inject.name.Names;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
+import com.mmxlabs.models.lng.transformer.chain.IChainRunner;
+import com.mmxlabs.models.lng.transformer.chain.ILNGStateTransformerUnit;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGInitialSequencesModule;
@@ -26,6 +28,12 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 
+/**
+ * The {@link LNGDataTransformer} is the main entry point for the {@link ILNGStateTransformerUnit} and {@link IChainRunner} APIs.
+ * 
+ * @author Simon Goodall
+ *
+ */
 public class LNGDataTransformer {
 
 	@NonNull
@@ -49,7 +57,7 @@ public class LNGDataTransformer {
 
 		final List<Module> modules = new LinkedList<>();
 
-		// modules.add(new ScheduleLifecycleModule());
+		// Prepare the main modules with the re-usable data for any further work.
 		modules.add(new PerChainUnitScopeModule());
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new DataComponentProviderModule(), services, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule, hints));
 		modules.addAll(
@@ -70,6 +78,7 @@ public class LNGDataTransformer {
 			try {
 				scope.enter();
 				final ISequences initialSequences = initialSolutionInjector.getInstance(Key.get(ISequences.class, Names.named(LNGInitialSequencesModule.KEY_GENERATED_RAW_SEQUENCES)));
+				// Create a new child injector from the parent (i.e. without the modules2 list) with the initial sequences added
 				injector = parentInjector.createChildInjector(new InitialSequencesModule(initialSequences));
 			} finally {
 				scope.exit();
@@ -87,12 +96,13 @@ public class LNGDataTransformer {
 		return services;
 	}
 
-	@SuppressWarnings("null")
-	@NonNull
-	public LNGScenarioModel getScenarioModel() {
-		return injector.getInstance(LNGScenarioModel.class);
-	}
-
+	//
+	// @SuppressWarnings("null")
+	// @NonNull
+	// public LNGScenarioModel getScenarioModel() {
+	// return injector.getInstance(LNGScenarioModel.class);
+	// }
+	//
 	@SuppressWarnings("null")
 	@NonNull
 	public OptimiserSettings getOptimiserSettings() {

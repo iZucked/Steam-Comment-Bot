@@ -30,7 +30,7 @@ import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_Evaluatio
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_OptimiserSettingsModule;
 import com.mmxlabs.models.lng.transformer.ui.BagOptimiser;
 import com.mmxlabs.models.lng.transformer.ui.ContainerProvider;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioDataTransformer;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -78,7 +78,7 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 		return link;
 	}
 
-	public static IChainLink export(final ChainBuilder chainBuilder, final int progressTicks, @NonNull final LNGScenarioDataTransformer runner, @NonNull final ContainerProvider containerProvider) {
+	public static IChainLink export(final ChainBuilder chainBuilder, final int progressTicks, @NonNull final LNGScenarioToOptimiserBridge runner, @NonNull final ContainerProvider containerProvider) {
 		final IChainLink link = new IChainLink() {
 
 			private IMultiStateResult state;
@@ -113,12 +113,6 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 				try {
 					int changeSetIdx = 0;
 					for (final Pair<ISequences, IAnnotatedSolution> changeSet : solutions) {
-
-						/**
-						 * Start the full evaluation process.
-						 */
-						// Save the scenario as a fork.
-
 						String newName;
 						if (changeSetIdx == 0) {
 							newName = "ActionSet-base";
@@ -200,12 +194,6 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 	@NonNull
 	public LNGDataTransformer getDataTransformer() {
 		return dataTransformer;
-	}
-
-	@Override
-	@NonNull
-	public Injector getInjector() {
-		return injector;
 	}
 
 	@Override

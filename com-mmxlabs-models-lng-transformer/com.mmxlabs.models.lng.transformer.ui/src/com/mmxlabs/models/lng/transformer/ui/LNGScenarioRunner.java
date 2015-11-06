@@ -47,7 +47,7 @@ public class LNGScenarioRunner {
 	private Schedule finalSchedule;
 
 	@NonNull
-	private LNGScenarioDataTransformer scenarioDataTransformer;
+	private LNGScenarioToOptimiserBridge scenarioToOptimiserBridge;
 
 	@NonNull
 	private LNGScenarioModel scenarioModel;
@@ -56,16 +56,11 @@ public class LNGScenarioRunner {
 	private ScenarioInstance scenarioInstance;
 
 	public LNGScenarioRunner(@NonNull final LNGScenarioModel scenario, @NonNull final OptimiserSettings optimiserSettings, final String... initialHints) {
-		this(scenario, null, optimiserSettings, LNGScenarioRunnerUtils.createLocalEditingDomain(), initialHints);
-	}
-
-	public LNGScenarioRunner(@NonNull final LNGScenarioModel scenarioModel, @Nullable final ScenarioInstance scenarioInstance, @NonNull final OptimiserSettings optimiserSettings,
-			final String... initialHints) {
-		this(scenarioModel, scenarioInstance, optimiserSettings, LNGScenarioRunnerUtils.createLocalEditingDomain(), null, null, initialHints);
+		this(scenario, null, optimiserSettings, LNGSchedulerJobUtils.createLocalEditingDomain(), initialHints);
 	}
 
 	public LNGScenarioRunner(@NonNull final LNGScenarioModel scenarioModel, @NonNull final OptimiserSettings optimiserSettings, @Nullable Module extraModule, final String... initialHints) {
-		this(scenarioModel, null, optimiserSettings, LNGScenarioRunnerUtils.createLocalEditingDomain(), extraModule, null, initialHints);
+		this(scenarioModel, null, optimiserSettings, LNGSchedulerJobUtils.createLocalEditingDomain(), extraModule, null, initialHints);
 	}
 
 	public LNGScenarioRunner(@NonNull final LNGScenarioModel scenarioModel, @Nullable final ScenarioInstance scenarioInstance, @NonNull final OptimiserSettings optimiserSettings,
@@ -80,17 +75,17 @@ public class LNGScenarioRunner {
 		this.scenarioInstance = scenarioInstance;
 
 		// here we want to take user settings and generate initial state settings
-		scenarioDataTransformer = new LNGScenarioDataTransformer(scenarioModel, scenarioInstance, optimiserSettings, editingDomain, extraModule, localOverrides,
+		scenarioToOptimiserBridge = new LNGScenarioToOptimiserBridge(scenarioModel, scenarioInstance, optimiserSettings, editingDomain, extraModule, localOverrides,
 				LNGTransformerHelper.HINT_OPTIMISE_LSO);
 
+		// FB: 1712 Switch for enabling run-all similarity optimisation. Needs better UI hook ups.
 		if (false) {
-			chainRunner = LNGScenarioChainBuilder.createRunAllSimilarityOptimisationChain(scenarioDataTransformer.getDataTransformer(), scenarioDataTransformer, optimiserSettings,
+			chainRunner = LNGScenarioChainBuilder.createRunAllSimilarityOptimisationChain(scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimiserSettings,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
 		} else {
-			chainRunner = LNGScenarioChainBuilder.createStandardOptimisationChain(null, scenarioDataTransformer.getDataTransformer(), scenarioDataTransformer, optimiserSettings,
+			chainRunner = LNGScenarioChainBuilder.createStandardOptimisationChain(null, scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimiserSettings,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
 		}
-
 	}
 
 	/**
@@ -107,8 +102,8 @@ public class LNGScenarioRunner {
 		final IMultiStateResult result = chainRunner.getInitialState();
 
 		final ISequences startRawSequences = result.getBestSolution().getFirst();
-		final Map<String, Object> extraAnnotations = scenarioDataTransformer.extractOptimisationAnnotations(result.getBestSolution().getSecond());
-		initialSchedule = scenarioDataTransformer.overwrite(0, startRawSequences, extraAnnotations);
+		final Map<String, Object> extraAnnotations = scenarioToOptimiserBridge.extractOptimisationAnnotations(result.getBestSolution().getSecond());
+		initialSchedule = scenarioToOptimiserBridge.overwrite(0, startRawSequences, extraAnnotations);
 
 		// initialSchedule= ScenarioModelUtil.getScheduleModel(scenarioModel).getSchedule();
 
@@ -128,16 +123,18 @@ public class LNGScenarioRunner {
 	public void runWithProgress(final @NonNull IProgressMonitor progressMonitor) {
 		// assert createOptimiser;
 
+		// TODO: Replace with originalScenario.getScheduleModel().getSchedule()
 		if (initialSchedule == null) {
 			evaluateInitialState();
 		}
 
 		final IMultiStateResult p = chainRunner.run(progressMonitor);
 
-		finalSchedule = scenarioDataTransformer.overwrite(100, p.getBestSolution().getFirst(), scenarioDataTransformer.extractOptimisationAnnotations(p.getBestSolution().getSecond()));
+		finalSchedule = scenarioToOptimiserBridge.overwrite(100, p.getBestSolution().getFirst(), scenarioToOptimiserBridge.extractOptimisationAnnotations(p.getBestSolution().getSecond()));
 		log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
 	}
 
+	// TODO: There should only be one schedule, not initial and final. Not sure what state the initial schedule will be in.
 	@Nullable
 	public final Schedule getFinalSchedule() {
 		return finalSchedule;
@@ -153,8 +150,8 @@ public class LNGScenarioRunner {
 		return scenarioModel;
 	}
 
+	@Nullable
 	public ScenarioInstance getScenarioInstance() {
 		return scenarioInstance;
 	}
-
 }

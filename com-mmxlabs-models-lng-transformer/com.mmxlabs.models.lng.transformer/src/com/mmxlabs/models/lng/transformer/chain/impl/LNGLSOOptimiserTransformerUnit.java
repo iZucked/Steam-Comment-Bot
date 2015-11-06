@@ -145,6 +145,7 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 						throw new IllegalStateException();
 					}
 
+					// DEBUG: Sanity checking each solution should get the same fitness
 					final Map<String, Long> original = createFitessMap(r);
 					for (final Future<IMultiStateResult> f : results) {
 						final IMultiStateResult result = f.get();

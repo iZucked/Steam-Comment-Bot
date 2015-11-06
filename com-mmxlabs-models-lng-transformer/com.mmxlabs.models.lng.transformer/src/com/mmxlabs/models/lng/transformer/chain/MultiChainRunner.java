@@ -18,6 +18,14 @@ import com.mmxlabs.models.lng.transformer.chain.impl.MultiStateResult;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequences;
 
+/**
+ * A composite {@link IChainRunner} allowing multiple {@link IChainRunner} instances to be run in parallel from a shared {@link LNGDataTransformer}.
+ * 
+ * TODO: This current implementation assumes each chain in configured to store it's output in a separate child instance and the original scenario is untouched.
+ * 
+ * @author Simon Goodall
+ *
+ */
 public class MultiChainRunner implements IChainRunner {
 
 	@NonNull
@@ -35,6 +43,7 @@ public class MultiChainRunner implements IChainRunner {
 		this.dataTransformer = dataTransformer;
 		this.chains = chains;
 		this.numThreads = numThreads;
+		// Return the data transformer state, - without an IAnnotatedSolution.
 		initialState = createInitialResult(dataTransformer.getInitialSequences());
 	}
 
@@ -62,14 +71,20 @@ public class MultiChainRunner implements IChainRunner {
 
 			// Wait for all results
 			for (final Future<IMultiStateResult> f : results) {
+				// TODO: If this throws an exception, we will skip blocking other results
+				// TODO: Combine results?
 				f.get();
 			}
 		} catch (final Throwable e) {
+			// TODO: Log
 			e.printStackTrace();
 		} finally {
 			monitor.done();
+			// Ensure we keep blocking in case of exception above...
 			pool.shutdown();
 		}
+
+		// TODO: Return a combined state?
 		return initialState;
 	}
 
@@ -82,11 +97,13 @@ public class MultiChainRunner implements IChainRunner {
 	}
 
 	static class MyRunnable implements Callable<IMultiStateResult> {
-
+		@NonNull
 		private final IChainRunner runner;
-		IProgressMonitor m;
 
-		public MyRunnable(final IChainRunner runner, final IProgressMonitor monitor, final int ticks) {
+		@NonNull
+		private final IProgressMonitor m;
+
+		public MyRunnable(@NonNull final IChainRunner runner, @NonNull final IProgressMonitor monitor, final int ticks) {
 			this.runner = runner;
 			this.m = new SubProgressMonitor(monitor, ticks);
 		}
@@ -96,5 +113,4 @@ public class MultiChainRunner implements IChainRunner {
 			return runner.run(m);
 		}
 	}
-
 }

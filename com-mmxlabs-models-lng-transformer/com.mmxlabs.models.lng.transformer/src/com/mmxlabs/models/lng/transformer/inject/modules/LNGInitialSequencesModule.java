@@ -30,7 +30,7 @@ import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.ConstrainedInitial
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.IInitialSequenceBuilder;
 
 /**
- * Main entry point to create {@link LNGScenarioTransformer}. This uses injection to populate the data structures.
+ * Main entry point to create {@link LNGScenarioTransformer}. This uses injection to populate the data structures. This is a {@link PrivateModule} to avoid "leakage" into the parent injector
  * 
  */
 public class LNGInitialSequencesModule extends PrivateModule {

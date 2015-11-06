@@ -41,9 +41,6 @@ public class LNGSchedulerManyJobsControl extends AbstractEclipseJobControl {
 
 	private static final Logger LOG = LoggerFactory.getLogger(LNGSchedulerManyJobsControl.class);
 
-	private static final int REPORT_PERCENTAGE = 1;
-	private final int currentProgress = 0;
-
 	private final LNGRunAllSimilarityJobDescriptor jobDescriptor;
 
 	private final ScenarioInstance scenarioInstance;
@@ -147,7 +144,7 @@ public class LNGSchedulerManyJobsControl extends AbstractEclipseJobControl {
 		for (int i = 0; i < jobs.length; ++i) {
 			final OptimiserSettings optimiserSettings = EcoreUtil.copy(jobDescriptor.getOptimiserSettings());
 			String name = String.format("Job %02d", i);
-//			optimiserSettings.setSeed(i);
+			// optimiserSettings.setSeed(i);
 			this.jobs[i] = new SimilarityFuture(scenarioInstance, originalScenario, name, optimiserSettings, LNGTransformerHelper.HINT_OPTIMISE_LSO);
 		}
 		// Hmm...

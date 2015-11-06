@@ -18,16 +18,12 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 import org.eclipse.emf.edit.command.DeleteCommand;
-import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
-import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.jdt.annotation.NonNull;
 import org.ops4j.peaberry.Peaberry;
 import org.ops4j.peaberry.util.TypeLiterals;
@@ -84,6 +80,7 @@ import com.mmxlabs.models.lng.transformer.period.InclusionChecker.PeriodRecord;
 import com.mmxlabs.models.lng.transformer.period.InclusionChecker.Position;
 import com.mmxlabs.models.lng.transformer.period.extensions.IPeriodTransformerExtension;
 import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
+import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 
@@ -692,7 +689,7 @@ public class PeriodTransformer {
 			while (itr.hasNext()) {
 				copier.remove(itr.next());
 			}
-//			schedule.eAllContents().forEachRemaining(t -> copier.remove(t));
+			// schedule.eAllContents().forEachRemaining(t -> copier.remove(t));
 			copier.remove(schedule);
 		}
 
@@ -717,10 +714,7 @@ public class PeriodTransformer {
 		// final ModelEntityMap modelEntityMap = transformer.getModelEntityMap();
 
 		// Construct internal command stack to generate correct output schedule
-		final BasicCommandStack commandStack = new BasicCommandStack();
-		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
-		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
-		final EditingDomain ed = new AdapterFactoryEditingDomain(adapterFactory, commandStack);
+		final EditingDomain ed = LNGSchedulerJobUtils.createLocalEditingDomain();
 
 		// Delete commands need a resource set on the editing domain
 		final Resource r = new XMIResourceImpl();

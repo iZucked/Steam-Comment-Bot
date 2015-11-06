@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.swt.internal.win32.SIPINFO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,9 +56,18 @@ import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
-public class LNGScenarioDataTransformer {
+/**
+ * The {@link LNGScenarioToOptimiserBridge} creates and maintains the mapping between the original {@link LNGScenarioModel} and the optimiser data structures to allow saving of the results. This class
+ * also handles the Period Optimisation transformation. Call {@link #overwrite(int, ISequences, Map)} to save into the current {@link ScenarioInstance}. Call
+ * {@link #storeAsCopy(ISequences, String, Container, Map)} to save the result in a copy of the {@link SIPINFO}
+ * 
+ * 
+ * @author Simon Goodall
+ *
+ */
+public class LNGScenarioToOptimiserBridge {
 
-	private static final Logger log = LoggerFactory.getLogger(LNGScenarioDataTransformer.class);
+	private static final Logger log = LoggerFactory.getLogger(LNGScenarioToOptimiserBridge.class);
 
 	@NonNull
 	private final LNGScenarioModel originalScenario;
@@ -91,11 +101,12 @@ public class LNGScenarioDataTransformer {
 
 	/**
 	 * Integer to count "undo" state of the scenario. Each overwrite evaluation should increment this value. Calls to {@link LNGSchedulerJobUtils#undoPreviousOptimsationStep(EditingDomain, int)}
-	 * should decrement it. Ideally we would track the current state of the command stack, but the API does not appear to permit this (maybe a command stack listener? - can we tell if a command is undo/redo?).
+	 * should decrement it. Ideally we would track the current state of the command stack, but the API does not appear to permit this (maybe a command stack listener? - can we tell if a command is
+	 * undo/redo?).
 	 */
 	private int overwriteCommandStackCounter = 0;
 
-	public LNGScenarioDataTransformer(@NonNull final LNGScenarioModel scenario, @Nullable final ScenarioInstance scenarioInstance, @NonNull final OptimiserSettings optimiserSettings,
+	public LNGScenarioToOptimiserBridge(@NonNull final LNGScenarioModel scenario, @Nullable final ScenarioInstance scenarioInstance, @NonNull final OptimiserSettings optimiserSettings,
 			@NonNull final EditingDomain editingDomain, @Nullable final Module bootstrapModule, @Nullable final IOptimiserInjectorService localOverrides, final String... initialHints) {
 		this.originalScenario = scenario;
 		this.scenarioInstance = scenarioInstance;
@@ -107,17 +118,22 @@ public class LNGScenarioDataTransformer {
 
 		originalDataTransformer = new LNGDataTransformer(this.originalScenario, optimiserSettings, hints, services);
 
+		// TODO: These ideally should be final, but #overwrite currently needs these variables set.
 		this.optimiserEditingDomain = originalEditingDomain;
 		this.optimiserDataTransformer = originalDataTransformer;
 		this.optimiserScenario = originalScenario;
 
-		// Trigger initial evaluation
+		// Trigger initial evaluation - note no fitness state is saved
 		overwrite(0, originalDataTransformer.getInitialSequences(), null);
 
 		final Triple<LNGScenarioModel, EditingDomain, IScenarioEntityMapping> t = initPeriodOptimisationData(scenarioInstance, originalScenario, originalEditingDomain, optimiserSettings);
+
+		// TODO: Replaces the above with that return in the triple (this could be original or optimiser)
 		this.optimiserScenario = t.getFirst();
 		this.optimiserEditingDomain = t.getSecond();
 		this.periodMapping = t.getThird();
+
+		// If we are in a period optimisation, then create a LNGDataTransformer for the period data
 		if (this.periodMapping != null) {
 			optimiserDataTransformer = new LNGDataTransformer(this.optimiserScenario, optimiserSettings, hints, services);
 		} else {
@@ -220,7 +236,7 @@ public class LNGScenarioDataTransformer {
 		originalScenarioCopier.copyReferences();
 
 		assert targetOriginalScenario != null;
-		final EditingDomain targetOriginalEditingDomain = LNGScenarioRunnerUtils.createLocalEditingDomain();
+		final EditingDomain targetOriginalEditingDomain = LNGSchedulerJobUtils.createLocalEditingDomain();
 
 		final IScenarioEntityMapping pPeriodMapping = periodMapping;
 		if (pPeriodMapping != null) {
@@ -234,7 +250,7 @@ public class LNGScenarioDataTransformer {
 			final CopiedModelEntityMap copiedOriginalModelEntityMap = new CopiedModelEntityMap(originalDataTransformer.getModelEntityMap(), originalScenarioCopier);
 
 			final CopiedScenarioEntityMapping copiedPeriodMapping = new CopiedScenarioEntityMapping(pPeriodMapping, originalScenarioCopier, optimiserScenarioCopier);
-			final EditingDomain targetOptimiserEditingDomain = LNGScenarioRunnerUtils.createLocalEditingDomain();
+			final EditingDomain targetOptimiserEditingDomain = LNGSchedulerJobUtils.createLocalEditingDomain();
 
 			final Pair<Command, Schedule> commandPair = creatExportScheduleCommand(100, rawSeqences, extraAnnotations,
 
