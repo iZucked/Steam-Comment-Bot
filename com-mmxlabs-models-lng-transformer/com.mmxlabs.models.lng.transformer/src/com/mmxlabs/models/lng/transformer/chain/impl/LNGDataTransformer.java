@@ -69,7 +69,7 @@ public class LNGDataTransformer {
 			final PerChainUnitScopeImpl scope = initialSolutionInjector.getInstance(PerChainUnitScopeImpl.class);
 			try {
 				scope.enter();
-				final ISequences initialSequences = initialSolutionInjector.getInstance(Key.get(ISequences.class, Names.named("Initial")));
+				final ISequences initialSequences = initialSolutionInjector.getInstance(Key.get(ISequences.class, Names.named(LNGInitialSequencesModule.KEY_GENERATED_RAW_SEQUENCES)));
 				injector = parentInjector.createChildInjector(new InitialSequencesModule(initialSequences));
 			} finally {
 				scope.exit();

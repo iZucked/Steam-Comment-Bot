@@ -110,7 +110,7 @@ public class ScenarioUtils {
 		}
 
 		final AnnealingSettings annealingSettings = parametersFactory.createAnnealingSettings();
-		annealingSettings.setIterations(1000000);
+		annealingSettings.setIterations(10000);
 		annealingSettings.setCooling(0.96);
 		annealingSettings.setEpochLength(900); // 900 for full; 300 for period
 		annealingSettings.setInitialTemperature(1000000);
@@ -129,7 +129,7 @@ public class ScenarioUtils {
 		// hill climbing
 		IndividualSolutionImprovementSettings solutionImprovementSettings = parametersFactory.createIndividualSolutionImprovementSettings();
 		solutionImprovementSettings.setImprovingSolutions(true);
-		solutionImprovementSettings.setIterations(50000);
+		solutionImprovementSettings.setIterations(500);
 		settings.setSolutionImprovementSettings(solutionImprovementSettings);
 		return settings;
 	}

@@ -21,7 +21,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Injector;
+import com.google.inject.Key;
 import com.google.inject.Module;
+import com.google.inject.name.Names;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
@@ -36,6 +38,7 @@ import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
+import com.mmxlabs.models.lng.transformer.inject.modules.LNGInitialSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
 import com.mmxlabs.models.lng.transformer.period.CopiedScenarioEntityMapping;
 import com.mmxlabs.models.lng.transformer.period.IScenarioEntityMapping;
@@ -47,13 +50,14 @@ import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
+import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public class LNGScenarioDataTransformer {
 
-	private static final Logger log = LoggerFactory.getLogger(LNGScenarioDataTransformer2.class);
+	private static final Logger log = LoggerFactory.getLogger(LNGScenarioDataTransformer.class);
 
 	@NonNull
 	private final LNGScenarioModel originalScenario;
@@ -85,6 +89,12 @@ public class LNGScenarioDataTransformer {
 	@NonNull
 	private final LNGDataTransformer originalDataTransformer;
 
+	/**
+	 * Integer to count "undo" state of the scenario. Each overwrite evaluation should increment this value. Calls to {@link LNGSchedulerJobUtils#undoPreviousOptimsationStep(EditingDomain, int)}
+	 * should decrement it. Ideally we would track the current state of the command stack, but the API does not appear to permit this (maybe a command stack listener? - can we tell if a command is undo/redo?).
+	 */
+	private int overwriteCommandStackCounter = 0;
+
 	public LNGScenarioDataTransformer(@NonNull final LNGScenarioModel scenario, @Nullable final ScenarioInstance scenarioInstance, @NonNull final OptimiserSettings optimiserSettings,
 			@NonNull final EditingDomain editingDomain, @Nullable final Module bootstrapModule, @Nullable final IOptimiserInjectorService localOverrides, final String... initialHints) {
 		this.originalScenario = scenario;
@@ -96,20 +106,13 @@ public class LNGScenarioDataTransformer {
 		final Collection<IOptimiserInjectorService> services = LNGTransformerHelper.getOptimiserInjectorServices(bootstrapModule, localOverrides);
 
 		originalDataTransformer = new LNGDataTransformer(this.originalScenario, optimiserSettings, hints, services);
-		// TODO: Evaluate initial state.
 
 		this.optimiserEditingDomain = originalEditingDomain;
 		this.optimiserDataTransformer = originalDataTransformer;
 		this.optimiserScenario = originalScenario;
 
-		System.out.println("1");
-		System.out.println(originalEditingDomain.getCommandStack().getMostRecentCommand());
-		System.out.println(optimiserEditingDomain.getCommandStack().getMostRecentCommand());
+		// Trigger initial evaluation
 		overwrite(0, originalDataTransformer.getInitialSequences(), null);
-
-		System.out.println("2");
-		System.out.println(originalEditingDomain.getCommandStack().getMostRecentCommand());
-		System.out.println(optimiserEditingDomain.getCommandStack().getMostRecentCommand());
 
 		final Triple<LNGScenarioModel, EditingDomain, IScenarioEntityMapping> t = initPeriodOptimisationData(scenarioInstance, originalScenario, originalEditingDomain, optimiserSettings);
 		this.optimiserScenario = t.getFirst();
@@ -120,19 +123,6 @@ public class LNGScenarioDataTransformer {
 		} else {
 			optimiserDataTransformer = originalDataTransformer;
 		}
-
-		System.out.println("3");
-		System.out.println(originalEditingDomain.getCommandStack().getMostRecentCommand());
-		System.out.println(optimiserEditingDomain.getCommandStack().getMostRecentCommand());
-
-		// TODO:
-		// 1. Evaluate main scenario. Store data transformer.
-		// 2. If period, pass copy into transformer, do not re-evaluate.
-		// 2.1 -- store new "optimiser" datatransformer.
-
-		// saveAsCopy
-		// NEed to copy period scenario data model. Period mapping needs two copiers, original to copy1, period to copy2.
-
 	}
 
 	@NonNull
@@ -179,14 +169,21 @@ public class LNGScenarioDataTransformer {
 	 * @return
 	 */
 	public Schedule overwrite(final int currentProgress, @NonNull final ISequences rawSeqences, @Nullable final Map<String, Object> extraAnnotations) {
-		System.out.println("Overwrite");
-		System.out.println(originalEditingDomain.getCommandStack().getMostRecentCommand());
-		System.out.println(optimiserEditingDomain.getCommandStack().getMostRecentCommand());
+
 		// Clear any previous optimisation state.
-		if (periodMapping != null) {
-			LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, currentProgress);
+		if (overwriteCommandStackCounter > 0) {
+			if (periodMapping != null) {
+				if (!LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, currentProgress, true)) {
+					assert false;
+				}
+			}
+			if (LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, currentProgress, true)) {
+				--overwriteCommandStackCounter;
+			} else {
+				assert false;
+			}
 		}
-		LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, currentProgress);
+		assert overwriteCommandStackCounter == 0;
 
 		try {
 			if (originalEditingDomain instanceof CommandProviderAwareEditingDomain) {
@@ -194,8 +191,11 @@ public class LNGScenarioDataTransformer {
 			}
 
 			final Pair<Command, Schedule> commandPair = creatExportScheduleCommand(currentProgress, rawSeqences, extraAnnotations, optimiserScenario, optimiserEditingDomain, originalScenario,
-					originalEditingDomain, optimiserDataTransformer.getModelEntityMap(), periodMapping);
+					originalEditingDomain, optimiserDataTransformer.getModelEntityMap(), originalDataTransformer.getModelEntityMap(), periodMapping);
 			originalEditingDomain.getCommandStack().execute(commandPair.getFirst());
+
+			++overwriteCommandStackCounter;
+
 			return commandPair.getSecond();
 		} finally {
 			if (originalEditingDomain instanceof CommandProviderAwareEditingDomain) {
@@ -204,6 +204,15 @@ public class LNGScenarioDataTransformer {
 		}
 	}
 
+	/**
+	 * Save the sequences in a complete copy of the scenario. Ensure the current scenario is in it's original state (excluding Schedule model and Parameters model changes) -- that is the data model
+	 * still represents the initial solution..
+	 * 
+	 * @param rawSeqences
+	 * @param extraAnnotations
+	 * @return
+	 */
+	@NonNull
 	private LNGScenarioModel exportAsCopy(@NonNull final ISequences rawSeqences, @Nullable final Map<String, Object> extraAnnotations) {
 
 		final EcoreUtil.Copier originalScenarioCopier = new EcoreUtil.Copier();
@@ -221,23 +230,24 @@ public class LNGScenarioDataTransformer {
 
 			assert targetOptimiserScenario != null;
 
-			final CopiedModelEntityMap copiedModelEntityMap = new CopiedModelEntityMap(optimiserDataTransformer.getModelEntityMap(), optimiserScenarioCopier);
+			final CopiedModelEntityMap copiedOptimiserModelEntityMap = new CopiedModelEntityMap(optimiserDataTransformer.getModelEntityMap(), optimiserScenarioCopier);
+			final CopiedModelEntityMap copiedOriginalModelEntityMap = new CopiedModelEntityMap(originalDataTransformer.getModelEntityMap(), originalScenarioCopier);
 
 			final CopiedScenarioEntityMapping copiedPeriodMapping = new CopiedScenarioEntityMapping(pPeriodMapping, originalScenarioCopier, optimiserScenarioCopier);
 			final EditingDomain targetOptimiserEditingDomain = LNGScenarioRunnerUtils.createLocalEditingDomain();
 
 			final Pair<Command, Schedule> commandPair = creatExportScheduleCommand(100, rawSeqences, extraAnnotations,
 
-					targetOptimiserScenario, targetOptimiserEditingDomain, targetOriginalScenario, targetOriginalEditingDomain, copiedModelEntityMap, copiedPeriodMapping);
+					targetOptimiserScenario, targetOptimiserEditingDomain, targetOriginalScenario, targetOriginalEditingDomain, copiedOptimiserModelEntityMap, copiedOriginalModelEntityMap,
+					copiedPeriodMapping);
 			targetOriginalEditingDomain.getCommandStack().execute(commandPair.getFirst());
 
 		} else {
 			final CopiedModelEntityMap copiedModelEntityMap = new CopiedModelEntityMap(originalDataTransformer.getModelEntityMap(), originalScenarioCopier);
 			final Pair<Command, Schedule> commandPair = creatExportScheduleCommand(100, rawSeqences, extraAnnotations,
 
-					targetOriginalScenario, targetOriginalEditingDomain, targetOriginalScenario, targetOriginalEditingDomain, copiedModelEntityMap, null);
+					targetOriginalScenario, targetOriginalEditingDomain, targetOriginalScenario, targetOriginalEditingDomain, copiedModelEntityMap, copiedModelEntityMap, null);
 			targetOriginalEditingDomain.getCommandStack().execute(commandPair.getFirst());
-
 		}
 
 		return targetOriginalScenario;
@@ -254,7 +264,8 @@ public class LNGScenarioDataTransformer {
 	 */
 	private Pair<Command, Schedule> creatExportScheduleCommand(final int currentProgress, @NonNull final ISequences rawSequences, @Nullable final Map<String, Object> extraAnnotations,
 			@NonNull final LNGScenarioModel targetOptimiserScenario, @NonNull final EditingDomain targetOptimiserEditingDomain, @NonNull final LNGScenarioModel targetOriginalScenario,
-			@NonNull final EditingDomain targetOriginalEditingDomain, @NonNull final ModelEntityMap modelEntityMap, @Nullable final IScenarioEntityMapping periodMapping) {
+			@NonNull final EditingDomain targetOriginalEditingDomain, @NonNull final ModelEntityMap optimiserModelEntityMap, @NonNull final ModelEntityMap originalModelEntityMap,
+			@Nullable final IScenarioEntityMapping periodMapping) {
 
 		// Create a "wrapper" to set the user friendly command name for the undo menu
 		final CompoundCommand wrapper = LNGSchedulerJobUtils.createBlankCommand(currentProgress);
@@ -290,7 +301,7 @@ public class LNGScenarioDataTransformer {
 					}
 					// This either applies to the real scenario or the period copy if present.
 					final Pair<Command, Schedule> updateCommand = LNGSchedulerJobUtils.exportSolution(evaluationInjector, targetOptimiserScenario, optimiserSettings, targetOptimiserEditingDomain,
-							modelEntityMap, rawSequences, extraAnnotations);
+							optimiserModelEntityMap, rawSequences, extraAnnotations);
 
 					// Apply to real scenario
 					appendAndExecute(updateCommand.getFirst());
@@ -313,7 +324,7 @@ public class LNGScenarioDataTransformer {
 						}
 						// This either applies to the real scenario or the period copy if present.
 						final Pair<Command, Schedule> updateCommand = LNGSchedulerJobUtils.exportSolution(evaluationInjector, targetOptimiserScenario, optimiserSettings, targetOptimiserEditingDomain,
-								modelEntityMap, rawSequences, extraAnnotations);
+								optimiserModelEntityMap, rawSequences, extraAnnotations);
 
 						// Period optimisation code path, apply the dual commands to the real scenario.
 
@@ -339,12 +350,12 @@ public class LNGScenarioDataTransformer {
 						evalSettings.getRange().unsetOptimiseBefore();
 
 						final Set<String> hints = LNGTransformerHelper.getHints(evalSettings);
-						// Resuse from period transformer? (unless we are in a save as copy call)
+
 						final LNGDataTransformer subTransformer = originalDataTransformer;
 
 						Injector evaluationInjector2;
+						final Collection<IOptimiserInjectorService> services = subTransformer.getModuleServices();
 						{
-							final Collection<IOptimiserInjectorService> services = subTransformer.getModuleServices();
 							final List<Module> modules2 = new LinkedList<>();
 							modules2.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(originalDataTransformer.getOptimiserSettings()), services,
 									IOptimiserInjectorService.ModuleType.Module_ParametersModule, hints));
@@ -353,12 +364,30 @@ public class LNGScenarioDataTransformer {
 							evaluationInjector2 = subTransformer.getInjector().createChildInjector(modules2);
 						}
 
-						// Replace with copied version?
-						final ModelEntityMap subModelEntityMap = subTransformer.getModelEntityMap();
-						final Pair<Command, Schedule> part2 = LNGSchedulerJobUtils.exportSolution(evaluationInjector2, targetOriginalScenario, EcoreUtil.copy(optimiserSettings), originalEditingDomain,
-								subModelEntityMap, subTransformer.getInitialSequences(), extraAnnotations);
+						// Take the new EMF state and generate an ISequences from it to re-evaluate
+
+						final ISequences initialSequences;
+						{
+							final List<Module> modules2 = new LinkedList<>();
+							modules2.addAll(
+									LNGTransformerHelper.getModulesWithOverrides(new LNGInitialSequencesModule(), services, IOptimiserInjectorService.ModuleType.Module_InitialSolution, hints));
+
+							final Injector initialSolutionInjector = evaluationInjector2.createChildInjector(modules2);
+							final PerChainUnitScopeImpl scope = initialSolutionInjector.getInstance(PerChainUnitScopeImpl.class);
+							try {
+								scope.enter();
+								initialSequences = initialSolutionInjector.getInstance(Key.get(ISequences.class, Names.named(LNGInitialSequencesModule.KEY_GENERATED_RAW_SEQUENCES)));
+							} finally {
+								scope.exit();
+							}
+						}
+
+						final Pair<Command, Schedule> part2 = LNGSchedulerJobUtils.exportSolution(evaluationInjector2, targetOriginalScenario, EcoreUtil.copy(optimiserSettings),
+								targetOriginalEditingDomain, originalModelEntityMap, initialSequences, extraAnnotations);
 						if (part2.getFirst().canExecute()) {
-							appendAndExecute(part2.getFirst());
+							if (!appendAndExecute(part2.getFirst())) {
+								throw new RuntimeException("Unable to execute period optimisation update command");
+							}
 						} else {
 							throw new RuntimeException("Unable to execute period optimisation update command");
 						}
@@ -388,10 +417,6 @@ public class LNGScenarioDataTransformer {
 	}
 
 	public ScenarioInstance storeAsCopy(@NonNull final ISequences rawSequences, @NonNull final String newName, @NonNull final Container parent, @Nullable final Map<String, Object> extraAnnotations) {
-
-		System.out.println("storeAsCopy");
-		System.out.println(originalEditingDomain.getCommandStack().getMostRecentCommand());
-		System.out.println(optimiserEditingDomain.getCommandStack().getMostRecentCommand());
 
 		final ScenarioInstance pScenarioInstance = scenarioInstance;
 		if (pScenarioInstance == null) {

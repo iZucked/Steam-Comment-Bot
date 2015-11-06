@@ -154,13 +154,21 @@ public class LNGSchedulerJobUtils {
 		}
 	}
 
+	@NonNull
 	public static CompoundCommand createBlankCommand(final int solutionCurrentProgress) {
 		final String label = (solutionCurrentProgress != 0) ? (LABEL_PREFIX + solutionCurrentProgress + "%") : ("Evaluate");
 		final CompoundCommand command = new CompoundCommand(label);
 		return command;
 	}
 
-	public static void undoPreviousOptimsationStep(final EditingDomain editingDomain, final int solutionCurrentProgress) {
+	/**
+	 * Returns true if a command was undone
+	 * 
+	 * @param editingDomain
+	 * @param solutionCurrentProgress
+	 * @return
+	 */
+	public static boolean undoPreviousOptimsationStep(@NonNull final EditingDomain editingDomain, final int solutionCurrentProgress, boolean force) {
 		// Undo previous optimisation step if possible
 		try {
 
@@ -169,16 +177,17 @@ public class LNGSchedulerJobUtils {
 			}
 
 			// Rollback last "save" and re-apply to avoid long history of undos
-			if (solutionCurrentProgress != 0) {
+			if (force || solutionCurrentProgress != 0) {
 				final Command mostRecentCommand = editingDomain.getCommandStack().getMostRecentCommand();
 				if (mostRecentCommand != null) {
-					if (mostRecentCommand.getLabel().startsWith(LABEL_PREFIX)) {
+					if (force || mostRecentCommand.getLabel().startsWith(LABEL_PREFIX)) {
 						final CommandStack stack = editingDomain.getCommandStack();
 						if (stack instanceof MMXAdaptersAwareCommandStack) {
 							((MMXAdaptersAwareCommandStack) stack).undo(null);
 						} else {
 							stack.undo();
 						}
+						return true;
 					}
 				}
 			}
@@ -188,6 +197,7 @@ public class LNGSchedulerJobUtils {
 				((CommandProviderAwareEditingDomain) editingDomain).setAdaptersEnabled(true, true);
 			}
 		}
+		return false;
 	}
 
 	/**

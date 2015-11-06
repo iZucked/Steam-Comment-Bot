@@ -20,11 +20,11 @@ import com.google.inject.Module;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.chain.IChainRunner;
 import com.mmxlabs.models.lng.transformer.chain.IMultiStateResult;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
+import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -83,7 +83,7 @@ public class LNGScenarioRunner {
 		scenarioDataTransformer = new LNGScenarioDataTransformer(scenarioModel, scenarioInstance, optimiserSettings, editingDomain, extraModule, localOverrides,
 				LNGTransformerHelper.HINT_OPTIMISE_LSO);
 
-		if (true) {
+		if (false) {
 			chainRunner = LNGScenarioChainBuilder.createRunAllSimilarityOptimisationChain(scenarioDataTransformer.getDataTransformer(), scenarioDataTransformer, optimiserSettings,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
 		} else {
@@ -100,14 +100,19 @@ public class LNGScenarioRunner {
 	public Schedule evaluateInitialState() {
 		startTimeMillis = System.currentTimeMillis();
 
-//		final IMultiStateResult result = chainRunner.getInitialState();
-//
-//		final ISequences startRawSequences = result.getBestSolution().getFirst();
-//		final Map<String, Object> extraAnnotations = scenarioDataTransformer.extractOptimisationAnnotations(result.getBestSolution().getSecond());
-//		initialSchedule = scenarioDataTransformer.overwrite(0, startRawSequences, extraAnnotations);
-		initialSchedule= ScenarioModelUtil.getScheduleModel(scenarioModel).getSchedule();
-		
-//need to undo this.chainRunner..
+		// TODO: The API would be *much* cleaner if we did not need to return the annotated solution to get the fitness trace. This would avoid the need here to re-calculate after doing an initial
+		// export in the constructor
+		// TODO: It is also pretty keyed to the first run LSO state and not any other stage in the process.
+		// TODO: Fitness traces needed for ITS run. Additional data also needed for headless app runs - e.g. move analysis logger.
+		final IMultiStateResult result = chainRunner.getInitialState();
+
+		final ISequences startRawSequences = result.getBestSolution().getFirst();
+		final Map<String, Object> extraAnnotations = scenarioDataTransformer.extractOptimisationAnnotations(result.getBestSolution().getSecond());
+		initialSchedule = scenarioDataTransformer.overwrite(0, startRawSequences, extraAnnotations);
+
+		// initialSchedule= ScenarioModelUtil.getScheduleModel(scenarioModel).getSchedule();
+
+		// need to undo this.chainRunner..
 		return initialSchedule;
 	}
 
