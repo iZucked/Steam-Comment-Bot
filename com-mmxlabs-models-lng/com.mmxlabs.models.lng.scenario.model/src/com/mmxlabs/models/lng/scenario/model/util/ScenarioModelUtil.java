@@ -141,7 +141,7 @@ public final class ScenarioModelUtil {
 		return fleetModel;
 	}
 
-	@Nullable
+	@NonNull
 	public static ScheduleModel getScheduleModel(@NonNull final LNGScenarioModel lngScenarioModel) {
 		return lngScenarioModel.getScheduleModel();
 	}
