@@ -59,6 +59,7 @@ import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
+import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.migration.scenario.MigrationHelper;
 import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger;
@@ -169,7 +170,7 @@ public class HeadlessApplication implements IApplication {
 		// Create logging module
 		final Module loggingModule = createLoggingModule();
 
-		final LNGScenarioRunner runner = new LNGScenarioRunner(rootObject, null, LNGScenarioRunnerUtils.createExtendedSettings(optimiserSettings), LNGScenarioRunnerUtils.createLocalEditingDomain(),
+		final LNGScenarioRunner runner = new LNGScenarioRunner(rootObject, null, LNGScenarioRunnerUtils.createExtendedSettings(optimiserSettings), LNGSchedulerJobUtils.createLocalEditingDomain(),
 				loggingModule, localOverrides, LNGTransformerHelper.HINT_OPTIMISE_LSO);
 
 		for (final IRunExporter ex : exporters) {
