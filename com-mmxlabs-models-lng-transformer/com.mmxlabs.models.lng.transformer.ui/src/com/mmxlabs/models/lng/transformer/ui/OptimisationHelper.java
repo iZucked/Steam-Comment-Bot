@@ -470,6 +470,19 @@ public final class OptimisationHelper {
 			break;
 
 		}
+		
+		// Copy across params
+		if (userSettings.isSetPeriodStart()) {
+			optimiserSettings.getRange().setOptimiseAfter(userSettings.getPeriodStart());
+		}
+		if (userSettings.isSetPeriodEnd()) {
+			optimiserSettings.getRange().setOptimiseBefore(userSettings.getPeriodEnd());
+		}
+		
+		optimiserSettings.setBuildActionSets(userSettings.isBuildActionSets());
+		optimiserSettings.setGenerateCharterOuts(userSettings.isGenerateCharterOuts());
+		optimiserSettings.setShippingOnly(userSettings.isShippingOnly());
+		
 		// change epoch length
 		// TODO: make this better!
 		if (userSettings.isSetPeriodStart() && userSettings.isSetPeriodEnd()) {
