@@ -7,6 +7,8 @@ package com.mmxlabs.models.lng.transformer.ui;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
@@ -52,21 +54,24 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 		setJobState(EJobState.RUNNING);
 		final ScenarioInstance scenarioInstance = jobDescriptor.getJobContext();
 
+		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try (final ModelReference modelReference = scenarioInstance.getReference()) {
 			final LNGScenarioModel scenario = (LNGScenarioModel) modelReference.getInstance();
 			final EditingDomain editingDomain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
 
-			LNGScenarioRunner runner = new LNGScenarioRunner(scenario, null, jobDescriptor.getOptimiserSettings(), editingDomain);
+			LNGScenarioRunner runner = new LNGScenarioRunner(executorService, scenario, null, jobDescriptor.getOptimiserSettings(), editingDomain);
 			try {
 				runner.evaluateInitialState();
 			} finally {
-//				runner.dispose();
+				// runner.dispose();
 			}
 
 			setJobState(EJobState.COMPLETED);
 		} catch (final Throwable e) {
 			setJobState(EJobState.CANCELLED);
 			throw new RuntimeException(e);
+		} finally {
+			executorService.shutdownNow();
 		}
 	}
 

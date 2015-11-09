@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.transformer.ui;
 
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 
 import javax.management.timer.Timer;
 
@@ -55,21 +56,23 @@ public class LNGScenarioRunner {
 	@Nullable
 	private ScenarioInstance scenarioInstance;
 
-	public LNGScenarioRunner(@NonNull final LNGScenarioModel scenario, @NonNull final OptimiserSettings optimiserSettings, final String... initialHints) {
-		this(scenario, null, optimiserSettings, LNGSchedulerJobUtils.createLocalEditingDomain(), initialHints);
+	public LNGScenarioRunner(@NonNull ExecutorService exectorService, @NonNull final LNGScenarioModel scenario, @NonNull final OptimiserSettings optimiserSettings, final String... initialHints) {
+		this(exectorService, scenario, null, optimiserSettings, LNGSchedulerJobUtils.createLocalEditingDomain(), initialHints);
 	}
 
-	public LNGScenarioRunner(@NonNull final LNGScenarioModel scenarioModel, @NonNull final OptimiserSettings optimiserSettings, @Nullable Module extraModule, final String... initialHints) {
-		this(scenarioModel, null, optimiserSettings, LNGSchedulerJobUtils.createLocalEditingDomain(), extraModule, null, initialHints);
+	public LNGScenarioRunner(@NonNull ExecutorService exectorService, @NonNull final LNGScenarioModel scenarioModel, @NonNull final OptimiserSettings optimiserSettings, @Nullable Module extraModule,
+			final String... initialHints) {
+		this(exectorService, scenarioModel, null, optimiserSettings, LNGSchedulerJobUtils.createLocalEditingDomain(), extraModule, null, initialHints);
 	}
 
-	public LNGScenarioRunner(@NonNull final LNGScenarioModel scenarioModel, @Nullable final ScenarioInstance scenarioInstance, @NonNull final OptimiserSettings optimiserSettings,
-			final EditingDomain editingDomain, final String... initialHints) {
-		this(scenarioModel, scenarioInstance, optimiserSettings, editingDomain, null, null, initialHints);
+	public LNGScenarioRunner(@NonNull ExecutorService exectorService, @NonNull final LNGScenarioModel scenarioModel, @Nullable final ScenarioInstance scenarioInstance,
+			@NonNull final OptimiserSettings optimiserSettings, final EditingDomain editingDomain, final String... initialHints) {
+		this(exectorService, scenarioModel, scenarioInstance, optimiserSettings, editingDomain, null, null, initialHints);
 	}
 
-	public LNGScenarioRunner(@NonNull final LNGScenarioModel scenarioModel, @Nullable final ScenarioInstance scenarioInstance, @NonNull final OptimiserSettings optimiserSettings,
-			@NonNull final EditingDomain editingDomain, @Nullable final Module extraModule, @Nullable final IOptimiserInjectorService localOverrides, final String... initialHints) {
+	public LNGScenarioRunner(@NonNull ExecutorService executorService, @NonNull final LNGScenarioModel scenarioModel, @Nullable final ScenarioInstance scenarioInstance,
+			@NonNull final OptimiserSettings optimiserSettings, @NonNull final EditingDomain editingDomain, @Nullable final Module extraModule,
+			@Nullable final IOptimiserInjectorService localOverrides, final String... initialHints) {
 
 		this.scenarioModel = scenarioModel;
 		this.scenarioInstance = scenarioInstance;
@@ -79,13 +82,18 @@ public class LNGScenarioRunner {
 				LNGTransformerHelper.HINT_OPTIMISE_LSO);
 
 		// FB: 1712 Switch for enabling run-all similarity optimisation. Needs better UI hook ups.
+
 		if (false) {
-			chainRunner = LNGScenarioChainBuilder.createRunAllSimilarityOptimisationChain(scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimiserSettings,
+			chainRunner = LNGScenarioChainBuilder.createRunAllSimilarityOptimisationChain(scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimiserSettings, executorService,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
 		} else {
-			chainRunner = LNGScenarioChainBuilder.createStandardOptimisationChain(null, scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimiserSettings,
+			chainRunner = LNGScenarioChainBuilder.createStandardOptimisationChain(null, scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimiserSettings, executorService,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
 		}
+	}
+
+	public void dispose() {
+
 	}
 
 	/**

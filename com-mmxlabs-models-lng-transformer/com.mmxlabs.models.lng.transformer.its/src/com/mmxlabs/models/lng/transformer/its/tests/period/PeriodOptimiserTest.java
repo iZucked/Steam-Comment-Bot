@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.junit.Assert;
@@ -332,11 +334,13 @@ public class PeriodOptimiserTest {
 		}
 
 		public void optimise() throws Exception {
+			ExecutorService executorService = Executors.newSingleThreadExecutor();
 			try {
 
 				final OptimiserSettings settings = getSettings();
 
-				final LNGScenarioRunner runner = new LNGScenarioRunner((LNGScenarioModel) scenario, settings, new TransformerExtensionTestBootstrapModule(), LNGTransformerHelper.HINT_OPTIMISE_LSO);
+				final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, (LNGScenarioModel) scenario, settings, new TransformerExtensionTestBootstrapModule(),
+						LNGTransformerHelper.HINT_OPTIMISE_LSO);
 				runner.evaluateInitialState();
 				if (OUTPUT_SCENARIOS) {
 					save(runner.getScenario(), "c:/temp/scenario1.lingo");
@@ -349,6 +353,8 @@ public class PeriodOptimiserTest {
 				// this exception should not occur
 				// Assert.fail("Scenario runner failed to initialise scenario");
 				throw er;
+			} finally {
+				executorService.shutdownNow();
 			}
 		}
 
@@ -359,6 +365,8 @@ public class PeriodOptimiserTest {
 		}
 
 		public void periodOptimise(final YearMonth start, final YearMonth end) throws Exception {
+			ExecutorService executorService = Executors.newSingleThreadExecutor();
+
 			try {
 
 				final OptimiserSettings settings = getSettings();
@@ -366,7 +374,8 @@ public class PeriodOptimiserTest {
 				settings.getRange().setOptimiseAfter(start);
 				settings.getRange().setOptimiseBefore(end);
 
-				final LNGScenarioRunner runner = new LNGScenarioRunner((LNGScenarioModel) scenario, settings, new TransformerExtensionTestBootstrapModule(), LNGTransformerHelper.HINT_OPTIMISE_LSO);
+				final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, (LNGScenarioModel) scenario, settings, new TransformerExtensionTestBootstrapModule(),
+						LNGTransformerHelper.HINT_OPTIMISE_LSO);
 				runner.evaluateInitialState();
 
 				if (OUTPUT_SCENARIOS) {
@@ -381,6 +390,8 @@ public class PeriodOptimiserTest {
 				// this exception should not occur
 				// Assert.fail("Scenario runner failed to initialise scenario: " + er.getMessage());
 				throw er;
+			} finally {
+				executorService.shutdownNow();
 			}
 		}
 	}

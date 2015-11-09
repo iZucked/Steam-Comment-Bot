@@ -8,13 +8,14 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.Injector;
 import com.google.inject.Key;
@@ -42,6 +43,8 @@ import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit {
+
+	private static final Logger LOG = LoggerFactory.getLogger(LNGLSOOptimiserTransformerUnit.class);
 
 	@NonNull
 	public static IChainLink chain(@NonNull final ChainBuilder chainBuilder, @NonNull final OptimiserSettings settings, final int progressTicks) {
@@ -81,11 +84,10 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 	}
 
 	@NonNull
-	public static IChainLink chainPool(@NonNull final ChainBuilder chainBuilder, @NonNull final OptimiserSettings settings, final int progressTicks) {
+	public static IChainLink chainPool(@NonNull final ChainBuilder chainBuilder, @NonNull final OptimiserSettings settings, final int progressTicks, final int numCopies,
+			@NonNull final ExecutorService executorService) {
 		final IChainLink link = new IChainLink() {
 
-			private final int numThreads = 3;
-			private final ExecutorService e = Executors.newFixedThreadPool(numThreads);
 			private LNGLSOOptimiserTransformerUnit[] t;
 
 			class MyRunnable implements Callable<IMultiStateResult> {
@@ -111,32 +113,19 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 						throw new IllegalStateException("#init has not been called");
 					}
 
-					monitor.beginTask("", 100 * numThreads);
+					monitor.beginTask("", 100 * numCopies);
 
-					final List<Future<IMultiStateResult>> results = new ArrayList<>(numThreads);
-					for (int i = 0; i < numThreads; ++i) {
-						results.add(e.submit(new MyRunnable(t[i], monitor, 100)));
+					final List<Future<IMultiStateResult>> results = new ArrayList<>(numCopies);
+					for (int i = 0; i < numCopies; ++i) {
+						results.add(executorService.submit(new MyRunnable(t[i], monitor, 100)));
 					}
 
 					for (final Future<IMultiStateResult> f : results) {
-						final IMultiStateResult result = f.get();
-						//
-						//
-						// result.getBestSolution()
-						// long total = 0l;
-						// for (final Fitness f : schedule.getFitnesses()) {
-						// final Double weightObj = weightsMap.get(f.getName());
-						// final double weight = weightObj == null ? 0.0 : weightObj.doubleValue();
-						// final long raw = f.getFitnessValue();
-						// final long fitness = (long) (weight * (double) raw);
-						// final Long deltaFitness = pinnedData == null ? null : getDelta(f.getName(), fitness, pinnedData);
-						// rowDataList.add(createRow(selectedDataProvider.getScenarioInstance(schedule), f.getName(), weight, raw, fitness, deltaFitness));
-						// if (!(f.getName().equals("iterations") || f.getName().equals("runtime"))) {
-						// total += fitness;
-						// }
-						// }
-
-						// result.getBestSolution().getSecond().getGeneralAnnotation(key, clz)
+						try {
+							f.get();
+						} catch (Exception e) {
+							LOG.error(e.getMessage(), e);
+						}
 					}
 
 					// TODO: Attach ranking, combine solutions.
@@ -172,8 +161,8 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 			@Override
 			public void init(final IMultiStateResult inputState) {
 				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
-				t = new LNGLSOOptimiserTransformerUnit[numThreads];
-				for (int i = 0; i < numThreads; ++i) {
+				t = new LNGLSOOptimiserTransformerUnit[numCopies];
+				for (int i = 0; i < numCopies; ++i) {
 					t[i] = new LNGLSOOptimiserTransformerUnit(dt, settings, inputState.getBestSolution().getFirst(), dt.getHints());
 				}
 			}

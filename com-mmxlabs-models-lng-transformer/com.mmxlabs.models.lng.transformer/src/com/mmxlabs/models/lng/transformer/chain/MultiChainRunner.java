@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Pair;
@@ -28,6 +29,8 @@ import com.mmxlabs.optimiser.core.ISequences;
  */
 public class MultiChainRunner implements IChainRunner {
 
+	private static final Logger LOG = LoggerFactory.getLogger(MultiChainRunner.class);
+
 	@NonNull
 	private final LNGDataTransformer dataTransformer;
 
@@ -37,12 +40,13 @@ public class MultiChainRunner implements IChainRunner {
 	@NonNull
 	private final IMultiStateResult initialState;
 
-	private final int numThreads;
+	@NonNull
+	private final ExecutorService executorService;
 
-	public MultiChainRunner(@NonNull final LNGDataTransformer dataTransformer, @NonNull final List<IChainRunner> chains, final int numThreads) {
+	public MultiChainRunner(@NonNull final LNGDataTransformer dataTransformer, @NonNull final List<IChainRunner> chains, @NonNull final ExecutorService executorService) {
 		this.dataTransformer = dataTransformer;
 		this.chains = chains;
-		this.numThreads = numThreads;
+		this.executorService = executorService;
 		// Return the data transformer state, - without an IAnnotatedSolution.
 		initialState = createInitialResult(dataTransformer.getInitialSequences());
 	}
@@ -61,27 +65,30 @@ public class MultiChainRunner implements IChainRunner {
 	@NonNull
 	public IMultiStateResult run(@NonNull final IProgressMonitor monitor) {
 		monitor.beginTask("Execute chains", 1000 * chains.size());
-		final ExecutorService pool = Executors.newFixedThreadPool(numThreads);
 		try {
-			final List<Future<IMultiStateResult>> results = new ArrayList<>(numThreads);
+			final List<Future<IMultiStateResult>> results = new ArrayList<>(chains.size());
 
 			for (final IChainRunner chain : chains) {
-				results.add(pool.submit(new MyRunnable(chain, monitor, 1000)));
+				results.add(executorService.submit(new MyRunnable(chain, monitor, 1000)));
 			}
 
 			// Wait for all results
 			for (final Future<IMultiStateResult> f : results) {
 				// TODO: If this throws an exception, we will skip blocking other results
 				// TODO: Combine results?
-				f.get();
+
+				// Put in try/catch to avoid breaking out of run and loosing track of other threads.
+				try {
+					f.get();
+				} catch (final Exception e) {
+					// TODO: throw exception at the end of execution.
+					LOG.error(e.getMessage(), e);
+				}
 			}
 		} catch (final Throwable e) {
-			// TODO: Log
-			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
 		} finally {
 			monitor.done();
-			// Ensure we keep blocking in case of exception above...
-			pool.shutdown();
 		}
 
 		// TODO: Return a combined state?

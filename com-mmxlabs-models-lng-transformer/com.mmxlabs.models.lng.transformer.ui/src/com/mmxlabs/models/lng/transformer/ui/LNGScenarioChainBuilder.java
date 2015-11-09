@@ -3,6 +3,8 @@ package com.mmxlabs.models.lng.transformer.ui;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.apache.shiro.SecurityUtils;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -38,11 +40,14 @@ public class LNGScenarioChainBuilder {
 	 * @param dataTransformer
 	 * @param scenarioToOptimiserBridge
 	 * @param optimiserSettings
+	 * @param executorService
+	 *            Optional (for now) {@link ExecutorService} for parallelisation
 	 * @param initialHints
 	 * @return
 	 */
 	public static IChainRunner createStandardOptimisationChain(@Nullable final String childName, @NonNull final LNGDataTransformer dataTransformer,
-			@NonNull final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, @NonNull final OptimiserSettings optimiserSettings, @Nullable final String... initialHints) {
+			@NonNull final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, @NonNull final OptimiserSettings optimiserSettings, @Nullable ExecutorService executorService,
+			@Nullable final String... initialHints) {
 
 		boolean createOptimiser = false;
 		boolean doHillClimb = false;
@@ -117,7 +122,7 @@ public class LNGScenarioChainBuilder {
 	 * @return
 	 */
 	public static IChainRunner createRunAllSimilarityOptimisationChain(@NonNull final LNGDataTransformer dataTransformer, @NonNull final LNGScenarioToOptimiserBridge dataExporter,
-			@NonNull final OptimiserSettings optimiserSettings, @Nullable final String... initialHints) {
+			@NonNull final OptimiserSettings optimiserSettings, @NonNull ExecutorService executorService, @Nullable final String... initialHints) {
 
 		final UserSettings basicSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		if (optimiserSettings.getRange() != null) {
@@ -144,16 +149,22 @@ public class LNGScenarioChainBuilder {
 
 			final OptimiserSettings settings = OptimisationHelper.transformUserSettings(copy, null);
 			if (settings != null) {
-				runners.add(createStandardOptimisationChain("Similarity-" + mode.toString(), dataTransformer, dataExporter, settings, initialHints));
+				runners.add(createStandardOptimisationChain("Similarity-" + mode.toString(), dataTransformer, dataExporter, settings, executorService, initialHints));
 			}
 		}
-		// TODO: Needs better control - e.g. pass in num available cores to this method
-		// Create x threads up to the smaller of the number of job or number of available cores
-		final int cores = Math.min(runners.size(), Math.max(1, Runtime.getRuntime().availableProcessors() - 1));
-
-		final MultiChainRunner runner = new MultiChainRunner(dataTransformer, runners, cores);
+		final MultiChainRunner runner = new MultiChainRunner(dataTransformer, runners, executorService);
 
 		return runner;
 	}
 
+	@NonNull
+	public static ExecutorService createExecutorService() {
+		final int cores = Math.max(1, Runtime.getRuntime().availableProcessors() - 1);
+		return createExecutorService(cores);
+	}
+
+	@NonNull
+	public static ExecutorService createExecutorService(int nThreads) {
+		return Executors.newFixedThreadPool(nThreads);
+	}
 }

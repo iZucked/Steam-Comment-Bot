@@ -53,7 +53,8 @@ public class LNGSchedulerManyJobsControl extends AbstractEclipseJobControl {
 	private static final ImageDescriptor imgEval = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/evaluate_schedule.gif");
 
 	private final SimilarityFuture[] jobs;
-	private final ExecutorService executorService;
+	private final ExecutorService controlService;
+	private final ExecutorService runnerService;
 
 	private class SimilarityFuture implements Runnable {
 
@@ -74,7 +75,7 @@ public class LNGSchedulerManyJobsControl extends AbstractEclipseJobControl {
 			fork = createFork(model);
 			ref = fork.getReference();
 			this.scenarioModel = (LNGScenarioModel) ref.getInstance();
-			this.runner = new LNGScenarioRunner(scenarioModel, fork, settings, (EditingDomain) fork.getAdapters().get(EditingDomain.class), hints);
+			this.runner = new LNGScenarioRunner(runnerService, scenarioModel, fork, settings, (EditingDomain) fork.getAdapters().get(EditingDomain.class), hints);
 			this.lock = fork.getLock(ScenarioLock.OPTIMISER);
 			this.lock.awaitClaim();
 		}
@@ -149,8 +150,10 @@ public class LNGSchedulerManyJobsControl extends AbstractEclipseJobControl {
 		}
 		// Hmm...
 		setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));
-		executorService = Executors.newFixedThreadPool(numberOfThreads);
-		// Disable optimisation in P&L testing phase
+		// This executor is for the futures we create and execute here...
+		controlService = Executors.newFixedThreadPool(numberOfThreads);
+		// .. this executor is for the optimisation itself to avoid blocking the control executor
+		runnerService = LNGScenarioChainBuilder.createExecutorService(); // Disable optimisation in P&L testing phase
 		if (SecurityUtils.getSubject().isPermitted("features:phase-pnl-testing")) {
 			throw new RuntimeException("Optimisation is disabled during the P&L testing phase.");
 		}
@@ -177,8 +180,11 @@ public class LNGSchedulerManyJobsControl extends AbstractEclipseJobControl {
 
 	@Override
 	public void dispose() {
-		if (!executorService.isShutdown()) {
-			executorService.shutdownNow();
+		if (!runnerService.isShutdown()) {
+			runnerService.shutdownNow();
+		}
+		if (!controlService.isShutdown()) {
+			controlService.shutdownNow();
 		}
 		// Clean up
 		for (final SimilarityFuture job : jobs) {
@@ -215,20 +221,23 @@ public class LNGSchedulerManyJobsControl extends AbstractEclipseJobControl {
 			progressMonitor.beginTask("Optimise", 100 * jobs.length);
 			for (final SimilarityFuture job : jobs) {
 				job.setParentProgressMonitor(progressMonitor, 100);
-				executorService.submit(job);
+				controlService.submit(job);
 			}
 			// Block until jobs completed
-			executorService.shutdown();
+			controlService.shutdown();
 			try {
-				while (!executorService.awaitTermination(100, TimeUnit.MILLISECONDS))
+				while (!controlService.awaitTermination(100, TimeUnit.MILLISECONDS))
 					;
 			} catch (final InterruptedException e) {
 				LOG.error(e.getMessage(), e);
 			}
 		} finally {
 			progressMonitor.done();
-			if (!executorService.isShutdown()) {
-				executorService.shutdownNow();
+			if (!runnerService.isShutdown()) {
+				runnerService.shutdownNow();
+			}
+			if (!controlService.isShutdown()) {
+				controlService.shutdownNow();
 			}
 			// Clean up
 			for (final SimilarityFuture job : jobs) {

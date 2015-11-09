@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.junit.Assert;
 
@@ -122,42 +124,49 @@ public class SuboptimalScenarioTester {
 
 		final int n = loadPorts.length;
 
-		// optimise the scenario
-		OptimiserSettings settings = LNGScenarioRunnerUtils.createDefaultSettings();
-		settings.getAnnealingSettings().setIterations(10000);
-		final LNGScenarioRunner runner = new LNGScenarioRunner((LNGScenarioModel) scenario, settings, new TransformerExtensionTestBootstrapModule(), LNGTransformerHelper.HINT_OPTIMISE_LSO);
-		runner.evaluateInitialState();
-		runner.run();
+		final ExecutorService executorService = Executors.newSingleThreadExecutor();
+		try {
+			// optimise the scenario
 
-		final Schedule schedule = runner.getFinalSchedule();
-		Assert.assertNotNull(schedule);
+			final OptimiserSettings settings = LNGScenarioRunnerUtils.createDefaultSettings();
+			settings.getAnnealingSettings().setIterations(10000);
+			final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, (LNGScenarioModel) scenario, settings, new TransformerExtensionTestBootstrapModule(),
+					LNGTransformerHelper.HINT_OPTIMISE_LSO);
+			runner.evaluateInitialState();
+			runner.run();
 
-		// set up an array storing whether load ports are assigned at all
-		final boolean[] found = new boolean[n];
-		for (int i = 0; i < n; i++) {
-			found[i] = false;
-		}
+			final Schedule schedule = runner.getFinalSchedule();
+			Assert.assertNotNull(schedule);
 
-		// check that the cargo allocations wire load ports up with the expected discharge ports
-		for (final CargoAllocation ca : schedule.getCargoAllocations()) {
-			final Port loadPort = ca.getSlotAllocations().get(0).getPort();
-			final Port dischargePort = ca.getSlotAllocations().get(1).getPort();
-
-			final int index = Arrays.asList(loadPorts).indexOf(loadPort);
-			Assert.assertTrue(String.format("Load port '%s' was assigned a wiring but the expected wiring does not contain it.", loadPort.getName()), index >= 0);
-
-			if (index >= 0) {
-				found[index] = true;
-				Assert.assertTrue(
-						String.format("Expected solution wires '%s' to '%s' but the allocation wires it to '%s'. (load cv = %f; discharge min cv = %f; discharge max cv = %f", loadPort.getName(),
-								dischargePorts[index].getName(), dischargePort.getName(), loadPort.getCvValue(), dischargePort.getMinCvValue(), dischargePort.getMaxCvValue()),
-						dischargePorts[index].equals(dischargePort));
+			// set up an array storing whether load ports are assigned at all
+			final boolean[] found = new boolean[n];
+			for (int i = 0; i < n; i++) {
+				found[i] = false;
 			}
-		}
 
-		// check that all expected load ports were assigned
-		for (int i = 0; i < n; i++) {
-			Assert.assertTrue(String.format("Expected a wiring for load port '%s' but none assigned in solution.", loadPorts[i].getName()), found[i]);
+			// check that the cargo allocations wire load ports up with the expected discharge ports
+			for (final CargoAllocation ca : schedule.getCargoAllocations()) {
+				final Port loadPort = ca.getSlotAllocations().get(0).getPort();
+				final Port dischargePort = ca.getSlotAllocations().get(1).getPort();
+
+				final int index = Arrays.asList(loadPorts).indexOf(loadPort);
+				Assert.assertTrue(String.format("Load port '%s' was assigned a wiring but the expected wiring does not contain it.", loadPort.getName()), index >= 0);
+
+				if (index >= 0) {
+					found[index] = true;
+					Assert.assertTrue(
+							String.format("Expected solution wires '%s' to '%s' but the allocation wires it to '%s'. (load cv = %f; discharge min cv = %f; discharge max cv = %f", loadPort.getName(),
+									dischargePorts[index].getName(), dischargePort.getName(), loadPort.getCvValue(), dischargePort.getMinCvValue(), dischargePort.getMaxCvValue()),
+							dischargePorts[index].equals(dischargePort));
+				}
+			}
+
+			// check that all expected load ports were assigned
+			for (int i = 0; i < n; i++) {
+				Assert.assertTrue(String.format("Expected a wiring for load port '%s' but none assigned in solution.", loadPorts[i].getName()), found[i]);
+			}
+		} finally {
+			executorService.shutdownNow();
 		}
 
 	}
@@ -210,14 +219,13 @@ public class SuboptimalScenarioTester {
 	 */
 	// TODO: rewrite to take a constraint checker factory instead of a constraint checker, so that the expected parameter does not have weird not-initialised semantics
 	public void testConstraintChecker(final boolean expectedResult, final AbstractPairwiseConstraintChecker checker) {
-	
-		
+
 		final OptimiserSettings settings = ScenarioUtils.createDefaultSettings();
 		final Set<String> hints = LNGTransformerHelper.getHints(settings);
 		final LNGDataTransformer transformer = new LNGDataTransformer(scenario, settings, hints,
 				LNGTransformerHelper.getOptimiserInjectorServices(new TransformerExtensionTestBootstrapModule(), null));
 
-//		final LNGDataTransformer transformer = new LNGDataTransformer(scenario, ScenarioUtils.createDefaultSettings(), new TransformerExtensionTestBootstrapModule(), null);
+		// final LNGDataTransformer transformer = new LNGDataTransformer(scenario, ScenarioUtils.createDefaultSettings(), new TransformerExtensionTestBootstrapModule(), null);
 		final IOptimisationData data = transformer.getOptimisationData();
 
 		transformer.getInjector().injectMembers(checker);
