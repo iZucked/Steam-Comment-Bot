@@ -161,31 +161,24 @@ public class HeadlessJSONParser {
 			destFile.createNewFile();
 		}
 
-		FileChannel source = null;
-		FileChannel destination = null;
-
-		try {
-			source = new FileInputStream(sourceFile).getChannel();
-			destination = new FileOutputStream(destFile).getChannel();
-			destination.transferFrom(source, 0, source.size());
-		} finally {
-			if (source != null) {
-				source.close();
-			}
-			if (destination != null) {
-				destination.close();
+		try (FileInputStream sourceStream = new FileInputStream(sourceFile)) {
+			try (FileChannel source = sourceStream.getChannel()) {
+				try (FileOutputStream destinationStream = new FileOutputStream(destFile)) {
+					try (FileChannel destination = destinationStream.getChannel()) {
+						destination.transferFrom(source, 0, source.size());
+					}
+				}
 			}
 		}
 	}
-	
+
 	boolean matchYearMonth(String input) {
-	     try {
-	          yearMonthFormat.parse(input);
-	          return true;
-	     }
-	     catch(ParseException e){
-	          return false;
-	     }
+		try {
+			yearMonthFormat.parse(input);
+			return true;
+		} catch (ParseException e) {
+			return false;
+		}
 	}
 
 	YearMonth parseYearMonth(String dateString) {
@@ -196,15 +189,14 @@ public class HeadlessJSONParser {
 		try {
 			localDateFormat.parse(input);
 			return true;
-		}
-		catch(ParseException e){
+		} catch (ParseException e) {
 			return false;
 		}
 	}
-	
+
 	LocalDate parseDate(String dateString) {
-		LocalDate dateTime = LocalDate.parse(dateString, DateTimeFormatter.ofPattern( "YYYY/MM/dd" ));
-		return dateTime;		
+		LocalDate dateTime = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("YYYY/MM/dd"));
+		return dateTime;
 	}
-	
+
 }
