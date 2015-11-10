@@ -209,6 +209,8 @@ public class HeadlessApplication implements IApplication {
 
 		exportData(runner.getInjector(), path, outputFolderName, exporters, jsonFilePath);
 
+		runner.dispose();
+		
 		return IApplication.EXIT_OK;
 
 	}

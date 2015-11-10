@@ -23,6 +23,8 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.emf.common.util.EList;
@@ -188,9 +190,13 @@ public class AbstractOptimisationResultTester {
 	public LNGScenarioRunner evaluateScenario(@NonNull final URL url, OptimiserSettings optimiserSettings) throws Exception {
 
 		final LNGScenarioModel originalScenario = getScenarioModelFromURL(url);
-		final LNGScenarioRunner originalScenarioRunner = createScenarioRunner(originalScenario, optimiserSettings);
-
-		return evaluateScenario(originalScenario, url, originalScenarioRunner);
+		final ExecutorService executorService = Executors.newSingleThreadExecutor();
+		try {
+			final LNGScenarioRunner originalScenarioRunner = createScenarioRunner(executorService, originalScenario, optimiserSettings);
+			return evaluateScenario(originalScenario, url, originalScenarioRunner);
+		} finally {
+			executorService.shutdownNow();
+		}
 	}
 
 	public LNGScenarioRunner evaluateScenario(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL) throws IOException, IncompleteScenarioException {
@@ -199,9 +205,15 @@ public class AbstractOptimisationResultTester {
 		if (false) {
 			saveScenarioModel(originalScenario);
 		}
-		// Create scenario runner with optimisation params incase we want to run optimisation outside of the opt run method.
-		final LNGScenarioRunner originalScenarioRunner = createScenarioRunner(originalScenario);
-		return evaluateScenario(originalScenario, origURL, originalScenarioRunner);
+		final ExecutorService executorService = Executors.newSingleThreadExecutor();
+		try {
+			// Create scenario runner with optimisation params incase we want to run optimisation outside of the opt run method.
+			final LNGScenarioRunner originalScenarioRunner = createScenarioRunner(executorService, originalScenario);
+			originalScenarioRunner.evaluateInitialState();
+			return originalScenarioRunner;
+		} finally {
+			executorService.shutdownNow();
+		}
 	}
 
 	public LNGScenarioRunner evaluateScenario(@NonNull final LNGScenarioModel originalScenario, @Nullable final URL origURL, @NonNull LNGScenarioRunner scenarioRunner)
@@ -220,9 +232,14 @@ public class AbstractOptimisationResultTester {
 
 	public LNGScenarioRunner runScenario(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL) throws IOException, IncompleteScenarioException {
 
-		final LNGScenarioRunner scenarioRunner = createScenarioRunner(originalScenario);
-		assert scenarioRunner != null;
-		return runScenario(originalScenario, origURL, scenarioRunner);
+		final ExecutorService executorService = Executors.newSingleThreadExecutor();
+		try {
+			final LNGScenarioRunner scenarioRunner = createScenarioRunner(executorService, originalScenario);
+			assert scenarioRunner != null;
+			return runScenario(originalScenario, origURL, scenarioRunner);
+		} finally {
+			executorService.shutdownNow();
+		}
 	}
 
 	/**
@@ -316,14 +333,15 @@ public class AbstractOptimisationResultTester {
 		return scenarioRunner;
 	}
 
-	private LNGScenarioRunner createScenarioRunner(final LNGScenarioModel originalScenario) {
+	private LNGScenarioRunner createScenarioRunner(final @NonNull ExecutorService executorService, final LNGScenarioModel originalScenario) {
 		OptimiserSettings createDefaultSettings = LNGScenarioRunnerUtils.createDefaultSettings();
 		createDefaultSettings.getAnnealingSettings().setIterations(10000);
-		return createScenarioRunner(originalScenario, createDefaultSettings);
+		return createScenarioRunner(executorService, originalScenario, createDefaultSettings);
 	}
 
-	private LNGScenarioRunner createScenarioRunner(final LNGScenarioModel originalScenario, OptimiserSettings settings) {
-		final LNGScenarioRunner originalScenarioRunner = new LNGScenarioRunner(originalScenario, settings, new TransformerExtensionTestBootstrapModule(), LNGTransformerHelper.HINT_OPTIMISE_LSO);
+	private LNGScenarioRunner createScenarioRunner(final @NonNull ExecutorService executorService, final LNGScenarioModel originalScenario, OptimiserSettings settings) {
+		final LNGScenarioRunner originalScenarioRunner = new LNGScenarioRunner(executorService, originalScenario, settings, new TransformerExtensionTestBootstrapModule(),
+				LNGTransformerHelper.HINT_OPTIMISE_LSO);
 		return originalScenarioRunner;
 	}
 
