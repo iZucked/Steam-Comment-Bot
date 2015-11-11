@@ -205,7 +205,7 @@ public class BagOptimiser {
 			try {
 				bagMover.setDepthRange(0, 3);
 				Collection<JobState> fullChangesSets = Collections.EMPTY_LIST;
-				Collection<JobState> oldFullChangesSets = Collections.EMPTY_LIST;
+				Collection<JobState> oldFullChangesSets = new LinkedList<>(l);
 				Collection<JobState> initialPopulation = addChangeSetLevel(targetSimilarityState, l, changeChecker, oldFullChangesSets, initialPopulationSize);
 
 				if (DEBUG) {
