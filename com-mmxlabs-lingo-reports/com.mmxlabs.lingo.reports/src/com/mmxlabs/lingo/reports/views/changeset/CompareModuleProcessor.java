@@ -4,12 +4,12 @@
  */
 package com.mmxlabs.lingo.reports.views.changeset;
 
-import org.apache.shiro.SecurityUtils;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.rcp.common.application.E4ModelHelper;
 
 public class CompareModuleProcessor {
@@ -21,7 +21,7 @@ public class CompareModuleProcessor {
 	@Execute
 	public void cleanUpActionPlanUI(@NonNull final MApplication application, @NonNull final EModelService modelService) {
 
-		if (SecurityUtils.getSubject().isPermitted("features:difftools")) {
+		if (LicenseFeatures.isPermitted("features:difftools")) {
 			// Feature is enabled, so do not clean up
 			return;
 		}

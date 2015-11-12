@@ -15,13 +15,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.shiro.SecurityUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.collect.Lists;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandler;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.changeset.model.ChangeSet;
@@ -102,7 +102,7 @@ public class ChangeSetTransformer {
 		final List<IDiffProcessor> diffProcessors = new LinkedList<>();
 
 		// Also if number of scenarios is 0 or 1
-		final boolean enableDiffTools = SecurityUtils.getSubject().isPermitted("features:difftools");
+		final boolean enableDiffTools = LicenseFeatures.isPermitted("features:difftools");
 		if (enableDiffTools) {
 		}
 		diffProcessors.add(new CycleDiffProcessor(customRelatedSlotHandlers));
