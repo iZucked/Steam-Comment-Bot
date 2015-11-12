@@ -96,6 +96,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Equality;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -1247,7 +1248,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	 */
 	protected void doWiringChanged(final Map<RowData, RowData> newWiring, final boolean ctrlPressed) {
 
-		final boolean createComplexCargo = ctrlPressed && SecurityUtils.getSubject().isPermitted("features:complex-cargo");
+		final boolean createComplexCargo = ctrlPressed && LicenseFeatures.isPermitted("features:complex-cargo");
 
 		final List<Command> setCommands = new LinkedList<Command>();
 		final List<Command> deleteCommands = new LinkedList<Command>();
@@ -1787,7 +1788,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				addActionToMenu(newFOBSale, menu);
 			}
 
-			if (SecurityUtils.getSubject().isPermitted("features:complex-cargo")) {
+			if (LicenseFeatures.isPermitted("features:complex-cargo")) {
 				final ComplexCargoAction newComplexCargo = new ComplexCargoAction("Complex Cargo");
 				addActionToMenu(newComplexCargo, menu);
 			}

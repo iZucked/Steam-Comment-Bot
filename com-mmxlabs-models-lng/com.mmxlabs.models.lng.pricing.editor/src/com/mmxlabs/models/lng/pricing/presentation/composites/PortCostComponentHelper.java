@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.shiro.SecurityUtils;
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
@@ -21,6 +20,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
@@ -109,7 +109,7 @@ public class PortCostComponentHelper extends BaseComponentHelper {
 		// add an inline editor for each port capability
 		for (final PortCapability capability : PortCapability.values()) {
 
-			if (capability != PortCapability.TRANSFER || SecurityUtils.getSubject().isPermitted("features:shiptoship")) {
+			if (capability != PortCapability.TRANSFER || LicenseFeatures.isPermitted("features:shiptoship")) {
 
 				final NumberInlineEditor numberEditor = new NumberInlineEditor(PricingPackage.eINSTANCE.getPortCostEntry_Cost());
 				detailComposite.addInlineEditor(new IInlineEditor() {
