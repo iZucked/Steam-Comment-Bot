@@ -4,8 +4,9 @@
  */
 package com.mmxlabs.license.features.properties;
 
-import org.apache.shiro.SecurityUtils;
 import org.eclipse.core.expressions.PropertyTester;
+
+import com.mmxlabs.license.features.LicenseFeatures;
 
 public class FeatureEnablementPropertyTester extends PropertyTester {
 	@Override
@@ -13,7 +14,7 @@ public class FeatureEnablementPropertyTester extends PropertyTester {
 
 		boolean permitted = args.length > 0;
 		for (final Object arg : args) {
-			permitted &= SecurityUtils.getSubject().isPermitted(arg.toString());
+			permitted &= LicenseFeatures.isPermitted(arg.toString());
 		}
 		return permitted;
 	}
