@@ -11,6 +11,7 @@ import org.apache.shiro.SecurityUtils;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.Singleton;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.scheduler.optimiser.calculators.IDivertableDESShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.calculators.impl.DefaultDivertableDESShippingTimesCalculator;
@@ -53,17 +54,17 @@ public class EvaluationModule extends AbstractModule {
 		bind(DefaultDivertableDESShippingTimesCalculator.class).in(Singleton.class);
 
 		if (hints != null) {
-			if (SecurityUtils.getSubject().isPermitted("features:optimisation-charter-out-generation")) {
+			if (LicenseFeatures.isPermitted("features:optimisation-charter-out-generation")) {
 
 				for (final String hint : hints) {
 					if (LNGTransformer.HINT_GENERATE_CHARTER_OUTS.equals(hint)) {
 						bind(IGeneratedCharterOutEvaluator.class).to(DefaultGeneratedCharterOutEvaluator.class);
+						break;
 					}
-					break;
 				}
 			}
 		}
-		if (SecurityUtils.getSubject().isPermitted("features:break-evens")) {
+		if (LicenseFeatures.isPermitted("features:break-evens")) {
 			bind(IBreakEvenEvaluator.class).to(DefaultBreakEvenEvaluator.class);
 		}
 	}

@@ -13,7 +13,6 @@ import java.util.List;
 
 import javax.management.timer.Timer;
 
-import org.apache.shiro.SecurityUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -37,6 +36,7 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
@@ -141,11 +141,11 @@ public class LNGScenarioRunner {
 		}
 		// Check for break down optimisation here.
 		if (optimiserSettings.isBuildActionSets()) {
-			if (SecurityUtils.getSubject().isPermitted("features:optimisation-actionset")) {
+			if (LicenseFeatures.isPermitted("features:optimisation-actionset")) {
 				doActionSetPostOptimisation = true;
 			}
 		}
-		doHillClimb = SecurityUtils.getSubject().isPermitted("features:optimisation-hillclimb");
+		doHillClimb = LicenseFeatures.isPermitted("features:optimisation-hillclimb");
 
 		optimiserScenario = originalScenario;
 		optimiserEditingDomain = originalEditingDomain;
