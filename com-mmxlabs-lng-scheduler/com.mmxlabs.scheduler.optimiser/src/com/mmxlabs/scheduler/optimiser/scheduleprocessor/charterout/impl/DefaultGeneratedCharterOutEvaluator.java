@@ -133,7 +133,6 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		final int firstStartTime = portTimesRecord.getSlotTime(firstSlot);
 		final IPortSlot slotBeforeCharter = ballastDetails.getOptions().getFromPortSlot();
 		final IPortSlot slotAfterCharter = ballastDetails.getOptions().getToPortSlot();
-
 		boolean solutionSeen = false;
 		List<Pair<VoyagePlan, IPortTimesRecord>> cachedSolution = null;
 
@@ -196,11 +195,14 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 				setHeelOptions(charter.getVesselEvent(), preCharteringTimes, upToCharterPlan.getSequence(), charterToEndPlan.getStartingHeelInM3());
 			}
 
+			// TODO: really we need partial boiloff here (see BugzID: 1798)
+			final long secondPlanStartHeel = charterToEndPlan.getStartingHeelInM3();
 			final long secondPlanRemainingHeel = charterToEndPlan.getRemainingHeelInM3();
 			// calculate post-charter plan
 			voyageCalculator.calculateVoyagePlan(charterToEndPlan, vesselAvailability.getVessel(), charterToEndPlan.getStartingHeelInM3(),
 					vesselBaseFuelCalculator.getBaseFuelPrice(vesselAvailability.getVessel(), postCharteringTimes), postCharteringTimes, charterToEndPlan.getSequence());
 			// remaining heel may have been overwritten
+			charterToEndPlan.setStartingHeelInM3(secondPlanStartHeel);
 			charterToEndPlan.setRemainingHeelInM3(secondPlanRemainingHeel);
 
 			final List<Pair<VoyagePlan, IPortTimesRecord>> charterPlans = new LinkedList<Pair<VoyagePlan, IPortTimesRecord>>();
