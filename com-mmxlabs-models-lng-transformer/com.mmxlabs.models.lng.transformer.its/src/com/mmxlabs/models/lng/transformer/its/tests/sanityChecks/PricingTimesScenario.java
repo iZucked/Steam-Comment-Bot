@@ -13,7 +13,6 @@ import java.util.Calendar;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.swt.widgets.DateTime;
 import org.junit.Assert;
 
 import com.mmxlabs.models.lng.cargo.Cargo;

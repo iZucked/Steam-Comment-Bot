@@ -18,7 +18,7 @@ import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
-import org.eclipse.swt.widgets.DateTime;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -373,6 +373,7 @@ public class PeriodTestUtils {
 		return new CollectedAssignment(Arrays.asList(elements), vesselAvailability);
 	}
 
+	@NonNull
 	public static EditingDomain createEditingDomain(final LNGScenarioModel scenarioModel) {
 		final BasicCommandStack commandStack = new BasicCommandStack();
 		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);

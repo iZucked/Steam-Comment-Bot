@@ -8,7 +8,6 @@ import java.time.YearMonth;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.apache.shiro.SecurityUtils;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
