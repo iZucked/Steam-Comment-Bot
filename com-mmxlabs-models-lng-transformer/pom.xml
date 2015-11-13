@@ -33,6 +33,8 @@
 
 		<module>com.mmxlabs.models.lng.transformer.ui</module>
 
+		<module>com.mmxlabs.models.lng.transformer.ui.tests</module>
+
 		<module>com.mmxlabs.models.lng.liveevaluator</module>
 
 		<module>com.mmxlabs.models.lng.transformer.tests</module>
