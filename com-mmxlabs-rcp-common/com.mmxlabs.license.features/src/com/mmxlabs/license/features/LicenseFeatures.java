@@ -6,6 +6,8 @@ package com.mmxlabs.license.features;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -34,14 +36,23 @@ public class LicenseFeatures {
 
 	private static final Logger LOG = LoggerFactory.getLogger(LoggerFactory.class);
 
-	public static void initialiseFeatureEnablements(final String... extraEnablements) {
+	private static Set<String> extraEnablementsSet = new HashSet<>();
 
-		final Injector injector = Guice.createInjector(new FeatureEnablementModule());
+	public static void initialiseFeatureEnablements(final String... extraEnablements) {
+		for (String s : extraEnablements) {
+			extraEnablementsSet.add(s);
+		}
 
 		class MyAuthRealm extends AuthorizingRealm {
 
 			@Inject(optional = true)
 			private Iterable<FeatureEnablementExtension> featureEnablements;
+
+			public MyAuthRealm() {
+				final Injector injector = Guice.createInjector(new FeatureEnablementModule());
+				injector.injectMembers(this);
+
+			}
 
 			@Override
 			protected AuthorizationInfo doGetAuthorizationInfo(final PrincipalCollection principals) {
@@ -79,15 +90,15 @@ public class LicenseFeatures {
 						}
 					}
 				}
-				if (extraEnablements != null) {
-					for (final String feature : extraEnablements) {
-						if (feature != null) {
-							final String permissionKey = "features:" + clean(feature);
-							sai.addStringPermission(permissionKey);
+				// if (extraEnablements != null) {
+				for (final String feature : extraEnablementsSet) {
+					if (feature != null) {
+						final String permissionKey = "features:" + clean(feature);
+						sai.addStringPermission(permissionKey);
 
-						}
 					}
 				}
+				// }
 
 				return sai;
 			}
@@ -99,7 +110,7 @@ public class LicenseFeatures {
 			}
 		}
 		final MyAuthRealm realm = new MyAuthRealm();
-		injector.injectMembers(realm);
+		// injector.injectMembers(realm);
 
 		// Disable caching for immediate updates
 		realm.setAuthorizationCachingEnabled(false);
