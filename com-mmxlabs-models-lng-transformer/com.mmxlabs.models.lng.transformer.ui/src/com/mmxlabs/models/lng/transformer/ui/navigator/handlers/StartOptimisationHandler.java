@@ -64,7 +64,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 					while (itr.hasNext()) {
 						final Object obj = itr.next();
 						if (obj instanceof ScenarioInstance) {
-							OptimisationHelper.evaluateScenarioInstance(jobManager, (ScenarioInstance) obj, null, false, optimising, ScenarioLock.OPTIMISER);
+							OptimisationHelper.evaluateScenarioInstance(jobManager, (ScenarioInstance) obj, null, /* prompt if optimising */ optimising, optimising, ScenarioLock.OPTIMISER);
 						}
 					}
 				}

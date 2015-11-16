@@ -44,7 +44,7 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 	@Override
 	public void run(final IAction methodAction) {
 
-		runLastMode();
+		editAndRunCustomMode();
 	}
 
 	@Override
