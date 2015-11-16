@@ -47,6 +47,6 @@ public abstract class AbstractOptimisationTester_CSV extends AbstractOptimisatio
 
 		LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
 
-		runScenario(scenario, new URL(url.toString() + "fitness"));
+		runScenarioWithGCO(scenario, new URL(url.toString() + "fitness"));
 	}
 }

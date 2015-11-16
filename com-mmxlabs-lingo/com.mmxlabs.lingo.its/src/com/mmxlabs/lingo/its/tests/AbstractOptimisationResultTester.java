@@ -30,6 +30,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 
 import com.mmxlabs.common.NonNullPair;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalCalendarReportView;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -97,7 +98,11 @@ public class AbstractOptimisationResultTester {
 		// Enforce UK Locale Needed for running tests on build server. Keeps date format consistent.
 		Locale.setDefault(Locale.UK);
 
+		// The vertical report can have some current time based properties which break the ITS comparison
 		System.setProperty(AbstractVerticalCalendarReportView.PROPERTY_RUNNING_ITS, Boolean.TRUE.toString());
+
+		// Enable "license" features
+		LicenseFeatures.initialiseFeatureEnablements("optimisation-period", "optimisation-charter-out-generation");
 	}
 
 	// Key prefixes used in the properties file.
@@ -142,19 +147,19 @@ public class AbstractOptimisationResultTester {
 	// * @throws MigrationException
 	// * @throws InterruptedException
 	// */
-	public LNGScenarioRunner runScenario(@NonNull final URL url) throws Exception {
+	public LNGScenarioRunner runScenarioWithGCO(@NonNull final URL url) throws Exception {
 
 		final LNGScenarioModel originalScenario = LNGScenarioRunnerCreator.getScenarioModelFromURL(url);
 
-		return runScenario(originalScenario, url);
+		return runScenarioWithGCO(originalScenario, url);
 	}
 
 	//
-	public LNGScenarioRunner evaluateScenario(@NonNull final URL url) throws Exception {
+	public LNGScenarioRunner evaluateScenarioWithGCO(@NonNull final URL url) throws Exception {
 
 		final LNGScenarioModel originalScenario = LNGScenarioRunnerCreator.getScenarioModelFromURL(url);
 
-		return evaluateScenario(originalScenario, url);
+		return evaluateScenarioWithGCO(originalScenario, url);
 	}
 
 	public LNGScenarioRunner evaluateScenario(@NonNull final URL url, @NonNull final OptimiserSettings optimiserSettings) throws Exception {
@@ -166,32 +171,47 @@ public class AbstractOptimisationResultTester {
 	}
 
 	//
-	public LNGScenarioRunner evaluateScenario(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL) throws IOException, IncompleteScenarioException {
+	public LNGScenarioRunner evaluateScenarioWithGCO(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL) throws IOException, IncompleteScenarioException {
 
 		if (false) {
 			LNGScenarioRunnerCreator.saveScenarioModel(originalScenario, new File("C:\\temp\\test-scenario.lingo"));
 		}
+
+		OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
+		optimiserSettings = LNGScenarioRunnerCreator.createExtendedSettings(optimiserSettings);
+
+		// Limit the number of iterations
+		optimiserSettings.getAnnealingSettings().setIterations(10_000);
+
+		// Enabled by default for ITS
+		optimiserSettings.setGenerateCharterOuts(true);
+
 		// Create scenario runner with optimisation params incase we want to run optimisation outside of the opt run method.
-		final LNGScenarioRunner originalScenarioRunner = LNGScenarioRunnerCreator.createScenarioRunner(originalScenario);
+		final LNGScenarioRunner originalScenarioRunner = LNGScenarioRunnerCreator.createScenarioRunner(originalScenario, optimiserSettings);
 		return evaluateScenario(originalScenario, origURL, originalScenarioRunner);
 	}
 
 	public LNGScenarioRunner evaluateScenario(@NonNull final LNGScenarioModel originalScenario, @Nullable final URL origURL, @NonNull final LNGScenarioRunner scenarioRunner)
 			throws IOException, IncompleteScenarioException {
-		scenarioRunner.initAndEval(new TransformerExtensionTestModule(), 10000);
+		scenarioRunner.initAndEval();// new TransformerExtensionTestModule(), 10000);
 
 		return scenarioRunner;
 	}
 
-	public LNGScenarioRunner runScenario(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL) throws IOException, IncompleteScenarioException {
+	public LNGScenarioRunner runScenarioWithGCO(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL) throws IOException, IncompleteScenarioException {
 
 		OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
 		optimiserSettings = LNGScenarioRunnerCreator.createExtendedSettings(optimiserSettings);
 
+		// Limit the number of iterations
 		optimiserSettings.getAnnealingSettings().setIterations(10000);
+
+		// Enabled by default for ITS
+		optimiserSettings.setGenerateCharterOuts(true);
+
 		final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunner(originalScenario, optimiserSettings);
 		assert scenarioRunner != null;
-		scenarioRunner.initAndEval(new TransformerExtensionTestModule());
+		scenarioRunner.initAndEval();// new TransformerExtensionTestModule());
 		optimiseScenario(scenarioRunner, origURL, ".properties");
 		return scenarioRunner;
 	}
@@ -220,7 +240,9 @@ public class AbstractOptimisationResultTester {
 		final IMultiStateResult result = scenarioRunner.run();
 
 		boolean checkSolutions = true;
+		// Store the number of extra solutions so we can verify we get the same amount back out
 		if (storeFitnessMap) {
+			// FIXME: Constant
 			props.put("solution-count", Integer.toString(result.getSolutions().size()));
 		} else {
 			int solutionCount = 0;

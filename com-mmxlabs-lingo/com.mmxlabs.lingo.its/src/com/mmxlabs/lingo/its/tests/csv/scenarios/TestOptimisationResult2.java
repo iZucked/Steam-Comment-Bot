@@ -9,12 +9,15 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
 import com.mmxlabs.lingo.its.utils.CSVImporter;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
+import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 
+@RunWith(value = ShiroRunner.class)
 public class TestOptimisationResult2 extends AbstractOptimisationResultTester {
 
 	@Test
@@ -25,6 +28,6 @@ public class TestOptimisationResult2 extends AbstractOptimisationResultTester {
 
 		final LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
 
-		runScenario(scenario, new URL(url.toString() + "fitness"));
+		runScenarioWithGCO(scenario, new URL(url.toString() + "fitness"));
 	}
 }

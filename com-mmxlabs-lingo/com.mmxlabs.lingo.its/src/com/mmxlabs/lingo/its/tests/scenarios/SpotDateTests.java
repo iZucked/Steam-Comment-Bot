@@ -9,6 +9,7 @@ import java.time.LocalDate;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -16,9 +17,11 @@ import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScheduleTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 
+@RunWith(value = ShiroRunner.class)
 public class SpotDateTests extends AbstractOptimisationResultTester {
 
 	@Test
@@ -26,7 +29,7 @@ public class SpotDateTests extends AbstractOptimisationResultTester {
 
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/spot-test-case/spot-date-test-case.lingo");
-		final LNGScenarioRunner runner = evaluateScenario(url);
+		final LNGScenarioRunner runner = evaluateScenarioWithGCO(url);
 
 		Assert.assertNotNull(runner);
 		runner.run();

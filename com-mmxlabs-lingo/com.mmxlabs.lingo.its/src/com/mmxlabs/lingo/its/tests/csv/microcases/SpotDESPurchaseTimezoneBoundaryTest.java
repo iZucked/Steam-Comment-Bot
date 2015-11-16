@@ -45,7 +45,7 @@ public class SpotDESPurchaseTimezoneBoundaryTest extends AbstractOptimisationRes
 
 		final LNGScenarioModel scenario = CSVImporter.importCSVScenario(url.toString());
 
-		final LNGScenarioRunner runner = runScenario(scenario, new URL(url.toString() + "fitness"));
+		final LNGScenarioRunner runner = runScenarioWithGCO(scenario, new URL(url.toString() + "fitness"));
 		// runner.updateScenario();
 		final Schedule schedule = runner.getFinalSchedule();
 		Assert.assertNotNull(schedule);
