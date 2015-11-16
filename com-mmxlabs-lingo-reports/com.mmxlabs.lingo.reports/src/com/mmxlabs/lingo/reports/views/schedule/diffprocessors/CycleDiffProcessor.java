@@ -87,10 +87,6 @@ public class CycleDiffProcessor implements IDiffProcessor {
 			boolean different = false;
 			{
 				final String currentWiring = CargoAllocationUtils.getSalesWiringAsString(referenceRowCargoAllocation);
-				if (currentWiring.contains("KG3")) {
-					int ii = 0;
-				}
-				// if (referenceRow == null) {
 				for (final Row referringRow : referenceRow.getReferringRows()) {
 					final CargoAllocation pinnedCargoAllocation = referringRow.getCargoAllocation();
 					if (pinnedCargoAllocation != null) {
@@ -144,7 +140,7 @@ public class CycleDiffProcessor implements IDiffProcessor {
 					}
 					cycleGroup.getRows().add(r);
 				}
-				
+
 				cycleGroup.setChangeType(ChangeType.WIRING);
 			}
 		} else if (referenceRow.getOpenSlotAllocation() != null) {
@@ -192,56 +188,56 @@ public class CycleDiffProcessor implements IDiffProcessor {
 				}
 			}
 		} else {
-//			final Object target = referenceRow.getTarget();
-//
-//			if (referenceRow.getCycleGroup() != null) {
-//				return;
-//			}
-//			CycleGroup cycleGroup = null;
-//			final Set<EObject> set = equivalancesMap.get(referenceElement);
-//			if (set != null) {
-//				for (final EObject equiv : set) {
-//					final Row r = elementToRowMap.get(equiv);
-//					if (r != null) {
-//						if (r.getCycleGroup() != null) {
-//							assert (cycleGroup == null || r.getCycleGroup() == cycleGroup);
-//							cycleGroup = r.getCycleGroup();
-//						}
-//					}
-//				}
-//			}
-//			if (cycleGroup != null) {
-//				referenceRow.setCycleGroup(cycleGroup);
-//			} else {
-//				cycleGroup = CycleGroupUtils.createOrReturnCycleGroup(table, referenceRow);
-//
-//				if (target instanceof GeneratedCharterOut) {
-//					cycleGroup.setDescription("Charter out (Virt)");
-//				} else if (target instanceof StartEvent) {
-//					cycleGroup.setDescription("Orphan Ballast");
-//				} else if (target instanceof VesselEventVisit) {
-//					final VesselEventVisit vesselEventVisit = (VesselEventVisit) target;
-//					final VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
-//					if (vesselEvent instanceof DryDockEvent) {
-//						cycleGroup.setDescription("Drydock - " + vesselEvent.getName());
-//					} else if (vesselEvent instanceof MaintenanceEvent) {
-//						cycleGroup.setDescription("Maintenance - " + vesselEvent.getName());
-//					} else if (vesselEvent instanceof CharterOutEvent) {
-//						cycleGroup.setDescription("Charter out - " + vesselEvent.getName());
-//					} else {
-//						cycleGroup.setDescription("Event - " + vesselEvent.getName());
-//					}
-//
-//				}
-//			}
-//			if (set != null) {
-//				for (final EObject equiv : set) {
-//					final Row r = elementToRowMap.get(equiv);
-//					if (r != null) {
-//						r.setCycleGroup(cycleGroup);
-//					}
-//				}
-//			}
+			// final Object target = referenceRow.getTarget();
+			//
+			// if (referenceRow.getCycleGroup() != null) {
+			// return;
+			// }
+			// CycleGroup cycleGroup = null;
+			// final Set<EObject> set = equivalancesMap.get(referenceElement);
+			// if (set != null) {
+			// for (final EObject equiv : set) {
+			// final Row r = elementToRowMap.get(equiv);
+			// if (r != null) {
+			// if (r.getCycleGroup() != null) {
+			// assert (cycleGroup == null || r.getCycleGroup() == cycleGroup);
+			// cycleGroup = r.getCycleGroup();
+			// }
+			// }
+			// }
+			// }
+			// if (cycleGroup != null) {
+			// referenceRow.setCycleGroup(cycleGroup);
+			// } else {
+			// cycleGroup = CycleGroupUtils.createOrReturnCycleGroup(table, referenceRow);
+			//
+			// if (target instanceof GeneratedCharterOut) {
+			// cycleGroup.setDescription("Charter out (Virt)");
+			// } else if (target instanceof StartEvent) {
+			// cycleGroup.setDescription("Orphan Ballast");
+			// } else if (target instanceof VesselEventVisit) {
+			// final VesselEventVisit vesselEventVisit = (VesselEventVisit) target;
+			// final VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
+			// if (vesselEvent instanceof DryDockEvent) {
+			// cycleGroup.setDescription("Drydock - " + vesselEvent.getName());
+			// } else if (vesselEvent instanceof MaintenanceEvent) {
+			// cycleGroup.setDescription("Maintenance - " + vesselEvent.getName());
+			// } else if (vesselEvent instanceof CharterOutEvent) {
+			// cycleGroup.setDescription("Charter out - " + vesselEvent.getName());
+			// } else {
+			// cycleGroup.setDescription("Event - " + vesselEvent.getName());
+			// }
+			//
+			// }
+			// }
+			// if (set != null) {
+			// for (final EObject equiv : set) {
+			// final Row r = elementToRowMap.get(equiv);
+			// if (r != null) {
+			// r.setCycleGroup(cycleGroup);
+			// }
+			// }
+			// }
 		}
 	}
 
