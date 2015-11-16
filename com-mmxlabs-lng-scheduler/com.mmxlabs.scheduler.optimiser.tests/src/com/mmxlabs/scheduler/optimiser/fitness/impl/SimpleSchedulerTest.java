@@ -264,7 +264,6 @@ public class SimpleSchedulerTest {
 
 		linearFitnessEvaluator.setOptimisationData(context.getOptimisationData());
 		linearFitnessEvaluator.setInitialSequences(context.getInputSequences(), context.getInputSequences(), evaluationState);
-
 		printSequences(context.getInputSequences());
 
 		final long initialFitness = linearFitnessEvaluator.getBestFitness();
