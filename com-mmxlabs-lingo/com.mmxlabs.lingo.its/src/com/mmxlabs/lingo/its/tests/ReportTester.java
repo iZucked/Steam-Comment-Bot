@@ -4,26 +4,24 @@
  */
 package com.mmxlabs.lingo.its.tests;
 
-import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
+import org.eclipse.core.runtime.FileLocator;
 import org.junit.Assert;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.ServiceReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lingo.reports.IReportContents;
-import com.mmxlabs.lingo.reports.views.fleet.ConfigurableFleetReportView;
-import com.mmxlabs.lingo.reports.views.portrotation.PortRotationReportView;
-import com.mmxlabs.lingo.reports.views.schedule.ConfigurableScheduleReportView;
-import com.mmxlabs.lingo.reports.views.standard.CapacityViolationReportView;
-import com.mmxlabs.lingo.reports.views.standard.CooldownReportView;
-import com.mmxlabs.lingo.reports.views.standard.LatenessReportView;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 
 /**
  * Helper class to open up a view, set the scenario selection provider to the given instance and adapt the result to a {@link IReportContents} instance.
@@ -33,85 +31,57 @@ import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
  */
 public class ReportTester {
 
-	public static final String SCHEDULE_SUMMARY_ID = ConfigurableScheduleReportView.ID;
-	public static final String SCHEDULE_SUMMARY_SHORTNAME = "ScheduleSummary";
+	private static final Logger LOG = LoggerFactory.getLogger(ReportTester.class);
 
-	public static final String PORT_ROTATIONS_ID = PortRotationReportView.ID;
-	public static final String PORT_ROTATIONS_SHORTNAME = "PortRotations";
+	// Never commit as true
+	private static final boolean storeReports = false;
 
-	public static final String VESSEL_REPORT_ID = ConfigurableFleetReportView.ID;
-	public static final String VESSEL_REPORT_SHORTNAME = "VesselReport";
+	public static void testReports(final ScenarioInstance instance, final URL scenarioURL, final String reportID, final String shortName, final String extension) throws Exception {
 
-	public static final String VERTICAL_REPORT_ID = "com.mmxlabs.lingo.reports.verticalreport";
-	public static final String VERTICAL_REPORT_SHORTNAME = "VerticalReport";
+		final LNGScenarioRunner runner = LNGScenarioRunnerCreator.createScenarioRunner((LNGScenarioModel) instance.getInstance());
+		// TODO: Push this higher in API
+		runner.initAndEval(new TransformerExtensionTestModule());
 
-	public static final String LATENESS_REPORT_ID = LatenessReportView.ID;
-	public static final String LATENESS_REPORT_SHORTNAME = "LatenessReport";
+		final ReportTesterHelper reportTester = new ReportTesterHelper();
+		final IReportContents reportContents = reportTester.getReportContents(instance, reportID);
 
-	public static final String CAPACITY_REPORT_ID = CapacityViolationReportView.ID;
-	public static final String CAPACITY_REPORT_SHORTNAME = "CapacityReport";
+		Assert.assertNotNull(reportContents);
+		final String actualContents = reportContents.getStringContents();
+		Assert.assertNotNull(actualContents);
+		if (storeReports) {
 
-	public static final String COOLDOWN_REPORT_ID = CooldownReportView.ID;
-	public static final String COOLDOWN_REPORT_SHORTNAME = "CooldownReport";
+			final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString())).toString().replaceAll(" ", "%20"));
 
-	@Nullable
-	public IReportContents getReportContents(final ScenarioInstance scenario, final String reportID) throws InterruptedException {
-
-		// Get reference to the selection provider service
-		final BundleContext bundleContext = FrameworkUtil.getBundle(ReportTester.class).getBundleContext();
-		final ServiceReference<IScenarioServiceSelectionProvider> serviceReference = bundleContext.getServiceReference(IScenarioServiceSelectionProvider.class);
-		Assert.assertNotNull(serviceReference);
-		final IScenarioServiceSelectionProvider provider = bundleContext.getService(serviceReference);
-		Assert.assertNotNull(provider);
-
-		final IViewPart[] view = new IViewPart[1];
-		final IReportContents[] contents = new IReportContents[1];
-		try {
-
-			// Step 1 open the view, release UI thread
-			Display.getDefault().syncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-					Assert.assertNotNull(activePage);
-					try {
-						view[0] = activePage.showView(reportID);
-						Assert.assertNotNull(view[0]);
-						activePage.activate(view[0]);
-
-					} catch (PartInitException e) {
-						e.printStackTrace();
+			final File f1 = new File(expectedReportOutput.toURI());
+			final String slash = f1.isDirectory() ? "/" : "";
+			final File file2 = new File(f1.getAbsoluteFile() + slash + "reports" + "." + shortName + "." + extension);
+			try (PrintWriter pw = new PrintWriter(file2, StandardCharsets.UTF_8.name())) {
+				pw.print(actualContents);
+			}
+		} else {
+			final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString() + "reports" + "." + shortName + "." + extension)).toString().replaceAll(" ", "%20"));
+			final StringBuilder expectedOutputBuilder = new StringBuilder();
+			{
+				try (InputStream is = expectedReportOutput.openStream(); BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+					String line = reader.readLine();
+					if (line != null) {
+						expectedOutputBuilder.append(line);
+					}
+					while (line != null) {
+						line = reader.readLine();
+						if (line != null) {
+							expectedOutputBuilder.append("\n");
+							expectedOutputBuilder.append(line);
+						}
 					}
 				}
-			});
-
-			// Step two set the new selection, release UI thread
-			Thread.sleep(1000);
-			Thread.yield();
-			Display.getDefault().syncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					provider.deselectAll(true);
-					provider.select(scenario, true);
-				}
-			});
-			Thread.yield();
-			Thread.sleep(1000);
-
-			// Step 3, obtain report contents
-			Display.getDefault().syncExec(new Runnable() {
-
-				@Override
-				public void run() {
-					contents[0] = (IReportContents) view[0].getAdapter(IReportContents.class);
-				}
-			});
-
-		} finally {
-			bundleContext.ungetService(serviceReference);
+			}
+			if (!expectedOutputBuilder.toString().equals(actualContents)) {
+				LOG.warn("Expected " + expectedOutputBuilder.toString());
+				LOG.warn("Actual " + actualContents);
+			}
+			Assert.assertEquals(expectedOutputBuilder.toString(), actualContents);
 		}
-		return contents[0];
 	}
+
 }

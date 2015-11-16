@@ -17,12 +17,13 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.its.tests.category.ReportTest;
 import com.mmxlabs.lingo.its.utils.CSVImporter;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
  * Abstract class to run parameterised tests on report generation. Sub classes should create a method similar to the one below to run test cases. May need to also include the @RunWith annotation.
  * 
  * <pre>
- * @Parameters(name = "{0}")
+ * &#64;Parameters(name = "{0}")
  * 	public static Iterable<Object[]> generateTests() {
  * 		return Arrays.asList(new Object[][] {
  * 				{ "Test Prefix", "scenario path/" }, //
@@ -54,48 +55,49 @@ public abstract class AbstractReportTester_CSV extends AbstractOptimisationResul
 		final Pair<URL, LNGScenarioModel> pair = cache.get(key);
 		final URL url = pair.getFirst();
 		final LNGScenarioModel scenarioModel = pair.getSecond();
-		testReports(scenarioModel, url, reportID, shortName, extension);
+		ScenarioInstance instance = LNGScenarioRunnerCreator.createScenarioInstance(scenarioModel, url);
+		ReportTester.testReports(instance, url, reportID, shortName, extension);
 	}
 
 	@Test
 	@Category(ReportTest.class)
 	public void reportTest_VerticalReport() throws Exception {
-		testReports(ReportTester.VERTICAL_REPORT_ID, ReportTester.VERTICAL_REPORT_SHORTNAME, "html");
+		testReports(ReportTesterHelper.VERTICAL_REPORT_ID, ReportTesterHelper.VERTICAL_REPORT_SHORTNAME, "html");
 	}
 
 	@Test
 	@Category(ReportTest.class)
 	public void reportTest_ScheduleSummary() throws Exception {
-		testReports(ReportTester.SCHEDULE_SUMMARY_ID, ReportTester.SCHEDULE_SUMMARY_SHORTNAME, "html");
+		testReports(ReportTesterHelper.SCHEDULE_SUMMARY_ID, ReportTesterHelper.SCHEDULE_SUMMARY_SHORTNAME, "html");
 	}
 
 	@Test
 	@Category(ReportTest.class)
 	public void reportTest_PortRotations() throws Exception {
-		testReports(ReportTester.PORT_ROTATIONS_ID, ReportTester.PORT_ROTATIONS_SHORTNAME, "html");
+		testReports(ReportTesterHelper.PORT_ROTATIONS_ID, ReportTesterHelper.PORT_ROTATIONS_SHORTNAME, "html");
 	}
 
 	@Test
 	@Category(ReportTest.class)
 	public void testLatenessReport() throws Exception {
-		testReports(ReportTester.LATENESS_REPORT_ID, ReportTester.LATENESS_REPORT_SHORTNAME, "html");
+		testReports(ReportTesterHelper.LATENESS_REPORT_ID, ReportTesterHelper.LATENESS_REPORT_SHORTNAME, "html");
 	}
 
 	@Test
 	@Category(ReportTest.class)
 	public void testCapacityReport() throws Exception {
-		testReports(ReportTester.CAPACITY_REPORT_ID, ReportTester.CAPACITY_REPORT_SHORTNAME, "html");
+		testReports(ReportTesterHelper.CAPACITY_REPORT_ID, ReportTesterHelper.CAPACITY_REPORT_SHORTNAME, "html");
 	}
 
 	@Test
 	@Category(ReportTest.class)
 	public void testVesselReport() throws Exception {
-		testReports(ReportTester.VESSEL_REPORT_ID, ReportTester.VESSEL_REPORT_SHORTNAME, "html");
+		testReports(ReportTesterHelper.VESSEL_REPORT_ID, ReportTesterHelper.VESSEL_REPORT_SHORTNAME, "html");
 	}
 
 	@Test
 	@Category(ReportTest.class)
 	public void testCooldownReport() throws Exception {
-		testReports(ReportTester.COOLDOWN_REPORT_ID, ReportTester.COOLDOWN_REPORT_SHORTNAME, "html");
+		testReports(ReportTesterHelper.COOLDOWN_REPORT_ID, ReportTesterHelper.COOLDOWN_REPORT_SHORTNAME, "html");
 	}
 }
