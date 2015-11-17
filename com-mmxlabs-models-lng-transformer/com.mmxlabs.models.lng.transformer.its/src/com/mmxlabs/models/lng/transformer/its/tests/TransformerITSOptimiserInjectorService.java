@@ -8,16 +8,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.shiro.crypto.OperationMode;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.emf.validation.AbstractModelConstraint;
-import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.jdt.annotation.NonNull;
 import org.ops4j.peaberry.util.TypeLiterals;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.mmxlabs.models.lng.transformer.extensions.charterout.GeneratedCharterOutTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.entities.EntityTransformerExtensionFactory;
@@ -54,8 +49,6 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.VirtualVesselConstraintC
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcessFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
-import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterOutEvaluator;
-import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.impl.DefaultGeneratedCharterOutEvaluator;
 
 public class TransformerITSOptimiserInjectorService implements IOptimiserInjectorService {
 
@@ -108,7 +101,7 @@ public class TransformerITSOptimiserInjectorService implements IOptimiserInjecto
 					}
 					// This bit is always needed for LiNGO ITS
 					// TODO: Split this into two classes, one for transformer ITS and one for LiNGO ITS
-					bind(IGeneratedCharterOutEvaluator.class).to(DefaultGeneratedCharterOutEvaluator.class);
+//					bind(IGeneratedCharterOutEvaluator.class).to(DefaultGeneratedCharterOutEvaluator.class);
 				}
 			};
 		} else if (moduleType == ModuleType.Module_Optimisation) {
@@ -184,25 +177,15 @@ public class TransformerITSOptimiserInjectorService implements IOptimiserInjecto
 		}
 
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new PortTypeConstraintCheckerFactory());
-
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new TravelTimeConstraintCheckerFactory());
-
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new PortExclusionConstraintCheckerFactory());
-
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new VirtualVesselConstraintCheckerFactory());
-
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new SlotGroupCountConstraintCheckerFactory());
-
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new TimeSortConstraintCheckerFactory());
-
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new RestrictedElementsConstraintCheckerFactory());
-
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new ContractCvConstraintCheckerFactory());
-
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new PortCvCompatibilityConstraintCheckerFactory());
-
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new SpotToSpotConstraintCheckerFactory());
-
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new ShippingTypeRequirementConstraintCheckerFactory());
 
 		return constraintCheckerRegistry;
