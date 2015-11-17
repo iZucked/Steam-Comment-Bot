@@ -6,10 +6,13 @@ package com.mmxlabs.lingo.its.tests.scenarios;
 
 import java.util.Arrays;
 
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import com.mmxlabs.lingo.its.tests.AbstractReportTester_LiNGO;
 
+@RunWith(value = Parameterized.class)
 public class TestDemoCasesReports extends AbstractReportTester_LiNGO {
 
 	public TestDemoCasesReports(String name, String scenario) throws Exception {

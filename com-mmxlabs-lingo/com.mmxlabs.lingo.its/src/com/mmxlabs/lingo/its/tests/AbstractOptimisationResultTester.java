@@ -4,32 +4,22 @@
  */
 package com.mmxlabs.lingo.its.tests;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.Collections;
 import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.AfterClass;
@@ -40,11 +30,9 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.lingo.its.internal.Activator;
-import com.mmxlabs.lingo.reports.IReportContents;
+import com.mmxlabs.common.NonNullPair;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalCalendarReportView;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -60,18 +48,15 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
-import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
-import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.models.lng.transformer.chain.IMultiStateResult;
+import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
-import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.migration.scenario.MigrationHelper;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scenario.service.manifest.ManifestPackage;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
 import com.mmxlabs.scenario.service.util.encryption.impl.PassthroughCipherProvider;
 
@@ -89,13 +74,10 @@ import com.mmxlabs.scenario.service.util.encryption.impl.PassthroughCipherProvid
  */
 public class AbstractOptimisationResultTester {
 
-	private static final Logger LOG = LoggerFactory.getLogger(AbstractOptimisationResultTester.class);
-
 	/**
 	 * Toggle between storing fitness names and values in a properties file and testing the current fitnesses against the stored values. Should be run as part of a plugin test.
 	 */
-	private static final boolean storeFitnessMap = false;
-	private static final boolean storeReports = false;
+	protected static final boolean storeFitnessMap = false;
 
 	static {
 		// Trigger EMF initialisation outside of eclipse environment.
@@ -117,15 +99,31 @@ public class AbstractOptimisationResultTester {
 		// Enforce UK Locale Needed for running tests on build server. Keeps date format consistent.
 		Locale.setDefault(Locale.UK);
 
+		// The vertical report can have some current time based properties which break the ITS comparison
 		System.setProperty(AbstractVerticalCalendarReportView.PROPERTY_RUNNING_ITS, Boolean.TRUE.toString());
+
+		// Enable "license" features
+		LicenseFeatures.initialiseFeatureEnablements("optimisation-period", "optimisation-charter-out-generation");
 	}
 
 	// Key prefixes used in the properties file.
-	private static final String originalFitnessesMapName = "originalFitnesses";
-	private static final String endFitnessesMapName = "endFitnesses";
+	protected static final String originalFitnessesMapName = "originalFitnesses";
+	protected static final String endFitnessesMapName = "endFitnesses";
 
 	// // Register a cipher provider with the osgi framework for running these tests
 	private static ServiceRegistration<IScenarioCipherProvider> cipherServiceRef = null;
+
+	protected static ExecutorService executorService;
+
+	@BeforeClass
+	public static void createExecutorService() {
+		executorService = Executors.newFixedThreadPool(1);
+	}
+
+	@AfterClass
+	public static void shutdownExecutorService() {
+		executorService.shutdownNow();
+	}
 
 	@BeforeClass
 	public static void registerCipherProvider() {
@@ -150,218 +148,159 @@ public class AbstractOptimisationResultTester {
 		super();
 	}
 
-	/**
-	 * If run on two separate occasions the fitnesses generated need to be identical. This method tests this by being run twice. The first execution prints out a map that maps the name of the fitness
-	 * to the value to the console. This is copied and pasted into the method. The second execution will test that map against a the fitnesses that have been generated again.
-	 * 
-	 * @throws Exception
-	 * 
-	 * @throws MigrationException
-	 * @throws InterruptedException
-	 */
-	public LNGScenarioRunner runScenario(@NonNull final URL url) throws Exception {
+	//
+	// /**
+	// * If run on two separate occasions the fitnesses generated need to be identical. This method tests this by being run twice. The first execution prints out a map that maps the name of the
+	// fitness
+	// * to the value to the console. This is copied and pasted into the method. The second execution will test that map against a the fitnesses that have been generated again.
+	// *
+	// * @throws Exception
+	// *
+	// * @throws MigrationException
+	// * @throws InterruptedException
+	// */
+	public LNGScenarioRunner runScenarioWithGCO(@NonNull final URL url) throws Exception {
 
-		final LNGScenarioModel originalScenario = getScenarioModelFromURL(url);
+		final LNGScenarioModel originalScenario = LNGScenarioRunnerCreator.getScenarioModelFromURL(url);
 
-		return runScenario(originalScenario, url);
+		return runScenarioWithGCO(originalScenario, url);
 	}
 
-	private LNGScenarioModel getScenarioModelFromURL(final URL url) throws IOException {
-		final URI uri = URI.createURI(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20"));
+	public LNGScenarioRunner evaluateScenarioWithGCO(@NonNull final URL url) throws Exception {
 
-		final BundleContext bundleContext = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class).getBundleContext();
-		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
-		try {
-			final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, bundleContext.getService(serviceReference));
-			final LNGScenarioModel originalScenario = getScenarioModel(instance);
-			return originalScenario;
-		} finally {
-			bundleContext.ungetService(serviceReference);
-		}
+		final LNGScenarioModel originalScenario = LNGScenarioRunnerCreator.getScenarioModelFromURL(url);
+
+		return evaluateScenarioWithGCO(originalScenario, url);
 	}
 
-	public LNGScenarioRunner evaluateScenario(@NonNull final URL url) throws Exception {
+	public LNGScenarioRunner evaluateScenario(@NonNull final URL url, @NonNull final OptimiserSettings optimiserSettings) throws Exception {
 
-		final LNGScenarioModel originalScenario = getScenarioModelFromURL(url);
+		final LNGScenarioModel originalScenario = LNGScenarioRunnerCreator.getScenarioModelFromURL(url);
+		final LNGScenarioRunner originalScenarioRunner = LNGScenarioRunnerCreator.createScenarioRunner(executorService, originalScenario, optimiserSettings);
 
-		return evaluateScenario(originalScenario, url);
+		return evaluateScenario(originalScenario, url, originalScenarioRunner);
 	}
 
-	public LNGScenarioRunner evaluateScenario(@NonNull final URL url, OptimiserSettings optimiserSettings) throws Exception {
+	//
+	public LNGScenarioRunner evaluateScenarioWithGCO(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL) throws IOException, IncompleteScenarioException {
 
-		final LNGScenarioModel originalScenario = getScenarioModelFromURL(url);
-		final ExecutorService executorService = Executors.newSingleThreadExecutor();
-		try {
-			final LNGScenarioRunner originalScenarioRunner = createScenarioRunner(executorService, originalScenario, optimiserSettings);
-			return evaluateScenario(originalScenario, url, originalScenarioRunner);
-		} finally {
-			executorService.shutdownNow();
-		}
-	}
-
-	public LNGScenarioRunner evaluateScenario(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL) throws IOException, IncompleteScenarioException {
-
-		// TODO: Does EcoreUtil.copy work -- do we need to do it here?
 		if (false) {
-			saveScenarioModel(originalScenario);
+			LNGScenarioRunnerCreator.saveScenarioModel(originalScenario, new File("C:\\temp\\test-scenario.lingo"));
 		}
-		final ExecutorService executorService = Executors.newSingleThreadExecutor();
-		try {
-			// Create scenario runner with optimisation params incase we want to run optimisation outside of the opt run method.
-			final LNGScenarioRunner originalScenarioRunner = createScenarioRunner(executorService, originalScenario);
-			originalScenarioRunner.evaluateInitialState();
-			return originalScenarioRunner;
-		} finally {
-			executorService.shutdownNow();
-		}
+
+		OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
+		optimiserSettings = LNGScenarioRunnerCreator.createExtendedSettings(optimiserSettings);
+
+		// Limit the number of iterations
+		optimiserSettings.getAnnealingSettings().setIterations(10_000);
+
+		// Enabled by default for ITS
+		optimiserSettings.setGenerateCharterOuts(true);
+
+		// Create scenario runner with optimisation params incase we want to run optimisation outside of the opt run method.
+		final LNGScenarioRunner originalScenarioRunner = LNGScenarioRunnerCreator.createScenarioRunner(executorService, originalScenario, optimiserSettings);
+		return evaluateScenario(originalScenario, origURL, originalScenarioRunner);
 	}
 
-	public LNGScenarioRunner evaluateScenario(@NonNull final LNGScenarioModel originalScenario, @Nullable final URL origURL, @NonNull LNGScenarioRunner scenarioRunner)
+	public LNGScenarioRunner evaluateScenario(@NonNull final LNGScenarioModel originalScenario, @Nullable final URL origURL, @NonNull final LNGScenarioRunner scenarioRunner)
 			throws IOException, IncompleteScenarioException {
-		// scenarioRunner.initAndEval(new TransformerExtensionTestBootstrapModule(), 10000);
+
 		scenarioRunner.evaluateInitialState();
+
 		return scenarioRunner;
 	}
 
-	private LNGScenarioModel getScenarioModel(final ScenarioInstance instance) throws IOException {
-		MigrationHelper.migrateAndLoad(instance);
+	public LNGScenarioRunner runScenarioWithGCO(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL) throws IOException, IncompleteScenarioException {
 
-		final LNGScenarioModel originalScenario = (LNGScenarioModel) instance.getInstance();
-		return originalScenario;
-	}
+		OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
+		optimiserSettings = LNGScenarioRunnerCreator.createExtendedSettings(optimiserSettings);
 
-	public LNGScenarioRunner runScenario(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL) throws IOException, IncompleteScenarioException {
+		// Limit the number of iterations
+		optimiserSettings.getAnnealingSettings().setIterations(10000);
 
-		final ExecutorService executorService = Executors.newSingleThreadExecutor();
-		try {
-			final LNGScenarioRunner scenarioRunner = createScenarioRunner(executorService, originalScenario);
-			assert scenarioRunner != null;
-			return runScenario(originalScenario, origURL, scenarioRunner);
-		} finally {
-			executorService.shutdownNow();
-		}
-	}
+		// Enabled by default for ITS
+		optimiserSettings.setGenerateCharterOuts(true);
 
-	/**
-	 * If run on two separate occasions the fitnesses generated need to be identical. This method tests this by being run twice. The first execution prints out a map that maps the name of the fitness
-	 * to the value to the console. This is copied and pasted into the method. The second execution will test that map against a the fitnesses that have been generated again.
-	 * 
-	 * @throws IOException
-	 * @throws IncompleteScenarioException
-	 * @throws MigrationException
-	 * @throws InterruptedException
-	 */
-	public LNGScenarioRunner runScenario(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL, @NonNull LNGScenarioRunner scenarioRunner)
-			throws IOException, IncompleteScenarioException {
-
-		if (false) {
-			saveScenarioModel(originalScenario);
-		}
-
-		// Limit number of iterations to keep runtime down.
-		// scenarioRunner.initAndEval(new TransformerExtensionTestBootstrapModule(), 10000);
+		final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunner(executorService, originalScenario, optimiserSettings);
+		assert scenarioRunner != null;
 		scenarioRunner.evaluateInitialState();
+		optimiseScenario(scenarioRunner, origURL, ".properties");
+		return scenarioRunner;
+	}
 
-		Schedule intialSchedule = scenarioRunner.getIntialSchedule();
+	public static void optimiseBasicScenario(@NonNull final LNGScenarioRunner scenarioRunner, @NonNull final URL origURL, @NonNull final String propertiesSuffix) throws IOException {
+		scenarioRunner.evaluateInitialState();
+		optimiseScenario(scenarioRunner, origURL, propertiesSuffix);
+	}
+
+	public static void optimiseScenario(@NonNull final LNGScenarioRunner scenarioRunner, @NonNull final URL origURL, @NonNull final String propertiesSuffix) throws IOException {
+
+		final Schedule intialSchedule = scenarioRunner.getIntialSchedule();
 		Assert.assertNotNull(intialSchedule);
 
 		final EList<Fitness> currentOriginalFitnesses = intialSchedule.getFitnesses();
+		final URL propertiesURL = new URL(origURL.toString() + propertiesSuffix);
+		final Properties props = TesterUtil.getProperties(propertiesURL, storeFitnessMap);
 		if (!storeFitnessMap) {
-			final URL propsURL = new URL(FileLocator.toFileURL(new URL(origURL.toString() + ".properties")).toString().replaceAll(" ", "%20"));
-
-			final Properties props = new Properties();
-			props.load(propsURL.openStream());
-
 			// Assert old and new are equal
-			testOriginalAndCurrentFitnesses(props, originalFitnessesMapName, currentOriginalFitnesses);
+			TesterUtil.testOriginalAndCurrentFitnesses(props, originalFitnessesMapName, currentOriginalFitnesses);
+		} else {
+			TesterUtil.storeFitnesses(props, originalFitnessesMapName, currentOriginalFitnesses);
 		}
 
-		scenarioRunner.run();
+		final IMultiStateResult result = scenarioRunner.run();
 
-		// get the fitnesses.
-		Schedule finalSchedule = scenarioRunner.getFinalSchedule();
-		Assert.assertNotNull(finalSchedule);
-
-		final EList<Fitness> currentEndFitnesses = finalSchedule.getFitnesses();
-
+		boolean checkSolutions = true;
+		// Store the number of extra solutions so we can verify we get the same amount back out
 		if (storeFitnessMap) {
+			// FIXME: Constant
+			props.put("solution-count", Integer.toString(result.getSolutions().size()));
+		} else {
+			int solutionCount = 0;
+			if (props.contains("solution-count")) {
+				solutionCount = Integer.valueOf(props.getProperty("solution-count")).intValue();
+				Assert.assertEquals(solutionCount, result.getSolutions().size());
+			} else {
+				checkSolutions = false;
+			}
+		}
 
-			/**
-			 * Extend to save properties in a sorted order for ease of reading
-			 */
-			@SuppressWarnings("serial")
-			final Properties props = new Properties() {
-				@Override
-				public Set<Object> keySet() {
-					return Collections.unmodifiableSet(new TreeSet<Object>(super.keySet()));
+		// Check final optimised result
+		{
+			final List<Fitness> currentEndFitnesses = TesterUtil.getFitnessFromExtraAnnotations(result.getBestSolution().getSecond());
+			if (storeFitnessMap) {
+				TesterUtil.storeFitnesses(props, endFitnessesMapName, currentEndFitnesses);
+			} else {
+				// Assert old and new are equal
+				TesterUtil.testOriginalAndCurrentFitnesses(props, endFitnessesMapName, currentEndFitnesses);
+			}
+		}
+		if (!result.getSolutions().isEmpty()) {
+			int i = 0;
+			for (final NonNullPair<ISequences, Map<String, Object>> p : result.getSolutions()) {
+				final List<Fitness> currentEndFitnesses = TesterUtil.getFitnessFromExtraAnnotations(p.getSecond());
+				final String mapName = String.format("solution-%d", i++);
+				if (storeFitnessMap) {
+					TesterUtil.storeFitnesses(props, mapName, currentEndFitnesses);
+				} else {
+					// Check for old test cases where we do not have this data stored, we do not want to abort here.
+					if (checkSolutions) {
+						// Assert old and new are equal
+						TesterUtil.testOriginalAndCurrentFitnesses(props, mapName, currentEndFitnesses);
+					}
 				}
-
-				@Override
-				public synchronized Enumeration<Object> keys() {
-					return Collections.enumeration(new TreeSet<Object>(super.keySet()));
-				}
-			};
-
-			storeFitnesses(props, originalFitnessesMapName, currentOriginalFitnesses);
-			storeFitnesses(props, endFitnessesMapName, currentEndFitnesses);
-
-			// {
-
-			try {
-				final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(origURL.toString() + ".properties")).toString().replaceAll(" ", "%20"));
-
-				// final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(origURL.toString())).toString().replaceAll(" ", "%20"));
-				final File file2 = new File(expectedReportOutput.toURI());
-				// final File file2 = new File(f1.getAbsoluteFile() + ".properties");
-				try (FileOutputStream out = new FileOutputStream(file2)) {
-					props.store(out, "Created by " + AbstractOptimisationResultTester.class.getName());
-				}
-			} catch (final URISyntaxException e) {
-				e.printStackTrace();
 			}
 
-		} else {
-			final URL propsURL = new URL(FileLocator.toFileURL(new URL(origURL.toString() + ".properties")).toString().replaceAll(" ", "%20"));
-
-			final Properties props = new Properties();
-			props.load(propsURL.openStream());
-
-			// Assert old and new are equal
-			// testOriginalAndCurrentFitnesses(props, originalFitnessesMapName, currentOriginalFitnesses);
-			testOriginalAndCurrentFitnesses(props, endFitnessesMapName, currentEndFitnesses);
+			if (storeFitnessMap) {
+				try {
+					final URL expectedReportOutput = new URL(FileLocator.toFileURL(origURL).toString().replaceAll(" ", "%20") + propertiesSuffix);
+					final File file2 = new File(expectedReportOutput.toURI());
+					TesterUtil.saveProperties(props, file2);
+				} catch (final URISyntaxException e) {
+					e.printStackTrace();
+				}
+			}
 		}
-		return scenarioRunner;
-	}
-
-	private LNGScenarioRunner createScenarioRunner(final @NonNull ExecutorService executorService, final LNGScenarioModel originalScenario) {
-		OptimiserSettings createDefaultSettings = LNGScenarioRunnerUtils.createDefaultSettings();
-		createDefaultSettings.getAnnealingSettings().setIterations(10000);
-		return createScenarioRunner(executorService, originalScenario, createDefaultSettings);
-	}
-
-	private LNGScenarioRunner createScenarioRunner(final @NonNull ExecutorService executorService, final LNGScenarioModel originalScenario, OptimiserSettings settings) {
-		final LNGScenarioRunner originalScenarioRunner = new LNGScenarioRunner(executorService, originalScenario, settings, new TransformerExtensionTestBootstrapModule(),
-				LNGTransformerHelper.HINT_OPTIMISE_LSO);
-		return originalScenarioRunner;
-	}
-
-	private void saveScenarioModel(@NonNull final LNGScenarioModel scenario) throws IOException {
-		saveScenarioModel(scenario, new File("C:/temp/scen.lingo"));
-	}
-
-	private void saveScenarioModel(@NonNull final LNGScenarioModel scenario, @NonNull File destinationFile) throws IOException {
-
-		final LNGScenarioModel copy = duplicate(scenario);
-		final IMigrationRegistry migrationRegistry = Activator.getDefault().getMigrationRegistry();
-		final String context = migrationRegistry.getDefaultMigrationContext();
-		if (context == null) {
-			throw new NullPointerException("Context cannot be null");
-		}
-		int version = migrationRegistry.getLatestContextVersion(context);
-		if (version < 0) {
-			version = migrationRegistry.getLastReleaseVersion(context);
-		}
-		ScenarioTools.storeToFile(copy, destinationFile, context, version);
 	}
 
 	/**
@@ -373,74 +312,6 @@ public class AbstractOptimisationResultTester {
 	 *            A list of fitnesses to store.
 	 */
 
-	private void storeFitnesses(final Properties props, final String mapName, final EList<Fitness> fitnesses) {
-
-		for (final Fitness f : fitnesses) {
-			props.setProperty(mapName + "." + f.getName(), Long.toString(f.getFitnessValue()));
-		}
-	}
-
-	/**
-	 * Test the original (previously generated) fitnesses against the current. Also test that the total of the original and current are equal.
-	 */
-	private void testOriginalAndCurrentFitnesses(final Properties props, final String mapName, final EList<Fitness> currentFitnesses) {
-
-		long totalOriginalFitness = 0;
-		long totalCurrentFitness = 0;
-		System.out.println(">>>> " + mapName + " <<<<");
-		// Information dump
-		for (final Fitness f : currentFitnesses) {
-
-			// get the values
-			final long originalFitnessValue = Long.parseLong(props.getProperty(mapName + "." + f.getName(), "0"));
-			final long currentFitness = f.getFitnessValue();
-			System.out.println(f.getName() + ": " + originalFitnessValue + " -> " + currentFitness);
-		}
-
-		// Grab expected total fitness from props
-		for (final Object fName : props.keySet()) {
-			final String str = fName.toString();
-			if (str.startsWith(mapName + ".")) {
-				final long originalFitnessValue = Long.parseLong(props.getProperty(str, "0"));
-				// add to total
-				totalOriginalFitness += originalFitnessValue;
-			}
-		}
-
-		// Validation
-		final Set<String> seenFitnesses = new HashSet<String>();
-		for (final Fitness f : currentFitnesses) {
-
-			// get the values
-			final long originalFitnessValue = Long.parseLong(props.getProperty(mapName + "." + f.getName(), "0"));
-			final long currentFitness = f.getFitnessValue();
-
-			// test they are equal
-			Assert.assertEquals(f.getName() + " - Previous fitness matches current fitness", originalFitnessValue, currentFitness);
-
-			// add to total
-			totalCurrentFitness += currentFitness;
-
-			seenFitnesses.add(mapName + "." + f.getName());
-		}
-
-		// test totals are equal
-		Assert.assertEquals("Total original fitnesses equal current fitnesses", totalOriginalFitness, totalCurrentFitness);
-
-		// Check that the expected fitness names appeared in the output
-		for (final Object fName : props.keySet()) {
-			final String str = fName.toString();
-			if (str.startsWith(mapName + ".")) {
-				Assert.assertTrue(seenFitnesses.contains(fName));
-			}
-		}
-	}
-
-	LNGScenarioModel duplicate(final LNGScenarioModel original) {
-
-		return EcoreUtil.copy(original);
-	}
-
 	public void testReports(final URL scenarioURL, final String reportID, final String shortName, final String extension) throws Exception {
 
 		final URI uri = URI.createURI(FileLocator.toFileURL(scenarioURL).toString().replaceAll(" ", "%20"));
@@ -450,65 +321,9 @@ public class AbstractOptimisationResultTester {
 		try {
 			final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, bundleContext.getService(serviceReference));
 			MigrationHelper.migrateAndLoad(instance);
-			testReports(instance, scenarioURL, reportID, shortName, extension);
+			ReportTester.testReports(executorService, instance, scenarioURL, reportID, shortName, extension);
 		} finally {
 			bundleContext.ungetService(serviceReference);
 		}
-	}
-
-	public void testReports(final LNGScenarioModel model, final URL scenarioURL, final String reportID, final String shortName, final String extension) throws Exception {
-		final ScenarioInstance scenarioInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
-		scenarioInstance.setMetadata(ScenarioServiceFactory.eINSTANCE.createMetadata());
-		scenarioInstance.setName(scenarioURL.getPath());
-		scenarioInstance.setInstance(model);
-		testReports(scenarioInstance, new URL(scenarioURL.toString()), reportID, shortName, extension);
-	}
-
-	public void testReports(final ScenarioInstance instance, final URL scenarioURL, final String reportID, final String shortName, final String extension) throws Exception {
-
-		final LNGScenarioModel originalScenario = (LNGScenarioModel) instance.getInstance();
-		final LNGScenarioRunner runner = evaluateScenario(originalScenario, scenarioURL);
-
-		final ReportTester reportTester = new ReportTester();
-		final IReportContents reportContents = reportTester.getReportContents(instance, reportID);
-
-		Assert.assertNotNull(reportContents);
-		final String actualContents = reportContents.getStringContents();
-		Assert.assertNotNull(actualContents);
-		if (storeReports) {
-
-			final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString())).toString().replaceAll(" ", "%20"));
-
-			final File f1 = new File(expectedReportOutput.toURI());
-			final String slash = f1.isDirectory() ? "/" : "";
-			final File file2 = new File(f1.getAbsoluteFile() + slash + "reports" + "." + shortName + "." + extension);
-			try (PrintWriter pw = new PrintWriter(file2, StandardCharsets.UTF_8.name())) {
-				pw.print(actualContents);
-			}
-		} else {
-			final URL expectedReportOutput = new URL(FileLocator.toFileURL(new URL(scenarioURL.toString() + "reports" + "." + shortName + "." + extension)).toString().replaceAll(" ", "%20"));
-			final StringBuilder expectedOutputBuilder = new StringBuilder();
-			{
-				try (InputStream is = expectedReportOutput.openStream(); BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
-					String line = reader.readLine();
-					if (line != null) {
-						expectedOutputBuilder.append(line);
-					}
-					while (line != null) {
-						line = reader.readLine();
-						if (line != null) {
-							expectedOutputBuilder.append("\n");
-							expectedOutputBuilder.append(line);
-						}
-					}
-				}
-			}
-			if (!expectedOutputBuilder.toString().equals(actualContents)) {
-				LOG.warn("Expected " + expectedOutputBuilder.toString());
-				LOG.warn("Actual " + actualContents);
-			}
-			Assert.assertEquals(expectedOutputBuilder.toString(), actualContents);
-		}
-
 	}
 }

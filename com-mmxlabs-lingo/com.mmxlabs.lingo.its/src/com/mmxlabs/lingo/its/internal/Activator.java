@@ -5,11 +5,14 @@
 package com.mmxlabs.lingo.its.internal;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.ops4j.peaberry.Export;
 import org.osgi.framework.BundleContext;
 
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModesRegistry;
+import com.mmxlabs.models.lng.transformer.ui.parametermodes.impl.ParameterModesExtensionModule;
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.util.importer.registry.ExtensionConfigurationModule;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
@@ -27,8 +30,12 @@ public class Activator extends AbstractUIPlugin {
 
 	@Inject
 	private IImporterRegistry importerRegistry;
+
 	@Inject
 	private IMigrationRegistry migrationRegistry;
+
+	@Inject
+	private Export<IParameterModesRegistry> parameterModesRegistry;
 
 	/**
 	 * The constructor
@@ -46,7 +53,8 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		Injector injector = Guice.createInjector(new ExtensionConfigurationModule(getBundle().getBundleContext()));
+		// Bind our module together with the hooks to the eclipse registry to get plugin extensions.
+		Injector injector = Guice.createInjector(new ExtensionConfigurationModule(getBundle().getBundleContext()), new ParameterModesExtensionModule());
 		injector.injectMembers(this);
 	}
 
@@ -59,6 +67,10 @@ public class Activator extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
+		
+
+		parameterModesRegistry.unput();
+		parameterModesRegistry = null;
 	}
 
 	/**
@@ -78,4 +90,7 @@ public class Activator extends AbstractUIPlugin {
 		return migrationRegistry;
 	}
 
+	public IParameterModesRegistry getParameterModesRegistry() {
+		return parameterModesRegistry.get();
+	}
 }
