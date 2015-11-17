@@ -16,6 +16,8 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -170,47 +172,51 @@ public class HeadlessApplication implements IApplication {
 		// Create logging module
 		final Module loggingModule = createLoggingModule();
 
-		final LNGScenarioRunner runner = new LNGScenarioRunner(rootObject, null, LNGScenarioRunnerUtils.createExtendedSettings(optimiserSettings), LNGSchedulerJobUtils.createLocalEditingDomain(),
-				loggingModule, localOverrides, LNGTransformerHelper.HINT_OPTIMISE_LSO);
+		ExecutorService executorService = Executors.newFixedThreadPool(1);
+		try {
+			final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, rootObject, null, LNGScenarioRunnerUtils.createExtendedSettings(optimiserSettings),
+					LNGSchedulerJobUtils.createLocalEditingDomain(), loggingModule, localOverrides, LNGTransformerHelper.HINT_OPTIMISE_LSO);
 
-		for (final IRunExporter ex : exporters) {
-			ex.setScenarioRunner(runner);
+			for (final IRunExporter ex : exporters) {
+				ex.setScenarioRunner(runner);
+			}
+			final long startTime = System.currentTimeMillis();
+			runner.evaluateInitialState();
+			System.out.println("LNGResult(");
+			System.out.println("\tscenario='" + scenarioFile + "',");
+			if (outputFile != null) {
+				System.out.println("\toutput='" + outputFile + "',");
+			}
+			System.out.println("\titerations=" + optimiserSettings.getAnnealingSettings().getIterations() + ",");
+			System.out.println("\tseed=" + optimiserSettings.getSeed() + ",");
+			System.out.println("\tcooling=" + optimiserSettings.getAnnealingSettings().getCooling() + ",");
+			System.out.println("\tepochLength=" + optimiserSettings.getAnnealingSettings().getEpochLength() + ",");
+			System.out.println("\ttemp=" + optimiserSettings.getAnnealingSettings().getInitialTemperature() + ",");
+
+			System.err.println("Starting run...");
+
+			runner.run();
+
+			final long runTime = System.currentTimeMillis() - startTime;
+			final Schedule finalSchedule = runner.getSchedule();
+			if (finalSchedule == null) {
+				System.err.println("Error optimising scenario");
+			}
+
+			System.out.println("\truntime=" + runTime + ",");
+
+			System.err.println("Optimised!");
+
+			if (outputFile != null) {
+				saveScenario(Paths.get(path, outputFolderName, outputFile).toString(), instance);
+			}
+
+			exportData(runner.getInjector(), path, outputFolderName, exporters, jsonFilePath);
+
+			runner.dispose();
+		} finally {
+			executorService.shutdownNow();
 		}
-		final long startTime = System.currentTimeMillis();
-		runner.evaluateInitialState();
-		System.out.println("LNGResult(");
-		System.out.println("\tscenario='" + scenarioFile + "',");
-		if (outputFile != null) {
-			System.out.println("\toutput='" + outputFile + "',");
-		}
-		System.out.println("\titerations=" + optimiserSettings.getAnnealingSettings().getIterations() + ",");
-		System.out.println("\tseed=" + optimiserSettings.getSeed() + ",");
-		System.out.println("\tcooling=" + optimiserSettings.getAnnealingSettings().getCooling() + ",");
-		System.out.println("\tepochLength=" + optimiserSettings.getAnnealingSettings().getEpochLength() + ",");
-		System.out.println("\ttemp=" + optimiserSettings.getAnnealingSettings().getInitialTemperature() + ",");
-
-		System.err.println("Starting run...");
-
-		runner.run();
-
-		final long runTime = System.currentTimeMillis() - startTime;
-		final Schedule finalSchedule = runner.getFinalSchedule();
-		if (finalSchedule == null) {
-			System.err.println("Error optimising scenario");
-		}
-
-		System.out.println("\truntime=" + runTime + ",");
-
-		System.err.println("Optimised!");
-
-		if (outputFile != null) {
-			saveScenario(Paths.get(path, outputFolderName, outputFile).toString(), instance);
-		}
-
-		exportData(runner.getInjector(), path, outputFolderName, exporters, jsonFilePath);
-
-		runner.dispose();
-		
 		return IApplication.EXIT_OK;
 
 	}

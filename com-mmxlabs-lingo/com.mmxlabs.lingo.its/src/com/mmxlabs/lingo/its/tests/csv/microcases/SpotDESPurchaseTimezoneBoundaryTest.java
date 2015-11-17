@@ -47,7 +47,7 @@ public class SpotDESPurchaseTimezoneBoundaryTest extends AbstractOptimisationRes
 
 		final LNGScenarioRunner runner = runScenarioWithGCO(scenario, new URL(url.toString() + "fitness"));
 		// runner.updateScenario();
-		final Schedule schedule = runner.getFinalSchedule();
+		final Schedule schedule = runner.getSchedule();
 		Assert.assertNotNull(schedule);
 
 		// Expect only two spot cargoes in Jan
