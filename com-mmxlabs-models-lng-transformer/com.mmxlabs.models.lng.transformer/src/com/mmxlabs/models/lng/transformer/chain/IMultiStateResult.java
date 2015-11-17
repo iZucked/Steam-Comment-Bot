@@ -1,15 +1,16 @@
 package com.mmxlabs.models.lng.transformer.chain;
 
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequences;
 
 /**
- * Results storing raw {@link ISequences} to {@link IAnnotatedSolution} pairings
+ * Results storing raw {@link ISequences} to {@link Map<String, Object>} extra annotations pairings
  * 
  * @author Simon Goodall
  *
@@ -17,8 +18,8 @@ import com.mmxlabs.optimiser.core.ISequences;
 public interface IMultiStateResult {
 
 	@NonNull
-	Pair<ISequences, IAnnotatedSolution> getBestSolution();
+	NonNullPair<ISequences, Map<String, Object>> getBestSolution();
 
 	@NonNull
-	List<Pair<ISequences, IAnnotatedSolution>> getSolutions();
+	List<NonNullPair<ISequences, Map<String, Object>>> getSolutions();
 }

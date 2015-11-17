@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGOptimisationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_OptimiserSettingsModule;
+import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -115,7 +116,7 @@ public class LNGHillClimbOptimiserTransformerUnit implements ILNGStateTransforme
 			if (startSolution == null) {
 				throw new IllegalStateException("Unable to get starting state");
 			}
-			inputState = new MultiStateResult(inputSequences, startSolution);
+			inputState = new MultiStateResult(inputSequences, LNGSchedulerJobUtils.extractOptimisationAnnotations(startSolution));
 		}
 	}
 
@@ -153,7 +154,7 @@ public class LNGHillClimbOptimiserTransformerUnit implements ILNGStateTransforme
 				final IAnnotatedSolution bestSolution = optimiser.getBestSolution();
 				final ISequences bestRawSequences = optimiser.getBestRawSequences();
 				if (bestRawSequences != null && bestSolution != null) {
-					return new MultiStateResult(bestRawSequences, bestSolution);
+					return new MultiStateResult(bestRawSequences, LNGSchedulerJobUtils.extractOptimisationAnnotations(bestSolution));
 				} else {
 					throw new RuntimeException("Unable to optimise");
 				}

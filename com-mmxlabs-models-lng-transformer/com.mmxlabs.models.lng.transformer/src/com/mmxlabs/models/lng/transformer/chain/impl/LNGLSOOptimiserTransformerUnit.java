@@ -33,6 +33,7 @@ import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGOptimisationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_OptimiserSettingsModule;
+import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -152,10 +153,7 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 			}
 
 			private Map<String, Long> createFitessMap(final IMultiStateResult r) {
-
-				final Pair<ISequences, IAnnotatedSolution> s = r.getBestSolution();
-				final IAnnotatedSolution second = s.getSecond();
-				return second.getGeneralAnnotation(OptimiserConstants.G_AI_fitnessComponents, Map.class);
+				return (Map<String, Long>) r.getBestSolution().getSecond().get(OptimiserConstants.G_AI_fitnessComponents);
 			}
 
 			@Override
@@ -225,7 +223,7 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 			if (startSolution == null) {
 				throw new IllegalStateException("Unable to get starting state");
 			}
-			inputState = new MultiStateResult(inputSequences, startSolution);
+			inputState = new MultiStateResult(inputSequences, LNGSchedulerJobUtils.extractOptimisationAnnotations(startSolution));
 		}
 	}
 
@@ -267,7 +265,7 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 				final ISequences bestRawSequences = optimiser.getBestRawSequences();
 
 				if (bestRawSequences != null && bestSolution != null) {
-					return new MultiStateResult(bestRawSequences, bestSolution);
+					return new MultiStateResult(bestRawSequences, LNGSchedulerJobUtils.extractOptimisationAnnotations(bestSolution));
 				} else {
 					throw new RuntimeException("Unable to optimise");
 				}

@@ -5,7 +5,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.shiro.crypto.hash.Hash;
+import org.apache.shiro.util.ByteSource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
@@ -14,6 +17,7 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.name.Names;
+import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
@@ -108,11 +112,11 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 						parent.getScenarioService().delete(c);
 					}
 				}
-				final List<Pair<ISequences, IAnnotatedSolution>> solutions = pState.getSolutions();
+				final List<NonNullPair<ISequences, Map<String, Object>>> solutions = pState.getSolutions();
 				monitor.beginTask("Saving action sets", solutions.size());
 				try {
 					int changeSetIdx = 0;
-					for (final Pair<ISequences, IAnnotatedSolution> changeSet : solutions) {
+					for (final NonNullPair<ISequences, Map<String, Object>> changeSet : solutions) {
 						String newName;
 						if (changeSetIdx == 0) {
 							newName = "ActionSet-base";
@@ -213,20 +217,7 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 				ISequences inputRawSequences = injector.getInstance(Key.get(ISequences.class, Names.named("Input")));
 				final boolean foundBetterResult = instance.optimise(inputRawSequences, new SubProgressMonitor(monitor, 95), 3);
 
-				// Store the results
-				List<ISequences> solutions = instance.getBestRawSolutions();
-				if (solutions == null || solutions.isEmpty()) {
-					// throw new IllegalStateException("No results found");
-					solutions = Collections.singletonList(inputRawSequences);
-				}
-
-				final List<Pair<ISequences, IAnnotatedSolution>> annotatedSolutions = new ArrayList<>(solutions.size());
-				for (final ISequences sequences : solutions) {
-					final IAnnotatedSolution annotatedSolution = LNGSchedulerJobUtils.evaluateCurrentState(injector, injector.getInstance(IOptimisationData.class), sequences);
-					assert annotatedSolution != null;
-					annotatedSolutions.add(new Pair<>(sequences, annotatedSolution));
-				}
-				return new MultiStateResult(annotatedSolutions.get(0), annotatedSolutions);
+				return instance.getBestSolution();
 			} finally {
 				monitor.done();
 			}

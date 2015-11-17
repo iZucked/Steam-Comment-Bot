@@ -1,6 +1,7 @@
 package com.mmxlabs.models.lng.transformer.chain;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -97,10 +98,7 @@ public class MultiChainRunner implements IChainRunner {
 
 	@NonNull
 	private static IMultiStateResult createInitialResult(final @NonNull ISequences sequences) {
-
-		final Pair<ISequences, IAnnotatedSolution> p = new Pair<>(sequences, null);
-		final List<Pair<ISequences, IAnnotatedSolution>> l = Lists.newArrayList(p);
-		return new MultiStateResult(p, l);
+		return new MultiStateResult(sequences, new HashMap<>());
 	}
 
 	static class MyRunnable implements Callable<IMultiStateResult> {

@@ -8,7 +8,6 @@ import java.time.YearMonth;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.apache.shiro.SecurityUtils;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
@@ -45,6 +44,7 @@ import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.parameters.Objective;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -320,7 +320,7 @@ public final class OptimisationHelper {
 						ParametersPackage.eINSTANCE.getUserSettings_PeriodStart());
 				final Option optEnd = dialog.addOption(DataSection.Controls, group, editingDomain, "Up to start of (mm/yyyy)", copy, defaultSettings, DataType.MonthYear,
 						ParametersPackage.eINSTANCE.getUserSettings_PeriodEnd());
-				if (!SecurityUtils.getSubject().isPermitted("features:optimisation-period")) {
+				if (!LicenseFeatures.isPermitted("features:optimisation-period")) {
 					optStart.enabled = false;
 					optEnd.enabled = false;
 				}
@@ -347,7 +347,7 @@ public final class OptimisationHelper {
 			choiceData.addChoice("Off", Boolean.FALSE);
 			choiceData.addChoice("On", Boolean.TRUE);
 
-			choiceData.enabled = SecurityUtils.getSubject().isPermitted("features:optimisation-charter-out-generation");
+			choiceData.enabled = LicenseFeatures.isPermitted("features:optimisation-charter-out-generation");
 			// dialog.addOption(DataSection.Main, null, editingDomian, "Similarity", copy, defaultSettings, DataType.Choice, choiceData,
 			// ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
 			dialog.addOption(DataSection.Toggles, null, editingDomain, "Generate charter outs: ", copy, defaultSettings, DataType.Choice, choiceData,
@@ -368,7 +368,7 @@ public final class OptimisationHelper {
 				choiceData.addChoice("High", SimilarityMode.HIGH);
 				// choiceData.addChoice("All", SimilarityMode.ALL);
 
-				choiceData.enabled = SecurityUtils.getSubject().isPermitted("features:optimisation-similarity");
+				choiceData.enabled = LicenseFeatures.isPermitted("features:optimisation-similarity");
 
 				final Option option = dialog.addOption(DataSection.Controls, group, editingDomain, "", copy, defaultSettings, DataType.Choice, choiceData,
 						ParametersPackage.Literals.USER_SETTINGS__SIMILARITY_MODE);
@@ -383,7 +383,7 @@ public final class OptimisationHelper {
 				choiceData.addChoice("Off", Boolean.FALSE);
 				choiceData.addChoice("On", Boolean.TRUE);
 
-				choiceData.enabled = SecurityUtils.getSubject().isPermitted("features:optimisation-actionset");
+				choiceData.enabled = LicenseFeatures.isPermitted("features:optimisation-actionset");
 
 				final Option option = dialog.addOption(DataSection.Controls, group, editingDomain, " ", copy, defaultSettings, DataType.Choice, choiceData,
 						ParametersPackage.eINSTANCE.getUserSettings_BuildActionSets());
@@ -520,17 +520,17 @@ public final class OptimisationHelper {
 	}
 
 	private static void resetDisabledFeatures(@NonNull final UserSettings copy) {
-		if (!SecurityUtils.getSubject().isPermitted("features:optimisation-actionset")) {
+		if (!LicenseFeatures.isPermitted("features:optimisation-actionset")) {
 			copy.setBuildActionSets(false);
 		}
-		if (!SecurityUtils.getSubject().isPermitted("features:optimisation-period")) {
+		if (!LicenseFeatures.isPermitted("features:optimisation-period")) {
 			copy.unsetPeriodStart();
 			copy.unsetPeriodEnd();
 		}
-		if (!SecurityUtils.getSubject().isPermitted("features:optimisation-charter-out-generation")) {
+		if (!LicenseFeatures.isPermitted("features:optimisation-charter-out-generation")) {
 			copy.setGenerateCharterOuts(false);
 		}
-		if (!SecurityUtils.getSubject().isPermitted("features:optimisation-similarity")) {
+		if (!LicenseFeatures.isPermitted("features:optimisation-similarity")) {
 			copy.setSimilarityMode(SimilarityMode.OFF);
 		}
 	}

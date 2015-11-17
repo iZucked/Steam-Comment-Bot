@@ -13,7 +13,7 @@ import org.junit.runners.model.InitializationError;
 import com.mmxlabs.license.features.LicenseFeatures;
 
 /**
- * Runner for test cases run outside of main application to initalise the Shiro Framework
+ * Runner for test cases run outside of main application to initialise the Shiro Framework
  * 
  * @author Simon Goodall
  * 
@@ -27,10 +27,11 @@ public class ShiroRunner extends BlockJUnit4ClassRunner {
 
 	private void initAccessControl() {
 		// Initialise feature enablements
-		LicenseFeatures.initialiseFeatureEnablements("optimisation-period");
+		LicenseFeatures.initialiseFeatureEnablements("optimisation-period", "optimisation-charter-out-generation");
 
 		// Login our default user
 		final Subject subject = SecurityUtils.getSubject();
+		subject.logout();
 		subject.login(new UsernamePasswordToken("user", "password"));
 	}
 

@@ -4,13 +4,10 @@
  */
 package com.mmxlabs.models.lng.transformer.inject.modules;
 
-import static org.ops4j.peaberry.Peaberry.service;
-
 import java.time.ZonedDateTime;
 
 import javax.inject.Singleton;
 
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.AbstractModule;
@@ -27,8 +24,6 @@ import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
-import com.mmxlabs.optimiser.core.IEvaluationContext;
-import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.calculators.IDivertableDESShippingTimesCalculator;

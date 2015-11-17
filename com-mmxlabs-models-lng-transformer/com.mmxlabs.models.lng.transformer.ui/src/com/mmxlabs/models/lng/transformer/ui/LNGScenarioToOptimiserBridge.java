@@ -462,23 +462,6 @@ public class LNGScenarioToOptimiserBridge {
 		return scenarioInstance;
 	}
 
-	/**
-	 * TODO: Currently this is now the only reason to keep the {@link IAnnotatedSolution} in the API in addition to the raw {@link ISequences}
-	 * 
-	 * @param annotatedSolution
-	 * @return
-	 */
-	@NonNull
-	public static Map<String, Object> extractOptimisationAnnotations(@Nullable final IAnnotatedSolution annotatedSolution) {
-		final Map<String, Object> extraAnnotations = new HashMap<>();
-		if (annotatedSolution != null) {
-			extraAnnotations.put(OptimiserConstants.G_AI_fitnessComponents, annotatedSolution.getGeneralAnnotation(OptimiserConstants.G_AI_fitnessComponents, Map.class));
-			extraAnnotations.put(OptimiserConstants.G_AI_iterations, annotatedSolution.getGeneralAnnotation(OptimiserConstants.G_AI_iterations, Integer.class));
-			extraAnnotations.put(OptimiserConstants.G_AI_runtime, annotatedSolution.getGeneralAnnotation(OptimiserConstants.G_AI_runtime, Long.class));
-		}
-		return extraAnnotations;
-	}
-
 	@NonNull
 	public LNGDataTransformer getDataTransformer() {
 		return optimiserDataTransformer;

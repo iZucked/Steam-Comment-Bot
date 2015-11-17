@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.models.lng.transformer</groupId>
 	<artifactId>com.mmxlabs.models.lng.transformer.parent</artifactId>
-	<version>3.10.3-SNAPSHOT</version>
+	<version>3.10.4-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<parent>
@@ -32,6 +32,8 @@
 		<module>com.mmxlabs.models.lng.transformer.extensions</module>
 
 		<module>com.mmxlabs.models.lng.transformer.ui</module>
+
+		<module>com.mmxlabs.models.lng.transformer.ui.tests</module>
 
 		<module>com.mmxlabs.models.lng.liveevaluator</module>
 
@@ -126,7 +128,7 @@
 	<repositories>
 		<repository>
 			<id>com-mmxlabs-models-datetime.hg</id>
-			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/datetime/com.mmxlabs.models.datetime.p2/2.1.0.RELEASE/com.mmxlabs.models.datetime.p2-2.1.0.RELEASE.zip-unzip/</url>
+			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/datetime/com.mmxlabs.models.datetime.p2/2.1.1.RELEASE/com.mmxlabs.models.datetime.p2-2.1.1.RELEASE.zip-unzip/</url>
 			<layout>p2</layout>
 		</repository>
 		<repository>

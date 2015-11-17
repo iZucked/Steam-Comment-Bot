@@ -1,17 +1,14 @@
 package com.mmxlabs.models.lng.transformer.chain;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.google.common.collect.Lists;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.chain.impl.MultiStateResult;
-import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequences;
 
 /**
@@ -80,9 +77,6 @@ public class ChainRunner implements IChainRunner {
 
 	@NonNull
 	private static IMultiStateResult createInitialResult(final @NonNull ISequences sequences) {
-
-		final Pair<ISequences, IAnnotatedSolution> p = new Pair<>(sequences, null);
-		final List<Pair<ISequences, IAnnotatedSolution>> l = Lists.newArrayList(p);
-		return new MultiStateResult(p, l);
+		return new MultiStateResult(sequences, new HashMap<>());
 	}
 }

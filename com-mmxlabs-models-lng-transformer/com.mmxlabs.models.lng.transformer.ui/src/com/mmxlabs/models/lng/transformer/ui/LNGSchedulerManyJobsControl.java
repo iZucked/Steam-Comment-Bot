@@ -10,7 +10,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.shiro.SecurityUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.QualifiedName;
@@ -26,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
@@ -154,7 +154,7 @@ public class LNGSchedulerManyJobsControl extends AbstractEclipseJobControl {
 		controlService = Executors.newFixedThreadPool(numberOfThreads);
 		// .. this executor is for the optimisation itself to avoid blocking the control executor
 		runnerService = LNGScenarioChainBuilder.createExecutorService(); // Disable optimisation in P&L testing phase
-		if (SecurityUtils.getSubject().isPermitted("features:phase-pnl-testing")) {
+		if (LicenseFeatures.isPermitted("features:phase-pnl-testing")) {
 			throw new RuntimeException("Optimisation is disabled during the P&L testing phase.");
 		}
 

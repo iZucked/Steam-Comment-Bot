@@ -4,23 +4,14 @@
  */
 package com.mmxlabs.models.lng.transformer;
 
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.swt.widgets.DateTime;
 
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 
 /**

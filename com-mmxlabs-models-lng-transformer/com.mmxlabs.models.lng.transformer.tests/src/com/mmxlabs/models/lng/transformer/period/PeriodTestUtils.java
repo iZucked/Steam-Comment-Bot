@@ -14,6 +14,7 @@ import java.util.Arrays;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -369,6 +370,7 @@ public class PeriodTestUtils {
 		return new CollectedAssignment(Arrays.asList(elements), vesselAvailability);
 	}
 
+	@NonNull
 	public static EditingDomain createEditingDomain(final LNGScenarioModel scenarioModel) {
 		final EditingDomain editingDomain = LNGSchedulerJobUtils.createLocalEditingDomain();
 

@@ -3,7 +3,6 @@ package com.mmxlabs.models.lng.transformer.chain.impl;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
@@ -91,7 +90,7 @@ public class LNGEvaluationTransformerUnit implements ILNGStateTransformerUnit {
 
 			final IAnnotatedSolution annotatedSolution = LNGSchedulerJobUtils.evaluateCurrentState(injector, injector.getInstance(IOptimisationData.class), inputSequences);
 			assert annotatedSolution != null;
-			inputState = new MultiStateResult(inputSequences, annotatedSolution);
+			inputState = new MultiStateResult(inputSequences, LNGSchedulerJobUtils.extractOptimisationAnnotations(annotatedSolution));
 		}
 	}
 

@@ -67,13 +67,13 @@ import com.mmxlabs.optimiser.core.IEvaluationContext;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.optimiser.core.impl.EvaluationContext;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scenario.service.util.MMXAdaptersAwareCommandStack;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
@@ -98,9 +98,6 @@ public class LNGSchedulerJobUtils {
 	 * @param editingDomain
 	 * @param modelEntityMap
 	 * @param extraAnnotations
-	 * @param solution
-	 * @param lockKey
-	 * @param solutionCurrentProgress
 	 * @param LABEL_PREFIX
 	 * @return
 	 */
@@ -114,8 +111,7 @@ public class LNGSchedulerJobUtils {
 			final Injector childInjector = injector.createChildInjector(new ExporterExtensionsModule());
 			childInjector.injectMembers(exporter);
 		}
-		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
-			scope.enter();
+		{
 
 			final IOptimisationData optimisationData = injector.getInstance(IOptimisationData.class);
 			final IAnnotatedSolution solution = LNGSchedulerJobUtils.evaluateCurrentState(injector, optimisationData, rawSequences);
@@ -508,6 +504,22 @@ public class LNGSchedulerJobUtils {
 		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 		final EditingDomain ed = new AdapterFactoryEditingDomain(adapterFactory, commandStack);
 		return ed;
+	}
+
+	/**
+	 * 
+	 * @param annotatedSolution
+	 * @return
+	 */
+	@NonNull
+	public static Map<String, Object> extractOptimisationAnnotations(@Nullable final IAnnotatedSolution annotatedSolution) {
+		final Map<String, Object> extraAnnotations = new HashMap<>();
+		if (annotatedSolution != null) {
+			extraAnnotations.put(OptimiserConstants.G_AI_fitnessComponents, annotatedSolution.getGeneralAnnotation(OptimiserConstants.G_AI_fitnessComponents, Map.class));
+			extraAnnotations.put(OptimiserConstants.G_AI_iterations, annotatedSolution.getGeneralAnnotation(OptimiserConstants.G_AI_iterations, Integer.class));
+			extraAnnotations.put(OptimiserConstants.G_AI_runtime, annotatedSolution.getGeneralAnnotation(OptimiserConstants.G_AI_runtime, Long.class));
+		}
+		return extraAnnotations;
 	}
 
 }

@@ -105,18 +105,18 @@ public class ScenarioUtils {
 
 			objectives.add(createObjective(parametersFactory, CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME, 1));
 			objectives.add(createObjective(parametersFactory, CargoSchedulerFitnessCoreFactory.CAPACITY_COMPONENT_NAME, 0.1));
-			objectives.add(createObjective(parametersFactory, NonOptionalSlotFitnessCoreFactory.NAME, 3000000));
+			objectives.add(createObjective(parametersFactory, NonOptionalSlotFitnessCoreFactory.NAME, 3_000_000));
 			objectives.add(createObjective(parametersFactory, "SimilarityFitnessCore", 1.0));
 		}
 
 		final AnnealingSettings annealingSettings = parametersFactory.createAnnealingSettings();
-		annealingSettings.setIterations(10000);
+		annealingSettings.setIterations(1_000_000);
 		annealingSettings.setCooling(0.96);
 		annealingSettings.setEpochLength(900); // 900 for full; 300 for period
-		annealingSettings.setInitialTemperature(1000000);
+		annealingSettings.setInitialTemperature(1_000_000);
 		// restarts
 		annealingSettings.setRestarting(false);
-		annealingSettings.setRestartIterationsThreshold(500000);
+		annealingSettings.setRestartIterationsThreshold(500_000);
 		settings.setAnnealingSettings(annealingSettings);
 
 		final OptimisationRange range = parametersFactory.createOptimisationRange();
@@ -129,7 +129,8 @@ public class ScenarioUtils {
 		// hill climbing
 		IndividualSolutionImprovementSettings solutionImprovementSettings = parametersFactory.createIndividualSolutionImprovementSettings();
 		solutionImprovementSettings.setImprovingSolutions(true);
-		solutionImprovementSettings.setIterations(500);
+		solutionImprovementSettings.setIterations(50_000);
+
 		settings.setSolutionImprovementSettings(solutionImprovementSettings);
 		return settings;
 	}
@@ -150,8 +151,8 @@ public class ScenarioUtils {
 
 		similaritySettings.setLowInterval(createSimilarityInterval(8, 0));
 		similaritySettings.setMedInterval(createSimilarityInterval(16, 0));
-		similaritySettings.setHighInterval(createSimilarityInterval(30, 500000));
-		similaritySettings.setOutOfBoundsWeight(5000000);
+		similaritySettings.setHighInterval(createSimilarityInterval(30, 500_000));
+		similaritySettings.setOutOfBoundsWeight(5_000_000);
 
 		return similaritySettings;
 	}
@@ -160,9 +161,9 @@ public class ScenarioUtils {
 		final SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
 
 		similaritySettings.setLowInterval(createSimilarityInterval(8, 0));
-		similaritySettings.setMedInterval(createSimilarityInterval(16, 250000));
-		similaritySettings.setHighInterval(createSimilarityInterval(30, 500000));
-		similaritySettings.setOutOfBoundsWeight(1000000);
+		similaritySettings.setMedInterval(createSimilarityInterval(16, 250_000));
+		similaritySettings.setHighInterval(createSimilarityInterval(30, 500_000));
+		similaritySettings.setOutOfBoundsWeight(1_000_000);
 
 		return similaritySettings;
 	}
@@ -170,10 +171,10 @@ public class ScenarioUtils {
 	public static SimilaritySettings createHighSimilaritySettings() {
 		final SimilaritySettings similaritySettings = ParametersFactory.eINSTANCE.createSimilaritySettings();
 
-		similaritySettings.setLowInterval(createSimilarityInterval(8, 250000));
-		similaritySettings.setMedInterval(createSimilarityInterval(16, 500000));
-		similaritySettings.setHighInterval(createSimilarityInterval(30, 1000000));
-		similaritySettings.setOutOfBoundsWeight(5000000);
+		similaritySettings.setLowInterval(createSimilarityInterval(8, 250_000));
+		similaritySettings.setMedInterval(createSimilarityInterval(16, 500_000));
+		similaritySettings.setHighInterval(createSimilarityInterval(30, 1_000_000));
+		similaritySettings.setOutOfBoundsWeight(5_000_000);
 
 		return similaritySettings;
 	}

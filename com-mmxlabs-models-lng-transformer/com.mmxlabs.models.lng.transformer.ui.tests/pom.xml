@@ -1,0 +1,75 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>com.mmxlabs.models.lng.transformer.parent</artifactId>
+		<groupId>com.mmxlabs.models.lng.transformer</groupId>
+		<version>3.10.4-SNAPSHOT</version>
+	</parent>
+	<artifactId>com.mmxlabs.models.lng.transformer.ui.tests</artifactId>
+	<version>3.10.4-SNAPSHOT</version>
+	<packaging>eclipse-test-plugin</packaging>
+
+	<build>
+
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<configuration>
+
+					<dependency-resolution>
+						<extraRequirements>
+							<requirement>
+								<type>eclipse-plugin</type>
+								<id>org.hamcrest</id>
+								<versionRange>0.0.0</versionRange>
+							</requirement>
+						</extraRequirements>
+					</dependency-resolution>
+					
+				</configuration>
+			</plugin>
+
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
+				<configuration>
+					<failIfNoTests>false</failIfNoTests>
+
+					<product>org.eclipse.sdk.ide</product>
+					<application>org.eclipse.ui.ide.workbench</application>
+
+					<dependencies>
+
+						<!-- Logging plug-ins -->
+						<dependency>
+							<type>eclipse-plugin</type>
+							<artifactId>ch.qos.logback.core</artifactId>
+							<version>0.0.0</version>
+						</dependency>
+						<dependency>
+							<type>eclipse-plugin</type>
+							<artifactId>ch.qos.logback.classic</artifactId>
+							<version>0.0.0</version>
+						</dependency>
+						<dependency>
+							<type>eclipse-plugin</type>
+							<artifactId>ch.qos.logback.slf4j</artifactId>
+							<version>0.0.0</version>
+						</dependency>
+						<dependency>
+							<type>eclipse-plugin</type>
+							<artifactId>com.mmxlabs.models.lng.transformer.ui</artifactId>
+							<version>0.0.0</version>
+						</dependency>
+
+					</dependencies>
+
+				</configuration>
+			</plugin>
+		</plugins>
+
+	</build>
+</project>

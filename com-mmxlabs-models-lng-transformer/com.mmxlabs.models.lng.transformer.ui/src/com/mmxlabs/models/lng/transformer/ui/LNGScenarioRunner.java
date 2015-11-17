@@ -66,7 +66,7 @@ public class LNGScenarioRunner {
 	}
 
 	public LNGScenarioRunner(@NonNull ExecutorService exectorService, @NonNull final LNGScenarioModel scenarioModel, @Nullable final ScenarioInstance scenarioInstance,
-			@NonNull final OptimiserSettings optimiserSettings, final EditingDomain editingDomain, final String... initialHints) {
+			@NonNull final OptimiserSettings optimiserSettings, @NonNull final EditingDomain editingDomain, final String... initialHints) {
 		this(exectorService, scenarioModel, scenarioInstance, optimiserSettings, editingDomain, null, null, initialHints);
 	}
 
@@ -110,7 +110,7 @@ public class LNGScenarioRunner {
 		final IMultiStateResult result = chainRunner.getInitialState();
 
 		final ISequences startRawSequences = result.getBestSolution().getFirst();
-		final Map<String, Object> extraAnnotations = scenarioToOptimiserBridge.extractOptimisationAnnotations(result.getBestSolution().getSecond());
+		final Map<String, Object> extraAnnotations = result.getBestSolution().getSecond();
 		initialSchedule = scenarioToOptimiserBridge.overwrite(0, startRawSequences, extraAnnotations);
 
 		// initialSchedule= ScenarioModelUtil.getScheduleModel(scenarioModel).getSchedule();
@@ -119,8 +119,8 @@ public class LNGScenarioRunner {
 		return initialSchedule;
 	}
 
-	public void run() {
-		runWithProgress(new NullProgressMonitor());
+	public IMultiStateResult run() {
+		return runWithProgress(new NullProgressMonitor());
 	}
 
 	/**
@@ -128,7 +128,9 @@ public class LNGScenarioRunner {
 	 * 
 	 * @param progressMonitor
 	 */
-	public void runWithProgress(final @NonNull IProgressMonitor progressMonitor) {
+
+	@NonNull
+	public IMultiStateResult runWithProgress(final @NonNull IProgressMonitor progressMonitor) {
 		// assert createOptimiser;
 
 		// TODO: Replace with originalScenario.getScheduleModel().getSchedule()
@@ -136,10 +138,12 @@ public class LNGScenarioRunner {
 			evaluateInitialState();
 		}
 
-		final IMultiStateResult p = chainRunner.run(progressMonitor);
+		final IMultiStateResult result = chainRunner.run(progressMonitor);
 
-		finalSchedule = scenarioToOptimiserBridge.overwrite(100, p.getBestSolution().getFirst(), scenarioToOptimiserBridge.extractOptimisationAnnotations(p.getBestSolution().getSecond()));
+		finalSchedule = scenarioToOptimiserBridge.overwrite(100, result.getBestSolution().getFirst(), result.getBestSolution().getSecond());
 		log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
+
+		return result;
 	}
 
 	// TODO: There should only be one schedule, not initial and final. Not sure what state the initial schedule will be in.

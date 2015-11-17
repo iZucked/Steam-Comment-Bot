@@ -5,14 +5,18 @@
 package com.mmxlabs.models.lng.transformer.period;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -37,8 +41,28 @@ public class InclusionCheckerTests {
 		Mockito.when(slot.getWindowEndWithSlotOrPortTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 9));
 
 		final PeriodRecord periodRecord = new PeriodRecord();
+		final Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
+		Assert.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(slot, objectToPortVisitMap, periodRecord));
+	}
 
-		Assert.assertEquals(new Pair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(slot, periodRecord));
+	@Test
+	public void testSlotInclusion_NoBounds_Late() {
+
+		final InclusionChecker checker = new InclusionChecker();
+
+		final Slot slot = Mockito.mock(Slot.class);
+
+		Mockito.when(slot.getWindowStartWithSlotOrPortTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 8));
+		Mockito.when(slot.getWindowEndWithSlotOrPortTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 9));
+
+		final PeriodRecord periodRecord = new PeriodRecord();
+		final Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
+
+		// Arrives late
+		final PortVisit portVisit = Mockito.mock(PortVisit.class);
+		Mockito.when(portVisit.getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 10));
+
+		Assert.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(slot, objectToPortVisitMap, periodRecord));
 	}
 
 	@Test
@@ -52,13 +76,40 @@ public class InclusionCheckerTests {
 		final Slot slot = Mockito.mock(Slot.class);
 		Mockito.when(slot.getWindowEndWithSlotOrPortTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 9));
 
+		final Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
+
 		// Classified as inside
 		Mockito.when(slot.getWindowStartWithSlotOrPortTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 8, 0));
-		Assert.assertEquals(new Pair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(slot, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(slot, objectToPortVisitMap, periodRecord));
 
 		// One hour later, classified as outside
 		Mockito.when(slot.getWindowStartWithSlotOrPortTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 8, 1));
-		Assert.assertEquals(new Pair<>(InclusionType.Out, Position.After), checker.getObjectInclusionType(slot, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.Out, Position.After), checker.getObjectInclusionType(slot, objectToPortVisitMap, periodRecord));
+	}
+
+	@Test
+	public void testSlotInclusion_UpperBound_Late() {
+
+		final InclusionChecker checker = new InclusionChecker();
+
+		final PeriodRecord periodRecord = new PeriodRecord();
+		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 8);
+
+		final Slot slot = Mockito.mock(Slot.class);
+		Mockito.when(slot.getWindowStartWithSlotOrPortTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 7, 0));
+
+		final Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
+		final PortVisit portVisit = Mockito.mock(PortVisit.class);
+		objectToPortVisitMap.put(slot, portVisit);
+
+		// Arrives late
+		Mockito.when(portVisit.getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 8, 0));
+		// Classified as inside due to window
+		Assert.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(slot, objectToPortVisitMap, periodRecord));
+
+		// One hour later, still in due to window
+		Mockito.when(portVisit.getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 8, 1));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(slot, objectToPortVisitMap, periodRecord));
 	}
 
 	@Test
@@ -72,13 +123,77 @@ public class InclusionCheckerTests {
 		final Slot slot = Mockito.mock(Slot.class);
 		Mockito.when(slot.getWindowStartWithSlotOrPortTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 7, 0));
 
+		final Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
+
 		// Classified as outside
 		Mockito.when(slot.getWindowEndWithSlotOrPortTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 7, 23));
-		Assert.assertEquals(new Pair<>(InclusionType.Out, Position.Before), checker.getObjectInclusionType(slot, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.Out, Position.Before), checker.getObjectInclusionType(slot, objectToPortVisitMap, periodRecord));
 
-		// One hour later, classified as inside
+		// Classified as outside as we use time window
 		Mockito.when(slot.getWindowEndWithSlotOrPortTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 8, 0));
-		Assert.assertEquals(new Pair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(slot, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(slot, objectToPortVisitMap, periodRecord));
+	}
+
+	@Test
+	public void testCargoInclusion_LowerBounds_Late() {
+
+		final InclusionChecker checker = new InclusionChecker();
+
+		final Cargo cargo = Mockito.mock(Cargo.class);
+		final LoadSlot loadSlot = Mockito.mock(LoadSlot.class);
+		final DischargeSlot dischargeSlot = Mockito.mock(DischargeSlot.class);
+
+		final EList<Slot> slotsList = new BasicEList<Slot>();
+		slotsList.add(loadSlot);
+		slotsList.add(dischargeSlot);
+		Mockito.when(cargo.getSlots()).thenReturn(slotsList);
+		Mockito.when(cargo.getSortedSlots()).thenReturn(slotsList);
+
+		Mockito.when(loadSlot.getWindowStartWithSlotOrPortTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 8));
+		Mockito.when(loadSlot.getWindowEndWithSlotOrPortTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 9));
+
+		Mockito.when(dischargeSlot.getWindowStartWithSlotOrPortTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 15));
+		Mockito.when(dischargeSlot.getWindowEndWithSlotOrPortTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 16));
+
+		final PeriodRecord periodRecord = new PeriodRecord();
+
+		final Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
+
+		final PortVisit loadPortVisit = Mockito.mock(PortVisit.class);
+		objectToPortVisitMap.put(loadSlot, loadPortVisit);
+
+		final PortVisit dischargePortVisit = Mockito.mock(PortVisit.class);
+		objectToPortVisitMap.put(dischargeSlot, dischargePortVisit);
+
+		// Completely out
+		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 16, 1);
+		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 20);
+		Mockito.when(dischargePortVisit.getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 15));
+		Mockito.when(dischargePortVisit.getEnd()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 16));
+
+		Assert.assertEquals(new NonNullPair<>(InclusionType.Out, Position.Before), checker.getObjectInclusionType(cargo, objectToPortVisitMap, periodRecord));
+
+		// Discharge slot is late enough to to be in boundary area
+		Mockito.when(dischargePortVisit.getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 17));
+		Mockito.when(dischargePortVisit.getEnd()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 18));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.Boundary, Position.Before), checker.getObjectInclusionType(cargo, objectToPortVisitMap, periodRecord));
+
+		// Load slot in boundary area
+		Mockito.when(loadPortVisit.getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 17));
+		Mockito.when(loadPortVisit.getEnd()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 18));
+		Mockito.when(dischargePortVisit.getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 24));
+		Mockito.when(dischargePortVisit.getEnd()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 25));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.Boundary, Position.Before), checker.getObjectInclusionType(cargo, objectToPortVisitMap, periodRecord));
+
+		// Completely in
+		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 7);
+		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 8);
+		
+		Mockito.when(loadPortVisit.getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 21));
+		Mockito.when(loadPortVisit.getEnd()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 22));
+		Mockito.when(dischargePortVisit.getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 24));
+		Mockito.when(dischargePortVisit.getEnd()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 25));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(cargo, objectToPortVisitMap, periodRecord));
 	}
 
 	@Test
@@ -103,8 +218,9 @@ public class InclusionCheckerTests {
 		Mockito.when(dischargeSlot.getWindowEndWithSlotOrPortTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 16));
 
 		final PeriodRecord periodRecord = new PeriodRecord();
+		final Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 
-		Assert.assertEquals(new Pair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(cargo, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(cargo, objectToPortVisitMap, periodRecord));
 	}
 
 	@Test
@@ -130,25 +246,27 @@ public class InclusionCheckerTests {
 
 		final PeriodRecord periodRecord = new PeriodRecord();
 
+		final Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
+
 		// Completely out
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 16, 1);
 		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 17);
-		Assert.assertEquals(new Pair<>(InclusionType.Out, Position.Before), checker.getObjectInclusionType(cargo, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.Out, Position.Before), checker.getObjectInclusionType(cargo, objectToPortVisitMap, periodRecord));
 
 		// Discharge slot in boundary area
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 16);
 		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 18);
-		Assert.assertEquals(new Pair<>(InclusionType.Boundary, Position.Before), checker.getObjectInclusionType(cargo, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.Boundary, Position.Before), checker.getObjectInclusionType(cargo, objectToPortVisitMap, periodRecord));
 
 		// Load slot in boundary area
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 8);
 		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 10);
-		Assert.assertEquals(new Pair<>(InclusionType.Boundary, Position.Before), checker.getObjectInclusionType(cargo, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.Boundary, Position.Before), checker.getObjectInclusionType(cargo, objectToPortVisitMap, periodRecord));
 
 		// Completely in
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 7);
 		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 8);
-		Assert.assertEquals(new Pair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(cargo, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(cargo, objectToPortVisitMap, periodRecord));
 	}
 
 	@Test
@@ -173,26 +291,94 @@ public class InclusionCheckerTests {
 		Mockito.when(dischargeSlot.getWindowEndWithSlotOrPortTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 16));
 
 		final PeriodRecord periodRecord = new PeriodRecord();
+		final Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 
 		// Completely out
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 7);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 7, 23);
-		Assert.assertEquals(new Pair<>(InclusionType.Out, Position.After), checker.getObjectInclusionType(cargo, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.Out, Position.After), checker.getObjectInclusionType(cargo, objectToPortVisitMap, periodRecord));
 
 		// Load slot in boundary area
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 7);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 8);
-		Assert.assertEquals(new Pair<>(InclusionType.Boundary, Position.After), checker.getObjectInclusionType(cargo, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.Boundary, Position.After), checker.getObjectInclusionType(cargo, objectToPortVisitMap, periodRecord));
 
 		// Discharge slot in boundary area
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 15);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 15, 23);
-		Assert.assertEquals(new Pair<>(InclusionType.Boundary, Position.After), checker.getObjectInclusionType(cargo, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.Boundary, Position.After), checker.getObjectInclusionType(cargo, objectToPortVisitMap, periodRecord));
 
 		// Completely in
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 16, 0);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 17);
-		Assert.assertEquals(new Pair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(cargo, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(cargo, objectToPortVisitMap, periodRecord));
+	}
+
+	@Ignore ("WIP")
+	@Test
+	public void testCargoInclusion_UpperBounds_Late() {
+
+		final InclusionChecker checker = new InclusionChecker();
+
+		final Cargo cargo = Mockito.mock(Cargo.class);
+		final LoadSlot loadSlot = Mockito.mock(LoadSlot.class);
+		final DischargeSlot dischargeSlot = Mockito.mock(DischargeSlot.class);
+
+		final EList<Slot> slotsList = new BasicEList<Slot>();
+		slotsList.add(loadSlot);
+		slotsList.add(dischargeSlot);
+		Mockito.when(cargo.getSlots()).thenReturn(slotsList);
+		Mockito.when(cargo.getSortedSlots()).thenReturn(slotsList);
+
+		Mockito.when(loadSlot.getWindowStartWithSlotOrPortTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 8));
+		Mockito.when(loadSlot.getWindowEndWithSlotOrPortTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 9));
+
+		Mockito.when(dischargeSlot.getWindowStartWithSlotOrPortTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 15));
+		Mockito.when(dischargeSlot.getWindowEndWithSlotOrPortTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 16));
+
+		final PeriodRecord periodRecord = new PeriodRecord();
+
+		final Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
+
+		final PortVisit loadPortVisit = Mockito.mock(PortVisit.class);
+		objectToPortVisitMap.put(loadSlot, loadPortVisit);
+
+		final PortVisit dischargePortVisit = Mockito.mock(PortVisit.class);
+		objectToPortVisitMap.put(dischargeSlot, dischargePortVisit);
+
+
+		// Completely out
+		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 20);
+		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 22);
+		
+		
+		Mockito.when(loadPortVisit.getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 22,1));
+		Mockito.when(loadPortVisit.getEnd()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 24));
+		Mockito.when(dischargePortVisit.getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 26));
+		Mockito.when(dischargePortVisit.getEnd()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 27));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.Out, Position.After), checker.getObjectInclusionType(cargo, objectToPortVisitMap, periodRecord));
+
+		// Load slot in boundary area
+		Mockito.when(loadPortVisit.getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 20));
+		Mockito.when(loadPortVisit.getEnd()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 21));
+		Mockito.when(dischargePortVisit.getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 26));
+		Mockito.when(dischargePortVisit.getEnd()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 27));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.Boundary, Position.After), checker.getObjectInclusionType(cargo, objectToPortVisitMap, periodRecord));
+
+		// Discharge slot in boundary area
+		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 15);
+		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 15, 23);
+		
+		Mockito.when(loadPortVisit.getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 15));
+		Mockito.when(loadPortVisit.getEnd()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 16));
+		Mockito.when(dischargePortVisit.getStart()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 20));
+		Mockito.when(dischargePortVisit.getEnd()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 21));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.Boundary, Position.After), checker.getObjectInclusionType(cargo, objectToPortVisitMap, periodRecord));
+
+		// Completely in
+		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 16, 0);
+		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 17);
+		Assert.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(cargo, objectToPortVisitMap, periodRecord));
 	}
 
 	@Test
@@ -217,48 +403,49 @@ public class InclusionCheckerTests {
 		Mockito.when(dischargeSlot.getWindowEndWithSlotOrPortTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 16));
 
 		final PeriodRecord periodRecord = new PeriodRecord();
+		final Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 
 		// Completely out (cargo before period)
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 16, 1);
 		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 17);
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 18);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 19);
-		Assert.assertEquals(new Pair<>(InclusionType.Out, Position.Before), checker.getObjectInclusionType(cargo, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.Out, Position.Before), checker.getObjectInclusionType(cargo, objectToPortVisitMap, periodRecord));
 
 		// Completely out (cargo after period)
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 5);
 		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 6);
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 7);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 7, 23);
-		Assert.assertEquals(new Pair<>(InclusionType.Out, Position.After), checker.getObjectInclusionType(cargo, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.Out, Position.After), checker.getObjectInclusionType(cargo, objectToPortVisitMap, periodRecord));
 
 		// Intersect lower bound
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 10);
 		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 11);
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 16);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 17);
-		Assert.assertEquals(new Pair<>(InclusionType.Boundary, Position.Before), checker.getObjectInclusionType(cargo, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.Boundary, Position.Before), checker.getObjectInclusionType(cargo, objectToPortVisitMap, periodRecord));
 
 		// Intersect upper bound
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 7);
 		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 8);
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 15);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 16);
-		Assert.assertEquals(new Pair<>(InclusionType.Boundary, Position.After), checker.getObjectInclusionType(cargo, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.Boundary, Position.After), checker.getObjectInclusionType(cargo, objectToPortVisitMap, periodRecord));
 
 		// Completely in
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 7);
 		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 8);
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 16);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 17);
-		Assert.assertEquals(new Pair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(cargo, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(cargo, objectToPortVisitMap, periodRecord));
 
 		// Intersect both boundaries
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 8);
 		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 9);
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 15);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 16);
-		Assert.assertEquals(new Pair<>(InclusionType.Boundary, Position.Both), checker.getObjectInclusionType(cargo, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.Boundary, Position.Both), checker.getObjectInclusionType(cargo, objectToPortVisitMap, periodRecord));
 	}
 
 	@Test
@@ -273,8 +460,9 @@ public class InclusionCheckerTests {
 		Mockito.when(event.getDurationInDays()).thenReturn(2);
 
 		final PeriodRecord periodRecord = new PeriodRecord();
+		final Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 
-		Assert.assertEquals(new Pair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(event, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(event, objectToPortVisitMap, periodRecord));
 	}
 
 	@Test
@@ -289,31 +477,32 @@ public class InclusionCheckerTests {
 		Mockito.when(event.getDurationInDays()).thenReturn(2);
 
 		final PeriodRecord periodRecord = new PeriodRecord();
+		final Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 5);
 		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 6);
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 7);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 7, 23);
 
-		Assert.assertEquals(new Pair<>(InclusionType.Out, Position.After), checker.getObjectInclusionType(event, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.Out, Position.After), checker.getObjectInclusionType(event, objectToPortVisitMap, periodRecord));
 
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 8);
 		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 9);
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 13);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 14);
-		Assert.assertEquals(new Pair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(event, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(event, objectToPortVisitMap, periodRecord));
 
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 10);
 		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 10);
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 10);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 11);
-		Assert.assertEquals(new Pair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(event, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(event, objectToPortVisitMap, periodRecord));
 
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 11, 1);
 		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 12);
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 13);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 14);
-		Assert.assertEquals(new Pair<>(InclusionType.Out, Position.Before), checker.getObjectInclusionType(event, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.Out, Position.Before), checker.getObjectInclusionType(event, objectToPortVisitMap, periodRecord));
 	}
 
 	@Test
@@ -329,7 +518,9 @@ public class InclusionCheckerTests {
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 7);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 7, 23);
 
-		Assert.assertEquals(new Pair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(vesselAvailability, periodRecord));
+		final Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
+
+		Assert.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(vesselAvailability, objectToPortVisitMap, periodRecord));
 	}
 
 	@Test
@@ -340,8 +531,9 @@ public class InclusionCheckerTests {
 		final VesselAvailability vesselAvailability = Mockito.mock(VesselAvailability.class);
 
 		final PeriodRecord periodRecord = new PeriodRecord();
+		final Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 
-		Assert.assertEquals(new Pair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(vesselAvailability, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(vesselAvailability, objectToPortVisitMap, periodRecord));
 
 		Mockito.when(vesselAvailability.isSetStartAfter()).thenReturn(Boolean.TRUE);
 		Mockito.when(vesselAvailability.isSetStartBy()).thenReturn(Boolean.TRUE);
@@ -353,7 +545,7 @@ public class InclusionCheckerTests {
 		Mockito.when(vesselAvailability.getEndAfter()).thenReturn(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 8, 0));
 		Mockito.when(vesselAvailability.getEndBy()).thenReturn(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 9, 0));
 
-		Assert.assertEquals(new Pair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(vesselAvailability, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(vesselAvailability, objectToPortVisitMap, periodRecord));
 	}
 
 	@Test
@@ -366,6 +558,7 @@ public class InclusionCheckerTests {
 		final PeriodRecord periodRecord = new PeriodRecord();
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 5);
 
+		final Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
 		// Assert.assertEquals(new Pair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(vesselAvailability, periodRecord));
 
 		// Mockito.when(vesselAvailability.isSetEndAfter()).thenReturn(Boolean.TRUE);
@@ -374,7 +567,8 @@ public class InclusionCheckerTests {
 		Mockito.when(vesselAvailability.isSetEndBy()).thenReturn(Boolean.TRUE);
 		Mockito.when(vesselAvailability.getEndByAsDateTime()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 4, 0));
 		//
-		Assert.assertEquals(new Pair<>(InclusionType.Out, Position.Before), checker.getObjectInclusionType(vesselAvailability, periodRecord));
+
+		Assert.assertEquals(new NonNullPair<>(InclusionType.Out, Position.Before), checker.getObjectInclusionType(vesselAvailability, objectToPortVisitMap, periodRecord));
 	}
 
 	@Test
@@ -390,7 +584,9 @@ public class InclusionCheckerTests {
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 7);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 7, 23);
 
-		Assert.assertEquals(new Pair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(vesselAvailability, periodRecord));
+		final Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
+
+		Assert.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(vesselAvailability, objectToPortVisitMap, periodRecord));
 
 		Mockito.when(vesselAvailability.isSetEndAfter()).thenReturn(Boolean.TRUE);
 		Mockito.when(vesselAvailability.getEndAfter()).thenReturn(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 8, 0));
@@ -398,7 +594,7 @@ public class InclusionCheckerTests {
 		// Mockito.when(vesselAvailability.isSetEndBy()).thenReturn(Boolean.TRUE);
 		// Mockito.when(vesselAvailability.getEndBy()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 9));
 		//
-		Assert.assertEquals(new Pair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(vesselAvailability, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(vesselAvailability, objectToPortVisitMap, periodRecord));
 	}
 
 	@Test
@@ -410,7 +606,9 @@ public class InclusionCheckerTests {
 
 		final PeriodRecord periodRecord = new PeriodRecord();
 
-		Assert.assertEquals(new Pair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(vesselAvailability, periodRecord));
+		final Map<EObject, PortVisit> objectToPortVisitMap = new HashMap<>();
+
+		Assert.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(vesselAvailability, objectToPortVisitMap, periodRecord));
 
 		Mockito.when(vesselAvailability.isSetStartAfter()).thenReturn(Boolean.TRUE);
 		Mockito.when(vesselAvailability.isSetStartBy()).thenReturn(Boolean.TRUE);
@@ -427,28 +625,28 @@ public class InclusionCheckerTests {
 		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 6);
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 7);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 7, 23);
-		Assert.assertEquals(new Pair<>(InclusionType.Out, Position.After), checker.getObjectInclusionType(vesselAvailability, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.Out, Position.After), checker.getObjectInclusionType(vesselAvailability, objectToPortVisitMap, periodRecord));
 
 		// Completely out
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 16, 1);
 		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 17);
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 18);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 19);
-		Assert.assertEquals(new Pair<>(InclusionType.Out, Position.Before), checker.getObjectInclusionType(vesselAvailability, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.Out, Position.Before), checker.getObjectInclusionType(vesselAvailability, objectToPortVisitMap, periodRecord));
 
 		// Partially in
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 5);
 		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 6);
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 7);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 8);
-		Assert.assertEquals(new Pair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(vesselAvailability, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(vesselAvailability, objectToPortVisitMap, periodRecord));
 
 		// Partially in
 		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 16);
 		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 17);
 		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 18);
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 19);
-		Assert.assertEquals(new Pair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(vesselAvailability, periodRecord));
+		Assert.assertEquals(new NonNullPair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(vesselAvailability, objectToPortVisitMap, periodRecord));
 	}
 
 	@Test

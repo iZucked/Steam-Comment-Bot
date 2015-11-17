@@ -5,14 +5,14 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.scenario.service.model.Container;
 
 public class ContainerProvider {
-
+	@Nullable
 	private Container container;
 
 	public ContainerProvider() {
 
 	}
 
-	public ContainerProvider(final Container container) {
+	public ContainerProvider(@Nullable final Container container) {
 		this.container = container;
 	}
 
@@ -21,8 +21,7 @@ public class ContainerProvider {
 		return container;
 	}
 
-	public void set(final Container container) {
+	public void set(@Nullable final Container container) {
 		this.container = container;
 	}
-
 }
