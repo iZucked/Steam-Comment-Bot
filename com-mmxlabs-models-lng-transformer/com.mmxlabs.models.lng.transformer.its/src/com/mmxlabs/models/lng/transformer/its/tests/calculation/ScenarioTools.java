@@ -26,6 +26,7 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.jdt.annotation.NonNull;
+import org.omg.PortableInterceptor.SUCCESSFUL;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -51,6 +52,7 @@ import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
+import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -687,7 +689,10 @@ public class ScenarioTools {
 		// hints= new String[] { LNGTransformer.HINT_OPTIMISE_LSO}
 		// }
 		//
-		final LNGTransformer transformer = new LNGTransformer(scenario, ScenarioUtils.createDefaultSettings(), new TransformerExtensionTestModule());
+		
+		OptimiserSettings settings = ScenarioUtils.createDefaultSettings();
+		settings.setGenerateCharterOuts(true);
+		final LNGTransformer transformer = new LNGTransformer(scenario, settings, new TransformerExtensionTestModule());
 
 		// Code to dump out the scenario to disk
 		if (false) {
