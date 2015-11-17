@@ -42,10 +42,7 @@ public class LNGScenarioRunner {
 	private long startTimeMillis;
 
 	@Nullable
-	private Schedule initialSchedule;
-
-	@Nullable
-	private Schedule finalSchedule;
+	private Schedule schedule;
 
 	@NonNull
 	private LNGScenarioToOptimiserBridge scenarioToOptimiserBridge;
@@ -77,6 +74,8 @@ public class LNGScenarioRunner {
 		this.scenarioModel = scenarioModel;
 		this.scenarioInstance = scenarioInstance;
 
+		// TODO: initial hints should specify LSO!
+		
 		// here we want to take user settings and generate initial state settings
 		scenarioToOptimiserBridge = new LNGScenarioToOptimiserBridge(scenarioModel, scenarioInstance, optimiserSettings, editingDomain, extraModule, localOverrides,
 				LNGTransformerHelper.HINT_OPTIMISE_LSO);
@@ -111,12 +110,12 @@ public class LNGScenarioRunner {
 
 		final ISequences startRawSequences = result.getBestSolution().getFirst();
 		final Map<String, Object> extraAnnotations = result.getBestSolution().getSecond();
-		initialSchedule = scenarioToOptimiserBridge.overwrite(0, startRawSequences, extraAnnotations);
+		schedule = scenarioToOptimiserBridge.overwrite(0, startRawSequences, extraAnnotations);
 
 		// initialSchedule= ScenarioModelUtil.getScheduleModel(scenarioModel).getSchedule();
 
 		// need to undo this.chainRunner..
-		return initialSchedule;
+		return schedule;
 	}
 
 	public IMultiStateResult run() {
@@ -134,27 +133,21 @@ public class LNGScenarioRunner {
 		// assert createOptimiser;
 
 		// TODO: Replace with originalScenario.getScheduleModel().getSchedule()
-		if (initialSchedule == null) {
+		if (schedule == null) {
 			evaluateInitialState();
 		}
 
 		final IMultiStateResult result = chainRunner.run(progressMonitor);
 
-		finalSchedule = scenarioToOptimiserBridge.overwrite(100, result.getBestSolution().getFirst(), result.getBestSolution().getSecond());
+		schedule = scenarioToOptimiserBridge.overwrite(100, result.getBestSolution().getFirst(), result.getBestSolution().getSecond());
 		log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
 
 		return result;
 	}
 
-	// TODO: There should only be one schedule, not initial and final. Not sure what state the initial schedule will be in.
 	@Nullable
-	public final Schedule getFinalSchedule() {
-		return finalSchedule;
-	}
-
-	@Nullable
-	public final Schedule getIntialSchedule() {
-		return initialSchedule;
+	public final Schedule getSchedule() {
+		return schedule;
 	}
 
 	@NonNull

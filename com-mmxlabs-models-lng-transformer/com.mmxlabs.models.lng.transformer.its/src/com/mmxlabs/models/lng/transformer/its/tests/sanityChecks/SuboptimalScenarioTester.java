@@ -135,7 +135,7 @@ public class SuboptimalScenarioTester {
 			runner.evaluateInitialState();
 			runner.run();
 
-			final Schedule schedule = runner.getFinalSchedule();
+			final Schedule schedule = runner.getSchedule();
 			Assert.assertNotNull(schedule);
 
 			// set up an array storing whether load ports are assigned at all

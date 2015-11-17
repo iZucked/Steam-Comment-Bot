@@ -149,7 +149,7 @@ public class PricingTimesScenario {
 					new TransformerExtensionTestBootstrapModule());
 			runner.evaluateInitialState();
 
-			final Schedule schedule = runner.getIntialSchedule();
+			final Schedule schedule = runner.getSchedule();
 			Assert.assertNotNull(schedule);
 
 			// Workaround, would prefer to use ca.getInputCargo().getName() but hookup runner.updateScenario() not working
