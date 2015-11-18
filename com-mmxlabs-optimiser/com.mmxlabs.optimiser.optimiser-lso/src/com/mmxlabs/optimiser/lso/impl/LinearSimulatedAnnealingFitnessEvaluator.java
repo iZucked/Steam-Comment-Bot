@@ -172,10 +172,10 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 	}
 
 	@Override
-	public void setInitialSequences(@NonNull final ISequences initialSequences, @NonNull IEvaluationState evaluationState) {
+	public void setInitialSequences(@NonNull final ISequences initialRawSequences, @NonNull final ISequences initialFullSequences, @NonNull IEvaluationState evaluationState) {
 
 		// TODO check for MAX_VALUE here and throw some kind of death condition.
-		final long totalFitness = evaluateSequencesIntern(initialSequences, evaluationState, null);
+		final long totalFitness = evaluateSequencesIntern(initialFullSequences, evaluationState, null);
 
 		if (totalFitness == Long.MAX_VALUE) {
 			LOG.error("Initial sequences have Long.MAX_VALUE fitness, which is pretty bad.");
@@ -185,9 +185,10 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 		initialFitness = totalFitness;
 		currentFitness = totalFitness;
 
-		this.initialSequences = new Pair<ISequences, IEvaluationState>(new Sequences(initialSequences), evaluationState);
-		bestSequences = new Pair<ISequences, IEvaluationState>(new Sequences(initialSequences), evaluationState);
-		currentSequences = new Pair<ISequences, IEvaluationState>(new Sequences(initialSequences), evaluationState);
+		this.initialSequences = new Pair<ISequences, IEvaluationState>(new Sequences(initialFullSequences), evaluationState);
+		bestSequences = new Pair<ISequences, IEvaluationState>(new Sequences(initialFullSequences), evaluationState);
+		bestRawSequences = new Sequences(initialRawSequences);
+		currentSequences = new Pair<ISequences, IEvaluationState>(new Sequences(initialFullSequences), evaluationState);
 
 		for (final IFitnessComponent component : fitnessComponents) {
 			bestFitnesses.put(component.getName(), component.getFitness());
