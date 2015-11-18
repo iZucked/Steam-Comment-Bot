@@ -30,14 +30,14 @@ import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 @RunWith(value = Parameterized.class)
 public abstract class AdvancedOptimisationTester extends AbstractOptimisationResultTester {
 
+	// This should only be commited as false to avoid crazy test run times.
 	private static final boolean RUN_FULL_ITERATION_CASES = false;
+	// This should only be commited as true.
+	private static final boolean RUN_LIMITED_ITERATION_CASES = true;
 
-	private @NonNull
-	final String scenarioURL;
-	private @Nullable
-	final YearMonth periodStart;
-	private @Nullable
-	final YearMonth periodEnd;
+	private @NonNull final String scenarioURL;
+	private @Nullable final YearMonth periodStart;
+	private @Nullable final YearMonth periodEnd;
 
 	public AdvancedOptimisationTester(@Nullable final String _unused_method_prefix_, @NonNull final String scenarioURL, @Nullable final YearMonth periodStart, @Nullable final YearMonth periodEnd) {
 		this.scenarioURL = scenarioURL;
@@ -87,7 +87,8 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 		runAdvancedOptimisationTestCase(true, SimilarityMode.HIGH, true, false);
 	}
 
-	private void runAdvancedOptimisationTestCase(final boolean limitedIterations, @NonNull final SimilarityMode mode, final boolean withActionSets, final boolean withGeneratedCharterOuts) throws Exception {
+	private void runAdvancedOptimisationTestCase(final boolean limitedIterations, @NonNull final SimilarityMode mode, final boolean withActionSets, final boolean withGeneratedCharterOuts)
+			throws Exception {
 
 		if (withActionSets) {
 			// Preconditions check - ensure period, otherwise ignore test case
@@ -101,9 +102,12 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 			// Only High Mode for now
 			Assume.assumeTrue(mode == SimilarityMode.HIGH);
 		}
-		//
-		Assume.assumeTrue(limitedIterations || RUN_FULL_ITERATION_CASES);
-
+		// Only run full iterations if the flag is set
+		if (limitedIterations) {
+			Assume.assumeTrue(RUN_LIMITED_ITERATION_CASES);
+		} else {
+			Assume.assumeTrue(RUN_FULL_ITERATION_CASES);
+		}
 		// Load the scenario to test
 		final URL url = getClass().getResource(scenarioURL);
 
@@ -143,6 +147,9 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 		// scenarioRunner.initAndEval();
 
 		final List<String> components = new LinkedList<>();
+		if (!limitedIterations) {
+			components.add("full-iters");
+		}
 		components.add(String.format("similarity-%s", mode.toString()));
 		if (withActionSets) {
 			components.add("actionset");
@@ -150,7 +157,7 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 		if (withGeneratedCharterOuts) {
 			components.add("gco");
 		}
-		
+
 		optimiseBasicScenario(scenarioRunner, url, String.format(".%s.properties", Joiner.on(".").join(components)));
 	}
 
