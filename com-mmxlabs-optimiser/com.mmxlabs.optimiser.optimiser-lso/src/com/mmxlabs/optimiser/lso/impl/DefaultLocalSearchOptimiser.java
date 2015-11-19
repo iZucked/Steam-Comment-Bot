@@ -261,8 +261,6 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		for (final IInitialSequencesConstraintChecker checker : getInitialSequencesConstraintCheckers()) {
 			checker.sequencesAccepted(initialSequences, fullSequences);
 		}
-
-		getFitnessEvaluator().setInitialSequences(currentRawSequences, fullSequences, evaluationState);
 	}
 
 	protected void initProgressLog() {

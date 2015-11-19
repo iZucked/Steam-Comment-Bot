@@ -22,7 +22,7 @@ public class AnnotatedSolutionTest {
 		final IOptimisationContext optContext = Mockito.mock(IOptimisationContext.class);
 		final IEvaluationState state = Mockito.mock(IEvaluationState.class);
 		final AnnotatedSolution solution = new AnnotatedSolution(sequences, optContext, state);
-		Assert.assertSame(sequences, solution.getSequences());
+		Assert.assertSame(sequences, solution.getFullSequences());
 		Assert.assertSame(optContext, solution.getContext());
 		Assert.assertSame(state, solution.getEvaluationState());
 	}

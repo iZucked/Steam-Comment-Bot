@@ -14,7 +14,7 @@ import org.mockito.Mockito;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
-import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
@@ -96,8 +96,8 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		Assert.assertEquals(1000, evaluator.getCurrentFitness());
 
 		Assert.assertNotNull(evaluator.getBestSequences());
-		Pair<ISequences, IEvaluationState> current = evaluator.getCurrentSequences();
-		Pair<ISequences, IEvaluationState> best = evaluator.getBestSequences();
+		Triple<ISequences, ISequences, IEvaluationState> current = evaluator.getCurrentSequences();
+		Triple<ISequences, ISequences, IEvaluationState> best = evaluator.getBestSequences();
 
 		Assert.assertNotNull(current);
 		Assert.assertNotNull(best);
