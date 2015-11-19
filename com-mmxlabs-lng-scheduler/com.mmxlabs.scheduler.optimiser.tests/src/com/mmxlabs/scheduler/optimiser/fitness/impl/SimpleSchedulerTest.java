@@ -17,7 +17,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
-import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -263,8 +263,14 @@ public class SimpleSchedulerTest {
 		}
 
 		linearFitnessEvaluator.setOptimisationData(context.getOptimisationData());
+<<<<<<< local
 		linearFitnessEvaluator.setInitialSequences(context.getInputSequences(), context.getInputSequences(), evaluationState);
 		printSequences(context.getInputSequences());
+=======
+		linearFitnessEvaluator.setInitialSequences(context.getInitialSequences(), context.getInitialSequences(), evaluationState);
+
+		printSequences(context.getInitialSequences());
+>>>>>>> other
 
 		final long initialFitness = linearFitnessEvaluator.getBestFitness();
 		System.out.println("Initial fitness " + initialFitness);
@@ -277,7 +283,7 @@ public class SimpleSchedulerTest {
 		System.out.println("Final fitness " + finalFitness);
 		Assert.assertFalse(finalFitness == Long.MAX_VALUE);
 
-		Pair<ISequences, IEvaluationState> bestSequences = fitnessEvaluator.getBestSequences();
+		Triple<ISequences, ISequences, IEvaluationState> bestSequences = fitnessEvaluator.getBestSequences();
 		Assert.assertNotNull(bestSequences);
 		printSequences(bestSequences.getFirst());
 
