@@ -40,6 +40,7 @@ import org.eclipse.swt.widgets.Shell;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.time.Days;
 import com.mmxlabs.common.time.Hours;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -93,7 +94,7 @@ public class CargoEditorMenuHelper {
 
 	private final LNGScenarioModel scenarioModel;
 
-	private static final boolean enableSTSMenus = SecurityUtils.getSubject().isPermitted("features:shiptoship");
+	private static final boolean enableSTSMenus = LicenseFeatures.isPermitted("features:shiptoship");
 
 	/**
 	 */
@@ -273,7 +274,7 @@ public class CargoEditorMenuHelper {
 		}
 		if (cargo != null) {
 			if (cargo.getSlots().size() > 2) {
-				if (SecurityUtils.getSubject().isPermitted("features:complex-cargo")) {
+				if (LicenseFeatures.isPermitted("features:complex-cargo")) {
 					newMenuManager.add(new EditLDDAction("Edit Complex Cargo", cargo));
 				}
 			}

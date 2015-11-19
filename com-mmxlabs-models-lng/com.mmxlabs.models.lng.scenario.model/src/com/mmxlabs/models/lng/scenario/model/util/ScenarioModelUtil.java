@@ -116,6 +116,15 @@ public final class ScenarioModelUtil {
 	}
 
 	@NonNull
+	public static CargoModel getCargoModel(@NonNull final LNGScenarioModel lngScenarioModel) {
+		final CargoModel cargoModel = lngScenarioModel.getCargoModel();
+		if (cargoModel == null) {
+			throw new IllegalArgumentException("Invalid scenario model");
+		}
+		return cargoModel;
+	}
+
+	@NonNull
 	public static PortModel getPortModel(@NonNull final LNGScenarioModel lngScenarioModel) {
 		final LNGReferenceModel referenceModel = findReferenceModel(lngScenarioModel);
 		if (referenceModel == null) {

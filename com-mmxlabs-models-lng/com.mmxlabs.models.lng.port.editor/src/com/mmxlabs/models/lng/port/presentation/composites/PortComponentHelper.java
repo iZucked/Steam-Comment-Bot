@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
 
-import org.apache.shiro.SecurityUtils;
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.command.Command;
@@ -28,6 +27,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.common.timezone.ITimezoneProvider;
 import com.mmxlabs.common.timezone.impl.GoogleTimezoneProvider;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
@@ -128,7 +128,7 @@ public class PortComponentHelper extends BaseComponentHelper {
 	protected void add_capabilitiesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final PortCapability capability : PortCapability.values()) {
 
-			if (capability != PortCapability.TRANSFER || SecurityUtils.getSubject().isPermitted("features:shiptoship")) {
+			if (capability != PortCapability.TRANSFER || LicenseFeatures.isPermitted("features:shiptoship")) {
 				detailComposite.addInlineEditor(new EnumCheckboxEditor(PortPackage.Literals.PORT__CAPABILITIES, capability, "Can "));
 			}
 		}
