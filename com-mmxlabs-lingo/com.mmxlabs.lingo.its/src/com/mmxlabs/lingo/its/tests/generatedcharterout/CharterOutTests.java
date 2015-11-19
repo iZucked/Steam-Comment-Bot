@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
+import com.mmxlabs.lingo.its.tests.LNGScenarioRunnerCreator;
 import com.mmxlabs.lingo.its.tests.category.QuickTest;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
@@ -29,7 +30,7 @@ public class CharterOutTests extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/charter-out/gco-barca-bonny-point fortin-min days 60.lingo");
 
-		final LNGScenarioRunner runner = evaluateScenario(url);
+		final LNGScenarioRunner runner = evaluateScenarioWithGCO(url);
 		Assert.assertNotNull(runner);
 
 		// Should be the same as the updateScenario as we have only called ScenarioRunner#init()
@@ -46,7 +47,7 @@ public class CharterOutTests extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/charter-out/gco-barca-bonny-point fortin.lingo");
 
-		final LNGScenarioRunner runner = evaluateScenario(url);
+		final LNGScenarioRunner runner = evaluateScenarioWithGCO(url);
 		Assert.assertNotNull(runner);
 
 		// Should be the same as the updateScenario as we have only called ScenarioRunner#init()
@@ -70,7 +71,7 @@ public class CharterOutTests extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/charter-out/gco-barca-point fortin.lingo");
 
-		final LNGScenarioRunner runner = evaluateScenario(url);
+		final LNGScenarioRunner runner = evaluateScenarioWithGCO(url);
 		Assert.assertNotNull(runner);
 
 		// Should be the same as the updateScenario as we have only called ScenarioRunner#init()

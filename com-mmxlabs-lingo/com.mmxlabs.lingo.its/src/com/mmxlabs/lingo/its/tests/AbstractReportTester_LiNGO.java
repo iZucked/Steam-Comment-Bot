@@ -93,48 +93,48 @@ public abstract class AbstractReportTester_LiNGO extends AbstractOptimisationRes
 		final ScenarioInstance instance = triple.getSecond();
 		Assert.assertNotNull(instance);
 		Assert.assertNotNull(instance.getInstance());
-		testReports(instance, url, reportID, shortName, extension);
+		ReportTester.testReports(instance, url, reportID, shortName, extension);
 	}
 
 	@Test
 	@Category(ReportTest.class)
 	public void testVerticalReport() throws Exception {
-		testReports(ReportTester.VERTICAL_REPORT_ID, ReportTester.VERTICAL_REPORT_SHORTNAME, "html");
+		testReports(ReportTesterHelper.VERTICAL_REPORT_ID, ReportTesterHelper.VERTICAL_REPORT_SHORTNAME, "html");
 	}
 
 	@Test
 	@Category(ReportTest.class)
 	public void testScheduleSummary() throws Exception {
-		testReports(ReportTester.SCHEDULE_SUMMARY_ID, ReportTester.SCHEDULE_SUMMARY_SHORTNAME, "html");
+		testReports(ReportTesterHelper.SCHEDULE_SUMMARY_ID, ReportTesterHelper.SCHEDULE_SUMMARY_SHORTNAME, "html");
 	}
 
 	@Test
 	@Category(ReportTest.class)
 	public void testPortRotations() throws Exception {
-		testReports(ReportTester.PORT_ROTATIONS_ID, ReportTester.PORT_ROTATIONS_SHORTNAME, "html");
+		testReports(ReportTesterHelper.PORT_ROTATIONS_ID, ReportTesterHelper.PORT_ROTATIONS_SHORTNAME, "html");
 	}
 
 	@Test
 	@Category(ReportTest.class)
 	public void testLatenessReport() throws Exception {
-		testReports(ReportTester.LATENESS_REPORT_ID, ReportTester.LATENESS_REPORT_SHORTNAME, "html");
+		testReports(ReportTesterHelper.LATENESS_REPORT_ID, ReportTesterHelper.LATENESS_REPORT_SHORTNAME, "html");
 	}
 
 	@Test
 	@Category(ReportTest.class)
 	public void testCapacityReport() throws Exception {
-		testReports(ReportTester.CAPACITY_REPORT_ID, ReportTester.CAPACITY_REPORT_SHORTNAME, "html");
+		testReports(ReportTesterHelper.CAPACITY_REPORT_ID, ReportTesterHelper.CAPACITY_REPORT_SHORTNAME, "html");
 	}
 
 	@Test
 	@Category(ReportTest.class)
 	public void testVesselReport() throws Exception {
-		testReports(ReportTester.VESSEL_REPORT_ID, ReportTester.VESSEL_REPORT_SHORTNAME, "html");
+		testReports(ReportTesterHelper.VESSEL_REPORT_ID, ReportTesterHelper.VESSEL_REPORT_SHORTNAME, "html");
 	}
 
 	@Test
 	@Category(ReportTest.class)
 	public void testCooldownReport() throws Exception {
-		testReports(ReportTester.COOLDOWN_REPORT_ID, ReportTester.COOLDOWN_REPORT_SHORTNAME, "html");
+		testReports(ReportTesterHelper.COOLDOWN_REPORT_ID, ReportTesterHelper.COOLDOWN_REPORT_SHORTNAME, "html");
 	}
 }

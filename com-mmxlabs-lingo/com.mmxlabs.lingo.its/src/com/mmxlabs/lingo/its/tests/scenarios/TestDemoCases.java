@@ -7,9 +7,12 @@ package com.mmxlabs.lingo.its.tests.scenarios;
 import java.net.URL;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
+import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 
+@RunWith(value = ShiroRunner.class)
 public class TestDemoCases extends AbstractOptimisationResultTester {
 
 	@Test
@@ -18,7 +21,7 @@ public class TestDemoCases extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/demo-cases/Bonny problems/0 Bonny.lingo");
 
-		runScenario(url);
+		runScenarioWithGCO(url);
 	}
 
 	@Test
@@ -27,7 +30,7 @@ public class TestDemoCases extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/demo-cases/Bonny problems/1 late and lost-DES backfill -F- Bonny.lingo");
 
-		runScenario(url);
+		runScenarioWithGCO(url);
 	}
 
 	@Test
@@ -36,7 +39,7 @@ public class TestDemoCases extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/demo-cases/Bonny problems/2 -O- late and lost-DES backfill -F- Bonny.lingo");
 
-		runScenario(url);
+		runScenarioWithGCO(url);
 	}
 
 	@Test
@@ -45,7 +48,7 @@ public class TestDemoCases extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/demo-cases/Dry dock issues/0 base.lingo");
 
-		runScenario(url);
+		runScenarioWithGCO(url);
 	}
 
 	@Test
@@ -54,7 +57,7 @@ public class TestDemoCases extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/demo-cases/Dry dock issues/3 -O- dry dock 55 -F- lateness removed -F- base.lingo");
 
-		runScenario(url);
+		runScenarioWithGCO(url);
 	}
 
 	@Test
@@ -63,7 +66,7 @@ public class TestDemoCases extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/demo-cases/Dry dock issues/4 dry dock 70 -O- -F- -F- base.lingo");
 
-		runScenario(url);
+		runScenarioWithGCO(url);
 	}
 
 	@Test
@@ -72,7 +75,7 @@ public class TestDemoCases extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/demo-cases/Dry dock issues/5 charter-in generated - rewire for shorter one -O- -F- -F- base.lingo");
 
-		runScenario(url);
+		runScenarioWithGCO(url);
 	}
 
 	@Test
@@ -81,7 +84,7 @@ public class TestDemoCases extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/demo-cases/Fleet cost optimisation/0 fleet demo.lingo");
 
-		runScenario(url);
+		runScenarioWithGCO(url);
 	}
 
 	@Test
@@ -90,7 +93,7 @@ public class TestDemoCases extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/demo-cases/Fleet cost optimisation/1 -O- fleet demo.lingo");
 
-		runScenario(url);
+		runScenarioWithGCO(url);
 	}
 
 }

@@ -78,7 +78,7 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		Assert.assertNotNull(url);
 		final LNGScenarioRunner runner;
 		if (isLingoFile) {
-			runner = evaluateScenario(url);
+			runner = evaluateScenarioWithGCO(url);
 		} else {
 			runner = null;
 		}
