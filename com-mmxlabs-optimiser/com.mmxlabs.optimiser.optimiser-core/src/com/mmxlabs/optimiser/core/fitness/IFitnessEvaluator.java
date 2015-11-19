@@ -10,7 +10,8 @@ import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.Triple;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
@@ -78,12 +79,12 @@ public interface IFitnessEvaluator {
 	boolean evaluateSequences(@NonNull ISequences rawSequences, @NonNull ISequences fullSequences, @NonNull IEvaluationState evaluationState, @NonNull Collection<IResource> affectedResources);
 
 	/**
-	 * Returns the best {@link ISequences} instance seen by this {@link IFitnessEvaluator}. The value of best is determined by the implementation.
+	 * Returns the best {@link ISequences} instances (raw then full) seen by this {@link IFitnessEvaluator}. The value of best is determined by the implementation.
 	 * 
 	 * @return
 	 */
 	@Nullable
-	Pair<ISequences, IEvaluationState> getBestSequences();
+	Triple<ISequences, ISequences, IEvaluationState> getBestSequences();
 
 	/**
 	 * Returns the fitness value of the best {@link ISequences} instance returned by {@link #getBestSequences()};
@@ -93,12 +94,13 @@ public interface IFitnessEvaluator {
 	long getBestFitness();
 
 	/**
-	 * Returns the current {@link ISequences} instance in use by this {@link IFitnessEvaluator}.
+	 * Returns the current {@link ISequences} (raw then full) instance in use by this {@link IFitnessEvaluator}.
 	 * 
 	 * @return
 	 */
+
 	@Nullable
-	Pair<ISequences, IEvaluationState> getCurrentSequences();
+	Triple<ISequences, ISequences, IEvaluationState> getCurrentSequences();
 
 	/**
 	 * Returns the fitness value of the current {@link ISequences} instance returned by {@link #getCurrentSequences()};
@@ -131,14 +133,11 @@ public interface IFitnessEvaluator {
 	 */
 	@Nullable
 	IAnnotatedSolution getCurrentAnnotatedSolution(@NonNull final IOptimisationContext context);
-	
-	public IAnnotatedSolution createAnnotatedSolution(final IOptimisationContext context, ISequences sequences, IEvaluationState evaluationState);
+
+	public IAnnotatedSolution createAnnotatedSolution(final IOptimisationContext context, ISequences fullSequences, IEvaluationState evaluationState);
 
 	void step();
 
-        ISequences getBestRawSequences();
+	void restart();
 
-		void restart();
-
-		
 }

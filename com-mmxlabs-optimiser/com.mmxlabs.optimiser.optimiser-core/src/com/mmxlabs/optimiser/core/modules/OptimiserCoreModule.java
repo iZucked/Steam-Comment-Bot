@@ -19,6 +19,7 @@ import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
@@ -115,7 +116,7 @@ public class OptimiserCoreModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	private IOptimisationContext createOptimisationContext(@NonNull final IOptimisationData data, @NonNull @Named("Initial") final ISequences sequences,
+	private IOptimisationContext createOptimisationContext(@NonNull final IOptimisationData data, @NonNull @Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) final ISequences sequences,
 			@NonNull final IFitnessFunctionRegistry fitnessFunctionRegistry, @NonNull final IConstraintCheckerRegistry constraintCheckerRegistry,
 			@NonNull final IEvaluationProcessRegistry evaluationProcessRegistry, @NonNull @Named(ENABLED_CONSTRAINT_NAMES) final List<String> enabledConstraintNames,
 			@NonNull @Named(ENABLED_FITNESS_NAMES) final List<String> enabledFitnessNames) {

@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -27,6 +28,7 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IInitialSequencesConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IReducingConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 
 public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser {
@@ -89,9 +91,13 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 
 	@Override
 	public ISequences getBestRawSequences() {
-		return fitnessEvaluator.getBestRawSequences();
+		final Triple<ISequences, ISequences, IEvaluationState> bestSequences = fitnessEvaluator.getBestSequences();
+		if (bestSequences != null) {
+			return bestSequences.getFirst();
+		}
+		return null;
 	}
-	
+
 	@Override
 	public final IAnnotatedSolution getBestSolution() {
 		final IAnnotatedSolution annotatedSolution = fitnessEvaluator.getBestAnnotatedSolution(currentContext);
@@ -163,7 +169,7 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 	public final int getNumberOfIterations() {
 		return numberOfIterations;
 	}
-	
+
 	public final void setConstraintCheckers(@NonNull final List<IConstraintChecker> constraintCheckers) {
 		this.constraintCheckers = constraintCheckers;
 		this.reducingConstraintCheckers = new ArrayList<IReducingConstraintChecker>(constraintCheckers.size());
@@ -193,7 +199,7 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 	public final List<IEvaluationProcess> getEvaluationProcesses() {
 		return evaluationProcesses;
 	}
-	
+
 	@Override
 	@NonNull
 	public final List<IReducingConstraintChecker> getReducingConstraintCheckers() {

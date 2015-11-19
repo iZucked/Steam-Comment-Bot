@@ -6,6 +6,8 @@ package com.mmxlabs.optimiser.core.scenario;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 
@@ -22,11 +24,13 @@ public interface IOptimisationData {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	List<ISequenceElement> getSequenceElements();
 
 	/**
 	 * Returns a list of all the {@link IResource}s in the optimisation.
 	 */
+	@NonNull
 	List<IResource> getResources();
 
 	/**
