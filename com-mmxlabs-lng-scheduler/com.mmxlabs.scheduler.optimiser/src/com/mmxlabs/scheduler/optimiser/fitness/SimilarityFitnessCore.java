@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -20,6 +21,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
@@ -41,6 +43,12 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 
 	private final String name;
 
+ 
+	@Inject
+	@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)
+	@NonNull
+	private ISequences initialRawSequences;
+	
 	@Inject
 	private IPortTypeProvider portTypeProvider;
 
@@ -81,11 +89,11 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 	 * 
 	 * @param sequences
 	 */
-	public void init(@NonNull final ISequences sequences) {
+	public void initWithState(@NonNull final ISequences rawSequences) {
 		for (final IResource resource : resources) {
 			assert resource != null;
 
-			final ISequence sequence = sequences.getSequence(resource);
+			final ISequence sequence = rawSequences.getSequence(resource);
 			ISequenceElement prev = null;
 			for (final ISequenceElement current : sequence) {
 				if (prev != null) {
@@ -158,9 +166,10 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 		if (loadDischargeMap == null) {
 			loadDischargeMap = new HashMap<Integer, Integer>();
 			loadResourceMap = new HashMap<Integer, Integer>();
-			init(sequences);
+			initWithState(initialRawSequences);
 			lastFitness = 0;
-		} else {
+		}
+		{
 			int cargoDifferences = 0;
 			int vesselDifferences = 0;
 			for (final IResource resource : resources) {
