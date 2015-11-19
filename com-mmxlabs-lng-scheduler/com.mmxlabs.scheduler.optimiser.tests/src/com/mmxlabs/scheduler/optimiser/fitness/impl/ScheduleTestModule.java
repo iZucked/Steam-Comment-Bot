@@ -172,31 +172,6 @@ public class ScheduleTestModule extends AbstractModule {
 		return evaluationProcessRegistry;
 	}
 
-<<<<<<< local
-=======
-	// @Provides
-	// @Singleton
-	// private IOptimisationContext createOptimisationContext(final IOptimisationData data, @Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL) final ISequences sequences, final IFitnessFunctionRegistry fitnessFunctionRegistry,
-	// final IConstraintCheckerRegistry constraintCheckerRegistry, final IEvaluationProcessRegistry evaluationProcessRegistry,
-	// @Named(ENABLED_CONSTRAINT_NAMES) final List<String> enabledConstraintNames, @Named(ENABLED_FITNESS_NAMES) final List<String> enabledFitnessNames) {
-	//
-	// final List<String> components = new ArrayList<String>(enabledFitnessNames);
-	// components.retainAll(fitnessFunctionRegistry.getFitnessComponentNames());
-	//
-	// final List<String> checkers = new ArrayList<String>(enabledConstraintNames);
-	// checkers.retainAll(constraintCheckerRegistry.getConstraintCheckerNames());
-	//
-	// // Enable all processes
-	// // final List<String> evaluationProcesses = getEnabledEvaluationProcessNames();
-	// // log.debug("Available evaluation processes: " + evaluationProcesses);
-	// // evaluationProcesses.retainAll(evaluationProcessRegistry.getEvaluationProcessNames());
-	//
-	// final List<String> evaluationProcesses = new ArrayList<String>(evaluationProcessRegistry.getEvaluationProcessNames());
-	//
-	// return new OptimisationContext(data, sequences, components, fitnessFunctionRegistry, checkers, constraintCheckerRegistry, evaluationProcesses, evaluationProcessRegistry);
-	// }
-
->>>>>>> other
 	@Provides
 	@Singleton
 	@Named(ConstraintCheckerInstantiatorModule.ENABLED_CONSTRAINT_NAMES)

@@ -21,11 +21,11 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
-import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ISimilarityComponentParameters;
@@ -55,7 +55,7 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 	private ISequencesManipulator sequenceManipulator;
 
 	@Inject
-	@Named("Initial")
+	@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)
 	@NonNull
 	private ISequences initialSequences;
 
