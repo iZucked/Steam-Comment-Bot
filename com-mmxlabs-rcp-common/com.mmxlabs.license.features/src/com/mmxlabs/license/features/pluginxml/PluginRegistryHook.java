@@ -33,7 +33,7 @@ public class PluginRegistryHook {
 	@Inject(optional = true)
 	private Iterable<PluginXMLEnablementExtension> featureEnablements;
 
-	public void registerEnablemnets() {
+	public void registerEnablements() {
 
 		// Dynamically register UI elements.
 		if (extensionRegistry instanceof ExtensionRegistry) {
@@ -43,7 +43,7 @@ public class PluginRegistryHook {
 			for (final PluginXMLEnablementExtension ext : featureEnablements) {
 
 				final String permissionKey = "features:" + LicenseFeatures.clean(ext.getFeature());
-				if (SecurityUtils.getSubject().isPermitted(permissionKey)) {
+				if (LicenseFeatures.isPermitted(permissionKey)) {
 					final Bundle bundle = ext.getBundle();
 
 					final IContributor contributor = ContributorFactoryOSGi.createContributor(bundle);
@@ -61,7 +61,7 @@ public class PluginRegistryHook {
 		final Injector injector = Guice.createInjector(new FeatureEnablementModule());
 		final PluginRegistryHook hook = new PluginRegistryHook();
 		injector.injectMembers(hook);
-		hook.registerEnablemnets();
+		hook.registerEnablements();
 	}
 
 }
