@@ -23,8 +23,6 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-import javax.inject.Named;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jdt.annotation.NonNull;
@@ -36,8 +34,6 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.lng.transformer.chain.IMultiStateResult;
-import com.mmxlabs.models.lng.transformer.chain.impl.MultiStateResult;
 import com.mmxlabs.models.lng.transformer.stochasticactionsets.StochasticActionSetUtils;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.BagMover;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.Change;
@@ -52,6 +48,7 @@ import com.mmxlabs.models.lng.transformer.ui.breakdown.MyFuture;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.SimilarityState;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.independence.ActionSetIndependenceChecking;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
+import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
@@ -62,7 +59,6 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.Sequences;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.IFitnessCombiner;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
@@ -84,6 +80,9 @@ public class BagOptimiser {
 	private ISequencesManipulator sequencesManipulator;
 
 	@Inject
+	private IOptimisationContext optimisationContext;
+
+	@Inject
 	@NonNull
 	private List<IFitnessComponent> fitnessComponents;
 
@@ -96,11 +95,6 @@ public class BagOptimiser {
 
 	@Inject
 	private List<IEvaluationProcess> evaluationProcesses;
-
-	@Inject
-	@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)
-	@NonNull
-	private ISequences initialRawSequences;
 
 	@Inject
 	private Injector injector;
@@ -117,7 +111,7 @@ public class BagOptimiser {
 
 	private final Random rdm = new Random(0);
 
-	private final List<IMultiStateResult> bestSolutions = new LinkedList<>();
+	private final List<List<NonNullPair<ISequences, Map<String, Object>>>> bestSolutions = new LinkedList<>();
 
 	private final int initialPopulationSize = 10;
 	private final int initialSearchSize = 20_000;
@@ -136,35 +130,30 @@ public class BagOptimiser {
 
 		final long time1 = System.currentTimeMillis();
 
-		// Initialise fitness components
-		{
-			fitnessHelper.initFitnessComponents(fitnessComponents, injector.getInstance(IOptimisationData.class));
-		}
-
 		final SimilarityState targetSimilarityState = injector.getInstance(SimilarityState.class);
 		final long bestFitness;
 
 		// Generate the similarity data structures to the target solution
 		{
-
-			final IModifiableSequences targetFullSequences = sequencesManipulator.createManipulatedSequences(targetRawSequences);
+			final IModifiableSequences potentialFullSequences = sequencesManipulator.createManipulatedSequences(targetRawSequences);
 
 			final IEvaluationState evaluationState = new EvaluationState();
 			for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
-				if (!evaluationProcess.evaluate(targetFullSequences, evaluationState)) {
+				if (!evaluationProcess.evaluate(potentialFullSequences, evaluationState)) {
 					// We expect the input solution to be valid....
 					assert false;
 				}
 			}
+			targetSimilarityState.init(targetRawSequences);
 
-			targetSimilarityState.init(targetFullSequences);
-
-			fitnessHelper.evaluateSequencesFromComponents(targetFullSequences, evaluationState, fitnessComponents, null);
+			fitnessHelper.evaluateSequencesFromComponents(potentialFullSequences, evaluationState, fitnessComponents, null);
 			bestFitness = fitnessCombiner.calculateFitness(fitnessComponents);
+
 		}
 
 		try {
 			// Prepare initial solution state
+			final ISequences initialRawSequences = optimisationContext.getInitialSequences();
 			final IModifiableSequences initialFullSequences = sequencesManipulator.createManipulatedSequences(initialRawSequences);
 
 			// // Debugging -- get initial change count
@@ -210,9 +199,7 @@ public class BagOptimiser {
 
 			final List<JobState> l = new LinkedList<>();
 			final ChangeChecker changeChecker = injector.getInstance(ChangeChecker.class);
-
 			changeChecker.init(null, targetSimilarityState, initialRawSequences);
-
 			for (int i = 0; i < initialSearchSize; i++) {
 				final JobState job = new JobState(new Sequences(initialRawSequences), changeSets, changes, changeChecker.getFullDifferences());
 				job.setMetric(MetricType.PNL, initialPNL, 0, 0);
@@ -334,7 +321,7 @@ public class BagOptimiser {
 						final Map<ChangeSet, Set<List<ChangeSet>>> independenceSets = actionSetIndependenceChecking.getChangeSetIndependence(bestChangeSets, initialRawSequences, targetSimilarityState,
 								targetSimilarityState.getBaseMetrics());
 					}
-					betterSolutionFound = processAndStoreBreakdownSolution(sortedChangeStates.get(0), initialRawSequences, /* initial extra annotations, */ bestFitness);
+					betterSolutionFound = processAndStoreBreakdownSolution(sortedChangeStates.get(0), initialRawSequences, initialFullSequences, null/* initial extra annotations */, bestFitness);
 				}
 				if (sortedChangeStates.isEmpty()) {
 					LOG.error("Unable to find action sets");
@@ -656,11 +643,10 @@ public class BagOptimiser {
 		return states;
 	}
 
-	protected boolean processAndStoreBreakdownSolution(final JobState solution, final ISequences initialRawSequences, final long bestSolutionFitness) {
-		List<NonNullPair<ISequences, Map<String, Object>>> processedSolution = new LinkedList<>();
+	protected boolean processAndStoreBreakdownSolution(final JobState solution, final ISequences initialRawSequences, final IModifiableSequences initialFullSequences, final IEvaluationState _unused_,
+			final long bestSolutionFitness) {
 
-		// Evaluate initial state.
-		// FIXME: Pass in
+		final List<NonNullPair<ISequences, Map<String, Object>>> processedSolution = new LinkedList<>();
 		{
 			final IModifiableSequences currentFullSequences = new ModifiableSequences(initialRawSequences);
 			sequencesManipulator.manipulate(currentFullSequences);
@@ -678,7 +664,6 @@ public class BagOptimiser {
 
 			processedSolution.add(new NonNullPair<ISequences, Map<String, Object>>(initialRawSequences, extraAnnotations));
 		}
-
 		long fitness = Long.MAX_VALUE;
 		long lastFitness = Long.MAX_VALUE;
 		int bestIdx = -1;
@@ -708,36 +693,26 @@ public class BagOptimiser {
 			extraAnnotations.put(OptimiserConstants.G_AI_fitnessComponents, currentFitnesses);
 
 			processedSolution.add(new NonNullPair<ISequences, Map<String, Object>>(cs.getRawSequences(), extraAnnotations));
-
 			idx++;
 		}
 
 		// Have we found a better solution?
-		boolean foundBetter;
 		if (fitness < bestSolutionFitness) {
-			processedSolution = processedSolution.subList(0, bestIdx + 1);
-			foundBetter = true;
+			bestSolutions.add(processedSolution.subList(0, bestIdx + 1));
+			return true;
 		} else {
-			foundBetter = false;
+			bestSolutions.add(processedSolution);
+			return false;
 		}
-
-		IMultiStateResult r = new MultiStateResult(processedSolution.get(processedSolution.size() - 1), processedSolution);
-		bestSolutions.add(r);
-		return foundBetter;
 
 	}
 
-	public IMultiStateResult getBestSolution() {
+	public List<NonNullPair<ISequences, Map<String, Object>>> getBestSolution() {
 		if (bestSolutions.size() > 0) {
 			return bestSolutions.get(0);
 		} else {
 			return null;
 		}
-	}
-
-	public IMultiStateResult getBestSolutions() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }
