@@ -1,10 +1,14 @@
 package com.mmxlabs.lingo.its.tests;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.net.URL;
 import java.time.YearMonth;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.Assert;
@@ -15,13 +19,18 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import com.google.common.base.Joiner;
+import com.google.inject.Injector;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
+import com.mmxlabs.models.lng.transformer.ui.IRunnerHook;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
+import com.mmxlabs.models.lng.transformer.util.SequencesSerialiser;
+import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 /**
  * Generic tests linked to emailed cases
@@ -203,6 +212,74 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 		// if (withShippingOnly) {
 		// components.add("shipping");
 		// }
+
+		// Optionally use pre-stored sequences state.
+		if (false) {
+			scenarioRunner.setRunnerHook(new IRunnerHook() {
+
+				@Override
+				public void reportSequences(String phase, final ISequences rawSequences) {
+					switch (phase) {
+
+					case IRunnerHook.PHASE_LSO:
+					case IRunnerHook.PHASE_HILL:
+					case IRunnerHook.PHASE_INITIAL:
+						save(rawSequences, phase);
+						break;
+					case IRunnerHook.PHASE_ACTION_SETS:
+						break;
+					}
+				}
+
+				@Override
+				public ISequences getSequences(String phase) {
+					switch (phase) {
+					case IRunnerHook.PHASE_LSO:
+					case IRunnerHook.PHASE_HILL:
+						return load(phase);
+					case IRunnerHook.PHASE_INITIAL:
+					case IRunnerHook.PHASE_ACTION_SETS:
+						break;
+
+					}
+					return null;
+				}
+
+				private void save(final ISequences rawSequences, final String type) {
+					assert false;
+					try {
+						final String suffix = Joiner.on(".").join(components) + "." + type + ".sequences";
+						final URL expectedReportOutput = new URL(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20") + suffix);
+						final File file2 = new File(expectedReportOutput.toURI());
+						try (FileOutputStream fos = new FileOutputStream(file2)) {
+							final Injector injector = scenarioRunner.getInjector();
+							Assert.assertNotNull(injector);
+							SequencesSerialiser.save(injector.getInstance(IOptimisationData.class), rawSequences, fos);
+						}
+					} catch (final Exception e) {
+						Assert.fail(e.getMessage());
+					}
+				}
+
+				private ISequences load(final String type) {
+					try {
+						final String suffix = Joiner.on(".").join(components) + "." + type + ".sequences";
+						final URL expectedReportOutput = new URL(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20") + suffix);
+						final File file2 = new File(expectedReportOutput.toURI());
+						try (FileInputStream fos = new FileInputStream(file2)) {
+							final Injector injector = scenarioRunner.getInjector();
+							Assert.assertNotNull(injector);
+							return SequencesSerialiser.load(injector.getInstance(IOptimisationData.class), fos);
+						}
+					} catch (final Exception e) {
+						// return
+						// Assert.fail(e.getMessage());
+					}
+					return null;
+				}
+
+			});
+		}
 
 		optimiseBasicScenario(scenarioRunner, url, String.format(".%s.properties", Joiner.on(".").join(components)));
 	}
