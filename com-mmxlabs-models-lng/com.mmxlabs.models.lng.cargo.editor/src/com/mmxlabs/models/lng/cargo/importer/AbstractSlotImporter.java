@@ -35,11 +35,6 @@ public class AbstractSlotImporter extends DefaultClassImporter {
 
 		if (object instanceof Slot) {
 			final Slot slot = (Slot) object;
-			
-			if (slot.getName().contains("B14d")) {
-				int ii = 0;
-			}
-			
 			if (extension instanceof SlotContractParams) {
 				final SlotContractParams slotContractParams = (SlotContractParams) extension;
 				final SlotContractParams expectedSlotContractParams = slot.getSlotContractParams();
