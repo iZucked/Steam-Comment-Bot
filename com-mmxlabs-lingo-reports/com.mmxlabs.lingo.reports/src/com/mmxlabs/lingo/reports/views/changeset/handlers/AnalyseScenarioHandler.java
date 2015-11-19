@@ -10,7 +10,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.shiro.SecurityUtils;
 import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.di.annotations.Optional;
@@ -25,6 +24,7 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetViewEventConstants;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -49,7 +49,7 @@ public class AnalyseScenarioHandler {
 	@CanExecute
 	public boolean canExecute(@Optional @Named(IServiceConstants.ACTIVE_PART) final MPart part) {
 
-		if (!SecurityUtils.getSubject().isPermitted("features:optimisation-actionset")) {
+		if (!LicenseFeatures.isPermitted("features:optimisation-actionset")) {
 			return false;
 		}
 

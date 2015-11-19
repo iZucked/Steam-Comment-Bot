@@ -21,6 +21,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ScheduleElementCollector;
 import com.mmxlabs.lingo.reports.diff.utils.PNLDeltaUtils;
@@ -209,7 +210,7 @@ public class ScenarioComparisonServiceTransformer {
 				diffProcessors.clear();
 
 				// Also if number of scenarios is 0 or 1
-				final boolean enableDiffTools = SecurityUtils.getSubject().isPermitted("features:difftools");
+				final boolean enableDiffTools = LicenseFeatures.isPermitted("features:difftools");
 				if (enableDiffTools) {
 					diffProcessors.add(new CycleDiffProcessor(customRelatedSlotHandlers));
 				}
