@@ -30,9 +30,9 @@ import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
 @RunWith(value = Parameterized.class)
 public abstract class AdvancedOptimisationTester extends AbstractOptimisationResultTester {
 
-	// This should only be commited as false to avoid crazy test run times.
+	// This should only be committed as false to avoid crazy test run times.
 	private static final boolean RUN_FULL_ITERATION_CASES = false;
-	// This should only be commited as true.
+	// This should only be committed as true.
 	private static final boolean RUN_LIMITED_ITERATION_CASES = true;
 
 	private @NonNull final String scenarioURL;
@@ -110,6 +110,7 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 		}
 		// Load the scenario to test
 		final URL url = getClass().getResource(scenarioURL);
+		Assert.assertNotNull(url);
 
 		final LNGScenarioModel originalScenario = LNGScenarioRunnerCreator.getScenarioModelFromURL(url);
 
@@ -128,6 +129,7 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 		userSettings.setSimilarityMode(mode);
 
 		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null);
+		Assert.assertNotNull(optimiserSettings);
 
 		if (limitedIterations) {
 			// Limit for quick optimisation
@@ -157,6 +159,9 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 		if (withGeneratedCharterOuts) {
 			components.add("gco");
 		}
+		// if (withShippingOnly) {
+		// components.add("shipping");
+		// }
 
 		optimiseBasicScenario(scenarioRunner, url, String.format(".%s.properties", Joiner.on(".").join(components)));
 	}
