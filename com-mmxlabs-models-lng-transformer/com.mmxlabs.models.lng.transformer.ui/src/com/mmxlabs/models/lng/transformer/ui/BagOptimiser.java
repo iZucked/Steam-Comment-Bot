@@ -149,6 +149,15 @@ public class BagOptimiser {
 			fitnessHelper.evaluateSequencesFromComponents(potentialFullSequences, evaluationState, fitnessComponents, null);
 			bestFitness = fitnessCombiner.calculateFitness(fitnessComponents);
 
+			final Map<String, Long> currentFitnesses = new HashMap<>();
+			for (final IFitnessComponent fitnessComponent : fitnessComponents) {
+				currentFitnesses.put(fitnessComponent.getName(), fitnessComponent.getFitness());
+			}
+
+			final Map<String, Object> extraAnnotations = new HashMap<>();
+			extraAnnotations.put(OptimiserConstants.G_AI_fitnessComponents, currentFitnesses);
+
+			
 		}
 
 		try {
@@ -178,7 +187,21 @@ public class BagOptimiser {
 
 			final ScheduledSequences initialScheduledSequences = evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class);
 			assert initialScheduledSequences != null;
+			{
 
+				fitnessHelper.evaluateSequencesFromComponents(initialFullSequences, evaluationState, fitnessComponents, null);
+				fitnessCombiner.calculateFitness(fitnessComponents);
+
+				final Map<String, Long> currentFitnesses = new HashMap<>();
+				for (final IFitnessComponent fitnessComponent : fitnessComponents) {
+					currentFitnesses.put(fitnessComponent.getName(), fitnessComponent.getFitness());
+				}
+
+				final Map<String, Object> extraAnnotations = new HashMap<>();
+				extraAnnotations.put(OptimiserConstants.G_AI_fitnessComponents, currentFitnesses);
+
+				
+			}
 			// Calculate initial metrics
 			final long initialUnusedCompulsarySlot = bagMover.calculateUnusedCompulsarySlot(initialRawSequences);
 			final long initialLateness = bagMover.calculateScheduleLateness(initialFullSequences, initialScheduledSequences);

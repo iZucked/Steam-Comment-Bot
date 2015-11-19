@@ -17,6 +17,7 @@ import java.util.Set;
 import com.google.common.base.Objects;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -62,12 +63,23 @@ public class ChangeSet implements Serializable {
 
 		// We cannot persist the rawSequences as this is linked to external data.
 		// However we can store the representation as an int array and re-create the sequences with reference to a IOptimisationData instance.
-		persistedSequences = new int[rawSequences.getResources().size()][];
-		for (int i = 0; i < persistedSequences.length; ++i) {
-			final ISequence s = rawSequences.getSequence(i);
-			persistedSequences[i] = new int[s.size()];
-			for (int j = 0; j < persistedSequences[i].length; ++j) {
-				persistedSequences[i][j] = s.get(j).getIndex();
+		int resourceCount = 0;
+		for (final IResource r : rawSequences.getResources()) {
+			++resourceCount;
+		}
+
+		persistedSequences = new int[resourceCount][];
+
+		{
+			persistedSequences = new int[resourceCount][];
+			int i = 0;
+			for (final IResource r : rawSequences.getResources()) {
+				final ISequence s = rawSequences.getSequence(r);
+				persistedSequences[i] = new int[s.size()];
+				for (int j = 0; j < persistedSequences[i].length; ++j) {
+					persistedSequences[i][j] = s.get(j).getIndex();
+				}
+				i++;
 			}
 		}
 		persistedUnusedElements = new int[rawSequences.getUnusedElements().size()];
@@ -129,7 +141,7 @@ public class ChangeSet implements Serializable {
 	public int hashCode() {
 		return hashCode;
 	}
-	
+
 	public ISequences getRawSequences() {
 		return rawSequences;
 	}

@@ -163,7 +163,7 @@ public class AnnotatedSolutionExporter {
 		}
 
 		final List<Sequence> sequences = output.getSequences();
-		final List<IResource> resources = annotatedSolution.getFullSequences().getResources();
+		final Iterable<IResource> resources = annotatedSolution.getFullSequences().getResources();
 		// Create sequences and run other exporters
 
 		final Sequence fobSequence = factory.createSequence();
