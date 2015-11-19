@@ -8,6 +8,9 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 
 @NonNullByDefault
 public class OptimiserConstants {
+	
+	public static final String SEQUENCE_TYPE_INITIAL = "Initial-Sequences";
+	
 	public static final String G_AI_fitnessComponents = "general-info-components";
 
 	public static final String G_AI_runtime = "general-info-runtime";
