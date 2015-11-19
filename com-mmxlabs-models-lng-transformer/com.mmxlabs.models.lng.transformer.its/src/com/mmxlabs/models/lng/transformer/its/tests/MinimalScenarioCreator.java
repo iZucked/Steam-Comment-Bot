@@ -9,7 +9,6 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.swt.widgets.DateTime;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;

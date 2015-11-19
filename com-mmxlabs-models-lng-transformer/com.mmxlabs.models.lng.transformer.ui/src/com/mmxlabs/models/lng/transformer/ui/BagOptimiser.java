@@ -205,7 +205,7 @@ public class BagOptimiser {
 			try {
 				bagMover.setDepthRange(0, 3);
 				Collection<JobState> fullChangesSets = Collections.EMPTY_LIST;
-				Collection<JobState> oldFullChangesSets = Collections.EMPTY_LIST;
+				Collection<JobState> oldFullChangesSets = new LinkedList<>(l);
 				Collection<JobState> initialPopulation = addChangeSetLevel(targetSimilarityState, l, changeChecker, oldFullChangesSets, initialPopulationSize);
 
 				if (DEBUG) {
@@ -512,7 +512,7 @@ public class BagOptimiser {
 				pnl += cs.metricDelta[MetricType.PNL.ordinal()];
 				changes += cs.changesList.size();
 			}
-			System.out.println(String.format("##%s## [%s] / [%s] = %s", ++order, pnl, changes, pnl / changes));
+			System.out.println(String.format("##%s## [%s] / [%s] = %s", ++order, pnl, changes, changes == 0 ? 0 : pnl / changes));
 		}
 		states.clear();
 		for (JobState js : reducedStates) {
@@ -531,7 +531,7 @@ public class BagOptimiser {
 				pnl += cs.metricDelta[MetricType.PNL.ordinal()];
 				changes += cs.changesList.size();
 			}
-			System.out.println(String.format("##%s## [%s] / [%s] = %s", 0, pnl, changes, pnl / changes));
+			System.out.println(String.format("##%s## [%s] / [%s] = %s", 0, pnl, changes, changes == 0 ? 0 : pnl / changes));
 		}
 		return states;
 	}
@@ -633,7 +633,8 @@ public class BagOptimiser {
 		return states;
 	}
 
-	protected boolean processAndStoreBreakdownSolution(final JobState solution, final IModifiableSequences initialFullSequences, final IEvaluationState evaluationState, final long bestSolutionFitness) {
+	protected boolean processAndStoreBreakdownSolution(final JobState solution, final IModifiableSequences initialFullSequences, final IEvaluationState evaluationState,
+			final long bestSolutionFitness) {
 		final List<Pair<ISequences, IEvaluationState>> processedSolution = new LinkedList<Pair<ISequences, IEvaluationState>>();
 
 		processedSolution.add(new Pair<ISequences, IEvaluationState>(initialFullSequences, evaluationState));

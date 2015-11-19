@@ -13,7 +13,7 @@ import org.junit.runners.model.InitializationError;
 import com.mmxlabs.license.features.LicenseFeatures;
 
 /**
- * Runner for test cases run outside of main application to initalise the Shiro Framework
+ * Runner for test cases run outside of main application to initialise the Shiro Framework
  * 
  * @author Simon Goodall
  * 

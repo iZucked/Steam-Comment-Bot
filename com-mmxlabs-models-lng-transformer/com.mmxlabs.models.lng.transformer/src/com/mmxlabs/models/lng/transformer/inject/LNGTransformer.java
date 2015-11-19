@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.shiro.SecurityUtils;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -24,6 +23,7 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.IOptimisationTransformer;
@@ -114,14 +114,14 @@ public class LNGTransformer {
 			}
 		}
 		if (optimiserSettings.isGenerateCharterOuts()) {
-			if (SecurityUtils.getSubject().isPermitted("features:optimisation-charter-out-generation")) {
+			if (LicenseFeatures.isPermitted("features:optimisation-charter-out-generation")) {
 				hints.add(HINT_GENERATE_CHARTER_OUTS);
 			}
 		}
 
 		// Too late for LNGScenarioRunner, but add to hints for modules in case it is needed in the future.
 		if (optimiserSettings.isBuildActionSets()) {
-			if (SecurityUtils.getSubject().isPermitted("features:optimisation-actionset")) {
+			if (LicenseFeatures.isPermitted("features:optimisation-actionset")) {
 				hints.add(HINT_OPTIMISE_BREAKDOWN);
 			}
 		}

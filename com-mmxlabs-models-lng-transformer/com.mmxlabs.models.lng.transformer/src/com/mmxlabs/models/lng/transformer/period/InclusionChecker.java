@@ -5,11 +5,15 @@
 package com.mmxlabs.models.lng.transformer.period;
 
 import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.Map;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -30,6 +34,7 @@ public class InclusionChecker {
 	 * 
 	 * 
 	 */
+	@NonNullByDefault
 	public static enum InclusionType {
 		In, Out, Boundary
 	}
@@ -39,6 +44,7 @@ public class InclusionChecker {
 	 * {@link #Before} or {@link #After} should be available. For a {@link InclusionType#In} only {@link #Unknown} is defined.
 	 * 
 	 */
+	@NonNullByDefault
 	public enum Position {
 		Before, After, Unknown, Both
 	}
@@ -50,13 +56,20 @@ public class InclusionChecker {
 	 * 
 	 */
 	public static class PeriodRecord {
+		@Nullable
 		public ZonedDateTime lowerCutoff;
+		@Nullable
 		public ZonedDateTime lowerBoundary;
+
+		@Nullable
 		public ZonedDateTime upperBoundary;
+		@Nullable
 		public ZonedDateTime upperCutoff;
 	}
 
-	public Pair<InclusionType, Position> getObjectInclusionType(final EObject object, final PeriodRecord periodRecord) {
+	@NonNull
+	public NonNullPair<InclusionType, Position> getObjectInclusionType(@NonNull final EObject object, @NonNull final Map<EObject, PortVisit> scheduledEventMap,
+			@NonNull final PeriodRecord periodRecord) {
 
 		if (object instanceof Cargo) {
 
@@ -64,18 +77,17 @@ public class InclusionChecker {
 			// FOB sales stay fixed. DES purchases, only if divertible
 
 			final Cargo cargo = (Cargo) object;
-			final Pair<Slot, Slot> slots = getFirstAndLastSlots(cargo);
+			final NonNullPair<Slot, Slot> slots = getFirstAndLastSlots(cargo);
 			final Slot firstSlot = slots.getFirst();
 			final Slot lastSlot = slots.getSecond();
-
 			if (periodRecord.upperCutoff != null) {
-				if (firstSlot.getWindowStartWithSlotOrPortTime().isAfter(periodRecord.upperCutoff)) {
-					return new Pair<>(InclusionType.Out, Position.After);
+				if (getScheduledStart(firstSlot, scheduledEventMap.get(firstSlot)).isAfter(periodRecord.upperCutoff)) {
+					return new NonNullPair<>(InclusionType.Out, Position.After);
 				}
 			}
 			if (periodRecord.lowerCutoff != null) {
-				if (lastSlot.getWindowEndWithSlotOrPortTime().isBefore(periodRecord.lowerCutoff)) {
-					return new Pair<>(InclusionType.Out, Position.Before);
+				if (getScheduledEnd(lastSlot, scheduledEventMap.get(lastSlot)).isBefore(periodRecord.lowerCutoff)) {
+					return new NonNullPair<>(InclusionType.Out, Position.Before);
 				}
 			}
 			{
@@ -98,31 +110,31 @@ public class InclusionChecker {
 					}
 
 				}
-				return new Pair<>(type, pos);
+				return new NonNullPair<>(type, pos);
 			}
 		} else if (object instanceof Slot) {
 			final Slot slot = (Slot) object;
 			if (periodRecord.upperBoundary != null) {
 				if (slot.getWindowStartWithSlotOrPortTime().isAfter(periodRecord.upperBoundary)) {
-					return new Pair<>(InclusionType.Out, Position.After);
+					return new NonNullPair<>(InclusionType.Out, Position.After);
 				}
 			}
 			if (periodRecord.lowerBoundary != null) {
 				if (slot.getWindowEndWithSlotOrPortTime().isBefore(periodRecord.lowerBoundary)) {
-					return new Pair<>(InclusionType.Out, Position.Before);
+					return new NonNullPair<>(InclusionType.Out, Position.Before);
 				}
 			}
 		} else if (object instanceof VesselEvent) {
 			final VesselEvent event = (VesselEvent) object;
 			if (periodRecord.upperCutoff != null) {
-				if (event.getStartAfterAsDateTime().isAfter(periodRecord.upperCutoff)) {
-					return new Pair<>(InclusionType.Out, Position.After);
+				if (getScheduledStart(event, scheduledEventMap.get(event)).isAfter(periodRecord.upperCutoff)) {
+					return new NonNullPair<>(InclusionType.Out, Position.After);
 				}
 			}
 			if (periodRecord.lowerCutoff != null) {
-				ZonedDateTime cal = event.getStartAfterAsDateTime().plusDays(event.getDurationInDays());
+				final ZonedDateTime cal = getScheduledStart(event, scheduledEventMap.get(event)).plusDays(event.getDurationInDays());
 				if (cal.isBefore(periodRecord.lowerCutoff)) {
-					return new Pair<>(InclusionType.Out, Position.Before);
+					return new NonNullPair<>(InclusionType.Out, Position.Before);
 				}
 			}
 			// TODO: Check duration
@@ -133,40 +145,79 @@ public class InclusionChecker {
 			final VesselAvailability vesselAvailability = (VesselAvailability) object;
 			if (periodRecord.lowerCutoff != null) {
 				if (vesselAvailability.isSetEndBy() && vesselAvailability.getEndByAsDateTime().isBefore(periodRecord.lowerCutoff)) {
-					return new Pair<>(InclusionType.Out, Position.Before);
+					return new NonNullPair<>(InclusionType.Out, Position.Before);
 				}
 			}
 			if (periodRecord.upperCutoff != null) {
 				if (vesselAvailability.isSetStartAfter() && vesselAvailability.getStartAfterAsDateTime().isAfter(periodRecord.upperCutoff)) {
-					return new Pair<>(InclusionType.Out, Position.After);
+					return new NonNullPair<>(InclusionType.Out, Position.After);
 				}
 			}
 		}
 
-		return new Pair<>(InclusionType.In, Position.Unknown);
+		return new NonNullPair<>(InclusionType.In, Position.Unknown);
 	}
 
-	public InclusionType getObjectInVesselAvailabilityRange(final PortVisit portVisit, final VesselAvailability vesselAvailability) {
+	@NonNull
+	public InclusionType getObjectInVesselAvailabilityRange(@NonNull final PortVisit portVisit, @NonNull final VesselAvailability vesselAvailability) {
 
 		if (vesselAvailability.isSetEndBy()) {
 			if (portVisit.getStart().isAfter(vesselAvailability.getEndByAsDateTime())) {
 				return InclusionType.Out;
 			}
 		}
-		if (vesselAvailability.isSetStartAfter()) {
+		if (vesselAvailability.isSetStartAfter())
+
+		{
 			if (portVisit.getEnd().isBefore(vesselAvailability.getStartAfterAsDateTime())) {
 				return InclusionType.Out;
 			}
 		}
 
 		return InclusionType.In;
+
 	}
 
-	public Pair<Slot, Slot> getFirstAndLastSlots(Cargo cargo) {
-		final EList<Slot> sortedSlots = cargo.getSortedSlots();
+	@NonNull
+	public NonNullPair<Slot, Slot> getFirstAndLastSlots(@NonNull final Cargo cargo) {
+		final List<Slot> sortedSlots = cargo.getSortedSlots();
+
 		final Slot firstSlot = sortedSlots.get(0);
+		assert firstSlot != null;
+
 		final Slot lastSlot = sortedSlots.get(sortedSlots.size() - 1);
-		return new Pair<Slot, Slot>(firstSlot, lastSlot);
+		assert lastSlot != null;
+
+		return new NonNullPair<Slot, Slot>(firstSlot, lastSlot);
 	}
 
+	@NonNull
+	public ZonedDateTime getScheduledStart(@NonNull final Slot slot, @Nullable final PortVisit portVisit) {
+		final ZonedDateTime visitTime = portVisit == null ? null : portVisit.getStart();
+		if (visitTime == null) {
+			return slot.getWindowStartWithSlotOrPortTime();
+		} else {
+			return visitTime;
+		}
+	}
+
+	@NonNull
+	public ZonedDateTime getScheduledEnd(@NonNull final Slot slot, @Nullable final PortVisit portVisit) {
+		final ZonedDateTime visitTime = portVisit == null ? null : portVisit.getEnd();
+		if (visitTime == null) {
+			return slot.getWindowEndWithSlotOrPortTime().plusHours(slot.getDuration());
+		} else {
+			return visitTime;
+		}
+	}
+
+	@NonNull
+	public ZonedDateTime getScheduledStart(@NonNull final VesselEvent vesselEvent, @Nullable final PortVisit portVisit) {
+		final ZonedDateTime visitTime = portVisit == null ? null : portVisit.getStart();
+		if (visitTime == null) {
+			return vesselEvent.getStartAfterAsDateTime();
+		} else {
+			return visitTime;
+		}
+	}
 }

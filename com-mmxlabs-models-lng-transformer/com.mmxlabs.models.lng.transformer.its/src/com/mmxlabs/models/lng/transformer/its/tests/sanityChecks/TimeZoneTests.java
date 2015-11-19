@@ -7,7 +7,6 @@ package com.mmxlabs.models.lng.transformer.its.tests.sanityChecks;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-import org.eclipse.swt.widgets.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
