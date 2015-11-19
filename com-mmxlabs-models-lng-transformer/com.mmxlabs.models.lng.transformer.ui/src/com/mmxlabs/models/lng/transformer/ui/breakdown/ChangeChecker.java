@@ -21,7 +21,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 public class ChangeChecker {
 	SimilarityState target;
 	SimilarityState base;
-	ISequences baseFullSequences;
+	ISequences baseRawSequences;
 	List<Difference> fullDifferences;
 
 	@Inject
@@ -31,31 +31,31 @@ public class ChangeChecker {
 
 	}
 
-	public ChangeChecker(SimilarityState base, SimilarityState target, ISequences baseFullSequences) {
-		init(base, target, baseFullSequences);
+	public ChangeChecker(SimilarityState base, SimilarityState target, ISequences baseRawSequences) {
+		init(base, target, baseRawSequences);
 	}
 
-	public void init(SimilarityState base, SimilarityState target, ISequences baseFullSequences) {
+	public void init(SimilarityState base, SimilarityState target, ISequences baseRawSequences) {
 		this.base = base;
 		this.target = target;
-		this.baseFullSequences = baseFullSequences;
-		setFullDifferences(baseFullSequences);
+		this.baseRawSequences = baseRawSequences;
+		setDifferences(baseRawSequences);
 	}
 
 	public List<Difference> getFullDifferences() {
 		return fullDifferences;
 	}
 
-	private void setFullDifferences(ISequences sequences) {
-		fullDifferences = findAllDifferences(sequences);
+	private void setDifferences(ISequences rawSequences) {
+		fullDifferences = findAllDifferences(rawSequences);
 	}
 
-	private List<Difference> findAllDifferences(ISequences fullSequences) {
+	private List<Difference> findAllDifferences(ISequences rawSequences) {
 		List<Difference> differences = new ArrayList<Difference>();
 		int differenceCount = 0;
 		boolean different = false;
-		for (final IResource resource : fullSequences.getResources()) {
-			final ISequence sequence = fullSequences.getSequence(resource);
+		for (final IResource resource : rawSequences.getResources()) {
+			final ISequence sequence = rawSequences.getSequence(resource);
 			ISequenceElement prev = null;
 			int currIdx = -1;
 			for (final ISequenceElement current : sequence) {
@@ -135,7 +135,7 @@ public class ChangeChecker {
 			}
 		}
 
-		Deque<ISequenceElement> unusedElements = new LinkedList<ISequenceElement>(fullSequences.getUnusedElements());
+		Deque<ISequenceElement> unusedElements = new LinkedList<ISequenceElement>(rawSequences.getUnusedElements());
 		while (unusedElements.size() > 0) {
 			ISequenceElement element = unusedElements.pop();
 			if (portTypeProvider.getPortType(element).equals(PortType.Load) && target.getDischargeForLoad(element) != null) {
@@ -155,7 +155,7 @@ public class ChangeChecker {
 	}
 
 	public ChangeChecker(ChangeChecker original) {
-		this(original.base, original.target, original.baseFullSequences);
+		this(original.base, original.target, original.baseRawSequences);
 		this.fullDifferences = new ArrayList<Difference>();
 		for (Difference d : original.fullDifferences) {
 			this.fullDifferences.add(new Difference(d.move, d.load, d.discharge, d.resource));
