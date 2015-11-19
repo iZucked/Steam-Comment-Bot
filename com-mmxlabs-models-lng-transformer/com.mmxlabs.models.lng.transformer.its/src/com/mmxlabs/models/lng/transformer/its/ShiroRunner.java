@@ -27,10 +27,11 @@ public class ShiroRunner extends BlockJUnit4ClassRunner {
 
 	private void initAccessControl() {
 		// Initialise feature enablements
-		LicenseFeatures.initialiseFeatureEnablements("optimisation-period");
+		LicenseFeatures.initialiseFeatureEnablements("optimisation-period", "optimisation-charter-out-generation");
 
 		// Login our default user
 		final Subject subject = SecurityUtils.getSubject();
+		subject.logout();
 		subject.login(new UsernamePasswordToken("user", "password"));
 	}
 

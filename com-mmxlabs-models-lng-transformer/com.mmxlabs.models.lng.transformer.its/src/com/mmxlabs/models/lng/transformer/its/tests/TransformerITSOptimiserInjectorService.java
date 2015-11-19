@@ -27,7 +27,7 @@ public class TransformerITSOptimiserInjectorService implements IOptimiserInjecto
 			@Override
 			protected void configure() {
 
-				bind(IGeneratedCharterOutEvaluator.class).to(DefaultGeneratedCharterOutEvaluator.class);
+//				bind(IGeneratedCharterOutEvaluator.class).to(DefaultGeneratedCharterOutEvaluator.class);
 			}
 		};
 	}

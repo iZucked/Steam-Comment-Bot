@@ -21,6 +21,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.transformer.DefaultModelEntityMap;
 import com.mmxlabs.models.lng.transformer.IOptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
@@ -31,6 +32,7 @@ import com.mmxlabs.models.lng.transformer.util.OptimisationTransformer;
 import com.mmxlabs.optimiser.core.IEvaluationContext;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
@@ -103,7 +105,7 @@ public class LNGTransformerModule extends AbstractModule {
 
 		bind(DateAndCurveHelper.class).in(Singleton.class);
 
-		bind(ModelEntityMap.class).in(Singleton.class);
+		bind(ModelEntityMap.class).to(DefaultModelEntityMap.class).in(Singleton.class);
 
 		bind(ILNGVoyageCalculator.class).to(LNGVoyageCalculator.class);
 		bind(LNGVoyageCalculator.class).in(Singleton.class);
@@ -172,7 +174,7 @@ public class LNGTransformerModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	@Named("Initial")
+	@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)
 	private ISequences provideInitialSequences(final IOptimisationTransformer optimisationTransformer, final IOptimisationData data, final ModelEntityMap modelEntityMap) {
 
 		final ISequences sequences = optimisationTransformer.createInitialSequences(data, modelEntityMap);

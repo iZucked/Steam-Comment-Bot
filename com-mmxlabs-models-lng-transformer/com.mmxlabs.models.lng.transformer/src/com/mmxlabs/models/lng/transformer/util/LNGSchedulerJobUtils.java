@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -21,7 +22,12 @@ import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
@@ -60,7 +66,9 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IEvaluationContext;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
+import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
@@ -82,6 +90,73 @@ public class LNGSchedulerJobUtils {
 	 * Label used to prefix optimisation update commands so they can be undone later if possible to avoid a history of commands for each report interval.
 	 */
 	private static final String LABEL_PREFIX = "Optimised: ";
+
+	/**
+	 * Given the input scenario and am {@link IAnnotatedSolution}, create a new {@link Schedule} and update the related models ( the {@link CargoModel} and {@link AssignmentModel})
+	 * 
+	 * @param injector
+	 * @param scenario
+	 * @param editingDomain
+	 * @param modelEntityMap
+	 * @param extraAnnotations
+	 * @param solution
+	 * @param lockKey
+	 * @param solutionCurrentProgress
+	 * @param LABEL_PREFIX
+	 * @return
+	 */
+	public static Pair<Command, Schedule> exportSolution(final Injector injector, final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings, final EditingDomain editingDomain,
+			@NonNull final ModelEntityMap modelEntityMap, @NonNull final ISequences rawSequences, @Nullable final Map<String, Object> extraAnnotations) {
+
+		// new LNGExportTransformer(eveal/optimisationTransofrmer, hints);
+		// exporter == transformer.createASE();
+		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
+		{
+			final Injector childInjector = injector.createChildInjector(new ExporterExtensionsModule());
+			childInjector.injectMembers(exporter);
+		}
+		{
+
+			final IOptimisationData optimisationData = injector.getInstance(IOptimisationData.class);
+			final IAnnotatedSolution solution = LNGSchedulerJobUtils.evaluateCurrentState(injector, optimisationData, rawSequences);
+
+			// Copy extra annotations - e.g. fitness information
+			if (extraAnnotations != null) {
+				extraAnnotations.entrySet().forEach(e -> solution.setGeneralAnnotation(e.getKey(), e.getValue()));
+			}
+
+			final Schedule schedule = exporter.exportAnnotatedSolution(modelEntityMap, solution);
+			final ScheduleModel scheduleModel = scenario.getScheduleModel();
+			final CargoModel cargoModel = scenario.getCargoModel();
+
+			final CompoundCommand command = new CompoundCommand();
+
+			command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Schedule(), schedule));
+
+			// new LNGExportTransformer(eveal/optimisationTransofrmer, hints);
+			final Injector childInjector = injector.createChildInjector(new PostExportProcessorModule());
+
+			final Key<List<IPostExportProcessor>> key = Key.get(new TypeLiteral<List<IPostExportProcessor>>() {
+			});
+
+			Iterable<IPostExportProcessor> postExportProcessors;
+			try {
+				postExportProcessors = childInjector.getInstance(key);
+				//
+			} catch (final ConfigurationException e) {
+				postExportProcessors = null;
+			}
+
+			command.append(derive(editingDomain, scenario, schedule, cargoModel, postExportProcessors));
+			// command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Dirty(), false));
+			command.append(SetCommand.create(editingDomain, scenario, LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_Parameters(), optimiserSettings));
+
+			// Mark schedule as clean
+			command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.Literals.SCHEDULE_MODEL__DIRTY, Boolean.FALSE));
+
+			return new Pair<Command, Schedule>(command, schedule);
+		}
+	}
 
 	/**
 	 * Given the input scenario and am {@link IAnnotatedSolution}, create a new {@link Schedule} and update the related models ( the {@link CargoModel} and {@link AssignmentModel})
@@ -170,6 +245,45 @@ public class LNGSchedulerJobUtils {
 				((CommandProviderAwareEditingDomain) editingDomain).setAdaptersEnabled(true, true);
 			}
 		}
+	}
+
+	/**
+	 * Returns true if a command was undone
+	 * 
+	 * @param editingDomain
+	 * @param solutionCurrentProgress
+	 * @return
+	 */
+	public static boolean undoPreviousOptimsationStep(@NonNull final EditingDomain editingDomain, final int solutionCurrentProgress, boolean force) {
+		// Undo previous optimisation step if possible
+		try {
+
+			if (editingDomain instanceof CommandProviderAwareEditingDomain) {
+				((CommandProviderAwareEditingDomain) editingDomain).setAdaptersEnabled(false);
+			}
+
+			// Rollback last "save" and re-apply to avoid long history of undos
+			if (force || solutionCurrentProgress != 0) {
+				final Command mostRecentCommand = editingDomain.getCommandStack().getMostRecentCommand();
+				if (mostRecentCommand != null) {
+					if (force || mostRecentCommand.getLabel().startsWith(LABEL_PREFIX)) {
+						final CommandStack stack = editingDomain.getCommandStack();
+						if (stack instanceof MMXAdaptersAwareCommandStack) {
+							((MMXAdaptersAwareCommandStack) stack).undo(null);
+						} else {
+							stack.undo();
+						}
+						return true;
+					}
+				}
+			}
+
+		} finally {
+			if (editingDomain instanceof CommandProviderAwareEditingDomain) {
+				((CommandProviderAwareEditingDomain) editingDomain).setAdaptersEnabled(true, true);
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -472,4 +586,60 @@ public class LNGSchedulerJobUtils {
 
 		return solution;
 	}
+
+	@NonNull
+	public static EditingDomain createLocalEditingDomain() {
+		final BasicCommandStack commandStack = new BasicCommandStack();
+		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
+		final EditingDomain ed = new AdapterFactoryEditingDomain(adapterFactory, commandStack);
+		return ed;
+	}
+
+	/**
+	 * 
+	 * @param annotatedSolution
+	 * @return
+	 */
+	@NonNull
+	public static Map<String, Object> extractOptimisationAnnotations(@Nullable final IAnnotatedSolution annotatedSolution) {
+		final Map<String, Object> extraAnnotations = new HashMap<>();
+		if (annotatedSolution != null) {
+			extraAnnotations.put(OptimiserConstants.G_AI_fitnessComponents, annotatedSolution.getGeneralAnnotation(OptimiserConstants.G_AI_fitnessComponents, Map.class));
+			extraAnnotations.put(OptimiserConstants.G_AI_iterations, annotatedSolution.getGeneralAnnotation(OptimiserConstants.G_AI_iterations, Integer.class));
+			extraAnnotations.put(OptimiserConstants.G_AI_runtime, annotatedSolution.getGeneralAnnotation(OptimiserConstants.G_AI_runtime, Long.class));
+		}
+		return extraAnnotations;
+	}
+
+	@NonNull
+	public static IAnnotatedSolution evaluateCurrentState(@NonNull final Injector injector, @NonNull final IOptimisationData data, @NonNull final ISequences rawSequences) {
+		/**
+		 * Start the full evaluation process.
+		 */
+
+		// Step 1. Get or derive the initial sequences from the input scenario data
+		final IModifiableSequences mSequences = new ModifiableSequences(rawSequences);
+
+		// Run through the sequences manipulator of things such as start/end port replacement
+
+		final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
+		// this will set the return elements to the right places, and remove the start elements.
+		manipulator.manipulate(mSequences);
+
+		final EvaluationState state = new EvaluationState();
+		// The output data structured, a solution with all the output data as annotations
+		// Create a fake context
+		final EvaluationProcessRegistry evaluationProcessRegistry = new EvaluationProcessRegistry();
+		final IEvaluationContext context = new EvaluationContext(data, mSequences, Collections.<String> emptyList(), evaluationProcessRegistry);
+
+		final AnnotatedSolution solution = new AnnotatedSolution(mSequences, context, state);
+
+		final IEvaluationProcess process = injector.getInstance(SchedulerEvaluationProcess.class);
+
+		process.annotate(mSequences, state, solution);
+
+		return solution;
+	}
+
 }

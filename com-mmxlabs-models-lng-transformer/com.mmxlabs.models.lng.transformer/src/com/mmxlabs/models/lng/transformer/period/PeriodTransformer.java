@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -634,16 +635,10 @@ public class PeriodTransformer {
 		final ScheduleModel scheduleModel = output.getScheduleModel();
 		final Schedule schedule = scheduleModel.getSchedule();
 		for (final Sequence sequence : schedule.getSequences()) {
-			if (sequence.getSequenceType() == SequenceType.DES_PURCHASE) {
-				int ii = 0;
-			}
 			for (final Event event : sequence.getEvents()) {
 				if (event instanceof SlotVisit) {
 					final SlotVisit slotVisit = (SlotVisit) event;
 					Slot slot = slotVisit.getSlotAllocation().getSlot();
-					if (slot.getName().contains("GL3")) {
-						int ii = 0;
-					}
 					objectToPortVisitMap.put(slot, slotVisit);
 				} else if (event instanceof VesselEventVisit) {
 					final VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
@@ -745,6 +740,17 @@ public class PeriodTransformer {
 		assert output != null;
 
 		copier.copyReferences();
+
+		// Remove schedule model references from copier before passing into the mapping object.
+		Schedule schedule = wholeScenario.getScheduleModel().getSchedule();
+		if (schedule != null) {
+			Iterator<EObject> itr = schedule.eAllContents();
+			while (itr.hasNext()) {
+				copier.remove(itr.next());
+			}
+			// schedule.eAllContents().forEachRemaining(t -> copier.remove(t));
+			copier.remove(schedule);
+		}
 
 		mapping.createMappings(copier);
 
