@@ -171,10 +171,6 @@ public class ScenarioComparisonTransformer {
 			@NonNull final List<ChangeSetRow> rows, final Map<EObject, Set<EObject>> equivalancesMap, final int pass) {
 		for (final Row r : cycleGroup.getRows()) {
 
-			if (r.getOpenSlotAllocation() != null) {
-				int ii = 0;
-			}
-
 			final boolean isBase = true;
 
 			if (pass == 0 && r.isReference()) {
