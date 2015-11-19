@@ -19,7 +19,7 @@ public interface IAnnotatedSolution {
 	 * @return
 	 */
 	@NonNull
-	ISequences getSequences();
+	ISequences getFullSequences();
 
 	@NonNull
 	IEvaluationState getEvaluationState();

@@ -27,7 +27,7 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 public final class AnnotatedSolution implements IAnnotatedSolution {
 
 	@NonNull
-	private final ISequences sequences;
+	private final ISequences fullSequences;
 
 	@NonNull
 	private final IEvaluationContext context;
@@ -41,16 +41,16 @@ public final class AnnotatedSolution implements IAnnotatedSolution {
 	@NonNull
 	private final Map<String, Object> generalAnnotations = new HashMap<String, Object>();
 
-	public AnnotatedSolution(@NonNull final ISequences sequences, @NonNull final IEvaluationContext context, @NonNull final IEvaluationState evaluationState) {
-		this.sequences = sequences;
+	public AnnotatedSolution(@NonNull final ISequences fullSequences, @NonNull final IEvaluationContext context, @NonNull final IEvaluationState evaluationState) {
+		this.fullSequences = fullSequences;
 		this.context = context;
 		this.evaluationState = evaluationState;
 	}
 
 	@Override
 	@NonNull
-	public ISequences getSequences() {
-		return sequences;
+	public ISequences getFullSequences() {
+		return fullSequences;
 	}
 
 	@Override

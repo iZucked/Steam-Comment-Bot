@@ -41,26 +41,26 @@ public interface IFitnessCore {
 	/**
 	 * Evaluates the full fitness of the given sequences. If this returns false, the sequences are unacceptably bad, and the caller should back out of any more evaluation immediately
 	 * 
-	 * @param sequences
+	 * @param fullSequences
 	 */
-	boolean evaluate(@NonNull ISequences sequences, @NonNull IEvaluationState evaluationState);
+	boolean evaluate(@NonNull ISequences fullSequences, @NonNull IEvaluationState evaluationState);
 
 	/**
 	 * Evaluates the fitness of the given sequence. This method takes a list of affected resources used to indicate that only the given resources have changed since the previous evaluation. If this is
 	 * the first invocation of this method since the last {@link #init()} call, then a full evaluation must be performed and subsequent calls can take advantage of the affected list. Likewise, passing
 	 * null into the affectedResources will perform a full evaluation.
 	 * 
-	 * @param sequences
+	 * @param fullSequences
 	 */
-	boolean evaluate(@NonNull ISequences sequences, @NonNull IEvaluationState evaluationState, @Nullable Collection<IResource> affectedResources);
+	boolean evaluate(@NonNull ISequences fullSequences, @NonNull IEvaluationState evaluationState, @Nullable Collection<IResource> affectedResources);
 
 	/**
 	 * Notify the fitness core that the given sequences have been accepted. These parameters should have been given to the last invocation of {@link #evaluate(ISequences, Collection)}.
 	 * 
-	 * @param sequences
+	 * @param fullSequences
 	 * @param affectedResources
 	 */
-	void accepted(@NonNull ISequences sequences, @Nullable Collection<IResource> affectedResources);
+	void accepted(@NonNull ISequences fullSequences, @Nullable Collection<IResource> affectedResources);
 
 	/**
 	 * Clean up resources once the {@link IFitnessCore} is no longer required.
@@ -70,10 +70,10 @@ public interface IFitnessCore {
 	/**
 	 * Add annotations of the given sequences to the associated {@link IAnnotatedSolution}. Performs a full evaluation, but should <em>not</em> change the fitness stored in the associated components
 	 * 
-	 * @param sequences
+	 * @param fullSequences
 	 *            sequences to evaluate
 	 * @param solution
 	 *            annotated solution for these sequences
 	 */
-	void annotate(@NonNull final ISequences sequences, @NonNull IEvaluationState evaluationState, @NonNull final IAnnotatedSolution solution);
+	void annotate(@NonNull final ISequences fullSequences, @NonNull IEvaluationState evaluationState, @NonNull final IAnnotatedSolution solution);
 }

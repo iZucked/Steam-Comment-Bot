@@ -43,44 +43,44 @@ public interface IFitnessHelper {
 	/**
 	 * Evaluate the fitness of the given sequences using the given {@link IFitnessCores}s
 	 * 
-	 * @param sequences
+	 * @param fullSequences
 	 * @param fitnessFunctions
 	 * @return
 	 */
 
-	boolean evaluateSequencesFromCores(@NonNull ISequences sequences, @NonNull IEvaluationState evaluationState, @NonNull Collection<IFitnessCore> fitnessCores);
+	boolean evaluateSequencesFromCores(@NonNull ISequences fullSequences, @NonNull IEvaluationState evaluationState, @NonNull Collection<IFitnessCore> fitnessCores);
 
 	/**
 	 * Evaluate the fitness of the given sequences using the given {@link IFitnessCores}s
 	 * 
-	 * @param sequences
+	 * @param fullSequences
 	 * @param fitnessFunctions
 	 * @param affectedResources
 	 * @return
 	 */
 
-	boolean evaluateSequencesFromCores(@NonNull ISequences sequences, @NonNull IEvaluationState evaluationStates, @NonNull Collection<IFitnessCore> fitnessCores,
+	boolean evaluateSequencesFromCores(@NonNull ISequences fullSequences, @NonNull IEvaluationState evaluationStates, @NonNull Collection<IFitnessCore> fitnessCores,
 			@Nullable Collection<IResource> affectedResources);
 
 	/**
 	 * Evaluate the fitness of the given sequences using the given {@link IFitnessCores}s
 	 * 
-	 * @param sequences
+	 * @param fullSequences
 	 * @param fitnessFunctions
 	 * @return
 	 */
 
-	boolean evaluateSequencesFromComponents(@NonNull ISequences sequences, @NonNull IEvaluationState evaluationState, @NonNull Collection<IFitnessComponent> fitnessComponents);
+	boolean evaluateSequencesFromComponents(@NonNull ISequences fullSequences, @NonNull IEvaluationState evaluationState, @NonNull Collection<IFitnessComponent> fitnessComponents);
 
 	/**
 	 * Evaluate the fitness of the given sequences using the given {@link IFitnessCores}s
 	 * 
-	 * @param sequences
+	 * @param fullSequences
 	 * @param fitnessFunctions
 	 * @return
 	 */
 
-	boolean evaluateSequencesFromComponents(@NonNull ISequences sequences, @NonNull IEvaluationState evaluationState, @NonNull Collection<IFitnessComponent> fitnessComponents,
+	boolean evaluateSequencesFromComponents(@NonNull ISequences fullSequences, @NonNull IEvaluationState evaluationState, @NonNull Collection<IFitnessComponent> fitnessComponents,
 			@Nullable Collection<IResource> affectedResources);
 
 	/**
@@ -89,10 +89,10 @@ public interface IFitnessHelper {
 	 * 
 	 * @link{#evaluateSequencesFromCores(ISequences, Collection, Collection)} methods.
 	 * 
-	 * @param sequences
+	 * @param fullSequences
 	 * @param affectedResources
 	 */
-	void acceptFromCores(@NonNull Collection<IFitnessCore> fitnessCores, @NonNull ISequences sequences, @Nullable Collection<IResource> affectedResources);
+	void acceptFromCores(@NonNull Collection<IFitnessCore> fitnessCores, @NonNull ISequences fullSequences, @Nullable Collection<IResource> affectedResources);
 
 /**
 	 * The {@link #accept(ISequences, Collection)} method is to be invoked when
@@ -106,10 +106,10 @@ public interface IFitnessHelper {
 	 *       {@link #evaluateSequencesFromCores(ISequences, Collection, Collection)}
 	 *       methods.
 	 * 
-	 * @param sequences
+	 * @param fullSequences
 	 * @param affectedResources
 	 */
-	void acceptFromComponents(@NonNull Collection<IFitnessComponent> fitnessComponents, @NonNull ISequences sequences, @Nullable Collection<IResource> affectedResources);
+	void acceptFromComponents(@NonNull Collection<IFitnessComponent> fitnessComponents, @NonNull ISequences fullSequences, @Nullable Collection<IResource> affectedResources);
 
 	/**
 	 * Returns the set of {@link IFitnessCore}s that are used by the given {@link IFitnessComponent}s

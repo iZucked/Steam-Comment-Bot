@@ -10,7 +10,7 @@ import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -79,7 +79,7 @@ public interface IFitnessEvaluator {
 	boolean evaluateSequences(@NonNull ISequences rawSequences, @NonNull ISequences fullSequences, @NonNull IEvaluationState evaluationState, @NonNull Collection<IResource> affectedResources);
 
 	/**
-	 * Returns the best {@link ISequences} instance seen by this {@link IFitnessEvaluator}. The value of best is determined by the implementation.
+	 * Returns the best {@link ISequences} instances (raw then full) seen by this {@link IFitnessEvaluator}. The value of best is determined by the implementation.
 	 * 
 	 * @return
 	 */
@@ -94,10 +94,11 @@ public interface IFitnessEvaluator {
 	long getBestFitness();
 
 	/**
-	 * Returns the current {@link ISequences} instance in use by this {@link IFitnessEvaluator}.
+	 * Returns the current {@link ISequences} (raw then full) instance in use by this {@link IFitnessEvaluator}.
 	 * 
 	 * @return
 	 */
+
 	@Nullable
 	Triple<ISequences, ISequences, IEvaluationState> getCurrentSequences();
 
