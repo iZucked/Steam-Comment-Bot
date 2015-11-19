@@ -121,14 +121,14 @@ public interface IFitnessHelper {
 	Set<IFitnessCore> getFitnessCores(@NonNull Collection<IFitnessComponent> fitnessComponents);
 
 	/**
-	 * Construct an annotated solution for the given state. Performs an evaluation with the given components as well, so watch out for that.
+	 * Construct an annotated solution for the given fullSequences. Performs an evaluation with the given components as well, so watch out for that.
 	 * 
 	 * @param context
-	 * @param state
+	 * @param fullSequences
 	 * @param fitnessComponents
 	 * @return
 	 */
 	@NonNull
-	IAnnotatedSolution buildAnnotatedSolution(@NonNull IOptimisationContext context, @NonNull ISequences state, @NonNull IEvaluationState evaluationState,
+	IAnnotatedSolution buildAnnotatedSolution(@NonNull IOptimisationContext context, @NonNull ISequences fullSequences, @NonNull IEvaluationState evaluationState,
 			@NonNull Collection<IFitnessComponent> fitnessComponents, @NonNull Collection<IEvaluationProcess> evaluationProcesses);
 }

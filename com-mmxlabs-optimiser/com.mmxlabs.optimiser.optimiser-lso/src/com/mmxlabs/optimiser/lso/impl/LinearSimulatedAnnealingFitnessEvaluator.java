@@ -17,7 +17,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
@@ -61,11 +61,9 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 	private final Map<String, Long> currentFitnesses = new HashMap<String, Long>();
 	private final Map<String, Long> bestFitnesses = new HashMap<String, Long>();
 
-	private Pair<ISequences, IEvaluationState> initialSequences = null;
-	private Pair<ISequences, IEvaluationState> currentSequences = null;
-	private Pair<ISequences, IEvaluationState> bestSequences = null;
-
-	private Sequences bestRawSequences = null;
+	private Triple<ISequences, ISequences, IEvaluationState> initialSequences = null;
+	private Triple<ISequences, ISequences, IEvaluationState> currentSequences = null;
+	private Triple<ISequences, ISequences, IEvaluationState> bestSequences = null;
 
 	private long initialFitness = Long.MAX_VALUE;
 	private long currentFitness = Long.MAX_VALUE;
@@ -111,7 +109,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 
 		// Store current fitness and sequences
 		currentFitness = totalFitness;
-		currentSequences = new Pair<ISequences, IEvaluationState>(new Sequences(fullSequences), evaluationState);
+		currentSequences = new Triple<ISequences, ISequences, IEvaluationState>(new Sequences(rawSequences), new Sequences(fullSequences), evaluationState);
 
 		for (final IFitnessComponent component : getFitnessComponents()) {
 			currentFitnesses.put(component.getName(), component.getFitness());
@@ -122,7 +120,6 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 			// Store this as the new best
 			// Do we need to copy here too?
 			bestSequences = currentSequences;
-			bestRawSequences = new Sequences(rawSequences);
 			bestFitness = currentFitness;
 
 			for (final IFitnessComponent component : fitnessComponents) {
@@ -185,10 +182,9 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 		initialFitness = totalFitness;
 		currentFitness = totalFitness;
 
-		this.initialSequences = new Pair<ISequences, IEvaluationState>(new Sequences(initialFullSequences), evaluationState);
-		bestSequences = new Pair<ISequences, IEvaluationState>(new Sequences(initialFullSequences), evaluationState);
-		bestRawSequences = new Sequences(initialRawSequences);
-		currentSequences = new Pair<ISequences, IEvaluationState>(new Sequences(initialFullSequences), evaluationState);
+		this.initialSequences = new Triple<ISequences, ISequences, IEvaluationState>(new Sequences(initialRawSequences), new Sequences(initialFullSequences), evaluationState);
+		bestSequences = new Triple<ISequences, ISequences, IEvaluationState>(new Sequences(initialRawSequences), new Sequences(initialFullSequences), evaluationState);
+		currentSequences = new Triple<ISequences, ISequences, IEvaluationState>(new Sequences(initialRawSequences), new Sequences(initialFullSequences), evaluationState);
 
 		for (final IFitnessComponent component : fitnessComponents) {
 			bestFitnesses.put(component.getName(), component.getFitness());
@@ -219,7 +215,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 
 	@Override
 	@Nullable
-	public Pair<ISequences, IEvaluationState> getBestSequences() {
+	public Triple<ISequences, ISequences, IEvaluationState> getBestSequences() {
 		return bestSequences;
 	}
 
@@ -239,7 +235,7 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 	 * @return
 	 */
 	@Override
-	public Pair<ISequences, IEvaluationState> getCurrentSequences() {
+	public Triple<ISequences, ISequences, IEvaluationState> getCurrentSequences() {
 		return currentSequences;
 	}
 
@@ -259,15 +255,15 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 
 	@Override
 	public IAnnotatedSolution getBestAnnotatedSolution(@NonNull final IOptimisationContext context) {
-		Pair<ISequences, IEvaluationState> p = getBestSequences();
+		Triple<ISequences, ISequences, IEvaluationState> p = getBestSequences();
 		if (p == null) {
 			return null;
 		}
-		ISequences sequences = p.getFirst();
-		IEvaluationState evaluationState = p.getSecond();
-		assert sequences != null;
+		ISequences fullSequences = p.getSecond();
+		IEvaluationState evaluationState = p.getThird();
+		assert fullSequences != null;
 		assert evaluationState != null;
-		final IAnnotatedSolution result = fitnessHelper.buildAnnotatedSolution(context, sequences, evaluationState, getFitnessComponents(), getEvaluationProcesses());
+		final IAnnotatedSolution result = fitnessHelper.buildAnnotatedSolution(context, fullSequences, evaluationState, getFitnessComponents(), getEvaluationProcesses());
 
 		result.setGeneralAnnotation(OptimiserConstants.G_AI_fitnessComponents, new HashMap<String, Long>(bestFitnesses));
 
@@ -276,16 +272,16 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 
 	@Override
 	public IAnnotatedSolution getCurrentAnnotatedSolution(@NonNull final IOptimisationContext context) {
-		Pair<ISequences, IEvaluationState> p = getCurrentSequences();
+		Triple<ISequences, ISequences, IEvaluationState> p = getCurrentSequences();
 		if (p == null) {
 			return null;
 		}
-		ISequences sequences = p.getFirst();
-		IEvaluationState evaluationState = p.getSecond();
-		assert sequences != null;
+		ISequences fullSequences = p.getSecond();
+		IEvaluationState evaluationState = p.getThird();
+		assert fullSequences != null;
 		assert evaluationState != null;
 
-		final IAnnotatedSolution result = fitnessHelper.buildAnnotatedSolution(context, sequences, evaluationState, getFitnessComponents(), getEvaluationProcesses());
+		final IAnnotatedSolution result = fitnessHelper.buildAnnotatedSolution(context, fullSequences, evaluationState, getFitnessComponents(), getEvaluationProcesses());
 
 		result.setGeneralAnnotation(OptimiserConstants.G_AI_fitnessComponents, new HashMap<String, Long>(currentFitnesses));
 
@@ -300,11 +296,6 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 	@Override
 	public void step() {
 		thresholder.step();
-	}
-
-	@Override
-	public ISequences getBestRawSequences() {
-		return bestRawSequences;
 	}
 
 	@Override

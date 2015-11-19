@@ -11,6 +11,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
@@ -83,7 +84,7 @@ public interface IFitnessEvaluator {
 	 * @return
 	 */
 	@Nullable
-	Pair<ISequences, IEvaluationState> getBestSequences();
+	Triple<ISequences, ISequences, IEvaluationState> getBestSequences();
 
 	/**
 	 * Returns the fitness value of the best {@link ISequences} instance returned by {@link #getBestSequences()};
@@ -98,7 +99,7 @@ public interface IFitnessEvaluator {
 	 * @return
 	 */
 	@Nullable
-	Pair<ISequences, IEvaluationState> getCurrentSequences();
+	Triple<ISequences, ISequences, IEvaluationState> getCurrentSequences();
 
 	/**
 	 * Returns the fitness value of the current {@link ISequences} instance returned by {@link #getCurrentSequences()};
@@ -131,14 +132,11 @@ public interface IFitnessEvaluator {
 	 */
 	@Nullable
 	IAnnotatedSolution getCurrentAnnotatedSolution(@NonNull final IOptimisationContext context);
-	
-	public IAnnotatedSolution createAnnotatedSolution(final IOptimisationContext context, ISequences sequences, IEvaluationState evaluationState);
+
+	public IAnnotatedSolution createAnnotatedSolution(final IOptimisationContext context, ISequences fullSequences, IEvaluationState evaluationState);
 
 	void step();
 
-        ISequences getBestRawSequences();
+	void restart();
 
-		void restart();
-
-		
 }
