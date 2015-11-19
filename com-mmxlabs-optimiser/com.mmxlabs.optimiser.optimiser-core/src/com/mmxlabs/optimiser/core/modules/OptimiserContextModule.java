@@ -35,7 +35,7 @@ public class OptimiserContextModule extends AbstractModule {
 
 	@Provides
 
-	private IOptimisationContext createOptimisationContext(@NonNull final IOptimisationData data, @NonNull @Named("Input") final ISequences sequences,
+	private IOptimisationContext createOptimisationContext(@NonNull final IOptimisationData data, @NonNull @Named(OptimiserConstants.SEQUENCE_TYPE_INPUT) final ISequences sequences,
 
 			@NonNull final IFitnessFunctionRegistry fitnessFunctionRegistry, @NonNull final IConstraintCheckerRegistry constraintCheckerRegistry,
 			@NonNull final IEvaluationProcessRegistry evaluationProcessRegistry,
@@ -59,7 +59,7 @@ public class OptimiserContextModule extends AbstractModule {
 	}
 
 	@Provides
-	private IEvaluationContext createEvaluationContext(@NonNull final IOptimisationData data, @NonNull @Named("Input") final ISequences sequences,
+	private IEvaluationContext createEvaluationContext(@NonNull final IOptimisationData data, @NonNull @Named(OptimiserConstants.SEQUENCE_TYPE_INPUT) final ISequences sequences,
 			@NonNull final IFitnessFunctionRegistry fitnessFunctionRegistry, @NonNull final IConstraintCheckerRegistry constraintCheckerRegistry,
 			@NonNull final IEvaluationProcessRegistry evaluationProcessRegistry) {
 
