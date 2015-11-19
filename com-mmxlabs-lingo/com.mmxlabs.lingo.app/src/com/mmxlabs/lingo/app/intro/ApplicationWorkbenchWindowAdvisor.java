@@ -4,12 +4,13 @@
  */
 package com.mmxlabs.lingo.app.intro;
 
-import org.apache.shiro.SecurityUtils;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
+
+import com.mmxlabs.license.features.LicenseFeatures;
 
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
@@ -32,7 +33,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		configurer.setShowStatusLine(true);
 		configurer.setShowPerspectiveBar(true);
 
-		if (SecurityUtils.getSubject().isPermitted("features:beta-features")) {
+		if (LicenseFeatures.isPermitted("features:beta-features")) {
 			configurer.setTitle("LiNGO - Beta");
 		}
 	}
