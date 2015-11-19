@@ -2427,7 +2427,7 @@ public class LNGScenarioTransformer {
 					final ISpotCharterInMarket spotCharterInMarket = builder.createSpotCharterInMarket(charterCost.getName(), oVesselClass, charterInCurve, charterCount);
 					modelEntityMap.addModelObject(charterCost, spotCharterInMarket);
 
-					final List<IVesselAvailability> spots = builder.createSpotVessels("SPOT-" + eVesselClass.getName(), spotCharterInMarket);
+					final List<IVesselAvailability> spots = builder.createSpotVessels("SPOT-" + charterCost.getName(), spotCharterInMarket);
 					spotVesselAvailabilitiesByClass.put(eVesselClass, spots);
 					allVesselAvailabilities.addAll(spots);
 				}

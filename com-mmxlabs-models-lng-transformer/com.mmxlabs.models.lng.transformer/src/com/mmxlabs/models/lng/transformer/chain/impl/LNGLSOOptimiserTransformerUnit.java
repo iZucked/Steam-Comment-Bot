@@ -2,6 +2,7 @@ package com.mmxlabs.models.lng.transformer.chain.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,6 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.name.Names;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
 import com.mmxlabs.models.lng.transformer.chain.IChainLink;
@@ -33,6 +33,7 @@ import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGOptimisationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_OptimiserSettingsModule;
+import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -124,7 +125,7 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 					for (final Future<IMultiStateResult> f : results) {
 						try {
 							f.get();
-						} catch (Exception e) {
+						} catch (final Exception e) {
 							LOG.error(e.getMessage(), e);
 						}
 					}
@@ -218,7 +219,7 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 			optimiser = injector.getInstance(LocalSearchOptimiser.class);
 			optimiser.setProgressMonitor(new NullOptimiserProgressMonitor());
 			optimiser.init();
-			final IAnnotatedSolution startSolution = optimiser.start(injector.getInstance(IOptimisationContext.class), injector.getInstance(Key.get(ISequences.class, Names.named("Initial"))),
+			final IAnnotatedSolution startSolution = optimiser.start(injector.getInstance(IOptimisationContext.class), injector.getInstance(Key.get(ISequences.class, Names.named(OptimiserConstants.SEQUENCE_TYPE_INITIAL))),
 					inputSequences);
 			if (startSolution == null) {
 				throw new IllegalStateException("Unable to get starting state");
@@ -245,6 +246,21 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 
 	@Override
 	public IMultiStateResult run(final IProgressMonitor monitor) {
+
+		final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
+		if (runnerHook != null) {
+			final ISequences preloadedResult = runnerHook.getSequences(IRunnerHook.PHASE_LSO);
+			if (preloadedResult != null) {
+				monitor.beginTask("", 1);
+				try {
+					monitor.worked(1);
+					return new MultiStateResult(preloadedResult, new HashMap<>());
+				} finally {
+					monitor.done();
+				}
+			}
+		}
+
 		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
 			scope.enter();
 
@@ -263,6 +279,10 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 
 				final IAnnotatedSolution bestSolution = optimiser.getBestSolution();
 				final ISequences bestRawSequences = optimiser.getBestRawSequences();
+
+				if (runnerHook != null) {
+					runnerHook.reportSequences(IRunnerHook.PHASE_LSO, bestRawSequences);
+				}
 
 				if (bestRawSequences != null && bestSolution != null) {
 					return new MultiStateResult(bestRawSequences, LNGSchedulerJobUtils.extractOptimisationAnnotations(bestSolution));

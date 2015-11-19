@@ -38,6 +38,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scenario.service.model.Container;
@@ -214,7 +215,7 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 			try {
 
 				final BagOptimiser instance = injector.getInstance(BagOptimiser.class);
-				ISequences inputRawSequences = injector.getInstance(Key.get(ISequences.class, Names.named("Input")));
+				ISequences inputRawSequences = injector.getInstance(Key.get(ISequences.class, Names.named(OptimiserConstants.SEQUENCE_TYPE_INPUT)));
 				final boolean foundBetterResult = instance.optimise(inputRawSequences, new SubProgressMonitor(monitor, 95), 3);
 
 				return instance.getBestSolution();

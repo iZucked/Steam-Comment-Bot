@@ -8,6 +8,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
 
 public class InputSequencesModule extends AbstractModule {
 
@@ -26,7 +27,7 @@ public class InputSequencesModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	@Named("Input")
+	@Named(OptimiserConstants.SEQUENCE_TYPE_INPUT)
 	private ISequences provideSequences() {
 		return inputSequences;
 	}

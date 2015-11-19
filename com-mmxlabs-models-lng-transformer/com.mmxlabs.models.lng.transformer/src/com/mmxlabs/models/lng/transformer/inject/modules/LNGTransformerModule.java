@@ -76,7 +76,7 @@ public class LNGTransformerModule extends AbstractModule {
 		install(new ScheduleBuilderModule());
 
 		bind(LNGScenarioModel.class).toInstance(scenario);
-//		bind(OptimiserSettings.class).toInstance(optimiserSettings);
+		// bind(OptimiserSettings.class).toInstance(optimiserSettings);
 
 		// Parser for each section
 		final SeriesParser commodityParser = new SeriesParser();
@@ -107,8 +107,7 @@ public class LNGTransformerModule extends AbstractModule {
 		// Register default implementations
 		bind(IVolumeAllocator.class).to(UnconstrainedVolumeAllocator.class).in(Singleton.class);
 		bind(IEntityValueCalculator.class).to(DefaultEntityValueCalculator.class);
-		
-		
+
 		bind(GeneratedVesselEventFactory.class).in(PerChainUnitScope.class);
 	}
 

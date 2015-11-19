@@ -163,7 +163,7 @@ public class AnnotatedSolutionExporter {
 		}
 
 		final List<Sequence> sequences = output.getSequences();
-		final List<IResource> resources = annotatedSolution.getSequences().getResources();
+		final List<IResource> resources = annotatedSolution.getFullSequences().getResources();
 		// Create sequences and run other exporters
 
 		final Sequence fobSequence = factory.createSequence();
@@ -180,7 +180,7 @@ public class AnnotatedSolutionExporter {
 			boolean isFOBSequence = false;
 			boolean isDESSequence = false;
 
-			final ISequence sequence = annotatedSolution.getSequences().getSequence(resource);
+			final ISequence sequence = annotatedSolution.getFullSequences().getSequence(resource);
 			final ScheduledSequence scheduledSequence = scheduledSequences.getScheduledSequenceForResource(resource);
 			switch (vesselAvailability.getVesselInstanceType()) {
 			case TIME_CHARTER:
@@ -424,7 +424,7 @@ public class AnnotatedSolutionExporter {
 			}
 		}
 
-		for (final ISequenceElement element : annotatedSolution.getSequences().getUnusedElements()) {
+		for (final ISequenceElement element : annotatedSolution.getFullSequences().getUnusedElements()) {
 			assert element != null;
 			final IPortSlot slot = portSlotProvider.getPortSlot(element);
 			final Slot modelSlot = modelEntityMap.getModelObject(slot, Slot.class);

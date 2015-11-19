@@ -14,9 +14,9 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
-import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 
 /**
@@ -121,12 +121,12 @@ public final class CopiedScenarioEntityMapping implements IScenarioEntityMapping
 		if (copyOfOptimiser == null) {
 			return null;
 		}
-		if (copyOfOptimiser instanceof SpotSlot && !optimiserCopyToReal.containsKey(copyOfOptimiser)) {
+		if ((copyOfOptimiser instanceof SpotSlot || copyOfOptimiser instanceof Cargo) && !optimiserCopyToReal.containsKey(copyOfOptimiser)) {
 			return null;
 		}
-		
+
 		final EObject realOptimiser = mapOptimiserCopyToReal(copyOfOptimiser);
-		
+
 		final T copyOfOriginal = (T) originalMapping.getOriginalFromCopy(realOptimiser);
 		if (copyOfOptimiser instanceof SpotSlot && copyOfOriginal == null) {
 			return null;

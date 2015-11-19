@@ -98,7 +98,7 @@ public class BagOptimiser {
 	private List<IEvaluationProcess> evaluationProcesses;
 
 	@Inject
-	@Named("Initial")
+	@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)
 	@NonNull
 	private ISequences initialRawSequences;
 
@@ -130,9 +130,9 @@ public class BagOptimiser {
 	 * 
 	 * TODO: Return a data structure for the best set of instructions and then convert to EMF.
 	 * 
-	 * @param bestRawSequences
+	 * @param targetRawSequences
 	 */
-	public boolean optimise(@NonNull final ISequences targetRawSequences, @NonNull final IProgressMonitor progressMonitor, int maxLeafs) {
+	public boolean optimise(@NonNull final ISequences targetRawSequences, @NonNull final IProgressMonitor progressMonitor, final int maxLeafs) {
 
 		final long time1 = System.currentTimeMillis();
 
@@ -146,8 +146,8 @@ public class BagOptimiser {
 
 		// Generate the similarity data structures to the target solution
 		{
-			final IModifiableSequences targetFullSequences = new ModifiableSequences(targetRawSequences);
-			sequencesManipulator.manipulate(targetFullSequences);
+
+			final IModifiableSequences targetFullSequences = sequencesManipulator.createManipulatedSequences(targetRawSequences);
 
 			final IEvaluationState evaluationState = new EvaluationState();
 			for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
@@ -156,24 +156,22 @@ public class BagOptimiser {
 					assert false;
 				}
 			}
+
 			targetSimilarityState.init(targetFullSequences);
 
 			fitnessHelper.evaluateSequencesFromComponents(targetFullSequences, evaluationState, fitnessComponents, null);
 			bestFitness = fitnessCombiner.calculateFitness(fitnessComponents);
-
 		}
 
 		try {
 			// Prepare initial solution state
-			final IModifiableSequences mIinitialFullSequences = new ModifiableSequences(initialRawSequences);
-			sequencesManipulator.manipulate(mIinitialFullSequences);
+			final IModifiableSequences initialFullSequences = sequencesManipulator.createManipulatedSequences(initialRawSequences);
 
 			// // Debugging -- get initial change count
 			{
 				final int changesCount = bagMover.getChangedElements(targetSimilarityState, initialRawSequences).size();
-				if (DEBUG) {
-					System.out.println("Initial changes " + changesCount);
-				}
+
+				System.out.println("Initial changes " + changesCount);
 
 				// No changes, so nothing to do
 				if (changesCount == 0) {
@@ -183,7 +181,7 @@ public class BagOptimiser {
 
 			final IEvaluationState evaluationState = new EvaluationState();
 			for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
-				if (!evaluationProcess.evaluate(mIinitialFullSequences, evaluationState)) {
+				if (!evaluationProcess.evaluate(initialFullSequences, evaluationState)) {
 					// We expect the initial solution to be valid....
 					assert false;
 				}
@@ -192,10 +190,11 @@ public class BagOptimiser {
 			final ScheduledSequences initialScheduledSequences = evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class);
 			assert initialScheduledSequences != null;
 
+			// Calculate initial metrics
 			final long initialUnusedCompulsarySlot = bagMover.calculateUnusedCompulsarySlot(initialRawSequences);
-			final long initialLateness = bagMover.calculateScheduleLateness(mIinitialFullSequences, initialScheduledSequences);
-			final long initialCapacity = bagMover.calculateScheduleCapacity(mIinitialFullSequences, initialScheduledSequences);
-			final long initialPNL = bagMover.calculateSchedulePNL(mIinitialFullSequences, initialScheduledSequences);
+			final long initialLateness = bagMover.calculateScheduleLateness(initialFullSequences, initialScheduledSequences);
+			final long initialCapacity = bagMover.calculateScheduleCapacity(initialFullSequences, initialScheduledSequences);
+			final long initialPNL = bagMover.calculateSchedulePNL(initialFullSequences, initialScheduledSequences);
 
 			// Generate the initial set of changes, one level deep
 			final List<ChangeSet> changeSets = new LinkedList<>();
@@ -211,7 +210,9 @@ public class BagOptimiser {
 
 			final List<JobState> l = new LinkedList<>();
 			final ChangeChecker changeChecker = injector.getInstance(ChangeChecker.class);
-			changeChecker.init(null, targetSimilarityState, mIinitialFullSequences);
+
+			changeChecker.init(null, targetSimilarityState, initialRawSequences);
+
 			for (int i = 0; i < initialSearchSize; i++) {
 				final JobState job = new JobState(new Sequences(initialRawSequences), changeSets, changes, changeChecker.getFullDifferences());
 				job.setMetric(MetricType.PNL, initialPNL, 0, 0);

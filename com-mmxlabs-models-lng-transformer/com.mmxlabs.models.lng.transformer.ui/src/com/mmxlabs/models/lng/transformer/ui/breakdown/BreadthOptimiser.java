@@ -37,6 +37,7 @@ import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
@@ -130,7 +131,7 @@ public class BreadthOptimiser {
 	private BreakdownOptimiserMover breakdownOptimiserMover;
 
 	@Inject
-	@Named("Initial")
+	@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)
 	@NonNull
 	private ISequences initialRawSequences;
 	

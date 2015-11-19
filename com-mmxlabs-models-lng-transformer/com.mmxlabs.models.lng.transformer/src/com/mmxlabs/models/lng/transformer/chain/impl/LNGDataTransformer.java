@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -21,7 +22,9 @@ import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGInitialSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
+import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeModule;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -46,6 +49,9 @@ public class LNGDataTransformer {
 	private final Injector injector;
 
 	private final OptimiserSettings settings;
+
+	@Nullable
+	private IRunnerHook runnerHook;
 
 	@SuppressWarnings("null")
 	public LNGDataTransformer(@NonNull final LNGScenarioModel scenarioModel, @NonNull final OptimiserSettings settings, @NonNull final Collection<String> hints,
@@ -128,6 +134,15 @@ public class LNGDataTransformer {
 
 	@NonNull
 	public ISequences getInitialSequences() {
-		return injector.getInstance(Key.get(ISequences.class, Names.named("Initial")));
+		return injector.getInstance(Key.get(ISequences.class, Names.named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)));
+	}
+
+	@Nullable
+	public IRunnerHook getRunnerHook() {
+		return runnerHook;
+	}
+
+	public void setRunnerHook(@Nullable IRunnerHook runnerHook) {
+		this.runnerHook = runnerHook;
 	}
 }

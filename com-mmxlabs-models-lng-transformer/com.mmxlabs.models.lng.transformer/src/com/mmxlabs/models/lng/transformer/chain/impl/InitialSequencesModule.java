@@ -8,9 +8,11 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
+import com.mmxlabs.optimiser.core.impl.OptimisationContext;
 
 /**
- * A {@link Module} to bind a {@link ISequences} to the instance with the "Initial" name
+ * A {@link Module} to bind a {@link ISequences} to the instance with the {@link OptimiserConstants#SEQUENCE_TYPE_INITIAL} name
  * 
  * @author Simon Goodall
  *
@@ -33,7 +35,7 @@ public class InitialSequencesModule extends AbstractModule {
 	// TODO: Declare this as a constant somewhere
 	@Provides
 	@Singleton
-	@Named("Initial")
+	@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)
 	private ISequences provideSequences() {
 		return sequences;
 	}
