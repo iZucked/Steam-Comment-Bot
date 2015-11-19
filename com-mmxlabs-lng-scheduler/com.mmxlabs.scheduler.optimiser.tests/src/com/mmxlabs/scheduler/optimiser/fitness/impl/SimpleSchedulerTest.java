@@ -17,7 +17,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
-import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -153,17 +153,17 @@ public class SimpleSchedulerTest {
 				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
 
 		final IDischargeSlot discharge1 = builder.createDischargeSlot("discharge1", port2, tw2, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), 0, Long.MAX_VALUE, salesCurve, 24,
-				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE,  false,false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
+				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
 		final IDischargeSlot discharge2 = builder.createDischargeSlot("discharge2", port2, tw4, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), 0, Long.MAX_VALUE, salesCurve, 24,
-				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE,  false,false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
+				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
 		final IDischargeSlot discharge3 = builder.createDischargeSlot("discharge3", port2, tw6, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), 0, Long.MAX_VALUE, salesCurve, 24,
-				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE,  false,false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
+				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
 		final IDischargeSlot discharge4 = builder.createDischargeSlot("discharge4", port6, tw6, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), 0, Long.MAX_VALUE, salesCurve, 24,
-				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE,  false,false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
+				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
 		final IDischargeSlot discharge5 = builder.createDischargeSlot("discharge5", port4, tw3, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), 0, Long.MAX_VALUE, salesCurve, 24,
-				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE,  false,false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
+				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
 		final IDischargeSlot discharge6 = builder.createDischargeSlot("discharge6", port4, tw5, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), 0, Long.MAX_VALUE, salesCurve, 24,
-				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE,  false,false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
+				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
 		final IDischargeSlot discharge7 = builder.createDischargeSlot("discharge7", port6, tw7, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), 0, Long.MAX_VALUE, salesCurve, 24,
 				IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
 
@@ -263,7 +263,7 @@ public class SimpleSchedulerTest {
 		}
 
 		linearFitnessEvaluator.setOptimisationData(context.getOptimisationData());
-		linearFitnessEvaluator.setInitialSequences(context.getInitialSequences(),context.getInitialSequences(), evaluationState);
+		linearFitnessEvaluator.setInitialSequences(context.getInitialSequences(), context.getInitialSequences(), evaluationState);
 
 		printSequences(context.getInitialSequences());
 
@@ -278,7 +278,7 @@ public class SimpleSchedulerTest {
 		System.out.println("Final fitness " + finalFitness);
 		Assert.assertFalse(finalFitness == Long.MAX_VALUE);
 
-		Pair<ISequences, IEvaluationState> bestSequences = fitnessEvaluator.getBestSequences();
+		Triple<ISequences, ISequences, IEvaluationState> bestSequences = fitnessEvaluator.getBestSequences();
 		Assert.assertNotNull(bestSequences);
 		printSequences(bestSequences.getFirst());
 
