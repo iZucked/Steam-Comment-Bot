@@ -169,7 +169,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 		// in
 		{
 			final Map<IResource, Map<String, Long>> fitnessPerRoute = new HashMap<IResource, Map<String, Long>>();
-			for (final IResource resource : solution.getSequences().getResources()) {
+			for (final IResource resource : solution.getFullSequences().getResources()) {
 				fitnessPerRoute.put(resource, new HashMap<String, Long>());
 			}
 
