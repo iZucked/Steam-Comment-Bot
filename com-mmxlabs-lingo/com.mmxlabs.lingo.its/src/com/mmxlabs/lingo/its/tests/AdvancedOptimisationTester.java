@@ -47,6 +47,47 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 	}
 
 	@Test
+	public void advancedOptimisation_Full_NoSimilarity() throws Exception {
+		runAdvancedOptimisationTestCase(false, SimilarityMode.OFF, false, false);
+	}
+
+	@Test
+	public void advancedOptimisation_Full_LowSimilarity() throws Exception {
+		runAdvancedOptimisationTestCase(false, SimilarityMode.LOW, false, false);
+	}
+
+	@Test
+	public void advancedOptimisation_Full_MediumSimilarity() throws Exception {
+		runAdvancedOptimisationTestCase(false, SimilarityMode.MEDIUM, false, false);
+	}
+
+	@Test
+	public void advancedOptimisation_Full_HighSimilarity() throws Exception {
+		runAdvancedOptimisationTestCase(false, SimilarityMode.HIGH, false, false);
+	}
+
+	@Ignore("Not yet permitted")
+	@Test
+	public void advancedOptimisation_Full_NoSimilarity_ActionSet() throws Exception {
+		runAdvancedOptimisationTestCase(false, SimilarityMode.OFF, true, false);
+	}
+
+	@Test
+	public void advancedOptimisation_Full_LowSimilarity_ActionSet() throws Exception {
+		runAdvancedOptimisationTestCase(false, SimilarityMode.LOW, true, false);
+	}
+
+	@Test
+	public void advancedOptimisation_Full_MediumSimilarity_ActionSet() throws Exception {
+		runAdvancedOptimisationTestCase(false, SimilarityMode.MEDIUM, true, false);
+	}
+
+	@Test
+	public void advancedOptimisation_Full_HighSimilarity_ActionSet() throws Exception {
+		runAdvancedOptimisationTestCase(false, SimilarityMode.HIGH, true, false);
+	}
+
+	@Test
 	public void advancedOptimisation_Limited_NoSimilarity() throws Exception {
 		runAdvancedOptimisationTestCase(true, SimilarityMode.OFF, false, false);
 	}
