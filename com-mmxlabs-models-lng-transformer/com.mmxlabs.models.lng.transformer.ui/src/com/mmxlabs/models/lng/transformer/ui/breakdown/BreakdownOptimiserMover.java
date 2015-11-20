@@ -584,38 +584,69 @@ public class BreakdownOptimiserMover {
 			// System.out.println("found perfect points");
 			return perfectPoints;
 		}
-		int prevLoad = -1;
+		int prevLoadIdx = -1;
 		ITimeWindow prevTimeWindow = null;
-		int currLoad = -1;
+		int currLoadIdx = -1;
 		IPortSlot currPortSlot = null;
 		ITimeWindow currTimeWindow = null;
-		boolean consecutive = true;
 		final ITimeWindow insertingLoadTimeWindow = getTW(portSlotProvider.getPortSlot(insertingLoad), resource);
 		final LinkedHashSet<Integer> validPoints = new LinkedHashSet<Integer>();
+
+		// First pass - add in all valid positions.
 		for (int j = 1; j < sequence.size(); ++j) {
-			if (portTypeProvider.getPortType(sequence.get(j)) != PortType.Discharge) {
+			final PortType portType = portTypeProvider.getPortType(sequence.get(j));
+			if (portType != PortType.Discharge && portType != PortType.Virtual && portType != PortType.Other) {
 				validPoints.add(j);
 			}
-			if (portTypeProvider.getPortType(sequence.get(j)) == PortType.Load) {
-				currLoad = j;
+		}
+
+		// Forward pass - remove early timewindows up until the time window order gets out of sync
+		for (int j = 1; j < sequence.size(); ++j) {
+			final PortType portType = portTypeProvider.getPortType(sequence.get(j));
+			if (portType != PortType.Discharge && portType != PortType.Virtual && portType != PortType.Other && portType != PortType.End) {
+				currLoadIdx = j;
 				currPortSlot = portSlotProvider.getPortSlot(sequence.get(j));
 				currTimeWindow = getTW(currPortSlot, resource);
-				if (prevLoad == -1) {
-					continue;
-				} else {
-					prevLoad = currLoad;
-					prevTimeWindow = currTimeWindow;
+				if (prevLoadIdx != -1) {
 					assert prevTimeWindow != null;
-					if (consecutive == true && prevTimeWindow.getStart() > currTimeWindow.getEnd()) {
-						consecutive = false;
+					if (prevTimeWindow.getStart() > currTimeWindow.getEnd()) {
+						// No longer consistent ordering, abort
+						break;
 					}
-					if (consecutive && prevTimeWindow.getEnd() < insertingLoadTimeWindow.getStart()) {
+					if (prevTimeWindow.getEnd() < insertingLoadTimeWindow.getStart()) {
 						// don't insert before this element
-						validPoints.remove(prevLoad);
+						validPoints.remove(prevLoadIdx);
 					}
 				}
+				prevLoadIdx = currLoadIdx;
+				prevTimeWindow = currTimeWindow;
 			}
 		}
+		// Reverse pass, remove tail insertion points.
+		// Prev is now "Next"
+		prevLoadIdx = -1;
+		for (int j = sequence.size() - 1; j > 0; --j) {
+			final PortType portType = portTypeProvider.getPortType(sequence.get(j));
+			if (portType != PortType.Discharge && portType != PortType.Virtual && portType != PortType.Other && portType != PortType.End) {
+				currLoadIdx = j;
+				currPortSlot = portSlotProvider.getPortSlot(sequence.get(j));
+				currTimeWindow = getTW(currPortSlot, resource);
+				if (prevLoadIdx != -1) {
+					assert prevTimeWindow != null;
+					if (prevTimeWindow.getEnd() < currTimeWindow.getStart()) {
+						// No longer consistent ordering, abort
+						break;
+					}
+					if (currTimeWindow.getStart() > insertingLoadTimeWindow.getEnd()) {
+						// don't insert before this element
+						validPoints.remove(prevLoadIdx);
+					}
+				}
+				prevLoadIdx = currLoadIdx;
+				prevTimeWindow = currTimeWindow;
+			}
+		}
+
 		return validPoints;
 	}
 
@@ -696,7 +727,7 @@ public class BreakdownOptimiserMover {
 		// Set the new load on the "to" sequence
 		final IModifiableSequence copyOfToSequence = copy.getModifiableSequence(toResource);
 		final int j = p.getSecond();
-		assert(copyOfToSequence.get(j) == originalLoadElement);
+		assert (copyOfToSequence.get(j) == originalLoadElement);
 		copyOfToSequence.set(j, prev);
 
 		// Record the "other discharge"
@@ -711,7 +742,7 @@ public class BreakdownOptimiserMover {
 		final int k = p2.getSecond();
 
 		final IModifiableSequence copyOfFromSequence = copy.getModifiableSequence(resource);
-		assert(copyOfFromSequence.get(k) == prev);
+		assert (copyOfFromSequence.get(k) == prev);
 		copyOfFromSequence.set(k, originalLoadElement);
 
 		if (k > 0) {
@@ -719,7 +750,7 @@ public class BreakdownOptimiserMover {
 		}
 
 		// Make sure we have done something
-		assert(!copy.equals(currentState.getRawSequences()));
+		assert (!copy.equals(currentState.getRawSequences()));
 
 		searchElements.add(otherDischargeElement);
 		searchElements.add(prev);
@@ -766,7 +797,7 @@ public class BreakdownOptimiserMover {
 		// Set the new discharge on the "to" sequence
 		final IModifiableSequence copyOfToSequence = copy.getModifiableSequence(toResource);
 		final int j = p.getSecond();
-		assert(copyOfToSequence.get(j) == originalDischargeElement);
+		assert (copyOfToSequence.get(j) == originalDischargeElement);
 		copyOfToSequence.set(j, current);
 		if (j + 1 < copyOfToSequence.size()) {
 			searchElements.add(copyOfToSequence.get(j + 1));
@@ -782,14 +813,14 @@ public class BreakdownOptimiserMover {
 
 		final IModifiableSequence copyOfFromSequence = copy.getModifiableSequence(resource);
 		final int k = p2.getSecond();
-		assert(copyOfFromSequence.get(k) == current);
+		assert (copyOfFromSequence.get(k) == current);
 		copyOfFromSequence.set(k, originalDischargeElement);
 		if (k + 1 < copyOfFromSequence.size()) {
 			searchElements.add(copyOfFromSequence.get(k + 1));
 		}
 
 		// Make sure we have done something
-		assert(!copy.equals(currentState.getRawSequences()));
+		assert (!copy.equals(currentState.getRawSequences()));
 
 		searchElements.add(otherLoadElement);
 		searchElements.add(current);
@@ -1064,7 +1095,9 @@ public class BreakdownOptimiserMover {
 		} else if (portSlot instanceof EndPortSlot) {
 			final IStartEndRequirement req = startEndRequirementProvider.getEndRequirement(resource);
 			tw = req.getTimeWindow();
-		} else {
+		}
+
+		if (tw == null) {
 			tw = portSlot.getTimeWindow();
 		}
 		return tw;
