@@ -6,15 +6,17 @@ package com.mmxlabs.optimiser.common.constraints;
 
 import java.util.List;
 
-import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.inject.Inject;
 import com.mmxlabs.optimiser.common.dcproviders.ILockedElementsProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IInitialSequencesConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
@@ -28,6 +30,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
  * 
  */
 public final class LockedUnusedElementsConstraintChecker implements IPairwiseConstraintChecker, IInitialSequencesConstraintChecker {
+
 	@NonNull
 	private final String name;
 
@@ -35,7 +38,10 @@ public final class LockedUnusedElementsConstraintChecker implements IPairwiseCon
 	@NonNull
 	private ILockedElementsProvider lockedElementsProvider;
 
-	private ISequences initialSequences = null;
+	@Inject(optional = true) // Marked as optional as this constraint checker is active in the initial sequence builder where we do not have an existing initial solution.
+	@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)
+	@Nullable
+	private ISequences initialSequences;
 
 	public LockedUnusedElementsConstraintChecker(@NonNull final String name) {
 		this.name = name;
@@ -50,7 +56,9 @@ public final class LockedUnusedElementsConstraintChecker implements IPairwiseCon
 	public boolean checkConstraints(@NonNull final ISequences sequences, @Nullable final List<String> messages) {
 		if (isInitialised()) {
 			for (final IResource resource : sequences.getResources()) {
+				assert resource != null;
 				for (final ISequenceElement element : sequences.getSequence(resource)) {
+					assert element != null;
 					if (!checkElement(element)) {
 						return false;
 					}
