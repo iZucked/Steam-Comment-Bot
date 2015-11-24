@@ -696,7 +696,7 @@ public class BreakdownOptimiserMover {
 		// Set the new load on the "to" sequence
 		final IModifiableSequence copyOfToSequence = copy.getModifiableSequence(toResource);
 		final int j = p.getSecond();
-		assert(copyOfToSequence.get(j) == originalLoadElement);
+		assert (copyOfToSequence.get(j) == originalLoadElement);
 		copyOfToSequence.set(j, prev);
 
 		// Record the "other discharge"
@@ -711,7 +711,7 @@ public class BreakdownOptimiserMover {
 		final int k = p2.getSecond();
 
 		final IModifiableSequence copyOfFromSequence = copy.getModifiableSequence(resource);
-		assert(copyOfFromSequence.get(k) == prev);
+		assert (copyOfFromSequence.get(k) == prev);
 		copyOfFromSequence.set(k, originalLoadElement);
 
 		if (k > 0) {
@@ -719,7 +719,7 @@ public class BreakdownOptimiserMover {
 		}
 
 		// Make sure we have done something
-		assert(!copy.equals(currentState.getRawSequences()));
+		assert (!copy.equals(currentState.getRawSequences()));
 
 		searchElements.add(otherDischargeElement);
 		searchElements.add(prev);
@@ -766,7 +766,7 @@ public class BreakdownOptimiserMover {
 		// Set the new discharge on the "to" sequence
 		final IModifiableSequence copyOfToSequence = copy.getModifiableSequence(toResource);
 		final int j = p.getSecond();
-		assert(copyOfToSequence.get(j) == originalDischargeElement);
+		assert (copyOfToSequence.get(j) == originalDischargeElement);
 		copyOfToSequence.set(j, current);
 		if (j + 1 < copyOfToSequence.size()) {
 			searchElements.add(copyOfToSequence.get(j + 1));
@@ -782,14 +782,14 @@ public class BreakdownOptimiserMover {
 
 		final IModifiableSequence copyOfFromSequence = copy.getModifiableSequence(resource);
 		final int k = p2.getSecond();
-		assert(copyOfFromSequence.get(k) == current);
+		assert (copyOfFromSequence.get(k) == current);
 		copyOfFromSequence.set(k, originalDischargeElement);
 		if (k + 1 < copyOfFromSequence.size()) {
 			searchElements.add(copyOfFromSequence.get(k + 1));
 		}
 
 		// Make sure we have done something
-		assert(!copy.equals(currentState.getRawSequences()));
+		assert (!copy.equals(currentState.getRawSequences()));
 
 		searchElements.add(otherLoadElement);
 		searchElements.add(current);
