@@ -164,8 +164,6 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 	@Override
 	public void setOptimisationData(@NonNull final IOptimisationData data) {
 
-		// Initialise the fitness functions
-		fitnessHelper.initFitnessComponents(getFitnessComponents(), data);
 	}
 
 	@Override
@@ -178,13 +176,13 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 			LOG.error("Initial sequences have Long.MAX_VALUE fitness, which is pretty bad.");
 		}
 
-		bestFitness = totalFitness;
-		initialFitness = totalFitness;
-		currentFitness = totalFitness;
+		this.bestFitness = totalFitness;
+		this.initialFitness = totalFitness;
+		this.currentFitness = totalFitness;
 
 		this.initialSequences = new Triple<ISequences, ISequences, IEvaluationState>(new Sequences(initialRawSequences), new Sequences(initialFullSequences), evaluationState);
-		bestSequences = new Triple<ISequences, ISequences, IEvaluationState>(new Sequences(initialRawSequences), new Sequences(initialFullSequences), evaluationState);
-		currentSequences = new Triple<ISequences, ISequences, IEvaluationState>(new Sequences(initialRawSequences), new Sequences(initialFullSequences), evaluationState);
+		this.bestSequences = new Triple<ISequences, ISequences, IEvaluationState>(new Sequences(initialRawSequences), new Sequences(initialFullSequences), evaluationState);
+		this.currentSequences = new Triple<ISequences, ISequences, IEvaluationState>(new Sequences(initialRawSequences), new Sequences(initialFullSequences), evaluationState);
 
 		for (final IFitnessComponent component : fitnessComponents) {
 			bestFitnesses.put(component.getName(), component.getFitness());

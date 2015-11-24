@@ -20,7 +20,9 @@ import com.google.inject.name.Named;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
+import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessComponentInstantiator;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 public class FitnessFunctionInstantiatorModule extends AbstractModule {
 
@@ -33,8 +35,9 @@ public class FitnessFunctionInstantiatorModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	private List<IFitnessComponent> provideFitnessComponents(@NonNull final Injector injector, @NonNull final IFitnessFunctionRegistry fitnessFunctionRegistry,
-			@Named(ENABLED_FITNESS_NAMES) @NonNull final List<String> enabledFitnessNames) {
+	private List<IFitnessComponent> provideFitnessComponents(@NonNull final Injector injector, @NonNull final IFitnessHelper fitnessHelper,
+			@NonNull final IFitnessFunctionRegistry fitnessFunctionRegistry, @Named(ENABLED_FITNESS_NAMES) @NonNull final List<String> enabledFitnessNames,
+			final @NonNull IOptimisationData optimisationData) {
 
 		final FitnessComponentInstantiator fitnessComponentInstantiator = new FitnessComponentInstantiator();
 		final List<IFitnessComponent> fitnessComponents = fitnessComponentInstantiator.instantiateFitnesses(fitnessFunctionRegistry, enabledFitnessNames);
@@ -52,6 +55,9 @@ public class FitnessFunctionInstantiatorModule extends AbstractModule {
 		for (final IFitnessCore c : cores) {
 			injector.injectMembers(c);
 		}
+
+		// Initialise the fitness functions
+		fitnessHelper.initFitnessComponents(result, optimisationData);
 
 		return result;
 	}
