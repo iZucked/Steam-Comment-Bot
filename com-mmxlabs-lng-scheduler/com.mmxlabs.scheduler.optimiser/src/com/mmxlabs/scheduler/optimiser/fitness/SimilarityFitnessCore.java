@@ -102,10 +102,12 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 
 	public void initWithState(@NonNull final ISequences rawSequences) {
 
+		ISequences fullSequences = sequenceManipulator.createManipulatedSequences(rawSequences);
+		
 		for (final IResource resource : resources) {
 			assert resource != null;
 
-			final ISequence sequence = rawSequences.getSequence(resource);
+			final ISequence sequence = fullSequences.getSequence(resource);
 			ISequenceElement prev = null;
 			for (final ISequenceElement current : sequence) {
 				if (prev != null) {
