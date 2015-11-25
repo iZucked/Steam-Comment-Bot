@@ -148,10 +148,8 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 			// Skip this for now
 			// DEBUG - Remove
 			Assume.assumeFalse(scenarioURL.contains("FB1808"));
-
-			// Only High Mode for now
-			Assume.assumeTrue(mode == SimilarityMode.HIGH);
 		}
+
 		// Only run full iterations if the flag is set
 		if (limitedIterations) {
 			Assume.assumeTrue(RUN_LIMITED_ITERATION_CASES);
@@ -246,7 +244,6 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 				}
 
 				private void save(final ISequences rawSequences, final String type) {
-					assert false;
 					try {
 						final String suffix = Joiner.on(".").join(components) + "." + type + ".sequences";
 						final URL expectedReportOutput = new URL(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20") + suffix);
