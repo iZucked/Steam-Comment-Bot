@@ -358,6 +358,15 @@
                   tooltip="Terminate optimisation">
             </action>
             <action
+                  class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.ForkAndStartEditorActionDelegate"
+                  definitionId="com.mmxlabs.commands.optimisation.forkandplay"
+                  icon="icons/forkandoptimise.gif"
+                  id="com.mmxlabs.scenario.service.toolbars.optimisation.forkandplay"
+                  label="Fork and Optimise"
+                  toolbarPath="additions"
+                  tooltip="Fork scenario and optimise the fork">
+            </action>
+            <action
                   class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.StartOptimisationEditorActionDelegate"
                   definitionId="com.mmxlabs.commands.optimisation.play"
                   disabledIcon="icons/dlcl16/resume_co.gif"
@@ -366,15 +375,6 @@
                   label="Start Optimisation"
                   toolbarPath="additions"
                   tooltip="Start an optimisation">
-            </action>
-            <action
-                  class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.ForkAndStartEditorActionDelegate"
-                  definitionId="com.mmxlabs.commands.optimisation.forkandplay"
-                  icon="icons/forkandoptimise.gif"
-                  id="com.mmxlabs.scenario.service.toolbars.optimisation.forkandplay"
-                  label="Fork and Optimise"
-                  toolbarPath="additions"
-                  tooltip="Fork scenario and optimise the fork">
             </action>
             <action
                   class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.ForkScenarioEditorActionDelegate"
