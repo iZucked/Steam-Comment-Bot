@@ -527,6 +527,143 @@ public class ChangeSetTransformerUtilTest {
 		}
 	}
 
+	@Test
+	public void testSpotDischargeSwapWiringChange_DifferentMarketInstance_WiringSwap() {
+
+		// Configure example case
+
+		final Map<String, ChangeSetRow> lhsRowMap = new HashMap<>();
+		final Map<String, ChangeSetRow> rhsRowMap = new HashMap<>();
+
+		final Map<String, List<ChangeSetRow>> lhsRowMarketMap = new HashMap<>();
+		final Map<String, List<ChangeSetRow>> rhsRowMarketMap = new HashMap<>();
+
+		final List<ChangeSetRow> rows = new LinkedList<>();
+
+		// Target - 1
+		final CargoAllocation newCargoAllocation1;
+		final SlotAllocation newLoadSlotAllocation1;
+		final SlotAllocation newDischargeSlotAllocation1;
+		{
+			final Sequence sequence = createSequence("sequence");
+			final SpotMarket dischargeMarket = createDESSaleSpotMarket("SPOT");
+			final LoadSlot loadSlot = createLoadSlot("load1");
+			final DischargeSlot dischargeSlot = createSpotDischargeSlot("SPOT-2015-11-2", LocalDate.of(2015, 11, 1), dischargeMarket);
+			final Cargo cargo = createCargo("load1", loadSlot, dischargeSlot);
+
+			newLoadSlotAllocation1 = createSlotAllocation(loadSlot, sequence);
+			newDischargeSlotAllocation1 = createSlotAllocation(dischargeSlot, sequence);
+
+			newCargoAllocation1 = createCargoAllocation(cargo, newLoadSlotAllocation1, newDischargeSlotAllocation1);
+
+			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, newLoadSlotAllocation1.getSlotVisit(), loadSlot, true, false);
+		}
+		// Target - 2
+		final CargoAllocation newCargoAllocation2;
+		final SlotAllocation newLoadSlotAllocation2;
+		final SlotAllocation newDischargeSlotAllocation2;
+		{
+			final SpotMarket dischargeMarket = createDESSaleSpotMarket("SPOT");
+
+			final Sequence sequence = createSequence("sequence");
+			final LoadSlot loadSlot = createLoadSlot("load2");
+			final DischargeSlot dischargeSlot = createSpotDischargeSlot("SPOT-2015-11-1", LocalDate.of(2015, 11, 1), dischargeMarket);
+			final Cargo cargo = createCargo("load2", loadSlot, dischargeSlot);
+
+			newLoadSlotAllocation2 = createSlotAllocation(loadSlot, sequence);
+			newDischargeSlotAllocation2 = createSlotAllocation(dischargeSlot, sequence);
+
+			newCargoAllocation2 = createCargoAllocation(cargo, newLoadSlotAllocation2, newDischargeSlotAllocation2);
+
+			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, newLoadSlotAllocation2.getSlotVisit(), loadSlot, true, false);
+		}
+
+		// Base - 1
+		final CargoAllocation oldCargoAllocation1;
+		final SlotAllocation oldLoadSlotAllocation1;
+		final SlotAllocation oldDischargeSlotAllocation1;
+		{
+			final Sequence sequence = createSequence("sequence");
+			final SpotMarket dischargeMarket = createDESSaleSpotMarket("SPOT");
+
+			final LoadSlot loadSlot = createLoadSlot("load1");
+			final DischargeSlot dischargeSlot = createSpotDischargeSlot("SPOT-2015-11-1", LocalDate.of(2015, 11, 1), dischargeMarket);
+			final Cargo cargo = createCargo("load1", loadSlot, dischargeSlot);
+
+			oldLoadSlotAllocation1 = createSlotAllocation(loadSlot, sequence);
+			oldDischargeSlotAllocation1 = createSlotAllocation(dischargeSlot, sequence);
+
+			oldCargoAllocation1 = createCargoAllocation(cargo, oldLoadSlotAllocation1, oldDischargeSlotAllocation1);
+			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, oldLoadSlotAllocation1.getSlotVisit(), loadSlot, false, false);
+		}
+
+		// Base - 2
+		final CargoAllocation oldCargoAllocation2;
+		final SlotAllocation oldLoadSlotAllocation2;
+		final SlotAllocation oldDischargeSlotAllocation2;
+		{
+			final Sequence sequence = createSequence("sequence");
+			final SpotMarket dischargeMarket = createDESSaleSpotMarket("SPOT");
+
+			final LoadSlot loadSlot = createLoadSlot("load2");
+			final DischargeSlot dischargeSlot = createSpotDischargeSlot("SPOT-2015-11-2", LocalDate.of(2015, 11, 1), dischargeMarket);
+
+			final Cargo cargo = createCargo("load2", loadSlot, dischargeSlot);
+
+			oldLoadSlotAllocation2 = createSlotAllocation(loadSlot, sequence);
+			oldDischargeSlotAllocation2 = createSlotAllocation(dischargeSlot, sequence);
+
+			oldCargoAllocation2 = createCargoAllocation(cargo, oldLoadSlotAllocation2, oldDischargeSlotAllocation2);
+			ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, oldLoadSlotAllocation2.getSlotVisit(), loadSlot, false, false);
+		}
+
+		// Verify results
+		// Expect two independent rows as spot slots are equivalent
+
+		Assert.assertEquals(2, rows.size());
+
+		{
+			final ChangeSetRow row = rows.get(0);
+			Assert.assertEquals("load1", row.getLhsName());
+			Assert.assertEquals("SPOT-2015-11", row.getRhsName());
+			Assert.assertEquals("sequence", row.getOriginalVesselName());
+			Assert.assertEquals("sequence", row.getNewVesselName());
+			Assert.assertNull(row.getLhsWiringLink());
+			Assert.assertNull(row.getRhsWiringLink());
+
+			Assert.assertSame(newCargoAllocation1, row.getNewGroupProfitAndLoss());
+			Assert.assertSame(oldCargoAllocation1, row.getOriginalGroupProfitAndLoss());
+			Assert.assertSame(newCargoAllocation1, row.getNewEventGrouping());
+			Assert.assertSame(oldCargoAllocation1, row.getOriginalEventGrouping());
+
+			Assert.assertSame(newLoadSlotAllocation1, row.getNewLoadAllocation());
+			Assert.assertSame(oldLoadSlotAllocation1, row.getOriginalLoadAllocation());
+
+			Assert.assertSame(newDischargeSlotAllocation1, row.getNewDischargeAllocation());
+			Assert.assertSame(oldDischargeSlotAllocation1, row.getOriginalDischargeAllocation());
+		}
+		{
+			final ChangeSetRow row = rows.get(1);
+			Assert.assertEquals("load2", row.getLhsName());
+			Assert.assertEquals("SPOT-2015-11", row.getRhsName());
+			Assert.assertEquals("sequence", row.getOriginalVesselName());
+			Assert.assertEquals("sequence", row.getNewVesselName());
+			Assert.assertNull(row.getLhsWiringLink());
+			Assert.assertNull(row.getRhsWiringLink());
+
+			Assert.assertSame(newCargoAllocation2, row.getNewGroupProfitAndLoss());
+			Assert.assertSame(oldCargoAllocation2, row.getOriginalGroupProfitAndLoss());
+			Assert.assertSame(newCargoAllocation2, row.getNewEventGrouping());
+			Assert.assertSame(oldCargoAllocation2, row.getOriginalEventGrouping());
+
+			Assert.assertSame(newLoadSlotAllocation2, row.getNewLoadAllocation());
+			Assert.assertSame(oldLoadSlotAllocation2, row.getOriginalLoadAllocation());
+
+			Assert.assertSame(newDischargeSlotAllocation2, row.getNewDischargeAllocation());
+			Assert.assertSame(oldDischargeSlotAllocation2, row.getOriginalDischargeAllocation());
+		}
+	}
+
 	private Sequence createSequence(final String name) {
 
 		final Sequence sequence = Mockito.mock(Sequence.class);
