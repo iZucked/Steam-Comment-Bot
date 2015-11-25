@@ -28,6 +28,7 @@ import com.mmxlabs.lingo.reports.views.changeset.model.ChangesetFactory;
 import com.mmxlabs.lingo.reports.views.changeset.model.DeltaMetrics;
 import com.mmxlabs.lingo.reports.views.changeset.model.Metrics;
 import com.mmxlabs.lingo.reports.views.schedule.EquivalanceGroupBuilder;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -48,27 +49,33 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 
 public final class ChangeSetTransformerUtil {
-	public static void createOrUpdateRow(@NonNull final Map<String, ChangeSetRow> lhsRowMap, @NonNull final Map<String, ChangeSetRow> rhsRowMap, @NonNull final List<ChangeSetRow> rows,
-			@NonNull final EObject element, final boolean isBase) {
+	public static boolean createOrUpdateRow(@NonNull final Map<String, ChangeSetRow> lhsRowMap, @NonNull final Map<String, ChangeSetRow> rhsRowMap,
+
+			@NonNull final Map<String, List<ChangeSetRow>> lhsRowMarketMap, @NonNull final Map<String, List<ChangeSetRow>> rhsRowMarketMap, @NonNull final List<ChangeSetRow> rows,
+			@NonNull final EObject element, final boolean isBase, final boolean canDefer) {
 
 		if (element instanceof SlotVisit) {
 			final SlotVisit slotVisit = (SlotVisit) element;
 			if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) slotVisit.getSlotAllocation().getSlot();
 				assert loadSlot != null;
-				createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, rows, slotVisit, loadSlot, isBase);
+				return createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, slotVisit, loadSlot, isBase, canDefer);
 			}
 		} else if (element instanceof OpenSlotAllocation) {
 			final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) element;
-			createOrUpdateOpenSlotAllocationRow(lhsRowMap, rhsRowMap, rows, openSlotAllocation, isBase);
+			// return
+			createOrUpdateOpenSlotAllocationRow(lhsRowMap, rhsRowMap, rows, openSlotAllocation, isBase /* , canDefer */);
 		} else if (element instanceof Event) {
 			final Event event = (Event) element;
-			createOrUpdateEventRow(lhsRowMap, rhsRowMap, rows, event, isBase);
+			// return
+			createOrUpdateEventRow(lhsRowMap, rhsRowMap, rows, event, isBase /* , canDefer */);
 		}
+		return false;
 	}
 
-	public static void createOrUpdateSlotVisitRow(@NonNull final Map<String, ChangeSetRow> lhsRowMap, @NonNull final Map<String, ChangeSetRow> rhsRowMap, @NonNull final List<ChangeSetRow> rows,
-			@NonNull final SlotVisit slotVisit, @NonNull final LoadSlot loadSlot, final boolean isBase) {
+	public static boolean createOrUpdateSlotVisitRow(@NonNull final Map<String, ChangeSetRow> lhsRowMap, @NonNull final Map<String, ChangeSetRow> rhsRowMap,
+			final Map<String, List<ChangeSetRow>> lhsRowMarketMap, final Map<String, List<ChangeSetRow>> rhsRowMarketMap, @NonNull final List<ChangeSetRow> rows, @NonNull final SlotVisit slotVisit,
+			@NonNull final LoadSlot loadSlot, final boolean isBase, final boolean canDefer) {
 
 		final ChangeSetRow row;
 		{
@@ -76,27 +83,27 @@ public final class ChangeSetTransformerUtil {
 			if (lhsRowMap.containsKey(rowKey)) {
 				row = lhsRowMap.get(rowKey);
 			} else {
-				String rowName = getRowName(loadSlot);
+				final String rowName = getRowName(loadSlot);
 				// String rowName = getRowName(loadSlot);
-				if (loadSlot instanceof SpotSlot) {
-					if (lhsRowMap.containsKey("market-" + loadSlot.getName())) {
-						row = lhsRowMap.get("market-" + loadSlot.getName());
-					} else {
-						row = ChangesetFactory.eINSTANCE.createChangeSetRow();
-						rows.add(row);
-						row.setLhsName(rowName);
-						row.setLoadSlot(loadSlot);
-						lhsRowMap.put(rowKey, row);
-						lhsRowMap.put("market-" + loadSlot.getName(), row);
-					}
-				} else {
+//				if (loadSlot instanceof SpotSlot) {
+////					if (lhsRowMap.containsKey("market-" + loadSlot.getName())) {
+////						row = lhsRowMap.get("market-" + loadSlot.getName());
+////					} else {
+//						row = ChangesetFactory.eINSTANCE.createChangeSetRow();
+//						rows.add(row);
+//						row.setLhsName(rowName);
+//						row.setLoadSlot(loadSlot);
+//						lhsRowMap.put(rowKey, row);
+//						lhsRowMap.put("market-" + loadSlot.getName(), row);
+////					}
+//				} else {
 
 					row = ChangesetFactory.eINSTANCE.createChangeSetRow();
 					rows.add(row);
 					row.setLhsName(rowName);
 					row.setLoadSlot(loadSlot);
 					lhsRowMap.put(rowKey, row);
-				}
+//				}
 			}
 		}
 
@@ -121,16 +128,25 @@ public final class ChangeSetTransformerUtil {
 				continue;
 			}
 
+			// Store basic key
+			final String otherRowKey = getKeyName(slotAllocation.getSlot());
 			if (isBase) {
 				row.setRhsName(getRowName(slotAllocation.getSlot()));
 				row.setNewDischargeAllocation(slotAllocation);
 				row.setDischargeSlot((DischargeSlot) slotAllocation.getSlot());
 				// FIXME: This can replace an existing entry -- is this ok?
-				rhsRowMap.put(getKeyName(slotAllocation.getSlot()), row);
+				if (rhsRowMap.containsKey(otherRowKey)) {
+					System.out.println("Clash " + otherRowKey);
+				}
+				rhsRowMap.put(otherRowKey, row);
 				{
 					// String rowName = getRowName(slotAllocation.getSlot());
 					if (slotAllocation.getSlot() instanceof SpotSlot) {
-						rhsRowMap.put("market-" + slotAllocation.getSlot().getName(), row);
+						// FIXME: THis can overwrite other options and lead to a wiring mess.
+						// TODO: Store as list and process later.
+						// 1. Is before and after the same market? No change, remove option.
+						// 2. Whatever is left, pull from list
+						addToMarketMap(rhsRowMarketMap, slotAllocation.getSlot(), row);
 					}
 				}
 			} else {
@@ -138,29 +154,53 @@ public final class ChangeSetTransformerUtil {
 			}
 			if (!isBase) {
 				if (slotAllocation.getSlot() != null) {
-					ChangeSetRow otherRow = rhsRowMap.get(getKeyName(slotAllocation.getSlot()));
+
+					ChangeSetRow otherRow = rhsRowMap.get(otherRowKey);
 
 					if (otherRow == null) {
-						if (slotAllocation.getSlot() instanceof SpotSlot && rhsRowMap.containsKey("market-" + slotAllocation.getSlot().getName())) {
-							otherRow = rhsRowMap.get("market-" + slotAllocation.getSlot().getName());
-						} else {
-							otherRow = ChangesetFactory.eINSTANCE.createChangeSetRow();
-							rows.add(otherRow);
-							rhsRowMap.put(getKeyName(slotAllocation.getSlot()), otherRow);
-							if (slotAllocation.getSlot() instanceof SpotSlot) {
-								rhsRowMap.put("market-" + slotAllocation.getSlot().getName(), otherRow);
+
+						if (slotAllocation.getSlot() instanceof SpotSlot) {
+							final List<ChangeSetRow> possibleRows = getMarketOptions(rhsRowMarketMap, slotAllocation.getSlot());
+							for (final ChangeSetRow option : possibleRows) {
+								if (option.getLhsName().equals(row.getLhsName())) {
+									// Match, so remove option from list
+									possibleRows.remove(option);
+									otherRow = option;
+									break;
+								}
 							}
-							otherRow.setRhsName(getRowName(slotAllocation.getSlot()));
+							if (otherRow == null && canDefer) {
+								return true;
+							} else if (!possibleRows.isEmpty()) {
+								// Cannot defer, but remaining options should be interchangeable.
+								otherRow = possibleRows.remove(0);
+							}
 						}
-						otherRow.setOriginalDischargeAllocation(slotAllocation);
-						otherRow.setDischargeSlot((DischargeSlot) slotAllocation.getSlot());
+					} else {
+						// Exact match found, so remove this option from the available set.
+						if (slotAllocation.getSlot() instanceof SpotSlot) {
+							removeFromMarketMap(rhsRowMarketMap, slotAllocation.getSlot(), otherRow);
+						}
 					}
+					if (otherRow == null) {
+						otherRow = ChangesetFactory.eINSTANCE.createChangeSetRow();
+						rows.add(otherRow);
+						rhsRowMap.put(otherRowKey, otherRow);
+						if (slotAllocation.getSlot() instanceof SpotSlot) {
+							rhsRowMap.put("market-" + slotAllocation.getSlot().getName(), otherRow);
+						}
+						otherRow.setRhsName(getRowName(slotAllocation.getSlot()));
+					}
+					otherRow.setOriginalDischargeAllocation(slotAllocation);
+					otherRow.setDischargeSlot((DischargeSlot) slotAllocation.getSlot());
+
 					if (row != otherRow) {
 						row.setRhsWiringLink(otherRow);
 					}
 				}
 			}
 		}
+		return false;
 	}
 
 	public static void createOrUpdateOpenSlotAllocationRow(@NonNull final Map<String, ChangeSetRow> lhsRowMap, @NonNull final Map<String, ChangeSetRow> rhsRowMap,
@@ -233,7 +273,7 @@ public final class ChangeSetTransformerUtil {
 	public static void createOrUpdateEventRow(@NonNull final Map<String, ChangeSetRow> lhsRowMap, @NonNull final Map<String, ChangeSetRow> rhsRowMap, @NonNull final List<ChangeSetRow> rows,
 			@NonNull final Event event, final boolean isBase) {
 
-		String eventName = event.name();
+		final String eventName = event.name();
 		if (isBase) {
 			final ChangeSetRow row = ChangesetFactory.eINSTANCE.createChangeSetRow();
 			rows.add(row);
@@ -428,7 +468,7 @@ public final class ChangeSetTransformerUtil {
 		} else if (sequence.isSetVesselAvailability()) {
 			return getName(sequence.getVesselAvailability());
 		} else {
-			return "";
+			return sequence.getName();
 		}
 	}
 
@@ -465,7 +505,23 @@ public final class ChangeSetTransformerUtil {
 			return null;
 		}
 		if (slot instanceof SpotSlot) {
-			return EquivalanceGroupBuilder.getElementKey(slot);
+			final String key = EquivalanceGroupBuilder.getElementKey(slot);
+			final StringBuilder sb = new StringBuilder();
+			final Cargo cargo = slot.getCargo();
+			if (cargo != null) {
+				for (final Slot slot2 : cargo.getSortedSlots()) {
+					if (slot == slot2) {
+						sb.append(key);
+					} else {
+						sb.append(slot2.getName());
+					}
+
+				}
+			} else {
+				sb.append(key);
+			}
+			return sb.toString();
+
 		}
 		return slot.getName();
 	}
@@ -663,10 +719,10 @@ public final class ChangeSetTransformerUtil {
 		}
 	}
 
-	public static void mergeSpots(List<ChangeSetRow> rows) {
+	public static void mergeSpots(final List<ChangeSetRow> rows) {
 
 		final Map<ChangeSetRow, Collection<ChangeSetRow>> rowToRowGroup = new HashMap<>();
-		Map<ChangeSetRow, ChangeSetRow> headToTails = new HashMap();
+		final Map<ChangeSetRow, ChangeSetRow> headToTails = new HashMap();
 		for (final ChangeSetRow row : rows) {
 			if (row.getLhsWiringLink() == null) {
 				ChangeSetRow link = row.getRhsWiringLink();
@@ -678,7 +734,7 @@ public final class ChangeSetTransformerUtil {
 				headToTails.put(row, tail);
 			}
 		}
-		for (Map.Entry<ChangeSetRow, ChangeSetRow> e : headToTails.entrySet()) {
+		for (final Map.Entry<ChangeSetRow, ChangeSetRow> e : headToTails.entrySet()) {
 			if (merge(e.getKey(), e.getValue())) {
 				rows.remove(e.getValue());
 			}
@@ -686,7 +742,7 @@ public final class ChangeSetTransformerUtil {
 
 	}
 
-	private static boolean merge(@Nullable ChangeSetRow head, @Nullable ChangeSetRow tail) {
+	private static boolean merge(@Nullable final ChangeSetRow head, @Nullable final ChangeSetRow tail) {
 
 		assert head != tail;
 		if (head == null || !(head.getDischargeSlot() instanceof SpotSlot)) {
@@ -697,10 +753,43 @@ public final class ChangeSetTransformerUtil {
 		}
 
 		if (head.getRhsName() != null && head.getRhsName().equals(tail.getRhsName())) {
-			ChangeSetRow lhsWiringLink = tail.getLhsWiringLink();
-			head.setLhsWiringLink(lhsWiringLink);
+			final ChangeSetRow lhsWiringLink = tail.getLhsWiringLink();
+			// head.setLhsWiringLink(lhsWiringLink);
 			return true;
 		}
 		return false;
+	}
+
+	private static void addToMarketMap(final Map<String, List<ChangeSetRow>> rowMarketMap, final Slot slot, final ChangeSetRow row) {
+		final String marketKey = EquivalanceGroupBuilder.getElementKey(slot);
+		final List<ChangeSetRow> list;
+		if (rowMarketMap.containsKey(marketKey)) {
+			list = rowMarketMap.get(marketKey);
+		} else {
+			list = new LinkedList<>();
+		}
+		list.add(row);
+	}
+
+	@NonNull
+	private static List<ChangeSetRow> getMarketOptions(final Map<String, List<ChangeSetRow>> rowMarketMap, final Slot slot) {
+		final String marketKey = EquivalanceGroupBuilder.getElementKey(slot);
+		final List<ChangeSetRow> list;
+		if (rowMarketMap.containsKey(marketKey)) {
+			return rowMarketMap.get(marketKey);
+		} else {
+			return Collections.emptyList();
+		}
+	}
+
+	private static void removeFromMarketMap(final Map<String, List<ChangeSetRow>> rowMarketMap, final Slot slot, final ChangeSetRow row) {
+		final String marketKey = EquivalanceGroupBuilder.getElementKey(slot);
+		final List<ChangeSetRow> list;
+		if (rowMarketMap.containsKey(marketKey)) {
+			list = rowMarketMap.get(marketKey);
+		} else {
+			list = new LinkedList<>();
+		}
+		list.remove(row);
 	}
 }

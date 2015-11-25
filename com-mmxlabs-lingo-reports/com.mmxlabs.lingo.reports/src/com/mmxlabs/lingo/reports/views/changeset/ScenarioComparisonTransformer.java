@@ -69,15 +69,17 @@ public class ScenarioComparisonTransformer {
 					// final Map<String, ChangeSetRow> lhsRowMap = new HashMap<>();
 					final Map<String, ChangeSetRow> lhsRowMap = new HashMap<>();
 					final Map<String, ChangeSetRow> rhsRowMap = new HashMap<>();
-					// final Map<String, ChangeSetRow> rhsRowMap = new HashMap<>();
+
+					final Map<String, List<ChangeSetRow>> lhsRowMarketMap = new HashMap<>();
+					final Map<String, List<ChangeSetRow>> rhsRowMarketMap = new HashMap<>();
 
 					final ChangeSet changeSet = createChangeSet(root, from, to);
 					final List<ChangeSetRow> rows = new LinkedList<>();
 
 					for (final CycleGroup cycleGroup : g.getGroups()) {
-						processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, rows, equivalancesMap, 0);
-						processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, rows, equivalancesMap, 1);
-						processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, rows, equivalancesMap, 2);
+						processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, equivalancesMap, 0);
+						processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, equivalancesMap, 1);
+						processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, equivalancesMap, 2);
 					}
 					processRows(toSchedule, fromSchedule, rows, changeSet);
 					if (!changeSet.getChangeSetRowsToPrevious().isEmpty()) {
@@ -87,13 +89,17 @@ public class ScenarioComparisonTransformer {
 				for (final CycleGroup cycleGroup : table.getCycleGroups()) {
 					final Map<String, ChangeSetRow> lhsRowMap = new HashMap<>();
 					final Map<String, ChangeSetRow> rhsRowMap = new HashMap<>();
+
+					final Map<String, List<ChangeSetRow>> lhsRowMarketMap = new HashMap<>();
+					final Map<String, List<ChangeSetRow>> rhsRowMarketMap = new HashMap<>();
+
 					final List<ChangeSetRow> rows = new LinkedList<>();
 
 					final ChangeSet changeSet = createChangeSet(root, from, to);
 
-					processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, rows, equivalancesMap, 0);
-					processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, rows, equivalancesMap, 1);
-					processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, rows, equivalancesMap, 2);
+					processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, equivalancesMap, 0);
+					processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, equivalancesMap, 1);
+					processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, equivalancesMap, 2);
 
 					processRows(toSchedule, fromSchedule, rows, changeSet);
 					if (!changeSet.getChangeSetRowsToPrevious().isEmpty()) {
@@ -168,7 +174,8 @@ public class ScenarioComparisonTransformer {
 	}
 
 	private void processCycleGroup(final CycleGroup cycleGroup, @NonNull final Map<String, ChangeSetRow> lhsRowMap, @NonNull final Map<String, ChangeSetRow> rhsRowMap,
-			@NonNull final List<ChangeSetRow> rows, final Map<EObject, Set<EObject>> equivalancesMap, final int pass) {
+			Map<String, List<ChangeSetRow>> lhsRowMarketMap, Map<String, List<ChangeSetRow>> rhsRowMarketMap, @NonNull final List<ChangeSetRow> rows, final Map<EObject, Set<EObject>> equivalancesMap,
+			final int pass) {
 		for (final Row r : cycleGroup.getRows()) {
 
 			final boolean isBase = true;
@@ -194,12 +201,12 @@ public class ScenarioComparisonTransformer {
 			assert element != null;
 
 			if (pass == 0) {
-				ChangeSetTransformerUtil.createOrUpdateRow(lhsRowMap, rhsRowMap, rows, element, isBase);
+				ChangeSetTransformerUtil.createOrUpdateRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, element, isBase, false);
 			} else if (pass == 1) {
 				if (r.isReference()) {
 					// final Set<EObject> equivalents = equivalancesMap.get(element);
 					// if (equivalents == null) {
-					ChangeSetTransformerUtil.createOrUpdateRow(lhsRowMap, rhsRowMap, rows, element, false);
+					ChangeSetTransformerUtil.createOrUpdateRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, element, false, false);
 
 					continue;
 				}
@@ -224,7 +231,8 @@ public class ScenarioComparisonTransformer {
 								if (cargoAllocation.getSlotAllocations().size() != 2) {
 									throw new RuntimeException("Complex cargoes are not supported");
 								}
-								ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, rows, slotVisit2, (LoadSlot) slotVisit2.getSlotAllocation().getSlot(), false);
+								ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, slotVisit2,
+										(LoadSlot) slotVisit2.getSlotAllocation().getSlot(), false, false);
 							}
 						}
 					}

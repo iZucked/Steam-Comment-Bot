@@ -178,6 +178,10 @@ public class ChangeSetTransformer {
 
 		final Map<String, ChangeSetRow> lhsRowMap = new HashMap<>();
 		final Map<String, ChangeSetRow> rhsRowMap = new HashMap<>();
+
+		final Map<String, List<ChangeSetRow>> lhsRowMarketMap = new HashMap<>();
+		final Map<String, List<ChangeSetRow>> rhsRowMarketMap = new HashMap<>();
+
 		List<ChangeSet> changeSets = new LinkedList<>();
 
 		// Convert into new data model.
@@ -189,8 +193,8 @@ public class ChangeSetTransformer {
 			final List<ChangeSetRow> rows = new LinkedList<>();
 
 			for (final CycleGroup cycleGroup : g.getGroups()) {
-				processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, rows, equivalancesMap, true);
-				processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, rows, equivalancesMap, false);
+				processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, equivalancesMap, true);
+				processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, equivalancesMap, false);
 			}
 			processRows(toSchedule, fromSchedule, rows, changeSet);
 			if (!changeSet.getChangeSetRowsToPrevious().isEmpty()) {
@@ -202,8 +206,8 @@ public class ChangeSetTransformer {
 
 			final ChangeSet changeSet = createChangeSet(root, from, to);
 
-			processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, rows, equivalancesMap, true);
-			processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, rows, equivalancesMap, false);
+			processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, equivalancesMap, true);
+			processCycleGroup(cycleGroup, lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, equivalancesMap, false);
 
 			processRows(toSchedule, fromSchedule, rows, changeSet);
 			if (!changeSet.getChangeSetRowsToPrevious().isEmpty()) {
@@ -520,7 +524,8 @@ public class ChangeSetTransformer {
 	}
 
 	private void processCycleGroup(final CycleGroup cycleGroup, @NonNull final Map<String, ChangeSetRow> lhsRowMap, @NonNull final Map<String, ChangeSetRow> rhsRowMap,
-			@NonNull final List<ChangeSetRow> rows, final Map<EObject, Set<EObject>> equivalancesMap, final boolean firstPass) {
+			Map<String, List<ChangeSetRow>> lhsRowMarketMap, Map<String, List<ChangeSetRow>> rhsRowMarketMap, @NonNull final List<ChangeSetRow> rows, final Map<EObject, Set<EObject>> equivalancesMap,
+			final boolean firstPass) {
 		for (final Row r : cycleGroup.getRows()) {
 
 			boolean isBase = true;
@@ -551,7 +556,7 @@ public class ChangeSetTransformer {
 			assert element != null;
 
 			if (firstPass) {
-				ChangeSetTransformerUtil.createOrUpdateRow(lhsRowMap, rhsRowMap, rows, element, isBase);
+				ChangeSetTransformerUtil.createOrUpdateRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, element, isBase, false);
 			} else {
 
 				final Set<EObject> equivalents = equivalancesMap.get(element);
@@ -571,7 +576,8 @@ public class ChangeSetTransformer {
 								if (cargoAllocation.getSlotAllocations().size() != 2) {
 									throw new RuntimeException("Complex cargoes are not supported");
 								}
-								ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, rows, slotVisit2, (LoadSlot) slotVisit2.getSlotAllocation().getSlot(), false);
+								ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, slotVisit2,
+										(LoadSlot) slotVisit2.getSlotAllocation().getSlot(), false, false);
 							}
 						}
 					}
