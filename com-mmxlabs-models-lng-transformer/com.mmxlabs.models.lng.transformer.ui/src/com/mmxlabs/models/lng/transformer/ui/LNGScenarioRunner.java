@@ -730,7 +730,7 @@ public class LNGScenarioRunner {
 					// Run optimisation
 
 					final BagOptimiser instance = injector.getInstance(BagOptimiser.class);
-					final boolean foundBetterResult = instance.optimise(bestResult.getBestSolution().getFirst(), new SubProgressMonitor(progressMonitor, PROGRESS_ACTION_SET_OPTIMISATION), 3);
+					final boolean foundBetterResult = instance.optimise(bestResult.getBestSolution().getFirst(), new SubProgressMonitor(progressMonitor, PROGRESS_ACTION_SET_OPTIMISATION), 1000);
 
 					// Store the results
 					final List<NonNullPair<ISequences, Map<String, Object>>> breakdownSolution = instance.getBestSolution();

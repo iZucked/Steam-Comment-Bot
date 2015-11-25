@@ -106,6 +106,21 @@ public class StochasticActionSetUtils {
 		final int identical = getIdenticalChanges(a, b).size();
 		return Math.min((identical * 100) / (a.changesList.size()), 100);
 	}
+	
+	/**
+	 * Returns the total p&L per change for a collection of changeSets
+	 * 
+	 * @return
+	 */
+	public static long getTotalPNL(final Collection<ChangeSet> changeSets) {
+		long totalPnl = 0;
+		
+		for (final ChangeSet cs : changeSets) {
+			totalPnl += cs.metricDelta[MetricType.PNL.ordinal()];
+		}
+		
+		return totalPnl;
+	}
 
 	/**
 	 * Returns the total p&L per change for a collection of changeSets
