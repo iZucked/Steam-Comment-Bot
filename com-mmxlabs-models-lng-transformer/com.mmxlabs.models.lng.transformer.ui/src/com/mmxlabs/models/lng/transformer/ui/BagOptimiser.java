@@ -423,8 +423,9 @@ public class BagOptimiser {
 				states.add(new JobState(currentStates.get(rdm.nextInt(currentStates.size()))));
 			}
 			fullChangesSets = findChangeSets(targetSimilarityState, states, maxStates);
+			++retryCount;
 			if (DEBUG) {
-				System.out.println("retry:" + (++retryCount));
+				System.out.println("retry:" + (retryCount));
 				System.out.println("evaluations [after retry] : " + actionSetOptimisationData.getTotalEvaluations());
 				System.out.println("constraint failed evaluations [after retry] : " + actionSetOptimisationData.actualConstraintEvaluations);
 				System.out.println("pnl failed evaluations [after retry] : " + actionSetOptimisationData.actualPNLEvaluations);
