@@ -156,11 +156,10 @@ public class StochasticActionSetUtils {
 		for (final ChangeSet cs : changeSets) {
 			totalChanges += cs.changesList.size();
 			prctilePnl += cs.metricDelta[MetricType.PNL.ordinal()];
-			if (prctilePnl > (totalPnl * prctilePnl)) {
+			if (prctilePnl > (totalPnl * percentile)) {
 				break;
 			}
 		}
-		
 		
 		return prctilePnl / totalChanges;
 	}

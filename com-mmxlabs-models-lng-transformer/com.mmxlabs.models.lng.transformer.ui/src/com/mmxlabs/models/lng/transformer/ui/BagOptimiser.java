@@ -103,7 +103,7 @@ public class BagOptimiser {
 
 	private static final Logger LOG = LoggerFactory.getLogger(BagOptimiser.class);
 
-	private static final boolean DEBUG = true;
+	private static final boolean DEBUG = false;
 
 	private static final boolean BUILD_DEPENDANCY_GRAPH = false;
 
@@ -159,7 +159,7 @@ public class BagOptimiser {
 			final IModifiableSequences initialFullSequences = sequencesManipulator.createManipulatedSequences(initialRawSequences);
 
 			if (DEBUG) {
-				 // Debugging -- get initial change count
+				// Debugging -- get initial change count
 				final int changesCount = bagMover.getChangedElements(targetSimilarityState, initialRawSequences).size();
 				System.out.println("Initial changes " + changesCount);
 			}
@@ -473,7 +473,7 @@ public class BagOptimiser {
 		return fullChangesSets;
 	}
 
-	private List<JobState> getSortedLeafStates(Collection<JobState> finalPopulation) {
+	protected List<JobState> getSortedLeafStates(Collection<JobState> finalPopulation) {
 		final List<JobState> sortedChangeStates = new ArrayList<>(finalPopulation);
 		Collections.sort(sortedChangeStates, new Comparator<JobState>() {
 
@@ -484,18 +484,15 @@ public class BagOptimiser {
 				} else if (o1.mode != JobStateMode.LEAF && o2.mode == JobStateMode.LEAF) {
 					return 1;
 				}
-				double pnlPC1 = StochasticActionSetUtils.getTotalPNLPerChange(o1.changeSetsAsList);
-				double pnlPC2 = StochasticActionSetUtils.getTotalPNLPerChange(o2.changeSetsAsList);
-				if (pnlPC1 != pnlPC2) {
-					return Double.compare(pnlPC1, pnlPC2);
-				} else {
-					double prctile = 0.8;
-					while (prctile > 0.1 && StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(o1.changeSetsAsList, prctile) == StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(o1.changeSetsAsList, prctile)) {
-						prctile = prctile - 0.1;
-					}
-					return Double.compare(StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(o1.changeSetsAsList, prctile),
-							StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(o2.changeSetsAsList, prctile))*-1;
+				double prctile = 0.8;
+				while (prctile > 0.1 && StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(o1.changeSetsAsList, prctile) == StochasticActionSetUtils
+						.getTotalPNLPerChangeForPercentile(o2.changeSetsAsList, prctile)) {
+					prctile = prctile - 0.1;
 				}
+				double a = StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(o1.changeSetsAsList, prctile);
+				double b = StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(o2.changeSetsAsList, prctile);
+				int compare = Double.compare(a, b);
+				return compare * -1;
 			}
 		});
 		return sortedChangeStates;
@@ -568,7 +565,8 @@ public class BagOptimiser {
 						System.out.println(c.description);
 					}
 				}
-				System.out.println("pnl per change:"+StochasticActionSetUtils.getTotalPNLPerChange(s.changeSetsAsList));
+				System.out.println("pnl per change:" + StochasticActionSetUtils.getTotalPNLPerChange(s.changeSetsAsList));
+				System.out.println("pnl per change (0.8):" + StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(s.changeSetsAsList, 0.8));
 				System.out.println("-----------------");
 			}
 		}
@@ -813,14 +811,14 @@ public class BagOptimiser {
 
 	private void updateProgress(ActionSetOptimisationData actionSetOptimisationData, int maxEvaluations, IProgressMonitor progressMonitor) {
 		// The percent of weighted actual pnl evaluations + constraint failed evaluations that have completed, based on a given total
-		int progress = (((actionSetOptimisationData.actualPNLEvaluations*100 + actionSetOptimisationData.actualConstraintEvaluations) * 100) / maxEvaluations);
+		int progress = (((actionSetOptimisationData.actualPNLEvaluations * 100 + actionSetOptimisationData.actualConstraintEvaluations) * 100) / maxEvaluations);
 		while (progress > progressCounter.getTicks()) {
 			progressCounter.increment(progressMonitor);
 		}
 	}
 
 	private boolean shouldTerminate(ActionSetOptimisationData actionSetOptimisationData) {
-		if (actionSetOptimisationData.actualPNLEvaluations*100 + actionSetOptimisationData.actualConstraintEvaluations > maxEvaluations) {
+		if (actionSetOptimisationData.actualPNLEvaluations * 100 + actionSetOptimisationData.actualConstraintEvaluations > maxEvaluations) {
 			return true;
 		}
 		if (actionSetOptimisationData.getNumberOfLeafs() > maxLeafs) {
@@ -836,7 +834,7 @@ public class BagOptimiser {
 		if (actionSetOptimisationData.getCurrentRunEvaluations() > maxEvaluationsInRun) {
 			return true;
 		}
-		if (actionSetOptimisationData.actualPNLEvaluations*100 + actionSetOptimisationData.actualConstraintEvaluations > maxEvaluations) {
+		if (actionSetOptimisationData.actualPNLEvaluations * 100 + actionSetOptimisationData.actualConstraintEvaluations > maxEvaluations) {
 			return true;
 		}
 		return false;
@@ -920,11 +918,11 @@ public class BagOptimiser {
 		public void logConstraintEvaluations(int evals) {
 			actualConstraintEvaluations += evals;
 		}
-		
+
 		public void logPNLEvaluations(int evals) {
 			actualPNLEvaluations += evals;
 		}
-		
+
 		public int getTotalEvaluations() {
 			return totalEvaluations;
 		}
