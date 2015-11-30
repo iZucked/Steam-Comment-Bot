@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * All rights reserved.
+ */
 package com.mmxlabs.lingo.its.tests;
 
 import java.io.File;
@@ -148,9 +152,6 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 			// Skip this for now
 			// DEBUG - Remove
 			Assume.assumeFalse(scenarioURL.contains("FB1808"));
-
-			// Only High Mode for now
-			Assume.assumeTrue(mode == SimilarityMode.HIGH);
 		}
 		// Only run full iterations if the flag is set
 		if (limitedIterations) {
