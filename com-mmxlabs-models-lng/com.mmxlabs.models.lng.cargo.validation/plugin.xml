@@ -74,7 +74,7 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  [Cargo|{0}] Load is after discharge (note timezone).
+                 {0}
                </message>
                <description>
                   The end of the discharge slot's time window should be after the start of the load slot's time window.
@@ -92,7 +92,7 @@
                   severity="WARNING"
                   statusCode="1">
                <message>
-                  [Cargo|{0}].
+                  {0}
                </message>
                <description>
                </description>
