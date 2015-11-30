@@ -36,7 +36,7 @@ public final class ChangeSetFinderJob implements Callable<Collection<JobState>> 
 
 			final int localDepth = state.mode == JobStateMode.LIMITED ? 2 : BreakdownOptimiserMover.DEPTH_START;
 			return optimiser.search(new Sequences(state.rawSequences), similarityState, new LinkedList<Change>(state.changesAsList), new LinkedList<ChangeSet>(state.changeSetsAsList), localDepth,
-					BreakdownOptimiserMover.MOVE_TYPE_NONE, state.metric, jobStore, null, state.getDifferencesList());
+					BreakdownOptimiserMover.MOVE_TYPE_NONE, state.metric, jobStore, null, state.getDifferencesList(), new BreakdownSearchStatistics());
 		} catch (final Throwable e) {
 			throw new RuntimeException(e);
 		}
