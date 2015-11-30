@@ -207,23 +207,50 @@ public class ActionSetTransformer {
 		final Map<String, ChangeSetRow> lhsRowMap = new HashMap<>();
 		final Map<String, ChangeSetRow> rhsRowMap = new HashMap<>();
 
+		final Map<String, List<ChangeSetRow>> lhsRowMarketMap = new HashMap<>();
+		final Map<String, List<ChangeSetRow>> rhsRowMarketMap = new HashMap<>();
+
 		final List<ChangeSetRow> rows = new LinkedList<>();
 
 		// Pass one, construct current wiring.
 		for (final EObject element : toInterestingElements) {
-			assert element != null; 
-			ChangeSetTransformerUtil.createOrUpdateRow(lhsRowMap, rhsRowMap, rows, element, true);
+			assert element != null;
+			ChangeSetTransformerUtil.createOrUpdateRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, element, true, false);
 		}
 
 		for (final EObject element : uniqueElements) {
-			assert element != null; 
+			assert element != null;
 			final boolean isBaseElement = toAllElements.contains(element);
-			ChangeSetTransformerUtil.createOrUpdateRow(lhsRowMap, rhsRowMap, rows, element, isBaseElement);
+			ChangeSetTransformerUtil.createOrUpdateRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, element, isBaseElement, false);
 		}
 
 		// Second pass, create the wiring links.
+		final List<EObject> deferredElements = processElementsForWiringPass(toInterestingElements, equivalancesMap, lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, true);
+		// Process deferred elements - i.e. those with multiple spot market options
+		processElementsForWiringPass(deferredElements, equivalancesMap, lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, false);
 
-		for (final EObject element : toInterestingElements) {
+		ChangeSetTransformerUtil.mergeSpots(rows);
+		ChangeSetTransformerUtil.setRowFlags(rows);
+		ChangeSetTransformerUtil.filterRows(rows);
+		ChangeSetTransformerUtil.sortRows(rows);
+
+		// Add to data model
+		if (isBase) {
+			changeSet.getChangeSetRowsToBase().addAll(rows);
+		} else {
+			changeSet.getChangeSetRowsToPrevious().addAll(rows);
+		}
+
+		// Build metrics
+		ChangeSetTransformerUtil.calculateMetrics(changeSet, fromSchedule, toSchedule, isBase);
+	}
+
+	private List<EObject> processElementsForWiringPass(final Collection<EObject> elements, final Map<EObject, Set<EObject>> equivalancesMap, final Map<String, ChangeSetRow> lhsRowMap,
+			final Map<String, ChangeSetRow> rhsRowMap, final Map<String, List<ChangeSetRow>> lhsRowMarketMap, final Map<String, List<ChangeSetRow>> rhsRowMarketMap, final List<ChangeSetRow> rows,
+			final boolean canDefer) {
+		final List<EObject> deferredElements = new LinkedList<>();
+
+		for (final EObject element : elements) {
 			final Set<EObject> equivalents = equivalancesMap.get(element);
 			if (equivalents == null) {
 				continue;
@@ -240,7 +267,10 @@ public class ActionSetTransformer {
 							if (cargoAllocation.getSlotAllocations().size() != 2) {
 								throw new RuntimeException("Complex cargoes are not supported");
 							}
-							ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, rows, slotVisit2, (LoadSlot) slotVisit2.getSlotAllocation().getSlot(), false);
+							if (ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, slotVisit2,
+									(LoadSlot) slotVisit2.getSlotAllocation().getSlot(), false, true)) {
+								deferredElements.add(element);
+							}
 						}
 					}
 				}
@@ -257,21 +287,8 @@ public class ActionSetTransformer {
 				ChangeSetTransformerUtil.createOrUpdateEventRow(lhsRowMap, rhsRowMap, rows, event, false);
 			}
 		}
+		return deferredElements;
 
-		ChangeSetTransformerUtil.mergeSpots(rows);
-		ChangeSetTransformerUtil.setRowFlags(rows);
-		ChangeSetTransformerUtil.filterRows(rows);
-		ChangeSetTransformerUtil.sortRows(rows);
-
-		// Add to data model
-		if (isBase) {
-			changeSet.getChangeSetRowsToBase().addAll(rows);
-		} else {
-			changeSet.getChangeSetRowsToPrevious().addAll(rows);
-		}
-
-		// Build metrics
-		ChangeSetTransformerUtil.calculateMetrics(changeSet, fromSchedule, toSchedule, isBase);
 	}
 
 }
