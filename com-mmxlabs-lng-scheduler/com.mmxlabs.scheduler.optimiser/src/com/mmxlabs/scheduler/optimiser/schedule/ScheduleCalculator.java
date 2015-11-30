@@ -204,15 +204,23 @@ public class ScheduleCalculator {
 				if (thisPortSlot instanceof ILoadOption) {
 					// Divertible DES has real time window.
 					if (!shippingHoursRestrictionProvider.isDivertable(element)) {
-						final int windowStart = thisPortSlot.getTimeWindow().getStart();
-						startTime = Math.max(windowStart, startTime);
+						if (actualsDataProvider.hasActuals(thisPortSlot)) {
+							startTime = actualsDataProvider.getArrivalTime(thisPortSlot);
+						} else {
+							final int windowStart = thisPortSlot.getTimeWindow().getStart();
+							startTime = Math.max(windowStart, startTime);
+						}
 					}
 				}
 				if (thisPortSlot instanceof IDischargeOption) {
-					// Divertible FOB has sales time window
-					// if (!shippingHoursRestrictionProvider.isDivertable(element)) {
-					final int windowStart = thisPortSlot.getTimeWindow().getStart();
-					startTime = Math.max(windowStart, startTime);
+					if (actualsDataProvider.hasActuals(thisPortSlot)) {
+						startTime = actualsDataProvider.getArrivalTime(thisPortSlot);
+					} else {
+						// Divertible FOB has sales time window
+						// if (!shippingHoursRestrictionProvider.isDivertable(element)) {
+						final int windowStart = thisPortSlot.getTimeWindow().getStart();
+						startTime = Math.max(windowStart, startTime);
+					}
 					// }
 					if (dischargeOptionInMMBTU == false && !(((IDischargeOption) thisPortSlot).isVolumeSetInM3())) {
 						dischargeOptionInMMBTU = true;
@@ -282,8 +290,8 @@ public class ScheduleCalculator {
 		// TODO: This is not the place!
 		final IAllocationAnnotation annotation = volumeAllocator.allocate(vesselAvailability, vesselStartTime, currentPlan, portTimesRecord);
 
-		final ScheduledSequence scheduledSequence = new ScheduledSequence(resource, sequence, startTime, Collections.singletonList(new Triple<>(currentPlan, Collections
-				.<IPortSlot, IHeelLevelAnnotation> emptyMap(), (IPortTimesRecord) annotation)));
+		final ScheduledSequence scheduledSequence = new ScheduledSequence(resource, sequence, startTime,
+				Collections.singletonList(new Triple<>(currentPlan, Collections.<IPortSlot, IHeelLevelAnnotation> emptyMap(), (IPortTimesRecord) annotation)));
 
 		return scheduledSequence;
 	}
@@ -383,7 +391,7 @@ public class ScheduleCalculator {
 	}
 
 	// TODO: Push into entity value calculator?
-	private void calculateProfitAndLoss(final ISequences sequences, final ScheduledSequences scheduledSequences,// final Map<VoyagePlan, IAllocationAnnotation> allocations,
+	private void calculateProfitAndLoss(final ISequences sequences, final ScheduledSequences scheduledSequences, // final Map<VoyagePlan, IAllocationAnnotation> allocations,
 			final IAnnotatedSolution annotatedSolution) {
 
 		if (entityValueCalculator == null) {
@@ -424,8 +432,8 @@ public class ScheduleCalculator {
 					}
 
 					// TODO: this logic looks decidedly shaky - plan sequence length could change with logic changes
-					final boolean isDesFobCase = ((vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) && plan
-							.getSequence().length == 2);
+					final boolean isDesFobCase = ((vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE
+							|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) && plan.getSequence().length == 2);
 					if (currentAllocation != null) {
 						final CargoValueAnnotation cargoValueAnnotation = new CargoValueAnnotation(currentAllocation);
 						cargo = true;
