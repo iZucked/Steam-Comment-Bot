@@ -218,7 +218,11 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 				ISequences inputRawSequences = injector.getInstance(Key.get(ISequences.class, Names.named(OptimiserConstants.SEQUENCE_TYPE_INPUT)));
 				final boolean foundBetterResult = instance.optimise(inputRawSequences, new SubProgressMonitor(monitor, 95), 3);
 
-				return instance.getBestSolution();
+				IMultiStateResult result = instance.getBestSolution();
+				if (result != null) {
+					return result;
+				}
+				return inputState;
 			} finally {
 				monitor.done();
 			}

@@ -157,65 +157,6 @@ public class LNGScenarioRunner {
 		log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
 
 		return result;
-
-<<<<<<< local
-=======
-				assert bestResult != null;
-				if (doHillClimb) {
-					bestResult = performPhase(IRunnerHook.PHASE_HILL, progressMonitor, PROGRESS_HILLCLIMBING_OPTIMISATION, bestResult);
-
-					assert bestResult != null;
-					assert bestResult.getBestSolution() != null;
-					assert bestResult.getBestSolution().getFirst() != null;
-					assert bestResult.getBestSolution().getSecond() != null;
-				}
-			}
-
-			// Clear any previous optimisation state prior to export
-			if (periodMapping != null) {
-				LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, 100);
-			}
-			LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
-
-			if (doActionSetPostOptimisation) {
-				if (bestResult == null) {
-					log.error("No existing state - unable to find action sets");
-				} else {
-
-					boolean exportOptimiserSolution = true;
-					// Generate the changesets decomposition.
-					// Run optimisation
-
-					final BagOptimiser instance = injector.getInstance(BagOptimiser.class);
-					final boolean foundBetterResult = instance.optimise(bestResult.getBestSolution().getFirst(), new SubProgressMonitor(progressMonitor, PROGRESS_ACTION_SET_OPTIMISATION), 1000);
-
-					// Store the results
-					final List<NonNullPair<ISequences, Map<String, Object>>> breakdownSolution = instance.getBestSolution();
-					if (breakdownSolution != null) {
-						bestResult = storeBreakdownSolutionsAsForks(breakdownSolution, foundBetterResult, new SubProgressMonitor(progressMonitor, PROGRESS_ACTION_SET_SAVE));
-						exportOptimiserSolution = !foundBetterResult;
-					}
-					// The breakdown optimiser may find a better solution. This will be saved in storeBreakdownSolutionsAsForks
-					if (exportOptimiserSolution) {
-						// export final state
-						finalSchedule = overwrite(100, bestResult.getBestSolution().getFirst(), bestResult.getBestSolution().getSecond());
-					}
-
-					if (pRunnerHook != null) {
-						// List<ISequences> actionSetRawSequences = bestResult.getSolutions().stream().map(t -> t.getFirst()).collect(Collectors.toList());
-						pRunnerHook.reportSequences(IRunnerHook.PHASE_ACTION_SETS, bestResult.getBestSolution().getFirst() /* , actionSetRawSequences */);
-					}
-				}
-			} else {
-				assert bestResult != null;
-				finalSchedule = overwrite(100, bestResult.getBestSolution().getFirst(), bestResult.getBestSolution().getSecond());
-			}
-		} finally {
-			progressMonitor.done();
-		}
-		log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
-		return bestResult;
->>>>>>> other
 	}
 
 	@Nullable

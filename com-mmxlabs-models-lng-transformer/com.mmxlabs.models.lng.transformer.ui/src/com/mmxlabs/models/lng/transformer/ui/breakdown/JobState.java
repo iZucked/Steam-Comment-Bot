@@ -44,19 +44,15 @@ public class JobState implements Serializable {
 	public JobStateMode mode = JobStateMode.BRANCH;
 
 	private List<Difference> differencesList = null;
-	
+
 	public BreakdownSearchStatistics breakdownSearchStatistics = null;
-	
-	public JobState(final ISequences rawSequences, final List<ChangeSet> changeSets, final List<Change> changes, final List<Difference> differencesList, final BreakdownSearchStatistics breakdownSearchStatistics) {
+
+	public JobState(final ISequences rawSequences, final List<ChangeSet> changeSets, final List<Change> changes, final List<Difference> differencesList,
+			final BreakdownSearchStatistics breakdownSearchStatistics) {
 		this(rawSequences, changeSets, changes, differencesList);
 		this.breakdownSearchStatistics = breakdownSearchStatistics;
 	}
-	
-	public JobState(final ISequences rawSequences, final List<ChangeSet> changeSets, final List<Change> changes, final List<Difference> differencesList, final BreakdownSearchStatistics breakdownSearchStatistics) {
-		this(rawSequences, changeSets, changes, differencesList);
-		this.breakdownSearchStatistics = breakdownSearchStatistics;
-	}
-	
+
 	public JobState(final ISequences rawSequences, final List<ChangeSet> changeSets, final List<Change> changes, final List<Difference> differencesList) {
 		this.rawSequences = rawSequences;
 
