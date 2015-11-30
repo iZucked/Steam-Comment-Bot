@@ -204,15 +204,23 @@ public class ScheduleCalculator {
 				if (thisPortSlot instanceof ILoadOption) {
 					// Divertible DES has real time window.
 					if (!shippingHoursRestrictionProvider.isDivertable(element)) {
-						final int windowStart = thisPortSlot.getTimeWindow().getStart();
-						startTime = Math.max(windowStart, startTime);
+						if (actualsDataProvider.hasActuals(thisPortSlot)) {
+							startTime = actualsDataProvider.getArrivalTime(thisPortSlot);
+						} else {
+							final int windowStart = thisPortSlot.getTimeWindow().getStart();
+							startTime = Math.max(windowStart, startTime);
+						}
 					}
 				}
 				if (thisPortSlot instanceof IDischargeOption) {
-					// Divertible FOB has sales time window
-					// if (!shippingHoursRestrictionProvider.isDivertable(element)) {
-					final int windowStart = thisPortSlot.getTimeWindow().getStart();
-					startTime = Math.max(windowStart, startTime);
+					if (actualsDataProvider.hasActuals(thisPortSlot)) {
+						startTime = actualsDataProvider.getArrivalTime(thisPortSlot);
+					} else {
+						// Divertible FOB has sales time window
+						// if (!shippingHoursRestrictionProvider.isDivertable(element)) {
+						final int windowStart = thisPortSlot.getTimeWindow().getStart();
+						startTime = Math.max(windowStart, startTime);
+					}
 					// }
 					if (dischargeOptionInMMBTU == false && !(((IDischargeOption) thisPortSlot).isVolumeSetInM3())) {
 						dischargeOptionInMMBTU = true;
