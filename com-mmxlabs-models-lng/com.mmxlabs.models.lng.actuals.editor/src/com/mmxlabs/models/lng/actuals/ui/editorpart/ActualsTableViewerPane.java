@@ -552,7 +552,7 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 		addActualsColumn(loadColumns, "L-ID", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(MMXCorePackage.Literals.NAMED_OBJECT__NAME, editingDomain)),
 				new RowDataEMFPath(false, Type.LOAD, pkg.getSlotActuals_Slot()));
 		addActualsColumn(loadColumns, "L-Counter Party", new BasicAttributeManipulator(pkg.getSlotActuals_Counterparty(), editingDomain), new RowDataEMFPath(false, Type.LOAD));
-		addActualsColumn(loadColumns, "L_Price", new NumericAttributeManipulator(pkg.getSlotActuals_PriceDOL(), editingDomain), new RowDataEMFPath(false, Type.LOAD));
+		addActualsColumn(loadColumns, "L-Price", new NumericAttributeManipulator(pkg.getSlotActuals_PriceDOL(), editingDomain), new RowDataEMFPath(false, Type.LOAD));
 
 		addActualsColumn(dischargeColumns, "D-ID", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(MMXCorePackage.Literals.NAMED_OBJECT__NAME, editingDomain)),
 				new RowDataEMFPath(false, Type.DISCHARGE, pkg.getSlotActuals_Slot()));
