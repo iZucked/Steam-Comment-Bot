@@ -50,6 +50,10 @@ public class ActualsModelExtraImporter implements IExtraModelImporter {
 					if (e instanceof CargoActuals) {
 						CargoActuals cargoActuals = (CargoActuals) e;
 						actualsModel.getCargoActuals().add(cargoActuals);
+						
+						if (cargoActuals.getReturnActuals() == null) {
+							cargoActuals.setReturnActuals(ActualsFactory.eINSTANCE.createReturnActuals());
+						}
 					}
 				}
 				lngScenarioModel.setActualsModel(actualsModel);

@@ -47,12 +47,20 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 				status.addEObjectAndFeature(cargoActuals, ActualsPackage.Literals.CARGO_ACTUALS__CARGO_REFERENCE);
 				failures.add(status);
 			}
+			if (cargoActuals.getReturnActuals() == null) {
+				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Actuals needs return actuals"));
+				status.addEObjectAndFeature(cargoActuals, ActualsPackage.Literals.CARGO_ACTUALS__CARGO_REFERENCE);
+				failures.add(status);
+			}
 
 			if (cargoActuals.getCargo() == null) {
 				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Cargo Actuals needs a cargo"));
 				status.addEObjectAndFeature(cargoActuals, ActualsPackage.Literals.CARGO_ACTUALS__CARGO);
 				failures.add(status);
 			} else {
+
+				boolean checkReturnActuals = false;
+
 				final Cargo cargo = cargoActuals.getCargo();
 				if (cargo.isAllowRewiring()) {
 					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Actualised cargo should not allow re-wiring"));
@@ -62,6 +70,7 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 
 				// Check vessel assignments
 				if (cargo.getCargoType() == CargoType.FLEET) {
+					checkReturnActuals = true;
 
 					if (!cargo.isLocked()) {
 						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
@@ -90,10 +99,14 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 							final LoadSlot loadSlot = (LoadSlot) slot;
 							if (loadSlot.isDESPurchase()) {
 								if (loadSlot.getNominatedVessel() != null && !loadSlot.getNominatedVessel().equals(cargoActuals.getVessel())) {
-									final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Assigned and Actual vessel differ"));
+									final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
+											(IConstraintStatus) ctx.createFailureStatus("Assigned and Actual vessel differ"));
 									status.addEObjectAndFeature(cargoActuals, ActualsPackage.Literals.CARGO_ACTUALS__VESSEL);
 									status.addEObjectAndFeature(loadSlot, CargoPackage.Literals.SLOT__NOMINATED_VESSEL);
 									failures.add(status);
+								}
+								if (loadSlot.isDivertible()) {
+									checkReturnActuals = true;
 								}
 
 							}
@@ -101,7 +114,8 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 							final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 							if (dischargeSlot.isFOBSale()) {
 								if (dischargeSlot.getNominatedVessel() != null && !dischargeSlot.getNominatedVessel().equals(cargoActuals.getVessel())) {
-									final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Assigned and Actual vessel differ"));
+									final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
+											(IConstraintStatus) ctx.createFailureStatus("Assigned and Actual vessel differ"));
 									status.addEObjectAndFeature(cargoActuals, ActualsPackage.Literals.CARGO_ACTUALS__VESSEL);
 									status.addEObjectAndFeature(dischargeSlot, CargoPackage.Literals.SLOT__NOMINATED_VESSEL);
 									failures.add(status);
@@ -230,18 +244,22 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 				final ReturnActuals returnActuals = cargoActuals.getReturnActuals();
 				if (returnActuals != null) {
 
-					if (returnActuals.getTitleTransferPoint() == null) {
-						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Return Actuals needs a title transfer point"));
-						status.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__TITLE_TRANSFER_POINT);
-						failures.add(status);
-					}
+					if (checkReturnActuals) {
 
-					if (returnActuals.getOperationsStart() == null) {
-						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Return actual needs an operations start date"));
-						status.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__OPERATIONS_START);
-						failures.add(status);
-					}
+						if (returnActuals.getTitleTransferPoint() == null) {
+							final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
+									(IConstraintStatus) ctx.createFailureStatus("Return Actuals needs a title transfer point"));
+							status.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__TITLE_TRANSFER_POINT);
+							failures.add(status);
+						}
 
+						if (returnActuals.getOperationsStart() == null) {
+							final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
+									(IConstraintStatus) ctx.createFailureStatus("Return actual needs an operations start date"));
+							status.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__OPERATIONS_START);
+							failures.add(status);
+						}
+					}
 					// // Sanity check cv and m3 -> mmbtu conversions
 					// if (Math.abs((returnActuals.getCV() * returnActuals.getEndHeelM3()) - returnActuals.getEndHeelMMBTu()) > 1.0) {
 					// final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(

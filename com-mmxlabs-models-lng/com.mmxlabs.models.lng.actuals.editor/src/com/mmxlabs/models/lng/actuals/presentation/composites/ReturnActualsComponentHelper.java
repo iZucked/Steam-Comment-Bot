@@ -19,6 +19,7 @@ import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
@@ -73,26 +74,32 @@ public class ReturnActualsComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the titleTransferPoint feature on ReturnActuals
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_titleTransferPointEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.RETURN_ACTUALS__TITLE_TRANSFER_POINT));
+		IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.RETURN_ACTUALS__TITLE_TRANSFER_POINT);
+		editor.addNotificationChangedListener(new ReturnActualsInlineEditorChangedListener());
+		detailComposite.addInlineEditor(editor);
 	}
 
 	/**
 	 * Create the editor for the operationsStart feature on ReturnActuals
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_operationsStartEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.RETURN_ACTUALS__OPERATIONS_START));
+		IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.RETURN_ACTUALS__OPERATIONS_START);
+		editor.addNotificationChangedListener(new ReturnActualsInlineEditorChangedListener());
+		detailComposite.addInlineEditor(editor);
 	}
 	/**
 	 * Create the editor for the endHeelM3 feature on ReturnActuals
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_endHeelM3Editor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.RETURN_ACTUALS__END_HEEL_M3));
+		IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.RETURN_ACTUALS__END_HEEL_M3);
+		editor.addNotificationChangedListener(new ReturnActualsInlineEditorChangedListener());
+		detailComposite.addInlineEditor(editor);
 	}
 }
