@@ -27,7 +27,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.util.CargoTypeUtil;
-import com.mmxlabs.scheduler.optimiser.components.util.CargoTypeUtil.CargoType;
+import com.mmxlabs.scheduler.optimiser.components.util.CargoTypeUtil.SimpleCargoType;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
@@ -249,8 +249,8 @@ public class CapacityViolationChecker {
 
 				// TODO: Handle multiple load/discharge case
 				if (buy != null && sell != null) {
-					final CargoType cargoType = CargoTypeUtil.getCargoType(buy, sell);
-					if (cargoType == CargoType.SHIPPED) {
+					final SimpleCargoType cargoType = CargoTypeUtil.getSimpleCargoType(buy, sell);
+					if (cargoType == SimpleCargoType.SHIPPED) {
 						lastHeelDetails = (PortDetails) voyagePlan.getSequence()[voyagePlan.getSequence().length - 1];
 					} else {
 						lastHeelDetails = (PortDetails) voyagePlan.getSequence()[1];
