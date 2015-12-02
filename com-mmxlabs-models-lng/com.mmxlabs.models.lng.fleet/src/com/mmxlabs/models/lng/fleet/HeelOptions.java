@@ -35,13 +35,13 @@ public interface HeelOptions extends MMXObject {
 	 * @return the value of the '<em>Volume Available</em>' attribute.
 	 * @see #isSetVolumeAvailable()
 	 * @see #unsetVolumeAvailable()
-	 * @see #setVolumeAvailable(int)
+	 * @see #setVolumeAvailable(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getHeelOptions_VolumeAvailable()
 	 * @model unsettable="true" required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263' formatString='###,##0'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263' formatString='###,##0.###'"
 	 * @generated
 	 */
-	int getVolumeAvailable();
+	double getVolumeAvailable();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.HeelOptions#getVolumeAvailable <em>Volume Available</em>}' attribute.
@@ -53,7 +53,7 @@ public interface HeelOptions extends MMXObject {
 	 * @see #getVolumeAvailable()
 	 * @generated
 	 */
-	void setVolumeAvailable(int value);
+	void setVolumeAvailable(double value);
 
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.HeelOptions#getVolumeAvailable <em>Volume Available</em>}' attribute.
@@ -61,7 +61,7 @@ public interface HeelOptions extends MMXObject {
 	 * <!-- end-user-doc -->
 	 * @see #isSetVolumeAvailable()
 	 * @see #getVolumeAvailable()
-	 * @see #setVolumeAvailable(int)
+	 * @see #setVolumeAvailable(double)
 	 * @generated
 	 */
 	void unsetVolumeAvailable();
@@ -73,7 +73,7 @@ public interface HeelOptions extends MMXObject {
 	 * @return whether the value of the '<em>Volume Available</em>' attribute is set.
 	 * @see #unsetVolumeAvailable()
 	 * @see #getVolumeAvailable()
-	 * @see #setVolumeAvailable(int)
+	 * @see #setVolumeAvailable(double)
 	 * @generated
 	 */
 	boolean isSetVolumeAvailable();
@@ -90,7 +90,7 @@ public interface HeelOptions extends MMXObject {
 	 * @see #setCvValue(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getHeelOptions_CvValue()
 	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='mmBtu/m\263' formatString='#0.###'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='mmBtu/m\263' formatString='#0.######'"
 	 * @generated
 	 */
 	double getCvValue();

@@ -32,8 +32,8 @@ public class HeelOptionsInlineEditorWrapper extends IInlineEditorEnablementWrapp
 	@Override
 	protected boolean isEnabled() {
 		HeelOptions options = (HeelOptions) input;
-		Integer vol = options.getVolumeAvailable();
-		return vol > 0;
+		Double vol = options.getVolumeAvailable();
+		return vol > 0.0;
 	}
 
 	@Override
