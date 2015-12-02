@@ -907,7 +907,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		   source, 
 		   new String[] {
 			 "unit", "mmBtu/m\u00b3",
-			 "formatString", "#0.###"
+			 "formatString", "#0.#####"
 		   });	
 		addAnnotation
 		  (getSlotActuals_BaseFuelConsumption(), 

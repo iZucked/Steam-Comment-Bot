@@ -181,15 +181,37 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 					if (slotActuals.getOperationsStart() != null && slotActuals.getOperationsEnd() != null) {
 						if (slotActuals.getOperationsStart().isAfter(slotActuals.getOperationsEnd())) {
 							final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
-									(IConstraintStatus) ctx.createFailureStatus("Operations start date if adter operations end"));
+									(IConstraintStatus) ctx.createFailureStatus("Operations start date is after operations end"));
 							status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START);
 							status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_END);
 							failures.add(status);
 						}
+//						if (slot instanceof LoadSlot) {
+//							if (((LoadSlot) slot).isDESPurchase() && !slot.isDivertible()) {
+//								if (!slotActuals.getOperationsStart().equals(slotActuals.getOperationsEnd())) {
+//									final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
+//											(IConstraintStatus) ctx.createFailureStatus("Operations start and end date should be the same for a DES purchase"));
+//									status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START);
+//									status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_END);
+//									failures.add(status);
+//								}
+//							}
+//						}
+//						if (slot instanceof DischargeSlot) {
+//							if (((DischargeSlot) slot).isFOBSale()) {
+//								if (!slotActuals.getOperationsStart().equals(slotActuals.getOperationsEnd())) {
+//									final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
+//											(IConstraintStatus) ctx.createFailureStatus("Operations start and end date should be the same for a FOB sale"));
+//									status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START);
+//									status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_END);
+//									failures.add(status);
+//								}
+//							}
+//						}
 					}
 
 					// Sanity check cv and m3 -> mmbtu conversions
-					if (Math.abs((slotActuals.getVolumeInMMBtu() / slotActuals.getCV()) - slotActuals.getVolumeInM3()) > 0.2) {
+					if (Math.abs((slotActuals.getVolumeInMMBtu() / slotActuals.getCV()) - slotActuals.getVolumeInM3()) > 0.5) {
 						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
 								(IConstraintStatus) ctx.createFailureStatus("Slot actual CV, volume in m3 and volume in mmBtu do not match up"));
 						status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__CV);
@@ -199,7 +221,7 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 					}
 					if (slotActuals instanceof LoadActuals) {
 						final LoadActuals loadActuals = (LoadActuals) slotActuals;
-						if (Math.abs((loadActuals.getStartingHeelMMBTu() / slotActuals.getCV()) - loadActuals.getStartingHeelM3()) > 0.2) {
+						if (Math.abs((loadActuals.getStartingHeelMMBTu() / slotActuals.getCV()) - loadActuals.getStartingHeelM3()) > 0.5) {
 							final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
 									(IConstraintStatus) ctx.createFailureStatus("Slot actual CV, heel volume in m3 and heel volume in mmBtu do not match up"));
 							status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__CV);
@@ -209,7 +231,7 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 						}
 					} else if (slotActuals instanceof DischargeActuals) {
 						final DischargeActuals dischargeActuals = (DischargeActuals) slotActuals;
-						if (Math.abs((dischargeActuals.getEndHeelMMBTu() / slotActuals.getCV()) - dischargeActuals.getEndHeelM3()) > 0.2) {
+						if (Math.abs((dischargeActuals.getEndHeelMMBTu() / slotActuals.getCV()) - dischargeActuals.getEndHeelM3()) > 0.5) {
 							final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
 									(IConstraintStatus) ctx.createFailureStatus("Slot actual CV, heel volume in m3 and heel volume in mmBtu do not match up"));
 							status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__CV);

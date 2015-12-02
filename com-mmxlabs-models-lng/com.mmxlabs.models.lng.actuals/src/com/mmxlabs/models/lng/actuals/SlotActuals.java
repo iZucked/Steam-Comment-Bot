@@ -60,7 +60,7 @@ public interface SlotActuals extends ITimezoneProvider {
 	 * @return the value of the '<em>CV</em>' attribute.
 	 * @see #setCV(double)
 	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_CV()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='mmBtu/m\263' formatString='#0.###'"
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='mmBtu/m\263' formatString='#0.#####'"
 	 * @generated
 	 */
 	double getCV();
