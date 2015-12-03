@@ -29,6 +29,7 @@ import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
+import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
 import com.mmxlabs.models.lng.transformer.ui.IRunnerHook;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
@@ -216,7 +217,7 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 
 		// Optionally use pre-stored sequences state.
 		if (false) {
-			scenarioRunner.setRunnerHook(new IRunnerHook() {
+			scenarioRunner.setRunnerHook(new AbstractRunnerHook() {
 
 				@Override
 				public void reportSequences(String phase, final ISequences rawSequences) {
@@ -233,7 +234,7 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 				}
 
 				@Override
-				public ISequences getSequences(String phase) {
+				public ISequences getPrestoredSequences(String phase) {
 					switch (phase) {
 					case IRunnerHook.PHASE_LSO:
 					case IRunnerHook.PHASE_HILL:
@@ -278,7 +279,6 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 					}
 					return null;
 				}
-
 			});
 		}
 
