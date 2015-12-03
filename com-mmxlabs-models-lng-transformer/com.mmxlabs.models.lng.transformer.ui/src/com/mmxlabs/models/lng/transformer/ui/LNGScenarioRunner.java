@@ -246,7 +246,7 @@ public class LNGScenarioRunner {
 			startSolution = LNGSchedulerJobUtils.evaluateCurrentState(transformer);
 		}
 
-		IRunnerHook pRunnerHook = runnerHook;
+		final IRunnerHook pRunnerHook = runnerHook;
 		if (pRunnerHook != null) {
 			pRunnerHook.beginPhase(IRunnerHook.PHASE_INITIAL, transformer.getInjector());
 			pRunnerHook.reportSequences(IRunnerHook.PHASE_INITIAL, transformer.getEvaluationContext().getInitialSequences());
@@ -700,7 +700,7 @@ public class LNGScenarioRunner {
 
 		IMultiStateResult bestResult = null;
 
-		IRunnerHook pRunnerHook = runnerHook;
+		final IRunnerHook pRunnerHook = runnerHook;
 		try {
 			// Main Optimisation Loop
 			{
@@ -710,7 +710,10 @@ public class LNGScenarioRunner {
 
 				assert bestResult != null;
 				if (doHillClimb) {
-					bestResult = performPhase(IRunnerHook.PHASE_HILL, progressMonitor, PROGRESS_HILLCLIMBING_OPTIMISATION, bestResult);
+					final IMultiStateResult result = performPhase(IRunnerHook.PHASE_HILL, progressMonitor, PROGRESS_HILLCLIMBING_OPTIMISATION, bestResult);
+					if (result != null) {
+						bestResult = result;
+					}
 
 					assert bestResult != null;
 					assert bestResult.getBestSolution() != null;
@@ -796,7 +799,7 @@ public class LNGScenarioRunner {
 		return null;
 	}
 
-	private IMultiStateResult performLSOOptimisation(LocalSearchOptimiser lsoOptimiser, final IProgressMonitor progressMonitor/* , final ISequences bestRawSequences */)
+	private IMultiStateResult performLSOOptimisation(final LocalSearchOptimiser lsoOptimiser, final IProgressMonitor progressMonitor/* , final ISequences bestRawSequences */)
 			throws OperationCanceledException {
 
 		while (!lsoOptimiser.isFinished()) {
@@ -821,12 +824,12 @@ public class LNGScenarioRunner {
 		return runnerHook;
 	}
 
-	public void setRunnerHook(IRunnerHook runnerHook) {
+	public void setRunnerHook(final IRunnerHook runnerHook) {
 		this.runnerHook = runnerHook;
 	}
 
-	private IMultiStateResult performPhase(String phase, IProgressMonitor progressMonitor, int phaseTicks, IMultiStateResult bestResult) {
-		IRunnerHook pRunnerHook = runnerHook;
+	private IMultiStateResult performPhase(final String phase, final IProgressMonitor progressMonitor, final int phaseTicks, IMultiStateResult bestResult) {
+		final IRunnerHook pRunnerHook = runnerHook;
 
 		ISequences preloadedResult = null;
 		if (pRunnerHook != null) {
