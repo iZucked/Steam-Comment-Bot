@@ -85,7 +85,7 @@ public final class OptimisationHelper {
 	public static final int EPOCH_LENGTH_FULL = 900;
 
 	public static Object evaluateScenarioInstance(@NonNull final IEclipseJobManager jobManager, @NonNull final ScenarioInstance instance, @Nullable final String parameterMode,
-			final boolean promptForOptimiserSettings, final boolean optimising, final String k) {
+			final boolean promptForOptimiserSettings, final boolean optimising, final String lockName, final boolean promptOnlyIfOptionsEnabled) {
 
 		final IScenarioService service = instance.getScenarioService();
 		if (service == null) {
@@ -107,7 +107,7 @@ public final class OptimisationHelper {
 						return null;
 					}
 				}
-				final Pair<UserSettings, OptimiserSettings> optimiserSettings = getOptimiserSettings(root, !optimising, parameterMode, promptForOptimiserSettings);
+				final Pair<UserSettings, OptimiserSettings> optimiserSettings = getOptimiserSettings(root, !optimising, parameterMode, promptForOptimiserSettings, promptOnlyIfOptionsEnabled);
 
 				if (optimiserSettings == null || optimiserSettings.getSecond() == null) {
 					return null;
@@ -120,7 +120,7 @@ public final class OptimisationHelper {
 				}
 				// Pair<UserSettings, OptimiserSettings>
 
-				final ScenarioLock scenarioLock = instance.getLock(k);
+				final ScenarioLock scenarioLock = instance.getLock(lockName);
 				if (scenarioLock.awaitClaim()) {
 					IJobControl control = null;
 					IJobDescriptor job = null;
@@ -249,7 +249,7 @@ public final class OptimisationHelper {
 
 	@Nullable
 	public static Pair<UserSettings, OptimiserSettings> getOptimiserSettings(@NonNull final LNGScenarioModel scenario, final boolean forEvaluation, @Nullable final String parameterMode,
-			final boolean promptUser) {
+			final boolean promptUser, final boolean promptOnlyIfOptionsEnabled) {
 
 		UserSettings previousSettings = null;
 		if (scenario != null) {
@@ -263,7 +263,7 @@ public final class OptimisationHelper {
 
 		// Permit the user to override the settings object. Use the previous settings as the initial value
 		if (promptUser) {
-			previousSettings = openUserDialog(forEvaluation, previousSettings, defaultSettings);
+			previousSettings = openUserDialog(forEvaluation, previousSettings, defaultSettings, promptOnlyIfOptionsEnabled);
 		}
 
 		if (previousSettings == null) {
@@ -285,8 +285,9 @@ public final class OptimisationHelper {
 		return new Pair<UserSettings, OptimiserSettings>(defaultSettings, optimiserSettings);
 	}
 
-	private static UserSettings openUserDialog(final boolean forEvaluation, final UserSettings previousSettings, final UserSettings defaultSettings) {
+	private static UserSettings openUserDialog(final boolean forEvaluation, final UserSettings previousSettings, final UserSettings defaultSettings, final boolean displayOnlyIfOptionsEnabled) {
 		boolean optionAdded = false;
+		boolean enabledOptionAdded = false;
 
 		final Display display = PlatformUI.getWorkbench().getDisplay();
 
@@ -321,6 +322,8 @@ public final class OptimisationHelper {
 				if (!LicenseFeatures.isPermitted("features:optimisation-period")) {
 					optStart.enabled = false;
 					optEnd.enabled = false;
+				} else {
+					enabledOptionAdded = true;
 				}
 				optionAdded = true;
 			}
@@ -332,6 +335,7 @@ public final class OptimisationHelper {
 				dialog.addOption(DataSection.Toggles, null, editingDomain, "Shipping only: ", copy, defaultSettings, DataType.Choice, choiceData,
 						ParametersPackage.eINSTANCE.getUserSettings_ShippingOnly());
 				optionAdded = true;
+				enabledOptionAdded = true;
 			}
 			// dialog.addOption(DataSection.Main, null, editingDomian, "Shipping Only Optimisation", copy, defaultSettings, DataType.Boolean,
 			// ParametersPackage.eINSTANCE.getOptimiserSettings_ShippingOnly());
@@ -351,6 +355,7 @@ public final class OptimisationHelper {
 			dialog.addOption(DataSection.Toggles, null, editingDomain, "Generate charter outs: ", copy, defaultSettings, DataType.Choice, choiceData,
 					ParametersPackage.eINSTANCE.getUserSettings_GenerateCharterOuts());
 			optionAdded = true;
+			enabledOptionAdded = choiceData.enabled;
 		}
 
 		if (!forEvaluation) {
@@ -371,6 +376,7 @@ public final class OptimisationHelper {
 				final Option option = dialog.addOption(DataSection.Controls, group, editingDomain, "", copy, defaultSettings, DataType.Choice, choiceData,
 						ParametersPackage.Literals.USER_SETTINGS__SIMILARITY_MODE);
 				optionAdded = true;
+				enabledOptionAdded = choiceData.enabled;
 
 			}
 			{
@@ -411,10 +417,12 @@ public final class OptimisationHelper {
 						return Status.OK_STATUS;
 					}
 				});
+				optionAdded = true;
+				enabledOptionAdded = choiceData.enabled;
 			}
 		}
 
-		if (optionAdded) {
+		if (optionAdded && (enabledOptionAdded || !displayOnlyIfOptionsEnabled)) {
 			final int[] ret = new int[1];
 			display.syncExec(new Runnable() {
 
@@ -470,7 +478,7 @@ public final class OptimisationHelper {
 			break;
 
 		}
-		
+
 		// Copy across params
 		if (userSettings.isSetPeriodStart()) {
 			optimiserSettings.getRange().setOptimiseAfter(userSettings.getPeriodStart());
@@ -478,11 +486,11 @@ public final class OptimisationHelper {
 		if (userSettings.isSetPeriodEnd()) {
 			optimiserSettings.getRange().setOptimiseBefore(userSettings.getPeriodEnd());
 		}
-		
+
 		optimiserSettings.setBuildActionSets(userSettings.isBuildActionSets());
 		optimiserSettings.setGenerateCharterOuts(userSettings.isGenerateCharterOuts());
 		optimiserSettings.setShippingOnly(userSettings.isShippingOnly());
-		
+
 		// change epoch length
 		// TODO: make this better!
 		if (userSettings.isSetPeriodStart() && userSettings.isSetPeriodEnd()) {
