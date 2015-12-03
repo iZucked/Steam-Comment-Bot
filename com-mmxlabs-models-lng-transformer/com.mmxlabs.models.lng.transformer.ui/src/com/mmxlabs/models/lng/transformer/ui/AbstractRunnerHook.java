@@ -7,13 +7,17 @@ package com.mmxlabs.models.lng.transformer.ui;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.inject.Injector;
 import com.mmxlabs.optimiser.core.ISequences;
 
 public class AbstractRunnerHook implements IRunnerHook {
-	private String phase;
+	protected String phase;
+	protected Injector injector;
 
-	public void beginPhase(@NonNull String phase) {
+	@Override
+	public void beginPhase(@NonNull String phase, @Nullable Injector injector) {
 		this.phase = phase;
+		this.injector = injector;
 	}
 
 	@Nullable
@@ -31,5 +35,9 @@ public class AbstractRunnerHook implements IRunnerHook {
 
 	public String getPhase() {
 		return phase;
+	}
+
+	public Injector getInjector() {
+		return injector;
 	}
 }

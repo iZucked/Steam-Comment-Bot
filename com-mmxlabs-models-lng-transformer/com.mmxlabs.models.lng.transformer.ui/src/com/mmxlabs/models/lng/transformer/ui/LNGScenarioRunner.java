@@ -532,7 +532,7 @@ public class LNGScenarioRunner {
 	}
 
 	@Nullable
-	public Injector getInjector() {
+	private Injector getInjector() {
 		return injector;
 	}
 
@@ -819,6 +819,9 @@ public class LNGScenarioRunner {
 
 		ISequences preloadedResult = null;
 		if (pRunnerHook != null) {
+			pRunnerHook.beginPhase(phase, getInjector());
+		}
+		if (pRunnerHook != null) {
 			preloadedResult = pRunnerHook.getPrestoredSequences(phase);
 		}
 		if (preloadedResult == null) {
@@ -844,6 +847,9 @@ public class LNGScenarioRunner {
 		} else {
 			bestResult = new MultiStateResult(preloadedResult, new HashMap<>());
 			preloadedResult = null;
+		}
+		if (pRunnerHook != null) {
+			pRunnerHook.endPhase(phase);
 		}
 		return bestResult;
 	}
