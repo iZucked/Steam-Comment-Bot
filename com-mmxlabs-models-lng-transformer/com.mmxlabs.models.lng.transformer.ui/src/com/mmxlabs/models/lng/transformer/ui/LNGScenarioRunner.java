@@ -248,6 +248,7 @@ public class LNGScenarioRunner {
 
 		IRunnerHook pRunnerHook = runnerHook;
 		if (pRunnerHook != null) {
+			pRunnerHook.beginPhase(IRunnerHook.PHASE_INITIAL, transformer.getInjector());
 			pRunnerHook.reportSequences(IRunnerHook.PHASE_INITIAL, transformer.getEvaluationContext().getInitialSequences());
 		}
 
@@ -260,6 +261,10 @@ public class LNGScenarioRunner {
 
 			} finally {
 			}
+		}
+
+		if (pRunnerHook != null) {
+			pRunnerHook.endPhase(IRunnerHook.PHASE_INITIAL);
 		}
 		return initialSchedule;
 	}
@@ -721,6 +726,9 @@ public class LNGScenarioRunner {
 			LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
 
 			if (doActionSetPostOptimisation) {
+				if (pRunnerHook != null) {
+					pRunnerHook.beginPhase(IRunnerHook.PHASE_ACTION_SETS, getInjector());
+				}
 				if (bestResult == null) {
 					log.error("No existing state - unable to find action sets");
 				} else {
@@ -748,6 +756,9 @@ public class LNGScenarioRunner {
 						// List<ISequences> actionSetRawSequences = bestResult.getSolutions().stream().map(t -> t.getFirst()).collect(Collectors.toList());
 						pRunnerHook.reportSequences(IRunnerHook.PHASE_ACTION_SETS, bestResult.getBestSolution().getFirst() /* , actionSetRawSequences */);
 					}
+				}
+				if (pRunnerHook != null) {
+					pRunnerHook.endPhase(IRunnerHook.PHASE_ACTION_SETS);
 				}
 			} else {
 				assert bestResult != null;
