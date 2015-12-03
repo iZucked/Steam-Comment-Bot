@@ -219,7 +219,7 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 					// If this is an unused DES Purchase, we can try to link the DES purchase to the sale and remove the original load
 					// TODO: Add similar case for FOB Sale
 					final IVesselAvailability vesselAvailabilityForElement = virtualVesselSlotProvider.getVesselAvailabilityForElement(preceder);
-					if (vesselAvailabilityForElement != null && optionalElementsProvider.isElementOptional(element)) {
+					if (vesselAvailabilityForElement != null) {
 						// Should be an unused DES route
 						final IResource precederResource = vesselProvider.getResource(vesselAvailabilityForElement);
 						assert precederResource != null;
