@@ -156,7 +156,12 @@ public class LNGScenarioRunner {
 				doActionSetPostOptimisation = true;
 			}
 		}
-		doHillClimb = LicenseFeatures.isPermitted("features:optimisation-hillclimb");
+		final boolean hillClimberPermitted = LicenseFeatures.isPermitted("features:optimisation-hillclimb");
+		if (hillClimberPermitted) {
+			doHillClimb = (this.optimiserSettings.getSolutionImprovementSettings() != null && this.optimiserSettings.getSolutionImprovementSettings().isImprovingSolutions());
+		} else {
+			doHillClimb = false;
+		}
 
 		optimiserScenario = originalScenario;
 		optimiserEditingDomain = originalEditingDomain;
@@ -710,10 +715,7 @@ public class LNGScenarioRunner {
 
 				assert bestResult != null;
 				if (doHillClimb) {
-					final IMultiStateResult result = performPhase(IRunnerHook.PHASE_HILL, progressMonitor, PROGRESS_HILLCLIMBING_OPTIMISATION, bestResult);
-					if (result != null) {
-						bestResult = result;
-					}
+					bestResult = performPhase(IRunnerHook.PHASE_HILL, progressMonitor, PROGRESS_HILLCLIMBING_OPTIMISATION, bestResult);
 
 					assert bestResult != null;
 					assert bestResult.getBestSolution() != null;
