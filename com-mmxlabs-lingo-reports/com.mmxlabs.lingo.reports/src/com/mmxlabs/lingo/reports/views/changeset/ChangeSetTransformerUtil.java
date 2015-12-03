@@ -42,6 +42,7 @@ import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -468,6 +469,11 @@ public final class ChangeSetTransformerUtil {
 		} else if (sequence.isSetVesselAvailability()) {
 			return getName(sequence.getVesselAvailability());
 		} else {
+			if (sequence.getSequenceType() == SequenceType.DES_PURCHASE) {
+				return "";
+			} else if (sequence.getSequenceType() == SequenceType.FOB_SALE) {
+				return "";
+			}
 			return sequence.getName();
 		}
 	}
