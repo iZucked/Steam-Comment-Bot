@@ -26,9 +26,12 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator.Followers;
 import com.mmxlabs.scheduler.optimiser.lso.moves.ShuffleElements.ShuffleElementsBuilder;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 
 /**
  * A module for the {@link ConstrainedMoveGenerator} handles moves on a per slot basis. This moved generator selects single slot and attempts to move it next to another preceder or follower in another
@@ -52,6 +55,12 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 	private IAlternativeElementProvider alternativeElementProvider;
 
 	private List<ISequenceElement> targetElements;
+
+	@Inject
+	private IVirtualVesselSlotProvider virtualVesselSlotProvider;
+
+	@Inject
+	private IVesselProvider vesselProvider;
 
 	public ShuffleElementsMoveGenerator(final ConstrainedMoveGenerator owner) {
 		super();
@@ -195,18 +204,46 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 
 		} else {
 			final Followers<ISequenceElement> preceders = owner.validPreceeders.get(element);
+
 			if (preceders.size() == 0) {
 				return new NullShuffleElementsMove();
 			}
+
 			for (final ISequenceElement preceder : shuffleFollowers(preceders)) {
+
 				final Pair<Integer, Integer> precederPosition = owner.reverseLookup.get(preceder);
 				// Element is also not used!
+
 				if (precederPosition.getFirst() == null) {
-					continue;
+
+					// If this is an unused DES Purchase, we can try to link the DES purchase to the sale and remove the original load
+					// TODO: Add similar case for FOB Sale
+					final IVesselAvailability vesselAvailabilityForElement = virtualVesselSlotProvider.getVesselAvailabilityForElement(preceder);
+					if (vesselAvailabilityForElement != null && optionalElementsProvider.isElementOptional(element)) {
+						// Should be an unused DES route
+						final IResource precederResource = vesselProvider.getResource(vesselAvailabilityForElement);
+						assert precederResource != null;
+						if (!checkResource(element, precederResource)) {
+							continue;
+						}
+						// Use same offset (and insert in reverse order) as the builder code will correct for this.
+						builder.addFrom(elementResource, elementPosition.getSecond(), rawElement, alternativeElement);
+						builder.addTo(precederResource, 1, 1);
+						builder.addFrom(null, precederPosition.getSecond(), preceder);
+						builder.addTo(precederResource, 1, 1);
+
+						touchedElements.add(preceder);
+						foundMove = true;
+						break;
+					} else {
+						// Skip
+						continue;
+					}
 				}
 
 				// Check we can move our element to this resource
 				final IResource precederResource = owner.getSequences().getResources().get(precederPosition.getFirst());
+
 				if (precederResource == null || precederResource == elementResource) {
 					continue;
 				}
