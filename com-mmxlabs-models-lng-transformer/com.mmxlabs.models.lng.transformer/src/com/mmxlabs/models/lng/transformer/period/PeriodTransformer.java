@@ -37,7 +37,6 @@ import org.ops4j.peaberry.Peaberry;
 import org.ops4j.peaberry.util.TypeLiterals;
 import org.osgi.framework.FrameworkUtil;
 
-import com.google.common.base.Functions;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
