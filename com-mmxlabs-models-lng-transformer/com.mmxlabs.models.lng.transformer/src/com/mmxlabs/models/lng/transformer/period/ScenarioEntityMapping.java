@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.transformer.period;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -13,6 +14,9 @@ import org.eclipse.emf.ecore.EObject;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+
 /**
  * @author Simon Goodall
  *
@@ -64,6 +68,33 @@ public final class ScenarioEntityMapping implements IScenarioEntityMapping {
 	@Override
 	public Collection<EObject> getUnusedOriginalObjects() {
 		return removedObjects;
+	}
+
+	private Map<Pair<CharterInMarket, Integer>, Integer> periodToOriginal = new HashMap<>();
+	private Map<Pair<CharterInMarket, Integer>, Integer> originalToPeriod = new HashMap<>();
+
+	@Override
+	public void setSpotCharterInMapping(CharterInMarket periodCharterInMarket, int originalSpotIndex, int periodSpotIndex) {
+		periodToOriginal.put(new Pair<>(periodCharterInMarket, periodSpotIndex), originalSpotIndex);
+		originalToPeriod.put(new Pair<>(periodCharterInMarket, originalSpotIndex), periodSpotIndex);
+	}
+
+	@Override
+	public int getSpotCharterInMappingFromPeriod(CharterInMarket periodCharterInMarket, int periodSpotIndex) {
+		Integer idx = periodToOriginal.get(new Pair<>(periodCharterInMarket, periodSpotIndex));
+		if (idx == null) {
+			return periodSpotIndex;
+		}
+		return idx;
+	}
+
+	@Override
+	public int getSpotCharterInMappingFromOriginal(CharterInMarket periodCharterInMarket, int originalSpotIndex) {
+		Integer idx = originalToPeriod.get(new Pair<>(periodCharterInMarket, originalSpotIndex));
+		if (idx == null) {
+			return originalSpotIndex;
+		}
+		return idx;
 	}
 
 }

@@ -16,6 +16,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.command.BasicCommandStack;
@@ -35,6 +37,7 @@ import org.ops4j.peaberry.Peaberry;
 import org.ops4j.peaberry.util.TypeLiterals;
 import org.osgi.framework.FrameworkUtil;
 
+import com.google.common.base.Functions;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
@@ -172,13 +175,13 @@ public class PeriodTransformer {
 
 		// Get dates with flex
 		if (startDate != null) {
-			ZonedDateTime lowerBoundary = startDate.atDay(1).atStartOfDay(ZoneId.of("UTC"));
+			final ZonedDateTime lowerBoundary = startDate.atDay(1).atStartOfDay(ZoneId.of("UTC"));
 			periodRecord.lowerBoundary = lowerBoundary;
 			periodRecord.lowerCutoff = lowerBoundary.minusMonths(boundaryFlexInMonths);
 		}
 
 		if (endDate != null) {
-			ZonedDateTime upperBoundary = endDate.atDay(1).atStartOfDay(ZoneId.of("UTC"));
+			final ZonedDateTime upperBoundary = endDate.atDay(1).atStartOfDay(ZoneId.of("UTC"));
 			periodRecord.upperBoundary = upperBoundary;
 			periodRecord.upperCutoff = upperBoundary.plusMonths(boundaryFlexInMonths);
 		}
@@ -226,6 +229,9 @@ public class PeriodTransformer {
 		// Update vessel availabilities
 		updateVesselAvailabilities(periodRecord, cargoModel, spotMarketsModel, startConditionMap, endConditionMap, eventDependencies.getFirst(), eventDependencies.getSecond(), objectToPortVisitMap);
 		checkIfRemovedSlotsAreStillNeeded(seenSlots, slotsToRemove, cargoesToRemove, newVesselAvailabilities, startConditionMap, endConditionMap, slotAllocationMap);
+		final List<Pair<CharterInMarket, Integer>> spotCharterUse = getSpotCharterInUseForCargoes(cargoesToRemove);
+		updateSpotCharterMarkets(mapping, spotCharterUse, cargoModel, spotMarketsModel, cargoesToRemove);
+
 		removeExcludedSlotsAndCargoes(internalDomain, mapping, slotsToRemove, cargoesToRemove);
 		// Some slots are brought in from outside the period, make sure they are locked
 		lockOpenSlots(output.getCargoModel(), periodRecord, objectToPortVisitMap);
@@ -256,7 +262,122 @@ public class PeriodTransformer {
 		return output;
 	}
 
-	private void lockOpenSlots(@NonNull final CargoModel cargoModel, @NonNull final PeriodRecord periodRecord, @NonNull Map<EObject, PortVisit> objectToPortVisitMap) {
+	/**
+	 * For spot charter markets where all cargoes on a used charter option are outside of the period we reduce the spot charter in count. As spot charter are index from 0 to spot count, we need to
+	 * maintain a mapping between the original scenario spot index and the period scenario spot index to avoid issues with merging on the period export.
+	 * 
+	 * @param periodMapping
+	 * @param spotCharterUse
+	 * @param cargoModel
+	 * @param spotMarketsModel
+	 */
+	private void updateSpotCharterMarkets(final IScenarioEntityMapping periodMapping, final List<Pair<CharterInMarket, Integer>> spotCharterUse, final CargoModel cargoModel,
+			final SpotMarketsModel spotMarketsModel, Collection<Cargo> cargoesToRemove) {
+		// Generate the list of all spot charter ins used by all the cargoes in the scenario. An option may appear multiple times.
+		final List<Pair<CharterInMarket, Integer>> total = getSpotCharterInUseForCargoes(cargoModel.getCargoes());
+		// Convert the list into an accumlated map count.
+
+		final Map<Pair<CharterInMarket, Integer>, Long> counter_jav8 = total.stream() //
+				.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+		final Map<Pair<CharterInMarket, Integer>, Long> counter = new HashMap<>();
+		// Accumulate total charter use
+		for (final Pair<CharterInMarket, Integer> p : total) {
+			long t = 0;
+			if (counter.containsKey(p)) {
+				t = counter.get(p);
+			}
+			counter.put(p, t + 1);
+		}
+		assert counter.equals(counter_jav8);
+
+		//// Next - determine which charter in vessels are no longer used (all allocated cargoes are outside of the period)
+
+		// Mapping of charter market to spot index mapping
+		final Map<CharterInMarket, int[]> mapping = new HashMap<>();
+		final List<Pair<CharterInMarket, Integer>> chartersToRemove = new LinkedList<>();
+		for (final Pair<CharterInMarket, Integer> p : spotCharterUse) {
+			final int t = (int) (counter.get(p) - 1);
+			if (t == 0) {
+				chartersToRemove.add(p);
+				// Initialise the mapping array
+				final int[] m = new int[p.getFirst().getSpotCharterCount()];
+				for (int i = 0; i < m.length; ++i) {
+					m[i] = i;
+				}
+				mapping.put(p.getFirst(), m);
+			}
+			assert t >= 0;
+			counter.put(p, (long) t);
+		}
+
+		// Remove the spot charter in options and update the mapping arrays
+		for (final Pair<CharterInMarket, Integer> p : chartersToRemove) {
+			final int spotCharterCount = p.getFirst().getSpotCharterCount();
+			assert spotCharterCount > 0;
+			p.getFirst().setSpotCharterCount(spotCharterCount - 1);
+			final int idx = p.getSecond();
+			final int[] m = mapping.get(p.getFirst());
+			// Blank out mapping
+			m[idx] = -1;
+			for (int i = idx; i < m.length; ++i) {
+				if (m[i] >= 0) {
+					m[i]--;
+				}
+			}
+		}
+
+		// Store the mapping data in the periodMapping
+		for (final Map.Entry<CharterInMarket, int[]> e : mapping.entrySet()) {
+			final int[] m = e.getValue();
+			for (int i = 0; i < m.length; ++i) {
+				if (m[i] != -1) {
+					periodMapping.setSpotCharterInMapping(e.getKey(), i, m[i]);
+				}
+			}
+		}
+
+		// Finally update the spot index on the cargoes.
+		for (Cargo cargo : cargoModel.getCargoes()) {
+			// Skip this cargo as it will be removed.
+			if (cargoesToRemove.contains(cargo)) {
+				continue;
+			}
+
+			final VesselAssignmentType vesselAssignmentType = cargo.getVesselAssignmentType();
+			if (vesselAssignmentType instanceof CharterInMarket) {
+				final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
+				final int spotIndex = cargo.getSpotIndex();
+				if (spotIndex < 0) {
+					continue;
+				}
+				int[] m = mapping.get(charterInMarket);
+				if (m == null) {
+					continue;
+				}
+				cargo.setSpotIndex(m[spotIndex]);
+			}
+		}
+
+	}
+
+	@NonNull
+	private List<Pair<CharterInMarket, Integer>> getSpotCharterInUseForCargoes(final Collection<Cargo> cargoesToRemove) {
+		final List<Pair<CharterInMarket, Integer>> result = new LinkedList<>();
+		for (final Cargo cargo : cargoesToRemove) {
+			final VesselAssignmentType vesselAssignmentType = cargo.getVesselAssignmentType();
+			if (vesselAssignmentType instanceof CharterInMarket) {
+				final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
+				final int spotIndex = cargo.getSpotIndex();
+				final Pair<CharterInMarket, Integer> p = new Pair<>(charterInMarket, spotIndex);
+				result.add(p);
+			}
+		}
+		return result;
+
+	}
+
+	private void lockOpenSlots(@NonNull final CargoModel cargoModel, @NonNull final PeriodRecord periodRecord, @NonNull final Map<EObject, PortVisit> objectToPortVisitMap) {
 		for (final List<Slot> slotList : new List[] { cargoModel.getLoadSlots(), cargoModel.getDischargeSlots() }) {
 			for (final Slot slot : slotList) {
 				if (inclusionChecker.getObjectInclusionType(slot, objectToPortVisitMap, periodRecord).getFirst() == InclusionType.Out) {
@@ -279,7 +400,7 @@ public class PeriodTransformer {
 	}
 
 	public void filterVesselAvailabilities(@NonNull final EditingDomain internalDomain, @NonNull final PeriodRecord periodRecord, @NonNull final CargoModel cargoModel,
-			@NonNull final IScenarioEntityMapping mapping, @NonNull Map<EObject, PortVisit> objectToPortVisitMap) {
+			@NonNull final IScenarioEntityMapping mapping, @NonNull final Map<EObject, PortVisit> objectToPortVisitMap) {
 		final Set<VesselAvailability> vesselsToRemove = new HashSet<>();
 
 		for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
@@ -315,7 +436,7 @@ public class PeriodTransformer {
 
 	@NonNull
 	public Triple<Set<Cargo>, Set<Event>, Set<VesselEvent>> findVesselEventsToRemoveAndDependencies(@NonNull final Schedule schedule, @NonNull final PeriodRecord periodRecord,
-			@NonNull final CargoModel cargoModel, @NonNull Map<EObject, PortVisit> objectToPortVisitMap) {
+			@NonNull final CargoModel cargoModel, @NonNull final Map<EObject, PortVisit> objectToPortVisitMap) {
 		final Set<VesselEvent> eventsToRemove = new HashSet<>();
 		final Set<Event> eventsToKeep = new HashSet<>();
 		final Set<Cargo> cargoesToKeep = new HashSet<>();
@@ -341,7 +462,7 @@ public class PeriodTransformer {
 
 	public void findSlotsAndCargoesToRemove(@NonNull final EditingDomain internalDomain, @NonNull final PeriodRecord periodRecord, @NonNull final CargoModel cargoModel,
 			@NonNull final Set<Slot> seenSlots, @NonNull final Collection<Slot> slotsToRemove, @NonNull final Collection<Cargo> cargoesToRemove,
-			@NonNull final Map<Slot, SlotAllocation> slotAllocationMap, @NonNull Map<EObject, PortVisit> objectToPortVisitMap) {
+			@NonNull final Map<Slot, SlotAllocation> slotAllocationMap, @NonNull final Map<EObject, PortVisit> objectToPortVisitMap) {
 
 		for (final Cargo cargo : cargoModel.getCargoes()) {
 			assert cargo != null;
@@ -579,7 +700,7 @@ public class PeriodTransformer {
 
 	public void updateVesselAvailabilities(@NonNull final PeriodRecord periodRecord, @NonNull final CargoModel cargoModel, @NonNull final SpotMarketsModel spotMarketsModel,
 			@NonNull final Map<AssignableElement, PortVisit> startConditionMap, @NonNull final Map<AssignableElement, PortVisit> endConditionMap, @NonNull final Set<Cargo> cargoesToKeep,
-			@NonNull final Set<Event> eventsToKeep, @NonNull Map<EObject, PortVisit> objectToPortVisitMap) {
+			@NonNull final Set<Event> eventsToKeep, @NonNull final Map<EObject, PortVisit> objectToPortVisitMap) {
 
 		final List<CollectedAssignment> collectedAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, spotMarketsModel);
 
@@ -588,7 +709,7 @@ public class PeriodTransformer {
 
 	public void updateVesselAvailabilities(@NonNull final PeriodRecord periodRecord, @NonNull final List<CollectedAssignment> collectedAssignments,
 			@NonNull final Map<AssignableElement, PortVisit> startConditionMap, @NonNull final Map<AssignableElement, PortVisit> endConditionMap, @NonNull final Set<Cargo> cargoesToKeep,
-			@NonNull final Set<Event> eventsToKeep, @NonNull Map<EObject, PortVisit> objectToPortVisitMap) {
+			@NonNull final Set<Event> eventsToKeep, @NonNull final Map<EObject, PortVisit> objectToPortVisitMap) {
 
 		// Here we loop through all the collected assignments, trimming the vessel availability to anything outside of the date range.
 		// This can handle out-of-order assignments by checking to see whether or not a cargo has already been trimmed out of the date range before updating
@@ -638,7 +759,7 @@ public class PeriodTransformer {
 			for (final Event event : sequence.getEvents()) {
 				if (event instanceof SlotVisit) {
 					final SlotVisit slotVisit = (SlotVisit) event;
-					Slot slot = slotVisit.getSlotAllocation().getSlot();
+					final Slot slot = slotVisit.getSlotAllocation().getSlot();
 					objectToPortVisitMap.put(slot, slotVisit);
 				} else if (event instanceof VesselEventVisit) {
 					final VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
@@ -742,9 +863,9 @@ public class PeriodTransformer {
 		copier.copyReferences();
 
 		// Remove schedule model references from copier before passing into the mapping object.
-		Schedule schedule = wholeScenario.getScheduleModel().getSchedule();
+		final Schedule schedule = wholeScenario.getScheduleModel().getSchedule();
 		if (schedule != null) {
-			Iterator<EObject> itr = schedule.eAllContents();
+			final Iterator<EObject> itr = schedule.eAllContents();
 			while (itr.hasNext()) {
 				copier.remove(itr.next());
 			}
