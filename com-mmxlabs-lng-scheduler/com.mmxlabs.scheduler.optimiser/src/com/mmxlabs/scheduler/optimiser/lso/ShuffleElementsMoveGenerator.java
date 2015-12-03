@@ -139,7 +139,29 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 
 				// Element is also not used!
 				if (followerPosition.getFirst() == null) {
-					continue;
+
+					// If this is an unused FOB Sales , we can try to link the FOB sale to the purchase and remove the original discharge
+					// TODO: Add similar case for FOB Sale
+					final IVesselAvailability vesselAvailabilityForElement = virtualVesselSlotProvider.getVesselAvailabilityForElement(follower);
+					if (vesselAvailabilityForElement != null) {
+						// Should be an unused FOB Sale route
+						final IResource precederResource = vesselProvider.getResource(vesselAvailabilityForElement);
+						assert precederResource != null;
+						if (!checkResource(element, precederResource)) {
+							continue;
+						}
+						// Use same offset (and insert in reverse order) as the builder code will correct for this.
+						builder.addFrom(null, followerPosition.getSecond(), follower);
+						builder.addTo(precederResource, 1, 1);
+						builder.addFrom(elementResource, elementPosition.getSecond(), rawElement, alternativeElement);
+						builder.addTo(precederResource, 1, 1);
+
+						touchedElements.add(follower);
+						foundMove = true;
+						break;
+					} else {
+						continue;
+					}
 				}
 
 				// Check we can move our element to this resource
@@ -213,11 +235,9 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 
 				final Pair<Integer, Integer> precederPosition = owner.reverseLookup.get(preceder);
 				// Element is also not used!
-
 				if (precederPosition.getFirst() == null) {
 
 					// If this is an unused DES Purchase, we can try to link the DES purchase to the sale and remove the original load
-					// TODO: Add similar case for FOB Sale
 					final IVesselAvailability vesselAvailabilityForElement = virtualVesselSlotProvider.getVesselAvailabilityForElement(preceder);
 					if (vesselAvailabilityForElement != null) {
 						// Should be an unused DES route
