@@ -86,8 +86,11 @@ import com.mmxlabs.models.ui.tabular.EObjectTableViewerValidationSupport;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.DateTimeAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.LocalDateTimeAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
+import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
@@ -551,13 +554,21 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 
 		addActualsColumn(loadColumns, "L-ID", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(MMXCorePackage.Literals.NAMED_OBJECT__NAME, editingDomain)),
 				new RowDataEMFPath(false, Type.LOAD, pkg.getSlotActuals_Slot()));
+		addActualsColumn(loadColumns, "L-Port", new SingleReferenceManipulator(pkg.getSlotActuals_TitleTransferPoint(), getReferenceValueProviderCache(), editingDomain),
+				new RowDataEMFPath(false, Type.LOAD));
 		addActualsColumn(loadColumns, "L-Counter Party", new BasicAttributeManipulator(pkg.getSlotActuals_Counterparty(), editingDomain), new RowDataEMFPath(false, Type.LOAD));
 		addActualsColumn(loadColumns, "L-Price", new NumericAttributeManipulator(pkg.getSlotActuals_PriceDOL(), editingDomain), new RowDataEMFPath(false, Type.LOAD));
+		addActualsColumn(loadColumns, "L-Op. Start", new LocalDateTimeAttributeManipulator(pkg.getSlotActuals_OperationsStart(), editingDomain), new RowDataEMFPath(false, Type.LOAD));
+		addActualsColumn(loadColumns, "L-Op. End", new LocalDateTimeAttributeManipulator(pkg.getSlotActuals_OperationsEnd(), editingDomain), new RowDataEMFPath(false, Type.LOAD));
 
 		addActualsColumn(dischargeColumns, "D-ID", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(MMXCorePackage.Literals.NAMED_OBJECT__NAME, editingDomain)),
 				new RowDataEMFPath(false, Type.DISCHARGE, pkg.getSlotActuals_Slot()));
+		addActualsColumn(dischargeColumns, "D-Port", new SingleReferenceManipulator(pkg.getSlotActuals_TitleTransferPoint(), getReferenceValueProviderCache(), editingDomain),
+				new RowDataEMFPath(false, Type.DISCHARGE));
 		addActualsColumn(dischargeColumns, "D-Counter Party", new BasicAttributeManipulator(pkg.getSlotActuals_Counterparty(), editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
 		addActualsColumn(dischargeColumns, "D-Price", new NumericAttributeManipulator(pkg.getSlotActuals_PriceDOL(), editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
+		addActualsColumn(dischargeColumns, "D-Op. Start", new LocalDateTimeAttributeManipulator(pkg.getSlotActuals_OperationsStart(), editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
+		addActualsColumn(dischargeColumns, "D-Op. End", new LocalDateTimeAttributeManipulator(pkg.getSlotActuals_OperationsEnd(), editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
 
 		addActualsColumn(cargoColumns, "Base Fuel Price", new NumericAttributeManipulator(pkg.getCargoActuals_BaseFuelPrice(), editingDomain), new RowDataEMFPath(false, Type.CARGO));
 		// addActualsColumn(cargoColumns, "Crew Bonus", new NumericAttributeManipulator(pkg.getCargoActuals_CrewBonus(), editingDomain), new RowDataEMFPath(false, Type.CARGO));
