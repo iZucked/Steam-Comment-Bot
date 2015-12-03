@@ -16,6 +16,8 @@ import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -56,7 +58,7 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 			final LNGScenarioModel scenario = (LNGScenarioModel) modelReference.getInstance();
 			final EditingDomain editingDomain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
 
-			LNGScenarioRunner runner = new LNGScenarioRunner(scenario, null, jobDescriptor.getOptimiserSettings(), editingDomain);
+			LNGScenarioRunner runner = new LNGScenarioRunner(scenario, null, jobDescriptor.getOptimiserSettings(), editingDomain,LNGTransformerHelper.HINT_OPTIMISE_LSO);
 			try {
 				runner.initAndEval();
 			} finally {

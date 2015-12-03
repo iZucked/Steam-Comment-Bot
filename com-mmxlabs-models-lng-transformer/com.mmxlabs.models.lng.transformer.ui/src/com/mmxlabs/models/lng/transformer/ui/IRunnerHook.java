@@ -9,6 +9,7 @@ import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.common.collect.Lists;
 import com.mmxlabs.optimiser.core.ISequences;
 
 // Temporary interface....
@@ -20,8 +21,14 @@ public interface IRunnerHook {
 	public static final String PHASE_HILL = "hill";
 	public static final String PHASE_ACTION_SETS = "actionset";
 
-	@Nullable
-	ISequences getSequences(String phase);
+	public static List<String> PHASE_ORDER = Lists.newArrayList(PHASE_INITIAL, PHASE_LSO, PHASE_HILL, PHASE_ACTION_SETS);
 
-	void reportSequences(String phase, @NonNull ISequences rawSequences);
+	void beginPhase(@NonNull String phase);
+
+	@Nullable
+	ISequences getPrestoredSequences(@NonNull String phase);
+
+	void reportSequences(@NonNull String phase, @NonNull ISequences rawSequences);
+
+	void endPhase(@NonNull String phase);
 }

@@ -819,7 +819,7 @@ public class LNGScenarioRunner {
 
 		ISequences preloadedResult = null;
 		if (pRunnerHook != null) {
-			preloadedResult = pRunnerHook.getSequences(phase);
+			preloadedResult = pRunnerHook.getPrestoredSequences(phase);
 		}
 		if (preloadedResult == null) {
 			switch (phase) {
