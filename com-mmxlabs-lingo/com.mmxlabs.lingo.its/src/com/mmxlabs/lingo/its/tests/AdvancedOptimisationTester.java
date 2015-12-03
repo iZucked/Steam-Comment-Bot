@@ -254,7 +254,7 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 						final URL expectedReportOutput = new URL(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20") + suffix);
 						final File file2 = new File(expectedReportOutput.toURI());
 						try (FileOutputStream fos = new FileOutputStream(file2)) {
-							final Injector injector = scenarioRunner.getInjector();
+//							final Injector injector = scenarioRunner.getInjector();
 							Assert.assertNotNull(injector);
 							SequencesSerialiser.save(injector.getInstance(IOptimisationData.class), rawSequences, fos);
 						}
@@ -269,7 +269,7 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 						final URL expectedReportOutput = new URL(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20") + suffix);
 						final File file2 = new File(expectedReportOutput.toURI());
 						try (FileInputStream fos = new FileInputStream(file2)) {
-							final Injector injector = scenarioRunner.getInjector();
+//							final Injector injector = scenarioRunner.getInjector();
 							Assert.assertNotNull(injector);
 							return SequencesSerialiser.load(injector.getInstance(IOptimisationData.class), fos);
 						}
