@@ -9,8 +9,11 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.impl.EStoreEObjectImpl.EStoreFeatureMap;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.eclipse.emf.validation.service.AbstractConstraintProvider;
 
 import com.mmxlabs.models.lng.actuals.ActualsPackage;
 import com.mmxlabs.models.lng.actuals.CargoActuals;
@@ -35,6 +38,10 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class CargoActualsConstraint extends AbstractModelMultiConstraint {
+
+	private enum Type {
+		Load, Discharge, Return
+	}
 
 	@Override
 	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
@@ -186,28 +193,28 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 							status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_END);
 							failures.add(status);
 						}
-//						if (slot instanceof LoadSlot) {
-//							if (((LoadSlot) slot).isDESPurchase() && !slot.isDivertible()) {
-//								if (!slotActuals.getOperationsStart().equals(slotActuals.getOperationsEnd())) {
-//									final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
-//											(IConstraintStatus) ctx.createFailureStatus("Operations start and end date should be the same for a DES purchase"));
-//									status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START);
-//									status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_END);
-//									failures.add(status);
-//								}
-//							}
-//						}
-//						if (slot instanceof DischargeSlot) {
-//							if (((DischargeSlot) slot).isFOBSale()) {
-//								if (!slotActuals.getOperationsStart().equals(slotActuals.getOperationsEnd())) {
-//									final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
-//											(IConstraintStatus) ctx.createFailureStatus("Operations start and end date should be the same for a FOB sale"));
-//									status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START);
-//									status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_END);
-//									failures.add(status);
-//								}
-//							}
-//						}
+						// if (slot instanceof LoadSlot) {
+						// if (((LoadSlot) slot).isDESPurchase() && !slot.isDivertible()) {
+						// if (!slotActuals.getOperationsStart().equals(slotActuals.getOperationsEnd())) {
+						// final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
+						// (IConstraintStatus) ctx.createFailureStatus("Operations start and end date should be the same for a DES purchase"));
+						// status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START);
+						// status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_END);
+						// failures.add(status);
+						// }
+						// }
+						// }
+						// if (slot instanceof DischargeSlot) {
+						// if (((DischargeSlot) slot).isFOBSale()) {
+						// if (!slotActuals.getOperationsStart().equals(slotActuals.getOperationsEnd())) {
+						// final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
+						// (IConstraintStatus) ctx.createFailureStatus("Operations start and end date should be the same for a FOB sale"));
+						// status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START);
+						// status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_END);
+						// failures.add(status);
+						// }
+						// }
+						// }
 					}
 
 					// Sanity check cv and m3 -> mmbtu conversions
@@ -291,6 +298,83 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 					// status.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__END_HEEL_MMB_TU);
 					// failures.add(status);
 					// }
+				}
+
+				// Check slot sort order
+				{
+					// String builder to store cargo type
+					final StringBuilder sb = new StringBuilder();
+
+					Type prevSlotType = null;
+					EObject prevSlot = null;
+					final List<EObject> sortedSlots = cargoActuals.getSortedActuals();
+					ZonedDateTime prevOperationsStart = null;
+					EStructuralFeature prevOperationsStartFeature = null;
+					for (final EObject obj : sortedSlots) {
+						final Type slotType;
+						ZonedDateTime operationsStart = null;
+						EStructuralFeature operationsStartFeature = null;
+						if (obj instanceof SlotActuals && ((SlotActuals) obj).getSlot() instanceof LoadSlot) {
+							slotType = Type.Load;
+							sb.append("L");
+							operationsStart = ((SlotActuals) obj).getOperationsStartAsDateTime();
+							operationsStartFeature = ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START;
+						} else if (obj instanceof SlotActuals && ((SlotActuals) obj).getSlot() instanceof DischargeSlot) {
+							slotType = Type.Discharge;
+							sb.append("D");
+							operationsStart = ((SlotActuals) obj).getOperationsStartAsDateTime();
+							operationsStartFeature = ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START;
+						} else if (obj instanceof ReturnActuals) {
+							slotType = Type.Return;
+							sb.append("R");
+							operationsStart = ((ReturnActuals) obj).getOperationsStartAsDateTime();
+							operationsStartFeature = ActualsPackage.Literals.RETURN_ACTUALS__OPERATIONS_START;
+						} else {
+							sb.append("U");
+							// Unknown type
+							slotType = null;
+						}
+
+						// This should only permit a single load followed by zero or more discharge slots
+						if (slotType == Type.Load && prevSlotType != null) {
+							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
+									(IConstraintStatus) ctx.createFailureStatus("'" + cargo.getLoadName() + "' - The load slot should be the first slot in the cargo."));
+							dsd.addEObjectAndFeature(cargoActuals, ActualsPackage.eINSTANCE.getCargoActuals_CargoReference());
+							dsd.addEObjectAndFeature(obj, ActualsPackage.eINSTANCE.getSlotActuals_OperationsStart());
+							failures.add(dsd);
+						}
+
+						if (slotType == Type.Discharge && prevSlotType == null) {
+							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
+									(IConstraintStatus) ctx.createFailureStatus("'" + cargo.getLoadName() + "' - A load slot should be the first slot in the cargo."));
+							dsd.addEObjectAndFeature(cargoActuals, ActualsPackage.eINSTANCE.getCargoActuals_CargoReference());
+							dsd.addEObjectAndFeature(obj, ActualsPackage.eINSTANCE.getSlotActuals_OperationsStart());
+							failures.add(dsd);
+						}
+						if (prevSlotType == Type.Return) {
+							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
+									(IConstraintStatus) ctx.createFailureStatus("'" + cargo.getLoadName() + "' - Return actuals should be the last item in the cargo."));
+							dsd.addEObjectAndFeature(cargoActuals, ActualsPackage.eINSTANCE.getCargoActuals_CargoReference());
+							dsd.addEObjectAndFeature(prevSlot, ActualsPackage.eINSTANCE.getReturnActuals_OperationsStart());
+							failures.add(dsd);
+						}
+
+						if (prevOperationsStart != null && operationsStart != null) {
+							if (prevOperationsStart.isAfter(operationsStart)) {
+								final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
+										(IConstraintStatus) ctx.createFailureStatus("'" + cargo.getLoadName() + "' - Cargo actuals date order is incorrect"));
+								dsd.addEObjectAndFeature(obj, operationsStartFeature);
+								dsd.addEObjectAndFeature(prevSlot, prevOperationsStartFeature);
+								failures.add(dsd);
+
+							}
+						}
+
+						prevSlot = obj;
+						prevSlotType = slotType;
+						prevOperationsStart = operationsStart;
+						prevOperationsStartFeature = operationsStartFeature;
+					}
 				}
 
 			}

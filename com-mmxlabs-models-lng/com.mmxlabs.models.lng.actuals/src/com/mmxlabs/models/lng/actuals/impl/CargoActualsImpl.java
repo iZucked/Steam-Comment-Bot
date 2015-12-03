@@ -7,11 +7,13 @@
 package com.mmxlabs.models.lng.actuals.impl;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
@@ -22,8 +24,12 @@ import com.mmxlabs.models.lng.actuals.ActualsPackage;
 import com.mmxlabs.models.lng.actuals.CargoActuals;
 import com.mmxlabs.models.lng.actuals.ReturnActuals;
 import com.mmxlabs.models.lng.actuals.SlotActuals;
+import com.mmxlabs.models.lng.actuals.util.CargoActualsSlotSorter;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.util.CargoSlotSorter;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * <!-- begin-user-doc -->
@@ -334,6 +340,16 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 		insurancePremium = newInsurancePremium;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.CARGO_ACTUALS__INSURANCE_PREMIUM, oldInsurancePremium, insurancePremium));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<EObject> getSortedActuals() {
+		return CargoActualsSlotSorter.sortedSlots(getActuals(), getReturnActuals());
 	}
 
 	/**
@@ -855,6 +871,20 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 				return insurancePremium != INSURANCE_PREMIUM_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case ActualsPackage.CARGO_ACTUALS___GET_SORTED_ACTUALS:
+				return getSortedActuals();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 	/**
