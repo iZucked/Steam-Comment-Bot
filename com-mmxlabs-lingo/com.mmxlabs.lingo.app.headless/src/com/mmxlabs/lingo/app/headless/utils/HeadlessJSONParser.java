@@ -182,7 +182,7 @@ public class HeadlessJSONParser {
 	}
 
 	YearMonth parseYearMonth(String dateString) {
-		return YearMonth.parse(dateString, DateTimeFormatter.ofPattern("YYYY/MM"));
+		return YearMonth.parse(dateString, DateTimeFormatter.ofPattern("yyyy/MM"));
 	}
 
 	boolean matchDate(String input) {
@@ -195,7 +195,7 @@ public class HeadlessJSONParser {
 	}
 
 	LocalDate parseDate(String dateString) {
-		LocalDate dateTime = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("YYYY/MM/dd"));
+		LocalDate dateTime = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("yyyy/MM/dd"));
 		return dateTime;
 	}
 
