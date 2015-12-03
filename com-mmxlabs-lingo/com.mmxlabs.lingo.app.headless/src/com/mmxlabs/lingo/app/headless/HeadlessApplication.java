@@ -32,10 +32,8 @@ import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 
 import com.google.common.collect.Maps;
-import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.google.inject.Provides;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.license.features.pluginxml.PluginRegistryHook;
@@ -64,9 +62,7 @@ import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
 import com.mmxlabs.models.lng.transformer.ui.IRunnerHook;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.migration.scenario.MigrationHelper;
-import com.mmxlabs.optimiser.common.logging.ILoggingDataStore;
 import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
-import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger;
 import com.mmxlabs.optimiser.lso.logging.LSOLoggingExporter;
 import com.mmxlabs.rcp.common.viewfactory.ReplaceableViewManager;
@@ -152,6 +148,9 @@ public class HeadlessApplication implements IApplication {
 
 		final String outputFolderName = overrideSettings.getOutputName() == null ? getFolderNameFromSettings(optimiserSettings) : getFolderNameFromSettings(overrideSettings);
 
+		// Ensure dir structure is in place
+		Paths.get(path, outputFolderName).toFile().mkdirs();
+		
 		addFitnessTraceExporter(exporters, path, outputFolderName);
 		addLatenessExporter(exporters, path, outputFolderName);
 
