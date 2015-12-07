@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.management.timer.Timer;
 
@@ -669,19 +668,19 @@ public class LNGScenarioRunner {
 						log.error("Unable to store changeset scenario: " + e.getMessage(), e);
 					}
 				}
-
-				// If we are keeping the best result, then update the field and do not execute the undo commands
+				//
+				// // If we are keeping the best result, then update the field and do not execute the undo commands
 				if (keepFinalResult && breakdownSolution.get(breakdownSolution.size() - 1) == changeSet) {
 					this.finalSchedule = copy.getScheduleModel().getSchedule();
-				} else {
-					// Reset state
-					if (periodMapping != null) {
-						LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, 100);
-						LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
-					} else {
-						LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
-					}
 				}
+				// // Reset state
+				// if (periodMapping != null) {
+				// LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, 100);
+				// LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
+				// } else {
+				// LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
+				// }
+				// }
 
 				progressMonitor.worked(1);
 			}
@@ -749,13 +748,13 @@ public class LNGScenarioRunner {
 					final List<NonNullPair<ISequences, Map<String, Object>>> breakdownSolution = instance.getBestSolution();
 					if (breakdownSolution != null) {
 						bestResult = storeBreakdownSolutionsAsForks(breakdownSolution, foundBetterResult, new SubProgressMonitor(progressMonitor, PROGRESS_ACTION_SET_SAVE));
-						exportOptimiserSolution = !foundBetterResult;
+						// exportOptimiserSolution = !foundBetterResult;
 					}
 					// The breakdown optimiser may find a better solution. This will be saved in storeBreakdownSolutionsAsForks
-					if (exportOptimiserSolution) {
-						// export final state
-						finalSchedule = overwrite(100, bestResult.getBestSolution().getFirst(), bestResult.getBestSolution().getSecond());
-					}
+					// if (exportOptimiserSolution) {
+					// export final state
+					finalSchedule = overwrite(100, bestResult.getBestSolution().getFirst(), bestResult.getBestSolution().getSecond());
+					// }
 
 					if (pRunnerHook != null) {
 						// List<ISequences> actionSetRawSequences = bestResult.getSolutions().stream().map(t -> t.getFirst()).collect(Collectors.toList());
