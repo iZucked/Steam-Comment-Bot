@@ -1492,6 +1492,12 @@ public class ChangeSetView implements IAdaptable {
 			listenerMap.clear();
 		}
 
+		cleanUpVesselColumns();
+		if (vesselColumnGroup != null && !vesselColumnGroup.isDisposed()) {
+			vesselColumnGroup.dispose();
+			
+		}
+		
 		if (boldFont != null) {
 			boldFont.dispose();
 			boldFont = null;
