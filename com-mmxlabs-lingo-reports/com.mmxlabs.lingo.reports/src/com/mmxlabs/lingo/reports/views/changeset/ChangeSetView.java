@@ -1587,9 +1587,11 @@ public class ChangeSetView implements IAdaptable {
 
 	@Inject
 	@Optional
-	private void handleShowStructuralChangesToggle(@UIEventTopic(ChangeSetViewEventConstants.EVENT_TOGGLE_FILTER_NON_STRUCTURAL_CHANGES) final Object o) {
-		showNonStructuralChanges = !showNonStructuralChanges;
-		ViewerHelper.refresh(viewer, true);
+	private void handleShowStructuralChangesToggle(@UIEventTopic(ChangeSetViewEventConstants.EVENT_TOGGLE_FILTER_NON_STRUCTURAL_CHANGES) final MPart activePart) {
+		if (activePart.getObject() == this) {
+			showNonStructuralChanges = !showNonStructuralChanges;
+			ViewerHelper.refresh(viewer, true);
+		}
 	}
 
 	@Inject
