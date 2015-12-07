@@ -86,25 +86,25 @@ public final class ChangeSetTransformerUtil {
 			} else {
 				final String rowName = getRowName(loadSlot);
 				// String rowName = getRowName(loadSlot);
-//				if (loadSlot instanceof SpotSlot) {
-////					if (lhsRowMap.containsKey("market-" + loadSlot.getName())) {
-////						row = lhsRowMap.get("market-" + loadSlot.getName());
-////					} else {
-//						row = ChangesetFactory.eINSTANCE.createChangeSetRow();
-//						rows.add(row);
-//						row.setLhsName(rowName);
-//						row.setLoadSlot(loadSlot);
-//						lhsRowMap.put(rowKey, row);
-//						lhsRowMap.put("market-" + loadSlot.getName(), row);
-////					}
-//				} else {
+				// if (loadSlot instanceof SpotSlot) {
+				//// if (lhsRowMap.containsKey("market-" + loadSlot.getName())) {
+				//// row = lhsRowMap.get("market-" + loadSlot.getName());
+				//// } else {
+				// row = ChangesetFactory.eINSTANCE.createChangeSetRow();
+				// rows.add(row);
+				// row.setLhsName(rowName);
+				// row.setLoadSlot(loadSlot);
+				// lhsRowMap.put(rowKey, row);
+				// lhsRowMap.put("market-" + loadSlot.getName(), row);
+				//// }
+				// } else {
 
-					row = ChangesetFactory.eINSTANCE.createChangeSetRow();
-					rows.add(row);
-					row.setLhsName(rowName);
-					row.setLoadSlot(loadSlot);
-					lhsRowMap.put(rowKey, row);
-//				}
+				row = ChangesetFactory.eINSTANCE.createChangeSetRow();
+				rows.add(row);
+				row.setLhsName(rowName);
+				row.setLoadSlot(loadSlot);
+				lhsRowMap.put(rowKey, row);
+				// }
 			}
 		}
 
@@ -136,9 +136,9 @@ public final class ChangeSetTransformerUtil {
 				row.setNewDischargeAllocation(slotAllocation);
 				row.setDischargeSlot((DischargeSlot) slotAllocation.getSlot());
 				// FIXME: This can replace an existing entry -- is this ok?
-				if (rhsRowMap.containsKey(otherRowKey)) {
-					System.out.println("Clash " + otherRowKey);
-				}
+				// if (rhsRowMap.containsKey(otherRowKey)) {
+				// System.out.println("Clash " + otherRowKey);
+				// }
 				rhsRowMap.put(otherRowKey, row);
 				{
 					// String rowName = getRowName(slotAllocation.getSlot());
