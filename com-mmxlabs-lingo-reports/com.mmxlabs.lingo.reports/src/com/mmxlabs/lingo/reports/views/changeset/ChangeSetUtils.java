@@ -91,7 +91,10 @@ public final class ChangeSetUtils {
 			for (final Event evt : eventGrouping.getEvents()) {
 				if (evt instanceof PortVisit) {
 					final PortVisit visit = (PortVisit) evt;
-					lateness += LatenessUtils.getLatenessInHours(visit);
+					final boolean isLate = LatenessUtils.isLateWithFlex(visit);
+					if (isLate) {
+						lateness += LatenessUtils.getLatenessInHours(visit);
+					}
 				}
 			}
 		}
