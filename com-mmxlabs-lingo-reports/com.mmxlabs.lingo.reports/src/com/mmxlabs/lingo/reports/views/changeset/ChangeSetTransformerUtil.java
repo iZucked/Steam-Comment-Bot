@@ -741,14 +741,19 @@ public final class ChangeSetTransformerUtil {
 			}
 		}
 		for (final Map.Entry<ChangeSetRow, ChangeSetRow> e : headToTails.entrySet()) {
-			if (merge(e.getKey(), e.getValue())) {
+			if (mergeSpotSales(e.getKey(), e.getValue())) {
+				rows.remove(e.getValue());
+			}
+		}
+		for (final Map.Entry<ChangeSetRow, ChangeSetRow> e : headToTails.entrySet()) {
+			if (mergeSpotPurchases(e.getKey(), e.getValue())) {
 				rows.remove(e.getValue());
 			}
 		}
 
 	}
 
-	private static boolean merge(@Nullable final ChangeSetRow head, @Nullable final ChangeSetRow tail) {
+	private static boolean mergeSpotSales(@Nullable final ChangeSetRow head, @Nullable final ChangeSetRow tail) {
 
 		assert head != tail;
 		if (head == null || !(head.getDischargeSlot() instanceof SpotSlot)) {
@@ -760,7 +765,40 @@ public final class ChangeSetTransformerUtil {
 
 		if (head.getRhsName() != null && head.getRhsName().equals(tail.getRhsName())) {
 			final ChangeSetRow lhsWiringLink = tail.getLhsWiringLink();
-			// head.setLhsWiringLink(lhsWiringLink);
+			head.setLhsWiringLink(lhsWiringLink);
+			return true;
+		}
+		return false;
+	}
+
+	private static boolean mergeSpotPurchases(@Nullable final ChangeSetRow head, @Nullable final ChangeSetRow tail) {
+
+		assert head != tail;
+		if (head == null || !(head.getLoadSlot() instanceof SpotSlot)) {
+			return false;
+		}
+		if (tail == null || !(tail.getLoadSlot() instanceof SpotSlot)) {
+			return false;
+		}
+
+		if (head.getLhsName() != null && head.getLhsName().equals(tail.getLhsName())) {
+			
+			if (head.getNewDischargeAllocation() == null && tail.getOriginalDischargeAllocation() == null) {
+				
+			}
+			
+			final ChangeSetRow lhsWiringLink = tail.getLhsWiringLink();
+			head.setLhsWiringLink(lhsWiringLink);
+			
+			// Copy data across
+			head.setNewDischargeAllocation(tail.getNewDischargeAllocation());
+			head.setNewEventGrouping(tail.getNewEventGrouping());
+			head.setNewGroupProfitAndLoss(tail.getNewGroupProfitAndLoss());
+			head.setNewLoadAllocation(tail.getNewLoadAllocation());
+			head.setNewVesselName(tail.getNewVesselName());
+			head.setRhsName(tail.getRhsName());
+			head.setDischargeSlot(tail.getDischargeSlot());
+			
 			return true;
 		}
 		return false;
