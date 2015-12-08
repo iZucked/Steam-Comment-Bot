@@ -170,9 +170,6 @@ public class HeadlessApplication implements IApplication {
 			@Override
 			public void endPhase(String phase) {
 				super.endPhase(phase);
-				for (IRunExporter exporter : exporters) {
-					exporter.exportData();
-				}
 			}
 		};
 		runner.setRunnerHook(runnerHook);
@@ -241,7 +238,7 @@ public class HeadlessApplication implements IApplication {
 
 	private Module createLoggingModule(Map<String, LSOLogger> phaseToLoggerMap, AbstractRunnerHook runnerHook) {
 		// final LSOLogger lsoLogger = new LSOLogger(1000);
-		final LoggingModule loggingModule = new LoggingModule(phaseToLoggerMap, runnerHook, 1000);
+		final LoggingModule loggingModule = new LoggingModule(phaseToLoggerMap, runnerHook, 10_000);
 		return loggingModule;
 	}
 
