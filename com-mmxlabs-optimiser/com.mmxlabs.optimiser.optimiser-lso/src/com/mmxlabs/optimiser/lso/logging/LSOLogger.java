@@ -17,12 +17,15 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.logging.ILoggingDataStore;
 import com.mmxlabs.optimiser.common.logging.impl.EvaluationNumberKey;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
+import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.optimiser.lso.INullMove;
+
 public class LSOLogger implements ILoggingDataStore {
 	private Map<String, AtomicInteger> moveMap = new HashMap<>();
 	private Map<String, AtomicInteger> successfulMoveMap = new HashMap<>();
@@ -49,10 +52,16 @@ public class LSOLogger implements ILoggingDataStore {
 	private int numberOfFailedEvaluations;
 	private int numberOfFailedToValidate;
 
-	public LSOLogger(int reportingInterval) {
+	private IFitnessEvaluator lsafe;
+	private FitnessAnnotationLogger fitnessAnnotationLogger;
+	private GeneralAnnotationLogger generalAnnotationLogger;
+	
+	public LSOLogger(int reportingInterval, IFitnessEvaluator lsafe, IOptimisationContext context) {
 		nullMovesMap.put("null", new AtomicInteger(0));
 		progressKeys = getProgressKeysMap();
 		this.reportingInterval = reportingInterval;
+		this.fitnessAnnotationLogger = new FitnessAnnotationLogger(lsafe);
+		this.generalAnnotationLogger = new GeneralAnnotationLogger(lsafe, context);
 	}
 
 	public Map<String, Integer> getProgressKeysMap() {
@@ -168,6 +177,8 @@ public class LSOLogger implements ILoggingDataStore {
 		progress[5] = currentFitness;
 		progress[6] = time;
 		progressLogMap.put(new EvaluationNumberKey(numberOfMovesTried), progress);
+		fitnessAnnotationLogger.report(numberOfMovesTried);
+		generalAnnotationLogger.report(numberOfMovesTried);
 	}
 
 	public List<EvaluationNumberKey> getProgressEvaluations() {
@@ -371,8 +382,16 @@ public class LSOLogger implements ILoggingDataStore {
 	public void setNumberOfFailedToValidate(int numberOfFailedToValidate) {
 		this.numberOfFailedToValidate = numberOfFailedToValidate;
 	}
+	
+	public FitnessAnnotationLogger getFitnessAnnotationLogger() {
+		return fitnessAnnotationLogger;
+	}
 
-	private class SequencesCounts{
+	public GeneralAnnotationLogger getGeneralAnnotationLogger() {
+		return generalAnnotationLogger;
+	}
+	
+	private class SequencesCounts {
 		public AtomicInteger total;
 		public AtomicInteger accepted;
 		public AtomicInteger rejected;

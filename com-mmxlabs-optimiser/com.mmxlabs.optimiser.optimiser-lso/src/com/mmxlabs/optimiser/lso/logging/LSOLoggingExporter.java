@@ -34,7 +34,7 @@ public class LSOLoggingExporter {
 		this.foldername = foldername;
 		this.phase = phase;
 		this.lsoLogger = lsoLogger;
-		final String pathToFolder = Paths.get(path, this.foldername).toString();
+		final String pathToFolder = Paths.get(path, phase).toString();
 		final boolean success = (new File(pathToFolder)).mkdirs();
 	}
 
@@ -98,7 +98,29 @@ public class LSOLoggingExporter {
 		}
 		writer.close();
 	}
+	
+	private void exportFitnessAnnotations() {
+		writeFitnessAnnotations(lsoLogger.getFitnessAnnotationLogger());
+	}
+	
+	private void writeFitnessAnnotations(FitnessAnnotationLogger fitnessAnnotationLogger) {
+		final Path newPath = getPath("fitnessAnnotations");
+		final PrintWriter writer = getWriter(newPath.toString());
+		fitnessAnnotationLogger.exportData(writer);
+		writer.close();
+	}
 
+	private void exportGeneralAnnotations() {
+		writeGeneralAnnotations(lsoLogger.getGeneralAnnotationLogger());
+	}
+	
+	private void writeGeneralAnnotations(GeneralAnnotationLogger generalAnnotationLogger) {
+		final Path newPath = getPath("generalAnnotations");
+		final PrintWriter writer = getWriter(newPath.toString());
+		generalAnnotationLogger.exportData(writer);
+		writer.close();
+	}
+	
 	public void exportData(final String... keys) {
 		writeDataOverCourseOfRun(keys);
 		exportEndData();
@@ -109,6 +131,8 @@ public class LSOLoggingExporter {
 		exportRejectedSequences();
 		exportAcceptedFitnesses();
 		exportRejectedFitnesses();
+		exportFitnessAnnotations();
+		exportGeneralAnnotations();
 	}
 
 	public void exportEndData() {
@@ -234,7 +258,7 @@ public class LSOLoggingExporter {
 	}
 
 	private Path getPath(final String fileType) {
-		return Paths.get(path, foldername, String.format("%s.%s.txt", phase, fileType));
+		return Paths.get(path, phase, String.format("%s.%s.txt", foldername, fileType));
 	}
 
 }
