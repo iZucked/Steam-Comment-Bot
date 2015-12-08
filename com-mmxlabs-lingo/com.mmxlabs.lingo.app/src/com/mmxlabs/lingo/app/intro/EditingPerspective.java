@@ -49,7 +49,6 @@ public class EditingPerspective implements IPerspectiveFactory {
 //		layout.addShowViewShortcut("com.mmxlabs.models.lng.spotmarkets.editor.views.DESPurchaseSpotMarketView");
 //		layout.addShowViewShortcut("com.mmxlabs.models.lng.spotmarkets.editor.views.FOBSalesSpotMarketView");
 
-		layout.addPerspectiveShortcut("com.mmxlabs.shiplingo.platform.app.perspective.optimisation");
 		layout.addPerspectiveShortcut("com.mmxlabs.lingo.app.perspective.analysis");
 	}
 }
