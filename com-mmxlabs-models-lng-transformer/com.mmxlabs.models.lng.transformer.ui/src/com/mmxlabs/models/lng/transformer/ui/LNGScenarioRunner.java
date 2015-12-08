@@ -238,7 +238,12 @@ public class LNGScenarioRunner {
 
 		final IAnnotatedSolution startSolution;
 		final IOptimisationContext pContext = this.context;
+		IRunnerHook pRunnerHook = runnerHook;
 		if (createOptimiser) {
+			if (pRunnerHook != null) {
+				pRunnerHook.beginPhase(IRunnerHook.PHASE_INITIAL, transformer.getInjector());
+				pRunnerHook.reportSequences(IRunnerHook.PHASE_INITIAL, transformer.getEvaluationContext().getInitialSequences());
+			}
 			// Pin variable for null analysis
 			assert pContext != null;
 			startSolution = optimiser.start(pContext, pContext.getInitialSequences());
@@ -246,11 +251,11 @@ public class LNGScenarioRunner {
 			startSolution = LNGSchedulerJobUtils.evaluateCurrentState(transformer);
 		}
 
-		IRunnerHook pRunnerHook = runnerHook;
-		if (pRunnerHook != null) {
-			pRunnerHook.beginPhase(IRunnerHook.PHASE_INITIAL, transformer.getInjector());
-			pRunnerHook.reportSequences(IRunnerHook.PHASE_INITIAL, transformer.getEvaluationContext().getInitialSequences());
-		}
+//		IRunnerHook pRunnerHook = runnerHook;
+//		if (pRunnerHook != null) {
+//			pRunnerHook.beginPhase(IRunnerHook.PHASE_INITIAL, transformer.getInjector());
+//			pRunnerHook.reportSequences(IRunnerHook.PHASE_INITIAL, transformer.getEvaluationContext().getInitialSequences());
+//		}
 
 		initialSchedule = overwrite(0, transformer.getEvaluationContext().getInitialSequences(), LNGSchedulerJobUtils.extractOptimisationAnnotations(startSolution));
 		final LocalSearchOptimiser pOptimiser = this.optimiser;
@@ -798,7 +803,7 @@ public class LNGScenarioRunner {
 
 	private IMultiStateResult performLSOOptimisation(LocalSearchOptimiser lsoOptimiser, final IProgressMonitor progressMonitor/* , final ISequences bestRawSequences */)
 			throws OperationCanceledException {
-
+		optimiser.start(this.context, this.context.getInitialSequences());
 		while (!lsoOptimiser.isFinished()) {
 			lsoOptimiser.step(1);
 			if (progressMonitor.isCanceled()) {
