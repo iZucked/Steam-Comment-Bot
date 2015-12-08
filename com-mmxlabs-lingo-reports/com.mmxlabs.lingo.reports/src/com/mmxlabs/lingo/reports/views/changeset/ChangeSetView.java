@@ -730,8 +730,6 @@ public class ChangeSetView implements IAdaptable {
 								// Exclude if less than 10% of PNL change.
 								if ((ChangeSetView.this.viewMode == ViewMode.COMPARE) || (double) Math.abs(delta) / (double) Math.abs(totalPNLDelta) < 0.1) {
 									return false;
-									// return false;
-									// return false;
 								}
 							}
 						}
@@ -1042,17 +1040,17 @@ public class ChangeSetView implements IAdaptable {
 							flexStr = "within";
 						}
 						// CHECK -- IF Original was zero, then we have moved into the felx time.
-						return String.format("Lateness %s by %d days, %d hours %s flex time", delta > 0 ? "increased" : "decreased", delta / 24, delta % 24, flexStr);
+						return String.format("Lateness %s by %d days, %d hours %s flex time", delta > 0 ? "increased" : "decreased", Math.abs(delta) / 24, Math.abs(delta) % 24, flexStr);
 					}
 					if (!originalInFlex) {
 						// if (originalLateWithoutFlex > 0 && newLatenessWithoutFlex > 0) {
 						final long delta = newLatenessWithoutFlex - originalLateWithoutFlex;
-						return String.format("Lateness %s by %d days, %d hours", delta > 0 ? "increased" : "decreased", delta / 24, delta % 24);
+						return String.format("Lateness %s by %d days, %d hours", delta > 0 ? "increased" : "decreased", Math.abs(delta) / 24, Math.abs(delta) % 24);
 						// }
 					} else {
 						// if (originalLateWithoutFlex > 0 && newLatenessWithoutFlex > 0) {
 						final long delta = newLatenessWithoutFlex - originalLateWithoutFlex;
-						return String.format("Lateness (within flex time) %s by %d days, %d hours", delta > 0 ? "increased" : "decreased", delta / 24, delta % 24);
+						return String.format("Lateness (within flex time) %s by %d days, %d hours", delta > 0 ? "increased" : "decreased", Math.abs(delta) / 24, Math.abs(delta) % 24);
 						// }
 					}
 
