@@ -28,7 +28,7 @@ import com.mmxlabs.models.migration.impl.MigrationRegistry;
  * @author Simon Goodall
  * 
  */
-class MigrationActivationModule extends AbstractModule {
+public class MigrationActivationModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
@@ -38,7 +38,7 @@ class MigrationActivationModule extends AbstractModule {
 		bind(iterable(MigrationUnitExtensionPoint.class)).toProvider(service(MigrationUnitExtensionPoint.class).multiple());
 		bind(iterable(MigrationUnitExtensionExtensionPoint.class)).toProvider(service(MigrationUnitExtensionExtensionPoint.class).multiple());
 		bind(iterable(DefaultMigrationContextExtensionPoint.class)).toProvider(service(DefaultMigrationContextExtensionPoint.class).multiple());
-		
+
 		bind(iterable(ClientMigrationContextExtensionPoint.class)).toProvider(service(ClientMigrationContextExtensionPoint.class).multiple());
 		bind(iterable(ClientMigrationUnitExtensionPoint.class)).toProvider(service(ClientMigrationUnitExtensionPoint.class).multiple());
 		bind(iterable(DefaultClientMigrationContextExtensionPoint.class)).toProvider(service(DefaultClientMigrationContextExtensionPoint.class).multiple());
