@@ -728,7 +728,7 @@ public class ChangeSetView implements IAdaptable {
 							}
 							if (Math.abs(delta) < 250_000L) {
 								// Exclude if less than 10% of PNL change.
-								if ((double) Math.abs(delta) / (double) Math.abs(totalPNLDelta) < 0.1) {
+								if ((ChangeSetView.this.viewMode == ViewMode.COMPARE) || (double) Math.abs(delta) / (double) Math.abs(totalPNLDelta) < 0.1) {
 									return false;
 									// return false;
 									// return false;
