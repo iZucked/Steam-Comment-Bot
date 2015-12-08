@@ -273,7 +273,7 @@ public class ScenarioComparisonTransformer {
 						if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
 							final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
 							pnl += cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
-							lateness += ChangeSetUtils.getLateness(cargoAllocation);
+							lateness += ChangeSetUtils.getLatenessExcludingFlex(cargoAllocation);
 							violations += ChangeSetUtils.getCapacityViolationCount(cargoAllocation);
 						}
 					}
@@ -303,7 +303,7 @@ public class ScenarioComparisonTransformer {
 						}
 						if (newGroupProfitAndLoss instanceof CargoAllocation) {
 							final CargoAllocation cargoAllocation = (CargoAllocation) newGroupProfitAndLoss;
-							lateness += ChangeSetUtils.getLateness(cargoAllocation);
+							lateness += ChangeSetUtils.getLatenessExcludingFlex(cargoAllocation);
 							violations += ChangeSetUtils.getCapacityViolationCount(cargoAllocation);
 						}
 					}
@@ -316,7 +316,7 @@ public class ScenarioComparisonTransformer {
 						}
 						if (originalGroupProfitAndLoss instanceof CargoAllocation) {
 							final CargoAllocation cargoAllocation = (CargoAllocation) originalGroupProfitAndLoss;
-							lateness -= ChangeSetUtils.getLateness(cargoAllocation);
+							lateness -= ChangeSetUtils.getLatenessExcludingFlex(cargoAllocation);
 							violations -= ChangeSetUtils.getCapacityViolationCount(cargoAllocation);
 						}
 					}

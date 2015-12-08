@@ -123,7 +123,7 @@ class HeadlineReportTransformer {
 					final int cost = ((PortVisit) evt).getPortCost();
 					totalCost += cost;
 
-					if (LatenessUtils.isLate(evt)) {
+					if (LatenessUtils.isLateExcludingFlex(evt)) {
 						final long latenessInHours = LatenessUtils.getLatenessInHours((PortVisit) evt);
 						// Ensure positive
 						totalLatenessHours += Math.abs(latenessInHours);

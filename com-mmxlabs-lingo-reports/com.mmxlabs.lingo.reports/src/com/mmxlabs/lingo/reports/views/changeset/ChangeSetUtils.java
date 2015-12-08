@@ -84,14 +84,30 @@ public final class ChangeSetUtils {
 		return addnPNL;
 	}
 
-	public static long getLateness(@Nullable final EventGrouping eventGrouping) {
+	public static long getLatenessAfterFlex(@Nullable final EventGrouping eventGrouping) {
 		long lateness = 0;
 		if (eventGrouping != null) {
 
 			for (final Event evt : eventGrouping.getEvents()) {
 				if (evt instanceof PortVisit) {
 					final PortVisit visit = (PortVisit) evt;
-					final boolean isLate = LatenessUtils.isLateWithFlex(visit);
+					final boolean isLate = LatenessUtils.isLateAfterFlex(visit);
+					if (isLate) {
+						lateness += LatenessUtils.getLatenessInHours(visit);
+					}
+				}
+			}
+		}
+		return lateness;
+	}
+	public static long getLatenessExcludingFlex(@Nullable final EventGrouping eventGrouping) {
+		long lateness = 0;
+		if (eventGrouping != null) {
+			
+			for (final Event evt : eventGrouping.getEvents()) {
+				if (evt instanceof PortVisit) {
+					final PortVisit visit = (PortVisit) evt;
+					final boolean isLate = LatenessUtils.isLateExcludingFlex(visit);
 					if (isLate) {
 						lateness += LatenessUtils.getLatenessInHours(visit);
 					}
