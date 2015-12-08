@@ -719,11 +719,36 @@ public class ChangeSetView implements IAdaptable {
 					if (element instanceof ChangeSetRow) {
 						final ChangeSetRow row = (ChangeSetRow) element;
 						if (!row.isWiringChange() && !row.isVesselChange()) {
-							return false;
+
+							long delta = getPNL(row.getNewGroupProfitAndLoss()) - getPNL(row.getOriginalGroupProfitAndLoss());
+							long totalPNLDelta = 0;
+							if (parentElement instanceof ChangeSet) {
+								final ChangeSet changeSet = (ChangeSet) parentElement;
+								totalPNLDelta = changeSet.getMetricsToPrevious().getPnlDelta();
+							}
+							if (Math.abs(delta) < 250_000L) {
+								// Exclude if less than 10% of PNL change.
+								if ((double) Math.abs(delta) / (double) Math.abs(totalPNLDelta) < 0.1) {
+									return false;
+									// return false;
+									// return false;
+								}
+							}
 						}
 					}
 				}
 				return true;
+			}
+
+			private long getPNL(@Nullable final ProfitAndLossContainer c) {
+				if (c != null) {
+					final GroupProfitAndLoss gpl = c.getGroupProfitAndLoss();
+					if (gpl != null) {
+						return gpl.getProfitAndLoss();
+					}
+				}
+
+				return 0L;
 			}
 		};
 		viewer.setFilters(filters);
