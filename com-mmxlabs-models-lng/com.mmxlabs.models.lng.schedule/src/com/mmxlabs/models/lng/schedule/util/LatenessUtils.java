@@ -18,7 +18,7 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 
 public class LatenessUtils {
 
-	public static boolean isLate(final Event e) {
+	public static boolean isLateExcludingFlex(final Event e) {
 		if (e instanceof PortVisit) {
 			final PortVisitLateness portVisitLateness = ((PortVisit) e).getLateness();
 			if (portVisitLateness != null) {
@@ -27,7 +27,15 @@ public class LatenessUtils {
 		}
 		return false;
 	}
-	public static boolean isLateWithFlex(final Event e) {
+
+	/**
+	 * Returns true if it is late, event after considering the Slot flex time. If this returns false and {@link #isLateExcludingFlex(Event)} returns true, then the slot is late,but within the flex
+	 * time.
+	 * 
+	 * @param e
+	 * @return
+	 */
+	public static boolean isLateAfterFlex(final Event e) {
 		if (e instanceof PortVisit) {
 			final PortVisitLateness portVisitLateness = ((PortVisit) e).getLateness();
 			if (portVisitLateness != null) {
@@ -40,9 +48,9 @@ public class LatenessUtils {
 							return false;
 						}
 					}
-					
+
 				}
-				
+
 				return true;
 			}
 		}

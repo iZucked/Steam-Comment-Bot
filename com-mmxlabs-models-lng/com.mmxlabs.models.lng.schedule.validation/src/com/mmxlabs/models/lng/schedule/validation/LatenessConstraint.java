@@ -32,7 +32,7 @@ public class LatenessConstraint extends AbstractModelMultiConstraint {
 		final EObject target = ctx.getTarget();
 
 		if (target instanceof Event) {
-			if (LatenessUtils.isLate((Event) target)) {
+			if (LatenessUtils.isLateExcludingFlex((Event) target)) {
 				EObject obj = null;
 				EStructuralFeature feature = null;
 				String message = null;
