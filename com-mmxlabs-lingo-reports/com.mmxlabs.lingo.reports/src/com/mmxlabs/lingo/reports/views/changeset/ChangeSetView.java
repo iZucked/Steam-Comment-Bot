@@ -1005,14 +1005,14 @@ public class ChangeSetView implements IAdaptable {
 					{
 						final EventGrouping eventGrouping = change.getOriginalEventGrouping();
 						if (eventGrouping != null) {
-							f = ChangeSetUtils.getLateness(eventGrouping);
+							f = ChangeSetUtils.getLatenessExcludingFlex(eventGrouping);
 						}
 					}
 					Number t = null;
 					{
 						final EventGrouping eventGrouping = change.getNewEventGrouping();
 						if (eventGrouping != null) {
-							t = ChangeSetUtils.getLateness(eventGrouping);
+							t = ChangeSetUtils.getLatenessExcludingFlex(eventGrouping);
 						}
 					}
 					int delta = 0;
