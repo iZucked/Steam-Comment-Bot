@@ -42,7 +42,7 @@ class HeadlineReportTransformer {
 
 	public static class RowData {
 		public RowData(final String scheduleName, final Long totalPNL, final Long tradingPNL, final Long shippingPNL, final Long mtmPnl, final Long shippingCost, final Long idleTime,
-				final Long gcoTime, final Long gcoRevenue, final Long capacityViolationCount, final Long lateness) {
+				final Long gcoTime, final Long gcoRevenue, final Long capacityViolationCount, final Long latenessIncludingFlex, final Long latenessExcludingFlex) {
 			super();
 			this.scheduleName = scheduleName;
 			this.totalPNL = totalPNL;
@@ -54,7 +54,8 @@ class HeadlineReportTransformer {
 			this.gcoTime = gcoTime;
 			this.gcoRevenue = gcoRevenue;
 			this.capacityViolationCount = capacityViolationCount;
-			this.lateness = lateness;
+			this.latenessIncludingFlex = latenessIncludingFlex;
+			this.latenessExcludingFlex = latenessExcludingFlex;
 			this.dummy = false;
 		}
 
@@ -70,7 +71,8 @@ class HeadlineReportTransformer {
 			this.gcoTime = null;
 			this.gcoRevenue = null;
 			this.capacityViolationCount = null;
-			this.lateness = null;
+			this.latenessIncludingFlex = null;
+			this.latenessExcludingFlex = null;
 			this.dummy = true;
 		}
 
@@ -85,21 +87,23 @@ class HeadlineReportTransformer {
 		public final Long gcoTime;
 		public final Long gcoRevenue;
 		public final Long capacityViolationCount;
-		public final Long lateness;
+		public final Long latenessIncludingFlex;
+		public final Long latenessExcludingFlex;
 	}
 
 	@NonNull
 	public RowData transform(@NonNull final Schedule schedule, @NonNull final ScenarioInstance scenarioInstance) {
 
-		long totalCost = 0l;
-		long totalTradingPNL = 0l;
+		long totalCost = 0L;
+		long totalTradingPNL = 0L;
 		long totalShippingPNL = 0l;
-		long totalMtMPNL = 0l;
-		long totalIdleHours = 0l;
-		long totalGCOHours = 0l;
-		long totalGCORevenue = 0l;
-		long totalCapacityViolationCount = 0l;
-		long totalLatenessHours = 0l;
+		long totalMtMPNL = 0L;
+		long totalIdleHours = 0L;
+		long totalGCOHours = 0L;
+		long totalGCORevenue = 0L;
+		long totalCapacityViolationCount = 0L;
+		long totalLatenessHoursIncludingFlex = 0L;
+		long totalLatenessHoursExcludingFlex = 0L;
 
 		for (final Sequence seq : schedule.getSequences()) {
 
@@ -123,10 +127,14 @@ class HeadlineReportTransformer {
 					final int cost = ((PortVisit) evt).getPortCost();
 					totalCost += cost;
 
+					final long latenessInHours = LatenessUtils.getLatenessInHours((PortVisit) evt);
 					if (LatenessUtils.isLateExcludingFlex(evt)) {
-						final long latenessInHours = LatenessUtils.getLatenessInHours((PortVisit) evt);
 						// Ensure positive
-						totalLatenessHours += Math.abs(latenessInHours);
+						totalLatenessHoursExcludingFlex += Math.abs(latenessInHours);
+					}
+					if (LatenessUtils.isLateAfterFlex(evt)) {
+						// Ensure positive
+						totalLatenessHoursIncludingFlex += Math.abs(latenessInHours);
 					}
 				}
 
@@ -172,7 +180,7 @@ class HeadlineReportTransformer {
 		}
 
 		return new RowData(scenarioInstance.getName(), totalTradingPNL + totalShippingPNL, totalTradingPNL, totalShippingPNL, totalMtMPNL, totalCost, totalIdleHours, totalGCOHours, totalGCORevenue,
-				totalCapacityViolationCount, totalLatenessHours);
+				totalCapacityViolationCount, totalLatenessHoursIncludingFlex, totalLatenessHoursExcludingFlex);
 	}
 
 	private long getElementShippingPNL(final ProfitAndLossContainer container) {
