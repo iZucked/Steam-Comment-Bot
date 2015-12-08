@@ -347,7 +347,7 @@ public class ChangeSetView implements IAdaptable {
 		final FontData fontData = systemFont.getFontData()[0];
 		boldFont = new Font(Display.getDefault(), new FontData(fontData.getName(), fontData.getHeight(), SWT.BOLD));
 		// Create table
-		viewer = new GridTreeViewer(parent, SWT.V_SCROLL | SWT.H_SCROLL);
+		viewer = new GridTreeViewer(parent, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 		ColumnViewerToolTipSupport.enableFor(viewer, ToolTip.RECREATE);
 
 		viewer.getGrid().setHeaderVisible(true);
