@@ -268,7 +268,7 @@ public class ActionSetTransformer {
 								throw new RuntimeException("Complex cargoes are not supported");
 							}
 							if (ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, slotVisit2,
-									(LoadSlot) slotVisit2.getSlotAllocation().getSlot(), false, true)) {
+									(LoadSlot) slotVisit2.getSlotAllocation().getSlot(), false, canDefer)) {
 								deferredElements.add(element);
 							}
 						}
