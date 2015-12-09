@@ -1127,14 +1127,17 @@ public class ChangeSetView implements IAdaptable {
 					long delta = 0L;
 					delta -= originalLateWithoutFlex;
 					delta += newLatenessWithoutFlex;
+					long originalDelta = delta;
 					delta = (int) Math.round((double) delta / 24.0);
-					if (delta != 0) {
+					if (delta != 0L) {
 						cell.setText(String.format("%s %d%s", delta < 0 ? "↓" : "↑", Math.abs(delta), flexStr));
+					} else if (originalDelta != 0L) {
+						cell.setText(String.format("%s %s%s", originalDelta < 0 ? "↓" : "↑", "<1", flexStr));
 					}
-
 				}
 			}
 		};
+
 	}
 
 	private CellLabelProvider createViolationsDeltaLabelProvider() {
