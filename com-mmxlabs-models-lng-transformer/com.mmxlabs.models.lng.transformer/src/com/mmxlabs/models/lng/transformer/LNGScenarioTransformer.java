@@ -264,7 +264,7 @@ public class LNGScenarioTransformer {
 	private final Map<VesselClass, List<IVesselAvailability>> spotVesselAvailabilitiesByClass = new HashMap<>();
 
 	@NonNull
-	private final Map<Pair<CharterInMarket, Integer>, IVesselAvailability> spotCharterInToAvailability = new HashMap<>();
+	private final Map<NonNullPair<CharterInMarket, Integer>, IVesselAvailability> spotCharterInToAvailability = new HashMap<>();
 
 	@NonNull
 	private final List<IVesselAvailability> allVesselAvailabilities = new ArrayList<IVesselAvailability>();
@@ -768,7 +768,7 @@ public class LNGScenarioTransformer {
 				vesselAvailability = modelEntityMap.getOptimiserObject(va, IVesselAvailability.class);
 			}
 			if (vesselAssignmentType instanceof CharterInMarket) {
-				final Pair<CharterInMarket, Integer> key = new Pair<>((CharterInMarket) vesselAssignmentType, assignableElement.getSpotIndex());
+				final NonNullPair<CharterInMarket, Integer> key = new NonNullPair<>((CharterInMarket) vesselAssignmentType, assignableElement.getSpotIndex());
 				vesselAvailability = spotCharterInToAvailability.get(key);
 			}
 
@@ -2435,7 +2435,7 @@ public class LNGScenarioTransformer {
 
 					final List<IVesselAvailability> spots = builder.createSpotVessels("SPOT-" + charterCost.getName(), spotCharterInMarket);
 					for (int i = 0; i < spots.size(); ++i) {
-						final Pair<CharterInMarket, Integer> key = new Pair<>(charterCost, i);
+						final NonNullPair<CharterInMarket, Integer> key = new NonNullPair<>(charterCost, i);
 						spotCharterInToAvailability.put(key, spots.get(i));
 					}
 
