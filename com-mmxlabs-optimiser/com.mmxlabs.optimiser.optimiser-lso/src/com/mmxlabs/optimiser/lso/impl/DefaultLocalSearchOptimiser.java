@@ -27,6 +27,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.optimiser.lso.INullMove;
 import com.mmxlabs.optimiser.lso.LSOLoggingConstants;
+import com.mmxlabs.optimiser.lso.logging.ILoggingProvider;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger;
 
 /**
@@ -52,10 +53,13 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 	protected ModifiableSequences potentialRawSequences;
 
-	@Inject(optional = true)
-	@Named(LSOLoggingConstants.LSO_LOGGER)
+//	@Inject(optional = true)
+//	@Named(LSOLoggingConstants.LSO_LOGGER)
 	protected LSOLogger loggingDataStore;
 
+	@Inject(optional = true)
+	protected ILoggingProvider loggingProvider;
+	
 	protected Pair<Integer, Long> best = new Pair<>(0, 0L);
 
 	protected boolean DO_SEQUENCE_LOGGING = false;
@@ -63,6 +67,8 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 	@Override
 	public IAnnotatedSolution start(@NonNull final IOptimisationContext optimiserContext, @NonNull final ISequences initialRawSequences, @NonNull final ISequences inputRawSequences) {
 		setCurrentContext(optimiserContext);
+
+		initLogger();
 		data = optimiserContext.getOptimisationData();
 		numberOfMovesTried = 0;
 		numberOfMovesAccepted = 0;
@@ -97,6 +103,12 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		initProgressLog();
 
 		return annotatedBestSolution;
+	}
+
+	protected void initLogger() {
+		if (loggingDataStore != null) {
+			loggingDataStore = loggingProvider.providerLSOLogger(getFitnessEvaluator(), getCurrentContext());
+		}
 	}
 
 	@Override
