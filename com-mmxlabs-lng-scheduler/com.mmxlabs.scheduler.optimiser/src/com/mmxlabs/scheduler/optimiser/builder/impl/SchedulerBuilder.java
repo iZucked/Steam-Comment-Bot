@@ -1814,7 +1814,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 			for (final IDischargeOption option : dischargeSlots) {
 
-				// Skip frozen slots
+				// Skip frozen slots - already bound
 				if (frozenSlots.contains(option)) {
 					continue;
 				}
@@ -1866,7 +1866,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 			for (final ILoadOption option : loadSlots) {
 
-				// Skip frozen slots
+				// Skip frozen slots - already bound
 				if (frozenSlots.contains(option)) {
 					continue;
 				}
