@@ -35,7 +35,7 @@ public class HeelOptionsImpl extends MMXObjectImpl implements HeelOptions {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int VOLUME_AVAILABLE_EDEFAULT = 0;
+	protected static final double VOLUME_AVAILABLE_EDEFAULT = 0.0;
 
 	/**
 	 * The cached value of the '{@link #getVolumeAvailable() <em>Volume Available</em>}' attribute.
@@ -45,7 +45,7 @@ public class HeelOptionsImpl extends MMXObjectImpl implements HeelOptions {
 	 * @generated
 	 * @ordered
 	 */
-	protected int volumeAvailable = VOLUME_AVAILABLE_EDEFAULT;
+	protected double volumeAvailable = VOLUME_AVAILABLE_EDEFAULT;
 
 	/**
 	 * This is true if the Volume Available attribute has been set.
@@ -120,7 +120,7 @@ public class HeelOptionsImpl extends MMXObjectImpl implements HeelOptions {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getVolumeAvailable() {
+	public double getVolumeAvailable() {
 		return volumeAvailable;
 	}
 
@@ -129,8 +129,8 @@ public class HeelOptionsImpl extends MMXObjectImpl implements HeelOptions {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setVolumeAvailable(int newVolumeAvailable) {
-		int oldVolumeAvailable = volumeAvailable;
+	public void setVolumeAvailable(double newVolumeAvailable) {
+		double oldVolumeAvailable = volumeAvailable;
 		volumeAvailable = newVolumeAvailable;
 		boolean oldVolumeAvailableESet = volumeAvailableESet;
 		volumeAvailableESet = true;
@@ -144,7 +144,7 @@ public class HeelOptionsImpl extends MMXObjectImpl implements HeelOptions {
 	 * @generated
 	 */
 	public void unsetVolumeAvailable() {
-		int oldVolumeAvailable = volumeAvailable;
+		double oldVolumeAvailable = volumeAvailable;
 		boolean oldVolumeAvailableESet = volumeAvailableESet;
 		volumeAvailable = VOLUME_AVAILABLE_EDEFAULT;
 		volumeAvailableESet = false;
@@ -230,7 +230,7 @@ public class HeelOptionsImpl extends MMXObjectImpl implements HeelOptions {
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case FleetPackage.HEEL_OPTIONS__VOLUME_AVAILABLE:
-				setVolumeAvailable((Integer)newValue);
+				setVolumeAvailable((Double)newValue);
 				return;
 			case FleetPackage.HEEL_OPTIONS__CV_VALUE:
 				setCvValue((Double)newValue);

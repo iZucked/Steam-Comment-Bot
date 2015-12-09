@@ -10,6 +10,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.Vessel;
 
 /**
@@ -92,6 +93,14 @@ public interface CargoActuals extends EObject {
 	 * @generated
 	 */
 	void setInsurancePremium(int value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<EObject> getSortedActuals();
 
 	/**
 	 * Returns the value of the '<em><b>Actuals</b></em>' containment reference list.

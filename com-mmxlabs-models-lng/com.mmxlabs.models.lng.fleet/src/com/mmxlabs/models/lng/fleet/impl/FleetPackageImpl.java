@@ -796,7 +796,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		initEReference(getVesselGroup_Vessels(), this.getVessel(), null, "vessels", null, 0, -1, VesselGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(heelOptionsEClass, HeelOptions.class, "HeelOptions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getHeelOptions_VolumeAvailable(), ecorePackage.getEInt(), "volumeAvailable", null, 1, 1, HeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getHeelOptions_VolumeAvailable(), ecorePackage.getEDouble(), "volumeAvailable", null, 1, 1, HeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getHeelOptions_CvValue(), ecorePackage.getEDouble(), "cvValue", null, 1, 1, HeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getHeelOptions_PricePerMMBTU(), ecorePackage.getEDouble(), "pricePerMMBTU", null, 1, 1, HeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -927,14 +927,14 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		   source, 
 		   new String[] {
 			 "unit", "m\u00b3",
-			 "formatString", "###,##0"
+			 "formatString", "###,##0.###"
 		   });	
 		addAnnotation
 		  (getHeelOptions_CvValue(), 
 		   source, 
 		   new String[] {
 			 "unit", "mmBtu/m\u00b3",
-			 "formatString", "#0.###"
+			 "formatString", "#0.######"
 		   });	
 		addAnnotation
 		  (getHeelOptions_PricePerMMBTU(), 
