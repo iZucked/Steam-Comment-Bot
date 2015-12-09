@@ -60,6 +60,9 @@ public class ValidationService implements IValidationService {
 				try {
 					validationInputService.setExtraContext(extraContext);
 					return validator.validate(targets);
+				} catch (Throwable t) {
+					t.printStackTrace();
+					throw t;
 				} finally {
 					validationInputService.setExtraContext(null);
 				}
