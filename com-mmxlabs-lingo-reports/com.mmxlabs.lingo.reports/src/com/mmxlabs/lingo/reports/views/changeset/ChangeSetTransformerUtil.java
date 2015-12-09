@@ -782,15 +782,15 @@ public final class ChangeSetTransformerUtil {
 		}
 
 		if (head.getLhsName() != null && head.getLhsName().equals(tail.getLhsName())) {
-			
+
 			if (head.getNewDischargeAllocation() == null && tail.getOriginalDischargeAllocation() == null) {
-				
+
 			}
-			
+
 			final ChangeSetRow lhsWiringLink = tail.getLhsWiringLink();
 			head.setLhsWiringLink(lhsWiringLink);
-			
-			// Copy data across
+
+			// Copy data across - not needed for sales as that should already have happened. However all data is keyed off the load, hence extra work here
 			head.setNewDischargeAllocation(tail.getNewDischargeAllocation());
 			head.setNewEventGrouping(tail.getNewEventGrouping());
 			head.setNewGroupProfitAndLoss(tail.getNewGroupProfitAndLoss());
@@ -798,7 +798,7 @@ public final class ChangeSetTransformerUtil {
 			head.setNewVesselName(tail.getNewVesselName());
 			head.setRhsName(tail.getRhsName());
 			head.setDischargeSlot(tail.getDischargeSlot());
-			
+
 			return true;
 		}
 		return false;
