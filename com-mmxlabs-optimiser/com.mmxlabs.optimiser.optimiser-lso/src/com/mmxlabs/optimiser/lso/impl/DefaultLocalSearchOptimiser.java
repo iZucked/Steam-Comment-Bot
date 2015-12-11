@@ -80,9 +80,9 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 		// Evaluate initial sequences
 		setInitialSequences(initialRawSequences);
-		
+
 		evaluateInputSequences(initialRawSequences);
-		
+
 		evaluateInputSequences(inputRawSequences);
 
 		// Set initial sequences
@@ -267,21 +267,12 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		for (final IReducingConstraintChecker checker : getReducingConstraintCheckers()) {
 			checker.sequencesAccepted(fullSequences);
 		}
-<<<<<<< local
-
-		// // Prime IInitialSequencesConstraintCheckers with initial state
-		// for (final IInitialSequencesConstraintChecker checker : getInitialSequencesConstraintCheckers()) {
-		// checker.sequencesAccepted(fullSequences);
-		// }
-
-=======
 
 		// Prime IInitialSequencesConstraintCheckers with initial state
 		for (final IInitialSequencesConstraintChecker checker : getInitialSequencesConstraintCheckers()) {
-			checker.sequencesAccepted(fullSequences);
+			checker.sequencesAccepted(currentRawSequences, fullSequences);
 		}
 
->>>>>>> other
 		final IEvaluationState evaluationState = new EvaluationState();
 		for (final IEvaluationProcess evaluationProcess : getEvaluationProcesses()) {
 			evaluationProcess.evaluate(fullSequences, evaluationState);
