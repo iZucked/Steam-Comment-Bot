@@ -42,6 +42,7 @@ import com.mmxlabs.license.features.pluginxml.PluginRegistryHook;
 import com.mmxlabs.license.ssl.LicenseChecker;
 import com.mmxlabs.license.ssl.LicenseChecker.LicenseState;
 import com.mmxlabs.lingo.app.headless.exporter.FitnessTraceExporter;
+import com.mmxlabs.lingo.app.headless.exporter.GeneralAnnotationsExporter;
 import com.mmxlabs.lingo.app.headless.exporter.IRunExporter;
 import com.mmxlabs.lingo.app.headless.utils.DoubleMap;
 import com.mmxlabs.lingo.app.headless.utils.HeadlessJSONParser;
@@ -59,8 +60,10 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
+import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
+import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.migration.scenario.MigrationHelper;
 import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
@@ -148,6 +151,9 @@ public class HeadlessApplication implements IApplication {
 
 		final String outputFolderName = overrideSettings.getOutputName() == null ? getFolderNameFromSettings(optimiserSettings) : getFolderNameFromSettings(overrideSettings);
 
+		// Ensure dir structure is in place
+		Paths.get(path, outputFolderName).toFile().mkdirs();
+
 		addFitnessTraceExporter(exporters, path, outputFolderName);
 		addLatenessExporter(exporters, path, outputFolderName);
 
@@ -170,16 +176,34 @@ public class HeadlessApplication implements IApplication {
 		};
 
 		// Create logging module
-		final Module loggingModule = createLoggingModule();
-
-		ExecutorService executorService = Executors.newFixedThreadPool(1);
+		final ExecutorService executorService = Executors.newFixedThreadPool(1);
 		try {
+			final Map<String, LSOLogger> phaseToLoggerMap = new HashMap<>();
+
+			final AbstractRunnerHook runnerHook = new AbstractRunnerHook() {
+				@Override
+				public void beginPhase(final String phase, final Injector injector) {
+					super.beginPhase(phase, injector);
+					for (final IRunExporter exporter : exporters) {
+						exporter.setPhase(phase, injector);
+					}
+				}
+
+				@Override
+				public void endPhase(final String phase) {
+					super.endPhase(phase);
+				}
+			};
+			final Module loggingModule = createLoggingModule(phaseToLoggerMap, runnerHook);
+
 			final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, rootObject, null, LNGScenarioRunnerUtils.createExtendedSettings(optimiserSettings),
 					LNGSchedulerJobUtils.createLocalEditingDomain(), loggingModule, localOverrides, LNGTransformerHelper.HINT_OPTIMISE_LSO);
 
-			for (final IRunExporter ex : exporters) {
-				ex.setScenarioRunner(runner);
-			}
+			runner.setRunnerHook(runnerHook);
+
+			// FIXME
+			// runner.init(monitor);
+
 			final long startTime = System.currentTimeMillis();
 			runner.evaluateInitialState();
 			System.out.println("LNGResult(");
@@ -211,9 +235,8 @@ public class HeadlessApplication implements IApplication {
 				saveScenario(Paths.get(path, outputFolderName, outputFile).toString(), instance);
 			}
 
-			exportData(runner.getInjector(), path, outputFolderName, exporters, jsonFilePath);
+			exportData(phaseToLoggerMap, path, outputFolderName, jsonFilePath);
 
-			runner.dispose();
 		} finally {
 			executorService.shutdownNow();
 		}
@@ -227,7 +250,7 @@ public class HeadlessApplication implements IApplication {
 	}
 
 	private void addExporter(final List<IRunExporter> exporters, final String path, final String outputFolderName, final String filename, final IRunExporter exporter) {
-		exporter.setOutputFile(Paths.get(path, outputFolderName, filename).toFile());
+		exporter.setOutputFile(Paths.get(path, outputFolderName), filename);
 		exporters.add(exporter);
 	}
 
@@ -236,9 +259,9 @@ public class HeadlessApplication implements IApplication {
 		addExporter(exporters, path, outputFolderName, "generalAnnotationsReport.txt", exporter);
 	}
 
-	private Module createLoggingModule() {
-		final LSOLogger lsoLogger = new LSOLogger(1000);
-		final LoggingModule loggingModule = new LoggingModule(lsoLogger);
+	private Module createLoggingModule(final Map<String, LSOLogger> phaseToLoggerMap, final AbstractRunnerHook runnerHook) {
+		// final LSOLogger lsoLogger = new LSOLogger(1000);
+		final LoggingModule loggingModule = new LoggingModule(phaseToLoggerMap, runnerHook, 10_000);
 		return loggingModule;
 	}
 
@@ -467,14 +490,16 @@ public class HeadlessApplication implements IApplication {
 		return nameMap;
 	}
 
-	private void exportData(final Injector injector, final String path, final String foldername, final List<IRunExporter> exporters, final String jsonFilePath) {
+	private void exportData(final Map<String, LSOLogger> loggerMap, final String path, final String foldername, final String jsonFilePath) {
 		// first export logging data
-		final LSOLoggingExporter lsoLoggingExporter = new LSOLoggingExporter(path, foldername);
-		injector.injectMembers(lsoLoggingExporter);
-		lsoLoggingExporter.exportData("best-fitness", "current-fitness");
-		for (final IRunExporter exporter : exporters) {
-			exporter.exportData();
+		for (final String phase : IRunnerHook.PHASE_ORDER) {
+			final LSOLogger logger = loggerMap.get(phase);
+			if (logger != null) {
+				final LSOLoggingExporter lsoLoggingExporter = new LSOLoggingExporter(path, phase, foldername, logger);
+				lsoLoggingExporter.exportData("best-fitness", "current-fitness");
+			}
 		}
+
 		HeadlessJSONParser.copyJSONFile(jsonFilePath, Paths.get(path, foldername, "parameters.json").toString());
 	}
 

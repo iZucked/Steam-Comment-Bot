@@ -265,16 +265,7 @@ public class AbstractOptimisationResultTester {
 			}
 		}
 
-		// Check final optimised result
-		{
-			final List<Fitness> currentEndFitnesses = TesterUtil.getFitnessFromExtraAnnotations(result.getBestSolution().getSecond());
-			if (storeFitnessMap) {
-				TesterUtil.storeFitnesses(props, endFitnessesMapName, currentEndFitnesses);
-			} else {
-				// Assert old and new are equal
-				TesterUtil.testOriginalAndCurrentFitnesses(props, endFitnessesMapName, currentEndFitnesses);
-			}
-		}
+
 		if (!result.getSolutions().isEmpty()) {
 			int i = 0;
 			for (final NonNullPair<ISequences, Map<String, Object>> p : result.getSolutions()) {
@@ -299,6 +290,17 @@ public class AbstractOptimisationResultTester {
 				} catch (final URISyntaxException e) {
 					e.printStackTrace();
 				}
+			}
+		}
+		
+		// Check final optimised result
+		{
+			final List<Fitness> currentEndFitnesses = TesterUtil.getFitnessFromExtraAnnotations(result.getBestSolution().getSecond());
+			if (storeFitnessMap) {
+				TesterUtil.storeFitnesses(props, endFitnessesMapName, currentEndFitnesses);
+			} else {
+				// Assert old and new are equal
+				TesterUtil.testOriginalAndCurrentFitnesses(props, endFitnessesMapName, currentEndFitnesses);
 			}
 		}
 	}
