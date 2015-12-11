@@ -264,7 +264,7 @@ public final class OptimisationHelper {
 		// Permit the user to override the settings object. Use the previous settings as the initial value
 		if (promptUser) {
 
-			previousSettings = openUserDialog(forEvaluation, previousSettings, defaultSettings, promptOnlyIfOptionsEnabled);
+			previousSettings = openUserDialog(forEvaluation, previousSettings, userSettings, promptOnlyIfOptionsEnabled);
 		}
 
 		if (previousSettings == null) {
@@ -494,23 +494,7 @@ public final class OptimisationHelper {
 			break;
 
 		}
-<<<<<<< local
-
-=======
-
-		// Copy across params
-		if (userSettings.isSetPeriodStart()) {
-			optimiserSettings.getRange().setOptimiseAfter(userSettings.getPeriodStart());
-		}
-		if (userSettings.isSetPeriodEnd()) {
-			optimiserSettings.getRange().setOptimiseBefore(userSettings.getPeriodEnd());
-		}
-
-		optimiserSettings.setBuildActionSets(userSettings.isBuildActionSets());
-		optimiserSettings.setGenerateCharterOuts(userSettings.isGenerateCharterOuts());
-		optimiserSettings.setShippingOnly(userSettings.isShippingOnly());
-
->>>>>>> other
+		
 		// change epoch length
 		// TODO: make this better!
 		if (userSettings.isSetPeriodStart() && userSettings.isSetPeriodEnd()) {

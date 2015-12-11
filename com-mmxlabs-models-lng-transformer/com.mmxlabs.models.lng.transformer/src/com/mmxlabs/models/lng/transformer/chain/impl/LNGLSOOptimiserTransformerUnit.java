@@ -249,7 +249,7 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 
 		final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
 		if (runnerHook != null) {
-			final ISequences preloadedResult = runnerHook.getSequences(IRunnerHook.PHASE_LSO);
+			final ISequences preloadedResult = runnerHook.getPrestoredSequences(IRunnerHook.PHASE_LSO);
 			if (preloadedResult != null) {
 				monitor.beginTask("", 1);
 				try {
