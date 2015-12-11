@@ -23,10 +23,10 @@ public class ScenarioInstanceEvaluator implements IScenarioInstanceEvaluator {
 			try (final ModelReference modelRefence = instance.getReference()) {
 				final EObject object = modelRefence.getInstance();
 				if (object instanceof LNGScenarioModel) {
-					OptimisationHelper.evaluateScenarioInstance(Activator.getDefault().getJobManager(), instance, null, false, false, ScenarioLock.EVALUATOR);
+					OptimisationHelper.evaluateScenarioInstance(Activator.getDefault().getJobManager(), instance, null, false, false, ScenarioLock.EVALUATOR, true);
 				}
 			} catch (final Exception e) {
-				// Swallo exceptions??
+				// Swallow exceptions??
 			}
 		}
 	}

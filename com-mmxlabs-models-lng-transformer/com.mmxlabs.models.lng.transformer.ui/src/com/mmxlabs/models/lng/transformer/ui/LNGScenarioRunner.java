@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
@@ -12,13 +11,9 @@ import javax.management.timer.Timer;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,12 +24,10 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.chain.IChainRunner;
 import com.mmxlabs.models.lng.transformer.chain.IMultiStateResult;
-import com.mmxlabs.models.lng.transformer.chain.impl.MultiStateResult;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
@@ -175,32 +168,12 @@ public class LNGScenarioRunner {
 
 	}
 
-	private IMultiStateResult performLSOOptimisation(LocalSearchOptimiser lsoOptimiser, final IProgressMonitor progressMonitor/* , final ISequences bestRawSequences */)
-			throws OperationCanceledException {
-
-		while (!lsoOptimiser.isFinished()) {
-			lsoOptimiser.step(1);
-			if (progressMonitor.isCanceled()) {
-				throw new OperationCanceledException();
-			}
-			progressMonitor.worked(1);
-		}
-		assert lsoOptimiser.isFinished();
-
-		if (lsoOptimiser.isFinished()) {
-
-			if (lsoOptimiser.getBestRawSequences() != null) {
-				return new MultiStateResult(lsoOptimiser.getBestRawSequences(), LNGSchedulerJobUtils.extractOptimisationAnnotations(lsoOptimiser.getBestSolution()));
-			}
-		}
-		return null;
-	}
-
 	public IRunnerHook getRunnerHook() {
 		return scenarioToOptimiserBridge.getDataTransformer().getRunnerHook();
 	}
 
-	public void setRunnerHook(IRunnerHook runnerHook) {
+	public void setRunnerHook(final @Nullable IRunnerHook runnerHook) {
+
 		scenarioToOptimiserBridge.getDataTransformer().setRunnerHook(runnerHook);
 	}
 

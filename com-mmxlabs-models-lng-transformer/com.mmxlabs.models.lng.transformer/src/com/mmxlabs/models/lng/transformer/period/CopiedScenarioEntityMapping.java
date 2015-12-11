@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 
 /**
  * @author Simon Goodall
@@ -153,5 +154,22 @@ public final class CopiedScenarioEntityMapping implements IScenarioEntityMapping
 	@Override
 	public Collection<EObject> getUnusedOriginalObjects() {
 		return unusedObjects;
+	}
+
+	@Override
+	public void setSpotCharterInMapping(CharterInMarket periodCharterInMarket, int originalSpotIndex, int periodSpotIndex) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public int getSpotCharterInMappingFromPeriod(CharterInMarket periodCharterInMarket, int periodSpotIndex) {
+		final CharterInMarket realOriginal = (CharterInMarket) mapOptimiserCopyToReal(periodCharterInMarket);
+		return originalMapping.getSpotCharterInMappingFromPeriod(realOriginal, periodSpotIndex);
+	}
+
+	@Override
+	public int getSpotCharterInMappingFromOriginal(CharterInMarket periodCharterInMarket, int originalSpotIndex) {
+		final CharterInMarket realOriginal = (CharterInMarket) mapOptimiserCopyToReal(periodCharterInMarket);
+		return originalMapping.getSpotCharterInMappingFromOriginal(realOriginal, originalSpotIndex);
 	}
 }

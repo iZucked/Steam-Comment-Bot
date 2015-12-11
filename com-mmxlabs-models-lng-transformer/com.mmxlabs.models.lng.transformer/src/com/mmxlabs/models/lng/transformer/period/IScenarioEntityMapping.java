@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 
 /**
  * The IScenarioEntityMapping stores the mapping between an original scenario and the copied scenario used in a period optimisation. This is also used to track which of the original elements have been
@@ -72,5 +73,11 @@ public interface IScenarioEntityMapping {
 	 * @return
 	 */
 	Collection<EObject> getUnusedOriginalObjects();
+
+	void setSpotCharterInMapping(CharterInMarket periodCharterInMarket, int originalSpotIndex, int periodSpotIndex);
+
+	int getSpotCharterInMappingFromPeriod(CharterInMarket periodCharterInMarket, int periodSpotIndex);
+
+	int getSpotCharterInMappingFromOriginal(CharterInMarket periodCharterInMarket, int originalSpotIndex);
 
 }

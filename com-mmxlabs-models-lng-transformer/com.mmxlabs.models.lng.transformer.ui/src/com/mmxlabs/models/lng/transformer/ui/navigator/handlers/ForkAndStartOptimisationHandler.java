@@ -61,7 +61,7 @@ public class ForkAndStartOptimisationHandler extends StartOptimisationHandler {
 							try {
 								ScenarioInstance fork = ScenarioServiceModelUtils.createAndOpenFork(instance, true);
 								if (fork != null) {
-									OptimisationHelper.evaluateScenarioInstance(jobManager, fork, null, /* prompt if optimising */optimising, optimising, ScenarioLock.OPTIMISER);
+									OptimisationHelper.evaluateScenarioInstance(jobManager, fork, null, /* prompt if optimising */optimising, optimising, ScenarioLock.OPTIMISER, !optimising);
 								}
 							} catch (final IOException e) {
 								exceptions[0] = e;

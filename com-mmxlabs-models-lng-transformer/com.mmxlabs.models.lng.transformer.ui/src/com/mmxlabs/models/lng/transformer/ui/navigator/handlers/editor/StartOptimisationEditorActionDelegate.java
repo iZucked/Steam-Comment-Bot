@@ -190,6 +190,6 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 
 	protected void doRun(final IEclipseJobManager jobManager, final ScenarioInstance instance, final String parameterMode, final boolean promptForOptimiserSettings, final boolean optimising,
 			final String k) {
-		OptimisationHelper.evaluateScenarioInstance(jobManager, instance, parameterMode, promptForOptimiserSettings, optimising, k);
+		OptimisationHelper.evaluateScenarioInstance(jobManager, instance, parameterMode, promptForOptimiserSettings, optimising, k, !optimising);
 	}
 }
