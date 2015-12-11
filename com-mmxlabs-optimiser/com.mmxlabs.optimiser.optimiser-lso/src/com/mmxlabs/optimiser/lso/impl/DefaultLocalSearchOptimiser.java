@@ -73,14 +73,17 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		numberOfMovesTried = 0;
 		numberOfMovesAccepted = 0;
 
-		final ModifiableSequences currentRawSequences = new ModifiableSequences(initialRawSequences);
+		final ModifiableSequences currentRawSequences = new ModifiableSequences(inputRawSequences);
 
 		final ModifiableSequences potentialRawSequences = new ModifiableSequences(currentRawSequences.getResources());
 		updateSequences(currentRawSequences, potentialRawSequences, currentRawSequences.getResources());
 
 		// Evaluate initial sequences
-		setInitialSequences(inputRawSequences);
-		evaluateInputSequences(currentRawSequences);
+		setInitialSequences(initialRawSequences);
+		
+		evaluateInputSequences(initialRawSequences);
+		
+		evaluateInputSequences(inputRawSequences);
 
 		// Set initial sequences
 		getMoveGenerator().setSequences(potentialRawSequences);

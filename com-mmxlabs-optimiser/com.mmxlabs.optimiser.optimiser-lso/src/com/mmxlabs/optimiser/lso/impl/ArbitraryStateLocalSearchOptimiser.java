@@ -51,6 +51,8 @@ public class ArbitraryStateLocalSearchOptimiser extends DefaultLocalSearchOptimi
 		this.currentRawSequences = currentRawSequences;
 		this.potentialRawSequences = potentialRawSequences;
 
+		initProgressLog();
+
 		return annotatedBestSolution;
 	}
 
