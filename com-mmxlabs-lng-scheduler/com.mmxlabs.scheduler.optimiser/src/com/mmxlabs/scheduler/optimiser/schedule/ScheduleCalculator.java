@@ -97,7 +97,7 @@ public class ScheduleCalculator {
 	private IEntityValueCalculator entityValueCalculator;
 
 	@Inject
-	private Provider<VoyagePlanAnnotator> voyagePlanAnnotatorProvider;
+	private VoyagePlanAnnotator voyagePlanAnnotator;
 
 	@Inject(optional = true)
 	private IMarkToMarketProvider markToMarketProvider;
@@ -341,7 +341,6 @@ public class ScheduleCalculator {
 		if (annotatedSolution != null) {
 			// Do basic voyageplan annotation
 			// TODO: Roll in the other annotations!
-			final VoyagePlanAnnotator annotator = voyagePlanAnnotatorProvider.get();
 
 			for (final ScheduledSequence scheduledSequence : scheduledSequences) {
 				final IResource resource = scheduledSequence.getResource();
@@ -350,7 +349,7 @@ public class ScheduleCalculator {
 				assert sequence != null;
 
 				if (sequence.size() > 0) {
-					annotator.annotateFromScheduledSequence(scheduledSequence, annotatedSolution);
+					voyagePlanAnnotator.annotateFromScheduledSequence(scheduledSequence, annotatedSolution);
 				}
 			}
 		}

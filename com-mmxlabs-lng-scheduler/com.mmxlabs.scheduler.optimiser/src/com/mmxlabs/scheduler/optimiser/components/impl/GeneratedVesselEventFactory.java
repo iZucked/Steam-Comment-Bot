@@ -18,6 +18,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
  * @author Simon Goodall
  *
  */
+@PerChainUnitScope
 public class GeneratedVesselEventFactory {
 
 	@NonNull
