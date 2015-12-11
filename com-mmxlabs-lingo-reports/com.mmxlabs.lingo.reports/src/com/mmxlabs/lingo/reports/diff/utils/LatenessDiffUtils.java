@@ -12,7 +12,7 @@ import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 public class LatenessDiffUtils {
 
 	protected static boolean filter(final Event e) {
-		return LatenessUtils.isLate(e);
+		return LatenessUtils.isLateExcludingFlex(e);
 	}
 
 	public static String checkSlotAllocationForLateness(SlotAllocation nonReference, SlotAllocation reference) {

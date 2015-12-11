@@ -629,7 +629,7 @@ public class ChangeSetTransformer {
 						if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
 							final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
 							pnl += cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
-							lateness += ChangeSetUtils.getLateness(cargoAllocation);
+							lateness += ChangeSetUtils.getLatenessExcludingFlex(cargoAllocation);
 							violations += ChangeSetUtils.getCapacityViolationCount(cargoAllocation);
 						}
 					}
@@ -659,7 +659,7 @@ public class ChangeSetTransformer {
 						}
 						if (groupProfitAndLoss instanceof CargoAllocation) {
 							CargoAllocation cargoAllocation = (CargoAllocation) groupProfitAndLoss;
-							lateness += ChangeSetUtils.getLateness(cargoAllocation);
+							lateness += ChangeSetUtils.getLatenessExcludingFlex(cargoAllocation);
 							violations += ChangeSetUtils.getCapacityViolationCount(cargoAllocation);
 						}
 					}
@@ -672,7 +672,7 @@ public class ChangeSetTransformer {
 						}
 						if (groupProfitAndLoss instanceof CargoAllocation) {
 							CargoAllocation cargoAllocation = (CargoAllocation) groupProfitAndLoss;
-							lateness -= ChangeSetUtils.getLateness(cargoAllocation);
+							lateness -= ChangeSetUtils.getLatenessExcludingFlex(cargoAllocation);
 							violations -= ChangeSetUtils.getCapacityViolationCount(cargoAllocation);
 						}
 					}

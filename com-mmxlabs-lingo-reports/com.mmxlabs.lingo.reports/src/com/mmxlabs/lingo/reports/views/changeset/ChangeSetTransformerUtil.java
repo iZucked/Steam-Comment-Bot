@@ -42,6 +42,7 @@ import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
@@ -85,25 +86,25 @@ public final class ChangeSetTransformerUtil {
 			} else {
 				final String rowName = getRowName(loadSlot);
 				// String rowName = getRowName(loadSlot);
-//				if (loadSlot instanceof SpotSlot) {
-////					if (lhsRowMap.containsKey("market-" + loadSlot.getName())) {
-////						row = lhsRowMap.get("market-" + loadSlot.getName());
-////					} else {
-//						row = ChangesetFactory.eINSTANCE.createChangeSetRow();
-//						rows.add(row);
-//						row.setLhsName(rowName);
-//						row.setLoadSlot(loadSlot);
-//						lhsRowMap.put(rowKey, row);
-//						lhsRowMap.put("market-" + loadSlot.getName(), row);
-////					}
-//				} else {
+				// if (loadSlot instanceof SpotSlot) {
+				//// if (lhsRowMap.containsKey("market-" + loadSlot.getName())) {
+				//// row = lhsRowMap.get("market-" + loadSlot.getName());
+				//// } else {
+				// row = ChangesetFactory.eINSTANCE.createChangeSetRow();
+				// rows.add(row);
+				// row.setLhsName(rowName);
+				// row.setLoadSlot(loadSlot);
+				// lhsRowMap.put(rowKey, row);
+				// lhsRowMap.put("market-" + loadSlot.getName(), row);
+				//// }
+				// } else {
 
-					row = ChangesetFactory.eINSTANCE.createChangeSetRow();
-					rows.add(row);
-					row.setLhsName(rowName);
-					row.setLoadSlot(loadSlot);
-					lhsRowMap.put(rowKey, row);
-//				}
+				row = ChangesetFactory.eINSTANCE.createChangeSetRow();
+				rows.add(row);
+				row.setLhsName(rowName);
+				row.setLoadSlot(loadSlot);
+				lhsRowMap.put(rowKey, row);
+				// }
 			}
 		}
 
@@ -135,9 +136,9 @@ public final class ChangeSetTransformerUtil {
 				row.setNewDischargeAllocation(slotAllocation);
 				row.setDischargeSlot((DischargeSlot) slotAllocation.getSlot());
 				// FIXME: This can replace an existing entry -- is this ok?
-				if (rhsRowMap.containsKey(otherRowKey)) {
-					System.out.println("Clash " + otherRowKey);
-				}
+				// if (rhsRowMap.containsKey(otherRowKey)) {
+				// System.out.println("Clash " + otherRowKey);
+				// }
 				rhsRowMap.put(otherRowKey, row);
 				{
 					// String rowName = getRowName(slotAllocation.getSlot());
@@ -468,6 +469,11 @@ public final class ChangeSetTransformerUtil {
 		} else if (sequence.isSetVesselAvailability()) {
 			return getName(sequence.getVesselAvailability());
 		} else {
+			if (sequence.getSequenceType() == SequenceType.DES_PURCHASE) {
+				return "";
+			} else if (sequence.getSequenceType() == SequenceType.FOB_SALE) {
+				return "";
+			}
 			return sequence.getName();
 		}
 	}
@@ -569,8 +575,8 @@ public final class ChangeSetTransformerUtil {
 				a = ChangeSetUtils.getCapacityViolationCount(row.getOriginalEventGrouping());
 				b = ChangeSetUtils.getCapacityViolationCount(row.getNewEventGrouping());
 				if (a == b) {
-					a = ChangeSetUtils.getLateness(row.getOriginalEventGrouping());
-					b = ChangeSetUtils.getLateness(row.getNewEventGrouping());
+					a = ChangeSetUtils.getLatenessExcludingFlex(row.getOriginalEventGrouping());
+					b = ChangeSetUtils.getLatenessExcludingFlex(row.getNewEventGrouping());
 					if (a == b) {
 						itr.remove();
 						continue;
@@ -667,7 +673,7 @@ public final class ChangeSetTransformerUtil {
 							if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
 								final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
 								pnl += cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
-								lateness += ChangeSetUtils.getLateness(cargoAllocation);
+								lateness += ChangeSetUtils.getLatenessExcludingFlex(cargoAllocation);
 								violations += ChangeSetUtils.getCapacityViolationCount(cargoAllocation);
 							}
 						}
@@ -696,7 +702,7 @@ public final class ChangeSetTransformerUtil {
 							if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
 								final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
 								pnl -= cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
-								lateness -= ChangeSetUtils.getLateness(cargoAllocation);
+								lateness -= ChangeSetUtils.getLatenessExcludingFlex(cargoAllocation);
 								violations -= ChangeSetUtils.getCapacityViolationCount(cargoAllocation);
 							}
 						}
@@ -735,14 +741,19 @@ public final class ChangeSetTransformerUtil {
 			}
 		}
 		for (final Map.Entry<ChangeSetRow, ChangeSetRow> e : headToTails.entrySet()) {
-			if (merge(e.getKey(), e.getValue())) {
+			if (mergeSpotSales(e.getKey(), e.getValue())) {
+				rows.remove(e.getValue());
+			}
+		}
+		for (final Map.Entry<ChangeSetRow, ChangeSetRow> e : headToTails.entrySet()) {
+			if (mergeSpotPurchases(e.getKey(), e.getValue())) {
 				rows.remove(e.getValue());
 			}
 		}
 
 	}
 
-	private static boolean merge(@Nullable final ChangeSetRow head, @Nullable final ChangeSetRow tail) {
+	private static boolean mergeSpotSales(@Nullable final ChangeSetRow head, @Nullable final ChangeSetRow tail) {
 
 		assert head != tail;
 		if (head == null || !(head.getDischargeSlot() instanceof SpotSlot)) {
@@ -754,7 +765,40 @@ public final class ChangeSetTransformerUtil {
 
 		if (head.getRhsName() != null && head.getRhsName().equals(tail.getRhsName())) {
 			final ChangeSetRow lhsWiringLink = tail.getLhsWiringLink();
-			// head.setLhsWiringLink(lhsWiringLink);
+			head.setLhsWiringLink(lhsWiringLink);
+			return true;
+		}
+		return false;
+	}
+
+	private static boolean mergeSpotPurchases(@Nullable final ChangeSetRow head, @Nullable final ChangeSetRow tail) {
+
+		assert head != tail;
+		if (head == null || !(head.getLoadSlot() instanceof SpotSlot)) {
+			return false;
+		}
+		if (tail == null || !(tail.getLoadSlot() instanceof SpotSlot)) {
+			return false;
+		}
+
+		if (head.getLhsName() != null && head.getLhsName().equals(tail.getLhsName())) {
+
+			if (head.getNewDischargeAllocation() == null && tail.getOriginalDischargeAllocation() == null) {
+
+			}
+
+			final ChangeSetRow lhsWiringLink = tail.getLhsWiringLink();
+			head.setLhsWiringLink(lhsWiringLink);
+
+			// Copy data across - not needed for sales as that should already have happened. However all data is keyed off the load, hence extra work here
+			head.setNewDischargeAllocation(tail.getNewDischargeAllocation());
+			head.setNewEventGrouping(tail.getNewEventGrouping());
+			head.setNewGroupProfitAndLoss(tail.getNewGroupProfitAndLoss());
+			head.setNewLoadAllocation(tail.getNewLoadAllocation());
+			head.setNewVesselName(tail.getNewVesselName());
+			head.setRhsName(tail.getRhsName());
+			head.setDischargeSlot(tail.getDischargeSlot());
+
 			return true;
 		}
 		return false;

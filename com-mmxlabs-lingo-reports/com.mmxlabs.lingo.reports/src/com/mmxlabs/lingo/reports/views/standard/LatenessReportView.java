@@ -73,6 +73,33 @@ public class LatenessReportView extends EMFReportView {
 				return super.getComparable(object);
 			}
 		});
+		addColumn("flex", "Within Flex", ColumnType.NORMAL, new BaseFormatter() {
+			@Override
+			public String render(final Object object) {
+
+				if (object instanceof PortVisit) {
+					final PortVisit slotVisit = (PortVisit) object;
+					if (LatenessUtils.isLateAfterFlex(slotVisit) != LatenessUtils.isLateExcludingFlex(slotVisit)) {
+						return "Flex";
+					}
+				}
+
+				return "";
+			}
+
+			@Override
+			public Comparable<?> getComparable(final Object object) {
+
+				if (object instanceof PortVisit) {
+					final PortVisit slotVisit = (PortVisit) object;
+					if (LatenessUtils.isLateAfterFlex(slotVisit) != LatenessUtils.isLateExcludingFlex(slotVisit)) {
+						return "Flex";
+					}
+				}
+
+				return "";
+			}
+		});
 
 		addColumn("startby", "Start by", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
@@ -141,7 +168,7 @@ public class LatenessReportView extends EMFReportView {
 		return new ScheduledEventCollector() {
 
 			@Override
-			public void beginCollecting(boolean pinDiffMode) {
+			public void beginCollecting(final boolean pinDiffMode) {
 				clearPinModeData();
 				super.beginCollecting(pinDiffMode);
 			}
@@ -162,7 +189,7 @@ public class LatenessReportView extends EMFReportView {
 
 			@Override
 			protected boolean filter(final Event e) {
-				return LatenessUtils.isLate(e);
+				return LatenessUtils.isLateExcludingFlex(e);
 			}
 
 			@Override

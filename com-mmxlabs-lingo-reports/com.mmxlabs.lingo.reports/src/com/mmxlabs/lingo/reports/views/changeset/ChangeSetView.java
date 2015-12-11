@@ -78,6 +78,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.EventGrouping;
+import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -231,7 +232,7 @@ public class ChangeSetView implements IAdaptable {
 			diagram.setChangeSetRoot(newRoot);
 			viewer.setInput(newRoot);
 			// Release after creating the new one so we increment reference counts before decrementing, which could cause a scenario unload/load cycle
-			ChangeSetRoot oldRoot = ChangeSetView.this.root;
+			final ChangeSetRoot oldRoot = ChangeSetView.this.root;
 			ChangeSetView.this.root = newRoot;
 			cleanUp(oldRoot);
 		}
@@ -249,9 +250,9 @@ public class ChangeSetView implements IAdaptable {
 		@Override
 		public void onPreScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
 			boolean linkedScenario = false;
-			ChangeSetRoot root = view.root;
+			final ChangeSetRoot root = view.root;
 			if (root != null) {
-				for (ChangeSet cs : root.getChangeSets()) {
+				for (final ChangeSet cs : root.getChangeSets()) {
 					if (scenarioInstance == cs.getBaseScenario()) {
 						linkedScenario = true;
 					} else if (scenarioInstance == cs.getCurrentScenario()) {
@@ -278,9 +279,9 @@ public class ChangeSetView implements IAdaptable {
 		public void onPreScenarioInstanceDelete(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
 			if (scenarioInstance == this.scenarioInstance) {
 				boolean linkedScenario = false;
-				ChangeSetRoot root = view.root;
+				final ChangeSetRoot root = view.root;
 				if (root != null) {
-					for (ChangeSet cs : root.getChangeSets()) {
+					for (final ChangeSet cs : root.getChangeSets()) {
 						if (scenarioInstance == cs.getBaseScenario()) {
 							linkedScenario = true;
 						} else if (scenarioInstance == cs.getCurrentScenario()) {
@@ -346,7 +347,7 @@ public class ChangeSetView implements IAdaptable {
 		final FontData fontData = systemFont.getFontData()[0];
 		boldFont = new Font(Display.getDefault(), new FontData(fontData.getName(), fontData.getHeight(), SWT.BOLD));
 		// Create table
-		viewer = new GridTreeViewer(parent, SWT.V_SCROLL | SWT.H_SCROLL);
+		viewer = new GridTreeViewer(parent, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 		ColumnViewerToolTipSupport.enableFor(viewer, ToolTip.RECREATE);
 
 		viewer.getGrid().setHeaderVisible(true);
@@ -718,11 +719,34 @@ public class ChangeSetView implements IAdaptable {
 					if (element instanceof ChangeSetRow) {
 						final ChangeSetRow row = (ChangeSetRow) element;
 						if (!row.isWiringChange() && !row.isVesselChange()) {
-							return false;
+
+							long delta = getPNL(row.getNewGroupProfitAndLoss()) - getPNL(row.getOriginalGroupProfitAndLoss());
+							long totalPNLDelta = 0;
+							if (parentElement instanceof ChangeSet) {
+								final ChangeSet changeSet = (ChangeSet) parentElement;
+								totalPNLDelta = changeSet.getMetricsToPrevious().getPnlDelta();
+							}
+							if (Math.abs(delta) < 250_000L) {
+								// Exclude if less than 10% of PNL change.
+								if ((ChangeSetView.this.viewMode == ViewMode.COMPARE) || (double) Math.abs(delta) / (double) Math.abs(totalPNLDelta) < 0.1) {
+									return false;
+								}
+							}
 						}
 					}
 				}
 				return true;
+			}
+
+			private long getPNL(@Nullable final ProfitAndLossContainer c) {
+				if (c != null) {
+					final GroupProfitAndLoss gpl = c.getGroupProfitAndLoss();
+					if (gpl != null) {
+						return gpl.getProfitAndLoss();
+					}
+				}
+
+				return 0L;
 			}
 		};
 		viewer.setFilters(filters);
@@ -972,6 +996,69 @@ public class ChangeSetView implements IAdaptable {
 		return new CellLabelProvider() {
 
 			@Override
+			public String getToolTipText(final Object element) {
+				if (element instanceof ChangeSetRow) {
+					final ChangeSetRow change = (ChangeSetRow) element;
+
+					long originalLateWithFlex = 0;
+					long originalLateWithoutFlex = 0;
+					{
+						final EventGrouping eventGrouping = change.getOriginalEventGrouping();
+						if (eventGrouping != null) {
+							originalLateWithFlex = ChangeSetUtils.getLatenessAfterFlex(eventGrouping);
+							originalLateWithoutFlex = ChangeSetUtils.getLatenessExcludingFlex(eventGrouping);
+						}
+					}
+					long newLatenessWithFlex = 0;
+					long newLatenessWithoutFlex = 0;
+					{
+						final EventGrouping eventGrouping = change.getNewEventGrouping();
+						if (eventGrouping != null) {
+							newLatenessWithFlex = ChangeSetUtils.getLatenessAfterFlex(eventGrouping);
+							newLatenessWithoutFlex = ChangeSetUtils.getLatenessExcludingFlex(eventGrouping);
+						}
+					}
+
+					// No lateness
+					if (originalLateWithoutFlex == 0 && newLatenessWithoutFlex == 0) {
+						return null;
+					}
+
+					final boolean originalInFlex = originalLateWithoutFlex > 0 && originalLateWithFlex == 0;
+					final boolean newInFlex = newLatenessWithoutFlex > 0 && newLatenessWithFlex == 0;
+
+					if (originalInFlex != newInFlex) {
+						// Lateness shift between flex and non-flex times.
+						final long delta = newLatenessWithoutFlex - originalLateWithoutFlex;
+						final String flexStr;
+						if (originalLateWithoutFlex == 0) {
+							assert originalInFlex == false;
+							flexStr = "within";
+						} else if (delta > 0) {
+							flexStr = "out of";
+						} else {
+							flexStr = "within";
+						}
+						// CHECK -- IF Original was zero, then we have moved into the felx time.
+						return String.format("Lateness %s by %d days, %d hours %s flex time", delta > 0 ? "increased" : "decreased", Math.abs(delta) / 24, Math.abs(delta) % 24, flexStr);
+					}
+					if (!originalInFlex) {
+						// if (originalLateWithoutFlex > 0 && newLatenessWithoutFlex > 0) {
+						final long delta = newLatenessWithoutFlex - originalLateWithoutFlex;
+						return String.format("Lateness %s by %d days, %d hours", delta > 0 ? "increased" : "decreased", Math.abs(delta) / 24, Math.abs(delta) % 24);
+						// }
+					} else {
+						// if (originalLateWithoutFlex > 0 && newLatenessWithoutFlex > 0) {
+						final long delta = newLatenessWithoutFlex - originalLateWithoutFlex;
+						return String.format("Lateness (within flex time) %s by %d days, %d hours", delta > 0 ? "increased" : "decreased", Math.abs(delta) / 24, Math.abs(delta) % 24);
+						// }
+					}
+
+				}
+				return null;
+			}
+
+			@Override
 			public void update(final ViewerCell cell) {
 				final Object element = cell.getElement();
 				cell.setText("");
@@ -1001,35 +1088,56 @@ public class ChangeSetView implements IAdaptable {
 				if (element instanceof ChangeSetRow) {
 					final ChangeSetRow change = (ChangeSetRow) element;
 
-					Number f = null;
+					long originalLateWithFlex = 0;
+					long originalLateWithoutFlex = 0;
 					{
 						final EventGrouping eventGrouping = change.getOriginalEventGrouping();
 						if (eventGrouping != null) {
-							f = ChangeSetUtils.getLateness(eventGrouping);
+							originalLateWithFlex = ChangeSetUtils.getLatenessAfterFlex(eventGrouping);
+							originalLateWithoutFlex = ChangeSetUtils.getLatenessExcludingFlex(eventGrouping);
 						}
 					}
-					Number t = null;
+					long newLatenessWithFlex = 0;
+					long newLatenessWithoutFlex = 0;
 					{
 						final EventGrouping eventGrouping = change.getNewEventGrouping();
 						if (eventGrouping != null) {
-							t = ChangeSetUtils.getLateness(eventGrouping);
+
+							newLatenessWithFlex = ChangeSetUtils.getLatenessAfterFlex(eventGrouping);
+							newLatenessWithoutFlex = ChangeSetUtils.getLatenessExcludingFlex(eventGrouping);
 						}
 					}
-					int delta = 0;
-					if (f != null) {
-						delta -= f.intValue();
-					}
-					if (t != null) {
-						delta += t.intValue();
-					}
-					delta = (int) Math.round((double) delta / 24.0);
-					if (delta != 0) {
-						cell.setText(String.format("%s %d", delta < 0 ? "↓" : "↑", Math.abs(delta)));
-					}
 
+					final boolean originalInFlex = originalLateWithoutFlex > 0 && originalLateWithFlex == 0;
+					final boolean newInFlex = newLatenessWithoutFlex > 0 && newLatenessWithFlex == 0;
+
+					String flexStr = "";
+					if (originalInFlex != newInFlex) {
+						// Lateness shift between flex and non-flex times.
+						final long delta = newLatenessWithoutFlex - originalLateWithoutFlex;
+						if (originalLateWithoutFlex == 0) {
+							assert originalInFlex == false;
+							flexStr = " *";
+						} else if (delta > 0) {
+							flexStr = "";
+						} else {
+							flexStr = " *";
+						}
+					}
+					long delta = 0L;
+					delta -= originalLateWithoutFlex;
+					delta += newLatenessWithoutFlex;
+					long originalDelta = delta;
+					delta = (int) Math.round((double) delta / 24.0);
+					if (delta != 0L) {
+						cell.setText(String.format("%s %d%s", delta < 0 ? "↓" : "↑", Math.abs(delta), flexStr));
+					} else if (originalDelta != 0L) {
+						cell.setText(String.format("%s %s%s", originalDelta < 0 ? "↓" : "↑", "<1", flexStr));
+					}
 				}
 			}
 		};
+
 	}
 
 	private CellLabelProvider createViolationsDeltaLabelProvider() {
@@ -1372,7 +1480,7 @@ public class ChangeSetView implements IAdaptable {
 		diagram.setChangeSetRoot(newRoot);
 		ViewerHelper.setInput(viewer, true, newRoot);
 
-		ChangeSetRoot oldRoot = ChangeSetView.this.root;
+		final ChangeSetRoot oldRoot = ChangeSetView.this.root;
 		ChangeSetView.this.root = newRoot;
 		cleanUp(oldRoot);
 	}
@@ -1492,6 +1600,12 @@ public class ChangeSetView implements IAdaptable {
 			listenerMap.clear();
 		}
 
+		cleanUpVesselColumns();
+		if (vesselColumnGroup != null && !vesselColumnGroup.isDisposed()) {
+			vesselColumnGroup.dispose();
+
+		}
+
 		if (boldFont != null) {
 			boldFont.dispose();
 			boldFont = null;
@@ -1581,9 +1695,11 @@ public class ChangeSetView implements IAdaptable {
 
 	@Inject
 	@Optional
-	private void handleShowStructuralChangesToggle(@UIEventTopic(ChangeSetViewEventConstants.EVENT_TOGGLE_FILTER_NON_STRUCTURAL_CHANGES) final Object o) {
-		showNonStructuralChanges = !showNonStructuralChanges;
-		ViewerHelper.refresh(viewer, true);
+	private void handleShowStructuralChangesToggle(@UIEventTopic(ChangeSetViewEventConstants.EVENT_TOGGLE_FILTER_NON_STRUCTURAL_CHANGES) final MPart activePart) {
+		if (activePart.getObject() == this) {
+			showNonStructuralChanges = !showNonStructuralChanges;
+			ViewerHelper.refresh(viewer, true);
+		}
 	}
 
 	@Inject

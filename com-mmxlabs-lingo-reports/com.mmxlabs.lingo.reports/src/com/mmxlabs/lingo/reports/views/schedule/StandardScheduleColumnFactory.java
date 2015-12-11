@@ -451,7 +451,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 							diagram = new ScheduledTradesWiringDiagram(grid, column);
 							diagram.setTable(table);
 							// Link the the sort state
-//							diagram.setSortData((SortData) report.getAdapter(SortData.class));
+							// diagram.setSortData((SortData) report.getAdapter(SortData.class));
 							return column;
 						}
 					}) {
@@ -463,6 +463,14 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 					}, false);
 				}
 			});
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.load-notes":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Purchase Notes", "The notes for the load slot", ColumnType.NORMAL, Formatters.objectFormatter,
+					loadAllocationRef, s.getSlotAllocation_Slot(), c.getSlot_Notes()));
+			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.discharge-notes":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Sale Notes", "The notes for the discharge slot", ColumnType.NORMAL,
+					Formatters.objectFormatter, dischargeAllocationRef, s.getSlotAllocation_Slot(), c.getSlot_Notes()));
 			break;
 		}
 	}
