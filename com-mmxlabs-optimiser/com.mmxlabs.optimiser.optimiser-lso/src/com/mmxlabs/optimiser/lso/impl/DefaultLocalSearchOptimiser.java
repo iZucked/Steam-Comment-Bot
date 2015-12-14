@@ -275,7 +275,6 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		}
 
 		// Prime fitness cores with initial sequences
-		getFitnessEvaluator().setOptimisationData(data);
 		getFitnessEvaluator().setInitialSequences(currentRawSequences, fullSequences, evaluationState);
 	}
 

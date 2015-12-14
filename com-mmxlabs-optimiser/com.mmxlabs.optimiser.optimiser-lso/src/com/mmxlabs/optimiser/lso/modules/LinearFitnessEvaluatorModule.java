@@ -54,33 +54,27 @@ public class LinearFitnessEvaluatorModule extends AbstractModule {
 	@Provides
 	@Singleton
 	private IFitnessEvaluator createFitnessEvaluator(@NonNull final Injector injector, @NonNull final IThresholder thresholder, @NonNull final InstrumentingMoveGenerator img,
-			@NonNull final List<IFitnessComponent> fitnessComponents, 	@NonNull final List<IEvaluationProcess> evaluationProcesses) {
+			@NonNull final List<IFitnessComponent> fitnessComponents, @NonNull final List<IEvaluationProcess> evaluationProcesses) {
 		// create a linear Fitness evaluator.
 
-//		final Injector injectorToUse;
-//		if (LocalSearchOptimiserModule.instrumenting) {
-//			final IThresholder instrumentingThresholder = new InstrumentingThresholder(thresholder, img);
-//			injector.
-//			injectorToUse = injector.createChildInjector(new AbstractModule() {
-//				@Override
-//				protected void configure() {
-//					bind(IThresholder.class).toInstance(instrumentingThresholder);
-//				}
-//			});
-//		} else {
-//			injectorToUse = injector;
-//		}
+		// final Injector injectorToUse;
+		// if (LocalSearchOptimiserModule.instrumenting) {
+		// final IThresholder instrumentingThresholder = new InstrumentingThresholder(thresholder, img);
+		// injector.
+		// injectorToUse = injector.createChildInjector(new AbstractModule() {
+		// @Override
+		// protected void configure() {
+		// bind(IThresholder.class).toInstance(instrumentingThresholder);
+		// }
+		// });
+		// } else {
+		// injectorToUse = injector;
+		// }
 
-		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = new LinearSimulatedAnnealingFitnessEvaluator();
+		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = new LinearSimulatedAnnealingFitnessEvaluator(thresholder, fitnessComponents, evaluationProcesses);
 		injector.injectMembers(fitnessEvaluator);
-		fitnessEvaluator.setThresholder(thresholder);
-		fitnessEvaluator.setFitnessComponents(fitnessComponents);
-		fitnessEvaluator.setEvaluationProcesses(evaluationProcesses);
-
-		fitnessEvaluator.init();
 
 		return fitnessEvaluator;
-
 	}
 
 }

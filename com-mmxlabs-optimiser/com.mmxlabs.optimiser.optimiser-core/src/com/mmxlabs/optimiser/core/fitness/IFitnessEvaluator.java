@@ -8,9 +8,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -19,7 +17,6 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 /**
  * The {@link IFitnessEvaluator} interface defines objects which can be used in an optimisation process to determine whether or not the current fitness is a suitable improvement. The
@@ -43,25 +40,6 @@ public interface IFitnessEvaluator {
 	List<IEvaluationProcess> getEvaluationProcesses();
 
 	/**
-	 * Set the list of {@link IFitnessComponent}s to be used by this {@link IFitnessEvaluator}. Note these {@link IFitnessComponent}s instances should not be elsewhere while using this object.
-	 * 
-	 * @param fitnessComponents
-	 */
-	void setFitnessComponents(@NonNull List<IFitnessComponent> fitnessComponents);
-
-	/**
-	 * Initialise {@link IFitnessEvaluator} and ensure all the relevant setters have been called.
-	 */
-	void init();
-
-	/**
-	 * Initialise the {@link IFitnessEvaluator} with {@link IOptimisationData} object. This should be called once at the beginning of an optimisation process.
-	 * 
-	 * @param data
-	 */
-	void setOptimisationData(@NonNull IOptimisationData data);
-
-	/**
 	 * Set the initial sequences. These should have had any manipulation from {@link ISequencesManipulator} already applied.
 	 * 
 	 * @param sequences
@@ -83,7 +61,7 @@ public interface IFitnessEvaluator {
 	 * 
 	 * @return
 	 */
-	@Nullable
+	@NonNull
 	Triple<ISequences, ISequences, IEvaluationState> getBestSequences();
 
 	/**
@@ -99,7 +77,7 @@ public interface IFitnessEvaluator {
 	 * @return
 	 */
 
-	@Nullable
+	@NonNull
 	Triple<ISequences, ISequences, IEvaluationState> getCurrentSequences();
 
 	/**
@@ -122,7 +100,7 @@ public interface IFitnessEvaluator {
 	 * @param context
 	 * @return
 	 */
-	@Nullable
+	@NonNull
 	IAnnotatedSolution getBestAnnotatedSolution(@NonNull final IOptimisationContext context);
 
 	/**
@@ -131,10 +109,11 @@ public interface IFitnessEvaluator {
 	 * @param context
 	 * @return
 	 */
-	@Nullable
+	@NonNull
 	IAnnotatedSolution getCurrentAnnotatedSolution(@NonNull final IOptimisationContext context);
 
-	public IAnnotatedSolution createAnnotatedSolution(final IOptimisationContext context, ISequences fullSequences, IEvaluationState evaluationState);
+	@NonNull
+	IAnnotatedSolution createAnnotatedSolution(final @NonNull IOptimisationContext context, @NonNull ISequences fullSequences, @NonNull IEvaluationState evaluationState);
 
 	void step();
 
