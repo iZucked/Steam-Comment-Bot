@@ -9,8 +9,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Provides;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
@@ -45,7 +49,7 @@ import com.mmxlabs.optimiser.lso.movegenerators.impl.RandomMoveGenerator;
  */
 public final class GeneralTestUtils {
 
-	public static IMoveGenerator createRandomMoveGenerator(final Random random) {
+	public static IMoveGenerator createRandomMoveGenerator(@NonNull final Random random) {
 		final RandomMoveGenerator moveGenerator = new RandomMoveGenerator();
 		moveGenerator.setRandom(random);
 
@@ -61,7 +65,7 @@ public final class GeneralTestUtils {
 	}
 
 	public static LinearSimulatedAnnealingFitnessEvaluator createLinearSAFitnessEvaluator(final int stepSize, final int numIterations, final List<IFitnessComponent> fitnessComponents,
-			final List<IEvaluationProcess> evaluationProcesses) {
+			@NonNull final List<IEvaluationProcess> evaluationProcesses) {
 		final Map<String, Double> weightsMap = new HashMap<String, Double>();
 		for (final IFitnessComponent component : fitnessComponents) {
 			weightsMap.put(component.getName(), 1.0);
@@ -78,17 +82,12 @@ public final class GeneralTestUtils {
 		thresholder.setInitialThreshold(initialThreshold);
 
 		final FitnessHelper fitnessHelper = new FitnessHelper();
-		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = createFitnessEvaluatorInstance(combiner, thresholder, fitnessHelper);
-		fitnessEvaluator.setThresholder(thresholder);
-		fitnessEvaluator.setFitnessComponents(fitnessComponents);
-		fitnessEvaluator.setEvaluationProcesses(evaluationProcesses);
-
-		fitnessEvaluator.init();
+		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = createFitnessEvaluatorInstance(combiner, thresholder, fitnessHelper, fitnessComponents, evaluationProcesses);
 
 		return fitnessEvaluator;
 	}
 
-	public static LocalSearchOptimiser buildOptimiser(final IOptimisationContext context, final Random random, final int numberOfIterations, final int stepSize,
+	public static LocalSearchOptimiser buildOptimiser(@NonNull final IOptimisationContext context, @NonNull final Random random, final int numberOfIterations, final int stepSize,
 			final IOptimiserProgressMonitor monitor) {
 
 		final EvaluationProcessInstantiator evaluationProcessInstantiator = new EvaluationProcessInstantiator();
@@ -123,7 +122,7 @@ public final class GeneralTestUtils {
 		return lso;
 	}
 
-	private static LinearSimulatedAnnealingFitnessEvaluator createFitnessEvaluatorInstance(final IFitnessCombiner fitnessCombiner, final IThresholder thresholder, final IFitnessHelper fitnessHelper) {
+	private static LinearSimulatedAnnealingFitnessEvaluator createFitnessEvaluatorInstance(@NonNull final IFitnessCombiner fitnessCombiner, @NonNull final IThresholder thresholder, @NonNull final IFitnessHelper fitnessHelper, @NonNull final List<IFitnessComponent> fitnessComponents, @NonNull final List<IEvaluationProcess> evaluationProcesses) {
 		return Guice.createInjector(new AbstractModule() {
 
 			@Override
@@ -131,8 +130,15 @@ public final class GeneralTestUtils {
 				bind(IFitnessCombiner.class).toInstance(fitnessCombiner);
 				bind(IThresholder.class).toInstance(thresholder);
 				bind(IFitnessHelper.class).toInstance(fitnessHelper);
-
 			}
+
+			@Provides
+			LinearSimulatedAnnealingFitnessEvaluator providerFitnessEvaluator(@NonNull final Injector injector) {
+				final LinearSimulatedAnnealingFitnessEvaluator evaluator = new LinearSimulatedAnnealingFitnessEvaluator(thresholder, fitnessComponents, evaluationProcesses);
+				injector.injectMembers(evaluator);
+				return evaluator;
+			}
+
 		}).getInstance(LinearSimulatedAnnealingFitnessEvaluator.class);
 	}
 
