@@ -5,8 +5,11 @@
 package com.mmxlabs.common.csv;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
+
+import org.eclipse.jdt.annotation.Nullable;
 
 /**
  * CSV reader; could easily delegate to spring batch or something.
@@ -16,8 +19,7 @@ import java.net.URL;
  */
 public class FileCSVReader extends CSVReader {
 
-	private final String base;
-	private final String filename;
+	private @Nullable String fileName;
 
 	public FileCSVReader(final File file) throws IOException {
 		this(file, ',');
@@ -26,33 +28,29 @@ public class FileCSVReader extends CSVReader {
 	/**
 	 */
 	public FileCSVReader(final File file, final char separator) throws IOException {
-		this(file.toURI().toString().substring(0, file.toURI().toString().lastIndexOf("/")), file.toURI().toString(), separator);
-	}
-
-	public FileCSVReader(final String base, final String inputFileName) throws IOException {
-		this(base, inputFileName, ',');
+		super(separator, new FileInputStream(file));
+		this.fileName = file.getCanonicalPath();
 	}
 
 	/**
 	 * @param inputFileName
 	 * @throws IOException
 	 */
-	public FileCSVReader(final String base, final String inputFileName, final char separator) throws IOException {
-		super(separator, new URL(inputFileName).openStream());
-		this.base = base;
-		filename = inputFileName;
-
-	}
-
-	public FileCSVReader getAdjacentReader(final String pathFragment) throws IOException {
-		return new FileCSVReader(base, base + File.separator + pathFragment, getSeparator());
+	public FileCSVReader(final URL url) throws IOException {
+		this(url, ',');
 	}
 
 	/**
-	 * @return
+	 * @param inputFileName
+	 * @throws IOException
 	 */
-	public String getFileName() {
-		return filename;
+	public FileCSVReader(final URL url, final char separator) throws IOException {
+		super(separator, url.openStream());
+		this.fileName = url.toString();
 	}
 
+	@Nullable
+	public String getFileName() {
+		return fileName;
+	}
 }
