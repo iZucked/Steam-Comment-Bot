@@ -15,9 +15,15 @@ import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.ops4j.peaberry.Peaberry;
+import org.ops4j.peaberry.eclipse.EclipseRegistry;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.mmxlabs.models.migration.IClientMigrationUnit;
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.migration.IMigrationUnit;
@@ -29,6 +35,7 @@ import com.mmxlabs.models.migration.extensions.DefaultMigrationContextExtensionP
 import com.mmxlabs.models.migration.extensions.MigrationContextExtensionPoint;
 import com.mmxlabs.models.migration.extensions.MigrationUnitExtensionExtensionPoint;
 import com.mmxlabs.models.migration.extensions.MigrationUnitExtensionPoint;
+import com.mmxlabs.models.migration.internal.MigrationActivationModule;
 
 /**
  * An implementation of {@link IMigrationRegistry} populated by extensions points.
@@ -51,6 +58,13 @@ public class MigrationRegistry implements IMigrationRegistry {
 	private final Map<IClientMigrationUnit, String> clientMigrationExtPointIDMap = new HashMap<>();
 	private String defaultClientContext;
 
+	
+	public void activate() {
+		final BundleContext bc = FrameworkUtil.getBundle(MigrationRegistry.class).getBundleContext();
+		final Injector inj = Guice.createInjector(Peaberry.osgiModule(bc, EclipseRegistry.eclipseRegistry()), new MigrationActivationModule());
+		inj.injectMembers(this);
+	}
+	
 	/**
 	 * Initialise the registry with the initial set of migration units and contexts. There should be a single defaultMigrationContext
 	 * 
