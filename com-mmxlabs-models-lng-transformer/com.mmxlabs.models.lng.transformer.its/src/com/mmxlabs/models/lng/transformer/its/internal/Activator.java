@@ -17,6 +17,8 @@ import com.google.inject.Injector;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerITSOptimiserInjectorService;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModesRegistry;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.impl.ParameterModesExtensionModule;
+import com.mmxlabs.models.util.importer.registry.ExtensionConfigurationModule;
+import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 /**
@@ -31,6 +33,9 @@ public class Activator extends AbstractUIPlugin {
 	private static Activator plugin;
 
 	private ServiceRegistration<?> reg;
+
+	@Inject
+	private IImporterRegistry importerRegistry;
 
 	@Inject
 	private Export<IParameterModesRegistry> parameterModesRegistry;
@@ -54,7 +59,7 @@ public class Activator extends AbstractUIPlugin {
 
 		reg = context.registerService(new String[] { IOptimiserInjectorService.class.getCanonicalName() }, new TransformerITSOptimiserInjectorService(), null);
 		// Bind our module together with the hooks to the eclipse registry to get plugin extensions.
-		final Injector inj = Guice.createInjector(Peaberry.osgiModule(context, EclipseRegistry.eclipseRegistry()), new ParameterModesExtensionModule());
+		final Injector inj = Guice.createInjector(Peaberry.osgiModule(context, EclipseRegistry.eclipseRegistry()), new ParameterModesExtensionModule(), new ExtensionConfigurationModule(null));
 		inj.injectMembers(this);
 
 	}
@@ -82,7 +87,11 @@ public class Activator extends AbstractUIPlugin {
 	public static Activator getDefault() {
 		return plugin;
 	}
-	
+
+	public IImporterRegistry getImporterRegistry() {
+		return importerRegistry;
+	}
+
 	public IParameterModesRegistry getParameterModesRegistry() {
 		return parameterModesRegistry.get();
 	}
