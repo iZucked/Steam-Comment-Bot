@@ -48,7 +48,6 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.chain.IMultiStateResult;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
-import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.migration.scenario.MigrationHelper;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -198,7 +197,7 @@ public class AbstractOptimisationResultTester {
 		return scenarioRunner;
 	}
 
-	public LNGScenarioRunner runScenarioWithGCO(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL) throws IOException, IncompleteScenarioException {
+	public LNGScenarioRunner runScenarioWithGCO(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL) throws IOException {
 
 		OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
 		optimiserSettings = LNGScenarioRunnerCreator.createExtendedSettings(optimiserSettings);
