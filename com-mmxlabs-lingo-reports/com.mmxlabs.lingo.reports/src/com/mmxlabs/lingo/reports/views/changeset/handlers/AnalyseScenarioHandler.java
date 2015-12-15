@@ -23,6 +23,10 @@ import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.WorkbenchException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.views.changeset.ChangeSetViewEventConstants;
@@ -30,6 +34,8 @@ import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class AnalyseScenarioHandler {
+
+	private static final Logger LOG = LoggerFactory.getLogger(AnalyseScenarioHandler.class);
 
 	@Inject
 	private IEventBroker eventBroker;
@@ -90,10 +96,21 @@ public class AnalyseScenarioHandler {
 			return;
 		}
 		// Switch perspective
+		boolean foundPerspective = false;
 		final List<MPerspective> perspectives = modelService.findElements(application, null, MPerspective.class, null);
 		for (final MPerspective p : perspectives) {
 			if (p.getElementId().equals("com.mmxlabs.lingo.reports.diff.DiffPerspective")) {
 				partService.switchPerspective(p);
+				foundPerspective = true;
+				break;
+			}
+		}
+		if (!foundPerspective) {
+			// Fallback to eclipse 3.x API to open perspective
+			try {
+				PlatformUI.getWorkbench().showPerspective("com.mmxlabs.lingo.reports.diff.DiffPerspective", PlatformUI.getWorkbench().getActiveWorkbenchWindow());
+			} catch (final WorkbenchException e) {
+				LOG.error("Unable to open compare perspective", e);
 			}
 		}
 

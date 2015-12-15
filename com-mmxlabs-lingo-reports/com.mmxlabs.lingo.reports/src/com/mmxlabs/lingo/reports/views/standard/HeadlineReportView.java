@@ -167,7 +167,7 @@ public class HeadlineReportView extends ViewPart {
 							rowElements.add(pPinnedData);
 							pPinnedData = null;
 						} else {
-							rowElements.add(new RowData("", null, null, null, null, null, null, null, null, null, null));
+							rowElements.add(new RowData("", null, null, null, null, null, null, null, null, null, null, null));
 						}
 					}
 
@@ -198,7 +198,7 @@ public class HeadlineReportView extends ViewPart {
 			case VALUE_GCO_REVENUE:
 				return d.gcoRevenue;
 			case VALUE_LATENESS:
-				return d.lateness;
+				return d.latenessExcludingFlex;
 			case VALUE_PNL:
 				return d.totalPNL;
 			case VALUE_SHIPPING:
@@ -211,6 +211,14 @@ public class HeadlineReportView extends ViewPart {
 				break;
 
 			}
+			return null;
+		}
+
+		@Override
+		public String getToolTipText(final Object obj) {
+
+			// TODO: Lateness tooltip -- needs per column label provider
+
 			return null;
 		}
 
@@ -230,7 +238,30 @@ public class HeadlineReportView extends ViewPart {
 					final Long dValue = getValue(d, columnDefinition);
 					final Long pinValue = getValue(pinD, columnDefinition);
 					final Long rtn = (dValue != null ? dValue - (pinD != null ? pinValue : 0) : null);
-					return format(rtn, columnDefinition.getFormatType());
+
+					String suffix = "";
+					if (columnDefinition == ColumnDefinition.VALUE_LATENESS) {
+
+						if (pinD == null) {
+							if (d.latenessExcludingFlex != null && d.latenessIncludingFlex != null) {
+								suffix = " *";
+							}
+						} else {
+							long a = 0;
+							if (d.latenessExcludingFlex != null && d.latenessIncludingFlex != null) {
+								a = d.latenessExcludingFlex - d.latenessIncludingFlex;
+							}
+							long b = 0;
+							if (pinD.latenessExcludingFlex != null && pinD.latenessIncludingFlex != null) {
+								b = pinD.latenessExcludingFlex - pinD.latenessIncludingFlex;
+							}
+							if (a != b) {
+								suffix = " *";
+							}
+						}
+					}
+
+					return format(rtn, columnDefinition.getFormatType()) + suffix;
 				}
 			}
 			return "";
@@ -306,7 +337,7 @@ public class HeadlineReportView extends ViewPart {
 					if (pinD == null) {
 						color = SWT.COLOR_BLACK;
 					} else {
-						color = (d.lateness - pinD.lateness) > 0 ? SWT.COLOR_RED : SWT.COLOR_DARK_GREEN;
+						color = (d.latenessExcludingFlex - pinD.latenessExcludingFlex) > 0 ? SWT.COLOR_RED : SWT.COLOR_DARK_GREEN;
 					}
 					break;
 				default:

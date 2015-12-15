@@ -268,7 +268,7 @@ public class ActionSetTransformer {
 								throw new RuntimeException("Complex cargoes are not supported");
 							}
 							if (ChangeSetTransformerUtil.createOrUpdateSlotVisitRow(lhsRowMap, rhsRowMap, lhsRowMarketMap, rhsRowMarketMap, rows, slotVisit2,
-									(LoadSlot) slotVisit2.getSlotAllocation().getSlot(), false, true)) {
+									(LoadSlot) slotVisit2.getSlotAllocation().getSlot(), false, canDefer)) {
 								deferredElements.add(element);
 							}
 						}
@@ -284,7 +284,12 @@ public class ActionSetTransformer {
 				}
 			} else if (element instanceof Event) {
 				final Event event = (Event) element;
-				ChangeSetTransformerUtil.createOrUpdateEventRow(lhsRowMap, rhsRowMap, rows, event, false);
+				for (final EObject e : equivalents) {
+					if (e instanceof Event) {
+						final Event event2 = (Event) e;
+						ChangeSetTransformerUtil.createOrUpdateEventRow(lhsRowMap, rhsRowMap, rows, event2, false);
+					}
+				}
 			}
 		}
 		return deferredElements;

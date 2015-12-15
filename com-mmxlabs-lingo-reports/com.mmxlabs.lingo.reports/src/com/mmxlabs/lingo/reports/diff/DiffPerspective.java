@@ -58,8 +58,8 @@ public class DiffPerspective implements IPerspectiveFactory {
 		layout.addShowViewShortcut("com.mmxlabs.lingo.reports.views.changeset.ChangeSetView");
 		layout.addShowViewShortcut("com.mmxlabs.lingo.reports.views.changeset.ActionSetView");
 
-		layout.addPerspectiveShortcut("com.mmxlabs.shiplingo.platform.app.perspective.editing");
-		layout.addPerspectiveShortcut("com.mmxlabs.shiplingo.platform.app.perspective.analysis");
+		layout.addPerspectiveShortcut("com.mmxlabs.lingo.app.perspective.editing");
+		layout.addPerspectiveShortcut("com.mmxlabs.lingo.app.perspective.analysis");
 
 	}
 
