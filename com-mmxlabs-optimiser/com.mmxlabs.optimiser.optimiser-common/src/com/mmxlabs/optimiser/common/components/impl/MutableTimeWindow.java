@@ -22,9 +22,13 @@ public final class MutableTimeWindow implements ITimeWindow {
 
 	}
 
-	public MutableTimeWindow(final int start, final int end) {
+	public MutableTimeWindow(final int start, final int end, final int endFlex) {
 		this.start = start;
 		this.end = end;
+		this.endFlex = endFlex;
+	}
+	public MutableTimeWindow(final int start, final int end) {
+		this(start, end, 0);
 	}
 
 	@Override
@@ -50,7 +54,7 @@ public final class MutableTimeWindow implements ITimeWindow {
 		return endFlex;
 	}
 	
-	public void setEndFlex(int endFlex) {
+	public void setEndFlex(final int endFlex) {
 		this.endFlex = endFlex;
 	}
 

@@ -17,6 +17,9 @@ public class ArbitraryStateLocalSearchOptimiser extends DefaultLocalSearchOptimi
 	@Override
 	public IAnnotatedSolution start(@NonNull final IOptimisationContext optimiserContext, @NonNull ISequences initialSequences) {
 		setCurrentContext(optimiserContext);
+
+		initLogger();
+
 		data = optimiserContext.getOptimisationData();
 
 		final ModifiableSequences currentRawSequences = new ModifiableSequences(initialSequences);
@@ -54,33 +57,33 @@ public class ArbitraryStateLocalSearchOptimiser extends DefaultLocalSearchOptimi
 		// do nothing
 	}
 
-	@Override
-	public int getNumberOfMovesTried() {
-		// adding on previous values for logs
-		return numberOfMovesTried + (loggingDataStore != null ? loggingDataStore.getNumberOfMovesTried() : 0);
-	}
-	
-	@Override
-	public int getNumberOfMovesAccepted() {
-		// adding on previous values for logs
-		return numberOfMovesAccepted + (loggingDataStore != null ? loggingDataStore.getNumberOfMovesAccepted() : 0);
-	}
-
-	@Override
-	public int getNumberOfRejectedMoves() {
-		// adding on previous values for logs
-		return numberOfRejectedMoves + (loggingDataStore != null ? loggingDataStore.getNumberOfRejectedMoves() : 0);
-	}
-
-	@Override
-	public int getNumberOfFailedEvaluations() {
-		// adding on previous values for logs
-		return numberOfFailedEvaluations + (loggingDataStore != null ? loggingDataStore.getNumberOfFailedEvaluations() : 0);
-	}
-
-	@Override
-	public int getNumberOfFailedToValidate() {
-		// adding on previous values for logs
-		return numberOfFailedToValidate + (loggingDataStore != null ? loggingDataStore.getNumberOfFailedToValidate() : 0);
-	}
+//	@Override
+//	public int getNumberOfMovesTried() {
+//		// adding on previous values for logs
+//		return numberOfMovesTried + (loggingDataStore != null ? loggingDataStore.getNumberOfMovesTried() : 0);
+//	}
+//	
+//	@Override
+//	public int getNumberOfMovesAccepted() {
+//		// adding on previous values for logs
+//		return numberOfMovesAccepted + (loggingDataStore != null ? loggingDataStore.getNumberOfMovesAccepted() : 0);
+//	}
+//
+//	@Override
+//	public int getNumberOfRejectedMoves() {
+//		// adding on previous values for logs
+//		return numberOfRejectedMoves + (loggingDataStore != null ? loggingDataStore.getNumberOfRejectedMoves() : 0);
+//	}
+//
+//	@Override
+//	public int getNumberOfFailedEvaluations() {
+//		// adding on previous values for logs
+//		return numberOfFailedEvaluations + (loggingDataStore != null ? loggingDataStore.getNumberOfFailedEvaluations() : 0);
+//	}
+//
+//	@Override
+//	public int getNumberOfFailedToValidate() {
+//		// adding on previous values for logs
+//		return numberOfFailedToValidate + (loggingDataStore != null ? loggingDataStore.getNumberOfFailedToValidate() : 0);
+//	}
 }
