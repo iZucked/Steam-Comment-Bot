@@ -224,7 +224,7 @@ public class AbstractOptimisationResultTester {
 
 	public static void optimiseScenario(@NonNull final LNGScenarioRunner scenarioRunner, @NonNull final URL origURL, @NonNull final String propertiesSuffix) throws IOException {
 
-		final Schedule intialSchedule = scenarioRunner.getIntialSchedule();
+		final Schedule intialSchedule = scenarioRunner.getSchedule();
 		Assert.assertNotNull(intialSchedule);
 
 		final EList<Fitness> currentOriginalFitnesses = intialSchedule.getFitnesses();

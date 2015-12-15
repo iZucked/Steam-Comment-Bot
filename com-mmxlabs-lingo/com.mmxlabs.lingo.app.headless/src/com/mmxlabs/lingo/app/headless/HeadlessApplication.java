@@ -202,7 +202,7 @@ public class HeadlessApplication implements IApplication {
 		runner.run();
 
 		final long runTime = System.currentTimeMillis() - startTime;
-		final Schedule finalSchedule = runner.getFinalSchedule();
+		final Schedule finalSchedule = runner.getSchedule();
 		if (finalSchedule == null) {
 			System.err.println("Error optimising scenario");
 		}
