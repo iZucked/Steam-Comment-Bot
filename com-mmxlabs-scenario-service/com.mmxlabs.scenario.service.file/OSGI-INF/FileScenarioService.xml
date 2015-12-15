@@ -11,6 +11,6 @@
       <provide interface="com.mmxlabs.scenario.service.IScenarioService"/>
    </service>
    <property name="com.mmxlabs.scenario.service.file.model" type="String" value="/scenario-service/file-service-model.xmi"/>
-   <reference bind="setScenarioMigrationService" cardinality="1..1" interface="com.mmxlabs.scenario.service.IScenarioMigrationService" name="IScenarioMigratdynamicvice" policy="static"/>
-   <reference bind="setScenarioCipherProvider" cardinality="0..1" interface="com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider" name="IScenarioCiphdynamicider" policy="dynamic"/>
+   <reference bind="setScenarioMigrationService" cardinality="1..1" interface="com.mmxlabs.scenario.service.IScenarioMigrationService" name="IScenarioMigrationService" policy="static"/>
+   <reference bind="setScenarioCipherProvider" cardinality="0..1" interface="com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider" name="IScenarioCipherProvider" policy="dynamic"/>
 </scr:component>

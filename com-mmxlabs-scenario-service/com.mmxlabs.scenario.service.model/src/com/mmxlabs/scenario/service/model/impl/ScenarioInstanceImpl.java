@@ -829,8 +829,11 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 */
 	public synchronized ModelReference getReference() {
 
-		ModelReference modelReference = ScenarioServiceFactory.eINSTANCE.createModelReference();
-		modelReference.setScenarioInstance(this);
+		final ModelReference modelReference = ScenarioServiceFactory.eINSTANCE.createModelReference();
+		synchronized (this.getModelReferences()) {
+			// Concurrent calls to ModelReference#setScenarioInstance can lead to issues in the references list of the scenario instance, thus we "lock" the scenario instance reference list.
+			modelReference.setScenarioInstance(this);
+		}
 
 		return modelReference;
 	}
