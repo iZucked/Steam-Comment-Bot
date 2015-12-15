@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.lingo.its.tests;
 
+import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -253,7 +255,6 @@ public class AbstractOptimisationResultTester {
 			}
 		}
 
-
 		if (!result.getSolutions().isEmpty()) {
 			int i = 0;
 			for (final NonNullPair<ISequences, Map<String, Object>> p : result.getSolutions()) {
@@ -270,17 +271,8 @@ public class AbstractOptimisationResultTester {
 				}
 			}
 
-			if (storeFitnessMap) {
-				try {
-					final URL expectedReportOutput = new URL(FileLocator.toFileURL(origURL).toString().replaceAll(" ", "%20") + propertiesSuffix);
-					final File file2 = new File(expectedReportOutput.toURI());
-					TesterUtil.saveProperties(props, file2);
-				} catch (final URISyntaxException e) {
-					e.printStackTrace();
-				}
-			}
 		}
-		
+
 		// Check final optimised result
 		{
 			final List<Fitness> currentEndFitnesses = TesterUtil.getFitnessFromExtraAnnotations(result.getBestSolution().getSecond());
@@ -289,6 +281,17 @@ public class AbstractOptimisationResultTester {
 			} else {
 				// Assert old and new are equal
 				TesterUtil.testOriginalAndCurrentFitnesses(props, endFitnessesMapName, currentEndFitnesses);
+			}
+		}
+
+		if (storeFitnessMap) {
+			try {
+				final URL expectedReportOutput = new URL(FileLocator.toFileURL(origURL).toString().replaceAll(" ", "%20") + propertiesSuffix);
+				final File file2 = new File(expectedReportOutput.toURI());
+				TesterUtil.saveProperties(props, file2);
+			} catch (final URISyntaxException e) {
+				e.printStackTrace();
+				Assert.fail();
 			}
 		}
 	}
