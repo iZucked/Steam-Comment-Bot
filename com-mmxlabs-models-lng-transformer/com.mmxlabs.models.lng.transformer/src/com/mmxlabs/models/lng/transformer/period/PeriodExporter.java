@@ -168,7 +168,9 @@ public class PeriodExporter {
 				cmd.append(SetCommand.create(editingDomain, oldCargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, newCargo.getSequenceHint()));
 
 				if (vesselAssignmentType instanceof CharterInMarket) {
-					cmd.append(SetCommand.create(editingDomain, oldCargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, newCargo.getSpotIndex()));
+
+					final int spotIndex = mapping.getSpotCharterInMappingFromPeriod((CharterInMarket) vesselAssignmentType, newCargo.getSpotIndex());
+					cmd.append(SetCommand.create(editingDomain, oldCargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, spotIndex));
 				} else {
 					cmd.append(SetCommand.create(editingDomain, oldCargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
 				}

@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.management.timer.Timer;
 
@@ -156,7 +155,12 @@ public class LNGScenarioRunner {
 				doActionSetPostOptimisation = true;
 			}
 		}
-		doHillClimb = LicenseFeatures.isPermitted("features:optimisation-hillclimb");
+		final boolean hillClimberPermitted = LicenseFeatures.isPermitted("features:optimisation-hillclimb");
+		if (hillClimberPermitted) {
+			doHillClimb = (this.optimiserSettings.getSolutionImprovementSettings() != null && this.optimiserSettings.getSolutionImprovementSettings().isImprovingSolutions());
+		} else {
+			doHillClimb = false;
+		}
 
 		optimiserScenario = originalScenario;
 		optimiserEditingDomain = originalEditingDomain;
@@ -238,7 +242,12 @@ public class LNGScenarioRunner {
 
 		final IAnnotatedSolution startSolution;
 		final IOptimisationContext pContext = this.context;
+		IRunnerHook pRunnerHook = runnerHook;
 		if (createOptimiser) {
+			if (pRunnerHook != null) {
+				pRunnerHook.beginPhase(IRunnerHook.PHASE_INITIAL, transformer.getInjector());
+				pRunnerHook.reportSequences(IRunnerHook.PHASE_INITIAL, transformer.getEvaluationContext().getInitialSequences());
+			}
 			// Pin variable for null analysis
 			assert pContext != null;
 			startSolution = optimiser.start(pContext, pContext.getInitialSequences());
@@ -246,10 +255,6 @@ public class LNGScenarioRunner {
 			startSolution = LNGSchedulerJobUtils.evaluateCurrentState(transformer);
 		}
 
-		IRunnerHook pRunnerHook = runnerHook;
-		if (pRunnerHook != null) {
-			pRunnerHook.reportSequences(IRunnerHook.PHASE_INITIAL, transformer.getEvaluationContext().getInitialSequences());
-		}
 
 		initialSchedule = overwrite(0, transformer.getEvaluationContext().getInitialSequences(), LNGSchedulerJobUtils.extractOptimisationAnnotations(startSolution));
 		final LocalSearchOptimiser pOptimiser = this.optimiser;
@@ -260,6 +265,10 @@ public class LNGScenarioRunner {
 
 			} finally {
 			}
+		}
+
+		if (pRunnerHook != null) {
+			pRunnerHook.endPhase(IRunnerHook.PHASE_INITIAL);
 		}
 		return initialSchedule;
 	}
@@ -532,7 +541,7 @@ public class LNGScenarioRunner {
 	}
 
 	@Nullable
-	public Injector getInjector() {
+	private Injector getInjector() {
 		return injector;
 	}
 
@@ -659,19 +668,19 @@ public class LNGScenarioRunner {
 						log.error("Unable to store changeset scenario: " + e.getMessage(), e);
 					}
 				}
-
-				// If we are keeping the best result, then update the field and do not execute the undo commands
+				//
+				// // If we are keeping the best result, then update the field and do not execute the undo commands
 				if (keepFinalResult && breakdownSolution.get(breakdownSolution.size() - 1) == changeSet) {
 					this.finalSchedule = copy.getScheduleModel().getSchedule();
-				} else {
-					// Reset state
-					if (periodMapping != null) {
-						LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, 100);
-						LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
-					} else {
-						LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
-					}
 				}
+				// // Reset state
+				// if (periodMapping != null) {
+				// LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, 100);
+				// LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
+				// } else {
+				// LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
+				// }
+				// }
 
 				progressMonitor.worked(1);
 			}
@@ -695,7 +704,7 @@ public class LNGScenarioRunner {
 
 		IMultiStateResult bestResult = null;
 
-		IRunnerHook pRunnerHook = runnerHook;
+		final IRunnerHook pRunnerHook = runnerHook;
 		try {
 			// Main Optimisation Loop
 			{
@@ -721,6 +730,9 @@ public class LNGScenarioRunner {
 			LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
 
 			if (doActionSetPostOptimisation) {
+				if (pRunnerHook != null) {
+					pRunnerHook.beginPhase(IRunnerHook.PHASE_ACTION_SETS, getInjector());
+				}
 				if (bestResult == null) {
 					log.error("No existing state - unable to find action sets");
 				} else {
@@ -736,18 +748,21 @@ public class LNGScenarioRunner {
 					final List<NonNullPair<ISequences, Map<String, Object>>> breakdownSolution = instance.getBestSolution();
 					if (breakdownSolution != null) {
 						bestResult = storeBreakdownSolutionsAsForks(breakdownSolution, foundBetterResult, new SubProgressMonitor(progressMonitor, PROGRESS_ACTION_SET_SAVE));
-						exportOptimiserSolution = !foundBetterResult;
+						// exportOptimiserSolution = !foundBetterResult;
 					}
 					// The breakdown optimiser may find a better solution. This will be saved in storeBreakdownSolutionsAsForks
-					if (exportOptimiserSolution) {
-						// export final state
-						finalSchedule = overwrite(100, bestResult.getBestSolution().getFirst(), bestResult.getBestSolution().getSecond());
-					}
+					// if (exportOptimiserSolution) {
+					// export final state
+					finalSchedule = overwrite(100, bestResult.getBestSolution().getFirst(), bestResult.getBestSolution().getSecond());
+					// }
 
 					if (pRunnerHook != null) {
 						// List<ISequences> actionSetRawSequences = bestResult.getSolutions().stream().map(t -> t.getFirst()).collect(Collectors.toList());
 						pRunnerHook.reportSequences(IRunnerHook.PHASE_ACTION_SETS, bestResult.getBestSolution().getFirst() /* , actionSetRawSequences */);
 					}
+				}
+				if (pRunnerHook != null) {
+					pRunnerHook.endPhase(IRunnerHook.PHASE_ACTION_SETS);
 				}
 			} else {
 				assert bestResult != null;
@@ -785,9 +800,9 @@ public class LNGScenarioRunner {
 		return null;
 	}
 
-	private IMultiStateResult performLSOOptimisation(LocalSearchOptimiser lsoOptimiser, final IProgressMonitor progressMonitor/* , final ISequences bestRawSequences */)
+	private IMultiStateResult performLSOOptimisation(final LocalSearchOptimiser lsoOptimiser, final IProgressMonitor progressMonitor/* , final ISequences bestRawSequences */)
 			throws OperationCanceledException {
-
+		optimiser.start(this.context, this.context.getInitialSequences());
 		while (!lsoOptimiser.isFinished()) {
 			lsoOptimiser.step(1);
 			if (progressMonitor.isCanceled()) {
@@ -810,16 +825,19 @@ public class LNGScenarioRunner {
 		return runnerHook;
 	}
 
-	public void setRunnerHook(IRunnerHook runnerHook) {
+	public void setRunnerHook(final IRunnerHook runnerHook) {
 		this.runnerHook = runnerHook;
 	}
 
-	private IMultiStateResult performPhase(String phase, IProgressMonitor progressMonitor, int phaseTicks, IMultiStateResult bestResult) {
-		IRunnerHook pRunnerHook = runnerHook;
+	private IMultiStateResult performPhase(final String phase, final IProgressMonitor progressMonitor, final int phaseTicks, IMultiStateResult bestResult) {
+		final IRunnerHook pRunnerHook = runnerHook;
 
 		ISequences preloadedResult = null;
 		if (pRunnerHook != null) {
-			preloadedResult = pRunnerHook.getSequences(phase);
+			pRunnerHook.beginPhase(phase, getInjector());
+		}
+		if (pRunnerHook != null) {
+			preloadedResult = pRunnerHook.getPrestoredSequences(phase);
 		}
 		if (preloadedResult == null) {
 			switch (phase) {
@@ -844,6 +862,9 @@ public class LNGScenarioRunner {
 		} else {
 			bestResult = new MultiStateResult(preloadedResult, new HashMap<>());
 			preloadedResult = null;
+		}
+		if (pRunnerHook != null) {
+			pRunnerHook.endPhase(phase);
 		}
 		return bestResult;
 	}

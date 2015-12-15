@@ -445,7 +445,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 			}
 		}
 
-		final int expectedHeelRolledOver = vesselAvailability.getStartHeel().getVolumeAvailable() - legLNG[0];
+		final int expectedHeelRolledOver = (int) vesselAvailability.getStartHeel().getVolumeAvailable() - legLNG[0];
 		final int totalLNGUsed = legLNG[1] + legLNG[2];
 
 		final int vesselCapacity = (int) (msc.vessel.getVesselOrVesselClassCapacity() * msc.vessel.getVesselOrVesselClassFillCapacity());
@@ -540,7 +540,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		// at first discharge, retain 530m3 (500 min heel plus 30m3 travel fuel) and 40m3 was used to get here
 		// at next load, load back up to full (500 min heel minus 10m3 idle fuel was on board)
 		// at next discharge, retain 515m3 (500 min heel plus 15m3 travel fuel) and 40m3 was used to get here
-		final int startheel = vesselAvailability.getStartHeel().getVolumeAvailable();
+		final int startheel = (int) vesselAvailability.getStartHeel().getVolumeAvailable();
 		final int orphanHeel = startheel - legLNG[0];
 		final int firstLoad = 10000 - orphanHeel; // No start event heel rollover
 		final int firstDischarge = firstLoad + orphanHeel - (legLNG[1] + legLNG[2]) - msc.vc.getMinHeel();
@@ -633,7 +633,7 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 			}
 		}
 
-		final int startheel = vesselAvailability.getStartHeel().getVolumeAvailable();
+		final int startheel = (int) vesselAvailability.getStartHeel().getVolumeAvailable();
 		final int orphanHeel = startheel - legLNG[0];
 		final int firstLoad = 10000 - orphanHeel;
 		// No safety heel

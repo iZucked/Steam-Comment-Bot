@@ -37,7 +37,7 @@ public class ForkAndStartEditorActionDelegate extends StartOptimisationEditorAct
 			try {
 				ScenarioInstance fork = ScenarioServiceModelUtils.createAndOpenFork(instance, true);
 				if (fork != null) {
-					OptimisationHelper.evaluateScenarioInstance(jobManager, fork, parameterMode, promptForOptimiserSettings, optimising, k);
+					OptimisationHelper.evaluateScenarioInstance(jobManager, fork, parameterMode, promptForOptimiserSettings, optimising, k, !optimising);
 				}
 			} catch (final IOException e) {
 				throw new RuntimeException("Unable to fork scenario", e);
