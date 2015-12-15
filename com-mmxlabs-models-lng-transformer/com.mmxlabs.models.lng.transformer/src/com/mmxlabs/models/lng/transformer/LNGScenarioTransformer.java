@@ -264,6 +264,9 @@ public class LNGScenarioTransformer {
 	private final Map<VesselClass, List<IVesselAvailability>> spotVesselAvailabilitiesByClass = new HashMap<>();
 
 	@NonNull
+	private final Map<NonNullPair<CharterInMarket, Integer>, IVesselAvailability> spotCharterInToAvailability = new HashMap<>();
+
+	@NonNull
 	private final List<IVesselAvailability> allVesselAvailabilities = new ArrayList<IVesselAvailability>();
 
 	@NonNull
@@ -746,14 +749,16 @@ public class LNGScenarioTransformer {
 		assignableElements.addAll(rootObject.getCargoModel().getVesselEvents());
 
 		for (final AssignableElement assignableElement : assignableElements) {
+			// Open positions handled by the LockedUnusedElementsConstraintChecker.
+			// TODO: What about FOB/DES cargoes?
 			final VesselAssignmentType vesselAssignmentType = assignableElement.getVesselAssignmentType();
 			if (vesselAssignmentType == null) {
 				continue;
 			}
+
 			final boolean freeze = assignableElement.isLocked();
-			final NonNullPair<Boolean, Set<Slot>> containsLockedSlots = checkAndCollectLockedSlots(assignableElement);
-			final Set<Slot> lockedSlots = containsLockedSlots.getSecond();
-			if (!freeze && !containsLockedSlots.getFirst()) {
+			final Set<Slot> lockedSlots = checkAndCollectLockedSlots(assignableElement);
+			if (!freeze && lockedSlots.isEmpty()) {
 				continue;
 			}
 
@@ -761,6 +766,10 @@ public class LNGScenarioTransformer {
 			if (vesselAssignmentType instanceof VesselAvailability) {
 				final VesselAvailability va = (VesselAvailability) vesselAssignmentType;
 				vesselAvailability = modelEntityMap.getOptimiserObject(va, IVesselAvailability.class);
+			}
+			if (vesselAssignmentType instanceof CharterInMarket) {
+				final NonNullPair<CharterInMarket, Integer> key = new NonNullPair<>((CharterInMarket) vesselAssignmentType, assignableElement.getSpotIndex());
+				vesselAvailability = spotCharterInToAvailability.get(key);
 			}
 
 			if (vesselAvailability == null) {
@@ -794,15 +803,15 @@ public class LNGScenarioTransformer {
 		}
 	}
 
-	private NonNullPair<Boolean, Set<Slot>> checkAndCollectLockedSlots(@NonNull final AssignableElement assignableElement) {
-		final NonNullPair<Boolean, Set<Slot>> lockedSlots = new NonNullPair<Boolean, Set<Slot>>(false, new HashSet<Slot>());
+	@NonNull
+	private Set<Slot> checkAndCollectLockedSlots(@NonNull final AssignableElement assignableElement) {
+		final Set<Slot> lockedSlots = new HashSet<Slot>();
 
 		if (assignableElement instanceof Cargo) {
 			final Cargo cargo = (Cargo) assignableElement;
 			for (final Slot slot : cargo.getSortedSlots()) {
 				if (slot.isLocked()) {
-					lockedSlots.setFirst(true);
-					lockedSlots.getSecond().add(slot);
+					lockedSlots.add(slot);
 				}
 			}
 		}
@@ -2425,7 +2434,18 @@ public class LNGScenarioTransformer {
 					modelEntityMap.addModelObject(charterCost, spotCharterInMarket);
 
 					final List<IVesselAvailability> spots = builder.createSpotVessels("SPOT-" + charterCost.getName(), spotCharterInMarket);
-					spotVesselAvailabilitiesByClass.put(eVesselClass, spots);
+					for (int i = 0; i < spots.size(); ++i) {
+						final NonNullPair<CharterInMarket, Integer> key = new NonNullPair<>(charterCost, i);
+						spotCharterInToAvailability.put(key, spots.get(i));
+					}
+
+					final List<IVesselAvailability> vesselClassAvailabilities = new LinkedList<>();
+					if (spotVesselAvailabilitiesByClass.containsKey(eVesselClass)) {
+						vesselClassAvailabilities.addAll(spotVesselAvailabilitiesByClass.get(eVesselClass));
+					}
+					vesselClassAvailabilities.addAll(spots);
+					spotVesselAvailabilitiesByClass.put(eVesselClass, vesselClassAvailabilities);
+
 					allVesselAvailabilities.addAll(spots);
 				}
 
