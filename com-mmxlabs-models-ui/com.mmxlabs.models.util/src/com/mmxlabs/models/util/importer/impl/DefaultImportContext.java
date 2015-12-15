@@ -18,6 +18,7 @@ import java.util.Stack;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,15 +51,13 @@ public class DefaultImportContext implements IMMXImportContext {
 	}
 
 	@Override
-	public NamedObject getNamedObject(final String name, final EClass preferredType) {
+	public NamedObject getNamedObject(@NonNull final String name, final EClass preferredType) {
 		final List<NamedObject> matches = namedObjects.get(name);
 		if (matches == null) {
 			log.warn("No objects with name " + name + " have been imported");
-			if (name != null) {
-				final String lowerName = name.toLowerCase();
-				if (!lowerName.equals(name)) {
-					return getNamedObject(lowerName, preferredType);
-				}
+			final String lowerName = name.toLowerCase();
+			if (!lowerName.equals(name)) {
+				return getNamedObject(lowerName, preferredType);
 			}
 			return null;
 		}
@@ -293,7 +292,7 @@ public class DefaultImportContext implements IMMXImportContext {
 			final String field = trackField ? (upperField == null ? lowerField : upperField) : null;
 			final String file;
 			if (reader instanceof FileCSVReader) {
-				file = trackFile ? ((FileCSVReader)readerStack.peek()).getFileName() : null;
+				file = trackFile ? ((FileCSVReader) readerStack.peek()).getFileName() : null;
 			} else {
 				file = null;
 			}
