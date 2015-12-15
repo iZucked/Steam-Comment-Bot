@@ -6,20 +6,51 @@ package com.mmxlabs.models.lng.schedule.util;
 
 import java.time.ZonedDateTime;
 
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.PortVisitLateness;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 
 public class LatenessUtils {
 
-	public static boolean isLate(final Event e) {
+	public static boolean isLateExcludingFlex(final Event e) {
 		if (e instanceof PortVisit) {
 			final PortVisitLateness portVisitLateness = ((PortVisit) e).getLateness();
 			if (portVisitLateness != null) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Returns true if it is late, event after considering the Slot flex time. If this returns false and {@link #isLateExcludingFlex(Event)} returns true, then the slot is late,but within the flex
+	 * time.
+	 * 
+	 * @param e
+	 * @return
+	 */
+	public static boolean isLateAfterFlex(final Event e) {
+		if (e instanceof PortVisit) {
+			final PortVisitLateness portVisitLateness = ((PortVisit) e).getLateness();
+			if (portVisitLateness != null) {
+				if (e instanceof SlotVisit) {
+					final SlotVisit slotVisit = (SlotVisit) e;
+					final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
+					if (slotAllocation != null) {
+						final Slot slot = slotAllocation.getSlot();
+						if (slot.getWindowFlex() > 0 && getLatenessInHours(slotVisit) < slot.getWindowFlex()) {
+							return false;
+						}
+					}
+
+				}
+
 				return true;
 			}
 		}

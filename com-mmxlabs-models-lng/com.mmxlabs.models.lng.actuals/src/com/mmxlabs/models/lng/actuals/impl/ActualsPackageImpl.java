@@ -424,6 +424,15 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getCargoActuals__GetSortedActuals() {
+		return cargoActualsEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public EReference getCargoActuals_Actuals() {
 		return (EReference)cargoActualsEClass.getEStructuralFeatures().get(0);
@@ -738,6 +747,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		createEReference(cargoActualsEClass, CARGO_ACTUALS__CARGO);
 		createEAttribute(cargoActualsEClass, CARGO_ACTUALS__BASE_FUEL_PRICE);
 		createEAttribute(cargoActualsEClass, CARGO_ACTUALS__INSURANCE_PREMIUM);
+		createEOperation(cargoActualsEClass, CARGO_ACTUALS___GET_SORTED_ACTUALS);
 
 		loadActualsEClass = createEClass(LOAD_ACTUALS);
 		createEAttribute(loadActualsEClass, LOAD_ACTUALS__CONTRACT_TYPE);
@@ -843,6 +853,8 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		initEAttribute(getCargoActuals_BaseFuelPrice(), ecorePackage.getEDouble(), "baseFuelPrice", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCargoActuals_InsurancePremium(), ecorePackage.getEInt(), "insurancePremium", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEOperation(getCargoActuals__GetSortedActuals(), ecorePackage.getEObject(), "getSortedActuals", 0, -1, IS_UNIQUE, IS_ORDERED);
+
 		initEClass(loadActualsEClass, LoadActuals.class, "LoadActuals", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getLoadActuals_ContractType(), ecorePackage.getEString(), "contractType", null, 0, 1, LoadActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getLoadActuals_StartingHeelM3(), ecorePackage.getEDouble(), "startingHeelM3", null, 0, 1, LoadActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -907,7 +919,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		   source, 
 		   new String[] {
 			 "unit", "mmBtu/m\u00b3",
-			 "formatString", "#0.###"
+			 "formatString", "#0.#####"
 		   });	
 		addAnnotation
 		  (getSlotActuals_BaseFuelConsumption(), 

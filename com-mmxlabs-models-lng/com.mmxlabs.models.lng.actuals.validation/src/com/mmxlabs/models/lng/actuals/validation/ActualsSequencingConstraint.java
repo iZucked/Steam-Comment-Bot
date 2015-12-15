@@ -184,7 +184,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 
 							final HeelOptions startHeel = va.getStartHeel();
 							if (loadActuals.getStartingHeelM3() > 0) {
-								if (!startHeel.isSetVolumeAvailable() || Math.abs(loadActuals.getStartingHeelM3() - startHeel.getVolumeAvailable()) > 0.001) {
+								if (!startHeel.isSetVolumeAvailable() || Math.abs(loadActuals.getStartingHeelM3() - startHeel.getVolumeAvailable()) > 0.0005) {
 									final String msg = String.format("Actualised Cargo %s and vessel %s starting heel quantities do not match (%,.3f - %,.3f)", getID(assignment),
 											getVesselName(va.getVessel()), (double) loadActuals.getStartingHeelM3(), (double) startHeel.getVolumeAvailable());
 
@@ -196,7 +196,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 									statuses.add(failure);
 
 								}
-								if (Math.abs(loadActuals.getCV() - startHeel.getCvValue()) > 0.001) {
+								if (Math.abs(loadActuals.getCV() - startHeel.getCvValue()) > 0.0005) {
 									final String msg = String.format("Actualised Cargo %s and vessel %s starting heel CV do not match (%.3f - %.3f)", getID(assignment), getVesselName(va.getVessel()),
 											loadActuals.getCV(), startHeel.getCvValue());
 
@@ -229,7 +229,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 
 					if (prevObject != null && previousElementHasActuals == false && currentElementHasActuals == true) {
 						// Only warn about previous missing actuals if an event.
-						final int status = prevObject instanceof VesselEvent ? IStatus.WARNING : IStatus.ERROR;
+						final int status = /*prevObject instanceof VesselEvent ? IStatus.WARNING : */ IStatus.ERROR;
 
 						final String msg = String.format("Cargo %s is not preceeded by another actualised event.", getID(prevObject));
 
@@ -256,7 +256,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 								statuses.add(failure);
 
 							}
-							if (Math.abs(returnActuals.getEndHeelM3() - loadActuals.getStartingHeelM3()) > 0.001) {
+							if (Math.abs(returnActuals.getEndHeelM3() - loadActuals.getStartingHeelM3()) > 0.0005) {
 								final String message = String.format("Load actuals and previous return actuals %s does not match", "heel in m3");
 								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 								failure.addEObjectAndFeature(loadActuals, ActualsPackage.Literals.LOAD_ACTUALS__STARTING_HEEL_M3);

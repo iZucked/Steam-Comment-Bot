@@ -464,13 +464,22 @@ public interface ActualsPackage extends EPackage {
 	int CARGO_ACTUALS_FEATURE_COUNT = 13;
 
 	/**
+	 * The operation id for the '<em>Get Sorted Actuals</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ACTUALS___GET_SORTED_ACTUALS = 0;
+
+	/**
 	 * The number of operations of the '<em>Cargo Actuals</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ACTUALS_OPERATION_COUNT = 0;
+	int CARGO_ACTUALS_OPERATION_COUNT = 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.actuals.impl.LoadActualsImpl <em>Load Actuals</em>}' class.
@@ -1355,6 +1364,16 @@ public interface ActualsPackage extends EPackage {
 	EAttribute getCargoActuals_InsurancePremium();
 
 	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.actuals.CargoActuals#getSortedActuals() <em>Get Sorted Actuals</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Sorted Actuals</em>' operation.
+	 * @see com.mmxlabs.models.lng.actuals.CargoActuals#getSortedActuals()
+	 * @generated
+	 */
+	EOperation getCargoActuals__GetSortedActuals();
+
+	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.actuals.CargoActuals#getActuals <em>Actuals</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1868,6 +1887,14 @@ public interface ActualsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CARGO_ACTUALS__INSURANCE_PREMIUM = eINSTANCE.getCargoActuals_InsurancePremium();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Sorted Actuals</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CARGO_ACTUALS___GET_SORTED_ACTUALS = eINSTANCE.getCargoActuals__GetSortedActuals();
 
 		/**
 		 * The meta object literal for the '<em><b>Actuals</b></em>' containment reference list feature.
