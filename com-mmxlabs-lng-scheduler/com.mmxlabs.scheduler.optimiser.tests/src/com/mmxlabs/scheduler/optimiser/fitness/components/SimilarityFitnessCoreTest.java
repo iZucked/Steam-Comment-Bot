@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.junit.Assert;
@@ -28,6 +29,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.optimiser.core.impl.Resource;
@@ -74,12 +76,20 @@ public class SimilarityFitnessCoreTest {
 		});
 
 		final Injector injector = Guice.createInjector(new AbstractModule() {
+
+			@Provides
+			@Singleton
+			@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)
+			private ISequences provideInitialSequences() {
+				return sequences;
+			}
+
 			@Provides
 			@Singleton
 			private ISimilarityComponentParameters provideSimilarityComponentParameters() {
 
 				final SimilarityComponentParameters scp = new SimilarityComponentParameters();
-				
+
 				scp.setThreshold(ISimilarityComponentParameters.Interval.LOW, 0);
 				scp.setWeight(ISimilarityComponentParameters.Interval.LOW, 1);
 				scp.setThreshold(ISimilarityComponentParameters.Interval.MEDIUM, 0);
