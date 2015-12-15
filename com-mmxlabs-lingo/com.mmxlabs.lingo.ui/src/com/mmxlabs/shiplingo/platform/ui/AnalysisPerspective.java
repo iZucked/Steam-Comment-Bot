@@ -94,7 +94,7 @@ public class AnalysisPerspective implements IPerspectiveFactory {
 
 		layout.addShowViewShortcut("org.eclipse.pde.runtime.LogView");
 
-		layout.addPerspectiveShortcut("com.mmxlabs.shiplingo.platform.app.perspective.editing");
-		layout.addPerspectiveShortcut("com.mmxlabs.shiplingo.platform.app.perspective.analysis");
+		layout.addPerspectiveShortcut("com.mmxlabs.lingo.app.perspective.editing");
+		layout.addPerspectiveShortcut("com.mmxlabs.lingo.app.perspective.analysis");
 	}
 }

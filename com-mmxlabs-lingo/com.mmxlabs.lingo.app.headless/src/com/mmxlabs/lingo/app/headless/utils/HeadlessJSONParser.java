@@ -29,8 +29,8 @@ import org.json.simple.parser.JSONParser;
 import com.mmxlabs.common.Pair;
 
 public class HeadlessJSONParser {
-	SimpleDateFormat yearMonthFormat = new SimpleDateFormat("YYYY/MM");
-	SimpleDateFormat localDateFormat = new SimpleDateFormat("YYYY/MM/dd");
+	SimpleDateFormat yearMonthFormat = new SimpleDateFormat("yyyy-MM");
+	SimpleDateFormat localDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	public Map<String, Pair<Object, Class<?>>> openFile(String filePath) {
 		JSONParser parser = new JSONParser();
@@ -182,7 +182,7 @@ public class HeadlessJSONParser {
 	}
 
 	YearMonth parseYearMonth(String dateString) {
-		return YearMonth.parse(dateString, DateTimeFormatter.ofPattern("YYYY/MM"));
+		return YearMonth.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM"));
 	}
 
 	boolean matchDate(String input) {
@@ -195,7 +195,7 @@ public class HeadlessJSONParser {
 	}
 
 	LocalDate parseDate(String dateString) {
-		LocalDate dateTime = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("YYYY/MM/dd"));
+		LocalDate dateTime = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		return dateTime;
 	}
 

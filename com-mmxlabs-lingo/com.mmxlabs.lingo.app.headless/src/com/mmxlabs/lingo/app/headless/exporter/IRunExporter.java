@@ -4,16 +4,16 @@
  */
 package com.mmxlabs.lingo.app.headless.exporter;
 
-import java.io.File;
+import java.nio.file.Path;
 
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
+import com.google.inject.Injector;
 import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
 
 public interface IRunExporter extends IOptimiserProgressMonitor {
 
-	void setOutputFile(File output);
+	void setOutputFile(Path folder, String fileNameSuffix);
 
 	void exportData();
 
-	void setScenarioRunner(LNGScenarioRunner scenarioRunner);
+	void setPhase(String phase, Injector injector);
 }

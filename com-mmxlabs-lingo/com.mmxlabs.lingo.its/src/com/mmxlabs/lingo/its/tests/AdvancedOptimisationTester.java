@@ -29,6 +29,7 @@ import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
+import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
 import com.mmxlabs.models.lng.transformer.ui.IRunnerHook;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
@@ -152,7 +153,9 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 			// Skip this for now
 			// DEBUG - Remove
 			Assume.assumeFalse(scenarioURL.contains("FB1808"));
+
 		}
+
 		// Only run full iterations if the flag is set
 		if (limitedIterations) {
 			Assume.assumeTrue(RUN_LIMITED_ITERATION_CASES);
@@ -216,7 +219,7 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 
 		// Optionally use pre-stored sequences state.
 		if (false) {
-			scenarioRunner.setRunnerHook(new IRunnerHook() {
+			scenarioRunner.setRunnerHook(new AbstractRunnerHook() {
 
 				@Override
 				public void reportSequences(String phase, final ISequences rawSequences) {
@@ -233,7 +236,7 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 				}
 
 				@Override
-				public ISequences getSequences(String phase) {
+				public ISequences getPrestoredSequences(String phase) {
 					switch (phase) {
 					case IRunnerHook.PHASE_LSO:
 					case IRunnerHook.PHASE_HILL:
@@ -247,13 +250,12 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 				}
 
 				private void save(final ISequences rawSequences, final String type) {
-					assert false;
 					try {
 						final String suffix = Joiner.on(".").join(components) + "." + type + ".sequences";
 						final URL expectedReportOutput = new URL(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20") + suffix);
 						final File file2 = new File(expectedReportOutput.toURI());
 						try (FileOutputStream fos = new FileOutputStream(file2)) {
-							final Injector injector = scenarioRunner.getInjector();
+//							final Injector injector = scenarioRunner.getInjector();
 							Assert.assertNotNull(injector);
 							SequencesSerialiser.save(injector.getInstance(IOptimisationData.class), rawSequences, fos);
 						}
@@ -268,7 +270,7 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 						final URL expectedReportOutput = new URL(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20") + suffix);
 						final File file2 = new File(expectedReportOutput.toURI());
 						try (FileInputStream fos = new FileInputStream(file2)) {
-							final Injector injector = scenarioRunner.getInjector();
+//							final Injector injector = scenarioRunner.getInjector();
 							Assert.assertNotNull(injector);
 							return SequencesSerialiser.load(injector.getInstance(IOptimisationData.class), fos);
 						}
@@ -278,7 +280,6 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 					}
 					return null;
 				}
-
 			});
 		}
 
