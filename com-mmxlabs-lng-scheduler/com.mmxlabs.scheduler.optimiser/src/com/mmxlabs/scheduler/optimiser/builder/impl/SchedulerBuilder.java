@@ -811,11 +811,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		final ITimeWindow window;
 		if (end == Integer.MIN_VALUE) {
-			final MutableTimeWindow mutableWindow = new MutableTimeWindow(start, end);
+			final MutableTimeWindow mutableWindow = new MutableTimeWindow(start, end, endFlex);
 			openEndDateWindows.add(mutableWindow);
 			window = mutableWindow;
 		} else {
-			window = new TimeWindow(start, end);
+			window = new TimeWindow(start, end, endFlex);
 		}
 
 		if (end > endOfLatestWindow) {

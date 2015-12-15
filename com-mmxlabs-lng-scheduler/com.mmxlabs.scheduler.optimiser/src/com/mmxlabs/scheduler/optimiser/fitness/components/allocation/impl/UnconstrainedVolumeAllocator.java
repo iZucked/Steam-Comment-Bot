@@ -13,6 +13,8 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.util.CargoTypeUtil;
+import com.mmxlabs.scheduler.optimiser.components.util.CargoTypeUtil.DetailedCargoType;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord.AllocationMode;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
@@ -27,6 +29,9 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 
 	@Inject
 	private IActualsDataProvider actualsDataProvider;
+
+	@Inject
+	private CargoTypeUtil cargoTypeUtil;
 
 	/**
 	 * Returns x, capped by y; if x has the special value 0, it is considered undefined and y is returned.
@@ -60,7 +65,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		if (allocationRecord.allocationMode == AllocationMode.Actuals_Transfer) {
 
 			// Second slot - assume the DES Sale
-			IPortSlot salesSlot = allocationRecord.slots.get(1);
+			final IPortSlot salesSlot = allocationRecord.slots.get(1);
 			for (int i = 0; i < slots.size(); i++) {
 				final IPortSlot slot = allocationRecord.slots.get(i);
 				if (actualsDataProvider.hasActuals(slot) == false) {
@@ -97,6 +102,10 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			// * If the next load is actualised, take the heel before loading, otherwise assume safety heel.
 			long usedFuelVolume = 0;
 			IPortSlot lastSlot = null;
+
+			// Pre-process to determine cargo type. Pure FOB or DES has no duration, regardless of actuals
+			final DetailedCargoType detailedCargoType = cargoTypeUtil.getDetailedCargoType(slots);
+			final boolean isFOBOrDES = detailedCargoType == DetailedCargoType.DES_PURCHASE || detailedCargoType == DetailedCargoType.FOB_SALE;
 			for (int i = 0; i < slots.size(); i++) {
 				final IPortSlot slot = allocationRecord.slots.get(i);
 				if (actualsDataProvider.hasActuals(slot) == false) {
@@ -106,8 +115,8 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 				annotation.getSlots().add(slot);
 
 				// Scheduler should have made this happen, but lets make sure here
-				assert allocationRecord.portTimesRecord.getSlotTime(slot) == actualsDataProvider.getArrivalTime(slot);
-				assert allocationRecord.portTimesRecord.getSlotDuration(slot) == actualsDataProvider.getVisitDuration(slot);
+				assert isFOBOrDES || (allocationRecord.portTimesRecord.getSlotTime(slot) == actualsDataProvider.getArrivalTime(slot));
+				assert allocationRecord.portTimesRecord.getSlotDuration(slot) == (isFOBOrDES ? 0 : actualsDataProvider.getVisitDuration(slot));
 				annotation.setSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(slot));
 				annotation.setSlotDuration(slot, allocationRecord.portTimesRecord.getSlotDuration(slot));
 
@@ -167,7 +176,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			// Note: Calculations in MMBTU
 			final long startVolumeInMMBTu;
 			final long vesselCapacityInMMBTu;
-			
+
 			// Convert startVolume and vesselCapacity into MMBTu
 			if (defaultCargoCVValue > 0) {
 				if (allocationRecord.startVolumeInM3 != Long.MAX_VALUE) {
@@ -188,7 +197,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			long transferVolumeMMBTu = availableCargoSpaceMMBTu;
 			long transferVolumeM3 = -1;
 			for (int i = 0; i < slots.size(); ++i) {
-				long newMinTransferVolumeMMBTU = capValueWithZeroDefault(allocationRecord.maxVolumesInMMBtu.get(i), transferVolumeMMBTu);
+				final long newMinTransferVolumeMMBTU = capValueWithZeroDefault(allocationRecord.maxVolumesInMMBtu.get(i), transferVolumeMMBTu);
 				transferVolumeM3 = getUnroundedM3TransferVolume(allocationRecord, slots, transferVolumeMMBTu, transferVolumeM3, i, newMinTransferVolumeMMBTU);
 				transferVolumeMMBTu = newMinTransferVolumeMMBTU;
 			}
@@ -335,8 +344,9 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 	}
 
 	/**
-	 * Checks if the maximum transfer volume in MMBTU has changed, and if so, returns the original M3 volume, if the volume came from
-	 * a slot with input originally set in M3. If not a value of -1 is returned. 
+	 * Checks if the maximum transfer volume in MMBTU has changed, and if so, returns the original M3 volume, if the volume came from a slot with input originally set in M3. If not a value of -1 is
+	 * returned.
+	 * 
 	 * @param allocationRecord
 	 * @param slots
 	 * @param transferVolumeMMBTU
@@ -345,8 +355,8 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 	 * @param newMinTransferVolumeMMBTU
 	 * @return
 	 */
-	private long getUnroundedM3TransferVolume(final AllocationRecord allocationRecord, final List<IPortSlot> slots, long transferVolumeMMBTU, long transferVolumeM3, int slotIdx,
-			long newMinTransferVolumeMMBTU) {
+	private long getUnroundedM3TransferVolume(final AllocationRecord allocationRecord, final List<IPortSlot> slots, final long transferVolumeMMBTU, long transferVolumeM3, final int slotIdx,
+			final long newMinTransferVolumeMMBTU) {
 		if (transferVolumeMMBTU != newMinTransferVolumeMMBTU) {
 			// updating the min transfer volume, avoid rounding errors for M3 volumes
 			if (slots.get(slotIdx) instanceof IDischargeOption) {
@@ -370,13 +380,15 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 
 	/**
 	 * Sets the volume transferred in a non shipped cargo in both M3 and MMBTu
+	 * 
 	 * @param allocationRecord
 	 * @param slots
 	 * @param annotation
 	 * @param transferVolumeMMBTU
 	 * @param transferVolumeM3
 	 */
-	private void setTransferVolume(final AllocationRecord allocationRecord, final List<IPortSlot> slots, final AllocationAnnotation annotation, long transferVolumeMMBTU, long transferVolumeM3) {
+	private void setTransferVolume(final AllocationRecord allocationRecord, final List<IPortSlot> slots, final AllocationAnnotation annotation, final long transferVolumeMMBTU,
+			final long transferVolumeM3) {
 		for (int i = 0; i < slots.size(); ++i) {
 			final IPortSlot slot = slots.get(i);
 			annotation.setSlotVolumeInMMBTu(slot, transferVolumeMMBTU);
