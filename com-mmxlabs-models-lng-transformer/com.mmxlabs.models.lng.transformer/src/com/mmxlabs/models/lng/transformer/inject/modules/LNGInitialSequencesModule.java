@@ -22,7 +22,6 @@ import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.transformer.util.OptimisationTransformer;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;

@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.transformer.ui;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +16,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.swt.internal.win32.SIPINFO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,9 +46,7 @@ import com.mmxlabs.models.lng.transformer.period.PeriodExporter;
 import com.mmxlabs.models.lng.transformer.period.PeriodTransformer;
 import com.mmxlabs.models.lng.transformer.period.ScenarioEntityMapping;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
-import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -224,12 +220,12 @@ public class LNGScenarioToOptimiserBridge {
 	 * Save the sequences in a complete copy of the scenario. Ensure the current scenario is in it's original state (excluding Schedule model and Parameters model changes) -- that is the data model
 	 * still represents the initial solution..
 	 * 
-	 * @param rawSeqences
+	 * @param rawSequences
 	 * @param extraAnnotations
 	 * @return
 	 */
 	@NonNull
-	private LNGScenarioModel exportAsCopy(@NonNull final ISequences rawSeqences, @Nullable final Map<String, Object> extraAnnotations) {
+	private LNGScenarioModel exportAsCopy(@NonNull final ISequences rawSequences, @Nullable final Map<String, Object> extraAnnotations) {
 
 		final EcoreUtil.Copier originalScenarioCopier = new EcoreUtil.Copier();
 		final LNGScenarioModel targetOriginalScenario = (LNGScenarioModel) originalScenarioCopier.copy(originalScenario);
@@ -252,7 +248,7 @@ public class LNGScenarioToOptimiserBridge {
 			final CopiedScenarioEntityMapping copiedPeriodMapping = new CopiedScenarioEntityMapping(pPeriodMapping, originalScenarioCopier, optimiserScenarioCopier);
 			final EditingDomain targetOptimiserEditingDomain = LNGSchedulerJobUtils.createLocalEditingDomain();
 
-			final Pair<Command, Schedule> commandPair = creatExportScheduleCommand(100, rawSeqences, extraAnnotations,
+			final Pair<Command, Schedule> commandPair = creatExportScheduleCommand(100, rawSequences, extraAnnotations,
 
 					targetOptimiserScenario, targetOptimiserEditingDomain, targetOriginalScenario, targetOriginalEditingDomain, copiedOptimiserModelEntityMap, copiedOriginalModelEntityMap,
 					copiedPeriodMapping);
@@ -260,7 +256,7 @@ public class LNGScenarioToOptimiserBridge {
 
 		} else {
 			final CopiedModelEntityMap copiedModelEntityMap = new CopiedModelEntityMap(originalDataTransformer.getModelEntityMap(), originalScenarioCopier);
-			final Pair<Command, Schedule> commandPair = creatExportScheduleCommand(100, rawSeqences, extraAnnotations,
+			final Pair<Command, Schedule> commandPair = creatExportScheduleCommand(100, rawSequences, extraAnnotations,
 
 					targetOriginalScenario, targetOriginalEditingDomain, targetOriginalScenario, targetOriginalEditingDomain, copiedModelEntityMap, copiedModelEntityMap, null);
 			targetOriginalEditingDomain.getCommandStack().execute(commandPair.getFirst());
@@ -280,7 +276,7 @@ public class LNGScenarioToOptimiserBridge {
 	 */
 	private Pair<Command, Schedule> creatExportScheduleCommand(final int currentProgress, @NonNull final ISequences rawSequences, @Nullable final Map<String, Object> extraAnnotations,
 			@NonNull final LNGScenarioModel targetOptimiserScenario, @NonNull final EditingDomain targetOptimiserEditingDomain, @NonNull final LNGScenarioModel targetOriginalScenario,
-			@NonNull final EditingDomain targetOriginalEditingDomain, @NonNull final ModelEntityMap optimiserModelEntityMap, @NonNull final ModelEntityMap originalModelEntityMap,
+			@NonNull final EditingDomain targetOriginalEditingDomain, @NonNull final ModelEntityMap optimiserModelEntityMap, @NonNull final ModelEntityMap the_originalModelEntityMap,
 			@Nullable final IScenarioEntityMapping periodMapping) {
 
 		// Create a "wrapper" to set the user friendly command name for the undo menu
@@ -352,7 +348,8 @@ public class LNGScenarioToOptimiserBridge {
 					final PeriodExporter e = new PeriodExporter();
 					final CompoundCommand part1 = LNGSchedulerJobUtils.createBlankCommand(currentProgress);
 
-					part1.append(e.updateOriginal(targetOptimiserEditingDomain, targetOriginalScenario, targetOptimiserScenario, periodMapping));
+					part1.append(e.updateOriginal(targetOriginalEditingDomain, targetOriginalScenario, targetOptimiserScenario, periodMapping));
+					// part1.append(e.updateOriginal(targetOptimiserEditingDomain, targetOriginalScenario, targetOptimiserScenario, periodMapping));
 					if (part1.canExecute()) {
 						appendAndExecute(part1);
 					} else {
@@ -367,7 +364,15 @@ public class LNGScenarioToOptimiserBridge {
 
 						final Set<String> hints = LNGTransformerHelper.getHints(evalSettings);
 
-						final LNGDataTransformer subTransformer = originalDataTransformer;
+//						final LNGDataTransformer subTransformer = originalDataTransformer;
+						ModelEntityMap originalModelEntityMap = the_originalModelEntityMap;
+						final LNGDataTransformer subTransformer;
+						if (the_originalModelEntityMap instanceof CopiedModelEntityMap) {
+							subTransformer = new LNGDataTransformer(targetOriginalScenario, evalSettings, hints, originalDataTransformer.getModuleServices());
+							originalModelEntityMap = subTransformer.getModelEntityMap();
+						} else {
+							subTransformer = originalDataTransformer;
+						}
 
 						Injector evaluationInjector2;
 						final Collection<IOptimiserInjectorService> services = subTransformer.getModuleServices();
