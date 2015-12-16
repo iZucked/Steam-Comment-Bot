@@ -36,7 +36,7 @@ public interface ISequencesOptimiser extends IOptimiser {
 	 */
 	@NonNull
 	List<IConstraintChecker> getConstraintCheckers();
-	
+
 	/**
 	 * Returns the list of {@link #getConstraintCheckers()} which also implement @link {IReducingContraintChecker}
 	 * 
@@ -64,8 +64,18 @@ public interface ISequencesOptimiser extends IOptimiser {
 	@NonNull
 	ISequencesManipulator getSequenceManipulator();
 
+	/**
+	 * Prepare for optimisation on the given inputs
+	 * 
+	 * @param context
+	 * @param initialRawSequences
+	 *            This is the earliest starting point. In a multiple stage optimisation this is the starting point
+	 * @param inputRawSequences
+	 *            This the solution to optimise. In a multiple stage optimisation this is the result of the previous stage and may be different to the initialRawSequences
+	 * @return
+	 */
 	@Nullable
-	IAnnotatedSolution start(@NonNull IOptimisationContext context, @NonNull ISequences initialSequences);
+	IAnnotatedSolution start(@NonNull IOptimisationContext context, @NonNull final ISequences initialRawSequences, @NonNull final ISequences inputRawSequences);
 
 	@Nullable
 	IAnnotatedSolution getBestSolution();

@@ -34,7 +34,7 @@ public interface IEvaluationContext {
 	 * @return
 	 */
 	@NonNull
-	ISequences getInitialSequences();
+	ISequences getInputSequences();
 
 	/**
 	 * Returns the {@link IEvaluationProcessRegistry} instance to be used to obtain {@link IEvaluationProcess} instances. @see {@link #getEvaluationProcesses()}.

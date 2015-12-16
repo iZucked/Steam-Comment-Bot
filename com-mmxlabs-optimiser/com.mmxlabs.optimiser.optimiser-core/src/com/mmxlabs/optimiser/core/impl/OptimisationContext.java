@@ -67,7 +67,7 @@ public final class OptimisationContext implements IOptimisationContext {
 
 	@Override
 	@NonNull
-	public ISequences getInitialSequences() {
+	public ISequences getInputSequences() {
 		return initialSequences;
 	}
 

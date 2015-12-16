@@ -9,8 +9,8 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.optimiser.core.ISequences;
 
 /**
- * The {@link IInitialSequencesConstraintChecker} is an extended version of an {@link IConstraintChecker}. A {@link IConstraintChecker} which also implements
- * {@link IInitialSequencesConstraintChecker} requires an initial sequence, which it stores as state and uses in constraint checking.
+ * The {@link IInitialSequencesConstraintChecker} is an extended version of an {@link IConstraintChecker}. A {@link IConstraintChecker} which also implements {@link IInitialSequencesConstraintChecker}
+ * requires an initial sequence, which it stores as state and uses in constraint checking.
  * 
  * @author achurchill
  * 
@@ -22,6 +22,6 @@ public interface IInitialSequencesConstraintChecker extends IConstraintChecker {
 	 * 
 	 * @param sequences
 	 */
-	void sequencesAccepted(@NonNull ISequences sequences);
+	void sequencesAccepted(@NonNull ISequences rawSequences, @NonNull ISequences fullSequences);
 
 }

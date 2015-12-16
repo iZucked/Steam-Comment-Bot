@@ -40,7 +40,7 @@ public class GeneticAlgorithmOptimiser extends AbstractSequencesOptimiser implem
 
 	@Override
 	@Nullable
-	public IAnnotatedSolution start(@NonNull final IOptimisationContext optimiserContext, @NonNull ISequences initialSequences) {
+	public IAnnotatedSolution start(@NonNull final IOptimisationContext optimiserContext, @NonNull ISequences initialRawSequences, @NonNull ISequences inputRawSequences) {
 
 		throw new UnsupportedOperationException("Not yet implemented");
 	}

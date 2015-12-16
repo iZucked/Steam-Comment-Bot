@@ -89,7 +89,7 @@ public class LocalSearchOptimiserTest {
 
 		@Override
 		@Nullable
-		public IAnnotatedSolution start(@NonNull final IOptimisationContext context, @NonNull ISequences initialSequences) {
+		public IAnnotatedSolution start(@NonNull final IOptimisationContext context, @NonNull ISequences initialRawSequences, @NonNull ISequences inputRawSequences) {
 			fail("This is not part of the test.");
 			return null;
 		}

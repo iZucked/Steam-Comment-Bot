@@ -65,7 +65,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 	protected boolean DO_SEQUENCE_LOGGING = false;
 
 	@Override
-	public IAnnotatedSolution start(@NonNull final IOptimisationContext optimiserContext, @NonNull final ISequences initialSequences) {
+	public IAnnotatedSolution start(@NonNull final IOptimisationContext optimiserContext, @NonNull final ISequences initialRawSequences, @NonNull final ISequences inputRawSequences) {
 		setCurrentContext(optimiserContext);
 
 		initLogger();
@@ -73,13 +73,17 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		numberOfMovesTried = 0;
 		numberOfMovesAccepted = 0;
 
-		final ModifiableSequences currentRawSequences = new ModifiableSequences(initialSequences);
+		final ModifiableSequences currentRawSequences = new ModifiableSequences(inputRawSequences);
 
 		final ModifiableSequences potentialRawSequences = new ModifiableSequences(currentRawSequences.getResources());
 		updateSequences(currentRawSequences, potentialRawSequences, currentRawSequences.getResources());
 
 		// Evaluate initial sequences
-		evaluateInitialSequences(currentRawSequences);
+		setInitialSequences(initialRawSequences);
+
+		evaluateInputSequences(initialRawSequences);
+
+		evaluateInputSequences(inputRawSequences);
 
 		// Set initial sequences
 		getMoveGenerator().setSequences(potentialRawSequences);
@@ -163,7 +167,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 			// Update potential sequences
 			move.apply(pinnedPotentialRawSequences);
-			String moveName = move.getClass().getName();
+			final String moveName = move.getClass().getName();
 			if (loggingDataStore != null) {
 				loggingDataStore.logAppliedMove(moveName);
 				if (DO_SEQUENCE_LOGGING) {
@@ -254,7 +258,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		return iterationsThisStep;
 	}
 
-	protected void evaluateInitialSequences(final ModifiableSequences currentRawSequences) {
+	protected void evaluateInputSequences(@NonNull final ISequences currentRawSequences) {
 		// Apply sequence manipulators
 		final IModifiableSequences fullSequences = new ModifiableSequences(currentRawSequences);
 		getSequenceManipulator().manipulate(fullSequences);
@@ -266,7 +270,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 		// Prime IInitialSequencesConstraintCheckers with initial state
 		for (final IInitialSequencesConstraintChecker checker : getInitialSequencesConstraintCheckers()) {
-			checker.sequencesAccepted(fullSequences);
+			checker.sequencesAccepted(currentRawSequences, fullSequences);
 		}
 
 		final IEvaluationState evaluationState = new EvaluationState();
@@ -277,6 +281,17 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		// Prime fitness cores with initial sequences
 		getFitnessEvaluator().setOptimisationData(data);
 		getFitnessEvaluator().setInitialSequences(currentRawSequences, fullSequences, evaluationState);
+	}
+
+	protected void setInitialSequences(@NonNull final ISequences initialSequences) {
+		// Apply sequence manipulators
+		final IModifiableSequences fullSequences = new ModifiableSequences(initialSequences);
+		getSequenceManipulator().manipulate(fullSequences);
+
+		// Prime IInitialSequencesConstraintCheckers with initial state
+		for (final IInitialSequencesConstraintChecker checker : getInitialSequencesConstraintCheckers()) {
+			checker.sequencesAccepted(initialSequences, fullSequences);
+		}
 	}
 
 	protected void initProgressLog() {
@@ -299,7 +314,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		return numberOfMovesTried;
 	}
 
-	public void setNumberOfMovesTried(int numberOfMovesTried) {
+	public void setNumberOfMovesTried(final int numberOfMovesTried) {
 		this.numberOfMovesTried = numberOfMovesTried;
 	}
 
@@ -307,7 +322,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		return numberOfMovesAccepted;
 	}
 
-	public void setNumberOfMovesAccepted(int numberOfMovesAccepted) {
+	public void setNumberOfMovesAccepted(final int numberOfMovesAccepted) {
 		this.numberOfMovesAccepted = numberOfMovesAccepted;
 	}
 
@@ -315,7 +330,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		return numberOfRejectedMoves;
 	}
 
-	public void setNumberOfRejectedMoves(int numberOfRejectedMoves) {
+	public void setNumberOfRejectedMoves(final int numberOfRejectedMoves) {
 		this.numberOfRejectedMoves = numberOfRejectedMoves;
 	}
 
@@ -323,7 +338,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		return numberOfFailedEvaluations;
 	}
 
-	public void setNumberOfFailedEvaluations(int numberOfFailedEvaluations) {
+	public void setNumberOfFailedEvaluations(final int numberOfFailedEvaluations) {
 		this.numberOfFailedEvaluations = numberOfFailedEvaluations;
 	}
 
@@ -331,7 +346,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		return numberOfFailedToValidate;
 	}
 
-	public void setNumberOfFailedToValidate(int numberOfFailedToValidate) {
+	public void setNumberOfFailedToValidate(final int numberOfFailedToValidate) {
 		this.numberOfFailedToValidate = numberOfFailedToValidate;
 	}
 
