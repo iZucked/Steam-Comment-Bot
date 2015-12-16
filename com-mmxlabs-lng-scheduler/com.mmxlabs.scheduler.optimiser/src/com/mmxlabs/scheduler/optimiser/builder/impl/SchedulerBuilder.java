@@ -327,7 +327,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Inject
 	@NonNull
 	private ILockedElementsProviderEditor lockedElements;
-	
+
 	@Inject
 	@NonNull
 	private ISpotMarketSlotsProviderEditor spotMarketSlots;

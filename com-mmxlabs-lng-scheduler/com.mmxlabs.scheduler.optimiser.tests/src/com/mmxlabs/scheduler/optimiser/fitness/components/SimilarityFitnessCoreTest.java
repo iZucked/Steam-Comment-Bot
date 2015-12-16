@@ -23,6 +23,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
+import com.google.inject.name.Named;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.CheckingIndexingContext;
 import com.mmxlabs.optimiser.core.IResource;
@@ -81,6 +82,15 @@ public class SimilarityFitnessCoreTest {
 			@Singleton
 			@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)
 			private ISequences provideInitialSequences() {
+				return sequences;
+			}
+
+
+			@Provides
+			@Singleton
+			@Named(OptimiserConstants.SEQUENCE_TYPE_INPUT)
+			private ISequences provideInputSequences() {
+
 				return sequences;
 			}
 

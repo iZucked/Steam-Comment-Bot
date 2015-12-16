@@ -4,16 +4,18 @@
  */
 package com.mmxlabs.scheduler.optimiser.evaluation;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessFactory;
 
 public final class SchedulerEvaluationProcessFactory implements IEvaluationProcessFactory {
 
+	@NonNull
 	public static final String NAME = "SchedulerEvaluationProcess";
 
 	@Override
 	public String getName() {
-		assert NAME != null;
 		return NAME;
 	}
 
