@@ -88,7 +88,7 @@ import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.its.tests.ManifestJointModel;
 import com.mmxlabs.models.lng.transformer.its.tests.SimpleCargoAllocation;
-import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
+import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -112,7 +112,7 @@ public class ScenarioTools {
 		B.setName("B");
 		A.setTimeZone("UTC");
 		B.setTimeZone("UTC");
-		
+
 	}
 
 	// The default route name of the ocean route between ports.
@@ -688,10 +688,10 @@ public class ScenarioTools {
 		// hints= new String[] { LNGTransformer.HINT_OPTIMISE_LSO}
 		// }
 		//
-		
+
 		OptimiserSettings settings = ScenarioUtils.createDefaultSettings();
 		settings.setGenerateCharterOuts(true);
-		final LNGTransformer transformer = new LNGTransformer(scenario, settings, new TransformerExtensionTestModule());
+		final LNGTransformer transformer = new LNGTransformer(scenario, settings, new TransformerExtensionTestBootstrapModule());
 
 		// Code to dump out the scenario to disk
 		if (false) {

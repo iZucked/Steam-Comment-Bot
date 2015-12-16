@@ -802,7 +802,7 @@ public class PeriodTransformerTests {
 			transformer.updateStartConditions(vesselAvailability1, assignedObject3, startConditionMap);
 
 			Assert.assertEquals(Collections.singletonList(port3), vesselAvailability1.getStartAt());
-			Assert.assertEquals(30000, vesselAvailability1.getStartHeel().getVolumeAvailable());
+			Assert.assertEquals(30000.0, vesselAvailability1.getStartHeel().getVolumeAvailable(), 0.0001);
 			Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 28, 0), vesselAvailability1.getStartBy());
 			Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 28, 0), vesselAvailability1.getStartAfter());
 		}
@@ -816,7 +816,7 @@ public class PeriodTransformerTests {
 			transformer.updateStartConditions(vesselAvailability2, assignedObject1, startConditionMap);
 
 			Assert.assertEquals(Collections.singletonList(port3), vesselAvailability2.getStartAt());
-			Assert.assertEquals(30000, vesselAvailability2.getStartHeel().getVolumeAvailable());
+			Assert.assertEquals(30000.0, vesselAvailability2.getStartHeel().getVolumeAvailable(),0.0001);
 			Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 28, 0), vesselAvailability2.getStartBy());
 			Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 28, 0), vesselAvailability2.getStartAfter());
 		}

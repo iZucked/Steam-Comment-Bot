@@ -130,6 +130,7 @@ public class ScenarioUtils {
 		IndividualSolutionImprovementSettings solutionImprovementSettings = parametersFactory.createIndividualSolutionImprovementSettings();
 		solutionImprovementSettings.setImprovingSolutions(true);
 		solutionImprovementSettings.setIterations(50_000);
+
 		settings.setSolutionImprovementSettings(solutionImprovementSettings);
 		return settings;
 	}

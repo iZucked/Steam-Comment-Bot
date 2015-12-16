@@ -165,7 +165,7 @@ public class BreadthOptimiser {
 		}
 
 		// Prepare initial solution state
-		final ISequences initialRawSequences = new ModifiableSequences(optimisationContext.getInitialSequences());
+		final ISequences initialRawSequences = new ModifiableSequences(optimisationContext.getInputSequences());
 
 		//// Debugging -- get initial change count
 		{

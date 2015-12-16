@@ -155,7 +155,7 @@ public class BagOptimiser {
 
 		try {
 			// Prepare initial solution state
-			final ISequences initialRawSequences = new ModifiableSequences(optimisationContext.getInitialSequences());
+			final ISequences initialRawSequences = new ModifiableSequences(optimisationContext.getInputSequences());
 			final IModifiableSequences initialFullSequences = sequencesManipulator.createManipulatedSequences(initialRawSequences);
 
 			if (DEBUG) {

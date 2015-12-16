@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
+import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
@@ -120,10 +121,11 @@ public class SuboptimalScenarioTester {
 
 		// optimise the scenario
 		final LNGScenarioRunner runner = new LNGScenarioRunner((LNGScenarioModel) scenario, LNGScenarioRunner.createDefaultSettings(), LNGTransformer.HINT_OPTIMISE_LSO);
-		runner.initAndEval(new TransformerExtensionTestModule(), 10000);
+		runner.initAndEval(new TransformerExtensionTestBootstrapModule(), 10000);
+		// runner.evaluateInitialState();
 		runner.run();
 
-		final Schedule schedule = runner.getFinalSchedule();
+		final Schedule schedule = runner.getSchedule();
 		Assert.assertNotNull(schedule);
 
 		// set up an array storing whether load ports are assigned at all
@@ -142,8 +144,9 @@ public class SuboptimalScenarioTester {
 
 			if (index >= 0) {
 				found[index] = true;
-				Assert.assertTrue(String.format("Expected solution wires '%s' to '%s' but the allocation wires it to '%s'. (load cv = %f; discharge min cv = %f; discharge max cv = %f",
-						loadPort.getName(), dischargePorts[index].getName(), dischargePort.getName(), loadPort.getCvValue(), dischargePort.getMinCvValue(), dischargePort.getMaxCvValue()),
+				Assert.assertTrue(
+						String.format("Expected solution wires '%s' to '%s' but the allocation wires it to '%s'. (load cv = %f; discharge min cv = %f; discharge max cv = %f", loadPort.getName(),
+								dischargePorts[index].getName(), dischargePort.getName(), loadPort.getCvValue(), dischargePort.getMinCvValue(), dischargePort.getMaxCvValue()),
 						dischargePorts[index].equals(dischargePort));
 			}
 		}
@@ -203,7 +206,7 @@ public class SuboptimalScenarioTester {
 	 */
 	// TODO: rewrite to take a constraint checker factory instead of a constraint checker, so that the expected parameter does not have weird not-initialised semantics
 	public void testConstraintChecker(final boolean expectedResult, final AbstractPairwiseConstraintChecker checker) {
-		final LNGTransformer transformer = new LNGTransformer(scenario, ScenarioUtils.createDefaultSettings(), new TransformerExtensionTestModule());
+		final LNGTransformer transformer = new LNGTransformer(scenario, ScenarioUtils.createDefaultSettings(), new TransformerExtensionTestBootstrapModule());
 		final IOptimisationData data = transformer.getOptimisationData();
 
 		transformer.getInjector().injectMembers(checker);

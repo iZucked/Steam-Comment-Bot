@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.IRestric
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.MinimalScenarioCreator;
+import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
@@ -61,7 +62,7 @@ public class SlotOverridesTest {
 		}
 
 		public SlotTester(LNGScenarioModel scenario, boolean failSilently) {
-			transformer = new LNGTransformer(scenario, ScenarioUtils.createDefaultSettings(), new TransformerExtensionTestModule());
+			transformer = new LNGTransformer(scenario, ScenarioUtils.createDefaultSettings(), new TransformerExtensionTestBootstrapModule());
 			try {
 				LNGSchedulerJobUtils.evaluateCurrentState(transformer);
 			} catch (Exception e) {

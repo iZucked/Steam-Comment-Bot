@@ -6,8 +6,6 @@ package com.mmxlabs.models.lng.transformer.inject.modules;
 
 import java.util.Collection;
 
-import org.apache.shiro.SecurityUtils;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.Singleton;

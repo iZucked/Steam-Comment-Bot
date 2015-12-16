@@ -12,6 +12,8 @@ import static org.ops4j.peaberry.util.TypeLiterals.iterable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -50,12 +52,14 @@ public class ScheduleBuilderModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	private ISchedulerBuilder provideSchedulerBuilder(final Injector injector, final Iterable<IBuilderExtensionFactory> builderExtensionFactories) {
+	private ISchedulerBuilder provideSchedulerBuilder(@NonNull final Injector injector, @NonNull final Iterable<IBuilderExtensionFactory> builderExtensionFactories) {
 		final SchedulerBuilder builder = new SchedulerBuilder();
 		for (final IBuilderExtensionFactory factory : builderExtensionFactories) {
 			final IBuilderExtension instance = factory.createInstance();
-			injector.injectMembers(instance);
-			builder.addBuilderExtension(instance);
+			if (instance != null) {
+				injector.injectMembers(instance);
+				builder.addBuilderExtension(instance);
+			}
 		}
 		injector.injectMembers(builder);
 		return builder;

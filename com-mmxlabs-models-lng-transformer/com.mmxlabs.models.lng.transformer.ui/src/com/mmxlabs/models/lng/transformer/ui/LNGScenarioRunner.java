@@ -81,6 +81,7 @@ import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
+import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService.ModuleType;
 
 public class LNGScenarioRunner {
@@ -111,8 +112,6 @@ public class LNGScenarioRunner {
 
 	private LNGTransformer transformer;
 
-	private Schedule initialSchedule;
-
 	private Schedule finalSchedule;
 
 	private final String[] hints;
@@ -123,7 +122,7 @@ public class LNGScenarioRunner {
 
 	private Module extraModule;
 
-	private EnumMap<ModuleType, List<Module>> localOverrides;
+	private @Nullable IOptimiserInjectorService localOverrides;
 
 	private final ScenarioInstance scenarioInstance;
 
@@ -203,7 +202,7 @@ public class LNGScenarioRunner {
 	 * Initialise the evaluation/optimisation system. Prepare any period scenarios, creates the {@link LNGTransformer} and the optimiser (if an optimisation hint is specified) .
 	 * 
 	 */
-	public void init(@Nullable final IOptimiserProgressMonitor monitor, @Nullable final Module extraModule, @Nullable final EnumMap<ModuleType, List<Module>> localOverrides) {
+	public void init(@Nullable final IOptimiserProgressMonitor monitor, @Nullable final Module extraModule, @Nullable final IOptimiserInjectorService localOverrides) {
 
 		this.extraModule = extraModule;
 		this.localOverrides = localOverrides;
@@ -246,17 +245,16 @@ public class LNGScenarioRunner {
 		if (createOptimiser) {
 			if (pRunnerHook != null) {
 				pRunnerHook.beginPhase(IRunnerHook.PHASE_INITIAL, transformer.getInjector());
-				pRunnerHook.reportSequences(IRunnerHook.PHASE_INITIAL, transformer.getEvaluationContext().getInitialSequences());
+				pRunnerHook.reportSequences(IRunnerHook.PHASE_INITIAL, transformer.getEvaluationContext().getInputSequences());
 			}
 			// Pin variable for null analysis
 			assert pContext != null;
-			startSolution = optimiser.start(pContext, pContext.getInitialSequences());
+			startSolution = optimiser.start(pContext, pContext.getInputSequences(), pContext.getInputSequences());
 		} else {
 			startSolution = LNGSchedulerJobUtils.evaluateCurrentState(transformer);
 		}
 
-
-		initialSchedule = overwrite(0, transformer.getEvaluationContext().getInitialSequences(), LNGSchedulerJobUtils.extractOptimisationAnnotations(startSolution));
+		finalSchedule = overwrite(0, transformer.getEvaluationContext().getInputSequences(), LNGSchedulerJobUtils.extractOptimisationAnnotations(startSolution));
 		final LocalSearchOptimiser pOptimiser = this.optimiser;
 		if (pOptimiser != null) {
 			try {
@@ -270,7 +268,7 @@ public class LNGScenarioRunner {
 		if (pRunnerHook != null) {
 			pRunnerHook.endPhase(IRunnerHook.PHASE_INITIAL);
 		}
-		return initialSchedule;
+		return finalSchedule;
 	}
 
 	private void initPeriodOptimisationData(final OptimiserSettings optimiserSettings, @Nullable final Module extraModule) {
@@ -527,13 +525,8 @@ public class LNGScenarioRunner {
 	}
 
 	@Nullable
-	public final Schedule getFinalSchedule() {
+	public final Schedule getSchedule() {
 		return finalSchedule;
-	}
-
-	@Nullable
-	public final Schedule getIntialSchedule() {
-		return initialSchedule;
 	}
 
 	public boolean isFinished() {
@@ -781,8 +774,8 @@ public class LNGScenarioRunner {
 			final ArbitraryStateLocalSearchOptimiser hillClimber = injector.getInstance(ArbitraryStateLocalSearchOptimiser.class);
 			// The optimiser may not have a best sequence set
 			log.debug("Performing hill climbing...");
-			final ISequences sequenceToImprove = bestRawSequences == null ? context.getInitialSequences() : bestRawSequences;
-			hillClimber.start(context, sequenceToImprove);
+			final ISequences sequenceToImprove = bestRawSequences == null ? context.getInputSequences() : bestRawSequences;
+			hillClimber.start(context, context.getInputSequences(), sequenceToImprove);
 			int hillClimberWork = 0;
 			while (!hillClimber.isFinished()) {
 				if (progressMonitor.isCanceled()) {
@@ -802,7 +795,7 @@ public class LNGScenarioRunner {
 
 	private IMultiStateResult performLSOOptimisation(final LocalSearchOptimiser lsoOptimiser, final IProgressMonitor progressMonitor/* , final ISequences bestRawSequences */)
 			throws OperationCanceledException {
-		optimiser.start(this.context, this.context.getInitialSequences());
+		optimiser.start(this.context, this.context.getInputSequences(), this.context.getInputSequences());
 		while (!lsoOptimiser.isFinished()) {
 			lsoOptimiser.step(1);
 			if (progressMonitor.isCanceled()) {

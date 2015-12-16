@@ -56,6 +56,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.transformer.IOptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.IPostExportProcessor;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
@@ -557,13 +558,34 @@ public class LNGSchedulerJobUtils {
 	public static IAnnotatedSolution evaluateCurrentState(final LNGTransformer transformer) {
 		final ModelEntityMap modelEntityMap = transformer.getModelEntityMap();
 		final IOptimisationData data = transformer.getOptimisationData();
-		final Injector injector = transformer.getInjector();
+		 Injector injector = transformer.getInjector();
+		 
+		 final ISequences initialSequences;
+		{
+//			final List<Module> modules2 = new LinkedList<>();
+////			modules2.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(transformer.getOptimiserSettings()), transformer.getOptimiserServices(),
+////					IOptimiserInjectorService.ModuleType.Module_ParametersModule, transformer.getHints()));
+////			modules2.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(transformer.getHints()), transformer.getOptimiserServices(), IOptimiserInjectorService.ModuleType.Module_Evaluation, transformer.getHints()));
+//			modules2.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGInitialSequencesModule(), transformer.getOptimiserServices(), IOptimiserInjectorService.ModuleType.Module_InitialSolution, transformer.getHints()));
+//
+//			final Injector initialSolutionInjector = injector.createChildInjector(modules2);
+//			{		final IModifiableSequences 
+//				
+				initialSequences = new ModifiableSequences(injector.getInstance(IOptimisationTransformer.class).createInitialSequences(data, modelEntityMap));
+
+//				initialSequences = initialSolutionInjector.getInstance(Key.get(ISequences.class, Names.named(LNGInitialSequencesModule.KEY_GENERATED_RAW_SEQUENCES)));
+				// Create a new child injector from the parent (i.e. without the modules2 list) with the initial sequences added
+//				parentInjector = parentInjector.createChildInjector(new InitialSequencesModule(initialSequences));
+//			}
+		}
+		
+		
 		/**
 		 * Start the full evaluation process.
 		 */
 
 		// Step 1. Get or derive the initial sequences from the input scenario data
-		final IModifiableSequences sequences = new ModifiableSequences(transformer.getOptimisationTransformer().createInitialSequences(data, modelEntityMap));
+		final IModifiableSequences sequences = new ModifiableSequences(initialSequences);
 
 		// Run through the sequences manipulator of things such as start/end port replacement
 

@@ -49,7 +49,6 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.VirtualVesselConstraintC
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcessFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
-import com.mmxlabs.scheduler.optimiser.peaberry.SchedulerComponentsInjectorService;
 
 public class TransformerExtensionTestModule extends AbstractModule {
 
@@ -62,8 +61,7 @@ public class TransformerExtensionTestModule extends AbstractModule {
 			bind(IConstraintCheckerRegistry.class).toInstance(createConstraintCheckerRegistry());
 			bind(IEvaluationProcessRegistry.class).toInstance(createEvaluationProcessRegistry());
 
-			final List<IOptimiserInjectorService> injectorServices = Lists.<IOptimiserInjectorService> newArrayList(new SchedulerComponentsInjectorService(),
-					new RestrictedElementsModule.RestrictedElementsInjectorService(), new ShippingTypeRequirementModule.DesPermissionInjectorService(), createTradingInjectorService());
+			final List<IOptimiserInjectorService> injectorServices = Lists.<IOptimiserInjectorService> newArrayList(new RestrictedElementsModule.RestrictedElementsInjectorService(), new ShippingTypeRequirementModule.DesPermissionInjectorService(), createTradingInjectorService());
 
 			bind(TypeLiterals.iterable(IOptimiserInjectorService.class)).toInstance(injectorServices);
 			// bind(TypeLiterals.iterable(ICargoFitnessComponentProvider.class)).toInstance(Collections.singleton(new ProfitAndLossAllocationComponentProvider()));

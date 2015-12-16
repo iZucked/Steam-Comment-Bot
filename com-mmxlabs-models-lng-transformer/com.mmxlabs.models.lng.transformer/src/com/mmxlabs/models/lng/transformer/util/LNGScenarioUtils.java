@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.HashSet;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.swt.widgets.DateTime;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.CargoModel;

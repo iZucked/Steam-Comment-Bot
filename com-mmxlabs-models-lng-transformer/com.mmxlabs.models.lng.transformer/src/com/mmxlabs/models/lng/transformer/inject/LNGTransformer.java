@@ -4,24 +4,21 @@
  */
 package com.mmxlabs.models.lng.transformer.inject;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.ops4j.peaberry.Peaberry;
-import org.ops4j.peaberry.util.TypeLiterals;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
+import com.google.inject.name.Names;
 import com.google.inject.util.Modules;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
@@ -29,19 +26,22 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.IOptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
-import com.mmxlabs.models.lng.transformer.inject.modules.EvaluationModule;
+import com.mmxlabs.models.lng.transformer.chain.impl.InitialSequencesModule;
+import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
+import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
+import com.mmxlabs.models.lng.transformer.inject.modules.LNGInitialSequencesModule;
+import com.mmxlabs.models.lng.transformer.inject.modules.LNGOptimisationModule;
+import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
+import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_OptimiserSettingsModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
-import com.mmxlabs.models.lng.transformer.inject.modules.OptimisationModule;
-import com.mmxlabs.models.lng.transformer.inject.modules.OptimiserSettingsModule;
-import com.mmxlabs.models.lng.transformer.internal.Activator;
 import com.mmxlabs.models.lng.transformer.util.OptimisationTransformer;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.IEvaluationContext;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
+import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
-import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService.ModuleType;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 
 /**
@@ -68,6 +68,8 @@ public class LNGTransformer {
 	private Iterable<IOptimiserInjectorService> extraModules;
 
 	private final OptimiserSettings optimiserSettings;
+	private Collection<IOptimiserInjectorService> services;
+	private Set<String> hints;
 
 	/**
 	 * @param scenario
@@ -79,8 +81,8 @@ public class LNGTransformer {
 
 	/**
 	 */
-	public LNGTransformer(@NonNull final LNGScenarioModel scenario, @NonNull final OptimiserSettings optimiserSettings,
-			@Nullable final Map<IOptimiserInjectorService.ModuleType, List<Module>> localOverrides, final String... hints) {
+	public LNGTransformer(@NonNull final LNGScenarioModel scenario, @NonNull final OptimiserSettings optimiserSettings, @Nullable final IOptimiserInjectorService localOverrides,
+			final String... hints) {
 		this(scenario, optimiserSettings, null, localOverrides, hints);
 	}
 
@@ -96,14 +98,14 @@ public class LNGTransformer {
 
 	/**
 	 */
-	public LNGTransformer(@NonNull final LNGScenarioModel scenario, @NonNull final OptimiserSettings optimiserSettings, @Nullable final Module module,
-			@Nullable final Map<IOptimiserInjectorService.ModuleType, List<Module>> localOverrides, final String... initialHints) {
+	public LNGTransformer(@NonNull final LNGScenarioModel scenario, @NonNull final OptimiserSettings optimiserSettings, @Nullable final Module bootstrapModule,
+			@Nullable final IOptimiserInjectorService localOverrides, final String... initialHints) {
 		this.scenario = scenario;
 		this.optimiserSettings = optimiserSettings;
 
 		boolean performOptimisation = false;
 
-		Set<String> hints = new HashSet<String>();
+		hints = new HashSet<String>();
 		// Check hints
 		if (initialHints != null) {
 			for (final String hint : initialHints) {
@@ -126,120 +128,54 @@ public class LNGTransformer {
 			}
 		}
 
+		services = LNGTransformerHelper.getOptimiserInjectorServices(bootstrapModule, localOverrides);
+
+		Injector parentInjector;
 		{
-			final Injector tmpInjector;
-			if (Platform.isRunning()) {
-				// Create temp injector to grab extraModules from OSGi services
-				final AbstractModule optimiserInjectorServiceModule = new AbstractModule() {
+			final List<Module> modules = new LinkedList<>();
 
-					@Override
-					protected void configure() {
-						bind(TypeLiterals.iterable(IOptimiserInjectorService.class)).toProvider(Peaberry.service(IOptimiserInjectorService.class).multiple());
-					}
-				};
-				final List<Module> m = new ArrayList<Module>(3);
-				m.add(Peaberry.osgiModule(Activator.getDefault().getBundle().getBundleContext()));
-				m.add(optimiserInjectorServiceModule);
-				if (module != null) {
-					m.add(module);
-				}
-				tmpInjector = Guice.createInjector(m);
-			} else if (module != null) {
-				tmpInjector = Guice.createInjector(module);
-			} else {
-				tmpInjector = null;
-			}
+			// Prepare the main modules with the re-usable data for any further work.
+			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new DataComponentProviderModule(), services, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule, hints));
+			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGTransformerModule(scenario, optimiserSettings), services,
+					IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, hints));
 
-			if (tmpInjector != null) {
-				final Key<Iterable<? extends IOptimiserInjectorService>> key = Key.<Iterable<? extends IOptimiserInjectorService>> get(TypeLiterals.iterable(IOptimiserInjectorService.class));
-				this.extraModules = (Iterable<IOptimiserInjectorService>) tmpInjector.getInstance(key);
-			}
+			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(optimiserSettings), services,
+					IOptimiserInjectorService.ModuleType.Module_ParametersModule, hints));
+			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
+//			parentInjector = Guice.createInjector(modules);
+//		}
+//		// Create temporary child injector to compute the initial solution and then pass result back into the main injector (as new child). This avoid polluting the injector with evaluation state.
+//		final ISequences initialSequences;
+//		{
+//			final List<Module> modules2 = new LinkedList<>();
+			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGInitialSequencesModule(), services, IOptimiserInjectorService.ModuleType.Module_InitialSolution, hints));
+
+//			final Injector initialSolutionInjector = parentInjector.createChildInjector(modules2);
+//			{
+//				initialSequences = initialSolutionInjector.getInstance(Key.get(ISequences.class, Names.named(LNGInitialSequencesModule.KEY_GENERATED_RAW_SEQUENCES)));
+//				// Create a new child injector from the parent (i.e. without the modules2 list) with the initial sequences added
+//				parentInjector = parentInjector.createChildInjector(new InitialSequencesModule(initialSequences));
+//			}
+//		}
+//		{
+//			final List<Module> modules = new LinkedList<>();
+
+//			modules.add(new InputSequencesModule(initialSequences));
+//			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(optimiserSettings), services,
+//					IOptimiserInjectorService.ModuleType.Module_ParametersModule, hints));
+			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_OptimiserSettingsModule(optimiserSettings), services,
+					IOptimiserInjectorService.ModuleType.Module_ParametersModule, hints));
+//			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
+			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGOptimisationModule(), services, IOptimiserInjectorService.ModuleType.Module_Optimisation, hints));
+			parentInjector = Guice.createInjector(modules);
+
+//			parentInjector = parentInjector.createChildInjector(modules);
+
 		}
 
-		final List<Module> modules = new ArrayList<Module>();
-		if (module != null) {
-			modules.add(module);
-		}
-
-		final Map<IOptimiserInjectorService.ModuleType, List<Module>> moduleOverrides = new EnumMap<IOptimiserInjectorService.ModuleType, List<Module>>(IOptimiserInjectorService.ModuleType.class);
-
-		// Grab any module overrides
-		if (extraModules != null) {
-			for (final IOptimiserInjectorService service : extraModules) {
-				final Map<ModuleType, List<Module>> m = service.requestModuleOverrides(hints.toArray(new String[0]));
-				if (m != null) {
-					for (final Map.Entry<IOptimiserInjectorService.ModuleType, List<Module>> e : m.entrySet()) {
-						List<Module> overrides;
-						if (moduleOverrides.containsKey(e.getKey())) {
-							overrides = moduleOverrides.get(e.getKey());
-						} else {
-							overrides = new ArrayList<Module>();
-							moduleOverrides.put(e.getKey(), overrides);
-						}
-						overrides.addAll(e.getValue());
-					}
-				}
-			}
-		}
-		// Process local overrides
-		if (localOverrides != null) {
-			for (final Map.Entry<IOptimiserInjectorService.ModuleType, List<Module>> e : localOverrides.entrySet()) {
-				List<Module> overrides;
-				if (moduleOverrides.containsKey(e.getKey())) {
-					overrides = moduleOverrides.get(e.getKey());
-				} else {
-					overrides = new ArrayList<Module>();
-					moduleOverrides.put(e.getKey(), overrides);
-				}
-				overrides.addAll(e.getValue());
-			}
-		}
-
-		// Install standard module with optional overrides
-		installModuleOverrides(modules, new DataComponentProviderModule(), moduleOverrides, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule);
-
-		installModuleOverrides(modules, new LNGTransformerModule(scenario, optimiserSettings), moduleOverrides, IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule);
-
-		installModuleOverrides(modules, new OptimiserSettingsModule(), moduleOverrides, IOptimiserInjectorService.ModuleType.Module_ParametersModule);
-
-		installModuleOverrides(modules, new EvaluationModule(hints), moduleOverrides, IOptimiserInjectorService.ModuleType.Module_Evaluation);
-		if (performOptimisation) {
-			installModuleOverrides(modules, new OptimisationModule(), moduleOverrides, IOptimiserInjectorService.ModuleType.Module_Optimisation);
-		}
-
-		// Insert extra modules into modules list
-		if (extraModules != null) {
-			for (final IOptimiserInjectorService service : extraModules) {
-				final Module requestModule = service.requestModule(hints.toArray(new String[0]));
-				if (requestModule != null) {
-					modules.add(requestModule);
-				}
-			}
-		}
-		// Create the master injector
-		this.injector = Guice.createInjector(modules);
+		this.injector = parentInjector;
 
 		injector.injectMembers(this);
-	}
-
-	private void installModuleOverrides(final List<Module> modules, final Module mainModule, final Map<IOptimiserInjectorService.ModuleType, List<Module>> moduleOverrides,
-			final IOptimiserInjectorService.ModuleType moduleType) {
-		if (moduleOverrides.containsKey(moduleType)) {
-			final List<Module> overrides = moduleOverrides.get(moduleType);
-			if (overrides != null && !overrides.isEmpty()) {
-				modules.add(Modules.override(mainModule).with(overrides));
-			} else {
-				modules.add(mainModule);
-			}
-		} else {
-			modules.add(mainModule);
-		}
-	}
-
-	/**
-	 */
-	public IOptimisationTransformer getOptimisationTransformer() {
-		return injector.getInstance(IOptimisationTransformer.class);
 	}
 
 	public MMXRootObject getScenario() {
@@ -289,5 +225,13 @@ public class LNGTransformer {
 	 */
 	public OptimiserSettings getOptimiserSettings() {
 		return optimiserSettings;
+	}
+
+	public Collection<IOptimiserInjectorService> getOptimiserServices() {
+		return services;
+	}
+
+	public Collection<String> getHints() {
+		return hints;
 	}
 }
