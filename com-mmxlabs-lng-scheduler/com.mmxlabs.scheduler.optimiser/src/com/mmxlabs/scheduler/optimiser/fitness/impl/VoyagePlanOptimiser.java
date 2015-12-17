@@ -45,7 +45,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 	private static final int RELAXATION_STEP = 6;
 
-	private final List<IVoyagePlanChoice> choices = new ArrayList<IVoyagePlanChoice>();
+	private final List<IVoyagePlanChoice> choices = new ArrayList<>();
 
 	private List<IOptionsSequenceElement> basicSequence;
 
