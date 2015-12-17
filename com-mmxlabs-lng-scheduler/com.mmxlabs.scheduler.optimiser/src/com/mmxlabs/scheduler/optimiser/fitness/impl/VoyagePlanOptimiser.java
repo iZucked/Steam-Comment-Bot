@@ -43,7 +43,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 	private static final int RELAXATION_STEP = 6;
 
-	private final List<IVoyagePlanChoice> choices = new ArrayList<IVoyagePlanChoice>();
+	private final List<IVoyagePlanChoice> choices = new ArrayList<>();
 
 	private List<IOptionsSequenceElement> basicSequence;
 
@@ -105,6 +105,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		basicSequence = null;
 		bestPlan = null;
 		bestPlanFitsInAvailableTime = false;
+		bestProblemCount = Integer.MAX_VALUE;
 		bestCost = Long.MAX_VALUE;
 		portTimesRecord = null;
 	}
@@ -124,7 +125,12 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	 */
 	@Override
 	public VoyagePlan optimise() {
+		bestPlan = null;
+		bestPlanFitsInAvailableTime = false;
+		bestCost = Long.MAX_VALUE;
+		bestProblemCount = Integer.MAX_VALUE;
 		runLoop(0);
+		choices.clear();
 		return bestPlan;
 	}
 

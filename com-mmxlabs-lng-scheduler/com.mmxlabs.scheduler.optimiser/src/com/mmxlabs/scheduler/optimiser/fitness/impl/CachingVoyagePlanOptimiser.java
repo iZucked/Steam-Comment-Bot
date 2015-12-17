@@ -35,6 +35,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  * @param
  */
+
 public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 	/**
@@ -110,6 +111,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 		@Override
 		public final int hashCode() {
+
 			final int prime = 31;
 			int result = 1;
 			// result = prime * result + getOuterType().hashCode();
@@ -134,6 +136,11 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		 */
 		@Override
 		public final boolean equals(final Object obj) {
+
+			if (obj == this) {
+				return true;
+			}
+
 			if (obj instanceof CacheKey) {
 				final CacheKey other = (CacheKey) obj;
 				// if (getClass() != obj.getClass())
@@ -142,8 +149,9 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 				// if (!getOuterType().equals(other.getOuterType()))
 				// return false;
 
-				return Equality.shallowEquals(slots, other.slots) && (vessel == other.vessel) && Arrays.equals(voyageTimes, other.voyageTimes) && (// loadPrice == other.loadPrice &&
-						dischargePrice == other.dischargePrice && startHeel == other.startHeel && Arrays.equals(durations, other.durations));
+				return dischargePrice == other.dischargePrice && startHeel == other.startHeel && (vessel == other.vessel) && Arrays.equals(voyageTimes, other.voyageTimes) && (// loadPrice ==
+																																												// other.loadPrice &&
+				Arrays.equals(durations, other.durations)) && Equality.shallowEquals(slots, other.slots);
 			}
 			return false;
 		}
@@ -207,7 +215,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 		bestPlan = best.getFirst();
 		bestCost = best.getSecond();
-
+		choices.clear();
 		return bestPlan;
 	}
 
