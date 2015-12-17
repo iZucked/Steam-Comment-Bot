@@ -259,13 +259,13 @@ public class SimpleSchedulerTest {
 		IEvaluationState evaluationState = new EvaluationState();
 
 		for (final IEvaluationProcess c : optimiser.getFitnessEvaluator().getEvaluationProcesses()) {
-			c.evaluate(context.getInitialSequences(), evaluationState);
+			c.evaluate(context.getInputSequences(), evaluationState);
 		}
 
 		linearFitnessEvaluator.setOptimisationData(context.getOptimisationData());
-		linearFitnessEvaluator.setInitialSequences(context.getInitialSequences(), context.getInitialSequences(), evaluationState);
+		linearFitnessEvaluator.setInitialSequences(context.getInputSequences(), context.getInputSequences(), evaluationState);
 
-		printSequences(context.getInitialSequences());
+		printSequences(context.getInputSequences());
 
 		final long initialFitness = linearFitnessEvaluator.getBestFitness();
 		System.out.println("Initial fitness " + initialFitness);

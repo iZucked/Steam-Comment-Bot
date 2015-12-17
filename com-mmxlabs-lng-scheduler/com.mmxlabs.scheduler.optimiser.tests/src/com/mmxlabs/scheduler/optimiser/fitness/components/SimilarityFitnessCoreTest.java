@@ -84,6 +84,15 @@ public class SimilarityFitnessCoreTest {
 				return sequences;
 			}
 
+
+			@Provides
+			@Singleton
+			@Named(OptimiserConstants.SEQUENCE_TYPE_INPUT)
+			private ISequences provideInputSequences() {
+
+				return sequences;
+			}
+
 			@Provides
 			@Singleton
 			private ISimilarityComponentParameters provideSimilarityComponentParameters() {
