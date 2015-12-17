@@ -34,7 +34,7 @@ public class CharterOutTests extends AbstractOptimisationResultTester {
 		Assert.assertNotNull(runner);
 
 		// Should be the same as the updateScenario as we have only called ScenarioRunner#init()
-		final Schedule schedule = runner.getIntialSchedule();
+		final Schedule schedule = runner.getSchedule();
 		Assert.assertNotNull(schedule);
 
 		List<GeneratedCharterOut> charterOuts = findGCOEvents(schedule.getSequences().get(0));
@@ -51,7 +51,7 @@ public class CharterOutTests extends AbstractOptimisationResultTester {
 		Assert.assertNotNull(runner);
 
 		// Should be the same as the updateScenario as we have only called ScenarioRunner#init()
-		final Schedule schedule = runner.getIntialSchedule();
+		final Schedule schedule = runner.getSchedule();
 		Assert.assertNotNull(schedule);
 
 		List<GeneratedCharterOut> charterOuts = findGCOEvents(schedule.getSequences().get(0));
@@ -75,7 +75,7 @@ public class CharterOutTests extends AbstractOptimisationResultTester {
 		Assert.assertNotNull(runner);
 
 		// Should be the same as the updateScenario as we have only called ScenarioRunner#init()
-		final Schedule schedule = runner.getIntialSchedule();
+		final Schedule schedule = runner.getSchedule();
 		Assert.assertNotNull(schedule);
 
 		List<GeneratedCharterOut> charterOuts = findGCOEvents(schedule.getSequences().get(0));

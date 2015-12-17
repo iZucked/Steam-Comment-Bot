@@ -51,5 +51,4 @@ Export-Package: com.mmxlabs.lingo.its.tests,
  com.mmxlabs.lingo.its.tests.category,
  com.mmxlabs.lingo.its.uat.suite.cases,
  com.mmxlabs.lingo.its.uat.suite.testers,
- com.mmxlabs.lingo.its.uat.suite.utils,
- com.mmxlabs.lingo.its.utils
+ com.mmxlabs.lingo.its.uat.suite.utils

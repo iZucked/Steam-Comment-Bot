@@ -35,7 +35,7 @@ public class SpotDateTests extends AbstractOptimisationResultTester {
 		runner.run();
 
 		// Should be the same as the updateScenario as we have only called ScenarioRunner#init()
-		final Schedule schedule = runner.getFinalSchedule();
+		final Schedule schedule = runner.getSchedule();
 		Assert.assertNotNull(schedule);
 		{
 			final CargoAllocation cargoAllocation = ScheduleTools.findCargoAllocationByDischargeID("D1", schedule);

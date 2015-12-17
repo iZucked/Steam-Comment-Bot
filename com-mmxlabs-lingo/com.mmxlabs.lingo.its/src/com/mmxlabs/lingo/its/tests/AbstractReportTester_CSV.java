@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.its.tests;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,8 +16,8 @@ import org.junit.runners.Parameterized;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.its.tests.category.ReportTest;
-import com.mmxlabs.lingo.its.utils.CSVImporter;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
@@ -41,7 +42,7 @@ public abstract class AbstractReportTester_CSV extends AbstractOptimisationResul
 
 	private final Pair<String, String> key;
 
-	public AbstractReportTester_CSV(final String name, final String scenarioPath) {
+	public AbstractReportTester_CSV(final String name, final String scenarioPath) throws MalformedURLException {
 
 		key = new Pair<>(name, scenarioPath);
 		if (!cache.containsKey(key)) {

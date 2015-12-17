@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.lingo.its.tests;
 
+import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -48,7 +50,6 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.chain.IMultiStateResult;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
-import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.migration.scenario.MigrationHelper;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -198,7 +199,7 @@ public class AbstractOptimisationResultTester {
 		return scenarioRunner;
 	}
 
-	public LNGScenarioRunner runScenarioWithGCO(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL) throws IOException, IncompleteScenarioException {
+	public LNGScenarioRunner runScenarioWithGCO(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL) throws IOException {
 
 		OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
 		optimiserSettings = LNGScenarioRunnerCreator.createExtendedSettings(optimiserSettings);
@@ -224,7 +225,7 @@ public class AbstractOptimisationResultTester {
 
 	public static void optimiseScenario(@NonNull final LNGScenarioRunner scenarioRunner, @NonNull final URL origURL, @NonNull final String propertiesSuffix) throws IOException {
 
-		final Schedule intialSchedule = scenarioRunner.getIntialSchedule();
+		final Schedule intialSchedule = scenarioRunner.getSchedule();
 		Assert.assertNotNull(intialSchedule);
 
 		final EList<Fitness> currentOriginalFitnesses = intialSchedule.getFitnesses();
@@ -254,7 +255,6 @@ public class AbstractOptimisationResultTester {
 			}
 		}
 
-
 		if (!result.getSolutions().isEmpty()) {
 			int i = 0;
 			for (final NonNullPair<ISequences, Map<String, Object>> p : result.getSolutions()) {
@@ -271,17 +271,8 @@ public class AbstractOptimisationResultTester {
 				}
 			}
 
-			if (storeFitnessMap) {
-				try {
-					final URL expectedReportOutput = new URL(FileLocator.toFileURL(origURL).toString().replaceAll(" ", "%20") + propertiesSuffix);
-					final File file2 = new File(expectedReportOutput.toURI());
-					TesterUtil.saveProperties(props, file2);
-				} catch (final URISyntaxException e) {
-					e.printStackTrace();
-				}
-			}
 		}
-		
+
 		// Check final optimised result
 		{
 			final List<Fitness> currentEndFitnesses = TesterUtil.getFitnessFromExtraAnnotations(result.getBestSolution().getSecond());
@@ -290,6 +281,17 @@ public class AbstractOptimisationResultTester {
 			} else {
 				// Assert old and new are equal
 				TesterUtil.testOriginalAndCurrentFitnesses(props, endFitnessesMapName, currentEndFitnesses);
+			}
+		}
+
+		if (storeFitnessMap) {
+			try {
+				final URL expectedReportOutput = new URL(FileLocator.toFileURL(origURL).toString().replaceAll(" ", "%20") + propertiesSuffix);
+				final File file2 = new File(expectedReportOutput.toURI());
+				TesterUtil.saveProperties(props, file2);
+			} catch (final URISyntaxException e) {
+				e.printStackTrace();
+				Assert.fail();
 			}
 		}
 	}

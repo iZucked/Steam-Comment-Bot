@@ -16,13 +16,13 @@ import org.junit.experimental.categories.Category;
 
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
 import com.mmxlabs.lingo.its.tests.category.QuickTest;
-import com.mmxlabs.lingo.its.utils.CSVImporter;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
+import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScheduleTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 
@@ -47,7 +47,7 @@ public class SpotDESPurchaseTimezoneBoundaryTest extends AbstractOptimisationRes
 
 		final LNGScenarioRunner runner = runScenarioWithGCO(scenario, new URL(url.toString() + "fitness"));
 		// runner.updateScenario();
-		final Schedule schedule = runner.getFinalSchedule();
+		final Schedule schedule = runner.getSchedule();
 		Assert.assertNotNull(schedule);
 
 		// Expect only two spot cargoes in Jan

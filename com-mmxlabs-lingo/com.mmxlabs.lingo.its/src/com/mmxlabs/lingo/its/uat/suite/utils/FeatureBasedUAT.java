@@ -93,7 +93,7 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 	public Schedule getSchedule(@NonNull final String lingoFileName) throws Exception {
 		final LNGScenarioRunner runner = getScenarioRunner(lingoFileName);
 		Assert.assertNotNull(runner);
-		final Schedule schedule = runner.getIntialSchedule();
+		final Schedule schedule = runner.getSchedule();
 		return schedule;
 	}
 
