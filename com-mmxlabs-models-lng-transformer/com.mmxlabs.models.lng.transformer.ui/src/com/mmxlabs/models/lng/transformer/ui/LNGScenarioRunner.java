@@ -74,6 +74,7 @@ import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.optimiser.core.impl.EvaluationContext;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.optimiser.lso.impl.ArbitraryStateLocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
@@ -82,7 +83,6 @@ import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
-import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService.ModuleType;
 
 public class LNGScenarioRunner {
 
@@ -209,9 +209,12 @@ public class LNGScenarioRunner {
 		if (createOptimiser) {
 			initPeriodOptimisationData(optimiserSettings, extraModule);
 		}
+
 		transformer = new LNGTransformer(optimiserScenario, optimiserSettings, extraModule, localOverrides, hints);
 
 		injector = transformer.getInjector();
+		final PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class);
+		scope.enter();
 
 		modelEntityMap = transformer.getModelEntityMap();
 		if (createOptimiser) {
@@ -238,10 +241,9 @@ public class LNGScenarioRunner {
 	@Nullable
 	public Schedule evaluateInitialState() {
 		startTimeMillis = System.currentTimeMillis();
-
 		final IAnnotatedSolution startSolution;
 		final IOptimisationContext pContext = this.context;
-		IRunnerHook pRunnerHook = runnerHook;
+		final IRunnerHook pRunnerHook = runnerHook;
 		if (createOptimiser) {
 			if (pRunnerHook != null) {
 				pRunnerHook.beginPhase(IRunnerHook.PHASE_INITIAL, transformer.getInjector());
@@ -730,7 +732,7 @@ public class LNGScenarioRunner {
 					log.error("No existing state - unable to find action sets");
 				} else {
 
-					boolean exportOptimiserSolution = true;
+					final boolean exportOptimiserSolution = true;
 					// Generate the changesets decomposition.
 					// Run optimisation
 

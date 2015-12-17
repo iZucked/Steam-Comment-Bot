@@ -19,6 +19,7 @@ import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
+import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
 import com.mmxlabs.optimiser.core.modules.ConstraintCheckerInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.EvaluationProcessInstantiatorModule;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
@@ -52,10 +53,8 @@ public class LNGEvaluationModule extends AbstractModule {
 
 		install(new SequencesManipulatorModule());
 
-
-		bind(DirectRandomSequenceScheduler.class).in(Singleton.class);
+		bind(DirectRandomSequenceScheduler.class).in(PerChainUnitScope.class);
 		bind(ISequenceScheduler.class).to(DirectRandomSequenceScheduler.class);
-
 
 		if (hints != null) {
 			if (LicenseFeatures.isPermitted("features:optimisation-charter-out-generation")) {
@@ -85,6 +84,7 @@ public class LNGEvaluationModule extends AbstractModule {
 	}
 
 	@Provides
+	@PerChainUnitScope
 	private IVoyagePlanOptimiser provideVoyagePlanOptimiser(final VoyagePlanOptimiser delegate) {
 		final CachingVoyagePlanOptimiser cachingVoyagePlanOptimiser = new CachingVoyagePlanOptimiser(delegate, DEFAULT_VPO_CACHE_SIZE);
 		return cachingVoyagePlanOptimiser;
