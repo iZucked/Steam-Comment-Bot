@@ -77,7 +77,7 @@ public class BagOptimiser {
 
 	private static final Logger LOG = LoggerFactory.getLogger(BagOptimiser.class);
 
-	private static final boolean DEBUG = true;
+	private static final boolean DEBUG = false;
 
 	private static final boolean BUILD_DEPENDANCY_GRAPH = false;
 

@@ -364,15 +364,17 @@ public class LNGScenarioToOptimiserBridge {
 
 						final Set<String> hints = LNGTransformerHelper.getHints(evalSettings);
 
-//						final LNGDataTransformer subTransformer = originalDataTransformer;
+						// final LNGDataTransformer subTransformer = originalDataTransformer;
+						
+						// Always create a new transformer as we have problems with re-use and mapping newly created spot slots (and probably cargoes) between instances
 						ModelEntityMap originalModelEntityMap = the_originalModelEntityMap;
 						final LNGDataTransformer subTransformer;
-						if (the_originalModelEntityMap instanceof CopiedModelEntityMap) {
+//						if (the_originalModelEntityMap instanceof CopiedModelEntityMap) {
 							subTransformer = new LNGDataTransformer(targetOriginalScenario, evalSettings, hints, originalDataTransformer.getModuleServices());
 							originalModelEntityMap = subTransformer.getModelEntityMap();
-						} else {
-							subTransformer = originalDataTransformer;
-						}
+//						} else {
+//							subTransformer = originalDataTransformer;
+//						}
 
 						Injector evaluationInjector2;
 						final Collection<IOptimiserInjectorService> services = subTransformer.getModuleServices();

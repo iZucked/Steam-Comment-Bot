@@ -46,7 +46,7 @@ public class LNGScenarioChainBuilder {
 	 * @return
 	 */
 	public static IChainRunner createStandardOptimisationChain(@Nullable final String childName, @NonNull final LNGDataTransformer dataTransformer,
-			@NonNull final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, @NonNull final OptimiserSettings optimiserSettings, @Nullable ExecutorService executorService,
+			@NonNull final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, @NonNull final OptimiserSettings optimiserSettings, @NonNull ExecutorService executorService, int numSeeds,
 			@Nullable final String... initialHints) {
 
 		boolean createOptimiser = false;
@@ -70,10 +70,15 @@ public class LNGScenarioChainBuilder {
 		final ChainBuilder builder = new ChainBuilder(dataTransformer);
 		if (createOptimiser) {
 			// Run the standard LSO optimisation
-			LNGLSOOptimiserTransformerUnit.chain(builder, optimiserSettings, PROGRESS_OPTIMISATION);
+			int[] seeds = new int[numSeeds];
+			for (int i = 0; i < numSeeds; ++i) {
+				seeds[i] = i;
+			}
+			assert seeds.length > 0;
+			LNGLSOOptimiserTransformerUnit.chainPool(builder, optimiserSettings, PROGRESS_OPTIMISATION, executorService, seeds);
 			if (doHillClimb) {
-				// Run a hill clim opt on the LSO result
-				LNGHillClimbOptimiserTransformerUnit.chain(builder, optimiserSettings, PROGRESS_HILLCLIMBING_OPTIMISATION);
+				// Run a hill climb opt on the LSO result
+				LNGHillClimbOptimiserTransformerUnit.chainPool(builder, optimiserSettings, PROGRESS_HILLCLIMBING_OPTIMISATION, executorService);
 			}
 
 			if (doActionSetPostOptimisation) {
@@ -149,7 +154,7 @@ public class LNGScenarioChainBuilder {
 
 			final OptimiserSettings settings = OptimisationHelper.transformUserSettings(copy, null);
 			if (settings != null) {
-				runners.add(createStandardOptimisationChain("Similarity-" + mode.toString(), dataTransformer, dataExporter, settings, executorService, initialHints));
+				runners.add(createStandardOptimisationChain("Similarity-" + mode.toString(), dataTransformer, dataExporter, settings, executorService, 1, initialHints));
 			}
 		}
 		final MultiChainRunner runner = new MultiChainRunner(dataTransformer, runners, executorService);
@@ -159,7 +164,7 @@ public class LNGScenarioChainBuilder {
 
 	@NonNull
 	public static ExecutorService createExecutorService() {
-		final int cores = Math.max(1, Runtime.getRuntime().availableProcessors() - 1);
+		final int cores = Math.max(1, Runtime.getRuntime().availableProcessors() / 2);
 		return createExecutorService(cores);
 	}
 

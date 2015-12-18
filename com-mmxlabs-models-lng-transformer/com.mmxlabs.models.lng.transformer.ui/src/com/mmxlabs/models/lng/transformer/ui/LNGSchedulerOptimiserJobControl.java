@@ -61,6 +61,8 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 		scenarioRunner = new LNGScenarioRunner(executorService, originalScenario, scenarioInstance, jobDescriptor.getOptimiserSettings(), originalEditingDomain,
 				LNGTransformerHelper.HINT_OPTIMISE_LSO);
 		setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));
+		
+		
 
 		// Disable optimisation in P&L testing phase
 		if (LicenseFeatures.isPermitted("features:phase-pnl-testing")) {
