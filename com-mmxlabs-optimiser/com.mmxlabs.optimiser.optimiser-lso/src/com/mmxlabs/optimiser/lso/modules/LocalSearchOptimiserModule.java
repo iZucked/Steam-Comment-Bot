@@ -111,12 +111,8 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 
 		final ArbitraryStateLocalSearchOptimiser lso = new ArbitraryStateLocalSearchOptimiser();
 
-		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = new LinearSimulatedAnnealingFitnessEvaluator();
+		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = new LinearSimulatedAnnealingFitnessEvaluator(new GreedyThresholder(), fitnessComponents, evaluationProcesses);
 		injector.injectMembers(fitnessEvaluator);
-		fitnessEvaluator.setThresholder(new GreedyThresholder());
-		fitnessEvaluator.setFitnessComponents(fitnessComponents);
-		fitnessEvaluator.setEvaluationProcesses(evaluationProcesses);
-		fitnessEvaluator.init();
 
 		setLSO(injector, context, manipulator, moveGenerator, instrumentingMoveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluationProcesses, lso);
 

@@ -7,6 +7,7 @@ package com.mmxlabs.optimiser.lso.impl;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Matchers;
@@ -14,9 +15,12 @@ import org.mockito.Mockito;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Provides;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
@@ -29,40 +33,18 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 	@Test
 	public void testGetSetFitnessComponents() {
 
-		final LinearSimulatedAnnealingFitnessEvaluator evaluator = new LinearSimulatedAnnealingFitnessEvaluator();
+		final List<IFitnessComponent> fitnessComponents = Collections.emptyList();
+		assert fitnessComponents != null;
+
+		final List<IEvaluationProcess> evaluationProcesses = Collections.emptyList();
+		assert evaluationProcesses != null;
+
+		final IThresholder thresholder = Mockito.mock(IThresholder.class);
+		assert thresholder != null;
+
+		final LinearSimulatedAnnealingFitnessEvaluator evaluator = new LinearSimulatedAnnealingFitnessEvaluator(thresholder, fitnessComponents, evaluationProcesses);
 		Assert.assertTrue(evaluator.getFitnessComponents().isEmpty());
-		final List<IFitnessComponent> fitnessComponents = Collections.emptyList();
-		assert fitnessComponents != null;
-		evaluator.setFitnessComponents(fitnessComponents);
-		Assert.assertSame(fitnessComponents, evaluator.getFitnessComponents());
-	}
-
-	@Test
-	public void testInit() {
-		final LinearSimulatedAnnealingFitnessEvaluator evaluator = new LinearSimulatedAnnealingFitnessEvaluator();
-
-		final List<IFitnessComponent> fitnessComponents = Collections.emptyList();
-		assert fitnessComponents != null;
-
-		final IThresholder thresholder = Mockito.mock(IThresholder.class);
-
-		evaluator.setFitnessComponents(fitnessComponents);
-		evaluator.setThresholder(thresholder);
-		evaluator.init();
-
-	}
-
-	@Test(expected = IllegalStateException.class)
-	public void testInit2() {
-		final LinearSimulatedAnnealingFitnessEvaluator evaluator = new LinearSimulatedAnnealingFitnessEvaluator();
-		final List<IFitnessComponent> fitnessComponents = Collections.emptyList();
-		assert fitnessComponents != null;
-
-		final IThresholder thresholder = Mockito.mock(IThresholder.class);
-
-		evaluator.setFitnessComponents(fitnessComponents);
-		// evaluator.setThresholder(thresholder);
-		evaluator.init();
+		Assert.assertTrue(evaluator.getEvaluationProcesses().isEmpty());
 	}
 
 	@Test
@@ -77,15 +59,17 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 
 		final IEvaluationState evaluationState = Mockito.mock(IEvaluationState.class);
 		assert evaluationState != null;
+
 		final List<IFitnessComponent> fitnessComponents = Collections.emptyList();
 		assert fitnessComponents != null;
+
+		final List<IEvaluationProcess> evaluationProcesses = Collections.emptyList();
+		assert evaluationProcesses != null;
+
 		Mockito.when(fitnessHelper.evaluateSequencesFromComponents(source, evaluationState, fitnessComponents)).thenReturn(true);
 		Mockito.when(fitnessCombiner.calculateFitness(fitnessComponents)).thenReturn(1000l);
 
-		final LinearSimulatedAnnealingFitnessEvaluator evaluator = createFitnessEvaluator(fitnessCombiner, thresholder, fitnessHelper);
-		evaluator.setFitnessComponents(fitnessComponents);
-		evaluator.setThresholder(thresholder);
-		evaluator.init();
+		final LinearSimulatedAnnealingFitnessEvaluator evaluator = createFitnessEvaluatorInstance(fitnessCombiner, thresholder, fitnessHelper, fitnessComponents, evaluationProcesses);
 
 		Assert.assertEquals(Long.MAX_VALUE, evaluator.getBestFitness());
 		Assert.assertEquals(Long.MAX_VALUE, evaluator.getCurrentFitness());
@@ -165,6 +149,9 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		final List<IFitnessComponent> fitnessComponents = Collections.emptyList();
 		assert fitnessComponents != null;
 
+		final List<IEvaluationProcess> evaluationProcesses = Collections.emptyList();
+		assert evaluationProcesses != null;
+
 		final IThresholder thresholder = Mockito.mock(IThresholder.class);
 		final IFitnessCombiner fitnessCombiner = Mockito.mock(IFitnessCombiner.class);
 		final IFitnessHelper fitnessHelper = Mockito.mock(IFitnessHelper.class);
@@ -172,10 +159,7 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		Mockito.when(fitnessHelper.evaluateSequencesFromComponents(source, evaluationState, fitnessComponents)).thenReturn(true);
 		Mockito.when(fitnessCombiner.calculateFitness(fitnessComponents)).thenReturn(1000l);
 
-		final LinearSimulatedAnnealingFitnessEvaluator evaluator = createFitnessEvaluator(fitnessCombiner, thresholder, fitnessHelper);
-		evaluator.setFitnessComponents(fitnessComponents);
-		evaluator.setThresholder(thresholder);
-		evaluator.init();
+		final LinearSimulatedAnnealingFitnessEvaluator evaluator = createFitnessEvaluatorInstance(fitnessCombiner, thresholder, fitnessHelper, fitnessComponents, evaluationProcesses);
 
 		Assert.assertEquals(Long.MAX_VALUE, evaluator.getBestFitness());
 		Assert.assertEquals(Long.MAX_VALUE, evaluator.getCurrentFitness());
@@ -191,7 +175,8 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		// Assert.assertSame(source, evaluator.getBestSequences());
 	}
 
-	private LinearSimulatedAnnealingFitnessEvaluator createFitnessEvaluator(final IFitnessCombiner fitnessCombiner, final IThresholder thresholder, final IFitnessHelper fitnessHelper) {
+	private static LinearSimulatedAnnealingFitnessEvaluator createFitnessEvaluatorInstance(@NonNull final IFitnessCombiner fitnessCombiner, @NonNull final IThresholder thresholder,
+			@NonNull final IFitnessHelper fitnessHelper, @NonNull final List<IFitnessComponent> fitnessComponents, @NonNull final List<IEvaluationProcess> evaluationProcesses) {
 		return Guice.createInjector(new AbstractModule() {
 
 			@Override
@@ -199,8 +184,15 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 				bind(IFitnessCombiner.class).toInstance(fitnessCombiner);
 				bind(IThresholder.class).toInstance(thresholder);
 				bind(IFitnessHelper.class).toInstance(fitnessHelper);
-
 			}
+
+			@Provides
+			LinearSimulatedAnnealingFitnessEvaluator providerFitnessEvaluator(@NonNull final Injector injector) {
+				final LinearSimulatedAnnealingFitnessEvaluator evaluator = new LinearSimulatedAnnealingFitnessEvaluator(thresholder, fitnessComponents, evaluationProcesses);
+				injector.injectMembers(evaluator);
+				return evaluator;
+			}
+
 		}).getInstance(LinearSimulatedAnnealingFitnessEvaluator.class);
 	}
 }
