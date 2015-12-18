@@ -165,8 +165,6 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 	}
 
 	@Override
-		// Initialise the fitness functions
-		fitnessHelper.initFitnessComponents(getFitnessComponents(), data);
 	public void setInitialSequences(@NonNull final ISequences initialRawSequences, @NonNull final ISequences initialFullSequences, @NonNull final IEvaluationState evaluationState) {
 
 		// TODO check for MAX_VALUE here and throw some kind of death condition.
@@ -278,7 +276,6 @@ public final class LinearSimulatedAnnealingFitnessEvaluator implements IFitnessE
 
 		return result;
 	}
-
 
 	@Override
 	public void step() {
