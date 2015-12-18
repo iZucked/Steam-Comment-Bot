@@ -241,7 +241,7 @@ public class PeriodTransformer {
 
 		output.getCargoModel().getVesselAvailabilities().addAll(newVesselAvailabilities);
 
-		trimSpotMarketCurves(internalDomain, periodRecord, output);
+		trimSpotMarketCurves(periodRecord, output);
 
 		// Remove schedule model
 		output.getScheduleModel().setSchedule(null);
@@ -1052,7 +1052,7 @@ public class PeriodTransformer {
 		}
 	}
 
-	public void trimSpotMarketCurves(@NonNull final EditingDomain internalDomain, @NonNull final PeriodRecord periodRecord, @NonNull final LNGScenarioModel scenario) {
+	public void trimSpotMarketCurves(@NonNull final PeriodRecord periodRecord, @NonNull final LNGScenarioModel scenario) {
 		final SpotMarketsModel spotMarketsModel = scenario.getReferenceModel().getSpotMarketsModel();
 		ZonedDateTime earliestDate = periodRecord.lowerBoundary;
 		ZonedDateTime latestDate = periodRecord.upperBoundary;
@@ -1073,14 +1073,14 @@ public class PeriodTransformer {
 			throw new IllegalStateException("Unable to find latest scenario date");
 		}
 
-		trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getDesPurchaseSpotMarket(), earliestDate, latestDate);
-		trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getDesSalesSpotMarket(), earliestDate, latestDate);
-		trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getFobPurchasesSpotMarket(), earliestDate, latestDate);
-		trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getFobSalesSpotMarket(), earliestDate, latestDate);
+		trimSpotMarketCurves(periodRecord, spotMarketsModel.getDesPurchaseSpotMarket(), earliestDate, latestDate);
+		trimSpotMarketCurves(periodRecord, spotMarketsModel.getDesSalesSpotMarket(), earliestDate, latestDate);
+		trimSpotMarketCurves(periodRecord, spotMarketsModel.getFobPurchasesSpotMarket(), earliestDate, latestDate);
+		trimSpotMarketCurves(periodRecord, spotMarketsModel.getFobSalesSpotMarket(), earliestDate, latestDate);
 	}
 
-	public void trimSpotMarketCurves(@NonNull final EditingDomain internalDomain, @NonNull final PeriodRecord periodRecord, @Nullable final SpotMarketGroup spotMarketGroup,
-			@NonNull final ZonedDateTime earliestDate, @NonNull final ZonedDateTime latestDate) {
+	public void trimSpotMarketCurves(@NonNull final PeriodRecord periodRecord, @Nullable final SpotMarketGroup spotMarketGroup, @NonNull final ZonedDateTime earliestDate,
+			@NonNull final ZonedDateTime latestDate) {
 		if (spotMarketGroup != null) {
 			for (final SpotMarket spotMarket : spotMarketGroup.getMarkets()) {
 				final SpotAvailability availability = spotMarket.getAvailability();

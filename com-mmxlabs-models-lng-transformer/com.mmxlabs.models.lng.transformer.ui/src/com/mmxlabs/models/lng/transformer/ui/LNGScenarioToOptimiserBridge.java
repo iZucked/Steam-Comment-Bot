@@ -12,6 +12,7 @@ import java.util.Set;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
@@ -131,6 +132,12 @@ public class LNGScenarioToOptimiserBridge {
 
 		// If we are in a period optimisation, then create a LNGDataTransformer for the period data
 		if (this.periodMapping != null) {
+
+			// Create a stub command here so match the initial evaluation command update for undo() calls later
+			final CompoundCommand wrapper = LNGSchedulerJobUtils.createBlankCommand(0);
+			wrapper.append(IdentityCommand.INSTANCE);
+			optimiserEditingDomain.getCommandStack().execute(wrapper);
+			
 			optimiserDataTransformer = new LNGDataTransformer(this.optimiserScenario, optimiserSettings, hints, services);
 		} else {
 			optimiserDataTransformer = originalDataTransformer;
@@ -157,7 +164,7 @@ public class LNGScenarioToOptimiserBridge {
 			t.setInclusionChecker(new InclusionChecker());
 
 			final NonNullPair<LNGScenarioModel, EditingDomain> p = t.transform(originalScenario, optimiserSettings, periodMapping);
-
+			
 			// DEBUGGING - store sub scenario as a "fork"
 			if (false && scenarioInstance != null) {
 				try {
