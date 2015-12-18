@@ -687,6 +687,10 @@ public class ScenarioTools {
 	 * @return the evaluated schedule
 	 */
 	public static Schedule evaluate(@NonNull final LNGScenarioModel scenario) {
+		return evaluate(scenario, false);
+	}
+
+	public static Schedule evaluate(@NonNull final LNGScenarioModel scenario, boolean withCharterOutGeneration) {
 
 		// Code to dump out the scenario to disk
 		if (false) {
@@ -700,6 +704,7 @@ public class ScenarioTools {
 		}
 
 		final OptimiserSettings settings = ScenarioUtils.createDefaultSettings();
+		settings.setGenerateCharterOuts(withCharterOutGeneration);
 		final Set<String> hints = LNGTransformerHelper.getHints(settings);
 		final LNGDataTransformer dataTransformer = new LNGDataTransformer(scenario, settings, hints,
 				LNGTransformerHelper.getOptimiserInjectorServices(new TransformerExtensionTestBootstrapModule(), null));

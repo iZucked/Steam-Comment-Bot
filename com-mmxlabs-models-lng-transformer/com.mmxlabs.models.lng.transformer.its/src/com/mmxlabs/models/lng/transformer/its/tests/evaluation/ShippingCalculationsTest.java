@@ -1242,7 +1242,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		// -144 = 1.5 { days } * 96 { rate }
 		checker.setExpectedValues(Expectations.OVERHEAD_COSTS, GeneratedCharterOut.class, new Integer[] { -144 });
 
-		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		final Schedule schedule = ScenarioTools.evaluate(scenario, true);
 		ScenarioTools.printSequences(schedule);
 
 		final Sequence sequence = schedule.getSequences().get(0);
@@ -1306,7 +1306,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		// -144 = 1.5 { days } * 96 { rate }
 		checker.setExpectedValues(Expectations.OVERHEAD_COSTS, GeneratedCharterOut.class, new Integer[] { -144 });
 
-		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		final Schedule schedule = ScenarioTools.evaluate(scenario, true);
 		ScenarioTools.printSequences(schedule);
 
 		final Sequence sequence = schedule.getSequences().get(0);
