@@ -263,6 +263,7 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 	public IMultiStateResult run(final IProgressMonitor monitor) {
 		final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
 		if (runnerHook != null) {
+			runnerHook.beginPhase(IRunnerHook.PHASE_LSO, injector);
 			final ISequences preloadedResult = runnerHook.getPrestoredSequences(IRunnerHook.PHASE_LSO);
 			if (preloadedResult != null) {
 				monitor.beginTask("", 1);
@@ -270,6 +271,7 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 					monitor.worked(1);
 					return new MultiStateResult(preloadedResult, new HashMap<>());
 				} finally {
+					runnerHook.endPhase(IRunnerHook.PHASE_LSO);
 					monitor.done();
 				}
 			}
@@ -296,6 +298,7 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 
 				if (runnerHook != null) {
 					runnerHook.reportSequences(IRunnerHook.PHASE_LSO, bestRawSequences);
+					runnerHook.endPhase(IRunnerHook.PHASE_LSO);
 				}
 
 				if (bestRawSequences != null && bestSolution != null) {

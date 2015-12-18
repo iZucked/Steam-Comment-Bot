@@ -265,13 +265,16 @@ public class LNGHillClimbOptimiserTransformerUnit implements ILNGStateTransforme
 
 		final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
 		if (runnerHook != null) {
+			runnerHook.beginPhase(IRunnerHook.PHASE_HILL, injector);
 			final ISequences preloadedResult = runnerHook.getPrestoredSequences(IRunnerHook.PHASE_HILL);
+
 			if (preloadedResult != null) {
 				monitor.beginTask("", 1);
 				try {
 					monitor.worked(1);
 					return new MultiStateResult(preloadedResult, new HashMap<>());
 				} finally {
+					runnerHook.endPhase(IRunnerHook.PHASE_HILL);
 					monitor.done();
 				}
 			}
@@ -296,6 +299,7 @@ public class LNGHillClimbOptimiserTransformerUnit implements ILNGStateTransforme
 
 				if (runnerHook != null) {
 					runnerHook.reportSequences(IRunnerHook.PHASE_HILL, bestRawSequences);
+					runnerHook.endPhase(IRunnerHook.PHASE_HILL);
 				}
 
 				if (bestRawSequences != null && bestSolution != null) {
