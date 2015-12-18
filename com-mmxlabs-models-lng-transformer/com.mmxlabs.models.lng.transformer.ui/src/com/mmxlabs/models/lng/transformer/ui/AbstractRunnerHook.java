@@ -8,6 +8,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Injector;
+import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.optimiser.core.ISequences;
 
 public class AbstractRunnerHook implements IRunnerHook {
@@ -20,15 +21,18 @@ public class AbstractRunnerHook implements IRunnerHook {
 		this.injector = injector;
 	}
 
+	@Override
 	@Nullable
 	public ISequences getPrestoredSequences(@NonNull String phase) {
 		return null;
 	}
 
+	@Override
 	public void reportSequences(@NonNull String phase, @NonNull ISequences rawSequences) {
 
 	}
 
+	@Override
 	public void endPhase(@NonNull String phase) {
 
 	}

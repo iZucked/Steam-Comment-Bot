@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
+import java.util.concurrent.ExecutorService;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.SubProgressMonitor;
@@ -17,7 +19,7 @@ import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.model.ModelReference;
@@ -42,6 +44,8 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
 	private final LNGScenarioRunner scenarioRunner;
 
+	private ExecutorService executorService;
+
 	public LNGSchedulerOptimiserJobControl(final LNGSchedulerJobDescriptor jobDescriptor) {
 		super((jobDescriptor.isOptimising() ? "Optimise " : "Evaluate ") + jobDescriptor.getJobName(),
 				CollectionsUtil.<QualifiedName, Object> makeHashMap(IProgressConstants.ICON_PROPERTY, (jobDescriptor.isOptimising() ? imgOpti : imgEval)));
@@ -50,8 +54,15 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 		this.modelReference = scenarioInstance.getReference();
 		this.originalScenario = (LNGScenarioModel) modelReference.getInstance();
 		final EditingDomain originalEditingDomain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
-		scenarioRunner = new LNGScenarioRunner(originalScenario, scenarioInstance, jobDescriptor.getOptimiserSettings(), originalEditingDomain, LNGTransformer.HINT_OPTIMISE_LSO);
+
+		// TODO: This should be static / central service?
+		executorService = LNGScenarioChainBuilder.createExecutorService();// Executors.newSingleThreadExecutor();
+
+		scenarioRunner = new LNGScenarioRunner(executorService, originalScenario, scenarioInstance, jobDescriptor.getOptimiserSettings(), originalEditingDomain,
+				LNGTransformerHelper.HINT_OPTIMISE_LSO);
 		setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));
+		
+		
 
 		// Disable optimisation in P&L testing phase
 		if (LicenseFeatures.isPermitted("features:phase-pnl-testing")) {
@@ -62,7 +73,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
 	@Override
 	protected void reallyPrepare() {
-		scenarioRunner.initAndEval();
+		scenarioRunner.evaluateInitialState();
 	}
 
 	@Override
@@ -97,9 +108,11 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
 	@Override
 	public void dispose() {
-		if (scenarioRunner != null) {
-			scenarioRunner.dispose();
-		}
+		executorService.shutdownNow();
+
+		// if (scenarioRunner != null) {
+		// scenarioRunner.dispose();
+		// }
 		super.dispose();
 	}
 

@@ -290,8 +290,11 @@ public class LNGScenarioTransformer {
 	@NonNull
 	private final Map<SpotMarket, TreeMap<String, Collection<Slot>>> existingSpotCount = new HashMap<>();
 
-	@NonNull
-	private final OptimiserSettings optimiserParameters;
+	// @NonNull
+	// private final OptimiserSettings optimiserParameters;
+//	@Inject
+	@Named("OptimisationShippingOnly")
+	private boolean shippingOnly = false;
 
 	@Inject
 	@NonNull
@@ -311,10 +314,10 @@ public class LNGScenarioTransformer {
 	 * @param scenario
 	 */
 	@Inject
-	public LNGScenarioTransformer(@NonNull final LNGScenarioModel rootObject, @NonNull final OptimiserSettings optimiserParameters) {
+	public LNGScenarioTransformer(@NonNull final LNGScenarioModel rootObject) {
 
 		this.rootObject = rootObject;
-		this.optimiserParameters = optimiserParameters;
+//		this.optimiserParameters = optimiserParameters;
 	}
 
 	/**
@@ -666,7 +669,7 @@ public class LNGScenarioTransformer {
 
 		buildDistances(builder, portAssociation, allPorts, portIndices, vesselAssociations.getFirst(), modelEntityMap);
 
-		buildCargoes(builder, portAssociation, vesselAssociations.getSecond(), contractTransformers, modelEntityMap, optimiserParameters.isShippingOnly());
+		buildCargoes(builder, portAssociation, vesselAssociations.getSecond(), contractTransformers, modelEntityMap);
 
 		buildVesselEvents(builder, portAssociation, vesselAssociations.getFirst(), modelEntityMap);
 
@@ -881,7 +884,7 @@ public class LNGScenarioTransformer {
 	 * @param defaultRewiring
 	 */
 	private void buildCargoes(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @NonNull final Association<Vessel, IVessel> vesselAssociation,
-			@NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap, final boolean shippingOnly) {
+			@NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap) {
 
 		// All Discharge ports - for use with
 		final Set<IPort> allDischargePorts = new HashSet<IPort>();

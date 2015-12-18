@@ -15,6 +15,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -937,6 +938,7 @@ public class DefaultScenarioCreator {
 	 * 
 	 * @return The finished scenario.
 	 */
+	@NonNull
 	public LNGScenarioModel buildScenario() {
 
 		// Add every canal to every vessel class.

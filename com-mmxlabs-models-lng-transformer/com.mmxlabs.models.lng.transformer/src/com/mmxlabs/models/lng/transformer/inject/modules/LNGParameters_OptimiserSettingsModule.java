@@ -17,79 +17,48 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
-import com.mmxlabs.models.lng.parameters.Constraint;
 import com.mmxlabs.models.lng.parameters.Objective;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.SimilaritySettings;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessFactory;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
-import com.mmxlabs.optimiser.core.modules.ConstraintCheckerInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.EvaluationProcessInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.FitnessFunctionInstantiatorModule;
-import com.mmxlabs.optimiser.core.modules.OptimiserContextModule;
 import com.mmxlabs.optimiser.lso.IThresholder;
 import com.mmxlabs.optimiser.lso.impl.RestartingLocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.thresholders.GeometricThresholder;
 import com.mmxlabs.optimiser.lso.modules.LinearFitnessEvaluatorModule;
 import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ISimilarityComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.SimilarityComponentParameters;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.EnumeratingSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.lso.SequencesConstrainedMoveGeneratorUnit;
 
 /**
- * The {@link OptimiserSettingsModule} provides user-definable parameters derived from the {@link OptimiserSettings} object such as the random seed and number of iterations
+ * The {@link LNGParameters_OptimiserSettingsModule} provides user-definable parameters derived from the {@link OptimiserSettings} object such as the random seed and number of iterations
  * 
  */
-public class OptimiserSettingsModule extends AbstractModule {
+public class LNGParameters_OptimiserSettingsModule extends AbstractModule {
+
+	@NonNull
+	private final OptimiserSettings settings;
+
+	public LNGParameters_OptimiserSettingsModule(@NonNull OptimiserSettings settings) {
+		this.settings = settings;
+	}
 
 	@Override
 	protected void configure() {
-	};
 
-	@Provides
-	@Singleton
-	@Named(ConstraintCheckerInstantiatorModule.ENABLED_CONSTRAINT_NAMES)
-	private List<String> provideEnabledConstraintNames(final OptimiserSettings settings) {
-		final List<String> result = new ArrayList<String>();
-
-		for (final Constraint c : settings.getConstraints()) {
-			if (c.isEnabled()) {
-				result.add(c.getName());
-			}
-		}
-
-		return result;
-	}
-
-	@Provides
-	@Singleton
-	@Named(EvaluationProcessInstantiatorModule.ENABLED_EVALUATION_PROCESS_NAMES)
-	private List<String> provideEnabledEvaluationProcessNames(final OptimiserSettings settings, final IEvaluationProcessRegistry registry) {
-		final List<String> result = new ArrayList<String>();
-
-		// Enable all processes.
-		for (final IEvaluationProcessFactory f : registry.getEvaluationProcessFactories()) {
-			result.add(f.getName());
-		}
-		// for (final Constraint c : settings.getConstraints()) {
-		// if (c.isEnabled()) {
-		// result.add(c.getName());
-		// }
-		// }
-
-		return result;
 	}
 
 	@Provides
 	@Singleton
 	@Named(FitnessFunctionInstantiatorModule.ENABLED_FITNESS_NAMES)
-	private List<String> provideEnabledFitnessFunctionNames(final OptimiserSettings settings) {
+	private List<String> provideEnabledFitnessFunctionNames() {
 		final List<String> result = new ArrayList<String>();
 
 		for (final Objective o : settings.getObjectives()) {
@@ -103,7 +72,7 @@ public class OptimiserSettingsModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	private IThresholder provideThresholder(final OptimiserSettings settings, @Named(LocalSearchOptimiserModule.RANDOM_SEED) final long seed) {
+	private IThresholder provideThresholder(@Named(LocalSearchOptimiserModule.RANDOM_SEED) final long seed) {
 		// For now we are just going to generate a self-calibrating thresholder
 
 		final IThresholder thresholder = new GeometricThresholder(new Random(seed), settings.getAnnealingSettings().getEpochLength(), settings.getAnnealingSettings().getInitialTemperature(),
@@ -116,14 +85,8 @@ public class OptimiserSettingsModule extends AbstractModule {
 
 	@Provides
 	@Named(LocalSearchOptimiserModule.RANDOM_SEED)
-	private long getRandomSeed(final OptimiserSettings settings) {
+	private long getRandomSeed() {
 		return settings.getSeed();
-	}
-
-	@Provides
-	@Named(EnumeratingSequenceScheduler.OPTIMISER_REEVALUATE)
-	private boolean isOptimiserReevaluating() {
-		return true;
 	}
 
 	@Provides
@@ -133,38 +96,32 @@ public class OptimiserSettingsModule extends AbstractModule {
 	}
 
 	@Provides
-	@Named(TravelTimeConstraintChecker.OPTIMISER_START_ELEMENT_FIX)
-	private boolean enableStartOfSequenceFix() {
-		return true;
-	}
-
-	@Provides
 	@Named(LocalSearchOptimiserModule.LSO_NUMBER_OF_ITERATIONS)
-	private int getNumberOfIterations(final OptimiserSettings settings) {
+	private int getNumberOfIterations() {
 		return settings.getAnnealingSettings().getIterations();
 	}
 
 	@Provides
 	@Named(LocalSearchOptimiserModule.SOLUTION_IMPROVER_NUMBER_OF_ITERATIONS)
-	private int getNumberOfSolutionImprovementIterations(final OptimiserSettings settings) {
+	private int getNumberOfSolutionImprovementIterations() {
 		return settings.getSolutionImprovementSettings() != null ? settings.getSolutionImprovementSettings().getIterations() : 0;
 	}
 
 	@Provides
 	@Named(LocalSearchOptimiserModule.USE_RESTARTING_OPTIMISER)
-	private boolean isLSORestarting(final OptimiserSettings settings) {
+	private boolean isLSORestarting() {
 		return settings.getAnnealingSettings().isRestarting();
 	}
 
 	@Provides
 	@Named(RestartingLocalSearchOptimiser.RESTART_ITERATIONS_THRESHOLD)
-	private int getRestartIterationsThreshold(final OptimiserSettings settings) {
+	private int getRestartIterationsThreshold() {
 		return settings.getAnnealingSettings().getRestartIterationsThreshold();
 	}
 
 	@Provides
 	@Named(LinearFitnessEvaluatorModule.LINEAR_FITNESS_WEIGHTS_MAP)
-	Map<String, Double> provideLSOFitnessWeights(final OptimiserSettings settings, final List<IFitnessComponent> fitnessComponents) {
+	Map<String, Double> provideLSOFitnessWeights(final List<IFitnessComponent> fitnessComponents) {
 		// Initialise to zero, then take optimiser settings
 		final Map<String, Double> weightsMap = new HashMap<String, Double>();
 		for (final IFitnessComponent component : fitnessComponents) {
@@ -185,27 +142,7 @@ public class OptimiserSettingsModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	private ILatenessComponentParameters provideLatenessComponentParameters() {
-		final LatenessComponentParameters lcp = new LatenessComponentParameters();
-
-		lcp.setThreshold(Interval.PROMPT, 48);
-		lcp.setLowWeight(Interval.PROMPT, 0);
-		lcp.setHighWeight(Interval.PROMPT, 1000000);
-
-		lcp.setThreshold(Interval.MID_TERM, 72);
-		lcp.setLowWeight(Interval.MID_TERM, 0);
-		lcp.setHighWeight(Interval.MID_TERM, 1000000);
-
-		lcp.setThreshold(Interval.BEYOND, 72);
-		lcp.setLowWeight(Interval.BEYOND, 0);
-		lcp.setHighWeight(Interval.BEYOND, 1000000);
-
-		return lcp;
-	}
-
-	@Provides
-	@Singleton
-	private ISimilarityComponentParameters provideSimilarityComponentParameters(@NonNull OptimiserSettings settings) {
+	private ISimilarityComponentParameters provideSimilarityComponentParameters() {
 
 		final SimilarityComponentParameters scp = new SimilarityComponentParameters();
 

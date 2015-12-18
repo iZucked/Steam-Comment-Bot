@@ -39,8 +39,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 
-
-public class GeneratedCharterOutTransformer implements IContractTransformer, IVesselEventTransformer, IVesselAvailabilityTransformer{
+public class GeneratedCharterOutTransformer implements IContractTransformer, IVesselEventTransformer, IVesselAvailabilityTransformer {
 	private ModelEntityMap modelEntityMap;
 	private ISchedulerBuilder builder;
 	private LNGScenarioModel rootObject;
@@ -50,7 +49,7 @@ public class GeneratedCharterOutTransformer implements IContractTransformer, IVe
 
 	@Inject
 	private IGeneratedCharterOutSlotProviderEditor generatedCharterOutSlotProviderEditor;
-	
+
 	@Inject
 	private IStartEndRequirementProvider startEndRequirementProvider;
 
@@ -77,10 +76,10 @@ public class GeneratedCharterOutTransformer implements IContractTransformer, IVe
 	}
 
 	@Override
-	public void vesselEventTransformed( @NonNull IVesselEventPortSlot optimiserEventSlot) {
+	public void vesselEventTransformed(@NonNull IVesselEventPortSlot optimiserEventSlot) {
 		createSlotAndSequenceElement(optimiserEventSlot);
 	}
-	
+
 	@Override
 	public void slotTransformed(@NonNull Slot modelSlot, @NonNull IPortSlot optimiserSlot) {
 		if (optimiserSlot instanceof IDischargeOption)
@@ -91,12 +90,12 @@ public class GeneratedCharterOutTransformer implements IContractTransformer, IVe
 		boolean hasAlreadyGenerated = generatedCharterOutSlotProviderEditor.getPortSlotGeneratedByPortSlot(slotGeneratedFrom) != null;
 		if (!hasAlreadyGenerated) {
 			// create a VesselEventPortSlot (details will be filled in during generation)
-			IGeneratedCharterOutVesselEventPortSlot vesselEventPortSlot = builder.createGeneratedCharterOutEvent(String.format("gco-%s",slotGeneratedFrom.getId()),  null, slotGeneratedFrom.getPort(), null, 0, 0, 0, 0, 0, 0);
-			// create a sequence element 
+			IGeneratedCharterOutVesselEventPortSlot vesselEventPortSlot = builder.createGeneratedCharterOutEvent(String.format("gco-%s", slotGeneratedFrom.getId()), slotGeneratedFrom.getPort());
+			// create a sequence element
 			SequenceElement sequenceElement = builder.createSequenceElement(vesselEventPortSlot.getId());
-			
+
 			portSlotProvider.setPortSlot(sequenceElement, vesselEventPortSlot);
-			
+
 			ISequenceElement originalSequenceElement = portSlotProvider.getElement(slotGeneratedFrom);
 			generatedCharterOutSlotProviderEditor.setPortSlot(sequenceElement, vesselEventPortSlot);
 			generatedCharterOutSlotProviderEditor.setPortSlotGeneratedByElement(originalSequenceElement, vesselEventPortSlot);
@@ -134,15 +133,14 @@ public class GeneratedCharterOutTransformer implements IContractTransformer, IVe
 		// TODO Auto-generated method stub
 		return new LinkedList<EClass>();
 	}
-	
+
 	public void setInjectedMembers(IPortSlotProviderEditor portSlotProvider, IGeneratedCharterOutSlotProviderEditor generatedCharterOutSlotProviderEditor,
-			IStartEndRequirementProvider startEndRequirementProvider, IVesselProviderEditor vesselProvider,
-			ISchedulerBuilder builder) {
+			IStartEndRequirementProvider startEndRequirementProvider, IVesselProviderEditor vesselProvider, ISchedulerBuilder builder) {
 		this.portSlotProvider = portSlotProvider;
 		this.generatedCharterOutSlotProviderEditor = generatedCharterOutSlotProviderEditor;
 		this.startEndRequirementProvider = startEndRequirementProvider;
 		this.vesselProvider = vesselProvider;
 		this.builder = builder;
 	}
-	
+
 }

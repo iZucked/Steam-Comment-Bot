@@ -36,9 +36,10 @@ public class SimilarityState {
 
 	private long[] baseMetrics = new long[MetricType.values().length];
 
-	private ISequences originalSequences = null;
+	private ISequences originalFullSequences = null;
+	
 	public void init(@NonNull final ISequences fullSequences) {
-		setOriginalSequences(fullSequences);
+		setFullOriginalSequences(fullSequences);
 		for (final IResource resource : fullSequences.getResources()) {
 			assert resource != null;
 			final ISequence sequence = fullSequences.getSequence(resource);
@@ -110,12 +111,12 @@ public class SimilarityState {
 		return cargoToNextCargoMap.get(cargo);
 	}
 
-	public ISequences getOriginalSequences() {
-		return originalSequences;
+	public ISequences getFullOriginalSequences() {
+		return originalFullSequences;
 	}
 
-	public void setOriginalSequences(ISequences originalSequences) {
-		this.originalSequences = originalSequences;
+	public void setFullOriginalSequences(ISequences originalSequences) {
+		this.originalFullSequences = originalSequences;
 	}
 
 	public long[] getBaseMetrics() {

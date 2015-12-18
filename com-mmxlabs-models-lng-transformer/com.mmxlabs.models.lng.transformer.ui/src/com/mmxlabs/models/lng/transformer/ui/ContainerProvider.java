@@ -28,5 +28,4 @@ public class ContainerProvider {
 	public void set(@Nullable final Container container) {
 		this.container = container;
 	}
-
 }

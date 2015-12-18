@@ -11,9 +11,11 @@ import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
@@ -21,12 +23,11 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
-import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
-import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.google.inject.Injector;
+import com.google.inject.Module;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -84,17 +85,21 @@ import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
+import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
+import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
+import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
+import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_EvaluationSettingsModule;
 import com.mmxlabs.models.lng.transformer.its.tests.ManifestJointModel;
 import com.mmxlabs.models.lng.transformer.its.tests.SimpleCargoAllocation;
-import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
+import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.manifest.ManifestFactory;
+import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 /**
  * Methods for printing and creating a scenario where a ship travels from port A to port B then back to port A.
@@ -112,7 +117,7 @@ public class ScenarioTools {
 		B.setName("B");
 		A.setTimeZone("UTC");
 		B.setTimeZone("UTC");
-		
+
 	}
 
 	// The default route name of the ocean route between ports.
@@ -683,16 +688,6 @@ public class ScenarioTools {
 	 */
 	public static Schedule evaluate(@NonNull final LNGScenarioModel scenario) {
 
-		// String[] hints = null;
-		// if (optimise) {
-		// hints= new String[] { LNGTransformer.HINT_OPTIMISE_LSO}
-		// }
-		//
-		
-		OptimiserSettings settings = ScenarioUtils.createDefaultSettings();
-		settings.setGenerateCharterOuts(true);
-		final LNGTransformer transformer = new LNGTransformer(scenario, settings, new TransformerExtensionTestModule());
-
 		// Code to dump out the scenario to disk
 		if (false) {
 			try {
@@ -704,16 +699,30 @@ public class ScenarioTools {
 			}
 		}
 
-		final ModelEntityMap modelEntityMap = transformer.getModelEntityMap();
-		final IAnnotatedSolution startSolution = LNGSchedulerJobUtils.evaluateCurrentState(transformer);
+		final OptimiserSettings settings = ScenarioUtils.createDefaultSettings();
+		final Set<String> hints = LNGTransformerHelper.getHints(settings);
+		final LNGDataTransformer dataTransformer = new LNGDataTransformer(scenario, settings, hints,
+				LNGTransformerHelper.getOptimiserInjectorServices(new TransformerExtensionTestBootstrapModule(), null));
+
+		Injector evaluationInjector;
+		{
+			final List<Module> modules = new LinkedList<>();
+			modules.add(new InputSequencesModule(dataTransformer.getInitialSequences()));
+			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(dataTransformer.getOptimiserSettings()), dataTransformer.getModuleServices(),
+					IOptimiserInjectorService.ModuleType.Module_ParametersModule, hints));
+			modules.addAll(
+					LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), dataTransformer.getModuleServices(), IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
+			evaluationInjector = dataTransformer.getInjector().createChildInjector(modules);
+		}
+
+		final ModelEntityMap modelEntityMap = dataTransformer.getModelEntityMap();
+		// final IAnnotatedSolution startSolution = LNGSchedulerJobUtils.evaluateCurrentState(transformer);
 
 		// Construct internal command stack to generate correct output schedule
-		final BasicCommandStack commandStack = new BasicCommandStack();
-		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
-		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
-		final EditingDomain ed = new AdapterFactoryEditingDomain(adapterFactory, commandStack);
+		final EditingDomain ed = LNGSchedulerJobUtils.createLocalEditingDomain();
 
-		final Pair<Command, Schedule> p = LNGSchedulerJobUtils.exportSolution(transformer.getInjector(), scenario, transformer.getOptimiserSettings(), ed, modelEntityMap, startSolution);
+		final Pair<Command, Schedule> p = LNGSchedulerJobUtils.exportSolution(evaluationInjector, scenario, dataTransformer.getOptimiserSettings(), ed, modelEntityMap,
+				dataTransformer.getInitialSequences(), null);
 		ed.getCommandStack().execute(p.getFirst());
 		return p.getSecond();
 	}

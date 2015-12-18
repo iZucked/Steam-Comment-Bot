@@ -1,9 +1,6 @@
-/**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
- * All rights reserved.
- */
 package com.mmxlabs.models.lng.transformer.chain.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +26,7 @@ public class MultiStateResult implements IMultiStateResult {
 
 	public MultiStateResult(@NonNull final NonNullPair<ISequences, Map<String, Object>> bestResult, @NonNull final List<NonNullPair<ISequences, Map<String, Object>>> solutions) {
 		this.bestResult = bestResult;
-		this.solutions = solutions;
+		this.solutions = new ArrayList<>(solutions);
 	}
 
 	@Override

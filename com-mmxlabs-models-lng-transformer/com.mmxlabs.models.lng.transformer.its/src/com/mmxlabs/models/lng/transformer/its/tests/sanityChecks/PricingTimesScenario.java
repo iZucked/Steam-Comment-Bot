@@ -10,6 +10,8 @@ import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -22,9 +24,10 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
-import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
+import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
 
 /**
  * Creates a simple scenario for testing changes in price indexes and price dating
@@ -139,24 +142,33 @@ public class PricingTimesScenario {
 	 * Main testing methods to run the created scenario and compare the actual and expected price
 	 */
 	public void testSalesPrice(double... prices) {
-		final LNGScenarioRunner runner = new LNGScenarioRunner((LNGScenarioModel) this.scenario, LNGScenarioRunner.createDefaultSettings());
-		runner.initAndEval(new TransformerExtensionTestModule());
-		final Schedule schedule = runner.getIntialSchedule();
-		Assert.assertNotNull(schedule);
 
-		// Workaround, would prefer to use ca.getInputCargo().getName() but hookup runner.updateScenario() not working
-		String errorMsg = "Cargo %s has incorrect pricing %2f != %2f";
-		for (int i = 0; i < schedule.getCargoAllocations().size(); i++) {
-			CargoAllocation ca = schedule.getCargoAllocations().get(i);
-			if (i == 0) {
-				System.out.println("Discharge start:" + ca.getSlotAllocations().get(1).getSlotVisit().getStart().toString());
-				System.out.println("Discharge end:" + ca.getSlotAllocations().get(1).getSlotVisit().getEnd().toString());
+		final ExecutorService executorService = Executors.newSingleThreadExecutor();
+		try {
+			final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, (LNGScenarioModel) this.scenario, LNGScenarioRunnerUtils.createDefaultSettings(),
+					new TransformerExtensionTestBootstrapModule());
+			runner.evaluateInitialState();
+
+			final Schedule schedule = runner.getSchedule();
+			Assert.assertNotNull(schedule);
+
+			// Workaround, would prefer to use ca.getInputCargo().getName() but hookup runner.updateScenario() not working
+			String errorMsg = "Cargo %s has incorrect pricing %2f != %2f";
+			for (int i = 0; i < schedule.getCargoAllocations().size(); i++) {
+				CargoAllocation ca = schedule.getCargoAllocations().get(i);
+				if (i == 0) {
+					System.out.println("Discharge start:" + ca.getSlotAllocations().get(1).getSlotVisit().getStart().toString());
+					System.out.println("Discharge end:" + ca.getSlotAllocations().get(1).getSlotVisit().getEnd().toString());
+				}
+				double salePrice = ca.getSlotAllocations().get(1).getPrice();
+				double expectedPrice = prices[i];
+				System.out.println("Sale price: " + salePrice);
+				System.out.println("Expected price:" + expectedPrice);
+				Assert.assertEquals(String.format(errorMsg, i, expectedPrice, salePrice), expectedPrice, salePrice, 0.0001);
 			}
-			double salePrice = ca.getSlotAllocations().get(1).getPrice();
-			double expectedPrice = prices[i];
-			System.out.println("Sale price: " + salePrice);
-			System.out.println("Expected price:" + expectedPrice);
-			Assert.assertEquals(String.format(errorMsg, i, expectedPrice, salePrice), expectedPrice, salePrice, 0.0001);
+
+		} finally {
+			executorService.shutdownNow();
 		}
 	}
 

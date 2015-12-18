@@ -205,9 +205,10 @@ public class TradingExporterExtension implements IExporterExtension {
 	private EndEvent findEndEvent(final ISequenceElement element) {
 		EndEvent endEvent = null;
 		//
-		for (int i = 0; i < annotatedSolution.getFullSequences().size(); ++i) {
-			final ISequence seq = annotatedSolution.getFullSequences().getSequence(i);
-			final IResource res = annotatedSolution.getFullSequences().getResources().get(i);
+		// for (int i = 0; i < annotatedSolution.getFullSequences().size(); ++i) {
+		for (final Map.Entry<IResource, ISequence> e : annotatedSolution.getFullSequences().getSequences().entrySet()) {
+			final IResource res = e.getKey();
+			final ISequence seq = e.getValue();
 			if (seq.get(0) == element) {
 				for (final Sequence sequence : outputSchedule.getSequences()) {
 					final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
@@ -234,10 +235,10 @@ public class TradingExporterExtension implements IExporterExtension {
 	private StartEvent findStartEvent(final IVesselProvider vesselProvider, final ISequenceElement element) {
 		StartEvent startEvent = null;
 		//
-		LOOP_OUTER: for (int i = 0; i < annotatedSolution.getFullSequences().size(); ++i) {
-
-			// Find the optimiser sequence for the start element
-			final ISequence seq = annotatedSolution.getFullSequences().getSequence(i);
+		// Find the optimiser sequence for the start element
+		LOOP_OUTER: for (final Map.Entry<IResource, ISequence> e : annotatedSolution.getFullSequences().getSequences().entrySet()) {
+			final IResource res = e.getKey();
+			final ISequence seq = e.getValue();
 			if (seq.get(0) == element) {
 				// Found the sequence, so no find the matching EMF sequence
 				for (final Sequence sequence : outputSchedule.getSequences()) {
@@ -247,7 +248,6 @@ public class TradingExporterExtension implements IExporterExtension {
 						continue;
 					}
 					// Find the matching
-					final IResource res = annotatedSolution.getFullSequences().getResources().get(i);
 					final IVesselAvailability iVesselAvailability = modelEntityMap.getOptimiserObject(vesselAvailability, IVesselAvailability.class);
 
 					// Look up correct instance (NOTE: Even though IVessel extends IResource, they seem to be different instances.

@@ -1,7 +1,3 @@
-/**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
- * All rights reserved.
- */
 package com.mmxlabs.models.lng.transformer.chain;
 
 import java.util.List;
@@ -10,10 +6,11 @@ import java.util.Map;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.NonNullPair;
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequences;
 
 /**
- * Results storing raw {@link ISequences} to a {@link Map} of additional annotations such as fitness properties.
+ * Results storing raw {@link ISequences} to {@link Map<String, Object>} extra annotations pairings
  * 
  * @author Simon Goodall
  *

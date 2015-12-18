@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.junit.Assert;
@@ -21,10 +23,10 @@ import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
-import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
+import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
@@ -332,13 +334,14 @@ public class PeriodOptimiserTest {
 		}
 
 		public void optimise() throws Exception {
+			ExecutorService executorService = Executors.newSingleThreadExecutor();
 			try {
 
 				final OptimiserSettings settings = getSettings();
 
-				final LNGScenarioRunner runner = new LNGScenarioRunner((LNGScenarioModel) scenario, settings, LNGTransformer.HINT_OPTIMISE_LSO);
-
-				runner.initAndEval(new TransformerExtensionTestModule());
+				final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, (LNGScenarioModel) scenario, settings, new TransformerExtensionTestBootstrapModule(),
+						LNGTransformerHelper.HINT_OPTIMISE_LSO);
+				runner.evaluateInitialState();
 				if (OUTPUT_SCENARIOS) {
 					save(runner.getScenario(), "c:/temp/scenario1.lingo");
 				}
@@ -350,6 +353,8 @@ public class PeriodOptimiserTest {
 				// this exception should not occur
 				// Assert.fail("Scenario runner failed to initialise scenario");
 				throw er;
+			} finally {
+				executorService.shutdownNow();
 			}
 		}
 
@@ -360,6 +365,8 @@ public class PeriodOptimiserTest {
 		}
 
 		public void periodOptimise(final YearMonth start, final YearMonth end) throws Exception {
+			ExecutorService executorService = Executors.newSingleThreadExecutor();
+
 			try {
 
 				final OptimiserSettings settings = getSettings();
@@ -367,8 +374,10 @@ public class PeriodOptimiserTest {
 				settings.getRange().setOptimiseAfter(start);
 				settings.getRange().setOptimiseBefore(end);
 
-				final LNGScenarioRunner runner = new LNGScenarioRunner((LNGScenarioModel) scenario, settings, LNGTransformer.HINT_OPTIMISE_LSO);
-				runner.initAndEval(new TransformerExtensionTestModule());
+				final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, (LNGScenarioModel) scenario, settings, new TransformerExtensionTestBootstrapModule(),
+						LNGTransformerHelper.HINT_OPTIMISE_LSO);
+				runner.evaluateInitialState();
+
 				if (OUTPUT_SCENARIOS) {
 					save(runner.getScenario(), "c:/temp/scenario1p.lingo");
 				}
@@ -381,6 +390,8 @@ public class PeriodOptimiserTest {
 				// this exception should not occur
 				// Assert.fail("Scenario runner failed to initialise scenario: " + er.getMessage());
 				throw er;
+			} finally {
+				executorService.shutdownNow();
 			}
 		}
 	}

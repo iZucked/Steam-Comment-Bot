@@ -1,8 +1,10 @@
+
+package com.mmxlabs.models.lng.transformer.util;
+
 /**
  * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.ui;
 
 import java.util.List;
 

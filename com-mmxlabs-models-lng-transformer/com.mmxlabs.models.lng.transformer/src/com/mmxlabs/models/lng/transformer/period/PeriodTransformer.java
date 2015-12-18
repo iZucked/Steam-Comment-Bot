@@ -20,17 +20,12 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.emf.common.command.BasicCommandStack;
-import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 import org.eclipse.emf.edit.command.DeleteCommand;
-import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
-import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.ops4j.peaberry.Peaberry;
@@ -86,7 +81,6 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.period.InclusionChecker.InclusionType;
 import com.mmxlabs.models.lng.transformer.period.InclusionChecker.PeriodRecord;
 import com.mmxlabs.models.lng.transformer.period.InclusionChecker.Position;
@@ -117,14 +111,6 @@ public class PeriodTransformer {
 	@Inject(optional = true)
 	private Iterable<IPeriodTransformerExtension> extensions;
 
-	@Nullable
-	private Module testingModule;
-
-	public PeriodTransformer(@Nullable final Module testingModule) {
-		this.testingModule = testingModule;
-		injectExtensions();
-	}
-
 	public PeriodTransformer() {
 		injectExtensions();
 	}
@@ -152,7 +138,9 @@ public class PeriodTransformer {
 	@NonNull
 	private InclusionChecker inclusionChecker;
 
-	public LNGScenarioModel transform(@NonNull final LNGScenarioModel wholeScenario, @NonNull final OptimiserSettings optimiserSettings, @NonNull final IScenarioEntityMapping mapping) {
+	@NonNull
+	public NonNullPair<LNGScenarioModel, EditingDomain> transform(@NonNull final LNGScenarioModel wholeScenario, @NonNull final OptimiserSettings optimiserSettings,
+			@NonNull final IScenarioEntityMapping mapping) {
 		final PeriodRecord periodRecord = createPeriodRecord(optimiserSettings);
 		return transform(wholeScenario, optimiserSettings, periodRecord, mapping);
 	}
@@ -189,8 +177,8 @@ public class PeriodTransformer {
 	}
 
 	@NonNull
-	public LNGScenarioModel transform(@NonNull final LNGScenarioModel wholeScenario, @NonNull final OptimiserSettings optimiserSettings, @NonNull final PeriodRecord periodRecord,
-			@NonNull final IScenarioEntityMapping mapping) {
+	public NonNullPair<LNGScenarioModel, EditingDomain> transform(@NonNull final LNGScenarioModel wholeScenario, @NonNull final OptimiserSettings optimiserSettings,
+			@NonNull final PeriodRecord periodRecord, @NonNull final IScenarioEntityMapping mapping) {
 
 		// assert - passed validation
 
@@ -198,7 +186,7 @@ public class PeriodTransformer {
 		final LNGScenarioModel output = copyScenario(wholeScenario, mapping);
 
 		// Evaluate copy!
-		final EditingDomain internalDomain = evaluateScenario(optimiserSettings, output);
+		final EditingDomain internalDomain = createEditingDomain(output);
 
 		final CargoModel cargoModel = ScenarioModelUtil.getCargoModel(output);
 		final SpotMarketsModel spotMarketsModel = ScenarioModelUtil.getSpotMarketsModel(output);
@@ -258,7 +246,7 @@ public class PeriodTransformer {
 		// Remove schedule model
 		output.getScheduleModel().setSchedule(null);
 
-		return output;
+		return new NonNullPair<>(output, internalDomain);
 	}
 
 	/**
@@ -886,26 +874,35 @@ public class PeriodTransformer {
 	}
 
 	@NonNull
-	public EditingDomain evaluateScenario(@NonNull final OptimiserSettings optimiserSettings, @NonNull final LNGScenarioModel output) {
-
-		final LNGTransformer transformer = new LNGTransformer(output, optimiserSettings, testingModule);
-
-		final ModelEntityMap modelEntityMap = transformer.getModelEntityMap();
-		final IAnnotatedSolution startSolution = LNGSchedulerJobUtils.evaluateCurrentState(transformer);
+	public EditingDomain createEditingDomain(@NonNull final LNGScenarioModel output) {
+		//
+		// Set<String> hints = LNGTransformerHelper.getHints(optimiserSettings);
+		// final LNGDataTransformer transformer = new LNGDataTransformer(output, optimiserSettings, hints, services);
+		//
+		// final ModelEntityMap modelEntityMap = transformer.getModelEntityMap();
 
 		// Construct internal command stack to generate correct output schedule
-		final BasicCommandStack commandStack = new BasicCommandStack();
-		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
-		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
-		final EditingDomain ed = new AdapterFactoryEditingDomain(adapterFactory, commandStack);
+		final EditingDomain ed = LNGSchedulerJobUtils.createLocalEditingDomain();
 
 		// Delete commands need a resource set on the editing domain
 		final Resource r = new XMIResourceImpl();
 		r.getContents().add(output);
 		ed.getResourceSet().getResources().add(r);
-
-		final Pair<Command, Schedule> p = LNGSchedulerJobUtils.exportSolution(transformer.getInjector(), output, transformer.getOptimiserSettings(), ed, modelEntityMap, startSolution);
-		ed.getCommandStack().execute(p.getFirst());
+		//
+		// Injector evaluationInjector;
+		// {
+		// final List<Module> modules = new LinkedList<>();
+		// modules.add(new InputSequencesModule(transformer.getInitialSequences()));
+		// modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(transformer.getOptimiserSettings()), services,
+		// IOptimiserInjectorService.ModuleType.Module_ParametersModule, hints));
+		// modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
+		// evaluationInjector = transformer.getInjector().createChildInjector(modules);
+		// }
+		//
+		//
+		// final Pair<Command, Schedule> p = LNGSchedulerJobUtils.exportSolution(evaluationInjector, output, transformer.getOptimiserSettings(), ed, modelEntityMap,
+		// transformer.getInitialSequences(), null);
+		// ed.getCommandStack().execute(p.getFirst());
 
 		return ed;
 	}
