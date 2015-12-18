@@ -43,7 +43,7 @@ public final class EvaluationContext implements IEvaluationContext {
 
 	@Override
 	@NonNull
-	public ISequences getInitialSequences() {
+	public ISequences getInputSequences() {
 		return initialSequences;
 	}
 

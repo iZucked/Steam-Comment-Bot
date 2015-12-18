@@ -293,7 +293,7 @@ public class AbstractSequencesOptimiserTest {
 		}
 
 		@Override
-		public IAnnotatedSolution start(@NonNull final IOptimisationContext context, final @NonNull ISequences initialSequences) {
+		public IAnnotatedSolution start(@NonNull final IOptimisationContext context, final @NonNull ISequences initialRawSequences, final @NonNull ISequences inputRawSequences) {
 			fail("This is not part of the test.");
 			return null;
 		}

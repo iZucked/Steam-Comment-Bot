@@ -5,6 +5,7 @@
 package com.mmxlabs.optimiser.lso.modules;
 
 import java.util.List;
+import java.util.Random;
 
 import javax.inject.Singleton;
 
@@ -28,6 +29,7 @@ import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.RestartingLocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.thresholders.GreedyThresholder;
+import com.mmxlabs.optimiser.lso.movegenerators.impl.CompoundMoveGenerator;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.InstrumentingMoveGenerator;
 
 /**
@@ -58,30 +60,28 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 			return injector.getInstance(DefaultLocalSearchOptimiser.class);
 		}
 	}
-	
+
 	@Provides
 	@Singleton
 	DefaultLocalSearchOptimiser buildDefaultOptimiser(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator,
 			@NonNull final IMoveGenerator moveGenerator, @NonNull final InstrumentingMoveGenerator instrumentingMoveGenerator, @NonNull final IFitnessEvaluator fitnessEvaluator,
-			@Named(RANDOM_SEED) final long seed, @Named(LSO_NUMBER_OF_ITERATIONS) final int numberOfIterations, @NonNull final List<IConstraintChecker> constraintCheckers,
-			@NonNull final List<IEvaluationProcess> evaluationProcesses) {
+			@Named(LSO_NUMBER_OF_ITERATIONS) final int numberOfIterations, @NonNull final List<IConstraintChecker> constraintCheckers, @NonNull final List<IEvaluationProcess> evaluationProcesses) {
 
 		final DefaultLocalSearchOptimiser lso = new DefaultLocalSearchOptimiser();
 		setLSO(injector, context, manipulator, moveGenerator, instrumentingMoveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluationProcesses, lso);
 
 		return lso;
 	}
-	
+
 	@Provides
 	@Singleton
 	RestartingLocalSearchOptimiser buildRestartingOptimiser(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator,
 			@NonNull final IMoveGenerator moveGenerator, @NonNull final InstrumentingMoveGenerator instrumentingMoveGenerator, @NonNull final IFitnessEvaluator fitnessEvaluator,
-			@Named(RANDOM_SEED) final long seed, @Named(LSO_NUMBER_OF_ITERATIONS) final int numberOfIterations, @NonNull final List<IConstraintChecker> constraintCheckers,
-			@NonNull final List<IEvaluationProcess> evaluationProcesses) {
-		
+			@Named(LSO_NUMBER_OF_ITERATIONS) final int numberOfIterations, @NonNull final List<IConstraintChecker> constraintCheckers, @NonNull final List<IEvaluationProcess> evaluationProcesses) {
+
 		final RestartingLocalSearchOptimiser lso = new RestartingLocalSearchOptimiser();
 		setLSO(injector, context, manipulator, moveGenerator, instrumentingMoveGenerator, fitnessEvaluator, numberOfIterations, constraintCheckers, evaluationProcesses, lso);
-		
+
 		return lso;
 	}
 
@@ -99,17 +99,18 @@ public class LocalSearchOptimiserModule extends AbstractModule {
 		lso.setEvaluationProcesses(evaluationProcesses);
 
 		lso.setReportInterval(Math.max(10, numberOfIterations / 100));
+
 	}
-	
+
 	@Provides
 	@Singleton
 	ArbitraryStateLocalSearchOptimiser buildSolutionImprovingOptimiser(@NonNull final Injector injector, @NonNull final IOptimisationContext context, @NonNull final ISequencesManipulator manipulator,
 			@NonNull final IMoveGenerator moveGenerator, @NonNull final InstrumentingMoveGenerator instrumentingMoveGenerator,
-			@Named(RANDOM_SEED) final long seed, @Named(SOLUTION_IMPROVER_NUMBER_OF_ITERATIONS) final int numberOfIterations, @NonNull final List<IConstraintChecker> constraintCheckers,
+			@Named(SOLUTION_IMPROVER_NUMBER_OF_ITERATIONS) final int numberOfIterations, @NonNull final List<IConstraintChecker> constraintCheckers,
 			@NonNull final List<IEvaluationProcess> evaluationProcesses, @NonNull List<IFitnessComponent> fitnessComponents) {
 
 		final ArbitraryStateLocalSearchOptimiser lso = new ArbitraryStateLocalSearchOptimiser();
-		
+
 		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = new LinearSimulatedAnnealingFitnessEvaluator();
 		injector.injectMembers(fitnessEvaluator);
 		fitnessEvaluator.setThresholder(new GreedyThresholder());
