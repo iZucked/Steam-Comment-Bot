@@ -136,12 +136,11 @@ public class GeneratedCharterOutVesselEvent implements IGeneratedCharterOutVesse
 	public void setRepositioning(final long repositioning) {
 		this.repositioning = repositioning;
 	}
-	
+
 	@Override
 	public void setHeelOptions(int pricePerMBTU, int cv, long volumeInM3) {
 		setHeelUnitPrice(pricePerMBTU);
 		setHeelCVValue(cv);
 		setMaxHeelOut(volumeInM3);
 	}
-
 }

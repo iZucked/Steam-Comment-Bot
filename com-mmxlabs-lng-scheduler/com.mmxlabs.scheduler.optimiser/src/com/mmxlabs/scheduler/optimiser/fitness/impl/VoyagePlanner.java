@@ -15,6 +15,7 @@ import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.google.inject.Provider;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
@@ -90,7 +91,7 @@ public class VoyagePlanner {
 	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
 
 	@Inject
-	private IVoyagePlanOptimiser voyagePlanOptimiser;
+	private Provider<IVoyagePlanOptimiser> voyagePlanOptimiserProvider;
 
 	@Inject
 	private IRouteCostProvider routeCostProvider;
@@ -280,6 +281,7 @@ public class VoyagePlanner {
 	 */
 	final public List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IPortTimesRecord>> makeVoyagePlans(final IResource resource, final ISequence sequence, final int[] arrivalTimes) {
 
+		IVoyagePlanOptimiser voyagePlanOptimiser = voyagePlanOptimiserProvider.get();
 		// TODO: Handle FOB/DES cargoes also
 
 		// IF FOB/DES
@@ -356,7 +358,7 @@ public class VoyagePlanner {
 					shortCargoReturnArrivalTime = arrivalTimes[idx - 1] + prevVisitDuration + availableTime;
 				}
 
-				final VoyageOptions options = getVoyageOptionsAndSetVpoChoices(vesselAvailability, states[idx], availableTime, element, prevElement, previousOptions, voyagePlanOptimiser, useNBO);
+				final VoyageOptions options = getVoyageOptionsAndSetVpoChoices(vesselAvailability, states[idx], availableTime, element, prevElement, previousOptions, voyagePlanOptimiserProvider.get(), useNBO);
 				useNBO = options.useNBOForTravel();
 				voyageOrPortOptions.add(options);
 				previousOptions = options;
@@ -825,6 +827,8 @@ public class VoyagePlanner {
 	final public VoyagePlan makeVoyage(@NonNull final IResource resource, @NonNull final List<ISequenceElement> sequenceElements, final int vesselCharterInRatePerDay,
 			@NonNull final IPortTimesRecord portTimesRecord, long heelVolumeInM3) {
 
+		IVoyagePlanOptimiser voyagePlanOptimiser = voyagePlanOptimiserProvider.get();
+		
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		final boolean isShortsSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
 

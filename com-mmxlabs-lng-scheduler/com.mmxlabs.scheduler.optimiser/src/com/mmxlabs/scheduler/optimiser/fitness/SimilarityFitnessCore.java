@@ -21,6 +21,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
@@ -49,6 +50,15 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 	@NonNull
 	private ISequences initialRawSequences;
 	
+	@Inject
+	@NonNull
+	private ISequencesManipulator sequenceManipulator;
+
+	@Inject
+	@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)
+	@NonNull
+	private ISequences initialSequences;
+
 	@Inject
 	private IPortTypeProvider portTypeProvider;
 
@@ -89,11 +99,15 @@ public class SimilarityFitnessCore implements IFitnessCore, IFitnessComponent {
 	 * 
 	 * @param sequences
 	 */
+
 	public void initWithState(@NonNull final ISequences rawSequences) {
+
+		ISequences fullSequences = sequenceManipulator.createManipulatedSequences(rawSequences);
+		
 		for (final IResource resource : resources) {
 			assert resource != null;
 
-			final ISequence sequence = rawSequences.getSequence(resource);
+			final ISequence sequence = fullSequences.getSequence(resource);
 			ISequenceElement prev = null;
 			for (final ISequenceElement current : sequence) {
 				if (prev != null) {

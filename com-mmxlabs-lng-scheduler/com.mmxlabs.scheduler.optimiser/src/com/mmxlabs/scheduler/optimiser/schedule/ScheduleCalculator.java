@@ -76,7 +76,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public class ScheduleCalculator {
 
 	@Inject(optional = true)
-	private ScheduledDataLookupProvider scheduledDataLookupProvider;
+	private Provider<ScheduledDataLookupProvider> scheduledDataLookupProviderProvider;
 
 	@Inject
 	private CapacityViolationChecker capacityViolationChecker;
@@ -97,7 +97,7 @@ public class ScheduleCalculator {
 	private IEntityValueCalculator entityValueCalculator;
 
 	@Inject
-	private Provider<VoyagePlanAnnotator> voyagePlanAnnotatorProvider;
+	private VoyagePlanAnnotator voyagePlanAnnotator;
 
 	@Inject(optional = true)
 	private IMarkToMarketProvider markToMarketProvider;
@@ -299,6 +299,11 @@ public class ScheduleCalculator {
 	public ScheduledSequences schedule(@NonNull final ISequences sequences, @NonNull final int[][] arrivalTimes, @Nullable final IAnnotatedSolution solution) {
 		final ScheduledSequences result = new ScheduledSequences();
 
+		if (scheduledDataLookupProviderProvider != null) {
+			ScheduledDataLookupProvider scheduledDataLookupProvider = scheduledDataLookupProviderProvider.get();
+			scheduledDataLookupProvider.reset();
+		}
+
 		for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
 			shippingCalculator.prepareEvaluation(sequences);
 		}
@@ -328,14 +333,14 @@ public class ScheduleCalculator {
 
 	private void calculateSchedule(final ISequences sequences, final ScheduledSequences scheduledSequences, final IAnnotatedSolution annotatedSolution) {
 
-		if (scheduledDataLookupProvider != null) {
+		if (scheduledDataLookupProviderProvider != null) {
+			ScheduledDataLookupProvider scheduledDataLookupProvider = scheduledDataLookupProviderProvider.get();
 			scheduledDataLookupProvider.reset();
 		}
 
 		if (annotatedSolution != null) {
 			// Do basic voyageplan annotation
 			// TODO: Roll in the other annotations!
-			final VoyagePlanAnnotator annotator = voyagePlanAnnotatorProvider.get();
 
 			for (final ScheduledSequence scheduledSequence : scheduledSequences) {
 				final IResource resource = scheduledSequence.getResource();
@@ -344,7 +349,7 @@ public class ScheduleCalculator {
 				assert sequence != null;
 
 				if (sequence.size() > 0) {
-					annotator.annotateFromScheduledSequence(scheduledSequence, annotatedSolution);
+					voyagePlanAnnotator.annotateFromScheduledSequence(scheduledSequence, annotatedSolution);
 				}
 			}
 		}
@@ -378,7 +383,8 @@ public class ScheduleCalculator {
 			}
 		}
 
-		if (scheduledDataLookupProvider != null) {
+		if (scheduledDataLookupProviderProvider != null) {
+			ScheduledDataLookupProvider scheduledDataLookupProvider = scheduledDataLookupProviderProvider.get();
 			scheduledDataLookupProvider.setInputs(scheduledSequences);
 		}
 

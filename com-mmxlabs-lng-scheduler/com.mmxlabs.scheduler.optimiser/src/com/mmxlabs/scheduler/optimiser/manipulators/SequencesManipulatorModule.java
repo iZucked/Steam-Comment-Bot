@@ -33,14 +33,14 @@ public class SequencesManipulatorModule extends AbstractModule {
 	 * @return
 	 */
 	@Provides
-	@Singleton
+//	@Singleton
 	private ISequencesManipulator provideSequencesManipulator(final ChainedSequencesManipulator manipulator) {
 		return manipulator;
 
 	}
 
 	@Provides
-	@Singleton
+//	@Singleton
 	private ChainedSequencesManipulator provideChainedSequencesManipulator(final Injector injector, final StartLocationRemovingSequenceManipulator startLocationRemovingSequenceManipulator,
 			final EndLocationSequenceManipulator endLocationSequenceManipulator, ShortCargoSequenceManipulator shortCargoSequenceManipulator) {
 		/**

@@ -187,8 +187,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	IGeneratedCharterOutVesselEventPortSlot createGeneratedCharterOutEvent(@NonNull String id, @Nullable ITimeWindow arrivalTimeWindow, @NonNull IPort startPort, @Nullable IPort endPort,
-			int durationHours, long maxHeelOut, int heelCVValue, int heelUnitPrice, final long hireCost, final long repositioning);
+	IGeneratedCharterOutVesselEventPortSlot createGeneratedCharterOutEvent(@NonNull String id, @NonNull IPort startPort);
 
 	/**
 	 * Create a dry dock event
@@ -424,7 +423,8 @@ public interface ISchedulerBuilder {
 	 *            Scaled maximum loadable quantity of LNG in M3
 	 * @param cargoCVValue
 	 *            Scaled conversion factor to convert from M3 to MMBTU of LNG
-	 * @param slotIsLocked TODO
+	 * @param slotIsLocked
+	 *            TODO
 	 * @param price
 	 *            Scaled purchase price in $/MMBTu
 	 * @return

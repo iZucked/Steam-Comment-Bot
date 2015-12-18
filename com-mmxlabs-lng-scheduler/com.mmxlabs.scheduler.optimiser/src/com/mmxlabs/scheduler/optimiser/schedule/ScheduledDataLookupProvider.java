@@ -11,6 +11,7 @@ import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
@@ -31,6 +32,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @author Simon Goodall
  * 
  */
+@PerChainUnitScope
 public class ScheduledDataLookupProvider {
 	@Inject
 	private IVesselProvider vesselProvider;
