@@ -85,17 +85,17 @@ public class LNGScenarioRunner {
 		// here we want to take user settings and generate initial state settings
 		scenarioToOptimiserBridge = new LNGScenarioToOptimiserBridge(scenarioModel, scenarioInstance, optimiserSettings, editingDomain, extraModule, localOverrides,
 				LNGTransformerHelper.HINT_OPTIMISE_LSO);
-
 		// FB: 1712 Switch for enabling run-all similarity optimisation. Needs better UI hook ups.
 
 		if (false) {
 			chainRunner = LNGScenarioChainBuilder.createRunAllSimilarityOptimisationChain(scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimiserSettings, executorService,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
 		} else {
-//			chainRunner = LNGScenarioChainBuilder.createStandardOptimisationChain(null, scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimiserSettings, executorService,
-//					LNGTransformerHelper.HINT_OPTIMISE_LSO);
-			chainRunner = LNGScenarioChainBuilder.createStandardOptimisationChain(null, scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimiserSettings, executorService, 1,
-					LNGTransformerHelper.HINT_OPTIMISE_LSO);
+			// chainRunner = LNGScenarioChainBuilder.createStandardOptimisationChain(null, scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimiserSettings,
+			// executorService,
+			// LNGTransformerHelper.HINT_OPTIMISE_LSO);
+			chainRunner = LNGScenarioChainBuilder.createStandardOptimisationChain(null, scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimiserSettings, executorService,
+					1, LNGTransformerHelper.HINT_OPTIMISE_LSO);
 		}
 
 	}
