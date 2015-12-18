@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.emf.common.util.URI;
@@ -93,7 +94,7 @@ public abstract class AbstractReportTester_LiNGO extends AbstractOptimisationRes
 		final ScenarioInstance instance = triple.getSecond();
 		Assert.assertNotNull(instance);
 		Assert.assertNotNull(instance.getInstance());
-		ReportTester.testReports(instance, url, reportID, shortName, extension);
+		ReportTester.testReports(executorService, instance, url, reportID, shortName, extension);
 	}
 
 	@Test

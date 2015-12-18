@@ -23,16 +23,15 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import com.google.common.base.Joiner;
-import com.google.inject.Injector;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
-import com.mmxlabs.models.lng.transformer.ui.IRunnerHook;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
+import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
 import com.mmxlabs.models.lng.transformer.util.SequencesSerialiser;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -192,7 +191,7 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 			// Hill climb limit
 			optimiserSettings.getSolutionImprovementSettings().setIterations(1000);
 		}
-		final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunner(originalScenario, optimiserSettings);
+		final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunner(executorService, originalScenario, optimiserSettings);
 
 		Assert.assertEquals(withActionSets, optimiserSettings.isBuildActionSets());
 		Assert.assertEquals(withGeneratedCharterOuts, optimiserSettings.isGenerateCharterOuts());
@@ -255,7 +254,7 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 						final URL expectedReportOutput = new URL(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20") + suffix);
 						final File file2 = new File(expectedReportOutput.toURI());
 						try (FileOutputStream fos = new FileOutputStream(file2)) {
-//							final Injector injector = scenarioRunner.getInjector();
+							// final Injector injector = scenarioRunner.getInjector();
 							Assert.assertNotNull(injector);
 							SequencesSerialiser.save(injector.getInstance(IOptimisationData.class), rawSequences, fos);
 						}
@@ -270,7 +269,7 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 						final URL expectedReportOutput = new URL(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20") + suffix);
 						final File file2 = new File(expectedReportOutput.toURI());
 						try (FileInputStream fos = new FileInputStream(file2)) {
-//							final Injector injector = scenarioRunner.getInjector();
+							// final Injector injector = scenarioRunner.getInjector();
 							Assert.assertNotNull(injector);
 							return SequencesSerialiser.load(injector.getInstance(IOptimisationData.class), fos);
 						}

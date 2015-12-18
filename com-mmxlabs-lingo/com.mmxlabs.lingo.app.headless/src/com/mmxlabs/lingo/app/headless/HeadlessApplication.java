@@ -9,13 +9,15 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -30,8 +32,8 @@ import org.apache.shiro.subject.Subject;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
+import org.eclipse.jdt.annotation.NonNull;
 
-import com.google.common.collect.Maps;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.mmxlabs.common.Pair;
@@ -57,10 +59,12 @@ import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
-import com.mmxlabs.models.lng.transformer.ui.IRunnerHook;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunnerUtils;
+import com.mmxlabs.models.lng.transformer.util.IRunnerHook;
+import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.migration.scenario.MigrationHelper;
 import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger;
@@ -69,7 +73,6 @@ import com.mmxlabs.rcp.common.viewfactory.ReplaceableViewManager;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
-import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService.ModuleType;
 
 /**
  * Note duplication with various bits of ITS including ScenarioRunner and MigrationHelper
@@ -150,73 +153,93 @@ public class HeadlessApplication implements IApplication {
 
 		// Ensure dir structure is in place
 		Paths.get(path, outputFolderName).toFile().mkdirs();
-		
+
 		addFitnessTraceExporter(exporters, path, outputFolderName);
 		addLatenessExporter(exporters, path, outputFolderName);
-
-		final LNGScenarioRunner runner = new LNGScenarioRunner(rootObject, LNGScenarioRunner.createExtendedSettings(optimiserSettings), LNGTransformer.HINT_OPTIMISE_LSO);
-
-		final Map<String, LSOLogger> phaseToLoggerMap = new HashMap<>();
-
-		AbstractRunnerHook runnerHook = new AbstractRunnerHook() {
-			@Override
-			public void beginPhase(String phase, Injector injector) {
-				super.beginPhase(phase, injector);
-				for (IRunExporter exporter : exporters) {
-					exporter.setPhase(phase, injector);
-				}
-			}
-
-			@Override
-			public void endPhase(String phase) {
-				super.endPhase(phase);
-			}
-		};
-		runner.setRunnerHook(runnerHook);
 
 		final IOptimiserProgressMonitor monitor = new RunExporterProgressMonitor(exporters);
 
 		// FIXME: Replace with an IParameterMode thing
-		final EnumMap<ModuleType, List<Module>> localOverrides = Maps.newEnumMap(IOptimiserInjectorService.ModuleType.class);
-		localOverrides.put(IOptimiserInjectorService.ModuleType.Module_ParametersModule, Collections.<Module> singletonList(new SettingsOverrideModule(overrideSettings)));
+		final IOptimiserInjectorService localOverrides = new IOptimiserInjectorService() {
+			@Override
+			public Module requestModule(@NonNull final ModuleType moduleType, @NonNull final Collection<String> hints) {
+				return null;
+			}
+
+			@Override
+			public List<Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<String> hints) {
+				if (moduleType == ModuleType.Module_ParametersModule) {
+					return Collections.<Module> singletonList(new SettingsOverrideModule(overrideSettings));
+				}
+				return null;
+			}
+		};
 
 		// Create logging module
-		final Module loggingModule = createLoggingModule(phaseToLoggerMap, runnerHook);
-		runner.init(monitor, loggingModule, localOverrides);
+		final ExecutorService executorService = Executors.newFixedThreadPool(1);
+		try {
+			final Map<String, LSOLogger> phaseToLoggerMap = new HashMap<>();
 
-		final long startTime = System.currentTimeMillis();
-		runner.evaluateInitialState();
-		System.out.println("LNGResult(");
-		System.out.println("\tscenario='" + scenarioFile + "',");
-		if (outputFile != null) {
-			System.out.println("\toutput='" + outputFile + "',");
+			final AbstractRunnerHook runnerHook = new AbstractRunnerHook() {
+				@Override
+				public void beginPhase(final String phase, final Injector injector) {
+					super.beginPhase(phase, injector);
+					for (final IRunExporter exporter : exporters) {
+						exporter.setPhase(phase, injector);
+					}
+				}
+
+				@Override
+				public void endPhase(final String phase) {
+					super.endPhase(phase);
+				}
+			};
+			final Module loggingModule = createLoggingModule(phaseToLoggerMap, runnerHook);
+
+			final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, rootObject, null, LNGScenarioRunnerUtils.createExtendedSettings(optimiserSettings),
+					LNGSchedulerJobUtils.createLocalEditingDomain(), loggingModule, localOverrides, LNGTransformerHelper.HINT_OPTIMISE_LSO);
+
+			runner.setRunnerHook(runnerHook);
+
+			// FIXME
+			// runner.init(monitor);
+
+			final long startTime = System.currentTimeMillis();
+			runner.evaluateInitialState();
+			System.out.println("LNGResult(");
+			System.out.println("\tscenario='" + scenarioFile + "',");
+			if (outputFile != null) {
+				System.out.println("\toutput='" + outputFile + "',");
+			}
+			System.out.println("\titerations=" + optimiserSettings.getAnnealingSettings().getIterations() + ",");
+			System.out.println("\tseed=" + optimiserSettings.getSeed() + ",");
+			System.out.println("\tcooling=" + optimiserSettings.getAnnealingSettings().getCooling() + ",");
+			System.out.println("\tepochLength=" + optimiserSettings.getAnnealingSettings().getEpochLength() + ",");
+			System.out.println("\ttemp=" + optimiserSettings.getAnnealingSettings().getInitialTemperature() + ",");
+
+			System.err.println("Starting run...");
+
+			runner.run();
+
+			final long runTime = System.currentTimeMillis() - startTime;
+			final Schedule finalSchedule = runner.getSchedule();
+			if (finalSchedule == null) {
+				System.err.println("Error optimising scenario");
+			}
+
+			System.out.println("\truntime=" + runTime + ",");
+
+			System.err.println("Optimised!");
+
+			if (outputFile != null) {
+				saveScenario(Paths.get(path, outputFolderName, outputFile).toString(), instance);
+			}
+
+			exportData(phaseToLoggerMap, path, outputFolderName, jsonFilePath);
+
+		} finally {
+			executorService.shutdownNow();
 		}
-		System.out.println("\titerations=" + optimiserSettings.getAnnealingSettings().getIterations() + ",");
-		System.out.println("\tseed=" + optimiserSettings.getSeed() + ",");
-		System.out.println("\tcooling=" + optimiserSettings.getAnnealingSettings().getCooling() + ",");
-		System.out.println("\tepochLength=" + optimiserSettings.getAnnealingSettings().getEpochLength() + ",");
-		System.out.println("\ttemp=" + optimiserSettings.getAnnealingSettings().getInitialTemperature() + ",");
-
-		System.err.println("Starting run...");
-
-		runner.run();
-
-		final long runTime = System.currentTimeMillis() - startTime;
-		final Schedule finalSchedule = runner.getSchedule();
-		if (finalSchedule == null) {
-			System.err.println("Error optimising scenario");
-		}
-
-		System.out.println("\truntime=" + runTime + ",");
-
-		System.err.println("Optimised!");
-
-		if (outputFile != null) {
-			saveScenario(Paths.get(path, outputFolderName, outputFile).toString(), instance);
-		}
-
-		exportData(phaseToLoggerMap, path, outputFolderName, jsonFilePath);
-
 		return IApplication.EXIT_OK;
 
 	}
@@ -236,7 +259,7 @@ public class HeadlessApplication implements IApplication {
 		addExporter(exporters, path, outputFolderName, "generalAnnotationsReport.txt", exporter);
 	}
 
-	private Module createLoggingModule(Map<String, LSOLogger> phaseToLoggerMap, AbstractRunnerHook runnerHook) {
+	private Module createLoggingModule(final Map<String, LSOLogger> phaseToLoggerMap, final AbstractRunnerHook runnerHook) {
 		// final LSOLogger lsoLogger = new LSOLogger(1000);
 		final LoggingModule loggingModule = new LoggingModule(phaseToLoggerMap, runnerHook, 10_000);
 		return loggingModule;

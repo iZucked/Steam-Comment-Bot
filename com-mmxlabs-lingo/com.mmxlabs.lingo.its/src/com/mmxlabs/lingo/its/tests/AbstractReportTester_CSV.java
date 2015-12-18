@@ -57,7 +57,7 @@ public abstract class AbstractReportTester_CSV extends AbstractOptimisationResul
 		final URL url = pair.getFirst();
 		final LNGScenarioModel scenarioModel = pair.getSecond();
 		ScenarioInstance instance = LNGScenarioRunnerCreator.createScenarioInstance(scenarioModel, url);
-		ReportTester.testReports(instance, url, reportID, shortName, extension);
+		ReportTester.testReports(executorService, instance, url, reportID, shortName, extension);
 	}
 
 	@Test

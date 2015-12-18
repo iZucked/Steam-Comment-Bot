@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
+import java.util.concurrent.ExecutorService;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.emf.common.util.URI;
@@ -21,7 +22,8 @@ import org.osgi.framework.ServiceReference;
 import com.mmxlabs.lingo.its.internal.Activator;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
+import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
+import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeExtender;
@@ -36,14 +38,14 @@ import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
 public class LNGScenarioRunnerCreator {
 
 	@NonNull
-
-	public static LNGScenarioRunner createScenarioRunner(@NonNull final LNGScenarioModel originalScenario) {
-		return createScenarioRunner(originalScenario, LNGScenarioRunner.createDefaultSettings());
+	public static LNGScenarioRunner createScenarioRunner(@NonNull final ExecutorService executorService, @NonNull final LNGScenarioModel originalScenario) {
+		final OptimiserSettings settings = createExtendedSettings(ScenarioUtils.createDefaultSettings());
+		return createScenarioRunner(executorService, originalScenario, settings);
 	}
 
 	@NonNull
-	public static LNGScenarioRunner createScenarioRunner(@NonNull final LNGScenarioModel originalScenario, @NonNull final OptimiserSettings settings) {
-		final LNGScenarioRunner originalScenarioRunner = new LNGScenarioRunner(originalScenario, settings, LNGTransformer.HINT_OPTIMISE_LSO);
+	public static LNGScenarioRunner createScenarioRunner(@NonNull final ExecutorService executorService, @NonNull final LNGScenarioModel originalScenario, @NonNull final OptimiserSettings settings) {
+		final LNGScenarioRunner originalScenarioRunner = new LNGScenarioRunner(executorService, originalScenario, settings, LNGTransformerHelper.HINT_OPTIMISE_LSO);
 		return originalScenarioRunner;
 	}
 
@@ -52,6 +54,7 @@ public class LNGScenarioRunnerCreator {
 		MigrationHelper.migrateAndLoad(instance);
 
 		final LNGScenarioModel originalScenario = (LNGScenarioModel) instance.getInstance();
+		Assert.assertNotNull(originalScenario);
 		return originalScenario;
 	}
 
@@ -98,10 +101,10 @@ public class LNGScenarioRunnerCreator {
 	}
 
 	@NonNull
-	public static LNGScenarioRunner createScenarioRunner(final @NonNull URL url) throws IOException {
-		return createScenarioRunner(getScenarioModelFromURL(url));
+	public static LNGScenarioRunner createScenarioRunner(@NonNull final ExecutorService executorService, final @NonNull URL url) throws IOException {
+		return createScenarioRunner(executorService, getScenarioModelFromURL(url));
 	}
-	
+
 	/**
 	 * Use the {@link IParameterModesRegistry} to extend the existing settings object.
 	 * 

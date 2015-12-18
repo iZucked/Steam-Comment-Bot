@@ -11,8 +11,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.ExecutorService;
 
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +23,6 @@ import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
-import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -38,17 +39,18 @@ public class ReportTester {
 	// Never commit as true
 	private static final boolean storeReports = false;
 
-	public static void testReports(final ScenarioInstance instance, final URL scenarioURL, final String reportID, final String shortName, final String extension) throws Exception {
-		// [ TODO: Push this higher in API 
+	public static void testReports(@NonNull final ExecutorService executorService, final ScenarioInstance instance, final URL scenarioURL, final String reportID, final String shortName,
+			final String extension) throws Exception {
+		// [ TODO: Push this higher in API
 		OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
 		optimiserSettings = LNGScenarioRunnerCreator.createExtendedSettings(optimiserSettings);
 
 		// Enabled by default for ITS
 		optimiserSettings.setGenerateCharterOuts(true);
 
-		final LNGScenarioRunner runner = LNGScenarioRunnerCreator.createScenarioRunner((LNGScenarioModel) instance.getInstance(), optimiserSettings);
+		final LNGScenarioRunner runner = LNGScenarioRunnerCreator.createScenarioRunner(executorService, (LNGScenarioModel) instance.getInstance(), optimiserSettings);
 
-		runner.initAndEval(new TransformerExtensionTestModule());
+		runner.evaluateInitialState();
 		// ]
 
 		final ReportTesterHelper reportTester = new ReportTesterHelper();

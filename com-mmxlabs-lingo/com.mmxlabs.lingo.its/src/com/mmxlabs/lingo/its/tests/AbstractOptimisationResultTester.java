@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.emf.common.util.EList;
@@ -111,8 +113,19 @@ public class AbstractOptimisationResultTester {
 	protected static final String endFitnessesMapName = "endFitnesses";
 
 	// // Register a cipher provider with the osgi framework for running these tests
-
 	private static ServiceRegistration<IScenarioCipherProvider> cipherServiceRef = null;
+
+	protected static ExecutorService executorService;
+
+	@BeforeClass
+	public static void createExecutorService() {
+		executorService = Executors.newFixedThreadPool(1);
+	}
+
+	@AfterClass
+	public static void shutdownExecutorService() {
+		executorService.shutdownNow();
+	}
 
 	@BeforeClass
 	public static void registerCipherProvider() {
@@ -155,7 +168,6 @@ public class AbstractOptimisationResultTester {
 		return runScenarioWithGCO(originalScenario, url);
 	}
 
-	//
 	public LNGScenarioRunner evaluateScenarioWithGCO(@NonNull final URL url) throws Exception {
 
 		final LNGScenarioModel originalScenario = LNGScenarioRunnerCreator.getScenarioModelFromURL(url);
@@ -166,7 +178,7 @@ public class AbstractOptimisationResultTester {
 	public LNGScenarioRunner evaluateScenario(@NonNull final URL url, @NonNull final OptimiserSettings optimiserSettings) throws Exception {
 
 		final LNGScenarioModel originalScenario = LNGScenarioRunnerCreator.getScenarioModelFromURL(url);
-		final LNGScenarioRunner originalScenarioRunner = LNGScenarioRunnerCreator.createScenarioRunner(originalScenario, optimiserSettings);
+		final LNGScenarioRunner originalScenarioRunner = LNGScenarioRunnerCreator.createScenarioRunner(executorService, originalScenario, optimiserSettings);
 
 		return evaluateScenario(originalScenario, url, originalScenarioRunner);
 	}
@@ -188,13 +200,14 @@ public class AbstractOptimisationResultTester {
 		optimiserSettings.setGenerateCharterOuts(true);
 
 		// Create scenario runner with optimisation params incase we want to run optimisation outside of the opt run method.
-		final LNGScenarioRunner originalScenarioRunner = LNGScenarioRunnerCreator.createScenarioRunner(originalScenario, optimiserSettings);
+		final LNGScenarioRunner originalScenarioRunner = LNGScenarioRunnerCreator.createScenarioRunner(executorService, originalScenario, optimiserSettings);
 		return evaluateScenario(originalScenario, origURL, originalScenarioRunner);
 	}
 
 	public LNGScenarioRunner evaluateScenario(@NonNull final LNGScenarioModel originalScenario, @Nullable final URL origURL, @NonNull final LNGScenarioRunner scenarioRunner)
 			throws IOException, IncompleteScenarioException {
-		scenarioRunner.initAndEval();// new TransformerExtensionTestModule(), 10000);
+
+		scenarioRunner.evaluateInitialState();
 
 		return scenarioRunner;
 	}
@@ -210,16 +223,15 @@ public class AbstractOptimisationResultTester {
 		// Enabled by default for ITS
 		optimiserSettings.setGenerateCharterOuts(true);
 
-		final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunner(originalScenario, optimiserSettings);
+		final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunner(executorService, originalScenario, optimiserSettings);
 		assert scenarioRunner != null;
-		scenarioRunner.initAndEval();// new TransformerExtensionTestModule());
+		scenarioRunner.evaluateInitialState();
 		optimiseScenario(scenarioRunner, origURL, ".properties");
 		return scenarioRunner;
 	}
 
 	public static void optimiseBasicScenario(@NonNull final LNGScenarioRunner scenarioRunner, @NonNull final URL origURL, @NonNull final String propertiesSuffix) throws IOException {
-
-		scenarioRunner.initAndEval();
+		scenarioRunner.evaluateInitialState();
 		optimiseScenario(scenarioRunner, origURL, propertiesSuffix);
 	}
 
@@ -314,7 +326,7 @@ public class AbstractOptimisationResultTester {
 		try {
 			final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, bundleContext.getService(serviceReference));
 			MigrationHelper.migrateAndLoad(instance);
-			ReportTester.testReports(instance, scenarioURL, reportID, shortName, extension);
+			ReportTester.testReports(executorService, instance, scenarioURL, reportID, shortName, extension);
 		} finally {
 			bundleContext.ungetService(serviceReference);
 		}
