@@ -110,10 +110,10 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 								if (!hasDistance(hasDistanceMap, prevPort, currentPort)) {
 									reportError(ctx, prevObject, prevFeature, prevPort, slot, CargoPackage.Literals.SLOT__PORT, currentPort, statuses);
 								}
-								prevPort = currentPort;
-								prevObject = slot;
-								prevFeature = CargoPackage.Literals.SLOT__PORT;
 							}
+							prevPort = currentPort;
+							prevObject = slot;
+							prevFeature = CargoPackage.Literals.SLOT__PORT;
 						}
 
 						// Loop over all sorted slots
@@ -125,10 +125,10 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 							if (!hasDistance(hasDistanceMap, prevPort, currentPort)) {
 								reportError(ctx, prevObject, prevFeature, prevPort, charterOutEvent, CargoPackage.Literals.VESSEL_EVENT__PORT, currentPort, statuses);
 							}
-							prevPort = currentPort;
-							prevObject = charterOutEvent;
-							prevFeature = CargoPackage.Literals.VESSEL_EVENT__PORT;
 						}
+						prevPort = currentPort;
+						prevObject = charterOutEvent;
+						prevFeature = CargoPackage.Literals.VESSEL_EVENT__PORT;
 						// check reposition port
 						if (charterOutEvent.isSetRelocateTo()) {
 							prevPort = charterOutEvent.getRelocateTo();
