@@ -141,7 +141,7 @@ public class PricingTimesScenario {
 	public void testSalesPrice(double... prices) {
 		final LNGScenarioRunner runner = new LNGScenarioRunner((LNGScenarioModel) this.scenario, LNGScenarioRunner.createDefaultSettings());
 		runner.initAndEval(new TransformerExtensionTestModule());
-		final Schedule schedule = runner.getIntialSchedule();
+		final Schedule schedule = runner.getSchedule();
 		Assert.assertNotNull(schedule);
 
 		// Workaround, would prefer to use ca.getInputCargo().getName() but hookup runner.updateScenario() not working

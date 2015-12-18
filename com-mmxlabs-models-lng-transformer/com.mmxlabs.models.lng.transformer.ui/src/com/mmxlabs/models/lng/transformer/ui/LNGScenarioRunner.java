@@ -111,9 +111,7 @@ public class LNGScenarioRunner {
 
 	private LNGTransformer transformer;
 
-	private Schedule initialSchedule;
-
-	private Schedule finalSchedule;
+	private Schedule schedule;
 
 	private final String[] hints;
 
@@ -255,8 +253,7 @@ public class LNGScenarioRunner {
 			startSolution = LNGSchedulerJobUtils.evaluateCurrentState(transformer);
 		}
 
-
-		initialSchedule = overwrite(0, transformer.getEvaluationContext().getInitialSequences(), LNGSchedulerJobUtils.extractOptimisationAnnotations(startSolution));
+		schedule = overwrite(0, transformer.getEvaluationContext().getInitialSequences(), LNGSchedulerJobUtils.extractOptimisationAnnotations(startSolution));
 		final LocalSearchOptimiser pOptimiser = this.optimiser;
 		if (pOptimiser != null) {
 			try {
@@ -270,7 +267,7 @@ public class LNGScenarioRunner {
 		if (pRunnerHook != null) {
 			pRunnerHook.endPhase(IRunnerHook.PHASE_INITIAL);
 		}
-		return initialSchedule;
+		return schedule;
 	}
 
 	private void initPeriodOptimisationData(final OptimiserSettings optimiserSettings, @Nullable final Module extraModule) {
@@ -527,13 +524,8 @@ public class LNGScenarioRunner {
 	}
 
 	@Nullable
-	public final Schedule getFinalSchedule() {
-		return finalSchedule;
-	}
-
-	@Nullable
-	public final Schedule getIntialSchedule() {
-		return initialSchedule;
+	public final Schedule getSchedule() {
+		return schedule;
 	}
 
 	public boolean isFinished() {
@@ -671,7 +663,7 @@ public class LNGScenarioRunner {
 				//
 				// // If we are keeping the best result, then update the field and do not execute the undo commands
 				if (keepFinalResult && breakdownSolution.get(breakdownSolution.size() - 1) == changeSet) {
-					this.finalSchedule = copy.getScheduleModel().getSchedule();
+					this.schedule = copy.getScheduleModel().getSchedule();
 				}
 				// // Reset state
 				// if (periodMapping != null) {
@@ -753,7 +745,7 @@ public class LNGScenarioRunner {
 					// The breakdown optimiser may find a better solution. This will be saved in storeBreakdownSolutionsAsForks
 					// if (exportOptimiserSolution) {
 					// export final state
-					finalSchedule = overwrite(100, bestResult.getBestSolution().getFirst(), bestResult.getBestSolution().getSecond());
+					schedule = overwrite(100, bestResult.getBestSolution().getFirst(), bestResult.getBestSolution().getSecond());
 					// }
 
 					if (pRunnerHook != null) {
@@ -766,7 +758,7 @@ public class LNGScenarioRunner {
 				}
 			} else {
 				assert bestResult != null;
-				finalSchedule = overwrite(100, bestResult.getBestSolution().getFirst(), bestResult.getBestSolution().getSecond());
+				schedule = overwrite(100, bestResult.getBestSolution().getFirst(), bestResult.getBestSolution().getSecond());
 			}
 		} finally {
 			progressMonitor.done();

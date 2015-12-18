@@ -123,7 +123,7 @@ public class SuboptimalScenarioTester {
 		runner.initAndEval(new TransformerExtensionTestModule(), 10000);
 		runner.run();
 
-		final Schedule schedule = runner.getFinalSchedule();
+		final Schedule schedule = runner.getSchedule();
 		Assert.assertNotNull(schedule);
 
 		// set up an array storing whether load ports are assigned at all
