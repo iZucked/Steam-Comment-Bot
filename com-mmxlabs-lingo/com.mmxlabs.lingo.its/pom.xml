@@ -203,5 +203,15 @@
 				</repository>
 			</repositories>
 		</profile>
+		<profile>
+			<id>use_LINGO_P2_REPO</id>
+			<repositories>
+				<repository>
+					<id>lingo-p2</id>
+					<url>${LINGO_P2_REPO}</url>
+					<layout>p2</layout>
+				</repository>
+			</repositories>
+		</profile>
 	</profiles>
 </project>
