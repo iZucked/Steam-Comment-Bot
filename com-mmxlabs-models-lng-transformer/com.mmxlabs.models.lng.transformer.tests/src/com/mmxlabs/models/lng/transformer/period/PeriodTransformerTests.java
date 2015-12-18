@@ -2002,7 +2002,7 @@ public class PeriodTransformerTests {
 		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
 		scenarioModel.getReferenceModel().setSpotMarketsModel(PeriodTestUtils.createSpotMarkets(scenarioModel, "testSpots"));
 
-		transformer.trimSpotMarketCurves(PeriodTestUtils.createEditingDomain(scenarioModel), periodRecord, scenarioModel);
+		transformer.trimSpotMarketCurves(periodRecord, scenarioModel);
 
 		for (SpotMarketGroup group : new SpotMarketGroup[] { scenarioModel.getReferenceModel().getSpotMarketsModel().getDesPurchaseSpotMarket(),
 				scenarioModel.getReferenceModel().getSpotMarketsModel().getDesSalesSpotMarket(), scenarioModel.getReferenceModel().getSpotMarketsModel().getFobPurchasesSpotMarket(),
