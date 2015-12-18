@@ -4,9 +4,10 @@
  */
 package com.mmxlabs.lingo.extensions;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
@@ -17,13 +18,20 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 public class LingoOptimiserModuleService implements IOptimiserInjectorService {
 
 	@Override
-	public Module requestModule(final ModuleType moduleType, final Collection<String> hints) {
-		return null;
+	public Module requestModule(final String... hints) {
+
+		return new AbstractModule() {
+
+			@Override
+			protected void configure() {
+
+			}
+		};
 	}
 
 	@Override
-	public List<Module> requestModuleOverrides(final ModuleType moduleType, final Collection<String> hints) {
+	public Map<ModuleType, List<Module>> requestModuleOverrides(final String... hints) {
+
 		return null;
 	}
-
 }
