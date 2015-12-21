@@ -6,16 +6,23 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
 
 import org.apache.shiro.crypto.hash.Hash;
 import org.apache.shiro.util.ByteSource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
+import com.google.inject.Provides;
+import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
@@ -35,6 +42,7 @@ import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_Optimiser
 import com.mmxlabs.models.lng.transformer.ui.BagOptimiser;
 import com.mmxlabs.models.lng.transformer.ui.ContainerProvider;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
+import com.mmxlabs.models.lng.transformer.ui.breakdown.BagMover;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -45,9 +53,15 @@ import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
+	private final Map<Thread, BagMover> threadCache = new ConcurrentHashMap<>(100);
 
 	@NonNull
 	public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final OptimiserSettings settings, final int progressTicks) {
+		return chain(chainBuilder, settings, null, progressTicks);
+	}
+
+	@NonNull
+	public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final OptimiserSettings settings, @Nullable ExecutorService executorService, final int progressTicks) {
 		final IChainLink link = new IChainLink() {
 
 			private LNGActionSetTransformerUnit t;
@@ -63,7 +77,7 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 			@Override
 			public void init(final IMultiStateResult inputState) {
 				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
-				t = new LNGActionSetTransformerUnit(dt, settings, inputState, dt.getHints());
+				t = new LNGActionSetTransformerUnit(dt, settings, executorService, inputState, dt.getHints());
 			}
 
 			@Override
@@ -175,8 +189,8 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 	private final IMultiStateResult inputState;
 
 	@SuppressWarnings("null")
-	public LNGActionSetTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final OptimiserSettings settings, @NonNull final IMultiStateResult inputState,
-			@NonNull final Collection<String> hints) {
+	public LNGActionSetTransformerUnit(@NonNull final LNGDataTransformer dataTransformer, @NonNull final OptimiserSettings settings, @Nullable final ExecutorService executorService,
+			@NonNull final IMultiStateResult inputState, @NonNull final Collection<String> hints) {
 		this.dataTransformer = dataTransformer;
 
 		final Collection<IOptimiserInjectorService> services = dataTransformer.getModuleServices();
@@ -184,11 +198,44 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 		final List<Module> modules = new LinkedList<>();
 		modules.add(new InputSequencesModule(inputState.getBestSolution().getFirst()));
 		modules.addAll(
-				LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(settings), services, IOptimiserInjectorService.ModuleType.Module_ParametersModule, hints));
+				LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(settings), services, IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
 		modules.addAll(
-				LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_OptimiserSettingsModule(settings), services, IOptimiserInjectorService.ModuleType.Module_ParametersModule, hints));
+				LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_OptimiserSettingsModule(settings), services, IOptimiserInjectorService.ModuleType.Module_OptimisationParametersModule, hints));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGOptimisationModule(), services, IOptimiserInjectorService.ModuleType.Module_Optimisation, hints));
+
+		modules.add(new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				// bind(BagMover.class).in(PerChainUnitScope.class);
+				bind(ExecutorService.class).toInstance(executorService);
+			}
+
+			@Provides
+			private BagMover providePerThreadBagMover(@NonNull final Injector injector) {
+
+				BagMover bagMover = threadCache.get(Thread.currentThread());
+				if (bagMover == null) {
+					PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class);
+					scope.enter();
+					bagMover = new BagMover();
+					injector.injectMembers(bagMover);
+					threadCache.put(Thread.currentThread(), bagMover);
+					System.out.println("thread:" + Thread.currentThread().getId());
+				}
+				return bagMover;
+			}
+			
+			@Provides
+			@Named("MAIN_MOVER")
+			private BagMover providePerThreadBagMover2(@NonNull final Injector injector) {
+					BagMover bagMover = new BagMover();
+					injector.injectMembers(bagMover);
+				return bagMover;
+			}
+
+		});
 
 		injector = dataTransformer.getInjector().createChildInjector(modules);
 
@@ -221,6 +268,9 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 					return result;
 				}
 				return inputState;
+			} catch (Exception e) { 
+				e.printStackTrace();
+				throw e;
 			} finally {
 				monitor.done();
 			}

@@ -65,9 +65,6 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
 		// TODO: This should be static / central service?
 		executorService = LNGScenarioChainBuilder.createExecutorService();// Executors.newSingleThreadExecutor();
-
-		scenarioRunner = new LNGScenarioRunner(executorService, originalScenario, scenarioInstance, jobDescriptor.getOptimiserSettings(), originalEditingDomain,
-				LNGTransformerHelper.HINT_OPTIMISE_LSO);
 		
 		AbstractRunnerHook runnerHook = new AbstractRunnerHook() {
 			@Override
@@ -145,8 +142,12 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 			}
 			
 		};
+		
+		scenarioRunner = new LNGScenarioRunner(executorService, originalScenario, scenarioInstance, jobDescriptor.getOptimiserSettings(), originalEditingDomain, runnerHook,
+				LNGTransformerHelper.HINT_OPTIMISE_LSO);
+
 		setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));
-		scenarioRunner.setRunnerHook(runnerHook);
+		
 		// Disable optimisation in P&L testing phase
 		if (LicenseFeatures.isPermitted("features:phase-pnl-testing")) {
 			throw new RuntimeException("Optimisation is disabled during the P&L testing phase.");

@@ -221,9 +221,9 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 
 		modules.add(new InputSequencesModule(inputSequences));
 		modules.addAll(
-				LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(settings), services, IOptimiserInjectorService.ModuleType.Module_ParametersModule, hints));
+				LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(settings), services, IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
 		modules.addAll(
-				LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_OptimiserSettingsModule(settings), services, IOptimiserInjectorService.ModuleType.Module_ParametersModule, hints));
+				LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_OptimiserSettingsModule(settings), services, IOptimiserInjectorService.ModuleType.Module_OptimisationParametersModule, hints));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGOptimisationModule(), services, IOptimiserInjectorService.ModuleType.Module_Optimisation, hints));
 
@@ -234,6 +234,9 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 			optimiser = injector.getInstance(LocalSearchOptimiser.class);
 			optimiser.setProgressMonitor(new NullOptimiserProgressMonitor());
 			optimiser.init();
+			final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
+			runnerHook.beginPhase(IRunnerHook.PHASE_LSO, injector);
+
 			final IAnnotatedSolution startSolution = optimiser.start(injector.getInstance(IOptimisationContext.class),
 					injector.getInstance(Key.get(ISequences.class, Names.named(OptimiserConstants.SEQUENCE_TYPE_INITIAL))), inputSequences);
 			if (startSolution == null) {

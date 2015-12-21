@@ -87,7 +87,6 @@ public class BagMover extends BreakdownOptimiserMover {
 		searchStatistics.logStateSeen();
 		if (searchStatistics.getStatesSeen() > max) {
 			max = searchStatistics.getStatesSeen();
-			System.out.println("max:"+max); //DO NOT COMMIT
 		}
 		if (searchStatistics.getStatesSeen() > MAX_SEARCH_STATES) {
 			return newStates;

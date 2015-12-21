@@ -307,7 +307,7 @@ public class LNGScenarioToOptimiserBridge {
 						final List<Module> modules = new LinkedList<>();
 						modules.add(new InputSequencesModule(rawSequences));
 						modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(optimiserDataTransformer.getOptimiserSettings()), services,
-								IOptimiserInjectorService.ModuleType.Module_ParametersModule, hints));
+								IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
 						modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
 						evaluationInjector = optimiserDataTransformer.getInjector().createChildInjector(modules);
 					}
@@ -330,7 +330,7 @@ public class LNGScenarioToOptimiserBridge {
 							final List<Module> modules = new LinkedList<>();
 							modules.add(new InputSequencesModule(rawSequences));
 							modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(optimiserDataTransformer.getOptimiserSettings()), services,
-									IOptimiserInjectorService.ModuleType.Module_ParametersModule, hints));
+									IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
 							modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
 							evaluationInjector = optimiserDataTransformer.getInjector().createChildInjector(modules);
 						}
@@ -379,7 +379,7 @@ public class LNGScenarioToOptimiserBridge {
 						{
 							final List<Module> modules2 = new LinkedList<>();
 							modules2.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(originalDataTransformer.getOptimiserSettings()), services,
-									IOptimiserInjectorService.ModuleType.Module_ParametersModule, hints));
+									IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
 							modules2.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
 
 							evaluationInjector2 = subTransformer.getInjector().createChildInjector(modules2);

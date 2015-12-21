@@ -78,7 +78,7 @@ public class LNGScenarioChainBuilder {
 
 			if (doActionSetPostOptimisation) {
 				// Run the action set post optimisation
-				LNGActionSetTransformerUnit.chain(builder, optimiserSettings, PROGRESS_ACTION_SET_OPTIMISATION);
+				LNGActionSetTransformerUnit.chain(builder, optimiserSettings, executorService, PROGRESS_ACTION_SET_OPTIMISATION);
 				final ContainerProvider resultProvider;
 
 				if (childName != null) {
@@ -159,7 +159,8 @@ public class LNGScenarioChainBuilder {
 
 	@NonNull
 	public static ExecutorService createExecutorService() {
-		final int cores = Math.max(1, Runtime.getRuntime().availableProcessors() - 1);
+//		final int cores = Math.max(1, Runtime.getRuntime().availableProcessors() - 1);
+		final int cores = 4;
 		return createExecutorService(cores);
 	}
 
