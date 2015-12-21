@@ -86,7 +86,7 @@ public class LNGParameters_EvaluationSettingsModule extends AbstractModule {
 	@Provides
 	@Named(EnumeratingSequenceScheduler.OPTIMISER_REEVALUATE)
 	private boolean isOptimiserReevaluating() {
-		return true;
+		return false; // DO NOT COMMIT
 	}
 
 	@Provides

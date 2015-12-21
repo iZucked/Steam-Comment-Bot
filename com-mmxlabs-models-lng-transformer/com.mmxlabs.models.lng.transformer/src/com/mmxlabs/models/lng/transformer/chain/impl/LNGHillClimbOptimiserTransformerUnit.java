@@ -265,6 +265,7 @@ public class LNGHillClimbOptimiserTransformerUnit implements ILNGStateTransforme
 
 		final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
 		if (runnerHook != null) {
+			runnerHook.beginPhase(IRunnerHook.PHASE_HILL, injector);
 			final ISequences preloadedResult = runnerHook.getPrestoredSequences(IRunnerHook.PHASE_HILL);
 			if (preloadedResult != null) {
 				monitor.beginTask("", 1);

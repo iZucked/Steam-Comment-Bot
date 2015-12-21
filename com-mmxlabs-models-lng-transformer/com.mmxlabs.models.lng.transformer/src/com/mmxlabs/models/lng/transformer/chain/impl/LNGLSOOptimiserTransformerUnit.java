@@ -263,6 +263,7 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 	public IMultiStateResult run(final IProgressMonitor monitor) {
 		final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
 		if (runnerHook != null) {
+			runnerHook.beginPhase(IRunnerHook.PHASE_LSO, injector);
 			final ISequences preloadedResult = runnerHook.getPrestoredSequences(IRunnerHook.PHASE_LSO);
 			if (preloadedResult != null) {
 				monitor.beginTask("", 1);

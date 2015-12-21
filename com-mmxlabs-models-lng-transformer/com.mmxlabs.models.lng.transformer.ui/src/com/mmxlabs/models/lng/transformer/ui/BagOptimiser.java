@@ -114,13 +114,18 @@ public class BagOptimiser {
 	private ISequences initialRawSequences;
 
 	@Inject
+	@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)
+	@NonNull
+	private ISequences initialRawSequences;
+
+	@Inject
 	protected Injector injector;
 
 	@NonNull
 	@Inject
 	protected BagMover bagMover;
 
-	private final List<List<NonNullPair<ISequences, Map<String, Object>>>> bestSolutions = new LinkedList<>();
+	private final List<IMultiStateResult> bestSolutions = new LinkedList<>();
 
 	private final int initialPopulationSize = 10;
 	private final int initialSearchSize = 20_000;
@@ -164,13 +169,16 @@ public class BagOptimiser {
 	 * @param maxLeafs
 	 * @return
 	 */
-	public boolean optimise(@NonNull final ISequences targetRawSequences, @NonNull final IProgressMonitor progressMonitor, final int maxLeafs) {
+	public IMultiStateResult optimise(@NonNull final ISequences targetRawSequences, @NonNull final IProgressMonitor progressMonitor, final int maxLeafs) {
 
 		init(progressMonitor, maxLeafs);
 
 		final long time1 = System.currentTimeMillis();
 
+		// Prep Fitness cores based on original initial scenario - for lateness/similarity etc.
+		evaluateSolution(initialRawSequences);
 		final SimilarityState targetSimilarityState = injector.getInstance(SimilarityState.class);
+
 		final long bestFitness;
 
 		// Generate the similarity data structures to the target solution
@@ -178,14 +186,25 @@ public class BagOptimiser {
 
 		try {
 			// Prepare initial solution state
-			final ISequences initialRawSequences = new ModifiableSequences(optimisationContext.getInitialSequences());
 			final IModifiableSequences initialFullSequences = sequencesManipulator.createManipulatedSequences(initialRawSequences);
 
+			final int changesCount = bagMover.getChangedElements(targetSimilarityState, initialRawSequences).size();
 			if (DEBUG) {
 				// Debugging -- get initial change count
-				final int changesCount = bagMover.getChangedElements(targetSimilarityState, initialRawSequences).size();
 				System.out.println("Initial changes " + changesCount);
 			}
+
+			if (changesCount == 0) {
+				final List<NonNullPair<ISequences, Map<String, Object>>> processedSolution = new LinkedList<>();
+
+				// Evaluate initial state.
+				// Return an evaluated state for ITS
+				processedSolution.add(evaluateSolution(initialRawSequences));
+
+				final IMultiStateResult r = new MultiStateResult(processedSolution.get(processedSolution.size() - 1), processedSolution);
+				return r;
+			}
+
 
 			final ScheduledSequences initialScheduledSequences = evaluateAndGetScheduledSequences(initialFullSequences);
 			assert initialScheduledSequences != null;
@@ -228,7 +247,7 @@ public class BagOptimiser {
 					logInitialPopulation(initialPopulation);
 					allLimitedStates.addAll(initialPopulation);
 					if (initialPopulation.isEmpty()) {
-						return false;
+						return null;
 					}
 
 					if (DEBUG) {
@@ -319,8 +338,7 @@ public class BagOptimiser {
 					if (BUILD_DEPENDANCY_GRAPH) {
 						buildDependencyGraph(targetSimilarityState, initialRawSequences, sortedChangeStates);
 					}
-					betterSolutionFound = processAndStoreBreakdownSolution(sortedChangeStates.get(0), initialRawSequences, initialFullSequences, null, bestFitness);
-				}
+					processAndStoreBreakdownSolution(sortedChangeStates.get(0), initialRawSequences, bestFitness);				}
 				if (sortedChangeStates.isEmpty()) {
 					LOG.error("Unable to find action sets");
 				}
@@ -336,10 +354,28 @@ public class BagOptimiser {
 				System.out.printf("Setup time %d -- Search time %d\n", (time2 - time1) / 1000L, (time3 - time2) / 1000L);
 			}
 			logFinish();
-			return betterSolutionFound;
+			return getBestSolution();
 		} finally {
 			progressMonitor.done();
 		}
+	}
+
+	@NonNull
+	private NonNullPair<ISequences, Map<String, Object>> evaluateSolution(final @NonNull ISequences rawSequences) {
+		final IModifiableSequences currentFullSequences = sequencesManipulator.createManipulatedSequences(rawSequences);
+
+		final IEvaluationState changeSetEvaluationState = bagMover.evaluateSequence(currentFullSequences);
+		fitnessHelper.evaluateSequencesFromComponents(currentFullSequences, changeSetEvaluationState, fitnessComponents, null);
+
+		final Map<String, Long> currentFitnesses = new HashMap<>();
+		for (final IFitnessComponent fitnessComponent : fitnessComponents) {
+			currentFitnesses.put(fitnessComponent.getName(), fitnessComponent.getFitness());
+		}
+
+		final Map<String, Object> extraAnnotations = new HashMap<>();
+		extraAnnotations.put(OptimiserConstants.G_AI_fitnessComponents, currentFitnesses);
+
+		return new NonNullPair<ISequences, Map<String, Object>>(rawSequences, extraAnnotations);
 	}
 
 	private void logLimiteds(List<JobState> allLimitedStates) {
@@ -662,13 +698,13 @@ public class BagOptimiser {
 		return leafs;
 	}
 
-	protected ScheduledSequences evaluateAndGetScheduledSequences(final IModifiableSequences initialFullSequences) {
+	private ScheduledSequences evaluateAndGetScheduledSequences(final IModifiableSequences initialFullSequences) {
 		final IEvaluationState evaluationState = evaluateAndGetIEvaluationState(initialFullSequences);
 		final ScheduledSequences initialScheduledSequences = evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class);
 		return initialScheduledSequences;
 	}
 
-	private IEvaluationState evaluateAndGetIEvaluationState(final IModifiableSequences initialFullSequences) {
+	private IEvaluationState evaluateAndGetIEvaluationState(final @NonNull ISequences initialFullSequences) {
 		final IEvaluationState evaluationState = new EvaluationState();
 		for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
 			if (!evaluationProcess.evaluate(initialFullSequences, evaluationState)) {
@@ -678,6 +714,7 @@ public class BagOptimiser {
 		}
 		return evaluationState;
 	}
+
 
 	protected void printPopulationInfo(final List<JobState> sortedChangeStates) {
 		int popIndex = 1;
@@ -878,8 +915,7 @@ public class BagOptimiser {
 		return states;
 	}
 
-	protected boolean processAndStoreBreakdownSolution(final JobState solution, final ISequences initialRawSequences, final IModifiableSequences initialFullSequences, final IEvaluationState _unused_,
-			final long bestSolutionFitness) {
+	protected void processAndStoreBreakdownSolution(final JobState solution, final ISequences initialRawSequences, final long bestSolutionFitness) {
 
 		final List<NonNullPair<ISequences, Map<String, Object>>> processedSolution = new LinkedList<>();
 		{
@@ -919,37 +955,28 @@ public class BagOptimiser {
 				bestIdx = idx;
 			}
 			lastFitness = currentFitness;
-			final Map<String, Long> currentFitnesses = new HashMap<>();
-			for (final IFitnessComponent fitnessComponent : fitnessComponents) {
-				currentFitnesses.put(fitnessComponent.getName(), fitnessComponent.getFitness());
-			}
 
-			final Map<String, Object> extraAnnotations = new HashMap<>();
-			extraAnnotations.put(OptimiserConstants.G_AI_fitnessComponents, currentFitnesses);
-
-			processedSolution.add(new NonNullPair<ISequences, Map<String, Object>>(cs.getRawSequences(), extraAnnotations));
+			processedSolution.add(ps);
 			idx++;
 		}
 
-		// Have we found a better solution?
+		// Have we found a better solution than the given input?
 		if (fitness < bestSolutionFitness) {
-			bestSolutions.add(processedSolution.subList(0, bestIdx + 1));
-			return true;
-		} else {
-			bestSolutions.add(processedSolution);
-			return false;
+			// Found better solution, skip remaining action sets which reduce overall fitness
+			processedSolution = processedSolution.subList(0, bestIdx + 1);
 		}
-
+		final IMultiStateResult r = new MultiStateResult(processedSolution.get(processedSolution.size() - 1), processedSolution);
+		bestSolutions.add(r);
 	}
 
-	public List<NonNullPair<ISequences, Map<String, Object>>> getBestSolution() {
+	private IMultiStateResult getBestSolution() {
 		if (bestSolutions.size() > 0) {
 			return bestSolutions.get(0);
 		} else {
 			return null;
 		}
 	}
-
+	
 	private void updateProgress(ActionSetOptimisationData actionSetOptimisationData, int maxEvaluations, IProgressMonitor progressMonitor) {
 		// The percent of weighted actual pnl evaluations + constraint failed evaluations that have completed, based on a given total
 		int progress = (((actionSetOptimisationData.actualPNLEvaluations * 100 + actionSetOptimisationData.actualConstraintEvaluations) * 100) / maxEvaluations);
