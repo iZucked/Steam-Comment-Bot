@@ -164,8 +164,7 @@ public class LNGScenarioChainBuilder {
 
 	@NonNull
 	public static ExecutorService createExecutorService() {
-//		final int cores = Math.max(1, Runtime.getRuntime().availableProcessors() - 1);
-		final int cores = 4;
+		final int cores = Math.max(1, Runtime.getRuntime().availableProcessors() - 1);
 		return createExecutorService(cores);
 	}
 
