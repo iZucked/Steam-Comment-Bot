@@ -12,6 +12,7 @@ import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
+import com.mmxlabs.models.lng.transformer.inject.modules.ActionPlanModule;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
@@ -27,11 +28,11 @@ import com.mmxlabs.scheduler.optimiser.lso.SequencesConstrainedMoveGeneratorUnit
  * @author Simon Goodall
  * 
  */
-public class SettingsOverrideModule extends AbstractModule {
+public class EvaluationSettingsOverrideModule extends AbstractModule {
 
 	private final SettingsOverride settings;
 
-	public SettingsOverrideModule(final SettingsOverride settings) {
+	public EvaluationSettingsOverrideModule(final SettingsOverride settings) {
 		this.settings = settings;
 	}
 
@@ -46,19 +47,13 @@ public class SettingsOverrideModule extends AbstractModule {
 		return false;
 	}
 
-	
-	 @Provides
-	 @Named(SequencesConstrainedMoveGeneratorUnit.OPTIMISER_ENABLE_FOUR_OPT_2)
-	 private boolean enableFourOpt2() {
-	 return true;
-	 }
-	
-	 @Provides
-	 @Named(TravelTimeConstraintChecker.OPTIMISER_START_ELEMENT_FIX)
-	 private boolean enableStartOfSequenceFix() {
-	 return true;
-	 }
-	
+	@Provides
+	@Named(TravelTimeConstraintChecker.OPTIMISER_START_ELEMENT_FIX)
+	private boolean enableStartOfSequenceFix() {
+		return true;
+	}
+
+
 	@Provides
 	@Singleton
 	private ILatenessComponentParameters provideLatenessComponentParameters() {
@@ -79,26 +74,5 @@ public class SettingsOverrideModule extends AbstractModule {
 
 		return lcp;
 	}
-
-	@Provides
-	@Singleton
-	private ISimilarityComponentParameters provideSimilarityComponentParameters() {
-		Map<String, Integer> scpm = settings.getSimilarityParameterMap();
-		final SimilarityComponentParameters scp = new SimilarityComponentParameters();
-		
-		scp.setThreshold(SimilarityComponentParameters.Interval.LOW, scpm.get("scp-set-low-thresh"));
-		scp.setWeight(SimilarityComponentParameters.Interval.LOW, scpm.get("scp-set-low-weight"));
-		
-		scp.setThreshold(SimilarityComponentParameters.Interval.MEDIUM, scpm.get("scp-set-med-thresh"));
-		scp.setWeight(SimilarityComponentParameters.Interval.MEDIUM, scpm.get("scp-set-med-weight"));
-		
-		scp.setThreshold(SimilarityComponentParameters.Interval.HIGH, scpm.get("scp-set-high-thresh"));
-		scp.setWeight(SimilarityComponentParameters.Interval.HIGH, scpm.get("scp-set-high-weight"));
-
-		scp.setOutOfBoundsWeight(scpm.get("scp-set-outOfBounds-weight"));
-		
-		return scp;
-	}
 	
-
 }

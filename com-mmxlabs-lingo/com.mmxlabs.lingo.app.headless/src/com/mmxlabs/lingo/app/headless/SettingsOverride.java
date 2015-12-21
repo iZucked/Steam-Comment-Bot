@@ -52,6 +52,10 @@ public final class SettingsOverride {
 	Map<String, Integer> latenessParameterMap;
 	Map<String, Integer> similarityParameterMap;
 	
+	private int actionPlanTotalEvals = 5_000_000;
+	private int actionPlanInRunEvals = 1_500_000;
+	private int actionPlanMaxSearchDepth = 5_000;
+
 	public String getOutputName() {
 		return outputName;
 	}
@@ -122,6 +126,30 @@ public final class SettingsOverride {
 	
 	public Map<String, Integer> getSimilarityParameterMap() {
 		return similarityParameterMap;
+	}
+
+	public int getActionPlanTotalEvals() {
+		return actionPlanTotalEvals;
+	}
+
+	public void setActionPlanTotalEvals(int actionPlanTotalEvals) {
+		this.actionPlanTotalEvals = actionPlanTotalEvals;
+	}
+
+	public int getActionPlanInRunEvals() {
+		return actionPlanInRunEvals;
+	}
+
+	public void setActionPlanInRunEvals(int actionPlanInRunEvals) {
+		this.actionPlanInRunEvals = actionPlanInRunEvals;
+	}
+
+	public int getActionPlanMaxSearchDepth() {
+		return this.actionPlanMaxSearchDepth;
+	}
+
+	public void setActionPlanMaxSearchDepth(int actionPlanMaxSearchDepth) {
+		this.actionPlanMaxSearchDepth = actionPlanMaxSearchDepth;
 	}
 	
 }

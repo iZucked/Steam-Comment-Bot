@@ -191,7 +191,6 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 			// Hill climb limit
 			optimiserSettings.getSolutionImprovementSettings().setIterations(1000);
 		}
-		final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunner(executorService, originalScenario, optimiserSettings);
 
 		Assert.assertEquals(withActionSets, optimiserSettings.isBuildActionSets());
 		Assert.assertEquals(withGeneratedCharterOuts, optimiserSettings.isGenerateCharterOuts());
@@ -217,8 +216,9 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 		// }
 
 		// Optionally use pre-stored sequences state.
+		final IRunnerHook runnerHook;
 		if (false) {
-			scenarioRunner.setRunnerHook(new AbstractRunnerHook() {
+			runnerHook = new AbstractRunnerHook() {
 
 				@Override
 				public void reportSequences(String phase, final ISequences rawSequences) {
@@ -279,8 +279,12 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 					}
 					return null;
 				}
-			});
+			};
+		} else {
+			runnerHook = null;
 		}
+		
+		final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunner(executorService, originalScenario, optimiserSettings);
 
 		optimiseBasicScenario(scenarioRunner, url, String.format(".%s.properties", Joiner.on(".").join(components)));
 	}
