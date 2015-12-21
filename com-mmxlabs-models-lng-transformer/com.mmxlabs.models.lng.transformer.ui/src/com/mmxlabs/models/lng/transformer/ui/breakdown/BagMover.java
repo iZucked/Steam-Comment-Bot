@@ -19,8 +19,10 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
+import com.mmxlabs.models.lng.transformer.inject.modules.ActionPlanModule;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.ChangeChecker.DifferenceType;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.independence.DischargeRewireChange;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.independence.InsertUnusedCargoChange;
@@ -62,7 +64,10 @@ public class BagMover extends BreakdownOptimiserMover {
 	private int depthStart = 1;
 	private int depthEnd = 8;
 	
-	private int MAX_SEARCH_STATES = 5000;
+	@Inject
+	@Named(ActionPlanModule.ACTION_PLAN_MAX_SEARCH_DEPTH)
+	private int MAX_SEARCH_STATES;
+	
 	@Inject
 	@NonNull
 	protected Injector injector;
@@ -71,12 +76,17 @@ public class BagMover extends BreakdownOptimiserMover {
 	@NonNull
 	IResourceAllocationConstraintDataComponentProvider resourceAllocationProvider;
 
+	int max = 0;
 	@Override
 	public Collection<JobState> search(@NonNull final ISequences currentRawSequences, @NonNull final SimilarityState similarityState, @NonNull final List<Change> changes,
 			@NonNull final List<ChangeSet> changeSets, final int tryDepth, final int moveType, final long[] currentMetrics, @NonNull final JobStore jobStore,
 			@Nullable List<ISequenceElement> targetElements, List<Difference> differencesList, @NonNull BreakdownSearchStatistics searchStatistics) {
 		final List<JobState> newStates = new LinkedList<>();
 		searchStatistics.logStateSeen();
+		if (searchStatistics.getStatesSeen() > max) {
+			max = searchStatistics.getStatesSeen();
+			System.out.println("max:"+max); //DO NOT COMMIT
+		}
 		if (searchStatistics.getStatesSeen() > MAX_SEARCH_STATES) {
 			return newStates;
 		}
