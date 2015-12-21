@@ -72,7 +72,7 @@ public class LNGScenarioChainBuilder {
 			// Run the standard LSO optimisation
 			int[] seeds = new int[numSeeds];
 			for (int i = 0; i < numSeeds; ++i) {
-				seeds[i] = i;
+				seeds[i] = optimiserSettings.getSeed();//i;
 			}
 			assert seeds.length > 0;
 			LNGLSOOptimiserTransformerUnit.chainPool(builder, optimiserSettings, PROGRESS_OPTIMISATION, executorService, seeds);
