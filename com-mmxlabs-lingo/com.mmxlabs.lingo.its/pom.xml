@@ -182,6 +182,10 @@
 						<artifactId>tycho-surefire-plugin</artifactId>
 						<version>${tycho.version}</version>
 						<configuration>
+							<providerHint>junit47</providerHint>
+          					<providerProperties>
+								<groups>com.mmxlabs.lingo.its.tests.category.QuickTest</groups>
+          					</providerProperties>
 							<failIfNoTests>false</failIfNoTests>
 							<!-- Only run Tests marked with the Quick Test annotation -->
 							<group>com.mmxlabs.lingo.its.tests.category.QuickTest</group>
