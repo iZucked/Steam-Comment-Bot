@@ -12,8 +12,10 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import com.mmxlabs.models.lng.transformer.ui.AbstractRunnerHook;
+import com.mmxlabs.models.lng.transformer.ui.ActionSetLogger;
 import com.mmxlabs.optimiser.common.logging.ILoggingDataStore;
 import com.mmxlabs.optimiser.lso.logging.ILoggingProvider;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger;
@@ -29,11 +31,15 @@ public class LoggingModule extends AbstractModule {
 	private final Map<String, LSOLogger> phaseToLoggerMap;
 	private final AbstractRunnerHook runnerHook;
 	private final int reportingInterval;
-
-	public LoggingModule(final Map<String, LSOLogger> phaseToLoggerMap, final AbstractRunnerHook runnerHook, final int reportingInterval) {
+	private final ActionSetLogger actionSetLogger;
+	
+	private final static String ACTION_PLAN_LOGGER = "ACTION_PLAN_LOGGER";
+	
+	public LoggingModule(final Map<String, LSOLogger> phaseToLoggerMap, final ActionSetLogger actionSetLogger, final AbstractRunnerHook runnerHook, final int reportingInterval) {
 		this.phaseToLoggerMap = phaseToLoggerMap;
 		this.runnerHook = runnerHook;
 		this.reportingInterval = reportingInterval;
+		this.actionSetLogger = actionSetLogger;
 	}
 
 	@Override
@@ -89,5 +95,11 @@ public class LoggingModule extends AbstractModule {
 		final LoggingProvider logger = new LoggingProvider();
 		injector.injectMembers(logger);
 		return logger;
+	}
+	
+	@Provides
+	@Named(ACTION_PLAN_LOGGER)
+	private ActionSetLogger providerActionSetLogger(@NonNull final Injector injector) {
+		return actionSetLogger;
 	}
 }
