@@ -125,7 +125,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 	}
 
 	protected void initLogger() {
-		if (loggingDataStore != null) {
+		if (loggingProvider != null) {
 			loggingDataStore = loggingProvider.providerLSOLogger(getFitnessEvaluator(), getCurrentContext());
 		}
 	}

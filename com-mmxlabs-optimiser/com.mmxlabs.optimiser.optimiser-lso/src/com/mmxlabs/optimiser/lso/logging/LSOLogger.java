@@ -40,8 +40,8 @@ public class LSOLogger implements ILoggingDataStore {
 	private Map<ISequences, Long> rejectedMovesSequencesFitness = new HashMap<>();
 	private Map<ISequences, SequencesCounts> acceptedSequencesCount = new HashMap<>();
 	private Map<ISequences, SequencesCounts> rejectedSequencesCount = new HashMap<>();
-	private List<Pair<Integer, Long>> acceptedSolutionFitnesses = new LinkedList<Pair<Integer,Long>>();
-	private List<Pair<Integer, Long>> rejectedSolutionFitnesses = new LinkedList<Pair<Integer,Long>>();
+	private List<Pair<Integer, Long>> acceptedSolutionFitnesses = new LinkedList<Pair<Integer, Long>>();
+	private List<Pair<Integer, Long>> rejectedSolutionFitnesses = new LinkedList<Pair<Integer, Long>>();
 
 	private List<IResource> resourceList = null;
 
@@ -55,7 +55,7 @@ public class LSOLogger implements ILoggingDataStore {
 	private IFitnessEvaluator lsafe;
 	private FitnessAnnotationLogger fitnessAnnotationLogger;
 	private GeneralAnnotationLogger generalAnnotationLogger;
-	
+
 	public LSOLogger(int reportingInterval, IFitnessEvaluator lsafe, IOptimisationContext context) {
 		nullMovesMap.put("null", new AtomicInteger(0));
 		progressKeys = getProgressKeysMap();
@@ -111,19 +111,19 @@ public class LSOLogger implements ILoggingDataStore {
 		logSuccessfulMove(moveName);
 		addFitnessIterationPoint(acceptedSolutionFitnesses, numberOfMovesTried, fitness);
 	}
-	
+
 	public void logRejectedMove(IMove move, int numberOfMovesTried, long fitness) {
 		addFitnessIterationPoint(rejectedSolutionFitnesses, numberOfMovesTried, fitness);
 	}
-	
+
 	private void addFitnessIterationPoint(List<Pair<Integer, Long>> log, int iteration, long fitness) {
 		log.add(new Pair<Integer, Long>(iteration, fitness));
 	}
-	
+
 	public void logSuccessfulMove(String moveName) {
 		logMoveEvent(moveName, successfulMoveMap);
 	}
-	
+
 	public void logFailedToValidateMove(IMove move) {
 		String moveName = move.getClass().getName();
 		logFailedToValidateMove(moveName);
@@ -206,11 +206,13 @@ public class LSOLogger implements ILoggingDataStore {
 		List<String> attributes = new ArrayList<String>(progressKeys.keySet());
 		Collections.sort(attributes);
 		Map<String, Long> finalResults = new HashMap<String, Long>();
-		for (String key : attributes) {
-			if (key != "time") {
-				finalResults.put(key, progressLogMap.get(getProgressEvaluations().get(getProgressEvaluations().size() - 1))[progressKeys.get(key)]);
-			} else {
-				finalResults.put(key, getFinalTime());
+		if (progressLogMap.size() != 0) {
+			for (String key : attributes) {
+				if (key != "time") {
+					finalResults.put(key, progressLogMap.get(getProgressEvaluations().get(getProgressEvaluations().size() - 1))[progressKeys.get(key)]);
+				} else {
+					finalResults.put(key, getFinalTime());
+				}
 			}
 		}
 		return finalResults;
@@ -249,11 +251,11 @@ public class LSOLogger implements ILoggingDataStore {
 	public List<String> getSuccessfulMovesList() {
 		return new ArrayList<String>(successfulMoveMap.keySet());
 	}
-	
+
 	public int getSuccessfulMoveCount(String key) {
 		return successfulMoveMap.get(key).get();
 	}
-	
+
 	public List<String> getFailedConstraints() {
 		return new ArrayList<String>(failedConstraintsMovesMap.keySet());
 	}
@@ -273,7 +275,7 @@ public class LSOLogger implements ILoggingDataStore {
 	public int getFailedConstraintsMovesIndividualCount(String constraint, String move) {
 		return failedConstraintsMovesMap.get(constraint).get(move).get();
 	}
-	
+
 	public void logSequence(IModifiableSequences sequence) {
 		SequencesCounts count = seenSequencesCount.get(sequence);
 		if (count == null) {
@@ -284,11 +286,11 @@ public class LSOLogger implements ILoggingDataStore {
 			count.total.incrementAndGet();
 		}
 	}
-		
+
 	public List<Integer> getSequenceFrequencyCounts() {
 		return getFrequencyFromSequencesCounts(seenSequencesCount, SequenceCountType.TOTAL);
 	}
-	
+
 	private List<Integer> getFrequencyFromSequencesCounts(Map<ISequences, SequencesCounts> counts, SequenceCountType type) {
 		List<Integer> frequencies = new ArrayList<Integer>();
 		for (SequencesCounts s : counts.values()) {
@@ -301,7 +303,7 @@ public class LSOLogger implements ILoggingDataStore {
 		SequencesCounts counts = seenSequencesCount.get(pinnedPotentialRawSequences);
 		counts.constraints.incrementAndGet();
 	}
-	
+
 	public List<Integer> getInterestingSequenceFrequencies(Map<ISequences, SequencesCounts> interestingSequences, SequenceCountType type) {
 		List<Integer> frequencies = new ArrayList<Integer>();
 		for (SequencesCounts counts : interestingSequences.values()) {
@@ -312,7 +314,7 @@ public class LSOLogger implements ILoggingDataStore {
 		}
 		return frequencies;
 	}
-	
+
 	public List<Integer> getSequenceCountFailedConstraint() {
 		return getInterestingSequenceFrequencies(seenSequencesCount, SequenceCountType.CONSTRAINTS);
 	}
@@ -325,7 +327,7 @@ public class LSOLogger implements ILoggingDataStore {
 	public List<Integer> getSequenceCountAccepted() {
 		return getInterestingSequenceFrequencies(seenSequencesCount, SequenceCountType.ACCEPTED);
 	}
-		
+
 	public void logSequenceRejected(ModifiableSequences pinnedPotentialRawSequences, long currentFitness) {
 		SequencesCounts counts = seenSequencesCount.get(pinnedPotentialRawSequences);
 		counts.rejected.incrementAndGet();
@@ -334,7 +336,7 @@ public class LSOLogger implements ILoggingDataStore {
 	public List<Integer> getSequenceCountRejected() {
 		return getInterestingSequenceFrequencies(seenSequencesCount, SequenceCountType.REJECTED);
 	}
-	
+
 	public List<Pair<Integer, Long>> getAcceptedFitnesses() {
 		return acceptedSolutionFitnesses;
 	}
@@ -382,7 +384,7 @@ public class LSOLogger implements ILoggingDataStore {
 	public void setNumberOfFailedToValidate(int numberOfFailedToValidate) {
 		this.numberOfFailedToValidate = numberOfFailedToValidate;
 	}
-	
+
 	public FitnessAnnotationLogger getFitnessAnnotationLogger() {
 		return fitnessAnnotationLogger;
 	}
@@ -390,7 +392,7 @@ public class LSOLogger implements ILoggingDataStore {
 	public GeneralAnnotationLogger getGeneralAnnotationLogger() {
 		return generalAnnotationLogger;
 	}
-	
+
 	private class SequencesCounts {
 		public AtomicInteger total;
 		public AtomicInteger accepted;
@@ -400,12 +402,14 @@ public class LSOLogger implements ILoggingDataStore {
 		public SequencesCounts() {
 			this(0);
 		}
+
 		public SequencesCounts(int initVal) {
 			total = new AtomicInteger(initVal);
 			accepted = new AtomicInteger(initVal);
 			rejected = new AtomicInteger(initVal);
 			constraints = new AtomicInteger(initVal);
 		}
+
 		public Integer getValue(SequenceCountType type) {
 			switch (type) {
 			case TOTAL:
@@ -419,15 +423,12 @@ public class LSOLogger implements ILoggingDataStore {
 			default:
 				return null;
 			}
-		
+
 		}
 	}
-	
+
 	private enum SequenceCountType {
-		TOTAL,
-		ACCEPTED,
-		REJECTED,
-		CONSTRAINTS
+		TOTAL, ACCEPTED, REJECTED, CONSTRAINTS
 	}
 
 }
