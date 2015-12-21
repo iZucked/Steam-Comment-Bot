@@ -1,17 +1,12 @@
 package com.mmxlabs.models.lng.transformer.stochasticactionsets;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 
-import org.apache.shiro.crypto.hash.Hash;
-import org.apache.shiro.util.ByteSource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
@@ -25,14 +20,12 @@ import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.mmxlabs.common.NonNullPair;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.transformer.chain.ChainBuilder;
 import com.mmxlabs.models.lng.transformer.chain.IChainLink;
 import com.mmxlabs.models.lng.transformer.chain.ILNGStateTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.IMultiStateResult;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGDataTransformer;
-import com.mmxlabs.models.lng.transformer.chain.impl.MultiStateResult;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.InputSequencesModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGEvaluationModule;
@@ -43,12 +36,9 @@ import com.mmxlabs.models.lng.transformer.ui.BagOptimiser;
 import com.mmxlabs.models.lng.transformer.ui.ContainerProvider;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.BagMover;
-import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
-import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
@@ -61,7 +51,7 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 	}
 
 	@NonNull
-	public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final OptimiserSettings settings, @Nullable ExecutorService executorService, final int progressTicks) {
+	public static IChainLink chain(final ChainBuilder chainBuilder, @NonNull final OptimiserSettings settings, @Nullable final ExecutorService executorService, final int progressTicks) {
 		final IChainLink link = new IChainLink() {
 
 			private LNGActionSetTransformerUnit t;
@@ -197,10 +187,10 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 
 		final List<Module> modules = new LinkedList<>();
 		modules.add(new InputSequencesModule(inputState.getBestSolution().getFirst()));
-		modules.addAll(
-				LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(settings), services, IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
-		modules.addAll(
-				LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_OptimiserSettingsModule(settings), services, IOptimiserInjectorService.ModuleType.Module_OptimisationParametersModule, hints));
+		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(settings), services,
+				IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
+		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_OptimiserSettingsModule(settings), services,
+				IOptimiserInjectorService.ModuleType.Module_OptimisationParametersModule, hints));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), services, IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
 		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGOptimisationModule(), services, IOptimiserInjectorService.ModuleType.Module_Optimisation, hints));
 
@@ -217,7 +207,7 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 
 				BagMover bagMover = threadCache.get(Thread.currentThread());
 				if (bagMover == null) {
-					PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class);
+					final PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class);
 					scope.enter();
 					bagMover = new BagMover();
 					injector.injectMembers(bagMover);
@@ -226,12 +216,12 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 				}
 				return bagMover;
 			}
-			
+
 			@Provides
 			@Named("MAIN_MOVER")
 			private BagMover providePerThreadBagMover2(@NonNull final Injector injector) {
-					BagMover bagMover = new BagMover();
-					injector.injectMembers(bagMover);
+				final BagMover bagMover = new BagMover();
+				injector.injectMembers(bagMover);
 				return bagMover;
 			}
 
@@ -262,13 +252,13 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 			try {
 
 				final BagOptimiser instance = injector.getInstance(BagOptimiser.class);
-				ISequences inputRawSequences = injector.getInstance(Key.get(ISequences.class, Names.named(OptimiserConstants.SEQUENCE_TYPE_INPUT)));
+				final ISequences inputRawSequences = injector.getInstance(Key.get(ISequences.class, Names.named(OptimiserConstants.SEQUENCE_TYPE_INPUT)));
 				final IMultiStateResult result = instance.optimise(inputRawSequences, new SubProgressMonitor(monitor, 95), 1000);
 				if (result != null) {
 					return result;
 				}
 				return inputState;
-			} catch (Exception e) { 
+			} catch (final Exception e) {
 				e.printStackTrace();
 				throw e;
 			} finally {

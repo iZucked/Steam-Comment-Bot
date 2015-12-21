@@ -13,6 +13,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.progress.IProgressConstants;
@@ -65,90 +66,90 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
 		// TODO: This should be static / central service?
 		executorService = LNGScenarioChainBuilder.createExecutorService();// Executors.newSingleThreadExecutor();
-		
-		AbstractRunnerHook runnerHook = new AbstractRunnerHook() {
-			@Override
-			public void beginPhase(String phase, Injector injector) {
-				super.beginPhase(phase, injector);
-//				for (IRunExporter exporter : exporters) {
-//					exporter.setPhase(phase, injector);
-//				}
-			}
 
-			@Override
-			public void endPhase(String phase) {
-				super.endPhase(phase);
-			}
-			
-			@Override
-			public void reportSequences(String phase, final ISequences rawSequences) {
-				switch (phase) {
-				
-				case IRunnerHook.PHASE_LSO:
-				case IRunnerHook.PHASE_HILL:
-				case IRunnerHook.PHASE_INITIAL:
-					save(rawSequences, phase);
-					break;
-				case IRunnerHook.PHASE_ACTION_SETS:
-					break;
+		@Nullable
+		IRunnerHook runnerHook = null;
+		if (false) {
+			runnerHook = new AbstractRunnerHook() {
+				@Override
+				public void beginPhase(String phase, Injector injector) {
+					super.beginPhase(phase, injector);
+					// for (IRunExporter exporter : exporters) {
+					// exporter.setPhase(phase, injector);
+					// }
 				}
-			}
-			
-			@Override
-			public ISequences getPrestoredSequences(String phase) {
-				switch (phase) {
-				case IRunnerHook.PHASE_LSO:
-				case IRunnerHook.PHASE_HILL:
-					return load(phase);
-				case IRunnerHook.PHASE_INITIAL:
-				case IRunnerHook.PHASE_ACTION_SETS:
-					break;
-					
+
+				@Override
+				public void endPhase(String phase) {
+					super.endPhase(phase);
 				}
-				return null;
-			}
-			
-			private void save(final ISequences rawSequences, final String type) {
-//				assert false;
-				try {
-					final String suffix = scenarioInstance.getName() + "." + type + ".sequences";
-//					final File file2 = new File("/home/ubuntu/scenarios/"+suffix);
-					final File file2 = new File("c:\\Temp\\"+suffix);
-					try (FileOutputStream fos = new FileOutputStream(file2)) {
-						final Injector injector = getInjector();
-						assert(injector!= null);
-						SequencesSerialiser.save(injector.getInstance(IOptimisationData.class), rawSequences, fos);
+
+				@Override
+				public void reportSequences(String phase, final ISequences rawSequences) {
+					switch (phase) {
+
+					case IRunnerHook.PHASE_LSO:
+					case IRunnerHook.PHASE_HILL:
+					case IRunnerHook.PHASE_INITIAL:
+						save(rawSequences, phase);
+						break;
+					case IRunnerHook.PHASE_ACTION_SETS:
+						break;
 					}
-				} catch (final Exception e) {
-//					Assert.fail(e.getMessage());
 				}
-			}
-			
-			private ISequences load(final String type) {
-				try {
-					final String suffix = scenarioInstance.getName() + "." + type + ".sequences";
-//					final File file2 = new File("/home/ubuntu/scenarios/"+suffix);
-					final File file2 = new File("c:\\Temp\\"+suffix);
-					try (FileInputStream fos = new FileInputStream(file2)) {
-						final Injector injector = getInjector();
-						assert(injector!= null);
-						return SequencesSerialiser.load(injector.getInstance(IOptimisationData.class), fos);
+
+				@Override
+				public ISequences getPrestoredSequences(String phase) {
+					switch (phase) {
+					case IRunnerHook.PHASE_LSO:
+					case IRunnerHook.PHASE_HILL:
+						return load(phase);
+					case IRunnerHook.PHASE_INITIAL:
+					case IRunnerHook.PHASE_ACTION_SETS:
+						break;
+
 					}
-				} catch (final Exception e) {
-					// return
-					// Assert.fail(e.getMessage());
+					return null;
 				}
-				return null;
-			}
-			
-		};
-		
+
+				private void save(final ISequences rawSequences, final String type) {
+					// assert false;
+					try {
+						final String suffix = scenarioInstance.getName() + "." + type + ".sequences";
+						// final File file2 = new File("/home/ubuntu/scenarios/"+suffix);
+						final File file2 = new File("c:\\Temp\\" + suffix);
+						try (FileOutputStream fos = new FileOutputStream(file2)) {
+							final Injector injector = getInjector();
+							assert (injector != null);
+							SequencesSerialiser.save(injector.getInstance(IOptimisationData.class), rawSequences, fos);
+						}
+					} catch (final Exception e) {
+						// Assert.fail(e.getMessage());
+					}
+				}
+
+				private ISequences load(final String type) {
+					try {
+						final String suffix = scenarioInstance.getName() + "." + type + ".sequences";
+						// final File file2 = new File("/home/ubuntu/scenarios/"+suffix);
+						final File file2 = new File("c:\\Temp\\" + suffix);
+						try (FileInputStream fos = new FileInputStream(file2)) {
+							final Injector injector = getInjector();
+							assert (injector != null);
+							return SequencesSerialiser.load(injector.getInstance(IOptimisationData.class), fos);
+						}
+					} catch (final Exception e) {
+						// return
+						// Assert.fail(e.getMessage());
+					}
+					return null;
+				}
+			};
+		}
 		scenarioRunner = new LNGScenarioRunner(executorService, originalScenario, scenarioInstance, jobDescriptor.getOptimiserSettings(), originalEditingDomain, runnerHook,
 				LNGTransformerHelper.HINT_OPTIMISE_LSO);
 
 		setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));
-		
-		
 
 		// Disable optimisation in P&L testing phase
 		if (LicenseFeatures.isPermitted("features:phase-pnl-testing")) {
