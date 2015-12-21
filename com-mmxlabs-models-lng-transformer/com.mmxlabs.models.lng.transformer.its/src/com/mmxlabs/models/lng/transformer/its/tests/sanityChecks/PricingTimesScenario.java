@@ -146,7 +146,7 @@ public class PricingTimesScenario {
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try {
 			final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, (LNGScenarioModel) this.scenario, LNGScenarioRunnerUtils.createDefaultSettings(),
-					new TransformerExtensionTestBootstrapModule());
+					new TransformerExtensionTestBootstrapModule(), null);
 			runner.evaluateInitialState();
 
 			final Schedule schedule = runner.getSchedule();

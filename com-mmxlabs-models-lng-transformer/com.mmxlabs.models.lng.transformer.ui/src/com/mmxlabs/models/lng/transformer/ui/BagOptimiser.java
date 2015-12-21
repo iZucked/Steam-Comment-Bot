@@ -10,16 +10,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
-
-import javax.inject.Named;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -30,25 +28,30 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.google.inject.name.Named;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.transformer.chain.IMultiStateResult;
 import com.mmxlabs.models.lng.transformer.chain.impl.MultiStateResult;
+import com.mmxlabs.models.lng.transformer.inject.modules.ActionPlanModule;
 import com.mmxlabs.models.lng.transformer.stochasticactionsets.StochasticActionSetUtils;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.BagMover;
+import com.mmxlabs.models.lng.transformer.ui.breakdown.BreakdownSearchData;
+import com.mmxlabs.models.lng.transformer.ui.breakdown.BreakdownSearchStatistics;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.Change;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.ChangeChecker;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.ChangeSet;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.ChangeSetFinderJob;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.Difference;
+import com.mmxlabs.models.lng.transformer.ui.breakdown.IncrementingRandomSeed;
+import com.mmxlabs.models.lng.transformer.ui.breakdown.JobBatcher;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.JobState;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.JobStateMode;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.JobStore;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.MetricType;
-import com.mmxlabs.models.lng.transformer.ui.breakdown.MyFuture;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.SimilarityState;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.independence.ActionSetIndependenceChecking;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
+import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
@@ -75,14 +78,11 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
  */
 public class BagOptimiser {
 
-	private static final Logger LOG = LoggerFactory.getLogger(BagOptimiser.class);
-
-	private static final boolean DEBUG = false;
-
-	private static final boolean BUILD_DEPENDANCY_GRAPH = false;
+	@Inject
+	protected ISequencesManipulator sequencesManipulator;
 
 	@Inject
-	private ISequencesManipulator sequencesManipulator;
+	protected IOptimisationContext optimisationContext;
 
 	@Inject
 	@NonNull
@@ -91,9 +91,13 @@ public class BagOptimiser {
 	@Inject
 	@NonNull
 	private IFitnessHelper fitnessHelper;
+
 	@Inject
 	@NonNull
 	private IFitnessCombiner fitnessCombiner;
+
+	@Inject
+	ExecutorService executorService;
 
 	@Inject
 	private List<IEvaluationProcess> evaluationProcesses;
@@ -104,34 +108,64 @@ public class BagOptimiser {
 	private ISequences initialRawSequences;
 
 	@Inject
-	private Injector injector;
+	protected Injector injector;
 
 	@NonNull
 	@Inject
+	@Named("MAIN_MOVER")
 	protected BagMover bagMover;
-	private final Random rdm = new Random(0);
+
+	protected static final Logger LOG = LoggerFactory.getLogger(BagOptimiser.class);
+
+	private static final boolean DEBUG = false;
+
+	protected static final boolean BUILD_DEPENDANCY_GRAPH = false;
+
+	protected final Random rdm = new Random(0);
 
 	private final List<IMultiStateResult> bestSolutions = new LinkedList<>();
 
-	private final int initialPopulationSize = 10;
-	private final int initialSearchSize = 20_000;
-	private final int normalSearchSize = 2_000;
-	private final int retrySearchSize = 2_000;
+	protected int initialPopulationSize = 10;
+	private int initialSearchSize = 20_000;
+	protected int normalSearchSize = 2_000;
+	private int retrySearchSize = 2_000;
 
-	private final int maxEvaluations = 5_000_000;
-	private final int maxEvaluationsInRun = 1_500_000;
+	@Inject
+	@Named(ActionPlanModule.ACTION_PLAN_TOTAL_EVALUATIONS)
+	private int maxEvaluations;
+
+	@Inject
+	@Named(ActionPlanModule.ACTION_PLAN_IN_RUN_EVALUATIONS)
+	private int maxEvaluationsInRun;
+
 	private int maxLeafs = 0;
 	private IProgressMonitor progressMonitor = null;
 	private ProgressCounter progressCounter = new ProgressCounter();
-	private ActionSetOptimisationData actionSetOptimisationData = new ActionSetOptimisationData();
+	protected ActionSetOptimisationData actionSetOptimisationData = new ActionSetOptimisationData();
 	private boolean ignoreTerminationConditions = false;
 
-	private void init(final IProgressMonitor progressMonitor, final int maxLeafs) {
+	@Inject
+	@Named("ACTION_PLAN_LOGGER")
+	private ActionSetLogger actionSetLogger;
+
+	private IncrementingRandomSeed incrementingRandomSeed = new IncrementingRandomSeed();
+
+	private int depthStart = 0;
+	private int depthEnd = 3;
+
+	protected void init(final IProgressMonitor progressMonitor, final int maxLeafs) {
 		setProgressCounter(new ProgressCounter());
 		setProgressMonitor(progressMonitor);
 		setMaxLeafs(maxLeafs);
 		setIgnoreTerminationConditions(false);
 		setActionSetOptimisationData(new ActionSetOptimisationData());
+		logStart();
+	}
+
+	private void logStart() {
+		if (actionSetLogger != null) {
+			actionSetLogger.begin(System.currentTimeMillis());
+		}
 	}
 
 	/**
@@ -153,13 +187,18 @@ public class BagOptimiser {
 		evaluateSolution(initialRawSequences);
 		final SimilarityState targetSimilarityState = injector.getInstance(SimilarityState.class);
 
+		final long bestFitness;
+
+		// Generate the similarity data structures to the target solution
+		bestFitness = initSimiliarityTarget(targetRawSequences, targetSimilarityState);
+
 		try {
 			// Prepare initial solution state
 			final IModifiableSequences initialFullSequences = sequencesManipulator.createManipulatedSequences(initialRawSequences);
 
-			// Debugging -- get initial change count
 			final int changesCount = bagMover.getChangedElements(targetSimilarityState, initialRawSequences).size();
 			if (DEBUG) {
+				// Debugging -- get initial change count
 				System.out.println("Initial changes " + changesCount);
 			}
 
@@ -174,7 +213,7 @@ public class BagOptimiser {
 				return r;
 			}
 
-			final ScheduledSequences initialScheduledSequences = evaluateInitialStateAndGetScheduledSequences(initialFullSequences);
+			final ScheduledSequences initialScheduledSequences = evaluateAndGetScheduledSequences(initialFullSequences);
 			assert initialScheduledSequences != null;
 
 			final long initialUnusedCompulsarySlot = bagMover.calculateUnusedCompulsarySlot(initialRawSequences);
@@ -192,32 +231,32 @@ public class BagOptimiser {
 			targetSimilarityState.getBaseMetrics()[MetricType.PNL.ordinal()] = initialPNL;
 			targetSimilarityState.getBaseMetrics()[MetricType.COMPULSARY_SLOT.ordinal()] = initialUnusedCompulsarySlot;
 
-			final long bestFitness;
-
-			// Generate the similarity data structures to the target solution
-			bestFitness = initSimiliarityTarget(targetRawSequences, targetSimilarityState);
-
 			final ChangeChecker changeChecker = injector.getInstance(ChangeChecker.class);
 			changeChecker.init(null, targetSimilarityState, initialRawSequences);
-			final List<JobState> currentSearchStates = getInitialSearchStates(initialRawSequences, initialUnusedCompulsarySlot, initialLateness, initialCapacity, initialPNL, changeSets, changes,
+			List<JobState> currentSearchStates = getInitialSearchStates(initialRawSequences, initialUnusedCompulsarySlot, initialLateness, initialCapacity, initialPNL, changeSets, changes,
 					changeChecker);
 
-			final List<JobState> finalPopulation = new LinkedList<>();
-			final List<JobState> allLimitedStates = new LinkedList<>();
+			List<JobState> finalPopulation = new LinkedList<>();
+			List<JobState> allLimitedStates = new LinkedList<>();
+			boolean betterSolutionFound = false;
 			progressMonitor.beginTask("Generate Action Sets", 100);
-			int initialDepthLimit = 3;
+			int initialDepthLimitStart = 0;
+			int initialDepthLimitEnd = 3;
 			try {
 				while (!shouldTerminate(actionSetOptimisationData)) {
-					bagMover.setDepthRange(0, initialDepthLimit);
+					// bagMover.setDepthRange(initialDepthLimitStart, initialDepthLimitEnd);
+					depthStart = initialDepthLimitStart;
+					depthEnd = initialDepthLimitEnd;
 					actionSetOptimisationData.startNewRun();
-					final List<JobState> promisingLimitedStates = new LinkedList<>();
-					final List<List<JobState>> savedPopulations = new LinkedList<>();
+					List<JobState> promisingLimitedStates = new LinkedList<>();
+					List<List<JobState>> savedPopulations = new LinkedList<>();
 
 					// Find initial change set roots
-					final List<JobState> initialPopulation = addChangeSetLevel(targetSimilarityState, currentSearchStates, initialPopulationSize);
+					List<JobState> initialPopulation = addChangeSetLevel(targetSimilarityState, currentSearchStates, initialPopulationSize);
+					logInitialPopulation(initialPopulation);
 					allLimitedStates.addAll(initialPopulation);
 					if (initialPopulation.isEmpty()) {
-						return null;
+						break;
 					}
 
 					if (DEBUG) {
@@ -228,7 +267,7 @@ public class BagOptimiser {
 						System.out.println("pnl failed evaluations [after initialPopulation] : " + actionSetOptimisationData.actualPNLEvaluations);
 					}
 
-					for (final JobState root : initialPopulation) {
+					for (JobState root : initialPopulation) {
 						checkIfCancelled(progressMonitor);
 						if (shouldTerminate(actionSetOptimisationData)) {
 							break;
@@ -248,10 +287,11 @@ public class BagOptimiser {
 
 					checkIfCancelled(progressMonitor);
 					if (!shouldTerminate(actionSetOptimisationData)) {
-						for (final JobState promising : promisingLimitedStates) {
+						for (JobState promising : promisingLimitedStates) {
 							if (shouldTerminate(actionSetOptimisationData)) {
 								break;
 							}
+							actionSetOptimisationData.startNewRun();
 							finalPopulation.addAll(expandNode(promising, 250, targetSimilarityState));
 							actionSetOptimisationData.numberOfLeafs = finalPopulation.size();
 						}
@@ -263,7 +303,7 @@ public class BagOptimiser {
 						System.out.println("LEAFS [after expanding promising] : " + actionSetOptimisationData.numberOfLeafs);
 					}
 					actionSetOptimisationData.startNewRun();
-					while (savedPopulations.size() > 0 && !shouldTerminate(actionSetOptimisationData)) {
+					while (savedPopulations.size() > 0 && !shouldTerminate(actionSetOptimisationData) && !shouldTerminateInRun(actionSetOptimisationData)) {
 						checkIfCancelled(progressMonitor);
 						// main loop - search from a change set root. Will add LEAFs to finalPopulation and others to limitedStates
 						searchChangeSetPopulation(progressMonitor, maxLeafs, targetSimilarityState, finalPopulation, promisingLimitedStates, allLimitedStates, savedPopulations,
@@ -277,19 +317,21 @@ public class BagOptimiser {
 							break;
 						}
 					}
-					initialDepthLimit++;
+					initialDepthLimitStart = initialDepthLimitEnd;
+					initialDepthLimitEnd++;
 				}
-
+				logLimiteds(allLimitedStates);
+				logFinalPopulation(finalPopulation);
 				/**
 				 * Add everything else if we couldn't finish
 				 */
 				if (finalPopulation.size() == 0 && allLimitedStates.size() > 0) {
-					final JobState bestSolution = reduceAndSortStatesTotalPNL(allLimitedStates).get(0);
-					final ChangeSet changeSet = new ChangeSet(new LinkedList<Change>());
+					JobState bestSolution = reduceAndSortStatesTotalPNL(allLimitedStates).get(0);
+					ChangeSet changeSet = new ChangeSet(new LinkedList<Change>());
 					changeSet.setRawSequences(targetRawSequences);
-					final List<ChangeSet> finalSolutionChangeSets = new LinkedList<>(bestSolution.changeSetsAsList);
+					List<ChangeSet> finalSolutionChangeSets = new LinkedList<>(bestSolution.changeSetsAsList);
 					finalSolutionChangeSets.add(changeSet);
-					final JobState finalSolution = new JobState(targetRawSequences, finalSolutionChangeSets, Collections.<Change> emptyList(), new LinkedList<Difference>());
+					JobState finalSolution = new JobState(targetRawSequences, finalSolutionChangeSets, Collections.<Change> emptyList(), new LinkedList<Difference>());
 					finalSolution.mode = JobStateMode.LEAF;
 					finalPopulation.add(finalSolution);
 					actionSetOptimisationData.numberOfLeafs = finalPopulation.size();
@@ -311,15 +353,21 @@ public class BagOptimiser {
 					LOG.error("Unable to find action sets");
 				}
 
-			} catch (final InterruptedException | ExecutionException e) {
-				LOG.error(e.getMessage(), e);
+			} catch (final InterruptedException e) {
+				e.printStackTrace();
+			} catch (final ExecutionException e) {
+				e.printStackTrace();
+			} catch (final Exception e) {
+				e.printStackTrace();
 			}
 			final long time3 = System.currentTimeMillis();
 
-			if (DEBUG) {
-				System.out.printf("Setup time %d -- Search time %d\n", (time2 - time1) / 1000L, (time3 - time2) / 1000L);
-			}
+			System.out.printf("AS: Setup time %d -- Search time %d\n", (time2 - time1) / 1000L, (time3 - time2) / 1000L);
+			logFinish();
 			return getBestSolution();
+		} catch (final Exception e) {
+			e.printStackTrace();
+			return null;
 		} finally {
 			progressMonitor.done();
 		}
@@ -343,17 +391,39 @@ public class BagOptimiser {
 		return new NonNullPair<ISequences, Map<String, Object>>(rawSequences, extraAnnotations);
 	}
 
-	private void buildDependencyGraph(final SimilarityState targetSimilarityState, final ISequences initialRawSequences, final List<JobState> sortedChangeStates) {
-		final ActionSetIndependenceChecking actionSetIndependenceChecking = injector.getInstance(ActionSetIndependenceChecking.class);
-		final List<ChangeSet> bestChangeSets = new LinkedList<>();
-		for (final ChangeSet cs : sortedChangeStates.get(0).changeSetsAsList) {
+	private void logLimiteds(List<JobState> allLimitedStates) {
+		if (actionSetLogger != null) {
+			actionSetLogger.logLimiteds(allLimitedStates);
+		}
+	}
+
+	private void logFinish() {
+		actionSetLogger.finish(System.currentTimeMillis());
+	}
+
+	private void logFinalPopulation(List<JobState> finalPopulation) {
+		if (actionSetLogger != null) {
+			actionSetLogger.logLeafsFound(finalPopulation);
+		}
+	}
+
+	private void logInitialPopulation(List<JobState> initialPopulation) {
+		if (actionSetLogger != null) {
+			actionSetLogger.logInitialPopulation(initialPopulation);
+		}
+	}
+
+	protected void buildDependencyGraph(final SimilarityState targetSimilarityState, final ISequences initialRawSequences, final List<JobState> sortedChangeStates) {
+		ActionSetIndependenceChecking actionSetIndependenceChecking = injector.getInstance(ActionSetIndependenceChecking.class);
+		List<ChangeSet> bestChangeSets = new LinkedList<>();
+		for (ChangeSet cs : sortedChangeStates.get(0).changeSetsAsList) {
 			bestChangeSets.add(cs);
 		}
-		final Map<ChangeSet, Set<List<ChangeSet>>> independenceSets = actionSetIndependenceChecking.getChangeSetIndependence(bestChangeSets, initialRawSequences, targetSimilarityState,
+		Map<ChangeSet, Set<List<ChangeSet>>> independenceSets = actionSetIndependenceChecking.getChangeSetIndependence(bestChangeSets, initialRawSequences, targetSimilarityState,
 				targetSimilarityState.getBaseMetrics());
 	}
 
-	private long initSimiliarityTarget(final ISequences targetRawSequences, final SimilarityState targetSimilarityState) {
+	protected long initSimiliarityTarget(final ISequences targetRawSequences, final SimilarityState targetSimilarityState) {
 		final long bestFitness;
 		final IModifiableSequences potentialFullSequences = sequencesManipulator.createManipulatedSequences(targetRawSequences);
 
@@ -365,9 +435,9 @@ public class BagOptimiser {
 		return bestFitness;
 	}
 
-	private List<JobState> getInitialSearchStates(final ISequences initialRawSequences, final long initialUnusedCompulsarySlot, final long initialLateness, final long initialCapacity,
+	protected List<JobState> getInitialSearchStates(final ISequences initialRawSequences, final long initialUnusedCompulsarySlot, final long initialLateness, final long initialCapacity,
 			final long initialPNL, final List<ChangeSet> changeSets, final List<Change> changes, final ChangeChecker changeChecker) {
-		final List<JobState> currentSearchStates = new LinkedList<>();
+		List<JobState> currentSearchStates = new LinkedList<>();
 		for (int i = 0; i < initialSearchSize; i++) {
 			final JobState job = new JobState(new Sequences(initialRawSequences), changeSets, changes, changeChecker.getFullDifferences());
 			job.setMetric(MetricType.PNL, initialPNL, 0, 0);
@@ -379,11 +449,15 @@ public class BagOptimiser {
 		return currentSearchStates;
 	}
 
-	private void searchChangeSetRoot(final IProgressMonitor progressMonitor, final int maxLeafs, final SimilarityState targetSimilarityState, final Collection<JobState> finalPopulation,
-			final Collection<JobState> promisingLimitedStates, final Collection<JobState> allLimitedStates, final List<List<JobState>> savedPopulations, final JobState root)
-					throws InterruptedException, ExecutionException {
+	private void searchChangeSetRoot(final IProgressMonitor progressMonitor, int maxLeafs, final SimilarityState targetSimilarityState, Collection<JobState> finalPopulation,
+			Collection<JobState> promisingLimitedStates, Collection<JobState> allLimitedStates, List<List<JobState>> savedPopulations, JobState root) throws InterruptedException, ExecutionException {
+		long startTime = System.currentTimeMillis();
+		int startConstraintEvals = actionSetOptimisationData.actualConstraintEvaluations;
+		int startPNLEvals = actionSetOptimisationData.actualPNLEvaluations;
+		List<JobState> bestPopulation = new LinkedList<>();
 		if (root.mode == JobStateMode.LEAF) {
 			finalPopulation.add(root);
+			bestPopulation.add(root);
 			actionSetOptimisationData.numberOfLeafs = finalPopulation.size();
 		} else {
 			int rootIndex = 0;
@@ -396,9 +470,10 @@ public class BagOptimiser {
 				if (DEBUG) {
 					System.out.println("--------------------------- root ----------------- " + (rootIndex++));
 				}
-				final List<JobState> returnedPopulation = addChangeSetLevel(targetSimilarityState, states, 10);
+				List<JobState> returnedPopulation = addChangeSetLevel(targetSimilarityState, states, 10);
 				if (returnedPopulation.size() == 0) {
 					savedPopulations.add(states);
+					bestPopulation.addAll(states);
 				}
 				states = returnedPopulation;
 				allLimitedStates.addAll(states);
@@ -407,15 +482,80 @@ public class BagOptimiser {
 			// TODO: make more efficient - currently adding all branches but could choose based on some distance metric
 			if (foundLeaf(states)) {
 				promisingLimitedStates.addAll(getPromisingBranches(states));
+				bestPopulation.clear();
+				bestPopulation.addAll(getLeafs(states));
+			} else if (states.size() != 0) {
+				bestPopulation.addAll(states);
 			}
 
 			finalPopulation.addAll(getLeafs(states));
 			actionSetOptimisationData.numberOfLeafs = finalPopulation.size();
 		}
+		long endTime = System.currentTimeMillis();
+		int endConstraintEvals = actionSetOptimisationData.actualConstraintEvaluations;
+		int endPNLEvals = actionSetOptimisationData.actualPNLEvaluations;
+		logRootRun(root, bestPopulation, endTime - startTime, endPNLEvals - startPNLEvals, endConstraintEvals - startConstraintEvals);
 	}
 
-	private void searchChangeSetPopulation(final IProgressMonitor progressMonitor, final int maxLeafs, final SimilarityState targetSimilarityState, final Collection<JobState> finalPopulation,
-			final Collection<JobState> promisingLimitedStates, final Collection<JobState> allLimitedStates, final List<List<JobState>> savedPopulations, final List<JobState> population)
+	private void logRootRun(JobState root, List<JobState> bestPopulation, long runTime, int pnlEvals, int constraintEvals) {
+		if (actionSetLogger != null) {
+			int leafs = getLeafs(bestPopulation).size();
+			JobState best = getBestSolutionForLogger(bestPopulation);
+			List<Difference> diffs = Collections.<Difference> emptyList();
+			if (best != null) {
+				Collections.sort(bestPopulation, new Comparator<JobState>() {
+					@Override
+					public int compare(JobState o1, JobState o2) {
+						return Integer.compare(o1.getDifferencesList().size(), o2.getDifferencesList().size());
+					}
+				});
+				diffs = bestPopulation.get(0).getDifferencesList();
+			}
+			actionSetLogger.logRootActionSet(root, best, leafs, pnlEvals, constraintEvals, diffs, runTime);
+		}
+	}
+
+	private JobState getBestSolutionForLogger(List<JobState> states) {
+		if (states.size() > 0) {
+			Collections.sort(states, new Comparator<JobState>() {
+				@Override
+				public int compare(JobState o1, JobState o2) {
+					return metric(o1, o2);
+				}
+			});
+			return states.get(0);
+		} else {
+			return null;
+		}
+	}
+
+	// private int metric(JobState o1, JobState o2) {
+	// if (o1.mode == JobStateMode.LEAF && o2.mode != JobStateMode.LEAF) {
+	// return -1;
+	// } else if (o1.mode != JobStateMode.LEAF && o2.mode == JobStateMode.LEAF) {
+	// return 1;
+	// }
+	// double prctile = 0.8;
+	// while (prctile > 0.1 && StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(o1.changeSetsAsList, prctile) == StochasticActionSetUtils
+	// .getTotalPNLPerChangeForPercentile(o2.changeSetsAsList, prctile)) {
+	// prctile = prctile - 0.1;
+	// }
+	// double a = StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(o1.changeSetsAsList, prctile);
+	// double b = StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(o2.changeSetsAsList, prctile);
+	// int compare = Double.compare(a, b);
+	// return compare * -1;
+	// }
+
+	private int metric(JobState o1, JobState o2) {
+		return proshunMetric(o1, o2);
+	}
+
+	private int proshunMetric(JobState o1, JobState o2) {
+		return Long.compare(StochasticActionSetUtils.calculatePNLPerCumulativeChangeWithNegativeHandling(o1), StochasticActionSetUtils.calculatePNLPerCumulativeChangeWithNegativeHandling(o2)) * -1;
+	}
+
+	private void searchChangeSetPopulation(final IProgressMonitor progressMonitor, int maxLeafs, final SimilarityState targetSimilarityState, Collection<JobState> finalPopulation,
+			Collection<JobState> promisingLimitedStates, Collection<JobState> allLimitedStates, List<List<JobState>> savedPopulations, List<JobState> population)
 					throws InterruptedException, ExecutionException {
 		int rootIndex = 0;
 		List<JobState> states = new LinkedList<JobState>(population);
@@ -424,7 +564,7 @@ public class BagOptimiser {
 			if (DEBUG) {
 				System.out.println("--------------------------- root ----------------- " + (rootIndex++));
 			}
-			final List<JobState> returnedPopulation = addChangeSetLevel(targetSimilarityState, states, 10);
+			List<JobState> returnedPopulation = addChangeSetLevel(targetSimilarityState, states, 10);
 			if (returnedPopulation.size() == 0) {
 				savedPopulations.add(states);
 			}
@@ -441,19 +581,19 @@ public class BagOptimiser {
 		actionSetOptimisationData.numberOfLeafs = finalPopulation.size();
 	}
 
-	List<JobState> addChangeSetLevel(final SimilarityState targetSimilarityState, final List<JobState> currentStates, final int maxStates) throws InterruptedException, ExecutionException {
+	List<JobState> addChangeSetLevel(final SimilarityState targetSimilarityState, List<JobState> currentStates, int maxStates) throws InterruptedException, ExecutionException {
 		List<JobState> states = new LinkedList<>(currentStates);
 		if (states.isEmpty()) {
 			return states;
 		}
-		List<JobState> fullChangesSets = findChangeSets(targetSimilarityState, states, maxStates);
+		List<JobState> fullChangesSets = findChangeSets(targetSimilarityState, states, maxStates, depthStart, depthEnd);
 		int retryCount = 0;
 		while (fullChangesSets.size() == 0) {
 			states = new LinkedList<>();
 			for (int i = 0; i < retrySearchSize; i++) {
 				states.add(new JobState(currentStates.get(rdm.nextInt(currentStates.size()))));
 			}
-			fullChangesSets = findChangeSets(targetSimilarityState, states, maxStates);
+			fullChangesSets = findChangeSets(targetSimilarityState, states, maxStates, depthStart, depthEnd);
 			++retryCount;
 			if (DEBUG) {
 				System.out.println("retry:" + (retryCount));
@@ -462,28 +602,52 @@ public class BagOptimiser {
 				System.out.println("pnl failed evaluations [after retry] : " + actionSetOptimisationData.actualPNLEvaluations);
 			}
 			if (retryCount > 1) {
-				bagMover.setDepthRange(3, 4);
+				// bagMover.setDepthRange(3, 4);
+				depthStart = 3;
+				depthEnd = 4;
+
 			}
 			if (retryCount > 2) {
-				bagMover.setDepthRange(3, 5);
+				// bagMover.setDepthRange(3, 5);
+				depthStart = 3;
+				depthEnd = 5;
 			}
 			if (retryCount > 4) {
-				bagMover.setDepthRange(4, 5);
+				// bagMover.setDepthRange(4, 5);
+				depthStart = 4;
+				depthEnd = 5;
 			}
 			if (retryCount > 6) {
-				bagMover.setDepthRange(5, 1000);
+				// bagMover.setDepthRange(5, 15);
+				depthStart = 5;
+				depthEnd = 15;
+
 			}
 			if (retryCount > 8 && fullChangesSets.isEmpty()) {
-				bagMover.setDepthRange(0, 2);
+				if (DEBUG) {
+					System.out.println("failed to break down:");
+					System.out.println("******");
+					for (Difference d : currentStates.get(0).getDifferencesList()) {
+						System.out.println(d);
+					}
+					System.out.println("******");
+				}
+				// bagMover.setDepthRange(0, 2);
+				depthStart = 0;
+				depthEnd = 2;
+
 				return fullChangesSets;
 			}
 		}
-		bagMover.setDepthRange(0, 2);
+		// bagMover.setDepthRange(0, 2);
+		depthStart = 0;
+		depthEnd = 2;
+
 		if (DEBUG) {
 			System.out.printf("addChangeSetLevel ==> Found %d results\n", fullChangesSets.size());
 		}
 		int stateIndex = 0;
-		for (final JobState s : fullChangesSets) {
+		for (JobState s : fullChangesSets) {
 			if (DEBUG) {
 				System.out.println("########" + (stateIndex++) + "########");
 				System.out.println("m:" + s.mode);
@@ -492,9 +656,9 @@ public class BagOptimiser {
 				System.out.println(s.changeSetsAsList.get(0).changesList.size());
 				System.out.println("diffs:" + s.getDifferencesList().size());
 				if (s.mode == JobStateMode.LEAF || s.metricDeltaToBase[MetricType.LATENESS.ordinal()] <= 0) {
-					for (final ChangeSet cs : s.changeSetsAsList) {
+					for (ChangeSet cs : s.changeSetsAsList) {
 						System.out.println(String.format("#### CS %s ####", cs.metricDelta[MetricType.PNL.ordinal()]));
-						for (final Change c : cs.changesList) {
+						for (Change c : cs.changesList) {
 							System.out.println(c.description);
 						}
 					}
@@ -505,34 +669,35 @@ public class BagOptimiser {
 		return fullChangesSets;
 	}
 
-	protected List<JobState> getSortedLeafStates(final Collection<JobState> finalPopulation) {
+	protected List<JobState> getSortedLeafStates(Collection<JobState> finalPopulation) {
 		final List<JobState> sortedChangeStates = new ArrayList<>(finalPopulation);
 		Collections.sort(sortedChangeStates, new Comparator<JobState>() {
 
 			@Override
 			public int compare(final JobState o1, final JobState o2) {
-				if (o1.mode == JobStateMode.LEAF && o2.mode != JobStateMode.LEAF) {
-					return -1;
-				} else if (o1.mode != JobStateMode.LEAF && o2.mode == JobStateMode.LEAF) {
-					return 1;
-				}
-				double prctile = 0.8;
-				while (prctile > 0.1 && StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(o1.changeSetsAsList, prctile) == StochasticActionSetUtils
-						.getTotalPNLPerChangeForPercentile(o2.changeSetsAsList, prctile)) {
-					prctile = prctile - 0.1;
-				}
-				final double a = StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(o1.changeSetsAsList, prctile);
-				final double b = StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(o2.changeSetsAsList, prctile);
-				final int compare = Double.compare(a, b);
-				return compare * -1;
+				// if (o1.mode == JobStateMode.LEAF && o2.mode != JobStateMode.LEAF) {
+				// return -1;
+				// } else if (o1.mode != JobStateMode.LEAF && o2.mode == JobStateMode.LEAF) {
+				// return 1;
+				// }
+				// double prctile = 0.8;
+				// while (prctile > 0.1 && StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(o1.changeSetsAsList, prctile) == StochasticActionSetUtils
+				// .getTotalPNLPerChangeForPercentile(o2.changeSetsAsList, prctile)) {
+				// prctile = prctile - 0.1;
+				// }
+				// double a = StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(o1.changeSetsAsList, prctile);
+				// double b = StochasticActionSetUtils.getTotalPNLPerChangeForPercentile(o2.changeSetsAsList, prctile);
+				// int compare = Double.compare(a, b);
+				// return compare * -1;
+				return metric(o1, o2);
 			}
 		});
 		return sortedChangeStates;
 	}
 
-	private Collection<JobState> getPromisingBranches(final Collection<JobState> fullChangesSets) {
-		final Collection<JobState> promising = new LinkedList<>();
-		for (final JobState state : fullChangesSets) {
+	protected Collection<JobState> getPromisingBranches(Collection<JobState> fullChangesSets) {
+		Collection<JobState> promising = new LinkedList<>();
+		for (JobState state : fullChangesSets) {
 			if (state.mode == JobStateMode.BRANCH) {
 				promising.add(state);
 			}
@@ -540,7 +705,7 @@ public class BagOptimiser {
 		return promising;
 	}
 
-	private Collection<JobState> expandNode(final JobState node, final int initialIterations, final SimilarityState targetSimilarityState) {
+	private Collection<JobState> expandNode(JobState node, int initialIterations, SimilarityState targetSimilarityState) {
 		List<JobState> states = new LinkedList<JobState>();
 		for (int i = 0; i < initialIterations; i++) {
 			states.add(new JobState(node));
@@ -549,29 +714,24 @@ public class BagOptimiser {
 			while (!foundLeaf(states) && states.size() != 0) {
 				states = addChangeSetLevel(targetSimilarityState, states, 10);
 			}
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			assert false;
 		}
 		return getLeafs(states);
 	}
 
-	private List<JobState> getLeafs(final Collection<JobState> states) {
-		final List<JobState> leafs = new LinkedList<>();
-		for (final JobState job : states) {
+	protected List<JobState> getLeafs(Collection<JobState> states) {
+		List<JobState> leafs = new LinkedList<>();
+		for (JobState job : states) {
 			if (job.mode == JobStateMode.LEAF)
 				leafs.add(job);
 		}
 		return leafs;
 	}
 
-	private ScheduledSequences evaluateInitialStateAndGetScheduledSequences(final @NonNull ISequences initialFullSequences) {
+	private ScheduledSequences evaluateAndGetScheduledSequences(final IModifiableSequences initialFullSequences) {
 		final IEvaluationState evaluationState = evaluateAndGetIEvaluationState(initialFullSequences);
 		final ScheduledSequences initialScheduledSequences = evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class);
-
-		// Calculate fitness -- needed to prep initial state correctly.
-		fitnessHelper.evaluateSequencesFromComponents(initialFullSequences, evaluationState, fitnessComponents, null);
-		fitnessCombiner.calculateFitness(fitnessComponents);
-
 		return initialScheduledSequences;
 	}
 
@@ -586,9 +746,9 @@ public class BagOptimiser {
 		return evaluationState;
 	}
 
-	private void printPopulationInfo(final List<JobState> sortedChangeStates) {
+	protected void printPopulationInfo(final List<JobState> sortedChangeStates) {
 		int popIndex = 1;
-		for (final JobState s : sortedChangeStates) {
+		for (JobState s : sortedChangeStates) {
 			System.out.println("######## Final " + (popIndex++) + "########");
 			System.out.println("m:" + s.mode);
 			System.out.println("pnl:" + s.metricDelta[MetricType.PNL.ordinal()]);
@@ -596,9 +756,9 @@ public class BagOptimiser {
 			System.out.println(s.changeSetsAsList.get(0).changesList.size());
 			System.out.println("diffs:" + s.getDifferencesList().size());
 			if (s.mode == JobStateMode.LEAF && s.metricDeltaToBase[MetricType.LATENESS.ordinal()] <= 0) {
-				for (final ChangeSet cs : s.changeSetsAsList) {
+				for (ChangeSet cs : s.changeSetsAsList) {
 					System.out.println(String.format("#### CS %s ####", cs.metricDelta[MetricType.PNL.ordinal()]));
-					for (final Change c : cs.changesList) {
+					for (Change c : cs.changesList) {
 						System.out.println(c.description);
 					}
 				}
@@ -609,24 +769,24 @@ public class BagOptimiser {
 		}
 	}
 
-	private void checkIfCancelled(final IProgressMonitor progressMonitor) {
+	protected void checkIfCancelled(final IProgressMonitor progressMonitor) {
 		if (progressMonitor.isCanceled()) {
 			throw new OperationCanceledException();
 		}
 	}
 
-	private void printJobStates(final Collection<JobState> states) {
+	protected void printJobStates(Collection<JobState> states) {
 		int zz = 0;
-		for (final JobState s : states) {
+		for (JobState s : states) {
 			System.out.println("######## state " + (zz++) + "########");
 			System.out.println("m:" + s.mode);
 			System.out.println("pnl:" + s.metricDelta[MetricType.PNL.ordinal()]);
 			System.out.println("late:" + s.metricDelta[MetricType.LATENESS.ordinal()]);
 			System.out.println(s.changeSetsAsList.get(0).changesList.size());
 			System.out.println("diffs:" + s.getDifferencesList().size());
-			for (final ChangeSet cs : s.changeSetsAsList) {
+			for (ChangeSet cs : s.changeSetsAsList) {
 				System.out.println(String.format("#### CS %s ####", cs.metricDelta[MetricType.PNL.ordinal()]));
-				for (final Change c : cs.changesList) {
+				for (Change c : cs.changesList) {
 					System.out.println(c.description);
 				}
 			}
@@ -635,8 +795,8 @@ public class BagOptimiser {
 
 	}
 
-	private boolean foundLeaf(final Collection<JobState> states) {
-		for (final JobState js : states) {
+	protected boolean foundLeaf(Collection<JobState> states) {
+		for (JobState js : states) {
 			if (js.mode == JobStateMode.LEAF) {
 				return true;
 			}
@@ -645,46 +805,47 @@ public class BagOptimiser {
 	}
 
 	@NonNull
-	List<JobState> findChangeSets(@NonNull final SimilarityState similarityState, final Collection<JobState> currentStates, final int maxStates) throws InterruptedException, ExecutionException {
-		final Collection<JobState> states = runJobs(similarityState, currentStates, null);
-		List<JobState> reducedStates = reduceAndSortStatesPerChange(states);
+	List<JobState> findChangeSets(@NonNull final SimilarityState similarityState, final List<JobState> currentStates, final int maxStates, final int depthStart, final int depthEnd)
+			throws InterruptedException, ExecutionException {
+		Collection<JobState> states = runJobs(similarityState, currentStates, null, depthStart, depthEnd);
+		List<JobState> reducedStates = reduceAndSortStatesMetric(states);
 		if (DEBUG) {
 			int order = 0;
-			for (final JobState js : reducedStates) {
+			for (JobState js : reducedStates) {
 				long pnl = 0L;
 				long changes = 0L;
-				for (final ChangeSet cs : js.changeSetsAsList) {
+				for (ChangeSet cs : js.changeSetsAsList) {
 					pnl += cs.metricDelta[MetricType.PNL.ordinal()];
 					changes += cs.changesList.size();
 				}
-				// System.out.println(String.format("##%s## [%s] / [%s] = %s", ++order, pnl, changes, pnl / changes));
+				System.out.println(String.format("##%s## [%s] / [%s] = %s", ++order, pnl, changes, pnl / changes));
 			}
 		}
 		reducedStates = reducedStates.subList(0, Math.min(reducedStates.size(), maxStates));
 		if (DEBUG) {
 			System.out.println("Chosen state:");
-			for (final JobState js : reducedStates) {
+			for (JobState js : reducedStates) {
 				long pnl = 0;
 				long changes = 0;
-				for (final ChangeSet cs : js.changeSetsAsList) {
+				for (ChangeSet cs : js.changeSetsAsList) {
 					System.out.println("pnl - " + cs.metricDelta[MetricType.PNL.ordinal()]);
 					System.out.println("changes - " + cs.changesList.size());
 					pnl += cs.metricDelta[MetricType.PNL.ordinal()];
 					changes += cs.changesList.size();
 				}
-				// System.out.println(String.format("##%s## [%s] / [%s] = %s", 0, pnl, changes, pnl / changes));
+				System.out.println(String.format("##%s## [%s] / [%s] = %s", 0, pnl, changes, pnl / changes));
 			}
 		}
 		return reducedStates;
 	}
 
-	private List<JobState> reduceStates(final Collection<JobState> states) {
-		final List<JobState> reducedStates = new LinkedList<>();
-		final HashSet<Pair<Long, Long>> seenList = new HashSet<Pair<Long, Long>>();
-		for (final JobState js : states) {
+	private List<JobState> reduceStates(Collection<JobState> states) {
+		List<JobState> reducedStates = new LinkedList<>();
+		HashSet<Pair<Long, Long>> seenList = new HashSet<Pair<Long, Long>>();
+		for (JobState js : states) {
 			long pnl = 0L;
 			long changes = 0L;
-			for (final ChangeSet cs : js.changeSetsAsList) {
+			for (ChangeSet cs : js.changeSetsAsList) {
 				pnl += cs.metricDelta[MetricType.PNL.ordinal()];
 				changes += cs.changesList.size();
 			}
@@ -696,7 +857,7 @@ public class BagOptimiser {
 		return reducedStates;
 	}
 
-	protected void sortJobStates(@NonNull final Collection<JobState> states, @NonNull final Collection<JobState> leafStates, @Nullable final Collection<JobState> branchStates) {
+	protected void sortJobStates(@NonNull final Collection<JobState> states, @NonNull final Collection<JobState> leafStates, @Nullable Collection<JobState> branchStates) {
 		for (final JobState state : states) {
 			if (state.mode == JobStateMode.LEAF) {
 				leafStates.add(state);
@@ -713,8 +874,19 @@ public class BagOptimiser {
 		}
 	}
 
+	List<JobState> reduceAndSortStatesMetric(final Collection<JobState> currentStates) {
+		List<JobState> sortedJobStates = reduceStates(currentStates);
+		Collections.sort(sortedJobStates, new Comparator<JobState>() {
+			@Override
+			public int compare(final JobState o1, final JobState o2) {
+				return metric(o1, o2);
+			}
+		});
+		return sortedJobStates;
+	}
+
 	List<JobState> reduceAndSortStatesPerChange(final Collection<JobState> currentStates) {
-		final List<JobState> sortedJobStates = reduceStates(currentStates);
+		List<JobState> sortedJobStates = reduceStates(currentStates);
 		Collections.sort(sortedJobStates, new Comparator<JobState>() {
 			@Override
 			public int compare(final JobState o1, final JobState o2) {
@@ -725,7 +897,7 @@ public class BagOptimiser {
 	}
 
 	List<JobState> reduceAndSortStatesTotalPNL(final Collection<JobState> currentStates) {
-		final List<JobState> sortedJobStates = reduceStates(currentStates);
+		List<JobState> sortedJobStates = reduceStates(currentStates);
 		Collections.sort(sortedJobStates, new Comparator<JobState>() {
 			@Override
 			public int compare(final JobState o1, final JobState o2) {
@@ -736,38 +908,38 @@ public class BagOptimiser {
 	}
 
 	@NonNull
-	protected Collection<JobState> runJobs(@NonNull final SimilarityState similarityState, final Collection<JobState> sortedJobStates, final JobStore jobStore) throws InterruptedException {
-		final List<Future<Collection<JobState>>> futures = new LinkedList<>();
-
-		final Iterator<JobState> itr = sortedJobStates.iterator();
-		while (itr.hasNext()) {
-			final JobState state = itr.next();
-			itr.remove();
-
-			// Submit a new change set search to the executor
-			futures.add(new MyFuture(new ChangeSetFinderJob(bagMover, state, similarityState, jobStore)));
-		}
+	protected Collection<JobState> runJobs(@NonNull final SimilarityState similarityState, final List<JobState> sortedJobStates, final JobStore jobStore, int depthStart, int depthEnd)
+			throws InterruptedException {
+		// Create a batcher, which produces small batches of jobs that we can then spread among cores
+		// but keep the progress log accurate and maintain repeatablility
+		final JobBatcher jobBatcher = new JobBatcher(executorService, sortedJobStates, 100, depthStart, depthEnd);
 
 		final List<JobState> states = new LinkedList<>();
-		// Collect all results
-		for (final Future<Collection<JobState>> f : futures) {
-			try {
-				if (!shouldTerminateInRun(actionSetOptimisationData)) {
-					final Collection<JobState> futureStates = f.get();
+		List<Future<Collection<JobState>>> futures = jobBatcher.getNextFutures(injector, similarityState, jobStore, incrementingRandomSeed);
+		while (!futures.isEmpty() && !shouldTerminateInRun(actionSetOptimisationData) && !shouldTerminate(actionSetOptimisationData)) {
+			// Collect all results
+			for (final Future<Collection<JobState>> f : futures) {
+				try {
+					Collection<JobState> futureStates = f.get();
 					actionSetOptimisationData.logEvaluations(futureStates.size());
-					for (final JobState js : futureStates) {
-						if (js.breakdownSearchStatistics != null) {
-							actionSetOptimisationData.logConstraintEvaluations(js.breakdownSearchStatistics.getEvaluationsFailedConstraints());
-							actionSetOptimisationData.logPNLEvaluations(js.breakdownSearchStatistics.getEvaluationsFailedPNL());
-							actionSetOptimisationData.logPNLEvaluations(js.breakdownSearchStatistics.getEvaluationsPassed());
-							break;
+					for (JobState js : futureStates) {
+						BreakdownSearchData jobSearchData = js.getBreakdownSearchData();
+						if (jobSearchData != null) {
+							BreakdownSearchStatistics breakdownSearchStatistics = jobSearchData.getSearchStatistics();
+							if (breakdownSearchStatistics != null) {
+								actionSetOptimisationData.logConstraintEvaluations(breakdownSearchStatistics.getEvaluationsFailedConstraints());
+								actionSetOptimisationData.logPNLEvaluations(breakdownSearchStatistics.getEvaluationsFailedPNL());
+								actionSetOptimisationData.logPNLEvaluations(breakdownSearchStatistics.getEvaluationsPassed());
+								break;
+							}
 						}
 					}
 					states.addAll(removeLimitedStates(futureStates));
 					updateProgress(actionSetOptimisationData, maxEvaluations, progressMonitor);
+				} catch (final ExecutionException e) {
+					throw new RuntimeException(e);
 				}
-			} catch (final ExecutionException e) {
-				throw new RuntimeException(e);
+				futures = jobBatcher.getNextFutures(injector, similarityState, jobStore, incrementingRandomSeed);
 			}
 		}
 
@@ -819,15 +991,15 @@ public class BagOptimiser {
 		}
 	}
 
-	private void updateProgress(final ActionSetOptimisationData actionSetOptimisationData, final int maxEvaluations, final IProgressMonitor progressMonitor) {
+	private void updateProgress(ActionSetOptimisationData actionSetOptimisationData, int maxEvaluations, IProgressMonitor progressMonitor) {
 		// The percent of weighted actual pnl evaluations + constraint failed evaluations that have completed, based on a given total
-		final int progress = (((actionSetOptimisationData.actualPNLEvaluations * 100 + actionSetOptimisationData.actualConstraintEvaluations) * 100) / maxEvaluations);
+		int progress = (((actionSetOptimisationData.actualPNLEvaluations * 100 + actionSetOptimisationData.actualConstraintEvaluations) * 100) / maxEvaluations);
 		while (progress > progressCounter.getTicks()) {
 			progressCounter.increment(progressMonitor);
 		}
 	}
 
-	private boolean shouldTerminate(final ActionSetOptimisationData actionSetOptimisationData) {
+	protected boolean shouldTerminate(ActionSetOptimisationData actionSetOptimisationData) {
 		if (actionSetOptimisationData.actualPNLEvaluations * 100 + actionSetOptimisationData.actualConstraintEvaluations > maxEvaluations) {
 			return true;
 		}
@@ -837,11 +1009,11 @@ public class BagOptimiser {
 		return false;
 	}
 
-	private boolean shouldTerminateInRun(final ActionSetOptimisationData actionSetOptimisationData) {
+	private boolean shouldTerminateInRun(ActionSetOptimisationData actionSetOptimisationData) {
 		if (ignoreTerminationConditions()) {
 			return false;
 		}
-		if (actionSetOptimisationData.getCurrentRunEvaluations() > maxEvaluationsInRun) {
+		if (actionSetOptimisationData.currentRunPNLEvaluations * 100 + actionSetOptimisationData.currentRunConstraintEvaluations > maxEvaluationsInRun) {
 			return true;
 		}
 		if (actionSetOptimisationData.actualPNLEvaluations * 100 + actionSetOptimisationData.actualConstraintEvaluations > maxEvaluations) {
@@ -854,29 +1026,29 @@ public class BagOptimiser {
 		return ignoreTerminationConditions;
 	}
 
-	public void setIgnoreTerminationConditions(final boolean ignoreTerminationConditions) {
+	public void setIgnoreTerminationConditions(boolean ignoreTerminationConditions) {
 		this.ignoreTerminationConditions = ignoreTerminationConditions;
 	}
 
-	public void setProgressCounter(final ProgressCounter progressCounter) {
+	public void setProgressCounter(ProgressCounter progressCounter) {
 		this.progressCounter = progressCounter;
 	}
 
-	public void setProgressMonitor(final IProgressMonitor progressMonitor) {
+	public void setProgressMonitor(IProgressMonitor progressMonitor) {
 		this.progressMonitor = progressMonitor;
 	}
 
-	public void setActionSetOptimisationData(final ActionSetOptimisationData actionSetOptimisationData) {
+	public void setActionSetOptimisationData(ActionSetOptimisationData actionSetOptimisationData) {
 		this.actionSetOptimisationData = actionSetOptimisationData;
 	}
 
-	public void setMaxLeafs(final int maxLeafs) {
+	public void setMaxLeafs(int maxLeafs) {
 		this.maxLeafs = maxLeafs;
 	}
 
-	private Collection<JobState> removeLimitedStates(final Collection<JobState> futureStates) {
-		final List<JobState> nonLimitedStates = new LinkedList<>();
-		for (final JobState js : futureStates) {
+	private Collection<JobState> removeLimitedStates(Collection<JobState> futureStates) {
+		List<JobState> nonLimitedStates = new LinkedList<>();
+		for (JobState js : futureStates) {
 			if (js.mode != JobStateMode.LIMITED) {
 				nonLimitedStates.add(js);
 			}
@@ -887,7 +1059,7 @@ public class BagOptimiser {
 	private class ProgressCounter {
 		int ticks = 0;
 
-		public void increment(final IProgressMonitor progressMonitor) {
+		public void increment(IProgressMonitor progressMonitor) {
 			ticks++;
 			progressMonitor.worked(1);
 		}
@@ -897,10 +1069,12 @@ public class BagOptimiser {
 		}
 	}
 
-	private class ActionSetOptimisationData {
+	public class ActionSetOptimisationData {
 		int totalEvaluations = 0;
 		int actualPNLEvaluations = 0;
 		int actualConstraintEvaluations = 0;
+		int currentRunPNLEvaluations = 0;
+		int currentRunConstraintEvaluations = 0;
 		int currentRunEvaluations = 0;
 		int numberOfLeafs = 0;
 		List<Integer> runEvaluations = null;
@@ -909,28 +1083,30 @@ public class BagOptimiser {
 			if (runEvaluations != null) {
 				runEvaluations.add(currentRunEvaluations);
 				currentRunEvaluations = 0;
+				currentRunPNLEvaluations = 0;
+				currentRunConstraintEvaluations = 0;
 			} else {
 				runEvaluations = new LinkedList<>();
 			}
 		}
 
-		public void logEvaluations(final int evaluations) {
+		public void logEvaluations(int evaluations) {
 			totalEvaluations += evaluations;
 			currentRunEvaluations += evaluations;
-			// System.out.println("totalEvaluations:"+totalEvaluations);
-			// System.out.println("currentRunEvaluations:"+currentRunEvaluations);
 		}
 
-		public void logLeafs(final Collection<JobState> leafs) {
+		public void logLeafs(Collection<JobState> leafs) {
 			numberOfLeafs += leafs.size();
 		}
 
-		public void logConstraintEvaluations(final int evals) {
+		public void logConstraintEvaluations(int evals) {
 			actualConstraintEvaluations += evals;
+			currentRunConstraintEvaluations += evals;
 		}
 
-		public void logPNLEvaluations(final int evals) {
+		public void logPNLEvaluations(int evals) {
 			actualPNLEvaluations += evals;
+			currentRunPNLEvaluations += evals;
 		}
 
 		public int getTotalEvaluations() {
@@ -945,4 +1121,5 @@ public class BagOptimiser {
 			return numberOfLeafs;
 		}
 	}
+
 }
