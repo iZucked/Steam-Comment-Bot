@@ -2,7 +2,11 @@ package com.mmxlabs.optimiser.core.inject.scopes;
 
 import static com.google.common.base.Preconditions.checkState;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Map;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.collect.Maps;
 import com.google.inject.Key;
@@ -46,15 +50,49 @@ public class PerChainUnitScopeImpl implements Scope, AutoCloseable {
 		values.set(Maps.<Key<?>, Object> newHashMap());
 	}
 
-	
 	@Override
 	public void close() {
 		// For Autoclosable
 		exit();
 	}
+
 	public void exit() {
 		checkState(values.get() != null, "No scoping block in progress");
 		values.remove();
+	}
+
+	/**
+	 * An alternative {@link #exit()} method to clean up state for a given {@link Thread}. Normally {@link #exit()} should be called on the running {@link Thread}. However in certain circumstances
+	 * this may not be possible and this method needs to be invoked instead.Note this uses reflection to clean up the state and as such uses internal APIs. It is not recommended to use this method
+	 * unless there is no other option.
+	 * 
+	 * @param thread
+	 */
+	public void exit(final @NonNull Thread thread) {
+		try {
+			//// From ThreadLocal#remove: ThreadLocalMap m = getMap(Thread.currentThread());
+
+			// Get a reference to the thread locals table of the current thread
+			final Field threadLocalsField = Thread.class.getDeclaredField("threadLocals");
+			threadLocalsField.setAccessible(true);
+			final Object threadLocalTable = threadLocalsField.get(thread);
+
+			// Get a reference to the array holding the thread local variables inside the
+			// ThreadLocalMap of the current thread
+			final Class threadLocalMapClass = Class.forName("java.lang.ThreadLocal$ThreadLocalMap");
+
+			//// From ThreadLocal#remove: if (m != null)
+			if (threadLocalTable != null) {
+				//// From ThreadLocal#remove: m.remove(this);
+				final Method removeMethod = threadLocalMapClass.getDeclaredMethod("remove", ThreadLocal.class);
+				removeMethod.setAccessible(true);
+				removeMethod.invoke(threadLocalTable, values);
+				removeMethod.setAccessible(false);
+			}
+		} catch (final Exception e) {
+			// We will tolerate an exception here and just log it
+			throw new IllegalStateException(e);
+		}
 	}
 
 	public <T> void seed(final Key<T> key, final T value) {
