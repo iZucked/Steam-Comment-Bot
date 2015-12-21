@@ -75,7 +75,7 @@ public class LNGSchedulerManyJobsControl extends AbstractEclipseJobControl {
 			fork = createFork(model);
 			ref = fork.getReference();
 			this.scenarioModel = (LNGScenarioModel) ref.getInstance();
-			this.runner = new LNGScenarioRunner(runnerService, scenarioModel, fork, settings, (EditingDomain) fork.getAdapters().get(EditingDomain.class), hints);
+			this.runner = new LNGScenarioRunner(runnerService, scenarioModel, fork, settings, (EditingDomain) fork.getAdapters().get(EditingDomain.class), null, hints);
 			this.lock = fork.getLock(ScenarioLock.OPTIMISER);
 			this.lock.awaitClaim();
 		}

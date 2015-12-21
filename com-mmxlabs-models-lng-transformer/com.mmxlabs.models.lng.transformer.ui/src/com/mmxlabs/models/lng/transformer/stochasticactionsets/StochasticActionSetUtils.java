@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.omg.CORBA.CustomMarshal;
+
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.Change;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.ChangeSet;
@@ -347,6 +349,51 @@ public class StochasticActionSetUtils {
 			}
 		}
 		return d;
+	}
+
+	public static long calculatePNLPerCumulativeChange(JobState js) {
+		long cumulativeChanges = 0;
+		long value = 0;
+		for (ChangeSet cs : js.changeSetsAsList) {
+			cumulativeChanges += cs.changesList.size();
+			value += (cs.metricDelta[MetricType.PNL.ordinal()] / cumulativeChanges);
+		}
+		return value;
+	}
+
+	public static long calculatePNLPerCumulativeChangeWithNegativeHandling(JobState js) {
+		long cumulativeChanges = 0;
+		long value = 0;
+		int idx = 0;
+		while (idx < js.changeSetsAsList.size()) {
+			ChangeSet cs = js.changeSetsAsList.get(idx);
+			cumulativeChanges += cs.changesList.size();
+			if (cs.metricDelta[MetricType.PNL.ordinal()] > 0) {
+				value += (cs.metricDelta[MetricType.PNL.ordinal()] / cumulativeChanges);
+			} else {
+				boolean foundPositive = false;
+				long currentSum = cs.metricDelta[MetricType.PNL.ordinal()];
+				long currentChanges = cumulativeChanges;
+				// look for a net +ve
+				for (int i = idx + 1; i < js.changeSetsAsList.size(); i++) {
+					currentSum += js.changeSetsAsList.get(i).metricDelta[MetricType.PNL.ordinal()];
+					currentChanges += js.changeSetsAsList.get(i).changesList.size();
+					if (currentSum > 0) {
+						value += (currentSum/currentChanges);
+						cumulativeChanges = currentChanges;
+						idx = i;
+						foundPositive = true;
+						break;
+					}
+				}
+				if (!foundPositive) {
+					// no positive to roll into so just add value
+					value += cs.metricDelta[MetricType.PNL.ordinal()];
+				}
+			}
+			idx++;
+		}
+		return value;
 	}
 
 }

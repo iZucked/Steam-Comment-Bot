@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.common.base.Objects;
-import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 
@@ -25,7 +24,7 @@ import com.mmxlabs.optimiser.core.ISequences;
  * @author sg
  *
  */
-public class JobState implements Serializable {
+public class JobState implements Serializable{
 	protected transient ISequences rawSequences = null;
 	protected transient ISequences fullSequences = null;
 	public int[][] persistedSequences;
@@ -44,15 +43,14 @@ public class JobState implements Serializable {
 	public JobStateMode mode = JobStateMode.BRANCH;
 
 	private List<Difference> differencesList = null;
-
-	public BreakdownSearchStatistics breakdownSearchStatistics = null;
-
-	public JobState(final ISequences rawSequences, final List<ChangeSet> changeSets, final List<Change> changes, final List<Difference> differencesList,
-			final BreakdownSearchStatistics breakdownSearchStatistics) {
+	
+	private BreakdownSearchData breakdownSearchData = null;
+	
+	public JobState(final ISequences rawSequences, final List<ChangeSet> changeSets, final List<Change> changes, final List<Difference> differencesList, final BreakdownSearchData breakdownSearchData) {
 		this(rawSequences, changeSets, changes, differencesList);
-		this.breakdownSearchStatistics = breakdownSearchStatistics;
+		this.setBreakdownSearchData(breakdownSearchData);
 	}
-
+	
 	public JobState(final ISequences rawSequences, final List<ChangeSet> changeSets, final List<Change> changes, final List<Difference> differencesList) {
 		this.rawSequences = rawSequences;
 
@@ -63,23 +61,23 @@ public class JobState implements Serializable {
 		this.hashCode = Objects.hashCode(changes, changeSets);
 		this.setDifferencesList(differencesList);
 	}
-
-	public JobState(final JobState parent) {
+	
+	public JobState(JobState parent) {
 		this(parent.rawSequences, new ArrayList<ChangeSet>(parent.changeSetsAsList), new ArrayList<Change>(parent.changesAsList), new LinkedList<Difference>(parent.getDifferencesList()));
 		this.setMetric(MetricType.PNL, parent.metric[MetricType.PNL.ordinal()], parent.metricDelta[MetricType.PNL.ordinal()], parent.metricDeltaToBase[MetricType.PNL.ordinal()]);
 		this.setMetric(MetricType.LATENESS, parent.metric[MetricType.LATENESS.ordinal()], parent.metricDelta[MetricType.LATENESS.ordinal()], parent.metricDeltaToBase[MetricType.LATENESS.ordinal()]);
 		this.setMetric(MetricType.CAPACITY, parent.metric[MetricType.CAPACITY.ordinal()], parent.metricDelta[MetricType.CAPACITY.ordinal()], parent.metricDeltaToBase[MetricType.CAPACITY.ordinal()]);
-		this.setMetric(MetricType.COMPULSARY_SLOT, parent.metric[MetricType.COMPULSARY_SLOT.ordinal()], parent.metricDelta[MetricType.COMPULSARY_SLOT.ordinal()],
-				parent.metricDeltaToBase[MetricType.COMPULSARY_SLOT.ordinal()]);
+		this.setMetric(MetricType.COMPULSARY_SLOT, parent.metric[MetricType.COMPULSARY_SLOT.ordinal()], parent.metricDelta[MetricType.COMPULSARY_SLOT.ordinal()], parent.metricDeltaToBase[MetricType.COMPULSARY_SLOT.ordinal()]);
 		this.mode = parent.mode;
 	}
 
-	public JobState(final ISequences rawSequences, final List<ChangeSet> changeSets, final List<Change> changes) {
-		this(rawSequences, changeSets, changes, null);
-	}
 
-	public void setMetric(final MetricType metricType, final long value, final long delta, final long deltaToBase) {
-		final int idx = metricType.ordinal();
+	public JobState(final ISequences rawSequences, final List<ChangeSet> changeSets, final List<Change> changes) {
+					this(rawSequences, changeSets, changes, null);
+			 	}
+
+	public void setMetric(MetricType metricType, long value, long delta, long deltaToBase) {
+		int idx = metricType.ordinal();
 		metric[idx] = value;
 		metricDelta[idx] = delta;
 		metricDeltaToBase[idx] = deltaToBase;
@@ -102,21 +100,12 @@ public class JobState implements Serializable {
 
 		// We cannot persist the rawSequences as this is linked to external data.
 		// However we can store the representation as an int array and re-create the sequences with reference to a IOptimisationData instance.
-
-		int resourceCount = 0;
-		for (final IResource r : rawSequences.getResources()) {
-			++resourceCount;
-		}
-		{
-			persistedSequences = new int[resourceCount][];
-			int i = 0;
-			for (final IResource r : rawSequences.getResources()) {
-				final ISequence s = rawSequences.getSequence(r);
-				persistedSequences[i] = new int[s.size()];
-				for (int j = 0; j < persistedSequences[i].length; ++j) {
-					persistedSequences[i][j] = s.get(j).getIndex();
-				}
-				i++;
+		persistedSequences = new int[rawSequences.getResources().size()][];
+		for (int i = 0; i < persistedSequences.length; ++i) {
+			final ISequence s = rawSequences.getSequence(i);
+			persistedSequences[i] = new int[s.size()];
+			for (int j = 0; j < persistedSequences[i].length; ++j) {
+				persistedSequences[i][j] = s.get(j).getIndex();
 			}
 		}
 		persistedUnusedElements = new int[rawSequences.getUnusedElements().size()];
@@ -140,7 +129,7 @@ public class JobState implements Serializable {
 		return rawSequences;
 	}
 
-	public void setRawSequences(final ISequences rawSequences) {
+	public void setRawSequences(ISequences rawSequences) {
 		this.rawSequences = rawSequences;
 	}
 
@@ -148,7 +137,7 @@ public class JobState implements Serializable {
 		return fullSequences;
 	}
 
-	public void setFullSequences(final ISequences fullSequences) {
+	public void setFullSequences(ISequences fullSequences) {
 		this.fullSequences = fullSequences;
 	}
 
@@ -156,8 +145,16 @@ public class JobState implements Serializable {
 		return differencesList;
 	}
 
-	public void setDifferencesList(final List<Difference> differencesList) {
+	public void setDifferencesList(List<Difference> differencesList) {
 		this.differencesList = differencesList;
+	}
+
+	public BreakdownSearchData getBreakdownSearchData() {
+		return breakdownSearchData;
+	}
+
+	public void setBreakdownSearchData(BreakdownSearchData breakdownSearchData) {
+		this.breakdownSearchData = breakdownSearchData;
 	}
 
 	// private void readObjectNoData() throws ObjectStreamException;

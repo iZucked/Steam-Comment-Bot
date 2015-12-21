@@ -709,7 +709,7 @@ public class ScenarioTools {
 			final List<Module> modules = new LinkedList<>();
 			modules.add(new InputSequencesModule(dataTransformer.getInitialSequences()));
 			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new LNGParameters_EvaluationSettingsModule(dataTransformer.getOptimiserSettings()), dataTransformer.getModuleServices(),
-					IOptimiserInjectorService.ModuleType.Module_ParametersModule, hints));
+					IOptimiserInjectorService.ModuleType.Module_EvaluationParametersModule, hints));
 			modules.addAll(
 					LNGTransformerHelper.getModulesWithOverrides(new LNGEvaluationModule(hints), dataTransformer.getModuleServices(), IOptimiserInjectorService.ModuleType.Module_Evaluation, hints));
 			evaluationInjector = dataTransformer.getInjector().createChildInjector(modules);

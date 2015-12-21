@@ -139,6 +139,24 @@ public class OptimiserSettingsModule extends AbstractModule {
 	}
 
 	@Provides
+	@Named(ActionPlanModule.ACTION_PLAN_TOTAL_EVALUATIONS)
+	private int actionPlanTotalEvals() {
+		return 5_000_000;
+	}
+
+	@Provides
+	@Named(ActionPlanModule.ACTION_PLAN_IN_RUN_EVALUATIONS)
+	private int actionPlanInRunEvals() {
+		return 1_500_000;
+	}
+
+	@Provides
+	@Named(ActionPlanModule.ACTION_PLAN_MAX_SEARCH_DEPTH)
+	private int actionPlanInRunSearchDepth() {
+		return 5_000;
+	}
+	
+	@Provides
 	@Named(LocalSearchOptimiserModule.LSO_NUMBER_OF_ITERATIONS)
 	private int getNumberOfIterations(final OptimiserSettings settings) {
 		return settings.getAnnealingSettings().getIterations();

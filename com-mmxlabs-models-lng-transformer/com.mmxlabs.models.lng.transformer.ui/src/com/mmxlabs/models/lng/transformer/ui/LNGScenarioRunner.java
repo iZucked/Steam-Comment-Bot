@@ -9,6 +9,7 @@ import java.util.concurrent.ExecutorService;
 
 import javax.management.timer.Timer;
 
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -58,24 +59,24 @@ public class LNGScenarioRunner {
 	@Nullable
 	private ScenarioInstance scenarioInstance;
 
-	public LNGScenarioRunner(@NonNull ExecutorService exectorService, @NonNull final LNGScenarioModel scenario, @NonNull final OptimiserSettings optimiserSettings, final String... initialHints) {
-		this(exectorService, scenario, null, optimiserSettings, LNGSchedulerJobUtils.createLocalEditingDomain(), initialHints);
+	public LNGScenarioRunner(@NonNull ExecutorService exectorService, @NonNull final LNGScenarioModel scenario, @NonNull final OptimiserSettings optimiserSettings, @Nullable final IRunnerHook runnerHook, final String... initialHints) {
+		this(exectorService, scenario, null, optimiserSettings, LNGSchedulerJobUtils.createLocalEditingDomain(), runnerHook, initialHints);
 
 	}
 
-	public LNGScenarioRunner(@NonNull ExecutorService exectorService, @NonNull final LNGScenarioModel scenarioModel, @NonNull final OptimiserSettings optimiserSettings, @Nullable Module extraModule,
+	public LNGScenarioRunner(@NonNull ExecutorService exectorService, @NonNull final LNGScenarioModel scenarioModel, @NonNull final OptimiserSettings optimiserSettings, @Nullable Module extraModule, @Nullable final IRunnerHook runnerHook,
 			final String... initialHints) {
-		this(exectorService, scenarioModel, null, optimiserSettings, LNGSchedulerJobUtils.createLocalEditingDomain(), extraModule, null, initialHints);
+		this(exectorService, scenarioModel, null, optimiserSettings, LNGSchedulerJobUtils.createLocalEditingDomain(), extraModule, null, runnerHook, initialHints);
 	}
 
 	public LNGScenarioRunner(@NonNull ExecutorService exectorService, @NonNull final LNGScenarioModel scenarioModel, @Nullable final ScenarioInstance scenarioInstance,
-			@NonNull final OptimiserSettings optimiserSettings, @NonNull final EditingDomain editingDomain, final String... initialHints) {
-		this(exectorService, scenarioModel, scenarioInstance, optimiserSettings, editingDomain, null, null, initialHints);
+			@NonNull final OptimiserSettings optimiserSettings, @NonNull final EditingDomain editingDomain, @Nullable final IRunnerHook runnerHook, final String... initialHints) {
+		this(exectorService, scenarioModel, scenarioInstance, optimiserSettings, editingDomain, null, null, runnerHook, initialHints);
 	}
 
 	public LNGScenarioRunner(@NonNull ExecutorService executorService, @NonNull final LNGScenarioModel scenarioModel, @Nullable final ScenarioInstance scenarioInstance,
 			@NonNull final OptimiserSettings optimiserSettings, @NonNull final EditingDomain editingDomain, @Nullable final Module extraModule,
-			@Nullable final IOptimiserInjectorService localOverrides, final String... initialHints) {
+			@Nullable final IOptimiserInjectorService localOverrides, @Nullable final IRunnerHook runnerHook, final String... initialHints) {
 
 		this.scenarioModel = scenarioModel;
 		this.scenarioInstance = scenarioInstance;
@@ -86,8 +87,9 @@ public class LNGScenarioRunner {
 		scenarioToOptimiserBridge = new LNGScenarioToOptimiserBridge(scenarioModel, scenarioInstance, optimiserSettings, editingDomain, extraModule, localOverrides,
 				LNGTransformerHelper.HINT_OPTIMISE_LSO);
 
+		setRunnerHook(runnerHook);
+		
 		// FB: 1712 Switch for enabling run-all similarity optimisation. Needs better UI hook ups.
-
 		if (false) {
 			chainRunner = LNGScenarioChainBuilder.createRunAllSimilarityOptimisationChain(scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimiserSettings, executorService,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
@@ -174,7 +176,7 @@ public class LNGScenarioRunner {
 		return scenarioToOptimiserBridge.getDataTransformer().getRunnerHook();
 	}
 
-	public void setRunnerHook(final @Nullable IRunnerHook runnerHook) {
+	private void setRunnerHook(final @Nullable IRunnerHook runnerHook) {
 
 		scenarioToOptimiserBridge.getDataTransformer().setRunnerHook(runnerHook);
 	}
