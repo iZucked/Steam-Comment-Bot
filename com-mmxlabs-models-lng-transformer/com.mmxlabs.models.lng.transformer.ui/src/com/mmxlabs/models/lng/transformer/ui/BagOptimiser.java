@@ -471,9 +471,15 @@ public class BagOptimiser {
 				bagMover.setDepthRange(4, 5);
 			}
 			if (retryCount > 6) {
-				bagMover.setDepthRange(5, 1000);
+				bagMover.setDepthRange(5, 15);
 			}
 			if (retryCount > 8 && fullChangesSets.isEmpty()) {
+				System.out.println("failed to break down:");
+				System.out.println("******");
+				for (Difference d : currentStates.get(0).getDifferencesList()) {
+					System.out.println(d);
+				}
+				System.out.println("******");
 				bagMover.setDepthRange(0, 2);
 				return fullChangesSets;
 			}
