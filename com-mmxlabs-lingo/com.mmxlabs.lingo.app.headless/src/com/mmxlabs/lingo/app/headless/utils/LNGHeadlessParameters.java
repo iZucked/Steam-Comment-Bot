@@ -75,5 +75,13 @@ public class LNGHeadlessParameters extends HeadlessParameters {
 		setParameter("hillClimbing-useHillClimbing", false, Boolean.class, false);
 		setParameter("hillClimbing-iterations", 0, Integer.class, false);
 		
+		// Action Sets
+		setParameter("actionSets-buildActionSets", false, Boolean.class, false);
+		setParameter("actionSets-totalEvals", 5_000_000, Integer.class, false);
+		setParameter("actionSets-inRunEvals", 1_500_000, Integer.class, false);
+		setParameter("actionSets-maxSearchDepth", 5_000, Integer.class, false);
+		// Parallel
+		setParameter("actionSets-maxThreads", 1, Integer.class, false);
+		
 	}
 }
