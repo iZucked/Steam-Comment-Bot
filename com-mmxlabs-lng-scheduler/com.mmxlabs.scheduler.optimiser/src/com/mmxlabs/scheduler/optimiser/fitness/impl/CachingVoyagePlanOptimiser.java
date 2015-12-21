@@ -207,7 +207,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 		bestPlan = best.getFirst();
 		bestCost = best.getSecond();
-
+		choices.clear();
 		return bestPlan;
 	}
 
