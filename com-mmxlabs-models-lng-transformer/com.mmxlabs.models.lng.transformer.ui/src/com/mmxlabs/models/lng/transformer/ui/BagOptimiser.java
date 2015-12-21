@@ -808,8 +808,6 @@ public class BagOptimiser {
 	List<JobState> findChangeSets(@NonNull final SimilarityState similarityState, final List<JobState> currentStates, final int maxStates, final int depthStart, final int depthEnd)
 			throws InterruptedException, ExecutionException {
 		Collection<JobState> states = runJobs(similarityState, currentStates, null, depthStart, depthEnd);
-		System.out.println("states:"+states.size());
-		// List<JobState> reducedStates = reduceAndSortStatesPerChange(states);
 		List<JobState> reducedStates = reduceAndSortStatesMetric(states);
 		if (DEBUG) {
 			int order = 0;
@@ -936,7 +934,6 @@ public class BagOptimiser {
 							}
 						}
 					}
-					System.out.println("futuresStates:"+futureStates.size());
 					states.addAll(removeLimitedStates(futureStates));
 					updateProgress(actionSetOptimisationData, maxEvaluations, progressMonitor);
 				} catch (final ExecutionException e) {
