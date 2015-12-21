@@ -1174,8 +1174,7 @@ public class BreakdownOptimiserMover {
 		return changedElements;
 	}
 
-	@NonNull
-	public IEvaluationState evaluateSequence(@NonNull final ISequences currentFullSequences) {
+	public IEvaluationState evaluateSequence(@NonNull final IModifiableSequences currentFullSequences) {
 		final IEvaluationState evaluationState = new EvaluationState();
 		for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
 			if (!evaluationProcess.evaluate(currentFullSequences, evaluationState)) {
@@ -1185,6 +1184,7 @@ public class BreakdownOptimiserMover {
 
 		final ScheduledSequences ss = evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class);
 		assert ss != null;
+		calculateSchedulePNL(currentFullSequences, ss);
 		return evaluationState;
 	}
 
