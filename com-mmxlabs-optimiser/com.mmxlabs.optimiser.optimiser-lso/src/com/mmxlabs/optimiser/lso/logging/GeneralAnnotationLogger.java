@@ -11,9 +11,11 @@ import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.base.Joiner;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 
 public class GeneralAnnotationLogger {
@@ -38,11 +40,16 @@ public class GeneralAnnotationLogger {
 	}
 
 	private IAnnotatedSolution getBestAnnotatedSolution() {
-		if (fitnessEvaluator.getBestSequences().getSecond() == sequences) {
+		Triple<ISequences, ISequences, IEvaluationState> bestSequences = fitnessEvaluator.getBestSequences();
+		assert bestSequences != null;
+		ISequences sequencesFromEvaluator = bestSequences.getSecond();
+		assert sequencesFromEvaluator != null;
+
+		if (sequencesFromEvaluator == sequences) {
 			return solution;
 		} else {
 			solution = fitnessEvaluator.getBestAnnotatedSolution(context);
-			sequences = fitnessEvaluator.getBestSequences().getSecond();
+			sequences = sequencesFromEvaluator;
 			return solution;
 		}
 	}
