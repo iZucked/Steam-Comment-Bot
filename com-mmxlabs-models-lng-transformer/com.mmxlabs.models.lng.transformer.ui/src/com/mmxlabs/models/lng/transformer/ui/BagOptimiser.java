@@ -29,11 +29,11 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.name.Named;
-import com.mmxlabs.models.lng.transformer.inject.modules.ActionPlanModule;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.transformer.chain.IMultiStateResult;
 import com.mmxlabs.models.lng.transformer.chain.impl.MultiStateResult;
+import com.mmxlabs.models.lng.transformer.inject.modules.ActionPlanModule;
 import com.mmxlabs.models.lng.transformer.stochasticactionsets.StochasticActionSetUtils;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.BagMover;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.BreakdownSearchData;
@@ -78,14 +78,11 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
  */
 public class BagOptimiser {
 
-	private static final Logger LOG = LoggerFactory.getLogger(BagOptimiser.class);
-
-	private static final boolean DEBUG = false;
-
-	private static final boolean BUILD_DEPENDANCY_GRAPH = false;
+	@Inject
+	protected ISequencesManipulator sequencesManipulator;
 
 	@Inject
-	private ISequencesManipulator sequencesManipulator;
+	protected IOptimisationContext optimisationContext;
 
 	@Inject
 	@NonNull
@@ -96,22 +93,14 @@ public class BagOptimiser {
 	private IFitnessHelper fitnessHelper;
 
 	@Inject
-	ExecutorService executorService;
-
-        @Inject
-        protected IOptimisationContext optimisationContext;
-
-	@Inject
 	@NonNull
 	private IFitnessCombiner fitnessCombiner;
 
 	@Inject
-	private List<IEvaluationProcess> evaluationProcesses;
+	ExecutorService executorService;
 
 	@Inject
-	@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)
-	@NonNull
-	private ISequences initialRawSequences;
+	private List<IEvaluationProcess> evaluationProcesses;
 
 	@Inject
 	@Named(OptimiserConstants.SEQUENCE_TYPE_INITIAL)
@@ -126,19 +115,33 @@ public class BagOptimiser {
 	@Named("MAIN_MOVER")
 	protected BagMover bagMover;
 
+	protected static final Logger LOG = LoggerFactory.getLogger(BagOptimiser.class);
+
+	private static final boolean DEBUG = true;
+
+	protected static final boolean BUILD_DEPENDANCY_GRAPH = false;
+
+	protected final Random rdm = new Random(0);
+
 	private final List<IMultiStateResult> bestSolutions = new LinkedList<>();
 
-	private final int initialPopulationSize = 10;
-	private final int initialSearchSize = 20_000;
-	private final int normalSearchSize = 2_000;
-	private final int retrySearchSize = 2_000;
+	protected int initialPopulationSize = 10;
+	private int initialSearchSize = 20_000;
+	protected int normalSearchSize = 2_000;
+	private int retrySearchSize = 2_000;
 
-	private final int maxEvaluations = 15_000_000; // DO NOT COMMIT
-	private final int maxEvaluationsInRun = 5_500_000; // DO NOT COMMIT
+	@Inject
+	@Named(ActionPlanModule.ACTION_PLAN_TOTAL_EVALUATIONS)
+	private int maxEvaluations;
+
+	@Inject
+	@Named(ActionPlanModule.ACTION_PLAN_IN_RUN_EVALUATIONS)
+	private int maxEvaluationsInRun;
+
 	private int maxLeafs = 0;
 	private IProgressMonitor progressMonitor = null;
 	private ProgressCounter progressCounter = new ProgressCounter();
-	private ActionSetOptimisationData actionSetOptimisationData = new ActionSetOptimisationData();
+	protected ActionSetOptimisationData actionSetOptimisationData = new ActionSetOptimisationData();
 	private boolean ignoreTerminationConditions = false;
 
 	@Inject
@@ -817,22 +820,22 @@ public class BagOptimiser {
 					pnl += cs.metricDelta[MetricType.PNL.ordinal()];
 					changes += cs.changesList.size();
 				}
-				// System.out.println(String.format("##%s## [%s] / [%s] = %s", ++order, pnl, changes, pnl / changes));
+				System.out.println(String.format("##%s## [%s] / [%s] = %s", ++order, pnl, changes, pnl / changes));
 			}
 		}
 		reducedStates = reducedStates.subList(0, Math.min(reducedStates.size(), maxStates));
 		if (DEBUG) {
 			System.out.println("Chosen state:");
-			for (final JobState js : reducedStates) {
+			for (JobState js : reducedStates) {
 				long pnl = 0;
 				long changes = 0;
-				for (final ChangeSet cs : js.changeSetsAsList) {
+				for (ChangeSet cs : js.changeSetsAsList) {
 					System.out.println("pnl - " + cs.metricDelta[MetricType.PNL.ordinal()]);
 					System.out.println("changes - " + cs.changesList.size());
 					pnl += cs.metricDelta[MetricType.PNL.ordinal()];
 					changes += cs.changesList.size();
 				}
-				// System.out.println(String.format("##%s## [%s] / [%s] = %s", 0, pnl, changes, pnl / changes));
+				System.out.println(String.format("##%s## [%s] / [%s] = %s", 0, pnl, changes, pnl / changes));
 			}
 		}
 		return reducedStates;
@@ -844,7 +847,7 @@ public class BagOptimiser {
 		for (JobState js : states) {
 			long pnl = 0L;
 			long changes = 0L;
-			for (final ChangeSet cs : js.changeSetsAsList) {
+			for (ChangeSet cs : js.changeSetsAsList) {
 				pnl += cs.metricDelta[MetricType.PNL.ordinal()];
 				changes += cs.changesList.size();
 			}
@@ -919,9 +922,9 @@ public class BagOptimiser {
 			// Collect all results
 			for (final Future<Collection<JobState>> f : futures) {
 				try {
-					final Collection<JobState> futureStates = f.get();
+					Collection<JobState> futureStates = f.get();
 					actionSetOptimisationData.logEvaluations(futureStates.size());
-					for (final JobState js : futureStates) {
+					for (JobState js : futureStates) {
 						BreakdownSearchData jobSearchData = js.getBreakdownSearchData();
 						if (jobSearchData != null) {
 							BreakdownSearchStatistics breakdownSearchStatistics = jobSearchData.getSearchStatistics();
@@ -933,13 +936,14 @@ public class BagOptimiser {
 							}
 						}
 					}
+					System.out.println("futuresStates:"+futureStates.size());
 					states.addAll(removeLimitedStates(futureStates));
 					updateProgress(actionSetOptimisationData, maxEvaluations, progressMonitor);
 				} catch (final ExecutionException e) {
 					throw new RuntimeException(e);
 				}
-			}
 				futures = jobBatcher.getNextFutures(injector, similarityState, jobStore, incrementingRandomSeed);
+			}
 		}
 
 		return states;
@@ -947,34 +951,17 @@ public class BagOptimiser {
 
 	protected void processAndStoreBreakdownSolution(final JobState solution, final ISequences initialRawSequences, final long bestSolutionFitness) {
 
-		final List<NonNullPair<ISequences, Map<String, Object>>> processedSolution = new LinkedList<>();
-		{
-			final IModifiableSequences currentFullSequences = new ModifiableSequences(initialRawSequences);
-			sequencesManipulator.manipulate(currentFullSequences);
-			final IEvaluationState changeSetEvaluationState = bagMover.evaluateSequence(currentFullSequences);
-			fitnessHelper.evaluateSequencesFromComponents(currentFullSequences, changeSetEvaluationState, fitnessComponents, null);
-
-			final Map<String, Long> currentFitnesses = new HashMap<>();
-			for (final IFitnessComponent fitnessComponent : fitnessComponents) {
-				currentFitnesses.put(fitnessComponent.getName(), fitnessComponent.getFitness());
-			}
-
-			final Map<String, Object> extraAnnotations = new HashMap<>();
-			extraAnnotations.put(OptimiserConstants.G_AI_fitnessComponents, currentFitnesses);
-
-			processedSolution.add(new NonNullPair<ISequences, Map<String, Object>>(initialRawSequences, extraAnnotations));
-		}
+		List<NonNullPair<ISequences, Map<String, Object>>> processedSolution = new LinkedList<>();
+		// Alway add in the original solution
+		processedSolution.add(evaluateSolution(initialRawSequences));
 
 		long fitness = Long.MAX_VALUE;
 		long lastFitness = Long.MAX_VALUE;
 		int bestIdx = -1;
 		int idx = 1;
 		for (final ChangeSet cs : solution.changeSetsAsList) {
-			final IModifiableSequences currentFullSequences = new ModifiableSequences(cs.getRawSequences());
-			sequencesManipulator.manipulate(currentFullSequences);
-
-			final IEvaluationState changeSetEvaluationState = bagMover.evaluateSequence(currentFullSequences);
-			fitnessHelper.evaluateSequencesFromComponents(currentFullSequences, changeSetEvaluationState, fitnessComponents, null);
+			final NonNullPair<ISequences, Map<String, Object>> ps = evaluateSolution(cs.getRawSequences());
+			// Ensure this is called directly after evaluate solution so fitnessComponents are in the correct state
 			final long currentFitness = fitnessCombiner.calculateFitness(fitnessComponents);
 
 			if (currentFitness == lastFitness) {

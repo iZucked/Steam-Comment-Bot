@@ -937,7 +937,8 @@ public class BreakdownOptimiserMover {
 						final List<Change> changes2 = new ArrayList<>(changes);
 						changes2.add(new Change(String.format("Remove %s and %s\n", load.getName(), otherDischargeElement.getName()), load, otherDischargeElement));
 
-						newStates.addAll(search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_CARGO_REMOVE, currentMetrics, jobStore, searchElements, differencesList, searchData));
+						newStates
+								.addAll(search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_CARGO_REMOVE, currentMetrics, jobStore, searchElements, differencesList, searchData));
 					}
 				}
 				if (!newStates.isEmpty()) {
@@ -995,7 +996,8 @@ public class BreakdownOptimiserMover {
 						final List<Change> changes2 = new ArrayList<>(changes);
 						changes2.add(new Change(String.format("Remove %s and %s\n", otherLoadElement.getName(), discharge.getName()), otherLoadElement, discharge));
 
-						newStates.addAll(search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_CARGO_REMOVE, currentMetrics, jobStore, searchElements, differencesList, searchData));
+						newStates
+								.addAll(search(copy, similarityState, changes2, new ArrayList<>(changeSets), depth, MOVE_TYPE_CARGO_REMOVE, currentMetrics, jobStore, searchElements, differencesList, searchData));
 					}
 				}
 				// // Load already used, give up on current search and clear hints
@@ -1033,7 +1035,7 @@ public class BreakdownOptimiserMover {
 		return new LinkedList<JobState>();
 	}
 
-	public long calculateSchedulePNL(@NonNull final ISequences fullSequences, @NonNull final ScheduledSequences scheduledSequences) {
+	public long calculateSchedulePNL(@NonNull final IModifiableSequences fullSequences, @NonNull final ScheduledSequences scheduledSequences) {
 		long sumPNL = 0;
 
 		for (final ScheduledSequence scheduledSequence : scheduledSequences) {
