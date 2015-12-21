@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.transformer.ui.breakdown;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.concurrent.Callable;
 
 import com.mmxlabs.optimiser.core.impl.Sequences;
@@ -21,12 +22,14 @@ public final class ChangeSetFinderJob implements Callable<Collection<JobState>> 
 	private final SimilarityState similarityState;
 	private final BreakdownOptimiserMover optimiser;
 	private final JobStore jobStore;
-
-	public ChangeSetFinderJob(final BreakdownOptimiserMover optimiser, final JobState state, final SimilarityState similarityState, final JobStore jobStore) {
+	private final long seed;
+	
+	public ChangeSetFinderJob(final BreakdownOptimiserMover optimiser, final JobState state, final SimilarityState similarityState, final JobStore jobStore, final long seed) {
 		this.optimiser = optimiser;
 		this.state = state;
 		this.similarityState = similarityState;
 		this.jobStore = jobStore;
+		this.seed = seed;
 	}
 
 	@Override
@@ -36,7 +39,7 @@ public final class ChangeSetFinderJob implements Callable<Collection<JobState>> 
 
 			final int localDepth = state.mode == JobStateMode.LIMITED ? 2 : BreakdownOptimiserMover.DEPTH_START;
 			return optimiser.search(new Sequences(state.rawSequences), similarityState, new LinkedList<Change>(state.changesAsList), new LinkedList<ChangeSet>(state.changeSetsAsList), localDepth,
-					BreakdownOptimiserMover.MOVE_TYPE_NONE, state.metric, jobStore, null, state.getDifferencesList(), new BreakdownSearchStatistics());
+					BreakdownOptimiserMover.MOVE_TYPE_NONE, state.metric, jobStore, null, state.getDifferencesList(), new BreakdownSearchData(new BreakdownSearchStatistics(), new Random(seed)));
 		} catch (final Throwable e) {
 			throw new RuntimeException(e);
 		}

@@ -41,6 +41,8 @@ import com.mmxlabs.models.lng.transformer.ui.breakdown.ChangeChecker;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.ChangeSet;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.ChangeSetFinderJob;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.Difference;
+import com.mmxlabs.models.lng.transformer.ui.breakdown.IncrementingRandomSeed;
+import com.mmxlabs.models.lng.transformer.ui.breakdown.JobBatcher;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.JobState;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.JobStateMode;
 import com.mmxlabs.models.lng.transformer.ui.breakdown.JobStore;
@@ -126,6 +128,8 @@ public class BagOptimiser {
 	private ActionSetOptimisationData actionSetOptimisationData = new ActionSetOptimisationData();
 	private boolean ignoreTerminationConditions = false;
 
+	private IncrementingRandomSeed incrementingRandomSeed = new IncrementingRandomSeed();
+
 	private void init(final IProgressMonitor progressMonitor, final int maxLeafs) {
 		setProgressCounter(new ProgressCounter());
 		setProgressMonitor(progressMonitor);
@@ -205,10 +209,11 @@ public class BagOptimiser {
 			final List<JobState> finalPopulation = new LinkedList<>();
 			final List<JobState> allLimitedStates = new LinkedList<>();
 			progressMonitor.beginTask("Generate Action Sets", 100);
-			int initialDepthLimit = 3;
+			int initialDepthLimitStart = 0;
+			int initialDepthLimitEnd = 3;
 			try {
 				while (!shouldTerminate(actionSetOptimisationData)) {
-					bagMover.setDepthRange(0, initialDepthLimit);
+					bagMover.setDepthRange(initialDepthLimitStart, initialDepthLimitEnd);
 					actionSetOptimisationData.startNewRun();
 					final List<JobState> promisingLimitedStates = new LinkedList<>();
 					final List<List<JobState>> savedPopulations = new LinkedList<>();
@@ -278,7 +283,8 @@ public class BagOptimiser {
 							break;
 						}
 					}
-					initialDepthLimit++;
+					initialDepthLimitStart = initialDepthLimitEnd;
+					initialDepthLimitEnd++;
 				}
 				logLimiteds(allLimitedStates);
 				logFinalPopulation(finalPopulation);
@@ -541,7 +547,7 @@ public class BagOptimiser {
 			if (retryCount > 6) {
 				bagMover.setDepthRange(5, 15);
 			}
-			if (retryCount > 8 && fullChangesSets.isEmpty()) {
+			if (retryCount > 12 && fullChangesSets.isEmpty()) {
 				System.out.println("failed to break down:");
 				System.out.println("******");
 				for (Difference d : currentStates.get(0).getDifferencesList()) {
@@ -719,7 +725,7 @@ public class BagOptimiser {
 	}
 
 	@NonNull
-	List<JobState> findChangeSets(@NonNull final SimilarityState similarityState, final Collection<JobState> currentStates, final int maxStates) throws InterruptedException, ExecutionException {
+	List<JobState> findChangeSets(@NonNull final SimilarityState similarityState, final List<JobState> currentStates, final int maxStates) throws InterruptedException, ExecutionException {
 		final Collection<JobState> states = runJobs(similarityState, currentStates, null);
 		List<JobState> reducedStates = reduceAndSortStatesPerChange(states);
 		if (DEBUG) {
@@ -821,39 +827,37 @@ public class BagOptimiser {
 	}
 
 	@NonNull
-	protected Collection<JobState> runJobs(@NonNull final SimilarityState similarityState, final Collection<JobState> sortedJobStates, final JobStore jobStore) throws InterruptedException {
-		final List<Future<Collection<JobState>>> futures = new LinkedList<>();
-
-		final Iterator<JobState> itr = sortedJobStates.iterator();
-		while (itr.hasNext()) {
-			final JobState state = itr.next();
-			itr.remove();
-
-			// Submit a new change set search to the executor
-			futures.add(new MyFuture(new ChangeSetFinderJob(bagMover, state, similarityState, jobStore)));
-		}
-
+	protected Collection<JobState> runJobs(@NonNull final SimilarityState similarityState, final List<JobState> sortedJobStates, final JobStore jobStore) throws InterruptedException {
+		// Create a batcher, which produces small batches of jobs that we can then spread among cores 
+		// but keep the progress log accurate and maintain repeatablility
+		final JobBatcher jobBatcher = new JobBatcher(sortedJobStates, 100);
+		
 		final List<JobState> states = new LinkedList<>();
-		// Collect all results
-		for (final Future<Collection<JobState>> f : futures) {
-			try {
-				if (!shouldTerminateInRun(actionSetOptimisationData)) {
+		List<Future<Collection<JobState>>> futures = jobBatcher.getNextFutures(bagMover, similarityState, jobStore, incrementingRandomSeed);
+		while (!futures.isEmpty() && !shouldTerminateInRun(actionSetOptimisationData) && !shouldTerminate(actionSetOptimisationData)) {
+			// Collect all results
+			for (final Future<Collection<JobState>> f : futures) {
+				try {
 					final Collection<JobState> futureStates = f.get();
 					actionSetOptimisationData.logEvaluations(futureStates.size());
 					for (final JobState js : futureStates) {
-						if (js.breakdownSearchStatistics != null) {
-							actionSetOptimisationData.logConstraintEvaluations(js.breakdownSearchStatistics.getEvaluationsFailedConstraints());
-							actionSetOptimisationData.logPNLEvaluations(js.breakdownSearchStatistics.getEvaluationsFailedPNL());
-							actionSetOptimisationData.logPNLEvaluations(js.breakdownSearchStatistics.getEvaluationsPassed());
-							break;
+						BreakdownSearchData jobSearchData = js.getBreakdownSearchData();
+						if (jobSearchData != null) {
+							BreakdownSearchStatistics breakdownSearchStatistics = jobSearchData.getSearchStatistics();
+							if (breakdownSearchStatistics != null) {
+								actionSetOptimisationData.logConstraintEvaluations(breakdownSearchStatistics.getEvaluationsFailedConstraints());
+								actionSetOptimisationData.logPNLEvaluations(breakdownSearchStatistics.getEvaluationsFailedPNL());
+								actionSetOptimisationData.logPNLEvaluations(breakdownSearchStatistics.getEvaluationsPassed());
+								break;
+							}
 						}
 					}
 					states.addAll(removeLimitedStates(futureStates));
 					updateProgress(actionSetOptimisationData, maxEvaluations, progressMonitor);
-				}
 			} catch (final ExecutionException e) {
 				throw new RuntimeException(e);
 			}
+				futures = jobBatcher.getNextFutures(bagMover, similarityState, jobStore, incrementingRandomSeed);
 		}
 
 		return states;

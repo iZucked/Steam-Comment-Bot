@@ -45,12 +45,11 @@ public class JobState implements Serializable {
 
 	private List<Difference> differencesList = null;
 
-	public BreakdownSearchStatistics breakdownSearchStatistics = null;
+	private BreakdownSearchData breakdownSearchData = null;
 
-	public JobState(final ISequences rawSequences, final List<ChangeSet> changeSets, final List<Change> changes, final List<Difference> differencesList,
-			final BreakdownSearchStatistics breakdownSearchStatistics) {
+	public JobState(final ISequences rawSequences, final List<ChangeSet> changeSets, final List<Change> changes, final List<Difference> differencesList, final BreakdownSearchData breakdownSearchData) {
 		this(rawSequences, changeSets, changes, differencesList);
-		this.breakdownSearchStatistics = breakdownSearchStatistics;
+		this.setBreakdownSearchData(breakdownSearchData);
 	}
 
 	public JobState(final ISequences rawSequences, final List<ChangeSet> changeSets, final List<Change> changes, final List<Difference> differencesList) {
@@ -158,6 +157,14 @@ public class JobState implements Serializable {
 
 	public void setDifferencesList(final List<Difference> differencesList) {
 		this.differencesList = differencesList;
+	}
+
+	public BreakdownSearchData getBreakdownSearchData() {
+		return breakdownSearchData;
+	}
+
+	public void setBreakdownSearchData(BreakdownSearchData breakdownSearchData) {
+		this.breakdownSearchData = breakdownSearchData;
 	}
 
 	// private void readObjectNoData() throws ObjectStreamException;
