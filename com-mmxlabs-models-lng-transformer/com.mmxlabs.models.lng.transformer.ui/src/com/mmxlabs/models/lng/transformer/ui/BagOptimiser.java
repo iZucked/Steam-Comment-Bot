@@ -144,8 +144,9 @@ public class BagOptimiser {
 	protected ActionSetOptimisationData actionSetOptimisationData = new ActionSetOptimisationData();
 	private boolean ignoreTerminationConditions = false;
 
-	@Inject
+	@Inject(optional = true)
 	@Named("ACTION_PLAN_LOGGER")
+	@Nullable
 	private ActionSetLogger actionSetLogger;
 
 	private IncrementingRandomSeed incrementingRandomSeed = new IncrementingRandomSeed();
@@ -398,7 +399,9 @@ public class BagOptimiser {
 	}
 
 	private void logFinish() {
-		actionSetLogger.finish(System.currentTimeMillis());
+		if (actionSetLogger != null) {
+			actionSetLogger.finish(System.currentTimeMillis());
+		}
 	}
 
 	private void logFinalPopulation(List<JobState> finalPopulation) {
@@ -511,7 +514,9 @@ public class BagOptimiser {
 				});
 				diffs = bestPopulation.get(0).getDifferencesList();
 			}
-			actionSetLogger.logRootActionSet(root, best, leafs, pnlEvals, constraintEvals, diffs, runTime);
+			if (actionSetLogger != null) {
+				actionSetLogger.logRootActionSet(root, best, leafs, pnlEvals, constraintEvals, diffs, runTime);
+			}
 		}
 	}
 

@@ -273,6 +273,11 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 				throw e;
 			} finally {
 				monitor.done();
+				// Clean up thread-locals created in the scope object
+				for (final Thread thread : threadCache.keySet()) {
+					scope.exit(thread);
+				}
+				threadCache.clear();
 			}
 		}
 	}
