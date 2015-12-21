@@ -77,7 +77,7 @@ public class BagOptimiser {
 
 	private static final Logger LOG = LoggerFactory.getLogger(BagOptimiser.class);
 
-	private static final boolean DEBUG = true;
+	private static final boolean DEBUG = false;
 
 	private static final boolean BUILD_DEPENDANCY_GRAPH = false;
 
@@ -118,8 +118,8 @@ public class BagOptimiser {
 	private final int normalSearchSize = 2_000;
 	private final int retrySearchSize = 2_000;
 
-	private final int maxEvaluations = 5_000_000;
-	private final int maxEvaluationsInRun = 1_500_000;
+	private final int maxEvaluations = 15_000_000; // DO NOT COMMIT
+	private final int maxEvaluationsInRun = 5_500_000; // DO NOT COMMIT
 	private int maxLeafs = 0;
 	private IProgressMonitor progressMonitor = null;
 	private ProgressCounter progressCounter = new ProgressCounter();
@@ -903,7 +903,7 @@ public class BagOptimiser {
 		}
 	}
 
-	private class ActionSetOptimisationData {
+	public class ActionSetOptimisationData {
 		int totalEvaluations = 0;
 		int actualPNLEvaluations = 0;
 		int actualConstraintEvaluations = 0;
