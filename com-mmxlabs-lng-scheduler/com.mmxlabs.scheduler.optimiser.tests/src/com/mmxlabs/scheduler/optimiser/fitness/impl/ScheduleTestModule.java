@@ -28,6 +28,7 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessHelper;
+import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeModule;
 import com.mmxlabs.optimiser.core.modules.ConstraintCheckerInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.EvaluationProcessInstantiatorModule;
 import com.mmxlabs.optimiser.core.modules.FitnessFunctionInstantiatorModule;
@@ -64,6 +65,7 @@ public class ScheduleTestModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
+		install(new PerChainUnitScopeModule());
 		install(new OptimiserContextModule());
 		install(new ConstraintCheckerInstantiatorModule());
 		install(new FitnessFunctionInstantiatorModule());

@@ -34,6 +34,7 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
+import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.ILocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
@@ -206,82 +207,84 @@ public class SimpleSchedulerTest {
 		// Build opt data
 		final ScheduleTestModule m = new ScheduleTestModule(data);
 		final Injector injector = parentInjector.createChildInjector(m);
+		try (PerChainUnitScopeImpl scope = injector.getInstance(PerChainUnitScopeImpl.class)) {
+			scope.enter();
 
-		// Generate initial state
-		// final IInitialSequenceBuilder sequenceBuilder = injector.getInstance(IInitialSequenceBuilder.class);
+			// Generate initial state
+			// final IInitialSequenceBuilder sequenceBuilder = injector.getInstance(IInitialSequenceBuilder.class);
 
-		// final ISequences initialSequences = sequenceBuilder.createInitialSequences(data, null, null, Collections.<ISequenceElement, ISequenceElement> emptyMap());
+			// final ISequences initialSequences = sequenceBuilder.createInitialSequences(data, null, null, Collections.<ISequenceElement, ISequenceElement> emptyMap());
 
-		// final OptimisationContext context = new OptimisationContext(data, initialSequences, new ArrayList<String>(fitnessRegistry.getFitnessComponentNames()), fitnessRegistry, new
-		// ArrayList<String>(
-		// constraintRegistry.getConstraintCheckerNames()), constraintRegistry, new ArrayList<String>(evaluationProcessRegistry.getEvaluationProcessNames()), evaluationProcessRegistry);
+			// final OptimisationContext context = new OptimisationContext(data, initialSequences, new ArrayList<String>(fitnessRegistry.getFitnessComponentNames()), fitnessRegistry, new
+			// ArrayList<String>(
+			// constraintRegistry.getConstraintCheckerNames()), constraintRegistry, new ArrayList<String>(evaluationProcessRegistry.getEvaluationProcessNames()), evaluationProcessRegistry);
 
-		final IOptimisationContext context = injector.getInstance(IOptimisationContext.class);
+			final IOptimisationContext context = injector.getInstance(IOptimisationContext.class);
 
-		final IOptimiserProgressMonitor monitor = new IOptimiserProgressMonitor() {
+			final IOptimiserProgressMonitor monitor = new IOptimiserProgressMonitor() {
 
-			@Override
-			public void begin(final IOptimiser optimiser, final long initialFitness, final IAnnotatedSolution initialState) {
-				System.out.println("Initial Fitness: " + initialFitness);
+				@Override
+				public void begin(final IOptimiser optimiser, final long initialFitness, final IAnnotatedSolution initialState) {
+					System.out.println("Initial Fitness: " + initialFitness);
+				}
+
+				@Override
+				public void report(final IOptimiser optimiser, final int iteration, final long currentFitness, final long bestFitness, final IAnnotatedSolution currentState,
+						final IAnnotatedSolution bestState) {
+					System.out.println("Iter: " + iteration + " Fitness: " + bestFitness);
+				}
+
+				@Override
+				public void done(final IOptimiser optimiser, final long bestFitness, final IAnnotatedSolution bestState) {
+					System.out.println("Final Fitness: " + bestFitness);
+				}
+			};
+
+			final ILocalSearchOptimiser optimiser = GeneralTestUtils.buildOptimiser(context, new Random(seed), 1000, 5, monitor);
+
+			for (final IConstraintChecker c : optimiser.getConstraintCheckers()) {
+				injector.injectMembers(c);
 			}
 
-			@Override
-			public void report(final IOptimiser optimiser, final int iteration, final long currentFitness, final long bestFitness, final IAnnotatedSolution currentState,
-					final IAnnotatedSolution bestState) {
-				System.out.println("Iter: " + iteration + " Fitness: " + bestFitness);
+			for (final IFitnessComponent c : optimiser.getFitnessEvaluator().getFitnessComponents()) {
+				injector.injectMembers(c);
+				injector.injectMembers(c.getFitnessCore());
 			}
 
-			@Override
-			public void done(final IOptimiser optimiser, final long bestFitness, final IAnnotatedSolution bestState) {
-				System.out.println("Final Fitness: " + bestFitness);
+			for (final IEvaluationProcess c : optimiser.getFitnessEvaluator().getEvaluationProcesses()) {
+				injector.injectMembers(c);
 			}
-		};
 
-		final ILocalSearchOptimiser optimiser = GeneralTestUtils.buildOptimiser(context, new Random(seed), 1000, 5, monitor);
+			final IFitnessEvaluator fitnessEvaluator = optimiser.getFitnessEvaluator();
 
-		for (final IConstraintChecker c : optimiser.getConstraintCheckers()) {
-			injector.injectMembers(c);
+			final LinearSimulatedAnnealingFitnessEvaluator linearFitnessEvaluator = (LinearSimulatedAnnealingFitnessEvaluator) fitnessEvaluator;
+
+			IEvaluationState evaluationState = new EvaluationState();
+
+			for (final IEvaluationProcess c : optimiser.getFitnessEvaluator().getEvaluationProcesses()) {
+				c.evaluate(context.getInputSequences(), evaluationState);
+			}
+
+			linearFitnessEvaluator.setInitialSequences(context.getInputSequences(), context.getInputSequences(), evaluationState);
+			printSequences(context.getInputSequences());
+
+			final long initialFitness = linearFitnessEvaluator.getBestFitness();
+			System.out.println("Initial fitness " + initialFitness);
+
+			Assert.assertFalse(initialFitness == Long.MAX_VALUE);
+
+			optimiser.optimise(context);
+
+			final long finalFitness = linearFitnessEvaluator.getBestFitness();
+			System.out.println("Final fitness " + finalFitness);
+			Assert.assertFalse(finalFitness == Long.MAX_VALUE);
+
+			Triple<ISequences, ISequences, IEvaluationState> bestSequences = fitnessEvaluator.getBestSequences();
+			Assert.assertNotNull(bestSequences);
+			printSequences(bestSequences.getFirst());
+
+			// TODO: How to verify result?
 		}
-
-		for (final IFitnessComponent c : optimiser.getFitnessEvaluator().getFitnessComponents()) {
-			injector.injectMembers(c);
-			injector.injectMembers(c.getFitnessCore());
-		}
-
-		for (final IEvaluationProcess c : optimiser.getFitnessEvaluator().getEvaluationProcesses()) {
-			injector.injectMembers(c);
-		}
-
-		final IFitnessEvaluator fitnessEvaluator = optimiser.getFitnessEvaluator();
-
-		final LinearSimulatedAnnealingFitnessEvaluator linearFitnessEvaluator = (LinearSimulatedAnnealingFitnessEvaluator) fitnessEvaluator;
-
-		IEvaluationState evaluationState = new EvaluationState();
-
-		for (final IEvaluationProcess c : optimiser.getFitnessEvaluator().getEvaluationProcesses()) {
-			c.evaluate(context.getInputSequences(), evaluationState);
-		}
-
-
-		linearFitnessEvaluator.setInitialSequences(context.getInputSequences(), context.getInputSequences(), evaluationState);
-		printSequences(context.getInputSequences());
-
-		final long initialFitness = linearFitnessEvaluator.getBestFitness();
-		System.out.println("Initial fitness " + initialFitness);
-
-		Assert.assertFalse(initialFitness == Long.MAX_VALUE);
-
-		optimiser.optimise(context);
-
-		final long finalFitness = linearFitnessEvaluator.getBestFitness();
-		System.out.println("Final fitness " + finalFitness);
-		Assert.assertFalse(finalFitness == Long.MAX_VALUE);
-
-		Triple<ISequences, ISequences, IEvaluationState> bestSequences = fitnessEvaluator.getBestSequences();
-		Assert.assertNotNull(bestSequences);
-		printSequences(bestSequences.getFirst());
-
-		// TODO: How to verify result?
 	}
 
 	void printSequences(final Collection<ISequences> sequences) {

@@ -29,9 +29,11 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
+import com.mmxlabs.optimiser.core.impl.NullSequencesManipulator;
 import com.mmxlabs.optimiser.core.impl.Resource;
 import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -113,6 +115,7 @@ public class SimilarityFitnessCoreTest {
 			@Override
 			protected void configure() {
 				bind(IPortTypeProvider.class).toInstance(portTypeProvider);
+				bind(ISequencesManipulator.class).to(NullSequencesManipulator.class);
 			}
 		});
 
