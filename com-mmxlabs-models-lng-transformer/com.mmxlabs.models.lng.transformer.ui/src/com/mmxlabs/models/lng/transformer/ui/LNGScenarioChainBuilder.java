@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
@@ -27,6 +28,9 @@ import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.stochasticactionsets.LNGActionSetTransformerUnit;
 
 public class LNGScenarioChainBuilder {
+
+	public static final String PROPERTY_MMX_NUMBER_OF_CORES = "MMX_NUMBER_OF_CORES";
+	public static final String PROPERTY_MMX_DISABLE_MULTI_LSO = "MMX_DISABLE_MULTI_LSO";
 
 	private static final int PROGRESS_OPTIMISATION = 100;
 	private static final int PROGRESS_HILLCLIMBING_OPTIMISATION = 10;
@@ -46,7 +50,7 @@ public class LNGScenarioChainBuilder {
 	 * @return
 	 */
 	public static IChainRunner createStandardOptimisationChain(@Nullable final String childName, @NonNull final LNGDataTransformer dataTransformer,
-			@NonNull final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, @NonNull final OptimiserSettings optimiserSettings, @NonNull ExecutorService executorService, int numSeeds,
+			@NonNull final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge, @NonNull final OptimiserSettings optimiserSettings, @NonNull final ExecutorService executorService,
 			@Nullable final String... initialHints) {
 
 		boolean createOptimiser = false;
@@ -70,9 +74,13 @@ public class LNGScenarioChainBuilder {
 		final ChainBuilder builder = new ChainBuilder(dataTransformer);
 		if (createOptimiser) {
 			// Run the standard LSO optimisation
-			int[] seeds = new int[numSeeds];
-			for (int i = 0; i < numSeeds; ++i) {
-				seeds[i] = optimiserSettings.getSeed();//i;
+			int numCopies = getNumberOfAvailableCores();
+			if (System.getProperty(PROPERTY_MMX_DISABLE_MULTI_LSO) != null) {
+				numCopies = 1;
+			}
+			final int[] seeds = new int[numCopies];
+			for (int i = 0; i < numCopies; ++i) {
+				seeds[i] = optimiserSettings.getSeed();
 			}
 			assert seeds.length > 0;
 			LNGLSOOptimiserTransformerUnit.chainPool(builder, optimiserSettings, PROGRESS_OPTIMISATION, executorService, seeds);
@@ -127,7 +135,7 @@ public class LNGScenarioChainBuilder {
 	 * @return
 	 */
 	public static IChainRunner createRunAllSimilarityOptimisationChain(@NonNull final LNGDataTransformer dataTransformer, @NonNull final LNGScenarioToOptimiserBridge dataExporter,
-			@NonNull final OptimiserSettings optimiserSettings, @NonNull ExecutorService executorService, @Nullable final String... initialHints) {
+			@NonNull final OptimiserSettings optimiserSettings, @NonNull final ExecutorService executorService, @Nullable final String... initialHints) {
 
 		final UserSettings basicSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		if (optimiserSettings.getRange() != null) {
@@ -154,7 +162,7 @@ public class LNGScenarioChainBuilder {
 
 			final OptimiserSettings settings = OptimisationHelper.transformUserSettings(copy, null);
 			if (settings != null) {
-				runners.add(createStandardOptimisationChain("Similarity-" + mode.toString(), dataTransformer, dataExporter, settings, executorService, 1, initialHints));
+				runners.add(createStandardOptimisationChain("Similarity-" + mode.toString(), dataTransformer, dataExporter, settings, executorService, initialHints));
 			}
 		}
 		final MultiChainRunner runner = new MultiChainRunner(dataTransformer, runners, executorService);
@@ -164,12 +172,25 @@ public class LNGScenarioChainBuilder {
 
 	@NonNull
 	public static ExecutorService createExecutorService() {
-		final int cores = Math.max(1, Runtime.getRuntime().availableProcessors() - 1);
+		final int cores = getNumberOfAvailableCores();
 		return createExecutorService(cores);
 	}
 
 	@NonNull
-	public static ExecutorService createExecutorService(int nThreads) {
+	public static ExecutorService createExecutorService(final int nThreads) {
 		return Executors.newFixedThreadPool(nThreads);
+	}
+
+	public static int getNumberOfAvailableCores() {
+		final int cores;
+
+		if (System.getProperty(PROPERTY_MMX_NUMBER_OF_CORES) != null) {
+			cores = Integer.valueOf(System.getProperty(PROPERTY_MMX_NUMBER_OF_CORES));
+		} else if (LicenseFeatures.isPermitted("module-parallelisation")) {
+			cores = Math.max(1, Runtime.getRuntime().availableProcessors() / 2);
+		} else {
+			cores = 1;
+		}
+		return cores;
 	}
 }

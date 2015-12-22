@@ -59,13 +59,14 @@ public class LNGScenarioRunner {
 	@Nullable
 	private ScenarioInstance scenarioInstance;
 
-	public LNGScenarioRunner(@NonNull ExecutorService exectorService, @NonNull final LNGScenarioModel scenario, @NonNull final OptimiserSettings optimiserSettings, @Nullable final IRunnerHook runnerHook, final String... initialHints) {
+	public LNGScenarioRunner(@NonNull ExecutorService exectorService, @NonNull final LNGScenarioModel scenario, @NonNull final OptimiserSettings optimiserSettings,
+			@Nullable final IRunnerHook runnerHook, final String... initialHints) {
 		this(exectorService, scenario, null, optimiserSettings, LNGSchedulerJobUtils.createLocalEditingDomain(), runnerHook, initialHints);
 
 	}
 
-	public LNGScenarioRunner(@NonNull ExecutorService exectorService, @NonNull final LNGScenarioModel scenarioModel, @NonNull final OptimiserSettings optimiserSettings, @Nullable Module extraModule, @Nullable final IRunnerHook runnerHook,
-			final String... initialHints) {
+	public LNGScenarioRunner(@NonNull ExecutorService exectorService, @NonNull final LNGScenarioModel scenarioModel, @NonNull final OptimiserSettings optimiserSettings, @Nullable Module extraModule,
+			@Nullable final IRunnerHook runnerHook, final String... initialHints) {
 		this(exectorService, scenarioModel, null, optimiserSettings, LNGSchedulerJobUtils.createLocalEditingDomain(), extraModule, null, runnerHook, initialHints);
 	}
 
@@ -88,15 +89,16 @@ public class LNGScenarioRunner {
 				LNGTransformerHelper.HINT_OPTIMISE_LSO);
 
 		setRunnerHook(runnerHook);
-		
+
 		// FB: 1712 Switch for enabling run-all similarity optimisation. Needs better UI hook ups.
 		if (false) {
 			chainRunner = LNGScenarioChainBuilder.createRunAllSimilarityOptimisationChain(scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimiserSettings, executorService,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
 		} else {
-//			chainRunner = LNGScenarioChainBuilder.createStandardOptimisationChain(null, scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimiserSettings, executorService,
-//					LNGTransformerHelper.HINT_OPTIMISE_LSO);
-			chainRunner = LNGScenarioChainBuilder.createStandardOptimisationChain(null, scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimiserSettings, executorService, 1,
+			// chainRunner = LNGScenarioChainBuilder.createStandardOptimisationChain(null, scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimiserSettings,
+			// executorService,
+			// LNGTransformerHelper.HINT_OPTIMISE_LSO);
+			chainRunner = LNGScenarioChainBuilder.createStandardOptimisationChain(null, scenarioToOptimiserBridge.getDataTransformer(), scenarioToOptimiserBridge, optimiserSettings, executorService,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
 		}
 
