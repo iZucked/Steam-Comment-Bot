@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import com.mmxlabs.models.datetime.DateTimePackage;
+import com.mmxlabs.models.lng.parameters.ActionPlanSettings;
 import com.mmxlabs.models.lng.parameters.AnnealingSettings;
 import com.mmxlabs.models.lng.parameters.Argument;
 import com.mmxlabs.models.lng.parameters.Constraint;
@@ -113,6 +114,13 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * @generated
 	 */
 	private EClass similarityIntervalEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass actionPlanSettingsEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -428,6 +436,15 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getOptimiserSettings_ActionPlanSettings() {
+		return (EReference)optimiserSettingsEClass.getEStructuralFeatures().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public EClass getObjective() {
 		return objectiveEClass;
@@ -678,6 +695,42 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getActionPlanSettings() {
+		return actionPlanSettingsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getActionPlanSettings_TotalEvaluations() {
+		return (EAttribute)actionPlanSettingsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getActionPlanSettings_InRunEvaluations() {
+		return (EAttribute)actionPlanSettingsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getActionPlanSettings_SearchDepth() {
+		return (EAttribute)actionPlanSettingsEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getSimilarityMode() {
 		return similarityModeEEnum;
 	}
@@ -739,6 +792,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		createEReference(optimiserSettingsEClass, OPTIMISER_SETTINGS__SIMILARITY_SETTINGS);
 		createEReference(optimiserSettingsEClass, OPTIMISER_SETTINGS__SOLUTION_IMPROVEMENT_SETTINGS);
 		createEAttribute(optimiserSettingsEClass, OPTIMISER_SETTINGS__BUILD_ACTION_SETS);
+		createEReference(optimiserSettingsEClass, OPTIMISER_SETTINGS__ACTION_PLAN_SETTINGS);
 
 		objectiveEClass = createEClass(OBJECTIVE);
 		createEAttribute(objectiveEClass, OBJECTIVE__WEIGHT);
@@ -772,6 +826,11 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		similarityIntervalEClass = createEClass(SIMILARITY_INTERVAL);
 		createEAttribute(similarityIntervalEClass, SIMILARITY_INTERVAL__WEIGHT);
 		createEAttribute(similarityIntervalEClass, SIMILARITY_INTERVAL__THRESHOLD);
+
+		actionPlanSettingsEClass = createEClass(ACTION_PLAN_SETTINGS);
+		createEAttribute(actionPlanSettingsEClass, ACTION_PLAN_SETTINGS__TOTAL_EVALUATIONS);
+		createEAttribute(actionPlanSettingsEClass, ACTION_PLAN_SETTINGS__IN_RUN_EVALUATIONS);
+		createEAttribute(actionPlanSettingsEClass, ACTION_PLAN_SETTINGS__SEARCH_DEPTH);
 
 		// Create enums
 		similarityModeEEnum = createEEnum(SIMILARITY_MODE);
@@ -844,6 +903,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		initEReference(getOptimiserSettings_SimilaritySettings(), this.getSimilaritySettings(), null, "similaritySettings", null, 1, 1, OptimiserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOptimiserSettings_SolutionImprovementSettings(), this.getIndividualSolutionImprovementSettings(), null, "solutionImprovementSettings", null, 1, 1, OptimiserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getOptimiserSettings_BuildActionSets(), ecorePackage.getEBoolean(), "buildActionSets", null, 0, 1, OptimiserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getOptimiserSettings_ActionPlanSettings(), this.getActionPlanSettings(), null, "actionPlanSettings", null, 1, 1, OptimiserSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(objectiveEClass, Objective.class, "Objective", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getObjective_Weight(), ecorePackage.getEDouble(), "weight", null, 1, 1, Objective.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -878,6 +938,11 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 		initEAttribute(getSimilarityInterval_Weight(), ecorePackage.getEInt(), "weight", null, 1, 1, SimilarityInterval.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSimilarityInterval_Threshold(), ecorePackage.getEInt(), "threshold", null, 1, 1, SimilarityInterval.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(actionPlanSettingsEClass, ActionPlanSettings.class, "ActionPlanSettings", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getActionPlanSettings_TotalEvaluations(), ecorePackage.getEInt(), "totalEvaluations", null, 1, 1, ActionPlanSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getActionPlanSettings_InRunEvaluations(), ecorePackage.getEInt(), "inRunEvaluations", null, 1, 1, ActionPlanSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getActionPlanSettings_SearchDepth(), ecorePackage.getEInt(), "searchDepth", null, 1, 1, ActionPlanSettings.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		// Initialize enums and add enum literals
 		initEEnum(similarityModeEEnum, SimilarityMode.class, "SimilarityMode");
 		addEEnumLiteral(similarityModeEEnum, SimilarityMode.ALL);
@@ -888,6 +953,26 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 
 		// Create resource
 		createResource(eNS_URI);
+
+		// Create annotations
+		// http://www.minimaxlabs.com/license/features/required
+		createRequiredAnnotations();
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.minimaxlabs.com/license/features/required</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createRequiredAnnotations() {
+		String source = "http://www.minimaxlabs.com/license/features/required";	
+		addAnnotation
+		  (getUserSettings_BuildActionSets(), 
+		   source, 
+		   new String[] {
+			 "module", "actionplan"
+		   });
 	}
 
 } //ParametersPackageImpl

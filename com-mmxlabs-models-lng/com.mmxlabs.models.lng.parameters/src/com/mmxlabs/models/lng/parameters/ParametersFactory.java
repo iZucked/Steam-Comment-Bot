@@ -123,6 +123,15 @@ public interface ParametersFactory extends EFactory {
 	SimilarityInterval createSimilarityInterval();
 
 	/**
+	 * Returns a new object of class '<em>Action Plan Settings</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Action Plan Settings</em>'.
+	 * @generated
+	 */
+	ActionPlanSettings createActionPlanSettings();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

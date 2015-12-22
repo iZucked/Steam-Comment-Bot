@@ -205,6 +205,7 @@ public interface UserSettings extends EObject {
 	 * @see #setBuildActionSets(boolean)
 	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getUserSettings_BuildActionSets()
 	 * @model default="false"
+	 *        annotation="http://www.minimaxlabs.com/license/features/required module='actionplan'"
 	 * @generated
 	 */
 	boolean isBuildActionSets();

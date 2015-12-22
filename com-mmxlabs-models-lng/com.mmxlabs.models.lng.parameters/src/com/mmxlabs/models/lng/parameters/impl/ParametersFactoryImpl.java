@@ -82,6 +82,7 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 			case ParametersPackage.ARGUMENT: return createArgument();
 			case ParametersPackage.SIMILARITY_SETTINGS: return createSimilaritySettings();
 			case ParametersPackage.SIMILARITY_INTERVAL: return createSimilarityInterval();
+			case ParametersPackage.ACTION_PLAN_SETTINGS: return createActionPlanSettings();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -232,6 +233,16 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	public SimilarityInterval createSimilarityInterval() {
 		SimilarityIntervalImpl similarityInterval = new SimilarityIntervalImpl();
 		return similarityInterval;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ActionPlanSettings createActionPlanSettings() {
+		ActionPlanSettingsImpl actionPlanSettings = new ActionPlanSettingsImpl();
+		return actionPlanSettings;
 	}
 
 	/**

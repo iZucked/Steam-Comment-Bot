@@ -189,6 +189,7 @@ public class OptimiserSettingsItemProvider
 			childrenFeatures.add(ParametersPackage.Literals.OPTIMISER_SETTINGS__ARGUMENTS);
 			childrenFeatures.add(ParametersPackage.Literals.OPTIMISER_SETTINGS__SIMILARITY_SETTINGS);
 			childrenFeatures.add(ParametersPackage.Literals.OPTIMISER_SETTINGS__SOLUTION_IMPROVEMENT_SETTINGS);
+			childrenFeatures.add(ParametersPackage.Literals.OPTIMISER_SETTINGS__ACTION_PLAN_SETTINGS);
 		}
 		return childrenFeatures;
 	}
@@ -257,6 +258,7 @@ public class OptimiserSettingsItemProvider
 			case ParametersPackage.OPTIMISER_SETTINGS__ARGUMENTS:
 			case ParametersPackage.OPTIMISER_SETTINGS__SIMILARITY_SETTINGS:
 			case ParametersPackage.OPTIMISER_SETTINGS__SOLUTION_IMPROVEMENT_SETTINGS:
+			case ParametersPackage.OPTIMISER_SETTINGS__ACTION_PLAN_SETTINGS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -308,6 +310,11 @@ public class OptimiserSettingsItemProvider
 			(createChildParameter
 				(ParametersPackage.Literals.OPTIMISER_SETTINGS__SOLUTION_IMPROVEMENT_SETTINGS,
 				 ParametersFactory.eINSTANCE.createIndividualSolutionImprovementSettings()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ParametersPackage.Literals.OPTIMISER_SETTINGS__ACTION_PLAN_SETTINGS,
+				 ParametersFactory.eINSTANCE.createActionPlanSettings()));
 	}
 
 }

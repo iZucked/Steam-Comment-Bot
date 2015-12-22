@@ -342,6 +342,29 @@ public class ParametersItemProviderAdapterFactory extends ParametersAdapterFacto
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.parameters.ActionPlanSettings} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ActionPlanSettingsItemProvider actionPlanSettingsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.parameters.ActionPlanSettings}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createActionPlanSettingsAdapter() {
+		if (actionPlanSettingsItemProvider == null) {
+			actionPlanSettingsItemProvider = new ActionPlanSettingsItemProvider(this);
+		}
+
+		return actionPlanSettingsItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -486,6 +509,7 @@ public class ParametersItemProviderAdapterFactory extends ParametersAdapterFacto
 		if (argumentItemProvider != null) argumentItemProvider.dispose();
 		if (similaritySettingsItemProvider != null) similaritySettingsItemProvider.dispose();
 		if (similarityIntervalItemProvider != null) similarityIntervalItemProvider.dispose();
+		if (actionPlanSettingsItemProvider != null) actionPlanSettingsItemProvider.dispose();
 	}
 
 }

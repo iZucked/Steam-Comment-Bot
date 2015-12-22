@@ -3,6 +3,7 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.parameters.impl;
+import com.mmxlabs.models.lng.parameters.ActionPlanSettings;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -47,6 +48,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#getSimilaritySettings <em>Similarity Settings</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#getSolutionImprovementSettings <em>Solution Improvement Settings</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#isBuildActionSets <em>Build Action Sets</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.impl.OptimiserSettingsImpl#getActionPlanSettings <em>Action Plan Settings</em>}</li>
  * </ul>
  *
  * @generated
@@ -221,6 +223,16 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * @ordered
 	 */
 	protected boolean buildActionSets = BUILD_ACTION_SETS_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getActionPlanSettings() <em>Action Plan Settings</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getActionPlanSettings()
+	 * @generated
+	 * @ordered
+	 */
+	protected ActionPlanSettings actionPlanSettings;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -574,6 +586,49 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public ActionPlanSettings getActionPlanSettings() {
+		return actionPlanSettings;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetActionPlanSettings(ActionPlanSettings newActionPlanSettings, NotificationChain msgs) {
+		ActionPlanSettings oldActionPlanSettings = actionPlanSettings;
+		actionPlanSettings = newActionPlanSettings;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ParametersPackage.OPTIMISER_SETTINGS__ACTION_PLAN_SETTINGS, oldActionPlanSettings, newActionPlanSettings);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setActionPlanSettings(ActionPlanSettings newActionPlanSettings) {
+		if (newActionPlanSettings != actionPlanSettings) {
+			NotificationChain msgs = null;
+			if (actionPlanSettings != null)
+				msgs = ((InternalEObject)actionPlanSettings).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ParametersPackage.OPTIMISER_SETTINGS__ACTION_PLAN_SETTINGS, null, msgs);
+			if (newActionPlanSettings != null)
+				msgs = ((InternalEObject)newActionPlanSettings).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ParametersPackage.OPTIMISER_SETTINGS__ACTION_PLAN_SETTINGS, null, msgs);
+			msgs = basicSetActionPlanSettings(newActionPlanSettings, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ParametersPackage.OPTIMISER_SETTINGS__ACTION_PLAN_SETTINGS, newActionPlanSettings, newActionPlanSettings));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -591,6 +646,8 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 				return basicSetSimilaritySettings(null, msgs);
 			case ParametersPackage.OPTIMISER_SETTINGS__SOLUTION_IMPROVEMENT_SETTINGS:
 				return basicSetSolutionImprovementSettings(null, msgs);
+			case ParametersPackage.OPTIMISER_SETTINGS__ACTION_PLAN_SETTINGS:
+				return basicSetActionPlanSettings(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -627,6 +684,8 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 				return getSolutionImprovementSettings();
 			case ParametersPackage.OPTIMISER_SETTINGS__BUILD_ACTION_SETS:
 				return isBuildActionSets();
+			case ParametersPackage.OPTIMISER_SETTINGS__ACTION_PLAN_SETTINGS:
+				return getActionPlanSettings();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -679,6 +738,9 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 			case ParametersPackage.OPTIMISER_SETTINGS__BUILD_ACTION_SETS:
 				setBuildActionSets((Boolean)newValue);
 				return;
+			case ParametersPackage.OPTIMISER_SETTINGS__ACTION_PLAN_SETTINGS:
+				setActionPlanSettings((ActionPlanSettings)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -727,6 +789,9 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 			case ParametersPackage.OPTIMISER_SETTINGS__BUILD_ACTION_SETS:
 				setBuildActionSets(BUILD_ACTION_SETS_EDEFAULT);
 				return;
+			case ParametersPackage.OPTIMISER_SETTINGS__ACTION_PLAN_SETTINGS:
+				setActionPlanSettings((ActionPlanSettings)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -763,6 +828,8 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 				return solutionImprovementSettings != null;
 			case ParametersPackage.OPTIMISER_SETTINGS__BUILD_ACTION_SETS:
 				return buildActionSets != BUILD_ACTION_SETS_EDEFAULT;
+			case ParametersPackage.OPTIMISER_SETTINGS__ACTION_PLAN_SETTINGS:
+				return actionPlanSettings != null;
 		}
 		return super.eIsSet(featureID);
 	}

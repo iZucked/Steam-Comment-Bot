@@ -128,6 +128,10 @@ public class ParametersAdapterFactory extends AdapterFactoryImpl {
 				return createSimilarityIntervalAdapter();
 			}
 			@Override
+			public Adapter caseActionPlanSettings(ActionPlanSettings object) {
+				return createActionPlanSettingsAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -310,6 +314,20 @@ public class ParametersAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSimilarityIntervalAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.parameters.ActionPlanSettings <em>Action Plan Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.parameters.ActionPlanSettings
+	 * @generated
+	 */
+	public Adapter createActionPlanSettingsAdapter() {
 		return null;
 	}
 

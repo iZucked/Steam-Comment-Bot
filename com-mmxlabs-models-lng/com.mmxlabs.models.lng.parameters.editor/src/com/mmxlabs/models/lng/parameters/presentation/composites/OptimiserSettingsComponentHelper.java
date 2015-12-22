@@ -97,6 +97,7 @@ public class OptimiserSettingsComponentHelper extends BaseComponentHelper {
 		add_similaritySettingsEditor(detailComposite, topClass);
 		add_solutionImprovementSettingsEditor(detailComposite, topClass);
 		add_buildActionSetsEditor(detailComposite, topClass);
+		add_actionPlanSettingsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the objectives feature on OptimiserSettings
@@ -190,5 +191,14 @@ public class OptimiserSettingsComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_buildActionSetsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ParametersPackage.Literals.OPTIMISER_SETTINGS__BUILD_ACTION_SETS));
+	}
+
+	/**
+	 * Create the editor for the actionPlanSettings feature on OptimiserSettings
+	 *
+	 * @generated
+	 */
+	protected void add_actionPlanSettingsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ParametersPackage.Literals.OPTIMISER_SETTINGS__ACTION_PLAN_SETTINGS));
 	}
 }

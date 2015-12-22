@@ -28,6 +28,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getSimilaritySettings <em>Similarity Settings</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getSolutionImprovementSettings <em>Solution Improvement Settings</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#isBuildActionSets <em>Build Action Sets</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getActionPlanSettings <em>Action Plan Settings</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getOptimiserSettings()
@@ -290,6 +291,32 @@ public interface OptimiserSettings extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setBuildActionSets(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Action Plan Settings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Action Plan Settings</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Action Plan Settings</em>' containment reference.
+	 * @see #setActionPlanSettings(ActionPlanSettings)
+	 * @see com.mmxlabs.models.lng.parameters.ParametersPackage#getOptimiserSettings_ActionPlanSettings()
+	 * @model containment="true" required="true"
+	 * @generated
+	 */
+	ActionPlanSettings getActionPlanSettings();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getActionPlanSettings <em>Action Plan Settings</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Action Plan Settings</em>' containment reference.
+	 * @see #getActionPlanSettings()
+	 * @generated
+	 */
+	void setActionPlanSettings(ActionPlanSettings value);
 
 } // end of  OptimiserSettings
 

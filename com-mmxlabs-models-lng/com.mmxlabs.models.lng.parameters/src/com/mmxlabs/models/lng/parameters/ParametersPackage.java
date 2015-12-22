@@ -362,13 +362,22 @@ public interface ParametersPackage extends EPackage {
 	int OPTIMISER_SETTINGS__BUILD_ACTION_SETS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
 
 	/**
+	 * The feature id for the '<em><b>Action Plan Settings</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPTIMISER_SETTINGS__ACTION_PLAN_SETTINGS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+
+	/**
 	 * The number of structural features of the '<em>Optimiser Settings</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISER_SETTINGS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+	int OPTIMISER_SETTINGS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ObjectiveImpl <em>Objective</em>}' class.
@@ -714,6 +723,52 @@ public interface ParametersPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.impl.ActionPlanSettingsImpl <em>Action Plan Settings</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.parameters.impl.ActionPlanSettingsImpl
+	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getActionPlanSettings()
+	 * @generated
+	 */
+	int ACTION_PLAN_SETTINGS = 11;
+
+	/**
+	 * The feature id for the '<em><b>Total Evaluations</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTION_PLAN_SETTINGS__TOTAL_EVALUATIONS = 0;
+
+	/**
+	 * The feature id for the '<em><b>In Run Evaluations</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTION_PLAN_SETTINGS__IN_RUN_EVALUATIONS = 1;
+
+	/**
+	 * The feature id for the '<em><b>Search Depth</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTION_PLAN_SETTINGS__SEARCH_DEPTH = 2;
+
+	/**
+	 * The number of structural features of the '<em>Action Plan Settings</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTION_PLAN_SETTINGS_FEATURE_COUNT = 3;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.parameters.SimilarityMode <em>Similarity Mode</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -721,7 +776,7 @@ public interface ParametersPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getSimilarityMode()
 	 * @generated
 	 */
-	int SIMILARITY_MODE = 11;
+	int SIMILARITY_MODE = 12;
 
 
 	/**
@@ -994,6 +1049,17 @@ public interface ParametersPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getOptimiserSettings_BuildActionSets();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#getActionPlanSettings <em>Action Plan Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Action Plan Settings</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.OptimiserSettings#getActionPlanSettings()
+	 * @see #getOptimiserSettings()
+	 * @generated
+	 */
+	EReference getOptimiserSettings_ActionPlanSettings();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.Objective <em>Objective</em>}'.
@@ -1275,6 +1341,49 @@ public interface ParametersPackage extends EPackage {
 	EAttribute getSimilarityInterval_Threshold();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.parameters.ActionPlanSettings <em>Action Plan Settings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Action Plan Settings</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.ActionPlanSettings
+	 * @generated
+	 */
+	EClass getActionPlanSettings();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.ActionPlanSettings#getTotalEvaluations <em>Total Evaluations</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Total Evaluations</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.ActionPlanSettings#getTotalEvaluations()
+	 * @see #getActionPlanSettings()
+	 * @generated
+	 */
+	EAttribute getActionPlanSettings_TotalEvaluations();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.ActionPlanSettings#getInRunEvaluations <em>In Run Evaluations</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>In Run Evaluations</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.ActionPlanSettings#getInRunEvaluations()
+	 * @see #getActionPlanSettings()
+	 * @generated
+	 */
+	EAttribute getActionPlanSettings_InRunEvaluations();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.parameters.ActionPlanSettings#getSearchDepth <em>Search Depth</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Search Depth</em>'.
+	 * @see com.mmxlabs.models.lng.parameters.ActionPlanSettings#getSearchDepth()
+	 * @see #getActionPlanSettings()
+	 * @generated
+	 */
+	EAttribute getActionPlanSettings_SearchDepth();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.parameters.SimilarityMode <em>Similarity Mode</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1515,6 +1624,14 @@ public interface ParametersPackage extends EPackage {
 		EAttribute OPTIMISER_SETTINGS__BUILD_ACTION_SETS = eINSTANCE.getOptimiserSettings_BuildActionSets();
 
 		/**
+		 * The meta object literal for the '<em><b>Action Plan Settings</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference OPTIMISER_SETTINGS__ACTION_PLAN_SETTINGS = eINSTANCE.getOptimiserSettings_ActionPlanSettings();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.ObjectiveImpl <em>Objective</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1735,6 +1852,40 @@ public interface ParametersPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SIMILARITY_INTERVAL__THRESHOLD = eINSTANCE.getSimilarityInterval_Threshold();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.impl.ActionPlanSettingsImpl <em>Action Plan Settings</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.parameters.impl.ActionPlanSettingsImpl
+		 * @see com.mmxlabs.models.lng.parameters.impl.ParametersPackageImpl#getActionPlanSettings()
+		 * @generated
+		 */
+		EClass ACTION_PLAN_SETTINGS = eINSTANCE.getActionPlanSettings();
+
+		/**
+		 * The meta object literal for the '<em><b>Total Evaluations</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ACTION_PLAN_SETTINGS__TOTAL_EVALUATIONS = eINSTANCE.getActionPlanSettings_TotalEvaluations();
+
+		/**
+		 * The meta object literal for the '<em><b>In Run Evaluations</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ACTION_PLAN_SETTINGS__IN_RUN_EVALUATIONS = eINSTANCE.getActionPlanSettings_InRunEvaluations();
+
+		/**
+		 * The meta object literal for the '<em><b>Search Depth</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ACTION_PLAN_SETTINGS__SEARCH_DEPTH = eINSTANCE.getActionPlanSettings_SearchDepth();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.parameters.SimilarityMode <em>Similarity Mode</em>}' enum.
