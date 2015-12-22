@@ -240,12 +240,7 @@ public class BagMover extends BreakdownOptimiserMover {
 			}
 			if (failedEvaluation) {
 				// Failed to to find valid state at the end of the search depth. Record a limited state and exit
-				final JobState jobState = new JobState(new Sequences(currentRawSequences), changeSets, new LinkedList<Change>(changes), new LinkedList<Difference>(), searchData);
-
-				jobState.setMetric(MetricType.PNL, currentMetrics[MetricType.PNL.ordinal()], 0, 0);
-				jobState.setMetric(MetricType.LATENESS, currentMetrics[MetricType.LATENESS.ordinal()], 0, 0);
-				jobState.setMetric(MetricType.CAPACITY, currentMetrics[MetricType.CAPACITY.ordinal()], 0, 0);
-				jobState.setMetric(MetricType.COMPULSARY_SLOT, currentMetrics[MetricType.COMPULSARY_SLOT.ordinal()], 0, 0);
+				final JobState jobState = new JobState(searchData);
 
 				jobState.mode = JobStateMode.LIMITED;
 				newStates.add(jobState);

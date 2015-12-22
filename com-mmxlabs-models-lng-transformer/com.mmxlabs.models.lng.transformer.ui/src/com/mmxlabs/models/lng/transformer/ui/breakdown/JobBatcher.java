@@ -28,13 +28,22 @@ public class JobBatcher {
 	public List<Future<Collection<JobState>>> getNextFutures(Injector injector, SimilarityState similarityState, JobStore jobStore, IncrementingRandomSeed incrementingRandomSeed) {
 		if (index < states.size()) {
 			List<Future<Collection<JobState>>> futures = new LinkedList<>();
-			for (int i = index; i < Math.min(i + this.batchSize, states.size()); i++) {
+			int incrementedBatchSize = index + this.batchSize;
+			for (int i = index; i < Math.min(incrementedBatchSize, states.size()); i++) {
 				futures.add(executorService.submit(new ChangeSetFinderJob(injector, states.get(i), similarityState, jobStore, incrementingRandomSeed.getSeed(), depthStart, depthEnd)));
 				index++;
 			}
 			return futures;
 		} else {
 			return Collections.<Future<Collection<JobState>>>emptyList();
+		}
+	}
+	
+	public boolean hasNext() {
+		if (index < states.size()) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 }

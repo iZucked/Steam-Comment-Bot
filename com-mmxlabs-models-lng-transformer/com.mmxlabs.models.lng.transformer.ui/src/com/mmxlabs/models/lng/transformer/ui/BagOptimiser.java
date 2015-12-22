@@ -256,7 +256,9 @@ public class BagOptimiser {
 					logInitialPopulation(initialPopulation);
 					allLimitedStates.addAll(initialPopulation);
 					if (initialPopulation.isEmpty()) {
-						break;
+						initialDepthLimitStart = initialDepthLimitEnd;
+						initialDepthLimitEnd++;
+						continue;
 					}
 
 					if (DEBUG) {
@@ -313,7 +315,7 @@ public class BagOptimiser {
 							System.out.println("constraint failed evaluations [after savedPopulation] : " + actionSetOptimisationData.actualConstraintEvaluations);
 							System.out.println("pnl failed evaluations [after savedPopulation] : " + actionSetOptimisationData.actualPNLEvaluations);
 						}
-						if (finalPopulation.size() > maxLeafs) { // Do not commit - move up
+						if (finalPopulation.size() > maxLeafs) {
 							break;
 						}
 					}
@@ -915,8 +917,10 @@ public class BagOptimiser {
 		final JobBatcher jobBatcher = new JobBatcher(executorService, sortedJobStates, 100, depthStart, depthEnd);
 
 		final List<JobState> states = new LinkedList<>();
-		List<Future<Collection<JobState>>> futures = jobBatcher.getNextFutures(injector, similarityState, jobStore, incrementingRandomSeed);
-		while (!futures.isEmpty() && !shouldTerminateInRun(actionSetOptimisationData) && !shouldTerminate(actionSetOptimisationData)) {
+		List<Future<Collection<JobState>>> futures;
+		while (jobBatcher.hasNext() && !shouldTerminateInRun(actionSetOptimisationData) && !shouldTerminate(actionSetOptimisationData)) {
+			long start = System.currentTimeMillis();
+			futures = jobBatcher.getNextFutures(injector, similarityState, jobStore, incrementingRandomSeed);
 			// Collect all results
 			for (final Future<Collection<JobState>> f : futures) {
 				try {
@@ -939,8 +943,9 @@ public class BagOptimiser {
 				} catch (final ExecutionException e) {
 					throw new RuntimeException(e);
 				}
-				futures = jobBatcher.getNextFutures(injector, similarityState, jobStore, incrementingRandomSeed);
 			}
+			long end = System.currentTimeMillis();
+//			System.out.println("batch:"+(end-start));
 		}
 
 		return states;
@@ -1001,9 +1006,15 @@ public class BagOptimiser {
 
 	protected boolean shouldTerminate(ActionSetOptimisationData actionSetOptimisationData) {
 		if (actionSetOptimisationData.actualPNLEvaluations * 100 + actionSetOptimisationData.actualConstraintEvaluations > maxEvaluations) {
+			if (DEBUG) {
+				System.out.println("AS terminating: reached eval limit");
+			}
 			return true;
 		}
 		if (actionSetOptimisationData.getNumberOfLeafs() > maxLeafs) {
+			if (DEBUG) {
+				System.out.println("AS terminating: reached leaf limit");
+			}
 			return true;
 		}
 		return false;
@@ -1014,9 +1025,15 @@ public class BagOptimiser {
 			return false;
 		}
 		if (actionSetOptimisationData.currentRunPNLEvaluations * 100 + actionSetOptimisationData.currentRunConstraintEvaluations > maxEvaluationsInRun) {
+			if (DEBUG) {
+				System.out.println("AS terminating: reached eval limit in run");
+			}
 			return true;
 		}
 		if (actionSetOptimisationData.actualPNLEvaluations * 100 + actionSetOptimisationData.actualConstraintEvaluations > maxEvaluations) {
+			if (DEBUG) {
+				System.out.println("AS terminating: reached max eval limit");
+			}
 			return true;
 		}
 		return false;
