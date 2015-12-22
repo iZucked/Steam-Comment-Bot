@@ -45,11 +45,13 @@ import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.parameters.ActionPlanSettings;
 import com.mmxlabs.models.lng.parameters.Objective;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
+import com.mmxlabs.models.lng.parameters.SimilaritySettings;
 import com.mmxlabs.models.lng.parameters.UserSettings;
 import com.mmxlabs.models.lng.parameters.provider.ParametersItemProviderAdapterFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -409,11 +411,13 @@ public final class OptimisationHelper {
 								final YearMonth periodEnd = userSettings.getPeriodEnd();
 								if (periodStart != null && periodEnd != null) {
 									// 3 month window?
-									if (Months.between(periodStart, periodEnd) > 3) {
-										return ValidationStatus.error("Unable to run with Action Sets as the period range is greater than three months");
+									if (Months.between(periodStart, periodEnd) > 6) {
+										return ValidationStatus.error("Unable to run with Action Sets as the period range is greater than six months");
+									} else if (Months.between(periodStart, periodEnd) > 3 && userSettings.getSimilarityMode() == SimilarityMode.LOW) {
+										return ValidationStatus.error("Unable to run with Action Sets as the period range is too long for the low similarity setting (max 3 Months). Please try medium or high");
 									}
 								} else {
-									return ValidationStatus.error("Unable to run with Action Sets as the period range is greater than three months");
+									return ValidationStatus.error("Unable to run with Action Sets as the period range is greater than six months");
 								}
 							}
 						}
@@ -468,33 +472,46 @@ public final class OptimisationHelper {
 		similarityObjective.setEnabled(true);
 		similarityObjective.setWeight(1.0);
 
-		switch (userSettings.getSimilarityMode()) {
+		YearMonth periodStart = userSettings.getPeriodStart();
+		YearMonth periodEnd = userSettings.getPeriodEnd();
+		SimilarityMode similarityMode = userSettings.getSimilarityMode();
+		
+		switch (similarityMode) {
 		case ALL:
 			assert false;
 			break;
 		case HIGH:
-			optimiserSettings.setSimilaritySettings(ScenarioUtils.createHighSimilaritySettings());
+			optimiserSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.HIGH, periodStart, periodEnd));
 			optimiserSettings.getAnnealingSettings().setRestarting(true);
 			break;
 		case LOW:
-			optimiserSettings.setSimilaritySettings(ScenarioUtils.createLowSimilaritySettings());
+			optimiserSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.LOW, periodStart, periodEnd));
 			optimiserSettings.getAnnealingSettings().setRestarting(false);
+			if (shouldDisableActionSets(SimilarityMode.LOW, periodStart, periodEnd)) {
+				optimiserSettings.setBuildActionSets(false);
+			}
 			break;
 		case MEDIUM:
-			optimiserSettings.setSimilaritySettings(ScenarioUtils.createMediumSimilaritySettings());
+			optimiserSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.MEDIUM, periodStart, periodEnd));
 			optimiserSettings.getAnnealingSettings().setRestarting(false);
 			break;
 		case OFF:
-			optimiserSettings.setSimilaritySettings(ScenarioUtils.createOffSimilaritySettings());
+			optimiserSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.OFF, periodStart, periodEnd));
 			optimiserSettings.getAnnealingSettings().setRestarting(false);
 			optimiserSettings.setBuildActionSets(false);
 			break;
 		default:
 			assert false;
 			break;
-
 		}
 		
+		if (optimiserSettings.isBuildActionSets() && periodStart != null && periodEnd != null) {
+			ActionPlanSettings apSettings = ActionPlanUIParameters.getActionPlanSettings(similarityMode, periodStart, periodEnd);
+			optimiserSettings.setActionPlanSettings(apSettings);
+		} else {
+			optimiserSettings.setActionPlanSettings(ActionPlanUIParameters.getDefaultSettings());
+		}
+
 		// change epoch length
 		// TODO: make this better!
 		if (userSettings.isSetPeriodStart() && userSettings.isSetPeriodEnd()) {
@@ -524,8 +541,27 @@ public final class OptimisationHelper {
 				extender.extend(optimiserSettings, parameterMode);
 			}
 		}
+		
 
 		return optimiserSettings;
+	}
+
+	private static boolean shouldDisableActionSets(SimilarityMode mode, YearMonth periodStart, YearMonth periodEnd) {
+		if (mode == SimilarityMode.LOW && Months.between(periodStart, periodEnd) > 3) {
+			return true;
+		}
+		if (mode == SimilarityMode.OFF) {
+			return true;
+		}
+		return false;
+	}
+
+	private static SimilaritySettings createSimilaritySettings(SimilarityMode mode, YearMonth periodStart, YearMonth periodEnd) {
+		if (periodStart == null || periodEnd == null || mode == null) {
+			return SimilarityUIParameters.createOffSimilaritySettings();
+		} else {
+			return SimilarityUIParameters.getSimilaritySettings(mode, periodStart, periodEnd);
+		}
 	}
 
 	private static void resetDisabledFeatures(@NonNull final UserSettings copy) {
@@ -599,12 +635,15 @@ public final class OptimisationHelper {
 					final YearMonth periodEnd = to.getPeriodEnd();
 					if (periodStart != null && periodEnd != null) {
 						// 3 month window?
-						if (Months.between(periodStart, periodEnd) > 3) {
-							actionSetErrorMessage = "Unable to run with Action Sets as the period range is too big";
+						if (Months.between(periodStart, periodEnd) > 6) {
+							actionSetErrorMessage = "Unable to run with Action Sets as the period range is too long";
+							to.setBuildActionSets(false);
+						} else if (Months.between(periodStart, periodEnd) > 3 && to.getSimilarityMode() == SimilarityMode.LOW) {
+							actionSetErrorMessage = "Unable to run with Action Sets as the period range is too long for the low similarity setting. Please try medium or high";
 							to.setBuildActionSets(false);
 						}
 					} else {
-						actionSetErrorMessage = "Unable to run with Action Sets as the period range is too big";
+						actionSetErrorMessage = "Unable to run with Action Sets as the period range is too long";
 						to.setBuildActionSets(false);
 					}
 				}

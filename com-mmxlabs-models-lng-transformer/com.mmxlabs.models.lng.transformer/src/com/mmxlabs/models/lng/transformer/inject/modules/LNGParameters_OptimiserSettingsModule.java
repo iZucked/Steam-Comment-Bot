@@ -17,6 +17,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
+import com.mmxlabs.models.lng.parameters.ActionPlanSettings;
 import com.mmxlabs.models.lng.parameters.Objective;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.SimilaritySettings;
@@ -163,19 +164,25 @@ public class LNGParameters_OptimiserSettingsModule extends AbstractModule {
 	@Provides
 	@Named(ActionPlanModule.ACTION_PLAN_TOTAL_EVALUATIONS)
 	private int actionPlanTotalEvals() {
-		return 5_000_000;
+		ActionPlanSettings actionPlanSettings = settings.getActionPlanSettings();
+		assert actionPlanSettings != null;
+		return actionPlanSettings.getTotalEvaluations();
 	}
 
 	@Provides
 	@Named(ActionPlanModule.ACTION_PLAN_IN_RUN_EVALUATIONS)
 	private int actionPlanInRunEvals() {
-		return 1_500_000;
+		ActionPlanSettings actionPlanSettings = settings.getActionPlanSettings();
+		assert actionPlanSettings != null;
+		return actionPlanSettings.getInRunEvaluations();
 	}
 
 	@Provides
 	@Named(ActionPlanModule.ACTION_PLAN_MAX_SEARCH_DEPTH)
 	private int actionPlanInRunSearchDepth() {
-		return 5_000;
+		ActionPlanSettings actionPlanSettings = settings.getActionPlanSettings();
+		assert actionPlanSettings != null;
+		return actionPlanSettings.getSearchDepth();
 	}
 
 }
