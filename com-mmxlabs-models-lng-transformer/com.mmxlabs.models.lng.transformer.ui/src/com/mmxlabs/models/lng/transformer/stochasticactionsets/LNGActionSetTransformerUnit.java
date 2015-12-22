@@ -212,7 +212,7 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 					bagMover = new BagMover();
 					injector.injectMembers(bagMover);
 					threadCache.put(Thread.currentThread(), bagMover);
-					System.out.println("thread:" + Thread.currentThread().getId());
+					// System.out.println("thread:" + Thread.currentThread().getId());
 				}
 				return bagMover;
 			}
