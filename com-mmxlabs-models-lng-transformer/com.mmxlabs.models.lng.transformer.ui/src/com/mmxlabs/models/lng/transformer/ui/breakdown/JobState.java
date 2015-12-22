@@ -45,6 +45,17 @@ public class JobState implements Serializable{
 	private List<Difference> differencesList = null;
 	
 	private BreakdownSearchData breakdownSearchData = null;
+
+	public JobState(final BreakdownSearchData breakdownSearchData) {
+		this.setBreakdownSearchData(breakdownSearchData);
+		this.rawSequences = null;
+		this.changesAsList = null;
+		this.changesAsSet = null;
+		this.changeSetsAsList = null;
+		this.changeSetsAsSet = null;
+		this.hashCode = super.hashCode();
+	}
+
 	
 	public JobState(final ISequences rawSequences, final List<ChangeSet> changeSets, final List<Change> changes, final List<Difference> differencesList, final BreakdownSearchData breakdownSearchData) {
 		this(rawSequences, changeSets, changes, differencesList);
