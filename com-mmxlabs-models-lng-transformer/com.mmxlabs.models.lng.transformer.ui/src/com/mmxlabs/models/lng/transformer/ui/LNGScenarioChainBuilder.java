@@ -186,7 +186,7 @@ public class LNGScenarioChainBuilder {
 
 		if (System.getProperty(PROPERTY_MMX_NUMBER_OF_CORES) != null) {
 			cores = Integer.valueOf(System.getProperty(PROPERTY_MMX_NUMBER_OF_CORES));
-		} else if (LicenseFeatures.isPermitted("module-parallelisation")) {
+		} else if (LicenseFeatures.isPermitted("features:module-parallelisation")) {
 			cores = Math.max(1, Runtime.getRuntime().availableProcessors() / 2);
 		} else {
 			cores = 1;
