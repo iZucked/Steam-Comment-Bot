@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.transformer.its;
 
 import java.util.concurrent.ExecutorService;
