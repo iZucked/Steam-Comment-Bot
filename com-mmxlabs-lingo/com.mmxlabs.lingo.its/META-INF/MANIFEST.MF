@@ -40,7 +40,7 @@ Require-Bundle: org.junit;bundle-version="4.8.1",
  com.mmxlabs.lingo.reports;bundle-version="[3.11.0,3.11.1)",
  com.mmxlabs.models.lng.actuals.editor;bundle-version="[3.11.0,3.11.1)",
  com.mmxlabs.common.common-util,
- com.mmxlabs.models.lng.transformer.ui;bundle-version="[3.10.4,4.0.0)",
+ com.mmxlabs.models.lng.transformer.ui;bundle-version="[3.11.0,4.0.0)",
  com.mmxlabs.license.features
 Bundle-ClassPath: data/,
  .
