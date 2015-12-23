@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -68,6 +69,9 @@ public class ChainRunner implements IChainRunner {
 				}
 				r = link.run(new SubProgressMonitor(monitor, link.getProgressTicks()));
 				firstLink = false;
+				if (monitor.isCanceled()) {
+					throw new OperationCanceledException();
+				}
 			}
 		} finally {
 			monitor.done();

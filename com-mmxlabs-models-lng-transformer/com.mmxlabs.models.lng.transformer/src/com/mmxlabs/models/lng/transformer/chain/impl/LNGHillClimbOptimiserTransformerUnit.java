@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
@@ -127,15 +128,46 @@ public class LNGHillClimbOptimiserTransformerUnit implements ILNGStateTransforme
 					}
 
 					final List<NonNullPair<ISequences, Map<String, Object>>> output = new LinkedList<>();
-					for (final Future<IMultiStateResult> f : results) {
-						try {
+					try {
+						for (final Future<IMultiStateResult> f : results) {
 							final IMultiStateResult r = f.get();
 							output.add(r.getBestSolution());
-						} catch (final Exception e) {
-							LOG.error(e.getMessage(), e);
+
+							// Check monitor state
+							if (monitor.isCanceled()) {
+								throw new OperationCanceledException();
+							}
+						}
+					} catch (Throwable e) {
+						// An exception occurred, abort!
+
+						// Unwrap exception
+						if (e instanceof ExecutionException) {
+							e = e.getCause();
+						}
+
+						// Abort any other running jobs
+						for (final Future<IMultiStateResult> f : results) {
+							try {
+								f.cancel(true);
+							} catch (final Exception e2) {
+								LOG.error(e2.getMessage(), e2);
+							}
+						}
+
+						if (e instanceof OperationCanceledException) {
+							throw (OperationCanceledException) e;
+						} else {
+							throw new RuntimeException(e);
 						}
 					}
 
+					// Check monitor state
+					if (monitor.isCanceled()) {
+						throw new OperationCanceledException();
+					}
+
+					// Sort results
 					Collections.sort(output, new Comparator<NonNullPair<ISequences, Map<String, Object>>>() {
 
 						@Override
@@ -163,6 +195,10 @@ public class LNGHillClimbOptimiserTransformerUnit implements ILNGStateTransforme
 
 						}
 					});
+
+					if (output.isEmpty()) {
+						throw new IllegalStateException("No results generated");
+					}
 
 					return new MultiStateResult(output.get(0), output);
 				} finally {
@@ -290,6 +326,8 @@ public class LNGHillClimbOptimiserTransformerUnit implements ILNGStateTransforme
 
 			monitor.beginTask("", 100);
 			try {
+
+				// Main Optimisation Loop
 				while (!optimiser.isFinished()) {
 					if (monitor.isCanceled()) {
 						throw new OperationCanceledException();

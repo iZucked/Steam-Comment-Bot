@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
@@ -107,7 +108,7 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 				}
 
 				@Override
-				public IMultiStateResult call() {
+				public IMultiStateResult call() throws OperationCanceledException {
 					return t.run(m);
 				}
 			}
@@ -127,13 +128,43 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 					}
 
 					final List<NonNullPair<ISequences, Map<String, Object>>> output = new LinkedList<>();
-					for (final Future<IMultiStateResult> f : results) {
-						try {
+					try {
+						for (final Future<IMultiStateResult> f : results) {
 							final IMultiStateResult r = f.get();
 							output.add(r.getBestSolution());
-						} catch (final Exception e) {
-							LOG.error(e.getMessage(), e);
+
+							// Check monitor state
+							if (monitor.isCanceled()) {
+								throw new OperationCanceledException();
+							}
 						}
+					} catch (Throwable e) {
+						// An exception occurred, abort!
+
+						// Unwrap exception
+						if (e instanceof ExecutionException) {
+							e = e.getCause();
+						}
+
+						// Abort any other running jobs
+						for (final Future<IMultiStateResult> f : results) {
+							try {
+								f.cancel(true);
+							} catch (final Exception e2) {
+								LOG.error(e2.getMessage(), e2);
+							}
+						}
+
+						if (e instanceof OperationCanceledException) {
+							throw (OperationCanceledException) e;
+						} else {
+							throw new RuntimeException(e);
+						}
+					}
+
+					// Check monitor state
+					if (monitor.isCanceled()) {
+						throw new OperationCanceledException();
 					}
 
 					// Sort results
@@ -164,6 +195,10 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 
 						}
 					});
+
+					if (output.isEmpty()) {
+						throw new IllegalStateException("No results generated");
+					}
 
 					return new MultiStateResult(output.get(0), output);
 				} finally {
@@ -258,14 +293,8 @@ public class LNGLSOOptimiserTransformerUnit implements ILNGStateTransformerUnit 
 		return injector;
 	}
 
-	@SuppressWarnings("null")
-	@NonNull
-	public IOptimisationContext getOptimisationContext() {
-		return injector.getInstance(IOptimisationContext.class);
-	}
-
 	@Override
-	public IMultiStateResult run(final IProgressMonitor monitor) {
+	public IMultiStateResult run(@NonNull final IProgressMonitor monitor) {
 		final IRunnerHook runnerHook = dataTransformer.getRunnerHook();
 		if (runnerHook != null) {
 			runnerHook.beginPhase(IRunnerHook.PHASE_LSO, injector);
