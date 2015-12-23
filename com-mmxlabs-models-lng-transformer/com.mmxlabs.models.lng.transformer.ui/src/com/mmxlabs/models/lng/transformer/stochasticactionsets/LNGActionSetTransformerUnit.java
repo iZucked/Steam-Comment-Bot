@@ -86,6 +86,44 @@ public class LNGActionSetTransformerUnit implements ILNGStateTransformerUnit {
 		chainBuilder.addLink(link);
 		return link;
 	}
+	
+	@NonNull
+	public static IChainLink chainFake(final ChainBuilder chainBuilder, @NonNull final OptimiserSettings settings, @Nullable final ExecutorService executorService, final int progressTicks) {
+		final IChainLink link = new IChainLink() {
+			
+			private LNGActionSetTransformerUnit t;
+			
+			@Override
+			public IMultiStateResult run(final IProgressMonitor monitor) {
+				if (t == null) {
+					throw new IllegalStateException("#init has not been called");
+				}
+				t.run(monitor);
+				return t.getInputState();
+			}
+			
+			@Override
+			public void init(final IMultiStateResult inputState) {
+				final LNGDataTransformer dt = chainBuilder.getDataTransformer();
+				t = new LNGActionSetTransformerUnit(dt, settings, executorService, inputState, dt.getHints());
+			}
+			
+			@Override
+			public int getProgressTicks() {
+				return progressTicks;
+			}
+			
+			@Override
+			public IMultiStateResult getInputState() {
+				if (t == null) {
+					throw new IllegalStateException("#init has not been called");
+				}
+				return t.getInputState();
+			}
+		};
+		chainBuilder.addLink(link);
+		return link;
+	}
 
 	public static IChainLink export(final ChainBuilder chainBuilder, final int progressTicks, @NonNull final LNGScenarioToOptimiserBridge runner, @NonNull final ContainerProvider containerProvider) {
 		final IChainLink link = new IChainLink() {

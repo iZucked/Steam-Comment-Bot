@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.common.time.Months;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
@@ -91,7 +92,24 @@ public class LNGScenarioChainBuilder {
 
 			if (doActionSetPostOptimisation) {
 				// Run the action set post optimisation
-				LNGActionSetTransformerUnit.chain(builder, optimiserSettings, executorService, PROGRESS_ACTION_SET_OPTIMISATION);
+				boolean over3Months = false;
+				OptimisationRange range = optimiserSettings.getRange();
+				if (range != null) {
+					if (!range.isSetOptimiseAfter() || !range.isSetOptimiseBefore()) {
+						over3Months = true;
+
+					}
+					if (Months.between(range.getOptimiseAfter(), range.getOptimiseBefore()) > 3) {
+						over3Months = true;
+					}
+				}
+				if (over3Months) {
+					LNGActionSetTransformerUnit.chainFake(builder, optimiserSettings, executorService, PROGRESS_ACTION_SET_OPTIMISATION / 2);
+					LNGActionSetTransformerUnit.chain(builder, optimiserSettings, executorService, PROGRESS_ACTION_SET_OPTIMISATION / 2);
+				} else {
+					LNGActionSetTransformerUnit.chain(builder, optimiserSettings, executorService, PROGRESS_ACTION_SET_OPTIMISATION);
+
+				}
 				final ContainerProvider resultProvider;
 
 				if (childName != null) {
