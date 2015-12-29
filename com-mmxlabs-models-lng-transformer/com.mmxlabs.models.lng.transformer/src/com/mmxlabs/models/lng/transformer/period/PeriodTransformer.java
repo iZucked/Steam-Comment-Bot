@@ -36,7 +36,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import com.google.inject.Module;
 import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
@@ -59,6 +58,7 @@ import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
@@ -80,7 +80,6 @@ import com.mmxlabs.models.lng.spotmarkets.SpotAvailability;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
-import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.period.InclusionChecker.InclusionType;
 import com.mmxlabs.models.lng.transformer.period.InclusionChecker.PeriodRecord;
 import com.mmxlabs.models.lng.transformer.period.InclusionChecker.Position;
@@ -89,7 +88,6 @@ import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.util.SetUtils;
-import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 
 /***
  * TODO
@@ -259,7 +257,7 @@ public class PeriodTransformer {
 	 * @param spotMarketsModel
 	 */
 	private void updateSpotCharterMarkets(final IScenarioEntityMapping periodMapping, final List<Pair<CharterInMarket, Integer>> spotCharterUse, final CargoModel cargoModel,
-			final SpotMarketsModel spotMarketsModel, Collection<Cargo> cargoesToRemove) {
+			final SpotMarketsModel spotMarketsModel, final Collection<Cargo> cargoesToRemove) {
 		// Generate the list of all spot charter ins used by all the cargoes in the scenario. An option may appear multiple times.
 		final List<Pair<CharterInMarket, Integer>> total = getSpotCharterInUseForCargoes(cargoModel.getCargoes());
 		// Convert the list into an accumlated map count.
@@ -325,7 +323,7 @@ public class PeriodTransformer {
 		}
 
 		// Finally update the spot index on the cargoes.
-		for (Cargo cargo : cargoModel.getCargoes()) {
+		for (final Cargo cargo : cargoModel.getCargoes()) {
 			// Skip this cargo as it will be removed.
 			if (cargoesToRemove.contains(cargo)) {
 				continue;
@@ -338,7 +336,7 @@ public class PeriodTransformer {
 				if (spotIndex < 0) {
 					continue;
 				}
-				int[] m = mapping.get(charterInMarket);
+				final int[] m = mapping.get(charterInMarket);
 				if (m == null) {
 					continue;
 				}
@@ -511,7 +509,7 @@ public class PeriodTransformer {
 		}
 	}
 
-	/**
+`	/**
 	 * Scan through the slots processed and if still in use check for removed slots and cargoes which are required to e.g. complete P&L evaluation and bring them back in on dedicated round trip cargo
 	 * models.
 	 * 
@@ -954,12 +952,27 @@ public class PeriodTransformer {
 
 	public void updateEndConditions(@NonNull final VesselAvailability vesselAvailability, @NonNull final AssignableElement assignedObject,
 			@NonNull final Map<AssignableElement, PortVisit> endConditionMap) {
+
 		final PortVisit portVisit = endConditionMap.get(assignedObject);
 		assert portVisit != null;
 
 		if (inclusionChecker.getObjectInVesselAvailabilityRange(portVisit, vesselAvailability) == InclusionType.In) {
 			vesselAvailability.getEndAt().clear();
+			// Standard case
 			vesselAvailability.getEndAt().add(portVisit.getPort());
+			// Special case for charter outs start/end ports can differ
+			if (portVisit instanceof VesselEventVisit) {
+				final VesselEventVisit vesselEventVisit = (VesselEventVisit) portVisit;
+				final VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
+				if (vesselEvent instanceof CharterOutEvent) {
+					final CharterOutEvent charterOutEvent = (CharterOutEvent) vesselEvent;
+					if (charterOutEvent.isSetRelocateTo()) {
+						final Port port = charterOutEvent.getPort();
+						vesselAvailability.getEndAt().clear();
+						vesselAvailability.getEndAt().add(port);
+					}
+				}
+			}
 
 			vesselAvailability.setEndAfter(portVisit.getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
 			vesselAvailability.setEndBy(portVisit.getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
