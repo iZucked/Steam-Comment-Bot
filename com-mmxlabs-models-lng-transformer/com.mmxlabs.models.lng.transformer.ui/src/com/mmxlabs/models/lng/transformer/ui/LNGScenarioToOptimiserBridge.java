@@ -137,7 +137,7 @@ public class LNGScenarioToOptimiserBridge {
 			final CompoundCommand wrapper = LNGSchedulerJobUtils.createBlankCommand(0);
 			wrapper.append(IdentityCommand.INSTANCE);
 			optimiserEditingDomain.getCommandStack().execute(wrapper);
-			
+
 			optimiserDataTransformer = new LNGDataTransformer(this.optimiserScenario, optimiserSettings, hints, services);
 		} else {
 			optimiserDataTransformer = originalDataTransformer;
@@ -164,7 +164,7 @@ public class LNGScenarioToOptimiserBridge {
 			t.setInclusionChecker(new InclusionChecker());
 
 			final NonNullPair<LNGScenarioModel, EditingDomain> p = t.transform(originalScenario, optimiserSettings, periodMapping);
-			
+
 			// DEBUGGING - store sub scenario as a "fork"
 			if (false && scenarioInstance != null) {
 				try {
@@ -372,16 +372,16 @@ public class LNGScenarioToOptimiserBridge {
 						final Set<String> hints = LNGTransformerHelper.getHints(evalSettings);
 
 						// final LNGDataTransformer subTransformer = originalDataTransformer;
-						
+
 						// Always create a new transformer as we have problems with re-use and mapping newly created spot slots (and probably cargoes) between instances
 						ModelEntityMap originalModelEntityMap = the_originalModelEntityMap;
 						final LNGDataTransformer subTransformer;
-//						if (the_originalModelEntityMap instanceof CopiedModelEntityMap) {
-							subTransformer = new LNGDataTransformer(targetOriginalScenario, evalSettings, hints, originalDataTransformer.getModuleServices());
-							originalModelEntityMap = subTransformer.getModelEntityMap();
-//						} else {
-//							subTransformer = originalDataTransformer;
-//						}
+						// if (the_originalModelEntityMap instanceof CopiedModelEntityMap) {
+						subTransformer = new LNGDataTransformer(targetOriginalScenario, evalSettings, hints, originalDataTransformer.getModuleServices());
+						originalModelEntityMap = subTransformer.getModelEntityMap();
+						// } else {
+						// subTransformer = originalDataTransformer;
+						// }
 
 						Injector evaluationInjector2;
 						final Collection<IOptimiserInjectorService> services = subTransformer.getModuleServices();
@@ -479,5 +479,14 @@ public class LNGScenarioToOptimiserBridge {
 	@NonNull
 	public LNGDataTransformer getDataTransformer() {
 		return optimiserDataTransformer;
+	}
+
+	/**
+	 * Returns the scenario used by the optimisation. This method is intended for use in test cases rather than the main application.
+	 * 
+	 * @return
+	 */
+	public LNGScenarioModel getOptimiserScenario() {
+		return optimiserScenario;
 	}
 }
