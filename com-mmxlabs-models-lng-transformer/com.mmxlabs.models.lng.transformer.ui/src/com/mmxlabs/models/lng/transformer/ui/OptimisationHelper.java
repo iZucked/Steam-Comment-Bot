@@ -547,6 +547,9 @@ public final class OptimisationHelper {
 	}
 
 	private static boolean shouldDisableActionSets(SimilarityMode mode, YearMonth periodStart, YearMonth periodEnd) {
+		if (periodStart == null || periodEnd == null) {
+			return true;
+		}
 		if (mode == SimilarityMode.LOW && Months.between(periodStart, periodEnd) > 3) {
 			return true;
 		}
