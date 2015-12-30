@@ -29,7 +29,7 @@ public class PortModelFinder {
 				return port;
 			}
 		}
-		throw new IllegalArgumentException("Unknown port");
+		throw new IllegalArgumentException("Unknown port " + portName);
 	}
 
 	@NonNull

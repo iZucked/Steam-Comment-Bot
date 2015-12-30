@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.cargo.util;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -250,5 +251,11 @@ public class CargoModelBuilder {
 	@NonNull
 	public VesselAvailabilityMaker makeVesselAvailability(final @NonNull Vessel vessel) {
 		return new VesselAvailabilityMaker(this, vessel);
+	}
+
+	@NonNull
+	public CharterOutEventMaker makeCharterOutEvent(@NonNull String name, @NonNull LocalDateTime startAfter, @NonNull LocalDateTime startBy, @NonNull Port startPort) {
+
+		return new CharterOutEventMaker(name, startPort, startAfter, startBy, this);
 	}
 }
