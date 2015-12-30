@@ -9,8 +9,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.inject.Singleton;
-
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.AbstractModule;
@@ -34,7 +32,6 @@ public class FitnessFunctionInstantiatorModule extends AbstractModule {
 	}
 
 	@Provides
-	@Singleton
 	private List<IFitnessComponent> provideFitnessComponents(@NonNull final Injector injector, @NonNull final IFitnessHelper fitnessHelper,
 			@NonNull final IFitnessFunctionRegistry fitnessFunctionRegistry, @Named(ENABLED_FITNESS_NAMES) @NonNull final List<String> enabledFitnessNames,
 			final @NonNull IOptimisationData optimisationData) {

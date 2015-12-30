@@ -43,7 +43,7 @@ public class LinearFitnessEvaluatorModule extends AbstractModule {
 	}
 
 	@Provides
-//	@Singleton
+	// @Singleton
 	private IFitnessCombiner createFitnessCombiner(@Named(LINEAR_FITNESS_WEIGHTS_MAP) final Map<String, Double> weightsMap) {
 
 		final LinearFitnessCombiner combiner = new LinearFitnessCombiner();
@@ -52,7 +52,7 @@ public class LinearFitnessEvaluatorModule extends AbstractModule {
 	}
 
 	@Provides
-//	@Singleton
+	// @Singleton
 	private IFitnessEvaluator createFitnessEvaluator(@NonNull final Injector injector, @NonNull final IThresholder thresholder, @NonNull final InstrumentingMoveGenerator img,
 			@NonNull final List<IFitnessComponent> fitnessComponents, @NonNull final List<IEvaluationProcess> evaluationProcesses) {
 		// create a linear Fitness evaluator.
