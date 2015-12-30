@@ -47,7 +47,7 @@
 					<products>
 						<product>
 							<id>com.mmxlabs.lingo.app.product.id</id>
-							<attachId>com.mmxlabs.lingo.app.product</attachId>
+							<!--<attachId>com.mmxlabs.lingo.app.product</attachId>-->
 							<rootFolder>LiNGO</rootFolder>
 							<archiveFileName>LiNGO-${unqualifiedVersion}.${buildQualifier}</archiveFileName>
 							<rootFolders>
