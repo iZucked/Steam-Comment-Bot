@@ -501,7 +501,12 @@ public class LNGSchedulerJobUtils {
 
 	@NonNull
 	public static EditingDomain createLocalEditingDomain() {
-		final BasicCommandStack commandStack = new BasicCommandStack();
+		final BasicCommandStack commandStack = new BasicCommandStack() {
+			@Override
+			protected void handleError(Exception exception) {
+				throw new RuntimeException(exception);
+			}
+		};
 		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 		final EditingDomain ed = new AdapterFactoryEditingDomain(adapterFactory, commandStack);
