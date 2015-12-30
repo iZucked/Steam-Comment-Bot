@@ -10,7 +10,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.name.Named;
@@ -52,7 +51,7 @@ import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
  * @author hinton
  * 
  */
-public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceScheduler {
+public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequenceScheduler {
 	public final static String OPTIMISER_REEVALUATE = "enableReEvaluationInOptimiser";
 
 	@Inject
@@ -174,71 +173,14 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 	 */
 	private ISequences sequences;
 
-//	private ScheduleFitnessEvaluator evaluator;
-
-//	/**
-//	 * the fitness of the best result in the cycle
-//	 */
-//	private long bestValue;
-	/**
-	 * the best result in this cycle, or null if we have just started a cycle
-	 */
-	private ScheduledSequences bestResult;
-
 	private final TimeWindow defaultStartWindow = new TimeWindow(0, Integer.MAX_VALUE);
 
 	public EnumeratingSequenceScheduler() {
 		super();
-
-//		createLog();
-	}
-
-	@Override
-	public ScheduledSequences schedule(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
-		setSequences(sequences);
-		resetBest();
-
-//		startLogEntry(1);
-		prepare();
-		if (RE_EVALUATE_SOLUTION) {
-			enumerate(0, 0, null);
-		} else {
-			enumerate(0, 0, solution);
-		}
-//		endLogEntry();
-		if (RE_EVALUATE_SOLUTION) {
-			return reEvaluateAndGetBestResult(sequences, solution);
-		} else {
-			return getBestResult();
-		}
-	}
-
-	protected ScheduledSequences reEvaluateAndGetBestResult(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
-//		final long lastValue = getBestValue();
-		setSequences(sequences);
-		resetBest();
-
-//		startLogEntry(1);
-		prepare();
-		enumerate(0, 0, solution);
-//		endLogEntry();
-
-//		assert lastValue == getBestValue();
-
-		return getBestResult();
-	}
-
-	protected final void resetBest() {
-		this.bestResult = null;
-//		this.bestValue = Long.MAX_VALUE;
 	}
 
 	protected final void setSequences(final ISequences sequences) {
 		this.sequences = sequences;
-	}
-
-	protected ScheduledSequences getBestResult() {
-		return bestResult;
 	}
 
 	protected final void prepare() {
@@ -631,53 +573,40 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 		// separationPoints.add(arrivalTimes.length - 1);
 	}
 
-	/**
-	 * Recursively enumerate all the possibilities for arrival times from the given index (inclusive), evaluating each one and keeping the best.
-	 * 
-	 * A randomised subclass could override this and take a random decision at each step, until it has evaluated a certain number of possibilities.
-	 * 
-	 * @param index
-	 */
-	protected void enumerate(final int seq, final int index, @Nullable IAnnotatedSolution solution) {
-		if ((seq == arrivalTimes.length) && (index < sizes[seq])) {
-			evaluate(solution);
-			return;
-		} else if (seq == arrivalTimes.length) {
-			enumerate(seq + 1, 0, solution);
-			return;
-		}
+	// /**
+	// * Recursively enumerate all the possibilities for arrival times from the given index (inclusive), evaluating each one and keeping the best.
+	// *
+	// * A randomised subclass could override this and take a random decision at each step, until it has evaluated a certain number of possibilities.
+	// *
+	// * @param index
+	// */
+	// protected ScheduledSequences enumerate(final int seq, final int index, @Nullable IAnnotatedSolution solution) {
+	// if ((seq == arrivalTimes.length) && (index < sizes[seq])) {
+	// evaluate(solution);
+	// return;
+	// } else if (seq == arrivalTimes.length) {
+	// enumerate(seq + 1, 0, solution);
+	// return;
+	// }
+	//
+	// final int min = getMinArrivalTime(seq, index);
+	// final int max = getMaxArrivalTime(seq, index);
+	//
+	// for (int time = min; time <= max; time++) {
+	// arrivalTimes[seq][index] = time;
+	// enumerate(seq, index + 1, solution);
+	// }
+	// }
 
-		final int min = getMinArrivalTime(seq, index);
-		final int max = getMaxArrivalTime(seq, index);
-
-		for (int time = min; time <= max; time++) {
-			arrivalTimes[seq][index] = time;
-			enumerate(seq, index + 1, solution);
-		}
-	}
-
-	protected boolean evaluate(@Nullable final IAnnotatedSolution solution) {
+	protected ScheduledSequences evaluate(@Nullable final IAnnotatedSolution solution) {
 
 		final ScheduledSequences scheduledSequences = scheduleCalculator.schedule(sequences, arrivalTimes, solution);
 		if (scheduledSequences == null) {
-			return false;
+			return null;
 		}
 
-//		if (evaluator != null) {
-//			bestValue = evaluator.evaluateSchedule(sequences, scheduledSequences);
-//		} else {
-//			bestValue = 0;
-//		}
-
-//		logValue(bestValue);
-
-		bestResult = scheduledSequences;
-		return true;
+		return scheduledSequences;
 	}
-
-//	public long getBestValue() {
-//		return bestValue;
-//	}
 
 	/**
 	 * Gets the earliest time at which the current vessel can arrive at the given element, given the arrival times set for the previous elements.
@@ -720,16 +649,8 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 		} else if (useTimeWindow[seq][index] || actualisedTimeWindow[seq][index]) {
 			return windowStartTime[seq][index];
 		} else {
-			return Math.max(getMinArrivalTime(seq, index), // the latest we can
-															// arrive
-															// here is either
-															// window
-															// end
-															// time, or if we're
-															// late
-															// clamp to the
-															// earliest.
-					windowEndTime[seq][index]);
+			// the latest we can arrive here is either window end time, or if we're late clamp to the earliest.
+			return Math.max(getMinArrivalTime(seq, index), windowEndTime[seq][index]);
 		}
 	}
 
@@ -744,16 +665,7 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 		} else {
 			return ideal;
 		}
-
 	}
-
-//	public ScheduleFitnessEvaluator getScheduleEvaluator() {
-//		return evaluator;
-//	}
-//
-//	public void setScheduleEvaluator(final ScheduleFitnessEvaluator evaluator) {
-//		this.evaluator = evaluator;
-//	}
 
 	/**
 	 * Get the approximate number of combinations of arrival times for elements from firstIndex to lastIndex inclusive, up to maxValue

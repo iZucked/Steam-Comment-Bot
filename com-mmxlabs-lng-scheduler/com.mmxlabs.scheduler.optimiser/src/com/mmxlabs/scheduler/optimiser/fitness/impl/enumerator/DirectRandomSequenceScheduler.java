@@ -30,7 +30,6 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 		random = new Random(seed);
 
 		setSequences(sequences);
-		resetBest();
 
 		prepare();
 
@@ -44,19 +43,15 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 			evaluate(null);
 			return reEvaluateAndGetBestResult(sequences, solution);
 		} else {
-			evaluate(solution);
-			return getBestResult();
+			return evaluate(solution);
 		}
 	}
 
-	@Override
 	protected final ScheduledSequences reEvaluateAndGetBestResult(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
 
-//		final long lastValue = getBestValue();
 		random = new Random(seed);
 
 		setSequences(sequences);
-		resetBest();
 
 		prepare();
 
@@ -65,11 +60,7 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 			randomise(index);
 		}
 		synchroniseShipToShipBindings();
-		evaluate(solution);
-
-//		assert lastValue == getBestValue();
-
-		return getBestResult();
+		return evaluate(solution);
 	}
 
 	private void synchroniseShipToShipBindings() {
@@ -107,5 +98,4 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 			arrivalTimes[seq][0] = getMaxArrivalTimeForNextArrival(seq, 0);
 		}
 	}
-
 }
