@@ -49,6 +49,7 @@ Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.mmxlabs.lingo.its.internal.Activator
 Export-Package: com.mmxlabs.lingo.its.tests,
  com.mmxlabs.lingo.its.tests.category,
+ com.mmxlabs.lingo.its.tests.microcases,
  com.mmxlabs.lingo.its.uat.suite.cases,
  com.mmxlabs.lingo.its.uat.suite.testers,
  com.mmxlabs.lingo.its.uat.suite.utils

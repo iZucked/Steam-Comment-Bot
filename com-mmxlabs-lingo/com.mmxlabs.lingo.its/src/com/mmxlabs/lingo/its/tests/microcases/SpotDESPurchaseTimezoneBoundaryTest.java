@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2015
  * All rights reserved.
  */
-package com.mmxlabs.lingo.its.tests.csv.microcases;
+package com.mmxlabs.lingo.its.tests.microcases;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
