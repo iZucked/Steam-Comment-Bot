@@ -190,4 +190,9 @@ public class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 	public void setEditingDomain(final CommandProviderAwareEditingDomain editingDomain) {
 		this.editingDomain = editingDomain;
 	}
+	
+	@Override
+	protected void handleError(Exception exception) {
+		throw new RuntimeException(exception);
+	}
 }
