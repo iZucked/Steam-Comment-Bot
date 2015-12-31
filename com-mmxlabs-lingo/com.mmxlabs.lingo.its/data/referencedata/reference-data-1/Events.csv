@@ -1,0 +1,2 @@
+name,durationInDays,startAfter,startBy,allowedVessels,port,kind
+Dry Dock,30,2011-02-10 07:00,2011-02-20 07:00,Methane Heather Sally,Damietta,DryDockEvent

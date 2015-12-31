@@ -1,0 +1,5 @@
+name,minQuantity,maxQuantity,restrictedListsArePermissive,minCvValue,maxCvValue,entity,allowedPorts,restrictedContracts,restrictedPorts,priceInfo.priceExpression,priceInfo.kind,kind
+HH Sales,0,0,false,,,US,,,,7,ExpressionPriceParameters,SalesContract
+NBP Sales,0,0,false,,,Europe,,,,7,ExpressionPriceParameters,SalesContract
+TTF Sales,0,0,false,,,Europe,,,,7,ExpressionPriceParameters,SalesContract
+JCC Sales,0,0,false,,,Asia,,,,7,ExpressionPriceParameters,SalesContract

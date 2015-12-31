@@ -1,0 +1,66 @@
+name,otherNames,capabilities,timeZone,loadDuration,dischargeDuration,cvValue,defaultStartTime,allowCooldown,defaultWindowSize,atobviacCode,dataloyCode,location.country,location.lat,location.lon,location.kind,kind
+Ras Laffan,,LOAD,Asia/Qatar,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Yemen LNG,,LOAD,Asia/Aden,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Sakhalin-2,,LOAD,Asia/Sakhalin,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Point Fortin,,LOAD,America/Port_of_Spain,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Kenai LNG,,LOAD,America/Anchorage,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Karratha Gas Plant,,LOAD,Australia/Perth,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Darwin LNG,,LOAD,Australia/Darwin,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Hammerfest LNG,,LOAD,Europe/Oslo,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Sonatrach LNG,,LOAD,Africa/Algiers,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Bethioua,,LOAD,Africa/Algiers,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Punta Europa LNG,,LOAD,Africa/Malabo,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+SEGAS,,LOAD,Africa/Cairo,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Bonny Nigeria,,LOAD,Africa/Lagos,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Malaysia LNG,,LOAD,Asia/Kuching,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Brunei LNG,,LOAD,Asia/Brunei,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Arun LNG,,LOAD,Asia/Jakarta,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Bontang LNG,,LOAD,Asia/Makassar,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Tannguh,,LOAD,Asia/Jayapura,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Oman LNG,,LOAD,Asia/Muscat,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Idku LNG,,LOAD,Africa/Cairo,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+ADGAS LNG,,LOAD,Asia/Dubai,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Fluxys,,DISCHARGE,Europe/Brussels,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+South Hook LNG,,DISCHARGE,Europe/London,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Dragon LNG,,DISCHARGE,Europe/London,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Petrobras Guanabara LNG,,DISCHARGE,America/Sao_Paulo,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Petrobras Pecem LNG,,DISCHARGE,America/Fortaleza,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Canaport LNG,,DISCHARGE,America/Moncton,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Quintero Bay LNG,,DISCHARGE,America/Santiago,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Dapeng LNG,,DISCHARGE,Asia/Shanghai,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Fujian LNG,,DISCHARGE,Asia/Shanghai,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Chita LNG,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Hakodate LNG,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Barcelona LNG,,DISCHARGE,Europe/Madrid,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Bilbao LNG,,DISCHARGE,Europe/Madrid,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Huelva LNG,,DISCHARGE,Europe/Madrid,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Cartagena LNG,,DISCHARGE,Europe/Madrid,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Dominion Cove Point LNG,,DISCHARGE,America/New_York,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Northeast Gateway Deepwater Port,,DISCHARGE,America/Chicago,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Gulf Gateway Deepwater Port,,DISCHARGE,America/Chicago,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Southern LNG,,DISCHARGE,America/New_York,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Trunkline LNG,,DISCHARGE,America/Chicago,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+EcoElectrica LNG,,DISCHARGE,America/Puerto_Rico,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Sabine Pass LNG,,"LOAD,DISCHARGE",America/Chicago,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Freeport LNG,,DISCHARGE,America/Chicago,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Everett Marine Terminal,,DISCHARGE,America/New_York,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Aliaga,,DISCHARGE,Europe/Istanbul,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Costa Azul LNG Terminal,,LOAD,America/Mazatlan,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Dahej,,DISCHARGE,Asia/Calcutta,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Damietta,,LOAD,Africa/Cairo,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Elba Island,,DISCHARGE,America/Chicago,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Guangdong,,DISCHARGE,Asia/Shanghai,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Hazira - LNG Terminal,,DISCHARGE,Africa/Casablanca,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Incheon,,DISCHARGE,Asia/Pyongyang,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Mina Al Ahmadi,,DISCHARGE,Asia/Kuwait,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Montoir,,DISCHARGE,Europe/Paris,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Ogishima - Tokyo Gas LNG Berth,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Pascagoula,,DISCHARGE,America/Chicago,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Pyeongtaek,,DISCHARGE,Asia/Seoul,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Sakai,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Tong Yong,,DISCHARGE,Asia/Seoul,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Yung An,,DISCHARGE,Asia/Taipei,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Tobata,,DISCHARGE,Asia/Tokyo,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Bintulu,,LOAD,Asia/Kuching,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Lake Charles,,DISCHARGE,America/North_Dakota/New_Salem,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port
+Isle of Grain,,DISCHARGE,Europe/London,24,24,22.8,7,false,7,,,,0.0,0.0,Location,Port

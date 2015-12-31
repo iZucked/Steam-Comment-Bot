@@ -1,0 +1,7 @@
+timeCharterRate,startAfter,startBy,endAfter,endBy,vessel,startAt,endAt,startHeel.volumeAvailable,startHeel.cvValue,startHeel.pricePerMMBTU,startHeel.kind,kind,entity
+100000,02/01/2011 00:00,02/01/2011 00:00,,,Bluesky,Point Fortin,,,22.8,0,HeelOptions,VesselAvailability,Shipping
+,,20/12/2010 00:00,,,Methane Becki Anne,,,,22.8,0,HeelOptions,VesselAvailability,Shipping
+,,29/11/2010 00:00,,,Methane Heather Sally,,,,22.8,0,HeelOptions,VesselAvailability,Shipping
+,,30/12/2010 00:00,,,Methane Julia Louise,,,,22.8,0,HeelOptions,VesselAvailability,Shipping
+,,08/12/2010 00:00,,,Methane Lydon Volney,,,,22.8,0,HeelOptions,VesselAvailability,Shipping
+100000,,,,,Methane Princess,Point Fortin,,,22.8,0,HeelOptions,VesselAvailability,Shipping
