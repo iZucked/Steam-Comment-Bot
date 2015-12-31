@@ -195,6 +195,28 @@
 			</build>
 
 		</profile>
+		<profile>
+			<id>categoryBasedTests</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipse.tycho</groupId>
+						<artifactId>tycho-surefire-plugin</artifactId>
+						<version>${tycho.version}</version>
+						<configuration>
+							<providerHint>junit47</providerHint>
+          					<providerProperties>
+								<groups>com.mmxlabs.lingo.its.tests.category.${test.category}</groups>
+          					</providerProperties>
+							<failIfNoTests>false</failIfNoTests>
+							<!-- Only run Tests marked with the Quick Test annotation -->
+							<group>com.mmxlabs.lingo.its.tests.category.${test.category}</group>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+
+		</profile>
 
 		<!-- Enable this profile to run the its test independently of the full build. -->
 		<profile>
