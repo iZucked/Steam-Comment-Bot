@@ -249,13 +249,26 @@ public class CargoModelBuilder {
 	}
 
 	@NonNull
-	public VesselAvailabilityMaker makeVesselAvailability(final @NonNull Vessel vessel) {
-		return new VesselAvailabilityMaker(this, vessel);
+	public VesselAvailabilityMaker makeVesselAvailability(final @NonNull Vessel vessel, @NonNull final BaseLegalEntity entity) {
+		return new VesselAvailabilityMaker(this, vessel, entity);
 	}
 
 	@NonNull
-	public CharterOutEventMaker makeCharterOutEvent(@NonNull String name, @NonNull LocalDateTime startAfter, @NonNull LocalDateTime startBy, @NonNull Port startPort) {
+	public CharterOutEventMaker makeCharterOutEvent(@NonNull final String name, @NonNull final LocalDateTime startAfter, @NonNull final LocalDateTime startBy, @NonNull final Port startPort) {
 
 		return new CharterOutEventMaker(name, startPort, startAfter, startBy, this);
 	}
+
+	@NonNull
+	public DryDockEventMaker makeDryDockEvent(@NonNull final String name, @NonNull final LocalDateTime startAfter, @NonNull final LocalDateTime startBy, @NonNull final Port startPort) {
+
+		return new DryDockEventMaker(name, startPort, startAfter, startBy, this);
+	}
+
+	@NonNull
+	public MaintenanceEventMaker makeMaintenanceEvent(@NonNull final String name, @NonNull final LocalDateTime startAfter, @NonNull final LocalDateTime startBy, @NonNull final Port startPort) {
+
+		return new MaintenanceEventMaker(name, startPort, startAfter, startBy, this);
+	}
+
 }

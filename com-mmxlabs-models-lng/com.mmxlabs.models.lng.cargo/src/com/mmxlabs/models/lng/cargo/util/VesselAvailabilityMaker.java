@@ -12,6 +12,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.EndHeelOptions;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -24,12 +25,13 @@ public class VesselAvailabilityMaker {
 	@NonNull
 	private final VesselAvailability vesselAvailability;
 
-	public VesselAvailabilityMaker(@NonNull final CargoModelBuilder cargoModelBuilder, @NonNull Vessel vessel) {
+	public VesselAvailabilityMaker(@NonNull final CargoModelBuilder cargoModelBuilder, @NonNull Vessel vessel, @NonNull BaseLegalEntity entity) {
 		this.cargoModelBuilder = cargoModelBuilder;
 		this.vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
 		this.vesselAvailability.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
 		this.vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
 		this.vesselAvailability.setVessel(vessel);
+		this.vesselAvailability.setEntity(entity);
 	}
 
 	public VesselAvailabilityMaker withStartPort(@Nullable final Port port) {

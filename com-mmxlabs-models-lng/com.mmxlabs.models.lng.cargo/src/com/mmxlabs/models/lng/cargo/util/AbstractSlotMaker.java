@@ -124,6 +124,24 @@ public class AbstractSlotMaker<T extends AbstractSlotMaker<T>> {
 		return (T) this;
 	}
 
+	public T withWindowSize(@Nullable final Integer windowSizeInHours) {
+		if (windowSizeInHours != null) {
+			slot.setWindowSize(windowSizeInHours);
+		} else {
+			slot.unsetWindowSize();
+		}
+		return (T) this;
+	}
+
+	public T withWindowStartTime(@Nullable final Integer windowStartHourOfDay) {
+		if (windowStartHourOfDay != null) {
+			slot.setWindowStartTime(windowStartHourOfDay);
+		} else {
+			slot.unsetWindowStartTime();
+		}
+		return (T) this;
+	}
+
 	public T withLocked(final boolean locked) {
 		slot.setLocked(locked);
 		return (T) this;
