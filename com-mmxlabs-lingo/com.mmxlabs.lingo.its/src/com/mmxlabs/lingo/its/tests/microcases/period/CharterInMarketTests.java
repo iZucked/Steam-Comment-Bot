@@ -44,8 +44,9 @@ import com.mmxlabs.optimiser.core.ISequences;
 public class CharterInMarketTests extends AbstractPeriodTestCase {
 
 	/**
-	 * If we have two charter in markets and we remove all cargoes from one used option, make sure we reduce the market count and renumber spot index assignments.
-	 * This test removes cargo after the period.
+	 * If we have two charter in markets and we remove all cargoes from one used option, make sure we reduce the market count and renumber spot index assignments. This test removes cargo after the
+	 * period.
+	 * 
 	 * @throws Exception
 	 */
 	@Test
@@ -153,7 +154,7 @@ public class CharterInMarketTests extends AbstractPeriodTestCase {
 			Assert.assertEquals(1, optimiserScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(0).getSpotCharterCount());
 			// Stays the same
 			Assert.assertEquals(2, optimiserScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(1).getSpotCharterCount());
-			
+
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 
 			// Validate the initial sequences are valid
@@ -162,45 +163,46 @@ public class CharterInMarketTests extends AbstractPeriodTestCase {
 			executorService.shutdownNow();
 		}
 	}
-	
+
 	/**
-	 * If we have two charter in markets and we remove all cargoes from one used option, make sure we reduce the market count and renumber spot index assignments.
-	 * This test removes cargo before the period.
+	 * If we have two charter in markets and we remove all cargoes from one used option, make sure we reduce the market count and renumber spot index assignments. This test removes cargo before the
+	 * period.
+	 * 
 	 * @throws Exception
 	 */
 	@Test
 	@Category({ QuickTest.class, MicroTest.class })
 	public void testSpotCharterInMarketReduction_Before() throws Exception {
-		
+
 		// Load in the basic scenario from CSV
 		final LNGScenarioModel lngScenarioModel = importReferenceData();
-		
+
 		// Create finder and builder
 		final ScenarioModelFinder scenarioModelFinder = new ScenarioModelFinder(lngScenarioModel);
 		final ScenarioModelBuilder scenarioModelBuilder = new ScenarioModelBuilder(lngScenarioModel);
-		
+
 		final CommercialModelFinder commercialModelFinder = scenarioModelFinder.getCommercialModelFinder();
 		final FleetModelFinder fleetModelFinder = scenarioModelFinder.getFleetModelFinder();
 		final PortModelFinder portFinder = scenarioModelFinder.getPortModelFinder();
-		
+
 		final CargoModelBuilder cargoModelBuilder = scenarioModelBuilder.getCargoModelBuilder();
 		final FleetModelBuilder fleetModelBuilder = scenarioModelBuilder.getFleetModelBuilder();
 		final SpotMarketsModelBuilder spotMarketsModelBuilder = scenarioModelBuilder.getSpotMarketsModelBuilder();
-		
+
 		// Create the required basic elements
 		final VesselClass vesselClass = fleetModelFinder.findVesselClass("STEAM-145");
-		
+
 		final PricingModelBuilder pricingModelBuilder = scenarioModelBuilder.getPricingModelBuilder();
 		final CharterIndex charterIndex1 = pricingModelBuilder.createCharterIndex("CharterIndex1", "$/day", 50_000);
 		final CharterIndex charterIndex2 = pricingModelBuilder.createCharterIndex("CharterIndex2", "$/day", 100_000);
-		
+
 		final CharterInMarket charterInMarket_1 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 1", vesselClass, charterIndex1, 2);
 		final CharterInMarket charterInMarket_2 = spotMarketsModelBuilder.createCharterInMarket("CharterIn 2", vesselClass, charterIndex2, 2);
-		
+
 		final BaseLegalEntity entity = commercialModelFinder.findEntity("Shipping");
-		
+
 		// Construct the cargo scenario
-		
+
 		// Create cargo 1, cargo 2
 		final Cargo cargo1 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L1", LocalDate.of(2015, 12, 5), portFinder.findPort("Point Fortin"), null, entity, "5") //
@@ -212,7 +214,7 @@ public class CharterInMarketTests extends AbstractPeriodTestCase {
 				.withVesselAssignment(charterInMarket_1, 1, 0) //
 				.withAssignmentFlags(true, false) //
 				.build();
-		
+
 		final Cargo cargo2 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L2", LocalDate.of(2015, 12, 24), portFinder.findPort("Point Fortin"), null, entity, "5") //
 				.withVesselRestriction(vesselClass) //
@@ -222,7 +224,7 @@ public class CharterInMarketTests extends AbstractPeriodTestCase {
 				.withVesselAssignment(charterInMarket_1, 1, 1) //
 				.withAssignmentFlags(true, false) //
 				.build();
-		
+
 		// Create cargo 3, cargo 4
 		final Cargo cargo3 = cargoModelBuilder.makeCargo() //
 				.makeFOBPurchase("L3", LocalDate.of(2015, 4, 1), portFinder.findPort("Point Fortin"), null, entity, "5") //
@@ -234,33 +236,33 @@ public class CharterInMarketTests extends AbstractPeriodTestCase {
 				.withVesselAssignment(charterInMarket_1, 0, 0) //
 				.withAssignmentFlags(true, false) //
 				.build();
-		
+
 		// Create UserSettings, place cargo 2 load in boundary, cargo 2 discharge in period.
 		final UserSettings userSettings = ParametersFactory.eINSTANCE.createUserSettings();
 		userSettings.setBuildActionSets(false);
 		userSettings.setGenerateCharterOuts(false);
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(SimilarityMode.OFF);
-		
+
 		userSettings.setPeriodStart(YearMonth.of(2015, 11));
 		userSettings.setPeriodEnd(YearMonth.of(2016, 1));
-		
+
 		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null);
-		
+
 		// Generate internal data
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try {
-			
+
 			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, new TransformerExtensionTestBootstrapModule(), null,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
 			scenarioRunner.evaluateInitialState();
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
-			
+
 			// Check spot index has been updated
 			LNGScenarioModel optimiserScenario = scenarioToOptimiserBridge.getOptimiserScenario();
 			// Check cargoes removed
 			Assert.assertEquals(2, optimiserScenario.getCargoModel().getCargoes().size());
-			
+
 			// Check correct cargoes remain and spot index has changed.
 			Cargo optCargo1 = optimiserScenario.getCargoModel().getCargoes().get(0);
 			Assert.assertEquals("L1", optCargo1.getLoadName());
@@ -268,14 +270,14 @@ public class CharterInMarketTests extends AbstractPeriodTestCase {
 			Cargo optCargo2 = optimiserScenario.getCargoModel().getCargoes().get(1);
 			Assert.assertEquals("L2", optCargo2.getLoadName());
 			Assert.assertEquals(0, optCargo2.getSpotIndex());
-			
+
 			// Reduced by one
 			Assert.assertEquals(1, optimiserScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(0).getSpotCharterCount());
 			// Stays the same
 			Assert.assertEquals(2, optimiserScenario.getReferenceModel().getSpotMarketsModel().getCharterInMarkets().get(1).getSpotCharterCount());
-			
+
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
-			
+
 			// Validate the initial sequences are valid
 			Assert.assertNull(MicroTestUtils.validateConstraintCheckers(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
 		} finally {

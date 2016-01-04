@@ -1,6 +1,5 @@
 package com.mmxlabs.lingo.its.tests.microcases.period;
 
-import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
@@ -51,7 +50,7 @@ import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.optimiser.core.ISequences;
 
 @RunWith(value = ShiroRunner.class)
-public class EventsAfterBoundaryTests {
+public class EventsAfterBoundaryTests extends AbstractPeriodTestCase {
 
 	@Test
 	@Category({ QuickTest.class, MicroTest.class })
@@ -475,26 +474,5 @@ public class EventsAfterBoundaryTests {
 		} finally {
 			executorService.shutdownNow();
 		}
-	}
-
-	@NonNull
-	public LNGScenarioModel importReferenceData() throws MalformedURLException {
-		return importReferenceData("/referencedata/reference-data-1/");
-	}
-
-	@NonNull
-	public LNGScenarioModel importReferenceData(final String url) throws MalformedURLException {
-
-		final @NonNull String urlRoot = getClass().getResource(url).toString();
-		final CSVImporter importer = new CSVImporter();
-		importer.importPortData(urlRoot);
-		importer.importCostData(urlRoot);
-		importer.importEntityData(urlRoot);
-		importer.importFleetData(urlRoot);
-		importer.importMarketData(urlRoot);
-		importer.importPromptData(urlRoot);
-		importer.importMarketData(urlRoot);
-
-		return importer.doImport();
 	}
 }
