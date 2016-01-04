@@ -486,5 +486,4 @@ public class EventsAcrossPeriodTests extends AbstractPeriodTestCase {
 			executorService.shutdownNow();
 		}
 	}
-
 }
