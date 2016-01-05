@@ -325,6 +325,7 @@ public class AbstractOptimisationResultTester {
 		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
 		try {
 			final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, bundleContext.getService(serviceReference));
+			Assert.assertNotNull(instance);
 			MigrationHelper.migrateAndLoad(instance);
 			ReportTester.testReports(executorService, instance, scenarioURL, reportID, shortName, extension);
 		} finally {
