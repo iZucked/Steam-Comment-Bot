@@ -1,11 +1,7 @@
 package com.mmxlabs.lingo.its.tests.microcases.period;
 
-import java.awt.im.InputContext;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -29,14 +25,12 @@ import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
 import com.mmxlabs.models.lng.parameters.UserSettings;
-import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.util.PortModelFinder;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelBuilder;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelFinder;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
-import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketMaker;
 import com.mmxlabs.models.lng.spotmarkets.util.SpotMarketsModelBuilder;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
@@ -44,7 +38,6 @@ import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBoot
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioToOptimiserBridge;
 import com.mmxlabs.models.lng.transformer.ui.OptimisationHelper;
-import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.optimiser.core.ISequences;
 
 @RunWith(value = ShiroRunner.class)
@@ -146,7 +139,7 @@ public class TrimmedSpotCargoMarketsTests extends AbstractPeriodTestCase {
 			}
 			Assert.assertTrue(foundNewOne);
 
-			// Assert initial state can be evaluted
+			// Assert initial state can be evaluated
 			final ISequences initialRawSequences = scenarioToOptimiserBridge.getDataTransformer().getInitialSequences();
 			// Validate the initial sequences are valid
 			Assert.assertTrue(MicroTestUtils.evaluateLSOSequences(scenarioToOptimiserBridge.getDataTransformer(), initialRawSequences));
