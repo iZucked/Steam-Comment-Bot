@@ -111,7 +111,7 @@ public class AbstractSlotMaker<T extends AbstractSlotMaker<T>> {
 	}
 
 	public T withOptional(final boolean optional) {
-		slot.setOptional(true);
+		slot.setOptional(optional);
 		return (T) this;
 	}
 
