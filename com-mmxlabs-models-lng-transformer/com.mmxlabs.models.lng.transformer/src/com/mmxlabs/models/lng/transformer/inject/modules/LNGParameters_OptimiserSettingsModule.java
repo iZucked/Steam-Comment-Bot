@@ -37,6 +37,8 @@ import com.mmxlabs.scheduler.optimiser.lso.SequencesConstrainedMoveGeneratorUnit
  */
 public class LNGParameters_OptimiserSettingsModule extends AbstractModule {
 
+	public static final String PROPERTY_MMX_HALF_SPEED_ACTION_SETS = "MMX_HALF_SPEED_ACTION_SETS";
+
 	@NonNull
 	private final OptimiserSettings settings;
 
@@ -77,6 +79,12 @@ public class LNGParameters_OptimiserSettingsModule extends AbstractModule {
 		// return new CalibratingGeometricThresholder(getRandom(), ts.getEpochLength(), ts.getInitialAcceptanceRate(), ts.getAlpha());
 	}
 
+	@Provides
+	@Named(PROPERTY_MMX_HALF_SPEED_ACTION_SETS)
+	private boolean isActionSetsRevaluating() {
+		return true;
+	}
+	
 	@Provides
 	@Named(LocalSearchOptimiserModule.RANDOM_SEED)
 	private long getRandomSeed() {

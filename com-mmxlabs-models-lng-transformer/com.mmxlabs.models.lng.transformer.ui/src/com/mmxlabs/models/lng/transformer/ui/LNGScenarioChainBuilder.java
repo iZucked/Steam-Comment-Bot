@@ -1,7 +1,3 @@
-/**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
- * All rights reserved.
- */
 package com.mmxlabs.models.lng.transformer.ui;
 
 import java.util.ArrayList;
@@ -15,6 +11,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mmxlabs.common.time.Months;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
@@ -30,6 +28,7 @@ import com.mmxlabs.models.lng.transformer.chain.impl.LNGEvaluationTransformerUni
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGHillClimbOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.chain.impl.LNGLSOOptimiserTransformerUnit;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
+import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_OptimiserSettingsModule;
 import com.mmxlabs.models.lng.transformer.stochasticactionsets.LNGActionSetTransformerUnit;
 
 public class LNGScenarioChainBuilder {
@@ -42,6 +41,10 @@ public class LNGScenarioChainBuilder {
 	private static final int PROGRESS_ACTION_SET_OPTIMISATION = 20;
 	private static final int PROGRESS_ACTION_SET_SAVE = 5;
 
+	@Inject
+	@Named(LNGParameters_OptimiserSettingsModule.PROPERTY_MMX_HALF_SPEED_ACTION_SETS)
+	private static boolean HALF_SPEED_ACTION_SETS;
+	
 	/**
 	 * Creates a {@link IChainRunner} for the "standard" optimisation process (as of 2015/11)
 	 * 
@@ -107,7 +110,7 @@ public class LNGScenarioChainBuilder {
 						over3Months = true;
 					}
 				}
-				if (over3Months) {
+				if (over3Months && HALF_SPEED_ACTION_SETS) {
 					LNGActionSetTransformerUnit.chainFake(builder, optimiserSettings, executorService, PROGRESS_ACTION_SET_OPTIMISATION / 2);
 					LNGActionSetTransformerUnit.chain(builder, optimiserSettings, executorService, PROGRESS_ACTION_SET_OPTIMISATION / 2);
 				} else {
