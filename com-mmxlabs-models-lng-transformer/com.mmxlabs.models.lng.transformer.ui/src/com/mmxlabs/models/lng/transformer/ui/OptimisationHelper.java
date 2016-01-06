@@ -516,6 +516,9 @@ public final class OptimisationHelper {
 		case HIGH:
 			optimiserSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.HIGH, periodStart, periodEnd));
 			optimiserSettings.getAnnealingSettings().setRestarting(true);
+			if (shouldDisableActionSets(SimilarityMode.HIGH, periodStart, periodEnd)) {
+				optimiserSettings.setBuildActionSets(false);
+			}
 			break;
 		case LOW:
 			optimiserSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.LOW, periodStart, periodEnd));
@@ -527,6 +530,9 @@ public final class OptimisationHelper {
 		case MEDIUM:
 			optimiserSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.MEDIUM, periodStart, periodEnd));
 			optimiserSettings.getAnnealingSettings().setRestarting(false);
+			if (shouldDisableActionSets(SimilarityMode.MEDIUM, periodStart, periodEnd)) {
+				optimiserSettings.setBuildActionSets(false);
+			}
 			break;
 		case OFF:
 			optimiserSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.OFF, periodStart, periodEnd));
@@ -587,8 +593,11 @@ public final class OptimisationHelper {
 		}
 		if (mode == SimilarityMode.LOW && Months.between(periodStart, periodEnd) > 3) {
 			return true;
-		}
-		if (mode == SimilarityMode.OFF) {
+		} else if (mode == SimilarityMode.MEDIUM && Months.between(periodStart, periodEnd) > 6) {
+			return true;
+		} else if (mode == SimilarityMode.HIGH && Months.between(periodStart, periodEnd) > 6) {
+			return true;
+		} else if (mode == SimilarityMode.OFF) {
 			return true;
 		}
 		return false;
