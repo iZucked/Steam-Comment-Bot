@@ -20,6 +20,7 @@ import java.util.TreeMap;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.csv.IExportContext;
 import com.mmxlabs.common.csv.IImportContext;
@@ -105,35 +106,44 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 				if (columnsToIgnore.contains(s)) {
 					continue;
 				}
+				final YearMonth date;
 				try {
-					final YearMonth date = parseDateString(s);
-
-					final String valueStr = row.get(s);
-					if (valueStr.isEmpty())
-						continue;
-					try {
-						final Number n = numberImporterHelper.parseNumberString(valueStr, parseAsInt);
-						if (n == null) {
-							continue;
-						}
-
-						if (!seenDates.add(date)) {
-							context.addProblem(context.createProblem("The month " + s + " is defined multiple times", true, true, true));
-							continue;
-						}
-
-						final IndexPoint<Number> point = PricingFactory.eINSTANCE.createIndexPoint();
-						point.setDate(date);
-						point.setValue(n);
-						data.getPoints().add(point);
-					} catch (final NumberFormatException nfe) {
-						context.addProblem(context.createProblem("The value " + valueStr + " is not a number", true, true, true));
-					}
+					 date = parseDateString(s);
 				} catch (final ParseException ex) {
 					if (s.equals(EXPRESSION) == false && s.equals(UNITS) == false) {
 						context.addProblem(context.createProblem("The field " + s + " is not a date", true, false, true));
 					}
+					continue;
 				}
+				if (date == null) {
+					continue;
+				}
+				final String valueStr = row.get(s);
+				if (valueStr.isEmpty())
+					continue;
+				try {
+					final Number n = numberImporterHelper.parseNumberString(valueStr, parseAsInt);
+					if (n == null) {
+						continue;
+					}
+
+					if (!seenDates.add(date)) {
+						context.addProblem(context.createProblem("The month " + s + " is defined multiple times", true, true, true));
+						continue;
+					}
+
+					final IndexPoint<Number> point = PricingFactory.eINSTANCE.createIndexPoint();
+					point.setDate(date);
+					point.setValue(n);
+					data.getPoints().add(point);
+				} catch (final NumberFormatException | ParseException nfe) {
+					context.addProblem(context.createProblem("The value " + valueStr + " is not a number", true, true, true));
+				}
+				// } catch (final ParseException ex) {
+				// if (s.equals(EXPRESSION) == false && s.equals(UNITS) == false) {
+				// context.addProblem(context.createProblem("The field " + s + " is not a date", true, false, true));
+				// }
+				// }
 			}
 		}
 
@@ -188,6 +198,7 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 		return map;
 	}
 
+	@Nullable
 	protected YearMonth parseDateString(final String s) throws ParseException {
 		try {
 			return dateParser.parseYearMonth(s);
