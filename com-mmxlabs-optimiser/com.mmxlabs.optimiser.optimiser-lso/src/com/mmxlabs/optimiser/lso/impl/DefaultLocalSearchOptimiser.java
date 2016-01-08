@@ -9,7 +9,6 @@ import java.util.Date;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -26,7 +25,6 @@ import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.optimiser.lso.INullMove;
-import com.mmxlabs.optimiser.lso.LSOLoggingConstants;
 import com.mmxlabs.optimiser.lso.logging.ILoggingProvider;
 import com.mmxlabs.optimiser.lso.logging.LSOLogger;
 
