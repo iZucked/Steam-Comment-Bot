@@ -196,6 +196,42 @@
 
 		</profile>
 		<profile>
+			<id>skipITS</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipse.tycho</groupId>
+						<artifactId>tycho-surefire-plugin</artifactId>
+						<version>${tycho.version}</version>
+						<configuration>
+							<skipTests>true</skipTests>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+
+		</profile>
+		<profile>
+			<id>excludeCategoryBasedTests</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipse.tycho</groupId>
+						<artifactId>tycho-surefire-plugin</artifactId>
+						<version>${tycho.version}</version>
+						<configuration>
+							<providerHint>junit47</providerHint>
+          					<providerProperties>
+								<excludegroups>${test.excludeCategories}</excludegroups>
+          					</providerProperties>
+							<failIfNoTests>false</failIfNoTests>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+
+		</profile>
+		<profile>
 			<id>categoryBasedTests</id>
 			<build>
 				<plugins>
@@ -220,21 +256,11 @@
 
 		<!-- Enable this profile to run the its test independently of the full build. -->
 		<profile>
-			<id>useSnapshotsRepo</id>
+			<id>useBuildRepos</id>
 			<repositories>
 				<repository>
 					<id>lingo-p2</id>
-					<url>https://server1.mmxlabs.com/nexus/service/local/repositories/snapshots-v2-unzip/content/com/mmxlabs/lingo/com.mmxlabs.lingo.product-definition/${project.version}/com.mmxlabs.lingo.product-definition-${project.version}.zip-unzip/</url>
-					<layout>p2</layout>
-				</repository>
-			</repositories>
-		</profile>
-		<profile>
-			<id>use_LINGO_P2_REPO</id>
-			<repositories>
-				<repository>
-					<id>lingo-p2</id>
-					<url>${LINGO_P2_REPO}</url>
+					<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/lingo/com.mmxlabs.lingo.product-definition/${project.version}/com.mmxlabs.lingo.product-definition-${project.version}.zip-unzip/</url>
 					<layout>p2</layout>
 				</repository>
 			</repositories>
