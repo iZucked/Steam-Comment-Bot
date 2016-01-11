@@ -659,7 +659,7 @@ public final class ChangeSetTransformerUtil {
 			long pnl = 0;
 			long lateness = 0;
 			long violations = 0;
-			{
+			if (toSchedule != null) {
 				for (final Sequence sequence : toSchedule.getSequences()) {
 					for (final Event event : sequence.getEvents()) {
 						if (event instanceof ProfitAndLossContainer) {
@@ -688,7 +688,7 @@ public final class ChangeSetTransformerUtil {
 			currentMetrics.setPnl((int) pnl);
 			currentMetrics.setCapacity((int) violations);
 			currentMetrics.setLateness((int) lateness);
-			{
+			if (fromSchedule != null) {
 				for (final Sequence sequence : fromSchedule.getSequences()) {
 					for (final Event event : sequence.getEvents()) {
 						if (event instanceof ProfitAndLossContainer) {
@@ -723,6 +723,7 @@ public final class ChangeSetTransformerUtil {
 			}
 			changeSet.setCurrentMetrics(currentMetrics);
 		}
+
 	}
 
 	public static void mergeSpots(final List<ChangeSetRow> rows) {
