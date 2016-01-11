@@ -232,11 +232,13 @@ public class LNGScenarioToOptimiserBridge {
 	 * @return
 	 */
 	@NonNull
-	private LNGScenarioModel exportAsCopy(@NonNull final ISequences rawSequences, @Nullable final Map<String, Object> extraAnnotations) {
+	public LNGScenarioModel exportAsCopy(@NonNull final ISequences rawSequences, @Nullable final Map<String, Object> extraAnnotations) {
 
 		final EcoreUtil.Copier originalScenarioCopier = new EcoreUtil.Copier();
 		final LNGScenarioModel targetOriginalScenario = (LNGScenarioModel) originalScenarioCopier.copy(originalScenario);
-		originalScenarioCopier.copyReferences();
+		// Do not do this here as CopiedModelEntityMap will do it. If we call it twice, we can end up with multiple copies of data
+		// in reference lists
+		// originalScenarioCopier.copyReferences();
 
 		assert targetOriginalScenario != null;
 		final EditingDomain targetOriginalEditingDomain = LNGSchedulerJobUtils.createLocalEditingDomain();
@@ -245,7 +247,8 @@ public class LNGScenarioToOptimiserBridge {
 		if (pPeriodMapping != null) {
 			final EcoreUtil.Copier optimiserScenarioCopier = new EcoreUtil.Copier();
 			final LNGScenarioModel targetOptimiserScenario = (LNGScenarioModel) optimiserScenarioCopier.copy(optimiserScenario);
-			optimiserScenarioCopier.copyReferences();
+			// As above
+			// optimiserScenarioCopier.copyReferences();
 
 			assert targetOptimiserScenario != null;
 
