@@ -62,11 +62,8 @@ public final class ResourceHelper {
 	}
 
 	public static Resource loadResource(@NonNull final ResourceSet resourceSet, @NonNull final URI uri) throws IOException {
-		System.out.println("load start" + new Date());
 
 		final Resource resource = resourceSet.createResource(uri);
-		System.out.println("Resource cerated" + new Date());
-
 		if (resource instanceof ResourceImpl) {
 			// This helps speed up model loading
 			final HashMap<String, EObject> intrinsicIDToEObjectMap = new HashMap<String, EObject>();
