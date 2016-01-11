@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 
 public class CharterOutEventMaker {
@@ -24,9 +25,9 @@ public class CharterOutEventMaker {
 
 		this.cargoModelBuilder = cargoModelBuilder;
 		this.event = CargoFactory.eINSTANCE.createCharterOutEvent();
-		
+
 		this.event.setHeelOptions(FleetFactory.eINSTANCE.createHeelOptions());
-		
+
 		this.event.setName(name);
 
 		this.event.setPort(port);
@@ -61,9 +62,20 @@ public class CharterOutEventMaker {
 		return this;
 	}
 
+	public CharterOutEventMaker withAllowedVessels(Vessel... vessels) {
+
+		event.getAllowedVessels().clear();
+		for (Vessel v : vessels) {
+			event.getAllowedVessels().add(v);
+		}
+
+		return this;
+	}
+
 	@NonNull
 	public CharterOutEvent build() {
 		cargoModelBuilder.getCargoModel().getVesselEvents().add(event);
 		return event;
 	}
+
 }
