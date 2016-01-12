@@ -15,6 +15,7 @@ import org.junit.runner.RunWith;
 
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.lingo.its.tests.category.QuickTest;
+import com.mmxlabs.lingo.its.tests.category.RegressionTest;
 import com.mmxlabs.lingo.its.tests.microcases.MicroTestUtils;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
@@ -57,7 +58,7 @@ public class ExportAsCopyConsistencyTest {
 	 * @throws Exception
 	 */
 	@Test
-	@Category({ QuickTest.class, MicroTest.class })
+	@Category({ QuickTest.class, RegressionTest.class })
 	public void testExportAsCopyDoesNotDuplicateReferenceListItems() throws Exception {
 
 		// Load in the basic scenario from CSV
