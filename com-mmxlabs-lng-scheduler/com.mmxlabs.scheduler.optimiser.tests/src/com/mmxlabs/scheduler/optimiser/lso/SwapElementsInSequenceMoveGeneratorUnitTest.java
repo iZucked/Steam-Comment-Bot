@@ -44,9 +44,9 @@ public class SwapElementsInSequenceMoveGeneratorUnitTest {
 		seq.add(elementA);
 		seq.add(elementB);
 
-		final Map<ISequenceElement, Pair<Integer, Integer>> reverseLookup = new HashMap<ISequenceElement, Pair<Integer, Integer>>();
-		reverseLookup.put(elementA, new Pair<Integer, Integer>(0, 0));
-		reverseLookup.put(elementB, new Pair<Integer, Integer>(0, 1));
+		final Map<ISequenceElement, Pair<IResource, Integer>> reverseLookup = new HashMap<>();
+		reverseLookup.put(elementA, new Pair<IResource, Integer>(resource, 0));
+		reverseLookup.put(elementB, new Pair<IResource, Integer>(resource, 1));
 
 		// Build up followers / preceeders
 		final Map<ISequenceElement, Followers<ISequenceElement>> followers = new HashMap<ISequenceElement, ConstrainedMoveGenerator.Followers<ISequenceElement>>();
@@ -96,10 +96,10 @@ public class SwapElementsInSequenceMoveGeneratorUnitTest {
 		seq.add(elementB);
 		seq.add(elementC);
 
-		final Map<ISequenceElement, Pair<Integer, Integer>> reverseLookup = new HashMap<ISequenceElement, Pair<Integer, Integer>>();
-		reverseLookup.put(elementA, new Pair<Integer, Integer>(0, 0));
-		reverseLookup.put(elementB, new Pair<Integer, Integer>(0, 1));
-		reverseLookup.put(elementC, new Pair<Integer, Integer>(0, 2));
+		final Map<ISequenceElement, Pair<IResource, Integer>> reverseLookup = new HashMap<>();
+		reverseLookup.put(elementA, new Pair<IResource, Integer>(resource, 0));
+		reverseLookup.put(elementB, new Pair<IResource, Integer>(resource, 1));
+		reverseLookup.put(elementC, new Pair<IResource, Integer>(resource, 2));
 
 		// Build up followers / preceeders
 		final Map<ISequenceElement, Followers<ISequenceElement>> followers = new HashMap<ISequenceElement, ConstrainedMoveGenerator.Followers<ISequenceElement>>();

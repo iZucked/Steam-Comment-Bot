@@ -70,15 +70,15 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	/**
 	 * A structure caching the output of the {@link LegalSequencingChecker}. If an element x is in the set mapped to by key y, x can legally follow y under some circumstance
 	 */
-	protected final Map<ISequenceElement, Followers<ISequenceElement>> validFollowers = new HashMap<ISequenceElement, Followers<ISequenceElement>>();
-	protected final Map<ISequenceElement, Followers<ISequenceElement>> validPreceeders = new HashMap<ISequenceElement, Followers<ISequenceElement>>();
+	protected final Map<ISequenceElement, Followers<ISequenceElement>> validFollowers = new HashMap<>();
+	protected final Map<ISequenceElement, Followers<ISequenceElement>> validPreceeders = new HashMap<>();
 
 	/**
 	 * A reverse lookup table from elements to positions. The {@link Pair} is a item containing {@link Resource} index and position within the {@link ISequence}. There are some special cases here. A
 	 * null Resource index means the {@link ISequenceElement} is not part of the main set of sequences. A value of zero or more indicates the position within the {@link ISequences#getUnusedElements()}
 	 * list. A negative number means it is not for normal use. Currently -1 means the element is the unused pair of an alternative (@see {@link IAlternativeElementProvider}
 	 */
-	protected final Map<ISequenceElement, Pair<Integer, Integer>> reverseLookup = new HashMap<ISequenceElement, Pair<Integer, Integer>>();
+	protected final Map<ISequenceElement, Pair<IResource, Integer>> reverseLookup = new HashMap<>();
 
 	/**
 	 * A reference to the current set of sequences, which will be used in generating moves
@@ -168,6 +168,9 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 
 	@Inject
 	private IStartEndRequirementProvider startEndRequirementProvider;
+	
+	@Inject
+	private IOptimisationData optimisationData;
 
 	public ConstrainedMoveGenerator(final IOptimisationContext context) {
 		this.context = context;
@@ -209,7 +212,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 				breakableVertexCount++;
 			}
 
-			reverseLookup.put(e1, new Pair<Integer, Integer>(0, 0));
+			reverseLookup.put(e1, new Pair<>(null, 0));
 
 			final LinkedHashSet<ISequenceElement> followers = new LinkedHashSet<ISequenceElement>();
 			final LinkedHashSet<ISequenceElement> preceeders = new LinkedHashSet<ISequenceElement>();
@@ -310,11 +313,11 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 		this.sequences = sequences;
 
 		// build table for elements in conventional sequences
-		for (int i = 0; i < sequences.size(); i++) {
-			final ISequence sequence = sequences.getSequence(i);
+		for (IResource resource : context.getOptimisationData().getResources()) {
+			final ISequence sequence = sequences.getSequence(resource);
 			for (int j = 0; j < sequence.size(); j++) {
 				final ISequenceElement element = sequence.get(j);
-				reverseLookup.get(element).setBoth(i, j);
+				reverseLookup.get(element).setBoth(resource, j);
 				if (alternativeElementProvider.hasAlternativeElement(element)) {
 					final ISequenceElement alt = alternativeElementProvider.getAlternativeElement(element);
 					// Negative numbers now indicate alternative
@@ -359,7 +362,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 
 	/**
 	 */
-	public Map<ISequenceElement, Pair<Integer, Integer>> getReverseLookup() {
+	public Map<ISequenceElement, Pair<IResource, Integer>> getReverseLookup() {
 		return reverseLookup;
 	}
 }
