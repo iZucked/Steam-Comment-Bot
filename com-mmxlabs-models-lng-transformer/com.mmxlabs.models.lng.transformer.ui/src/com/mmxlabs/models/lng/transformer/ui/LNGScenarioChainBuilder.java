@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -48,7 +49,7 @@ public class LNGScenarioChainBuilder {
 	@Inject
 	@Named(LNGParameters_OptimiserSettingsModule.PROPERTY_MMX_HALF_SPEED_ACTION_SETS)
 	private static boolean HALF_SPEED_ACTION_SETS;
-	
+
 	/**
 	 * Creates a {@link IChainRunner} for the "standard" optimisation process (as of 2015/11)
 	 * 
@@ -104,13 +105,11 @@ public class LNGScenarioChainBuilder {
 			if (doActionSetPostOptimisation) {
 				// Run the action set post optimisation
 				boolean over3Months = false;
-				OptimisationRange range = optimiserSettings.getRange();
+				final OptimisationRange range = optimiserSettings.getRange();
 				if (range != null) {
 					if (!range.isSetOptimiseAfter() || !range.isSetOptimiseBefore()) {
 						over3Months = true;
-
-					}
-					if (Months.between(range.getOptimiseAfter(), range.getOptimiseBefore()) > 3) {
+					} else if (Months.between(range.getOptimiseAfter(), range.getOptimiseBefore()) > 3) {
 						over3Months = true;
 					}
 				}
