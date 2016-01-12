@@ -341,8 +341,8 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	}
 
 	private Integer getLadenMaxWindow(Slot startSlot, Slot endSlot) {
-		final ZonedDateTime dateStart = startSlot.getWindowStartWithSlotOrPortTime();
-		final ZonedDateTime dateEnd = endSlot.getWindowEndWithSlotOrPortTime();
+		final ZonedDateTime dateStart = startSlot.getWindowStartWithSlotOrPortTimeWithFlex();
+		final ZonedDateTime dateEnd = endSlot.getWindowEndWithSlotOrPortTimeWithFlex();
 
 		if (dateStart != null && dateEnd != null) {
 			return Hours.between(dateStart, dateEnd);
