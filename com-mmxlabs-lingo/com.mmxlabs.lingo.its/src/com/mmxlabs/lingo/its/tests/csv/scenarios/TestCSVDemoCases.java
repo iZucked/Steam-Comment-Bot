@@ -9,9 +9,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
+import com.mmxlabs.lingo.its.tests.category.OptimisationTest;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
@@ -21,6 +23,7 @@ import com.mmxlabs.models.lng.transformer.its.scenario.CSVImporter;
 public class TestCSVDemoCases extends AbstractOptimisationResultTester {
 
 	@Test
+	@Category(OptimisationTest.class)
 	public void testBonnyProblems_Bonny() throws IOException, InterruptedException {
 
 		// Load the scenario to test
@@ -32,6 +35,7 @@ public class TestCSVDemoCases extends AbstractOptimisationResultTester {
 	}
 
 	@Test
+	@Category(OptimisationTest.class)
 	public void testBonnyProblems_LateAndLost_DES_Backfill() throws IOException, InterruptedException  {
 
 		// Load the scenario to test
@@ -43,6 +47,7 @@ public class TestCSVDemoCases extends AbstractOptimisationResultTester {
 	}
 
 	@Test
+	@Category(OptimisationTest.class)
 	public void testBonnyProblems_O_LateAndLost_DES_Backfill() throws IOException, InterruptedException, IncompleteScenarioException {
 
 		// Load the scenario to test
@@ -54,6 +59,7 @@ public class TestCSVDemoCases extends AbstractOptimisationResultTester {
 	}
 
 	@Test
+	@Category(OptimisationTest.class)
 	public void testDryDockIssues_base() throws IOException, InterruptedException, IncompleteScenarioException {
 
 		// Load the scenario to test
@@ -65,6 +71,7 @@ public class TestCSVDemoCases extends AbstractOptimisationResultTester {
 	}
 
 	@Test
+	@Category(OptimisationTest.class)
 	public void testDryDockIssues_dryDock55_lateness_removed() throws IOException, InterruptedException, MalformedURLException {
 
 		// Load the scenario to test
@@ -76,6 +83,7 @@ public class TestCSVDemoCases extends AbstractOptimisationResultTester {
 	}
 
 	@Test
+	@Category(OptimisationTest.class)
 	public void testDryDockIssues_dryDock70() throws IOException, InterruptedException, MalformedURLException {
 
 		// Load the scenario to test
@@ -87,6 +95,7 @@ public class TestCSVDemoCases extends AbstractOptimisationResultTester {
 	}
 
 	@Test
+	@Category(OptimisationTest.class)
 	public void testDryDockIssues_charterInGenerated() throws IOException, InterruptedException, IncompleteScenarioException {
 
 		// Load the scenario to test
@@ -98,6 +107,7 @@ public class TestCSVDemoCases extends AbstractOptimisationResultTester {
 	}
 
 	@Test
+	@Category(OptimisationTest.class)
 	public void testFleetCostOptimisation_fleet_demo() throws IOException, InterruptedException, IncompleteScenarioException {
 
 		// Load the scenario to test
@@ -109,6 +119,7 @@ public class TestCSVDemoCases extends AbstractOptimisationResultTester {
 	}
 
 	@Test
+	@Category(OptimisationTest.class)
 	public void testFleetCostOptimisation_O_fleet_demo() throws IOException, InterruptedException, IncompleteScenarioException {
 
 		// Load the scenario to test

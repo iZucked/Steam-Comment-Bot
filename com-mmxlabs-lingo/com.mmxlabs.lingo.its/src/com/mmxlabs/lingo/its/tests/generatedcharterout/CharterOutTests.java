@@ -14,6 +14,7 @@ import org.junit.experimental.categories.Category;
 
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
 import com.mmxlabs.lingo.its.tests.LNGScenarioRunnerCreator;
+import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.lingo.its.tests.category.QuickTest;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
@@ -25,7 +26,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 public class CharterOutTests extends AbstractOptimisationResultTester {
 
 	@Test
-	@Category(QuickTest.class)
+	@Category(MicroTest.class)
 	public void UAT_CharterOut_1() throws Exception {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/charter-out/gco-barca-bonny-point fortin-min days 60.lingo");
@@ -42,7 +43,7 @@ public class CharterOutTests extends AbstractOptimisationResultTester {
 	}
 
 	@Test
-	@Category(QuickTest.class)
+	@Category(MicroTest.class)
 	public void UAT_CharterOut_2() throws Exception {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/charter-out/gco-barca-bonny-point fortin.lingo");
@@ -66,7 +67,7 @@ public class CharterOutTests extends AbstractOptimisationResultTester {
 	}
 
 	@Test
-	@Category(QuickTest.class)
+	@Category(MicroTest.class)
 	public void UAT_CharterOut_3() throws Exception {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/charter-out/gco-barca-point fortin.lingo");

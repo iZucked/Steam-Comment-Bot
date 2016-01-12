@@ -9,9 +9,11 @@ import java.time.LocalDate;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
+import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -25,6 +27,7 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 public class SpotDateTests extends AbstractOptimisationResultTester {
 
 	@Test
+	@Category(MicroTest.class)
 	public void testSpotDates() throws Exception {
 
 		// Load the scenario to test

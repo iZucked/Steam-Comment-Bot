@@ -8,15 +8,18 @@ import java.net.URL;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
+import com.mmxlabs.lingo.its.tests.category.OptimisationTest;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 
 @RunWith(value = ShiroRunner.class)
 public class TestOptimisationResult2 extends AbstractOptimisationResultTester {
 
 	@Test
+	@Category(OptimisationTest.class)
 	public void testOptimisationResult() throws Exception {
 
 		// Load the scenario to test
