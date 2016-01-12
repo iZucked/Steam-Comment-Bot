@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.migration.units;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -17,7 +18,7 @@ import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
 import com.mmxlabs.models.migration.utils.EObjectWrapper;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 
-public class MigrateToV44 extends AbstractMigrationUnit {
+public class MigrateToV45 extends AbstractMigrationUnit {
 
 	@Override
 	public String getScenarioContext() {
@@ -26,16 +27,36 @@ public class MigrateToV44 extends AbstractMigrationUnit {
 
 	@Override
 	public int getScenarioSourceVersion() {
-		return 43;
-	}
-
-	@Override
-	public int getScenarioDestinationVersion() {
 		return 44;
 	}
 
 	@Override
-	protected void doMigrationWithHelper(final MetamodelLoader loader, final EObjectWrapper model) {
+	public int getScenarioDestinationVersion() {
+		return 45;
+	}
 
+	@Override
+	protected void doMigrationWithHelper(final MetamodelLoader loader, final EObjectWrapper model) {
+		final TreeIterator<EObject> eAllContents = model.eAllContents();
+		while (eAllContents.hasNext()) {
+			final EObject o = eAllContents.next();
+
+			final EClass cls = o.eClass();
+
+			for (final EReference ref : cls.getEAllReferences()) {
+				// Skip containment references
+				if (ref.isContainment()) {
+					continue;
+				}
+				// Skip singular references
+				if (!ref.isMany()) {
+					continue;
+				}
+
+				final List<?> items = (List<?>) o.eGet(ref);
+				final LinkedHashSet<?> newItems = new LinkedHashSet<>(items);
+				o.eSet(ref, new ArrayList<>(newItems));
+			}
+		}
 	}
 }
