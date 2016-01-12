@@ -132,7 +132,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 						}
 					}
 
-					columnManagers.addAll(transformer.getColumnManagers());
+					columnManagers.addAll(transformer.getColumnManagers(selectedDataProvider));
 					clearColumns();
 					addColumns();
 					setShowColumns(pinned != null, numberOfSchedules);
