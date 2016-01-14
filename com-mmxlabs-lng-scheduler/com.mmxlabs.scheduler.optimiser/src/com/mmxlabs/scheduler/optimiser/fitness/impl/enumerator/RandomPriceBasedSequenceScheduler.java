@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 
+import java.awt.event.WindowStateListener;
 import java.util.List;
 import java.util.Random;
 
@@ -11,6 +12,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
+import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -26,7 +28,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
  * @author achurchill
  * @param
  */
-public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
+public class RandomPriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 	private final int seed = 0;
 	private Random random;
 
@@ -43,16 +45,18 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 		prepare();
 		priceBasedWindowTrimming(sequences, portTimeWindowsRecords);
 		for (int index = 0; index < sequences.size(); ++index) {
-			setTimeWindowsToEarliest(index);
+			random.setSeed(seed);
+			randomise(index);
 		}
 		synchroniseShipToShipBindings();
-		if (RE_EVALUATE_SOLUTION) {
-			evaluate(null);
-			return reEvaluateAndGetBestResult(sequences, solution);
-		} else {
+		// DON NOT COMMIT
+//		if (RE_EVALUATE_SOLUTION) {
+//			evaluate(null);
+//			return reEvaluateAndGetBestResult(sequences, solution);
+//		} else {
 			evaluate(solution);
 			return getBestResult();
-		}
+//		}
 	}
 
 	private void priceBasedWindowTrimming(ISequences sequences, List<List<IPortTimeWindowsRecord>> portTimeWindowsRecords) {
@@ -84,17 +88,22 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 	@Override
 	protected final ScheduledSequences reEvaluateAndGetBestResult(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
 
+		// final long lastValue = getBestValue();
+		random = new Random(seed);
+
 		setSequences(sequences);
 		resetBest();
 
 		prepare();
 
-		priceBasedWindowTrimming(sequences, portTimeWindowsRecords);
 		for (int index = 0; index < sequences.size(); ++index) {
-			setTimeWindowsToEarliest(index);
+			random.setSeed(seed);
+			randomise(index);
 		}
 		synchroniseShipToShipBindings();
 		evaluate(solution);
+
+		// assert lastValue == getBestValue();
 
 		return getBestResult();
 	}
@@ -113,8 +122,8 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 		}
 
 	}
-	
-	private void setTimeWindowsToEarliest(final int seq) {
+
+	private void randomise(final int seq) {
 		if (arrivalTimes[seq] == null) {
 			return;
 		}
@@ -124,7 +133,7 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 			for (int pos = 0; pos < lastIndex; pos++) {
 				final int min = getMinArrivalTime(seq, pos);
 				final int max = getMaxArrivalTime(seq, pos);
-				arrivalTimes[seq][pos] = min;
+				arrivalTimes[seq][pos] = RandomHelper.nextIntBetween(random, min, max);
 				// TODO force sync this with any ship-to-ship bindings
 			}
 

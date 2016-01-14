@@ -22,22 +22,6 @@ public interface IPriceIntervalProvider {
 	 */
 	public List<int[]> getPriceIntervals(IPortSlot slot, int startOfRange, int endOfRange, IPortTimeWindowsRecord portTimeWindowRecord);
 
-	/**
-	 * Provides the date range for the highest price period in a given range 
-	 * @param loadOption
-	 * @param dischargeOption
-	 * @return
-	 */
-	public Pair<Integer, Integer> getHighestPriceInterval(int startOfRange, int endOfRange, IPortSlot portSlot, IPortTimeWindowsRecord portTimeWindowRecord); 
-	
-	/**
-	 * Provides the date range for the lowest price period in a given range 
-	 * @param loadOption
-	 * @param dischargeOption
-	 * @return
-	 */
-	public Pair<Integer, Integer> getLowestPriceInterval(int startOfRange, int endOfRange, IPortSlot portSlot, IPortTimeWindowsRecord portTimeWindowRecord);
-
 	// TODO: extend to load/discharge interface
 	public List<Integer> getPriceHourIntervals(IPortSlot slot, int start, int end, IPortTimeWindowsRecord portTimeWindowsRecord);	
 }

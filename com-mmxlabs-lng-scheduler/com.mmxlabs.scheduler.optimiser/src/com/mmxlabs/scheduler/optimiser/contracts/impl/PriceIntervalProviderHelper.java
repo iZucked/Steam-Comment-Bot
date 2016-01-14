@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.NavigableSet;
 import java.util.Set;
 
 import com.google.inject.Inject;
@@ -24,7 +23,7 @@ import com.mmxlabs.scheduler.optimiser.curves.IntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
-public class PriceIntervalProviderUtil {
+public class PriceIntervalProviderHelper {
 
 	@Inject
 	private ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
@@ -38,6 +37,11 @@ public class PriceIntervalProviderUtil {
 	private Set<PricingEventType> dischargePricingEventTypeSet = new HashSet<>(Arrays.asList(new PricingEventType[] { PricingEventType.END_OF_DISCHARGE, PricingEventType.END_OF_DISCHARGE_WINDOW,
 			PricingEventType.START_OF_DISCHARGE, PricingEventType.START_OF_DISCHARGE_WINDOW, }));
 
+	/**
+	 * Trim time windows for a given set of slots
+	 * @param portTimeWindowRecord
+	 * @return
+	 */
 	public IPortTimeWindowsRecord processCargo(IPortTimeWindowsRecord portTimeWindowRecord) {
 		boolean seenLoad = false;
 		boolean seenDischarge = false;
@@ -124,11 +128,108 @@ public class PriceIntervalProviderUtil {
 		return portTimeWindowRecord;
 	}
 
+	/**
+	 * Produce a list of the difference between purchase and sales price at hour points, when slots in a cargo are not price independent
+	 * @param start
+	 * @param end
+	 * @param load
+	 * @param discharge
+	 * @param loadPriceIntervalProvider
+	 * @param dischargePriceIntervalProvider
+	 * @param portTimeWindowRecord
+	 * @return
+	 */
+	public List<int[]> buildComplexPriceIntervals(int start, int end, ILoadOption load, IDischargeOption discharge, IPriceIntervalProvider loadPriceIntervalProvider,
+			IPriceIntervalProvider dischargePriceIntervalProvider, IPortTimeWindowsRecord portTimeWindowRecord) {
+		int[][] intervals = getOverlappingWindows(load, discharge, loadPriceIntervalProvider, dischargePriceIntervalProvider, start, end, portTimeWindowRecord); // DO NOT COMMIT - convert to UTC
+		List<int[]> bestIntervals = new LinkedList<>();
+		for (int[] interval : intervals) {
+			int loadPricingTime = shiftTimeByTimezoneToUTC(interval[0], load, portTimeWindowRecord, getPriceEventFromSlotOrContract(load, portTimeWindowRecord));
+			int purchasePrice = getPriceFromLoadOrDischargeCalculator(load, load, discharge, loadPricingTime);
+			int dischargePricingTime = shiftTimeByTimezoneToUTC(interval[0], discharge, portTimeWindowRecord, getPriceEventFromSlotOrContract(discharge, portTimeWindowRecord));
+			int salesPrice = getPriceFromLoadOrDischargeCalculator(discharge, load, discharge, dischargePricingTime);
+			int difference = salesPrice - purchasePrice;
+			bestIntervals.add(new int[] { interval[0], difference });
+		}
+		bestIntervals.add(new int[] {intervals[intervals.length-1][1], Integer.MIN_VALUE });
+		return bestIntervals;
+	}
+
+	/**
+	 * Produces a list of the time a purchase price changes for a load slot 
+	 * @param slot
+	 * @param intervals
+	 * @param curve
+	 * @param start
+	 * @param end
+	 * @param offsetInHours
+	 * @param portTimeWindowRecord
+	 * @return
+	 */
+	public List<int[]> getPriceIntervalsList(ILoadOption slot, IIntegerIntervalCurve intervals, ICurve curve, int start, int end, int offsetInHours, IPortTimeWindowsRecord portTimeWindowRecord) {
+		List<int[]> priceIntervals = new LinkedList<>(); // DO NOT COMMIT - get rid of curve
+		buildIntervalsList(slot, intervals, curve, start, end, portTimeWindowRecord, priceIntervals); // DON NOT COMMIT (what about contract pricing event)
+		return priceIntervals;
+	}
+
+	/**
+	 * Produces a list of the time a sales price changes for a discharge slot 
+	 * @param slot
+	 * @param intervals
+	 * @param curve
+	 * @param start
+	 * @param end
+	 * @param offsetInHours
+	 * @param portTimeWindowRecord
+	 * @return
+	 */
+	public List<int[]> getPriceIntervalsList(IDischargeOption slot, IIntegerIntervalCurve intervals, ICurve curve, int start, int end, int offsetInHours, IPortTimeWindowsRecord portTimeWindowRecord) {
+		List<int[]> priceIntervals = new LinkedList<>();
+		buildIntervalsList(slot, intervals, curve, start, end, portTimeWindowRecord, priceIntervals); // DON NOT COMMIT (what about contract pricing event)
+		return priceIntervals;
+	}
+
+	/**
+	 * Provides a list of hours indicating a change in price for a particular slot
+	 * @param start
+	 * @param end
+	 * @param slot
+	 * @param intervals
+	 * @param portTimeWindowsRecord
+	 * @return
+	 */
+	public List<Integer> buildDateChangeCurveAsIntegerList(int start, int end, IPortSlot slot, int[] intervals, IPortTimeWindowsRecord portTimeWindowsRecord) {
+		// DO NOT COMMIT - clean up and get rid of PriceEventType (change to int[]?)
+		List<Integer> shifted = new LinkedList<>();
+		PricingEventType pricingEventType = getPriceEventTypeFromPortSlot(slot, portTimeWindowsRecord);
+		if (isStartOfWindow(pricingEventType)) {
+			shifted.add(start);
+		} else if (isEndOfWindow(pricingEventType)) {
+			shifted.add(start);
+		} else if (isPricingDateSpecified(slot, pricingEventType)) {
+			shifted.add(start);
+		} else {
+			shifted.add(start);
+			for (int h = 1; h < intervals.length; h++) {
+				IPortSlot pricingSlot = slot;
+				if (slot instanceof ILoadOption && dischargePricingEventTypeSet.contains(pricingEventType)) {
+					pricingSlot = getFirstDischargeOption(portTimeWindowsRecord.getSlots());
+				} else if (slot instanceof IDischargeOption && loadPricingEventTypeSet.contains(pricingEventType)) {
+					pricingSlot = getFirstLoadOption(portTimeWindowsRecord.getSlots());
+				}
+				int date = getShiftedDate(pricingSlot, portTimeWindowsRecord, intervals[h], pricingEventType);
+				if (date < end) {
+					shifted.add(date);
+				}
+			}
+		}
+		shifted.add(end);
+		return shifted;
+	}
+
 	private void trimLoadWindowIndependentOfDischarge(IPortTimeWindowsRecord portTimeWindowRecord, ILoadOption load) {
 		ITimeWindow timeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(load);
-		// Pair<Integer, Integer> bounds = ((IPriceIntervalProvider) load.getLoadPriceCalculator()).getLowestPriceInterval(timeWindow.getStart(), timeWindow.getEnd(), load, null,
-		// portTimeWindowRecord);
-		Pair<Integer, Integer> bounds = getLowestPriceInterval(feasibleIntervalSubSet(timeWindow.getStart(), timeWindow.getEnd(),
+		Pair<Integer, Integer> bounds = getLowestPriceInterval(getFeasibleIntervalSubSet(timeWindow.getStart(), timeWindow.getEnd(),
 				priceIntervalProducer.getLoadIntervalsIndependentOfDischarge(load, portTimeWindowRecord)));
 		int start = bounds.getFirst();
 		int end = bounds.getSecond();
@@ -137,16 +238,70 @@ public class PriceIntervalProviderUtil {
 
 	private void trimLoadWindowBasedOnDischarge(IPortTimeWindowsRecord portTimeWindowRecord, ILoadOption load, IDischargeOption discharge) {
 		ITimeWindow timeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(load);
-		// Pair<Integer, Integer> bounds = ((IPriceIntervalProvider) discharge.getDischargePriceCalculator()).getHighestPriceInterval(timeWindow.getStart(), timeWindow.getEnd(), null, discharge,
-		// portTimeWindowRecord);
 		List<int[]> priceCurve = priceIntervalProducer.getLoadIntervalsBasedOnDischarge(load, portTimeWindowRecord);
-		Pair<Integer, Integer> bounds = getHighestPriceInterval(feasibleIntervalSubSet(timeWindow.getStart(), timeWindow.getEnd(), priceCurve));
+		Pair<Integer, Integer> bounds = getHighestPriceInterval(getFeasibleIntervalSubSet(timeWindow.getStart(), timeWindow.getEnd(), priceCurve));
 		int start = bounds.getFirst();
 		int end = bounds.getSecond();
 		createAndSetTimeWindow(portTimeWindowRecord, load, start, end);
 	}
 
-	private List<int[]> feasibleIntervalSubSet(int start, int end, List<int[]> intervals) {
+	private void trimDischargeWindowIndependentOfLoad(IPortTimeWindowsRecord portTimeWindowRecord, IDischargeOption discharge) {
+		ITimeWindow timeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(discharge);
+		Pair<Integer, Integer> bounds = getHighestPriceInterval(getFeasibleIntervalSubSet(timeWindow.getStart(), timeWindow.getEnd(),
+				priceIntervalProducer.getDischargeWindowIndependentOfLoad(discharge, portTimeWindowRecord)));
+		TimeWindow feasibleTimeWindow = new TimeWindow(bounds.getFirst(), bounds.getSecond(), timeWindow.getEndFlex());
+		portTimeWindowRecord.setSlotFeasibleTimeWindow(discharge, feasibleTimeWindow);
+	}
+
+	private void trimDischargeWindowBasedOnLoad(IPortTimeWindowsRecord portTimeWindowRecord, ILoadOption load, IDischargeOption discharge) {
+		ITimeWindow timeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(discharge);
+		Pair<Integer, Integer> bounds = getLowestPriceInterval(getFeasibleIntervalSubSet(timeWindow.getStart(), timeWindow.getEnd(),
+				priceIntervalProducer.getDischargeWindowBasedOnLoad(discharge, portTimeWindowRecord)));
+		int start = bounds.getFirst();
+		int end = bounds.getSecond();
+		createAndSetTimeWindow(portTimeWindowRecord, discharge, start, end);
+	}
+
+	private void loadOrDischargeDeterminesBothPricingEvents(ILoadOption load, IDischargeOption discharge, IPriceIntervalProvider loadPriceIntervalProvider,
+			IPriceIntervalProvider dischargePriceIntervalProvider, IPortTimeWindowsRecord portTimeWindowRecord, boolean dateFromLoad) {
+		// TODO: make feasible based on load or discharge
+		// DO NOT COMMIT - clean up
+		List<int[]> complexPricingIntervals = getComplexPriceIntervals(load, discharge, loadPriceIntervalProvider, dischargePriceIntervalProvider, portTimeWindowRecord, dateFromLoad);
+		Pair<Integer, Integer> bounds = getHighestPriceInterval(complexPricingIntervals);
+		int start = bounds.getFirst();
+		int end = bounds.getSecond();
+		if (dateFromLoad) {
+			createAndSetTimeWindow(portTimeWindowRecord, load, start, end);
+		} else {
+			createAndSetTimeWindow(portTimeWindowRecord, discharge, start, end);
+		}
+	}
+
+	/**
+	 * Produce a list of the difference between purchase and sales price at hour points, when slots in a cargo are not price independent
+	 * @param load
+	 * @param discharge
+	 * @param loadPriceIntervalProvider
+	 * @param dischargePriceIntervalProvider
+	 * @param portTimeWindowRecord
+	 * @param dateFromLoad
+	 * @return
+	 */
+	private List<int[]> getComplexPriceIntervals(ILoadOption load, IDischargeOption discharge, IPriceIntervalProvider loadPriceIntervalProvider, IPriceIntervalProvider dischargePriceIntervalProvider,
+			IPortTimeWindowsRecord portTimeWindowRecord, boolean dateFromLoad) {
+		ITimeWindow timeWindow;
+		if (dateFromLoad) {
+			timeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(load);
+		} else {
+			timeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(discharge);
+		}
+	
+		List<int[]> intervals = getFeasibleIntervalSubSet(timeWindow.getStart(), timeWindow.getEnd(), priceIntervalProducer.getIntervalsWhenLoadOrDischargeDeterminesBothPricingEvents(load, discharge,
+				(IPriceIntervalProvider) load.getLoadPriceCalculator(), (IPriceIntervalProvider) discharge.getDischargePriceCalculator(), portTimeWindowRecord, dateFromLoad));
+		return intervals;
+	}
+
+	private List<int[]> getFeasibleIntervalSubSet(int start, int end, List<int[]> intervals) {
 		List<int[]> list = new LinkedList<>();
 		for (int i = 0; i < intervals.size(); i++) {
 			if (list.size() == 0) {
@@ -166,86 +321,7 @@ public class PriceIntervalProviderUtil {
 		return list;
 	}
 
-	private void trimDischargeWindowIndependentOfLoad(IPortTimeWindowsRecord portTimeWindowRecord, IDischargeOption discharge) {
-		ITimeWindow timeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(discharge);
-		// Pair<Integer, Integer> bounds = ((IPriceIntervalProvider) discharge.getDischargePriceCalculator()).getHighestPriceInterval(timeWindow.getStart(), timeWindow.getEnd(), null, discharge,
-		// portTimeWindowRecord);
-		Pair<Integer, Integer> bounds = getHighestPriceInterval(feasibleIntervalSubSet(timeWindow.getStart(), timeWindow.getEnd(),
-				priceIntervalProducer.getDischargeWindowIndependentOfLoad(discharge, portTimeWindowRecord)));
-		TimeWindow feasibleTimeWindow = new TimeWindow(bounds.getFirst(), bounds.getSecond(), timeWindow.getEndFlex());
-		portTimeWindowRecord.setSlotFeasibleTimeWindow(discharge, feasibleTimeWindow);
-	}
-
-	private void trimDischargeWindowBasedOnLoad(IPortTimeWindowsRecord portTimeWindowRecord, ILoadOption load, IDischargeOption discharge) {
-		ITimeWindow timeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(discharge);
-		// Pair<Integer, Integer> bounds = ((IPriceIntervalProvider) load.getLoadPriceCalculator()).getLowestPriceInterval(timeWindow.getStart(), timeWindow.getEnd(), load, null,
-		// portTimeWindowRecord);
-		Pair<Integer, Integer> bounds = getLowestPriceInterval(feasibleIntervalSubSet(timeWindow.getStart(), timeWindow.getEnd(),
-				priceIntervalProducer.getDischargeWindowBasedOnLoad(discharge, portTimeWindowRecord)));
-		int start = bounds.getFirst();
-		int end = bounds.getSecond();
-		createAndSetTimeWindow(portTimeWindowRecord, discharge, start, end);
-	}
-
-	private void createAndSetTimeWindow(IPortTimeWindowsRecord portTimeWindowRecord, IPortSlot slot, int start, int end) {
-		ITimeWindow timeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(slot);
-		TimeWindow feasibleTimeWindow = new TimeWindow(start, end, timeWindow.getEndFlex());
-		portTimeWindowRecord.setSlotFeasibleTimeWindow(slot, feasibleTimeWindow);
-	}
-
-	private void loadOrDischargeDeterminesBothPricingEvents(ILoadOption load, IDischargeOption discharge, IPriceIntervalProvider loadPriceIntervalProvider,
-			IPriceIntervalProvider dischargePriceIntervalProvider, IPortTimeWindowsRecord portTimeWindowRecord, boolean dateFromLoad) {
-		// TODO: make feasible based on load or discharge
-		// DO NOT COMMIT - clean up
-		List<int[]> complexPricingIntervals = getComplexPriceIntervals(load, discharge, loadPriceIntervalProvider, dischargePriceIntervalProvider, portTimeWindowRecord, dateFromLoad);
-		Pair<Integer, Integer> bounds = getHighestPriceInterval(complexPricingIntervals);
-		int start = bounds.getFirst();
-		int end = bounds.getSecond();
-		// int start = complexPricingIntervals.get(0)[0];
-		// int end = complexPricingIntervals.get(0)[1];
-		// for (int i = 1; i < complexPricingIntervals.size(); i++) {
-		// if (end == complexPricingIntervals.get(i)[0]) {
-		// end = complexPricingIntervals.get(i)[1];
-		// } else {
-		// break;
-		// }
-		// }
-		if (dateFromLoad) {
-			createAndSetTimeWindow(portTimeWindowRecord, load, start, end);
-		} else {
-			createAndSetTimeWindow(portTimeWindowRecord, discharge, start, end);
-		}
-	}
-
-	public List<int[]> getComplexPriceIntervals(ILoadOption load, IDischargeOption discharge, IPriceIntervalProvider loadPriceIntervalProvider, IPriceIntervalProvider dischargePriceIntervalProvider,
-			IPortTimeWindowsRecord portTimeWindowRecord, boolean dateFromLoad) {
-		ITimeWindow timeWindow;
-		if (dateFromLoad) {
-			timeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(load);
-		} else {
-			timeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(discharge);
-		}
-
-		List<int[]> intervals = feasibleIntervalSubSet(timeWindow.getStart(), timeWindow.getEnd(), priceIntervalProducer.getIntervalsWhenLoadOrDischargeDeterminesBothPricingEvents(load, discharge,
-				(IPriceIntervalProvider) load.getLoadPriceCalculator(), (IPriceIntervalProvider) discharge.getDischargePriceCalculator(), portTimeWindowRecord, dateFromLoad));
-		return intervals;
-	}
-
-	public List<int[]> buildComplexPriceIntervals(int start, int end, ILoadOption load, IDischargeOption discharge, IPriceIntervalProvider loadPriceIntervalProvider,
-			IPriceIntervalProvider dischargePriceIntervalProvider, IPortTimeWindowsRecord portTimeWindowRecord, boolean dateFromLoad) {
-		int[][] intervals = getOverlappingWindows(load, discharge, loadPriceIntervalProvider, dischargePriceIntervalProvider, start, end, portTimeWindowRecord); // DO NOT COMMIT - convert to UTC
-		List<int[]> bestIntervals = new LinkedList<>();
-		for (int[] interval : intervals) {
-			int purchasePrice = load.getLoadPriceCalculator().getEstimatedPurchasePrice(load, discharge, getShiftedDateForLoadBasedOnDischarge(load, discharge, portTimeWindowRecord, interval[0]));
-			int salesPrice = discharge.getDischargePriceCalculator().getEstimatedSalesPrice(load, discharge, getShiftedDateForDischargeBasedOnLoad(load, discharge, portTimeWindowRecord, interval[0]));
-			int difference = salesPrice - purchasePrice;
-			bestIntervals.add(new int[] { interval[0], difference });
-		}
-		bestIntervals.add(new int[] {intervals[intervals.length-1][1], Integer.MIN_VALUE });
-		return bestIntervals;
-	}
-
-	private int[][] getOverlappingWindows(ILoadOption load, IDischargeOption discharge, IPriceIntervalProvider loadPriceIntervalProvider, IPriceIntervalProvider dischargePriceIntervalProvider,
+	int[][] getOverlappingWindows(ILoadOption load, IDischargeOption discharge, IPriceIntervalProvider loadPriceIntervalProvider, IPriceIntervalProvider dischargePriceIntervalProvider,
 			int start, int end, IPortTimeWindowsRecord portTimeWindowsRecord) {
 		List<Integer> loadIntervals = loadPriceIntervalProvider.getPriceHourIntervals(load, start, end, portTimeWindowsRecord);
 		List<Integer> dischargeIntervals = dischargePriceIntervalProvider.getPriceHourIntervals(discharge, start, end, portTimeWindowsRecord); // DON NOT COMMIT - problem with discharge time shifting!
@@ -253,6 +329,12 @@ public class PriceIntervalProviderUtil {
 		integerIntervalCurve.addAll(loadIntervals);
 		integerIntervalCurve.addAll(dischargeIntervals);
 		return integerIntervalCurve.getIntervalsAs2dArray(start, end);
+	}
+
+	PricingEventType getPriceEventTypeFromPortSlot(IPortSlot slot, IPortTimeWindowsRecord portTimeWindowsRecord) {
+		PricingEventType pricingEventType = (slot instanceof ILoadOption) ? getPriceEventFromSlotOrContract((ILoadOption) slot, portTimeWindowsRecord) : getPriceEventFromSlotOrContract(
+				(IDischargeOption) slot, portTimeWindowsRecord);
+		return pricingEventType;
 	}
 
 	private Pair<ILoadOption, IDischargeOption> getLoadAndDischarge(IPortTimeWindowsRecord portTimeWindowRecord, List<Triple<IPortSlot, Class<?>, PricingEventType>> slotData) {
@@ -269,8 +351,6 @@ public class PriceIntervalProviderUtil {
 	}
 
 	private boolean isLoadPricingEventTime(ILoadOption slot, IPortTimeWindowsRecord portTimeWindowsRecord) {
-		// throw new IllegalStateException("Not implemented full method");
-		// DO NOT COMMIT - Don't we have a method for this?
 		PricingEventType pet = slot.getLoadPriceCalculator().getCalculatorPricingEventType(slot, portTimeWindowsRecord) == null ? slot.getPricingEvent() : slot.getLoadPriceCalculator()
 				.getCalculatorPricingEventType(slot, portTimeWindowsRecord);
 		return isLoadPricingEventTime(pet);
@@ -293,95 +373,63 @@ public class PriceIntervalProviderUtil {
 	private boolean isDischargePricingEventTime(ILoadOption slot, IPortTimeWindowsRecord portTimeWindowsRecord) {
 		PricingEventType pet = slot.getLoadPriceCalculator().getCalculatorPricingEventType(slot, portTimeWindowsRecord) == null ? slot.getPricingEvent() : slot.getLoadPriceCalculator()
 				.getCalculatorPricingEventType(slot, portTimeWindowsRecord);
+		return isDischargePricingEventTime(pet);
+	}
+
+
+	private boolean isDischargePricingEventTime(IDischargeOption slot, IPortTimeWindowsRecord portTimeWindowsRecord) {
+		PricingEventType pet = slot.getDischargePriceCalculator().getCalculatorPricingEventType(slot, portTimeWindowsRecord) == null ? slot.getPricingEvent() : slot.getDischargePriceCalculator()
+				.getCalculatorPricingEventType(slot, portTimeWindowsRecord);
+		return isDischargePricingEventTime(pet);
+	}
+
+	private boolean isDischargePricingEventTime(PricingEventType pet) {
 		if (dischargePricingEventTypeSet.contains(pet)) {
 			return true;
 		}
 		return false;
 	}
 
-	private boolean isDischargePricingEventTime(IDischargeOption slot, IPortTimeWindowsRecord portTimeWindowsRecord) {
-		PricingEventType pet = slot.getDischargePriceCalculator().getCalculatorPricingEventType(slot, portTimeWindowsRecord) == null ? slot.getPricingEvent() : slot.getDischargePriceCalculator()
-				.getCalculatorPricingEventType(slot, portTimeWindowsRecord);
-		if (dischargePricingEventTypeSet.contains(pet)) {
-			return true; // DON NOT COMMIT
-		}
-		return false;
-	}
-
-	public List<int[]> getPriceIntervalsList(ILoadOption slot, IIntegerIntervalCurve intervals, ICurve curve, int start, int end, int offsetInHours, IPortTimeWindowsRecord portTimeWindowRecord) {
-		List<int[]> priceIntervals = new LinkedList<>(); // DO NOT COMMIT - get rid of curve
-		buildIntervalsList(slot, intervals, curve, start, end, portTimeWindowRecord, priceIntervals); // DON NOT COMMIT (what about contract pricing event)
-		return priceIntervals;
-	}
-
-	public List<int[]> getPriceIntervalsList(IDischargeOption slot, IIntegerIntervalCurve intervals, ICurve curve, int start, int end, int offsetInHours, IPortTimeWindowsRecord portTimeWindowRecord) {
-		List<int[]> priceIntervals = new LinkedList<>();
-		buildIntervalsList(slot, intervals, curve, start, end, portTimeWindowRecord, priceIntervals); // DON NOT COMMIT (what about contract pricing event)
-		return priceIntervals;
-	}
-
-	//
-	// private void buildIntervalsList(IIntegerIntervalCurve intervals, ICurve curve, int start, int end, IPortSlot slot, PricingEventType pricingEventType, IPortTimeWindowsRecord
-	// portTimeWindowRecord,
-	// List<int[]> priceIntervals) {
-	// int[] hourIntervals = intervals.getIntervalRange(start, end);
-	// int transferDate = start;
-	// if (isStartOfWindow(pricingEventType)) {
-	// priceIntervals.add(new int[] { start, curve.getValueAtPoint(timeZoneToUtcOffsetProvider.UTC(start, slot.getPort())) });
-	// priceIntervals.add(getEndInterval(end));
-	// } else if (isEndOfWindow(pricingEventType)) {
-	// priceIntervals.add(new int[] { end, curve.getValueAtPoint(timeZoneToUtcOffsetProvider.UTC(end, slot.getPort())) });
-	// priceIntervals.add(getEndInterval(end));
-	// } else {
-	// priceIntervals.add(new int[] { start, curve.getValueAtPoint(timeZoneToUtcOffsetProvider.UTC(start, slot.getPort())) });
-	// for (int h = 1; h < hourIntervals.length - 1; h++) {
-	// int date = hourIntervals[h];
-	// if (isStartOfEvent(pricingEventType)) {
-	// transferDate = date;
-	// } else if (isEndOfEvent(pricingEventType)) {
-	// transferDate = date + portTimeWindowRecord.getSlotDuration(slot);
-	// }
-	// if (timeZoneToUtcOffsetProvider.localTime(transferDate, slot.getPort()) < end) {
-	// priceIntervals.add(new int[] { timeZoneToUtcOffsetProvider.localTime(transferDate, slot.getPort()),
-	// curve.getValueAtPoint(timeZoneToUtcOffsetProvider.UTC(transferDate, slot.getPort())) });
-	// }
-	// }
-	// priceIntervals.add(getEndInterval(end));
-	// }
-	// }
-
-	private void buildIntervalsList(IPortSlot slot, IIntegerIntervalCurve intervals, ICurve curve, int start, int end, IPortTimeWindowsRecord portTimeWindowsRecord, List<int[]> priceIntervals) {
+	List<int[]> buildIntervalsList(IPortSlot slot, IIntegerIntervalCurve intervals, ICurve curve, int start, int end, IPortTimeWindowsRecord portTimeWindowsRecord, List<int[]> priceIntervals) {
 		ILoadOption loadOption = getFirstLoadOption(portTimeWindowsRecord.getSlots());
 		IDischargeOption dischargeOption = getFirstDischargeOption(portTimeWindowsRecord.getSlots());
-		PricingEventType pricingEventType = (slot instanceof ILoadOption) ? getPriceEventFromSlotOrContract((ILoadOption) slot, portTimeWindowsRecord) : getPriceEventFromSlotOrContract(
-				(IDischargeOption) slot, portTimeWindowsRecord); // DO NOT COMMIT - clean up
+		PricingEventType pricingEventType = getPriceEventTypeFromPortSlot(slot, portTimeWindowsRecord);
 		int[] hourIntervals = intervals.getIntervalRange(start, end);
 		int transferDate = start;
 		if (isStartOfWindow(pricingEventType)) {
-			priceIntervals.add(new int[] { start, getPriceFromLoadOrDischargeCalculator(slot, loadOption, dischargeOption, timeZoneToUtcOffsetProvider.UTC(start, slot.getPort())) });
+			priceIntervals.add(new int[] { start, getPriceFromLoadOrDischargeCalculator(slot, loadOption, dischargeOption, shiftTimeByTimezoneToUTC(start, slot, portTimeWindowsRecord, pricingEventType)) });
 			priceIntervals.add(getEndInterval(end));
 		} else if (isEndOfWindow(pricingEventType)) {
-			priceIntervals.add(new int[] { start, getPriceFromLoadOrDischargeCalculator(slot, loadOption, dischargeOption, timeZoneToUtcOffsetProvider.UTC(end, slot.getPort())) });
+			priceIntervals.add(new int[] { start, getPriceFromLoadOrDischargeCalculator(slot, loadOption, dischargeOption, shiftTimeByTimezoneToUTC(end, slot, portTimeWindowsRecord, pricingEventType)) });
 			priceIntervals.add(getEndInterval(end));
 		} else if (isPricingDateSpecified(slot, pricingEventType)) {
 			priceIntervals.add(new int[] { start, getPriceFromLoadOrDischargeCalculator(slot, loadOption, dischargeOption, timeZoneToUtcOffsetProvider.UTC(getDateFromSlotOrContract(slot, portTimeWindowsRecord), slot.getPort())) });
 			priceIntervals.add(getEndInterval(end));
 		} else {
-			priceIntervals.add(new int[] { start, getPriceFromLoadOrDischargeCalculator(slot, loadOption, dischargeOption, timeZoneToUtcOffsetProvider.UTC(start, slot.getPort())) });
+			// first add start
+			priceIntervals.add(new int[] { start, getPriceFromLoadOrDischargeCalculator(slot, loadOption, dischargeOption, shiftTimeByTimezoneToUTC(start + (isEndOfEvent(pricingEventType) ? getDuration(slot, portTimeWindowsRecord) : 0), slot, portTimeWindowsRecord, pricingEventType)) });
 			for (int h = 1; h < hourIntervals.length - 1; h++) {
 				int date = hourIntervals[h];
 				if (isStartOfEvent(pricingEventType)) {
 					transferDate = date;
 				} else if (isEndOfEvent(pricingEventType)) {
-					transferDate = date + getDuration(slot, portTimeWindowsRecord); // DO NOT COMMIT - check this
+					transferDate = date - getDuration(slot, portTimeWindowsRecord); // DO NOT COMMIT - check this
 				}
-				if (timeZoneToUtcOffsetProvider.localTime(transferDate, slot.getPort()) < end) {
-					priceIntervals.add(new int[] { timeZoneToUtcOffsetProvider.localTime(transferDate, slot.getPort()),
-							getPriceFromLoadOrDischargeCalculator(slot, loadOption, dischargeOption, timeZoneToUtcOffsetProvider.UTC(transferDate, slot.getPort())) });
+				int windowDate = shiftTimeByTimezoneToLocalTime(transferDate, slot, portTimeWindowsRecord, pricingEventType);
+				if (windowDate < end && windowDate > start) {
+					priceIntervals.add(new int[] { windowDate,
+							getPriceFromLoadOrDischargeCalculator(slot, loadOption, dischargeOption, date) });
 				}
 			}
 			priceIntervals.add(getEndInterval(end));
 		}
+		return priceIntervals;
+	}
+
+	private void createAndSetTimeWindow(IPortTimeWindowsRecord portTimeWindowRecord, IPortSlot slot, int start, int end) {
+		ITimeWindow timeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(slot);
+		TimeWindow feasibleTimeWindow = new TimeWindow(start, end, timeWindow.getEndFlex());
+		portTimeWindowRecord.setSlotFeasibleTimeWindow(slot, feasibleTimeWindow);
 	}
 
 	private int shiftTimeByTimezoneToUTC(int time, IPortSlot slot, IPortTimeWindowsRecord portTimeWindowsRecord, PricingEventType pricingEventType) {
@@ -399,7 +447,26 @@ public class PriceIntervalProviderUtil {
 				slotToUse = slot;
 			}
 		}
-		return timeZoneToUtcOffsetProvider.UTC(time, slotToUse.getPort());
+		int shifted = timeZoneToUtcOffsetProvider.UTC(time, slotToUse.getPort());
+		return shifted;
+	}
+	
+	private int shiftTimeByTimezoneToLocalTime(int time, IPortSlot slot, IPortTimeWindowsRecord portTimeWindowsRecord, PricingEventType pricingEventType) {
+		IPortSlot slotToUse;
+		if (slot instanceof ILoadOption) {
+			if (isLoadPricingEventTime(pricingEventType)) {
+				slotToUse = slot;
+			} else {
+				slotToUse = getFirstDischargeOption(portTimeWindowsRecord.getSlots());
+			}
+		} else {
+			if (isLoadPricingEventTime(pricingEventType)) {
+				slotToUse = getFirstLoadOption(portTimeWindowsRecord.getSlots());
+			} else {
+				slotToUse = slot;
+			}
+		}
+		return timeZoneToUtcOffsetProvider.localTime(time, slotToUse.getPort());
 	}
 	
 	private int getDateFromSlotOrContract(IPortSlot slot, IPortTimeWindowsRecord portTimeWindowsRecord) {
@@ -437,38 +504,6 @@ public class PriceIntervalProviderUtil {
 		} else {
 			throw new IllegalStateException("A price can only be obtained from a load or discharge option");
 		}
-	}
-
-	public List<Integer> buildDateChangeCurveAsIntegerList(int start, int end, IPortSlot slot, int[] intervals, IPortTimeWindowsRecord portTimeWindowsRecord) {
-		// DO NOT COMMIT - clean up and get rid of PriceEventType (change to int[]?)
-		List<Integer> shifted = new LinkedList<>();
-		ILoadOption loadOption = getFirstLoadOption(portTimeWindowsRecord.getSlots()); // DO NOT COMMIT - encapsulate or clean this up
-		IDischargeOption dischargeOption = getFirstDischargeOption(portTimeWindowsRecord.getSlots());
-		PricingEventType pricingEventType = (slot instanceof ILoadOption) ? getPriceEventFromSlotOrContract((ILoadOption) slot, portTimeWindowsRecord) : getPriceEventFromSlotOrContract(
-				(IDischargeOption) slot, portTimeWindowsRecord);
-		if (isStartOfWindow(pricingEventType)) {
-			shifted.add(start);
-		} else if (isEndOfWindow(pricingEventType)) {
-			shifted.add(start);
-		} else if (isPricingDateSpecified(slot, pricingEventType)) {
-			shifted.add(start);
-		} else {
-			shifted.add(start);
-			for (int h = 1; h < intervals.length - 1; h++) {
-				IPortSlot pricingSlot = slot;
-				if (slot instanceof ILoadOption && dischargePricingEventTypeSet.contains(pricingEventType)) {
-					pricingSlot = getFirstDischargeOption(portTimeWindowsRecord.getSlots());
-				} else if (slot instanceof IDischargeOption && loadPricingEventTypeSet.contains(pricingEventType)) {
-					pricingSlot = getFirstLoadOption(portTimeWindowsRecord.getSlots());
-				}
-				int date = getShiftedDate(pricingSlot, portTimeWindowsRecord, intervals[h], pricingEventType);
-				if (date < end) {
-					shifted.add(date);
-				}
-			}
-		}
-		shifted.add(end);
-		return shifted;
 	}
 
 	static List<Integer> getFixedStartEndIntervals(int start, int end) {
@@ -541,32 +576,8 @@ public class PriceIntervalProviderUtil {
 		return timeZoneToUtcOffsetProvider.UTC(transferDate, discharge.getPort());
 	}
 
-	public int[] getIntervalRangePricingTime(int[] intervals, String tz, int additionalOffset) {
-		int[] newIntervals = new int[intervals.length];
-		for (int idx = 0; idx < newIntervals.length; idx++) {
-			newIntervals[idx] = convertTimeToLocal(intervals[idx], tz, additionalOffset);
-		}
-		return newIntervals;
-	}
-
-	public int[] getIntervalRangeSchedulingTime(int[] intervals, String tz, int additionalOffset) {
-		int[] newIntervals = new int[intervals.length];
-		for (int idx = 0; idx < newIntervals.length; idx++) {
-			newIntervals[idx] = convertTimeToUTC(intervals[idx], tz, additionalOffset);
-		}
-		return newIntervals;
-	}
-
-	private int[] getEndInterval(int end) {
+	public static final int[] getEndInterval(int end) {
 		return new int[] { end, Integer.MIN_VALUE };
-	}
-
-	private int convertTimeToLocal(int utcTime, String tz, int additionalOffset) {
-		return timeZoneToUtcOffsetProvider.localTime(utcTime, tz) + additionalOffset; // note: adding additionalOffset
-	}
-
-	private int convertTimeToUTC(int localTime, String tz, int additionalOffset) {
-		return timeZoneToUtcOffsetProvider.UTC(localTime, tz) - additionalOffset; // note: subtracting additionalOffset
 	}
 
 	public static boolean isStartOfEvent(PricingEventType pet) {
@@ -576,40 +587,12 @@ public class PriceIntervalProviderUtil {
 		return false;
 	}
 
-	// public static boolean isStartOfEvent(ILoadOption slot) {
-	// if (getPriceEventFromSlotOrContract(slot) == PricingEventType.START_OF_LOAD) {
-	// return true;
-	// }
-	// return false;
-	// }
-	//
-	// public static boolean isStartOfEvent(IDischargeOption slot) {
-	// if (getPriceEventFromSlotOrContract(slot) == PricingEventType.START_OF_DISCHARGE) {
-	// return true;
-	// }
-	// return false;
-	// }
-
 	public static boolean isEndOfEvent(PricingEventType pet) {
 		if (pet == PricingEventType.END_OF_LOAD || pet == PricingEventType.END_OF_DISCHARGE) {
 			return true;
 		}
 		return false;
 	}
-
-	// public static boolean isEndOfEvent(ILoadOption slot) {
-	// if (getPriceEventFromSlotOrContract(slot) == PricingEventType.END_OF_LOAD) {
-	// return true;
-	// }
-	// return false;
-	// }
-	//
-	// public static boolean isEndOfEvent(IDischargeOption slot) {
-	// if (getPriceEventFromSlotOrContract(slot) == PricingEventType.END_OF_DISCHARGE) {
-	// return true;
-	// }
-	// return false;
-	// }
 
 	public static boolean isEndOfWindow(PricingEventType pet) {
 		if (pet == PricingEventType.END_OF_LOAD_WINDOW || pet == PricingEventType.END_OF_DISCHARGE_WINDOW) {
@@ -618,40 +601,12 @@ public class PriceIntervalProviderUtil {
 		return false;
 	}
 
-	// public static boolean isEndOfWindow(ILoadOption slot) {
-	// if (getPriceEventFromSlotOrContract(slot) == PricingEventType.END_OF_LOAD_WINDOW) {
-	// return true;
-	// }
-	// return false;
-	// }
-
-	// public static boolean isEndOfWindow(IDischargeOption slot) {
-	// if (getPriceEventFromSlotOrContract(slot) == PricingEventType.END_OF_DISCHARGE_WINDOW) {
-	// return true;
-	// }
-	// return false;
-	// }
-
 	public static boolean isStartOfWindow(PricingEventType pet) {
 		if (pet == PricingEventType.START_OF_LOAD_WINDOW || pet == PricingEventType.START_OF_DISCHARGE_WINDOW) {
 			return true;
 		}
 		return false;
 	}
-
-	// public static boolean isStartOfWindow(ILoadOption slot) {
-	// if (getPriceEventFromSlotOrContract(slot) == PricingEventType.START_OF_LOAD_WINDOW) {
-	// return true;
-	// }
-	// return false;
-	// }
-
-	// public static boolean isStartOfWindow(IDischargeOption slot) {
-	// if (getPriceEventFromSlotOrContract(slot) == PricingEventType.START_OF_DISCHARGE_WINDOW) {
-	// return true;
-	// }
-	// return false;
-	// }
 
 	public static PricingEventType getPriceEventFromSlotOrContract(ILoadOption slot, IPortTimeWindowsRecord portTimeWindowRecord) {
 		return slot.getLoadPriceCalculator().getCalculatorPricingEventType(slot, portTimeWindowRecord) == null ? slot.getPricingEvent() : slot.getLoadPriceCalculator().getCalculatorPricingEventType(
@@ -755,5 +710,9 @@ public class PriceIntervalProviderUtil {
 		} else {
 			return false;
 		}
+	}
+	
+	public int intTest(int i) {
+		return 0;
 	}
 }

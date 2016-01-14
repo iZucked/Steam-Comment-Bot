@@ -7,13 +7,13 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceIntervalProviderUtil;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceIntervalProviderHelper;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
 public class PriceIntervalProducer implements IPriceIntervalProducer {
 
 	@Inject
-	PriceIntervalProviderUtil priceIntervalProviderUtil;
+	PriceIntervalProviderHelper priceIntervalProviderUtil;
 	
 	/* (non-Javadoc)
 	 * @see com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer#getLoadIntervalsIndependentOfDischarge(com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord, com.mmxlabs.scheduler.optimiser.components.ILoadOption)
@@ -78,7 +78,7 @@ public class PriceIntervalProducer implements IPriceIntervalProducer {
 		ITimeWindow dischargeFeasibletimeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
 		int end = findBestEnd(start, loadFeasibletimeWindow.getStart(), discharge.getTimeWindow().getEnd(), dischargeFeasibletimeWindow.getEnd());
 
-		return priceIntervalProviderUtil.buildComplexPriceIntervals(start, end, load, discharge, loadPriceIntervalProvider, dischargePriceIntervalProvider, portTimeWindowsRecord, dateFromLoad);
+		return priceIntervalProviderUtil.buildComplexPriceIntervals(start, end, load, discharge, loadPriceIntervalProvider, dischargePriceIntervalProvider, portTimeWindowsRecord);
 	}
 
 	/**

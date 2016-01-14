@@ -12,13 +12,13 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceIntervalProviderUtil;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceIntervalProviderHelper;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
 public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 
 	@Inject
-	PriceIntervalProviderUtil priceIntervalProviderUtil;
+	PriceIntervalProviderHelper priceIntervalProviderUtil;
 
 	private final class CacheKey {
 

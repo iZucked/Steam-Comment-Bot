@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -32,6 +33,10 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  */
 public class FixedPriceContract implements ILoadPriceCalculator, ISalesPriceCalculator, IPriceIntervalProvider {
+	@Inject
+	private PriceIntervalProviderHelper priceIntervalProviderHelper;
+
+	
 	private final int pricePerMMBTU;
 
 	public FixedPriceContract(final int pricePerMMBTU) {
@@ -83,49 +88,53 @@ public class FixedPriceContract implements ILoadPriceCalculator, ISalesPriceCalc
 	}
 
 	@Override
-	public List<int[]> getPriceIntervals(IPortSlot slot, int startOfRange, int endOfRange, IPortTimeWindowsRecord portTimeWindowRecord) {
-		List<int[]> fixedPriceIntervals = new LinkedList<int[]>();
-		fixedPriceIntervals.add(new int[] {startOfRange, pricePerMMBTU});
-		fixedPriceIntervals.add(new int[] {endOfRange, Integer.MIN_VALUE});
-		return fixedPriceIntervals;
+	public int getEstimatedPurchasePrice(ILoadOption loadOption, IDischargeOption dischargeOption, int timeInHours) {
+		return pricePerMMBTU;
 	}
 
 	@Override
-	public Pair<Integer, Integer> getHighestPriceInterval(int startOfRange, int endOfRange, ILoadOption loadOption, IDischargeOption dischargeOption, IPortTimeWindowsRecord portTimeWindowRecord) {
-		return new Pair<Integer, Integer>(startOfRange, endOfRange);
+	public List<Integer> getPriceHourIntervals(IPortSlot slot, int start, int end, IPortTimeWindowsRecord portTimeWindowsRecord) {
+		int[] intervals = new int[] {start, end};
+		if (slot instanceof ILoadOption) {
+			return priceIntervalProviderHelper.buildDateChangeCurveAsIntegerList(start, end, slot, intervals, portTimeWindowsRecord);
+		} else if (slot instanceof IDischargeOption) {
+			return priceIntervalProviderHelper.buildDateChangeCurveAsIntegerList(start, end, slot, intervals, portTimeWindowsRecord);
+		} else {
+			return null;
+		}
 	}
 
 	@Override
-	public Pair<Integer, Integer> getLowestPriceInterval(int startOfRange, int endOfRange, ILoadOption loadOption, IDischargeOption dischargeOption, IPortTimeWindowsRecord portTimeWindowRecord) {
-		return new Pair<Integer, Integer>(startOfRange, endOfRange);
-	}
-
-	@Override
-	public List<Integer> getPriceHourIntervals(IPortSlot slot, ILoadOption loadOption, IDischargeOption dischargeOption, int start, int end, IPortTimeWindowsRecord portTimeWindowsRecord) {
-		List<Integer> priceIntervals = getFixedStartEndIntervals(start, end);
-		return priceIntervals;
-	}
-
-	private List<Integer> getFixedStartEndIntervals(int start, int end) {
-		List<Integer> priceIntervals = new LinkedList<Integer>();
-		priceIntervals.add(start);
-		priceIntervals.add(end);
-		return priceIntervals;
-	}
-
-	@Override
-	public PricingEventType getCalculatorPricingEventType(ILoadOption loadOption, IDischargeOption dischargeOption) {
+	public PricingEventType getCalculatorPricingEventType(IDischargeOption dischargeOption, IPortTimeWindowsRecord portTimeWindowsRecord) {
 		return null;
 	}
 
 	@Override
-	public int getEstimatedSalesPrice(IDischargeOption sell, int timeInHours) {
+	public int getEstimatedSalesPrice(ILoadOption loadOption, IDischargeOption dischargeOption, int timeInHours) {
 		return pricePerMMBTU;
 	}
 
 	@Override
-	public int getEstimatedPurchasePrice(ILoadOption loadOption, IDischargeOption dischargeOption, int timeInHours) {
+	public int getCalculatorPricingDate(IDischargeOption dischargeOption, IPortTimeWindowsRecord portTimeWindowsRecord) {
+		return IPortSlot.NO_PRICING_DATE;
+	}
+
+	@Override
+	public PricingEventType getCalculatorPricingEventType(ILoadOption loadOption, IPortTimeWindowsRecord portTimeWindowsRecord) {
+		return null;
+	}
+
+	@Override
+	public int getCalculatorPricingDate(ILoadOption loadOption, IPortTimeWindowsRecord portTimeWindowsRecord) {
 		return pricePerMMBTU;
+	}
+
+	@Override
+	public List<int[]> getPriceIntervals(IPortSlot slot, int startOfRange, int endOfRange, IPortTimeWindowsRecord portTimeWindowRecord) {
+		List<int[]> intervals = new LinkedList<>();
+		intervals.add(new int[] {startOfRange, pricePerMMBTU});
+		intervals.add(priceIntervalProviderHelper.getEndInterval(endOfRange));
+		return intervals;
 	}
 
 }

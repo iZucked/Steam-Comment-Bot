@@ -64,12 +64,6 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	}
 
 	@Override
-	public int getEstimatedPurchasePrice(ILoadOption loadOption, IDischargeOption dischargeOption, int timeInHours) {
-		final IPort port = loadOption.getPort();
-		return calculateSimpleUnitPrice(timeInHours, port);
-	}
-	
-	@Override
 	public int estimateSalesUnitPrice(final IDischargeOption dischargeOption, final IPortTimesRecord voyageRecord, final IDetailTree annotations) {
 
 		if (actualsDataProvider != null && actualsDataProvider.hasActuals(dischargeOption)) {
@@ -82,9 +76,23 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	}
 
 	@Override
+	public int getEstimatedPurchasePrice(ILoadOption loadOption, IDischargeOption dischargeOption, int timeInHours) {
+		if (actualsDataProvider.hasActuals(loadOption)) {
+			return actualsDataProvider.getLNGPricePerMMBTu(loadOption);
+		} else {
+			final IPort port = loadOption.getPort();
+			return calculateSimpleUnitPrice(timeInHours, port);
+		}
+	}
+
+	@Override
 	public int getEstimatedSalesPrice(ILoadOption loadOption, IDischargeOption dischargeOption, int timeInHours) {
-		final IPort port = dischargeOption.getPort();
-		return calculateSimpleUnitPrice(timeInHours, port);
+		if (actualsDataProvider.hasActuals(loadOption)) {
+			return actualsDataProvider.getLNGPricePerMMBTu(loadOption);
+		} else {
+			final IPort port = dischargeOption.getPort();
+			return calculateSimpleUnitPrice(timeInHours, port);
+		}
 	}
 	
 	@Override
@@ -141,22 +149,37 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	
 	@Override
 	public PricingEventType getCalculatorPricingEventType(ILoadOption loadOption, IPortTimeWindowsRecord portTimeWindowsRecord) {
+		if (actualsDataProvider.hasActuals(loadOption)) {
+			return PricingEventType.DATE_SPECIFIED;
+		}
+		return null;
+	}
+
+
+	@Override
+	public PricingEventType getCalculatorPricingEventType(IDischargeOption dischargeOption, IPortTimeWindowsRecord portTimeWindowsRecord) {
+		if (actualsDataProvider.hasActuals(dischargeOption)) {
+			return PricingEventType.DATE_SPECIFIED;
+		}
 		return null;
 	}
 
 	@Override
 	public int getCalculatorPricingDate(ILoadOption loadOption, IPortTimeWindowsRecord portTimeWindowsRecord) {
-		return IPortSlot.NO_PRICING_DATE;
-	}
-
-	@Override
-	public PricingEventType getCalculatorPricingEventType(IDischargeOption dischargeOption, IPortTimeWindowsRecord portTimeWindowsRecord) {
-		return null;
+		if (actualsDataProvider.hasActuals(loadOption)) {
+			return actualsDataProvider.getArrivalTime(loadOption);
+		} else {
+			return IPortSlot.NO_PRICING_DATE;
+		}
 	}
 
 	@Override
 	public int getCalculatorPricingDate(IDischargeOption dischargeOption, IPortTimeWindowsRecord portTimeWindowsRecord) {
-		return IPortSlot.NO_PRICING_DATE;
+		if (actualsDataProvider.hasActuals(dischargeOption)) {
+			return actualsDataProvider.getArrivalTime(dischargeOption);
+		} else {
+			return IPortSlot.NO_PRICING_DATE;
+		}
 	}
 
 }

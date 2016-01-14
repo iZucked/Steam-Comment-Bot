@@ -26,7 +26,7 @@ public class PriceExpressionContract extends SimpleContract implements IPriceInt
 	private final IIntegerIntervalCurve priceChangeIntervalsInHours;
 	
 	@Inject
-	private PriceIntervalProviderUtil priceIntervalProviderUtil;
+	private PriceIntervalProviderHelper priceIntervalProviderUtil;
 
 	public PriceExpressionContract(final ICurve expressionCurve, final IIntegerIntervalCurve priceChangeIntervalsInHours) {
 		this.expressionCurve = expressionCurve;
@@ -49,16 +49,6 @@ public class PriceExpressionContract extends SimpleContract implements IPriceInt
 		} else {
 			throw new IllegalStateException("getPriceIntervals() requires either an ILoadOption or IDischargeOption");
 		}
-	}
-
-	@Override
-	public Pair<Integer, Integer> getHighestPriceInterval(int startOfRange, int endOfRange, IPortSlot slot, IPortTimeWindowsRecord portTimeWindowRecord) {
-		return priceIntervalProviderUtil.getHighestPriceInterval(getPriceIntervals(slot, startOfRange, endOfRange, portTimeWindowRecord));
-	}
-
-	@Override
-	public Pair<Integer, Integer> getLowestPriceInterval(int startOfRange, int endOfRange, IPortSlot slot, IPortTimeWindowsRecord portTimeWindowRecord) {
-		return priceIntervalProviderUtil.getLowestPriceInterval(getPriceIntervals(slot, startOfRange, endOfRange, portTimeWindowRecord));
 	}
 
 	@Override
