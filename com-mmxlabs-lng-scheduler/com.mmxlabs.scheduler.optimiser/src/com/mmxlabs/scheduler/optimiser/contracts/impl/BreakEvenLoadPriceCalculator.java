@@ -11,6 +11,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.contracts.IBreakEvenPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
@@ -67,5 +68,15 @@ public class BreakEvenLoadPriceCalculator implements ILoadPriceCalculator, IBrea
 	@Override
 	public void prepareRealPNL() {
 
+	}
+
+	@Override
+	public PricingEventType getCalculatorPricingEventType() {
+		return null;
+	}
+
+	@Override
+	public int getEstimatedPurchasePrice(ILoadOption loadOption, int timeInHours) {
+		throw new IllegalStateException("BreakEvenLoadPriceCalculator should not use getEstimatedPurchasePrice()");
 	}
 }

@@ -14,6 +14,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -103,4 +104,18 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * any cached data prior to the real calculations.
 	 */
 	public void prepareRealPNL();
+	
+	/**
+	 * Provides a set PricingEventType for a calculator
+	 */
+	PricingEventType getCalculatorPricingEventType();
+	
+	/**
+	 * Get a rough estimate of the price at a given point in time
+	 * Note that this is assumed to be in price curve time
+	 * @param loadOption
+	 * @param timeInHours
+	 * @return
+	 */
+	int getEstimatedPurchasePrice(ILoadOption loadOption, int timeInHours);
 }

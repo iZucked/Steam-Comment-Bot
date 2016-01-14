@@ -1,0 +1,242 @@
+--- SimilarityFitnessCoreIndexed.java
++++ SimilarityFitnessCoreIndexed.java
+@@ -0,0 +1,239 @@
++/**
++ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
++ * All rights reserved.
++ */
++package com.mmxlabs.scheduler.optimiser.fitness;
++
++import java.util.Arrays;
++import java.util.Collection;
++import java.util.Collections;
++import java.util.HashMap;
++import java.util.List;
++import java.util.Map;
++
++import javax.inject.Inject;
++
++import org.eclipse.jdt.annotation.NonNull;
++import org.eclipse.jdt.annotation.Nullable;
++
++import com.google.inject.name.Named;
++import com.mmxlabs.common.indexedobjects.IIndexingContext;
++import com.mmxlabs.optimiser.core.IAnnotatedSolution;
++import com.mmxlabs.optimiser.core.IResource;
++import com.mmxlabs.optimiser.core.ISequence;
++import com.mmxlabs.optimiser.core.ISequenceElement;
++import com.mmxlabs.optimiser.core.ISequences;
++import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
++import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
++import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
++import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
++import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
++import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
++import com.mmxlabs.scheduler.optimiser.fitness.components.ISimilarityComponentParameters;
++import com.mmxlabs.scheduler.optimiser.fitness.components.ISimilarityComponentParameters.Interval;
++import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
++import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
++import com.mmxlabs.scheduler.optimiser.providers.PortType;
++
++/**
++ * An {@link IFitnessComponent} and {@link IFitnessCore} combined implementation which applies a penalty for moving away from the initial solution
++ * 
++ * @author Alex Churchill
++ * @since 3.7
++ */
++public class SimilarityFitnessCoreIndexed implements IFitnessCore, IFitnessComponent {
++	public final static String SIMILARITY_THRESHOLD_NUM_CHANGES = "similarityThresholdNumChanges";
++	public final static String SIMILARITY_THRESHOLD = "similarityThreshold";
++
++	@Inject
++	@Named(SimilarityFitnessCoreIndexed.SIMILARITY_THRESHOLD_NUM_CHANGES)
++	protected int CHANGE_THRESHOLD;
++
++	@Inject
++	@Named(SimilarityFitnessCoreIndexed.SIMILARITY_THRESHOLD)
++	private boolean USE_THRESHOLD;
++
++	@Inject
++	private ISimilarityComponentParameters similarityComponentParameters;
++
++	@Inject
++	@NonNull
++	private IIndexingContext indexingContext;
++
++	private final String name;
++
++	@Inject
++	private IPortTypeProvider portTypeProvider;
++
++	private long lastFitness = 0;
++	private int lastDifferences = 0;
++
++	private int[] loadDischargeMap = null;
++	private int[] loadResourceMap = null;
++	private List<IResource> resources;
++
++	public SimilarityFitnessCoreIndexed(final String name) {
++		this.name = name;
++	}
++
++	public SimilarityFitnessCoreIndexed(final String name, boolean threshold) {
++		this.name = name;
++		this.USE_THRESHOLD = threshold;
++	}
++
++	@Override
++	public void init(@NonNull final IOptimisationData data) {
++		resources = data.getResources();
++	}
++
++	/***
++	 * Build mapping
++	 * 
++	 * @param sequences
++	 */
++	public void init(@NonNull final ISequences sequences) {
++		for (IResource resource : resources) {
++			ISequence sequence = sequences.getSequence(resource.getIndex());
++			ISequenceElement prev = null;
++			for (final ISequenceElement current : sequence) {
++				if (prev != null) {
++					if (getPortType(prev) == PortType.Load) {
++						if (getPortType(current) == PortType.Discharge) {
++							loadDischargeMap[prev.getIndex()] = current.getIndex();
++						}
++						loadResourceMap[prev.getIndex()] = resource.getIndex();
++					}
++				}
++				prev = current;
++			}
++		}
++	}
++
++	@Override
++	public void dispose() {
++
++	}
++
++	@Override
++	public Collection<IFitnessComponent> getFitnessComponents() {
++		return Collections.<IFitnessComponent> singleton(this);
++	}
++
++	@Override
++	public boolean evaluate(@NonNull ISequences sequences, @NonNull IEvaluationState evaluationState) {
++		evaluation(sequences);
++		return true;
++	}
++
++	@Override
++	public boolean evaluate(@NonNull final ISequences sequences, @NonNull IEvaluationState evaluationState, @Nullable final Collection<IResource> affectedResources) {
++		evaluation(sequences);
++		return true;
++	}
++
++	@Override
++	public void accepted(@NonNull final ISequences sequences, @Nullable final Collection<IResource> affectedResources) {
++
++	}
++
++	@Override
++	public void annotate(@NonNull final ISequences sequences, @NonNull IEvaluationState evaluationState, @NonNull final IAnnotatedSolution solution) {
++		if (solution != null) {
++			evaluation(sequences);
++			solution.setGeneralAnnotation(SchedulerConstants.AI_similarityDifferences, lastDifferences);
++		}
++	}
++
++	private void evaluation(@NonNull final ISequences sequences) {
++		int numberOfChanges = 0;
++		if (loadDischargeMap == null) {
++			loadDischargeMap = new int[indexingContext.getCurrentIndex(ISequenceElement.class)];
++			loadResourceMap = new int[indexingContext.getCurrentIndex(IResource.class)];
++			initArrayIndexes(loadDischargeMap, loadResourceMap);
++			init(sequences);
++			lastFitness = 0;
++		} else {
++			int cargoDifferences = 0;
++			int vesselDifferences = 0;
++			for (IResource resource : resources) {
++				ISequence sequence = sequences.getSequence(resource.getIndex());
++				ISequenceElement prev = null;
++				for (final ISequenceElement current : sequence) {
++					if (prev != null) {
++						if (getPortType(prev) == PortType.Load) {
++							int matchedDischarge = loadDischargeMap[prev.getIndex()];
++							if (getPortType(current) == PortType.Discharge && matchedDischarge != current.getIndex() ) {
++								cargoDifferences++;
++							}
++							if (loadResourceMap[prev.getIndex()] != resource.getIndex()) {
++								vesselDifferences++;
++							}
++						}
++					}
++					prev = current;
++				}
++			}
++			numberOfChanges = cargoDifferences + vesselDifferences;
++//			if (USE_THRESHOLD) {
++				lastFitness = processDifferencesWithThreshold(numberOfChanges);
++//			} else {
++//				lastFitness = numberOfChanges;
++//			}
++		}
++		lastDifferences = numberOfChanges;
++	}
++
++	private void initArrayIndexes(int[] ... indexes) {
++		for (int[] indexesArray : indexes) {
++			Arrays.fill(indexesArray, -1);
++		}
++	}
++	
++	private int processDifferencesWithThreshold(int diff) {
++		int outOfBounds = 0;
++		int high = similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.HIGH)
++				- similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.MEDIUM);
++		int med = similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.MEDIUM)
++				- similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.LOW);
++		int low = similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.LOW);
++
++		if (diff >= similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.HIGH)) {
++			outOfBounds = diff - similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.HIGH);
++		} else if (diff >= similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.MEDIUM)) {
++			high = diff - similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.MEDIUM);
++		} else if (diff >= similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.LOW)) {
++			high = 0;
++			med = diff - similarityComponentParameters.getThreshold(ISimilarityComponentParameters.Interval.LOW);
++		} else {
++			high = 0;
++			med = 0;
++			low = diff;
++		}
++
++		return (outOfBounds * similarityComponentParameters.getWeight(Interval.OUT_OF_BOUNDS) + high * similarityComponentParameters.getWeight(Interval.HIGH) + med
++				* similarityComponentParameters.getWeight(Interval.MEDIUM) + low * similarityComponentParameters.getWeight(Interval.LOW));
++	}
++
++	public PortType getPortType(ISequenceElement element) {
++		return portTypeProvider.getPortType(element);
++	}
++
++	@Override
++	public String getName() {
++		if (name != null) {
++			return name;
++		} else {
++			return "";
++		}
++	}
++
++	@Override
++	public long getFitness() {
++		return lastFitness;
++	}
++
++	@Override
++	public IFitnessCore getFitnessCore() {
++		return this;
++	}
++}

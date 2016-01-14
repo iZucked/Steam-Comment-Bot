@@ -1,0 +1,47 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * All rights reserved.
+ */
+package com.mmxlabs.scheduler.optimiser.voyage;
+
+import java.util.List;
+
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.core.IElementAnnotation;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
+
+public interface IPortTimeWindowsRecord extends IElementAnnotation {
+	
+	/**
+	 * Returns all slots excluding the return slot
+	 * @return
+	 */
+	List<IPortSlot> getSlots();
+
+	ITimeWindow getSlotFeasibleTimeWindow(IPortSlot slot);
+	void setSlotFeasibleTimeWindow(IPortSlot slot, ITimeWindow timeWindow);
+
+	int getSlotDuration(IPortSlot slot);
+	void setSlotDuration(IPortSlot slot, int duration);
+
+	/**
+	 * Should be expected to do equivalent of "ptr.getSlotTime(ptr.getFirstSlot())"
+	 * @return
+	 */
+	ITimeWindow getFirstSlotFeasibleTimeWindow();
+
+	IPortSlot getFirstSlot();
+	
+	/**
+	 * Returns the final slot in the slots list
+	 * @return
+	 */
+	IPortSlot getReturnSlot();
+
+	void setSlot(IPortSlot slot, ITimeWindow timeWindow, int duration, int index);
+	void setReturnSlot(IPortSlot slot, ITimeWindow timeWindow, int duration, int index);
+
+	int getIndex(IPortSlot slot);
+	
+}

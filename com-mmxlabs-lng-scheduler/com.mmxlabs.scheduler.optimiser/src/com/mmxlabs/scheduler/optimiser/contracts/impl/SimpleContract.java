@@ -13,6 +13,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
@@ -61,6 +62,12 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	}
 
 	@Override
+	public int getEstimatedPurchasePrice(ILoadOption loadOption, int timeInHours) {
+		final IPort port = loadOption.getPort();
+		return calculateSimpleUnitPrice(timeInHours, port);
+	}
+	
+	@Override
 	public int estimateSalesUnitPrice(final IDischargeOption dischargeOption, final IPortTimesRecord voyageRecord, final IDetailTree annotations) {
 
 		if (actualsDataProvider != null && actualsDataProvider.hasActuals(dischargeOption)) {
@@ -72,6 +79,12 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 		return calculateSimpleUnitPrice(pricingDate, port);
 	}
 
+	@Override
+	public int getEstimatedSalesPrice(IDischargeOption dischargeOption, int timeInHours) {
+		final IPort port = dischargeOption.getPort();
+		return calculateSimpleUnitPrice(timeInHours, port);
+	}
+	
 	@Override
 	public int calculateSalesUnitPrice(final IDischargeOption dischargeOption, final IAllocationAnnotation allocationAnnotation, final IDetailTree annotations) {
 
@@ -122,5 +135,11 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	@Override
 	public void prepareRealPNL() {
 
+	}
+	
+	@Override
+	public PricingEventType getCalculatorPricingEventType() {
+		// Contract does not determine pricing event
+		return null;
 	}
 }
