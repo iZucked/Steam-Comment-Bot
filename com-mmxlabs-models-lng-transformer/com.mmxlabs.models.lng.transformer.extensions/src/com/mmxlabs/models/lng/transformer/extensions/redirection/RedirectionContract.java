@@ -38,6 +38,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.schedule.ShippingCostHelper;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -386,8 +387,22 @@ public class RedirectionContract implements ILoadPriceCalculator {
 	}
 
 	@Override
-	public PricingEventType getCalculatorPricingEventType() {
+	public PricingEventType getCalculatorPricingEventType(ILoadOption loadOption, IPortTimeWindowsRecord portTimeWindowsRecord) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public int getEstimatedPurchasePrice(ILoadOption loadOption, IDischargeOption dischargeOption, int timeInHours) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getCalculatorPricingDate(ILoadOption loadOption, IPortTimeWindowsRecord portTimeWindowsRecord) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
 }

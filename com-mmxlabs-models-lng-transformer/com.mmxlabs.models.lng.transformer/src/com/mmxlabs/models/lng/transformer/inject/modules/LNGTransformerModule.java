@@ -12,6 +12,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
@@ -28,7 +29,7 @@ import com.mmxlabs.models.lng.transformer.util.IntegerIntervalCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceIntervalProviderUtil;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceIntervalProviderHelper;
 import com.mmxlabs.scheduler.optimiser.curves.CachingPriceIntervalProducer;
 import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer;
@@ -141,8 +142,9 @@ public class LNGTransformerModule extends AbstractModule {
 	}
 
 	@Provides
-	IPriceIntervalProducer providePriceIntervalProducer(final PriceIntervalProducer delegate) {
+	IPriceIntervalProducer providePriceIntervalProducer(final PriceIntervalProducer delegate, @NonNull Injector injector) {
 		final CachingPriceIntervalProducer cachingPriceIntervalProducer = new CachingPriceIntervalProducer(delegate);
+		injector.injectMembers(cachingPriceIntervalProducer);
 		return cachingPriceIntervalProducer;
 	}
 

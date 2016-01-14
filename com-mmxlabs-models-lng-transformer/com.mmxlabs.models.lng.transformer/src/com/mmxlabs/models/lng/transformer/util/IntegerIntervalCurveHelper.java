@@ -3,6 +3,7 @@ package com.mmxlabs.models.lng.transformer.util;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.joda.time.DateTime;
 
 import com.google.inject.Inject;
@@ -18,6 +19,7 @@ public class IntegerIntervalCurveHelper {
 	@Inject
 	ModelEntityMap modelEntityMap;
 	
+	@NonNull
 	public List<Integer> getMonthAlignedWithOffsetDatesForRange(int start, int end, int offsetInHours) {
 		List<Integer> intervals = new LinkedList<>();
 		int proposed = start;
@@ -29,29 +31,35 @@ public class IntegerIntervalCurveHelper {
 		return intervals;
 	}
 
+	@NonNull
 	public IIntegerIntervalCurve getMonthAlignedIntegerIntervalCurve(int start, int end, int offsetInHours) {
 		IIntegerIntervalCurve intervals = new IntegerIntervalCurve();
 		int proposed = start;
 		while (proposed < end) {
-			intervals.add(proposed);
-			proposed = getNextMonth(proposed) + offsetInHours;
+			proposed = getNextMonth(proposed);
+			intervals.add(proposed + offsetInHours);
 		}
 		intervals.add(end);
 		for (int i : intervals.getIntervalsAs1dArray(start, end)) {
-			System.out.println(i);
+			System.out.println(i); // DO NOT COMMIT
 			System.out.println(modelEntityMap.getDateFromHours(i, "UTC"));
 		}
 		return intervals;
 	}
 
-	public List<Integer> getSplitMonthAlignedWithOffsetDatesForRange(int start, int end, int offsetInHours, int splitInDays) {
-		List<Integer> intervals = new LinkedList<>();
-		int proposed = start;
+	@NonNull
+	public IIntegerIntervalCurve getSplitMonthAlignedWithOffsetDatesForRange(int start, int end, int offsetInHours, int splitInDays) {
+		IIntegerIntervalCurve intervals = new IntegerIntervalCurve();
+		int proposed = start + offsetInHours;
 		while (proposed < end) {
 			intervals.add(proposed);
-			proposed = getNextMonth(intervals.get(intervals.size()-1)) + offsetInHours ;
+			proposed = getNextMonthOrSplit(proposed + offsetInHours, splitInDays) ;
 		}
 		intervals.add(end);
+		for (int i : intervals.getIntervalsAs1dArray(start, end)) {
+			System.out.println(i); // DO NOT COMMIT
+			System.out.println(modelEntityMap.getDateFromHours(i, "UTC"));
+		}
 		return intervals;
 	}
 
@@ -87,7 +95,11 @@ public class IntegerIntervalCurveHelper {
 	@SuppressWarnings("null")
 	public int getNextMonthOrSplit(int hours, int splitInDays) {
 		DateTime asDate = modelEntityMap.getDateFromHours(hours, "UTC");
-		asDate = asDate.plusMonths(1).withDayOfMonth(1);
+		if (asDate.getDayOfMonth() < splitInDays) {			
+			asDate = asDate.withDayOfMonth(splitInDays);
+		} else {
+			asDate = asDate.plusMonths(1).withDayOfMonth(1);
+		}
 		return dateAndCurveHelper.convertTime(asDate);
 	}
 
