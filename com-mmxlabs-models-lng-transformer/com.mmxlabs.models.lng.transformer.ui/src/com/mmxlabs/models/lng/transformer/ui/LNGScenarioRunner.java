@@ -59,9 +59,9 @@ public class LNGScenarioRunner {
 	@Nullable
 	private ScenarioInstance scenarioInstance;
 
-	public LNGScenarioRunner(@NonNull ExecutorService exectorService, @NonNull final LNGScenarioModel scenario, @NonNull final OptimiserSettings optimiserSettings,
+	public LNGScenarioRunner(@NonNull ExecutorService exectorService, @NonNull final LNGScenarioModel scenarioModel, @NonNull final OptimiserSettings optimiserSettings,
 			@Nullable final IRunnerHook runnerHook, final String... initialHints) {
-		this(exectorService, scenario, null, optimiserSettings, LNGSchedulerJobUtils.createLocalEditingDomain(), runnerHook, initialHints);
+		this(exectorService, scenarioModel, null, optimiserSettings, LNGSchedulerJobUtils.createLocalEditingDomain(), runnerHook, initialHints);
 
 	}
 
