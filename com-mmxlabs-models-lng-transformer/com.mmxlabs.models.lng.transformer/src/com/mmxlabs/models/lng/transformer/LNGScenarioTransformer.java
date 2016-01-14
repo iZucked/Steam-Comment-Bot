@@ -150,6 +150,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenSalesPriceCalcula
 import com.mmxlabs.scheduler.optimiser.contracts.impl.CooldownLumpSumCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.CooldownPriceIndexedCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceExpressionContract;
+import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProviderEditor;
@@ -307,6 +308,10 @@ public class LNGScenarioTransformer {
 	@Inject
 	@NonNull
 	private ICancellationFeeProviderEditor cancellationFeeProviderEditor;
+
+	@Inject
+	@Named(LNGTransformerModule.MONTH_ALIGNED_INTEGER_INTERVAL_CURVE)
+	private IIntegerIntervalCurve monthIntervalsInHoursCurve;
 
 	/**
 	 * Create a transformer for the given scenario; the class holds a reference, so changes made to the scenario after construction will be reflected in calls to the various helper methods.
@@ -1176,7 +1181,7 @@ public class LNGScenarioTransformer {
 						curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
 					}
 				}
-				dischargePriceCalculator = new PriceExpressionContract(curve);
+				dischargePriceCalculator = new PriceExpressionContract(curve, monthIntervalsInHoursCurve);
 				injector.injectMembers(dischargePriceCalculator);
 			}
 		} else if (dischargeSlot instanceof SpotSlot) {
@@ -1335,7 +1340,7 @@ public class LNGScenarioTransformer {
 						curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
 					}
 				}
-				loadPriceCalculator = new PriceExpressionContract(curve);
+				loadPriceCalculator = new PriceExpressionContract(curve, monthIntervalsInHoursCurve);
 				injector.injectMembers(loadPriceCalculator);
 
 			}
