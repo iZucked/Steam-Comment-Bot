@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
-import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -40,12 +39,14 @@ public class LNGScenarioChainBuilder {
 
 	public static final String PROPERTY_MMX_NUMBER_OF_CORES = "MMX_NUMBER_OF_CORES";
 	public static final String PROPERTY_MMX_DISABLE_MULTI_LSO = "MMX_DISABLE_MULTI_LSO";
+	public static final String PROPERTY_MMX_DISABLE_SECOND_ACTION_SET_RUN = "MMX_DISABLE_SECOND_ACTION_SET_RUN";
 
 	private static final int PROGRESS_OPTIMISATION = 100;
 	private static final int PROGRESS_HILLCLIMBING_OPTIMISATION = 10;
 	private static final int PROGRESS_ACTION_SET_OPTIMISATION = 20;
 	private static final int PROGRESS_ACTION_SET_SAVE = 5;
 
+	// TODO: (Alex) - Does not work as class is not injected. See system property.
 	@Inject
 	@Named(LNGParameters_OptimiserSettingsModule.PROPERTY_MMX_HALF_SPEED_ACTION_SETS)
 	private static boolean HALF_SPEED_ACTION_SETS;
@@ -87,10 +88,7 @@ public class LNGScenarioChainBuilder {
 		final ChainBuilder builder = new ChainBuilder(dataTransformer);
 		if (createOptimiser) {
 			// Run the standard LSO optimisation
-			int numCopies = getNumberOfAvailableCores();
-			if (System.getProperty(PROPERTY_MMX_DISABLE_MULTI_LSO) != null) {
-				numCopies = 1;
-			}
+			int numCopies = getNumberOfLSOCopies();
 			final int[] seeds = new int[numCopies];
 			for (int i = 0; i < numCopies; ++i) {
 				seeds[i] = optimiserSettings.getSeed();
@@ -104,16 +102,8 @@ public class LNGScenarioChainBuilder {
 
 			if (doActionSetPostOptimisation) {
 				// Run the action set post optimisation
-				boolean over3Months = false;
-				final OptimisationRange range = optimiserSettings.getRange();
-				if (range != null) {
-					if (!range.isSetOptimiseAfter() || !range.isSetOptimiseBefore()) {
-						over3Months = true;
-					} else if (Months.between(range.getOptimiseAfter(), range.getOptimiseBefore()) > 3) {
-						over3Months = true;
-					}
-				}
-				if (over3Months && HALF_SPEED_ACTION_SETS) {
+				boolean doSecondRun = doSecondActionSetRun(optimiserSettings);
+				if (doSecondRun) {
 					LNGActionSetTransformerUnit.chainFake(builder, optimiserSettings, executorService, PROGRESS_ACTION_SET_OPTIMISATION / 2);
 					LNGActionSetTransformerUnit.chain(builder, optimiserSettings, executorService, PROGRESS_ACTION_SET_OPTIMISATION / 2);
 				} else {
@@ -151,6 +141,31 @@ public class LNGScenarioChainBuilder {
 			LNGEvaluationTransformerUnit.chain(builder, 1);
 		}
 		return builder.build();
+	}
+
+	protected static boolean doSecondActionSetRun(@NonNull final OptimiserSettings optimiserSettings) {
+		if (System.getProperty(PROPERTY_MMX_DISABLE_SECOND_ACTION_SET_RUN) != null) {
+			return false;
+		}
+
+		boolean over3Months = false;
+		final OptimisationRange range = optimiserSettings.getRange();
+		if (range != null) {
+			if (!range.isSetOptimiseAfter() || !range.isSetOptimiseBefore()) {
+				over3Months = true;
+			} else if (Months.between(range.getOptimiseAfter(), range.getOptimiseBefore()) > 3) {
+				over3Months = true;
+			}
+		}
+		return over3Months;
+	}
+
+	protected static int getNumberOfLSOCopies() {
+		int numCopies = getNumberOfAvailableCores();
+		if (System.getProperty(PROPERTY_MMX_DISABLE_MULTI_LSO) != null) {
+			numCopies = 1;
+		}
+		return numCopies;
 	}
 
 	/**
