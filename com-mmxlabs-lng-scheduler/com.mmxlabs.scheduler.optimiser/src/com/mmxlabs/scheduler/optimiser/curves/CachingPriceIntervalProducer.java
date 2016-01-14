@@ -1,24 +1,13 @@
 package com.mmxlabs.scheduler.optimiser.curves;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
-import com.google.inject.Inject;
-import com.mmxlabs.common.Equality;
-import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.Triple;
-import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
-import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceIntervalProviderUtil;
-import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
 public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
@@ -31,15 +20,17 @@ public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 		protected final int dischargeEnd;
 		protected final ILoadOption loadOption;
 		protected final IDischargeOption dischargeOption;
-		protected final IPricingEventHelper dischargeOption;
-		protected final IPricingEventHelper dischargeOption;
-		public CacheKey(int loadStart, int loadEnd, int dischargeStart, int dischargeEnd, ILoadOption loadOption, IDischargeOption dischargeOption) {
+		protected final PricingEventType loadPricingEventType;
+		protected final PricingEventType dischargePricingEventType;
+		public CacheKey(int loadStart, int loadEnd, int dischargeStart, int dischargeEnd, ILoadOption loadOption, IDischargeOption dischargeOption, PricingEventType loadPricingEventType, PricingEventType dischargePricingEventType) {
 			this.loadStart = loadStart;
 			this.loadEnd = loadEnd;
 			this.dischargeStart = dischargeStart;
 			this.dischargeEnd = dischargeEnd;
 			this.loadOption = loadOption;
 			this.dischargeOption = dischargeOption;
+			this.loadPricingEventType = loadPricingEventType;
+			this.dischargePricingEventType = dischargePricingEventType;
 		}
 
 		@Override
@@ -52,6 +43,8 @@ public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 			result = (prime * result) + dischargeEnd;
 			result = (prime * result) + (loadOption == null ? 0 : loadOption.hashCode());
 			result = (prime * result) + (dischargeOption == null ? 0 : dischargeOption.hashCode());
+			result = (prime * result) + (dischargePricingEventType == null ? 0 : dischargePricingEventType.hashCode());
+			result = (prime * result) + (loadPricingEventType == null ? 0 : loadPricingEventType.hashCode());
 
 			return result;
 		}
@@ -65,7 +58,8 @@ public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 			if (obj instanceof CacheKey) {
 				final CacheKey other = (CacheKey) obj;
 				return this.loadStart == other.loadStart && this.loadEnd == other.loadEnd && this.dischargeStart == other.dischargeStart && this.dischargeEnd == other.dischargeEnd
-						&& this.loadOption == other.loadOption && this.dischargeOption == other.dischargeOption;
+						&& this.loadOption == other.loadOption && this.dischargeOption == other.dischargeOption && this.loadPricingEventType == other.loadPricingEventType
+						&& this.dischargePricingEventType == other.dischargePricingEventType;
 			}
 			return false;
 		}
@@ -79,6 +73,8 @@ public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 		public final int dischargeEnd;
 		public final ILoadOption loadOption;
 		public final IDischargeOption dischargeOption;
+		protected final PricingEventType loadPricingEventType;
+		protected final PricingEventType dischargePricingEventType;
 		public final CacheKey cacheKey;
 		public List<int[]> result = null;
 		
@@ -88,22 +84,26 @@ public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 				this.loadStart = loadOption.getTimeWindow().getStart();
 				this.loadEnd = Math.max(loadOption.getTimeWindow().getEnd(), loadFeasibleTimeWindow.getEnd());
 				this.loadOption = loadOption;
+				this.loadPricingEventType = loadOption.getPricingEvent();
 			} else {
 				this.loadStart = -1;
 				this.loadEnd = -1;
 				this.loadOption = null;
+				this.loadPricingEventType = null;
 			}
 			if (dischargeOption != null) {
 				ITimeWindow dischargeFeasibleTimeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(dischargeOption);
 				this.dischargeStart = dischargeOption.getTimeWindow().getStart();
 				this.dischargeEnd = Math.max(dischargeOption.getTimeWindow().getEnd(), dischargeFeasibleTimeWindow.getEnd());
 				this.dischargeOption = dischargeOption;
+				this.dischargePricingEventType = dischargeOption.getPricingEvent();
 			} else {
 				this.dischargeStart = -1;
 				this.dischargeEnd = -1;
 				this.dischargeOption = null;
+				this.dischargePricingEventType = null;
 			}
-			cacheKey = new CacheKey(loadStart, loadEnd, dischargeStart, dischargeEnd, loadOption, dischargeOption);
+			cacheKey = new CacheKey(loadStart, loadEnd, dischargeStart, dischargeEnd, loadOption, dischargeOption, loadPricingEventType, dischargePricingEventType);
 		}
 	}
 

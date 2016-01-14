@@ -78,9 +78,12 @@ public class PriceIntervalProducer implements IPriceIntervalProducer {
 	 */
 	@Override
 	public List<int[]> getIntervalsWhenLoadOrDischargeDeterminesBothPricingEvents(ILoadOption load, IDischargeOption discharge, IPriceIntervalProvider loadPriceIntervalProvider,
-			IPriceIntervalProvider dischargePriceIntervalProvider, IPortTimeWindowsRecord portTimeWindowRecord, boolean dateFromLoad) {
-		List<int[]> complexPricingIntervals = priceIntervalProviderUtil.getComplexPriceIntervals(load, discharge, loadPriceIntervalProvider, dischargePriceIntervalProvider, portTimeWindowRecord, dateFromLoad);
-		return complexPricingIntervals;
+			IPriceIntervalProvider dischargePriceIntervalProvider, IPortTimeWindowsRecord portTimeWindowsRecord, boolean dateFromLoad) {
+		int start = load.getTimeWindow().getStart();
+		ITimeWindow feasibletimeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
+		int end = feasibletimeWindow.getEnd(); // in case we're late
+
+		return priceIntervalProviderUtil.buildComplexPriceIntervals(start, end, load, discharge, loadPriceIntervalProvider, dischargePriceIntervalProvider, portTimeWindowsRecord, dateFromLoad);
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
@@ -61,5 +62,5 @@ public interface ISalesPriceCalculator extends ICalculator {
 	
 	public int getEstimatedSalesPrice(IDischargeOption sell, int timeInHours); // DON NOT COMMIT (comment)
 
-	public PricingEventType getCalculatorPricingEventType();
+	public PricingEventType getCalculatorPricingEventType(ILoadOption loadOption, IDischargeOption dischargeOption);
 }

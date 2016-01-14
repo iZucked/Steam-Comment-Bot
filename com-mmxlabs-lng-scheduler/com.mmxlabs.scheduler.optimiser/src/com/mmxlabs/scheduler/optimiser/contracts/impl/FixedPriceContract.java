@@ -114,7 +114,7 @@ public class FixedPriceContract implements ILoadPriceCalculator, ISalesPriceCalc
 	}
 
 	@Override
-	public PricingEventType getCalculatorPricingEventType() {
+	public PricingEventType getCalculatorPricingEventType(ILoadOption loadOption, IDischargeOption dischargeOption) {
 		return null;
 	}
 

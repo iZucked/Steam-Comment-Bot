@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.curves;
 
 import java.util.Collection;
+import java.util.List;
 
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
@@ -36,6 +37,8 @@ public interface IIntegerIntervalCurve {
 
 	int[][] getIntervalsAs2dArray(int start, int end);
 
+	List<Integer> getIntervalsAs1dList(int start, int end);
 
+	List<int[]> getIntervalsAs2dList(int start, int end);
 	
 }

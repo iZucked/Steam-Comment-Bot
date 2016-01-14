@@ -138,7 +138,7 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	}
 	
 	@Override
-	public PricingEventType getCalculatorPricingEventType() {
+	public PricingEventType getCalculatorPricingEventType(ILoadOption loadOption, IDischargeOption dischargeOption) {
 		// Contract does not determine pricing event
 		return null;
 	}

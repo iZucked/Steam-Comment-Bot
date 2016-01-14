@@ -94,6 +94,23 @@ public class IntegerIntervalCurve implements IIntegerIntervalCurve {
 	}
 
 	@Override
+	public List<int[]> getIntervalsAs2dList(int start, int end) {
+		int[] range = getIntervalRange(start, end);
+		List<int[]> intervals = new LinkedList<>();
+		int idx = 0;
+		int prev = Integer.MIN_VALUE;
+		int curr;
+		for (int i : range) {
+			curr = i;
+			if (prev != Integer.MIN_VALUE) {
+				intervals.add(new int[] {prev, curr});
+			}
+			prev = curr;
+		}
+		return intervals;
+	}
+
+	@Override
 	public int[][] getIntervalsAs2dArray(int start, int end) {
 		int[] range = getIntervalRange(start, end);
 		int[][] intervals = new int[range.length-1][2];
@@ -115,6 +132,18 @@ public class IntegerIntervalCurve implements IIntegerIntervalCurve {
 	@Override
 	public int[] getIntervalsAs1dArray(int start, int end) {
 		return getIntervalRange(start, end);
+	}
+
+	@Override
+	public List<Integer> getIntervalsAs1dList(int start, int end) {
+		NavigableSet<Integer> subSet = intervals.subSet(start, false, end, false);
+		List<Integer> intList = new LinkedList<>();
+		intList.add(start);
+		for (int i : subSet) {
+			intList.add(i);
+		}
+		intList.add(end);
+		return intList;
 	}
 
 }

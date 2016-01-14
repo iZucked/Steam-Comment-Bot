@@ -107,8 +107,10 @@ public interface ILoadPriceCalculator extends ICalculator {
 	
 	/**
 	 * Provides a set PricingEventType for a calculator
+	 * @param loadOption TODO
+	 * @param dischargeOption TODO
 	 */
-	PricingEventType getCalculatorPricingEventType();
+	PricingEventType getCalculatorPricingEventType(ILoadOption loadOption, IDischargeOption dischargeOption);
 	
 	/**
 	 * Get a rough estimate of the price at a given point in time

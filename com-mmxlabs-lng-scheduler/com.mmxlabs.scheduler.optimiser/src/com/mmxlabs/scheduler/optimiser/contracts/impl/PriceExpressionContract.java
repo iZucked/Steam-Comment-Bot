@@ -40,7 +40,7 @@ public class PriceExpressionContract extends SimpleContract implements IPriceInt
 	}
 
 	@Override
-	public PricingEventType getCalculatorPricingEventType() {
+	public PricingEventType getCalculatorPricingEventType(ILoadOption loadOption, IDischargeOption dischargeOption) {
 		// not determined by this contract
 		return null;
 	}
