@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 import org.eclipse.core.runtime.FileLocator;
@@ -19,21 +21,30 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Module;
+import com.google.inject.Provides;
+import com.google.inject.name.Named;
 import com.mmxlabs.lingo.its.internal.Activator;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
+import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_OptimiserSettingsModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeExtender;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModesRegistry;
+import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.migration.scenario.MigrationHelper;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.EnumeratingSequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 
 public class LNGScenarioRunnerCreator {
 
@@ -45,7 +56,8 @@ public class LNGScenarioRunnerCreator {
 
 	@NonNull
 	public static LNGScenarioRunner createScenarioRunner(@NonNull final ExecutorService executorService, @NonNull final LNGScenarioModel originalScenario, @NonNull final OptimiserSettings settings) {
-		final LNGScenarioRunner originalScenarioRunner = new LNGScenarioRunner(executorService, originalScenario, settings, null, LNGTransformerHelper.HINT_OPTIMISE_LSO);
+		final LNGScenarioRunner originalScenarioRunner = new LNGScenarioRunner(executorService, originalScenario, null, settings, LNGSchedulerJobUtils.createLocalEditingDomain(), null,
+				createITSService(), null, LNGTransformerHelper.HINT_OPTIMISE_LSO);
 		return originalScenarioRunner;
 	}
 
@@ -129,5 +141,64 @@ public class LNGScenarioRunnerCreator {
 			}
 		}
 		return optimiserSettings;
+	}
+
+	/**
+	 * Special optimiser injection service to disable special deployment settings during ITS runs
+	 * 
+	 * @return
+	 */
+	@NonNull
+	public static IOptimiserInjectorService createITSService() {
+
+		return new IOptimiserInjectorService() {
+
+			@Override
+			public Module requestModule(@NonNull final ModuleType moduleType, @NonNull final Collection<String> hints) {
+				return null;
+			}
+
+			@Override
+			public List<Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<String> hints) {
+				if (moduleType == ModuleType.Module_EvaluationParametersModule) {
+					return Collections.<Module> singletonList(new AbstractModule() {
+
+						@Override
+						protected void configure() {
+
+						}
+
+						@Provides
+						@Named(EnumeratingSequenceScheduler.OPTIMISER_REEVALUATE)
+						private boolean isOptimiserReevaluating() {
+							return false;
+						}
+					});
+				}
+				if (moduleType == ModuleType.Module_OptimisationParametersModule) {
+					return Collections.<Module> singletonList(new AbstractModule() {
+
+						@Override
+						protected void configure() {
+
+						}
+
+						@Provides
+						@Named(LNGParameters_OptimiserSettingsModule.PROPERTY_MMX_HALF_SPEED_ACTION_SETS)
+						private boolean isHalfSpeedActionSets() {
+							return false;
+						}
+
+						@Provides
+						@Named(LNGScenarioChainBuilder.PROPERTY_MMX_DISABLE_MULTI_LSO)
+						private boolean disableMultiLSO() {
+							return true;
+						}
+					});
+
+				}
+				return null;
+			}
+		};
 	}
 }
