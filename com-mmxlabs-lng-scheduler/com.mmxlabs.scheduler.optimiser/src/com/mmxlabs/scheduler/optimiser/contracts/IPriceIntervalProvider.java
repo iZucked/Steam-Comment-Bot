@@ -17,11 +17,10 @@ public interface IPriceIntervalProvider {
 
 	/**
 	 * Provides an ordered list of dates and price intervals 
-	 * @param loadOption
-	 * @param dischargeOption
+	 * @param slot TODO
 	 * @return
 	 */
-	public List<int[]> getPriceIntervals(int startOfRange, int endOfRange, ILoadOption loadOption, IDischargeOption dischargeOption, IPortTimeWindowsRecord portTimeWindowRecord);
+	public List<int[]> getPriceIntervals(IPortSlot slot, int startOfRange, int endOfRange, IPortTimeWindowsRecord portTimeWindowRecord);
 
 	/**
 	 * Provides the date range for the highest price period in a given range 
@@ -29,7 +28,7 @@ public interface IPriceIntervalProvider {
 	 * @param dischargeOption
 	 * @return
 	 */
-	public Pair<Integer, Integer> getHighestPriceInterval(int startOfRange, int endOfRange, ILoadOption loadOption, IDischargeOption dischargeOption, IPortTimeWindowsRecord portTimeWindowRecord); 
+	public Pair<Integer, Integer> getHighestPriceInterval(int startOfRange, int endOfRange, IPortSlot portSlot, IPortTimeWindowsRecord portTimeWindowRecord); 
 	
 	/**
 	 * Provides the date range for the lowest price period in a given range 
@@ -37,7 +36,7 @@ public interface IPriceIntervalProvider {
 	 * @param dischargeOption
 	 * @return
 	 */
-	public Pair<Integer, Integer> getLowestPriceInterval(int startOfRange, int endOfRange, ILoadOption loadOption, IDischargeOption dischargeOption, IPortTimeWindowsRecord portTimeWindowRecord);
+	public Pair<Integer, Integer> getLowestPriceInterval(int startOfRange, int endOfRange, IPortSlot portSlot, IPortTimeWindowsRecord portTimeWindowRecord);
 
 	// TODO: extend to load/discharge interface
 	public List<Integer> getPriceHourIntervals(IPortSlot slot, int start, int end, IPortTimeWindowsRecord portTimeWindowsRecord);	

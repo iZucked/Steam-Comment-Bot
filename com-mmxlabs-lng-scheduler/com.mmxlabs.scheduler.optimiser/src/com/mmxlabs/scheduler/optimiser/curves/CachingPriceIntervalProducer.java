@@ -1,65 +1,58 @@
 package com.mmxlabs.scheduler.optimiser.curves;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import com.google.inject.Inject;
+import com.mmxlabs.common.Equality;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceIntervalProviderUtil;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
 public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 
+	@Inject
+	PriceIntervalProviderUtil priceIntervalProviderUtil;
+
 	private final class CacheKey {
 
-		protected final int loadStart;
-		protected final int loadEnd;
-		protected final int dischargeStart;
-		protected final int dischargeEnd;
-		protected final ILoadOption loadOption;
-		protected final IDischargeOption dischargeOption;
-		protected final PricingEventType loadPricingEventType;
-		protected final PricingEventType dischargePricingEventType;
-		public CacheKey(int loadStart, int loadEnd, int dischargeStart, int dischargeEnd, ILoadOption loadOption, IDischargeOption dischargeOption, PricingEventType loadPricingEventType, PricingEventType dischargePricingEventType) {
-			this.loadStart = loadStart;
-			this.loadEnd = loadEnd;
-			this.dischargeStart = dischargeStart;
-			this.dischargeEnd = dischargeEnd;
-			this.loadOption = loadOption;
-			this.dischargeOption = dischargeOption;
-			this.loadPricingEventType = loadPricingEventType;
-			this.dischargePricingEventType = dischargePricingEventType;
+		protected final int startTime;
+		protected final int endTime;
+		protected final IPortSlot[] determiningSlots;
+		protected final IPortSlot[] allSlots;
+		public CacheKey(int start, int end, IPortSlot[] determiningSlots, IPortSlot[] allSlots) {
+			this.startTime = start;
+			this.endTime = end;
+			this.determiningSlots = determiningSlots;
+			this.allSlots = allSlots;
 		}
 
 		@Override
 		public final int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = (prime * result) + loadStart;
-			result = (prime * result) + loadEnd;
-			result = (prime * result) + dischargeStart;
-			result = (prime * result) + dischargeEnd;
-			result = (prime * result) + (loadOption == null ? 0 : loadOption.hashCode());
-			result = (prime * result) + (dischargeOption == null ? 0 : dischargeOption.hashCode());
-			result = (prime * result) + (dischargePricingEventType == null ? 0 : dischargePricingEventType.hashCode());
-			result = (prime * result) + (loadPricingEventType == null ? 0 : loadPricingEventType.hashCode());
+			result = (prime * result) + startTime;
+			result = (prime * result) + endTime;
+			result = (prime * result) + Arrays.hashCode(determiningSlots);
+			result = (prime * result) + Arrays.hashCode(allSlots);
 
 			return result;
 		}
 
 		/**
-		 * This equals method almost certainly doesn't fulfil the normal equality contract; however it should be fast, and because this class is final and private it ought not end up getting used
-		 * wrongly.
 		 */
 		@Override
 		public final boolean equals(final Object obj) {
 			if (obj instanceof CacheKey) {
 				final CacheKey other = (CacheKey) obj;
-				return this.loadStart == other.loadStart && this.loadEnd == other.loadEnd && this.dischargeStart == other.dischargeStart && this.dischargeEnd == other.dischargeEnd
-						&& this.loadOption == other.loadOption && this.dischargeOption == other.dischargeOption && this.loadPricingEventType == other.loadPricingEventType
-						&& this.dischargePricingEventType == other.dischargePricingEventType;
+				return this.startTime == other.startTime && this.endTime == other.endTime && Equality.shallowEquals(this.determiningSlots, other.determiningSlots)
+						&& Equality.shallowEquals(this.allSlots, other.allSlots);
 			}
 			return false;
 		}
@@ -67,43 +60,19 @@ public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 	}
 
 	private final class Entry {
-		public final int loadStart;
-		public final int loadEnd;
-		public final int dischargeStart;
-		public final int dischargeEnd;
-		public final ILoadOption loadOption;
-		public final IDischargeOption dischargeOption;
-		protected final PricingEventType loadPricingEventType;
-		protected final PricingEventType dischargePricingEventType;
+		protected final int startTime;
+		protected final int endTime;
+		protected final IPortSlot[] determiningSlots;
+		protected final IPortSlot[] allSlots;
 		public final CacheKey cacheKey;
 		public List<int[]> result = null;
 		
-		public Entry(IPortTimeWindowsRecord portTimeWindowsRecord, ILoadOption loadOption, IDischargeOption dischargeOption) {
-			if (loadOption != null) {
-				ITimeWindow loadFeasibleTimeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(loadOption);
-				this.loadStart = loadOption.getTimeWindow().getStart();
-				this.loadEnd = Math.max(loadOption.getTimeWindow().getEnd(), loadFeasibleTimeWindow.getEnd());
-				this.loadOption = loadOption;
-				this.loadPricingEventType = loadOption.getPricingEvent();
-			} else {
-				this.loadStart = -1;
-				this.loadEnd = -1;
-				this.loadOption = null;
-				this.loadPricingEventType = null;
-			}
-			if (dischargeOption != null) {
-				ITimeWindow dischargeFeasibleTimeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(dischargeOption);
-				this.dischargeStart = dischargeOption.getTimeWindow().getStart();
-				this.dischargeEnd = Math.max(dischargeOption.getTimeWindow().getEnd(), dischargeFeasibleTimeWindow.getEnd());
-				this.dischargeOption = dischargeOption;
-				this.dischargePricingEventType = dischargeOption.getPricingEvent();
-			} else {
-				this.dischargeStart = -1;
-				this.dischargeEnd = -1;
-				this.dischargeOption = null;
-				this.dischargePricingEventType = null;
-			}
-			cacheKey = new CacheKey(loadStart, loadEnd, dischargeStart, dischargeEnd, loadOption, dischargeOption, loadPricingEventType, dischargePricingEventType);
+		public Entry(int startTime, int endTime, IPortSlot[] determiningSlots, IPortSlot[] allSlots) {
+			this.startTime = startTime;
+			this.endTime = endTime;
+			this.determiningSlots = determiningSlots;
+			this.allSlots = allSlots;
+			this.cacheKey = new CacheKey(startTime, endTime, determiningSlots, allSlots);
 		}
 	}
 
@@ -121,16 +90,19 @@ public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 	 * com.mmxlabs.scheduler.optimiser.components.ILoadOption)
 	 */
 	@Override
-	public List<int[]> getLoadIntervalsIndependentOfDischarge(IPortTimeWindowsRecord portTimeWindowRecord, ILoadOption load) {
-		Entry entry = getCacheEntry(portTimeWindowRecord, load, null);
+	public List<int[]> getLoadIntervalsIndependentOfDischarge(ILoadOption portSlot, IPortTimeWindowsRecord portTimeWindowRecord) {
+		int start = portSlot.getTimeWindow().getStart();
+		ITimeWindow feasibletimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(portSlot);
+		int end = findBestEnd(start, feasibletimeWindow.getStart(), portSlot.getTimeWindow().getEnd(), feasibletimeWindow.getEnd());
+
+		Entry entry = getCacheEntry(start, end, new IPortSlot[] {portSlot}, portTimeWindowRecord);
 		if (entry.result == null) {
-			List<int[]> intervals = delegate.getLoadIntervalsIndependentOfDischarge(portTimeWindowRecord, load);
+			List<int[]> intervals = delegate.getLoadIntervalsIndependentOfDischarge(portSlot, portTimeWindowRecord);
 			cache.put(entry.cacheKey, intervals);
 			return intervals;
 		} else {
 			return entry.result;
 		}
-		
 	}
 
 	/*
@@ -140,10 +112,14 @@ public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 	 * com.mmxlabs.scheduler.optimiser.components.ILoadOption, com.mmxlabs.scheduler.optimiser.components.IDischargeOption)
 	 */
 	@Override
-	public List<int[]> getLoadIntervalsBasedOnDischarge(IPortTimeWindowsRecord portTimeWindowRecord, ILoadOption load, IDischargeOption discharge) {
-		Entry entry = getCacheEntry(portTimeWindowRecord, load, discharge);
+	public List<int[]> getLoadIntervalsBasedOnDischarge(ILoadOption portSlot, IPortTimeWindowsRecord portTimeWindowRecord) {
+		int start = portSlot.getTimeWindow().getStart();
+		ITimeWindow feasibletimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(portSlot);
+		int end = findBestEnd(start, feasibletimeWindow.getStart(), portSlot.getTimeWindow().getEnd(), feasibletimeWindow.getEnd());
+		
+		Entry entry = getCacheEntry(start, end, new IPortSlot[] {portSlot}, portTimeWindowRecord);
 		if (entry.result == null) {
-			List<int[]> intervals = delegate.getLoadIntervalsBasedOnDischarge(portTimeWindowRecord, load, discharge);
+			List<int[]> intervals = delegate.getLoadIntervalsBasedOnDischarge(portSlot, portTimeWindowRecord);
 			cache.put(entry.cacheKey, intervals);
 			return intervals;
 		} else {
@@ -158,10 +134,14 @@ public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 	 * com.mmxlabs.scheduler.optimiser.components.IDischargeOption)
 	 */
 	@Override
-	public List<int[]> getDischargeWindowIndependentOfLoad(IPortTimeWindowsRecord portTimeWindowRecord, IDischargeOption discharge) {
-		Entry entry = getCacheEntry(portTimeWindowRecord, null, discharge);
+	public List<int[]> getDischargeWindowIndependentOfLoad(IDischargeOption portSlot, IPortTimeWindowsRecord portTimeWindowRecord) {
+		int start = portSlot.getTimeWindow().getStart();
+		ITimeWindow feasibletimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(portSlot);
+		int end = findBestEnd(start, feasibletimeWindow.getStart(), portSlot.getTimeWindow().getEnd(), feasibletimeWindow.getEnd());
+
+		Entry entry = getCacheEntry(start, end, new IPortSlot[] {portSlot}, portTimeWindowRecord);
 		if (entry.result == null) {
-			List<int[]> intervals = delegate.getDischargeWindowIndependentOfLoad(portTimeWindowRecord, discharge);
+			List<int[]> intervals = delegate.getDischargeWindowIndependentOfLoad(portSlot, portTimeWindowRecord);
 			cache.put(entry.cacheKey, intervals);
 			return intervals;
 		} else {
@@ -176,10 +156,14 @@ public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 	 * com.mmxlabs.scheduler.optimiser.components.ILoadOption, com.mmxlabs.scheduler.optimiser.components.IDischargeOption)
 	 */
 	@Override
-	public List<int[]> getDischargeWindowBasedOnLoad(IPortTimeWindowsRecord portTimeWindowRecord, ILoadOption load, IDischargeOption discharge) {
-		Entry entry = getCacheEntry(portTimeWindowRecord, load, discharge);
+	public List<int[]> getDischargeWindowBasedOnLoad(IDischargeOption portSlot, IPortTimeWindowsRecord portTimeWindowRecord) {
+		int start = portSlot.getTimeWindow().getStart();
+		ITimeWindow feasibletimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(portSlot);
+		int end = findBestEnd(start, feasibletimeWindow.getStart(), portSlot.getTimeWindow().getEnd(), feasibletimeWindow.getEnd());
+
+		Entry entry = getCacheEntry(start, end, new IPortSlot[] {portSlot}, portTimeWindowRecord);
 		if (entry.result == null) {
-			List<int[]> intervals = delegate.getDischargeWindowBasedOnLoad(portTimeWindowRecord, load, discharge);
+			List<int[]> intervals = delegate.getDischargeWindowBasedOnLoad(portSlot, portTimeWindowRecord);
 			cache.put(entry.cacheKey, intervals);
 			return intervals;
 		} else {
@@ -196,10 +180,15 @@ public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 	 */
 	@Override
 	public List<int[]> getIntervalsWhenLoadOrDischargeDeterminesBothPricingEvents(ILoadOption load, IDischargeOption discharge, IPriceIntervalProvider loadPriceIntervalProvider,
-			IPriceIntervalProvider dischargePriceIntervalProvider, IPortTimeWindowsRecord portTimeWindowRecord, boolean dateFromLoad) {
-		Entry entry = getCacheEntry(portTimeWindowRecord, load, discharge);
+			IPriceIntervalProvider dischargePriceIntervalProvider, IPortTimeWindowsRecord portTimeWindowsRecord, boolean dateFromLoad) {
+		int start = load.getTimeWindow().getStart();
+		ITimeWindow loadFeasibletimeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
+		ITimeWindow dischargeFeasibletimeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
+		int end = findBestEnd(start, loadFeasibletimeWindow.getStart(), discharge.getTimeWindow().getEnd(), dischargeFeasibletimeWindow.getEnd());
+		
+		Entry entry = getCacheEntry(start, end, new IPortSlot[] {load, discharge}, portTimeWindowsRecord);
 		if (entry.result == null) {
-			List<int[]> intervals = delegate.getIntervalsWhenLoadOrDischargeDeterminesBothPricingEvents(load, discharge, loadPriceIntervalProvider, dischargePriceIntervalProvider, portTimeWindowRecord, dateFromLoad);
+			List<int[]> intervals = delegate.getIntervalsWhenLoadOrDischargeDeterminesBothPricingEvents(load, discharge, loadPriceIntervalProvider, dischargePriceIntervalProvider, portTimeWindowsRecord, dateFromLoad);
 			cache.put(entry.cacheKey, intervals);
 			return intervals;
 		} else {
@@ -217,8 +206,33 @@ public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 		cache.clear();
 	}
 
-	private Entry getCacheEntry(IPortTimeWindowsRecord portTimeWindowsRecord, ILoadOption load, IDischargeOption discharge) {
-		return new Entry(portTimeWindowsRecord, load, discharge);
+	private Entry getCacheEntry(int start, int end, IPortSlot[] determiningSlots, IPortTimeWindowsRecord portTimeWindowsRecord) {
+//		int startTime = portTimeWindowsRecord.getFirstSlot().getTimeWindow().getStart();
+//		IPortSlot end = portTimeWindowsRecord.getReturnSlot();
+//		int endTime;
+//		if (end == null) {
+//			endTime = Math.max(portTimeWindowsRecord.getSlotFeasibleTimeWindow(portTimeWindowsRecord.getFirstSlot()).getEnd(), portTimeWindowsRecord.getFirstSlot().getTimeWindow().getEnd());
+//		} else {
+//			endTime = Math.max(portTimeWindowsRecord.getSlotFeasibleTimeWindow(portTimeWindowsRecord.getReturnSlot()).getEnd(), portTimeWindowsRecord.getReturnSlot().getTimeWindow().getEnd());			
+//		}
+		return new Entry(start, end, determiningSlots,
+				portTimeWindowsRecord.getSlots().toArray(new IPortSlot[portTimeWindowsRecord.getSlots().size()]));
+	}
+	
+	/**
+	 * Return the max of the window end and the feasbile end (if late). Add 1 hour if start == end
+	 * @param windowStart
+	 * @param feasibleStart
+	 * @param windowEnd
+	 * @param feasibleEnd
+	 * @return
+	 */
+	private int findBestEnd(int windowStart, int feasibleStart, int windowEnd, int feasibleEnd) {
+		int maxEnd = Math.max(windowEnd, feasibleEnd);
+		if (windowStart == maxEnd || feasibleStart == maxEnd) {
+			maxEnd += 1;
+		}
+		return maxEnd + 1;
 	}
 
 }

@@ -45,8 +45,9 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 		prepare();
 		priceBasedWindowTrimming(sequences, portTimeWindowsRecords);
 		for (int index = 0; index < sequences.size(); ++index) {
-			random.setSeed(seed);
-			randomise(index);
+//			random.setSeed(seed);
+//			randomise(index);
+			setTimeWindowsToEarliest(index);
 		}
 		synchroniseShipToShipBindings();
 		// DON NOT COMMIT
@@ -134,6 +135,27 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 				final int min = getMinArrivalTime(seq, pos);
 				final int max = getMaxArrivalTime(seq, pos);
 				arrivalTimes[seq][pos] = RandomHelper.nextIntBetween(random, min, max);
+				// TODO force sync this with any ship-to-ship bindings
+			}
+
+			// Set the arrival time at the last bit to be as early as possible; VPO will relax it if necessary.
+			arrivalTimes[seq][lastIndex] = getMinArrivalTime(seq, lastIndex);
+
+			arrivalTimes[seq][0] = getMaxArrivalTimeForNextArrival(seq, 0);
+		}
+	}
+	
+	private void setTimeWindowsToEarliest(final int seq) {
+		if (arrivalTimes[seq] == null) {
+			return;
+		}
+
+		if (sizes[seq] > 0) {
+			final int lastIndex = sizes[seq] - 1;
+			for (int pos = 0; pos < lastIndex; pos++) {
+				final int min = getMinArrivalTime(seq, pos);
+				final int max = getMaxArrivalTime(seq, pos);
+				arrivalTimes[seq][pos] = min;
 				// TODO force sync this with any ship-to-ship bindings
 			}
 

@@ -76,7 +76,7 @@ public class BreakEvenLoadPriceCalculator implements ILoadPriceCalculator, IBrea
 	}
 
 	@Override
-	public int getEstimatedPurchasePrice(ILoadOption loadOption, int timeInHours) {
+	public int getEstimatedPurchasePrice(ILoadOption loadOption, IDischargeOption dischargeOption, int timeInHours) {
 		throw new IllegalStateException("BreakEvenLoadPriceCalculator should not use getEstimatedPurchasePrice()");
 	}
 }

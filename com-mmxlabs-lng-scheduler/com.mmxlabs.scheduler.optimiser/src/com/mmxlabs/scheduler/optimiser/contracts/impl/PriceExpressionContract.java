@@ -35,43 +35,39 @@ public class PriceExpressionContract extends SimpleContract implements IPriceInt
 
 	@Override
 	protected int calculateSimpleUnitPrice(final int time, final IPort port) {
-		System.out.println(time);
+		System.out.println(time); // DO NOT COMMIT
 		return expressionCurve.getValueAtPoint(time);
 	}
 
 	@Override
-	public PricingEventType getCalculatorPricingEventType(ILoadOption loadOption, IDischargeOption dischargeOption) {
-		// not determined by this contract
-		return null;
-	}
-
-	@Override
-	public List<int[]> getPriceIntervals(int startOfRange, int endOfRange, ILoadOption loadOption, IDischargeOption dischargeOption, IPortTimeWindowsRecord portTimeWindowRecord) {
-		if (loadOption != null) { //DON NOT COMMIT
+	public List<int[]> getPriceIntervals(IPortSlot slot, int startOfRange, int endOfRange, IPortTimeWindowsRecord portTimeWindowRecord) {
+		if (slot instanceof ILoadOption) { //DON NOT COMMIT - make a load/discharge version
 			//TODO: do we need this?
-			return priceIntervalProviderUtil.getPriceIntervalsList(priceChangeIntervalsInHours, expressionCurve, startOfRange, endOfRange, 0, loadOption, portTimeWindowRecord);
+			return priceIntervalProviderUtil.getPriceIntervalsList((ILoadOption) slot, priceChangeIntervalsInHours, expressionCurve, startOfRange, endOfRange, 0, portTimeWindowRecord);
+		} else if (slot instanceof IDischargeOption) {
+			return priceIntervalProviderUtil.getPriceIntervalsList((IDischargeOption) slot, priceChangeIntervalsInHours, expressionCurve, startOfRange, endOfRange, 0, portTimeWindowRecord);
 		} else {
-			return priceIntervalProviderUtil.getPriceIntervalsList(priceChangeIntervalsInHours, expressionCurve, startOfRange, endOfRange, 0, dischargeOption, portTimeWindowRecord);
+			throw new IllegalStateException("getPriceIntervals() requires either an ILoadOption or IDischargeOption");
 		}
 	}
 
 	@Override
-	public Pair<Integer, Integer> getHighestPriceInterval(int startOfRange, int endOfRange, ILoadOption loadOption, IDischargeOption dischargeOption, IPortTimeWindowsRecord portTimeWindowRecord) {
-		return priceIntervalProviderUtil.getHighestPriceInterval(getPriceIntervals(startOfRange, endOfRange, loadOption, dischargeOption, portTimeWindowRecord));
+	public Pair<Integer, Integer> getHighestPriceInterval(int startOfRange, int endOfRange, IPortSlot slot, IPortTimeWindowsRecord portTimeWindowRecord) {
+		return priceIntervalProviderUtil.getHighestPriceInterval(getPriceIntervals(slot, startOfRange, endOfRange, portTimeWindowRecord));
 	}
 
 	@Override
-	public Pair<Integer, Integer> getLowestPriceInterval(int startOfRange, int endOfRange, ILoadOption loadOption, IDischargeOption dischargeOption, IPortTimeWindowsRecord portTimeWindowRecord) {
-		return priceIntervalProviderUtil.getLowestPriceInterval(getPriceIntervals(startOfRange, endOfRange, loadOption, dischargeOption, portTimeWindowRecord));
+	public Pair<Integer, Integer> getLowestPriceInterval(int startOfRange, int endOfRange, IPortSlot slot, IPortTimeWindowsRecord portTimeWindowRecord) {
+		return priceIntervalProviderUtil.getLowestPriceInterval(getPriceIntervals(slot, startOfRange, endOfRange, portTimeWindowRecord));
 	}
 
 	@Override
 	public List<Integer> getPriceHourIntervals(IPortSlot slot, int start, int end, IPortTimeWindowsRecord portTimeWindowsRecord) {
 		int[] intervals = priceChangeIntervalsInHours.getIntervalsAs1dArray(start, end);
 		if (slot instanceof ILoadOption) {
-			return priceIntervalProviderUtil.buildDateChangeCurveAsIntegerList(start, end, slot, intervals, portTimeWindowsRecord, PriceIntervalProviderUtil.getPriceEventFromSlotOrContract((ILoadOption) slot));
+			return priceIntervalProviderUtil.buildDateChangeCurveAsIntegerList(start, end, slot, intervals, portTimeWindowsRecord);
 		} else if (slot instanceof IDischargeOption) {
-			return priceIntervalProviderUtil.buildDateChangeCurveAsIntegerList(start, end, slot, intervals, portTimeWindowsRecord, PriceIntervalProviderUtil.getPriceEventFromSlotOrContract((IDischargeOption) slot));
+			return priceIntervalProviderUtil.buildDateChangeCurveAsIntegerList(start, end, slot, intervals, portTimeWindowsRecord);
 		} else {
 			return null;
 		}

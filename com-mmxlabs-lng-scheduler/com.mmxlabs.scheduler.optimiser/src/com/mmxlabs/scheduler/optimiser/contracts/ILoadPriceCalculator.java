@@ -17,6 +17,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -110,14 +111,24 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * @param loadOption TODO
 	 * @param dischargeOption TODO
 	 */
-	PricingEventType getCalculatorPricingEventType(ILoadOption loadOption, IDischargeOption dischargeOption);
+	PricingEventType getCalculatorPricingEventType(ILoadOption loadOption, IPortTimeWindowsRecord portTimeWindowsRecord);
 	
 	/**
 	 * Get a rough estimate of the price at a given point in time
 	 * Note that this is assumed to be in price curve time
 	 * @param loadOption
+	 * @param dischargeOption TODO
 	 * @param timeInHours
 	 * @return
 	 */
-	int getEstimatedPurchasePrice(ILoadOption loadOption, int timeInHours);
+	int getEstimatedPurchasePrice(ILoadOption loadOption, IDischargeOption dischargeOption, int timeInHours);
+	
+	/**
+	 * A contract may specify the pricing date of a purchase
+	 * @param loadOption
+	 * @param dischargeOption
+	 * @return
+	 */
+	public int getCalculatorPricingDate(ILoadOption loadOption, IPortTimeWindowsRecord portTimeWindowsRecord);
+
 }

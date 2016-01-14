@@ -14,6 +14,7 @@ import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 /**
@@ -60,7 +61,15 @@ public interface ISalesPriceCalculator extends ICalculator {
 	 */
 	public void prepareRealPNL();
 	
-	public int getEstimatedSalesPrice(IDischargeOption sell, int timeInHours); // DON NOT COMMIT (comment)
+	public PricingEventType getCalculatorPricingEventType(IDischargeOption dischargeOption, IPortTimeWindowsRecord portTimeWindowsRecord);
 
-	public PricingEventType getCalculatorPricingEventType(ILoadOption loadOption, IDischargeOption dischargeOption);
+	public int getEstimatedSalesPrice(ILoadOption loadOption, IDischargeOption dischargeOption, int timeInHours); // DON NOT COMMIT (comment)
+	
+	/**
+	 * A contract may specify the pricing date of a purchase
+	 * @param dischargeOption
+	 * @param portTimeWindowsRecord
+	 * @return
+	 */
+	public int getCalculatorPricingDate(IDischargeOption dischargeOption, IPortTimeWindowsRecord portTimeWindowsRecord);
 }

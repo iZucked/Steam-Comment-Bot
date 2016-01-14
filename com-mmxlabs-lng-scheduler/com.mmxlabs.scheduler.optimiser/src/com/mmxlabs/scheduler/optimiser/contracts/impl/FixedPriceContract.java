@@ -83,7 +83,7 @@ public class FixedPriceContract implements ILoadPriceCalculator, ISalesPriceCalc
 	}
 
 	@Override
-	public List<int[]> getPriceIntervals(int startOfRange, int endOfRange, ILoadOption loadOption, IDischargeOption dischargeOption, IPortTimeWindowsRecord portTimeWindowRecord) {
+	public List<int[]> getPriceIntervals(IPortSlot slot, int startOfRange, int endOfRange, IPortTimeWindowsRecord portTimeWindowRecord) {
 		List<int[]> fixedPriceIntervals = new LinkedList<int[]>();
 		fixedPriceIntervals.add(new int[] {startOfRange, pricePerMMBTU});
 		fixedPriceIntervals.add(new int[] {endOfRange, Integer.MIN_VALUE});
@@ -101,7 +101,7 @@ public class FixedPriceContract implements ILoadPriceCalculator, ISalesPriceCalc
 	}
 
 	@Override
-	public List<Integer> getPriceHourIntervals(IPortSlot slot, int start, int end, IPortTimeWindowsRecord portTimeWindowsRecord) {
+	public List<Integer> getPriceHourIntervals(IPortSlot slot, ILoadOption loadOption, IDischargeOption dischargeOption, int start, int end, IPortTimeWindowsRecord portTimeWindowsRecord) {
 		List<Integer> priceIntervals = getFixedStartEndIntervals(start, end);
 		return priceIntervals;
 	}
@@ -124,7 +124,7 @@ public class FixedPriceContract implements ILoadPriceCalculator, ISalesPriceCalc
 	}
 
 	@Override
-	public int getEstimatedPurchasePrice(ILoadOption loadOption, int timeInHours) {
+	public int getEstimatedPurchasePrice(ILoadOption loadOption, IDischargeOption dischargeOption, int timeInHours) {
 		return pricePerMMBTU;
 	}
 
