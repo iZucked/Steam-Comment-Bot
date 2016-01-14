@@ -1,0 +1,7 @@
+kind,entity,type,1970-01-01
+SimpleEntityBook,WST,shipping,0.0000
+SimpleEntityBook,WST,trading,0.0000
+SimpleEntityBook,MST,shipping,0.0000
+SimpleEntityBook,MST,trading,0.0000
+SimpleEntityBook,EST,shipping,0.0500
+SimpleEntityBook,EST,trading,0.0500

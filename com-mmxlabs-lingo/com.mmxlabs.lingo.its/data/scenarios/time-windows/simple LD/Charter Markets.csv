@@ -1,0 +1,27 @@
+charteroutstartdate,enabled,name,spotCharterCount,vesselClass,charterInPrice,kind,minCharterOutDuration,charterOutPrice,availablePorts
+2014-04-01,,,,,,,,,
+,true,Shell 138k - 138k_InCharter_1st,0,Shell 138k,138k_InCharter_1st,CharterInMarket,,,
+,true,Shell 138k - 138k_InCharter_2nd,0,Shell 138k,138k_InCharter_2nd,CharterInMarket,,,
+,true,Trinity 155k - 154k_InCharter_1st,1,Trinity 155k,154k_InCharter_1st,CharterInMarket,,,
+,true,Trinity 155k - 154k_InCharter_2nd,0,Trinity 155k,154k_InCharter_2nd,CharterInMarket,,,
+,true,Shell 138k - 138k_OutCharter_30days,,Shell 138k,,CharterOutMarket,30,138k_OutCharter_30days,"Bonny,Point Fortin"
+,true,Hispania Spirit - 138k_OutCharter_30days,,Hispania Spirit,,CharterOutMarket,30,138k_OutCharter_30days,"Bonny,Point Fortin"
+,true,Shell 138k - 138k_OutCharter_60days,,Shell 138k,,CharterOutMarket,60,138k_OutCharter_60days,"Bonny,Point Fortin"
+,true,Hispania Spirit - 138k_OutCharter_60days,,Hispania Spirit,,CharterOutMarket,60,138k_OutCharter_60days,"Bonny,Point Fortin"
+,true,Shell 138k - 138k_OutCharter_90days,,Shell 138k,,CharterOutMarket,90,138k_OutCharter_90days,"Bonny,Point Fortin"
+,true,Hispania Spirit - 138k_OutCharter_90days,,Hispania Spirit,,CharterOutMarket,90,138k_OutCharter_90days,"Bonny,Point Fortin"
+,true,Trinity 155k - 154k_OutCharter_30days,,Trinity 155k,,CharterOutMarket,30,154k_OutCharter_30days,"Bonny,Point Fortin"
+,true,Shell 173k - 154k_OutCharter_30days,,Shell 173k,,CharterOutMarket,30,154k_OutCharter_30days,"Bonny,Point Fortin"
+,true,Gaslog - 154k_OutCharter_30days,,Gaslog,,CharterOutMarket,30,154k_OutCharter_30days,"Bonny,Point Fortin"
+,true,SCF 173K - 154k_OutCharter_30days,,SCF 173K,,CharterOutMarket,30,154k_OutCharter_30days,"Bonny,Point Fortin"
+,true,Asia 160K - 154k_OutCharter_30days,,Asia 160K,,CharterOutMarket,30,154k_OutCharter_30days,"Bonny,Point Fortin"
+,true,Trinity 155k - 154k_OutCharter_60days,,Trinity 155k,,CharterOutMarket,60,154k_OutCharter_60days,"Bonny,Point Fortin"
+,true,Shell 173k - 154k_OutCharter_60days,,Shell 173k,,CharterOutMarket,60,154k_OutCharter_60days,"Bonny,Point Fortin"
+,true,Gaslog - 154k_OutCharter_60days,,Gaslog,,CharterOutMarket,60,154k_OutCharter_60days,"Bonny,Point Fortin"
+,true,SCF 173K - 154k_OutCharter_60days,,SCF 173K,,CharterOutMarket,60,154k_OutCharter_60days,"Bonny,Point Fortin"
+,true,Asia 160K - 154k_OutCharter_60days,,Asia 160K,,CharterOutMarket,60,154k_OutCharter_60days,"Bonny,Point Fortin"
+,true,Trinity 155k - 154k_OutCharter_90days,,Trinity 155k,,CharterOutMarket,90,154k_OutCharter_90days,"Bonny,Point Fortin"
+,true,Shell 173k - 154k_OutCharter_90days,,Shell 173k,,CharterOutMarket,90,154k_OutCharter_90days,"Bonny,Point Fortin"
+,true,Gaslog - 154k_OutCharter_90days,,Gaslog,,CharterOutMarket,90,154k_OutCharter_90days,"Bonny,Point Fortin"
+,true,SCF 173K - 154k_OutCharter_90days,,SCF 173K,,CharterOutMarket,90,154k_OutCharter_90days,"Bonny,Point Fortin"
+,true,Asia 160K - 154k_OutCharter_90days,,Asia 160K,,CharterOutMarket,90,154k_OutCharter_90days,"Bonny,Point Fortin"
