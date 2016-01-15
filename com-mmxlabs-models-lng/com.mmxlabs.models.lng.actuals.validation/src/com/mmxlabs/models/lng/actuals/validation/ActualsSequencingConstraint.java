@@ -52,7 +52,7 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
- * This constraint ensures that an {@link CargoActuals} is preceeded by another {@link CargoActuals}, or the vessel start. (or a vessel event with warning). This ensures proper heel tracking etc.
+ * This constraint ensures that an {@link CargoActuals} is preceded by another {@link CargoActuals}, or the vessel start. (or a vessel event with warning). This ensures proper heel tracking etc.
  * 
  * @author Simon Goodall
  * 
@@ -231,7 +231,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 						// Only warn about previous missing actuals if an event.
 						final int status = /*prevObject instanceof VesselEvent ? IStatus.WARNING : */ IStatus.ERROR;
 
-						final String msg = String.format("Cargo %s is not preceeded by another actualised event.", getID(prevObject));
+						final String msg = String.format("Cargo %s is not preceded by another actualised event.", getID(prevObject));
 
 						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), status);
 						failure.addEObjectAndFeature(prevObject, MMXCorePackage.Literals.NAMED_OBJECT__NAME);
