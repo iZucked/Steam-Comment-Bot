@@ -188,12 +188,6 @@ public class LNGScenarioRunnerCreator {
 						private boolean isHalfSpeedActionSets() {
 							return false;
 						}
-
-						@Provides
-						@Named(LNGScenarioChainBuilder.PROPERTY_MMX_DISABLE_MULTI_LSO)
-						private boolean disableMultiLSO() {
-							return true;
-						}
 					});
 
 				}
