@@ -72,7 +72,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	 * A structure caching the output of the {@link LegalSequencingChecker}. If an element x is in the set mapped to by key y, x can legally follow y under some circumstance
 	 */
 	protected final Map<ISequenceElement, Followers<ISequenceElement>> validFollowers = new HashMap<>();
-	protected final Map<ISequenceElement, Followers<ISequenceElement>> validPreceeders = new HashMap<>();
+	protected final Map<ISequenceElement, Followers<ISequenceElement>> validPreceders = new HashMap<>();
 
 	/**
 	 * A reverse lookup table from elements to positions. The {@link Pair} is a item containing {@link Resource} index and position within the {@link ISequence}. There are some special cases here. A
@@ -98,7 +98,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	 */
 	final protected ArrayList<Pair<ISequenceElement, ISequenceElement>> validBreaks = new ArrayList<Pair<ISequenceElement, ISequenceElement>>();
 
-	final protected class Followers<Q> implements Iterable<Q> {
+	public final class Followers<Q> implements Iterable<Q> {
 		/**
 		 * @param followers
 		 */
@@ -220,7 +220,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 			reverseLookup.put(e1, new Pair<>(null, 0));
 
 			final LinkedHashSet<ISequenceElement> followers = new LinkedHashSet<ISequenceElement>();
-			final LinkedHashSet<ISequenceElement> preceeders = new LinkedHashSet<ISequenceElement>();
+			final LinkedHashSet<ISequenceElement> preceders = new LinkedHashSet<ISequenceElement>();
 
 			for (final ISequenceElement e2 : data.getSequenceElements()) {
 				if (e1 == e2) {
@@ -260,12 +260,12 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 
 				final boolean allowReverseSequence = spotResource == null ? checker.allowSequence(e2, e1, false) : checker.allowSequence(e2, e1, spotResource, false);
 				if (allowReverseSequence) {
-					preceeders.add(e2);
+					preceders.add(e2);
 				}
 			}
 
 			validFollowers.put(e1, new Followers<ISequenceElement>(followers));
-			validPreceeders.put(e1, new Followers<ISequenceElement>(preceeders));
+			validPreceders.put(e1, new Followers<ISequenceElement>(preceders));
 		}
 
 		this.sequencesMoveGenerator = new SequencesConstrainedMoveGeneratorUnit(this);
@@ -366,8 +366,8 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 
 	/**
 	 */
-	public Map<ISequenceElement, Followers<ISequenceElement>> getValidPreceeders() {
-		return validPreceeders;
+	public Map<ISequenceElement, Followers<ISequenceElement>> getValidPreceders() {
+		return validPreceders;
 	}
 
 	/**

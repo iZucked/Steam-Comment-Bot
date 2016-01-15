@@ -19,7 +19,7 @@ import com.mmxlabs.scheduler.optimiser.lso.moves.SwapSingleSequenceElements;
 
 /**
  * A module for the {@link ConstrainedMoveGenerator} which swaps slots within a single sequence. This is intended for use with {@link VesselInstanceType#CARGO_SHORTS}. Note this cannot currently swap
- * two elements which are adjacent to each other. This would require additional work around the follower / preceeder checks.
+ * two elements which are adjacent to each other. This would require additional work around the follower / preceder checks.
  * 
  * @author Simon Goodall
  * 
@@ -116,7 +116,7 @@ public class SwapElementsInSequenceMoveGeneratorUnit implements IConstrainedMove
 		if (follower) {
 			return owner.getValidFollowers().get(a).contains(b);
 		} else {
-			return owner.getValidPreceeders().get(a).contains(b);
+			return owner.getValidPreceders().get(a).contains(b);
 		}
 	}
 }

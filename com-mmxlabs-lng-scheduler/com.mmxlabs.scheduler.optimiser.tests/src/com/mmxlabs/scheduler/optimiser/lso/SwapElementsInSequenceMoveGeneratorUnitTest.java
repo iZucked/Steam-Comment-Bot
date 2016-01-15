@@ -48,19 +48,19 @@ public class SwapElementsInSequenceMoveGeneratorUnitTest {
 		reverseLookup.put(elementA, new Pair<IResource, Integer>(resource, 0));
 		reverseLookup.put(elementB, new Pair<IResource, Integer>(resource, 1));
 
-		// Build up followers / preceeders
+		// Build up followers / preceders
 		final Map<ISequenceElement, Followers<ISequenceElement>> followers = new HashMap<ISequenceElement, ConstrainedMoveGenerator.Followers<ISequenceElement>>();
-		final Map<ISequenceElement, Followers<ISequenceElement>> preceeders = new HashMap<ISequenceElement, ConstrainedMoveGenerator.Followers<ISequenceElement>>();
+		final Map<ISequenceElement, Followers<ISequenceElement>> preceders = new HashMap<ISequenceElement, ConstrainedMoveGenerator.Followers<ISequenceElement>>();
 
 		// A can be followed by B
 		followers.put(elementA, cmg.new Followers<ISequenceElement>(Collections.singleton(elementB)));
 		followers.put(elementB, cmg.new Followers<ISequenceElement>(Collections.singleton(elementA)));
-		preceeders.put(elementA, cmg.new Followers<ISequenceElement>(Collections.singleton(elementB)));
-		preceeders.put(elementB, cmg.new Followers<ISequenceElement>(Collections.singleton(elementA)));
+		preceders.put(elementA, cmg.new Followers<ISequenceElement>(Collections.singleton(elementB)));
+		preceders.put(elementB, cmg.new Followers<ISequenceElement>(Collections.singleton(elementA)));
 
 		Mockito.when(cmg.getReverseLookup()).thenReturn(reverseLookup);
 		Mockito.when(cmg.getValidFollowers()).thenReturn(followers);
-		Mockito.when(cmg.getValidPreceeders()).thenReturn(preceeders);
+		Mockito.when(cmg.getValidPreceders()).thenReturn(preceders);
 		Mockito.when(cmg.getSequences()).thenReturn(sequences);
 
 		final SwapSingleSequenceElements move = mg.generateMove();
@@ -101,9 +101,9 @@ public class SwapElementsInSequenceMoveGeneratorUnitTest {
 		reverseLookup.put(elementB, new Pair<IResource, Integer>(resource, 1));
 		reverseLookup.put(elementC, new Pair<IResource, Integer>(resource, 2));
 
-		// Build up followers / preceeders
+		// Build up followers / preceders
 		final Map<ISequenceElement, Followers<ISequenceElement>> followers = new HashMap<ISequenceElement, ConstrainedMoveGenerator.Followers<ISequenceElement>>();
-		final Map<ISequenceElement, Followers<ISequenceElement>> preceeders = new HashMap<ISequenceElement, ConstrainedMoveGenerator.Followers<ISequenceElement>>();
+		final Map<ISequenceElement, Followers<ISequenceElement>> preceders = new HashMap<ISequenceElement, ConstrainedMoveGenerator.Followers<ISequenceElement>>();
 
 		// A can be followed by B
 		followers.put(elementA, cmg.new Followers<ISequenceElement>(Collections.singleton(elementB)));
@@ -112,15 +112,15 @@ public class SwapElementsInSequenceMoveGeneratorUnitTest {
 		followers.put(elementC, cmg.new Followers<ISequenceElement>(Collections.singleton(elementB)));
 		followers.put(elementB, cmg.new Followers<ISequenceElement>(Collections.singleton(elementA)));
 
-		preceeders.put(elementB, cmg.new Followers<ISequenceElement>(Collections.singleton(elementA)));
-		preceeders.put(elementC, cmg.new Followers<ISequenceElement>(Collections.singleton(elementB)));
+		preceders.put(elementB, cmg.new Followers<ISequenceElement>(Collections.singleton(elementA)));
+		preceders.put(elementC, cmg.new Followers<ISequenceElement>(Collections.singleton(elementB)));
 
-		preceeders.put(elementB, cmg.new Followers<ISequenceElement>(Collections.singleton(elementC)));
-		preceeders.put(elementA, cmg.new Followers<ISequenceElement>(Collections.singleton(elementB)));
+		preceders.put(elementB, cmg.new Followers<ISequenceElement>(Collections.singleton(elementC)));
+		preceders.put(elementA, cmg.new Followers<ISequenceElement>(Collections.singleton(elementB)));
 
 		Mockito.when(cmg.getReverseLookup()).thenReturn(reverseLookup);
 		Mockito.when(cmg.getValidFollowers()).thenReturn(followers);
-		Mockito.when(cmg.getValidPreceeders()).thenReturn(preceeders);
+		Mockito.when(cmg.getValidPreceders()).thenReturn(preceders);
 		Mockito.when(cmg.getSequences()).thenReturn(sequences);
 
 		final SwapSingleSequenceElements move = mg.generateMove();

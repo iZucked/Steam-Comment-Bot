@@ -574,7 +574,7 @@ public class VoyagePlanner {
 					if (idx == 0) {
 						if (actualsDataProvider.hasActuals(portOptions.getPortSlot())) {
 
-							// This should not be required in future as preceeding voyages should also be actualised!
+							// This should not be required in future as preceding voyages should also be actualised!
 							assert startHeelVolumeInM3 == actualsDataProvider.getStartHeelInM3(portOptions.getPortSlot());
 							// plan.setStartingHeelInM3(startHeelVolumeInM3);
 

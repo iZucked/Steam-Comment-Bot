@@ -194,7 +194,7 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 						for (ISequenceElement e : beforeFollowerFollowers) {
 							bffSet.add(e);
 						}
-						final ConstrainedMoveGenerator.Followers<ISequenceElement> unusedPreceeders = owner.validPreceeders.get(unused);
+						final ConstrainedMoveGenerator.Followers<ISequenceElement> unusedPreceeders = owner.validPreceders.get(unused);
 						final Set<ISequenceElement> upSet = new LinkedHashSet<ISequenceElement>(unusedPreceeders.size());
 						for (ISequenceElement e : unusedPreceeders) {
 							upSet.add(e);
