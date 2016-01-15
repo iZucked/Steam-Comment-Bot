@@ -25,6 +25,7 @@ import com.mmxlabs.optimiser.lso.impl.NullMove;
 import com.mmxlabs.optimiser.lso.impl.NullMove2Over2;
 import com.mmxlabs.optimiser.lso.impl.NullMove3Over2;
 import com.mmxlabs.optimiser.lso.impl.NullMove4Over2;
+import com.mmxlabs.scheduler.optimiser.providers.Followers;
 
 /**
  * Refactoring of the sequences-related CMG logic into a helper class.
@@ -42,6 +43,9 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 	public final static String OPTIMISER_ENABLE_FOUR_OPT_2 = "enableOptimiser4Opt2";
 
 	private int FOUR_OPT2_MOVES;
+
+	@Inject
+	private IFollowersAndPreceders followersAndPreceders;
 
 	@Inject
 	public void setFourOpt2Fix(@Named(SequencesConstrainedMoveGeneratorUnit.OPTIMISER_ENABLE_FOUR_OPT_2) boolean ENABLE_4_OPT_2_FIX) {
@@ -139,7 +143,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 			final ISequenceElement lastElementInSegment = sequence.get(beforeSecondCut);
 
 			// Collect the elements which can go after the segment we are cutting out
-			final ConstrainedMoveGenerator.Followers<ISequenceElement> followers = owner.validFollowers.get(lastElementInSegment);
+			final Followers<ISequenceElement> followers = followersAndPreceders.getValidFollowers(lastElementInSegment);
 
 			// Pick one of these followers and find where it is at the moment
 			if (followers.size() == 0)
@@ -154,7 +158,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 				return new NullMove3Over2();
 			}
 			final ISequenceElement beforeInsert = owner.sequences.getSequence(first).get(posPrecursor.getSecond() - 1);
-			if (owner.validFollowers.get(beforeInsert).contains(firstElementInSegment)) {
+			if (followersAndPreceders.getValidFollowers(beforeInsert).contains(firstElementInSegment)) {
 				// we have a legal 3opt2, so do that. It might be a 3opt1
 				// really, but that's OK
 				// so long as we don't insert a segment into itself.
@@ -194,13 +198,13 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 			final ISequence seq1 = owner.sequences.getSequence(sequence1);
 			final ISequence seq2 = owner.sequences.getSequence(sequence2);
 
-			boolean valid2opt2 = owner.validFollowers.get(seq2.get(position2 - 1)).contains(seq1.get(position1 + 1));
+			boolean valid2opt2 = followersAndPreceders.getValidFollowers(seq2.get(position2 - 1)).contains(seq1.get(position1 + 1));
 
 			while (!valid2opt2 && (position2 > 1)) {
 				// rewind position 2? after all if we don't have a valid 2opt2
 				// we probably won't get a valid 4opt2 out of it either?
 				position2--;
-				valid2opt2 = owner.validFollowers.get(seq2.get(position2 - 1)).contains(seq1.get(position1 + 1));
+				valid2opt2 = followersAndPreceders.getValidFollowers(seq2.get(position2 - 1)).contains(seq1.get(position1 + 1));
 			}
 
 			// if it would be, maybe do it
@@ -223,12 +227,12 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 				 * we want to iterate over the elements following B and see if any of them can precede anything in S1 after or including A.
 				 */
 
-				final ConstrainedMoveGenerator.Followers<ISequenceElement> followersOfSecondElementsPredecessor = owner.validFollowers.get(seq2.get(position2 - 1));
+				final Followers<ISequenceElement> followersOfSecondElementsPredecessor = followersAndPreceders.getValidFollowers(seq2.get(position2 - 1));
 
 				final List<Pair<Integer, Integer>> viableSecondBreaks = new ArrayList<Pair<Integer, Integer>>();
 				for (int i = position2 + FOUR_OPT2_MOVES; i < (seq2.size() - 1); i++) { // ignore last element
 					final ISequenceElement here = seq2.get(i);
-					for (final ISequenceElement elt : owner.validFollowers.get(here)) {
+					for (final ISequenceElement elt : followersAndPreceders.getValidFollowers(here)) {
 						final Pair<IResource, Integer> loc = owner.reverseLookup.get(elt);
 						final IResource first = loc.getFirst();
 						if (first == null) {
@@ -250,7 +254,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 									}
 								} else {
 									// 4opt2 check
-									if (valid2opt2 && owner.validFollowers.get(owner.sequences.getSequence(first).get(loc.getSecond() - 1)).contains(seq2.get(i + 1))) {
+									if (valid2opt2 && followersAndPreceders.getValidFollowers(owner.sequences.getSequence(first).get(loc.getSecond() - 1)).contains(seq2.get(i + 1))) {
 										viableSecondBreaks.add(new Pair<Integer, Integer>(i, loc.getSecond()));
 									}
 								}
