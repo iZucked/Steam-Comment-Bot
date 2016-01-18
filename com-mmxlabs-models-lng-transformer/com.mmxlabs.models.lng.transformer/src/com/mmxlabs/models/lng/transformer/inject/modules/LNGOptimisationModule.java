@@ -21,6 +21,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
+import com.google.inject.name.Names;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
@@ -32,6 +33,8 @@ import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.CompoundMoveGenerator;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.InstrumentingMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator;
+import com.mmxlabs.scheduler.optimiser.lso.FollowersAndPrecedersProviderImpl;
+import com.mmxlabs.scheduler.optimiser.lso.IFollowersAndPreceders;
 
 /**
  * Main entry point to create {@link LNGScenarioTransformer}. This uses injection to populate the data structures.
@@ -51,6 +54,9 @@ public class LNGOptimisationModule extends AbstractModule {
 
 		install(new LocalSearchOptimiserModule());
 		install(new LinearFitnessEvaluatorModule());
+
+		bind(Random.class).annotatedWith(Names.named("GUIDED_MOVE_HELPER_RANDOM")).toInstance(new Random(0L));
+		bind(IFollowersAndPreceders.class).to(FollowersAndPrecedersProviderImpl.class).in(Singleton.class);
 	}
 
 	@Provides
@@ -77,7 +83,7 @@ public class LNGOptimisationModule extends AbstractModule {
 	}
 
 	@Provides
-//	@Singleton
+	// @Singleton
 	private InstrumentingMoveGenerator provideInstrumentingMoveGenerator(final IMoveGenerator moveGenerator) {
 
 		final InstrumentingMoveGenerator instrumentingMoveGenerator = LocalSearchOptimiserModule.instrumenting ? new InstrumentingMoveGenerator(moveGenerator, true // profile moves (true) or just rate
