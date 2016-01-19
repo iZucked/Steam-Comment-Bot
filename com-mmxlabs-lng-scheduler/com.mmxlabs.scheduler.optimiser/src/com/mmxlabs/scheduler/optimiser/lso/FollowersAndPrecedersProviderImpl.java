@@ -8,6 +8,7 @@ import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.google.inject.Singleton;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -18,6 +19,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 
+@Singleton
 public class FollowersAndPrecedersProviderImpl implements IFollowersAndPreceders {
 
 	@Inject
@@ -70,6 +72,8 @@ public class FollowersAndPrecedersProviderImpl implements IFollowersAndPreceders
 	@Inject
 	public void buildCache() {
 
+		checker.disallowLateness();
+		
 		// Build of a map of special cargo elements for FOB/DES cargoes.
 		final Map<ISequenceElement, IResource> spotElementMap = new HashMap<>();
 		for (final IResource resource : optimisationData.getResources()) {
