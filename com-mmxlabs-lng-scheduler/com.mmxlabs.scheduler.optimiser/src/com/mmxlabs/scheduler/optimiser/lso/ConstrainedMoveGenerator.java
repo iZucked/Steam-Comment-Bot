@@ -192,25 +192,17 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 		this.elementSwapMoveGenerator = new ElementSwapMoveGenerator(this);
 		injector.injectMembers(elementSwapMoveGenerator);
 
-		if (optionalElementsProvider != null)
-
-		{
+		if (optionalElementsProvider != null) {
 			if (optionalElementsProvider.getOptionalElements().size() > 0) {
 				this.optionalMoveGenerator = new OptionalConstrainedMoveGeneratorUnit(this);
 				injector.injectMembers(optionalMoveGenerator);
 			} else {
 				this.optionalMoveGenerator = null;
 			}
-		} else
-
-		{
+		} else {
 			this.optionalMoveGenerator = null;
 		}
-		for (
-
-		final IResource resource : data.getResources())
-
-		{
+		for (final IResource resource : data.getResources()) {
 			final IVesselAvailability vessel = vesselProvider.getVesselAvailability(resource);
 			if (vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS) {
 				this.swapElementsMoveGenerator = new SwapElementsInSequenceMoveGeneratorUnit(this);
