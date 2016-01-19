@@ -21,7 +21,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
-import com.google.inject.name.Names;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
@@ -55,7 +54,6 @@ public class LNGOptimisationModule extends AbstractModule {
 		install(new LocalSearchOptimiserModule());
 		install(new LinearFitnessEvaluatorModule());
 
-		bind(Random.class).annotatedWith(Names.named("GUIDED_MOVE_HELPER_RANDOM")).toInstance(new Random(0L));
 		bind(IFollowersAndPreceders.class).to(FollowersAndPrecedersProviderImpl.class).in(Singleton.class);
 	}
 
