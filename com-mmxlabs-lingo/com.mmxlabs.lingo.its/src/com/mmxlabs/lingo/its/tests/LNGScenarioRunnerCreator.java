@@ -89,6 +89,12 @@ public class LNGScenarioRunnerCreator {
 	}
 
 	@NonNull
+	public static LNGScenarioRunner createScenarioRunnerWithLSO(@NonNull final ExecutorService executorService, final @NonNull URL url, @Nullable Boolean withGCO, @Nullable Integer lsoIterations)
+			throws IOException {
+		return createScenarioRunnerWithLSO(executorService, getScenarioModelFromURL(url), withGCO, lsoIterations);
+	}
+
+	@NonNull
 	public static LNGScenarioRunner createScenarioRunnerWithLSO(@NonNull final ExecutorService executorService, final @NonNull URL url) throws IOException {
 		return createScenarioRunnerWithLSO(executorService, getScenarioModelFromURL(url), null, null);
 	}
