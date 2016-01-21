@@ -340,7 +340,7 @@ public class PeriodOptimiserTest {
 				final OptimiserSettings settings = getSettings();
 
 				final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, (LNGScenarioModel) scenario, settings, new TransformerExtensionTestBootstrapModule(),
-						null, LNGTransformerHelper.HINT_OPTIMISE_LSO);
+						null, false, LNGTransformerHelper.HINT_OPTIMISE_LSO);
 				runner.evaluateInitialState();
 				if (OUTPUT_SCENARIOS) {
 					save(runner.getScenario(), "c:/temp/scenario1.lingo");
@@ -375,7 +375,7 @@ public class PeriodOptimiserTest {
 				settings.getRange().setOptimiseBefore(end);
 
 				final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, (LNGScenarioModel) scenario, settings, new TransformerExtensionTestBootstrapModule(),
-						null, LNGTransformerHelper.HINT_OPTIMISE_LSO);
+						null, false, LNGTransformerHelper.HINT_OPTIMISE_LSO);
 				runner.evaluateInitialState();
 
 				if (OUTPUT_SCENARIOS) {
