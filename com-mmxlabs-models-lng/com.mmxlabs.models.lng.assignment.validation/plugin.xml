@@ -106,6 +106,9 @@
                <target
                      class="AssignableElement">
                </target>
+               <target
+                     class="Slot">
+               </target>
             </constraint>
             <constraint
                   class="com.mmxlabs.models.lng.assignment.validation.VesselAvailabilityConstraint"
