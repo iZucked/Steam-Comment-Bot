@@ -11,11 +11,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.junit.Assert;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -32,7 +34,6 @@ import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGParameters_OptimiserSettingsModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioChainBuilder;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeExtender;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModesRegistry;
@@ -49,15 +50,98 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 public class LNGScenarioRunnerCreator {
 
 	@NonNull
-	public static LNGScenarioRunner createScenarioRunner(@NonNull final ExecutorService executorService, @NonNull final LNGScenarioModel originalScenario) {
-		final OptimiserSettings settings = createExtendedSettings(ScenarioUtils.createDefaultSettings());
-		return createScenarioRunner(executorService, originalScenario, settings);
+	public static LNGScenarioRunner createScenarioRunnerForEvaluationWithGCO(@NonNull final LNGScenarioModel originalScenario) throws IOException {
+		//
+		OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
+		optimiserSettings = createExtendedSettings(optimiserSettings);
+
+		optimiserSettings.setGenerateCharterOuts(true);
+
+		final ExecutorService executorService = Executors.newSingleThreadExecutor();
+		try {
+			final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunnerWithLSO(executorService, originalScenario, optimiserSettings);
+			scenarioRunner.evaluateInitialState();
+			return scenarioRunner;
+		} finally {
+			executorService.shutdown();
+		}
 	}
 
 	@NonNull
-	public static LNGScenarioRunner createScenarioRunner(@NonNull final ExecutorService executorService, @NonNull final LNGScenarioModel originalScenario, @NonNull final OptimiserSettings settings) {
+	public static LNGScenarioRunner createScenarioRunnerForEvaluation(@NonNull final LNGScenarioModel originalScenario) throws IOException {
+
+		final LNGScenarioRunner scenarioRunner = createScenarioRunnerForEvaluation(originalScenario, (Boolean) null);
+		return scenarioRunner;
+	}
+
+	@NonNull
+	public static LNGScenarioRunner createScenarioRunnerForEvaluation(final @NonNull URL url) throws IOException {
+
+		final LNGScenarioRunner scenarioRunner = createScenarioRunnerForEvaluation(getScenarioModelFromURL(url), (Boolean) null);
+		return scenarioRunner;
+	}
+
+	@NonNull
+	public static LNGScenarioRunner createScenarioRunnerForEvaluation(final @NonNull URL url, @Nullable Boolean withGCO) throws IOException {
+
+		final LNGScenarioRunner scenarioRunner = createScenarioRunnerForEvaluation(getScenarioModelFromURL(url), withGCO);
+		return scenarioRunner;
+	}
+
+	@NonNull
+	public static LNGScenarioRunner createScenarioRunnerWithLSO(@NonNull final ExecutorService executorService, final @NonNull URL url) throws IOException {
+		return createScenarioRunnerWithLSO(executorService, getScenarioModelFromURL(url), null, null);
+	}
+
+	@NonNull
+	public static LNGScenarioRunner createScenarioRunnerForEvaluation(@NonNull final LNGScenarioModel originalScenario, @Nullable Boolean withGCO) {
+
+		final OptimiserSettings settings = createExtendedSettings(ScenarioUtils.createDefaultSettings());
+		if (withGCO != null) {
+			settings.setGenerateCharterOuts(withGCO);
+		}
+		return createScenarioRunnerForEvaluation(originalScenario, settings);
+
+	}
+
+	@NonNull
+	public static LNGScenarioRunner createScenarioRunnerWithLSO(@NonNull final ExecutorService executorService, @NonNull final LNGScenarioModel originalScenario, @Nullable Boolean withGCO,
+			@Nullable Integer lsoIterations) {
+		final OptimiserSettings settings = createExtendedSettings(ScenarioUtils.createDefaultSettings());
+		if (withGCO != null) {
+			settings.setGenerateCharterOuts(withGCO);
+		}
+		if (lsoIterations != null) {
+			settings.getAnnealingSettings().setIterations(lsoIterations);
+		}
+
+		return createScenarioRunnerWithLSO(executorService, originalScenario, settings);
+	}
+
+	@NonNull
+	public static LNGScenarioRunner createScenarioRunnerForEvaluation(@NonNull final LNGScenarioModel originalScenario, @NonNull final OptimiserSettings settings) {
+
+		final ExecutorService executorService = Executors.newSingleThreadExecutor();
+		try {
+			final LNGScenarioRunner originalScenarioRunner = new LNGScenarioRunner(executorService, originalScenario, null, settings, LNGSchedulerJobUtils.createLocalEditingDomain(), null,
+					createITSService(), null, true);
+
+			originalScenarioRunner.evaluateInitialState();
+
+			return originalScenarioRunner;
+		} finally {
+			executorService.shutdown();
+		}
+	}
+
+	@NonNull
+	public static LNGScenarioRunner createScenarioRunnerWithLSO(@NonNull final ExecutorService executorService, @NonNull final LNGScenarioModel originalScenario,
+			@NonNull final OptimiserSettings settings) {
 		final LNGScenarioRunner originalScenarioRunner = new LNGScenarioRunner(executorService, originalScenario, null, settings, LNGSchedulerJobUtils.createLocalEditingDomain(), null,
 				createITSService(), null, false, LNGTransformerHelper.HINT_OPTIMISE_LSO);
+
+		originalScenarioRunner.evaluateInitialState();
+
 		return originalScenarioRunner;
 	}
 
@@ -110,11 +194,6 @@ public class LNGScenarioRunnerCreator {
 		scenarioInstance.setInstance(scenario);
 
 		return scenarioInstance;
-	}
-
-	@NonNull
-	public static LNGScenarioRunner createScenarioRunner(@NonNull final ExecutorService executorService, final @NonNull URL url) throws IOException {
-		return createScenarioRunner(executorService, getScenarioModelFromURL(url));
 	}
 
 	/**

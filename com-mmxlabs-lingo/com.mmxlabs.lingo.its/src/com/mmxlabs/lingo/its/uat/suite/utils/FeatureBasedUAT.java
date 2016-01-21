@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
+import com.mmxlabs.lingo.its.tests.LNGScenarioRunnerCreator;
 import com.mmxlabs.lingo.its.uat.suite.testers.GlobalUATTestsConfig;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -78,7 +79,7 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 		Assert.assertNotNull(url);
 		final LNGScenarioRunner runner;
 		if (isLingoFile) {
-			runner = evaluateScenarioWithGCO(url);
+			runner = LNGScenarioRunnerCreator.createScenarioRunnerForEvaluation(url, false);
 		} else {
 			runner = null;
 		}
@@ -372,11 +373,11 @@ public abstract class FeatureBasedUAT extends AbstractOptimisationResultTester {
 			if (prop.containsKey(key)) {
 				final double propertiesValue = Double.valueOf(prop.getProperty(key));
 				final double lingoValue = getLingoOutput(map.getContainer(), map.getFeature());
-//				Assert.assertEquals(String.format("testing cargo (%s) \"%s:\"", cargoName, key), propertiesValue, lingoValue, 0.000001);
+				// Assert.assertEquals(String.format("testing cargo (%s) \"%s:\"", cargoName, key), propertiesValue, lingoValue, 0.000001);
 				if (Math.abs(propertiesValue - lingoValue) > 0.00001) {
 					System.out.println(String.format("testing cargo (%s) \"%s:\"", cargoName, key));
 				}
-//				Assert.assertEquals(String.format("testing cargo (%s) \"%s:\"", cargoName, key), propertiesValue, lingoValue, 0.000001);
+				// Assert.assertEquals(String.format("testing cargo (%s) \"%s:\"", cargoName, key), propertiesValue, lingoValue, 0.000001);
 			} else {
 				LOG.warn(key + " not in map");
 			}

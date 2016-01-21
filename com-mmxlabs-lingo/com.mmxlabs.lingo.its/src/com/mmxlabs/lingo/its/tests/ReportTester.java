@@ -20,9 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lingo.reports.IReportContents;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -39,19 +37,11 @@ public class ReportTester {
 	// Never commit as true
 	private static final boolean storeReports = false;
 
-	public static void testReports(@NonNull final ExecutorService executorService, final ScenarioInstance instance, final URL scenarioURL, final String reportID, final String shortName,
+	public static void testReports(final ScenarioInstance instance, final URL scenarioURL, final String reportID, final String shortName,
 			final String extension) throws Exception {
-		// [ TODO: Push this higher in API
-		OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
-		optimiserSettings = LNGScenarioRunnerCreator.createExtendedSettings(optimiserSettings);
 
-		// Enabled by default for ITS
-		optimiserSettings.setGenerateCharterOuts(true);
-
-		final LNGScenarioRunner runner = LNGScenarioRunnerCreator.createScenarioRunner(executorService, (LNGScenarioModel) instance.getInstance(), optimiserSettings);
-
-		runner.evaluateInitialState();
-		// ]
+		// A side-effect is the initial evaluation.
+		final LNGScenarioRunner runner = LNGScenarioRunnerCreator.createScenarioRunnerForEvaluation((LNGScenarioModel) instance.getInstance(), true);
 
 		final ReportTesterHelper reportTester = new ReportTesterHelper();
 		final IReportContents reportContents = reportTester.getReportContents(instance, reportID);
