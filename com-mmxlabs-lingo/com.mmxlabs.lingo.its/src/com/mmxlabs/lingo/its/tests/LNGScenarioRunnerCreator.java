@@ -57,7 +57,7 @@ public class LNGScenarioRunnerCreator {
 	@NonNull
 	public static LNGScenarioRunner createScenarioRunner(@NonNull final ExecutorService executorService, @NonNull final LNGScenarioModel originalScenario, @NonNull final OptimiserSettings settings) {
 		final LNGScenarioRunner originalScenarioRunner = new LNGScenarioRunner(executorService, originalScenario, null, settings, LNGSchedulerJobUtils.createLocalEditingDomain(), null,
-				createITSService(), null, LNGTransformerHelper.HINT_OPTIMISE_LSO);
+				createITSService(), null, false, LNGTransformerHelper.HINT_OPTIMISE_LSO);
 		return originalScenarioRunner;
 	}
 

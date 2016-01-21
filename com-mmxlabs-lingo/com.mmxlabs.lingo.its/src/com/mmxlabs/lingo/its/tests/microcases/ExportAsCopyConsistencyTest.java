@@ -114,7 +114,7 @@ public class ExportAsCopyConsistencyTest {
 		try {
 
 			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, new TransformerExtensionTestBootstrapModule(), null,
-					LNGTransformerHelper.HINT_OPTIMISE_LSO);
+					true);
 			scenarioRunner.evaluateInitialState();
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 

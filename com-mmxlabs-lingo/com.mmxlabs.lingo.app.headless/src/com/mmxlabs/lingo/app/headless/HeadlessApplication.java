@@ -211,11 +211,11 @@ public class HeadlessApplication implements IApplication {
 				private void save(final ISequences rawSequences, final String type) {
 					try {
 						final String suffix = instance.getName() + "." + type + ".sequences";
-						final File file2 = new File("/home/ubuntu/scenarios/"+suffix);
-//						final File file2 = new File("c:\\Temp1\\" + suffix);
+						final File file2 = new File("/home/ubuntu/scenarios/" + suffix);
+						// final File file2 = new File("c:\\Temp1\\" + suffix);
 						try (FileOutputStream fos = new FileOutputStream(file2)) {
 							final Injector injector = getInjector();
-							assert(injector != null);
+							assert (injector != null);
 							SequencesSerialiser.save(injector.getInstance(IOptimisationData.class), rawSequences, fos);
 						}
 					} catch (final Exception e) {
@@ -225,11 +225,11 @@ public class HeadlessApplication implements IApplication {
 				private ISequences load(final String type) {
 					try {
 						final String suffix = instance.getName() + "." + type + ".sequences";
-						final File file2 = new File("/home/ubuntu/scenarios/"+suffix);
-//						final File file2 = new File("c:\\Temp1\\" + suffix);
+						final File file2 = new File("/home/ubuntu/scenarios/" + suffix);
+						// final File file2 = new File("c:\\Temp1\\" + suffix);
 						try (FileInputStream fos = new FileInputStream(file2)) {
 							final Injector injector = getInjector();
-							assert(injector != null);
+							assert (injector != null);
 							return SequencesSerialiser.load(injector.getInstance(IOptimisationData.class), fos);
 						}
 					} catch (final Exception e) {
@@ -267,7 +267,7 @@ public class HeadlessApplication implements IApplication {
 
 			try {
 				final LNGScenarioRunner runner = new LNGScenarioRunner(executorService, rootObject, null, LNGScenarioRunnerUtils.createExtendedSettings(optimiserSettings),
-						LNGSchedulerJobUtils.createLocalEditingDomain(), null, localOverrides, runnerHook, LNGTransformerHelper.HINT_OPTIMISE_LSO);
+						LNGSchedulerJobUtils.createLocalEditingDomain(), null, localOverrides, runnerHook, false, LNGTransformerHelper.HINT_OPTIMISE_LSO);
 
 				// FIXME
 				// runner.init(monitor);
@@ -306,7 +306,7 @@ public class HeadlessApplication implements IApplication {
 				exportData(phaseToLoggerMap, actionSetLogger, path, outputFolderName, jsonFilePath);
 			} catch (Exception e) {
 				System.out.println("Headless Error");
-				System.err.println("Headless Error:" +e.getMessage());
+				System.err.println("Headless Error:" + e.getMessage());
 				e.printStackTrace();
 			}
 
@@ -590,9 +590,9 @@ public class HeadlessApplication implements IApplication {
 			actionSetLogger.export(Paths.get(path, foldername).toString(), "action");
 		}
 		HeadlessJSONParser.copyJSONFile(jsonFilePath, Paths.get(path, foldername, "parameters.json").toString());
-		
+
 		PrintWriter writer = WriterFactory.getWriter(Paths.get(path, foldername, "machineData.txt").toString());
-		writer.write(String.format("maxCPUs,%s",Runtime.getRuntime().availableProcessors()));
+		writer.write(String.format("maxCPUs,%s", Runtime.getRuntime().availableProcessors()));
 		writer.close();
 
 	}

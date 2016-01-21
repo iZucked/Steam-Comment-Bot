@@ -107,7 +107,7 @@ public class TrimmedSpotCargoMarketsTests extends AbstractPeriodTestCase {
 		try {
 
 			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, new TransformerExtensionTestBootstrapModule(), null,
-					LNGTransformerHelper.HINT_OPTIMISE_LSO);
+					false, LNGTransformerHelper.HINT_OPTIMISE_LSO);
 			scenarioRunner.evaluateInitialState();
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
 

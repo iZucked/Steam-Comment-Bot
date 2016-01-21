@@ -119,7 +119,7 @@ public class EventsAcrossPeriodTests extends AbstractPeriodTestCase {
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try {
 
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, new TransformerExtensionTestBootstrapModule(), null,
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, new TransformerExtensionTestBootstrapModule(), null, false,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
 			scenarioRunner.evaluateInitialState();
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
@@ -218,7 +218,7 @@ public class EventsAcrossPeriodTests extends AbstractPeriodTestCase {
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try {
 
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, new TransformerExtensionTestBootstrapModule(), null,
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, new TransformerExtensionTestBootstrapModule(), null, false,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
 			scenarioRunner.evaluateInitialState();
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
@@ -317,7 +317,7 @@ public class EventsAcrossPeriodTests extends AbstractPeriodTestCase {
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try {
 
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, new TransformerExtensionTestBootstrapModule(), null,
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, new TransformerExtensionTestBootstrapModule(), null, false,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
 			scenarioRunner.evaluateInitialState();
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
@@ -444,7 +444,7 @@ public class EventsAcrossPeriodTests extends AbstractPeriodTestCase {
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try {
 
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, new TransformerExtensionTestBootstrapModule(), null,
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, new TransformerExtensionTestBootstrapModule(), null, false,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
 			scenarioRunner.evaluateInitialState();
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();
