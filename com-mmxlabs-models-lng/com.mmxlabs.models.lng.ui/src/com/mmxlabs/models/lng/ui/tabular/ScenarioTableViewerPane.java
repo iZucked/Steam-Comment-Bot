@@ -270,9 +270,10 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 				}
 			};
 
-			GridViewerEditor.create(scenarioViewer, actSupport, ColumnViewerEditor.KEYBOARD_ACTIVATION | GridViewerEditor.SELECTION_FOLLOWS_EDITOR |
-			// ColumnViewerEditor.KEEP_EDITOR_ON_DOUBLE_CLICK |
-					ColumnViewerEditor.TABBING_HORIZONTAL | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL | ColumnViewerEditor.KEYBOARD_ACTIVATION);
+			GridViewerEditor.create(scenarioViewer, actSupport,
+					ColumnViewerEditor.KEYBOARD_ACTIVATION | GridViewerEditor.SELECTION_FOLLOWS_EDITOR |
+							// ColumnViewerEditor.KEEP_EDITOR_ON_DOUBLE_CLICK |
+							ColumnViewerEditor.TABBING_HORIZONTAL | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL | ColumnViewerEditor.KEYBOARD_ACTIVATION);
 
 			return scenarioViewer;
 		} else {
@@ -306,8 +307,8 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 							try {
 								editorLock.claim();
 								if (scenarioViewer.isLocked() == false) {
-									final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getRootObject(), scenarioEditingLocation
-											.getDefaultCommandHandler());
+									final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), scenarioEditingLocation.getRootObject(),
+											scenarioEditingLocation.getDefaultCommandHandler());
 									mdd.open(scenarioEditingLocation, structuredSelection.toList());
 								}
 							} finally {
@@ -554,17 +555,18 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 		super.requestActivation();
 		scenarioEditingLocation.setCurrentViewer(scenarioViewer);
 
-		if (actionBars != null) {
-			actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
+		final IActionBars pActionBars = actionBars;
+		if (pActionBars != null) {
+			pActionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
+			pActionBars.updateActionBars();
 		}
-		if (actionBars != null) {
-			actionBars.updateActionBars();
-		}
-
 	}
 
 	public void setLocked(final boolean locked) {
-		scenarioViewer.setLocked(locked);
+		final ScenarioTableViewer pScenarioViewer = scenarioViewer;
+		if (pScenarioViewer != null) {
+			pScenarioViewer.setLocked(locked);
+		}
 
 		for (final IContributionItem item : getToolBarManager().getItems()) {
 			if (item instanceof ActionContributionItem) {
