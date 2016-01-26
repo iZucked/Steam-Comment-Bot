@@ -37,6 +37,16 @@ public class HashMapMultiMatrixProvider<T, U extends Comparable<U>> implements I
 	 */
 	private transient String[] keys;
 
+	private transient String[] preSortedKeys;
+
+	public String[] getPreSortedKeys() {
+		return preSortedKeys;
+	}
+
+	public void setPreSortedKeys(String[] preSortedKeys) {
+		this.preSortedKeys = preSortedKeys;
+	}
+
 	public HashMapMultiMatrixProvider() {
 	}
 
@@ -64,12 +74,10 @@ public class HashMapMultiMatrixProvider<T, U extends Comparable<U>> implements I
 	}
 
 	@Override
-	public final Set<String> getKeySet() {
-		return matricies.keySet();
-	}
-
-	@Override
 	public final String[] getKeys() {
+		if (preSortedKeys != null) {
+			return preSortedKeys;
+		}
 		if (keys == null) {
 			keys = matricies.keySet().toArray(new String[matricies.size()]);
 			Arrays.sort(keys);
@@ -83,8 +91,10 @@ public class HashMapMultiMatrixProvider<T, U extends Comparable<U>> implements I
 
 		for (final String key : getKeys()) {
 			final IMatrixProvider<T, U> p = matricies.get(key);
-			final U u = p.get(x, y);
-			entries.add(new MatrixEntry<T, U>(key, x, y, u));
+			if (p != null) {
+				final U u = p.get(x, y);
+				entries.add(new MatrixEntry<T, U>(key, x, y, u));
+			}
 		}
 		return entries;
 	}
@@ -116,18 +126,23 @@ public class HashMapMultiMatrixProvider<T, U extends Comparable<U>> implements I
 		U minimum = null;
 		String minKey = null;
 
-		for (final Map.Entry<String, IMatrixProvider<T, U>> entry : matricies.entrySet()) {
-			final String key = entry.getKey();
-			final IMatrixProvider<T, U> p = entry.getValue();
-			if (p.has(x, y)) {
-				final U u = p.get(x, y);
-				if ((minimum == null) || (u.compareTo(minimum) <= 0)) {
-					minimum = u;
+		for (final String key : getKeys()) {
+			final IMatrixProvider<T, U> p = matricies.get(key);
+			//
+			// for (final Map.Entry<String, IMatrixProvider<T, U>> entry : matricies.entrySet()) {
+			// final String key = entry.getKey();
+			// final IMatrixProvider<T, U> p = entry.getValue();
+			if (p != null) {
+				if (p.has(x, y)) {
+					final U u = p.get(x, y);
+					if ((minimum == null) || (u.compareTo(minimum) <= 0)) {
+						minimum = u;
+						minKey = key;
+					}
+				} else if (invalid == null) {
+					invalid = p.get(x, y);
 					minKey = key;
 				}
-			} else if (invalid == null) {
-				invalid = p.get(x, y);
-				minKey = key;
 			}
 		}
 		return new MatrixEntry<T, U>(minKey, x, y, minimum == null ? invalid : minimum);
