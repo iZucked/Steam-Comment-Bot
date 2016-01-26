@@ -49,6 +49,7 @@ import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.time.Hours;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -300,7 +301,7 @@ public class LNGScenarioTransformer {
 	// private final OptimiserSettings optimiserParameters;
 	// @Inject
 	@Named("OptimisationShippingOnly")
-	private boolean shippingOnly = false;
+	private final boolean shippingOnly = false;
 
 	@Inject
 	@NonNull
@@ -2213,19 +2214,18 @@ public class LNGScenarioTransformer {
 			@NonNull final Map<IPort, Integer> portIndices, @NonNull final Association<VesselClass, IVesselClass> vesselAssociation, @NonNull final ModelEntityMap modelEntityMap)
 					throws IncompleteScenarioException {
 
-		LinkedHashSet<RouteOption> orderedKeys = Sets.newLinkedHashSet();
-		
+		final LinkedHashSet<RouteOption> orderedKeys = Sets.newLinkedHashSet();
+
 		orderedKeys.add(RouteOption.DIRECT);
 		orderedKeys.add(RouteOption.SUEZ);
-		
-		// TODO: Add in Panama
-		// orderedKeys.add(RouteOption.PANAMA);
-
+		if (LicenseFeatures.isPermitted("features:panama-canal")) {
+			orderedKeys.add(RouteOption.PANAMA);
+		}
 
 		/*
 		 * Now fill out the distances from the distance model. Firstly we need to create the default distance matrix.
 		 */
-		Set<RouteOption> seenRoutes = new HashSet<>();
+		final Set<RouteOption> seenRoutes = new HashSet<>();
 		final PortModel portModel = rootObject.getReferenceModel().getPortModel();
 		for (final Route r : portModel.getRoutes()) {
 			seenRoutes.add(r.getRouteOption());
