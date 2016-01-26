@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.inject.name.Named;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -28,6 +29,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
 
 /**
@@ -55,6 +57,11 @@ public final class SimpleSequenceScheduler extends AbstractLoggingSequenceSchedu
 
 	@Inject
 	private ICalculatorProvider calculatorProvider;
+
+	@Inject
+	@NonNull
+	@Named(DataComponentProviderModule.DIRECT_ROUTE)
+	private String directRoute;
 
 	@Override
 	public ScheduledSequences schedule(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
@@ -98,9 +105,8 @@ public final class SimpleSequenceScheduler extends AbstractLoggingSequenceSchedu
 			if (timeWindows.isEmpty() && (idx > 0)) {
 
 				final int lastTimeWindowStart = arrivalTimes[idx - 1];
-				timeWindowStart = lastTimeWindowStart
-						+ Calculator.getTimeFromSpeedDistance(vesselProvider.getVesselAvailability(resource).getVessel().getVesselClass().getMaxSpeed(),
-								distanceProvider.get(IMultiMatrixProvider.Default_Key).get(portProvider.getPortForElement(sequence.get(idx - 1)), portProvider.getPortForElement(element)));
+				timeWindowStart = lastTimeWindowStart + Calculator.getTimeFromSpeedDistance(vesselProvider.getVesselAvailability(resource).getVessel().getVesselClass().getMaxSpeed(),
+						distanceProvider.get(directRoute).get(portProvider.getPortForElement(sequence.get(idx - 1)), portProvider.getPortForElement(element)));
 			} else {
 				for (final ITimeWindow window : timeWindows) {
 					timeWindowStart = Math.min(timeWindowStart, window.getStart());
@@ -111,8 +117,8 @@ public final class SimpleSequenceScheduler extends AbstractLoggingSequenceSchedu
 		return arrivalTimes;
 	}
 
-//	@Override
-//	public void acceptLastSchedule() {
-//
-//	}
+	// @Override
+	// public void acceptLastSchedule() {
+	//
+	// }
 }

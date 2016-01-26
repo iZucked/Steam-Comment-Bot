@@ -20,7 +20,7 @@ public class DataComponentProviderModuleTest {
 	@Test
 	public void testDataComponentProviderModule() {
 
-		Injector injector = Guice.createInjector(new DataComponentProviderModule());
+		Injector injector = Guice.createInjector(new DataComponentProviderModule("DIRECT"));
 
 		IVesselProvider provider = injector.getInstance(IVesselProvider.class);
 		IVesselProviderEditor editor = injector.getInstance(IVesselProviderEditor.class);
@@ -33,17 +33,17 @@ public class DataComponentProviderModuleTest {
 
 	@Test
 	public void testDataComponentProviderModuleBoolean_True() {
-		Injector injector = Guice.createInjector(new DataComponentProviderModule(true));
+		Injector injector = Guice.createInjector(new DataComponentProviderModule(true, "DIRECT"));
 
 		ITimeWindowDataComponentProviderEditor editor = injector.getInstance(ITimeWindowDataComponentProviderEditor.class);
 		Assert.assertNotNull(editor);
 
 		Assert.assertTrue(editor instanceof IndexedTimeWindowEditor);
 	}
-	
+
 	@Test
 	public void testDataComponentProviderModuleBoolean_False() {
-		Injector injector = Guice.createInjector(new DataComponentProviderModule(false));
+		Injector injector = Guice.createInjector(new DataComponentProviderModule(false, "DIRECT"));
 
 		ITimeWindowDataComponentProviderEditor editor = injector.getInstance(ITimeWindowDataComponentProviderEditor.class);
 		Assert.assertNotNull(editor);

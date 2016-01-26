@@ -464,7 +464,7 @@ public class LNGVoyageCalculatorTest {
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
-		final HashMapRouteCostProviderEditor routeCostProvider = new HashMapRouteCostProviderEditor("Default");
+		final HashMapRouteCostProviderEditor routeCostProvider = new HashMapRouteCostProviderEditor("DIRECT");
 		calc.setRouteCostDataComponentProvider(routeCostProvider);
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
@@ -516,7 +516,7 @@ public class LNGVoyageCalculatorTest {
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
-		final HashMapRouteCostProviderEditor routeCostProvider = new HashMapRouteCostProviderEditor("Default");
+		final HashMapRouteCostProviderEditor routeCostProvider = new HashMapRouteCostProviderEditor("DIRECT");
 		calc.setRouteCostDataComponentProvider(routeCostProvider);
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);

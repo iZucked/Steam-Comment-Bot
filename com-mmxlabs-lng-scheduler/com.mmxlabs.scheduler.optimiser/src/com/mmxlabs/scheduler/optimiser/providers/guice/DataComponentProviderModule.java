@@ -4,11 +4,14 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers.guice;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
+import com.google.inject.name.Names;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.ILockedElementsProvider;
@@ -37,8 +40,6 @@ import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMatrixEditor;
 import com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMultiMatrixProvider;
-import com.mmxlabs.scheduler.optimiser.builder.IXYPortDistanceCalculator;
-import com.mmxlabs.scheduler.optimiser.builder.impl.XYPortEuclideanDistanceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitProvider;
@@ -160,24 +161,28 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortTypeEdi
  */
 public class DataComponentProviderModule extends AbstractModule {
 
+	public static final String DIRECT_ROUTE = "DIRECT_ROUTE";
+
 	/**
 	 * For debug & timing purposes. Switches the indexing DCPs on or off.
 	 */
 	private final boolean USE_INDEXED_DCPS;
 
-	public DataComponentProviderModule() {
-		this(true);
+	private final @NonNull String directRoute;
+
+	public DataComponentProviderModule(@NonNull String directRoute) {
+		this(true, directRoute);
 	}
 
-	public DataComponentProviderModule(final boolean useIndexedDCPs) {
+	public DataComponentProviderModule(final boolean useIndexedDCPs, @NonNull String directRoute) {
 		USE_INDEXED_DCPS = useIndexedDCPs;
+		this.directRoute = directRoute;
 	}
 
 	@Override
 	protected void configure() {
 
-		bind(IXYPortDistanceCalculator.class).to(XYPortEuclideanDistanceCalculator.class);
-		bind(XYPortEuclideanDistanceCalculator.class).in(Singleton.class);
+		bind(String.class).annotatedWith(Names.named(DIRECT_ROUTE)).toInstance(directRoute);
 
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
 
@@ -209,7 +214,7 @@ public class DataComponentProviderModule extends AbstractModule {
 			elementDurationsProvider = new IndexedElementDurationEditor();
 
 			// Create a default matrix entry
-			portDistanceProvider.set(IMultiMatrixProvider.Default_Key, new IndexedMatrixEditor<IPort, Integer>(Integer.MAX_VALUE));
+			portDistanceProvider.set(directRoute, new IndexedMatrixEditor<IPort, Integer>(Integer.MAX_VALUE));
 		} else {
 			portProvider = new HashMapPortEditor();
 			portSlotsProvider = new HashMapPortSlotEditor();
@@ -220,7 +225,7 @@ public class DataComponentProviderModule extends AbstractModule {
 			elementDurationsProvider = new HashMapElementDurationEditor();
 
 			// Create a default matrix entry
-			portDistanceProvider.set(IMultiMatrixProvider.Default_Key, new HashMapMatrixProvider<IPort, Integer>(Integer.MAX_VALUE));
+			portDistanceProvider.set(directRoute, new HashMapMatrixProvider<IPort, Integer>(Integer.MAX_VALUE));
 		}
 		bind(IPortProvider.class).toInstance(portProvider);
 		bind(IPortProviderEditor.class).toInstance(portProvider);
@@ -256,7 +261,7 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(IReturnElementProvider.class).toInstance(returnElementProvider);
 		bind(IReturnElementProviderEditor.class).toInstance(returnElementProvider);
 
-		final HashMapRouteCostProviderEditor routeCostProvider = new HashMapRouteCostProviderEditor(IMultiMatrixProvider.Default_Key);
+		final HashMapRouteCostProviderEditor routeCostProvider = new HashMapRouteCostProviderEditor(directRoute);
 		bind(IRouteCostProvider.class).toInstance(routeCostProvider);
 		bind(IRouteCostProviderEditor.class).toInstance(routeCostProvider);
 
@@ -271,7 +276,7 @@ public class DataComponentProviderModule extends AbstractModule {
 		final HashSetCalculatorProviderEditor calculatorProvider = new HashSetCalculatorProviderEditor();
 		bind(ICalculatorProvider.class).toInstance(calculatorProvider);
 		bind(ICalculatorProviderEditor.class).toInstance(calculatorProvider);
-		
+
 		final IOptionalElementsProviderEditor optionalElements = new IndexedOptionalElementsEditor();
 		bind(IOptionalElementsProvider.class).toInstance(optionalElements);
 		bind(IOptionalElementsProviderEditor.class).toInstance(optionalElements);
@@ -331,7 +336,7 @@ public class DataComponentProviderModule extends AbstractModule {
 		final HashMapLoadPriceCalculatorProviderEditor loadPriceCalculatorProviderEditor = new HashMapLoadPriceCalculatorProviderEditor();
 		bind(ILoadPriceCalculatorProvider.class).toInstance(loadPriceCalculatorProviderEditor);
 		bind(ILoadPriceCalculatorProviderEditor.class).toInstance(loadPriceCalculatorProviderEditor);
-		
+
 		final HashMapMarkToMarketProviderEditor markToMarketEditor = new HashMapMarkToMarketProviderEditor();
 		bind(IMarkToMarketProvider.class).toInstance(markToMarketEditor);
 		bind(IMarkToMarketProviderEditor.class).toInstance(markToMarketEditor);

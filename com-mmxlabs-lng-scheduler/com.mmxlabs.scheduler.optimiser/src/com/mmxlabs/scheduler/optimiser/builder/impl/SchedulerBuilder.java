@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.builder.impl;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Injector;
+import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ICurve;
@@ -52,7 +54,6 @@ import com.mmxlabs.optimiser.core.scenario.impl.OptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
-import com.mmxlabs.scheduler.optimiser.builder.IXYPortDistanceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.DefaultSpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
@@ -130,6 +131,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProviderEdi
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 
 /**
  * Implementation of {@link ISchedulerBuilder}
@@ -239,10 +241,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Inject
 	@NonNull
-	private IXYPortDistanceCalculator distanceProvider;
-
-	@Inject
-	@NonNull
 	private IVesselProviderEditor vesselProvider;
 
 	@Inject
@@ -260,6 +258,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Inject
 	@NonNull
 	private ITimeWindowDataComponentProviderEditor timeWindowProvider;
+
+	@Inject
+	@NonNull
+	@Named(DataComponentProviderModule.DIRECT_ROUTE)
+	private String directRoute;
 
 	@Inject
 	@NonNull
@@ -379,11 +382,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@NonNull
 	private final Map<IPort, MarkToMarket> fobPurchaseMTMPortMap = new HashMap<IPort, MarkToMarket>();
-	
+
 	@Inject
 	@NonNull
 	private Injector injector;
-	
+
 	/**
 	 * Constant used during end date of scenario calculations - {@link #minDaysFromLastEventToEnd} days extra after last date. See code in {@link SchedulerBuilder#getOptimisationData()}
 	 * 
@@ -791,12 +794,12 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// Pin variable for null analysis...
 		final IPort localANYWHERE = ANYWHERE;
 		if (localANYWHERE != null) {
-			setPortToPortDistance(port, localANYWHERE, IMultiMatrixProvider.Default_Key, 0);
-			setPortToPortDistance(localANYWHERE, port, IMultiMatrixProvider.Default_Key, 0);
+			setPortToPortDistance(port, localANYWHERE, directRoute, 0);
+			setPortToPortDistance(localANYWHERE, port, directRoute, 0);
 		}
 
 		// travel time from A to A should be zero, right?
-		this.setPortToPortDistance(port, port, IMultiMatrixProvider.Default_Key, 0);
+		this.setPortToPortDistance(port, port, directRoute, 0);
 
 		calculatorProvider.addCooldownCalculator(cooldownCalculator);
 	}
@@ -1279,21 +1282,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public void buildXYDistances() {
-		for (final IPort from : ports) {
-			if (!(from instanceof IXYPort)) {
-				continue;
-			}
-			for (final IPort to : ports) {
-				if (to instanceof IXYPort) {
-					final double dist = distanceProvider.getDistance((IXYPort) from, (IXYPort) to);
-					final int iDist = (int) dist;
-
-					final IMatrixEditor<IPort, Integer> matrix = (IMatrixEditor<IPort, Integer>) portDistanceProvider.get(IMultiMatrixProvider.Default_Key);
-
-					matrix.set(from, to, iDist);
-				}
-			}
-		}
+		// FIXME: What did this do?
 	}
 
 	@Override
@@ -1405,8 +1394,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	@NonNull
-	public IGeneratedCharterOutVesselEventPortSlot createGeneratedCharterOutEvent(final String id,final IPort fromPort) {
-		return createGeneratedCharterOutVesselEvent(id, fromPort );
+	public IGeneratedCharterOutVesselEventPortSlot createGeneratedCharterOutEvent(final String id, final IPort fromPort) {
+		return createGeneratedCharterOutVesselEvent(id, fromPort);
 	}
 
 	@Override
@@ -1458,27 +1447,27 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@NonNull
 	private IGeneratedCharterOutVesselEventPortSlot createGeneratedCharterOutVesselEvent(final String id, final IPort fromPort) {
-//		final GeneratedCharterOutVesselEvent event = new GeneratedCharterOutVesselEvent();
-//
-//		// TODO should start port and end port be set on this single sequence
-//		// element,
-//		// or should there be a second invisible sequence element for
-//		// repositioning, and something
-//		// which rigs the distance to be zero between repositioning elements?
-//
-//		event.setTimeWindow(arrival); // TODO: this may fail...
-//		event.setDurationHours(durationHours);
-//		event.setStartPort(fromPort);
-//		event.setEndPort(toPort);
-//		event.setMaxHeelOut(maxHeelOut);
-//		event.setHeelCVValue(heelCVValue);
-//		event.setHeelUnitPrice(heelUnitPrice);
-//		event.setHireOutRevenue(hireCost);
-//		event.setRepositioning(repositioning);
+		// final GeneratedCharterOutVesselEvent event = new GeneratedCharterOutVesselEvent();
+		//
+		// // TODO should start port and end port be set on this single sequence
+		// // element,
+		// // or should there be a second invisible sequence element for
+		// // repositioning, and something
+		// // which rigs the distance to be zero between repositioning elements?
+		//
+		// event.setTimeWindow(arrival); // TODO: this may fail...
+		// event.setDurationHours(durationHours);
+		// event.setStartPort(fromPort);
+		// event.setEndPort(toPort);
+		// event.setMaxHeelOut(maxHeelOut);
+		// event.setHeelCVValue(heelCVValue);
+		// event.setHeelUnitPrice(heelUnitPrice);
+		// event.setHireOutRevenue(hireCost);
+		// event.setRepositioning(repositioning);
 
 		final GeneratedCharterOutVesselEventPortSlot slot = new GeneratedCharterOutVesselEventPortSlot(id, fromPort);
 		injector.injectMembers(slot);
-//		slot.setPortType(PortType.GeneratedCharterOut);
+		// slot.setPortType(PortType.GeneratedCharterOut);
 		return slot;
 	}
 

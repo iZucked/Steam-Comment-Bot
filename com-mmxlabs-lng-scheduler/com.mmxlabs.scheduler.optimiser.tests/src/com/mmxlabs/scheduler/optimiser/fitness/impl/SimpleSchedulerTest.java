@@ -194,7 +194,7 @@ public class SimpleSchedulerTest {
 	public void testLSO() {
 
 		final long seed = 1;
-		final Injector parentInjector = Guice.createInjector(new DataComponentProviderModule() {
+		final Injector parentInjector = Guice.createInjector(new DataComponentProviderModule("DIRECT") {
 			@Provides
 			@Named(EnumeratingSequenceScheduler.OPTIMISER_REEVALUATE)
 			private boolean isOptimiserReevaluating() {

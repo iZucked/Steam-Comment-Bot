@@ -170,9 +170,9 @@ public class TestCalculations {
 
 			final ICargo cargo1 = builder.createCargo(Lists.newArrayList(loadSlot, dischargeSlot), false);
 
-			builder.setPortToPortDistance(port1, port2, IMultiMatrixProvider.Default_Key, 12 * 24);
-			builder.setPortToPortDistance(port2, port3, IMultiMatrixProvider.Default_Key, 12 * 24);
-			builder.setPortToPortDistance(port3, port4, IMultiMatrixProvider.Default_Key, 12 * 24);
+			builder.setPortToPortDistance(port1, port2, "DIRECT", 12 * 24);
+			builder.setPortToPortDistance(port2, port3, "DIRECT", 12 * 24);
+			builder.setPortToPortDistance(port3, port4, "DIRECT", 12 * 24);
 
 			final IOptimisationData data = builder.getOptimisationData();
 
@@ -619,9 +619,9 @@ public class TestCalculations {
 
 			final ICargo cargo1 = builder.createCargo(Lists.newArrayList(loadSlot, dischargeSlot), false);
 
-			builder.setPortToPortDistance(port1, port2, IMultiMatrixProvider.Default_Key, 12 * 25);
-			builder.setPortToPortDistance(port2, port3, IMultiMatrixProvider.Default_Key, 12 * 25);
-			builder.setPortToPortDistance(port3, port4, IMultiMatrixProvider.Default_Key, 12 * 25);
+			builder.setPortToPortDistance(port1, port2, "DIRECT", 12 * 25);
+			builder.setPortToPortDistance(port2, port3, "DIRECT", 12 * 25);
+			builder.setPortToPortDistance(port3, port4, "DIRECT", 12 * 25);
 
 			final IOptimisationData data = builder.getOptimisationData();
 
@@ -1061,9 +1061,9 @@ public class TestCalculations {
 
 			final ICargo cargo1 = builder.createCargo(Lists.newArrayList(loadSlot, dischargeSlot), false);
 
-			builder.setPortToPortDistance(port1, port2, IMultiMatrixProvider.Default_Key, 12 * 25);
-			builder.setPortToPortDistance(port2, port3, IMultiMatrixProvider.Default_Key, 12 * 25);
-			builder.setPortToPortDistance(port3, port4, IMultiMatrixProvider.Default_Key, 12 * 25);
+			builder.setPortToPortDistance(port1, port2, "DIRECT", 12 * 25);
+			builder.setPortToPortDistance(port2, port3, "DIRECT", 12 * 25);
+			builder.setPortToPortDistance(port3, port4, "DIRECT", 12 * 25);
 
 			final IOptimisationData data = builder.getOptimisationData();
 
@@ -1447,7 +1447,7 @@ public class TestCalculations {
 
 	private Injector createTestInjector(final IVolumeAllocator volumeAllocator, final int baseFuelUnitPrice) {
 
-		final Injector injector = Guice.createInjector(new PerChainUnitScopeModule(), new DataComponentProviderModule(), new AbstractModule() {
+		final Injector injector = Guice.createInjector(new PerChainUnitScopeModule(), new DataComponentProviderModule("DIRECT"), new AbstractModule() {
 
 			@Provides
 			@Singleton

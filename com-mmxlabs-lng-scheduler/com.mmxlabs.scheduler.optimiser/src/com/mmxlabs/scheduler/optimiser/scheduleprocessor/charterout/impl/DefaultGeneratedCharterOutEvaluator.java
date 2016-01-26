@@ -14,6 +14,7 @@ import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
@@ -41,6 +42,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.IdleNBOVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.NBOTravelVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider.CharterMarketOptions;
+import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 import com.mmxlabs.scheduler.optimiser.providers.IGeneratedCharterOutSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterOutEvaluator;
@@ -60,6 +62,12 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 /**
  */
 public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOutEvaluator {
+
+	@Inject
+	@NonNull
+	@Named(DataComponentProviderModule.DIRECT_ROUTE)
+	private String directRoute;
+
 	@Inject
 	private ILNGVoyageCalculator voyageCalculator;
 
@@ -296,7 +304,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		MatrixEntry<IPort, Integer> directEntry = null;
 		for (final MatrixEntry<IPort, Integer> d : distances) {
 			final int travelTime = Calculator.getTimeFromSpeedDistance(vesselClass.getMaxSpeed(), d.getValue()) + routeCostProvider.getRouteTransitTime(d.getKey(), vesselClass);
-			if (d.getKey().equals("Direct")) {
+			if (d.getKey().equals(directRoute)) {
 				directTime = travelTime;
 				directEntry = d;
 			}
@@ -307,11 +315,11 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			}
 		}
 		// heuristic to only use canal if a big improvement
-		if (!route.equals("Direct") && directEntry != null) {
+		if (!route.equals(directRoute) && directEntry != null) {
 			final double improvement = ((double) directTime - (double) shortestTime) / (double) directTime;
 			if (directTime == 0 || improvement < canalChoiceThreshold) {
 				distance = directEntry.getValue();
-				route = "Direct";
+				route = directRoute;
 				shortestTime = directTime;
 			}
 		}

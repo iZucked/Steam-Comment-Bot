@@ -34,6 +34,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 
 /**
  * A constraint checker which tests whether the ports in a sequence can be reached from one another presuming the vessel travels at its maximum speed all the way and spends a minimum amount of time at
@@ -87,6 +88,11 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 	@NonNull
 	private IActualsDataProvider actualsDataProvider;
 
+	@Inject
+	@NonNull
+	@Named(DataComponentProviderModule.DIRECT_ROUTE)
+	private String directRoute;	
+	
 	public TravelTimeConstraintChecker(@NonNull final String name) {
 		this.name = name;
 	}
@@ -243,7 +249,7 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 		final IPortSlot slot1 = portSlotProvider.getPortSlot(first);
 		final IPortSlot slot2 = portSlotProvider.getPortSlot(second);
-		final int distance = distanceProvider.get(IMultiMatrixProvider.Default_Key).get(slot1.getPort(), slot2.getPort());
+		final int distance = distanceProvider.get(directRoute).get(slot1.getPort(), slot2.getPort());
 		if (distance == Integer.MAX_VALUE) {
 			return "No edge connecting ports";
 		}

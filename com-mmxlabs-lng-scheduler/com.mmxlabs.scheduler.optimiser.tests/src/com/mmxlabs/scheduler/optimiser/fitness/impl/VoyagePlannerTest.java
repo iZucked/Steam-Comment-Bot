@@ -141,7 +141,7 @@ public final class VoyagePlannerTest {
 		final HashMapMatrixProvider<IPort, Integer> defaultDistanceProvider = new HashMapMatrixProvider<IPort, Integer>();
 
 		final HashMapMultiMatrixProvider<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>();
-		distanceProvider.set(IMultiMatrixProvider.Default_Key, defaultDistanceProvider);
+		distanceProvider.set("DIRECT", defaultDistanceProvider);
 
 		// Only need sparse matrix for testing
 		defaultDistanceProvider.set(port1, port2, 400);
@@ -230,7 +230,7 @@ public final class VoyagePlannerTest {
 		// The NBO travel options will have completed the setup of previous
 		// options (options1) filling in distance info.
 		final VoyageOptions expectedVoyageOptions1a = expectedVoyageOptions1.clone();
-		expectedVoyageOptions1a.setRoute(IMultiMatrixProvider.Default_Key);
+		expectedVoyageOptions1a.setRoute("DIRECT");
 		expectedVoyageOptions1a.setDistance(400);
 
 		final VoyageOptions expectedVoyageOptions2 = new VoyageOptions();
@@ -245,7 +245,7 @@ public final class VoyagePlannerTest {
 		expectedVoyageOptions2.setNBOSpeed(15000);
 		expectedVoyageOptions2.setShouldBeCold(true);
 		final VoyageOptions expectedVoyageOptions2a = expectedVoyageOptions2.clone();
-		expectedVoyageOptions2a.setRoute(IMultiMatrixProvider.Default_Key);
+		expectedVoyageOptions2a.setRoute("DIRECT");
 		expectedVoyageOptions2a.setDistance(400);
 
 		final VoyageOptions expectedVoyageOptions3 = new VoyageOptions();
@@ -260,7 +260,7 @@ public final class VoyagePlannerTest {
 		expectedVoyageOptions3.setNBOSpeed(15000);
 
 		final VoyageOptions expectedVoyageOptions3a = expectedVoyageOptions3.clone();
-		expectedVoyageOptions3a.setRoute(IMultiMatrixProvider.Default_Key);
+		expectedVoyageOptions3a.setRoute("DIRECT");
 		expectedVoyageOptions3a.setDistance(400);
 
 		final PortDetails expectedPortDetails1 = new PortDetails();
@@ -417,7 +417,7 @@ public final class VoyagePlannerTest {
 		final HashMapMatrixProvider<IPort, Integer> defaultDistanceProvider = new HashMapMatrixProvider<IPort, Integer>();
 
 		final HashMapMultiMatrixProvider<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>();
-		distanceProvider.set(IMultiMatrixProvider.Default_Key, defaultDistanceProvider);
+		distanceProvider.set("DIRECT", defaultDistanceProvider);
 
 		// Only need sparse matrix for testing
 		defaultDistanceProvider.set(port1, port2, 400);
@@ -502,7 +502,7 @@ public final class VoyagePlannerTest {
 		// The NBO travel options will have completed the setup of previous
 		// options (options1) filling in distance info.
 		final VoyageOptions expectedVoyageOptions1a = expectedVoyageOptions1.clone();
-		expectedVoyageOptions1a.setRoute(IMultiMatrixProvider.Default_Key);
+		expectedVoyageOptions1a.setRoute("DIRECT");
 		expectedVoyageOptions1a.setDistance(400);
 
 		final VoyageOptions expectedVoyageOptions2 = new VoyageOptions();
@@ -517,7 +517,7 @@ public final class VoyagePlannerTest {
 		expectedVoyageOptions2.setNBOSpeed(15000);
 		expectedVoyageOptions2.setShouldBeCold(true);
 		final VoyageOptions expectedVoyageOptions2a = expectedVoyageOptions2.clone();
-		expectedVoyageOptions2a.setRoute(IMultiMatrixProvider.Default_Key);
+		expectedVoyageOptions2a.setRoute("DIRECT");
 		expectedVoyageOptions2a.setDistance(400);
 
 		final PortDetails expectedPortDetails1 = new PortDetails();

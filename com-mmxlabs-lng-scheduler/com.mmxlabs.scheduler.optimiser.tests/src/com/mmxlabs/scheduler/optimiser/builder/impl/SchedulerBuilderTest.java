@@ -197,7 +197,7 @@ public class SchedulerBuilderTest {
 
 	private SchedulerBuilder createScheduleBuilder() {
 		final SchedulerBuilder builder = new SchedulerBuilder();
-		final Injector injector = Guice.createInjector(new DataComponentProviderModule());
+		final Injector injector = Guice.createInjector(new DataComponentProviderModule("DIRECT"));
 		injector.injectMembers(builder);
 		return builder;
 	}
