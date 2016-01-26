@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -68,7 +69,8 @@ public class RouteCostModelCommandProvider extends BaseModelCommandProvider<Obje
 
 		final List<RouteCost> extraCosts = new ArrayList<RouteCost>();
 		if (addedObject instanceof Route) {
-			if (((Route) addedObject).isCanal() == false) {
+			final Route route = (Route) addedObject;
+			if (route.getRouteOption() == RouteOption.DIRECT) {
 				return null;
 			}
 			final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenarioModel);
@@ -98,8 +100,9 @@ public class RouteCostModelCommandProvider extends BaseModelCommandProvider<Obje
 					if (routeCost.getVesselClass() == addedObject && routeCost.getRoute() == route)
 						continue add_costs_for_new_vc;
 				}
-				if (route.isCanal())
+				if (route.getRouteOption() != RouteOption.DIRECT) {
 					extraCosts.add(createRouteCost(route, (VesselClass) addedObject));
+				}
 			}
 
 			// CHCEK
@@ -110,8 +113,9 @@ public class RouteCostModelCommandProvider extends BaseModelCommandProvider<Obje
 						if (routeCost.getVesselClass() == addedObject && routeCost.getRoute() == route)
 							continue add_costs_for_new_vc;
 					}
-					if (route.isCanal())
+					if (route.getRouteOption() != RouteOption.DIRECT) {
 						extraCosts.add(createRouteCost(route, (VesselClass) addedObject));
+					}
 				}
 			}
 

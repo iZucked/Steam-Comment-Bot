@@ -22,7 +22,7 @@ import com.mmxlabs.models.migration.utils.EObjectWrapper;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 import com.mmxlabs.models.migration.utils.MetamodelUtils;
 
-public class MigrateToV45 extends AbstractMigrationUnit {
+public class MigrateToV46 extends AbstractMigrationUnit {
 
 	@Override
 	public String getScenarioContext() {
@@ -31,36 +31,37 @@ public class MigrateToV45 extends AbstractMigrationUnit {
 
 	@Override
 	public int getScenarioSourceVersion() {
-		return 44;
+		return 45;
 	}
 
 	@Override
 	public int getScenarioDestinationVersion() {
-		return 45;
+		return 46;
 	}
 
 	@Override
 	protected void doMigrationWithHelper(final MetamodelLoader loader, final EObjectWrapper model) {
 
-		final TreeIterator<EObject> eAllContents = model.eAllContents();
-		while (eAllContents.hasNext()) {
-			final EObject o = eAllContents.next();
+		final EPackage package_PortModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_PortModel);
+		final EEnum enum_RouteOption = MetamodelUtils.getEEnum(package_PortModel, "RouteOption");
+		final EEnumLiteral enum_literal_RouteOption_DIRECT = MetamodelUtils.getEEnum_Literal(enum_RouteOption, "DIRECT");
+		final EEnumLiteral enum_literal_RouteOption_SUEZ = MetamodelUtils.getEEnum_Literal(enum_RouteOption, "SUEZ");
 
-			final EClass cls = o.eClass();
-
-			for (final EReference ref : cls.getEAllReferences()) {
-				// Skip containment references
-				if (ref.isContainment()) {
-					continue;
+		final EObjectWrapper referenceModel = model.getRef("referenceModel");
+		if (referenceModel != null) {
+			final EObjectWrapper portModel = referenceModel.getRef("portModel");
+			if (portModel != null) {
+				final List<EObjectWrapper> routes = portModel.getRefAsList("routes");
+				if (routes != null) {
+					for (final EObjectWrapper route : routes) {
+						final Boolean isCanal = route.getAttribAsBooleanObject("canal");
+						if (isCanal) {
+							route.setAttrib("routeOption", enum_literal_RouteOption_SUEZ);
+						} else {
+							route.setAttrib("routeOption", enum_literal_RouteOption_DIRECT);
+						}
+					}
 				}
-				// Skip singular references
-				if (!ref.isMany()) {
-					continue;
-				}
-
-				final List<?> items = (List<?>) o.eGet(ref);
-				final LinkedHashSet<?> newItems = new LinkedHashSet<>(items);
-				o.eSet(ref, new ArrayList<>(newItems));
 			}
 		}
 	}
