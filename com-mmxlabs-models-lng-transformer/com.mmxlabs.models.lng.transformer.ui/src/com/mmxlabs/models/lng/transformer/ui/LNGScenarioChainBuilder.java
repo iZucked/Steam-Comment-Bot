@@ -188,7 +188,7 @@ public class LNGScenarioChainBuilder {
 
 			OptimisationHelper.checkUserSettings(copy, true);
 
-			final OptimiserSettings settings = OptimisationHelper.transformUserSettings(copy, null);
+			final OptimiserSettings settings = OptimisationHelper.transformUserSettings(copy, null, dataExporter.getOptimiserScenario());
 			if (settings != null) {
 				runners.add(createStandardOptimisationChain("Similarity-" + mode.toString(), dataTransformer, dataExporter, settings, executorService, initialHints));
 			}
