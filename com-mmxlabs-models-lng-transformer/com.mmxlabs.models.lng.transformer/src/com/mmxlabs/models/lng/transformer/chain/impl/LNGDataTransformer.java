@@ -17,6 +17,7 @@ import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.name.Names;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.chain.IChainRunner;
@@ -69,7 +70,7 @@ public class LNGDataTransformer {
 
 		// Prepare the main modules with the re-usable data for any further work.
 		modules.add(new PerChainUnitScopeModule());
-		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new DataComponentProviderModule(), services, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule, hints));
+		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new DataComponentProviderModule(RouteOption.DIRECT.getName()), services, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule, hints));
 		modules.addAll(
 				LNGTransformerHelper.getModulesWithOverrides(new LNGTransformerModule(scenarioModel, settings), services, IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, hints));
 

@@ -23,6 +23,7 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.pricing.CostModel;
@@ -69,7 +70,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		// change from default scenario: add a canal
 
-		final Route canal = msc.portCreator.addCanal("canal");
+		final Route canal = msc.portCreator.addCanal(RouteOption.SUEZ);
 		msc.portCreator.setDistance(msc.loadPort, msc.dischargePort, 10, canal);
 		msc.fleetCreator.assignDefaultCanalData(msc.vc, canal);
 
@@ -124,7 +125,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		// change from default scenario: add a canal, but it is longer than the default route
 
-		final Route canal = msc.portCreator.addCanal("canal");
+		final Route canal = msc.portCreator.addCanal(RouteOption.SUEZ);
 		msc.portCreator.setDistance(msc.loadPort, msc.dischargePort, 30, canal);
 		msc.fleetCreator.assignDefaultCanalData(msc.vc, canal);
 
@@ -153,7 +154,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		// which is shorter than the default route
 		// but has a high usage cost
 
-		final Route canal = msc.portCreator.addCanal("canal");
+		final Route canal = msc.portCreator.addCanal(RouteOption.SUEZ);
 		msc.portCreator.setDistance(msc.loadPort, msc.dischargePort, 10, canal);
 		msc.fleetCreator.assignDefaultCanalData(msc.vc, canal);
 		final RouteCost cost = msc.getRouteCost(msc.vc, canal);
@@ -182,7 +183,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		// change from default scenario: add a canal
 
-		final Route canal = msc.portCreator.addCanal("canal");
+		final Route canal = msc.portCreator.addCanal(RouteOption.SUEZ);
 		msc.portCreator.setDistance(msc.loadPort, msc.dischargePort, 10, canal);
 		msc.fleetCreator.assignDefaultCanalData(msc.vc, canal);
 		final VesselClassRouteParameters routeParameters = msc.getRouteParameters(msc.vc, canal);

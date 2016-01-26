@@ -54,6 +54,7 @@ import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 import com.mmxlabs.models.lng.pricing.CharterIndex;
@@ -136,10 +137,11 @@ public class DefaultScenarioCreator {
 
 	/**
 	 */
-	public Route addRoute(final String name) {
+	public Route addRoute(final RouteOption option) {
 		final PortModel portModel = scenario.getReferenceModel().getPortModel();
 		final Route r = PortFactory.eINSTANCE.createRoute();
-		r.setName(name);
+		r.setName(option.getName());
+		r.setRouteOption(option);
 		portModel.getRoutes().add(r);
 		return r;
 	}
@@ -442,9 +444,8 @@ public class DefaultScenarioCreator {
 		public DefaultPortCreator() {
 		}
 
-		public Route addCanal(final String name) {
-			final Route result = addRoute(name);
-			result.setCanal(true);
+		public Route addCanal(final RouteOption option) {
+			final Route result = addRoute(option);
 			return result;
 		}
 
@@ -838,7 +839,7 @@ public class DefaultScenarioCreator {
 	/**
 	 * Creates a canal and costs. Although this only returns a VesselClassCost for the canal costs, the canal can be retrieved by using {@link VesselClassCost#getCanal()}.
 	 * 
-	 * @param canalName
+	 * @param canalOption
 	 *            The name of the canal
 	 * @param distanceAToB
 	 *            Distance along the canal from port A to port B
@@ -854,13 +855,13 @@ public class DefaultScenarioCreator {
 	 *            Transit time in hours
 	 * @return
 	 */
-	public static void createCanalAndCost(final LNGScenarioModel scenario, final String canalName, final Port A, final Port B, final int distanceAToB, final int distanceBToA, final int canalLadenCost,
-			final int canalUnladenCost, final int canalTransitFuelDays, final int canalNBORateDays, final int canalTransitTime) {
+	public static void createCanalAndCost(final LNGScenarioModel scenario, final RouteOption canalOption, final Port A, final Port B, final int distanceAToB, final int distanceBToA,
+			final int canalLadenCost, final int canalUnladenCost, final int canalTransitFuelDays, final int canalNBORateDays, final int canalTransitTime) {
 
 		final Route canal = PortFactory.eINSTANCE.createRoute();
 		canal.setCanal(true);
 		scenario.getReferenceModel().getPortModel().getRoutes().add(canal);
-		canal.setName(canalName);
+		canal.setName(canalOption.getName());
 		// add distance lines, as for the main distance model:
 		final RouteLine atob = PortFactory.eINSTANCE.createRouteLine();
 		atob.setFrom(A);

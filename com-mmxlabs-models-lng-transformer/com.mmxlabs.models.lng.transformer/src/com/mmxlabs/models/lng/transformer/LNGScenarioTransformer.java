@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import javax.inject.Named;
 
@@ -35,6 +36,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.Sets;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mmxlabs.common.Association;
@@ -76,12 +78,12 @@ import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 import com.mmxlabs.models.lng.pricing.CharterIndex;
@@ -216,6 +218,10 @@ public class LNGScenarioTransformer {
 
 	@Inject
 	@NonNull
+	private com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMultiMatrixProvider<IPort, Integer> portDistanceProvider;
+
+	@Inject
+	@NonNull
 	private TimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
 
 	@Inject(optional = true)
@@ -292,7 +298,7 @@ public class LNGScenarioTransformer {
 
 	// @NonNull
 	// private final OptimiserSettings optimiserParameters;
-//	@Inject
+	// @Inject
 	@Named("OptimisationShippingOnly")
 	private boolean shippingOnly = false;
 
@@ -317,7 +323,7 @@ public class LNGScenarioTransformer {
 	public LNGScenarioTransformer(@NonNull final LNGScenarioModel rootObject) {
 
 		this.rootObject = rootObject;
-//		this.optimiserParameters = optimiserParameters;
+		// this.optimiserParameters = optimiserParameters;
 	}
 
 	/**
@@ -2207,13 +2213,24 @@ public class LNGScenarioTransformer {
 			@NonNull final Map<IPort, Integer> portIndices, @NonNull final Association<VesselClass, IVesselClass> vesselAssociation, @NonNull final ModelEntityMap modelEntityMap)
 					throws IncompleteScenarioException {
 
+		LinkedHashSet<RouteOption> orderedKeys = Sets.newLinkedHashSet();
+		
+		orderedKeys.add(RouteOption.DIRECT);
+		orderedKeys.add(RouteOption.SUEZ);
+		
+		// TODO: Add in Panama
+		// orderedKeys.add(RouteOption.PANAMA);
+
+
 		/*
 		 * Now fill out the distances from the distance model. Firstly we need to create the default distance matrix.
 		 */
+		Set<RouteOption> seenRoutes = new HashSet<>();
 		final PortModel portModel = rootObject.getReferenceModel().getPortModel();
 		for (final Route r : portModel.getRoutes()) {
+			seenRoutes.add(r.getRouteOption());
 			// Store Route under it's name
-			modelEntityMap.addModelObject(r, r.getName());
+			modelEntityMap.addModelObject(r, r.getRouteOption().getName());
 			for (final RouteLine dl : r.getLines()) {
 				IPort from, to;
 				from = portAssociation.lookupNullChecked(dl.getFrom());
@@ -2221,20 +2238,20 @@ public class LNGScenarioTransformer {
 
 				final int distance = dl.getFullDistance();
 
-				builder.setPortToPortDistance(from, to, r.getName(), distance);
+				builder.setPortToPortDistance(from, to, r.getRouteOption().getName(), distance);
 			}
 
 			// Set extra time and fuel consumption
 			final FleetModel fleetModel = rootObject.getReferenceModel().getFleetModel();
 			for (final VesselClass evc : fleetModel.getVesselClasses()) {
 				for (final VesselClassRouteParameters routeParameters : evc.getRouteParameters()) {
-					builder.setVesselClassRouteTransitTime(routeParameters.getRoute().getName(), vesselAssociation.lookupNullChecked(evc), routeParameters.getExtraTransitTime());
+					builder.setVesselClassRouteTransitTime(routeParameters.getRoute().getRouteOption().getName(), vesselAssociation.lookupNullChecked(evc), routeParameters.getExtraTransitTime());
 
-					builder.setVesselClassRouteFuel(routeParameters.getRoute().getName(), vesselAssociation.lookupNullChecked(evc), VesselState.Laden,
+					builder.setVesselClassRouteFuel(routeParameters.getRoute().getRouteOption().getName(), vesselAssociation.lookupNullChecked(evc), VesselState.Laden,
 							OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenConsumptionRate()),
 							OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenNBORate()));
 
-					builder.setVesselClassRouteFuel(routeParameters.getRoute().getName(), vesselAssociation.lookupNullChecked(evc), VesselState.Ballast,
+					builder.setVesselClassRouteFuel(routeParameters.getRoute().getRouteOption().getName(), vesselAssociation.lookupNullChecked(evc), VesselState.Ballast,
 							OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastConsumptionRate()),
 							OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastNBORate()));
 
@@ -2246,10 +2263,22 @@ public class LNGScenarioTransformer {
 			for (final RouteCost routeCost : costModel.getRouteCosts()) {
 				final IVesselClass vesselClass = vesselAssociation.lookupNullChecked(routeCost.getVesselClass());
 
-				builder.setVesselClassRouteCost(routeCost.getRoute().getName(), vesselClass, VesselState.Laden, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getLadenCost()));
-				builder.setVesselClassRouteCost(routeCost.getRoute().getName(), vesselClass, VesselState.Ballast, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost()));
+				builder.setVesselClassRouteCost(routeCost.getRoute().getRouteOption().getName(), vesselClass, VesselState.Laden,
+						OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getLadenCost()));
+				builder.setVesselClassRouteCost(routeCost.getRoute().getRouteOption().getName(), vesselClass, VesselState.Ballast,
+						OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost()));
 			}
 		}
+		// Filter out unused routes
+		orderedKeys.retainAll(seenRoutes);
+
+		// Fix sort order for distance iteration
+		final String[] preSortedKeys = orderedKeys.stream() //
+				.map(RouteOption::getName)//
+				.collect(Collectors.toList()) //
+				.toArray(new String[orderedKeys.size()]);
+		portDistanceProvider.setPreSortedKeys(preSortedKeys);
+
 	}
 
 	/**
@@ -2291,7 +2320,7 @@ public class LNGScenarioTransformer {
 			final List<String> allowedRoutes = new LinkedList<>();
 			if (shippingDaysRestrictionSpeedProvider != null) {
 				for (final Route route : shippingDaysRestrictionSpeedProvider.getValidRoutes(portModel, eVc)) {
-					allowedRoutes.add(route.getName());
+					allowedRoutes.add(route.getRouteOption().getName());
 				}
 			}
 			builder.setDivertableDESAllowedRoute(vc, allowedRoutes);
