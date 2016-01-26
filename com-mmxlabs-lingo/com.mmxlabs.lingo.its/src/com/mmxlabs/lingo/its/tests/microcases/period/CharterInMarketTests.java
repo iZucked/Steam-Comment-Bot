@@ -126,7 +126,7 @@ public class CharterInMarketTests extends AbstractPeriodTestCase {
 		userSettings.setPeriodStart(YearMonth.of(2015, 11));
 		userSettings.setPeriodEnd(YearMonth.of(2016, 1));
 
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null);
+		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 
 		// Generate internal data
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -247,7 +247,7 @@ public class CharterInMarketTests extends AbstractPeriodTestCase {
 		userSettings.setPeriodStart(YearMonth.of(2015, 11));
 		userSettings.setPeriodEnd(YearMonth.of(2016, 1));
 
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null);
+		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 
 		// Generate internal data
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();

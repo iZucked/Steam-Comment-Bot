@@ -100,7 +100,7 @@ public class TrimmedSpotCargoMarketsTests extends AbstractPeriodTestCase {
 		userSettings.setPeriodStart(YearMonth.of(2015, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 2));
 
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null);
+		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 
 		// Generate internal data
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();

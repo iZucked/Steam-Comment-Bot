@@ -199,7 +199,7 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(mode);
 
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null);
+		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, originalScenario);
 		Assert.assertNotNull(optimiserSettings);
 
 		if (limitedIterations) {

@@ -113,7 +113,7 @@ public class EventsAcrossPeriodTests extends AbstractPeriodTestCase {
 		userSettings.setPeriodStart(YearMonth.of(2015, 3));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 4));
 
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null);
+		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 
 		// Generate internal data
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -212,7 +212,7 @@ public class EventsAcrossPeriodTests extends AbstractPeriodTestCase {
 		userSettings.setPeriodStart(YearMonth.of(2015, 3));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 4));
 
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null);
+		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 
 		// Generate internal data
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -311,7 +311,7 @@ public class EventsAcrossPeriodTests extends AbstractPeriodTestCase {
 		userSettings.setPeriodStart(YearMonth.of(2015, 3));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 4));
 
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null);
+		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 
 		// Generate internal data
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -438,7 +438,7 @@ public class EventsAcrossPeriodTests extends AbstractPeriodTestCase {
 		userSettings.setPeriodStart(YearMonth.of(2015, 3));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 4));
 
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null);
+		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 
 		// Generate internal data
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();

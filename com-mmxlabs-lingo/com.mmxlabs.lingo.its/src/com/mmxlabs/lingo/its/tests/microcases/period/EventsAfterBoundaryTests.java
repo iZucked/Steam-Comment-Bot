@@ -101,7 +101,7 @@ public class EventsAfterBoundaryTests extends AbstractPeriodTestCase {
 		userSettings.setPeriodStart(YearMonth.of(2015, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 2));
 
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null);
+		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 
 		// Generate internal data
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -182,7 +182,7 @@ public class EventsAfterBoundaryTests extends AbstractPeriodTestCase {
 		userSettings.setPeriodStart(YearMonth.of(2015, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 2));
 
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null);
+		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 
 		// Generate internal data
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -263,7 +263,7 @@ public class EventsAfterBoundaryTests extends AbstractPeriodTestCase {
 		userSettings.setPeriodStart(YearMonth.of(2015, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 2));
 
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null);
+		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 
 		// Generate internal data
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -352,7 +352,7 @@ public class EventsAfterBoundaryTests extends AbstractPeriodTestCase {
 		userSettings.setPeriodStart(YearMonth.of(2015, 1));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 2));
 
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null);
+		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 
 		// Generate internal data
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -457,7 +457,7 @@ public class EventsAfterBoundaryTests extends AbstractPeriodTestCase {
 		userSettings.setPeriodStart(YearMonth.of(2016, 2));
 		userSettings.setPeriodEnd(YearMonth.of(2016, 5));
 
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null);
+		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 
 		// Generate internal data
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
