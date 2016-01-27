@@ -95,6 +95,8 @@ import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
+import com.mmxlabs.models.lng.pricing.PanamaCanalTariff;
+import com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PricingModel;
@@ -2260,9 +2262,53 @@ public class LNGScenarioTransformer {
 
 			// set tolls
 			final CostModel costModel = rootObject.getReferenceModel().getCostModel();
+
+			PanamaCanalTariff panamaCanalTariff = costModel.getPanamaCanalTariff();
+			{
+				if (panamaCanalTariff != null) {
+					List<Pair<Integer, PanamaCanalTariffBand>> bands = new LinkedList<>();
+					for (PanamaCanalTariffBand band : panamaCanalTariff.getBands()) {
+						int upperBound = Integer.MAX_VALUE;
+						if (band.isSetBandEnd()) {
+							upperBound = band.getBandEnd();
+						}
+						bands.add(new Pair<>(upperBound, band));
+					}
+
+					Collections.sort(bands, (b1, b2) -> b1.getFirst().compareTo(b2.getFirst()));
+
+					// for (Vessel vessel : fleetModel.getVessels()) {
+					// int capacityInM3 = vessel.getVesselOrVesselClassCapacity();
+					for (VesselClass eVesselClass : fleetModel.getVesselClasses()) {
+						int capacityInM3 = eVesselClass.getCapacity();
+						double totalLadenCost = 0.0;
+						double totalBallastCost = 0.0;
+						double totalBallastRoundTripCost = 0.0;
+						for (Pair<Integer, PanamaCanalTariffBand> p : bands) {
+							PanamaCanalTariffBand band = p.getSecond();
+							int contributingCapacity = Math.min(capacityInM3, p.getFirst());
+							contributingCapacity = Math.max(0, contributingCapacity - (band.isSetBandStart() ? band.getBandStart() : 0));
+
+							totalLadenCost += contributingCapacity * band.getLadenTariff();
+							totalBallastCost += contributingCapacity * band.getBallastTariff();
+							totalBallastRoundTripCost += contributingCapacity * band.getBallastRoundtripTariff();
+						}
+
+						final IVesselClass vesselClass = vesselAssociation.lookupNullChecked(eVesselClass);
+
+						builder.setVesselClassRouteCost(RouteOption.PANAMA.getName(), vesselClass, VesselState.Laden,
+								OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalLadenCost)));
+						builder.setVesselClassRouteCost(RouteOption.PANAMA.getName(), vesselClass, VesselState.Ballast,
+								OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalBallastCost)));
+					}
+				}
+			}
+
 			for (final RouteCost routeCost : costModel.getRouteCosts()) {
 				final IVesselClass vesselClass = vesselAssociation.lookupNullChecked(routeCost.getVesselClass());
-
+				if (routeCost.getRoute().getRouteOption() == RouteOption.PANAMA) {
+					continue;
+				}
 				builder.setVesselClassRouteCost(routeCost.getRoute().getRouteOption().getName(), vesselClass, VesselState.Laden,
 						OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getLadenCost()));
 				builder.setVesselClassRouteCost(routeCost.getRoute().getRouteOption().getName(), vesselClass, VesselState.Ballast,
