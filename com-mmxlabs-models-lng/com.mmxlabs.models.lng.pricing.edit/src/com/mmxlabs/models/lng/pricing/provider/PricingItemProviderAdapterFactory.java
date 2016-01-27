@@ -501,6 +501,52 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.PanamaCanalTariff} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PanamaCanalTariffItemProvider panamaCanalTariffItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.PanamaCanalTariff}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPanamaCanalTariffAdapter() {
+		if (panamaCanalTariffItemProvider == null) {
+			panamaCanalTariffItemProvider = new PanamaCanalTariffItemProvider(this);
+		}
+
+		return panamaCanalTariffItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PanamaCanalTariffBandItemProvider panamaCanalTariffBandItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPanamaCanalTariffBandAdapter() {
+		if (panamaCanalTariffBandItemProvider == null) {
+			panamaCanalTariffBandItemProvider = new PanamaCanalTariffBandItemProvider(this);
+		}
+
+		return panamaCanalTariffBandItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -644,6 +690,8 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		if (portsExpressionMapItemProvider != null) portsExpressionMapItemProvider.dispose();
 		if (portsSplitPriceMapItemProvider != null) portsSplitPriceMapItemProvider.dispose();
 		if (portsSplitExpressionMapItemProvider != null) portsSplitExpressionMapItemProvider.dispose();
+		if (panamaCanalTariffItemProvider != null) panamaCanalTariffItemProvider.dispose();
+		if (panamaCanalTariffBandItemProvider != null) panamaCanalTariffBandItemProvider.dispose();
 	}
 
 }

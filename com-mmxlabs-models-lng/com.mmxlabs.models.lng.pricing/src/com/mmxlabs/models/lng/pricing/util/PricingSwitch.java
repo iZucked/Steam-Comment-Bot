@@ -233,6 +233,18 @@ public class PricingSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case PricingPackage.PANAMA_CANAL_TARIFF: {
+				PanamaCanalTariff panamaCanalTariff = (PanamaCanalTariff)theEObject;
+				T result = casePanamaCanalTariff(panamaCanalTariff);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.PANAMA_CANAL_TARIFF_BAND: {
+				PanamaCanalTariffBand panamaCanalTariffBand = (PanamaCanalTariffBand)theEObject;
+				T result = casePanamaCanalTariffBand(panamaCanalTariffBand);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -519,6 +531,36 @@ public class PricingSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T casePortsSplitExpressionMap(PortsSplitExpressionMap object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Panama Canal Tariff</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Panama Canal Tariff</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T casePanamaCanalTariff(PanamaCanalTariff object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Panama Canal Tariff Band</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Panama Canal Tariff Band</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T casePanamaCanalTariffBand(PanamaCanalTariffBand object) {
 		return null;
 	}
 

@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.EObject;
 import com.mmxlabs.common.csv.CSVReader;
 import com.mmxlabs.common.csv.IDeferment;
 import com.mmxlabs.common.csv.IImportContext;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
@@ -24,6 +25,8 @@ import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.CostModel;
+import com.mmxlabs.models.lng.pricing.PanamaCanalTariff;
+import com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
@@ -46,10 +49,14 @@ public class CostModelImporter implements ISubmodelImporter {
 	private static final HashMap<String, String> inputs = new HashMap<String, String>();
 	public static final String COOLDOWN_PRICING_KEY = "COOLDOWN_PRICING";
 	public static final String PORT_COSTS_KEY = "PORT_COSTS";
+	public static final String PANAMA_CANAL_TARIFF_KEY = "PANAMA_CANAL_TARIFF";
 
 	static {
 		inputs.put(COOLDOWN_PRICING_KEY, "Cooldown Prices");
 		inputs.put(PORT_COSTS_KEY, "Port Costs");
+		if (LicenseFeatures.isPermitted("features:panama-canal")) {
+			inputs.put(PANAMA_CANAL_TARIFF_KEY, "Panama Canal Tariff");
+		}
 	}
 
 	@Inject
@@ -57,6 +64,7 @@ public class CostModelImporter implements ISubmodelImporter {
 
 	private IClassImporter cooldownPriceImporter;
 	private IClassImporter portCostImporter;
+	private IClassImporter panamaCanalTariffBandImporter;
 
 	/**
 	 */
@@ -74,6 +82,7 @@ public class CostModelImporter implements ISubmodelImporter {
 		if (importerRegistry != null) {
 			cooldownPriceImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getCooldownPrice());
 			portCostImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getPortCost());
+			panamaCanalTariffBandImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getPanamaCanalTariffBand());
 		}
 	}
 
@@ -94,13 +103,22 @@ public class CostModelImporter implements ISubmodelImporter {
 					.addAll((Collection<? extends CooldownPrice>) cooldownPriceImporter.importObjects(PricingPackage.eINSTANCE.getCooldownPrice(), inputs.get(COOLDOWN_PRICING_KEY), context));
 		}
 
+		if (inputs.containsKey(PANAMA_CANAL_TARIFF_KEY)) {
+			final PanamaCanalTariff panamaCanalTariff = PricingFactory.eINSTANCE.createPanamaCanalTariff();
+
+			panamaCanalTariff.getBands().addAll((Collection<? extends PanamaCanalTariffBand>) panamaCanalTariffBandImporter.importObjects(PricingPackage.eINSTANCE.getPanamaCanalTariffBand(),
+					inputs.get(PANAMA_CANAL_TARIFF_KEY), context));
+
+			costModel.setPanamaCanalTariff(panamaCanalTariff);
+		}
+
 		context.doLater(new IDeferment() {
 			@Override
 			public void run(final IImportContext importContext) {
 				final IMMXImportContext context = (IMMXImportContext) importContext;
 				final MMXRootObject root = context.getRootObject();
 				if (root instanceof LNGScenarioModel) {
-					LNGScenarioModel scenarioModel = (LNGScenarioModel) root;
+					final LNGScenarioModel scenarioModel = (LNGScenarioModel) root;
 
 					final PricingModel pricing = ScenarioModelUtil.getPricingModel(scenarioModel);
 					final FleetModel fleet = ScenarioModelUtil.getFleetModel(scenarioModel);
@@ -159,6 +177,10 @@ public class CostModelImporter implements ISubmodelImporter {
 		final CostModel costModel = (CostModel) model;
 		output.put(COOLDOWN_PRICING_KEY, cooldownPriceImporter.exportObjects(costModel.getCooldownCosts(), context));
 		output.put(PORT_COSTS_KEY, portCostImporter.exportObjects(costModel.getPortCosts(), context));
+		final PanamaCanalTariff panamaCanalTariff = costModel.getPanamaCanalTariff();
+		if (panamaCanalTariff != null) {
+			output.put(PANAMA_CANAL_TARIFF_KEY, panamaCanalTariffBandImporter.exportObjects(panamaCanalTariff.getBands(), context));
+		}
 	}
 
 	@Override

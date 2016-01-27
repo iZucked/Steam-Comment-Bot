@@ -1,17 +1,11 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
- * All rights reserved.
- */
-/**
  */
 package com.mmxlabs.models.lng.pricing.provider;
 
 
-import com.mmxlabs.models.lng.pricing.CostModel;
+import com.mmxlabs.models.lng.pricing.PanamaCanalTariff;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
-
-import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 
 import java.util.Collection;
 import java.util.List;
@@ -19,25 +13,41 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.util.ResourceLocator;
+
 import org.eclipse.emf.ecore.EStructuralFeature;
 
+import org.eclipse.emf.edit.provider.IChildCreationExtender;
+import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
+import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.IItemPropertySource;
+import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
+import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.CostModel} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.PanamaCanalTariff} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class CostModelItemProvider extends UUIDObjectItemProvider {
+public class PanamaCanalTariffItemProvider 
+	extends ItemProviderAdapter
+	implements
+		IEditingDomainItemProvider,
+		IStructuredItemContentProvider,
+		ITreeItemContentProvider,
+		IItemLabelProvider,
+		IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CostModelItemProvider(AdapterFactory adapterFactory) {
+	public PanamaCanalTariffItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -68,11 +78,7 @@ public class CostModelItemProvider extends UUIDObjectItemProvider {
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(PricingPackage.Literals.COST_MODEL__ROUTE_COSTS);
-			childrenFeatures.add(PricingPackage.Literals.COST_MODEL__PORT_COSTS);
-			childrenFeatures.add(PricingPackage.Literals.COST_MODEL__COOLDOWN_COSTS);
-			childrenFeatures.add(PricingPackage.Literals.COST_MODEL__BASE_FUEL_COSTS);
-			childrenFeatures.add(PricingPackage.Literals.COST_MODEL__PANAMA_CANAL_TARIFF);
+			childrenFeatures.add(PricingPackage.Literals.PANAMA_CANAL_TARIFF__BANDS);
 		}
 		return childrenFeatures;
 	}
@@ -91,14 +97,14 @@ public class CostModelItemProvider extends UUIDObjectItemProvider {
 	}
 
 	/**
-	 * This returns CostModel.gif.
+	 * This returns PanamaCanalTariff.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/CostModel"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/PanamaCanalTariff"));
 	}
 
 	/**
@@ -109,10 +115,7 @@ public class CostModelItemProvider extends UUIDObjectItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((CostModel)object).getUuid();
-		return label == null || label.length() == 0 ?
-			getString("_UI_CostModel_type") :
-			getString("_UI_CostModel_type") + " " + label;
+		return getString("_UI_PanamaCanalTariff_type");
 	}
 	
 
@@ -127,12 +130,8 @@ public class CostModelItemProvider extends UUIDObjectItemProvider {
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(CostModel.class)) {
-			case PricingPackage.COST_MODEL__ROUTE_COSTS:
-			case PricingPackage.COST_MODEL__PORT_COSTS:
-			case PricingPackage.COST_MODEL__COOLDOWN_COSTS:
-			case PricingPackage.COST_MODEL__BASE_FUEL_COSTS:
-			case PricingPackage.COST_MODEL__PANAMA_CANAL_TARIFF:
+		switch (notification.getFeatureID(PanamaCanalTariff.class)) {
+			case PricingPackage.PANAMA_CANAL_TARIFF__BANDS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -152,28 +151,19 @@ public class CostModelItemProvider extends UUIDObjectItemProvider {
 
 		newChildDescriptors.add
 			(createChildParameter
-				(PricingPackage.Literals.COST_MODEL__ROUTE_COSTS,
-				 PricingFactory.eINSTANCE.createRouteCost()));
+				(PricingPackage.Literals.PANAMA_CANAL_TARIFF__BANDS,
+				 PricingFactory.eINSTANCE.createPanamaCanalTariffBand()));
+	}
 
-		newChildDescriptors.add
-			(createChildParameter
-				(PricingPackage.Literals.COST_MODEL__PORT_COSTS,
-				 PricingFactory.eINSTANCE.createPortCost()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PricingPackage.Literals.COST_MODEL__COOLDOWN_COSTS,
-				 PricingFactory.eINSTANCE.createCooldownPrice()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PricingPackage.Literals.COST_MODEL__BASE_FUEL_COSTS,
-				 PricingFactory.eINSTANCE.createBaseFuelCost()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PricingPackage.Literals.COST_MODEL__PANAMA_CANAL_TARIFF,
-				 PricingFactory.eINSTANCE.createPanamaCanalTariff()));
+	/**
+	 * Return the resource locator for this item provider's resources.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ResourceLocator getResourceLocator() {
+		return ((IChildCreationExtender)adapterFactory).getResourceLocator();
 	}
 
 }

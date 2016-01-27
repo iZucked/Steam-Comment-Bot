@@ -186,6 +186,24 @@ public interface PricingFactory extends EFactory {
 	PortsSplitExpressionMap createPortsSplitExpressionMap();
 
 	/**
+	 * Returns a new object of class '<em>Panama Canal Tariff</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Panama Canal Tariff</em>'.
+	 * @generated
+	 */
+	PanamaCanalTariff createPanamaCanalTariff();
+
+	/**
+	 * Returns a new object of class '<em>Panama Canal Tariff Band</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Panama Canal Tariff Band</em>'.
+	 * @generated
+	 */
+	PanamaCanalTariffBand createPanamaCanalTariffBand();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

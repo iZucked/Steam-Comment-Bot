@@ -93,6 +93,8 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 			case PricingPackage.PORTS_EXPRESSION_MAP: return createPortsExpressionMap();
 			case PricingPackage.PORTS_SPLIT_PRICE_MAP: return createPortsSplitPriceMap();
 			case PricingPackage.PORTS_SPLIT_EXPRESSION_MAP: return createPortsSplitExpressionMap();
+			case PricingPackage.PANAMA_CANAL_TARIFF: return createPanamaCanalTariff();
+			case PricingPackage.PANAMA_CANAL_TARIFF_BAND: return createPanamaCanalTariffBand();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -276,6 +278,26 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	public PortsSplitExpressionMap createPortsSplitExpressionMap() {
 		PortsSplitExpressionMapImpl portsSplitExpressionMap = new PortsSplitExpressionMapImpl();
 		return portsSplitExpressionMap;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PanamaCanalTariff createPanamaCanalTariff() {
+		PanamaCanalTariffImpl panamaCanalTariff = new PanamaCanalTariffImpl();
+		return panamaCanalTariff;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PanamaCanalTariffBand createPanamaCanalTariffBand() {
+		PanamaCanalTariffBandImpl panamaCanalTariffBand = new PanamaCanalTariffBandImpl();
+		return panamaCanalTariffBand;
 	}
 
 	/**
