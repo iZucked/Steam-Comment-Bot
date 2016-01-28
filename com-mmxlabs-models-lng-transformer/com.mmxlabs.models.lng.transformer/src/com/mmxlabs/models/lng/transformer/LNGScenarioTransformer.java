@@ -76,7 +76,6 @@ import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -292,7 +291,7 @@ public class LNGScenarioTransformer {
 
 	// @NonNull
 	// private final OptimiserSettings optimiserParameters;
-//	@Inject
+	// @Inject
 	@Named("OptimisationShippingOnly")
 	private boolean shippingOnly = false;
 
@@ -317,7 +316,7 @@ public class LNGScenarioTransformer {
 	public LNGScenarioTransformer(@NonNull final LNGScenarioModel rootObject) {
 
 		this.rootObject = rootObject;
-//		this.optimiserParameters = optimiserParameters;
+		// this.optimiserParameters = optimiserParameters;
 	}
 
 	/**
@@ -960,7 +959,7 @@ public class LNGScenarioTransformer {
 					final IDischargeOption discharge = (IDischargeOption) slotMap.get(dischargeSlot);
 					assert discharge != null;
 					final ITimeWindow twForBinding = getTimeWindowForSlotBinding(dischargeSlot, discharge, portAssociation.lookupNullChecked(dischargeSlot.getPort()));
-					configureDischargeSlotRestrictions(builder, allLoadPorts, dischargeSlot, discharge, twForBinding);
+					configureDischargeSlotRestrictions(builder, portAssociation, allLoadPorts, dischargeSlot, discharge, twForBinding);
 					isTransfer = (((DischargeSlot) slot).getTransferTo() != null);
 				}
 
@@ -1033,7 +1032,8 @@ public class LNGScenarioTransformer {
 				}
 			}
 
-			configureDischargeSlotRestrictions(builder, allLoadPorts, dischargeSlot, discharge, getTimeWindowForSlotBinding(dischargeSlot, discharge, portAssociation.lookup(dischargeSlot.getPort())));
+			configureDischargeSlotRestrictions(builder, portAssociation, allLoadPorts, dischargeSlot, discharge,
+					getTimeWindowForSlotBinding(dischargeSlot, discharge, portAssociation.lookup(dischargeSlot.getPort())));
 		}
 	}
 
@@ -1058,13 +1058,24 @@ public class LNGScenarioTransformer {
 
 	}
 
-	public void configureDischargeSlotRestrictions(@NonNull final ISchedulerBuilder builder, @NonNull final Set<IPort> allLoadPorts, @NonNull final DischargeSlot dischargeSlot,
-			@NonNull final IDischargeOption discharge, @NonNull final ITimeWindow twForSlotBinding) {
+	public void configureDischargeSlotRestrictions(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @NonNull final Set<IPort> allLoadPorts,
+			@NonNull final DischargeSlot dischargeSlot, @NonNull final IDischargeOption discharge, @NonNull final ITimeWindow twForSlotBinding) {
 		if (dischargeSlot.isFOBSale()) {
 
 			if (dischargeSlot instanceof SpotDischargeSlot) {
+				final SpotDischargeSlot spotSlot = (SpotDischargeSlot) dischargeSlot;
+				final FOBSalesMarket fobSaleMarket = (FOBSalesMarket) spotSlot.getMarket();
+				final Set<Port> portSet = SetUtils.getObjects(fobSaleMarket.getOriginPorts());
+				final Set<IPort> marketPorts = new HashSet<IPort>();
+				for (final Port ap : portSet) {
+					final IPort ip = portAssociation.lookup((Port) ap);
+					if (ip != null) {
+						marketPorts.add(ip);
+					}
+				}
+
 				final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
-				for (final IPort port : allLoadPorts) {
+				for (final IPort port : marketPorts) {
 					// Take the UTC based window and shift according to local port timezone
 					final int twStart = timeZoneToUtcOffsetProvider.localTime(twForSlotBinding.getStart(), port);
 					final int twEnd = timeZoneToUtcOffsetProvider.localTime(twForSlotBinding.getEnd(), port);
@@ -1072,9 +1083,7 @@ public class LNGScenarioTransformer {
 				}
 
 				builder.bindLoadSlotsToFOBSale(discharge, marketPortsMap);
-			} else
-
-			if (dischargeSlot.isDivertible()) {
+			} else if (dischargeSlot.isDivertible()) {
 				// Bind to all loads
 				final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
 				for (final IPort port : allLoadPorts) {
