@@ -69,5 +69,4 @@ public class SpotMarketsModelBuilder {
 		final SpotMarketMaker maker = new SpotMarketMaker(this);
 		return maker.withFOBSaleMarket(name, ports, entity, priceExpression);
 	}
-
 }

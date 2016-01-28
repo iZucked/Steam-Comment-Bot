@@ -4,12 +4,16 @@
  */
 package com.mmxlabs.models.lng.port.util;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.PortCapability;
 
 public class PortModelBuilder {
@@ -62,5 +66,14 @@ public class PortModelBuilder {
 		} else {
 			port.unsetMaxCvValue();
 		}
+	}
+
+	@NonNull
+	public static List<APortSet<Port>> makePortSet(@NonNull final Port... ports) {
+		final List<APortSet<Port>> list = new LinkedList<APortSet<Port>>();
+		for (final Port port : ports) {
+			list.add(port);
+		}
+		return list;
 	}
 }

@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.cargo.util;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,7 +16,6 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.cargo.util.CargoMaker.CargoMakerSlotMaker;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
@@ -68,16 +68,14 @@ public class CargoMaker {
 		return slotMaker.withDESPurchase(name, divertible, windowStart, port, purchaseContract, entity, priceExpression, nominatedVessel);
 	}
 
-	public CargoMakerSlotMaker makeMarketFOBPurchase(@NonNull final String name, @NonNull final FOBPurchasesMarket market, @NonNull final LocalDate windowStart, @NonNull final Port port,
-			@Nullable final PurchaseContract purchaseContract, @Nullable final BaseLegalEntity entity, @Nullable final String priceExpression) {
+	public CargoMakerSlotMaker makeMarketFOBPurchase(@NonNull final String name, @NonNull final FOBPurchasesMarket market, @NonNull final YearMonth windowStart, @NonNull final Port port) {
 		final CargoMakerSlotMaker slotMaker = new CargoMakerSlotMaker(cargoModelBuilder);
-		return slotMaker.withMarketFOBPurchase(name, market, windowStart, port, purchaseContract, entity, priceExpression);
+		return slotMaker.withMarketFOBPurchase(name, market, windowStart, port);
 	}
 
-	public CargoMakerSlotMaker makeMarketDESPurchase(@NonNull final String name, @NonNull final DESPurchaseMarket market, @NonNull final LocalDate windowStart, @NonNull final Port port,
-			@Nullable final PurchaseContract purchaseContract, @Nullable final BaseLegalEntity entity, @Nullable final String priceExpression) {
+	public CargoMakerSlotMaker makeMarketDESPurchase(@NonNull final String name, @NonNull final DESPurchaseMarket market, @NonNull final YearMonth windowStart, @NonNull final Port port) {
 		final CargoMakerSlotMaker slotMaker = new CargoMakerSlotMaker(cargoModelBuilder);
-		return slotMaker.withMarketDESPurchase(name, market, windowStart, port, purchaseContract, entity, priceExpression);
+		return slotMaker.withMarketDESPurchase(name, market, windowStart, port);
 	}
 
 	public CargoMakerSlotMaker makeDESSale(@NonNull final String name, @NonNull final LocalDate windowStart, @NonNull final Port port, @Nullable final SalesContract salesContract,
@@ -92,16 +90,15 @@ public class CargoMaker {
 		return slotMaker.withFOBSale(name, divertible, windowStart, port, salesContract, entity, priceExpression, nominatedVessel);
 	}
 
-	public CargoMakerSlotMaker makeMarketDESSale(@NonNull final String name, @NonNull final DESSalesMarket market, @NonNull final LocalDate windowStart, @NonNull final Port port,
+	public CargoMakerSlotMaker makeMarketDESSale(@NonNull final String name, @NonNull final DESSalesMarket market, @NonNull final YearMonth windowStart, @NonNull final Port port,
 			@Nullable final SalesContract salesContract, @Nullable final BaseLegalEntity entity, @Nullable final String priceExpression) {
 		final CargoMakerSlotMaker slotMaker = new CargoMakerSlotMaker(cargoModelBuilder);
-		return slotMaker.withMarketDESSale(name, market, windowStart, port, salesContract, entity, priceExpression);
+		return slotMaker.withMarketDESSale(name, market, windowStart, port);
 	}
 
-	public CargoMakerSlotMaker makeMarketFOBSale(@NonNull final String name, @NonNull final FOBSalesMarket market, @NonNull final LocalDate windowStart, @NonNull final Port port,
-			@Nullable final SalesContract salesContract, @Nullable final BaseLegalEntity entity, @Nullable final String priceExpression) {
+	public CargoMakerSlotMaker makeMarketFOBSale(@NonNull final String name, @NonNull final FOBSalesMarket market, @NonNull final YearMonth windowStart, @NonNull final Port port) {
 		final CargoMakerSlotMaker slotMaker = new CargoMakerSlotMaker(cargoModelBuilder);
-		return slotMaker.withMarketFOBSale(name, market, windowStart, port, salesContract, entity, priceExpression);
+		return slotMaker.withMarketFOBSale(name, market, windowStart, port);
 	}
 
 	public CargoMaker withVesselAssignment(@NonNull final VesselAvailability vesselAvailability, final int sequenceHint) {
