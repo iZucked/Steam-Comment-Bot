@@ -3,6 +3,7 @@ package com.mmxlabs.scheduler.optimiser.contracts.impl;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.mock;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,13 +18,18 @@ import org.mockito.stubbing.Answer;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.TypeLiteral;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
+import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
+import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider;
@@ -32,12 +38,175 @@ import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer;
 import com.mmxlabs.scheduler.optimiser.curves.IntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.curves.PriceIntervalProducer;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimeWindowsRecord;
 
 public class PriceIntervalProviderHelperTest {
+	
+	/**
+	 * Test that the cheapest option is to go direct meaning: load {0, 0} and discharge {40, 45}
+	 */
+	@Test
+	public void testCanalTrimming_MinTimeGreaterThanCheapestOption() {
+		List<int[]> purchaseIntervals = new ArrayList<>();
+		purchaseIntervals.add(new int[] {0,20});
+		purchaseIntervals.add(new int[] {5,25});
+		purchaseIntervals.add(new int[] {15,18});
+		purchaseIntervals.add(new int[] {20,Integer.MIN_VALUE});
+
+		List<int[]> salesIntervals = new ArrayList<>();
+		salesIntervals.add(new int[] {40,25});
+		salesIntervals.add(new int[] {45,20});
+		salesIntervals.add(new int[] {50,22});
+		salesIntervals.add(new int[] {51,Integer.MIN_VALUE});
+
+		List<MatrixEntry<IPort, Integer>> distances = new LinkedList<>();
+		distances.add(new MatrixEntry<IPort, Integer>("direct", null, null, 400));
+		distances.add(new MatrixEntry<IPort, Integer>("suez", null, null, 300));
+		TimeWindowsTrimming timeWindowsTrimming = getTimeWindowsTrimming(distances);
+		
+		ILoadOption loadSlot = Mockito.mock(ILoadOption.class);
+		Mockito.when(loadSlot.getMaxLoadVolumeMMBTU()).thenReturn(OptimiserUnitConvertor.convertToInternalVolume(160000*22.4));
+		IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
+
+		IPortTimeWindowsRecord portTimesWindowsRecord = Mockito.mock(IPortTimeWindowsRecord.class);
+		Mockito.when(portTimesWindowsRecord.getSlotDuration(loadSlot)).thenReturn(0);
+		IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
+		Mockito.when(vesselClass.getMaxSpeed()).thenReturn(10*1000);
+		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vesselClass, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
+		Assert.assertArrayEquals(new int[] {0, 0, 40, 45}, times);
+	}
+	
+	@Test
+	public void testCanalTrimming_BestPriceDirect() {
+		List<int[]> purchaseIntervals = new ArrayList<>();
+		purchaseIntervals.add(new int[] {0,20});
+		purchaseIntervals.add(new int[] {5,25});
+		purchaseIntervals.add(new int[] {15,18});
+		purchaseIntervals.add(new int[] {20,Integer.MIN_VALUE});
+
+		List<int[]> salesIntervals = new ArrayList<>();
+		salesIntervals.add(new int[] {40,25});
+		salesIntervals.add(new int[] {45,20});
+		salesIntervals.add(new int[] {50,22});
+		salesIntervals.add(new int[] {51,Integer.MIN_VALUE});
+
+		List<MatrixEntry<IPort, Integer>> distances = new LinkedList<>();
+		distances.add(new MatrixEntry<IPort, Integer>("direct", null, null, 350));
+		distances.add(new MatrixEntry<IPort, Integer>("suez", null, null, 190));
+
+		TimeWindowsTrimming timeWindowsTrimming = getTimeWindowsTrimming(distances);
+
+		ILoadOption loadSlot = Mockito.mock(ILoadOption.class);
+		Mockito.when(loadSlot.getMaxLoadVolumeMMBTU()).thenReturn(OptimiserUnitConvertor.convertToInternalVolume(160000*22.4));
+		IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
+
+		IPortTimeWindowsRecord portTimesWindowsRecord = Mockito.mock(IPortTimeWindowsRecord.class);
+		Mockito.when(portTimesWindowsRecord.getSlotDuration(loadSlot)).thenReturn(0);
+		IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
+		Mockito.when(vesselClass.getMaxSpeed()).thenReturn(10*1000);
+		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vesselClass, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
+		Assert.assertArrayEquals(new int[] {15, 15, 50, 51}, times);
+	}
+	
+	@Test
+	public void testCanalTrimming_BestPriceCanal_TakeDirectRoute_A() {
+		List<int[]> purchaseIntervals = new ArrayList<>();
+		purchaseIntervals.add(new int[] {0,2000000});
+		purchaseIntervals.add(new int[] {5,2500000});
+		purchaseIntervals.add(new int[] {15,1800000});
+		purchaseIntervals.add(new int[] {20,Integer.MIN_VALUE});
+		
+		List<int[]> salesIntervals = new ArrayList<>();
+		salesIntervals.add(new int[] {40,2300000});
+		salesIntervals.add(new int[] {45,2000000});
+		salesIntervals.add(new int[] {50,2200000});
+		salesIntervals.add(new int[] {51,Integer.MIN_VALUE});
+		
+		List<MatrixEntry<IPort, Integer>> distances = new LinkedList<>();
+		distances.add(new MatrixEntry<IPort, Integer>("direct", null, null, 310));
+		distances.add(new MatrixEntry<IPort, Integer>("suez", null, null, 190));
+		TimeWindowsTrimming timeWindowsTrimming = getTimeWindowsTrimming(distances);
+
+		ILoadOption loadSlot = Mockito.mock(ILoadOption.class);
+		Mockito.when(loadSlot.getMaxLoadVolumeMMBTU()).thenReturn(OptimiserUnitConvertor.convertToInternalVolume(160000*22.4));
+		IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
+
+		IPortTimeWindowsRecord portTimesWindowsRecord = Mockito.mock(IPortTimeWindowsRecord.class);
+		Mockito.when(portTimesWindowsRecord.getSlotDuration(loadSlot)).thenReturn(0);
+		IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
+		Mockito.when(vesselClass.getMaxSpeed()).thenReturn(10*1000);
+		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vesselClass, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
+		Assert.assertArrayEquals(new int[] {15, 15, 50, 51}, times);
+	}
+	
+	@Test
+	public void testCanalTrimming_BestPriceCanal_TakeCanalRoute_B() {
+		List<int[]> purchaseIntervals = new ArrayList<>();
+		purchaseIntervals.add(new int[] {0,2_000_000});
+		purchaseIntervals.add(new int[] {5,2_500_000});
+		purchaseIntervals.add(new int[] {15,1_800_000});
+		purchaseIntervals.add(new int[] {20,Integer.MIN_VALUE});
+		
+		List<int[]> salesIntervals = new ArrayList<>();
+		salesIntervals.add(new int[] {40,2_500_000});
+		salesIntervals.add(new int[] {45,2_00_000});
+		salesIntervals.add(new int[] {50,2_200_000});
+		salesIntervals.add(new int[] {51,Integer.MIN_VALUE});
+		
+		List<MatrixEntry<IPort, Integer>> distances = new LinkedList<>();
+		distances.add(new MatrixEntry<IPort, Integer>("direct", null, null, 310));
+		distances.add(new MatrixEntry<IPort, Integer>("suez", null, null, 190));
+		TimeWindowsTrimming timeWindowsTrimming = getTimeWindowsTrimming(distances);
+		
+		ILoadOption loadSlot = Mockito.mock(ILoadOption.class);
+		Mockito.when(loadSlot.getMaxLoadVolumeMMBTU()).thenReturn(4018790000L);
+		IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
+		
+		IPortTimeWindowsRecord portTimesWindowsRecord = Mockito.mock(IPortTimeWindowsRecord.class);
+		Mockito.when(portTimesWindowsRecord.getSlotDuration(loadSlot)).thenReturn(0);
+		IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
+		Mockito.when(vesselClass.getMaxSpeed()).thenReturn(10*1000);
+		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vesselClass, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
+		Assert.assertArrayEquals(new int[] {15, 15, 40, 45}, times);
+	}
+
+	@Test
+	public void testCanalTrimming_BestPriceCanal_TakeDirectRoute_C() {
+		List<int[]> purchaseIntervals = new ArrayList<>();
+		purchaseIntervals.add(new int[] {0,2_000_000});
+		purchaseIntervals.add(new int[] {5,1_900_000});
+		purchaseIntervals.add(new int[] {15,1_800_000});
+		purchaseIntervals.add(new int[] {20,Integer.MIN_VALUE});
+		
+		List<int[]> salesIntervals = new ArrayList<>();
+		salesIntervals.add(new int[] {40,2_500_000});
+		salesIntervals.add(new int[] {45,2_00_000});
+		salesIntervals.add(new int[] {50,2_200_000});
+		salesIntervals.add(new int[] {51,Integer.MIN_VALUE});
+		
+		List<MatrixEntry<IPort, Integer>> distances = new LinkedList<>();
+		distances.add(new MatrixEntry<IPort, Integer>("direct", null, null, 310));
+		distances.add(new MatrixEntry<IPort, Integer>("suez", null, null, 190));
+		TimeWindowsTrimming timeWindowsTrimming = getTimeWindowsTrimming(distances);
+		
+		ILoadOption loadSlot = Mockito.mock(ILoadOption.class);
+		Mockito.when(loadSlot.getMaxLoadVolumeMMBTU()).thenReturn(4018790000L);
+		IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
+		IPortTimeWindowsRecord portTimesWindowsRecord = Mockito.mock(IPortTimeWindowsRecord.class);
+		Mockito.when(portTimesWindowsRecord.getSlotDuration(loadSlot)).thenReturn(0);
+		
+		IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
+		Mockito.when(vesselClass.getMaxSpeed()).thenReturn(10*1000);
+		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vesselClass, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
+		Assert.assertArrayEquals(new int[] {5, 5, 40, 45}, times);
+	}
+
 	@Test
 	public void testIntervals() {
 		final StepwiseIntegerCurve c = new StepwiseIntegerCurve();
@@ -530,6 +699,7 @@ public class PriceIntervalProviderHelperTest {
 			protected void configure() {
 				bind(ITimeZoneToUtcOffsetProvider.class).toInstance(t);
 				bind(IPriceIntervalProducer.class).to(PriceIntervalProducer.class);
+				bind(IVesselProvider.class).to(HashMapVesselEditor.class);
 			}
 		});
 
@@ -565,11 +735,135 @@ public class PriceIntervalProviderHelperTest {
 			protected void configure() {
 				bind(ITimeZoneToUtcOffsetProvider.class).toInstance(t);
 				bind(IPriceIntervalProducer.class).to(PriceIntervalProducer.class);
+				bind(IVesselProvider.class).to(HashMapVesselEditor.class);
 			}
 		});
 
 		injector.injectMembers(ppih);
 		return ppih;
+	}
+	
+	private PriceIntervalProviderHelper createPriceIntervalProviderHelper(final int timeDiff, List<MatrixEntry<IPort, Integer>> distances) {
+		PriceIntervalProviderHelper ppih = new PriceIntervalProviderHelper();
+		final ITimeZoneToUtcOffsetProvider t = Mockito.mock(ITimeZoneToUtcOffsetProvider.class);
+		when(t.UTC(Matchers.anyInt(), Matchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
+			@Override
+			public Integer answer(final InvocationOnMock invocation) throws Throwable {
+				final Object[] args = invocation.getArguments();
+				final int input = (int) args[0]+timeDiff;
+				return input;
+			}
+		});
+		when(t.localTime(Matchers.anyInt(), Matchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
+			@Override
+			public Integer answer(final InvocationOnMock invocation) throws Throwable {
+				final Object[] args = invocation.getArguments();
+				final int input = (int) args[0]-timeDiff;
+				return input;
+			}
+		});
+		when(t.UTC(Matchers.anyInt(), Matchers.<IPortSlot> any())).thenAnswer(new Answer<Integer>() {
+			@Override
+			public Integer answer(final InvocationOnMock invocation) throws Throwable {
+				final Object[] args = invocation.getArguments();
+				final int input = (int) args[0]-2;
+				return input;
+			}
+		});
+		
+		Injector injector = Guice.createInjector(new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				bind(ITimeZoneToUtcOffsetProvider.class).toInstance(t);
+				bind(IPriceIntervalProducer.class).to(PriceIntervalProducer.class);
+				bind(new TypeLiteral<IMultiMatrixProvider<IPort, Integer>>(){}).toInstance(getDistanceProvider(distances));
+				bind(IRouteCostProvider.class).toInstance(getIRouteCostProvider());
+				bind(IVesselProvider.class).to(HashMapVesselEditor.class);
+			}
+		});
+
+		injector.injectMembers(ppih);
+		return ppih;
+	}
+	
+	private TimeWindowSchedulingCanalDistanceProvider getTimeWindowSchedulingCanalDistanceProvider(List<MatrixEntry<IPort, Integer>> distances) {
+		TimeWindowSchedulingCanalDistanceProvider timeWindowSchedulingCanalDistanceProvider = new TimeWindowSchedulingCanalDistanceProvider();
+		
+		Injector injector = Guice.createInjector(new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				bind(new TypeLiteral<IMultiMatrixProvider<IPort, Integer>>(){}).toInstance(getDistanceProvider(distances));
+				bind(IRouteCostProvider.class).toInstance(getIRouteCostProvider());
+			}
+		});
+
+		injector.injectMembers(timeWindowSchedulingCanalDistanceProvider);
+		return timeWindowSchedulingCanalDistanceProvider;
+	}
+
+	private TimeWindowsTrimming getTimeWindowsTrimming(List<MatrixEntry<IPort, Integer>> distances) {
+		TimeWindowsTrimming timeWindowsTrimming = new TimeWindowsTrimming();
+		
+		final ITimeZoneToUtcOffsetProvider t = Mockito.mock(ITimeZoneToUtcOffsetProvider.class);
+		when(t.UTC(Matchers.anyInt(), Matchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
+			@Override
+			public Integer answer(final InvocationOnMock invocation) throws Throwable {
+				final Object[] args = invocation.getArguments();
+				final int input = (int) args[0];
+				return input;
+			}
+		});
+		when(t.localTime(Matchers.anyInt(), Matchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
+			@Override
+			public Integer answer(final InvocationOnMock invocation) throws Throwable {
+				final Object[] args = invocation.getArguments();
+				final int input = (int) args[0];
+				return input;
+			}
+		});
+		when(t.UTC(Matchers.anyInt(), Matchers.<IPortSlot> any())).thenAnswer(new Answer<Integer>() {
+			@Override
+			public Integer answer(final InvocationOnMock invocation) throws Throwable {
+				final Object[] args = invocation.getArguments();
+				final int input = (int) args[0]-2;
+				return input;
+			}
+		});
+
+		Injector injector = Guice.createInjector(new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				bind(ITimeZoneToUtcOffsetProvider.class).toInstance(t);
+				bind(IPriceIntervalProducer.class).to(PriceIntervalProducer.class);
+				bind(IVesselProvider.class).to(HashMapVesselEditor.class);
+				bind(IPriceIntervalProducer.class).to(PriceIntervalProducer.class);
+				bind(PriceIntervalProviderHelper.class).toInstance(createPriceIntervalProviderHelper(0));
+				bind(new TypeLiteral<IMultiMatrixProvider<IPort, Integer>>(){}).toInstance(getDistanceProvider(distances));
+				bind(IRouteCostProvider.class).toInstance(getIRouteCostProvider());
+				bind(ITimeWindowSchedulingCanalDistanceProvider.class).toInstance(getTimeWindowSchedulingCanalDistanceProvider(distances));
+			}
+		});
+		
+		injector.injectMembers(timeWindowsTrimming);
+		return timeWindowsTrimming;
+
+	}
+	
+	private IMultiMatrixProvider<IPort, Integer> getDistanceProvider(List<MatrixEntry<IPort, Integer>> distances) {
+		IMultiMatrixProvider<IPort, Integer> distanceProvider = (IMultiMatrixProvider<IPort, Integer>) Mockito.mock(IMultiMatrixProvider.class);
+		Mockito.when(distanceProvider.getValues(Mockito.any(IPort.class), Mockito.any(IPort.class))).thenReturn(distances);
+		return distanceProvider;
+	}
+
+	private IRouteCostProvider getIRouteCostProvider() {
+		IRouteCostProvider routeCostProvider = Mockito.mock(IRouteCostProvider.class);
+		Mockito.when(routeCostProvider.getRouteTransitTime(Mockito.any(), Mockito.any())).thenReturn(0);
+		Mockito.when(routeCostProvider.getRouteCost(Mockito.eq("direct"), Mockito.any(), Mockito.any())).thenReturn(0L);
+		Mockito.when(routeCostProvider.getRouteCost(Mockito.eq("suez"), Mockito.any(), Mockito.any())).thenReturn(OptimiserUnitConvertor.convertToInternalFixedCost(500_000));
+		return routeCostProvider;
 	}
 
 

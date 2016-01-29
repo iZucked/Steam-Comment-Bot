@@ -20,7 +20,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
 /**
  */
-public class PriceExpressionContract extends SimpleContract implements IPriceIntervalProvider{
+public class PriceExpressionContract extends SimpleContract implements IPriceIntervalProvider {
 
 	private final ICurve expressionCurve;
 	private final IIntegerIntervalCurve priceChangeIntervalsInHours;
@@ -35,14 +35,12 @@ public class PriceExpressionContract extends SimpleContract implements IPriceInt
 
 	@Override
 	protected int calculateSimpleUnitPrice(final int time, final IPort port) {
-		System.out.println(time); // DO NOT COMMIT
 		return expressionCurve.getValueAtPoint(time);
 	}
 
 	@Override
 	public List<int[]> getPriceIntervals(IPortSlot slot, int startOfRange, int endOfRange, IPortTimeWindowsRecord portTimeWindowRecord) {
-		if (slot instanceof ILoadOption) { //DON NOT COMMIT - make a load/discharge version
-			//TODO: do we need this?
+		if (slot instanceof ILoadOption) {
 			return priceIntervalProviderUtil.getPriceIntervalsList((ILoadOption) slot, priceChangeIntervalsInHours, expressionCurve, startOfRange, endOfRange, 0, portTimeWindowRecord);
 		} else if (slot instanceof IDischargeOption) {
 			return priceIntervalProviderUtil.getPriceIntervalsList((IDischargeOption) slot, priceChangeIntervalsInHours, expressionCurve, startOfRange, endOfRange, 0, portTimeWindowRecord);

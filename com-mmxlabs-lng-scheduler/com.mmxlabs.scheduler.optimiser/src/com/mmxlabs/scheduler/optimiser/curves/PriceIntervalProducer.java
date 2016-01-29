@@ -10,43 +10,38 @@ import com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceIntervalProviderHelper;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
+/**
+ * Concrete implementation of an {@link IPriceIntervalProducer}
+ * @author achurchill
+ *
+ */
 public class PriceIntervalProducer implements IPriceIntervalProducer {
 
 	@Inject
 	PriceIntervalProviderHelper priceIntervalProviderUtil;
 	
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer#getLoadIntervalsIndependentOfDischarge(com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord, com.mmxlabs.scheduler.optimiser.components.ILoadOption)
-	 */
 	@Override
 	public List<int[]> getLoadIntervalsIndependentOfDischarge(ILoadOption portSlot, IPortTimeWindowsRecord portTimeWindowRecord) {
-		
+		assert portSlot.getLoadPriceCalculator() instanceof IPriceIntervalProvider;
 		int start = portSlot.getTimeWindow().getStart();
 		ITimeWindow feasibletimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(portSlot);
 		int end = findBestEnd(start, feasibletimeWindow.getStart(), portSlot.getTimeWindow().getEnd(), feasibletimeWindow.getEnd());
-
 		return ((IPriceIntervalProvider) portSlot.getLoadPriceCalculator()).getPriceIntervals(portSlot, start, end, portTimeWindowRecord);
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer#getLoadIntervalsBasedOnDischarge(com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord, com.mmxlabs.scheduler.optimiser.components.ILoadOption, com.mmxlabs.scheduler.optimiser.components.IDischargeOption)
-	 */
 	@Override
 	public List<int[]> getLoadIntervalsBasedOnDischarge(ILoadOption portSlot, IPortTimeWindowsRecord portTimeWindowRecord) {
 		IDischargeOption discharge = priceIntervalProviderUtil.getFirstDischargeOption(portTimeWindowRecord.getSlots());
+		assert discharge.getDischargePriceCalculator() instanceof IPriceIntervalProvider;
 		int start = portSlot.getTimeWindow().getStart();
 		ITimeWindow feasibletimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(portSlot);
 		int end = findBestEnd(start, feasibletimeWindow.getStart(), portSlot.getTimeWindow().getEnd(), feasibletimeWindow.getEnd());
-
-		// DO NOT COMMIT (time window
 		return ((IPriceIntervalProvider) discharge.getDischargePriceCalculator()).getPriceIntervals(discharge, start, end, portTimeWindowRecord);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer#getDischargeWindowIndependentOfLoad(com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord, com.mmxlabs.scheduler.optimiser.components.IDischargeOption)
-	 */
 	@Override
 	public List<int[]> getDischargeWindowIndependentOfLoad(IDischargeOption portSlot, IPortTimeWindowsRecord portTimeWindowRecord) {
+		assert portSlot.getDischargePriceCalculator() instanceof IPriceIntervalProvider;
 		int start = portSlot.getTimeWindow().getStart();
 		ITimeWindow feasibletimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(portSlot);
 		int end = findBestEnd(start, feasibletimeWindow.getStart(), portSlot.getTimeWindow().getEnd(), feasibletimeWindow.getEnd());
@@ -54,22 +49,16 @@ public class PriceIntervalProducer implements IPriceIntervalProducer {
 		return ((IPriceIntervalProvider) portSlot.getDischargePriceCalculator()).getPriceIntervals(portSlot, start, end, portTimeWindowRecord);
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer#getDischargeWindowBasedOnLoad(com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord, com.mmxlabs.scheduler.optimiser.components.ILoadOption, com.mmxlabs.scheduler.optimiser.components.IDischargeOption)
-	 */
 	@Override
 	public List<int[]> getDischargeWindowBasedOnLoad(IDischargeOption portSlot, IPortTimeWindowsRecord portTimeWindowRecord) {
 		ILoadOption loadOption = priceIntervalProviderUtil.getFirstLoadOption(portTimeWindowRecord.getSlots());
+		assert loadOption.getLoadPriceCalculator() instanceof IPriceIntervalProvider;
 		int start = portSlot.getTimeWindow().getStart();
 		ITimeWindow feasibletimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(portSlot);
 		int end = findBestEnd(start, feasibletimeWindow.getStart(), portSlot.getTimeWindow().getEnd(), feasibletimeWindow.getEnd());
-
 		return ((IPriceIntervalProvider) loadOption.getLoadPriceCalculator()).getPriceIntervals(loadOption, start, end, portTimeWindowRecord);
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer#getIntervalsWhenLoadOrDischargeDeterminesBothPricingEvents(com.mmxlabs.scheduler.optimiser.components.ILoadOption, com.mmxlabs.scheduler.optimiser.components.IDischargeOption, com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider, com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider, com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord, boolean)
-	 */
 	@Override
 	public List<int[]> getIntervalsWhenLoadOrDischargeDeterminesBothPricingEvents(ILoadOption load, IDischargeOption discharge, IPriceIntervalProvider loadPriceIntervalProvider,
 			IPriceIntervalProvider dischargePriceIntervalProvider, IPortTimeWindowsRecord portTimeWindowsRecord, boolean dateFromLoad) {
@@ -77,7 +66,6 @@ public class PriceIntervalProducer implements IPriceIntervalProducer {
 		ITimeWindow loadFeasibletimeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
 		ITimeWindow dischargeFeasibletimeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(discharge);
 		int end = findBestEnd(start, loadFeasibletimeWindow.getStart(), discharge.getTimeWindow().getEnd(), dischargeFeasibletimeWindow.getEnd());
-
 		return priceIntervalProviderUtil.buildComplexPriceIntervals(start, end, load, discharge, loadPriceIntervalProvider, dischargePriceIntervalProvider, portTimeWindowsRecord);
 	}
 
@@ -94,19 +82,15 @@ public class PriceIntervalProducer implements IPriceIntervalProducer {
 		if (windowStart == maxEnd || feasibleStart == maxEnd) {
 			maxEnd += 1;
 		}
-		return maxEnd + 1; //DO NOT COMMIT
+		return maxEnd + 1;
 	}
 	
 	@Override
 	public void reset() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-		
 	}
 	
 }

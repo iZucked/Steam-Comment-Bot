@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IElementAnnotation;
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -43,5 +44,6 @@ public interface IPortTimeWindowsRecord extends IElementAnnotation {
 	void setReturnSlot(IPortSlot slot, ITimeWindow timeWindow, int duration, int index);
 
 	int getIndex(IPortSlot slot);
-	
+
+	IResource getResource();
 }

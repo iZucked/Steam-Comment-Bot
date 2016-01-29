@@ -11,17 +11,19 @@ import java.util.Map;
 import java.util.Objects;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
 /**
+ * DO NOT COMMIT - fill this in
  * A small class storing the port arrival time and visit duration for a {@link VoyagePlan}. This class may or may not include the times for the last element in the plan depending on how it is created.
  * For scheduling purposes the end element should be included. Often for pricing purposes the end element can be ignored.
  * 
  * Note, the order slots are added is important. They should be added in scheduled order. The calls to {@link #getFirstSlotTime()} and {@link #getFirstSlot()} are expected to be bound the first slot
  * added to the instance.
  * 
- * @author Simon Goodall
+ * @author achurchill
  * 
  */
 public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
@@ -55,6 +57,7 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 	private ITimeWindow firstSlotFeasibleTimeWindow = null;
 	private IPortSlot firstPortSlot = null;
 	private IPortSlot returnSlot;
+	private IResource resource;
 	
 	public PortTimeWindowsRecord() {
 
@@ -192,4 +195,14 @@ public class PortTimeWindowsRecord implements IPortTimeWindowsRecord {
 		SlotWindowRecord allocation = slotRecords.get(slot);
 		return allocation != null ? allocation.index : -1;
 	}
+
+	@Override
+	public IResource getResource() {
+		return resource;
+	}
+	
+	public IResource setResource(IResource resource) {
+		return this.resource = resource;
+	}
+
 }

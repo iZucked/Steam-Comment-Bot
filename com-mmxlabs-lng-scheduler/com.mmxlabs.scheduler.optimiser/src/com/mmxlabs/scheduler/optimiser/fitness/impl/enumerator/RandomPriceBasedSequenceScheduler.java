@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 
-import java.awt.event.WindowStateListener;
 import java.util.List;
 import java.util.Random;
 
@@ -18,7 +17,7 @@ import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceIntervalProviderHelper;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.TimeWindowsTrimming;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
@@ -33,14 +32,13 @@ public class RandomPriceBasedSequenceScheduler extends EnumeratingSequenceSchedu
 	private Random random;
 
 	@Inject
-	PriceIntervalProviderHelper priceIntervalProviderUtil;
+	TimeWindowsTrimming timeWindowsTrimming;
 
 	@Override
 	public ScheduledSequences schedule(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
 		random = new Random(seed);
 
 		setSequences(sequences);
-		resetBest();
 
 		prepare();
 		priceBasedWindowTrimming(sequences, portTimeWindowsRecords);
@@ -49,13 +47,12 @@ public class RandomPriceBasedSequenceScheduler extends EnumeratingSequenceSchedu
 			randomise(index);
 		}
 		synchroniseShipToShipBindings();
-		// DON NOT COMMIT
+		// DO NOT COMMIT
 //		if (RE_EVALUATE_SOLUTION) {
 //			evaluate(null);
 //			return reEvaluateAndGetBestResult(sequences, solution);
 //		} else {
-			evaluate(solution);
-			return getBestResult();
+			return evaluate(solution);
 //		}
 	}
 
@@ -63,7 +60,7 @@ public class RandomPriceBasedSequenceScheduler extends EnumeratingSequenceSchedu
 		for (int seqIndex = 0; seqIndex < sequences.size(); seqIndex++) {
 			for (IPortTimeWindowsRecord portTimeWindowsRecord : portTimeWindowsRecords.get(seqIndex)) {
 				setFeasibleTimeWindows(portTimeWindowsRecord, seqIndex);
-				priceIntervalProviderUtil.processCargo(portTimeWindowsRecord);
+				timeWindowsTrimming.processCargo(portTimeWindowsRecord);
 				updateTimeWindows(portTimeWindowsRecord, seqIndex);
 			}
 		}
@@ -85,14 +82,12 @@ public class RandomPriceBasedSequenceScheduler extends EnumeratingSequenceSchedu
 		}
 	}
 
-	@Override
 	protected final ScheduledSequences reEvaluateAndGetBestResult(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
 
 		// final long lastValue = getBestValue();
 		random = new Random(seed);
 
 		setSequences(sequences);
-		resetBest();
 
 		prepare();
 
@@ -101,11 +96,7 @@ public class RandomPriceBasedSequenceScheduler extends EnumeratingSequenceSchedu
 			randomise(index);
 		}
 		synchroniseShipToShipBindings();
-		evaluate(solution);
-
-		// assert lastValue == getBestValue();
-
-		return getBestResult();
+		return evaluate(solution);
 	}
 
 	private void synchroniseShipToShipBindings() {

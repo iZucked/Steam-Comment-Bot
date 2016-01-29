@@ -135,7 +135,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 	// protected final ArrayList<Integer> separationPoints = new
 	// ArrayList<Integer>();
 
-	protected List<List<IPortTimeWindowsRecord>> portTimeWindowsRecords = new ArrayList<>(); //DON NOT COMMIT
+	protected List<List<IPortTimeWindowsRecord>> portTimeWindowsRecords = new ArrayList<>();
 	
 	@Inject
 	private IShipToShipBindingProvider shipToShipProvider;
@@ -206,7 +206,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 
 		portTimeWindowsRecords.clear();
 		for (int i = 0; i < size; i++) {
-			portTimeWindowsRecords.add(new ArrayList<IPortTimeWindowsRecord>());
+			portTimeWindowsRecords.add(new LinkedList<IPortTimeWindowsRecord>());
 			prepare(i);
 		}
 
@@ -459,6 +459,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 		// Used for end of sequence checks
 		IPortSlot prevPrevPortSlot = null;
 		PortTimeWindowsRecord portTimeWindowsRecord = new PortTimeWindowsRecord();
+		portTimeWindowsRecord.setResource(resource);
 		// --->
 
 		// first pass, collecting start time windows
@@ -533,6 +534,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 				portTimeWindowsRecords.get(sequenceIndex).add(portTimeWindowsRecord);
 				// create new record
 				portTimeWindowsRecord = new PortTimeWindowsRecord();
+				portTimeWindowsRecord.setResource(resource);
 				portTimeWindowsRecord.setSlot(thisPortSlot, null, visitDuration, index);
 			} else {
 				portTimeWindowsRecord.setSlot(thisPortSlot, null, visitDuration, index);

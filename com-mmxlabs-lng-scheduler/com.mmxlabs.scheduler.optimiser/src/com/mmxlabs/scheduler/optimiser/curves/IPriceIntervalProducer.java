@@ -9,16 +9,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
 public interface IPriceIntervalProducer {
 
-	/**
-	 * Reset the state of this object ready for a new optimisation.
-	 */
-	public abstract void reset();
-	
-	/**
-	 * Clean up all references.
-	 */
-	public abstract void dispose();
-
 	public abstract List<int[]> getLoadIntervalsIndependentOfDischarge(ILoadOption portSlot, IPortTimeWindowsRecord portTimeWindowRecord);
 
 	public abstract List<int[]> getLoadIntervalsBasedOnDischarge(ILoadOption portSlot, IPortTimeWindowsRecord portTimeWindowRecord);
@@ -30,6 +20,8 @@ public interface IPriceIntervalProducer {
 	public abstract List<int[]> getIntervalsWhenLoadOrDischargeDeterminesBothPricingEvents(ILoadOption load, IDischargeOption discharge, IPriceIntervalProvider loadPriceIntervalProvider,
 			IPriceIntervalProvider dischargePriceIntervalProvider, IPortTimeWindowsRecord portTimeWindowRecord, boolean dateFromLoad);
 
-
+	public void reset();
+	
+	public void dispose();
 
 }

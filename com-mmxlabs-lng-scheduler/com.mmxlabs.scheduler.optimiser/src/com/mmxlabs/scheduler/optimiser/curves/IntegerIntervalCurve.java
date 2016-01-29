@@ -16,7 +16,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 
 /**
- * 
+ * Concrete implementation of {@link IIntegerIntervalCurve}
  */
 public class IntegerIntervalCurve implements IIntegerIntervalCurve {
 

@@ -17,6 +17,7 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceIntervalProviderHelper;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.TimeWindowsTrimming;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
@@ -27,18 +28,12 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
  * @param
  */
 public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
-	private final int seed = 0;
-	private Random random;
-
 	@Inject
-	PriceIntervalProviderHelper priceIntervalProviderUtil;
+	TimeWindowsTrimming timeWindowsTrimming;
 
 	@Override
 	public ScheduledSequences schedule(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
-		random = new Random(seed);
-
 		setSequences(sequences);
-		resetBest();
 
 		prepare();
 		priceBasedWindowTrimming(sequences, portTimeWindowsRecords);
@@ -50,8 +45,7 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 			evaluate(null);
 			return reEvaluateAndGetBestResult(sequences, solution);
 		} else {
-			evaluate(solution);
-			return getBestResult();
+			return evaluate(solution);
 		}
 	}
 
@@ -59,7 +53,7 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 		for (int seqIndex = 0; seqIndex < sequences.size(); seqIndex++) {
 			for (IPortTimeWindowsRecord portTimeWindowsRecord : portTimeWindowsRecords.get(seqIndex)) {
 				setFeasibleTimeWindows(portTimeWindowsRecord, seqIndex);
-				priceIntervalProviderUtil.processCargo(portTimeWindowsRecord);
+				timeWindowsTrimming.processCargo(portTimeWindowsRecord);
 				updateTimeWindows(portTimeWindowsRecord, seqIndex);
 			}
 		}
@@ -81,11 +75,9 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 		}
 	}
 
-	@Override
 	protected final ScheduledSequences reEvaluateAndGetBestResult(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
 
 		setSequences(sequences);
-		resetBest();
 
 		prepare();
 
@@ -94,9 +86,7 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 			setTimeWindowsToEarliest(index);
 		}
 		synchroniseShipToShipBindings();
-		evaluate(solution);
-
-		return getBestResult();
+		return evaluate(solution);
 	}
 
 	private void synchroniseShipToShipBindings() {
