@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * All rights reserved.
+ */
 package com.mmxlabs.lingo.its.tests.microcases.period;
 
 import java.time.LocalDate;
@@ -6,6 +10,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
@@ -51,6 +56,7 @@ public class DivertibleDESTests extends AbstractPeriodTestCase {
 	 */
 	@Test
 	@Category({ QuickTest.class, MicroTest.class })
+	@Ignore("This is unexpected as the load is in the window, but as the sale is outside (and locked) and it is a DES Purchase, this is a fixed cargo and it does not matter if it is included or not")
 	public void testDivertableDES() throws Exception {
 
 		// Load in the basic scenario from CSV
@@ -97,13 +103,13 @@ public class DivertibleDESTests extends AbstractPeriodTestCase {
 		userSettings.setPeriodStart(YearMonth.of(2015, 4));
 		userSettings.setPeriodEnd(YearMonth.of(2015, 5));
 
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null);
+		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, lngScenarioModel);
 
 		// Generate internal data
 		final ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try {
 
-			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, new TransformerExtensionTestBootstrapModule(), null,
+			final LNGScenarioRunner scenarioRunner = new LNGScenarioRunner(executorService, lngScenarioModel, optimiserSettings, new TransformerExtensionTestBootstrapModule(), null, false,
 					LNGTransformerHelper.HINT_OPTIMISE_LSO);
 			scenarioRunner.evaluateInitialState();
 			final LNGScenarioToOptimiserBridge scenarioToOptimiserBridge = scenarioRunner.getScenarioToOptimiserBridge();

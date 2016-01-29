@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests;
@@ -199,7 +199,7 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 		userSettings.setShippingOnly(false);
 		userSettings.setSimilarityMode(mode);
 
-		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null);
+		final OptimiserSettings optimiserSettings = OptimisationHelper.transformUserSettings(userSettings, null, originalScenario);
 		Assert.assertNotNull(optimiserSettings);
 
 		if (limitedIterations) {
@@ -302,7 +302,7 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 			runnerHook = null;
 		}
 
-		final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunner(executorService, originalScenario, optimiserSettings);
+		final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunnerWithLSO(executorService, originalScenario, optimiserSettings);
 
 		optimiseBasicScenario(scenarioRunner, url, String.format(".%s.properties", Joiner.on(".").join(components)));
 	}

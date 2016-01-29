@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.app.intro;
@@ -33,7 +33,9 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		configurer.setShowStatusLine(true);
 		configurer.setShowPerspectiveBar(true);
 
-		if (LicenseFeatures.isPermitted("features:beta-features")) {
+		if (LicenseFeatures.isPermitted("features:beta-cores-features")) {
+			configurer.setTitle("LiNGO - Cores - Beta");
+		} else if (LicenseFeatures.isPermitted("features:beta-features")) {
 			configurer.setTitle("LiNGO - Beta");
 		}
 	}

@@ -1,10 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests;
-
-import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +21,6 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -40,7 +37,6 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -49,9 +45,7 @@ import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
-import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.chain.IMultiStateResult;
-import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.models.migration.scenario.MigrationHelper;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -150,82 +144,34 @@ public class AbstractOptimisationResultTester {
 		super();
 	}
 
-	//
-	// /**
-	// * If run on two separate occasions the fitnesses generated need to be identical. This method tests this by being run twice. The first execution prints out a map that maps the name of the
-	// fitness
-	// * to the value to the console. This is copied and pasted into the method. The second execution will test that map against a the fitnesses that have been generated again.
-	// *
-	// * @throws Exception
-	// *
-	// * @throws MigrationException
-	// * @throws InterruptedException
-	// */
-	public LNGScenarioRunner runScenarioWithGCO(@NonNull final URL url) throws Exception {
-
+	@NonNull
+	public LNGScenarioRunner runScenario(@NonNull final URL url) throws IOException {
 		final LNGScenarioModel originalScenario = LNGScenarioRunnerCreator.getScenarioModelFromURL(url);
-
-		return runScenarioWithGCO(originalScenario, url);
+		return runScenario(originalScenario, url);
 	}
 
-	public LNGScenarioRunner evaluateScenarioWithGCO(@NonNull final URL url) throws Exception {
+	@NonNull
+	public LNGScenarioRunner runScenario(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL) throws IOException {
 
-		final LNGScenarioModel originalScenario = LNGScenarioRunnerCreator.getScenarioModelFromURL(url);
+		final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunnerWithLSO(executorService, originalScenario, null, 10_000);
+		assert scenarioRunner != null;
 
-		return evaluateScenarioWithGCO(originalScenario, url);
-	}
-
-	public LNGScenarioRunner evaluateScenario(@NonNull final URL url, @NonNull final OptimiserSettings optimiserSettings) throws Exception {
-
-		final LNGScenarioModel originalScenario = LNGScenarioRunnerCreator.getScenarioModelFromURL(url);
-		final LNGScenarioRunner originalScenarioRunner = LNGScenarioRunnerCreator.createScenarioRunner(executorService, originalScenario, optimiserSettings);
-
-		return evaluateScenario(originalScenario, url, originalScenarioRunner);
-	}
-
-	//
-	public LNGScenarioRunner evaluateScenarioWithGCO(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL) throws IOException, IncompleteScenarioException {
-
-		if (false) {
-			LNGScenarioRunnerCreator.saveScenarioModel(originalScenario, new File("C:\\temp\\test-scenario.lingo"));
-		}
-
-		OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
-		optimiserSettings = LNGScenarioRunnerCreator.createExtendedSettings(optimiserSettings);
-
-		// Limit the number of iterations
-		optimiserSettings.getAnnealingSettings().setIterations(10_000);
-
-		// Enabled by default for ITS
-		optimiserSettings.setGenerateCharterOuts(true);
-
-		// Create scenario runner with optimisation params incase we want to run optimisation outside of the opt run method.
-		final LNGScenarioRunner originalScenarioRunner = LNGScenarioRunnerCreator.createScenarioRunner(executorService, originalScenario, optimiserSettings);
-		return evaluateScenario(originalScenario, origURL, originalScenarioRunner);
-	}
-
-	public LNGScenarioRunner evaluateScenario(@NonNull final LNGScenarioModel originalScenario, @Nullable final URL origURL, @NonNull final LNGScenarioRunner scenarioRunner)
-			throws IOException, IncompleteScenarioException {
-
-		scenarioRunner.evaluateInitialState();
-
+		optimiseScenario(scenarioRunner, origURL, ".properties");
 		return scenarioRunner;
 	}
 
+	@NonNull
+	public LNGScenarioRunner runScenarioWithGCO(@NonNull final URL url) throws IOException {
+		final LNGScenarioModel originalScenario = LNGScenarioRunnerCreator.getScenarioModelFromURL(url);
+		return runScenarioWithGCO(originalScenario, url);
+	}
+
+	@NonNull
 	public LNGScenarioRunner runScenarioWithGCO(@NonNull final LNGScenarioModel originalScenario, @NonNull final URL origURL) throws IOException {
 
-		OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
-		optimiserSettings = LNGScenarioRunnerCreator.createExtendedSettings(optimiserSettings);
-
-		// Limit the number of iterations
-		optimiserSettings.getAnnealingSettings().setIterations(10000);
-
-		// Enabled by default for ITS
-		optimiserSettings.setGenerateCharterOuts(true);
-
-		final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunner(executorService, originalScenario, optimiserSettings);
+		final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunnerWithLSO(executorService, originalScenario, true, 10_000);
 		assert scenarioRunner != null;
-		scenarioRunner.evaluateInitialState();
+
 		optimiseScenario(scenarioRunner, origURL, ".properties");
 		return scenarioRunner;
 	}
@@ -327,7 +273,7 @@ public class AbstractOptimisationResultTester {
 			final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, bundleContext.getService(serviceReference));
 			Assert.assertNotNull(instance);
 			MigrationHelper.migrateAndLoad(instance);
-			ReportTester.testReports(executorService, instance, scenarioURL, reportID, shortName, extension);
+			ReportTester.testReports(instance, scenarioURL, reportID, shortName, extension);
 		} finally {
 			bundleContext.ungetService(serviceReference);
 		}

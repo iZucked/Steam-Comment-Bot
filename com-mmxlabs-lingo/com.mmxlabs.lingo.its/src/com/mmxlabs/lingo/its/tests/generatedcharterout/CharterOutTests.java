@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests.generatedcharterout;
@@ -31,7 +31,7 @@ public class CharterOutTests extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/charter-out/gco-barca-bonny-point fortin-min days 60.lingo");
 
-		final LNGScenarioRunner runner = evaluateScenarioWithGCO(url);
+		final LNGScenarioRunner runner = LNGScenarioRunnerCreator.createScenarioRunnerForEvaluation(url, true);
 		Assert.assertNotNull(runner);
 
 		// Should be the same as the updateScenario as we have only called ScenarioRunner#init()
@@ -48,7 +48,7 @@ public class CharterOutTests extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/charter-out/gco-barca-bonny-point fortin.lingo");
 
-		final LNGScenarioRunner runner = evaluateScenarioWithGCO(url);
+		final LNGScenarioRunner runner = LNGScenarioRunnerCreator.createScenarioRunnerForEvaluation(url, true);
 		Assert.assertNotNull(runner);
 
 		// Should be the same as the updateScenario as we have only called ScenarioRunner#init()
@@ -72,7 +72,7 @@ public class CharterOutTests extends AbstractOptimisationResultTester {
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/charter-out/gco-barca-point fortin.lingo");
 
-		final LNGScenarioRunner runner = evaluateScenarioWithGCO(url);
+		final LNGScenarioRunner runner = LNGScenarioRunnerCreator.createScenarioRunnerForEvaluation(url, true);
 		Assert.assertNotNull(runner);
 
 		// Should be the same as the updateScenario as we have only called ScenarioRunner#init()

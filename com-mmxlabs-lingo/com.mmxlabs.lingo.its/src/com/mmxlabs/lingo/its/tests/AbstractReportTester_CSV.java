@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests;
@@ -38,24 +38,25 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 @RunWith(value = Parameterized.class)
 public abstract class AbstractReportTester_CSV extends AbstractOptimisationResultTester {
 
+	private static Map<Pair<String, String>, Pair<URL, LNGScenarioModel>> cache = new HashMap<>();
+
 	private final Pair<String, String> key;
 
-	public AbstractReportTester_CSV(final String name, final String scenarioPath) {
+	public AbstractReportTester_CSV(final String name, final String scenarioPath) throws MalformedURLException {
 		key = new Pair<>(name, scenarioPath);
-	}
-
-	protected Pair<URL, LNGScenarioModel> load(Pair<String, String> key) throws MalformedURLException {
-		final URL url = getClass().getResource(key.getSecond());
-		final LNGScenarioModel scenarioModel = CSVImporter.importCSVScenario(url.toString());
-		return new Pair<>(url, scenarioModel);
+		if (!cache.containsKey(key)) {
+			final URL url = getClass().getResource(scenarioPath);
+			final LNGScenarioModel scenarioModel = CSVImporter.importCSVScenario(url.toString());
+			cache.put(key, new Pair<>(url, scenarioModel));
+		}
 	}
 
 	protected void testReports(final String reportID, final String shortName, final String extension) throws Exception {
-		final Pair<URL, LNGScenarioModel> pair = load(key);
+		final Pair<URL, LNGScenarioModel> pair = cache.get(key);
 		final URL url = pair.getFirst();
 		final LNGScenarioModel scenarioModel = pair.getSecond();
 		ScenarioInstance instance = LNGScenarioRunnerCreator.createScenarioInstance(scenarioModel, url);
-		ReportTester.testReports(executorService, instance, url, reportID, shortName, extension);
+		ReportTester.testReports(instance, url, reportID, shortName, extension);
 	}
 
 	@Test

@@ -1,14 +1,18 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.lingo.its.tests;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.emf.common.util.URI;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -43,41 +47,54 @@ import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
 @RunWith(value = Parameterized.class)
 public abstract class AbstractReportTester_LiNGO extends AbstractOptimisationResultTester {
 
+	private static Map<Pair<String, String>, Pair<URL, ScenarioInstance>> cache = new HashMap<>();
+
 	private final Pair<String, String> key;
 
 	public AbstractReportTester_LiNGO(final String name, final String scenarioPath) throws Exception {
 
 		key = new Pair<>(name, scenarioPath);
+		if (!cache.containsKey(key)) {
+			final URL url = getClass().getResource(scenarioPath);
+			final URI uri = URI.createURI(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20"));
+
+			final BundleContext bundleContext = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class).getBundleContext();
+			final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
+			try {
+				final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, bundleContext.getService(serviceReference));
+				Assert.assertNotNull(instance);
+
+				MigrationHelper.migrateAndLoad(instance);
+
+				Assert.assertNotNull(instance.getInstance());
+				cache.put(key, new Pair<>(url, instance));
+			} finally {
+				bundleContext.ungetService(serviceReference);
+			}
+		}
 	}
 
-	protected Pair<URL, ScenarioInstance> load(Pair<String, String> key) throws IOException {
-		final URL url = getClass().getResource(key.getSecond());
-		final URI uri = URI.createURI(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20"));
+	@AfterClass
+	public static void clearCache() throws Exception {
 
-		final BundleContext bundleContext = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class).getBundleContext();
-		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
-		try {
-			final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, bundleContext.getService(serviceReference));
-			Assert.assertNotNull(instance);
-
-			MigrationHelper.migrateAndLoad(instance);
-
-			Assert.assertNotNull(instance.getInstance());
-			return new Pair<>(url, instance);
-		} finally {
-			bundleContext.ungetService(serviceReference);
+		final Iterator<Map.Entry<Pair<String, String>, Pair<URL, ScenarioInstance>>> itr = cache.entrySet().iterator();
+		while (itr.hasNext()) {
+			final Map.Entry<Pair<String, String>, Pair<URL, ScenarioInstance>> e = itr.next();
+			itr.remove();
 		}
 	}
 
 	protected void testReports(final String reportID, final String shortName, final String extension) throws Exception {
-		final Pair<URL, ScenarioInstance> triple = load(key);
+		Assert.assertTrue(cache.containsKey(key));
+
+		final Pair<URL, ScenarioInstance> triple = cache.get(key);
 		final URL url = triple.getFirst();
 		Assert.assertNotNull(url);
 
 		final ScenarioInstance instance = triple.getSecond();
 		Assert.assertNotNull(instance);
 		Assert.assertNotNull(instance.getInstance());
-		ReportTester.testReports(executorService, instance, url, reportID, shortName, extension);
+		ReportTester.testReports(instance, url, reportID, shortName, extension);
 	}
 
 	@Test
