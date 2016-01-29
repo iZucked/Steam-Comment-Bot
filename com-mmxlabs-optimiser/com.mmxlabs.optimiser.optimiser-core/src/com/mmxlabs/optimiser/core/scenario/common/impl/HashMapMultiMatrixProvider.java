@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.mmxlabs.optimiser.core.scenario.common.IMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixEditor;
@@ -145,7 +144,10 @@ public class HashMapMultiMatrixProvider<T, U extends Comparable<U>> implements I
 				}
 			}
 		}
-		return new MatrixEntry<T, U>(minKey, x, y, minimum == null ? invalid : minimum);
+		if (minKey != null) {
+			return new MatrixEntry<T, U>(minKey, x, y, minimum == null ? invalid : minimum);
+		}
+		return null;
 	}
 
 	@Override
