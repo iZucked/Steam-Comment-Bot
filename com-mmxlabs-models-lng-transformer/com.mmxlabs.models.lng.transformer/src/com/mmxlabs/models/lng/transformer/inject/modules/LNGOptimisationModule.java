@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 /**
@@ -32,6 +32,8 @@ import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.CompoundMoveGenerator;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.InstrumentingMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator;
+import com.mmxlabs.scheduler.optimiser.lso.FollowersAndPrecedersProviderImpl;
+import com.mmxlabs.scheduler.optimiser.lso.IFollowersAndPreceders;
 
 /**
  * Main entry point to create {@link LNGScenarioTransformer}. This uses injection to populate the data structures.
@@ -51,6 +53,8 @@ public class LNGOptimisationModule extends AbstractModule {
 
 		install(new LocalSearchOptimiserModule());
 		install(new LinearFitnessEvaluatorModule());
+
+		bind(IFollowersAndPreceders.class).to(FollowersAndPrecedersProviderImpl.class).in(Singleton.class);
 	}
 
 	@Provides
@@ -77,7 +81,7 @@ public class LNGOptimisationModule extends AbstractModule {
 	}
 
 	@Provides
-//	@Singleton
+	// @Singleton
 	private InstrumentingMoveGenerator provideInstrumentingMoveGenerator(final IMoveGenerator moveGenerator) {
 
 		final InstrumentingMoveGenerator instrumentingMoveGenerator = LocalSearchOptimiserModule.instrumenting ? new InstrumentingMoveGenerator(moveGenerator, true // profile moves (true) or just rate

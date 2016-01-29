@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui;
@@ -104,7 +104,8 @@ public class LNGScenarioToOptimiserBridge {
 	private int overwriteCommandStackCounter = 0;
 
 	public LNGScenarioToOptimiserBridge(@NonNull final LNGScenarioModel scenario, @Nullable final ScenarioInstance scenarioInstance, @NonNull final OptimiserSettings optimiserSettings,
-			@NonNull final EditingDomain editingDomain, @Nullable final Module bootstrapModule, @Nullable final IOptimiserInjectorService localOverrides, final String... initialHints) {
+			@NonNull final EditingDomain editingDomain, @Nullable final Module bootstrapModule, @Nullable final IOptimiserInjectorService localOverrides, boolean evaluationOnly,
+			final String... initialHints) {
 		this.originalScenario = scenario;
 		this.scenarioInstance = scenarioInstance;
 		this.optimiserSettings = optimiserSettings;
@@ -123,13 +124,16 @@ public class LNGScenarioToOptimiserBridge {
 		// Trigger initial evaluation - note no fitness state is saved
 		overwrite(0, originalDataTransformer.getInitialSequences(), null);
 
-		final Triple<LNGScenarioModel, EditingDomain, IScenarioEntityMapping> t = initPeriodOptimisationData(scenarioInstance, originalScenario, originalEditingDomain, optimiserSettings);
+		if (!evaluationOnly) {
+			final Triple<LNGScenarioModel, EditingDomain, IScenarioEntityMapping> t = initPeriodOptimisationData(scenarioInstance, originalScenario, originalEditingDomain, optimiserSettings);
 
-		// TODO: Replaces the above with that return in the triple (this could be original or optimiser)
-		this.optimiserScenario = t.getFirst();
-		this.optimiserEditingDomain = t.getSecond();
-		this.periodMapping = t.getThird();
-
+			// TODO: Replaces the above with that return in the triple (this could be original or optimiser)
+			this.optimiserScenario = t.getFirst();
+			this.optimiserEditingDomain = t.getSecond();
+			this.periodMapping = t.getThird();
+		} else {
+			this.periodMapping = null;
+		}
 		// If we are in a period optimisation, then create a LNGDataTransformer for the period data
 		if (this.periodMapping != null) {
 

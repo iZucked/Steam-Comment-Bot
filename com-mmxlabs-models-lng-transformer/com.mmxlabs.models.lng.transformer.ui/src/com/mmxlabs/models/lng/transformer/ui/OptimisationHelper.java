@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui;
@@ -7,6 +7,9 @@ package com.mmxlabs.models.lng.transformer.ui;
 import java.time.YearMonth;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
@@ -46,6 +49,7 @@ import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.license.features.LicenseFeatures;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.parameters.ActionPlanSettings;
 import com.mmxlabs.models.lng.parameters.Objective;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
@@ -303,7 +307,7 @@ public final class OptimisationHelper {
 			return null;
 		}
 
-		final OptimiserSettings optimiserSettings = transformUserSettings(userSettings, parameterMode);
+		final OptimiserSettings optimiserSettings = transformUserSettings(userSettings, parameterMode, scenario);
 
 		// Tmp hack - need to update customiser API to avoid needing to back-apply
 		userSettings.setGenerateCharterOuts(optimiserSettings.isGenerateCharterOuts());
@@ -479,7 +483,7 @@ public final class OptimisationHelper {
 		return copy;
 	}
 
-	public static OptimiserSettings transformUserSettings(@NonNull final UserSettings userSettings, @Nullable final String parameterMode) {
+	public static OptimiserSettings transformUserSettings(@NonNull final UserSettings userSettings, @Nullable final String parameterMode, LNGScenarioModel lngScenarioModel) {
 
 		final OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
 
@@ -507,6 +511,10 @@ public final class OptimisationHelper {
 
 		YearMonth periodStart = userSettings.getPeriodStart();
 		YearMonth periodEnd = userSettings.getPeriodEnd();
+		
+		YearMonth periodStartOrDefault = getPeriodStartOrDefault(periodStart, lngScenarioModel);
+		YearMonth periodEndOrDefault = getPeriodEndOrDefault(periodEnd, lngScenarioModel);
+
 		SimilarityMode similarityMode = userSettings.getSimilarityMode();
 
 		switch (similarityMode) {
@@ -514,28 +522,28 @@ public final class OptimisationHelper {
 			assert false;
 			break;
 		case HIGH:
-			optimiserSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.HIGH, periodStart, periodEnd));
+			optimiserSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.HIGH, periodStartOrDefault, periodEndOrDefault));
 			optimiserSettings.getAnnealingSettings().setRestarting(true);
 			if (shouldDisableActionSets(SimilarityMode.HIGH, periodStart, periodEnd)) {
 				optimiserSettings.setBuildActionSets(false);
 			}
 			break;
 		case LOW:
-			optimiserSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.LOW, periodStart, periodEnd));
+			optimiserSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.LOW, periodStartOrDefault, periodEndOrDefault));
 			optimiserSettings.getAnnealingSettings().setRestarting(false);
 			if (shouldDisableActionSets(SimilarityMode.LOW, periodStart, periodEnd)) {
 				optimiserSettings.setBuildActionSets(false);
 			}
 			break;
 		case MEDIUM:
-			optimiserSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.MEDIUM, periodStart, periodEnd));
+			optimiserSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.MEDIUM, periodStartOrDefault, periodEndOrDefault));
 			optimiserSettings.getAnnealingSettings().setRestarting(false);
 			if (shouldDisableActionSets(SimilarityMode.MEDIUM, periodStart, periodEnd)) {
 				optimiserSettings.setBuildActionSets(false);
 			}
 			break;
 		case OFF:
-			optimiserSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.OFF, periodStart, periodEnd));
+			optimiserSettings.setSimilaritySettings(createSimilaritySettings(SimilarityMode.OFF, periodStartOrDefault, periodEndOrDefault));
 			optimiserSettings.getAnnealingSettings().setRestarting(false);
 			optimiserSettings.setBuildActionSets(false);
 			break;
@@ -726,4 +734,41 @@ public final class OptimisationHelper {
 		}
 		return null;
 	}
+	
+	private static YearMonth getPeriodEndOrDefault(YearMonth periodEnd, LNGScenarioModel scenario) {
+		if (periodEnd != null) {
+			return periodEnd;
+		} else if (scenario == null) {
+			return periodEnd;
+		} else {
+			List<LoadSlot> loadSlots = new LinkedList<>(scenario.getCargoModel().getLoadSlots());
+			Collections.sort(loadSlots, new Comparator<LoadSlot>() {
+
+				@Override
+				public int compare(LoadSlot o1, LoadSlot o2) {
+					return o1.getWindowEndWithSlotOrPortTimeWithFlex().compareTo(o2.getWindowEndWithSlotOrPortTimeWithFlex())*-1;
+				}
+			});
+			return YearMonth.of(loadSlots.get(0).getWindowStartWithSlotOrPortTime().getYear(), loadSlots.get(0).getWindowStartWithSlotOrPortTime().getMonth());
+		}
+	}
+
+	private static YearMonth getPeriodStartOrDefault(YearMonth periodStart, LNGScenarioModel scenario) {
+		if (periodStart != null) {
+			return periodStart;
+		} else if (scenario == null) {
+			return periodStart;
+		} else {
+			List<LoadSlot> loadSlots = new LinkedList<>(scenario.getCargoModel().getLoadSlots());
+			Collections.sort(loadSlots, new Comparator<LoadSlot>() {
+
+				@Override
+				public int compare(LoadSlot o1, LoadSlot o2) {
+					return o1.getWindowStartWithSlotOrPortTime().compareTo(o2.getWindowStartWithSlotOrPortTime());
+				}
+			});
+			return YearMonth.of(loadSlots.get(0).getWindowStartWithSlotOrPortTime().getYear(), loadSlots.get(0).getWindowStartWithSlotOrPortTime().getMonth());
+		}
+	}
+
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui;
@@ -38,7 +38,6 @@ import com.mmxlabs.models.lng.transformer.stochasticactionsets.LNGActionSetTrans
 public class LNGScenarioChainBuilder {
 
 	public static final String PROPERTY_MMX_NUMBER_OF_CORES = "MMX_NUMBER_OF_CORES";
-	public static final String PROPERTY_MMX_DISABLE_MULTI_LSO = "MMX_DISABLE_MULTI_LSO";
 	public static final String PROPERTY_MMX_DISABLE_SECOND_ACTION_SET_RUN = "MMX_DISABLE_SECOND_ACTION_SET_RUN";
 
 	private static final int PROGRESS_OPTIMISATION = 100;
@@ -88,13 +87,7 @@ public class LNGScenarioChainBuilder {
 		final ChainBuilder builder = new ChainBuilder(dataTransformer);
 		if (createOptimiser) {
 			// Run the standard LSO optimisation
-			int numCopies = getNumberOfLSOCopies();
-			final int[] seeds = new int[numCopies];
-			for (int i = 0; i < numCopies; ++i) {
-				seeds[i] = optimiserSettings.getSeed();
-			}
-			assert seeds.length > 0;
-			LNGLSOOptimiserTransformerUnit.chainPool(builder, optimiserSettings, PROGRESS_OPTIMISATION, executorService, seeds);
+			LNGLSOOptimiserTransformerUnit.chain(builder, optimiserSettings, PROGRESS_OPTIMISATION);
 			if (doHillClimb) {
 				// Run a hill climb opt on the LSO result
 				LNGHillClimbOptimiserTransformerUnit.chainPool(builder, optimiserSettings, PROGRESS_HILLCLIMBING_OPTIMISATION, executorService);
@@ -160,14 +153,6 @@ public class LNGScenarioChainBuilder {
 		return over3Months;
 	}
 
-	protected static int getNumberOfLSOCopies() {
-		int numCopies = getNumberOfAvailableCores();
-		if (System.getProperty(PROPERTY_MMX_DISABLE_MULTI_LSO) != null) {
-			numCopies = 1;
-		}
-		return numCopies;
-	}
-
 	/**
 	 * WIP: Needs UI link up. Generates a run-all similarity mode chain.
 	 * 
@@ -203,7 +188,7 @@ public class LNGScenarioChainBuilder {
 
 			OptimisationHelper.checkUserSettings(copy, true);
 
-			final OptimiserSettings settings = OptimisationHelper.transformUserSettings(copy, null);
+			final OptimiserSettings settings = OptimisationHelper.transformUserSettings(copy, null, dataExporter.getOptimiserScenario());
 			if (settings != null) {
 				runners.add(createStandardOptimisationChain("Similarity-" + mode.toString(), dataTransformer, dataExporter, settings, executorService, initialHints));
 			}
