@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
@@ -39,6 +40,7 @@ public interface INextLoadDateProvider extends IDataComponentProvider {
 	 * @param vessel
 	 * @return
 	 */
-	INextLoadDate getNextLoadDate(ILoadOption origin, IPort fromPort, int time, IVessel vessel);
+	@NonNull
+	INextLoadDate getNextLoadDate(@NonNull ILoadOption origin, @NonNull IPort fromPort, int completionOfDischarge, @NonNull IVessel vessel);
 
 }

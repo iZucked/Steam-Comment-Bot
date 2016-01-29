@@ -111,7 +111,7 @@ public class VoyagePlanAnnotatorTest {
 		final VoyageOptions options1 = new VoyageOptions();
 		options1.setFromPortSlot(loadSlot1);
 		options1.setToPortSlot(dischargeSlot1);
-		options1.setDistance(500);
+		options1.setRoute("DIRECT", 500, 0L);
 		options1.setAvailableTime(90);
 		options1.setVesselState(VesselState.Laden);
 
@@ -131,7 +131,7 @@ public class VoyagePlanAnnotatorTest {
 		final VoyageOptions options2 = new VoyageOptions();
 		options2.setFromPortSlot(dischargeSlot1);
 		options2.setToPortSlot(loadSlot2);
-		options2.setDistance(1000);
+		options2.setRoute("DIRECT", 1000, 0L);
 		options2.setAvailableTime(80);
 		options2.setVesselState(VesselState.Ballast);
 
@@ -151,7 +151,7 @@ public class VoyagePlanAnnotatorTest {
 		final VoyageOptions options3 = new VoyageOptions();
 		options3.setFromPortSlot(loadSlot2);
 		options3.setToPortSlot(dischargeSlot2);
-		options3.setDistance(1500);
+		options3.setRoute("DIRECT", 1500, 0L);
 		options3.setAvailableTime(70);
 		options3.setVesselState(VesselState.Laden);
 

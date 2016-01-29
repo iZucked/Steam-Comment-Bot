@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -14,7 +15,6 @@ import com.mmxlabs.scheduler.optimiser.components.VesselState;
 
 public class VoyageOptionsTest {
 
-
 	@Test
 	public void testGetSetAvailableTime() {
 		final int value = 100;
@@ -22,15 +22,6 @@ public class VoyageOptionsTest {
 		Assert.assertEquals(0, options.getAvailableTime());
 		options.setAvailableTime(value);
 		Assert.assertEquals(value, options.getAvailableTime());
-	}
-
-	@Test
-	public void testGetSetDistance() {
-		final int value = 100;
-		final VoyageOptions options = new VoyageOptions();
-		Assert.assertEquals(0, options.getDistance());
-		options.setDistance(value);
-		Assert.assertEquals(value, options.getDistance());
 	}
 
 	@Test
@@ -66,10 +57,14 @@ public class VoyageOptionsTest {
 	public void testGetSetRoute() {
 
 		final String route = "route";
+		final int distance = 100;
+		final long cost = 2000L;
 		final VoyageOptions options = new VoyageOptions();
 		Assert.assertNull(options.getRoute());
-		options.setRoute(route);
+		options.setRoute(route, distance, cost);
 		Assert.assertSame(route, options.getRoute());
+		Assert.assertEquals(distance, options.getDistance());
+		Assert.assertEquals(cost, options.getRouteCost());
 	}
 
 	@Test
@@ -133,24 +128,28 @@ public class VoyageOptionsTest {
 		final String route1 = "r1";
 		final String route2 = "r2";
 
+		long routeCost1 = 10L;
+		long routeCost2 = 20L;
+
 		final VesselState state1 = VesselState.Laden;
 		final VesselState state2 = VesselState.Ballast;
 
-		final VoyageOptions options1 = make(1, 2, vessel1, portSlot1, portSlot2, 3, true, true, true, route1, state1);
+		final VoyageOptions options1 = make(1, 2, vessel1, portSlot1, portSlot2, 3, true, true, true, route1, routeCost1, state1);
 
-		final VoyageOptions options2 = make(1, 2, vessel1, portSlot1, portSlot2, 3, true, true, true, route1, state1);
+		final VoyageOptions options2 = make(1, 2, vessel1, portSlot1, portSlot2, 3, true, true, true, route1, routeCost1, state1);
 
-		final VoyageOptions options3 = make(21, 2, vessel1, portSlot1, portSlot2, 3, true, true, true, route1, state1);
-		final VoyageOptions options4 = make(1, 22, vessel1, portSlot1, portSlot2, 3, true, true, true, route1, state1);
-		final VoyageOptions options5 = make(1, 2, vessel2, portSlot1, portSlot2, 3, true, true, true, route1, state1);
-		final VoyageOptions options6 = make(1, 2, vessel1, portSlot3, portSlot2, 3, true, true, true, route1, state1);
-		final VoyageOptions options7 = make(1, 2, vessel1, portSlot1, portSlot4, 3, true, true, true, route1, state1);
-		final VoyageOptions options8 = make(1, 2, vessel1, portSlot1, portSlot2, 23, true, true, true, route1, state1);
-		final VoyageOptions options9 = make(1, 2, vessel1, portSlot1, portSlot2, 3, false, true, true, route1, state1);
-		final VoyageOptions options10 = make(1, 2, vessel1, portSlot1, portSlot2, 3, true, false, true, route1, state1);
-		final VoyageOptions options11 = make(1, 2, vessel1, portSlot1, portSlot2, 3, true, true, false, route1, state1);
-		final VoyageOptions options12 = make(1, 2, vessel1, portSlot1, portSlot2, 3, true, true, true, route2, state1);
-		final VoyageOptions options13 = make(1, 2, vessel1, portSlot1, portSlot2, 3, true, true, true, route1, state2);
+		final VoyageOptions options3 = make(21, 2, vessel1, portSlot1, portSlot2, 3, true, true, true, route1, routeCost1, state1);
+		final VoyageOptions options4 = make(1, 22, vessel1, portSlot1, portSlot2, 3, true, true, true, route1, routeCost1, state1);
+		final VoyageOptions options5 = make(1, 2, vessel2, portSlot1, portSlot2, 3, true, true, true, route1, routeCost1, state1);
+		final VoyageOptions options6 = make(1, 2, vessel1, portSlot3, portSlot2, 3, true, true, true, route1, routeCost1, state1);
+		final VoyageOptions options7 = make(1, 2, vessel1, portSlot1, portSlot4, 3, true, true, true, route1, routeCost1, state1);
+		final VoyageOptions options8 = make(1, 2, vessel1, portSlot1, portSlot2, 23, true, true, true, route1, routeCost1, state1);
+		final VoyageOptions options9 = make(1, 2, vessel1, portSlot1, portSlot2, 3, false, true, true, route1, routeCost1, state1);
+		final VoyageOptions options10 = make(1, 2, vessel1, portSlot1, portSlot2, 3, true, false, true, route1, routeCost1, state1);
+		final VoyageOptions options11 = make(1, 2, vessel1, portSlot1, portSlot2, 3, true, true, false, route1, routeCost1, state1);
+		final VoyageOptions options12 = make(1, 2, vessel1, portSlot1, portSlot2, 3, true, true, true, route2, routeCost1, state1);
+		final VoyageOptions options13 = make(1, 2, vessel1, portSlot1, portSlot2, 3, true, true, true, route1, routeCost2, state1);
+		final VoyageOptions options14 = make(1, 2, vessel1, portSlot1, portSlot2, 3, true, true, true, route1, routeCost1, state2);
 
 		Assert.assertTrue(options1.equals(options1));
 		Assert.assertTrue(options1.equals(options2));
@@ -179,16 +178,16 @@ public class VoyageOptionsTest {
 		Assert.assertFalse(options11.equals(options1));
 		Assert.assertFalse(options12.equals(options1));
 		Assert.assertFalse(options13.equals(options1));
+		Assert.assertFalse(options14.equals(options1));
 
 		Assert.assertFalse(options1.equals(new Object()));
 	}
 
 	VoyageOptions make(final int availableTime, final int distance, final IVessel vessel, final IPortSlot fromPortSlot, final IPortSlot toPortSlot, final int nboSpeed, final boolean useNBOForIdle,
-			final boolean useNBOForTravel, final boolean useFBOForSupplement, final String route, final VesselState vesselState) {
+			final boolean useNBOForTravel, final boolean useFBOForSupplement, @NonNull final String route, long routeCost, final VesselState vesselState) {
 
 		final VoyageOptions o = new VoyageOptions();
 		o.setAvailableTime(availableTime);
-		o.setDistance(distance);
 		o.setVessel(vessel);
 		o.setFromPortSlot(fromPortSlot);
 		o.setToPortSlot(toPortSlot);
@@ -196,7 +195,7 @@ public class VoyageOptionsTest {
 		o.setUseNBOForIdle(useNBOForIdle);
 		o.setUseNBOForTravel(useNBOForTravel);
 		o.setUseFBOForSupplement(useFBOForSupplement);
-		o.setRoute(route);
+		o.setRoute(route, distance, routeCost);
 		o.setVesselState(vesselState);
 
 		return o;

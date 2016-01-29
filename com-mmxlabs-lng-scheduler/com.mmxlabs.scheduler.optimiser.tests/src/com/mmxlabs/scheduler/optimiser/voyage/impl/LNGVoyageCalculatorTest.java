@@ -60,7 +60,7 @@ public class LNGVoyageCalculatorTest {
 		options.setUseFBOForSupplement(true);
 
 		options.setAvailableTime(48);
-		options.setDistance(15 * 48);
+		options.setRoute("DIRECT", 15 * 48, 0L);
 
 		final VoyageDetails details = new VoyageDetails();
 
@@ -100,7 +100,7 @@ public class LNGVoyageCalculatorTest {
 		options.setUseFBOForSupplement(true);
 
 		options.setAvailableTime(48);
-		options.setDistance(15 * 48);
+		options.setRoute("DIRECT", 15 * 48, 0L);
 
 		final VoyageDetails details = new VoyageDetails();
 
@@ -140,7 +140,7 @@ public class LNGVoyageCalculatorTest {
 		options.setUseFBOForSupplement(true);
 
 		options.setAvailableTime(96);
-		options.setDistance(15 * 48);
+		options.setRoute("DIRECT", 15 * 48, 0L);
 
 		final VoyageDetails details = new VoyageDetails();
 
@@ -180,9 +180,8 @@ public class LNGVoyageCalculatorTest {
 		options.setUseFBOForSupplement(false);
 
 		options.setAvailableTime(96);
-		options.setDistance(15 * 48);
 		final String route = "route";
-		options.setRoute(route);
+		options.setRoute(route, 15 * 48, 0L);
 
 		final VoyageDetails details = new VoyageDetails();
 
@@ -227,7 +226,7 @@ public class LNGVoyageCalculatorTest {
 		final int expectedIdleTime = 72;
 
 		assert expectedTravelTime + expectedIdleTime == options.getAvailableTime();
-		options.setDistance(15 * expectedTravelTime);
+		options.setRoute("DIRECT", 15 * expectedTravelTime, 0L);
 
 		final VoyageDetails details = new VoyageDetails();
 
@@ -270,7 +269,7 @@ public class LNGVoyageCalculatorTest {
 		options.setUseFBOForSupplement(true);
 
 		options.setAvailableTime(36);
-		options.setDistance(15 * 48);
+		options.setRoute("DIRECT", 15 * 48, 0L);
 
 		final VoyageDetails details = new VoyageDetails();
 
@@ -309,7 +308,7 @@ public class LNGVoyageCalculatorTest {
 		options.setUseFBOForSupplement(false);
 
 		options.setAvailableTime(36);
-		options.setDistance(15 * 48);
+		options.setRoute("DIRECT", 15 * 48, 0L);
 
 		final VoyageDetails details = new VoyageDetails();
 
@@ -350,7 +349,7 @@ public class LNGVoyageCalculatorTest {
 		options.setUseFBOForSupplement(true);
 
 		options.setAvailableTime(20);
-		options.setDistance(15 * 48);
+		options.setRoute("DIRECT", 15 * 48, 0L);
 
 		final VoyageDetails details = new VoyageDetails();
 
@@ -398,7 +397,7 @@ public class LNGVoyageCalculatorTest {
 		options.setVesselState(VesselState.Laden);
 
 		options.setCargoCVValue(OptimiserUnitConvertor.convertToInternalConversionFactor(22.8));
-		
+
 		return options;
 	}
 
@@ -415,7 +414,7 @@ public class LNGVoyageCalculatorTest {
 		options.setUseFBOForSupplement(true);
 
 		options.setAvailableTime(48);
-		options.setDistance(0);
+		options.setRoute("DIRECT", 0, 0L);
 
 		final VoyageDetails details = new VoyageDetails();
 
@@ -456,9 +455,9 @@ public class LNGVoyageCalculatorTest {
 		options.setUseFBOForSupplement(true);
 
 		options.setAvailableTime(48);
-		options.setDistance(15 * 24);
 		final String routeName = "Canal";
-		options.setRoute(routeName);
+		long routeCost = 200000;
+		options.setRoute(routeName, 15 * 24, routeCost);
 
 		final VoyageDetails details = new VoyageDetails();
 
@@ -469,11 +468,11 @@ public class LNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		final IVesselClass vesselClass = options.getVessel().getVesselClass();
+		final IVessel vessel = options.getVessel();
 
-		routeCostProvider.setDefaultRouteCost(routeName, 200000);
-		routeCostProvider.setRouteTransitTime(routeName, vesselClass, 24);
-		routeCostProvider.setRouteFuel(routeName, vesselClass, VesselState.Laden, 1000, 50000);
+		routeCostProvider.setDefaultRouteCost(routeName, routeCost);
+		routeCostProvider.setRouteTransitTime(routeName, vessel, 24);
+		routeCostProvider.setRouteFuel(routeName, vessel, VesselState.Laden, 1000, 50000);
 		calc.calculateVoyageFuelRequirements(options, details);
 
 		// Check results
@@ -508,9 +507,7 @@ public class LNGVoyageCalculatorTest {
 		options.setUseFBOForSupplement(false);
 
 		options.setAvailableTime(48);
-		options.setDistance(15 * 24);
 		final String routeName = "Canal";
-		options.setRoute(routeName);
 
 		final VoyageDetails details = new VoyageDetails();
 
@@ -521,11 +518,14 @@ public class LNGVoyageCalculatorTest {
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
 
-		final IVesselClass vesselClass = options.getVessel().getVesselClass();
+		final IVessel vessel = options.getVessel();
 
-		routeCostProvider.setDefaultRouteCost(routeName, 200000);
-		routeCostProvider.setRouteTransitTime(routeName, vesselClass, 24);
-		routeCostProvider.setRouteFuel(routeName, vesselClass, VesselState.Laden, 1000, 50000);
+		long routeCost = 200000;
+		options.setRoute(routeName, 15 * 24, routeCost);
+
+		routeCostProvider.setDefaultRouteCost(routeName, routeCost);
+		routeCostProvider.setRouteTransitTime(routeName, vessel, 24);
+		routeCostProvider.setRouteFuel(routeName, vessel, VesselState.Laden, 1000, 50000);
 
 		calc.calculateVoyageFuelRequirements(options, details);
 
@@ -612,8 +612,8 @@ public class LNGVoyageCalculatorTest {
 		vesselClass.setCargoCapacity(Long.MAX_VALUE);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
 		Mockito.when(vessel.getCargoCapacity()).thenReturn(Long.MAX_VALUE);
-		
-//		vesselClass.setBaseFuelConversionFactor(OptimiserUnitConvertor.convertToInternalConversionFactor(1.0));
+
+		// vesselClass.setBaseFuelConversionFactor(OptimiserUnitConvertor.convertToInternalConversionFactor(1.0));
 		final PortDetails loadDetails = new PortDetails();
 		loadDetails.setOptions(new PortOptions());
 		final PortDetails dischargeDetails = new PortDetails();
@@ -695,12 +695,12 @@ public class LNGVoyageCalculatorTest {
 			@Override
 			protected void configure() {
 				bind(ITimeZoneToUtcOffsetProvider.class).to(TimeZoneToUtcOffsetProvider.class);
-				 IBaseFuelCurveProvider b = Mockito.mock(IBaseFuelCurveProvider.class);
-				 Mockito.when(b.getBaseFuelCurve(Mockito.any(IBaseFuel.class))).thenReturn(curve);
-				 Mockito.when(b.getVesselBaseFuelCurve(Mockito.any(IVessel.class))).thenReturn(curve);
-				 
-				 bind(IBaseFuelCurveProvider.class).toInstance(b);
-				 
+				IBaseFuelCurveProvider b = Mockito.mock(IBaseFuelCurveProvider.class);
+				Mockito.when(b.getBaseFuelCurve(Mockito.any(IBaseFuel.class))).thenReturn(curve);
+				Mockito.when(b.getVesselBaseFuelCurve(Mockito.any(IVessel.class))).thenReturn(curve);
+
+				bind(IBaseFuelCurveProvider.class).toInstance(b);
+
 			}
 		});
 
@@ -710,20 +710,20 @@ public class LNGVoyageCalculatorTest {
 
 	private ICurve getMockedCurve(int mainInt) {
 		ICurve curve = Mockito.mock(ICurve.class);
-		
+
 		// create prices for different times (to test UTC)
 		int priceA = (int) OptimiserUnitConvertor.convertToInternalPrice(mainInt);
 		int priceB = (int) OptimiserUnitConvertor.convertToInternalFixedCost(0);
 		int timeA = 100;
 		int timeB = 0;
-				
+
 		// mock some return values
 		Mockito.when(curve.getValueAtPoint(timeA)).thenReturn(priceA);
 		Mockito.when(curve.getValueAtPoint(timeB)).thenReturn(priceB);
-		
-		return curve; 
+
+		return curve;
 	}
-	
+
 	@Ignore("No longer works after LNGVoyageCalculator#init() removal")
 	@Test(expected = RuntimeException.class)
 	public void testCalculateVoyagePlan3() {
@@ -1103,7 +1103,7 @@ public class LNGVoyageCalculatorTest {
 		IBaseFuel baseFuel = new BaseFuel("test");
 		baseFuel.setEquivalenceFactor(OptimiserUnitConvertor.convertToInternalConversionFactor(45.6));
 		vesselClass.setBaseFuel(baseFuel);
-		
+
 		// 2 days of boil off
 		vesselClass.setSafetyHeel(OptimiserUnitConvertor.convertToInternalVolume(300 * 24));
 

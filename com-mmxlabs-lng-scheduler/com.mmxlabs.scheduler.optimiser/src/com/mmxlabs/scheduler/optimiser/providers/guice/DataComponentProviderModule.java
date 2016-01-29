@@ -60,6 +60,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IGeneratedCharterOutSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IGeneratedCharterOutSlotProviderEditor;
@@ -113,6 +114,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.DefaultDistanceProviderImpl;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultNextLoadDateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultPromptPeriodProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultVesselCharterCurveProvider;
@@ -189,6 +191,8 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(IVesselProvider.class).toInstance(vesselProvider);
 		bind(IVesselProviderEditor.class).toInstance(vesselProvider);
 
+		bind(IDistanceProvider.class).to(DefaultDistanceProviderImpl.class);
+		
 		final IndexedMultiMatrixProvider<IPort, Integer> portDistanceProvider = new IndexedMultiMatrixProvider<IPort, Integer>();
 		bind(new TypeLiteral<IMultiMatrixEditor<IPort, Integer>>() {
 		}).toInstance(portDistanceProvider);

@@ -7,8 +7,7 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 import java.util.List;
 
 import com.mmxlabs.common.Equality;
-import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 
 /**
@@ -23,11 +22,11 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 
 	private final VoyageOptions options;
 
-	private final List<MatrixEntry<IPort, Integer>> distances;
+	private final List<Triple<String, Integer, Long>> routeOptions;
 
-	public RouteVoyagePlanChoice(final VoyageOptions options, final List<MatrixEntry<IPort, Integer>> distances) {
+	public RouteVoyagePlanChoice(final VoyageOptions options, final List<Triple<String, Integer, Long>> routeOptions) {
 		this.options = options;
-		this.distances = distances;
+		this.routeOptions = routeOptions;
 	}
 
 	@Override
@@ -54,25 +53,16 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 
 	@Override
 	public int numChoices() {
-		return distances.size();
+		return routeOptions.size();
 	}
 
 	@Override
 	public final boolean apply(final int choice) {
 		this.choice = choice;
 
-		final MatrixEntry<IPort, Integer> entry = distances.get(choice);
+		final Triple<String, Integer, Long> entry = routeOptions.get(choice);
 
-		options.setRoute(entry.getKey());
-
-		final int distance = entry.getValue();
-
-		// Invalid distance
-		if (distance == Integer.MAX_VALUE) {
-			return false;
-		}
-
-		options.setDistance(distance);
+		options.setRoute(entry.getFirst(), entry.getSecond(), entry.getThird());
 
 		return true;
 	}
@@ -84,7 +74,7 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 
 			final RouteVoyagePlanChoice other = (RouteVoyagePlanChoice) obj;
 
-			if (!Equality.isEqual(distances, other.distances)) {
+			if (!Equality.isEqual(routeOptions, other.routeOptions)) {
 				return false;
 			}
 

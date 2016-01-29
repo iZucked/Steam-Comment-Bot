@@ -20,14 +20,13 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
@@ -47,7 +46,7 @@ public final class SimpleSequenceScheduler extends AbstractLoggingSequenceSchedu
 	private IPortProvider portProvider;
 
 	@Inject
-	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
+	private IDistanceProvider distanceProvider;
 
 	@Inject
 	private IVesselProvider vesselProvider;
@@ -105,8 +104,8 @@ public final class SimpleSequenceScheduler extends AbstractLoggingSequenceSchedu
 			if (timeWindows.isEmpty() && (idx > 0)) {
 
 				final int lastTimeWindowStart = arrivalTimes[idx - 1];
-				timeWindowStart = lastTimeWindowStart + Calculator.getTimeFromSpeedDistance(vesselProvider.getVesselAvailability(resource).getVessel().getVesselClass().getMaxSpeed(),
-						distanceProvider.get(directRoute).get(portProvider.getPortForElement(sequence.get(idx - 1)), portProvider.getPortForElement(element)));
+				timeWindowStart = lastTimeWindowStart + Calculator.getTimeFromSpeedDistance(vesselProvider.getVesselAvailability(resource).getVessel().getVesselClass().getMaxSpeed(), distanceProvider
+						.getDistance(directRoute, portProvider.getPortForElement(sequence.get(idx - 1)), portProvider.getPortForElement(element), lastTimeWindowStart /* + visitDuration */));
 			} else {
 				for (final ITimeWindow window : timeWindows) {
 					timeWindowStart = Math.min(timeWindowStart, window.getStart());

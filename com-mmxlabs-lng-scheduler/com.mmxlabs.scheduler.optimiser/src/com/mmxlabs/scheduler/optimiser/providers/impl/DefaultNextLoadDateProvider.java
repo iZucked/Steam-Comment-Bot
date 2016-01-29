@@ -13,15 +13,15 @@ import java.util.TreeSet;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
-import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INextLoadDateProviderEditor;
 
 public class DefaultNextLoadDateProvider implements INextLoadDateProviderEditor {
@@ -54,10 +54,10 @@ public class DefaultNextLoadDateProvider implements INextLoadDateProviderEditor 
 	private final Map<ILoadPriceCalculator, Set<ILoadOption>> contractToSlotsMap = new HashMap<>();
 
 	@Inject
-	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
+	private IDistanceProvider distanceProvider;
 
 	@Override
-	public INextLoadDate getNextLoadDate(final ILoadOption origin, final IPort fromPort, final int time, final IVessel vessel) {
+	public INextLoadDate getNextLoadDate(@NonNull final ILoadOption origin, @NonNull final IPort fromPort, final int completionOfDischarge, @NonNull final IVessel vessel) {
 
 		final ILoadPriceCalculator contract = origin.getLoadPriceCalculator();
 		final Rule rule = contractToRuleMap.get(contract);
@@ -77,10 +77,9 @@ public class DefaultNextLoadDateProvider implements INextLoadDateProviderEditor 
 			throw new IllegalSelectorException();
 		}
 
-		final int distance = distanceProvider.getMinimumValue(fromPort, origin.getPort());
-		final int ballastTime = Calculator.getTimeFromSpeedDistance(speed, distance);
+		final int ballastTime = distanceProvider.getQuickestTravelTime(vessel, fromPort, origin.getPort(), completionOfDischarge, speed).getSecond();
+		final int returnTime = completionOfDischarge + ballastTime;
 
-		final int returnTime = time + ballastTime;
 		// TODO: treemap?
 		final Set<ILoadOption> slots = contractToSlotsMap.get(contract);
 		ILoadOption nextSlot = null;

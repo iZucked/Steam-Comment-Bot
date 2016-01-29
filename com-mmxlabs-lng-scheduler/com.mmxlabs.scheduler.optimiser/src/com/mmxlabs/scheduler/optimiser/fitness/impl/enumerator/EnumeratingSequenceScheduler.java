@@ -40,6 +40,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
@@ -154,7 +155,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 	private IRouteCostProvider routeCostProvider;
 
 	@Inject
-	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
+	private IDistanceProvider distanceProvider;
 
 	@Inject
 	private IElementDurationProvider durationProvider;
@@ -481,10 +482,10 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 
 				int minTravelTime = Integer.MAX_VALUE;
 				int maxTravelTime = 0;
-				for (final MatrixEntry<IPort, Integer> entry : distanceProvider.getValues(prevPort, port)) {
+				for (final MatrixEntry<IPort, Integer> entry : distanceProvider.getDistanceValues(prevPort, port, windowStartTime[index - 1] + durationProvider.getElementDuration(element, resource))) {
 					final int distance = entry.getValue();
-					if (distance != Integer.MAX_VALUE) {
-						final int extraTime = routeCostProvider.getRouteTransitTime(entry.getKey(), vesselAvailability.getVessel().getVesselClass());
+					if (distance != Integer.MAX_VALUE) {					
+						final int extraTime = routeCostProvider.getRouteTransitTime(entry.getKey(), vesselAvailability.getVessel());
 						final int minByRoute = Calculator.getTimeFromSpeedDistance(maxSpeed, distance) + extraTime;
 						final int maxByRoute = Calculator.getTimeFromSpeedDistance(minSpeed, distance) + extraTime;
 						minTravelTime = Math.min(minTravelTime, minByRoute);

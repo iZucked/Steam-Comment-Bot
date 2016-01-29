@@ -17,7 +17,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
@@ -29,7 +28,6 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
@@ -42,9 +40,11 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.IdleNBOVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.NBOTravelVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider.CharterMarketOptions;
-import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 import com.mmxlabs.scheduler.optimiser.providers.IGeneratedCharterOutSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterOutEvaluator;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
@@ -81,7 +81,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	private IVesselBaseFuelCalculator vesselBaseFuelCalculator;
 
 	@Inject
-	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
+	private IDistanceProvider distanceProvider;
 
 	@Inject
 	private IVoyagePlanOptimiser vpo;
@@ -92,13 +92,13 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	@Inject
 	private IGeneratedCharterOutSlotProviderEditor generatedCharterOutSlotProviderEditor;
 
-	private GeneratedCharterOutOptionCache generatedCharterOutOptionCache = new GeneratedCharterOutOptionCache();
+	private final GeneratedCharterOutOptionCache generatedCharterOutOptionCache = new GeneratedCharterOutOptionCache();
 
 	private static final double canalChoiceThreshold = 0.1; // percentage improvement required to choose a canal route
 
 	private static final boolean DO_CACHING = false;
 
-	private int hits = 0;
+	private final int hits = 0;
 
 	@Override
 	public List<Pair<VoyagePlan, IPortTimesRecord>> processSchedule(final int vesselStartTime, final long startHeelVolumeInM3, final IVesselAvailability vesselAvailability, final VoyagePlan vp,
@@ -166,7 +166,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 				return null;
 			}
 
-			final ExtendedCharterOutSequence bigSequence = constructNewRawSequenceWithCharterOuts(currentSequence, gcoMarket, portTimesRecord, ballastIdx, ballastStartTime);
+			final ExtendedCharterOutSequence bigSequence = constructNewRawSequenceWithCharterOuts(vesselAvailability, currentSequence, gcoMarket, portTimesRecord, ballastIdx, ballastStartTime);
 
 			final VoyagePlan bigVoyagePlan = runVPOOnBigSequence(vesselAvailability.getVessel(), vp, startHeelInM3, bigSequence);
 
@@ -271,8 +271,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 				}
 			}
 			for (final IPort charterOutPort : ports) {
-				final Triple<Integer, String, Integer> toCharterPort = calculateShortestTimeToPort(discharge, charterOutPort, vesselAvailability.getVessel().getVesselClass());
-				final Triple<Integer, String, Integer> fromCharterPort = calculateShortestTimeToPort(charterOutPort, nextLoad, vesselAvailability.getVessel().getVesselClass());
+				final Triple<Integer, String, Integer> toCharterPort = calculateShortestTimeToPort(discharge, charterOutPort, vesselAvailability.getVessel(), ballastStartTime);
+				final Triple<Integer, String, Integer> fromCharterPort = calculateShortestTimeToPort(charterOutPort, nextLoad, vesselAvailability.getVessel(), ballastStartTime);
 				final int availableCharteringTime = availableTime - toCharterPort.getThird() - fromCharterPort.getThird();
 				final int charterStartTime = ballastStartTime + toCharterPort.getThird();
 				final long dailyPrice = (long) option.getCharterPrice(charterStartTime);
@@ -294,16 +294,16 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		return gcoo;
 	}
 
-	private Triple<Integer, String, Integer> calculateShortestTimeToPort(final IPort slotPort, final IPort charterPort, final IVesselClass vesselClass) {
+	private Triple<Integer, String, Integer> calculateShortestTimeToPort(final IPort slotPort, final IPort charterPort, final IVessel vessel, int voyageStartTime) {
 		int distance = Integer.MAX_VALUE;
 		int shortestTime = Integer.MAX_VALUE;
 		String route = "";
 
-		final List<MatrixEntry<IPort, Integer>> distances = new ArrayList<MatrixEntry<IPort, Integer>>(distanceProvider.getValues(slotPort, charterPort));
+		final List<MatrixEntry<IPort, Integer>> distances = distanceProvider.getDistanceValues(slotPort, charterPort, voyageStartTime);
 		int directTime = Integer.MAX_VALUE;
 		MatrixEntry<IPort, Integer> directEntry = null;
 		for (final MatrixEntry<IPort, Integer> d : distances) {
-			final int travelTime = Calculator.getTimeFromSpeedDistance(vesselClass.getMaxSpeed(), d.getValue()) + routeCostProvider.getRouteTransitTime(d.getKey(), vesselClass);
+			final int travelTime = Calculator.getTimeFromSpeedDistance(vessel.getVesselClass().getMaxSpeed(), d.getValue()) + routeCostProvider.getRouteTransitTime(d.getKey(), vessel);
 			if (d.getKey().equals(directRoute)) {
 				directTime = travelTime;
 				directEntry = d;
@@ -336,20 +336,24 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	 * @param ballastStartTime
 	 * @return
 	 */
-	private ExtendedCharterOutSequence constructNewRawSequenceWithCharterOuts(final Object[] currentSequence, final GeneratedCharterOutOption charterOutOption, final IPortTimesRecord portTimesRecord,
-			final int ballastIdx, final int ballastStartTime) {
+	private ExtendedCharterOutSequence constructNewRawSequenceWithCharterOuts(final @NonNull IVesselAvailability vesselAvailability, final Object[] currentSequence,
+			final GeneratedCharterOutOption charterOutOption, final IPortTimesRecord portTimesRecord, final int ballastIdx, final int ballastStartTime) {
 		final List<IOptionsSequenceElement> newRawSequence = new ArrayList<IOptionsSequenceElement>(currentSequence.length);
 		final ExtendedCharterOutSequence bigSequence = new ExtendedCharterOutSequence();
+		final IVessel vessel = vesselAvailability.getVessel();
 
 		// build new sequence up to and not including last ballast leg
+		IPort loadPort = null;
 		for (int i = 0; i < ballastIdx; i++) {
 			final Object o = currentSequence[i];
 			if (o instanceof PortDetails) {
 				newRawSequence.add(((PortDetails) o).getOptions().clone());
 			} else if (o instanceof VoyageDetails) {
-				newRawSequence.add(((VoyageDetails) o).getOptions().clone());
-				if (((VoyageDetails) o).getOptions().getVesselState() == VesselState.Laden) {
-					bigSequence.setLaden(((VoyageDetails) o).getOptions().clone());
+				final VoyageDetails voyageDetails = (VoyageDetails) o;
+				newRawSequence.add(voyageDetails.getOptions().clone());
+				if (voyageDetails.getOptions().getVesselState() == VesselState.Laden) {
+					loadPort = voyageDetails.getOptions().getFromPortSlot().getPort();
+					bigSequence.setLaden(voyageDetails.getOptions().clone());
 				}
 			}
 		}
@@ -368,9 +372,11 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 		// (1) ballast to charter out
 
+		final CostType dischargeToCharterPortCostType = (loadPort == charterOutOption.getPort()) ? CostType.RoundTripBallast : CostType.Ballast;
+		final long dischargeToCharterPortRouteCosts = routeCostProvider.getRouteCost(charterOutOption.getToCharterPort().getSecond(), vessel, CostType.Ballast);
+
 		final VoyageOptions dischargeToCharterPortVoyageOptions = new VoyageOptions();
-		dischargeToCharterPortVoyageOptions.setDistance(charterOutOption.getToCharterPort().getFirst());
-		dischargeToCharterPortVoyageOptions.setRoute(charterOutOption.getToCharterPort().getSecond());
+		dischargeToCharterPortVoyageOptions.setRoute(charterOutOption.getToCharterPort().getSecond(), charterOutOption.getToCharterPort().getFirst(), dischargeToCharterPortRouteCosts);
 		dischargeToCharterPortVoyageOptions.setAvailableTime(charterOutOption.getToCharterPort().getThird());
 		dischargeToCharterPortVoyageOptions.setVesselState(VesselState.Ballast);
 		dischargeToCharterPortVoyageOptions.setVessel(originalBallast.getOptions().getVessel());
@@ -401,9 +407,10 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		charterOutOption.setPortOptions(generatedCharterPortOptions);
 		// (3) ballast to return port
 
+		final long charterToReturnPortRouteCosts = routeCostProvider.getRouteCost(charterOutOption.getFromCharterPort().getSecond(), vessel, CostType.Ballast);
+
 		final VoyageOptions charterToReturnPortVoyageOptions = new VoyageOptions();
-		charterToReturnPortVoyageOptions.setDistance(charterOutOption.getFromCharterPort().getFirst());
-		charterToReturnPortVoyageOptions.setRoute(charterOutOption.getFromCharterPort().getSecond());
+		charterToReturnPortVoyageOptions.setRoute(charterOutOption.getFromCharterPort().getSecond(), charterOutOption.getFromCharterPort().getFirst(), charterToReturnPortRouteCosts);
 		charterToReturnPortVoyageOptions.setAvailableTime(charterOutOption.getFromCharterPort().getThird());
 		charterToReturnPortVoyageOptions.setVesselState(VesselState.Ballast);
 		charterToReturnPortVoyageOptions.setVessel(originalBallast.getOptions().getVessel());
@@ -646,7 +653,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	}
 
 	private void addCachedSolution(final int firstLoadTime, final long startHeel, final int ballastStartTime, final int availableTime, final IPortSlot firstLoad, final IPortSlot discharge,
-			final IPortSlot nextLoad, final IVesselAvailability vesselAvailability, List<Pair<VoyagePlan, IPortTimesRecord>> solution, GeneratedCharterOutOption charterOutOption) {
+			final IPortSlot nextLoad, final IVesselAvailability vesselAvailability, final List<Pair<VoyagePlan, IPortTimesRecord>> solution, final GeneratedCharterOutOption charterOutOption) {
 		Pair<List<Pair<VoyagePlan, IPortTimesRecord>>, GeneratedCharterOutOption> solutionToCache = null;
 		if (solution != null) {
 			solutionToCache = new Pair<List<Pair<VoyagePlan, IPortTimesRecord>>, GeneratedCharterOutOption>(solution, charterOutOption);
@@ -654,8 +661,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		generatedCharterOutOptionCache.addSplitVoyagePlans(firstLoadTime, startHeel, ballastStartTime, availableTime, firstLoad, discharge, nextLoad, vesselAvailability, solutionToCache);
 	}
 
-	private void setAdditionalDataForCaching(GeneratedCharterOutOption gcoo) {
-		PortOptions gcoOptions = gcoo.getPortOptions();
+	private void setAdditionalDataForCaching(final GeneratedCharterOutOption gcoo) {
+		final PortOptions gcoOptions = gcoo.getPortOptions();
 		// options
 		gcoo.setGCOVessel(gcoOptions.getVessel());
 		gcoo.setGCODuration(gcoOptions.getVisitDuration());

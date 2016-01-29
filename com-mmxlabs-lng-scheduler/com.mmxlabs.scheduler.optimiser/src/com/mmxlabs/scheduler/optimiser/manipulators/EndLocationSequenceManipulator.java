@@ -6,17 +6,20 @@ package com.mmxlabs.scheduler.optimiser.manipulators;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import com.google.inject.Inject;
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
+import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -25,9 +28,11 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.charterout.IGeneratedCharterOutEvaluator;
@@ -92,7 +97,13 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 	private IStartEndRequirementProvider startEndRequirementProvider;
 
 	@Inject
-	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
+	private IDistanceProvider distanceProvider;
+
+	@Inject
+	private IPortSlotProvider portSlotProvider;
+
+	@Inject
+	private IElementDurationProvider durationsProvider;
 
 	@Inject
 	private IVesselProvider vesselProvider;
@@ -139,11 +150,11 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 
 	}
 
-	private void setNoRequirementEndLocationRule(IResource resource) {
+	private void setNoRequirementEndLocationRule(final IResource resource) {
 		// TODO: Remove NullGeneratedCharterOutEvaluator at some point
 		boolean returnToLastPort = true;
 		if (charterOutEvaluator != null && !(charterOutEvaluator instanceof NullGeneratedCharterOutEvaluator)) {
-			Set<IPort> charteringPorts = getCharterMarketPortsForResource(resource);
+			final Set<IPort> charteringPorts = getCharterMarketPortsForResource(resource);
 			if (charteringPorts != null && charteringPorts.size() > 0) {
 				returnToLastPort = false;
 			}
@@ -155,19 +166,19 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 		}
 	}
 
-	private Set<IPort> getCharterMarketPortsForResource(IResource resource) {
+	private Set<IPort> getCharterMarketPortsForResource(final IResource resource) {
 		Set<IPort> charteringPorts = null;
-		IVesselClass resourceVesselClass = getVesselClass(resource);
+		final IVesselClass resourceVesselClass = getVesselClass(resource);
 		if (resourceVesselClass != null) {
 			charteringPorts = charterMarketProvider.getCharteringPortsForVesselClass(resourceVesselClass);
 		}
 		return charteringPorts;
 	}
 
-	private IVesselClass getVesselClass(IResource resource) {
-		IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+	private IVesselClass getVesselClass(final IResource resource) {
+		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		if (vesselAvailability != null) {
-			IVessel vessel = vesselAvailability.getVessel();
+			final IVessel vessel = vesselAvailability.getVessel();
 			if (vessel != null) {
 				return vessel.getVesselClass();
 			}
@@ -261,9 +272,12 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 	 * @param sequence
 	 * @param ports
 	 */
-	private final void returnToClosestInSet(final IResource resource, final IModifiableSequence sequence, Collection<IPort> ports) {
+	private final void returnToClosestInSet(final IResource resource, final IModifiableSequence sequence, final Collection<IPort> ports) {
 		final ISequenceElement lastVisit = sequence.get(sequence.size() - 2);
 		final IPort fromPort = portProvider.getPortForElement(lastVisit);
+		final ITimeWindow timeWindow = portSlotProvider.getPortSlot(lastVisit).getTimeWindow();
+		final int visitDuration = durationsProvider.getElementDuration(lastVisit, resource);
+		final int lastVoyageStartTime = timeWindow.getStart() + visitDuration;
 
 		IPort closestPort = null;
 		int closestPortDistance = Integer.MAX_VALUE;
@@ -272,7 +286,14 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 				closestPort = toPort;
 				break;
 			}
-			final int distance = distanceProvider.getMinimumValue(fromPort, toPort);
+			final List<MatrixEntry<IPort, Integer>> distanceValues = distanceProvider.getDistanceValues(fromPort, toPort, lastVoyageStartTime);
+			int distance = Integer.MAX_VALUE;
+			for (final MatrixEntry<IPort, Integer> distanceOption : distanceValues) {
+				final int routeDistance = distanceOption.getValue();
+				if (routeDistance < distance) {
+					distance = routeDistance;
+				}
+			}
 			if (distance < closestPortDistance) {
 				closestPort = toPort;
 				closestPortDistance = distance;
@@ -331,26 +352,6 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 		return portTypeProvider;
 	}
 
-	public void setPortTypeProvider(final IPortTypeProvider portTypeProvider) {
-		this.portTypeProvider = portTypeProvider;
-	}
-
-	public IPortProvider getPortProvider() {
-		return portProvider;
-	}
-
-	public void setPortProvider(final IPortProvider portProvider) {
-		this.portProvider = portProvider;
-	}
-
-	public IReturnElementProvider getReturnElementProvider() {
-		return returnElementProvider;
-	}
-
-	public void setReturnElementProvider(final IReturnElementProvider returnElementProvider) {
-		this.returnElementProvider = returnElementProvider;
-	}
-
 	/**
 	 * Specify the {@link EndLocationRule} for this {@link IResource}
 	 * 
@@ -372,21 +373,5 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 			return ruleMap.get(resource);
 		}
 		return EndLocationRule.NONE;
-	}
-
-	public IStartEndRequirementProvider getStartEndRequirementProvider() {
-		return startEndRequirementProvider;
-	}
-
-	public void setStartEndRequirementProvider(final IStartEndRequirementProvider startEndRequirementProvider) {
-		this.startEndRequirementProvider = startEndRequirementProvider;
-	}
-
-	public IMultiMatrixProvider<IPort, Integer> getDistanceProvider() {
-		return distanceProvider;
-	}
-
-	public void setDistanceProvider(final IMultiMatrixProvider<IPort, Integer> distanceProvider) {
-		this.distanceProvider = distanceProvider;
 	}
 }

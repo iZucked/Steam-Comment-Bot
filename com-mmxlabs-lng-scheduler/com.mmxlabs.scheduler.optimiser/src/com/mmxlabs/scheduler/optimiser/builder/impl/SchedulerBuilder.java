@@ -6,7 +6,6 @@ package com.mmxlabs.scheduler.optimiser.builder.impl;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.time.Duration;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -48,7 +47,6 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.Resource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.IMatrixEditor;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.impl.OptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -122,6 +120,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShortCargoReturnElementProviderEditor;
@@ -1056,8 +1055,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	/**
 	 */
 	@Override
-	public void setVesselClassRouteCost(final String route, @NonNull final IVesselClass vesselClass, final VesselState state, final long tollPrice) {
-		routeCostProvider.setRouteCost(route, vesselClass, state, tollPrice);
+	public void setVesselRouteCost(final String route, @NonNull final IVessel vessel, final IRouteCostProvider.CostType state, final long tollPrice) {
+		routeCostProvider.setRouteCost(route, vessel, state, tollPrice);
 	}
 
 	/**
@@ -1068,13 +1067,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public void setVesselClassRouteFuel(final String name, @NonNull final IVesselClass vc, final VesselState vesselState, final long baseFuelInScaledMT, final long nboRateInScaledM3) {
-		routeCostProvider.setRouteFuel(name, vc, vesselState, baseFuelInScaledMT, nboRateInScaledM3);
+	public void setVesselRouteFuel(final String name, @NonNull final IVessel vessel, final VesselState vesselState, final long baseFuelInScaledMT, final long nboRateInScaledM3) {
+		routeCostProvider.setRouteFuel(name, vessel, vesselState, baseFuelInScaledMT, nboRateInScaledM3);
 	}
 
 	@Override
-	public void setVesselClassRouteTransitTime(final String name, final IVesselClass vc, final int transitTimeInHours) {
-		routeCostProvider.setRouteTransitTime(name, vc, transitTimeInHours);
+	public void setVesselRouteTransitTime(final String name, final IVessel vessel, final int transitTimeInHours) {
+		routeCostProvider.setRouteTransitTime(name, vessel, transitTimeInHours);
 	}
 
 	@Override

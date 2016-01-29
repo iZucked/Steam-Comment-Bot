@@ -37,7 +37,7 @@ public class RouteCostFitnessComponent extends AbstractPerRouteSchedulerFitnessC
 	protected boolean reallyEvaluateObject(final Object obj, final int time) {
 		if (obj instanceof VoyageDetails) {
 			final VoyageDetails details = (VoyageDetails) obj;
-			accumulator += getDiscountedValue(time, details.getRouteCost());
+			accumulator += getDiscountedValue(time, details.getOptions().getRouteCost());
 		}
 		return true;
 	}

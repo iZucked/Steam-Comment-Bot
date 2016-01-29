@@ -63,7 +63,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 	public void annotateFromScheduledSequence(final ScheduledSequence scheduledSequence, final IAnnotatedSolution solution) {
 		annotateFromVoyagePlan(scheduledSequence, solution);
 	}
-		
+
 	/**
 	 */
 	@Override
@@ -137,7 +137,6 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 				final int travelTime = details.getTravelTime();
 
 				final JourneyEventImpl journey = new JourneyEventImpl();
-
 				journey.setName("journey");
 				journey.setFromPort(prevPortSlot.getPort());
 				journey.setToPort(currentPortSlot.getPort());
@@ -148,7 +147,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 
 				journey.setDistance(options.getDistance());
 				journey.setRoute(options.getRoute());
-				journey.setRouteCost(details.getRouteCost());
+				journey.setRouteCost(options.getRouteCost());
 
 				journey.setDuration(travelTime);
 				journey.setHireCost(Calculator.quantityFromRateTime(charterRatePerDay, travelTime) / 24);
@@ -252,5 +251,5 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 	public void setVesselProvider(final IVesselProvider vesselProvider) {
 		this.vesselProvider = vesselProvider;
 	}
-	
+
 }
