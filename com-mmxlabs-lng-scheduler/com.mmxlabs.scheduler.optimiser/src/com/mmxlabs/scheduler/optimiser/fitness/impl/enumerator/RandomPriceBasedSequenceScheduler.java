@@ -47,13 +47,12 @@ public class RandomPriceBasedSequenceScheduler extends EnumeratingSequenceSchedu
 			randomise(index);
 		}
 		synchroniseShipToShipBindings();
-		// DO NOT COMMIT
-//		if (RE_EVALUATE_SOLUTION) {
-//			evaluate(null);
-//			return reEvaluateAndGetBestResult(sequences, solution);
-//		} else {
+		if (RE_EVALUATE_SOLUTION) {
+			evaluate(null);
+			return reEvaluateAndGetBestResult(sequences, solution);
+		} else {
 			return evaluate(solution);
-//		}
+		}
 	}
 
 	private void priceBasedWindowTrimming(ISequences sequences, List<List<IPortTimeWindowsRecord>> portTimeWindowsRecords) {

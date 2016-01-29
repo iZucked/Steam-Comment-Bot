@@ -12,6 +12,12 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
+/**
+ * A similar class to {@link IPortTimesRecord}, created before arrival times have been scheduled.
+ * TODO: Replace {@link IPortTimesRecord} with this
+ * @author achurchill
+ *
+ */
 public interface IPortTimeWindowsRecord extends IElementAnnotation {
 	
 	/**
