@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.lso;
@@ -28,6 +28,7 @@ import com.mmxlabs.scheduler.optimiser.lso.moves.RemoveAndFill;
 import com.mmxlabs.scheduler.optimiser.lso.moves.RemoveOptionalElement;
 import com.mmxlabs.scheduler.optimiser.lso.moves.ReplaceMoveAndFill;
 import com.mmxlabs.scheduler.optimiser.lso.moves.SwapOptionalElements;
+import com.mmxlabs.scheduler.optimiser.providers.Followers;
 
 /**
  * A module for the {@link ConstrainedMoveGenerator} which handles moves around optional slots.
@@ -43,6 +44,9 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 
 	@Inject
 	private IResourceAllocationConstraintDataComponentProvider racDCP;
+
+	@Inject
+	private IFollowersAndPreceders followersAndPreceders;
 
 	public OptionalConstrainedMoveGeneratorUnit(final ConstrainedMoveGenerator owner) {
 		super();
@@ -80,7 +84,7 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 		final ISequenceElement afterElement = locationSequence.get(locationIndex + 1);
 
 		// check whether beforeElement can be before afterElement
-		if (owner.getRandom().nextBoolean() && owner.validFollowers.get(beforeElement).contains(afterElement)) {
+		if (owner.getRandom().nextBoolean() && followersAndPreceders.getValidFollowers(beforeElement).contains(afterElement)) {
 			// we can just cut out the optional element
 			return new RemoveOptionalElement(location.getFirst(), locationIndex);
 		} else {
@@ -96,7 +100,7 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 			if (optionalElementsProvider.isElementOptional(beforeElement)) {
 				// check whether we can skip out both
 				final ISequenceElement beforeBeforeElement = locationSequence.get(locationIndex - 2);
-				if (owner.validFollowers.get(beforeBeforeElement).contains(afterElement)) {
+				if (followersAndPreceders.getValidFollowers(beforeBeforeElement).contains(afterElement)) {
 					// remove both
 					return new RemoveOptionalElement(location.getFirst(), locationIndex, locationIndex - 1);
 				}
@@ -104,7 +108,7 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 
 			if (optionalElementsProvider.isElementOptional(afterElement)) {
 				final ISequenceElement afterAfterElement = locationSequence.get(locationIndex + 2);
-				if (owner.validFollowers.get(beforeElement).contains(afterAfterElement)) {
+				if (followersAndPreceders.getValidFollowers(beforeElement).contains(afterAfterElement)) {
 					// remove both
 					return new RemoveOptionalElement(location.getFirst(), locationIndex + 1, locationIndex);
 				}
@@ -122,12 +126,12 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 				final ISequenceElement beforeAnother = owner.sequences.getSequence(location2.getFirst()).get(location2.getSecond() - 1);
 				final ISequenceElement afterAnother = owner.sequences.getSequence(location2.getFirst()).get(location2.getSecond() + 1);
 				// find whether we can move one of these into the gap
-				if (owner.validFollowers.get(beforeElement).contains(afterAnother)) {
+				if (followersAndPreceders.getValidFollowers(beforeElement).contains(afterAnother)) {
 					// here afterAnother can go after before; resource2 is the thing whose guy gets moved.
 					final IResource resource1 = location2.getFirst();
 					final IResource resource2 = location.getFirst();
 					return new RemoveAndFill(resource1, resource2, location2.getSecond(), locationIndex);
-				} else if (owner.validFollowers.get(beforeAnother).contains(afterElement)) {
+				} else if (followersAndPreceders.getValidFollowers(beforeAnother).contains(afterElement)) {
 					// the converse of the above case.
 					final IResource resource1 = location.getFirst();
 					final IResource resource2 = location2.getFirst();
@@ -143,7 +147,7 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 		// the element is currently not in the solution, so try and add it
 
 		// find something which can go after this element
-		final ConstrainedMoveGenerator.Followers<ISequenceElement> followers = owner.validFollowers.get(unused);
+		final Followers<ISequenceElement> followers = followersAndPreceders.getValidFollowers(unused);
 
 		if (followers.size() > 0) {
 
@@ -163,7 +167,7 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 					// this is the element currently before the follower
 					final ISequenceElement beforeFollower = owner.sequences.getSequence(resource).get(position - 1);
 					// these are the elements which can go after what's currently before the follower
-					final ConstrainedMoveGenerator.Followers<ISequenceElement> beforeFollowerFollowers = owner.validFollowers.get(beforeFollower);
+					Followers<ISequenceElement> beforeFollowerFollowers = followersAndPreceders.getValidFollowers(beforeFollower);
 					if (!checkResource(unused, resource)) {
 						continue LOOP_TRIES;
 					}
@@ -194,7 +198,7 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 						for (ISequenceElement e : beforeFollowerFollowers) {
 							bffSet.add(e);
 						}
-						final ConstrainedMoveGenerator.Followers<ISequenceElement> unusedPreceeders = owner.validPreceeders.get(unused);
+						final Followers<ISequenceElement> unusedPreceeders = followersAndPreceders.getValidPreceders(unused);
 						final Set<ISequenceElement> upSet = new LinkedHashSet<ISequenceElement>(unusedPreceeders.size());
 						for (ISequenceElement e : unusedPreceeders) {
 							upSet.add(e);
@@ -210,7 +214,7 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 							if (candidatePosition.getSecond() == -1) {
 								continue;
 							}
-							if (owner.validFollowers.get(candidate).contains(unused)) {
+							if (followersAndPreceders.getValidFollowers(candidate).contains(unused)) {
 								if (candidatePosition.getFirst() == null) {
 									// candidate is currently spare, and can go between beforeFollower and unused, so we have
 									// [... beforeFollower, +candidate, +unused, follower]
@@ -234,13 +238,13 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 									}
 
 									final IResource candidateResource = candidatePosition.getFirst();
-									if (owner.validFollowers.get(beforeCandidate).contains(afterCandidate)) {
+									if (followersAndPreceders.getValidFollowers(beforeCandidate).contains(afterCandidate)) {
 
 										// we can just cut out candidate
 										// TODO MOVE HERE
 										return new MoveAndFill(candidateResource, resource, candidatePosition.getSecond(), unusedIndex, followerPosition.getSecond(), false);
 									} else {
-										final ConstrainedMoveGenerator.Followers<ISequenceElement> beforeFollowers = owner.validFollowers.get(beforeCandidate);
+										final Followers<ISequenceElement> beforeFollowers = followersAndPreceders.getValidFollowers(beforeCandidate);
 
 										final List<ISequenceElement> spares = new ArrayList<ISequenceElement>(owner.sequences.getUnusedElements());
 										Collections.shuffle(spares, owner.getRandom());
@@ -251,13 +255,13 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 											}
 
 											// TODO this loop could be a hashset intersection; not sure what's faster.
-											if (beforeFollowers.contains(spare) && owner.validFollowers.get(spare).contains(afterCandidate)) {
+											if (beforeFollowers.contains(spare) && followersAndPreceders.getValidFollowers(spare).contains(afterCandidate)) {
 
 												// we have a working filler element to do the move above.
 												final Pair<IResource, Integer> fillerPosition = owner.reverseLookup.get(spare);
 												// TODO these checks appear duplicated, and do not seem to be used
-//												final boolean check = checkResource(candidate, resource);
-//												checkResource(candidate, resource);
+												// final boolean check = checkResource(candidate, resource);
+												// checkResource(candidate, resource);
 
 												return new ReplaceMoveAndFill(candidateResource, resource, candidatePosition.getSecond(), followerPosition.getSecond(), fillerPosition.getSecond(),
 														unusedIndex, false);
@@ -274,7 +278,7 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 
 					// pick something live and insert next to it.
 					// these are the things which can come after follower
-					final ConstrainedMoveGenerator.Followers<ISequenceElement> followerFollowers = owner.validFollowers.get(follower);
+					final Followers<ISequenceElement> followerFollowers = followersAndPreceders.getValidFollowers(follower);
 
 					final List<Integer> elements = new ArrayList<Integer>(followerFollowers.size());
 					for (int i = 0; i < followerFollowers.size(); ++i) {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.lso;
@@ -31,6 +31,7 @@ import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.providers.Followers;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
@@ -69,12 +70,6 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	private static final double swapMoveFrequency = 0.01;
 
 	/**
-	 * A structure caching the output of the {@link LegalSequencingChecker}. If an element x is in the set mapped to by key y, x can legally follow y under some circumstance
-	 */
-	protected final Map<ISequenceElement, Followers<ISequenceElement>> validFollowers = new HashMap<>();
-	protected final Map<ISequenceElement, Followers<ISequenceElement>> validPreceeders = new HashMap<>();
-
-	/**
 	 * A reverse lookup table from elements to positions. The {@link Pair} is a item containing {@link Resource} index and position within the {@link ISequence}. There are some special cases here. A
 	 * null Resource index means the {@link ISequenceElement} is not part of the main set of sequences. A value of zero or more indicates the position within the {@link ISequences#getUnusedElements()}
 	 * list. A negative number means it is not for normal use. Currently -1 means the element is the unused pair of an alternative (@see {@link IAlternativeElementProvider}
@@ -98,47 +93,6 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	 */
 	final protected ArrayList<Pair<ISequenceElement, ISequenceElement>> validBreaks = new ArrayList<Pair<ISequenceElement, ISequenceElement>>();
 
-	final protected class Followers<Q> implements Iterable<Q> {
-		/**
-		 * @param followers
-		 */
-		public Followers(final Collection<Q> followers) {
-			backingList.addAll(followers);
-			containsSet.addAll(followers);
-		}
-
-		private final List<Q> backingList = new ArrayList<Q>();
-		private final Set<Q> containsSet = new HashSet<Q>();
-
-		/**
-		 * @return
-		 */
-		public int size() {
-			return backingList.size();
-		}
-
-		/**
-		 * @param nextInt
-		 * @return
-		 */
-		public Q get(final int nextInt) {
-			return backingList.get(nextInt);
-		}
-
-		/**
-		 * @param firstElementInSegment
-		 * @return
-		 */
-		public boolean contains(final Q firstElementInSegment) {
-			return containsSet.contains(firstElementInSegment);
-		}
-
-		@Override
-		public Iterator<Q> iterator() {
-			return backingList.iterator();
-		}
-	}
-
 	@Inject
 	private LegalSequencingChecker checker;
 
@@ -150,7 +104,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 
 	// TODO: Inject
 	private boolean enableSwapElementsMoveGenerator = false;
-	
+
 	protected final IOptimisationContext context;
 
 	@Inject
@@ -176,6 +130,9 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 
 	@Inject
 	private IOptimisationData optimisationData;
+
+	@Inject
+	private IFollowersAndPreceders followersAndPreceders;
 
 	public ConstrainedMoveGenerator(final IOptimisationContext context) {
 		this.context = context;
@@ -219,55 +176,13 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 
 			reverseLookup.put(e1, new Pair<>(null, 0));
 
-			final LinkedHashSet<ISequenceElement> followers = new LinkedHashSet<ISequenceElement>();
-			final LinkedHashSet<ISequenceElement> preceeders = new LinkedHashSet<ISequenceElement>();
-
-			for (final ISequenceElement e2 : data.getSequenceElements()) {
-				if (e1 == e2) {
-					continue;
-				}
-
-				// Check for special cargo elements. A special element can only go on one resource and all three elements in the set must be on the same one.
-				if (spotElementMap.containsKey(e1) && spotElementMap.containsKey(e2)) {
-					final IResource r1 = spotElementMap.get(e1);
-					final IResource r2 = spotElementMap.get(e2);
-					if (r1 != r2) {
-						continue;
-					}
-				}
-
-				// This code segment yields a large speed up, but breaks ITS
-
-				// If any of e1 or e2 is a special spot element then there is only one resource it is permitted to go on. Ignore the rest for sequencing checks.
-				IResource spotResource = null;
-				if (spotElementMap.containsKey(e1)) {
-					spotResource = spotElementMap.get(e1);
-				} else if (spotElementMap.containsKey(e2)) {
-					spotResource = spotElementMap.get(e2);
-				}
-
-				final boolean allowForwardSequence = spotResource == null ? checker.allowSequence(e1, e2, false) : checker.allowSequence(e1, e2, spotResource, false);
-				if (allowForwardSequence) {
-
-					if (followers.size() == 1) {
-						validBreaks.add(new Pair<ISequenceElement, ISequenceElement>(e1, followers.iterator().next()));
-					}
-					followers.add(e2);
-					if (followers.size() > 1) {
-						validBreaks.add(new Pair<ISequenceElement, ISequenceElement>(e1, e2));
-					}
-				}
-
-				final boolean allowReverseSequence = spotResource == null ? checker.allowSequence(e2, e1, false) : checker.allowSequence(e2, e1, spotResource, false);
-				if (allowReverseSequence) {
-					preceeders.add(e2);
+			Followers<ISequenceElement> validFollowers = followersAndPreceders.getValidFollowers(e1);
+			if (validFollowers.size() > 1) {
+				for (ISequenceElement e2 : validFollowers) {
+					validBreaks.add(new Pair<ISequenceElement, ISequenceElement>(e1, e2));
 				}
 			}
-
-			validFollowers.put(e1, new Followers<ISequenceElement>(followers));
-			validPreceeders.put(e1, new Followers<ISequenceElement>(preceeders));
 		}
-
 		this.sequencesMoveGenerator = new SequencesConstrainedMoveGeneratorUnit(this);
 		injector.injectMembers(sequencesMoveGenerator);
 
@@ -296,6 +211,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 			}
 		}
 		checker.setMaxLateness(initialMaxLateness);
+
 	}
 
 	@Override
@@ -356,18 +272,6 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 
 	public void setRandom(final Random random) {
 		this.random = random;
-	}
-
-	/**
-	 */
-	public Map<ISequenceElement, Followers<ISequenceElement>> getValidFollowers() {
-		return validFollowers;
-	}
-
-	/**
-	 */
-	public Map<ISequenceElement, Followers<ISequenceElement>> getValidPreceeders() {
-		return validPreceeders;
 	}
 
 	/**

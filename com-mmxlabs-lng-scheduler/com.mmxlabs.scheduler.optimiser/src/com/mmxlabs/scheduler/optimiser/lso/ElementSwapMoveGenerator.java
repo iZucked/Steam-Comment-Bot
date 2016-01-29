@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
+ * All rights reserved.
+ */
 package com.mmxlabs.scheduler.optimiser.lso;
 
 import java.util.Collection;
@@ -33,6 +37,9 @@ public class ElementSwapMoveGenerator implements IConstrainedMoveGeneratorUnit {
 	@NonNull
 	private IResourceAllocationConstraintDataComponentProvider resourceAllocationConstraintDataComponentProvider;
 
+	@Inject
+	private IFollowersAndPreceders followersAndPreceders;
+	
 	private final @NonNull ConstrainedMoveGenerator owner;
 
 	public ElementSwapMoveGenerator(@NonNull final ConstrainedMoveGenerator owner) {
@@ -110,14 +117,14 @@ public class ElementSwapMoveGenerator implements IConstrainedMoveGeneratorUnit {
 			final ISequenceElement pos2_plus1 = seq2.get(position2Index + 1);
 
 			// Can we have p1, p2, p1+2 ? (p1 -> p2 should be fine as this is the input pairing)
-			if (!owner.validFollowers.get(pos2).contains(pos1_plus2)) {
+			if (!followersAndPreceders.getValidFollowers(pos2).contains(pos1_plus2)) {
 				continue;
 			}
 			// Can we have p2-1,p1+1,p2+1?
-			if (!owner.validFollowers.get(pos2_minus1).contains(pos1_plus1)) {
+			if (!followersAndPreceders.getValidFollowers(pos2_minus1).contains(pos1_plus1)) {
 				continue;
 			}
-			if (!owner.validFollowers.get(pos1_plus1).contains(pos2_plus1)) {
+			if (!followersAndPreceders.getValidFollowers(pos1_plus1).contains(pos2_plus1)) {
 				continue;
 			}
 
