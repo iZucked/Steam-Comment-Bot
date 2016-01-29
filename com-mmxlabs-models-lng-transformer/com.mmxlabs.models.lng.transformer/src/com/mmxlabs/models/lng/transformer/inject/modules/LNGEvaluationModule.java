@@ -55,12 +55,12 @@ public class LNGEvaluationModule extends AbstractModule {
 		install(new SequencesManipulatorModule());
 
 
-//		bind(DirectRandomSequenceScheduler.class).in(PerChainUnitScope.class);
-////		bind(DirectRandomSequenceScheduler.class).in(Singleton.class);
-//		bind(ISequenceScheduler.class).to(DirectRandomSequenceScheduler.class);
+		bind(DirectRandomSequenceScheduler.class).in(PerChainUnitScope.class);
+//		bind(DirectRandomSequenceScheduler.class).in(Singleton.class);
+		bind(ISequenceScheduler.class).to(DirectRandomSequenceScheduler.class);
 		
-		bind(PriceBasedSequenceScheduler.class).in(PerChainUnitScope.class);
-		bind(ISequenceScheduler.class).to(PriceBasedSequenceScheduler.class);
+//		bind(PriceBasedSequenceScheduler.class).in(PerChainUnitScope.class);
+//		bind(ISequenceScheduler.class).to(PriceBasedSequenceScheduler.class);
 
 
 		if (hints != null) {

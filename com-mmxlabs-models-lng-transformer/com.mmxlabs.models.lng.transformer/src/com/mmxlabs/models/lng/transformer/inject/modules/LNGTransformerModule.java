@@ -29,7 +29,10 @@ import com.mmxlabs.models.lng.transformer.util.IntegerIntervalCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.CachingTimeWindowSchedulingCanalDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.ITimeWindowSchedulingCanalDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceIntervalProviderHelper;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.TimeWindowSchedulingCanalDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.curves.CachingPriceIntervalProducer;
 import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer;
@@ -142,10 +145,20 @@ public class LNGTransformerModule extends AbstractModule {
 	}
 
 	@Provides
+	@Singleton
 	IPriceIntervalProducer providePriceIntervalProducer(final PriceIntervalProducer delegate, @NonNull Injector injector) {
 		final CachingPriceIntervalProducer cachingPriceIntervalProducer = new CachingPriceIntervalProducer(delegate);
 		injector.injectMembers(cachingPriceIntervalProducer);
 		return cachingPriceIntervalProducer;
+	}
+	
+	@Provides
+	@Singleton
+	ITimeWindowSchedulingCanalDistanceProvider provideTimeWindowSchedulingCanalDistanceProvider(@NonNull Injector injector) {
+		TimeWindowSchedulingCanalDistanceProvider delegate = new TimeWindowSchedulingCanalDistanceProvider();
+		injector.injectMembers(delegate);
+		final CachingTimeWindowSchedulingCanalDistanceProvider cachingTimeWindowSchedulingCanalDistanceProvider = new CachingTimeWindowSchedulingCanalDistanceProvider(delegate);
+		return cachingTimeWindowSchedulingCanalDistanceProvider;
 	}
 
 	@Provides

@@ -1,16 +1,21 @@
 package com.mmxlabs.models.lng.transformer.util;
 
+import java.time.ZonedDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.joda.time.DateTime;
 
 import com.google.inject.Inject;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
 import com.mmxlabs.scheduler.optimiser.curves.IntegerIntervalCurve;
 
+/**
+ * Util class used to create {@link IIntegerIntervalCurve} instances
+ * @author achurchill
+ *
+ */
 public class IntegerIntervalCurveHelper {
 
 	@Inject
@@ -40,10 +45,6 @@ public class IntegerIntervalCurveHelper {
 			intervals.add(proposed + offsetInHours);
 		}
 		intervals.add(end);
-		for (int i : intervals.getIntervalsAs1dArray(start, end)) {
-			System.out.println(i); // DO NOT COMMIT
-			System.out.println(modelEntityMap.getDateFromHours(i, "UTC"));
-		}
 		return intervals;
 	}
 
@@ -56,10 +57,6 @@ public class IntegerIntervalCurveHelper {
 			proposed = getNextMonthOrSplit(proposed + offsetInHours, splitInDays) ;
 		}
 		intervals.add(end);
-		for (int i : intervals.getIntervalsAs1dArray(start, end)) {
-			System.out.println(i); // DO NOT COMMIT
-			System.out.println(modelEntityMap.getDateFromHours(i, "UTC"));
-		}
 		return intervals;
 	}
 
@@ -70,20 +67,20 @@ public class IntegerIntervalCurveHelper {
 	 */
 	@SuppressWarnings("null")
 	public int getNextMonth(int hours) {
-		DateTime asDate = modelEntityMap.getDateFromHours(hours, "UTC");
-		asDate = asDate.plusMonths(1).withDayOfMonth(1).withTimeAtStartOfDay();
+		ZonedDateTime asDate = modelEntityMap.getDateFromHours(hours, "UTC");
+		asDate = asDate.plusMonths(1).withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
 		return dateAndCurveHelper.convertTime(asDate);
 	}
 
 	/**
-	 * Get the date in hours of the first day of the next month
+	 * Get the date in hours of the first day of the previous month
 	 * @param hours
 	 * @return
 	 */
 	@SuppressWarnings("null")
 	public int getPreviousMonth(int hours) {
-		DateTime asDate = modelEntityMap.getDateFromHours(hours, "UTC");
-		asDate = asDate.minusMonths(1).withDayOfMonth(1);
+		ZonedDateTime asDate = modelEntityMap.getDateFromHours(hours, "UTC");
+		asDate = asDate.minusMonths(1).withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
 		return dateAndCurveHelper.convertTime(asDate);
 	}
 
@@ -94,11 +91,11 @@ public class IntegerIntervalCurveHelper {
 	 */
 	@SuppressWarnings("null")
 	public int getNextMonthOrSplit(int hours, int splitInDays) {
-		DateTime asDate = modelEntityMap.getDateFromHours(hours, "UTC");
+		ZonedDateTime asDate = modelEntityMap.getDateFromHours(hours, "UTC");
 		if (asDate.getDayOfMonth() < splitInDays) {			
-			asDate = asDate.withDayOfMonth(splitInDays);
+			asDate = asDate.withDayOfMonth(splitInDays).withHour(0).withMinute(0).withSecond(0).withNano(0);
 		} else {
-			asDate = asDate.plusMonths(1).withDayOfMonth(1);
+			asDate = asDate.plusMonths(1).withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
 		}
 		return dateAndCurveHelper.convertTime(asDate);
 	}
