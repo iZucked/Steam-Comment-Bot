@@ -24,9 +24,9 @@ public class TimeWindowsTests extends AbstractOptimisationResultTester{
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/time-windows/L D D D 1.lingo");
 		Assert.assertNotNull(url);
-		final LNGScenarioRunner runner = evaluateScenario(url);
+		final LNGScenarioRunner runner = evaluateScenarioWithGCO(url);
 		Assert.assertNotNull(runner);
-		Schedule schedule = runner.getIntialSchedule();
+		Schedule schedule = runner.getSchedule();
 		Assert.assertNotNull(schedule);
 		
 		checkLoadAndDischargeTime(schedule, 3, 4);
@@ -39,9 +39,9 @@ public class TimeWindowsTests extends AbstractOptimisationResultTester{
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/time-windows/L D D D 2.lingo");
 		Assert.assertNotNull(url);
-		final LNGScenarioRunner runner = evaluateScenario(url);
+		final LNGScenarioRunner runner = evaluateScenarioWithGCO(url);
 		Assert.assertNotNull(runner);
-		Schedule schedule = runner.getIntialSchedule();
+		Schedule schedule = runner.getSchedule();
 		Assert.assertNotNull(schedule);
 		
 		checkLoadAndDischargeTime(schedule, 3, 5);
@@ -54,9 +54,9 @@ public class TimeWindowsTests extends AbstractOptimisationResultTester{
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/time-windows/L D D L 1.lingo");
 		Assert.assertNotNull(url);
-		final LNGScenarioRunner runner = evaluateScenario(url);
+		final LNGScenarioRunner runner = evaluateScenarioWithGCO(url);
 		Assert.assertNotNull(runner);
-		Schedule schedule = runner.getIntialSchedule();
+		Schedule schedule = runner.getSchedule();
 		Assert.assertNotNull(schedule);
 		
 		checkLoadAndDischargeTime(schedule, 3, 5);
@@ -69,9 +69,9 @@ public class TimeWindowsTests extends AbstractOptimisationResultTester{
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/time-windows/L D D L 2.lingo");
 		Assert.assertNotNull(url);
-		final LNGScenarioRunner runner = evaluateScenario(url);
+		final LNGScenarioRunner runner = evaluateScenarioWithGCO(url);
 		Assert.assertNotNull(runner);
-		Schedule schedule = runner.getIntialSchedule();
+		Schedule schedule = runner.getSchedule();
 		Assert.assertNotNull(schedule);
 		
 		checkLoadAndDischargeTime(schedule, 4, 4);
@@ -84,9 +84,9 @@ public class TimeWindowsTests extends AbstractOptimisationResultTester{
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/time-windows/simpleLD.lingo");
 		Assert.assertNotNull(url);
-		final LNGScenarioRunner runner = evaluateScenario(url);
+		final LNGScenarioRunner runner = evaluateScenarioWithGCO(url);
 		Assert.assertNotNull(runner);
-		Schedule schedule = runner.getIntialSchedule();
+		Schedule schedule = runner.getSchedule();
 		Assert.assertNotNull(schedule);
 
 		checkLoadAndDischargeTime(schedule, 4, 4);
@@ -117,9 +117,9 @@ public class TimeWindowsTests extends AbstractOptimisationResultTester{
 			if (event instanceof SlotVisit) {
 				SlotVisit sv = (SlotVisit) event;
 				if (sv.getSlotAllocation().getSlot() == l) {
-					Assert.assertTrue(sv.getStart().getMonthOfYear() == loadMonth);
+					Assert.assertTrue(sv.getStart().getMonth().getValue() == loadMonth);
 				} else if (sv.getSlotAllocation().getSlot() == d) {
-					Assert.assertTrue(sv.getStart().getMonthOfYear() == dischargeMonth);
+					Assert.assertTrue(sv.getStart().getMonth().getValue() == dischargeMonth);
 				}
 			}
 		}
