@@ -40,7 +40,7 @@ public class DataComponentProviderModuleTest {
 
 		Assert.assertTrue(editor instanceof IndexedTimeWindowEditor);
 	}
-	
+
 	@Test
 	public void testDataComponentProviderModuleBoolean_False() {
 		Injector injector = Guice.createInjector(new DataComponentProviderModule(false));

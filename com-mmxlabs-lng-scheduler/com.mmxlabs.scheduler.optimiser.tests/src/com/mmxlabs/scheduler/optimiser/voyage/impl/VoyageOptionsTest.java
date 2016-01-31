@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 
 public class VoyageOptionsTest {
 
@@ -65,7 +66,7 @@ public class VoyageOptionsTest {
 	@Test
 	public void testGetSetRoute() {
 
-		final String route = "route";
+		final ERouteOption route = ERouteOption.PANAMA;
 		final VoyageOptions options = new VoyageOptions();
 		Assert.assertNull(options.getRoute());
 		options.setRoute(route);
@@ -130,8 +131,8 @@ public class VoyageOptionsTest {
 		final IPortSlot portSlot3 = Mockito.mock(IPortSlot.class, "s3");
 		final IPortSlot portSlot4 = Mockito.mock(IPortSlot.class, "s4");
 
-		final String route1 = "r1";
-		final String route2 = "r2";
+		final ERouteOption route1 = ERouteOption.DIRECT;
+		final ERouteOption route2 = ERouteOption.SUEZ;
 
 		final VesselState state1 = VesselState.Laden;
 		final VesselState state2 = VesselState.Ballast;
@@ -184,7 +185,7 @@ public class VoyageOptionsTest {
 	}
 
 	VoyageOptions make(final int availableTime, final int distance, final IVessel vessel, final IPortSlot fromPortSlot, final IPortSlot toPortSlot, final int nboSpeed, final boolean useNBOForIdle,
-			final boolean useNBOForTravel, final boolean useFBOForSupplement, final String route, final VesselState vesselState) {
+			final boolean useNBOForTravel, final boolean useFBOForSupplement, final ERouteOption route, final VesselState vesselState) {
 
 		final VoyageOptions o = new VoyageOptions();
 		o.setAvailableTime(availableTime);

@@ -49,6 +49,6 @@ public interface IShippingHoursRestrictionProvider extends IDataComponentProvide
 	 * @return
 	 */
 	int getReferenceSpeed(@NonNull IVessel vessel, @NonNull VesselState vesselState);
-	
-	Collection<String> getDivertableDESAllowedRoutes(@NonNull IVesselClass vesselClass);
+
+	Collection<ERouteOption> getDivertableDESAllowedRoutes(@NonNull IVesselClass vesselClass);
 }

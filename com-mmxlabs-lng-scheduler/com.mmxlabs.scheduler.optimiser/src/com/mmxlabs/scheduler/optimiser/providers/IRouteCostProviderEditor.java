@@ -22,7 +22,7 @@ public interface IRouteCostProviderEditor extends IRouteCostProvider {
 	 * @param vesselState
 	 * @param price
 	 */
-	public void setRouteCost(String route, IVesselClass vesselClass, VesselState vesselState, long price);
+	public void setRouteCost(ERouteOption route, IVesselClass vesselClass, VesselState vesselState, long price);
 
 	/**
 	 * Sets the default cost incurred when travelling via the route named {@code route} to {@code price}. This price is overridden for particular vessel classes by
@@ -33,7 +33,7 @@ public interface IRouteCostProviderEditor extends IRouteCostProvider {
 	 * @param price
 	 *            price in dollars
 	 */
-	public void setDefaultRouteCost(String route, long price);
+	public void setDefaultRouteCost(ERouteOption route, long price);
 
 	/**
 	 * Sets the fuel consumption and NBO rate incurred by vessels of class {@code vc} when travelling via the route with name {@code routeName} with the {@link VesselState}
@@ -49,7 +49,7 @@ public interface IRouteCostProviderEditor extends IRouteCostProvider {
 	 * @param baseFuelInScaledMTPerHour
 	 *            the amount of NBO while traversing the canal, in scaled M3 / hour
 	 */
-	void setRouteFuel(String routeName, IVesselClass vesselClass, VesselState vesselState, long baseFuelInScaledMTPerHour, long nboRateInScaledM3PerHour);
+	void setRouteFuel(ERouteOption routeName, IVesselClass vesselClass, VesselState vesselState, long baseFuelInScaledMTPerHour, long nboRateInScaledM3PerHour);
 
 	/**
 	 * Sets the extra time incurred by vessels of class {@code vc} when travelling via the route with name {@code routeName}
@@ -61,5 +61,5 @@ public interface IRouteCostProviderEditor extends IRouteCostProvider {
 	 * @param transitTimeInHours
 	 *            the amount of extra travel time required to get through the canal, in hours.
 	 */
-	void setRouteTransitTime(String routeName, IVesselClass vesselClass, int transitTimeInHours);
+	void setRouteTransitTime(ERouteOption routeName, IVesselClass vesselClass, int transitTimeInHours);
 }

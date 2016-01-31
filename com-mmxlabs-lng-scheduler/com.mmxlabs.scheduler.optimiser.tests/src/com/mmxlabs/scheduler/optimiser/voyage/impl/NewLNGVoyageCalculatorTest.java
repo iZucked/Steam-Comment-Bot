@@ -26,6 +26,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -708,7 +709,7 @@ public class NewLNGVoyageCalculatorTest {
 		// Populate options
 		options.setUseNBOForTravel(true);
 		options.setUseFBOForSupplement(false);
-		options.setRoute("ROUTE");
+		options.setRoute(ERouteOption.SUEZ);
 
 		final VesselState vesselState = VesselState.Laden;
 		final int additionalRouteTime = 48;

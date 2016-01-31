@@ -22,7 +22,6 @@ import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
@@ -46,7 +45,9 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord.AllocationMode;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -88,7 +89,7 @@ public class VoyagePlanner {
 	private IVesselProvider vesselProvider;
 
 	@Inject
-	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
+	private IDistanceProvider distanceProvider;
 
 	@Inject
 	private Provider<IVoyagePlanOptimiser> voyagePlanOptimiserProvider;
@@ -250,12 +251,12 @@ public class VoyagePlanner {
 			}
 		}
 
-		final List<MatrixEntry<IPort, Integer>> distances = new ArrayList<MatrixEntry<IPort, Integer>>(distanceProvider.getValues(prevPort, thisPort));
+		final List<Pair<ERouteOption, Integer>> distances = distanceProvider.getDistanceValues(prevPort, thisPort);
 		// Only add route choice if there is one
 		if (distances.size() == 1) {
-			final MatrixEntry<IPort, Integer> d = distances.get(0);
-			options.setDistance(d.getValue());
-			options.setRoute(d.getKey());
+			final Pair<ERouteOption, Integer> d = distances.get(0);
+			options.setDistance(d.getSecond());
+			options.setRoute(d.getFirst());
 		} else {
 			optimiser.addChoice(new RouteVoyagePlanChoice(options, distances));
 		}
@@ -347,9 +348,10 @@ public class VoyagePlanner {
 					availableTime = arrivalTimes[idx] - arrivalTimes[idx - 1] - prevVisitDuration;
 				} else { // shorts cargo end on shorts sequence
 					int minTravelTime = Integer.MAX_VALUE;
-					for (final MatrixEntry<IPort, Integer> entry : distanceProvider.getValues(prevPort, prev2Port)) {
-						final int distance = entry.getValue();
-						final int extraTime = routeCostProvider.getRouteTransitTime(entry.getKey(), vesselAvailability.getVessel().getVesselClass());
+					assert prev2Port != null;
+					for (final Pair<ERouteOption, Integer> entry : distanceProvider.getDistanceValues(prevPort, prev2Port)) {
+						final int distance = entry.getSecond();
+						final int extraTime = routeCostProvider.getRouteTransitTime(entry.getFirst(), vesselAvailability.getVessel().getVesselClass());
 						final int minByRoute = Calculator.getTimeFromSpeedDistance(vesselAvailability.getVessel().getVesselClass().getMaxSpeed(), distance) + extraTime;
 						minTravelTime = Math.min(minTravelTime, minByRoute);
 					}
@@ -358,7 +360,8 @@ public class VoyagePlanner {
 					shortCargoReturnArrivalTime = arrivalTimes[idx - 1] + prevVisitDuration + availableTime;
 				}
 
-				final VoyageOptions options = getVoyageOptionsAndSetVpoChoices(vesselAvailability, states[idx], availableTime, element, prevElement, previousOptions, voyagePlanOptimiserProvider.get(), useNBO);
+				final VoyageOptions options = getVoyageOptionsAndSetVpoChoices(vesselAvailability, states[idx], availableTime, element, prevElement, previousOptions, voyagePlanOptimiserProvider.get(),
+						useNBO);
 				useNBO = options.useNBOForTravel();
 				voyageOrPortOptions.add(options);
 				previousOptions = options;
@@ -406,7 +409,7 @@ public class VoyagePlanner {
 					// Short_Cargo_End for the VoyagePlanIterator to work correctly. Here we strip the voyage and make this a single element sequence.
 					if (!shortCargoEnd) {
 						final int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselAvailability, /** FIXME: not utc */
-						vesselStartTime, timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getFirstSlotTime(), portTimesRecord.getFirstSlot()));
+								vesselStartTime, timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getFirstSlotTime(), portTimesRecord.getFirstSlot()));
 
 						final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, portTimesRecord, voyagePlanOptimiser, heelVolumeInM3, vesselCharterInRatePerDay,
 								vesselAvailability.getVesselInstanceType(), sequenceContainsMMBTUVolumeOption);
@@ -486,7 +489,7 @@ public class VoyagePlanner {
 				voyagePlanOptimiser.reset();
 			} else {
 				final int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselAvailability, /** FIXME: not utc */
-				vesselStartTime, timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getFirstSlotTime(), portTimesRecord.getFirstSlot()));
+						vesselStartTime, timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getFirstSlotTime(), portTimesRecord.getFirstSlot()));
 				// set vessel and fuel price here
 				setVesselAndBaseFuelPrice(voyagePlanOptimiser, portTimesRecord, vesselAvailability.getVessel(), resource);
 				final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, portTimesRecord, voyagePlanOptimiser, heelVolumeInM3, vesselCharterInRatePerDay,
@@ -520,7 +523,7 @@ public class VoyagePlanner {
 		final VoyagePlan plan = new VoyagePlan();
 		// Replace with actuals later if needed
 		plan.setCharterInRatePerDay(charterRateCalculator.getCharterRatePerDay(vesselAvailability, /** FIXME: not utc */
-		vesselStartTime, timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getFirstSlotTime(), portTimesRecord.getFirstSlot())));
+				vesselStartTime, timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getFirstSlotTime(), portTimesRecord.getFirstSlot())));
 		plan.setStartingHeelInM3(startHeelVolumeInM3);
 		{
 
@@ -665,8 +668,9 @@ public class VoyagePlanner {
 						voyageDetails.setFuelUnitPrice(FuelComponent.NBO, lngSalesPricePerMMBTu);
 						voyageDetails.setFuelConsumption(FuelComponent.NBO, FuelUnit.M3, lngInM3);
 
-						final HeelLevelAnnotation heelLevelAnnotation = new HeelLevelAnnotation(actualsDataProvider.getEndHeelInM3(voyageOptions.getFromPortSlot())
-								+ actualsDataProvider.getVolumeInM3(voyageOptions.getFromPortSlot()), actualsDataProvider.getEndHeelInM3(voyageOptions.getFromPortSlot()));
+						final HeelLevelAnnotation heelLevelAnnotation = new HeelLevelAnnotation(
+								actualsDataProvider.getEndHeelInM3(voyageOptions.getFromPortSlot()) + actualsDataProvider.getVolumeInM3(voyageOptions.getFromPortSlot()),
+								actualsDataProvider.getEndHeelInM3(voyageOptions.getFromPortSlot()));
 						heelLevelAnnotations.put(voyageOptions.getFromPortSlot(), heelLevelAnnotation);
 
 					}
@@ -828,7 +832,7 @@ public class VoyagePlanner {
 			@NonNull final IPortTimesRecord portTimesRecord, long heelVolumeInM3) {
 
 		IVoyagePlanOptimiser voyagePlanOptimiser = voyagePlanOptimiserProvider.get();
-		
+
 		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		final boolean isShortsSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
 
@@ -877,9 +881,10 @@ public class VoyagePlanner {
 					availableTime = portTimesRecord.getSlotTime(thisPortSlot) - portTimesRecord.getSlotTime(prevPortSlot) - prevVisitDuration;
 				} else { // shorts cargo end on shorts sequence
 					int minTravelTime = Integer.MAX_VALUE;
-					for (final MatrixEntry<IPort, Integer> entry : distanceProvider.getValues(prevPort, prev2Port)) {
-						final int distance = entry.getValue();
-						final int extraTime = routeCostProvider.getRouteTransitTime(entry.getKey(), vesselAvailability.getVessel().getVesselClass());
+					assert prev2Port != null;
+					for (final Pair<ERouteOption, Integer> entry : distanceProvider.getDistanceValues(prevPort, prev2Port)) {
+						final int distance = entry.getSecond();
+						final int extraTime = routeCostProvider.getRouteTransitTime(entry.getFirst(), vesselAvailability.getVessel().getVesselClass());
 						final int minByRoute = Calculator.getTimeFromSpeedDistance(vesselAvailability.getVessel().getVesselClass().getMaxSpeed(), distance) + extraTime;
 						minTravelTime = Math.min(minTravelTime, minByRoute);
 					}
