@@ -70,7 +70,7 @@ public class LNGDataTransformer {
 
 		// Prepare the main modules with the re-usable data for any further work.
 		modules.add(new PerChainUnitScopeModule());
-		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new DataComponentProviderModule(RouteOption.DIRECT.getName()), services, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule, hints));
+		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new DataComponentProviderModule(), services, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule, hints));
 		modules.addAll(
 				LNGTransformerHelper.getModulesWithOverrides(new LNGTransformerModule(scenarioModel, settings), services, IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, hints));
 

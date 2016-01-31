@@ -28,7 +28,6 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import javax.inject.Named;
-import javax.swing.RootPaneContainer;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
@@ -125,6 +124,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
@@ -220,7 +220,7 @@ public class LNGScenarioTransformer {
 
 	@Inject
 	@NonNull
-	private com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMultiMatrixProvider<IPort, Integer> portDistanceProvider;
+	private IndexedMultiMatrixProvider<IPort, Integer> portDistanceProvider;
 
 	@Inject
 	@NonNull
@@ -302,7 +302,7 @@ public class LNGScenarioTransformer {
 	// private final OptimiserSettings optimiserParameters;
 	// @Inject
 	@Named("OptimisationShippingOnly")
-	private boolean shippingOnly = false;
+	private final boolean shippingOnly = false;
 
 	@Inject
 	@NonNull
@@ -2225,19 +2225,18 @@ public class LNGScenarioTransformer {
 			@NonNull final Map<IPort, Integer> portIndices, @NonNull final Association<VesselClass, IVesselClass> vesselAssociation, @NonNull final ModelEntityMap modelEntityMap)
 					throws IncompleteScenarioException {
 
-		LinkedHashSet<RouteOption> orderedKeys = Sets.newLinkedHashSet();
-		
+		final LinkedHashSet<RouteOption> orderedKeys = Sets.newLinkedHashSet();
+
 		orderedKeys.add(RouteOption.DIRECT);
 		orderedKeys.add(RouteOption.SUEZ);
-		
+
 		// TODO: Add in Panama
 		// orderedKeys.add(RouteOption.PANAMA);
-
 
 		/*
 		 * Now fill out the distances from the distance model. Firstly we need to create the default distance matrix.
 		 */
-		Set<RouteOption> seenRoutes = new HashSet<>();
+		final Set<RouteOption> seenRoutes = new HashSet<>();
 		final PortModel portModel = rootObject.getReferenceModel().getPortModel();
 		for (final Route r : portModel.getRoutes()) {
 			seenRoutes.add(r.getRouteOption());
@@ -2277,8 +2276,6 @@ public class LNGScenarioTransformer {
 
 				builder.setVesselClassRouteCost(mapRouteOption(routeCost.getRoute()), vesselClass, VesselState.Laden, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getLadenCost()));
 				builder.setVesselClassRouteCost(mapRouteOption(routeCost.getRoute()), vesselClass, VesselState.Ballast, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost()));
-				builder.setVesselClassRouteCost(routeCost.getRoute().getRouteOption().getName(), vesselClass, VesselState.Ballast,
-						OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost()));
 			}
 		}
 		// Filter out unused routes
@@ -2681,10 +2678,16 @@ public class LNGScenarioTransformer {
 	}
 
 	@NonNull
-	public static ERouteOption mapRouteOption(@NonNull Route route) {
-		if (route.isCanal()) {
+	public static ERouteOption mapRouteOption(@NonNull final Route route) {
+		final RouteOption routeOption = route.getRouteOption();
+		switch (routeOption) {
+		case DIRECT:
+			return ERouteOption.DIRECT;
+		case PANAMA:
+			return ERouteOption.PANAMA;
+		case SUEZ:
 			return ERouteOption.SUEZ;
 		}
-		return ERouteOption.DIRECT;
+		throw new IllegalStateException();
 	}
 }
