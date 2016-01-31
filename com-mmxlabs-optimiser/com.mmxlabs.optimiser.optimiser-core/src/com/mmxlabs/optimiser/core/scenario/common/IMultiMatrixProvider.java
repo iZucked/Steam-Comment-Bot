@@ -24,12 +24,6 @@ import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 public interface IMultiMatrixProvider<T, U extends Comparable<U>> extends IDataComponentProvider {
 
 	/**
-	 * Key for the default matrix.
-	 */
-	@NonNull
-	public static final String Default_Key = "default";
-
-	/**
 	 * Returns true if the given {@link String} exists as a key.
 	 * 
 	 * @param key
