@@ -56,29 +56,6 @@ public class HashMapMultiMatrixProviderTest {
 	}
 
 	@Test
-	public void testHashMapMatrixGetKeySet() {
-
-		final String key = "key";
-		final String key2 = "key2";
-
-		@SuppressWarnings("unchecked")
-		final IMatrixProvider<Integer, Integer> p = Mockito.mock(IMatrixProvider.class);
-
-		final HashMapMultiMatrixProvider<Integer, Integer> provider = new HashMapMultiMatrixProvider<Integer, Integer>();
-
-		Set<String> keySet = provider.getKeySet();
-		Assert.assertTrue(keySet.isEmpty());
-
-		provider.set(key, p);
-
-		keySet = provider.getKeySet();
-		Assert.assertEquals(1, keySet.size());
-
-		Assert.assertTrue(keySet.contains(key));
-		Assert.assertFalse(keySet.contains(key2));
-	}
-
-	@Test
 	public void testHashMapMatrixGetKeys() {
 
 		final String key = "key";
