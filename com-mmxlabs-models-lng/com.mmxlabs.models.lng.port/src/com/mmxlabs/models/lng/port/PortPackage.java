@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.port;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -324,13 +325,22 @@ public interface PortPackage extends EPackage {
 	int ROUTE__LINES = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Route Option</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROUTE__ROUTE_OPTION = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+
+	/**
 	 * The feature id for the '<em><b>Canal</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ROUTE__CANAL = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+	int ROUTE__CANAL = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Routing Options</b></em>' attribute list.
@@ -339,7 +349,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROUTE__ROUTING_OPTIONS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
+	int ROUTE__ROUTING_OPTIONS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Route</em>' class.
@@ -348,7 +358,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROUTE_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
+	int ROUTE_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.PortGroupImpl <em>Group</em>}' class.
@@ -645,6 +655,16 @@ public interface PortPackage extends EPackage {
 	int LOCATION_FEATURE_COUNT = 3;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.RouteOption <em>Route Option</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.port.RouteOption
+	 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getRouteOption()
+	 * @generated
+	 */
+	int ROUTE_OPTION = 7;
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.Port <em>Port</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -874,6 +894,17 @@ public interface PortPackage extends EPackage {
 	EReference getRoute_Lines();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Route#getRouteOption <em>Route Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Route Option</em>'.
+	 * @see com.mmxlabs.models.lng.port.Route#getRouteOption()
+	 * @see #getRoute()
+	 * @generated
+	 */
+	EAttribute getRoute_RouteOption();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Route#isCanal <em>Canal</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1089,6 +1120,16 @@ public interface PortPackage extends EPackage {
 	EAttribute getLocation_Lon();
 
 	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.port.RouteOption <em>Route Option</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Route Option</em>'.
+	 * @see com.mmxlabs.models.lng.port.RouteOption
+	 * @generated
+	 */
+	EEnum getRouteOption();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1283,6 +1324,14 @@ public interface PortPackage extends EPackage {
 		EReference ROUTE__LINES = eINSTANCE.getRoute_Lines();
 
 		/**
+		 * The meta object literal for the '<em><b>Route Option</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ROUTE__ROUTE_OPTION = eINSTANCE.getRoute_RouteOption();
+
+		/**
 		 * The meta object literal for the '<em><b>Canal</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1451,6 +1500,16 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute LOCATION__LON = eINSTANCE.getLocation_Lon();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.RouteOption <em>Route Option</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.port.RouteOption
+		 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getRouteOption()
+		 * @generated
+		 */
+		EEnum ROUTE_OPTION = eINSTANCE.getRouteOption();
 
 	}
 
