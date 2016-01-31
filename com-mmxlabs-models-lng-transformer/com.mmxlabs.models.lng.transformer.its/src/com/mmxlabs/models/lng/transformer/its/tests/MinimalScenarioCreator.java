@@ -23,11 +23,11 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.CostModel;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
-import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 public class MinimalScenarioCreator extends DefaultScenarioCreator {
@@ -66,7 +66,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		vessel = fleetCreator.createMultipleDefaultVessels(vc, 1, shippingEntity)[0];
 
 		// need to create a default route
-		addRoute(ScenarioTools.defaultRouteName);
+		addRoute(RouteOption.DIRECT);
 
 		final double maxSpeed = vc.getMaxSpeed();
 
@@ -130,8 +130,8 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		final ZonedDateTime endDate = lastDischargeDate.plusHours(getMarginHours(lastAppointment.getFirst(), endPort));
 
 		final CargoModel cargoModel = scenario.getCargoModel();
-		this.vesselAvailability = fleetCreator.setAvailability(cargoModel, vessel, originPort, startDate.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime(), originPort, endDate.withZoneSameInstant(ZoneId.of("UTC"))
-				.toLocalDateTime());
+		this.vesselAvailability = fleetCreator.setAvailability(cargoModel, vessel, originPort, startDate.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime(), originPort,
+				endDate.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
 	}
 
 	public VesselEvent createDefaultMaintenanceEvent(final String name, final Port port, LocalDateTime startDate) {

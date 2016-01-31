@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Fuel;
@@ -215,7 +216,7 @@ public class MultipleCargoFuelConsumptionTest {
 		final int distanceBetweenPorts = 110;
 		csc.addPorts(portA, portB, distanceBetweenPorts);
 		// and add a canal
-		final ERouteOption canalName = ERouteOption.SUEZ;
+		final RouteOption canalName = RouteOption.SUEZ;
 		final int canalDistanceBetweenPorts = 90;
 
 		final String vesselClassName = "vc";
@@ -246,8 +247,8 @@ public class MultipleCargoFuelConsumptionTest {
 		csc.addDryDock(portA, dryDockStart, dryDockDurationDays);
 
 		final LNGScenarioModel scenario = csc.buildScenario();
-		CustomScenarioCreator
-				.createCanalAndCost(scenario, canalName, portA, portB, canalDistanceBetweenPorts, canalDistanceBetweenPorts, canalDistanceBetweenPorts, canalDistanceBetweenPorts, 0, 0, 0);
+		CustomScenarioCreator.createCanalAndCost(scenario, canalName, portA, portB, canalDistanceBetweenPorts, canalDistanceBetweenPorts, canalDistanceBetweenPorts, canalDistanceBetweenPorts, 0, 0,
+				0);
 
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(scenario);
@@ -265,8 +266,8 @@ public class MultipleCargoFuelConsumptionTest {
 		// add assertions on results
 		for (final CargoAllocation cargoAllocation : result.getCargoAllocations()) {
 			final SimpleCargoAllocation ca = new SimpleCargoAllocation(cargoAllocation);
-			Assert.assertEquals("Vessel travels on canal", canalName, ca.getLadenLeg().getRoute().getName());
-			Assert.assertEquals("Vessel travels on canal", canalName, ca.getBallastLeg().getRoute().getName());
+			Assert.assertEquals("Vessel travels on canal", canalName, ca.getLadenLeg().getRoute().getRouteOption());
+			Assert.assertEquals("Vessel travels on canal", canalName, ca.getBallastLeg().getRoute().getRouteOption());
 
 			// expect only NBO to be used always
 

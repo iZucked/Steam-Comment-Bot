@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
@@ -83,7 +84,7 @@ public class SlotOverridesTest {
 
 			final List<Module> modules = new LinkedList<>();
 			modules.add(new PerChainUnitScopeModule());
-			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new DataComponentProviderModule(), services, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule, hints));
+			modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new DataComponentProviderModule(RouteOption.DIRECT.getName()), services, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule, hints));
 			modules.addAll(
 					LNGTransformerHelper.getModulesWithOverrides(new LNGTransformerModule(scenario, settings), services, IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, hints));
 
