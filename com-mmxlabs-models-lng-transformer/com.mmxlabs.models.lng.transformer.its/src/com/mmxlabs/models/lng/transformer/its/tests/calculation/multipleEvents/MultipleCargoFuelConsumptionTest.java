@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 
 /**
  * <a href="https://mmxlabs.fogbugz.com/default.asp?259">Case 259: Scenario with several cargoes</a>
@@ -214,7 +215,7 @@ public class MultipleCargoFuelConsumptionTest {
 		final int distanceBetweenPorts = 110;
 		csc.addPorts(portA, portB, distanceBetweenPorts);
 		// and add a canal
-		final String canalName = "canal";
+		final ERouteOption canalName = ERouteOption.SUEZ;
 		final int canalDistanceBetweenPorts = 90;
 
 		final String vesselClassName = "vc";

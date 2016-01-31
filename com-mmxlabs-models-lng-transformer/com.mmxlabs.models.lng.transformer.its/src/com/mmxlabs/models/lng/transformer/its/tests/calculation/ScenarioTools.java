@@ -100,6 +100,7 @@ import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.manifest.ManifestFactory;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 
 /**
  * Methods for printing and creating a scenario where a ship travels from port A to port B then back to port A.
@@ -121,7 +122,7 @@ public class ScenarioTools {
 	}
 
 	// The default route name of the ocean route between ports.
-	public static final String defaultRouteName = IMultiMatrixProvider.Default_Key;
+	public static final String defaultRouteName = ERouteOption.DIRECT.name();
 
 	/**
 	 * Creates a scenario.
@@ -342,7 +343,7 @@ public class ScenarioTools {
 		portModel.getPorts().add(B);
 
 		final Route r = PortFactory.eINSTANCE.createRoute();
-		r.setName("default");
+		r.setName(ERouteOption.DIRECT.name());
 		portModel.getRoutes().add(r);
 		for (final int distance : distancesBetweenPorts) {
 			final RouteLine distanceLine = PortFactory.eINSTANCE.createRouteLine();
@@ -586,7 +587,7 @@ public class ScenarioTools {
 		portModel.getPorts().add(B);
 
 		final Route r = PortFactory.eINSTANCE.createRoute();
-		r.setName("default");
+		r.setName(ERouteOption.DIRECT.name());
 		portModel.getRoutes().add(r);
 
 		final RouteLine distance = PortFactory.eINSTANCE.createRouteLine();

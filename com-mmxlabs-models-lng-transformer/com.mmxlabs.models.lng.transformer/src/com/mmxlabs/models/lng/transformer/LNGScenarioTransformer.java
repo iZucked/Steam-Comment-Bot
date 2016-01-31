@@ -27,6 +27,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.inject.Named;
+import javax.swing.RootPaneContainer;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
@@ -150,6 +151,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.CooldownLumpSumCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.CooldownPriceIndexedCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceExpressionContract;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
@@ -2222,7 +2224,7 @@ public class LNGScenarioTransformer {
 		final PortModel portModel = rootObject.getReferenceModel().getPortModel();
 		for (final Route r : portModel.getRoutes()) {
 			// Store Route under it's name
-			modelEntityMap.addModelObject(r, r.getName());
+			modelEntityMap.addModelObject(r, mapRouteOption(r).name());
 			for (final RouteLine dl : r.getLines()) {
 				IPort from, to;
 				from = portAssociation.lookupNullChecked(dl.getFrom());
@@ -2230,20 +2232,20 @@ public class LNGScenarioTransformer {
 
 				final int distance = dl.getFullDistance();
 
-				builder.setPortToPortDistance(from, to, r.getName(), distance);
+				builder.setPortToPortDistance(from, to, mapRouteOption(r), distance);
 			}
 
 			// Set extra time and fuel consumption
 			final FleetModel fleetModel = rootObject.getReferenceModel().getFleetModel();
 			for (final VesselClass evc : fleetModel.getVesselClasses()) {
 				for (final VesselClassRouteParameters routeParameters : evc.getRouteParameters()) {
-					builder.setVesselClassRouteTransitTime(routeParameters.getRoute().getName(), vesselAssociation.lookupNullChecked(evc), routeParameters.getExtraTransitTime());
+					builder.setVesselClassRouteTransitTime(mapRouteOption(routeParameters.getRoute()), vesselAssociation.lookupNullChecked(evc), routeParameters.getExtraTransitTime());
 
-					builder.setVesselClassRouteFuel(routeParameters.getRoute().getName(), vesselAssociation.lookupNullChecked(evc), VesselState.Laden,
+					builder.setVesselClassRouteFuel(mapRouteOption(routeParameters.getRoute()), vesselAssociation.lookupNullChecked(evc), VesselState.Laden,
 							OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenConsumptionRate()),
 							OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenNBORate()));
 
-					builder.setVesselClassRouteFuel(routeParameters.getRoute().getName(), vesselAssociation.lookupNullChecked(evc), VesselState.Ballast,
+					builder.setVesselClassRouteFuel(mapRouteOption(routeParameters.getRoute()), vesselAssociation.lookupNullChecked(evc), VesselState.Ballast,
 							OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastConsumptionRate()),
 							OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastNBORate()));
 
@@ -2255,8 +2257,8 @@ public class LNGScenarioTransformer {
 			for (final RouteCost routeCost : costModel.getRouteCosts()) {
 				final IVesselClass vesselClass = vesselAssociation.lookupNullChecked(routeCost.getVesselClass());
 
-				builder.setVesselClassRouteCost(routeCost.getRoute().getName(), vesselClass, VesselState.Laden, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getLadenCost()));
-				builder.setVesselClassRouteCost(routeCost.getRoute().getName(), vesselClass, VesselState.Ballast, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost()));
+				builder.setVesselClassRouteCost(mapRouteOption(routeCost.getRoute()), vesselClass, VesselState.Laden, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getLadenCost()));
+				builder.setVesselClassRouteCost(mapRouteOption(routeCost.getRoute()), vesselClass, VesselState.Ballast, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost()));
 			}
 		}
 	}
@@ -2297,10 +2299,10 @@ public class LNGScenarioTransformer {
 
 			vesselClassAssociation.add(eVc, vc);
 
-			final List<String> allowedRoutes = new LinkedList<>();
+			final List<ERouteOption> allowedRoutes = new LinkedList<>();
 			if (shippingDaysRestrictionSpeedProvider != null) {
 				for (final Route route : shippingDaysRestrictionSpeedProvider.getValidRoutes(portModel, eVc)) {
-					allowedRoutes.add(route.getName());
+					allowedRoutes.add(mapRouteOption(route));
 				}
 			}
 			builder.setDivertableDESAllowedRoute(vc, allowedRoutes);
@@ -2646,5 +2648,13 @@ public class LNGScenarioTransformer {
 			pricingDate = IPortSlot.NO_PRICING_DATE;
 		}
 		return pricingDate;
+	}
+
+	@NonNull
+	public static ERouteOption mapRouteOption(@NonNull Route route) {
+		if (route.isCanal()) {
+			return ERouteOption.SUEZ;
+		}
+		return ERouteOption.DIRECT;
 	}
 }

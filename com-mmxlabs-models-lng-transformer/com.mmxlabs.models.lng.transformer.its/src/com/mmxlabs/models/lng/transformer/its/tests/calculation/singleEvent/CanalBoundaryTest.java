@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 
 /**
  * Tests for <a href="https://mmxlabs.fogbugz.com/default.asp?184">FogBugz: Case 184</a>
@@ -28,7 +29,7 @@ import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 @RunWith(value = ShiroRunner.class)
 public class CanalBoundaryTest {
 
-	private static final String canalName = "Suez canal";
+	private static final ERouteOption canalName = ERouteOption.SUEZ;
 
 	/**
 	 * Test that a canal is used if it's just shorter than the ocean route. No costs are associated with the canal

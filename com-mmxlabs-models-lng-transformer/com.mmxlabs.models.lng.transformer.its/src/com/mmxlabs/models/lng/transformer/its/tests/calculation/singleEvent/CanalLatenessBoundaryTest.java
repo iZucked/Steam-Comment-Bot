@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 
 /**
  * Tests for <a href="https://mmxlabs.fogbugz.com/default.asp?184">FogBugz: Case 184</a>
@@ -28,7 +29,7 @@ import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 @RunWith(value = ShiroRunner.class)
 public class CanalLatenessBoundaryTest {
 
-	private static final String canalName = "Suez canal";
+	private static final ERouteOption canalName = ERouteOption.SUEZ;
 
 	/**
 	 * If the vessel is going to be late if it takes the longer ocean route check it takes the shorter canal route, even if it costs more.
@@ -197,8 +198,8 @@ public class CanalLatenessBoundaryTest {
 		final int minHeelVolume = 0;
 
 		final LNGScenarioModel canalScenario = ScenarioTools.createScenarioWithCanal(oceanRouteDistance, baseFuelUnitPrice, dischargePrice, cvValue, travelTime, equivalenceFactor, speed, speed,
-				capacity, speed, fuelTravelConsumptionPerDay, speed, fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBOIdleRatePerDay, NBOTravelRatePerDay, speed,
-				fuelTravelConsumptionPerDay, speed, fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBOIdleRatePerDay, NBOTravelRatePerDay, useDryDock, pilotLightRate, minHeelVolume);
+				capacity, speed, fuelTravelConsumptionPerDay, speed, fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBOIdleRatePerDay, NBOTravelRatePerDay, speed, fuelTravelConsumptionPerDay,
+				speed, fuelTravelConsumptionPerDay, fuelIdleConsumptionPerDay, NBOIdleRatePerDay, NBOTravelRatePerDay, useDryDock, pilotLightRate, minHeelVolume);
 
 		CustomScenarioCreator.createCanalAndCost(canalScenario, canalName, ScenarioTools.A, ScenarioTools.B, canalDistance, canalDistance, canalLadenCost, canalUnladenCost, canalTransitFuelPerDay,
 				NBOTravelRatePerDay, canalTransitTimeHours);

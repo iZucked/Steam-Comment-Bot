@@ -70,6 +70,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 
 /**
  * Class to create a scenario. Call methods to customise the scenario. When finished get the final scenario using {@link #buildScenario()}. <br>
@@ -561,13 +562,13 @@ public class CustomScenarioCreator {
 	 *            Transit time in hours
 	 * @return
 	 */
-	public static void createCanalAndCost(final LNGScenarioModel scenario, final String canalName, final Port A, final Port B, final int distanceAToB, final int distanceBToA,
+	public static void createCanalAndCost(final LNGScenarioModel scenario, final ERouteOption canalName, final Port A, final Port B, final int distanceAToB, final int distanceBToA,
 			final int canalLadenCost, final int canalUnladenCost, final int canalTransitFuelDays, final int canalNBORateDays, final int canalTransitTime) {
 
 		final Route canal = PortFactory.eINSTANCE.createRoute();
 		canal.setCanal(true);
 		scenario.getReferenceModel().getPortModel().getRoutes().add(canal);
-		canal.setName(canalName);
+		canal.setName(canalName.name());
 		// add distance lines, as for the main distance model:
 		final RouteLine atob = PortFactory.eINSTANCE.createRouteLine();
 		atob.setFrom(A);
