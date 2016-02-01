@@ -485,7 +485,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 				for (final Pair<ERouteOption, Integer> entry : distanceProvider.getDistanceValues(prevPort, port)) {
 					final int distance = entry.getSecond();
 					if (distance != Integer.MAX_VALUE) {
-						final int extraTime = routeCostProvider.getRouteTransitTime(entry.getFirst(), vesselAvailability.getVessel().getVesselClass());
+						final int extraTime = routeCostProvider.getRouteTransitTime(entry.getFirst(), vesselAvailability.getVessel());
 						final int minByRoute = Calculator.getTimeFromSpeedDistance(maxSpeed, distance) + extraTime;
 						final int maxByRoute = Calculator.getTimeFromSpeedDistance(minSpeed, distance) + extraTime;
 						minTravelTime = Math.min(minTravelTime, minByRoute);

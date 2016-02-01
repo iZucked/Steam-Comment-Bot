@@ -18,7 +18,6 @@ import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 
@@ -180,12 +179,10 @@ public class DefaultDistanceProviderImplTest {
 		final DefaultDistanceProviderImpl distanceProvider = createDistanceProvider(matrixProvider, routeCostProvider);
 
 		IVessel vessel = Mockito.mock(IVessel.class);
-		IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
-		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
 
-		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.DIRECT, vesselClass)).thenReturn(0);
-		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.SUEZ, vesselClass)).thenReturn(6);
-		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.PANAMA, vesselClass)).thenReturn(12);
+		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.DIRECT, vessel)).thenReturn(0);
+		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.SUEZ, vessel)).thenReturn(6);
+		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.PANAMA, vessel)).thenReturn(12);
 
 		// No restriction set, all open
 		// 10 knots speed
@@ -251,28 +248,26 @@ public class DefaultDistanceProviderImplTest {
 		final DefaultDistanceProviderImpl distanceProvider = createDistanceProvider(matrixProvider, routeCostProvider);
 
 		IVessel vessel = Mockito.mock(IVessel.class);
-		IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
-		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
 
-		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.DIRECT, vesselClass)).thenReturn(0);
-		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.PANAMA, vesselClass)).thenReturn(12);
+		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.DIRECT, vessel)).thenReturn(0);
+		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.PANAMA, vessel)).thenReturn(12);
 
-		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.SUEZ, vesselClass)).thenReturn(6);
+		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.SUEZ, vessel)).thenReturn(6);
 		Assert.assertEquals(new Pair<>(ERouteOption.DIRECT, 4), distanceProvider.getQuickestTravelTime(vessel, port1, port2, 100, 10_000));
 
-		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.SUEZ, vesselClass)).thenReturn(1);
+		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.SUEZ, vessel)).thenReturn(1);
 		Assert.assertEquals(new Pair<>(ERouteOption.SUEZ, 2 + 1), distanceProvider.getQuickestTravelTime(vessel, port1, port2, 100, 10_000));
 
 		// Close Suez
 		distanceProvider.setRouteAvailableFrom(ERouteOption.SUEZ, 101);
-		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.SUEZ, vesselClass)).thenReturn(1);
+		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.SUEZ, vessel)).thenReturn(1);
 		Assert.assertEquals(new Pair<>(ERouteOption.DIRECT, 4), distanceProvider.getQuickestTravelTime(vessel, port1, port2, 100, 10_000));
 
 		// Close Direct and Suez
 		distanceProvider.setRouteAvailableFrom(ERouteOption.SUEZ, 101);
 		distanceProvider.setRouteAvailableFrom(ERouteOption.DIRECT, 101);
 
-		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.SUEZ, vesselClass)).thenReturn(1);
+		Mockito.when(routeCostProvider.getRouteTransitTime(ERouteOption.SUEZ, vessel)).thenReturn(1);
 		Assert.assertEquals(new Pair<>(ERouteOption.PANAMA, 3 + 12), distanceProvider.getQuickestTravelTime(vessel, port1, port2, 100, 10_000));
 
 	}

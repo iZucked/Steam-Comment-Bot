@@ -62,6 +62,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
@@ -74,6 +76,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvid
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultDistanceProviderImpl;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapBaseFuelCurveEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
@@ -104,7 +107,7 @@ public class ScheduleCalculatorTest {
 		final IStartEndRequirementProvider startEndRequirementProvider = mock(IStartEndRequirementProvider.class);
 		final IShippingHoursRestrictionProvider shippingHoursRestrictionProvider = mock(IShippingHoursRestrictionProvider.class);
 		class TestModule extends AbstractModule {
-			
+
 			@Provides
 			@Singleton
 			private ILatenessComponentParameters provideLatenessComponentParameters() {
@@ -144,7 +147,7 @@ public class ScheduleCalculatorTest {
 				bind(ICharterRateCalculator.class).toInstance(charterRateCalculator);
 				bind(IActualsDataProvider.class).toInstance(actualsDataProvider);
 				bind(IStartEndRequirementProvider.class).toInstance(startEndRequirementProvider);
-				
+
 				final IPromptPeriodProvider promptProvider = Mockito.mock(IPromptPeriodProvider.class);
 
 				bind(IPromptPeriodProvider.class).toInstance(promptProvider);
@@ -158,6 +161,10 @@ public class ScheduleCalculatorTest {
 
 				bind(new TypeLiteral<IMultiMatrixProvider<IPort, Integer>>() {
 				}).toInstance(distanceProvider);
+
+				bind(IDistanceProvider.class).to(DefaultDistanceProviderImpl.class).in(Singleton.class);
+				bind(IDistanceProviderEditor.class).to(DefaultDistanceProviderImpl.class);
+
 				bind(ITimeZoneToUtcOffsetProvider.class).to(TimeZoneToUtcOffsetProvider.class);
 			}
 		}
@@ -227,14 +234,14 @@ public class ScheduleCalculatorTest {
 		when(markToMarketProvider.getMarketForElement(element5)).thenReturn(market5);
 
 		final IAllocationAnnotation allocationAnnotation = mock(IAllocationAnnotation.class);
-		when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot1)), Matchers.<IPortTimesRecord> any())).thenReturn(
-				allocationAnnotation);
-		when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot2)), Matchers.<IPortTimesRecord> any())).thenReturn(
-				allocationAnnotation);
-		when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot3)), Matchers.<IPortTimesRecord> any())).thenReturn(
-				allocationAnnotation);
-		when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot4)), Matchers.<IPortTimesRecord> any())).thenReturn(
-				allocationAnnotation);
+		when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot1)), Matchers.<IPortTimesRecord> any()))
+				.thenReturn(allocationAnnotation);
+		when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot2)), Matchers.<IPortTimesRecord> any()))
+				.thenReturn(allocationAnnotation);
+		when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot3)), Matchers.<IPortTimesRecord> any()))
+				.thenReturn(allocationAnnotation);
+		when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot4)), Matchers.<IPortTimesRecord> any()))
+				.thenReturn(allocationAnnotation);
 
 		scheduleCalculator.calculateMarkToMarketPNL(sequences, annotatedSolution);
 

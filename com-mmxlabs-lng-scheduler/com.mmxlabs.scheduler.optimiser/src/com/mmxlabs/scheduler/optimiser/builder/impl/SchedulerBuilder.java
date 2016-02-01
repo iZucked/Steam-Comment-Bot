@@ -51,7 +51,6 @@ import com.mmxlabs.optimiser.core.scenario.impl.OptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
-import com.mmxlabs.scheduler.optimiser.builder.IXYPortDistanceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.DefaultSpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
@@ -121,6 +120,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShortCargoReturnElementProviderEditor;
@@ -236,10 +236,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@NonNull
 	private final IIndexingContext indexingContext = new CheckingIndexingContext();
-
-	@Inject
-	@NonNull
-	private IXYPortDistanceCalculator distanceProvider;
 
 	@Inject
 	@NonNull
@@ -1053,8 +1049,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	/**
 	 */
 	@Override
-	public void setVesselClassRouteCost(final ERouteOption route, @NonNull final IVesselClass vesselClass, final VesselState state, final long tollPrice) {
-		routeCostProvider.setRouteCost(route, vesselClass, state, tollPrice);
+	public void setVesselRouteCost(final ERouteOption route, @NonNull final IVessel vessel, final IRouteCostProvider.CostType costType, final long tollPrice) {
+		routeCostProvider.setRouteCost(route, vessel, costType, tollPrice);
 	}
 
 	/**
@@ -1065,13 +1061,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public void setVesselClassRouteFuel(final ERouteOption name, @NonNull final IVesselClass vc, final VesselState vesselState, final long baseFuelInScaledMT, final long nboRateInScaledM3) {
-		routeCostProvider.setRouteFuel(name, vc, vesselState, baseFuelInScaledMT, nboRateInScaledM3);
+	public void setVesselRouteFuel(final ERouteOption name, @NonNull final IVessel vessel, final VesselState vesselState, final long baseFuelInScaledMT, final long nboRateInScaledM3) {
+		routeCostProvider.setRouteFuel(name, vessel, vesselState, baseFuelInScaledMT, nboRateInScaledM3);
 	}
 
 	@Override
-	public void setVesselClassRouteTransitTime(final ERouteOption name, final IVesselClass vc, final int transitTimeInHours) {
-		routeCostProvider.setRouteTransitTime(name, vc, transitTimeInHours);
+	public void setVesselRouteTransitTime(final ERouteOption name, final IVessel vessel, final int transitTimeInHours) {
+		routeCostProvider.setRouteTransitTime(name, vessel, transitTimeInHours);
 	}
 
 	@Override
@@ -1275,25 +1271,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		virtualVesselSlotProviderEditor.setVesselAvailabilityForElement(virtualVesselAvailability, element);
 
 		return virtualVesselAvailability;
-	}
-
-	@Override
-	public void buildXYDistances() {
-		for (final IPort from : ports) {
-			if (!(from instanceof IXYPort)) {
-				continue;
-			}
-			for (final IPort to : ports) {
-				if (to instanceof IXYPort) {
-					final double dist = distanceProvider.getDistance((IXYPort) from, (IXYPort) to);
-					final int iDist = (int) dist;
-
-					final IMatrixEditor<IPort, Integer> matrix = (IMatrixEditor<IPort, Integer>) portDistanceProvider.get(ERouteOption.DIRECT.name());
-
-					matrix.set(from, to, iDist);
-				}
-			}
-		}
 	}
 
 	@Override

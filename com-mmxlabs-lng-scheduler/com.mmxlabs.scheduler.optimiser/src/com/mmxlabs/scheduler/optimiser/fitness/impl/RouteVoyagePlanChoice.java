@@ -6,8 +6,10 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.Equality;
-import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 
@@ -21,13 +23,13 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 
 	private int choice;
 
-	private final VoyageOptions options;
+	private final @NonNull VoyageOptions options;
 
-	private final List<Pair<ERouteOption, Integer>> distances;
+	private final @NonNull List<Triple<ERouteOption, Integer, Long>> routeOptions;
 
-	public RouteVoyagePlanChoice(final VoyageOptions options, final List<Pair<ERouteOption, Integer>> distances) {
+	public RouteVoyagePlanChoice(final @NonNull VoyageOptions options, final @NonNull List<Triple<ERouteOption, Integer, Long>> routeOptions) {
 		this.options = options;
-		this.distances = distances;
+		this.routeOptions = routeOptions;
 	}
 
 	@Override
@@ -54,25 +56,15 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 
 	@Override
 	public int numChoices() {
-		return distances.size();
+		return routeOptions.size();
 	}
 
 	@Override
 	public final boolean apply(final int choice) {
 		this.choice = choice;
 
-		final Pair<ERouteOption, Integer> entry = distances.get(choice);
-
-		options.setRoute(entry.getFirst());
-
-		final int distance = entry.getSecond();
-
-		// Invalid distance
-		if (distance == Integer.MAX_VALUE) {
-			return false;
-		}
-
-		options.setDistance(distance);
+		final Triple<ERouteOption, Integer, Long> entry = routeOptions.get(choice);
+		options.setRoute(entry.getFirst(), entry.getSecond(), entry.getThird());
 
 		return true;
 	}
@@ -84,7 +76,7 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 
 			final RouteVoyagePlanChoice other = (RouteVoyagePlanChoice) obj;
 
-			if (!Equality.isEqual(distances, other.distances)) {
+			if (!Equality.isEqual(routeOptions, other.routeOptions)) {
 				return false;
 			}
 
