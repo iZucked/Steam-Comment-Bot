@@ -2343,7 +2343,7 @@ public class LNGScenarioTransformer {
 
 	}
 
-	private void buildPanamaCosts(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Vessel, IVessel> vesselAssociation, final FleetModel fleetModel,
+	public static void buildPanamaCosts(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Vessel, IVessel> vesselAssociation, final FleetModel fleetModel,
 			@NonNull final PanamaCanalTariff panamaCanalTariff) {
 
 		// Extract band information into a sorted list
@@ -2367,7 +2367,7 @@ public class LNGScenarioTransformer {
 				final PanamaCanalTariffBand band = p.getSecond();
 				//// How much vessel capacity is used for this band calculation?
 				// First, find the largest value valid in this band
-				int contributingCapacity = Math.min(capacityInM3, p.getFirst());
+				double contributingCapacity = Math.min(capacityInM3, p.getFirst());
 
 				// Next, subtract band lower bound to find the capacity contribution
 				contributingCapacity = Math.max(0, contributingCapacity - (band.isSetBandStart() ? band.getBandStart() : 0));
@@ -2383,7 +2383,7 @@ public class LNGScenarioTransformer {
 
 			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.Laden, OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalLadenCost)));
 			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.Ballast, OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalBallastCost)));
-			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.RoundTripBallast, OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalBallastCost)));
+			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.RoundTripBallast, OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalBallastRoundTripCost)));
 		}
 	}
 
