@@ -1,10 +1,11 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.util;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -48,16 +49,14 @@ public class AbstractSlotMaker<T extends AbstractSlotMaker<T>> {
 		return (T) this;
 	}
 
-	public T withMarketFOBPurchase(@NonNull final String name, @NonNull final FOBPurchasesMarket market, @NonNull final LocalDate windowStart, @NonNull final Port port,
-			@Nullable final PurchaseContract purchaseContract, @Nullable final BaseLegalEntity entity, @Nullable final String priceExpression) {
-		final Slot slot = cargoModelBuilder.createSpotFOBPurchase(name, market, windowStart, port, purchaseContract, entity, priceExpression);
+	public T withMarketFOBPurchase(@NonNull final String name, @NonNull final FOBPurchasesMarket market, @NonNull final YearMonth windowStart, @NonNull final Port port) {
+		final Slot slot = cargoModelBuilder.createSpotFOBPurchase(name, market, windowStart, port);
 		this.slot = slot;
 		return (T) this;
 	}
 
-	public T withMarketDESPurchase(@NonNull final String name, @NonNull final DESPurchaseMarket market, @NonNull final LocalDate windowStart, @NonNull final Port port,
-			@Nullable final PurchaseContract purchaseContract, @Nullable final BaseLegalEntity entity, @Nullable final String priceExpression) {
-		final Slot slot = cargoModelBuilder.createSpotDESPurchase(name, market, windowStart, port, purchaseContract, entity, priceExpression);
+	public T withMarketDESPurchase(@NonNull final String name, @NonNull final DESPurchaseMarket market, @NonNull final YearMonth windowStart, @NonNull final Port port) {
+		final Slot slot = cargoModelBuilder.createSpotDESPurchase(name, market, windowStart, port);
 		this.slot = slot;
 		return (T) this;
 	}
@@ -76,16 +75,14 @@ public class AbstractSlotMaker<T extends AbstractSlotMaker<T>> {
 		return (T) this;
 	}
 
-	public T withMarketDESSale(@NonNull final String name, @NonNull final DESSalesMarket market, @NonNull final LocalDate windowStart, @NonNull final Port port,
-			@Nullable final SalesContract salesContract, @Nullable final BaseLegalEntity entity, @Nullable final String priceExpression) {
-		final Slot slot = cargoModelBuilder.createSpotDESSale(name, market, windowStart, port, salesContract, entity, priceExpression);
+	public T withMarketDESSale(@NonNull final String name, @NonNull final DESSalesMarket market, @NonNull final YearMonth windowStart, @NonNull final Port port) {
+		final Slot slot = cargoModelBuilder.createSpotDESSale(name, market, windowStart, port);
 		this.slot = slot;
 		return (T) this;
 	}
 
-	public T withMarketFOBSale(@NonNull final String name, @NonNull final FOBSalesMarket market, @NonNull final LocalDate windowStart, @NonNull final Port port,
-			@Nullable final SalesContract salesContract, @Nullable final BaseLegalEntity entity, @Nullable final String priceExpression) {
-		final Slot slot = cargoModelBuilder.createSpotFOBSale(name, market, windowStart, port, salesContract, entity, priceExpression);
+	public T withMarketFOBSale(@NonNull final String name, @NonNull final FOBSalesMarket market, @NonNull final YearMonth windowStart, @NonNull final Port port) {
+		final Slot slot = cargoModelBuilder.createSpotFOBSale(name, market, windowStart, port);
 		this.slot = slot;
 		return (T) this;
 	}

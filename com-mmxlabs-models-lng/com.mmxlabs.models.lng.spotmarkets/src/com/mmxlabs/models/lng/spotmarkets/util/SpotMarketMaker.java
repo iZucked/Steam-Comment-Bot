@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.spotmarkets.util;
@@ -15,7 +15,6 @@ import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
@@ -37,8 +36,61 @@ public class SpotMarketMaker {
 		this.spotMarketsModelBuilder = spotMarketsModelBuilder;
 	}
 
+	private SpotMarketMaker(@NonNull final SpotMarketsModelBuilder spotMarketsModelBuilder, @NonNull final SpotMarket spotMarket) {
+		this.spotMarketsModelBuilder = spotMarketsModelBuilder;
+		this.spotMarket = spotMarket;
+	}
+
+	public class FOBPurchaseSpotMarketMaker extends SpotMarketMaker {
+
+		private FOBPurchaseSpotMarketMaker(@NonNull final SpotMarketsModelBuilder spotMarketsModelBuilder, @NonNull final SpotMarket spotMarket) {
+			super(spotMarketsModelBuilder, spotMarket);
+		}
+
+		@Override
+		public FOBPurchasesMarket build() {
+			return (FOBPurchasesMarket) super.build();
+		}
+	}
+
+	public class FOBSaleSpotMarketMaker extends SpotMarketMaker {
+
+		private FOBSaleSpotMarketMaker(@NonNull final SpotMarketsModelBuilder spotMarketsModelBuilder, @NonNull final SpotMarket spotMarket) {
+			super(spotMarketsModelBuilder, spotMarket);
+		}
+
+		@Override
+		public FOBSalesMarket build() {
+			return (FOBSalesMarket) super.build();
+		}
+	}
+
+	public class DESPurchaseSpotMarketMaker extends SpotMarketMaker {
+
+		private DESPurchaseSpotMarketMaker(@NonNull final SpotMarketsModelBuilder spotMarketsModelBuilder, @NonNull final SpotMarket spotMarket) {
+			super(spotMarketsModelBuilder, spotMarket);
+		}
+
+		@Override
+		public DESPurchaseMarket build() {
+			return (DESPurchaseMarket) super.build();
+		}
+	}
+
+	public class DESSaleSpotMarketMaker extends SpotMarketMaker {
+
+		private DESSaleSpotMarketMaker(@NonNull final SpotMarketsModelBuilder spotMarketsModelBuilder, @NonNull final SpotMarket spotMarket) {
+			super(spotMarketsModelBuilder, spotMarket);
+		}
+
+		@Override
+		public DESSalesMarket build() {
+			return (DESSalesMarket) super.build();
+		}
+	}
+
 	@NonNull
-	public SpotMarketMaker withFOBPurchaseMarket(@NonNull final String name, @NonNull final Port notionalPort, @Nullable final BaseLegalEntity entity, @NonNull final String priceExpression,
+	public FOBPurchaseSpotMarketMaker withFOBPurchaseMarket(@NonNull final String name, @NonNull final Port notionalPort, @Nullable final BaseLegalEntity entity, @NonNull final String priceExpression,
 			@Nullable final Double cv) {
 
 		final FOBPurchasesMarket market = SpotMarketsFactory.eINSTANCE.createFOBPurchasesMarket();
@@ -58,12 +110,12 @@ public class SpotMarketMaker {
 		this.spotMarket.setAvailability(SpotMarketsFactory.eINSTANCE.createSpotAvailability());
 		this.spotMarket.getAvailability().setCurve(PricingFactory.eINSTANCE.createDataIndex());
 
-		return this;
+		return new FOBPurchaseSpotMarketMaker(this.spotMarketsModelBuilder, this.spotMarket);
 	}
 
 	@NonNull
-	public SpotMarketMaker withDESPurchaseMarket(@NonNull final String name, @NonNull final List<APortSet<Port>> ports, @Nullable final BaseLegalEntity entity, @NonNull final String priceExpression,
-			@Nullable final Double cv) {
+	public DESPurchaseSpotMarketMaker withDESPurchaseMarket(@NonNull final String name, @NonNull final List<APortSet<Port>> ports, @Nullable final BaseLegalEntity entity,
+			@NonNull final String priceExpression, @Nullable final Double cv) {
 
 		final DESPurchaseMarket market = SpotMarketsFactory.eINSTANCE.createDESPurchaseMarket();
 		market.setPricingEvent(PricingEvent.START_LOAD);
@@ -81,11 +133,13 @@ public class SpotMarketMaker {
 		this.spotMarket = market;
 		this.spotMarket.setAvailability(SpotMarketsFactory.eINSTANCE.createSpotAvailability());
 		this.spotMarket.getAvailability().setCurve(PricingFactory.eINSTANCE.createDataIndex());
-		return this;
+
+		return new DESPurchaseSpotMarketMaker(this.spotMarketsModelBuilder, this.spotMarket);
 	}
 
 	@NonNull
-	public SpotMarketMaker withFOBSaleMarket(@NonNull final String name, @NonNull final List<APortSet<Port>> ports, @Nullable final BaseLegalEntity entity, @NonNull final String priceExpression) {
+	public FOBSaleSpotMarketMaker withFOBSaleMarket(@NonNull final String name, @NonNull final List<APortSet<Port>> ports, @Nullable final BaseLegalEntity entity,
+			@NonNull final String priceExpression) {
 
 		final FOBSalesMarket market = SpotMarketsFactory.eINSTANCE.createFOBSalesMarket();
 		market.setPricingEvent(PricingEvent.START_LOAD);
@@ -99,11 +153,11 @@ public class SpotMarketMaker {
 		this.spotMarket = market;
 		this.spotMarket.setAvailability(SpotMarketsFactory.eINSTANCE.createSpotAvailability());
 		this.spotMarket.getAvailability().setCurve(PricingFactory.eINSTANCE.createDataIndex());
-		return this;
+		return new FOBSaleSpotMarketMaker(this.spotMarketsModelBuilder, this.spotMarket);
 	}
 
 	@NonNull
-	public SpotMarketMaker withDESSaleMarket(@NonNull final String name, @NonNull final Port notionalPort, @Nullable final BaseLegalEntity entity, @NonNull final String priceExpression) {
+	public DESSaleSpotMarketMaker withDESSaleMarket(@NonNull final String name, @NonNull final Port notionalPort, @Nullable final BaseLegalEntity entity, @NonNull final String priceExpression) {
 
 		final DESSalesMarket market = SpotMarketsFactory.eINSTANCE.createDESSalesMarket();
 		market.setPricingEvent(PricingEvent.START_LOAD);
@@ -117,7 +171,7 @@ public class SpotMarketMaker {
 		this.spotMarket = market;
 		this.spotMarket.setAvailability(SpotMarketsFactory.eINSTANCE.createSpotAvailability());
 		this.spotMarket.getAvailability().setCurve(PricingFactory.eINSTANCE.createDataIndex());
-		return this;
+		return new DESSaleSpotMarketMaker(this.spotMarketsModelBuilder, this.spotMarket);
 	}
 
 	@NonNull
@@ -161,8 +215,7 @@ public class SpotMarketMaker {
 	}
 
 	@NonNull
-	public SpotMarket build() {
-
+	public <T extends SpotMarket> T build() {
 		if (spotMarket instanceof DESPurchaseMarket) {
 			spotMarketsModelBuilder.getSpotMarketsModel().getDesPurchaseSpotMarket().getMarkets().add(spotMarket);
 		} else if (spotMarket instanceof FOBPurchasesMarket) {
@@ -175,7 +228,7 @@ public class SpotMarketMaker {
 			throw new IllegalStateException("Unknown subtype");
 		}
 
-		return spotMarket;
+		return (T) spotMarket;
 	}
 
 }

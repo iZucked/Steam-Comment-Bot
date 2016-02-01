@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.spotmarkets.util;
@@ -69,5 +69,4 @@ public class SpotMarketsModelBuilder {
 		final SpotMarketMaker maker = new SpotMarketMaker(this);
 		return maker.withFOBSaleMarket(name, ports, entity, priceExpression);
 	}
-
 }

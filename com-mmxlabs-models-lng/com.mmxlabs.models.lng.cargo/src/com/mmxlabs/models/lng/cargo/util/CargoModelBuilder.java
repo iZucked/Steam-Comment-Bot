@@ -1,15 +1,17 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.util;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.common.time.Hours;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -20,6 +22,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.Contract;
@@ -61,7 +64,18 @@ public class CargoModelBuilder {
 	private void configureSlot(@NonNull final Slot slot, @NonNull final String name, @NonNull final LocalDate windowStart, @NonNull final Port port, @Nullable final Contract contract,
 			@Nullable final BaseLegalEntity entity, @Nullable final String priceExpression) {
 
-		if (contract == null && entity == null) {
+		if (slot instanceof SpotSlot) {
+			if (contract != null) {
+				throw new IllegalArgumentException("Contract must be null for a spot slot");
+			}
+			if (entity != null) {
+				throw new IllegalArgumentException("Entity must be null for a spot slot");
+			}
+
+			if (priceExpression != null) {
+				throw new IllegalArgumentException("Price Expression must be null for a spot slot");
+			}
+		} else if (contract == null && entity == null) {
 			throw new IllegalArgumentException("Contract or Entity must be set");
 		}
 
@@ -108,30 +122,32 @@ public class CargoModelBuilder {
 		return slot;
 	}
 
-	public @NonNull SpotLoadSlot createSpotFOBPurchase(@NonNull final String name, @NonNull final FOBPurchasesMarket market, @NonNull final LocalDate windowStart, @NonNull final Port port,
-			@Nullable final PurchaseContract purchaseContract, @Nullable final BaseLegalEntity entity, @Nullable final String priceExpression) {
+	public @NonNull SpotLoadSlot createSpotFOBPurchase(@NonNull final String name, @NonNull final FOBPurchasesMarket market, @NonNull final YearMonth windowStart, @NonNull final Port port) {
 
 		validatePortCapability(port, PortCapability.LOAD);
 
 		final SpotLoadSlot slot = CargoFactory.eINSTANCE.createSpotLoadSlot();
-		configureSlot(slot, name, windowStart, port, purchaseContract, entity, priceExpression);
+		configureSlot(slot, name, windowStart.atDay(1), port, null, null, null);
 		slot.setMarket(market);
 		slot.setOptional(true);
+		slot.setWindowStartTime(0);
+		slot.setWindowSize(Hours.between(windowStart, windowStart.plusMonths(1)));
 
 		cargoModel.getLoadSlots().add(slot);
 		return slot;
 	}
 
-	public @NonNull SpotLoadSlot createSpotDESPurchase(@NonNull final String name, @NonNull final DESPurchaseMarket market, @NonNull final LocalDate windowStart, @NonNull final Port port,
-			@Nullable final PurchaseContract purchaseContract, @Nullable final BaseLegalEntity entity, @Nullable final String priceExpression) {
+	public @NonNull SpotLoadSlot createSpotDESPurchase(@NonNull final String name, @NonNull final DESPurchaseMarket market, @NonNull final YearMonth windowStart, @NonNull final Port port) {
 
 		validatePortCapability(port, PortCapability.DISCHARGE);
 
 		final SpotLoadSlot slot = CargoFactory.eINSTANCE.createSpotLoadSlot();
-		configureSlot(slot, name, windowStart, port, purchaseContract, entity, priceExpression);
+		configureSlot(slot, name, windowStart.atDay(1), port, null, null, null);
 		slot.setDESPurchase(true);
 		slot.setMarket(market);
 		slot.setOptional(true);
+		slot.setWindowStartTime(0);
+		slot.setWindowSize(Hours.between(windowStart, windowStart.plusMonths(1)));
 
 		cargoModel.getLoadSlots().add(slot);
 		return slot;
@@ -170,31 +186,34 @@ public class CargoModelBuilder {
 		return slot;
 	}
 
-	public @NonNull SpotDischargeSlot createSpotDESSale(@NonNull final String name, @NonNull final DESSalesMarket market, @NonNull final LocalDate windowStart, @NonNull final Port port,
-			@Nullable final SalesContract salesContract, @Nullable final BaseLegalEntity entity, @Nullable final String priceExpression) {
+	public @NonNull SpotDischargeSlot createSpotDESSale(@NonNull final String name, @NonNull final DESSalesMarket market, @NonNull final YearMonth windowStart, @NonNull final Port port) {
 
 		validatePortCapability(port, PortCapability.DISCHARGE);
 
 		final SpotDischargeSlot slot = CargoFactory.eINSTANCE.createSpotDischargeSlot();
-		configureSlot(slot, name, windowStart, port, salesContract, entity, priceExpression);
+		configureSlot(slot, name, windowStart.atDay(1), port, null, null, null);
 		slot.setMarket(market);
 		slot.setOptional(true);
+		slot.setWindowStartTime(0);
+		slot.setWindowSize(Hours.between(windowStart, windowStart.plusMonths(1)));
 
 		cargoModel.getDischargeSlots().add(slot);
 
 		return slot;
 	}
 
-	public @NonNull SpotDischargeSlot createSpotFOBSale(@NonNull final String name, @NonNull final FOBSalesMarket market, @NonNull final LocalDate windowStart, @NonNull final Port port,
-			@Nullable final SalesContract salesContract, @Nullable final BaseLegalEntity entity, @Nullable final String priceExpression) {
+	public @NonNull SpotDischargeSlot createSpotFOBSale(@NonNull final String name, @NonNull final FOBSalesMarket market, @NonNull final YearMonth windowStart, @NonNull final Port port) {
 
 		validatePortCapability(port, PortCapability.LOAD);
 
 		final SpotDischargeSlot slot = CargoFactory.eINSTANCE.createSpotDischargeSlot();
-		configureSlot(slot, name, windowStart, port, salesContract, entity, priceExpression);
+		configureSlot(slot, name, windowStart.atDay(1), port, null, null, null);
 		slot.setMarket(market);
 		slot.setFOBSale(true);
 		slot.setOptional(true);
+		slot.setWindowStartTime(0);
+		slot.setWindowSize(Hours.between(windowStart, windowStart.plusMonths(1)));
+
 		cargoModel.getDischargeSlots().add(slot);
 
 		return slot;
