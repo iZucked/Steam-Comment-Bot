@@ -4,14 +4,11 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers.guice;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
-import com.google.inject.name.Names;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.ILockedElementsProvider;
