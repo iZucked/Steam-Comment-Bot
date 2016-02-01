@@ -23,7 +23,7 @@ public interface IRouteCostProvider extends IDataComponentProvider {
 	enum CostType {
 		Laden, Ballast, RoundTripBallast
 	}
-	
+
 	/**
 	 * Gets the cost in dollars incurred by vessels travelling via {@code route}
 	 * 

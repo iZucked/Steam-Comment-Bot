@@ -30,6 +30,7 @@ public class HashMapRouteCostProviderEditor implements IRouteCostProviderEditor 
 	@Override
 	public long getRouteCost(final @NonNull ERouteOption route, final @NonNull IVessel vessel, final @NonNull CostType vesselState) {
 
+		// Special case DIRECT
 		if (route == ERouteOption.DIRECT) {
 			return 0L;
 		}
@@ -131,6 +132,8 @@ public class HashMapRouteCostProviderEditor implements IRouteCostProviderEditor 
 					if (x != null) {
 						return x;
 					}
+				} else {
+					throw new IllegalStateException();
 				}
 			}
 		}

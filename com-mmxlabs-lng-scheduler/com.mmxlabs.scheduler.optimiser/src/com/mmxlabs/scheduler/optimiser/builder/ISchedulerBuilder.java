@@ -378,8 +378,8 @@ public interface ISchedulerBuilder {
 	/**
 	 * Set the extra time and fuel required for the given vessel to travel by the given route
 	 * 
-	 * @param name
-	 *            the name of the route
+	 * @param route
+	 *            the route
 	 * @param vessel
 	 *            the vessel
 	 * @param vesselState

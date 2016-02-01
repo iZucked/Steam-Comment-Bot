@@ -29,7 +29,7 @@ public interface IRouteCostProviderEditor extends IRouteCostProvider {
 
 	/**
 	 * Sets the default cost incurred when travelling via the route named {@code route} to {@code price}. This price is overridden for particular vessel classes by
-	 * {@link #setRouteCost(String, IVesselClass, VesselState, int)}.
+	 * {@link #setRouteCost(String, IVessel, VesselState, int)}.
 	 * 
 	 * @param route
 	 *            the route name
