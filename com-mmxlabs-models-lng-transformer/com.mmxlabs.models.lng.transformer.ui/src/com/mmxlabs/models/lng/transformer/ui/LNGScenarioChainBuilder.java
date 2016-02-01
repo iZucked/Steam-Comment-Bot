@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.ui;
@@ -188,7 +188,7 @@ public class LNGScenarioChainBuilder {
 
 			OptimisationHelper.checkUserSettings(copy, true);
 
-			final OptimiserSettings settings = OptimisationHelper.transformUserSettings(copy, null);
+			final OptimiserSettings settings = OptimisationHelper.transformUserSettings(copy, null, dataExporter.getOptimiserScenario());
 			if (settings != null) {
 				runners.add(createStandardOptimisationChain("Similarity-" + mode.toString(), dataTransformer, dataExporter, settings, executorService, initialHints));
 			}

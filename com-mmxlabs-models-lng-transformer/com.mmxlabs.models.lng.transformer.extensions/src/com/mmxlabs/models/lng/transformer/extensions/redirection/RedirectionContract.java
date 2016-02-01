@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.extensions.redirection;
@@ -30,7 +30,9 @@ import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProvider;
@@ -50,11 +52,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  */
 public class RedirectionContract implements ILoadPriceCalculator {
-
-	@Inject
-	@NonNull
-	@Named(DataComponentProviderModule.DIRECT_ROUTE)
-	private String directRoute;
 
 	@Inject
 	private ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
@@ -112,7 +109,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 	}
 
 	@Override
-	public int calculateFOBPricePerMMBTu(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu, IAllocationAnnotation allocationAnnotation,
+	public int calculateFOBPricePerMMBTu(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
 			final IVesselAvailability vesselAvailability, final int vesselStartTime, final VoyagePlan originalPlan, final IDetailTree annotation) {
 
 		final int loadTime = allocationAnnotation.getSlotTime(loadSlot);
@@ -134,7 +131,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 			final int originalLoadTime = shippingHoursRestrictionProvider.getBaseTime(loadElement).getStart();
 
 			long baseShippingCosts = Long.MAX_VALUE;
-			String baseRoute = null;
+			ERouteOption baseRoute = null;
 
 			IDetailTree baseRouteAnnotation = null;
 			IDetailTree currentRouteAnnotation = null;
@@ -146,7 +143,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 			// TODO: E.g. Model based on distance @ max speed?
 			final int baseDischargeTime = dischargeTime;
 			{
-				String route = directRoute;
+				final ERouteOption route = ERouteOption.DIRECT;
 				final int loadDuration = durationProvider.getElementDuration(loadElement, vesselProvider.getResource(vesselAvailability));
 				final int dischargeDuration = portVisitDurationProvider.getVisitDuration(baseSalesMarketPort, PortType.Discharge);
 
@@ -158,8 +155,8 @@ public class RedirectionContract implements ILoadPriceCalculator {
 							vesselStartTime, timeZoneToUtcOffsetProvider.UTC(originalLoadTime, loadSlot));
 				}
 
-				int utcLoadTime = timeZoneToUtcOffsetProvider.UTC(originalLoadTime, loadSlot);
-				int baseFuelPriceInMT = vesselBaseFuelCalculator.getBaseFuelPrice(vesselAvailability.getVessel(), utcLoadTime);
+				final int utcLoadTime = timeZoneToUtcOffsetProvider.UTC(originalLoadTime, loadSlot);
+				final int baseFuelPriceInMT = vesselBaseFuelCalculator.getBaseFuelPrice(vesselAvailability.getVessel(), utcLoadTime);
 				// final VoyagePlan plan = redirVCC.calculateShippingCosts(loadSlot.getPort(), baseSalesMarketPort, originalLoadTime, loadDuration, baseDischargeTime, dischargeDuration,
 				// vesselAvailability.getVessel(), vesselCharterInRatePerDay, startHeelInM3, vesselAvailability.getVessel().getVesselClass().getMaxSpeed(), loadSlot.getCargoCVValue(), route,
 				// vesselAvailability.getVessel().getVesselClass().getBaseFuelUnitPrice(), dischargePricePerMMBTu);
@@ -172,7 +169,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 				final IDetailTree details[] = annotation == null ? null : new IDetailTree[2];
 				final long costs = shippingCostHelper.getShippingCosts(plan, vesselAvailability, false, true);
 				if (baseRouteAnnotation != null && details != null) {
-					baseRouteAnnotation.addChild(route, "").addChild(details[0]);
+					baseRouteAnnotation.addChild(route.name(), "").addChild(details[0]);
 				}
 
 				if (costs < baseShippingCosts) {
@@ -187,15 +184,15 @@ public class RedirectionContract implements ILoadPriceCalculator {
 
 			// Current voyage plan
 			long notionalShippingCosts = Long.MAX_VALUE;
-			String notionalRoute = null;
+			ERouteOption notionalRoute = null;
 			{
-				String route = directRoute;
+				final ERouteOption route = ERouteOption.DIRECT;
 				final int loadDuration = durationProvider.getElementDuration(loadElement, vesselProvider.getResource(vesselAvailability));
 				final int dischargeDuration = durationProvider.getElementDuration(dischargeElement, vesselProvider.getResource(vesselAvailability));
 				final int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselAvailability, vesselStartTime, timeZoneToUtcOffsetProvider.UTC(originalLoadTime, loadSlot));
 
-				int utcLoadTime = timeZoneToUtcOffsetProvider.UTC(originalLoadTime, loadSlot);
-				int baseFuelPriceInMT = vesselBaseFuelCalculator.getBaseFuelPrice(vesselAvailability.getVessel(), utcLoadTime);
+				final int utcLoadTime = timeZoneToUtcOffsetProvider.UTC(originalLoadTime, loadSlot);
+				final int baseFuelPriceInMT = vesselBaseFuelCalculator.getBaseFuelPrice(vesselAvailability.getVessel(), utcLoadTime);
 
 				final VoyagePlan plan = redirVCC.calculateShippingCosts(loadSlot.getPort(), dischargeSlot.getPort(), originalLoadTime, loadDuration, dischargeTime, dischargeDuration,
 						vesselAvailability.getVessel(), vesselCharterInRatePerDay, startHeelInM3, vesselAvailability.getVessel().getVesselClass().getMaxSpeed(), loadSlot.getCargoCVValue(), route,
@@ -207,7 +204,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 				final IDetailTree details[] = annotation == null ? null : new IDetailTree[2];
 				final long costs = shippingCostHelper.getShippingCosts(plan, vesselAvailability, false, true);
 				if (currentRouteAnnotation != null && details != null) {
-					currentRouteAnnotation.addChild(route, "").addChild(details[0]);
+					currentRouteAnnotation.addChild(route.name(), "").addChild(details[0]);
 				}
 				if (costs < notionalShippingCosts) {
 					notionalShippingCosts = costs;
@@ -254,12 +251,12 @@ public class RedirectionContract implements ILoadPriceCalculator {
 		if (baseSalesMarketPort.equals(dischargeOption.getPort())) {
 			return marketPurchasePricePerMMBTu;
 		} else {
-			DefaultVesselAvailability notionalVesselAvailability = new DefaultVesselAvailability();
+			final DefaultVesselAvailability notionalVesselAvailability = new DefaultVesselAvailability();
 			notionalVesselAvailability.setVessel(vessel);
 			final int originalLoadTime = shippingHoursRestrictionProvider.getBaseTime(loadElement).getStart();
 
 			long baseShippingCosts = Long.MAX_VALUE;
-			String baseRoute = null;
+			ERouteOption baseRoute = null;
 
 			IDetailTree baseRouteAnnotation = null;
 			IDetailTree currentRouteAnnotation = null;
@@ -270,10 +267,10 @@ public class RedirectionContract implements ILoadPriceCalculator {
 
 			// TODO: E.g. Model based on distance @ max speed?
 			final int baseDischargeTime = transferTime;
-			int utcLoadTime = timeZoneToUtcOffsetProvider.UTC(originalLoadTime, loadOption);
-			int baseFuelPriceInMT = vesselBaseFuelCalculator.getBaseFuelPrice(vessel, utcLoadTime);
+			final int utcLoadTime = timeZoneToUtcOffsetProvider.UTC(originalLoadTime, loadOption);
+			final int baseFuelPriceInMT = vesselBaseFuelCalculator.getBaseFuelPrice(vessel, utcLoadTime);
 			{
-				String route = directRoute;
+				final ERouteOption route = ERouteOption.DIRECT;
 				// Notional Costs - Purchase port to base destination
 				final int loadDuration = portVisitDurationProvider.getVisitDuration(loadOption.getPort(), PortType.Load);
 				final int dischargeDuration = portVisitDurationProvider.getVisitDuration(baseSalesMarketPort, PortType.Discharge);
@@ -294,7 +291,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 				final IDetailTree details[] = annotations == null ? null : new IDetailTree[2];
 				final long costs = shippingCostHelper.getShippingCosts(plan, notionalVesselAvailability, false, true);
 				if (baseRouteAnnotation != null && details != null) {
-					baseRouteAnnotation.addChild(route, "").addChild(details[0]);
+					baseRouteAnnotation.addChild(route.name(), "").addChild(details[0]);
 				}
 
 				if (costs < baseShippingCosts) {
@@ -309,9 +306,10 @@ public class RedirectionContract implements ILoadPriceCalculator {
 
 			// Current voyage plan
 			long notionalShippingCosts = Long.MAX_VALUE;
-			String notionalRoute = null;
+			ERouteOption notionalRoute = null;
 			{
-				String route = directRoute;
+				final ERouteOption route = ERouteOption.DIRECT;
+
 				final int loadDuration = portVisitDurationProvider.getVisitDuration(loadOption.getPort(), PortType.Load);
 				final int dischargeDuration = portVisitDurationProvider.getVisitDuration(dischargeOption.getPort(), PortType.Discharge);
 
@@ -328,7 +326,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 				final IDetailTree details[] = annotations == null ? null : new IDetailTree[2];
 				final long costs = shippingCostHelper.getShippingCosts(plan, notionalVesselAvailability, false, true);
 				if (currentRouteAnnotation != null && details != null) {
-					currentRouteAnnotation.addChild(route, "").addChild(details[0]);
+					currentRouteAnnotation.addChild(route.name(), "").addChild(details[0]);
 				}
 				if (costs < notionalShippingCosts) {
 					notionalShippingCosts = costs;

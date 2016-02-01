@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.period;
@@ -802,7 +802,7 @@ public class PeriodTransformerTests {
 			transformer.updateStartConditions(vesselAvailability1, assignedObject3, startConditionMap);
 
 			Assert.assertEquals(Collections.singletonList(port3), vesselAvailability1.getStartAt());
-			Assert.assertEquals(30000, vesselAvailability1.getStartHeel().getVolumeAvailable());
+			Assert.assertEquals(30000.0, vesselAvailability1.getStartHeel().getVolumeAvailable(), 0.0);
 			Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 28, 0), vesselAvailability1.getStartBy());
 			Assert.assertEquals(PeriodTestUtils.createLocalDateTime(2014, Calendar.JULY, 28, 0), vesselAvailability1.getStartAfter());
 		}

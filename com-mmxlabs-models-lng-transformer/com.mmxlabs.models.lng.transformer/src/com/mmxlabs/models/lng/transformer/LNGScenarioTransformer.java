@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer;
@@ -128,6 +128,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
@@ -157,6 +158,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.CooldownLumpSumCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.CooldownPriceIndexedCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceExpressionContract;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
@@ -223,7 +225,7 @@ public class LNGScenarioTransformer {
 
 	@Inject
 	@NonNull
-	private com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMultiMatrixProvider<IPort, Integer> portDistanceProvider;
+	private IndexedMultiMatrixProvider<IPort, Integer> portDistanceProvider;
 
 	@Inject
 	@NonNull
@@ -971,7 +973,7 @@ public class LNGScenarioTransformer {
 					final IDischargeOption discharge = (IDischargeOption) slotMap.get(dischargeSlot);
 					assert discharge != null;
 					final ITimeWindow twForBinding = getTimeWindowForSlotBinding(dischargeSlot, discharge, portAssociation.lookupNullChecked(dischargeSlot.getPort()));
-					configureDischargeSlotRestrictions(builder, allLoadPorts, dischargeSlot, discharge, twForBinding);
+					configureDischargeSlotRestrictions(builder, portAssociation, allLoadPorts, dischargeSlot, discharge, twForBinding);
 					isTransfer = (((DischargeSlot) slot).getTransferTo() != null);
 				}
 
@@ -1044,7 +1046,8 @@ public class LNGScenarioTransformer {
 				}
 			}
 
-			configureDischargeSlotRestrictions(builder, allLoadPorts, dischargeSlot, discharge, getTimeWindowForSlotBinding(dischargeSlot, discharge, portAssociation.lookup(dischargeSlot.getPort())));
+			configureDischargeSlotRestrictions(builder, portAssociation, allLoadPorts, dischargeSlot, discharge,
+					getTimeWindowForSlotBinding(dischargeSlot, discharge, portAssociation.lookup(dischargeSlot.getPort())));
 		}
 	}
 
@@ -1069,13 +1072,24 @@ public class LNGScenarioTransformer {
 
 	}
 
-	public void configureDischargeSlotRestrictions(@NonNull final ISchedulerBuilder builder, @NonNull final Set<IPort> allLoadPorts, @NonNull final DischargeSlot dischargeSlot,
-			@NonNull final IDischargeOption discharge, @NonNull final ITimeWindow twForSlotBinding) {
+	public void configureDischargeSlotRestrictions(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @NonNull final Set<IPort> allLoadPorts,
+			@NonNull final DischargeSlot dischargeSlot, @NonNull final IDischargeOption discharge, @NonNull final ITimeWindow twForSlotBinding) {
 		if (dischargeSlot.isFOBSale()) {
 
 			if (dischargeSlot instanceof SpotDischargeSlot) {
+				final SpotDischargeSlot spotSlot = (SpotDischargeSlot) dischargeSlot;
+				final FOBSalesMarket fobSaleMarket = (FOBSalesMarket) spotSlot.getMarket();
+				final Set<Port> portSet = SetUtils.getObjects(fobSaleMarket.getOriginPorts());
+				final Set<IPort> marketPorts = new HashSet<IPort>();
+				for (final Port ap : portSet) {
+					final IPort ip = portAssociation.lookup((Port) ap);
+					if (ip != null) {
+						marketPorts.add(ip);
+					}
+				}
+
 				final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
-				for (final IPort port : allLoadPorts) {
+				for (final IPort port : marketPorts) {
 					// Take the UTC based window and shift according to local port timezone
 					final int twStart = timeZoneToUtcOffsetProvider.localTime(twForSlotBinding.getStart(), port);
 					final int twEnd = timeZoneToUtcOffsetProvider.localTime(twForSlotBinding.getEnd(), port);
@@ -1083,9 +1097,7 @@ public class LNGScenarioTransformer {
 				}
 
 				builder.bindLoadSlotsToFOBSale(discharge, marketPortsMap);
-			} else
-
-			if (dischargeSlot.isDivertible()) {
+			} else if (dischargeSlot.isDivertible()) {
 				// Bind to all loads
 				final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
 				for (final IPort port : allLoadPorts) {
@@ -2234,7 +2246,7 @@ public class LNGScenarioTransformer {
 		for (final Route r : portModel.getRoutes()) {
 			seenRoutes.add(r.getRouteOption());
 			// Store Route under it's name
-			modelEntityMap.addModelObject(r, r.getRouteOption().getName());
+			modelEntityMap.addModelObject(r, mapRouteOption(r).name());
 			for (final RouteLine dl : r.getLines()) {
 				IPort from, to;
 				from = portAssociation.lookupNullChecked(dl.getFrom());
@@ -2242,20 +2254,20 @@ public class LNGScenarioTransformer {
 
 				final int distance = dl.getFullDistance();
 
-				builder.setPortToPortDistance(from, to, r.getRouteOption().getName(), distance);
+				builder.setPortToPortDistance(from, to, mapRouteOption(r), distance);
 			}
 
 			// Set extra time and fuel consumption
 			final FleetModel fleetModel = rootObject.getReferenceModel().getFleetModel();
 			for (final Vessel eVessel : fleetModel.getVessels()) {
 				for (final VesselClassRouteParameters routeParameters : eVessel.getVesselClass().getRouteParameters()) {
-					builder.setVesselRouteTransitTime(routeParameters.getRoute().getRouteOption().getName(), vesselAssociation.lookupNullChecked(eVessel), routeParameters.getExtraTransitTime());
+					builder.setVesselRouteTransitTime(mapRouteOption(routeParameters.getRoute()), vesselAssociation.lookupNullChecked(eVessel), routeParameters.getExtraTransitTime());
 
-					builder.setVesselRouteFuel(routeParameters.getRoute().getRouteOption().getName(), vesselAssociation.lookupNullChecked(eVessel), VesselState.Laden,
+					builder.setVesselRouteFuel(mapRouteOption(routeParameters.getRoute()), vesselAssociation.lookupNullChecked(eVessel), VesselState.Laden,
 							OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenConsumptionRate()),
 							OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenNBORate()));
 
-					builder.setVesselRouteFuel(routeParameters.getRoute().getRouteOption().getName(), vesselAssociation.lookupNullChecked(eVessel), VesselState.Ballast,
+					builder.setVesselRouteFuel(mapRouteOption(routeParameters.getRoute()), vesselAssociation.lookupNullChecked(eVessel), VesselState.Ballast,
 							OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastConsumptionRate()),
 							OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastNBORate()));
 
@@ -2279,18 +2291,20 @@ public class LNGScenarioTransformer {
 					if (vesselClass != null) {
 						final VesselClass eVesselClass = vesselClassAssociation.reverseLookup(vesselClass);
 						final List<RouteCost> routeCosts = vesselClassToRouteCostMap.get(eVesselClass);
+						if (routeCosts == null) {
+							// Some unit tests have this state
+							continue;
+						}
 						assert routeCosts != null;
 						for (final RouteCost routeCost : routeCosts) {
 							if (routeCost.getRoute().getRouteOption() == RouteOption.PANAMA) {
 								continue;
 							}
-							builder.setVesselRouteCost(routeCost.getRoute().getRouteOption().getName(), vessel, CostType.Laden,
-									OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getLadenCost()));
+							builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.Laden, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getLadenCost()));
 
-							builder.setVesselRouteCost(routeCost.getRoute().getRouteOption().getName(), vessel, CostType.Ballast,
-									OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost()));
+							builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.Ballast, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost()));
 
-							builder.setVesselRouteCost(routeCost.getRoute().getRouteOption().getName(), vessel, CostType.RoundTripBallast,
+							builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.RoundTripBallast,
 									OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost()));
 						}
 					}
@@ -2367,9 +2381,9 @@ public class LNGScenarioTransformer {
 
 			final IVessel vessel = vesselAssociation.lookupNullChecked(eVessel);
 
-			builder.setVesselRouteCost(RouteOption.PANAMA.getName(), vessel, CostType.Laden, OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalLadenCost)));
-			builder.setVesselRouteCost(RouteOption.PANAMA.getName(), vessel, CostType.Ballast, OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalBallastCost)));
-			builder.setVesselRouteCost(RouteOption.PANAMA.getName(), vessel, CostType.RoundTripBallast, OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalBallastCost)));
+			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.Laden, OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalLadenCost)));
+			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.Ballast, OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalBallastCost)));
+			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.RoundTripBallast, OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalBallastCost)));
 		}
 	}
 
@@ -2409,10 +2423,10 @@ public class LNGScenarioTransformer {
 
 			vesselClassAssociation.add(eVc, vc);
 
-			final List<String> allowedRoutes = new LinkedList<>();
+			final List<ERouteOption> allowedRoutes = new LinkedList<>();
 			if (shippingDaysRestrictionSpeedProvider != null) {
 				for (final Route route : shippingDaysRestrictionSpeedProvider.getValidRoutes(portModel, eVc)) {
-					allowedRoutes.add(route.getRouteOption().getName());
+					allowedRoutes.add(mapRouteOption(route));
 				}
 			}
 			builder.setDivertableDESAllowedRoute(vc, allowedRoutes);
@@ -2758,5 +2772,19 @@ public class LNGScenarioTransformer {
 			pricingDate = IPortSlot.NO_PRICING_DATE;
 		}
 		return pricingDate;
+	}
+
+	@NonNull
+	public static ERouteOption mapRouteOption(@NonNull final Route route) {
+		final RouteOption routeOption = route.getRouteOption();
+		switch (routeOption) {
+		case DIRECT:
+			return ERouteOption.DIRECT;
+		case PANAMA:
+			return ERouteOption.PANAMA;
+		case SUEZ:
+			return ERouteOption.SUEZ;
+		}
+		throw new IllegalStateException();
 	}
 }

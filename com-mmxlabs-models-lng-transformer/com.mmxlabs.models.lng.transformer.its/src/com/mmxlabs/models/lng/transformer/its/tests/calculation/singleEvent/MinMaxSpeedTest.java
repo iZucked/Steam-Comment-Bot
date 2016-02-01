@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.its.tests.calculation.singleEvent;
@@ -61,7 +61,7 @@ public class MinMaxSpeedTest {
 		// set the travel time to be one hour too little
 		final int travelTime = (distanceBetweenPorts / maxSpeed) - 1;
 
-		final SimpleCargoAllocation a =new SimpleCargoAllocation( test(testName, travelTime, baseFuelExpensive));
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(test(testName, travelTime, baseFuelExpensive));
 
 		Assert.assertTrue("Laden leg travels at max speed", a.getLadenLeg().getSpeed() == maxSpeed);
 		Assert.assertTrue("Ballast leg travels at max speed", a.getBallastLeg().getSpeed() == maxSpeed);
@@ -69,7 +69,7 @@ public class MinMaxSpeedTest {
 
 	/**
 	 * Test that the min speed is used if the vessel won't be late and vessel uses base fuel.
-	 * */
+	 */
 	@Test
 	public void minSpeedUsed() {
 
@@ -77,7 +77,7 @@ public class MinMaxSpeedTest {
 		// set the travel time to be sufficient for min speed travel
 		final int travelTime = (distanceBetweenPorts / minSpeed) + 1;
 
-		final SimpleCargoAllocation a =new SimpleCargoAllocation( test(testName, travelTime, baseFuelCheap));
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(test(testName, travelTime, baseFuelCheap));
 
 		// assert that base fuel is used on the ballast leg as it is cheaper than LNG
 		for (final FuelQuantity fq : a.getBallastLeg().getFuels()) {
@@ -110,7 +110,7 @@ public class MinMaxSpeedTest {
 		// set the travel time to be sufficient for min speed travel
 		final int travelTime = (distanceBetweenPorts / minSpeed) + 10;
 
-		final SimpleCargoAllocation a =new SimpleCargoAllocation(test(testName, travelTime, baseFuelExpensive));
+		final SimpleCargoAllocation a = new SimpleCargoAllocation(test(testName, travelTime, baseFuelExpensive));
 
 		// assert that NBO is used on the ballast leg as it is cheaper than base fuel
 		for (final FuelQuantity fq : a.getBallastLeg().getFuels()) {

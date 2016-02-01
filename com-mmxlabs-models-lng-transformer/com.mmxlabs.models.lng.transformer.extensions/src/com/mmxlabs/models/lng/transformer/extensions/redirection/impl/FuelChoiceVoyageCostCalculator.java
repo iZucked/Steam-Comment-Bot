@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.extensions.redirection.impl;
@@ -28,6 +28,8 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.LinkedFBOVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
@@ -63,15 +65,15 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 	@Override
 	public @Nullable VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, final int loadDuration, final int dischargeTime,
 			final int dischargeDuration, @NonNull final IVessel vessel, final int vesselCharterInRatePerDay, final long startHeelInM3, final int notionalBallastSpeed, final int cargoCVValue,
-			@NonNull final String route, final int baseFuelPricePerMT, @NonNull final ISalesPriceCalculator salesPriceCalculator) {
+			@NonNull final ERouteOption route, final int baseFuelPricePerMT, @NonNull final ISalesPriceCalculator salesPriceCalculator) {
 
-		final Integer ladenDistance = distanceProvider.getDistance(route, loadPort, dischargePort, loadTime + loadDuration);
-		if (ladenDistance == null || ladenDistance.intValue() == Integer.MAX_VALUE) {
+		final int ladenDistance = distanceProvider.getDistance(route, loadPort, dischargePort, loadTime + loadDuration);
+		if (ladenDistance == Integer.MAX_VALUE) {
 			return null;
 		}
 
-		final Integer ballastDistance = distanceProvider.getDistance(route, dischargePort, loadPort, dischargeTime + dischargeDuration);
-		if (ballastDistance == null || ballastDistance.intValue() == Integer.MAX_VALUE) {
+		final int ballastDistance = distanceProvider.getDistance(route, dischargePort, loadPort, dischargeTime + dischargeDuration);
+		if (ballastDistance == Integer.MAX_VALUE) {
 			return null;
 		}
 
@@ -88,7 +90,7 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 	@Override
 	public @Nullable VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, final int loadDuration, final int dischargeTime,
 			final int dischargeDuration, final int notionalReturnTime, @NonNull final IVessel vessel, final int vesselCharterInRatePerDay, final long startHeelInM3, final int cargoCVValue,
-			@NonNull final String route, final int baseFuelPricePerMT, @NonNull final ISalesPriceCalculator salesPriceCalculator) {
+			@NonNull final ERouteOption route, final int baseFuelPricePerMT, @NonNull final ISalesPriceCalculator salesPriceCalculator) {
 
 		// MUST CALL setFuelChoice!
 		assert fuelChoice != null;
@@ -97,13 +99,13 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 			fuelChoice = FuelChoice.Optimal;
 		}
 
-		final Integer ladenDistance = distanceProvider.getDistance(route, loadPort, dischargePort, loadTime + loadDuration);
-		if (ladenDistance == null || ladenDistance.intValue() == Integer.MAX_VALUE) {
+		final int ladenDistance = distanceProvider.getDistance(route, loadPort, dischargePort, loadTime + loadDuration);
+		if (ladenDistance == Integer.MAX_VALUE) {
 			return null;
 		}
 
-		final Integer ballastDistance = distanceProvider.getDistance(route, dischargePort, loadPort, dischargeTime + dischargeDuration);
-		if (ballastDistance == null || ballastDistance.intValue() == Integer.MAX_VALUE) {
+		final int ballastDistance = distanceProvider.getDistance(route, dischargePort, loadPort, dischargeTime + dischargeDuration);
+		if (ballastDistance == Integer.MAX_VALUE) {
 			return null;
 		}
 

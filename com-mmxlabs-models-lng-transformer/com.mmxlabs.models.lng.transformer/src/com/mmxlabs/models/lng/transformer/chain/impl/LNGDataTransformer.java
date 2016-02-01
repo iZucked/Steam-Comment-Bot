@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.transformer.chain.impl;
@@ -70,7 +70,7 @@ public class LNGDataTransformer {
 
 		// Prepare the main modules with the re-usable data for any further work.
 		modules.add(new PerChainUnitScopeModule());
-		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new DataComponentProviderModule(RouteOption.DIRECT.getName()), services, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule, hints));
+		modules.addAll(LNGTransformerHelper.getModulesWithOverrides(new DataComponentProviderModule(), services, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule, hints));
 		modules.addAll(
 				LNGTransformerHelper.getModulesWithOverrides(new LNGTransformerModule(scenarioModel, settings), services, IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule, hints));
 
