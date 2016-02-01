@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 import java.util.TreeMap;
 
@@ -47,6 +48,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.IXYPort;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
@@ -55,6 +57,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.EnumeratingSequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 
@@ -180,7 +183,22 @@ public class SimpleSchedulerTest {
 
 		// ....
 
-		builder.buildXYDistances();
+		final List<IPort> portsList = Lists.newArrayList(port1, port2, port3, port4, port5, port6);
+		for (final IPort from : portsList) {
+			if (from instanceof IXYPort) {
+				final IXYPort xyFrom = (IXYPort) from;
+				for (final IPort to : portsList) {
+					if (to instanceof IXYPort) {
+						final IXYPort xyTo = (IXYPort) to;
+						final float diffX = xyFrom.getX() - xyTo.getX();
+						final float diffY = xyFrom.getY() - xyTo.getY();
+
+						final double distance = Math.sqrt((diffX * diffX) + (diffY * diffY));
+						builder.setPortToPortDistance(from, to, ERouteOption.DIRECT, (int) distance);
+					}
+				}
+			}
+		}
 
 		// Generate the optimisation data
 		final IOptimisationData data = builder.getOptimisationData();
@@ -259,7 +277,7 @@ public class SimpleSchedulerTest {
 
 			final LinearSimulatedAnnealingFitnessEvaluator linearFitnessEvaluator = (LinearSimulatedAnnealingFitnessEvaluator) fitnessEvaluator;
 
-			IEvaluationState evaluationState = new EvaluationState();
+			final IEvaluationState evaluationState = new EvaluationState();
 
 			for (final IEvaluationProcess c : optimiser.getFitnessEvaluator().getEvaluationProcesses()) {
 				c.evaluate(context.getInputSequences(), evaluationState);
@@ -279,7 +297,7 @@ public class SimpleSchedulerTest {
 			System.out.println("Final fitness " + finalFitness);
 			Assert.assertFalse(finalFitness == Long.MAX_VALUE);
 
-			Triple<ISequences, ISequences, IEvaluationState> bestSequences = fitnessEvaluator.getBestSequences();
+			final Triple<ISequences, ISequences, IEvaluationState> bestSequences = fitnessEvaluator.getBestSequences();
 			Assert.assertNotNull(bestSequences);
 			printSequences(bestSequences.getFirst());
 
