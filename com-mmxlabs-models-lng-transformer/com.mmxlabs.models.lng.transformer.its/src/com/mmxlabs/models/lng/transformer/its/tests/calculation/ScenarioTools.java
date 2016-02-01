@@ -58,6 +58,7 @@ import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
@@ -96,10 +97,10 @@ import com.mmxlabs.models.lng.transformer.its.tests.SimpleCargoAllocation;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestBootstrapModule;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.manifest.ManifestFactory;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 
 /**
  * Methods for printing and creating a scenario where a ship travels from port A to port B then back to port A.
@@ -119,9 +120,6 @@ public class ScenarioTools {
 		B.setTimeZone("UTC");
 
 	}
-
-	// The default route name of the ocean route between ports.
-	public static final String defaultRouteName = IMultiMatrixProvider.Default_Key;
 
 	/**
 	 * Creates a scenario.
@@ -342,7 +340,8 @@ public class ScenarioTools {
 		portModel.getPorts().add(B);
 
 		final Route r = PortFactory.eINSTANCE.createRoute();
-		r.setName("default");
+		r.setName(RouteOption.DIRECT.getName());
+		r.setRouteOption(RouteOption.DIRECT);
 		portModel.getRoutes().add(r);
 		for (final int distance : distancesBetweenPorts) {
 			final RouteLine distanceLine = PortFactory.eINSTANCE.createRouteLine();
@@ -586,7 +585,7 @@ public class ScenarioTools {
 		portModel.getPorts().add(B);
 
 		final Route r = PortFactory.eINSTANCE.createRoute();
-		r.setName("default");
+		r.setName(RouteOption.DIRECT.getName());
 		portModel.getRoutes().add(r);
 
 		final RouteLine distance = PortFactory.eINSTANCE.createRouteLine();

@@ -15,7 +15,7 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.models.lng.port.RouteOption;
 
 /**
  */
@@ -59,7 +59,7 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 		vessel = fleetCreator.createMultipleDefaultVessels(vc, 1, shippingEntity)[0];
 
 		// need to create a default route
-		addRoute(ScenarioTools.defaultRouteName);
+		addRoute(RouteOption.DIRECT);
 
 		final double maxSpeed = vc.getMaxSpeed();
 
@@ -99,8 +99,8 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 		final ZonedDateTime startDate = loadDate.minusHours(2 * getTravelTime(originPort, loadPort, null, (int) maxSpeed));
 		final ZonedDateTime endDate = lastDischargeDate.plusHours(2 * getTravelTime(dischargePort2, originPort, null, (int) maxSpeed));
 
-		this.vesselAvailability = fleetCreator.setAvailability(scenario.getCargoModel(), vessel, originPort, startDate.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime(), originPort, endDate
-				.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
+		this.vesselAvailability = fleetCreator.setAvailability(scenario.getCargoModel(), vessel, originPort, startDate.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime(), originPort,
+				endDate.withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime());
 
 		cargo.setVesselAssignmentType(vesselAvailability);
 	}
