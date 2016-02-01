@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.providers;
@@ -49,6 +49,6 @@ public interface IShippingHoursRestrictionProvider extends IDataComponentProvide
 	 * @return
 	 */
 	int getReferenceSpeed(@NonNull IVessel vessel, @NonNull VesselState vesselState);
-	
-	Collection<String> getDivertableDESAllowedRoutes(@NonNull IVesselClass vesselClass);
+
+	Collection<ERouteOption> getDivertableDESAllowedRoutes(@NonNull IVesselClass vesselClass);
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
@@ -12,7 +12,6 @@ import javax.inject.Inject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.google.inject.name.Named;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -24,11 +23,11 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
-import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
 
 /**
@@ -56,11 +55,6 @@ public final class SimpleSequenceScheduler extends AbstractLoggingSequenceSchedu
 
 	@Inject
 	private ICalculatorProvider calculatorProvider;
-
-	@Inject
-	@NonNull
-	@Named(DataComponentProviderModule.DIRECT_ROUTE)
-	private String directRoute;
 
 	@Override
 	public ScheduledSequences schedule(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
@@ -105,7 +99,7 @@ public final class SimpleSequenceScheduler extends AbstractLoggingSequenceSchedu
 
 				final int lastTimeWindowStart = arrivalTimes[idx - 1];
 				timeWindowStart = lastTimeWindowStart + Calculator.getTimeFromSpeedDistance(vesselProvider.getVesselAvailability(resource).getVessel().getVesselClass().getMaxSpeed(), distanceProvider
-						.getDistance(directRoute, portProvider.getPortForElement(sequence.get(idx - 1)), portProvider.getPortForElement(element), lastTimeWindowStart /* + visitDuration */));
+						.getDistance(ERouteOption.DIRECT, portProvider.getPortForElement(sequence.get(idx - 1)), portProvider.getPortForElement(element), lastTimeWindowStart /* + visitDuration */));
 			} else {
 				for (final ITimeWindow window : timeWindows) {
 					timeWindowStart = Math.min(timeWindowStart, window.getStart());

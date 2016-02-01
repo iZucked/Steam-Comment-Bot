@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.manipulators;
@@ -12,6 +12,7 @@ import java.util.Set;
 
 import com.google.inject.Inject;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -26,7 +27,9 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -286,14 +289,16 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 				closestPort = toPort;
 				break;
 			}
-			final List<MatrixEntry<IPort, Integer>> distanceValues = distanceProvider.getDistanceValues(fromPort, toPort, lastVoyageStartTime);
+
+			final List<Pair<ERouteOption, Integer>> distanceValues = distanceProvider.getDistanceValues(fromPort, toPort, lastVoyageStartTime);
 			int distance = Integer.MAX_VALUE;
-			for (final MatrixEntry<IPort, Integer> distanceOption : distanceValues) {
-				final int routeDistance = distanceOption.getValue();
+			for (final Pair<ERouteOption, Integer> distanceOption : distanceValues) {
+				final int routeDistance = distanceOption.getSecond();
 				if (routeDistance < distance) {
 					distance = routeDistance;
 				}
 			}
+
 			if (distance < closestPortDistance) {
 				closestPort = toPort;
 				closestPortDistance = distance;

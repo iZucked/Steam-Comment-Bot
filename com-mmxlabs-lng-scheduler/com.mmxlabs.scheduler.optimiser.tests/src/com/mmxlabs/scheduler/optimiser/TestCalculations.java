@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser;
@@ -72,6 +72,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllo
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -170,9 +171,9 @@ public class TestCalculations {
 
 			final ICargo cargo1 = builder.createCargo(Lists.newArrayList(loadSlot, dischargeSlot), false);
 
-			builder.setPortToPortDistance(port1, port2, "DIRECT", 12 * 24);
-			builder.setPortToPortDistance(port2, port3, "DIRECT", 12 * 24);
-			builder.setPortToPortDistance(port3, port4, "DIRECT", 12 * 24);
+			builder.setPortToPortDistance(port1, port2, ERouteOption.DIRECT, 12 * 24);
+			builder.setPortToPortDistance(port2, port3, ERouteOption.DIRECT, 12 * 24);
+			builder.setPortToPortDistance(port3, port4, ERouteOption.DIRECT, 12 * 24);
 
 			final IOptimisationData data = builder.getOptimisationData();
 
@@ -619,9 +620,9 @@ public class TestCalculations {
 
 			final ICargo cargo1 = builder.createCargo(Lists.newArrayList(loadSlot, dischargeSlot), false);
 
-			builder.setPortToPortDistance(port1, port2, "DIRECT", 12 * 25);
-			builder.setPortToPortDistance(port2, port3, "DIRECT", 12 * 25);
-			builder.setPortToPortDistance(port3, port4, "DIRECT", 12 * 25);
+			builder.setPortToPortDistance(port1, port2, ERouteOption.DIRECT, 12 * 25);
+			builder.setPortToPortDistance(port2, port3, ERouteOption.DIRECT, 12 * 25);
+			builder.setPortToPortDistance(port3, port4, ERouteOption.DIRECT, 12 * 25);
 
 			final IOptimisationData data = builder.getOptimisationData();
 
@@ -1061,9 +1062,9 @@ public class TestCalculations {
 
 			final ICargo cargo1 = builder.createCargo(Lists.newArrayList(loadSlot, dischargeSlot), false);
 
-			builder.setPortToPortDistance(port1, port2, "DIRECT", 12 * 25);
-			builder.setPortToPortDistance(port2, port3, "DIRECT", 12 * 25);
-			builder.setPortToPortDistance(port3, port4, "DIRECT", 12 * 25);
+			builder.setPortToPortDistance(port1, port2, ERouteOption.DIRECT, 12 * 25);
+			builder.setPortToPortDistance(port2, port3, ERouteOption.DIRECT, 12 * 25);
+			builder.setPortToPortDistance(port3, port4, ERouteOption.DIRECT, 12 * 25);
 
 			final IOptimisationData data = builder.getOptimisationData();
 
@@ -1447,7 +1448,7 @@ public class TestCalculations {
 
 	private Injector createTestInjector(final IVolumeAllocator volumeAllocator, final int baseFuelUnitPrice) {
 
-		final Injector injector = Guice.createInjector(new PerChainUnitScopeModule(), new DataComponentProviderModule("DIRECT"), new AbstractModule() {
+		final Injector injector = Guice.createInjector(new PerChainUnitScopeModule(), new DataComponentProviderModule(), new AbstractModule() {
 
 			@Provides
 			@Singleton

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
@@ -53,6 +53,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.Vessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselStartDateCharterRateCalculator;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -141,7 +142,7 @@ public final class VoyagePlannerTest {
 		final HashMapMatrixProvider<IPort, Integer> defaultDistanceProvider = new HashMapMatrixProvider<IPort, Integer>();
 
 		final HashMapMultiMatrixProvider<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>();
-		distanceProvider.set("DIRECT", defaultDistanceProvider);
+		distanceProvider.set(ERouteOption.DIRECT.name(), defaultDistanceProvider);
 
 		// Only need sparse matrix for testing
 		defaultDistanceProvider.set(port1, port2, 400);
@@ -230,7 +231,7 @@ public final class VoyagePlannerTest {
 		// The NBO travel options will have completed the setup of previous
 		// options (options1) filling in distance info.
 		final VoyageOptions expectedVoyageOptions1a = expectedVoyageOptions1.clone();
-		expectedVoyageOptions1a.setRoute("DIRECT", 400, 0L);
+		expectedVoyageOptions1a.setRoute(ERouteOption.DIRECT, 400, 0L);
 
 		final VoyageOptions expectedVoyageOptions2 = new VoyageOptions();
 		expectedVoyageOptions2.setAvailableTime(4);
@@ -244,7 +245,7 @@ public final class VoyagePlannerTest {
 		expectedVoyageOptions2.setNBOSpeed(15000);
 		expectedVoyageOptions2.setShouldBeCold(true);
 		final VoyageOptions expectedVoyageOptions2a = expectedVoyageOptions2.clone();
-		expectedVoyageOptions2a.setRoute("DIRECT", 400, 0L);
+		expectedVoyageOptions2a.setRoute(ERouteOption.DIRECT, 400, 0L);
 
 		final VoyageOptions expectedVoyageOptions3 = new VoyageOptions();
 		expectedVoyageOptions3.setAvailableTime(4);
@@ -258,7 +259,7 @@ public final class VoyagePlannerTest {
 		expectedVoyageOptions3.setNBOSpeed(15000);
 
 		final VoyageOptions expectedVoyageOptions3a = expectedVoyageOptions3.clone();
-		expectedVoyageOptions3a.setRoute("DIRECT", 400, 0L);
+		expectedVoyageOptions3a.setRoute(ERouteOption.DIRECT, 400, 0L);
 
 		final PortDetails expectedPortDetails1 = new PortDetails();
 		final PortOptions expectedPortOptions1 = new PortOptions(1, vessel, loadSlot1, VesselState.Ballast);
@@ -414,7 +415,7 @@ public final class VoyagePlannerTest {
 		final HashMapMatrixProvider<IPort, Integer> defaultDistanceProvider = new HashMapMatrixProvider<IPort, Integer>();
 
 		final HashMapMultiMatrixProvider<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>();
-		distanceProvider.set("DIRECT", defaultDistanceProvider);
+		distanceProvider.set(ERouteOption.DIRECT.name(), defaultDistanceProvider);
 
 		// Only need sparse matrix for testing
 		defaultDistanceProvider.set(port1, port2, 400);
@@ -499,7 +500,7 @@ public final class VoyagePlannerTest {
 		// The NBO travel options will have completed the setup of previous
 		// options (options1) filling in distance info.
 		final VoyageOptions expectedVoyageOptions1a = expectedVoyageOptions1.clone();
-		expectedVoyageOptions1a.setRoute("DIRECT", 400, 0L);
+		expectedVoyageOptions1a.setRoute(ERouteOption.DIRECT, 400, 0L);
 
 		final VoyageOptions expectedVoyageOptions2 = new VoyageOptions();
 		expectedVoyageOptions2.setAvailableTime(4);
@@ -513,7 +514,7 @@ public final class VoyagePlannerTest {
 		expectedVoyageOptions2.setNBOSpeed(15000);
 		expectedVoyageOptions2.setShouldBeCold(true);
 		final VoyageOptions expectedVoyageOptions2a = expectedVoyageOptions2.clone();
-		expectedVoyageOptions2a.setRoute("DIRECT", 400, 0L);
+		expectedVoyageOptions2a.setRoute(ERouteOption.DIRECT, 400, 0L);
 
 		final PortDetails expectedPortDetails1 = new PortDetails();
 		final PortOptions expectedPortOptions1 = new PortOptions(1, vessel, loadSlot1, VesselState.Ballast);

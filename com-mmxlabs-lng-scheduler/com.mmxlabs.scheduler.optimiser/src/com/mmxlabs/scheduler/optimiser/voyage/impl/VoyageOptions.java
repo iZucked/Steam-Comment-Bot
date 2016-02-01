@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
@@ -10,6 +10,7 @@ import com.google.common.base.Objects;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 
 /**
  * Default implementation of {@link VoyageOptions}. This is @link {Cloneable} for use with @link{VoyagePlanOptimiser} use.
@@ -50,7 +51,7 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 	 */
 	private boolean startWarm;
 
-	private String route;
+	private ERouteOption route;
 
 	private VesselState vesselState;
 
@@ -98,7 +99,7 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 		return nboSpeed;
 	}
 
-	public final String getRoute() {
+	public final ERouteOption getRoute() {
 		return route;
 	}
 
@@ -158,7 +159,7 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 		this.toPortSlot = toPortSlot;
 	}
 
-	public final void setRoute(@NonNull final String route, final int distance, final long routeCost) {
+	public final void setRoute(@NonNull final ERouteOption route, final int distance, final long routeCost) {
 		this.route = route;
 		this.distance = distance;
 		this.routeCost = routeCost;

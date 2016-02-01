@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.schedule;
@@ -146,7 +146,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 				journey.setEndTime(currentTime + travelTime);
 
 				journey.setDistance(options.getDistance());
-				journey.setRoute(options.getRoute());
+				journey.setRoute(options.getRoute().name());
 				journey.setRouteCost(options.getRouteCost());
 
 				journey.setDuration(travelTime);

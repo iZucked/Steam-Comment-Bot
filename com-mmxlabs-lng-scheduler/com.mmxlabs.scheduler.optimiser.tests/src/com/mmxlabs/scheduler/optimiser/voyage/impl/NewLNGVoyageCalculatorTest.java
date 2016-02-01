@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
@@ -26,6 +26,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -50,7 +51,7 @@ public class NewLNGVoyageCalculatorTest {
 		// Set distance/time to give the expected speed exactly
 		final int expectedSpeed = VESSEL_NBO_SPEED + 1;
 		options.setAvailableTime(48);
-		options.setRoute("DIRECT", expectedSpeed * 48, 0L);
+		options.setRoute(ERouteOption.DIRECT, expectedSpeed * 48, 0L);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
@@ -76,7 +77,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		// Set distance time so that the speed would be below the expected min speed
 		options.setAvailableTime(48 * 3);
-		options.setRoute("DIRECT", expectedMinSpeed * 48, 0L);
+		options.setRoute(ERouteOption.DIRECT, expectedMinSpeed * 48, 0L);
 
 		// Sanity check that inputs will yield a speed lower than the expected min speed
 		Assert.assertTrue(options.getDistance() / options.getAvailableTime() < expectedMinSpeed);
@@ -107,7 +108,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		// Set distance time so that the speed would be below the expected min speed
 		options.setAvailableTime(48 * 15);
-		options.setRoute("DIRECT", expectedMinSpeed * 48, 0L);
+		options.setRoute(ERouteOption.DIRECT, expectedMinSpeed * 48, 0L);
 
 		// Sanity check that inputs will yield a speed lower than the expected min speed
 		Assert.assertTrue(options.getDistance() / options.getAvailableTime() < expectedMinSpeed);
@@ -138,7 +139,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		// Set distance time so that the speed would be below the expected min speed
 		options.setAvailableTime(48 / 2);
-		options.setRoute("DIRECT", expectedMaxSpeed * 48, 0L);
+		options.setRoute(ERouteOption.DIRECT, expectedMaxSpeed * 48, 0L);
 
 		// Sanity check that inputs will yield a speed higher than the expected max speed
 		Assert.assertTrue(options.getDistance() / options.getAvailableTime() > expectedMaxSpeed);
@@ -169,7 +170,7 @@ public class NewLNGVoyageCalculatorTest {
 		final int expectedSpeed = 0;
 
 		options.setAvailableTime(48);
-		options.setRoute("DIRECT", 0, 0L);
+		options.setRoute(ERouteOption.DIRECT, 0, 0L);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
@@ -196,7 +197,7 @@ public class NewLNGVoyageCalculatorTest {
 		final int expectedMinSpeed = VESSEL_MIN_SPEED;
 
 		options.setAvailableTime(48);
-		options.setRoute("DIRECT", 1, 0L);
+		options.setRoute(ERouteOption.DIRECT, 1, 0L);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
@@ -225,7 +226,7 @@ public class NewLNGVoyageCalculatorTest {
 		final int speed = VESSEL_NBO_SPEED - 1;
 		final int travelTime = 48;
 		options.setAvailableTime(travelTime);
-		options.setRoute("DIRECT", speed * travelTime, 0L);
+		options.setRoute(ERouteOption.DIRECT, speed * travelTime, 0L);
 
 		// Sanity check that we are travelling slower than NBO rate so there will be no supplement
 		Assert.assertTrue(OptimiserUnitConvertor.convertToInternalSpeed(speed) < options.getNBOSpeed());
@@ -269,7 +270,7 @@ public class NewLNGVoyageCalculatorTest {
 		final int speed = VESSEL_NBO_SPEED + 1;
 		final int travelTime = 48;
 		options.setAvailableTime(travelTime);
-		options.setRoute("DIRECT", speed * travelTime, 0L);
+		options.setRoute(ERouteOption.DIRECT, speed * travelTime, 0L);
 
 		// Sanity check that we are travelling slower than NBO rate so there will be no supplement
 		final int internalSpeed = OptimiserUnitConvertor.convertToInternalSpeed(speed);
@@ -320,7 +321,7 @@ public class NewLNGVoyageCalculatorTest {
 		final int speed = VESSEL_NBO_SPEED + 1;
 		final int travelTime = 48;
 		options.setAvailableTime(travelTime);
-		options.setRoute("DIRECT", speed * travelTime, 0L);
+		options.setRoute(ERouteOption.DIRECT, speed * travelTime, 0L);
 
 		// Sanity check that we are travelling slower than NBO rate so there will be no supplement
 		final int internalSpeed = OptimiserUnitConvertor.convertToInternalSpeed(speed);
@@ -368,7 +369,7 @@ public class NewLNGVoyageCalculatorTest {
 		final int speed = VESSEL_NBO_SPEED + 1;
 		final int travelTime = 48;
 		options.setAvailableTime(travelTime);
-		options.setRoute("DIRECT", speed * travelTime, 0L);
+		options.setRoute(ERouteOption.DIRECT, speed * travelTime, 0L);
 
 		// Sanity check that we are travelling slower than NBO rate so there will be no supplement
 		final int internalSpeed = OptimiserUnitConvertor.convertToInternalSpeed(speed);
@@ -626,7 +627,7 @@ public class NewLNGVoyageCalculatorTest {
 		final long nboRate = OptimiserUnitConvertor.convertToInternalDailyRate(50);
 		final long expectedBaseConsumption = OptimiserUnitConvertor.convertToInternalDailyRate(150);
 		final long routeCost = 100000;
-		options.setRoute("DIRECT", 0, routeCost);
+		options.setRoute(ERouteOption.DIRECT, 0, routeCost);
 
 		Mockito.when(mockRouteCostProvider.getRouteTransitTime(options.getRoute(), options.getVessel())).thenReturn(additionalRouteTime);
 		Mockito.when(mockRouteCostProvider.getRouteCost(options.getRoute(), options.getVessel(), costType)).thenReturn(routeCost);
@@ -678,7 +679,7 @@ public class NewLNGVoyageCalculatorTest {
 		final long nboRate = OptimiserUnitConvertor.convertToInternalDailyRate(50);
 		final long expectedBaseConsumption = OptimiserUnitConvertor.convertToInternalDailyRate(50);
 		final long routeCost = 100000;
-		options.setRoute("DIRECT", 0, routeCost);
+		options.setRoute(ERouteOption.DIRECT, 0, routeCost);
 
 		Mockito.when(mockRouteCostProvider.getRouteTransitTime(options.getRoute(), options.getVessel())).thenReturn(additionalRouteTime);
 		Mockito.when(mockRouteCostProvider.getRouteCost(options.getRoute(), options.getVessel(), costType)).thenReturn(routeCost);
@@ -727,7 +728,7 @@ public class NewLNGVoyageCalculatorTest {
 		final long expectedBaseConsumption = OptimiserUnitConvertor.convertToInternalDailyRate(50);
 		final long routeCost = 100000;
 
-		options.setRoute("ROUTE", 0, routeCost);
+		options.setRoute(ERouteOption.SUEZ, 0, routeCost);
 
 		Mockito.when(mockRouteCostProvider.getRouteTransitTime(options.getRoute(), options.getVessel())).thenReturn(additionalRouteTime);
 		Mockito.when(mockRouteCostProvider.getRouteCost(options.getRoute(), options.getVessel(), costType)).thenReturn(routeCost);
@@ -777,7 +778,7 @@ public class NewLNGVoyageCalculatorTest {
 		final long expectedBaseConsumption = OptimiserUnitConvertor.convertToInternalDailyRate(50);
 		final long routeCost = 100000;
 
-		options.setRoute("DIRECT", 0, routeCost);
+		options.setRoute(ERouteOption.DIRECT, 0, routeCost);
 
 		Mockito.when(mockRouteCostProvider.getRouteTransitTime(options.getRoute(), options.getVessel())).thenReturn(additionalRouteTime);
 		Mockito.when(mockRouteCostProvider.getRouteCost(options.getRoute(), options.getVessel(), costType)).thenReturn(routeCost);

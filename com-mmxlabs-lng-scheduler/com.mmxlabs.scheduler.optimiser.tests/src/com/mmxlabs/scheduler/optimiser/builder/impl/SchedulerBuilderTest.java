@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.builder.impl;
@@ -88,7 +88,8 @@ public class SchedulerBuilderTest {
 
 		final ISalesPriceCalculator curve = Mockito.mock(ISalesPriceCalculator.class);
 
-		builder.createDischargeSlot("id", port, window, 0, 0, 0, Long.MAX_VALUE, curve, 0, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
+		builder.createDischargeSlot("id", port, window, 0, 0, 0, Long.MAX_VALUE, curve, 0, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false, false,
+				DEFAULT_VOLUME_LIMIT_IS_M3);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -101,7 +102,8 @@ public class SchedulerBuilderTest {
 
 		final ISalesPriceCalculator curve = Mockito.mock(ISalesPriceCalculator.class);
 
-		builder.createDischargeSlot("id", port, window, 0, 0, 0, Long.MAX_VALUE, curve, 0, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false, false, DEFAULT_VOLUME_LIMIT_IS_M3);
+		builder.createDischargeSlot("id", port, window, 0, 0, 0, Long.MAX_VALUE, curve, 0, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false, false, false,
+				DEFAULT_VOLUME_LIMIT_IS_M3);
 	}
 
 	@Ignore
@@ -197,7 +199,7 @@ public class SchedulerBuilderTest {
 
 	private SchedulerBuilder createScheduleBuilder() {
 		final SchedulerBuilder builder = new SchedulerBuilder();
-		final Injector injector = Guice.createInjector(new DataComponentProviderModule("DIRECT"));
+		final Injector injector = Guice.createInjector(new DataComponentProviderModule());
 		injector.injectMembers(builder);
 		return builder;
 	}

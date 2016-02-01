@@ -1,17 +1,17 @@
-package com.mmxlabs.scheduler.optimiser.providers;
+package com.mmxlabs.scheduler.optimiser.providers.impl;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.collect.Lists;
-import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.optimiser.core.scenario.common.IMatrixProvider;
@@ -20,7 +20,9 @@ import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 
 /**
  * A {@link IDataComponentProvider} implementation combining raw distance information with route availability information and offering basic travel time calculation APIs
@@ -30,7 +32,7 @@ import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModu
  * @author Simon Goodall
  *
  */
-public class DefaultDistanceProviderImpl implements ITimedDistanceProviderEditor {
+public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 
 	@Inject
 	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
@@ -38,63 +40,57 @@ public class DefaultDistanceProviderImpl implements ITimedDistanceProviderEditor
 	@Inject
 	private IRouteCostProvider routeCostProvider;
 
-	private final Map<String, Integer> routeAvailableFrom = new HashMap<>();
-
-	@Inject
-	@NonNull
-	@Named(DataComponentProviderModule.DIRECT_ROUTE)
-	private String directRoute;
+	private final Map<ERouteOption, Integer> routeAvailableFrom = new HashMap<>();
 
 	@Override
-	public List<MatrixEntry<IPort, Integer>> getDistanceValues(final IPort from, final IPort to, final int voyageStartTime) {
+	public List<Pair<ERouteOption, Integer>> getDistanceValues(final IPort from, final IPort to, final int voyageStartTime) {
 
-		final List<MatrixEntry<IPort, Integer>> distances = new LinkedList<>(distanceProvider.getValues(from, to));
+		List<Pair<ERouteOption, Integer>> distances = getAllDistanceValues(from, to);
 
 		// Filter out bad route choices
-		final Iterator<MatrixEntry<IPort, Integer>> itr = distances.iterator();
+		final Iterator<Pair<ERouteOption, Integer>> itr = distances.iterator();
 		while (itr.hasNext()) {
-			final MatrixEntry<IPort, Integer> e = itr.next();
+			final Pair<ERouteOption, Integer> e = itr.next();
 			// No distance?
-			if (e.getValue() == Integer.MAX_VALUE) {
+			if (e.getSecond() == Integer.MAX_VALUE) {
 				itr.remove();
 			}
 			// Distance available, but route is closed at this time
-			if (!isRouteAvailable(e.getKey(), voyageStartTime)) {
+			if (!isRouteAvailable(e.getFirst(), voyageStartTime)) {
 				itr.remove();
 			}
 		}
-
 		return distances;
 	}
 
 	@Override
-	public List<MatrixEntry<IPort, Integer>> getAllDistanceValues(final IPort from, final IPort to) {
+	public List<Pair<ERouteOption, Integer>> getAllDistanceValues(final IPort from, final IPort to) {
 
 		final List<MatrixEntry<IPort, Integer>> distances = new LinkedList<>(distanceProvider.getValues(from, to));
-		return distances;
+		return distances.stream().map(e -> new Pair<ERouteOption, Integer>(ERouteOption.valueOf(e.getKey()), e.getValue())).collect(Collectors.toList());
 	}
 
 	@Override
-	public int getRouteAvailableFrom(@NonNull final String route) {
+	public int getRouteAvailableFrom(@NonNull final ERouteOption route) {
 		final Integer v = routeAvailableFrom.getOrDefault(route, Integer.MIN_VALUE);
 		assert v != null;
 		return v.intValue();
 	}
 
 	@Override
-	public boolean isRouteAvailable(@NonNull final String route, final int voyageStartTime) {
+	public boolean isRouteAvailable(@NonNull final ERouteOption route, final int voyageStartTime) {
 
 		final int routeAvailableFrom = getRouteAvailableFrom(route);
 		return (voyageStartTime >= routeAvailableFrom);
 	}
 
 	@Override
-	public void setRouteAvailableFrom(final String route, final int availableFrom) {
+	public void setRouteAvailableFrom(final ERouteOption route, final int availableFrom) {
 		routeAvailableFrom.put(route, availableFrom);
 	}
 
 	@Override
-	public int getDistance(@NonNull final String route, @NonNull final IPort from, @NonNull final IPort to, final int voyageStartTime) {
+	public int getDistance(@NonNull final ERouteOption route, @NonNull final IPort from, @NonNull final IPort to, final int voyageStartTime) {
 
 		if (!isRouteAvailable(route, voyageStartTime)) {
 			return Integer.MAX_VALUE;
@@ -103,8 +99,8 @@ public class DefaultDistanceProviderImpl implements ITimedDistanceProviderEditor
 	}
 
 	@Override
-	public int getOpenDistance(@NonNull final String route, @NonNull final IPort from, @NonNull final IPort to) {
-		final IMatrixProvider<IPort, Integer> matrix = distanceProvider.get(route);
+	public int getOpenDistance(@NonNull final ERouteOption route, @NonNull final IPort from, @NonNull final IPort to) {
+		final IMatrixProvider<IPort, Integer> matrix = distanceProvider.get(route.name());
 		if (matrix == null) {
 			return Integer.MAX_VALUE;
 		}
@@ -117,7 +113,7 @@ public class DefaultDistanceProviderImpl implements ITimedDistanceProviderEditor
 	}
 
 	@Override
-	public int getTravelTime(@NonNull final String route, @NonNull final IVessel vessel, @NonNull final IPort from, @NonNull final IPort to, final int voyageStartTime, final int speed) {
+	public int getTravelTime(@NonNull final ERouteOption route, @NonNull final IVessel vessel, @NonNull final IPort from, @NonNull final IPort to, final int voyageStartTime, final int speed) {
 		if (speed == 0) {
 			return Integer.MAX_VALUE;
 		}
@@ -134,11 +130,11 @@ public class DefaultDistanceProviderImpl implements ITimedDistanceProviderEditor
 	}
 
 	@Override
-	public Pair<String, Integer> getQuickestTravelTime(@NonNull final IVessel vessel, final IPort from, final IPort to, final int voyageStartTime, final int speed) {
+	public Pair<ERouteOption, Integer> getQuickestTravelTime(@NonNull final IVessel vessel, final IPort from, final IPort to, final int voyageStartTime, final int speed) {
 
-		String bestRoute = null;
+		ERouteOption bestRoute = null;
 		int bestTime = Integer.MAX_VALUE;
-		for (final String route : distanceProvider.getKeys()) {
+		for (final ERouteOption route : getRoutes()) {
 			assert route != null;
 			final int travelTime = getTravelTime(route, vessel, from, to, voyageStartTime, speed);
 			if (travelTime < bestTime) {
@@ -148,14 +144,15 @@ public class DefaultDistanceProviderImpl implements ITimedDistanceProviderEditor
 		}
 
 		if (bestRoute == null) {
-			bestRoute = directRoute;
+			bestRoute = ERouteOption.DIRECT;
 		}
 
 		return new Pair<>(bestRoute, bestTime);
 	}
 
 	@Override
-	public List<String> getRoutes() {
-		return Lists.newArrayList(distanceProvider.getKeys());
+	public List<ERouteOption> getRoutes() {
+		// TODO: Pre-calculate?
+		return Lists.newArrayList(distanceProvider.getKeys()).stream().map(e -> ERouteOption.valueOf(e)).collect(Collectors.toList());
 	}
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
@@ -45,7 +45,9 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord.AllocationMode;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -251,7 +253,7 @@ public class VoyagePlanner {
 			}
 		}
 
-		final List<MatrixEntry<IPort, Integer>> distances = distanceProvider.getDistanceValues(prevPort, thisPort, voyageStartTime);
+		final List<Pair<ERouteOption, Integer>> distances = distanceProvider.getDistanceValues(prevPort, thisPort, voyageStartTime);
 		assert !distances.isEmpty();
 
 		// Only add route choice if there is one
@@ -267,12 +269,12 @@ public class VoyagePlanner {
 		}
 
 		if (distances.size() == 1) {
-			final MatrixEntry<IPort, Integer> d = distances.get(0);
-			options.setRoute(d.getKey(), d.getValue(), routeCostProvider.getRouteCost(d.getKey(), vesselAvailability.getVessel(), costType));
+			final Pair<ERouteOption, Integer> d = distances.get(0);
+			options.setRoute(d.getFirst(), d.getSecond(), routeCostProvider.getRouteCost(d.getFirst(), vesselAvailability.getVessel(), costType));
 		} else {
-			final List<Triple<String, Integer, Long>> routeOptions = new ArrayList<>(distances.size());
-			for (final MatrixEntry<IPort, Integer> d : distances) {
-				routeOptions.add(new Triple<>(d.getKey(), d.getValue(), routeCostProvider.getRouteCost(d.getKey(), vesselAvailability.getVessel(), costType)));
+			final List<Triple<ERouteOption, Integer, Long>> routeOptions = new ArrayList<>(distances.size());
+			for (final Pair<ERouteOption, Integer> d : distances) {
+				routeOptions.add(new Triple<>(d.getFirst(), d.getSecond(), routeCostProvider.getRouteCost(d.getFirst(), vesselAvailability.getVessel(), costType)));
 			}
 			optimiser.addChoice(new RouteVoyagePlanChoice(options, routeOptions));
 		}

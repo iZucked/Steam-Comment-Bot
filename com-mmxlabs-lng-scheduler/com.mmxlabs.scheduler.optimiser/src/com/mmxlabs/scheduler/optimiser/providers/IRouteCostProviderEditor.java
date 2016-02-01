@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.providers;
@@ -25,7 +25,7 @@ public interface IRouteCostProviderEditor extends IRouteCostProvider {
 	 * @param costType
 	 * @param price
 	 */
-	public void setRouteCost(@NonNull String route, @NonNull IVessel vessel, @NonNull CostType costType, long price);
+	public void setRouteCost(@NonNull ERouteOption route, @NonNull IVessel vessel, @NonNull CostType costType, long price);
 
 	/**
 	 * Sets the default cost incurred when travelling via the route named {@code route} to {@code price}. This price is overridden for particular vessel classes by
@@ -36,7 +36,7 @@ public interface IRouteCostProviderEditor extends IRouteCostProvider {
 	 * @param price
 	 *            price in dollars
 	 */
-	public void setDefaultRouteCost(@NonNull String route, long price);
+	public void setDefaultRouteCost(@NonNull ERouteOption route, long price);
 
 	/**
 	 * 
@@ -51,7 +51,7 @@ public interface IRouteCostProviderEditor extends IRouteCostProvider {
 	 * @param baseFuelInScaledMTPerHour
 	 *            the amount of NBO while traversing the canal, in scaled M3 / hour
 	 */
-	void setRouteFuel(@NonNull String routeName, @NonNull IVessel vessel, @NonNull VesselState vesselState, long baseFuelInScaledMTPerHour, long nboRateInScaledM3PerHour);
+	void setRouteFuel(@NonNull ERouteOption routeName, @NonNull IVessel vessel, @NonNull VesselState vesselState, long baseFuelInScaledMTPerHour, long nboRateInScaledM3PerHour);
 
 	/**
 	 * Sets the extra time incurred by vessels of class {@code vc} when travelling via the route with name {@code routeName}
@@ -63,5 +63,5 @@ public interface IRouteCostProviderEditor extends IRouteCostProvider {
 	 * @param transitTimeInHours
 	 *            the amount of extra travel time required to get through the canal, in hours.
 	 */
-	void setRouteTransitTime(@NonNull String routeName, @NonNull IVessel vessel, int transitTimeInHours);
+	void setRouteTransitTime(@NonNull ERouteOption routeName, @NonNull IVessel vessel, int transitTimeInHours);
 }

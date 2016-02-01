@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
@@ -194,7 +194,7 @@ public class SimpleSchedulerTest {
 	public void testLSO() {
 
 		final long seed = 1;
-		final Injector parentInjector = Guice.createInjector(new DataComponentProviderModule("DIRECT") {
+		final Injector parentInjector = Guice.createInjector(new DataComponentProviderModule() {
 			@Provides
 			@Named(EnumeratingSequenceScheduler.OPTIMISER_REEVALUATE)
 			private boolean isOptimiserReevaluating() {

@@ -1,13 +1,16 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Triple;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 
 /**
@@ -20,11 +23,11 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 
 	private int choice;
 
-	private final VoyageOptions options;
+	private final @NonNull VoyageOptions options;
 
-	private final List<Triple<String, Integer, Long>> routeOptions;
+	private final @NonNull List<Triple<ERouteOption, Integer, Long>> routeOptions;
 
-	public RouteVoyagePlanChoice(final VoyageOptions options, final List<Triple<String, Integer, Long>> routeOptions) {
+	public RouteVoyagePlanChoice(final @NonNull VoyageOptions options, final @NonNull List<Triple<ERouteOption, Integer, Long>> routeOptions) {
 		this.options = options;
 		this.routeOptions = routeOptions;
 	}
@@ -60,8 +63,7 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 	public final boolean apply(final int choice) {
 		this.choice = choice;
 
-		final Triple<String, Integer, Long> entry = routeOptions.get(choice);
-
+		final Triple<ERouteOption, Integer, Long> entry = routeOptions.get(choice);
 		options.setRoute(entry.getFirst(), entry.getSecond(), entry.getThird());
 
 		return true;

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.constraints.impl;
@@ -14,6 +14,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.name.Named;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IResource;
@@ -22,13 +23,12 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -94,11 +94,6 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 	@Inject
 	@NonNull
 	private IActualsDataProvider actualsDataProvider;
-
-	@Inject
-	@NonNull
-	@Named(DataComponentProviderModule.DIRECT_ROUTE)
-	private String directRoute;
 
 	public TravelTimeConstraintChecker(@NonNull final String name) {
 		this.name = name;
@@ -244,14 +239,14 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 		// travelTime = routeTravelTime;
 		// }
 		// }
-		final List<MatrixEntry<IPort, Integer>> distanceValues = distanceProvider.getDistanceValues(slot1.getPort(), slot2.getPort(), voyageStartTime);
-		for (final MatrixEntry<IPort, Integer> distanceOption : distanceValues) {
+		final List<Pair<ERouteOption, Integer>> distanceValues = distanceProvider.getDistanceValues(slot1.getPort(), slot2.getPort(), voyageStartTime);
+		for (final Pair<ERouteOption, Integer> distanceOption : distanceValues) {
 
-			final int distance = distanceOption.getValue();
+			final int distance = distanceOption.getSecond();
 			if (distance == Integer.MAX_VALUE) {
 				continue;
 			}
-			
+
 			// TODO: Excluding transit time looks like a bug
 			final int transitTime = 0;// routeCostProvider.getRouteTransitTime(distanceOption.getKey(), vessel);
 			//
@@ -283,7 +278,7 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 		final ITimeWindow tw2 = slot2.getTimeWindow();
 		final int visitDuration = elementDurationProvider.getElementDuration(first, resource);
 
-		final int distance = distanceProvider.getDistance(directRoute, slot1.getPort(), slot2.getPort(), tw1.getStart() + visitDuration);
+		final int distance = distanceProvider.getDistance(ERouteOption.DIRECT, slot1.getPort(), slot2.getPort(), tw1.getStart() + visitDuration);
 
 		if (distance == Integer.MAX_VALUE) {
 			return "No edge connecting ports";

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.providers;
@@ -35,7 +35,8 @@ public interface IShippingHoursRestrictionProviderEditor extends IShippingHoursR
 
 	/**
 	 * Set an allowed route that a DES cargo can follow
+	 * 
 	 * @param route
 	 */
-	void setDivertableDESAllowedRoute(@NonNull IVesselClass vc, @NonNull String route);
+	void setDivertableDESAllowedRoute(@NonNull IVesselClass vc, @NonNull ERouteOption route);
 }

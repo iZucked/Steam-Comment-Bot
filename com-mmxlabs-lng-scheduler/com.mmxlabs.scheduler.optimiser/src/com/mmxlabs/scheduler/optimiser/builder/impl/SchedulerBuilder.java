@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.builder.impl;
@@ -106,6 +106,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProviderEditor;
@@ -257,11 +258,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Inject
 	@NonNull
 	private ITimeWindowDataComponentProviderEditor timeWindowProvider;
-
-	@Inject
-	@NonNull
-	@Named(DataComponentProviderModule.DIRECT_ROUTE)
-	private String directRoute;
 
 	@Inject
 	@NonNull
@@ -793,12 +789,12 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// Pin variable for null analysis...
 		final IPort localANYWHERE = ANYWHERE;
 		if (localANYWHERE != null) {
-			setPortToPortDistance(port, localANYWHERE, directRoute, 0);
-			setPortToPortDistance(localANYWHERE, port, directRoute, 0);
+			setPortToPortDistance(port, localANYWHERE, ERouteOption.DIRECT, 0);
+			setPortToPortDistance(localANYWHERE, port, ERouteOption.DIRECT, 0);
 		}
 
 		// travel time from A to A should be zero, right?
-		this.setPortToPortDistance(port, port, directRoute, 0);
+		this.setPortToPortDistance(port, port, ERouteOption.DIRECT, 0);
 
 		calculatorProvider.addCooldownCalculator(cooldownCalculator);
 	}
@@ -1031,7 +1027,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public void setPortToPortDistance(@NonNull final IPort from, @NonNull final IPort to, @NonNull final String route, final int distance) {
+	public void setPortToPortDistance(@NonNull final IPort from, @NonNull final IPort to, @NonNull final ERouteOption route, final int distance) {
 
 		if (!ports.contains(from)) {
 			throw new IllegalArgumentException("From IPort was not created using this builder");
@@ -1040,14 +1036,14 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			throw new IllegalArgumentException("To IPort was not created using this builder");
 		}
 
-		if (portDistanceProvider.containsKey(route) == false) {
+		if (portDistanceProvider.containsKey(route.name()) == false) {
 			/*
 			 * This route has not previously been added to the PDP; initialise a blank matrix here?
 			 */
-			portDistanceProvider.set(route, matrixEditorProvider.get());
+			portDistanceProvider.set(route.name(), matrixEditorProvider.get());
 		}
 
-		final IMatrixEditor<IPort, Integer> matrix = (IMatrixEditor<IPort, Integer>) portDistanceProvider.get(route);
+		final IMatrixEditor<IPort, Integer> matrix = (IMatrixEditor<IPort, Integer>) portDistanceProvider.get(route.name());
 
 		matrix.set(from, to, distance);
 	}
@@ -1055,25 +1051,25 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	/**
 	 */
 	@Override
-	public void setVesselRouteCost(final String route, @NonNull final IVessel vessel, final IRouteCostProvider.CostType state, final long tollPrice) {
+	public void setVesselRouteCost(final @NonNull ERouteOption route, @NonNull final IVessel vessel, final IRouteCostProvider.CostType state, final long tollPrice) {
 		routeCostProvider.setRouteCost(route, vessel, state, tollPrice);
 	}
 
 	/**
 	 */
 	@Override
-	public void setDefaultRouteCost(final String route, final long defaultPrice) {
+	public void setDefaultRouteCost(final ERouteOption route, final long defaultPrice) {
 		routeCostProvider.setDefaultRouteCost(route, defaultPrice);
 	}
 
 	@Override
-	public void setVesselRouteFuel(final String name, @NonNull final IVessel vessel, final VesselState vesselState, final long baseFuelInScaledMT, final long nboRateInScaledM3) {
-		routeCostProvider.setRouteFuel(name, vessel, vesselState, baseFuelInScaledMT, nboRateInScaledM3);
+	public void setVesselRouteFuel(final @NonNull ERouteOption route, @NonNull final IVessel vessel, final VesselState vesselState, final long baseFuelInScaledMT, final long nboRateInScaledM3) {
+		routeCostProvider.setRouteFuel(route, vessel, vesselState, baseFuelInScaledMT, nboRateInScaledM3);
 	}
 
 	@Override
-	public void setVesselRouteTransitTime(final String name, final IVessel vessel, final int transitTimeInHours) {
-		routeCostProvider.setRouteTransitTime(name, vessel, transitTimeInHours);
+	public void setVesselRouteTransitTime(final @NonNull ERouteOption route, final IVessel vessel, final int transitTimeInHours) {
+		routeCostProvider.setRouteTransitTime(route, vessel, transitTimeInHours);
 	}
 
 	@Override
@@ -1277,11 +1273,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		virtualVesselSlotProviderEditor.setVesselAvailabilityForElement(virtualVesselAvailability, element);
 
 		return virtualVesselAvailability;
-	}
-
-	@Override
-	public void buildXYDistances() {
-		// FIXME: What did this do?
 	}
 
 	@Override
@@ -2107,8 +2098,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public void setDivertableDESAllowedRoute(@NonNull final IVesselClass vc, @NonNull final List<String> allowedRoutes) {
-		for (final String route : allowedRoutes) {
+	public void setDivertableDESAllowedRoute(@NonNull final IVesselClass vc, @NonNull final List<ERouteOption> allowedRoutes) {
+		for (final ERouteOption route : allowedRoutes) {
 			assert route != null;
 			shippingHoursRestrictionProviderEditor.setDivertableDESAllowedRoute(vc, route);
 		}

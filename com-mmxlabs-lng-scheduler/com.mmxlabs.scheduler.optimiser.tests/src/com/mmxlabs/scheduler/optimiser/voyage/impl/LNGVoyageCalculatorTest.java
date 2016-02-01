@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
@@ -35,6 +35,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
@@ -60,7 +61,7 @@ public class LNGVoyageCalculatorTest {
 		options.setUseFBOForSupplement(true);
 
 		options.setAvailableTime(48);
-		options.setRoute("DIRECT", 15 * 48, 0L);
+		options.setRoute(ERouteOption.DIRECT, 15 * 48, 0L);
 
 		final VoyageDetails details = new VoyageDetails();
 
@@ -100,7 +101,7 @@ public class LNGVoyageCalculatorTest {
 		options.setUseFBOForSupplement(true);
 
 		options.setAvailableTime(48);
-		options.setRoute("DIRECT", 15 * 48, 0L);
+		options.setRoute(ERouteOption.DIRECT, 15 * 48, 0L);
 
 		final VoyageDetails details = new VoyageDetails();
 
@@ -140,7 +141,7 @@ public class LNGVoyageCalculatorTest {
 		options.setUseFBOForSupplement(true);
 
 		options.setAvailableTime(96);
-		options.setRoute("DIRECT", 15 * 48, 0L);
+		options.setRoute(ERouteOption.DIRECT, 15 * 48, 0L);
 
 		final VoyageDetails details = new VoyageDetails();
 
@@ -180,7 +181,7 @@ public class LNGVoyageCalculatorTest {
 		options.setUseFBOForSupplement(false);
 
 		options.setAvailableTime(96);
-		final String route = "route";
+		final ERouteOption route = ERouteOption.DIRECT;
 		options.setRoute(route, 15 * 48, 0L);
 
 		final VoyageDetails details = new VoyageDetails();
@@ -226,7 +227,7 @@ public class LNGVoyageCalculatorTest {
 		final int expectedIdleTime = 72;
 
 		assert expectedTravelTime + expectedIdleTime == options.getAvailableTime();
-		options.setRoute("DIRECT", 15 * expectedTravelTime, 0L);
+		options.setRoute(ERouteOption.DIRECT, 15 * expectedTravelTime, 0L);
 
 		final VoyageDetails details = new VoyageDetails();
 
@@ -269,7 +270,7 @@ public class LNGVoyageCalculatorTest {
 		options.setUseFBOForSupplement(true);
 
 		options.setAvailableTime(36);
-		options.setRoute("DIRECT", 15 * 48, 0L);
+		options.setRoute(ERouteOption.DIRECT, 15 * 48, 0L);
 
 		final VoyageDetails details = new VoyageDetails();
 
@@ -308,7 +309,7 @@ public class LNGVoyageCalculatorTest {
 		options.setUseFBOForSupplement(false);
 
 		options.setAvailableTime(36);
-		options.setRoute("DIRECT", 15 * 48, 0L);
+		options.setRoute(ERouteOption.DIRECT, 15 * 48, 0L);
 
 		final VoyageDetails details = new VoyageDetails();
 
@@ -349,7 +350,7 @@ public class LNGVoyageCalculatorTest {
 		options.setUseFBOForSupplement(true);
 
 		options.setAvailableTime(20);
-		options.setRoute("DIRECT", 15 * 48, 0L);
+		options.setRoute(ERouteOption.DIRECT, 15 * 48, 0L);
 
 		final VoyageDetails details = new VoyageDetails();
 
@@ -414,7 +415,7 @@ public class LNGVoyageCalculatorTest {
 		options.setUseFBOForSupplement(true);
 
 		options.setAvailableTime(48);
-		options.setRoute("DIRECT", 0, 0L);
+		options.setRoute(ERouteOption.DIRECT, 0, 0L);
 
 		final VoyageDetails details = new VoyageDetails();
 
@@ -455,7 +456,7 @@ public class LNGVoyageCalculatorTest {
 		options.setUseFBOForSupplement(true);
 
 		options.setAvailableTime(48);
-		final String routeName = "Canal";
+		final ERouteOption routeName = ERouteOption.SUEZ;
 		long routeCost = 200000;
 		options.setRoute(routeName, 15 * 24, routeCost);
 
@@ -463,7 +464,7 @@ public class LNGVoyageCalculatorTest {
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
-		final HashMapRouteCostProviderEditor routeCostProvider = new HashMapRouteCostProviderEditor("DIRECT");
+		final HashMapRouteCostProviderEditor routeCostProvider = new HashMapRouteCostProviderEditor();
 		calc.setRouteCostDataComponentProvider(routeCostProvider);
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
@@ -507,13 +508,13 @@ public class LNGVoyageCalculatorTest {
 		options.setUseFBOForSupplement(false);
 
 		options.setAvailableTime(48);
-		final String routeName = "Canal";
+		final ERouteOption routeName = ERouteOption.SUEZ;
 
 		final VoyageDetails details = new VoyageDetails();
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
-		final HashMapRouteCostProviderEditor routeCostProvider = new HashMapRouteCostProviderEditor("DIRECT");
+		final HashMapRouteCostProviderEditor routeCostProvider = new HashMapRouteCostProviderEditor();
 		calc.setRouteCostDataComponentProvider(routeCostProvider);
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);

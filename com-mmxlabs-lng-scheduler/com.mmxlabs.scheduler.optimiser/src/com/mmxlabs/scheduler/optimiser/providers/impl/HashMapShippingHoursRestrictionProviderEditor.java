@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2015
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2016
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.providers.impl;
@@ -17,6 +17,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProviderEditor;
 
 /**
@@ -27,7 +28,7 @@ public class HashMapShippingHoursRestrictionProviderEditor implements IShippingH
 	private final Map<ISequenceElement, ITimeWindow> baseTimeMap = new HashMap<>();
 	private final Map<IVessel, Integer> ballastReferenceSpeeds = new HashMap<>();
 	private final Map<IVessel, Integer> ladenReferenceSpeeds = new HashMap<>();
-	private final Map<IVesselClass, List<String>> allowedRoutes = new HashMap<>();
+	private final Map<IVesselClass, List<ERouteOption>> allowedRoutes = new HashMap<>();
 
 	@Override
 	public int getShippingHoursRestriction(@NonNull final ISequenceElement element) {
@@ -76,14 +77,14 @@ public class HashMapShippingHoursRestrictionProviderEditor implements IShippingH
 	}
 
 	@Override
-	public Collection<String> getDivertableDESAllowedRoutes(@NonNull IVesselClass vc) {
+	public Collection<ERouteOption> getDivertableDESAllowedRoutes(@NonNull IVesselClass vc) {
 		return allowedRoutes.get(vc);
 	}
 
 	@Override
-	public void setDivertableDESAllowedRoute(@NonNull IVesselClass vc, @NonNull String route) {
+	public void setDivertableDESAllowedRoute(@NonNull IVesselClass vc, @NonNull ERouteOption route) {
 		if (!allowedRoutes.containsKey(vc)) {
-			allowedRoutes.put(vc, new LinkedList<String>());
+			allowedRoutes.put(vc, new LinkedList<>());
 		}
 		allowedRoutes.get(vc).add(route);
 	}
