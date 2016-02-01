@@ -7,8 +7,8 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 import java.util.List;
 
 import com.mmxlabs.common.Equality;
-import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 
 /**
@@ -23,9 +23,9 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 
 	private final VoyageOptions options;
 
-	private final List<MatrixEntry<IPort, Integer>> distances;
+	private final List<Pair<ERouteOption, Integer>> distances;
 
-	public RouteVoyagePlanChoice(final VoyageOptions options, final List<MatrixEntry<IPort, Integer>> distances) {
+	public RouteVoyagePlanChoice(final VoyageOptions options, final List<Pair<ERouteOption, Integer>> distances) {
 		this.options = options;
 		this.distances = distances;
 	}
@@ -61,11 +61,11 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 	public final boolean apply(final int choice) {
 		this.choice = choice;
 
-		final MatrixEntry<IPort, Integer> entry = distances.get(choice);
+		final Pair<ERouteOption, Integer> entry = distances.get(choice);
 
-		options.setRoute(entry.getKey());
+		options.setRoute(entry.getFirst());
 
-		final int distance = entry.getValue();
+		final int distance = entry.getSecond();
 
 		// Invalid distance
 		if (distance == Integer.MAX_VALUE) {

@@ -14,6 +14,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.name.Named;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IResource;
@@ -22,13 +23,13 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
@@ -77,7 +78,7 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 
 	@Inject
 	@NonNull
-	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
+	private IDistanceProvider distanceProvider;
 
 	@Inject
 	@NonNull
@@ -143,12 +144,12 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 
 	@Override
 	/**
-	 * Can element 2 be reached from element 1 in accordance with time windows under the best possible circumstances,
-	 * if using the given resource to service them
+	 * Can element 2 be reached from element 1 in accordance with time windows under the best possible circumstances, if using the given resource to service them
 	 * 
 	 * @param e1
 	 * @param e2
-	 * @param resource the vessel in question
+	 * @param resource
+	 *            the vessel in question
 	 * @return
 	 */
 	public boolean checkPairwiseConstraint(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
@@ -214,12 +215,22 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 			}
 		}
 
-		final int distance = distanceProvider.getMinimumValue(slot1.getPort(), slot2.getPort());
+		final List<Pair<ERouteOption, Integer>> distanceValues = distanceProvider.getDistanceValues(slot1.getPort(), slot2.getPort());
+		int distance = Integer.MAX_VALUE;
+		for (final Pair<ERouteOption, Integer> distanceOption : distanceValues) {
+			final int routeDistance = distanceOption.getSecond();
+			if (routeDistance < distance) {
+				distance = routeDistance;
+			}
+		}
+
+		// final int distance = distanceProvider.getMinimumValue(slot1.getPort(), slot2.getPort());
 
 		if (distance == Integer.MAX_VALUE) {
 			return false;
 		}
 
+		// FIXME: TRANSIT TIME
 		final int travelTime = Calculator.getTimeFromSpeedDistance(resourceMaxSpeed, distance);
 		final ITimeWindow tw1 = slot1.getTimeWindow();
 		final ITimeWindow tw2 = slot2.getTimeWindow();
@@ -243,7 +254,7 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 		final IPortSlot slot1 = portSlotProvider.getPortSlot(first);
 		final IPortSlot slot2 = portSlotProvider.getPortSlot(second);
-		final int distance = distanceProvider.get(IMultiMatrixProvider.Default_Key).get(slot1.getPort(), slot2.getPort());
+		final int distance = distanceProvider.getDistance(ERouteOption.DIRECT, slot1.getPort(), slot2.getPort());
 		if (distance == Integer.MAX_VALUE) {
 			return "No edge connecting ports";
 		}

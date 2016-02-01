@@ -35,6 +35,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
@@ -181,7 +182,7 @@ public class LNGVoyageCalculatorTest {
 
 		options.setAvailableTime(96);
 		options.setDistance(15 * 48);
-		final String route = "route";
+		final ERouteOption route = ERouteOption.DIRECT;
 		options.setRoute(route);
 
 		final VoyageDetails details = new VoyageDetails();
@@ -398,7 +399,7 @@ public class LNGVoyageCalculatorTest {
 		options.setVesselState(VesselState.Laden);
 
 		options.setCargoCVValue(OptimiserUnitConvertor.convertToInternalConversionFactor(22.8));
-		
+
 		return options;
 	}
 
@@ -457,14 +458,14 @@ public class LNGVoyageCalculatorTest {
 
 		options.setAvailableTime(48);
 		options.setDistance(15 * 24);
-		final String routeName = "Canal";
+		final ERouteOption routeName = ERouteOption.SUEZ;
 		options.setRoute(routeName);
 
 		final VoyageDetails details = new VoyageDetails();
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
-		final HashMapRouteCostProviderEditor routeCostProvider = new HashMapRouteCostProviderEditor("Default");
+		final HashMapRouteCostProviderEditor routeCostProvider = new HashMapRouteCostProviderEditor();
 		calc.setRouteCostDataComponentProvider(routeCostProvider);
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
@@ -509,14 +510,14 @@ public class LNGVoyageCalculatorTest {
 
 		options.setAvailableTime(48);
 		options.setDistance(15 * 24);
-		final String routeName = "Canal";
+		final ERouteOption routeName = ERouteOption.SUEZ;
 		options.setRoute(routeName);
 
 		final VoyageDetails details = new VoyageDetails();
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
-		final HashMapRouteCostProviderEditor routeCostProvider = new HashMapRouteCostProviderEditor("Default");
+		final HashMapRouteCostProviderEditor routeCostProvider = new HashMapRouteCostProviderEditor();
 		calc.setRouteCostDataComponentProvider(routeCostProvider);
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
@@ -612,8 +613,8 @@ public class LNGVoyageCalculatorTest {
 		vesselClass.setCargoCapacity(Long.MAX_VALUE);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
 		Mockito.when(vessel.getCargoCapacity()).thenReturn(Long.MAX_VALUE);
-		
-//		vesselClass.setBaseFuelConversionFactor(OptimiserUnitConvertor.convertToInternalConversionFactor(1.0));
+
+		// vesselClass.setBaseFuelConversionFactor(OptimiserUnitConvertor.convertToInternalConversionFactor(1.0));
 		final PortDetails loadDetails = new PortDetails();
 		loadDetails.setOptions(new PortOptions());
 		final PortDetails dischargeDetails = new PortDetails();
@@ -695,12 +696,12 @@ public class LNGVoyageCalculatorTest {
 			@Override
 			protected void configure() {
 				bind(ITimeZoneToUtcOffsetProvider.class).to(TimeZoneToUtcOffsetProvider.class);
-				 IBaseFuelCurveProvider b = Mockito.mock(IBaseFuelCurveProvider.class);
-				 Mockito.when(b.getBaseFuelCurve(Mockito.any(IBaseFuel.class))).thenReturn(curve);
-				 Mockito.when(b.getVesselBaseFuelCurve(Mockito.any(IVessel.class))).thenReturn(curve);
-				 
-				 bind(IBaseFuelCurveProvider.class).toInstance(b);
-				 
+				IBaseFuelCurveProvider b = Mockito.mock(IBaseFuelCurveProvider.class);
+				Mockito.when(b.getBaseFuelCurve(Mockito.any(IBaseFuel.class))).thenReturn(curve);
+				Mockito.when(b.getVesselBaseFuelCurve(Mockito.any(IVessel.class))).thenReturn(curve);
+
+				bind(IBaseFuelCurveProvider.class).toInstance(b);
+
 			}
 		});
 
@@ -710,20 +711,20 @@ public class LNGVoyageCalculatorTest {
 
 	private ICurve getMockedCurve(int mainInt) {
 		ICurve curve = Mockito.mock(ICurve.class);
-		
+
 		// create prices for different times (to test UTC)
 		int priceA = (int) OptimiserUnitConvertor.convertToInternalPrice(mainInt);
 		int priceB = (int) OptimiserUnitConvertor.convertToInternalFixedCost(0);
 		int timeA = 100;
 		int timeB = 0;
-				
+
 		// mock some return values
 		Mockito.when(curve.getValueAtPoint(timeA)).thenReturn(priceA);
 		Mockito.when(curve.getValueAtPoint(timeB)).thenReturn(priceB);
-		
-		return curve; 
+
+		return curve;
 	}
-	
+
 	@Ignore("No longer works after LNGVoyageCalculator#init() removal")
 	@Test(expected = RuntimeException.class)
 	public void testCalculateVoyagePlan3() {
@@ -1103,7 +1104,7 @@ public class LNGVoyageCalculatorTest {
 		IBaseFuel baseFuel = new BaseFuel("test");
 		baseFuel.setEquivalenceFactor(OptimiserUnitConvertor.convertToInternalConversionFactor(45.6));
 		vesselClass.setBaseFuel(baseFuel);
-		
+
 		// 2 days of boil off
 		vesselClass.setSafetyHeel(OptimiserUnitConvertor.convertToInternalVolume(300 * 24));
 

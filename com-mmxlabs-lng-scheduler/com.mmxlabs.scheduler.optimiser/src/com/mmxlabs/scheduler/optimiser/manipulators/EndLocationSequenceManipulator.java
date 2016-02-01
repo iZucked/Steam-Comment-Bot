@@ -6,24 +6,27 @@ package com.mmxlabs.scheduler.optimiser.manipulators;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import com.google.inject.Inject;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProvider;
@@ -92,7 +95,7 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 	private IStartEndRequirementProvider startEndRequirementProvider;
 
 	@Inject
-	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
+	private IDistanceProviderEditor distanceProvider;
 
 	@Inject
 	private IVesselProvider vesselProvider;
@@ -272,7 +275,16 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 				closestPort = toPort;
 				break;
 			}
-			final int distance = distanceProvider.getMinimumValue(fromPort, toPort);
+
+			final List<Pair<ERouteOption, Integer>> distanceValues = distanceProvider.getDistanceValues(fromPort, toPort);
+			int distance = Integer.MAX_VALUE;
+			for (final Pair<ERouteOption, Integer> distanceOption : distanceValues) {
+				final int routeDistance = distanceOption.getSecond();
+				if (routeDistance < distance) {
+					distance = routeDistance;
+				}
+			}
+
 			if (distance < closestPortDistance) {
 				closestPort = toPort;
 				closestPortDistance = distance;
@@ -380,13 +392,5 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 
 	public void setStartEndRequirementProvider(final IStartEndRequirementProvider startEndRequirementProvider) {
 		this.startEndRequirementProvider = startEndRequirementProvider;
-	}
-
-	public IMultiMatrixProvider<IPort, Integer> getDistanceProvider() {
-		return distanceProvider;
-	}
-
-	public void setDistanceProvider(final IMultiMatrixProvider<IPort, Integer> distanceProvider) {
-		this.distanceProvider = distanceProvider;
 	}
 }

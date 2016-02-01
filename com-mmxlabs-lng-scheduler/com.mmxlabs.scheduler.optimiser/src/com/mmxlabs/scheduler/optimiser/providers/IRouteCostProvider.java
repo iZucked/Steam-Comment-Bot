@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
@@ -24,10 +26,10 @@ public interface IRouteCostProvider extends IDataComponentProvider {
 	 * @param vesselClass
 	 *            class of travelling vessel
 	 * @param vesselState
-	 *            vessel state during travel`
+	 *            vessel state during travel
 	 * @return toll in dollars
 	 */
-	public long getRouteCost(final String route, final IVesselClass vesselClass, final VesselState vesselState);
+	long getRouteCost(@NonNull ERouteOption route, @NonNull IVesselClass vesselClass, @NonNull VesselState vesselState);
 
 	/**
 	 * Gets the extra fuel usage, in base-fuel-equivalent scaled MT per hour (see {@link Calculator#ScaleFactor}), required for vessels of class {@code vesselClass} to travel via {@code route} for the
@@ -39,7 +41,7 @@ public interface IRouteCostProvider extends IDataComponentProvider {
 	 *            class of travelling vessel
 	 * @return extra fuel used by vessel, in scaled MT BF(E) per hour
 	 */
-	public long getRouteFuelUsage(final String route, final IVesselClass vesselClass, final VesselState vesselState);
+	long getRouteFuelUsage(@NonNull ERouteOption route, @NonNull IVesselClass vesselClass, @NonNull VesselState vesselState);
 
 	/**
 	 * Gets the NBO rate, in scaled M3 per hour (see {@link Calculator#ScaleFactor}), required for vessels of class {@code vesselClass} to travel via {@code route} for the given {@link VesselState}.
@@ -51,7 +53,7 @@ public interface IRouteCostProvider extends IDataComponentProvider {
 	 *            class of travelling vessel
 	 * @return NBO rate of vessel, in scaled M3 per hour
 	 */
-	public long getRouteNBORate(final String route, final IVesselClass vesselClass, final VesselState vesselState);
+	long getRouteNBORate(@NonNull ERouteOption route, @NonNull IVesselClass vesselClass, @NonNull VesselState vesselState);
 
 	/**
 	 * Gets the extra time, in hours, which vessels of class {@code vesselClass} must spend to travel via {@code route}.
@@ -62,5 +64,5 @@ public interface IRouteCostProvider extends IDataComponentProvider {
 	 *            class of travelling vessel
 	 * @return Time to pass through canal, in hours. This is independent of the journey time spent getting from point A to canal entrance and canal exit to point B.
 	 */
-	public int getRouteTransitTime(final String route, final IVesselClass vesselClass);
+	int getRouteTransitTime(@NonNull ERouteOption route, @NonNull IVesselClass vesselClass);
 }

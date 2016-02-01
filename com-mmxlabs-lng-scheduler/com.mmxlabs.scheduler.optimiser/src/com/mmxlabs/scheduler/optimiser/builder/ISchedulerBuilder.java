@@ -24,7 +24,6 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
@@ -54,6 +53,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 
@@ -352,7 +352,7 @@ public interface ISchedulerBuilder {
 	 * @param to
 	 * @param distance
 	 */
-	void setPortToPortDistance(@NonNull IPort from, @NonNull IPort to, @NonNull String route, int distance);
+	void setPortToPortDistance(@NonNull IPort from, @NonNull IPort to, @NonNull ERouteOption route, int distance);
 
 	/**
 	 * Set a toll for sending a given vessel class + state via a given route
@@ -362,7 +362,7 @@ public interface ISchedulerBuilder {
 	 * @param state
 	 * @param tollPrice
 	 */
-	void setVesselClassRouteCost(final String route, @NonNull final IVesselClass vesselClass, @NonNull final VesselState state, final long tollPrice);
+	void setVesselClassRouteCost(final ERouteOption route, @NonNull final IVesselClass vesselClass, @NonNull final VesselState state, final long tollPrice);
 
 	/**
 	 * Set the default toll associated with passing by a given route
@@ -372,7 +372,7 @@ public interface ISchedulerBuilder {
 	 * @param defaultPrice
 	 *            the associated toll in dollars
 	 */
-	void setDefaultRouteCost(@NonNull String route, long defaultPrice);
+	void setDefaultRouteCost(@NonNull ERouteOption route, long defaultPrice);
 
 	/**
 	 * Set the extra time and fuel required for the given vessel class to travel by the given route
@@ -388,7 +388,7 @@ public interface ISchedulerBuilder {
 	 * @param nboRateInScaledM3
 	 *            the NBO rate in up-scaled M3 (see {@link Calculator#ScaleFactor})
 	 */
-	void setVesselClassRouteFuel(String name, @NonNull IVesselClass vc, VesselState vesselState, long baseFuelInScaledMT, long nboRateInScaledM3);
+	void setVesselClassRouteFuel(ERouteOption name, @NonNull IVesselClass vc, VesselState vesselState, long baseFuelInScaledMT, long nboRateInScaledM3);
 
 	/**
 	 * Set the extra time required for the given vessel class to travel by the given route
@@ -400,7 +400,7 @@ public interface ISchedulerBuilder {
 	 * @param time
 	 *            the extra transit time required, in hours
 	 */
-	void setVesselClassRouteTransitTime(@NonNull String name, @NonNull IVesselClass vc, int time);
+	void setVesselClassRouteTransitTime(@NonNull ERouteOption name, @NonNull IVesselClass vc, int time);
 
 	/**
 	 * Specify an amount of time a given {@link IResource} must incur if assigned to the given {@link ISequenceElement}.
@@ -761,6 +761,6 @@ public interface ISchedulerBuilder {
 	@NonNull
 	SequenceElement createSequenceElement(@NonNull String name);
 
-	void setDivertableDESAllowedRoute(@NonNull IVesselClass vc, @NonNull List<String> allowedRoutes);
+	void setDivertableDESAllowedRoute(@NonNull IVesselClass vc, @NonNull List<ERouteOption> allowedRoutes);
 
 }

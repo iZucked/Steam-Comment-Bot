@@ -124,7 +124,7 @@ public interface IActualsDataProvider extends IDataComponentProvider {
 
 	long getNextVoyageRouteCosts(IPortSlot slot);
 
-	String getNextVoyageRoute(IPortSlot slot);
+	ERouteOption getNextVoyageRoute(IPortSlot slot);
 
 	// Values for return - should be used as actuals esp for DES, and validation when overlapping with another set of actuals
 	boolean hasReturnActuals(IPortSlot slot);

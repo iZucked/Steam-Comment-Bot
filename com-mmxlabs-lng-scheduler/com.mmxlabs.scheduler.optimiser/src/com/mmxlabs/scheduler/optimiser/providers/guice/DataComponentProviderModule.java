@@ -4,11 +4,14 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers.guice;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
+import com.google.inject.name.Names;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.ILockedElementsProvider;
@@ -43,6 +46,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitProvider;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ArrayListVolumeAllocationEditor;
+import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
@@ -59,6 +63,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IGeneratedCharterOutSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IGeneratedCharterOutSlotProviderEditor;
@@ -112,6 +118,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultDistanceProviderImpl;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultNextLoadDateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultPromptPeriodProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultVesselCharterCurveProvider;
@@ -176,6 +183,9 @@ public class DataComponentProviderModule extends AbstractModule {
 	@Override
 	protected void configure() {
 
+		bind(IDistanceProvider.class).to(DefaultDistanceProviderImpl.class).in(Singleton.class);
+		bind(IDistanceProviderEditor.class).to(DefaultDistanceProviderImpl.class);
+
 		bind(IXYPortDistanceCalculator.class).to(XYPortEuclideanDistanceCalculator.class);
 		bind(XYPortEuclideanDistanceCalculator.class).in(Singleton.class);
 
@@ -209,7 +219,7 @@ public class DataComponentProviderModule extends AbstractModule {
 			elementDurationsProvider = new IndexedElementDurationEditor();
 
 			// Create a default matrix entry
-			portDistanceProvider.set(IMultiMatrixProvider.Default_Key, new IndexedMatrixEditor<IPort, Integer>(Integer.MAX_VALUE));
+			portDistanceProvider.set(ERouteOption.DIRECT.name(), new IndexedMatrixEditor<IPort, Integer>(Integer.MAX_VALUE));
 		} else {
 			portProvider = new HashMapPortEditor();
 			portSlotsProvider = new HashMapPortSlotEditor();
@@ -220,7 +230,7 @@ public class DataComponentProviderModule extends AbstractModule {
 			elementDurationsProvider = new HashMapElementDurationEditor();
 
 			// Create a default matrix entry
-			portDistanceProvider.set(IMultiMatrixProvider.Default_Key, new HashMapMatrixProvider<IPort, Integer>(Integer.MAX_VALUE));
+			portDistanceProvider.set(ERouteOption.DIRECT.name(), new HashMapMatrixProvider<IPort, Integer>(Integer.MAX_VALUE));
 		}
 		bind(IPortProvider.class).toInstance(portProvider);
 		bind(IPortProviderEditor.class).toInstance(portProvider);
@@ -256,7 +266,7 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(IReturnElementProvider.class).toInstance(returnElementProvider);
 		bind(IReturnElementProviderEditor.class).toInstance(returnElementProvider);
 
-		final HashMapRouteCostProviderEditor routeCostProvider = new HashMapRouteCostProviderEditor(IMultiMatrixProvider.Default_Key);
+		final HashMapRouteCostProviderEditor routeCostProvider = new HashMapRouteCostProviderEditor();
 		bind(IRouteCostProvider.class).toInstance(routeCostProvider);
 		bind(IRouteCostProviderEditor.class).toInstance(routeCostProvider);
 
@@ -271,7 +281,7 @@ public class DataComponentProviderModule extends AbstractModule {
 		final HashSetCalculatorProviderEditor calculatorProvider = new HashSetCalculatorProviderEditor();
 		bind(ICalculatorProvider.class).toInstance(calculatorProvider);
 		bind(ICalculatorProviderEditor.class).toInstance(calculatorProvider);
-		
+
 		final IOptionalElementsProviderEditor optionalElements = new IndexedOptionalElementsEditor();
 		bind(IOptionalElementsProvider.class).toInstance(optionalElements);
 		bind(IOptionalElementsProviderEditor.class).toInstance(optionalElements);
@@ -331,7 +341,7 @@ public class DataComponentProviderModule extends AbstractModule {
 		final HashMapLoadPriceCalculatorProviderEditor loadPriceCalculatorProviderEditor = new HashMapLoadPriceCalculatorProviderEditor();
 		bind(ILoadPriceCalculatorProvider.class).toInstance(loadPriceCalculatorProviderEditor);
 		bind(ILoadPriceCalculatorProviderEditor.class).toInstance(loadPriceCalculatorProviderEditor);
-		
+
 		final HashMapMarkToMarketProviderEditor markToMarketEditor = new HashMapMarkToMarketProviderEditor();
 		bind(IMarkToMarketProvider.class).toInstance(markToMarketEditor);
 		bind(IMarkToMarketProviderEditor.class).toInstance(markToMarketEditor);
