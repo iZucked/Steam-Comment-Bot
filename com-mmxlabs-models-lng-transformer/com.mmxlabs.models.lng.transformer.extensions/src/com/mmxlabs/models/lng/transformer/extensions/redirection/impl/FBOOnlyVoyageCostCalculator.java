@@ -18,11 +18,10 @@ import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -50,8 +49,8 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 		final VoyagePlan notionalPlan = new VoyagePlan();
 		notionalPlan.setCharterInRatePerDay(vesselCharterInRatePerDay);
 
-		final Integer distance = distanceProvider.getDistance(route, loadPort, dischargePort, loadTime + loadDuration);
-		if (distance == null || distance.intValue() == Integer.MAX_VALUE) {
+		final int distance = distanceProvider.getDistance(route, loadPort, dischargePort, loadTime + loadDuration);
+		if (distance == Integer.MAX_VALUE) {
 			return null;
 		}
 

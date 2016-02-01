@@ -103,6 +103,7 @@ import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate;
@@ -2258,19 +2259,24 @@ public class LNGScenarioTransformer {
 			}
 
 			// Set extra time and fuel consumption
-			final FleetModel fleetModel = rootObject.getReferenceModel().getFleetModel();
-			for (final Vessel eVessel : fleetModel.getVessels()) {
-				for (final VesselClassRouteParameters routeParameters : eVessel.getVesselClass().getRouteParameters()) {
-					builder.setVesselRouteTransitTime(mapRouteOption(routeParameters.getRoute()), vesselAssociation.lookupNullChecked(eVessel), routeParameters.getExtraTransitTime());
+			for (final IVesselAvailability vesselAvailability : allVesselAvailabilities) {
+				final IVessel vessel = vesselAvailability.getVessel();
+				if (vessel != null) {
+					final IVesselClass vesselClass = vessel.getVesselClass();
+					if (vesselClass != null) {
+						final VesselClass eVesselClass = vesselClassAssociation.reverseLookup(vesselClass);
+						for (final VesselClassRouteParameters routeParameters : eVesselClass.getRouteParameters()) {
+							builder.setVesselRouteTransitTime(mapRouteOption(routeParameters.getRoute()), vessel, routeParameters.getExtraTransitTime());
 
-					builder.setVesselRouteFuel(mapRouteOption(routeParameters.getRoute()), vesselAssociation.lookupNullChecked(eVessel), VesselState.Laden,
-							OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenConsumptionRate()),
-							OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenNBORate()));
+							builder.setVesselRouteFuel(mapRouteOption(routeParameters.getRoute()), vessel, VesselState.Laden,
+									OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenConsumptionRate()),
+									OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenNBORate()));
 
-					builder.setVesselRouteFuel(mapRouteOption(routeParameters.getRoute()), vesselAssociation.lookupNullChecked(eVessel), VesselState.Ballast,
-							OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastConsumptionRate()),
-							OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastNBORate()));
-
+							builder.setVesselRouteFuel(mapRouteOption(routeParameters.getRoute()), vessel, VesselState.Ballast,
+									OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastConsumptionRate()),
+									OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastNBORate()));
+						}
+					}
 				}
 			}
 
@@ -2279,8 +2285,10 @@ public class LNGScenarioTransformer {
 
 			final PanamaCanalTariff panamaCanalTariff = costModel.getPanamaCanalTariff();
 			if (panamaCanalTariff != null) {
+				final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(rootObject);
 				buildPanamaCosts(builder, vesselAssociation, fleetModel, panamaCanalTariff);
 			}
+
 			final Map<VesselClass, List<RouteCost>> vesselClassToRouteCostMap = costModel.getRouteCosts().stream() //
 					.collect(Collectors.groupingBy(RouteCost::getVesselClass, Collectors.mapping(Function.identity(), Collectors.toList())));
 
@@ -2297,9 +2305,11 @@ public class LNGScenarioTransformer {
 						}
 						assert routeCosts != null;
 						for (final RouteCost routeCost : routeCosts) {
+
 							if (routeCost.getRoute().getRouteOption() == RouteOption.PANAMA) {
 								continue;
 							}
+
 							builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.Laden, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getLadenCost()));
 
 							builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.Ballast, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost()));
@@ -2309,27 +2319,7 @@ public class LNGScenarioTransformer {
 						}
 					}
 				}
-
 			}
-
-			// for (final RouteCost routeCost : costModel.getRouteCosts()) {
-			// for (final Vessel eVessel : fleetModel.getVessels()) {
-			// if (eVessel.getVesselClass() == routeCost.getVesselClass()) {
-			// final IVessel vessel = vesselAssociation.lookupNullChecked(eVessel);
-			// if (routeCost.getRoute().getRouteOption() == RouteOption.PANAMA) {
-			// continue;
-			// }
-			// builder.setVesselRouteCost(routeCost.getRoute().getRouteOption().getName(), vessel, CostType.Laden,
-			// OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getLadenCost()));
-			//
-			// builder.setVesselRouteCost(routeCost.getRoute().getRouteOption().getName(), vessel, CostType.Ballast,
-			// OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost()));
-			//
-			// builder.setVesselRouteCost(routeCost.getRoute().getRouteOption().getName(), vessel, CostType.RoundTripBallast,
-			// OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost()));
-			// }
-			// }
-			// }
 		}
 		// Filter out unused routes
 		orderedKeys.retainAll(seenRoutes);

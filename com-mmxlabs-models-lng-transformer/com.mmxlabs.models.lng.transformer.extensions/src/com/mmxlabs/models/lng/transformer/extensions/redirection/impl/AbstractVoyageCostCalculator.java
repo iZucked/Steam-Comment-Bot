@@ -67,8 +67,8 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 		return voyageDetails;
 	}
 
-	protected @NonNull VoyageOptions createVoyageOptions(final VesselState vesselState, final IVessel vessel, final @NonNull ERouteOption route, final int distance, final long routeCost, final int availableTime,
-			final PortSlot from, final PortSlot to, final int cargoCV) {
+	protected @NonNull VoyageOptions createVoyageOptions(final VesselState vesselState, final IVessel vessel, final @NonNull ERouteOption route, final int distance, final long routeCost,
+			final int availableTime, final PortSlot from, final PortSlot to, final int cargoCV) {
 		final VoyageOptions voyageOptions = new VoyageOptions();
 		voyageOptions.setAvailableTime(availableTime);
 		voyageOptions.setAllowCooldown(false);
