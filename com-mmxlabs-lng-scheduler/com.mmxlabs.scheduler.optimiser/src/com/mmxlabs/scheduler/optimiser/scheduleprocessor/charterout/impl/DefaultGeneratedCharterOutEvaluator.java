@@ -13,6 +13,7 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
@@ -265,7 +266,13 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			}
 			for (final IPort charterOutPort : ports) {
 				final Triple<Integer, ERouteOption, Integer> toCharterPort = calculateShortestTimeToPort(discharge, charterOutPort, vesselAvailability.getVessel(), ballastStartTime);
+				if (toCharterPort == null) {
+					continue;
+				}
 				final Triple<Integer, ERouteOption, Integer> fromCharterPort = calculateShortestTimeToPort(charterOutPort, nextLoad, vesselAvailability.getVessel(), ballastStartTime);
+				if (fromCharterPort == null) {
+					continue;
+				}
 				final int availableCharteringTime = availableTime - toCharterPort.getThird() - fromCharterPort.getThird();
 				final int charterStartTime = ballastStartTime + toCharterPort.getThird();
 				final long dailyPrice = (long) option.getCharterPrice(charterStartTime);
@@ -287,6 +294,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		return gcoo;
 	}
 
+	@Nullable
 	private Triple<Integer, ERouteOption, Integer> calculateShortestTimeToPort(final IPort slotPort, final IPort charterPort, final IVessel vessel, final int voyageStartTime) {
 		int distance = Integer.MAX_VALUE;
 		int shortestTime = Integer.MAX_VALUE;
@@ -297,17 +305,26 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		Pair<ERouteOption, Integer> directEntry = null;
 		for (final Pair<ERouteOption, Integer> d : distances) {
 			final ERouteOption routeOption = d.getFirst();
+			final int thisDistance = d.getSecond();
+			if (thisDistance == Integer.MAX_VALUE) {
+				continue;
+			}
 			final int travelTime = Calculator.getTimeFromSpeedDistance(vessel.getVesselClass().getMaxSpeed(), d.getSecond()) + routeCostProvider.getRouteTransitTime(routeOption, vessel);
 			if (routeOption == ERouteOption.DIRECT) {
 				directTime = travelTime;
 				directEntry = d;
 			}
 			if (travelTime < shortestTime) {
-				distance = d.getSecond();
+				distance = thisDistance;
 				route = routeOption;
 				shortestTime = travelTime;
 			}
 		}
+		// No distance found at all.
+		if (distance == Integer.MAX_VALUE) {
+			return null;
+		}
+
 		// heuristic to only use canal if a big improvement
 		if (route != ERouteOption.DIRECT && directEntry != null) {
 			final double improvement = ((double) directTime - (double) shortestTime) / (double) directTime;
