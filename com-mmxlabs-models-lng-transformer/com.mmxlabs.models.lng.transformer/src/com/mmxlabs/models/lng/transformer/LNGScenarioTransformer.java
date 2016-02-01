@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.inject.Named;
@@ -161,6 +162,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ILoadPriceCalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
@@ -675,7 +677,7 @@ public class LNGScenarioTransformer {
 			}
 		}
 
-		buildDistances(builder, portAssociation, allPorts, portIndices, vesselAssociations.getFirst(), modelEntityMap);
+		buildDistances(builder, portAssociation, allPorts, portIndices, vesselAssociations.getSecond(), vesselAssociations.getFirst(), modelEntityMap);
 
 		buildCargoes(builder, portAssociation, vesselAssociations.getSecond(), contractTransformers, modelEntityMap);
 
@@ -2222,16 +2224,14 @@ public class LNGScenarioTransformer {
 	 * @throws IncompleteScenarioException
 	 */
 	private void buildDistances(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @NonNull final List<IPort> allPorts,
-			@NonNull final Map<IPort, Integer> portIndices, @NonNull final Association<VesselClass, IVesselClass> vesselAssociation, @NonNull final ModelEntityMap modelEntityMap)
-					throws IncompleteScenarioException {
+			@NonNull final Map<IPort, Integer> portIndices, @NonNull final Association<Vessel, IVessel> vesselAssociation, @NonNull final Association<VesselClass, IVesselClass> vesselClassAssociation,
+			@NonNull final ModelEntityMap modelEntityMap) throws IncompleteScenarioException {
 
 		final LinkedHashSet<RouteOption> orderedKeys = Sets.newLinkedHashSet();
 
 		orderedKeys.add(RouteOption.DIRECT);
 		orderedKeys.add(RouteOption.SUEZ);
-
-		// TODO: Add in Panama
-		// orderedKeys.add(RouteOption.PANAMA);
+		orderedKeys.add(RouteOption.PANAMA);
 
 		/*
 		 * Now fill out the distances from the distance model. Firstly we need to create the default distance matrix.
@@ -2253,29 +2253,58 @@ public class LNGScenarioTransformer {
 			}
 
 			// Set extra time and fuel consumption
-			final FleetModel fleetModel = rootObject.getReferenceModel().getFleetModel();
-			for (final VesselClass evc : fleetModel.getVesselClasses()) {
-				for (final VesselClassRouteParameters routeParameters : evc.getRouteParameters()) {
-					builder.setVesselClassRouteTransitTime(mapRouteOption(routeParameters.getRoute()), vesselAssociation.lookupNullChecked(evc), routeParameters.getExtraTransitTime());
+			for (final IVesselAvailability vesselAvailability : allVesselAvailabilities) {
+				final IVessel vessel = vesselAvailability.getVessel();
+				if (vessel != null) {
+					final IVesselClass vesselClass = vessel.getVesselClass();
+					if (vesselClass != null) {
+						final VesselClass eVesselClass = vesselClassAssociation.reverseLookup(vesselClass);
+						//
+						// final FleetModel fleetModel = rootObject.getReferenceModel().getFleetModel();
+						// for (final Vessel eVessel : fleetModel.getVessels()) {
+						for (final VesselClassRouteParameters routeParameters : eVesselClass.getRouteParameters()) {
+							builder.setVesselRouteTransitTime(mapRouteOption(routeParameters.getRoute()), vessel, routeParameters.getExtraTransitTime());
 
-					builder.setVesselClassRouteFuel(mapRouteOption(routeParameters.getRoute()), vesselAssociation.lookupNullChecked(evc), VesselState.Laden,
-							OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenConsumptionRate()),
-							OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenNBORate()));
+							builder.setVesselRouteFuel(mapRouteOption(routeParameters.getRoute()), vessel, VesselState.Laden,
+									OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenConsumptionRate()),
+									OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenNBORate()));
 
-					builder.setVesselClassRouteFuel(mapRouteOption(routeParameters.getRoute()), vesselAssociation.lookupNullChecked(evc), VesselState.Ballast,
-							OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastConsumptionRate()),
-							OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastNBORate()));
-
+							builder.setVesselRouteFuel(mapRouteOption(routeParameters.getRoute()), vessel, VesselState.Ballast,
+									OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastConsumptionRate()),
+									OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastNBORate()));
+						}
+					}
 				}
 			}
 
 			// set tolls
 			final CostModel costModel = rootObject.getReferenceModel().getCostModel();
-			for (final RouteCost routeCost : costModel.getRouteCosts()) {
-				final IVesselClass vesselClass = vesselAssociation.lookupNullChecked(routeCost.getVesselClass());
 
-				builder.setVesselClassRouteCost(mapRouteOption(routeCost.getRoute()), vesselClass, VesselState.Laden, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getLadenCost()));
-				builder.setVesselClassRouteCost(mapRouteOption(routeCost.getRoute()), vesselClass, VesselState.Ballast, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost()));
+			final Map<VesselClass, List<RouteCost>> vesselClassToRouteCostMap = costModel.getRouteCosts().stream() //
+					.collect(Collectors.groupingBy(RouteCost::getVesselClass, Collectors.mapping(Function.identity(), Collectors.toList())));
+
+			for (final IVesselAvailability vesselAvailability : allVesselAvailabilities) {
+				final IVessel vessel = vesselAvailability.getVessel();
+				if (vessel != null) {
+					final IVesselClass vesselClass = vessel.getVesselClass();
+					if (vesselClass != null) {
+						final VesselClass eVesselClass = vesselClassAssociation.reverseLookup(vesselClass);
+						final List<RouteCost> routeCosts = vesselClassToRouteCostMap.get(eVesselClass);
+						if (routeCosts == null) {
+							// Some unit tests have this state
+							continue;
+						}
+						assert routeCosts != null;
+						for (final RouteCost routeCost : routeCosts) {
+							builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.Laden, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getLadenCost()));
+
+							builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.Ballast, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost()));
+
+							builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.RoundTripBallast,
+									OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost()));
+						}
+					}
+				}
 			}
 		}
 		// Filter out unused routes

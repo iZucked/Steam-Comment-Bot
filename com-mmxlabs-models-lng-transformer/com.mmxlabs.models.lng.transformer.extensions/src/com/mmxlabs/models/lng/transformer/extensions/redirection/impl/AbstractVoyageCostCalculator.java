@@ -57,24 +57,23 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 			@NonNull final ERouteOption route, final int basePricePerMT, @NonNull final ISalesPriceCalculator salesPriceCalculator);
 
 	protected @NonNull VoyageDetails calculateVoyageDetails(@NonNull final VesselState vesselState, @NonNull final IVessel vessel, @NonNull final ERouteOption route, final int distance,
-			final int availableTime, @NonNull final PortSlot from, @NonNull final PortSlot to, final int cargoCV) {
+			final long routeCost, final int availableTime, @NonNull final PortSlot from, @NonNull final PortSlot to, final int cargoCV) {
 		final VoyageDetails voyageDetails = new VoyageDetails();
 		{
-			final VoyageOptions voyageOptions = createVoyageOptions(vesselState, vessel, route, distance, availableTime, from, to, cargoCV);
+			final VoyageOptions voyageOptions = createVoyageOptions(vesselState, vessel, route, distance, routeCost, availableTime, from, to, cargoCV);
 
 			voyageCalculator.calculateVoyageFuelRequirements(voyageOptions, voyageDetails);
 		}
 		return voyageDetails;
 	}
 
-	protected @NonNull VoyageOptions createVoyageOptions(final VesselState vesselState, final IVessel vessel, final ERouteOption route, final int distance, final int availableTime,
-			final PortSlot from, final PortSlot to, final int cargoCV) {
+	protected @NonNull VoyageOptions createVoyageOptions(final VesselState vesselState, final IVessel vessel, final @NonNull ERouteOption route, final int distance, final long routeCost,
+			final int availableTime, final PortSlot from, final PortSlot to, final int cargoCV) {
 		final VoyageOptions voyageOptions = new VoyageOptions();
 		voyageOptions.setAvailableTime(availableTime);
 		voyageOptions.setAllowCooldown(false);
-		voyageOptions.setDistance(distance);
 		voyageOptions.setFromPortSlot(from);
-		voyageOptions.setRoute(route);
+		voyageOptions.setRoute(route, distance, routeCost);
 		voyageOptions.setToPortSlot(to);
 		voyageOptions.setShouldBeCold(true);
 		voyageOptions.setUseFBOForSupplement(true);

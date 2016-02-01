@@ -14,7 +14,6 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.mmxlabs.models.lng.transformer.extensions.redirection.IVoyageCostCalculator;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -29,6 +28,8 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.LinkedFBOVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
@@ -53,6 +54,9 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 	private IDistanceProvider distanceProvider;
 
 	@Inject
+	private IRouteCostProvider routeCostProvider;
+
+	@Inject
 	private Provider<VoyagePlanOptimiser> vpoProvider;
 
 	private FuelChoice fuelChoice = null;
@@ -62,13 +66,13 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 			final int dischargeDuration, @NonNull final IVessel vessel, final int vesselCharterInRatePerDay, final long startHeelInM3, final int notionalBallastSpeed, final int cargoCVValue,
 			@NonNull final ERouteOption route, final int baseFuelPricePerMT, @NonNull final ISalesPriceCalculator salesPriceCalculator) {
 
-		final Integer ladenDistance = distanceProvider.getDistance(route, loadPort, dischargePort);
-		if (ladenDistance == null || ladenDistance.intValue() == Integer.MAX_VALUE) {
+		final int ladenDistance = distanceProvider.getDistance(route, loadPort, dischargePort, loadTime + loadDuration);
+		if (ladenDistance == Integer.MAX_VALUE) {
 			return null;
 		}
 
-		final Integer ballastDistance = distanceProvider.getDistance(route, dischargePort, loadPort);
-		if (ballastDistance == null || ballastDistance.intValue() == Integer.MAX_VALUE) {
+		final int ballastDistance = distanceProvider.getDistance(route, dischargePort, loadPort, dischargeTime + dischargeDuration);
+		if (ballastDistance == Integer.MAX_VALUE) {
 			return null;
 		}
 
@@ -94,13 +98,13 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 			fuelChoice = FuelChoice.Optimal;
 		}
 
-		final Integer ladenDistance = distanceProvider.getDistance(route, loadPort, dischargePort);
-		if (ladenDistance == null || ladenDistance.intValue() == Integer.MAX_VALUE) {
+		final int ladenDistance = distanceProvider.getDistance(route, loadPort, dischargePort, loadTime + loadDuration);
+		if (ladenDistance == Integer.MAX_VALUE) {
 			return null;
 		}
 
-		final Integer ballastDistance = distanceProvider.getDistance(route, dischargePort, loadPort);
-		if (ballastDistance == null || ballastDistance.intValue() == Integer.MAX_VALUE) {
+		final int ballastDistance = distanceProvider.getDistance(route, dischargePort, loadPort, dischargeTime + dischargeDuration);
+		if (ballastDistance == Integer.MAX_VALUE) {
 			return null;
 		}
 
@@ -123,10 +127,14 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 
 		// Calculate new voyage requirements
 		{
-			final VoyageOptions ladenOptions = createVoyageOptions(VesselState.Laden, vessel, route, ladenDistance, dischargeTime - loadDuration - loadTime, notionalLoadSlot, notionalDischargeSlot,
-					cargoCVValue);
-			final VoyageOptions ballastOptions = createVoyageOptions(VesselState.Ballast, vessel, route, ballastDistance, notionalReturnTime - dischargeDuration - dischargeTime, notionalDischargeSlot,
-					notionalReturnSlot, cargoCVValue);
+			final long ladenRouteCosts = routeCostProvider.getRouteCost(route, vessel, CostType.Laden);
+			final long ballastRouteCosts = routeCostProvider.getRouteCost(route, vessel, CostType.RoundTripBallast);
+
+			final VoyageOptions ladenOptions = createVoyageOptions(VesselState.Laden, vessel, route, ladenDistance, ladenRouteCosts, dischargeTime - loadDuration - loadTime, notionalLoadSlot,
+					notionalDischargeSlot, cargoCVValue);
+
+			final VoyageOptions ballastOptions = createVoyageOptions(VesselState.Ballast, vessel, route, ballastDistance, ballastRouteCosts, notionalReturnTime - dischargeDuration - dischargeTime,
+					notionalDischargeSlot, notionalReturnSlot, cargoCVValue);
 
 			switch (fuelChoice) {
 			case Base:

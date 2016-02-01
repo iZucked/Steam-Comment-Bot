@@ -20,6 +20,8 @@ import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -34,6 +36,9 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 	private IDistanceProvider distanceProvider;
 
 	@Inject
+	private IRouteCostProvider routeCostProvider;
+
+	@Inject
 	private ILNGVoyageCalculator voyageCalculator;
 
 	@Override
@@ -44,8 +49,8 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 		final VoyagePlan notionalPlan = new VoyagePlan();
 		notionalPlan.setCharterInRatePerDay(vesselCharterInRatePerDay);
 
-		final Integer distance = distanceProvider.getDistance(route, loadPort, dischargePort);
-		if (distance == null || distance.intValue() == Integer.MAX_VALUE) {
+		final int distance = distanceProvider.getDistance(route, loadPort, dischargePort, loadTime + loadDuration);
+		if (distance == Integer.MAX_VALUE) {
 			return null;
 		}
 
@@ -80,11 +85,14 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 
 		// Calculate new voyage requirements
 		{
-			final VoyageDetails ladenDetails = calculateVoyageDetails(VesselState.Laden, vessel, route, distance, dischargeTime - loadDuration - loadTime, notionalLoadSlot, notionalDischargeSlot,
-					cargoCVValue);
+			final long ladenRouteCosts = routeCostProvider.getRouteCost(route, vessel, CostType.Laden);
+			final long ballastRouteCosts = routeCostProvider.getRouteCost(route, vessel, CostType.RoundTripBallast);
 
-			final VoyageDetails ballastDetails = calculateVoyageDetails(VesselState.Ballast, vessel, route, distance, notionalReturnTime - dischargeDuration - dischargeTime, notionalDischargeSlot,
-					notionalReturnSlot, cargoCVValue);
+			final VoyageDetails ladenDetails = calculateVoyageDetails(VesselState.Laden, vessel, route, distance, ladenRouteCosts, dischargeTime - loadDuration - loadTime, notionalLoadSlot,
+					notionalDischargeSlot, cargoCVValue);
+
+			final VoyageDetails ballastDetails = calculateVoyageDetails(VesselState.Ballast, vessel, route, distance, ballastRouteCosts, notionalReturnTime - dischargeDuration - dischargeTime,
+					notionalDischargeSlot, notionalReturnSlot, cargoCVValue);
 
 			final PortDetails loadDetails = new PortDetails();
 			loadDetails.setOptions(new PortOptions());
@@ -118,8 +126,8 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 		final VoyagePlan notionalPlan = new VoyagePlan();
 		notionalPlan.setCharterInRatePerDay(vesselCharterInRatePerDay);
 
-		final Integer distance = distanceProvider.getDistance(route, loadPort, dischargePort);
-		if (distance == null || distance.intValue() == Integer.MAX_VALUE) {
+		final int distance = distanceProvider.getDistance(route, loadPort, dischargePort, loadTime + loadDuration);
+		if (distance == Integer.MAX_VALUE) {
 			return null;
 		}
 
@@ -148,11 +156,14 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 
 		// Calculate new voyage requirements
 		{
-			final VoyageDetails ladenDetails = calculateVoyageDetails(VesselState.Laden, vessel, route, distance, dischargeTime - loadDuration - loadTime, notionalLoadSlot, notionalDischargeSlot,
-					cargoCVValue);
+			final long ladenRouteCosts = routeCostProvider.getRouteCost(route, vessel, CostType.Laden);
+			final long ballastRouteCosts = routeCostProvider.getRouteCost(route, vessel, CostType.RoundTripBallast);
 
-			final VoyageDetails ballastDetails = calculateVoyageDetails(VesselState.Ballast, vessel, route, distance, returnTime - dischargeDuration - dischargeTime, notionalDischargeSlot,
-					notionalReturnSlot, cargoCVValue);
+			final VoyageDetails ladenDetails = calculateVoyageDetails(VesselState.Laden, vessel, route, distance, ladenRouteCosts, dischargeTime - loadDuration - loadTime, notionalLoadSlot,
+					notionalDischargeSlot, cargoCVValue);
+
+			final VoyageDetails ballastDetails = calculateVoyageDetails(VesselState.Ballast, vessel, route, distance, ballastRouteCosts, returnTime - dischargeDuration - dischargeTime,
+					notionalDischargeSlot, notionalReturnSlot, cargoCVValue);
 
 			final PortDetails loadDetails = new PortDetails();
 			loadDetails.setOptions(new PortOptions());
