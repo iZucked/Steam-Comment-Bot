@@ -33,6 +33,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -118,11 +119,9 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		} else if (element instanceof Journey) {
 			final Journey j = (Journey) element;
 			final Route route = j.getRoute();
-			if (route != null) {
-				if (route.isCanal()) {
-					if (memento.getBoolean(Show_Canals)) {
-						text = route.getName().replace("canal", "");
-					}
+			if (route != null && route.getRouteOption() != RouteOption.DIRECT) {
+				if (memento.getBoolean(Show_Canals)) {
+					text = route.getName().replace("canal", "");
 				}
 			}
 		}
@@ -239,13 +238,14 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				eventText.append("Travel time: " + durationTime + " \n");
 				final Journey journey = (Journey) element;
 				eventText.append(" \n");
-				// if (!journey.getRoute().equalsIgnoreCase("default")) {
+				// if (!journey.getRoute().equalsIgnoreCase(RouteOption.DIRECT.getName())) {
 				eventText.append(String.format("%.1f knots", journey.getSpeed()));
 				for (final FuelQuantity fq : journey.getFuels()) {
 					eventText.append(String.format(" | %s", fq.getFuel().toString()));
 				}
 				final Route route = journey.getRoute();
-				if (route != null && route.isCanal()) {
+
+				if (route != null && route.getRouteOption() != RouteOption.DIRECT) {
 					eventText.append(" | " + route + "\n");
 				}
 
