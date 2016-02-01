@@ -322,7 +322,7 @@ public final class OptimisationHelper {
 				displayOnlyIfOptionsEnabled);
 	}
 
-	public static UserSettings openUserDialog(Display display, Shell shell, final boolean forEvaluation, final UserSettings previousSettings, final UserSettings defaultSettings,
+	public static UserSettings openUserDialog(final Display display, final Shell shell, final boolean forEvaluation, final UserSettings previousSettings, final UserSettings defaultSettings,
 			final boolean displayOnlyIfOptionsEnabled) {
 		boolean optionAdded = false;
 		boolean enabledOptionAdded = false;
@@ -334,7 +334,7 @@ public final class OptimisationHelper {
 		//
 		// Fire up a dialog
 		final ParameterModesDialog dialog = new ParameterModesDialog(shell) {
-			protected void configureShell(org.eclipse.swt.widgets.Shell newShell) {
+			protected void configureShell(final org.eclipse.swt.widgets.Shell newShell) {
 
 				super.configureShell(newShell);
 				newShell.setText(forEvaluation ? "Evaluation Settings" : "Optimisation Settings");
@@ -483,7 +483,7 @@ public final class OptimisationHelper {
 		return copy;
 	}
 
-	public static OptimiserSettings transformUserSettings(@NonNull final UserSettings userSettings, @Nullable final String parameterMode, LNGScenarioModel lngScenarioModel) {
+	public static OptimiserSettings transformUserSettings(@NonNull final UserSettings userSettings, @Nullable final String parameterMode, final LNGScenarioModel lngScenarioModel) {
 
 		final OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
 
@@ -509,13 +509,13 @@ public final class OptimisationHelper {
 		similarityObjective.setEnabled(true);
 		similarityObjective.setWeight(1.0);
 
-		YearMonth periodStart = userSettings.getPeriodStart();
-		YearMonth periodEnd = userSettings.getPeriodEnd();
-		
-		YearMonth periodStartOrDefault = getPeriodStartOrDefault(periodStart, lngScenarioModel);
-		YearMonth periodEndOrDefault = getPeriodEndOrDefault(periodEnd, lngScenarioModel);
+		final YearMonth periodStart = userSettings.getPeriodStart();
+		final YearMonth periodEnd = userSettings.getPeriodEnd();
 
-		SimilarityMode similarityMode = userSettings.getSimilarityMode();
+		final YearMonth periodStartOrDefault = getPeriodStartOrDefault(periodStart, lngScenarioModel);
+		final YearMonth periodEndOrDefault = getPeriodEndOrDefault(periodEnd, lngScenarioModel);
+
+		final SimilarityMode similarityMode = userSettings.getSimilarityMode();
 
 		switch (similarityMode) {
 		case ALL:
@@ -553,7 +553,7 @@ public final class OptimisationHelper {
 		}
 
 		if (optimiserSettings.isBuildActionSets() && periodStart != null && periodEnd != null) {
-			ActionPlanSettings apSettings = ActionPlanUIParameters.getActionPlanSettings(similarityMode, periodStart, periodEnd);
+			final ActionPlanSettings apSettings = ActionPlanUIParameters.getActionPlanSettings(similarityMode, periodStart, periodEnd);
 			optimiserSettings.setActionPlanSettings(apSettings);
 		} else {
 			optimiserSettings.setActionPlanSettings(ActionPlanUIParameters.getDefaultSettings());
@@ -567,7 +567,7 @@ public final class OptimisationHelper {
 			optimiserSettings.getAnnealingSettings().setEpochLength(EPOCH_LENGTH_FULL);
 		}
 
-		Activator activator = Activator.getDefault();
+		final Activator activator = Activator.getDefault();
 		if (activator != null) {
 			final IParameterModesRegistry parameterModesRegistry = activator.getParameterModesRegistry();
 
@@ -595,7 +595,7 @@ public final class OptimisationHelper {
 		return optimiserSettings;
 	}
 
-	private static boolean shouldDisableActionSets(SimilarityMode mode, YearMonth periodStart, YearMonth periodEnd) {
+	private static boolean shouldDisableActionSets(final SimilarityMode mode, final YearMonth periodStart, final YearMonth periodEnd) {
 		if (periodStart == null || periodEnd == null) {
 			return true;
 		}
@@ -611,7 +611,7 @@ public final class OptimisationHelper {
 		return false;
 	}
 
-	private static SimilaritySettings createSimilaritySettings(SimilarityMode mode, YearMonth periodStart, YearMonth periodEnd) {
+	private static SimilaritySettings createSimilaritySettings(final SimilarityMode mode, final YearMonth periodStart, final YearMonth periodEnd) {
 		if (periodStart == null || periodEnd == null || mode == null) {
 			return SimilarityUIParameters.createOffSimilaritySettings();
 		} else {
@@ -669,7 +669,7 @@ public final class OptimisationHelper {
 		to.setBuildActionSets(from.isBuildActionSets());
 	}
 
-	public static boolean checkUserSettings(@NonNull final UserSettings to, boolean quiet) {
+	public static boolean checkUserSettings(@NonNull final UserSettings to, final boolean quiet) {
 		resetDisabledFeatures(to);
 
 		// Turn off if settings are not nice
@@ -734,39 +734,45 @@ public final class OptimisationHelper {
 		}
 		return null;
 	}
-	
-	private static YearMonth getPeriodEndOrDefault(YearMonth periodEnd, LNGScenarioModel scenario) {
+
+	private static YearMonth getPeriodEndOrDefault(final YearMonth periodEnd, final LNGScenarioModel scenario) {
 		if (periodEnd != null) {
 			return periodEnd;
 		} else if (scenario == null) {
 			return periodEnd;
 		} else {
-			List<LoadSlot> loadSlots = new LinkedList<>(scenario.getCargoModel().getLoadSlots());
+			final List<LoadSlot> loadSlots = new LinkedList<>(scenario.getCargoModel().getLoadSlots());
 			Collections.sort(loadSlots, new Comparator<LoadSlot>() {
 
 				@Override
-				public int compare(LoadSlot o1, LoadSlot o2) {
-					return o1.getWindowEndWithSlotOrPortTimeWithFlex().compareTo(o2.getWindowEndWithSlotOrPortTimeWithFlex())*-1;
+				public int compare(final LoadSlot o1, final LoadSlot o2) {
+					return o1.getWindowEndWithSlotOrPortTimeWithFlex().compareTo(o2.getWindowEndWithSlotOrPortTimeWithFlex()) * -1;
 				}
 			});
+			if (loadSlots.isEmpty()) {
+				return YearMonth.of(2000, 1);
+			}
 			return YearMonth.of(loadSlots.get(0).getWindowStartWithSlotOrPortTime().getYear(), loadSlots.get(0).getWindowStartWithSlotOrPortTime().getMonth());
 		}
 	}
 
-	private static YearMonth getPeriodStartOrDefault(YearMonth periodStart, LNGScenarioModel scenario) {
+	private static YearMonth getPeriodStartOrDefault(final YearMonth periodStart, final LNGScenarioModel scenario) {
 		if (periodStart != null) {
 			return periodStart;
 		} else if (scenario == null) {
 			return periodStart;
 		} else {
-			List<LoadSlot> loadSlots = new LinkedList<>(scenario.getCargoModel().getLoadSlots());
+			final List<LoadSlot> loadSlots = new LinkedList<>(scenario.getCargoModel().getLoadSlots());
 			Collections.sort(loadSlots, new Comparator<LoadSlot>() {
 
 				@Override
-				public int compare(LoadSlot o1, LoadSlot o2) {
+				public int compare(final LoadSlot o1, final LoadSlot o2) {
 					return o1.getWindowStartWithSlotOrPortTime().compareTo(o2.getWindowStartWithSlotOrPortTime());
 				}
 			});
+			if (loadSlots.isEmpty()) {
+				return YearMonth.of(2000, 1);
+			}
 			return YearMonth.of(loadSlots.get(0).getWindowStartWithSlotOrPortTime().getYear(), loadSlots.get(0).getWindowStartWithSlotOrPortTime().getMonth());
 		}
 	}
