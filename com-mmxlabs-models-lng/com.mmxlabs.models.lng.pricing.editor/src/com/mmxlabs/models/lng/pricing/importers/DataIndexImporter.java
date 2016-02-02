@@ -82,7 +82,9 @@ public class DataIndexImporter extends AbstractClassImporter {
 			for (final String s : row.keySet()) {
 				try {
 					final YearMonth date = parseDateString(s);
-
+					if (date == null) {
+						continue;
+					}
 					if (row.get(s).isEmpty()) {
 						continue;
 					}
