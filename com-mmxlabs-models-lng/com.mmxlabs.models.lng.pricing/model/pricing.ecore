@@ -190,6 +190,8 @@
   <eClassifiers xsi:type="ecore:EClass" name="PanamaCanalTariff">
     <eStructuralFeatures xsi:type="ecore:EReference" name="bands" upperBound="-1"
         eType="#//PanamaCanalTariffBand" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="availableFrom" eType="ecore:EDataType ../../com.mmxlabs.models.datetime/model/datetime.ecore#//LocalDate"
+        unsettable="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PanamaCanalTariffBand">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="ladenTariff" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">

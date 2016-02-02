@@ -7,6 +7,7 @@ import com.mmxlabs.models.lng.pricing.PanamaCanalTariff;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import org.eclipse.emf.common.util.ResourceLocator;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
 
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IChildCreationExtender;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -24,6 +26,7 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
@@ -62,8 +65,31 @@ public class PanamaCanalTariffItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addAvailableFromPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Available From feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addAvailableFromPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PanamaCanalTariff_availableFrom_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PanamaCanalTariff_availableFrom_feature", "_UI_PanamaCanalTariff_type"),
+				 PricingPackage.Literals.PANAMA_CANAL_TARIFF__AVAILABLE_FROM,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -115,7 +141,11 @@ public class PanamaCanalTariffItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_PanamaCanalTariff_type");
+		LocalDate labelValue = ((PanamaCanalTariff)object).getAvailableFrom();
+		String label = labelValue == null ? null : labelValue.toString();
+		return label == null || label.length() == 0 ?
+			getString("_UI_PanamaCanalTariff_type") :
+			getString("_UI_PanamaCanalTariff_type") + " " + label;
 	}
 	
 
@@ -131,6 +161,9 @@ public class PanamaCanalTariffItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(PanamaCanalTariff.class)) {
+			case PricingPackage.PANAMA_CANAL_TARIFF__AVAILABLE_FROM:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
 			case PricingPackage.PANAMA_CANAL_TARIFF__BANDS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;

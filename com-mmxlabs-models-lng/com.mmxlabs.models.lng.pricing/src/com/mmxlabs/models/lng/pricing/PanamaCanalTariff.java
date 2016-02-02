@@ -2,6 +2,7 @@
  */
 package com.mmxlabs.models.lng.pricing;
 
+import java.time.LocalDate;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
@@ -16,6 +17,7 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PanamaCanalTariff#getBands <em>Bands</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.PanamaCanalTariff#getAvailableFrom <em>Available From</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPanamaCanalTariff()
@@ -38,5 +40,58 @@ public interface PanamaCanalTariff extends EObject {
 	 * @generated
 	 */
 	EList<PanamaCanalTariffBand> getBands();
+
+	/**
+	 * Returns the value of the '<em><b>Available From</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Available From</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Available From</em>' attribute.
+	 * @see #isSetAvailableFrom()
+	 * @see #unsetAvailableFrom()
+	 * @see #setAvailableFrom(LocalDate)
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPanamaCanalTariff_AvailableFrom()
+	 * @model unsettable="true" dataType="com.mmxlabs.models.datetime.LocalDate"
+	 * @generated
+	 */
+	LocalDate getAvailableFrom();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.PanamaCanalTariff#getAvailableFrom <em>Available From</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Available From</em>' attribute.
+	 * @see #isSetAvailableFrom()
+	 * @see #unsetAvailableFrom()
+	 * @see #getAvailableFrom()
+	 * @generated
+	 */
+	void setAvailableFrom(LocalDate value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.pricing.PanamaCanalTariff#getAvailableFrom <em>Available From</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetAvailableFrom()
+	 * @see #getAvailableFrom()
+	 * @see #setAvailableFrom(LocalDate)
+	 * @generated
+	 */
+	void unsetAvailableFrom();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.pricing.PanamaCanalTariff#getAvailableFrom <em>Available From</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Available From</em>' attribute is set.
+	 * @see #unsetAvailableFrom()
+	 * @see #getAvailableFrom()
+	 * @see #setAvailableFrom(LocalDate)
+	 * @generated
+	 */
+	boolean isSetAvailableFrom();
 
 } // PanamaCanalTariff

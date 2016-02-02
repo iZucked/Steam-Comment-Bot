@@ -779,6 +779,15 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getPanamaCanalTariff_AvailableFrom() {
+		return (EAttribute)panamaCanalTariffEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getPanamaCanalTariffBand() {
 		return panamaCanalTariffBandEClass;
 	}
@@ -932,6 +941,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 		panamaCanalTariffEClass = createEClass(PANAMA_CANAL_TARIFF);
 		createEReference(panamaCanalTariffEClass, PANAMA_CANAL_TARIFF__BANDS);
+		createEAttribute(panamaCanalTariffEClass, PANAMA_CANAL_TARIFF__AVAILABLE_FROM);
 
 		panamaCanalTariffBandEClass = createEClass(PANAMA_CANAL_TARIFF_BAND);
 		createEAttribute(panamaCanalTariffBandEClass, PANAMA_CANAL_TARIFF_BAND__LADEN_TARIFF);
@@ -1134,6 +1144,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 		initEClass(panamaCanalTariffEClass, PanamaCanalTariff.class, "PanamaCanalTariff", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPanamaCanalTariff_Bands(), this.getPanamaCanalTariffBand(), null, "bands", null, 0, -1, PanamaCanalTariff.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPanamaCanalTariff_AvailableFrom(), theDateTimePackage.getLocalDate(), "availableFrom", null, 0, 1, PanamaCanalTariff.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(panamaCanalTariffBandEClass, PanamaCanalTariffBand.class, "PanamaCanalTariffBand", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getPanamaCanalTariffBand_LadenTariff(), ecorePackage.getEDouble(), "ladenTariff", null, 0, 1, PanamaCanalTariffBand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

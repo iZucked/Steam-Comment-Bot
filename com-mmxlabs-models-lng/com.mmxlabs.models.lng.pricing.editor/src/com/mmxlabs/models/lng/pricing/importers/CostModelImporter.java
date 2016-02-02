@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteOption;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.CostModel;
@@ -32,6 +33,7 @@ import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.lng.pricing.importers.PanamaCanalTariffImporter.AvailableFrom;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -64,7 +66,7 @@ public class CostModelImporter implements ISubmodelImporter {
 
 	private IClassImporter cooldownPriceImporter;
 	private IClassImporter portCostImporter;
-	private IClassImporter panamaCanalTariffBandImporter;
+	private final PanamaCanalTariffImporter panamaCanalTariffBandImporter = new PanamaCanalTariffImporter();
 
 	/**
 	 */
@@ -82,7 +84,6 @@ public class CostModelImporter implements ISubmodelImporter {
 		if (importerRegistry != null) {
 			cooldownPriceImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getCooldownPrice());
 			portCostImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getPortCost());
-			panamaCanalTariffBandImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getPanamaCanalTariffBand());
 		}
 	}
 
@@ -106,8 +107,17 @@ public class CostModelImporter implements ISubmodelImporter {
 		if (inputs.containsKey(PANAMA_CANAL_TARIFF_KEY)) {
 			final PanamaCanalTariff panamaCanalTariff = PricingFactory.eINSTANCE.createPanamaCanalTariff();
 
-			panamaCanalTariff.getBands().addAll((Collection<? extends PanamaCanalTariffBand>) panamaCanalTariffBandImporter.importObjects(PricingPackage.eINSTANCE.getPanamaCanalTariffBand(),
-					inputs.get(PANAMA_CANAL_TARIFF_KEY), context));
+			// panamaCanalTariff.getBands().addAll((Collection<? extends PanamaCanalTariffBand>)
+
+			for (final EObject o : panamaCanalTariffBandImporter.importObjects(PricingPackage.eINSTANCE.getPanamaCanalTariffBand(), inputs.get(PANAMA_CANAL_TARIFF_KEY), context)) {
+				if (o instanceof PanamaCanalTariffBand) {
+					final PanamaCanalTariffBand band = (PanamaCanalTariffBand) o;
+					panamaCanalTariff.getBands().add(band);
+				} else if (o instanceof AvailableFrom) {
+					final AvailableFrom availableFrom = (AvailableFrom) o;
+					panamaCanalTariff.setAvailableFrom(availableFrom.availableFrom);
+				}
+			}
 
 			costModel.setPanamaCanalTariff(panamaCanalTariff);
 		}
@@ -125,7 +135,7 @@ public class CostModelImporter implements ISubmodelImporter {
 					final PortModel port = ScenarioModelUtil.getPortModel(scenarioModel);
 					if (pricing != null && fleet != null && port != null) {
 						for (final Route route : port.getRoutes()) {
-							if (route.isCanal()) {
+							if (route.getRouteOption() == RouteOption.SUEZ) {
 								for (final VesselClass vesselClass : fleet.getVesselClasses()) {
 									boolean found = false;
 									for (final RouteCost cost : costModel.getRouteCosts()) {
@@ -179,7 +189,7 @@ public class CostModelImporter implements ISubmodelImporter {
 		output.put(PORT_COSTS_KEY, portCostImporter.exportObjects(costModel.getPortCosts(), context));
 		final PanamaCanalTariff panamaCanalTariff = costModel.getPanamaCanalTariff();
 		if (panamaCanalTariff != null) {
-			output.put(PANAMA_CANAL_TARIFF_KEY, panamaCanalTariffBandImporter.exportObjects(panamaCanalTariff.getBands(), context));
+			output.put(PANAMA_CANAL_TARIFF_KEY, panamaCanalTariffBandImporter.exportTariff(panamaCanalTariff, context));
 		}
 	}
 

@@ -1052,13 +1052,22 @@ public interface PricingPackage extends EPackage {
 	int PANAMA_CANAL_TARIFF__BANDS = 0;
 
 	/**
+	 * The feature id for the '<em><b>Available From</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PANAMA_CANAL_TARIFF__AVAILABLE_FROM = 1;
+
+	/**
 	 * The number of structural features of the '<em>Panama Canal Tariff</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PANAMA_CANAL_TARIFF_FEATURE_COUNT = 1;
+	int PANAMA_CANAL_TARIFF_FEATURE_COUNT = 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PanamaCanalTariffBandImpl <em>Panama Canal Tariff Band</em>}' class.
@@ -1732,6 +1741,17 @@ public interface PricingPackage extends EPackage {
 	EReference getPanamaCanalTariff_Bands();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.PanamaCanalTariff#getAvailableFrom <em>Available From</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Available From</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PanamaCanalTariff#getAvailableFrom()
+	 * @see #getPanamaCanalTariff()
+	 * @generated
+	 */
+	EAttribute getPanamaCanalTariff_AvailableFrom();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand <em>Panama Canal Tariff Band</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2313,6 +2333,14 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PANAMA_CANAL_TARIFF__BANDS = eINSTANCE.getPanamaCanalTariff_Bands();
+
+		/**
+		 * The meta object literal for the '<em><b>Available From</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PANAMA_CANAL_TARIFF__AVAILABLE_FROM = eINSTANCE.getPanamaCanalTariff_AvailableFrom();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.PanamaCanalTariffBandImpl <em>Panama Canal Tariff Band</em>}' class.
