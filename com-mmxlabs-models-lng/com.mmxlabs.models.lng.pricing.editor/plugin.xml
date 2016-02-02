@@ -74,26 +74,16 @@
 			modelClass="com.mmxlabs.models.lng.pricing.Index" />
 		
 		<componentHelper
-			id="com.mmxlabs.models.lng.pricing.helpers.FleetCostModel"
-			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.FleetCostModelComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.pricing.FleetCostModel" />
-		
-		<componentHelper
 			id="com.mmxlabs.models.lng.pricing.helpers.RouteCost"
 			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.RouteCostComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.pricing.RouteCost" />
-		
 		
 		<componentHelper
 			id="com.mmxlabs.models.lng.pricing.helpers.BaseFuelCost"
 			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.BaseFuelCostComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.pricing.BaseFuelCost" />
-		
-		
-
   
   <componentHelper
         helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.CooldownPriceComponentHelper"

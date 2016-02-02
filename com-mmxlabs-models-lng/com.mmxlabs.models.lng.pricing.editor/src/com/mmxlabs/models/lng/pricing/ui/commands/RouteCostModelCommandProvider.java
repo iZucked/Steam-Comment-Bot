@@ -70,7 +70,8 @@ public class RouteCostModelCommandProvider extends BaseModelCommandProvider<Obje
 		final List<RouteCost> extraCosts = new ArrayList<RouteCost>();
 		if (addedObject instanceof Route) {
 			final Route route = (Route) addedObject;
-			if (route.getRouteOption() == RouteOption.DIRECT) {
+			// Only maintain Suez Canal Costs
+			if (route.getRouteOption() != RouteOption.SUEZ) {
 				return null;
 			}
 			final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(scenarioModel);
@@ -100,7 +101,7 @@ public class RouteCostModelCommandProvider extends BaseModelCommandProvider<Obje
 					if (routeCost.getVesselClass() == addedObject && routeCost.getRoute() == route)
 						continue add_costs_for_new_vc;
 				}
-				if (route.getRouteOption() != RouteOption.DIRECT) {
+				if (route.getRouteOption() == RouteOption.SUEZ) {
 					extraCosts.add(createRouteCost(route, (VesselClass) addedObject));
 				}
 			}
@@ -113,7 +114,7 @@ public class RouteCostModelCommandProvider extends BaseModelCommandProvider<Obje
 						if (routeCost.getVesselClass() == addedObject && routeCost.getRoute() == route)
 							continue add_costs_for_new_vc;
 					}
-					if (route.getRouteOption() != RouteOption.DIRECT) {
+					if (route.getRouteOption() == RouteOption.SUEZ) {
 						extraCosts.add(createRouteCost(route, (VesselClass) addedObject));
 					}
 				}
