@@ -25,6 +25,7 @@ import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
@@ -32,6 +33,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -59,6 +61,10 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 
 	@NonNull
 	private final String name;
+
+	@Inject
+	@NonNull
+	private IRouteCostProvider routeCostProvider;
 
 	@Inject
 	@NonNull
@@ -168,10 +174,10 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 			return true;
 		}
 
-		final IVesselAvailability vessel = vesselProvider.getVesselAvailability(resource);
+		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		final PortType firstType = portTypeProvider.getPortType(first);
 		final PortType secondType = portTypeProvider.getPortType(second);
-		if (vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
+		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
 			final ITimeWindow tw1 = slot1.getTimeWindow();
 			final ITimeWindow tw2 = slot2.getTimeWindow();
 
@@ -205,7 +211,7 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 			return true;
 		}
 
-		if (vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS) {
+		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS) {
 			// Ignore problems with short cargoes between discharge and next load
 			if (firstType == PortType.Start && secondType == PortType.End) {
 				return true;
@@ -215,23 +221,6 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 			}
 		}
 
-		final List<Pair<ERouteOption, Integer>> distanceValues = distanceProvider.getDistanceValues(slot1.getPort(), slot2.getPort());
-		int distance = Integer.MAX_VALUE;
-		for (final Pair<ERouteOption, Integer> distanceOption : distanceValues) {
-			final int routeDistance = distanceOption.getSecond();
-			if (routeDistance < distance) {
-				distance = routeDistance;
-			}
-		}
-
-		// final int distance = distanceProvider.getMinimumValue(slot1.getPort(), slot2.getPort());
-
-		if (distance == Integer.MAX_VALUE) {
-			return false;
-		}
-
-		// FIXME: TRANSIT TIME
-		final int travelTime = Calculator.getTimeFromSpeedDistance(resourceMaxSpeed, distance);
 		final ITimeWindow tw1 = slot1.getTimeWindow();
 		final ITimeWindow tw2 = slot2.getTimeWindow();
 
@@ -239,8 +228,38 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 			return true; // if the time windows are null, there is no effective constraint
 		}
 
-		final int earliestArrivalTime = tw1.getStart() + elementDurationProvider.getElementDuration(first, resource) + travelTime;
+		final int voyageStartTime = tw1.getStart() + elementDurationProvider.getElementDuration(first, resource);
+		Integer travelTime = null;
+		IVessel vessel = vesselAvailability.getVessel();
+		// TODO: Use this loop once rest of code if verified correct.
+		// for (final String route : distanceProvider.getRoutes()) {
+		// int routeTravelTime = distanceProvider.getTravelTime(route, vessel, slot1.getPort(), slot2.getPort(), voyageStartTime, resourceMaxSpeed);
+		// if (travelTime == null || routeTravelTime < travelTime) {
+		// travelTime = routeTravelTime;
+		// }
+		// }
+		final List<Pair<ERouteOption, Integer>> distanceValues = distanceProvider.getDistanceValues(slot1.getPort(), slot2.getPort(), voyageStartTime);
+		for (final Pair<ERouteOption, Integer> distanceOption : distanceValues) {
 
+			final int distance = distanceOption.getSecond();
+			if (distance == Integer.MAX_VALUE) {
+				continue;
+			}
+
+			// TODO: Excluding transit time looks like a bug
+			final int transitTime = 0;// routeCostProvider.getRouteTransitTime(distanceOption.getKey(), vessel);
+			//
+			final int routeTravelTime = Calculator.getTimeFromSpeedDistance(resourceMaxSpeed, distance) + transitTime;
+			if (travelTime == null || routeTravelTime < travelTime) {
+				travelTime = routeTravelTime;
+			}
+		}
+
+		if (travelTime == null) {
+			return false;
+		}
+
+		final int earliestArrivalTime = voyageStartTime + travelTime;
 		final int latestAllowableTime = tw2.getEnd() + maxLateness;
 
 		if (START_ELEMENT_OPTIMISATION_FIX) {
@@ -254,12 +273,15 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 	public String explain(@NonNull final ISequenceElement first, @NonNull final ISequenceElement second, @NonNull final IResource resource) {
 		final IPortSlot slot1 = portSlotProvider.getPortSlot(first);
 		final IPortSlot slot2 = portSlotProvider.getPortSlot(second);
-		final int distance = distanceProvider.getDistance(ERouteOption.DIRECT, slot1.getPort(), slot2.getPort());
+		final ITimeWindow tw1 = slot1.getTimeWindow();
+		final ITimeWindow tw2 = slot2.getTimeWindow();
+		final int visitDuration = elementDurationProvider.getElementDuration(first, resource);
+
+		final int distance = distanceProvider.getDistance(ERouteOption.DIRECT, slot1.getPort(), slot2.getPort(), tw1.getStart() + visitDuration);
+
 		if (distance == Integer.MAX_VALUE) {
 			return "No edge connecting ports";
 		}
-		final ITimeWindow tw1 = slot1.getTimeWindow();
-		final ITimeWindow tw2 = slot2.getTimeWindow();
 
 		return "Excessive lateness : " + slot1.getPort().getName() + " to " + slot2.getPort().getName() + " = " + distance + ", but " + " start of first tw = " + tw1.getStart()
 				+ " and end of second = " + tw2.getEnd();
@@ -272,5 +294,4 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 	public void setMaxLateness(final int maxLateness) {
 		this.maxLateness = maxLateness;
 	}
-
 }

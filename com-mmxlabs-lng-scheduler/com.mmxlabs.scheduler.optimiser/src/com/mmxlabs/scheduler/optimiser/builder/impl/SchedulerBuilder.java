@@ -1049,7 +1049,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	/**
 	 */
 	@Override
-	public void setVesselRouteCost(final ERouteOption route, @NonNull final IVessel vessel, final IRouteCostProvider.CostType costType, final long tollPrice) {
+	public void setVesselRouteCost(final @NonNull ERouteOption route, @NonNull final IVessel vessel, final IRouteCostProvider.CostType costType, final long tollPrice) {
 		routeCostProvider.setRouteCost(route, vessel, costType, tollPrice);
 	}
 
@@ -1061,13 +1061,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public void setVesselRouteFuel(final ERouteOption name, @NonNull final IVessel vessel, final VesselState vesselState, final long baseFuelInScaledMT, final long nboRateInScaledM3) {
-		routeCostProvider.setRouteFuel(name, vessel, vesselState, baseFuelInScaledMT, nboRateInScaledM3);
+	public void setVesselRouteFuel(final @NonNull ERouteOption route, @NonNull final IVessel vessel, final VesselState vesselState, final long baseFuelInScaledMT, final long nboRateInScaledM3) {
+		routeCostProvider.setRouteFuel(route, vessel, vesselState, baseFuelInScaledMT, nboRateInScaledM3);
 	}
 
 	@Override
-	public void setVesselRouteTransitTime(final ERouteOption name, final IVessel vessel, final int transitTimeInHours) {
-		routeCostProvider.setRouteTransitTime(name, vessel, transitTimeInHours);
+	public void setVesselRouteTransitTime(final @NonNull ERouteOption route, final @NonNull IVessel vessel, final int transitTimeInHours) {
+		routeCostProvider.setRouteTransitTime(route, vessel, transitTimeInHours);
 	}
 
 	@Override

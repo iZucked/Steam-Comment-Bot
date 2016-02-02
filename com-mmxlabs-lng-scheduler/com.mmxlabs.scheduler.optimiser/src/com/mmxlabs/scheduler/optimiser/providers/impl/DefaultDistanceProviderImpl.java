@@ -125,8 +125,7 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 		if (baseTime == Integer.MAX_VALUE) {
 			return Integer.MAX_VALUE;
 		}
-		final int transitTime = routeCostProvider.getRouteTransitTime(route, vessel
-				);
+		final int transitTime = routeCostProvider.getRouteTransitTime(route, vessel);
 		return baseTime + transitTime;
 	}
 

@@ -363,7 +363,7 @@ public interface ISchedulerBuilder {
 	 * @param state
 	 * @param tollPrice
 	 */
-	void setVesselRouteCost(final ERouteOption route, @NonNull final IVessel vessel, @NonNull final IRouteCostProvider.CostType costType, final long tollPrice);
+	void setVesselRouteCost(final @NonNull ERouteOption route, @NonNull final IVessel vessel, @NonNull final IRouteCostProvider.CostType costType, final long tollPrice);
 
 	/**
 	 * Set the default toll associated with passing by a given route
@@ -389,19 +389,19 @@ public interface ISchedulerBuilder {
 	 * @param nboRateInScaledM3
 	 *            the NBO rate in up-scaled M3 (see {@link Calculator#ScaleFactor})
 	 */
-	void setVesselRouteFuel(ERouteOption route, @NonNull IVessel vessel, VesselState vesselState, long baseFuelInScaledMT, long nboRateInScaledM3);
+	void setVesselRouteFuel(@NonNull ERouteOption route, @NonNull IVessel vessel, VesselState vesselState, long baseFuelInScaledMT, long nboRateInScaledM3);
 
 	/**
-	 * Set the extra time required for the given vessel class to travel by the given route
+	 * Set the extra time required for the given vessel to travel by the given route
 	 * 
 	 * @param name
 	 *            the name of the route
-	 * @param vc
-	 *            the vessel class
+	 * @param vessel
+	 *            the vessel
 	 * @param time
 	 *            the extra transit time required, in hours
 	 */
-	void setVesselRouteTransitTime(@NonNull ERouteOption name, @NonNull IVessel vessel, int timeInHours);
+	void setVesselRouteTransitTime(@NonNull ERouteOption route, @NonNull IVessel vessel, int timeInHours);
 
 	/**
 	 * Specify an amount of time a given {@link IResource} must incur if assigned to the given {@link ISequenceElement}.

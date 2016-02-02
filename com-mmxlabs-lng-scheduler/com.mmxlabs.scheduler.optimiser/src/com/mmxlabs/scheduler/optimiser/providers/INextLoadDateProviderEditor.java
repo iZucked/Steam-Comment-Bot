@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 
@@ -13,7 +15,7 @@ public interface INextLoadDateProviderEditor extends INextLoadDateProvider {
 		Service_Speed, Max_Speed, Constant_Speed
 	}
 
-	void addSlotForContract(ILoadPriceCalculator contract, ILoadOption slot);
+	void addSlotForContract(@NonNull ILoadPriceCalculator contract, @NonNull ILoadOption slot);
 
 	/**
 	 * When there are no feasible slots, we model based on a speed determined by the rule. If the rule is {@link Rule#Constant_Speed} then {@link #setConstantSpeed(ILoadPriceCalculator, int)} must
@@ -22,7 +24,7 @@ public interface INextLoadDateProviderEditor extends INextLoadDateProvider {
 	 * @param contract
 	 * @param rule
 	 */
-	void setRuleForNoSlot(ILoadPriceCalculator contract, Rule rule);
+	void setRuleForNoSlot(@NonNull ILoadPriceCalculator contract, @NonNull Rule rule);
 
 	/**
 	 * If the "Rule for No Slot" is {@link Rule#Constant_Speed} then this method must be called to specify the constant speed.
@@ -30,5 +32,5 @@ public interface INextLoadDateProviderEditor extends INextLoadDateProvider {
 	 * @param contract
 	 * @param constantSpeed
 	 */
-	void setConstantSpeed(ILoadPriceCalculator contract, int constantSpeed);
+	void setConstantSpeed(@NonNull ILoadPriceCalculator contract, int constantSpeed);
 }
