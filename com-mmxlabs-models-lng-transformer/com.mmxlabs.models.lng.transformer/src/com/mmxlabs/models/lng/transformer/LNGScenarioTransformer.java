@@ -50,6 +50,7 @@ import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.time.Hours;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -95,11 +96,14 @@ import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
+import com.mmxlabs.models.lng.pricing.PanamaCanalTariff;
+import com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate;
@@ -2231,7 +2235,9 @@ public class LNGScenarioTransformer {
 
 		orderedKeys.add(RouteOption.DIRECT);
 		orderedKeys.add(RouteOption.SUEZ);
-		orderedKeys.add(RouteOption.PANAMA);
+		if (LicenseFeatures.isPermitted("features:panama-canal")) {
+			orderedKeys.add(RouteOption.PANAMA);
+		}
 
 		/*
 		 * Now fill out the distances from the distance model. Firstly we need to create the default distance matrix.
@@ -2259,9 +2265,6 @@ public class LNGScenarioTransformer {
 					final IVesselClass vesselClass = vessel.getVesselClass();
 					if (vesselClass != null) {
 						final VesselClass eVesselClass = vesselClassAssociation.reverseLookup(vesselClass);
-						//
-						// final FleetModel fleetModel = rootObject.getReferenceModel().getFleetModel();
-						// for (final Vessel eVessel : fleetModel.getVessels()) {
 						for (final VesselClassRouteParameters routeParameters : eVesselClass.getRouteParameters()) {
 							builder.setVesselRouteTransitTime(mapRouteOption(routeParameters.getRoute()), vessel, routeParameters.getExtraTransitTime());
 
@@ -2280,6 +2283,12 @@ public class LNGScenarioTransformer {
 			// set tolls
 			final CostModel costModel = rootObject.getReferenceModel().getCostModel();
 
+			final PanamaCanalTariff panamaCanalTariff = costModel.getPanamaCanalTariff();
+			if (panamaCanalTariff != null) {
+				final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(rootObject);
+				buildPanamaCosts(builder, vesselAssociation, fleetModel, panamaCanalTariff);
+			}
+
 			final Map<VesselClass, List<RouteCost>> vesselClassToRouteCostMap = costModel.getRouteCosts().stream() //
 					.collect(Collectors.groupingBy(RouteCost::getVesselClass, Collectors.mapping(Function.identity(), Collectors.toList())));
 
@@ -2296,6 +2305,11 @@ public class LNGScenarioTransformer {
 						}
 						assert routeCosts != null;
 						for (final RouteCost routeCost : routeCosts) {
+
+							if (routeCost.getRoute().getRouteOption() == RouteOption.PANAMA) {
+								continue;
+							}
+
 							builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.Laden, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getLadenCost()));
 
 							builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.Ballast, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost()));
@@ -2317,6 +2331,50 @@ public class LNGScenarioTransformer {
 				.toArray(new String[orderedKeys.size()]);
 		portDistanceProvider.setPreSortedKeys(preSortedKeys);
 
+	}
+
+	public static void buildPanamaCosts(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Vessel, IVessel> vesselAssociation, final FleetModel fleetModel,
+			@NonNull final PanamaCanalTariff panamaCanalTariff) {
+
+		// Extract band information into a sorted list
+		final List<Pair<Integer, PanamaCanalTariffBand>> bands = new LinkedList<>();
+		for (final PanamaCanalTariffBand band : panamaCanalTariff.getBands()) {
+			int upperBound = Integer.MAX_VALUE;
+			if (band.isSetBandEnd()) {
+				upperBound = band.getBandEnd();
+			}
+			bands.add(new Pair<>(upperBound, band));
+		}
+		// Sort the bands smallest to largest
+		Collections.sort(bands, (b1, b2) -> b1.getFirst().compareTo(b2.getFirst()));
+
+		for (final Vessel eVessel : fleetModel.getVessels()) {
+			final int capacityInM3 = eVessel.getVesselOrVesselClassCapacity();
+			double totalLadenCost = 0.0;
+			double totalBallastCost = 0.0;
+			double totalBallastRoundTripCost = 0.0;
+			for (final Pair<Integer, PanamaCanalTariffBand> p : bands) {
+				final PanamaCanalTariffBand band = p.getSecond();
+				//// How much vessel capacity is used for this band calculation?
+				// First, find the largest value valid in this band
+				double contributingCapacity = Math.min(capacityInM3, p.getFirst());
+
+				// Next, subtract band lower bound to find the capacity contribution
+				contributingCapacity = Math.max(0, contributingCapacity - (band.isSetBandStart() ? band.getBandStart() : 0));
+
+				if (contributingCapacity > 0) {
+					totalLadenCost += contributingCapacity * band.getLadenTariff();
+					totalBallastCost += contributingCapacity * band.getBallastTariff();
+					totalBallastRoundTripCost += contributingCapacity * band.getBallastRoundtripTariff();
+				}
+			}
+
+			final IVessel vessel = vesselAssociation.lookupNullChecked(eVessel);
+
+			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.Laden, OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalLadenCost)));
+			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.Ballast, OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalBallastCost)));
+			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.RoundTripBallast, OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalBallastRoundTripCost)));
+		}
 	}
 
 	/**
