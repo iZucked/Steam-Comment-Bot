@@ -51,7 +51,7 @@ public class ColourSchemeUtil {
 		VesselClass vesselClass = null;
 
 		// get vessel class directly from the sequence if it is a spot charter
-		CharterInMarket charterInMarket = sequence.getCharterInMarket();
+		final CharterInMarket charterInMarket = sequence.getCharterInMarket();
 		if (charterInMarket != null) {
 			vesselClass = charterInMarket.getVesselClass();
 		}
@@ -172,12 +172,21 @@ public class ColourSchemeUtil {
 	}
 
 	public static boolean isFOBSaleCargo(final SlotVisit visit) {
-		boolean isFOB;
-		final Slot slot = visit.getSlotAllocation().getSlot();
-		if (slot instanceof LoadSlot) {
-			return visit.getSlotAllocation().getCargoAllocation().getInputCargo().getCargoType() == CargoType.FOB;
-		} else {
-			isFOB = ((DischargeSlot) slot).isFOBSale();
+		boolean isFOB = false;
+		final SlotAllocation slotAllocation = visit.getSlotAllocation();
+		if (slotAllocation != null) {
+			final Slot slot = slotAllocation.getSlot();
+			if (slot instanceof LoadSlot) {
+				final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
+				if (cargoAllocation != null) {
+					final Cargo inputCargo = cargoAllocation.getInputCargo();
+					if (inputCargo != null) {
+						return inputCargo.getCargoType() == CargoType.FOB;
+					}
+				}
+			} else {
+				isFOB = ((DischargeSlot) slot).isFOBSale();
+			}
 		}
 		return isFOB;
 	}
