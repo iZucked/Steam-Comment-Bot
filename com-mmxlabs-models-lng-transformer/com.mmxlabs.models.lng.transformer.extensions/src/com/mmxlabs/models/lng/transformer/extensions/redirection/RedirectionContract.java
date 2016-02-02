@@ -25,6 +25,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.impl.DefaultVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
@@ -43,6 +44,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 import com.mmxlabs.scheduler.optimiser.schedule.ShippingCostHelper;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -391,4 +393,24 @@ public class RedirectionContract implements ILoadPriceCalculator {
 		final long transferVolumeInM3 = allocationAnnotation.getSlotVolumeInM3(loadSlot);
 		return calculateLoadPricePerMMBTu(loadSlot, dischargeOption, transferTime, loadSlot.getPort(), dischargePricePerMMBTu, transferVolumeInM3, annotations);
 	}
+
+	@Override
+	public PricingEventType getCalculatorPricingEventType(ILoadOption loadOption, IPortTimeWindowsRecord portTimeWindowsRecord) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getEstimatedPurchasePrice(ILoadOption loadOption, IDischargeOption dischargeOption, int timeInHours) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getCalculatorPricingDate(ILoadOption loadOption, IPortTimeWindowsRecord portTimeWindowsRecord) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
 }

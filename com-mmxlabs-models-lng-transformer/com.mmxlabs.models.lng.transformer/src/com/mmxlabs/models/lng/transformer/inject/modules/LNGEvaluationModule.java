@@ -27,6 +27,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.CachingVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.DirectRandomSequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.PriceBasedSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.lso.LegalSequencingChecker;
 import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorModule;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.breakeven.IBreakEvenEvaluator;
@@ -55,10 +56,8 @@ public class LNGEvaluationModule extends AbstractModule {
 
 
 		bind(DirectRandomSequenceScheduler.class).in(PerChainUnitScope.class);
-//		bind(DirectRandomSequenceScheduler.class).in(Singleton.class);
 		bind(ISequenceScheduler.class).to(DirectRandomSequenceScheduler.class);
-
-
+		
 		if (hints != null) {
 			if (LicenseFeatures.isPermitted("features:optimisation-charter-out-generation")) {
 
