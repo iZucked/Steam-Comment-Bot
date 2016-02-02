@@ -9,13 +9,13 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.shiro.SecurityUtils;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -41,6 +41,7 @@ import com.mmxlabs.lingo.reports.views.schedule.model.RowGroup;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportFactory;
 import com.mmxlabs.lingo.reports.views.schedule.model.Table;
 import com.mmxlabs.lingo.reports.views.schedule.model.UserGroup;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -496,51 +497,58 @@ public class ScenarioComparisonServiceTransformer {
 	public void addInputEquivalents(@NonNull final Row row, @NonNull final EObject a) {
 
 		// map to events
+		final Set<EObject> equivalents = new LinkedHashSet<>();
 		if (a instanceof CargoAllocation) {
 			final CargoAllocation allocation = (CargoAllocation) a;
 
-			final List<Object> equivalents = new LinkedList<Object>();
 			for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
 				equivalents.add(slotAllocation.getSlot());
 				equivalents.add(slotAllocation.getSlotVisit());
 			}
-			row.getInputEquivalents().addAll(allocation.getEvents());
-			row.getInputEquivalents().add(allocation.getInputCargo());
+			equivalents.addAll(allocation.getEvents());
+			Cargo inputCargo = allocation.getInputCargo();
+			if (inputCargo != null) {
+				equivalents.add(inputCargo);
+			}
 		} else if (a instanceof SlotVisit) {
 			final SlotVisit slotVisit = (SlotVisit) a;
 
 			final CargoAllocation allocation = slotVisit.getSlotAllocation().getCargoAllocation();
 			for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
-				row.getInputEquivalents().add(slotAllocation.getSlot());
-				row.getInputEquivalents().add(slotAllocation.getSlotVisit());
+				equivalents.add(slotAllocation.getSlot());
+				equivalents.add(slotAllocation.getSlotVisit());
 			}
-			row.getInputEquivalents().addAll(allocation.getEvents());
-			row.getInputEquivalents().add(allocation.getInputCargo());
+			equivalents.addAll(allocation.getEvents());
+			equivalents.add(allocation.getInputCargo());
 		} else if (a instanceof VesselEventVisit) {
 			final VesselEventVisit vesselEventVisit = (VesselEventVisit) a;
-			row.getInputEquivalents().addAll(Lists.<EObject> newArrayList(vesselEventVisit, vesselEventVisit.getVesselEvent()));
-			row.getInputEquivalents().addAll(vesselEventVisit.getEvents());
+			equivalents.addAll(Lists.<EObject> newArrayList(vesselEventVisit, vesselEventVisit.getVesselEvent()));
+			equivalents.addAll(vesselEventVisit.getEvents());
 		} else if (a instanceof GeneratedCharterOut) {
 			final GeneratedCharterOut generatedCharterOut = (GeneratedCharterOut) a;
-			row.getInputEquivalents().add(generatedCharterOut);
-			row.getInputEquivalents().addAll(generatedCharterOut.getEvents());
+			equivalents.add(generatedCharterOut);
+			equivalents.addAll(generatedCharterOut.getEvents());
 		} else if (a instanceof StartEvent) {
 			final StartEvent startEvent = (StartEvent) a;
-			row.getInputEquivalents().addAll(startEvent.getEvents());
+			equivalents.addAll(startEvent.getEvents());
 			final VesselAvailability vesselAvailability = startEvent.getSequence().getVesselAvailability();
 			if (vesselAvailability != null) {
-				row.getInputEquivalents().addAll(Lists.<EObject> newArrayList(startEvent, vesselAvailability.getVessel()));
+				equivalents.addAll(Lists.<EObject> newArrayList(startEvent, vesselAvailability.getVessel()));
 			}
 		} else if (a instanceof OpenSlotAllocation) {
 			final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) a;
-			row.getInputEquivalents().addAll(Lists.<EObject> newArrayList(openSlotAllocation, openSlotAllocation.getSlot()));
+			equivalents.addAll(Lists.<EObject> newArrayList(openSlotAllocation, openSlotAllocation.getSlot()));
 		} else {
-			row.getInputEquivalents().addAll(Lists.<EObject> newArrayList(a));
+			equivalents.addAll(Lists.<EObject> newArrayList(a));
 		}
 		// FIXME: Added to vessel report, but this causing any event on a sequence to be "equivalent" to any other
 		if (row.getSequence() != null) {
 			// row.getInputEquivalents().add(row.getSequence());
 		}
+
+		equivalents.stream()//
+				.filter(e -> e != null)// Filter out nulls
+				.forEach(e -> row.getInputEquivalents().add(e));
 	}
 
 	private void renumberCycleGroups(final Table table) {
