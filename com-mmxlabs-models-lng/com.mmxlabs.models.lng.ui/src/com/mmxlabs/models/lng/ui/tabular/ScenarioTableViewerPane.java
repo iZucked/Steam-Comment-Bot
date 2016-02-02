@@ -157,6 +157,10 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 		return "toolbar:" + getClass().getCanonicalName();
 	}
 
+	protected String getMenuID() {
+		return "menu:" + getClass().getCanonicalName();
+	}
+
 	@Override
 	public void dispose() {
 		if (page != null) {
@@ -450,17 +454,20 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 
 		// add extension points to toolbar
 		{
-			final String toolbarID = getToolbarID();
 			final IMenuService menuService = (IMenuService) PlatformUI.getWorkbench().getService(IMenuService.class);
 			if (menuService != null) {
-				menuService.populateContributionManager(toolbar, toolbarID);
+				{
+					toolbar.getControl().addDisposeListener(new DisposeListener() {
 
-				viewer.getControl().addDisposeListener(new DisposeListener() {
-					@Override
-					public void widgetDisposed(final DisposeEvent e) {
-						menuService.releaseContributions(toolbar);
-					}
-				});
+						@Override
+						public void widgetDisposed(DisposeEvent e) {
+							menuService.releaseContributions(toolbar);
+
+						}
+					});
+					menuService.populateContributionManager(toolbar, getToolbarID());
+				}
+
 			}
 		}
 
@@ -477,6 +484,26 @@ public class ScenarioTableViewerPane extends EMFViewerPane {
 
 		if (copyToClipboardAction != null) {
 			toolbar.add(copyToClipboardAction);
+		}
+
+		{
+			// Menu Manager
+			{
+				final String menuID = getMenuID();
+				final IMenuService menuService = (IMenuService) PlatformUI.getWorkbench().getService(IMenuService.class);
+				if (menuService != null) {
+					final MenuManager mgr = getMenuManager();
+					menuService.populateContributionManager(mgr, menuID);
+
+					viewer.getControl().addDisposeListener(new DisposeListener() {
+						@Override
+						public void widgetDisposed(final DisposeEvent e) {
+							menuService.releaseContributions(mgr);
+						}
+					});
+				}
+			}
+
 		}
 
 		if (actionBars != null) {

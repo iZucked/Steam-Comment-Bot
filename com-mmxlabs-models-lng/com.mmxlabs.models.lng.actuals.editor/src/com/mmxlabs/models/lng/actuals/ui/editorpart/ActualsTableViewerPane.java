@@ -508,7 +508,7 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 			if (menuService != null) {
 				menuService.populateContributionManager(toolbar, toolbarID);
 
-				viewer.getControl().addDisposeListener(new DisposeListener() {
+				toolbar.getControl().addDisposeListener(new DisposeListener() {
 					@Override
 					public void widgetDisposed(final DisposeEvent e) {
 						menuService.releaseContributions(toolbar);

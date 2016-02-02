@@ -335,7 +335,7 @@
          point="org.eclipse.ui.menus">
       <menuContribution
             allPopups="false"
-            locationURI="menu:com.mmxlabs.models.lng.port.editor.views.PortView?after=additions">
+            locationURI="menu:com.mmxlabs.models.lng.port.ui.editorpart.PortEditorPane">
          <command
                commandId="com.mmxlabs.models.lng.pricing.editor.commands.EditPanamaCanalTariff"
                style="push">

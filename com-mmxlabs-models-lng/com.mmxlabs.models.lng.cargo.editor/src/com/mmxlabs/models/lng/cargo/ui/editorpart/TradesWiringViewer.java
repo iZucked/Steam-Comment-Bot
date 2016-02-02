@@ -744,7 +744,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			if (menuService != null) {
 				menuService.populateContributionManager(toolbar, toolbarID);
 
-				viewer.getControl().addDisposeListener(new DisposeListener() {
+				toolbar.addDisposeListener(new DisposeListener() {
 					@Override
 					public void widgetDisposed(final DisposeEvent e) {
 						menuService.releaseContributions(toolbar);
