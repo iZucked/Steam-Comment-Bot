@@ -16,9 +16,9 @@ import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceIntervalProviderHelper;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.TimeWindowsTrimming;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.PriceIntervalProviderHelper;
+import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TimeWindowsTrimming;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
 /**

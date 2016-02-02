@@ -1,4 +1,4 @@
-package com.mmxlabs.scheduler.optimiser.contracts.impl;
+package com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling;
 
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.mock;
@@ -48,6 +48,9 @@ import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
+import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.PriceIntervalProviderHelper;
+import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TimeWindowSchedulingCanalDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TimeWindowsTrimming;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimeWindowsRecord;
 

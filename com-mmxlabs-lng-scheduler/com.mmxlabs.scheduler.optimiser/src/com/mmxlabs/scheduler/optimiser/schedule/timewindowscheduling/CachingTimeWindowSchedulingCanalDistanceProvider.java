@@ -1,4 +1,4 @@
-package com.mmxlabs.scheduler.optimiser.contracts.impl;
+package com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling;
 
 import java.util.HashMap;
 import java.util.List;

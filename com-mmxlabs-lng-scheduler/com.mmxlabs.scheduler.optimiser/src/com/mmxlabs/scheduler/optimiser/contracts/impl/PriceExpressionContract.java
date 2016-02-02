@@ -16,6 +16,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider;
 import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
+import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.PriceIntervalProviderHelper;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
 /**

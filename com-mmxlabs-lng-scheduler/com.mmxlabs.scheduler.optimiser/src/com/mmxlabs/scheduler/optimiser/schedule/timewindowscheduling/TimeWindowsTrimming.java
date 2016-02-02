@@ -1,4 +1,4 @@
-package com.mmxlabs.scheduler.optimiser.contracts.impl;
+package com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
