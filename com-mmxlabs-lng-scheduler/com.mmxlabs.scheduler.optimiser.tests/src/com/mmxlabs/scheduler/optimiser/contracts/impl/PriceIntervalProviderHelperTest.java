@@ -31,6 +31,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
@@ -83,10 +84,17 @@ public class PriceIntervalProviderHelperTest {
 
 		IPortTimeWindowsRecord portTimesWindowsRecord = Mockito.mock(IPortTimeWindowsRecord.class);
 		Mockito.when(portTimesWindowsRecord.getSlotDuration(loadSlot)).thenReturn(0);
+		IVessel vessel = getIVessel();
+		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
+		Assert.assertArrayEquals(new int[] {0, 0, 40, 45}, times);
+	}
+
+	private IVessel getIVessel() {
+		IVessel vessel = Mockito.mock(IVessel.class);
 		IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
 		Mockito.when(vesselClass.getMaxSpeed()).thenReturn(10*1000);
-		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vesselClass, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
-		Assert.assertArrayEquals(new int[] {0, 0, 40, 45}, times);
+		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
+		return vessel;
 	}
 	
 	@Test
@@ -120,9 +128,8 @@ public class PriceIntervalProviderHelperTest {
 
 		IPortTimeWindowsRecord portTimesWindowsRecord = Mockito.mock(IPortTimeWindowsRecord.class);
 		Mockito.when(portTimesWindowsRecord.getSlotDuration(loadSlot)).thenReturn(0);
-		IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
-		Mockito.when(vesselClass.getMaxSpeed()).thenReturn(10*1000);
-		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vesselClass, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
+		IVessel vessel = getIVessel();
+		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
 		Assert.assertArrayEquals(new int[] {15, 15, 50, 51}, times);
 	}
 	
@@ -156,9 +163,8 @@ public class PriceIntervalProviderHelperTest {
 		Mockito.when(loadSlot.getTimeWindow()).thenReturn(loadSlotTimeWindow);
 		Mockito.when(loadSlotTimeWindow.getStart()).thenReturn(0);
 
-		IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
-		Mockito.when(vesselClass.getMaxSpeed()).thenReturn(10*1000);
-		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vesselClass, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
+		IVessel vessel = getIVessel();
+		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
 		Assert.assertArrayEquals(new int[] {15, 15, 50, 51}, times);
 	}
 	
@@ -191,9 +197,8 @@ public class PriceIntervalProviderHelperTest {
 		
 		IPortTimeWindowsRecord portTimesWindowsRecord = Mockito.mock(IPortTimeWindowsRecord.class);
 		Mockito.when(portTimesWindowsRecord.getSlotDuration(loadSlot)).thenReturn(0);
-		IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
-		Mockito.when(vesselClass.getMaxSpeed()).thenReturn(10*1000);
-		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vesselClass, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
+		IVessel vessel = getIVessel();
+		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
 		Assert.assertArrayEquals(new int[] {15, 15, 40, 45}, times);
 	}
 
@@ -226,9 +231,8 @@ public class PriceIntervalProviderHelperTest {
 		IPortTimeWindowsRecord portTimesWindowsRecord = Mockito.mock(IPortTimeWindowsRecord.class);
 		Mockito.when(portTimesWindowsRecord.getSlotDuration(loadSlot)).thenReturn(0);
 		
-		IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
-		Mockito.when(vesselClass.getMaxSpeed()).thenReturn(10*1000);
-		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vesselClass, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
+		IVessel vessel = getIVessel();
+		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
 		Assert.assertArrayEquals(new int[] {5, 5, 40, 45}, times);
 	}
 
@@ -279,9 +283,8 @@ public class PriceIntervalProviderHelperTest {
 		
 		IPortTimeWindowsRecord portTimesWindowsRecord = Mockito.mock(IPortTimeWindowsRecord.class);
 		Mockito.when(portTimesWindowsRecord.getSlotDuration(loadSlot)).thenReturn(0);
-		IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
-		Mockito.when(vesselClass.getMaxSpeed()).thenReturn(10*1000);
-		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vesselClass, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
+		IVessel vessel = getIVessel();
+		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
 		Assert.assertArrayEquals(new int[] {15, 15, 40, 45}, times);
 	}
 
@@ -315,9 +318,8 @@ public class PriceIntervalProviderHelperTest {
 		
 		IPortTimeWindowsRecord portTimesWindowsRecord = Mockito.mock(IPortTimeWindowsRecord.class);
 		Mockito.when(portTimesWindowsRecord.getSlotDuration(loadSlot)).thenReturn(0);
-		IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
-		Mockito.when(vesselClass.getMaxSpeed()).thenReturn(10*1000);
-		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vesselClass, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
+		IVessel vessel = getIVessel();
+		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
 		Assert.assertArrayEquals(new int[] {15, 15, 50, 51}, times);
 	}
 
@@ -354,9 +356,8 @@ public class PriceIntervalProviderHelperTest {
 		
 		IPortTimeWindowsRecord portTimesWindowsRecord = Mockito.mock(IPortTimeWindowsRecord.class);
 		Mockito.when(portTimesWindowsRecord.getSlotDuration(loadSlot)).thenReturn(0);
-		IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
-		Mockito.when(vesselClass.getMaxSpeed()).thenReturn(10*1000);
-		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vesselClass, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
+		IVessel vessel = getIVessel();
+		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
 		Assert.assertArrayEquals(new int[] {15, 15, 40, 45}, times);
 	}
 
@@ -402,16 +403,12 @@ public class PriceIntervalProviderHelperTest {
 		
 		List<int[]> priceIntervals = new LinkedList<>();
 		priceIntervalProviderHelper.buildIntervalsList(loadSlot, curve, null, 0, 50, portTimeWindowsRecord, priceIntervals);
-		for (int[] i : priceIntervals) {
-			System.out.println(Arrays.toString(i));
-		}
 		List<int[]> expected = new LinkedList<>();
 		expected.add(new int[] {0,15});
 		expected.add(new int[] {6,20});
 		expected.add(new int[] {16,30});
 		expected.add(new int[] {50,Integer.MIN_VALUE});
 		
-		System.out.println(c.getValueAtPoint(30));
 		for (int i = 0; i < expected.size(); i++) {
 			Assert.assertTrue(String.format("Expected %s got %s",Arrays.toString(expected.get(i)), Arrays.toString(priceIntervals.get(i))), expected.get(i)[0] == priceIntervals.get(i)[0] && expected.get(i)[1] == priceIntervals.get(i)[1]);
 		}
@@ -463,16 +460,12 @@ public class PriceIntervalProviderHelperTest {
 		
 		List<int[]> priceIntervals = new LinkedList<>();
 		priceIntervalProviderHelper.buildIntervalsList(loadSlot, curve, null, 0, 50, portTimeWindowsRecord, priceIntervals);
-		for (int[] i : priceIntervals) {
-			System.out.println(Arrays.toString(i));
-		}
 		List<int[]> expected = new LinkedList<>();
 		expected.add(new int[] {0,20});
 		expected.add(new int[] {5,25});
 		expected.add(new int[] {15,30});
 		expected.add(new int[] {50,Integer.MIN_VALUE});
 		
-		System.out.println(c.getValueAtPoint(30));
 		for (int i = 0; i < expected.size(); i++) {
 			Assert.assertTrue(String.format("Expected %s got %s",Arrays.toString(expected.get(i)), Arrays.toString(priceIntervals.get(i))), expected.get(i)[0] == priceIntervals.get(i)[0] && expected.get(i)[1] == priceIntervals.get(i)[1]);
 		}
@@ -524,14 +517,10 @@ public class PriceIntervalProviderHelperTest {
 		
 		List<int[]> priceIntervals = new LinkedList<>();
 		priceIntervalProviderHelper.buildIntervalsList(loadSlot, curve, null, 0, 50, portTimeWindowsRecord, priceIntervals);
-		for (int[] i : priceIntervals) {
-			System.out.println(Arrays.toString(i));
-		}
 		List<int[]> expected = new LinkedList<>();
 		expected.add(new int[] {0,8});
 		expected.add(new int[] {50,Integer.MIN_VALUE});
 		
-		System.out.println(c.getValueAtPoint(30));
 		for (int i = 0; i < expected.size(); i++) {
 			Assert.assertTrue(String.format("Expected %s got %s",Arrays.toString(expected.get(i)), Arrays.toString(priceIntervals.get(i))), expected.get(i)[0] == priceIntervals.get(i)[0] && expected.get(i)[1] == priceIntervals.get(i)[1]);
 		}
@@ -579,14 +568,10 @@ public class PriceIntervalProviderHelperTest {
 		
 		List<int[]> priceIntervals = new LinkedList<>();
 		priceIntervalProviderHelper.buildIntervalsList(loadSlot, curve, null, 0, 50, portTimeWindowsRecord, priceIntervals);
-		for (int[] i : priceIntervals) {
-			System.out.println(Arrays.toString(i));
-		}
 		List<int[]> expected = new LinkedList<>();
 		expected.add(new int[] {0,5});
 		expected.add(new int[] {50,Integer.MIN_VALUE});
 		
-		System.out.println(c.getValueAtPoint(30));
 		for (int i = 0; i < expected.size(); i++) {
 			Assert.assertTrue(String.format("Expected %s got %s",Arrays.toString(expected.get(i)), Arrays.toString(priceIntervals.get(i))), expected.get(i)[0] == priceIntervals.get(i)[0] && expected.get(i)[1] == priceIntervals.get(i)[1]);
 		}
@@ -660,11 +645,7 @@ public class PriceIntervalProviderHelperTest {
 		
 		PriceIntervalProviderHelper priceIntervalProviderHelper = createPriceIntervalProviderHelper(0);
 		
-		List<int[]> priceIntervals = new LinkedList<>();
 		int[][] overlappingIntervals = priceIntervalProviderHelper.getOverlappingWindows(loadSlot, dischargeSlot, loadPriceIntervalProvider, dischargePriceIntervalProvider, 0, 50, portTimeWindowsRecord);
-		for (int[] i : overlappingIntervals) {
-			System.out.println(Arrays.toString(i));
-		}
 		int[][] expected = new int[][]{
 				{0, 5},
 				{5, 10},
@@ -682,9 +663,6 @@ public class PriceIntervalProviderHelperTest {
 		}
 		
 		List<int[]> priceDiffs = priceIntervalProviderHelper.buildComplexPriceIntervals(0, 50, loadSlot, dischargeSlot, loadPriceIntervalProvider, dischargePriceIntervalProvider, portTimeWindowsRecord);
-		for (int[] d : priceDiffs) {
-			System.out.println(Arrays.toString(d));
-		}
 		for (int i = 0; i < priceDiffs.size() - 1; i++) {
 			int[] d = priceDiffs.get(i);
 			Assert.assertTrue(d[1] == -5);
@@ -789,9 +767,6 @@ public class PriceIntervalProviderHelperTest {
 		});
 
 		int[][] overlappingIntervals = priceIntervalProviderHelper.getOverlappingWindows(loadSlot, dischargeSlot, loadPriceIntervalProvider, dischargePriceIntervalProvider, 0, 50, portTimeWindowsRecord);
-		for (int[] i : overlappingIntervals) {
-			System.out.println(Arrays.toString(i));
-		}
 		int[][] expected = new int[][]{
 				{0, 8},
 				{8, 13},
@@ -808,9 +783,6 @@ public class PriceIntervalProviderHelperTest {
 		}
 		
 		List<int[]> priceDiffs = priceIntervalProviderHelper.buildComplexPriceIntervals(0, 50, loadSlot, dischargeSlot, loadPriceIntervalProvider, dischargePriceIntervalProvider, portTimeWindowsRecord);
-		for (int[] d : priceDiffs) {
-			System.out.println(Arrays.toString(d));
-		}
 		for (int i = 0; i < priceDiffs.size() - 1; i++) {
 			int[] d = priceDiffs.get(i);
 			Assert.assertTrue(d[1] == -5);

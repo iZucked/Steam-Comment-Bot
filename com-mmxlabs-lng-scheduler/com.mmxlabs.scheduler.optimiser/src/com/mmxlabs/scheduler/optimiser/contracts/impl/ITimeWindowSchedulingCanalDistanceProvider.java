@@ -6,7 +6,7 @@ import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 
 /**
  * An interface to provide details on routes that can be used for pairs of time windows.
@@ -18,11 +18,11 @@ public interface ITimeWindowSchedulingCanalDistanceProvider {
 	 * Provides the minimum travel time for a given load-discharge pair and vessel class
 	 * @param load
 	 * @param discharge
-	 * @param vesselClass
+	 * @param vessel TODO
 	 * @return
 	 */
 	@NonNull
-	public long[][] getMinimumLadenTravelTimes(IPort load, IPort discharge, IVesselClass vesselClass, int ladenStartTime);
+	public long[][] getMinimumLadenTravelTimes(IPort load, IPort discharge, IVessel vessel, int ladenStartTime);
 
 	/**
 	 * Get feasible routes for min and max times

@@ -238,6 +238,18 @@ public class PriceIntervalProviderHelper {
 		return dischargePriceIntervals.get(dischargePriceIntervals.size()-1)[0] - loadPriceIntervals.get(0)[0];
 	}
 
+	IVessel getVessel(IResource resource) {
+		IVesselAvailability availability = vesselProvider.getVesselAvailability(resource);
+		if (availability == null) {
+			return null;
+		}
+		IVessel vessel = availability.getVessel();
+		if (vessel == null) {
+			return null;
+		}
+		return vessel;
+	}
+
 	IVesselClass getVesselClass(IResource resource) {
 		IVesselAvailability availability = vesselProvider.getVesselAvailability(resource);
 		if (availability == null) {

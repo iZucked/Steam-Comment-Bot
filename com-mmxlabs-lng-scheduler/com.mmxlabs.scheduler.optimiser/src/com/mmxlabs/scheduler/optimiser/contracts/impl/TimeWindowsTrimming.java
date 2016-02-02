@@ -15,7 +15,7 @@ import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.contracts.IPriceIntervalProvider;
 import com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer;
@@ -142,18 +142,18 @@ public class TimeWindowsTrimming {
 	/**
 	 * Trim time windows given different route options
 	 * @param portTimeWindowsRecord
-	 * @param vesselClass
+	 * @param vessel
 	 * @param load
 	 * @param discharge
 	 * @param loadPriceIntervals
 	 * @param dischargePriceIntervals
 	 * @return
 	 */
-	int[] trimCargoTimeWindowsWithRouteOptimisation(IPortTimeWindowsRecord portTimeWindowsRecord, IVesselClass vesselClass, ILoadOption load, IDischargeOption discharge,
+	int[] trimCargoTimeWindowsWithRouteOptimisation(IPortTimeWindowsRecord portTimeWindowsRecord, IVessel vessel, ILoadOption load, IDischargeOption discharge,
 			List<int[]> loadPriceIntervals, List<int[]> dischargePriceIntervals) {
 		ITimeWindow loadTimeWindow = load.getTimeWindow();
 		assert loadTimeWindow != null;
-		long[][] sortedCanalTimes = schedulingCanalDistanceProvider.getMinimumLadenTravelTimes(load.getPort(), discharge.getPort(), vesselClass, loadTimeWindow.getStart());
+		long[][] sortedCanalTimes = schedulingCanalDistanceProvider.getMinimumLadenTravelTimes(load.getPort(), discharge.getPort(), vessel, loadTimeWindow.getStart());
 		assert sortedCanalTimes.length > 0;
 		int loadDuration = portTimeWindowsRecord.getSlotDuration(load);
 		int minTime = Math.max(priceIntervalProviderHelper.getMinimumPossibleTimeForCargoIntervals(loadPriceIntervals, dischargePriceIntervals) + loadDuration, loadDuration);
@@ -204,18 +204,18 @@ public class TimeWindowsTrimming {
 	/**
 	 * Trim time windows given different route options when load depends on discharge and discharge depends on load
 	 * @param portTimeWindowsRecord
-	 * @param vesselClass
+	 * @param vessel
 	 * @param load
 	 * @param discharge
 	 * @param loadPriceIntervals
 	 * @param dischargePriceIntervals
 	 * @return
 	 */
-	private int[] trimCargoTimeWindowsWithRouteOptimisationForInvertedCase(IPortTimeWindowsRecord portTimeWindowsRecord, IVesselClass vesselClass, ILoadOption load, IDischargeOption discharge,
+	private int[] trimCargoTimeWindowsWithRouteOptimisationForInvertedCase(IPortTimeWindowsRecord portTimeWindowsRecord, IVessel vessel, ILoadOption load, IDischargeOption discharge,
 			List<int[]> loadPriceIntervals, List<int[]> dischargePriceIntervals) {
 		ITimeWindow loadTimeWindow = load.getTimeWindow();
 		assert loadTimeWindow != null;
-		long[][] sortedCanalTimes = schedulingCanalDistanceProvider.getMinimumLadenTravelTimes(load.getPort(), discharge.getPort(), vesselClass, loadTimeWindow.getStart());
+		long[][] sortedCanalTimes = schedulingCanalDistanceProvider.getMinimumLadenTravelTimes(load.getPort(), discharge.getPort(), vessel, loadTimeWindow.getStart());
 		assert sortedCanalTimes.length > 0;
 		int loadDuration = portTimeWindowsRecord.getSlotDuration(load);
 		int minTime = Math.max(priceIntervalProviderHelper.getMinimumPossibleTimeForCargoIntervals(loadPriceIntervals, dischargePriceIntervals) + loadDuration, loadDuration);
@@ -276,13 +276,13 @@ public class TimeWindowsTrimming {
 			List<int[]> dischargeIntervals, boolean switched) {
 		IResource resource = portTimeWindowRecord.getResource();
 		assert resource != null;
-		IVesselClass vesselClass = priceIntervalProviderHelper.getVesselClass(resource);
-		assert vesselClass != null;
+		IVessel vessel = priceIntervalProviderHelper.getVessel(resource);
+		assert vessel != null;
 		int[] bounds;
 		if (switched) {
-			bounds = trimCargoTimeWindowsWithRouteOptimisationForInvertedCase(portTimeWindowRecord, vesselClass, load, discharge, loadIntervals, dischargeIntervals);
+			bounds = trimCargoTimeWindowsWithRouteOptimisationForInvertedCase(portTimeWindowRecord, vessel, load, discharge, loadIntervals, dischargeIntervals);
 		} else {
-			bounds = trimCargoTimeWindowsWithRouteOptimisation(portTimeWindowRecord, vesselClass, load, discharge, loadIntervals, dischargeIntervals);
+			bounds = trimCargoTimeWindowsWithRouteOptimisation(portTimeWindowRecord, vessel, load, discharge, loadIntervals, dischargeIntervals);
 		}
 		priceIntervalProviderHelper.createAndSetTimeWindow(portTimeWindowRecord, load, bounds[0], bounds[1]);
 		priceIntervalProviderHelper.createAndSetTimeWindow(portTimeWindowRecord, discharge, bounds[2], bounds[3]);
