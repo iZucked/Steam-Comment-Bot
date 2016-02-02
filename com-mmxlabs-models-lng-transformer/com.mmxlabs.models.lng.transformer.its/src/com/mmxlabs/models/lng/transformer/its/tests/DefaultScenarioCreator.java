@@ -14,7 +14,6 @@ import java.util.List;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.slf4j.Logger;
@@ -221,7 +220,8 @@ public class DefaultScenarioCreator {
 		final int cooldownVolume = 0;
 		final double defaultFillCapacity = 1.0;
 		final int startHeelVolume = 0;
-		final int defaultCanalCost = 1;
+		final int defaultSuezCanalCost = 1;
+		final int defaultPanamaCanalCost = 1;
 
 		/**
 		 * Creates a heel options with default settings.
@@ -403,9 +403,14 @@ public class DefaultScenarioCreator {
 			return null;
 		}
 
-		public void assignDefaultCanalData(final VesselClass vc, final Route route) {
+		public void assignDefaultSuezCanalData(final VesselClass vc, final Route route) {
 			assignRouteParameters(vc, route);
-			setCanalCost(vc, route, defaultCanalCost, defaultCanalCost);
+			setCanalCost(vc, route, defaultSuezCanalCost, defaultSuezCanalCost);
+		}
+
+		public void assignDefaultPanamaCanalData(final VesselClass vc, final Route route) {
+			assignRouteParameters(vc, route);
+			setCanalCost(vc, route, defaultPanamaCanalCost, defaultPanamaCanalCost);
 		}
 
 		/**
@@ -834,71 +839,6 @@ public class DefaultScenarioCreator {
 		dryDock.setStartBy(start);
 
 		return dryDock;
-	}
-
-	/**
-	 * Creates a canal and costs. Although this only returns a VesselClassCost for the canal costs, the canal can be retrieved by using {@link VesselClassCost#getCanal()}.
-	 * 
-	 * @param canalOption
-	 *            The name of the canal
-	 * @param distanceAToB
-	 *            Distance along the canal from port A to port B
-	 * @param distanceBToA
-	 *            Distance along the canal from port B to port A
-	 * @param canalLadenCost
-	 *            Cost in dollars for a laden vessel
-	 * @param canalUnladenCost
-	 *            Cost in dollars for a ballast vessel
-	 * @param canalTransitFuelDays
-	 *            MT of base fuel per day used when in transit
-	 * @param canalTransitTime
-	 *            Transit time in hours
-	 * @return
-	 */
-	public static void createCanalAndCost(final LNGScenarioModel scenario, final RouteOption canalOption, final Port A, final Port B, final int distanceAToB, final int distanceBToA,
-			final int canalLadenCost, final int canalUnladenCost, final int canalTransitFuelDays, final int canalNBORateDays, final int canalTransitTime) {
-
-		final Route canal = PortFactory.eINSTANCE.createRoute();
-		canal.setCanal(true);
-		scenario.getReferenceModel().getPortModel().getRoutes().add(canal);
-		canal.setName(canalOption.getName());
-		// add distance lines, as for the main distance model:
-		final RouteLine atob = PortFactory.eINSTANCE.createRouteLine();
-		atob.setFrom(A);
-		atob.setTo(B);
-		atob.setDistance(distanceAToB);
-
-		final RouteLine btoa = PortFactory.eINSTANCE.createRouteLine();
-		btoa.setFrom(B);
-		btoa.setTo(A);
-		btoa.setDistance(distanceBToA);
-
-		canal.getLines().add(atob);
-		canal.getLines().add(btoa);
-
-		// next do canal costs
-		final RouteCost canalCost = PricingFactory.eINSTANCE.createRouteCost();
-		canalCost.setRoute(canal);
-		canalCost.setLadenCost(canalLadenCost); // cost in dollars for a laden vessel
-		canalCost.setBallastCost(canalUnladenCost); // cost in dollars for a ballast vessel
-
-		final FleetModel fleetModel = scenario.getReferenceModel().getFleetModel();
-
-		final VesselClassRouteParameters params = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
-
-		params.setRoute(canal);
-		params.setLadenConsumptionRate(canalTransitFuelDays);
-		params.setBallastConsumptionRate(canalTransitFuelDays);
-		params.setLadenNBORate(canalNBORateDays);
-		params.setBallastNBORate(canalNBORateDays);
-		params.setExtraTransitTime(canalTransitTime);
-
-		for (final VesselClass vc : fleetModel.getVesselClasses()) {
-			vc.getRouteParameters().add(EcoreUtil.copy(params));
-			final RouteCost rc2 = EcoreUtil.copy(canalCost);
-			rc2.setVesselClass(vc);
-			scenario.getReferenceModel().getCostModel().getRouteCosts().add(rc2);
-		}
 	}
 
 	public CharterOutEvent addCharterOut(final String id, final Port startPort, final Port endPort, final LocalDateTime startCharterOut, final int heelLimit, final int charterOutDurationDays,

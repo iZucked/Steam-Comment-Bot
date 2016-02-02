@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.inject.Named;
@@ -49,6 +50,7 @@ import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.common.time.Hours;
+import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -94,11 +96,14 @@ import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
+import com.mmxlabs.models.lng.pricing.PanamaCanalTariff;
+import com.mmxlabs.models.lng.pricing.PanamaCanalTariffBand;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate;
@@ -158,10 +163,12 @@ import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ILoadPriceCalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPromptPeriodProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
@@ -178,7 +185,7 @@ public class LNGScenarioTransformer {
 
 	private static final Logger log = LoggerFactory.getLogger(LNGScenarioTransformer.class);
 
-	private final LNGScenarioModel rootObject;
+	private final @NonNull LNGScenarioModel rootObject;
 
 	@Inject
 	@NonNull
@@ -222,6 +229,10 @@ public class LNGScenarioTransformer {
 	@Inject
 	@NonNull
 	private IndexedMultiMatrixProvider<IPort, Integer> portDistanceProvider;
+
+	@Inject
+	@NonNull
+	private IDistanceProviderEditor distanceProviderEditor;
 
 	@Inject
 	@NonNull
@@ -680,7 +691,7 @@ public class LNGScenarioTransformer {
 			}
 		}
 
-		buildDistances(builder, portAssociation, allPorts, portIndices, vesselAssociations.getFirst(), modelEntityMap);
+		buildDistances(builder, portAssociation, allPorts, portIndices, vesselAssociations.getSecond(), vesselAssociations.getFirst(), modelEntityMap);
 
 		buildCargoes(builder, portAssociation, vesselAssociations.getSecond(), contractTransformers, modelEntityMap);
 
@@ -738,7 +749,7 @@ public class LNGScenarioTransformer {
 		if (cargoModel != null) {
 
 			for (final LoadSlot loadSlot : cargoModel.getLoadSlots()) {
-
+				assert loadSlot != null;
 				final IPortSlot portSlot = modelEntityMap.getOptimiserObject(loadSlot, IPortSlot.class);
 				final IVessel vessel = allVessels.get(loadSlot.getNominatedVessel());
 				if (vessel != null && portSlot != null) {
@@ -746,7 +757,7 @@ public class LNGScenarioTransformer {
 				}
 			}
 			for (final DischargeSlot dischargeSlot : cargoModel.getDischargeSlots()) {
-
+				assert dischargeSlot != null;
 				final IPortSlot portSlot = modelEntityMap.getOptimiserObject(dischargeSlot, IPortSlot.class);
 				final IVessel vessel = allVessels.get(dischargeSlot.getNominatedVessel());
 				if (vessel != null && portSlot != null) {
@@ -2227,16 +2238,16 @@ public class LNGScenarioTransformer {
 	 * @throws IncompleteScenarioException
 	 */
 	private void buildDistances(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @NonNull final List<IPort> allPorts,
-			@NonNull final Map<IPort, Integer> portIndices, @NonNull final Association<VesselClass, IVesselClass> vesselAssociation, @NonNull final ModelEntityMap modelEntityMap)
-					throws IncompleteScenarioException {
+			@NonNull final Map<IPort, Integer> portIndices, @NonNull final Association<Vessel, IVessel> vesselAssociation, @NonNull final Association<VesselClass, IVesselClass> vesselClassAssociation,
+			@NonNull final ModelEntityMap modelEntityMap) throws IncompleteScenarioException {
 
 		final LinkedHashSet<RouteOption> orderedKeys = Sets.newLinkedHashSet();
 
 		orderedKeys.add(RouteOption.DIRECT);
 		orderedKeys.add(RouteOption.SUEZ);
-
-		// TODO: Add in Panama
-		// orderedKeys.add(RouteOption.PANAMA);
+		if (LicenseFeatures.isPermitted("features:panama-canal")) {
+			orderedKeys.add(RouteOption.PANAMA);
+		}
 
 		/*
 		 * Now fill out the distances from the distance model. Firstly we need to create the default distance matrix.
@@ -2258,29 +2269,73 @@ public class LNGScenarioTransformer {
 			}
 
 			// Set extra time and fuel consumption
-			final FleetModel fleetModel = rootObject.getReferenceModel().getFleetModel();
-			for (final VesselClass evc : fleetModel.getVesselClasses()) {
-				for (final VesselClassRouteParameters routeParameters : evc.getRouteParameters()) {
-					builder.setVesselClassRouteTransitTime(mapRouteOption(routeParameters.getRoute()), vesselAssociation.lookupNullChecked(evc), routeParameters.getExtraTransitTime());
+			for (final IVesselAvailability vesselAvailability : allVesselAvailabilities) {
+				final IVessel vessel = vesselAvailability.getVessel();
+				if (vessel != null) {
+					final IVesselClass vesselClass = vessel.getVesselClass();
+					if (vesselClass != null) {
+						final VesselClass eVesselClass = vesselClassAssociation.reverseLookup(vesselClass);
+						for (final VesselClassRouteParameters routeParameters : eVesselClass.getRouteParameters()) {
+							builder.setVesselRouteTransitTime(mapRouteOption(routeParameters.getRoute()), vessel, routeParameters.getExtraTransitTime());
 
-					builder.setVesselClassRouteFuel(mapRouteOption(routeParameters.getRoute()), vesselAssociation.lookupNullChecked(evc), VesselState.Laden,
-							OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenConsumptionRate()),
-							OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenNBORate()));
+							builder.setVesselRouteFuel(mapRouteOption(routeParameters.getRoute()), vessel, VesselState.Laden,
+									OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenConsumptionRate()),
+									OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenNBORate()));
 
-					builder.setVesselClassRouteFuel(mapRouteOption(routeParameters.getRoute()), vesselAssociation.lookupNullChecked(evc), VesselState.Ballast,
-							OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastConsumptionRate()),
-							OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastNBORate()));
-
+							builder.setVesselRouteFuel(mapRouteOption(routeParameters.getRoute()), vessel, VesselState.Ballast,
+									OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastConsumptionRate()),
+									OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastNBORate()));
+						}
+					}
 				}
 			}
 
 			// set tolls
 			final CostModel costModel = rootObject.getReferenceModel().getCostModel();
-			for (final RouteCost routeCost : costModel.getRouteCosts()) {
-				final IVesselClass vesselClass = vesselAssociation.lookupNullChecked(routeCost.getVesselClass());
 
-				builder.setVesselClassRouteCost(mapRouteOption(routeCost.getRoute()), vesselClass, VesselState.Laden, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getLadenCost()));
-				builder.setVesselClassRouteCost(mapRouteOption(routeCost.getRoute()), vesselClass, VesselState.Ballast, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost()));
+			final PanamaCanalTariff panamaCanalTariff = costModel.getPanamaCanalTariff();
+			if (panamaCanalTariff != null) {
+				final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(rootObject);
+				buildPanamaCosts(builder, vesselAssociation, fleetModel, panamaCanalTariff);
+				if (panamaCanalTariff.isSetAvailableFrom()) {
+					LocalDate availableFrom = panamaCanalTariff.getAvailableFrom();
+					if (availableFrom != null) {
+						int time = dateHelper.convertTime(availableFrom);
+						distanceProviderEditor.setRouteAvailableFrom(ERouteOption.PANAMA, time);
+					}
+				}
+			}
+
+			final Map<VesselClass, List<RouteCost>> vesselClassToRouteCostMap = costModel.getRouteCosts().stream() //
+					.collect(Collectors.groupingBy(RouteCost::getVesselClass, Collectors.mapping(Function.identity(), Collectors.toList())));
+
+			for (final IVesselAvailability vesselAvailability : allVesselAvailabilities) {
+				final IVessel vessel = vesselAvailability.getVessel();
+				if (vessel != null) {
+					final IVesselClass vesselClass = vessel.getVesselClass();
+					if (vesselClass != null) {
+						final VesselClass eVesselClass = vesselClassAssociation.reverseLookup(vesselClass);
+						final List<RouteCost> routeCosts = vesselClassToRouteCostMap.get(eVesselClass);
+						if (routeCosts == null) {
+							// Some unit tests have this state
+							continue;
+						}
+						assert routeCosts != null;
+						for (final RouteCost routeCost : routeCosts) {
+
+							if (routeCost.getRoute().getRouteOption() == RouteOption.PANAMA) {
+								continue;
+							}
+
+							builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.Laden, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getLadenCost()));
+
+							builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.Ballast, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost()));
+
+							builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.RoundTripBallast,
+									OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost()));
+						}
+					}
+				}
 			}
 		}
 		// Filter out unused routes
@@ -2293,6 +2348,50 @@ public class LNGScenarioTransformer {
 				.toArray(new String[orderedKeys.size()]);
 		portDistanceProvider.setPreSortedKeys(preSortedKeys);
 
+	}
+
+	public static void buildPanamaCosts(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Vessel, IVessel> vesselAssociation, final FleetModel fleetModel,
+			@NonNull final PanamaCanalTariff panamaCanalTariff) {
+
+		// Extract band information into a sorted list
+		final List<Pair<Integer, PanamaCanalTariffBand>> bands = new LinkedList<>();
+		for (final PanamaCanalTariffBand band : panamaCanalTariff.getBands()) {
+			int upperBound = Integer.MAX_VALUE;
+			if (band.isSetBandEnd()) {
+				upperBound = band.getBandEnd();
+			}
+			bands.add(new Pair<>(upperBound, band));
+		}
+		// Sort the bands smallest to largest
+		Collections.sort(bands, (b1, b2) -> b1.getFirst().compareTo(b2.getFirst()));
+
+		for (final Vessel eVessel : fleetModel.getVessels()) {
+			final int capacityInM3 = eVessel.getVesselOrVesselClassCapacity();
+			double totalLadenCost = 0.0;
+			double totalBallastCost = 0.0;
+			double totalBallastRoundTripCost = 0.0;
+			for (final Pair<Integer, PanamaCanalTariffBand> p : bands) {
+				final PanamaCanalTariffBand band = p.getSecond();
+				//// How much vessel capacity is used for this band calculation?
+				// First, find the largest value valid in this band
+				double contributingCapacity = Math.min(capacityInM3, p.getFirst());
+
+				// Next, subtract band lower bound to find the capacity contribution
+				contributingCapacity = Math.max(0, contributingCapacity - (band.isSetBandStart() ? band.getBandStart() : 0));
+
+				if (contributingCapacity > 0) {
+					totalLadenCost += contributingCapacity * band.getLadenTariff();
+					totalBallastCost += contributingCapacity * band.getBallastTariff();
+					totalBallastRoundTripCost += contributingCapacity * band.getBallastRoundtripTariff();
+				}
+			}
+
+			final IVessel vessel = vesselAssociation.lookupNullChecked(eVessel);
+
+			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.Laden, OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalLadenCost)));
+			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.Ballast, OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalBallastCost)));
+			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.RoundTripBallast, OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalBallastRoundTripCost)));
+		}
 	}
 
 	/**
@@ -2497,6 +2596,7 @@ public class LNGScenarioTransformer {
 
 			}
 			for (final CharterOutMarket charterCost : spotMarketsModel.getCharterOutMarkets()) {
+				assert charterCost != null;
 
 				if (!charterCost.isEnabled()) {
 					continue;
