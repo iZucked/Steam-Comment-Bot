@@ -178,7 +178,7 @@ public class PriceIntervalProviderHelper {
 	
 	int[] getCargoBoundsWithCanalTrimming(int purchaseStart, int purchaseEnd, int salesStart, int salesEnd, int loadDuration, int minTimeCanal) {
 		int minSalesStart = Math.max(purchaseStart + minTimeCanal + loadDuration, salesStart);
-		return new int[] {purchaseStart, purchaseStart, minSalesStart, salesEnd};
+		return new int[] {purchaseStart, purchaseStart, minSalesStart, Math.max(minSalesStart, salesEnd)};
 	}
 	
 	boolean isFeasibleTravelTime(int[] purchase, int[] sales, int loadDuration, long time) {
@@ -606,11 +606,10 @@ public class PriceIntervalProviderHelper {
 
 	/**
 	 * Provides the date range and price for the lowest price period in a given range
-	 * DO NOT COMMIT (get rid of arraylist)
 	 * @return
 	 */
-	public ArrayList<int[]> getIntervalsBoundsAndPrices(List<int[]> intervals) {
-		ArrayList<int[]> sortedIntervals = new ArrayList<>(intervals.size());
+	public List<int[]> getIntervalsBoundsAndPrices(List<int[]> intervals) {
+		List<int[]> sortedIntervals = new LinkedList<>();
 		for (int i = 0; i < intervals.size()-1; i++) {
 			sortedIntervals.add(new int[] {intervals.get(i)[0], intervals.get(i + 1)[0], intervals.get(i)[1]});
 		}

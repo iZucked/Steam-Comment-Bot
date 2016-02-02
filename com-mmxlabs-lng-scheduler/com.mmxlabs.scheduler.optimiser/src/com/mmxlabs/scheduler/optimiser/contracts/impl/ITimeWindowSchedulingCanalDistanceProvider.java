@@ -22,7 +22,7 @@ public interface ITimeWindowSchedulingCanalDistanceProvider {
 	 * @return
 	 */
 	@NonNull
-	public long[][] getMinimumTravelTimes(IPort load, IPort discharge, IVesselClass vesselClass);
+	public long[][] getMinimumLadenTravelTimes(IPort load, IPort discharge, IVesselClass vesselClass, int ladenStartTime);
 
 	/**
 	 * Get feasible routes for min and max times

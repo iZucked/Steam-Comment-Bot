@@ -12,12 +12,13 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 public class CachingTimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSchedulingCanalDistanceProvider {
 	
 	private final class CacheKey {
-		IPort load; IPort discharge; IVesselClass vesselClass;
+		IPort load; IPort discharge; IVesselClass vesselClass; int ladenStartTime;
 		
-		public CacheKey(IPort load, IPort discharge, IVesselClass vesselClass) {
+		public CacheKey(IPort load, IPort discharge, IVesselClass vesselClass, int ladenStartTime) {
 			this.load = load;
 			this.discharge = discharge;
 			this.vesselClass = vesselClass;
+			this.ladenStartTime = ladenStartTime;
 		}
 		
 		@Override
@@ -26,7 +27,8 @@ public class CachingTimeWindowSchedulingCanalDistanceProvider implements ITimeWi
 				return true;
 			} else if (obj instanceof CacheKey) {
 				CacheKey other = (CacheKey) obj;
-				return this.load == other.load && this.discharge == other.discharge && this.vesselClass == other.vesselClass;
+				return this.load == other.load && this.discharge == other.discharge && this.vesselClass == other.vesselClass
+						&& this.ladenStartTime == other.ladenStartTime;
 			} else {
 				return false;
 			}
@@ -39,6 +41,7 @@ public class CachingTimeWindowSchedulingCanalDistanceProvider implements ITimeWi
 			result = (prime * result) + (load != null ? load.hashCode() : 0);
 			result = (prime * result) + (discharge != null ? discharge.hashCode() : 0);
 			result = (prime * result) + (vesselClass != null ? vesselClass.hashCode() : 0);
+			result = (prime * result) + ladenStartTime;
 			return result;
 		}
 	}
@@ -51,11 +54,11 @@ public class CachingTimeWindowSchedulingCanalDistanceProvider implements ITimeWi
 	}
 	
 	@Override
-	public long[][] getMinimumTravelTimes(IPort load, IPort discharge, IVesselClass vesselClass) {
-		CacheKey key = new CacheKey(load, discharge, vesselClass);
+	public long[][] getMinimumLadenTravelTimes(IPort load, IPort discharge, IVesselClass vesselClass, int ladenStartTime) {
+		CacheKey key = new CacheKey(load, discharge, vesselClass, ladenStartTime);
 		long[][] values = cache.get(key);
 		if (values == null) {
-			values = delegate.getMinimumTravelTimes(load, discharge, vesselClass);
+			values = delegate.getMinimumLadenTravelTimes(load, discharge, vesselClass, ladenStartTime);
 			assert values != null;
 			cache.put(key, values);
 		}

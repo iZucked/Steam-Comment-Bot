@@ -139,9 +139,22 @@ public class TimeWindowsTrimming {
 		return portTimeWindowRecord;
 	}
 
+	/**
+	 * Trim time windows given different route options
+	 * @param portTimeWindowsRecord
+	 * @param vesselClass
+	 * @param load
+	 * @param discharge
+	 * @param loadPriceIntervals
+	 * @param dischargePriceIntervals
+	 * @return
+	 */
 	int[] trimCargoTimeWindowsWithRouteOptimisation(IPortTimeWindowsRecord portTimeWindowsRecord, IVesselClass vesselClass, ILoadOption load, IDischargeOption discharge,
 			List<int[]> loadPriceIntervals, List<int[]> dischargePriceIntervals) {
-		long[][] sortedCanalTimes = schedulingCanalDistanceProvider.getMinimumTravelTimes(load.getPort(), discharge.getPort(), vesselClass);
+		ITimeWindow loadTimeWindow = load.getTimeWindow();
+		assert loadTimeWindow != null;
+		long[][] sortedCanalTimes = schedulingCanalDistanceProvider.getMinimumLadenTravelTimes(load.getPort(), discharge.getPort(), vesselClass, loadTimeWindow.getStart());
+		assert sortedCanalTimes.length > 0;
 		int loadDuration = portTimeWindowsRecord.getSlotDuration(load);
 		int minTime = Math.max(priceIntervalProviderHelper.getMinimumPossibleTimeForCargoIntervals(loadPriceIntervals, dischargePriceIntervals) + loadDuration, loadDuration);
 		int maxTime = priceIntervalProviderHelper.getMaximumPossibleTimeForCargoIntervals(loadPriceIntervals, dischargePriceIntervals) + loadDuration;
@@ -154,8 +167,8 @@ public class TimeWindowsTrimming {
 					highestPriceInterval.getSecond(), loadDuration, (int) sortedCanalTimes[0][0]);
 		} else {
 			// we could go via canal but should we?
-			ArrayList<int[]> purchaseIntervals = priceIntervalProviderHelper.getIntervalsBoundsAndPrices(loadPriceIntervals);
-			ArrayList<int[]> salesIntervals = priceIntervalProviderHelper.getIntervalsBoundsAndPrices(dischargePriceIntervals);
+			List<int[]> purchaseIntervals = priceIntervalProviderHelper.getIntervalsBoundsAndPrices(loadPriceIntervals);
+			List<int[]> salesIntervals = priceIntervalProviderHelper.getIntervalsBoundsAndPrices(dischargePriceIntervals);
 			int bestPurchaseDetailsIdx = priceIntervalProviderHelper.getMinIndexOfPriceIntervalList(purchaseIntervals);
 			int bestSalesDetailsIdx = priceIntervalProviderHelper.getMaxIndexOfPriceIntervalList(salesIntervals);
 			if (priceIntervalProviderHelper.isFeasibleTravelTime(purchaseIntervals.get(bestPurchaseDetailsIdx), salesIntervals.get(bestSalesDetailsIdx), loadDuration, sortedCanalTimes[0][0])) {
@@ -188,9 +201,22 @@ public class TimeWindowsTrimming {
 		}
 	}
 
+	/**
+	 * Trim time windows given different route options when load depends on discharge and discharge depends on load
+	 * @param portTimeWindowsRecord
+	 * @param vesselClass
+	 * @param load
+	 * @param discharge
+	 * @param loadPriceIntervals
+	 * @param dischargePriceIntervals
+	 * @return
+	 */
 	private int[] trimCargoTimeWindowsWithRouteOptimisationForInvertedCase(IPortTimeWindowsRecord portTimeWindowsRecord, IVesselClass vesselClass, ILoadOption load, IDischargeOption discharge,
 			List<int[]> loadPriceIntervals, List<int[]> dischargePriceIntervals) {
-		long[][] sortedCanalTimes = schedulingCanalDistanceProvider.getMinimumTravelTimes(load.getPort(), discharge.getPort(), vesselClass);
+		ITimeWindow loadTimeWindow = load.getTimeWindow();
+		assert loadTimeWindow != null;
+		long[][] sortedCanalTimes = schedulingCanalDistanceProvider.getMinimumLadenTravelTimes(load.getPort(), discharge.getPort(), vesselClass, loadTimeWindow.getStart());
+		assert sortedCanalTimes.length > 0;
 		int loadDuration = portTimeWindowsRecord.getSlotDuration(load);
 		int minTime = Math.max(priceIntervalProviderHelper.getMinimumPossibleTimeForCargoIntervals(loadPriceIntervals, dischargePriceIntervals) + loadDuration, loadDuration);
 		int maxTime = priceIntervalProviderHelper.getMaximumPossibleTimeForCargoIntervals(loadPriceIntervals, dischargePriceIntervals) + loadDuration;
@@ -203,8 +229,8 @@ public class TimeWindowsTrimming {
 					lowestPriceInterval.getSecond(), loadDuration, (int) sortedCanalTimes[0][0]);
 		} else {
 			// we could go via canal but should we?
-			ArrayList<int[]> purchaseIntervals = priceIntervalProviderHelper.getIntervalsBoundsAndPrices(loadPriceIntervals); // discharge prices!!
-			ArrayList<int[]> salesIntervals = priceIntervalProviderHelper.getIntervalsBoundsAndPrices(dischargePriceIntervals); // load prices!!
+			List<int[]> purchaseIntervals = priceIntervalProviderHelper.getIntervalsBoundsAndPrices(loadPriceIntervals); // discharge prices!!
+			List<int[]> salesIntervals = priceIntervalProviderHelper.getIntervalsBoundsAndPrices(dischargePriceIntervals); // load prices!!
 			int bestPurchaseDetailsIdx = priceIntervalProviderHelper.getMaxIndexOfPriceIntervalList(purchaseIntervals);
 			int bestSalesDetailsIdx = priceIntervalProviderHelper.getMinIndexOfPriceIntervalList(salesIntervals);
 			if (priceIntervalProviderHelper.isFeasibleTravelTime(purchaseIntervals.get(bestPurchaseDetailsIdx), salesIntervals.get(bestSalesDetailsIdx), loadDuration, sortedCanalTimes[0][0])) {
@@ -237,6 +263,15 @@ public class TimeWindowsTrimming {
 		}
 	}
 
+	/**
+	 * Trim a time window for a cargo considering different route options
+	 * @param portTimeWindowRecord
+	 * @param load
+	 * @param discharge
+	 * @param loadIntervals
+	 * @param dischargeIntervals
+	 * @param switched
+	 */
 	private void trimLoadAndDischargeWindowsWithRouteChoice(IPortTimeWindowsRecord portTimeWindowRecord, ILoadOption load, IDischargeOption discharge, List<int[]> loadIntervals,
 			List<int[]> dischargeIntervals, boolean switched) {
 		IResource resource = portTimeWindowRecord.getResource();
