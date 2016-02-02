@@ -1,0 +1,4 @@
+name,workingCapital,notionalSpeed,transferMargin,spotCharterCurve,kind
+WST,0.150,17.000,0.050,SpotCharter,BaseShellEntity
+MST,0.150,17.000,0.050,SpotCharter,BaseShellEntity
+EST,0.150,17.000,0.050,SpotCharter,BaseShellEntity
