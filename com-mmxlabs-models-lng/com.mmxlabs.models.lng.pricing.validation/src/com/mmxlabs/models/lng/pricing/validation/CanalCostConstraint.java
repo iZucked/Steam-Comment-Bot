@@ -58,7 +58,7 @@ public class CanalCostConstraint extends AbstractModelConstraint {
 					boolean seenAnyCanalParameters = false;
 
 					for (final Route route : portModel.getRoutes()) {
-						if (route.getRouteOption() != RouteOption.DIRECT) {
+						if (route.getRouteOption() == RouteOption.SUEZ) {
 							// If the vessel class container is null, then we are probably in a dialog and may not have route costs yet - however the dialog cannot create them, so skip this check
 							boolean seenCanalCost = vesselClass.eContainer() == null;
 							routeCosts: for (final RouteCost routeCost : costModel.getRouteCosts()) {
