@@ -3,6 +3,7 @@ package com.mmxlabs.lingo.its.tests.timewindows;
 import java.net.URL;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
@@ -18,13 +19,14 @@ import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 
 public class TimeWindowsTests extends AbstractOptimisationResultTester{
 	
+	@Ignore
 	@Test
 	public void LDDD1() throws Exception {
 		
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/time-windows/L D D D 1.lingo");
 		Assert.assertNotNull(url);
-		final LNGScenarioRunner runner = evaluateScenarioWithGCO(url);
+		final LNGScenarioRunner runner = runScenarioWithGCO(url);
 		Assert.assertNotNull(runner);
 		Schedule schedule = runner.getSchedule();
 		Assert.assertNotNull(schedule);
@@ -33,13 +35,14 @@ public class TimeWindowsTests extends AbstractOptimisationResultTester{
 		
 	}
 	
+	@Ignore
 	@Test
 	public void LDDD2() throws Exception {
 		
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/time-windows/L D D D 2.lingo");
 		Assert.assertNotNull(url);
-		final LNGScenarioRunner runner = evaluateScenarioWithGCO(url);
+		final LNGScenarioRunner runner = runScenarioWithGCO(url);
 		Assert.assertNotNull(runner);
 		Schedule schedule = runner.getSchedule();
 		Assert.assertNotNull(schedule);
@@ -48,13 +51,14 @@ public class TimeWindowsTests extends AbstractOptimisationResultTester{
 		
 	}
 	
+	@Ignore
 	@Test
 	public void LDDL1() throws Exception {
 		
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/time-windows/L D D L 1.lingo");
 		Assert.assertNotNull(url);
-		final LNGScenarioRunner runner = evaluateScenarioWithGCO(url);
+		final LNGScenarioRunner runner = runScenarioWithGCO(url);
 		Assert.assertNotNull(runner);
 		Schedule schedule = runner.getSchedule();
 		Assert.assertNotNull(schedule);
@@ -62,14 +66,15 @@ public class TimeWindowsTests extends AbstractOptimisationResultTester{
 		checkLoadAndDischargeTime(schedule, 3, 5);
 		
 	}
-	
+
+	@Ignore
 	@Test
 	public void LDDL2() throws Exception {
 		
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/time-windows/L D D L 2.lingo");
 		Assert.assertNotNull(url);
-		final LNGScenarioRunner runner = evaluateScenarioWithGCO(url);
+		final LNGScenarioRunner runner = runScenarioWithGCO(url);
 		Assert.assertNotNull(runner);
 		Schedule schedule = runner.getSchedule();
 		Assert.assertNotNull(schedule);
@@ -78,13 +83,14 @@ public class TimeWindowsTests extends AbstractOptimisationResultTester{
 		
 	}
 
+	@Ignore
 	@Test
 	public void simpleLD() throws Exception {
 
 		// Load the scenario to test
 		final URL url = getClass().getResource("/scenarios/time-windows/simpleLD.lingo");
 		Assert.assertNotNull(url);
-		final LNGScenarioRunner runner = evaluateScenarioWithGCO(url);
+		final LNGScenarioRunner runner = runScenarioWithGCO(url);
 		Assert.assertNotNull(runner);
 		Schedule schedule = runner.getSchedule();
 		Assert.assertNotNull(schedule);
