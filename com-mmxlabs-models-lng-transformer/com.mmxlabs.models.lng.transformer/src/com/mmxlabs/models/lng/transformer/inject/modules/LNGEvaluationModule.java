@@ -56,13 +56,8 @@ public class LNGEvaluationModule extends AbstractModule {
 
 
 		bind(DirectRandomSequenceScheduler.class).in(PerChainUnitScope.class);
-//		bind(DirectRandomSequenceScheduler.class).in(Singleton.class);
 		bind(ISequenceScheduler.class).to(DirectRandomSequenceScheduler.class);
 		
-//		bind(PriceBasedSequenceScheduler.class).in(PerChainUnitScope.class);
-//		bind(ISequenceScheduler.class).to(PriceBasedSequenceScheduler.class);
-
-
 		if (hints != null) {
 			if (LicenseFeatures.isPermitted("features:optimisation-charter-out-generation")) {
 
