@@ -11,7 +11,6 @@ import javax.inject.Singleton;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
@@ -29,15 +28,6 @@ import com.mmxlabs.models.lng.transformer.util.IntegerIntervalCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.LNGScenarioUtils;
 import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScope;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.CachingTimeWindowSchedulingCanalDistanceProvider;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.ITimeWindowSchedulingCanalDistanceProvider;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceIntervalProviderHelper;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.TimeWindowSchedulingCanalDistanceProvider;
-import com.mmxlabs.scheduler.optimiser.curves.CachingPriceIntervalProducer;
-import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
-import com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer;
-import com.mmxlabs.scheduler.optimiser.curves.IntegerIntervalCurve;
-import com.mmxlabs.scheduler.optimiser.curves.PriceIntervalProducer;
 import com.mmxlabs.scheduler.optimiser.calculators.IDivertableDESShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.calculators.impl.DefaultDivertableDESShippingTimesCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.GeneratedVesselEventFactory;
@@ -45,13 +35,19 @@ import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VoyagePlanStartDateCharterRateCalculator;
+import com.mmxlabs.scheduler.optimiser.curves.CachingPriceIntervalProducer;
+import com.mmxlabs.scheduler.optimiser.curves.IIntegerIntervalCurve;
+import com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer;
+import com.mmxlabs.scheduler.optimiser.curves.PriceIntervalProducer;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.impl.DefaultEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.CachingTimeWindowSchedulingCanalDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.ITimeWindowSchedulingCanalDistanceProvider;
+import com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling.TimeWindowSchedulingCanalDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.PriceBasedSequenceScheduler;
 
 
 /**
