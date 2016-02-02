@@ -170,7 +170,7 @@ public class PortModelImporter implements ISubmodelImporter {
 			} else if (r.getRouteOption() == RouteOption.SUEZ) {
 				output.put(SUEZ_KEY, result);
 			} else if (r.getRouteOption() == RouteOption.PANAMA) {
-				output.put(PANAMA_CANAL_NAME, result);
+				output.put(PANAMA_KEY, result);
 			} else {
 				inputs.put(r.getName(), r.getName());
 				output.put(r.getName(), result);
