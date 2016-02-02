@@ -9,6 +9,7 @@ import java.util.Arrays;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 
 import com.mmxlabs.models.lng.port.Location;
@@ -18,6 +19,7 @@ import com.mmxlabs.models.lng.port.editor.actions.MergePorts;
 import com.mmxlabs.models.lng.port.ui.editorpart.PortEditorPane;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.ui.views.ScenarioTableViewerView;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 public class PortView extends ScenarioTableViewerView<PortEditorPane> {
@@ -39,7 +41,8 @@ public class PortView extends ScenarioTableViewerView<PortEditorPane> {
 	protected void initViewerPane(final PortEditorPane pane) {
 		final EditingDomain domain = getEditingDomain();
 		if (domain != null) {
-			pane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ReferenceModel(), LNGScenarioPackage.eINSTANCE.getLNGReferenceModel_PortModel(), PortPackage.eINSTANCE.getPortModel_Ports() }), null, domain.getCommandStack());
+			pane.init(Arrays.asList(new EReference[] { LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ReferenceModel(), LNGScenarioPackage.eINSTANCE.getLNGReferenceModel_PortModel(),
+					PortPackage.eINSTANCE.getPortModel_Ports() }), null, domain.getCommandStack());
 			pane.getViewer().setInput(getRootObject());
 
 			// Add action to create and edit cargo groups
@@ -70,5 +73,14 @@ public class PortView extends ScenarioTableViewerView<PortEditorPane> {
 				setSelection(new StructuredSelection(port), true);
 			}
 		}
+	}
+
+	@Override
+	public Object getAdapter(final Class adapter) {
+
+		if (IScenarioEditingLocation.class.isAssignableFrom(adapter)) {
+			return this;
+		}
+		return super.getAdapter(adapter);
 	}
 }

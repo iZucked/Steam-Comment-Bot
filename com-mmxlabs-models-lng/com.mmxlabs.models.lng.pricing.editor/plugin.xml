@@ -39,6 +39,12 @@
           id="com.mmxlabs.models.lng.cargo.editor.CharterIndexCompositeFactory"
           inheritable="true">
     </displayCompositeFactory>
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.pricing.PanamaCanalTariff"
+          factory="com.mmxlabs.models.lng.pricing.ui.displaycomposites.PanamaCanalTariffDisplayCompositeFactory"
+          id="com.mmxlabs.models.lng.pricing.ui.displaycomposites.PanamaCanalTariffDisplayCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
 </extension>
 	<extension
 		point="com.mmxlabs.models.ui.componenthelpers">
@@ -257,6 +263,12 @@
           inheritable="false"
           modelClass="com.mmxlabs.models.lng.fleet.BaseFuel">
     </componentHelper>
+    <componentHelper
+          helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.PanamaCanalTariffComponentHelper"
+          id="com.mmxlabs.models.lng.pricing.presentation.composites.PanamaCanalTariffComponentHelper"
+          inheritable="true"
+          modelClass="com.mmxlabs.models.lng.pricing.PanamaCanalTariff">
+    </componentHelper>
  </extension>
  <extension
        point="com.mmxlabs.models.util.import.classes">
@@ -318,6 +330,25 @@
             class="com.mmxlabs.models.lng.pricing.presentation.PricingEditor"
             contributorClass="com.mmxlabs.models.lng.pricing.presentation.PricingActionBarContributor">
       </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:com.mmxlabs.models.lng.port.editor.views.PortView?after=additions">
+         <command
+               commandId="com.mmxlabs.models.lng.pricing.editor.commands.EditPanamaCanalTariff"
+               style="push">
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="com.mmxlabs.models.lng.pricing.ui.editorpart.PanamaCanalTariffHandler"
+            id="com.mmxlabs.models.lng.pricing.editor.commands.EditPanamaCanalTariff"
+            name="Edit Panama Canal Tariff">
+      </command>
    </extension>
 
 </plugin>
