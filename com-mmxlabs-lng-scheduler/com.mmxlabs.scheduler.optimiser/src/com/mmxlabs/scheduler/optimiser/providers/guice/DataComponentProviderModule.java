@@ -4,14 +4,11 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers.guice;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
-import com.google.inject.name.Names;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.ILockedElementsProvider;
@@ -40,8 +37,6 @@ import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMatrixEditor;
 import com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMultiMatrixProvider;
-import com.mmxlabs.scheduler.optimiser.builder.IXYPortDistanceCalculator;
-import com.mmxlabs.scheduler.optimiser.builder.impl.XYPortEuclideanDistanceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitProvider;
@@ -185,9 +180,6 @@ public class DataComponentProviderModule extends AbstractModule {
 
 		bind(IDistanceProvider.class).to(DefaultDistanceProviderImpl.class).in(Singleton.class);
 		bind(IDistanceProviderEditor.class).to(DefaultDistanceProviderImpl.class);
-
-		bind(IXYPortDistanceCalculator.class).to(XYPortEuclideanDistanceCalculator.class);
-		bind(XYPortEuclideanDistanceCalculator.class).in(Singleton.class);
 
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
 

@@ -74,7 +74,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		/**
 		 * How much of the time given to us by the scheduler has to be spent travelling by an alternative route.
 		 */
-		final int additionalRouteTimeInHours = routeCostProvider.getRouteTransitTime(options.getRoute(), vesselClass);
+		final int additionalRouteTimeInHours = routeCostProvider.getRouteTransitTime(options.getRoute(), vessel);
 
 		/**
 		 * How much time is available to cover the distance, excluding time which must be spent traversing any canals
@@ -125,23 +125,23 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		/**
 		 * Base fuel requirement for canal traversal
 		 */
-		calculateRouteAdditionalFuelRequirements(options, output, vesselClass, vesselState, additionalRouteTimeInHours);
+		calculateRouteAdditionalFuelRequirements(options, output, vessel, vesselState, additionalRouteTimeInHours);
 
 	}
 
-	protected final void calculateRouteAdditionalFuelRequirements(final VoyageOptions options, final VoyageDetails output, final IVesselClass vesselClass, final VesselState vesselState,
+	protected final void calculateRouteAdditionalFuelRequirements(final VoyageOptions options, final VoyageDetails output, final IVessel vessel, final VesselState vesselState,
 			final int additionalRouteTimeInHours) {
 
-		final int equivalenceFactorMMBTuToMT = vesselClass.getBaseFuel().getEquivalenceFactor();
+		final int equivalenceFactorMMBTuToMT = vessel.getVesselClass().getBaseFuel().getEquivalenceFactor();
 
-		final long routeRequiredConsumptionInMT = Calculator.quantityFromRateTime(routeCostProvider.getRouteFuelUsage(options.getRoute(), vesselClass, vesselState), additionalRouteTimeInHours) / 24L;
+		final long routeRequiredConsumptionInMT = Calculator.quantityFromRateTime(routeCostProvider.getRouteFuelUsage(options.getRoute(), vessel, vesselState), additionalRouteTimeInHours) / 24L;
 		final int cargoCVValue = options.getCargoCVValue();
 
 		if (routeRequiredConsumptionInMT > 0) {
 
 			if (options.useNBOForTravel()) {
 
-				final long nboRouteRateInM3PerDay = routeCostProvider.getRouteNBORate(options.getRoute(), vesselClass, vesselState);
+				final long nboRouteRateInM3PerDay = routeCostProvider.getRouteNBORate(options.getRoute(), vessel, vesselState);
 
 				/**
 				 * How much NBO is produced while in the canal (M3)
@@ -179,7 +179,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						routeFboProvidedInMT = routeRequiredConsumptionInMT - routeNboProvidedInMT;
 						routeFboProvidedInM3 = Calculator.convertMTToM3(routeFboProvidedInMT, cargoCVValue, equivalenceFactorMMBTuToMT);
 
-						final long pilotLightRateINMTPerDay = vesselClass.getPilotLightRate();
+						final long pilotLightRateINMTPerDay = vessel.getVesselClass().getPilotLightRate();
 						pilotLightConsumptionInMT = Calculator.quantityFromRateTime(pilotLightRateINMTPerDay, additionalRouteTimeInHours) / 24L;
 
 					} else {
@@ -212,9 +212,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				output.setRouteAdditionalConsumption(FuelComponent.PilotLight, FuelUnit.MT, 0);
 			}
 		}
-		output.setRouteCost(routeCostProvider.getRouteCost(options.getRoute(), vesselClass, vesselState));
 
-		final long minBaseFuelConsumptionInMT = Calculator.quantityFromRateTime(vesselClass.getMinBaseFuelConsumptionInMTPerDay(), additionalRouteTimeInHours) / 24L;
+		final long minBaseFuelConsumptionInMT = Calculator.quantityFromRateTime(vessel.getVesselClass().getMinBaseFuelConsumptionInMTPerDay(), additionalRouteTimeInHours) / 24L;
 		if (options.useNBOForTravel()) {
 			if (output.getRouteAdditionalConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT) < minBaseFuelConsumptionInMT) {
 				output.setRouteAdditionalConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT, minBaseFuelConsumptionInMT);
@@ -227,7 +226,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 	}
 
-	protected final void calculateIdleFuelRequirements(final VoyageOptions options, final VoyageDetails output, final IVesselClass vesselClass, final VesselState vesselState, final int idleTimeInHours) {
+	protected final void calculateIdleFuelRequirements(final VoyageOptions options, final VoyageDetails output, final IVesselClass vesselClass, final VesselState vesselState,
+			final int idleTimeInHours) {
 
 		final int equivalenceFactorM3ToMT = vesselClass.getBaseFuel().getEquivalenceFactor();
 
@@ -616,7 +616,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			if (element instanceof VoyageDetails) {
 				final VoyageDetails details = (VoyageDetails) element;
 				// add route cost
-				routeCostAccumulator += details.getRouteCost();
+				routeCostAccumulator += details.getOptions().getRouteCost();
 
 				voyageTime += details.getTravelTime();
 				voyageTime += details.getIdleTime();

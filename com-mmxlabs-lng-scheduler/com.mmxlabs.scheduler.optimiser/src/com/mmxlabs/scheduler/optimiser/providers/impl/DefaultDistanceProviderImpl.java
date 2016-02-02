@@ -1,8 +1,8 @@
 package com.mmxlabs.scheduler.optimiser.providers.impl;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -66,7 +66,7 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 	@Override
 	public List<Pair<ERouteOption, Integer>> getAllDistanceValues(final IPort from, final IPort to) {
 
-		final List<MatrixEntry<IPort, Integer>> distances = new LinkedList<>(distanceProvider.getValues(from, to));
+		final Collection<MatrixEntry<IPort, Integer>> distances = distanceProvider.getValues(from, to);
 		return distances.stream().map(e -> new Pair<ERouteOption, Integer>(ERouteOption.valueOf(e.getKey()), e.getValue())).collect(Collectors.toList());
 	}
 
@@ -125,7 +125,7 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 		if (baseTime == Integer.MAX_VALUE) {
 			return Integer.MAX_VALUE;
 		}
-		final int transitTime = routeCostProvider.getRouteTransitTime(route, vessel.getVesselClass());
+		final int transitTime = routeCostProvider.getRouteTransitTime(route, vessel);
 		return baseTime + transitTime;
 	}
 

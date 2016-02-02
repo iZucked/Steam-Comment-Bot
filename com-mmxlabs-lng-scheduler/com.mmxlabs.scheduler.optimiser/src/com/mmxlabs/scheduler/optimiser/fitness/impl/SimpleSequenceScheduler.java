@@ -98,8 +98,8 @@ public final class SimpleSequenceScheduler extends AbstractLoggingSequenceSchedu
 			if (timeWindows.isEmpty() && (idx > 0)) {
 
 				final int lastTimeWindowStart = arrivalTimes[idx - 1];
-				timeWindowStart = lastTimeWindowStart + Calculator.getTimeFromSpeedDistance(vesselProvider.getVesselAvailability(resource).getVessel().getVesselClass().getMaxSpeed(),
-						distanceProvider.getDistance(ERouteOption.DIRECT, portProvider.getPortForElement(sequence.get(idx - 1)), portProvider.getPortForElement(element)));
+				timeWindowStart = lastTimeWindowStart + Calculator.getTimeFromSpeedDistance(vesselProvider.getVesselAvailability(resource).getVessel().getVesselClass().getMaxSpeed(), distanceProvider
+						.getDistance(ERouteOption.DIRECT, portProvider.getPortForElement(sequence.get(idx - 1)), portProvider.getPortForElement(element), lastTimeWindowStart /* + visitDuration */));
 			} else {
 				for (final ITimeWindow window : timeWindows) {
 					timeWindowStart = Math.min(timeWindowStart, window.getStart());

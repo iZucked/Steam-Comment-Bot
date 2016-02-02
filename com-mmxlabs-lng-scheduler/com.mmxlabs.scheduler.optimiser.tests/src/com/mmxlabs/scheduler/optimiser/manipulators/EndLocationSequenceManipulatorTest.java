@@ -18,19 +18,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 public class EndLocationSequenceManipulatorTest {
 
 	@Test
-	public void testGetSetPortTypeProvider() {
-		final EndLocationSequenceManipulator manipulator = new EndLocationSequenceManipulator();
-
-		Assert.assertNull(manipulator.getPortTypeProvider());
-
-		final IPortTypeProvider portTypeProvider = Mockito.mock(IPortTypeProvider.class);
-
-		manipulator.setPortTypeProvider(portTypeProvider);
-
-		Assert.assertSame(portTypeProvider, manipulator.getPortTypeProvider());
-	}
-
-	@Test
 	public void testGetSetEndLocationRule() {
 		final IIndexingContext index = new SimpleIndexingContext();
 		final EndLocationSequenceManipulator manipulator = new EndLocationSequenceManipulator();
