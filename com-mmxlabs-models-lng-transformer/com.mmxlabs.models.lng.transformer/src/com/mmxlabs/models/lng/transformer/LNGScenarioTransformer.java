@@ -162,6 +162,7 @@ import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IBaseFuelCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IDistanceProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ILoadPriceCalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProviderEditor;
@@ -183,7 +184,7 @@ public class LNGScenarioTransformer {
 
 	private static final Logger log = LoggerFactory.getLogger(LNGScenarioTransformer.class);
 
-	private final LNGScenarioModel rootObject;
+	private final @NonNull LNGScenarioModel rootObject;
 
 	@Inject
 	@NonNull
@@ -227,6 +228,10 @@ public class LNGScenarioTransformer {
 	@Inject
 	@NonNull
 	private IndexedMultiMatrixProvider<IPort, Integer> portDistanceProvider;
+
+	@Inject
+	@NonNull
+	private IDistanceProviderEditor distanceProviderEditor;
 
 	@Inject
 	@NonNull
@@ -739,7 +744,7 @@ public class LNGScenarioTransformer {
 		if (cargoModel != null) {
 
 			for (final LoadSlot loadSlot : cargoModel.getLoadSlots()) {
-
+				assert loadSlot != null;
 				final IPortSlot portSlot = modelEntityMap.getOptimiserObject(loadSlot, IPortSlot.class);
 				final IVessel vessel = allVessels.get(loadSlot.getNominatedVessel());
 				if (vessel != null && portSlot != null) {
@@ -747,7 +752,7 @@ public class LNGScenarioTransformer {
 				}
 			}
 			for (final DischargeSlot dischargeSlot : cargoModel.getDischargeSlots()) {
-
+				assert dischargeSlot != null;
 				final IPortSlot portSlot = modelEntityMap.getOptimiserObject(dischargeSlot, IPortSlot.class);
 				final IVessel vessel = allVessels.get(dischargeSlot.getNominatedVessel());
 				if (vessel != null && portSlot != null) {
@@ -2287,6 +2292,13 @@ public class LNGScenarioTransformer {
 			if (panamaCanalTariff != null) {
 				final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(rootObject);
 				buildPanamaCosts(builder, vesselAssociation, fleetModel, panamaCanalTariff);
+				if (panamaCanalTariff.isSetAvailableFrom()) {
+					LocalDate availableFrom = panamaCanalTariff.getAvailableFrom();
+					if (availableFrom != null) {
+						int time = dateHelper.convertTime(availableFrom);
+						distanceProviderEditor.setRouteAvailableFrom(ERouteOption.PANAMA, time);
+					}
+				}
 			}
 
 			final Map<VesselClass, List<RouteCost>> vesselClassToRouteCostMap = costModel.getRouteCosts().stream() //
@@ -2579,6 +2591,7 @@ public class LNGScenarioTransformer {
 
 			}
 			for (final CharterOutMarket charterCost : spotMarketsModel.getCharterOutMarkets()) {
+				assert charterCost != null;
 
 				if (!charterCost.isEnabled()) {
 					continue;
