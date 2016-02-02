@@ -604,7 +604,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		/**
 		 * Accumulates route costs due to canal decisions.
 		 */
-		int routeCostAccumulator = 0;
+		long routeCostAccumulator = 0;
 
 		// The last voyage details in sequence.
 		VoyageDetails lastVoyageDetailsElement = null;

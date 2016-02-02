@@ -9,9 +9,12 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 /**
@@ -57,4 +60,23 @@ public interface ISalesPriceCalculator extends ICalculator {
 	 * clean any cached data prior to the real calculations.
 	 */
 	public void prepareRealPNL();
+	
+	public PricingEventType getCalculatorPricingEventType(IDischargeOption dischargeOption, IPortTimeWindowsRecord portTimeWindowsRecord);
+
+	/**
+	 * Get the estimated sales price in dollars per mmbtu at a given point in time in hours
+	 * @param loadOption
+	 * @param dischargeOption
+	 * @param timeInHours
+	 * @return
+	 */
+	public int getEstimatedSalesPrice(ILoadOption loadOption, IDischargeOption dischargeOption, int timeInHours);
+	
+	/**
+	 * A contract may specify the pricing date of a purchase
+	 * @param dischargeOption
+	 * @param portTimeWindowsRecord
+	 * @return
+	 */
+	public int getCalculatorPricingDate(IDischargeOption dischargeOption, IPortTimeWindowsRecord portTimeWindowsRecord);
 }

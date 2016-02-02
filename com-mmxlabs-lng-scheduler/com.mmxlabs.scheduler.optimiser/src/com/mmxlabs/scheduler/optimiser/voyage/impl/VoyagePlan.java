@@ -177,13 +177,13 @@ public final class VoyagePlan implements Cloneable {
 		return lngFuelVolume;
 	}
 
-	private int totalRouteCost;
+	private long totalRouteCost;
 
-	public void setTotalRouteCost(final int routeCost) {
+	public void setTotalRouteCost(final long routeCost) {
 		totalRouteCost = routeCost;
 	}
 
-	public int getTotalRouteCost() {
+	public long getTotalRouteCost() {
 		return totalRouteCost;
 	}
 

@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -45,6 +46,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimeWindowsRecord;
 
 /**
  * A sequence scheduler which enumerates possible combinations of arrival times explicitly, rather than using the GA byte array decoding method. This should be subclassable into a random sequence
@@ -78,11 +81,11 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 	/**
 	 * The start times of each window, appropriately `clipped' to deal with infeasible choices or null time windows.
 	 */
-	private int[][] windowStartTime;
+	protected int[][] windowStartTime;
 	/**
 	 * The end times of each window, similar to start times.
 	 */
-	private int[][] windowEndTime;
+	protected int[][] windowEndTime;
 	/**
 	 * The minimum time this vessel can take to get from the indexed element to its successor. i.e. min travel time + visit time at indexed element.
 	 */
@@ -134,6 +137,8 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 	// protected final ArrayList<Integer> separationPoints = new
 	// ArrayList<Integer>();
 
+	protected List<List<IPortTimeWindowsRecord>> portTimeWindowsRecords = new ArrayList<>();
+	
 	@Inject
 	private IShipToShipBindingProvider shipToShipProvider;
 
@@ -201,7 +206,9 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 			sizes = new int[size];
 		}
 
+		portTimeWindowsRecords.clear();
 		for (int i = 0; i < size; i++) {
+			portTimeWindowsRecords.add(new LinkedList<IPortTimeWindowsRecord>());
 			prepare(i);
 		}
 
@@ -379,6 +386,39 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 	}
 
 	/**
+	 * Returns an array of boolean values indicating whether, for each index of the vessel location sequence, a sequence break occurs at that location (separating one cargo from the next one).
+	 * 
+	 * @param sequence
+	 * @return
+	 */
+	private boolean[] findSequenceBreaks(final ISequence sequence) {
+		final boolean[] result = new boolean[sequence.size()];
+
+		int idx = 0;
+		for (final ISequenceElement element : sequence) {
+			final PortType portType = portTypeProvider.getPortType(element);
+			switch (portType) {
+			case Load:
+				result[idx] = (idx > 0); // don't break on first load port
+				break;
+			case CharterOut:
+			case DryDock:
+			case Other:
+			case Maintenance:
+			case Short_Cargo_End:
+				result[idx] = true;
+				break;
+			default:
+				result[idx] = false;
+				break;
+			}
+			idx++;
+		}
+
+		return result;
+	}
+
+	/**
 	 * Unpack some distance/time/speed information, set up arrays etc
 	 * 
 	 * @param maxValue
@@ -414,11 +454,28 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 
 		int index = 0;
 		ISequenceElement prevElement = null;
+		final boolean[] breakSequence = findSequenceBreaks(sequence);
+		
+		// from voyageplanner --->
+		IPortSlot prevPortSlot = null;
+		// Used for end of sequence checks
+		IPortSlot prevPrevPortSlot = null;
+		PortTimeWindowsRecord portTimeWindowsRecord = new PortTimeWindowsRecord();
+		portTimeWindowsRecord.setResource(resource);
+		// --->
 
 		// first pass, collecting start time windows
 		for (final ISequenceElement element : sequence) {
 			final IPortSlot slot = portSlotProvider.getPortSlot(element);
+			
+			// from voyageplanner --->
+			final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
+			final PortType portType = portTypeProvider.getPortType(element);
+			final int visitDuration = actualsDataProvider.hasActuals(thisPortSlot) ? actualsDataProvider.getVisitDuration(thisPortSlot) : durationProvider.getElementDuration(element, resource);
+			// --->
+
 			final List<ITimeWindow> windows;
+			
 			// Take element start window into account
 			if (portTypeProvider.getPortType(element) == PortType.Start) {
 				final IStartEndRequirement startRequirement = startEndRequirementProvider.getStartRequirement(resource);
@@ -472,6 +529,19 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 				recordShipToShipBindings(sequenceIndex, index, element);
 			}
 
+			if (breakSequence[index]) {
+				// last slot in plan, set return
+				portTimeWindowsRecord.setReturnSlot(thisPortSlot, null, visitDuration, index);
+				// finalise record
+				portTimeWindowsRecords.get(sequenceIndex).add(portTimeWindowsRecord);
+				// create new record
+				portTimeWindowsRecord = new PortTimeWindowsRecord();
+				portTimeWindowsRecord.setResource(resource);
+				portTimeWindowsRecord.setSlot(thisPortSlot, null, visitDuration, index);
+			} else {
+				portTimeWindowsRecord.setSlot(thisPortSlot, null, visitDuration, index);
+			}
+			
 			isVirtual[index] = portTypeProvider.getPortType(element) == PortType.Virtual;
 			useTimeWindow[index] = prevElement == null ? false : portTypeProvider.getPortType(prevElement) == PortType.Short_Cargo_End;
 			// Calculate minimum inter-element durations
@@ -535,7 +605,8 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 			index++;
 			prevElement = element;
 		}
-
+		// add the last time window
+		portTimeWindowsRecords.get(sequenceIndex).add(portTimeWindowsRecord);
 		// now perform reverse-pass to trim any overly late end times
 		// (that is end times which would make us late at the next element)
 		for (index = size - 2; index >= 0; index--) {
