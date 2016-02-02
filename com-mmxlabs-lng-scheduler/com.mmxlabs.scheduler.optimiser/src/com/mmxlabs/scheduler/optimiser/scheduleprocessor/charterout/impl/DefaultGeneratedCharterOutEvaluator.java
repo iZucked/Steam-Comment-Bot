@@ -300,7 +300,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		int shortestTime = Integer.MAX_VALUE;
 		ERouteOption route = ERouteOption.DIRECT;
 
-		final List<Pair<ERouteOption, Integer>> distances = distanceProvider.getDistanceValues(slotPort, charterPort);
+		final List<Pair<ERouteOption, Integer>> distances = distanceProvider.getDistanceValues(slotPort, charterPort, voyageStartTime);
 		int directTime = Integer.MAX_VALUE;
 		Pair<ERouteOption, Integer> directEntry = null;
 		for (final Pair<ERouteOption, Integer> d : distances) {

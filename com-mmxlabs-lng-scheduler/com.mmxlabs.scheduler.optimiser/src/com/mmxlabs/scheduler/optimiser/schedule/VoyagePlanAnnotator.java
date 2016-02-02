@@ -137,7 +137,6 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 				final int travelTime = details.getTravelTime();
 
 				final JourneyEventImpl journey = new JourneyEventImpl();
-
 				journey.setName("journey");
 				journey.setFromPort(prevPortSlot.getPort());
 				journey.setToPort(currentPortSlot.getPort());

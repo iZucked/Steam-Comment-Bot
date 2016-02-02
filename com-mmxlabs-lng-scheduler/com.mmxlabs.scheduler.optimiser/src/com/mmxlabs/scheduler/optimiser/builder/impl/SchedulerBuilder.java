@@ -26,6 +26,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Injector;
+import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ICurve;
@@ -130,6 +131,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProviderEdi
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 
 /**
  * Implementation of {@link ISchedulerBuilder}
@@ -1049,7 +1051,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	/**
 	 */
 	@Override
-	public void setVesselRouteCost(final @NonNull ERouteOption route, @NonNull final IVessel vessel, final IRouteCostProvider.CostType costType, final long tollPrice) {
+	public void setVesselRouteCost(final @NonNull ERouteOption route, @NonNull final IVessel vessel, final @NonNull IRouteCostProvider.CostType costType, final long tollPrice) {
 		routeCostProvider.setRouteCost(route, vessel, costType, tollPrice);
 	}
 
