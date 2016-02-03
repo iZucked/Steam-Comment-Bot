@@ -95,6 +95,7 @@ public class CSVImporter {
 		dataMap.put(PortModelImporter.PORT_GROUP_KEY, createURL(urlRoot, "Port Groups.csv"));
 		dataMap.put(PortModelImporter.DISTANCES_KEY, createURL(urlRoot, "Distance Matrix.csv"));
 		dataMap.put(PortModelImporter.SUEZ_KEY, createURL(urlRoot, "Suez Distance Matrix.csv"));
+		dataMap.put(PortModelImporter.PANAMA_KEY, createURL(urlRoot, "Panama Distance Matrix.csv"));
 	}
 
 	public void importFleetData(@NonNull final String urlRoot) throws MalformedURLException {
@@ -126,6 +127,7 @@ public class CSVImporter {
 
 		dataMap.put(CostModelImporter.COOLDOWN_PRICING_KEY, createURL(urlRoot, "Cooldown Prices.csv"));
 		dataMap.put(CostModelImporter.PORT_COSTS_KEY, createURL(urlRoot, "Port Costs.csv"));
+		dataMap.put(CostModelImporter.PANAMA_CANAL_TARIFF_KEY, createURL(urlRoot, "Panama Canal Tariff.csv"));
 	}
 
 	public void importPromptData(@NonNull final String urlRoot) throws MalformedURLException {
