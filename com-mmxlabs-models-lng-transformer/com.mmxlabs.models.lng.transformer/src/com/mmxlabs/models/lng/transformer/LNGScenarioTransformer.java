@@ -748,7 +748,6 @@ public class LNGScenarioTransformer {
 
 		final CargoModel cargoModel = rootObject.getCargoModel();
 		if (cargoModel != null) {
-
 			for (final LoadSlot loadSlot : cargoModel.getLoadSlots()) {
 				assert loadSlot != null;
 				final IPortSlot portSlot = modelEntityMap.getOptimiserObject(loadSlot, IPortSlot.class);
@@ -757,6 +756,7 @@ public class LNGScenarioTransformer {
 					builder.setNominatedVessel(portSlot, vessel);
 				}
 			}
+
 			for (final DischargeSlot dischargeSlot : cargoModel.getDischargeSlots()) {
 				assert dischargeSlot != null;
 				final IPortSlot portSlot = modelEntityMap.getOptimiserObject(dischargeSlot, IPortSlot.class);
