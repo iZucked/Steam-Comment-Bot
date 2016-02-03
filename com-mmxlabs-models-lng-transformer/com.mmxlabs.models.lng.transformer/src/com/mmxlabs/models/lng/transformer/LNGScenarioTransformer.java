@@ -2297,7 +2297,7 @@ public class LNGScenarioTransformer {
 			final PanamaCanalTariff panamaCanalTariff = costModel.getPanamaCanalTariff();
 			if (panamaCanalTariff != null) {
 				final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(rootObject);
-				buildPanamaCosts(builder, vesselAssociation, vesselClassAssociation, allVesselAvailabilities, fleetModel, panamaCanalTariff);
+				buildPanamaCosts(builder, vesselAssociation, vesselClassAssociation, allVesselAvailabilities, panamaCanalTariff);
 				if (panamaCanalTariff.isSetAvailableFrom()) {
 					LocalDate availableFrom = panamaCanalTariff.getAvailableFrom();
 					if (availableFrom != null) {
@@ -2351,8 +2351,8 @@ public class LNGScenarioTransformer {
 
 	}
 
-	public static void buildPanamaCosts(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Vessel, IVessel> vesselAssociation, @NonNull final Association<VesselClass, IVesselClass> vesselClassAssociation, List<IVesselAvailability> vesselAvailabilities, final FleetModel fleetModel,
-			@NonNull final PanamaCanalTariff panamaCanalTariff) {
+	public static void buildPanamaCosts(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Vessel, IVessel> vesselAssociation,
+			@NonNull final Association<VesselClass, IVesselClass> vesselClassAssociation, List<IVesselAvailability> vesselAvailabilities, @NonNull final PanamaCanalTariff panamaCanalTariff) {
 
 		// Extract band information into a sorted list
 		final List<Pair<Integer, PanamaCanalTariffBand>> bands = new LinkedList<>();
