@@ -54,13 +54,13 @@ public class DefaultDistanceProviderImpl implements IDistanceProviderEditor {
 			// No distance?
 			if (e.getSecond() == Integer.MAX_VALUE) {
 				itr.remove();
-			}
-			// Distance available, but route is closed at this time
-			if (!isRouteAvailable(e.getFirst(), voyageStartTime)) {
+			} else if (!isRouteAvailable(e.getFirst(), voyageStartTime)) {
+				// Distance available, but route is closed at this time
 				itr.remove();
 			}
 		}
 		return distances;
+
 	}
 
 	@Override

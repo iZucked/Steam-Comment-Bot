@@ -178,7 +178,8 @@ public class DataComponentProviderModule extends AbstractModule {
 	@Override
 	protected void configure() {
 
-		bind(IDistanceProvider.class).to(DefaultDistanceProviderImpl.class).in(Singleton.class);
+		bind(DefaultDistanceProviderImpl.class).in(Singleton.class);
+		bind(IDistanceProvider.class).to(DefaultDistanceProviderImpl.class);
 		bind(IDistanceProviderEditor.class).to(DefaultDistanceProviderImpl.class);
 
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
