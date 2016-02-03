@@ -92,7 +92,7 @@ public class DistanceEditorDialog extends Dialog {
 
 		if (menuService != null) {
 			menuService.populateContributionManager(barManager, DISTANCE_EDITOR_TOOLBAR_ID);
-			barManager.getControl().addDisposeListener(new DisposeListener() {
+			getShell().addDisposeListener(new DisposeListener() {
 				@Override
 				public void widgetDisposed(final DisposeEvent e) {
 					menuService.releaseContributions(barManager);
