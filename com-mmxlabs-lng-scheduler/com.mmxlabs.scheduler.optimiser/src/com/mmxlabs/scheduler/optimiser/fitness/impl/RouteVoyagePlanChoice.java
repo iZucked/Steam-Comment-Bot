@@ -7,10 +7,15 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Equality;
-import com.mmxlabs.common.Triple;
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 
 /**
@@ -23,13 +28,23 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 
 	private int choice;
 
+	private final @Nullable VoyageOptions previousOptions;
+
 	private final @NonNull VoyageOptions options;
 
-	private final @NonNull List<Triple<ERouteOption, Integer, Long>> routeOptions;
+	private final @NonNull List<Pair<ERouteOption, Integer>> routeOptions;
 
-	public RouteVoyagePlanChoice(final @NonNull VoyageOptions options, final @NonNull List<Triple<ERouteOption, Integer, Long>> routeOptions) {
+	private final @NonNull IRouteCostProvider routeCostProvider;
+
+	private final @NonNull IVessel vessel;
+
+	public RouteVoyagePlanChoice(@Nullable final VoyageOptions previousOptions, @NonNull final VoyageOptions options, @NonNull final List<Pair<ERouteOption, Integer>> routeOptions,
+			@NonNull final IVessel vessel, @NonNull final IRouteCostProvider routeCostProvider) {
+		this.previousOptions = previousOptions;
 		this.options = options;
 		this.routeOptions = routeOptions;
+		this.vessel = vessel;
+		this.routeCostProvider = routeCostProvider;
 	}
 
 	@Override
@@ -63,10 +78,34 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 	public final boolean apply(final int choice) {
 		this.choice = choice;
 
-		final Triple<ERouteOption, Integer, Long> entry = routeOptions.get(choice);
-		options.setRoute(entry.getFirst(), entry.getSecond(), entry.getThird());
+		final Pair<ERouteOption, Integer> entry = routeOptions.get(choice);
+		final CostType costType;
+
+		VoyageOptions pPreviousOption = previousOptions;
+		if (options.getVesselState() == VesselState.Laden) {
+			costType = CostType.Laden;
+		} else if (previousOptions == null) {
+			costType = CostType.Ballast;
+		} else {
+			// Is it round trip?
+			if (pPreviousOption != null) {
+				// Needs same route and load and next load port
+				if ((pPreviousOption.getRoute() == entry.getFirst()) && (pPreviousOption.getFromPortSlot().getPort() == pPreviousOption.getFromPortSlot().getPort())) {
+					costType = CostType.RoundTripBallast;
+				} else {
+					costType = CostType.Ballast;
+				}
+			} else {
+				costType = CostType.Ballast;
+			}
+		}
+
+		final long routeCost = routeCostProvider.getRouteCost(entry.getFirst(), vessel, costType);
+
+		options.setRoute(entry.getFirst(), entry.getSecond(), routeCost);
 
 		return true;
+
 	}
 
 	@Override

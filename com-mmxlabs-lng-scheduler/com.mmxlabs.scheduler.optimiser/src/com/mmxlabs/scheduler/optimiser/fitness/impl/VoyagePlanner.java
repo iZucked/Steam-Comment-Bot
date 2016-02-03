@@ -257,29 +257,27 @@ public class VoyagePlanner {
 		assert !distances.isEmpty();
 
 		// Only add route choice if there is one
-		final CostType costType;
-		if (vesselState == VesselState.Laden) {
-			costType = CostType.Laden;
-		} else if (previousOptions != null && previousOptions.getFromPortSlot().getPort() == thisPort) {
-			// TODO: Make part of if instead?
-			assert previousOptions.getFromPortSlot() instanceof ILoadOption;
-			costType = CostType.RoundTripBallast;
-		} else {
-			costType = CostType.Ballast;
-		}
 
 		if (distances.size() == 1) {
+			// TODO: Make part of if instead?
 			final Pair<ERouteOption, Integer> d = distances.get(0);
+			final CostType costType;
+			if (vesselState == VesselState.Laden) {
+				costType = CostType.Laden;
+			} else if (previousOptions != null && previousOptions.getFromPortSlot().getPort() == thisPort && previousOptions.getRoute() == d.getFirst()) {
+				costType = CostType.RoundTripBallast;
+			} else {
+				costType = CostType.Ballast;
+			}
+
 			options.setRoute(d.getFirst(), d.getSecond(), routeCostProvider.getRouteCost(d.getFirst(), vesselAvailability.getVessel(), costType));
 		} else {
-			final List<Triple<ERouteOption, Integer, Long>> routeOptions = new ArrayList<>(distances.size());
-			for (final Pair<ERouteOption, Integer> d : distances) {
-				routeOptions.add(new Triple<>(d.getFirst(), d.getSecond(), routeCostProvider.getRouteCost(d.getFirst(), vesselAvailability.getVessel(), costType)));
-			}
-			optimiser.addChoice(new RouteVoyagePlanChoice(options, routeOptions));
+			optimiser.addChoice(new RouteVoyagePlanChoice(previousOptions, options, distances, vesselAvailability.getVessel(), routeCostProvider));
 		}
 
-		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER && thisPortSlot.getPortType() == PortType.End) {
+		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER && thisPortSlot.getPortType() == PortType.End)
+
+		{
 			// The SchedulerBuilder should set options to trigger these values to be set above
 			assert !options.getAllowCooldown();
 			assert options.shouldBeCold();
@@ -288,6 +286,7 @@ public class VoyagePlanner {
 		}
 
 		return options;
+
 	}
 
 	/**

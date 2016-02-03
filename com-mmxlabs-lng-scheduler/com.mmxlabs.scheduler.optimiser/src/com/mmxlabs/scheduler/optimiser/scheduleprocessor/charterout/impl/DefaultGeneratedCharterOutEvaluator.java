@@ -355,6 +355,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 		// build new sequence up to and not including last ballast leg
 		IPort loadPort = null;
+		ERouteOption ladenRoute = null;
 		for (int i = 0; i < ballastIdx; i++) {
 			final Object o = currentSequence[i];
 			if (o instanceof PortDetails) {
@@ -364,6 +365,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 				newRawSequence.add(voyageDetails.getOptions().clone());
 				if (voyageDetails.getOptions().getVesselState() == VesselState.Laden) {
 					loadPort = voyageDetails.getOptions().getFromPortSlot().getPort();
+					ladenRoute = voyageDetails.getOptions().getRoute();
 					bigSequence.setLaden(voyageDetails.getOptions().clone());
 				}
 			}
@@ -383,7 +385,11 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 		// (1) ballast to charter out
 
-		final CostType dischargeToCharterPortCostType = (loadPort == charterOutOption.getPort()) ? CostType.RoundTripBallast : CostType.Ballast;
+		CostType dischargeToCharterPortCostType = CostType.Ballast;
+		// Is this a round trip?
+		if (loadPort == charterOutOption.getPort() && ladenRoute == charterOutOption.getToCharterPort().getSecond()) {
+			dischargeToCharterPortCostType = CostType.RoundTripBallast;
+		}
 		final long dischargeToCharterPortRouteCosts = routeCostProvider.getRouteCost(charterOutOption.getToCharterPort().getSecond(), vessel, CostType.Ballast);
 
 		final VoyageOptions dischargeToCharterPortVoyageOptions = new VoyageOptions();
