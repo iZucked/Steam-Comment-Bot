@@ -52,6 +52,10 @@ public class VesselAvailabilityMaker {
 		return this;
 	}
 
+	public VesselAvailabilityMaker withStartWindow(@NonNull final LocalDateTime exactTime) {
+		return withStartWindow(exactTime, exactTime);
+	}
+
 	public VesselAvailabilityMaker withStartWindow(@Nullable final LocalDateTime windowStart, @Nullable final LocalDateTime windowEnd) {
 		if (windowStart != null) {
 			vesselAvailability.setStartAfter(windowStart);
@@ -66,6 +70,10 @@ public class VesselAvailabilityMaker {
 		return this;
 	}
 
+	public VesselAvailabilityMaker withEndWindow(@NonNull final LocalDateTime exactTime) {
+		return withEndWindow(exactTime, exactTime);
+	}
+	
 	public VesselAvailabilityMaker withEndWindow(@Nullable final LocalDateTime windowStart, @Nullable final LocalDateTime windowEnd) {
 		if (windowStart != null) {
 			vesselAvailability.setEndAfter(windowStart);
@@ -106,6 +114,12 @@ public class VesselAvailabilityMaker {
 		}
 		return this;
 
+	}
+
+	@NonNull
+	public VesselAvailabilityMaker withCharterRate(@NonNull String priceExpression) {
+		vesselAvailability.setTimeCharterRate(priceExpression);
+		return this;
 	}
 
 	public VesselAvailability build() {
