@@ -34,6 +34,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.ui.internal.views.markers.AllMarkersView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -2296,7 +2297,7 @@ public class LNGScenarioTransformer {
 			final PanamaCanalTariff panamaCanalTariff = costModel.getPanamaCanalTariff();
 			if (panamaCanalTariff != null) {
 				final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(rootObject);
-				buildPanamaCosts(builder, vesselAssociation, fleetModel, panamaCanalTariff);
+				buildPanamaCosts(builder, vesselAssociation, vesselClassAssociation, allVesselAvailabilities, fleetModel, panamaCanalTariff);
 				if (panamaCanalTariff.isSetAvailableFrom()) {
 					LocalDate availableFrom = panamaCanalTariff.getAvailableFrom();
 					if (availableFrom != null) {
@@ -2350,7 +2351,7 @@ public class LNGScenarioTransformer {
 
 	}
 
-	public static void buildPanamaCosts(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Vessel, IVessel> vesselAssociation, final FleetModel fleetModel,
+	public static void buildPanamaCosts(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Vessel, IVessel> vesselAssociation, @NonNull final Association<VesselClass, IVesselClass> vesselClassAssociation, List<IVesselAvailability> vesselAvailabilities, final FleetModel fleetModel,
 			@NonNull final PanamaCanalTariff panamaCanalTariff) {
 
 		// Extract band information into a sorted list
@@ -2365,8 +2366,18 @@ public class LNGScenarioTransformer {
 		// Sort the bands smallest to largest
 		Collections.sort(bands, (b1, b2) -> b1.getFirst().compareTo(b2.getFirst()));
 
-		for (final Vessel eVessel : fleetModel.getVessels()) {
-			final int capacityInM3 = eVessel.getVesselOrVesselClassCapacity();
+		for (final IVesselAvailability availability : vesselAvailabilities) {
+			final int capacityInM3;
+			IVessel vessel = availability.getVessel();
+			assert vessel != null;
+			Vessel eVessel = vesselAssociation.reverseLookup(availability.getVessel());
+			if (eVessel == null) {
+				// spot charter
+				VesselClass eVesselClass = vesselClassAssociation.reverseLookupNullChecked(availability.getVessel().getVesselClass());
+				capacityInM3 = eVesselClass.getCapacity();
+			} else {
+				capacityInM3 = eVessel.getVesselOrVesselClassCapacity();
+			}
 			double totalLadenCost = 0.0;
 			double totalBallastCost = 0.0;
 			double totalBallastRoundTripCost = 0.0;
@@ -2385,8 +2396,6 @@ public class LNGScenarioTransformer {
 					totalBallastRoundTripCost += contributingCapacity * band.getBallastRoundtripTariff();
 				}
 			}
-
-			final IVessel vessel = vesselAssociation.lookupNullChecked(eVessel);
 
 			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.Laden, OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalLadenCost)));
 			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.Ballast, OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalBallastCost)));
