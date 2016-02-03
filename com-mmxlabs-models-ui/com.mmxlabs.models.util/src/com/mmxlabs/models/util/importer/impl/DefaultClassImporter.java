@@ -105,6 +105,10 @@ public class DefaultClassImporter extends AbstractClassImporter {
 				Map<String, String> row;
 				while ((row = reader.readRow(true)) != null) {
 					results.addAll(importObject(null, importClass, row, context).createdExtraObjects);
+					// Clean up null data
+					while (results.contains(null)) {
+						results.remove(null);
+					}
 				}
 			} finally {
 				reader.close();
