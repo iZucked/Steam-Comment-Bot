@@ -1,0 +1,99 @@
+package com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling;
+
+import static org.mockito.Mockito.when;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.mockito.Matchers;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.curves.IPriceIntervalProducer;
+import com.mmxlabs.scheduler.optimiser.curves.PriceIntervalProducer;
+import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
+
+
+public class PriceIntervalProviderHelperLowLevelTests {
+
+	@Test
+	public void testIsFeasible_1() {
+		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
+		Assert.assertTrue(helper.isFeasibleTravelTime(new int[]{0,10}, new int[] {20, 100}, 0, 30));
+	}
+	
+	@Test
+	public void testIsFeasible_2() {
+		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
+		Assert.assertTrue(helper.isFeasibleTravelTime(new int[]{0,10}, new int[] {20, 100}, 0, 5));
+	}
+
+	@Test
+	public void testIsFeasible_3() {
+		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
+		Assert.assertTrue(helper.isFeasibleTravelTime(new int[]{0,10}, new int[] {20, 100}, 0, 50));
+	}
+
+	@Test
+	public void testIsFeasible_4() {
+		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
+		Assert.assertTrue(helper.isFeasibleTravelTime(new int[]{0,10}, new int[] {20, 100}, 0, 100));
+	}
+
+	@Test
+	public void testIsFeasible_5() {
+		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
+		Assert.assertFalse(helper.isFeasibleTravelTime(new int[]{0,10}, new int[] {20, 100}, 0, 101));
+	}
+
+
+	private PriceIntervalProviderHelper createPriceIntervalProviderHelper(final int timeDiff) {
+		PriceIntervalProviderHelper ppih = new PriceIntervalProviderHelper();
+		final ITimeZoneToUtcOffsetProvider t = Mockito.mock(ITimeZoneToUtcOffsetProvider.class);
+		when(t.UTC(Matchers.anyInt(), Matchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
+			@Override
+			public Integer answer(final InvocationOnMock invocation) throws Throwable {
+				final Object[] args = invocation.getArguments();
+				final int input = (int) args[0]+timeDiff;
+				return input;
+			}
+		});
+		when(t.localTime(Matchers.anyInt(), Matchers.<IPort> any())).thenAnswer(new Answer<Integer>() {
+			@Override
+			public Integer answer(final InvocationOnMock invocation) throws Throwable {
+				final Object[] args = invocation.getArguments();
+				final int input = (int) args[0]-timeDiff;
+				return input;
+			}
+		});
+		when(t.UTC(Matchers.anyInt(), Matchers.<IPortSlot> any())).thenAnswer(new Answer<Integer>() {
+			@Override
+			public Integer answer(final InvocationOnMock invocation) throws Throwable {
+				final Object[] args = invocation.getArguments();
+				final int input = (int) args[0]-2;
+				return input;
+			}
+		});
+		
+		Injector injector = Guice.createInjector(new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				bind(ITimeZoneToUtcOffsetProvider.class).toInstance(t);
+				bind(IPriceIntervalProducer.class).to(PriceIntervalProducer.class);
+				bind(IVesselProvider.class).to(HashMapVesselEditor.class);
+			}
+		});
+
+		injector.injectMembers(ppih);
+		return ppih;
+	}
+
+}

@@ -177,12 +177,51 @@ public class PriceIntervalProviderHelper {
 	
 	
 	int[] getCargoBoundsWithCanalTrimming(int purchaseStart, int purchaseEnd, int salesStart, int salesEnd, int loadDuration, int minTimeCanal) {
-		int minSalesStart = Math.max(purchaseStart + minTimeCanal + loadDuration, salesStart);
+		int minSalesStart = getMinDischargeGivenCanal(purchaseStart, salesStart, loadDuration, minTimeCanal);
 		return new int[] {purchaseStart, purchaseStart, minSalesStart, Math.max(minSalesStart, salesEnd)};
+	}
+
+	public int getMinDischargeGivenCanal(int purchaseStart, int salesStart, int loadDuration, int minTimeCanal) {
+		int minSalesStart = Math.max(purchaseStart + minTimeCanal + loadDuration, salesStart);
+		return minSalesStart;
 	}
 	
 	boolean isFeasibleTravelTime(int[] purchase, int[] sales, int loadDuration, long time) {
-		return time >= (Math.max(sales[0] - purchase[1] + loadDuration, loadDuration)) && time <= (sales[1] - purchase[0] + loadDuration);
+		long minArrivalTime = purchase[0] + time + loadDuration;
+		if (minArrivalTime <= sales[1]) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public long[] getBestCanalDetails(int[] purchase, int[] sales, int loadDuration, long[][] sortedCanalTimes) {
+		for (long[] canal : sortedCanalTimes) {
+			if (isFeasibleTravelTime(purchase, sales, loadDuration, canal[0])) {
+				return canal;
+			}
+		}
+		return sortedCanalTimes[sortedCanalTimes.length - 1];
+	}
+
+	public long[] getBestCanalDetailsWithBoiloff(int[] purchase, int[] sales, int loadDuration, int salesPrice, long[][] sortedCanalTimes, long boiloffRateM3, int cv, int loadVolumeMMBTU) {
+		long bestMargin = Long.MAX_VALUE;
+		long bestBoiloffCostMMBTU = Long.MIN_VALUE;
+		long[] bestCanal = null;
+		for (long[] canal : sortedCanalTimes) {
+			if (isFeasibleTravelTime(purchase, sales, loadDuration, canal[0])) {
+				long boiloffMMBTU = Calculator.convertM3ToMMBTu(((getMinDischargeGivenCanal(purchase[0], sales[0], loadDuration, (int) canal[0])-purchase[0]-loadDuration)/24)*boiloffRateM3, cv);
+				long boiloffCost = Calculator.costFromVolume(boiloffMMBTU, sales[2]);
+				long boiloffCostMMBTU = OptimiserUnitConvertor.convertToInternalDailyCost(boiloffCost);
+				long cost = canal[1] + boiloffCostMMBTU;
+				if (cost < bestMargin) {
+					bestMargin = cost;
+					bestCanal = canal;
+					bestBoiloffCostMMBTU = boiloffCostMMBTU;
+				}
+			}
+		}
+		return new long[] {bestCanal[0], bestCanal[1], bestBoiloffCostMMBTU};
 	}
 
 	int getMinIndexOfPriceIntervalList(List<int[]> list) {
@@ -221,7 +260,7 @@ public class PriceIntervalProviderHelper {
 		return bestIdx;
 	}
 
-	private long[] getBestCanalDetails(long[][] times, int maxTime) {
+	long[] getBestCanalDetails(long[][] times, int maxTime) {
 		for (long[] canal : times) {
 			if (maxTime >= canal[0]) {
 				return canal;

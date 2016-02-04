@@ -36,7 +36,7 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 		setSequences(sequences);
 
 		prepare();
-		priceBasedWindowTrimming(sequences, portTimeWindowsRecords);
+		sequentialEarliestTimePriceBasedWindowTrimming(sequences, portTimeWindowsRecords);
 		for (int index = 0; index < sequences.size(); ++index) {
 			setTimeWindowsToEarliest(index);
 		}
@@ -47,6 +47,26 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 		} else {
 			return evaluate(solution);
 		}
+	}
+
+	private void sequentialEarliestTimePriceBasedWindowTrimming(ISequences sequences, List<List<IPortTimeWindowsRecord>> portTimeWindowsRecords) {
+		for (int seqIndex = 0; seqIndex < sequences.size(); seqIndex++) {
+			for (int idx = 0; idx < portTimeWindowsRecords.get(seqIndex).size(); idx++) {
+				IPortTimeWindowsRecord portTimeWindowsRecord = portTimeWindowsRecords.get(seqIndex).get(idx);
+				setFeasibleTimeWindowsUsingPrevious(portTimeWindowsRecord, seqIndex);
+				timeWindowsTrimming.processCargo(portTimeWindowsRecord);
+				updateTimeWindows(portTimeWindowsRecord, seqIndex);
+				IPortSlot lastSlot = portTimeWindowsRecord.getSlots().get(portTimeWindowsRecord.getSlots().size()-1);
+				setTimeWindowsToEarliest(seqIndex, portTimeWindowsRecord.getIndex(lastSlot), portTimeWindowsRecord.getSlotFeasibleTimeWindow(lastSlot));
+			}
+		}
+	}
+
+	private void updateFollowingPortTimeRecordStartTime(IPortTimeWindowsRecord first, IPortTimeWindowsRecord second) {
+		IPortSlot lastSlotFirst = first.getSlots().get(first.getSlots().size()-1);
+		IPortSlot firstSlotSecond = second.getFirstSlot();
+		ITimeWindow timeWindow = new TimeWindow(first.getSlotFeasibleTimeWindow(lastSlotFirst).getStart(), second.getFirstSlotFeasibleTimeWindow().getStart(), second.getFirstSlotFeasibleTimeWindow().getEndFlex());
+		second.setSlotFeasibleTimeWindow(firstSlotSecond, timeWindow);
 	}
 
 	private void priceBasedWindowTrimming(ISequences sequences, List<List<IPortTimeWindowsRecord>> portTimeWindowsRecords) {
@@ -67,6 +87,21 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 		}
 	}
 
+	private void setFeasibleTimeWindowsUsingPrevious(IPortTimeWindowsRecord portTimeWindowsRecord, int seqIndex) {
+		for (IPortSlot portSlot : portTimeWindowsRecord.getSlots()) {
+			final ITimeWindow timeWindow;
+			if (portTimeWindowsRecord.getFirstSlot().equals(portSlot) && portTimeWindowsRecord.getIndex(portTimeWindowsRecord.getFirstSlot()) > 0) {
+				// first load
+				timeWindow = new TimeWindow(Math.max(windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portTimeWindowsRecord.getFirstSlot()) - 1] + minTimeToNextElement[seqIndex][portTimeWindowsRecord.getIndex(portTimeWindowsRecord.getFirstSlot()) - 1], windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portTimeWindowsRecord.getFirstSlot())]),
+						windowEndTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)]);
+			} else {
+				timeWindow = new TimeWindow(windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)],
+						windowEndTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)]);
+			}
+			portTimeWindowsRecord.setSlotFeasibleTimeWindow(portSlot, timeWindow);
+		}
+	}
+
 	private void setFeasibleTimeWindows(IPortTimeWindowsRecord portTimeWindowsRecord, int seqIndex) {
 		for (IPortSlot portSlot : portTimeWindowsRecord.getSlots()) {
 			ITimeWindow timeWindow = new TimeWindow(windowStartTime[seqIndex][portTimeWindowsRecord.getIndex(portSlot)],
@@ -81,7 +116,7 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 
 		prepare();
 
-		priceBasedWindowTrimming(sequences, portTimeWindowsRecords);
+		sequentialEarliestTimePriceBasedWindowTrimming(sequences, portTimeWindowsRecords);
 		for (int index = 0; index < sequences.size(); ++index) {
 			setTimeWindowsToEarliest(index);
 		}
@@ -122,6 +157,15 @@ public class PriceBasedSequenceScheduler extends EnumeratingSequenceScheduler {
 			arrivalTimes[seq][lastIndex] = getMinArrivalTime(seq, lastIndex);
 
 			arrivalTimes[seq][0] = getMaxArrivalTimeForNextArrival(seq, 0);
+		}
+	}
+
+	private void setTimeWindowsToEarliest(final int seq, final int index, ITimeWindow timeWindow) {
+		if (arrivalTimes[seq] == null) {
+			return;
+		}
+		if (sizes[seq] >= index) {
+			windowStartTime[seq][index] = timeWindow.getStart();
 		}
 	}
 

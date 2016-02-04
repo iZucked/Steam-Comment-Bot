@@ -1,6 +1,7 @@
 package com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -79,20 +80,18 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 		for (int i = 0; i < sortedCanalTimes.length; i++) {
 			if (sortedCanalTimes[i][0] <= maxTime) {
 				canalsWeCanUse.add(i);
-			} else {
-				break;
-			}
+			} 
 		}
 		return canalsWeCanUse;
 	}
 
 	@Override
-	public long[] getBestCanalDetails(long[][] times, int maxTime) {
-		for (long[] canal : times) {
+	public long[] getBestCanalDetails(long[][] sortedCanalTimes, int maxTime) {
+		for (long[] canal : sortedCanalTimes) {
 			if (maxTime >= canal[0]) {
 				return canal;
 			}
 		}
-		return times[times.length - 1];
+		return sortedCanalTimes[sortedCanalTimes.length - 1];
 	}
 }

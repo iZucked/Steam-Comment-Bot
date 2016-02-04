@@ -89,7 +89,7 @@ public abstract class EnumeratingSequenceScheduler extends AbstractLoggingSequen
 	/**
 	 * The minimum time this vessel can take to get from the indexed element to its successor. i.e. min travel time + visit time at indexed element.
 	 */
-	private int[][] minTimeToNextElement;
+	protected int[][] minTimeToNextElement;
 	/**
 	 * The maximum time to get from the indexed element to its successor. This is the maximum travel time + visit time at this element
 	 */
