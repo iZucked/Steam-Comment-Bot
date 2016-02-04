@@ -339,6 +339,14 @@
          <command
                commandId="com.mmxlabs.models.lng.pricing.editor.commands.EditPanamaCanalTariff"
                style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <test
+                     args="features:panama-canal"
+                     forcePluginActivation="true"
+                     property="com.mmxlabs.license.features.enablement">
+               </test>
+            </visibleWhen>
          </command>
       </menuContribution>
    </extension>
