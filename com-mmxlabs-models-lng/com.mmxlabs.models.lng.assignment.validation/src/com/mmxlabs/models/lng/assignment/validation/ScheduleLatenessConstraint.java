@@ -57,7 +57,7 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 				AssignableElement prevAssignment = null;
 				for (final AssignableElement assignment : collectedAssignment.getAssignedObjects()) {
 					final ZonedDateTime left = getEndDate(prevAssignment);
-					final ZonedDateTime right = getStartDate(assignment);
+					final ZonedDateTime right = getStartDate(assignment, false);
 
 					if (left != null && right != null) {
 						if (left.isAfter(right)) {
@@ -107,7 +107,7 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 		}
 	}
 
-	private ZonedDateTime getStartDate(final AssignableElement uuidObject) {
+	private ZonedDateTime getStartDate(final AssignableElement uuidObject, boolean isStartOfWindow) {
 		if (uuidObject instanceof Cargo) {
 			final Cargo cargo = (Cargo) uuidObject;
 			final EList<Slot> sortedSlots = cargo.getSortedSlots();
@@ -115,7 +115,7 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 			if (slot instanceof SpotSlot) {
 				return null;
 			}
-			return slot.getWindowStartWithSlotOrPortTime();
+			return isStartOfWindow ? slot.getWindowStartWithSlotOrPortTime() : slot.getWindowEndWithSlotOrPortTime();
 		} else if (uuidObject instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) uuidObject;
 			return vesselEvent.getStartByAsDateTime();
