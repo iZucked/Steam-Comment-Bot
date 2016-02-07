@@ -1,21 +1,16 @@
 package com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
-import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
@@ -25,6 +20,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 
 public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSchedulingCanalDistanceProvider {
+
+	private static final int DEFAULT_CARGO_CV = 22670000;
 
 	@Inject
 	private IRouteCostProvider routeCostProvider;
@@ -62,16 +59,26 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 		}
 		
 		// create a new distances data structure
-		long[][] times = new long[allDistanceValues.size()][2];
+		long[][] times = new long[allDistanceValues.size()][3];
 		int i = 0;
 		for (final Pair<ERouteOption, Integer> d : allDistanceValues) {
-			int travelTime = Calculator.getTimeFromSpeedDistance(vesselClass.getMaxSpeed(), d.getSecond());
+			vesselClass.getBaseFuel().getEquivalenceFactor();
+			int mintravelTime = Calculator.getTimeFromSpeedDistance(vesselClass.getMaxSpeed(), d.getSecond());
+			int nboSpeed = Math.min(Math.max(getNBOSpeed(vesselClass, VesselState.Laden), vesselClass.getMinSpeed()), vesselClass.getMaxSpeed());
+			int nbotravelTime = Calculator.getTimeFromSpeedDistance(nboSpeed, d.getSecond());
 			int transitTime = routeCostProvider.getRouteTransitTime(d.getFirst(), vessel);
-			times[i][0] = travelTime + transitTime;
+			times[i][0] = mintravelTime + transitTime;
 			times[i][1] = OptimiserUnitConvertor.convertToInternalDailyCost(routeCostProvider.getRouteCost(d.getFirst(), vessel, IRouteCostProvider.CostType.Laden));
+			times[i][2] = nbotravelTime + transitTime;
 			i++;
 		}
 		return times;
+	}
+
+	private int getNBOSpeed(IVesselClass vesselClass, VesselState vesselState) {
+		final long nboRateInM3PerHour = vesselClass.getNBORate(vesselState);
+		final long nboProvidedInMT = Calculator.convertM3ToMT(nboRateInM3PerHour, DEFAULT_CARGO_CV, vesselClass.getBaseFuel().getEquivalenceFactor());
+		return vesselClass.getConsumptionRate(vesselState).getSpeed(nboProvidedInMT); 
 	}
 
 	@Override

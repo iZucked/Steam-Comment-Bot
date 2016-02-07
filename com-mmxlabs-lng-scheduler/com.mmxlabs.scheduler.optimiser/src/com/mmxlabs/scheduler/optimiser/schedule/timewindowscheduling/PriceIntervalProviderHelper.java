@@ -186,6 +186,25 @@ public class PriceIntervalProviderHelper {
 		return minSalesStart;
 	}
 	
+	public int[] getIdealLoadAndDischargeTimesGivenCanal(int purchaseStart, int purchaseEnd, int salesStart, int salesEnd, int loadDuration, int canalMaxSpeed, int canalNBOSpeed) {
+		int purchase = salesStart - canalMaxSpeed - loadDuration;
+		int discharge = salesStart;
+		if (purchase > purchaseEnd) {
+			purchase = purchaseEnd;
+			discharge = Math.min(Math.max(purchaseStart + canalNBOSpeed + loadDuration, salesStart), salesEnd);
+		} else {
+			int canalDifference = canalNBOSpeed - canalMaxSpeed;
+			int remainder = purchase - purchaseStart - canalDifference;
+			if (remainder >= 0) {
+				purchase -= canalDifference;
+			} else {
+				purchase = purchaseStart;
+				discharge = Math.min(salesStart - remainder, salesEnd); // note: remainder is -ve
+			}
+		}
+		return new int[]{purchase, discharge};
+	}
+
 	boolean isFeasibleTravelTime(int[] purchase, int[] sales, int loadDuration, long time) {
 		long minArrivalTime = purchase[0] + time + loadDuration;
 		if (minArrivalTime <= sales[1]) {
@@ -221,7 +240,7 @@ public class PriceIntervalProviderHelper {
 				}
 			}
 		}
-		return new long[] {bestCanal[0], bestCanal[1], bestBoiloffCostMMBTU};
+		return new long[] {bestCanal[0], bestCanal[2], bestCanal[1], bestBoiloffCostMMBTU}; // TODO: this ordering is stupid now!
 	}
 
 	int getMinIndexOfPriceIntervalList(List<int[]> list) {

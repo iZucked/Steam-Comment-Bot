@@ -27,6 +27,8 @@ import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.components.IBaseFuel;
+import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -86,7 +88,9 @@ public class PriceIntervalProviderHelperTest {
 		IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
 
 		IPortTimeWindowsRecord portTimesWindowsRecord = Mockito.mock(IPortTimeWindowsRecord.class);
-		Mockito.when(portTimesWindowsRecord.getSlotDuration(loadSlot)).thenReturn(0);
+		Mockito.when(portTimesWindowsRecord.getSlotDuration(Matchers.eq(loadSlot))).thenReturn(0);
+		Mockito.when(portTimesWindowsRecord.getSlotFeasibleTimeWindow(Matchers.eq(loadSlot))).thenReturn(loadSlotTimeWindow);
+		
 		IVessel vessel = getIVessel();
 		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
 		Assert.assertArrayEquals(new int[] {0, 0, 40, 45}, times);
@@ -96,6 +100,12 @@ public class PriceIntervalProviderHelperTest {
 		IVessel vessel = Mockito.mock(IVessel.class);
 		IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
 		Mockito.when(vesselClass.getMaxSpeed()).thenReturn(10*1000);
+		IConsumptionRateCalculator consumptionRateCalculator = Mockito.mock(IConsumptionRateCalculator.class);
+		Mockito.when(consumptionRateCalculator.getSpeed(Matchers.anyLong())).thenReturn(10);
+		Mockito.when(vesselClass.getConsumptionRate(Mockito.any())).thenReturn(consumptionRateCalculator);
+		IBaseFuel baseFuel = Mockito.mock(IBaseFuel.class);
+		Mockito.when(baseFuel.getEquivalenceFactor()).thenReturn(44100);
+		Mockito.when(vesselClass.getBaseFuel()).thenReturn(baseFuel);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
 		return vessel;
 	}
@@ -131,6 +141,8 @@ public class PriceIntervalProviderHelperTest {
 
 		IPortTimeWindowsRecord portTimesWindowsRecord = Mockito.mock(IPortTimeWindowsRecord.class);
 		Mockito.when(portTimesWindowsRecord.getSlotDuration(loadSlot)).thenReturn(0);
+		Mockito.when(portTimesWindowsRecord.getSlotFeasibleTimeWindow(Matchers.eq(loadSlot))).thenReturn(loadSlotTimeWindow);
+
 		IVessel vessel = getIVessel();
 		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
 		Assert.assertArrayEquals(new int[] {15, 15, 50, 51}, times);
@@ -165,6 +177,7 @@ public class PriceIntervalProviderHelperTest {
 		ITimeWindow loadSlotTimeWindow = Mockito.mock(ITimeWindow.class);
 		Mockito.when(loadSlot.getTimeWindow()).thenReturn(loadSlotTimeWindow);
 		Mockito.when(loadSlotTimeWindow.getStart()).thenReturn(0);
+		Mockito.when(portTimesWindowsRecord.getSlotFeasibleTimeWindow(Matchers.eq(loadSlot))).thenReturn(loadSlotTimeWindow);
 
 		IVessel vessel = getIVessel();
 		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
@@ -200,6 +213,8 @@ public class PriceIntervalProviderHelperTest {
 		
 		IPortTimeWindowsRecord portTimesWindowsRecord = Mockito.mock(IPortTimeWindowsRecord.class);
 		Mockito.when(portTimesWindowsRecord.getSlotDuration(loadSlot)).thenReturn(0);
+		Mockito.when(portTimesWindowsRecord.getSlotFeasibleTimeWindow(Matchers.eq(loadSlot))).thenReturn(loadSlotTimeWindow);
+
 		IVessel vessel = getIVessel();
 		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
 		Assert.assertArrayEquals(new int[] {15, 15, 40, 45}, times);
@@ -233,6 +248,7 @@ public class PriceIntervalProviderHelperTest {
 		IDischargeOption dischargeSlot = Mockito.mock(IDischargeOption.class);
 		IPortTimeWindowsRecord portTimesWindowsRecord = Mockito.mock(IPortTimeWindowsRecord.class);
 		Mockito.when(portTimesWindowsRecord.getSlotDuration(loadSlot)).thenReturn(0);
+		Mockito.when(portTimesWindowsRecord.getSlotFeasibleTimeWindow(Matchers.eq(loadSlot))).thenReturn(loadSlotTimeWindow);
 		
 		IVessel vessel = getIVessel();
 		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
@@ -286,6 +302,7 @@ public class PriceIntervalProviderHelperTest {
 		
 		IPortTimeWindowsRecord portTimesWindowsRecord = Mockito.mock(IPortTimeWindowsRecord.class);
 		Mockito.when(portTimesWindowsRecord.getSlotDuration(loadSlot)).thenReturn(0);
+		Mockito.when(portTimesWindowsRecord.getSlotFeasibleTimeWindow(Matchers.eq(loadSlot))).thenReturn(loadSlotTimeWindow);
 		IVessel vessel = getIVessel();
 		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
 		Assert.assertArrayEquals(new int[] {15, 15, 40, 45}, times);
@@ -321,6 +338,7 @@ public class PriceIntervalProviderHelperTest {
 		
 		IPortTimeWindowsRecord portTimesWindowsRecord = Mockito.mock(IPortTimeWindowsRecord.class);
 		Mockito.when(portTimesWindowsRecord.getSlotDuration(loadSlot)).thenReturn(0);
+		Mockito.when(portTimesWindowsRecord.getSlotFeasibleTimeWindow(Matchers.eq(loadSlot))).thenReturn(loadSlotTimeWindow);
 		IVessel vessel = getIVessel();
 		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
 		Assert.assertArrayEquals(new int[] {15, 15, 50, 51}, times);
@@ -359,6 +377,8 @@ public class PriceIntervalProviderHelperTest {
 		
 		IPortTimeWindowsRecord portTimesWindowsRecord = Mockito.mock(IPortTimeWindowsRecord.class);
 		Mockito.when(portTimesWindowsRecord.getSlotDuration(loadSlot)).thenReturn(0);
+		Mockito.when(portTimesWindowsRecord.getSlotFeasibleTimeWindow(Matchers.eq(loadSlot))).thenReturn(loadSlotTimeWindow);
+
 		IVessel vessel = getIVessel();
 		int[] times = timeWindowsTrimming.trimCargoTimeWindowsWithRouteOptimisation(portTimesWindowsRecord, vessel, loadSlot, dischargeSlot, purchaseIntervals, salesIntervals);
 		Assert.assertArrayEquals(new int[] {15, 15, 40, 45}, times);
@@ -880,6 +900,7 @@ public class PriceIntervalProviderHelperTest {
 			protected void configure() {
 				bind(IDistanceProvider.class).toInstance(getDistanceProvider(distances, canalOpenings));
 				bind(IRouteCostProvider.class).toInstance(getIRouteCostProvider());
+				bind(IConsumptionRateCalculator.class).toInstance(Mockito.mock(IConsumptionRateCalculator.class));
 			}
 		});
 
@@ -927,6 +948,8 @@ public class PriceIntervalProviderHelperTest {
 				bind(PriceIntervalProviderHelper.class).toInstance(createPriceIntervalProviderHelper(0));
 				bind(IDistanceProvider.class).toInstance(getDistanceProvider(distances, canalOpenings));
 				bind(IRouteCostProvider.class).toInstance(getIRouteCostProvider());
+				bind(IConsumptionRateCalculator.class).toInstance(Mockito.mock(IConsumptionRateCalculator.class));
+
 				bind(ITimeWindowSchedulingCanalDistanceProvider.class).toInstance(getTimeWindowSchedulingCanalDistanceProvider(distances, canalOpenings));
 			}
 		});
