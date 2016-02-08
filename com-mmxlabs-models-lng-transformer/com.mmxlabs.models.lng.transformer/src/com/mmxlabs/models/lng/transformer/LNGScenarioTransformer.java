@@ -1184,7 +1184,9 @@ public class LNGScenarioTransformer {
 			@NonNull final Association<Vessel, IVessel> vesselAssociation, @NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap,
 			@NonNull final DischargeSlot dischargeSlot) {
 		final IDischargeOption discharge;
-		usedIDStrings.add(dischargeSlot.getName());
+		String elementName = String.format("%s-%s", dischargeSlot.isFOBSale() ? "FS" : "FP" ,dischargeSlot.getName());
+
+		usedIDStrings.add(elementName);
 
 		final ITimeWindow dischargeWindow = builder.createTimeWindow(dateHelper.convertTime(dischargeSlot.getWindowStartWithSlotOrPortTimeWithFlex()),
 				dateHelper.convertTime(dischargeSlot.getWindowEndWithSlotOrPortTimeWithFlex()), dischargeSlot.getWindowFlex());
@@ -1247,7 +1249,7 @@ public class LNGScenarioTransformer {
 		// local scope for slot creation convenience variables
 		{
 			// convenience variables
-			final String name = dischargeSlot.getName();
+			final String name = elementName;
 			final long minVolume;
 			final long maxVolume;
 			if (dischargeSlot instanceof SpotSlot) {
@@ -1316,7 +1318,7 @@ public class LNGScenarioTransformer {
 		}
 
 		if (dischargeSlot instanceof SpotSlot) {
-			marketSlotsByID.put(dischargeSlot.getName(), dischargeSlot);
+			marketSlotsByID.put(elementName, dischargeSlot);
 			addSpotSlotToCount((SpotSlot) dischargeSlot);
 		}
 
@@ -1343,7 +1345,8 @@ public class LNGScenarioTransformer {
 			@NonNull final Association<Vessel, IVessel> vesselAssociation, @NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap,
 			@NonNull final LoadSlot loadSlot) {
 		final ILoadOption load;
-		usedIDStrings.add(loadSlot.getName());
+		String elementName = String.format("%s-%s", loadSlot.isDESPurchase() ? "DP" : "DS" ,loadSlot.getName());
+		usedIDStrings.add(elementName);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(dateHelper.convertTime(loadSlot.getWindowStartWithSlotOrPortTimeWithFlex()),
 				dateHelper.convertTime(loadSlot.getWindowEndWithSlotOrPortTimeWithFlex()), loadSlot.getWindowFlex());
@@ -1440,7 +1443,7 @@ public class LNGScenarioTransformer {
 			} else {
 				port = portAssociation.lookup(loadSlot.getPort());
 			}
-			load = builder.createDESPurchaseLoadSlot(loadSlot.getName(), port, localTimeWindow, minVolume, maxVolume, loadPriceCalculator,
+			load = builder.createDESPurchaseLoadSlot(elementName, port, localTimeWindow, minVolume, maxVolume, loadPriceCalculator,
 					OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrDelegatedCV()), loadSlot.getSlotOrPortDuration(), slotPricingDate,
 					transformPricingEvent(loadSlot.getSlotOrDelegatedPricingEvent()), loadSlot.isOptional(), loadSlot.isLocked(), isSpot, isVolumeLimitInM3);
 
@@ -1448,7 +1451,7 @@ public class LNGScenarioTransformer {
 				builder.setShippingHoursRestriction(load, loadWindow, loadSlot.getShippingDaysRestriction() * 24);
 			}
 		} else {
-			load = builder.createLoadSlot(loadSlot.getName(), portAssociation.lookupNullChecked(loadSlot.getPort()), loadWindow, minVolume, maxVolume, loadPriceCalculator,
+			load = builder.createLoadSlot(elementName, portAssociation.lookupNullChecked(loadSlot.getPort()), loadWindow, minVolume, maxVolume, loadPriceCalculator,
 					OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrDelegatedCV()), loadSlot.getSlotOrPortDuration(), loadSlot.isSetArriveCold(), loadSlot.isArriveCold(),
 					slotPricingDate, transformPricingEvent(loadSlot.getSlotOrDelegatedPricingEvent()), loadSlot.isOptional(), loadSlot.isLocked(), isSpot, isVolumeLimitInM3);
 		}
@@ -1459,7 +1462,7 @@ public class LNGScenarioTransformer {
 			contractTransformer.slotTransformed(loadSlot, load);
 		}
 		if (loadSlot instanceof SpotSlot) {
-			marketSlotsByID.put(loadSlot.getName(), loadSlot);
+			marketSlotsByID.put(elementName, loadSlot);
 			addSpotSlotToCount((SpotSlot) loadSlot);
 		}
 
@@ -1608,7 +1611,7 @@ public class LNGScenarioTransformer {
 
 								final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(desPurchaseMarket.getCv());
 
-								final String idPrefix = market.getName() + "-" + yearMonthString + "-";
+								final String idPrefix = "DP-" + market.getName() + "-" + yearMonthString + "-";
 
 								// Avoid ID clash
 								String id = idPrefix + (i + offset);
@@ -1741,7 +1744,7 @@ public class LNGScenarioTransformer {
 								final ITimeWindow twUTC = builder.createTimeWindow(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime) - 1);
 								final ITimeWindow twUTCPlus = createUTCPlusTimeWindow(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime));
 
-								final String idPrefix = market.getName() + "-" + yearMonthString + "-";
+								final String idPrefix = "FS-" + market.getName() + "-" + yearMonthString + "-";
 
 								String id = idPrefix + (i + offset);
 								while (usedIDStrings.contains(id)) {
@@ -1880,7 +1883,7 @@ public class LNGScenarioTransformer {
 
 								final ITimeWindow tw = builder.createTimeWindow(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime));
 
-								final String idPrefix = market.getName() + "-" + yearMonthString + "-";
+								final String idPrefix = "DS-" + market.getName() + "-" + yearMonthString + "-";
 
 								String id = idPrefix + (i + offset);
 								while (usedIDStrings.contains(id)) {
@@ -1999,7 +2002,7 @@ public class LNGScenarioTransformer {
 
 								final ITimeWindow tw = builder.createTimeWindow(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime));
 
-								final String idPrefix = market.getName() + "-" + yearMonthString + "-";
+								final String idPrefix = "FP-" + market.getName() + "-" + yearMonthString + "-";
 
 								String id = idPrefix + (i + offset);
 								while (usedIDStrings.contains(id)) {
