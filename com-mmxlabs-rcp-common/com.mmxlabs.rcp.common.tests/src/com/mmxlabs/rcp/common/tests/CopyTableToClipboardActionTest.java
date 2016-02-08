@@ -37,11 +37,6 @@ public class CopyTableToClipboardActionTest {
 	@Test
 	public void testCopyTableToClipboardAction() throws InterruptedException {
 
-		// Get bot ref to workbench
-		final SWTWorkbenchBot bot = new SWTWorkbenchBot();
-		// Get shell
-		final Shell shell = bot.activeShell().widget;
-
 		bot.getDisplay().syncExec(new Runnable() {
 
 			@Override
