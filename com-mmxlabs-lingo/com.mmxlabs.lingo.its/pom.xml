@@ -273,6 +273,11 @@
 					<url>${env.LINGO_P2_REPO}</url>
 					<layout>p2</layout>
 				</repository>
+				<repository>
+					<id>lingo-transformer-its-p2</id>
+					<url>${env.LINGO_TRANFORMER_ITS_P2_REPO}</url>
+					<layout>p2</layout>
+				</repository>
 			</repositories>
 		</profile>
 	</profiles>
