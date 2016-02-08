@@ -1262,7 +1262,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		assert type == VesselInstanceType.DES_PURCHASE || type == VesselInstanceType.FOB_SALE;
 		// create a new resource for each of these guys, and bind them to their resources
 		assert virtualClass != null;
-		final IVessel virtualVessel = createVessel("virtual-" + element.getName(), virtualClass, virtualClass.getCargoCapacity());
+		final IVessel virtualVessel = createVessel("virtual-" + type.toString() + "-" + element.getName(), virtualClass, virtualClass.getCargoCapacity());
 		final IVesselAvailability virtualVesselAvailability = createVesselAvailability(virtualVessel, ZeroCurve.getInstance(), type, createStartRequirement(), createEndRequirement());
 		// Bind every slot to its vessel
 		final IPortSlot portSlot = portSlotsProvider.getPortSlot(element);
