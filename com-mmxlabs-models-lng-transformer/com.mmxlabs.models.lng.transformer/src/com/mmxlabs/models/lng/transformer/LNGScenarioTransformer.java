@@ -2324,7 +2324,7 @@ public class LNGScenarioTransformer {
 						assert routeCosts != null;
 						for (final RouteCost routeCost : routeCosts) {
 
-							if (routeCost.getRoute().getRouteOption() == RouteOption.PANAMA) {
+							if (panamaCanalTariff!= null && routeCost.getRoute().getRouteOption() == RouteOption.PANAMA) {
 								continue;
 							}
 
