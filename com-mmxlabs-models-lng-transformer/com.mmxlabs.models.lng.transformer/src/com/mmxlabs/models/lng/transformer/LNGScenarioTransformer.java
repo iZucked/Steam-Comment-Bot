@@ -1184,7 +1184,7 @@ public class LNGScenarioTransformer {
 			@NonNull final Association<Vessel, IVessel> vesselAssociation, @NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap,
 			@NonNull final DischargeSlot dischargeSlot) {
 		final IDischargeOption discharge;
-		String elementName = String.format("%s-%s", dischargeSlot.isFOBSale() ? "FS" : "FP" ,dischargeSlot.getName());
+		String elementName = String.format("%s-%s", dischargeSlot.isFOBSale() ? "FS" : "DS" ,dischargeSlot.getName());
 
 		usedIDStrings.add(elementName);
 
@@ -1345,7 +1345,7 @@ public class LNGScenarioTransformer {
 			@NonNull final Association<Vessel, IVessel> vesselAssociation, @NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap,
 			@NonNull final LoadSlot loadSlot) {
 		final ILoadOption load;
-		String elementName = String.format("%s-%s", loadSlot.isDESPurchase() ? "DP" : "DS" ,loadSlot.getName());
+		String elementName = String.format("%s-%s", loadSlot.isDESPurchase() ? "DP" : "FP" ,loadSlot.getName());
 		usedIDStrings.add(elementName);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(dateHelper.convertTime(loadSlot.getWindowStartWithSlotOrPortTimeWithFlex()),
