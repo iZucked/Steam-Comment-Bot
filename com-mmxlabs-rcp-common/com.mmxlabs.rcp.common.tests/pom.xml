@@ -27,7 +27,7 @@
 							</requirement>
 						</extraRequirements>
 					</dependency-resolution>
-					
+
 				</configuration>
 			</plugin>
 
@@ -38,9 +38,6 @@
 				<configuration>
 					<useUIHarness>true</useUIHarness>
 					<useUIThread>false</useUIThread>
-
-					<product>org.eclipse.sdk.ide</product>
-					<application>org.eclipse.ui.ide.workbench</application>
 
 					<dependencies>
 
