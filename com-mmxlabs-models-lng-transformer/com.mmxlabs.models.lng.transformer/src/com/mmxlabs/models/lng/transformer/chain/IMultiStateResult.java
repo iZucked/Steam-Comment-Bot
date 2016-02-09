@@ -10,7 +10,6 @@ import java.util.Map;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.NonNullPair;
-import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequences;
 
 /**
