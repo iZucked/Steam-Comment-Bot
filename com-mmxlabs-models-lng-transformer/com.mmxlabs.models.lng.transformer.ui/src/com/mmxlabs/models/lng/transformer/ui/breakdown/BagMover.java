@@ -414,7 +414,7 @@ public class BagMover extends BreakdownOptimiserMover {
 					if (!(portSlotProvider.getPortSlot(otherLoad) instanceof ILoadSlot)) {
 						return Collections.emptyList();
 					}
-					if ((portSlotProvider.getPortSlot(s.get(j + 1)) instanceof IDischargeSlot)) {
+					if ((portSlotProvider.getPortSlot(s.get(j + 1)) instanceof IDischargeOption)) {
 						originalDischarge = s.get(j + 1);
 					}
 					otherResource = r;
