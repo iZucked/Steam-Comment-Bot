@@ -38,6 +38,14 @@ public class CopyTreeToClipboardActionTest {
 	@Test
 	public void testCopyTreeToClipboardAction() throws InterruptedException {
 
+		SWTUtils.waitForDisplayToAppear();
+
+		// Get bot ref to workbench
+		final SWTWorkbenchBot bot = new SWTWorkbenchBot();
+
+		// Get shell
+		final Shell shell = bot.activeShell().widget;
+
 		bot.getDisplay().syncExec(new Runnable() {
 
 			@Override
