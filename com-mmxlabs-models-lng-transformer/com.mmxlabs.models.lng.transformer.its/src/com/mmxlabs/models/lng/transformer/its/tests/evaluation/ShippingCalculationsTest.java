@@ -316,10 +316,11 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		ScenarioTools.printSequences(schedule);
 
 		final Sequence sequence = schedule.getSequences().get(0);
-		checker.check(sequence);
 		Assert.assertEquals(RouteOption.DIRECT, ((Journey) sequence.getEvents().get(1)).getRoute().getRouteOption());
 		Assert.assertEquals(RouteOption.PANAMA, ((Journey) sequence.getEvents().get(4)).getRoute().getRouteOption());
 		Assert.assertEquals(RouteOption.DIRECT, ((Journey) sequence.getEvents().get(7)).getRoute().getRouteOption());
+
+		checker.check(sequence);
 
 	}
 
