@@ -387,7 +387,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 		CostType dischargeToCharterPortCostType = CostType.Ballast;
 		// Is this a round trip?
-		if (loadPort == charterOutOption.getPort() && ladenRoute == charterOutOption.getToCharterPort().getSecond()) {
+		if (ladenRoute == charterOutOption.getToCharterPort().getSecond()) {
 			dischargeToCharterPortCostType = CostType.RoundTripBallast;
 		}
 		final long dischargeToCharterPortRouteCosts = routeCostProvider.getRouteCost(charterOutOption.getToCharterPort().getSecond(), vessel, CostType.Ballast);

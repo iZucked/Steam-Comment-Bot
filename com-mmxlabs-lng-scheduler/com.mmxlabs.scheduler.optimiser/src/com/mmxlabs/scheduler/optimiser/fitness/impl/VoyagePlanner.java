@@ -264,7 +264,7 @@ public class VoyagePlanner {
 			final CostType costType;
 			if (vesselState == VesselState.Laden) {
 				costType = CostType.Laden;
-			} else if (previousOptions != null && previousOptions.getFromPortSlot().getPort() == thisPort && previousOptions.getRoute() == d.getFirst()) {
+			} else if (previousOptions != null && previousOptions.getRoute() == d.getFirst()) {
 				costType = CostType.RoundTripBallast;
 			} else {
 				costType = CostType.Ballast;

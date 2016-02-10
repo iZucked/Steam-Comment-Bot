@@ -90,7 +90,7 @@ public final class RouteVoyagePlanChoice implements IVoyagePlanChoice {
 			// Is it round trip?
 			if (pPreviousOption != null) {
 				// Needs same route and load and next load port
-				if ((pPreviousOption.getRoute() == entry.getFirst()) && (pPreviousOption.getFromPortSlot().getPort() == pPreviousOption.getFromPortSlot().getPort())) {
+				if (pPreviousOption.getRoute() == entry.getFirst()) {
 					costType = CostType.RoundTripBallast;
 				} else {
 					costType = CostType.Ballast;
