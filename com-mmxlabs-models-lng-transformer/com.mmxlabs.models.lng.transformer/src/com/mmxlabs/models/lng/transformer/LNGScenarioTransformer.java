@@ -34,6 +34,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.ui.INestableKeyBindingService;
 import org.eclipse.ui.internal.views.markers.AllMarkersView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1184,7 +1185,7 @@ public class LNGScenarioTransformer {
 			@NonNull final Association<Vessel, IVessel> vesselAssociation, @NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap,
 			@NonNull final DischargeSlot dischargeSlot) {
 		final IDischargeOption discharge;
-		String elementName = String.format("%s-%s", dischargeSlot.isFOBSale() ? "FS" : "DS" ,dischargeSlot.getName());
+		String elementName = String.format("%s-%s", dischargeSlot.isFOBSale() ? "FS" : "DS", dischargeSlot.getName());
 
 		usedIDStrings.add(elementName);
 
@@ -1345,7 +1346,7 @@ public class LNGScenarioTransformer {
 			@NonNull final Association<Vessel, IVessel> vesselAssociation, @NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap,
 			@NonNull final LoadSlot loadSlot) {
 		final ILoadOption load;
-		String elementName = String.format("%s-%s", loadSlot.isDESPurchase() ? "DP" : "FP" ,loadSlot.getName());
+		String elementName = String.format("%s-%s", loadSlot.isDESPurchase() ? "DP" : "FP", loadSlot.getName());
 		usedIDStrings.add(elementName);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(dateHelper.convertTime(loadSlot.getWindowStartWithSlotOrPortTimeWithFlex()),
@@ -1611,25 +1612,28 @@ public class LNGScenarioTransformer {
 
 								final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(desPurchaseMarket.getCv());
 
-								final String idPrefix = "DP-" + market.getName() + "-" + yearMonthString + "-";
+								String typePrefix = "DP-";
+								final String externalIDPrefix = market.getName() + "-" + yearMonthString + "-";
 
 								// Avoid ID clash
-								String id = idPrefix + (i + offset);
-								while (usedIDStrings.contains(id)) {
-									id = idPrefix + (i + ++offset);
+								String externalID = externalIDPrefix + (i + offset);
+								String internalID = typePrefix + externalID;
+								while (usedIDStrings.contains(internalID)) {
+									externalID = externalIDPrefix + (i + ++offset);
+									internalID = typePrefix + externalID;
 								}
-								usedIDStrings.add(id);
+								usedIDStrings.add(internalID);
 
 								final boolean isVolumeLimitInM3 = desPurchaseMarket.getVolumeLimitsUnit() == com.mmxlabs.models.lng.types.VolumeUnits.M3 ? true : false;
 
-								final ILoadOption desPurchaseSlot = builder.createDESPurchaseLoadSlot(id, null, twUTCPlus, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
-										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), priceCalculator, cargoCVValue, 0, IPortSlot.NO_PRICING_DATE,
-										transformPricingEvent(market.getPricingEvent()), true, false, true, isVolumeLimitInM3);
+								final ILoadOption desPurchaseSlot = builder.createDESPurchaseLoadSlot(internalID, null, twUTCPlus,
+										OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()), OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()),
+										priceCalculator, cargoCVValue, 0, IPortSlot.NO_PRICING_DATE, transformPricingEvent(market.getPricingEvent()), true, false, true, isVolumeLimitInM3);
 
 								// Create a fake model object to add in here;
 								final SpotLoadSlot desSlot = CargoFactory.eINSTANCE.createSpotLoadSlot();
 								desSlot.setDESPurchase(true);
-								desSlot.setName(id);
+								desSlot.setName(externalID);
 								desSlot.setArriveCold(false);
 								desSlot.setWindowStart(LocalDate.of(startTime.getYear(), startTime.getMonthValue(), startTime.getDayOfMonth()));
 								desSlot.setWindowStartTime(0);
@@ -1744,27 +1748,31 @@ public class LNGScenarioTransformer {
 								final ITimeWindow twUTC = builder.createTimeWindow(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime) - 1);
 								final ITimeWindow twUTCPlus = createUTCPlusTimeWindow(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime));
 
-								final String idPrefix = "FS-" + market.getName() + "-" + yearMonthString + "-";
+								String typePrefix = "FS-";
+								final String externalIDPrefix = market.getName() + "-" + yearMonthString + "-";
 
-								String id = idPrefix + (i + offset);
-								while (usedIDStrings.contains(id)) {
-									id = idPrefix + (i + ++offset);
+								// Avoid ID clash
+								String externalID = externalIDPrefix + (i + offset);
+								String internalID = typePrefix + externalID;
+								while (usedIDStrings.contains(internalID)) {
+									externalID = externalIDPrefix + (i + ++offset);
+									internalID = typePrefix + externalID;
 								}
-								usedIDStrings.add(id);
+								usedIDStrings.add(internalID);
 
 								final long minCv = 0;
 								final long maxCv = Long.MAX_VALUE;
 
 								final boolean isVolumeLimitInM3 = fobSaleMarket.getVolumeLimitsUnit() == com.mmxlabs.models.lng.types.VolumeUnits.M3 ? true : false;
 
-								final IDischargeOption fobSaleSlot = builder.createFOBSaleDischargeSlot(id, null, twUTCPlus, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
-										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), minCv, maxCv, priceCalculator, 0, IPortSlot.NO_PRICING_DATE,
-										transformPricingEvent(market.getPricingEvent()), true, false, true, isVolumeLimitInM3);
+								final IDischargeOption fobSaleSlot = builder.createFOBSaleDischargeSlot(internalID, null, twUTCPlus,
+										OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()), OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), minCv, maxCv,
+										priceCalculator, 0, IPortSlot.NO_PRICING_DATE, transformPricingEvent(market.getPricingEvent()), true, false, true, isVolumeLimitInM3);
 
 								// Create a fake model object to add in here;
 								final SpotDischargeSlot fobSlot = CargoFactory.eINSTANCE.createSpotDischargeSlot();
 								fobSlot.setFOBSale(true);
-								fobSlot.setName(id);
+								fobSlot.setName(externalID);
 								fobSlot.setWindowStart(startTime);
 								fobSlot.setWindowStartTime(0);
 								// fobSlot.setContract(fobSaleMarket.getContract());
@@ -1883,17 +1891,21 @@ public class LNGScenarioTransformer {
 
 								final ITimeWindow tw = builder.createTimeWindow(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime));
 
-								final String idPrefix = "DS-" + market.getName() + "-" + yearMonthString + "-";
+								String typePrefix = "DS-";
+								final String externalIDPrefix = market.getName() + "-" + yearMonthString + "-";
 
-								String id = idPrefix + (i + offset);
-								while (usedIDStrings.contains(id)) {
-									id = idPrefix + (i + ++offset);
+								// Avoid ID clash
+								String externalID = externalIDPrefix + (i + offset);
+								String internalID = typePrefix + externalID;
+								while (usedIDStrings.contains(internalID)) {
+									externalID = externalIDPrefix + (i + ++offset);
+									internalID = typePrefix + externalID;
 								}
-								usedIDStrings.add(id);
+								usedIDStrings.add(internalID);
 
 								// Create a fake model object to add in here;
 								final SpotDischargeSlot desSlot = CargoFactory.eINSTANCE.createSpotDischargeSlot();
-								desSlot.setName(id);
+								desSlot.setName(externalID);
 								desSlot.setWindowStart(startTime);
 								desSlot.setWindowStartTime(0);
 								// desSlot.setContract(desSalesMarket.getContract());
@@ -1909,7 +1921,7 @@ public class LNGScenarioTransformer {
 
 								final boolean isVolumeLimitInM3 = desSalesMarket.getVolumeLimitsUnit() == com.mmxlabs.models.lng.types.VolumeUnits.M3 ? true : false;
 
-								final IDischargeOption desSalesSlot = builder.createDischargeSlot(id, notionalIPort, tw, minVolume, maxVolume, 0, Long.MAX_VALUE, priceCalculator,
+								final IDischargeOption desSalesSlot = builder.createDischargeSlot(internalID, notionalIPort, tw, minVolume, maxVolume, 0, Long.MAX_VALUE, priceCalculator,
 										desSlot.getSlotOrPortDuration(), pricingDate, transformPricingEvent(market.getPricingEvent()), true, false, true, isVolumeLimitInM3);
 
 								// Key piece of information
@@ -2001,19 +2013,21 @@ public class LNGScenarioTransformer {
 							for (int i = 0; i < remaining; ++i) {
 
 								final ITimeWindow tw = builder.createTimeWindow(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime));
+								String typePrefix = "FP-";
+								final String externalIDPrefix = market.getName() + "-" + yearMonthString + "-";
 
-								final String idPrefix = "FP-" + market.getName() + "-" + yearMonthString + "-";
-
-								String id = idPrefix + (i + offset);
-								while (usedIDStrings.contains(id)) {
-
-									id = idPrefix + (i + ++offset);
+								// Avoid ID clash
+								String externalID = externalIDPrefix + (i + offset);
+								String internalID = typePrefix + externalID;
+								while (usedIDStrings.contains(internalID)) {
+									externalID = externalIDPrefix + (i + ++offset);
+									internalID = typePrefix + externalID;
 								}
-								usedIDStrings.add(id);
+								usedIDStrings.add(internalID);
 
 								// Create a fake model object to add in here;
 								final SpotLoadSlot fobSlot = CargoFactory.eINSTANCE.createSpotLoadSlot();
-								fobSlot.setName(id);
+								fobSlot.setName(externalID);
 								fobSlot.setWindowStart(startTime);
 								fobSlot.setWindowStartTime(0);
 								// fobSlot.setContract(fobPurchaseMarket.getContract());
@@ -2024,7 +2038,7 @@ public class LNGScenarioTransformer {
 								final int duration = Math.max(0, Hours.between(startTime, endTime));
 								fobSlot.setWindowSize(duration);
 
-								final ILoadOption fobPurchaseSlot = builder.createLoadSlot(id, notionalIPort, tw, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
+								final ILoadOption fobPurchaseSlot = builder.createLoadSlot(internalID, notionalIPort, tw, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
 										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), priceCalculator, cargoCVValue, fobSlot.getSlotOrPortDuration(), true, true,
 										IPortSlot.NO_PRICING_DATE, transformPricingEvent(market.getPricingEvent()), true, false, true, false);
 
@@ -2327,7 +2341,7 @@ public class LNGScenarioTransformer {
 						assert routeCosts != null;
 						for (final RouteCost routeCost : routeCosts) {
 
-							if (panamaCanalTariff!= null && routeCost.getRoute().getRouteOption() == RouteOption.PANAMA) {
+							if (panamaCanalTariff != null && routeCost.getRoute().getRouteOption() == RouteOption.PANAMA) {
 								continue;
 							}
 
