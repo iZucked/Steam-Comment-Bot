@@ -246,7 +246,7 @@ public class ChangeSetWiringDiagram implements PaintListener {
 			// Draw left hand terminal
 			if (row.getLoadSlot() != null) {
 				final LoadSlot loadSlot = row.getLoadSlot();// (LoadSlot) row.getLoadAllocation().getSlot();
-				final Color terminalColour = (loadSlot.getCargo() != null || loadSlot.isOptional()) ? ValidTerminalColour : InvalidTerminalColour;
+				final Color terminalColour = (row.getNewDischargeAllocation() != null || loadSlot.isOptional()) ? ValidTerminalColour : InvalidTerminalColour;
 				drawTerminal(true, loadSlot.isDESPurchase(), terminalColour, loadSlot.isOptional(), loadSlot instanceof SpotSlot, ca, graphics, midpoint);
 			}
 
@@ -254,7 +254,7 @@ public class ChangeSetWiringDiagram implements PaintListener {
 			// Draw right hand terminal
 			if (row.getDischargeSlot() != null) {
 				final DischargeSlot dischargeSlot = row.getDischargeSlot();// (DischargeSlot) row.getDischargeAllocation().getSlot();
-				final Color terminalColour = (dischargeSlot.getCargo() != null || dischargeSlot.isOptional()) ? ValidTerminalColour : InvalidTerminalColour;
+				final Color terminalColour = (row.getNewLoadAllocation() != null || dischargeSlot.isOptional()) ? ValidTerminalColour : InvalidTerminalColour;
 				drawTerminal(false, !dischargeSlot.isFOBSale(), terminalColour, dischargeSlot.isOptional(), dischargeSlot instanceof SpotSlot, ca, graphics, midpoint);
 			}
 		}
