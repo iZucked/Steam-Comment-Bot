@@ -6,12 +6,11 @@ package com.mmxlabs.models.lng.cargo.util;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -19,7 +18,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.Triple;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -122,66 +120,32 @@ public class AssignmentEditorHelper {
 
 	public static List<CollectedAssignment> collectAssignments(@NonNull final CargoModel cargoModel, @NonNull final SpotMarketsModel spotMarketsModel,
 			@NonNull final IAssignableElementComparator assignableElementComparator) {
-		final List<CollectedAssignment> result = new ArrayList<CollectedAssignment>();
-		// Enforce consistent order
-		final Map<Pair<VesselAvailability, Integer>, List<AssignableElement>> fleetGrouping = new TreeMap<Pair<VesselAvailability, Integer>, List<AssignableElement>>(
-				new Comparator<Pair<VesselAvailability, Integer>>() {
 
-					@Override
-					public int compare(final Pair<VesselAvailability, Integer> o1, final Pair<VesselAvailability, Integer> o2) {
-
-						final int c = o1.getSecond() - o2.getSecond();
-						if (c == 0) {
-							// Hmm, this could be bad, will we loose elements in the TreeMap?
-							final int ii = 0; // Set a breakpoint!
-						}
-
-						return c;
-					}
-				});
-		final Map<Triple<CharterInMarket, Integer, Integer>, List<AssignableElement>> spotGrouping = new TreeMap<>(new Comparator<Triple<CharterInMarket, Integer, Integer>>() {
-
-			@Override
-			public int compare(final Triple<CharterInMarket, Integer, Integer> o1, final Triple<CharterInMarket, Integer, Integer> o2) {
-
-				int c = o1.getSecond() - o2.getSecond();
-				if (c == 0) {
-					if (o1.getThird() == o2.getThird()) {
-						c = 0;
-					} else if (o1.getThird() == null) {
-						c = -1;
-					} else if (o2.getThird() == null) {
-						return 1;
-					} else {
-						c = o1.getThird() - o2.getThird();
-					}
-				}
-
-				if (c == 0) {
-					// Hmm, this could be bad, will we loose elements in the TreeMap?
-					final int ii = 0; // Set a breakpoint!
-				}
-
-				return c;
-			}
-		});
-
-		int index = 0;
+		// Map the vessel availability to assignents
+		final Map<VesselAvailability, List<AssignableElement>> fleetGrouping = new HashMap<>();
+		// Keep the same order as the EMF data model
 		final List<VesselAvailability> vesselAvailabilityOrder = new ArrayList<>();
 		for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
 			vesselAvailabilityOrder.add(va);
-			fleetGrouping.put(new Pair<VesselAvailability, Integer>(va, index++), new ArrayList<AssignableElement>());
-		}
-		final List<CharterInMarket> charterInMarketOrder = new ArrayList<>();
-		for (final CharterInMarket charterInMarket : spotMarketsModel.getCharterInMarkets()) {
-			charterInMarketOrder.add(charterInMarket);
-			spotGrouping.put(new Triple<CharterInMarket, Integer, Integer>(charterInMarket, index++, 0), new ArrayList<AssignableElement>());
+			// Pre-create map values
+			fleetGrouping.put(va, new ArrayList<>());
 		}
 
+		// Spot markets are keyed by market and instance/spot index
+		final List<Pair<CharterInMarket, Integer>> charterInMarketKeysOrder = new ArrayList<>();
+		final Map<Pair<CharterInMarket, Integer>, List<AssignableElement>> spotGrouping = new HashMap<>();
+		for (final CharterInMarket charterInMarket : spotMarketsModel.getCharterInMarkets()) {
+			for (int i = 0; i < charterInMarket.getSpotCharterCount(); ++i) {
+				final Pair<CharterInMarket, Integer> key = new Pair<CharterInMarket, Integer>(charterInMarket, i);
+				charterInMarketKeysOrder.add(key);
+				// Pre-create map values
+				spotGrouping.put(key, new ArrayList<AssignableElement>());
+			}
+		}
+
+		// Loop over all assignable things - shipped cargoes and vessel events and allocate them their vessel assignment.
 		final Set<AssignableElement> assignableElements = new LinkedHashSet<>();
 		assignableElements.addAll(cargoModel.getCargoes());
-		// assignableElements.addAll(cargoModel.getLoadSlots());
-		// assignableElements.addAll(cargoModel.getDischargeSlots());
 		assignableElements.addAll(cargoModel.getVesselEvents());
 		for (final AssignableElement assignableElement : assignableElements) {
 			final VesselAssignmentType vesselAssignmentType = assignableElement.getVesselAssignmentType();
@@ -192,33 +156,28 @@ public class AssignmentEditorHelper {
 			if (vesselAssignmentType instanceof CharterInMarket) {
 				final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
 				// Use vessel index normally, but for spots include spot index
-				final Triple<CharterInMarket, Integer, Integer> key = new Triple<>(charterInMarket, charterInMarketOrder.indexOf(charterInMarket), assignableElement.getSpotIndex());
-				List<AssignableElement> l = spotGrouping.get(key);
-				if (l == null) {
-					l = new ArrayList<AssignableElement>();
-					spotGrouping.put(key, l);
-				}
-				l.add(assignableElement);
+				final Pair<CharterInMarket, Integer> key = new Pair<>(charterInMarket, assignableElement.getSpotIndex());
+				// Groupings should have been pre-created
+				spotGrouping.get(key).add(assignableElement);
 
 			} else if (vesselAssignmentType instanceof VesselAvailability) {
 				final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
-
-				// Use vessel index normally, but for spots include spot index
-				final Pair<VesselAvailability, Integer> key = new Pair<>(vesselAvailability, vesselAvailabilityOrder.indexOf(vesselAvailability));
-				List<AssignableElement> l = fleetGrouping.get(key);
-				if (l == null) {
-					l = new ArrayList<AssignableElement>();
-					fleetGrouping.put(key, l);
-				}
-				l.add(assignableElement);
+				// Groupings should have been pre-created
+				fleetGrouping.get(vesselAvailability).add(assignableElement);
 			}
 		}
 
-		for (final Pair<VesselAvailability, Integer> k : fleetGrouping.keySet()) {
-			result.add(new CollectedAssignment(fleetGrouping.get(k), k.getFirst(), assignableElementComparator));
+		// Final sorted list of assignment, ordered by fleet then spot
+		final List<CollectedAssignment> result = new ArrayList<>();
+
+		// First add in the fleet vessels
+		for (final VesselAvailability vesselAvailability : vesselAvailabilityOrder) {
+			result.add(new CollectedAssignment(fleetGrouping.get(vesselAvailability), vesselAvailability, assignableElementComparator));
 		}
-		for (final Triple<CharterInMarket, Integer, Integer> k : spotGrouping.keySet()) {
-			result.add(new CollectedAssignment(spotGrouping.get(k), k.getFirst(), k.getThird()));
+
+		// Now add in the spot charter-ins
+		for (final Pair<CharterInMarket, Integer> key : charterInMarketKeysOrder) {
+			result.add(new CollectedAssignment(spotGrouping.get(key), key.getFirst(), key.getSecond()));
 		}
 
 		return result;
