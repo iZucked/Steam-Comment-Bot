@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.optimiser.ga.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.caches.AbstractCache;
 import com.mmxlabs.common.caches.AbstractCache.IKeyEvaluator;
@@ -23,17 +26,17 @@ import com.mmxlabs.optimiser.ga.Individual;
 public final class CachingIndividualEvaluator<I extends Individual<I>> implements IIndividualEvaluator<I> {
 	final IIndividualEvaluator<I> delegate;
 
-	private final AbstractCache<I, Long> cache;
+	private final AbstractCache<@NonNull I, @NonNull Long> cache;
 
 	public CachingIndividualEvaluator(final IIndividualEvaluator<I> delegate, final int size) {
 		super();
 
-		cache = new SimpleCache<I, Long>("IE", new IKeyEvaluator<I, Long>() {
+		cache = new SimpleCache<@NonNull I, @NonNull Long>("IE", new IKeyEvaluator<@NonNull I, @NonNull Long>() {
 
 			@Override
-			public Pair<I, Long> evaluate(final I key) {
+			public Pair<@NonNull I, @NonNull Long> evaluate(final I key) {
 				// do clone key
-				return new Pair<I, Long>(key.clone(), delegate.evaluate(key));
+				return new Pair<@NonNull I, @NonNull Long>(key.clone(), delegate.evaluate(key));
 			}
 		}, size, 3);
 

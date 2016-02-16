@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.ga;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 /**
  * The {@link IIndividualEvaluator} calculates the fitness of a given individual.
  * 
@@ -20,7 +22,7 @@ public interface IIndividualEvaluator<I> {
 	 * @param individual
 	 * @return
 	 */
-	long evaluate(I individual);
+	long evaluate(@NonNull I individual);
 
 	/**
 	 * Clean up resources

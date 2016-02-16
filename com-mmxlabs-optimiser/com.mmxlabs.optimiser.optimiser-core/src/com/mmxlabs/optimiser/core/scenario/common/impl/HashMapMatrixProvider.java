@@ -26,7 +26,7 @@ public final class HashMapMatrixProvider<T, U> implements IMatrixProvider<T, U>,
 	private U defaultValue;
 
 	public HashMapMatrixProvider() {
-		this(null);
+		this((U) null);
 	}
 
 	public HashMapMatrixProvider(final U defaultValue) {

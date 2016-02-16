@@ -13,7 +13,7 @@ import org.eclipse.jdt.annotation.Nullable;
  * @author Simon Goodall
  * 
  */
-public interface ISequence extends Iterable<ISequenceElement> {
+public interface ISequence extends Iterable<@NonNull ISequenceElement> {
 
 	/**
 	 * Returns the number of elements in this sequence.
