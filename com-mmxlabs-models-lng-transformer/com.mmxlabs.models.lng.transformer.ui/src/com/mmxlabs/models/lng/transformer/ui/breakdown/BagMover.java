@@ -202,10 +202,10 @@ public class BagMover extends BreakdownOptimiserMover {
 							final ChangeSet cs = new ChangeSet(changes);
 
 							cs.setMetric(MetricType.PNL, thisPNL, thisPNL - currentMetrics[MetricType.PNL.ordinal()], thisPNL - similarityState.getBaseMetrics()[MetricType.PNL.ordinal()]);
-							cs.setMetric(MetricType.LATENESS, thisLateness, thisLateness - currentMetrics[MetricType.LATENESS.ordinal()], thisLateness
-									- similarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()]);
-							cs.setMetric(MetricType.CAPACITY, thisCapacity, thisCapacity - currentMetrics[MetricType.CAPACITY.ordinal()], thisCapacity
-									- similarityState.getBaseMetrics()[MetricType.CAPACITY.ordinal()]);
+							cs.setMetric(MetricType.LATENESS, thisLateness, thisLateness - currentMetrics[MetricType.LATENESS.ordinal()],
+									thisLateness - similarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()]);
+							cs.setMetric(MetricType.CAPACITY, thisCapacity, thisCapacity - currentMetrics[MetricType.CAPACITY.ordinal()],
+									thisCapacity - similarityState.getBaseMetrics()[MetricType.CAPACITY.ordinal()]);
 							cs.setMetric(MetricType.COMPULSARY_SLOT, thisUnusedCompulsarySlotCount, thisUnusedCompulsarySlotCount - currentMetrics[MetricType.COMPULSARY_SLOT.ordinal()],
 									thisUnusedCompulsarySlotCount - similarityState.getBaseMetrics()[MetricType.COMPULSARY_SLOT.ordinal()]);
 							cs.setRawSequences(currentRawSequences);
@@ -215,10 +215,10 @@ public class BagMover extends BreakdownOptimiserMover {
 							final JobState jobState = new JobState(new Sequences(currentRawSequences), changeSets, new LinkedList<Change>(), differencesList, searchData);
 
 							jobState.setMetric(MetricType.PNL, thisPNL, thisPNL - currentMetrics[MetricType.PNL.ordinal()], thisPNL - similarityState.getBaseMetrics()[MetricType.PNL.ordinal()]);
-							jobState.setMetric(MetricType.LATENESS, thisLateness, thisLateness - currentMetrics[MetricType.LATENESS.ordinal()], thisLateness
-									- similarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()]);
-							jobState.setMetric(MetricType.CAPACITY, thisCapacity, thisCapacity - currentMetrics[MetricType.CAPACITY.ordinal()], thisCapacity
-									- similarityState.getBaseMetrics()[MetricType.CAPACITY.ordinal()]);
+							jobState.setMetric(MetricType.LATENESS, thisLateness, thisLateness - currentMetrics[MetricType.LATENESS.ordinal()],
+									thisLateness - similarityState.getBaseMetrics()[MetricType.LATENESS.ordinal()]);
+							jobState.setMetric(MetricType.CAPACITY, thisCapacity, thisCapacity - currentMetrics[MetricType.CAPACITY.ordinal()],
+									thisCapacity - similarityState.getBaseMetrics()[MetricType.CAPACITY.ordinal()]);
 							jobState.setMetric(MetricType.COMPULSARY_SLOT, thisUnusedCompulsarySlotCount, thisUnusedCompulsarySlotCount - currentMetrics[MetricType.COMPULSARY_SLOT.ordinal()],
 									thisUnusedCompulsarySlotCount - similarityState.getBaseMetrics()[MetricType.COMPULSARY_SLOT.ordinal()]);
 
@@ -359,7 +359,8 @@ public class BagMover extends BreakdownOptimiserMover {
 
 			final int depth = getNextDepth(tryDepth, searchData.getRandom());
 			final List<Change> changes2 = new ArrayList<>(changes);
-			changes2.add(new VesselChange(String.format("Vessel %s from %s to %s\n", prev.getName(), resource.getName(), similarityState.getResourceForElement(prev).getName()), prev, current, modifiableSequence.get(j-1), modifiableSequence.get(j + 2), resource, similarityState.getResourceForElement(prev)));
+			changes2.add(new VesselChange(String.format("Vessel %s from %s to %s\n", prev.getName(), resource.getName(), similarityState.getResourceForElement(prev).getName()), prev, current,
+					modifiableSequence.get(j - 1), modifiableSequence.get(j + 2), resource, similarityState.getResourceForElement(prev)));
 			if (copy.equals(currentSequences)) {
 				// FIXME: Why do we get here?
 				// return Collections.emptyList();
@@ -687,8 +688,8 @@ public class BagMover extends BreakdownOptimiserMover {
 			matchedElement = similarityState.getElementForIndex(similarityState.getDischargeForLoad(elementToKeep));
 		}
 		// (1) is the correct element in the unused? Swap it in
-		if ((portSlotProvider.getPortSlot(elementToRemove) instanceof ILoadSlot) || (portSlotProvider.getPortSlot(elementToRemove) instanceof IDischargeSlot)
-				&& currentSequences.getUnusedElements().contains(matchedElement)) {
+		if ((portSlotProvider.getPortSlot(elementToRemove) instanceof ILoadSlot)
+				|| (portSlotProvider.getPortSlot(elementToRemove) instanceof IDischargeSlot) && currentSequences.getUnusedElements().contains(matchedElement)) {
 
 			if ((portSlotProvider.getPortSlot(matchedElement) instanceof ILoadSlot) || (portSlotProvider.getPortSlot(matchedElement) instanceof IDischargeSlot)) {
 				final IModifiableSequences copy = new ModifiableSequences(currentSequences);
@@ -710,8 +711,8 @@ public class BagMover extends BreakdownOptimiserMover {
 				final List<Change> changes2 = new ArrayList<>(changes);
 				final int moveType;
 				if (isLoadSwap) {
-					String description = String
-							.format("Remove load %s (unused in target solution) and insert load %s (unused in base solution)\n", elementToRemove.getName(), matchedElement.getName());
+					String description = String.format("Remove load %s (unused in target solution) and insert load %s (unused in base solution)\n", elementToRemove.getName(),
+							matchedElement.getName());
 					changes2.add(new UnusedToUsedLoadChange(description, elementToKeep, elementToRemove, matchedElement, resource));
 					moveType = MOVE_TYPE_UNUSED_LOAD_SWAPPED;
 					updateWrongCargoWiringDifference(differencesList, elementToRemove, elementToKeep);
@@ -738,7 +739,7 @@ public class BagMover extends BreakdownOptimiserMover {
 				final IModifiableSequences copy = new ModifiableSequences(currentSequences);
 				final IModifiableSequence currentResource = copy.getModifiableSequence(resource);
 				Collection<IResource> allowedResources = resourceAllocationProvider.getAllowedResources(matchedElement);
-				assert allowedResources.size() == 1;
+				assert allowedResources != null && allowedResources.size() == 1;
 
 				final IModifiableSequence fsSequence = copy.getModifiableSequence(allowedResources.iterator().next());
 				final IModifiableSequence currentSequence = copy.getModifiableSequence(resource);
@@ -751,8 +752,8 @@ public class BagMover extends BreakdownOptimiserMover {
 					copy.getModifiableUnusedElements().add(elementToRemove);
 					final int depth = getNextDepth(tryDepth, searchData.getRandom());
 					final List<Change> changes2 = new ArrayList<>(changes);
-					String description = String
-							.format("Insert FS  %s (unused in target solution) and remove  load %s (unused in base solution)\n", matchedElement.getName(), elementToRemove.getName());
+					String description = String.format("Insert FS  %s (unused in target solution) and remove  load %s (unused in base solution)\n", matchedElement.getName(),
+							elementToRemove.getName());
 					changes2.add(new UnusedToUsedLoadChange(description, elementToKeep, elementToRemove, matchedElement, resource));
 					updateWrongCargoWiringDifference(differencesList, elementToKeep, elementToRemove);
 					updateDifferencesRemoveUnusedDischargeInTarget(differencesList, elementToRemove);
@@ -1064,18 +1065,18 @@ public class BagMover extends BreakdownOptimiserMover {
 					}
 				}
 				if (load != null && discharge != null) {
-//					System.out.println(String.format("%s,%s,%s", load.getId(), discharge.getId(), scheduledSequences.getVoyagePlanGroupValue(p.getFirst())/1000));
+					// System.out.println(String.format("%s,%s,%s", load.getId(), discharge.getId(), scheduledSequences.getVoyagePlanGroupValue(p.getFirst())/1000));
 				}
 			}
 			long sumB = 0;
-//			System.out.println("sumPNL[0]:"+sumPNL);
+			// System.out.println("sumPNL[0]:"+sumPNL);
 			for (final ISequenceElement element : fullSequences.getUnusedElements()) {
 				final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
 				assert portSlot != null;
 				sumPNL += scheduledSequences.getUnusedSlotGroupValue(portSlot);
 				sumB += scheduledSequences.getUnusedSlotGroupValue(portSlot);
 			}
-//			System.out.println("sumPNL[1]:"+sumPNL);
+			// System.out.println("sumPNL[1]:"+sumPNL);
 			if (sumB != 0) {
 				int z = 0;
 			}

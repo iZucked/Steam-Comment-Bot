@@ -1199,7 +1199,7 @@ public class BreakdownOptimiserMover {
 
 		// Find FOB Sale resource and sequence
 		final Collection<IResource> allowedResources = resourceAllocationProvider.getAllowedResources(matchedDischargeElement);
-		assert allowedResources.size() == 1;
+		assert allowedResources != null && allowedResources.size() == 1;
 		final IResource fsResource = allowedResources.iterator().next();
 		assert fsResource != null;
 		final IModifiableSequence fsSequence = copy.getModifiableSequence(fsResource);
@@ -1303,7 +1303,7 @@ public class BreakdownOptimiserMover {
 
 		// Find DES Purchase resource and sequence
 		final Collection<IResource> allowedResources = resourceAllocationProvider.getAllowedResources(matchedLoadElement);
-		assert allowedResources.size() == 1;
+		assert allowedResources != null && allowedResources.size() == 1;
 		final IModifiableSequence dpSequence = copy.getModifiableSequence(allowedResources.iterator().next());
 		assert dpSequence.size() == 2;
 

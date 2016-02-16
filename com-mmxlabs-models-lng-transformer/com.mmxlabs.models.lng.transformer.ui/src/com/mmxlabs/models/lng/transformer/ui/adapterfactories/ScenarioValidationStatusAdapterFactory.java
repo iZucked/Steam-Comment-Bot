@@ -31,9 +31,9 @@ public class ScenarioValidationStatusAdapterFactory implements IAdapterFactory {
 	public ScenarioValidationStatusAdapterFactory() {
 		Activator.getDefault().getValidationService();
 	}
-	
+
 	@Override
-	public Object getAdapter(final Object adaptableObject, @SuppressWarnings("rawtypes") final Class adapterType) {
+	public <T> T getAdapter(final Object adaptableObject, final Class<T> adapterType) {
 
 		MMXRootObject scenario = null;
 		IResource resource = null;
@@ -48,10 +48,10 @@ public class ScenarioValidationStatusAdapterFactory implements IAdapterFactory {
 		}
 
 		if (scenario == null) {
-			return null;
+			return (T) null;
 		}
 
-		return validate(resource, scenario);
+		return (T) validate(resource, scenario);
 	}
 
 	private static IStatus validate(final IResource resource, final MMXRootObject rootObject) {

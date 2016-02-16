@@ -422,7 +422,10 @@ public class PeriodTransformer {
 			if (inclusionChecker.getObjectInclusionType(vesselAvailability, objectToPortVisitMap, periodRecord).getFirst() == InclusionType.Out) {
 				inclusionChecker.getObjectInclusionType(vesselAvailability, objectToPortVisitMap, periodRecord);
 				vesselsToRemove.add(vesselAvailability);
-				mapping.registerRemovedOriginal(mapping.getOriginalFromCopy(vesselAvailability));
+				@Nullable
+				VesselAvailability originalFromCopy = mapping.getOriginalFromCopy(vesselAvailability);
+				assert originalFromCopy != null; // We should not be null in the transformer
+				mapping.registerRemovedOriginal(originalFromCopy);
 
 			}
 		}
@@ -443,7 +446,10 @@ public class PeriodTransformer {
 			}
 		}
 		for (final VesselEvent event : eventsToRemove) {
-			mapping.registerRemovedOriginal(mapping.getOriginalFromCopy(event));
+			@Nullable
+			VesselEvent originalFromCopy = mapping.getOriginalFromCopy(event);
+			assert originalFromCopy != null; // We should not be null in the transformer
+			mapping.registerRemovedOriginal(originalFromCopy);
 		}
 		internalDomain.getCommandStack().execute(DeleteCommand.create(internalDomain, eventsToRemove));
 	}
@@ -607,11 +613,15 @@ public class PeriodTransformer {
 	 * @param slotsToRemove
 	 * @param cargoesToRemove
 	 */
-	public void removeExcludedSlotsAndCargoes(final EditingDomain internalDomain, final IScenarioEntityMapping mapping, final Collection<Slot> slotsToRemove, final Collection<Cargo> cargoesToRemove) {
+	public void removeExcludedSlotsAndCargoes(final EditingDomain internalDomain, final IScenarioEntityMapping mapping, final Collection<@NonNull Slot> slotsToRemove,
+			final Collection<@NonNull Cargo> cargoesToRemove) {
 		// <<<
 		// Delete slots and cargoes outside of range.
 		for (final Slot slot : slotsToRemove) {
-			mapping.registerRemovedOriginal(mapping.getOriginalFromCopy(slot));
+			@Nullable
+			Slot originalFromCopy = mapping.getOriginalFromCopy(slot);
+			assert originalFromCopy != null; // We should not be null in the transformer
+			mapping.registerRemovedOriginal(originalFromCopy);
 			if (slot instanceof LoadSlot) {
 				// cargoModel.getLoadSlots().remove(slot);
 			} else if (slot instanceof DischargeSlot) {
@@ -623,7 +633,10 @@ public class PeriodTransformer {
 		}
 		for (final Cargo cargo : cargoesToRemove) {
 			// cargoModel.getCargoes().remove(cargo);
-			mapping.registerRemovedOriginal(mapping.getOriginalFromCopy(cargo));
+			@Nullable
+			Cargo originalFromCopy = mapping.getOriginalFromCopy(cargo);
+			assert originalFromCopy != null; // We should not be null in the transformer
+			mapping.registerRemovedOriginal(originalFromCopy);
 			internalDomain.getCommandStack().execute(DeleteCommand.create(internalDomain, cargo));
 		}
 	}

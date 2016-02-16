@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.swt.internal.win32.SIPINFO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -170,11 +171,16 @@ public class LNGScenarioToOptimiserBridge {
 			final NonNullPair<LNGScenarioModel, EditingDomain> p = t.transform(originalScenario, optimiserSettings, periodMapping);
 
 			// DEBUGGING - store sub scenario as a "fork"
-			if (false && scenarioInstance != null) {
-				try {
-					LNGScenarioRunnerUtils.saveScenarioAsChild(scenarioInstance, scenarioInstance, p.getFirst(), "Period Scenario");
-				} catch (final Exception e) {
-					e.printStackTrace();
+			if (scenarioInstance != null) {
+				@NonNull
+				ScenarioInstance pScenarioInstance = scenarioInstance;
+				if (false) {
+					try {
+						assert scenarioInstance != null;
+						LNGScenarioRunnerUtils.saveScenarioAsChild(pScenarioInstance, pScenarioInstance, p.getFirst(), "Period Scenario");
+					} catch (final Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 			return new Triple<>(p.getFirst(), p.getSecond(), periodMapping);

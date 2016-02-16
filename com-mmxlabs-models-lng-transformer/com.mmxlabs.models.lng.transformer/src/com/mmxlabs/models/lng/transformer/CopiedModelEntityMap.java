@@ -32,7 +32,7 @@ public class CopiedModelEntityMap implements ModelEntityMap {
 	 * @param delegate
 	 * @param copier
 	 */
-	public CopiedModelEntityMap(@NonNull final ModelEntityMap delegate, @NonNull final EcoreUtil.Copier copier) {
+	public CopiedModelEntityMap(@NonNull final ModelEntityMap delegate, final EcoreUtil.@NonNull Copier copier) {
 		this.delegate = delegate;
 		for (final Map.Entry<EObject, EObject> e : copier.entrySet()) {
 			originalToNewCopy.put(e.getKey(), e.getValue());

@@ -69,11 +69,11 @@ public class LNGTransformerHelper {
 	}
 
 	@NonNull
-	public static Collection<Module> getModulesWithOverrides(@NonNull final Module mainModule, @NonNull final Collection<IOptimiserInjectorService> services,
-			@NonNull final IOptimiserInjectorService.ModuleType moduleType, @NonNull final Collection<String> hints) {
-		final List<Module> overrides = new LinkedList<>();
+	public static Collection<Module> getModulesWithOverrides(@NonNull final Module mainModule, @NonNull final Collection<@NonNull IOptimiserInjectorService> services,
+			final IOptimiserInjectorService.@NonNull ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
+		final List<@NonNull Module> overrides = new LinkedList<>();
 		collectModuleOverrides(moduleType, services, overrides, hints);
-		final LinkedList<Module> modules = new LinkedList<>();
+		final LinkedList<@NonNull Module> modules = new LinkedList<>();
 		if (overrides.isEmpty()) {
 			modules.add(mainModule);
 		} else {
@@ -84,9 +84,9 @@ public class LNGTransformerHelper {
 	}
 
 	@NonNull
-	public static Collection<Module> collectModules(@NonNull final IOptimiserInjectorService.ModuleType moduleType, @NonNull final Collection<IOptimiserInjectorService> services,
-			@NonNull final Collection<String> hints) {
-		final List<Module> modules = new LinkedList<>();
+	public static Collection<Module> collectModules(final IOptimiserInjectorService.@NonNull ModuleType moduleType, @NonNull final Collection<@NonNull IOptimiserInjectorService> services,
+			@NonNull final Collection<@NonNull String> hints) {
+		final List<@NonNull Module> modules = new LinkedList<>();
 		for (final IOptimiserInjectorService s : services) {
 			if (s != null) {
 				final Module m = s.requestModule(moduleType, hints);
@@ -98,8 +98,8 @@ public class LNGTransformerHelper {
 		return modules;
 	}
 
-	public static void collectModuleOverrides(@NonNull final IOptimiserInjectorService.ModuleType moduleType, @NonNull final Collection<IOptimiserInjectorService> moduleOverrides,
-			@NonNull final List<Module> overrides, @NonNull final Collection<String> hints) {
+	public static void collectModuleOverrides(final IOptimiserInjectorService.@NonNull ModuleType moduleType, @NonNull final Collection<@NonNull IOptimiserInjectorService> moduleOverrides,
+			@NonNull final List<@NonNull Module> overrides, @NonNull final Collection<@NonNull String> hints) {
 
 		for (final IOptimiserInjectorService s : moduleOverrides) {
 			if (s != null) {
@@ -124,7 +124,7 @@ public class LNGTransformerHelper {
 	@NonNull
 	public static Collection<IOptimiserInjectorService> getOptimiserInjectorServices(@Nullable final Module bootstrapModule, @Nullable final IOptimiserInjectorService extraService) {
 
-		final List<IOptimiserInjectorService> services = new LinkedList<>();
+		final List<@NonNull IOptimiserInjectorService> services = new LinkedList<>();
 		final Injector tmpInjector;
 		if (Platform.isRunning()) {
 			// Create temp injector to grab extraModules from OSGi services
@@ -135,7 +135,7 @@ public class LNGTransformerHelper {
 					bind(TypeLiterals.iterable(IOptimiserInjectorService.class)).toProvider(Peaberry.service(IOptimiserInjectorService.class).multiple());
 				}
 			};
-			final List<Module> m = new ArrayList<Module>(3);
+			final List<@NonNull Module> m = new ArrayList<>(3);
 			m.add(Peaberry.osgiModule(FrameworkUtil.getBundle(LNGTransformerHelper.class).getBundleContext()));
 			m.add(optimiserInjectorServiceModule);
 			if (bootstrapModule != null) {
