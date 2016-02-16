@@ -322,13 +322,13 @@ public class ChangeSetView implements IAdaptable {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object getAdapter(final Class adapter) {
+	public <T> T getAdapter(final Class<T> adapter) {
 		if (GridTreeViewer.class.isAssignableFrom(adapter)) {
-			return viewer;
+			return (T) viewer;
 		}
 		if (Grid.class.isAssignableFrom(adapter)) {
 			if (viewer != null) {
-				return viewer.getGrid();
+				return (T) viewer.getGrid();
 			}
 		}
 
@@ -340,7 +340,7 @@ public class ChangeSetView implements IAdaptable {
 				ViewerHelper.refresh(viewer, true);
 				final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
 				final String contents = util.convert();
-				return new IReportContents() {
+				return (T) new IReportContents() {
 
 					@Override
 					public String getStringContents() {
@@ -352,7 +352,7 @@ public class ChangeSetView implements IAdaptable {
 				textualVesselMarkers = false;
 			}
 		}
-		return null;
+		return (T) null;
 	}
 
 	@PostConstruct

@@ -86,20 +86,20 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 	}
 
 	@Override
-	public Object getAdapter(@SuppressWarnings("rawtypes") final Class adapter) {
+	public <T> T getAdapter(final Class<T> adapter) {
 
 		if (GridTableViewer.class.isAssignableFrom(adapter)) {
-			return viewer;
+			return (T) viewer;
 		}
 		if (Grid.class.isAssignableFrom(adapter)) {
-			return viewer.getGrid();
+			return (T) viewer.getGrid();
 		}
 
 		if (IReportContents.class.isAssignableFrom(adapter)) {
 
 			final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
 			final String contents = util.convert();
-			return new IReportContents() {
+			return (T) new IReportContents() {
 
 				@Override
 				public String getStringContents() {
