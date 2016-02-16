@@ -409,17 +409,17 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 	/**
 	 */
 	@Override
-	public Object getAdapter(final Class adapter) {
+	public <T> T getAdapter(final Class<T> adapter) {
 
 		if (SaveablesProvider.class.isAssignableFrom(adapter)) {
 
 			if (provider == null) {
 				provider = new InternalSaveablesProvider();
 			}
-			return provider;
+			return (T) provider;
 		}
 
-		return null;
+		return (T) null;
 	}
 
 	/**

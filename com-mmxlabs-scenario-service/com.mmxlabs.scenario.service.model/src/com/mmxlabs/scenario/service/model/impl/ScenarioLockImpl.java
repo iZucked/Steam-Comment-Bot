@@ -24,13 +24,13 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioLockImpl#isAvailable <em>Available</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioLockImpl#isClaimed <em>Claimed</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioLockImpl#getKey <em>Key</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioLockImpl#getInstance <em>Instance</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

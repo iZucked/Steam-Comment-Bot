@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<genmodel:GenModel xmi:version="2.0"
-    xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
-    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.scenario.service.manifest/src"
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.scenario.service.manifest/src" editorDirectory=""
     modelPluginID="com.mmxlabs.scenario.service.manifest" modelName="Scenariomanifest"
-    importerID="org.eclipse.emf.importer.ecore" complianceLevel="6.0" copyrightFields="false">
+    testsDirectory="" importerID="org.eclipse.emf.importer.ecore" complianceLevel="8.0"
+    copyrightFields="false">
   <foreignModel>scenariomanifest.ecore</foreignModel>
   <genPackages prefix="Manifest" basePackage="com.mmxlabs.scenario.service" disposableProviderFactory="true"
       ecorePackage="scenariomanifest.ecore#/">
@@ -11,6 +11,11 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenariomanifest.ecore#//Manifest/modelURIs"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenariomanifest.ecore#//Manifest/dependencyUUIDs"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenariomanifest.ecore#//Manifest/UUID"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenariomanifest.ecore#//Manifest/scenarioType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenariomanifest.ecore#//Manifest/scenarioVersion"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenariomanifest.ecore#//Manifest/versionContext"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenariomanifest.ecore#//Manifest/clientScenarioVersion"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenariomanifest.ecore#//Manifest/clientVersionContext"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

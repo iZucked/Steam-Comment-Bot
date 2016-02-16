@@ -13,13 +13,13 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioLock#isAvailable <em>Available</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioLock#isClaimed <em>Claimed</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioLock#getKey <em>Key</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioLock#getInstance <em>Instance</em>}</li>
  * </ul>
- * </p>
  *
  * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioLock()
  * @model
