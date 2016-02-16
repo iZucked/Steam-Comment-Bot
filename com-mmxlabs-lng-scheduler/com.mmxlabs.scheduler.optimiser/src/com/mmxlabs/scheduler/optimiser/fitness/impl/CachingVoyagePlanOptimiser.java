@@ -161,16 +161,16 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 	// private final ConcurrentMap<CacheKey, Pair<VoyagePlan, Long>> cache;// =
 	// null;
-	private final AbstractCache<CacheKey, Pair<VoyagePlan, Long>> cache;
+	private final AbstractCache<@NonNull CacheKey, @NonNull Pair<@NonNull VoyagePlan, Long>> cache;
 
 	VoyagePlan bestPlan;
 	long bestCost;
 
-	private List<IOptionsSequenceElement> basicSequence;
+	private List<@NonNull IOptionsSequenceElement> basicSequence;
 	private IVessel vessel;
 	private int vesselCharterInRatePerDay;
 	private int baseFuelPricePerMT;
-	private final List<IVoyagePlanChoice> choices = new ArrayList<IVoyagePlanChoice>();
+	private final List<@NonNull IVoyagePlanChoice> choices = new ArrayList<>();
 
 	private IPortTimesRecord portTimesRecord;
 
@@ -181,10 +181,10 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	public CachingVoyagePlanOptimiser(final IVoyagePlanOptimiser delegate, final int cacheSize) {
 		super();
 		this.delegate = delegate;
-		final IKeyEvaluator<CacheKey, Pair<VoyagePlan, Long>> evaluator = new IKeyEvaluator<CacheKey, Pair<VoyagePlan, Long>>() {
+		final IKeyEvaluator<@NonNull CacheKey, @NonNull Pair<@NonNull VoyagePlan, @NonNull Long>> evaluator = new IKeyEvaluator<@NonNull CacheKey, @NonNull Pair<@NonNull VoyagePlan, @NonNull Long>>() {
 
 			@Override
-			final public Pair<CacheKey, Pair<VoyagePlan, Long>> evaluate(final CacheKey arg) {
+			final public @NonNull Pair<@NonNull CacheKey, @NonNull Pair<@NonNull VoyagePlan, @NonNull Long>> evaluate(final CacheKey arg) {
 				final Pair<VoyagePlan, Long> answer = new Pair<VoyagePlan, Long>();
 
 				delegate.reset();
@@ -202,10 +202,10 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 				answer.setBoth(delegate.getBestPlan(), delegate.getBestCost());
 
 				// don't clone key
-				return new Pair<CacheKey, Pair<VoyagePlan, Long>>(arg, answer);
+				return new Pair<@NonNull CacheKey, Pair<@NonNull VoyagePlan, @NonNull Long>>(arg, answer);
 			}
 		};
-		this.cache = new LHMCache<CacheKey, Pair<VoyagePlan, Long>>("VPO", evaluator, cacheSize);
+		this.cache = new LHMCache<@NonNull CacheKey, @NonNull Pair<@NonNull VoyagePlan, @NonNull Long>>("VPO", evaluator, cacheSize);
 	}
 
 	@Override

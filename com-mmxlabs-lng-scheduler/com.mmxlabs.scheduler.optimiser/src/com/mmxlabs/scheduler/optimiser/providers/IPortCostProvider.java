@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -23,5 +25,5 @@ public interface IPortCostProvider extends IDataComponentProvider {
 	 * @param portType
 	 * @return
 	 */
-	public long getPortCost(final IPort port, final IVessel vessel, final PortType portType);
+	public long getPortCost(final @NonNull IPort port, final @NonNull IVessel vessel, final @NonNull PortType portType);
 }

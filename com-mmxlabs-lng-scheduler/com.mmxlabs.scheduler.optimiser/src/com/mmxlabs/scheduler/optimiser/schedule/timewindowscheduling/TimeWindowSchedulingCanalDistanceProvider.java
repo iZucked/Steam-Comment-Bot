@@ -10,6 +10,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -28,74 +30,80 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 
 	@Inject
 	private IRouteCostProvider routeCostProvider;
-	
+
 	@Inject
 	private IDistanceProvider distanceProvider;
 
 	@Override
-	public LadenRouteData[] getMinimumLadenTravelTimes(IPort load, IPort discharge, IVessel vessel, int ladenStartTime) {
+	public @NonNull LadenRouteData @NonNull [] getMinimumLadenTravelTimes(@NonNull final IPort load, @NonNull final IPort discharge, @NonNull final IVessel vessel, final int ladenStartTime) {
 		// get distances for this pairing (assumes that getAllDistanceValues() returns a copy of the data)
-		List<Pair<ERouteOption,Integer>> allDistanceValues = distanceProvider.getAllDistanceValues(load, discharge);
-		IVesselClass vesselClass = vessel.getVesselClass();
+		List<@NonNull Pair<@NonNull ERouteOption, @NonNull Integer>> allDistanceValues = distanceProvider.getAllDistanceValues(load, discharge);
+		final IVesselClass vesselClass = vessel.getVesselClass();
 		assert vesselClass != null;
 		// sort by cost then distance
-		Collections.sort(allDistanceValues, new Comparator<Pair<ERouteOption,Integer>>() {
+		Collections.sort(allDistanceValues, new Comparator<Pair<@NonNull ERouteOption, @NonNull Integer>>() {
 			@Override
-			public int compare(Pair<ERouteOption,Integer> o1, Pair<ERouteOption,Integer> o2) {
-				if (routeCostProvider.getRouteCost(o1.getFirst(), vessel, IRouteCostProvider.CostType.Laden)==routeCostProvider.getRouteCost(o2.getFirst(), vessel, IRouteCostProvider.CostType.Laden)) {
-					return Integer.compare(Calculator.getTimeFromSpeedDistance(vesselClass.getMaxSpeed(),o1.getSecond())+routeCostProvider.getRouteTransitTime(o1.getFirst(), vessel), Calculator.getTimeFromSpeedDistance(vesselClass.getMaxSpeed(), o2.getSecond())+routeCostProvider.getRouteTransitTime(o2.getFirst(), vessel)); 
+			public int compare(final Pair<@NonNull ERouteOption, @NonNull Integer> o1, final Pair<@NonNull ERouteOption, @NonNull Integer> o2) {
+				if (routeCostProvider.getRouteCost(o1.getFirst(), vessel, IRouteCostProvider.CostType.Laden) == routeCostProvider.getRouteCost(o2.getFirst(), vessel,
+						IRouteCostProvider.CostType.Laden)) {
+					return Integer.compare(Calculator.getTimeFromSpeedDistance(vesselClass.getMaxSpeed(), o1.getSecond()) + routeCostProvider.getRouteTransitTime(o1.getFirst(), vessel),
+							Calculator.getTimeFromSpeedDistance(vesselClass.getMaxSpeed(), o2.getSecond()) + routeCostProvider.getRouteTransitTime(o2.getFirst(), vessel));
 				} else {
-					return Long.compare(routeCostProvider.getRouteCost(o1.getFirst(), vessel, IRouteCostProvider.CostType.Laden),routeCostProvider.getRouteCost(o2.getFirst(), vessel, IRouteCostProvider.CostType.Laden));
+					return Long.compare(routeCostProvider.getRouteCost(o1.getFirst(), vessel, IRouteCostProvider.CostType.Laden),
+							routeCostProvider.getRouteCost(o2.getFirst(), vessel, IRouteCostProvider.CostType.Laden));
 				}
 			}
 		});
-		
+
 		// filter out closed distances
-		allDistanceValues = allDistanceValues.stream().filter(d -> distanceProvider.isRouteAvailable(d.getFirst(),  ladenStartTime)).collect(Collectors.toList());
-		
+		allDistanceValues = allDistanceValues.stream().filter(d -> distanceProvider.isRouteAvailable(d.getFirst(), ladenStartTime)).collect(Collectors.toList());
+
 		// remove dominated distances
 		for (int i = allDistanceValues.size() - 1; i > 0; i--) {
-			if ((routeCostProvider.getRouteCost(allDistanceValues.get(i).getFirst(), vessel, IRouteCostProvider.CostType.Laden) >= routeCostProvider.getRouteCost(allDistanceValues.get(i - 1).getFirst(), vessel, IRouteCostProvider.CostType.Laden))
-					&& allDistanceValues.get(i).getSecond() > allDistanceValues.get(i-1).getSecond()) {
+			if ((routeCostProvider.getRouteCost(allDistanceValues.get(i).getFirst(), vessel, IRouteCostProvider.CostType.Laden) >= routeCostProvider
+					.getRouteCost(allDistanceValues.get(i - 1).getFirst(), vessel, IRouteCostProvider.CostType.Laden))
+					&& allDistanceValues.get(i).getSecond() > allDistanceValues.get(i - 1).getSecond()) {
 				allDistanceValues.remove(i);
 			}
 		}
-		
+
 		// create a new distances data structure
-		LadenRouteData[] times = new LadenRouteData[allDistanceValues.size()];
+		@NonNull
+		final LadenRouteData @NonNull [] times = new @NonNull LadenRouteData[allDistanceValues.size()];
 		int i = 0;
-		for (final Pair<ERouteOption, Integer> d : allDistanceValues) {
+		for (final Pair<@NonNull ERouteOption, @NonNull Integer> d : allDistanceValues) {
 			vesselClass.getBaseFuel().getEquivalenceFactor();
-			int mintravelTime = Calculator.getTimeFromSpeedDistance(vesselClass.getMaxSpeed(), d.getSecond());
-			int nboSpeed = Math.min(Math.max(getNBOSpeed(vesselClass, VesselState.Laden), vesselClass.getMinSpeed()), vesselClass.getMaxSpeed());
-			int nbotravelTime = Calculator.getTimeFromSpeedDistance(nboSpeed, d.getSecond());
-			int transitTime = routeCostProvider.getRouteTransitTime(d.getFirst(), vessel);
-			times[i] = new LadenRouteData(mintravelTime + transitTime, nbotravelTime + transitTime, OptimiserUnitConvertor.convertToInternalDailyCost(routeCostProvider.getRouteCost(d.getFirst(), vessel, IRouteCostProvider.CostType.Laden)));
+			final int mintravelTime = Calculator.getTimeFromSpeedDistance(vesselClass.getMaxSpeed(), d.getSecond());
+			final int nboSpeed = Math.min(Math.max(getNBOSpeed(vesselClass, VesselState.Laden), vesselClass.getMinSpeed()), vesselClass.getMaxSpeed());
+			final int nbotravelTime = Calculator.getTimeFromSpeedDistance(nboSpeed, d.getSecond());
+			final int transitTime = routeCostProvider.getRouteTransitTime(d.getFirst(), vessel);
+			times[i] = new LadenRouteData(mintravelTime + transitTime, nbotravelTime + transitTime,
+					OptimiserUnitConvertor.convertToInternalDailyCost(routeCostProvider.getRouteCost(d.getFirst(), vessel, IRouteCostProvider.CostType.Laden)));
 			i++;
 		}
 		return times;
 	}
 
-	private int getNBOSpeed(IVesselClass vesselClass, VesselState vesselState) {
+	private int getNBOSpeed(@NonNull final IVesselClass vesselClass, @NonNull final VesselState vesselState) {
 		final long nboRateInM3PerHour = vesselClass.getNBORate(vesselState);
 		final long nboProvidedInMT = Calculator.convertM3ToMT(nboRateInM3PerHour, DEFAULT_CARGO_CV, vesselClass.getBaseFuel().getEquivalenceFactor());
-		return vesselClass.getConsumptionRate(vesselState).getSpeed(nboProvidedInMT); 
+		return vesselClass.getConsumptionRate(vesselState).getSpeed(nboProvidedInMT);
 	}
 
 	@Override
-	public List<Integer> getFeasibleRoutes(LadenRouteData[] sortedCanalTimes, int minTime, int maxTime) {
-		List<Integer> canalsWeCanUse = new LinkedList<>();
+	public @NonNull List<@NonNull Integer> getFeasibleRoutes(@NonNull final LadenRouteData @NonNull [] sortedCanalTimes, final int minTime, final int maxTime) {
+		final List<@NonNull Integer> canalsWeCanUse = new LinkedList<>();
 		for (int i = 0; i < sortedCanalTimes.length; i++) {
 			if (sortedCanalTimes[i].ladenMaxSpeed <= maxTime) {
 				canalsWeCanUse.add(i);
-			} 
+			}
 		}
 		return canalsWeCanUse;
 	}
 
 	@Override
-	public LadenRouteData getBestCanalDetails(LadenRouteData[] sortedCanalTimes, int maxTime) {
-		for (LadenRouteData canal : sortedCanalTimes) {
+	public @NonNull LadenRouteData getBestCanalDetails(@NonNull final LadenRouteData @NonNull [] sortedCanalTimes, final int maxTime) {
+		for (final LadenRouteData canal : sortedCanalTimes) {
 			if (maxTime >= canal.ladenMaxSpeed) {
 				return canal;
 			}

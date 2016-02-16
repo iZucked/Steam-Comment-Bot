@@ -9,11 +9,8 @@ import org.eclipse.jdt.annotation.NonNull;
 public interface ISimilarityComponentParameters {
 
 	public enum Interval {
-		@NonNull
 		LOW,
-		@NonNull
 		MEDIUM,
-		@NonNull
 		HIGH,
 	}
 

@@ -299,7 +299,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	ICargo createCargo(@NonNull final Collection<IPortSlot> slots, final boolean allowRewiring);
+	ICargo createCargo(@NonNull final Collection<@NonNull IPortSlot> slots, final boolean allowRewiring);
 
 	/**
 	 */
@@ -363,7 +363,7 @@ public interface ISchedulerBuilder {
 	 * @param state
 	 * @param tollPrice
 	 */
-	void setVesselRouteCost(final @NonNull ERouteOption route, @NonNull final IVessel vessel, @NonNull final IRouteCostProvider.CostType costType, final long tollPrice);
+	void setVesselRouteCost(final @NonNull ERouteOption route, @NonNull final IVessel vessel, final IRouteCostProvider.@NonNull CostType costType, final long tollPrice);
 
 	/**
 	 * Set the default toll associated with passing by a given route

@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.components;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 /**
  * Enum defining the states a vessel can be in.
  * 
@@ -16,12 +14,10 @@ public enum VesselState {
 	/**
 	 * Vessel has a cargo loaded
 	 */
-	@NonNull
 	Laden,
 
 	/**
-	 * Vessel has no cargo loaded. However, a small quantitymay remain for use a fuel.
+	 * Vessel has no cargo loaded. However, a small quantity may remain for use a fuel.
 	 */
-	@NonNull
 	Ballast
 }

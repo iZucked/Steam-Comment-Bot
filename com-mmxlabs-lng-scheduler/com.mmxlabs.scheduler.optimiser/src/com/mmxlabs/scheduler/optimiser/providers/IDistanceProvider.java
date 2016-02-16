@@ -39,15 +39,16 @@ public interface IDistanceProvider extends IDataComponentProvider {
 	 * @return
 	 */
 	@NonNull
-	List<Pair<ERouteOption, Integer>> getDistanceValues(@NonNull IPort from, @NonNull IPort to, int voyageStartTime);
+	List<@NonNull Pair<@NonNull ERouteOption, @NonNull Integer>> getDistanceValues(@NonNull IPort from, @NonNull IPort to, int voyageStartTime);
 
 	@Deprecated
-	default List<Pair<ERouteOption, Integer>> getDistanceValues(@NonNull IPort from, @NonNull IPort to) {
+	@NonNull
+	default List<@NonNull Pair<@NonNull ERouteOption, @NonNull Integer>> getDistanceValues(@NonNull IPort from, @NonNull IPort to) {
 		return getDistanceValues(from, to, Integer.MIN_VALUE);
 	}
 
 	@NonNull
-	List<Pair<ERouteOption, Integer>> getAllDistanceValues(@NonNull IPort from, @NonNull IPort to);
+	List<@NonNull Pair<@NonNull ERouteOption, @NonNull Integer>> getAllDistanceValues(@NonNull IPort from, @NonNull IPort to);
 
 	/**
 	 * Returns the distance if route is open for the given time. May return {@link Integer#MAX_VALUE} if the route is closed or there is no distance.
@@ -59,7 +60,7 @@ public interface IDistanceProvider extends IDataComponentProvider {
 	 * @return
 	 */
 	int getDistance(@NonNull ERouteOption route, @NonNull IPort from, @NonNull IPort to, int voyageStartTime);
-	
+
 	@Deprecated
 	default int getDistance(@NonNull ERouteOption route, @NonNull IPort from, @NonNull IPort to) {
 		return getDistance(route, from, to, Integer.MIN_VALUE);
@@ -88,8 +89,8 @@ public interface IDistanceProvider extends IDataComponentProvider {
 	int getTravelTime(@NonNull ERouteOption route, @NonNull IVessel vessel, @NonNull IPort from, @NonNull IPort to, int voyageStartTime, int speed);
 
 	@NonNull
-	Pair<ERouteOption, Integer> getQuickestTravelTime(@NonNull IVessel vessel, @NonNull IPort from, @NonNull IPort to, int voyageStartTime, int speed);
+	Pair<@NonNull ERouteOption, @NonNull Integer> getQuickestTravelTime(@NonNull IVessel vessel, @NonNull IPort from, @NonNull IPort to, int voyageStartTime, int speed);
 
 	@NonNull
-	List<ERouteOption> getRoutes();
+	List<@NonNull ERouteOption> getRoutes();
 }

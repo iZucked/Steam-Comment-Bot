@@ -653,9 +653,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	@NonNull
-	public ICargo createCargo(final Collection<IPortSlot> slots, final boolean allowRewiring) {
+	public ICargo createCargo(final @NonNull Collection<@NonNull IPortSlot> slots, final boolean allowRewiring) {
 
-		final Cargo cargo = new Cargo(new ArrayList<IPortSlot>(slots));
+		final Cargo cargo = new Cargo(new ArrayList<@NonNull IPortSlot>(slots));
 		cargoes.add(cargo);
 
 		// Fix slot pairing if we disallow re-wiring or this is a complex cargo (more than just one load and one discharge)
@@ -1049,7 +1049,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	/**
 	 */
 	@Override
-	public void setVesselRouteCost(final @NonNull ERouteOption route, @NonNull final IVessel vessel, final @NonNull IRouteCostProvider.CostType costType, final long tollPrice) {
+	public void setVesselRouteCost(final @NonNull ERouteOption route, @NonNull final IVessel vessel, final IRouteCostProvider.@NonNull CostType costType, final long tollPrice) {
 		routeCostProvider.setRouteCost(route, vessel, costType, tollPrice);
 	}
 

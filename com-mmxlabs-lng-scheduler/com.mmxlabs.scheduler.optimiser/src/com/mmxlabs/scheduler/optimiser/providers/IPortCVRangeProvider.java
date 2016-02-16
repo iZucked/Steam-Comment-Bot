@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 
@@ -20,6 +22,6 @@ public interface IPortCVRangeProvider extends IDataComponentProvider {
 	 * @param port
 	 * @return
 	 */
-	int getPortMinCV(IPort port);
-	int getPortMaxCV(IPort port);
+	int getPortMinCV(@NonNull IPort port);
+	int getPortMaxCV(@NonNull IPort port);
 }

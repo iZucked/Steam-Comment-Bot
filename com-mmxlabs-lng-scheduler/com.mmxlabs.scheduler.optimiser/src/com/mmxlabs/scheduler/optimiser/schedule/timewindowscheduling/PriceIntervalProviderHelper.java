@@ -115,9 +115,9 @@ public class PriceIntervalProviderHelper {
 	 * @return
 	 */
 	@NonNull
-	public List<int[]> getPriceIntervalsList(final @NonNull ILoadOption slot, final @NonNull IIntegerIntervalCurve intervals, final @Nullable ICurve curve, final int start, final int end,
+	public List<int @NonNull []> getPriceIntervalsList(final @NonNull ILoadOption slot, final @NonNull IIntegerIntervalCurve intervals, final @Nullable ICurve curve, final int start, final int end,
 			final int offsetInHours, final @NonNull IPortTimeWindowsRecord portTimeWindowRecord) {
-		final List<int[]> priceIntervals = new LinkedList<>();
+		final List<int @NonNull []> priceIntervals = new LinkedList<>();
 		buildIntervalsList(slot, intervals, curve, start, end, portTimeWindowRecord, priceIntervals);
 		return priceIntervals;
 	}
@@ -134,8 +134,8 @@ public class PriceIntervalProviderHelper {
 	 * @param portTimeWindowRecord
 	 * @return
 	 */
-	public List<int[]> getPriceIntervalsList(final IDischargeOption slot, final IIntegerIntervalCurve intervals, final ICurve curve, final int start, final int end, final int offsetInHours,
-			final IPortTimeWindowsRecord portTimeWindowRecord) {
+	public List<int[]> getPriceIntervalsList(final @NonNull IDischargeOption slot, final @NonNull IIntegerIntervalCurve intervals, final @Nullable ICurve curve, final int start, final int end,
+			final int offsetInHours, final @NonNull IPortTimeWindowsRecord portTimeWindowRecord) {
 		final List<int[]> priceIntervals = new LinkedList<>();
 		buildIntervalsList(slot, intervals, curve, start, end, portTimeWindowRecord, priceIntervals);
 		return priceIntervals;
@@ -152,7 +152,7 @@ public class PriceIntervalProviderHelper {
 	 * @return
 	 */
 	@NonNull
-	public List<Integer> buildDateChangeCurveAsIntegerList(final int start, final int end, final @NonNull IPortSlot slot, final @NonNull int[] intervals,
+	public List<Integer> buildDateChangeCurveAsIntegerList(final int start, final int end, final @NonNull IPortSlot slot, final int @NonNull [] intervals,
 			final @NonNull IPortTimeWindowsRecord portTimeWindowsRecord) {
 		// TODO - get rid of PriceEventType (change to int[]?)
 		final List<Integer> shifted = new LinkedList<>();
@@ -183,8 +183,7 @@ public class PriceIntervalProviderHelper {
 		return shifted;
 	}
 
-	@NonNull
-	int[] getCargoBoundsWithCanalTrimming(final int purchaseStart, final int purchaseEnd, final int salesStart, final int salesEnd, final int loadDuration, final int minTimeCanal) {
+	int @NonNull [] getCargoBoundsWithCanalTrimming(final int purchaseStart, final int purchaseEnd, final int salesStart, final int salesEnd, final int loadDuration, final int minTimeCanal) {
 		final int minSalesStart = getMinDischargeGivenCanal(purchaseStart, salesStart, loadDuration, minTimeCanal);
 		return new int[] { purchaseStart, purchaseStart, minSalesStart, Math.max(minSalesStart, salesEnd) };
 	}
@@ -194,7 +193,6 @@ public class PriceIntervalProviderHelper {
 		return minSalesStart;
 	}
 
-	@NonNull
 	public int[] getIdealLoadAndDischargeTimesGivenCanal(final int purchaseStart, final int purchaseEnd, int salesStart, final int salesEnd, final int loadDuration, final int canalMaxSpeed,
 			final int canalNBOSpeed) {
 		int purchase = salesStart - canalMaxSpeed - loadDuration;
@@ -238,8 +236,8 @@ public class PriceIntervalProviderHelper {
 		return sortedCanalTimes[sortedCanalTimes.length - 1];
 	}
 
-	public NonNullPair<LadenRouteData, Long> getBestCanalDetailsWithBoiloff(@NonNull final IntervalData purchase, @NonNull final IntervalData sales, final int loadDuration, final int salesPrice, @NonNull final LadenRouteData[] sortedCanalTimes,
-			final long boiloffRateM3, final int cv, final int loadVolumeMMBTU) {
+	public NonNullPair<LadenRouteData, Long> getBestCanalDetailsWithBoiloff(@NonNull final IntervalData purchase, @NonNull final IntervalData sales, final int loadDuration, final int salesPrice,
+			@NonNull final LadenRouteData[] sortedCanalTimes, final long boiloffRateM3, final int cv, final int loadVolumeMMBTU) {
 
 		assert sortedCanalTimes.length > 0;
 		long bestMargin = Long.MAX_VALUE;
@@ -260,7 +258,7 @@ public class PriceIntervalProviderHelper {
 			}
 		}
 		assert bestCanal != null;
-		return new NonNullPair<> (bestCanal, bestBoiloffCostMMBTU);
+		return new NonNullPair<>(bestCanal, bestBoiloffCostMMBTU);
 	}
 
 	int getMinIndexOfPriceIntervalList(final IntervalData[] purchaseIntervals) {
@@ -339,8 +337,7 @@ public class PriceIntervalProviderHelper {
 		return bestIdx;
 	}
 
-	@NonNull
-	long[] getBestCanalDetails(@NonNull final long[][] times, final int maxTime) {
+	long @NonNull [] getBestCanalDetails(final long @NonNull [] @NonNull [] times, final int maxTime) {
 		for (final long[] canal : times) {
 			if (maxTime >= canal[0]) {
 				return canal;
@@ -396,8 +393,8 @@ public class PriceIntervalProviderHelper {
 	 * @return
 	 */
 	@NonNull
-	List<int[]> getComplexPriceIntervals(final ILoadOption load, final IDischargeOption discharge, final IPriceIntervalProvider loadPriceIntervalProvider,
-			final IPriceIntervalProvider dischargePriceIntervalProvider, final IPortTimeWindowsRecord portTimeWindowRecord, final boolean dateFromLoad) {
+	List<int[]> getComplexPriceIntervals(final @NonNull ILoadOption load, final @NonNull IDischargeOption discharge, final @NonNull IPriceIntervalProvider loadPriceIntervalProvider,
+			final @NonNull IPriceIntervalProvider dischargePriceIntervalProvider, final @NonNull IPortTimeWindowsRecord portTimeWindowRecord, final boolean dateFromLoad) {
 		ITimeWindow timeWindow;
 		if (dateFromLoad) {
 			timeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(load);
@@ -431,8 +428,7 @@ public class PriceIntervalProviderHelper {
 		return list;
 	}
 
-	@NonNull
-	int[][] getOverlappingWindows(final @NonNull ILoadOption load, final @NonNull IDischargeOption discharge, final @NonNull IPriceIntervalProvider loadPriceIntervalProvider,
+	int @NonNull [] @NonNull [] getOverlappingWindows(final @NonNull ILoadOption load, final @NonNull IDischargeOption discharge, final @NonNull IPriceIntervalProvider loadPriceIntervalProvider,
 			final @NonNull IPriceIntervalProvider dischargePriceIntervalProvider, final int start, final int end, final @NonNull IPortTimeWindowsRecord portTimeWindowsRecord) {
 		final List<Integer> loadIntervals = loadPriceIntervalProvider.getPriceHourIntervals(load, start, end, portTimeWindowsRecord);
 		final List<Integer> dischargeIntervals = dischargePriceIntervalProvider.getPriceHourIntervals(discharge, start, end, portTimeWindowsRecord);
@@ -502,8 +498,8 @@ public class PriceIntervalProviderHelper {
 	}
 
 	@NonNull
-	List<int[]> buildIntervalsList(final @NonNull IPortSlot slot, final @NonNull IIntegerIntervalCurve intervals, final @Nullable ICurve curve, final int start, final int end,
-			final @NonNull IPortTimeWindowsRecord portTimeWindowsRecord, @NonNull final List<int[]> priceIntervals) {
+	List<int @NonNull []> buildIntervalsList(final @NonNull IPortSlot slot, final @NonNull IIntegerIntervalCurve intervals, final @Nullable ICurve curve, final int start, final int end,
+			final @NonNull IPortTimeWindowsRecord portTimeWindowsRecord, @NonNull final List<int @NonNull []> priceIntervals) {
 
 		final ILoadOption loadOption = getFirstLoadOption(portTimeWindowsRecord.getSlots());
 		assert loadOption != null;
@@ -668,26 +664,25 @@ public class PriceIntervalProviderHelper {
 		return duration;
 	}
 
-	@NonNull
-	public static final int[] getEndInterval(final int end) {
+	public static final int @NonNull [] getEndInterval(final int end) {
 		return new int[] { end, Integer.MIN_VALUE };
 	}
 
-	public static boolean isStartOfEvent(final PricingEventType pet) {
+	public static boolean isStartOfEvent(final @NonNull PricingEventType pet) {
 		if (pet == PricingEventType.START_OF_LOAD || pet == PricingEventType.START_OF_DISCHARGE) {
 			return true;
 		}
 		return false;
 	}
 
-	public static boolean isEndOfEvent(final PricingEventType pet) {
+	public static boolean isEndOfEvent(final @NonNull PricingEventType pet) {
 		if (pet == PricingEventType.END_OF_LOAD || pet == PricingEventType.END_OF_DISCHARGE) {
 			return true;
 		}
 		return false;
 	}
 
-	public static boolean isEndOfWindow(final PricingEventType pet) {
+	public static boolean isEndOfWindow(final @NonNull PricingEventType pet) {
 		if (pet == PricingEventType.END_OF_LOAD_WINDOW || pet == PricingEventType.END_OF_DISCHARGE_WINDOW) {
 			return true;
 		}

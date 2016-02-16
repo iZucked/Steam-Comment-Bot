@@ -15,15 +15,15 @@ import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
 public interface IPriceIntervalProducer {
 
-	public abstract List<int[]> getLoadIntervalsIndependentOfDischarge(@NonNull ILoadOption portSlot, @NonNull IPortTimeWindowsRecord portTimeWindowRecord);
+	public abstract List<int @NonNull []> getLoadIntervalsIndependentOfDischarge(@NonNull ILoadOption portSlot, @NonNull IPortTimeWindowsRecord portTimeWindowRecord);
 
-	public abstract List<int[]> getLoadIntervalsBasedOnDischarge(@NonNull ILoadOption portSlot, @NonNull IPortTimeWindowsRecord portTimeWindowRecord);
+	public abstract List<int @NonNull []> getLoadIntervalsBasedOnDischarge(@NonNull ILoadOption portSlot, @NonNull IPortTimeWindowsRecord portTimeWindowRecord);
 
-	public abstract List<int[]> getDischargeWindowIndependentOfLoad(@NonNull IDischargeOption portSlot, @NonNull IPortTimeWindowsRecord portTimeWindowRecord);
+	public abstract List<int @NonNull []> getDischargeWindowIndependentOfLoad(@NonNull IDischargeOption portSlot, @NonNull IPortTimeWindowsRecord portTimeWindowRecord);
 
-	public abstract List<int[]> getDischargeWindowBasedOnLoad(@NonNull IDischargeOption portSlot, @NonNull IPortTimeWindowsRecord portTimeWindowRecord);
+	public abstract List<int @NonNull []> getDischargeWindowBasedOnLoad(@NonNull IDischargeOption portSlot, @NonNull IPortTimeWindowsRecord portTimeWindowRecord);
 
-	public abstract List<int[]> getIntervalsWhenLoadOrDischargeDeterminesBothPricingEvents(@NonNull ILoadOption load, @NonNull IDischargeOption discharge,
+	public abstract List<int @NonNull []> getIntervalsWhenLoadOrDischargeDeterminesBothPricingEvents(@NonNull ILoadOption load, @NonNull IDischargeOption discharge,
 			@NonNull IPriceIntervalProvider loadPriceIntervalProvider, @NonNull IPriceIntervalProvider dischargePriceIntervalProvider, @NonNull IPortTimeWindowsRecord portTimeWindowRecord,
 			boolean dateFromLoad);
 

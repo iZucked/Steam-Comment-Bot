@@ -296,7 +296,7 @@ public class ScheduleCalculator {
 		return scheduledSequence;
 	}
 
-	public ScheduledSequences schedule(@NonNull final ISequences sequences, @NonNull final int[][] arrivalTimes, @Nullable final IAnnotatedSolution solution) {
+	public ScheduledSequences schedule(@NonNull final ISequences sequences, final int @NonNull [][] arrivalTimes, @Nullable final IAnnotatedSolution solution) {
 		final ScheduledSequences result = new ScheduledSequences();
 
 		if (scheduledDataLookupProviderProvider != null) {
