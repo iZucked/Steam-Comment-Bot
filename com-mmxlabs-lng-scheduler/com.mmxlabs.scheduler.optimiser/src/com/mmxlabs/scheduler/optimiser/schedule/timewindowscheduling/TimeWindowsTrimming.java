@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.schedule.timewindowscheduling;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,7 +14,6 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -51,13 +48,13 @@ public class TimeWindowsTrimming {
 	 * @param portTimeWindowRecord
 	 * @return
 	 */
-	public IPortTimeWindowsRecord processCargo(IPortTimeWindowsRecord portTimeWindowRecord) {
+	public IPortTimeWindowsRecord processCargo(final IPortTimeWindowsRecord portTimeWindowRecord) {
 		boolean seenLoad = false;
 		boolean seenDischarge = false;
 		boolean complexCargo = false;
-		List<Triple<IPortSlot, Class<?>, PricingEventType>> slotData = new LinkedList<>();
+		final List<Triple<IPortSlot, Class<?>, PricingEventType>> slotData = new LinkedList<>();
 
-		for (IPortSlot slot : portTimeWindowRecord.getSlots()) {
+		for (final IPortSlot slot : portTimeWindowRecord.getSlots()) {
 			if (slot instanceof ILoadOption) {
 				slotData.add(new Triple<IPortSlot, Class<?>, PricingEventType>(slot, slot.getClass(), ((ILoadOption) slot).getPricingEvent()));
 				if (seenLoad) {
@@ -76,7 +73,7 @@ public class TimeWindowsTrimming {
 		}
 
 		if (complexCargo) {
-			for (Triple<IPortSlot, Class<?>, PricingEventType> slotRow : slotData) {
+			for (final Triple<IPortSlot, Class<?>, PricingEventType> slotRow : slotData) {
 				if (slotRow.getSecond().isAssignableFrom(ILoadOption.class)) {
 					if (!priceIntervalProviderHelper.isLoadPricingEventTime((ILoadOption) slotRow.getFirst(), portTimeWindowRecord) && !priceIntervalProviderHelper
 							.isPricingDateSpecified(slotRow.getFirst(), PriceIntervalProviderHelper.getPriceEventFromSlotOrContract((ILoadOption) slotRow.getFirst(), portTimeWindowRecord))) {
@@ -89,23 +86,23 @@ public class TimeWindowsTrimming {
 					}
 				}
 			}
-			for (Triple<IPortSlot, Class<?>, PricingEventType> slotRow : slotData) {
+			for (final Triple<IPortSlot, Class<?>, PricingEventType> slotRow : slotData) {
 				if (slotRow.getSecond().isAssignableFrom(ILoadOption.class)) {
-					ILoadOption slot = (ILoadOption) slotRow.getFirst();
+					final ILoadOption slot = (ILoadOption) slotRow.getFirst();
 					if (slot.getLoadPriceCalculator() instanceof IPriceIntervalProvider) {
 						trimLoadWindowIndependentOfDischarge(portTimeWindowRecord, slot);
 					}
 				} else if (slotRow.getSecond().isAssignableFrom(IDischargeOption.class)) {
-					IDischargeOption slot = (IDischargeOption) slotRow.getFirst();
+					final IDischargeOption slot = (IDischargeOption) slotRow.getFirst();
 					if (slot.getDischargePriceCalculator() instanceof IPriceIntervalProvider) {
 						trimDischargeWindowIndependentOfLoad(portTimeWindowRecord, slot);
 					}
 				}
 			}
 		} else {
-			Pair<ILoadOption, IDischargeOption> slots = priceIntervalProviderHelper.getLoadAndDischarge(portTimeWindowRecord, slotData);
-			ILoadOption load = slots.getFirst();
-			IDischargeOption discharge = slots.getSecond();
+			final Pair<ILoadOption, IDischargeOption> slots = priceIntervalProviderHelper.getLoadAndDischarge(portTimeWindowRecord, slotData);
+			final ILoadOption load = slots.getFirst();
+			final IDischargeOption discharge = slots.getSecond();
 			if (load != null && discharge != null && load.getLoadPriceCalculator() instanceof IPriceIntervalProvider && discharge.getDischargePriceCalculator() instanceof IPriceIntervalProvider) {
 				if ((priceIntervalProviderHelper.isLoadPricingEventTime(load, portTimeWindowRecord)
 						|| priceIntervalProviderHelper.isPricingDateSpecified(load, PriceIntervalProviderHelper.getPriceEventFromSlotOrContract(load, portTimeWindowRecord)))
@@ -114,8 +111,8 @@ public class TimeWindowsTrimming {
 					// simplest case
 					trimLoadAndDischargeWindowsWithRouteChoice(portTimeWindowRecord, load, discharge, getLoadPriceIntervalsIndependentOfDischarge(portTimeWindowRecord, load),
 							getDischargePriceIntervalsIndependentOfLoad(portTimeWindowRecord, discharge), false);
-				} else
-					if (priceIntervalProviderHelper.isDischargePricingEventTime(load, portTimeWindowRecord) && (priceIntervalProviderHelper.isLoadPricingEventTime(discharge, portTimeWindowRecord))) {
+				} else if (priceIntervalProviderHelper.isDischargePricingEventTime(load, portTimeWindowRecord)
+						&& (priceIntervalProviderHelper.isLoadPricingEventTime(discharge, portTimeWindowRecord))) {
 					// complex case (L -> D; D -> L)
 					trimLoadAndDischargeWindowsWithRouteChoice(portTimeWindowRecord, load, discharge, getLoadPriceIntervalsBasedOnDischarge(portTimeWindowRecord, load),
 							getDischargePriceIntervalsBasedOnLoad(portTimeWindowRecord, discharge), false);
@@ -123,22 +120,22 @@ public class TimeWindowsTrimming {
 						&& (priceIntervalProviderHelper.isDischargePricingEventTime(discharge, portTimeWindowRecord)
 								|| priceIntervalProviderHelper.isPricingDateSpecified(discharge, PriceIntervalProviderHelper.getPriceEventFromSlotOrContract(discharge, portTimeWindowRecord)))) {
 					// complex case (L -> D; D -> D)
-					List<int[]> loadZeroPrices = new LinkedList<>();
+					final List<int[]> loadZeroPrices = new LinkedList<>();
 					loadZeroPrices.add(new int[] { portTimeWindowRecord.getSlotFeasibleTimeWindow(load).getStart(), 0 });
-					List<int[]> loadIntervals = priceIntervalProviderHelper.getFeasibleIntervalSubSet(portTimeWindowRecord.getSlotFeasibleTimeWindow(load).getStart(),
+					final List<int[]> loadIntervals = priceIntervalProviderHelper.getFeasibleIntervalSubSet(portTimeWindowRecord.getSlotFeasibleTimeWindow(load).getStart(),
 							portTimeWindowRecord.getSlotFeasibleTimeWindow(load).getEnd(), loadZeroPrices);
-					List<int[]> dischargeIntervals = priceIntervalProviderHelper.getComplexPriceIntervals(load, discharge, (IPriceIntervalProvider) load.getLoadPriceCalculator(),
+					final List<int[]> dischargeIntervals = priceIntervalProviderHelper.getComplexPriceIntervals(load, discharge, (IPriceIntervalProvider) load.getLoadPriceCalculator(),
 							(IPriceIntervalProvider) discharge.getDischargePriceCalculator(), portTimeWindowRecord, false);
 					trimLoadAndDischargeWindowsWithRouteChoice(portTimeWindowRecord, load, discharge, loadIntervals, dischargeIntervals, false);
 				} else if ((priceIntervalProviderHelper.isLoadPricingEventTime(load, portTimeWindowRecord)
 						|| priceIntervalProviderHelper.isPricingDateSpecified(load, PriceIntervalProviderHelper.getPriceEventFromSlotOrContract(load, portTimeWindowRecord)))
 						&& priceIntervalProviderHelper.isLoadPricingEventTime(discharge, portTimeWindowRecord)) {
 					// complex case (L -> L; D -> L)
-					List<int[]> dischargeZeroPrices = new LinkedList<>();
+					final List<int[]> dischargeZeroPrices = new LinkedList<>();
 					dischargeZeroPrices.add(new int[] { portTimeWindowRecord.getSlotFeasibleTimeWindow(load).getStart(), 0 });
-					List<int[]> dischargeIntervals = priceIntervalProviderHelper.getFeasibleIntervalSubSet(portTimeWindowRecord.getSlotFeasibleTimeWindow(discharge).getStart(),
+					final List<int[]> dischargeIntervals = priceIntervalProviderHelper.getFeasibleIntervalSubSet(portTimeWindowRecord.getSlotFeasibleTimeWindow(discharge).getStart(),
 							portTimeWindowRecord.getSlotFeasibleTimeWindow(discharge).getEnd(), dischargeZeroPrices);
-					List<int[]> loadIntervals = priceIntervalProviderHelper.getComplexPriceIntervals(load, discharge, (IPriceIntervalProvider) load.getLoadPriceCalculator(),
+					final List<int[]> loadIntervals = priceIntervalProviderHelper.getComplexPriceIntervals(load, discharge, (IPriceIntervalProvider) load.getLoadPriceCalculator(),
 							(IPriceIntervalProvider) discharge.getDischargePriceCalculator(), portTimeWindowRecord, true);
 					trimLoadAndDischargeWindowsWithRouteChoice(portTimeWindowRecord, load, discharge, loadIntervals, dischargeIntervals, false);
 				}
@@ -158,16 +155,16 @@ public class TimeWindowsTrimming {
 	 * @param dischargePriceIntervals
 	 * @return
 	 */
-	int[] trimCargoTimeWindowsWithRouteOptimisationAndBoilOff(IPortTimeWindowsRecord portTimeWindowsRecord, IVessel vessel, ILoadOption load, IDischargeOption discharge,
-			List<int[]> loadPriceIntervals, List<int[]> dischargePriceIntervals, boolean inverted) {
-		ITimeWindow loadTimeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
+	int[] trimCargoTimeWindowsWithRouteOptimisationAndBoilOff(final IPortTimeWindowsRecord portTimeWindowsRecord, final IVessel vessel, final ILoadOption load, final IDischargeOption discharge,
+			final List<int[]> loadPriceIntervals, final List<int[]> dischargePriceIntervals, final boolean inverted) {
+		final ITimeWindow loadTimeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
 		assert loadTimeWindow != null;
-		long[][] sortedCanalTimes = schedulingCanalDistanceProvider.getMinimumLadenTravelTimes(load.getPort(), discharge.getPort(), vessel, loadTimeWindow.getStart());
+		final long[][] sortedCanalTimes = schedulingCanalDistanceProvider.getMinimumLadenTravelTimes(load.getPort(), discharge.getPort(), vessel, loadTimeWindow.getStart());
 		assert sortedCanalTimes.length > 0;
-		int loadDuration = portTimeWindowsRecord.getSlotDuration(load);
-		int minTime = Math.max(priceIntervalProviderHelper.getMinimumPossibleTimeForCargoIntervals(loadPriceIntervals, dischargePriceIntervals) + loadDuration, loadDuration);
-		int maxTime = priceIntervalProviderHelper.getMaximumPossibleTimeForCargoIntervals(loadPriceIntervals, dischargePriceIntervals);
-		List<Integer> canalsWeCanUse = schedulingCanalDistanceProvider.getFeasibleRoutes(sortedCanalTimes, minTime, maxTime);
+		final int loadDuration = portTimeWindowsRecord.getSlotDuration(load);
+		final int minTime = Math.max(priceIntervalProviderHelper.getMinimumPossibleTimeForCargoIntervals(loadPriceIntervals, dischargePriceIntervals) + loadDuration, loadDuration);
+		final int maxTime = priceIntervalProviderHelper.getMaximumPossibleTimeForCargoIntervals(loadPriceIntervals, dischargePriceIntervals);
+		final List<Integer> canalsWeCanUse = schedulingCanalDistanceProvider.getFeasibleRoutes(sortedCanalTimes, minTime, maxTime);
 		if (canalsWeCanUse.size() == 1) {
 			// no options
 			Pair<Integer, Integer> loadBounds;
@@ -179,14 +176,14 @@ public class TimeWindowsTrimming {
 				loadBounds = priceIntervalProviderHelper.getHighestPriceInterval(loadPriceIntervals);
 				dischargeBounds = priceIntervalProviderHelper.getLowestPriceInterval(dischargePriceIntervals);
 			}
-//			return priceIntervalProviderHelper.getCargoBoundsWithCanalTrimming(loadBounds.getFirst(), loadBounds.getSecond(), dischargeBounds.getFirst(), dischargeBounds.getSecond(), loadDuration,
-//					(int) sortedCanalTimes[canalsWeCanUse.get(0)][0]);
+			// return priceIntervalProviderHelper.getCargoBoundsWithCanalTrimming(loadBounds.getFirst(), loadBounds.getSecond(), dischargeBounds.getFirst(), dischargeBounds.getSecond(), loadDuration,
+			// (int) sortedCanalTimes[canalsWeCanUse.get(0)][0]);
 			return getCargoBounds(loadBounds.getFirst(), loadBounds.getSecond(), dischargeBounds.getFirst(), dischargeBounds.getSecond(), loadDuration,
 					(int) sortedCanalTimes[canalsWeCanUse.get(0)][0], (int) sortedCanalTimes[canalsWeCanUse.get(0)][2]);
 		} else {
 			// we could go via canal but should we?
-			List<int[]> purchaseIntervals = priceIntervalProviderHelper.getIntervalsBoundsAndPrices(loadPriceIntervals);
-			List<int[]> salesIntervals = priceIntervalProviderHelper.getIntervalsBoundsAndPrices(dischargePriceIntervals);
+			final List<int[]> purchaseIntervals = priceIntervalProviderHelper.getIntervalsBoundsAndPrices(loadPriceIntervals);
+			final List<int[]> salesIntervals = priceIntervalProviderHelper.getIntervalsBoundsAndPrices(dischargePriceIntervals);
 			if (!inverted) {
 				return findBestBucketPairWithRouteAndBoiloffConsiderations(vessel, load, sortedCanalTimes, loadDuration, purchaseIntervals, salesIntervals);
 			} else {
@@ -206,22 +203,25 @@ public class TimeWindowsTrimming {
 	 * @param salesIntervals
 	 * @return
 	 */
-	private int[] findBestBucketPairWithRouteAndBoiloffConsiderationsInverted(IVessel vessel, ILoadOption load, long[][] sortedCanalTimes, int loadDuration, List<int[]> purchaseIntervals,
-			List<int[]> salesIntervals) {
+	private int[] findBestBucketPairWithRouteAndBoiloffConsiderationsInverted(final IVessel vessel, final ILoadOption load, final long[][] sortedCanalTimes, final int loadDuration,
+			final List<int[]> purchaseIntervals, final List<int[]> salesIntervals) {
+
+		assert !purchaseIntervals.isEmpty();
+
 		int bestPurchaseDetailsIdx = 0;
 		int bestSalesDetailsIdx = salesIntervals.size() - 1;
-		int loadVolumeMMBTU = OptimiserUnitConvertor.convertToExternalVolume(load.getMaxLoadVolumeMMBTU());
+		final int loadVolumeMMBTU = OptimiserUnitConvertor.convertToExternalVolume(load.getMaxLoadVolumeMMBTU());
 		long[] bestCanalDetails = null;
 		long bestMargin = Long.MIN_VALUE;
 		for (int purchaseIndex = bestPurchaseDetailsIdx; purchaseIndex < purchaseIntervals.size(); purchaseIndex++) {
 			for (int salesIndex = bestSalesDetailsIdx; salesIndex >= 0; salesIndex--) {
-				int salesPrice = purchaseIntervals.get(purchaseIndex)[2]; // inverted!
-				long[] newCanalDetails = priceIntervalProviderHelper.getBestCanalDetailsWithBoiloff(purchaseIntervals.get(purchaseIndex), salesIntervals.get(salesIndex), loadDuration, salesPrice,
-						sortedCanalTimes, vessel.getVesselClass().getNBORate(VesselState.Laden), load.getCargoCVValue(), loadVolumeMMBTU);
-				long boiloffCost = newCanalDetails[3];
-				long boiloffMargin = boiloffCost / loadVolumeMMBTU;
-				long canalMargin = (newCanalDetails[2] / loadVolumeMMBTU);
-				long newMargin = purchaseIntervals.get(purchaseIndex)[2] - salesIntervals.get(salesIndex)[2] - canalMargin - boiloffMargin; // inverted!
+				final int salesPrice = purchaseIntervals.get(purchaseIndex)[2]; // inverted!
+				final long[] newCanalDetails = priceIntervalProviderHelper.getBestCanalDetailsWithBoiloff(purchaseIntervals.get(purchaseIndex), salesIntervals.get(salesIndex), loadDuration,
+						salesPrice, sortedCanalTimes, vessel.getVesselClass().getNBORate(VesselState.Laden), load.getCargoCVValue(), loadVolumeMMBTU);
+				final long boiloffCost = newCanalDetails[3];
+				final long boiloffMargin = boiloffCost / loadVolumeMMBTU;
+				final long canalMargin = (newCanalDetails[2] / loadVolumeMMBTU);
+				final long newMargin = purchaseIntervals.get(purchaseIndex)[2] - salesIntervals.get(salesIndex)[2] - canalMargin - boiloffMargin; // inverted!
 				if (newMargin > bestMargin) {
 					bestMargin = newMargin;
 					bestPurchaseDetailsIdx = purchaseIndex;
@@ -230,10 +230,11 @@ public class TimeWindowsTrimming {
 				}
 			}
 		}
-//		return priceIntervalProviderHelper.getCargoBoundsWithCanalTrimming(purchaseIntervals.get(bestPurchaseDetailsIdx)[0], purchaseIntervals.get(bestPurchaseDetailsIdx)[1],
-//				salesIntervals.get(bestSalesDetailsIdx)[0], salesIntervals.get(bestSalesDetailsIdx)[1], loadDuration, (int) bestCanalDetails[0]);
-		return getCargoBounds(purchaseIntervals.get(bestPurchaseDetailsIdx)[0], purchaseIntervals.get(bestPurchaseDetailsIdx)[1],
-				salesIntervals.get(bestSalesDetailsIdx)[0], salesIntervals.get(bestSalesDetailsIdx)[1], loadDuration, (int) bestCanalDetails[0], (int) bestCanalDetails[1]);
+		assert bestCanalDetails != null;
+		// return priceIntervalProviderHelper.getCargoBoundsWithCanalTrimming(purchaseIntervals.get(bestPurchaseDetailsIdx)[0], purchaseIntervals.get(bestPurchaseDetailsIdx)[1],
+		// salesIntervals.get(bestSalesDetailsIdx)[0], salesIntervals.get(bestSalesDetailsIdx)[1], loadDuration, (int) bestCanalDetails[0]);
+		return getCargoBounds(purchaseIntervals.get(bestPurchaseDetailsIdx)[0], purchaseIntervals.get(bestPurchaseDetailsIdx)[1], salesIntervals.get(bestSalesDetailsIdx)[0],
+				salesIntervals.get(bestSalesDetailsIdx)[1], loadDuration, (int) bestCanalDetails[0], (int) bestCanalDetails[1]);
 	}
 
 	/**
@@ -247,21 +248,24 @@ public class TimeWindowsTrimming {
 	 * @param salesIntervals
 	 * @return
 	 */
-	private int[] findBestBucketPairWithRouteAndBoiloffConsiderations(IVessel vessel, ILoadOption load, long[][] sortedCanalTimes, int loadDuration, List<int[]> purchaseIntervals,
-			List<int[]> salesIntervals) {
+	private int[] findBestBucketPairWithRouteAndBoiloffConsiderations(final IVessel vessel, final ILoadOption load, final long[][] sortedCanalTimes, final int loadDuration,
+			final List<int[]> purchaseIntervals, final List<int[]> salesIntervals) {
+
+		assert !purchaseIntervals.isEmpty();
+
 		int bestPurchaseDetailsIdx = purchaseIntervals.size() - 1;
 		int bestSalesDetailsIdx = 0;
-		int loadVolumeMMBTU = OptimiserUnitConvertor.convertToExternalVolume(load.getMaxLoadVolumeMMBTU());
+		final int loadVolumeMMBTU = OptimiserUnitConvertor.convertToExternalVolume(load.getMaxLoadVolumeMMBTU());
 		long[] bestCanalDetails = null;
 		long bestMargin = Long.MIN_VALUE;
 		for (int purchaseIndex = bestPurchaseDetailsIdx; purchaseIndex >= 0; purchaseIndex--) {
 			for (int salesIndex = bestSalesDetailsIdx; salesIndex < salesIntervals.size(); salesIndex++) {
-				long[] newCanalDetails = priceIntervalProviderHelper.getBestCanalDetailsWithBoiloff(purchaseIntervals.get(purchaseIndex), salesIntervals.get(salesIndex), loadDuration,
+				final long[] newCanalDetails = priceIntervalProviderHelper.getBestCanalDetailsWithBoiloff(purchaseIntervals.get(purchaseIndex), salesIntervals.get(salesIndex), loadDuration,
 						salesIntervals.get(salesIndex)[2], sortedCanalTimes, vessel.getVesselClass().getNBORate(VesselState.Laden), load.getCargoCVValue(), loadVolumeMMBTU);
-				long boiloffCost = newCanalDetails[3];
-				long boiloffMargin = boiloffCost / loadVolumeMMBTU;
-				long canalMargin = newCanalDetails[2] / loadVolumeMMBTU;
-				long newMargin = salesIntervals.get(salesIndex)[2] - purchaseIntervals.get(purchaseIndex)[2] - canalMargin - boiloffMargin;
+				final long boiloffCost = newCanalDetails[3];
+				final long boiloffMargin = boiloffCost / loadVolumeMMBTU;
+				final long canalMargin = newCanalDetails[2] / loadVolumeMMBTU;
+				final long newMargin = salesIntervals.get(salesIndex)[2] - purchaseIntervals.get(purchaseIndex)[2] - canalMargin - boiloffMargin;
 				if (newMargin > bestMargin) {
 					bestMargin = newMargin;
 					bestPurchaseDetailsIdx = purchaseIndex;
@@ -270,19 +274,22 @@ public class TimeWindowsTrimming {
 				}
 			}
 		}
-//		return priceIntervalProviderHelper.getCargoBoundsWithCanalTrimming(purchaseIntervals.get(bestPurchaseDetailsIdx)[0], purchaseIntervals.get(bestPurchaseDetailsIdx)[1],
-//				salesIntervals.get(bestSalesDetailsIdx)[0], salesIntervals.get(bestSalesDetailsIdx)[1], loadDuration, (int) bestCanalDetails[0]);
-		return getCargoBounds(purchaseIntervals.get(bestPurchaseDetailsIdx)[0], purchaseIntervals.get(bestPurchaseDetailsIdx)[1],
-				salesIntervals.get(bestSalesDetailsIdx)[0], salesIntervals.get(bestSalesDetailsIdx)[1], loadDuration, (int) bestCanalDetails[0], (int) bestCanalDetails[1]);
+
+		assert bestCanalDetails != null;
+
+		// return priceIntervalProviderHelper.getCargoBoundsWithCanalTrimming(purchaseIntervals.get(bestPurchaseDetailsIdx)[0], purchaseIntervals.get(bestPurchaseDetailsIdx)[1],
+		// salesIntervals.get(bestSalesDetailsIdx)[0], salesIntervals.get(bestSalesDetailsIdx)[1], loadDuration, (int) bestCanalDetails[0]);
+		return getCargoBounds(purchaseIntervals.get(bestPurchaseDetailsIdx)[0], purchaseIntervals.get(bestPurchaseDetailsIdx)[1], salesIntervals.get(bestSalesDetailsIdx)[0],
+				salesIntervals.get(bestSalesDetailsIdx)[1], loadDuration, (int) bestCanalDetails[0], (int) bestCanalDetails[1]);
 	}
 
-	private int[] getCargoBounds(int purchaseStart, int purchaseEnd, int salesStart, int salesEnd, int loadDuration, int maxSpeedCanal, int nboSpeedCanal) {
-//		return priceIntervalProviderHelper.getCargoBoundsWithCanalTrimming(purchaseIntervals.get(bestPurchaseDetailsIdx)[0], purchaseIntervals.get(bestPurchaseDetailsIdx)[1],
-//				salesIntervals.get(bestSalesDetailsIdx)[0], salesIntervals.get(bestSalesDetailsIdx)[1], loadDuration, (int) bestCanalDetails[0])
-				int[] idealTimes = priceIntervalProviderHelper.getIdealLoadAndDischargeTimesGivenCanal(purchaseStart, purchaseEnd, salesStart, salesEnd, loadDuration, maxSpeedCanal, nboSpeedCanal);
-				return new int[] {idealTimes[0], idealTimes[0], idealTimes[1], idealTimes[1]};
+	private int[] getCargoBounds(final int purchaseStart, final int purchaseEnd, final int salesStart, final int salesEnd, final int loadDuration, final int maxSpeedCanal, final int nboSpeedCanal) {
+		// return priceIntervalProviderHelper.getCargoBoundsWithCanalTrimming(purchaseIntervals.get(bestPurchaseDetailsIdx)[0], purchaseIntervals.get(bestPurchaseDetailsIdx)[1],
+		// salesIntervals.get(bestSalesDetailsIdx)[0], salesIntervals.get(bestSalesDetailsIdx)[1], loadDuration, (int) bestCanalDetails[0])
+		final int[] idealTimes = priceIntervalProviderHelper.getIdealLoadAndDischargeTimesGivenCanal(purchaseStart, purchaseEnd, salesStart, salesEnd, loadDuration, maxSpeedCanal, nboSpeedCanal);
+		return new int[] { idealTimes[0], idealTimes[0], idealTimes[1], idealTimes[1] };
 	}
-	
+
 	/**
 	 * Trim time windows given different route options
 	 * 
@@ -294,26 +301,26 @@ public class TimeWindowsTrimming {
 	 * @param dischargePriceIntervals
 	 * @return
 	 */
-	int[] trimCargoTimeWindowsWithRouteOptimisation(IPortTimeWindowsRecord portTimeWindowsRecord, IVessel vessel, ILoadOption load, IDischargeOption discharge, List<int[]> loadPriceIntervals,
-			List<int[]> dischargePriceIntervals) {
-		ITimeWindow loadTimeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
+	int[] trimCargoTimeWindowsWithRouteOptimisation(final IPortTimeWindowsRecord portTimeWindowsRecord, final IVessel vessel, final ILoadOption load, final IDischargeOption discharge,
+			final List<int[]> loadPriceIntervals, final List<int[]> dischargePriceIntervals) {
+		final ITimeWindow loadTimeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
 		assert loadTimeWindow != null;
-		long[][] sortedCanalTimes = schedulingCanalDistanceProvider.getMinimumLadenTravelTimes(load.getPort(), discharge.getPort(), vessel, loadTimeWindow.getStart());
+		final long[][] sortedCanalTimes = schedulingCanalDistanceProvider.getMinimumLadenTravelTimes(load.getPort(), discharge.getPort(), vessel, loadTimeWindow.getStart());
 		assert sortedCanalTimes.length > 0;
-		int loadDuration = portTimeWindowsRecord.getSlotDuration(load);
-		int minTime = Math.max(priceIntervalProviderHelper.getMinimumPossibleTimeForCargoIntervals(loadPriceIntervals, dischargePriceIntervals) + loadDuration, loadDuration);
-		int maxTime = priceIntervalProviderHelper.getMaximumPossibleTimeForCargoIntervals(loadPriceIntervals, dischargePriceIntervals);
-		List<Integer> canalsWeCanUse = schedulingCanalDistanceProvider.getFeasibleRoutes(sortedCanalTimes, minTime, maxTime);
+		final int loadDuration = portTimeWindowsRecord.getSlotDuration(load);
+		final int minTime = Math.max(priceIntervalProviderHelper.getMinimumPossibleTimeForCargoIntervals(loadPriceIntervals, dischargePriceIntervals) + loadDuration, loadDuration);
+		final int maxTime = priceIntervalProviderHelper.getMaximumPossibleTimeForCargoIntervals(loadPriceIntervals, dischargePriceIntervals);
+		final List<Integer> canalsWeCanUse = schedulingCanalDistanceProvider.getFeasibleRoutes(sortedCanalTimes, minTime, maxTime);
 		if (canalsWeCanUse.size() == 1) {
 			// no options
-			Pair<Integer, Integer> lowestPriceInterval = priceIntervalProviderHelper.getLowestPriceInterval(loadPriceIntervals);
-			Pair<Integer, Integer> highestPriceInterval = priceIntervalProviderHelper.getHighestPriceInterval(dischargePriceIntervals);
+			final Pair<Integer, Integer> lowestPriceInterval = priceIntervalProviderHelper.getLowestPriceInterval(loadPriceIntervals);
+			final Pair<Integer, Integer> highestPriceInterval = priceIntervalProviderHelper.getHighestPriceInterval(dischargePriceIntervals);
 			return priceIntervalProviderHelper.getCargoBoundsWithCanalTrimming(lowestPriceInterval.getFirst(), lowestPriceInterval.getSecond(), highestPriceInterval.getFirst(),
 					highestPriceInterval.getSecond(), loadDuration, (int) sortedCanalTimes[canalsWeCanUse.get(0)][0]);
 		} else {
 			// we could go via canal but should we?
-			List<int[]> purchaseIntervals = priceIntervalProviderHelper.getIntervalsBoundsAndPrices(loadPriceIntervals);
-			List<int[]> salesIntervals = priceIntervalProviderHelper.getIntervalsBoundsAndPrices(dischargePriceIntervals);
+			final List<int[]> purchaseIntervals = priceIntervalProviderHelper.getIntervalsBoundsAndPrices(loadPriceIntervals);
+			final List<int[]> salesIntervals = priceIntervalProviderHelper.getIntervalsBoundsAndPrices(dischargePriceIntervals);
 			int bestPurchaseDetailsIdx = priceIntervalProviderHelper.getMinIndexOfPriceIntervalList(purchaseIntervals);
 			int bestSalesDetailsIdx = priceIntervalProviderHelper.getMaxIndexOfPriceIntervalList(salesIntervals);
 			if (priceIntervalProviderHelper.isFeasibleTravelTime(purchaseIntervals.get(bestPurchaseDetailsIdx), salesIntervals.get(bestSalesDetailsIdx), loadDuration, sortedCanalTimes[0][0])) {
@@ -322,15 +329,16 @@ public class TimeWindowsTrimming {
 						salesIntervals.get(bestSalesDetailsIdx)[0], salesIntervals.get(bestSalesDetailsIdx)[1], loadDuration, (int) sortedCanalTimes[0][0]);
 			} else {
 				// we are going to have to go via a canal. is it worth it?
-				int loadVolumeMMBTU = OptimiserUnitConvertor.convertToExternalVolume(load.getMaxLoadVolumeMMBTU());
-				int[] bestPurchaseDetails = purchaseIntervals.get(bestPurchaseDetailsIdx);
-				int[] bestSalesDetails = salesIntervals.get(bestSalesDetailsIdx);
+				final int loadVolumeMMBTU = OptimiserUnitConvertor.convertToExternalVolume(load.getMaxLoadVolumeMMBTU());
+				final int[] bestPurchaseDetails = purchaseIntervals.get(bestPurchaseDetailsIdx);
+				final int[] bestSalesDetails = salesIntervals.get(bestSalesDetailsIdx);
 				long[] bestCanalDetails = priceIntervalProviderHelper.getBestCanalDetails(bestPurchaseDetails, bestSalesDetails, loadDuration, sortedCanalTimes);
 				long bestMargin = salesIntervals.get(bestSalesDetailsIdx)[2] - purchaseIntervals.get(bestPurchaseDetailsIdx)[2] - (bestCanalDetails[1] / loadVolumeMMBTU);
 				for (int purchaseIndex = bestPurchaseDetailsIdx; purchaseIndex >= 0; purchaseIndex--) {
 					for (int salesIndex = bestSalesDetailsIdx; salesIndex < salesIntervals.size(); salesIndex++) {
-						long[] newCanalDetails = priceIntervalProviderHelper.getBestCanalDetails(purchaseIntervals.get(purchaseIndex), salesIntervals.get(salesIndex), loadDuration, sortedCanalTimes);
-						long newMargin = salesIntervals.get(salesIndex)[2] - purchaseIntervals.get(purchaseIndex)[2] - (newCanalDetails[1] / loadVolumeMMBTU);
+						final long[] newCanalDetails = priceIntervalProviderHelper.getBestCanalDetails(purchaseIntervals.get(purchaseIndex), salesIntervals.get(salesIndex), loadDuration,
+								sortedCanalTimes);
+						final long newMargin = salesIntervals.get(salesIndex)[2] - purchaseIntervals.get(purchaseIndex)[2] - (newCanalDetails[1] / loadVolumeMMBTU);
 						if (newMargin > bestMargin) {
 							bestMargin = newMargin;
 							bestPurchaseDetailsIdx = purchaseIndex;
@@ -356,26 +364,26 @@ public class TimeWindowsTrimming {
 	 * @param dischargePriceIntervals
 	 * @return
 	 */
-	private int[] trimCargoTimeWindowsWithRouteOptimisationForInvertedCase(IPortTimeWindowsRecord portTimeWindowsRecord, IVessel vessel, ILoadOption load, IDischargeOption discharge,
-			List<int[]> loadPriceIntervals, List<int[]> dischargePriceIntervals) {
-		ITimeWindow loadTimeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
+	private int[] trimCargoTimeWindowsWithRouteOptimisationForInvertedCase(final IPortTimeWindowsRecord portTimeWindowsRecord, final IVessel vessel, final ILoadOption load,
+			final IDischargeOption discharge, final List<int[]> loadPriceIntervals, final List<int[]> dischargePriceIntervals) {
+		final ITimeWindow loadTimeWindow = portTimeWindowsRecord.getSlotFeasibleTimeWindow(load);
 		assert loadTimeWindow != null;
-		long[][] sortedCanalTimes = schedulingCanalDistanceProvider.getMinimumLadenTravelTimes(load.getPort(), discharge.getPort(), vessel, loadTimeWindow.getStart());
+		final long[][] sortedCanalTimes = schedulingCanalDistanceProvider.getMinimumLadenTravelTimes(load.getPort(), discharge.getPort(), vessel, loadTimeWindow.getStart());
 		assert sortedCanalTimes.length > 0;
-		int loadDuration = portTimeWindowsRecord.getSlotDuration(load);
-		int minTime = Math.max(priceIntervalProviderHelper.getMinimumPossibleTimeForCargoIntervals(loadPriceIntervals, dischargePriceIntervals) + loadDuration, loadDuration);
-		int maxTime = priceIntervalProviderHelper.getMaximumPossibleTimeForCargoIntervals(loadPriceIntervals, dischargePriceIntervals) + loadDuration;
-		List<Integer> canalsWeCanUse = schedulingCanalDistanceProvider.getFeasibleRoutes(sortedCanalTimes, minTime, maxTime);
+		final int loadDuration = portTimeWindowsRecord.getSlotDuration(load);
+		final int minTime = Math.max(priceIntervalProviderHelper.getMinimumPossibleTimeForCargoIntervals(loadPriceIntervals, dischargePriceIntervals) + loadDuration, loadDuration);
+		final int maxTime = priceIntervalProviderHelper.getMaximumPossibleTimeForCargoIntervals(loadPriceIntervals, dischargePriceIntervals) + loadDuration;
+		final List<Integer> canalsWeCanUse = schedulingCanalDistanceProvider.getFeasibleRoutes(sortedCanalTimes, minTime, maxTime);
 		if (canalsWeCanUse.size() == 1) {
 			// no options
-			Pair<Integer, Integer> highestPriceInterval = priceIntervalProviderHelper.getHighestPriceInterval(loadPriceIntervals);
-			Pair<Integer, Integer> lowestPriceInterval = priceIntervalProviderHelper.getLowestPriceInterval(dischargePriceIntervals);
+			final Pair<Integer, Integer> highestPriceInterval = priceIntervalProviderHelper.getHighestPriceInterval(loadPriceIntervals);
+			final Pair<Integer, Integer> lowestPriceInterval = priceIntervalProviderHelper.getLowestPriceInterval(dischargePriceIntervals);
 			return priceIntervalProviderHelper.getCargoBoundsWithCanalTrimming(highestPriceInterval.getFirst(), highestPriceInterval.getSecond(), lowestPriceInterval.getFirst(),
 					lowestPriceInterval.getSecond(), loadDuration, (int) sortedCanalTimes[0][0]);
 		} else {
 			// we could go via canal but should we?
-			List<int[]> purchaseIntervals = priceIntervalProviderHelper.getIntervalsBoundsAndPrices(loadPriceIntervals); // discharge prices!!
-			List<int[]> salesIntervals = priceIntervalProviderHelper.getIntervalsBoundsAndPrices(dischargePriceIntervals); // load prices!!
+			final List<int[]> purchaseIntervals = priceIntervalProviderHelper.getIntervalsBoundsAndPrices(loadPriceIntervals); // discharge prices!!
+			final List<int[]> salesIntervals = priceIntervalProviderHelper.getIntervalsBoundsAndPrices(dischargePriceIntervals); // load prices!!
 			int bestPurchaseDetailsIdx = priceIntervalProviderHelper.getMaxIndexOfPriceIntervalList(purchaseIntervals);
 			int bestSalesDetailsIdx = priceIntervalProviderHelper.getMinIndexOfPriceIntervalList(salesIntervals);
 			if (priceIntervalProviderHelper.isFeasibleTravelTime(purchaseIntervals.get(bestPurchaseDetailsIdx), salesIntervals.get(bestSalesDetailsIdx), loadDuration, sortedCanalTimes[0][0])) {
@@ -384,16 +392,16 @@ public class TimeWindowsTrimming {
 						salesIntervals.get(bestSalesDetailsIdx)[0], salesIntervals.get(bestSalesDetailsIdx)[1], loadDuration, (int) sortedCanalTimes[0][0]);
 			} else {
 				// we are going to have to go via a canal. is it worth it?
-				int loadVolumeMMBTU = OptimiserUnitConvertor.convertToExternalVolume(load.getMaxLoadVolumeMMBTU());
-				int[] bestPurchaseDetails = purchaseIntervals.get(bestPurchaseDetailsIdx);
-				int[] bestSalesDetails = salesIntervals.get(bestSalesDetailsIdx);
+				final int loadVolumeMMBTU = OptimiserUnitConvertor.convertToExternalVolume(load.getMaxLoadVolumeMMBTU());
+				final int[] bestPurchaseDetails = purchaseIntervals.get(bestPurchaseDetailsIdx);
+				final int[] bestSalesDetails = salesIntervals.get(bestSalesDetailsIdx);
 				long[] bestCanalDetails = schedulingCanalDistanceProvider.getBestCanalDetails(sortedCanalTimes, bestSalesDetails[1] - bestPurchaseDetails[0] + loadDuration);
 				long bestMargin = purchaseIntervals.get(bestPurchaseDetailsIdx)[2] - salesIntervals.get(bestSalesDetailsIdx)[2] - (bestCanalDetails[1] / loadVolumeMMBTU);
 				for (int purchaseIndex = bestPurchaseDetailsIdx; purchaseIndex >= 0; purchaseIndex--) {
 					for (int salesIndex = bestSalesDetailsIdx; salesIndex < salesIntervals.size(); salesIndex++) {
-						long[] newCanalDetails = schedulingCanalDistanceProvider.getBestCanalDetails(sortedCanalTimes,
+						final long[] newCanalDetails = schedulingCanalDistanceProvider.getBestCanalDetails(sortedCanalTimes,
 								salesIntervals.get(salesIndex)[1] - purchaseIntervals.get(purchaseIndex)[0] + loadDuration);
-						long newMargin = purchaseIntervals.get(purchaseIndex)[2] - salesIntervals.get(salesIndex)[2] - (newCanalDetails[1] / loadVolumeMMBTU);
+						final long newMargin = purchaseIntervals.get(purchaseIndex)[2] - salesIntervals.get(salesIndex)[2] - (newCanalDetails[1] / loadVolumeMMBTU);
 						if (newMargin > bestMargin) {
 							bestMargin = newMargin;
 							bestPurchaseDetailsIdx = purchaseIndex;
@@ -418,11 +426,11 @@ public class TimeWindowsTrimming {
 	 * @param dischargeIntervals
 	 * @param switched
 	 */
-	private void trimLoadAndDischargeWindowsWithRouteChoice(IPortTimeWindowsRecord portTimeWindowRecord, ILoadOption load, IDischargeOption discharge, List<int[]> loadIntervals,
-			List<int[]> dischargeIntervals, boolean switched) {
-		IResource resource = portTimeWindowRecord.getResource();
+	private void trimLoadAndDischargeWindowsWithRouteChoice(final IPortTimeWindowsRecord portTimeWindowRecord, final ILoadOption load, final IDischargeOption discharge,
+			final List<int[]> loadIntervals, final List<int[]> dischargeIntervals, final boolean switched) {
+		final IResource resource = portTimeWindowRecord.getResource();
 		assert resource != null;
-		IVessel vessel = priceIntervalProviderHelper.getVessel(resource);
+		final IVessel vessel = priceIntervalProviderHelper.getVessel(resource);
 		assert vessel != null;
 		int[] bounds;
 		if (switched) {
@@ -435,70 +443,70 @@ public class TimeWindowsTrimming {
 	}
 
 	@NonNull
-	private List<int[]> getLoadPriceIntervalsIndependentOfDischarge(IPortTimeWindowsRecord portTimeWindowRecord, ILoadOption load) {
-		ITimeWindow loadTimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(load);
+	private List<int[]> getLoadPriceIntervalsIndependentOfDischarge(final IPortTimeWindowsRecord portTimeWindowRecord, final ILoadOption load) {
+		final ITimeWindow loadTimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(load);
 		return priceIntervalProviderHelper.getFeasibleIntervalSubSet(loadTimeWindow.getStart(), loadTimeWindow.getEnd(),
 				priceIntervalProducer.getLoadIntervalsIndependentOfDischarge(load, portTimeWindowRecord));
 	}
 
 	@NonNull
-	private List<int[]> getDischargePriceIntervalsIndependentOfLoad(IPortTimeWindowsRecord portTimeWindowRecord, IDischargeOption discharge) {
-		ITimeWindow dischargeTimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(discharge);
+	private List<int[]> getDischargePriceIntervalsIndependentOfLoad(final IPortTimeWindowsRecord portTimeWindowRecord, final IDischargeOption discharge) {
+		final ITimeWindow dischargeTimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(discharge);
 		return priceIntervalProviderHelper.getFeasibleIntervalSubSet(dischargeTimeWindow.getStart(), dischargeTimeWindow.getEnd(),
 				priceIntervalProducer.getDischargeWindowIndependentOfLoad(discharge, portTimeWindowRecord));
 	}
 
-	private void trimLoadWindowIndependentOfDischarge(IPortTimeWindowsRecord portTimeWindowRecord, ILoadOption load) {
-		Pair<Integer, Integer> bounds = priceIntervalProviderHelper.getLowestPriceInterval(getLoadPriceIntervalsIndependentOfDischarge(portTimeWindowRecord, load));
-		int start = bounds.getFirst();
-		int end = bounds.getSecond();
+	private void trimLoadWindowIndependentOfDischarge(final IPortTimeWindowsRecord portTimeWindowRecord, final ILoadOption load) {
+		final Pair<Integer, Integer> bounds = priceIntervalProviderHelper.getLowestPriceInterval(getLoadPriceIntervalsIndependentOfDischarge(portTimeWindowRecord, load));
+		final int start = bounds.getFirst();
+		final int end = bounds.getSecond();
 		priceIntervalProviderHelper.createAndSetTimeWindow(portTimeWindowRecord, load, start, end);
 	}
 
 	@NonNull
-	private List<int[]> getLoadPriceIntervalsBasedOnDischarge(IPortTimeWindowsRecord portTimeWindowRecord, ILoadOption load) {
-		ITimeWindow loadTimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(load);
+	private List<int[]> getLoadPriceIntervalsBasedOnDischarge(final IPortTimeWindowsRecord portTimeWindowRecord, final ILoadOption load) {
+		final ITimeWindow loadTimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(load);
 		return priceIntervalProviderHelper.getFeasibleIntervalSubSet(loadTimeWindow.getStart(), loadTimeWindow.getEnd(),
 				priceIntervalProducer.getLoadIntervalsBasedOnDischarge(load, portTimeWindowRecord));
 	}
 
-	private void trimLoadWindowBasedOnDischarge(IPortTimeWindowsRecord portTimeWindowRecord, ILoadOption load, IDischargeOption discharge) {
-		Pair<Integer, Integer> bounds = priceIntervalProviderHelper.getHighestPriceInterval(getLoadPriceIntervalsBasedOnDischarge(portTimeWindowRecord, load));
-		int start = bounds.getFirst();
-		int end = bounds.getSecond();
+	private void trimLoadWindowBasedOnDischarge(final IPortTimeWindowsRecord portTimeWindowRecord, final ILoadOption load, final IDischargeOption discharge) {
+		final Pair<Integer, Integer> bounds = priceIntervalProviderHelper.getHighestPriceInterval(getLoadPriceIntervalsBasedOnDischarge(portTimeWindowRecord, load));
+		final int start = bounds.getFirst();
+		final int end = bounds.getSecond();
 		priceIntervalProviderHelper.createAndSetTimeWindow(portTimeWindowRecord, load, start, end);
 	}
 
-	private void trimDischargeWindowIndependentOfLoad(IPortTimeWindowsRecord portTimeWindowRecord, IDischargeOption discharge) {
-		Pair<Integer, Integer> bounds = priceIntervalProviderHelper.getHighestPriceInterval(getDischargePriceIntervalsIndependentOfLoad(portTimeWindowRecord, discharge));
-		int start = bounds.getFirst();
-		int end = bounds.getSecond();
+	private void trimDischargeWindowIndependentOfLoad(final IPortTimeWindowsRecord portTimeWindowRecord, final IDischargeOption discharge) {
+		final Pair<Integer, Integer> bounds = priceIntervalProviderHelper.getHighestPriceInterval(getDischargePriceIntervalsIndependentOfLoad(portTimeWindowRecord, discharge));
+		final int start = bounds.getFirst();
+		final int end = bounds.getSecond();
 		priceIntervalProviderHelper.createAndSetTimeWindow(portTimeWindowRecord, discharge, start, end);
 	}
 
 	@NonNull
-	private List<int[]> getDischargePriceIntervalsBasedOnLoad(IPortTimeWindowsRecord portTimeWindowRecord, IDischargeOption discharge) {
-		ITimeWindow dischargeTimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(discharge);
+	private List<int[]> getDischargePriceIntervalsBasedOnLoad(final IPortTimeWindowsRecord portTimeWindowRecord, final IDischargeOption discharge) {
+		final ITimeWindow dischargeTimeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(discharge);
 		return priceIntervalProviderHelper.getFeasibleIntervalSubSet(dischargeTimeWindow.getStart(), dischargeTimeWindow.getEnd(),
 				priceIntervalProducer.getDischargeWindowBasedOnLoad(discharge, portTimeWindowRecord));
 	}
 
-	private void trimDischargeWindowBasedOnLoad(IPortTimeWindowsRecord portTimeWindowRecord, ILoadOption load, IDischargeOption discharge) {
-		ITimeWindow timeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(discharge);
-		Pair<Integer, Integer> bounds = priceIntervalProviderHelper.getLowestPriceInterval(priceIntervalProviderHelper.getFeasibleIntervalSubSet(timeWindow.getStart(), timeWindow.getEnd(),
+	private void trimDischargeWindowBasedOnLoad(final IPortTimeWindowsRecord portTimeWindowRecord, final ILoadOption load, final IDischargeOption discharge) {
+		final ITimeWindow timeWindow = portTimeWindowRecord.getSlotFeasibleTimeWindow(discharge);
+		final Pair<Integer, Integer> bounds = priceIntervalProviderHelper.getLowestPriceInterval(priceIntervalProviderHelper.getFeasibleIntervalSubSet(timeWindow.getStart(), timeWindow.getEnd(),
 				priceIntervalProducer.getDischargeWindowBasedOnLoad(discharge, portTimeWindowRecord)));
-		int start = bounds.getFirst();
-		int end = bounds.getSecond();
+		final int start = bounds.getFirst();
+		final int end = bounds.getSecond();
 		priceIntervalProviderHelper.createAndSetTimeWindow(portTimeWindowRecord, discharge, start, end);
 	}
 
-	private void loadOrDischargeDeterminesBothPricingEvents(ILoadOption load, IDischargeOption discharge, IPriceIntervalProvider loadPriceIntervalProvider,
-			IPriceIntervalProvider dischargePriceIntervalProvider, IPortTimeWindowsRecord portTimeWindowRecord, boolean dateFromLoad) {
-		List<int[]> complexPricingIntervals = priceIntervalProviderHelper.getComplexPriceIntervals(load, discharge, loadPriceIntervalProvider, dischargePriceIntervalProvider, portTimeWindowRecord,
-				dateFromLoad);
-		Pair<Integer, Integer> bounds = priceIntervalProviderHelper.getHighestPriceInterval(complexPricingIntervals);
-		int start = bounds.getFirst();
-		int end = bounds.getSecond();
+	private void loadOrDischargeDeterminesBothPricingEvents(final ILoadOption load, final IDischargeOption discharge, final IPriceIntervalProvider loadPriceIntervalProvider,
+			final IPriceIntervalProvider dischargePriceIntervalProvider, final IPortTimeWindowsRecord portTimeWindowRecord, final boolean dateFromLoad) {
+		final List<int[]> complexPricingIntervals = priceIntervalProviderHelper.getComplexPriceIntervals(load, discharge, loadPriceIntervalProvider, dischargePriceIntervalProvider,
+				portTimeWindowRecord, dateFromLoad);
+		final Pair<Integer, Integer> bounds = priceIntervalProviderHelper.getHighestPriceInterval(complexPricingIntervals);
+		final int start = bounds.getFirst();
+		final int end = bounds.getSecond();
 		if (dateFromLoad) {
 			priceIntervalProviderHelper.createAndSetTimeWindow(portTimeWindowRecord, load, start, end);
 		} else {

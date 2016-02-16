@@ -6,9 +6,6 @@ package com.mmxlabs.scheduler.optimiser.contracts;
 
 import java.util.List;
 
-import com.mmxlabs.common.Pair;
-import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
-import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 
