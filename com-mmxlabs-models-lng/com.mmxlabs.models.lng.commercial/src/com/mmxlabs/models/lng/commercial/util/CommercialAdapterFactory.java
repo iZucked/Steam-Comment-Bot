@@ -4,10 +4,12 @@
  */
 package com.mmxlabs.models.lng.commercial.util;
 
+import com.mmxlabs.models.lng.commercial.*;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
@@ -82,8 +84,8 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected CommercialSwitch<Adapter> modelSwitch =
-		new CommercialSwitch<Adapter>() {
+	protected CommercialSwitch<@Nullable Adapter> modelSwitch =
+		new CommercialSwitch<@Nullable Adapter>() {
 			@Override
 			public Adapter caseCommercialModel(CommercialModel object) {
 				return createCommercialModelAdapter();

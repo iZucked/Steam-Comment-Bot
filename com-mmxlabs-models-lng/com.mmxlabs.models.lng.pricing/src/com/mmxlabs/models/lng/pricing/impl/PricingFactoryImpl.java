@@ -145,56 +145,6 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public RouteCost createRouteCost() {
-		RouteCostImpl routeCost = new RouteCostImpl();
-		return routeCost;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public BaseFuelCost createBaseFuelCost() {
-		BaseFuelCostImpl baseFuelCost = new BaseFuelCostImpl();
-		return baseFuelCost;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public PortCost createPortCost() {
-		PortCostImpl portCost = new PortCostImpl();
-		return portCost;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public PortCostEntry createPortCostEntry() {
-		PortCostEntryImpl portCostEntry = new PortCostEntryImpl();
-		return portCostEntry;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public CooldownPrice createCooldownPrice() {
-		CooldownPriceImpl cooldownPrice = new CooldownPriceImpl();
-		return cooldownPrice;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public CommodityIndex createCommodityIndex() {
 		CommodityIndexImpl commodityIndex = new CommodityIndexImpl();
 		return commodityIndex;
@@ -238,6 +188,56 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	public CostModel createCostModel() {
 		CostModelImpl costModel = new CostModelImpl();
 		return costModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public RouteCost createRouteCost() {
+		RouteCostImpl routeCost = new RouteCostImpl();
+		return routeCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BaseFuelCost createBaseFuelCost() {
+		BaseFuelCostImpl baseFuelCost = new BaseFuelCostImpl();
+		return baseFuelCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PortCost createPortCost() {
+		PortCostImpl portCost = new PortCostImpl();
+		return portCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PortCostEntry createPortCostEntry() {
+		PortCostEntryImpl portCostEntry = new PortCostEntryImpl();
+		return portCostEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CooldownPrice createCooldownPrice() {
+		CooldownPriceImpl cooldownPrice = new CooldownPriceImpl();
+		return cooldownPrice;
 	}
 
 	/**

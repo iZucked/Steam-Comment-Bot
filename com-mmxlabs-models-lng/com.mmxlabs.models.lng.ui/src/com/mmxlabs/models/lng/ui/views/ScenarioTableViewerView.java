@@ -8,9 +8,11 @@ import java.util.EventObject;
 
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
+import org.eclipse.emf.common.ui.ViewerPane;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.ui.action.RedoAction;
 import org.eclipse.emf.edit.ui.action.UndoAction;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.ISelection;
@@ -34,7 +36,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  */
 public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane> extends ScenarioInstanceView implements CommandStackListener {
 	private Composite childComposite;
-	private T viewerPane;
+	private @Nullable T viewerPane;
 	private UndoAction undoAction;
 	private RedoAction redoAction;
 	private CommandStack currentCommandStack;
@@ -69,9 +71,12 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 		// Clear existing settings
 		updateActions(null);
 		if (instance != getScenarioInstance()) {
-			if (viewerPane != null) {
+			// Pin the reference
+			@Nullable
+			final T nViewerPane = viewerPane;
+			if (nViewerPane != null) {
 				getSite().setSelectionProvider(null);
-				viewerPane.dispose();
+				nViewerPane.dispose();
 				viewerPane = null;
 			}
 
@@ -82,12 +87,14 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 
 			super.displayScenarioInstance(instance);
 			if (instance != null) {
-				viewerPane = createViewerPane();
-				viewerPane.setExternalMenuManager((MenuManager) getViewSite().getActionBars().getMenuManager());
-				viewerPane.setExternalToolBarManager((ToolBarManager) getViewSite().getActionBars().getToolBarManager());
-				viewerPane.createControl(childComposite);
-				viewerPane.setLocked(isLocked());
-				initViewerPane(viewerPane);
+				// Pin the reference
+				final T pViewerPane = createViewerPane();
+				pViewerPane.setExternalMenuManager((MenuManager) getViewSite().getActionBars().getMenuManager());
+				pViewerPane.setExternalToolBarManager((ToolBarManager) getViewSite().getActionBars().getToolBarManager());
+				pViewerPane.createControl(childComposite);
+				pViewerPane.setLocked(isLocked());
+				this.viewerPane = pViewerPane;
+				initViewerPane(pViewerPane);
 			}
 			parent.layout(true);
 

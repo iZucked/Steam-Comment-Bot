@@ -10,6 +10,7 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.actuals.ActualsModel;
 import com.mmxlabs.models.lng.actuals.ActualsPackage;
@@ -74,8 +75,8 @@ public class ActualsAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ActualsSwitch<Adapter> modelSwitch =
-		new ActualsSwitch<Adapter>() {
+	protected ActualsSwitch<@Nullable Adapter> modelSwitch =
+		new ActualsSwitch<@Nullable Adapter>() {
 			@Override
 			public Adapter caseActualsModel(ActualsModel object) {
 				return createActualsModelAdapter();

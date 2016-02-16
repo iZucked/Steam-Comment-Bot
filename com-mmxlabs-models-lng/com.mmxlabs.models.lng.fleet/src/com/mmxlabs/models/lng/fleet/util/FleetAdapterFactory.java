@@ -4,10 +4,12 @@
  */
 package com.mmxlabs.models.lng.fleet.util;
 
+import com.mmxlabs.models.lng.fleet.*;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -79,8 +81,8 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected FleetSwitch<Adapter> modelSwitch =
-		new FleetSwitch<Adapter>() {
+	protected FleetSwitch<@Nullable Adapter> modelSwitch =
+		new FleetSwitch<@Nullable Adapter>() {
 			@Override
 			public Adapter caseFleetModel(FleetModel object) {
 				return createFleetModelAdapter();

@@ -44,7 +44,7 @@ public class ScheduleModelKPIUtils {
 	public static final int LATENESS_WTH_FLEX_IDX = 1;
 	private static final int LATENESS_COMPONENT_COUNT = 2;
 
-	public static @NonNull long[] getScheduleProfitAndLossSplit(@NonNull final Schedule schedule) {
+	public static long @NonNull [] getScheduleProfitAndLossSplit(@NonNull final Schedule schedule) {
 
 		long totalTradingPNL = 0L;
 		long totalShippingPNL = 0L;
