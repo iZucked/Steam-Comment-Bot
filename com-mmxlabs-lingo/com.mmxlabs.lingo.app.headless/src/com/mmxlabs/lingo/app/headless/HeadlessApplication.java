@@ -35,6 +35,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -164,7 +165,7 @@ public class HeadlessApplication implements IApplication {
 
 		// Create logging module
 		final int no_threads = getNumThreads(headlessParameters);
-		final ExecutorService executorService = Executors.newFixedThreadPool(no_threads);
+		final @NonNull ExecutorService executorService = Executors.newFixedThreadPool(no_threads);
 		try {
 
 			final AbstractRunnerHook runnerHook = new AbstractRunnerHook() {
@@ -206,7 +207,7 @@ public class HeadlessApplication implements IApplication {
 					return null;
 				}
 
-				private void save(final ISequences rawSequences, final String type) {
+				private void save(final @NonNull ISequences rawSequences, final @NonNull String type) {
 					try {
 						final String suffix = instance.getName() + "." + type + ".sequences";
 						final File file2 = new File("/home/ubuntu/scenarios/" + suffix);
@@ -220,7 +221,8 @@ public class HeadlessApplication implements IApplication {
 					}
 				}
 
-				private ISequences load(final String type) {
+				@Nullable
+				private ISequences load(final @NonNull String type) {
 					try {
 						final String suffix = instance.getName() + "." + type + ".sequences";
 						final File file2 = new File("/home/ubuntu/scenarios/" + suffix);
@@ -244,20 +246,21 @@ public class HeadlessApplication implements IApplication {
 			// FIXME: Replace with an IParameterMode thing
 			final IOptimiserInjectorService localOverrides = new IOptimiserInjectorService() {
 				@Override
-				public Module requestModule(@NonNull final ModuleType moduleType, @NonNull final Collection<String> hints) {
+				public Module requestModule(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
 					return null;
 				}
 
 				@Override
-				public List<Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<String> hints) {
+				@Nullable
+				public List<@NonNull Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
 					if (moduleType == ModuleType.Module_EvaluationParametersModule) {
-						return Collections.<Module> singletonList(new EvaluationSettingsOverrideModule(overrideSettings));
+						return Collections.<@NonNull Module> singletonList(new EvaluationSettingsOverrideModule(overrideSettings));
 					}
 					if (moduleType == ModuleType.Module_OptimisationParametersModule) {
-						return Collections.<Module> singletonList(new OptimisationSettingsOverrideModule(overrideSettings));
+						return Collections.<@NonNull Module> singletonList(new OptimisationSettingsOverrideModule(overrideSettings));
 					}
 					if (moduleType == ModuleType.Module_Optimisation) {
-						return Collections.<Module> singletonList(createLoggingModule(phaseToLoggerMap, actionSetLogger, runnerHook));
+						return Collections.<@NonNull Module> singletonList(createLoggingModule(phaseToLoggerMap, actionSetLogger, runnerHook));
 					}
 					return null;
 				}
@@ -321,6 +324,7 @@ public class HeadlessApplication implements IApplication {
 		return Math.min(processorsFromParams, recommended);
 	}
 
+	@NonNull
 	private Module createLoggingModule(Map<String, LSOLogger> phaseToLoggerMap, ActionSetLogger actionSetLogger, AbstractRunnerHook runnerHook) {
 		final LoggingModule loggingModule = new LoggingModule(phaseToLoggerMap, actionSetLogger, runnerHook, 10_000);
 		return loggingModule;

@@ -127,7 +127,7 @@ public class LNGScenarioRunnerCreator {
 	@NonNull
 	public static LNGScenarioRunner createScenarioRunnerForEvaluation(@NonNull final LNGScenarioModel originalScenario, @NonNull final OptimiserSettings settings) {
 
-		final ExecutorService executorService = Executors.newSingleThreadExecutor();
+		final @NonNull ExecutorService executorService = Executors.newSingleThreadExecutor();
 		try {
 			final LNGScenarioRunner originalScenarioRunner = new LNGScenarioRunner(executorService, originalScenario, null, settings, LNGSchedulerJobUtils.createLocalEditingDomain(), null,
 					createITSService(), null, true);
@@ -239,14 +239,16 @@ public class LNGScenarioRunnerCreator {
 		return new IOptimiserInjectorService() {
 
 			@Override
-			public Module requestModule(@NonNull final ModuleType moduleType, @NonNull final Collection<String> hints) {
+			@Nullable
+			public Module requestModule(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
 				return null;
 			}
 
 			@Override
-			public List<Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<String> hints) {
+			@Nullable
+			public List<@NonNull Module> requestModuleOverrides(@NonNull final ModuleType moduleType, @NonNull final Collection<@NonNull String> hints) {
 				if (moduleType == ModuleType.Module_EvaluationParametersModule) {
-					return Collections.<Module> singletonList(new AbstractModule() {
+					return Collections.<@NonNull Module> singletonList(new AbstractModule() {
 
 						@Override
 						protected void configure() {
