@@ -196,7 +196,11 @@ public class ColourSchemeUtil {
 		if (slot instanceof LoadSlot) {
 			return ((LoadSlot) slot).isDESPurchase();
 		} else {
-			return visit.getSlotAllocation().getCargoAllocation().getInputCargo().getCargoType() == CargoType.DES;
+			Cargo inputCargo = visit.getSlotAllocation().getCargoAllocation().getInputCargo();
+			if (inputCargo != null) {
+				return inputCargo.getCargoType() == CargoType.DES;
+			}
 		}
+		return false;
 	}
 }
