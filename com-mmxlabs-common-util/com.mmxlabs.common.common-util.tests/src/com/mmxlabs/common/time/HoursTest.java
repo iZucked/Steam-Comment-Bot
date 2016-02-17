@@ -13,7 +13,6 @@ import java.time.ZonedDateTime;
 import org.junit.Assert;
 import org.junit.Test;
 
-@SuppressWarnings("null")
 public class HoursTest {
 
 	@Test
