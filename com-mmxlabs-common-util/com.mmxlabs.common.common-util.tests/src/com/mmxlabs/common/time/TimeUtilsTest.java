@@ -12,8 +12,6 @@ import org.junit.Test;
 
 import com.mmxlabs.common.NonNullPair;
 
-import ch.qos.logback.classic.turbo.TurboFilter;
-
 public class TimeUtilsTest {
 
 	@Test
