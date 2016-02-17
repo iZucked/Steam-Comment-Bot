@@ -5,6 +5,7 @@
 package com.mmxlabs.models.ui.editorpart;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.rcp.common.editors.IReasonProvider;
 
@@ -18,7 +19,12 @@ public class SimpleReasonProvider implements IReasonProvider {
 
 	@Override
 	public String getTitle() {
-		return throwable.getMessage();
+		@Nullable
+		String message = throwable.getMessage();
+		if (message == null) {
+			return "";
+		}
+		return message;
 	}
 
 	@Override
