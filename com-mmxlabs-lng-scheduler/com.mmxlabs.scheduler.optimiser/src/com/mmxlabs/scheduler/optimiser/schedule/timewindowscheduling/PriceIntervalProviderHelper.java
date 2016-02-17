@@ -15,6 +15,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
+import com.mmxlabs.common.NonNullPair;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.curves.ICurve;
@@ -60,13 +61,13 @@ public class PriceIntervalProviderHelper {
 	/**
 	 * Compares price intervals based on price
 	 */
-	private static final class PriceIntervalsComparator implements Comparator<int[]> {
+	private static final class PriceIntervalsComparator implements Comparator<IntervalData> {
 		@Override
-		public int compare(final int[] o1, final int[] o2) {
+		public int compare(final IntervalData o1, final IntervalData o2) {
 			if (o1 == null || o2 == null) {
 				return 0;
 			} else {
-				return Integer.compare(o1[2], o2[2]);
+				return Integer.compare(o1.price, o2.price);
 			}
 		}
 	}
@@ -214,9 +215,9 @@ public class PriceIntervalProviderHelper {
 		return new int[] { purchase, discharge };
 	}
 
-	boolean isFeasibleTravelTime(@NonNull final int[] purchase, @NonNull final int[] sales, final int loadDuration, final long time) {
-		final long minArrivalTime = purchase[0] + time + loadDuration;
-		if (minArrivalTime <= sales[1]) {
+	boolean isFeasibleTravelTime(@NonNull final IntervalData purchase, @NonNull final IntervalData sales, final int loadDuration, final long time) {
+		final long minArrivalTime = purchase.start + time + loadDuration;
+		if (minArrivalTime <= sales.end) {
 			return true;
 		} else {
 			return false;
@@ -224,29 +225,29 @@ public class PriceIntervalProviderHelper {
 	}
 
 	@NonNull
-	public long[] getBestCanalDetails(@NonNull final int[] purchase, @NonNull final int[] sales, final int loadDuration, @NonNull final long[][] sortedCanalTimes) {
-		for (final long[] canal : sortedCanalTimes) {
-			if (isFeasibleTravelTime(purchase, sales, loadDuration, canal[0])) {
+	public LadenRouteData getBestCanalDetails(@NonNull final IntervalData purchase, @NonNull final IntervalData sales, final int loadDuration, @NonNull final LadenRouteData[] sortedCanalTimes) {
+		for (final LadenRouteData canal : sortedCanalTimes) {
+			if (isFeasibleTravelTime(purchase, sales, loadDuration, canal.ladenMaxSpeed)) {
 				return canal;
 			}
 		}
 		return sortedCanalTimes[sortedCanalTimes.length - 1];
 	}
 
-	public long[] getBestCanalDetailsWithBoiloff(@NonNull final int[] purchase, @NonNull final int[] sales, final int loadDuration, final int salesPrice, @NonNull final long[][] sortedCanalTimes,
+	public NonNullPair<LadenRouteData, Long> getBestCanalDetailsWithBoiloff(@NonNull final IntervalData purchase, @NonNull final IntervalData sales, final int loadDuration, final int salesPrice, @NonNull final LadenRouteData[] sortedCanalTimes,
 			final long boiloffRateM3, final int cv, final int loadVolumeMMBTU) {
 
 		assert sortedCanalTimes.length > 0;
 		long bestMargin = Long.MAX_VALUE;
 		long bestBoiloffCostMMBTU = Long.MIN_VALUE;
-		long[] bestCanal = null;
-		for (final long[] canal : sortedCanalTimes) {
-			if (isFeasibleTravelTime(purchase, sales, loadDuration, canal[0])) {
+		LadenRouteData bestCanal = null;
+		for (final LadenRouteData canal : sortedCanalTimes) {
+			if (isFeasibleTravelTime(purchase, sales, loadDuration, canal.ladenMaxSpeed)) {
 				final long boiloffMMBTU = Calculator
-						.convertM3ToMMBTu(((getMinDischargeGivenCanal(purchase[0], sales[0], loadDuration, (int) canal[0]) - purchase[0] - loadDuration) / 24) * boiloffRateM3, cv);
-				final long boiloffCost = Calculator.costFromVolume(boiloffMMBTU, sales[2]);
+						.convertM3ToMMBTu(((getMinDischargeGivenCanal(purchase.start, sales.start, loadDuration, (int) canal.ladenMaxSpeed) - purchase.start - loadDuration) / 24) * boiloffRateM3, cv);
+				final long boiloffCost = Calculator.costFromVolume(boiloffMMBTU, sales.price);
 				final long boiloffCostMMBTU = OptimiserUnitConvertor.convertToInternalDailyCost(boiloffCost);
-				final long cost = canal[1] + boiloffCostMMBTU;
+				final long cost = canal.ladenRouteCost + boiloffCostMMBTU;
 				if (cost < bestMargin) {
 					bestMargin = cost;
 					bestCanal = canal;
@@ -255,14 +256,17 @@ public class PriceIntervalProviderHelper {
 			}
 		}
 		assert bestCanal != null;
-		return new long[] { bestCanal[0], bestCanal[2], bestCanal[1], bestBoiloffCostMMBTU }; // TODO: this ordering is stupid now!
+		return new NonNullPair<> (bestCanal, bestBoiloffCostMMBTU);
 	}
 
-	int getMinIndexOfPriceIntervalList(final List<int[]> list) {
-		return getMinIndex(list, priceIntervalComparator);
+	int getMinIndexOfPriceIntervalList(final IntervalData[] purchaseIntervals) {
+		return getMinIndex(purchaseIntervals, priceIntervalComparator);
 	}
 
 	private static <T> int getMinIndex(final List<? extends T> coll, final Comparator<? super T> comp) {
+		if (coll.isEmpty()) {
+			return -1;
+		}
 		int i = 0;
 		int bestIdx = 0;
 		T bestObj = coll.get(0);
@@ -276,14 +280,51 @@ public class PriceIntervalProviderHelper {
 		return bestIdx;
 	}
 
-	int getMaxIndexOfPriceIntervalList(final List<int[]> list) {
-		return getMaxIndex(list, priceIntervalComparator);
+	private static <T> int getMinIndex(final T[] coll, final Comparator<? super T> comp) {
+		if (coll.length == 0) {
+			return -1;
+		}
+		int i = 0;
+		int bestIdx = 0;
+		T bestObj = coll[0];
+		for (final T o : coll) {
+			if (comp.compare(o, bestObj) == -1) {
+				bestObj = o;
+				bestIdx = i;
+			}
+			i++;
+		}
+		return bestIdx;
+	}
+
+	int getMaxIndexOfPriceIntervalList(final IntervalData[] salesIntervals) {
+		return getMaxIndex(salesIntervals, priceIntervalComparator);
 	}
 
 	private static <T> int getMaxIndex(final List<? extends T> coll, final Comparator<? super T> comp) {
+		if (coll.isEmpty()) {
+			return -1;
+		}
 		int i = 0;
 		int bestIdx = 0;
 		T bestObj = coll.get(0);
+		for (final T o : coll) {
+			if (comp.compare(o, bestObj) == 1) {
+				bestObj = o;
+				bestIdx = i;
+			}
+			i++;
+		}
+		return bestIdx;
+	}
+
+	private static <T> int getMaxIndex(final T[] coll, final Comparator<? super T> comp) {
+		if (coll.length == 0) {
+			return -1;
+		}
+		int i = 0;
+		int bestIdx = 0;
+		T bestObj = coll[0];
 		for (final T o : coll) {
 			if (comp.compare(o, bestObj) == 1) {
 				bestObj = o;
@@ -729,10 +770,10 @@ public class PriceIntervalProviderHelper {
 	 * @return
 	 */
 	@NonNull
-	public List<int[]> getIntervalsBoundsAndPrices(final List<int[]> intervals) {
-		final List<int[]> sortedIntervals = new LinkedList<>();
+	public IntervalData[] getIntervalsBoundsAndPrices(final List<int[]> intervals) {
+		final IntervalData[] sortedIntervals = new IntervalData[intervals.size() - 1];
 		for (int i = 0; i < intervals.size() - 1; i++) {
-			sortedIntervals.add(new int[] { intervals.get(i)[0], intervals.get(i + 1)[0], intervals.get(i)[1] });
+			sortedIntervals[i] = new IntervalData(intervals.get(i)[0], intervals.get(i + 1)[0], intervals.get(i)[1]);
 		}
 		return sortedIntervals;
 	}

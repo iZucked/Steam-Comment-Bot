@@ -18,6 +18,10 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
  *
  */
 public interface ITimeWindowSchedulingCanalDistanceProvider {
+	public static final int MINIMUM_LADEN_TRAVEL_TIMES_FASTEST_LADEN_TRAVEL_TIME = 0;
+	public static final int MINIMUM_LADEN_TRAVEL_TIMES_LADEN_ROUTE_COST = 1;
+	public static final int MINIMUM_LADEN_TRAVEL_TIMES_NBO_LADEN_TRAVEL_TIME = 2;
+	
 	/**
 	 * Provides the minimum travel time for a given load-discharge pair and vessel class
 	 * @param load
@@ -26,7 +30,7 @@ public interface ITimeWindowSchedulingCanalDistanceProvider {
 	 * @return
 	 */
 	@NonNull
-	public long[][] getMinimumLadenTravelTimes(IPort load, IPort discharge, IVessel vessel, int ladenStartTime);
+	public LadenRouteData[] getMinimumLadenTravelTimes(IPort load, IPort discharge, IVessel vessel, int ladenStartTime);
 
 	/**
 	 * Get feasible routes for min and max times
@@ -36,15 +40,15 @@ public interface ITimeWindowSchedulingCanalDistanceProvider {
 	 * @return
 	 */
 	@NonNull
-	public List<Integer> getFeasibleRoutes(long[][] sortedCanalTimes, int minTime, int maxTime);
+	public List<Integer> getFeasibleRoutes(LadenRouteData[] sortedCanalTimes, int minTime, int maxTime);
 
 	/**
 	 * Get an array of the min time and cost of the best route we can take
-	 * @param times
+	 * @param sortedCanalTimes
 	 * @param maxTime
 	 * @return
 	 */
 	@NonNull
-	long[] getBestCanalDetails(long[][] times, int maxTime);
+	LadenRouteData getBestCanalDetails(LadenRouteData[] sortedCanalTimes, int maxTime);
 	
 }
