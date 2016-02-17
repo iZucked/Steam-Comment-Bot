@@ -24,7 +24,7 @@ public class Triple<A, B, C> {
 	private C third;
 
 	public Triple() {
-		this(null, null, null);
+		this((A) null, (B) null, (C) null);
 	}
 
 	public Triple(final A first, final B second, final C third) {
