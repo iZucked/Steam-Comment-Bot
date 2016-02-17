@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.reports.views.standard;
 
-import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.LinkedList;
 import java.util.List;
