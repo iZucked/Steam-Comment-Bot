@@ -479,6 +479,7 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SimilaritySettings getSimilaritySettings() {
 		return similaritySettings;
 	}
@@ -503,6 +504,7 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSimilaritySettings(SimilaritySettings newSimilaritySettings) {
 		if (newSimilaritySettings != similaritySettings) {
 			NotificationChain msgs = null;
@@ -522,6 +524,7 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public IndividualSolutionImprovementSettings getSolutionImprovementSettings() {
 		return solutionImprovementSettings;
 	}
@@ -546,6 +549,7 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSolutionImprovementSettings(IndividualSolutionImprovementSettings newSolutionImprovementSettings) {
 		if (newSolutionImprovementSettings != solutionImprovementSettings) {
 			NotificationChain msgs = null;
@@ -565,6 +569,7 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isBuildActionSets() {
 		return buildActionSets;
 	}
@@ -574,6 +579,7 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBuildActionSets(boolean newBuildActionSets) {
 		boolean oldBuildActionSets = buildActionSets;
 		buildActionSets = newBuildActionSets;
@@ -586,6 +592,7 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ActionPlanSettings getActionPlanSettings() {
 		return actionPlanSettings;
 	}
@@ -610,6 +617,7 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setActionPlanSettings(ActionPlanSettings newActionPlanSettings) {
 		if (newActionPlanSettings != actionPlanSettings) {
 			NotificationChain msgs = null;

@@ -93,6 +93,7 @@ public class IndividualSolutionImprovementSettingsImpl extends EObjectImpl imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getIterations() {
 		return iterations;
 	}
@@ -102,6 +103,7 @@ public class IndividualSolutionImprovementSettingsImpl extends EObjectImpl imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setIterations(int newIterations) {
 		int oldIterations = iterations;
 		iterations = newIterations;
@@ -114,6 +116,7 @@ public class IndividualSolutionImprovementSettingsImpl extends EObjectImpl imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isImprovingSolutions() {
 		return improvingSolutions;
 	}
@@ -123,6 +126,7 @@ public class IndividualSolutionImprovementSettingsImpl extends EObjectImpl imple
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setImprovingSolutions(boolean newImprovingSolutions) {
 		boolean oldImprovingSolutions = improvingSolutions;
 		improvingSolutions = newImprovingSolutions;

@@ -199,6 +199,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getUserSettings() {
 		return userSettingsEClass;
 	}
@@ -208,6 +209,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUserSettings_PeriodStart() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(0);
 	}
@@ -217,6 +219,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUserSettings_PeriodEnd() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(1);
 	}
@@ -226,6 +229,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUserSettings_ShippingOnly() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(2);
 	}
@@ -235,6 +239,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUserSettings_GenerateCharterOuts() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(3);
 	}
@@ -244,6 +249,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUserSettings_BuildActionSets() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(4);
 	}
@@ -253,6 +259,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getUserSettings_SimilarityMode() {
 		return (EAttribute)userSettingsEClass.getEStructuralFeatures().get(5);
 	}
@@ -262,6 +269,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getIndividualSolutionImprovementSettings() {
 		return individualSolutionImprovementSettingsEClass;
 	}
@@ -271,6 +279,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getIndividualSolutionImprovementSettings_Iterations() {
 		return (EAttribute)individualSolutionImprovementSettingsEClass.getEStructuralFeatures().get(0);
 	}
@@ -280,6 +289,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getIndividualSolutionImprovementSettings_ImprovingSolutions() {
 		return (EAttribute)individualSolutionImprovementSettingsEClass.getEStructuralFeatures().get(1);
 	}
@@ -409,6 +419,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getOptimiserSettings_SimilaritySettings() {
 		return (EReference)optimiserSettingsEClass.getEStructuralFeatures().get(8);
 	}
@@ -418,6 +429,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getOptimiserSettings_SolutionImprovementSettings() {
 		return (EReference)optimiserSettingsEClass.getEStructuralFeatures().get(9);
 	}
@@ -427,6 +439,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getOptimiserSettings_BuildActionSets() {
 		return (EAttribute)optimiserSettingsEClass.getEStructuralFeatures().get(10);
 	}
@@ -436,6 +449,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getOptimiserSettings_ActionPlanSettings() {
 		return (EReference)optimiserSettingsEClass.getEStructuralFeatures().get(11);
 	}
@@ -575,6 +589,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getAnnealingSettings_Restarting() {
 		return (EAttribute)annealingSettingsEClass.getEStructuralFeatures().get(4);
 	}
@@ -584,6 +599,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getAnnealingSettings_RestartIterationsThreshold() {
 		return (EAttribute)annealingSettingsEClass.getEStructuralFeatures().get(5);
 	}
@@ -623,6 +639,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSimilaritySettings() {
 		return similaritySettingsEClass;
 	}
@@ -632,6 +649,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSimilaritySettings_LowInterval() {
 		return (EReference)similaritySettingsEClass.getEStructuralFeatures().get(0);
 	}
@@ -641,6 +659,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSimilaritySettings_MedInterval() {
 		return (EReference)similaritySettingsEClass.getEStructuralFeatures().get(1);
 	}
@@ -650,6 +669,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSimilaritySettings_HighInterval() {
 		return (EReference)similaritySettingsEClass.getEStructuralFeatures().get(2);
 	}
@@ -659,6 +679,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSimilaritySettings_OutOfBoundsWeight() {
 		return (EAttribute)similaritySettingsEClass.getEStructuralFeatures().get(3);
 	}
@@ -668,6 +689,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getSimilarityInterval() {
 		return similarityIntervalEClass;
 	}
@@ -677,6 +699,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSimilarityInterval_Weight() {
 		return (EAttribute)similarityIntervalEClass.getEStructuralFeatures().get(0);
 	}
@@ -686,6 +709,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSimilarityInterval_Threshold() {
 		return (EAttribute)similarityIntervalEClass.getEStructuralFeatures().get(1);
 	}
@@ -695,6 +719,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getActionPlanSettings() {
 		return actionPlanSettingsEClass;
 	}
@@ -704,6 +729,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getActionPlanSettings_TotalEvaluations() {
 		return (EAttribute)actionPlanSettingsEClass.getEStructuralFeatures().get(0);
 	}
@@ -713,6 +739,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getActionPlanSettings_InRunEvaluations() {
 		return (EAttribute)actionPlanSettingsEClass.getEStructuralFeatures().get(1);
 	}
@@ -722,6 +749,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getActionPlanSettings_SearchDepth() {
 		return (EAttribute)actionPlanSettingsEClass.getEStructuralFeatures().get(2);
 	}
@@ -731,6 +759,7 @@ public class ParametersPackageImpl extends EPackageImpl implements ParametersPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getSimilarityMode() {
 		return similarityModeEEnum;
 	}

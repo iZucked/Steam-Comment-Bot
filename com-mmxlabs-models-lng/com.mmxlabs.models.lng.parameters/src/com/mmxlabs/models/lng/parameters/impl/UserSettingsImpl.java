@@ -200,6 +200,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public YearMonth getPeriodStart() {
 		return periodStart;
 	}
@@ -209,6 +210,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPeriodStart(YearMonth newPeriodStart) {
 		YearMonth oldPeriodStart = periodStart;
 		periodStart = newPeriodStart;
@@ -223,6 +225,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetPeriodStart() {
 		YearMonth oldPeriodStart = periodStart;
 		boolean oldPeriodStartESet = periodStartESet;
@@ -237,6 +240,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetPeriodStart() {
 		return periodStartESet;
 	}
@@ -246,6 +250,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public YearMonth getPeriodEnd() {
 		return periodEnd;
 	}
@@ -255,6 +260,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPeriodEnd(YearMonth newPeriodEnd) {
 		YearMonth oldPeriodEnd = periodEnd;
 		periodEnd = newPeriodEnd;
@@ -269,6 +275,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void unsetPeriodEnd() {
 		YearMonth oldPeriodEnd = periodEnd;
 		boolean oldPeriodEndESet = periodEndESet;
@@ -283,6 +290,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isSetPeriodEnd() {
 		return periodEndESet;
 	}
@@ -292,6 +300,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isShippingOnly() {
 		return shippingOnly;
 	}
@@ -301,6 +310,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setShippingOnly(boolean newShippingOnly) {
 		boolean oldShippingOnly = shippingOnly;
 		shippingOnly = newShippingOnly;
@@ -313,6 +323,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isGenerateCharterOuts() {
 		return generateCharterOuts;
 	}
@@ -322,6 +333,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setGenerateCharterOuts(boolean newGenerateCharterOuts) {
 		boolean oldGenerateCharterOuts = generateCharterOuts;
 		generateCharterOuts = newGenerateCharterOuts;
@@ -334,6 +346,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public boolean isBuildActionSets() {
 		return buildActionSets;
 	}
@@ -343,6 +356,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBuildActionSets(boolean newBuildActionSets) {
 		boolean oldBuildActionSets = buildActionSets;
 		buildActionSets = newBuildActionSets;
@@ -355,6 +369,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SimilarityMode getSimilarityMode() {
 		return similarityMode;
 	}
@@ -364,6 +379,7 @@ public class UserSettingsImpl extends EObjectImpl implements UserSettings {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSimilarityMode(SimilarityMode newSimilarityMode) {
 		SimilarityMode oldSimilarityMode = similarityMode;
 		similarityMode = newSimilarityMode == null ? SIMILARITY_MODE_EDEFAULT : newSimilarityMode;

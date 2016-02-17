@@ -123,6 +123,7 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public UserSettings createUserSettings() {
 		UserSettingsImpl userSettings = new UserSettingsImpl();
 		return userSettings;
@@ -133,6 +134,7 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public IndividualSolutionImprovementSettings createIndividualSolutionImprovementSettings() {
 		IndividualSolutionImprovementSettingsImpl individualSolutionImprovementSettings = new IndividualSolutionImprovementSettingsImpl();
 		return individualSolutionImprovementSettings;
@@ -220,6 +222,7 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SimilaritySettings createSimilaritySettings() {
 		SimilaritySettingsImpl similaritySettings = new SimilaritySettingsImpl();
 		return similaritySettings;
@@ -230,6 +233,7 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public SimilarityInterval createSimilarityInterval() {
 		SimilarityIntervalImpl similarityInterval = new SimilarityIntervalImpl();
 		return similarityInterval;
@@ -240,6 +244,7 @@ public class ParametersFactoryImpl extends EFactoryImpl implements ParametersFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ActionPlanSettings createActionPlanSettings() {
 		ActionPlanSettingsImpl actionPlanSettings = new ActionPlanSettingsImpl();
 		return actionPlanSettings;

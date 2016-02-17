@@ -424,6 +424,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getCargoActuals__GetSortedActuals() {
 		return cargoActualsEClass.getEOperations().get(0);
 	}
