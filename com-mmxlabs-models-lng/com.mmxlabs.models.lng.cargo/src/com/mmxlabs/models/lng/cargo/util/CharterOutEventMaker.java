@@ -78,4 +78,13 @@ public class CharterOutEventMaker {
 		return event;
 	}
 
+	public CharterOutEventMaker withEndHeelOptions(double volumeInM3, double cvValue, double pricePerMMBTu) {
+
+		event.getHeelOptions().setVolumeAvailable(volumeInM3);
+		event.getHeelOptions().setCvValue(cvValue);
+		event.getHeelOptions().setPricePerMMBTU(pricePerMMBTu);
+
+		return this;
+	}
+
 }
