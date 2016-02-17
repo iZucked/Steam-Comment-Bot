@@ -1183,7 +1183,7 @@ public class LNGScenarioTransformer {
 			@NonNull final Association<Vessel, IVessel> vesselAssociation, @NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap,
 			@NonNull final DischargeSlot dischargeSlot) {
 		final IDischargeOption discharge;
-		String elementName = String.format("%s-%s", dischargeSlot.isFOBSale() ? "FS" : "DS", dischargeSlot.getName());
+		final String elementName = String.format("%s-%s", dischargeSlot.isFOBSale() ? "FS" : "DS", dischargeSlot.getName());
 
 		usedIDStrings.add(elementName);
 
@@ -1344,7 +1344,7 @@ public class LNGScenarioTransformer {
 			@NonNull final Association<Vessel, IVessel> vesselAssociation, @NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap,
 			@NonNull final LoadSlot loadSlot) {
 		final ILoadOption load;
-		String elementName = String.format("%s-%s", loadSlot.isDESPurchase() ? "DP" : "FP", loadSlot.getName());
+		final String elementName = String.format("%s-%s", loadSlot.isDESPurchase() ? "DP" : "FP", loadSlot.getName());
 		usedIDStrings.add(elementName);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(dateHelper.convertTime(loadSlot.getWindowStartWithSlotOrPortTimeWithFlex()),
@@ -1610,7 +1610,7 @@ public class LNGScenarioTransformer {
 
 								final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(desPurchaseMarket.getCv());
 
-								String typePrefix = "DP-";
+								final String typePrefix = "DP-";
 								final String externalIDPrefix = market.getName() + "-" + yearMonthString + "-";
 
 								// Avoid ID clash
@@ -1746,7 +1746,7 @@ public class LNGScenarioTransformer {
 								final ITimeWindow twUTC = builder.createTimeWindow(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime) - 1);
 								final ITimeWindow twUTCPlus = createUTCPlusTimeWindow(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime));
 
-								String typePrefix = "FS-";
+								final String typePrefix = "FS-";
 								final String externalIDPrefix = market.getName() + "-" + yearMonthString + "-";
 
 								// Avoid ID clash
@@ -1889,7 +1889,7 @@ public class LNGScenarioTransformer {
 
 								final ITimeWindow tw = builder.createTimeWindow(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime));
 
-								String typePrefix = "DS-";
+								final String typePrefix = "DS-";
 								final String externalIDPrefix = market.getName() + "-" + yearMonthString + "-";
 
 								// Avoid ID clash
@@ -2011,7 +2011,7 @@ public class LNGScenarioTransformer {
 							for (int i = 0; i < remaining; ++i) {
 
 								final ITimeWindow tw = builder.createTimeWindow(dateHelper.convertTime(tzStartTime), dateHelper.convertTime(tzEndTime));
-								String typePrefix = "FP-";
+								final String typePrefix = "FP-";
 								final String externalIDPrefix = market.getName() + "-" + yearMonthString + "-";
 
 								// Avoid ID clash
@@ -2314,9 +2314,9 @@ public class LNGScenarioTransformer {
 				final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(rootObject);
 				buildPanamaCosts(builder, vesselAssociation, vesselClassAssociation, allVesselAvailabilities, panamaCanalTariff);
 				if (panamaCanalTariff.isSetAvailableFrom()) {
-					LocalDate availableFrom = panamaCanalTariff.getAvailableFrom();
+					final LocalDate availableFrom = panamaCanalTariff.getAvailableFrom();
 					if (availableFrom != null) {
-						int time = dateHelper.convertTime(availableFrom);
+						final int time = dateHelper.convertTime(availableFrom);
 						distanceProviderEditor.setRouteAvailableFrom(ERouteOption.PANAMA, time);
 					}
 				}
@@ -2367,7 +2367,7 @@ public class LNGScenarioTransformer {
 	}
 
 	public static void buildPanamaCosts(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Vessel, IVessel> vesselAssociation,
-			@NonNull final Association<VesselClass, IVesselClass> vesselClassAssociation, List<IVesselAvailability> vesselAvailabilities, @NonNull final PanamaCanalTariff panamaCanalTariff) {
+			@NonNull final Association<VesselClass, IVesselClass> vesselClassAssociation, final List<IVesselAvailability> vesselAvailabilities, @NonNull final PanamaCanalTariff panamaCanalTariff) {
 
 		// Extract band information into a sorted list
 		final List<Pair<Integer, PanamaCanalTariffBand>> bands = new LinkedList<>();
@@ -2383,12 +2383,12 @@ public class LNGScenarioTransformer {
 
 		for (final IVesselAvailability availability : vesselAvailabilities) {
 			final int capacityInM3;
-			IVessel vessel = availability.getVessel();
+			final IVessel vessel = availability.getVessel();
 			assert vessel != null;
-			Vessel eVessel = vesselAssociation.reverseLookup(availability.getVessel());
+			final Vessel eVessel = vesselAssociation.reverseLookup(availability.getVessel());
 			if (eVessel == null) {
 				// spot charter
-				VesselClass eVesselClass = vesselClassAssociation.reverseLookupNullChecked(availability.getVessel().getVesselClass());
+				final VesselClass eVesselClass = vesselClassAssociation.reverseLookupNullChecked(availability.getVessel().getVesselClass());
 				capacityInM3 = eVesselClass.getCapacity();
 			} else {
 				capacityInM3 = eVessel.getVesselOrVesselClassCapacity();
@@ -2410,6 +2410,14 @@ public class LNGScenarioTransformer {
 					totalBallastCost += contributingCapacity * band.getBallastTariff();
 					totalBallastRoundTripCost += contributingCapacity * band.getBallastRoundtripTariff();
 				}
+			}
+
+			// If there is a markup %, apply it
+			if (panamaCanalTariff.getMarkupRate() != 0.0) {
+				final double multiplier = 1.0 + panamaCanalTariff.getMarkupRate();
+				totalLadenCost *= multiplier;
+				totalBallastCost *= multiplier;
+				totalBallastRoundTripCost *= multiplier;
 			}
 
 			builder.setVesselRouteCost(ERouteOption.PANAMA, vessel, CostType.Laden, OptimiserUnitConvertor.convertToInternalFixedCost((int) Math.round(totalLadenCost)));
