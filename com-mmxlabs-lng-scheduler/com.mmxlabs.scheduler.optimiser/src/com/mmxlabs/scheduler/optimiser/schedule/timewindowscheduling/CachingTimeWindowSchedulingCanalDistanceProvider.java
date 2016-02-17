@@ -52,16 +52,16 @@ public class CachingTimeWindowSchedulingCanalDistanceProvider implements ITimeWi
 	}
 
 	private TimeWindowSchedulingCanalDistanceProvider delegate;
-	private Map<CacheKey, long[][]> cache = new HashMap<>();
+	private Map<CacheKey, LadenRouteData[]> cache = new HashMap<>();
 	
 	public CachingTimeWindowSchedulingCanalDistanceProvider(TimeWindowSchedulingCanalDistanceProvider canalDistanceProvider) {
 		delegate = canalDistanceProvider;
 	}
 	
 	@Override
-	public long[][] getMinimumLadenTravelTimes(IPort load, IPort discharge, IVessel vessel, int ladenStartTime) {
+	public LadenRouteData[] getMinimumLadenTravelTimes(IPort load, IPort discharge, IVessel vessel, int ladenStartTime) {
 		CacheKey key = new CacheKey(load, discharge, vessel, ladenStartTime);
-		long[][] values = cache.get(key);
+		LadenRouteData[] values = cache.get(key);
 		if (values == null) {
 			values = delegate.getMinimumLadenTravelTimes(load, discharge, vessel, ladenStartTime);
 			assert values != null;
@@ -72,13 +72,13 @@ public class CachingTimeWindowSchedulingCanalDistanceProvider implements ITimeWi
 
 	@Override
 	@NonNull
-	public List<Integer> getFeasibleRoutes(long[][] sortedCanalTimes, int minTime, int maxTime) {
+	public List<Integer> getFeasibleRoutes(LadenRouteData[] sortedCanalTimes, int minTime, int maxTime) {
 		return delegate.getFeasibleRoutes(sortedCanalTimes, minTime, maxTime);
 	}
 
 	@Override
 	@NonNull
-	public long[] getBestCanalDetails(long[][] times, int maxTime) {
-		return delegate.getBestCanalDetails(times, maxTime);
+	public LadenRouteData getBestCanalDetails(LadenRouteData[] sortedCanalTimes, int maxTime) {
+		return delegate.getBestCanalDetails(sortedCanalTimes, maxTime);
 	}
 }

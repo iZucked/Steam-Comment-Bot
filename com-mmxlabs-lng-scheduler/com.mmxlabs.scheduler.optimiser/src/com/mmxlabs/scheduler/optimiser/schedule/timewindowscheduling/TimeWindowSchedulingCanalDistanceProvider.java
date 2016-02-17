@@ -34,7 +34,7 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 	private IDistanceProvider distanceProvider;
 
 	@Override
-	public long[][] getMinimumLadenTravelTimes(IPort load, IPort discharge, IVessel vessel, int ladenStartTime) {
+	public LadenRouteData[] getMinimumLadenTravelTimes(IPort load, IPort discharge, IVessel vessel, int ladenStartTime) {
 		// get distances for this pairing (assumes that getAllDistanceValues() returns a copy of the data)
 		List<Pair<ERouteOption,Integer>> allDistanceValues = distanceProvider.getAllDistanceValues(load, discharge);
 		IVesselClass vesselClass = vessel.getVesselClass();
@@ -63,7 +63,7 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 		}
 		
 		// create a new distances data structure
-		long[][] times = new long[allDistanceValues.size()][3];
+		LadenRouteData[] times = new LadenRouteData[allDistanceValues.size()];
 		int i = 0;
 		for (final Pair<ERouteOption, Integer> d : allDistanceValues) {
 			vesselClass.getBaseFuel().getEquivalenceFactor();
@@ -71,9 +71,7 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 			int nboSpeed = Math.min(Math.max(getNBOSpeed(vesselClass, VesselState.Laden), vesselClass.getMinSpeed()), vesselClass.getMaxSpeed());
 			int nbotravelTime = Calculator.getTimeFromSpeedDistance(nboSpeed, d.getSecond());
 			int transitTime = routeCostProvider.getRouteTransitTime(d.getFirst(), vessel);
-			times[i][0] = mintravelTime + transitTime;
-			times[i][1] = OptimiserUnitConvertor.convertToInternalDailyCost(routeCostProvider.getRouteCost(d.getFirst(), vessel, IRouteCostProvider.CostType.Laden));
-			times[i][2] = nbotravelTime + transitTime;
+			times[i] = new LadenRouteData(mintravelTime + transitTime, nbotravelTime + transitTime, OptimiserUnitConvertor.convertToInternalDailyCost(routeCostProvider.getRouteCost(d.getFirst(), vessel, IRouteCostProvider.CostType.Laden)));
 			i++;
 		}
 		return times;
@@ -86,10 +84,10 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 	}
 
 	@Override
-	public List<Integer> getFeasibleRoutes(long[][] sortedCanalTimes, int minTime, int maxTime) {
+	public List<Integer> getFeasibleRoutes(LadenRouteData[] sortedCanalTimes, int minTime, int maxTime) {
 		List<Integer> canalsWeCanUse = new LinkedList<>();
 		for (int i = 0; i < sortedCanalTimes.length; i++) {
-			if (sortedCanalTimes[i][0] <= maxTime) {
+			if (sortedCanalTimes[i].ladenMaxSpeed <= maxTime) {
 				canalsWeCanUse.add(i);
 			} 
 		}
@@ -97,9 +95,9 @@ public class TimeWindowSchedulingCanalDistanceProvider implements ITimeWindowSch
 	}
 
 	@Override
-	public long[] getBestCanalDetails(long[][] sortedCanalTimes, int maxTime) {
-		for (long[] canal : sortedCanalTimes) {
-			if (maxTime >= canal[0]) {
+	public LadenRouteData getBestCanalDetails(LadenRouteData[] sortedCanalTimes, int maxTime) {
+		for (LadenRouteData canal : sortedCanalTimes) {
+			if (maxTime >= canal.ladenMaxSpeed) {
 				return canal;
 			}
 		}
