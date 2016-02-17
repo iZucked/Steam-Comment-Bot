@@ -290,7 +290,11 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 					}
 				}
 			} else if (element instanceof Idle) {
+				Idle idle = (Idle) element;
 				eventText.append("Idle time: " + durationTime);
+				for (final FuelQuantity fq : idle.getFuels()) {
+					eventText.append(String.format("\n%s\n", fq.getFuel().toString()));
+				}
 			} else if (element instanceof GeneratedCharterOut) {
 				eventText.append(" \n");
 				eventText.append("Duration: " + durationTime);
