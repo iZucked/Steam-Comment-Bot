@@ -122,6 +122,7 @@ public class VesselAvailabilityMaker {
 		return this;
 	}
 
+	@NonNull
 	public VesselAvailability build() {
 
 		cargoModelBuilder.getCargoModel().getVesselAvailabilities().add(vesselAvailability);
