@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PanamaCanalTariff#getBands <em>Bands</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PanamaCanalTariff#getAvailableFrom <em>Available From</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.PanamaCanalTariff#getMarkupRate <em>Markup Rate</em>}</li>
  * </ul>
  *
  * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPanamaCanalTariff()
@@ -97,5 +98,31 @@ public interface PanamaCanalTariff extends EObject {
 	 * @generated
 	 */
 	boolean isSetAvailableFrom();
+
+	/**
+	 * Returns the value of the '<em><b>Markup Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Markup Rate</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Markup Rate</em>' attribute.
+	 * @see #setMarkupRate(double)
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPanamaCanalTariff_MarkupRate()
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat scale='100' formatString='##0.#' unit='%'"
+	 * @generated
+	 */
+	double getMarkupRate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.PanamaCanalTariff#getMarkupRate <em>Markup Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Markup Rate</em>' attribute.
+	 * @see #getMarkupRate()
+	 * @generated
+	 */
+	void setMarkupRate(double value);
 
 } // PanamaCanalTariff

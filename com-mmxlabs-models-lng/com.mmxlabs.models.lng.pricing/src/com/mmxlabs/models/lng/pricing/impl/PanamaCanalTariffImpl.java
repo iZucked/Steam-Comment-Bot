@@ -37,6 +37,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PanamaCanalTariffImpl#getBands <em>Bands</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PanamaCanalTariffImpl#getAvailableFrom <em>Available From</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PanamaCanalTariffImpl#getMarkupRate <em>Markup Rate</em>}</li>
  * </ul>
  *
  * @generated
@@ -79,6 +80,26 @@ public class PanamaCanalTariffImpl extends EObjectImpl implements PanamaCanalTar
 	 * @ordered
 	 */
 	protected boolean availableFromESet;
+
+	/**
+	 * The default value of the '{@link #getMarkupRate() <em>Markup Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMarkupRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double MARKUP_RATE_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getMarkupRate() <em>Markup Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMarkupRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected double markupRate = MARKUP_RATE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -162,6 +183,27 @@ public class PanamaCanalTariffImpl extends EObjectImpl implements PanamaCanalTar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public double getMarkupRate() {
+		return markupRate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMarkupRate(double newMarkupRate) {
+		double oldMarkupRate = markupRate;
+		markupRate = newMarkupRate;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.PANAMA_CANAL_TARIFF__MARKUP_RATE, oldMarkupRate, markupRate));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -183,6 +225,8 @@ public class PanamaCanalTariffImpl extends EObjectImpl implements PanamaCanalTar
 				return getBands();
 			case PricingPackage.PANAMA_CANAL_TARIFF__AVAILABLE_FROM:
 				return getAvailableFrom();
+			case PricingPackage.PANAMA_CANAL_TARIFF__MARKUP_RATE:
+				return getMarkupRate();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -203,6 +247,9 @@ public class PanamaCanalTariffImpl extends EObjectImpl implements PanamaCanalTar
 			case PricingPackage.PANAMA_CANAL_TARIFF__AVAILABLE_FROM:
 				setAvailableFrom((LocalDate)newValue);
 				return;
+			case PricingPackage.PANAMA_CANAL_TARIFF__MARKUP_RATE:
+				setMarkupRate((Double)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -221,6 +268,9 @@ public class PanamaCanalTariffImpl extends EObjectImpl implements PanamaCanalTar
 			case PricingPackage.PANAMA_CANAL_TARIFF__AVAILABLE_FROM:
 				unsetAvailableFrom();
 				return;
+			case PricingPackage.PANAMA_CANAL_TARIFF__MARKUP_RATE:
+				setMarkupRate(MARKUP_RATE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -237,6 +287,8 @@ public class PanamaCanalTariffImpl extends EObjectImpl implements PanamaCanalTar
 				return bands != null && !bands.isEmpty();
 			case PricingPackage.PANAMA_CANAL_TARIFF__AVAILABLE_FROM:
 				return isSetAvailableFrom();
+			case PricingPackage.PANAMA_CANAL_TARIFF__MARKUP_RATE:
+				return markupRate != MARKUP_RATE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -253,6 +305,8 @@ public class PanamaCanalTariffImpl extends EObjectImpl implements PanamaCanalTar
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (availableFrom: ");
 		if (availableFromESet) result.append(availableFrom); else result.append("<unset>");
+		result.append(", markupRate: ");
+		result.append(markupRate);
 		result.append(')');
 		return result.toString();
 	}

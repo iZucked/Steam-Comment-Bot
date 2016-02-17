@@ -70,6 +70,7 @@ public class PanamaCanalTariffItemProvider
 			super.getPropertyDescriptors(object);
 
 			addAvailableFromPropertyDescriptor(object);
+			addMarkupRatePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -92,6 +93,28 @@ public class PanamaCanalTariffItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Markup Rate feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMarkupRatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PanamaCanalTariff_markupRate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PanamaCanalTariff_markupRate_feature", "_UI_PanamaCanalTariff_type"),
+				 PricingPackage.Literals.PANAMA_CANAL_TARIFF__MARKUP_RATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -166,6 +189,7 @@ public class PanamaCanalTariffItemProvider
 
 		switch (notification.getFeatureID(PanamaCanalTariff.class)) {
 			case PricingPackage.PANAMA_CANAL_TARIFF__AVAILABLE_FROM:
+			case PricingPackage.PANAMA_CANAL_TARIFF__MARKUP_RATE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case PricingPackage.PANAMA_CANAL_TARIFF__BANDS:

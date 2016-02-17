@@ -69,6 +69,7 @@ public class PanamaCanalTariffComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_bandsEditor(detailComposite, topClass);
 		add_availableFromEditor(detailComposite, topClass);
+		add_markupRateEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the bands feature on PanamaCanalTariff
@@ -86,5 +87,14 @@ public class PanamaCanalTariffComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_availableFromEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PANAMA_CANAL_TARIFF__AVAILABLE_FROM));
+	}
+
+	/**
+	 * Create the editor for the markupRate feature on PanamaCanalTariff
+	 *
+	 * @generated
+	 */
+	protected void add_markupRateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PANAMA_CANAL_TARIFF__MARKUP_RATE));
 	}
 }
