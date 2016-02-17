@@ -4,10 +4,6 @@
  */
 package com.mmxlabs.models.lng.fleet.util;
 
-import java.io.ObjectInputStream.GetField;
-
-import javax.swing.text.BadLocationException;
-
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 

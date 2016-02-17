@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.spotmarkets.util;
 
-import com.mmxlabs.models.lng.spotmarkets.*;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;

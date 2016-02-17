@@ -17,7 +17,6 @@ import com.mmxlabs.common.csv.FieldMap;
 import com.mmxlabs.common.csv.IDeferment;
 import com.mmxlabs.common.csv.IFieldMap;
 import com.mmxlabs.common.csv.IImportContext;
-import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;

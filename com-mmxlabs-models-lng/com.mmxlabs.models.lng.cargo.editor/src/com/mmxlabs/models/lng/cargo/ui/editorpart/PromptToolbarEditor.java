@@ -5,8 +5,6 @@
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
-
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.Notification;
