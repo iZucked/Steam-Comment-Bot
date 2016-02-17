@@ -4,10 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.redirection;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.common.detailtree.impl.TotalCostDetailElement;
@@ -39,10 +36,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
-import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 import com.mmxlabs.scheduler.optimiser.schedule.ShippingCostHelper;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimeWindowsRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;

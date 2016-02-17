@@ -11,7 +11,6 @@ import org.junit.Test;
 
 import com.mmxlabs.models.lng.parameters.ActionPlanSettings;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
-import com.mmxlabs.models.lng.parameters.SimilaritySettings;
 
 public class ActionPlanUIParametersTests {
 	@Test

@@ -10,12 +10,8 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.common.time.Months;
 import com.mmxlabs.models.lng.parameters.ActionPlanSettings;
-import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
-import com.mmxlabs.models.lng.parameters.SimilarityInterval;
 import com.mmxlabs.models.lng.parameters.SimilarityMode;
-import com.mmxlabs.models.lng.parameters.SimilaritySettings;
-import com.mmxlabs.models.lng.parameters.UserSettings;
 
 public class ActionPlanUIParameters {
 	
