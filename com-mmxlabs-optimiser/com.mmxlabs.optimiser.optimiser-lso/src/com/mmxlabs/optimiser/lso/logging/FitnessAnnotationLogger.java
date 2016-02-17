@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.optimiser.lso.logging;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.LinkedHashMap;
 import java.util.Map;

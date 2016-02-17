@@ -7,8 +7,6 @@ package com.mmxlabs.optimiser.core.modules;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Singleton;
-
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.AbstractModule;
@@ -18,7 +16,6 @@ import com.mmxlabs.optimiser.core.IEvaluationContext;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
-import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;

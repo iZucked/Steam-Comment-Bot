@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.optimiser.core.scenario.common.impl;
 
-import java.util.Set;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;

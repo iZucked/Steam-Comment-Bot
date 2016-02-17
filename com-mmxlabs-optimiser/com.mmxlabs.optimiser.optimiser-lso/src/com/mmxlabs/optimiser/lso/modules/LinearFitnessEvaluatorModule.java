@@ -7,8 +7,6 @@ package com.mmxlabs.optimiser.lso.modules;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Singleton;
-
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.AbstractModule;
