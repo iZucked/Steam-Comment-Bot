@@ -81,7 +81,6 @@ import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultAttributeImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
-import com.mmxlabs.models.util.importer.impl.MultiLineImporter;
 import com.mmxlabs.models.util.importer.registry.ExtensionConfigurationModule;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 import com.mmxlabs.models.util.importer.registry.impl.ImporterRegistry;

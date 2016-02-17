@@ -34,8 +34,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.ui.INestableKeyBindingService;
-import org.eclipse.ui.internal.views.markers.AllMarkersView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

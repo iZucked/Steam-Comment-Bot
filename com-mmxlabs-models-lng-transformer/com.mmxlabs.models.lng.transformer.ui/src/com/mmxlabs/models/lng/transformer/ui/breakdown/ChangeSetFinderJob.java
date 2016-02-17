@@ -11,7 +11,6 @@ import java.util.concurrent.Callable;
 
 import com.google.inject.Injector;
 import com.mmxlabs.optimiser.core.impl.Sequences;
-import com.mmxlabs.optimiser.core.inject.scopes.PerChainUnitScopeImpl;
 
 /**
  * A class that could be passed into an ExecutorService to attempt to find change sets from the current state.
