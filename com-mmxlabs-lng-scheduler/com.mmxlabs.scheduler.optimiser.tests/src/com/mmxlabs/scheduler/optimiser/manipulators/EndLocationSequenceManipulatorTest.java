@@ -6,14 +6,11 @@ package com.mmxlabs.scheduler.optimiser.manipulators;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Mockito;
-
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.impl.Resource;
 import com.mmxlabs.scheduler.optimiser.manipulators.EndLocationSequenceManipulator.EndLocationRule;
-import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 
 public class EndLocationSequenceManipulatorTest {
 
