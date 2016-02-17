@@ -244,7 +244,9 @@ public class HeadlineReportView extends ViewPart {
 
 						if (pinD == null) {
 							if (d.latenessExcludingFlex != null && d.latenessIncludingFlex != null) {
-								suffix = " *";
+								if (d.latenessExcludingFlex - d.latenessIncludingFlex != 0) {
+									suffix = " *";
+								}
 							}
 						} else {
 							long a = 0;
