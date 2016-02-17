@@ -25,36 +25,36 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
 
 
-public class PriceIntervalProviderHelperLowLevelTests {
+public class PriceIntervalProviderHelperLowLevelTest {
 
 	@Test
 	public void testIsFeasible_1() {
 		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
-		Assert.assertTrue(helper.isFeasibleTravelTime(new int[]{0,10}, new int[] {20, 100}, 0, 30));
+		Assert.assertTrue(helper.isFeasibleTravelTime(new IntervalData(0, 10, 0), new IntervalData(20, 100, 0), 0, 30));
 	}
 	
 	@Test
 	public void testIsFeasible_2() {
 		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
-		Assert.assertTrue(helper.isFeasibleTravelTime(new int[]{0,10}, new int[] {20, 100}, 0, 5));
+		Assert.assertTrue(helper.isFeasibleTravelTime(new IntervalData(0, 10, 0), new IntervalData(20, 100, 0), 0, 5));
 	}
 
 	@Test
 	public void testIsFeasible_3() {
 		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
-		Assert.assertTrue(helper.isFeasibleTravelTime(new int[]{0,10}, new int[] {20, 100}, 0, 50));
+		Assert.assertTrue(helper.isFeasibleTravelTime(new IntervalData(0, 10, 0), new IntervalData(20, 100, 0), 0, 50));
 	}
 
 	@Test
 	public void testIsFeasible_4() {
 		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
-		Assert.assertTrue(helper.isFeasibleTravelTime(new int[]{0,10}, new int[] {20, 100}, 0, 100));
+		Assert.assertTrue(helper.isFeasibleTravelTime(new IntervalData(0, 10, 0), new IntervalData(20, 100, 0), 0, 100));
 	}
 
 	@Test
 	public void testIsFeasible_5() {
 		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
-		Assert.assertFalse(helper.isFeasibleTravelTime(new int[]{0,10}, new int[] {20, 100}, 0, 101));
+		Assert.assertFalse(helper.isFeasibleTravelTime(new IntervalData(0, 10, 0), new IntervalData(20, 100, 0), 0, 101));
 	}
 	
 	@Test
@@ -86,12 +86,32 @@ public class PriceIntervalProviderHelperLowLevelTests {
 	}
 
 	@Test
-	public void testIdealLoadAndDischargeTimes_MaxSpeed() {
+	public void testIdealLoadAndDischargeTimes_MaxInterval() {
 		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
 		int[] times = helper.getIdealLoadAndDischargeTimesGivenCanal(10, 20, 50, 80, 5, 60, 90);
+		Assert.assertArrayEquals(new int[]{10, 80}, times);
+	}
+	
+	@Test
+	public void testIdealLoadAndDischargeTimes_AlmostMaxSpeed() {
+		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
+		int[] times = helper.getIdealLoadAndDischargeTimesGivenCanal(10, 20, 50, 80, 5, 60, 60);
 		Assert.assertArrayEquals(new int[]{10, 75}, times);
 	}
 
+	@Test
+	public void testIdealLoadAndDischargeTimes_MaxSpeed1() {
+		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
+		int[] times = helper.getIdealLoadAndDischargeTimesGivenCanal(10, 20, 75, 80, 5, 60, 60);
+		Assert.assertArrayEquals(new int[]{10, 75}, times);
+	}
+
+	@Test
+	public void testIdealLoadAndDischargeTimes_MaxSpeed2() {
+		PriceIntervalProviderHelper helper = createPriceIntervalProviderHelper(0);
+		int[] times = helper.getIdealLoadAndDischargeTimesGivenCanal(10, 20, 85, 100, 5, 60, 60);
+		Assert.assertArrayEquals(new int[]{20, 85}, times);
+	}
 
 	private PriceIntervalProviderHelper createPriceIntervalProviderHelper(final int timeDiff) {
 		PriceIntervalProviderHelper ppih = new PriceIntervalProviderHelper();

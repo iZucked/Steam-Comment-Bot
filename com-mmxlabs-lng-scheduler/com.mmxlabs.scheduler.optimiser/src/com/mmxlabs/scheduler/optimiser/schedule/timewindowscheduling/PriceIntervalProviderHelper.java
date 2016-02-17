@@ -195,9 +195,13 @@ public class PriceIntervalProviderHelper {
 	}
 
 	@NonNull
-	public int[] getIdealLoadAndDischargeTimesGivenCanal(final int purchaseStart, final int purchaseEnd, final int salesStart, final int salesEnd, final int loadDuration, final int canalMaxSpeed,
+	public int[] getIdealLoadAndDischargeTimesGivenCanal(final int purchaseStart, final int purchaseEnd, int salesStart, final int salesEnd, final int loadDuration, final int canalMaxSpeed,
 			final int canalNBOSpeed) {
 		int purchase = salesStart - canalMaxSpeed - loadDuration;
+		if (purchase < purchaseStart) {
+			salesStart = purchaseStart + canalMaxSpeed + loadDuration;
+			purchase = purchaseStart;
+		}
 		int discharge = salesStart;
 		if (purchase > purchaseEnd) {
 			purchase = purchaseEnd;
