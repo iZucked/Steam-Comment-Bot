@@ -252,6 +252,9 @@ public class VoyagePlanner {
 		}
 
 		final List<Pair<ERouteOption, Integer>> distances = distanceProvider.getDistanceValues(prevPort, thisPort, voyageStartTime);
+		if (distances.isEmpty()) {
+			throw new RuntimeException(String.format("No distance between %s and %s", prevPort.getName(), thisPort.getName()));
+		}
 		assert !distances.isEmpty();
 
 		// Only add route choice if there is one
