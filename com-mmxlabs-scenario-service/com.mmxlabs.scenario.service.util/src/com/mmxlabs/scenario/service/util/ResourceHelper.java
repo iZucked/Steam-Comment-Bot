@@ -6,7 +6,6 @@ package com.mmxlabs.scenario.service.util;
 
 import java.io.CharConversionException;
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 

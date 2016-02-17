@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.scenario.service.model.impl;
 
-import static com.mmxlabs.scenario.service.model.ScenarioServicePackage.CONTAINER;
-
 import java.io.Closeable;
 import java.io.IOException;
 
