@@ -164,8 +164,9 @@ public class BagOptimiser {
 	}
 
 	private void logStart() {
-		if (actionSetLogger != null) {
-			actionSetLogger.begin(System.currentTimeMillis());
+		ActionSetLogger pActionSetLogger = actionSetLogger;
+		if (pActionSetLogger != null) {
+			pActionSetLogger.begin(System.currentTimeMillis());
 		}
 	}
 
@@ -395,26 +396,30 @@ public class BagOptimiser {
 	}
 
 	private void logLimiteds(List<JobState> allLimitedStates) {
-		if (actionSetLogger != null) {
-			actionSetLogger.logLimiteds(allLimitedStates);
+		ActionSetLogger pActionSetLogger = actionSetLogger;
+		if (pActionSetLogger != null) {
+			pActionSetLogger.logLimiteds(allLimitedStates);
 		}
 	}
 
 	private void logFinish() {
-		if (actionSetLogger != null) {
-			actionSetLogger.finish(System.currentTimeMillis());
+		ActionSetLogger pActionSetLogger = actionSetLogger;
+		if (pActionSetLogger != null) {
+			pActionSetLogger.finish(System.currentTimeMillis());
 		}
 	}
 
 	private void logFinalPopulation(List<JobState> finalPopulation) {
-		if (actionSetLogger != null) {
-			actionSetLogger.logLeafsFound(finalPopulation);
+		ActionSetLogger pActionSetLogger = actionSetLogger;
+		if (pActionSetLogger != null) {
+			pActionSetLogger.logLeafsFound(finalPopulation);
 		}
 	}
 
 	private void logInitialPopulation(List<JobState> initialPopulation) {
-		if (actionSetLogger != null) {
-			actionSetLogger.logInitialPopulation(initialPopulation);
+		ActionSetLogger pActionSetLogger = actionSetLogger;
+		if (pActionSetLogger != null) {
+			pActionSetLogger.logInitialPopulation(initialPopulation);
 		}
 	}
 
@@ -516,8 +521,9 @@ public class BagOptimiser {
 				});
 				diffs = bestPopulation.get(0).getDifferencesList();
 			}
-			if (actionSetLogger != null) {
-				actionSetLogger.logRootActionSet(root, best, leafs, pnlEvals, constraintEvals, diffs, runTime);
+			ActionSetLogger pActionSetLogger = actionSetLogger;
+			if (pActionSetLogger != null) {
+				pActionSetLogger.logRootActionSet(root, best, leafs, pnlEvals, constraintEvals, diffs, runTime);
 			}
 		}
 	}
