@@ -15,7 +15,6 @@ import org.junit.experimental.categories.Category;
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
 import com.mmxlabs.lingo.its.tests.LNGScenarioRunnerCreator;
 import com.mmxlabs.lingo.its.tests.category.MicroTest;
-import com.mmxlabs.lingo.its.tests.category.QuickTest;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Journey;

@@ -4,15 +4,6 @@
  */
 package com.mmxlabs.lingo.its.tests;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewPart;
@@ -23,9 +14,6 @@ import org.junit.Assert;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.views.fleet.ConfigurableFleetReportView;
 import com.mmxlabs.lingo.reports.views.portrotation.PortRotationReportView;
@@ -33,8 +21,6 @@ import com.mmxlabs.lingo.reports.views.schedule.ConfigurableScheduleReportView;
 import com.mmxlabs.lingo.reports.views.standard.CapacityViolationReportView;
 import com.mmxlabs.lingo.reports.views.standard.CooldownReportView;
 import com.mmxlabs.lingo.reports.views.standard.LatenessReportView;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.transformer.ui.LNGScenarioRunner;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 

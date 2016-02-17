@@ -11,7 +11,6 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
-import com.mmxlabs.lingo.its.tests.category.MicroTest;
 import com.mmxlabs.lingo.its.tests.category.OptimisationTest;
 import com.mmxlabs.models.lng.transformer.its.ShiroRunner;
 

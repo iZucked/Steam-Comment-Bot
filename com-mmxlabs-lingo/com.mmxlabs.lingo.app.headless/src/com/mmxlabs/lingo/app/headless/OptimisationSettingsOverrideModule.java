@@ -13,13 +13,8 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import com.mmxlabs.models.lng.transformer.inject.modules.ActionPlanModule;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChecker;
-import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters;
-import com.mmxlabs.scheduler.optimiser.fitness.components.ILatenessComponentParameters.Interval;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ISimilarityComponentParameters;
-import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponentParameters;
 import com.mmxlabs.scheduler.optimiser.fitness.components.SimilarityComponentParameters;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.EnumeratingSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.lso.SequencesConstrainedMoveGeneratorUnit;
 
 /**
