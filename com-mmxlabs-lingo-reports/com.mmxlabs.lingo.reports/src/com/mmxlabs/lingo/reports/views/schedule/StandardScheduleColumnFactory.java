@@ -287,6 +287,20 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				}
 			}, cargoAllocationRef));
 			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.shipping_cost":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Shipping Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
+				@Override
+				public Integer getIntValue(final Object object) {
+					if (object instanceof CargoAllocation) {
+						final CargoAllocation allocation = (CargoAllocation) object;
+						int total = ScheduleCostUtils.calculateLegCost(allocation);
+						return total;
+					}
+					return null;
+
+				}
+			}, cargoAllocationRef));
+			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.pnl_additional":
 
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Addn. P&L", null, ColumnType.NORMAL, new IntegerFormatter() {
