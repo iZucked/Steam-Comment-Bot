@@ -4,32 +4,19 @@
  */
 package com.mmxlabs.lingo.reports.views.standard;
 
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.commercial.BaseEntityBook;
-import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
-import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
-import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
-import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PortVisit;
-import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
-import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
@@ -95,15 +82,11 @@ class HeadlineReportTransformer {
 	public RowData transform(@NonNull final Schedule schedule, @NonNull final ScenarioInstance scenarioInstance) {
 
 		long totalCost = 0L;
-		long totalTradingPNL = 0L;
-		long totalShippingPNL = 0l;
+
 		long totalMtMPNL = 0L;
 		long totalIdleHours = 0L;
 		long totalGCOHours = 0L;
 		long totalGCORevenue = 0L;
-		long totalCapacityViolationCount = 0L;
-		long totalLatenessHoursIncludingFlex = 0L;
-		long totalLatenessHoursExcludingFlex = 0L;
 
 		for (final Sequence seq : schedule.getSequences()) {
 
@@ -126,30 +109,6 @@ class HeadlineReportTransformer {
 				if (evt instanceof PortVisit) {
 					final int cost = ((PortVisit) evt).getPortCost();
 					totalCost += cost;
-
-					final long latenessInHours = LatenessUtils.getLatenessInHours((PortVisit) evt);
-					if (LatenessUtils.isLateExcludingFlex(evt)) {
-						// Ensure positive
-						totalLatenessHoursExcludingFlex += Math.abs(latenessInHours);
-					}
-					if (LatenessUtils.isLateAfterFlex(evt)) {
-						// Ensure positive
-						totalLatenessHoursIncludingFlex += Math.abs(latenessInHours);
-					}
-				}
-
-				if (evt instanceof SlotVisit) {
-					final SlotVisit visit = (SlotVisit) evt;
-
-					if (visit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-						final CargoAllocation cargoAllocation = visit.getSlotAllocation().getCargoAllocation();
-						totalTradingPNL += getElementTradingPNL(cargoAllocation);
-						totalShippingPNL += getElementShippingPNL(cargoAllocation);
-					}
-
-				} else if (evt instanceof ProfitAndLossContainer) {
-					totalTradingPNL += getElementTradingPNL((ProfitAndLossContainer) evt);
-					totalShippingPNL += getElementShippingPNL((ProfitAndLossContainer) evt);
 				}
 
 				if (evt instanceof GeneratedCharterOut) {
@@ -158,61 +117,25 @@ class HeadlineReportTransformer {
 					totalGCORevenue += generatedCharterOut.getRevenue();
 				}
 
-				if (evt instanceof CapacityViolationsHolder) {
-					final CapacityViolationsHolder capacityViolationsHolder = (CapacityViolationsHolder) evt;
-					totalCapacityViolationCount += capacityViolationsHolder.getViolations().size();
-				}
 			}
 
 		}
 		for (final MarketAllocation marketAllocation : schedule.getMarketAllocations()) {
-			totalMtMPNL += getElementTradingPNL(marketAllocation);
-			totalMtMPNL += getElementShippingPNL(marketAllocation);
-		}
-		for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
-			totalTradingPNL += getElementTradingPNL(openSlotAllocation);
-			totalShippingPNL += getElementShippingPNL(openSlotAllocation);
+			totalMtMPNL += ScheduleModelKPIUtils.getElementTradingPNL(marketAllocation);
+			totalMtMPNL += ScheduleModelKPIUtils.getElementShippingPNL(marketAllocation);
 		}
 
-		EObject object = schedule.eContainer();
-		while ((object != null) && !(object instanceof MMXRootObject)) {
-			object = object.eContainer();
-		}
+		final long[] scheduleProfitAndLoss = ScheduleModelKPIUtils.getScheduleProfitAndLossSplit(schedule);
+		final long totalTradingPNL = scheduleProfitAndLoss[ScheduleModelKPIUtils.TRADING_PNL_IDX];
+		final long totalShippingPNL = scheduleProfitAndLoss[ScheduleModelKPIUtils.SHIPPING_PNL_IDX];
+
+		final long[] scheduleLateness = ScheduleModelKPIUtils.getScheduleProfitAndLossSplit(schedule);
+		final long totalLatenessHoursExcludingFlex = scheduleLateness[ScheduleModelKPIUtils.LATENESS_WITHOUT_FLEX_IDX];
+		final long totalLatenessHoursIncludingFlex = scheduleLateness[ScheduleModelKPIUtils.LATENESS_WTH_FLEX_IDX];
+
+		final long totalCapacityViolationCount = ScheduleModelKPIUtils.getScheduleViolationCount(schedule);
 
 		return new RowData(scenarioInstance.getName(), totalTradingPNL + totalShippingPNL, totalTradingPNL, totalShippingPNL, totalMtMPNL, totalCost, totalIdleHours, totalGCOHours, totalGCORevenue,
 				totalCapacityViolationCount, totalLatenessHoursIncludingFlex, totalLatenessHoursExcludingFlex);
-	}
-
-	private long getElementShippingPNL(final ProfitAndLossContainer container) {
-		return getElementPNL(container, CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK);
-	}
-
-	private long getElementTradingPNL(final ProfitAndLossContainer container) {
-		return getElementPNL(container, CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK);
-	}
-
-	private long getElementPNL(final ProfitAndLossContainer container, final EStructuralFeature containmentFeature) {
-
-		final GroupProfitAndLoss groupProfitAndLoss = container.getGroupProfitAndLoss();
-		if (groupProfitAndLoss != null) {
-			long totalPNL = 0;
-			for (final EntityProfitAndLoss entityPNL : groupProfitAndLoss.getEntityProfitAndLosses()) {
-				final BaseEntityBook entityBook = entityPNL.getEntityBook();
-				if (entityBook == null) {
-					// Fall back code path for old models.
-					if (containmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK) {
-						return groupProfitAndLoss.getProfitAndLoss();
-					} else {
-						return 0;
-					}
-				} else {
-					if (entityBook.eContainmentFeature() == containmentFeature) {
-						totalPNL += entityPNL.getProfitAndLoss();
-					}
-				}
-			}
-			return totalPNL;
-		}
-		return 0;
 	}
 }

@@ -45,6 +45,8 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.types.VesselAssignmentType;
@@ -569,14 +571,14 @@ public final class ChangeSetTransformerUtil {
 			if (row.isVesselChange()) {
 				continue;
 			}
-			long a = ChangeSetUtils.getGroupProfitAndLoss(row.getOriginalGroupProfitAndLoss());
-			long b = ChangeSetUtils.getGroupProfitAndLoss(row.getNewGroupProfitAndLoss());
+			long a = ScheduleModelKPIUtils.getGroupProfitAndLoss(row.getOriginalGroupProfitAndLoss());
+			long b = ScheduleModelKPIUtils.getGroupProfitAndLoss(row.getNewGroupProfitAndLoss());
 			if (a == b) {
-				a = ChangeSetUtils.getCapacityViolationCount(row.getOriginalEventGrouping());
-				b = ChangeSetUtils.getCapacityViolationCount(row.getNewEventGrouping());
+				a = ScheduleModelKPIUtils.getCapacityViolationCount(row.getOriginalEventGrouping());
+				b = ScheduleModelKPIUtils.getCapacityViolationCount(row.getNewEventGrouping());
 				if (a == b) {
-					a = ChangeSetUtils.getLatenessExcludingFlex(row.getOriginalEventGrouping());
-					b = ChangeSetUtils.getLatenessExcludingFlex(row.getNewEventGrouping());
+					a = LatenessUtils.getLatenessExcludingFlex(row.getOriginalEventGrouping());
+					b = LatenessUtils.getLatenessExcludingFlex(row.getNewEventGrouping());
 					if (a == b) {
 						itr.remove();
 						continue;
@@ -657,8 +659,8 @@ public final class ChangeSetTransformerUtil {
 			final DeltaMetrics deltaMetrics = ChangesetFactory.eINSTANCE.createDeltaMetrics();
 
 			long pnl = 0;
-			long lateness = 0;
-			long violations = 0;
+			int lateness = 0;
+			int violations = 0;
 			if (toSchedule != null) {
 				for (final Sequence sequence : toSchedule.getSequences()) {
 					for (final Event event : sequence.getEvents()) {
@@ -673,8 +675,8 @@ public final class ChangeSetTransformerUtil {
 							if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
 								final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
 								pnl += cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
-								lateness += ChangeSetUtils.getLatenessExcludingFlex(cargoAllocation);
-								violations += ChangeSetUtils.getCapacityViolationCount(cargoAllocation);
+								lateness += LatenessUtils.getLatenessExcludingFlex(cargoAllocation);
+								violations += ScheduleModelKPIUtils.getCapacityViolationCount(cargoAllocation);
 							}
 						}
 					}
@@ -686,8 +688,8 @@ public final class ChangeSetTransformerUtil {
 			}
 			// THIS SHOULD BE THE TO SCHENAR> -- FLIP CODE ROUND
 			currentMetrics.setPnl((int) pnl);
-			currentMetrics.setCapacity((int) violations);
-			currentMetrics.setLateness((int) lateness);
+			currentMetrics.setCapacity(violations);
+			currentMetrics.setLateness(lateness);
 			if (fromSchedule != null) {
 				for (final Sequence sequence : fromSchedule.getSequences()) {
 					for (final Event event : sequence.getEvents()) {
@@ -702,8 +704,8 @@ public final class ChangeSetTransformerUtil {
 							if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
 								final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
 								pnl -= cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
-								lateness -= ChangeSetUtils.getLatenessExcludingFlex(cargoAllocation);
-								violations -= ChangeSetUtils.getCapacityViolationCount(cargoAllocation);
+								lateness -= LatenessUtils.getLatenessExcludingFlex(cargoAllocation);
+								violations -= ScheduleModelKPIUtils.getCapacityViolationCount(cargoAllocation);
 							}
 						}
 					}

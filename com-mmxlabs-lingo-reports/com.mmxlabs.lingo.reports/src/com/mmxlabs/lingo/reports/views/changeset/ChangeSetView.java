@@ -82,6 +82,8 @@ import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
 import com.mmxlabs.scenario.service.IScenarioService;
@@ -905,14 +907,14 @@ public class ChangeSetView implements IAdaptable {
 					{
 						final ProfitAndLossContainer pnlContainer = change.getOriginalGroupProfitAndLoss();
 						if (pnlContainer != null) {
-							f = ChangeSetUtils.getGroupProfitAndLoss(pnlContainer);
+							f = ScheduleModelKPIUtils.getGroupProfitAndLoss(pnlContainer);
 						}
 					}
 					Number t = null;
 					{
 						final ProfitAndLossContainer pnlContainer = change.getNewGroupProfitAndLoss();
 						if (pnlContainer != null) {
-							t = ChangeSetUtils.getGroupProfitAndLoss(pnlContainer);
+							t = ScheduleModelKPIUtils.getGroupProfitAndLoss(pnlContainer);
 						}
 					}
 					double delta = 0;
@@ -965,14 +967,14 @@ public class ChangeSetView implements IAdaptable {
 					{
 						final ProfitAndLossContainer pnlContainer = change.getOriginalGroupProfitAndLoss();
 						if (pnlContainer != null) {
-							f = ChangeSetUtils.getGroupProfitAndLoss(pnlContainer) - ChangeSetUtils.getGroupPreTaxProfitAndLoss(pnlContainer);
+							f = ScheduleModelKPIUtils.getGroupProfitAndLoss(pnlContainer) - ScheduleModelKPIUtils.getGroupPreTaxProfitAndLoss(pnlContainer);
 						}
 					}
 					Number t = null;
 					{
 						final ProfitAndLossContainer pnlContainer = change.getNewGroupProfitAndLoss();
 						if (pnlContainer != null) {
-							t = ChangeSetUtils.getGroupProfitAndLoss(pnlContainer) - ChangeSetUtils.getGroupPreTaxProfitAndLoss(pnlContainer);
+							t = ScheduleModelKPIUtils.getGroupProfitAndLoss(pnlContainer) - ScheduleModelKPIUtils.getGroupPreTaxProfitAndLoss(pnlContainer);
 						}
 					}
 					double delta = 0;
@@ -1005,8 +1007,8 @@ public class ChangeSetView implements IAdaptable {
 					{
 						final EventGrouping eventGrouping = change.getOriginalEventGrouping();
 						if (eventGrouping != null) {
-							originalLateWithFlex = ChangeSetUtils.getLatenessAfterFlex(eventGrouping);
-							originalLateWithoutFlex = ChangeSetUtils.getLatenessExcludingFlex(eventGrouping);
+							originalLateWithFlex = LatenessUtils.getLatenessAfterFlex(eventGrouping);
+							originalLateWithoutFlex = LatenessUtils.getLatenessExcludingFlex(eventGrouping);
 						}
 					}
 					long newLatenessWithFlex = 0;
@@ -1014,8 +1016,8 @@ public class ChangeSetView implements IAdaptable {
 					{
 						final EventGrouping eventGrouping = change.getNewEventGrouping();
 						if (eventGrouping != null) {
-							newLatenessWithFlex = ChangeSetUtils.getLatenessAfterFlex(eventGrouping);
-							newLatenessWithoutFlex = ChangeSetUtils.getLatenessExcludingFlex(eventGrouping);
+							newLatenessWithFlex = LatenessUtils.getLatenessAfterFlex(eventGrouping);
+							newLatenessWithoutFlex = LatenessUtils.getLatenessExcludingFlex(eventGrouping);
 						}
 					}
 
@@ -1093,8 +1095,8 @@ public class ChangeSetView implements IAdaptable {
 					{
 						final EventGrouping eventGrouping = change.getOriginalEventGrouping();
 						if (eventGrouping != null) {
-							originalLateWithFlex = ChangeSetUtils.getLatenessAfterFlex(eventGrouping);
-							originalLateWithoutFlex = ChangeSetUtils.getLatenessExcludingFlex(eventGrouping);
+							originalLateWithFlex = LatenessUtils.getLatenessAfterFlex(eventGrouping);
+							originalLateWithoutFlex = LatenessUtils.getLatenessExcludingFlex(eventGrouping);
 						}
 					}
 					long newLatenessWithFlex = 0;
@@ -1103,8 +1105,8 @@ public class ChangeSetView implements IAdaptable {
 						final EventGrouping eventGrouping = change.getNewEventGrouping();
 						if (eventGrouping != null) {
 
-							newLatenessWithFlex = ChangeSetUtils.getLatenessAfterFlex(eventGrouping);
-							newLatenessWithoutFlex = ChangeSetUtils.getLatenessExcludingFlex(eventGrouping);
+							newLatenessWithFlex = LatenessUtils.getLatenessAfterFlex(eventGrouping);
+							newLatenessWithoutFlex = LatenessUtils.getLatenessExcludingFlex(eventGrouping);
 						}
 					}
 
@@ -1174,14 +1176,14 @@ public class ChangeSetView implements IAdaptable {
 					{
 						final EventGrouping eventGrouping = change.getOriginalEventGrouping();
 						if (eventGrouping != null) {
-							f = ChangeSetUtils.getCapacityViolationCount(eventGrouping);
+							f = ScheduleModelKPIUtils.getCapacityViolationCount(eventGrouping);
 						}
 					}
 					Number t = null;
 					{
 						final EventGrouping eventGrouping = change.getNewEventGrouping();
 						if (eventGrouping != null) {
-							t = ChangeSetUtils.getCapacityViolationCount(eventGrouping);
+							t = ScheduleModelKPIUtils.getCapacityViolationCount(eventGrouping);
 						}
 					}
 					int delta = 0;
@@ -1217,7 +1219,7 @@ public class ChangeSetView implements IAdaptable {
 						if (originalLoadAllocation != null) {
 							final CargoAllocation cargoAllocation = originalLoadAllocation.getCargoAllocation();
 							if (cargoAllocation != null) {
-								final long addnPNL = ChangeSetUtils.getAdditionalProfitAndLoss(cargoAllocation);
+								final long addnPNL = ScheduleModelKPIUtils.getAdditionalProfitAndLoss(cargoAllocation);
 								f = addnPNL;
 							}
 						}
@@ -1228,7 +1230,7 @@ public class ChangeSetView implements IAdaptable {
 						if (newLoadAllocation != null) {
 							final CargoAllocation cargoAllocation = newLoadAllocation.getCargoAllocation();
 							if (cargoAllocation != null) {
-								final long addnPNL = ChangeSetUtils.getAdditionalProfitAndLoss(cargoAllocation);
+								final long addnPNL = ScheduleModelKPIUtils.getAdditionalProfitAndLoss(cargoAllocation);
 								t = addnPNL;
 							}
 						}
@@ -1268,7 +1270,7 @@ public class ChangeSetView implements IAdaptable {
 						if (originalLoadAllocation != null) {
 							final CargoAllocation cargoAllocation = originalLoadAllocation.getCargoAllocation();
 							if (cargoAllocation != null) {
-								final long addnPNL = ChangeSetUtils.getAdditionalShippingProfitAndLoss(cargoAllocation);
+								final long addnPNL = ScheduleModelKPIUtils.getAdditionalShippingProfitAndLoss(cargoAllocation);
 								f = -addnPNL;
 							}
 						}
@@ -1279,7 +1281,7 @@ public class ChangeSetView implements IAdaptable {
 						if (newLoadAllocation != null) {
 							final CargoAllocation cargoAllocation = newLoadAllocation.getCargoAllocation();
 							if (cargoAllocation != null) {
-								final long addnPNL = ChangeSetUtils.getAdditionalShippingProfitAndLoss(cargoAllocation);
+								final long addnPNL = ScheduleModelKPIUtils.getAdditionalShippingProfitAndLoss(cargoAllocation);
 								t = -addnPNL;
 							}
 						}
@@ -1319,7 +1321,7 @@ public class ChangeSetView implements IAdaptable {
 						if (originalLoadAllocation != null) {
 							final CargoAllocation cargoAllocation = originalLoadAllocation.getCargoAllocation();
 							if (cargoAllocation != null) {
-								final long addnPNL = ChangeSetUtils.getAdditionalUpsideProfitAndLoss(cargoAllocation);
+								final long addnPNL = ScheduleModelKPIUtils.getAdditionalUpsideProfitAndLoss(cargoAllocation);
 								f = -addnPNL;
 							}
 						}
@@ -1330,7 +1332,7 @@ public class ChangeSetView implements IAdaptable {
 						if (newLoadAllocation != null) {
 							final CargoAllocation cargoAllocation = newLoadAllocation.getCargoAllocation();
 							if (cargoAllocation != null) {
-								final long addnPNL = ChangeSetUtils.getAdditionalUpsideProfitAndLoss(cargoAllocation);
+								final long addnPNL = ScheduleModelKPIUtils.getAdditionalUpsideProfitAndLoss(cargoAllocation);
 								t = -addnPNL;
 							}
 						}
@@ -1368,14 +1370,14 @@ public class ChangeSetView implements IAdaptable {
 					{
 						final EventGrouping eventGrouping = change.getOriginalEventGrouping();
 						if (eventGrouping != null) {
-							f = ChangeSetUtils.getTotalShippingCost(eventGrouping);
+							f = ScheduleModelKPIUtils.getTotalShippingCost(eventGrouping);
 						}
 					}
 					Number t = null;
 					{
 						final EventGrouping eventGrouping = change.getNewEventGrouping();
 						if (eventGrouping != null) {
-							t = ChangeSetUtils.getTotalShippingCost(eventGrouping);
+							t = ScheduleModelKPIUtils.getTotalShippingCost(eventGrouping);
 						}
 					}
 					double delta = 0;

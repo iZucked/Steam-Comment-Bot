@@ -8,6 +8,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
@@ -63,8 +65,9 @@ public final class VerticalReportUtils {
 	 * @param end
 	 * @return
 	 */
+	@NonNull
 	public static List<LocalDate> getUTCDaysBetween(final LocalDate start, final LocalDate end) {
-		final ArrayList<LocalDate> result = new ArrayList<>();
+		final List<LocalDate> result = new ArrayList<>();
 		if (start != null && end != null) {
 			LocalDate current = start;
 			while (!current.isAfter(end)) {

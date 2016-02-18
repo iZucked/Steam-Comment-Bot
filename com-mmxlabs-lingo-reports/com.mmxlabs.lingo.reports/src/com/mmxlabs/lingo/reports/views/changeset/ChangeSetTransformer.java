@@ -63,6 +63,8 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -612,43 +614,20 @@ public class ChangeSetTransformer {
 		final Metrics currentMetrics = ChangesetFactory.eINSTANCE.createMetrics();
 		final DeltaMetrics deltaMetrics = ChangesetFactory.eINSTANCE.createDeltaMetrics();
 
-		long pnl = 0;
-		long lateness = 0;
-		long violations = 0;
 		{
-			for (final Sequence sequence : toSchedule.getSequences()) {
-				for (final Event event : sequence.getEvents()) {
-					if (event instanceof ProfitAndLossContainer) {
-						final ProfitAndLossContainer profitAndLossContainer = (ProfitAndLossContainer) event;
-						final GroupProfitAndLoss groupProfitAndLoss = profitAndLossContainer.getGroupProfitAndLoss();
-						if (groupProfitAndLoss != null) {
-							pnl += groupProfitAndLoss.getProfitAndLoss();
-						}
-					} else if (event instanceof SlotVisit) {
-						final SlotVisit slotVisit = (SlotVisit) event;
-						if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-							final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
-							pnl += cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
-							lateness += ChangeSetUtils.getLatenessExcludingFlex(cargoAllocation);
-							violations += ChangeSetUtils.getCapacityViolationCount(cargoAllocation);
-						}
-					}
-				}
-			}
+			long pnl = ScheduleModelKPIUtils.getScheduleProfitAndLoss(toSchedule);
+			int lateness = ScheduleModelKPIUtils.getScheduleLateness(toSchedule)[ScheduleModelKPIUtils.LATENESS_WITHOUT_FLEX_IDX];
+			int violations = ScheduleModelKPIUtils.getScheduleViolationCount(toSchedule);
 
-			for (final OpenSlotAllocation openSlotAllocation : fromSchedule.getOpenSlotAllocations()) {
-				pnl += openSlotAllocation.getGroupProfitAndLoss().getProfitAndLoss();
-			}
+			currentMetrics.setPnl((int) pnl);
+			currentMetrics.setCapacity((int) violations);
+			currentMetrics.setLateness((int) lateness);
 		}
 
-		currentMetrics.setPnl((int) pnl);
-		currentMetrics.setCapacity((int) violations);
-		currentMetrics.setLateness((int) lateness);
-		pnl = 0;
-		violations = 0;
-		lateness = 0;
+		long pnl = 0L;
+		long violations = 0L;
+		long lateness = 0L;
 		{
-
 			for (ChangeSetRow row : changeSet.getChangeSetRowsToPrevious()) {
 				{
 					ProfitAndLossContainer newGroupProfitAndLoss = row.getNewGroupProfitAndLoss();
@@ -659,8 +638,8 @@ public class ChangeSetTransformer {
 						}
 						if (groupProfitAndLoss instanceof CargoAllocation) {
 							CargoAllocation cargoAllocation = (CargoAllocation) groupProfitAndLoss;
-							lateness += ChangeSetUtils.getLatenessExcludingFlex(cargoAllocation);
-							violations += ChangeSetUtils.getCapacityViolationCount(cargoAllocation);
+							lateness += LatenessUtils.getLatenessExcludingFlex(cargoAllocation);
+							violations += ScheduleModelKPIUtils.getCapacityViolationCount(cargoAllocation);
 						}
 					}
 
@@ -672,8 +651,8 @@ public class ChangeSetTransformer {
 						}
 						if (groupProfitAndLoss instanceof CargoAllocation) {
 							CargoAllocation cargoAllocation = (CargoAllocation) groupProfitAndLoss;
-							lateness -= ChangeSetUtils.getLatenessExcludingFlex(cargoAllocation);
-							violations -= ChangeSetUtils.getCapacityViolationCount(cargoAllocation);
+							lateness -= LatenessUtils.getLatenessExcludingFlex(cargoAllocation);
+							violations -= ScheduleModelKPIUtils.getCapacityViolationCount(cargoAllocation);
 						}
 					}
 				}

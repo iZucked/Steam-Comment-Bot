@@ -29,7 +29,6 @@ import com.mmxlabs.lingo.reports.components.IColumnFactory;
 import com.mmxlabs.lingo.reports.components.MultiObjectEmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.components.SimpleEmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.diff.utils.PNLDeltaUtils;
-import com.mmxlabs.lingo.reports.diff.utils.ScheduleCostUtils;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
@@ -70,6 +69,7 @@ import com.mmxlabs.models.lng.schedule.SlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
@@ -239,7 +239,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				@Override
 				public Integer getIntValue(final Object object) {
 
-					return ScheduleCostUtils.calculateLegCost(object, cargoAllocationRef, loadAllocationRef);
+					return ScheduleModelKPIUtils.calculateLegCost(object, cargoAllocationRef, loadAllocationRef);
 				}
 
 			}));
@@ -250,7 +250,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				@Override
 				public Integer getIntValue(final Object object) {
 
-					return ScheduleCostUtils.calculateLegCost(object, cargoAllocationRef, dischargeAllocationRef);
+					return ScheduleModelKPIUtils.calculateLegCost(object, cargoAllocationRef, dischargeAllocationRef);
 				}
 			}));
 			break;

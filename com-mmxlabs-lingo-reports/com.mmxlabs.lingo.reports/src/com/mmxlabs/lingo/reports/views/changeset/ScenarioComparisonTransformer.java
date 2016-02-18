@@ -34,9 +34,10 @@ import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -174,8 +175,8 @@ public class ScenarioComparisonTransformer {
 	}
 
 	private void processCycleGroup(final CycleGroup cycleGroup, @NonNull final Map<String, ChangeSetRow> lhsRowMap, @NonNull final Map<String, ChangeSetRow> rhsRowMap,
-			Map<String, List<ChangeSetRow>> lhsRowMarketMap, Map<String, List<ChangeSetRow>> rhsRowMarketMap, @NonNull final List<ChangeSetRow> rows, final Map<EObject, Set<EObject>> equivalancesMap,
-			final int pass) {
+			@NonNull Map<String, List<ChangeSetRow>> lhsRowMarketMap, @NonNull Map<String, List<ChangeSetRow>> rhsRowMarketMap, @NonNull final List<ChangeSetRow> rows,
+			final Map<EObject, Set<EObject>> equivalancesMap, final int pass) {
 		for (final Row r : cycleGroup.getRows()) {
 
 			final boolean isBase = true;
@@ -256,38 +257,13 @@ public class ScenarioComparisonTransformer {
 		final Metrics currentMetrics = ChangesetFactory.eINSTANCE.createMetrics();
 		final DeltaMetrics deltaMetrics = ChangesetFactory.eINSTANCE.createDeltaMetrics();
 
-		long pnl = 0;
-		long lateness = 0;
-		long violations = 0;
-		{
-			for (final Sequence sequence : fromSchedule.getSequences()) {
-				for (final Event event : sequence.getEvents()) {
-					if (event instanceof ProfitAndLossContainer) {
-						final ProfitAndLossContainer profitAndLossContainer = (ProfitAndLossContainer) event;
-						final GroupProfitAndLoss groupProfitAndLoss = profitAndLossContainer.getGroupProfitAndLoss();
-						if (groupProfitAndLoss != null) {
-							pnl += groupProfitAndLoss.getProfitAndLoss();
-						}
-					} else if (event instanceof SlotVisit) {
-						final SlotVisit slotVisit = (SlotVisit) event;
-						if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-							final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
-							pnl += cargoAllocation.getGroupProfitAndLoss().getProfitAndLoss();
-							lateness += ChangeSetUtils.getLatenessExcludingFlex(cargoAllocation);
-							violations += ChangeSetUtils.getCapacityViolationCount(cargoAllocation);
-						}
-					}
-				}
-			}
-
-			for (final OpenSlotAllocation openSlotAllocation : fromSchedule.getOpenSlotAllocations()) {
-				pnl += openSlotAllocation.getGroupProfitAndLoss().getProfitAndLoss();
-			}
-		}
+		long pnl = ScheduleModelKPIUtils.getScheduleProfitAndLoss(fromSchedule);
+		int lateness = ScheduleModelKPIUtils.getScheduleLateness(fromSchedule)[ScheduleModelKPIUtils.LATENESS_WITHOUT_FLEX_IDX];
+		int violations = ScheduleModelKPIUtils.getScheduleViolationCount(fromSchedule);
 
 		currentMetrics.setPnl((int) pnl);
-		currentMetrics.setCapacity((int) violations);
-		currentMetrics.setLateness((int) lateness);
+		currentMetrics.setCapacity(violations);
+		currentMetrics.setLateness(lateness);
 		pnl = 0;
 		violations = 0;
 		lateness = 0;
@@ -303,8 +279,8 @@ public class ScenarioComparisonTransformer {
 						}
 						if (newGroupProfitAndLoss instanceof CargoAllocation) {
 							final CargoAllocation cargoAllocation = (CargoAllocation) newGroupProfitAndLoss;
-							lateness += ChangeSetUtils.getLatenessExcludingFlex(cargoAllocation);
-							violations += ChangeSetUtils.getCapacityViolationCount(cargoAllocation);
+							lateness += LatenessUtils.getLatenessExcludingFlex(cargoAllocation);
+							violations += ScheduleModelKPIUtils.getCapacityViolationCount(cargoAllocation);
 						}
 					}
 
@@ -316,16 +292,16 @@ public class ScenarioComparisonTransformer {
 						}
 						if (originalGroupProfitAndLoss instanceof CargoAllocation) {
 							final CargoAllocation cargoAllocation = (CargoAllocation) originalGroupProfitAndLoss;
-							lateness -= ChangeSetUtils.getLatenessExcludingFlex(cargoAllocation);
-							violations -= ChangeSetUtils.getCapacityViolationCount(cargoAllocation);
+							lateness -= LatenessUtils.getLatenessExcludingFlex(cargoAllocation);
+							violations -= ScheduleModelKPIUtils.getCapacityViolationCount(cargoAllocation);
 						}
 					}
 				}
 			}
 		}
 		deltaMetrics.setPnlDelta((int) pnl);
-		deltaMetrics.setLatenessDelta((int) lateness);
-		deltaMetrics.setCapacityDelta((int) violations);
+		deltaMetrics.setLatenessDelta(lateness);
+		deltaMetrics.setCapacityDelta(violations);
 		changeSet.setMetricsToPrevious(deltaMetrics);
 
 		changeSet.setCurrentMetrics(currentMetrics);
