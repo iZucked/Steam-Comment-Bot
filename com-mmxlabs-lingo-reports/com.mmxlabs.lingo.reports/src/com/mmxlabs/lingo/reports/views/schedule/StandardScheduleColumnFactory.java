@@ -293,8 +293,8 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				public Integer getIntValue(final Object object) {
 					if (object instanceof CargoAllocation) {
 						final CargoAllocation allocation = (CargoAllocation) object;
-						int total = ScheduleCostUtils.calculateLegCost(allocation);
-						return total;
+						long total = ScheduleModelKPIUtils.calculateLegCost(allocation);
+						return (int)total;
 					}
 					return null;
 
