@@ -543,7 +543,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 		}
 	}
 
-	protected boolean shouldExportExtension(EObject object, EObject extension) {
+	protected boolean shouldExportExtension(final EObject object, final EObject extension) {
 		return true;
 	}
 
