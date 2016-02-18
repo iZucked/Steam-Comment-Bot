@@ -15,11 +15,14 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 import com.mmxlabs.lingo.reports.IReportContents;
+import com.mmxlabs.lingo.reports.views.IProvideEditorInputScenario;
 import com.mmxlabs.lingo.reports.views.fleet.ConfigurableFleetReportView;
 import com.mmxlabs.lingo.reports.views.portrotation.PortRotationReportView;
 import com.mmxlabs.lingo.reports.views.schedule.ConfigurableScheduleReportView;
 import com.mmxlabs.lingo.reports.views.standard.CapacityViolationReportView;
 import com.mmxlabs.lingo.reports.views.standard.CooldownReportView;
+import com.mmxlabs.lingo.reports.views.standard.HeadlineReportView;
+import com.mmxlabs.lingo.reports.views.standard.KPIReportView;
 import com.mmxlabs.lingo.reports.views.standard.LatenessReportView;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
@@ -53,6 +56,12 @@ public class ReportTesterHelper {
 	public static final String COOLDOWN_REPORT_ID = CooldownReportView.ID;
 	public static final String COOLDOWN_REPORT_SHORTNAME = "CooldownReport";
 
+	public static final String HEADLINE_REPORT_ID = HeadlineReportView.ID;
+	public static final String HEADLINE_REPORT_SHORTNAME = "HeadlineReport";
+
+	public static final String KPI_REPORT_ID = KPIReportView.ID;
+	public static final String KPI_REPORT_SHORTNAME = "KPIReport";
+
 	@Nullable
 	public IReportContents getReportContents(final ScenarioInstance scenario, final String reportID) throws InterruptedException {
 
@@ -79,11 +88,16 @@ public class ReportTesterHelper {
 						Assert.assertNotNull(view[0]);
 						activePage.activate(view[0]);
 
-					} catch (PartInitException e) {
+					} catch (final PartInitException e) {
 						e.printStackTrace();
 					}
 				}
 			});
+
+			final IProvideEditorInputScenario scenarioInputProvider = view[0].getAdapter(IProvideEditorInputScenario.class);
+			if (scenarioInputProvider != null) {
+				scenarioInputProvider.provideScenarioInstance(scenario);
+			}
 
 			// Step two set the new selection, release UI thread
 			Thread.sleep(1000);
