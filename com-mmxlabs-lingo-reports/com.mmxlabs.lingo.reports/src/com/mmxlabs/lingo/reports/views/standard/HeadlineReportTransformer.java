@@ -129,7 +129,7 @@ class HeadlineReportTransformer {
 		final long totalTradingPNL = scheduleProfitAndLoss[ScheduleModelKPIUtils.TRADING_PNL_IDX];
 		final long totalShippingPNL = scheduleProfitAndLoss[ScheduleModelKPIUtils.SHIPPING_PNL_IDX];
 
-		final long[] scheduleLateness = ScheduleModelKPIUtils.getScheduleProfitAndLossSplit(schedule);
+		final int[] scheduleLateness = ScheduleModelKPIUtils.getScheduleLateness(schedule);
 		final long totalLatenessHoursExcludingFlex = scheduleLateness[ScheduleModelKPIUtils.LATENESS_WITHOUT_FLEX_IDX];
 		final long totalLatenessHoursIncludingFlex = scheduleLateness[ScheduleModelKPIUtils.LATENESS_WTH_FLEX_IDX];
 
