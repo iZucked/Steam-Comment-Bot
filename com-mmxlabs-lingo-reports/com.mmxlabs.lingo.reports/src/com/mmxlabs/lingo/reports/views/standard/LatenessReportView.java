@@ -211,13 +211,13 @@ public class LatenessReportView extends EMFReportView {
 	}
 
 	@Override
-	public Object getAdapter(final Class adapter) {
+	public <T> T getAdapter(final Class<T> adapter) {
 
 		if (IReportContents.class.isAssignableFrom(adapter)) {
 
 			final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
 			final String contents = util.convert();
-			return new IReportContents() {
+			return (T) new IReportContents() {
 
 				@Override
 				public String getStringContents() {

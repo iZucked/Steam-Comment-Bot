@@ -7,7 +7,9 @@ package com.mmxlabs.lingo.reports.views.standard;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
+import org.eclipse.core.runtime.preferences.IPreferenceFilter;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -35,9 +37,11 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
+import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
 import com.mmxlabs.lingo.reports.services.ISelectedScenariosServiceListener;
 import com.mmxlabs.lingo.reports.services.SelectedScenariosService;
+import com.mmxlabs.lingo.reports.views.IProvideEditorInputScenario;
 import com.mmxlabs.lingo.reports.views.standard.HeadlineReportTransformer.RowData;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
@@ -45,6 +49,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
+import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
@@ -563,5 +568,56 @@ public class HeadlineReportView extends ViewPart {
 		} else {
 			return String.format("%,d", value);
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T getAdapter(final Class<T> adapter) {
+
+		if (IProvideEditorInputScenario.class.isAssignableFrom(adapter)) {
+			return (T) new IProvideEditorInputScenario() {
+				@Override
+				public void provideScenarioInstance(ScenarioInstance scenarioInstance) {
+
+					if (HeadlineReportView.this.modelReference != null) {
+						HeadlineReportView.this.modelReference.close();
+						HeadlineReportView.this.modelReference = null;
+					}
+					HeadlineReportView.this.currentActiveEditor = null;
+					ScheduleModel scheduleModel = null;
+
+					if (scenarioInstance != null) {
+						if (!scenarioInstance.isLoadFailure()) {
+							HeadlineReportView.this.modelReference = scenarioInstance.getReference();
+							final EObject instance = modelReference.getInstance();
+							if (instance instanceof LNGScenarioModel) {
+								final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) instance;
+								scheduleModel = lngScenarioModel.getScheduleModel();
+							}
+						}
+					}
+					// this.activeEditor = activeEditor;
+					HeadlineReportView.this.scheduleModel = scheduleModel;
+
+				}
+			};
+		}
+
+		if (IReportContents.class.isAssignableFrom(adapter))
+
+		{
+
+			final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
+			final String contents = util.convert();
+			return (T) new IReportContents() {
+
+				@Override
+				public String getStringContents() {
+					return contents;
+				}
+			};
+		}
+
+		return super.getAdapter(adapter);
 	}
 }
