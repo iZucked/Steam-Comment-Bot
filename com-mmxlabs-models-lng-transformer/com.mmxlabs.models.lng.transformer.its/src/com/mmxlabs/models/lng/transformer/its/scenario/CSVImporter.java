@@ -159,7 +159,8 @@ public class CSVImporter {
 		importPromptData(urlRoot);
 	}
 
-	private URL createURL(final String urlRoot, final String filename) throws MalformedURLException {
+	@NonNull
+	protected URL createURL(final String urlRoot, final String filename) throws MalformedURLException {
 		return new URL(String.format("%s/%s", urlRoot, filename));
 	}
 
@@ -364,7 +365,7 @@ public class CSVImporter {
 		try {
 			for (final String key : parts.keySet()) {
 				try {
-					URL url = dataMap.get(key);
+					final URL url = dataMap.get(key);
 					if (url != null) {
 						@SuppressWarnings("resource")
 						final CSVReader r = new FileCSVReader(url);
@@ -403,7 +404,7 @@ public class CSVImporter {
 			try {
 				for (final String key : parts.keySet()) {
 					try {
-						URL url = dataMap.get(key);
+						final URL url = dataMap.get(key);
 						if (url != null) {
 							@SuppressWarnings("resource")
 							final CSVReader r = new FileCSVReader(url);
