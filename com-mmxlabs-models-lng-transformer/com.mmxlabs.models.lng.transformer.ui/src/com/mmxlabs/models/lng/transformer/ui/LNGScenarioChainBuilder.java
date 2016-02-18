@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -95,7 +96,7 @@ public class LNGScenarioChainBuilder {
 
 			if (doActionSetPostOptimisation) {
 				// Run the action set post optimisation
-				boolean doSecondRun = doSecondActionSetRun(optimiserSettings);
+				final boolean doSecondRun = doSecondActionSetRun(optimiserSettings);
 				if (doSecondRun) {
 					LNGActionSetTransformerUnit.chainFake(builder, optimiserSettings, executorService, PROGRESS_ACTION_SET_OPTIMISATION / 2);
 					LNGActionSetTransformerUnit.chain(builder, optimiserSettings, executorService, PROGRESS_ACTION_SET_OPTIMISATION / 2);
@@ -140,14 +141,20 @@ public class LNGScenarioChainBuilder {
 		if (System.getProperty(PROPERTY_MMX_DISABLE_SECOND_ACTION_SET_RUN) != null) {
 			return false;
 		}
-
 		boolean over3Months = false;
 		final OptimisationRange range = optimiserSettings.getRange();
 		if (range != null) {
 			if (!range.isSetOptimiseAfter() || !range.isSetOptimiseBefore()) {
 				over3Months = true;
-			} else if (Months.between(range.getOptimiseAfter(), range.getOptimiseBefore()) > 3) {
-				over3Months = true;
+			} else {
+				final YearMonth after = range.getOptimiseAfter();
+				final YearMonth before = range.getOptimiseBefore();
+				if (after == null || before == null) {
+					over3Months = true;
+
+				} else if (Months.between(after, before) > 3) {
+					over3Months = true;
+				}
 			}
 		}
 		return over3Months;
