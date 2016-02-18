@@ -26,23 +26,48 @@ public class PanamaCanalTariffImporter extends DefaultClassImporter {
 		LocalDate availableFrom;
 	}
 
+	public class MarkupRate extends EObjectImpl {
+		double markupRate;
+	}
+
 	public static final String AVAILABLE_FROM_KEY = "availablefrom";
+
+	public static final String MARKUP_RATE_KEY = "markuprate";
 
 	@Override
 	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IMMXImportContext context) {
 
 		if (row.containsKey(AVAILABLE_FROM_KEY)) {
 			final String dateString = row.get(AVAILABLE_FROM_KEY);
-			LocalDate localDate;
-			try {
-				localDate = new LocalDateAttributeImporter().parseLocalDate(dateString);
+			if (dateString != null && !dateString.isEmpty()) {
+				LocalDate localDate;
+				try {
+					localDate = new LocalDateAttributeImporter().parseLocalDate(dateString);
 
-				final AvailableFrom data = new AvailableFrom();
-				data.availableFrom = localDate;
-				return new ImportResults(data);
-			} catch (final ParseException e) {
-				context.createProblem("Unable to parse available from date", true, true, true);
-				return new ImportResults(null);
+					final AvailableFrom data = new AvailableFrom();
+					data.availableFrom = localDate;
+					return new ImportResults(data);
+				} catch (final ParseException e) {
+					context.createProblem("Unable to parse available from date", true, true, true);
+					return new ImportResults(null);
+				}
+			}
+		}
+
+		if (row.containsKey(MARKUP_RATE_KEY)) {
+			final String rateString = row.get(MARKUP_RATE_KEY);
+			if (rateString != null && !rateString.isEmpty()) {
+				Double rate;
+				try {
+					rate = Double.parseDouble(rateString);
+
+					final MarkupRate data = new MarkupRate();
+					data.markupRate = rate;
+					return new ImportResults(data);
+				} catch (final NumberFormatException e) {
+					context.createProblem("Unable to parse markup rate", true, true, true);
+					return new ImportResults(null);
+				}
 			}
 		}
 
@@ -57,6 +82,12 @@ public class PanamaCanalTariffImporter extends DefaultClassImporter {
 			row.put(AVAILABLE_FROM_KEY, dateString);
 			exportObjects.add(row);
 		}
+		{
+			final Map<String, String> row = new HashMap<>();
+			row.put(MARKUP_RATE_KEY, String.format("%0,1f", tariff.getMarkupRate()));
+			exportObjects.add(row);
+		}
+
 		return exportObjects;
 
 	}
