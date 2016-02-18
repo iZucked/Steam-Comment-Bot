@@ -53,7 +53,7 @@ public class CargoMaker {
 	public CargoMaker(@NonNull final CargoModelBuilder cargoModelBuilder) {
 		this.cargoModelBuilder = cargoModelBuilder;
 		this.cargo = CargoFactory.eINSTANCE.createCargo();
-
+		this.cargo.setAllowRewiring(true);
 	}
 
 	public CargoMakerSlotMaker makeFOBPurchase(@NonNull final String name, @NonNull final LocalDate windowStart, @NonNull final Port port, @Nullable final PurchaseContract purchaseContract,
