@@ -61,6 +61,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.mmxlabs.lingo.reports.IReportContents;
 import com.mmxlabs.lingo.reports.services.EDiffOption;
 import com.mmxlabs.lingo.reports.services.IScenarioComparisonServiceListener;
 import com.mmxlabs.lingo.reports.services.ISelectedDataProvider;
@@ -86,6 +87,7 @@ import com.mmxlabs.models.lng.schedule.util.LatenessUtils;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelKPIUtils;
 import com.mmxlabs.rcp.common.RunnerHelper;
 import com.mmxlabs.rcp.common.ViewerHelper;
+import com.mmxlabs.rcp.common.actions.CopyGridToHtmlStringUtil;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.IScenarioServiceListener;
 import com.mmxlabs.scenario.service.impl.ScenarioServiceListener;
@@ -108,6 +110,11 @@ public class ChangeSetView implements IAdaptable {
 	private GridViewerColumn vesselColumnStub;
 
 	private ChangeSetWiringDiagram diagram;
+
+	/**
+	 * Display textual vessel change markers - used for unit testing where graphics are not captured in data dump.
+	 */
+	private boolean textualVesselMarkers = false;
 
 	@Inject
 	private IScenarioServiceSelectionProvider scenarioSelectionProvider;
@@ -325,6 +332,26 @@ public class ChangeSetView implements IAdaptable {
 			}
 		}
 
+		if (IReportContents.class.isAssignableFrom(adapter)) {
+
+			try {
+				textualVesselMarkers = true;
+				// Need to refresh the view to trigger creation of the text labels
+				ViewerHelper.refresh(viewer, true);
+				final CopyGridToHtmlStringUtil util = new CopyGridToHtmlStringUtil(viewer.getGrid(), false, true);
+				final String contents = util.convert();
+				return new IReportContents() {
+
+					@Override
+					public String getStringContents() {
+						// Prefix this header for rendering purposes
+						return "<meta charset=\"UTF-8\"/>" + contents;
+					}
+				};
+			} finally {
+				textualVesselMarkers = false;
+			}
+		}
 		return null;
 	}
 
@@ -1558,10 +1585,14 @@ public class ChangeSetView implements IAdaptable {
 
 					if (name.equals(changeSetRow.getNewVesselName())) {
 						cell.setImage(imageClosedCircle);
-						// cell.setText("●");
+						if (textualVesselMarkers) {
+							cell.setText("●");
+						}
 					} else if (name.equals(changeSetRow.getOriginalVesselName())) {
 						cell.setImage(imageOpenCircle);
-						// cell.setText("○");
+						if (textualVesselMarkers) {
+							cell.setText("○");
+						}
 					}
 				}
 			}
