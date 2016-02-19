@@ -162,9 +162,6 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 	private void runAdvancedOptimisationTestCase(final boolean limitedIterations, @NonNull final SimilarityMode mode, final boolean withActionSets, final boolean withGeneratedCharterOuts)
 			throws Exception {
 
-		Assume.assumeFalse(withActionSets);
-		Assume.assumeNotNull(periodStart, periodEnd);
-
 		if (withActionSets) {
 			// Preconditions check - ensure period, otherwise ignore test case
 			Assume.assumeTrue(periodStart != null);
