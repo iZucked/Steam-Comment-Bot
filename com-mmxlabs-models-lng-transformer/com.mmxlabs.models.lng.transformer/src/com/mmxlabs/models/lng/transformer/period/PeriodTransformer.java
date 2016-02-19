@@ -65,6 +65,7 @@ import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.util.ScenarioModelUtil;
 import com.mmxlabs.models.lng.schedule.Cooldown;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -230,9 +231,18 @@ public class PeriodTransformer {
 		final Triple<Set<Cargo>, Set<Event>, Set<VesselEvent>> eventDependencies = findVesselEventsToRemoveAndDependencies(output.getScheduleModel().getSchedule(), periodRecord, cargoModel,
 				objectToPortVisitMap);
 		updateSlotsToRemoveWithDependencies(slotAllocationMap, slotsToRemove, cargoesToRemove, eventDependencies.getFirst());
+
 		// Update vessel availabilities
 		updateVesselAvailabilities(periodRecord, cargoModel, spotMarketsModel, startConditionMap, endConditionMap, eventDependencies.getFirst(), eventDependencies.getSecond(), objectToPortVisitMap);
 		checkIfRemovedSlotsAreStillNeeded(seenSlots, slotsToRemove, cargoesToRemove, newVesselAvailabilities, startConditionMap, endConditionMap, slotAllocationMap);
+
+		if (extensions != null) {
+			final List<Slot> extraDependencies = new LinkedList<Slot>();
+			for (final IPeriodTransformerExtension ext : extensions) {
+				ext.processSlotInclusionsAndExclusions(cargoModel, output.getScheduleModel().getSchedule(), slotsToRemove, cargoesToRemove);
+			}
+		}
+
 		final List<Pair<CharterInMarket, Integer>> spotCharterUse = getSpotCharterInUseForCargoes(cargoesToRemove);
 		updateSpotCharterMarkets(mapping, spotCharterUse, cargoModel, spotMarketsModel, cargoesToRemove);
 
@@ -540,9 +550,9 @@ public class PeriodTransformer {
 	 * @param endConditionMap
 	 * @param slotAllocationMap
 	 */
-	public void checkIfRemovedSlotsAreStillNeeded(final Set<Slot> seenSlots, final Collection<Slot> slotsToRemove, final Collection<Cargo> cargoesToRemove,
-			final List<VesselAvailability> newVesselAvailabilities, final Map<AssignableElement, PortVisit> startConditionMap, final Map<AssignableElement, PortVisit> endConditionMap,
-			final Map<Slot, SlotAllocation> slotAllocationMap) {
+	public void checkIfRemovedSlotsAreStillNeeded(final @NonNull Set<Slot> seenSlots, final @NonNull Collection<Slot> slotsToRemove, final @NonNull Collection<Cargo> cargoesToRemove,
+			final @NonNull List<VesselAvailability> newVesselAvailabilities, final @NonNull Map<AssignableElement, PortVisit> startConditionMap,
+			final @NonNull Map<AssignableElement, PortVisit> endConditionMap, final @NonNull Map<Slot, SlotAllocation> slotAllocationMap) {
 
 		for (final Slot slot : seenSlots) {
 			// Slot has already been removed, ignore it.
@@ -556,9 +566,9 @@ public class PeriodTransformer {
 		}
 	}
 
-	private void updateSlotDependencies(final Collection<Slot> slotsToRemove, final Collection<Cargo> cargoesToRemove, final List<VesselAvailability> newVesselAvailabilities,
-			final Map<AssignableElement, PortVisit> startConditionMap, final Map<AssignableElement, PortVisit> endConditionMap, final Map<Slot, SlotAllocation> slotAllocationMap,
-			final Set<Slot> slotDependencies) {
+	private void updateSlotDependencies(final @NonNull Collection<Slot> slotsToRemove, final @NonNull Collection<Cargo> cargoesToRemove,
+			final @NonNull List<VesselAvailability> newVesselAvailabilities, final @NonNull Map<AssignableElement, PortVisit> startConditionMap,
+			@NonNull final Map<AssignableElement, PortVisit> endConditionMap, @NonNull final Map<Slot, SlotAllocation> slotAllocationMap, final Set<Slot> slotDependencies) {
 		for (final Slot dep : slotDependencies) {
 			if (slotsToRemove.contains(dep)) {
 				slotsToRemove.remove(dep);
@@ -998,7 +1008,6 @@ public class PeriodTransformer {
 			if (vesselAvailability.getEndHeel() == null) {
 				vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
 			}
-
 			// Set must arrive cold with target heel volume
 			final int heel = portVisit.getHeelAtStart();
 			if (heel > 0 || portVisit.getPreviousEvent() instanceof Cooldown) {
