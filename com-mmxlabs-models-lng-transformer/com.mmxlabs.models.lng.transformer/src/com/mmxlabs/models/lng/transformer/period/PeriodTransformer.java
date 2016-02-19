@@ -200,6 +200,25 @@ public class PeriodTransformer {
 		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
 		generateSlotAllocationMap(output, slotAllocationMap);
 
+		// final Map<Cargo, CargoAllocation> fullMap = originalScenario.getScheduleModel().getSchedule().getCargoAllocations().stream() //
+		// .collect(Collectors.toMap(CargoAllocation::getInputCargo, Function.identity()));
+
+		final Map<VesselAvailability, Event> map = output.getScheduleModel().getSchedule().getSequences().stream() //
+				.filter(s -> s.getVesselAvailability() != null) //
+				.collect(Collectors.toMap(Sequence::getVesselAvailability, s -> s.getEvents().get(s.getEvents().size() - 1)));
+
+		// Set initial end conditions - if open, use the evaluated end date to keep long ballast leg P&L the same
+		for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
+			final EndEvent endEvent = (EndEvent) map.get(vesselAvailability);
+			if (!vesselAvailability.isSetEndAfter() && !vesselAvailability.isSetEndBy()) {
+				vesselAvailability.setEndAfter(endEvent.getStart().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime());
+				vesselAvailability.setEndBy(endEvent.getStart().withZoneSameInstant(ZoneId.of("Etc/UTC")).toLocalDateTime());
+			}
+			if (!vesselAvailability.getEndAt().isEmpty()) {
+				vesselAvailability.getEndAt().add(endEvent.getPort());
+			}
+		}
+
 		// List of new vessel availabilities for cargoes outside normal range
 		final List<VesselAvailability> newVesselAvailabilities = new LinkedList<>();
 		final Set<Slot> seenSlots = new HashSet<>();
