@@ -17,7 +17,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.swt.internal.win32.SIPINFO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +56,7 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 /**
  * The {@link LNGScenarioToOptimiserBridge} creates and maintains the mapping between the original {@link LNGScenarioModel} and the optimiser data structures to allow saving of the results. This class
  * also handles the Period Optimisation transformation. Call {@link #overwrite(int, ISequences, Map)} to save into the current {@link ScenarioInstance}. Call
- * {@link #storeAsCopy(ISequences, String, Container, Map)} to save the result in a copy of the {@link SIPINFO}
+ * {@link #storeAsCopy(ISequences, String, Container, Map)} to save the result in a copy of the {@link ScenarioInstance}
  * 
  * 
  * @author Simon Goodall
