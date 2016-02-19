@@ -59,8 +59,6 @@ public abstract class AbstractReportTester extends AbstractOptimisationResultTes
 		testReports(ReportTesterHelper.CAPACITY_REPORT_ID, ReportTesterHelper.CAPACITY_REPORT_SHORTNAME, "html");
 	}
 
-	@Ignore
-
 	@Test
 	@Category(ReportTest.class)
 	public void testVesselReport() throws Exception {
