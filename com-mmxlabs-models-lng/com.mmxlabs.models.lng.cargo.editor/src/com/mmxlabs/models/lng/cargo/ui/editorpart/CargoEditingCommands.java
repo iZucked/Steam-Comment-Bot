@@ -16,6 +16,7 @@ import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.StructuredSelection;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -36,25 +37,33 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
+import com.mmxlabs.models.ui.registries.IModelFactoryRegistry;
 
 /**
  */
 public class CargoEditingCommands {
 
-	private final EditingDomain editingDomain;
+	private final @NonNull EditingDomain editingDomain;
 
-	private final LNGScenarioModel scenarioModel;
+	private final @NonNull LNGScenarioModel scenarioModel;
+
+	private final @NonNull IModelFactoryRegistry modelFactoryRegistry;
 
 	/**
 	 */
-	public CargoEditingCommands(final EditingDomain editingDomain, final LNGScenarioModel rootObject) {
+	public CargoEditingCommands(final @NonNull EditingDomain editingDomain, final @NonNull LNGScenarioModel rootObject) {
+		this(editingDomain, rootObject, Activator.getDefault().getModelFactoryRegistry());
+	}
+
+	public CargoEditingCommands(final @NonNull EditingDomain editingDomain, final @NonNull LNGScenarioModel rootObject, final @NonNull IModelFactoryRegistry modelFactoryRegistry) {
 		this.editingDomain = editingDomain;
 		this.scenarioModel = rootObject;
+		this.modelFactoryRegistry = modelFactoryRegistry;
 	}
 
 	@SuppressWarnings("unchecked")
 	public <T> T createObject(final EClass clz, final EReference reference, final EObject container) {
-		final List<IModelFactory> factories = Activator.getDefault().getModelFactoryRegistry().getModelFactories(clz);
+		final List<IModelFactory> factories = modelFactoryRegistry.getModelFactories(clz);
 
 		// TODO: Pre-generate and link to UI
 		// TODO: Add FOB/DES etc as explicit slot types.
@@ -275,4 +284,40 @@ public class CargoEditingCommands {
 		}
 	}
 
+	/**
+	 * Method to check the state of the data model after command execution
+	 * 
+	 * @param cargoModel
+	 */
+	public void verifyCargoModel(@NonNull final CargoModel cargoModel) {
+
+		cargoModel.getLoadSlots().forEach(s -> {
+			final Cargo c = s.getCargo();
+			if (c != null) {
+				if (!cargoModel.getCargoes().contains(c)) {
+					throw new IllegalStateException(String.format("Inconsistent data model - slot %s has uncontained cargo reference", s.getName()));
+				}
+			}
+		});
+
+		cargoModel.getDischargeSlots().forEach(s -> {
+			final Cargo c = s.getCargo();
+			if (c != null) {
+				if (!cargoModel.getCargoes().contains(c)) {
+					throw new IllegalStateException(String.format("Inconsistent data model - slot %s has uncontained cargo reference", s.getName()));
+				}
+			}
+		});
+
+		cargoModel.getCargoes().forEach(c -> {
+			c.getSlots().forEach(s -> {
+				if (!(cargoModel.getLoadSlots().contains(s) || cargoModel.getDischargeSlots().contains(s))) {
+					throw new IllegalStateException(String.format("Inconsistent data model - cargo %s has uncontained slot reference %s", c.getLoadName(), s.getName()));
+				}
+			});
+			if (c.getSlots().size() < 2) {
+				throw new IllegalStateException(String.format("Inconsistent data model - cargo %s has less than 2 slots (%d in total)", c.getLoadName(), c.getSlots().size()));
+			}
+		});
+	}
 }
