@@ -160,7 +160,7 @@ public class CSVImporter {
 	}
 
 	@NonNull
-	protected URL createURL(final String urlRoot, final String filename) throws MalformedURLException {
+	public URL createURL(final String urlRoot, final String filename) throws MalformedURLException {
 		return new URL(String.format("%s/%s", urlRoot, filename));
 	}
 
