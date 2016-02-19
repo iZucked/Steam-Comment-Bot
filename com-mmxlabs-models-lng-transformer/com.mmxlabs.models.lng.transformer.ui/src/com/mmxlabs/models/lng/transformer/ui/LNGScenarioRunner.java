@@ -171,7 +171,7 @@ public class LNGScenarioRunner {
 		return scenarioToOptimiserBridge.getDataTransformer().getRunnerHook();
 	}
 
-	private void setRunnerHook(final @Nullable IRunnerHook runnerHook) {
+	public void setRunnerHook(final @Nullable IRunnerHook runnerHook) {
 		scenarioToOptimiserBridge.getDataTransformer().setRunnerHook(runnerHook);
 	}
 }
