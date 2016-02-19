@@ -517,7 +517,7 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 		return allowedResources.contains(resource);
 	}
 
-	private Set<ISequenceElement> findPossibleUnusedElement(final IResource resource, final Followers<ISequenceElement> followers, final Followers<ISequenceElement> preceeders) {
+	private Set<ISequenceElement> findPossibleUnusedElement(final IResource resource, final Followers<ISequenceElement> followers, final Followers<ISequenceElement> preceders) {
 		final Set<ISequenceElement> possibleFillers = new LinkedHashSet<ISequenceElement>();
 		{ // Find the set of unused elements which could be replace candidate
 			for (final ISequenceElement e : followers) {
@@ -527,7 +527,7 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 			}
 			if (!possibleFillers.isEmpty()) {
 				final HashSet<ISequenceElement> temp = new HashSet<ISequenceElement>();
-				for (final ISequenceElement e : preceeders) {
+				for (final ISequenceElement e : preceders) {
 					if (checkResource(e, resource)) {
 						temp.add(e);
 					}

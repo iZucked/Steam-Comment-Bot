@@ -412,7 +412,7 @@ public final class IndividualEvaluator implements IIndividualEvaluator<ByteArray
 			}
 
 			// Take off travel time to get to this port to get new latest
-			// arrival at preceeding port.
+			// arrival at preceding port.
 			currentLatestArrival -= travelTimes[idx];
 		}
 
