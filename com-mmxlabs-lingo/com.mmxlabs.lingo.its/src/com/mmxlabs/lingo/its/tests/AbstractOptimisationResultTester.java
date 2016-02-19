@@ -31,6 +31,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 
 import com.mmxlabs.common.NonNullPair;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalCalendarReportView;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
@@ -273,6 +274,25 @@ public class AbstractOptimisationResultTester {
 			Assert.assertNotNull(instance);
 			MigrationHelper.migrateAndLoad(instance);
 			ReportTester.testReports(instance, scenarioURL, reportID, shortName, extension);
+		} finally {
+			bundleContext.ungetService(serviceReference);
+		}
+	}
+
+	public ScenarioInstance loadScenario(URL url) throws Exception {
+		
+		final URI uri = URI.createURI(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20"));
+
+		final BundleContext bundleContext = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class).getBundleContext();
+		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
+		try {
+			final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, bundleContext.getService(serviceReference));
+			Assert.assertNotNull(instance);
+
+			MigrationHelper.migrateAndLoad(instance);
+
+			Assert.assertNotNull(instance.getInstance());
+			return instance;
 		} finally {
 			bundleContext.ungetService(serviceReference);
 		}

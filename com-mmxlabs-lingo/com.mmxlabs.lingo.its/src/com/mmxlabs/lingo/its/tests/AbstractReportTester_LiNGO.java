@@ -55,21 +55,10 @@ public abstract class AbstractReportTester_LiNGO extends AbstractReportTester {
 		key = new Pair<>(name, scenarioPath);
 		if (!cache.containsKey(key)) {
 			final URL url = getClass().getResource(scenarioPath);
-			final URI uri = URI.createURI(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20"));
-
-			final BundleContext bundleContext = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class).getBundleContext();
-			final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
-			try {
-				final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, bundleContext.getService(serviceReference));
-				Assert.assertNotNull(instance);
-
-				MigrationHelper.migrateAndLoad(instance);
-
-				Assert.assertNotNull(instance.getInstance());
-				cache.put(key, new Pair<>(url, instance));
-			} finally {
-				bundleContext.ungetService(serviceReference);
-			}
+			final ScenarioInstance instance = loadScenario(url);
+			Assert.assertNotNull(instance);
+			Assert.assertNotNull(instance.getInstance());
+			cache.put(key, new Pair<>(url, instance));
 		}
 	}
 
