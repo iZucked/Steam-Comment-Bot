@@ -162,6 +162,9 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 	private void runAdvancedOptimisationTestCase(final boolean limitedIterations, @NonNull final SimilarityMode mode, final boolean withActionSets, final boolean withGeneratedCharterOuts)
 			throws Exception {
 
+		Assume.assumeFalse(withActionSets);
+		Assume.assumeNotNull(periodStart, periodEnd);
+
 		if (withActionSets) {
 			// Preconditions check - ensure period, otherwise ignore test case
 			Assume.assumeTrue(periodStart != null);
@@ -235,7 +238,7 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 
 		// Optionally use pre-stored sequences state.
 		final IRunnerHook runnerHook;
-		if (false) {
+		if (true) {
 			runnerHook = new AbstractRunnerHook() {
 
 				@Override
@@ -245,7 +248,7 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 					case IRunnerHook.PHASE_LSO:
 					case IRunnerHook.PHASE_HILL:
 					case IRunnerHook.PHASE_INITIAL:
-						save(rawSequences, phase);
+						verify(phase, rawSequences);
 						break;
 					case IRunnerHook.PHASE_ACTION_SETS:
 						break;
@@ -257,7 +260,7 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 					switch (phase) {
 					case IRunnerHook.PHASE_LSO:
 					case IRunnerHook.PHASE_HILL:
-						return load(phase);
+//						return load(phase);
 					case IRunnerHook.PHASE_INITIAL:
 					case IRunnerHook.PHASE_ACTION_SETS:
 						break;
@@ -297,13 +300,20 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 					}
 					return null;
 				}
+
+				private void verify(final String type, final ISequences actual) {
+					ISequences expected = load(type);
+					if (actual != null && expected != null) {
+						Assert.assertEquals(expected, actual);
+					}
+				}
 			};
 		} else {
 			runnerHook = null;
 		}
 
 		final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunnerWithLSO(executorService, originalScenario, optimiserSettings);
-
+		scenarioRunner.setRunnerHook(runnerHook);
 		optimiseBasicScenario(scenarioRunner, url, String.format(".%s.properties", Joiner.on(".").join(components)));
 	}
 

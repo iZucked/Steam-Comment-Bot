@@ -228,7 +228,6 @@ public class AbstractOptimisationResultTester {
 					}
 				}
 			}
-
 		}
 
 		// Check final optimised result
