@@ -238,7 +238,7 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 
 		// Optionally use pre-stored sequences state.
 		final IRunnerHook runnerHook;
-		if (true) {
+		if (false) {
 			runnerHook = new AbstractRunnerHook() {
 
 				@Override
@@ -260,7 +260,7 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 					switch (phase) {
 					case IRunnerHook.PHASE_LSO:
 					case IRunnerHook.PHASE_HILL:
-//						return load(phase);
+						// return load(phase);
 					case IRunnerHook.PHASE_INITIAL:
 					case IRunnerHook.PHASE_ACTION_SETS:
 						break;
@@ -313,7 +313,9 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 		}
 
 		final LNGScenarioRunner scenarioRunner = LNGScenarioRunnerCreator.createScenarioRunnerWithLSO(executorService, originalScenario, optimiserSettings);
-		scenarioRunner.setRunnerHook(runnerHook);
+		if (runnerHook != null) {
+			scenarioRunner.setRunnerHook(runnerHook);
+		}
 		optimiseBasicScenario(scenarioRunner, url, String.format(".%s.properties", Joiner.on(".").join(components)));
 	}
 
