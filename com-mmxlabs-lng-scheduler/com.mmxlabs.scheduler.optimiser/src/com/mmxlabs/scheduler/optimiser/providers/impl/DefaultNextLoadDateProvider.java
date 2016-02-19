@@ -52,12 +52,17 @@ public class DefaultNextLoadDateProvider implements INextLoadDateProviderEditor 
 	private final Map<ILoadPriceCalculator, Integer> contractToConstantSpeedMap = new HashMap<>();
 	private final Map<ILoadPriceCalculator, Rule> contractToRuleMap = new HashMap<>();
 	private final Map<ILoadPriceCalculator, Set<ILoadOption>> contractToSlotsMap = new HashMap<>();
+	private final Map<ILoadOption, Integer> explicitTimeMap = new HashMap<>();
 
 	@Inject
 	private IDistanceProvider distanceProvider;
 
 	@Override
 	public INextLoadDate getNextLoadDate(@NonNull final ILoadOption origin, @NonNull final IPort fromPort, final int completionOfDischarge, @NonNull final IVessel vessel) {
+
+		if (explicitTimeMap.containsKey(origin)) {
+			return new DefaultNextLoadDate(explicitTimeMap.get(origin), null);
+		}
 
 		final ILoadPriceCalculator contract = origin.getLoadPriceCalculator();
 		final Rule rule = contractToRuleMap.get(contract);
@@ -128,6 +133,11 @@ public class DefaultNextLoadDateProvider implements INextLoadDateProviderEditor 
 		contractToConstantSpeedMap.put(contract, constantSpeed);
 	}
 
+	@Override
+	public void setExplicitTimeForSlot(final @NonNull ILoadOption slot, int time) {
+		explicitTimeMap.put(slot, time);
+	}
+
 	private static final class SlotComparator implements Comparator<ILoadOption> {
 
 		@Override
@@ -136,4 +146,5 @@ public class DefaultNextLoadDateProvider implements INextLoadDateProviderEditor 
 			return o1.getTimeWindow().getStart() - o2.getTimeWindow().getStart();
 		}
 	}
+
 }

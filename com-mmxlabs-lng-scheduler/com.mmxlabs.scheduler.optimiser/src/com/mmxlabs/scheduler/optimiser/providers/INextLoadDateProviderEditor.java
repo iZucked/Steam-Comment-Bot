@@ -33,4 +33,12 @@ public interface INextLoadDateProviderEditor extends INextLoadDateProvider {
 	 * @param constantSpeed
 	 */
 	void setConstantSpeed(@NonNull ILoadPriceCalculator contract, int constantSpeed);
+
+	/**
+	 * Set an explicit date to use for the given slot
+	 * 
+	 * @param slot
+	 * @param time
+	 */
+	void setExplicitTimeForSlot(@NonNull ILoadOption slot, int time);
 }
