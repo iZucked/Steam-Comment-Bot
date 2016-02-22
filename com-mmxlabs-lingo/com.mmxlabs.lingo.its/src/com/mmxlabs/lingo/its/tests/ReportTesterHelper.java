@@ -88,8 +88,8 @@ public class ReportTesterHelper {
 				scenarioInputProvider.provideScenarioInstance(scenario);
 			}
 
-			p.deselectAll();
-			p.select(scenario);
+			p.deselectAll(true);
+			p.select(scenario, true);
 		});
 	}
 

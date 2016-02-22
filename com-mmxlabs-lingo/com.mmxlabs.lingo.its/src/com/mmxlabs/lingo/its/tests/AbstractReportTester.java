@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.its.tests;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
