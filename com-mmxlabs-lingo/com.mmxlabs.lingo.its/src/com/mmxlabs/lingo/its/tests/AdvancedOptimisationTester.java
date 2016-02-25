@@ -205,9 +205,9 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 		if (limitedIterations) {
 			// Limit for quick optimisation
 			// LSO Limit
-			optimiserSettings.getAnnealingSettings().setIterations(10000);
+			optimiserSettings.getAnnealingSettings().setIterations(10_000);
 			// Hill climb limit
-			optimiserSettings.getSolutionImprovementSettings().setIterations(1000);
+			optimiserSettings.getSolutionImprovementSettings().setIterations(1_000);
 		}
 
 		Assert.assertEquals(withActionSets, optimiserSettings.isBuildActionSets());
