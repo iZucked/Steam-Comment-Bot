@@ -95,10 +95,13 @@ public interface ILoadPriceCalculator extends ICalculator {
 	static final int IDX_SHIPPING_VALUE = 1;
 	static final int IDX_UPSIDE_VALUE = 2;
 	static final int ADDITIONAL_PNL_COMPONENT_SIZE = 3;
-	static final long[] EMPTY_ADDITIONAL_PNL_RESULT = new long[ADDITIONAL_PNL_COMPONENT_SIZE];
+	static final @NonNull long[] EMPTY_ADDITIONAL_PNL_RESULT = new long[ADDITIONAL_PNL_COMPONENT_SIZE];
 
-	public long[] calculateAdditionalProfitAndLoss(@NonNull ILoadOption loadOption, @NonNull IAllocationAnnotation allocationAnnotation, @NonNull int[] slotPricesPerMMBTu,
-			@NonNull IVesselAvailability vesselAvailability, int vesselStartTime, @NonNull VoyagePlan plan, @Nullable IDetailTree annotations);
+	@NonNull
+	default long[] calculateAdditionalProfitAndLoss(@NonNull ILoadOption loadOption, @NonNull IAllocationAnnotation allocationAnnotation, @NonNull int[] slotPricesPerMMBTu,
+			@NonNull IVesselAvailability vesselAvailability, int vesselStartTime, @NonNull VoyagePlan plan, @Nullable IDetailTree annotations) {
+		return EMPTY_ADDITIONAL_PNL_RESULT;
+	}
 
 	/**
 	 * Invoked before P&L calculations are about to begin, but after {@link #prepareEvaluation(ISequences)}. The calculate methods may have been invoked to obtain P&L estimates, now we want to clean
