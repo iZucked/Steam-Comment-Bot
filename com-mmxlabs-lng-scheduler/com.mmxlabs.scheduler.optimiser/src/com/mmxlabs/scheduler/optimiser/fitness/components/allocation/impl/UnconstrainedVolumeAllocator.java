@@ -85,7 +85,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			{
 				final IPortSlot slot = allocationRecord.portTimesRecord.getReturnSlot();
 				if (slot != null) {
-					annotation.setSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(slot));
+					annotation.setReturnSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(slot));
 				}
 			}
 			// break out before we get to the m3 to mmbtu calcs which would overwrite the actuals data
@@ -161,7 +161,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			{
 				final IPortSlot slot = allocationRecord.portTimesRecord.getReturnSlot();
 				if (slot != null) {
-					annotation.setSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(slot));
+					annotation.setReturnSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(slot));
 				}
 			}
 			// break out before we get to the m3 to mmbtu calcs which would overwrite the actuals data
@@ -337,7 +337,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		{
 			final IPortSlot slot = allocationRecord.portTimesRecord.getReturnSlot();
 			if (slot != null) {
-				annotation.setSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(slot));
+				annotation.setReturnSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(slot));
 			}
 		}
 		return annotation;
