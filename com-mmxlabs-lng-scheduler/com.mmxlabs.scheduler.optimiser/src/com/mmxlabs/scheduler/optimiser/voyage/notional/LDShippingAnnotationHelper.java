@@ -109,7 +109,7 @@ public class LDShippingAnnotationHelper {
 		shippingAnnotation.ballastBunkersCost = Calculator.costFromConsumption(shippingAnnotation.ballastBunkersInMT, bunkerPricePerMT);
 	}
 
-	public static void updateLNGCosts(final @NonNull LDShippingAnnotation shippingAnnotation, int lngCostPerMMBTu) {
+	public static void updateLNGCosts(final @NonNull LDShippingAnnotation shippingAnnotation, final int lngCostPerMMBTu) {
 
 		shippingAnnotation.ladenBOCost = Calculator.costFromConsumption(shippingAnnotation.ladenBOInMMBTu, lngCostPerMMBTu);
 		shippingAnnotation.ballastBOCost = Calculator.costFromConsumption(shippingAnnotation.ballastBOInMMBTu, lngCostPerMMBTu);
@@ -122,7 +122,20 @@ public class LDShippingAnnotationHelper {
 		shippingAnnotation.ballastCharterCost = Calculator.getTimeFromRateQuantity(charterCostPerDay, shippingAnnotation.ballastHireHours) / 24L;
 	}
 
-	public static long getTotalShippingCost(final @NonNull LDShippingAnnotation shippingAnnotation, boolean includeBOG) {
+	public static void updateCosts(final @NonNull LDShippingAnnotation shippingAnnotation, final int charterCostPerDay, final int lngCostPerMMBTu, final int bunkerPricePerMT) {
+		updateCharterCosts(shippingAnnotation, charterCostPerDay);
+		updateBunkerCosts(shippingAnnotation, bunkerPricePerMT);
+		updateLNGCosts(shippingAnnotation, lngCostPerMMBTu);
+
+		shippingAnnotation.ladenCostsExcludingBOG = shippingAnnotation.ladenBunkersCost + shippingAnnotation.ladenCanalCosts + shippingAnnotation.ladenCharterCost + shippingAnnotation.ladenMiscCosts;
+		shippingAnnotation.ladenCostsIncludingBOG = shippingAnnotation.ladenCostsExcludingBOG + shippingAnnotation.ladenBOCost;
+
+		shippingAnnotation.ballastCostsExcludingBOG = shippingAnnotation.ballastBunkersCost + shippingAnnotation.ballastCanalCosts + shippingAnnotation.ballastCharterCost
+				+ shippingAnnotation.ballastMiscCosts;
+		shippingAnnotation.ballastCostsIncludingBOG = shippingAnnotation.ballastCostsExcludingBOG + shippingAnnotation.ballastBOCost;
+	}
+
+	public static long getTotalShippingCost(final @NonNull LDShippingAnnotation shippingAnnotation, final boolean includeBOG) {
 
 		long totalCosts = 0L;
 
