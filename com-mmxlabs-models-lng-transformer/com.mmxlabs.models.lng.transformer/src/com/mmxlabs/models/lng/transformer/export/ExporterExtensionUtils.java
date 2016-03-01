@@ -64,8 +64,8 @@ public class ExporterExtensionUtils {
 	}
 
 	@Nullable
-	public ProfitAndLossContainer findProfitAndLossContainer(@NonNull ISequenceElement element, @NonNull final IPortSlot slot, @NonNull final ModelEntityMap modelEntityMap,
-			@NonNull final Schedule outputSchedule, @NonNull IAnnotatedSolution annotatedSolution) {
+	public ProfitAndLossContainer findProfitAndLossContainer(@NonNull final ISequenceElement element, @NonNull final IPortSlot slot, @NonNull final ModelEntityMap modelEntityMap,
+			@NonNull final Schedule outputSchedule, @NonNull final IAnnotatedSolution annotatedSolution) {
 		ProfitAndLossContainer profitAndLossContainer = null;
 
 		if (slot instanceof ILoadOption || slot instanceof IDischargeOption) {
@@ -192,12 +192,12 @@ public class ExporterExtensionUtils {
 		entityDetails.getGeneralPNLDetails().add(details);
 	}
 
-	private EndEvent findEndEvent(final @NonNull ISequenceElement element, @NonNull final ModelEntityMap modelEntityMap, @NonNull Schedule outputSchedule,
-			@NonNull IAnnotatedSolution annotatedSolution) {
+	private EndEvent findEndEvent(final @NonNull ISequenceElement element, @NonNull final ModelEntityMap modelEntityMap, @NonNull final Schedule outputSchedule,
+			@NonNull final IAnnotatedSolution annotatedSolution) {
 		EndEvent endEvent = null;
 		//
 		// for (int i = 0; i < annotatedSolution.getFullSequences().size(); ++i) {
-		for (final Map.Entry<IResource, ISequence> e : annotatedSolution.getFullSequences().getSequences().entrySet()) {
+		LOOP_OUTER: for (final Map.Entry<IResource, ISequence> e : annotatedSolution.getFullSequences().getSequences().entrySet()) {
 			final IResource res = e.getKey();
 			final ISequence seq = e.getValue();
 			if (seq.get(0) == element) {
@@ -207,13 +207,15 @@ public class ExporterExtensionUtils {
 						continue;
 					}
 
-					final IVessel iVessel = modelEntityMap.getOptimiserObject(vesselAvailability, IVessel.class);
-					if (iVessel == res) {
+					// Find the matching
+					final IVesselAvailability iVesselAvailability = modelEntityMap.getOptimiserObject(vesselAvailability, IVesselAvailability.class);
+
+					if (iVesselAvailability == vesselProvider.getVesselAvailability(res)) {
 						if (sequence.getEvents().size() > 0) {
 							final Event evt = sequence.getEvents().get(sequence.getEvents().size() - 1);
 							if (evt instanceof EndEvent) {
 								endEvent = (EndEvent) evt;
-								break;
+								break LOOP_OUTER;
 							}
 						}
 					}
@@ -223,7 +225,8 @@ public class ExporterExtensionUtils {
 		return endEvent;
 	}
 
-	private StartEvent findStartEvent(final ISequenceElement element, @NonNull final ModelEntityMap modelEntityMap, @NonNull Schedule outputSchedule, @NonNull IAnnotatedSolution annotatedSolution) {
+	private StartEvent findStartEvent(final ISequenceElement element, @NonNull final ModelEntityMap modelEntityMap, @NonNull final Schedule outputSchedule,
+			@NonNull final IAnnotatedSolution annotatedSolution) {
 		StartEvent startEvent = null;
 		//
 		// Find the optimiser sequence for the start element
