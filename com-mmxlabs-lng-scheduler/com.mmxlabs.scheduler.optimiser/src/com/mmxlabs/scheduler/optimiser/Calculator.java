@@ -142,11 +142,17 @@ public final class Calculator {
 	}
 
 	/**
-	 * Convert a $/m3 price to a $/MMBTu price
-	 * 
+	 * Take a price (in high scale factor) and multiply by a % share (range 0.0->1.0 at high scale factor)
 	 */
-	public static int getShareOfPrice(final int share, final int price) {
-		return (int) (((long) share * (long) price) / HighScaleFactor);
+	public static int getShareOfPrice(final int hs_share, final int hs_price) {
+		return (int) (((long) hs_share * (long) hs_price) / HighScaleFactor);
+	}
+
+	/**
+	 * Take a value (in low scale factor) and multiply by a % share (range 0.0->1.0 at High scale factor)
+	 */
+	public static long getShareOfValue(final long hs_share, final long ls_value) {
+		return (ls_value * hs_share) / HighScaleFactor;
 	}
 
 	/**
