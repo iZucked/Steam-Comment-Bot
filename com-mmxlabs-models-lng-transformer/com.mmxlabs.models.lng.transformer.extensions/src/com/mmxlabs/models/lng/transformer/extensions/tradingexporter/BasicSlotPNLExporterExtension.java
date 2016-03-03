@@ -33,6 +33,9 @@ public class BasicSlotPNLExporterExtension implements IExporterExtension {
 	@Inject
 	private IPortSlotProvider slotProvider;
 
+	@Inject
+	private ExporterExtensionUtils exporterExtensionUtils;
+
 	@Override
 	public void startExporting(final Schedule outputSchedule, final ModelEntityMap modelEntityMap, final IAnnotatedSolution annotatedSolution) {
 		this.modelEntityMap = modelEntityMap;
@@ -49,7 +52,7 @@ public class BasicSlotPNLExporterExtension implements IExporterExtension {
 			if (slot instanceof ILoadOption || slot instanceof IDischargeOption) {
 				final Slot modelSlot = modelEntityMap.getModelObjectNullChecked(slot, Slot.class);
 
-				final ProfitAndLossContainer profitAndLossContainer = ExporterExtensionUtils.findProfitAndLossContainer(slot, modelEntityMap, outputSchedule);
+				final ProfitAndLossContainer profitAndLossContainer = exporterExtensionUtils.findProfitAndLossContainer(element, slot, modelEntityMap, outputSchedule, annotatedSolution);
 
 				if (profitAndLossContainer != null) {
 
