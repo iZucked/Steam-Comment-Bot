@@ -12,6 +12,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.transformer.extensions.redirection.IVoyageCostCalculator;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -30,6 +31,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ERouteOption;
 import com.mmxlabs.scheduler.optimiser.providers.IDistanceProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider.CostType;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
@@ -118,16 +120,6 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 			fuelChoice = FuelChoice.Optimal;
 		}
 
-		final int ladenDistance = distanceProvider.getDistance(route, loadPort, dischargePort, loadTime + loadDuration);
-		if (ladenDistance == Integer.MAX_VALUE) {
-			return null;
-		}
-
-		final int ballastDistance = distanceProvider.getDistance(route, dischargePort, loadPort, dischargeTime + dischargeDuration);
-		if (ballastDistance == Integer.MAX_VALUE) {
-			return null;
-		}
-
 		final LoadSlot notionalLoadSlot = new LoadSlot();
 		notionalLoadSlot.setPort(loadPort);
 		notionalLoadSlot.setTimeWindow(new TimeWindow(loadTime, loadTime));
@@ -143,17 +135,75 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 
 		final PortSlot notionalReturnSlot = new EndPortSlot("notional-return", loadPort, new TimeWindow(notionalReturnTime, notionalReturnTime), true, vessel.getVesselClass().getSafetyHeel());
 
+		final PortTimesRecord portTimesRecord = getPortTimesRecord(loadTime, loadDuration, dischargeTime, dischargeDuration, notionalReturnTime, notionalLoadSlot, notionalDischargeSlot,
+				notionalReturnSlot);
+
 		final VoyagePlanOptimiser vpo = vpoProvider.get();
 
+		return applyVPOAndGetVP(loadTime, loadDistance, loadDuration, dischargeTime, dischargeDistance, dischargeDuration, notionalReturnTime, vessel, vesselCharterInRatePerDay, startHeelInM3,
+				cargoCVValue, route, baseFuelPricePerMT, notionalLoadSlot, notionalDischargeSlot, notionalReturnSlot, portTimesRecord, vpo);
+	}
+
+	public @Nullable Pair<VoyagePlan, IPortTimesRecord> calculateShippingCostsAndGetPTR(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, final int loadDistance, final int loadDuration, final int dischargeTime,
+			final int dischargeDistance, final int dischargeDuration, final int notionalReturnTime, @NonNull final IVessel vessel, final int vesselCharterInRatePerDay, final long startHeelInM3, final int cargoCVValue,
+			@NonNull final ERouteOption route, final int baseFuelPricePerMT, final int salesPricePerMMBTu) {
+
+		// MUST CALL setFuelChoice!
+		assert fuelChoice != null;
+		// When assert is not enabled, default to FuelChoice#Optimal
+		if (fuelChoice == null) {
+			fuelChoice = FuelChoice.Optimal;
+		}
+
+		final LoadSlot notionalLoadSlot = new LoadSlot();
+		notionalLoadSlot.setPort(loadPort);
+		notionalLoadSlot.setTimeWindow(new TimeWindow(loadTime, loadTime));
+		notionalLoadSlot.setCargoCVValue(cargoCVValue);
+		notionalLoadSlot.setCooldownForbidden(true);
+		notionalLoadSlot.setMaxLoadVolume(vessel.getCargoCapacity());
+		notionalLoadSlot.setMinLoadVolume(vessel.getCargoCapacity());
+
+		final DischargeSlot notionalDischargeSlot = new DischargeSlot();
+		notionalDischargeSlot.setPort(dischargePort);
+		notionalDischargeSlot.setTimeWindow(new TimeWindow(dischargeTime, dischargeTime));
+		notionalDischargeSlot.setDischargePriceCalculator(createSalesPriceCalculator(salesPricePerMMBTu));
+
+		final PortSlot notionalReturnSlot = new EndPortSlot("notional-return", loadPort, new TimeWindow(notionalReturnTime, notionalReturnTime), true, vessel.getVesselClass().getSafetyHeel());
+
+		final PortTimesRecord portTimesRecord = getPortTimesRecord(loadTime, loadDuration, dischargeTime, dischargeDuration, notionalReturnTime, notionalLoadSlot, notionalDischargeSlot,
+				notionalReturnSlot);
+
+		final VoyagePlanOptimiser vpo = vpoProvider.get();
+
+		return new Pair<> (applyVPOAndGetVP(loadTime, loadDistance, loadDuration, dischargeTime, dischargeDistance, dischargeDuration, notionalReturnTime, vessel, vesselCharterInRatePerDay, startHeelInM3,
+				cargoCVValue, route, baseFuelPricePerMT, notionalLoadSlot, notionalDischargeSlot, notionalReturnSlot, portTimesRecord, vpo), portTimesRecord);
+	}
+
+	private PortTimesRecord getPortTimesRecord(final int loadTime, final int loadDuration, final int dischargeTime, final int dischargeDuration, final int notionalReturnTime,
+			final LoadSlot notionalLoadSlot, final DischargeSlot notionalDischargeSlot, final PortSlot notionalReturnSlot) {
+		final PortTimesRecord portTimesRecord = new PortTimesRecord();
+		portTimesRecord.setSlotTime(notionalLoadSlot, loadTime);
+		portTimesRecord.setSlotTime(notionalDischargeSlot, dischargeTime);
+		portTimesRecord.setReturnSlotTime(notionalReturnSlot, notionalReturnTime);
+
+		portTimesRecord.setSlotDuration(notionalLoadSlot, loadDuration);
+		portTimesRecord.setSlotDuration(notionalDischargeSlot, dischargeDuration);
+		return portTimesRecord;
+	}
+
+	private VoyagePlan applyVPOAndGetVP(final int loadTime, final int loadDistance, final int loadDuration, final int dischargeTime, final int dischargeDistance, final int dischargeDuration,
+			final int notionalReturnTime, final IVessel vessel, final int vesselCharterInRatePerDay, final long startHeelInM3, final int cargoCVValue, final ERouteOption route,
+			final int baseFuelPricePerMT, final LoadSlot notionalLoadSlot, final DischargeSlot notionalDischargeSlot, final PortSlot notionalReturnSlot, final PortTimesRecord portTimesRecord,
+			final VoyagePlanOptimiser vpo) {
 		// Calculate new voyage requirements
 		{
 			final long ladenRouteCosts = routeCostProvider.getRouteCost(route, vessel, CostType.Laden);
 			final long ballastRouteCosts = routeCostProvider.getRouteCost(route, vessel, CostType.RoundTripBallast);
 
-			final VoyageOptions ladenOptions = createVoyageOptions(VesselState.Laden, vessel, route, ladenDistance, ladenRouteCosts, dischargeTime - loadDuration - loadTime, notionalLoadSlot,
+			final VoyageOptions ladenOptions = createVoyageOptions(VesselState.Laden, vessel, route, loadDistance, ladenRouteCosts, dischargeTime - loadDuration - loadTime, notionalLoadSlot,
 					notionalDischargeSlot, cargoCVValue);
 
-			final VoyageOptions ballastOptions = createVoyageOptions(VesselState.Ballast, vessel, route, ballastDistance, ballastRouteCosts, notionalReturnTime - dischargeDuration - dischargeTime,
+			final VoyageOptions ballastOptions = createVoyageOptions(VesselState.Ballast, vessel, route, dischargeDistance, ballastRouteCosts, notionalReturnTime - dischargeDuration - dischargeTime,
 					notionalDischargeSlot, notionalReturnSlot, cargoCVValue);
 
 			switch (fuelChoice) {
@@ -167,6 +217,10 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 				break;
 			case Optimal:
 				vpo.addChoice(new LinkedFBOVoyagePlanChoice(ladenOptions, ballastOptions));
+//				vpo.addChoice(new NBOTravelVoyagePlanChoice(ladenOptions, ballastOptions));
+//				vpo.addChoice(new FBOVoyagePlanChoice(ballastOptions));
+//				vpo.addChoice(new FBOVoyagePlanChoice(ladenOptions));
+//				vpo.addChoice(new IdleNBOVoyagePlanChoice(ballastOptions));
 				break;
 			default:
 				break;
@@ -188,14 +242,6 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 			returnOptions.setVessel(vessel);
 
 			final List<IOptionsSequenceElement> basicSequence = Lists.<IOptionsSequenceElement> newArrayList(loadOptions, ladenOptions, dischargeOptions, ballastOptions, returnOptions);
-
-			final PortTimesRecord portTimesRecord = new PortTimesRecord();
-			portTimesRecord.setSlotTime(notionalLoadSlot, loadTime);
-			portTimesRecord.setSlotTime(notionalDischargeSlot, dischargeTime);
-			portTimesRecord.setReturnSlotTime(notionalReturnSlot, notionalReturnTime);
-
-			portTimesRecord.setSlotDuration(notionalLoadSlot, loadDuration);
-			portTimesRecord.setSlotDuration(notionalDischargeSlot, dischargeDuration);
 
 			vpo.setBasicSequence(basicSequence);
 			vpo.setPortTimesRecord(portTimesRecord);
