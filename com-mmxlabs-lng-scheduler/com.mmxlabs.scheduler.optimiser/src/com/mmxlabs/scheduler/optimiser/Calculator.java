@@ -168,6 +168,17 @@ public final class Calculator {
 	}
 
 	/**
+	 * Multiply a int by a double, returning the result as a int, rounded
+	 * 
+	 * @param multiply
+	 * @param d
+	 * @return
+	 */
+	public static int multiply(final int multiply, final double d) {
+		return (int) Math.round((multiply * d));
+	}
+
+	/**
 	 * Simple multiplication between scaled integer based values
 	 * 
 	 * @param a

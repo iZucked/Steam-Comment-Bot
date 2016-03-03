@@ -34,7 +34,21 @@ public class LDShippingAnnotationHelper {
 		shippingAnnotation.completionOfLoading = shippingAnnotation.startOfLoading + allocationAnnotation.getSlotDuration(loadDetails.getOptions().getPortSlot());
 	}
 
-	public static void extractLadenDetails(final @NonNull VoyagePlan realPlan, final @NonNull IAllocationAnnotation allocationAnnotation, final @NonNull LDShippingAnnotation shippingAnnotation) {
+	public static void extractLoadDetails(final @NonNull VoyagePlan realPlan, final int startOfLoadingTime, final int loadDuration, final @NonNull LDShippingAnnotation shippingAnnotation) {
+
+		final PortDetails loadDetails = (PortDetails) realPlan.getSequence()[0];
+		// Load Details
+		shippingAnnotation.loadPort = loadDetails.getOptions().getPortSlot().getPort();
+		for (final FuelComponent fc : FuelComponent.getBaseFuelComponents()) {
+			shippingAnnotation.loadBunkersInMT += loadDetails.getFuelConsumption(fc);
+		}
+		shippingAnnotation.loadHireHours = loadDetails.getOptions().getVisitDuration();
+		shippingAnnotation.loadPortCosts = loadDetails.getPortCosts();
+		shippingAnnotation.startOfLoading = startOfLoadingTime;
+		shippingAnnotation.completionOfLoading = shippingAnnotation.startOfLoading + loadDuration;
+	}
+
+	public static void extractLadenDetails(final @NonNull VoyagePlan realPlan, final @NonNull LDShippingAnnotation shippingAnnotation) {
 		final VoyageDetails ladenLeg = (VoyageDetails) realPlan.getSequence()[1];
 
 		shippingAnnotation.ladenRoute = ladenLeg.getOptions().getRoute();
@@ -71,7 +85,22 @@ public class LDShippingAnnotationHelper {
 		shippingAnnotation.completionOfDischarge = shippingAnnotation.startOfDischarge + allocationAnnotation.getSlotDuration(dischargeDetails.getOptions().getPortSlot());
 	}
 
-	public static void extractBallastDetails(final @NonNull VoyagePlan realPlan, final @NonNull IAllocationAnnotation allocationAnnotation, final @NonNull LDShippingAnnotation shippingAnnotation) {
+	public static void extractDischargeDetails(final @NonNull VoyagePlan realPlan, final int startOfDischargeTime, final int dischargeDuration, final @NonNull LDShippingAnnotation shippingAnnotation) {
+		final PortDetails dischargeDetails = (PortDetails) realPlan.getSequence()[2];
+
+		// Discharge Details
+		shippingAnnotation.dischargePort = dischargeDetails.getOptions().getPortSlot().getPort();
+
+		for (final FuelComponent fc : FuelComponent.getBaseFuelComponents()) {
+			shippingAnnotation.dischargeBunkersInMT += dischargeDetails.getFuelConsumption(fc);
+		}
+		shippingAnnotation.dischargeHireHours = dischargeDetails.getOptions().getVisitDuration();
+		shippingAnnotation.dischargePortCosts = dischargeDetails.getPortCosts();
+		shippingAnnotation.startOfDischarge = startOfDischargeTime;
+		shippingAnnotation.completionOfDischarge = shippingAnnotation.startOfDischarge + dischargeDuration;
+	}
+
+	public static void extractBallastDetails(final @NonNull VoyagePlan realPlan, final @NonNull LDShippingAnnotation shippingAnnotation) {
 		final VoyageDetails ballastLeg = (VoyageDetails) realPlan.getSequence()[3];
 
 		shippingAnnotation.ballastRoute = ballastLeg.getOptions().getRoute();
@@ -117,9 +146,9 @@ public class LDShippingAnnotationHelper {
 
 	public static void updateCharterCosts(final @NonNull LDShippingAnnotation shippingAnnotation, final int charterCostPerDay) {
 		shippingAnnotation.loadCharterCost = Calculator.quantityFromRateTime(charterCostPerDay, shippingAnnotation.loadHireHours) / 24L;
-		shippingAnnotation.ladenCharterCost = Calculator.getTimeFromRateQuantity(charterCostPerDay, shippingAnnotation.ladenHireHours) / 24L;
+		shippingAnnotation.ladenCharterCost = Calculator.quantityFromRateTime(charterCostPerDay, shippingAnnotation.ladenHireHours) / 24L;
 		shippingAnnotation.dischargeCharterCost = Calculator.quantityFromRateTime(charterCostPerDay, shippingAnnotation.dischargeHireHours) / 24L;
-		shippingAnnotation.ballastCharterCost = Calculator.getTimeFromRateQuantity(charterCostPerDay, shippingAnnotation.ballastHireHours) / 24L;
+		shippingAnnotation.ballastCharterCost = Calculator.quantityFromRateTime(charterCostPerDay, shippingAnnotation.ballastHireHours) / 24L;
 	}
 
 	public static void updateCosts(final @NonNull LDShippingAnnotation shippingAnnotation, final int charterCostPerDay, final int lngCostPerMMBTu, final int bunkerPricePerMT) {
@@ -135,6 +164,35 @@ public class LDShippingAnnotationHelper {
 		shippingAnnotation.ballastCostsIncludingBOG = shippingAnnotation.ballastCostsExcludingBOG + shippingAnnotation.ballastBOCost;
 	}
 
+	public static void updateTotalCosts(final @NonNull LDShippingAnnotation shippingAnnotation) {
+		shippingAnnotation.ladenCostsExcludingBOG = 0;
+		shippingAnnotation.ladenCostsExcludingBOG += shippingAnnotation.loadPortCosts;
+		shippingAnnotation.ladenCostsExcludingBOG += shippingAnnotation.loadCharterCost;
+		shippingAnnotation.ladenCostsExcludingBOG += shippingAnnotation.loadBunkersCost;
+		shippingAnnotation.ladenCostsExcludingBOG += shippingAnnotation.loadMiscCosts;
+
+		shippingAnnotation.ladenCostsExcludingBOG += shippingAnnotation.ladenCharterCost;
+		shippingAnnotation.ladenCostsExcludingBOG += shippingAnnotation.ladenBunkersCost;
+		shippingAnnotation.ladenCostsExcludingBOG += shippingAnnotation.ladenCanalCosts;
+		shippingAnnotation.ladenCostsExcludingBOG += shippingAnnotation.ladenMiscCosts;
+		
+		shippingAnnotation.ladenCostsIncludingBOG = shippingAnnotation.ladenCostsExcludingBOG + shippingAnnotation.ladenBOCost;
+		
+		shippingAnnotation.ballastCostsExcludingBOG = 0;
+		shippingAnnotation.ballastCostsExcludingBOG += shippingAnnotation.dischargePortCosts;
+		shippingAnnotation.ballastCostsExcludingBOG += shippingAnnotation.dischargeCharterCost;
+		shippingAnnotation.ballastCostsExcludingBOG += shippingAnnotation.dischargeBunkersCost;
+		shippingAnnotation.ballastCostsExcludingBOG += shippingAnnotation.dischargeMiscCosts;
+
+		shippingAnnotation.ballastCostsExcludingBOG += shippingAnnotation.ballastCharterCost;
+		shippingAnnotation.ballastCostsExcludingBOG += shippingAnnotation.ballastBunkersCost;
+		shippingAnnotation.ballastCostsExcludingBOG += shippingAnnotation.ballastCanalCosts;
+		shippingAnnotation.ballastCostsExcludingBOG += shippingAnnotation.ballastMiscCosts;
+
+		shippingAnnotation.ballastCostsIncludingBOG = shippingAnnotation.ballastBOCost + shippingAnnotation.ballastCostsExcludingBOG;
+
+
+	}
 	public static long getTotalShippingCost(final @NonNull LDShippingAnnotation shippingAnnotation, final boolean includeBOG) {
 
 		long totalCosts = 0L;
