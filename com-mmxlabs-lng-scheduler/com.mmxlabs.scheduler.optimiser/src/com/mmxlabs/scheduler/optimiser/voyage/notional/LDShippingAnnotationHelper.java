@@ -123,7 +123,7 @@ public class LDShippingAnnotationHelper {
 	}
 
 	public static void extractReturnDetails(final @NonNull VoyagePlan realPlan, final @NonNull IAllocationAnnotation allocationAnnotation, final @NonNull LDShippingAnnotation shippingAnnotation) {
-		final PortDetails returnDetails = (PortDetails) realPlan.getSequence()[5];
+		final PortDetails returnDetails = (PortDetails) realPlan.getSequence()[4];
 
 		// Discharge Details
 		shippingAnnotation.returnPort = returnDetails.getOptions().getPortSlot().getPort();
