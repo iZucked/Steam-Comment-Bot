@@ -163,13 +163,20 @@ public abstract class DetailPropertiesView extends ViewPart {
 				}
 				final ISelection selection = SelectionHelper.adaptSelection(selectedObject);
 				removeAdapters();
-				final Collection<?> adaptSelection = adaptSelection(selection);
-				ViewerHelper.setInput(viewer, true, adaptSelection);
-				hookAdapters(adaptSelection);
-				if (packColumnsAction != null) {
-					packColumnsAction.run();
-				}
-
+                                // This is very slow with many selected items. Run async to avoid blocking other actions.
+				final Runnable r = new Runnable() {
+					@Override
+					public void run() {
+						removeAdapters();
+						final Collection<?> adaptSelection = adaptSelection(selection);
+						viewer.setInput(adaptSelection);
+						hookAdapters(adaptSelection);
+						if (packColumnsAction != null) {
+							packColumnsAction.run();
+						}
+					}
+				};
+				PlatformUI.getWorkbench().getDisplay().asyncExec(r);
 			}
 
 		};
