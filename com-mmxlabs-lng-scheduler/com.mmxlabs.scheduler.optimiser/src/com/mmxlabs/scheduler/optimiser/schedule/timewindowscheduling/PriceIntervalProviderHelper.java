@@ -195,6 +195,7 @@ public class PriceIntervalProviderHelper {
 
 	public int[] getIdealLoadAndDischargeTimesGivenCanal(final int purchaseStart, final int purchaseEnd, int salesStart, final int salesEnd, final int loadDuration, final int canalMaxSpeed,
 			final int canalNBOSpeed) {
+		//  set min start dates
 		int purchase = salesStart - canalMaxSpeed - loadDuration;
 		if (purchase < purchaseStart) {
 			salesStart = purchaseStart + canalMaxSpeed + loadDuration;
@@ -205,6 +206,7 @@ public class PriceIntervalProviderHelper {
 			purchase = purchaseEnd;
 			discharge = Math.min(Math.max(purchaseStart + canalNBOSpeed + loadDuration, salesStart), salesEnd);
 		} else {
+			// we are able vary our speeds
 			final int canalDifference = canalNBOSpeed - canalMaxSpeed;
 			final int remainder = purchase - purchaseStart - canalDifference;
 			if (remainder >= 0) {
@@ -245,11 +247,15 @@ public class PriceIntervalProviderHelper {
 		LadenRouteData bestCanal = null;
 		for (final LadenRouteData canal : sortedCanalTimes) {
 			if (isFeasibleTravelTime(purchase, sales, loadDuration, canal.ladenMaxSpeed)) {
+				int[] times = getIdealLoadAndDischargeTimesGivenCanal(purchase.start, purchase.end, sales.start, sales.end, loadDuration, (int) canal.ladenMaxSpeed, (int) canal.ladenNBOSpeed);
+				int ladenLength = (times[1] - times[0]) / 24;
+
 				final long boiloffMMBTU = Calculator
-						.convertM3ToMMBTu(((getMinDischargeGivenCanal(purchase.start, sales.start, loadDuration, (int) canal.ladenMaxSpeed) - purchase.start - loadDuration) / 24) * boiloffRateM3, cv);
+						.convertM3ToMMBTu((ladenLength) * boiloffRateM3, cv);
 				final long boiloffCost = Calculator.costFromVolume(boiloffMMBTU, sales.price);
 				final long boiloffCostMMBTU = OptimiserUnitConvertor.convertToInternalDailyCost(boiloffCost);
-				final long cost = canal.ladenRouteCost + boiloffCostMMBTU;
+				long charterCost = 0;
+				final long cost = canal.ladenRouteCost + boiloffCostMMBTU + charterCost;
 				if (cost < bestMargin) {
 					bestMargin = cost;
 					bestCanal = canal;
