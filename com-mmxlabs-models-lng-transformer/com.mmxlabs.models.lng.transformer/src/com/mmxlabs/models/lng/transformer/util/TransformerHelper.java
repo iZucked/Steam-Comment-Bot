@@ -31,7 +31,7 @@ public class TransformerHelper {
 		final IVesselClass vc = builder.createVesselClass(eVc.getName(), OptimiserUnitConvertor.convertToInternalSpeed(eVc.getMinSpeed()),
 				OptimiserUnitConvertor.convertToInternalSpeed(eVc.getMaxSpeed()), OptimiserUnitConvertor.convertToInternalVolume((int) (eVc.getFillCapacity() * eVc.getCapacity())),
 				OptimiserUnitConvertor.convertToInternalVolume(eVc.getMinHeel()), baseFuel, OptimiserUnitConvertor.convertToInternalDailyRate(eVc.getPilotLightRate()), eVc.getWarmingTime(),
-				OptimiserUnitConvertor.convertToInternalVolume(eVc.getCoolingVolume()), OptimiserUnitConvertor.convertToInternalDailyRate(eVc.getMinBaseFuelConsumption()));
+				OptimiserUnitConvertor.convertToInternalVolume(eVc.getCoolingVolume()), OptimiserUnitConvertor.convertToInternalDailyRate(eVc.getMinBaseFuelConsumption()), eVc.isHasReliqCapability());
 		buildVesselStateAttributes(builder, vc, com.mmxlabs.scheduler.optimiser.components.VesselState.Laden, eVc.getLadenAttributes());
 		buildVesselStateAttributes(builder, vc, com.mmxlabs.scheduler.optimiser.components.VesselState.Ballast, eVc.getBallastAttributes());
 
