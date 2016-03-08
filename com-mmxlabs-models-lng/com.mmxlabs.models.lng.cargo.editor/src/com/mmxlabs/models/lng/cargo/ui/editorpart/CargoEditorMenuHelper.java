@@ -225,6 +225,9 @@ public class CargoEditorMenuHelper {
 					currentWiringCommand.append(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), cargo));
 				}
 				scenarioEditingLocation.getEditingDomain().getCommandStack().execute(currentWiringCommand);
+				{
+					cec.verifyCargoModel(((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getCargoModel());
+				}
 			}
 		};
 		newMenuManager.add(new Separator());
@@ -301,6 +304,9 @@ public class CargoEditorMenuHelper {
 					final Object value = vessel == null ? SetCommand.UNSET_VALUE : vessel;
 					final Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(), slot, CargoPackage.Literals.SLOT__NOMINATED_VESSEL, value);
 					scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+					{
+						cec.verifyCargoModel(((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getCargoModel());
+					}
 				}
 			}
 
@@ -323,6 +329,9 @@ public class CargoEditorMenuHelper {
 						final CompoundCommand cc = new CompoundCommand("Unassign");
 						cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), slot, CargoPackage.Literals.SLOT__NOMINATED_VESSEL, SetCommand.UNSET_VALUE));
 						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cc);
+						{
+							cec.verifyCargoModel(((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getCargoModel());
+						}
 					}
 				};
 				menuManager.add(action);
@@ -352,6 +361,9 @@ public class CargoEditorMenuHelper {
 					final Object value = vessel == null ? SetCommand.UNSET_VALUE : vessel;
 					final Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, value);
 					scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+					{
+						cec.verifyCargoModel(((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getCargoModel());
+					}
 				}
 			}
 
@@ -377,6 +389,9 @@ public class CargoEditorMenuHelper {
 									cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, CargoPackage.Literals.CARGO__ALLOW_REWIRING, Boolean.TRUE));
 								}
 								scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cc);
+								{
+									cec.verifyCargoModel(((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getCargoModel());
+								}
 							}
 						};
 						menuManager.add(action);
@@ -390,6 +405,9 @@ public class CargoEditorMenuHelper {
 									cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, CargoPackage.Literals.CARGO__ALLOW_REWIRING, Boolean.FALSE));
 								}
 								scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cc);
+								{
+									cec.verifyCargoModel(((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getCargoModel());
+								}
 							}
 						};
 						menuManager.add(action);
@@ -404,6 +422,9 @@ public class CargoEditorMenuHelper {
 						cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE,
 								SetCommand.UNSET_VALUE));
 						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cc);
+						{
+							cec.verifyCargoModel(((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getCargoModel());
+						}
 					}
 				};
 				menuManager.add(action);
@@ -442,6 +463,9 @@ public class CargoEditorMenuHelper {
 								cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, CargoPackage.Literals.CARGO__ALLOW_REWIRING, Boolean.TRUE));
 							}
 							scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cc);
+							{
+								cec.verifyCargoModel(((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getCargoModel());
+							}
 						}
 					};
 					manager.add(action);
@@ -457,6 +481,9 @@ public class CargoEditorMenuHelper {
 								cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, CargoPackage.Literals.CARGO__ALLOW_REWIRING, Boolean.FALSE));
 							}
 							scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cc);
+							{
+								cec.verifyCargoModel(((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getCargoModel());
+							}
 						}
 					};
 					manager.add(action);
@@ -1099,6 +1126,9 @@ public class CargoEditorMenuHelper {
 			}
 
 			scenarioEditingLocation.getEditingDomain().getCommandStack().execute(currentWiringCommand);
+			{
+				cec.verifyCargoModel(((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getCargoModel());
+			}
 
 		}
 	}
@@ -1132,6 +1162,9 @@ public class CargoEditorMenuHelper {
 			}
 
 			scenarioEditingLocation.getEditingDomain().getCommandStack().execute(currentWiringCommand);
+			{
+				cec.verifyCargoModel(((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getCargoModel());
+			}
 		}
 
 	}
@@ -1185,6 +1218,9 @@ public class CargoEditorMenuHelper {
 			}
 
 			scenarioEditingLocation.getEditingDomain().getCommandStack().execute(currentWiringCommand);
+			{
+				cec.verifyCargoModel(((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getCargoModel());
+			}
 		}
 	}
 
@@ -1259,6 +1295,9 @@ public class CargoEditorMenuHelper {
 
 			if (cmd.canExecute()) {
 				scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+				{
+					cec.verifyCargoModel(((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getCargoModel());
+				}
 			}
 
 		}
@@ -1297,6 +1336,7 @@ public class CargoEditorMenuHelper {
 				}
 
 				commandStack.execute(cmd);
+
 			} else {
 				final Iterator<Command> itr = new LinkedList<Command>(editor.getExecutedCommands()).descendingIterator();
 				while (itr.hasNext()) {

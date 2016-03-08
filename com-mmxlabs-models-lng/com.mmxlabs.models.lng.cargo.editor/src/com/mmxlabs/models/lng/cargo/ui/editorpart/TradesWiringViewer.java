@@ -1363,6 +1363,11 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		}
 
 		executeCurrentWiringCommand(currentWiringCommand);
+		
+		// SANITTY CHECKING!
+		{
+			cec.verifyCargoModel(cargoModel);
+		}
 	}
 
 	/**
