@@ -133,7 +133,7 @@ public class TestCalculations {
 			final int baseFuelUnitPrice = OptimiserUnitConvertor.convertToInternalPrice(400);
 			final IBaseFuel baseFuel = new BaseFuel("test");
 			baseFuel.setEquivalenceFactor(baseFuelEquivalence);
-			final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0);
+			final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
 
 			final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
 			ladenKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.6));
@@ -577,7 +577,7 @@ public class TestCalculations {
 			final IBaseFuel baseFuel = new BaseFuel("test");
 			baseFuel.setEquivalenceFactor(baseFuelUnitEquivalence);
 
-			final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0);
+			final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
 
 			final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
 			ladenKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.6));
@@ -1020,7 +1020,7 @@ public class TestCalculations {
 
 			final IBaseFuel baseFuel = new BaseFuel("test");
 			baseFuel.setEquivalenceFactor(baseFuelEquivalence);
-			final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0);
+			final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuel, 0, Integer.MAX_VALUE, 0, 0, false);
 
 			final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
 			ladenKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.6));
