@@ -162,9 +162,6 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 	private void runAdvancedOptimisationTestCase(final boolean limitedIterations, @NonNull final SimilarityMode mode, final boolean withActionSets, final boolean withGeneratedCharterOuts)
 			throws Exception {
 
-		Assume.assumeFalse(withActionSets);
-		Assume.assumeNotNull(periodStart, periodEnd);
-
 		if (withActionSets) {
 			// Preconditions check - ensure period, otherwise ignore test case
 			Assume.assumeTrue(periodStart != null);
@@ -208,9 +205,9 @@ public abstract class AdvancedOptimisationTester extends AbstractOptimisationRes
 		if (limitedIterations) {
 			// Limit for quick optimisation
 			// LSO Limit
-			optimiserSettings.getAnnealingSettings().setIterations(10000);
+			optimiserSettings.getAnnealingSettings().setIterations(10_000);
 			// Hill climb limit
-			optimiserSettings.getSolutionImprovementSettings().setIterations(1000);
+			optimiserSettings.getSolutionImprovementSettings().setIterations(1_000);
 		}
 
 		Assert.assertEquals(withActionSets, optimiserSettings.isBuildActionSets());

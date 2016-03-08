@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.its.tests;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -58,8 +57,6 @@ public abstract class AbstractReportTester extends AbstractOptimisationResultTes
 	public void testCapacityReport() throws Exception {
 		testReports(ReportTesterHelper.CAPACITY_REPORT_ID, ReportTesterHelper.CAPACITY_REPORT_SHORTNAME, "html");
 	}
-
-	@Ignore
 
 	@Test
 	@Category(ReportTest.class)
