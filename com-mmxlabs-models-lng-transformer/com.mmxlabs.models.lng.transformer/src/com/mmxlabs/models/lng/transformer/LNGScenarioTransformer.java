@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 
 import javax.inject.Named;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jdt.annotation.NonNull;
@@ -86,6 +87,7 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.port.RouteOption;
+import com.mmxlabs.models.lng.port.util.RouteDistanceLineCache;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 import com.mmxlabs.models.lng.pricing.CharterIndex;
@@ -2265,21 +2267,40 @@ public class LNGScenarioTransformer {
 			orderedKeys.add(RouteOption.PANAMA);
 		}
 
+		final PortModel portModel = rootObject.getReferenceModel().getPortModel();
+		
+		// Create a cached direct look up to filter out canal distances greater than direct
+		RouteDistanceLineCache directRouteCache = null;
+		for (Route route : portModel.getRoutes()) {
+			if (route.getRouteOption() == RouteOption.DIRECT) {
+				directRouteCache = new RouteDistanceLineCache(route);
+				break;
+			}
+		}
+		
 		/*
 		 * Now fill out the distances from the distance model. Firstly we need to create the default distance matrix.
 		 */
 		final Set<RouteOption> seenRoutes = new HashSet<>();
-		final PortModel portModel = rootObject.getReferenceModel().getPortModel();
 		for (final Route r : portModel.getRoutes()) {
 			seenRoutes.add(r.getRouteOption());
 			// Store Route under it's name
 			modelEntityMap.addModelObject(r, mapRouteOption(r).name());
 			for (final RouteLine dl : r.getLines()) {
+				final int distance = dl.getFullDistance();
+				
+				// Filter out canal distances greater than or equal to direct distance. There should never be a good reason to pick this choice
+				if (directRouteCache != null && r.getRouteOption() != RouteOption.DIRECT) {
+					int directDistance = directRouteCache.getDistance(dl.getFrom(), dl.getTo());
+					if (distance >= directDistance) {
+						continue;
+					}
+				}
+				
 				IPort from, to;
 				from = portAssociation.lookupNullChecked(dl.getFrom());
 				to = portAssociation.lookupNullChecked(dl.getTo());
 
-				final int distance = dl.getFullDistance();
 
 				builder.setPortToPortDistance(from, to, mapRouteOption(r), distance);
 			}
