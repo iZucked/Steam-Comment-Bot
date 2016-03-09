@@ -100,26 +100,26 @@ public class NumericAttributeManipulator extends BasicAttributeManipulator {
 
 	private Object scale(final Object internalValue) {
 		if (internalValue instanceof Integer) {
-			return ((Integer) internalValue).intValue() * scale;
+			return ((Integer) internalValue).intValue() * (double) scale;
 		} else if (internalValue instanceof Long) {
-			return ((Long) internalValue).longValue() * scale;
+			return ((Long) internalValue).longValue() * (double) scale;
 		} else if (internalValue instanceof Float) {
-			return ((Float) internalValue).floatValue() * scale;
+			return ((Float) internalValue).floatValue() * (double) scale;
 		} else if (internalValue instanceof Double) {
-			return ((Double) internalValue).doubleValue() * scale;
+			return ((Double) internalValue).doubleValue() * (double) scale;
 		}
 		return internalValue;
 	}
 
 	private Object descale(final Object displayValue) {
 		if (displayValue instanceof Integer) {
-			return ((Integer) displayValue).intValue() / scale;
+			return ((Integer) displayValue).intValue() / (double) scale;
 		} else if (displayValue instanceof Long) {
-			return ((Long) displayValue).longValue() / scale;
+			return ((Long) displayValue).longValue() / (double) scale;
 		} else if (displayValue instanceof Float) {
-			return ((Float) displayValue).floatValue() / scale;
+			return ((Float) displayValue).floatValue() / (double) scale;
 		} else if (displayValue instanceof Double) {
-			return ((Double) displayValue).doubleValue() / scale;
+			return ((Double) displayValue).doubleValue() / (double) scale;
 		}
 		return displayValue;
 	}
