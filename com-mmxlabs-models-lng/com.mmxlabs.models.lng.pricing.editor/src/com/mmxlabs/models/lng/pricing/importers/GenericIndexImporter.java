@@ -31,6 +31,7 @@ import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.util.importer.IMMXImportContext;
 import com.mmxlabs.models.util.importer.impl.AbstractClassImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
@@ -108,7 +109,7 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 				}
 				final YearMonth date;
 				try {
-					 date = parseDateString(s);
+					date = parseDateString(s);
 				} catch (final ParseException ex) {
 					if (s.equals(EXPRESSION) == false && s.equals(UNITS) == false) {
 						context.addProblem(context.createProblem("The field " + s + " is not a date", true, false, true));
@@ -187,9 +188,9 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 			for (final IndexPoint<? extends Number> pt : di.getPoints()) {
 				String value;
 				if (exportAsInt) {
-					value = nai.intToString(pt.getValue().intValue());
+					value = nai.intToString(pt.getValue().intValue(), PricingPackage.Literals.INDEX_POINT__VALUE);
 				} else {
-					value = nai.doubleToString(pt.getValue().doubleValue());
+					value = nai.doubleToString(pt.getValue().doubleValue(), PricingPackage.Literals.INDEX_POINT__VALUE);
 				}
 				map.put(dateParser.formatYearMonth(pt.getDate()), value);
 			}
