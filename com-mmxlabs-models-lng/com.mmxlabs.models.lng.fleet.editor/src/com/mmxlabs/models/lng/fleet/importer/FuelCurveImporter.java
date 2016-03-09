@@ -56,8 +56,8 @@ public class FuelCurveImporter {
 				final List<FuelConsumption> consumptions = new LinkedList<FuelConsumption>();
 				for (final Map.Entry<String, String> column : row.entrySet()) {
 					try {
-						final double speed = nai.stringToDouble(column.getKey());
-						final double consumption = nai.stringToDouble(column.getValue());
+						final double speed = nai.stringToDouble(column.getKey(), FleetPackage.Literals.FUEL_CONSUMPTION__SPEED);
+						final double consumption = nai.stringToDouble(column.getValue(), FleetPackage.Literals.FUEL_CONSUMPTION__CONSUMPTION);
 						final FuelConsumption fcl = FleetFactory.eINSTANCE.createFuelConsumption();
 						fcl.setSpeed(speed);
 						fcl.setConsumption(consumption);
@@ -149,7 +149,8 @@ public class FuelCurveImporter {
 
 	private void exportConsumptions(final EList<FuelConsumption> fuelConsumption, final Map<String, String> ladenRow, final NumberAttributeImporter nai) {
 		for (final FuelConsumption fc : fuelConsumption) {
-			ladenRow.put(nai.doubleToString(fc.getSpeed()), nai.doubleToString(fc.getConsumption()));
+			ladenRow.put(nai.doubleToString(fc.getSpeed(), FleetPackage.Literals.FUEL_CONSUMPTION__SPEED),
+					nai.doubleToString(fc.getConsumption(), FleetPackage.Literals.FUEL_CONSUMPTION__CONSUMPTION));
 		}
 	}
 }
