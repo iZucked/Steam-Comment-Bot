@@ -83,9 +83,13 @@ public class LDShippingAnnotation {
 	public long dischargeMiscCosts;
 	public long ballastMiscCosts;
 
-	public long ladenCostsExcludingBOG;
-	public long ballastCostsExcludingBOG;
-	public long ladenCostsIncludingBOG;
-	public long ballastCostsIncludingBOG;
+	public long ladenCostsExcludingBOG = 0;
+	public long ballastCostsExcludingBOG = 0;
+	public long ladenCostsIncludingBOG = 0;
+	public long ballastCostsIncludingBOG = 0;
+	
+	public long returnGasInMMBTu = 0;
+	public long ladenBOInM3;
+	public long ballastBOInM3;
 
 }

@@ -67,6 +67,7 @@ public class LDShippingAnnotationHelper {
 			ladenBOGInM3 += ladenLeg.getFuelConsumption(fc, FuelUnit.M3);
 			ladenBOGInM3 += ladenLeg.getRouteAdditionalConsumption(fc, FuelUnit.M3);
 		}
+		shippingAnnotation.ladenBOInM3 = ladenBOGInM3;
 		shippingAnnotation.ladenBOInMMBTu = Calculator.convertM3ToMMBTu(ladenBOGInM3, ladenLeg.getOptions().getCargoCVValue());
 	}
 
@@ -119,6 +120,7 @@ public class LDShippingAnnotationHelper {
 			ballastBOGInM3 += ballastLeg.getFuelConsumption(fc, FuelUnit.M3);
 			ballastBOGInM3 += ballastLeg.getRouteAdditionalConsumption(fc, FuelUnit.M3);
 		}
+		shippingAnnotation.ballastBOInM3 = ballastBOGInM3;
 		shippingAnnotation.ballastBOInMMBTu = Calculator.convertM3ToMMBTu(ballastBOGInM3, ballastLeg.getOptions().getCargoCVValue());
 	}
 
@@ -138,6 +140,14 @@ public class LDShippingAnnotationHelper {
 		shippingAnnotation.ballastBunkersCost = Calculator.costFromConsumption(shippingAnnotation.ballastBunkersInMT, bunkerPricePerMT);
 	}
 
+	public static void updateBunkerCosts(final @NonNull LDShippingAnnotation shippingAnnotation, final int voyageBunkerPricePerMT, final int portBunkerPricePerMT) {
+
+		shippingAnnotation.loadBunkersCost = Calculator.costFromConsumption(shippingAnnotation.loadBunkersInMT, portBunkerPricePerMT);
+		shippingAnnotation.ladenBunkersCost = Calculator.costFromConsumption(shippingAnnotation.ladenBunkersInMT, voyageBunkerPricePerMT);
+		shippingAnnotation.dischargeBunkersCost = Calculator.costFromConsumption(shippingAnnotation.dischargeBunkersInMT, portBunkerPricePerMT);
+		shippingAnnotation.ballastBunkersCost = Calculator.costFromConsumption(shippingAnnotation.ballastBunkersInMT, voyageBunkerPricePerMT);
+	}
+
 	public static void updateLNGCosts(final @NonNull LDShippingAnnotation shippingAnnotation, final int lngCostPerMMBTu) {
 
 		shippingAnnotation.ladenBOCost = Calculator.costFromConsumption(shippingAnnotation.ladenBOInMMBTu, lngCostPerMMBTu);
@@ -155,7 +165,7 @@ public class LDShippingAnnotationHelper {
 		updateCharterCosts(shippingAnnotation, charterCostPerDay);
 		updateBunkerCosts(shippingAnnotation, bunkerPricePerMT);
 		updateLNGCosts(shippingAnnotation, lngCostPerMMBTu);
-
+		// TODO: neccessary?
 		shippingAnnotation.ladenCostsExcludingBOG = shippingAnnotation.ladenBunkersCost + shippingAnnotation.ladenCanalCosts + shippingAnnotation.ladenCharterCost + shippingAnnotation.ladenMiscCosts;
 		shippingAnnotation.ladenCostsIncludingBOG = shippingAnnotation.ladenCostsExcludingBOG + shippingAnnotation.ladenBOCost;
 
