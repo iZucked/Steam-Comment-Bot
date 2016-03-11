@@ -30,7 +30,6 @@ import java.util.stream.Collectors;
 
 import javax.inject.Named;
 
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jdt.annotation.NonNull;
@@ -87,7 +86,6 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.port.RouteOption;
-import com.mmxlabs.models.lng.port.util.RouteDistanceLineCache;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 import com.mmxlabs.models.lng.pricing.CharterIndex;
@@ -2267,72 +2265,30 @@ public class LNGScenarioTransformer {
 			orderedKeys.add(RouteOption.PANAMA);
 		}
 
-		final PortModel portModel = rootObject.getReferenceModel().getPortModel();
-		
-		// Create a cached direct look up to filter out canal distances greater than direct
-		RouteDistanceLineCache directRouteCache = null;
-		for (Route route : portModel.getRoutes()) {
-			if (route.getRouteOption() == RouteOption.DIRECT) {
-				directRouteCache = new RouteDistanceLineCache(route);
-				break;
-			}
-		}
-		
 		/*
 		 * Now fill out the distances from the distance model. Firstly we need to create the default distance matrix.
 		 */
 		final Set<RouteOption> seenRoutes = new HashSet<>();
+		final PortModel portModel = rootObject.getReferenceModel().getPortModel();
 		for (final Route r : portModel.getRoutes()) {
 			seenRoutes.add(r.getRouteOption());
 			// Store Route under it's name
 			modelEntityMap.addModelObject(r, mapRouteOption(r).name());
 			for (final RouteLine dl : r.getLines()) {
-				final int distance = dl.getFullDistance();
-				
-				// Filter out canal distances greater than or equal to direct distance. There should never be a good reason to pick this choice
-				if (directRouteCache != null && r.getRouteOption() != RouteOption.DIRECT) {
-					int directDistance = directRouteCache.getDistance(dl.getFrom(), dl.getTo());
-					if (distance >= directDistance) {
-						continue;
-					}
-				}
-				
 				IPort from, to;
 				from = portAssociation.lookupNullChecked(dl.getFrom());
 				to = portAssociation.lookupNullChecked(dl.getTo());
 
+				final int distance = dl.getFullDistance();
 
 				builder.setPortToPortDistance(from, to, mapRouteOption(r), distance);
 			}
 
-			// Set extra time and fuel consumption
-			for (final IVesselAvailability vesselAvailability : allVesselAvailabilities) {
-				final IVessel vessel = vesselAvailability.getVessel();
-				if (vessel != null) {
-					final IVesselClass vesselClass = vessel.getVesselClass();
-					if (vesselClass != null) {
-						final VesselClass eVesselClass = vesselClassAssociation.reverseLookup(vesselClass);
-						for (final VesselClassRouteParameters routeParameters : eVesselClass.getRouteParameters()) {
-							builder.setVesselRouteTransitTime(mapRouteOption(routeParameters.getRoute()), vessel, routeParameters.getExtraTransitTime());
-
-							builder.setVesselRouteFuel(mapRouteOption(routeParameters.getRoute()), vessel, VesselState.Laden,
-									OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenConsumptionRate()),
-									OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenNBORate()));
-
-							builder.setVesselRouteFuel(mapRouteOption(routeParameters.getRoute()), vessel, VesselState.Ballast,
-									OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastConsumptionRate()),
-									OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastNBORate()));
-						}
-					}
-				}
-			}
-
-			// set tolls
+			// set canal route consumptions and toll info
 			final CostModel costModel = rootObject.getReferenceModel().getCostModel();
 
 			final PanamaCanalTariff panamaCanalTariff = costModel.getPanamaCanalTariff();
 			if (panamaCanalTariff != null) {
-				final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(rootObject);
 				buildPanamaCosts(builder, vesselAssociation, vesselClassAssociation, allVesselAvailabilities, panamaCanalTariff);
 				if (panamaCanalTariff.isSetAvailableFrom()) {
 					final LocalDate availableFrom = panamaCanalTariff.getAvailableFrom();
@@ -2346,30 +2302,49 @@ public class LNGScenarioTransformer {
 			final Map<VesselClass, List<RouteCost>> vesselClassToRouteCostMap = costModel.getRouteCosts().stream() //
 					.collect(Collectors.groupingBy(RouteCost::getVesselClass, Collectors.mapping(Function.identity(), Collectors.toList())));
 
+			final Set<IVessel> optimiserVessels = new HashSet<>();
+			optimiserVessels.addAll(allVessels.values());
 			for (final IVesselAvailability vesselAvailability : allVesselAvailabilities) {
 				final IVessel vessel = vesselAvailability.getVessel();
 				if (vessel != null) {
-					final IVesselClass vesselClass = vessel.getVesselClass();
-					if (vesselClass != null) {
-						final VesselClass eVesselClass = vesselClassAssociation.reverseLookup(vesselClass);
-						final List<RouteCost> routeCosts = vesselClassToRouteCostMap.get(eVesselClass);
-						if (routeCosts == null) {
-							// Some unit tests have this state
-							continue;
-						}
-						assert routeCosts != null;
+					optimiserVessels.add(vessel);
+				}
+			}
+
+			for (final IVessel vessel : optimiserVessels) {
+
+				final IVesselClass vesselClass = vessel.getVesselClass();
+				if (vesselClass != null) {
+					final VesselClass eVesselClass = vesselClassAssociation.reverseLookup(vesselClass);
+					for (final VesselClassRouteParameters routeParameters : eVesselClass.getRouteParameters()) {
+						builder.setVesselRouteTransitTime(mapRouteOption(routeParameters.getRoute()), vessel, routeParameters.getExtraTransitTime());
+
+						builder.setVesselRouteFuel(mapRouteOption(routeParameters.getRoute()), vessel, VesselState.Laden,
+								OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenConsumptionRate()),
+								OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenNBORate()));
+
+						builder.setVesselRouteFuel(mapRouteOption(routeParameters.getRoute()), vessel, VesselState.Ballast,
+								OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastConsumptionRate()),
+								OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastNBORate()));
+					}
+
+					final List<RouteCost> routeCosts = vesselClassToRouteCostMap.get(eVesselClass);
+					if (routeCosts != null) {
+						// Some unit tests have null data state
 						for (final RouteCost routeCost : routeCosts) {
 
 							if (panamaCanalTariff != null && routeCost.getRoute().getRouteOption() == RouteOption.PANAMA) {
-								continue;
+								// continue;
+							} else {
+
+								builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.Laden, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getLadenCost()));
+
+								builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.Ballast,
+										OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost()));
+
+								builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.RoundTripBallast,
+										OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost()));
 							}
-
-							builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.Laden, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getLadenCost()));
-
-							builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.Ballast, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost()));
-
-							builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.RoundTripBallast,
-									OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost()));
 						}
 					}
 				}
