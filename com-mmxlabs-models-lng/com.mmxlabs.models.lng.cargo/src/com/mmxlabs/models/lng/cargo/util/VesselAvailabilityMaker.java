@@ -81,7 +81,7 @@ public class VesselAvailabilityMaker {
 			vesselAvailability.unsetEndAfter();
 		}
 		if (windowEnd != null) {
-			vesselAvailability.setEndBy(windowStart);
+			vesselAvailability.setEndBy(windowEnd);
 		} else {
 			vesselAvailability.unsetEndBy();
 		}
