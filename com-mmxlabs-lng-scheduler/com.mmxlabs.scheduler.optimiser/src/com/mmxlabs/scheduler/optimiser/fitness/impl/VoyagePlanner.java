@@ -156,6 +156,8 @@ public class VoyagePlanner {
 		// Flag to force NBO use over cost choice - e.g. for cases where there is already a heel onboard
 		boolean forceNBO = false;
 
+		boolean isReliq = vesselClass.hasReliqCapability();
+
 		if ((prevPortType == PortType.Load) || (prevPortType == PortType.CharterOut)) {
 			useNBO = true;
 		}
@@ -198,9 +200,10 @@ public class VoyagePlanner {
 		}
 		// Determined by voyage plan optimiser
 		options.setUseNBOForTravel(useNBO);
-		options.setUseFBOForSupplement(false);
+		// If NBO is enabled for a reliq vessel, then force FBO too
+		options.setUseFBOForSupplement(useNBO && isReliq);
 		// If not forced, then a choice may be added later
-		options.setUseNBOForIdle(forceNBO);
+		options.setUseNBOForIdle((useNBO && isReliq) || forceNBO);
 
 		if (thisPortSlot.getPortType() == PortType.Load) {
 			options.setShouldBeCold(true);
@@ -240,14 +243,18 @@ public class VoyagePlanner {
 			// false, FBO and IdleNBO may still be true if set before
 			// NBO
 
-			if (vesselState == VesselState.Ballast && !forceNBO) {
-				optimiser.addChoice(new NBOTravelVoyagePlanChoice(previousOptions, options));
-			}
-
-			optimiser.addChoice(new FBOVoyagePlanChoice(options));
-
-			if (!forceNBO) {
-				optimiser.addChoice(new IdleNBOVoyagePlanChoice(options));
+			if (isReliq) {
+				if (vesselState == VesselState.Ballast && !forceNBO) {
+					optimiser.addChoice(new ReliqVoyagePlanChoice(previousOptions, options));
+				}
+			} else {
+				if (vesselState == VesselState.Ballast && !forceNBO) {
+					optimiser.addChoice(new NBOTravelVoyagePlanChoice(previousOptions, options));
+				}
+				optimiser.addChoice(new FBOVoyagePlanChoice(options));
+				if (!forceNBO) {
+					optimiser.addChoice(new IdleNBOVoyagePlanChoice(options));
+				}
 			}
 		}
 

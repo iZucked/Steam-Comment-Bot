@@ -130,4 +130,9 @@ class ClampedSpeedVesselClass implements IVesselClass {
 		vesselClass.setBaseFuel(baseFuel);
 	}
 
+	@Override
+	public boolean hasReliqCapability() {
+		return vesselClass.hasReliqCapability();
+	}
+
 }

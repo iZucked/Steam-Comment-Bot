@@ -183,6 +183,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						pilotLightConsumptionInMT = Calculator.quantityFromRateTime(pilotLightRateINMTPerDay, additionalRouteTimeInHours) / 24L;
 
 					} else {
+						// Reliq vessels should not use base fuel supplement.
+						assert (!vessel.getVesselClass().hasReliqCapability());
+						
 						routeDiffInMT = routeRequiredConsumptionInMT - routeNboProvidedInMT;
 						routeFboProvidedInMT = 0;
 						routeFboProvidedInM3 = 0;
