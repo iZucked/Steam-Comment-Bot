@@ -36,17 +36,17 @@ public class AbstractSlotMaker<T extends AbstractSlotMaker<T>> {
 
 	@NonNull
 	public T withFOBPurchase(@NonNull final String name, @NonNull final LocalDate windowStart, @NonNull final Port port, @Nullable final PurchaseContract purchaseContract,
-			@Nullable final BaseLegalEntity entity, @Nullable final String priceExpression) {
+			@Nullable final BaseLegalEntity entity, @Nullable final String priceExpression, @Nullable final Double cv) {
 
-		final Slot slot = cargoModelBuilder.createFOBPurchase(name, windowStart, port, purchaseContract, entity, priceExpression);
+		final Slot slot = cargoModelBuilder.createFOBPurchase(name, windowStart, port, purchaseContract, entity, priceExpression, cv);
 		this.slot = slot;
 		return (T) this;
 	}
 
 	@NonNull
 	public T withDESPurchase(@NonNull final String name, final boolean divertible, @NonNull final LocalDate windowStart, @NonNull final Port port, @Nullable final PurchaseContract purchaseContract,
-			@Nullable final BaseLegalEntity entity, @Nullable final String priceExpression, @Nullable final Vessel nominatedVessel) {
-		final Slot slot = cargoModelBuilder.createDESPurchase(name, divertible, windowStart, port, purchaseContract, entity, priceExpression, nominatedVessel);
+			@Nullable final BaseLegalEntity entity, @Nullable final String priceExpression, final @Nullable Double cv, @Nullable final Vessel nominatedVessel) {
+		final Slot slot = cargoModelBuilder.createDESPurchase(name, divertible, windowStart, port, purchaseContract, entity, priceExpression, cv, nominatedVessel);
 		this.slot = slot;
 		return (T) this;
 	}
