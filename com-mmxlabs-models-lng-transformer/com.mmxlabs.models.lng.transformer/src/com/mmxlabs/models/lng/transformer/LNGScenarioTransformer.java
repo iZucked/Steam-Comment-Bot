@@ -2284,34 +2284,11 @@ public class LNGScenarioTransformer {
 				builder.setPortToPortDistance(from, to, mapRouteOption(r), distance);
 			}
 
-			// Set extra time and fuel consumption
-			for (final IVesselAvailability vesselAvailability : allVesselAvailabilities) {
-				final IVessel vessel = vesselAvailability.getVessel();
-				if (vessel != null) {
-					final IVesselClass vesselClass = vessel.getVesselClass();
-					if (vesselClass != null) {
-						final VesselClass eVesselClass = vesselClassAssociation.reverseLookup(vesselClass);
-						for (final VesselClassRouteParameters routeParameters : eVesselClass.getRouteParameters()) {
-							builder.setVesselRouteTransitTime(mapRouteOption(routeParameters.getRoute()), vessel, routeParameters.getExtraTransitTime());
-
-							builder.setVesselRouteFuel(mapRouteOption(routeParameters.getRoute()), vessel, VesselState.Laden,
-									OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenConsumptionRate()),
-									OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenNBORate()));
-
-							builder.setVesselRouteFuel(mapRouteOption(routeParameters.getRoute()), vessel, VesselState.Ballast,
-									OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastConsumptionRate()),
-									OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastNBORate()));
-						}
-					}
-				}
-			}
-
-			// set tolls
+			// set canal route consumptions and toll info
 			final CostModel costModel = rootObject.getReferenceModel().getCostModel();
 
 			final PanamaCanalTariff panamaCanalTariff = costModel.getPanamaCanalTariff();
 			if (panamaCanalTariff != null) {
-				final FleetModel fleetModel = ScenarioModelUtil.getFleetModel(rootObject);
 				buildPanamaCosts(builder, vesselAssociation, vesselClassAssociation, allVesselAvailabilities, panamaCanalTariff);
 				if (panamaCanalTariff.isSetAvailableFrom()) {
 					final LocalDate availableFrom = panamaCanalTariff.getAvailableFrom();
@@ -2325,30 +2302,49 @@ public class LNGScenarioTransformer {
 			final Map<VesselClass, List<RouteCost>> vesselClassToRouteCostMap = costModel.getRouteCosts().stream() //
 					.collect(Collectors.groupingBy(RouteCost::getVesselClass, Collectors.mapping(Function.identity(), Collectors.toList())));
 
+			final Set<IVessel> optimiserVessels = new HashSet<>();
+			optimiserVessels.addAll(allVessels.values());
 			for (final IVesselAvailability vesselAvailability : allVesselAvailabilities) {
 				final IVessel vessel = vesselAvailability.getVessel();
 				if (vessel != null) {
-					final IVesselClass vesselClass = vessel.getVesselClass();
-					if (vesselClass != null) {
-						final VesselClass eVesselClass = vesselClassAssociation.reverseLookup(vesselClass);
-						final List<RouteCost> routeCosts = vesselClassToRouteCostMap.get(eVesselClass);
-						if (routeCosts == null) {
-							// Some unit tests have this state
-							continue;
-						}
-						assert routeCosts != null;
+					optimiserVessels.add(vessel);
+				}
+			}
+
+			for (final IVessel vessel : optimiserVessels) {
+
+				final IVesselClass vesselClass = vessel.getVesselClass();
+				if (vesselClass != null) {
+					final VesselClass eVesselClass = vesselClassAssociation.reverseLookup(vesselClass);
+					for (final VesselClassRouteParameters routeParameters : eVesselClass.getRouteParameters()) {
+						builder.setVesselRouteTransitTime(mapRouteOption(routeParameters.getRoute()), vessel, routeParameters.getExtraTransitTime());
+
+						builder.setVesselRouteFuel(mapRouteOption(routeParameters.getRoute()), vessel, VesselState.Laden,
+								OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenConsumptionRate()),
+								OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenNBORate()));
+
+						builder.setVesselRouteFuel(mapRouteOption(routeParameters.getRoute()), vessel, VesselState.Ballast,
+								OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastConsumptionRate()),
+								OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastNBORate()));
+					}
+
+					final List<RouteCost> routeCosts = vesselClassToRouteCostMap.get(eVesselClass);
+					if (routeCosts != null) {
+						// Some unit tests have null data state
 						for (final RouteCost routeCost : routeCosts) {
 
 							if (panamaCanalTariff != null && routeCost.getRoute().getRouteOption() == RouteOption.PANAMA) {
-								continue;
+								// continue;
+							} else {
+
+								builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.Laden, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getLadenCost()));
+
+								builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.Ballast,
+										OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost()));
+
+								builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.RoundTripBallast,
+										OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost()));
 							}
-
-							builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.Laden, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getLadenCost()));
-
-							builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.Ballast, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost()));
-
-							builder.setVesselRouteCost(mapRouteOption(routeCost.getRoute()), vessel, CostType.RoundTripBallast,
-									OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost()));
 						}
 					}
 				}

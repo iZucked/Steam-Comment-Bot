@@ -48,10 +48,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator {
 
-	public enum FuelChoice {
-		FBO, Base, Optimal
-	}
-
 	@Inject
 	private IDistanceProvider distanceProvider;
 
