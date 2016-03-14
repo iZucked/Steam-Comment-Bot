@@ -53,6 +53,7 @@ public class ScenarioInstanceValidatorScenarioServiceListener extends ScenarioSe
 	}
 
 	private void hookExisting(final Container container) {
+		// CONCURRENT MODIFICATION EXCEPTION HERE!
 		for (final Container c : container.getElements()) {
 			if (c instanceof ScenarioInstance) {
 				final ScenarioInstance scenarioInstance = (ScenarioInstance) c;
