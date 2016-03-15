@@ -698,7 +698,6 @@ public class LNGVoyageCalculatorTest {
 				bind(ITimeZoneToUtcOffsetProvider.class).to(TimeZoneToUtcOffsetProvider.class);
 				IBaseFuelCurveProvider b = Mockito.mock(IBaseFuelCurveProvider.class);
 				Mockito.when(b.getBaseFuelCurve(Mockito.any(IBaseFuel.class))).thenReturn(curve);
-				Mockito.when(b.getVesselBaseFuelCurve(Mockito.any(IVessel.class))).thenReturn(curve);
 
 				bind(IBaseFuelCurveProvider.class).toInstance(b);
 
