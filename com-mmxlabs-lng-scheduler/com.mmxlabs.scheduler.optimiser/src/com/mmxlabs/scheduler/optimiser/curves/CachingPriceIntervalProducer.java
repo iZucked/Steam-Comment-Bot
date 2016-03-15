@@ -73,6 +73,7 @@ public class CachingPriceIntervalProducer implements IPriceIntervalProducer {
 		protected final IPortSlot[] determiningSlots;
 		protected final IPortSlot[] allSlots;
 		public final CacheKey cacheKey;
+		// FIXME: This is never set to anything
 		public List<int[]> result = null;
 		
 		public Entry(int startTime, int endTime, IPortSlot[] determiningSlots, IPortSlot[] allSlots) {
