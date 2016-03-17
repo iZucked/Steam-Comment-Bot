@@ -35,15 +35,6 @@ public final class HashMapBaseFuelCurveEditor implements IBaseFuelCurveProviderE
 	}
 
 	@Override
-	@NonNull
-	public ICurve getVesselBaseFuelCurve(@NonNull final IVessel vessel) {
-		if (map.containsKey(vessel)) {
-			return map.get(vessel);
-		}
-		throw new IllegalArgumentException("Unknown vessel");
-	}
-
-	@Override
 	public void setBaseFuelCurve(@NonNull final IBaseFuel baseFuel, @NonNull final ICurve curve) {
 		map.put(baseFuel, curve);
 	}

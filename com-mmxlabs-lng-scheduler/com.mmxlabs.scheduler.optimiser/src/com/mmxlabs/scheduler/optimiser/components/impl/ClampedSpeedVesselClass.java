@@ -15,11 +15,14 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 class ClampedSpeedVesselClass implements IVesselClass {
 
 	private final IVesselClass vesselClass;
-	private final int speed;
+	private final int maxSpeed;
+	private final int minSpeed;
 	
 	public ClampedSpeedVesselClass(@NonNull final IVesselClass vesselClass, final int clampedSpeed) {
 		this.vesselClass = vesselClass;
-		this.speed = clampedSpeed;
+		this.maxSpeed = clampedSpeed;
+		this.minSpeed = vesselClass.getMinSpeed() <= clampedSpeed ? vesselClass.getMinSpeed() : clampedSpeed ;
+		
 	}
 
 	@Override
@@ -64,7 +67,7 @@ class ClampedSpeedVesselClass implements IVesselClass {
 
 	@Override
 	public int getMaxSpeed() {
-		return speed;
+		return maxSpeed;
 	}
 
 	@Override
@@ -74,7 +77,7 @@ class ClampedSpeedVesselClass implements IVesselClass {
 
 	@Override
 	public int getMinSpeed() {
-		return vesselClass.getMinSpeed();
+		return minSpeed;
 	}
 
 	@Override

@@ -281,7 +281,7 @@ public class PriceIntervalProviderHelper {
 		int bestIdx = 0;
 		T bestObj = coll.get(0);
 		for (final T o : coll) {
-			if (comp.compare(o, bestObj) == -1) {
+			if (comp.compare(o, bestObj) < 0) {
 				bestObj = o;
 				bestIdx = i;
 			}
@@ -298,7 +298,7 @@ public class PriceIntervalProviderHelper {
 		int bestIdx = 0;
 		T bestObj = coll[0];
 		for (final T o : coll) {
-			if (comp.compare(o, bestObj) == -1) {
+			if (comp.compare(o, bestObj) < 0) {
 				bestObj = o;
 				bestIdx = i;
 			}
@@ -319,7 +319,7 @@ public class PriceIntervalProviderHelper {
 		int bestIdx = 0;
 		T bestObj = coll.get(0);
 		for (final T o : coll) {
-			if (comp.compare(o, bestObj) == 1) {
+			if (comp.compare(o, bestObj) > 0) {
 				bestObj = o;
 				bestIdx = i;
 			}
@@ -336,7 +336,7 @@ public class PriceIntervalProviderHelper {
 		int bestIdx = 0;
 		T bestObj = coll[0];
 		for (final T o : coll) {
-			if (comp.compare(o, bestObj) == 1) {
+			if (comp.compare(o, bestObj) > 0) {
 				bestObj = o;
 				bestIdx = i;
 			}
