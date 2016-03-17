@@ -97,7 +97,8 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	private void validateSlotOrder(final IValidationContext ctx, final Cargo cargo, final Slot slot, final long availableTime, final List<IStatus> failures) {
 		if (availableTime < 0) {
 			final int severity = IStatus.ERROR;
-			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(" [Cargo|" + cargo.getLoadName() + "] Load is after discharge (note timezone)."), severity);
+			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
+					(IConstraintStatus) ctx.createFailureStatus(" [Cargo|" + cargo.getLoadName() + "] Load is after discharge (note timezone)."), severity);
 			status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
 			failures.add(status);
 		}
@@ -318,14 +319,14 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 		}
 		if (windowLength < 0) {
 			final int severity = IStatus.ERROR;
-			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Cargo|" + cargo.getLoadName() + "] purchase is after sale"),
-					severity);
+			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
+					(IConstraintStatus) ctx.createFailureStatus("[Cargo|" + cargo.getLoadName() + "] purchase is after sale"), severity);
 			status.addEObjectAndFeature(from, CargoPackage.eINSTANCE.getSlot_WindowStart());
 			status.addEObjectAndFeature(to, CargoPackage.eINSTANCE.getSlot_WindowStart());
 			failures.add(status);
 		} else {
 
-			int travelTime = TravelTimeUtils.getMinRouteTimeInHours(from, to, shippingDaysSpeedProvider, TravelTimeUtils.getScenarioModel(extraContext), vessel,
+			int travelTime = TravelTimeUtils.getMinRouteTimeInHours(from, from, to, shippingDaysSpeedProvider, TravelTimeUtils.getScenarioModel(extraContext), vessel,
 					TravelTimeUtils.getReferenceSpeed(shippingDaysSpeedProvider, from, vessel.getVesselClass(), true));
 			if (travelTime + from.getSlotOrPortDuration() > windowLength) {
 				final String message = String.format("Purchase|%s] is paired with a sale at %s. However the laden travel time (%s) is greater than the shortest possible journey by %s", from.getName(),
